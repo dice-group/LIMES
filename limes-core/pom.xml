@@ -4,9 +4,9 @@
 
 	<groupId>org.aksw.limes.core</groupId>
 	<artifactId>limes-core</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>limes-core</name>
 	<url>http://aksw.org/Projects/LIMES</url>
 	<description>LIMES – Link Discovery Framework for Metric Spaces.</description>
 
@@ -140,5 +140,5 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-	<version>0.0.1-SNAPSHOT</version>
+
 </project>
