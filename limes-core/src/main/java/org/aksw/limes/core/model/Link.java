@@ -4,6 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
@@ -16,7 +17,11 @@ public class Link extends Triple implements Comparable<Link> {
 
 	public Link(Node s, Node p, Node o) {
 		super(s, p, o);
-		this.hash = DigestUtils.shaHex(s.getURI() + "" + p.getURI() + "" + o.toString());
+		this.hash = DigestUtils.shaHex(s.getURI() + "\n" + p.getURI() + "\n" + o.toString());
+	}
+	
+	public Link(RDFNode s, RDFNode p, RDFNode o) {
+		this(s.asNode(), p.asNode(), o.asNode());
 	}
 
 	@Override
