@@ -1,4 +1,4 @@
-package org.aksw.limes.core.evaluation;
+package org.aksw.limes.core.evaluation.quality;
 
 import java.util.Set;
 

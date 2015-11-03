@@ -1,4 +1,4 @@
-package org.aksw.limes.core.evaluation;
+package org.aksw.limes.core.evaluation.quality;
 
 import java.util.Set;
 
@@ -10,7 +10,7 @@ import org.aksw.limes.core.model.Link;
  * @version 2015-11-03
  *
  */
-public class Recall implements QualitativeMeasure {
+public class Precision implements QualitativeMeasure {
 
 	@Override
 	public double calculate(Set<Link> predictions, Set<Link> goldStandard) {
