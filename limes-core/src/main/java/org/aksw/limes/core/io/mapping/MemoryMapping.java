@@ -1,8 +1,8 @@
-package org.aksw.limes.core.io;
+package org.aksw.limes.core.io.mapping;
 
 import java.util.HashMap;
 
-public class Mapping {
+public class MemoryMapping {
 
     public HashMap<String, HashMap<String, Double>> map;
 
@@ -11,7 +11,7 @@ public class Mapping {
 	return 0;
     }
 
-    public Mapping reverseSourceTarget() {
+    public MemoryMapping reverseSourceTarget() {
 	// TODO Auto-generated method stub
 	return null;
     }

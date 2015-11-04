@@ -1,8 +1,8 @@
 package org.aksw.limes.core.execution.engine;
 
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
-import org.aksw.limes.core.io.Mapping;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
 
 /**
  * Implements the default parallel engine class. The idea is that the engine
@@ -28,7 +28,7 @@ public class ParallelExecutionEngine extends ExecutionEngine {
      * @return The mapping from running the plan
      */
     @Override
-    public Mapping execute(ExecutionPlan plan) {
+    public MemoryMapping execute(ExecutionPlan plan) {
 	// TODO Auto-generated method stub
 	return null;
     }

@@ -8,15 +8,15 @@ import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.execution.planning.plan.Plan;
-import org.aksw.limes.core.io.Mapping;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.AtomicMapper;
 import org.aksw.limes.core.measures.mapper.SetOperations;
 
 /**
  * Implements the default execution engine class. The idea is that the engine
  * gets a series of instructions in the form of an execution plan and runs these
- * instructions sequentially and returns a mapping.
+ * instructions sequentially and returns a MemoryMemoryMapping.
  *
  * @author ngonga
  * @author kleanthi
@@ -34,17 +34,17 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *
      * @param plan
      *            An execution plan
-     * @return The mapping that results from running the plan
+     * @return The MemoryMapping that results from running the plan
      */
-    public Mapping executeAtomic(ExecutionPlan plan) {
-	buffer = new ArrayList<Mapping>();
+    public MemoryMapping executeAtomic(ExecutionPlan plan) {
+	buffer = new ArrayList<MemoryMapping>();
 	if (plan.isEmpty()) {
 	    logger.info("Plan is empty. Done.");
-	    return new Mapping();
+	    return new MemoryMapping();
 	}
 
 	List<Instruction> instructions = plan.getInstructionList();
-	Mapping m = new Mapping();
+	MemoryMapping m = new MemoryMapping();
 	for (int i = 0; i < instructions.size(); i++) {
 	    Instruction inst = instructions.get(i);
 	    // get the index for writing the results
@@ -67,7 +67,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 	    } // diff
 	    else if (inst.getCommand().equals(Command.DIFF)) {
 		m = SetOperations.difference(buffer.get(inst.getSourceMapping()), buffer.get(inst.getTargetMapping()));
-	    } // end of processing. Return the indicated mapping
+	    } // end of processing. Return the indicated MemoryMapping
 	    else if (inst.getCommand().equals(Command.RETURN)) {
 		logger.info("Reached return command. Returning results.");
 		if (buffer.isEmpty()) {
@@ -83,19 +83,19 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 	    if (index < 0) {
 		buffer.add(m);
 	    } else {
-		// add placeholders to ensure that the mapping can be placed
+		// add placeholders to ensure that the MemoryMapping can be placed
 		// where the user wanted to have it
 		while ((index + 1) > buffer.size()) {
-		    buffer.add(new Mapping());
+		    buffer.add(new MemoryMapping());
 		}
 		buffer.set(index, m);
 	    }
 	}
 
 	// just in case the return operator was forgotten.
-	// Then we return the last mapping computed
+	// Then we return the last MemoryMapping computed
 	if (buffer.isEmpty()) {
-	    return new Mapping();
+	    return new MemoryMapping();
 	} else {
 	    return buffer.get(buffer.size() - 1);
 	}
@@ -111,9 +111,9 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *            Source cache
      * @param target
      *            Target cache
-     * @return Mapping
+     * @return MemoryMapping
      */
-    public Mapping executeRun(Instruction inst) {
+    public MemoryMapping executeRun(Instruction inst) {
 	// get threshold
 
 	double threshold = Double.parseDouble(inst.getThreshold());
@@ -146,31 +146,31 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      * @param inst
      *            Instruction
      * @param input
-     *            Mapping that is to be filtered
-     * @return Filtered mapping
+     *            MemoryMapping that is to be filtered
+     * @return Filtered MemoryMapping
      */
-    private Mapping executeFilter(Instruction inst, Mapping input) {
+    private MemoryMapping executeFilter(Instruction inst, MemoryMapping input) {
 	LinearFilter filter = new LinearFilter();
 	return filter.filter(input, inst.getMeasureExpression(), Double.parseDouble(inst.getThreshold()), source,
 		target, sourceVariable, targetVariable);
     }
 
     /**
-     * Implements the intersection of mappings
+     * Implements the intersection of MemoryMappings
      *
      * @param inst
      *            Instruction
      * @param m1
-     *            First mapping
+     *            First MemoryMapping
      * @param m2
-     *            Second mapping
+     *            Second MemoryMapping
      * @return Intersection of m1 and m2
      */
-    public Mapping executeIntersection(Instruction inst, Mapping m1, Mapping m2) {
+    public MemoryMapping executeIntersection(Instruction inst, MemoryMapping m1, MemoryMapping m2) {
 	return SetOperations.intersection(m1, m2);
     }
 
-    public Mapping executeUnion(Instruction inst, Mapping m1, Mapping m2) {
+    public MemoryMapping executeUnion(Instruction inst, MemoryMapping m1, MemoryMapping m2) {
 	return SetOperations.union(m1, m2);
     }
 
@@ -179,13 +179,13 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *
      * @param ExecutionPlan
      *            ExecutionPlan
-     * @return Mapping
+     * @return MemoryMapping
      */
-    public Mapping execute(ExecutionPlan ExecutionPlan) {
+    public MemoryMapping execute(ExecutionPlan ExecutionPlan) {
 	// empty nested plan contains nothing
 	long begin = System.currentTimeMillis();
 
-	Mapping m = new Mapping();
+	MemoryMapping m = new MemoryMapping();
 	if (ExecutionPlan.isEmpty()) {
 	} // atomic nested plan just contain simple list of instructions
 	else if (ExecutionPlan.isAtomic()) {
@@ -199,7 +199,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 
 	    // run all the subplans
 	    m = execute(ExecutionPlan.subPlans.get(0));
-	    Mapping m2, result = m;
+	    MemoryMapping m2, result = m;
 	    for (int i = 1; i < ExecutionPlan.subPlans.size(); i++) {
 		m2 = execute(ExecutionPlan.subPlans.get(i));
 		if (ExecutionPlan.operator.equals(Command.INTERSECTION)) {
@@ -218,7 +218,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 		m = result;
 	    }
 	    // only run filtering if there is a filter indeed, else simply
-	    // return mapping
+	    // return MemoryMapping
 	    if (ExecutionPlan.filteringInstruction != null) {
 		if (Double.parseDouble(ExecutionPlan.filteringInstruction.getThreshold()) > 0) {
 		    m = executeFilter(ExecutionPlan.filteringInstruction, m);

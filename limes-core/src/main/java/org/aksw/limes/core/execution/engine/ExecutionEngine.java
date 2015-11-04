@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
-import org.aksw.limes.core.io.Mapping;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.apache.log4j.Logger;
 
 
@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 public abstract class ExecutionEngine implements Engine {
     static Logger logger = Logger.getLogger("LIMES");
     //contains the results     
-    protected List<Mapping> buffer;
+    protected List<MemoryMapping> buffer;
     protected String sourceVariable;
     protected String targetVariable;
     protected Cache source;
@@ -35,7 +35,7 @@ public abstract class ExecutionEngine implements Engine {
      * @param targetVar Target variable (usually "?y")
      */
     public ExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
-        buffer = new ArrayList<Mapping>();
+        buffer = new ArrayList<MemoryMapping>();
         this.source = source;
         this.target = target;
         sourceVariable = sourceVar;
