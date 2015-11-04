@@ -11,14 +11,7 @@ import org.apache.log4j.Logger;
 public class AlgebraicRewriter implements Rewriter {
 
 
-    /**
-     * Rewrites a Link Specification and returns an equivalent yet probably more
-     * time-efficient link spec
-     *
-     * @param spec
-     *            Input link specification
-     * @return Rewritten spec
-     */
+    
     static Logger logger = Logger.getLogger("LIMES");
 
     @Override

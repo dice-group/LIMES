@@ -1,6 +1,6 @@
 package org.aksw.limes.core.cache;
 
-import org.aksw.limes.core.measures.measure.Instance;
+import org.aksw.limes.core.data.Instance;
 
 public class MemoryCache implements Cache{
 
@@ -14,6 +14,12 @@ public class MemoryCache implements Cache{
     public Instance getInstance(String string) {
 	// TODO Auto-generated method stub
 	return null;
+    }
+
+    @Override
+    public int size() {
+	// TODO Auto-generated method stub
+	return 0;
     }
 
 }

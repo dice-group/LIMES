@@ -1,6 +1,6 @@
 package org.aksw.limes.core.cache;
 
-import org.aksw.limes.core.measures.measure.Instance;
+import org.aksw.limes.core.data.Instance;
 
 public class HybridCache implements Cache {
 
@@ -15,5 +15,13 @@ public class HybridCache implements Cache {
 	// TODO Auto-generated method stub
 	return null;
     }
+
+    @Override
+    public int size() {
+	// TODO Auto-generated method stub
+	return 0;
+    }
+
+    
 
 }

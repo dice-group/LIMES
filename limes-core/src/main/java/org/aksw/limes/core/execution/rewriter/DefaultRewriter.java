@@ -23,7 +23,13 @@ public class DefaultRewriter implements Rewriter {
 	return spec;
     }
 
-
+    /**
+     * Returns the factor expression of a metric 
+     *
+     * @param spec
+     *            Input link specification
+     * @return Rewritten spec
+     */
     public static String factorExpression(String metric) {
 	try {
 	    String copy = metric.replaceAll(" ", "");
