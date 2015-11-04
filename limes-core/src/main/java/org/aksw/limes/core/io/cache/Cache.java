@@ -1,5 +1,7 @@
 package org.aksw.limes.core.io.cache;
 
+import java.util.ArrayList;
+
 import org.aksw.limes.core.data.Instance;
 
 public interface Cache {
@@ -9,5 +11,7 @@ public interface Cache {
     Instance getInstance(String string);
 
     int size();
+
+    ArrayList<String> getAllUris();
 
 }

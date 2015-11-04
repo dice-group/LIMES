@@ -1,7 +1,5 @@
 package org.aksw.limes.core.execution.rewriter;
 
-import org.aksw.limes.core.cache.Cache;
-
 import org.apache.log4j.Logger;
 
 public class RewriterFactory {

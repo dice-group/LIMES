@@ -167,9 +167,7 @@ public class SetOperations {
 		map.add(key, value, map2.getSimilarity(key, value));
 	    }
 	}
-	// logger.info("\n******\nMap1\n"+map1);
-	// logger.info("\n******\nMap2\n"+map2);
-	// logger.info("\n******\nMap\n"+map);
+	
 	return map;
     }
 
