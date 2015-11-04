@@ -3,10 +3,10 @@ package org.aksw.limes.core.execution.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.aksw.limes.core.cache.Cache;
-import org.aksw.limes.core.data.Mapping;
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
+import org.aksw.limes.core.io.Mapping;
+import org.aksw.limes.core.io.cache.Cache;
 import org.apache.log4j.Logger;
 
 

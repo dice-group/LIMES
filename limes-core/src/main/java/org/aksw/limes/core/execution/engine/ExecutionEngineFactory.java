@@ -1,6 +1,6 @@
 package org.aksw.limes.core.execution.engine;
 
-import org.aksw.limes.core.cache.Cache;
+import org.aksw.limes.core.io.cache.Cache;
 import org.apache.log4j.Logger;
 
 public class ExecutionEngineFactory {
@@ -14,7 +14,7 @@ public class ExecutionEngineFactory {
      * @return a specific execution engine instance
      * @author kleanthi
      */
-    public static ExecutionEngine getEngine(String name,Cache source, Cache target, String sourceVar, String targetVar) {
+    public static ExecutionEngine getEngine(String name, Cache source, Cache target, String sourceVar, String targetVar) {
 
 	if (name.equalsIgnoreCase(DEFAULT))
 	    return new DefaultExecutionEngine(source, target, sourceVar, targetVar);

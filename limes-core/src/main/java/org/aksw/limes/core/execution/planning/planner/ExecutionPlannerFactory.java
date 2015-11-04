@@ -1,10 +1,10 @@
 package org.aksw.limes.core.execution.planning.planner;
 
-import org.aksw.limes.core.cache.Cache;
 import org.aksw.limes.core.execution.engine.DefaultExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.engine.ParallelExecutionEngine;
+import org.aksw.limes.core.io.cache.Cache;
 import org.apache.log4j.Logger;
 
 public class ExecutionPlannerFactory {
@@ -19,7 +19,7 @@ public class ExecutionPlannerFactory {
      * @return a specific execution engine instance
      * @author kleanthi
      */
-    public static ExecutionPlanner getPlanner(String name,Cache source, Cache target) {
+    public static ExecutionPlanner getPlanner(String name, Cache source, Cache target) {
 
 	if (name.equalsIgnoreCase(DEFAULT))
 	    return new CannonicalPlanner();

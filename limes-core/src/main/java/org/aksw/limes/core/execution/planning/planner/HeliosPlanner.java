@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.aksw.limes.core.cache.Cache;
-import org.aksw.limes.core.data.Mapping;
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
+import org.aksw.limes.core.io.Mapping;
+import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.measures.mapper.Mapper.Language;
 import org.aksw.limes.core.measures.mapper.SetOperations.Operator;
 import org.aksw.limes.core.measures.measure.Measure;

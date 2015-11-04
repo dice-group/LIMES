@@ -2,8 +2,8 @@ package org.aksw.limes.core.execution.planning.planner;
 
 import java.util.Map;
 
-import org.aksw.limes.core.cache.Cache;
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
+import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.measures.mapper.Mapper.Language;
 import org.apache.log4j.Logger;
 

@@ -1,8 +1,8 @@
-package org.aksw.limes.core.cache;
+package org.aksw.limes.core.io.cache;
 
 import org.aksw.limes.core.data.Instance;
 
-public class MemoryCache implements Cache{
+public class HybridCache implements Cache {
 
     @Override
     public void addTriple(String string, String string2, String string3) {
@@ -21,5 +21,7 @@ public class MemoryCache implements Cache{
 	// TODO Auto-generated method stub
 	return 0;
     }
+
+    
 
 }

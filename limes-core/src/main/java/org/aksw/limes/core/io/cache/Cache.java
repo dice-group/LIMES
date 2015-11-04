@@ -1,4 +1,4 @@
-package org.aksw.limes.core.cache;
+package org.aksw.limes.core.io.cache;
 
 import org.aksw.limes.core.data.Instance;
 

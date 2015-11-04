@@ -11,5 +11,5 @@ import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
 * @author kleanthi
 */
 public interface Planner {
-    public ExecutionPlan plan(LinkSpec spec);
+    public ExecutionPlan plan(LinkSpecification spec);
 }
