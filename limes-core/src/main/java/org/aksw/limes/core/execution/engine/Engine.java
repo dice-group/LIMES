@@ -1,9 +1,8 @@
 package org.aksw.limes.core.execution.engine;
 
+import org.aksw.limes.core.data.Mapping;
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
-import org.aksw.limes.core.result.result.Mapping;
-import org.aksw.limes.core.result.result.Result;
 
 /**
  * Implements the engine interface. The engine gets a series of instructions in
@@ -18,8 +17,8 @@ public interface Engine {
      *
      * @param plan
      *            An execution plan
-     * @return The result from running the plan
+     * @return The result mapping from running the plan
      */
-    Result execute(Plan plan);
+    Mapping execute(ExecutionPlan plan);
 
 }

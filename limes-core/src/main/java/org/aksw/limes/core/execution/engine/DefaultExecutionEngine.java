@@ -1,9 +1,9 @@
 package org.aksw.limes.core.execution.engine;
 
+import org.aksw.limes.core.cache.Cache;
+import org.aksw.limes.core.data.Mapping;
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
-import org.aksw.limes.core.result.result.Mapping;
-import org.aksw.limes.core.result.result.Result;
 
 /**
  * Implements the default execution engine class. The idea is that the engine
@@ -15,6 +15,11 @@ import org.aksw.limes.core.result.result.Result;
  */
 public class DefaultExecutionEngine extends ExecutionEngine {
 
+    public DefaultExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
+	super(source, target, sourceVar, targetVar);
+	// TODO Auto-generated constructor stub
+    }
+
     /**
      * Implementation of the execution of a plan. Instructions of the plan are
      * implemented sequentially.
@@ -23,15 +28,12 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *            An execution plan
      * @return The mapping from running the plan
      */
-    public Mapping executePlan(ExecutionPlan plan) {
+    @Override
+    public Mapping execute(ExecutionPlan plan) {
 	// TODO Auto-generated method stub
 	return null;
     }
 
-    @Override
-    public Result execute(Plan plan) {
-	// TODO Auto-generated method stub
-	return this.executePlan((ExecutionPlan) plan);
-    }
+    
 
 }

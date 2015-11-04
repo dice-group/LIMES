@@ -1,7 +1,7 @@
 package org.aksw.limes.core.measures.mapper;
 
 import org.aksw.limes.core.cache.Cache;
-import org.aksw.limes.core.result.result.Mapping;
+import org.aksw.limes.core.data.Mapping;
 
 public abstract class AtomicMapper implements Mapper{
 

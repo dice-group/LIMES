@@ -6,4 +6,6 @@ public interface Measure {
     public double getSimilarity(Object a, Object b);    
     public double getSimilarity(Instance a, Instance b, String property1, String property2);
     public double getRuntimeApproximation(double mappingSize);
+    public String getName();
+    
 }
