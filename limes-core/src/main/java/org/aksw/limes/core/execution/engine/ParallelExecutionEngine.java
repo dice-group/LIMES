@@ -1,9 +1,9 @@
 package org.aksw.limes.core.execution.engine;
 
 import org.aksw.limes.core.cache.Cache;
-import org.aksw.limes.core.data.Mapping;
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
+import org.aksw.limes.core.io.Mapping;
 
 /**
  * Implements the default parallel engine class. The idea is that the engine

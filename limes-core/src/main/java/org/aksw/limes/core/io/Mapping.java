@@ -1,4 +1,4 @@
-package org.aksw.limes.core.data;
+package org.aksw.limes.core.io;
 
 import java.util.HashMap;
 
