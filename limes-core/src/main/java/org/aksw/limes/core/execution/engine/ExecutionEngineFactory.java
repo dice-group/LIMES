@@ -10,7 +10,7 @@ public class ExecutionEngineFactory {
 
     /**
      * @param name,
-     *            type of the ExecutionEngine
+     *            type of the Execution Engine
      * @return a specific execution engine instance
      * @author kleanthi
      */

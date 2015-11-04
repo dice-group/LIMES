@@ -12,6 +12,7 @@ import org.aksw.limes.core.cache.Cache;
 import org.aksw.limes.core.cache.MemoryCache;
 import org.apache.log4j.Logger;
 import org.aksw.limes.core.data.Instance;
+
 /**
  *
  * @author ngonga
@@ -44,9 +45,7 @@ public class MeasureProcessor {
 	Parser p = new Parser(expression, 0);
 
 	if (p.isAtomic()) {
-	    // System.out.println("ATOMIC");
 	    Measure measure = MeasureFactory.getMeasure(p.getOperation());
-	    // System.out.println("Measure = " + measure.getName());
 	    // get property name
 	    // 0. get properties
 	    // get property labels
@@ -71,10 +70,8 @@ public class MeasureProcessor {
 		    }
 		}
 		if (var.equals(sourceVar)) {
-		    // property1 = split[1];
 		    property1 = property;
 		} else {
-		    // property2 = split[1];
 		    property2 = property;
 		}
 	    } else {
@@ -119,8 +116,6 @@ public class MeasureProcessor {
 			getSimilarity(sourceInstance, targetInstance, p.getTerm2(), sourceVar, targetVar));
 	    }
 	    if (p.op.equalsIgnoreCase("ADD")) {
-		// System.out.println(p.coef1);
-		// System.out.println(p.coef2);
 		return p.coef1 * getSimilarity(sourceInstance, targetInstance, p.getTerm1(), sourceVar, targetVar)
 			+ p.coef2 * getSimilarity(sourceInstance, targetInstance, p.getTerm2(), sourceVar, targetVar);
 	    } else {

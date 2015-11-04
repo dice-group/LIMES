@@ -43,7 +43,7 @@ public class ExecutionPlan extends Plan {
     /**
      * Get all measure expressions from the execution plan, for example
      * "[trigrams(x.rdfs:label, y.rdfs:label),cosine(x.rdfs:title, y.rdfs:title)]"
-     * .
+     * 
      * 
      * @return results, list of measure expressions
      */

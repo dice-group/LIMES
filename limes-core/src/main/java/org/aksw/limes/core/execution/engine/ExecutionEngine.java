@@ -21,11 +21,11 @@ import org.apache.log4j.Logger;
 public abstract class ExecutionEngine implements Engine {
     static Logger logger = Logger.getLogger("LIMES");
     //contains the results     
-    private List<Mapping> buffer;
-    private String sourceVariable;
-    private String targetVariable;
-    private Cache source;
-    private Cache target;
+    protected List<Mapping> buffer;
+    protected String sourceVariable;
+    protected String targetVariable;
+    protected Cache source;
+    protected Cache target;
     /**
      * Constructor for an execution engine.
      *

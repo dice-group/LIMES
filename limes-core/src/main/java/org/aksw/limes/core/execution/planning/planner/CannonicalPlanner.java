@@ -45,7 +45,6 @@ public class CannonicalPlanner extends ExecutionPlanner {
 	    for (LinkSpec child : spec.children) {
 		children.add(plan(child));
 	    }
-	    // logger.info("Added "+children.size()+" subplans");
 	    plan.subPlans = children;
 	    // set operator
 
@@ -61,7 +60,6 @@ public class CannonicalPlanner extends ExecutionPlanner {
 	    plan.filteringInstruction = new Instruction(Command.FILTER, spec.getFilterExpression(), spec.threshold + "",
 		    -1, -1, 0);
 	}
-	// logger.info("Generated the following instructionList:\n"+plan);
 
 	return plan;
 

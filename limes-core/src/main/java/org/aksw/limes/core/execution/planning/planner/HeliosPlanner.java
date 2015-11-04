@@ -375,9 +375,5 @@ public class HeliosPlanner extends ExecutionPlanner {
 	return result;
     }
 
-    @Override
-    public void plan() {
-	// TODO Auto-generated method stub
-
-    }
+    
 }
