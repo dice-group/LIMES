@@ -26,9 +26,9 @@ public class DefaultRewriter implements Rewriter {
     /**
      * Returns the factor expression of a metric 
      *
-     * @param spec
-     *            Input link specification
-     * @return Rewritten spec
+     * @param metric,
+     *            input metric expression
+     * @return metric, factor expression as string
      */
     public static String factorExpression(String metric) {
 	try {
@@ -63,7 +63,13 @@ public class DefaultRewriter implements Rewriter {
 	}
 	return metric;
     }
-
+    /**
+     * Returns infix of a metric expression
+     *
+     * @param metric,
+     *            input metric expression
+     * @return metric, expression with infix as string
+     */
     public static String getInfix(String metric) {
 	try {
 	    Parser p = new Parser(metric, 1d);
