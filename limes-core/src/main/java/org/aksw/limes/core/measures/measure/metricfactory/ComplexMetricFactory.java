@@ -19,6 +19,7 @@ import org.apache.log4j.*;
 /**
  * A more complex metric factory that allows for metrics to combine properties
  * to a similarity via operations such as linear combinations, MAX, AVG, ...
+ * 
  * @author ngonga
  */
 public class ComplexMetricFactory implements MetricFactory {
@@ -32,450 +33,421 @@ public class ComplexMetricFactory implements MetricFactory {
     private String var2 = "y";
 
     public ComplexMetricFactory() {
-        metricExpression = null;
-        logger = Logger.getLogger("LIMES");
-        counter = 0;
+	metricExpression = null;
+	logger = Logger.getLogger("LIMES");
+	counter = 0;
     }
 
-    /** Sets the variable used in expressions for the source
+    /**
+     * Sets the variable used in expressions for the source
      *
-     * @param s Name of the variable
+     * @param s
+     *            Name of the variable
      */
     public void setSourceVar(String s) {
-        var1 = s;
+	var1 = s;
     }
 
-    /** Sets the variable used in expressions for the target
+    /**
+     * Sets the variable used in expressions for the target
      *
-     * @param s Name of the variable
+     * @param s
+     *            Name of the variable
      */
     public void setTargerVar(String s) {
-        var2 = s;
+	var2 = s;
     }
 
-    /** Transforms the input expression into a string that can be evaluated
-     *
-     * @param expression Input expression
-     */
+    
     public void setExpression(String expression) {
-        metricExpression = expression;
-        expression = expression.replaceAll(".", "_");
-        expression = expression.replaceAll(" ", "?");
-        int stacklistSize = expression.length();
-        stacklist = new Stacklist(stacklistSize);
-        metricExpression = metricExpression.toLowerCase();
-        logger.info("Transforming " + metricExpression);
+	metricExpression = expression;
+	expression = expression.replaceAll(".", "_");
+	expression = expression.replaceAll(" ", "?");
+	int stacklistSize = expression.length();
+	stacklist = new Stacklist(stacklistSize);
+	metricExpression = metricExpression.toLowerCase();
+	logger.info("Transforming " + metricExpression);
 
-        metricExpression = metricExpression.replaceAll("max", "xam");
-        metricExpression = metricExpression.replaceAll("euclidean", "naedilcuE");
-        metricExpression = metricExpression.replaceAll("blockdistance", "ecnatsidkcolb");
-        metricExpression = metricExpression.replaceAll("avg", "gva");
-        metricExpression = metricExpression.replaceAll("min", "nim");
-        metricExpression = metricExpression.replaceAll("levenshtein", "niethsnevel");
-        metricExpression = metricExpression.replaceAll("qgrams", "smargq");
-        metricExpression = toPostfix(metricExpression);
+	metricExpression = metricExpression.replaceAll("max", "xam");
+	metricExpression = metricExpression.replaceAll("euclidean", "naedilcuE");
+	metricExpression = metricExpression.replaceAll("blockdistance", "ecnatsidkcolb");
+	metricExpression = metricExpression.replaceAll("avg", "gva");
+	metricExpression = metricExpression.replaceAll("min", "nim");
+	metricExpression = metricExpression.replaceAll("levenshtein", "niethsnevel");
+	metricExpression = metricExpression.replaceAll("qgrams", "smargq");
+	metricExpression = toPostfix(metricExpression);
+	metricExpression = metricExpression.replaceAll("MAX", " MAX");
 
-        //metricExpression = metricExpression.replaceAll("abBlockDistance", " a b BlockDistance ");
-        //metricExpression = metricExpression.replaceAll("abEuclidean", " a b Euclidean ");
-        //metricExpression = metricExpression.replaceAll("abQGrams", " a b QGrams ");
-        metricExpression = metricExpression.replaceAll("MAX", " MAX");
+	String localExpression = metricExpression;
+	String[] split = localExpression.split(" ");
+	String reverse;
+	for (int i = 0; i < split.length; i++) {
+	    if (split[i].contains("_")) {
+		reverse = new StringBuffer(split[i]).reverse().toString();
+		logger.info(split[i] + " reversed to " + reverse);
+		metricExpression = metricExpression.replaceAll(split[i], reverse);
+	    }
+	}
 
-        String localExpression = metricExpression;
-        String[] split = localExpression.split(" ");
-        String reverse;
-        for (int i = 0; i < split.length; i++) {
-            if (split[i].contains("_")) {
-                reverse = new StringBuffer(split[i]).reverse().toString();
-                logger.info(split[i] + " reversed to " + reverse);
-                metricExpression = metricExpression.replaceAll(split[i], reverse);
-            }
-        }
-
-        logger.info("The reversed Input is " + metricExpression + '\n');
+	logger.info("The reversed Input is " + metricExpression + '\n');
     }
 
     public float evaluateExpression(String s) {
-        //System.out.println("Processing RPN |" + s + "|");
-        StringTokenizer st = new StringTokenizer(s);
-        Stack stack = new Stack();
-        while (st.hasMoreTokens()) {
-            String token = st.nextToken();
-            try {
-                //stack.push(Double.parseDouble(token));
-                //stack.push(new Double(token));
-                stack.push(Float.parseFloat(token));
-                stack.push(new Float(token));
-                System.out.println("New Number Processed " + token);
-            } catch (NumberFormatException e) {
-                double v1, v2;
-                String s1, s2;
-                float f1, f2;
-                String tmp = "";
+	// System.out.println("Processing RPN |" + s + "|");
+	StringTokenizer st = new StringTokenizer(s);
+	Stack stack = new Stack();
+	while (st.hasMoreTokens()) {
+	    String token = st.nextToken();
+	    try {
+		stack.push(Float.parseFloat(token));
+		stack.push(new Float(token));
+		System.out.println("New Number Processed " + token);
+	    } catch (NumberFormatException e) {
+		double v1, v2;
+		String s1, s2;
+		float f1, f2;
+		String tmp = "";
 
-                switch (token.charAt(0)) {
+		switch (token.charAt(0)) {
 
-                    case '*':
-                        v2 = Double.valueOf(stack.pop().toString());
-                        v1 = Double.valueOf(stack.pop().toString());
-                        System.out.println("Multiplying " + v1 + " * " + v2);
-                        System.out.println("Product Processed " + (v1 * v2));
-                        stack.push(new Float(v1 * v2));
-                        break;
-                    case '+':
-                        v2 = Double.valueOf(stack.pop().toString());
-                        v1 = Double.valueOf(stack.pop().toString());
-                        System.out.println("Adding " + v1 + " + " + v2);
-                        System.out.println("Sum Processed " + (v1 + v2));
-                        stack.push(new Double(v1 + v2));
-                        break;
-                    case '-':
-                        v2 = Double.valueOf(stack.pop().toString());
-                        v1 = Double.valueOf(stack.pop().toString());
-                        System.out.println("Subtracting " + v1 + " - " + v2);
-                        System.out.println("Difference Processed " + (v1 - v2));
-                        stack.push(new Double(v1 - v2));
-                        break;
-                    //case '.':
-                    //stack.push(e);
-                    //break;
-                    default:
+		case '*':
+		    v2 = Double.valueOf(stack.pop().toString());
+		    v1 = Double.valueOf(stack.pop().toString());
+		    System.out.println("Multiplying " + v1 + " * " + v2);
+		    System.out.println("Product Processed " + (v1 * v2));
+		    stack.push(new Float(v1 * v2));
+		    break;
+		case '+':
+		    v2 = Double.valueOf(stack.pop().toString());
+		    v1 = Double.valueOf(stack.pop().toString());
+		    System.out.println("Adding " + v1 + " + " + v2);
+		    System.out.println("Sum Processed " + (v1 + v2));
+		    stack.push(new Double(v1 + v2));
+		    break;
+		case '-':
+		    v2 = Double.valueOf(stack.pop().toString());
+		    v1 = Double.valueOf(stack.pop().toString());
+		    System.out.println("Subtracting " + v1 + " - " + v2);
+		    System.out.println("Difference Processed " + (v1 - v2));
+		    stack.push(new Double(v1 - v2));
+		    break;
+		// case '.':
+		// stack.push(e);
+		// break;
+		default:
 
-                        tmp = token.toString();
-                        String decimalPattern = "(\\d{1,3})?(.)?(\\d{1,3})?";
+		    tmp = token.toString();
+		    String decimalPattern = "(\\d{1,3})?(.)?(\\d{1,3})?";
 
-                        if (tmp.toLowerCase().matches("euclidean")) {
-                            s1 = stack.pop().toString();
-                            s2 = stack.pop().toString();
-                            //v2 = ((Double)stack.pop()).intValue();
-                            //v1 = ((Double)stack.pop()).intValue();
-                            System.out.println("Euclidean of " + s1 + " and " + s2);
-                            v1 = new EuclideanDistance().getEuclidDistance(s1, s2);
-                            System.out.println("Euclidean Processed " + v1);
-                            stack.push(v1);
-                            tmp = "";
-                            break;
-                        } else if (tmp.toLowerCase().matches("blockdistance")) {
-                            //v2 = ((Double)stack.pop()).doubleValue();
-                            //v1 = ((Double)stack.pop()).doubleValue();
-                            s2 = stack.pop().toString();
-                            s1 = stack.pop().toString();
-                            System.out.println("Blockdistance of " + s1 + " and " + s2);
-                            f1 = new BlockDistance().getSimilarity(s1, s2);
-                            System.out.println("Blockdistance Processed " + f1);
-                            stack.push(f1);
-                            tmp = "";
-                            break;
-                        } else if (tmp.toLowerCase().matches("qgrams")) {
-                            //v2 = ((Double)stack.pop()).doubleValue();
-                            //v1 = ((Double)stack.pop()).doubleValue();
-                            s1 = stack.pop().toString();
-                            s2 = stack.pop().toString();
-                            System.out.println("Qgrams of " + s1 + " and " + s2);
-                            f1 = new QGramsDistance().getSimilarity(s1, s2);
-                            System.out.println("Qgrams Processed " + f1);
-                            stack.push(f1);
-                            tmp = "";
-                            break;
-                        } else if (tmp.toLowerCase().matches("max")) {
-                            v2 = ((Double)stack.pop()).doubleValue();
-                            v1 = ((Double)stack.pop()).doubleValue();                            
-                            System.out.println("MAX of " + v1 + " and " + v2);
-                            stack.push((new Double(java.lang.Math.max(v1, v2))));
-                            tmp = "";
-                            break;
-                        } else if (tmp.toLowerCase().matches("avg")) {
-                            v2 = ((Double) stack.pop()).doubleValue();
-                            v1 = ((Double) stack.pop()).doubleValue();
-                            //s1 = stack.pop().toString();
-                            //s2 = stack.pop().toString();
-                            System.out.println("AVG of " + v1 + " and " + v2);
-                            //f1 = new
-                            System.out.println("AVG Processed " + (v1 + v2));
-                            stack.push(new Double(v1 + v2)/2);
-                            tmp = "";
-                            break;
-                        } else if (tmp.toLowerCase().matches("min")) {
-                            v2 = ((Double) stack.pop()).doubleValue();
-                            v1 = ((Double) stack.pop()).doubleValue();
-                            System.out.println("MIN of " + v1 + " and " + v2);
-                            System.out.println("MIN Processed " + (v1 + v2));
-                            stack.push(new Double(java.lang.Math.min(v1, v2)));
-                            tmp = "";
-                            break;
-                        } else if (tmp.toLowerCase().matches("levenshtein")) {
-                            //v2 = ((Double)stack.pop()).doubleValue();
-                            //v1 = ((Double)stack.pop()).doubleValue();
-                            s1 = stack.pop().toString();
-                            s2 = stack.pop().toString();
-                            System.out.println("Levenshtein of " + s1 + " and " + s2);
-                            f1 = new Levenshtein().getSimilarity(s1, s2);
-                            System.out.println("Levenshtein Processed " + f1);
-                            stack.push(f1);
-                            tmp = "";
-                            break;
-                        } /*else if(tmp.toLowerCase().matches("[0-9]")){
-                        stack.push(tmp);
-                        }
+		    if (tmp.toLowerCase().matches("euclidean")) {
+			s1 = stack.pop().toString();
+			s2 = stack.pop().toString();
+			// v2 = ((Double)stack.pop()).intValue();
+			// v1 = ((Double)stack.pop()).intValue();
+			System.out.println("Euclidean of " + s1 + " and " + s2);
+			v1 = new EuclideanDistance().getEuclidDistance(s1, s2);
+			System.out.println("Euclidean Processed " + v1);
+			stack.push(v1);
+			tmp = "";
+			break;
+		    } else if (tmp.toLowerCase().matches("blockdistance")) {
+			// v2 = ((Double)stack.pop()).doubleValue();
+			// v1 = ((Double)stack.pop()).doubleValue();
+			s2 = stack.pop().toString();
+			s1 = stack.pop().toString();
+			System.out.println("Blockdistance of " + s1 + " and " + s2);
+			f1 = new BlockDistance().getSimilarity(s1, s2);
+			System.out.println("Blockdistance Processed " + f1);
+			stack.push(f1);
+			tmp = "";
+			break;
+		    } else if (tmp.toLowerCase().matches("qgrams")) {
+			// v2 = ((Double)stack.pop()).doubleValue();
+			// v1 = ((Double)stack.pop()).doubleValue();
+			s1 = stack.pop().toString();
+			s2 = stack.pop().toString();
+			System.out.println("Qgrams of " + s1 + " and " + s2);
+			f1 = new QGramsDistance().getSimilarity(s1, s2);
+			System.out.println("Qgrams Processed " + f1);
+			stack.push(f1);
+			tmp = "";
+			break;
+		    } else if (tmp.toLowerCase().matches("max")) {
+			v2 = ((Double) stack.pop()).doubleValue();
+			v1 = ((Double) stack.pop()).doubleValue();
+			System.out.println("MAX of " + v1 + " and " + v2);
+			stack.push((new Double(java.lang.Math.max(v1, v2))));
+			tmp = "";
+			break;
+		    } else if (tmp.toLowerCase().matches("avg")) {
+			v2 = ((Double) stack.pop()).doubleValue();
+			v1 = ((Double) stack.pop()).doubleValue();
+			// s1 = stack.pop().toString();
+			// s2 = stack.pop().toString();
+			System.out.println("AVG of " + v1 + " and " + v2);
+			// f1 = new
+			System.out.println("AVG Processed " + (v1 + v2));
+			stack.push(new Double(v1 + v2) / 2);
+			tmp = "";
+			break;
+		    } else if (tmp.toLowerCase().matches("min")) {
+			v2 = ((Double) stack.pop()).doubleValue();
+			v1 = ((Double) stack.pop()).doubleValue();
+			System.out.println("MIN of " + v1 + " and " + v2);
+			System.out.println("MIN Processed " + (v1 + v2));
+			stack.push(new Double(java.lang.Math.min(v1, v2)));
+			tmp = "";
+			break;
+		    } else if (tmp.toLowerCase().matches("levenshtein")) {
+			// v2 = ((Double)stack.pop()).doubleValue();
+			// v1 = ((Double)stack.pop()).doubleValue();
+			s1 = stack.pop().toString();
+			s2 = stack.pop().toString();
+			System.out.println("Levenshtein of " + s1 + " and " + s2);
+			f1 = new Levenshtein().getSimilarity(s1, s2);
+			System.out.println("Levenshtein Processed " + f1);
+			stack.push(f1);
+			tmp = "";
+			break;
+		    } else {
+			stack.push(tmp.toLowerCase().toString());
+		    }
+		    System.out.println("String " + tmp + " to be processed.");
+		    break;
 
-                        else if(tmp.toLowerCase().matches("[a")){
-                        stack.push(tmp);
-                        }
-                        else if(tmp.toLowerCase().matches("b")){
-                        stack.push(tmp);
-                        }*/ else {
-                            stack.push(tmp.toLowerCase().toString());
-                        }
-                        System.out.println("String " + tmp + " to be processed.");
-                        break;
+		}
 
-                }
-
-            }
-        }
-        return new Float((Double) stack.pop()).floatValue();
+	    }
+	}
+	return new Float((Double) stack.pop()).floatValue();
     }
 
     static List<Token> tokenize(String source, List<Rule> rules) {
-        //source = removeSpaces(source);
-        //source.toLowerCase();
 
-        List<Token> tokens = new ArrayList<Token>();
-        int pos = 0;
-        final int end = source.length();
-        Matcher m = Pattern.compile("dummy").matcher(source);
-        m.useTransparentBounds(false).useAnchoringBounds(false);
-        while (pos < end) {
-            m.region(pos, end);
-            for (Rule r : rules) {
-                if (m.usePattern(r.pattern).lookingAt()) {
-                    tokens.add(new Token(r.name, m.start(), m.end()));
-                    pos = m.end();
-                    break;
-                }
-            }
-            pos++;  // bump-along, in case no rule matched
-        }
-        return tokens;
+	List<Token> tokens = new ArrayList<Token>();
+	int pos = 0;
+	final int end = source.length();
+	Matcher m = Pattern.compile("dummy").matcher(source);
+	m.useTransparentBounds(false).useAnchoringBounds(false);
+	while (pos < end) {
+	    m.region(pos, end);
+	    for (Rule r : rules) {
+		if (m.usePattern(r.pattern).lookingAt()) {
+		    tokens.add(new Token(r.name, m.start(), m.end()));
+		    pos = m.end();
+		    break;
+		}
+	    }
+	    pos++; // bump-along, in case no rule matched
+	}
+	return tokens;
     }
 
     public float getSimilarity(Instance a, Instance b) {
-        String localExpression = metricExpression;
-        String[] expression = localExpression.split(" ");
-        String property;
-        String value;
-        float similarity = 0;
-        try {
-            for (int i = 0; i < expression.length; i++) {
-                if (expression[i].contains("_")) {
-                    if (expression[i].startsWith(var1)) {
-                        property = expression[i].substring(expression[i].indexOf("_") + 1);
-                        value = a.getProperty(property).first();
-                        value = removeExtraCharacters(value);
-                        localExpression = localExpression.replaceAll(expression[i], value);
-                        logger.info("New local expression = "+localExpression);
-                    } else if (expression[i].startsWith(var2)) {
-                        property = expression[i].substring(expression[i].indexOf("_") + 1);
-                        value = b.getProperty(property).first();
-                        value = removeExtraCharacters(value);
-                        localExpression = localExpression.replaceAll(expression[i], value);
-                        logger.info("New local expression = "+localExpression);
-                    }
-                }
-            }
-            logger.info("New expression is " + localExpression);
-            similarity = evaluateExpression(localExpression);
-        } catch (Exception e) {
-            logger.warn(e.getMessage());
-        }
-        return similarity;
+	String localExpression = metricExpression;
+	String[] expression = localExpression.split(" ");
+	String property;
+	String value;
+	float similarity = 0;
+	try {
+	    for (int i = 0; i < expression.length; i++) {
+		if (expression[i].contains("_")) {
+		    if (expression[i].startsWith(var1)) {
+			property = expression[i].substring(expression[i].indexOf("_") + 1);
+			value = a.getProperty(property).first();
+			value = removeExtraCharacters(value);
+			localExpression = localExpression.replaceAll(expression[i], value);
+			logger.info("New local expression = " + localExpression);
+		    } else if (expression[i].startsWith(var2)) {
+			property = expression[i].substring(expression[i].indexOf("_") + 1);
+			value = b.getProperty(property).first();
+			value = removeExtraCharacters(value);
+			localExpression = localExpression.replaceAll(expression[i], value);
+			logger.info("New local expression = " + localExpression);
+		    }
+		}
+	    }
+	    logger.info("New expression is " + localExpression);
+	    similarity = evaluateExpression(localExpression);
+	} catch (Exception e) {
+	    logger.warn(e.getMessage());
+	}
+	return similarity;
     }
 
     public String removeExtraCharacters(String value) {
-        logger.info("Input = "+value);
-        value = value.replaceAll(" ", "?");
-        value = value.replaceAll("\\.", "_");
-        value = value.replaceAll("\\*", "_");
-        value = value.replaceAll("\\+", "_");
-        value = value.replaceAll("-", "_");
-        logger.info("Output = "+value);
-        return value;
+	logger.info("Input = " + value);
+	value = value.replaceAll(" ", "?");
+	value = value.replaceAll("\\.", "_");
+	value = value.replaceAll("\\*", "_");
+	value = value.replaceAll("\\+", "_");
+	value = value.replaceAll("-", "_");
+	logger.info("Output = " + value);
+	return value;
     }
 
     public String foldExpression(String expression, String var1, String var2) {
-        throw new UnsupportedOperationException("Not supported yet.");
+	throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public String toPostfix(String input) {
-        for (int j = 0; j < input.length(); j++) {
-            char ch = input.charAt(j);
-            switch (ch) {
-                case '+':
-                case '-':
-                    gotOperator(ch, 1);
-                    break; //   (precedence 1)
-                case '*': // it's * or /
-                case '/':
-                    gotOperator(ch, 2); // go pop operators
-                    break; //   (precedence 2)
-                case '(': // it's a left paren
-                    stacklist.push(ch); // push it
-                    break;
-                case ')': // it's a right paren
-                    gotParenthesis(ch); // go pop operators
-                    break;
-                case ',': // it's a function argument separator i.e a comma:
-                    gotSeparator(ch);
-                    break;
-                case '.': // it's a point e.g 4.6
-                    output = output + ch;
-                    break;
-                case ' ': //
-                    output = output + ch;
-                    break;
-                default: // must be an operand
-                    if (Character.isDigit(ch)) {
-                        output = output + ch; // write it to output
-                    } else {
-                        stacklist.push(ch);
-                    }
-                    break;
-            }
-        }
-        while (!stacklist.isEmpty()) {
-            output = output + stacklist.pop();
-        }
-        System.out.println(output);
-        return output; // return postfix
+	for (int j = 0; j < input.length(); j++) {
+	    char ch = input.charAt(j);
+	    switch (ch) {
+	    case '+':
+	    case '-':
+		gotOperator(ch, 1);
+		break; // (precedence 1)
+	    case '*': // it's * or /
+	    case '/':
+		gotOperator(ch, 2); // go pop operators
+		break; // (precedence 2)
+	    case '(': // it's a left paren
+		stacklist.push(ch); // push it
+		break;
+	    case ')': // it's a right paren
+		gotParenthesis(ch); // go pop operators
+		break;
+	    case ',': // it's a function argument separator i.e a comma:
+		gotSeparator(ch);
+		break;
+	    case '.': // it's a point e.g 4.6
+		output = output + ch;
+		break;
+	    case ' ': //
+		output = output + ch;
+		break;
+	    default: // must be an operand
+		if (Character.isDigit(ch)) {
+		    output = output + ch; // write it to output
+		} else {
+		    stacklist.push(ch);
+		}
+		break;
+	    }
+	}
+	while (!stacklist.isEmpty()) {
+	    output = output + stacklist.pop();
+	}
+	System.out.println(output);
+	return output; // return postfix
     }
 
     public void gotOperator(char opThis, int prec1) {
-        stacklist.push(' ');
-        while (!stacklist.isEmpty()) {
-            char opTop = stacklist.pop();
-            if (opTop == '(') {
-                stacklist.push(opTop);
-                break;
-            }// it's an operator
-            else {// precedence of new op
-                int prec2;
-                if (opTop == '+' || opTop == '-') {
+	stacklist.push(' ');
+	while (!stacklist.isEmpty()) {
+	    char opTop = stacklist.pop();
+	    if (opTop == '(') {
+		stacklist.push(opTop);
+		break;
+	    } // it's an operator
+	    else {// precedence of new op
+		int prec2;
+		if (opTop == '+' || opTop == '-') {
 
-                    prec2 = 1;
-                } else {
-                    prec2 = 2;
-                }
-                if (prec2 < prec1) // if prec of new op less than prec of old
-                {
+		    prec2 = 1;
+		} else {
+		    prec2 = 2;
+		}
+		if (prec2 < prec1) // if prec of new op less than prec of old
+		{
 
-                    stacklist.push(opTop); // save newly-popped op
-                    //theStacklist.push(' ');
-                    break;
-                } else // prec of new not less
-                {
-                    output = output + opTop; // than prec of old
-                }
-            }
-        }
-        stacklist.push(' ');
-        stacklist.push(opThis);
-        stacklist.push(' ');
+		    stacklist.push(opTop); // save newly-popped op
+		    // theStacklist.push(' ');
+		    break;
+		} else // prec of new not less
+		{
+		    output = output + opTop; // than prec of old
+		}
+	    }
+	}
+	stacklist.push(' ');
+	stacklist.push(opThis);
+	stacklist.push(' ');
     }
 
     public void gotParenthesis(char ch) {
-        while (!stacklist.isEmpty()) {
-            char chx = stacklist.pop();
-            if (chx == '(') {
-                break;
-            } else {
-                output = output + chx;
-            }
-        }
-        output = output + " ";
+	while (!stacklist.isEmpty()) {
+	    char chx = stacklist.pop();
+	    if (chx == '(') {
+		break;
+	    } else {
+		output = output + chx;
+	    }
+	}
+	output = output + " ";
     }
 
     public void gotSeparator(char ch) {
-        output = output + " ";
-        while (!stacklist.isEmpty()) {
-            char chx = stacklist.pop();
-            if (chx == '(') {
-                stacklist.push(chx);
-                break;
-            } else {
-                output = output + chx;
-            }
-        }
-        output = output + " ";
+	output = output + " ";
+	while (!stacklist.isEmpty()) {
+	    char chx = stacklist.pop();
+	    if (chx == '(') {
+		stacklist.push(chx);
+		break;
+	    } else {
+		output = output + chx;
+	    }
+	}
+	output = output + " ";
     }
 
     private static class Rule {
 
-        final String name;
-        final Pattern pattern;
+	final String name;
+	final Pattern pattern;
 
-        public Rule(String name, String regex) {
-            this.name = name;
-            this.pattern = Pattern.compile(regex);
-        }
+	public Rule(String name, String regex) {
+	    this.name = name;
+	    this.pattern = Pattern.compile(regex);
+	}
     }
 
     static class Token {
 
-        final String name;
-        final int startPos;
-        final int endPos;
+	final String name;
+	final int startPos;
+	final int endPos;
 
-        Token(String name, int startPos, int endPos) {
-            this.name = name;
-            this.startPos = startPos;
-            this.endPos = endPos;
-        }
+	Token(String name, int startPos, int endPos) {
+	    this.name = name;
+	    this.startPos = startPos;
+	    this.endPos = endPos;
+	}
 
-        @Override
-        public String toString() {
-            return String.format("Token [%2d, %2d, %s]", startPos, endPos, name);
-        }
+	@Override
+	public String toString() {
+	    return String.format("Token [%2d, %2d, %s]", startPos, endPos, name);
+	}
     }
 
     class Stacklist {
 
-        private int maxSize;
-        private char[] stacklistArray;
-        private int top;
+	private int maxSize;
+	private char[] stacklistArray;
+	private int top;
 
-        public Stacklist(int max) {
-            maxSize = max;
-            stacklistArray = new char[maxSize];
-            top = -1;
-        }
+	public Stacklist(int max) {
+	    maxSize = max;
+	    stacklistArray = new char[maxSize];
+	    top = -1;
+	}
 
-        public void push(char j) {
-            stacklistArray[++top] = j;
-        }
+	public void push(char j) {
+	    stacklistArray[++top] = j;
+	}
 
-        public char pop() {
-            return stacklistArray[top--];
-        }
+	public char pop() {
+	    return stacklistArray[top--];
+	}
 
-        public char peek() {
-            return stacklistArray[top];
-        }
+	public char peek() {
+	    return stacklistArray[top];
+	}
 
-        public boolean isEmpty() {
-            return (top == -1);
-        }
+	public boolean isEmpty() {
+	    return (top == -1);
+	}
     }
 
-    public static void main(String args[]) {
-        ComplexMetricFactory cmf = new ComplexMetricFactory();
-        cmf.setExpression("0.5 *Euclidean (x_title, y_title)+0.5*QGrams (y_name, x_familyName)");
-        Instance a = new Instance("uri1");
-        Instance b = new Instance("uri2");
-
-        a.addProperty("title", "Dr. rer. nat");
-        a.addProperty("familyname", "NgongaNgomo");
-        b.addProperty("name", "AxelNgonga");
-        b.addProperty("title", "Dr.");
-
-        System.out.println("Similarity is " + cmf.getSimilarity(a, b));
-    }
 }

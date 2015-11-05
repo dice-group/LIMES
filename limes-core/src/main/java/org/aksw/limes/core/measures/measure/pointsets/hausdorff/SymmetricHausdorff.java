@@ -18,16 +18,16 @@ import org.aksw.limes.core.measures.measure.pointsets.SetMeasure;
  *
  * @author ngonga
  */
-public class SymmetricHausdorff extends NaiveHausdorff{
+public class SymmetricHausdorff extends NaiveHausdorff {
 
     @Override
     public double computeDistance(Polygon X, Polygon Y, double threshold) {
-        NaiveHausdorff nh = new NaiveHausdorff();
-        return Math.max(nh.computeDistance(X, Y, threshold), nh.computeDistance(Y, X, threshold));
+	NaiveHausdorff nh = new NaiveHausdorff();
+	return Math.max(nh.computeDistance(X, Y, threshold), nh.computeDistance(Y, X, threshold));
     }
-    
+
     @Override
     public String getName() {
-        return "symmetricHausdorff";
+	return "symmetricHausdorff";
     }
 }
