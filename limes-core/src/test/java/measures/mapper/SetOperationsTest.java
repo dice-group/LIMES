@@ -1,10 +1,14 @@
 package measures.mapper;
+import static org.junit.Assert.*;
 
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.SetOperations;
+import org.junit.Test;
 
 public class SetOperationsTest {
+    
+    @Test
     public static void main(String args[]) {
 	Mapping a = new MemoryMapping();
 	Mapping b = new MemoryMapping();

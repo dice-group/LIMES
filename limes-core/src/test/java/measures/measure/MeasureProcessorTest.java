@@ -1,10 +1,14 @@
 package measures.measure;
+import static org.junit.Assert.*;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
+import org.junit.Test;
 
 public class MeasureProcessorTest {
+    
+    @Test
     public static void main(String args[]) {
 	Cache source = new MemoryCache();
 	Cache target = new MemoryCache();

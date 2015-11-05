@@ -190,55 +190,5 @@ public class TopologicalRelationUtils {
         return m;
     } 
     
-    public static void main(String args[]) {
-
-        String polygonA, polygonB, relation;
-        
-        polygonA = "POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))";
-        polygonB = "POLYGON ((2 2, 3 2, 3 3, 2 3, 2 2))";
-        relation = DISJOINT;
-        theta = 10;
-        System.out.println("Test 1: " + (((getMapping((new HashSet<>(Arrays.asList(new Polygon("A", getPoints(polygonA))))), (new HashSet<>(Arrays.asList(new Polygon("Β", getPoints(polygonB))))), relation).size != 0)) ? (polygonA + " " + relation + " " + polygonB) : "No Mapping."));
-
-        polygonA = "POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))";
-        polygonB = "POLYGON ((2 2, 3 2, 3 3, 2 3, 2 2))";
-        relation = DISJOINT;
-        theta = 1000;
-        System.out.println("Test 2: " + (((getMapping((new HashSet<>(Arrays.asList(new Polygon("A", getPoints(polygonA))))), (new HashSet<>(Arrays.asList(new Polygon("Β", getPoints(polygonB))))), relation).size != 0)) ? (polygonA + " " + relation + " " + polygonB) : "No Mapping."));
-        
-        polygonA = "POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))";
-        polygonB = "POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))";
-        relation = DISJOINT;
-        System.out.println("Test 3: " + (((getMapping((new HashSet<>(Arrays.asList(new Polygon("A", getPoints(polygonA))))), (new HashSet<>(Arrays.asList(new Polygon("Β", getPoints(polygonB))))), relation).size != 0)) ? (polygonA + " " + relation + " " + polygonB) : "No Mapping."));
-
-        polygonA = "POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))";
-        polygonB = "POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))";
-        relation = EQUALS;
-        System.out.println("Test 4: " + (((getMapping((new HashSet<>(Arrays.asList(new Polygon("A", getPoints(polygonA))))), (new HashSet<>(Arrays.asList(new Polygon("Β", getPoints(polygonB))))), relation).size != 0)) ? (polygonA + " " + relation + " " + polygonB) : "No Mapping."));
-
-        polygonA = "POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))";
-        polygonB = "POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))";
-        relation = INTERSECTS;
-        System.out.println("Test 5: " + (((getMapping((new HashSet<>(Arrays.asList(new Polygon("A", getPoints(polygonA))))), (new HashSet<>(Arrays.asList(new Polygon("Β", getPoints(polygonB))))), relation).size != 0)) ? (polygonA + " " + relation + " " + polygonB) : "No Mapping."));
-
-        polygonA = "POLYGON ((0 0, 3 0, 3 3, 0 3, 0 0))";
-        polygonB = "POLYGON ((1 1, 2 1, 2 2, 1 2, 1 1))";
-        relation = CONTAINS;
-        System.out.println("Test 6: " + (((getMapping((new HashSet<>(Arrays.asList(new Polygon("A", getPoints(polygonA))))), (new HashSet<>(Arrays.asList(new Polygon("Β", getPoints(polygonB))))), relation).size != 0)) ? (polygonA + " " + relation + " " + polygonB) : "No Mapping."));
-
-        polygonA = "POLYGON ((1 1, 2 1, 2 2, 1 2, 1 1))";
-        polygonB = "POLYGON ((0 0, 3 0, 3 3, 0 3, 0 0))";
-        relation = WITHIN;
-        System.out.println("Test 7: " + (((getMapping((new HashSet<>(Arrays.asList(new Polygon("A", getPoints(polygonA))))), (new HashSet<>(Arrays.asList(new Polygon("Β", getPoints(polygonB))))), relation).size != 0)) ? (polygonA + " " + relation + " " + polygonB) : "No Mapping."));        
-
-        polygonA = "POLYGON ((1 1, 3 1, 3 3, 1 3, 1 1))";
-        polygonB = "POLYGON ((0 0, 2 0, 2 2, 0 2, 0 0))";                
-        relation = OVERLAPS;
-        System.out.println("Test 8: " + (((getMapping((new HashSet<>(Arrays.asList(new Polygon("A", getPoints(polygonA))))), (new HashSet<>(Arrays.asList(new Polygon("Β", getPoints(polygonB))))), relation).size != 0)) ? (polygonA + " " + relation + " " + polygonB) : "No Mapping."));
-
-        polygonA = "POLYGON ((0 2, 2 3, 3 3, 3 2, 0 2))";
-        polygonB = "POLYGON ((0 0, 2 0, 2 2, 0 2, 0 0))";                
-        relation = TOUCHES;
-        System.out.println("Test 9: " + (((getMapping((new HashSet<>(Arrays.asList(new Polygon("A", getPoints(polygonA))))), (new HashSet<>(Arrays.asList(new Polygon("Β", getPoints(polygonB))))), relation).size != 0)) ? (polygonA + " " + relation + " " + polygonB) : "No Mapping."));        
-    }
+    
 }

@@ -159,11 +159,7 @@ public class OrchidMapper extends AtomicMapper {
         }
     }
 
-    public static void main(String args[]) {
-        System.out.println(getPoints("LINESTRING((129.1656696 43.1537336) (129.1653388 43.1494863))"));
-        System.out.println(getPoints("POINT(-79.116667 -3.2)"));
-        System.out.println(getPoints("POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))"));
-    }
+   
 
     public Type getTypeFromExpression(String expression) {
         String measure = expression.toLowerCase();
