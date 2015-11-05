@@ -6,11 +6,13 @@ package org.aksw.limes.core.measures.mapper.atomic;
 
 import algorithms.Correspondence;
 import algorithms.ppjoinplus.PPJoinPlus;
-import de.uni_leipzig.simba.cache.Cache;
-import de.uni_leipzig.simba.data.Instance;
-import de.uni_leipzig.simba.data.Mapping;
-import de.uni_leipzig.simba.mapper.AtomicMapper;
-import de.uni_leipzig.simba.controller.Parser;
+
+import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.parser.Parser;
+import org.aksw.limes.core.measures.mapper.AtomicMapper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,7 +29,7 @@ import org.apache.log4j.Logger;
  * @author ngonga
  */
 @Deprecated
-public class PPJoinMapper implements AtomicMapper {
+public class PPJoinMapper extends AtomicMapper {
 
     static Logger logger = Logger.getLogger("LIMES");
 
@@ -135,7 +137,7 @@ public class PPJoinMapper implements AtomicMapper {
 
         logger.info("Reorganizing ...");
         //transform result to mapping
-        Mapping map = new Mapping();
+        Mapping map = new MemoryMapping();
 
         Correspondence corr;
 //        for (int i = 0; i < result.size(); i++) {

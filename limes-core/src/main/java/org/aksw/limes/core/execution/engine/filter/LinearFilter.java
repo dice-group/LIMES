@@ -1,8 +1,9 @@
 package org.aksw.limes.core.execution.engine.filter;
 
 import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.io.Mapping;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.SetOperations;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.apache.log4j.Logger;
@@ -33,7 +34,7 @@ public class LinearFilter implements Filter {
 	if (threshold <= 0.0) {
 	    return map;
 	} else {
-	    Mapping result = new Mapping();
+	    Mapping result = new MemoryMapping();
 	    // 1. Run on all pairs and remove those whose similarity is below
 	    // the threshold
 	    for (String key : map.map.keySet()) {
@@ -67,7 +68,7 @@ public class LinearFilter implements Filter {
 	    return filter(map, threshold);
 	} else {
 
-	    Mapping result = new Mapping();
+	    Mapping result = new MemoryMapping();
 	    // 2. run on all pairs and remove those
 	    for (String key : map.map.keySet()) {
 		s = source.getInstance(key);
@@ -93,7 +94,7 @@ public class LinearFilter implements Filter {
      */
     public Mapping filter(Mapping m1, Mapping m2, double coef1, double coef2, double threshold, String operation) {
 	Mapping m = SetOperations.intersection(m1, m2);
-	Mapping result = new Mapping();
+	Mapping result = new MemoryMapping();
 	double sim;
 	// we can be sure that each key in m is also in m1 and m2 as we used
 	// intersection

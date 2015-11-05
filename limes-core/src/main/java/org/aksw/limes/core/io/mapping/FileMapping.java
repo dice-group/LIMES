@@ -6,7 +6,7 @@ public class FileMapping extends Mapping implements IMapping {
 
     public HashMap<String, HashMap<String, Double>> map;
 
-    public long getNumberofMappings() {
+    public int getNumberofMappings() {
 	// TODO Auto-generated method stub
 	return 0;
     }
@@ -31,9 +31,21 @@ public class FileMapping extends Mapping implements IMapping {
 	
     }
 
-    public Double getSimilarity(String key, String value) {
+    public double getSimilarity(String key, String value) {
 	// TODO Auto-generated method stub
-	return null;
+	return 0.0d;
+    }
+
+    @Override
+    public void add(String key, String value, double sim) {
+	// TODO Auto-generated method stub
+	
+    }
+
+    @Override
+    public boolean contains(String key, String value) {
+	// TODO Auto-generated method stub
+	return false;
     }
 
 }

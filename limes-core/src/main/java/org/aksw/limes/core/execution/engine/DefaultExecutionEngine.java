@@ -7,11 +7,18 @@ import org.aksw.limes.core.execution.engine.filter.LinearFilter;
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
-import org.aksw.limes.core.execution.planning.plan.Plan;
+import org.aksw.limes.core.execution.planning.plan.IPlan;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.AtomicMapper;
 import org.aksw.limes.core.measures.mapper.SetOperations;
+import org.aksw.limes.core.measures.mapper.atomic.EDJoin;
+import org.aksw.limes.core.measures.mapper.atomic.JaroMapper;
+import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
+import org.aksw.limes.core.measures.mapper.atomic.PPJoinPlusPlus;
+import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
+import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
 
 /**
  * Implements the default execution engine class. The idea is that the engine
@@ -36,7 +43,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *            An execution plan
      * @return The MemoryMapping that results from running the plan
      */
-    public MemoryMapping executeAtomic(ExecutionPlan plan) {
+    public Mapping executeAtomic(ExecutionPlan plan) {
 	buffer = new ArrayList<MemoryMapping>();
 	if (plan.isEmpty()) {
 	    logger.info("Plan is empty. Done.");
@@ -44,7 +51,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 	}
 
 	List<Instruction> instructions = plan.getInstructionList();
-	MemoryMapping m = new MemoryMapping();
+	Mapping m = new MemoryMapping();
 	for (int i = 0; i < instructions.size(); i++) {
 	    Instruction inst = instructions.get(i);
 	    // get the index for writing the results
@@ -81,14 +88,14 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 	    }
 
 	    if (index < 0) {
-		buffer.add(m);
+		buffer.add((MemoryMapping) m);
 	    } else {
 		// add placeholders to ensure that the MemoryMapping can be placed
 		// where the user wanted to have it
 		while ((index + 1) > buffer.size()) {
 		    buffer.add(new MemoryMapping());
 		}
-		buffer.set(index, m);
+		buffer.set(index, (MemoryMapping) m);
 	    }
 	}
 
@@ -113,7 +120,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *            Target cache
      * @return MemoryMapping
      */
-    public MemoryMapping executeRun(Instruction inst) {
+    public Mapping executeRun(Instruction inst) {
 	// get threshold
 
 	double threshold = Double.parseDouble(inst.getThreshold());
@@ -149,7 +156,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *            MemoryMapping that is to be filtered
      * @return Filtered MemoryMapping
      */
-    private MemoryMapping executeFilter(Instruction inst, MemoryMapping input) {
+    private Mapping executeFilter(Instruction inst, Mapping input) {
 	LinearFilter filter = new LinearFilter();
 	return filter.filter(input, inst.getMeasureExpression(), Double.parseDouble(inst.getThreshold()), source,
 		target, sourceVariable, targetVariable);
@@ -166,11 +173,11 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *            Second MemoryMapping
      * @return Intersection of m1 and m2
      */
-    public MemoryMapping executeIntersection(Instruction inst, MemoryMapping m1, MemoryMapping m2) {
+    public Mapping executeIntersection(Instruction inst, Mapping m1, Mapping m2) {
 	return SetOperations.intersection(m1, m2);
     }
 
-    public MemoryMapping executeUnion(Instruction inst, MemoryMapping m1, MemoryMapping m2) {
+    public Mapping executeUnion(Instruction inst, Mapping m1, Mapping m2) {
 	return SetOperations.union(m1, m2);
     }
 
@@ -181,11 +188,11 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *            ExecutionPlan
      * @return MemoryMapping
      */
-    public MemoryMapping execute(ExecutionPlan ExecutionPlan) {
+    public Mapping execute(ExecutionPlan ExecutionPlan) {
 	// empty nested plan contains nothing
 	long begin = System.currentTimeMillis();
 
-	MemoryMapping m = new MemoryMapping();
+	Mapping m = new MemoryMapping();
 	if (ExecutionPlan.isEmpty()) {
 	} // atomic nested plan just contain simple list of instructions
 	else if (ExecutionPlan.isAtomic()) {
@@ -199,7 +206,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 
 	    // run all the subplans
 	    m = execute(ExecutionPlan.subPlans.get(0));
-	    MemoryMapping m2, result = m;
+	    Mapping m2, result = m;
 	    for (int i = 1; i < ExecutionPlan.subPlans.size(); i++) {
 		m2 = execute(ExecutionPlan.subPlans.get(i));
 		if (ExecutionPlan.operator.equals(Command.INTERSECTION)) {

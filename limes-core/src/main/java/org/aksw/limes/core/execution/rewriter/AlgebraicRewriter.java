@@ -3,25 +3,27 @@ package org.aksw.limes.core.execution.rewriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.aksw.limes.core.config.LinkSpecification;
+import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.SetOperations.Operator;
 import org.apache.log4j.Logger;
 
 
 
-public class AlgebraicRewriter implements Rewriter {
+public class AlgebraicRewriter implements IRewriter {
 
 
     
     static Logger logger = Logger.getLogger("LIMES");
 
     @Override
-    public LinkSpec rewrite(LinkSpec spec) {
+    public LinkSpecification rewrite(LinkSpecification spec) {
 	// rewrite only non-atomic specs
 	// if(spec.size() <= 1) return spec;
 	int oldSize;
 	int newSize = spec.size();
 	int counter = 0;
-	LinkSpec result = spec;
+	LinkSpecification result = spec;
 	try {
 	    do {
 		counter++;
@@ -47,7 +49,7 @@ public class AlgebraicRewriter implements Rewriter {
      * @param spec
      * @return Return spec with updated weights
      */
-    public LinkSpec updateThresholds(LinkSpec spec) {
+    public LinkSpecification updateThresholds(LinkSpecification spec) {
 	// should not happen
 	if (spec.isEmpty()) {
 	    return spec;
@@ -58,7 +60,7 @@ public class AlgebraicRewriter implements Rewriter {
 	    if (spec.getFilterExpression() == null) {
 		double min = 1f;
 		// get minimum over all children
-		for (LinkSpec child : spec.children) {
+		for (LinkSpecification child : spec.children) {
 		    if (child.threshold < min) {
 			min = child.threshold;
 		    }
@@ -69,7 +71,7 @@ public class AlgebraicRewriter implements Rewriter {
 		}
 	    }
 	    // if spec has children then run update for children as well
-	    for (LinkSpec child : spec.children) {
+	    for (LinkSpecification child : spec.children) {
 		child = updateThresholds(child);
 	    }
 	}
@@ -83,7 +85,7 @@ public class AlgebraicRewriter implements Rewriter {
      *            Input
      * @return Cleaned up spec
      */
-    public LinkSpec removeUnaryOperators(LinkSpec spec) {
+    public LinkSpecification removeUnaryOperators(LinkSpecification spec) {
 	if (!spec.isAtomic() && !spec.isEmpty()) {
 	    if (spec.getFilterExpression() == null && spec.children.size() == 1) {
 		// don't forget to update the threshold while lifting the branch
@@ -95,8 +97,8 @@ public class AlgebraicRewriter implements Rewriter {
 		System.out.println("New spec = " + spec + "\t");
 	    }
 	    if (!spec.isAtomic()) {
-		List<LinkSpec> newChildren = new ArrayList<LinkSpec>();
-		for (LinkSpec child : spec.children) {
+		List<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
+		for (LinkSpecification child : spec.children) {
 		    newChildren.add(removeUnaryOperators(child));
 		}
 		spec.children = newChildren;
@@ -117,7 +119,7 @@ public class AlgebraicRewriter implements Rewriter {
      *            Target link spec
      * @return -1, 0, +1 or +2
      */
-    public LinkSpec computeAtomicDependency(LinkSpec source, LinkSpec target) {
+    public LinkSpecification computeAtomicDependency(LinkSpecification source, LinkSpecification target) {
 	// only works for atomic properties
 	if (!source.isAtomic() || !target.isAtomic()) {
 	    return source;
@@ -157,7 +159,7 @@ public class AlgebraicRewriter implements Rewriter {
      *            Input spec
      * @return List of properties used in the spec
      */
-    public List<String> getProperties(LinkSpec spec) {
+    public List<String> getProperties(LinkSpecification spec) {
 	List<String> result = new ArrayList<String>();
 	if (spec.isAtomic()) {
 	    Parser p = new Parser(spec.getFilterExpression(), spec.threshold);
@@ -174,7 +176,7 @@ public class AlgebraicRewriter implements Rewriter {
      *            Specification
      * @return Measure used in the spec, null if the spec is not atomic
      */
-    public String getMeasure(LinkSpec spec) {
+    public String getMeasure(LinkSpecification spec) {
 	if (spec.isAtomic()) {
 	    return spec.getFilterExpression().substring(0, spec.getFilterExpression().indexOf("("));
 	} else {
@@ -189,7 +191,7 @@ public class AlgebraicRewriter implements Rewriter {
      *            Input spec
      * @return Spec with all dependencies updated
      */
-    public LinkSpec computeAllDependencies(LinkSpec spec) {
+    public LinkSpecification computeAllDependencies(LinkSpecification spec) {
 	spec = computeAtomicDependencies(spec);
 	spec = computeNonAtomicDependencies(spec);
 	return spec;
@@ -201,12 +203,12 @@ public class AlgebraicRewriter implements Rewriter {
      * @param spec
      * @return
      */
-    public LinkSpec computeNonAtomicDependencies(LinkSpec spec) {
+    public LinkSpecification computeNonAtomicDependencies(LinkSpecification spec) {
 	if (!spec.isAtomic()) {
-	    List<LinkSpec> newDependencies = null;
-	    List<LinkSpec> newChildren = new ArrayList<LinkSpec>();
+	    List<LinkSpecification> newDependencies = null;
+	    List<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
 	    // first update dependencies of children
-	    for (LinkSpec child : spec.children) {
+	    for (LinkSpecification child : spec.children) {
 		newChildren.add(computeNonAtomicDependencies(child));
 	    }
 	    spec.children = newChildren;
@@ -225,8 +227,8 @@ public class AlgebraicRewriter implements Rewriter {
 	    }
 	    // if operator = OR, then merge all
 	    if (spec.operator == Operator.OR) {
-		newDependencies = new ArrayList<LinkSpec>();
-		for (LinkSpec child : spec.children) {
+		newDependencies = new ArrayList<LinkSpecification>();
+		for (LinkSpecification child : spec.children) {
 		    if (child.hasDependencies()) {
 			newDependencies.addAll(child.dependencies);
 		    }
@@ -235,7 +237,7 @@ public class AlgebraicRewriter implements Rewriter {
 	    spec.dependencies = null;
 
 	    if (newDependencies != null) {
-		for (LinkSpec d : newDependencies) {
+		for (LinkSpecification d : newDependencies) {
 		    if (d.threshold > spec.threshold || spec.threshold == 0) {
 			spec.addDependency(d);
 		    }
@@ -252,12 +254,12 @@ public class AlgebraicRewriter implements Rewriter {
      *            Input spec
      * @return spec with all dependencies computed
      */
-    public LinkSpec computeAtomicDependencies(LinkSpec spec) {
-	List<LinkSpec> leaves = spec.getAllLeaves();
+    public LinkSpecification computeAtomicDependencies(LinkSpecification spec) {
+	List<LinkSpecification> leaves = spec.getAllLeaves();
 	// compute the dependency between leaves
 	for (int i = 0; i < leaves.size(); i++) {
 	    // reset dependencies
-	    leaves.get(i).dependencies = new ArrayList<LinkSpec>();
+	    leaves.get(i).dependencies = new ArrayList<LinkSpecification>();
 	    for (int j = 0; j < leaves.size(); j++) {
 		if (i != j) {
 		    leaves.set(i, computeAtomicDependency(leaves.get(i), leaves.get(j)));
@@ -274,20 +276,20 @@ public class AlgebraicRewriter implements Rewriter {
      *            Input spec
      * @return Collapsed spec, i.e., spec where dependencies have been removed
      */
-    public LinkSpec collapseSpec(LinkSpec spec) {
+    public LinkSpecification collapseSpec(LinkSpecification spec) {
 	if (spec.isAtomic() || spec.isEmpty()) {
 	    return spec;
 	}
 	// first collapse children which depend on each other
 	if (spec.operator == Operator.AND) {
-	    List<LinkSpec> newChildren = new ArrayList<LinkSpec>();
+	    List<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
 	    newChildren.addAll(spec.children);
 	    // child is a superset of its dependencies, thus
 	    // if one of its dependency is a child of the current node, then
 	    // no need to compute child
-	    for (LinkSpec child : spec.children) {
+	    for (LinkSpecification child : spec.children) {
 		if (child.hasDependencies()) {
-		    for (LinkSpec dependency : child.dependencies) {
+		    for (LinkSpecification dependency : child.dependencies) {
 			if (newChildren.contains(dependency)) {
 			    // ensures that at least one child is kept, in case
 			    // of cyclic dependencies
@@ -301,11 +303,11 @@ public class AlgebraicRewriter implements Rewriter {
 	    }
 	    spec.children = newChildren;
 	} else if (spec.operator == Operator.OR) {
-	    List<LinkSpec> newChildren = new ArrayList<LinkSpec>();
+	    List<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
 	    newChildren.addAll(spec.children);
-	    for (LinkSpec child : spec.children) {
+	    for (LinkSpecification child : spec.children) {
 		if (child.hasDependencies()) {
-		    for (LinkSpec dependency : child.dependencies) {
+		    for (LinkSpecification dependency : child.dependencies) {
 			// all entries of dependency contained in child, so
 			// no need to compute it
 			if (newChildren.contains(dependency)) {
@@ -321,9 +323,9 @@ public class AlgebraicRewriter implements Rewriter {
 	    }
 	    spec.children = newChildren;
 	}
-	List<LinkSpec> newChildren = new ArrayList<LinkSpec>();
+	List<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
 	// now collapse remaining children
-	for (LinkSpec child : spec.children) {
+	for (LinkSpecification child : spec.children) {
 	    newChildren.add(collapseSpec(child));
 	}
 	spec.children = newChildren;

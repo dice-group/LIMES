@@ -4,9 +4,11 @@
  */
 package org.aksw.limes.core.measures.mapper.atomic;
 
-import de.uni_leipzig.simba.controller.Parser;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import org.aksw.limes.core.io.parser.Parser;
 
 /**
  *

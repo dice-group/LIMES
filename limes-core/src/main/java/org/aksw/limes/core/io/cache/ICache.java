@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.aksw.limes.core.data.Instance;
 
-public interface Cache {
+public interface ICache {
 
     void addTriple(String string, String string2, String string3);
 

@@ -4,16 +4,18 @@
  */
 package org.aksw.limes.core.measures.mapper.atomic;
 
-import de.uni_leipzig.simba.cache.Cache;
-import de.uni_leipzig.simba.data.Mapping;
-import de.uni_leipzig.simba.mapper.AtomicMapper;
-import de.uni_leipzig.simba.mapper.SetOperations;
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.SetOperations;
+
 
 /**
  *
  * @author ngonga
  */
-public class SymmetricHausdorffMapper implements AtomicMapper{
+public class SymmetricHausdorffMapper extends AtomicMapper{
 
     public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression, double threshold) {
         OrchidMapper hm = new OrchidMapper();

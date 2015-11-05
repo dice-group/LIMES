@@ -8,10 +8,9 @@ package org.aksw.limes.core.measures.measure;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.aksw.limes.core.cache.Cache;
-import org.aksw.limes.core.cache.MemoryCache;
 import org.apache.log4j.Logger;
 import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.parser.Parser;
 
 /**
  *

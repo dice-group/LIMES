@@ -4,12 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.aksw.limes.core.config.LinkSpecification;
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
-import org.aksw.limes.core.io.Mapping;
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.measures.mapper.Mapper.Language;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.parser.Parser;
+import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.SetOperations.Operator;
+import org.aksw.limes.core.measures.mapper.atomic.EDJoin;
+import org.aksw.limes.core.measures.mapper.atomic.PPJoinMapper;
+import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
+import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
 import org.aksw.limes.core.measures.measure.Measure;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
@@ -116,9 +122,9 @@ public class HeliosPlanner extends ExecutionPlanner {
 	return cost;
     }
 
-    public ExecutionPlan plan(LinkSpec spec) {
+    public ExecutionPlan plan(LinkSpecification spec) {
 
-	return plan(spec, source, target, new Mapping(), new Mapping());
+	return plan(spec, source, target, new MemoryMapping(), new MemoryMapping());
 
     }
 
@@ -138,7 +144,7 @@ public class HeliosPlanner extends ExecutionPlanner {
      *            Size of target mapping
      * @return Nested instructionList for the given spec
      */
-    public ExecutionPlan plan(LinkSpec spec, Cache source, Cache target, Mapping sourceMapping, Mapping targetMapping) {
+    public ExecutionPlan plan(LinkSpecification spec, Cache source, Cache target, MemoryMapping sourceMapping, MemoryMapping targetMapping) {
 	ExecutionPlan plan = new ExecutionPlan();
 	// atomic specs are simply ran
 	if (spec.isAtomic()) {
@@ -160,7 +166,7 @@ public class HeliosPlanner extends ExecutionPlanner {
 		List<ExecutionPlan> children = new ArrayList<ExecutionPlan>();
 		// set children and update costs
 		plan.runtimeCost = 0;
-		for (LinkSpec child : spec.children) {
+		for (LinkSpecification child : spec.children) {
 		    ExecutionPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
 		    children.add(childPlan);
 		    plan.runtimeCost = plan.runtimeCost + childPlan.runtimeCost;
@@ -225,7 +231,7 @@ public class HeliosPlanner extends ExecutionPlanner {
 		List<ExecutionPlan> children = new ArrayList<ExecutionPlan>();
 		plan.runtimeCost = 0;
 		double selectivity = 1d;
-		for (LinkSpec child : spec.children) {
+		for (LinkSpecification child : spec.children) {
 		    ExecutionPlan childPlan = plan(child);
 		    children.add(childPlan);
 		    plan.runtimeCost = plan.runtimeCost + childPlan.runtimeCost;

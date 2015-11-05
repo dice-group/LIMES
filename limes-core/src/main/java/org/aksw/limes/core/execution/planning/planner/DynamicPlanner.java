@@ -2,9 +2,10 @@ package org.aksw.limes.core.execution.planning.planner;
 
 import java.util.Map;
 
+import org.aksw.limes.core.config.LinkSpecification;
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.measures.mapper.Mapper.Language;
+import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.apache.log4j.Logger;
 
 /**
@@ -27,7 +28,8 @@ public class DynamicPlanner extends ExecutionPlanner {
     }
 
     @Override
-    public ExecutionPlan plan(LinkSpec spec) {
+    public ExecutionPlan plan(LinkSpecification spec) {
+	return null;
 	// TODO Auto-generated method stub
 
     }

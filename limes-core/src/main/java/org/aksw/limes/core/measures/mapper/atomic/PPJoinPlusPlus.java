@@ -18,15 +18,17 @@ import java.util.StringTokenizer;
 
 import algorithms.StoppUhr;
 import algorithms.Token;
-import de.uni_leipzig.simba.cache.Cache;
-//import de.uni_leipzig.simba.data.Instance;
-import de.uni_leipzig.simba.data.Instance;
-import de.uni_leipzig.simba.data.Mapping;
-import de.uni_leipzig.simba.mapper.AtomicMapper;
-import de.uni_leipzig.simba.measures.MeasureFactory;
-import de.uni_leipzig.simba.measures.string.StringMeasure;
-import de.uni_leipzig.simba.controller.Parser;
+
+import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.parser.Parser;
+import org.aksw.limes.core.measures.mapper.AtomicMapper;
 import java.util.ArrayList;
+
+import org.aksw.limes.core.measures.measure.MeasureFactory;
+import org.aksw.limes.core.measures.measure.string.StringMeasure;
 import org.apache.log4j.Logger;
 
 class Position {
@@ -94,7 +96,7 @@ class PartitionResult {
  * @author Dawid Kotlarz
  * @version 1.0
  */
-public class PPJoinPlusPlus implements AtomicMapper {
+public class PPJoinPlusPlus extends AtomicMapper {
 
     static Logger logger = Logger.getLogger("LIMES");
     private static int MAX_DEPTH;
@@ -124,7 +126,7 @@ public class PPJoinPlusPlus implements AtomicMapper {
     public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression, double threshold) {
         comparisons = 0;
         MAX_DEPTH = 2;
-        mapping = new Mapping();
+        mapping = new MemoryMapping();
         int candidatesCount = 0;
 
 //        logger.info("Starting PPJoinPlus");

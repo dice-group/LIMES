@@ -4,11 +4,14 @@
  */
 package org.aksw.limes.core.measures.mapper.atomic;
 
-import de.uni_leipzig.simba.cache.Cache;
-import de.uni_leipzig.simba.data.Mapping;
-import de.uni_leipzig.simba.mapper.AtomicMapper;
-import de.uni_leipzig.simba.metricfactory.SimpleMetricFactory;
-import de.uni_leipzig.simba.controller.Parser;
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.parser.Parser;
+import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.SetOperations;
+import org.aksw.limes.core.measures.measure.metricfactory.SimpleMetricFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,7 +21,7 @@ import java.util.HashMap;
  * DEPRECATED
  * @author ngonga
  */
-public class TotalOrderMapper implements AtomicMapper {
+public class TotalOrderMapper extends AtomicMapper {
 
     public String getName()
     {
@@ -27,7 +30,7 @@ public class TotalOrderMapper implements AtomicMapper {
             
     public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression, double threshold) {
 
-        Mapping mapping = new Mapping();
+        Mapping mapping = new MemoryMapping();
         ArrayList<Double> valueList = new ArrayList<Double>();
 
         //0. get properties
@@ -88,7 +91,7 @@ public class TotalOrderMapper implements AtomicMapper {
 
         
         //4. go to the right until sim is below threshold
-        return new Mapping();
+        return new MemoryMapping();
     }
 
     public static int binarySearch(ArrayList<Double> a, Double x) {

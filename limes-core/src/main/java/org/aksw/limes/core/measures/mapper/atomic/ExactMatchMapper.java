@@ -4,19 +4,23 @@
  */
 package org.aksw.limes.core.measures.mapper.atomic;
 
-import de.uni_leipzig.simba.cache.Cache;
-import de.uni_leipzig.simba.controller.Parser;
-import de.uni_leipzig.simba.data.Mapping;
-import de.uni_leipzig.simba.mapper.AtomicMapper;
+
 import java.lang.String;
 import java.util.*;
+
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.parser.Parser;
+import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.apache.log4j.Logger;
 
 /**
  *
  * @author ngonga
  */
-public class ExactMatchMapper implements AtomicMapper {
+public class ExactMatchMapper extends AtomicMapper {
 
     static Logger logger = Logger.getLogger("LIMES");
 
@@ -83,7 +87,7 @@ public class ExactMatchMapper implements AtomicMapper {
         Map<String, Set<String>> sourceIndex = index(source, property1);
         Map<String, Set<String>> targetIndex = index(target, property2);
 
-        Mapping m = new Mapping();
+        Mapping m = new MemoryMapping();
 
         if (sourceIndex.keySet().size() < targetIndex.keySet().size()) {
             for (String value : sourceIndex.keySet()) {

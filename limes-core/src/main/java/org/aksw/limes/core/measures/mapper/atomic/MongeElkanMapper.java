@@ -1,8 +1,10 @@
 package org.aksw.limes.core.measures.mapper.atomic;
-import de.uni_leipzig.simba.cache.Cache;
-import de.uni_leipzig.simba.data.Mapping;
-import de.uni_leipzig.simba.mapper.AtomicMapper;
-import de.uni_leipzig.simba.measures.string.TrigramMeasure;
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.measures.mapper.AtomicMapper;
+
+import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -12,7 +14,7 @@ import java.util.*;
  * @author Peggy Lucke
  *
  */
-public class MongeElkanMapper implements AtomicMapper {
+public class MongeElkanMapper extends AtomicMapper {
 
     static Logger logger = Logger.getLogger("LIMES");
 
@@ -117,7 +119,7 @@ public class MongeElkanMapper implements AtomicMapper {
         Map<String, Set<String>> targetMap = getValueToUriMap(target, properties.get(1));
         Map<String, Map<String, Double>> similarityBook = mongeElkan(sourceMap.keySet(), targetMap.keySet(), threshold);
         logger.info("Similarity Book has " + String.valueOf(similarityBook.size()) + " entries.");
-        Mapping result = new Mapping();
+        Mapping result = new MemoryMapping();
         for (String s : similarityBook.keySet()) {
             for (String t : similarityBook.get(s).keySet()) {
                 for (String sourceUri : sourceMap.get(s)) {

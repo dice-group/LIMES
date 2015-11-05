@@ -1,11 +1,14 @@
 package org.aksw.limes.core.execution.rewriter;
+
+import org.aksw.limes.core.config.LinkSpecification;
+
 /**
 * Implements Rewriter interface.
 * 
 * @author ngonga
 * @author kleanthi
 */
-public interface Rewriter {
+public interface IRewriter {
     /**
      * Rewrites a Link Specification and returns an equivalent yet probably more
      * time-efficient link spec
@@ -14,5 +17,5 @@ public interface Rewriter {
      *            Input link specification
      * @return Rewritten spec
      */
-    public LinkSpec rewrite(LinkSpec spec);
+    public LinkSpecification rewrite(LinkSpecification spec);
 }

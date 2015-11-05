@@ -3,6 +3,7 @@ package org.aksw.limes.core.execution.planning.planner;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.aksw.limes.core.config.LinkSpecification;
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
@@ -29,7 +30,7 @@ public class CannonicalPlanner extends ExecutionPlanner {
      *            Input spec
      * @return Nested instructionList
      */
-    public ExecutionPlan plan(LinkSpec spec) {
+    public ExecutionPlan plan(LinkSpecification spec) {
 	ExecutionPlan plan = new ExecutionPlan();
 	plan.instructionList = new ArrayList<Instruction>();
 	// atomic specs are simply ran
@@ -42,7 +43,7 @@ public class CannonicalPlanner extends ExecutionPlanner {
 	} else {
 	    List<ExecutionPlan> children = new ArrayList<ExecutionPlan>();
 	    // set childrean
-	    for (LinkSpec child : spec.children) {
+	    for (LinkSpecification child : spec.children) {
 		children.add(plan(child));
 	    }
 	    plan.subPlans = children;

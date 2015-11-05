@@ -4,24 +4,30 @@
  */
 package org.aksw.limes.core.measures.mapper.atomic;
 
-import de.uni_leipzig.simba.cache.Cache;
-import de.uni_leipzig.simba.data.Instance;
-import de.uni_leipzig.simba.data.Mapping;
-import de.uni_leipzig.simba.data.Point;
-import de.uni_leipzig.simba.mapper.AtomicMapper;
-import de.uni_leipzig.simba.mapper.atomic.hausdorff.GeoHR3;
-import de.uni_leipzig.simba.measures.pointsets.SetMeasureFactory;
-import de.uni_leipzig.simba.mapper.atomic.hausdorff.Polygon;
-import de.uni_leipzig.simba.measures.pointsets.SetMeasure;
-import de.uni_leipzig.simba.measures.pointsets.SetMeasureFactory.Type;
+import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.data.Point;
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.parser.Parser;
+import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.IMapper.Language;
+import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
+
 import java.util.*;
 import java.util.regex.Pattern;
+
+import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GeoHR3;
+import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
+import org.aksw.limes.core.measures.measure.pointsets.SetMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.SetMeasureFactory;
+import org.aksw.limes.core.measures.measure.pointsets.SetMeasureFactory.Type;
 
 /**
  *
  * @author ngonga
  */
-public class OrchidMapper implements AtomicMapper {
+public class OrchidMapper extends AtomicMapper {
 
     SetMeasure m = null;
 

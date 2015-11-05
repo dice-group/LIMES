@@ -1,8 +1,10 @@
 package org.aksw.limes.core.io.cache;
 
+import java.util.ArrayList;
+
 import org.aksw.limes.core.data.Instance;
 
-public class HybridCache implements Cache {
+public class MemoryCache extends Cache{
 
     @Override
     public void addTriple(String string, String string2, String string3) {
@@ -22,6 +24,10 @@ public class HybridCache implements Cache {
 	return 0;
     }
 
-    
+    @Override
+    public ArrayList<String> getAllUris() {
+	// TODO Auto-generated method stub
+	return null;
+    }
 
 }

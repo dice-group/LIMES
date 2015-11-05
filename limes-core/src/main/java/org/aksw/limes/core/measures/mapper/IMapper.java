@@ -1,9 +1,9 @@
 package org.aksw.limes.core.measures.mapper;
 
-import org.aksw.limes.core.io.Mapping;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
 
-public interface Mapper {
+public interface IMapper {
     public enum Language {
 	EN, FR, DE, NULL
     };

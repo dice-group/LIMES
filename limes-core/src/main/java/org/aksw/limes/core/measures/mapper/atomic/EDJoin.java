@@ -12,9 +12,13 @@ import algorithms.edjoin.MismatchingQGram;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.aksw.limes.core.io.Mapping;
+import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.measure.string.StringMeasure;
 import org.apache.log4j.Logger;
 import algorithms.Token;
 import java.util.Arrays;
@@ -51,7 +55,7 @@ public class EDJoin extends AtomicMapper {
         threshold = (1 - threshold) / threshold;
 
         comparisons = 0;
-        mapping = new Mapping();
+        mapping = new MemoryMapping();
         int candidatesCount = 0;
 
 //        logger.info("Starting PPJoinPlus");

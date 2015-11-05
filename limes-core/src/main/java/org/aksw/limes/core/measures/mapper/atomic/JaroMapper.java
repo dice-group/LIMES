@@ -4,20 +4,25 @@
  */
 package org.aksw.limes.core.measures.mapper.atomic;
 
-import de.uni_leipzig.simba.cache.Cache;
-import de.uni_leipzig.simba.data.Mapping;
-import de.uni_leipzig.simba.execution.histogram.RandomStringGenerator;
-import de.uni_leipzig.simba.mapper.AtomicMapper;
-import de.uni_leipzig.simba.mapper.SetOperations;
-import de.uni_leipzig.simba.measures.string.Jaro;
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.parser.Parser;
+import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.IMapper.Language;
+import org.aksw.limes.core.measures.mapper.SetOperations;
+
 import java.util.*;
+
+import org.aksw.limes.core.measures.measure.string.Jaro;
+import org.aksw.limes.core.util.RandomStringGenerator;
 import org.apache.log4j.Logger;
 
 /**
  *
  * @author ngonga
  */
-public class JaroMapper implements AtomicMapper {
+public class JaroMapper extends AtomicMapper {
 
     static Logger logger = Logger.getLogger("LIMES");
 
@@ -71,7 +76,7 @@ public class JaroMapper implements AtomicMapper {
         Set<String> target = targetMap.keySet();
         Map<Integer, Set<String>> sourceLengthIndex = getLengthIndex(source);
         Map<Integer, Set<String>> targetLengthIndex = getLengthIndex(target);
-        Mapping result = new Mapping();
+        Mapping result = new MemoryMapping();
         double maxSourceLength, maxTargetLength, theta;
 
         for (Integer sourceLength : sourceLengthIndex.keySet()) {
@@ -108,7 +113,7 @@ public class JaroMapper implements AtomicMapper {
         Map<Integer, Set<String>> targetLengthIndex = getLengthIndex(target);
 //        Map<String, Set<Character>> sourceCharacterMap = getChars(source);
 //        Map<String, Set<Character>> targetCharacterMap = getChars(target);
-        Mapping result = new Mapping();
+        Mapping result = new MemoryMapping();
         double maxSourceLength, maxTargetLength, similarity, theta;
         List<Character> sourceMappingCharacters, targetMappingCharacters;
         Set<Character> sourcePrefix, targetPrefix;
@@ -181,7 +186,7 @@ public class JaroMapper implements AtomicMapper {
         Map<Integer, Set<String>> targetLengthIndex = getLengthIndex(target);
 //        Map<String, Set<Character>> sourceCharacterMap = getChars(source);
 //        Map<String, Set<Character>> targetCharacterMap = getChars(target);
-        Mapping result = new Mapping();
+        Mapping result = new MemoryMapping();
         double maxSourceLength, maxTargetLength, similarity, theta;
         List<Character> sourceMappingCharacters, targetMappingCharacters;
         int halfLength, transpositions, lengthFilterCount = 0, prefixFilterCount = 0, characterFilterCount = 0;
@@ -285,7 +290,7 @@ public class JaroMapper implements AtomicMapper {
 
     private Mapping bruteForce(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap, double threshold) {
         Jaro j = new Jaro();
-        Mapping m = new Mapping();
+        Mapping m = new MemoryMapping();
         double sim;
         for (String s : sourceMap.keySet()) {
             for (String t : targetMap.keySet()) {

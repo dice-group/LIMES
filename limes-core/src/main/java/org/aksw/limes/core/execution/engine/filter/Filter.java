@@ -1,9 +1,9 @@
 package org.aksw.limes.core.execution.engine.filter;
 
 
-import org.aksw.limes.core.io.Mapping;
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.measures.mapper.IMapper;
 
 /**
  * Implements the filter interface.

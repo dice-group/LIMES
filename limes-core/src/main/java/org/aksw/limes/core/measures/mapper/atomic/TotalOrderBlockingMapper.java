@@ -4,25 +4,29 @@
  */
 package org.aksw.limes.core.measures.mapper.atomic;
 
-import de.uni_leipzig.simba.cache.Cache;
-import de.uni_leipzig.simba.cache.MemoryCache;
-import de.uni_leipzig.simba.data.Mapping;
-import de.uni_leipzig.simba.mapper.AtomicMapper;
-import de.uni_leipzig.simba.controller.Parser;
-import de.uni_leipzig.simba.measures.space.SpaceMeasure;
-import de.uni_leipzig.simba.measures.space.SpaceMeasureFactory;
-import de.uni_leipzig.simba.measures.space.blocking.BlockingFactory;
-import de.uni_leipzig.simba.measures.space.blocking.BlockingModule;
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.MemoryCache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.parser.Parser;
+import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.SetOperations;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
+
+import org.aksw.limes.core.measures.measure.space.SpaceMeasure;
+import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
+import org.aksw.limes.core.measures.measure.space.blocking.BlockingFactory;
+import org.aksw.limes.core.measures.measure.space.blocking.BlockingModule;
 import org.apache.log4j.Logger;
 
 /**
  * Uses metric spaces to create blocks.
  * @author ngonga
  */
-public class TotalOrderBlockingMapper implements AtomicMapper {
+public class TotalOrderBlockingMapper extends AtomicMapper {
 
     public int granularity = 4;
     static Logger logger = Logger.getLogger("LIMES");
@@ -36,7 +40,7 @@ public class TotalOrderBlockingMapper implements AtomicMapper {
     }
     public Mapping getMapping(Cache source, Cache target, String sourceVar,
             String targetVar, String expression, double threshold) {
-        Mapping mapping = new Mapping();
+        Mapping mapping = new MemoryMapping();
 
         //maps each block id to a set of instances. Actually one should integrate LIMES here
         HashMap<ArrayList<Integer>, TreeSet<String>> targetBlocks = new HashMap<ArrayList<Integer>, TreeSet<String>>();

@@ -23,7 +23,7 @@ import com.mxgraph.view.mxStylesheet;
  * @author ngonga
  * @author kleanthi
  */
-public class ExecutionPlan extends Plan {
+public class ExecutionPlan extends IPlan {
     public double runtimeCost;
     public double mappingSize;
     public double selectivity;
@@ -40,13 +40,38 @@ public class ExecutionPlan extends Plan {
 	mappingSize = 0.0d;
     }
 
-    /**
-     * Get all measure expressions from the execution plan, for example
-     * "[trigrams(x.rdfs:label, y.rdfs:label),cosine(x.rdfs:title, y.rdfs:title)]"
-     * 
-     * 
-     * @return results, list of measure expressions
-     */
+    public boolean isEmpty() {
+	return (instructionList == null && subPlans == null && filteringInstruction == null);
+    }
+
+    public void addInstruction(Instruction instruction) {
+	boolean added = instructionList.add(instruction);
+	if (!added)
+	    logger.info("ExecutionPlan.addInstructiun() failed");
+    }
+
+    public void removeInstruction(int i) {
+	instructionList.remove(i);
+    }
+
+    public void removeInstruction(Instruction i) {
+	instructionList.remove(i);
+    }
+
+    public int size() {
+	return instructionList.size();
+    }
+
+    public List<Instruction> getInstructionList() {
+	List<Instruction> instructions = getInstructionList();
+	if (!isAtomic()) {
+	    for (ExecutionPlan np : subPlans) {
+		instructions.addAll(np.getInstructionList());
+	    }
+	}
+	return instructions;
+    }
+
     public List<String> getAllMeasures() {
 	List<String> result = new ArrayList<String>();
 
@@ -86,11 +111,6 @@ public class ExecutionPlan extends Plan {
 	    }
 	}
 	return false;
-    }
-
-    @Override
-    public boolean isEmpty() {
-	return (instructionList == null && subPlans == null && filteringInstruction == null);
     }
 
     /**
@@ -214,7 +234,7 @@ public class ExecutionPlan extends Plan {
 	    return "0";
 	}
     }
-    
+
     /**
      * Get size of biggest instruction.
      *
@@ -231,9 +251,9 @@ public class ExecutionPlan extends Plan {
 	}
 	return s.length();
     }
-    
+
     /**
-     * Get string representation of  instruction
+     * Get string representation of instruction
      *
      * @return result, instruction as string
      */
@@ -245,16 +265,6 @@ public class ExecutionPlan extends Plan {
 	return result;
     }
 
-    @Override
-    public List<Instruction> getInstructionList() {
-	List<Instruction> instructions = super.getInstructionList();
-	if (!isAtomic()) {
-	    for (ExecutionPlan np : subPlans) {
-		instructions.addAll(np.getInstructionList());
-	    }
-	}
-	return instructions;
-    }
     /**
      * Get graphical representation of execution plan
      *
@@ -292,10 +302,11 @@ public class ExecutionPlan extends Plan {
 	    }
 	}
     }
+
     /**
      * Get graph of execution plan
      *
-     *@return graph, graph of execution plan
+     * @return graph, graph of execution plan
      */
     public mxGraph getGraph() {
 	mxGraph graph = new mxGraph();
@@ -329,16 +340,17 @@ public class ExecutionPlan extends Plan {
 	layout.execute(graph.getDefaultParent());
 	return graph;
     }
+
     /**
      * Draw execution plan
      *
-    */
+     */
     public void draw() {
 	mxGraph graph = getGraph();
 	mxGraphComponent graphComponent = new mxGraphComponent(graph);
 	graphComponent.getViewport().setOpaque(false);
 	graphComponent.setBackground(Color.WHITE);
-	
+
 	JFrame frame = new JFrame();
 	frame.setSize(500, 500);
 	frame.setLocation(300, 200);

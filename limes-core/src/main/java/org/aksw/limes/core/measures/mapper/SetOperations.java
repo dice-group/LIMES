@@ -1,5 +1,6 @@
 package org.aksw.limes.core.measures.mapper;
 
+import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 
 public class SetOperations {
@@ -19,7 +20,7 @@ public class SetOperations {
      *            Set pperator
      * @return Resulting mapping
      */
-    public static MemoryMapping getMapping(MemoryMapping source, MemoryMapping target, Operator op) {
+    public static Mapping getMapping(Mapping source, Mapping target, Operator op) {
 	if (op.equals(Operator.AND))
 	    return intersection(source, target);
 	if (op.equals(Operator.OR))
@@ -42,7 +43,7 @@ public class SetOperations {
      *            mapping size of target
      * @return operator runtime as double
      */
-    public static double getRuntimeApproximation(Operator op, int MemoryMappingSize1, int MemoryMappingSize2) {
+    public static double getRuntimeApproximation(Operator op, int mappingSize1, int mappingSize2) {
 	if (op.equals(Operator.AND)) {
 	    return 1d;
 	}
@@ -83,8 +84,8 @@ public class SetOperations {
      *            Second mapping
      * @return map1 \ map2
      */
-    public static MemoryMapping difference(MemoryMapping map1, MemoryMapping map2) {
-	MemoryMapping map = new MemoryMapping();
+    public static Mapping difference(Mapping map1, Mapping map2) {
+	Mapping map = new MemoryMapping();
 
 	// go through all the keys in map1
 	for (String key : map1.map.keySet()) {
@@ -115,8 +116,8 @@ public class SetOperations {
      *            Second mapping
      * @return Intersection of map1 and map2
      */
-    public static MemoryMapping intersection(MemoryMapping map1, MemoryMapping map2) {
-	MemoryMapping map = new MemoryMapping();
+    public static Mapping intersection(Mapping map1, Mapping map2) {
+	Mapping map = new MemoryMapping();
 	// takes care of not running the filter if some set is empty
 	if (map1.size() == 0 || map2.size() == 0) {
 	    return new MemoryMapping();
@@ -152,8 +153,8 @@ public class SetOperations {
      *            Second mapping
      * @return Union of map1 and map2
      */
-    public static MemoryMapping union(MemoryMapping map1, MemoryMapping map2) {
-	MemoryMapping map = new MemoryMapping();
+    public static Mapping union(Mapping map1, Mapping map2) {
+	Mapping map = new MemoryMapping();
 	// go through all the keys in map1
 	for (String key : map1.map.keySet()) {
 	    // if the first term (key) can also be found in map2
@@ -180,7 +181,7 @@ public class SetOperations {
      *            Second map
      * @return XOR(map1, map2)
      */
-    public static MemoryMapping xor(MemoryMapping map1, MemoryMapping map2) {
+    public static Mapping xor(Mapping map1, Mapping map2) {
 	return union(difference(map1, map2), difference(map2, map1).reverseSourceTarget());
     }
 

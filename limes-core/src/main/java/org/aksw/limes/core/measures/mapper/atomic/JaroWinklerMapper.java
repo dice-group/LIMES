@@ -1,12 +1,15 @@
 package org.aksw.limes.core.measures.mapper.atomic;
 
 
-import de.uni_leipzig.simba.cache.Cache;
-import de.uni_leipzig.simba.data.Mapping;
-import de.uni_leipzig.simba.mapper.AtomicMapper;
-import de.uni_leipzig.simba.mapper.atomic.jarowinkler.TrieFilter;
-import de.uni_leipzig.simba.mapper.atomic.jarowinkler.LengthQuicksort;
-import de.uni_leipzig.simba.measures.string.JaroWinkler;
+
+
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.atomic.jarowinkler.LengthQuicksort;
+import org.aksw.limes.core.measures.mapper.atomic.jarowinkler.TrieFilter;
+import org.aksw.limes.core.measures.measure.string.JaroWinkler;
 import org.apache.commons.lang3.tuple.*;
 import org.apache.log4j.Logger;
 
@@ -21,7 +24,7 @@ import java.util.concurrent.Executors;
  */
 @SuppressWarnings("unchecked")
 
-public class JaroWinklerMapper implements AtomicMapper {
+public class JaroWinklerMapper extends AtomicMapper {
 
     static Logger logger = Logger.getLogger("LIMES");
 
@@ -123,7 +126,7 @@ public class JaroWinklerMapper implements AtomicMapper {
             }
         }
         logger.info("Similarity Book has " + String.valueOf(similarityBook.size()) + " entries.");
-        Mapping result = new Mapping();
+        Mapping result = new MemoryMapping();
         for (String s : similarityBook.keySet()) {
             for (String t : similarityBook.get(s).keySet()) {
                 for (String sourceUri : sourceMap.get(s)) {
