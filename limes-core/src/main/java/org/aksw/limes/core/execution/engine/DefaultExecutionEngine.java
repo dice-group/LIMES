@@ -182,7 +182,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Runs a nested plan
+     * Runs an execution plan
      *
      * @param ExecutionPlan
      *            ExecutionPlan

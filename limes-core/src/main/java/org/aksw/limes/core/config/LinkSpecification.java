@@ -13,6 +13,14 @@ public class LinkSpecification implements ILinkSpecification {
     public List<LinkSpecification> dependencies;
 
 
+    public LinkSpecification(String metric, double d) {
+	// TODO Auto-generated constructor stub
+    }
+
+    public LinkSpecification() {
+	// TODO Auto-generated constructor stub
+    }
+
     public boolean isAtomic() {
 	// TODO Auto-generated method stub
 	return false;
@@ -46,6 +54,16 @@ public class LinkSpecification implements ILinkSpecification {
     public boolean hasDependencies() {
 	// TODO Auto-generated method stub
 	return false;
+    }
+
+    public void readSpec(String string, double d) {
+	// TODO Auto-generated method stub
+	
+    }
+
+    public void addChild(LinkSpecification spec3) {
+	// TODO Auto-generated method stub
+	
     }
 
 }
