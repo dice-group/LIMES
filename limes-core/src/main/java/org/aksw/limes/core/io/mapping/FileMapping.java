@@ -2,7 +2,7 @@ package org.aksw.limes.core.io.mapping;
 
 import java.util.HashMap;
 
-public class FileMapping extends Mapping implements IMapping {
+public class FileMapping extends Mapping {
 
     public HashMap<String, HashMap<String, Double>> map;
 
@@ -47,5 +47,11 @@ public class FileMapping extends Mapping implements IMapping {
 	// TODO Auto-generated method stub
 	return false;
     }
+
+	@Override
+	public Mapping getBestOneToNMapping() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

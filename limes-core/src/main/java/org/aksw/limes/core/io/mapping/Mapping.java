@@ -20,4 +20,6 @@ public abstract class Mapping implements IMapping{
     public abstract int getNumberofMappings();
 
     public abstract boolean contains(String key, String value);
+
+	public abstract Mapping getBestOneToNMapping();
 }

@@ -1,4 +1,4 @@
-package org.aksw.limes.core.config;
+package org.aksw.limes.core.io.ls;
 
 import java.util.List;
 

@@ -1,6 +1,5 @@
 package org.aksw.limes.core.io.parser;
 
-import org.aksw.limes.core.measures.mapper.SetOperations.Operator;
 
 public class Parser implements IParser {
 
