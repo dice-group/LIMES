@@ -1,5 +1,7 @@
 package org.aksw.limes.core.evaluation.quantity;
 
+import java.util.List;
+
 
 /**
  * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
