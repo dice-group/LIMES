@@ -32,7 +32,6 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 
     public DefaultExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
 	super(source, target, sourceVar, targetVar);
-	// TODO Auto-generated constructor stub
     }
 
     /**
@@ -90,7 +89,8 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 	    if (index < 0) {
 		buffer.add((MemoryMapping) m);
 	    } else {
-		// add placeholders to ensure that the MemoryMapping can be placed
+		// add placeholders to ensure that the MemoryMapping can be
+		// placed
 		// where the user wanted to have it
 		while ((index + 1) > buffer.size()) {
 		    buffer.add(new MemoryMapping());
@@ -122,10 +122,8 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      */
     public Mapping executeRun(Instruction inst) {
 	// get threshold
-
 	double threshold = Double.parseDouble(inst.getThreshold());
 	// generate correct mapper
-
 	AtomicMapper mapper;
 	if (inst.getMeasureExpression().startsWith("leven")) {
 	    mapper = new EDJoin();
@@ -141,7 +139,6 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 	} else {
 	    mapper = new PPJoinPlusPlus();
 	}
-
 	// run mapper
 	return mapper.getMapping(source, target, sourceVariable, targetVariable, inst.getMeasureExpression(),
 		threshold);
@@ -196,14 +193,11 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 	if (ExecutionPlan.isEmpty()) {
 	} // atomic nested plan just contain simple list of instructions
 	else if (ExecutionPlan.isAtomic()) {
-
 	    m = executeAtomic(ExecutionPlan);
-
 	} // nested plans contain subplans, an operator for merging the results
 	  // of the
 	  // subplans and a filter for filtering the results of the subplan
 	else {
-
 	    // run all the subplans
 	    m = execute(ExecutionPlan.subPlans.get(0));
 	    Mapping m2, result = m;
@@ -221,7 +215,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 
 		    result = SetOperations.xor(m, m2);
 		}
-		
+
 		m = result;
 	    }
 	    // only run filtering if there is a filter indeed, else simply

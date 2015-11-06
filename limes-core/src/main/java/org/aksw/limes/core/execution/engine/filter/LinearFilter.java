@@ -28,7 +28,7 @@ public class LinearFilter implements Filter {
      * @return All mapping from map such that sim >= threshold
      */
     public Mapping filter(Mapping map, double threshold) {
-	
+
 	double sim = 0.0;
 	Instance s, t;
 	if (threshold <= 0.0) {
@@ -48,6 +48,7 @@ public class LinearFilter implements Filter {
 	    return result;
 	}
     }
+
     /**
      * Filter a mapping with respect to an expression. If the expression is
      * null, then all the pairs with a similarity above threshold are returned
@@ -56,18 +57,13 @@ public class LinearFilter implements Filter {
 	    String targetVar) {
 	double sim = 0.0;
 	Instance s, t;
-	//
+
 	if (threshold <= 0.0) {
-	    // logger.info("No filtering needed as threshold " + threshold + "
-	    // is lage.");
 	    return map;
 	}
 	if (condition == null) {
-	    // logger.info("Filtering solely for similarity as no condition is
-	    // given.");
 	    return filter(map, threshold);
 	} else {
-
 	    Mapping result = new MemoryMapping();
 	    // 2. run on all pairs and remove those
 	    for (String key : map.map.keySet()) {
@@ -89,7 +85,7 @@ public class LinearFilter implements Filter {
      * Implements a filter for the special case of linear combinations and
      * multiplications. The straight forward way would be to compute
      * filter(intersection(m1, m2), linear_combination_condition) leading to
-     * recomputations. This implementation avoid that by reusing the
+     * re-computations. This implementation avoid that by reusing the
      * similarities that have already been computed
      */
     public Mapping filter(Mapping m1, Mapping m2, double coef1, double coef2, double threshold, String operation) {

@@ -1,7 +1,6 @@
 package execution.engine;
 
 
-import org.aksw.limes.core.config.LinkSpecification;
 import org.aksw.limes.core.execution.engine.DefaultExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
@@ -10,6 +9,7 @@ import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.execution.planning.planner.HeliosPlanner;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 
 

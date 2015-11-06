@@ -165,6 +165,27 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+            <groupId>org.matheclipse</groupId>
+            <artifactId>matheclipse-core</artifactId>
+            <version>0.0.7</version>
+        </dependency>
+         <dependency>
+            <groupId>jgraph</groupId>
+            <artifactId>jgraph</artifactId>
+            <version>5.13.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>jgraphx</groupId>
+            <artifactId>jgraphx</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>ssjoin</groupId>
+            <artifactId>ssjoin</artifactId>
+            <version>1.0</version>
+        </dependency>
 	</dependencies>
 
 	<distributionManagement>

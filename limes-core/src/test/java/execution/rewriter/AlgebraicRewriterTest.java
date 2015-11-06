@@ -1,7 +1,7 @@
 package execution.rewriter;
 
-import org.aksw.limes.core.config.LinkSpecification;
 import org.aksw.limes.core.execution.rewriter.AlgebraicRewriter;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.measures.mapper.SetOperations.Operator;
 
 public class AlgebraicRewriterTest {

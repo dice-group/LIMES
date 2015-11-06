@@ -4,12 +4,12 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-import org.aksw.limes.core.config.LinkSpecification;
 import org.aksw.limes.core.execution.engine.DefaultExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.MemoryCache;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
 import org.aksw.limes.core.execution.planning.planner.CannonicalPlanner;
