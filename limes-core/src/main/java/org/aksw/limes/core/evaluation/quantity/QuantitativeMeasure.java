@@ -8,5 +8,8 @@ package org.aksw.limes.core.evaluation.quantity;
  *
  */
 public interface QuantitativeMeasure {
-	
+	RunRecord getRun(int runId);
+	List<RunRecord> getRuns();
+	void setRun(int runId, RunRecord record);
+	double getRunInfo(int runId, String Info);
 }
