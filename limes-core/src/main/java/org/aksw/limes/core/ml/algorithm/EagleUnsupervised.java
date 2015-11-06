@@ -2,7 +2,7 @@ package org.aksw.limes.core.ml.algorithm;
 
 import java.util.Set;
 
-import org.aksw.limes.core.ml.Classifier;
+import org.aksw.limes.core.ml.LearningModel;
 import org.aksw.limes.core.ml.Prediction;
 import org.aksw.limes.core.model.Link;
 
@@ -10,18 +10,18 @@ import org.aksw.limes.core.model.Link;
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  *
  */
-public class EagleUnsupervised extends Classifier {
+public class EagleUnsupervised implements MLAlgorithm {
 
 	/**
-	 * 
+	 * TODO Example hyperparameter...
 	 */
 	private int generations;
 
 	/**
 	 * @param dataset
 	 */
-	public EagleUnsupervised(Set<Link> dataset) {
-		super(dataset);
+	public EagleUnsupervised() {
+		super();
 	}
 	
 	/**
@@ -44,7 +44,7 @@ public class EagleUnsupervised extends Classifier {
 	}
 
 	@Override
-	public void learn(Set<Link> trainingSet) {
+	public void learn() {
 		// TODO Auto-generated method stub
 	}
 
@@ -56,6 +56,12 @@ public class EagleUnsupervised extends Classifier {
 
 	@Override
 	public Set<Link> computePredictions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LearningModel getLearningModel() {
 		// TODO Auto-generated method stub
 		return null;
 	}
