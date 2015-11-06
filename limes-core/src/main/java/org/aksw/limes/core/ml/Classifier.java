@@ -10,7 +10,11 @@ import org.aksw.limes.core.model.Link;
  */
 public abstract class Classifier {
 	
+	/*
+	 * TODO replace with Dataset object, containing Path to file (where the dataset is)
+	 */
 	protected Set<Link> dataset;
+	
 	protected LearningModel lModel;
 
 	/**

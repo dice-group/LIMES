@@ -207,6 +207,11 @@
 			<artifactId>geoxygene-api</artifactId>
 			<version>1.6</version>
 		</dependency>
+		<dependency>
+			<groupId>fr.ign.cogit</groupId>
+			<artifactId>geoxygene-spatial</artifactId>
+			<version>1.6</version>
+		</dependency>
 	</dependencies>
 
 	<distributionManagement>
