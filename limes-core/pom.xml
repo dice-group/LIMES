@@ -186,6 +186,16 @@
             <artifactId>ssjoin</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>fr.ign.cogit</groupId>
+            <artifactId>geoxygene-api</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2</version>
+        </dependency>
 	</dependencies>
 
 	<distributionManagement>
