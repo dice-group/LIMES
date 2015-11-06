@@ -3,7 +3,7 @@ package org.aksw.limes.core.execution.rewriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.aksw.limes.core.config.LinkSpecification;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.SetOperations.Operator;
 import org.apache.log4j.Logger;

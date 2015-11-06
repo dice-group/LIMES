@@ -1,6 +1,6 @@
 package org.aksw.limes.core.execution.rewriter;
 
-import org.aksw.limes.core.config.LinkSpecification;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 
 /**
 * Implements Rewriter interface.

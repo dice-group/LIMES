@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.aksw.limes.core.config.LinkSpecification;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.parser.Parser;
 import org.apache.log4j.Logger;
 import org.matheclipse.core.eval.EvalUtilities;

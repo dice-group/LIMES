@@ -1,7 +1,7 @@
 package org.aksw.limes.core.execution.planning.planner;
 
-import org.aksw.limes.core.config.LinkSpecification;
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 
 /**
 *
