@@ -1,19 +1,19 @@
 package org.aksw.limes.core.ml.setting;
 
-import org.aksw.limes.core.ml.algorithm.MLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.IMLAlgorithm;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  *
  */
-public class UnsupervisedLearningSetting implements LearningSetting {
+public class UnsupervisedLearningSetting extends LearningSetting {
 	
-	public UnsupervisedLearningSetting() {
-		// TODO Auto-generated constructor stub
+	public UnsupervisedLearningSetting(IMLAlgorithm algorithm) {
+		super(algorithm);
 	}
 
 	@Override
-	public void learn(MLAlgorithm algorithm) {
+	public void learn() {
 		// TODO Auto-generated method stub
 		// will use the following
 		algorithm.learn();

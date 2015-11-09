@@ -1,13 +1,26 @@
 package org.aksw.limes.core.ml.setting;
 
-import org.aksw.limes.core.ml.algorithm.MLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.IMLAlgorithm;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  *
  */
-public interface LearningSetting {
+public abstract class LearningSetting {
+	
+	protected IMLAlgorithm algorithm;
 
-	public void learn(MLAlgorithm algorithm);
+	public LearningSetting(IMLAlgorithm algorithm) {
+		super();
+		this.algorithm = algorithm;
+	}
+
+	public abstract void learn();
+
+	public IMLAlgorithm getAlgorithm() {
+		return algorithm;
+	}
+	
+	
 	
 }

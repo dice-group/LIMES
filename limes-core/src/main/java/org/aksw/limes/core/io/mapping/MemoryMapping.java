@@ -144,7 +144,7 @@ public class MemoryMapping extends Mapping implements Serializable{
 	 * @return Similarity of the two instances according to the mapping
 	 */
 	@Override
-	public double getSimilarity(String sourceInstance, String targetInstance) {
+	public double getConfidence(String sourceInstance, String targetInstance) {
 		if (map.containsKey(sourceInstance)) {
 			if (map.get(sourceInstance).containsKey(targetInstance)) {
 				return map.get(sourceInstance).get(targetInstance);
@@ -210,11 +210,11 @@ public class MemoryMapping extends Mapping implements Serializable{
 			double maxSim = 0;
 			Set<String> target = new HashSet<String>();;
 			for (String t : map.get(s).keySet()) {
-				if (getSimilarity(s, t) == maxSim) {
+				if (getConfidence(s, t) == maxSim) {
 					target.add(t);
 				}
-				if (getSimilarity(s, t) > maxSim) {
-					maxSim = getSimilarity(s, t);
+				if (getConfidence(s, t) > maxSim) {
+					maxSim = getConfidence(s, t);
 					target = new HashSet<String>();
 					target.add(t);
 				}

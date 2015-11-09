@@ -24,7 +24,7 @@ public class HybridMapping extends Mapping {
 	
     }
 
-    public double getSimilarity(String key, String value) {
+    public double getConfidence(String key, String value) {
 	// TODO Auto-generated method stub
 	return 0.0d;
     }

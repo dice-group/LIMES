@@ -159,13 +159,13 @@ public class SetOperations {
 	for (String key : map1.map.keySet()) {
 	    // if the first term (key) can also be found in map2
 	    for (String value : map1.map.get(key).keySet()) {
-		map.add(key, value, map1.getSimilarity(key, value));
+		map.add(key, value, map1.getConfidence(key, value));
 	    }
 	}
 	for (String key : map2.map.keySet()) {
 	    // if the first term (key) can also be found in map2
 	    for (String value : map2.map.get(key).keySet()) {
-		map.add(key, value, map2.getSimilarity(key, value));
+		map.add(key, value, map2.getConfidence(key, value));
 	    }
 	}
 	

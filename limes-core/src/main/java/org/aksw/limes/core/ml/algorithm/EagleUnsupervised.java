@@ -1,27 +1,24 @@
 package org.aksw.limes.core.ml.algorithm;
 
-import java.util.Set;
-
-import org.aksw.limes.core.ml.LearningModel;
-import org.aksw.limes.core.ml.Prediction;
-import org.aksw.limes.core.model.Link;
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.ml.LinksetMap;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  *
  */
-public class EagleUnsupervised implements MLAlgorithm {
+public class EagleUnsupervised extends MLAlgorithm {
 
 	/**
 	 * TODO Example hyperparameter...
 	 */
-	private int generations;
+	private int generations = 10;
 
-	/**
-	 * @param dataset
-	 */
-	public EagleUnsupervised() {
-		super();
+	public EagleUnsupervised(Cache sourceCache, Cache targetCache,
+			Mapping mapping) {
+		super(sourceCache, targetCache, mapping);
+		// TODO Auto-generated constructor stub
 	}
 	
 	/**
@@ -46,22 +43,11 @@ public class EagleUnsupervised implements MLAlgorithm {
 	@Override
 	public void learn() {
 		// TODO Auto-generated method stub
+		System.out.println(getName()+" :: learn called.");
 	}
 
 	@Override
-	public Prediction predict(Link link) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<Link> computePredictions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public LearningModel getLearningModel() {
+	public LinksetMap computePredictions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

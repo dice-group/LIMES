@@ -53,7 +53,7 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
 	for (String sIdx : knownDistances.map.keySet()) {
 	    min = Double.MAX_VALUE;
 	    for (String tIdx : knownDistances.map.get(sIdx).keySet()) {
-		min = Math.min(min, (double) knownDistances.getSimilarity(sIdx, tIdx));
+		min = Math.min(min, (double) knownDistances.getConfidence(sIdx, tIdx));
 	    }
 	    max = Math.max(max, min);
 	}

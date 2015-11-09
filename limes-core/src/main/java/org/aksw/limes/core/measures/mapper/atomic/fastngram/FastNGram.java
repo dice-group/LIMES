@@ -190,7 +190,7 @@ public class FastNGram extends AtomicMapper {
             for (String t : m.map.get(s).keySet()) {
                 for (String sourceUri : sourceMap.get(s)) {
                     for (String targetUri : targetMap.get(t)) {
-                        result.add(sourceUri, targetUri, m.getSimilarity(s, t));
+                        result.add(sourceUri, targetUri, m.getConfidence(s, t));
                     }
                 }
             }

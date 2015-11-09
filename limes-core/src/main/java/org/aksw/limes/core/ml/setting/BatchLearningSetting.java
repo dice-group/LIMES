@@ -1,19 +1,19 @@
 package org.aksw.limes.core.ml.setting;
 
-import org.aksw.limes.core.ml.algorithm.MLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.IMLAlgorithm;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  *
  */
-public class BatchLearningSetting implements LearningSetting {
+public class BatchLearningSetting extends LearningSetting {
 	
-	public BatchLearningSetting() {
-		// TODO Auto-generated constructor stub
+	public BatchLearningSetting(IMLAlgorithm algorithm) {
+		super(algorithm);
 	}
 
 	@Override
-	public void learn(MLAlgorithm algorithm) {
+	public void learn() {
 		// TODO Auto-generated method stub
 		// will use the following
 		algorithm.learn();

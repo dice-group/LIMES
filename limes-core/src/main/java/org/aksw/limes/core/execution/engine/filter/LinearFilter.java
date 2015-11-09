@@ -39,7 +39,7 @@ public class LinearFilter implements Filter {
 	    // the threshold
 	    for (String key : map.map.keySet()) {
 		for (String value : map.map.get(key).keySet()) {
-		    sim = map.getSimilarity(key, value);
+		    sim = map.getConfidence(key, value);
 		    if (sim >= threshold) {
 			result.add(key, value, sim);
 		    }
@@ -97,7 +97,7 @@ public class LinearFilter implements Filter {
 	if (operation.equalsIgnoreCase("add")) {
 	    for (String key : m.map.keySet()) {
 		for (String value : m.map.get(key).keySet()) {
-		    sim = coef1 * m1.getSimilarity(key, value) + coef2 * m2.getSimilarity(key, value);
+		    sim = coef1 * m1.getConfidence(key, value) + coef2 * m2.getConfidence(key, value);
 		    if (sim >= threshold) {
 			result.add(key, value, sim);
 		    }
@@ -106,7 +106,7 @@ public class LinearFilter implements Filter {
 	} else {
 	    for (String key : m.map.keySet()) {
 		for (String value : m.map.get(key).keySet()) {
-		    sim = coef1 * coef2 * m1.getSimilarity(key, value) * m2.getSimilarity(key, value);
+		    sim = coef1 * coef2 * m1.getConfidence(key, value) * m2.getConfidence(key, value);
 		    if (sim >= threshold) {
 			result.add(key, value, sim);
 		    }

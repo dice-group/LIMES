@@ -1,25 +1,24 @@
 package org.aksw.limes.core.ml.algorithm;
 
-import java.util.Set;
-
-import org.aksw.limes.core.ml.LearningModel;
-import org.aksw.limes.core.ml.Prediction;
-import org.aksw.limes.core.model.Link;
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @version 2015-11-09
  *
  */
-public interface MLAlgorithm {
-
-	public String getName();
-
-	public void learn();
-
-	public Prediction predict(Link link);
-
-	public Set<Link> computePredictions();
+public abstract class MLAlgorithm implements IMLAlgorithm {
 	
-	public LearningModel getLearningModel();
+	protected Cache sourceCache;
+	protected Cache targetCache;
+	protected Mapping mapping;
 
+	public MLAlgorithm(Cache sourceCache, Cache targetCache, Mapping mapping) {
+		super();
+		this.sourceCache = sourceCache;
+		this.targetCache = targetCache;
+		this.mapping = mapping;
+	}
+	
 }
