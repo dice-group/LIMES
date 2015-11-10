@@ -10,8 +10,8 @@
 
 
 	<properties>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -202,6 +202,41 @@
 			<version>1.6</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.jdom</groupId>
+			<artifactId>jdom2</artifactId>
+			<version>2.0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jgap</groupId>
+			<artifactId>jgap</artifactId>
+			<version>3.4.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.4</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>de.twentyeleven.skysail</groupId>
+			<artifactId>jgraphx-osgi</artifactId>
+			<version>1.10.3.1</version>
+		</dependency>
+
+		<dependency>
+			<artifactId>ehcache</artifactId>
+			<groupId>net.sf.ehcache</groupId>
+			<version>2.10.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.6.6</version>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<distributionManagement>
