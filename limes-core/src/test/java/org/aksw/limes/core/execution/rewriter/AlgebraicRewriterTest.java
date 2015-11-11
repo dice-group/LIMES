@@ -76,8 +76,8 @@ public class AlgebraicRewriterTest {
 
 	spec.readSpec("trigrams(x.p, y.p)", 0.7);
 	spec2.readSpec("euclidean(x.q, y.q)", 0.3);
-	spec3.threshold = 0.5;
-	spec3.operator = Operator.AND;
+	spec3.setThreshold(0.5);
+	spec3.setOperator(Operator.AND);
 	spec.addChild(spec3);
 	spec3.addChild(spec2);
 	System.out.println(spec);
