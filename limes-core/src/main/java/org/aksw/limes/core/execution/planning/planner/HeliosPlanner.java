@@ -154,8 +154,8 @@ public class HeliosPlanner extends ExecutionPlanner {
 	    plan.instructionList = new ArrayList<Instruction>();
 	    plan.addInstruction(new Instruction(Instruction.Command.RUN, spec.getFilterExpression(),
 		    spec.getThreshold() + "", -1, -1, 0));
-	    plan.runtimeCost = getAtomicRuntimeCosts(p.getOperation(), spec.getThreshold());
-	    plan.mappingSize = getAtomicMappingSizes(p.getOperation(), spec.getThreshold());
+	    plan.runtimeCost = getAtomicRuntimeCosts(p.getOperator(), spec.getThreshold());
+	    plan.mappingSize = getAtomicMappingSizes(p.getOperator(), spec.getThreshold());
 	    // there is a function in EDJoin that does that
 	    plan.selectivity = plan.mappingSize / (double) (source.size() * target.size());
 	    // System.out.println("Plan for " + spec.filterExpression + ":\n" +
@@ -166,13 +166,13 @@ public class HeliosPlanner extends ExecutionPlanner {
 		List<ExecutionPlan> children = new ArrayList<ExecutionPlan>();
 		// set children and update costs
 		plan.runtimeCost = 0;
-		for (LinkSpecification child : spec.children) {
+		for (LinkSpecification child : spec.getChildren()) {
 		    ExecutionPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
 		    children.add(childPlan);
 		    plan.runtimeCost = plan.runtimeCost + childPlan.runtimeCost;
 		}
 		// add costs of union, which are 1
-		plan.runtimeCost = plan.runtimeCost + (spec.children.size() - 1);
+		plan.runtimeCost = plan.runtimeCost + (spec.getChildren().size() - 1);
 		plan.subPlans = children;
 		// set operator
 		double selectivity;
@@ -231,7 +231,7 @@ public class HeliosPlanner extends ExecutionPlanner {
 		List<ExecutionPlan> children = new ArrayList<ExecutionPlan>();
 		plan.runtimeCost = 0;
 		double selectivity = 1d;
-		for (LinkSpecification child : spec.children) {
+		for (LinkSpecification child : spec.getChildren()) {
 		    ExecutionPlan childPlan = plan(child);
 		    children.add(childPlan);
 		    plan.runtimeCost = plan.runtimeCost + childPlan.runtimeCost;

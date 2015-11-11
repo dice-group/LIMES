@@ -77,7 +77,7 @@ public class DefaultRewriter implements IRewriter {
 	    if (p.isAtomic()) {
 		return metric;
 	    }
-	    String operation = p.getOperation();
+	    String operation = p.getOperator();
 	    String term1 = p.getTerm1();
 	    String t1 = p.getThreshold1() + "";
 	    String term2 = p.getTerm2();
@@ -131,7 +131,7 @@ public class DefaultRewriter implements IRewriter {
 	}
 	String term1 = p.getTerm1();
 	String term2 = p.getTerm2();
-	if (!(p.getOperation().equals("ADD") && p.getOperation().equals("MULT"))) {
+	if (!(p.getOperator().equals("ADD") && p.getOperator().equals("MULT"))) {
 	    return (isBoolean(term1) && isBoolean(term2));
 	} else {
 	    return false;

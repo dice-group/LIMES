@@ -244,7 +244,7 @@ public class PPJoinPlusPlus extends AtomicMapper {
             k = 1;
         }
 
-        measure = (StringMeasure) MeasureFactory.getMeasure(p.op, "string");
+        measure = (StringMeasure) MeasureFactory.getMeasure(p.getOperator(), "string");
 //        logger.info("Beginninng comparison per se");
         if (measure != null) {
 //            logger.info("Using measure " + measure.getName());

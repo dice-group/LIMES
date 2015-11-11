@@ -43,7 +43,7 @@ public class CannonicalPlanner extends ExecutionPlanner {
 	} else {
 	    List<ExecutionPlan> children = new ArrayList<ExecutionPlan>();
 	    // set childrean
-	    for (LinkSpecification child : spec.children) {
+	    for (LinkSpecification child : spec.getChildren()) {
 		children.add(plan(child));
 	    }
 	    plan.subPlans = children;

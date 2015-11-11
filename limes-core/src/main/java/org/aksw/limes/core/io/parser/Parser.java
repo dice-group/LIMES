@@ -14,7 +14,7 @@ public class Parser implements IParser {
     protected double coef2;
     protected String term1;
     protected String term2;
-    protected String op;
+    protected String operator;
     protected String expression;
 	
 
@@ -52,8 +52,8 @@ public class Parser implements IParser {
         return term1;
     }
 
-    public String getOperation() {
-        return op;
+    public String getOperator() {
+        return operator;
     }
 
     public String getTerm2() {
@@ -102,7 +102,7 @@ public class Parser implements IParser {
         if (!isAtomic()) {
             int counter = 1;
             boolean found = false;
-            op = expression.substring(0, expression.indexOf("("));
+            operator = expression.substring(0, expression.indexOf("("));
             String noOpExpression = expression.substring(expression.indexOf("(") + 1, expression.lastIndexOf(")"));
             //get terms
             //       System.out.println("Expression stripped from operator = "+noOpExpression);
@@ -127,16 +127,16 @@ public class Parser implements IParser {
             getCoef2();
             //now compute thresholds based on operations
             //first numeric operations
-            if (op.equalsIgnoreCase("MIN") || op.equalsIgnoreCase("MAX")) {
+            if (operator.equalsIgnoreCase("MIN") || operator.equalsIgnoreCase("MAX")) {
                 setThreshold1(threshold);
                 setThreshold2(threshold);
-            } else if (op.equalsIgnoreCase("ADD")) {
-                op = "ADD";
+            } else if (operator.equalsIgnoreCase("ADD")) {
+                operator = "ADD";
                 System.out.println("Coef1 = " + coef1 + ", Coef2 = " + coef2);
                 setThreshold1((threshold - coef2) / coef1);
                 setThreshold2((threshold - coef1) / coef2);
-            } else if (op.equalsIgnoreCase("MULT")) {
-                op = "MULT";
+            } else if (operator.equalsIgnoreCase("MULT")) {
+                operator = "MULT";
                 setThreshold1(threshold / (coef2 * coef1));
                 setThreshold2(getThreshold1());
             } //now set constraints. separator for sets and thresholds is |
@@ -163,7 +163,7 @@ public class Parser implements IParser {
             }
         }//atomic
         else {
-            op = expression.substring(0, expression.indexOf("("));
+            operator = expression.substring(0, expression.indexOf("("));
             String noOpExpression = expression.substring(expression.indexOf("(") + 1, expression.lastIndexOf(")"));
             String split[] = noOpExpression.split(",");
             term1 = split[0];
