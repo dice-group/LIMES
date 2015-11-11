@@ -8,7 +8,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 /**
- * @author sherif
+ * @author sherif			
  *
  */
 public class LIMES {				  
