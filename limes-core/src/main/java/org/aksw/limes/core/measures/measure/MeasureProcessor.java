@@ -31,7 +31,7 @@ public class MeasureProcessor {
 	List<String> results = new ArrayList<String>();
 	Parser p = new Parser(expression, 0);
 	if (p.isAtomic()) {
-	    results.add(p.getOperation());
+	    results.add(p.getOperator());
 	} else {
 	    results.addAll(getMeasures(p.getTerm1()));
 	    results.addAll(getMeasures(p.getTerm2()));
@@ -44,7 +44,7 @@ public class MeasureProcessor {
 	Parser p = new Parser(expression, 0);
 
 	if (p.isAtomic()) {
-	    Measure measure = MeasureFactory.getMeasure(p.getOperation());
+	    Measure measure = MeasureFactory.getMeasure(p.getOperator());
 	    // get property name
 	    // 0. get properties
 	    // get property labels
@@ -104,19 +104,19 @@ public class MeasureProcessor {
 	    } else
 		return measure.getSimilarity(sourceInstance, targetInstance, property1, property2);
 	} else {
-	    if (p.op.equalsIgnoreCase("MAX") | p.op.equalsIgnoreCase("OR") | p.op.equalsIgnoreCase("XOR")) {
+	    if (p.getOperator().equalsIgnoreCase("MAX") | p.getOperator().equalsIgnoreCase("OR") | p.getOperator().equalsIgnoreCase("XOR")) {
 		return Math.max(getSimilarity(sourceInstance, targetInstance, p.getTerm1(), sourceVar, targetVar),
 			getSimilarity(sourceInstance, targetInstance, p.getTerm2(), sourceVar, targetVar));
 	    }
-	    if (p.op.equalsIgnoreCase("MIN") | p.op.equalsIgnoreCase("AND")) {
+	    if (p.getOperator().equalsIgnoreCase("MIN") | p.getOperator().equalsIgnoreCase("AND")) {
 		return Math.min(getSimilarity(sourceInstance, targetInstance, p.getTerm1(), sourceVar, targetVar),
 			getSimilarity(sourceInstance, targetInstance, p.getTerm2(), sourceVar, targetVar));
 	    }
-	    if (p.op.equalsIgnoreCase("ADD")) {
-		return p.coef1 * getSimilarity(sourceInstance, targetInstance, p.getTerm1(), sourceVar, targetVar)
-			+ p.coef2 * getSimilarity(sourceInstance, targetInstance, p.getTerm2(), sourceVar, targetVar);
+	    if (p.getOperator().equalsIgnoreCase("ADD")) {
+		return p.getCoef1() * getSimilarity(sourceInstance, targetInstance, p.getTerm1(), sourceVar, targetVar)
+			+ p.getCoef2() * getSimilarity(sourceInstance, targetInstance, p.getTerm2(), sourceVar, targetVar);
 	    } else {
-		logger.warn("Not sure what to do with operator " + p.op + ". Using MAX.");
+		logger.warn("Not sure what to do with operator " + p.getOperator() + ". Using MAX.");
 		return Math.max(getSimilarity(sourceInstance, targetInstance, p.getTerm1(), sourceVar, targetVar),
 			getSimilarity(sourceInstance, targetInstance, p.getTerm2(), sourceVar, targetVar));
 	    }

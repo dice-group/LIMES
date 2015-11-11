@@ -77,11 +77,11 @@ public class DefaultRewriter implements IRewriter {
 	    if (p.isAtomic()) {
 		return metric;
 	    }
-	    String operation = p.getOperation();
+	    String operation = p.getOperator();
 	    String term1 = p.getTerm1();
-	    String t1 = p.threshold1 + "";
+	    String t1 = p.getThreshold1() + "";
 	    String term2 = p.getTerm2();
-	    String t2 = p.threshold2 + "";
+	    String t2 = p.getThreshold2() + "";
 
 	    if (operation.equals("MIN") || operation.equals("AND")) {
 		return "(" + getInfix(p.getTerm1() + "|" + t1) + "*" + getInfix(p.getTerm2() + "|" + t2) + ")";
@@ -112,8 +112,8 @@ public class DefaultRewriter implements IRewriter {
 	    result = new HashSet<String>();
 	    result.add(metric);
 	} else {
-	    result = getVariables(p.getTerm1() + "|" + p.threshold1);
-	    result.addAll(getVariables(p.getTerm2() + "|" + p.threshold2));
+	    result = getVariables(p.getTerm1() + "|" + p.getThreshold1());
+	    result.addAll(getVariables(p.getTerm2() + "|" + p.getThreshold2()));
 	}
 	return result;
     }
@@ -131,7 +131,7 @@ public class DefaultRewriter implements IRewriter {
 	}
 	String term1 = p.getTerm1();
 	String term2 = p.getTerm2();
-	if (!(p.getOperation().equals("ADD") && p.getOperation().equals("MULT"))) {
+	if (!(p.getOperator().equals("ADD") && p.getOperator().equals("MULT"))) {
 	    return (isBoolean(term1) && isBoolean(term2));
 	} else {
 	    return false;

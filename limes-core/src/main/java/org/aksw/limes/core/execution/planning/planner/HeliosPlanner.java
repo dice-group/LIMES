@@ -150,33 +150,33 @@ public class HeliosPlanner extends ExecutionPlanner {
 	if (spec.isAtomic()) {
 	    // here we should actually choose between different implementations
 	    // of the operators based on their runtimeCost
-	    Parser p = new Parser(spec.getFilterExpression(), spec.threshold);
+	    Parser p = new Parser(spec.getFilterExpression(), spec.getThreshold());
 	    plan.instructionList = new ArrayList<Instruction>();
 	    plan.addInstruction(new Instruction(Instruction.Command.RUN, spec.getFilterExpression(),
-		    spec.threshold + "", -1, -1, 0));
-	    plan.runtimeCost = getAtomicRuntimeCosts(p.getOperation(), spec.threshold);
-	    plan.mappingSize = getAtomicMappingSizes(p.getOperation(), spec.threshold);
+		    spec.getThreshold() + "", -1, -1, 0));
+	    plan.runtimeCost = getAtomicRuntimeCosts(p.getOperator(), spec.getThreshold());
+	    plan.mappingSize = getAtomicMappingSizes(p.getOperator(), spec.getThreshold());
 	    // there is a function in EDJoin that does that
 	    plan.selectivity = plan.mappingSize / (double) (source.size() * target.size());
 	    // System.out.println("Plan for " + spec.filterExpression + ":\n" +
 	    // plan);
 	} else {
 	    // no optimization for non AND operators really
-	    if (!spec.operator.equals(Operator.AND)) {
+	    if (!spec.getOperator().equals(Operator.AND)) {
 		List<ExecutionPlan> children = new ArrayList<ExecutionPlan>();
 		// set children and update costs
 		plan.runtimeCost = 0;
-		for (LinkSpecification child : spec.children) {
+		for (LinkSpecification child : spec.getChildren()) {
 		    ExecutionPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
 		    children.add(childPlan);
 		    plan.runtimeCost = plan.runtimeCost + childPlan.runtimeCost;
 		}
 		// add costs of union, which are 1
-		plan.runtimeCost = plan.runtimeCost + (spec.children.size() - 1);
+		plan.runtimeCost = plan.runtimeCost + (spec.getChildren().size() - 1);
 		plan.subPlans = children;
 		// set operator
 		double selectivity;
-		if (spec.operator.equals(Operator.OR)) {
+		if (spec.getOperator().equals(Operator.OR)) {
 		    plan.operator = Instruction.Command.UNION;
 		    selectivity = 1 - children.get(0).selectivity;
 		    plan.runtimeCost = children.get(0).runtimeCost;
@@ -192,7 +192,7 @@ public class HeliosPlanner extends ExecutionPlanner {
 			}
 		    }
 		    plan.selectivity = 1 - selectivity;
-		} else if (spec.operator.equals(Operator.MINUS)) {
+		} else if (spec.getOperator().equals(Operator.MINUS)) {
 		    plan.operator = Instruction.Command.DIFF;
 		    // p(A \ B \ C \ ... ) = p(A) \ p(B U C U ...)
 		    selectivity = children.get(0).selectivity;
@@ -207,7 +207,7 @@ public class HeliosPlanner extends ExecutionPlanner {
 			}
 		    }
 		    plan.selectivity = selectivity;
-		} else if (spec.operator.equals(Operator.XOR)) {
+		} else if (spec.getOperator().equals(Operator.XOR)) {
 		    plan.operator = Instruction.Command.XOR;
 		    // A XOR B = (A U B) \ (A & B)
 		    selectivity = children.get(0).selectivity;
@@ -225,13 +225,13 @@ public class HeliosPlanner extends ExecutionPlanner {
 		    plan.selectivity = selectivity;
 		}
 		plan.filteringInstruction = new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
-			spec.threshold + "", -1, -1, 0);
+			spec.getThreshold() + "", -1, -1, 0);
 	    } // here we can optimize.
-	    else if (spec.operator.equals(Operator.AND)) {
+	    else if (spec.getOperator().equals(Operator.AND)) {
 		List<ExecutionPlan> children = new ArrayList<ExecutionPlan>();
 		plan.runtimeCost = 0;
 		double selectivity = 1d;
-		for (LinkSpecification child : spec.children) {
+		for (LinkSpecification child : spec.getChildren()) {
 		    ExecutionPlan childPlan = plan(child);
 		    children.add(childPlan);
 		    plan.runtimeCost = plan.runtimeCost + childPlan.runtimeCost;

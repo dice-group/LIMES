@@ -80,10 +80,10 @@ public class TotalOrderBlockingMapper extends AtomicMapper {
         //distance threshold. Central for finding the right blocks and might differ from blocker
         //to blocker.
 //        logger.info("Granularity is set to " + granularity);
-        BlockingModule generator = BlockingFactory.getBlockingModule(property2, p.op, threshold, granularity);
+        BlockingModule generator = BlockingFactory.getBlockingModule(property2, p.getOperator(), threshold, granularity);
         
         //initialize the measure for similarity computation
-        SpaceMeasure measure = SpaceMeasureFactory.getMeasure(p.op, dimensions);
+        SpaceMeasure measure = SpaceMeasureFactory.getMeasure(p.getOperator(), dimensions);
 
 //        logger.info("Getting hypercubes for target.");
         //compute blockid for each of the elements of the target
