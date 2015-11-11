@@ -61,13 +61,13 @@ public class AlgebraicRewriter implements IRewriter {
 		double min = 1f;
 		// get minimum over all children
 		for (LinkSpecification child : spec.children) {
-		    if (child.threshold < min) {
-			min = child.threshold;
+		    if (child.getThreshold() < min) {
+			min = child.getThreshold();
 		    }
 		}
 		// if spec threshold smaller than miminum then set to 0
-		if (spec.threshold <= min) {
-		    spec.threshold = 0;
+		if (spec.getThreshold() <= min) {
+		    spec.setThreshold(0);
 		}
 	    }
 	    // if spec has children then run update for children as well
@@ -89,11 +89,11 @@ public class AlgebraicRewriter implements IRewriter {
 	if (!spec.isAtomic() && !spec.isEmpty()) {
 	    if (spec.getFilterExpression() == null && spec.children.size() == 1) {
 		// don't forget to update the threshold while lifting the branch
-		double theta = Math.max(spec.threshold, spec.children.get(0).threshold);
+		double theta = Math.max(spec.getThreshold(), spec.children.get(0).threshold);
 		System.out.print("Old spec = " + spec + "\t");
 
 		spec = spec.children.get(0);
-		spec.threshold = theta;
+		spec.setThreshold(theta);
 		System.out.println("New spec = " + spec + "\t");
 	    }
 	    if (!spec.isAtomic()) {
@@ -131,12 +131,12 @@ public class AlgebraicRewriter implements IRewriter {
 	    String measure1 = getMeasure(source);
 	    String measure2 = getMeasure(target);
 	    if (measure1.equals(measure2)) {
-		if (source.threshold <= target.threshold) {
+		if (source.getThreshold() <= target.getThreshold()) {
 		    source.addDependency(target);
 		} else {
 
-		    double t1 = source.threshold;
-		    double t2 = target.threshold;
+		    double t1 = source.getThreshold();
+		    double t2 = target.getThreshold();
 		    if (measure1.equals("trigrams")) {
 			// works for jaro vs. jaro-winkler
 			//
@@ -162,7 +162,7 @@ public class AlgebraicRewriter implements IRewriter {
     public List<String> getProperties(LinkSpecification spec) {
 	List<String> result = new ArrayList<String>();
 	if (spec.isAtomic()) {
-	    Parser p = new Parser(spec.getFilterExpression(), spec.threshold);
+	    Parser p = new Parser(spec.getFilterExpression(), spec.getThreshold());
 	    result.add(p.getTerm1());
 	    result.add(p.getTerm2());
 	}
@@ -215,7 +215,7 @@ public class AlgebraicRewriter implements IRewriter {
 	    // then update spec itself
 	    // if operator = AND, then dependency is intersection of all
 	    // dependencies
-	    if (spec.operator == Operator.AND && spec.children.get(0).hasDependencies()) {
+	    if (spec.getOperator() == Operator.AND && spec.children.get(0).hasDependencies()) {
 		newDependencies = spec.children.get(0).dependencies;
 		for (int i = 1; i < spec.children.size(); i++) {
 		    if (!spec.children.get(i).hasDependencies()) {
@@ -226,7 +226,7 @@ public class AlgebraicRewriter implements IRewriter {
 		}
 	    }
 	    // if operator = OR, then merge all
-	    if (spec.operator == Operator.OR) {
+	    if (spec.getOperator() == Operator.OR) {
 		newDependencies = new ArrayList<LinkSpecification>();
 		for (LinkSpecification child : spec.children) {
 		    if (child.hasDependencies()) {
@@ -238,7 +238,7 @@ public class AlgebraicRewriter implements IRewriter {
 
 	    if (newDependencies != null) {
 		for (LinkSpecification d : newDependencies) {
-		    if (d.threshold > spec.threshold || spec.threshold == 0) {
+		    if (d.getThreshold() > spec.getThreshold() || spec.getThreshold() == 0) {
 			spec.addDependency(d);
 		    }
 		}
@@ -281,7 +281,7 @@ public class AlgebraicRewriter implements IRewriter {
 	    return spec;
 	}
 	// first collapse children which depend on each other
-	if (spec.operator == Operator.AND) {
+	if (spec.getOperator() == Operator.AND) {
 	    List<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
 	    newChildren.addAll(spec.children);
 	    // child is a superset of its dependencies, thus
@@ -302,7 +302,7 @@ public class AlgebraicRewriter implements IRewriter {
 		}
 	    }
 	    spec.children = newChildren;
-	} else if (spec.operator == Operator.OR) {
+	} else if (spec.getOperator() == Operator.OR) {
 	    List<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
 	    newChildren.addAll(spec.children);
 	    for (LinkSpecification child : spec.children) {
