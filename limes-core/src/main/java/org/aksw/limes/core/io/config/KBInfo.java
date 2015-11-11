@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.aksw.limes.core.io.config.reader.XMLConfigrationReader;
+import org.aksw.limes.core.io.config.reader.xml.XMLConfigrationReader;
 
 /**
  * Contains the infos necessary to access a knowledge base

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.aksw.limes.core.io.config.reader;
+package org.aksw.limes.core.io.config.reader.xml;
 
 import org.xml.sax.SAXParseException;
 import org.xml.sax.SAXException;
