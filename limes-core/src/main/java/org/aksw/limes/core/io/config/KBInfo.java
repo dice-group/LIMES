@@ -14,7 +14,7 @@ import java.util.Map.Entry;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 
 /**
- * Contains the infos necessary to access a knowledge base
+ * Contains the information necessary to access a knowledge base
  *
  * @author ngonga
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
@@ -308,8 +308,7 @@ public class KBInfo implements Serializable{
             if (rest.matches(".* rdf:type .*")) {
                 String result = rest.substring(rest.indexOf("rdf:type") + 8).replaceAll("<", "").replaceAll(">", "").trim();
                 if(!expanded) return result;
-                else
-                {
+                else{
                     String namespace = result.substring(0, result.indexOf(":"));
                     if(prefixes.containsKey(namespace))
                         return prefixes.get(namespace)+result.substring(result.indexOf(":")+1);
@@ -331,7 +330,6 @@ public class KBInfo implements Serializable{
                 ret = s.substring(s.indexOf("rdf:type") + 8).trim();
             }
         }
-
         return ret;
     }
 

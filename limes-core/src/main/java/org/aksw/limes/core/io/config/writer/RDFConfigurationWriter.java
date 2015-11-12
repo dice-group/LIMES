@@ -24,6 +24,9 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
 	private static final Logger logger = Logger.getLogger(RDFConfigurationWriter.class.getName());
 	
 
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.io.config.writer.IConfigurationWriter#write(org.aksw.limes.core.io.config.Configuration, java.lang.String)
+	 */
 	@Override
 	public void write(Configuration configuration, String outputFile) throws IOException{
 		String format = outputFile.substring(outputFile.indexOf(".")+1).trim().toLowerCase();
@@ -49,6 +52,9 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
 	
 	
 	
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.io.config.writer.IConfigurationWriter#write(org.aksw.limes.core.io.config.Configuration, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public void write(Configuration configuration, String outputFile, String format) throws IOException{
 		Model m = ModelFactory.createDefaultModel();

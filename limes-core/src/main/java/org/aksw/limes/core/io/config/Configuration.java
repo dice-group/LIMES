@@ -5,6 +5,8 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 
 /**
+ * Contain all LIMES configuration parameters
+ *  
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 12, 2015
  */

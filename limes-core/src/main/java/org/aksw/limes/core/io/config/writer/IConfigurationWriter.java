@@ -10,7 +10,20 @@ import org.aksw.limes.core.io.config.Configuration;
  */
 public interface IConfigurationWriter {
 
+	/**
+	 * @param configuration
+	 * @param outputFile
+	 * @param format of the outputFile
+	 * @throws IOException 
+	 */
 	void write(Configuration configuration, String outputFile, String format) throws IOException;
+	
+	/**
+	 * Write the configuration object to outputFile detecting the format from outputFile extension
+	 * @param configuration
+	 * @param outputFile 
+	 * @throws IOException
+	 */
 	void write(Configuration configuration, String outputFile) throws IOException;
 
 }
