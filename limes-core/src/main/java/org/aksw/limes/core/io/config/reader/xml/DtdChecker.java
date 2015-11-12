@@ -11,6 +11,8 @@ import org.apache.log4j.*;
 /**
  * Checks a link specification against the LIMES DTD.
  * @author ngonga
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 12, 2015
  */
 public class DtdChecker implements org.xml.sax.ErrorHandler {
 

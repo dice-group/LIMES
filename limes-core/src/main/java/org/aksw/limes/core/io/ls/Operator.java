@@ -7,6 +7,8 @@ package org.aksw.limes.core.io.ls;
 /**
  *
  * @author ngonga
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 12, 2015
  */
 public enum Operator {
     AND, OR, XOR, MINUS;

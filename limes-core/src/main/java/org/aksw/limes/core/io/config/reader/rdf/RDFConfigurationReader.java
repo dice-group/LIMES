@@ -21,6 +21,10 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 
+/**
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 12, 2015
+ */
 public class RDFConfigurationReader implements IConfigurationReader{
 	private static final Logger logger = Logger.getLogger(RDFConfigurationReader.class.getName());
 

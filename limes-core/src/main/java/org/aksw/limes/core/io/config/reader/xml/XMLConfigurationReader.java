@@ -25,6 +25,10 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 
+/**
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 12, 2015
+ */
 public class XMLConfigurationReader implements IConfigurationReader{
 	private static final Logger logger = Logger.getLogger(XMLConfigurationReader.class.getName());
 

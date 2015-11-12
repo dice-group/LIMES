@@ -17,15 +17,19 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 
+/**
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 12, 2015
+ */
 public class LinkSpecification implements ILinkSpecification {
 	private static final Logger logger = Logger.getLogger(LinkSpecification.class.getName());
 	
 	// Constants
 	protected static final String MAX 	= "MAX";
-	protected static final String OR 		= "OR";
+	protected static final String OR 	= "OR";
 	protected static final String ADD 	= "ADD";
-	protected static final String MINUS 	= "MINUS";
-	protected static final String XOR		= "XOR";
+	protected static final String MINUS = "MINUS";
+	protected static final String XOR	= "XOR";
 	protected static final String MIN 	= "MIN";
 	protected static final String AND 	= "AND";
 	

@@ -2,6 +2,10 @@ package org.aksw.limes.core.io.mapping;
 
 import java.util.HashMap;
 
+/**
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 12, 2015
+ */
 public class FileMapping extends Mapping {
 
     public HashMap<String, HashMap<String, Double>> map;

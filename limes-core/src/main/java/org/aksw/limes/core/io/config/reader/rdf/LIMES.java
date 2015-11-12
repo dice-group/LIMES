@@ -8,8 +8,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 /**
- * @author sherif			
- *
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 12, 2015
  */
 public class LIMES {				  
 	public static final String uri = "http://limes.sf.net/ontology/";

@@ -17,6 +17,8 @@ import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
  * Contains the infos necessary to access a knowledge base
  *
  * @author ngonga
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 12, 2015
  */
 public class KBInfo implements Serializable{
 

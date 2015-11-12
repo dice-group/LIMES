@@ -7,6 +7,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 
+/**
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 12, 2015
+ */
 public class MappingFactory {
 	private static final Logger logger = Logger.getLogger(MappingFactory.class.getName());
 

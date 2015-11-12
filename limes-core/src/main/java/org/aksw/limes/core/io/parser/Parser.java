@@ -2,8 +2,10 @@ package org.aksw.limes.core.io.parser;
 
 import org.apache.log4j.Logger;
 
-
-
+/**
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 12, 2015
+ */
 public class Parser implements IParser {
 	private static final Logger logger = Logger.getLogger(Parser.class.getName());
 

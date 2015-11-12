@@ -10,6 +10,10 @@ import java.util.TreeSet;
 import org.aksw.limes.core.util.RandomStringGenerator;
 
 
+/**
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 12, 2015
+ */
 public class MemoryMapping extends Mapping implements Serializable{
 
 	private static final long serialVersionUID = 1L;
