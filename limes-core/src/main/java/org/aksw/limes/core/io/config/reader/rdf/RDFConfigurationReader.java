@@ -7,7 +7,7 @@ import java.util.Set;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.IConfigurationReader;
-import org.aksw.limes.core.io.config.reader.xml.XMLConfigrationReader;
+import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -21,8 +21,8 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 
-public class RDFConfigrationReader implements IConfigurationReader{
-	private static final Logger logger = Logger.getLogger(RDFConfigrationReader.class.getName());
+public class RDFConfigurationReader implements IConfigurationReader{
+	private static final Logger logger = Logger.getLogger(RDFConfigurationReader.class.getName());
 
 	
 	/**
@@ -106,7 +106,7 @@ public class RDFConfigrationReader implements IConfigurationReader{
 	 * 
 	 *@author sherif
 	 */
-	public RDFConfigrationReader() {
+	public RDFConfigurationReader() {
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class RDFConfigrationReader implements IConfigurationReader{
 			kbinfo.addRestriction(restriction);
 		}
 		for(RDFNode properity : getObjects(kb, LIMES.property, true)){
-			XMLConfigrationReader.processProperty(kbinfo, properity.toString());
+			XMLConfigurationReader.processProperty(kbinfo, properity.toString());
 		}
 		kbinfo.setPageSize(parseInt(getObject(kb, LIMES.pageSize, true).toString()));
 		kbinfo.setVar(getObject(kb, LIMES.variable, true).toString());

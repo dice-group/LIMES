@@ -25,8 +25,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 
-public class XMLConfigrationReader implements IConfigurationReader{
-	private static final Logger logger = Logger.getLogger(XMLConfigrationReader.class.getName());
+public class XMLConfigurationReader implements IConfigurationReader{
+	private static final Logger logger = Logger.getLogger(XMLConfigurationReader.class.getName());
 
 	// Constants
 	private static final String FILE 			= "FILE";
@@ -57,8 +57,36 @@ public class XMLConfigrationReader implements IConfigurationReader{
 	private static final String NAMESPACE 		= "NAMESPACE";
 
 
-	public XMLConfigrationReader() {
+	/**
+	 * Constructor
+	 */
+	public XMLConfigurationReader() {
 
+	}
+	
+	/**
+	 * Returns a filled out configuration object if the input complies 
+	 * to the LIMES DTD and contains everything needed. 
+	 * NB: The path to the DTD must be specified in the input file
+	 *
+	 * @param input The input XML file
+	 * @return filled out configuration if parsing was successful, else false
+	 */
+	@Override
+	public Configuration read(String filePath) {
+		try {
+			//System.out.println("file://"+System.getProperty("user.dir")+"/"+filePath);
+			String s = System.getProperty("user.dir")+"/"+filePath;
+			File f = new File(s);
+			//System.out.println(f.exists());
+			InputStream input = new FileInputStream(f);
+			return validateAndRead(input, s);
+		} catch (FileNotFoundException e) {
+			logger.warn(e.getMessage());
+			e.printStackTrace();
+			logger.warn("Some values were not set. Crossing my fingers and using defaults.");
+		}
+		return configuration;
 	}
 
 	public void afterPropertiesSet() {
@@ -337,30 +365,7 @@ public class XMLConfigrationReader implements IConfigurationReader{
 		return text.toString();
 	}
 
-	/**
-	 * Returns true if the input complies to the LIMES DTD and contains
-	 * everything needed. NB: The path to the DTD must be specified in the input
-	 * file
-	 *
-	 * @param input The input XML file
-	 * @return true if parsing was successful, else false
-	 */
-	@Override
-	public Configuration read(String filePath) {
-		try {
-			//System.out.println("file://"+System.getProperty("user.dir")+"/"+filePath);
-			String s = System.getProperty("user.dir")+"/"+filePath;
-			File f = new File(s);
-			//System.out.println(f.exists());
-			InputStream input = new FileInputStream(f);
-			return validateAndRead(input, s);
-		} catch (FileNotFoundException e) {
-			logger.warn(e.getMessage());
-			e.printStackTrace();
-			logger.warn("Some values were not set. Crossing my fingers and using defaults.");
-		}
-		return configuration;
-	}
+
 
 
 	//    /**

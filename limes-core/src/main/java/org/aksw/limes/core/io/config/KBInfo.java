@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.aksw.limes.core.io.config.reader.xml.XMLConfigrationReader;
+import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 
 /**
  * Contains the infos necessary to access a knowledge base
@@ -349,7 +349,7 @@ public class KBInfo implements Serializable{
         properties.clear();
 
         for(String property : copy) {
-            XMLConfigrationReader.processProperty(this, property);
+            XMLConfigurationReader.processProperty(this, property);
         }
     }
 }
