@@ -22,7 +22,7 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
 
 	@Override
 	public void write(Configuration configuration, String outputFile) throws IOException{
-		String format = outputFile.substring(outputFile.indexOf(".")).trim().toLowerCase();
+		String format = outputFile.substring(outputFile.indexOf(".")+1).trim().toLowerCase();
 		switch (format) {
 		case "n3":
 		case "nt":
@@ -142,7 +142,7 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
 	}
 	
 	public static void writeModel(Model model, String format, String outputFile) throws IOException{
-		logger.info("Saving dataset to " + outputFile + "...");
+		logger.info("Saving dataset to " + outputFile + " ...");
 		long starTime = System.currentTimeMillis();
 		FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
 		model.write(fileOutputStream, format);

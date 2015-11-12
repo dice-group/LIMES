@@ -1,5 +1,7 @@
 package org.aksw.limes.core.io.config.reader.xml;
 
+import org.aksw.limes.core.io.config.Configuration;
+
 
 public class XMLConfigurationReaderTest {
 	
