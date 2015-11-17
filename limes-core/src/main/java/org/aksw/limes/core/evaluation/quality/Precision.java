@@ -10,12 +10,13 @@ import org.aksw.limes.core.model.Link;
  * @version 2015-11-03
  *
  */
-public class Precision implements QualitativeMeasure {
+public class Precision extends PRF implements QualitativeMeasure {
 
 	@Override
 	public double calculate(Set<Link> predictions, Set<Link> goldStandard) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(predictions.size()==0)
+			return 0;
+		return trueFalsePositive(predictions, goldStandard, true)/(double)predictions.size();
 	}
 
 }
