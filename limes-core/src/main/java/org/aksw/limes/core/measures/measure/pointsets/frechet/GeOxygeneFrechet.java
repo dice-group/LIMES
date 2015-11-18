@@ -1,7 +1,8 @@
+package org.aksw.limes.core.measures.measure.pointsets.frechet;
+
 /**
  * 
  */
-package org.aksw.limes.core.measures.measure.pointsets.frechet;
 
 import java.io.PrintStream;
 import java.util.Arrays;
