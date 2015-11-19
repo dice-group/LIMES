@@ -153,7 +153,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *            MemoryMapping that is to be filtered
      * @return Filtered MemoryMapping
      */
-    private Mapping executeFilter(Instruction inst, Mapping input) {
+    public Mapping executeFilter(Instruction inst, Mapping input) {
 	LinearFilter filter = new LinearFilter();
 	return filter.filter(input, inst.getMeasureExpression(), Double.parseDouble(inst.getThreshold()), source,
 		target, sourceVariable, targetVariable);

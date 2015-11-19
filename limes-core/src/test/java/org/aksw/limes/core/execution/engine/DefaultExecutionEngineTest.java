@@ -1,28 +1,27 @@
 package org.aksw.limes.core.execution.engine;
 
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
 
 import org.aksw.limes.core.execution.engine.DefaultExecutionEngine;
-import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
-import org.aksw.limes.core.execution.planning.planner.HeliosPlanner;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
-
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class DefaultExecutionEngineTest {
+    public Cache source = new MemoryCache();
+    public Cache target = new MemoryCache();
 
-    /**
-     * Implements the test
-     *
-     */
-    public static void test() {
-	// data
-	Cache source = new MemoryCache();
+    @Before
+    public void setUp() {
+	// create source cache
 	source.addTriple("S1", "surname", "sandra");
 	source.addTriple("S1", "name", "bullock");
 	source.addTriple("S2", "surname", "lukas");
@@ -30,43 +29,81 @@ public class DefaultExecutionEngineTest {
 	source.addTriple("S1", "age", "31");
 	source.addTriple("S1", "age", "31");
 
-	Cache target = new MemoryCache();
+	// create target cache
 	target.addTriple("T1", "surname", "sandy");
 	target.addTriple("T1", "name", "bullock");
 	target.addTriple("T1", "alter", "31");
-
 	target.addTriple("T2", "surname", "lukas");
 	target.addTriple("T2", "name", "dorkas,love");
 	target.addTriple("T2", "name", "12");
-
-	// instructions
-	Instruction i1 = new Instruction(Command.RUN, "levenshtein(x.surname, y.surname)", "0.5", -1, -1, 0);
-	Instruction i2 = new Instruction(Command.RUN, "levenshtein(x.name, y.name)", "0.5", -1, -1, 1);
-	Instruction i3 = new Instruction(Command.UNION, "", "0.5", 0, 1, 2);
-
-	// execution plan
-	ExecutionPlan plan = new ExecutionPlan();
-	plan.addInstruction(i1);
-	plan.addInstruction(i2);
-	plan.addInstruction(i3);
-
-	// engine
-	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
-	// test run method
-	System.out.println(source);
-	System.out.println(target);
-	Mapping m1 = ee.executeRun(i1);
-	System.out.println(m1);
-	Mapping m2 = ee.executeRun(i2);
-	System.out.println(m2);
-	Mapping m3 = ee.executeUnion(i3, m1, m2);
-	System.out.println(m3);
-
-	System.out.println(ee.execute(plan));
+	
+	System.out.println("Size of source: "+source.size());
+	System.out.println("Size of target: "+target.size());
 
     }
 
-    public static void testNestedPlanExecution() {
+    @After
+    public void tearDown() {
+	source = null;
+	target = null;
+    }
+
+    @Test
+    public void testSimpleUnion() {
+
+	// instructions for RUN command
+	Instruction run1 = new Instruction(Command.RUN, "levenshtein(x.surname, y.surname)", "0.5", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "qgrams(x.name, y.name)", "0.5", -1, -1, 1);
+	// instructions for UNION command
+	Instruction union1 = new Instruction(Command.UNION, "", "0.5", -1, -1, 0);
+	// instruction for FILTER command 
+	Instruction filter1 = new Instruction(Command.FILTER, "", "0.5", -1, -1, 0);
+	
+	// engine
+	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+
+	// Instruction intersection1 = new Instruction(Command.INTERSECTION, "",
+	// "0.5", 0, 1, 2);
+	// Instruction intersection2 = new Instruction(Command.INTERSECTION, "",
+	// "0.0", 0, 1, 2);
+
+	// Instruction diff1 = new Instruction(Command.DIFF, "", "0.5", 0, 1,
+	// 2);
+
+	// execution plan
+	ExecutionPlan plan = new ExecutionPlan();
+	ExecutionPlan leftChild = new ExecutionPlan();
+	leftChild.instructionList = new ArrayList<Instruction>();
+	leftChild.addInstruction(run1);
+	ExecutionPlan rightChild = new ExecutionPlan();
+	rightChild.instructionList = new ArrayList<Instruction>();
+	rightChild.addInstruction(run2);
+	plan.subPlans = new ArrayList<ExecutionPlan>();
+	plan.subPlans.add(leftChild);
+	plan.subPlans.add(rightChild);
+	plan.operator = Command.UNION;
+	plan.filteringInstruction = filter1;
+
+	// execute instructions independently
+	Mapping mSource = ee.executeRun(run1);
+	Mapping mTarget = ee.executeRun(run2);
+	Mapping mUnion1 = ee.executeUnion(union1, mSource, mTarget);
+	mUnion1 = ee.executeFilter(filter1, mUnion1);
+	
+	// run whole plan
+	Mapping mUnion2 = ee.execute(plan);
+
+	assertTrue(mSource.size <= mUnion1.size);
+	assertTrue(mTarget.size <= mUnion1.size);
+
+	assertTrue(mSource.size <= mUnion2.size);
+	assertTrue(mTarget.size <= mUnion2.size);
+
+	assertTrue(mUnion1.size == mUnion2.size);
+
+    }
+
+    /*public static void testNestedPlanExecution() {
 	// data
 	Cache source = new MemoryCache();
 	source.addTriple("S1", "surname", "sandra");
@@ -93,11 +130,7 @@ public class DefaultExecutionEngineTest {
 	ExecutionPlan plan = cp.plan(spec);
 	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
 	System.out.println("Nested Plan Result = " + ee.execute(plan));
-    }
+    }*/
 
-    public static void main(String args[]) {
-	// test();
-	// System.out.println("_______________________");
-	testNestedPlanExecution();
-    }
+   
 }

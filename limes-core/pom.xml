@@ -239,6 +239,11 @@
 			<artifactId>geoxygene-spatial</artifactId>
 			<version>1.6</version>
 		</dependency>
+		<dependency>
+            <groupId>jgraph</groupId>
+            <artifactId>jgraph</artifactId>
+            <version>5.13.0.0</version>
+        </dependency>
 	</dependencies>
 
 	<distributionManagement>

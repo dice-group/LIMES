@@ -13,7 +13,7 @@ import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.SetOperations.Operator;
 import org.aksw.limes.core.measures.mapper.atomic.EDJoin;
-import org.aksw.limes.core.measures.mapper.atomic.PPJoinMapper;
+import org.aksw.limes.core.measures.mapper.atomic.PPJoinPlusPlus;
 import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
 import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
 import org.aksw.limes.core.measures.measure.Measure;
@@ -71,7 +71,7 @@ public class HeliosPlanner extends ExecutionPlanner {
 	} else if (m.getName().equalsIgnoreCase("qgrams")) {
 	    runtime = (new FastNGram()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
 	} else {
-	    runtime = (new PPJoinMapper()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
+	    runtime = (new PPJoinPlusPlus()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
 	}
 	logger.info("Runtime approximation for " + measure + " is " + runtime);
 	return runtime;
@@ -97,7 +97,7 @@ public class HeliosPlanner extends ExecutionPlanner {
 	if (m.getName().equalsIgnoreCase("qgrams")) {
 	    size = (new FastNGram()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
 	} else {
-	    size = (new PPJoinMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
+	    size = (new PPJoinPlusPlus()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
 	}
 	return size;
     }
