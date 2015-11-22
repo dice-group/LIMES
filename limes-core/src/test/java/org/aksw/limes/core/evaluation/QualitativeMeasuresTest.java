@@ -17,9 +17,11 @@ import org.aksw.limes.core.evaluation.quality.Recall;
 import org.aksw.limes.core.model.*;
 
 import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 /**
  * @author mofeed
@@ -43,18 +45,19 @@ public class QualitativeMeasuresTest {
     	assertTrue(recall == 0.6);
 
     	double fmeasure = new FMeasure().calculate(predictions, goldStandard);
-    	assertTrue(fmeasure < 1.8);
+    	assertTrue(fmeasure > 1.8);
 
 	}
 	private Set<Link> initGoldStandardList()
 	{
 		Set<Link> goldStandard = new TreeSet<Link>();
-		Node p = Node.createURI("http://www.w3.org/2002/07/owl#sameAs");
-		Link l2 = new Link(Node.createURI("http://dbpedia.org/resource/Albania"), Node.createURI("http://dbpedia.org/resource/Albania"), p);
-		Link l3 = new Link(Node.createURI("http://dbpedia.org/resource/Algeria"), Node.createURI("http://dbpedia.org/resource/Algeria"), p);
-		Link l4 = new Link(Node.createURI("http://dbpedia.org/resource/Andorra"), Node.createURI("http://dbpedia.org/resource/Andorra"), p);
-		Link l5 = new Link(Node.createURI("http://dbpedia.org/resource/Argentina"), Node.createURI("http://dbpedia.org/resource/Argentina"), p);
-		Link l6 = new Link(Node.createURI("http://dbpedia.org/resource/Australia"), Node.createURI("http://dbpedia.org/resource/Australia"), p);
+		NodeFactory.createURI("");
+		Node p = NodeFactory.createURI("http://www.w3.org/2002/07/owl#sameAs");
+		Link l2 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Albania"), NodeFactory.createURI("http://dbpedia.org/resource/Albania"), p);
+		Link l3 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Algeria"), NodeFactory.createURI("http://dbpedia.org/resource/Algeria"), p);
+		Link l4 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Andorra"), NodeFactory.createURI("http://dbpedia.org/resource/Andorra"), p);
+		Link l5 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Argentina"), NodeFactory.createURI("http://dbpedia.org/resource/Argentina"), p);
+		Link l6 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Australia"), NodeFactory.createURI("http://dbpedia.org/resource/Australia"), p);
 		goldStandard.add(l2);
 		goldStandard.add(l3);
 		goldStandard.add(l4);
@@ -66,13 +69,13 @@ public class QualitativeMeasuresTest {
 	private Set<Link> initPredictionsList()
 	{
 		Set<Link> predictions = new TreeSet<Link>();
-		Node p = Node.createURI("http://www.w3.org/2002/07/owl#sameAs");
-		Link l1 = new Link(Node.createURI("http://dbpedia.org/resource/Afghanistan"), Node.createURI("http://dbpedia.org/resource/Afghanistan"), p);
-		Link l2 = new Link(Node.createURI("http://dbpedia.org/resource/Albania"), Node.createURI("http://dbpedia.org/resource/Albania"), p);
-		Link l3 = new Link(Node.createURI("http://dbpedia.org/resource/Algeria"), Node.createURI("http://dbpedia.org/resource/Algeria"), p);
-		Link l4 = new Link(Node.createURI("http://dbpedia.org/resource/Angola"), Node.createURI("http://dbpedia.org/resource/Andorra"), p);
-		Link l5 = new Link(Node.createURI("http://dbpedia.org/resource/Argentina"), Node.createURI("http://dbpedia.org/resource/Argentina"), p);
-		Link l6 = new Link(Node.createURI("http://dbpedia.org/resource/Austria"), Node.createURI("http://dbpedia.org/resource/Australia"), p);
+		Node p = NodeFactory.createURI("http://www.w3.org/2002/07/owl#sameAs");
+		Link l1 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Afghanistan"), NodeFactory.createURI("http://dbpedia.org/resource/Afghanistan"), p);
+		Link l2 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Albania"), NodeFactory.createURI("http://dbpedia.org/resource/Albania"), p);
+		Link l3 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Algeria"), NodeFactory.createURI("http://dbpedia.org/resource/Algeria"), p);
+		Link l4 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Angola"), NodeFactory.createURI("http://dbpedia.org/resource/Andorra"), p);
+		Link l5 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Argentina"), NodeFactory.createURI("http://dbpedia.org/resource/Argentina"), p);
+		Link l6 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Austria"), NodeFactory.createURI("http://dbpedia.org/resource/Australia"), p);
 		predictions.add(l1);
 		predictions.add(l2);
 		predictions.add(l3);
