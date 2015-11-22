@@ -14,7 +14,7 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.CosineSimilarity;
  *
  * @author ngonga
  */
-public class CosineMeasure implements StringMeasure {
+public class CosineMeasure extends StringMeasure {
 
     public double getSimilarityChar(Object a, Object b) {
         String p1 = a + "";

@@ -12,7 +12,7 @@ import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.SetMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
 import java.util.Set;
 
 /**

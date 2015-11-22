@@ -7,14 +7,14 @@ package org.aksw.limes.core.measures.measure.string;
 import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.measures.measure.Measure;
+import org.aksw.limes.core.measures.measure.IMeasure;
 import java.util.TreeSet;
 
 /**
  *
  * @author ngonga
  */
-public class TrigramMeasure implements StringMeasure {
+public class TrigramMeasure extends StringMeasure {
 
     public double getSimilarity(int overlap, int lengthA, int lengthB) {
         return ((double) 2 * overlap) / (double) (lengthA + lengthB);

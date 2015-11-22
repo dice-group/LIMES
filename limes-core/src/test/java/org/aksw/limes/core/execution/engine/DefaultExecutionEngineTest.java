@@ -52,24 +52,17 @@ public class DefaultExecutionEngineTest {
     public void testSimpleUnion() {
 
 	// instructions for RUN command
-	Instruction run1 = new Instruction(Command.RUN, "levenshtein(x.surname, y.surname)", "0.5", -1, -1, 0);
-	Instruction run2 = new Instruction(Command.RUN, "qgrams(x.name, y.name)", "0.5", -1, -1, 1);
+	Instruction run1 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.5");
+	Instruction run2 = new Instruction(Command.RUN, "qgrams(x.name, y.name)", "0.5");
 	// instructions for UNION command
-	Instruction union1 = new Instruction(Command.UNION, "", "0.5", -1, -1, 0);
+	Instruction union1 = new Instruction(Command.UNION, "", "0.5");
 	// instruction for FILTER command 
-	Instruction filter1 = new Instruction(Command.FILTER, "", "0.5", -1, -1, 0);
+	//Instruction filter1 = new Instruction(Command.FILTER, "", "0.6", -1, -1, 0);
 	
 	// engine
 	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
 
-	// Instruction intersection1 = new Instruction(Command.INTERSECTION, "",
-	// "0.5", 0, 1, 2);
-	// Instruction intersection2 = new Instruction(Command.INTERSECTION, "",
-	// "0.0", 0, 1, 2);
-
-	// Instruction diff1 = new Instruction(Command.DIFF, "", "0.5", 0, 1,
-	// 2);
-
+	
 	// execution plan
 	ExecutionPlan plan = new ExecutionPlan();
 	ExecutionPlan leftChild = new ExecutionPlan();
@@ -82,27 +75,150 @@ public class DefaultExecutionEngineTest {
 	plan.subPlans.add(leftChild);
 	plan.subPlans.add(rightChild);
 	plan.operator = Command.UNION;
-	plan.filteringInstruction = filter1;
+	plan.filteringInstruction = null;
 
 	// execute instructions independently
-	Mapping mSource = ee.executeRun(run1);
-	Mapping mTarget = ee.executeRun(run2);
-	Mapping mUnion1 = ee.executeUnion(union1, mSource, mTarget);
-	mUnion1 = ee.executeFilter(filter1, mUnion1);
+	Mapping mSource = ee.executeRun(leftChild);
+	Mapping mTarget = ee.executeRun(rightChild);
+	Mapping m = ee.executeUnion(mSource, mTarget);
+	//mUnion1 = ee.executeFilter(filter1, mUnion1);
 	
 	// run whole plan
-	Mapping mUnion2 = ee.execute(plan);
+	Mapping m2 = ee.execute(plan);
 
-	assertTrue(mSource.size <= mUnion1.size);
-	assertTrue(mTarget.size <= mUnion1.size);
+	assertTrue(mSource.size <= m.size);
+	assertTrue(mTarget.size <= m.size);
 
-	assertTrue(mSource.size <= mUnion2.size);
-	assertTrue(mTarget.size <= mUnion2.size);
+	assertTrue(mSource.size <= m2.size);
+	assertTrue(mTarget.size <= m2.size);
 
-	assertTrue(mUnion1.size == mUnion2.size);
+	assertTrue(m.size == m2.size);
 
     }
+    @Test
+    public void testSimpleIntersection() {
 
+	// instructions for RUN command
+	Instruction run1 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.5");
+	Instruction run2 = new Instruction(Command.RUN, "qgrams(x.name, y.name)", "0.5");
+	// instructions for UNION command
+	Instruction union1 = new Instruction(Command.INTERSECTION, "", "0.5");
+	// instruction for FILTER command 
+	//Instruction filter1 = new Instruction(Command.FILTER, "", "0.6", -1, -1, 0);
+	// engine
+	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	// execution plan
+	ExecutionPlan plan = new ExecutionPlan();
+	ExecutionPlan leftChild = new ExecutionPlan();
+	leftChild.instructionList = new ArrayList<Instruction>();
+	leftChild.addInstruction(run1);
+	ExecutionPlan rightChild = new ExecutionPlan();
+	rightChild.instructionList = new ArrayList<Instruction>();
+	rightChild.addInstruction(run2);
+	plan.subPlans = new ArrayList<ExecutionPlan>();
+	plan.subPlans.add(leftChild);
+	plan.subPlans.add(rightChild);
+	plan.operator = Command.UNION;
+	plan.filteringInstruction = null;
+
+	// execute instructions independently
+	Mapping mSource = ee.executeRun(leftChild);
+	Mapping mTarget = ee.executeRun(rightChild);
+	Mapping m = ee.executeUnion(mSource, mTarget);
+	
+	// run whole plan
+	Mapping m2 = ee.execute(plan);
+
+	assertTrue(mSource.size >= m.size);
+	assertTrue(mTarget.size >= m.size);
+
+	assertTrue(mSource.size >= m2.size);
+	assertTrue(mTarget.size >= m2.size);
+
+	assertTrue(m.size == m2.size);
+
+    }
+    
+    @Test
+    public void testSimpleDifference() {
+
+	// instructions for RUN command
+	Instruction run1 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.5");
+	Instruction run2 = new Instruction(Command.RUN, "qgrams(x.name, y.name)", "0.5");
+	// instructions for UNION command
+	Instruction union1 = new Instruction(Command.DIFF, "", "0.5");
+	// engine
+	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	// execution plan
+	ExecutionPlan plan = new ExecutionPlan();
+	ExecutionPlan leftChild = new ExecutionPlan();
+	leftChild.instructionList = new ArrayList<Instruction>();
+	leftChild.addInstruction(run1);
+	ExecutionPlan rightChild = new ExecutionPlan();
+	rightChild.instructionList = new ArrayList<Instruction>();
+	rightChild.addInstruction(run2);
+	plan.subPlans = new ArrayList<ExecutionPlan>();
+	plan.subPlans.add(leftChild);
+	plan.subPlans.add(rightChild);
+	plan.operator = Command.DIFF;
+	plan.filteringInstruction = null;
+	
+	// execute instructions independently
+	Mapping mSource = ee.executeRun(leftChild);
+	Mapping mTarget = ee.executeRun(rightChild);
+	Mapping m = ee.executeUnion(mSource, mTarget);
+	
+	// run whole plan
+	Mapping m2 = ee.execute(plan);
+
+	assertTrue(mSource.size <= m.size);
+
+	assertTrue(mSource.size <= m2.size);
+
+	assertTrue(m.size == m2.size);
+
+    }
+    @Test
+    public void testSimpleXor() {
+
+	// instructions for RUN command
+	Instruction run1 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.5");
+	Instruction run2 = new Instruction(Command.RUN, "qgrams(x.name, y.name)", "0.5");
+	// instructions for UNION command
+	Instruction union1 = new Instruction(Command.XOR, "", "0.5");
+	// engine
+	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	// execution plan
+	ExecutionPlan plan = new ExecutionPlan();
+	ExecutionPlan leftChild = new ExecutionPlan();
+	leftChild.instructionList = new ArrayList<Instruction>();
+	leftChild.addInstruction(run1);
+	ExecutionPlan rightChild = new ExecutionPlan();
+	rightChild.instructionList = new ArrayList<Instruction>();
+	rightChild.addInstruction(run2);
+	plan.subPlans = new ArrayList<ExecutionPlan>();
+	plan.subPlans.add(leftChild);
+	plan.subPlans.add(rightChild);
+	plan.operator = Command.XOR;
+	plan.filteringInstruction = null;
+	
+	// execute instructions independently
+	Mapping mSource = ee.executeRun(leftChild);
+	Mapping mTarget = ee.executeRun(rightChild);
+	Mapping m = ee.executeUnion( mSource, mTarget);
+	
+	// run whole plan
+	Mapping m2 = ee.execute(plan);
+
+	assertTrue(mSource.size <= m.size);
+	assertTrue(mTarget.size <= m.size);
+
+	assertTrue(mSource.size <= m2.size);
+	assertTrue(mTarget.size <= m2.size);
+
+	assertTrue(m.size == m2.size);
+
+    }
     /*public static void testNestedPlanExecution() {
 	// data
 	Cache source = new MemoryCache();

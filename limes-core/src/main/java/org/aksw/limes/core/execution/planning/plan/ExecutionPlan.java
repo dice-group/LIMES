@@ -23,13 +23,16 @@ import com.mxgraph.view.mxStylesheet;
  * @author ngonga
  * @author kleanthi
  */
-public class ExecutionPlan extends IPlan {
+public class ExecutionPlan implements IPlan {
     public double runtimeCost;
     public double mappingSize;
     public double selectivity;
     public List<ExecutionPlan> subPlans;
     public Command operator;
     public Instruction filteringInstruction;
+    public List<Instruction> instructionList;
+    static Logger logger = Logger.getLogger("LIMES");
+
 
     public ExecutionPlan() {
 	instructionList = null;

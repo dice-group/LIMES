@@ -6,9 +6,9 @@ import org.junit.Test;
 
 
 /**
- * An implementation of the {@link DateMeasure} to compute the similarity of
+ * An implementation of the {@link IDateMeasure} to compute the similarity of
  * dates based on days. As we have to compute a similarity <i>sim</i> as
- * <i>0<=sim<=1</i> this {@link Measure} computes the similarity of two Dates d1
+ * <i>0<=sim<=1</i> this {@link IMeasure} computes the similarity of two Dates d1
  * and d2 based on their difference <i>dayDifference(d1, d2)</i> in number of
  * days as (365 - dayDifference(d1, d2) ) / 365. Which means if d1 and d2
  * reference the same day it is 1; if d1 and d2 are more than a year apart from

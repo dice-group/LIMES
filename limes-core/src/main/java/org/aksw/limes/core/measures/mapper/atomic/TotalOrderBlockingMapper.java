@@ -9,14 +9,14 @@ import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.SetOperations;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 
-import org.aksw.limes.core.measures.measure.space.SpaceMeasure;
+import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.aksw.limes.core.measures.measure.space.blocking.BlockingFactory;
 import org.aksw.limes.core.measures.measure.space.blocking.BlockingModule;
@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
  * Uses metric spaces to create blocks.
  * @author ngonga
  */
-public class TotalOrderBlockingMapper extends AtomicMapper {
+public class TotalOrderBlockingMapper implements IMapper {
 
     public int granularity = 4;
     static Logger logger = Logger.getLogger("LIMES");
@@ -83,7 +83,7 @@ public class TotalOrderBlockingMapper extends AtomicMapper {
         BlockingModule generator = BlockingFactory.getBlockingModule(property2, p.getOperator(), threshold, granularity);
         
         //initialize the measure for similarity computation
-        SpaceMeasure measure = SpaceMeasureFactory.getMeasure(p.getOperator(), dimensions);
+        ISpaceMeasure measure = SpaceMeasureFactory.getMeasure(p.getOperator(), dimensions);
 
 //        logger.info("Getting hypercubes for target.");
         //compute blockid for each of the elements of the target

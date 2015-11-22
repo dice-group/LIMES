@@ -16,7 +16,7 @@ import org.aksw.limes.core.measures.mapper.atomic.EDJoin;
 import org.aksw.limes.core.measures.mapper.atomic.PPJoinPlusPlus;
 import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
 import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
-import org.aksw.limes.core.measures.measure.Measure;
+import org.aksw.limes.core.measures.measure.IMeasure;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.apache.log4j.Logger;
@@ -61,7 +61,7 @@ public class HeliosPlanner extends ExecutionPlanner {
      * @return
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
-	Measure m = MeasureFactory.getMeasure(measure);
+	IMeasure m = MeasureFactory.getMeasure(measure);
 	double runtime;
 	if (m.getName().equalsIgnoreCase("levenshtein")) {
 	    runtime = (new EDJoin()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
@@ -85,7 +85,7 @@ public class HeliosPlanner extends ExecutionPlanner {
      * @return
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
-	Measure m = MeasureFactory.getMeasure(measure);
+	IMeasure m = MeasureFactory.getMeasure(measure);
 	double size;
 	if (m.getName().equalsIgnoreCase("levenshtein")) {
 	    size = (new EDJoin()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
@@ -153,7 +153,7 @@ public class HeliosPlanner extends ExecutionPlanner {
 	    Parser p = new Parser(spec.getFilterExpression(), spec.getThreshold());
 	    plan.instructionList = new ArrayList<Instruction>();
 	    plan.addInstruction(new Instruction(Instruction.Command.RUN, spec.getFilterExpression(),
-		    spec.getThreshold() + "", -1, -1, 0));
+		    spec.getThreshold() + ""));
 	    plan.runtimeCost = getAtomicRuntimeCosts(p.getOperator(), spec.getThreshold());
 	    plan.mappingSize = getAtomicMappingSizes(p.getOperator(), spec.getThreshold());
 	    // there is a function in EDJoin that does that
@@ -225,7 +225,7 @@ public class HeliosPlanner extends ExecutionPlanner {
 		    plan.selectivity = selectivity;
 		}
 		plan.filteringInstruction = new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
-			spec.getThreshold() + "", -1, -1, 0);
+			spec.getThreshold() + "");
 	    } // here we can optimize.
 	    else if (spec.getOperator().equals(Operator.AND)) {
 		List<ExecutionPlan> children = new ArrayList<ExecutionPlan>();
@@ -349,10 +349,10 @@ public class HeliosPlanner extends ExecutionPlanner {
 	    // \n"+right.toString());
 	    if (right.isAtomic()) {
 		result.filteringInstruction = new Instruction(Instruction.Command.FILTER, right.getEquivalentMeasure(),
-			right.getInstructionList().get(0).getThreshold() + "", -1, -1, 0);
+			right.getInstructionList().get(0).getThreshold() + "");
 	    } else {
 		result.filteringInstruction = new Instruction(Instruction.Command.FILTER, right.getEquivalentMeasure(),
-			right.filteringInstruction.getThreshold() + "", -1, -1, 0);
+			right.filteringInstruction.getThreshold() + "");
 	    }
 	    result.operator = null;
 	    List<ExecutionPlan> plans = new ArrayList<ExecutionPlan>();
@@ -364,10 +364,10 @@ public class HeliosPlanner extends ExecutionPlanner {
 	    // \n"+left.toString());
 	    if (left.isAtomic()) {
 		result.filteringInstruction = new Instruction(Instruction.Command.FILTER, left.getEquivalentMeasure(),
-			left.getInstructionList().get(0).getThreshold() + "", -1, -1, 0);
+			left.getInstructionList().get(0).getThreshold() + "");
 	    } else {
 		result.filteringInstruction = new Instruction(Instruction.Command.FILTER, left.getEquivalentMeasure(),
-			left.filteringInstruction.getThreshold() + "", -1, -1, 0);
+			left.filteringInstruction.getThreshold() + "");
 	    }
 	    result.operator = null;
 	    List<ExecutionPlan> plans = new ArrayList<ExecutionPlan>();

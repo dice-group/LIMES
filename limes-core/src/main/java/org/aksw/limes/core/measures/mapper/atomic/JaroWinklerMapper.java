@@ -6,7 +6,7 @@ package org.aksw.limes.core.measures.mapper.atomic;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.atomic.jarowinkler.LengthQuicksort;
 import org.aksw.limes.core.measures.mapper.atomic.jarowinkler.TrieFilter;
 import org.aksw.limes.core.measures.measure.string.JaroWinkler;
@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
  */
 @SuppressWarnings("unchecked")
 
-public class JaroWinklerMapper extends AtomicMapper {
+public class JaroWinklerMapper implements IMapper {
 
     static Logger logger = Logger.getLogger("LIMES");
 

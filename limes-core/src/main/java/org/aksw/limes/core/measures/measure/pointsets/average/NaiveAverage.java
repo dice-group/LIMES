@@ -16,13 +16,14 @@ import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.SetMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 
 /**
  * @author sherif
  *
  */
-public class NaiveAverage implements SetMeasure {
+public class NaiveAverage extends PointsetsMeasure {
 
     public int computations;
 

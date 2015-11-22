@@ -21,9 +21,6 @@ public class Instruction {
     private Command command;
     private String measureExpression;
     private String threshold;
-    private int sourceMapping;
-    private int targetMapping;
-    private int resultIndex;
 
     /**
      * Constructor
@@ -41,29 +38,11 @@ public class Instruction {
      *            Target mapping TODO: what is result?
      * 
      */
-    public Instruction(Command c, String measure, String thrs, int source, int target, int result) {
+    public Instruction(Command c, String measure, String thrs) {
 	command = c;
 	measureExpression = measure;
 	threshold = thrs;
-	sourceMapping = source;
-	targetMapping = target;
-	resultIndex = result;
-    }
-
-    /**
-     * @return current result index
-     */
-    public int getResultIndex() {
-	return resultIndex;
-    }
-
-    /**
-     * 
-     * @param resultIndex,
-     *            result index to set
-     */
-    public void setResultIndex(int resultIndex) {
-	this.resultIndex = resultIndex;
+	
     }
 
     /**
@@ -98,37 +77,6 @@ public class Instruction {
 	this.measureExpression = measureExpression;
     }
 
-    /**
-     * @return current source mapping
-     */
-    public int getSourceMapping() {
-	return sourceMapping;
-    }
-
-    /**
-     * 
-     * @param sourceMapping,
-     *            source mapping to set
-     */
-    public void setSourceMapping(int sourceMapping) {
-	this.sourceMapping = sourceMapping;
-    }
-
-    /**
-     * @return current target mapping
-     */
-    public int getTargetMapping() {
-	return targetMapping;
-    }
-
-    /**
-     * 
-     * @param targetMapping,
-     *            target mapping to set
-     */
-    public void setTargetMapping(int targetMapping) {
-	this.targetMapping = targetMapping;
-    }
 
     public String getThreshold() {
 	return threshold;
@@ -165,10 +113,8 @@ public class Instruction {
 	}
 
 	s = s + measureExpression + "\t";
-	s = s + threshold + "\t";
-	s = s + sourceMapping + "\t";
-	s = s + targetMapping + "\t";
-	s = s + resultIndex;
+	s = s + threshold ;
+
 	return s;
     }
 

@@ -17,8 +17,8 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
-import org.aksw.limes.core.measures.measure.string.StringMeasure;
+import org.aksw.limes.core.measures.mapper.IMapper;
+import org.aksw.limes.core.measures.measure.string.IStringMeasure;
 import org.apache.log4j.Logger;
 import algorithms.Token;
 import java.util.Arrays;
@@ -30,14 +30,14 @@ import java.util.List;
  *
  * @author ngonga
  */
-public class EDJoin extends AtomicMapper {
+public class EDJoin implements IMapper {
 
     static Logger logger = Logger.getLogger("LIMES");
     private static int Q = -1;
     private static Mapping mapping = null;
     private static HashMap<Integer, String> sourceMap;
     private static HashMap<Integer, String> targetMap;
-    private StringMeasure measure;
+    private IStringMeasure measure;
     private int comparisons = 0;
 
     public String getName() {

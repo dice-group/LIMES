@@ -1,17 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.aksw.limes.core.measures.measure.space;
 
-import org.aksw.limes.core.measures.measure.Measure;
+public abstract class SpaceMeasure implements ISpaceMeasure{
 
-/**
- *
- * @author ngonga
- */
-public interface SpaceMeasure extends Measure{
-    public void setDimension(int n);
-    public double getThreshold(int dimension, double simThreshold);
 }

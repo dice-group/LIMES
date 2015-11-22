@@ -1,8 +1,7 @@
 package org.aksw.limes.core.measures.measure;
 
 import org.apache.log4j.Logger;
-
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.atomic.EDJoin;
 import org.aksw.limes.core.measures.mapper.atomic.ExactMatchMapper;
 import org.aksw.limes.core.measures.mapper.atomic.JaroMapper;
@@ -15,7 +14,7 @@ import org.aksw.limes.core.measures.mapper.atomic.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.atomic.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
 import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
-import org.aksw.limes.core.measures.measure.Measure;
+import org.aksw.limes.core.measures.measure.IMeasure;
 import org.aksw.limes.core.measures.measure.date.DayMeasure;
 import org.aksw.limes.core.measures.measure.date.SimpleDateMeasure;
 import org.aksw.limes.core.measures.measure.date.YearMeasure;
@@ -46,8 +45,8 @@ public class MeasureFactory {
 
     static Logger logger = Logger.getLogger("LIMES");
 
-    public static Measure getMeasure(String name) {
-	Measure m;
+    public static IMeasure getMeasure(String name) {
+	IMeasure m;
 	if (name.toLowerCase().startsWith("cosine")) {
 	    m = new CosineMeasure();
 	} else if (name.toLowerCase().startsWith("jaccard")) {
@@ -119,7 +118,7 @@ public class MeasureFactory {
      *            Type of the measure
      * @return Similarity measure of the given type
      */
-    public static Measure getMeasure(String name, String type) {
+    public static IMeasure getMeasure(String name, String type) {
 	if (type.equals("string")) {
 	    if (name.toLowerCase().startsWith("cosine")) {
 		return new CosineMeasure();
@@ -158,8 +157,8 @@ public class MeasureFactory {
      * @param measure
      * @return
      */
-    public static AtomicMapper getMapper(String measure) {
-	AtomicMapper am;
+    public static IMapper getMapper(String measure) {
+	IMapper am;
 	if (measure.toLowerCase().startsWith("leven")) {
 	    am = new EDJoin();
 	} else if (measure.toLowerCase().startsWith("qgrams")) {

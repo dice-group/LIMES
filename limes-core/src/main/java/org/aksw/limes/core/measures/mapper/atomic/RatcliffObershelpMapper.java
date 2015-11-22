@@ -5,7 +5,7 @@ package org.aksw.limes.core.measures.mapper.atomic;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.atomic.jarowinkler.LengthQuicksort;
 import org.aksw.limes.core.measures.mapper.atomic.jarowinkler.TrieFilter;
 import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class RatcliffObershelpMapper extends AtomicMapper {
+public class RatcliffObershelpMapper implements IMapper {
 
 
     static Logger logger = Logger.getLogger("LIMES");

@@ -12,7 +12,7 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.apache.log4j.Logger;
 
@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
  *
  * @author ngonga
  */
-public class ExactMatchMapper extends AtomicMapper {
+public class ExactMatchMapper implements IMapper {
 
     static Logger logger = Logger.getLogger("LIMES");
 

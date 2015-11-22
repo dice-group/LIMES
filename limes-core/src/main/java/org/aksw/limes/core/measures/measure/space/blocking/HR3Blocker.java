@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.TreeSet;
 
 import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.measures.measure.space.SpaceMeasure;
+import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.apache.log4j.Logger;
 
@@ -24,7 +24,7 @@ public class HR3Blocker implements BlockingModule {
     int dim = 2;
     ArrayList<Double> thresholds;
     ArrayList<String> properties;
-    SpaceMeasure measure;
+    ISpaceMeasure measure;
     Instance zero;
     int granularity;
     HashMap<ArrayList<Integer>, ArrayList<ArrayList<Integer>>> cache;

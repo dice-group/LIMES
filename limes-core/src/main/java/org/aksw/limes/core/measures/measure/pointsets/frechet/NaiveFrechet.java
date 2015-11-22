@@ -16,7 +16,8 @@ import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.SetMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.util.GeometricShapeFactory;
@@ -25,7 +26,7 @@ import com.vividsolutions.jts.util.GeometricShapeFactory;
  * @author sherif
  *
  */
-public class NaiveFrechet implements SetMeasure {
+public class NaiveFrechet extends PointsetsMeasure {
     Polygon poly1, poly2;
     public double[][] a, b, c, d;
     static GeometricShapeFactory gsf = new GeometricShapeFactory();

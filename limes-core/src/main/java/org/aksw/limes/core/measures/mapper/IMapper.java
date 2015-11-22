@@ -60,4 +60,5 @@ public interface IMapper {
      * @return estimated execution time, as double
      */
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language);
+    String getName();
 }

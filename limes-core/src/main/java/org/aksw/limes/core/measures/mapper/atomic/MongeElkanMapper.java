@@ -2,7 +2,7 @@ package org.aksw.limes.core.measures.mapper.atomic;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.IMapper;
 
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.apache.log4j.Logger;
@@ -14,7 +14,7 @@ import java.util.*;
  * @author Peggy Lucke
  *
  */
-public class MongeElkanMapper extends AtomicMapper {
+public class MongeElkanMapper implements IMapper {
 
     static Logger logger = Logger.getLogger("LIMES");
 

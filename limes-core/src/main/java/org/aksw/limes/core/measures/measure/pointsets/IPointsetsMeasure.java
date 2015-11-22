@@ -8,13 +8,13 @@ import java.util.Set;
 
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
-import org.aksw.limes.core.measures.measure.Measure;
+import org.aksw.limes.core.measures.measure.IMeasure;
 
 /**
  *
  * @author ngonga
  */
-public interface SetMeasure extends Measure {
+public interface IPointsetsMeasure extends IMeasure {
 
     public static boolean USE_GREAT_ELLIPTIC_DISTANCE = true; // if false
 							      // orthodomic

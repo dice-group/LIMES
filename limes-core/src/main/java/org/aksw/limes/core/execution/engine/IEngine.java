@@ -1,7 +1,6 @@
 package org.aksw.limes.core.execution.engine;
 
 import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
-import org.aksw.limes.core.execution.planning.plan.IPlan;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 

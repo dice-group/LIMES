@@ -12,7 +12,7 @@ import org.aksw.limes.core.data.Instance;
  * as 1/(1+d) where d is the distance between the two points.
  * @author ngonga
  */
-public class GeoDistance implements SpaceMeasure {
+public class GeoDistance extends SpaceMeasure {
 
     int dimension = 2;
     private static double D2R = Math.PI / 180;

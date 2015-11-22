@@ -44,7 +44,7 @@ public class MeasureProcessor {
 	Parser p = new Parser(expression, 0);
 
 	if (p.isAtomic()) {
-	    Measure measure = MeasureFactory.getMeasure(p.getOperator());
+	    IMeasure measure = MeasureFactory.getMeasure(p.getOperator());
 	    // get property name
 	    // 0. get properties
 	    // get property labels

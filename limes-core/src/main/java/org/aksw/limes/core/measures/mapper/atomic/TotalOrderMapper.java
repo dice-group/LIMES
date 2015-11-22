@@ -8,7 +8,7 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.SetOperations;
 import org.aksw.limes.core.measures.measure.metricfactory.SimpleMetricFactory;
 
@@ -21,7 +21,7 @@ import java.util.HashMap;
  * DEPRECATED
  * @author ngonga
  */
-public class TotalOrderMapper extends AtomicMapper {
+public class TotalOrderMapper implements IMapper {
 
     public String getName()
     {

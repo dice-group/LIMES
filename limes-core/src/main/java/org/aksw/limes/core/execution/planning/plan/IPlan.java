@@ -2,18 +2,7 @@ package org.aksw.limes.core.execution.planning.plan;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
-/**
- * Implements the plan interface.
- *
- * @author ngonga
- * @author kleanthi
- */
-public abstract class IPlan {
-    public List<Instruction> instructionList;
-    static Logger logger = Logger.getLogger("LIMES");
-
+public interface IPlan {
     /**
      * Adds an instruction to the instructionList
      * 
@@ -57,5 +46,4 @@ public abstract class IPlan {
      * @return Number of instructions in the instructionList
      */
     public abstract int size();
-
 }

@@ -9,13 +9,12 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
 import java.util.*;
 import java.util.logging.Logger;
 
-import org.aksw.limes.core.measures.measure.pointsets.SetMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.SetMeasureFactory;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorff;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff;
@@ -41,7 +40,7 @@ public class GeoHR3 {
     public static float delta;
     int latMax, latMin, longMax, longMin;
     public boolean HR3;
-    public SetMeasure setMeasure;
+    public IPointsetsMeasure setMeasure;
     public boolean verbose = false;
 	public long indexingTime;
 

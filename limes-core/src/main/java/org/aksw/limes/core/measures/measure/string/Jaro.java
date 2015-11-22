@@ -6,7 +6,7 @@ package org.aksw.limes.core.measures.measure.string;
 
 import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.measures.measure.Measure;
+import org.aksw.limes.core.measures.measure.IMeasure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author ngonga
  */
-public class Jaro implements Measure{
+public class Jaro extends StringMeasure{
     /**
      * gets the similarity of the two strings using Jaro distance.
      *
@@ -135,4 +135,42 @@ public class Jaro implements Measure{
     public double getRuntimeApproximation(double mappingSize) {
         return -1d;
     }
+
+    @Override
+    public int getPrefixLength(int tokensNumber, double threshold) {
+	// TODO Auto-generated method stub
+	return 0;
+    }
+
+    @Override
+    public int getMidLength(int tokensNumber, double threshold) {
+	// TODO Auto-generated method stub
+	return 0;
+    }
+
+    @Override
+    public double getSizeFilteringThreshold(int tokensNumber, double threshold) {
+	// TODO Auto-generated method stub
+	return 0;
+    }
+
+    @Override
+    public int getAlpha(int xTokensNumber, int yTokensNumber, double threshold) {
+	// TODO Auto-generated method stub
+	return 0;
+    }
+
+    @Override
+    public double getSimilarity(int overlap, int lengthA, int lengthB) {
+	// TODO Auto-generated method stub
+	return 0;
+    }
+
+    @Override
+    public boolean computableViaOverlap() {
+	// TODO Auto-generated method stub
+	return false;
+    }
+
+    
 }

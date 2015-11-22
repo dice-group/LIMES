@@ -7,7 +7,7 @@ import java.util.LinkedList;
 /**
  * Created by kvn on 28/09/15.
  */
-public interface TrieFilterableStringMeasure extends StringMeasure {
+public interface TrieFilterableStringMeasure extends IStringMeasure {
 
     double characterFrequencyUpperBound(int l1, int l2, int m);
 

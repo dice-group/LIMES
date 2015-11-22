@@ -39,7 +39,7 @@ public class CannonicalPlanner extends ExecutionPlanner {
 	    // nested plan have a null instruction list as default
 	    plan.instructionList = new ArrayList<Instruction>();
 	    plan.addInstruction(new Instruction(Instruction.Command.RUN, spec.getFilterExpression(),
-		    spec.getThreshold() + "", -1, -1, 0));
+		    spec.getThreshold() + ""));
 	} else {
 	    List<ExecutionPlan> children = new ArrayList<ExecutionPlan>();
 	    // set childrean
@@ -58,8 +58,7 @@ public class CannonicalPlanner extends ExecutionPlanner {
 	    } else if (spec.getOperator().equals(Operator.MINUS)) {
 		plan.operator = Command.DIFF;
 	    }
-	    plan.filteringInstruction = new Instruction(Command.FILTER, spec.getFilterExpression(), spec.getThreshold() + "",
-		    -1, -1, 0);
+	    plan.filteringInstruction = new Instruction(Command.FILTER, spec.getFilterExpression(), spec.getThreshold() + "");
 	}
 
 	return plan;

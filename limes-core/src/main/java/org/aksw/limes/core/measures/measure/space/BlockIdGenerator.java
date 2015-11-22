@@ -17,7 +17,7 @@ public class BlockIdGenerator {
     int dim = 2;
     ArrayList<Double> thresholds;
     ArrayList<String> properties;
-    SpaceMeasure measure;
+    ISpaceMeasure measure;
     Instance zero;
 
     /** Initializes the generator. The basic idea here is the following: First, pick

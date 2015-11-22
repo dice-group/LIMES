@@ -32,8 +32,8 @@ public class SetMeasureFactory {
         GEOMAX, GEOAVG, GEOSUMMIN, GEOLINK, GEOQUINLAN, FRECHET, SURJECTION, FAIRSURJECTION, MEAN   
     };
 
-    public static SetMeasure getMeasure(Type type) {
-        SetMeasure measure;
+    public static IPointsetsMeasure getMeasure(Type type) {
+        IPointsetsMeasure measure;
         if (type == Type.NAIVEHAUSDORFF) {
             measure = new NaiveHausdorff();
         } else if (type == Type.FASTHAUSDORFF) {
@@ -67,7 +67,7 @@ public class SetMeasureFactory {
         return measure;
     }
     
-    public static Type getType(SetMeasure measure) {
+    public static Type getType(IPointsetsMeasure measure) {
         if (measure instanceof NaiveHausdorff) {
 			return Type.NAIVEHAUSDORFF;
 		}  

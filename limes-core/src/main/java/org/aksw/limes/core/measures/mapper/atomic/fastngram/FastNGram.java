@@ -7,11 +7,12 @@ package org.aksw.limes.core.measures.mapper.atomic.fastngram;
 
 import java.util.*;
 
+import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
 import org.apache.log4j.Logger;
@@ -20,7 +21,7 @@ import org.apache.log4j.Logger;
  *
  * @author ngonga
  */
-public class FastNGram extends AtomicMapper {
+public class FastNGram implements IMapper {
 
     static Logger logger = Logger.getLogger("LIMES");
     static int q = 3;
@@ -226,6 +227,5 @@ public class FastNGram extends AtomicMapper {
             return 8.2 + 0.001*sourceSize + 0.001*targetSize - 16.75*threshold;
         }
     }
-    
-    
+   
 }

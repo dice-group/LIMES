@@ -22,7 +22,8 @@ import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.SetMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 
 import fr.ign.cogit.geoxygene.distance.Frechet;
 import fr.ign.cogit.geoxygene.spatial.coordgeom.DirectPosition;
@@ -34,7 +35,7 @@ import fr.ign.cogit.geoxygene.api.spatial.coordgeom.ILineSegment;
  * @author sherif
  *
  */
-public class GeOxygeneFrechet implements SetMeasure {
+public class GeOxygeneFrechet extends PointsetsMeasure {
 
 	public int computations;
 

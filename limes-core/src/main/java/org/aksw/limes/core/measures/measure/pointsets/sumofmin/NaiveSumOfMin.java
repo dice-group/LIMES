@@ -19,13 +19,14 @@ import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistanc
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.PolygonIndex;
-import org.aksw.limes.core.measures.measure.pointsets.SetMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 
 /**
  * @author sherif
  *
  */
-public class NaiveSumOfMin implements SetMeasure {
+public class NaiveSumOfMin extends PointsetsMeasure {
     public int computations;
 
     /**

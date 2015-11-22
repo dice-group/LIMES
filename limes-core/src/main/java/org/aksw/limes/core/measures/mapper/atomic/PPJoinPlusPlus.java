@@ -24,11 +24,11 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
 import java.util.ArrayList;
 
+import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
-import org.aksw.limes.core.measures.measure.string.StringMeasure;
+import org.aksw.limes.core.measures.measure.string.IStringMeasure;
 import org.apache.log4j.Logger;
 
 class Position {
@@ -96,14 +96,14 @@ class PartitionResult {
  * @author Dawid Kotlarz
  * @version 1.0
  */
-public class PPJoinPlusPlus extends AtomicMapper {
+public class PPJoinPlusPlus implements IMapper {
 
     static Logger logger = Logger.getLogger("LIMES");
     private static int MAX_DEPTH;
     private static Mapping mapping = null;
     private static HashMap<Integer, String> sourceMap;
     private static HashMap<Integer, String> targetMap;
-    private StringMeasure measure;
+    private IStringMeasure measure;
     private int comparisons = 0;
 
     public String getName()
@@ -244,7 +244,7 @@ public class PPJoinPlusPlus extends AtomicMapper {
             k = 1;
         }
 
-        measure = (StringMeasure) MeasureFactory.getMeasure(p.getOperator(), "string");
+        measure = (IStringMeasure) MeasureFactory.getMeasure(p.getOperator(), "string");
 //        logger.info("Beginninng comparison per se");
         if (measure != null) {
 //            logger.info("Using measure " + measure.getName());
