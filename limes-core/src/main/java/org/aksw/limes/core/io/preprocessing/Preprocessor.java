@@ -1,23 +1,20 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.aksw.limes.core.io.preprocessing;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
 import org.apache.log4j.Logger;
 
 /**
  *
  * @author ngonga
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 23, 2015
  */
 public class Preprocessor {
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger(Preprocessor.class.getName());
 
     public static String process(String entry, String functionChain) {
         String result = entry.split("\\^")[0];
