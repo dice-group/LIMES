@@ -11,9 +11,10 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import uk.ac.shef.wit.simmetrics.similaritymetrics.*;
 
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 import org.apache.log4j.*;
 
 /**

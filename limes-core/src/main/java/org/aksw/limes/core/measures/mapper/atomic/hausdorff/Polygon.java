@@ -6,11 +6,16 @@ package org.aksw.limes.core.measures.mapper.atomic.hausdorff;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 
+<<<<<<< HEAD
 import org.aksw.limes.core.data.Point;
+=======
+import org.aksw.limes.core.datastrutures.Point;
+>>>>>>> 04f229403216e5956dd16f2b2e0519c2b5ae47d3
 
 /**
  *

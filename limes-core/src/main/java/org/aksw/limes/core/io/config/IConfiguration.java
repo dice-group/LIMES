@@ -1,8 +1,7 @@
 package org.aksw.limes.core.io.config;
 
-import java.util.HashMap;
+import java.util.Set;
 
-import org.apache.log4j.Logger;
 
 
 /**
@@ -11,6 +10,7 @@ import org.apache.log4j.Logger;
  */
 public interface IConfiguration {
 	
+	public Set<String> getConfigurationParametersNames();
 
 
 }

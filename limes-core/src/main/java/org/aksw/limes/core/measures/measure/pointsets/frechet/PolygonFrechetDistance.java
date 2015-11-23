@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-import org.aksw.limes.core.data.Point;
+import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
 

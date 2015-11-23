@@ -1,7 +1,13 @@
 package org.aksw.limes.core.measures.measure.string;
 
 
+<<<<<<< HEAD
 import org.aksw.limes.core.data.Instance;
+=======
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.io.cache.MemoryCache;
+import org.aksw.limes.core.measures.measure.IMeasure;
+>>>>>>> 04f229403216e5956dd16f2b2e0519c2b5ae47d3
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 import java.util.LinkedList;

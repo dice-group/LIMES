@@ -6,7 +6,15 @@ package org.aksw.limes.core.measures.measure.pointsets.surjection;
 import java.util.ArrayList;
 import java.util.List;
 
+<<<<<<< HEAD
 import org.aksw.limes.core.data.Point;
+=======
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
+>>>>>>> 04f229403216e5956dd16f2b2e0519c2b5ae47d3
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;

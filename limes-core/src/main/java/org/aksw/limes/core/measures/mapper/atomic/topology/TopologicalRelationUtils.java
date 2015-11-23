@@ -8,8 +8,20 @@ import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 
+<<<<<<< HEAD
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
+=======
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.parser.Parser;
+import org.aksw.limes.core.measures.mapper.IMapper.Language;
+import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
+
+import static org.aksw.limes.core.measures.mapper.atomic.OrchidMapper.getPoints;
+>>>>>>> 04f229403216e5956dd16f2b2e0519c2b5ae47d3
 
 import java.util.*;
 import java.util.logging.Level;

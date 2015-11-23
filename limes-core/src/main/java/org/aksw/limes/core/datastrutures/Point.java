@@ -1,4 +1,4 @@
-package org.aksw.limes.core.data;
+package org.aksw.limes.core.datastrutures;
 
 import java.util.ArrayList;
 import java.util.Arrays;

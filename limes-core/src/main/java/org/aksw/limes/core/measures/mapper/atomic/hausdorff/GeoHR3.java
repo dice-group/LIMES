@@ -4,9 +4,16 @@
  */
 package org.aksw.limes.core.measures.mapper.atomic.hausdorff;
 
+<<<<<<< HEAD
 import org.aksw.limes.core.data.Point;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
+=======
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+
+>>>>>>> 04f229403216e5956dd16f2b2e0519c2b5ae47d3
 import java.util.*;
 import java.util.logging.Logger;
 

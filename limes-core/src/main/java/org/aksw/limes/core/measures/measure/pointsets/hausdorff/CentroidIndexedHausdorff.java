@@ -4,10 +4,20 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.hausdorff;
 
+<<<<<<< HEAD
 
+=======
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.io.cache.Instance;
+>>>>>>> 04f229403216e5956dd16f2b2e0519c2b5ae47d3
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
+<<<<<<< HEAD
+=======
+import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
+
+>>>>>>> 04f229403216e5956dd16f2b2e0519c2b5ae47d3
 import java.util.Set;
 
 /**

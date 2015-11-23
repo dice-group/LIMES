@@ -8,7 +8,11 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
+<<<<<<< HEAD
 import org.aksw.limes.core.measures.mapper.Mapper;
+=======
+import org.aksw.limes.core.measures.mapper.IMapper;
+>>>>>>> 04f229403216e5956dd16f2b2e0519c2b5ae47d3
 
 import java.util.ArrayList;
 import java.util.HashMap;

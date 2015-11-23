@@ -7,9 +7,16 @@ package org.aksw.limes.core.measures.mapper.atomic.hausdorff;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+<<<<<<< HEAD
 import org.aksw.limes.core.data.Point;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
+=======
+
+import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
+import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
+import org.aksw.limes.core.datastrutures.Point;
+>>>>>>> 04f229403216e5956dd16f2b2e0519c2b5ae47d3
 import org.apache.log4j.Logger;
 
 /**
@@ -103,6 +110,10 @@ public class PolygonIndex {
 	} else {
 	    logger.warn(uri + "\t Index contains uri = " + polygonIndex.containsKey(uri));
 	    if (distanceIndex.containsKey(uri)) {
+<<<<<<< HEAD
+=======
+//		Polygon q = polygonIndex.get(uri);
+>>>>>>> 04f229403216e5956dd16f2b2e0519c2b5ae47d3
 		logger.warn(uri + "\t Distance index contains " + x + " = " + distanceIndex.get(uri).containsKey(x));
 		logger.warn(uri + "\t Distance index contains " + x + " = " + distanceIndex.get(uri).containsKey(y));
 	    }

@@ -5,7 +5,7 @@
 
 package org.aksw.limes.core.measures.measure.space;
 
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 import org.apache.log4j.Logger;
 
 /**

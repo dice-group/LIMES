@@ -1,8 +1,11 @@
 package org.aksw.limes.core.io.config;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 /**
  * Contain all LIMES configuration parameters
@@ -10,8 +13,8 @@ import org.apache.log4j.Logger;
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 12, 2015
  */
-public class Configuration {
-	private static final Logger logger = Logger.getLogger(Configuration.class.getName());
+public class Configuration implements IConfiguration{
+//	private static final Logger logger = Logger.getLogger(Configuration.class.getName());
 
 	protected KBInfo sourceInfo 				= new KBInfo();
 	protected KBInfo targetInfo 				= new KBInfo();
@@ -215,5 +218,12 @@ public class Configuration {
 				+ "\nrecallRegulator="	+ recallRegulator 
 				+ "\nrecallThreshold=" + recallThreshold
 				+ "\n]";
+	}
+
+	@Override
+	public Set<String> getConfigurationParametersNames() {
+		return new HashSet<String>(Arrays.asList("sourceInfo", "targetInfo", "metricExpression", "acceptanceRelation",
+				"verificationRelation",	"acceptanceThreshold", "acceptanceFile", "verificationThreshold", "verificationFile",
+				"exemplars", "prefixes", "outputFormat", "executionPlan", "granularity", "recallRegulator",	"recallThreshold"));
 	}
 }

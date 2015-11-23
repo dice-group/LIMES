@@ -9,6 +9,7 @@ package org.aksw.limes.core.measures.mapper.atomic;
  * @author ngonga
  */
 import algorithms.ppjoinplus.Record;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,11 +20,12 @@ import java.util.StringTokenizer;
 import algorithms.StoppUhr;
 import algorithms.Token;
 
-import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
+
 import java.util.ArrayList;
 
 

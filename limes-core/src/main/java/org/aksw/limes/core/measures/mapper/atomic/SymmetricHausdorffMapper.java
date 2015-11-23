@@ -6,8 +6,13 @@ package org.aksw.limes.core.measures.mapper.atomic;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
+<<<<<<< HEAD
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+=======
+import org.aksw.limes.core.measures.mapper.IMapper;
+import org.aksw.limes.core.measures.mapper.SetOperations;
+>>>>>>> 04f229403216e5956dd16f2b2e0519c2b5ae47d3
 
 
 /**

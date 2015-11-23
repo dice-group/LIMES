@@ -1,5 +1,11 @@
 package org.aksw.limes.core.measures.measure.date;
 
+<<<<<<< HEAD
+=======
+import org.aksw.limes.core.io.cache.Instance;
+import org.junit.Assert;
+import org.junit.Test;
+>>>>>>> 04f229403216e5956dd16f2b2e0519c2b5ae47d3
 
 /**
  * Computes the similarity of two dates based upon years within a decade. Every
