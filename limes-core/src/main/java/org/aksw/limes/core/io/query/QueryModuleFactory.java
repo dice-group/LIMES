@@ -2,7 +2,6 @@ package org.aksw.limes.core.io.query;
 
 
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.apache.log4j.Logger;
 
 /**

@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
  * Can load from a resource as well.
  */
 public class FileQueryModule implements IQueryModule {
-	
+
 	private Logger logger = Logger.getLogger(FileQueryModule.class.getName());
 
 	KBInfo kb;
@@ -29,6 +29,7 @@ public class FileQueryModule implements IQueryModule {
 	 * @param kbinfo
 	 * Loads the endpoint as a file and if that fails as a resource. 
 	 */
+	@SuppressWarnings("resource")
 	public FileQueryModule(KBInfo kbinfo) {
 		try
 		{
@@ -37,7 +38,7 @@ public class FileQueryModule implements IQueryModule {
 			model = ModelFactory.createDefaultModel();
 			System.out.println("Trying to get reader "+kb.getType());
 			RDFReader r = model.getReader(kb.getType());
-			
+
 			try
 			{
 				in = new FileInputStream(kb.getEndpoint());
@@ -69,7 +70,7 @@ public class FileQueryModule implements IQueryModule {
 	public void fillCache(Cache c) {
 		SparqlQueryModule sqm = new SparqlQueryModule(kb);
 		sqm.fillCache(c, false);
-		
+
 	}
 
 }
