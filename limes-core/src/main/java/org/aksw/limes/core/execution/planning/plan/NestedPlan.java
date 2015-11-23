@@ -9,7 +9,6 @@ import javax.swing.JFrame;
 
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
-import org.apache.log4j.Logger;
 
 import com.mxgraph.layout.mxCompactTreeLayout;
 import com.mxgraph.swing.mxGraphComponent;
@@ -23,58 +22,53 @@ import com.mxgraph.view.mxStylesheet;
  * @author ngonga
  * @author kleanthi
  */
-public class ExecutionPlan implements IPlan {
-    public double runtimeCost;
-    public double mappingSize;
-    public double selectivity;
-    public List<ExecutionPlan> subPlans;
+public class NestedPlan extends Plan {
+
+    public List<NestedPlan> subPlans;
     public Command operator;
     public Instruction filteringInstruction;
-    public List<Instruction> instructionList;
-    static Logger logger = Logger.getLogger("LIMES");
 
-
-    public ExecutionPlan() {
+    public NestedPlan() {
+	super();
 	instructionList = null;
 	subPlans = null;
 	filteringInstruction = null;
-	runtimeCost = 0.0d;
-	selectivity = 0.0d;
-	mappingSize = 0.0d;
     }
 
+    @Override
     public boolean isEmpty() {
 	return (instructionList == null && subPlans == null && filteringInstruction == null);
     }
 
-    public void addInstruction(Instruction instruction) {
-	boolean added = instructionList.add(instruction);
-	if (!added)
-	    logger.info("ExecutionPlan.addInstructiun() failed");
-    }
-
-    public void removeInstruction(int i) {
-	instructionList.remove(i);
-    }
-
-    public void removeInstruction(Instruction i) {
-	instructionList.remove(i);
-    }
-
-    public int size() {
-	return instructionList.size();
-    }
-
+    @Override
     public List<Instruction> getInstructionList() {
-	List<Instruction> instructions = getInstructionList();
+	List<Instruction> instructions = super.getInstructionList();
 	if (!isAtomic()) {
-	    for (ExecutionPlan np : subPlans) {
+	    for (NestedPlan np : subPlans) {
 		instructions.addAll(np.getInstructionList());
 	    }
 	}
 	return instructions;
     }
 
+    /**
+     * Adds a subplan to the current list of subplans, if there is no list one
+     * will be created
+     * 
+     * @param subplan
+     *            to be added
+     */
+    public void addSubplan(NestedPlan subplan) {
+	if (subPlans == null)
+	    subPlans = new ArrayList<NestedPlan>();
+	subPlans.add(subplan);
+    }
+
+    /**
+     * Get all the metric expressions of the current NestedPlan
+     * 
+     * @return List of all metric expressions
+     */
     public List<String> getAllMeasures() {
 	List<String> result = new ArrayList<String>();
 
@@ -85,7 +79,7 @@ public class ExecutionPlan implements IPlan {
 	}
 	if (!(subPlans == null)) {
 	    if (!subPlans.isEmpty()) {
-		for (ExecutionPlan p : subPlans) {
+		for (NestedPlan p : subPlans) {
 		    result.addAll(p.getAllMeasures());
 		}
 	    }
@@ -101,9 +95,9 @@ public class ExecutionPlan implements IPlan {
     }
 
     /**
-     * Check if plan consists of one instruction.
+     * Checks whether the current NestedPlan is atomic
      * 
-     * @return true, if plan is atomic or false, otherwise
+     * @return true, if current NestedPlan is atomic. false, if otherwise
      */
     public boolean isAtomic() {
 	if (subPlans == null) {
@@ -117,10 +111,9 @@ public class ExecutionPlan implements IPlan {
     }
 
     /**
-     * String representation of execution plan.
+     * String representation of NestedPlan
      * 
-     * 
-     * @return pre, string representation of plan
+     * @return NestedPlan as string
      */
     public String toString() {
 	String pre = ("Selectivity = " + selectivity);
@@ -141,7 +134,9 @@ public class ExecutionPlan implements IPlan {
     }
 
     /**
-     * TODO: add description
+     * Returns the filterInstruction of a NestedPlan
+     *
+     * @return filterInstruction as string
      */
     public String getFilterString(String filter) {
 	String[] parts = filter.split("\t");
@@ -157,14 +152,13 @@ public class ExecutionPlan implements IPlan {
      * Returns the measure that is equivalent to this plan. Mostly for planning
      * purposes
      *
-     * @return result, the string representation of equivalent measure
+     * @return Measure as string
      */
     public String getEquivalentMeasure() {
 	String result;
 	if (isAtomic()) {
 	    result = instructionList.get(0).getMeasureExpression();
 	} else {
-
 	    // filtering node with one
 	    if (subPlans.size() == 1) {
 		if (filteringInstruction != null) {
@@ -190,15 +184,13 @@ public class ExecutionPlan implements IPlan {
 		result = "";
 	    }
 
-	    for (ExecutionPlan p : subPlans) {
+	    for (NestedPlan p : subPlans) {
 		result = result + p.getEquivalentMeasure() + "|";
 		if (p.isAtomic()) {
 		    result = result + p.instructionList.get(0).getThreshold() + ",";
 		} else {
 		    if (p.filteringInstruction != null) {
-
 			result = result + p.filteringInstruction.getThreshold() + ",";
-
 		    }
 		}
 	    }
@@ -225,8 +217,33 @@ public class ExecutionPlan implements IPlan {
     }
 
     /**
+     * Generates a clone of the current NestedPlan
+     * 
+     * @return Clone of current NestedPlan
+     */
+    public NestedPlan clone() {
+	NestedPlan clone = new NestedPlan();
+	clone.filteringInstruction = this.filteringInstruction;
+	clone.instructionList = this.instructionList;
+	clone.mappingSize = this.mappingSize;
+	clone.operator = this.operator;
+	clone.runtimeCost = this.runtimeCost;
+	clone.selectivity = this.selectivity;
+	List<NestedPlan> l = new ArrayList<NestedPlan>();
+	NestedPlan subPlanCopy;
+	if (this.subPlans != null)
+	    for (NestedPlan c : this.subPlans) {
+		subPlanCopy = c.clone();
+		clone.addSubplan(subPlanCopy);
+		l.add(subPlanCopy);
+	    }
+
+	return clone;
+    }
+
+    /**
      * Returns the threshold to be used when reconstructing the metric that led
-     * to this plans
+     * to the current NestedPlan
      *
      * @return Threshold as string
      */
@@ -239,9 +256,10 @@ public class ExecutionPlan implements IPlan {
     }
 
     /**
-     * Get size of biggest instruction.
-     *
-     * @return size, size of biggest instruction
+     * Returns the size of a NestedPlan
+     * 
+     * @param size
+     *            as int
      */
     public int getSize(String s) {
 	int size = 0;
@@ -256,9 +274,10 @@ public class ExecutionPlan implements IPlan {
     }
 
     /**
-     * Get string representation of instruction
-     *
-     * @return result, instruction as string
+     * Returns the string representation of the instruction of an atomic
+     * NestedPlan
+     * 
+     * @return Instruction as a string
      */
     public String getInstructionString(List<Instruction> list) {
 	Instruction i = list.get(0);
@@ -269,8 +288,8 @@ public class ExecutionPlan implements IPlan {
     }
 
     /**
-     * Get graphical representation of execution plan
-     *
+     * Graphic representation of the current NestedPlan
+     * 
      */
     public void draw(mxGraph graph, Object root) {
 	int charsize = 8;
@@ -295,21 +314,22 @@ public class ExecutionPlan implements IPlan {
 	    } else {
 		filter = "NULL";
 	    }
+	    // String inst = getInstructionString(instructionList);
 	    v1 = graph.insertVertex(parent, null, filter, 20, 40, getSize(filter) * charsize, 45, "ROUNDED");
 	    v2 = graph.insertVertex(parent, null, operator, 20, 40, (operator + "").length() * charsize, 45,
 		    "RECTANGLE");
 	    graph.insertEdge(parent, null, "", root, v1);
 	    graph.insertEdge(parent, null, "", v1, v2);
-	    for (ExecutionPlan p : subPlans) {
+	    for (NestedPlan p : subPlans) {
 		p.draw(graph, v2);
 	    }
 	}
     }
 
     /**
-     * Get graph of execution plan
-     *
-     * @return graph, graph of execution plan
+     * Representation of the current NestedPlan as a Graph
+     * 
+     * @return NestedPlan as a Graph
      */
     public mxGraph getGraph() {
 	mxGraph graph = new mxGraph();
@@ -329,11 +349,11 @@ public class ExecutionPlan implements IPlan {
 	rectangle.put(mxConstants.STYLE_FONTCOLOR, "#000000");
 	stylesheet.putCellStyle("RECTANGLE", rectangle);
 
+	@SuppressWarnings("unused")
 	Object parent = graph.getDefaultParent();
 	graph.getModel().beginUpdate();
 	try {
-	    // Object root = graph.insertVertex(parent, null, "ROOT", 20, 40,
-	    // 80, 30, "RECTANGLE");
+
 	    draw(graph, null);
 	} finally {
 	    graph.getModel().endUpdate();
@@ -345,8 +365,8 @@ public class ExecutionPlan implements IPlan {
     }
 
     /**
-     * Draw execution plan
-     *
+     * Drawing of the current NestedPlan
+     * 
      */
     public void draw() {
 	mxGraph graph = getGraph();
@@ -355,9 +375,11 @@ public class ExecutionPlan implements IPlan {
 	graphComponent.setBackground(Color.WHITE);
 
 	JFrame frame = new JFrame();
+
 	frame.setSize(500, 500);
 	frame.setLocation(300, 200);
 	frame.setBackground(Color.white);
+
 	frame.add(graphComponent);
 	frame.pack();
 	frame.setVisible(true);

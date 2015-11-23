@@ -32,6 +32,7 @@ public class PolygonReader {
 	Map<String, Polygon> result = new HashMap<String, Polygon>();
 	String s, split[];
 	try {
+	    @SuppressWarnings("resource")
 	    BufferedReader buf = new BufferedReader(new FileReader(file));
 	    s = buf.readLine();
 	    while (s != null) {

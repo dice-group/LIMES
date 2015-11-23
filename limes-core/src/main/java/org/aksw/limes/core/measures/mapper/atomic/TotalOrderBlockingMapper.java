@@ -5,12 +5,10 @@
 package org.aksw.limes.core.measures.mapper.atomic;
 
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.IMapper;
-import org.aksw.limes.core.measures.mapper.SetOperations;
+import org.aksw.limes.core.measures.mapper.Mapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +24,7 @@ import org.apache.log4j.Logger;
  * Uses metric spaces to create blocks.
  * @author ngonga
  */
-public class TotalOrderBlockingMapper implements IMapper {
+public class TotalOrderBlockingMapper extends Mapper{
 
     public int granularity = 4;
     static Logger logger = Logger.getLogger("LIMES");
@@ -75,17 +73,14 @@ public class TotalOrderBlockingMapper implements IMapper {
 
         //get number of dimensions we are dealing with
         int dimensions = property2.split("\\|").length;
-//        logger.info("Comparing " + property1 + " and " + property2 + ", ergo " + dimensions + " dimensions");
         //important. The Blocking module takes care of the transformation from similarity to
         //distance threshold. Central for finding the right blocks and might differ from blocker
         //to blocker.
-//        logger.info("Granularity is set to " + granularity);
         BlockingModule generator = BlockingFactory.getBlockingModule(property2, p.getOperator(), threshold, granularity);
         
         //initialize the measure for similarity computation
         ISpaceMeasure measure = SpaceMeasureFactory.getMeasure(p.getOperator(), dimensions);
 
-//        logger.info("Getting hypercubes for target.");
         //compute blockid for each of the elements of the target
         //implement our simple yet efficient blocking approach
         ArrayList<ArrayList<Integer>> blockIds;
@@ -98,18 +93,13 @@ public class TotalOrderBlockingMapper implements IMapper {
                 targetBlocks.get(blockIds.get(ids)).add(key);
             }
         }
-//        logger.info("Generated "+targetBlocks.size()+" hypercubes for target.");
-//        logger.info("Computing links ...");
 
         ArrayList<ArrayList<Integer>> blocksToCompare;
         //comparison
         TreeSet<String> uris;
         double sim;
-        //necessary to compute RRR
-        int comparisons = 0;
-        int necessaryComparisons = 0;
-        
-        int counter = 0, size = source.getAllUris().size();
+        int counter = 0;
+	source.getAllUris().size();
         for (String sourceInstanceUri : source.getAllUris()) {
             counter++;
             if (counter % 1000 == 0) {
@@ -131,10 +121,8 @@ public class TotalOrderBlockingMapper implements IMapper {
                         for (String targetInstanceUri : uris) {
                             sim = measure.getSimilarity(source.getInstance(sourceInstanceUri),
                                     target.getInstance(targetInstanceUri), property1, property2);
-                            comparisons++;
                             if (sim >= threshold) {
-                                mapping.add(sourceInstanceUri, targetInstanceUri, sim);     
-                                necessaryComparisons++;
+                                mapping.add(sourceInstanceUri, targetInstanceUri, sim);
                             }
                         }
                     }

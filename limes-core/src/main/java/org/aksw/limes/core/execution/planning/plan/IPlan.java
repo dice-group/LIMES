@@ -27,11 +27,7 @@ public interface IPlan {
      */
     public abstract void removeInstruction(Instruction i);
 
-    /**
-     * Checks whether a instructionList is empty
-     * 
-     */
-    public abstract boolean isEmpty();
+    
 
     /**
      * Returns the list of instructions contained in a instructionList
@@ -39,11 +35,6 @@ public interface IPlan {
      * @return List of instructions
      */
     public abstract List<Instruction> getInstructionList();
-
-    /**
-     * Returns the size of a instructionList
-     * 
-     * @return Number of instructions in the instructionList
-     */
-    public abstract int size();
+    
+    
 }

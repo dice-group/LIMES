@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.string.comparison;
+package org.aksw.limes.core.measures.measure.string.comparison;
 
 public class CompareByMin implements ComparisonStrategy{
 

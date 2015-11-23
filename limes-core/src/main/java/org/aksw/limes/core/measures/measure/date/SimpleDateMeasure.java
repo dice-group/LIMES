@@ -7,9 +7,8 @@ import java.util.Date;
 
 import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
-import org.apache.log4j.Level;
+
 import org.apache.log4j.Logger;
-import org.junit.Test;
 
 /**
  * An implementation of the {@link IDateMeasure} to compute the similarity of

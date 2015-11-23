@@ -1,6 +1,6 @@
 package org.aksw.limes.core.execution.planning.planner;
 
-import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
+import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 
 /**
@@ -10,6 +10,6 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 * @author ngonga
 * @author kleanthi
 */
-public abstract class ExecutionPlanner implements IPlanner{
-    public abstract ExecutionPlan plan(LinkSpecification spec);
+public abstract class Planner implements IPlanner{
+    public abstract NestedPlan plan(LinkSpecification spec);
 }

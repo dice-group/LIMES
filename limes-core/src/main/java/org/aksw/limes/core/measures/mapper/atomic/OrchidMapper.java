@@ -8,11 +8,7 @@ import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.data.Point;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.IMapper;
-import org.aksw.limes.core.measures.mapper.IMapper.Language;
-import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
+import org.aksw.limes.core.measures.mapper.Mapper;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -20,14 +16,13 @@ import java.util.regex.Pattern;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GeoHR3;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.SetMeasureFactory;
 import org.aksw.limes.core.measures.measure.pointsets.SetMeasureFactory.Type;
 
 /**
  *
  * @author ngonga
  */
-public class OrchidMapper implements IMapper {
+public class OrchidMapper extends Mapper {
 
     IPointsetsMeasure m = null;
 

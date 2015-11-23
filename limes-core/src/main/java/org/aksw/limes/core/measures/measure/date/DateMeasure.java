@@ -1,5 +1,7 @@
 package org.aksw.limes.core.measures.measure.date;
 
-public abstract class DateMeasure implements IDateMeasure{
+import org.aksw.limes.core.measures.measure.Measure;
+
+public abstract class DateMeasure extends Measure implements IDateMeasure{
 
 }

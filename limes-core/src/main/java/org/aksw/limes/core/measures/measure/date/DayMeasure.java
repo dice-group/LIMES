@@ -1,8 +1,5 @@
 package org.aksw.limes.core.measures.measure.date;
 
-import org.aksw.limes.core.data.Instance;
-import org.junit.Assert;
-import org.junit.Test;
 
 
 /**

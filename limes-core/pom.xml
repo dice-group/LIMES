@@ -124,17 +124,17 @@
 			<name>Cogit Releases Repository</name>
 			<url>https://forge-cogit.ign.fr/nexus/content/repositories/releases/</url>
 		</repository>
-		
+
 		<repository>
-            <id>org-matheclipse-repository</id>
-            <url>http://symja.googlecode.com/svn/maven-repository/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
+			<id>org-matheclipse-repository</id>
+			<url>http://symja.googlecode.com/svn/maven-repository/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -170,11 +170,11 @@
 			<version>1.13</version>
 		</dependency>
 		<dependency>
-            <groupId>org.matheclipse</groupId>
-            <artifactId>matheclipse-core</artifactId>
-            <version>0.0.7</version>
-        </dependency>
-		
+			<groupId>org.matheclipse</groupId>
+			<artifactId>matheclipse-core</artifactId>
+			<version>0.0.7</version>
+		</dependency>
+
 		<dependency>
 			<groupId>algorithms.edjoin</groupId>
 			<artifactId>edjoin-plus</artifactId>
@@ -191,6 +191,11 @@
 			<version>2.5</version>
 			<type>jar</type>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>jgraphx</groupId>
+			<artifactId>jgraphx</artifactId>
+			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-collections</groupId>
@@ -240,10 +245,10 @@
 			<version>1.6</version>
 		</dependency>
 		<dependency>
-            <groupId>jgraph</groupId>
-            <artifactId>jgraph</artifactId>
-            <version>5.13.0.0</version>
-        </dependency>
+			<groupId>jgraph</groupId>
+			<artifactId>jgraph</artifactId>
+			<version>5.13.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<distributionManagement>

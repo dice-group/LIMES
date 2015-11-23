@@ -2,8 +2,6 @@ package org.aksw.limes.core.measures.measure.string;
 
 
 import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.measures.measure.IMeasure;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 import java.util.LinkedList;
@@ -87,7 +85,6 @@ public class JaroWinkler extends StringMeasure implements TrieFilterableStringMe
      * Clone method for parallel execution
      * @return
      */
-    @SuppressWarnings("CloneDoesntCallSuperClone")
     public JaroWinkler clone() {
         return new JaroWinkler(uppercase,longStrings,simOn);
     }

@@ -17,8 +17,7 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.IMapper;
-import org.aksw.limes.core.measures.measure.string.IStringMeasure;
+import org.aksw.limes.core.measures.mapper.Mapper;
 import org.apache.log4j.Logger;
 import algorithms.Token;
 import java.util.Arrays;
@@ -30,14 +29,13 @@ import java.util.List;
  *
  * @author ngonga
  */
-public class EDJoin implements IMapper {
+public class EDJoin extends Mapper {
 
     static Logger logger = Logger.getLogger("LIMES");
     private static int Q = -1;
     private static Mapping mapping = null;
     private static HashMap<Integer, String> sourceMap;
     private static HashMap<Integer, String> targetMap;
-    private IStringMeasure measure;
     private int comparisons = 0;
 
     public String getName() {
@@ -54,11 +52,9 @@ public class EDJoin implements IMapper {
         //convert similarity in distance threshold
         threshold = (1 - threshold) / threshold;
 
-        comparisons = 0;
+        this.comparisons = 0;
         mapping = new MemoryMapping();
-        int candidatesCount = 0;
-
-//        logger.info("Starting PPJoinPlus");
+        //        logger.info("Starting PPJoinPlus");
         if (threshold < 0) {
             logger.info("Wrong threshold setting. Returning empty mapping.");
             return mapping;
@@ -89,7 +85,7 @@ public class EDJoin implements IMapper {
         ArrayList<String> uris = source.getAllUris();
         ArrayList<String> entries = new ArrayList<String>();
         Instance instance;
-        int counter = 0, border = 0;
+        int counter = 0;
         for (int i = 0; i < uris.size(); i++) {
             instance = source.getInstance(uris.get(i));
             for (String s : instance.getProperty(properties.get(0))) {
@@ -102,7 +98,6 @@ public class EDJoin implements IMapper {
         //3.2 fill objects from target in entries
 //        logger.info("Filling objects from target knowledge base.");
         targetMap = new HashMap<Integer, String>();
-        border = counter - 1;
         uris = target.getAllUris();
         for (int i = 0; i < uris.size(); i++) {
             instance = target.getInstance(uris.get(i));
@@ -126,7 +121,6 @@ public class EDJoin implements IMapper {
         int count = 0;
         //run the core of EdJoin
         String id1, id2;
-        int percentage = records.length / 100;
         for (int i = 0; i < records.length; i++) {
             //if((i+1)%percentage == 0) logger.info("Processed "+(i*100)/records.length+"% of the input");
             /*
@@ -202,9 +196,7 @@ public class EDJoin implements IMapper {
                 }
             }
         }
-//        logger.info("Got " + count + " links.");
-//        logger.info("Done.");
-        //logger.info(mapping);
+
         return mapping;
     }
 

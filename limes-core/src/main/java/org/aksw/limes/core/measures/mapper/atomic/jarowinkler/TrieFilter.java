@@ -75,6 +75,7 @@ public class TrieFilter implements Runnable {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void reducePairsToResultMap() {
         double currentSim;
         HashMap<String, Double> similarityTable = new HashMap<>();
@@ -94,6 +95,7 @@ public class TrieFilter implements Runnable {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void trieSearch (String b, List<String> partition) {
         List<String> matchCandidateList = new LinkedList<>();
         int bLen = b.length();

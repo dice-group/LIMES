@@ -11,7 +11,6 @@ import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 
 import org.aksw.limes.core.data.Point;
-import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
  *
@@ -57,7 +56,7 @@ public class Polygon {
      * @param y Point to remove
      */
     public void remove(Point y) {
-    	((List)points).remove(y);
+    	((List<Point>)points).remove(y);
     }
     
     

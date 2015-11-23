@@ -3,7 +3,6 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.link;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -12,12 +11,10 @@ import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.data.Point;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.PolygonIndex;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 import org.aksw.limes.core.util.Pair;
@@ -50,7 +47,7 @@ public class NaiveLink extends PointsetsMeasure {
     public double computeDistance(Polygon X, Polygon Y, double threshold) {
 	double sum = 0;
 	LinkFinder fsf = new LinkFinder(X, Y);
-	fsf.USE_GREAT_ELLIPTIC_DISTANCE = this.USE_GREAT_ELLIPTIC_DISTANCE;
+	LinkFinder.USE_GREAT_ELLIPTIC_DISTANCE = IPointsetsMeasure.USE_GREAT_ELLIPTIC_DISTANCE;
 
 	for (Pair<Point> p : fsf.getlinkPairsList()) {
 	    sum += distance(p.a, p.b);

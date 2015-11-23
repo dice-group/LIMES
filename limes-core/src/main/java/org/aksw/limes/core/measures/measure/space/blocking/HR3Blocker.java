@@ -84,7 +84,6 @@ public class HR3Blocker implements BlockingModule {
 //        }
         ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
         ArrayList<ArrayList<Integer>> hr3result = new ArrayList<ArrayList<Integer>>();
-        ArrayList<ArrayList<Integer>> buffer = new ArrayList<ArrayList<Integer>>();
         result.add(blockId);
 
         ArrayList<ArrayList<Integer>> toAdd;
@@ -146,9 +145,7 @@ public class HR3Blocker implements BlockingModule {
             }
             if(hr3Index < alphaPowered) hr3result.add(block);
         }
-        //System.out.println(result.size());
-        //update cache
-//        cache.put(blockId, hr3result);
+      
         return hr3result;
     }
 
@@ -172,10 +169,8 @@ public class HR3Blocker implements BlockingModule {
      */
     public ArrayList<ArrayList<Integer>> getAllBlockIds(Instance a) {
         int blockId;
-        TreeSet<String> propValues;
         ArrayList<ArrayList<Integer>> blockIds = new ArrayList<ArrayList<Integer>>();
         ArrayList<ArrayList<Double>> combinations = new ArrayList<ArrayList<Double>>();
-        double value;
         //get all property combinations
         for (int i = 0; i < dim; i++) {
             combinations = addIdsToList(combinations, a.getProperty(properties.get(i)));
@@ -206,7 +201,6 @@ public class HR3Blocker implements BlockingModule {
         
         ArrayList<ArrayList<Integer>> blockIds = new ArrayList<ArrayList<Integer>>();
         ArrayList<ArrayList<Double>> combinations = new ArrayList<ArrayList<Double>>();
-        double value;
         //get all property combinations
         for (int i = 0; i < dim; i++) {
             combinations = addIdsToList(combinations, a.getProperty(sourceProps[i]));

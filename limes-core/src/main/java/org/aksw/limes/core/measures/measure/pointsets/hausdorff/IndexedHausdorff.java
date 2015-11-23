@@ -8,12 +8,10 @@ import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.data.Point;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.PolygonIndex;
-import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 
 import java.util.HashMap;
@@ -49,11 +47,7 @@ public class IndexedHausdorff extends PointsetsMeasure {
 	// first run indexing
 	Mapping m = new MemoryMapping();
 	targetIndex = new PolygonIndex();
-	long begin = System.currentTimeMillis();
 	targetIndex.index(target);
-	long end = System.currentTimeMillis();
-	// System.out.println("Indexing took " + (end - begin) + " ms and
-	// "+targetIndex.computations+" computations.");
 	double d;
 	for (Polygon s : source) {
 	    for (Polygon t : target) {

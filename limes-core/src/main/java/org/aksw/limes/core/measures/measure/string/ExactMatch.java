@@ -5,7 +5,6 @@
 package org.aksw.limes.core.measures.measure.string;
 
 import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.io.cache.MemoryCache;
 /**
  *
  * @author ngonga

@@ -1,8 +1,7 @@
 package org.aksw.limes.core.execution.engine;
 
-import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
+import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
 
 /**
  * Implements the engine interface. The engine gets a series of instructions in
@@ -11,7 +10,7 @@ import org.aksw.limes.core.io.mapping.MemoryMapping;
  * @author ngonga
  * @author kleanthi
  */
-public interface IEngine {
+public interface IExecutionEngine {
     /**
      * Implementation of the execution of a plan.
      *
@@ -19,6 +18,6 @@ public interface IEngine {
      *            An execution plan
      * @return The result mapping from running the plan
      */
-    Mapping execute(ExecutionPlan plan);
+    Mapping execute(NestedPlan plan);
 
 }

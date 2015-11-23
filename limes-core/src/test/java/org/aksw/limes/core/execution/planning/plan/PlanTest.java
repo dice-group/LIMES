@@ -11,12 +11,12 @@ import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
+import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.planner.CannonicalPlanner;
 import org.aksw.limes.core.execution.planning.planner.HeliosPlanner;
 import org.aksw.limes.core.execution.rewriter.AlgebraicRewriter;
 import org.aksw.limes.core.execution.rewriter.IRewriter;
-import org.aksw.limes.core.measures.mapper.SetOperations;
+import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.apache.commons.lang.StringEscapeUtils;
 
 
@@ -89,7 +89,7 @@ public class PlanTest {
         System.out.println("Rewritten: "+spec);
         System.out.println("Canonical plan:\n"+cp.plan(spec));
         cp.plan(spec).draw();
-        ExecutionPlan np = hp.plan(spec);
+        NestedPlan np = hp.plan(spec);
         np.draw();
         System.out.println("HELIOS plan:\n"+np);
         long begin = System.currentTimeMillis();
@@ -101,8 +101,8 @@ public class PlanTest {
         Mapping m2 = ee.execute(cp.plan(spec));
         end = System.currentTimeMillis();
         System.out.println((end - begin)+" ms for CANONICAL, "+m2.getNumberofMappings()+" results.");        
-        System.out.println(SetOperations.difference(m1, m2).getNumberofMappings() +" are missing somewhere");
-        System.out.println(SetOperations.difference(m2, m1).getNumberofMappings() +" are missing somewhere");
+        System.out.println(MappingOperations.difference(m1, m2).getNumberofMappings() +" are missing somewhere");
+        System.out.println(MappingOperations.difference(m2, m1).getNumberofMappings() +" are missing somewhere");
     }
 
     public static void main(String args[]) {

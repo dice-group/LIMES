@@ -69,7 +69,6 @@ public class VariableGranularityBlocker implements BlockingModule {
             return new ArrayList<ArrayList<Integer>>();
         }
         ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
-        ArrayList<ArrayList<Integer>> buffer = new ArrayList<ArrayList<Integer>>();
         result.add(blockId);
 
         ArrayList<ArrayList<Integer>> toAdd = new ArrayList<ArrayList<Integer>>();
@@ -143,10 +142,8 @@ public class VariableGranularityBlocker implements BlockingModule {
      */
     public ArrayList<ArrayList<Integer>> getAllBlockIds(Instance a) {
         int blockId;
-        TreeSet<String> propValues;
         ArrayList<ArrayList<Integer>> blockIds = new ArrayList<ArrayList<Integer>>();
         ArrayList<ArrayList<Double>> combinations = new ArrayList<ArrayList<Double>>();
-        double value;
         //get all property combinations
         for (int i = 0; i < dim; i++) {
             combinations = addIdsToList(combinations, a.getProperty(properties.get(i)));
@@ -177,7 +174,6 @@ public class VariableGranularityBlocker implements BlockingModule {
         
         ArrayList<ArrayList<Integer>> blockIds = new ArrayList<ArrayList<Integer>>();
         ArrayList<ArrayList<Double>> combinations = new ArrayList<ArrayList<Double>>();
-        double value;
         //get all property combinations
         for (int i = 0; i < dim; i++) {
             combinations = addIdsToList(combinations, a.getProperty(sourceProps[i]));

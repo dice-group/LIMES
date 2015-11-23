@@ -87,27 +87,18 @@ public class EuclideanBlockingModule implements BlockingModule {
         if(dim == 0) return new ArrayList<ArrayList<Integer>>();
 
         ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
-        ArrayList<ArrayList<Integer>> buffer = new ArrayList<ArrayList<Integer>>();
         result.add(blockId);
 
         ArrayList<Integer> minus = new ArrayList<Integer>();
         ArrayList<Integer> plus = new ArrayList<Integer>();
-        ArrayList<Integer> copy = new ArrayList<Integer>();
-//        for(int i=0; i<dim; i++)
-//        {
-//            minus.add(0);
-//            copy.add(0);
-//            plus.add(0);
-//        }
+
         ArrayList<Integer> id;
 
         for(int i = 0; i < dim; i++)
         {
             for(int j = 0; j < Math.pow(3, i); j++)
             {
-                //System.out.println("Result"+result);
                 id = result.get(j);
-                //System.out.println(j+" -> "+id);
                 minus = new ArrayList<Integer>();
                 plus = new ArrayList<Integer>();
                 for(int k = 0; k < dim; k++)
@@ -123,11 +114,8 @@ public class EuclideanBlockingModule implements BlockingModule {
                         plus.add(id.get(k)+1);
                     }
                 }
-                //System.out.println("Adding to "+result);
                 result.add(minus);
-                //System.out.println(result);
                 result.add(plus);
-                //System.out.println(result);
             }                       
         }
         return result;
@@ -135,10 +123,8 @@ public class EuclideanBlockingModule implements BlockingModule {
 
 public ArrayList<ArrayList<Integer>> getAllBlockIds(Instance a) {
         int blockId;
-        TreeSet<String> propValues;
         ArrayList<ArrayList<Integer>> blockIds = new ArrayList<ArrayList<Integer>>();
         ArrayList<ArrayList<Double>> combinations = new ArrayList<ArrayList<Double>>();
-        double value;
         //get all property combinations
         for (int i = 0; i < dim; i++) {
             combinations = addIdsToList(combinations, a.getProperty(properties.get(i)));
@@ -160,10 +146,8 @@ public ArrayList<ArrayList<Integer>> getAllBlockIds(Instance a) {
 public ArrayList<ArrayList<Integer>> getAllSourceIds(Instance a, String sourceProps) {
     String[] props = sourceProps.split("\\|");
         int blockId;
-        TreeSet<String> propValues;
         ArrayList<ArrayList<Integer>> blockIds = new ArrayList<ArrayList<Integer>>();
         ArrayList<ArrayList<Double>> combinations = new ArrayList<ArrayList<Double>>();
-        double value;
         //get all property combinations
         for (int i = 0; i < dim; i++) {
             combinations = addIdsToList(combinations, a.getProperty(props[i]));

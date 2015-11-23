@@ -55,7 +55,6 @@ public class BlockIdGenerator {
      */
     public ArrayList<Integer> getBlockId(Instance a)
     {
-        double threshold;
         int blockId;
         ArrayList<Integer> blockIds = new ArrayList<Integer>();
         double value;
@@ -80,7 +79,6 @@ public class BlockIdGenerator {
         if(dim == 0) return new ArrayList<ArrayList<Integer>>();
 
         ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
-        ArrayList<ArrayList<Integer>> buffer = new ArrayList<ArrayList<Integer>>();
         result.add(blockId);
 
         ArrayList<Integer> minus = new ArrayList<Integer>();
@@ -116,11 +114,8 @@ public class BlockIdGenerator {
                         plus.add(id.get(k)+1);
                     }
                 }
-                //System.out.println("Adding to "+result);
                 result.add(minus);
-                //System.out.println(result);
                 result.add(plus);
-                //System.out.println(result);
             }                       
         }
         return result;

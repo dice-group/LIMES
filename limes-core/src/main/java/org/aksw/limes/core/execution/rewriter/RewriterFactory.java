@@ -13,7 +13,7 @@ public class RewriterFactory {
      * @return a specific rewriter instance
      * @author kleanthi
      */
-    public static IRewriter getRewriter(String name) {
+    public static Rewriter getRewriter(String name) {
 
 	if (name.equalsIgnoreCase(DEFAULT))
 	    return new DefaultRewriter();

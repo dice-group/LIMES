@@ -1,5 +1,7 @@
 package org.aksw.limes.core.measures.measure.space;
 
-public abstract class SpaceMeasure implements ISpaceMeasure{
+import org.aksw.limes.core.measures.measure.Measure;
+
+public abstract class SpaceMeasure extends Measure implements ISpaceMeasure{
 
 }

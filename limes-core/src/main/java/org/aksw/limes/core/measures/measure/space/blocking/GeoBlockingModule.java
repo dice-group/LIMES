@@ -60,7 +60,6 @@ public class GeoBlockingModule implements BlockingModule {
         }
 
         ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
-        ArrayList<ArrayList<Integer>> buffer = new ArrayList<ArrayList<Integer>>();
         result.add(blockId);
 
         ArrayList<Integer> minus = new ArrayList<Integer>();
@@ -89,11 +88,8 @@ public class GeoBlockingModule implements BlockingModule {
                         plus.add(id.get(k) + 1);
                     }
                 }
-                //System.out.println("Adding to "+result);
                 result.add(minus);
-                //System.out.println(result);
                 result.add(plus);
-                //System.out.println(result);
             }
         }
 
@@ -143,7 +139,6 @@ public class GeoBlockingModule implements BlockingModule {
                 }
             }
             blockId = (int) java.lang.Math.floor(value / thresholds.get(i));
-
             blockIds.add(blockId);
         }
         return blockIds;

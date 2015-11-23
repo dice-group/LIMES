@@ -1,7 +1,7 @@
 package org.aksw.limes.core.measures.measure;
 
 import org.apache.log4j.Logger;
-import org.aksw.limes.core.measures.mapper.IMapper;
+import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.atomic.EDJoin;
 import org.aksw.limes.core.measures.mapper.atomic.ExactMatchMapper;
 import org.aksw.limes.core.measures.mapper.atomic.JaroMapper;
@@ -14,7 +14,6 @@ import org.aksw.limes.core.measures.mapper.atomic.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.atomic.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
 import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
-import org.aksw.limes.core.measures.measure.IMeasure;
 import org.aksw.limes.core.measures.measure.date.DayMeasure;
 import org.aksw.limes.core.measures.measure.date.SimpleDateMeasure;
 import org.aksw.limes.core.measures.measure.date.YearMeasure;
@@ -45,8 +44,8 @@ public class MeasureFactory {
 
     static Logger logger = Logger.getLogger("LIMES");
 
-    public static IMeasure getMeasure(String name) {
-	IMeasure m;
+    public static Measure getMeasure(String name) {
+	Measure m;
 	if (name.toLowerCase().startsWith("cosine")) {
 	    m = new CosineMeasure();
 	} else if (name.toLowerCase().startsWith("jaccard")) {
@@ -101,8 +100,6 @@ public class MeasureFactory {
 	    m = new TrigramMeasure();
 	}
 
-	// System.out.println("Got measure "+m.getName()+" for name
-	// <"+name+">");
 	return m;
     }
 
@@ -118,7 +115,7 @@ public class MeasureFactory {
      *            Type of the measure
      * @return Similarity measure of the given type
      */
-    public static IMeasure getMeasure(String name, String type) {
+    public static Measure getMeasure(String name, String type) {
 	if (type.equals("string")) {
 	    if (name.toLowerCase().startsWith("cosine")) {
 		return new CosineMeasure();
@@ -157,8 +154,8 @@ public class MeasureFactory {
      * @param measure
      * @return
      */
-    public static IMapper getMapper(String measure) {
-	IMapper am;
+    public static Mapper getMapper(String measure) {
+	Mapper am;
 	if (measure.toLowerCase().startsWith("leven")) {
 	    am = new EDJoin();
 	} else if (measure.toLowerCase().startsWith("qgrams")) {
@@ -209,13 +206,11 @@ public class MeasureFactory {
 	    am = new OrchidMapper();
 	} else if (measure.toLowerCase().startsWith("fairsurjection")) {
 	    am = new OrchidMapper();
-	} // logger.warn("Could not find mapper for " + measure + ". Using
-	  // default mapper.");
+	}
 	else {
 	    am = new PPJoinPlusPlus();
 	}
-	// System.out.println("Got mapper with name <"+am.getName()+"> for
-	// expression <"+measure+">");
+	
 	return am;
     }
 

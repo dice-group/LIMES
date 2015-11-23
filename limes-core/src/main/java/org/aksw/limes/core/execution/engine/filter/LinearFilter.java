@@ -4,7 +4,7 @@ import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.SetOperations;
+import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.apache.log4j.Logger;
 
@@ -28,14 +28,12 @@ public class LinearFilter implements Filter {
      * @return All mapping from map such that sim >= threshold
      */
     public Mapping filter(Mapping map, double threshold) {
-
 	double sim = 0.0;
-	Instance s, t;
 	if (threshold <= 0.0) {
 	    return map;
 	} else {
 	    Mapping result = new MemoryMapping();
-	    // 1. Run on all pairs and remove those whose similarity is below
+	    // run on all pairs and remove those whose similarity is below
 	    // the threshold
 	    for (String key : map.map.keySet()) {
 		for (String value : map.map.get(key).keySet()) {
@@ -71,7 +69,6 @@ public class LinearFilter implements Filter {
 		for (String value : map.map.get(key).keySet()) {
 		    t = target.getInstance(value);
 		    sim = MeasureProcessor.getSimilarity(s, t, condition, sourceVar, targetVar);
-
 		    if (sim >= threshold) {
 			result.add(s.getUri(), t.getUri(), sim);
 		    }
@@ -89,7 +86,7 @@ public class LinearFilter implements Filter {
      * similarities that have already been computed
      */
     public Mapping filter(Mapping m1, Mapping m2, double coef1, double coef2, double threshold, String operation) {
-	Mapping m = SetOperations.intersection(m1, m2);
+	Mapping m = MappingOperations.intersection(m1, m2);
 	Mapping result = new MemoryMapping();
 	double sim;
 	// we can be sure that each key in m is also in m1 and m2 as we used

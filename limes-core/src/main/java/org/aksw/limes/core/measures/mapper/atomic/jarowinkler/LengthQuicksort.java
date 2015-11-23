@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.mapper.atomic.jarowinkler;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

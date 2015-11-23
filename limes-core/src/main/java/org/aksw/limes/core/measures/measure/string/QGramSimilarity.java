@@ -5,15 +5,12 @@
 package org.aksw.limes.core.measures.measure.string;
 
 import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.measures.mapper.atomic.fastngram.NGramTokenizer;
 import org.aksw.limes.core.measures.mapper.atomic.fastngram.Tokenizer;
-import org.aksw.limes.core.measures.measure.IMeasure;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.aksw.limes.core.measures.measure.string.IStringMeasure;
 
 /**
  *

@@ -8,16 +8,14 @@ import java.util.regex.Pattern;
 
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.parser.Parser;
-import org.apache.log4j.Logger;
 import org.matheclipse.core.eval.EvalUtilities;
 import org.matheclipse.core.expression.F;
 import org.matheclipse.core.form.output.OutputFormFactory;
 import org.matheclipse.core.form.output.StringBufferWriter;
 import org.matheclipse.core.interfaces.IExpr;
 
-public class DefaultRewriter implements IRewriter {
+public class DefaultRewriter extends Rewriter {
 
-    static Logger logger = Logger.getLogger("LIMES");
 
     @Override
     public LinkSpecification rewrite(LinkSpecification spec) {
@@ -84,10 +82,10 @@ public class DefaultRewriter implements IRewriter {
 	    String t2 = p.getThreshold2() + "";
 
 	    if (operation.equals("MIN") || operation.equals("AND")) {
-		return "(" + getInfix(p.getTerm1() + "|" + t1) + "*" + getInfix(p.getTerm2() + "|" + t2) + ")";
+		return "(" + getInfix(term1 + "|" + t1) + "*" + getInfix(term2 + "|" + t2) + ")";
 	    }
 	    if (operation.equals("MAX") || operation.equals("OR")) {
-		return "(" + getInfix(p.getTerm1() + "|" + t1) + "+" + getInfix(p.getTerm2() + "|" + t2) + ")";
+		return "(" + getInfix(term1 + "|" + t1) + "+" + getInfix(term2 + "|" + t2) + ")";
 	    } else {
 		return metric;
 	    }

@@ -3,7 +3,7 @@ package org.aksw.limes.core.measures.mapper;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 
-public class SetOperations {
+public class MappingOperations {
 
     public enum Operator {
 	AND, OR, DIFF, XOR, MINUS

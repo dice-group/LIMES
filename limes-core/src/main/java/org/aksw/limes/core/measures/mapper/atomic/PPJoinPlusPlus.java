@@ -26,7 +26,8 @@ import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
 import java.util.ArrayList;
 
-import org.aksw.limes.core.measures.mapper.IMapper;
+
+import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.string.IStringMeasure;
 import org.apache.log4j.Logger;
@@ -96,7 +97,7 @@ class PartitionResult {
  * @author Dawid Kotlarz
  * @version 1.0
  */
-public class PPJoinPlusPlus implements IMapper {
+public class PPJoinPlusPlus extends Mapper {
 
     static Logger logger = Logger.getLogger("LIMES");
     private static int MAX_DEPTH;
@@ -104,8 +105,6 @@ public class PPJoinPlusPlus implements IMapper {
     private static HashMap<Integer, String> sourceMap;
     private static HashMap<Integer, String> targetMap;
     private IStringMeasure measure;
-    private int comparisons = 0;
-
     public String getName()
     {
         return "PPJoinPlusPlus";
@@ -124,12 +123,9 @@ public class PPJoinPlusPlus implements IMapper {
      * <i>objects</i>)
      */
     public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression, double threshold) {
-        comparisons = 0;
         MAX_DEPTH = 2;
         mapping = new MemoryMapping();
-        int candidatesCount = 0;
-
-//        logger.info("Starting PPJoinPlus");
+        //        logger.info("Starting PPJoinPlus");
         if (threshold < 0) {
             throw new RuntimeException("Verification threshold must be >= 0");
 //            logger.info("Wrong threshold setting. Returning empty mapping.");
@@ -205,7 +201,7 @@ public class PPJoinPlusPlus implements IMapper {
         ArrayList<String> uris = source.getAllUris();
         ArrayList<String> entries = new ArrayList<String>();
         Instance instance;
-        int counter = 0, border = 0;
+        int counter = 0;
         for (int i = 0; i < uris.size(); i++) {
             instance = source.getInstance(uris.get(i));
             for (String s : instance.getProperty(property1)) {
@@ -218,7 +214,6 @@ public class PPJoinPlusPlus implements IMapper {
         //3.2 fill objects from target in entries
 //        logger.info("Filling objects from target knowledge base.");
         targetMap = new HashMap<Integer, String>();
-        border = counter - 1;
         uris = target.getAllUris();
         for (int i = 0; i < uris.size(); i++) {
             instance = target.getInstance(uris.get(i));
@@ -237,11 +232,8 @@ public class PPJoinPlusPlus implements IMapper {
         Record[] records = tokenizer(entryArray);
         HashMap<Integer, LinkedList<Position>> index = new HashMap<Integer, LinkedList<Position>>();	//I
 
-        int k;
         if (threshold == 0) {
-            k = 0;
         } else {
-            k = 1;
         }
 
         measure = (IStringMeasure) MeasureFactory.getMeasure(p.getOperator(), "string");
@@ -321,8 +313,7 @@ public class PPJoinPlusPlus implements IMapper {
                     }
                 }
             }
-            //verification
-            candidatesCount += verification(currentRec, candidates);
+            verification(currentRec, candidates);
         }
 //        logger.info("Mapping carried out using " + comparisons + " comparisons.");
         return mapping;
@@ -332,7 +323,7 @@ public class PPJoinPlusPlus implements IMapper {
         int count = 0;
         String id1, id2;
 
-        for (Map.Entry e : candidates.entrySet()) {
+        for (@SuppressWarnings("rawtypes") Map.Entry e : candidates.entrySet()) {
             CandidateInfo value = (CandidateInfo) e.getValue();
             if (value.currentOverlap > 0) {
                 Record key = (Record) e.getKey();
@@ -368,7 +359,6 @@ public class PPJoinPlusPlus implements IMapper {
                 }
                 if (overlap >= value.alpha) {
                     double similarity = measure.getSimilarity(overlap, currentRec.tokens.length, key.tokens.length);
-                    comparisons++;
                     //use border here instead. faster!
                     if ((sourceMap.containsKey(currentRec.id) && targetMap.containsKey(key.id))) {
                         id1 = sourceMap.get(currentRec.id);
