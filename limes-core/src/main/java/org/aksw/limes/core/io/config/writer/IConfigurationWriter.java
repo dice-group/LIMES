@@ -11,6 +11,8 @@ import org.aksw.limes.core.io.config.Configuration;
 public interface IConfigurationWriter {
 
 	/**
+	 * Write the configuration object to outputFile in the given format
+	 * 
 	 * @param configuration
 	 * @param outputFile
 	 * @param format of the outputFile
@@ -20,6 +22,7 @@ public interface IConfigurationWriter {
 	
 	/**
 	 * Write the configuration object to outputFile detecting the format from outputFile extension
+	 * 
 	 * @param configuration
 	 * @param outputFile 
 	 * @throws IOException

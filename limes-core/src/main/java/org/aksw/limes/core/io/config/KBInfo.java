@@ -33,6 +33,22 @@ public class KBInfo implements Serializable{
     protected int pageSize;
     protected String type; //can be sparql or csv, TODO add N3
 
+	/**
+     * Constructor
+     */
+    public KBInfo() {
+        id = null;
+        endpoint = null;
+        graph = null;
+        restrictions = new ArrayList<String>();
+        properties = new ArrayList<String>();
+        prefixes = new HashMap<String, String>();
+        functions = new HashMap<String, Map<String, String>>();
+        //-1 means query all at once
+        pageSize = -1;
+        type = "sparql"; //default value
+    }
+    
     public String getId() {
 		return id;
 	}
@@ -117,21 +133,7 @@ public class KBInfo implements Serializable{
 		this.type = type;
 	}
 
-	/**
-     * Constructor
-     */
-    public KBInfo() {
-        id = null;
-        endpoint = null;
-        graph = null;
-        restrictions = new ArrayList<String>();
-        properties = new ArrayList<String>();
-        prefixes = new HashMap<String, String>();
-        functions = new HashMap<String, Map<String, String>>();
-        //-1 means query all at once
-        pageSize = -1;
-        type = "sparql"; //default value
-    }
+
     
     /**
      * @param var

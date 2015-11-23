@@ -7,8 +7,8 @@ package org.aksw.limes.core.measures.mapper.atomic.fastngram;
 
 import java.util.*;
 
-import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;

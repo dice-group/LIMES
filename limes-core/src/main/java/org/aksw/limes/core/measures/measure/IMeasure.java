@@ -1,6 +1,6 @@
 package org.aksw.limes.core.measures.measure;
 
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 
 public interface IMeasure {
     public double getSimilarity(Object a, Object b);    

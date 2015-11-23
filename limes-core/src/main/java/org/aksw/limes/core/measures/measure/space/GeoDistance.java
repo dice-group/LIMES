@@ -4,7 +4,7 @@
  */
 package org.aksw.limes.core.measures.measure.space;
 
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 
 /**
  * Computes a similarity based on the geo distance of two points. Assumes that the

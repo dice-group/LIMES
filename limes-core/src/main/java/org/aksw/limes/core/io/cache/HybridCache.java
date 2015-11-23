@@ -1,8 +1,7 @@
 package org.aksw.limes.core.io.cache;
 
 import java.util.ArrayList;
-
-import org.aksw.limes.core.data.Instance;
+import java.util.List;
 
 public class HybridCache extends Cache{
 
@@ -29,6 +28,18 @@ public class HybridCache extends Cache{
 	// TODO Auto-generated method stub
 	return null;
     }
+
+	@Override
+	public List<Instance> getAllInstances() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addInstance(Instance i) {
+		// TODO Auto-generated method stub
+		
+	}
 
     
 

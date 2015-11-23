@@ -7,7 +7,7 @@ package org.aksw.limes.core.measures.measure.space.blocking;
 
 import java.util.ArrayList;
 
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 
 /**
  *

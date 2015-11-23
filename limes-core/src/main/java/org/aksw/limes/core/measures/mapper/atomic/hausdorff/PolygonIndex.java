@@ -7,8 +7,8 @@ package org.aksw.limes.core.measures.mapper.atomic.hausdorff;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.data.Point;
+
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
@@ -16,7 +16,7 @@ import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistanc
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
-import org.aksw.limes.core.data.Point;
+import org.aksw.limes.core.datastrutures.Point;
 import org.apache.log4j.Logger;
 
 /**

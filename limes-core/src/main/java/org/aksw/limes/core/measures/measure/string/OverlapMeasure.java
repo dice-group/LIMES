@@ -5,9 +5,11 @@
 
 package org.aksw.limes.core.measures.measure.string;
 
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.measures.measure.IMeasure;import java.util.TreeSet;
+import org.aksw.limes.core.measures.measure.IMeasure;
+
+import java.util.TreeSet;
 
 /**
  *

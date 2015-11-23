@@ -9,18 +9,21 @@ import algorithms.edjoin.Record;
 import algorithms.edjoin.QGram;
 import algorithms.StoppUhr;
 import algorithms.edjoin.MismatchingQGram;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.measure.string.IStringMeasure;
 import org.apache.log4j.Logger;
+
 import algorithms.Token;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;

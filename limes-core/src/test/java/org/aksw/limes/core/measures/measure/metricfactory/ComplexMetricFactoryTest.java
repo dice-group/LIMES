@@ -2,7 +2,7 @@ package org.aksw.limes.core.measures.measure.metricfactory;
 
 import static org.junit.Assert.*;
 
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.metricfactory.ComplexMetricFactory;
 import org.junit.Test;
 

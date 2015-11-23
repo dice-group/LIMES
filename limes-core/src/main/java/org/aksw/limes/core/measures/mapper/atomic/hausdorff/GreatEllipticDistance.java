@@ -4,7 +4,7 @@
  */
 package org.aksw.limes.core.measures.mapper.atomic.hausdorff;
 
-import org.aksw.limes.core.data.Point;
+import org.aksw.limes.core.datastrutures.Point;
 
 //import net.sf.geographiclib.Geodesic;
 //import net.sf.geographiclib.GeodesicData;
