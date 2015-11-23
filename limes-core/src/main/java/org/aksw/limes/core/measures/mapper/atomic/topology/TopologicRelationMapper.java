@@ -4,12 +4,7 @@
  */
 package org.aksw.limes.core.measures.mapper.atomic.topology;
 
-<<<<<<< HEAD
 
-=======
-import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.io.cache.Cache;
->>>>>>> 04f229403216e5956dd16f2b2e0519c2b5ae47d3
 import org.aksw.limes.core.io.mapping.Mapping;
 
 

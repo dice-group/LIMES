@@ -4,8 +4,6 @@
  */
 package org.aksw.limes.core.measures.mapper.atomic.hausdorff;
 
-
-
 import org.aksw.limes.core.datastrutures.Point;
 
 import java.io.BufferedReader;
@@ -20,28 +18,15 @@ import org.apache.log4j.Logger;
  * @author ngonga
  */
 public class PolygonReader {
-	private static final Logger logger = Logger.getLogger(PolygonReader.class.getName());
+    private static final Logger logger = Logger.getLogger(PolygonReader.class.getName());
 
-	public static boolean keepPolygons = true;
+    public static boolean keepPolygons = true;
 
-	public static Set<Polygon> readPolygons(String file) {
-		return readPolygons(file, -1);
-	}
+    public static Set<Polygon> readPolygons(String file) {
+	return readPolygons(file, -1);
+    }
 
-<<<<<<< HEAD
     public static Set<Polygon> readPolygons(String file, int numberOfEntries) {
-	long startTime = System.currentTimeMillis();
-	Map<String, Polygon> result = new HashMap<String, Polygon>();
-	String s, split[];
-	try {
-	    @SuppressWarnings("resource")
-	    BufferedReader buf = new BufferedReader(new FileReader(file));
-	    s = buf.readLine();
-	    while (s != null) {
-		while (s.contains("  ")) {
-		    s = s.replaceAll(Pattern.quote("  "), " ");
-=======
-	public static Set<Polygon> readPolygons(String file, int numberOfEntries) {
 		long startTime = System.currentTimeMillis();
 		Map<String, Polygon> result = new HashMap<String, Polygon>();
 		String s, split[];
@@ -74,15 +59,12 @@ public class PolygonReader {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
->>>>>>> 04f229403216e5956dd16f2b2e0519c2b5ae47d3
 		}
 		
 		Set<Polygon> r = new HashSet<Polygon>();
 		if (keepPolygons) {
 			for (Polygon p : result.values()) {
-				// if (p.points.size() > 2) {
 				r.add(p);
-				// }
 			}
 			logger.info("Read " + r.size() + " polygons done in " + (System.currentTimeMillis() - startTime) + "ms.");
 			return r;
@@ -93,11 +75,11 @@ public class PolygonReader {
 		}
 	}
 
-	public static void main(String args[]) {
-		Set<Polygon> result = readPolygons("resources/nuts/nuts_geometry.csv");
-		for (Polygon p : result) {
-			System.out.println(p.uri + "\t" + p.points.size());
-		}
-
+    public static void main(String args[]) {
+	Set<Polygon> result = readPolygons("resources/nuts/nuts_geometry.csv");
+	for (Polygon p : result) {
+	    System.out.println(p.uri + "\t" + p.points.size());
 	}
+
+    }
 }
