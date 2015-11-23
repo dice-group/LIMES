@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -13,8 +14,22 @@ import org.apache.log4j.Logger;
  * @version Nov 23, 2015
  */
 public class Preprocessor {
+	static Logger logger = Logger.getLogger(Preprocessor.class.getName());
 
-    static Logger logger = Logger.getLogger(Preprocessor.class.getName());
+    private static final String REPLACE = "replace";
+	private static final String REGEXREPLACE = "regexreplace";
+	private static final String FAHRENHEIT = "fahrenheit";
+	private static final String URIASSTRING = "uriasstring";
+	private static final String REMOVEBRACES = "removebraces";
+	private static final String CELSIUS = "celsius";
+	private static final String REGULAR_ALPHABET = "regularAlphabet";
+	private static final String UPPERCASE = "uppercase";
+	private static final String LOWERCASE = "lowercase";
+	private static final String CLEANIRI = "cleaniri";
+	private static final String AT = "@";
+	private static final String NOLANG = "nolang";
+	private static final String NUMBER = "number";
+
 
     public static String process(String entry, String functionChain) {
         String result = entry.split("\\^")[0];
@@ -41,13 +56,13 @@ public class Preprocessor {
         }
         //remove unneeded xsd information        
         //function = function.toLowerCase();
-        if (function.startsWith("lowercase")) {
+        if (function.startsWith(LOWERCASE)) {
             return entry.toLowerCase();
         }
-        if (function.startsWith("uppercase")) {
+        if (function.startsWith(UPPERCASE)) {
             return entry.toUpperCase();
         }
-        if (function.startsWith("replace")) {
+        if (function.startsWith(REPLACE)) {
             //function = function.replaceAll(Pattern.quote("_"), " ");
             //System.out.println(">>>"+function);
             String replaced = function.substring(8, function.indexOf(","));
@@ -55,7 +70,7 @@ public class Preprocessor {
             //System.out.println("<"+replaced + ">, <" + replacee + ">");
             return entry.replaceAll(Pattern.quote(replaced), replacee);
         }
-        if (function.startsWith("regexreplace")) { //e.g replace((*),)
+        if (function.startsWith(REGEXREPLACE)) { //e.g replace((*),)
             try {
                 String replaced = function.substring(13, function.lastIndexOf(","));
                 String replacee = function.substring(function.lastIndexOf(",") + 1, function.indexOf(")", function.lastIndexOf(",")));
@@ -67,21 +82,21 @@ public class Preprocessor {
             }
             return entry;
         }
-        if (function.startsWith("nolang")) {
-            if (entry.contains("@")) {
-                return entry.substring(0, entry.lastIndexOf("@"));
+        if (function.startsWith(NOLANG)) {
+            if (entry.contains(AT)) {
+                return entry.substring(0, entry.lastIndexOf(AT));
             } else {
                 return entry;
             }
         }
-        if (function.startsWith("cleaniri")) {
+        if (function.startsWith(CLEANIRI)) {
             if (entry.contains("/")) {
                 return entry.substring(entry.lastIndexOf("/") + 1);
             } else {
                 return entry;
             }
         }
-        if (function.startsWith("number")) {
+        if (function.startsWith(NUMBER)) {
             //get rid of the type information
             String value = entry.replaceAll("[^0-9,.,-]", "");
             if (value.length() == 0) {
@@ -95,22 +110,22 @@ public class Preprocessor {
             }
             return value;
         }
-        if (function.startsWith("celsius")) {
+        if (function.startsWith(CELSIUS)) {
             //get rid of the type information
-            double value = Double.parseDouble(atomicProcess(entry, "number"));
+            double value = Double.parseDouble(atomicProcess(entry, NUMBER));
             double result = 32 + value * 9 / 5;
             return result + "";
         }
-        if (function.startsWith("fahrenheit")) {
+        if (function.startsWith(FAHRENHEIT)) {
             //get rid of the type information
-            double value = Double.parseDouble(atomicProcess(entry, "number"));
+            double value = Double.parseDouble(atomicProcess(entry, NUMBER));
             double result = (value - 32) * 5 / 9;
             return result + "";
         }
         if (function.startsWith("date")) {
             return entry.replaceAll("[^0-9,.-]", "");
         }
-        if (function.startsWith("removebraces")) {
+        if (function.startsWith(REMOVEBRACES)) {
             int openBrace = entry.indexOf("(");
             int closingBrace = entry.indexOf(")", Math.max(openBrace, 0));
             if (closingBrace > -1 && openBrace > -1) {
@@ -120,64 +135,19 @@ public class Preprocessor {
                 return ret.replaceAll("\\)", "");
             }
         }
-        if (function.startsWith("regularAlphabet")) {
+        if (function.startsWith(REGULAR_ALPHABET)) {
             return atomicProcess(entry, "regexreplace([^A-Za-z0-9 ],)");
         } 
-        if (function.startsWith("uriasstring")) {
+        if (function.startsWith(URIASSTRING)) {
         	return URIasString(entry);
         }
         //function not known...
         else {
-        	logger.warn("Unknown preprocessing function "+function);
+        	logger.warn("Unknown preprocessing function " + function);
             return entry;
         }
     }
 
-    public static void main(String args[]) {
-//        System.out.println(getPoints("POINT(-0.274278 51.9302)"));
-//        String s = "X AS Y";
-//        String AS = " AS ";
-////        System.out.println("<"+s.substring(s.indexOf(AS)+AS.length(), s.length())+"<");
-////        System.out.println("<"+s.substring(0,s.indexOf(AS))+"<");
-////        System.out.println(process("Estato do Maria", "replace(Estato do ,)"));
-//        String func = "lowercase->regexreplace(\\(.*\\),)";
-//        String func2 = "lowercase->removebraces";
-//        String func3 = "regularAlphabet";
-//        String func4 = "replace(hotel ,)";
-//        func = "lowercase->regexreplace(\\(.*\\),)";
-//        String toreplace[] = {"hotel larissa", "Kill or Cure (1962 film)", "Shoot Loud, Louder... I Don't Understand", "The Unholy Three (1930 film)"};
-////        System.out.println(toreplace.replaceAll(func, ""));
-//        for (String entry : toreplace) {
-////	        System.out.println(Preprocessor.process(entry, func));
-////	        System.out.println(Preprocessor.process(entry, func2));
-//            System.out.println(Preprocessor.process(entry, func4));
-//        }
-//
-//
-//
-//        String dates[] = {"30C", "30.05.1988", "88889", "am 1.1.1983", "1.1.1954", "5-12-1988"};
-//        for (String ds : dates) {
-//            System.out.println(ds + " =(date)=>" + Preprocessor.process(ds, "date")
-//                    + " =(number)=>" + Preprocessor.process(ds, "date")
-//                    + " =(celsius)=>" + Preprocessor.process(ds, "date")
-//                    + " =(fahrenheit)=>" + Preprocessor.process(ds, "date"));
-//        }
-        
-        String uriReplace[] = {"http://dbpedia.org/resource/Category:Random_House_books",
-        		"philip roth, good, category1967 novels, house books, categoryrandom house",
-        	};
-        String funcs[] = {"uriasstring->lowercase", "replace(category,)"};
-        
-        for(String org : uriReplace) {
-        	System.out.println(org);
-        	for(String func:funcs) {
-        		
-        		System.out.println("\t"+func+" => "+ process(org, func));
-        	}
-        	
-        }
-        
-    }
 
     public static List<Double> getPoints(String rawValue) {
         if (!(rawValue.contains("(") && rawValue.contains(")"))) {
