@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 /**
  * Contain all LIMES configuration parameters
@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
  * @version Nov 12, 2015
  */
 public class Configuration implements IConfiguration{
-	private static final Logger logger = Logger.getLogger(Configuration.class.getName());
+//	private static final Logger logger = Logger.getLogger(Configuration.class.getName());
 
 	protected KBInfo sourceInfo 				= new KBInfo();
 	protected KBInfo targetInfo 				= new KBInfo();

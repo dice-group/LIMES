@@ -9,7 +9,6 @@ import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.IMapper;
-import org.aksw.limes.core.measures.mapper.SetOperations;
 import org.aksw.limes.core.measures.measure.metricfactory.SimpleMetricFactory;
 
 import java.util.ArrayList;
@@ -67,7 +66,7 @@ public class TotalOrderMapper implements IMapper {
         SimpleMetricFactory factory = new SimpleMetricFactory("", "");
         factory.setExpression(expression);
 
-        Comparator comparator = Collections.reverseOrder();
+        Comparator<Double> comparator = Collections.reverseOrder();
         Collections.sort(valueList, comparator);
         //2. search for closest match for each element of source
         for (String key : source.getAllUris()) {

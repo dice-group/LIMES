@@ -8,12 +8,10 @@ package org.aksw.limes.core.measures.mapper.atomic.fastngram;
 import java.util.*;
 
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.IMapper;
-import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
 import org.apache.log4j.Logger;
 
@@ -42,8 +40,8 @@ public class FastNGram implements IMapper {
             targetTokens.put(t, index.addString(t));
         }
 
-        Set<String> candidates1;
-        Set<String> candidates2;
+//        Set<String> candidates1;
+//        Set<String> candidates2;
         //run similarity computation
 
         for (String s : source) {

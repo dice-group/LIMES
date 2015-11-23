@@ -35,16 +35,14 @@ import org.apache.log4j.Logger;
  * @version Nov 23, 2015
  */
 public class HybridCache extends MemoryCache implements Serializable{
-	// maps uris to instance. A bit redundant as instance contain their URI
-
-    /**
-	 * 
-	 */
+	static Logger logger = Logger.getLogger(HybridCache.class.getName());
+	
 	private static final long serialVersionUID = -2268344215686055231L;
+	// maps uris to instance. A bit redundant as instance contain their URI
 	HashMap<String, Instance> instanceMap;
     //Iterator for getting next instance
     Iterator<Instance> instanceIterator;
-    static Logger logger = Logger.getLogger("LIMES");
+    
     // pointing to the parent folder of the "cache" folder
     private File folder = new File("");
     
@@ -172,7 +170,6 @@ public class HybridCache extends MemoryCache implements Serializable{
      */
     public void saveToFile(File file) {
         FileOutputStream out;
-        Logger logger = Logger.getLogger("LIMES");
         logger.info("Serializing " + size() + " objects to " + file.getAbsolutePath());
 
         try {
@@ -215,6 +212,8 @@ public class HybridCache extends MemoryCache implements Serializable{
     public static HybridCache getData(KBInfo kb) {
     	return getData(new File(""), kb);
     }
+    
+    
     /**
      * Method to get Data of the specified endpoint, and cache it to the "cache" folder in the folder specified.
      * @param folder Path to the parent folder of the "cache" folder.

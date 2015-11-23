@@ -22,6 +22,7 @@ import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
  */
 public class KBInfo implements Serializable{
 
+	private static final long serialVersionUID = 7915400434442160847L;
 	protected String id;
     protected String endpoint;
     protected String graph;

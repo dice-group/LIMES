@@ -4,6 +4,7 @@ import org.aksw.limes.core.measures.measure.string.TrieFilterableStringMeasure;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.*;
 
 public class TrieFilter implements Runnable {
@@ -75,7 +76,8 @@ public class TrieFilter implements Runnable {
         }
     }
 
-    private void reducePairsToResultMap() {
+    @SuppressWarnings("unchecked")
+	private void reducePairsToResultMap() {
         double currentSim;
         HashMap<String, Double> similarityTable = new HashMap<>();
         for (Pair<List<String>, List<String>> filteredPair : matchCandidateListPairs) {
@@ -94,7 +96,8 @@ public class TrieFilter implements Runnable {
         }
     }
 
-    private void trieSearch (String b, List<String> partition) {
+    @SuppressWarnings("unchecked")
+	private void trieSearch (String b, List<String> partition) {
         List<String> matchCandidateList = new LinkedList<>();
         int bLen = b.length();
         int matches = 0;

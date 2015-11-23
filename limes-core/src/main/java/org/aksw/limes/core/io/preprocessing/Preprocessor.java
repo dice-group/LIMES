@@ -16,20 +16,20 @@ import org.apache.log4j.Logger;
 public class Preprocessor {
 	static Logger logger = Logger.getLogger(Preprocessor.class.getName());
 
-	private static final String DATE = "date";
-	private static final String REPLACE = "replace";
-	private static final String REGEXREPLACE = "regexreplace";
-	private static final String FAHRENHEIT = "fahrenheit";
-	private static final String URIASSTRING = "uriasstring";
-	private static final String REMOVEBRACES = "removebraces";
-	private static final String CELSIUS = "celsius";
-	private static final String REGULAR_ALPHABET = "regularAlphabet";
-	private static final String UPPERCASE = "uppercase";
-	private static final String LOWERCASE = "lowercase";
-	private static final String CLEANIRI = "cleaniri";
-	private static final String AT = "@";
-	private static final String NOLANG = "nolang";
-	private static final String NUMBER = "number";
+	private static final String DATE 			= "date";
+	private static final String REPLACE 		= "replace";
+	private static final String REGEXREPLACE	= "regexreplace";
+	private static final String FAHRENHEIT 		= "fahrenheit";
+	private static final String URIASSTRING		= "uriasstring";
+	private static final String REMOVEBRACES	= "removebraces";
+	private static final String CELSIUS 		= "celsius";
+	private static final String REGULAR_ALPHABET= "regularAlphabet";
+	private static final String UPPERCASE 		= "uppercase";
+	private static final String LOWERCASE 		= "lowercase";
+	private static final String CLEANIRI 		= "cleaniri";
+	private static final String AT 				= "@";
+	private static final String NOLANG 			= "nolang";
+	private static final String NUMBER 			= "number";
 
 
 	public static String process(String entry, String functionChain) {

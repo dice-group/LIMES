@@ -7,7 +7,6 @@ package org.aksw.limes.core.measures.mapper.atomic.hausdorff;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
  * Same as a hypercube for polygons

@@ -28,7 +28,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
  * @version Nov 23, 2015
  */
 public class MemoryCache extends Cache{
-//	private static final Logger logger = Logger.getLogger(MemoryCache.class.getName());
+	//	private static final Logger logger = Logger.getLogger(MemoryCache.class.getName());
 
 	// maps uris to instance. A bit redundant as instance contain their URI
 	HashMap<String, Instance> instanceMap;
