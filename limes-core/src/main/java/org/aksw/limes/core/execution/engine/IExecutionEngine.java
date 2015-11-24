@@ -1,6 +1,7 @@
 package org.aksw.limes.core.execution.engine;
 
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
+import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.io.mapping.Mapping;
 
 /**
@@ -18,6 +19,6 @@ public interface IExecutionEngine {
      *            An execution plan
      * @return The result mapping from running the plan
      */
-    Mapping execute(NestedPlan plan);
+    Mapping execute(Plan plan);
 
 }

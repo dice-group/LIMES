@@ -30,11 +30,11 @@ public class CannonicalPlanner extends Planner {
      */
     public NestedPlan plan(LinkSpecification spec) {
 	NestedPlan plan = new NestedPlan();
-	plan.instructionList = new ArrayList<Instruction>();
+	plan.setInstructionList(new ArrayList<Instruction>());
 	// atomic specs are simply ran
 	if (spec.isAtomic()) {
 	    // nested plan have a null instruction list as default
-	    plan.instructionList = new ArrayList<Instruction>();
+	    plan.setInstructionList(new ArrayList<Instruction>());
 	    plan.addInstruction(new Instruction(Instruction.Command.RUN, spec.getFilterExpression(),
 		    spec.getThreshold() + "", -1, -1, 0));
 	} else {
@@ -43,19 +43,19 @@ public class CannonicalPlanner extends Planner {
 	    for (LinkSpecification child : spec.getChildren()) {
 		children.add(plan(child));
 	    }
-	    plan.subPlans = children;
+	    plan.setSubPlans(children);
 	    // set operator
 	    if (spec.getOperator().equals(Operator.AND)) {
-		plan.operator = Command.INTERSECTION;
+		plan.setOperator(Command.INTERSECTION);
 	    } else if (spec.getOperator().equals(Operator.OR)) {
-		plan.operator = Command.UNION;
+		plan.setOperator(Command.UNION);
 	    } else if (spec.getOperator().equals(Operator.XOR)) {
-		plan.operator = Command.XOR;
+		plan.setOperator(Command.XOR);
 	    } else if (spec.getOperator().equals(Operator.MINUS)) {
-		plan.operator = Command.DIFF;
+		plan.setOperator(Command.DIFF);
 	    }
-	    plan.filteringInstruction = new Instruction(Command.FILTER, spec.getFilterExpression(),
-		    spec.getThreshold() + "", -1, -1, 0);
+	    plan.setFilteringInstruction(new Instruction(Command.FILTER, spec.getFilterExpression(),
+		    spec.getThreshold() + "", -1, -1, 0));
 	}
 	return plan;
     }

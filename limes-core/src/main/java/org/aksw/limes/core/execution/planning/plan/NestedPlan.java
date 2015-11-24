@@ -24,27 +24,22 @@ import com.mxgraph.view.mxStylesheet;
  */
 public class NestedPlan extends Plan {
 
-    public List<NestedPlan> subPlans;
-    public Command operator;
-    public Instruction filteringInstruction;
-
+    
     public NestedPlan() {
 	super();
-	instructionList = null;
-	subPlans = null;
-	filteringInstruction = null;
+	
     }
 
     @Override
     public boolean isEmpty() {
-	return (instructionList == null && subPlans == null && filteringInstruction == null);
+	return (getInstructionList() == null && getSubPlans() == null && getFilteringInstruction() == null);
     }
 
     @Override
     public List<Instruction> getInstructionList() {
 	List<Instruction> instructions = super.getInstructionList();
-	if (!isAtomic()) {
-	    for (NestedPlan np : subPlans) {
+	if (!isFlat()) {
+	    for (NestedPlan np : getSubPlans()) {
 		instructions.addAll(np.getInstructionList());
 	    }
 	}
@@ -59,9 +54,9 @@ public class NestedPlan extends Plan {
      *            to be added
      */
     public void addSubplan(NestedPlan subplan) {
-	if (subPlans == null)
-	    subPlans = new ArrayList<NestedPlan>();
-	subPlans.add(subplan);
+	if (getSubPlans() == null)
+	    setSubPlans(new ArrayList<NestedPlan>());
+	getSubPlans().add(subplan);
     }
 
     /**
@@ -72,20 +67,20 @@ public class NestedPlan extends Plan {
     public List<String> getAllMeasures() {
 	List<String> result = new ArrayList<String>();
 
-	if (isAtomic()) {
-	    if (filteringInstruction != null) {
-		result.addAll(MeasureProcessor.getMeasures(filteringInstruction.getMeasureExpression()));
+	if (isFlat()) {
+	    if (getFilteringInstruction() != null) {
+		result.addAll(MeasureProcessor.getMeasures(getFilteringInstruction().getMeasureExpression()));
 	    }
 	}
-	if (!(subPlans == null)) {
-	    if (!subPlans.isEmpty()) {
-		for (NestedPlan p : subPlans) {
+	if (!(getSubPlans() == null)) {
+	    if (!getSubPlans().isEmpty()) {
+		for (NestedPlan p : getSubPlans()) {
 		    result.addAll(p.getAllMeasures());
 		}
 	    }
 	}
-	if (instructionList != null) {
-	    for (Instruction i : instructionList) {
+	if (getInstructionList() != null) {
+	    for (Instruction i : getInstructionList()) {
 		if (i.getMeasureExpression() != null) {
 		    result.addAll(MeasureProcessor.getMeasures(i.getMeasureExpression()));
 		}
@@ -99,11 +94,11 @@ public class NestedPlan extends Plan {
      * 
      * @return true, if current NestedPlan is atomic. false, if otherwise
      */
-    public boolean isAtomic() {
-	if (subPlans == null) {
+    public boolean isFlat() {
+	if (getSubPlans() == null) {
 	    return true;
 	} else {
-	    if (subPlans.isEmpty()) {
+	    if (getSubPlans().isEmpty()) {
 		return true;
 	    }
 	}
@@ -116,19 +111,19 @@ public class NestedPlan extends Plan {
      * @return NestedPlan as string
      */
     public String toString() {
-	String pre = ("Selectivity = " + selectivity);
+	String pre = ("Selectivity = " + getSelectivity());
 	if (isEmpty()) {
 	    return "Empty plan";
 	}
-	if (isAtomic()) {
+	if (isFlat()) {
 
-	    if (instructionList != null) {
-		return "\n\nBEGIN\n" + pre + "\n-----\nNULL\n" + instructionList + "\nEND\n-----";
+	    if (getInstructionList() != null) {
+		return "\n\nBEGIN\n" + pre + "\n-----\nNULL\n" + getInstructionList() + "\nEND\n-----";
 	    } else {
-		return "\nBEGIN\n" + pre + "-----\nNULL\n" + filteringInstruction + "\nEND\n-----";
+		return "\nBEGIN\n" + pre + "-----\nNULL\n" + getFilteringInstruction() + "\nEND\n-----";
 	    }
 	} else {
-	    return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\nSubplans\n" + operator + "\n" + subPlans
+	    return "\nBEGIN\n" + pre + "-----\n" + getFilteringInstruction() + "\nSubplans\n" + getOperator() + "\n" + getSubPlans()
 		    + "\nEND\n-----";
 	}
     }
@@ -156,59 +151,59 @@ public class NestedPlan extends Plan {
      */
     public String getEquivalentMeasure() {
 	String result;
-	if (isAtomic()) {
-	    result = instructionList.get(0).getMeasureExpression();
+	if (isFlat()) {
+	    result = getInstructionList().get(0).getMeasureExpression();
 	} else {
 	    // filtering node with one
-	    if (subPlans.size() == 1) {
-		if (filteringInstruction != null) {
-		    if (filteringInstruction.getMeasureExpression() == null) {
-			return subPlans.get(0).getEquivalentMeasure();
+	    if (getSubPlans().size() == 1) {
+		if (getFilteringInstruction() != null) {
+		    if (getFilteringInstruction().getMeasureExpression() == null) {
+			return getSubPlans().get(0).getEquivalentMeasure();
 		    } else {
-			return "AND(" + filteringInstruction.getMeasureExpression() + "|"
-				+ filteringInstruction.getThreshold() + "," + subPlans.get(0).getEquivalentMeasure()
-				+ "|" + subPlans.get(0).instructionList.get(0).getThreshold() + ")";
+			return "AND(" + getFilteringInstruction().getMeasureExpression() + "|"
+				+ getFilteringInstruction().getThreshold() + "," + getSubPlans().get(0).getEquivalentMeasure()
+				+ "|" + getSubPlans().get(0).getInstructionList().get(0).getThreshold() + ")";
 		    }
 		}
 	    }
 
-	    if (operator == Command.INTERSECTION) {
+	    if (getOperator() == Command.INTERSECTION) {
 		result = "AND(";
-	    } else if (operator == Command.UNION) {
+	    } else if (getOperator() == Command.UNION) {
 		result = "OR(";
-	    } else if (operator == Command.XOR) {
+	    } else if (getOperator() == Command.XOR) {
 		result = "XOR(";
-	    } else if (operator == Command.DIFF) {
+	    } else if (getOperator() == Command.DIFF) {
 		result = "MINUS(";
 	    } else {
 		result = "";
 	    }
 
-	    for (NestedPlan p : subPlans) {
+	    for (NestedPlan p : getSubPlans()) {
 		result = result + p.getEquivalentMeasure() + "|";
-		if (p.isAtomic()) {
-		    result = result + p.instructionList.get(0).getThreshold() + ",";
+		if (p.isFlat()) {
+		    result = result + p.getInstructionList().get(0).getThreshold() + ",";
 		} else {
-		    if (p.filteringInstruction != null) {
-			result = result + p.filteringInstruction.getThreshold() + ",";
+		    if (p.getFilteringInstruction() != null) {
+			result = result + p.getFilteringInstruction().getThreshold() + ",";
 		    }
 		}
 	    }
 	    result = result.substring(0, result.length() - 1);
 	    result = result + ")";
 
-	    if (!(instructionList == null)) {
-		if (!instructionList.isEmpty()) {
-		    for (Instruction i : instructionList) {
+	    if (!(getInstructionList() == null)) {
+		if (!getInstructionList().isEmpty()) {
+		    for (Instruction i : getInstructionList()) {
 			result = "AND(" + i.getMeasureExpression() + "|" + i.getThreshold() + "," + result + ")";
 		    }
 		}
 	    }
 	}
-	if (filteringInstruction != null) {
-	    if (filteringInstruction.getMeasureExpression() != null) {
-		result = "AND(" + filteringInstruction.getMeasureExpression() + "|"
-			+ filteringInstruction.getThreshold() + "," + result + "|" + filteringInstruction.getThreshold()
+	if (getFilteringInstruction() != null) {
+	    if (getFilteringInstruction().getMeasureExpression() != null) {
+		result = "AND(" + getFilteringInstruction().getMeasureExpression() + "|"
+			+ getFilteringInstruction().getThreshold() + "," + result + "|" + getFilteringInstruction().getThreshold()
 			+ ")";
 	    }
 	}
@@ -223,16 +218,16 @@ public class NestedPlan extends Plan {
      */
     public NestedPlan clone() {
 	NestedPlan clone = new NestedPlan();
-	clone.filteringInstruction = this.filteringInstruction;
-	clone.instructionList = this.instructionList;
-	clone.mappingSize = this.mappingSize;
-	clone.operator = this.operator;
-	clone.runtimeCost = this.runtimeCost;
-	clone.selectivity = this.selectivity;
+	clone.setFilteringInstruction(this.getFilteringInstruction());
+	clone.setInstructionList(this.getInstructionList());
+	clone.setMappingSize(this.getMappingSize());
+	clone.setOperator(this.getOperator());
+	clone.setRuntimeCost(this.getRuntimeCost());
+	clone.setSelectivity(this.getSelectivity());
 	List<NestedPlan> l = new ArrayList<NestedPlan>();
 	NestedPlan subPlanCopy;
-	if (this.subPlans != null)
-	    for (NestedPlan c : this.subPlans) {
+	if (this.getSubPlans() != null)
+	    for (NestedPlan c : this.getSubPlans()) {
 		subPlanCopy = c.clone();
 		clone.addSubplan(subPlanCopy);
 		l.add(subPlanCopy);
@@ -248,8 +243,8 @@ public class NestedPlan extends Plan {
      * @return Threshold as string
      */
     public String getThreshold() {
-	if (filteringInstruction != null) {
-	    return filteringInstruction.getThreshold();
+	if (getFilteringInstruction() != null) {
+	    return getFilteringInstruction().getThreshold();
 	} else {
 	    return "0";
 	}
@@ -294,13 +289,13 @@ public class NestedPlan extends Plan {
     public void draw(mxGraph graph, Object root) {
 	int charsize = 8;
 	Object parent = graph.getDefaultParent();
-	if (isAtomic()) {
+	if (isFlat()) {
 	    Object v;
-	    if (instructionList != null && !instructionList.isEmpty()) {
-		String inst = getInstructionString(instructionList);
+	    if (getInstructionList() != null && !getInstructionList().isEmpty()) {
+		String inst = getInstructionString(getInstructionList());
 		v = graph.insertVertex(parent, null, inst, 20, 40, getSize(inst) * charsize, 45, "ROUNDED");
 	    } else {
-		String filter = getFilterString(filteringInstruction.toString());
+		String filter = getFilterString(getFilteringInstruction().toString());
 		v = graph.insertVertex(parent, null, filter, 20, 40, getSize(filter) * charsize, 45, "ROUNDED");
 	    }
 	    if (root != null) {
@@ -309,18 +304,18 @@ public class NestedPlan extends Plan {
 	} else {
 	    Object v1, v2;
 	    String filter;
-	    if (filteringInstruction != null) {
-		filter = getFilterString(filteringInstruction.toString());
+	    if (getFilteringInstruction() != null) {
+		filter = getFilterString(getFilteringInstruction().toString());
 	    } else {
 		filter = "NULL";
 	    }
 	    // String inst = getInstructionString(instructionList);
 	    v1 = graph.insertVertex(parent, null, filter, 20, 40, getSize(filter) * charsize, 45, "ROUNDED");
-	    v2 = graph.insertVertex(parent, null, operator, 20, 40, (operator + "").length() * charsize, 45,
+	    v2 = graph.insertVertex(parent, null, getOperator(), 20, 40, (getOperator() + "").length() * charsize, 45,
 		    "RECTANGLE");
 	    graph.insertEdge(parent, null, "", root, v1);
 	    graph.insertEdge(parent, null, "", v1, v2);
-	    for (NestedPlan p : subPlans) {
+	    for (NestedPlan p : getSubPlans()) {
 		p.draw(graph, v2);
 	    }
 	}
