@@ -168,6 +168,8 @@ public class FastNGram extends Mapper {
 	    }
 	}
 
+	// index target values
+	// logger.info("Indexing target values");
 	for (String t : targetUris) {
 	    TreeSet<String> values = target.getInstance(t).getProperty(property2);
 	    for (String v : values) {
@@ -178,10 +180,12 @@ public class FastNGram extends Mapper {
 	    }
 	}
 
+	// run the algorithm
+	// logger.info("Computing mappings");
 	Mapping m = FastNGram.compute(sourceMap.keySet(), targetMap.keySet(), q, threshold);
 	Mapping result = new MemoryMapping();
-	for (String s : m.map.keySet()) {
-	    for (String t : m.map.get(s).keySet()) {
+	for (String s : m.getMap().keySet()) {
+	    for (String t : m.getMap().get(s).keySet()) {
 		for (String sourceUri : sourceMap.get(s)) {
 		    for (String targetUri : targetMap.get(t)) {
 			result.add(sourceUri, targetUri, m.getConfidence(s, t));

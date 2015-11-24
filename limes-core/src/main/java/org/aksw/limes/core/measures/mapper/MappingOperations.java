@@ -88,19 +88,19 @@ public class MappingOperations {
 	Mapping map = new MemoryMapping();
 
 	// go through all the keys in map1
-	for (String key : map1.map.keySet()) {
+	for (String key : map1.getMap().keySet()) {
 	    // if the first term (key) can also be found in map2
-	    if (map2.map.containsKey(key)) {
+	    if (map2.getMap().containsKey(key)) {
 		// then go through the second terms and checks whether they can
 		// be found in map2 as well
-		for (String value : map1.map.get(key).keySet()) {
+		for (String value : map1.getMap().get(key).keySet()) {
 		    // if yes, take the highest similarity
-		    if (!map2.map.get(key).containsKey(value)) {
-			map.add(key, value, map1.map.get(key).get(value));
+		    if (!map2.getMap().get(key).containsKey(value)) {
+			map.add(key, value, map1.getMap().get(key).get(value));
 		    }
 		}
 	    } else {
-		map.add(key, map1.map.get(key));
+		map.add(key, map1.getMap().get(key));
 	    }
 	}
 	return map;
@@ -123,18 +123,18 @@ public class MappingOperations {
 	    return new MemoryMapping();
 	}
 	// go through all the keys in map1
-	for (String key : map1.map.keySet()) {
+	for (String key : map1.getMap().keySet()) {
 	    // if the first term (key) can also be found in map2
-	    if (map2.map.containsKey(key)) {
+	    if (map2.getMap().containsKey(key)) {
 		// then go through the second terms and checks whether they can
 		// be found in map2 as well
-		for (String value : map1.map.get(key).keySet()) {
+		for (String value : map1.getMap().get(key).keySet()) {
 		    // if yes, take the highest similarity
-		    if (map2.map.get(key).containsKey(value)) {
-			if (map1.map.get(key).get(value) <= map2.map.get(key).get(value)) {
-			    map.add(key, value, map1.map.get(key).get(value));
+		    if (map2.getMap().get(key).containsKey(value)) {
+			if (map1.getMap().get(key).get(value) <= map2.getMap().get(key).get(value)) {
+			    map.add(key, value, map1.getMap().get(key).get(value));
 			} else {
-			    map.add(key, value, map2.map.get(key).get(value));
+			    map.add(key, value, map2.getMap().get(key).get(value));
 			}
 		    }
 		}
@@ -156,15 +156,15 @@ public class MappingOperations {
     public static Mapping union(Mapping map1, Mapping map2) {
 	Mapping map = new MemoryMapping();
 	// go through all the keys in map1
-	for (String key : map1.map.keySet()) {
+	for (String key : map1.getMap().keySet()) {
 	    // if the first term (key) can also be found in map2
-	    for (String value : map1.map.get(key).keySet()) {
+	    for (String value : map1.getMap().get(key).keySet()) {
 		map.add(key, value, map1.getConfidence(key, value));
 	    }
 	}
-	for (String key : map2.map.keySet()) {
+	for (String key : map2.getMap().keySet()) {
 	    // if the first term (key) can also be found in map2
-	    for (String value : map2.map.get(key).keySet()) {
+	    for (String value : map2.getMap().get(key).keySet()) {
 		map.add(key, value, map2.getConfidence(key, value));
 	    }
 	}

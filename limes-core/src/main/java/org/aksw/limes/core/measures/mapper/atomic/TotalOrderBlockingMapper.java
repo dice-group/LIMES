@@ -24,9 +24,10 @@ import org.apache.log4j.Logger;
  * @author ngonga
  */
 public class TotalOrderBlockingMapper extends Mapper{
-
+	static Logger logger = Logger.getLogger(TotalOrderBlockingMapper.class.getName());
+	
     public int granularity = 4;
-    static Logger logger = Logger.getLogger("LIMES");
+    
     //this might only work for substraction. Need to create something that transforms
     //the threshold on real numbers into a threshold in the function space. Then it will work
     //perfectly
