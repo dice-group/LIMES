@@ -16,14 +16,10 @@ import org.aksw.limes.core.util.RandomStringGenerator;
 public class MemoryMapping extends Mapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    protected HashMap<String, HashMap<String, Double>> map;
-    protected int size;
-    protected HashMap<Double, HashMap<String, TreeSet<String>>> reversedMap;
-
+   
     public MemoryMapping() {
 	super();
-	map = new HashMap<String, HashMap<String, Double>>();
-	size = 0;
+	
     }
 
     public static Mapping generateRandomMapping(int mappingSize, int minSize, int maxSize) {
@@ -162,7 +158,7 @@ public class MemoryMapping extends Mapping implements Serializable {
 	}
 	return 0;
     }
-
+    
     /**
      * Checks whether a mapping contains a particular entry
      *

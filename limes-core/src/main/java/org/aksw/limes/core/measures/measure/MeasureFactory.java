@@ -54,7 +54,7 @@ public class MeasureFactory {
 	    m = new JaroWinkler();
 	} else if (name.toLowerCase().startsWith("jaro")) {
 	    m = new Jaro();
-	} else if (name.toLowerCase().startsWith("ratcliff")) {
+	} else if (name.toLowerCase().startsWith("ratcliff")) { //problem
 	    m = new RatcliffObershelpMeasure();
 	} else if (name.toLowerCase().startsWith("euclidean")) {
 	    m = new EuclideanMetric();

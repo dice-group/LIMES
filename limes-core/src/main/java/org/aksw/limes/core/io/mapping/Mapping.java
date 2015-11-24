@@ -1,6 +1,7 @@
 package org.aksw.limes.core.io.mapping;
 
 import java.util.HashMap;
+import java.util.TreeSet;
 
 import com.hp.hpl.jena.vocabulary.OWL;
 
@@ -16,6 +17,7 @@ public abstract class Mapping implements IMapping {
     public HashMap<String, HashMap<String, Double>> map;
     // FIXME why public fields?
     public int size;
+    protected HashMap<Double, HashMap<String, TreeSet<String>>> reversedMap;
 
     public abstract double getConfidence(String key, String value);
 
@@ -33,13 +35,20 @@ public abstract class Mapping implements IMapping {
 
     public abstract Mapping getBestOneToNMapping();
 
+
     /**
      * Get the predicate URI, which defaults to OWL.sameAs.
      * 
      * @return the predicate URI
      */
+    public Mapping() {
+	map = new HashMap<String, HashMap<String, Double>>();
+	reversedMap = new HashMap<Double, HashMap<String, TreeSet<String>>>();
+	size = 0;
+    }
+
     public String getPredicateURI() {
 	return OWL.sameAs.getURI();
-    };
+    }
 
 }
