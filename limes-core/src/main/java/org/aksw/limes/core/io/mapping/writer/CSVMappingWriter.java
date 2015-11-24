@@ -1,5 +1,7 @@
 package org.aksw.limes.core.io.mapping.writer;
 
+import java.io.IOException;
+
 import org.aksw.limes.core.io.mapping.Mapping;
 
 /**
@@ -9,9 +11,16 @@ import org.aksw.limes.core.io.mapping.Mapping;
 public class CSVMappingWriter implements IMappingWriter{
 
 	@Override
-	public boolean write(Mapping mapping, String file) {
+	public void write(Mapping mapping, String outputFile) throws IOException {
 		// TODO Auto-generated method stub
-		return false;
+		
+	}
+
+	@Override
+	public void write(Mapping mapping, String outputFile, String format)
+			throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

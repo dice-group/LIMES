@@ -5,9 +5,10 @@ import java.util.HashMap;
 import com.hp.hpl.jena.vocabulary.OWL;
 
 /**
+ * @author ngonga
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
- * @version 2015-11-09
+ * @version 2015-11-24
  *
  */
 public abstract class Mapping implements IMapping {
