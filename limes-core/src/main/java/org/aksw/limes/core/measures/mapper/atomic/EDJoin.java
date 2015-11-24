@@ -39,7 +39,8 @@ public class EDJoin extends Mapper {
     private static Mapping mapping = null;
     private static HashMap<Integer, String> sourceMap;
     private static HashMap<Integer, String> targetMap;
-    private int comparisons = 0;
+    @SuppressWarnings("unused")
+	private int comparisons = 0;
 
     public String getName() {
         return "EDJoin";

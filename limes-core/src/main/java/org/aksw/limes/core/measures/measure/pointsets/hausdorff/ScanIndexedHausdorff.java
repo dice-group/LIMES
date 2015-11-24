@@ -36,7 +36,7 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
 	// approximated as much as we could. Have to go through known distances;
 
 	for (int i = 0; i < s.points.size(); i++) {
-	    if (!knownDistances.map.containsKey(i + "")) {
+	    if (!knownDistances.getMap().containsKey(i + "")) {
 		// means that all min distances for this point are larger than
 		// the threshold
 		return threshold + 1;
@@ -46,9 +46,9 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
 	double max = -1;
 	double min;
 
-	for (String sIdx : knownDistances.map.keySet()) {
+	for (String sIdx : knownDistances.getMap().keySet()) {
 	    min = Double.MAX_VALUE;
-	    for (String tIdx : knownDistances.map.get(sIdx).keySet()) {
+	    for (String tIdx : knownDistances.getMap().get(sIdx).keySet()) {
 		min = Math.min(min, (double) knownDistances.getConfidence(sIdx, tIdx));
 	    }
 	    max = Math.max(max, min);
@@ -94,8 +94,8 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
 	if (toCompute.containsKey(sourceIndex)) {
 	    return -1.0; // distance is unknown
 	} else {
-	    if (knownDistances.map.containsKey(sourceIndex + "")) {
-		HashMap<String, Double> distances = knownDistances.map.get(sourceIndex + "");
+	    if (knownDistances.getMap().containsKey(sourceIndex + "")) {
+		HashMap<String, Double> distances = knownDistances.getMap().get(sourceIndex + "");
 		double d, min = Double.MAX_VALUE;
 		for (String key : distances.keySet()) {
 		    d = distances.get(key).doubleValue();

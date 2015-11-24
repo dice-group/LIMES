@@ -12,10 +12,9 @@ import com.hp.hpl.jena.vocabulary.OWL;
  */
 public abstract class Mapping implements IMapping {
 
-    // FIXME why public fields?
-    public HashMap<String, HashMap<String, Double>> map;
-    // FIXME why public fields?
-    public int size;
+	protected HashMap<String, HashMap<String, Double>> map;
+    protected int size;
+    protected String predicate = OWL.sameAs.getURI();
 
     public abstract double getConfidence(String key, String value);
 
@@ -33,13 +32,30 @@ public abstract class Mapping implements IMapping {
 
     public abstract Mapping getBestOneToNMapping();
 
-    /**
-     * Get the predicate URI, which defaults to OWL.sameAs.
-     * 
-     * @return the predicate URI
-     */
-    public String getPredicateURI() {
-	return OWL.sameAs.getURI();
-    };
+	public HashMap<String, HashMap<String, Double>> getMap() {
+		return map;
+	}
+
+	public void setMap(HashMap<String, HashMap<String, Double>> map) {
+		this.map = map;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
+	public String getPredicate() {
+		return predicate;
+	}
+
+	public void setPredicate(String mappingPredicate) {
+		this.predicate = mappingPredicate;
+	}
+
+
 
 }

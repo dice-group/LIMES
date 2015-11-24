@@ -26,13 +26,13 @@ public class Utils {
      * @param computed
      * @return Precision
      */
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger(Utils.class.getName());
 
     public static double getPrecision(Mapping reference, Mapping computed) {
         double size = (double) computed.size();
         double count = 0;
-        for (String key : computed.map.keySet()) {
-            for (String value : computed.map.get(key).keySet()) {
+        for (String key : computed.getMap().keySet()) {
+            for (String value : computed.getMap().get(key).keySet()) {
                 if (reference.contains(key, value) || reference.contains(value, key)) {
                     count++;
                 }
@@ -52,8 +52,8 @@ public class Utils {
     public static double getRecall(Mapping reference, Mapping computed) {
         double size = (double) reference.size();
         double count = 0;
-        for (String key : computed.map.keySet()) {
-            for (String value : computed.map.get(key).keySet()) {
+        for (String key : computed.getMap().keySet()) {
+            for (String value : computed.getMap().get(key).keySet()) {
                 if (reference.contains(key, value) || reference.contains(value, key)) {
                     count++;
                 }
@@ -74,8 +74,8 @@ public class Utils {
         double sizeC = (double) computed.size();
         double sizeR = (double) reference.size();
         double count = 0;
-        for (String key : computed.map.keySet()) {
-            for (String value : computed.map.get(key).keySet()) {
+        for (String key : computed.getMap().keySet()) {
+            for (String value : computed.getMap().get(key).keySet()) {
                 if (reference.contains(key, value) || reference.contains(value, key)) {
                     count++;
                 }
@@ -100,8 +100,8 @@ public class Utils {
         double sizeC = (double) computed.size();
         double sizeR = (double) reference.size();
         double count = 0;
-        for (String key : computed.map.keySet()) {
-            for (String value : computed.map.get(key).keySet()) {
+        for (String key : computed.getMap().keySet()) {
+            for (String value : computed.getMap().get(key).keySet()) {
                 if (reference.contains(key, value) || reference.contains(value, key)) {
                     count++;
                 }
@@ -123,7 +123,8 @@ public class Utils {
      * @param s Input string in camel case
      * @return Split string
      */
-    private static String splitAtCamelCase(String s) {
+    @SuppressWarnings("unused")
+	private static String splitAtCamelCase(String s) {
         String regex = "([a-z])([A-Z])";
         String replacement = "$1 $2";
         return s.replaceAll(regex, replacement).toLowerCase();

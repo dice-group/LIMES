@@ -39,7 +39,7 @@ public class RDFMappingReader implements IMappingReader{
                 m.add(split[0].substring(1, split[0].length() - 1), split[2].substring(1, split[2].length() - 1), 1.0);
                 s = reader.readLine();
             }
-
+            reader.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
