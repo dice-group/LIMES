@@ -16,8 +16,12 @@ public class CSVMappingReader implements IMappingReader{
 
 	protected String delimiter = "\t";
 
-	/* (non-Javadoc)
-	 * @see org.aksw.limes.core.io.mapping.reader.IMappingReader#read(java.lang.String)
+	/* 
+	 * Read Mapping from the input CSV file
+	 * First column contains source URIs
+	 * Second column contains Target URIs
+	 * Third column contains similarity,
+	 * In case of only 2 columns, all similarities is set to 1
 	 */
 	@Override
 	public Mapping read(String file) {

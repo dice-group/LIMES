@@ -10,8 +10,16 @@ import java.util.TreeSet;
 import org.aksw.limes.core.util.RandomStringGenerator;
 
 /**
+ * This class contains the mappings computed by an organizer. Each URI from the
+ * second knowledge base is mapped to the URI of instances from the first
+ * knowledge base and the corresponding similarity value. This is a help class
+ * for further processing that simply stores the mapping results in memory. It
+ * is important to notice that if (s, t, sim1) are already in the mapping and
+ * (s, t, sim2) is added then the mapping will contain (s, t, max(sim1, sim2))
+ * 
+ * @author ngonga
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
- * @version Nov 12, 2015
+ * @version Nov 24, 2015
  */
 public class MemoryMapping extends Mapping implements Serializable {
 
