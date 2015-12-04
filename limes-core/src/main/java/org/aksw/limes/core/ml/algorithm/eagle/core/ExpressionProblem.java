@@ -10,6 +10,7 @@ import org.jgap.gp.function.SubProgram;
 import org.jgap.gp.impl.GPConfiguration;
 import org.jgap.gp.impl.GPGenotype;
 import org.jgap.gp.terminal.Terminal;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.util.Pair;
 import org.apache.log4j.Logger;
 
@@ -55,7 +56,7 @@ public class ExpressionProblem extends GPProblem{
 		LinkSpecGeneticLearnerConfig config = (LinkSpecGeneticLearnerConfig) getGPConfiguration();
 			//	ExpressionApplicationData applData = new ExpressionApplicationData("PublicationData.xml");
 				// a program has two chromosomes: first an expression, second a acceptance threshold 
-				Class[] types = {Metric.class};
+				Class[] types = {LinkSpecification.class};
 				Class[][] argTypes = {{
 				}
 				};
@@ -142,7 +143,7 @@ public class ExpressionProblem extends GPProblem{
 			nodes.add(new NestedBoolean("OR", config));
 			nodes.add(new NestedBoolean("XOR", config));
 //			nodes.add(new AddMetric(config));
-			nodes.add(new MetricCommand(config, Metric.class));
+			nodes.add(new MetricCommand(config, LinkSpecification.class));
 			
 			if(config.hasPointSetProperties()) {					
 				nodes.add(new PointSetMeasure("hausdorff", config, String.class, 1, true));
@@ -177,7 +178,7 @@ public class ExpressionProblem extends GPProblem{
 			nodes.add( new Terminal(config, CommandGene.DoubleClass, 0.0d, 1.0d, false,
 		    		ResourceTerminalType.GOBALTHRESHOLD.intValue(), true));
 			for(int anz = 0; anz < 11; anz++)
-				nodes.add(new MetricCommand(config, Metric.class));
+				nodes.add(new MetricCommand(config, LinkSpecification.class));
 			// add pairs of Properties
 			for(int anz = 0; anz < 11; anz++)
 			for(int i=0; i<config.getPropertyMapping().stringPropPairs.size(); i++) {

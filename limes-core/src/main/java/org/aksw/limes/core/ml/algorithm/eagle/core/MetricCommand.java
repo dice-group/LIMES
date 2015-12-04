@@ -1,5 +1,6 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.CommandGene;
@@ -29,7 +30,7 @@ implements IMutateable, ICloneable{
 	private static final long serialVersionUID = -5555554301086427498L;
 
 	public MetricCommand(final GPConfiguration config) throws InvalidConfigurationException {
-		this(config, Metric.class);
+		this(config, LinkSpecification.class);
 	}
 	
 	public MetricCommand(final GPConfiguration config, Class returnType) throws InvalidConfigurationException {
@@ -65,14 +66,14 @@ implements IMutateable, ICloneable{
 	    }
 	}
 	
-	public Metric execute_object(ProgramChromosome a_chrom, int a_n, Object[] args) {
+	public LinkSpecification execute_object(ProgramChromosome a_chrom, int a_n, Object[] args) {
 		String expr =  AddMetric.removeThresholdFromMeasure((String)a_chrom.execute_object(a_n, 0, args));
 		double thres = a_chrom.execute_double(a_n, 1, args);
 		//@FIXME really necessary?
 		if(expr.startsWith("euclidean") && thres < 0.4d) {
 			thres = 0.4d;
 		}
-		return new Metric(expr, thres);
+		return new LinkSpecification(expr, thres);
 	}
 		
 }
