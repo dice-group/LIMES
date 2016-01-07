@@ -25,23 +25,23 @@ import org.apache.log4j.Logger;
  * with the same data source, it retrieves the corresponding data from the file,
  * which is obviously more efficient for online data sources (no HTTP latency,
  * offline processing, etc.). Else, it retrieves the data, generates a hash and
- * caches it on the harddrive.
+ * caches it on the hard drive.
  * Enhancing it with folders: specify the folder, where the application has 
  * permissions to read and write files.
  * 
  * @author ngonga
  * @author Lyko
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
- * @version Nov 23, 2015
+ * @version Nov 25, 2015
  */
 public class HybridCache extends MemoryCache implements Serializable{
 	static Logger logger = Logger.getLogger(HybridCache.class.getName());
 	
 	private static final long serialVersionUID = -2268344215686055231L;
 	// maps uris to instance. A bit redundant as instance contain their URI
-	HashMap<String, Instance> instanceMap;
+	protected HashMap<String, Instance> instanceMap;
     //Iterator for getting next instance
-    Iterator<Instance> instanceIterator;
+	protected Iterator<Instance> instanceIterator;
     
     // pointing to the parent folder of the "cache" folder
     private File folder = new File("");
