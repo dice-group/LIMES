@@ -5,14 +5,14 @@
 
 package org.aksw.limes.core.measures.measure.string;
 
-import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.io.cache.MemoryCache;
+import org.aksw.limes.core.io.cache.Instance;
+
 import uk.ac.shef.wit.simmetrics.similaritymetrics.JaccardSimilarity;
 /**
  *
  * @author ngonga
  */
-public class JaccardMeasure implements StringMeasure{
+public class JaccardMeasure extends StringMeasure{
 
     public double getSimilarityChar(Object a, Object b) {
         String p1 = a+"";

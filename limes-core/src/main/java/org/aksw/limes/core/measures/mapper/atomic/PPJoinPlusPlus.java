@@ -9,6 +9,7 @@ package org.aksw.limes.core.measures.mapper.atomic;
  * @author ngonga
  */
 import algorithms.ppjoinplus.Record;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,16 +20,18 @@ import java.util.StringTokenizer;
 import algorithms.StoppUhr;
 import algorithms.Token;
 
-import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
+
 import java.util.ArrayList;
 
+
+import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
-import org.aksw.limes.core.measures.measure.string.StringMeasure;
+import org.aksw.limes.core.measures.measure.string.IStringMeasure;
 import org.apache.log4j.Logger;
 
 class Position {
@@ -96,16 +99,14 @@ class PartitionResult {
  * @author Dawid Kotlarz
  * @version 1.0
  */
-public class PPJoinPlusPlus extends AtomicMapper {
+public class PPJoinPlusPlus extends Mapper {
 
     static Logger logger = Logger.getLogger("LIMES");
     private static int MAX_DEPTH;
     private static Mapping mapping = null;
     private static HashMap<Integer, String> sourceMap;
     private static HashMap<Integer, String> targetMap;
-    private StringMeasure measure;
-    private int comparisons = 0;
-
+    private IStringMeasure measure;
     public String getName()
     {
         return "PPJoinPlusPlus";
@@ -124,12 +125,9 @@ public class PPJoinPlusPlus extends AtomicMapper {
      * <i>objects</i>)
      */
     public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression, double threshold) {
-        comparisons = 0;
         MAX_DEPTH = 2;
         mapping = new MemoryMapping();
-        int candidatesCount = 0;
-
-//        logger.info("Starting PPJoinPlus");
+        //        logger.info("Starting PPJoinPlus");
         if (threshold < 0) {
             throw new RuntimeException("Verification threshold must be >= 0");
 //            logger.info("Wrong threshold setting. Returning empty mapping.");
@@ -205,7 +203,7 @@ public class PPJoinPlusPlus extends AtomicMapper {
         ArrayList<String> uris = source.getAllUris();
         ArrayList<String> entries = new ArrayList<String>();
         Instance instance;
-        int counter = 0, border = 0;
+        int counter = 0;
         for (int i = 0; i < uris.size(); i++) {
             instance = source.getInstance(uris.get(i));
             for (String s : instance.getProperty(property1)) {
@@ -218,7 +216,6 @@ public class PPJoinPlusPlus extends AtomicMapper {
         //3.2 fill objects from target in entries
 //        logger.info("Filling objects from target knowledge base.");
         targetMap = new HashMap<Integer, String>();
-        border = counter - 1;
         uris = target.getAllUris();
         for (int i = 0; i < uris.size(); i++) {
             instance = target.getInstance(uris.get(i));
@@ -237,14 +234,11 @@ public class PPJoinPlusPlus extends AtomicMapper {
         Record[] records = tokenizer(entryArray);
         HashMap<Integer, LinkedList<Position>> index = new HashMap<Integer, LinkedList<Position>>();	//I
 
-        int k;
         if (threshold == 0) {
-            k = 0;
         } else {
-            k = 1;
         }
 
-        measure = (StringMeasure) MeasureFactory.getMeasure(p.getOperator(), "string");
+        measure = (IStringMeasure) MeasureFactory.getMeasure(p.getOperator(), "string");
 //        logger.info("Beginninng comparison per se");
         if (measure != null) {
 //            logger.info("Using measure " + measure.getName());
@@ -321,8 +315,7 @@ public class PPJoinPlusPlus extends AtomicMapper {
                     }
                 }
             }
-            //verification
-            candidatesCount += verification(currentRec, candidates);
+            verification(currentRec, candidates);
         }
 //        logger.info("Mapping carried out using " + comparisons + " comparisons.");
         return mapping;
@@ -332,7 +325,7 @@ public class PPJoinPlusPlus extends AtomicMapper {
         int count = 0;
         String id1, id2;
 
-        for (Map.Entry e : candidates.entrySet()) {
+        for (@SuppressWarnings("rawtypes") Map.Entry e : candidates.entrySet()) {
             CandidateInfo value = (CandidateInfo) e.getValue();
             if (value.currentOverlap > 0) {
                 Record key = (Record) e.getKey();
@@ -368,7 +361,6 @@ public class PPJoinPlusPlus extends AtomicMapper {
                 }
                 if (overlap >= value.alpha) {
                     double similarity = measure.getSimilarity(overlap, currentRec.tokens.length, key.tokens.length);
-                    comparisons++;
                     //use border here instead. faster!
                     if ((sourceMap.containsKey(currentRec.id) && targetMap.containsKey(key.id))) {
                         id1 = sourceMap.get(currentRec.id);

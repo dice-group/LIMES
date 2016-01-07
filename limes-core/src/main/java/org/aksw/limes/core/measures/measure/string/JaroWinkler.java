@@ -1,9 +1,7 @@
 package org.aksw.limes.core.measures.measure.string;
 
 
-import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.measures.measure.Measure;
+import org.aksw.limes.core.io.cache.Instance;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 import java.util.LinkedList;
@@ -23,7 +21,7 @@ import java.util.LinkedList;
  * https://github.com/kvndrsslr/SemanticWeb-QuickJaroWinkler
  */
 
-public class JaroWinkler implements TrieFilterableStringMeasure {
+public class JaroWinkler extends StringMeasure implements TrieFilterableStringMeasure  {
 
     private static char[][] sp =
             {{'A','E'},{'A','I'},{'A','O'},{'A','U'},{'B','V'},{'E','I'},{'E','O'},{'E','U'},
@@ -87,7 +85,6 @@ public class JaroWinkler implements TrieFilterableStringMeasure {
      * Clone method for parallel execution
      * @return
      */
-    @SuppressWarnings("CloneDoesntCallSuperClone")
     public JaroWinkler clone() {
         return new JaroWinkler(uppercase,longStrings,simOn);
     }

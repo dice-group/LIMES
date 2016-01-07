@@ -1,8 +1,7 @@
 package org.aksw.limes.core.measures.measure;
 
 import org.apache.log4j.Logger;
-
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.atomic.EDJoin;
 import org.aksw.limes.core.measures.mapper.atomic.ExactMatchMapper;
 import org.aksw.limes.core.measures.mapper.atomic.JaroMapper;
@@ -15,7 +14,6 @@ import org.aksw.limes.core.measures.mapper.atomic.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.atomic.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
 import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
-import org.aksw.limes.core.measures.measure.Measure;
 import org.aksw.limes.core.measures.measure.date.DayMeasure;
 import org.aksw.limes.core.measures.measure.date.SimpleDateMeasure;
 import org.aksw.limes.core.measures.measure.date.YearMeasure;
@@ -56,7 +54,7 @@ public class MeasureFactory {
 	    m = new JaroWinkler();
 	} else if (name.toLowerCase().startsWith("jaro")) {
 	    m = new Jaro();
-	} else if (name.toLowerCase().startsWith("ratcliff")) {
+	} else if (name.toLowerCase().startsWith("ratcliff")) { //problem
 	    m = new RatcliffObershelpMeasure();
 	} else if (name.toLowerCase().startsWith("euclidean")) {
 	    m = new EuclideanMetric();
@@ -102,8 +100,6 @@ public class MeasureFactory {
 	    m = new TrigramMeasure();
 	}
 
-	// System.out.println("Got measure "+m.getName()+" for name
-	// <"+name+">");
 	return m;
     }
 
@@ -158,8 +154,8 @@ public class MeasureFactory {
      * @param measure
      * @return
      */
-    public static AtomicMapper getMapper(String measure) {
-	AtomicMapper am;
+    public static Mapper getMapper(String measure) {
+	Mapper am;
 	if (measure.toLowerCase().startsWith("leven")) {
 	    am = new EDJoin();
 	} else if (measure.toLowerCase().startsWith("qgrams")) {
@@ -210,13 +206,11 @@ public class MeasureFactory {
 	    am = new OrchidMapper();
 	} else if (measure.toLowerCase().startsWith("fairsurjection")) {
 	    am = new OrchidMapper();
-	} // logger.warn("Could not find mapper for " + measure + ". Using
-	  // default mapper.");
+	}
 	else {
 	    am = new PPJoinPlusPlus();
 	}
-	// System.out.println("Got mapper with name <"+am.getName()+"> for
-	// expression <"+measure+">");
+	
 	return am;
     }
 

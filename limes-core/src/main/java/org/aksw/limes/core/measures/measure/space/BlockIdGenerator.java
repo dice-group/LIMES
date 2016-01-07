@@ -7,7 +7,7 @@ package org.aksw.limes.core.measures.measure.space;
 
 import java.util.ArrayList;
 
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 
 /**
  *
@@ -17,7 +17,7 @@ public class BlockIdGenerator {
     int dim = 2;
     ArrayList<Double> thresholds;
     ArrayList<String> properties;
-    SpaceMeasure measure;
+    ISpaceMeasure measure;
     Instance zero;
 
     /** Initializes the generator. The basic idea here is the following: First, pick
@@ -55,7 +55,6 @@ public class BlockIdGenerator {
      */
     public ArrayList<Integer> getBlockId(Instance a)
     {
-        double threshold;
         int blockId;
         ArrayList<Integer> blockIds = new ArrayList<Integer>();
         double value;
@@ -80,7 +79,6 @@ public class BlockIdGenerator {
         if(dim == 0) return new ArrayList<ArrayList<Integer>>();
 
         ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
-        ArrayList<ArrayList<Integer>> buffer = new ArrayList<ArrayList<Integer>>();
         result.add(blockId);
 
         ArrayList<Integer> minus = new ArrayList<Integer>();
@@ -116,11 +114,8 @@ public class BlockIdGenerator {
                         plus.add(id.get(k)+1);
                     }
                 }
-                //System.out.println("Adding to "+result);
                 result.add(minus);
-                //System.out.println(result);
                 result.add(plus);
-                //System.out.println(result);
             }                       
         }
         return result;

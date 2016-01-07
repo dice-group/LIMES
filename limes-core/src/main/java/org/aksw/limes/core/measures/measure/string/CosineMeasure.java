@@ -5,7 +5,7 @@
 package org.aksw.limes.core.measures.measure.string;
 
 
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.CosineSimilarity;
@@ -14,7 +14,7 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.CosineSimilarity;
  *
  * @author ngonga
  */
-public class CosineMeasure implements StringMeasure {
+public class CosineMeasure extends StringMeasure {
 
     public double getSimilarityChar(Object a, Object b) {
         String p1 = a + "";

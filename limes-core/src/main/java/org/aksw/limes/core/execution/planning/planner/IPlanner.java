@@ -1,6 +1,6 @@
 package org.aksw.limes.core.execution.planning.planner;
 
-import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
+import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 
 /**
@@ -12,5 +12,5 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 * @author kleanthi
 */
 public interface IPlanner {
-    public ExecutionPlan plan(LinkSpecification spec);
+    public NestedPlan plan(LinkSpecification spec);
 }

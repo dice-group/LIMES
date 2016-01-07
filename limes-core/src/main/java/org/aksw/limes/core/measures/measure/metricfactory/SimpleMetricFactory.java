@@ -8,7 +8,7 @@ package org.aksw.limes.core.measures.measure.metricfactory;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.*;
 
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 import org.apache.log4j.*;
 //import de.uni_leipzig.simba.metricfactory.simGIC;
 

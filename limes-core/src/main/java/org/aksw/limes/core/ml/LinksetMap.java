@@ -21,7 +21,7 @@ public class LinksetMap extends HashMap<String, Linkset> {
 	 * @param linkset
 	 */
 	public void add(Linkset linkset) {
-		this.put(linkset.getPredicateURI(), linkset);
+		this.put(linkset.getPredicate(), linkset);
 	}
 
 }

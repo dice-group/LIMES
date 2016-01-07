@@ -7,8 +7,8 @@ package org.aksw.limes.core.measures.measure.space.blocking;
 
 import java.util.ArrayList;
 
-import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.measures.measure.space.SpaceMeasure;
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.apache.log4j.Logger;
 
@@ -23,7 +23,7 @@ public class GeoBlockingModule implements BlockingModule {
     int dim = 2;
     ArrayList<Double> thresholds;
     ArrayList<String> properties;
-    SpaceMeasure measure;
+    ISpaceMeasure measure;
     Instance zero;
     int latLimit, longLimit;
 
@@ -60,7 +60,6 @@ public class GeoBlockingModule implements BlockingModule {
         }
 
         ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
-        ArrayList<ArrayList<Integer>> buffer = new ArrayList<ArrayList<Integer>>();
         result.add(blockId);
 
         ArrayList<Integer> minus = new ArrayList<Integer>();
@@ -89,11 +88,8 @@ public class GeoBlockingModule implements BlockingModule {
                         plus.add(id.get(k) + 1);
                     }
                 }
-                //System.out.println("Adding to "+result);
                 result.add(minus);
-                //System.out.println(result);
                 result.add(plus);
-                //System.out.println(result);
             }
         }
 
@@ -143,7 +139,6 @@ public class GeoBlockingModule implements BlockingModule {
                 }
             }
             blockId = (int) java.lang.Math.floor(value / thresholds.get(i));
-
             blockIds.add(blockId);
         }
         return blockIds;

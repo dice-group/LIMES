@@ -5,14 +5,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.measures.measure.space.SpaceMeasure;
-import org.apache.log4j.Level;
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
+
 import org.apache.log4j.Logger;
-import org.junit.Test;
 
 /**
- * An implementation of the {@link DateMeasure} to compute the similarity of
+ * An implementation of the {@link IDateMeasure} to compute the similarity of
  * dates as a asymptotic mapping of the a in days to a similarity value in [0,
  * 1]. Whereas, let <i>dayDiff</i> be a difference of two dates measured in
  * number of days. The similarity value is computed as e^(-0.005*dayDiff). The
@@ -63,7 +62,7 @@ import org.junit.Test;
  * @author Klaus Lyko
  *
  */
-public class SimpleDateMeasure implements DateMeasure, SpaceMeasure {
+public class SimpleDateMeasure extends DateMeasure implements IDateMeasure, ISpaceMeasure {
     static Logger logger = Logger.getLogger("LIMES");
     public double dim = 1;
 
@@ -117,7 +116,7 @@ public class SimpleDateMeasure implements DateMeasure, SpaceMeasure {
     }
 
     /**
-     * Computes similarity value of this {@link DateMeasure} based upon the
+     * Computes similarity value of this {@link IDateMeasure} based upon the
      * difference of two dates in days. Other implementations should override
      * this method to provide their similarity implementation.
      * 

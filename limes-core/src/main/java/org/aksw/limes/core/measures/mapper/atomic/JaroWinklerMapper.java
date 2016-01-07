@@ -6,7 +6,7 @@ package org.aksw.limes.core.measures.mapper.atomic;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.atomic.jarowinkler.LengthQuicksort;
 import org.aksw.limes.core.measures.mapper.atomic.jarowinkler.TrieFilter;
 import org.aksw.limes.core.measures.measure.string.JaroWinkler;
@@ -22,9 +22,8 @@ import java.util.concurrent.Executors;
  * Matches one list of strings against the other,
  * using the given JaroWinkler and an optional range filter
  */
-@SuppressWarnings("unchecked")
 
-public class JaroWinklerMapper extends AtomicMapper {
+public class JaroWinklerMapper extends Mapper {
 
     static Logger logger = Logger.getLogger("LIMES");
 

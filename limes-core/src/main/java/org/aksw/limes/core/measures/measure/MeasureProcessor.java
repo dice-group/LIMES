@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.parser.Parser;
 
 /**
@@ -44,7 +44,7 @@ public class MeasureProcessor {
 	Parser p = new Parser(expression, 0);
 
 	if (p.isAtomic()) {
-	    Measure measure = MeasureFactory.getMeasure(p.getOperator());
+	    IMeasure measure = MeasureFactory.getMeasure(p.getOperator());
 	    // get property name
 	    // 0. get properties
 	    // get property labels

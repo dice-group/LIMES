@@ -4,14 +4,9 @@
  */
 package org.aksw.limes.core.measures.mapper.atomic.topology;
 
-import org.aksw.limes.core.data.Point;
-import org.aksw.limes.core.io.cache.Cache;
+
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
-import org.aksw.limes.core.measures.mapper.IMapper.Language;
-import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
+
 
 import java.util.*;
 

@@ -1,13 +1,11 @@
 package org.aksw.limes.core.measures.measure.string;
 
-import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.measures.measure.Measure;
+import org.aksw.limes.core.io.cache.Instance;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 import java.util.LinkedList;
 
-public class RatcliffObershelpMeasure implements TrieFilterableStringMeasure {
+public class RatcliffObershelpMeasure extends StringMeasure implements TrieFilterableStringMeasure {
 
     /**
      * the current score will be stored here.

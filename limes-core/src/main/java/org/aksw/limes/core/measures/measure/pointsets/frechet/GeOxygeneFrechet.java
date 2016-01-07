@@ -1,31 +1,26 @@
+package org.aksw.limes.core.measures.measure.pointsets.frechet;
+
 /**
  * 
  */
-package org.aksw.limes.core.measures.measure.pointsets.frechet;
 
-import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.Collection;
+
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.data.Point;
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.SetMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 
 import fr.ign.cogit.geoxygene.distance.Frechet;
 import fr.ign.cogit.geoxygene.spatial.coordgeom.DirectPosition;
-import fr.ign.cogit.geoxygene.spatial.coordgeom.DirectPositionList;
 import fr.ign.cogit.geoxygene.spatial.coordgeom.GM_LineSegment;
 import fr.ign.cogit.geoxygene.api.spatial.coordgeom.ILineSegment;
 
@@ -33,7 +28,7 @@ import fr.ign.cogit.geoxygene.api.spatial.coordgeom.ILineSegment;
  * @author sherif
  *
  */
-public class GeOxygeneFrechet implements SetMeasure {
+public class GeOxygeneFrechet extends PointsetsMeasure {
 
 	public int computations;
 
@@ -46,7 +41,6 @@ public class GeOxygeneFrechet implements SetMeasure {
 	}
 
 	public static ILineSegment toLineSegment(Polygon poly) {
-		DirectPositionList directPosList = new DirectPositionList();
 		// assume a polygon as a curve starting at point p and end at point q
 		double pLat = poly.points.get(0).coordinates.get(0);
 		double pLong = poly.points.get(0).coordinates.get(1);

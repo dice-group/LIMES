@@ -5,7 +5,7 @@
 
 package org.aksw.limes.core.measures.measure.space;
 
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 import org.apache.log4j.Logger;
 
 /**
@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
  * d = 0 -> sim = 1 and d = Infinity -> sim = 0
  * @author ngonga
  */
-public class EuclideanMetric implements SpaceMeasure {
+public class EuclideanMetric extends SpaceMeasure {
     static Logger logger = Logger.getLogger("LIMES");
     public double dim = 2;
 

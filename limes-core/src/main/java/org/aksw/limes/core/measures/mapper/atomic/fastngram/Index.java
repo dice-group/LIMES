@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+//import de.uni_leipzig.simba.mapper.atomic.fastngram.NGramTokenizer;
+//import de.uni_leipzig.simba.mapper.atomic.fastngram.Tokenizer;
+
 /**
  *
  * @author ngonga

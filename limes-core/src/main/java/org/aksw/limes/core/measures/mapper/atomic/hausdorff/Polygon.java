@@ -6,13 +6,12 @@ package org.aksw.limes.core.measures.mapper.atomic.hausdorff;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.aksw.limes.core.datastrutures.Point;
+
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
-
-import org.aksw.limes.core.data.Point;
-import org.apache.commons.lang.builder.EqualsBuilder;
-
 /**
  *
  * @author ngonga
@@ -57,7 +56,7 @@ public class Polygon {
      * @param y Point to remove
      */
     public void remove(Point y) {
-    	((List)points).remove(y);
+    	((List<Point>)points).remove(y);
     }
     
     

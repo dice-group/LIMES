@@ -7,15 +7,17 @@ package org.aksw.limes.core.measures.mapper.atomic;
 import algorithms.Correspondence;
 import algorithms.ppjoinplus.PPJoinPlus;
 
-import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
+import org.aksw.limes.core.measures.mapper.IMapper;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -29,7 +31,7 @@ import org.apache.log4j.Logger;
  * @author ngonga
  */
 @Deprecated
-public class PPJoinMapper extends AtomicMapper {
+public class PPJoinMapper implements IMapper {
 
     static Logger logger = Logger.getLogger("LIMES");
 

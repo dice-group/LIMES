@@ -11,9 +11,10 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import uk.ac.shef.wit.simmetrics.similaritymetrics.*;
 
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 import org.apache.log4j.*;
 
 /**
@@ -95,7 +96,8 @@ public class ComplexMetricFactory implements MetricFactory {
     public float evaluateExpression(String s) {
 	// System.out.println("Processing RPN |" + s + "|");
 	StringTokenizer st = new StringTokenizer(s);
-	Stack stack = new Stack();
+	@SuppressWarnings("rawtypes")
+	Stack<Comparable> stack = new Stack<Comparable>();
 	while (st.hasMoreTokens()) {
 	    String token = st.nextToken();
 	    try {
@@ -105,7 +107,7 @@ public class ComplexMetricFactory implements MetricFactory {
 	    } catch (NumberFormatException e) {
 		double v1, v2;
 		String s1, s2;
-		float f1, f2;
+		float f1;
 		String tmp = "";
 
 		switch (token.charAt(0)) {
@@ -131,14 +133,10 @@ public class ComplexMetricFactory implements MetricFactory {
 		    System.out.println("Difference Processed " + (v1 - v2));
 		    stack.push(new Double(v1 - v2));
 		    break;
-		// case '.':
-		// stack.push(e);
-		// break;
+		
 		default:
 
 		    tmp = token.toString();
-		    String decimalPattern = "(\\d{1,3})?(.)?(\\d{1,3})?";
-
 		    if (tmp.toLowerCase().matches("euclidean")) {
 			s1 = stack.pop().toString();
 			s2 = stack.pop().toString();
@@ -394,13 +392,8 @@ public class ComplexMetricFactory implements MetricFactory {
 
     private static class Rule {
 
-	final String name;
-	final Pattern pattern;
-
-	public Rule(String name, String regex) {
-	    this.name = name;
-	    this.pattern = Pattern.compile(regex);
-	}
+	final String name = null;
+	final Pattern pattern = null;
     }
 
     static class Token {

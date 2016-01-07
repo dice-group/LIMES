@@ -3,10 +3,7 @@ package org.aksw.limes.core.measures.mapper.atomic;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
-import org.aksw.limes.core.measures.mapper.atomic.jarowinkler.LengthQuicksort;
-import org.aksw.limes.core.measures.mapper.atomic.jarowinkler.TrieFilter;
-import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
+import org.aksw.limes.core.measures.mapper.Mapper;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.log4j.Logger;
@@ -24,7 +21,7 @@ import java.util.Set;
 /**
  * @author Kevin Dreßler
  */
-public class SoundexMapper extends AtomicMapper {
+public class SoundexMapper extends Mapper {
 
     static final int codeLength = 6;
 

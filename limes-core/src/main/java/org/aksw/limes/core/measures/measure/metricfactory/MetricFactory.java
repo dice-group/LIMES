@@ -1,6 +1,6 @@
 package org.aksw.limes.core.measures.measure.metricfactory;
 
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 
 /*
  * To change this template, choose Tools | Templates

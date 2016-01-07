@@ -1,10 +1,10 @@
 package org.aksw.limes.core.execution.engine.filter;
 
-import org.aksw.limes.core.data.Instance;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.SetOperations;
+import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.apache.log4j.Logger;
 
@@ -28,17 +28,15 @@ public class LinearFilter implements Filter {
      * @return All mapping from map such that sim >= threshold
      */
     public Mapping filter(Mapping map, double threshold) {
-
 	double sim = 0.0;
-	Instance s, t;
 	if (threshold <= 0.0) {
 	    return map;
 	} else {
 	    Mapping result = new MemoryMapping();
-	    // 1. Run on all pairs and remove those whose similarity is below
+	    // run on all pairs and remove those whose similarity is below
 	    // the threshold
-	    for (String key : map.map.keySet()) {
-		for (String value : map.map.get(key).keySet()) {
+	    for (String key : map.getMap().keySet()) {
+		for (String value : map.getMap().get(key).keySet()) {
 		    sim = map.getConfidence(key, value);
 		    if (sim >= threshold) {
 			result.add(key, value, sim);
@@ -66,12 +64,11 @@ public class LinearFilter implements Filter {
 	} else {
 	    Mapping result = new MemoryMapping();
 	    // 2. run on all pairs and remove those
-	    for (String key : map.map.keySet()) {
+	    for (String key : map.getMap().keySet()) {
 		s = source.getInstance(key);
-		for (String value : map.map.get(key).keySet()) {
+		for (String value : map.getMap().get(key).keySet()) {
 		    t = target.getInstance(value);
 		    sim = MeasureProcessor.getSimilarity(s, t, condition, sourceVar, targetVar);
-
 		    if (sim >= threshold) {
 			result.add(s.getUri(), t.getUri(), sim);
 		    }
@@ -89,14 +86,14 @@ public class LinearFilter implements Filter {
      * similarities that have already been computed
      */
     public Mapping filter(Mapping m1, Mapping m2, double coef1, double coef2, double threshold, String operation) {
-	Mapping m = SetOperations.intersection(m1, m2);
+	Mapping m = MappingOperations.intersection(m1, m2);
 	Mapping result = new MemoryMapping();
 	double sim;
 	// we can be sure that each key in m is also in m1 and m2 as we used
 	// intersection
 	if (operation.equalsIgnoreCase("add")) {
-	    for (String key : m.map.keySet()) {
-		for (String value : m.map.get(key).keySet()) {
+	    for (String key : m.getMap().keySet()) {
+		for (String value : m.getMap().get(key).keySet()) {
 		    sim = coef1 * m1.getConfidence(key, value) + coef2 * m2.getConfidence(key, value);
 		    if (sim >= threshold) {
 			result.add(key, value, sim);
@@ -104,8 +101,8 @@ public class LinearFilter implements Filter {
 		}
 	    }
 	} else {
-	    for (String key : m.map.keySet()) {
-		for (String value : m.map.get(key).keySet()) {
+	    for (String key : m.getMap().keySet()) {
+		for (String value : m.getMap().get(key).keySet()) {
 		    sim = coef1 * coef2 * m1.getConfidence(key, value) * m2.getConfidence(key, value);
 		    if (sim >= threshold) {
 			result.add(key, value, sim);

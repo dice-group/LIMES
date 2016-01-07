@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
+import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
-import org.aksw.limes.core.measures.mapper.SetOperations.Operator;
+import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 import org.aksw.limes.core.measures.mapper.atomic.EDJoin;
-import org.aksw.limes.core.measures.mapper.atomic.PPJoinMapper;
+import org.aksw.limes.core.measures.mapper.atomic.JaroMapper;
+import org.aksw.limes.core.measures.mapper.atomic.PPJoinPlusPlus;
 import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
 import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
 import org.aksw.limes.core.measures.measure.Measure;
@@ -28,7 +29,7 @@ import org.apache.log4j.Logger;
  * @author ngonga
  * @author kleanthi
  */
-public class HeliosPlanner extends ExecutionPlanner {
+public class HeliosPlanner extends Planner {
 
     static Logger logger = Logger.getLogger("LIMES");
     public Cache source;
@@ -40,7 +41,7 @@ public class HeliosPlanner extends ExecutionPlanner {
     public Language lang;
 
     /**
-     * Constructor. Caches are needed for stats.
+     * Constructor. Caches are needed for statistic computations.
      *
      * @param s
      *            Source cache
@@ -54,11 +55,11 @@ public class HeliosPlanner extends ExecutionPlanner {
     }
 
     /**
-     * Computes atomic costs for a measure
+     * Computes atomic costs for a metric expression
      *
      * @param measure
      * @param threshold
-     * @return
+     * @return runtime, estimated runtime cost of the metric expression
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
 	Measure m = MeasureFactory.getMeasure(measure);
@@ -70,8 +71,10 @@ public class HeliosPlanner extends ExecutionPlanner {
 		    lang);
 	} else if (m.getName().equalsIgnoreCase("qgrams")) {
 	    runtime = (new FastNGram()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
+	} else if (m.getName().equalsIgnoreCase("jaro")) {
+	    runtime = (new JaroMapper()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
 	} else {
-	    runtime = (new PPJoinMapper()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
+	    runtime = (new PPJoinPlusPlus()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
 	}
 	logger.info("Runtime approximation for " + measure + " is " + runtime);
 	return runtime;
@@ -82,7 +85,7 @@ public class HeliosPlanner extends ExecutionPlanner {
      *
      * @param measure
      * @param threshold
-     * @return
+     * @return size, estimated size of returned mapping
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
 	Measure m = MeasureFactory.getMeasure(measure);
@@ -96,8 +99,10 @@ public class HeliosPlanner extends ExecutionPlanner {
 	}
 	if (m.getName().equalsIgnoreCase("qgrams")) {
 	    size = (new FastNGram()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
+	} else if (m.getName().equalsIgnoreCase("jaro")) {
+	    size = (new JaroMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
 	} else {
-	    size = (new PPJoinMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
+	    size = (new PPJoinPlusPlus()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
 	}
 	return size;
     }
@@ -109,11 +114,9 @@ public class HeliosPlanner extends ExecutionPlanner {
      *            Expression used to filter
      * @param mappingSize
      *            Size of mapping
-     * @return Costs for filtering
+     * @return cost, estimated runtime cost of filteringInstruction(s)
      */
     public double getFilterCosts(List<String> measures, int mappingSize) {
-	// need costs for single operations on measures
-	// = MeasureProcessor.getMeasures(filterExpression);
 	double cost = 0;
 	for (String measure : measures) {
 	    cost = cost + MeasureFactory.getMeasure(measure).getRuntimeApproximation(mappingSize);
@@ -122,18 +125,16 @@ public class HeliosPlanner extends ExecutionPlanner {
 	return cost;
     }
 
-    public ExecutionPlan plan(LinkSpecification spec) {
-
+    public NestedPlan plan(LinkSpecification spec) {
 	return plan(spec, source, target, new MemoryMapping(), new MemoryMapping());
-
     }
 
     /**
-     * Generates a instructionList based on the optimality assumption used in
+     * Generates a NestedPlan based on the optimality assumption used in
      * databases
      *
      * @param spec
-     *            Specification for which a instructionList is needed
+     *            Input link specification
      * @param source
      *            Source cache
      * @param target
@@ -142,100 +143,100 @@ public class HeliosPlanner extends ExecutionPlanner {
      *            Size of source mapping
      * @param targetMapping
      *            Size of target mapping
-     * @return Nested instructionList for the given spec
+     * @return plan, a NestedPlan for the input link specification
      */
-    public ExecutionPlan plan(LinkSpecification spec, Cache source, Cache target, MemoryMapping sourceMapping, MemoryMapping targetMapping) {
-	ExecutionPlan plan = new ExecutionPlan();
+    public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, MemoryMapping sourceMapping,
+	    MemoryMapping targetMapping) {
+	NestedPlan plan = new NestedPlan();
 	// atomic specs are simply ran
 	if (spec.isAtomic()) {
 	    // here we should actually choose between different implementations
 	    // of the operators based on their runtimeCost
 	    Parser p = new Parser(spec.getFilterExpression(), spec.getThreshold());
-	    plan.instructionList = new ArrayList<Instruction>();
+	    plan.setInstructionList(new ArrayList<Instruction>());
 	    plan.addInstruction(new Instruction(Instruction.Command.RUN, spec.getFilterExpression(),
 		    spec.getThreshold() + "", -1, -1, 0));
-	    plan.runtimeCost = getAtomicRuntimeCosts(p.getOperator(), spec.getThreshold());
-	    plan.mappingSize = getAtomicMappingSizes(p.getOperator(), spec.getThreshold());
+	    plan.setRuntimeCost(getAtomicRuntimeCosts(p.getOperator(), spec.getThreshold()));
+	    plan.setMappingSize(getAtomicMappingSizes(p.getOperator(), spec.getThreshold()));
 	    // there is a function in EDJoin that does that
-	    plan.selectivity = plan.mappingSize / (double) (source.size() * target.size());
+	    plan.setSelectivity(plan.getMappingSize() / (double) (source.size() * target.size()));
 	    // System.out.println("Plan for " + spec.filterExpression + ":\n" +
 	    // plan);
 	} else {
 	    // no optimization for non AND operators really
 	    if (!spec.getOperator().equals(Operator.AND)) {
-		List<ExecutionPlan> children = new ArrayList<ExecutionPlan>();
+		List<NestedPlan> children = new ArrayList<NestedPlan>();
 		// set children and update costs
-		plan.runtimeCost = 0;
+		plan.setRuntimeCost(0);
 		for (LinkSpecification child : spec.getChildren()) {
-		    ExecutionPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
+		    NestedPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
 		    children.add(childPlan);
-		    plan.runtimeCost = plan.runtimeCost + childPlan.runtimeCost;
+		    plan.setRuntimeCost(plan.getRuntimeCost() + childPlan.getRuntimeCost());
 		}
 		// add costs of union, which are 1
-		plan.runtimeCost = plan.runtimeCost + (spec.getChildren().size() - 1);
-		plan.subPlans = children;
+		plan.setRuntimeCost(plan.getRuntimeCost() + (spec.getChildren().size() - 1));
+		plan.setSubPlans(children);
 		// set operator
 		double selectivity;
 		if (spec.getOperator().equals(Operator.OR)) {
-		    plan.operator = Instruction.Command.UNION;
-		    selectivity = 1 - children.get(0).selectivity;
-		    plan.runtimeCost = children.get(0).runtimeCost;
+		    plan.setOperator(Instruction.Command.UNION);
+		    selectivity = 1 - children.get(0).getSelectivity();
+		    plan.setRuntimeCost(children.get(0).getRuntimeCost());
 		    for (int i = 1; i < children.size(); i++) {
-			selectivity = selectivity * (1 - children.get(i).selectivity);
+			selectivity = selectivity * (1 - children.get(i).getSelectivity());
 			// add filtering costs based on approximation of mapping
 			// size
-			if (plan.filteringInstruction != null) {
-
-			    plan.runtimeCost = plan.runtimeCost
-				    + MeasureProcessor.getCosts(plan.filteringInstruction.getMeasureExpression(),
-					    source.size() * target.size() * (1 - selectivity));
+			if (plan.getFilteringInstruction() != null) {
+			    plan.setRuntimeCost(plan.getRuntimeCost()
+				    + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
+					    source.size() * target.size() * (1 - selectivity)));
 			}
 		    }
-		    plan.selectivity = 1 - selectivity;
+		    plan.setSelectivity(1 - selectivity);
 		} else if (spec.getOperator().equals(Operator.MINUS)) {
-		    plan.operator = Instruction.Command.DIFF;
+		    plan.setOperator(Instruction.Command.DIFF);
 		    // p(A \ B \ C \ ... ) = p(A) \ p(B U C U ...)
-		    selectivity = children.get(0).selectivity;
+		    selectivity = children.get(0).getSelectivity();
 		    for (int i = 1; i < children.size(); i++) {
-			selectivity = selectivity * (1 - children.get(i).selectivity);
+			selectivity = selectivity * (1 - children.get(i).getSelectivity());
 			// add filtering costs based on approximation of mapping
 			// size
-			if (plan.filteringInstruction != null) {
-			    plan.runtimeCost = plan.runtimeCost
-				    + MeasureProcessor.getCosts(plan.filteringInstruction.getMeasureExpression(),
-					    source.size() * target.size() * (1 - selectivity));
+			if (plan.getFilteringInstruction() != null) {
+			    plan.setRuntimeCost(plan.getRuntimeCost()
+				    + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
+					    source.size() * target.size() * (1 - selectivity)));
 			}
 		    }
-		    plan.selectivity = selectivity;
+		    plan.setSelectivity(selectivity);
 		} else if (spec.getOperator().equals(Operator.XOR)) {
-		    plan.operator = Instruction.Command.XOR;
+		    plan.setOperator(Instruction.Command.XOR);
 		    // A XOR B = (A U B) \ (A & B)
-		    selectivity = children.get(0).selectivity;
+		    selectivity = children.get(0).getSelectivity();
 		    for (int i = 1; i < children.size(); i++) {
-			selectivity = (1 - (1 - selectivity) * (1 - children.get(i).selectivity))
-				* (1 - selectivity * children.get(i).selectivity);
+			selectivity = (1 - (1 - selectivity) * (1 - children.get(i).getSelectivity()))
+				* (1 - selectivity * children.get(i).getSelectivity());
 			// add filtering costs based on approximation of mapping
 			// size
-			if (plan.filteringInstruction != null) {
-			    plan.runtimeCost = plan.runtimeCost
-				    + MeasureProcessor.getCosts(plan.filteringInstruction.getMeasureExpression(),
-					    source.size() * target.size() * selectivity);
+			if (plan.getFilteringInstruction() != null) {
+			    plan.setRuntimeCost(plan.getRuntimeCost()
+				    + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
+					    source.size() * target.size() * selectivity));
 			}
 		    }
-		    plan.selectivity = selectivity;
+		    plan.setSelectivity(selectivity);
 		}
-		plan.filteringInstruction = new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
-			spec.getThreshold() + "", -1, -1, 0);
+		plan.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+			spec.getThreshold() + "", -1, -1, 0));
 	    } // here we can optimize.
 	    else if (spec.getOperator().equals(Operator.AND)) {
-		List<ExecutionPlan> children = new ArrayList<ExecutionPlan>();
-		plan.runtimeCost = 0;
+		List<NestedPlan> children = new ArrayList<NestedPlan>();
+		plan.setRuntimeCost(0);
 		double selectivity = 1d;
 		for (LinkSpecification child : spec.getChildren()) {
-		    ExecutionPlan childPlan = plan(child);
+		    NestedPlan childPlan = plan(child);
 		    children.add(childPlan);
-		    plan.runtimeCost = plan.runtimeCost + childPlan.runtimeCost;
-		    selectivity = selectivity * childPlan.selectivity;
+		    plan.setRuntimeCost(plan.getRuntimeCost() + childPlan.getRuntimeCost());
+		    selectivity = selectivity * childPlan.getSelectivity();
 		}
 		plan = getBestConjunctivePlan(children, selectivity);
 	    }
@@ -245,21 +246,21 @@ public class HeliosPlanner extends ExecutionPlanner {
 
     /**
      * Compute the left-order best instructionList for a list of plans. Only
-     * needed when more AND has more than 2 children. Simply splits the task in
+     * needed when AND has more than 2 children. Simply splits the task in
      * computing the best instructionList for (leftmost, all others)
      *
      * @param plans
      *            List of plans
      * @param selectivity
      *            Selectivity of the instructionList (known beforehand)
-     * @return ExecutionPlan
+     * @return NestedPlan
      */
-    public ExecutionPlan getBestConjunctivePlan(List<ExecutionPlan> plans, double selectivity) {
+    public NestedPlan getBestConjunctivePlan(List<NestedPlan> plans, double selectivity) {
 	if (plans == null) {
 	    return null;
 	}
 	if (plans.isEmpty()) {
-	    return new ExecutionPlan();
+	    return new NestedPlan();
 	}
 	if (plans.size() == 1) {
 	    return plans.get(0);
@@ -267,7 +268,7 @@ public class HeliosPlanner extends ExecutionPlanner {
 	if (plans.size() == 2) {
 	    return getBestConjunctivePlan(plans.get(0), plans.get(1), selectivity);
 	} else {
-	    ExecutionPlan left = plans.get(0);
+	    NestedPlan left = plans.get(0);
 	    plans.remove(plans.get(0));
 	    return getBestConjunctivePlan(left, plans, selectivity);
 	}
@@ -283,9 +284,9 @@ public class HeliosPlanner extends ExecutionPlanner {
      *            List of other plans
      * @param selectivity
      *            Overall selectivity
-     * @return ExecutionPlan
+     * @return NestedPlan
      */
-    public ExecutionPlan getBestConjunctivePlan(ExecutionPlan left, List<ExecutionPlan> plans, double selectivity) {
+    public NestedPlan getBestConjunctivePlan(NestedPlan left, List<NestedPlan> plans, double selectivity) {
 	if (plans == null) {
 	    return left;
 	}
@@ -295,7 +296,7 @@ public class HeliosPlanner extends ExecutionPlanner {
 	if (plans.size() == 1) {
 	    return getBestConjunctivePlan(left, plans.get(0), selectivity);
 	} else {
-	    ExecutionPlan right = getBestConjunctivePlan(plans, selectivity);
+	    NestedPlan right = getBestConjunctivePlan(plans, selectivity);
 	    return getBestConjunctivePlan(left, right, selectivity);
 	}
     }
@@ -309,77 +310,62 @@ public class HeliosPlanner extends ExecutionPlanner {
      * @param right
      *            Right instructionList
      * @param selectivity
-     * @return
+     * @return NestedPlan
      */
-    public ExecutionPlan getBestConjunctivePlan(ExecutionPlan left, ExecutionPlan right, double selectivity) {
+    public NestedPlan getBestConjunctivePlan(NestedPlan left, NestedPlan right, double selectivity) {
 	double runtime1 = 0, runtime2, runtime3;
-	ExecutionPlan result = new ExecutionPlan();
-	double mappingSize = source.size() * target.size() * right.selectivity;
+	NestedPlan result = new NestedPlan();
+	double mappingSize = source.size() * target.size() * right.getSelectivity();
 
 	// first instructionList: run both children and then merge
-	runtime1 = left.runtimeCost + right.runtimeCost;
+	runtime1 = left.getRuntimeCost() + right.getRuntimeCost();
 	// second instructionList: run left child and use right child as filter
-	runtime2 = left.runtimeCost;
+	runtime2 = left.getRuntimeCost();
 	runtime2 = runtime2 + getFilterCosts(right.getAllMeasures(), (int) Math.ceil(mappingSize));
-
 	// third instructionList: run right child and use left child as filter
-	runtime3 = right.runtimeCost;
-	mappingSize = source.size() * target.size() * left.selectivity;
+	runtime3 = right.getRuntimeCost();
+	mappingSize = source.size() * target.size() * left.getSelectivity();
 	runtime3 = runtime3 + getFilterCosts(left.getAllMeasures(), (int) Math.ceil(mappingSize));
-	// logger.info("RUN - RUN approximation for left-right is "+runtime1);
-	// logger.info("RUN - FILTER approximation for left-right is
-	// "+runtime2+" with right selectivity = "+right.selectivity);
-	// logger.info("FILTER - RUN approximation for left-right is
-	// "+runtime3+" with left selectivity = "+left.selectivity);
+
 	double min = Math.min(Math.min(runtime3, runtime2), runtime1);
-	// //just for tests
-	// min = -10d;
-	// runtime2 = -10d;
 
 	if (min == runtime1) {
-	    result.operator = Instruction.Command.INTERSECTION;
-	    result.filteringInstruction = null;
-	    List<ExecutionPlan> plans = new ArrayList<ExecutionPlan>();
+	    result.setOperator(Instruction.Command.INTERSECTION);
+	    result.setFilteringInstruction(null);
+	    List<NestedPlan> plans = new ArrayList<NestedPlan>();
 	    plans.add(left);
 	    plans.add(right);
-	    result.subPlans = plans;
+	    result.setSubPlans(plans);
 
 	} else if (min == runtime2) {
-	    // System.out.println("Right = "+right.getEquivalentMeasure()+" --->
-	    // \n"+right.toString());
-	    if (right.isAtomic()) {
-		result.filteringInstruction = new Instruction(Instruction.Command.FILTER, right.getEquivalentMeasure(),
-			right.getInstructionList().get(0).getThreshold() + "", -1, -1, 0);
+	    if (right.isFlat()) {
+		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, right.getEquivalentMeasure(),
+			right.getInstructionList().get(0).getThreshold() + "", -1, -1, 0));
 	    } else {
-		result.filteringInstruction = new Instruction(Instruction.Command.FILTER, right.getEquivalentMeasure(),
-			right.filteringInstruction.getThreshold() + "", -1, -1, 0);
+		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, right.getEquivalentMeasure(),
+			right.getFilteringInstruction().getThreshold() + "", -1, -1, 0));
 	    }
-	    result.operator = null;
-	    List<ExecutionPlan> plans = new ArrayList<ExecutionPlan>();
+	    result.setOperator(null);
+	    List<NestedPlan> plans = new ArrayList<NestedPlan>();
 	    plans.add(left);
-	    result.subPlans = plans;
-	} else // min == runtime3
-	{
-	    // System.out.println("Left = "+left.getEquivalentMeasure()+" --->
-	    // \n"+left.toString());
-	    if (left.isAtomic()) {
-		result.filteringInstruction = new Instruction(Instruction.Command.FILTER, left.getEquivalentMeasure(),
-			left.getInstructionList().get(0).getThreshold() + "", -1, -1, 0);
+	    result.setSubPlans(plans);
+	} else {
+	    if (left.isFlat()) {
+		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, left.getEquivalentMeasure(),
+			left.getInstructionList().get(0).getThreshold() + "", -1, -1, 0));
 	    } else {
-		result.filteringInstruction = new Instruction(Instruction.Command.FILTER, left.getEquivalentMeasure(),
-			left.filteringInstruction.getThreshold() + "", -1, -1, 0);
+		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, left.getEquivalentMeasure(),
+			left.getFilteringInstruction().getThreshold() + "", -1, -1, 0));
 	    }
-	    result.operator = null;
-	    List<ExecutionPlan> plans = new ArrayList<ExecutionPlan>();
+	    result.setOperator(null);
+	    List<NestedPlan> plans = new ArrayList<NestedPlan>();
 	    plans.add(right);
-	    result.subPlans = plans;
+	    result.setSubPlans(plans);
 	}
-	result.runtimeCost = min;
-	result.selectivity = selectivity;
-	result.mappingSize = source.size() * target.size() * selectivity;
+	result.setRuntimeCost(min);
+	result.setSelectivity(selectivity);
+	result.setMappingSize(source.size() * target.size() * selectivity);
 
 	return result;
     }
-
-    
 }

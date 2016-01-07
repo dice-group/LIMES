@@ -1,31 +1,48 @@
 package org.aksw.limes.core.evaluation.quantity;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * @author mofeed
+ *
+ */
 public class RunsData implements QuantitativeMeasure{
 
+	protected Map<Long, RunRecord> runs = new HashMap<Long, RunRecord>();
+	
 	@Override
-	public RunRecord getRun(int runId) {
-		// TODO Auto-generated method stub
-		return null;
+	public RunRecord getRun(long runId) {
+		return runs.get(Long.valueOf(runId));
 	}
 
 	@Override
 	public List<RunRecord> getRuns() {
-		// TODO Auto-generated method stub
-		return null;
+		return (List<RunRecord>) runs.values();
 	}
 
 	@Override
-	public void setRun(int runId, RunRecord record) {
-		// TODO Auto-generated method stub
+	public void setRun(long runId, RunRecord record) {
+		runs.put(Long.valueOf(runId), record);
 		
 	}
 
 	@Override
-	public double getRunInfo(int runId, String Info) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getRunInfo(long runId, String Info) {
+		if(Info.equals("Id"))
+			return runs.get(Long.valueOf(runId)).getRunId();
+		else if(Info.equals("Time"))
+			return runs.get(Long.valueOf(runId)).getRunTime();
+		else if(Info.equals("Memory"))
+			return runs.get(Long.valueOf(runId)).getRunMemory();
+		else return 0;
+	}
+
+	@Override
+	public void addRun(RunRecord record) {
+		runs.put(record.getRunId(),record);
+		
 	}
 
 }

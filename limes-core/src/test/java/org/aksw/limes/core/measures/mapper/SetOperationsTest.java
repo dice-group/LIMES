@@ -3,7 +3,7 @@ import static org.junit.Assert.*;
 
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.SetOperations;
+import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.junit.Test;
 
 public class SetOperationsTest {
@@ -12,7 +12,7 @@ public class SetOperationsTest {
     public static void main(String args[]) {
 	Mapping a = new MemoryMapping();
 	Mapping b = new MemoryMapping();
-	SetOperations opers = new SetOperations();
+	MappingOperations opers = new MappingOperations();
 	a.add("c", "c", 0.5);
 	a.add("a", "z", 0.5);
 	a.add("a", "b", 0.5);

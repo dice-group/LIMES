@@ -12,27 +12,35 @@ import java.util.Random;
 import java.util.Set;
 
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.SetOperations.Operator;
+import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-
+/**
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 12, 2015
+ */
 public class LinkSpecification implements ILinkSpecification {
-	private static final Logger logger = Logger.getLogger(LinkSpecification.class.getName());
-	
-	// Constants
-	protected static final String MAX 	= "MAX";
-	protected static final String OR 		= "OR";
-	protected static final String ADD 	= "ADD";
-	protected static final String MINUS 	= "MINUS";
-	protected static final String XOR		= "XOR";
-	protected static final String MIN 	= "MIN";
-	protected static final String AND 	= "AND";
-	
+    private static final Logger logger = Logger.getLogger(LinkSpecification.class.getName());
+
+    // Constants
+    protected static final String MAX = "MAX";
+    protected static final String OR = "OR";
+    protected static final String ADD = "ADD";
+    protected static final String MINUS = "MINUS";
+    protected static final String XOR = "XOR";
+    protected static final String MIN = "MIN";
+    protected static final String AND = "AND";
+
     private double threshold;
     private Operator operator;
-    private List<LinkSpecification> children; 	// children must be a list because not all operators are commutative
-    private List<LinkSpecification> dependencies;// dependencies are the list of specs whose result set is included in the result set of this node
+    private List<LinkSpecification> children; // children must be a list because
+					      // not all operators are
+					      // commutative
+    private List<LinkSpecification> dependencies;// dependencies are the list of
+						 // specs whose result set is
+						 // included in the result set
+						 // of this node
     protected String filterExpression;
     protected LinkSpecification parent;
     // just a quick hack to have lower borders for advanced threshold searches
@@ -44,7 +52,7 @@ public class LinkSpecification implements ILinkSpecification {
     protected String prop1 = "";
     protected String prop2 = "";
     protected String treePath = "";
-    
+
     public void setAtomicFilterExpression(String atomicMeasure, String prop1, String prop2) {
 	this.setAtomicMeasure(atomicMeasure);
 	this.prop1 = prop1;
@@ -73,6 +81,7 @@ public class LinkSpecification implements ILinkSpecification {
 	setDependencies(null);
 	readSpec(measure, threshold);
     }
+
     /**
      * Creates a spec with a measure read inside
      * 
@@ -85,8 +94,9 @@ public class LinkSpecification implements ILinkSpecification {
 	parent = null;
 	setDependencies(null);
 	readSpecXOR(measure, threshold);
-	
+
     }
+
     /**
      * Adds a child to the current node of the spec
      * 
@@ -154,6 +164,7 @@ public class LinkSpecification implements ILinkSpecification {
 	    return true;
 	return getChildren().isEmpty();
     }
+
     /**
      * Returns all leaves of the link spec
      * 
@@ -161,21 +172,21 @@ public class LinkSpecification implements ILinkSpecification {
      */
     public void getAllChildren() {
 	for (LinkSpecification child : getChildren()) {
-	    if(this.getOperator() == Operator.OR){
+	    if (this.getOperator() == Operator.OR) {
 		logger.info(this.parent);
 		this.parent = child;
 		logger.info(this.parent);
 	    }
-	    if(!child.isAtomic())
+	    if (!child.isAtomic())
 		child.getAllChildren();
 	}
-	
+
     }
-    
+
     /**
-    *
-    * Create the path of operators for each leaf spec
-    */
+     *
+     * Create the path of operators for each leaf spec
+     */
     public void pathOfAtomic() {
 	if (this.isAtomic())
 	    treePath += "";
@@ -194,6 +205,7 @@ public class LinkSpecification implements ILinkSpecification {
 	}
 
     }
+
     /**
      * Reads a spec expression into its canonical form Don't forget to optimize
      * the filters by checking (if threshold_left and threshold_right >= theta,
@@ -205,7 +217,7 @@ public class LinkSpecification implements ILinkSpecification {
      *            Global threshold
      */
     public void readSpecXOR(String spec, double theta) {
-	
+
 	Parser p = new Parser(spec, getThreshold());
 	if (p.isAtomic()) {
 	    filterExpression = spec;
@@ -246,8 +258,10 @@ public class LinkSpecification implements ILinkSpecification {
 		setThreshold(theta);
 	    } else if (p.getOperator().equalsIgnoreCase(XOR)) {
 		setOperator(Operator.MINUS);
-		leftSpec.readSpecXOR("OR("+p.getTerm1()+"|"+p.getThreshold1()+","+p.getTerm2()+"|"+p.getThreshold2()+")", theta);
-		rightSpec.readSpecXOR("AND("+p.getTerm1()+"|"+p.getThreshold1()+","+p.getTerm2()+"|"+p.getThreshold2()+")", theta);
+		leftSpec.readSpecXOR("OR(" + p.getTerm1() + "|" + p.getThreshold1() + "," + p.getTerm2() + "|"
+			+ p.getThreshold2() + ")", theta);
+		rightSpec.readSpecXOR("AND(" + p.getTerm1() + "|" + p.getThreshold1() + "," + p.getTerm2() + "|"
+			+ p.getThreshold2() + ")", theta);
 		filterExpression = null;
 		setThreshold(theta);
 	    } else if (p.getOperator().equalsIgnoreCase(MINUS)) {
@@ -265,6 +279,7 @@ public class LinkSpecification implements ILinkSpecification {
 	    }
 	}
     }
+
     /**
      * Reads a spec expression into its canonical form Don't forget to optimize
      * the filters by checking (if threshold_left and threshold_right >= theta,
@@ -336,7 +351,7 @@ public class LinkSpecification implements ILinkSpecification {
 	    }
 	}
     }
-    
+
     /**
      * Returns all leaves of the link spec
      * 
@@ -423,7 +438,6 @@ public class LinkSpecification implements ILinkSpecification {
 
 	return clone;
     }
-   
 
     /**
      *
@@ -466,7 +480,8 @@ public class LinkSpecification implements ILinkSpecification {
      */
     public String toStringOneLine() {
 	if (getChildren() != null) {
-	    String str = "(" + getShortendFilterExpression() + ", " + getThreshold() + ", " + getOperator() + ", null,)";
+	    String str = "(" + getShortendFilterExpression() + ", " + getThreshold() + ", " + getOperator()
+		    + ", null,)";
 	    str += "{";
 	    for (LinkSpecification child : getChildren())
 		str += child.toStringOneLine() + ",";
@@ -507,33 +522,33 @@ public class LinkSpecification implements ILinkSpecification {
 		+ "cosine(x.E,y.E)|0.7063)|0.3552)|0.8884,cosine(x.F,y.F)|0.3)|0.3552)|0.6307)";
 	// spec.readSpec("OR(trigrams(x.rdfs:label,y.name)|0.3,
 	// jaro(x.rdfs:label, y.name)|0.5)", 0.8);
-	spec.readSpec(l,0.4678);
+	spec.readSpec(l, 0.4678);
 	logger.info(spec.toString());
-	spec.readSpecXOR(l,0.4678);
+	spec.readSpecXOR(l, 0.4678);
 	logger.info(spec + " " + spec.size());
 	// System.out.println(spec.clone());
-	
+
 	spec.pathOfAtomic();
-	/*for(LinkSpecification leaf:spec.getAllLeaves()){
-	   logger.info(leaf);
-	   logger.info(leaf.treePath);
-	}*/
+	/*
+	 * for(LinkSpecification leaf:spec.getAllLeaves()){ logger.info(leaf);
+	 * logger.info(leaf.treePath); }
+	 */
 	spec.getAllChildren();
-	
+
 	List<LinkSpecification> leaves = spec.getAllLeaves();
 	int i = 0;
 	for (LinkSpecification sp : leaves) {
-	    
+
 	    System.out.println("Leave " + (++i) + ": " + sp);
 	    Parser p = new Parser(sp.filterExpression, sp.getThreshold());
 	    System.out.println("\tp.term1=" + p.getTerm1() + " p.term2=" + p.getTerm2() + "");
 	    if (sp.parent.parent != null)
 		System.out.println((sp.parent).parent.getOperator());
-	    
+
 	    String sourceProp = p.getTerm1().substring(p.getTerm1().indexOf(".") + 1);
 	    String targetProp = p.getTerm2().substring(p.getTerm2().indexOf(".") + 1);
 
-	    System.out.println("\tsourceProp=" + sourceProp + ", targetProp=" + targetProp+"\n\n");
+	    System.out.println("\tsourceProp=" + sourceProp + ", targetProp=" + targetProp + "\n\n");
 	}
     }
 
@@ -591,7 +606,8 @@ public class LinkSpecification implements ILinkSpecification {
 
 	LinkSpecification other = (LinkSpecification) o;
 
-	// logger.info("LinkSpecification.compareTo: this="+this+" -other="+other);
+	// logger.info("LinkSpecification.compareTo: this="+this+"
+	// -other="+other);
 	if (other.size() > size())
 	    return -1;
 	if (other.size() < size())
@@ -786,36 +802,36 @@ public class LinkSpecification implements ILinkSpecification {
 	return false;
     }
 
-	public double getThreshold() {
-		return threshold;
-	}
+    public double getThreshold() {
+	return threshold;
+    }
 
-	public void setThreshold(double threshold) {
-		this.threshold = threshold;
-	}
+    public void setThreshold(double threshold) {
+	this.threshold = threshold;
+    }
 
-	public Operator getOperator() {
-		return operator;
-	}
+    public Operator getOperator() {
+	return operator;
+    }
 
-	public void setOperator(Operator operator) {
-		this.operator = operator;
-	}
+    public void setOperator(Operator operator) {
+	this.operator = operator;
+    }
 
-	public List<LinkSpecification> getChildren() {
-		return children;
-	}
+    public List<LinkSpecification> getChildren() {
+	return children;
+    }
 
-	public void setChildren(List<LinkSpecification> children) {
-		this.children = children;
-	}
+    public void setChildren(List<LinkSpecification> children) {
+	this.children = children;
+    }
 
-	public List<LinkSpecification> getDependencies() {
-		return dependencies;
-	}
+    public List<LinkSpecification> getDependencies() {
+	return dependencies;
+    }
 
-	public void setDependencies(List<LinkSpecification> dependencies) {
-		this.dependencies = dependencies;
-	}
+    public void setDependencies(List<LinkSpecification> dependencies) {
+	this.dependencies = dependencies;
+    }
 
 }

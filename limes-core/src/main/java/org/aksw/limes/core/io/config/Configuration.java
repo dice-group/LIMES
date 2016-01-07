@@ -1,34 +1,43 @@
 package org.aksw.limes.core.io.config;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
-public class Configuration {
-	private static final Logger logger = Logger.getLogger(Configuration.class.getName());
-	
-    protected KBInfo sourceInfo 				= new KBInfo();
-    protected KBInfo targetInfo 				= new KBInfo();
-    protected String metricExpression 			= new String();
-    protected String acceptanceRelation 		= new String();
-    protected String verificationRelation		= new String();
-    protected double acceptanceThreshold;
-    protected String acceptanceFile;
-    protected double verificationThreshold;
-    protected String verificationFile;
-    protected int exemplars 					= -1;
-    protected HashMap<String, String> prefixes 	= new HashMap<String, String>();;
-    protected String outputFormat;
-    protected String executionPlan 				= "simple";
-    protected int granularity 					= 2;
-    protected String recallRegulator;
-    protected double recallThreshold;
-    
+/**
+ * Contain all LIMES configuration parameters
+ *  
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 12, 2015
+ */
+public class Configuration implements IConfiguration{
+//	private static final Logger logger = Logger.getLogger(Configuration.class.getName());
 
-    
-    public Configuration(){
-    }
-    		
+	protected KBInfo sourceInfo 				= new KBInfo();
+	protected KBInfo targetInfo 				= new KBInfo();
+	protected String metricExpression 			= new String();
+	protected String acceptanceRelation 		= new String();
+	protected String verificationRelation		= new String();
+	protected double acceptanceThreshold;
+	protected String acceptanceFile;
+	protected double verificationThreshold;
+	protected String verificationFile;
+	protected int exemplars 					= -1;
+	protected HashMap<String, String> prefixes 	= new HashMap<String, String>();;
+	protected String outputFormat;
+	protected String executionPlan 				= "simple";
+	protected int granularity 					= 2;
+	protected String recallRegulator;
+	protected double recallThreshold;
+
+
+
+	public Configuration(){
+	}
+
 	public Configuration(KBInfo sourceInfo, KBInfo targetInfo,
 			String metricExpression, String acceptanceRelation,
 			String verificationRelation, double acceptanceThreshold,
@@ -143,7 +152,7 @@ public class Configuration {
 	public void setPrefixes(HashMap<String, String> prefixes) {
 		this.prefixes = prefixes;
 	}
-	
+
 	public void addPrefixes(String label, String namespace) {
 		this.prefixes.put(label, namespace);
 	}
@@ -187,6 +196,34 @@ public class Configuration {
 	public void setRecallThreshold(double recallThreshold) {
 		this.recallThreshold = recallThreshold;
 	}
-    
 
+	@Override
+	public String toString() {
+		return "Configuration" 
+				+ "\n["
+				+ "\nsourceInfo=" + sourceInfo 
+				+ "\ntargetInfo=" + targetInfo 
+				+ "\nmetricExpression=" + metricExpression
+				+ "\nacceptanceRelation=" + acceptanceRelation
+				+ "\nverificationRelation=" + verificationRelation
+				+ "\nacceptanceThreshold=" + acceptanceThreshold
+				+ "\nacceptanceFile=" + acceptanceFile
+				+ "\nverificationThreshold=" + verificationThreshold
+				+ "\nverificationFile=" + verificationFile 
+				+ "\nexemplars=" + exemplars 
+				+ "\nprefixes=" + prefixes 
+				+ "\noutputFormat="	+ outputFormat 
+				+ "\nexecutionPlan=" + executionPlan
+				+ "\ngranularity=" + granularity 
+				+ "\nrecallRegulator="	+ recallRegulator 
+				+ "\nrecallThreshold=" + recallThreshold
+				+ "\n]";
+	}
+
+	@Override
+	public Set<String> getConfigurationParametersNames() {
+		return new HashSet<String>(Arrays.asList("sourceInfo", "targetInfo", "metricExpression", "acceptanceRelation",
+				"verificationRelation",	"acceptanceThreshold", "acceptanceFile", "verificationThreshold", "verificationFile",
+				"exemplars", "prefixes", "outputFormat", "executionPlan", "granularity", "recallRegulator",	"recallThreshold"));
+	}
 }

@@ -10,12 +10,14 @@ import org.aksw.limes.core.model.Link;
  * @version 2015-11-03
  *
  */
-public class Recall implements QualitativeMeasure {
+public class Recall extends PRF implements QualitativeMeasure {
 
 	@Override
 	public double calculate(Set<Link> predictions, Set<Link> goldStandard) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(predictions.size()==0)
+			return 0;
+		return trueFalsePositive(predictions, goldStandard, true)/(double)goldStandard.size();
+
 	}
 
 }

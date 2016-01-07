@@ -10,8 +10,9 @@ import java.util.List;
  *
  */
 public interface QuantitativeMeasure {
-	RunRecord getRun(int runId);
+	RunRecord getRun(long runId);
+	void addRun(RunRecord record);
 	List<RunRecord> getRuns();
-	void setRun(int runId, RunRecord record);
-	double getRunInfo(int runId, String Info);
+	void setRun(long runId, RunRecord record);
+	double getRunInfo(long runId, String Info);
 }

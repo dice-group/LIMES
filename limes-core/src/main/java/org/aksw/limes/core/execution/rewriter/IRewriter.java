@@ -11,11 +11,11 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 public interface IRewriter {
     /**
      * Rewrites a Link Specification and returns an equivalent yet probably more
-     * time-efficient link spec
+     * time-efficient link specification
      *
      * @param spec
      *            Input link specification
-     * @return Rewritten spec
+     * @return Rewritten specification
      */
     public LinkSpecification rewrite(LinkSpecification spec);
 }

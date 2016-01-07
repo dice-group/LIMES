@@ -7,22 +7,18 @@ package org.aksw.limes.core.measures.mapper.atomic;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
-import org.aksw.limes.core.measures.mapper.IMapper.Language;
-import org.aksw.limes.core.measures.mapper.SetOperations;
+import org.aksw.limes.core.measures.mapper.Mapper;
 
 import java.util.*;
 
 import org.aksw.limes.core.measures.measure.string.Jaro;
-import org.aksw.limes.core.util.RandomStringGenerator;
 import org.apache.log4j.Logger;
 
 /**
  *
  * @author ngonga
  */
-public class JaroMapper extends AtomicMapper {
+public class JaroMapper extends Mapper{
 
     static Logger logger = Logger.getLogger("LIMES");
 
@@ -33,7 +29,6 @@ public class JaroMapper extends AtomicMapper {
 	Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
 	Map<String, Set<String>> targetMap = getValueToUriMap(target, properties.get(1));
 	return runWithoutPrefixFilter(sourceMap, targetMap, threshold);
-	// return bruteForce(sourceMap, targetMap, threshold);
     }
 
     public Map<String, Set<String>> getValueToUriMap(Cache c, String property) {
@@ -79,11 +74,10 @@ public class JaroMapper extends AtomicMapper {
 	Map<Integer, Set<String>> sourceLengthIndex = getLengthIndex(source);
 	Map<Integer, Set<String>> targetLengthIndex = getLengthIndex(target);
 	Mapping result = new MemoryMapping();
-	double maxSourceLength, maxTargetLength, theta;
+	double maxSourceLength, maxTargetLength;
 
 	for (Integer sourceLength : sourceLengthIndex.keySet()) {
 	    for (Integer targetLength : targetLengthIndex.keySet()) {
-		theta = (3 * threshold - 1) * sourceLength * targetLength / (2 * (sourceLength + targetLength));
 		maxSourceLength = getMaxComparisonLength((double) sourceLength, threshold,
 			Math.min(sourceLength, targetLength));
 		maxTargetLength = getMaxComparisonLength((double) targetLength, threshold,
@@ -110,13 +104,11 @@ public class JaroMapper extends AtomicMapper {
     }
 
     public Mapping run(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap, double threshold) {
-	Jaro j = new Jaro();
 	Set<String> source = sourceMap.keySet();
 	Set<String> target = targetMap.keySet();
 	Map<Integer, Set<String>> sourceLengthIndex = getLengthIndex(source);
 	Map<Integer, Set<String>> targetLengthIndex = getLengthIndex(target);
-	// Map<String, Set<Character>> sourceCharacterMap = getChars(source);
-	// Map<String, Set<Character>> targetCharacterMap = getChars(target);
+	
 	Mapping result = new MemoryMapping();
 	double maxSourceLength, maxTargetLength, similarity, theta;
 	List<Character> sourceMappingCharacters, targetMappingCharacters;
@@ -190,17 +182,15 @@ public class JaroMapper extends AtomicMapper {
 
     public Mapping runWithoutPrefixFilter(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
 	    double threshold) {
-	Jaro j = new Jaro();
 	Set<String> source = sourceMap.keySet();
 	Set<String> target = targetMap.keySet();
 	Map<Integer, Set<String>> sourceLengthIndex = getLengthIndex(source);
 	Map<Integer, Set<String>> targetLengthIndex = getLengthIndex(target);
-	// Map<String, Set<Character>> sourceCharacterMap = getChars(source);
-	// Map<String, Set<Character>> targetCharacterMap = getChars(target);
+
 	Mapping result = new MemoryMapping();
 	double maxSourceLength, maxTargetLength, similarity, theta;
 	List<Character> sourceMappingCharacters, targetMappingCharacters;
-	int halfLength, transpositions, lengthFilterCount = 0, prefixFilterCount = 0, characterFilterCount = 0;
+	int halfLength, transpositions, lengthFilterCount = 0, characterFilterCount = 0;
 
 	// length-aware filter
 	for (Integer sourceLength : sourceLengthIndex.keySet()) {
@@ -242,9 +232,7 @@ public class JaroMapper extends AtomicMapper {
 	    }
 	}
 	System.out.println(lengthFilterCount + " = " + ((double) lengthFilterCount) / (source.size() * target.size()));
-	// System.out.println(prefixFilterCount
-	// + " = " + ((double) prefixFilterCount) / (source.size()
-	// * target.size()));
+	
 	System.out.println(
 		characterFilterCount + " = " + ((double) characterFilterCount) / (source.size() * target.size()));
 	return result;
@@ -271,22 +259,7 @@ public class JaroMapper extends AtomicMapper {
 	return result;
     }
 
-    /**
-     * Returns the set of characters contained in a string
-     *
-     * @param s
-     *            Input String
-     * @return Set of characters contained in it
-     */
-    private Set<Character> getCharSet(String s) {
-	Set<Character> result = new HashSet<Character>();
-	char[] characters = s.toCharArray();
-	for (int i = 0; i < characters.length; i++) {
-	    result.add(characters[i]);
-	}
-	return result;
-    }
-
+    
     /**
      * Returns the set of characters contained in a string
      *
@@ -303,61 +276,5 @@ public class JaroMapper extends AtomicMapper {
 	return result;
     }
 
-    private Mapping bruteForce(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
-	    double threshold) {
-	Jaro j = new Jaro();
-	Mapping m = new MemoryMapping();
-	double sim;
-	for (String s : sourceMap.keySet()) {
-	    for (String t : targetMap.keySet()) {
-		sim = j.getSimilarity(s, t);
-		if (sim >= threshold) {
-		    for (String sourceUris : sourceMap.get(s)) {
-			for (String targetUris : targetMap.get(t)) {
-			    m.add(s, t, sim);
-			}
-		    }
-		}
-	    }
-	}
-	return m;
-    }
-
-    private void test(int sourceSize, int targetSize, double threshold) {
-	Map<String, Set<String>> sourceMap = generateRandomMap(sourceSize);
-	Map<String, Set<String>> targetMap = generateRandomMap(targetSize);
-
-	long begin = System.currentTimeMillis();
-	Mapping m1 = bruteForce(sourceMap, targetMap, threshold);
-	long end = System.currentTimeMillis();
-	System.out.println("Brute force: " + (end - begin));
-	System.out.println("Mapping size : " + (m1.getNumberofMappings()));
-
-	begin = System.currentTimeMillis();
-	Mapping m2 = run(sourceMap, targetMap, threshold);
-	end = System.currentTimeMillis();
-	System.out.println("Approach: " + (end - begin));
-	System.out.println("Mapping size : " + (m2.getNumberofMappings()));
-	System.out.println("Mapping size : " + (SetOperations.difference(m1, m2)));
-    }
-
-    public Map<String, Set<String>> generateRandomMap(int size) {
-	Map<String, Set<String>> map = new HashMap<String, Set<String>>();
-	RandomStringGenerator rsg = new RandomStringGenerator(5, 20);
-	while (map.size() < size) {
-	    String s = rsg.generateString();
-	    Set<String> set = new HashSet<String>();
-	    set.add(s);
-	    map.put(s, set);
-	}
-	return map;
-    }
-
-    private Map<String, Set<Character>> getChars(Set<String> source) {
-	Map<String, Set<Character>> map = new HashMap<String, Set<Character>>();
-	for (String s : source) {
-	    map.put(s, getCharSet(s));
-	}
-	return map;
-    }
+    
 }

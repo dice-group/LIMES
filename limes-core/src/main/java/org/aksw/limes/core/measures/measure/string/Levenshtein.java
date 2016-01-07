@@ -5,14 +5,13 @@
 
 package org.aksw.limes.core.measures.measure.string;
 
-import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.measures.measure.Measure;
+
+import org.aksw.limes.core.io.cache.Instance;
 /**
  *
  * @author ngonga
  */
-public class Levenshtein implements StringMeasure {
+public class Levenshtein extends StringMeasure {
 
     public int getPrefixLength(int tokensNumber, double threshold) {
         throw new UnsupportedOperationException("Not supported yet.");

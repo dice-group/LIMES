@@ -23,7 +23,7 @@ public class Linkset extends Mapping {
 	}
 
 	@Override
-	public String getPredicateURI() {
+	public String getPredicate() {
 		return predicateURI;
 	}
 
@@ -75,4 +75,5 @@ public class Linkset extends Mapping {
 		return null;
 	}
 
+	
 }

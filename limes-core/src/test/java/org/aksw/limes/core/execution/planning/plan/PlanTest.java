@@ -1,111 +1,143 @@
 package org.aksw.limes.core.execution.planning.plan;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import static org.junit.Assert.*;
 
 import org.aksw.limes.core.execution.engine.DefaultExecutionEngine;
-import org.aksw.limes.core.execution.engine.ExecutionEngine;
+import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
-import org.aksw.limes.core.execution.planning.planner.CannonicalPlanner;
-import org.aksw.limes.core.execution.planning.planner.HeliosPlanner;
-import org.aksw.limes.core.execution.rewriter.AlgebraicRewriter;
-import org.aksw.limes.core.execution.rewriter.IRewriter;
-import org.aksw.limes.core.measures.mapper.SetOperations;
-import org.apache.commons.lang.StringEscapeUtils;
-
-
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class PlanTest {
-    private static final String CSVSEPARATOR = ",";
+    public Cache source = new MemoryCache();
+    public Cache target = new MemoryCache();
 
-    /**
-     * Read a file into the cache
-     *
-     * @param file
-     *            Input fille
-     * @return Cache containing the data from the file
-     */
-    public static Cache readFile(String file) {
-	Cache c = new HybridCache();
-	String s = "";
-	try {
-	    BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
-	    // read properties;
-	    s = reader.readLine();
+    @Before
+    public void setUp() {
+	source = new MemoryCache();
+	target = new MemoryCache();
+	// create source cache
+	source.addTriple("S1", "surname", "georgala");
+	source.addTriple("S1", "name", "kleanthi");
+	source.addTriple("S1", "age", "26");
 
-	    String properties[] = s.split(CSVSEPARATOR);
+	source.addTriple("S2", "surname", "sandra");
+	source.addTriple("S2", "name", "lukas");
+	source.addTriple("S2", "age", "13");
 
-	    String split[];
-	    int size = 0;
-	    s = reader.readLine();
-	    while (s != null && size < 250000) {
-		s = s.toLowerCase();
-		s = StringEscapeUtils.unescapeHtml(s);
+	source.addTriple("S3", "surname", "depp");
+	source.addTriple("S3", "name", "johny");
+	source.addTriple("S3", "age", "52");
 
-		split = s.split(CSVSEPARATOR);
+	source.addTriple("S4", "surname", "swift");
+	source.addTriple("S4", "name", "taylor,maria");
+	source.addTriple("S4", "age", "25");
 
-		for (int i = 1; i < properties.length; i++) {
-		    try {
+	source.addTriple("S5", "surname", "paok");
+	source.addTriple("S5", "name", "ole");
+	source.addTriple("S5", "age", "56");
 
-			c.addTriple(split[0], properties[i], split[i]);
-			size++;
-		    } catch (Exception e) {
-			e.printStackTrace();
+	target.addTriple("T1", "surname", "georg");
+	target.addTriple("T1", "name", "klea");
+	target.addTriple("T1", "age", "26");
 
-		    }
-		}
-		s = reader.readLine();
-	    }
-	    reader.close();
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    // logger.info(s);
-	}
-	return c;
-    }
-    
-    public static void test() {
-        CannonicalPlanner cp = new CannonicalPlanner();
-        Cache source = readFile("Examples\\GeneticEval\\Datasets\\DBLP-Scholar/DBLP1.csv");
-        Cache target = readFile("Examples\\GeneticEval\\Datasets\\DBLP-Scholar/Scholar.csv");
-//        Cache source = Experiment.readFile("C:\\Users\\Lyko\\workspace\\LIMES\\Examples\\GeneticEval\\Datasets\\DBLP-Scholar\\DBLP1.csv");
-//        Cache target = Experiment.readFile("C:\\Users\\Lyko\\workspace\\LIMES\\Examples\\GeneticEval\\Datasets\\DBLP-Scholar\\Scholar.csv");
-        HeliosPlanner hp = new HeliosPlanner(source, target);        
-        LinkSpecification spec = new LinkSpecification();
-        spec.readSpec("AND(euclidean(x.year,y.year)|0.8019,OR(cosine(x.title,y.title)|0.5263,AND(cosine(x.authors,y.authors)|0.5263,overlap(x.title,y.title)|0.5263)|0.2012)|0.2012)", 0.3627);
-//        spec.readSpec("OR(cosine(x.title,y.title)|0.5263,AND(cosine(x.authors,y.authors)|0.5263,overlap(x.title,y.title)|0.5263)|0.2012)", 0.3627);
-//        spec.readSpec("AND(jaccard(x.title,y.title)|0.4278,trigrams(x.authors,y.authors)|0.4278)", 0.36);
-        
-        System.out.println("Orginal: "+spec);
-        IRewriter rewriter = new AlgebraicRewriter();
-        spec = rewriter.rewrite(spec);
-        System.out.println("Rewritten: "+spec);
-        System.out.println("Canonical plan:\n"+cp.plan(spec));
-        cp.plan(spec).draw();
-        ExecutionPlan np = hp.plan(spec);
-        np.draw();
-        System.out.println("HELIOS plan:\n"+np);
-        long begin = System.currentTimeMillis();
-        DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
-        Mapping m1 = ee.execute(np);
-        long end = System.currentTimeMillis();
-        System.out.println((end - begin)+" ms for HELIOS, "+m1.getNumberofMappings()+" results.");
-        begin = System.currentTimeMillis();
-        Mapping m2 = ee.execute(cp.plan(spec));
-        end = System.currentTimeMillis();
-        System.out.println((end - begin)+" ms for CANONICAL, "+m2.getNumberofMappings()+" results.");        
-        System.out.println(SetOperations.difference(m1, m2).getNumberofMappings() +" are missing somewhere");
-        System.out.println(SetOperations.difference(m2, m1).getNumberofMappings() +" are missing somewhere");
+	target.addTriple("T2", "surname", "sandra");
+	target.addTriple("T2", "name", "lukas");
+	target.addTriple("T2", "age", "13");
+
+	target.addTriple("T3", "surname", "derp");
+	target.addTriple("T3", "name", "johnny");
+	target.addTriple("T3", "age", "52");
+
+	target.addTriple("T4", "surname", "swift");
+	target.addTriple("T4", "name", "taylor");
+	target.addTriple("T4", "age", "25");
+
+	target.addTriple("T5", "surname", "paok");
+	target.addTriple("T5", "name", "oleole");
+	target.addTriple("T5", "age", "56");
+
     }
 
-    public static void main(String args[]) {
-        test();
+    @After
+    public void tearDown() {
+
     }
+
+    @Test
+    public void addInstruction() {
+	System.out.println("addInstruction");
+
+	Plan plan = new Plan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	System.out.println("Size before: " + plan.size());
+
+	plan.addInstruction(run1);
+	plan.addInstruction(null);
+
+	assertTrue(plan.size() == 1);
+	System.out.println("Size after: " + plan.size());
+
+	System.out.println("------------------------");
+
+    }
+
+    @Test
+    public void removeInstruction() {
+	System.out.println("removeInstruction");
+
+	Plan plan = new Plan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan.addInstruction(run1);
+	plan.addInstruction(null);
+	plan.addInstruction(null);
+	System.out.println("Size before: " + plan.size());
+
+	plan.removeInstruction(run1);
+	plan.removeInstruction(null);
+	System.out.println("Size after: " + plan.size());
+	assertTrue(plan.size() == 0);
+
+	plan.removeInstruction(-1);
+	System.out.println("------------------------");
+
+    }
+
+    @Test
+    public void removeInstruction2() {
+	System.out.println("removeInstruction2");
+
+	Plan plan = new Plan();
+	Instruction run1 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.name, y.name)", "0.3", -1, -1, 1);
+	Instruction union = new Instruction(Command.UNION, "", "0.3", 0, 1, 2);
+	Instruction instersection = new Instruction(Command.INTERSECTION, "", "0.3", 0, 1, 2);
+
+	plan.addInstruction(run1);
+	plan.addInstruction(run2);
+	plan.addInstruction(union);
+
+	System.out.println("Plan size with Union: " + plan.size());
+	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	Mapping mUnion = ee.execute(plan);
+	System.out.println("Size of Mapping with Union: " + mUnion.size());
+
+	plan.removeInstruction(union);
+	plan.addInstruction(instersection);
+
+	System.out.println("Plan size with Intersection: " + plan.size());
+	Mapping mIntersection = ee.execute(plan);
+	System.out.println("Size of Mapping with Intersection: " + mIntersection.size());
+	
+	assertTrue(!mUnion.toString().equals(mIntersection.toString()));
+	assertTrue(plan.getInstructionList().contains(union) == false);
+
+	
+	System.out.println("------------------------");
+
+    }
+
 }

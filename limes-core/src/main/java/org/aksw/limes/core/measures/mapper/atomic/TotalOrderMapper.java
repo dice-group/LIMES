@@ -8,8 +8,9 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.AtomicMapper;
-import org.aksw.limes.core.measures.mapper.SetOperations;
+
+import org.aksw.limes.core.measures.mapper.Mapper;
+
 import org.aksw.limes.core.measures.measure.metricfactory.SimpleMetricFactory;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import java.util.HashMap;
  * DEPRECATED
  * @author ngonga
  */
-public class TotalOrderMapper extends AtomicMapper {
+public class TotalOrderMapper extends Mapper {
 
     public String getName()
     {
@@ -30,7 +31,6 @@ public class TotalOrderMapper extends AtomicMapper {
             
     public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression, double threshold) {
 
-        Mapping mapping = new MemoryMapping();
         ArrayList<Double> valueList = new ArrayList<Double>();
 
         //0. get properties
@@ -67,7 +67,7 @@ public class TotalOrderMapper extends AtomicMapper {
         SimpleMetricFactory factory = new SimpleMetricFactory("", "");
         factory.setExpression(expression);
 
-        Comparator comparator = Collections.reverseOrder();
+        Comparator<Double> comparator = Collections.reverseOrder();
         Collections.sort(valueList, comparator);
         //2. search for closest match for each element of source
         for (String key : source.getAllUris()) {

@@ -4,7 +4,7 @@
  */
 package org.aksw.limes.core.measures.measure.space;
 
-import org.aksw.limes.core.data.Instance;
+import org.aksw.limes.core.io.cache.Instance;
 
 /**
  * Computes a similarity based on the geo distance of two points. Assumes that the
@@ -12,7 +12,7 @@ import org.aksw.limes.core.data.Instance;
  * as 1/(1+d) where d is the distance between the two points.
  * @author ngonga
  */
-public class GeoDistance implements SpaceMeasure {
+public class GeoDistance extends SpaceMeasure {
 
     int dimension = 2;
     private static double D2R = Math.PI / 180;

@@ -3,29 +3,26 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.sumofmin;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.aksw.limes.core.measures.measure.pointsets.min.NaiveMin;
-
-import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.data.Point;
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.PolygonIndex;
-import org.aksw.limes.core.measures.measure.pointsets.SetMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 
 /**
  * @author sherif
  *
  */
-public class NaiveSumOfMin implements SetMeasure {
+public class NaiveSumOfMin extends PointsetsMeasure {
     public int computations;
 
     /**
@@ -46,8 +43,6 @@ public class NaiveSumOfMin implements SetMeasure {
     }
 
     public double computeDistance(Polygon X, Polygon Y, double threshold) {
-	// System.out.println(SumOfMins(X, Y));
-	// System.out.println(SumOfMins(Y, X));
 	return (SumOfMins(X, Y) + SumOfMins(Y, X)) / 2;
     }
 
@@ -56,7 +51,6 @@ public class NaiveSumOfMin implements SetMeasure {
 	for (Point x : X.points) {
 	    sum += computeMinDistance(x, Y);
 	}
-	// System.out.println("Min(" + X + "," + Y + ")" + sum);
 	return sum;
     }
 
@@ -68,8 +62,6 @@ public class NaiveSumOfMin implements SetMeasure {
 		min = d;
 	    }
 	}
-	// System.out.println( "min distance(" + x.label + ", " + Y.uri + "): "+
-	// min);
 	return min;
     }
 

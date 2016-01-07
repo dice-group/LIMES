@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.aksw.limes.core.data.Point;
+import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechet;
 import org.junit.Test;

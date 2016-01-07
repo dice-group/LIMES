@@ -5,15 +5,16 @@
 
 package org.aksw.limes.core.measures.measure.string;
 
-import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.measures.measure.Measure;import java.util.TreeSet;
+
+import org.aksw.limes.core.io.cache.Instance;
+
+import java.util.TreeSet;
 
 /**
  *
  * @author ngonga
  */
-public class OverlapMeasure implements StringMeasure {
+public class OverlapMeasure extends StringMeasure {
 
     public int getPrefixLength(int tokensNumber, double threshold) {
         return (int)(tokensNumber - threshold + 1);
@@ -39,8 +40,8 @@ public class OverlapMeasure implements StringMeasure {
     public double getSimilarity(Object a, Object b) {
         double counter = 0;
 
-        TreeSet<String> tokens1 = new TreeSet();
-        TreeSet<String> tokens2 = new TreeSet();
+        TreeSet<String> tokens1 = new TreeSet<String>();
+        TreeSet<String> tokens2 = new TreeSet<String>();
 
         String split1[] = ((String )a).split(" ");
         for(int i=0; i<split1.length; i++)

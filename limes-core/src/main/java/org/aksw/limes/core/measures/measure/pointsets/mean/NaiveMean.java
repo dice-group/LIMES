@@ -3,21 +3,18 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.mean;
 
-import org.aksw.limes.core.data.Instance;
-import org.aksw.limes.core.data.Point;
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.PolygonIndex;
-import org.aksw.limes.core.measures.measure.pointsets.SetMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -25,7 +22,7 @@ import java.util.TreeSet;
  * @author sherif
  *
  */
-public class NaiveMean implements SetMeasure {
+public class NaiveMean extends PointsetsMeasure {
 
     public int computations;
 

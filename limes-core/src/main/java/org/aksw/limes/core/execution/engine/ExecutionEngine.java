@@ -3,10 +3,7 @@ package org.aksw.limes.core.execution.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.aksw.limes.core.execution.planning.plan.ExecutionPlan;
-import org.aksw.limes.core.execution.planning.plan.IPlan;
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.apache.log4j.Logger;
 
@@ -19,7 +16,7 @@ import org.apache.log4j.Logger;
  * @author ngonga
  * @author kleanthi
  */
-public abstract class ExecutionEngine implements IEngine {
+public abstract class ExecutionEngine implements IExecutionEngine {
     static Logger logger = Logger.getLogger("LIMES");
     //contains the results     
     protected List<MemoryMapping> buffer;

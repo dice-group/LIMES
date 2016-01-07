@@ -5,12 +5,9 @@
 package org.aksw.limes.core.measures.measure.pointsets.benchmarking;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.aksw.limes.core.data.Point;
+import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
 
 /**
