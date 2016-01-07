@@ -15,7 +15,7 @@ import org.apache.log4j.*;
  * 
  * @author ngonga
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
- * @version Nov 23, 2015
+ * @version Nov 25, 2015
  */
 @SuppressWarnings("rawtypes")
 public class Instance implements Comparable, Serializable {

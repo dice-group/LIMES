@@ -16,8 +16,8 @@ import org.apache.log4j.*;
  */
 public class DtdChecker implements org.xml.sax.ErrorHandler {
 
-    Logger logger = Logger.getLogger("LIMES");
-    boolean valid = true;
+    private Logger logger = Logger.getLogger(DtdChecker.class.getName());
+    protected boolean valid = true;
 
     /** Carries out the validation in case a fatal parsing error occur.
      *
