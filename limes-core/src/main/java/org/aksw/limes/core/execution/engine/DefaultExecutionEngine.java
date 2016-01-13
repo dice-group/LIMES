@@ -150,12 +150,12 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 	    mapper = new ExactMatchMapper();
 	} else if (inst.getMeasureExpression().startsWith("soundex")) {
 	    mapper = new SoundexMapper();
-	}else if (inst.getMeasureExpression().startsWith("overlap")
-		|| inst.getMeasureExpression().startsWith("trigrams")||
-		inst.getMeasureExpression().startsWith("cosine") ||
-		inst.getMeasureExpression().startsWith("jaccard")) {
+	} else
+	    if (inst.getMeasureExpression().startsWith("overlap") || inst.getMeasureExpression().startsWith("trigrams")
+		    || inst.getMeasureExpression().startsWith("cosine")
+		    || inst.getMeasureExpression().startsWith("jaccard")) {
 	    mapper = new PPJoinPlusPlus();
-	} else 
+	} else
 	    return new MemoryMapping();
 	// run mapper
 	return mapper.getMapping(source, target, sourceVariable, targetVariable, inst.getMeasureExpression(),
@@ -171,10 +171,21 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *            MemoryMapping that is to be filtered
      * @return Filtered MemoryMapping
      */
-    public Mapping executeFilter(Instruction inst, Mapping m) {
+    public Mapping executeFilter(Instruction inst, Mapping input) {
 	LinearFilter filter = new LinearFilter();
-	return filter.filter(m, inst.getMeasureExpression(), Double.parseDouble(inst.getThreshold()), source, target,
-		sourceVariable, targetVariable);
+	Mapping m = new MemoryMapping();
+	if (inst.getMeasureExpression() == null)
+	    m = filter.filter(input, Double.parseDouble(inst.getThreshold()));
+	else {
+	    if (inst.getMainThreshold() != null)
+		m = filter.filter(input, inst.getMeasureExpression(), Double.parseDouble(inst.getThreshold()),
+			Double.parseDouble(inst.getMainThreshold()), source, target, sourceVariable, targetVariable);
+	    else// original filtering
+		m = filter.filter(input, inst.getMeasureExpression(), Double.parseDouble(inst.getThreshold()), source,
+			target, sourceVariable, targetVariable);
+	}
+
+	return m;
     }
 
     /**
@@ -269,9 +280,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 	    // only run filtering if there is a filter indeed, else simply
 	    // return MemoryMapping
 	    if (plan.getFilteringInstruction() != null) {
-		if (Double.parseDouble(plan.getFilteringInstruction().getThreshold()) > 0) {
-		    m = executeFilter(plan.getFilteringInstruction(), m);
-		}
+		m = executeFilter(plan.getFilteringInstruction(), m);
 	    }
 	}
 	return m;

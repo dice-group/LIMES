@@ -159,16 +159,44 @@ public class MappingOperations {
 	for (String key : map1.getMap().keySet()) {
 	    // if the first term (key) can also be found in map2
 	    for (String value : map1.getMap().get(key).keySet()) {
-		map.add(key, value, map1.getConfidence(key, value));
+		// if both mappings include the link, store the highest
+		// similarity
+		if (map2.getMap().containsKey(key)) {
+		    // target instance included in map2
+		    if (map2.getMap().get(key).containsKey(value)) {
+			if (map1.getMap().get(key).get(value) >= map2.getMap().get(key).get(value)) {
+			    map.add(key, value, map1.getMap().get(key).get(value));
+			} else {
+			    map.add(key, value, map2.getMap().get(key).get(value));
+			}
+		    } else// target instance not included in map2
+			map.add(key, value, map1.getMap().get(key).get(value));
+		} else// source instance not included in map2
+		    map.add(key, value, map1.getMap().get(key).get(value));
 	    }
 	}
 	for (String key : map2.getMap().keySet()) {
 	    // if the first term (key) can also be found in map2
 	    for (String value : map2.getMap().get(key).keySet()) {
-		map.add(key, value, map2.getConfidence(key, value));
+		// if both mappings include the link, store the highest
+		// similarity
+		if (map1.getMap().containsKey(key)) {
+		    // target instance included in map1
+		    if (map1.getMap().get(key).containsKey(value)) {
+			if (map1.getMap().get(key).get(value) >= map2.getMap().get(key).get(value)) {
+			    map.add(key, value, map1.getMap().get(key).get(value));
+			} else {
+			    map.add(key, value, map2.getMap().get(key).get(value));
+			}
+		    } else// target instance not included in map1
+			map.add(key, value, map2.getMap().get(key).get(value));
+		} else// source instance not included in map2
+		    map.add(key, value, map2.getMap().get(key).get(value));
 	    }
 	}
-	
+	// logger.info("\n******\nMap1\n"+map1);
+	// logger.info("\n******\nMap2\n"+map2);
+	// logger.info("\n******\nMap\n"+map);
 	return map;
     }
 
@@ -182,8 +210,7 @@ public class MappingOperations {
      * @return XOR(map1, map2)
      */
     public static Mapping xor(Mapping map1, Mapping map2) {
-	return union(difference(map1, map2), difference(map2, map1).reverseSourceTarget());
+	return difference(union(map1, map2), intersection(map1, map2));
     }
 
-    
 }

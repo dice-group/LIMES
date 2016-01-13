@@ -9,8 +9,8 @@ import org.apache.log4j.Logger;
 public class Plan implements IPlan {
     static Logger logger = Logger.getLogger("LIMES");
     protected double runtimeCost;
-    private double mappingSize;
-    private double selectivity;
+    protected double mappingSize;
+    protected double selectivity;
     private List<Instruction> instructionList;
     private List<NestedPlan> subPlans;
     private Command operator;
@@ -21,7 +21,6 @@ public class Plan implements IPlan {
 	setRuntimeCost(0d);
 	setMappingSize(0d);
 	setSelectivity(1d);
-	setInstructionList(new ArrayList<Instruction>());
 	setSubPlans(null);
 	setFilteringInstruction(null);
     }

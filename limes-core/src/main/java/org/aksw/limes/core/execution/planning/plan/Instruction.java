@@ -2,6 +2,7 @@ package org.aksw.limes.core.execution.planning.plan;
 
 import org.apache.log4j.Logger;
 
+
 /**
  * Implements Instruction class. Instruction is an essential component of the
  * execution plan. An execution is expressed as a set of instruction objects.
@@ -24,6 +25,7 @@ public class Instruction {
     private int sourceMapping;
     private int targetMapping;
     private int resultIndex;
+    private String mainThreshold = null;
 
     /**
      * Constructor
@@ -141,6 +143,37 @@ public class Instruction {
      */
     public void setThreshold(String threshold) {
 	this.threshold = threshold;
+    }
+
+    /**
+     * 
+     * @param threshold,
+     *            main threshold to set
+     */
+    public void setMainThreshold(String threshold) {
+	this.mainThreshold = threshold;
+    }
+
+    public String getMainThreshold() {
+	return this.mainThreshold;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+	Instruction i = (Instruction) other;
+	if (i == null)
+	    return false;
+
+	if (this.mainThreshold == null && i.getMainThreshold() == null)
+	    return (this.toString().equals(other.toString()));
+	if (this.mainThreshold != null && i.getMainThreshold() == null)
+	    return false;
+	if (this.mainThreshold == null && i.getMainThreshold() != null)
+	    return false;
+	if (this.mainThreshold.equals(i.getMainThreshold()))
+	    return (this.toString().equals(other.toString()));
+
+	return false;
     }
 
     /**

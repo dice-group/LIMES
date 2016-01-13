@@ -118,7 +118,7 @@ public class DefaultExecutionEngineTest {
 
 	
 	Mapping totalEmpty = ee.executeUnion(emptyMapping,emptyMapping);
-	System.out.println("executeUnion with totalEmpty: " + totalEmpty.getNumberofMappings());
+	System.out.println("executeUnion with totalEmpty with empty: " + totalEmpty.getNumberofMappings());
 	assertTrue(totalEmpty.toString().equals(""));
 
 	System.out.println("---------------------------------");
@@ -156,7 +156,7 @@ public class DefaultExecutionEngineTest {
 	assertTrue(mSource.getNumberofMappings() >= mEmpty.getNumberofMappings());
 	
 	Mapping totalEmpty = ee.executeIntersection(emptyMapping,emptyMapping);
-	System.out.println("executeIntersection with totalEmpty: " + totalEmpty.getNumberofMappings());
+	System.out.println("executeIntersection with totalEmpty with empty: " + totalEmpty.getNumberofMappings());
 	assertTrue(totalEmpty.toString().equals(""));
 	System.out.println("---------------------------------");
     }
@@ -195,7 +195,7 @@ public class DefaultExecutionEngineTest {
 
 	
 	Mapping totalEmpty = ee.executeIntersection(emptyMapping,emptyMapping);
-	System.out.println("executeIntersection with totalEmpty: " + totalEmpty.getNumberofMappings());
+	System.out.println("executeIntersection with totalEmpty with empty: " + totalEmpty.getNumberofMappings());
 	assertTrue(totalEmpty.toString().equals(""));
 	System.out.println("---------------------------------");
     }
@@ -234,7 +234,7 @@ public class DefaultExecutionEngineTest {
 	assertTrue(mEmpty.toString().equals(mSource.toString()));
 
 	Mapping totalEmpty = ee.executeExclusiveOr(emptyMapping,emptyMapping);
-	System.out.println("executeExclusiveOr with totalEmpty: " + totalEmpty.getNumberofMappings());
+	System.out.println("executeExclusiveOr with totalEmpty with empty: " + totalEmpty.getNumberofMappings());
 	assertTrue(totalEmpty.toString().equals(""));
 	System.out.println("---------------------------------");
     }

@@ -14,7 +14,7 @@ public class Parser implements IParser {
 	private static final String MAX = "MAX";
 	private static final String MIN = "MIN";
 
-	protected double threshold;
+	private double threshold;
 	private double threshold1;
     private double threshold2;
     protected double coef1;
@@ -28,7 +28,7 @@ public class Parser implements IParser {
     public Parser(String input, double theta) {
         expression = input.replaceAll(" ", "");
         //expression = expression.toLowerCase();
-        threshold = theta;
+        setThreshold(theta);
         getTerms();
     }
 
@@ -135,16 +135,16 @@ public class Parser implements IParser {
             //now compute thresholds based on operations
             //first numeric operations
             if (operator.equalsIgnoreCase(MIN) || operator.equalsIgnoreCase(MAX)) {
-                setThreshold1(threshold);
-                setThreshold2(threshold);
+                setThreshold1(getThreshold());
+                setThreshold2(getThreshold());
             } else if (operator.equalsIgnoreCase(ADD)) {
                 operator = ADD;
                 System.out.println("Coef1 = " + coef1 + ", Coef2 = " + coef2);
-                setThreshold1((threshold - coef2) / coef1);
-                setThreshold2((threshold - coef1) / coef2);
+                setThreshold1((getThreshold() - coef2) / coef1);
+                setThreshold2((getThreshold() - coef1) / coef2);
             } else if (operator.equalsIgnoreCase(MULT)) {
                 operator = MULT;
-                setThreshold1(threshold / (coef2 * coef1));
+                setThreshold1(getThreshold() / (coef2 * coef1));
                 setThreshold2(getThreshold1());
             } //now set constraints. separator for sets and thresholds is |
             //thus one can write
@@ -208,6 +208,16 @@ public class Parser implements IParser {
 
 	public void setThreshold1(double threshold1) {
 		this.threshold1 = threshold1;
+	}
+
+
+	public double getThreshold() {
+	    return threshold;
+	}
+
+
+	public void setThreshold(double threshold) {
+	    this.threshold = threshold;
 	}
 
 }
