@@ -252,7 +252,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 	Mapping m = new MemoryMapping();
 	if (plan.isEmpty()) {
 	} // atomic nested plan just contain simple list of instructions
-	else if (plan.isFlat()) {
+	else if (plan.isAtomic()) {
 	    m = run(plan);
 	} // nested plans contain subplans, an operator for merging the results
 	  // of the subplans and a filter for filtering the results of the
