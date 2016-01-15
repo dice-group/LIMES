@@ -7,11 +7,11 @@ import org.apache.log4j.Logger;
  * @version DEC 2, 2015
  */
 public class Parser implements IParser {
-	private static final Logger logger = Logger.getLogger(Parser.class.getName());
+	public static final Logger logger = Logger.getLogger(Parser.class.getName());
 	
 	public static final String MULT = "MULT";
 	public static final String ADD = "ADD";
-	public  static final String MAX = "MAX";
+	public static final String MAX = "MAX";
 	public static final String MIN = "MIN";
 
 	private double threshold;

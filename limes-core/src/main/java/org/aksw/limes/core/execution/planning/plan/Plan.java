@@ -11,10 +11,10 @@ public class Plan implements IPlan {
     protected double runtimeCost;
     protected double mappingSize;
     protected double selectivity;
-    private List<Instruction> instructionList;
-    private List<NestedPlan> subPlans;
-    private Command operator;
-    private Instruction filteringInstruction;
+    protected List<Instruction> instructionList;
+    protected List<NestedPlan> subPlans;
+    protected Command operator;
+    protected Instruction filteringInstruction;
 
     public Plan() {
 	setInstructionList(new ArrayList<Instruction>());
@@ -60,7 +60,21 @@ public class Plan implements IPlan {
     public boolean isEmpty() {
 	return getInstructionList().isEmpty();
     }
-
+    /**
+     * Checks whether the current NestedPlan is atomic
+     * 
+     * @return true, if current NestedPlan is atomic. false, if otherwise
+     */
+    public boolean isAtomic() {
+	if (getSubPlans() == null) {
+	    return true;
+	} else {
+	    if (getSubPlans().isEmpty()) {
+		return true;
+	    }
+	}
+	return false;
+    }
     /**
      * Returns the size of the instructionList of the current NestedPlan
      * 
@@ -70,10 +84,8 @@ public class Plan implements IPlan {
 	return getInstructionList().size();
     }
 
-    public boolean isFlat() {
-	return true;
-    }
-
+    
+    
     public double getRuntimeCost() {
 	return runtimeCost;
     }

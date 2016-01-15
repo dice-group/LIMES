@@ -139,5 +139,63 @@ public class PlanTest {
 	System.out.println("------------------------");
 
     }
+    @Test
+    public void removeNonExistingInstruction() {
+	System.out.println("removeNonExistingInstruction");
 
+	Plan plan = new Plan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan.addInstruction(run1);
+	System.out.println("Size before: " + plan.size());
+
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan.removeInstruction(run2);
+	System.out.println("Size after: " + plan.size());
+	assertTrue(plan.size() != 0);
+
+	plan.removeInstruction(-1);
+	System.out.println("------------------------");
+
+    }
+    @Test
+    public void removeInstructionWithIndex() {
+	System.out.println("removeInstructionWithIndex");
+
+	Plan plan = new Plan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan.addInstruction(run1);
+	System.out.println("Size before: " + plan.size());
+
+	
+	plan.removeInstruction(0);
+	System.out.println("Size after: " + plan.size());
+	assertTrue(plan.size() == 0);
+
+	plan.addInstruction(run1);
+	System.out.println("Size before: " + plan.size());
+	
+	plan.removeInstruction(20);
+	System.out.println("Size after: " + plan.size());
+	assertTrue(plan.size() != 0);
+	
+	plan.removeInstruction(-1);
+	System.out.println("------------------------");
+
+    }
+    @Test
+    public void isEmpty() {
+	System.out.println("isEmpty");
+
+	Plan plan = new Plan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan.addInstruction(run1);
+	System.out.println("Size before: " + plan.size());
+	assertTrue(plan.isEmpty() == false);
+
+	plan.removeInstruction(null);
+	assertTrue(plan.isEmpty() == false);
+
+	System.out.println("------------------------");
+
+    }
 }

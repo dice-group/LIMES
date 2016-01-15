@@ -16,6 +16,7 @@ import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
 
+
 /**
  * Implements execution plan that are given to an execution engine.
  * 
@@ -24,10 +25,9 @@ import com.mxgraph.view.mxStylesheet;
  */
 public class NestedPlan extends Plan {
 
-    
     public NestedPlan() {
 	super();
-	
+
     }
 
     @Override
@@ -38,7 +38,7 @@ public class NestedPlan extends Plan {
     @Override
     public List<Instruction> getInstructionList() {
 	List<Instruction> instructions = super.getInstructionList();
-	if (!isFlat()) {
+	if (!isAtomic()) {
 	    for (NestedPlan np : getSubPlans()) {
 		instructions.addAll(np.getInstructionList());
 	    }
@@ -67,7 +67,7 @@ public class NestedPlan extends Plan {
     public List<String> getAllMeasures() {
 	List<String> result = new ArrayList<String>();
 
-	if (isFlat()) {
+	if (isAtomic()) {
 	    if (getFilteringInstruction() != null) {
 		result.addAll(MeasureProcessor.getMeasures(getFilteringInstruction().getMeasureExpression()));
 	    }
@@ -88,22 +88,8 @@ public class NestedPlan extends Plan {
 	}
 	return result;
     }
-
-    /**
-     * Checks whether the current NestedPlan is atomic
-     * 
-     * @return true, if current NestedPlan is atomic. false, if otherwise
-     */
-    public boolean isFlat() {
-	if (getSubPlans() == null) {
-	    return true;
-	} else {
-	    if (getSubPlans().isEmpty()) {
-		return true;
-	    }
-	}
-	return false;
-    }
+    
+   
 
     /**
      * String representation of NestedPlan
@@ -115,7 +101,7 @@ public class NestedPlan extends Plan {
 	if (isEmpty()) {
 	    return "Empty plan";
 	}
-	if (isFlat()) {
+	if (isAtomic()) {
 
 	    if (getInstructionList() != null) {
 		return "\n\nBEGIN\n" + pre + "\n-----\nNULL\n" + getInstructionList() + "\nEND\n-----";
@@ -123,8 +109,8 @@ public class NestedPlan extends Plan {
 		return "\nBEGIN\n" + pre + "-----\nNULL\n" + getFilteringInstruction() + "\nEND\n-----";
 	    }
 	} else {
-	    return "\nBEGIN\n" + pre + "-----\n" + getFilteringInstruction() + "\nSubplans\n" + getOperator() + "\n" + getSubPlans()
-		    + "\nEND\n-----";
+	    return "\nBEGIN\n" + pre + "-----\n" + getFilteringInstruction() + "\nSubplans\n" + getOperator() + "\n"
+		    + getSubPlans() + "\nEND\n-----";
 	}
     }
 
@@ -140,74 +126,6 @@ public class NestedPlan extends Plan {
 	    result = result + "\n" + parts[1];
 	}
 	result = result + "\n" + parts[2];
-	return result;
-    }
-
-    /**
-     * Returns the measure that is equivalent to this plan. Mostly for planning
-     * purposes
-     *
-     * @return Measure as string
-     */
-    public String getEquivalentMeasure() {
-	String result;
-	if (isFlat()) {
-	    result = getInstructionList().get(0).getMeasureExpression();
-	} else {
-	    // filtering node with one
-	    if (getSubPlans().size() == 1) {
-		if (getFilteringInstruction() != null) {
-		    if (getFilteringInstruction().getMeasureExpression() == null) {
-			return getSubPlans().get(0).getEquivalentMeasure();
-		    } else {
-			return "AND(" + getFilteringInstruction().getMeasureExpression() + "|"
-				+ getFilteringInstruction().getThreshold() + "," + getSubPlans().get(0).getEquivalentMeasure()
-				+ "|" + getSubPlans().get(0).getInstructionList().get(0).getThreshold() + ")";
-		    }
-		}
-	    }
-
-	    if (getOperator() == Command.INTERSECTION) {
-		result = "AND(";
-	    } else if (getOperator() == Command.UNION) {
-		result = "OR(";
-	    } else if (getOperator() == Command.XOR) {
-		result = "XOR(";
-	    } else if (getOperator() == Command.DIFF) {
-		result = "MINUS(";
-	    } else {
-		result = "";
-	    }
-
-	    for (NestedPlan p : getSubPlans()) {
-		result = result + p.getEquivalentMeasure() + "|";
-		if (p.isFlat()) {
-		    result = result + p.getInstructionList().get(0).getThreshold() + ",";
-		} else {
-		    if (p.getFilteringInstruction() != null) {
-			result = result + p.getFilteringInstruction().getThreshold() + ",";
-		    }
-		}
-	    }
-	    result = result.substring(0, result.length() - 1);
-	    result = result + ")";
-
-	    if (!(getInstructionList() == null)) {
-		if (!getInstructionList().isEmpty()) {
-		    for (Instruction i : getInstructionList()) {
-			result = "AND(" + i.getMeasureExpression() + "|" + i.getThreshold() + "," + result + ")";
-		    }
-		}
-	    }
-	}
-	if (getFilteringInstruction() != null) {
-	    if (getFilteringInstruction().getMeasureExpression() != null) {
-		result = "AND(" + getFilteringInstruction().getMeasureExpression() + "|"
-			+ getFilteringInstruction().getThreshold() + "," + result + "|" + getFilteringInstruction().getThreshold()
-			+ ")";
-	    }
-	}
-
 	return result;
     }
 
@@ -282,6 +200,51 @@ public class NestedPlan extends Plan {
 	return result;
     }
 
+    @Override
+    public boolean equals(Object other) {
+	NestedPlan o = (NestedPlan) other;
+	if (o == null)
+	    return false;
+
+	// only RUN instructions in instructionList
+	if (this.isAtomic() && o.isAtomic()) {
+	    return (this.instructionList.equals(o.instructionList));
+
+	} else if (!this.isAtomic() && !o.isAtomic()) { // no instructionList
+	    if (this.operator == null && o.operator != null)
+		return false;
+	    if (this.operator != null && o.operator == null)
+		return false;
+	    // AND/MINUS operator (optimization): RUN one child, (reverse)FILTER
+	    // with other the child
+	    if (this.operator == null && o.operator == null) {
+		if (this.filteringInstruction.equals(o.filteringInstruction)) {
+		    return (this.subPlans.get(0).equals(o.subPlans.get(0)));
+		} // different filteringInstructions
+		return false;
+	    }
+	    if (this.operator.equals(o.operator)) {
+		// all complex, non-optimized plans MUST have a filtering
+		// instruction
+		if (this.filteringInstruction == null && o.filteringInstruction == null)
+		    return false;
+		if (this.filteringInstruction != null && o.filteringInstruction == null)
+		    return false;
+		if (this.filteringInstruction == null && o.filteringInstruction != null)
+		    return false;
+		if (this.filteringInstruction.equals(o.filteringInstruction)) {
+		    return (this.subPlans.get(0).equals(o.subPlans.get(0))
+			    && this.subPlans.get(1).equals(o.subPlans.get(1)));
+		} // different filtering instructions
+		return false;
+	    } // different operators
+	    return false;
+	}
+	// one plan is atomic, the other is not
+	return false;
+
+    }
+
     /**
      * Graphic representation of the current NestedPlan
      * 
@@ -289,7 +252,7 @@ public class NestedPlan extends Plan {
     public void draw(mxGraph graph, Object root) {
 	int charsize = 8;
 	Object parent = graph.getDefaultParent();
-	if (isFlat()) {
+	if (isAtomic()) {
 	    Object v;
 	    if (getInstructionList() != null && !getInstructionList().isEmpty()) {
 		String inst = getInstructionString(getInstructionList());
