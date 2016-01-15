@@ -94,7 +94,7 @@ public class MappingOperations {
 		// then go through the second terms and checks whether they can
 		// be found in map2 as well
 		for (String value : map1.getMap().get(key).keySet()) {
-		    // if yes, take the highest similarity
+		    // if no, save the link
 		    if (!map2.getMap().get(key).containsKey(value)) {
 			map.add(key, value, map1.getMap().get(key).get(value));
 		    }
@@ -167,9 +167,6 @@ public class MappingOperations {
 		map.add(key, value, map2.getMap().get(key).get(value));
 	    }
 	}
-	// logger.info("\n******\nMap1\n"+map1);
-	// logger.info("\n******\nMap2\n"+map2);
-	// logger.info("\n******\nMap\n"+map);
 	return map;
     }
 

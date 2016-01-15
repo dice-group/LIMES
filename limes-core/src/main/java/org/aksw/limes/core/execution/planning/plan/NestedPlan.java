@@ -17,6 +17,7 @@ import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
 
 
+
 /**
  * Implements execution plan that are given to an execution engine.
  * 
@@ -32,12 +33,12 @@ public class NestedPlan extends Plan {
 
     @Override
     public boolean isEmpty() {
-	return (getInstructionList() == null && getSubPlans() == null && getFilteringInstruction() == null);
+	return (getInstructionList().isEmpty() == true && getSubPlans() == null && getFilteringInstruction() == null);
     }
 
     @Override
     public List<Instruction> getInstructionList() {
-	List<Instruction> instructions = super.getInstructionList();
+	List<Instruction> instructions = instructionList; //super.getInstructionList();
 	if (!isAtomic()) {
 	    for (NestedPlan np : getSubPlans()) {
 		instructions.addAll(np.getInstructionList());
@@ -167,7 +168,57 @@ public class NestedPlan extends Plan {
 	    return "0";
 	}
     }
+    public String finalPlan() {
+	if (isEmpty()) {
+	    return "Empty plan";
+	}
+	if (isAtomic()) {
+	    return this.instructionList.get(0).getMeasureExpression() + "-"
+		    + this.instructionList.get(0).getThreshold();
+	} else {
+	    if (operator == null) {
+		String child = subPlans.get(0).finalPlan();
+		String filter = "";
+		if (filteringInstruction.getCommand().equals(Instruction.Command.FILTER))
+		    filter = "FILTER:" + filteringInstruction.getMeasureExpression() + "-"
+			    + filteringInstruction.getThreshold();
+		else
+		    filter = "REVERSEFILTER:" + filteringInstruction.getMeasureExpression() + "-"
+			    + filteringInstruction.getThreshold();
+		String mainFilter = "FILTER:" + filteringInstruction.getMainThreshold();
 
+		if (subPlans.get(0).isAtomic()) {
+		    return "RUN:" + child + "\n" + filter + "\n" + mainFilter + "\n";
+		} else
+		    return child + "\n" + filter + "\n" + mainFilter + "\n";
+
+	    } else {
+		String childLeft = subPlans.get(0).finalPlan();
+		String childRight = subPlans.get(1).finalPlan();
+		String op = "";
+		if (this.operator.equals(Command.DIFF)) {
+		    op = "DIFFERENCE";
+		} else if (this.operator.equals(Command.INTERSECTION)) {
+		    op = "INTERSECTION";
+		} else if (this.operator.equals(Command.UNION)) {
+		    op = "UNION";
+		} else if (this.operator.equals(Command.XOR)) {
+		    op = "XOR";
+		}
+		String filter = "FILTER:" + filteringInstruction.getThreshold();
+		if (subPlans.get(0).isAtomic() && subPlans.get(1).isAtomic()) {
+		    return "RUN:" + childLeft + "\n" + "RUN:" + childRight + "\n" + op + "\n" + filter + "\n";
+		}else if (subPlans.get(0).isAtomic() && !subPlans.get(1).isAtomic()) {
+		    return "RUN:" + childLeft + "\n" +  childRight + "\n" + op + "\n" + filter + "\n";
+		}else if (!subPlans.get(0).isAtomic() && subPlans.get(1).isAtomic()) {
+		    return  childLeft + "\n" +  "RUN:" + childRight + "\n" + op + "\n" + filter + "\n";
+		}else if (!subPlans.get(0).isAtomic() && !subPlans.get(1).isAtomic()) {
+		    return  childLeft + "\n" + childRight + "\n" + op + "\n" + filter + "\n";
+		}
+	    }
+	}
+	return null;
+    }
     /**
      * Returns the size of a NestedPlan
      * 

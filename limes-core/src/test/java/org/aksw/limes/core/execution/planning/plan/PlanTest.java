@@ -2,6 +2,10 @@ package org.aksw.limes.core.execution.planning.plan;
 
 import static org.junit.Assert.*;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.io.cache.Cache;
@@ -194,6 +198,60 @@ public class PlanTest {
 
 	plan.removeInstruction(null);
 	assertTrue(plan.isEmpty() == false);
+
+	System.out.println("------------------------");
+
+    }
+    @Test
+    public void getInstructionList() {
+	System.out.println("getInstructionList");
+
+	Plan plan = new Plan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan.addInstruction(run1);
+	plan.addInstruction(run2);
+	List<Instruction> list = plan.getInstructionList();
+	System.out.println("Size before: " + plan.size());
+
+	System.out.println("Size of Instruction list " + list.size());
+
+	assertTrue(list.size() == plan.size());
+
+	assertTrue(list.contains(run1) == true);
+	
+	
+	Instruction run3 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	assertTrue(list.contains(run3) == true);
+	
+	Instruction run4 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	assertTrue(list.contains(run4) == false);
+	
+	list.add(run4);
+	System.out.println(list);
+	System.out.println(plan.getInstructionList());
+
+	assertTrue(list.size() == plan.getInstructionList().size());
+	
+	
+	System.out.println("------------------------");
+
+    }
+    @Test
+    public void isAtomic() {
+	System.out.println("isAtomic");
+
+	Plan plan = new Plan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan.addInstruction(run1);
+	
+	assertTrue(plan.isAtomic() == true);
+
+	plan.setSubPlans(new ArrayList<NestedPlan>());
+	assertTrue(plan.isAtomic() == true);
+	
+	plan.getSubPlans().add(new NestedPlan());
+	assertTrue(plan.isAtomic() == false);
 
 	System.out.println("------------------------");
 
