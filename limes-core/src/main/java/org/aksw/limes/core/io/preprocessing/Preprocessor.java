@@ -16,20 +16,20 @@ import org.apache.log4j.Logger;
 public class Preprocessor {
 	static Logger logger = Logger.getLogger(Preprocessor.class.getName());
 
-	private static final String DATE 			= "date";
-	private static final String REPLACE 		= "replace";
-	private static final String REGEXREPLACE	= "regexreplace";
-	private static final String FAHRENHEIT 		= "fahrenheit";
-	private static final String URIASSTRING		= "uriasstring";
-	private static final String REMOVEBRACES	= "removebraces";
-	private static final String CELSIUS 		= "celsius";
-	private static final String REGULAR_ALPHABET= "regularAlphabet";
-	private static final String UPPERCASE 		= "uppercase";
-	private static final String LOWERCASE 		= "lowercase";
-	private static final String CLEANIRI 		= "cleaniri";
-	private static final String AT 				= "@";
-	private static final String NOLANG 			= "nolang";
-	private static final String NUMBER 			= "number";
+	public static final String DATE 			= "date";
+	public static final String REPLACE 			= "replace";
+	public static final String REG_EX_REPLACE	= "regexreplace";
+	public static final String FAHRENHEIT 		= "fahrenheit";
+	public static final String URI_AS_STRING	= "uriasstring";
+	public static final String REMOVE_BRACES	= "removebraces";
+	public static final String CELSIUS 			= "celsius";
+	public static final String REGULAR_ALPHABET	= "regularAlphabet";
+	public static final String UPPER_CASE 		= "uppercase";
+	public static final String LOWER_CASE 		= "lowercase";
+	public static final String CLEAN_IRI 		= "cleaniri";
+	public static final String AT 				= "@";
+	public static final String NO_LANG 			= "nolang";
+	public static final String NUMBER 			= "number";
 
 
 	public static String process(String entry, String functionChain) {
@@ -57,10 +57,10 @@ public class Preprocessor {
 		}
 		//remove unneeded xsd information        
 		//function = function.toLowerCase();
-		if (function.startsWith(LOWERCASE)) {
+		if (function.startsWith(LOWER_CASE)) {
 			return entry.toLowerCase();
 		}
-		if (function.startsWith(UPPERCASE)) {
+		if (function.startsWith(UPPER_CASE)) {
 			return entry.toUpperCase();
 		}
 		if (function.startsWith(REPLACE)) {
@@ -71,7 +71,7 @@ public class Preprocessor {
 			//System.out.println("<"+replaced + ">, <" + replacee + ">");
 			return entry.replaceAll(Pattern.quote(replaced), replacee);
 		}
-		if (function.startsWith(REGEXREPLACE)) { //e.g replace((*),)
+		if (function.startsWith(REG_EX_REPLACE)) { //e.g replace((*),)
 			try {
 				String replaced = function.substring(13, function.lastIndexOf(","));
 				String replacee = function.substring(function.lastIndexOf(",") + 1, function.indexOf(")", function.lastIndexOf(",")));
@@ -83,14 +83,14 @@ public class Preprocessor {
 			}
 			return entry;
 		}
-		if (function.startsWith(NOLANG)) {
+		if (function.startsWith(NO_LANG)) {
 			if (entry.contains(AT)) {
 				return entry.substring(0, entry.lastIndexOf(AT));
 			} else {
 				return entry;
 			}
 		}
-		if (function.startsWith(CLEANIRI)) {
+		if (function.startsWith(CLEAN_IRI)) {
 			if (entry.contains("/")) {
 				return entry.substring(entry.lastIndexOf("/") + 1);
 			} else {
@@ -126,7 +126,7 @@ public class Preprocessor {
 		if (function.startsWith(DATE)) {
 			return entry.replaceAll("[^0-9,.-]", "");
 		}
-		if (function.startsWith(REMOVEBRACES)) {
+		if (function.startsWith(REMOVE_BRACES)) {
 			int openBrace = entry.indexOf("(");
 			int closingBrace = entry.indexOf(")", Math.max(openBrace, 0));
 			if (closingBrace > -1 && openBrace > -1) {
@@ -139,7 +139,7 @@ public class Preprocessor {
 		if (function.startsWith(REGULAR_ALPHABET)) {
 			return atomicProcess(entry, "regexreplace([^A-Za-z0-9 ],)");
 		} 
-		if (function.startsWith(URIASSTRING)) {
+		if (function.startsWith(URI_AS_STRING)) {
 			return URIasString(entry);
 		}
 		//function not known...

@@ -9,10 +9,10 @@ import org.apache.log4j.Logger;
 public class Parser implements IParser {
 	private static final Logger logger = Logger.getLogger(Parser.class.getName());
 	
-	private static final String MULT = "MULT";
-	private static final String ADD = "ADD";
-	private static final String MAX = "MAX";
-	private static final String MIN = "MIN";
+	public static final String MULT = "MULT";
+	public static final String ADD = "ADD";
+	public  static final String MAX = "MAX";
+	public static final String MIN = "MIN";
 
 	private double threshold;
 	private double threshold1;
@@ -178,24 +178,12 @@ public class Parser implements IParser {
         }
     }
 
-    public static void testParsing(String s, double threshold) {
-        Parser p = new Parser(s, threshold);
-        if (p.isAtomic()) {
-            logger.debug("-->" + s + " with threshold " + threshold + " will be carried out.");
-        } else {
-            testParsing(p.term1, p.getThreshold1());
-            testParsing(p.term2, p.getThreshold2());
-            logger.debug("--> <" + p.operator + "> will be carried out on " + p.term1 + " and " + p.term2 + " with "
-                    + "threshold " + threshold);
-        }
-    }
-
 
 	public double getThreshold2() {
 		return threshold2;
 	}
 
-
+	
 	public void setThreshold2(double threshold2) {
 		this.threshold2 = threshold2;
 	}
