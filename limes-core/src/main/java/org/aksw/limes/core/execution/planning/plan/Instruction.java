@@ -2,7 +2,6 @@ package org.aksw.limes.core.execution.planning.plan;
 
 import org.apache.log4j.Logger;
 
-
 /**
  * Implements Instruction class. Instruction is an essential component of the
  * execution plan. An execution is expressed as a set of instruction objects.
@@ -174,6 +173,23 @@ public class Instruction {
 	    return (this.toString().equals(other.toString()));
 
 	return false;
+    }
+
+    @Override
+    public Instruction clone() {
+
+	Command command = this.command;
+	int sourceMapping = this.sourceMapping;
+	int targetMapping = this.targetMapping;
+	int resultIndex = this.resultIndex;
+
+	Instruction newInstruction = new Instruction(command, "", "", sourceMapping,
+		targetMapping, resultIndex);
+	newInstruction.setMainThreshold(mainThreshold);
+	newInstruction.setMeasureExpression(measureExpression);
+	newInstruction.setThreshold(threshold);
+
+	return newInstruction;
     }
 
     /**

@@ -16,8 +16,6 @@ import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
 
-
-
 /**
  * Implements execution plan that are given to an execution engine.
  * 
@@ -25,26 +23,134 @@ import com.mxgraph.view.mxStylesheet;
  * @author kleanthi
  */
 public class NestedPlan extends Plan {
+    protected List<NestedPlan> subPlans;
+    protected Command operator;
+    protected Instruction filteringInstruction;
 
     public NestedPlan() {
 	super();
+	subPlans = null;
+	filteringInstruction = null;
 
+    }
+
+    public List<NestedPlan> getSubPlans() {
+	return subPlans;
+    }
+
+    public void setSubPlans(List<NestedPlan> subPlans) {
+	this.subPlans = subPlans;
+    }
+
+    public Command getOperator() {
+	return operator;
+    }
+
+    public void setOperator(Command operator) {
+	this.operator = operator;
+    }
+
+    public Instruction getFilteringInstruction() {
+	return filteringInstruction;
+    }
+
+    public void setFilteringInstruction(Instruction filteringInstruction) {
+	this.filteringInstruction = filteringInstruction;
     }
 
     @Override
     public boolean isEmpty() {
-	return (getInstructionList().isEmpty() == true && getSubPlans() == null && getFilteringInstruction() == null);
+	// instructionList is initiliazed as new list
+	// subplans are null until a function initiliazes it
+	// filteringInstruction is null until a function initiliazes it
+	return (instructionList.isEmpty() == true && subPlans == null && filteringInstruction == null);
+    }
+
+    /**
+     * Checks whether the current NestedPlan is atomic
+     * 
+     * @return true, if current NestedPlan is atomic. false, if otherwise
+     */
+    public boolean isAtomic() {
+	if (subPlans == null) {
+	    return true;
+	} else {
+	    if (subPlans.isEmpty()) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     @Override
     public List<Instruction> getInstructionList() {
-	List<Instruction> instructions = instructionList; //super.getInstructionList();
+	List<Instruction> instructions = new ArrayList<Instruction>();
+	for (Instruction inst : instructionList) {
+	    instructions.add(inst.clone());
+	}
 	if (!isAtomic()) {
-	    for (NestedPlan np : getSubPlans()) {
-		instructions.addAll(np.getInstructionList());
+	    for (NestedPlan np : subPlans) {
+		List<Instruction> instructions2 = np.getInstructionList();
+		for (Instruction inst2 : instructions2) {
+		    instructions.add(inst2.clone());
+		}
 	    }
 	}
 	return instructions;
+    }
+
+    @Override
+    public int size() {
+	return (this.getInstructionList().size());
+    }
+
+    /**
+     * Generates a clone of the current NestedPlan
+     * 
+     * @return Clone of current NestedPlan
+     */
+    public NestedPlan clone() {
+	NestedPlan clone = new NestedPlan();
+
+	// clone primitives fields
+	clone.setMappingSize(this.mappingSize);
+	clone.setRuntimeCost(this.runtimeCost);
+	clone.setSelectivity(this.selectivity);
+	clone.setOperator(this.operator);
+
+	// clone instructionList
+	if (this.instructionList != null) {
+	    if (this.instructionList.isEmpty() == false) {
+		List<Instruction> cloneInstructionList = new ArrayList<Instruction>();
+		for (Instruction i : this.instructionList) {
+		    cloneInstructionList.add(i.clone());
+		}
+		clone.setInstructionList(cloneInstructionList);
+	    } else {
+		clone.setInstructionList(new ArrayList<Instruction>());
+	    }
+	} else
+	    clone.setInstructionList(null);
+
+	// clone filteringInstruction
+	if (this.filteringInstruction != null) {
+	    Instruction cloneFilteringInstruction = this.filteringInstruction.clone();
+	    clone.setFilteringInstruction(cloneFilteringInstruction);
+	} else {
+	    clone.setFilteringInstruction(null);
+	}
+
+	// clone subplans
+	if (this.subPlans != null) {
+	    if (this.subPlans.isEmpty() == false) {
+		for (NestedPlan c : this.subPlans) {
+		    NestedPlan subPlanCopy = c.clone();
+		    clone.addSubplan(subPlanCopy);
+		}
+	    } else
+		clone.setSubPlans(new ArrayList<NestedPlan>());
+	}
+	return clone;
     }
 
     /**
@@ -55,9 +161,11 @@ public class NestedPlan extends Plan {
      *            to be added
      */
     public void addSubplan(NestedPlan subplan) {
-	if (getSubPlans() == null)
-	    setSubPlans(new ArrayList<NestedPlan>());
-	getSubPlans().add(subplan);
+	if (subplan != null) {
+	    if (subPlans == null)
+		setSubPlans(new ArrayList<NestedPlan>());
+	    subPlans.add(subplan);
+	}
     }
 
     /**
@@ -69,19 +177,19 @@ public class NestedPlan extends Plan {
 	List<String> result = new ArrayList<String>();
 
 	if (isAtomic()) {
-	    if (getFilteringInstruction() != null) {
-		result.addAll(MeasureProcessor.getMeasures(getFilteringInstruction().getMeasureExpression()));
+	    if (filteringInstruction != null) {
+		result.addAll(MeasureProcessor.getMeasures(filteringInstruction.getMeasureExpression()));
 	    }
 	}
-	if (!(getSubPlans() == null)) {
-	    if (!getSubPlans().isEmpty()) {
-		for (NestedPlan p : getSubPlans()) {
+	if (!(subPlans == null)) {
+	    if (!subPlans.isEmpty()) {
+		for (NestedPlan p : subPlans) {
 		    result.addAll(p.getAllMeasures());
 		}
 	    }
 	}
-	if (getInstructionList() != null) {
-	    for (Instruction i : getInstructionList()) {
+	if (instructionList != null) {
+	    for (Instruction i : instructionList) {
 		if (i.getMeasureExpression() != null) {
 		    result.addAll(MeasureProcessor.getMeasures(i.getMeasureExpression()));
 		}
@@ -89,8 +197,6 @@ public class NestedPlan extends Plan {
 	}
 	return result;
     }
-    
-   
 
     /**
      * String representation of NestedPlan
@@ -98,20 +204,27 @@ public class NestedPlan extends Plan {
      * @return NestedPlan as string
      */
     public String toString() {
-	String pre = ("Selectivity = " + getSelectivity());
+	String pre = ("Selectivity = " + selectivity);
 	if (isEmpty()) {
 	    return "Empty plan";
 	}
 	if (isAtomic()) {
-
-	    if (getInstructionList() != null) {
-		return "\n\nBEGIN\n" + pre + "\n-----\nNULL\n" + getInstructionList() + "\nEND\n-----";
+	    if (instructionList != null) {
+		return "\n\nBEGIN\n" + pre + "\n-----\n" + instructionList + "\nEND\n-----";
 	    } else {
-		return "\nBEGIN\n" + pre + "-----\nNULL\n" + getFilteringInstruction() + "\nEND\n-----";
+		return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\nEND\n-----";
 	    }
 	} else {
-	    return "\nBEGIN\n" + pre + "-----\n" + getFilteringInstruction() + "\nSubplans\n" + getOperator() + "\n"
-		    + getSubPlans() + "\nEND\n-----";
+	    if (instructionList != null) {
+		return "\nBEGIN\n" + pre + "\n-----\n" + instructionList + "-----\n" + filteringInstruction + "\n" + operator+ "\nSubplans\n"  + "\n" + subPlans
+			    + "\nEND\n-----";
+	    } else {
+		return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n" + operator +"\nSubplans\n"  + "\n" + subPlans
+			    + "\nEND\n-----";
+	    }
+	    
+	    
+	    
 	}
     }
 
@@ -131,43 +244,19 @@ public class NestedPlan extends Plan {
     }
 
     /**
-     * Generates a clone of the current NestedPlan
-     * 
-     * @return Clone of current NestedPlan
-     */
-    public NestedPlan clone() {
-	NestedPlan clone = new NestedPlan();
-	clone.setFilteringInstruction(this.getFilteringInstruction());
-	clone.setInstructionList(this.getInstructionList());
-	clone.setMappingSize(this.getMappingSize());
-	clone.setOperator(this.getOperator());
-	clone.setRuntimeCost(this.getRuntimeCost());
-	clone.setSelectivity(this.getSelectivity());
-	List<NestedPlan> l = new ArrayList<NestedPlan>();
-	NestedPlan subPlanCopy;
-	if (this.getSubPlans() != null)
-	    for (NestedPlan c : this.getSubPlans()) {
-		subPlanCopy = c.clone();
-		clone.addSubplan(subPlanCopy);
-		l.add(subPlanCopy);
-	    }
-
-	return clone;
-    }
-
-    /**
      * Returns the threshold to be used when reconstructing the metric that led
      * to the current NestedPlan
      *
      * @return Threshold as string
      */
     public String getThreshold() {
-	if (getFilteringInstruction() != null) {
-	    return getFilteringInstruction().getThreshold();
+	if (filteringInstruction != null) {
+	    return filteringInstruction.getThreshold();
 	} else {
 	    return "0";
 	}
     }
+
     public String finalPlan() {
 	if (isEmpty()) {
 	    return "Empty plan";
@@ -208,17 +297,18 @@ public class NestedPlan extends Plan {
 		String filter = "FILTER:" + filteringInstruction.getThreshold();
 		if (subPlans.get(0).isAtomic() && subPlans.get(1).isAtomic()) {
 		    return "RUN:" + childLeft + "\n" + "RUN:" + childRight + "\n" + op + "\n" + filter + "\n";
-		}else if (subPlans.get(0).isAtomic() && !subPlans.get(1).isAtomic()) {
-		    return "RUN:" + childLeft + "\n" +  childRight + "\n" + op + "\n" + filter + "\n";
-		}else if (!subPlans.get(0).isAtomic() && subPlans.get(1).isAtomic()) {
-		    return  childLeft + "\n" +  "RUN:" + childRight + "\n" + op + "\n" + filter + "\n";
-		}else if (!subPlans.get(0).isAtomic() && !subPlans.get(1).isAtomic()) {
-		    return  childLeft + "\n" + childRight + "\n" + op + "\n" + filter + "\n";
+		} else if (subPlans.get(0).isAtomic() && !subPlans.get(1).isAtomic()) {
+		    return "RUN:" + childLeft + "\n" + childRight + "\n" + op + "\n" + filter + "\n";
+		} else if (!subPlans.get(0).isAtomic() && subPlans.get(1).isAtomic()) {
+		    return childLeft + "\n" + "RUN:" + childRight + "\n" + op + "\n" + filter + "\n";
+		} else if (!subPlans.get(0).isAtomic() && !subPlans.get(1).isAtomic()) {
+		    return childLeft + "\n" + childRight + "\n" + op + "\n" + filter + "\n";
 		}
 	    }
 	}
 	return null;
     }
+
     /**
      * Returns the size of a NestedPlan
      * 

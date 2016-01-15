@@ -238,22 +238,44 @@ public class PlanTest {
 
     }
     @Test
-    public void isAtomic() {
-	System.out.println("isAtomic");
+    public void Clone() {
+	System.out.println("Clone");
+	Plan plan1 = new Plan();
 
-	Plan plan = new Plan();
 	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
-	plan.addInstruction(run1);
-	
-	assertTrue(plan.isAtomic() == true);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan1.addInstruction(run1);
+	plan1.addInstruction(run2);
 
-	plan.setSubPlans(new ArrayList<NestedPlan>());
-	assertTrue(plan.isAtomic() == true);
-	
-	plan.getSubPlans().add(new NestedPlan());
-	assertTrue(plan.isAtomic() == false);
 
-	System.out.println("------------------------");
+	plan1.setMappingSize(10);
+	plan1.setRuntimeCost(1000d);
+	plan1.setSelectivity(0.1d);
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	Plan clonePlan = plan1.clone();
+	// check plan itself
+	System.out.println("Plan hashCode: "+plan1.hashCode());
+	System.out.println("PlanClone hashCode: "+clonePlan.hashCode());
+	assertTrue(plan1.hashCode() != clonePlan.hashCode());
+	System.out.println("\n");
+
+	// check instructionList
+	System.out.println("InstructionList hashCode: "+plan1.getInstructionList().hashCode());
+	System.out.println("InstructionListClone hashCode: "+clonePlan.getInstructionList().hashCode());
+	assertTrue(plan1.getInstructionList().hashCode() != clonePlan.getInstructionList().hashCode());
+	for (int i = 0; i < plan1.getInstructionList().size(); i++) {
+
+	    Instruction inst = plan1.getInstructionList().get(i);
+	    Instruction instClone = clonePlan.getInstructionList().get(i);
+
+	    System.out.println(inst);
+	    System.out.println("----Instruction hashCode: "+inst.hashCode());
+	    System.out.println(instClone);
+	    System.out.println("----InstructionClone hashCode: "+instClone.hashCode());
+	    assertTrue(inst.hashCode() != instClone.hashCode());
+	}
+	System.out.println("\n");
 
     }
 }

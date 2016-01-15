@@ -16,7 +16,6 @@ import org.junit.Test;
 
 public class NestedPlanTest {
 
-
     public Cache source = new MemoryCache();
     public Cache target = new MemoryCache();
 
@@ -77,12 +76,13 @@ public class NestedPlanTest {
 	System.out.println("addInstruction");
 
 	Plan plan = new NestedPlan();
+	plan.setInstructionList(new ArrayList<Instruction>());
 	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 	System.out.println("Size before: " + plan.size());
-
+	System.out.println(plan.getInstructionList());
 	plan.addInstruction(run1);
 	plan.addInstruction(null);
-
+	System.out.println(plan.getInstructionList());
 	assertTrue(plan.size() == 1);
 	System.out.println("Size after: " + plan.size());
 
@@ -94,7 +94,7 @@ public class NestedPlanTest {
     public void removeInstruction() {
 	System.out.println("removeInstruction");
 
-	Plan plan = new NestedPlan();
+	NestedPlan plan = new NestedPlan();
 	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 	plan.addInstruction(run1);
 	plan.addInstruction(null);
@@ -136,19 +136,19 @@ public class NestedPlanTest {
 	System.out.println("Plan size with Intersection: " + plan.size());
 	Mapping mIntersection = ee.execute(plan);
 	System.out.println("Size of Mapping with Intersection: " + mIntersection.size());
-	
+
 	assertTrue(!mUnion.toString().equals(mIntersection.toString()));
 	assertTrue(plan.getInstructionList().contains(union) == false);
 
-	
 	System.out.println("------------------------");
 
     }
+
     @Test
     public void removeNonExistingInstruction() {
 	System.out.println("removeNonExistingInstruction");
 
-	Plan plan = new NestedPlan();
+	NestedPlan plan = new NestedPlan();
 	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 	plan.addInstruction(run1);
 	System.out.println("Size before: " + plan.size());
@@ -162,31 +162,32 @@ public class NestedPlanTest {
 	System.out.println("------------------------");
 
     }
+
     @Test
     public void removeInstructionWithIndex() {
 	System.out.println("removeInstructionWithIndex");
 
-	Plan plan = new NestedPlan();
+	NestedPlan plan = new NestedPlan();
 	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 	plan.addInstruction(run1);
 	System.out.println("Size before: " + plan.size());
 
-	
 	plan.removeInstruction(0);
 	System.out.println("Size after: " + plan.size());
 	assertTrue(plan.size() == 0);
 
 	plan.addInstruction(run1);
 	System.out.println("Size before: " + plan.size());
-	
+
 	plan.removeInstruction(20);
 	System.out.println("Size after: " + plan.size());
 	assertTrue(plan.size() != 0);
-	
+
 	plan.removeInstruction(-1);
 	System.out.println("------------------------");
 
     }
+
     @Test
     public void isEmpty() {
 	System.out.println("isEmpty");
@@ -194,23 +195,26 @@ public class NestedPlanTest {
 	Plan plan = new NestedPlan();
 	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 	plan.addInstruction(run1);
+	System.out.println(run1);
+	System.out.println(plan.getInstructionList().isEmpty());
 	System.out.println("Size before: " + plan.size());
 	assertTrue(plan.isEmpty() == false);
 
 	plan.removeInstruction(null);
 	assertTrue(plan.isEmpty() == false);
-	
+
 	plan.removeInstruction(run1);
 	assertTrue(plan.isEmpty() == true);
 
 	System.out.println("------------------------");
 
     }
+
     @Test
     public void getInstructionList() {
 	System.out.println("getInstructionList");
 
-	Plan plan = new NestedPlan();
+	NestedPlan plan = new NestedPlan();
 	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
 	plan.addInstruction(run1);
@@ -220,60 +224,308 @@ public class NestedPlanTest {
 	System.out.println("Size of Instruction list " + list.size());
 
 	assertTrue(list.size() == plan.size());
-	assertTrue(list.contains(run1) == true);
-	
-	
-	Instruction run3 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
-	assertTrue(list.contains(run3) == true);
-	
-	Instruction run4 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
-	assertTrue(list.contains(run4) == false);
-	list.add(run4);
-	System.out.println(list);
-	System.out.println(plan.getInstructionList());
+
+	Instruction run3 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	list.add(run3);
+	assertTrue(list.size() != plan.getInstructionList().size());
+
+	plan.setInstructionList(list);
 	assertTrue(list.size() == plan.getInstructionList().size());
-	
-	Plan subPlan = new Plan();
-	Instruction subrun1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+
+	NestedPlan subPlan = new NestedPlan();
+	Instruction subrun1 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
 	subPlan.addInstruction(subrun1);
 	plan.setSubPlans(new ArrayList<NestedPlan>());
 	plan.getSubPlans().add((NestedPlan) subPlan);
-	
-	System.out.println("X = "+plan.getInstructionList().size());
-	System.out.println("Z = "+list.size());
-	System.out.println(plan.getInstructionList());
-	System.out.println(list);
 
 	
-	System.out.println("X = "+plan.getInstructionList().size());
-	System.out.println("Z = "+list.size());
-	//System.out.println(subPlan.getInstructionList().size());
-	System.out.println(list.size() - plan.getInstructionList().size() );
-	assertTrue(list.size() - plan.getInstructionList().size() == 0);
+	NestedPlan subsubPlan = new NestedPlan();
+	Instruction subsubrun1 = new Instruction(Command.RUN, "overlap(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan.addInstruction(subsubrun1);
+	subPlan.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan.getSubPlans().add((NestedPlan) subsubPlan);
 	
+	System.out.println("X = " + plan.getInstructionList().size());
+	System.out.println(plan.getInstructionList());
+
+	assertTrue(plan.getInstructionList().size() == 5);
 
 	System.out.println("------------------------");
 
     }
+
     @Test
     public void isAtomic() {
 	System.out.println("isAtomic");
 
-	Plan plan = new NestedPlan();
+	NestedPlan plan = new NestedPlan();
 	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 	plan.addInstruction(run1);
-	
+
 	assertTrue(plan.isAtomic() == true);
 
 	plan.setSubPlans(new ArrayList<NestedPlan>());
 	assertTrue(plan.isAtomic() == true);
-	
+
 	plan.getSubPlans().add(new NestedPlan());
 	assertTrue(plan.isAtomic() == false);
 
 	System.out.println("------------------------");
 
     }
+    @Test
+    public void size() {
+	System.out.println("size");
 
+	NestedPlan plan = new NestedPlan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run3 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+
+	plan.addInstruction(run1);
+	plan.addInstruction(run2);
+	
+	System.out.println("Size before: " + plan.size());
+	List<Instruction> list = plan.getInstructionList();
+	list.add(run3);
+	plan.setInstructionList(list);
+	System.out.println("Size after: " + plan.size());
+
+	NestedPlan subPlan = new NestedPlan();
+	Instruction subrun1 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan.addInstruction(subrun1);
+	plan.setSubPlans(new ArrayList<NestedPlan>());
+	plan.getSubPlans().add((NestedPlan) subPlan);
+
+	
+	NestedPlan subsubPlan = new NestedPlan();
+	Instruction subsubrun1 = new Instruction(Command.RUN, "overlap(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan.addInstruction(subsubrun1);
+	subPlan.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan.getSubPlans().add((NestedPlan) subsubPlan);
+	
+	assertTrue(plan.size() == 5);
+	assertTrue(plan.getInstructionList().size() == 5);
+
+	System.out.println("------------------------");
+
+    }
+    @Test
+    public void addSubPlan(){
+	System.out.println("addSubPlan");
+
+	NestedPlan plan = new NestedPlan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run3 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+
+	plan.addInstruction(run1);
+	plan.addInstruction(run2);
+	
+	List<Instruction> list = plan.getInstructionList();
+	list.add(run3);
+	plan.setInstructionList(list);
+
+	NestedPlan subPlan = new NestedPlan();
+	Instruction subrun1 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan.addInstruction(subrun1);
+	plan.addSubplan(subPlan);
+	plan.addSubplan(null);
+
+	
+	NestedPlan subsubPlan = new NestedPlan();
+	Instruction subsubrun1 = new Instruction(Command.RUN, "overlap(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan.addInstruction(subsubrun1);
+	subPlan.addSubplan(subsubPlan);
+	subPlan.addSubplan(null);
+	
+	assertTrue(plan.size() == 5);
+	assertTrue(plan.getInstructionList().size() == 5);
+
+	System.out.println("------------------------");
+
+    
+    }
+    @Test
+    public void getAllMeasures(){
+	System.out.println("getAllMeasures");
+
+	NestedPlan plan = new NestedPlan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run3 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+
+	plan.addInstruction(run1);
+	plan.addInstruction(run2);
+	
+	List<Instruction> list = plan.getInstructionList();
+	list.add(run3);
+	plan.setInstructionList(list);
+
+	NestedPlan subPlan = new NestedPlan();
+	Instruction subrun1 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan.addInstruction(subrun1);
+	plan.addSubplan(subPlan);
+	plan.addSubplan(null);
+
+	
+	NestedPlan subsubPlan = new NestedPlan();
+	Instruction subsubrun1 = new Instruction(Command.RUN, "overlap(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan.addInstruction(subsubrun1);
+	subPlan.addSubplan(subsubPlan);
+	subPlan.addSubplan(null);
+	
+	assertTrue(plan.size() == 5);
+	assertTrue(plan.getInstructionList().size() == 5);
+
+	List<String> allM = plan.getAllMeasures();
+	assertTrue(allM != null);
+	assertTrue(allM.isEmpty() == false);
+	System.out.println(allM);
+
+	
+	///////////////////////////////////////////////
+	NestedPlan plan2 = new NestedPlan();
+	List<String> allM2 = plan2.getAllMeasures();
+	assertTrue(allM2.isEmpty() == true);
+	System.out.println(allM2);
+	//////////////////////////////////////////////
+	
+	System.out.println("------------------------");
+
+	
+    
+    }
+    @Test
+    public void String(){
+	System.out.println("String");
+
+	NestedPlan plan = new NestedPlan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run3 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+
+	plan.addInstruction(run1);
+	plan.addInstruction(run2);
+	
+	List<Instruction> list = plan.getInstructionList();
+	list.add(run3);
+	plan.setInstructionList(list);
+
+	NestedPlan subPlan = new NestedPlan();
+	Instruction subrun1 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan.addInstruction(subrun1);
+	plan.addSubplan(subPlan);
+	plan.addSubplan(null);
+
+	
+	NestedPlan subsubPlan = new NestedPlan();
+	Instruction subsubrun1 = new Instruction(Command.RUN, "overlap(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan.addInstruction(subsubrun1);
+	subPlan.addSubplan(subsubPlan);
+	subPlan.addSubplan(null);
+	
+	assertTrue(plan.size() == 5);
+	assertTrue(plan.getInstructionList().size() == 5);
+
+	String allM = plan.toString();
+	assertTrue(allM != null);
+	assertTrue(allM.isEmpty() == false);
+	System.out.println(allM);
+
+
+	///////////////////////////////////////////////
+	/*NestedPlan plan2 = new NestedPlan();
+	String allM2 = plan2.toString();
+	assertTrue(allM2.equals("Empty plan"));
+	System.out.println(allM2);*/
+	//////////////////////////////////////////////
+
+	
+	
+	System.out.println("------------------------");
+
+	
+    
+    }
+    
+    @Test
+    public void Clone() {
+	System.out.println("Clone");
+	NestedPlan plan1 = new NestedPlan();
+
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan1.addInstruction(run1);
+	plan1.addInstruction(run2);
+
+	Instruction filter = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan1.setFilteringInstruction(filter);
+
+	plan1.setMappingSize(10);
+	plan1.setRuntimeCost(1000d);
+	plan1.setSelectivity(0.1d);
+
+	NestedPlan subPlan1 = new NestedPlan();
+	Instruction subrun1 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan1.addInstruction(subrun1);
+	plan1.setSubPlans(new ArrayList<NestedPlan>());
+	plan1.getSubPlans().add((NestedPlan) subPlan1);
+
+	NestedPlan subPlan2 = new NestedPlan();
+	Instruction subrun2 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan2.addInstruction(subrun2);
+	plan1.getSubPlans().add((NestedPlan) subPlan2);
+
+	Plan subPlan21 = new NestedPlan();
+	Instruction subrun21 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan21.addInstruction(subrun21);
+	subPlan1.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan1.getSubPlans().add((NestedPlan) subPlan21);
+	//////////////////////////////////////////////////////////////////////////////////////////
+	NestedPlan clonePlan = plan1.clone();
+	// check plan itself
+	System.out.println("Plan hashCode: "+plan1.hashCode());
+	System.out.println("PlanClone hashCode: "+clonePlan.hashCode());
+	assertTrue(plan1.hashCode() != clonePlan.hashCode());
+	System.out.println("\n");
+
+	// check instructionList
+	System.out.println("InstructionList hashCode: "+plan1.getInstructionList().hashCode());
+	System.out.println("InstructionListClone hashCode: "+clonePlan.getInstructionList().hashCode());
+	assertTrue(plan1.getInstructionList().hashCode() != clonePlan.getInstructionList().hashCode());
+	for (int i = 0; i < plan1.getInstructionList().size(); i++) {
+
+	    Instruction inst = plan1.getInstructionList().get(i);
+	    Instruction instClone = clonePlan.getInstructionList().get(i);
+
+	    System.out.println(inst);
+	    System.out.println("----Instruction hashCode: "+inst.hashCode());
+	    System.out.println(instClone);
+	    System.out.println("----InstructionClone hashCode: "+instClone.hashCode());
+	    assertTrue(inst.hashCode() != instClone.hashCode());
+	}
+	System.out.println("\n");
+	// check filtering instruction
+	System.out.println("FilteringInstruction hashCode: "+plan1.getFilteringInstruction().hashCode());
+	System.out.println("FilteringInstructionClone hashCode: "+clonePlan.getFilteringInstruction().hashCode());
+	assertTrue(plan1.getFilteringInstruction().hashCode() != clonePlan.getFilteringInstruction().hashCode());
+	System.out.println("\n");
+
+	// check subplans list
+	System.out.println("SubPlans hashCode: "+plan1.getSubPlans().hashCode());
+	System.out.println("SubPlansClone hashCode: "+clonePlan.getSubPlans().hashCode());
+	assertTrue(plan1.getSubPlans().hashCode() != clonePlan.getSubPlans().hashCode());
+	for (int i = 0; i < plan1.getSubPlans().size(); i++) {
+
+	    NestedPlan p = plan1.getSubPlans().get(i);
+	    NestedPlan pClone = clonePlan.getSubPlans().get(i);
+
+	    System.out.println("----SubPlan hashCode: "+p.hashCode());
+	    System.out.println("----SubPlanClone hashCode: "+pClone.hashCode());
+	    assertTrue(p.hashCode() != pClone.hashCode());
+	}
+
+    }
 
 }

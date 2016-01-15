@@ -12,23 +12,19 @@ public class Plan implements IPlan {
     protected double mappingSize;
     protected double selectivity;
     protected List<Instruction> instructionList;
-    protected List<NestedPlan> subPlans;
-    protected Command operator;
-    protected Instruction filteringInstruction;
 
     public Plan() {
-	setInstructionList(new ArrayList<Instruction>());
-	setRuntimeCost(0d);
-	setMappingSize(0d);
-	setSelectivity(1d);
-	setSubPlans(null);
-	setFilteringInstruction(null);
+	instructionList = new ArrayList<Instruction>();
+	runtimeCost = 0d;
+	mappingSize = 0;
+	selectivity = 1d;
+
     }
 
     @Override
     public void addInstruction(Instruction instruction) {
 	if (instruction != null) {
-	    boolean added = getInstructionList().add(instruction);
+	    boolean added = instructionList.add(instruction);
 	    if (!added)
 		logger.info("ExecutionPlan.addInstructiun() failed");
 	}
@@ -40,12 +36,12 @@ public class Plan implements IPlan {
 	if (i >= getInstructionList().size() || i < 0)
 	    logger.info("ExecutionPlan.removeInstructiun() failed");
 	else
-	    getInstructionList().remove(i);
+	    instructionList.remove(i);
     }
 
     @Override
     public void removeInstruction(Instruction i) {
-	getInstructionList().remove(i);
+	instructionList.remove(i);
     }
 
     @Override
@@ -58,34 +54,48 @@ public class Plan implements IPlan {
      * 
      */
     public boolean isEmpty() {
-	return getInstructionList().isEmpty();
+	return instructionList.isEmpty();
     }
+
     /**
-     * Checks whether the current NestedPlan is atomic
+     * Generates a clone of the current NestedPlan
      * 
-     * @return true, if current NestedPlan is atomic. false, if otherwise
+     * @return Clone of current NestedPlan
      */
-    public boolean isAtomic() {
-	if (getSubPlans() == null) {
-	    return true;
-	} else {
-	    if (getSubPlans().isEmpty()) {
-		return true;
+    public Plan clone() {
+	Plan clone = new Plan();
+
+	// clone primitives fields
+	clone.setMappingSize(this.mappingSize);
+	clone.setRuntimeCost(this.runtimeCost);
+	clone.setSelectivity(this.selectivity);
+
+	// clone instructionList
+	if (this.instructionList != null) {
+	    if (this.instructionList.isEmpty() == false) {
+		List<Instruction> cloneInstructionList = new ArrayList<Instruction>();
+		for (Instruction i : this.instructionList) {
+		    cloneInstructionList.add(i.clone());
+		}
+		clone.setInstructionList(cloneInstructionList);
+	    } else {
+		clone.setInstructionList(new ArrayList<Instruction>());
 	    }
-	}
-	return false;
+	} else
+	    clone.setInstructionList(null);
+
+	return clone;
     }
+
     /**
      * Returns the size of the instructionList of the current NestedPlan
      * 
      * @return Number of instructions in the instructionList
      */
     public int size() {
-	return getInstructionList().size();
+	return instructionList.size();
     }
 
-    
-    
     public double getRuntimeCost() {
 	return runtimeCost;
     }
@@ -96,30 +106,6 @@ public class Plan implements IPlan {
 
     public void setInstructionList(List<Instruction> instructionList) {
 	this.instructionList = instructionList;
-    }
-
-    public List<NestedPlan> getSubPlans() {
-	return subPlans;
-    }
-
-    public void setSubPlans(List<NestedPlan> subPlans) {
-	this.subPlans = subPlans;
-    }
-
-    public Command getOperator() {
-	return operator;
-    }
-
-    public void setOperator(Command operator) {
-	this.operator = operator;
-    }
-
-    public Instruction getFilteringInstruction() {
-	return filteringInstruction;
-    }
-
-    public void setFilteringInstruction(Instruction filteringInstruction) {
-	this.filteringInstruction = filteringInstruction;
     }
 
     public double getMappingSize() {
