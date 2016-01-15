@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.junit.Test;
 
 
@@ -17,14 +18,16 @@ import org.junit.Test;
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Jan 15, 2016
  */
-public class XMLConfigurationReaderTest {
+public class RDFConfigurationReaderTest {
 	@Test
 	public void testXmlReader(){
 		HashMap<String, String> prefixes = new HashMap<>();
 		prefixes.put("geos", "http://www.opengis.net/ont/geosparql#");
 		prefixes.put("lgdo", "http://linkedgeodata.org/ontology/");
 		prefixes.put("geom", "http://geovocab.org/geometry#");
-
+		prefixes.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+		prefixes.put("limes", "http://limes.sf.net/ontology/");
+		
 		Map<String, Map<String, String>> functions = new HashMap<>();
 		HashMap<String, String> f = new HashMap<String, String>();
 		f.put("polygon",null);
@@ -74,8 +77,8 @@ public class XMLConfigurationReaderTest {
 				0.0									//recallThreshold
 				);
 
-		XMLConfigurationReader c = new XMLConfigurationReader();
-		Configuration fileConf = c.read("/resources/lgd-lgd.xml");
+		RDFConfigurationReader c = new RDFConfigurationReader();
+		Configuration fileConf = c.read("/resources/lgd-lgd.ttl");
 
 		assertTrue(testConf.equals(fileConf));
 	}

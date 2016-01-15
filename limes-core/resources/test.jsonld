@@ -1,0 +1,110 @@
+{
+  "@graph" : [ {
+    "@id" : "limes:1447948319242",
+    "@type" : "limes:LimesSpecs",
+    "executionPlan" : "Simple",
+    "granularity" : "2",
+    "hasAcceptance" : "limes:1447948319242_acceptance",
+    "hasMetric" : "limes:1447948319242_metric",
+    "hasReview" : "limes:1447948319242_review",
+    "hasSource" : "limes:1447948319242_source",
+    "hasTarget" : "limes:1447948319242_target",
+    "outputFormat" : "TAB"
+  }, {
+    "@id" : "limes:1447948319242_acceptance",
+    "@type" : "limes:Acceptance",
+    "file" : "lgd_relaybox_verynear.nt",
+    "relation" : "lgdo:near",
+    "limes:threshold" : 0.9
+  }, {
+    "@id" : "limes:1447948319242_metric",
+    "@type" : "limes:Metric",
+    "expression" : "hausdorff(x.polygon, y.polygon)"
+  }, {
+    "@id" : "limes:1447948319242_review",
+    "@type" : "limes:Review",
+    "file" : "lgd_relaybox_near.nt",
+    "relation" : "lgdo:near",
+    "limes:threshold" : 0.5
+  }, {
+    "@id" : "limes:1447948319242_source",
+    "@type" : "limes:SourceDataset",
+    "endPoint" : "http://linkedgeodata.org/sparql",
+    "pageSize" : "2000",
+    "property" : "geom:http://geovocab.org/geometry#etry/geosasWKT",
+    "restriction" : "?x a lgdo:RelayBox",
+    "variable" : "?x",
+    "label" : "linkedgeodata"
+  }, {
+    "@id" : "limes:1447948319242_target",
+    "@type" : "limes:TargetDataset",
+    "endPoint" : "http://linkedgeodata.org/sparql",
+    "pageSize" : "2000",
+    "property" : "geom:http://geovocab.org/geometry#etry/geosasWKT",
+    "restriction" : "?y a lgdo:RelayBox",
+    "variable" : "?y",
+    "label" : "linkedgeodata"
+  } ],
+  "@context" : {
+    "relation" : {
+      "@id" : "http://limes.sf.net/ontology/relation",
+      "@type" : "@id"
+    },
+    "file" : {
+      "@id" : "http://limes.sf.net/ontology/file",
+      "@type" : "@id"
+    },
+    "threshold" : {
+      "@id" : "http://limes.sf.net/ontology/threshold",
+      "@type" : "http://www.w3.org/2001/XMLSchema#double"
+    },
+    "property" : {
+      "@id" : "http://limes.sf.net/ontology/property",
+      "@type" : "@id"
+    },
+    "restriction" : "http://limes.sf.net/ontology/restriction",
+    "pageSize" : {
+      "@id" : "http://limes.sf.net/ontology/pageSize",
+      "@type" : "http://www.w3.org/2001/XMLSchema#int"
+    },
+    "variable" : "http://limes.sf.net/ontology/variable",
+    "endPoint" : {
+      "@id" : "http://limes.sf.net/ontology/endPoint",
+      "@type" : "@id"
+    },
+    "label" : "http://www.w3.org/2000/01/rdf-schema#label",
+    "expression" : "http://limes.sf.net/ontology/expression",
+    "outputFormat" : "http://limes.sf.net/ontology/outputFormat",
+    "granularity" : {
+      "@id" : "http://limes.sf.net/ontology/granularity",
+      "@type" : "http://www.w3.org/2001/XMLSchema#int"
+    },
+    "executionPlan" : "http://limes.sf.net/ontology/executionPlan",
+    "hasReview" : {
+      "@id" : "http://limes.sf.net/ontology/hasReview",
+      "@type" : "@id"
+    },
+    "hasAcceptance" : {
+      "@id" : "http://limes.sf.net/ontology/hasAcceptance",
+      "@type" : "@id"
+    },
+    "hasMetric" : {
+      "@id" : "http://limes.sf.net/ontology/hasMetric",
+      "@type" : "@id"
+    },
+    "hasTarget" : {
+      "@id" : "http://limes.sf.net/ontology/hasTarget",
+      "@type" : "@id"
+    },
+    "hasSource" : {
+      "@id" : "http://limes.sf.net/ontology/hasSource",
+      "@type" : "@id"
+    },
+    "geos" : "http://www.opengis.net/ont/geosparql#",
+    "rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
+    "lgdo" : "http://linkedgeodata.org/ontology/",
+    "owl" : "http://www.w3.org/2002/07/owl#",
+    "geom" : "http://geovocab.org/geometry#",
+    "limes" : "http://limes.sf.net/ontology/"
+  }
+}

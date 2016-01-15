@@ -3,6 +3,7 @@ package org.aksw.limes.core.io.config;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 //import org.apache.log4j.Logger;
@@ -26,13 +27,12 @@ public class Configuration implements IConfiguration{
 	protected double verificationThreshold;
 	protected String verificationFile;
 	protected int exemplars 					= -1;
-	protected HashMap<String, String> prefixes 	= new HashMap<String, String>();;
+	protected Map<String, String> prefixes 		= new HashMap<String, String>();;
 	protected String outputFormat;
 	protected String executionPlan 				= "simple";
 	protected int granularity 					= 2;
 	protected String recallRegulator;
 	protected double recallThreshold;
-
 
 
 	public Configuration(){
@@ -145,7 +145,7 @@ public class Configuration implements IConfiguration{
 		this.exemplars = exemplars;
 	}
 
-	public HashMap<String, String> getPrefixes() {
+	public Map<String, String> getPrefixes() {
 		return prefixes;
 	}
 
@@ -226,4 +226,133 @@ public class Configuration implements IConfiguration{
 				"verificationRelation",	"acceptanceThreshold", "acceptanceFile", "verificationThreshold", "verificationFile",
 				"exemplars", "prefixes", "outputFormat", "executionPlan", "granularity", "recallRegulator",	"recallThreshold"));
 	}
+	
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime
+					* result
+					+ ((acceptanceFile == null) ? 0 : acceptanceFile.hashCode());
+			result = prime
+					* result
+					+ ((acceptanceRelation == null) ? 0 : acceptanceRelation
+							.hashCode());
+			long temp;
+			temp = Double.doubleToLongBits(acceptanceThreshold);
+			result = prime * result + (int) (temp ^ (temp >>> 32));
+			result = prime * result
+					+ ((executionPlan == null) ? 0 : executionPlan.hashCode());
+			result = prime * result + exemplars;
+			result = prime * result + granularity;
+			result = prime
+					* result
+					+ ((metricExpression == null) ? 0 : metricExpression
+							.hashCode());
+			result = prime * result
+					+ ((outputFormat == null) ? 0 : outputFormat.hashCode());
+			result = prime * result
+					+ ((prefixes == null) ? 0 : prefixes.hashCode());
+			result = prime
+					* result
+					+ ((recallRegulator == null) ? 0 : recallRegulator
+							.hashCode());
+			temp = Double.doubleToLongBits(recallThreshold);
+			result = prime * result + (int) (temp ^ (temp >>> 32));
+			result = prime * result
+					+ ((sourceInfo == null) ? 0 : sourceInfo.hashCode());
+			result = prime * result
+					+ ((targetInfo == null) ? 0 : targetInfo.hashCode());
+			result = prime
+					* result
+					+ ((verificationFile == null) ? 0 : verificationFile
+							.hashCode());
+			result = prime
+					* result
+					+ ((verificationRelation == null) ? 0
+							: verificationRelation.hashCode());
+			temp = Double.doubleToLongBits(verificationThreshold);
+			result = prime * result + (int) (temp ^ (temp >>> 32));
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Configuration other = (Configuration) obj;
+			if (acceptanceFile == null) {
+				if (other.acceptanceFile != null)
+					return false;
+			} else if (!acceptanceFile.equals(other.acceptanceFile))
+				return false;
+			if (acceptanceRelation == null) {
+				if (other.acceptanceRelation != null)
+					return false;
+			} else if (!acceptanceRelation.equals(other.acceptanceRelation))
+				return false;
+			if (Double.doubleToLongBits(acceptanceThreshold) != Double
+					.doubleToLongBits(other.acceptanceThreshold))
+				return false;
+			if (executionPlan == null) {
+				if (other.executionPlan != null)
+					return false;
+			} else if (!executionPlan.equals(other.executionPlan))
+				return false;
+			if (exemplars != other.exemplars)
+				return false;
+			if (granularity != other.granularity)
+				return false;
+			if (metricExpression == null) {
+				if (other.metricExpression != null)
+					return false;
+			} else if (!metricExpression.equals(other.metricExpression))
+				return false;
+			if (outputFormat == null) {
+				if (other.outputFormat != null)
+					return false;
+			} else if (!outputFormat.equals(other.outputFormat))
+				return false;
+			if (prefixes == null) {
+				if (other.prefixes != null)
+					return false;
+			} else if (!prefixes.equals(other.prefixes))
+				return false;
+			if (recallRegulator == null) {
+				if (other.recallRegulator != null)
+					return false;
+			} else if (!recallRegulator.equals(other.recallRegulator))
+				return false;
+			if (Double.doubleToLongBits(recallThreshold) != Double
+					.doubleToLongBits(other.recallThreshold))
+				return false;
+			if (sourceInfo == null) {
+				if (other.sourceInfo != null)
+					return false;
+			} else if (!sourceInfo.equals(other.sourceInfo))
+				return false;
+			if (targetInfo == null) {
+				if (other.targetInfo != null)
+					return false;
+			} else if (!targetInfo.equals(other.targetInfo))
+				return false;
+			if (verificationFile == null) {
+				if (other.verificationFile != null)
+					return false;
+			} else if (!verificationFile.equals(other.verificationFile))
+				return false;
+			if (verificationRelation == null) {
+				if (other.verificationRelation != null)
+					return false;
+			} else if (!verificationRelation.equals(other.verificationRelation))
+				return false;
+			if (Double.doubleToLongBits(verificationThreshold) != Double
+					.doubleToLongBits(other.verificationThreshold))
+				return false;
+			return true;
+		}
 }
