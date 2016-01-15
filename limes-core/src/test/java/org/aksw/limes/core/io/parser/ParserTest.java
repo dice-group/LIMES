@@ -35,7 +35,6 @@ public class ParserTest {
 	@Test
 	public void testParcer() {
 		Parser p = new Parser("MAX(trigrams(x.skos:prefLabel,y.rdfs:label),trigrams(x.osnp:valueLabel, y.rdfs:label))", 0.5);
-		assertFalse(p.isAtomic());
 		assertTrue(p.getOperator().equals(Parser.MAX));
 		assertTrue(p.getTerm1().equals("trigrams(x.skos:prefLabel,y.rdfs:label)"));
 		assertTrue(p.getTerm2().equals("trigrams(x.osnp:valueLabel,y.rdfs:label)"));

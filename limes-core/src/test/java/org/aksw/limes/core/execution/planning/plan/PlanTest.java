@@ -2,7 +2,7 @@ package org.aksw.limes.core.execution.planning.plan;
 
 import static org.junit.Assert.*;
 
-import org.aksw.limes.core.execution.engine.DefaultExecutionEngine;
+import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
@@ -121,7 +121,7 @@ public class PlanTest {
 	plan.addInstruction(union);
 
 	System.out.println("Plan size with Union: " + plan.size());
-	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 	Mapping mUnion = ee.execute(plan);
 	System.out.println("Size of Mapping with Union: " + mUnion.size());
 

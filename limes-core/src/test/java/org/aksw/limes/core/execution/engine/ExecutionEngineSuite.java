@@ -3,7 +3,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    ExecutionEngineFactoryTest.class,DefaultExecutionEngineTest.class
+    ExecutionEngineFactoryTest.class,SimpleExecutionEngineTest.class
 })
 public class ExecutionEngineSuite {
 

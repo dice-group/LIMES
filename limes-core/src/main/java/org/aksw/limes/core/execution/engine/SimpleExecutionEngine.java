@@ -33,7 +33,7 @@ import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
  * @author ngonga
  * @author kleanthi
  */
-public class DefaultExecutionEngine extends ExecutionEngine {
+public class SimpleExecutionEngine extends ExecutionEngine {
     /**
      * Implements running the run operator. Assume atomic measures
      *
@@ -45,7 +45,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *            Target cache
      * @return MemoryMapping
      */
-    public DefaultExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
+    public SimpleExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
 	super(source, target, sourceVar, targetVar);
     }
 
