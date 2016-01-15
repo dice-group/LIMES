@@ -57,7 +57,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      *            An execution plan
      * @return The MemoryMapping that results from running the plan
      */
-    private Mapping run(Plan plan) {
+    public Mapping execute(Plan plan) {
 	buffer = new ArrayList<MemoryMapping>();
 	if (plan.isEmpty()) {
 	    logger.info("Plan is empty. Done.");
@@ -128,8 +128,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * @return Mapping
      */
     public Mapping executeRun(Instruction inst) {
-	// get threshold
-
+	
 	double threshold = Double.parseDouble(inst.getThreshold());
 	// generate correct mapper
 	IMapper mapper;
@@ -247,13 +246,13 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      *            ExecutionPlan
      * @return MemoryMapping
      */
-    public Mapping execute(Plan plan) {
+    public Mapping execute(NestedPlan plan) {
 	// empty nested plan contains nothing
 	Mapping m = new MemoryMapping();
 	if (plan.isEmpty()) {
 	} // atomic nested plan just contain simple list of instructions
 	else if (plan.isAtomic()) {
-	    m = run(plan);
+	    m = execute((Plan)plan);
 	} // nested plans contain subplans, an operator for merging the results
 	  // of the subplans and a filter for filtering the results of the
 	  // subplan

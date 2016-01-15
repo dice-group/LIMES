@@ -115,7 +115,7 @@ public class NestedPlanTest {
     public void removeInstruction2() {
 	System.out.println("removeInstruction2");
 
-	Plan plan = new NestedPlan();
+	NestedPlan plan = new NestedPlan();
 	Instruction run1 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
 	Instruction run2 = new Instruction(Command.RUN, "cosine(x.name, y.name)", "0.3", -1, -1, 1);
 	Instruction union = new Instruction(Command.UNION, "", "0.3", 0, 1, 2);
