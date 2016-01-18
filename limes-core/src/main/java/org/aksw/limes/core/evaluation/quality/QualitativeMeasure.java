@@ -1,8 +1,6 @@
 package org.aksw.limes.core.evaluation.quality;
 
-import java.util.Set;
-
-import org.aksw.limes.core.model.Link;
+import org.aksw.limes.core.io.mapping.Mapping;
 
 /**
  * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
@@ -12,6 +10,6 @@ import org.aksw.limes.core.model.Link;
  */
 public interface QualitativeMeasure {
 	
-	public double calculate(Set<Link> predictions, Set<Link> goldStandard);
+	public double calculate(Mapping predictions, Mapping goldStandard);
 
 }

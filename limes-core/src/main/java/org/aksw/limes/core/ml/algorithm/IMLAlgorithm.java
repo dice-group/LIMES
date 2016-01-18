@@ -10,8 +10,8 @@ public interface IMLAlgorithm {
 
 	public String getName();
 
-	public void learn();
-
+	public MLResult learn();
+	
 	public LinksetMap computePredictions();
 	
 }
