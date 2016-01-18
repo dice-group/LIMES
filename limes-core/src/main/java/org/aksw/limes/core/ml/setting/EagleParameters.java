@@ -1,4 +1,6 @@
-package org.aksw.limes.core.ml.algorithm.eagle;
+package org.aksw.limes.core.ml.setting;
+
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 
 /**
  * Basic EAGLE Parameters
@@ -11,7 +13,23 @@ public class EagleParameters {
 	float reproductionRate = 0.4f;
 	float crossoverRate = 0.3f;
 	boolean preserveFittest = true;
+	double beta = 1;
 	
+	public double getBeta() {
+		return beta;
+	}
+	public void setBeta(double beta) {
+		this.beta = beta;
+	}
+	PropertyMapping  propMap = new PropertyMapping();
+	
+	
+	public PropertyMapping getPropMap() {
+		return propMap;
+	}
+	public void setPropMap(PropertyMapping propMap) {
+		this.propMap = propMap;
+	}
 	public int getGenerations() {
 		return generations;
 	}

@@ -1,10 +1,11 @@
 package org.aksw.limes.core.ml.algorithm;
 
+import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.ml.LinksetMap;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
- *
+ * @author Klaus Lyko
  */
 public interface IMLAlgorithm {
 
@@ -12,6 +13,6 @@ public interface IMLAlgorithm {
 
 	public MLResult learn();
 	
-	public LinksetMap computePredictions();
+	public Mapping computePredictions();
 	
 }

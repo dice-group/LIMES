@@ -1,5 +1,8 @@
 package org.aksw.limes.core.ml.algorithm;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 
@@ -12,6 +15,8 @@ public class MLResult {
 	LinkSpecification linkspec;
 	Mapping mapping;
 	double quality;
+	
+	Map<String, Object> details = new HashMap<String, Object>();
 	
 	public void setLinkSpecification(LinkSpecification spec) {
 		this.linkspec = spec;
@@ -30,6 +35,13 @@ public class MLResult {
 	}
 	public void setQuality(double quality) {
 		this.quality = quality;
+	}
+	
+	public void addDetail(String key, Object value) {
+		details.put(key, value);
+	}
+	public Map<String, Object> getDetails() {
+		return details;
 	}
 	
 }
