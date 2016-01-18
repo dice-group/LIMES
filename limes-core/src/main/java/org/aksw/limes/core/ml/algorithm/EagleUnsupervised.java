@@ -41,8 +41,9 @@ public class EagleUnsupervised extends MLAlgorithm {
 	List<LinkSpecification> specifications;
 	
 	public EagleUnsupervised(Cache sourceCache, Cache targetCache,
-			Configuration config) {
+			Configuration config) throws Exception {
 		super(sourceCache, targetCache, config);
+		setUp();
 	}
 
 
@@ -53,28 +54,19 @@ public class EagleUnsupervised extends MLAlgorithm {
 
 	@Override
 	public MLResult learn() {
-		try {
-			specifications = new LinkedList<LinkSpecification>();
-			
-			setUp();
-						
-			System.out.println("Start learning");
-			for (int gen = 1; gen < parameters.getGenerations(); gen++) {
-			    gp.evolve();
-			    IGPProgram currentBest = determinFittest(gp);
-			    LinkSpecification currentBestMetric = getLinkSpecification(currentBest);
-			    //TODO: if you want to save only the best LS of each generation,
-			    //then comment the following line
-			    specifications.add(currentBestMetric);
-			}
-
-			allBest = determinFittest(gp);
-			return createMLResult();
-					
-		} catch (InvalidConfigurationException e) {
-			e.printStackTrace();
-			return null;
+		specifications = new LinkedList<LinkSpecification>();
+		logger.info("Start learning");
+		for (int gen = 1; gen <= parameters.getGenerations(); gen++) {
+		    gp.evolve();
+		    IGPProgram currentBest = determinFittest(gp, gen);
+		    LinkSpecification currentBestMetric = getLinkSpecification(currentBest);
+		    //TODO: if you don't want to save only the best LS of each generation,
+		    //then comment the following line
+		    specifications.add(currentBestMetric);
 		}
+		
+		allBest = determinFittest(gp, parameters.getGenerations());
+		return createMLResult();
 	}
 
 	@Override
@@ -92,7 +84,13 @@ public class EagleUnsupervised extends MLAlgorithm {
 		this.parameters = parameters;
 	}
 	
-	private IGPProgram determinFittest(GPGenotype gp) {
+	/**
+	 * Method to compute best individuals by hand.
+	 * @param gp
+	 * @param gen
+	 * @return
+	 */
+	private IGPProgram determinFittest(GPGenotype gp, int gen) {
 
 		GPPopulation pop = gp.getGPPopulation();
 		pop.sortByFitness();
@@ -105,11 +103,11 @@ public class EagleUnsupervised extends MLAlgorithm {
 
 		for (IGPProgram p : bests) {
 		    if (p != null) {
-			double fitM = fitness.calculateRawFitness(p);
-			if (fitM < fittest) {
-			    fittest = fitM;
-			    bestHere = p;
-			}
+				double fitM = fitness.calculateRawFitness(p);
+				if (fitM < fittest) {
+				    fittest = fitM;
+				    bestHere = p;
+				}
 		    }
 		}
 		/* consider population if neccessary */
@@ -117,25 +115,30 @@ public class EagleUnsupervised extends MLAlgorithm {
 		    logger.debug("Determing best program failed, consider the whole population");
 		    System.err.println("Determing best program failed, consider the whole population");
 		    for (IGPProgram p : pop.getGPPrograms()) {
-			if (p != null) {
-			    double fitM = fitness.calculateRawFitness(p);
-			    if (fitM < fittest) {
-				fittest = fitM;
-				bestHere = p;
-			    }
-			}
+				if (p != null) {
+				    double fitM = fitness.calculateRawFitness(p);
+				    if (fitM < fittest) {
+						fittest = fitM;
+						bestHere = p;
+				    }
+				}
 		    }
 		}
 		
 		if(parameters.isPreserveFittest()) {
-			if(fitness.calculateRawFitness(allBest)>fittest) {
+			if(allBest==null || fitness.calculateRawFitness(allBest)>fittest) {
 				allBest = bestHere;
+				logger.info("Generation "+gen+" new fittest ("+fittest+") individual: "+getLinkSpecification(bestHere));
 			}
 		}
 		
 		return bestHere;
 	}
 	
+	/**
+	 * Configures EAGLE.
+	 * @throws InvalidConfigurationException
+	 */
 	private void setUp() throws InvalidConfigurationException {
 		LinkSpecGeneticLearnerConfig jgapConfig = new LinkSpecGeneticLearnerConfig(configuration.getSourceInfo(), configuration.getTargetInfo(), parameters.getPropMap());
 		
@@ -157,12 +160,21 @@ public class EagleUnsupervised extends MLAlgorithm {
 		gp = gpP.create();
 	}
 
+	/**
+	 * Computes for a given jgap Program its corresponding link specification.
+	 * @param p
+	 * @return
+	 */
 	private LinkSpecification getLinkSpecification(IGPProgram p) {
 		Object[] args = {};
 		ProgramChromosome pc = p.getChromosome(0);
 		return (LinkSpecification) pc.getNode(0).execute_object(pc, 0, args);
 	}
 	
+	/**
+	 * Constructs the MLResult for this run.
+	 * @return
+	 */
 	private MLResult createMLResult() {
 		MLResult result = new MLResult();
 		result.setLinkSpecification(getLinkSpecification(allBest));
