@@ -23,7 +23,7 @@ public class MeasureProcessorTest {
 	target.addTriple("S3", "conf", "conf three");
 
 	System.out.println(MeasureProcessor.getSimilarity(source.getInstance("S1"), target.getInstance("S3"),
-		"ADD(0.5*trigram(x.conf, y.conf),0.5*cosine(y.conf, x.conf))", "?x", "?y"));
+		"ADD(0.5*trigram(x.conf, y.conf),0.5*cosine(y.conf, x.conf))", 0.4,"?x", "?y"));
 
 	System.out.println(MeasureProcessor
 		.getMeasures("AND(jaccard(x.authors,y.authors)|0.4278,overlap(x.authors,y.authors)|0.4278)"));

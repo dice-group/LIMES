@@ -4,12 +4,17 @@ import org.apache.log4j.Logger;
 
 /**
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
- * @version Nov 12, 2015
+ * @version DEC 2, 2015
  */
 public class Parser implements IParser {
-	private static final Logger logger = Logger.getLogger(Parser.class.getName());
+	public static final Logger logger = Logger.getLogger(Parser.class.getName());
+	
+	public static final String MULT = "MULT";
+	public static final String ADD = "ADD";
+	public static final String MAX = "MAX";
+	public static final String MIN = "MIN";
 
-	protected double threshold;
+	private double threshold;
 	private double threshold1;
     private double threshold2;
     protected double coef1;
@@ -23,7 +28,7 @@ public class Parser implements IParser {
     public Parser(String input, double theta) {
         expression = input.replaceAll(" ", "");
         //expression = expression.toLowerCase();
-        threshold = theta;
+        setThreshold(theta);
         getTerms();
     }
 
@@ -123,23 +128,23 @@ public class Parser implements IParser {
                 }
             }
 
-            //        System.out.println("Term 1 = "+term1);
-            //        System.out.println("Term 2 = "+term2);
+            logger.debug("Term 1 = "+term1);
+            logger.debug("Term 2 = "+term2);
             getCoef1();
             getCoef2();
             //now compute thresholds based on operations
             //first numeric operations
-            if (operator.equalsIgnoreCase("MIN") || operator.equalsIgnoreCase("MAX")) {
-                setThreshold1(threshold);
-                setThreshold2(threshold);
-            } else if (operator.equalsIgnoreCase("ADD")) {
-                operator = "ADD";
+            if (operator.equalsIgnoreCase(MIN) || operator.equalsIgnoreCase(MAX)) {
+                setThreshold1(getThreshold());
+                setThreshold2(getThreshold());
+            } else if (operator.equalsIgnoreCase(ADD)) {
+                operator = ADD;
                 System.out.println("Coef1 = " + coef1 + ", Coef2 = " + coef2);
-                setThreshold1((threshold - coef2) / coef1);
-                setThreshold2((threshold - coef1) / coef2);
-            } else if (operator.equalsIgnoreCase("MULT")) {
-                operator = "MULT";
-                setThreshold1(threshold / (coef2 * coef1));
+                setThreshold1((getThreshold() - coef2) / coef1);
+                setThreshold2((getThreshold() - coef1) / coef2);
+            } else if (operator.equalsIgnoreCase(MULT)) {
+                operator = MULT;
+                setThreshold1(getThreshold() / (coef2 * coef1));
                 setThreshold2(getThreshold1());
             } //now set constraints. separator for sets and thresholds is |
             //thus one can write
@@ -173,24 +178,12 @@ public class Parser implements IParser {
         }
     }
 
-    public static void testParsing(String s, double threshold) {
-        Parser p = new Parser(s, threshold);
-        if (p.isAtomic()) {
-            System.out.println("-->" + s + " with threshold " + threshold + " will be carried out.");
-        } else {
-            testParsing(p.term1, p.getThreshold1());
-            testParsing(p.term2, p.getThreshold2());
-//            System.out.println("--> <" + p.op + "> will be carried out on " + p.term1 + " and " + p.term2 + " with "
-//                    + "threshold " + threshold);
-        }
-    }
-
 
 	public double getThreshold2() {
 		return threshold2;
 	}
 
-
+	
 	public void setThreshold2(double threshold2) {
 		this.threshold2 = threshold2;
 	}
@@ -205,28 +198,14 @@ public class Parser implements IParser {
 		this.threshold1 = threshold1;
 	}
 
-//    public static void main(String args[]) {
-//        //Parser p = new Parser("max(add(0.3*sim(a,b),0.3*sim(c,d)), min(sim3(a,b), sim2(c,d)))", 0.9);
-////        Parser.testParsing("MULT(0.3*sim(c,d), 0.7*sim(a,b))", 0.9);
-//        //Parser.testParsing("max(add(0.5*sim(a,b),0.5*sim(c,d)), min(sim3(a,b), sim2(c,d)))", 0.9);
-//        //Parser p = new Parser("sim(a.c, b.d)", 0.9);
-////        System.out.println(p.getTerm1());
-////        System.out.println(p.getTerm2());
-////        System.out.println(p.op);
-//        //Parser.testParsing("AND(sim1(a,b)|0.7, sim2(b,d)|0.9)", 0.9);
-////        System.out.println(Double.parseDouble("1.0"));
-//        String m = "levenshtein(x.http://www.okkam.org/ontology_person1.owl#surname, y.http://www.okkam.org/ontology_person2.owl#surname)";
-//        m = "OR(A|0.8,B|0.7)";
-//        m = "MAX(trigrams(x.skos:prefLabel,y.rdfs:label),trigrams(x.osnp:valueLabel, y.rdfs:label))";
-//        Parser p = new Parser(m, 0.5);
-//
-//        System.out.println(p.isAtomic());
-//        Parser.testParsing(m, 0.5d);
-//
-////    	System.out.println(m.contains("."));
-//        System.out.println(p.op);
-//        System.out.println(p.term1);
-//        System.out.println(p.term2);
-//    }
+
+	public double getThreshold() {
+	    return threshold;
+	}
+
+
+	public void setThreshold(double threshold) {
+	    this.threshold = threshold;
+	}
 
 }

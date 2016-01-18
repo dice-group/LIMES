@@ -6,6 +6,10 @@ import java.util.Set;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
+/**
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Nov 25, 2015
+ */
 public abstract class Cache implements ICache{
 
 	public abstract void addInstance(Instance i);

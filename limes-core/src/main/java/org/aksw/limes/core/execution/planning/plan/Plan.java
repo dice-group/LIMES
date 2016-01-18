@@ -9,27 +9,22 @@ import org.apache.log4j.Logger;
 public class Plan implements IPlan {
     static Logger logger = Logger.getLogger("LIMES");
     protected double runtimeCost;
-    private double mappingSize;
-    private double selectivity;
-    private List<Instruction> instructionList;
-    private List<NestedPlan> subPlans;
-    private Command operator;
-    private Instruction filteringInstruction;
+    protected double mappingSize;
+    protected double selectivity;
+    protected List<Instruction> instructionList;
 
     public Plan() {
-	setInstructionList(new ArrayList<Instruction>());
-	setRuntimeCost(0d);
-	setMappingSize(0d);
-	setSelectivity(1d);
-	setInstructionList(new ArrayList<Instruction>());
-	setSubPlans(null);
-	setFilteringInstruction(null);
+	instructionList = new ArrayList<Instruction>();
+	runtimeCost = 0d;
+	mappingSize = 0;
+	selectivity = 1d;
+
     }
 
     @Override
     public void addInstruction(Instruction instruction) {
 	if (instruction != null) {
-	    boolean added = getInstructionList().add(instruction);
+	    boolean added = instructionList.add(instruction);
 	    if (!added)
 		logger.info("ExecutionPlan.addInstructiun() failed");
 	}
@@ -41,12 +36,12 @@ public class Plan implements IPlan {
 	if (i >= getInstructionList().size() || i < 0)
 	    logger.info("ExecutionPlan.removeInstructiun() failed");
 	else
-	    getInstructionList().remove(i);
+	    instructionList.remove(i);
     }
 
     @Override
     public void removeInstruction(Instruction i) {
-	getInstructionList().remove(i);
+	instructionList.remove(i);
     }
 
     @Override
@@ -59,7 +54,37 @@ public class Plan implements IPlan {
      * 
      */
     public boolean isEmpty() {
-	return getInstructionList().isEmpty();
+	return instructionList.isEmpty();
+    }
+
+    /**
+     * Generates a clone of the current NestedPlan
+     * 
+     * @return Clone of current NestedPlan
+     */
+    public Plan clone() {
+	Plan clone = new Plan();
+
+	// clone primitives fields
+	clone.setMappingSize(this.mappingSize);
+	clone.setRuntimeCost(this.runtimeCost);
+	clone.setSelectivity(this.selectivity);
+
+	// clone instructionList
+	if (this.instructionList != null) {
+	    if (this.instructionList.isEmpty() == false) {
+		List<Instruction> cloneInstructionList = new ArrayList<Instruction>();
+		for (Instruction i : this.instructionList) {
+		    cloneInstructionList.add(i.clone());
+		}
+		clone.setInstructionList(cloneInstructionList);
+	    } else {
+		clone.setInstructionList(new ArrayList<Instruction>());
+	    }
+	} else
+	    clone.setInstructionList(null);
+
+	return clone;
     }
 
     /**
@@ -68,11 +93,7 @@ public class Plan implements IPlan {
      * @return Number of instructions in the instructionList
      */
     public int size() {
-	return getInstructionList().size();
-    }
-
-    public boolean isFlat() {
-	return true;
+	return instructionList.size();
     }
 
     public double getRuntimeCost() {
@@ -85,30 +106,6 @@ public class Plan implements IPlan {
 
     public void setInstructionList(List<Instruction> instructionList) {
 	this.instructionList = instructionList;
-    }
-
-    public List<NestedPlan> getSubPlans() {
-	return subPlans;
-    }
-
-    public void setSubPlans(List<NestedPlan> subPlans) {
-	this.subPlans = subPlans;
-    }
-
-    public Command getOperator() {
-	return operator;
-    }
-
-    public void setOperator(Command operator) {
-	this.operator = operator;
-    }
-
-    public Instruction getFilteringInstruction() {
-	return filteringInstruction;
-    }
-
-    public void setFilteringInstruction(Instruction filteringInstruction) {
-	this.filteringInstruction = filteringInstruction;
     }
 
     public double getMappingSize() {

@@ -239,7 +239,7 @@ public class RDFConfigurationReader implements IConfigurationReader{
 	{
 		long startTime = System.currentTimeMillis();
 		Model model=ModelFactory.createDefaultModel();
-		java.io.InputStream in = FileManager.get().open( fileNameOrUri );
+		java.io.InputStream in = FileManager.get().open(System.getProperty("user.dir")+"/"+fileNameOrUri );
 		if (in == null) {
 			throw new IllegalArgumentException(fileNameOrUri + " not found");
 		}

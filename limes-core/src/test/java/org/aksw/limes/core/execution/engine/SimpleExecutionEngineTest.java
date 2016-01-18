@@ -2,7 +2,7 @@ package org.aksw.limes.core.execution.engine;
 
 import static org.junit.Assert.*;
 
-import org.aksw.limes.core.execution.engine.DefaultExecutionEngine;
+import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.execution.planning.planner.CannonicalPlanner;
@@ -17,7 +17,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class DefaultExecutionEngineTest {
+public class SimpleExecutionEngineTest {
     public Cache source = new MemoryCache();
     public Cache target = new MemoryCache();
 
@@ -76,7 +76,7 @@ public class DefaultExecutionEngineTest {
     @Test
     public void EmptyLink(){
 	System.out.println("EmptyLink");
-	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 	Instruction run1 = new Instruction(Command.RUN, "", "0.3", -1, -1, 0);
 	Mapping mSource = ee.executeRun(run1);
 	
@@ -87,7 +87,7 @@ public class DefaultExecutionEngineTest {
     @Test
     public void BasicUnion() {
 	System.out.println("BasicUnion");
-	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 	Instruction run2 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 1);
 	Instruction union = new Instruction(Command.UNION, "", "0.4", 0, 1, 2);
@@ -118,7 +118,7 @@ public class DefaultExecutionEngineTest {
 
 	
 	Mapping totalEmpty = ee.executeUnion(emptyMapping,emptyMapping);
-	System.out.println("executeUnion with totalEmpty: " + totalEmpty.getNumberofMappings());
+	System.out.println("executeUnion with totalEmpty with empty: " + totalEmpty.getNumberofMappings());
 	assertTrue(totalEmpty.toString().equals(""));
 
 	System.out.println("---------------------------------");
@@ -127,7 +127,7 @@ public class DefaultExecutionEngineTest {
     @Test
     public void basicIntersection() {
 	System.out.println("basicIntersection");
-	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 	Instruction run2 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 1);
 	Instruction intersection = new Instruction(Command.INTERSECTION, "", "0.4", 0, 1, 2);
@@ -156,7 +156,7 @@ public class DefaultExecutionEngineTest {
 	assertTrue(mSource.getNumberofMappings() >= mEmpty.getNumberofMappings());
 	
 	Mapping totalEmpty = ee.executeIntersection(emptyMapping,emptyMapping);
-	System.out.println("executeIntersection with totalEmpty: " + totalEmpty.getNumberofMappings());
+	System.out.println("executeIntersection with totalEmpty with empty: " + totalEmpty.getNumberofMappings());
 	assertTrue(totalEmpty.toString().equals(""));
 	System.out.println("---------------------------------");
     }
@@ -164,7 +164,7 @@ public class DefaultExecutionEngineTest {
     @Test
     public void basicDifference() {
 	System.out.println("basicDifference");
-	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 	Instruction run2 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 1);
 	Instruction difference = new Instruction(Command.DIFF, "", "0.4", 0, 1, 2);
@@ -195,7 +195,7 @@ public class DefaultExecutionEngineTest {
 
 	
 	Mapping totalEmpty = ee.executeIntersection(emptyMapping,emptyMapping);
-	System.out.println("executeIntersection with totalEmpty: " + totalEmpty.getNumberofMappings());
+	System.out.println("executeIntersection with totalEmpty with empty: " + totalEmpty.getNumberofMappings());
 	assertTrue(totalEmpty.toString().equals(""));
 	System.out.println("---------------------------------");
     }
@@ -203,7 +203,7 @@ public class DefaultExecutionEngineTest {
     @Test
     public void basicXor() {
 	System.out.println("basicXor");
-	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 	Instruction run2 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 1);
 	Instruction xor = new Instruction(Command.XOR, "", "0.4", 0, 1, 2);
@@ -234,7 +234,7 @@ public class DefaultExecutionEngineTest {
 	assertTrue(mEmpty.toString().equals(mSource.toString()));
 
 	Mapping totalEmpty = ee.executeExclusiveOr(emptyMapping,emptyMapping);
-	System.out.println("executeExclusiveOr with totalEmpty: " + totalEmpty.getNumberofMappings());
+	System.out.println("executeExclusiveOr with totalEmpty with empty: " + totalEmpty.getNumberofMappings());
 	assertTrue(totalEmpty.toString().equals(""));
 	System.out.println("---------------------------------");
     }
@@ -243,7 +243,7 @@ public class DefaultExecutionEngineTest {
     public void testAtomicLinkSpecification() {
 	System.out.println("testAtomicLinkSpecificationRun");
 	LinkSpecification ls = new LinkSpecification("jaccard(x.surname, y.surname)", 0.3);
-	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 	CannonicalPlanner cp = new CannonicalPlanner();
 	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 
@@ -285,7 +285,7 @@ public class DefaultExecutionEngineTest {
 	System.out.println("testUnion");
 	LinkSpecification ls = new LinkSpecification("OR(qgrams(x.surname,y.surname)|0.4,jaro(x.name,y.name)|0.4)",
 		0.4);
-	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 	CannonicalPlanner cp = new CannonicalPlanner();
 
 	Instruction run1 = new Instruction(Command.RUN, "qgrams(x.surname,y.surname)", "0.4", -1, -1, 0);
@@ -356,7 +356,7 @@ public class DefaultExecutionEngineTest {
 	Instruction intersection = new Instruction(Command.INTERSECTION, "", "", 0, 1, 2);
 	Instruction filter = new Instruction(Command.FILTER, null, "0.5", 2, -1, -1);
 	// engine
-	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 	CannonicalPlanner cp = new CannonicalPlanner();
 
 	// 1) run as a NestedPlan calling execute function
@@ -423,7 +423,7 @@ public class DefaultExecutionEngineTest {
 	CannonicalPlanner cp = new CannonicalPlanner();
 
 	// engine
-	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
 	/// 1) run as a NestedPlan calling execute function
 	NestedPlan plan = cp.plan(ls);
@@ -490,7 +490,7 @@ public class DefaultExecutionEngineTest {
 	Instruction filter = new Instruction(Command.FILTER, null, "0.5", 2, -1, -1);
 
 	// engine
-	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
 	CannonicalPlanner cp = new CannonicalPlanner();
 
