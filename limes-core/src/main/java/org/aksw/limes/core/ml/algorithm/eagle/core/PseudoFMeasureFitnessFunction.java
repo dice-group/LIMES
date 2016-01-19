@@ -62,6 +62,7 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
 			ProgramChromosome pc = null;
 			pc = p.getChromosome(0);
 			LinkSpecification spec = (LinkSpecification)pc.getNode(0).execute_object(pc, 0, args);
+			logger.info("LS: "+spec);
 			logger.error("Pseudo Measure was not in [0,1]");
 			System.out.println("Pseudo Measure for ("+spec+") was not in [0,1]");
 			System.err.println("Pseudo Measure for ("+spec+") was not in [0,1]");
@@ -81,6 +82,7 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
 				Mapping actualMapping = new MemoryMapping();
 				LinkSpecification spec = (LinkSpecification)pc.getNode(0).execute_object(pc, 0, args);
 				// get Mapping 
+				logger.info("ls = "+spec);
 				try{
 					actualMapping = getMapping(spec);
 				}

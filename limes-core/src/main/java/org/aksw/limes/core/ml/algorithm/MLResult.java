@@ -15,8 +15,16 @@ public class MLResult {
 	LinkSpecification linkspec;
 	Mapping mapping;
 	double quality;
-	
 	Map<String, Object> details = new HashMap<String, Object>();
+	@Override
+	public String toString() {
+		String s = "RESULT:\n";
+		s+="LS: "+linkspec+"\n";
+		s+="Quality: "+quality+"\n";
+		s+="Mapping: "+mapping+"\n";
+		
+		return s;
+	}
 	
 	public void setLinkSpecification(LinkSpecification spec) {
 		this.linkspec = spec;

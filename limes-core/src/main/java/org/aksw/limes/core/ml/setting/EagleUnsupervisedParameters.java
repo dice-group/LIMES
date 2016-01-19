@@ -7,7 +7,7 @@ import org.aksw.limes.core.evaluation.quality.PseudoFMeasure;
  *
  */
 public class EagleUnsupervisedParameters extends EagleParameters{
-	PseudoFMeasure measure;
+	PseudoFMeasure measure = new PseudoFMeasure();
 
 	public PseudoFMeasure getMeasure() {
 		return measure;

@@ -223,4 +223,7 @@ public class LinkSpecGeneticLearnerConfig extends GPConfiguration  {
 	public PropertyMapping getPropertyMapping() {
 		return this.propMap;
 	}
+	public void setPropertyMapping(PropertyMapping propMap) {
+		this.propMap = propMap;
+	}
 }
