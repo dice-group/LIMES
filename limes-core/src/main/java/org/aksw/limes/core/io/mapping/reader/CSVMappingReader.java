@@ -5,6 +5,7 @@ import java.io.FileReader;
 
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.apache.commons.lang.NumberUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -14,8 +15,15 @@ import org.apache.log4j.Logger;
 public class CSVMappingReader implements IMappingReader{
 	static Logger logger = Logger.getLogger(CSVMappingReader.class.getName());
 
-	protected String delimiter = "\t";
+	protected String delimiter;
 
+	public CSVMappingReader(){
+		this.delimiter = ",";
+	}
+	
+	public CSVMappingReader(String delimiter){
+		this.delimiter = delimiter;
+	}
 	/* 
 	 * Read Mapping from the input CSV file
 	 * First column contains source URIs
@@ -23,9 +31,11 @@ public class CSVMappingReader implements IMappingReader{
 	 * Third column contains similarity,
 	 * In case of only 2 columns, all similarities is set to 1
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public Mapping read(String file) {
 		try {
+			file = System.getProperty("user.dir") + "/" + file;
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String line = reader.readLine();
 			reader.close();
@@ -36,7 +46,15 @@ public class CSVMappingReader implements IMappingReader{
 				if(col.length == 2){
 					return readTwoColumnFile(file);
 				} else if(col.length == 3){
-					return readThreeColumnFile(file);
+					try
+					{
+					  Double.parseDouble(col[2]);
+					  return readThreeColumnFileWithSimilarity(file);
+					}
+					catch(NumberFormatException e)
+					{
+					  return readThreeColumnFile(file);
+					}
 				} else {
 					logger.error("Format not supported");
 					System.exit(1);
@@ -89,7 +107,7 @@ public class CSVMappingReader implements IMappingReader{
 	 * @param file
 	 * @return
 	 */
-	public Mapping readThreeColumnFile(String file) {
+	public Mapping readThreeColumnFileWithSimilarity(String file) {
 		Mapping m = new MemoryMapping();
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -106,6 +124,42 @@ public class CSVMappingReader implements IMappingReader{
 			e.printStackTrace();
 		}
 		return m;
+	}
+	
+	/**
+	 * Read Mapping from the input 3 column CSV file
+	 * First column contains source URIs
+	 * Second column contains linking property
+	 * Third column contains Target URIs
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public Mapping readThreeColumnFile(String file) {
+		Mapping m = new MemoryMapping();
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			String s = reader.readLine();
+			String split[];
+			while (s != null) {
+				//split first line
+				split = s.split(delimiter);
+				m.add(removeQuotes(split[0]), removeQuotes(split[2]), 1d);
+				m.setPredicate(removeQuotes(split[1]));
+				s = reader.readLine();
+			}
+			reader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return m;
+	}
+	
+	private String removeQuotes(String s){
+		if((s.charAt(0) == '\"' && s.charAt(s.length()-1) == '\"') || (s.charAt(0) == '\'' && s.charAt(s.length()-1) == '\'')){
+			return s.substring(1, s.length()-1);
+		}
+		return s;
 	}
 
 	/**

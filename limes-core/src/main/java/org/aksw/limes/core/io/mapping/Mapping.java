@@ -83,4 +83,47 @@ public abstract class Mapping implements IMapping {
 		this.predicate = mappingPredicate;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((map == null) ? 0 : map.hashCode());
+		result = prime * result
+				+ ((predicate == null) ? 0 : predicate.hashCode());
+		result = prime * result
+				+ ((reversedMap == null) ? 0 : reversedMap.hashCode());
+		result = prime * result + size;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Mapping other = (Mapping) obj;
+		if (map == null) {
+			if (other.map != null)
+				return false;
+		} else if (!map.equals(other.map))
+			return false;
+		if (predicate == null) {
+			if (other.predicate != null)
+				return false;
+		} else if (!predicate.equals(other.predicate))
+			return false;
+		if (reversedMap == null) {
+			if (other.reversedMap != null)
+				return false;
+		} else if (!reversedMap.equals(other.reversedMap))
+			return false;
+		if (size != other.size)
+			return false;
+		return true;
+	}
+
+	
 }
