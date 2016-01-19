@@ -16,7 +16,7 @@ public class RDFMappingReader implements IMappingReader{
 	@Override
 	public Mapping read(String file) {
 		if(file.endsWith(".nt") || file.endsWith(".n3")){
-			readNtFile(file);
+			return readNtFile(file);
 		}
 		return null;
 	}
@@ -30,6 +30,7 @@ public class RDFMappingReader implements IMappingReader{
     public static Mapping readNtFile(String file) {
         Mapping m = new MemoryMapping();
         try {
+        	file = System.getProperty("user.dir") + "/" + file;
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String s = reader.readLine();
             String split[];
