@@ -2,6 +2,7 @@ package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.ml.LinksetMap;
+import org.aksw.limes.core.ml.setting.LearningSetting;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
@@ -14,5 +15,7 @@ public interface IMLAlgorithm {
 	public MLResult learn();
 	
 	public Mapping computePredictions();
+
+	void init(LearningSetting parameters) throws Exception;
 	
 }

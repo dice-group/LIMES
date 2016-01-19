@@ -17,15 +17,16 @@ public class MLAlgorithmTest {
 	public void test() {
 		
 		EagleUnsupervised eagle;
+		eagle = new EagleUnsupervised(null, null, null);
 		try {
-			eagle = new EagleUnsupervised(null, null, null, null);
-		
 			System.out.println("Default termination criteria.");
 			ActiveLearningSetting als = new ActiveLearningSetting(eagle);
+			eagle.init(als);
 			als.learn();
-			
+				
 			System.out.println("Custom termination criteria.");
 			MyActiveLearning mals = new MyActiveLearning(eagle);
+			eagle.init(mals);
 			mals.learn();
 		
 		} catch (Exception e) {

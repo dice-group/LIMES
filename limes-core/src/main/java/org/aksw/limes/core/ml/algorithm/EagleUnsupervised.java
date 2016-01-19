@@ -16,8 +16,8 @@ import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem;
 import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.aksw.limes.core.ml.algorithm.eagle.core.PseudoFMeasureFitnessFunction;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.aksw.limes.core.ml.setting.EagleUnsupervisedParameters;
-
+import org.aksw.limes.core.ml.setting.LearningSetting;
+import org.aksw.limes.core.ml.setting.UnsupervisedLearningSetting;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.GPProblem;
 import org.jgap.gp.IGPProgram;
@@ -36,7 +36,7 @@ import org.jgap.gp.impl.ProgramChromosome;
  */
 public class EagleUnsupervised extends MLAlgorithm {
 
-	EagleUnsupervisedParameters parameters = new EagleUnsupervisedParameters();
+	UnsupervisedLearningSetting parameters;
 
 	PseudoFMeasureFitnessFunction fitness;
 	GPGenotype gp;
@@ -45,12 +45,15 @@ public class EagleUnsupervised extends MLAlgorithm {
 	List<LinkSpecification> specifications;
 	
 	public EagleUnsupervised(Cache sourceCache, Cache targetCache,
-			Configuration config, EagleUnsupervisedParameters params) throws Exception {
+			Configuration config) {
 		super(sourceCache, targetCache, config);
-		this.parameters = params;
-		setUp();
 	}
 
+	@Override
+	public void init(LearningSetting parameters) throws InvalidConfigurationException {
+		this.parameters = (UnsupervisedLearningSetting) parameters;
+		setUp();
+	}
 
 	@Override
 	public String getName() {
@@ -83,10 +86,6 @@ public class EagleUnsupervised extends MLAlgorithm {
 			return new MemoryMapping();
 		}		
 		return fitness.calculateMapping(allBest);
-	}
-	
-	public void setParameters(EagleUnsupervisedParameters parameters) {
-		this.parameters = parameters;
 	}
 	
 	/**
