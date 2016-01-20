@@ -2,6 +2,7 @@ package org.aksw.limes.core.evaluation.quality;
 
 import java.util.Set;
 
+import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.model.Link;
 
 /**
@@ -13,7 +14,7 @@ import org.aksw.limes.core.model.Link;
 public class Precision extends PRF implements QualitativeMeasure {
 
 	@Override
-	public double calculate(Set<Link> predictions, Set<Link> goldStandard) {
+	public double calculate(Mapping predictions, Mapping goldStandard) {
 		if(predictions.size()==0)
 			return 0;
 		return trueFalsePositive(predictions, goldStandard, true)/(double)predictions.size();

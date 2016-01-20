@@ -4,7 +4,7 @@ import org.aksw.limes.core.ml.algorithm.MLAlgorithm;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
- *
+ * @author Klaus Lyko
  */
 public class ActiveLearningSetting extends LearningSetting {
 	

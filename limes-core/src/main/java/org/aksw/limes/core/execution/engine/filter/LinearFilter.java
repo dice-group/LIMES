@@ -19,7 +19,7 @@ public class LinearFilter implements Filter {
     static Logger logger = Logger.getLogger("LIMES");
 
     /**
-     * Filter a mapping solely with respect to a threshold
+     * Filter a mapping solely with respect to a threshold.
      *
      * @param map
      *            Input mapping
@@ -48,34 +48,77 @@ public class LinearFilter implements Filter {
     }
 
     /**
-     * Filter a mapping with respect to an expression. If the expression is
-     * null, then all the pairs with a similarity above threshold are returned
+     * Filter a mapping with respect to an expression and a threshold.
      */
     public Mapping filter(Mapping map, String condition, double threshold, Cache source, Cache target, String sourceVar,
 	    String targetVar) {
 	double sim = 0.0;
 	Instance s, t;
-
 	if (threshold <= 0.0) {
 	    return map;
 	}
-	if (condition == null) {
-	    return filter(map, threshold);
-	} else {
-	    Mapping result = new MemoryMapping();
-	    // 2. run on all pairs and remove those
-	    for (String key : map.getMap().keySet()) {
-		s = source.getInstance(key);
-		for (String value : map.getMap().get(key).keySet()) {
-		    t = target.getInstance(value);
-		    sim = MeasureProcessor.getSimilarity(s, t, condition, sourceVar, targetVar);
-		    if (sim >= threshold) {
-			result.add(s.getUri(), t.getUri(), sim);
-		    }
+	Mapping result = new MemoryMapping();
+	// 2. run on all pairs and remove those
+	for (String key : map.getMap().keySet()) {
+	    s = source.getInstance(key);
+	    for (String value : map.getMap().get(key).keySet()) {
+		t = target.getInstance(value);
+		sim = MeasureProcessor.getSimilarity(s, t, condition, threshold, sourceVar, targetVar);
+		if (sim >= threshold) {
+		    result.add(s.getUri(), t.getUri(), sim);
 		}
 	    }
-	    return result;
+
 	}
+	return result;
+    }
+
+    /**
+     * 
+     * Filter a mapping with respect to an expression and two thresholds. Used
+     * by HELIOS/DYNAMIC planner in case of an AND optimization strategy. The
+     * input mapping produced by executing one of the children specifications of
+     * a specification that has AND as operator, will be filtered by using the
+     * expression and the threshold of the other child. In order for a link to
+     * be included in the output mapping, it must also pass the parent
+     * specification threshold.
+     * 
+     *
+     * @param map
+     *            Input mapping
+     * @param threshold
+     *            Similarity threshold
+     * @param mainThreshold
+     *            Parent similarity threshold
+     * 
+     */
+    public Mapping filter(Mapping map, String condition, double threshold, double mainThreshold, Cache source,
+	    Cache target, String sourceVar, String targetVar) {
+	double sim = 0.0;
+	Instance s, t;
+	Mapping result = new MemoryMapping();
+	
+	// 2. run on all pairs and remove those
+	for (String key : map.getMap().keySet()) {
+	    s = source.getInstance(key);
+	    for (String value : map.getMap().get(key).keySet()) {
+		t = target.getInstance(value);
+		sim = MeasureProcessor.getSimilarity(s, t, condition, threshold, sourceVar, targetVar);
+		// result must pass the filter threshold first!
+		if (sim >= threshold) {
+		    double sim2 = map.getMap().get(s.getUri()).get(t.getUri());
+		    double minSim = Math.min(sim, sim2);
+		    // min similarity because of AND operator
+		    // check if min sim passes the bigger threshold
+		    if (minSim >= mainThreshold) {
+			result.add(s.getUri(), t.getUri(), minSim);
+		    }
+		}
+
+	    }
+	}
+	return result;
+
     }
 
     /**

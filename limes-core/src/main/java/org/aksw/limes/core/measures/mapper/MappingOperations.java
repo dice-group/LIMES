@@ -94,7 +94,7 @@ public class MappingOperations {
 		// then go through the second terms and checks whether they can
 		// be found in map2 as well
 		for (String value : map1.getMap().get(key).keySet()) {
-		    // if yes, take the highest similarity
+		    // if no, save the link
 		    if (!map2.getMap().get(key).containsKey(value)) {
 			map.add(key, value, map1.getMap().get(key).get(value));
 		    }
@@ -157,18 +157,16 @@ public class MappingOperations {
 	Mapping map = new MemoryMapping();
 	// go through all the keys in map1
 	for (String key : map1.getMap().keySet()) {
-	    // if the first term (key) can also be found in map2
 	    for (String value : map1.getMap().get(key).keySet()) {
-		map.add(key, value, map1.getConfidence(key, value));
+		map.add(key, value, map1.getMap().get(key).get(value));
 	    }
 	}
 	for (String key : map2.getMap().keySet()) {
 	    // if the first term (key) can also be found in map2
 	    for (String value : map2.getMap().get(key).keySet()) {
-		map.add(key, value, map2.getConfidence(key, value));
+		map.add(key, value, map2.getMap().get(key).get(value));
 	    }
 	}
-	
 	return map;
     }
 
@@ -182,8 +180,7 @@ public class MappingOperations {
      * @return XOR(map1, map2)
      */
     public static Mapping xor(Mapping map1, Mapping map2) {
-	return union(difference(map1, map2), difference(map2, map1).reverseSourceTarget());
+	return difference(union(map1, map2), intersection(map1, map2));
     }
 
-    
 }

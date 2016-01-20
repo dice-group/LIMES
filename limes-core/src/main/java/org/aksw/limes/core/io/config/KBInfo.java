@@ -32,7 +32,7 @@ public class KBInfo implements Serializable{
     protected Map<String, Map<String, String>> functions;
     protected Map<String, String> prefixes;
     protected int pageSize;
-    protected String type; //can be sparql or csv, TODO add N3
+    protected String type; 
 
 	/**
      * Constructor

@@ -2,7 +2,11 @@ package org.aksw.limes.core.execution.planning.plan;
 
 import static org.junit.Assert.*;
 
-import org.aksw.limes.core.execution.engine.DefaultExecutionEngine;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
@@ -121,7 +125,7 @@ public class PlanTest {
 	plan.addInstruction(union);
 
 	System.out.println("Plan size with Union: " + plan.size());
-	DefaultExecutionEngine ee = new DefaultExecutionEngine(source, target, "?x", "?y");
+	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 	Mapping mUnion = ee.execute(plan);
 	System.out.println("Size of Mapping with Union: " + mUnion.size());
 
@@ -139,5 +143,139 @@ public class PlanTest {
 	System.out.println("------------------------");
 
     }
+    @Test
+    public void removeNonExistingInstruction() {
+	System.out.println("removeNonExistingInstruction");
 
+	Plan plan = new Plan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan.addInstruction(run1);
+	System.out.println("Size before: " + plan.size());
+
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan.removeInstruction(run2);
+	System.out.println("Size after: " + plan.size());
+	assertTrue(plan.size() != 0);
+
+	plan.removeInstruction(-1);
+	System.out.println("------------------------");
+
+    }
+    @Test
+    public void removeInstructionWithIndex() {
+	System.out.println("removeInstructionWithIndex");
+
+	Plan plan = new Plan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan.addInstruction(run1);
+	System.out.println("Size before: " + plan.size());
+
+	
+	plan.removeInstruction(0);
+	System.out.println("Size after: " + plan.size());
+	assertTrue(plan.size() == 0);
+
+	plan.addInstruction(run1);
+	System.out.println("Size before: " + plan.size());
+	
+	plan.removeInstruction(20);
+	System.out.println("Size after: " + plan.size());
+	assertTrue(plan.size() != 0);
+	
+	plan.removeInstruction(-1);
+	System.out.println("------------------------");
+
+    }
+    @Test
+    public void isEmpty() {
+	System.out.println("isEmpty");
+
+	Plan plan = new Plan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan.addInstruction(run1);
+	System.out.println("Size before: " + plan.size());
+	assertTrue(plan.isEmpty() == false);
+
+	plan.removeInstruction(null);
+	assertTrue(plan.isEmpty() == false);
+
+	System.out.println("------------------------");
+
+    }
+    @Test
+    public void getInstructionList() {
+	System.out.println("getInstructionList");
+
+	Plan plan = new Plan();
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan.addInstruction(run1);
+	plan.addInstruction(run2);
+	List<Instruction> list = plan.getInstructionList();
+	System.out.println("Size before: " + plan.size());
+
+	System.out.println("Size of Instruction list " + list.size());
+
+	assertTrue(list.size() == plan.size());
+
+	assertTrue(list.contains(run1) == true);
+	
+	
+	Instruction run3 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	assertTrue(list.contains(run3) == true);
+	
+	Instruction run4 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	assertTrue(list.contains(run4) == false);
+	
+	list.add(run4);
+	System.out.println(list);
+	System.out.println(plan.getInstructionList());
+
+	assertTrue(list.size() == plan.getInstructionList().size());
+	
+	
+	System.out.println("------------------------");
+
+    }
+    @Test
+    public void Clone() {
+	System.out.println("Clone");
+	Plan plan1 = new Plan();
+
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan1.addInstruction(run1);
+	plan1.addInstruction(run2);
+
+
+	plan1.setMappingSize(10);
+	plan1.setRuntimeCost(1000d);
+	plan1.setSelectivity(0.1d);
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	Plan clonePlan = plan1.clone();
+	// check plan itself
+	System.out.println("Plan hashCode: "+plan1.hashCode());
+	System.out.println("PlanClone hashCode: "+clonePlan.hashCode());
+	assertTrue(plan1.hashCode() != clonePlan.hashCode());
+	System.out.println("\n");
+
+	// check instructionList
+	System.out.println("InstructionList hashCode: "+plan1.getInstructionList().hashCode());
+	System.out.println("InstructionListClone hashCode: "+clonePlan.getInstructionList().hashCode());
+	assertTrue(plan1.getInstructionList().hashCode() != clonePlan.getInstructionList().hashCode());
+	for (int i = 0; i < plan1.getInstructionList().size(); i++) {
+
+	    Instruction inst = plan1.getInstructionList().get(i);
+	    Instruction instClone = clonePlan.getInstructionList().get(i);
+
+	    System.out.println(inst);
+	    System.out.println("----Instruction hashCode: "+inst.hashCode());
+	    System.out.println(instClone);
+	    System.out.println("----InstructionClone hashCode: "+instClone.hashCode());
+	    assertTrue(inst.hashCode() != instClone.hashCode());
+	}
+	System.out.println("\n");
+
+    }
 }

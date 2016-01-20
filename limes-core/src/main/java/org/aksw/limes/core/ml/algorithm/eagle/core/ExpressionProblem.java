@@ -139,31 +139,31 @@ public class ExpressionProblem extends GPProblem{
 			/**
 			* FIXME reset out commenting additional metrics and operators
 			*/
-			nodes.add(new NestedBoolean("MINUS", config));
+//			nodes.add(new NestedBoolean("MINUS", config))
 			nodes.add(new NestedBoolean("OR", config));
-			nodes.add(new NestedBoolean("XOR", config));
+//			nodes.add(new NestedBoolean("XOR", config));
 //			nodes.add(new AddMetric(config));
 			nodes.add(new MetricCommand(config, LinkSpecification.class));
 			
-			if(config.hasPointSetProperties()) {					
-				nodes.add(new PointSetMeasure("hausdorff", config, String.class, 1, true));
-				nodes.add(new PointSetMeasure("geomean", config, String.class, 1, true));
-			for(int i=0; i<config.getPropertyMapping().pointsetPropPairs.size(); i++) {
-				nodes.add( new PointSetPropertyPair(config, Pair.class, ResourceTerminalType.POINTSETPROPPAIR.intValue(), true, i));
-			}
-		}	
+//			if(config.hasPointSetProperties()) {					
+//				nodes.add(new PointSetMeasure("hausdorff", config, String.class, 1, true));
+//				nodes.add(new PointSetMeasure("geomean", config, String.class, 1, true));
+//				for(int i=0; i<config.getPropertyMapping().pointsetPropPairs.size(); i++) {
+//					nodes.add( new PointSetPropertyPair(config, Pair.class, ResourceTerminalType.POINTSETPROPPAIR.intValue(), true, i));
+//				}
+//			}	
 			
 
-		if(config.hasNumericProperties()) {					
-			nodes.add(new NumberMeasure(config));
-			for(int i=0; i<config.getPropertyMapping().numberPropPairs.size(); i++) {
-				nodes.add( new NumberPropertyPair(config, Pair.class, ResourceTerminalType.NUMBERPROPPAIR.intValue(), true, i));
-//				nodes.add( new StringPropertyPair(config, Pair.class, ResourceTerminalType.STRINGPROPPAIR.intValue(), true, i));
-			}
-			// threshold for numeric properties - more restrictive due to possible memory lacks		
-		    nodes.add(new Terminal(config, CommandGene.DoubleClass, 0.8d, 1.0d, false, 
-			   		ResourceTerminalType.NUMBERTHRESHOLD.intValue(), true));
-		}
+//		if(config.hasNumericProperties()) {					
+//			nodes.add(new NumberMeasure(config));
+//			for(int i=0; i<config.getPropertyMapping().numberPropPairs.size(); i++) {
+//				nodes.add( new NumberPropertyPair(config, Pair.class, ResourceTerminalType.NUMBERPROPPAIR.intValue(), true, i));
+////				nodes.add( new StringPropertyPair(config, Pair.class, ResourceTerminalType.STRINGPROPPAIR.intValue(), true, i));
+//			}
+//			// threshold for numeric properties - more restrictive due to possible memory lacks		
+//		    nodes.add(new Terminal(config, CommandGene.DoubleClass, 0.8d, 1.0d, false, 
+//			   		ResourceTerminalType.NUMBERTHRESHOLD.intValue(), true));
+//		}
 		    
 //		if(config.hasDateProperties()) {
 //			nodes.add(new DateMeasure("yearsim", config));

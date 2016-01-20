@@ -6,8 +6,8 @@ import org.junit.Test;
 
 /**
  * TODO Assertions!
- * 
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Klaus Lyko
  * @version 2015-11-09
  *
  */
@@ -16,16 +16,24 @@ public class MLAlgorithmTest {
 	@Test
 	public void test() {
 		
-		EagleUnsupervised eagle = new EagleUnsupervised(null, null, null);
+		EagleUnsupervised eagle;
+		eagle = new EagleUnsupervised(null, null, null);
+		try {
+			System.out.println("Default termination criteria.");
+			ActiveLearningSetting als = new ActiveLearningSetting(eagle);
+			eagle.init(als);
+			als.learn();
+				
+			System.out.println("Custom termination criteria.");
+			MyActiveLearning mals = new MyActiveLearning(eagle);
+			eagle.init(mals);
+			mals.learn();
+		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		System.out.println("Default termination criteria.");
-		ActiveLearningSetting als = new ActiveLearningSetting(eagle);
-		als.learn();
-		
-		System.out.println("Custom termination criteria.");
-		MyActiveLearning mals = new MyActiveLearning(eagle);
-		mals.learn();
-		
 	}
 	
 

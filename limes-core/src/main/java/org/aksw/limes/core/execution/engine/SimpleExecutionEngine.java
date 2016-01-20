@@ -33,7 +33,7 @@ import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
  * @author ngonga
  * @author kleanthi
  */
-public class DefaultExecutionEngine extends ExecutionEngine {
+public class SimpleExecutionEngine extends ExecutionEngine {
     /**
      * Implements running the run operator. Assume atomic measures
      *
@@ -45,7 +45,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *            Target cache
      * @return MemoryMapping
      */
-    public DefaultExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
+    public SimpleExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
 	super(source, target, sourceVar, targetVar);
     }
 
@@ -57,7 +57,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *            An execution plan
      * @return The MemoryMapping that results from running the plan
      */
-    private Mapping run(Plan plan) {
+    public Mapping execute(Plan plan) {
 	buffer = new ArrayList<MemoryMapping>();
 	if (plan.isEmpty()) {
 	    logger.info("Plan is empty. Done.");
@@ -128,8 +128,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      * @return Mapping
      */
     public Mapping executeRun(Instruction inst) {
-	// get threshold
-
+	
 	double threshold = Double.parseDouble(inst.getThreshold());
 	// generate correct mapper
 	IMapper mapper;
@@ -150,12 +149,12 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 	    mapper = new ExactMatchMapper();
 	} else if (inst.getMeasureExpression().startsWith("soundex")) {
 	    mapper = new SoundexMapper();
-	}else if (inst.getMeasureExpression().startsWith("overlap")
-		|| inst.getMeasureExpression().startsWith("trigrams")||
-		inst.getMeasureExpression().startsWith("cosine") ||
-		inst.getMeasureExpression().startsWith("jaccard")) {
+	} else
+	    if (inst.getMeasureExpression().startsWith("overlap") || inst.getMeasureExpression().startsWith("trigrams")
+		    || inst.getMeasureExpression().startsWith("cosine")
+		    || inst.getMeasureExpression().startsWith("jaccard")) {
 	    mapper = new PPJoinPlusPlus();
-	} else 
+	} else
 	    return new MemoryMapping();
 	// run mapper
 	return mapper.getMapping(source, target, sourceVariable, targetVariable, inst.getMeasureExpression(),
@@ -171,10 +170,21 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *            MemoryMapping that is to be filtered
      * @return Filtered MemoryMapping
      */
-    public Mapping executeFilter(Instruction inst, Mapping m) {
+    public Mapping executeFilter(Instruction inst, Mapping input) {
 	LinearFilter filter = new LinearFilter();
-	return filter.filter(m, inst.getMeasureExpression(), Double.parseDouble(inst.getThreshold()), source, target,
-		sourceVariable, targetVariable);
+	Mapping m = new MemoryMapping();
+	if (inst.getMeasureExpression() == null)
+	    m = filter.filter(input, Double.parseDouble(inst.getThreshold()));
+	else {
+	    if (inst.getMainThreshold() != null)
+		m = filter.filter(input, inst.getMeasureExpression(), Double.parseDouble(inst.getThreshold()),
+			Double.parseDouble(inst.getMainThreshold()), source, target, sourceVariable, targetVariable);
+	    else// original filtering
+		m = filter.filter(input, inst.getMeasureExpression(), Double.parseDouble(inst.getThreshold()), source,
+			target, sourceVariable, targetVariable);
+	}
+
+	return m;
     }
 
     /**
@@ -236,13 +246,13 @@ public class DefaultExecutionEngine extends ExecutionEngine {
      *            ExecutionPlan
      * @return MemoryMapping
      */
-    public Mapping execute(Plan plan) {
+    public Mapping execute(NestedPlan plan) {
 	// empty nested plan contains nothing
 	Mapping m = new MemoryMapping();
 	if (plan.isEmpty()) {
 	} // atomic nested plan just contain simple list of instructions
-	else if (plan.isFlat()) {
-	    m = run(plan);
+	else if (plan.isAtomic()) {
+	    m = execute((Plan)plan);
 	} // nested plans contain subplans, an operator for merging the results
 	  // of the subplans and a filter for filtering the results of the
 	  // subplan
@@ -269,9 +279,7 @@ public class DefaultExecutionEngine extends ExecutionEngine {
 	    // only run filtering if there is a filter indeed, else simply
 	    // return MemoryMapping
 	    if (plan.getFilteringInstruction() != null) {
-		if (Double.parseDouble(plan.getFilteringInstruction().getThreshold()) > 0) {
-		    m = executeFilter(plan.getFilteringInstruction(), m);
-		}
+		m = executeFilter(plan.getFilteringInstruction(), m);
 	    }
 	}
 	return m;

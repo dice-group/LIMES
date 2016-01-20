@@ -17,7 +17,7 @@ public class ExecutionEngineFactory {
     public static ExecutionEngine getEngine(String name, Cache source, Cache target, String sourceVar, String targetVar) {
 
 	if (name.equalsIgnoreCase(DEFAULT))
-	    return new DefaultExecutionEngine(source, target, sourceVar, targetVar);
+	    return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
 	if (name.equalsIgnoreCase(PARALLEL))
 	    return new ParallelExecutionEngine(source, target, sourceVar, targetVar);
 

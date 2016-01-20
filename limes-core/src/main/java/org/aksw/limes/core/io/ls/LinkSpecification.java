@@ -52,6 +52,7 @@ public class LinkSpecification implements ILinkSpecification {
     protected String prop1 = "";
     protected String prop2 = "";
     protected String treePath = "";
+    protected String fullExpression = "";
 
     public void setAtomicFilterExpression(String atomicMeasure, String prop1, String prop2) {
 	this.setAtomicMeasure(atomicMeasure);
@@ -82,20 +83,7 @@ public class LinkSpecification implements ILinkSpecification {
 	readSpec(measure, threshold);
     }
 
-    /**
-     * Creates a spec with a measure read inside
-     * 
-     * @param measure
-     *            String representation of the spec
-     */
-    public LinkSpecification(String measure, double threshold, boolean flag) {
-	setOperator(null);
-	setChildren(null);
-	parent = null;
-	setDependencies(null);
-	readSpecXOR(measure, threshold);
-
-    }
+    
 
     /**
      * Adds a child to the current node of the spec
@@ -206,79 +194,7 @@ public class LinkSpecification implements ILinkSpecification {
 
     }
 
-    /**
-     * Reads a spec expression into its canonical form Don't forget to optimize
-     * the filters by checking (if threshold_left and threshold_right >= theta,
-     * then theta = 0)
-     *
-     * @param spec
-     *            Spec expression to read
-     * @param theta
-     *            Global threshold
-     */
-    public void readSpecXOR(String spec, double theta) {
-
-	Parser p = new Parser(spec, getThreshold());
-	if (p.isAtomic()) {
-	    filterExpression = spec;
-	    setThreshold(theta);
-	} else {
-	    LinkSpecification leftSpec = new LinkSpecification();
-	    LinkSpecification rightSpec = new LinkSpecification();
-	    leftSpec.parent = this;
-	    rightSpec.parent = this;
-	    setChildren(new ArrayList<LinkSpecification>());
-	    getChildren().add(leftSpec);
-	    getChildren().add(rightSpec);
-
-	    if (p.getOperator().equalsIgnoreCase(AND)) {
-		setOperator(Operator.AND);
-		leftSpec.readSpecXOR(p.getTerm1(), p.getThreshold1());
-		rightSpec.readSpecXOR(p.getTerm2(), p.getThreshold2());
-		filterExpression = null;
-		setThreshold(theta);
-	    } else if (p.getOperator().equalsIgnoreCase(MIN)) {
-		setOperator(Operator.AND);
-		leftSpec.readSpecXOR(p.getTerm1(), theta);
-		rightSpec.readSpecXOR(p.getTerm2(), theta);
-		filterExpression = null;
-		setThreshold(theta);
-
-	    } else if (p.getOperator().equalsIgnoreCase(OR)) {
-		setOperator(Operator.OR);
-		leftSpec.readSpecXOR(p.getTerm1(), p.getThreshold1());
-		rightSpec.readSpecXOR(p.getTerm2(), p.getThreshold2());
-		filterExpression = null;
-		setThreshold(theta);
-	    } else if (p.getOperator().equalsIgnoreCase(MAX)) {
-		setOperator(Operator.OR);
-		leftSpec.readSpecXOR(p.getTerm1(), theta);
-		rightSpec.readSpecXOR(p.getTerm2(), theta);
-		filterExpression = null;
-		setThreshold(theta);
-	    } else if (p.getOperator().equalsIgnoreCase(XOR)) {
-		setOperator(Operator.MINUS);
-		leftSpec.readSpecXOR("OR(" + p.getTerm1() + "|" + p.getThreshold1() + "," + p.getTerm2() + "|"
-			+ p.getThreshold2() + ")", theta);
-		rightSpec.readSpecXOR("AND(" + p.getTerm1() + "|" + p.getThreshold1() + "," + p.getTerm2() + "|"
-			+ p.getThreshold2() + ")", theta);
-		filterExpression = null;
-		setThreshold(theta);
-	    } else if (p.getOperator().equalsIgnoreCase(MINUS)) {
-		setOperator(Operator.MINUS);
-		leftSpec.readSpecXOR(p.getTerm1(), p.getThreshold1());
-		rightSpec.readSpecXOR(p.getTerm2(), p.getThreshold2());
-		filterExpression = null;
-		setThreshold(theta);
-	    } else if (p.getOperator().equalsIgnoreCase(ADD)) {
-		setOperator(Operator.AND);
-		leftSpec.readSpecXOR(p.getTerm1(), (theta - p.getCoef2()) / p.getCoef1());
-		rightSpec.readSpecXOR(p.getTerm2(), (theta - p.getCoef1()) / p.getCoef2());
-		filterExpression = spec;
-		setThreshold(theta);
-	    }
-	}
-    }
+    
 
     /**
      * Reads a spec expression into its canonical form Don't forget to optimize
@@ -311,43 +227,57 @@ public class LinkSpecification implements ILinkSpecification {
 		rightSpec.readSpec(p.getTerm2(), p.getThreshold2());
 		filterExpression = null;
 		setThreshold(theta);
+		fullExpression = "AND(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
+			+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 	    } else if (p.getOperator().equalsIgnoreCase(MIN)) {
 		setOperator(Operator.AND);
 		leftSpec.readSpec(p.getTerm1(), theta);
 		rightSpec.readSpec(p.getTerm2(), theta);
 		filterExpression = null;
 		setThreshold(theta);
-
+		fullExpression = "MIN(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
+			+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 	    } else if (p.getOperator().equalsIgnoreCase(OR)) {
 		setOperator(Operator.OR);
 		leftSpec.readSpec(p.getTerm1(), p.getThreshold1());
 		rightSpec.readSpec(p.getTerm2(), p.getThreshold2());
 		filterExpression = null;
 		setThreshold(theta);
+		fullExpression = "OR(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
+			+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 	    } else if (p.getOperator().equalsIgnoreCase(MAX)) {
 		setOperator(Operator.OR);
 		leftSpec.readSpec(p.getTerm1(), theta);
 		rightSpec.readSpec(p.getTerm2(), theta);
 		filterExpression = null;
 		setThreshold(theta);
+		fullExpression = "MAX(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
+			+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 	    } else if (p.getOperator().equalsIgnoreCase(XOR)) {
 		setOperator(Operator.XOR);
 		leftSpec.readSpec(p.getTerm1(), p.getThreshold1());
 		rightSpec.readSpec(p.getTerm2(), p.getThreshold2());
 		filterExpression = null;
 		setThreshold(theta);
+		fullExpression = "XOR(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
+			+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 	    } else if (p.getOperator().equalsIgnoreCase(MINUS)) {
 		setOperator(Operator.MINUS);
 		leftSpec.readSpec(p.getTerm1(), p.getThreshold1());
 		rightSpec.readSpec(p.getTerm2(), p.getThreshold2());
 		filterExpression = null;
 		setThreshold(theta);
+		fullExpression = "MINUS(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
+			+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 	    } else if (p.getOperator().equalsIgnoreCase(ADD)) {
 		setOperator(Operator.AND);
 		leftSpec.readSpec(p.getTerm1(), (theta - p.getCoef2()) / p.getCoef1());
 		rightSpec.readSpec(p.getTerm2(), (theta - p.getCoef1()) / p.getCoef2());
 		filterExpression = spec;
 		setThreshold(theta);
+		fullExpression = "ADD(" + leftSpec.fullExpression + "|" + ((theta - p.getCoef2()) / p.getCoef1()) + ","
+			+ rightSpec.fullExpression + "|" + ((theta - p.getCoef1()) / p.getCoef2()) + ")";
+
 	    }
 	}
     }
@@ -515,42 +445,7 @@ public class LinkSpecification implements ILinkSpecification {
 	}
     }
 
-    public static void main(String args[]) {
-	LinkSpecification spec = new LinkSpecification();
-	String l = "XOR(cosine(x.A,y.A)|0.7881,OR(trigrams(x.B,y.B)|0.5003,"
-		+ "XOR(MINUS(overlap(x.C,y.C)|0.48,OR(overlap(x.D,y.D)|0.4733,"
-		+ "cosine(x.E,y.E)|0.7063)|0.3552)|0.8884,cosine(x.F,y.F)|0.3)|0.3552)|0.6307)";
-	// spec.readSpec("OR(trigrams(x.rdfs:label,y.name)|0.3,
-	// jaro(x.rdfs:label, y.name)|0.5)", 0.8);
-	spec.readSpec(l, 0.4678);
-	logger.info(spec.toString());
-	spec.readSpecXOR(l, 0.4678);
-	logger.info(spec + " " + spec.size());
-	// System.out.println(spec.clone());
-
-	spec.pathOfAtomic();
-	/*
-	 * for(LinkSpecification leaf:spec.getAllLeaves()){ logger.info(leaf);
-	 * logger.info(leaf.treePath); }
-	 */
-	spec.getAllChildren();
-
-	List<LinkSpecification> leaves = spec.getAllLeaves();
-	int i = 0;
-	for (LinkSpecification sp : leaves) {
-
-	    System.out.println("Leave " + (++i) + ": " + sp);
-	    Parser p = new Parser(sp.filterExpression, sp.getThreshold());
-	    System.out.println("\tp.term1=" + p.getTerm1() + " p.term2=" + p.getTerm2() + "");
-	    if (sp.parent.parent != null)
-		System.out.println((sp.parent).parent.getOperator());
-
-	    String sourceProp = p.getTerm1().substring(p.getTerm1().indexOf(".") + 1);
-	    String targetProp = p.getTerm2().substring(p.getTerm2().indexOf(".") + 1);
-
-	    System.out.println("\tsourceProp=" + sourceProp + ", targetProp=" + targetProp + "\n\n");
-	}
-    }
+    
 
     @Override
     public boolean equals(Object other) {
@@ -832,6 +727,14 @@ public class LinkSpecification implements ILinkSpecification {
 
     public void setDependencies(List<LinkSpecification> dependencies) {
 	this.dependencies = dependencies;
+    }
+
+    public String getFullExpression() {
+	return fullExpression;
+    }
+
+    public void setFullExpression(String fullExpression) {
+	this.fullExpression = fullExpression;
     }
 
 }

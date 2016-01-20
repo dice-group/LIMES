@@ -3,6 +3,7 @@ package org.aksw.limes.core.execution.engine;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 
 /**
@@ -22,14 +23,26 @@ public class ParallelExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Implementation of the execution of a plan.
+     * Implementation of the execution of a nested plan.
+     * Instructions of the plan are implemented in parallel.
+     *
+     * @param plan A nested plan
+     * @return The mapping from running the plan
+     */
+    @Override
+    public MemoryMapping execute(NestedPlan plan) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+    /**
+     * Implementation of the execution of an execution plan.
      * Instructions of the plan are implemented in parallel.
      *
      * @param plan An execution plan
      * @return The mapping from running the plan
      */
     @Override
-    public MemoryMapping execute(Plan plan) {
+    public Mapping execute(Plan plan) {
 	// TODO Auto-generated method stub
 	return null;
     }

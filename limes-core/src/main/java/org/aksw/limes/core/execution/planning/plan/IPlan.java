@@ -2,7 +2,9 @@ package org.aksw.limes.core.execution.planning.plan;
 
 import java.util.List;
 
-public interface IPlan {
+import org.aksw.limes.core.util.Clonable;
+
+public interface IPlan extends Clonable<IPlan>{
     /**
      * Adds an instruction to the instructionList
      * 

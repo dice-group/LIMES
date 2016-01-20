@@ -7,14 +7,14 @@ import org.apache.log4j.Logger;
  * @version DEC 2, 2015
  */
 public class Parser implements IParser {
-	private static final Logger logger = Logger.getLogger(Parser.class.getName());
+	public static final Logger logger = Logger.getLogger(Parser.class.getName());
 	
-	private static final String MULT = "MULT";
-	private static final String ADD = "ADD";
-	private static final String MAX = "MAX";
-	private static final String MIN = "MIN";
+	public static final String MULT = "MULT";
+	public static final String ADD = "ADD";
+	public static final String MAX = "MAX";
+	public static final String MIN = "MIN";
 
-	protected double threshold;
+	private double threshold;
 	private double threshold1;
     private double threshold2;
     protected double coef1;
@@ -28,7 +28,7 @@ public class Parser implements IParser {
     public Parser(String input, double theta) {
         expression = input.replaceAll(" ", "");
         //expression = expression.toLowerCase();
-        threshold = theta;
+        setThreshold(theta);
         getTerms();
     }
 
@@ -135,16 +135,16 @@ public class Parser implements IParser {
             //now compute thresholds based on operations
             //first numeric operations
             if (operator.equalsIgnoreCase(MIN) || operator.equalsIgnoreCase(MAX)) {
-                setThreshold1(threshold);
-                setThreshold2(threshold);
+                setThreshold1(getThreshold());
+                setThreshold2(getThreshold());
             } else if (operator.equalsIgnoreCase(ADD)) {
                 operator = ADD;
                 System.out.println("Coef1 = " + coef1 + ", Coef2 = " + coef2);
-                setThreshold1((threshold - coef2) / coef1);
-                setThreshold2((threshold - coef1) / coef2);
+                setThreshold1((getThreshold() - coef2) / coef1);
+                setThreshold2((getThreshold() - coef1) / coef2);
             } else if (operator.equalsIgnoreCase(MULT)) {
                 operator = MULT;
-                setThreshold1(threshold / (coef2 * coef1));
+                setThreshold1(getThreshold() / (coef2 * coef1));
                 setThreshold2(getThreshold1());
             } //now set constraints. separator for sets and thresholds is |
             //thus one can write
@@ -178,24 +178,12 @@ public class Parser implements IParser {
         }
     }
 
-    public static void testParsing(String s, double threshold) {
-        Parser p = new Parser(s, threshold);
-        if (p.isAtomic()) {
-            logger.debug("-->" + s + " with threshold " + threshold + " will be carried out.");
-        } else {
-            testParsing(p.term1, p.getThreshold1());
-            testParsing(p.term2, p.getThreshold2());
-            logger.debug("--> <" + p.operator + "> will be carried out on " + p.term1 + " and " + p.term2 + " with "
-                    + "threshold " + threshold);
-        }
-    }
-
 
 	public double getThreshold2() {
 		return threshold2;
 	}
 
-
+	
 	public void setThreshold2(double threshold2) {
 		this.threshold2 = threshold2;
 	}
@@ -208,6 +196,16 @@ public class Parser implements IParser {
 
 	public void setThreshold1(double threshold1) {
 		this.threshold1 = threshold1;
+	}
+
+
+	public double getThreshold() {
+	    return threshold;
+	}
+
+
+	public void setThreshold(double threshold) {
+	    this.threshold = threshold;
 	}
 
 }

@@ -121,7 +121,6 @@ public class HeliosPlanner extends Planner {
 	for (String measure : measures) {
 	    cost = cost + MeasureFactory.getMeasure(measure).getRuntimeApproximation(mappingSize);
 	}
-	logger.info("Runtime approximation for filter expression " + measures + " is " + cost);
 	return cost;
     }
 
@@ -176,6 +175,8 @@ public class HeliosPlanner extends Planner {
 		// add costs of union, which are 1
 		plan.setRuntimeCost(plan.getRuntimeCost() + (spec.getChildren().size() - 1));
 		plan.setSubPlans(children);
+		plan.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+			spec.getThreshold() + "", -1, -1, 0));
 		// set operator
 		double selectivity;
 		if (spec.getOperator().equals(Operator.OR)) {
@@ -225,8 +226,7 @@ public class HeliosPlanner extends Planner {
 		    }
 		    plan.setSelectivity(selectivity);
 		}
-		plan.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
-			spec.getThreshold() + "", -1, -1, 0));
+
 	    } // here we can optimize.
 	    else if (spec.getOperator().equals(Operator.AND)) {
 		List<NestedPlan> children = new ArrayList<NestedPlan>();
@@ -238,7 +238,9 @@ public class HeliosPlanner extends Planner {
 		    plan.setRuntimeCost(plan.getRuntimeCost() + childPlan.getRuntimeCost());
 		    selectivity = selectivity * childPlan.getSelectivity();
 		}
-		plan = getBestConjunctivePlan(children, selectivity);
+		plan.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+			spec.getThreshold() + "", -1, -1, 0));
+		plan = getBestConjunctivePlan(spec, children, selectivity);
 	    }
 	}
 	return plan;
@@ -255,7 +257,7 @@ public class HeliosPlanner extends Planner {
      *            Selectivity of the instructionList (known beforehand)
      * @return NestedPlan
      */
-    public NestedPlan getBestConjunctivePlan(List<NestedPlan> plans, double selectivity) {
+    public NestedPlan getBestConjunctivePlan(LinkSpecification spec, List<NestedPlan> plans, double selectivity) {
 	if (plans == null) {
 	    return null;
 	}
@@ -266,11 +268,11 @@ public class HeliosPlanner extends Planner {
 	    return plans.get(0);
 	}
 	if (plans.size() == 2) {
-	    return getBestConjunctivePlan(plans.get(0), plans.get(1), selectivity);
+	    return getBestConjunctivePlan(spec, plans.get(0), plans.get(1), selectivity);
 	} else {
 	    NestedPlan left = plans.get(0);
 	    plans.remove(plans.get(0));
-	    return getBestConjunctivePlan(left, plans, selectivity);
+	    return getBestConjunctivePlan(spec, left, plans, selectivity);
 	}
     }
 
@@ -286,7 +288,7 @@ public class HeliosPlanner extends Planner {
      *            Overall selectivity
      * @return NestedPlan
      */
-    public NestedPlan getBestConjunctivePlan(NestedPlan left, List<NestedPlan> plans, double selectivity) {
+    public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, List<NestedPlan> plans, double selectivity) {
 	if (plans == null) {
 	    return left;
 	}
@@ -294,10 +296,10 @@ public class HeliosPlanner extends Planner {
 	    return left;
 	}
 	if (plans.size() == 1) {
-	    return getBestConjunctivePlan(left, plans.get(0), selectivity);
+	    return getBestConjunctivePlan(spec, left, plans.get(0), selectivity);
 	} else {
-	    NestedPlan right = getBestConjunctivePlan(plans, selectivity);
-	    return getBestConjunctivePlan(left, right, selectivity);
+	    NestedPlan right = getBestConjunctivePlan(spec, plans, selectivity);
+	    return getBestConjunctivePlan(spec, left, right, selectivity);
 	}
     }
 
@@ -312,13 +314,18 @@ public class HeliosPlanner extends Planner {
      * @param selectivity
      * @return NestedPlan
      */
-    public NestedPlan getBestConjunctivePlan(NestedPlan left, NestedPlan right, double selectivity) {
+    public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, NestedPlan right, double selectivity) {
 	double runtime1 = 0, runtime2, runtime3;
 	NestedPlan result = new NestedPlan();
 	double mappingSize = source.size() * target.size() * right.getSelectivity();
-
 	// first instructionList: run both children and then merge
 	runtime1 = left.getRuntimeCost() + right.getRuntimeCost();
+	result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+		spec.getThreshold() + "", -1, -1, 0));
+	if (result.getFilteringInstruction().getMeasureExpression() != null) {
+	    runtime1 = runtime1 + MeasureProcessor.getCosts(result.getFilteringInstruction().getMeasureExpression(),
+		    (int) Math.ceil(source.size() * target.size() * selectivity));
+	}
 	// second instructionList: run left child and use right child as filter
 	runtime2 = left.getRuntimeCost();
 	runtime2 = runtime2 + getFilterCosts(right.getAllMeasures(), (int) Math.ceil(mappingSize));
@@ -328,44 +335,38 @@ public class HeliosPlanner extends Planner {
 	runtime3 = runtime3 + getFilterCosts(left.getAllMeasures(), (int) Math.ceil(mappingSize));
 
 	double min = Math.min(Math.min(runtime3, runtime2), runtime1);
-
+	// //just for tests
+	// min = -10d;
+	// runtime2 = -10d;
 	if (min == runtime1) {
 	    result.setOperator(Instruction.Command.INTERSECTION);
-	    result.setFilteringInstruction(null);
-	    List<NestedPlan> plans = new ArrayList<NestedPlan>();
-	    plans.add(left);
-	    plans.add(right);
-	    result.setSubPlans(plans);
-
+	    List<NestedPlan> subplans = new ArrayList<NestedPlan>();
+	    subplans.add(left);
+	    subplans.add(right);
+	    result.setSubPlans(subplans);
 	} else if (min == runtime2) {
-	    if (right.isFlat()) {
-		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, right.getEquivalentMeasure(),
-			right.getInstructionList().get(0).getThreshold() + "", -1, -1, 0));
-	    } else {
-		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, right.getEquivalentMeasure(),
-			right.getFilteringInstruction().getThreshold() + "", -1, -1, 0));
-	    }
+	    String rightChild = spec.getChildren().get(1).getFullExpression();
+	    result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, rightChild,
+		    spec.getChildren().get(1).getThreshold() + "", -1, -1, 0));
+	    result.getFilteringInstruction().setMainThreshold(spec.getThreshold() + "");
 	    result.setOperator(null);
-	    List<NestedPlan> plans = new ArrayList<NestedPlan>();
-	    plans.add(left);
-	    result.setSubPlans(plans);
-	} else {
-	    if (left.isFlat()) {
-		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, left.getEquivalentMeasure(),
-			left.getInstructionList().get(0).getThreshold() + "", -1, -1, 0));
-	    } else {
-		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, left.getEquivalentMeasure(),
-			left.getFilteringInstruction().getThreshold() + "", -1, -1, 0));
-	    }
+	    List<NestedPlan> subplans = new ArrayList<NestedPlan>();
+	    subplans.add(left);
+	    result.setSubPlans(subplans);
+	} else // min == runtime3
+	{
+	    String leftChild = spec.getChildren().get(0).getFullExpression();
+	    result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, leftChild,
+		    spec.getChildren().get(0).getThreshold() + "", -1, -1, 0));
+	    result.getFilteringInstruction().setMainThreshold(spec.getThreshold() + "");
 	    result.setOperator(null);
-	    List<NestedPlan> plans = new ArrayList<NestedPlan>();
-	    plans.add(right);
-	    result.setSubPlans(plans);
+	    List<NestedPlan> subplans = new ArrayList<NestedPlan>();
+	    subplans.add(right);
+	    result.setSubPlans(subplans);
 	}
 	result.setRuntimeCost(min);
 	result.setSelectivity(selectivity);
 	result.setMappingSize(source.size() * target.size() * selectivity);
-
 	return result;
     }
 }
