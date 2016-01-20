@@ -10,7 +10,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @author ngonga
  * @author kleanthi
  */
-public interface Filter {
+public interface IFilter {
     /**
      * Naive filter for mapping using a threshold as filtering criterion
      * 
@@ -44,7 +44,30 @@ public interface Filter {
      */
     public Mapping filter(Mapping map, String condition, double threshold, Cache source, Cache target, String sourceVar,
 	    String targetVar);
-
+    /**
+     * Filter for mapping using a condition and two thresholds as filtering
+     * criterion
+     * 
+     * @param map,
+     *            Map bearing the results of Link Specification
+     * @param condition,
+     *            the condition for filtering
+     * @param threshold,
+     *            Value of t, first threshold
+     * @param mainThreshold,
+     *            Value of t2, second threshold
+     * @param source,
+     *            source Knowledge base
+     * @param target,
+     *            target Knowledge base
+     * @param sourceVar,
+     *            source property
+     * @param targetVar,
+     *            target property
+     * @return Mapping, that satisfies condition >= threshold
+     */
+    public Mapping filter(Mapping map, String condition, double threshold, double mainThreshold, Cache source, Cache target, String sourceVar,
+	    String targetVar);
     /**
      * Filter for linear combinations when operation is set to "add", given the
      * expression a*sim1 + b*sim2 >= t or multiplication given the expression
