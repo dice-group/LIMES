@@ -9,6 +9,7 @@ import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
+import org.aksw.limes.core.io.ls.Operator;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.junit.After;
 import org.junit.Before;
@@ -527,5 +528,540 @@ public class NestedPlanTest {
 	}
 
     }
+    @Test
+    public void Equal() {
+	System.out.println("Equal");
+	NestedPlan plan1 = new NestedPlan();
 
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan1.addInstruction(run1);
+	plan1.addInstruction(run2);
+	Instruction filter1 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan1.setFilteringInstruction(filter1);
+
+	NestedPlan subPlan1 = new NestedPlan();
+	Instruction subrun1 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan1.addInstruction(subrun1);
+	plan1.setSubPlans(new ArrayList<NestedPlan>());
+	plan1.getSubPlans().add((NestedPlan) subPlan1);
+
+	NestedPlan subPlan2 = new NestedPlan();
+	Instruction subrun2 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan2.addInstruction(subrun2);
+	plan1.getSubPlans().add((NestedPlan) subPlan2);
+
+	Plan subsubPlan1 = new NestedPlan();
+	Instruction subsubrun1 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan1.addInstruction(subsubrun1);
+	subPlan1.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan1.getSubPlans().add((NestedPlan) subsubPlan1);
+	//////////////////////////////////////////////////////////////////////////////////////////
+	NestedPlan plan2 = new NestedPlan();
+	Instruction run3 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run4 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan2.addInstruction(run3);
+	plan2.addInstruction(run4);
+	Instruction filter2 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan2.setFilteringInstruction(filter2);
+
+	NestedPlan subPlan3 = new NestedPlan();
+	Instruction subrun3 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan3.addInstruction(subrun3);
+	plan2.setSubPlans(new ArrayList<NestedPlan>());
+	plan2.getSubPlans().add((NestedPlan) subPlan3);
+
+	NestedPlan subPlan4 = new NestedPlan();
+	Instruction subrun4 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan4.addInstruction(subrun4);
+	plan2.getSubPlans().add((NestedPlan) subPlan4);
+
+	Plan subsubPlan2 = new NestedPlan();
+	Instruction subsubrun2 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan2.addInstruction(subsubrun2);
+	subPlan3.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan3.getSubPlans().add((NestedPlan) subsubPlan2);	
+	
+	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////
+	assertTrue(plan1.equals(plan2));
+	
+	NestedPlan plan3 = null;
+	assertTrue(!plan1.equals(plan3));
+	///////////////////////////////////////////////////////////////////////////////////////////
+	System.out.println("------------------------");
+
+	
+	
+
+    }
+    @Test
+    public void EqualExcludeInstruction() {
+	System.out.println("EqualExcludeInstruction");
+	NestedPlan plan1 = new NestedPlan();
+
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan1.addInstruction(run1);
+	plan1.addInstruction(run2);
+	Instruction filter1 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan1.setFilteringInstruction(filter1);
+
+	NestedPlan subPlan1 = new NestedPlan();
+	Instruction subrun1 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan1.addInstruction(subrun1);
+	plan1.setSubPlans(new ArrayList<NestedPlan>());
+	plan1.getSubPlans().add((NestedPlan) subPlan1);
+
+	NestedPlan subPlan2 = new NestedPlan();
+	Instruction subrun2 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan2.addInstruction(subrun2);
+	plan1.getSubPlans().add((NestedPlan) subPlan2);
+
+	NestedPlan subsubPlan1 = new NestedPlan();
+	Instruction subsubrun1 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan1.addInstruction(subsubrun1);
+	subPlan1.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan1.getSubPlans().add((NestedPlan) subsubPlan1);
+	//////////////////////////////////////////////////////////////////////////////////////////
+	NestedPlan plan2 = new NestedPlan();
+	Instruction filter2 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan2.setFilteringInstruction(filter2);
+
+	NestedPlan subPlan3 = new NestedPlan();
+	Instruction subrun3 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan3.addInstruction(subrun3);
+	plan2.setSubPlans(new ArrayList<NestedPlan>());
+	plan2.getSubPlans().add((NestedPlan) subPlan3);
+
+	NestedPlan subPlan4 = new NestedPlan();
+	Instruction subrun4 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan4.addInstruction(subrun4);
+	plan2.getSubPlans().add((NestedPlan) subPlan4);
+
+	NestedPlan subsubPlan2 = new NestedPlan();
+	Instruction subsubrun2 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan2.addInstruction(subsubrun2);
+	subPlan3.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan3.getSubPlans().add((NestedPlan) subsubPlan2);	
+	
+	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////
+	assertTrue(!plan1.equals(plan2));
+	System.out.println("------------------------");
+
+
+    }
+    
+    @Test
+    public void EqualExcludeSubPlan() {
+	System.out.println("EqualExcludeSubPlan");
+	NestedPlan plan1 = new NestedPlan();
+
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan1.addInstruction(run1);
+	plan1.addInstruction(run2);
+	Instruction filter1 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan1.setFilteringInstruction(filter1);
+
+	NestedPlan subPlan1 = new NestedPlan();
+	Instruction subrun1 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan1.addInstruction(subrun1);
+	plan1.setSubPlans(new ArrayList<NestedPlan>());
+	plan1.getSubPlans().add((NestedPlan) subPlan1);
+
+	NestedPlan subPlan2 = new NestedPlan();
+	Instruction subrun2 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan2.addInstruction(subrun2);
+	plan1.getSubPlans().add((NestedPlan) subPlan2);
+
+	NestedPlan subsubPlan1 = new NestedPlan();
+	Instruction subsubrun1 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan1.addInstruction(subsubrun1);
+	subPlan1.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan1.getSubPlans().add((NestedPlan) subsubPlan1);
+	//////////////////////////////////////////////////////////////////////////////////////////
+	NestedPlan plan2 = new NestedPlan();
+	Instruction run3 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run4 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+
+	plan2.addInstruction(run3);
+	plan2.addInstruction(run4);
+	Instruction filter2 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan2.setFilteringInstruction(filter2);
+
+	NestedPlan subPlan3 = new NestedPlan();
+	Instruction subrun3 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan3.addInstruction(subrun3);
+	plan2.setSubPlans(new ArrayList<NestedPlan>());
+	plan2.getSubPlans().add((NestedPlan) subPlan3);
+
+	NestedPlan subsubPlan2 = new NestedPlan();
+	Instruction subsubrun2 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan2.addInstruction(subsubrun2);
+	subPlan3.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan3.getSubPlans().add((NestedPlan) subsubPlan2);	
+	
+	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////
+	assertTrue(!plan1.equals(plan2));
+	System.out.println("------------------------");
+
+
+    }
+    
+    @Test
+    public void EqualExcludeFilter() {
+	System.out.println("EqualExcludeFilter");
+	NestedPlan plan1 = new NestedPlan();
+
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan1.addInstruction(run1);
+	plan1.addInstruction(run2);
+	Instruction filter1 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan1.setFilteringInstruction(filter1);
+
+	NestedPlan subPlan1 = new NestedPlan();
+	Instruction subrun1 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan1.addInstruction(subrun1);
+	plan1.setSubPlans(new ArrayList<NestedPlan>());
+	plan1.getSubPlans().add((NestedPlan) subPlan1);
+
+	NestedPlan subPlan2 = new NestedPlan();
+	Instruction subrun2 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan2.addInstruction(subrun2);
+	plan1.getSubPlans().add((NestedPlan) subPlan2);
+
+	Plan subsubPlan1 = new NestedPlan();
+	Instruction subsubrun1 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan1.addInstruction(subsubrun1);
+	subPlan1.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan1.getSubPlans().add((NestedPlan) subsubPlan1);
+	//////////////////////////////////////////////////////////////////////////////////////////
+	NestedPlan plan2 = new NestedPlan();
+	Instruction run3 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run4 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan2.addInstruction(run3);
+	plan2.addInstruction(run4);
+
+	NestedPlan subPlan3 = new NestedPlan();
+	Instruction subrun3 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan3.addInstruction(subrun3);
+	plan2.setSubPlans(new ArrayList<NestedPlan>());
+	plan2.getSubPlans().add((NestedPlan) subPlan3);
+
+	NestedPlan subPlan4 = new NestedPlan();
+	Instruction subrun4 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan4.addInstruction(subrun4);
+	plan2.getSubPlans().add((NestedPlan) subPlan4);
+
+	Plan subsubPlan2 = new NestedPlan();
+	Instruction subsubrun2 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan2.addInstruction(subsubrun2);
+	subPlan3.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan3.getSubPlans().add((NestedPlan) subsubPlan2);	
+	
+	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////
+	assertTrue(!plan1.equals(plan2));
+	
+	
+	System.out.println("------------------------");
+
+	
+	
+
+    }
+    
+    @Test
+    public void EqualExcludeSubSubPlan() {
+	System.out.println("EqualSubSubPlan");
+	NestedPlan plan1 = new NestedPlan();
+
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan1.addInstruction(run1);
+	plan1.addInstruction(run2);
+	Instruction filter1 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan1.setFilteringInstruction(filter1);
+
+	NestedPlan subPlan1 = new NestedPlan();
+	Instruction subrun1 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan1.addInstruction(subrun1);
+	plan1.setSubPlans(new ArrayList<NestedPlan>());
+	plan1.getSubPlans().add((NestedPlan) subPlan1);
+
+	NestedPlan subPlan2 = new NestedPlan();
+	Instruction subrun2 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan2.addInstruction(subrun2);
+	plan1.getSubPlans().add((NestedPlan) subPlan2);
+
+	Plan subsubPlan1 = new NestedPlan();
+	Instruction subsubrun1 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan1.addInstruction(subsubrun1);
+	subPlan1.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan1.getSubPlans().add((NestedPlan) subsubPlan1);
+	//////////////////////////////////////////////////////////////////////////////////////////
+	NestedPlan plan2 = new NestedPlan();
+	Instruction run3 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run4 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan2.addInstruction(run3);
+	plan2.addInstruction(run4);
+	Instruction filter2 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan2.setFilteringInstruction(filter2);
+
+	NestedPlan subPlan3 = new NestedPlan();
+	Instruction subrun3 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan3.addInstruction(subrun3);
+	plan2.setSubPlans(new ArrayList<NestedPlan>());
+	plan2.getSubPlans().add((NestedPlan) subPlan3);
+
+	NestedPlan subPlan4 = new NestedPlan();
+	Instruction subrun4 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan4.addInstruction(subrun4);
+	plan2.getSubPlans().add((NestedPlan) subPlan4);	
+	
+	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////
+	assertTrue(!plan1.equals(plan2));
+	
+	
+	System.out.println("------------------------");
+
+	
+	
+
+    }
+    
+    @Test
+    public void EqualExcludeOperator() {
+	System.out.println("EqualExcludeOperator");
+	NestedPlan plan1 = new NestedPlan();
+
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan1.addInstruction(run1);
+	plan1.addInstruction(run2);
+	Instruction filter1 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan1.setFilteringInstruction(filter1);
+	plan1.setOperator(Command.INTERSECTION);
+
+	NestedPlan subPlan1 = new NestedPlan();
+	Instruction subrun1 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan1.addInstruction(subrun1);
+	plan1.setSubPlans(new ArrayList<NestedPlan>());
+	plan1.getSubPlans().add((NestedPlan) subPlan1);
+
+	NestedPlan subPlan2 = new NestedPlan();
+	Instruction subrun2 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan2.addInstruction(subrun2);
+	plan1.getSubPlans().add((NestedPlan) subPlan2);
+
+	Plan subsubPlan1 = new NestedPlan();
+	Instruction subsubrun1 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan1.addInstruction(subsubrun1);
+	subPlan1.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan1.getSubPlans().add((NestedPlan) subsubPlan1);
+	//////////////////////////////////////////////////////////////////////////////////////////
+	NestedPlan plan2 = new NestedPlan();
+	Instruction run3 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run4 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan2.addInstruction(run3);
+	plan2.addInstruction(run4);
+	Instruction filter2 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan2.setFilteringInstruction(filter2);
+
+	NestedPlan subPlan3 = new NestedPlan();
+	Instruction subrun3 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan3.addInstruction(subrun3);
+	plan2.setSubPlans(new ArrayList<NestedPlan>());
+	plan2.getSubPlans().add((NestedPlan) subPlan3);
+
+	NestedPlan subPlan4 = new NestedPlan();
+	Instruction subrun4 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan4.addInstruction(subrun4);
+	plan2.getSubPlans().add((NestedPlan) subPlan4);
+
+	Plan subsubPlan2 = new NestedPlan();
+	Instruction subsubrun2 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan2.addInstruction(subsubrun2);
+	subPlan3.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan3.getSubPlans().add((NestedPlan) subsubPlan2);	
+	
+	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////
+	assertTrue(!plan1.equals(plan2));
+	
+	System.out.println("------------------------");
+
+	
+	
+
+    }
+    
+    @Test
+    public void EqualDifferentOperatorInSubPlan() {
+	System.out.println("EqualDifferentOperatorInSubPlan");
+	NestedPlan plan1 = new NestedPlan();
+
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan1.addInstruction(run1);
+	plan1.addInstruction(run2);
+	Instruction filter1 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan1.setFilteringInstruction(filter1);
+
+	NestedPlan subPlan1 = new NestedPlan();
+	Instruction subrun1 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan1.addInstruction(subrun1);
+	plan1.setSubPlans(new ArrayList<NestedPlan>());
+	plan1.getSubPlans().add((NestedPlan) subPlan1);
+
+	NestedPlan subPlan2 = new NestedPlan();
+	Instruction subrun2 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan2.addInstruction(subrun2);
+	subPlan2.setOperator(Command.INTERSECTION);
+	plan1.getSubPlans().add((NestedPlan) subPlan2);
+	
+	
+	Plan subsubPlan1 = new NestedPlan();
+	Instruction subsubrun1 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan1.addInstruction(subsubrun1);
+	subPlan2.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan2.getSubPlans().add((NestedPlan) subsubPlan1);
+	
+	Plan subsubPlan2 = new NestedPlan();
+	Instruction subsubrun2 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan2.addInstruction(subsubrun2);
+	subPlan2.getSubPlans().add((NestedPlan) subsubPlan2);
+	//////////////////////////////////////////////////////////////////////////////////////////
+	NestedPlan plan2 = new NestedPlan();
+	Instruction run3 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run4 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan2.addInstruction(run3);
+	plan2.addInstruction(run4);
+	Instruction filter2 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan2.setFilteringInstruction(filter2);
+
+	NestedPlan subPlan3 = new NestedPlan();
+	Instruction subrun3 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan3.addInstruction(subrun3);
+	plan2.setSubPlans(new ArrayList<NestedPlan>());
+	plan2.getSubPlans().add((NestedPlan) subPlan3);
+
+	NestedPlan subPlan4 = new NestedPlan();
+	Instruction subrun4 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan4.addInstruction(subrun4);
+	subPlan4.setOperator(Command.DIFF);
+	plan2.getSubPlans().add((NestedPlan) subPlan4);
+
+	Plan subsubPlan3 = new NestedPlan();
+	Instruction subsubrun3 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan3.addInstruction(subsubrun3);
+	subPlan4.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan4.getSubPlans().add((NestedPlan) subsubPlan3);
+	
+	Plan subsubPlan4 = new NestedPlan();
+	Instruction subsubrun4 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan4.addInstruction(subsubrun4);
+	subPlan4.getSubPlans().add((NestedPlan) subsubPlan4);
+	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////
+	assertTrue(!plan1.equals(plan2));
+	
+	System.out.println("------------------------");
+
+	
+	
+
+    }
+    
+    @Test
+    public void EqualDifferentSubPlans() {
+	System.out.println("EqualDifferentSubPlans");
+	NestedPlan plan1 = new NestedPlan();
+
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan1.addInstruction(run1);
+	plan1.addInstruction(run2);
+	Instruction filter1 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan1.setFilteringInstruction(filter1);
+
+	NestedPlan subPlan1 = new NestedPlan();
+	Instruction subrun1 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan1.addInstruction(subrun1);
+	plan1.setSubPlans(new ArrayList<NestedPlan>());
+	plan1.getSubPlans().add((NestedPlan) subPlan1);
+
+	NestedPlan subPlan2 = new NestedPlan();
+	Instruction subrun2 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan2.addInstruction(subrun2);
+	subPlan2.setOperator(Command.INTERSECTION);
+	plan1.getSubPlans().add((NestedPlan) subPlan2);
+	
+	
+	Plan subsubPlan1 = new NestedPlan();
+	Instruction subsubrun1 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan1.addInstruction(subsubrun1);
+	subPlan2.setSubPlans(new ArrayList<NestedPlan>());
+	subPlan2.getSubPlans().add((NestedPlan) subsubPlan1);
+	
+	Plan subsubPlan2 = new NestedPlan();
+	Instruction subsubrun2 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan2.addInstruction(subsubrun2);
+	subPlan2.getSubPlans().add((NestedPlan) subsubPlan2);
+	
+	//////////////////////////////////////////////////////////////////////////////////////////
+	NestedPlan plan2 = new NestedPlan();
+	Instruction run3 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run4 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan2.addInstruction(run3);
+	plan2.addInstruction(run4);
+	Instruction filter2 = new Instruction(Command.FILTER, null, "0.3", -1, -1, 0);
+	plan2.setFilteringInstruction(filter2);
+
+	NestedPlan subPlan3 = new NestedPlan();
+	Instruction subrun3 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan3.addInstruction(subrun3);
+	plan2.setSubPlans(new ArrayList<NestedPlan>());
+	plan2.getSubPlans().add((NestedPlan) subPlan3);
+
+	NestedPlan subPlan4 = new NestedPlan();
+	Instruction subrun4 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan4.addInstruction(subrun4);
+	subPlan4.setOperator(Command.INTERSECTION);
+	plan2.getSubPlans().add((NestedPlan) subPlan4);
+
+
+	
+	Plan subsubPlan4 = new NestedPlan();
+	Instruction subsubrun4 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subPlan4.setSubPlans(new ArrayList<NestedPlan>());
+	subsubPlan4.addInstruction(subsubrun4);
+	subPlan4.getSubPlans().add((NestedPlan) subsubPlan4);
+	
+	Plan subsubPlan3 = new NestedPlan();
+	Instruction subsubrun3 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);
+	subsubPlan3.addInstruction(subsubrun3);
+	subPlan4.getSubPlans().add((NestedPlan) subsubPlan3);
+	
+	///////////////////////////////////////////////////////////////////////////////////////////
+	assertTrue(!plan1.equals(plan2));
+	
+	System.out.println("------------------------");
+
+	
+	
+
+    }
 }

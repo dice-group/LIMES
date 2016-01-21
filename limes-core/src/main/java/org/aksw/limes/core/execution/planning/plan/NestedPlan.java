@@ -31,7 +31,6 @@ public class NestedPlan extends Plan {
 	super();
 	subPlans = null;
 	filteringInstruction = null;
-
     }
 
     public List<NestedPlan> getSubPlans() {
@@ -216,15 +215,13 @@ public class NestedPlan extends Plan {
 	    }
 	} else {
 	    if (instructionList != null) {
-		return "\nBEGIN\n" + pre + "\n-----\n" + instructionList + "-----\n" + filteringInstruction + "\n" + operator+ "\nSubplans\n"  + "\n" + subPlans
-			    + "\nEND\n-----";
+		return "\nBEGIN\n" + pre + "\n-----\n" + instructionList + "-----\n" + filteringInstruction + "\n"
+			+ operator + "\nSubplans\n" + "\n" + subPlans + "\nEND\n-----";
 	    } else {
-		return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n" + operator +"\nSubplans\n"  + "\n" + subPlans
-			    + "\nEND\n-----";
+		return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n" + operator + "\nSubplans\n" + "\n"
+			+ subPlans + "\nEND\n-----";
 	    }
-	    
-	    
-	    
+
 	}
     }
 
@@ -356,27 +353,36 @@ public class NestedPlan extends Plan {
 		return false;
 	    if (this.operator != null && o.operator == null)
 		return false;
-	    // AND/MINUS operator (optimization): RUN one child, (reverse)FILTER
-	    // with other the child
+	    
 	    if (this.operator == null && o.operator == null) {
-		if (this.filteringInstruction.equals(o.filteringInstruction)) {
-		    return (this.subPlans.get(0).equals(o.subPlans.get(0)));
-		} // different filteringInstructions
-		return false;
-	    }
-	    if (this.operator.equals(o.operator)) {
-		// all complex, non-optimized plans MUST have a filtering
-		// instruction
-		if (this.filteringInstruction == null && o.filteringInstruction == null)
-		    return false;
+		if (this.filteringInstruction == null && o.filteringInstruction == null){
+		    if(this.instructionList.equals(o.instructionList))
+			return (this.subPlans.equals(o.subPlans));
+		} 
 		if (this.filteringInstruction != null && o.filteringInstruction == null)
 		    return false;
 		if (this.filteringInstruction == null && o.filteringInstruction != null)
 		    return false;
 		if (this.filteringInstruction.equals(o.filteringInstruction)) {
-		    return (this.subPlans.get(0).equals(o.subPlans.get(0))
-			    && this.subPlans.get(1).equals(o.subPlans.get(1)));
-		} // different filtering instructions
+		    if(this.instructionList.equals(o.instructionList))
+			return (this.subPlans.equals(o.subPlans));
+		} 
+		return false;
+	    }
+	    
+	    if (this.operator.equals(o.operator)) {
+		if (this.filteringInstruction == null && o.filteringInstruction == null) {
+		    if(this.instructionList.equals(o.instructionList))
+			return (this.subPlans.equals(o.subPlans));
+		}
+		if (this.filteringInstruction != null && o.filteringInstruction == null)
+		    return false;
+		if (this.filteringInstruction == null && o.filteringInstruction != null)
+		    return false;
+		if (this.filteringInstruction.equals(o.filteringInstruction)) {
+		    if(this.instructionList.equals(o.instructionList))
+			return (this.subPlans.equals(o.subPlans));
+		} 
 		return false;
 	    } // different operators
 	    return false;

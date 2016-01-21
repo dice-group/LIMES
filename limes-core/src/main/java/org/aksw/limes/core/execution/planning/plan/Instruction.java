@@ -164,17 +164,36 @@ public class Instruction {
 	    return false;
 
 	if (this.mainThreshold == null && i.getMainThreshold() == null)
-	    return (this.toString().equals(other.toString()));
+	    return (this.toSmallString().equals(((Instruction) other).toSmallString()));
 	if (this.mainThreshold != null && i.getMainThreshold() == null)
 	    return false;
 	if (this.mainThreshold == null && i.getMainThreshold() != null)
 	    return false;
 	if (this.mainThreshold.equals(i.getMainThreshold()))
-	    return (this.toString().equals(other.toString()));
+	    return (this.toSmallString().equals(((Instruction) other).toSmallString()));
 
 	return false;
     }
+    private String toSmallString(){
+	String s = "";
+	if (command.equals(Command.RUN)) {
+	    s = "RUN\t";
+	} else if (command.equals(Command.FILTER)) {
+	    s = "FILTER\t";
+	} else if (command.equals(Command.DIFF)) {
+	    s = "DIFF\t";
+	} else if (command.equals(Command.INTERSECTION)) {
+	    s = "INTERSECTION\t";
+	} else if (command.equals(Command.UNION)) {
+	    s = "UNION\t";
+	} else if (command.equals(Command.XOR)) {
+	    s = "XOR\t";
+	}
 
+	s = s + measureExpression + "\t";
+	s = s + threshold + "\t";
+	return s;
+    }
     @Override
     public Instruction clone() {
 
