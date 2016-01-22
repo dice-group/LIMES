@@ -110,7 +110,7 @@ public class NestedPlan extends Plan {
      */
     public NestedPlan clone() {
 	NestedPlan clone = new NestedPlan();
-
+	
 	// clone primitives fields
 	clone.setMappingSize(this.mappingSize);
 	clone.setRuntimeCost(this.runtimeCost);
