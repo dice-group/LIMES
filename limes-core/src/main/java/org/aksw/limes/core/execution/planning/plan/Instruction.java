@@ -204,9 +204,20 @@ public class Instruction {
 
 	Instruction newInstruction = new Instruction(command, "", "", sourceMapping,
 		targetMapping, resultIndex);
-	newInstruction.setMainThreshold(mainThreshold);
-	newInstruction.setMeasureExpression(measureExpression);
-	newInstruction.setThreshold(threshold);
+	if(this.mainThreshold == null)
+	    newInstruction.setMainThreshold(null);
+	else
+	    newInstruction.setMainThreshold(new String(this.mainThreshold));
+	
+	if(this.threshold == null)
+		newInstruction.setThreshold(null);
+	else
+		newInstruction.setThreshold(new String(this.threshold));
+
+	if(this.measureExpression == null)
+	    newInstruction.setMeasureExpression(null);
+	else
+	    newInstruction.setMeasureExpression(new String(this.measureExpression));
 
 	return newInstruction;
     }
