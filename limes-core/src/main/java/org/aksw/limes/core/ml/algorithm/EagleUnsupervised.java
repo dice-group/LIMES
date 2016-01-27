@@ -5,17 +5,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.Configuration;
-import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem;
 import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.aksw.limes.core.ml.algorithm.eagle.core.PseudoFMeasureFitnessFunction;
-import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.aksw.limes.core.ml.setting.UnsupervisedLearningSetting;
 import org.jgap.InvalidConfigurationException;
@@ -50,7 +46,7 @@ public class EagleUnsupervised extends MLAlgorithm {
 	}
 
 	@Override
-	public void init(LearningSetting parameters) throws InvalidConfigurationException {
+	public void init(LearningSetting parameters, Mapping trainingData) throws InvalidConfigurationException {
 		this.parameters = (UnsupervisedLearningSetting) parameters;
 		setUp();
 	}
@@ -61,15 +57,14 @@ public class EagleUnsupervised extends MLAlgorithm {
 	}
 
 	@Override
-	public MLResult learn() {
+	public MLResult learn(Mapping trainingData) {
 		specifications = new LinkedList<LinkSpecification>();
 		logger.info("Start learning");
 		for (int gen = 1; gen <= parameters.getGenerations(); gen++) {
 		    gp.evolve();
 		    IGPProgram currentBest = determinFittest(gp, gen);
 		    LinkSpecification currentBestMetric = getLinkSpecification(currentBest);
-		    //TODO: if you don't want to save only the best LS of each generation,
-		    //then comment the following line
+		    //TODO: save the best LS of each generation
 		    specifications.add(currentBestMetric);
 		}
 		
@@ -86,6 +81,11 @@ public class EagleUnsupervised extends MLAlgorithm {
 			return new MemoryMapping();
 		}		
 		return fitness.calculateMapping(allBest);
+	}
+	@Override
+	public void terminate() {
+		fitness.destroy();
+		fitness = null;
 	}
 	
 	/**
@@ -153,8 +153,8 @@ public class EagleUnsupervised extends MLAlgorithm {
 		jgapConfig.setReproductionProb(parameters.getReproductionRate());
 		jgapConfig.setPropertyMapping(parameters.getPropMap());
 
-		fitness = PseudoFMeasureFitnessFunction.getInstance(jgapConfig, parameters.getMeasure(), sourceCache, targetCache);
-		fitness.setBeta(parameters.getBeta());
+		fitness = PseudoFMeasureFitnessFunction.getInstance(jgapConfig, parameters.getPseudoMeasure(), sourceCache, targetCache);
+//		fitness.setBeta(parameters.getBeta());
 		jgapConfig.setFitnessFunction(fitness);
 		
 		GPProblem gpP;
@@ -186,6 +186,8 @@ public class EagleUnsupervised extends MLAlgorithm {
 		result.addDetail("specifiactions", specifications);
 		return result;
 	}
+	
+	
 	
 	
 	public static void main(String args[]) {

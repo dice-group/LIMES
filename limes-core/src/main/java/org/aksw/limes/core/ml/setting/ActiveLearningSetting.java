@@ -1,12 +1,14 @@
 package org.aksw.limes.core.ml.setting;
 
+import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.MLResult;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @author Klaus Lyko
  */
-public class ActiveLearningSetting extends LearningSetting {
+public class ActiveLearningSetting extends BatchLearningSetting {
 	
 	private int numQueries = 10;
 	private int numIterations = 5;
@@ -26,16 +28,18 @@ public class ActiveLearningSetting extends LearningSetting {
 		// TODO Auto-generated method stub
 		// will use the following
 		currentIteration = 0;
+		Mapping trainingData = selectExamples();
 		while(!terminate()) {
 			currentIteration ++;
+			MLResult result = algorithm.learn(trainingData);
+			trainingData = selectExamples();
 			
-			selectExamples();
-			algorithm.learn();
 		}
 	}
 	
-	public void selectExamples() {
+	public Mapping selectExamples() {
 		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**

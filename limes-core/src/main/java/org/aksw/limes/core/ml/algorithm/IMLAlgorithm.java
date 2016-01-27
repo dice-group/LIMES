@@ -12,10 +12,12 @@ public interface IMLAlgorithm {
 
 	public String getName();
 
-	public MLResult learn();
+	public MLResult learn(Mapping trainingData);
 	
 	public Mapping computePredictions();
 
-	void init(LearningSetting parameters) throws Exception;
+	void init(LearningSetting parameters, Mapping trainingData) throws Exception;
+	
+	void terminate();
 	
 }

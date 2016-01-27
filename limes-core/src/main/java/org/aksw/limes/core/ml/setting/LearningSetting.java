@@ -1,5 +1,7 @@
 package org.aksw.limes.core.ml.setting;
 
+import org.aksw.limes.core.evaluation.quality.FMeasure;
+import org.aksw.limes.core.evaluation.quality.QualitativeMeasure;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.ml.algorithm.IMLAlgorithm;
@@ -12,6 +14,16 @@ import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 public abstract class LearningSetting {
 	
 	protected IMLAlgorithm algorithm;
+	int inquerySize = 10;
+	
+	
+	public int getInquerySize() {
+		return inquerySize;
+	}
+
+	public void setInquerySize(int inquerySize) {
+		this.inquerySize = inquerySize;
+	}
 
 	public LearningSetting(IMLAlgorithm algorithm) {
 		super();
@@ -24,6 +36,8 @@ public abstract class LearningSetting {
 		return algorithm;
 	}
 	
+	
+	
 	// - EAGLE parameters
 	int generations = 10;
 	int population = 20;
@@ -31,14 +45,24 @@ public abstract class LearningSetting {
 	float reproductionRate = 0.4f;
 	float crossoverRate = 0.3f;
 	boolean preserveFittest = true;
-	double beta = 1;
+//	double beta = 1;
+	// supervised
+	QualitativeMeasure measure = new FMeasure();
 	
-	public double getBeta() {
-		return beta;
+	public QualitativeMeasure getMeasure() {
+		return measure;
 	}
-	public void setBeta(double beta) {
-		this.beta = beta;
+
+	public void setMeasure(QualitativeMeasure measure) {
+		this.measure = measure;
 	}
+
+//	public double getBeta() {
+//		return beta;
+//	}
+//	public void setBeta(double beta) {
+//		this.beta = beta;
+//	}
 	PropertyMapping  propMap = new PropertyMapping();
 	
 	
