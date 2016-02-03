@@ -61,7 +61,7 @@ public class InstructionTest {
 	assertTrue(i.getThreshold().hashCode() == i2.getThreshold().hashCode());
 	assertTrue(i.getMainThreshold().hashCode() == i2.getMainThreshold().hashCode());
 
-
+	
 	
     }
 

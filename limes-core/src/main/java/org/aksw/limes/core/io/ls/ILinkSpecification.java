@@ -1,6 +1,5 @@
 package org.aksw.limes.core.io.ls;
 
-import org.aksw.limes.core.execution.planning.plan.IPlan;
 import org.aksw.limes.core.util.Clonable;
 
 /**

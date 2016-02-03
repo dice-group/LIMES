@@ -1,4 +1,4 @@
-package org.aksw.limes.core.execution.planning.plan;
+package org.aksw.limes.core.execution.planning.planner;
 
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -7,11 +7,11 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({PlanSuite.class})
-public class PlanRunner {
+@SuiteClasses({PlannerSuite.class})
+public class PlannerRunner {
 
     public void main() {
-	Result result = JUnitCore.runClasses(PlanSuite.class);
+	Result result = JUnitCore.runClasses(PlannerSuite.class);
 	System.out.println(result.wasSuccessful());
 	//TestSuite suite = new TestSuite(ExecutionEngineFactoryTest.class);
 	//TestResult result = new TestResult();

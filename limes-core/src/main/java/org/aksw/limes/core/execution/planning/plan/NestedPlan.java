@@ -17,7 +17,9 @@ import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
 
 /**
- * Implements execution plan that are given to an execution engine.
+ * Implements execution plan that is given to an execution engine. Note that the
+ * subPlans fields is set to null by the instructor. Before adding a subplan for
+ * the first time, the subPlans field must be initiated.
  * 
  * @author ngonga
  * @author kleanthi
@@ -110,7 +112,7 @@ public class NestedPlan extends Plan {
      */
     public NestedPlan clone() {
 	NestedPlan clone = new NestedPlan();
-	
+
 	// clone primitives fields
 	clone.setMappingSize(this.mappingSize);
 	clone.setRuntimeCost(this.runtimeCost);
@@ -353,26 +355,10 @@ public class NestedPlan extends Plan {
 		return false;
 	    if (this.operator != null && o.operator == null)
 		return false;
-	    
+
 	    if (this.operator == null && o.operator == null) {
-		if (this.filteringInstruction == null && o.filteringInstruction == null){
-		    if(this.instructionList.equals(o.instructionList))
-			return (this.subPlans.equals(o.subPlans));
-		} 
-		if (this.filteringInstruction != null && o.filteringInstruction == null)
-		    return false;
-		if (this.filteringInstruction == null && o.filteringInstruction != null)
-		    return false;
-		if (this.filteringInstruction.equals(o.filteringInstruction)) {
-		    if(this.instructionList.equals(o.instructionList))
-			return (this.subPlans.equals(o.subPlans));
-		} 
-		return false;
-	    }
-	    
-	    if (this.operator.equals(o.operator)) {
 		if (this.filteringInstruction == null && o.filteringInstruction == null) {
-		    if(this.instructionList.equals(o.instructionList))
+		    if (this.instructionList.equals(o.instructionList))
 			return (this.subPlans.equals(o.subPlans));
 		}
 		if (this.filteringInstruction != null && o.filteringInstruction == null)
@@ -380,9 +366,25 @@ public class NestedPlan extends Plan {
 		if (this.filteringInstruction == null && o.filteringInstruction != null)
 		    return false;
 		if (this.filteringInstruction.equals(o.filteringInstruction)) {
-		    if(this.instructionList.equals(o.instructionList))
+		    if (this.instructionList.equals(o.instructionList))
 			return (this.subPlans.equals(o.subPlans));
-		} 
+		}
+		return false;
+	    }
+
+	    if (this.operator.equals(o.operator)) {
+		if (this.filteringInstruction == null && o.filteringInstruction == null) {
+		    if (this.instructionList.equals(o.instructionList))
+			return (this.subPlans.equals(o.subPlans));
+		}
+		if (this.filteringInstruction != null && o.filteringInstruction == null)
+		    return false;
+		if (this.filteringInstruction == null && o.filteringInstruction != null)
+		    return false;
+		if (this.filteringInstruction.equals(o.filteringInstruction)) {
+		    if (this.instructionList.equals(o.instructionList))
+			return (this.subPlans.equals(o.subPlans));
+		}
 		return false;
 	    } // different operators
 	    return false;
