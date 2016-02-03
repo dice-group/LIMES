@@ -1,5 +1,4 @@
 package org.aksw.limes.core.measures.measure;
-import static org.junit.Assert.*;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;

@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.mapper.atomic;
 
-import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.HashSet;

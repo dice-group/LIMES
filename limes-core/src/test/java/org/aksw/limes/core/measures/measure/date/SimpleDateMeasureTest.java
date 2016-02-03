@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.measure.date;
 
-import static org.junit.Assert.*;
 
 import org.aksw.limes.core.measures.measure.date.SimpleDateMeasure;
 import org.junit.Test;

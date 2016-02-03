@@ -9,7 +9,6 @@ import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.io.ls.Operator;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.junit.After;
 import org.junit.Before;

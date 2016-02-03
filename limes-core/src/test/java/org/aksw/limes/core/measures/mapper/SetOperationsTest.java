@@ -1,5 +1,4 @@
 package org.aksw.limes.core.measures.mapper;
-import static org.junit.Assert.*;
 
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
