@@ -31,7 +31,9 @@ public class CanonicalPlanner extends Planner {
     public NestedPlan plan(LinkSpecification spec) {
 	NestedPlan plan = new NestedPlan();
 	// atomic specs are simply ran
-	if(spec.isEmpty())
+	if (spec == null)
+	    return plan;
+	if (spec.isEmpty())
 	    return plan;
 	if (spec.isAtomic()) {
 	    // nested plan have a null instruction list as default

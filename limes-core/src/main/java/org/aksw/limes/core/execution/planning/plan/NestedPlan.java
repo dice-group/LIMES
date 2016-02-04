@@ -209,22 +209,62 @@ public class NestedPlan extends Plan {
 	if (isEmpty()) {
 	    return "Empty plan";
 	}
-	if (isAtomic()) {
-	    if (instructionList != null) {
-		return "\n\nBEGIN\n" + pre + "\n-----\n" + instructionList + "\nEND\n-----";
+	if (!instructionList.isEmpty()) {
+	    if (filteringInstruction != null) {
+		if (subPlans != null) {
+		    if (!subPlans.isEmpty()) {
+			// instructionList, filteringInstruction, subplans
+			return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
+				+ "\n" + operator + "\nSubplans\n" + "\n" + subPlans + "\nEND\n-----";
+		    } else
+			// instructionList, filteringInstruction
+			return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
+				+ "\nEND\n-----";
+		} else {
+		    // instructionList, filteringInstruction
+		    return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
+			    + "\nEND\n-----";
+		}
 	    } else {
-		return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\nEND\n-----";
+		if (subPlans != null) {
+		    if (!subPlans.isEmpty()) {
+			// instructionList, subplans
+			return "\nBEGIN\n" + pre + "-----\n" + instructionList + "\n" + operator + "\nSubplans\n"
+				+ subPlans + "\nEND\n-----";
+		    } else
+			// instructionList
+			return "\nBEGIN\n" + pre + "-----\n" + instructionList + "\nEND\n-----";
+		} else {
+		    return "\nBEGIN\n" + pre + "-----\n" + instructionList + "\nEND\n-----";
+		}
+
 	    }
 	} else {
-	    if (instructionList != null) {
-		return "\nBEGIN\n" + pre + "\n-----\n" + instructionList + "-----\n" + filteringInstruction + "\n"
-			+ operator + "\nSubplans\n" + "\n" + subPlans + "\nEND\n-----";
+	    if (filteringInstruction != null) {
+		if (subPlans != null) {
+		    if (!subPlans.isEmpty()) {
+			// filteringInstruction, subplans
+			return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + operator
+				+ "\nSubplans\n" + "\n" + subPlans + "\nEND\n-----";
+		    } else
+			// filteringInstruction
+			return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\nEND\n-----";
+		} else {
+		    // filteringInstruction
+		    return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\nEND\n-----";
+		}
 	    } else {
-		return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n" + operator + "\nSubplans\n" + "\n"
-			+ subPlans + "\nEND\n-----";
+		if (subPlans != null) {
+		    if (!subPlans.isEmpty()) {
+			//subplans
+			return "\nBEGIN\n" + pre + "-----\n" + operator + "\nSubplans\n" + "\n" + subPlans
+				+ "\nEND\n-----";
+		    } 
+		}
 	    }
-
 	}
+	return pre;
+
     }
 
     /**
@@ -347,6 +387,7 @@ public class NestedPlan extends Plan {
 	    return false;
 
 	// only RUN instructions in instructionList
+	// no worries for null instructionList, constructor initializes it
 	if (this.isAtomic() && o.isAtomic()) {
 	    return (this.instructionList.equals(o.instructionList));
 
@@ -355,11 +396,15 @@ public class NestedPlan extends Plan {
 		return false;
 	    if (this.operator != null && o.operator == null)
 		return false;
-
+	    // for optimized plans mostly
 	    if (this.operator == null && o.operator == null) {
 		if (this.filteringInstruction == null && o.filteringInstruction == null) {
+		    // instructionList must be empty for complex plans
+		    // if it is not for any reason, the condition is still true
 		    if (this.instructionList.equals(o.instructionList))
 			return (this.subPlans.equals(o.subPlans));
+		    else
+			return false;
 		}
 		if (this.filteringInstruction != null && o.filteringInstruction == null)
 		    return false;
@@ -368,14 +413,19 @@ public class NestedPlan extends Plan {
 		if (this.filteringInstruction.equals(o.filteringInstruction)) {
 		    if (this.instructionList.equals(o.instructionList))
 			return (this.subPlans.equals(o.subPlans));
+		    else
+			return false;
 		}
 		return false;
 	    }
-
+	    // for normal complex plans
 	    if (this.operator.equals(o.operator)) {
+		// filtering instruction SHOULD not be null, but just in case
 		if (this.filteringInstruction == null && o.filteringInstruction == null) {
 		    if (this.instructionList.equals(o.instructionList))
 			return (this.subPlans.equals(o.subPlans));
+		    else
+			return false;
 		}
 		if (this.filteringInstruction != null && o.filteringInstruction == null)
 		    return false;
@@ -384,6 +434,8 @@ public class NestedPlan extends Plan {
 		if (this.filteringInstruction.equals(o.filteringInstruction)) {
 		    if (this.instructionList.equals(o.instructionList))
 			return (this.subPlans.equals(o.subPlans));
+		    else
+			return false;
 		}
 		return false;
 	    } // different operators

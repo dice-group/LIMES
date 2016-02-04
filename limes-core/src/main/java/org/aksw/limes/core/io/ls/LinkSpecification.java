@@ -212,6 +212,7 @@ public class LinkSpecification implements ILinkSpecification {
 	if (p.isAtomic()) {
 	    filterExpression = spec;
 	    setThreshold(theta);
+	    fullExpression = spec;
 	} else {
 	    LinkSpecification leftSpec = new LinkSpecification();
 	    LinkSpecification rightSpec = new LinkSpecification();
