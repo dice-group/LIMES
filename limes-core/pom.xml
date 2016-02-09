@@ -138,6 +138,13 @@
 	</repositories>
 
 	<dependencies>
+		<!-- jena-sparql-api -->
+		<dependency>
+			<groupId>org.aksw.jena-sparql-api</groupId>
+			<artifactId>jena-sparql-api-core</artifactId>
+			<version>2.13.0-5</version>
+		</dependency>
+
 		<!-- <<<<<<< Updated upstream -->
 		<dependency>
 			<groupId>org.apache.jena</groupId>
@@ -254,7 +261,7 @@
 			<artifactId>jgap</artifactId>
 			<version>3.4.4</version>
 		</dependency>
-		
+
 	</dependencies>
 
 	<distributionManagement>

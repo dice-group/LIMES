@@ -16,12 +16,18 @@ public class TabSeparatedSerializer extends NtSerializer{
 	private static Logger logger = Logger.getLogger(TabSeparatedSerializer.class.getName());
 	protected String seperator = "\t";
 
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.io.serializer.NtSerializer#addStatement(java.lang.String, java.lang.String, java.lang.String, double)
+	 */
 	@Override
 	public void addStatement(String subject, String predicate, String object, double similarity)
 	{
 		statements.add(subject + seperator + object + seperator + similarity);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.io.serializer.NtSerializer#printStatement(java.lang.String, java.lang.String, java.lang.String, double)
+	 */
 	@Override
 	public void printStatement(String subject, String predicate, String object, double similarity) {
 		try {
@@ -31,10 +37,15 @@ public class TabSeparatedSerializer extends NtSerializer{
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.io.serializer.NtSerializer#getName()
+	 */
 	public String getName()
 	{
 		return "TabSeparatedSerializer";
 	}
+	
+	
 	/**
 	 * Gets a mapping and serializes it to a file in the N3 format. The method
 	 * assume that the class already knows all the prefixes used in the uris and
@@ -60,14 +71,23 @@ public class TabSeparatedSerializer extends NtSerializer{
 		close();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.io.serializer.NtSerializer#getFileExtension()
+	 */
 	public String getFileExtension() {
 		return "tsv";
 	}
 	
+	/**
+	 * @return the CSV file separator
+	 */
 	public String getSeperator() {
 		return seperator;
 	}
 
+	/**
+	 * @param seperator
+	 */
 	public void setSeperator(String seperator) {
 		this.seperator = seperator;
 	}
