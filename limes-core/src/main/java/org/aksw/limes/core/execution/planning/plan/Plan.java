@@ -56,7 +56,15 @@ public class Plan implements IPlan {
     public boolean isEmpty() {
 	return instructionList.isEmpty();
     }
-
+    @Override
+    public boolean equals(Object other) {
+	Plan o = (Plan) other;
+	if (o == null)
+	    return false;
+	return (this.instructionList.equals(o.instructionList));
+	 
+    }
+   
     /**
      * Generates a clone of the current NestedPlan
      * 

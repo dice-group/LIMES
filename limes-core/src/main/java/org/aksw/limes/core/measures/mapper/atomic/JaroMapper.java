@@ -55,7 +55,7 @@ public class JaroMapper extends Mapper{
     }
 
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
-	return 1000;
+	return 1000d;
     }
 
     private double getMaxComparisonLength(double length, double threshold, double maxLength) {

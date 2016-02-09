@@ -17,7 +17,9 @@ import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
 
 /**
- * Implements execution plan that are given to an execution engine.
+ * Implements execution plan that is given to an execution engine. Note that the
+ * subPlans fields is set to null by the instructor. Before adding a subplan for
+ * the first time, the subPlans field must be initiated.
  * 
  * @author ngonga
  * @author kleanthi
@@ -31,7 +33,6 @@ public class NestedPlan extends Plan {
 	super();
 	subPlans = null;
 	filteringInstruction = null;
-
     }
 
     public List<NestedPlan> getSubPlans() {
@@ -208,24 +209,62 @@ public class NestedPlan extends Plan {
 	if (isEmpty()) {
 	    return "Empty plan";
 	}
-	if (isAtomic()) {
-	    if (instructionList != null) {
-		return "\n\nBEGIN\n" + pre + "\n-----\n" + instructionList + "\nEND\n-----";
+	if (!instructionList.isEmpty()) {
+	    if (filteringInstruction != null) {
+		if (subPlans != null) {
+		    if (!subPlans.isEmpty()) {
+			// instructionList, filteringInstruction, subplans
+			return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
+				+ "\n" + operator + "\nSubplans\n" + "\n" + subPlans + "\nEND\n-----";
+		    } else
+			// instructionList, filteringInstruction
+			return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
+				+ "\nEND\n-----";
+		} else {
+		    // instructionList, filteringInstruction
+		    return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
+			    + "\nEND\n-----";
+		}
 	    } else {
-		return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\nEND\n-----";
+		if (subPlans != null) {
+		    if (!subPlans.isEmpty()) {
+			// instructionList, subplans
+			return "\nBEGIN\n" + pre + "-----\n" + instructionList + "\n" + operator + "\nSubplans\n"
+				+ subPlans + "\nEND\n-----";
+		    } else
+			// instructionList
+			return "\nBEGIN\n" + pre + "-----\n" + instructionList + "\nEND\n-----";
+		} else {
+		    return "\nBEGIN\n" + pre + "-----\n" + instructionList + "\nEND\n-----";
+		}
+
 	    }
 	} else {
-	    if (instructionList != null) {
-		return "\nBEGIN\n" + pre + "\n-----\n" + instructionList + "-----\n" + filteringInstruction + "\n" + operator+ "\nSubplans\n"  + "\n" + subPlans
-			    + "\nEND\n-----";
+	    if (filteringInstruction != null) {
+		if (subPlans != null) {
+		    if (!subPlans.isEmpty()) {
+			// filteringInstruction, subplans
+			return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + operator
+				+ "\nSubplans\n" + "\n" + subPlans + "\nEND\n-----";
+		    } else
+			// filteringInstruction
+			return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\nEND\n-----";
+		} else {
+		    // filteringInstruction
+		    return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\nEND\n-----";
+		}
 	    } else {
-		return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n" + operator +"\nSubplans\n"  + "\n" + subPlans
-			    + "\nEND\n-----";
+		if (subPlans != null) {
+		    if (!subPlans.isEmpty()) {
+			//subplans
+			return "\nBEGIN\n" + pre + "-----\n" + operator + "\nSubplans\n" + "\n" + subPlans
+				+ "\nEND\n-----";
+		    } 
+		}
 	    }
-	    
-	    
-	    
 	}
+	return pre;
+
     }
 
     /**
@@ -348,6 +387,7 @@ public class NestedPlan extends Plan {
 	    return false;
 
 	// only RUN instructions in instructionList
+	// no worries for null instructionList, constructor initializes it
 	if (this.isAtomic() && o.isAtomic()) {
 	    return (this.instructionList.equals(o.instructionList));
 
@@ -356,27 +396,47 @@ public class NestedPlan extends Plan {
 		return false;
 	    if (this.operator != null && o.operator == null)
 		return false;
-	    // AND/MINUS operator (optimization): RUN one child, (reverse)FILTER
-	    // with other the child
+	    // for optimized plans mostly
 	    if (this.operator == null && o.operator == null) {
-		if (this.filteringInstruction.equals(o.filteringInstruction)) {
-		    return (this.subPlans.get(0).equals(o.subPlans.get(0)));
-		} // different filteringInstructions
-		return false;
-	    }
-	    if (this.operator.equals(o.operator)) {
-		// all complex, non-optimized plans MUST have a filtering
-		// instruction
-		if (this.filteringInstruction == null && o.filteringInstruction == null)
-		    return false;
+		if (this.filteringInstruction == null && o.filteringInstruction == null) {
+		    // instructionList must be empty for complex plans
+		    // if it is not for any reason, the condition is still true
+		    if (this.instructionList.equals(o.instructionList))
+			return (this.subPlans.equals(o.subPlans));
+		    else
+			return false;
+		}
 		if (this.filteringInstruction != null && o.filteringInstruction == null)
 		    return false;
 		if (this.filteringInstruction == null && o.filteringInstruction != null)
 		    return false;
 		if (this.filteringInstruction.equals(o.filteringInstruction)) {
-		    return (this.subPlans.get(0).equals(o.subPlans.get(0))
-			    && this.subPlans.get(1).equals(o.subPlans.get(1)));
-		} // different filtering instructions
+		    if (this.instructionList.equals(o.instructionList))
+			return (this.subPlans.equals(o.subPlans));
+		    else
+			return false;
+		}
+		return false;
+	    }
+	    // for normal complex plans
+	    if (this.operator.equals(o.operator)) {
+		// filtering instruction SHOULD not be null, but just in case
+		if (this.filteringInstruction == null && o.filteringInstruction == null) {
+		    if (this.instructionList.equals(o.instructionList))
+			return (this.subPlans.equals(o.subPlans));
+		    else
+			return false;
+		}
+		if (this.filteringInstruction != null && o.filteringInstruction == null)
+		    return false;
+		if (this.filteringInstruction == null && o.filteringInstruction != null)
+		    return false;
+		if (this.filteringInstruction.equals(o.filteringInstruction)) {
+		    if (this.instructionList.equals(o.instructionList))
+			return (this.subPlans.equals(o.subPlans));
+		    else
+			return false;
+		}
 		return false;
 	    } // different operators
 	    return false;

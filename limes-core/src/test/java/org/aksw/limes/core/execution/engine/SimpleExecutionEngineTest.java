@@ -5,7 +5,8 @@ import static org.junit.Assert.*;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
-import org.aksw.limes.core.execution.planning.planner.CannonicalPlanner;
+import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
+import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.io.cache.Cache;
@@ -244,7 +245,7 @@ public class SimpleExecutionEngineTest {
 	System.out.println("testAtomicLinkSpecificationRun");
 	LinkSpecification ls = new LinkSpecification("jaccard(x.surname, y.surname)", 0.3);
 	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
-	CannonicalPlanner cp = new CannonicalPlanner();
+	IPlanner cp = new CanonicalPlanner();
 	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
 
 	// 1) run as a NestedPlan calling execute function
@@ -286,7 +287,7 @@ public class SimpleExecutionEngineTest {
 	LinkSpecification ls = new LinkSpecification("OR(qgrams(x.surname,y.surname)|0.4,jaro(x.name,y.name)|0.4)",
 		0.4);
 	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
-	CannonicalPlanner cp = new CannonicalPlanner();
+	IPlanner cp = new CanonicalPlanner();
 
 	Instruction run1 = new Instruction(Command.RUN, "qgrams(x.surname,y.surname)", "0.4", -1, -1, 0);
 	Instruction run2 = new Instruction(Command.RUN, "jaro(x.name,y.name)", "0.4", -1, -1, 1);
@@ -357,7 +358,7 @@ public class SimpleExecutionEngineTest {
 	Instruction filter = new Instruction(Command.FILTER, null, "0.5", 2, -1, -1);
 	// engine
 	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
-	CannonicalPlanner cp = new CannonicalPlanner();
+	IPlanner cp = new CanonicalPlanner();
 
 	// 1) run as a NestedPlan calling execute function
 	NestedPlan plan = cp.plan(ls);
@@ -420,7 +421,7 @@ public class SimpleExecutionEngineTest {
 	// instructions for UNION command
 	Instruction difference = new Instruction(Command.DIFF, "", "", 0, 1, 2);
 	Instruction filter = new Instruction(Command.FILTER, null, "0.5", 2, -1, -1);
-	CannonicalPlanner cp = new CannonicalPlanner();
+	IPlanner cp = new CanonicalPlanner();
 
 	// engine
 	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
@@ -492,7 +493,7 @@ public class SimpleExecutionEngineTest {
 	// engine
 	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
-	CannonicalPlanner cp = new CannonicalPlanner();
+	IPlanner cp = new CanonicalPlanner();
 
 	/// 1) run as a NestedPlan calling execute function
 	NestedPlan plan = cp.plan(ls);

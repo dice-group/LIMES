@@ -1,7 +1,6 @@
 package org.aksw.limes.core.measures.mapper.atomic.topology;
 
 import static org.aksw.limes.core.measures.mapper.atomic.OrchidMapper.getPoints;
-import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.HashSet;

@@ -3,19 +3,11 @@ package org.aksw.limes.core.execution.engine;
 import static org.junit.Assert.*;
 
 
-import junit.framework.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
 
-import junit.framework.TestResult;
-import junit.framework.TestSuite;
 
 
 public class ExecutionEngineFactoryTest{

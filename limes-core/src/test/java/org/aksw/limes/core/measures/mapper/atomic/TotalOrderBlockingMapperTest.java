@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.mapper.atomic;
 
-import static org.junit.Assert.*;
 
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;

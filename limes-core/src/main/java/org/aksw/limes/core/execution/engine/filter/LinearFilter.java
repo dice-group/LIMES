@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
  * @author ngonga
  * @author kleanthi
  */
-public class LinearFilter implements Filter {
+public class LinearFilter implements IFilter {
 
     static Logger logger = Logger.getLogger("LIMES");
 
@@ -57,6 +57,10 @@ public class LinearFilter implements Filter {
 	if (threshold <= 0.0) {
 	    return map;
 	}
+	if(condition == null){
+	    return filter(map,threshold);
+	}
+	
 	Mapping result = new MemoryMapping();
 	// 2. run on all pairs and remove those
 	for (String key : map.getMap().keySet()) {
@@ -97,7 +101,9 @@ public class LinearFilter implements Filter {
 	double sim = 0.0;
 	Instance s, t;
 	Mapping result = new MemoryMapping();
-	
+	if(condition == null){
+	    return filter(map,threshold);
+	}
 	// 2. run on all pairs and remove those
 	for (String key : map.getMap().keySet()) {
 	    s = source.getInstance(key);

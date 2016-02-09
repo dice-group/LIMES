@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.measure.pointsets.min;
 
-import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.HashSet;
