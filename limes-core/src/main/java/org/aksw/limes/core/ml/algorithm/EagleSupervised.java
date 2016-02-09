@@ -147,7 +147,7 @@ public class EagleSupervised extends MLAlgorithm{
 				}
 		    }
 		}
-		/* consider population if neccessary */
+		/* consider population if necessary */
 		if (bestHere == null) {
 		    logger.debug("Determing best program failed, consider the whole population");
 		    System.err.println("Determing best program failed, consider the whole population");
@@ -183,7 +183,7 @@ public class EagleSupervised extends MLAlgorithm{
 		return (LinkSpecification) pc.getNode(0).execute_object(pc, 0, args);
 	}
 	
-	public MLResult createResult() {
+	private MLResult createResult() {
 		MLResult result = new MLResult();
 		result.setLinkSpecification(getLinkSpecification(allBest));
 		result.setMapping(fitness.getMapping(getLinkSpecification(allBest), true));
@@ -193,7 +193,7 @@ public class EagleSupervised extends MLAlgorithm{
 		return result;
 	}
 	
-	public Mapping calculateOracleQuestions(int size) {
+	private Mapping calculateOracleQuestions(int size) {
 		// first get all Mappings for the current population
         logger.info("Getting mappings for output");
         GPPopulation pop = this.gp.getGPPopulation();
