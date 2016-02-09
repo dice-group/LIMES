@@ -15,8 +15,16 @@ public abstract class LearningSetting {
 	
 	protected IMLAlgorithm algorithm;
 	int inquerySize = 10;
+	protected long maxDuration = 600;
 	
-	
+	public long getMaxDuration() {
+		return maxDuration;
+	}
+
+	public void setMaxDuration(long maxDuration) {
+		this.maxDuration = maxDuration;
+	}
+
 	public int getInquerySize() {
 		return inquerySize;
 	}
@@ -49,6 +57,46 @@ public abstract class LearningSetting {
 	// supervised
 	QualitativeMeasure measure = new FMeasure();
 	
+	//LION parameters
+	double gammaScore = 0.15d;
+	/**Expansion penalty*/
+	double expansionPenalty = 0.7d;
+	/**reward for better then parent*/
+	double reward = 1.2;
+	/**maximal number of iterations*/
+	int maxIteration = 500;
+	public int getMaxIteration() {
+		return maxIteration;
+	}
+
+	public void setMaxIteration(int maxIteration) {
+		this.maxIteration = maxIteration;
+	}
+
+	public double getGammaScore() {
+		return gammaScore;
+	}
+
+	public void setGammaScore(double gammaScore) {
+		this.gammaScore = gammaScore;
+	}
+
+	public double getExpansionPenalty() {
+		return expansionPenalty;
+	}
+
+	public void setExpansionPenalty(double expansionPenalty) {
+		this.expansionPenalty = expansionPenalty;
+	}
+
+	public double getReward() {
+		return reward;
+	}
+
+	public void setReward(double reward) {
+		this.reward = reward;
+	}
+
 	public QualitativeMeasure getMeasure() {
 		return measure;
 	}

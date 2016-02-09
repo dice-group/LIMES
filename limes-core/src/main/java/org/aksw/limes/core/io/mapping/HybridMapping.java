@@ -57,6 +57,12 @@ public class HybridMapping extends Mapping {
 		return null;
 	}
 
+	@Override
+	public Mapping getSubMap(double threshold) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 
 }

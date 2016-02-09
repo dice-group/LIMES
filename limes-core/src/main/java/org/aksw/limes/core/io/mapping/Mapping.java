@@ -39,6 +39,8 @@ public abstract class Mapping implements IMapping {
 
 	public abstract Mapping getBestOneToNMapping();
 
+	public abstract Mapping getSubMap(double threshold);
+	
 	/**
 	 * Get the predicate URI, which defaults to OWL.sameAs.
 	 * 

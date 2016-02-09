@@ -18,6 +18,7 @@ import org.junit.Test;
 
 /**
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Klaus Lyko
  * @version Nov 12, 2015
  */
 public class LinkSpecification implements ILinkSpecification {
@@ -44,8 +45,8 @@ public class LinkSpecification implements ILinkSpecification {
     protected String filterExpression;
     protected LinkSpecification parent;
     // just a quick hack to have lower borders for advanced threshold searches
-    protected double lowThreshold = 0d;
-    protected double quality = 0d;
+    public double lowThreshold = 0d;
+    private double quality = 0d;
     // If the LinkSpecification is atomic the measure and properties are this.
     // filterexpression: e.g. trigrams(s.label,t.label).
     protected String atomicMeasure = ""; // eg. trigrams...
@@ -737,5 +738,26 @@ public class LinkSpecification implements ILinkSpecification {
     public void setFullExpression(String fullExpression) {
 	this.fullExpression = fullExpression;
     }
+    
+    public LinkSpecification getParent() {
+    	return parent;
+    }
+    public void setParent(LinkSpecification parent) {
+    	this.parent = parent;
+    }
+    public String getProperty1() {
+    	return this.prop1;
+    }
+    public String getProperty2() {
+    	return this.prop2;
+    }
+
+	public double getQuality() {
+		return quality;
+	}
+
+	public void setQuality(double quality) {
+		this.quality = quality;
+	}
 
 }
