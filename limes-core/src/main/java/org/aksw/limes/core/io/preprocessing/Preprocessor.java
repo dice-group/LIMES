@@ -17,12 +17,12 @@ public class Preprocessor {
 	static Logger logger = Logger.getLogger(Preprocessor.class.getName());
 
 	public static final String DATE 			= "date";
-	public static final String REPLACE 		= "replace";
+	public static final String REPLACE 			= "replace";
 	public static final String REG_EX_REPLACE	= "regexreplace";
 	public static final String FAHRENHEIT 		= "fahrenheit";
-	public static final String URI_AS_STRING		= "uriasstring";
+	public static final String URI_AS_STRING	= "uriasstring";
 	public static final String REMOVE_BRACES	= "removebraces";
-	public static final String CELSIUS 		= "celsius";
+	public static final String CELSIUS 			= "celsius";
 	public static final String REGULAR_ALPHABET= "regularAlphabet";
 	public static final String UPPER_CASE 		= "uppercase";
 	public static final String LOWER_CASE 		= "lowercase";
@@ -164,7 +164,7 @@ public class Preprocessor {
 	}
 
 	/**
-	 * Returns the last part of an URI as a String. Additional pasing _ as space.
+	 * Returns the last part of an URI as a String. Additional parsing _ as space.
 	 * @return
 	 */
 	private static String URIasString(String org) {

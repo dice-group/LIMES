@@ -39,11 +39,13 @@ public class QueryModuleFactory {
             kbinfo.setType("RDF/XML");
             return new FileQueryModule(kbinfo);
         }
-        
+        else if (name.toLowerCase().startsWith("sparql")) {
+            return new SparqlQueryModule(kbinfo);
+        }
         else if (name.toLowerCase().startsWith("vector")) {
             return new VectorQueryModule(kbinfo);
         }
         //default
-        return new SparqlQueryModule(kbinfo);
+        return new ResilientSparqlQueryModule(kbinfo);
     }
 }

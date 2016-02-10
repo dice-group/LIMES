@@ -63,12 +63,9 @@ public class EagleUnsupervisedTest {
 		param.setPropMap(pm);
 		
 		try {
-			eus.init(param);
-		
+			eus.init(param, null);
 			
-		
-			
-			MLResult result = eus.learn();
+			MLResult result = eus.learn(null);
 			System.out.println(result);
 			System.out.println(result.getMapping());
 			

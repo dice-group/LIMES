@@ -21,12 +21,12 @@ public class MLAlgorithmTest {
 		try {
 			System.out.println("Default termination criteria.");
 			ActiveLearningSetting als = new ActiveLearningSetting(eagle);
-			eagle.init(als);
+			eagle.init(als, null);
 			als.learn();
 				
 			System.out.println("Custom termination criteria.");
 			MyActiveLearning mals = new MyActiveLearning(eagle);
-			eagle.init(mals);
+			eagle.init(mals, null);
 			mals.learn();
 		
 		} catch (Exception e) {

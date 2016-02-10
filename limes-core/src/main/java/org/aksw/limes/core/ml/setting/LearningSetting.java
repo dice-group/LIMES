@@ -1,5 +1,7 @@
 package org.aksw.limes.core.ml.setting;
 
+import org.aksw.limes.core.evaluation.quality.FMeasure;
+import org.aksw.limes.core.evaluation.quality.QualitativeMeasure;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.ml.algorithm.IMLAlgorithm;
@@ -12,6 +14,24 @@ import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 public abstract class LearningSetting {
 	
 	protected IMLAlgorithm algorithm;
+	int inquerySize = 10;
+	protected long maxDuration = 600;
+	
+	public long getMaxDuration() {
+		return maxDuration;
+	}
+
+	public void setMaxDuration(long maxDuration) {
+		this.maxDuration = maxDuration;
+	}
+
+	public int getInquerySize() {
+		return inquerySize;
+	}
+
+	public void setInquerySize(int inquerySize) {
+		this.inquerySize = inquerySize;
+	}
 
 	public LearningSetting(IMLAlgorithm algorithm) {
 		super();
@@ -24,6 +44,8 @@ public abstract class LearningSetting {
 		return algorithm;
 	}
 	
+	
+	
 	// - EAGLE parameters
 	int generations = 10;
 	int population = 20;
@@ -31,14 +53,64 @@ public abstract class LearningSetting {
 	float reproductionRate = 0.4f;
 	float crossoverRate = 0.3f;
 	boolean preserveFittest = true;
-	double beta = 1;
+//	double beta = 1;
+	// supervised
+	QualitativeMeasure measure = new FMeasure();
 	
-	public double getBeta() {
-		return beta;
+	//LION parameters
+	double gammaScore = 0.15d;
+	/**Expansion penalty*/
+	double expansionPenalty = 0.7d;
+	/**reward for better then parent*/
+	double reward = 1.2;
+	/**maximal number of iterations*/
+	int maxIteration = 500;
+	public int getMaxIteration() {
+		return maxIteration;
 	}
-	public void setBeta(double beta) {
-		this.beta = beta;
+
+	public void setMaxIteration(int maxIteration) {
+		this.maxIteration = maxIteration;
 	}
+
+	public double getGammaScore() {
+		return gammaScore;
+	}
+
+	public void setGammaScore(double gammaScore) {
+		this.gammaScore = gammaScore;
+	}
+
+	public double getExpansionPenalty() {
+		return expansionPenalty;
+	}
+
+	public void setExpansionPenalty(double expansionPenalty) {
+		this.expansionPenalty = expansionPenalty;
+	}
+
+	public double getReward() {
+		return reward;
+	}
+
+	public void setReward(double reward) {
+		this.reward = reward;
+	}
+
+	public QualitativeMeasure getMeasure() {
+		return measure;
+	}
+
+	public void setMeasure(QualitativeMeasure measure) {
+		this.measure = measure;
+	}
+
+//	public double getBeta() {
+//		return beta;
+//	}
+//	public void setBeta(double beta) {
+//		this.beta = beta;
+//	}
 	PropertyMapping  propMap = new PropertyMapping();
 	
 	

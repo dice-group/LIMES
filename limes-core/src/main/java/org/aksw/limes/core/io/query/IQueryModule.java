@@ -8,10 +8,13 @@ package org.aksw.limes.core.io.query;
 import org.aksw.limes.core.io.cache.Cache;
 
 /**
- * Interface for query modules. SPARQL query module implemented so far.
- * Query from file and databases will be implemented soon.
+ * Interface for query modules
  * @author ngonga
  */
 public interface IQueryModule {
+	
+    /**
+     * @param cache
+     */
     public void fillCache(Cache c);
 }
