@@ -36,7 +36,7 @@ public class AlgebraicRewriterTest {
 		0.5);
 	// spec.readSpec("OR(trigrams(x.q, y.q)|0.75, AND(jaccard(x.q, y.q)|0.7,
 	// jaccard(x.q, y.q)|0.5)|0.8)", 0.5);
-	AlgebraicRewriterTest ar = new AlgebraicRewriterTest();
+//	AlgebraicRewriterTest ar = new AlgebraicRewriterTest();
 	System.out.println(spec);
     }
 

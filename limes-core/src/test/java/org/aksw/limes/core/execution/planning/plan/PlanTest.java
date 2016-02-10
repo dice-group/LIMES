@@ -3,7 +3,6 @@ package org.aksw.limes.core.execution.planning.plan;
 import static org.junit.Assert.*;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
