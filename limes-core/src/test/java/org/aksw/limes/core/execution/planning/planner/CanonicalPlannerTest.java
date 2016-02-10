@@ -3,13 +3,11 @@ package org.aksw.limes.core.execution.planning.planner;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 import org.junit.Test;
 
 public class CanonicalPlannerTest {
@@ -133,8 +131,6 @@ public class CanonicalPlannerTest {
 	System.out.println(ls.isAtomic());
 
 	NestedPlan plan = p.plan(ls);
-	//////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////
 
 	NestedPlan plan2 = new NestedPlan();
 	Instruction run1 = new Instruction(Command.RUN, "cosine(x.description,y.description)", "0.3", -1, -1, 0);

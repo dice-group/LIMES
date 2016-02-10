@@ -5,25 +5,13 @@ package org.aksw.limes.core.evaluation;
 
 import static org.junit.Assert.*;
 
-import java.util.TreeSet;
 
 import org.junit.Test;
-
-import java.util.Set;
-
 import org.aksw.limes.core.evaluation.quality.FMeasure;
 import org.aksw.limes.core.evaluation.quality.Precision;
 import org.aksw.limes.core.evaluation.quality.Recall;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.model.*;
-
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.NodeFactory;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 /**
  * @author mofeed

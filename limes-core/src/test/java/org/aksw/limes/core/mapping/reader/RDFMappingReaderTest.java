@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
 import org.junit.Test;
 
