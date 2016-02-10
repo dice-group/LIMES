@@ -48,6 +48,7 @@ import org.jgap.InvalidConfigurationException;
  * Refinement based learning algorithm for link specs.
  * @author Jens Lehmann
  * @author Klaus Lyko
+ * 
  */
 public class LionPrune extends MLAlgorithm {
 

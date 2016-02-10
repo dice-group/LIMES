@@ -15,7 +15,72 @@ public abstract class LearningSetting {
 	
 	protected IMLAlgorithm algorithm;
 	int inquerySize = 10;
-	protected long maxDuration = 600;
+	/**maximal duration in seconds*/
+	protected long maxDuration = 60;
+	/**maximal number of iterations*/
+	int maxIteration = 500;
+	/**maximal quality in F-Measure // Pseudo-F. The implementing ML algorithm should it interpret as wished.*/
+	double maxQuality = 0.5;
+	TerminationCriteria terminationCriteria = TerminationCriteria.iteration;
+	double terminationCriteriaValue = 0;
+	/**beta for (pseudo) F-Measure*/
+	double beta = 1.0;
+
+	// - EAGLE parameters
+	int generations = 10; //FIXME use iterations?
+	int population = 20;
+	float mutationRate = 0.4f;
+	float reproductionRate = 0.4f;
+	float crossoverRate = 0.3f;
+	boolean preserveFittest = true;
+	// supervised
+	QualitativeMeasure measure = new FMeasure();
+	
+	//LION parameters
+	double gammaScore = 0.15d;
+	/**Expansion penalty*/
+	double expansionPenalty = 0.7d;
+	/**reward for better then parent*/
+	double reward = 1.2;
+	/**switch pruning on /off*/
+	boolean prune = true;
+	
+	
+	public double getBeta() {
+		return beta;
+	}
+
+	public void setBeta(double beta) {
+		this.beta = beta;
+	}
+
+	
+	public double getMaxQuality() {
+		return maxQuality;
+	}
+
+	public void setMaxQuality(double maxQuality) {
+		this.maxQuality = maxQuality;
+	}
+
+	public boolean isPrune() {
+		return prune;
+	}
+
+	public void setPrune(boolean prune) {
+		this.prune = prune;
+	}
+
+	/**
+	 * To differentiate termination criteria for ML algorithms.
+	 * @author Klaus Lyko
+	 * @version Feb 10, 2016
+	 */
+	public enum TerminationCriteria {
+		iteration, // EAGLE generations others maxIteration
+		duration, // using timeBased criteria, specified in millisecond: maxDuration
+		quality, // a quality based approach
+	};
 	
 	public long getMaxDuration() {
 		return maxDuration;
@@ -23,6 +88,7 @@ public abstract class LearningSetting {
 
 	public void setMaxDuration(long maxDuration) {
 		this.maxDuration = maxDuration;
+		terminationCriteriaValue = maxDuration;
 	}
 
 	public int getInquerySize() {
@@ -44,27 +110,6 @@ public abstract class LearningSetting {
 		return algorithm;
 	}
 	
-	
-	
-	// - EAGLE parameters
-	int generations = 10;
-	int population = 20;
-	float mutationRate = 0.4f;
-	float reproductionRate = 0.4f;
-	float crossoverRate = 0.3f;
-	boolean preserveFittest = true;
-//	double beta = 1;
-	// supervised
-	QualitativeMeasure measure = new FMeasure();
-	
-	//LION parameters
-	double gammaScore = 0.15d;
-	/**Expansion penalty*/
-	double expansionPenalty = 0.7d;
-	/**reward for better then parent*/
-	double reward = 1.2;
-	/**maximal number of iterations*/
-	int maxIteration = 500;
 	public int getMaxIteration() {
 		return maxIteration;
 	}
@@ -125,6 +170,7 @@ public abstract class LearningSetting {
 	}
 	public void setGenerations(int generations) {
 		this.generations = generations;
+		terminationCriteriaValue = generations;
 	}
 	public int getPopulation() {
 		return population;
@@ -157,7 +203,45 @@ public abstract class LearningSetting {
 		this.preserveFittest = preserveFittest;
 	}
 	
+	public TerminationCriteria getTerminationCriteria() {
+		return this.terminationCriteria;
+	}
 	
+	public void setTerminationCriteria(TerminationCriteria criteria) {
+		this.terminationCriteria = criteria;
+	}
+	/**
+	 * A convenient setter for different termination criteria. Will
+	 * interpret the given value depending on the criteria (e.g. as 
+	 * maxDuration in seconds iff TerminationCriteria.duration is given.
+	 * @param criteria Termination criteria
+	 * @param value Criteria specific value (seconds/number o
+	 */
+	public boolean setTerminationCriteria(TerminationCriteria criteria, double value) {
+		this.terminationCriteria = criteria;
+		if(criteria==TerminationCriteria.duration) {
+			this.maxDuration = (long) value;
+			terminationCriteriaValue = value;
+//			System.out.println("Setting duration based criteria to "+maxDuration+" seconds.");
+			return true;
+		}
+		if(criteria==TerminationCriteria.iteration) {
+			this.maxIteration = (int) value;
+			terminationCriteriaValue = value;
+//			System.out.println("Setting iteration based criteria to: "+maxIteration+" iterations");
+			return true;
+		}
+		if(criteria==TerminationCriteria.quality) {
+			this.maxQuality = value;
+			terminationCriteriaValue = value;
+//			System.out.println("Setting quality based criteria to: "+maxQuality+" quality");
+			return true;
+		}
+		return false;
+	}
 	
-	
+	public double getTerminationCriteriaValue() {
+		return terminationCriteriaValue;
+	}
 }
+

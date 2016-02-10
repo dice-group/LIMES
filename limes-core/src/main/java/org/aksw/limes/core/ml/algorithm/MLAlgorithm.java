@@ -1,13 +1,8 @@
 package org.aksw.limes.core.ml.algorithm;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
-import org.aksw.limes.core.io.mapping.Mapping;
 import org.apache.log4j.Logger;
 
 /**
