@@ -63,7 +63,7 @@ public class UpwardLengthLimitRefinementOperator
 			for(LinkSpecification ls: getAllAtomicMeasures(intialThresholds)) {
 				linkSpecs.add(ls);
 			}
-			logger.error("Refined root to the first time. Created "+linkSpecs.size()+" children (atomic specs).");
+			logger.info("Refined root to the first time. Created "+linkSpecs.size()+" children (atomic specs).");
 		} 
 		/*atomic at maxLength1: Threshold decrease or OR
 		 */
@@ -235,7 +235,6 @@ public class UpwardLengthLimitRefinementOperator
 		/*get all mapping properties*/
 		PropertyMapping propMapper = setting.getPropMap();
 		Mapping propMap = propMapper.getCompletePropMapping();
-	
 		String sourceVar = configuration.getSourceInfo().getVar();
 		if(sourceVar.startsWith("?")&& sourceVar.length()>=2)
 			sourceVar = sourceVar.substring(1);

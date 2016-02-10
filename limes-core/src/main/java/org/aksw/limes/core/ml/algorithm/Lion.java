@@ -21,12 +21,15 @@ import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
 import org.aksw.limes.core.execution.planning.planner.Planner;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
+import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 import org.aksw.limes.core.measures.measure.Measure;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.algorithm.lion.DefaultRefinementHeuristic;
 import org.aksw.limes.core.ml.algorithm.lion.RefinementHeuristic;
 import org.aksw.limes.core.ml.algorithm.lion.SearchTreeNode;
@@ -108,7 +111,8 @@ public class Lion extends MLAlgorithm {
 		nodes= new TreeSet<SearchTreeNode>();
 		heuristic = new DefaultRefinementHeuristic();
 		operator = new UpwardLengthLimitRefinementOperator();
-		
+		operator.setConfiguration(configuration);
+		heuristic.setLearningSetting(setting);
 		planner = new CanonicalPlanner();
 	}
 
@@ -161,16 +165,17 @@ public class Lion extends MLAlgorithm {
 		int nextRootNode = 100;
 		while (!timeBasedTermination(dur, maxDuration)) {
 			if(loop%10 == 0)
-//				logger.error("Loop "+loop+" searchtree.size="+nodes.size());
+				logger.info("Loop "+loop+" searchtree.size="+nodes.size());
+			
 			newBest = false;
 			if(loop == 1) {
-				logger.error("intial treesize: "+nodes.size());
+				logger.info("intial treesize: "+nodes.size());
 				Iterator<SearchTreeNode> it = nodes.descendingIterator();
 				while(it.hasNext()) {
 					SearchTreeNode within = it.next();
 					System.out.println("score= "+within.getScore()+" penScore="+within.getPenaltyScore()+" =>"+within);
 				}
-				System.out.println("Next:="+getNextNodeToExpand());
+//				System.out.println("Next:="+getNextNodeToExpand());
 				
 				
 			}
@@ -344,8 +349,7 @@ public class Lion extends MLAlgorithm {
 		}
 		// this should practically never be called, since for any reasonable learning
 		// task, we will always have at least one node with less than 100% accuracy
-		System.out.println("Not able to pick reasonable node to expand: just taking last");
-		System.err.println("Not able to pick reasonable node to expand: just taking last");
+		
 		return nodes.last();
 	}
 	
@@ -465,7 +469,7 @@ public class Lion extends MLAlgorithm {
 		
 		if(bestScore < accuracy || best.isRoot()) {
 			bestScore = accuracy;
-			logger.error("Setting new best"+node);
+			logger.info("Setting new best"+node);
 			best = node;
 			newBest = true;
 		}
@@ -996,4 +1000,42 @@ public class Lion extends MLAlgorithm {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public static void main(String args[]) {
+		String base = "/home/lyko/svn/LIMES/";
+		String configFile = "../../../svn/LIMES/Examples/GeneticEval/PublicationData.xml";
+		XMLConfigurationReader reader = new XMLConfigurationReader();
+		Configuration config = reader.read(configFile);
+		config.getSourceInfo().setEndpoint(base+config.getSourceInfo().getEndpoint());
+		config.getTargetInfo().setEndpoint(base+config.getTargetInfo().getEndpoint());
+		
+		Cache sC = HybridCache.getData(config.getSourceInfo());
+		
+		HybridCache tC = HybridCache.getData(config.getTargetInfo());
+		
+		Lion lion = new Lion(sC,tC,config);
+		
+		UnsupervisedLearningSetting setting = new UnsupervisedLearningSetting(lion);
+		PropertyMapping propMap = new PropertyMapping();
+		propMap.addStringPropertyMatch("title", "title");
+		propMap.addStringPropertyMatch("authors", "authors");
+		propMap.addStringPropertyMatch("venue", "venue");
+		propMap.addNumberPropertyMatch("year", "year");
+		setting.setPropMap(propMap);
+		
+		setting.setGenerations(3);
+		setting.setPopulation(10);
+		setting.setMaxDuration(60);
+		
+		try {
+			lion.init(setting, new MemoryMapping());
+			MLResult result = lion.learn(new MemoryMapping());
+			System.out.println(result);
+		} catch (InvalidConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 }
