@@ -94,6 +94,11 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>org.aksw.limes.core.controller.Controller</mainClass>
+						</manifest>
+					</archive>
 				</configuration>
 			</plugin>
 
