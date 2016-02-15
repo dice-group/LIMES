@@ -16,23 +16,24 @@ import org.matheclipse.core.interfaces.IExpr;
 
 public class DefaultRewriter extends Rewriter {
 
-
+    public DefaultRewriter(){};
+    
     @Override
     public LinkSpecification rewrite(LinkSpecification spec) {
 	return spec;
     }
 
     /**
-     * Returns the factor expression of a metric 
+     * Returns the factor expression of a metric
      *
      * @param metric,
      *            input metric expression
      * @return metric, factor expression as string
      */
-    public static String factorExpression(String metric) {
+    public  String factorExpression(String metric) {
 	try {
 	    String copy = metric.replaceAll(" ", "");
-	    if (isBoolean(metric)) {
+	    if (this.isBoolean(metric)) {
 		List<String> variables = new ArrayList<String>();
 		variables.addAll(getVariables(metric));
 		copy = getInfix(copy);
@@ -62,6 +63,7 @@ public class DefaultRewriter extends Rewriter {
 	}
 	return metric;
     }
+
     /**
      * Returns infix of a metric expression
      *
@@ -69,7 +71,7 @@ public class DefaultRewriter extends Rewriter {
      *            input metric expression
      * @return metric, expression with infix as string
      */
-    public static String getInfix(String metric) {
+    public  String getInfix(String metric) {
 	try {
 	    Parser p = new Parser(metric, 1d);
 	    if (p.isAtomic()) {
@@ -103,7 +105,7 @@ public class DefaultRewriter extends Rewriter {
      *            Measure to analyse
      * @return Set of variables contained in the measure
      */
-    public static Set<String> getVariables(String metric) {
+    public  Set<String> getVariables(String metric) {
 	Parser p = new Parser(metric, 1d);
 	Set<String> result;
 	if (p.isAtomic()) {
@@ -122,7 +124,7 @@ public class DefaultRewriter extends Rewriter {
      * @param metric
      * @return
      */
-    public static boolean isBoolean(String metric) {
+    public  boolean isBoolean(String metric) {
 	Parser p = new Parser(metric, 1d);
 	if (p.isAtomic()) {
 	    return true;
@@ -136,7 +138,4 @@ public class DefaultRewriter extends Rewriter {
 	}
     }
 
-    
-    
-    
 }
