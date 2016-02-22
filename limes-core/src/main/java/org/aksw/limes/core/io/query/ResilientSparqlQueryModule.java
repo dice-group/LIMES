@@ -2,8 +2,6 @@ package org.aksw.limes.core.io.query;
 
 import com.hp.hpl.jena.query.*;
 
-import java.util.Iterator;
-
 import org.aksw.jena_sparql_api.delay.core.QueryExecutionFactoryDelay;
 import org.aksw.jena_sparql_api.http.QueryExecutionFactoryHttp;
 import org.aksw.jena_sparql_api.pagination.core.QueryExecutionFactoryPaginated;
