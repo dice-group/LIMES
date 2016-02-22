@@ -73,30 +73,31 @@ public class AlgebraicRewriter extends Rewriter {
 	}
 	return spec;
     }
-    
+
     /**
-    * Removes duplicated specifications from specification
-    *
-    * @param spec
-    *            Input
-    * @return spec, de-duplicated specification
-    */
-    public LinkSpecification removeDuplicates(LinkSpecification spec){
-	
+     * Removes duplicated specifications from specification
+     *
+     * @param spec
+     *            Input
+     * @return spec, de-duplicated specification
+     */
+    public LinkSpecification removeDuplicates(LinkSpecification spec) {
+
 	if (!spec.isAtomic()) {
 	    if (spec.getChildren().size() == 2) {
 		LinkSpecification left = removeDuplicates(spec.getChildren().get(0));
 		LinkSpecification right = removeDuplicates(spec.getChildren().get(1));
 		if (left.equals(right)) {
 		    spec = left;
-		    double theta = Math.max(spec.getThreshold(),left.getThreshold());
+		    double theta = Math.max(spec.getThreshold(), left.getThreshold());
 		    spec.setThreshold(theta);
 		}
 	    }
 	}
-	
+
 	return spec;
     }
+
     /**
      * Removes unary operators from a spec
      *
@@ -156,11 +157,11 @@ public class AlgebraicRewriter extends Rewriter {
 	    String measure1 = getMeasure(source);
 	    String measure2 = getMeasure(target);
 	    if (measure1.equals(measure2)) {
-		//!!!!!!!!!!!!!!!!!!!!!!!!!!!! < not <=
+		// !!!!!!!!!!!!!!!!!!!!!!!!!!!! < not <=
 		if (source.getThreshold() <= target.getThreshold()) {
 		    source.addDependency(target);
 		} else {
-		    //!!!!!!!!!!!!!!!!!!!!!!!! WHAT?????
+		    // !!!!!!!!!!!!!!!!!!!!!!!! WHAT?????
 		    double t1 = source.getThreshold();
 		    double t2 = target.getThreshold();
 		    if (measure1.equals("trigrams")) {
