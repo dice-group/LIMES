@@ -5,6 +5,8 @@ import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
+import org.aksw.limes.core.execution.rewriter.Rewriter;
+import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.IConfigurationReader;
@@ -107,22 +109,35 @@ public class Controller {
         HybridCache sourceCache = HybridCache.getData(config.getSourceInfo());
         HybridCache targetCache = HybridCache.getData(config.getTargetInfo());
 
-        // 4. Planning
-        LinkSpecification ls = new LinkSpecification(config.getMetricExpression(), config.getVerificationThreshold());
-        IPlanner planner = ExecutionPlannerFactory.getPlanner(config.getExecutionPlan(), sourceCache, targetCache);
-        assert planner != null;
-        Plan plan = planner.plan(ls);
+        // 4. Machine Learning or Planning
+        String metricExpression = config.getMetricExpression();
+        int i = metricExpression.indexOf('(');
+        String algorithmOrMetric = metricExpression.substring(0, i == -1 ? metricExpression.length() : i);
+        boolean isAlgorithm = false;
+        if (isAlgorithm) {
+            // 4.1. Machine Learning
+            //todo: tie to MLAlgorithmFactory when implemented
+        } else {
+            // 4.2. Rewriting
+            Rewriter rw = RewriterFactory.getRewriter("Default");
+            LinkSpecification ls = new LinkSpecification(config.getMetricExpression(), config.getVerificationThreshold());
+            LinkSpecification rwLs = rw.rewrite(ls);
+            // 4.3. Planning
+            IPlanner planner = ExecutionPlannerFactory.getPlanner(config.getExecutionPlan(), sourceCache, targetCache);
+            assert planner != null;
+            Plan plan = planner.plan(rwLs);
 
-        // 5. Execution
-        ExecutionEngine engine = ExecutionEngineFactory.getEngine("Simple", sourceCache, targetCache,
-                config.getSourceInfo().getVar(), config.getTargetInfo().getVar());
-        assert engine != null;
-        Mapping verificationMapping = engine.execute(plan);
-        Mapping acceptanceMapping = verificationMapping.getSubMap(config.getAcceptanceThreshold());
-        String outputFormat = config.getOutputFormat();
-        ISerializer output = SerializerFactory.getSerializer(outputFormat);
-        output.setPrefixes(config.getPrefixes());
-        output.writeToFile(verificationMapping, config.getVerificationRelation(), config.getVerificationFile());
-        output.writeToFile(acceptanceMapping, config.getAcceptanceRelation(), config.getAcceptanceFile());
+            // 5. Execution
+            ExecutionEngine engine = ExecutionEngineFactory.getEngine("Simple", sourceCache, targetCache,
+                    config.getSourceInfo().getVar(), config.getTargetInfo().getVar());
+            assert engine != null;
+            Mapping verificationMapping = engine.execute(plan);
+            Mapping acceptanceMapping = verificationMapping.getSubMap(config.getAcceptanceThreshold());
+            String outputFormat = config.getOutputFormat();
+            ISerializer output = SerializerFactory.getSerializer(outputFormat);
+            output.setPrefixes(config.getPrefixes());
+            output.writeToFile(verificationMapping, config.getVerificationRelation(), config.getVerificationFile());
+            output.writeToFile(acceptanceMapping, config.getAcceptanceRelation(), config.getAcceptanceFile());
+        }
     }
 }
