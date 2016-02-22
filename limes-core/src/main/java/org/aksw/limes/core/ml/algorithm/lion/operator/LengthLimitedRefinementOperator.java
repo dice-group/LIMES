@@ -6,8 +6,6 @@ import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 
-//import de.uni_leipzig.simba.genetics.evaluation.basics.EvaluationData;
-//import de.uni_leipzig.simba.specification.LinkSpec;
 
 
 /**

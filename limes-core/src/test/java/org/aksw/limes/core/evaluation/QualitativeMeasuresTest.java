@@ -5,8 +5,15 @@ package org.aksw.limes.core.evaluation;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
+
+import com.google.common.collect.Multimap;
+
+import org.aksw.limes.core.evaluation.quality.Evaluate;
 import org.aksw.limes.core.evaluation.quality.FMeasure;
 import org.aksw.limes.core.evaluation.quality.Precision;
 import org.aksw.limes.core.evaluation.quality.Recall;
@@ -28,70 +35,88 @@ public class QualitativeMeasuresTest {
 
 		Mapping goldStandard = initGoldStandardList();
 		Mapping predictions = initPredictionsList();
-		double precision = new Precision().calculate(predictions, goldStandard);
-		System.out.println("precision="+precision);
-    	assertTrue(precision == 0.5);
-    	
-    	double recall = new Recall().calculate(predictions, goldStandard);
-    	System.out.println("recall="+recall);
-    	assertTrue(recall == 0.6);
+		List<String> dataSet =initDataSet();
+		
+		Map<EvalFunc,Double> calculations = testEvaluate(predictions,goldStandard,dataSet,dataSet,EvalFunc.all);
+		
+		double precision = calculations.get(EvalFunc.precision);
+		assertTrue(precision == 0.7);
+		
+		double recall = calculations.get(EvalFunc.recall);
+		assertTrue(recall == 0.7);
+		
+		double fmeasure = calculations.get(EvalFunc.fmeasure);
+		assertTrue(fmeasure == 0.7);
+		
+		double accuracy = calculations.get(EvalFunc.accuracy);
+		assertTrue(accuracy == 4.85);
+		
+		double pprecision = calculations.get(EvalFunc.pseuPrecision);
+		assertTrue(pprecision == 0.8);
+		
+		double precall = calculations.get(EvalFunc.PseuRecall);
+		assertTrue(precall == 0.8);
+		
+		
+		double pfmeasure = calculations.get(EvalFunc.pseuFMeasure);
+		assertTrue(pfmeasure > 0.7 && pfmeasure < 0.9);
 
-    	double fmeasure = new FMeasure().calculate(predictions, goldStandard);
-    	System.out.println("fMeasure="+fmeasure);
-    	assertTrue(fmeasure > 0.5 && fmeasure <0.6);
 
+	}
+	private Map<EvalFunc,Double> testEvaluate(Mapping predictions,Mapping goldStandard,List<String> sourceUris,List<String> targetUris,EvalFunc evaluationFunc)
+	{
+		return new Evaluate().evaluate(predictions, goldStandard, sourceUris, targetUris, evaluationFunc);
 	}
 	private Mapping initGoldStandardList()
 	{
-//		Set<Link> goldStandard = new TreeSet<Link>();
-//		NodeFactory.createURI("");
-//		Node p = NodeFactory.createURI("http://www.w3.org/2002/07/owl#sameAs");
-//		Link l2 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Albania"), NodeFactory.createURI("http://dbpedia.org/resource/Albania"), p);
-//		Link l3 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Algeria"), NodeFactory.createURI("http://dbpedia.org/resource/Algeria"), p);
-//		Link l4 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Andorra"), NodeFactory.createURI("http://dbpedia.org/resource/Andorra"), p);
-//		Link l5 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Argentina"), NodeFactory.createURI("http://dbpedia.org/resource/Argentina"), p);
-//		Link l6 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Australia"), NodeFactory.createURI("http://dbpedia.org/resource/Australia"), p);
-//		goldStandard.add(l2);
-//		goldStandard.add(l3);
-//		goldStandard.add(l4);
-//		goldStandard.add(l5);
-//		goldStandard.add(l6);	
-//		return goldStandard;
+	
 		Mapping gold = new MemoryMapping();
-		gold.add("http://dbpedia.org/resource/Albania", "http://dbpedia.org/resource/Albania", 1);
-		gold.add("http://dbpedia.org/resource/Algeria", "http://dbpedia.org/resource/Algeria", 1);
-		gold.add("http://dbpedia.org/resource/Andorra", "http://dbpedia.org/resource/Andorra", 1);
-		gold.add("http://dbpedia.org/resource/Argentina", "http://dbpedia.org/resource/Argentina", 1);
-		gold.add("http://dbpedia.org/resource/Australia", "http://dbpedia.org/resource/Australia", 1);
+		gold.add("http://dbpedia.org/resource/A", "http://dbpedia.org/resource/A", 1);
+		gold.add("http://dbpedia.org/resource/B", "http://dbpedia.org/resource/B", 1);
+		gold.add("http://dbpedia.org/resource/C", "http://dbpedia.org/resource/C", 1);
+		gold.add("http://dbpedia.org/resource/D", "http://dbpedia.org/resource/D", 1);
+		gold.add("http://dbpedia.org/resource/E", "http://dbpedia.org/resource/E", 1);
+		gold.add("http://dbpedia.org/resource/F", "http://dbpedia.org/resource/F", 1);
+		gold.add("http://dbpedia.org/resource/G", "http://dbpedia.org/resource/G", 1);
+		gold.add("http://dbpedia.org/resource/H", "http://dbpedia.org/resource/H", 1);
+		gold.add("http://dbpedia.org/resource/I", "http://dbpedia.org/resource/I", 1);
+		gold.add("http://dbpedia.org/resource/J", "http://dbpedia.org/resource/J", 1);
 		return gold;
 		
 	}
 	private Mapping initPredictionsList()
 	{
-//		Set<Link> predictions = new TreeSet<Link>();
-//		Node p = NodeFactory.createURI("http://www.w3.org/2002/07/owl#sameAs");
-//		Link l1 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Afghanistan"), NodeFactory.createURI("http://dbpedia.org/resource/Afghanistan"), p);
-//		Link l2 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Albania"), NodeFactory.createURI("http://dbpedia.org/resource/Albania"), p);
-//		Link l3 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Algeria"), NodeFactory.createURI("http://dbpedia.org/resource/Algeria"), p);
-//		Link l4 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Angola"), NodeFactory.createURI("http://dbpedia.org/resource/Andorra"), p);
-//		Link l5 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Argentina"), NodeFactory.createURI("http://dbpedia.org/resource/Argentina"), p);
-//		Link l6 = new Link(NodeFactory.createURI("http://dbpedia.org/resource/Austria"), NodeFactory.createURI("http://dbpedia.org/resource/Australia"), p);
-//		predictions.add(l1);
-//		predictions.add(l2);
-//		predictions.add(l3);
-//		predictions.add(l4);
-//		predictions.add(l5);
-//		predictions.add(l6);	
-//		return predictions;
+		
 		Mapping pred = new MemoryMapping();
-		pred.add("http://dbpedia.org/resource/Afghanistan", "http://dbpedia.org/resource/Afghanistan", 1);
-		pred.add("http://dbpedia.org/resource/Albania", "http://dbpedia.org/resource/Albania", 1);
-		pred.add("http://dbpedia.org/resource/Algeria", "http://dbpedia.org/resource/Algeria", 1);
-		pred.add("http://dbpedia.org/resource/Angola", "http://dbpedia.org/resource/Andorra", 1);
-		pred.add("http://dbpedia.org/resource/Argentina", "http://dbpedia.org/resource/Argentina", 1);
-		pred.add("http://dbpedia.org/resource/Austria", "http://dbpedia.org/resource/Austria", 1);
+		pred.add("http://dbpedia.org/resource/A", "http://dbpedia.org/resource/A", 1);
+		pred.add("http://dbpedia.org/resource/B", "http://dbpedia.org/resource/B", 1);
+		pred.add("http://dbpedia.org/resource/C", "http://dbpedia.org/resource/C", 1);
+		pred.add("http://dbpedia.org/resource/C", "http://dbpedia.org/resource/D", 1);
+		pred.add("http://dbpedia.org/resource/D", "http://dbpedia.org/resource/F", 1);
+		pred.add("http://dbpedia.org/resource/F", "http://dbpedia.org/resource/F", 1);
+		pred.add("http://dbpedia.org/resource/G", "http://dbpedia.org/resource/G", 1);
+		pred.add("http://dbpedia.org/resource/H", "http://dbpedia.org/resource/H", 1);
+		pred.add("http://dbpedia.org/resource/I", "http://dbpedia.org/resource/H", 1);
+		pred.add("http://dbpedia.org/resource/I", "http://dbpedia.org/resource/I", 1);
+
 		return pred;
 		
+	}
+	private List<String> initDataSet()
+	{
+		List<String> dataSet = new ArrayList<String>();
+		dataSet.add("http://dbpedia.org/resource/A");
+		dataSet.add("http://dbpedia.org/resource/B");
+		dataSet.add("http://dbpedia.org/resource/C");
+		dataSet.add("http://dbpedia.org/resource/C");
+		dataSet.add("http://dbpedia.org/resource/D");
+		dataSet.add("http://dbpedia.org/resource/F");
+		dataSet.add("http://dbpedia.org/resource/G");
+		dataSet.add("http://dbpedia.org/resource/H");
+		dataSet.add("http://dbpedia.org/resource/I");
+		dataSet.add("http://dbpedia.org/resource/I");
+		return dataSet;
+
 	}
 
 }
