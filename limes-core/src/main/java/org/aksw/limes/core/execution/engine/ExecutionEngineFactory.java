@@ -11,15 +11,26 @@ public class ExecutionEngineFactory {
     /**
      * @param name,
      *            type of the Execution Engine
+     * @param source,
+     *            Source cache
+     * @param target,
+     *            Target cache
+     * @param sourceVar,
+     *            Source variable (usually "?x")
+     * @param targetVar,
+     *            Target variable (usually "?y")
+     *            
      * @return a specific execution engine instance
+     * 
      * @author kleanthi
      */
-    public static ExecutionEngine getEngine(String name, Cache source, Cache target, String sourceVar, String targetVar) {
+    public static ExecutionEngine getEngine(String name, Cache source, Cache target, String sourceVar,
+	    String targetVar) {
 
 	if (name.equalsIgnoreCase(DEFAULT))
 	    return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
-	if (name.equalsIgnoreCase(PARALLEL))
-	    return new ParallelExecutionEngine(source, target, sourceVar, targetVar);
+	//if (name.equalsIgnoreCase(PARALLEL))
+	//    return new ParallelExecutionEngine(source, target, sourceVar, targetVar);
 
 	logger.error("Sorry, " + name + " is not yet implemented. Exit with error ...");
 	System.exit(1);

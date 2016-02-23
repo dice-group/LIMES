@@ -30,21 +30,6 @@ public class ExecutionEngineFactoryTest{
 	ExecutionEngine engine = ExecutionEngineFactory.getEngine("default", null, null, null, null);
 	assertTrue(engine instanceof SimpleExecutionEngine);
     }
-    @Test
-    public void testEqualParallel() {
-	ExecutionEngine engine = ExecutionEngineFactory.getEngine("parallel", null, null, null, null);
-	assertTrue(engine instanceof ParallelExecutionEngine);
-    }
-    
-    @Test
-    public void testNotEqualParallel() {
-	ExecutionEngine engine = ExecutionEngineFactory.getEngine("parallel", null, null, null, null);
-	assertFalse(engine instanceof SimpleExecutionEngine);
-    }
-    
-    
-
-    
    
     
 }

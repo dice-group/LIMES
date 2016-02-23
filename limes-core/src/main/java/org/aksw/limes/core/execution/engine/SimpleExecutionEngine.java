@@ -22,6 +22,7 @@ import org.aksw.limes.core.measures.mapper.atomic.PPJoinPlusPlus;
 import org.aksw.limes.core.measures.mapper.atomic.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
 import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
+import org.aksw.limes.core.measures.measure.MeasureFactory;
 
 /**
  * Implements the default execution engine class. The idea is that the engine
@@ -53,7 +54,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      *
      * @param plan
      *            An execution plan
-     * @return The MemoryMapping that results from running the plan
+     * @return The mapping obtained from executing the plan
      */
     public Mapping execute(Plan plan) {
 	buffer = new ArrayList<MemoryMapping>();
@@ -91,26 +92,35 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 		if (buffer.isEmpty()) {
 		    return m;
 		}
-		if (index < 0) {
+		if (index < 0) {// return last element of buffer
 		    return buffer.get(buffer.size() - 1);
 		} else {
 		    return buffer.get(index);
 		}
 	    }
-	    if (index < 0) {
+	    // place resulting mapping in the buffer
+	    if (index < 0) {// add the new mapping at the end of the list
 		buffer.add((MemoryMapping) m);
 	    } else {
-		// add placeholders to ensure that the mapping can be placed
-		// where the user wanted to have it
-		while ((index + 1) > buffer.size()) {
-		    buffer.add(new MemoryMapping());
+		// avoid overriding places in buffer
+		// by adding the result at the end
+		if (index < buffer.size()) {
+		    buffer.add((MemoryMapping) m);
+		} else {
+		    // add placeholders to ensure that the mapping can be placed
+		    // where the user wanted to have it
+		    // new mappings are added at the end
+		    while ((index + 1) > buffer.size()) {
+			buffer.add(new MemoryMapping());
+		    }
+		    buffer.set(index, (MemoryMapping) m);
 		}
-		buffer.set(index, (MemoryMapping) m);
+
 	    }
 	}
 
 	// just in case the return operator was forgotten.
-	// Then we return the last mapping computed
+	// then we return the last mapping computed
 	if (buffer.isEmpty()) {
 	    return new MemoryMapping();
 	} else {
@@ -119,54 +129,30 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Implements running the run operator. Assume atomic measures.
+     * Implements the execution of the run operator. Assume atomic measures.
      *
      * @param inst
-     *            Instruction
-     * @return Mapping
+     *            atomic run Instruction
+     * @return The mapping obtained from executing the atomic run Instruction
      */
     public Mapping executeRun(Instruction inst) {
-	
 	double threshold = Double.parseDouble(inst.getThreshold());
 	// generate correct mapper
-	IMapper mapper;
-	if (inst.getMeasureExpression().startsWith("leven")) {
-	    mapper = new EDJoin();
-	} else if (inst.getMeasureExpression().startsWith("euclid")) {
-	    mapper = new TotalOrderBlockingMapper();
-	} else if (inst.getMeasureExpression().startsWith("jaro")) {
-	    mapper = new JaroMapper();
-	} else if (inst.getMeasureExpression().startsWith("qgrams")) {
-	    mapper = new FastNGram();
-	} else if (inst.getMeasureExpression().startsWith("hausdorff")
-		|| inst.getMeasureExpression().startsWith("geomean")) {
-	    mapper = new OrchidMapper();
-	} else if (inst.getMeasureExpression().startsWith("monge")) {
-	    mapper = new MongeElkanMapper();
-	} else if (inst.getMeasureExpression().startsWith("exactmatch")) {
-	    mapper = new ExactMatchMapper();
-	} else if (inst.getMeasureExpression().startsWith("soundex")) {
-	    mapper = new SoundexMapper();
-	} else
-	    if (inst.getMeasureExpression().startsWith("overlap") || inst.getMeasureExpression().startsWith("trigrams")
-		    || inst.getMeasureExpression().startsWith("cosine")
-		    || inst.getMeasureExpression().startsWith("jaccard")) {
-	    mapper = new PPJoinPlusPlus();
-	} else
-	    return new MemoryMapping();
-	// run mapper
-	return mapper.getMapping(source, target, sourceVariable, targetVariable, inst.getMeasureExpression(),
-		threshold);
+	IMapper mapper = MeasureFactory.getMapper(inst.getMeasureExpression());
+	if (mapper != null)
+	    return mapper.getMapping(source, target, sourceVariable, targetVariable, inst.getMeasureExpression(),
+		    threshold);
+	return new MemoryMapping();
     }
 
     /**
      * Runs the filtering operator
      *
      * @param inst
-     *            Instruction
+     *            filter Instruction
      * @param input
-     *            MemoryMapping that is to be filtered
-     * @return Filtered MemoryMapping
+     *            Mapping that is to be filtered
+     * @return filtered Mapping
      */
     public Mapping executeFilter(Instruction inst, Mapping input) {
 	LinearFilter filter = new LinearFilter();
@@ -186,12 +172,12 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Implements the difference of MemoryMappings
+     * Implements the difference of Mappings
      *
      * @param m1
-     *            First MemoryMapping
+     *            First Mapping
      * @param m2
-     *            Second MemoryMapping
+     *            Second Mapping
      * @return Intersection of m1 and m2
      */
     public Mapping executeDifference(Mapping m1, Mapping m2) {
@@ -199,12 +185,12 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Implements the exclusive or of MemoryMappings
+     * Implements the exclusive or of Mappings
      *
      * @param m1
-     *            First MemoryMapping
+     *            First Mapping
      * @param m2
-     *            Second MemoryMapping
+     *            Second Mapping
      * @return Intersection of m1 and m2
      */
     public Mapping executeExclusiveOr(Mapping m1, Mapping m2) {
@@ -212,12 +198,12 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Implements the intersection of MemoryMappings
+     * Implements the intersection of Mappings
      *
      * @param m1
-     *            First MemoryMapping
+     *            First Mapping
      * @param m2
-     *            Second MemoryMapping
+     *            Second Mapping
      * @return Intersection of m1 and m2
      */
     public Mapping executeIntersection(Mapping m1, Mapping m2) {
@@ -225,12 +211,12 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Implements the union of MemoryMappings
+     * Implements the union of Mappings
      *
      * @param m1
-     *            First MemoryMapping
+     *            First Mapping
      * @param m2
-     *            Second MemoryMapping
+     *            Second Mapping
      * @return Intersection of m1 and m2
      */
     public Mapping executeUnion(Mapping m1, Mapping m2) {
@@ -238,19 +224,21 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Runs an execution plan
+     * Implementation of the execution of a nested plan.
      *
-     * @param plan
-     *            ExecutionPlan
-     * @return MemoryMapping
+     * @param plan,
+     *            A nested plan
+     * 
+     * @return The mapping obtained from executing the plan
      */
     public Mapping execute(NestedPlan plan) {
 	// empty nested plan contains nothing
 	Mapping m = new MemoryMapping();
+	System.out.println("Lolo");
 	if (plan.isEmpty()) {
 	} // atomic nested plan just contain simple list of instructions
 	else if (plan.isAtomic()) {
-	    m = execute((Plan)plan);
+	    m = execute((Plan) plan);
 	} // nested plans contain subplans, an operator for merging the results
 	  // of the subplans and a filter for filtering the results of the
 	  // subplan
