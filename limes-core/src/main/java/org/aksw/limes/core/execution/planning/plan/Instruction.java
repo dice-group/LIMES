@@ -32,8 +32,7 @@ public class Instruction {
      * @param c
      *            Command
      * @param measure
-     *            Measure expression, for example
-     *            "trigrams(x.rdfs:label, y.rdfs:label)"
+     *            Measure expression
      * @param t
      *            Threshold
      * @param source
@@ -131,6 +130,9 @@ public class Instruction {
 	this.targetMapping = targetMapping;
     }
 
+    /**
+     * @return current threshold
+     */
     public String getThreshold() {
 	return threshold;
     }
@@ -153,6 +155,9 @@ public class Instruction {
 	this.mainThreshold = threshold;
     }
 
+    /**
+     * @return current mainThreshold
+     */
     public String getMainThreshold() {
 	return this.mainThreshold;
     }
@@ -174,7 +179,14 @@ public class Instruction {
 
 	return false;
     }
-    private String toSmallString(){
+
+    /**
+     * String representation of the Instruction excluding source, target and
+     * result index.
+     * 
+     * @return s, instruction as string
+     */
+    private String toSmallString() {
 	String s = "";
 	if (command.equals(Command.RUN)) {
 	    s = "RUN\t";
@@ -194,6 +206,7 @@ public class Instruction {
 	s = s + threshold + "\t";
 	return s;
     }
+
     @Override
     public Instruction clone() {
 
@@ -202,19 +215,18 @@ public class Instruction {
 	int targetMapping = this.targetMapping;
 	int resultIndex = this.resultIndex;
 
-	Instruction newInstruction = new Instruction(command, "", "", sourceMapping,
-		targetMapping, resultIndex);
-	if(this.mainThreshold == null)
+	Instruction newInstruction = new Instruction(command, "", "", sourceMapping, targetMapping, resultIndex);
+	if (this.mainThreshold == null)
 	    newInstruction.setMainThreshold(null);
 	else
 	    newInstruction.setMainThreshold(new String(this.mainThreshold));
-	
-	if(this.threshold == null)
-		newInstruction.setThreshold(null);
-	else
-		newInstruction.setThreshold(new String(this.threshold));
 
-	if(this.measureExpression == null)
+	if (this.threshold == null)
+	    newInstruction.setThreshold(null);
+	else
+	    newInstruction.setThreshold(new String(this.threshold));
+
+	if (this.measureExpression == null)
 	    newInstruction.setMeasureExpression(null);
 	else
 	    newInstruction.setMeasureExpression(new String(this.measureExpression));

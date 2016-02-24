@@ -960,7 +960,7 @@ public class NestedPlanTest {
 	Instruction subrun4 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
 	subPlan4.addInstruction(subrun4);
 	subPlan4.setOperator(Command.DIFF);
-	plan2.getSubPlans().add( subPlan4);
+	plan2.getSubPlans().add(subPlan4);
 
 	NestedPlan subsubPlan3 = new NestedPlan();
 	Instruction subsubrun3 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.3", -1, -1, 0);

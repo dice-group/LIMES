@@ -234,7 +234,6 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     public Mapping execute(NestedPlan plan) {
 	// empty nested plan contains nothing
 	Mapping m = new MemoryMapping();
-	System.out.println("Lolo");
 	if (plan.isEmpty()) {
 	} // atomic nested plan just contain simple list of instructions
 	else if (plan.isAtomic()) {
