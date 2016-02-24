@@ -35,26 +35,59 @@ public class NestedPlan extends Plan {
 	filteringInstruction = null;
     }
 
+    /**
+     * Returns the set of sub-Plans of the plan
+     * 
+     * @return subPlans
+     */
     public List<NestedPlan> getSubPlans() {
 	return subPlans;
     }
 
+    /**
+     * Set the sub-Plans of the plan
+     * 
+     * @param subPlans
+     *            to set
+     */
     public void setSubPlans(List<NestedPlan> subPlans) {
 	this.subPlans = subPlans;
     }
 
+    /**
+     * Returns the operator of the plan
+     * 
+     * @return operator
+     */
     public Command getOperator() {
 	return operator;
     }
 
+    /**
+     * Set the operator of the plan
+     * 
+     * @param operator
+     *            to set
+     */
     public void setOperator(Command operator) {
 	this.operator = operator;
     }
 
+    /**
+     * Returns the filtering Instruction of the plan
+     * 
+     * @return filteringInstruction
+     */
     public Instruction getFilteringInstruction() {
 	return filteringInstruction;
     }
 
+    /**
+     * Set the filtering Instruction of the plan
+     * 
+     * @param filteringInstruction
+     *            to set
+     */
     public void setFilteringInstruction(Instruction filteringInstruction) {
 	this.filteringInstruction = filteringInstruction;
     }
@@ -68,7 +101,7 @@ public class NestedPlan extends Plan {
     }
 
     /**
-     * Checks whether the current NestedPlan is atomic
+     * Checks whether the current NestedPlan is atomic or not.
      * 
      * @return true, if current NestedPlan is atomic. false, if otherwise
      */
@@ -108,7 +141,7 @@ public class NestedPlan extends Plan {
     /**
      * Generates a clone of the current NestedPlan
      * 
-     * @return Clone of current NestedPlan
+     * @return clone, clone of current NestedPlan
      */
     public NestedPlan clone() {
 	NestedPlan clone = new NestedPlan();
@@ -155,7 +188,7 @@ public class NestedPlan extends Plan {
     }
 
     /**
-     * Adds a subplan to the current list of subplans, if there is no list one
+     * Adds a sub-Plan to the current list of subPlans, if there is no list one
      * will be created
      * 
      * @param subplan
@@ -256,10 +289,10 @@ public class NestedPlan extends Plan {
 	    } else {
 		if (subPlans != null) {
 		    if (!subPlans.isEmpty()) {
-			//subplans
+			// subplans
 			return "\nBEGIN\n" + pre + "-----\n" + operator + "\nSubplans\n" + "\n" + subPlans
 				+ "\nEND\n-----";
-		    } 
+		    }
 		}
 	    }
 	}
@@ -295,7 +328,11 @@ public class NestedPlan extends Plan {
 	    return "0";
 	}
     }
-
+    /**
+     * String representation of NestedPlan as a set of commands
+     * 
+     * @return NestedPlan as a set of commands
+     */
     public String finalPlan() {
 	if (isEmpty()) {
 	    return "Empty plan";
@@ -347,39 +384,6 @@ public class NestedPlan extends Plan {
 	}
 	return null;
     }
-
-    /**
-     * Returns the size of a NestedPlan
-     * 
-     * @param size
-     *            as int
-     */
-    public int getSize(String s) {
-	int size = 0;
-	if (s.contains("\n")) {
-	    String[] parts = s.split("\n");
-	    for (int i = 0; i < parts.length; i++) {
-		size = Math.max(size, parts[i].length());
-	    }
-	    return size;
-	}
-	return s.length();
-    }
-
-    /**
-     * Returns the string representation of the instruction of an atomic
-     * NestedPlan
-     * 
-     * @return Instruction as a string
-     */
-    public String getInstructionString(List<Instruction> list) {
-	Instruction i = list.get(0);
-	String result = i.getCommand() + "\n";
-	result = result + i.getMeasureExpression() + "\n";
-	result = result + i.getThreshold();
-	return result;
-    }
-
     @Override
     public boolean equals(Object other) {
 	NestedPlan o = (NestedPlan) other;
@@ -436,7 +440,7 @@ public class NestedPlan extends Plan {
 			return (this.subPlans.equals(o.subPlans));
 		    else
 			return false;
-		}
+		}//different filtering instructions
 		return false;
 	    } // different operators
 	    return false;
@@ -446,6 +450,39 @@ public class NestedPlan extends Plan {
 
     }
 
+    /**
+     * Returns the size of a NestedPlan
+     * 
+     * @param size
+     *            as int
+     */
+    private int getSize(String s) {
+	int size = 0;
+	if (s.contains("\n")) {
+	    String[] parts = s.split("\n");
+	    for (int i = 0; i < parts.length; i++) {
+		size = Math.max(size, parts[i].length());
+	    }
+	    return size;
+	}
+	return s.length();
+    }
+
+    /**
+     * Returns the string representation of the instruction of an atomic
+     * NestedPlan
+     * 
+     * @return Instruction as a string
+     */
+    private String getInstructionString(List<Instruction> list) {
+	Instruction i = list.get(0);
+	String result = i.getCommand() + "\n";
+	result = result + i.getMeasureExpression() + "\n";
+	result = result + i.getThreshold();
+	return result;
+    }
+
+    
     /**
      * Graphic representation of the current NestedPlan
      * 

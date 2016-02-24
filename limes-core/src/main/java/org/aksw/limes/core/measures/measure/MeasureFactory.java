@@ -44,7 +44,7 @@ public class MeasureFactory {
 
     public static Measure getMeasure(String name) {
 	Measure m;
-	if (name == null){
+	if (name == null) {
 	    m = new TrigramMeasure();
 	    return m;
 	}
@@ -52,8 +52,8 @@ public class MeasureFactory {
 	    m = new CosineMeasure();
 	} else if (name.toLowerCase().startsWith("jaccard")) {
 	    m = new JaccardMeasure();
-	} //else if (name.toLowerCase().startsWith("jarowinkler")) {problematic
-	  //  m = new JaroWinkler();} 
+	} // else if (name.toLowerCase().startsWith("jarowinkler")) {problematic
+	  // m = new JaroWinkler();}
 	else if (name.toLowerCase().startsWith("jaro")) {
 	    m = new Jaro();
 	} // else if (name.toLowerCase().startsWith("ratcliff")) { //problem
@@ -120,41 +120,11 @@ public class MeasureFactory {
     }
 
     /**
-     * Returns measures of a particular type. If measure with name "name" and
-     * type "type" is not found, the default measure for the given type is
-     * returned, e.g., trigram similarity for strings. To get the defaukt
-     * measure of a given type, simply use getMeasure("", type).
-     *
-     * @param name
-     *            Name of the measure
-     * @param type
-     *            Type of the measure
-     * @return Similarity measure of the given type
-     */
-    /*
-     * public static Measure getMeasure(String name, String type) { if
-     * (type.equals("string")) { if (name.toLowerCase().startsWith("cosine")) {
-     * return new CosineMeasure(); } else if
-     * (name.toLowerCase().startsWith("jaccard")) { return new JaccardMeasure();
-     * } // default return new TrigramMeasure();
-     * 
-     * } else if (type.equals("spatial")) { if
-     * (name.toLowerCase().startsWith("geo")) { return new GeoDistance(); } else
-     * if (name.toLowerCase().startsWith("euclidean")) { return new
-     * EuclideanMetric(); } // default return new EuclideanMetric(); } else if
-     * (type.equals("date")) { if (name.toLowerCase().startsWith("datesim")) {
-     * return new SimpleDateMeasure(); } else if
-     * (name.toLowerCase().startsWith("daysim")) { return new DayMeasure(); }
-     * else if (name.toLowerCase().startsWith("yearsim")) { return new
-     * YearMeasure(); } // default return new SimpleDateMeasure(); } // default
-     * of all return new TrigramMeasure(); }
-     */
-
-    /**
      * Get mapper to measure
      *
-     * @param measure
-     * @return
+     * @param measure,
+     *            name of measure
+     * @return am, mapper corresponding to measure
      */
     public static Mapper getMapper(String measure) {
 	Mapper am;
@@ -162,11 +132,18 @@ public class MeasureFactory {
 	    am = new EDJoin();
 	} else if (measure.toLowerCase().startsWith("qgrams")) {
 	    am = new FastNGram();
-	} //else if (measure.toLowerCase().startsWith("jarowinkler")) { //problematic
-	    //am = new JaroWinklerMapper(); } 
+	} // else if (measure.toLowerCase().startsWith("jarowinkler")) {
+	  // //problematic
+	  // am = new JaroWinklerMapper(); }
 	else if (measure.toLowerCase().startsWith("jaro")) {
 	    am = new JaroMapper();
 	} else if (measure.toLowerCase().startsWith("trigrams")) {
+	    am = new PPJoinPlusPlus();
+	} else if (measure.toLowerCase().startsWith("jaccard")) {
+	    am = new PPJoinPlusPlus();
+	} else if (measure.toLowerCase().startsWith("overlap")) {
+	    am = new PPJoinPlusPlus();
+	} else if (measure.toLowerCase().startsWith("cosine")) {
 	    am = new PPJoinPlusPlus();
 	} else if (measure.toLowerCase().startsWith("soundex")) {
 	    am = new SoundexMapper();
@@ -175,12 +152,10 @@ public class MeasureFactory {
 	} // else if (measure.toLowerCase().startsWith("monge")) { //problem in
 	  // getMappingSizeApproximation
 	  // am = new MongeElkanMapper();}
-	else if (measure.toLowerCase().startsWith("exactmatch")) {
+	  else if (measure.toLowerCase().startsWith("exactmatch")) {
 	    am = new ExactMatchMapper();
 	} else if (measure.toLowerCase().startsWith("euclid")) {
 	    am = new TotalOrderBlockingMapper();
-	} else if (measure.toLowerCase().startsWith("jaccard")) {
-	    am = new PPJoinPlusPlus();
 	} else if (measure.toLowerCase().startsWith("hausdorff")) {
 	    am = new OrchidMapper();
 	} else if (measure.toLowerCase().startsWith("orthodromic")) {
@@ -210,7 +185,7 @@ public class MeasureFactory {
 	} else if (measure.toLowerCase().startsWith("fairsurjection")) {
 	    am = new OrchidMapper();
 	} else {
-	    am = new PPJoinPlusPlus();
+	    am = null;
 	}
 
 	return am;

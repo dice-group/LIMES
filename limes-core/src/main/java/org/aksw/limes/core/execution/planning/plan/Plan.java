@@ -24,6 +24,7 @@ public class Plan implements IPlan {
     @Override
     public void addInstruction(Instruction instruction) {
 	if (instruction != null) {
+	    // instructions are added at the end of the list
 	    boolean added = instructionList.add(instruction);
 	    if (!added)
 		logger.info("ExecutionPlan.addInstructiun() failed");
@@ -51,20 +52,26 @@ public class Plan implements IPlan {
 
     /**
      * Checks whether the instructionList of the current NestedPlan is empty
-     * 
+     * @return true or false
      */
     public boolean isEmpty() {
 	return instructionList.isEmpty();
     }
+
     @Override
+    /**
+     * Check if two plans are equal.
+     * 
+     * @return true or false, if the plans have the same instruction list or not
+     */
     public boolean equals(Object other) {
 	Plan o = (Plan) other;
 	if (o == null)
 	    return false;
 	return (this.instructionList.equals(o.instructionList));
-	 
+
     }
-   
+
     /**
      * Generates a clone of the current NestedPlan
      * 
@@ -103,31 +110,59 @@ public class Plan implements IPlan {
     public int size() {
 	return instructionList.size();
     }
-
+    /**
+     * Returns the runtime cost of the plan
+     * 
+     * @return runtimeCost
+     */
     public double getRuntimeCost() {
 	return runtimeCost;
     }
-
+    /**
+     * Set the runtime cost of the plan
+     * 
+     * @param runtimeCost to set
+     */
     public void setRuntimeCost(double runtimeCost) {
 	this.runtimeCost = runtimeCost;
     }
-
+    /**
+     * Set the instructionList of the plan
+     * 
+     * @param instructionList to set
+     */
     public void setInstructionList(List<Instruction> instructionList) {
 	this.instructionList = instructionList;
     }
-
+    /**
+     * Returns the mapping size of the plan
+     * 
+     * @return mappingSize
+     */
     public double getMappingSize() {
 	return mappingSize;
     }
-
+    /**
+     * Set the mapping size of the plan
+     * 
+     * @param mappingSize to set
+     */
     public void setMappingSize(double mappingSize) {
 	this.mappingSize = mappingSize;
     }
-
+    /**
+     * Returns the selectivity of the plan
+     * 
+     * @return selectivity
+     */
     public double getSelectivity() {
 	return selectivity;
     }
-
+    /**
+     * Set the selectivity of the plan
+     * 
+     * @param selectivity to set
+     */
     public void setSelectivity(double selectivity) {
 	this.selectivity = selectivity;
     }

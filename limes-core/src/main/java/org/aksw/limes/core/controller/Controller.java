@@ -2,7 +2,7 @@ package org.aksw.limes.core.controller;
 
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
-import org.aksw.limes.core.execution.planning.plan.Plan;
+import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.execution.rewriter.Rewriter;
@@ -125,7 +125,7 @@ public class Controller {
             // 4.3. Planning
             IPlanner planner = ExecutionPlannerFactory.getPlanner(config.getExecutionPlan(), sourceCache, targetCache);
             assert planner != null;
-            Plan plan = planner.plan(rwLs);
+            NestedPlan plan = planner.plan(rwLs);
 
             // 5. Execution
             ExecutionEngine engine = ExecutionEngineFactory.getEngine("Simple", sourceCache, targetCache,

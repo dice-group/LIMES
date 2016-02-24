@@ -31,8 +31,7 @@ public class ParallelExecutionEngine extends ExecutionEngine {
      */
     @Override
     public MemoryMapping execute(NestedPlan plan) {
-	// TODO Auto-generated method stub
-	return null;
+	throw new UnsupportedOperationException("Not implemented yet");
     }
     /**
      * Implementation of the execution of an execution plan.
@@ -43,8 +42,8 @@ public class ParallelExecutionEngine extends ExecutionEngine {
      */
     @Override
     public Mapping execute(Plan plan) {
-	// TODO Auto-generated method stub
-	return null;
+	throw new UnsupportedOperationException("Not implemented yet");
+
     }
 
     
