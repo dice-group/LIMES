@@ -28,8 +28,7 @@ public class SparqlQueryModule implements IQueryModule {
 	/**
 	 * Reads from a SPARQL endpoint and writes the results in a cache
 	 *
-	 * @param cache The cache in which the content on the SPARQL endpoint is to
-	 * be written
+	 * @param cache The cache in which the content on the SPARQL endpoint is to be written
 	 */
 	public void fillCache(Cache cache) {
 		fillCache(cache, true);
@@ -38,12 +37,10 @@ public class SparqlQueryModule implements IQueryModule {
 	/**
 	 * Reads from a SPARQL endpoint or a file and writes the results in a cache
 	 *
-	 * @param cache The cache in which the content on the SPARQL endpoint is to
-	 * be written
-	 * @param sparql True if the endpoint is a remote SPARQL endpoint, else
-	 * assume that is is a jena model
+	 * @param cache The cache in which the content on the SPARQL endpoint is to be written
+	 * @param isSparql True if the endpoint is a remote SPARQL endpoint, else assume that is is a Jena model
 	 */
-	public void fillCache(Cache cache, boolean sparql) {
+	public void fillCache(Cache cache, boolean isSparql) {
 		long startTime = System.currentTimeMillis();
 		String query = generateQuery();
 
@@ -65,7 +62,7 @@ public class SparqlQueryModule implements IQueryModule {
 
 			// take care of graph issues. Only takes one graph. Seems like some sparql endpoint do
 			// not like the FROM option.
-			if (!sparql) {
+			if (!isSparql) {
 				Model model = ModelRegistry.getInstance().getMap().get(kb.getEndpoint());
 				if (model == null) {
 					throw new RuntimeException("No model with id '" + kb.getEndpoint() + "' registered");
@@ -166,38 +163,38 @@ public class SparqlQueryModule implements IQueryModule {
 			}
 		}
 		//properties
-		String optional;
+		String propertiesStr;
 		if (kb.getProperties().size() > 0) {
 			logger.info("Properties are " + kb.getProperties());
-			optional = "";
+			propertiesStr = "";
 			for (int i = 0; i < kb.getProperties().size(); i++) {
-				optional = optional + kb.getVar() + " " + kb.getProperties().get(i) + " ?v" + i + " .\n";
+				propertiesStr = propertiesStr + kb.getVar() + " " + kb.getProperties().get(i) + " ?v" + i + " .\n";
 			}
 			//some endpoints and parsers do not support property paths. We replace them here with variables
 			int varCount = 1;
-			while (optional.contains("/")) {
-				optional = optional.replaceFirst("/", " ?w" + varCount + " .\n?w" + varCount + " ");
+			while (propertiesStr.contains("/")) {
+				propertiesStr = propertiesStr.replaceFirst("/", " ?w" + varCount + " .\n?w" + varCount + " ");
 				varCount++;
 			}
 			//close optional
-			query = query + optional;
+			query = query + propertiesStr;
 		}
 		//properties
-		String optionalProperties;
-		if (kb.getProperties().size() > 0) {
-			logger.info("Optipnal properties are " + kb.getProperties());
-			optionalProperties = "OPTIONAL {\n";
+		String optionalPropertiesStr;
+		if (kb.getOptionalProperties() != null && kb.getOptionalProperties().size() > 0) {
+			logger.info("Optipnal properties are " + kb.getOptionalProperties());
+			optionalPropertiesStr = "OPTIONAL {\n";
 			for (int i = 0; i < kb.getProperties().size(); i++) {
-				optionalProperties += kb.getVar() + " " + kb.getProperties().get(i) + " ?v" + i + " .\n";
+				optionalPropertiesStr += kb.getVar() + " " + kb.getOptionalProperties().get(i) + " ?v" + i + " .\n";
 			}
 			//some endpoints and parsers do not support property paths. We replace them here with variables
 			int varCount = 1;
-			while (optionalProperties.contains("/")) {
-				optional = optionalProperties.replaceFirst("/", " ?w" + varCount + " .\n?w" + varCount + " ");
+			while (optionalPropertiesStr.contains("/")) {
+				propertiesStr = optionalPropertiesStr.replaceFirst("/", " ?w" + varCount + " .\n?w" + varCount + " ");
 				varCount++;
 			}
 			//close optional
-			query = query + optionalProperties;
+			query = query + optionalPropertiesStr;
 		}
 		//finally replace variables in inverse properties
 		String q[] = query.split("\n");

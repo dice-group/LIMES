@@ -40,9 +40,9 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
 		logger.info("Querying the endpoint.");
 		//run query
 		org.aksw.jena_sparql_api.core.QueryExecutionFactory qef = new QueryExecutionFactoryHttp(kb.getEndpoint(), kb.getGraph());
-//		qef = new QueryExecutionFactoryRetry(qef, 5, 10000);
+		qef = new QueryExecutionFactoryRetry(qef, 5, 10000);
 		qef = new QueryExecutionFactoryDelay(qef, 5000);
-		//		long timeToLive = 24l * 60l * 60l * 1000l; 
+//		long timeToLive = 24l * 60l * 60l * 1000l; 
 		QueryExecutionFactoryHttp foo = qef.unwrap(QueryExecutionFactoryHttp.class);
 		System.out.println(foo);
 		qef = new QueryExecutionFactoryPaginated(qef, 900);

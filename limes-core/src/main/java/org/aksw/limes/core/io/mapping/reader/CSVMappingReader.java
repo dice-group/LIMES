@@ -5,7 +5,6 @@ import java.io.FileReader;
 
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.apache.commons.lang.NumberUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -31,7 +30,6 @@ public class CSVMappingReader implements IMappingReader{
 	 * Third column contains similarity,
 	 * In case of only 2 columns, all similarities is set to 1
 	 */
-	@SuppressWarnings("deprecation")
 	@Override
 	public Mapping read(String file) {
 		try {
