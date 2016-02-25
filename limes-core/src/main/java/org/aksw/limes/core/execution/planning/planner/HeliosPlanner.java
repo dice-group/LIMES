@@ -2,7 +2,6 @@ package org.aksw.limes.core.execution.planning.planner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
@@ -10,19 +9,10 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
+import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
-import org.aksw.limes.core.measures.mapper.atomic.EDJoin;
-import org.aksw.limes.core.measures.mapper.atomic.ExactMatchMapper;
-import org.aksw.limes.core.measures.mapper.atomic.JaroMapper;
-import org.aksw.limes.core.measures.mapper.atomic.MongeElkanMapper;
-import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
-import org.aksw.limes.core.measures.mapper.atomic.PPJoinPlusPlus;
-import org.aksw.limes.core.measures.mapper.atomic.SoundexMapper;
-import org.aksw.limes.core.measures.mapper.atomic.SymmetricHausdorffMapper;
-import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
-import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
-import org.aksw.limes.core.measures.measure.Measure;
+
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.apache.log4j.Logger;
@@ -39,10 +29,6 @@ public class HeliosPlanner extends Planner {
     static Logger logger = Logger.getLogger("LIMES");
     public Cache source;
     public Cache target;
-    Map<String, Double> averageSourcePropertyLength;
-    Map<String, Double> stdDevSourceProperty;
-    Map<String, Double> averageTargetPropertyLength;
-    Map<String, Double> stdDevTargetProperty;
     public Language lang;
 
     /**
@@ -62,98 +48,29 @@ public class HeliosPlanner extends Planner {
     /**
      * Computes atomic costs for a metric expression
      *
-     * @param measure
-     * @param threshold
+     * @param measure,
+     *            measure of metric expression
+     * @param threshold,
+     *            threshold of metric expression
      * @return runtime, estimated runtime cost of the metric expression
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
-	Measure m = MeasureFactory.getMeasure(measure);
-	double runtime;
-	if (m.getName().equalsIgnoreCase("levenshtein")) {
-	    runtime = (new EDJoin()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
-	} else if (m.getName().equalsIgnoreCase("euclidean")) {
-	    runtime = (new TotalOrderBlockingMapper()).getRuntimeApproximation(source.size(), target.size(), threshold,
-		    lang);
-	} else if (m.getName().equalsIgnoreCase("qgrams")) {
-	    runtime = (new FastNGram()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
-
-	} else if (m.getName().equalsIgnoreCase("jaro")) {
-	    runtime = (new JaroMapper()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
-
-	} else if (m.getName().equalsIgnoreCase("hausdorff") || m.getName().equalsIgnoreCase("orthodromic")
-		|| m.getName().equalsIgnoreCase("geomin") || m.getName().equalsIgnoreCase("geomax")
-		|| m.getName().equalsIgnoreCase("geosumofmin") || m.getName().equalsIgnoreCase("frechet")
-		|| m.getName().equalsIgnoreCase("link") || m.getName().equalsIgnoreCase("surjection")
-		|| m.getName().equalsIgnoreCase("fairsurjection")) {
-	    runtime = (new OrchidMapper()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
-
-	} else if (m.getName().equalsIgnoreCase("symmetrichausdorff")) {
-	    runtime = (new SymmetricHausdorffMapper()).getRuntimeApproximation(source.size(), target.size(), threshold,
-		    lang);
-
-	} else if (m.getName().equalsIgnoreCase("soundex")) {
-	    runtime = (new SoundexMapper()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
-
-	} //else if (m.getName().equalsIgnoreCase("monge")) {
-	   // runtime = (new MongeElkanMapper()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
-
-	//}
-	else if (m.getName().equalsIgnoreCase("exactmatch")) {
-	    runtime = (new ExactMatchMapper()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
-
-	} else {
-	    runtime = (new PPJoinPlusPlus()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
-	}
-	logger.info("Runtime approximation for " + measure + " is " + runtime);
-	return runtime;
+	Mapper am = MeasureFactory.getMapper(measure);
+	return am.getRuntimeApproximation(source.size(), target.size(), threshold, lang);
     }
 
     /**
      * Computes atomic mapping sizes for a measure
      *
-     * @param measure
-     * @param threshold
+     * @param measure,
+     *            measure of metric expression
+     * @param threshold,
+     *            threshold of metric expression
      * @return size, estimated size of returned mapping
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
-	Measure m = MeasureFactory.getMeasure(measure);
-	double size;
-	if (m.getName().equalsIgnoreCase("levenshtein")) {
-	    size = (new EDJoin()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
-	} else if (m.getName().equalsIgnoreCase("euclidean")) {
-	    size = (new TotalOrderBlockingMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold,
-		    lang);
-	} else if (m.getName().equalsIgnoreCase("qgrams")) {
-	    size = (new FastNGram()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
-
-	} else if (m.getName().equalsIgnoreCase("jaro")) {
-	    size = (new JaroMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
-
-	} else if (m.getName().equalsIgnoreCase("hausdorff") || m.getName().equalsIgnoreCase("orthodromic")
-		|| m.getName().equalsIgnoreCase("geomin") || m.getName().equalsIgnoreCase("geomax")
-		|| m.getName().equalsIgnoreCase("geosumofmin") || m.getName().equalsIgnoreCase("frechet")
-		|| m.getName().equalsIgnoreCase("link") || m.getName().equalsIgnoreCase("surjection")
-		|| m.getName().equalsIgnoreCase("fairsurjection")) {
-	    size = (new OrchidMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
-
-	} else if (m.getName().equalsIgnoreCase("symmetrichausdorff")) {
-	    size = (new SymmetricHausdorffMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold,
-		    lang);
-
-	} else if (m.getName().equalsIgnoreCase("soundex")) {
-	    size = (new SoundexMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
-
-	} //else if (m.getName().equalsIgnoreCase("monge")) {
-	    //size = (new MongeElkanMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
-
-	//}
-	else if (m.getName().equalsIgnoreCase("exactmatch")) {
-	    size = (new ExactMatchMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
-
-	} else {
-	    size = (new PPJoinPlusPlus()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
-	}
-	return size;
+	Mapper am = MeasureFactory.getMapper(measure);
+	return am.getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
     }
 
     /**
@@ -177,6 +94,13 @@ public class HeliosPlanner extends Planner {
 	return cost;
     }
 
+    /**
+     * Generates a NestedPlan for a link specification
+     *
+     * @param spec
+     *            Input link specification
+     * @return NestedPlan of the input link specification
+     */
     public NestedPlan plan(LinkSpecification spec) {
 	return plan(spec, source, target, new MemoryMapping(), new MemoryMapping());
     }
@@ -236,7 +160,6 @@ public class HeliosPlanner extends Planner {
 		if (spec.getOperator().equals(Operator.OR)) {
 		    plan.setOperator(Instruction.Command.UNION);
 		    selectivity = 1 - children.get(0).getSelectivity();
-		    plan.setRuntimeCost(children.get(0).getRuntimeCost());
 		    for (int i = 1; i < children.size(); i++) {
 			selectivity = selectivity * (1 - children.get(i).getSelectivity());
 			// add filtering costs based on approximation of mapping

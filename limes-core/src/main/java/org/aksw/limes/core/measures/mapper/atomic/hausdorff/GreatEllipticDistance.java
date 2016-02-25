@@ -1,13 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.aksw.limes.core.measures.mapper.atomic.hausdorff;
 
 import org.aksw.limes.core.datastrutures.Point;
-
-//import net.sf.geographiclib.Geodesic;
-//import net.sf.geographiclib.GeodesicData;
 
 /**
  * implementation of https://en.wikipedia.org/wiki/Vincenty's_formulae Solve the
@@ -21,11 +15,36 @@ import org.aksw.limes.core.datastrutures.Point;
  */
 public class GreatEllipticDistance {
 
+    /**
+     * Computes and returns distance between two points.
+     * 
+     * @param x,
+     *            first point
+     * @param y,
+     *            second point
+     * @return the distance between x and y
+     * 
+     */
     public static double getDistanceInDegrees(Point x, Point y) {
 	return getDistanceInDegrees(x.coordinates.get(0), x.coordinates.get(1), y.coordinates.get(0),
 		y.coordinates.get(1));
     }
 
+    /**
+     * Computes the distance between two points on earth Input
+     * latitudes/longitudes by converting their latitude and longitude into
+     * radians.
+     * 
+     * @param lat1,
+     *            Latitude of first point
+     * @param long1,
+     *            Longitude of first point
+     * @param lat2,
+     *            Latitude of second point
+     * @param long2,
+     *            Longitude of second point
+     * @return Distance between both points
+     */
     public static double getDistanceInDegrees(double lat1, double long1, double lat2, double long2) {
 	double la1 = (double) Math.toRadians(lat1);
 	double lo1 = (double) Math.toRadians(long1);
@@ -34,6 +53,20 @@ public class GreatEllipticDistance {
 	return getDistance(la1, lo1, la2, lo2);
     }
 
+    /**
+     * Computes the distance between two points on earth Input
+     * latitudes/longitudes are in Radians
+     * 
+     * @param lat1,
+     *            Latitude of first point
+     * @param long1,
+     *            Longitude of first point
+     * @param lat2,
+     *            Latitude of second point
+     * @param long2,
+     *            Longitude of second point
+     * @return Distance between both points
+     */
     public static double getDistance(double lat1, double lon1, double lat2, double lon2) {
 	double a = 6378137, b = 6356752.314245, f = 1 / 298.257223563;
 	double L = lon2 - lon1;

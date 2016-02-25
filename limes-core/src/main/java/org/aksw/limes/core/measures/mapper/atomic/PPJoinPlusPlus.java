@@ -30,12 +30,9 @@ import java.util.ArrayList;
 
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.measure.Measure;
-import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.date.DayMeasure;
 import org.aksw.limes.core.measures.measure.date.SimpleDateMeasure;
 import org.aksw.limes.core.measures.measure.date.YearMeasure;
-import org.aksw.limes.core.measures.measure.space.EuclideanMetric;
-import org.aksw.limes.core.measures.measure.space.GeoDistance;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
 import org.aksw.limes.core.measures.measure.string.IStringMeasure;
 import org.aksw.limes.core.measures.measure.string.JaccardMeasure;

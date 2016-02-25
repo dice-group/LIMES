@@ -12,5 +12,12 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 * @author kleanthi
 */
 public interface IPlanner {
+    /**
+     * Generates a NestedPlan for a link specification
+     *
+     * @param spec
+     *            Input link specification
+     * @return NestedPlan of the input link specification
+     */
     public NestedPlan plan(LinkSpecification spec);
 }

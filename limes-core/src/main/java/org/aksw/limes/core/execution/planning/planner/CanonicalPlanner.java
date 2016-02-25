@@ -43,7 +43,8 @@ public class CanonicalPlanner extends Planner {
 	    List<NestedPlan> children = new ArrayList<NestedPlan>();
 	    // set children
 	    for (LinkSpecification child : spec.getChildren()) {
-		children.add(plan(child));
+		NestedPlan childPlan = plan(child);
+		children.add(childPlan);
 	    }
 	    plan.setSubPlans(children);
 	    // set operator

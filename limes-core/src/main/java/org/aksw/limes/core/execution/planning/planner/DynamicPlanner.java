@@ -27,9 +27,7 @@ public class DynamicPlanner extends Planner {
 
     @Override
     public NestedPlan plan(LinkSpecification spec) {
-	return null;
-	// TODO Auto-generated method stub
-
+	throw new UnsupportedOperationException("Not implemented yet");
     }
 
 }

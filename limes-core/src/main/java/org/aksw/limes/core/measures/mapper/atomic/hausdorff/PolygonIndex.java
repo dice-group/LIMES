@@ -30,7 +30,11 @@ public class PolygonIndex {
 	polygonIndex = new HashMap<String, Polygon>();
 	computations = 0;
     }
-
+    /**
+     * String representation of the polygon index
+     * 
+     * @return polygon index, as a string
+     */
     public String toString() {
 	return distanceIndex.toString();
     }
