@@ -86,7 +86,7 @@ public class EagleSupervised extends MLAlgorithm{
 	 * @throws InvalidConfigurationException
 	 */
 	private void setUp(Mapping trainingData) throws InvalidConfigurationException {
-		LinkSpecGeneticLearnerConfig jgapConfig = new LinkSpecGeneticLearnerConfig(configuration.getSourceInfo(), configuration.getTargetInfo(), parameters.getPropMap());
+		LinkSpecGeneticLearnerConfig jgapConfig = new LinkSpecGeneticLearnerConfig(getConfiguration().getSourceInfo(), getConfiguration().getTargetInfo(), parameters.getPropMap());
 		
 		jgapConfig.setPopulationSize(parameters.getPopulation());
 		jgapConfig.setCrossoverProb(parameters.getCrossoverRate());

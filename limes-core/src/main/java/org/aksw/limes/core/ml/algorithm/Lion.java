@@ -104,7 +104,7 @@ public class Lion extends MLAlgorithm {
 		nodes= new TreeSet<SearchTreeNode>();
 		heuristic = new DefaultRefinementHeuristic();
 		operator = new UpwardLengthLimitRefinementOperator();
-		operator.setConfiguration(configuration);
+		operator.setConfiguration(getConfiguration());
 		heuristic.setLearningSetting(setting);
 		planner = new CanonicalPlanner();
 	}
@@ -123,10 +123,10 @@ public class Lion extends MLAlgorithm {
 		heuristic.setLearningSetting(setting);
 		operator.setLearningSetting(setting);
 		engine = ExecutionEngineFactory.getEngine("default", 
-				this.sourceCache, 
-				this.targetCache, 
-				this.configuration.getSourceInfo().getVar(), 
-				this.configuration.getTargetInfo().getVar());
+				this.getSourceCache(), 
+				this.getTargetCache(), 
+				this.getConfiguration().getSourceInfo().getVar(), 
+				this.getConfiguration().getTargetInfo().getVar());
 				
 	}
 	
@@ -496,8 +496,8 @@ public class Lion extends MLAlgorithm {
 		//eMofeed
 
 		double maxAcievable = maxAcievableFScore(map, 
-				this.sourceCache.getAllUris().size(), 
-				this.targetCache.getAllUris().size());
+				this.getSourceCache().getAllUris().size(), 
+				this.getTargetCache().getAllUris().size());
 		node.maxAcchievablePFM = maxAcievable; 
 		boolean added = false;
 		if(best != null && !best.isRoot())
@@ -617,8 +617,8 @@ public class Lion extends MLAlgorithm {
 //		logger.info("Executing LinkSpec "+spec);
 		
 //		mapping = Mapping.getBestOneToOneMappings(mapping);
-		res = pfm.getPseudoFMeasure(this.sourceCache.getAllUris(),
-				this.targetCache.getAllUris(), map, 
+		res = pfm.getPseudoFMeasure(this.getSourceCache().getAllUris(),
+				this.getTargetCache().getAllUris(), map, 
 				setting.getBeta());
 //		logger.info("getQuality():  PFM="+res);
 

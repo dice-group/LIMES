@@ -20,9 +20,9 @@ public abstract class MLAlgorithm implements IMLAlgorithm {
 
 	public MLAlgorithm(Cache sourceCache, Cache targetCache, Configuration configuration) {//, Mapping mapping) {
 		super();
-		this.sourceCache = sourceCache;
-		this.targetCache = targetCache;
-		this.configuration = configuration;
+		this.setSourceCache(sourceCache);
+		this.setTargetCache(targetCache);
+		this.setConfiguration(configuration);
 //		this.mapping = mapping;
 	}
 //	
@@ -34,4 +34,28 @@ public abstract class MLAlgorithm implements IMLAlgorithm {
 //		System.setErr(errOut);
 //		System.setOut(stdOut);
 //	}
+
+	public Configuration getConfiguration() {
+		return configuration;
+	}
+
+	public void setConfiguration(Configuration configuration) {
+		this.configuration = configuration;
+	}
+
+	public Cache getSourceCache() {
+		return sourceCache;
+	}
+
+	public void setSourceCache(Cache sourceCache) {
+		this.sourceCache = sourceCache;
+	}
+
+	public Cache getTargetCache() {
+		return targetCache;
+	}
+
+	public void setTargetCache(Cache targetCache) {
+		this.targetCache = targetCache;
+	}
 }
