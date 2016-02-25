@@ -19,14 +19,14 @@ public class SparqlQueryModuleTest {
 		HashMap<String, String> prefixes = new HashMap<>();
 		prefixes.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
 		prefixes.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-		prefixes.put("dbpo", "http://dbpedia.org/ontology/");
+		prefixes.put("owl", "http://www.w3.org/2002/07/owl#");
 		
 		Map<String, Map<String, String>> functions = new HashMap<>();
 		HashMap<String, String> f = new HashMap<String, String>();
 		f.put("label",null);
 		functions.put("rdfs:label",f);
 		
-		KBInfo kbinfo = new KBInfo(
+		KBInfo kbInfo = new KBInfo(
 				"DBpedia", 															//String id
 				"http://dbpedia.org/sparql", 										//String endpoint 
 				null, 																//String graph
@@ -40,9 +40,10 @@ public class SparqlQueryModuleTest {
 				"sparql" 															//String type
 				);
 		
-		SparqlQueryModule sqm = new SparqlQueryModule(kbinfo);
+		SparqlQueryModule sqm = new SparqlQueryModule(kbInfo);
 		Cache cache = new HybridCache();
 		sqm.fillCache(cache);
+		
 		assertTrue(cache.size() > 0);
 	}
 
