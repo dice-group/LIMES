@@ -12,7 +12,7 @@ import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.junit.Test;
 
-public class SparqlQueryModuleTest {
+public class ResilientSparqlQueryModuleTest {
 	
 	@Test
 	public void fillCacheTest(){
@@ -40,9 +40,9 @@ public class SparqlQueryModuleTest {
 				"sparql" 															//String type
 				);
 		
-		SparqlQueryModule sqm = new SparqlQueryModule(kbInfo);
+		ResilientSparqlQueryModule rsqm = new ResilientSparqlQueryModule(kbInfo);
 		Cache cache = new HybridCache();
-		sqm.fillCache(cache);
+		rsqm.fillCache(cache);
 		
 		assertTrue(cache.size() > 0);
 	}

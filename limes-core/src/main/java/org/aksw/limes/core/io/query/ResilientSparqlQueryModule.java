@@ -6,6 +6,7 @@ import org.aksw.jena_sparql_api.delay.core.QueryExecutionFactoryDelay;
 import org.aksw.jena_sparql_api.http.QueryExecutionFactoryHttp;
 import org.aksw.jena_sparql_api.pagination.core.QueryExecutionFactoryPaginated;
 import org.aksw.jena_sparql_api.retry.core.QueryExecutionFactoryRetry;
+import org.aksw.jena_sparql_api.timeout.QueryExecutionFactoryTimeout;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
@@ -18,12 +19,24 @@ import org.apache.log4j.Logger;
  *
  */
 public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQueryModule {
-
 	private Logger logger = Logger.getLogger(ResilientSparqlQueryModule.class.getName());
-	private KBInfo kb;
+	
+	private int retryCount 		= 5;
+	private int retryDelayimMS 	= 10000;
+	private int delayer 		= 1000;
+	private int pageSize 		= 900;
+	private long timeToLive 	= 24l * 60l * 60l * 1000l;
 
-	public ResilientSparqlQueryModule(KBInfo kbinfo) {
-		super(kbinfo);
+	public ResilientSparqlQueryModule(KBInfo kbInfo) {
+		super(kbInfo);
+	}
+	
+	public ResilientSparqlQueryModule(KBInfo kbInfo, int retryCount, int retryDelayimMS, int pageSize, long timeToLive) {
+		this(kbInfo);
+		this.retryCount = retryCount;
+		this.retryDelayimMS = retryDelayimMS;
+		this.pageSize = pageSize;
+		this.timeToLive = timeToLive;
 	}
 
 
@@ -40,12 +53,11 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
 		logger.info("Querying the endpoint.");
 		//run query
 		org.aksw.jena_sparql_api.core.QueryExecutionFactory qef = new QueryExecutionFactoryHttp(kb.getEndpoint(), kb.getGraph());
-		qef = new QueryExecutionFactoryRetry(qef, 5, 10000);
-		qef = new QueryExecutionFactoryDelay(qef, 5000);
-//		long timeToLive = 24l * 60l * 60l * 1000l; 
-		QueryExecutionFactoryHttp foo = qef.unwrap(QueryExecutionFactoryHttp.class);
-		System.out.println(foo);
-		qef = new QueryExecutionFactoryPaginated(qef, 900);
+		qef = new QueryExecutionFactoryRetry(qef, retryCount, retryDelayimMS);
+//		qef = new QueryExecutionFactoryDelay(qef, delayer);
+//		qef = new QueryExecutionFactoryTimeout(qef, timeToLive);
+//		QueryExecutionFactoryHttp foo = qef.unwrap(QueryExecutionFactoryHttp.class);
+		qef = new QueryExecutionFactoryPaginated(qef, pageSize);
 		QueryExecution qe = qef.createQueryExecution(query);
 		int counter = 0;
 		ResultSet results = qe.execSelect();

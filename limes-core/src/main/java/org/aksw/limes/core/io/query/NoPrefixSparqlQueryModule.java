@@ -37,7 +37,6 @@ public class NoPrefixSparqlQueryModule implements IQueryModule{
 			query = query + " ?v" + i;
 		}
 		query = query + "\n";
-
 		//restrictions
 		if (kb.getRestrictions().size() > 0) {
 			String where;
@@ -48,7 +47,6 @@ public class NoPrefixSparqlQueryModule implements IQueryModule{
 				query = query +where + " .\n";
 			}
 		}
-
 		//properties
 		String optional;
 		query = query + "OPTIONAL {";
@@ -64,23 +62,17 @@ public class NoPrefixSparqlQueryModule implements IQueryModule{
 			query = query + optional;
 		}
 		query = query + "}";
-
-
 		// close where
 		if (kb.getRestrictions().size() > 0) {
 			query = query + "}\n";
 		}
-
 		logger.info("Query issued is \n" + query);
 		//query = query + " LIMIT 1000";
-
 		logger.info("Querying the endpoint.");
 		//run query
-
 		int offset = 0;
 		boolean moreResults = false;
 		int counter=0;
-		//		int counter2 = 0;
 		String basicQuery = query;
 		do {
 			logger.info("Getting statements " + offset + " to " + (offset + kb.getPageSize()));
@@ -88,23 +80,13 @@ public class NoPrefixSparqlQueryModule implements IQueryModule{
 				query = basicQuery + " LIMIT " + kb.getPageSize() + " OFFSET " + offset;
 			}
 
-			//logger.info(query);
 			Query sparqlQuery = QueryFactory.create(query);
 			QueryExecution qexec;
-
 			// take care of graph issues. Only takes one graph. Seems like some sparql endpoint do
 			// not like the FROM option.
-
-			//            if (kb.graph != null) {
-			//                qexec = QueryExecutionFactory.sparqlService(kb.endpoint, sparqlQuery, kb.graph);
-			//                logger.info("Querying default graph "+kb.graph);
-			//            } //
-			//            else {
 			qexec = QueryExecutionFactory.sparqlService(kb.getEndpoint(), sparqlQuery);
 			logger.info("No default graph "+kb.getGraph());
-			//            }
 			ResultSet results = qexec.execSelect();
-
 
 			//write
 			String uri, property, value;
@@ -115,17 +97,13 @@ public class NoPrefixSparqlQueryModule implements IQueryModule{
 					moreResults = false;
 					break;
 				}
-
 				while (results.hasNext()) {
-
 					QuerySolution soln = results.nextSolution();
 					// process query here
 					{
-						//logger.info(soln.toString());
 						try {
 							//first get uri
 							uri = soln.get(kb.getVar().substring(1)).toString();
-
 							//now get (p,o) pairs for this s
 							String split[];
 							for (int i = 0; i < kb.getProperties().size(); i++) {
@@ -136,13 +114,7 @@ public class NoPrefixSparqlQueryModule implements IQueryModule{
 									if (value.contains("@")) {
 										value = value.substring(0, value.indexOf("@"));
 									}
-									//int test = 0;
 									if (value.contains("^^")) {
-										//                                        if(test%100 == 0)
-										//                                        {
-										//                                        System.out.println(value);
-										//                                        }
-										//                                        test++;
 										if(value.contains(":date"))
 										{
 											value = value.substring(0, value.indexOf("^^"));
@@ -152,29 +124,23 @@ public class NoPrefixSparqlQueryModule implements IQueryModule{
 											value = Integer.parseInt(split[0])*365
 													+ Integer.parseInt(split[1])*12
 													+ Integer.parseInt(split[2])+"";
-										}
-										else
+										}else {
 											value = value.substring(0, value.indexOf("^^"));
+										}
 									}
 									cache.addTriple(uri, property, value);
-									//logger.info("Adding (" + uri + ", " + property + ", " + value + ")");
-								}
-								else
+								}else{
 									cache.addTriple(uri, property, "");
-								//else logger.warn(soln.toString()+" does not contain "+property);
+								}
 							}
-							//else
-							//    cache.addTriple(uri, property, "");
 
 						} catch (Exception e) {
 							logger.warn("Error while processing: " + soln.toString());
 							logger.warn("Following exception occured: " + e.getMessage());
 							logger.info("Processing further ...");
 						}
-						//                      counter2++;
 					}
 					counter++;
-					//logger.info(soln.get("v0").toString());       // Get a result variable by name.
 				}
 
 			} catch (Exception e) {

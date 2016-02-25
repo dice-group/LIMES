@@ -31,7 +31,7 @@ public class ModelRegistry {
 
     public static void register(String name, Model model) {
         getInstance().getMap().put(name, model);
-        logger.info("Registry = "+getInstance().map.keySet());
+        logger.info("Registry = "+ getInstance().map.keySet());
     }
 
     public static void unregister(String name) {
