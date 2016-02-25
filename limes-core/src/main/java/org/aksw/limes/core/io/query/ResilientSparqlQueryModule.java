@@ -2,11 +2,16 @@ package org.aksw.limes.core.io.query;
 
 import com.hp.hpl.jena.query.*;
 
+import java.sql.SQLException;
+
+import org.aksw.jena_sparql_api.cache.core.QueryExecutionFactoryCacheEx;
+import org.aksw.jena_sparql_api.cache.extra.CacheBackend;
+import org.aksw.jena_sparql_api.cache.extra.CacheFrontend;
+import org.aksw.jena_sparql_api.cache.extra.CacheFrontendImpl;
+import org.aksw.jena_sparql_api.cache.h2.CacheCoreH2;
 import org.aksw.jena_sparql_api.delay.core.QueryExecutionFactoryDelay;
 import org.aksw.jena_sparql_api.http.QueryExecutionFactoryHttp;
 import org.aksw.jena_sparql_api.pagination.core.QueryExecutionFactoryPaginated;
-import org.aksw.jena_sparql_api.retry.core.QueryExecutionFactoryRetry;
-import org.aksw.jena_sparql_api.timeout.QueryExecutionFactoryTimeout;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
@@ -20,17 +25,18 @@ import org.apache.log4j.Logger;
  */
 public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQueryModule {
 	private Logger logger = Logger.getLogger(ResilientSparqlQueryModule.class.getName());
-	
+
 	private int retryCount 		= 5;
-	private int retryDelayimMS 	= 10000;
+	private int retryDelayimMS 	= 500;
 	private int delayer 		= 1000;
 	private int pageSize 		= 900;
 	private long timeToLive 	= 24l * 60l * 60l * 1000l;
+	private String cacheDirectory = "cache";
 
 	public ResilientSparqlQueryModule(KBInfo kbInfo) {
 		super(kbInfo);
 	}
-	
+
 	public ResilientSparqlQueryModule(KBInfo kbInfo, int retryCount, int retryDelayimMS, int pageSize, long timeToLive) {
 		this(kbInfo);
 		this.retryCount = retryCount;
@@ -52,12 +58,12 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
 
 		logger.info("Querying the endpoint.");
 		//run query
-		org.aksw.jena_sparql_api.core.QueryExecutionFactory qef = new QueryExecutionFactoryHttp(kb.getEndpoint(), kb.getGraph());
-		qef = new QueryExecutionFactoryRetry(qef, retryCount, retryDelayimMS);
-//		qef = new QueryExecutionFactoryDelay(qef, delayer);
-//		qef = new QueryExecutionFactoryTimeout(qef, timeToLive);
-//		QueryExecutionFactoryHttp foo = qef.unwrap(QueryExecutionFactoryHttp.class);
-		qef = new QueryExecutionFactoryPaginated(qef, pageSize);
+		org.aksw.jena_sparql_api.core.QueryExecutionFactory qef = null;
+		try {
+			qef = initQueryExecution(kb);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 		QueryExecution qe = qef.createQueryExecution(query);
 		int counter = 0;
 		ResultSet results = qe.execSelect();
@@ -94,5 +100,31 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
 		}
 		logger.info("Retrieved " + counter + " triples and " + cache.size() + " entities.");
 		logger.info("Retrieving statements took " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds.");
+	}
+
+	protected org.aksw.jena_sparql_api.core.QueryExecutionFactory initQueryExecution(KBInfo kbInfo) throws ClassNotFoundException, SQLException {
+		org.aksw.jena_sparql_api.core.QueryExecutionFactory qef;
+		if (kbInfo.getGraph() != null) {
+			qef = new QueryExecutionFactoryHttp(kbInfo.getEndpoint(), kbInfo.getGraph());
+		} else {
+			qef = new QueryExecutionFactoryHttp(kbInfo.getEndpoint());
+		}
+		qef = new QueryExecutionFactoryDelay(qef, retryDelayimMS);
+		//TODO FIX chache issue
+//		if (cacheDirectory != null) {
+//			CacheBackend cacheBackend = CacheCoreH2.create(true, cacheDirectory,
+//					kbInfo.getEndpoint().replaceAll("[:/]", "_"), timeToLive, true);
+//			CacheFrontend cacheFrontend = new CacheFrontendImpl(cacheBackend);
+//			qef = new QueryExecutionFactoryCacheEx(qef, cacheFrontend);
+//		} else {
+//			logger.info("The cache directory has not been set. Creating an uncached SPARQL client.");
+//		}
+		try {
+			return  new QueryExecutionFactoryPaginated(qef, pageSize);
+		} catch (Exception e) {
+			logger.warn("Couldn't create Factory with pagination. Returning Factory without pagination. Exception: " +
+					e.getLocalizedMessage() );
+			return qef;
+		}
 	}
 }

@@ -19,7 +19,6 @@ import com.hp.hpl.jena.rdf.model.Model;
 public class SparqlQueryModule implements IQueryModule {
 
 	private Logger logger = Logger.getLogger(SparqlQueryModule.class.getName());
-	
 	protected KBInfo kb;
 
 	public SparqlQueryModule(KBInfo kbinfo) {
