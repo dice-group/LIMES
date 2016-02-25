@@ -48,15 +48,11 @@ public class FairSurjection extends PointsetsMeasure {
 	double sum = 0;
 	FairSurjectionFinder fsf = new FairSurjectionFinder(X, Y);
 	fsf.USE_GREAT_ELLIPTIC_DISTANCE = IPointsetsMeasure.USE_GREAT_ELLIPTIC_DISTANCE;
-	// System.out.println("Fair Surjection pairs:" +
-	// fsf.getSurjectionPairsList());
 
 	for (Pair<Point> p : fsf.getFairSurjectionPairsList()) {
-	    // System.out.println("Fair Surjection pairs: (" + p.a +", " + p.b +
-	    // ")");
+	   
 	    sum += distance(p.a, p.b);
 	}
-	// System.out.println("Fair Surjection distance: "+sum);
 	return sum;
     }
 

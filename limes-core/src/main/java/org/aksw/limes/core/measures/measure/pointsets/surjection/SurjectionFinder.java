@@ -24,7 +24,9 @@ public class SurjectionFinder {
 
     /**
      * @param X
+     *            First polygon
      * @param Y
+     *            Second polygon
      * @author sherif
      */
     SurjectionFinder(Polygon X, Polygon Y) {

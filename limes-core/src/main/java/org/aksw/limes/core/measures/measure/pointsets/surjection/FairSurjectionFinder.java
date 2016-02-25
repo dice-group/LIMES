@@ -74,5 +74,4 @@ public class FairSurjectionFinder extends SurjectionFinder {
 	throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    
 }

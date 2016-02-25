@@ -53,7 +53,6 @@ public class NaiveMax extends PointsetsMeasure {
 		}
 	    }
 	}
-	// System.out.println("Max distance is: " + max);
 	return max;
     }
 
@@ -152,13 +151,6 @@ public class NaiveMax extends PointsetsMeasure {
 
     public double getRuntimeApproximation(double mappingSize) {
 	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public static void test() {
-    }
-
-    public static void main(String args[]) {
-	test();
     }
 
 }

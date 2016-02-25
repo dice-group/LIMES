@@ -59,8 +59,7 @@ public class NaiveMean extends PointsetsMeasure {
 	for (int i = 0; i < meanY.coordinates.size(); i++) {
 	    meanY.coordinates.set(i, meanY.coordinates.get(i) / (double) Y.points.size());
 	}
-	// System.out.println("Mean point of" + X + "is: " + meanX);
-	// System.out.println("Mean point of" + Y + "is: " + meanY);
+
 	return distance(meanX, meanY);
     }
 
@@ -104,8 +103,7 @@ public class NaiveMean extends PointsetsMeasure {
 	for (Polygon s : source) {
 	    for (Polygon t : target) {
 		double d = computeDistance(s, t, threshold);
-		// System.out.println("Orthodromic Distance between (" + s+ ", "
-		// + t + "is: " + d);
+
 		if (d <= threshold) {
 		    m.add(s.uri, t.uri, d);
 		}

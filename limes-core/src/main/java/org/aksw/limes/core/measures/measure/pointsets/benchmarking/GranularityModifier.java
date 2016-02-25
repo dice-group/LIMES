@@ -49,5 +49,4 @@ public class GranularityModifier extends AbstractPolygonModifier {
 	return "GranularityModifier";
     }
 
-    
 }

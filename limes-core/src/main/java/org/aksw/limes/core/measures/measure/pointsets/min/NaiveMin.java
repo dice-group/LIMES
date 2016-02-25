@@ -53,7 +53,6 @@ public class NaiveMin extends PointsetsMeasure {
 		}
 	    }
 	}
-	// System.out.println("Min distance is: " + min);
 	return min;
     }
 

@@ -107,8 +107,6 @@ public class SimpleDateMeasure extends DateMeasure implements IDateMeasure, ISpa
 	}
 	if (set) {
 	    double sim = computeSimValue(diff);
-	    // System.out.println("Similarity of Dates("+d1+" - "+d2+") ==
-	    // "+sim);
 	    logger.debug("Similarity of Dates(" + d1 + " - " + d2 + ") == " + sim);
 	    return sim;
 	}
@@ -139,7 +137,6 @@ public class SimpleDateMeasure extends DateMeasure implements IDateMeasure, ISpa
 
     @Override
     public Date extractDate(String toParse) {
-	// logger.info("Parsing string "+toParse+" to date");
 	DateFormat format;
 	Date date = null;
 	// date is only a year

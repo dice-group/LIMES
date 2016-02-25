@@ -4,7 +4,6 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.hausdorff;
 
-
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
@@ -205,16 +204,10 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
 	sIndex = entries.getKey();
 	tIndex = entries.getValue().get(0);
 	double approx, d = distance(s.points.get(sIndex), t.points.get(tIndex));
-	// if (verbose) {
-	// System.out.println("d(" + sIndex + ", " + tIndex + ") = " + d+" while
-	// threshold = "+threshold);
-	// }
+	
 	if (d <= threshold) {
 	    knownDistances.add(sIndex + "", tIndex + "", d);
-	    // if (verbose) {
-	    // System.out.println("Adding d(" + sIndex + ", " + tIndex + ") to
-	    // known distances");
-	    // }
+	    
 	}
 
 	toCompute.get(sIndex).remove(0);
@@ -234,11 +227,7 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
 		    approx = d - targetIndex.getDistance(t.uri, t.points.get(tIdx), t.points.get(tIndex))
 			    - sourceIndex.getDistance(s.uri, s.points.get(sIdx), s.points.get(sIndex));
 		}
-		// if (verbose) {
-		// System.out.println("approx d(A" + sIdx + ", B" + tIdx + ") =
-		// " + approx);
-		// }
-
+		
 		if (approx > threshold) {
 		    List<Integer> entry = new ArrayList<Integer>();
 		    entry.add(sIdx);
@@ -247,9 +236,7 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
 		}
 	    }
 	}
-	// if (verbose) {
-	// System.out.println("To delete :" + toDelete);
-	// }
+	
 	for (List<Integer> entry : toDelete) {
 	    if (toCompute.containsKey(entry.get(0))) {
 		toCompute.get(entry.get(0)).remove(entry.get(1));
