@@ -10,7 +10,6 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.*;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.apache.log4j.*;
-//import de.uni_leipzig.simba.metricfactory.simGIC;
 
 /**
  * Implements a simple metric factory that allows for linking on single properties.

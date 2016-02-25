@@ -1,6 +1,5 @@
 package org.aksw.limes.core.execution.planning.plan;
 
-import org.aksw.limes.core.execution.engine.SimpleExecutionEngineTest;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.RunWith;

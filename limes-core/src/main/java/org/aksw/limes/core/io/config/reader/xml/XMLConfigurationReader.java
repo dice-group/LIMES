@@ -80,7 +80,8 @@ public class XMLConfigurationReader implements IConfigurationReader{
 	public Configuration read(String filePath) {
 		try {
 			//System.out.println("file://"+System.getProperty("user.dir")+"/"+filePath);
-			String s = System.getProperty("user.dir")+"/"+filePath;
+			//String s = System.getProperty("user.dir")+"/"+filePath;
+			String s = filePath;
 			File f = new File(s);
 			//System.out.println(f.exists());
 			InputStream input = new FileInputStream(f);

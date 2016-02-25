@@ -2,7 +2,6 @@ package org.aksw.limes.core.io.preprocessing;
 
 import static org.junit.Assert.assertTrue;
 
-import org.aksw.limes.core.io.parser.Parser;
 import org.junit.Test;
 
 public class PreprocessorTest {

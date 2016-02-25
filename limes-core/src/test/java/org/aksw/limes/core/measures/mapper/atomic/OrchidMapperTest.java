@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.mapper.atomic;
 
-import static org.junit.Assert.*;
 
 import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
 import org.junit.Test;

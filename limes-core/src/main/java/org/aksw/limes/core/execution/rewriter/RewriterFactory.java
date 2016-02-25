@@ -17,8 +17,8 @@ public class RewriterFactory {
 
 	if (name.equalsIgnoreCase(DEFAULT))
 	    return new DefaultRewriter();
-	if (name.equalsIgnoreCase(ALGEBRAIC))
-	    return new AlgebraicRewriter();
+	//if (name.equalsIgnoreCase(ALGEBRAIC))
+	//    return new AlgebraicRewriter();
 
 	logger.error("Sorry, " + name + " is not yet implemented. Exit with error ...");
 	System.exit(1);

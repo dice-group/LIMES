@@ -66,8 +66,14 @@ public interface ISerializer {
      */
     public boolean open(String file);
 
+    /**
+     * @return name
+     */
     public String getName();
 
+    /**
+     * @return file extension
+     */
     public String getFileExtension();
 
     /**

@@ -21,7 +21,7 @@ public class MLResult {
 		String s = "RESULT:\n";
 		s+="LS: "+linkspec+"\n";
 		s+="Quality: "+quality+"\n";
-		s+="Mapping: "+mapping+"\n";
+		s+="Mapping: "+mapping.size()+"\n";
 		
 		return s;
 	}

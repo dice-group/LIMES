@@ -11,7 +11,6 @@ import com.hp.hpl.jena.rdf.model.Model;
  * @version Nov 25, 2015
  */
 public abstract class Cache implements ICache{
-
 	public abstract void addInstance(Instance i);
 	public abstract Instance getNextInstance();
 	public abstract ArrayList<Instance> getAllInstances();

@@ -13,8 +13,13 @@ import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 import org.aksw.limes.core.measures.mapper.atomic.EDJoin;
+import org.aksw.limes.core.measures.mapper.atomic.ExactMatchMapper;
 import org.aksw.limes.core.measures.mapper.atomic.JaroMapper;
+import org.aksw.limes.core.measures.mapper.atomic.MongeElkanMapper;
+import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.atomic.PPJoinPlusPlus;
+import org.aksw.limes.core.measures.mapper.atomic.SoundexMapper;
+import org.aksw.limes.core.measures.mapper.atomic.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
 import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
 import org.aksw.limes.core.measures.measure.Measure;
@@ -71,8 +76,31 @@ public class HeliosPlanner extends Planner {
 		    lang);
 	} else if (m.getName().equalsIgnoreCase("qgrams")) {
 	    runtime = (new FastNGram()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
+
 	} else if (m.getName().equalsIgnoreCase("jaro")) {
 	    runtime = (new JaroMapper()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
+
+	} else if (m.getName().equalsIgnoreCase("hausdorff") || m.getName().equalsIgnoreCase("orthodromic")
+		|| m.getName().equalsIgnoreCase("geomin") || m.getName().equalsIgnoreCase("geomax")
+		|| m.getName().equalsIgnoreCase("geosumofmin") || m.getName().equalsIgnoreCase("frechet")
+		|| m.getName().equalsIgnoreCase("link") || m.getName().equalsIgnoreCase("surjection")
+		|| m.getName().equalsIgnoreCase("fairsurjection")) {
+	    runtime = (new OrchidMapper()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
+
+	} else if (m.getName().equalsIgnoreCase("symmetrichausdorff")) {
+	    runtime = (new SymmetricHausdorffMapper()).getRuntimeApproximation(source.size(), target.size(), threshold,
+		    lang);
+
+	} else if (m.getName().equalsIgnoreCase("soundex")) {
+	    runtime = (new SoundexMapper()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
+
+	} //else if (m.getName().equalsIgnoreCase("monge")) {
+	   // runtime = (new MongeElkanMapper()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
+
+	//}
+	else if (m.getName().equalsIgnoreCase("exactmatch")) {
+	    runtime = (new ExactMatchMapper()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
+
 	} else {
 	    runtime = (new PPJoinPlusPlus()).getRuntimeApproximation(source.size(), target.size(), threshold, lang);
 	}
@@ -92,15 +120,36 @@ public class HeliosPlanner extends Planner {
 	double size;
 	if (m.getName().equalsIgnoreCase("levenshtein")) {
 	    size = (new EDJoin()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
-	}
-	if (m.getName().equalsIgnoreCase("euclidean")) {
+	} else if (m.getName().equalsIgnoreCase("euclidean")) {
 	    size = (new TotalOrderBlockingMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold,
 		    lang);
-	}
-	if (m.getName().equalsIgnoreCase("qgrams")) {
+	} else if (m.getName().equalsIgnoreCase("qgrams")) {
 	    size = (new FastNGram()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
+
 	} else if (m.getName().equalsIgnoreCase("jaro")) {
 	    size = (new JaroMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
+
+	} else if (m.getName().equalsIgnoreCase("hausdorff") || m.getName().equalsIgnoreCase("orthodromic")
+		|| m.getName().equalsIgnoreCase("geomin") || m.getName().equalsIgnoreCase("geomax")
+		|| m.getName().equalsIgnoreCase("geosumofmin") || m.getName().equalsIgnoreCase("frechet")
+		|| m.getName().equalsIgnoreCase("link") || m.getName().equalsIgnoreCase("surjection")
+		|| m.getName().equalsIgnoreCase("fairsurjection")) {
+	    size = (new OrchidMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
+
+	} else if (m.getName().equalsIgnoreCase("symmetrichausdorff")) {
+	    size = (new SymmetricHausdorffMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold,
+		    lang);
+
+	} else if (m.getName().equalsIgnoreCase("soundex")) {
+	    size = (new SoundexMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
+
+	} //else if (m.getName().equalsIgnoreCase("monge")) {
+	    //size = (new MongeElkanMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
+
+	//}
+	else if (m.getName().equalsIgnoreCase("exactmatch")) {
+	    size = (new ExactMatchMapper()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
+
 	} else {
 	    size = (new PPJoinPlusPlus()).getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
 	}
@@ -118,8 +167,12 @@ public class HeliosPlanner extends Planner {
      */
     public double getFilterCosts(List<String> measures, int mappingSize) {
 	double cost = 0;
-	for (String measure : measures) {
-	    cost = cost + MeasureFactory.getMeasure(measure).getRuntimeApproximation(mappingSize);
+	if (measures != null) {
+	    for (String measure : measures) {
+		double tempCost = MeasureFactory.getMeasure(measure).getRuntimeApproximation(mappingSize);
+		if (tempCost >= 0)
+		    cost += tempCost;
+	    }
 	}
 	return cost;
     }
@@ -148,6 +201,10 @@ public class HeliosPlanner extends Planner {
 	    MemoryMapping targetMapping) {
 	NestedPlan plan = new NestedPlan();
 	// atomic specs are simply ran
+	if (spec == null)
+	    return plan;
+	if (spec.isEmpty())
+	    return plan;
 	if (spec.isAtomic()) {
 	    // here we should actually choose between different implementations
 	    // of the operators based on their runtimeCost
@@ -157,10 +214,7 @@ public class HeliosPlanner extends Planner {
 		    spec.getThreshold() + "", -1, -1, 0));
 	    plan.setRuntimeCost(getAtomicRuntimeCosts(p.getOperator(), spec.getThreshold()));
 	    plan.setMappingSize(getAtomicMappingSizes(p.getOperator(), spec.getThreshold()));
-	    // there is a function in EDJoin that does that
 	    plan.setSelectivity(plan.getMappingSize() / (double) (source.size() * target.size()));
-	    // System.out.println("Plan for " + spec.filterExpression + ":\n" +
-	    // plan);
 	} else {
 	    // no optimization for non AND operators really
 	    if (!spec.getOperator().equals(Operator.AND)) {
@@ -187,7 +241,7 @@ public class HeliosPlanner extends Planner {
 			selectivity = selectivity * (1 - children.get(i).getSelectivity());
 			// add filtering costs based on approximation of mapping
 			// size
-			if (plan.getFilteringInstruction() != null) {
+			if (plan.getFilteringInstruction().getMeasureExpression() != null) {
 			    plan.setRuntimeCost(plan.getRuntimeCost()
 				    + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
 					    source.size() * target.size() * (1 - selectivity)));
@@ -202,7 +256,7 @@ public class HeliosPlanner extends Planner {
 			selectivity = selectivity * (1 - children.get(i).getSelectivity());
 			// add filtering costs based on approximation of mapping
 			// size
-			if (plan.getFilteringInstruction() != null) {
+			if (plan.getFilteringInstruction().getMeasureExpression() != null) {
 			    plan.setRuntimeCost(plan.getRuntimeCost()
 				    + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
 					    source.size() * target.size() * (1 - selectivity)));
@@ -218,7 +272,7 @@ public class HeliosPlanner extends Planner {
 				* (1 - selectivity * children.get(i).getSelectivity());
 			// add filtering costs based on approximation of mapping
 			// size
-			if (plan.getFilteringInstruction() != null) {
+			if (plan.getFilteringInstruction().getMeasureExpression() != null) {
 			    plan.setRuntimeCost(plan.getRuntimeCost()
 				    + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
 					    source.size() * target.size() * selectivity));
@@ -238,8 +292,6 @@ public class HeliosPlanner extends Planner {
 		    plan.setRuntimeCost(plan.getRuntimeCost() + childPlan.getRuntimeCost());
 		    selectivity = selectivity * childPlan.getSelectivity();
 		}
-		plan.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
-			spec.getThreshold() + "", -1, -1, 0));
 		plan = getBestConjunctivePlan(spec, children, selectivity);
 	    }
 	}
@@ -288,7 +340,8 @@ public class HeliosPlanner extends Planner {
      *            Overall selectivity
      * @return NestedPlan
      */
-    public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, List<NestedPlan> plans, double selectivity) {
+    public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, List<NestedPlan> plans,
+	    double selectivity) {
 	if (plans == null) {
 	    return left;
 	}
@@ -314,10 +367,10 @@ public class HeliosPlanner extends Planner {
      * @param selectivity
      * @return NestedPlan
      */
-    public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, NestedPlan right, double selectivity) {
+    public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, NestedPlan right,
+	    double selectivity) {
 	double runtime1 = 0, runtime2, runtime3;
 	NestedPlan result = new NestedPlan();
-	double mappingSize = source.size() * target.size() * right.getSelectivity();
 	// first instructionList: run both children and then merge
 	runtime1 = left.getRuntimeCost() + right.getRuntimeCost();
 	result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
@@ -328,11 +381,12 @@ public class HeliosPlanner extends Planner {
 	}
 	// second instructionList: run left child and use right child as filter
 	runtime2 = left.getRuntimeCost();
-	runtime2 = runtime2 + getFilterCosts(right.getAllMeasures(), (int) Math.ceil(mappingSize));
+	runtime2 = runtime2 + getFilterCosts(right.getAllMeasures(),
+		(int) Math.ceil(source.size() * target.size() * right.getSelectivity()));
 	// third instructionList: run right child and use left child as filter
 	runtime3 = right.getRuntimeCost();
-	mappingSize = source.size() * target.size() * left.getSelectivity();
-	runtime3 = runtime3 + getFilterCosts(left.getAllMeasures(), (int) Math.ceil(mappingSize));
+	runtime3 = runtime3 + getFilterCosts(left.getAllMeasures(),
+		(int) Math.ceil(source.size() * target.size() * left.getSelectivity()));
 
 	double min = Math.min(Math.min(runtime3, runtime2), runtime1);
 	// //just for tests

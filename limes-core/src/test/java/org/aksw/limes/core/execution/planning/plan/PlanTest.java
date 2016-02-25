@@ -3,7 +3,6 @@ package org.aksw.limes.core.execution.planning.plan;
 import static org.junit.Assert.*;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
@@ -276,6 +275,36 @@ public class PlanTest {
 	    assertTrue(inst.hashCode() != instClone.hashCode());
 	}
 	System.out.println("\n");
+
+    }
+    
+    @Test
+    public void Equal() {
+	System.out.println("Equal");
+	Plan plan1 = new Plan();
+
+	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run2 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan1.addInstruction(run1);
+	plan1.addInstruction(run2);
+	
+	//////////////////////////////////////////////////////////////////////////////////////////
+	Plan plan2 = new Plan();
+	Instruction run3 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
+	Instruction run4 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
+	plan2.addInstruction(run3);
+	plan2.addInstruction(run4);
+	
+	///////////////////////////////////////////////////////////////////////////////////////////
+	assertTrue(plan1.equals(plan2));
+	
+	NestedPlan plan3 = null;
+	assertTrue(!plan1.equals(plan3));
+	///////////////////////////////////////////////////////////////////////////////////////////
+	System.out.println("------------------------");
+
+	
+	
 
     }
 }

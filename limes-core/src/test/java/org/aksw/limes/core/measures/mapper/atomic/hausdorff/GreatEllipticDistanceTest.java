@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.mapper.atomic.hausdorff;
 
-import static org.junit.Assert.*;
 
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;

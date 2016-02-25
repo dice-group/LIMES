@@ -19,7 +19,7 @@ public class ExecutionPlannerFactory {
     public static IPlanner getPlanner(String name, Cache source, Cache target) {
 
 	if (name.equalsIgnoreCase(DEFAULT))
-	    return new CannonicalPlanner();
+	    return new CanonicalPlanner();
 	if (name.equalsIgnoreCase(HELIOS))
 	    return new HeliosPlanner(target, target);
 	if (name.equalsIgnoreCase(DYNAMIC))

@@ -17,12 +17,12 @@ public class UnsupervisedLearningSetting extends LearningSetting {
 	public void learn() {
 		// TODO Auto-generated method stub
 		// will use the following
-		algorithm.learn();
+		algorithm.learn(null);
 	}
 	
 	PseudoFMeasure measure = new PseudoFMeasure();
 
-	public PseudoFMeasure getMeasure() {
+	public PseudoFMeasure getPseudoMeasure() {
 		return measure;
 	}
 

@@ -39,14 +39,11 @@ public class FileQueryModule implements IQueryModule {
 			System.out.println("Trying to get reader "+kb.getType());
 			RDFReader r = model.getReader(kb.getType());
 
-			try
-			{
+			try{
 				in = new FileInputStream(kb.getEndpoint());
-			} catch(FileNotFoundException e)
-			{
+			} catch(FileNotFoundException e){
 				in = getClass().getClassLoader().getResourceAsStream(kb.getEndpoint());
-				if(in==null)
-				{
+				if(in == null){
 					logger.fatal("endpoint could not be loaded as a file or resource");
 					return;
 				}

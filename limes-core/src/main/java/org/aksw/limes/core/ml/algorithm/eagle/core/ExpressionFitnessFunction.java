@@ -7,10 +7,7 @@ import java.util.Map.Entry;
 import org.jgap.gp.GPFitnessFunction;
 import org.jgap.gp.IGPProgram;
 import org.jgap.gp.impl.ProgramChromosome;
-import org.aksw.limes.core.evaluation.quality.FMeasure;
-import org.aksw.limes.core.evaluation.quality.Precision;
 import org.aksw.limes.core.evaluation.quality.QualitativeMeasure;
-import org.aksw.limes.core.evaluation.quality.Recall;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
@@ -41,7 +38,7 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 	static Logger logger = Logger.getLogger("LIMES");
 	protected LinkSpecGeneticLearnerConfig m_config;
 	/** Complete optimal Mapping. Note that it should only hold matches! */
-	protected Mapping optimalMapping;
+//	protected Mapping optimalMapping;
 	/** Fragment of optimal Mapping used during evolution. Note that it should only hold matches! */
 	protected Mapping reference;
 	/** Holding training data, that is a mapping maybe also holding non-matches.*/
@@ -51,9 +48,9 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 	protected Cache tC;
 	protected Cache trimmedSourceCache;
 	protected Cache trimmedTargetCache;
-	protected int numberOfExamples = 0;
+//	protected int numberOfExamples = 0;
 	
-	protected String measure;
+	protected QualitativeMeasure measure;
 	
 	protected double crossProduct;
 	public static final String fScore="fScore";
@@ -80,11 +77,10 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 		
 	}
 	
-	private ExpressionFitnessFunction(LinkSpecGeneticLearnerConfig a_config, Mapping reference, String measure, int sampleSize) {
+	private ExpressionFitnessFunction(LinkSpecGeneticLearnerConfig a_config, QualitativeMeasure measure, Mapping reference) {
 		this(a_config);		
 		m_config = a_config;
-		this.numberOfExamples = sampleSize;
-		optimalMapping = reference;
+//		optimalMapping = reference;
 		this.reference = reference;
 
 		// get Engines
@@ -94,7 +90,7 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 		
 		this.measure=measure;
 		crossProduct = trimmedSourceCache.size() * trimmedTargetCache.size();
-		System.gc();
+//		System.gc();
 	}
 	
 	@Override
@@ -181,36 +177,15 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 	 * @return
 	 */
 	private double getMeasure(Mapping a_mapping, Mapping reference, double crossProduct) {
-		QualitativeMeasure quality = new FMeasure();
-		if(measure.equalsIgnoreCase(precision))
-			quality = new Precision();
-		if(measure.equalsIgnoreCase(recall))
-			quality = new Recall();
-		//FIXME quality.calculate(a_mapping, reference);
-		return 0.5;
-	}
-	/**
-	 * Function to calculate fitness based on recall value.
-	 */
-	public void useRecall() {
-		measure = recall;
-	}
-	/**
-	 * Function to calculate fitness based on precision value.
-	 */
-	public void usePrecision() {
-		measure = precision;
-	}
-	/**
-	 * Function to calculate fitness based on f-score.
-	 */
-	public void useFScore() {
-		measure = fScore;
+		double quality = measure.calculate(a_mapping, reference);
+		// TODO check
+		return quality;
 	}
 	
-	public static ExpressionFitnessFunction getInstance(LinkSpecGeneticLearnerConfig a_config,  Mapping reference, String measure,int sampleSize) {
+	
+	public static ExpressionFitnessFunction getInstance(LinkSpecGeneticLearnerConfig a_config, QualitativeMeasure measure,  Mapping reference) {
 		if(instance == null) {
-				instance = new ExpressionFitnessFunction(a_config, reference, measure, sampleSize);
+				instance = new ExpressionFitnessFunction(a_config, measure, reference);
 		}
 		return instance;
 	}
@@ -233,16 +208,7 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 	public void destroy() {
 		instance = null;
 	}
-	
-	public void useMeasure(String name) {
-		if(name.equalsIgnoreCase("recall"))
-			useRecall();
-		else	
-		if(name.equalsIgnoreCase("precision"))
-			usePrecision();
-		else
-			useFScore();
-	}
+
 	/**
 	 * Method to create the mapping based on the specified expression and acceptance threshold.
 	 * As of now this just wraps around the the SetConstraintsMapper getLinks() function.

@@ -16,9 +16,9 @@ import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
  * @author ngonga
  * @author kleanthi
  */
-public class CannonicalPlanner extends Planner {
+public class CanonicalPlanner extends Planner {
 
-    public CannonicalPlanner() {
+    public CanonicalPlanner() {
     }
 
     /**
@@ -30,11 +30,13 @@ public class CannonicalPlanner extends Planner {
      */
     public NestedPlan plan(LinkSpecification spec) {
 	NestedPlan plan = new NestedPlan();
-	plan.setInstructionList(new ArrayList<Instruction>());
 	// atomic specs are simply ran
+	if (spec == null)
+	    return plan;
+	if (spec.isEmpty())
+	    return plan;
 	if (spec.isAtomic()) {
 	    // nested plan have a null instruction list as default
-	    plan.setInstructionList(new ArrayList<Instruction>());
 	    plan.addInstruction(new Instruction(Instruction.Command.RUN, spec.getFilterExpression(),
 		    spec.getThreshold() + "", -1, -1, 0));
 	} else {
@@ -53,6 +55,9 @@ public class CannonicalPlanner extends Planner {
 		plan.setOperator(Command.XOR);
 	    } else if (spec.getOperator().equals(Operator.MINUS)) {
 		plan.setOperator(Command.DIFF);
+	    }else{
+		System.out.println("Wrong operator: "+spec.getOperator()+". at LS: "+spec);
+		return null;
 	    }
 	    plan.setFilteringInstruction(new Instruction(Command.FILTER, spec.getFilterExpression(),
 		    spec.getThreshold() + "", -1, -1, 0));

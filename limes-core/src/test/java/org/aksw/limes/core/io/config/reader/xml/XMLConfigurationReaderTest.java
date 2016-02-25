@@ -36,6 +36,7 @@ public class XMLConfigurationReaderTest {
 				null, 																//String graph
 				"?x", 																//String var
 				new ArrayList<String>(Arrays.asList("geom:geometry/geos:asWKT")), 	//List<String> properties 
+				new ArrayList<String>(), 											//List<String> optionalProperties 
 				new ArrayList<String>(Arrays.asList("?x a lgdo:RelayBox")), 		//ArrayList<String> restrictions
 				functions , 														//Map<String, Map<String, String>> functions
 				prefixes, 															//Map<String, String> prefixes
@@ -49,6 +50,7 @@ public class XMLConfigurationReaderTest {
 				null, 																//String graph
 				"?y", 																//String var
 				new ArrayList<String>(Arrays.asList("geom:geometry/geos:asWKT")), 	//List<String> properties 
+				new ArrayList<String>(), 											//List<String> optionalProperties 
 				new ArrayList<String>(Arrays.asList("?y a lgdo:RelayBox")), 		//ArrayList<String> restrictions
 				functions , 														//Map<String, Map<String, String>> functions
 				prefixes, 															//Map<String, String> prefixes

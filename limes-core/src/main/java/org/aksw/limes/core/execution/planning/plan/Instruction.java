@@ -32,8 +32,7 @@ public class Instruction {
      * @param c
      *            Command
      * @param measure
-     *            Measure expression, for example
-     *            "trigrams(x.rdfs:label, y.rdfs:label)"
+     *            Measure expression
      * @param t
      *            Threshold
      * @param source
@@ -131,6 +130,9 @@ public class Instruction {
 	this.targetMapping = targetMapping;
     }
 
+    /**
+     * @return current threshold
+     */
     public String getThreshold() {
 	return threshold;
     }
@@ -153,6 +155,9 @@ public class Instruction {
 	this.mainThreshold = threshold;
     }
 
+    /**
+     * @return current mainThreshold
+     */
     public String getMainThreshold() {
 	return this.mainThreshold;
     }
@@ -164,15 +169,42 @@ public class Instruction {
 	    return false;
 
 	if (this.mainThreshold == null && i.getMainThreshold() == null)
-	    return (this.toString().equals(other.toString()));
+	    return (this.toSmallString().equals(((Instruction) other).toSmallString()));
 	if (this.mainThreshold != null && i.getMainThreshold() == null)
 	    return false;
 	if (this.mainThreshold == null && i.getMainThreshold() != null)
 	    return false;
 	if (this.mainThreshold.equals(i.getMainThreshold()))
-	    return (this.toString().equals(other.toString()));
+	    return (this.toSmallString().equals(((Instruction) other).toSmallString()));
 
 	return false;
+    }
+
+    /**
+     * String representation of the Instruction excluding source, target and
+     * result index.
+     * 
+     * @return s, instruction as string
+     */
+    private String toSmallString() {
+	String s = "";
+	if (command.equals(Command.RUN)) {
+	    s = "RUN\t";
+	} else if (command.equals(Command.FILTER)) {
+	    s = "FILTER\t";
+	} else if (command.equals(Command.DIFF)) {
+	    s = "DIFF\t";
+	} else if (command.equals(Command.INTERSECTION)) {
+	    s = "INTERSECTION\t";
+	} else if (command.equals(Command.UNION)) {
+	    s = "UNION\t";
+	} else if (command.equals(Command.XOR)) {
+	    s = "XOR\t";
+	}
+
+	s = s + measureExpression + "\t";
+	s = s + threshold + "\t";
+	return s;
     }
 
     @Override
@@ -183,11 +215,21 @@ public class Instruction {
 	int targetMapping = this.targetMapping;
 	int resultIndex = this.resultIndex;
 
-	Instruction newInstruction = new Instruction(command, "", "", sourceMapping,
-		targetMapping, resultIndex);
-	newInstruction.setMainThreshold(mainThreshold);
-	newInstruction.setMeasureExpression(measureExpression);
-	newInstruction.setThreshold(threshold);
+	Instruction newInstruction = new Instruction(command, "", "", sourceMapping, targetMapping, resultIndex);
+	if (this.mainThreshold == null)
+	    newInstruction.setMainThreshold(null);
+	else
+	    newInstruction.setMainThreshold(new String(this.mainThreshold));
+
+	if (this.threshold == null)
+	    newInstruction.setThreshold(null);
+	else
+	    newInstruction.setThreshold(new String(this.threshold));
+
+	if (this.measureExpression == null)
+	    newInstruction.setMeasureExpression(null);
+	else
+	    newInstruction.setMeasureExpression(new String(this.measureExpression));
 
 	return newInstruction;
     }

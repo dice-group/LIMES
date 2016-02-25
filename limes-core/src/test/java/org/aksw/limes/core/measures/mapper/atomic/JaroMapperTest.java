@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.mapper.atomic;
 
-import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -117,7 +116,7 @@ public class JaroMapperTest extends JaroMapper {
 	// m2)));
 
 	begin = System.currentTimeMillis();
-	Mapping m3 = jm.run(sourceMap, sourceMap, threshold);
+//	Mapping m3 = jm.run(sourceMap, sourceMap, threshold);
 	end = System.currentTimeMillis();
 	System.out.println("Full approach: " + (end - begin));
 	System.out.println("Mapping size : " + (m2.getNumberofMappings()));

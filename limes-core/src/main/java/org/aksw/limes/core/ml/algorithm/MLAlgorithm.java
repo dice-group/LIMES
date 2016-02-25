@@ -1,8 +1,8 @@
 package org.aksw.limes.core.ml.algorithm;
 
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
-import org.aksw.limes.core.io.mapping.Mapping;
 import org.apache.log4j.Logger;
 
 /**
@@ -25,5 +25,13 @@ public abstract class MLAlgorithm implements IMLAlgorithm {
 		this.configuration = configuration;
 //		this.mapping = mapping;
 	}
-	
+//	
+//	private void setOutStreams(String name) throws FileNotFoundException {
+//		File stdFile = new File(name+"_stdOut.txt");
+//		PrintStream stdOut = new PrintStream(new FileOutputStream(stdFile, false));
+//		File errFile = new File(name+"_errOut.txt");
+//		PrintStream errOut = new PrintStream(new FileOutputStream(errFile, false));
+//		System.setErr(errOut);
+//		System.setOut(stdOut);
+//	}
 }

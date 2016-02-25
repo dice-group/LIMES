@@ -9,22 +9,23 @@ import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 
 public class AlgebraicRewriter extends Rewriter {
 
-    
-
     @Override
     public LinkSpecification rewrite(LinkSpecification spec) {
 	// rewrite only non-atomic specs
-	// if(spec.size() <= 1) return spec;
+	if (spec.size() <= 1)
+	    return spec;
 	int oldSize;
 	int newSize = spec.size();
 	LinkSpecification result = spec;
 	try {
 	    do {
+		System.out.println(spec);
 		oldSize = newSize;
 		spec = updateThresholds(spec);
 		spec = computeAllDependencies(spec);
 		spec = collapseSpec(spec);
 		spec = removeUnaryOperators(spec);
+		spec = removeDuplicates(spec);
 		newSize = spec.size();
 		result = spec;
 	    } while (newSize < oldSize);
@@ -43,9 +44,12 @@ public class AlgebraicRewriter extends Rewriter {
      */
     public LinkSpecification updateThresholds(LinkSpecification spec) {
 	// should not happen
-	if (spec.isEmpty()) {
+	if (spec == null)
 	    return spec;
-	}
+	if (spec.isEmpty())
+	    return spec;
+	if (spec.isAtomic())
+	    return spec;
 	// does not work for atomic specs
 	if (!spec.isAtomic()) {
 	    // only works for null filters
@@ -71,6 +75,30 @@ public class AlgebraicRewriter extends Rewriter {
     }
 
     /**
+     * Removes duplicated specifications from specification
+     *
+     * @param spec
+     *            Input
+     * @return spec, de-duplicated specification
+     */
+    public LinkSpecification removeDuplicates(LinkSpecification spec) {
+
+	if (!spec.isAtomic()) {
+	    if (spec.getChildren().size() == 2) {
+		LinkSpecification left = removeDuplicates(spec.getChildren().get(0));
+		LinkSpecification right = removeDuplicates(spec.getChildren().get(1));
+		if (left.equals(right)) {
+		    spec = left;
+		    double theta = Math.max(spec.getThreshold(), left.getThreshold());
+		    spec.setThreshold(theta);
+		}
+	    }
+	}
+
+	return spec;
+    }
+
+    /**
      * Removes unary operators from a spec
      *
      * @param spec
@@ -78,19 +106,25 @@ public class AlgebraicRewriter extends Rewriter {
      * @return Cleaned up spec
      */
     public LinkSpecification removeUnaryOperators(LinkSpecification spec) {
-	if (!spec.isAtomic() && !spec.isEmpty()) {
+	System.out.println("removeUnaryOperators: " + spec);
+	System.out.println("removeUnaryOperators: " + spec.isAtomic());
+
+	if (!spec.isAtomic()) {
+	    // if the LS has more than one child, it propagates the removal to
+	    // the children
 	    if (spec.getFilterExpression() == null && spec.getChildren().size() == 1) {
 		// don't forget to update the threshold while lifting the branch
 		double theta = Math.max(spec.getThreshold(), spec.getChildren().get(0).getThreshold());
-		System.out.print("Old spec = " + spec + "\t");
-
+		System.out.print("Old spec = " + spec);
 		spec = spec.getChildren().get(0);
 		spec.setThreshold(theta);
-		System.out.println("New spec = " + spec + "\t");
+		System.out.println("New spec = " + spec);
+		System.out.println(spec.isAtomic());
 	    }
 	    if (!spec.isAtomic()) {
 		List<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
 		for (LinkSpecification child : spec.getChildren()) {
+		    System.out.println("child spec = " + child);
 		    newChildren.add(removeUnaryOperators(child));
 		}
 		spec.setChildren(newChildren);
@@ -123,16 +157,17 @@ public class AlgebraicRewriter extends Rewriter {
 	    String measure1 = getMeasure(source);
 	    String measure2 = getMeasure(target);
 	    if (measure1.equals(measure2)) {
+		// !!!!!!!!!!!!!!!!!!!!!!!!!!!! < not <=
 		if (source.getThreshold() <= target.getThreshold()) {
 		    source.addDependency(target);
 		} else {
-
+		    // !!!!!!!!!!!!!!!!!!!!!!!! WHAT?????
 		    double t1 = source.getThreshold();
 		    double t2 = target.getThreshold();
 		    if (measure1.equals("trigrams")) {
 			// works for jaro vs. jaro-winkler
 			//
-		    } else if (measure2.equals("overlap")) {
+		    } else if (measure2.equals("overlap")) {// WHAT?????
 			if (measure2.equals("jaccard") && t2 <= 2 * t1 / (1 + t1)) {
 			    source.addDependency(target);
 			}
@@ -145,7 +180,7 @@ public class AlgebraicRewriter extends Rewriter {
 
     /**
      * Returns the properties that are used for the comparison. Only works for
-     * atomatic specifications
+     * atomic specifications
      *
      * @param spec
      *            Input specification
@@ -166,7 +201,8 @@ public class AlgebraicRewriter extends Rewriter {
      *
      * @param spec
      *            Specification
-     * @return Measure used in the specification, null if the specification is not atomic
+     * @return Measure used in the specification, null if the specification is
+     *         not atomic
      */
     public String getMeasure(LinkSpecification spec) {
 	if (spec.isAtomic()) {
@@ -180,20 +216,25 @@ public class AlgebraicRewriter extends Rewriter {
      * Updates all dependencies within a spec
      *
      * @param spec
-     *            Input spec
-     * @return Spec with all dependencies updated
+     *            Input specification
+     * @return spec, with all dependencies updated
      */
     public LinkSpecification computeAllDependencies(LinkSpecification spec) {
 	spec = computeAtomicDependencies(spec);
 	spec = computeNonAtomicDependencies(spec);
+	for (LinkSpecification ls : spec.getAllLeaves()) {
+	    System.out.println(ls);
+	    System.out.println(ls.getDependencies());
+	}
 	return spec;
     }
 
     /**
      * Updates the non-atomic dependencies of a link spec
      *
-     * @param spec
-     * @return
+     * @param spec,
+     *            input specification
+     * @return spec, updated specification with non-atomic dependencies
      */
     public LinkSpecification computeNonAtomicDependencies(LinkSpecification spec) {
 	if (!spec.isAtomic()) {
@@ -207,6 +248,8 @@ public class AlgebraicRewriter extends Rewriter {
 	    // then update spec itself
 	    // if operator = AND, then dependency is intersection of all
 	    // dependencies
+	    // if all children of a conjuction depend on L' then the father of
+	    // the conjuction depends on L'
 	    if (spec.getOperator() == Operator.AND && spec.getChildren().get(0).hasDependencies()) {
 		newDependencies = spec.getChildren().get(0).getDependencies();
 		for (int i = 1; i < spec.getChildren().size(); i++) {
@@ -226,6 +269,8 @@ public class AlgebraicRewriter extends Rewriter {
 		    }
 		}
 	    }
+	    // System.out.println(spec);
+	    // System.out.println("Dependencies: " + newDependencies);
 	    spec.setDependencies(null);
 
 	    if (newDependencies != null) {
@@ -240,11 +285,11 @@ public class AlgebraicRewriter extends Rewriter {
     }
 
     /**
-     * Computes all dependencies within a link specification
+     * Computes all atomic dependencies within a link specification
      *
-     * @param spec
-     *            Input spec
-     * @return spec with all dependencies computed
+     * @param spec,
+     *            input specification
+     * @return spec, updated specification with atomic dependencies
      */
     public LinkSpecification computeAtomicDependencies(LinkSpecification spec) {
 	List<LinkSpecification> leaves = spec.getAllLeaves();
@@ -265,41 +310,66 @@ public class AlgebraicRewriter extends Rewriter {
      * Collapses a spec by making use of the dependencies within the spec
      *
      * @param spec
-     *            Input spec
-     * @return Collapsed spec, i.e., spec where dependencies have been removed
+     *            Input specification
+     * @return Collapsed spec, i.e., specification where dependencies have been
+     *         removed
      */
     public LinkSpecification collapseSpec(LinkSpecification spec) {
-	if (spec.isAtomic() || spec.isEmpty()) {
+	if (spec == null)
+	    return spec;
+	if (spec.isAtomic()) { // || spec.isEmpty()) {
 	    return spec;
 	}
+
 	// first collapse children which depend on each other
 	if (spec.getOperator() == Operator.AND) {
 	    List<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
 	    newChildren.addAll(spec.getChildren());
+	    System.out.println("======================================================");
+	    System.out.println("Children now: " + newChildren);
+
 	    // child is a superset of its dependencies, thus
 	    // if one of its dependency is a child of the current node, then
 	    // no need to compute child
 	    for (LinkSpecification child : spec.getChildren()) {
+		System.out.println("==============");
+		System.out.println("Child now: " + child);
 		if (child.hasDependencies()) {
+		    System.out.println("Dependency found");
 		    for (LinkSpecification dependency : child.getDependencies()) {
+			System.out.println("Dependency : " + dependency);
 			if (newChildren.contains(dependency)) {
 			    // ensures that at least one child is kept, in case
 			    // of cyclic dependencies
 			    // quick fix. Might not work
 			    if (newChildren.size() > 1) {
 				newChildren.remove(child);
+				System.out.println("Children after removal: " + newChildren);
 			    }
 			}
 		    }
+		    System.out.println("==============");
+
 		}
+		System.out.println("======================================================");
+
 	    }
 	    spec.setChildren(newChildren);
 	} else if (spec.getOperator() == Operator.OR) {
 	    List<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
 	    newChildren.addAll(spec.getChildren());
+	    System.out.println("======================================================");
+
+	    System.out.println("Children now: " + newChildren);
+
 	    for (LinkSpecification child : spec.getChildren()) {
+		System.out.println("==============");
+		System.out.println("Child now: " + child);
+
 		if (child.hasDependencies()) {
+		    System.out.println("Dependency found");
 		    for (LinkSpecification dependency : child.getDependencies()) {
+			System.out.println("Dependency : " + dependency);
 			// all entries of dependency contained in child, so
 			// no need to compute it
 			if (newChildren.contains(dependency)) {
@@ -308,11 +378,18 @@ public class AlgebraicRewriter extends Rewriter {
 			    // quick fix. Might not work
 			    if (newChildren.size() > 1) {
 				newChildren.remove(dependency);
+				System.out.println("Children after removal: " + newChildren);
+
 			    }
+
 			}
 		    }
 		}
+		System.out.println("==============");
+
 	    }
+	    System.out.println("======================================================");
+
 	    spec.setChildren(newChildren);
 	}
 	List<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();

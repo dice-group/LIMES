@@ -17,7 +17,9 @@ import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
 
 /**
- * Implements execution plan that are given to an execution engine.
+ * Implements execution plan that is given to an execution engine. Note that the
+ * subPlans fields is set to null by the instructor. Before adding a subplan for
+ * the first time, the subPlans field must be initiated.
  * 
  * @author ngonga
  * @author kleanthi
@@ -31,29 +33,61 @@ public class NestedPlan extends Plan {
 	super();
 	subPlans = null;
 	filteringInstruction = null;
-
     }
 
+    /**
+     * Returns the set of sub-Plans of the plan
+     * 
+     * @return subPlans
+     */
     public List<NestedPlan> getSubPlans() {
 	return subPlans;
     }
 
+    /**
+     * Set the sub-Plans of the plan
+     * 
+     * @param subPlans
+     *            to set
+     */
     public void setSubPlans(List<NestedPlan> subPlans) {
 	this.subPlans = subPlans;
     }
 
+    /**
+     * Returns the operator of the plan
+     * 
+     * @return operator
+     */
     public Command getOperator() {
 	return operator;
     }
 
+    /**
+     * Set the operator of the plan
+     * 
+     * @param operator
+     *            to set
+     */
     public void setOperator(Command operator) {
 	this.operator = operator;
     }
 
+    /**
+     * Returns the filtering Instruction of the plan
+     * 
+     * @return filteringInstruction
+     */
     public Instruction getFilteringInstruction() {
 	return filteringInstruction;
     }
 
+    /**
+     * Set the filtering Instruction of the plan
+     * 
+     * @param filteringInstruction
+     *            to set
+     */
     public void setFilteringInstruction(Instruction filteringInstruction) {
 	this.filteringInstruction = filteringInstruction;
     }
@@ -67,7 +101,7 @@ public class NestedPlan extends Plan {
     }
 
     /**
-     * Checks whether the current NestedPlan is atomic
+     * Checks whether the current NestedPlan is atomic or not.
      * 
      * @return true, if current NestedPlan is atomic. false, if otherwise
      */
@@ -107,7 +141,7 @@ public class NestedPlan extends Plan {
     /**
      * Generates a clone of the current NestedPlan
      * 
-     * @return Clone of current NestedPlan
+     * @return clone, clone of current NestedPlan
      */
     public NestedPlan clone() {
 	NestedPlan clone = new NestedPlan();
@@ -154,7 +188,7 @@ public class NestedPlan extends Plan {
     }
 
     /**
-     * Adds a subplan to the current list of subplans, if there is no list one
+     * Adds a sub-Plan to the current list of subPlans, if there is no list one
      * will be created
      * 
      * @param subplan
@@ -208,24 +242,62 @@ public class NestedPlan extends Plan {
 	if (isEmpty()) {
 	    return "Empty plan";
 	}
-	if (isAtomic()) {
-	    if (instructionList != null) {
-		return "\n\nBEGIN\n" + pre + "\n-----\n" + instructionList + "\nEND\n-----";
+	if (!instructionList.isEmpty()) {
+	    if (filteringInstruction != null) {
+		if (subPlans != null) {
+		    if (!subPlans.isEmpty()) {
+			// instructionList, filteringInstruction, subplans
+			return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
+				+ "\n" + operator + "\nSubplans\n" + "\n" + subPlans + "\nEND\n-----";
+		    } else
+			// instructionList, filteringInstruction
+			return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
+				+ "\nEND\n-----";
+		} else {
+		    // instructionList, filteringInstruction
+		    return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
+			    + "\nEND\n-----";
+		}
 	    } else {
-		return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\nEND\n-----";
+		if (subPlans != null) {
+		    if (!subPlans.isEmpty()) {
+			// instructionList, subplans
+			return "\nBEGIN\n" + pre + "-----\n" + instructionList + "\n" + operator + "\nSubplans\n"
+				+ subPlans + "\nEND\n-----";
+		    } else
+			// instructionList
+			return "\nBEGIN\n" + pre + "-----\n" + instructionList + "\nEND\n-----";
+		} else {
+		    return "\nBEGIN\n" + pre + "-----\n" + instructionList + "\nEND\n-----";
+		}
+
 	    }
 	} else {
-	    if (instructionList != null) {
-		return "\nBEGIN\n" + pre + "\n-----\n" + instructionList + "-----\n" + filteringInstruction + "\n" + operator+ "\nSubplans\n"  + "\n" + subPlans
-			    + "\nEND\n-----";
+	    if (filteringInstruction != null) {
+		if (subPlans != null) {
+		    if (!subPlans.isEmpty()) {
+			// filteringInstruction, subplans
+			return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + operator
+				+ "\nSubplans\n" + "\n" + subPlans + "\nEND\n-----";
+		    } else
+			// filteringInstruction
+			return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\nEND\n-----";
+		} else {
+		    // filteringInstruction
+		    return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\nEND\n-----";
+		}
 	    } else {
-		return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n" + operator +"\nSubplans\n"  + "\n" + subPlans
-			    + "\nEND\n-----";
+		if (subPlans != null) {
+		    if (!subPlans.isEmpty()) {
+			// subplans
+			return "\nBEGIN\n" + pre + "-----\n" + operator + "\nSubplans\n" + "\n" + subPlans
+				+ "\nEND\n-----";
+		    }
+		}
 	    }
-	    
-	    
-	    
 	}
+	return pre;
+
     }
 
     /**
@@ -256,7 +328,11 @@ public class NestedPlan extends Plan {
 	    return "0";
 	}
     }
-
+    /**
+     * String representation of NestedPlan as a set of commands
+     * 
+     * @return NestedPlan as a set of commands
+     */
     public String finalPlan() {
 	if (isEmpty()) {
 	    return "Empty plan";
@@ -308,6 +384,71 @@ public class NestedPlan extends Plan {
 	}
 	return null;
     }
+    @Override
+    public boolean equals(Object other) {
+	NestedPlan o = (NestedPlan) other;
+	if (o == null)
+	    return false;
+
+	// only RUN instructions in instructionList
+	// no worries for null instructionList, constructor initializes it
+	if (this.isAtomic() && o.isAtomic()) {
+	    return (this.instructionList.equals(o.instructionList));
+
+	} else if (!this.isAtomic() && !o.isAtomic()) { // no instructionList
+	    if (this.operator == null && o.operator != null)
+		return false;
+	    if (this.operator != null && o.operator == null)
+		return false;
+	    // for optimized plans mostly
+	    if (this.operator == null && o.operator == null) {
+		if (this.filteringInstruction == null && o.filteringInstruction == null) {
+		    // instructionList must be empty for complex plans
+		    // if it is not for any reason, the condition is still true
+		    if (this.instructionList.equals(o.instructionList))
+			return (this.subPlans.equals(o.subPlans));
+		    else
+			return false;
+		}
+		if (this.filteringInstruction != null && o.filteringInstruction == null)
+		    return false;
+		if (this.filteringInstruction == null && o.filteringInstruction != null)
+		    return false;
+		if (this.filteringInstruction.equals(o.filteringInstruction)) {
+		    if (this.instructionList.equals(o.instructionList))
+			return (this.subPlans.equals(o.subPlans));
+		    else
+			return false;
+		}
+		return false;
+	    }
+	    // for normal complex plans
+	    if (this.operator.equals(o.operator)) {
+		// filtering instruction SHOULD not be null, but just in case
+		if (this.filteringInstruction == null && o.filteringInstruction == null) {
+		    if (this.instructionList.equals(o.instructionList))
+			return (this.subPlans.equals(o.subPlans));
+		    else
+			return false;
+		}
+		if (this.filteringInstruction != null && o.filteringInstruction == null)
+		    return false;
+		if (this.filteringInstruction == null && o.filteringInstruction != null)
+		    return false;
+		if (this.filteringInstruction.equals(o.filteringInstruction)) {
+		    if (this.instructionList.equals(o.instructionList))
+			return (this.subPlans.equals(o.subPlans));
+		    else
+			return false;
+		}//different filtering instructions
+		return false;
+	    } // different operators
+	    return false;
+	}
+	// one plan is atomic, the other is not
+	return false;
+
+    }
 
     /**
      * Returns the size of a NestedPlan
@@ -315,7 +456,7 @@ public class NestedPlan extends Plan {
      * @param size
      *            as int
      */
-    public int getSize(String s) {
+    private int getSize(String s) {
 	int size = 0;
 	if (s.contains("\n")) {
 	    String[] parts = s.split("\n");
@@ -333,7 +474,7 @@ public class NestedPlan extends Plan {
      * 
      * @return Instruction as a string
      */
-    public String getInstructionString(List<Instruction> list) {
+    private String getInstructionString(List<Instruction> list) {
 	Instruction i = list.get(0);
 	String result = i.getCommand() + "\n";
 	result = result + i.getMeasureExpression() + "\n";
@@ -341,51 +482,7 @@ public class NestedPlan extends Plan {
 	return result;
     }
 
-    @Override
-    public boolean equals(Object other) {
-	NestedPlan o = (NestedPlan) other;
-	if (o == null)
-	    return false;
-
-	// only RUN instructions in instructionList
-	if (this.isAtomic() && o.isAtomic()) {
-	    return (this.instructionList.equals(o.instructionList));
-
-	} else if (!this.isAtomic() && !o.isAtomic()) { // no instructionList
-	    if (this.operator == null && o.operator != null)
-		return false;
-	    if (this.operator != null && o.operator == null)
-		return false;
-	    // AND/MINUS operator (optimization): RUN one child, (reverse)FILTER
-	    // with other the child
-	    if (this.operator == null && o.operator == null) {
-		if (this.filteringInstruction.equals(o.filteringInstruction)) {
-		    return (this.subPlans.get(0).equals(o.subPlans.get(0)));
-		} // different filteringInstructions
-		return false;
-	    }
-	    if (this.operator.equals(o.operator)) {
-		// all complex, non-optimized plans MUST have a filtering
-		// instruction
-		if (this.filteringInstruction == null && o.filteringInstruction == null)
-		    return false;
-		if (this.filteringInstruction != null && o.filteringInstruction == null)
-		    return false;
-		if (this.filteringInstruction == null && o.filteringInstruction != null)
-		    return false;
-		if (this.filteringInstruction.equals(o.filteringInstruction)) {
-		    return (this.subPlans.get(0).equals(o.subPlans.get(0))
-			    && this.subPlans.get(1).equals(o.subPlans.get(1)));
-		} // different filtering instructions
-		return false;
-	    } // different operators
-	    return false;
-	}
-	// one plan is atomic, the other is not
-	return false;
-
-    }
-
+    
     /**
      * Graphic representation of the current NestedPlan
      * 

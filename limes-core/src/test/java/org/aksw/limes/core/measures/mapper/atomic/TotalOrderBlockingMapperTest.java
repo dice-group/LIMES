@@ -1,9 +1,8 @@
 package org.aksw.limes.core.measures.mapper.atomic;
 
-import static org.junit.Assert.*;
 
 import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
+//import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
 import org.junit.Test;
 
 public class TotalOrderBlockingMapperTest {
@@ -31,7 +30,7 @@ public class TotalOrderBlockingMapperTest {
         source.addTriple("5", "lat", "5");
         source.addTriple("5", "lon", "2");
 
-        TotalOrderBlockingMapper bm = new TotalOrderBlockingMapper();
+//        TotalOrderBlockingMapper bm = new TotalOrderBlockingMapper();
     }
 
 }

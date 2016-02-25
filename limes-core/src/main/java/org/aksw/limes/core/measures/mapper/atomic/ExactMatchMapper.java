@@ -132,11 +132,11 @@ public class ExactMatchMapper extends Mapper {
 
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         //dummy
-        return (sourceSize + targetSize) / 1000;
+        return (sourceSize + targetSize) / 1000d;
     }
 
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         //dummy
-        return (sourceSize + targetSize) / 1000;
+        return (sourceSize + targetSize) / 1000d;
     }
 }

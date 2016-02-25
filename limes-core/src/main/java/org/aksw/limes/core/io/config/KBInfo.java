@@ -28,6 +28,7 @@ public class KBInfo implements Serializable{
     protected String graph;
     protected String var;
     protected List<String> properties;
+    protected List<String> optionalProperties;
     protected ArrayList<String> restrictions;
     protected Map<String, Map<String, String>> functions;
     protected Map<String, String> prefixes;
@@ -43,6 +44,7 @@ public class KBInfo implements Serializable{
         graph = null;
         restrictions = new ArrayList<String>();
         properties = new ArrayList<String>();
+        optionalProperties = new ArrayList<String>();
         prefixes = new HashMap<String, String>();
         functions = new HashMap<String, Map<String, String>>();
         //-1 means query all at once
@@ -85,9 +87,17 @@ public class KBInfo implements Serializable{
 	public List<String> getProperties() {
 		return properties;
 	}
+	
+	public List<String> getOptionalProperties() {
+		return optionalProperties;
+	}
 
 	public void setProperties(List<String> properties) {
 		this.properties = properties;
+	}
+	
+	public void setOptionalProperties(List<String> optionalProperties) {
+		this.optionalProperties = optionalProperties;
 	}
 
 	public ArrayList<String> getRestrictions() {
@@ -159,8 +169,8 @@ public class KBInfo implements Serializable{
 	 *@author sherif
 	 */
 	public KBInfo(String id, String endpoint, String graph, String var,
-			List<String> properties, ArrayList<String> restrictions,
-			Map<String, Map<String, String>> functions,
+			List<String> properties, List<String> optionalProperties,
+			ArrayList<String> restrictions,	Map<String, Map<String, String>> functions,
 			Map<String, String> prefixes, int pageSize, String type) {
 		super();
 		this.id = id;
@@ -168,6 +178,7 @@ public class KBInfo implements Serializable{
 		this.graph = graph;
 		this.var = var;
 		this.properties = properties;
+		this.optionalProperties = optionalProperties;
 		this.restrictions = restrictions;
 		this.functions = functions;
 		this.prefixes = prefixes;

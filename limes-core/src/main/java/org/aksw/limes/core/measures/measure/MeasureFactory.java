@@ -6,7 +6,6 @@ import org.aksw.limes.core.measures.mapper.atomic.EDJoin;
 import org.aksw.limes.core.measures.mapper.atomic.ExactMatchMapper;
 import org.aksw.limes.core.measures.mapper.atomic.JaroMapper;
 import org.aksw.limes.core.measures.mapper.atomic.JaroWinklerMapper;
-import org.aksw.limes.core.measures.mapper.atomic.MongeElkanMapper;
 import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.atomic.PPJoinPlusPlus;
 import org.aksw.limes.core.measures.mapper.atomic.RatcliffObershelpMapper;
@@ -37,7 +36,6 @@ import org.aksw.limes.core.measures.measure.string.Jaro;
 import org.aksw.limes.core.measures.measure.string.JaroWinkler;
 import org.aksw.limes.core.measures.measure.string.Levenshtein;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
-import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 
 public class MeasureFactory {
@@ -46,55 +44,73 @@ public class MeasureFactory {
 
     public static Measure getMeasure(String name) {
 	Measure m;
+	if (name == null) {
+	    m = new TrigramMeasure();
+	    return m;
+	}
 	if (name.toLowerCase().startsWith("cosine")) {
 	    m = new CosineMeasure();
 	} else if (name.toLowerCase().startsWith("jaccard")) {
 	    m = new JaccardMeasure();
-	} else if (name.toLowerCase().startsWith("jarowinkler")) {
-	    m = new JaroWinkler();
-	} else if (name.toLowerCase().startsWith("jaro")) {
+	} // else if (name.toLowerCase().startsWith("jarowinkler")) {problematic
+	  // m = new JaroWinkler();}
+	else if (name.toLowerCase().startsWith("jaro")) {
 	    m = new Jaro();
-	} else if (name.toLowerCase().startsWith("ratcliff")) { //problem
-	    m = new RatcliffObershelpMeasure();
-	} else if (name.toLowerCase().startsWith("euclidean")) {
+	} // else if (name.toLowerCase().startsWith("ratcliff")) { //problem
+	  // m = new RatcliffObershelpMeasure(); }
+	else if (name.toLowerCase().startsWith("euclidean")) {
 	    m = new EuclideanMetric();
 	} else if (name.toLowerCase().startsWith("levens")) {
 	    m = new Levenshtein();
 	} else if (name.toLowerCase().startsWith("qgrams")) {
 	    m = new QGramSimilarity();
-	} else if (name.toLowerCase().startsWith("exactmatch")) {
+	} else if (name.toLowerCase().startsWith("exactmatch")) {// NO
+								 // getRuntimeApproximation
 	    m = new ExactMatch();
 	} else if (name.toLowerCase().startsWith("hausdorff")) {
 	    m = new NaiveHausdorff();
-	} else if (name.toLowerCase().startsWith("orthodromic")) {
+	} else if (name.toLowerCase().startsWith("orthodromic")) {// NO
+								  // getRuntimeApproximation
 	    // change this by implementing measure interface in
 	    // orthodromicdistance class
 	    m = new GeoDistance();
-	} else if (name.toLowerCase().startsWith("symmetrichausdorff")) {
+	} else if (name.toLowerCase().startsWith("symmetrichausdorff")) {// NO
+									 // getRuntimeApproximation
 	    m = new SymmetricHausdorff();
 	} else if (name.toLowerCase().startsWith("datesim")) {
 	    m = new SimpleDateMeasure();
-	} else if (name.toLowerCase().startsWith("daysim")) {
+	} else if (name.toLowerCase().startsWith("daysim")) {// NO
+							     // getRuntimeApproximation
 	    m = new DayMeasure();
-	} else if (name.toLowerCase().startsWith("yearsim")) {
+	} else if (name.toLowerCase().startsWith("yearsim")) {// NO
+							      // getRuntimeApproximation
 	    m = new YearMeasure();
-	} else if (name.toLowerCase().startsWith("geomn")) {
+	} else if (name.toLowerCase().startsWith("geomn")) {// NO
+							    // getRuntimeApproximation
 	    m = new NaiveMin();
-	} else if (name.toLowerCase().startsWith("geomx")) {
+	} else if (name.toLowerCase().startsWith("geomx")) {// NO
+							    // getRuntimeApproximation
 	    m = new NaiveMax();
-	} else if (name.toLowerCase().startsWith("geoavg")) {
+	} else if (name.toLowerCase().startsWith("geoavg")) {// NO
+							     // getRuntimeApproximation
 	    m = new NaiveAverage();
-	} else if (name.toLowerCase().startsWith("geomean")) {
+	} else if (name.toLowerCase().startsWith("geomean")) {// NO
+							      // getRuntimeApproximation
 	    m = new NaiveMean();
-	} else if (name.toLowerCase().startsWith("frechet")) {
+	} else if (name.toLowerCase().startsWith("frechet")) {// NO
+							      // getRuntimeApproximation
 	    m = new NaiveFrechet();
-	} else if (name.toLowerCase().startsWith("geolink")) {
+	} else if (name.toLowerCase().startsWith("geolink")) {// NO
+							      // getRuntimeApproximation
 	    m = new NaiveLink();
-	} else if (name.toLowerCase().startsWith("geosummn")) {
+	} else if (name.toLowerCase().startsWith("geosummn")) {// NO
+							       // getRuntimeApproximation
 	    m = new NaiveSumOfMin();
-	} else if (name.toLowerCase().startsWith("surjection")) {
+	} else if (name.toLowerCase().startsWith("surjection")) {// NO
+								 // getRuntimeApproximation
 	    m = new NaiveSurjection();
-	} else if (name.toLowerCase().startsWith("fairsurjection")) {
+	} else if (name.toLowerCase().startsWith("fairsurjection")) {// NO
+								     // getRuntimeApproximation
 	    m = new FairSurjection();
 	} else {
 	    m = new TrigramMeasure();
@@ -104,55 +120,11 @@ public class MeasureFactory {
     }
 
     /**
-     * Returns measures of a particular type. If measure with name "name" and
-     * type "type" is not found, the default measure for the given type is
-     * returned, e.g., trigram similarity for strings. To get the defaukt
-     * measure of a given type, simply use getMeasure("", type).
-     *
-     * @param name
-     *            Name of the measure
-     * @param type
-     *            Type of the measure
-     * @return Similarity measure of the given type
-     */
-    public static Measure getMeasure(String name, String type) {
-	if (type.equals("string")) {
-	    if (name.toLowerCase().startsWith("cosine")) {
-		return new CosineMeasure();
-	    } else if (name.toLowerCase().startsWith("jaccard")) {
-		return new JaccardMeasure();
-	    }
-	    // default
-	    return new TrigramMeasure();
-
-	} else if (type.equals("spatial")) {
-	    if (name.toLowerCase().startsWith("geo")) {
-		return new GeoDistance();
-	    } else if (name.toLowerCase().startsWith("euclidean")) {
-		return new EuclideanMetric();
-	    }
-	    // default
-	    return new EuclideanMetric();
-	} else if (type.equals("date")) {
-	    if (name.toLowerCase().startsWith("datesim")) {
-		return new SimpleDateMeasure();
-	    } else if (name.toLowerCase().startsWith("daysim")) {
-		return new DayMeasure();
-	    } else if (name.toLowerCase().startsWith("yearsim")) {
-		return new YearMeasure();
-	    }
-	    // default
-	    return new SimpleDateMeasure();
-	}
-	// default of all
-	return new TrigramMeasure();
-    }
-
-    /**
      * Get mapper to measure
      *
-     * @param measure
-     * @return
+     * @param measure,
+     *            name of measure
+     * @return am, mapper corresponding to measure
      */
     public static Mapper getMapper(String measure) {
 	Mapper am;
@@ -160,24 +132,30 @@ public class MeasureFactory {
 	    am = new EDJoin();
 	} else if (measure.toLowerCase().startsWith("qgrams")) {
 	    am = new FastNGram();
-	} else if (measure.toLowerCase().startsWith("jarowinkler")) {
-	    am = new JaroWinklerMapper();
-	} else if (measure.toLowerCase().startsWith("jaro")) {
+	} // else if (measure.toLowerCase().startsWith("jarowinkler")) {
+	  // //problematic
+	  // am = new JaroWinklerMapper(); }
+	else if (measure.toLowerCase().startsWith("jaro")) {
 	    am = new JaroMapper();
 	} else if (measure.toLowerCase().startsWith("trigrams")) {
+	    am = new PPJoinPlusPlus();
+	} else if (measure.toLowerCase().startsWith("jaccard")) {
+	    am = new PPJoinPlusPlus();
+	} else if (measure.toLowerCase().startsWith("overlap")) {
+	    am = new PPJoinPlusPlus();
+	} else if (measure.toLowerCase().startsWith("cosine")) {
 	    am = new PPJoinPlusPlus();
 	} else if (measure.toLowerCase().startsWith("soundex")) {
 	    am = new SoundexMapper();
 	} else if (measure.toLowerCase().startsWith("ratcliff")) {
 	    am = new RatcliffObershelpMapper();
-	} else if (measure.toLowerCase().startsWith("monge")) {
-	    am = new MongeElkanMapper();
-	} else if (measure.toLowerCase().startsWith("exactmatch")) {
+	} // else if (measure.toLowerCase().startsWith("monge")) { //problem in
+	  // getMappingSizeApproximation
+	  // am = new MongeElkanMapper();}
+	  else if (measure.toLowerCase().startsWith("exactmatch")) {
 	    am = new ExactMatchMapper();
 	} else if (measure.toLowerCase().startsWith("euclid")) {
 	    am = new TotalOrderBlockingMapper();
-	} else if (measure.toLowerCase().startsWith("jaccard")) {
-	    am = new PPJoinPlusPlus();
 	} else if (measure.toLowerCase().startsWith("hausdorff")) {
 	    am = new OrchidMapper();
 	} else if (measure.toLowerCase().startsWith("orthodromic")) {
@@ -206,11 +184,10 @@ public class MeasureFactory {
 	    am = new OrchidMapper();
 	} else if (measure.toLowerCase().startsWith("fairsurjection")) {
 	    am = new OrchidMapper();
+	} else {
+	    am = null;
 	}
-	else {
-	    am = new PPJoinPlusPlus();
-	}
-	
+
 	return am;
     }
 

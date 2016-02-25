@@ -1,7 +1,5 @@
 package org.aksw.limes.core.measures.measure.date;
 
-import static org.junit.Assert.*;
-
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.date.DayMeasure;
 import org.junit.Assert;

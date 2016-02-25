@@ -20,7 +20,7 @@ public class SerializerFactory {
         if(name.toLowerCase().trim().startsWith("nt") || name.toLowerCase().trim().startsWith("turtle")) return new NtSerializer();
         else 
         {
-            logger.info("Serializer with name "+name+" not found. Using .nt as default format.");
+            logger.info("Serializer with name " + name + " not found. Using .nt as default format.");
             return new NtSerializer();
         }
     }
