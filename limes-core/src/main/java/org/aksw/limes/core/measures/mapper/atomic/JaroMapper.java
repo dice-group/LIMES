@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
  *
  * @author ngonga
  */
-public class JaroMapper extends Mapper{
+public class JaroMapper extends Mapper {
 
     static Logger logger = Logger.getLogger("LIMES");
 
@@ -108,7 +108,7 @@ public class JaroMapper extends Mapper{
 	Set<String> target = targetMap.keySet();
 	Map<Integer, Set<String>> sourceLengthIndex = getLengthIndex(source);
 	Map<Integer, Set<String>> targetLengthIndex = getLengthIndex(target);
-	
+
 	Mapping result = new MemoryMapping();
 	double maxSourceLength, maxTargetLength, similarity, theta;
 	List<Character> sourceMappingCharacters, targetMappingCharacters;
@@ -232,7 +232,7 @@ public class JaroMapper extends Mapper{
 	    }
 	}
 	System.out.println(lengthFilterCount + " = " + ((double) lengthFilterCount) / (source.size() * target.size()));
-	
+
 	System.out.println(
 		characterFilterCount + " = " + ((double) characterFilterCount) / (source.size() * target.size()));
 	return result;
@@ -259,7 +259,6 @@ public class JaroMapper extends Mapper{
 	return result;
     }
 
-    
     /**
      * Returns the set of characters contained in a string
      *
@@ -276,5 +275,4 @@ public class JaroMapper extends Mapper{
 	return result;
     }
 
-    
 }

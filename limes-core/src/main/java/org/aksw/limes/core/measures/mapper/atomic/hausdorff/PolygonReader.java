@@ -26,60 +26,62 @@ public class PolygonReader {
 	return readPolygons(file, -1);
     }
 
+    /**
+     * Read a number of polygons from a file.
+     * 
+     * @param file,
+     *            name of the file that contains the polygons
+     * @param numberOfEntries,
+     *            number of polygons to be read
+     * @return polygon, as a set
+     */
     public static Set<Polygon> readPolygons(String file, int numberOfEntries) {
-		long startTime = System.currentTimeMillis();
-		Map<String, Polygon> result = new HashMap<String, Polygon>();
-		String s, split[];
-		try {
-			BufferedReader buf = new BufferedReader(new FileReader(file));
-			s = buf.readLine();
-			while (s != null) {
-				while (s.contains("  ")) {
-					s = s.replaceAll(Pattern.quote("  "), " ");
-				}
-				s = s.replaceAll(Pattern.quote(" "), "\t");
-				split = s.split("\t");
-				if (split.length % 2 != 1) {
-					System.err.println("Error: " + split.length + " => " + s);
-				} else {
-					if (!result.containsKey(split[0])) {
-						result.put(split[0], new Polygon(split[0]));
-					}
-					// data is stored as long, lat
-					for (int i = 1; i < split.length; i = i + 2) {
-						result.get(split[0]).add(new Point("", Arrays.asList(
-								new Double[] { Double.parseDouble(split[i + 1]), Double.parseDouble(split[i]) })));
-					}
-				}
-				if (result.keySet().size() == numberOfEntries) {
-					break;
-				}
-				s = buf.readLine();
-				buf.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+	long startTime = System.currentTimeMillis();
+	Map<String, Polygon> result = new HashMap<String, Polygon>();
+	String s, split[];
+	try {
+	    BufferedReader buf = new BufferedReader(new FileReader(file));
+	    s = buf.readLine();
+	    while (s != null) {
+		while (s.contains("  ")) {
+		    s = s.replaceAll(Pattern.quote("  "), " ");
 		}
-		
-		Set<Polygon> r = new HashSet<Polygon>();
-		if (keepPolygons) {
-			for (Polygon p : result.values()) {
-				r.add(p);
-			}
-			logger.info("Read " + r.size() + " polygons done in " + (System.currentTimeMillis() - startTime) + "ms.");
-			return r;
+		s = s.replaceAll(Pattern.quote(" "), "\t");
+		split = s.split("\t");
+		if (split.length % 2 != 1) {
+		    System.err.println("Error: " + split.length + " => " + s);
 		} else {
-			logger.info(
-					"Read " + result.size() + " polygons done in " + (System.currentTimeMillis() - startTime) + "ms.");
-			return new HashSet<Polygon>(result.values());
+		    if (!result.containsKey(split[0])) {
+			result.put(split[0], new Polygon(split[0]));
+		    }
+		    // data is stored as long, lat
+		    for (int i = 1; i < split.length; i = i + 2) {
+			result.get(split[0]).add(new Point("", Arrays.asList(
+				new Double[] { Double.parseDouble(split[i + 1]), Double.parseDouble(split[i]) })));
+		    }
 		}
+		if (result.keySet().size() == numberOfEntries) {
+		    break;
+		}
+		s = buf.readLine();
+		buf.close();
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
 	}
 
-    public static void main(String args[]) {
-	Set<Polygon> result = readPolygons("resources/nuts/nuts_geometry.csv");
-	for (Polygon p : result) {
-	    System.out.println(p.uri + "\t" + p.points.size());
+	Set<Polygon> r = new HashSet<Polygon>();
+	if (keepPolygons) {
+	    for (Polygon p : result.values()) {
+		r.add(p);
+	    }
+	    logger.info("Read " + r.size() + " polygons done in " + (System.currentTimeMillis() - startTime) + "ms.");
+	    return r;
+	} else {
+	    logger.info(
+		    "Read " + result.size() + " polygons done in " + (System.currentTimeMillis() - startTime) + "ms.");
+	    return new HashSet<Polygon>(result.values());
 	}
-
     }
+
 }

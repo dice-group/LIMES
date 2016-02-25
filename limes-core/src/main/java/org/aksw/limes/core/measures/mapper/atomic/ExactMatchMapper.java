@@ -26,8 +26,6 @@ public class ExactMatchMapper extends Mapper {
     public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression, double threshold) {
 
         logger.info("Starting ExactMatchMapper");
-        //System.out.println(source.getInstance(source.getAllUris().get(0)));
-        //System.out.println(target.getInstance(target.getAllUris().get(0)));
         String property1 = null, property2 = null;
         //get property labels
         Parser p = new Parser(expression, threshold);
@@ -69,13 +67,7 @@ public class ExactMatchMapper extends Mapper {
             System.exit(1);
         }
 
-//        String info ="";
-//        info = info+"\nWill carry out mapping using the following parameter:\n";
-//        info = info+"Expression <"+expression+">\n";
-//        info = info+"Source property <"+property1+">\n";
-//        info = info+"Target property <"+property2+">\n";
-//        info = info+"Threshold <"+threshold+">\n";
-//        logger.info(info);
+
 
         if (!p.isAtomic()) {
             logger.fatal("Mappers can only deal with atomic expression");
