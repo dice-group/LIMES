@@ -22,8 +22,8 @@ public class ExecutionPlannerFactory {
 	    return new CanonicalPlanner();
 	if (name.equalsIgnoreCase(HELIOS))
 	    return new HeliosPlanner(target, target);
-	if (name.equalsIgnoreCase(DYNAMIC))
-	    return new DynamicPlanner(source, target);
+	//if (name.equalsIgnoreCase(DYNAMIC))
+	//   return new DynamicPlanner(source, target);
 
 	logger.error("Sorry, " + name + " is not yet implemented. Exit with error ...");
 	System.exit(1);

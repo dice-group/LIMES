@@ -10,6 +10,7 @@ import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
+import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.junit.After;
 import org.junit.Before;
@@ -127,12 +128,12 @@ public class HeliosPlannerTest {
 
 	assertTrue(plan.equals(plan2) == false);
     }
-
+    @Test
     public void ComplexPlanExtendedLS() {
 	System.out.println("ComplexPlanExtendedLS");
 
 	HeliosPlanner p = new HeliosPlanner(source, target);
-	LinkSpecification ls = new LinkSpecification(
+	ExtendedLinkSpecification ls = new ExtendedLinkSpecification(
 		"OR(jaccard(x.title,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728,XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728,trigrams(x.title,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.description,y.description)|0.7728)|0.5807)",
 		0.8);
 	NestedPlan plan = p.plan(ls);

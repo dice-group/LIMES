@@ -16,10 +16,10 @@ public class ExtendedLinkSpecification extends LinkSpecification {
 	setChildren(null);
 	parent = null;
 	setDependencies(null);
-	readSpec(measure, threshold);
+	this.readSpec(measure, threshold);
     }
 
-    @Override
+    //@Override
     /**
      * Reads a spec expression into its canonical form Don't forget to optimize
      * the filters by checking (if threshold_left and threshold_right >= theta,
@@ -39,8 +39,8 @@ public class ExtendedLinkSpecification extends LinkSpecification {
 	    fullExpression = spec;
 
 	} else {
-	    LinkSpecification leftSpec = new LinkSpecification();
-	    LinkSpecification rightSpec = new LinkSpecification();
+	    ExtendedLinkSpecification leftSpec = new ExtendedLinkSpecification();
+	    ExtendedLinkSpecification rightSpec = new ExtendedLinkSpecification();
 	    leftSpec.parent = this;
 	    rightSpec.parent = this;
 	    setChildren(new ArrayList<LinkSpecification>());
@@ -87,8 +87,8 @@ public class ExtendedLinkSpecification extends LinkSpecification {
 			+ theta + ")", theta);
 		filterExpression = null;
 		setThreshold(theta);
-		fullExpression = "MINUS(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
-			+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
+		fullExpression = "MINUS(" + leftSpec.fullExpression + "|" + theta + ","
+			+ rightSpec.fullExpression + "|" + theta + ")";
 	    } else if (p.getOperator().equalsIgnoreCase(MINUS)) {
 		setOperator(Operator.MINUS);
 		leftSpec.readSpec(p.getTerm1(), p.getThreshold1());

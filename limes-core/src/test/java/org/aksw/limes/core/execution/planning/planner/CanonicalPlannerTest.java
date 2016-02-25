@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
+import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.junit.Test;
 
@@ -63,14 +64,16 @@ public class CanonicalPlannerTest {
 	// atomic plans have filteringinstructions
 	assertTrue(plan.getFilteringInstruction() != null);
     }
-
+    @Test
     public void ComplexPlanExtendedLS() {
 	System.out.println("ComplexPlanExtendedLS");
 
 	CanonicalPlanner p = new CanonicalPlanner();
-	LinkSpecification ls = new LinkSpecification(
+	ExtendedLinkSpecification ls = new ExtendedLinkSpecification(
 		"OR(jaccard(x.title,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728,XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728,trigrams(x.title,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.description,y.description)|0.7728)|0.5807)",
 		0.8);
+	
+	System.out.println(ls.getFullExpression());
 	NestedPlan plan = p.plan(ls);
 	assertTrue(plan.isEmpty() == false);
 	assertTrue(plan.isAtomic() == false);

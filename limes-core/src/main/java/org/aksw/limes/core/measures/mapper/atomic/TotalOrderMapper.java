@@ -10,7 +10,6 @@ import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
 
 import org.aksw.limes.core.measures.mapper.Mapper;
-
 import org.aksw.limes.core.measures.measure.metricfactory.SimpleMetricFactory;
 
 import java.util.ArrayList;
