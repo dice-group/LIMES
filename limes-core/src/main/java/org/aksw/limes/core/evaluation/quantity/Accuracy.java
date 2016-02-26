@@ -1,4 +1,4 @@
-package org.aksw.limes.core.evaluation.quality;
+package org.aksw.limes.core.evaluation.quantity;
 
 import org.aksw.limes.core.io.mapping.Mapping;
 
@@ -9,7 +9,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @version 2015-11-03
  */
-public class Accuracy extends PRF implements QualitativeMeasure {
+public class Accuracy extends PRF implements QuantitativeMeasure {
 
 	@Override
 	public double calculate(Mapping predictions, Mapping goldStandard) {

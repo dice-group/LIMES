@@ -1,9 +1,6 @@
-package org.aksw.limes.core.evaluation.quality;
-
-import java.util.Set;
+package org.aksw.limes.core.evaluation.quantity;
 
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.model.Link;
 
 /**
  * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
@@ -11,14 +8,14 @@ import org.aksw.limes.core.model.Link;
  * @version 2015-11-03
  *
  */
-public class Recall extends PRF implements QualitativeMeasure {
+public class Precision extends PRF implements QuantitativeMeasure {
 
 	@Override
 	public double calculate(Mapping predictions, Mapping goldStandard) {
-		if(predictions.size()==0)
+		if (predictions.size() == 0)
 			return 0;
-		return trueFalsePositive(predictions, goldStandard, true)/(double)goldStandard.size();
-
+		return trueFalsePositive(predictions, goldStandard, true)
+				/ (double) predictions.size();
 	}
 
 }

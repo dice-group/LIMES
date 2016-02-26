@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.aksw.limes.core.evaluation.MeasureType;
-import org.aksw.limes.core.evaluation.quality.QualitativeMeasuresEvaluator;
-import org.aksw.limes.core.evaluation.quantity.QuantitativeMeasure;
+import org.aksw.limes.core.evaluation.quality.QualitativeMeasure;
+import org.aksw.limes.core.evaluation.quantity.QuantitativeMeasuresEvaluator;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
@@ -23,9 +23,9 @@ import com.google.common.collect.Table;
  */
 public class Evaluator {
 
-	private QualitativeMeasuresEvaluator eval = new QualitativeMeasuresEvaluator();
+	private QuantitativeMeasuresEvaluator eval = new QuantitativeMeasuresEvaluator();
 	
-	public Table<String,String,Map<MeasureType, Double>> evaluate(Set<MLAlgorithm> algorithms, Set<DataSetsPair> datasets, Set<MeasureType> QlMeasures, Set<QuantitativeMeasure> QnMeasures)
+	public Table<String,String,Map<MeasureType, Double>> evaluate(Set<MLAlgorithm> algorithms, Set<DataSetsPair> datasets, Set<MeasureType> QlMeasures, Set<QualitativeMeasure> QnMeasures)
 	{
 		Table<String,String,Map<MeasureType, Double>> overallEvaluations = HashBasedTable.create();// multimap stores aglortihmName:datasetname:List of evaluations
 		
@@ -62,7 +62,7 @@ public class Evaluator {
 	 * @return
 	 */
 	public Table<String, String, Map<MeasureType, Double>> crossValidate(MLAlgorithm algorithm, Set<DataSetsPair> datasets, 
-			int folds, Set<MeasureType> qlMeasures, Set<QuantitativeMeasure> qnMeasures) {
+			int folds, Set<MeasureType> qlMeasures, Set<QualitativeMeasure> qnMeasures) {
 		
 		Table<String, String, Map<MeasureType, Double>> evalTable = HashBasedTable.create();// multimap stores aglortihmName:datasetname:List of evaluations
 		

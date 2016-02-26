@@ -1,4 +1,4 @@
-package org.aksw.limes.core.evaluation.quality;
+package org.aksw.limes.core.evaluation.quantity;
 
 import java.util.HashSet;
 import java.util.List;

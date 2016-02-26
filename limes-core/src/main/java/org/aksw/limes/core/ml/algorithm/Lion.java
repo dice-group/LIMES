@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.aksw.limes.core.evaluation.quality.PseudoFMeasure;
+import org.aksw.limes.core.evaluation.quantity.PseudoFMeasure;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
@@ -28,7 +28,6 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
-
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.algorithm.lion.DefaultRefinementHeuristic;
 import org.aksw.limes.core.ml.algorithm.lion.RefinementHeuristic;
@@ -38,7 +37,6 @@ import org.aksw.limes.core.ml.algorithm.lion.operator.UpwardLengthLimitRefinemen
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.aksw.limes.core.ml.setting.LearningSetting.TerminationCriteria;
 import org.aksw.limes.core.ml.setting.UnsupervisedLearningSetting;
-
 import org.apache.log4j.Logger;
 import org.jgap.InvalidConfigurationException;
 

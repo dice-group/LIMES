@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.aksw.limes.core.evaluation.quality;
+package org.aksw.limes.core.evaluation.quantity;
 
 import java.util.Set;
 
@@ -13,7 +13,7 @@ import org.aksw.limes.core.model.Link;
  * @author mofeed
  * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
  */
-public abstract class PRF implements QualitativeMeasure{
+public abstract class PRF implements QuantitativeMeasure{
 	public abstract double calculate(Mapping predictions, Mapping goldStandard);
 	
 	/**

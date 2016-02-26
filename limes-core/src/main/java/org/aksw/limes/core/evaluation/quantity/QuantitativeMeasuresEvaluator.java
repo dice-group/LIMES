@@ -1,4 +1,4 @@
-package org.aksw.limes.core.evaluation.quality;
+package org.aksw.limes.core.evaluation.quantity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +12,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @author mofeed
  *
  */
-public class QualitativeMeasuresEvaluator {
+public class QuantitativeMeasuresEvaluator {
 	
 	Map<MeasureType,Double> evaluations = new HashMap<MeasureType,Double>();
 	

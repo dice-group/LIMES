@@ -1,6 +1,7 @@
 package org.aksw.limes.core.evaluation.quality;
 
-import org.aksw.limes.core.io.mapping.Mapping;
+import java.util.List;
+
 
 /**
  * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
@@ -9,7 +10,9 @@ import org.aksw.limes.core.io.mapping.Mapping;
  *
  */
 public interface QualitativeMeasure {
-	
-	public double calculate(Mapping predictions, Mapping goldStandard);
-
+	RunRecord getRun(long runId);
+	void addRun(RunRecord record);
+	List<RunRecord> getRuns();
+	void setRun(long runId, RunRecord record);
+	double getRunInfo(long runId, String Info);
 }

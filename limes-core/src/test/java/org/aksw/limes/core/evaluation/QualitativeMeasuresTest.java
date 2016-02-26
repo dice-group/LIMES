@@ -15,10 +15,10 @@ import org.junit.Test;
 
 import com.google.common.collect.Multimap;
 
-import org.aksw.limes.core.evaluation.quality.QualitativeMeasuresEvaluator;
-import org.aksw.limes.core.evaluation.quality.FMeasure;
-import org.aksw.limes.core.evaluation.quality.Precision;
-import org.aksw.limes.core.evaluation.quality.Recall;
+import org.aksw.limes.core.evaluation.quantity.FMeasure;
+import org.aksw.limes.core.evaluation.quantity.Precision;
+import org.aksw.limes.core.evaluation.quantity.QuantitativeMeasuresEvaluator;
+import org.aksw.limes.core.evaluation.quantity.Recall;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 
@@ -69,7 +69,7 @@ public class QualitativeMeasuresTest {
 	}
 	private Map<MeasureType,Double> testEvaluate(Mapping predictions,Mapping goldStandard,List<String> sourceUris,List<String> targetUris,Set<MeasureType> evaluationMeasure)
 	{
-		return new QualitativeMeasuresEvaluator().evaluate(predictions, goldStandard, sourceUris, targetUris, evaluationMeasure);
+		return new QuantitativeMeasuresEvaluator().evaluate(predictions, goldStandard, sourceUris, targetUris, evaluationMeasure);
 	}
 	private Mapping initGoldStandardList()
 	{
