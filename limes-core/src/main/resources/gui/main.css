@@ -1,0 +1,21 @@
+/* 
+    Document   : main
+*/
+
+.root{
+    -fx-font-size: 12pt;
+    -fx-font-family: "Roboto";
+    -fx-base: rgb(52, 138, 47);
+    -fx-background: rgb(235, 235, 235);
+    -fx-focus-color: rgb(104, 155, 153);
+    -fx-accent:rgb(104, 155, 153);
+}
+
+.menu-bar{
+	-fx-background-color: linear-gradient(to top, -fx-base, derive(-fx-base,30%)); 
+
+	} 
+#limesgraphic:hover{
+    -fx-background: rgba(255, 255, 255, 0.0);
+    }
+                        
