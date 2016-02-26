@@ -1,7 +1,6 @@
 package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.ml.LinksetMap;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 
 /**

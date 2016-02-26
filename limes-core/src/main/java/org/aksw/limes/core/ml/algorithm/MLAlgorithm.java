@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
  *
  */
 public abstract class MLAlgorithm implements IMLAlgorithm {
+	
 	protected Configuration configuration;
 	protected Cache sourceCache;
 	protected Cache targetCache;

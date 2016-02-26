@@ -1,9 +1,6 @@
 package org.aksw.limes.core.evaluation.quality;
 
-import java.util.Set;
-
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.model.Link;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>

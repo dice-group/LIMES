@@ -1,7 +1,5 @@
-/**
- * 
- */
 package org.aksw.limes.core.evaluation.quality;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,14 +7,11 @@ import java.util.Set;
 
 import org.aksw.limes.core.evaluation.MeasureType;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.cache.*;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+
 /**
  * @author mofeed
  *
  */
-
 public class QualitativeMeasuresEvaluator {
 	
 	Map<MeasureType,Double> evaluations = new HashMap<MeasureType,Double>();
@@ -89,6 +84,7 @@ public class QualitativeMeasuresEvaluator {
 		double auc = new AUC().calculate(predictions, goldStandard);
 		evaluations.put(MeasureType.auc, auc);
 	}
+	@SuppressWarnings("unused")
 	private void evaluateAll(Mapping predictions, Mapping goldStandard,List<String> sourceUris, List<String> targetUris)
 	{
 		evaluatePrecision(predictions,goldStandard);
