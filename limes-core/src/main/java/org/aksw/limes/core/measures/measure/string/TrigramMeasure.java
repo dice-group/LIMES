@@ -91,28 +91,12 @@ public class TrigramMeasure extends StringMeasure {
         return (int) Math.ceil((float) (threshold / 2 * (xTokensNumber + yTokensNumber)));
     }
 
-    public static void main(String args[])
-    {
-        MemoryCache source = new MemoryCache();
-        MemoryCache target = new MemoryCache();
-        source.addTriple("S1", "pub", "Perth Airport");
-        source.addTriple("S1", "conf", "conf1");
-        source.addTriple("S2", "pub", "test2");
-        source.addTriple("S2", "conf", "conf2");
-
-        target.addTriple("S1", "pub", "Perth International Airport");
-        target.addTriple("S1", "conf", "conf1");
-        target.addTriple("S3", "pub", "test3");
-        target.addTriple("S3", "conf", "conf3");
-
-        System.out.println(new TrigramMeasure().getSimilarity(source.getInstance("S1"), target.getInstance("S3"), "pub", "pub"));
-    }
-
+    
     public boolean computableViaOverlap() {
         return true;
     }
 
     public double getRuntimeApproximation(double mappingSize) {
-        return mappingSize/10000d;
+	return mappingSize / 1000d;
     }
 }

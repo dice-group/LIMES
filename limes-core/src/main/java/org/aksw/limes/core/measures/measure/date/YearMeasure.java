@@ -20,5 +20,9 @@ public class YearMeasure extends DayMeasure {
 	    return (3650d - dayDifference) / 3650d;
 	}
     }
+    
+    public double getRuntimeApproximation(double mappingSize) {
+	return mappingSize / 1000d;
+    }
 
 }

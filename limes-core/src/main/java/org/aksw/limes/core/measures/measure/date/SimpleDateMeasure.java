@@ -132,7 +132,7 @@ public class SimpleDateMeasure extends DateMeasure implements IDateMeasure, ISpa
 
     @Override
     public double getRuntimeApproximation(double mappingSize) {
-	return mappingSize / 1000;
+	return mappingSize / 1000d;
     }
 
     @Override
@@ -258,5 +258,6 @@ public class SimpleDateMeasure extends DateMeasure implements IDateMeasure, ISpa
 	logger.debug("calling getThreshold(" + dimension + ", " + simThreshold + ")");
 	return simThreshold;
     }
+   
 
 }

@@ -22,4 +22,8 @@ public class SymmetricHausdorff extends NaiveHausdorff {
     public String getName() {
 	return "symmetricHausdorff";
     }
+    
+    public double getRuntimeApproximation(double mappingSize) {
+	return mappingSize / 1000d;
+    }
 }

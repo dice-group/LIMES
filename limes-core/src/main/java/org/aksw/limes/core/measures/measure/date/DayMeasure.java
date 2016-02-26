@@ -23,5 +23,8 @@ public class DayMeasure extends SimpleDateMeasure {
 	    return (365d - dayDifference) / 365d;
 	}
     }
+    public double getRuntimeApproximation(double mappingSize) {
+	return mappingSize / 1000d;
+    }
 
 }

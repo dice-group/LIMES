@@ -161,8 +161,7 @@ public class NaiveHausdorff extends PointsetsMeasure {
     }
 
     public double getRuntimeApproximation(double mappingSize) {
-	// need to do this
-	return 0.00001 * mappingSize;// mappingSize;
+	return mappingSize / 1000d;
     }
 
 }

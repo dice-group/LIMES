@@ -91,7 +91,7 @@ public class SimpleExecutionEngineTest {
     public void bufferTest() {
 	System.out.println("bufferTest");
 	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
-	Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.9", -1, -1, 0);
+	Instruction run1 = new Instruction(Command.RUN, "monge(x.surname, y.surname)", "0.9", -1, -1, 0);
 	Instruction run2 = new Instruction(Command.RUN, "trigrams(x.name, y.name)", "0.4", -1, -1, 1);
 	Instruction union = new Instruction(Command.UNION, "", "0.4", 0, 1, 15);
 

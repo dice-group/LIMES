@@ -125,7 +125,7 @@ public class Jaro extends StringMeasure {
     }
 
     public double getRuntimeApproximation(double mappingSize) {
-	throw new UnsupportedOperationException("Not supported yet.");
+	return mappingSize / 1000d;
     }
 
     @Override

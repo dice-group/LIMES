@@ -81,6 +81,6 @@ public class GeoDistance extends SpaceMeasure {
     }
 
     public double getRuntimeApproximation(double mappingSize) {
-        throw new UnsupportedOperationException("Not supported yet.");
+	return mappingSize / 1000d;
     }
 }
