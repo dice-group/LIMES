@@ -72,8 +72,8 @@ public class Config extends Configuration {
 		this.targetInfo = new KBInfo();
 		this.targetInfo.setVar("?target");
 		metric = new Output();
-		this.sourceEndpoint = new Endpoint(new KBInfo());
-		this.targetEndpoint = new Endpoint(new KBInfo());
+		this.sourceEndpoint = new Endpoint(this.sourceInfo);
+		this.targetEndpoint = new Endpoint(this.targetInfo);
 		//System.out.println("cf: " + this.sourceEndpoint.toString());
 	}
 

@@ -199,6 +199,7 @@ public class ToolBox extends VBox {
 	 *            Config of current Limesquery
 	 */
 	public void showLoadedConfig(Config config) {
+		System.out.println("source: " + config.getSourceInfo().getProperties() + " target: " +  config.getTargetInfo().getProperties());
 		this.config = config;
 		setListViewFromList(toolBoxSourceProperties,
 				config.getSourceInfo().getProperties());
