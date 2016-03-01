@@ -54,7 +54,8 @@ public class MainController {
 			view.showLoadedConfig(true);
 			view.toolBox.showLoadedConfig(currentConfig);
 			view.graphBuild.graphBuildController.setConfig(currentConfig);
-			if (currentConfig.getMetricExpression() != null) {
+			if (! (currentConfig.getMetricExpression() == null || currentConfig.getMetricExpression().equals(""))) {
+				System.out.println("currentConfig.mexpression: " + currentConfig.getMetricExpression().length());
 				view.graphBuild.graphBuildController.generateGraphFromConfig();
 			}
 		}

@@ -77,6 +77,7 @@ public class GraphBuildController {
 	 */
 	public void generateGraphFromConfig() {
 		Output out = currentConfig.getMetric();
+		System.out.println("outchilds " + out.getChilds().size());
 		ArrayList<NodeView> newNodeList = new ArrayList<NodeView>();
 		NodeView outView = new NodeView(200, 200, NodeView.OUTPUT, out.id,
 				graphBuildView, out);
