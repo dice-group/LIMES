@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.measure.date;
 
-
 /**
  * Computes the similarity of two dates based upon years within a decade. Every
  * date within 365 has a similarity of 1. Whereas two dates more then 10 years
@@ -20,6 +19,10 @@ public class YearMeasure extends DayMeasure {
 	else {
 	    return (3650d - dayDifference) / 3650d;
 	}
+    }
+    
+    public double getRuntimeApproximation(double mappingSize) {
+	return mappingSize / 1000d;
     }
 
 }

@@ -1,7 +1,6 @@
 package org.aksw.limes.core.evaluation.quantity;
 
-import java.util.List;
-
+import org.aksw.limes.core.io.mapping.Mapping;
 
 /**
  * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
@@ -10,9 +9,7 @@ import java.util.List;
  *
  */
 public interface QuantitativeMeasure {
-	RunRecord getRun(long runId);
-	void addRun(RunRecord record);
-	List<RunRecord> getRuns();
-	void setRun(long runId, RunRecord record);
-	double getRunInfo(long runId, String Info);
+	
+	public double calculate(Mapping predictions, Mapping goldStandard);
+
 }

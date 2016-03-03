@@ -147,7 +147,7 @@ public class EagleUnsupervised extends MLAlgorithm {
 	 * @throws InvalidConfigurationException
 	 */
 	private void setUp() throws InvalidConfigurationException {
-		LinkSpecGeneticLearnerConfig jgapConfig = new LinkSpecGeneticLearnerConfig(configuration.getSourceInfo(), configuration.getTargetInfo(), parameters.getPropMap());
+		LinkSpecGeneticLearnerConfig jgapConfig = new LinkSpecGeneticLearnerConfig(getConfiguration().getSourceInfo(), getConfiguration().getTargetInfo(), parameters.getPropMap());
 		
 		jgapConfig.setPopulationSize(parameters.getPopulation());
 		jgapConfig.setCrossoverProb(parameters.getCrossoverRate());
@@ -156,7 +156,7 @@ public class EagleUnsupervised extends MLAlgorithm {
 		jgapConfig.setReproductionProb(parameters.getReproductionRate());
 		jgapConfig.setPropertyMapping(parameters.getPropMap());
 
-		fitness = PseudoFMeasureFitnessFunction.getInstance(jgapConfig, parameters.getPseudoMeasure(), sourceCache, targetCache);
+		fitness = PseudoFMeasureFitnessFunction.getInstance(jgapConfig, parameters.getPseudoMeasure(), getSourceCache(), getTargetCache());
 //		fitness.setBeta(parameters.getBeta());
 		jgapConfig.setFitnessFunction(fitness);
 		

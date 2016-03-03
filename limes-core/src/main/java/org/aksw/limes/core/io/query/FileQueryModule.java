@@ -31,12 +31,11 @@ public class FileQueryModule implements IQueryModule {
 	 */
 	@SuppressWarnings("resource")
 	public FileQueryModule(KBInfo kbinfo) {
-		try
-		{
+		try{
 			InputStream in;
 			kb = kbinfo;
 			model = ModelFactory.createDefaultModel();
-			System.out.println("Trying to get reader "+kb.getType());
+			System.out.println("Trying to get reader " + kb.getType());
 			RDFReader r = model.getReader(kb.getType());
 
 			try{
@@ -50,13 +49,12 @@ public class FileQueryModule implements IQueryModule {
 			}       
 			InputStreamReader reader = new InputStreamReader(in, "UTF8");
 			r.read(model, reader, null);
-			logger.info("RDF model read from "+kb.getEndpoint()+" is of size "+model.size());
+			logger.info("RDF model read from "+ kb.getEndpoint() + " is of size " + model.size());
 			ModelRegistry.register(kb.getEndpoint(), model);
 			reader.close();
 			in.close();
-		} catch(Exception e)
-		{
-			logger.fatal("Error loading endpoint",e);
+		} catch(Exception e){
+			logger.fatal("Error loading endpoint", e);
 		} 		
 	}
 

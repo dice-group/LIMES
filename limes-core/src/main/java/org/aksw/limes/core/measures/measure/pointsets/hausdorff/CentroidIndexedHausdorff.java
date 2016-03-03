@@ -4,7 +4,6 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.hausdorff;
 
-
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
@@ -43,9 +42,7 @@ public class CentroidIndexedHausdorff extends IndexedHausdorff {
 	targetIndex.index(target);
 	sourceIndex.index(source);
 	ih.targetIndex = targetIndex;
-	// long end = System.currentTimeMillis();
-	// System.out.println("Indexing took " + (end - begin) + " ms and
-	// "+targetIndex.computations+" computations.");
+	
 	double d;
 	for (Polygon s : source) {
 	    for (Polygon t : target) {

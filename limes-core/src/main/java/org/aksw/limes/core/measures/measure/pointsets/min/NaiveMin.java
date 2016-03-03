@@ -53,7 +53,6 @@ public class NaiveMin extends PointsetsMeasure {
 		}
 	    }
 	}
-	// System.out.println("Min distance is: " + min);
 	return min;
     }
 
@@ -151,7 +150,7 @@ public class NaiveMin extends PointsetsMeasure {
     }
 
     public double getRuntimeApproximation(double mappingSize) {
-	throw new UnsupportedOperationException("Not supported yet.");
+	return mappingSize / 1000d;
     }
 
 }

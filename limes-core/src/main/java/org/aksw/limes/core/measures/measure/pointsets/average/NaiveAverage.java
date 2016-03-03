@@ -25,6 +25,14 @@ public class NaiveAverage extends PointsetsMeasure {
 
     public int computations;
 
+    public NaiveAverage() {
+	computations = 0;
+    }
+
+    public int getComputations() {
+	return computations;
+    }
+
     /**
      * Brute force approach to computing the MAX distance between two polygons
      *
@@ -34,14 +42,6 @@ public class NaiveAverage extends PointsetsMeasure {
      *            Second polygon
      * @return Distance between the two polygons
      */
-    public NaiveAverage() {
-	computations = 0;
-    }
-
-    public int getComputations() {
-	return computations;
-    }
-
     public double computeDistance(Polygon X, Polygon Y, double threshold) {
 	double sum = 0f;
 	for (Point x : X.points) {
@@ -137,7 +137,7 @@ public class NaiveAverage extends PointsetsMeasure {
     }
 
     public double getRuntimeApproximation(double mappingSize) {
-	throw new UnsupportedOperationException("Not supported yet.");
+	return mappingSize / 1000d;
     }
 
 }

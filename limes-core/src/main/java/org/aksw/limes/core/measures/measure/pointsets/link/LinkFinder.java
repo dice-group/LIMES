@@ -87,10 +87,5 @@ public class LinkFinder {
 	throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public static void test() {
-    }
-
-    public static void main(String args[]) {
-	test();
-    }
+   
 }

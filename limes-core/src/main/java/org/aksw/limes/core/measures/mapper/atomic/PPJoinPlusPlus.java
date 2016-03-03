@@ -123,20 +123,22 @@ public class PPJoinPlusPlus extends Mapper {
     }
 
     /**
-     * Startet den PPJoin+ Algorithmus.
+     * Computes a mapping between a source and a target.
      *
-     * @param simFunct
-     *            Ähnlichkeitsfunktion ('j' für Jaccard, 'c' für Cosine, 't' für
-     *            Trigram)
+     * @param source
+     *            Source cache
+     * @param target
+     *            Target cache
+     * @param sourceVar
+     *            Variable for the source dataset
+     * @param targetVar
+     *            Variable for the target dataset
+     * @param expression
+     *            Expression to process.
      * @param threshold
-     *            Schwellwert aus dem Bereich [0,1]
-     * @param maxDepth
-     *            maximale Rekursionstiefe für die Suffix-Filterung (optimal 2)
-     * @param objects
-     *            Array mit den zu untersuchenden Datensätzen
-     * @return eine Liste der ähnlichen Objekte in der Form von ID-Paaren mit
-     *         dem berechneten Ähnlichkeitswert (ID entspricht der Stelle im
-     *         Array <i>objects</i>)
+     *            Similarity threshold
+     * @return A mapping which contains links between the source instances and
+     *         the target instances
      */
     public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
 	    double threshold) {

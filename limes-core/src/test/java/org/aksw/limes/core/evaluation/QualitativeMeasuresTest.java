@@ -6,17 +6,19 @@ package org.aksw.limes.core.evaluation;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 
 import com.google.common.collect.Multimap;
 
-import org.aksw.limes.core.evaluation.quality.Evaluate;
-import org.aksw.limes.core.evaluation.quality.FMeasure;
-import org.aksw.limes.core.evaluation.quality.Precision;
-import org.aksw.limes.core.evaluation.quality.Recall;
+import org.aksw.limes.core.evaluation.quantity.FMeasure;
+import org.aksw.limes.core.evaluation.quantity.Precision;
+import org.aksw.limes.core.evaluation.quantity.QuantitativeMeasuresEvaluator;
+import org.aksw.limes.core.evaluation.quantity.Recall;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 
@@ -37,35 +39,37 @@ public class QualitativeMeasuresTest {
 		Mapping predictions = initPredictionsList();
 		List<String> dataSet =initDataSet();
 		
-		Map<EvalFunc,Double> calculations = testEvaluate(predictions,goldStandard,dataSet,dataSet,EvalFunc.all);
+		Set<MeasureType> measure = initEvalMeasures();
+		measure.add(MeasureType.precision);
+		Map<MeasureType,Double> calculations = testEvaluate(predictions,goldStandard,dataSet,dataSet,measure);
 		
-		double precision = calculations.get(EvalFunc.precision);
+		double precision = calculations.get(MeasureType.precision);
 		assertTrue(precision == 0.7);
 		
-		double recall = calculations.get(EvalFunc.recall);
+		double recall = calculations.get(MeasureType.recall);
 		assertTrue(recall == 0.7);
 		
-		double fmeasure = calculations.get(EvalFunc.fmeasure);
+		double fmeasure = calculations.get(MeasureType.fmeasure);
 		assertTrue(fmeasure == 0.7);
 		
-		double accuracy = calculations.get(EvalFunc.accuracy);
+		double accuracy = calculations.get(MeasureType.accuracy);
 		assertTrue(accuracy == 4.85);
 		
-		double pprecision = calculations.get(EvalFunc.pseuPrecision);
+		double pprecision = calculations.get(MeasureType.pseuPrecision);
 		assertTrue(pprecision == 0.8);
 		
-		double precall = calculations.get(EvalFunc.PseuRecall);
+		double precall = calculations.get(MeasureType.PseuRecall);
 		assertTrue(precall == 0.8);
 		
 		
-		double pfmeasure = calculations.get(EvalFunc.pseuFMeasure);
+		double pfmeasure = calculations.get(MeasureType.pseuFMeasure);
 		assertTrue(pfmeasure > 0.7 && pfmeasure < 0.9);
 
 
 	}
-	private Map<EvalFunc,Double> testEvaluate(Mapping predictions,Mapping goldStandard,List<String> sourceUris,List<String> targetUris,EvalFunc evaluationFunc)
+	private Map<MeasureType,Double> testEvaluate(Mapping predictions,Mapping goldStandard,List<String> sourceUris,List<String> targetUris,Set<MeasureType> evaluationMeasure)
 	{
-		return new Evaluate().evaluate(predictions, goldStandard, sourceUris, targetUris, evaluationFunc);
+		return new QuantitativeMeasuresEvaluator().evaluate(predictions, goldStandard, sourceUris, targetUris, evaluationMeasure);
 	}
 	private Mapping initGoldStandardList()
 	{
@@ -116,6 +120,22 @@ public class QualitativeMeasuresTest {
 		dataSet.add("http://dbpedia.org/resource/I");
 		dataSet.add("http://dbpedia.org/resource/I");
 		return dataSet;
+
+	}
+	private Set<MeasureType> initEvalMeasures()
+	{
+		Set<MeasureType> measure = new HashSet<MeasureType>();
+
+		measure.add(MeasureType.precision);
+		measure.add(MeasureType.recall);
+		measure.add(MeasureType.fmeasure);
+		measure.add(MeasureType.accuracy);
+		measure.add(MeasureType.pseuPrecision);
+		measure.add(MeasureType.PseuRecall);
+		measure.add(MeasureType.pseuFMeasure);
+		
+		
+		return measure;
 
 	}
 

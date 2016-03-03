@@ -4,7 +4,6 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.hausdorff;
 
-
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
 
 /**
@@ -22,5 +21,9 @@ public class SymmetricHausdorff extends NaiveHausdorff {
     @Override
     public String getName() {
 	return "symmetricHausdorff";
+    }
+    
+    public double getRuntimeApproximation(double mappingSize) {
+	return mappingSize / 1000d;
     }
 }

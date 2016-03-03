@@ -128,7 +128,7 @@ public class Controller {
             NestedPlan plan = planner.plan(rwLs);
 
             // 5. Execution
-            ExecutionEngine engine = ExecutionEngineFactory.getEngine("Simple", sourceCache, targetCache,
+            ExecutionEngine engine = ExecutionEngineFactory.getEngine("Default", sourceCache, targetCache,
                     config.getSourceInfo().getVar(), config.getTargetInfo().getVar());
             assert engine != null;
             Mapping verificationMapping = engine.execute(plan);

@@ -104,6 +104,6 @@ public class QGramSimilarity extends StringMeasure {
     }
 
     public double getRuntimeApproximation(double mappingSize) {
-        return mappingSize/10000d;
+        return mappingSize/1000d;
     }
 }

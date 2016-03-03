@@ -40,9 +40,22 @@ public class JaroWinklerMapper extends Mapper {
     }
 
     /**
-     * match lists
-     * 
-     * @return Map of string alignments which were better than given threshold
+     * Computes a mapping between a source and a target.
+     *
+     * @param source
+     *            Source cache
+     * @param target
+     *            Target cache
+     * @param sourceVar
+     *            Variable for the source dataset
+     * @param targetVar
+     *            Variable for the target dataset
+     * @param expression
+     *            Expression to process.
+     * @param threshold
+     *            Similarity threshold
+     * @return A mapping which contains links between the source instances and
+     *         the target instances
      */
     @Override
     public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,

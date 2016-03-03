@@ -4,7 +4,6 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.hausdorff;
 
-
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
 

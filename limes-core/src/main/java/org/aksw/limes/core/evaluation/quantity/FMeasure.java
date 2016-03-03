@@ -1,16 +1,13 @@
-package org.aksw.limes.core.evaluation.quality;
-
-import java.util.Set;
+package org.aksw.limes.core.evaluation.quantity;
 
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.model.Link;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @version 2015-11-03
  *
  */
-public class FMeasure implements QualitativeMeasure {
+public class FMeasure implements QuantitativeMeasure {
 
 	@Override
 	public double calculate(Mapping predictions, Mapping goldStandard) {

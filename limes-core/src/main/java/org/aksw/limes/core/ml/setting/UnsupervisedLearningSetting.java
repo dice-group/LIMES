@@ -1,6 +1,6 @@
 package org.aksw.limes.core.ml.setting;
 
-import org.aksw.limes.core.evaluation.quality.PseudoFMeasure;
+import org.aksw.limes.core.evaluation.quantity.PseudoFMeasure;
 import org.aksw.limes.core.ml.algorithm.IMLAlgorithm;
 
 /**

@@ -1,4 +1,4 @@
-package org.aksw.limes.core.evaluation.quantity;
+package org.aksw.limes.core.evaluation.quality;
 
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.Map;
  * @author mofeed
  *
  */
-public class RunsData implements QuantitativeMeasure{
+public class RunsData implements QualitativeMeasure{
 
 	// list of recorded runs, each with its information like id,time,memory,.....
 	protected Map<Long, RunRecord> runs = new HashMap<Long, RunRecord>();

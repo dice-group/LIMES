@@ -138,7 +138,7 @@ public class NaiveFrechet extends PointsetsMeasure {
     }
 
     public double getRuntimeApproximation(double mappingSize) {
-	throw new UnsupportedOperationException("Not supported yet.");
+	return mappingSize / 1000d;
     }
 
 }
