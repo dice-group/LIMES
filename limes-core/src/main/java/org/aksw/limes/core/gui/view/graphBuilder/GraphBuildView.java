@@ -83,7 +83,7 @@ public class GraphBuildView extends Canvas {
 		widthProperty().addListener(evt -> draw());
 		heightProperty().addListener(evt -> draw());
 		this.nodeList = new ArrayList<NodeView>();
-		this.reversedNodeList = nodeList;
+		this.reversedNodeList = (ArrayList<NodeView>)nodeList.clone();
 		Collections.reverse(reversedNodeList);
 		this.nodeClicked = false;
 		this.isLinking = false;
@@ -99,7 +99,7 @@ public class GraphBuildView extends Canvas {
 		widthProperty().addListener(evt -> draw());
 		heightProperty().addListener(evt -> draw());
 		this.nodeList = new ArrayList<NodeView>();
-		this.reversedNodeList = nodeList;
+		this.reversedNodeList = (ArrayList<NodeView>)nodeList.clone();
 		Collections.reverse(reversedNodeList);
 		this.nodeClicked = false;
 		this.isLinking = false;
@@ -151,8 +151,8 @@ public class GraphBuildView extends Canvas {
 		this.addEventHandler(
 				MouseEvent.MOUSE_CLICKED,
 				e -> {
-					for (NodeView node : this.nodeList) {
-					}
+//					for (NodeView node : this.nodeList) {
+//					}
 					if (isLinking) {
 						for (NodeView node : nodeList) {
 							if (node.contains((int) e.getX(), (int) e.getY())) {
@@ -201,7 +201,7 @@ public class GraphBuildView extends Canvas {
 					clickedNode = reversedNodeList.get(index);
 					this.nodeList.remove(clickedNode);
 					this.nodeList.add(clickedNode);
-					this.reversedNodeList = this.nodeList;
+					this.reversedNodeList = (ArrayList<NodeView>)this.nodeList.clone();
 					break;
 				}
 				index++;
@@ -303,7 +303,7 @@ public class GraphBuildView extends Canvas {
 			NodeView nv = new NodeView(new_x, new_y, shape, "test", this, node);
 			nv.displayNode();
 			nodeList.add(nv);
-			this.reversedNodeList = nodeList;
+			this.reversedNodeList = (ArrayList<NodeView>)nodeList.clone();
 			Collections.reverse(reversedNodeList);
 		}
 	}

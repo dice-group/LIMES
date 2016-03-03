@@ -148,6 +148,8 @@ public class NodeView {
 		this.x = x;
 		this.y = y;
 	}
+	
+	
 
 	/**
 	 * Proof if Point is in the Node

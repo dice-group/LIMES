@@ -76,15 +76,18 @@ public class GraphBuildController {
 	 * Takes the Configuration and generates the Graph
 	 */
 	public void generateGraphFromConfig() {
+		graphBuildView.nodeList.clear();
+		graphBuildView.edited = true;
+		graphBuildView.draw();
 		Output out = currentConfig.getMetric();
-		System.out.println("outchilds " + out.getChilds().size());
 		ArrayList<NodeView> newNodeList = new ArrayList<NodeView>();
 		NodeView outView = new NodeView(200, 200, NodeView.OUTPUT, out.id,
 				graphBuildView, out);
 		newNodeList.add(outView);
 		graphBuildView.nodeList = drawChildRek(outView, outView.nodeData
 				.getChilds().get(0), newNodeList);
-
+		graphBuildView.reversedNodeList = (ArrayList<NodeView>) graphBuildView.nodeList.clone();
+		
 		layoutGraph();
 	}
 
