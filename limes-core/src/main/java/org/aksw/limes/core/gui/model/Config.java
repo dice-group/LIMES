@@ -23,7 +23,6 @@ import org.aksw.limes.core.execution.planning.planner.HeliosPlanner;
 import org.aksw.limes.core.gui.model.metric.MetricFormatException;
 import org.aksw.limes.core.gui.model.metric.MetricParser;
 import org.aksw.limes.core.gui.model.metric.Output;
-import org.aksw.limes.core.gui.util.ConfigWriter;
 import org.aksw.limes.core.gui.util.SourceOrTarget;
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.io.cache.Cache;
@@ -32,6 +31,8 @@ import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.IConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
+import org.aksw.limes.core.io.config.writer.RDFConfigurationWriter;
+import org.aksw.limes.core.io.config.writer.XMLConfigurationWriter;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
@@ -62,6 +63,11 @@ public class Config extends Configuration {
 	 * PorpertyMapping of current query
 	 */
 	public PropertyMapping propertyMapping;
+	
+	/**
+	 * Mapping of current MappingTask
+	 */
+	private Mapping mapping;
 
 	/**
 	 * Constructor
@@ -173,7 +179,15 @@ public class Config extends Configuration {
 		if (!metric.isComplete()) {
 			throw new MetricFormatException();
 		}
-		ConfigWriter.saveToXML(this, file);
+		String format = file.getName().substring(file.getName().lastIndexOf("."),file.getName().length());
+		if(format.equals(".xml")){
+			XMLConfigurationWriter xmlwriter = new XMLConfigurationWriter();
+			xmlwriter.write(this, file.getAbsolutePath());
+		}else{
+			RDFConfigurationWriter rdfwriter = new RDFConfigurationWriter();
+			rdfwriter.write(this, file.getAbsolutePath());
+		}
+		//ConfigWriter.saveToXML(this, file);
 	}
 
 	/**
@@ -248,7 +262,7 @@ public class Config extends Configuration {
 				SimpleExecutionEngine ee = new SimpleExecutionEngine(
 						sourceCache, targetCache, getSourceInfo().getVar(),
 						getTargetInfo().getVar());
-				Mapping mapping = ee.execute(plan);
+				mapping = ee.execute(plan);
 				mapping.getMap().forEach((sourceURI, map2) -> {
 					map2.forEach((targetURI, value) -> {
 						results.add(new Result(sourceURI, targetURI, value));
@@ -384,4 +398,13 @@ public class Config extends Configuration {
 		String prefixToAdd = parts[0];
 		info.getPrefixes().put(prefixToAdd, PrefixHelper.getURI(prefixToAdd));
 	}
+
+	public Mapping getMapping() {
+		return mapping;
+	}
+
+	public void setMapping(Mapping mapping) {
+		this.mapping = mapping;
+	}
+	
 }

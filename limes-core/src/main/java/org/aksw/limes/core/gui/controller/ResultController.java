@@ -1,19 +1,19 @@
 package org.aksw.limes.core.gui.controller;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.InstanceProperty;
 import org.aksw.limes.core.gui.model.Result;
 import org.aksw.limes.core.gui.view.ResultView;
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.writer.CSVMappingWriter;
+import org.aksw.limes.core.io.mapping.writer.RDFMappingWriter;
 
 /**
  * Controller for Resultview
@@ -93,38 +93,28 @@ public class ResultController {
 	 * @param file
 	 *            Path to File
 	 */
-	public void saveResults(ObservableList<Result> results, File file) {
-		try {
-			FileWriter fileWriter = new FileWriter(file);
-			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			// TODO set relation of thresholds to owl:sameAs, implement factory
-			// for .nt
-
-			HashMap<String, String> prefixes = this.currentConfig
-					.getPrefixes();
-			for (String name : prefixes.keySet()) {
-				String prefixToNT = "@prefix ";
-				prefixToNT += name.toString() + ": ";
-				prefixToNT += "<" + prefixes.get(name) + "> .";
-				bufferedWriter.write(prefixToNT);
-				bufferedWriter.newLine();
-			}
-
-			// For now relation between instances is hardcoded as owl:sameAs
-			bufferedWriter
-					.write("@prefix owl: <http://www.w3.org/2002/07/owl#> .");
-			bufferedWriter.newLine();
-
-			for (Result item : results) {
-				String nTriple = "<" + item.getSourceURI() + "> owl:sameAs <"
-						+ item.getTargetURI() + "> .";
-				bufferedWriter.write(nTriple);
-				bufferedWriter.newLine();
-			}
-
-			bufferedWriter.close();
-		} catch (IOException e1) {
-			e1.printStackTrace();
+	public void saveResults(Mapping mapping, File file) {
+		try{
+		String format = file.getName().substring(file.getName().lastIndexOf("."),file.getName().length());
+		if(format.equals(".csv")){
+			CSVMappingWriter csvwriter = new CSVMappingWriter();
+			csvwriter.write(mapping, file.getAbsolutePath());
+		}else{
+			RDFMappingWriter rdfwriter = new RDFMappingWriter();
+			rdfwriter.write(mapping, file.getAbsolutePath());
 		}
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
 	}
+
+	public Config getCurrentConfig() {
+		return currentConfig;
+	}
+
+	public void setCurrentConfig(Config currentConfig) {
+		this.currentConfig = currentConfig;
+	}
+	
 }

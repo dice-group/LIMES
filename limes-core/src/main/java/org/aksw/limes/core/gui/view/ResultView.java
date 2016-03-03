@@ -21,6 +21,7 @@ import org.aksw.limes.core.gui.controller.ResultController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.InstanceProperty;
 import org.aksw.limes.core.gui.model.Result;
+import org.aksw.limes.core.io.mapping.Mapping;
 
 /**
  * View to show the Results of the LIMES-query, and their Instances
@@ -60,6 +61,11 @@ public class ResultView {
 	 * MenuItem to save Results to File
 	 */
 	private MenuItem itemSaveResults;
+	
+	/**
+	 * Mapping of the results
+	 */
+	private Mapping mapping;
 
 	/**
 	 * Constructor
@@ -85,12 +91,13 @@ public class ResultView {
 		itemSaveResults
 				.setOnAction(e -> {
 					FileChooser fileChooser = new FileChooser();
-					FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
-							"N-Triples (*.nt)", "*.nt");
-					fileChooser.getExtensionFilters().add(extFilter);
+                    FileChooser.ExtensionFilter extFilterRDF = new FileChooser.ExtensionFilter("RDF File",".n3",".nt",".ttl",".rdf",".jsonld");
+                    FileChooser.ExtensionFilter extFilterCSV = new FileChooser.ExtensionFilter("CSV File", ".csv");
+                    fileChooser.getExtensionFilters().add(extFilterRDF);
+                    fileChooser.getExtensionFilters().add(extFilterCSV);
 					File file = fileChooser.showSaveDialog(stage);
 					if (file != null) {
-						controller.saveResults(results, file);
+						controller.saveResults(controller.getCurrentConfig().getMapping(), file);
 					}
 				});
 		menuFile.getItems().add(itemSaveResults);
@@ -227,4 +234,14 @@ public class ResultView {
 			ObservableList<InstanceProperty> instanceProperty) {
 		targetInstanceTable.setItems(instanceProperty);
 	}
+
+	public Mapping getMapping() {
+		return mapping;
+	}
+
+	public void setMapping(Mapping mapping) {
+		this.mapping = mapping;
+	}
+	
+	
 }
