@@ -11,13 +11,11 @@ import javafx.scene.control.Alert.AlertType;
 
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Result;
-import org.aksw.limes.core.gui.view.ActiveLearningView;
 import org.aksw.limes.core.gui.view.EditClassMatchingView;
 import org.aksw.limes.core.gui.view.EditEndpointsView;
 import org.aksw.limes.core.gui.view.EditPropertyMatchingView;
 import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.gui.view.ResultView;
-import org.aksw.limes.core.gui.view.SelfConfigurationView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.WizardView;
 
@@ -191,22 +189,22 @@ public class MainController {
 		return true;
 	}
 
-	/**
-	 * Show SelfConfig Window
-	 */
-	public void showSelfConfig() {
-		SelfConfigurationView selfConfigView = new SelfConfigurationView(view);
-		selfConfigView.controller.setCurrentConfig(currentConfig);
-	}
-
-	/**
-	 * Show the Active Learning Window
-	 */
-	public void showActiveLearning() {
-		if (currentConfig == null)
-			return;
-		new ActiveLearningView(view, currentConfig);
-	}
+//	/**
+//	 * Show SelfConfig Window
+//	 */
+//	public void showSelfConfig() {
+//		SelfConfigurationView selfConfigView = new SelfConfigurationView(view);
+//		selfConfigView.controller.setCurrentConfig(currentConfig);
+//	}
+//
+//	/**
+//	 * Show the Active Learning Window
+//	 */
+//	public void showActiveLearning() {
+//		if (currentConfig == null)
+//			return;
+//		new ActiveLearningView(view, currentConfig);
+//	}
 
 	/**
 	 * returns the currentConfig

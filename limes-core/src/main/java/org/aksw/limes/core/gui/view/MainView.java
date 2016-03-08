@@ -46,10 +46,10 @@ public class MainView {
 	 */
 	private Button runButton;
 
-	/**
-	 * MenuItem to start the SelfConfiguration Dialog
-	 */
-	private MenuItem itemSelfConfiguration;
+//	/**
+//	 * MenuItem to start the SelfConfiguration Dialog
+//	 */
+//	private MenuItem itemSelfConfiguration;
 
 	/**
 	 * Toolbox of the MainView adds Nodes to Graph
@@ -61,10 +61,10 @@ public class MainView {
 	 */
 	public GraphBuildView graphBuild;
 
-	/**
-	 * MenuItem to start the Active Learning Dialog
-	 */
-	private MenuItem itemActiveLearning;
+//	/**
+//	 * MenuItem to start the Active Learning Dialog
+//	 */
+//	private MenuItem itemActiveLearning;
 
 	/**
 	 * Constructor
@@ -182,16 +182,22 @@ public class MainView {
 
 		Menu menuLearn = new Menu("Learn");
 
-		itemSelfConfiguration = new MenuItem("Self Configuration");
-		itemSelfConfiguration.setOnAction(e -> {
-			controller.showSelfConfig();
+//		itemSelfConfiguration = new MenuItem("Self Configuration");
+//		itemSelfConfiguration.setOnAction(e -> {
+//			controller.showSelfConfig();
+//		});
+//		itemActiveLearning = new MenuItem("Active Learning");
+//		itemActiveLearning.setOnAction(e -> {
+//			controller.showActiveLearning();
+//		});
+//		menuLearn.getItems().add(itemActiveLearning);
+//		menuLearn.getItems().add(itemSelfConfiguration);
+		MenuItem machineLearning = new MenuItem("Machine Learning");
+		machineLearning.setOnAction(e -> {
+			System.out.println("err");
+			showErrorDialog("An Error occured", "Machine Learning is not implemented yet!");
 		});
-		itemActiveLearning = new MenuItem("Active Learning");
-		itemActiveLearning.setOnAction(e -> {
-			controller.showActiveLearning();
-		});
-		menuLearn.getItems().add(itemActiveLearning);
-		menuLearn.getItems().add(itemSelfConfiguration);
+		menuLearn.getItems().add(machineLearning);
 		return new MenuBar(menuFile, menuLayout, menuLearn);
 	}
 
@@ -204,8 +210,8 @@ public class MainView {
 	public void showLoadedConfig(boolean isLoaded) {
 		itemSave.setDisable(!isLoaded);
 		runButton.setDisable(!isLoaded);
-		itemSelfConfiguration.setDisable(!isLoaded);
-		itemActiveLearning.setDisable(!isLoaded);
+//		itemSelfConfiguration.setDisable(!isLoaded);
+//		itemActiveLearning.setDisable(!isLoaded);
 	}
 
 	/**
