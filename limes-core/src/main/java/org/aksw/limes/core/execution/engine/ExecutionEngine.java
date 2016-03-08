@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 /**
  * Implements the execution engine abstract class. The idea is that the engine
  * gets a series of instructions in the form of an execution plan and runs these
- * instructions and returns a mapping.
+ * instructions and returns a mapping
  *
  * @author ngonga
  * @author kleanthi
