@@ -189,6 +189,7 @@ public class MainController {
 		return true;
 	}
 
+	//TODO
 //	/**
 //	 * Show SelfConfig Window
 //	 */

@@ -46,10 +46,15 @@ public class MainView {
 	 */
 	private Button runButton;
 
-//	/**
-//	 * MenuItem to start the SelfConfiguration Dialog
-//	 */
-//	private MenuItem itemSelfConfiguration;
+	/**
+	 * MenuItem to start the BatchLearning Dialog
+	 */
+	private MenuItem itemBatchLearning;
+
+	/**
+	 * MenuItem to start the UnsupervisedLearning Dialog
+	 */
+	private MenuItem itemUnsupervisedLearning;
 
 	/**
 	 * Toolbox of the MainView adds Nodes to Graph
@@ -61,10 +66,10 @@ public class MainView {
 	 */
 	public GraphBuildView graphBuild;
 
-//	/**
-//	 * MenuItem to start the Active Learning Dialog
-//	 */
-//	private MenuItem itemActiveLearning;
+	/**
+	 * MenuItem to start the Active Learning Dialog
+	 */
+	private MenuItem itemActiveLearning;
 
 	/**
 	 * Constructor
@@ -182,22 +187,23 @@ public class MainView {
 
 		Menu menuLearn = new Menu("Learn");
 
-//		itemSelfConfiguration = new MenuItem("Self Configuration");
-//		itemSelfConfiguration.setOnAction(e -> {
-//			controller.showSelfConfig();
-//		});
-//		itemActiveLearning = new MenuItem("Active Learning");
-//		itemActiveLearning.setOnAction(e -> {
-//			controller.showActiveLearning();
-//		});
-//		menuLearn.getItems().add(itemActiveLearning);
-//		menuLearn.getItems().add(itemSelfConfiguration);
-		MenuItem machineLearning = new MenuItem("Machine Learning");
-		machineLearning.setOnAction(e -> {
-			System.out.println("err");
-			showErrorDialog("An Error occured", "Machine Learning is not implemented yet!");
+		itemBatchLearning = new MenuItem("Batch Learning");
+		itemBatchLearning.setOnAction(e -> {
+//TODO			controller.showBatchLearning();
 		});
-		menuLearn.getItems().add(machineLearning);
+		
+		
+		itemUnsupervisedLearning = new MenuItem("UnsupervisedLearning");
+		itemUnsupervisedLearning.setOnAction(e -> {
+//TODO			controller.showUnsupervisedLearning();
+		});
+
+		itemActiveLearning = new MenuItem("Active Learning");
+		itemActiveLearning.setOnAction(e -> {
+//TODO			controller.showActiveLearning();
+		});
+		menuLearn.getItems().add(itemActiveLearning);
+		menuLearn.getItems().add(itemBatchLearning);
 		return new MenuBar(menuFile, menuLayout, menuLearn);
 	}
 
