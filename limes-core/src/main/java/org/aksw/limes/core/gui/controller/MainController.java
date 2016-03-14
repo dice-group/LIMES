@@ -9,6 +9,7 @@ import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+import org.aksw.limes.core.gui.controller.ml.ActiveLearningController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Result;
 import org.aksw.limes.core.gui.view.EditClassMatchingView;
@@ -18,6 +19,7 @@ import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.gui.view.ResultView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.WizardView;
+import org.aksw.limes.core.gui.view.ml.ActiveLearningView;
 
 /**
  * Controller of MainView
@@ -206,6 +208,14 @@ public class MainController {
 //			return;
 //		new ActiveLearningView(view, currentConfig);
 //	}
+	
+	public void showActiveLearning(){
+		if(currentConfig != null){
+		ActiveLearningView alv = new ActiveLearningView(view, new ActiveLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache()));
+		}else{
+			System.err.println("Config is null!");
+		}
+	}
 
 	/**
 	 * returns the currentConfig

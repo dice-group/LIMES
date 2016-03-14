@@ -200,10 +200,11 @@ public class MainView {
 
 		itemActiveLearning = new MenuItem("Active Learning");
 		itemActiveLearning.setOnAction(e -> {
-//TODO			controller.showActiveLearning();
+				controller.showActiveLearning();
 		});
 		menuLearn.getItems().add(itemActiveLearning);
 		menuLearn.getItems().add(itemBatchLearning);
+		menuLearn.getItems().add(itemUnsupervisedLearning);
 		return new MenuBar(menuFile, menuLayout, menuLearn);
 	}
 
@@ -216,8 +217,9 @@ public class MainView {
 	public void showLoadedConfig(boolean isLoaded) {
 		itemSave.setDisable(!isLoaded);
 		runButton.setDisable(!isLoaded);
-//		itemSelfConfiguration.setDisable(!isLoaded);
-//		itemActiveLearning.setDisable(!isLoaded);
+		itemBatchLearning.setDisable(!isLoaded);
+		itemUnsupervisedLearning.setDisable(!isLoaded);
+		itemActiveLearning.setDisable(!isLoaded);
 	}
 
 	/**

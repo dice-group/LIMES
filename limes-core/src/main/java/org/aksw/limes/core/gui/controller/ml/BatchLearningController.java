@@ -1,9 +1,13 @@
 package org.aksw.limes.core.gui.controller.ml;
 
+import org.aksw.limes.core.gui.model.Config;
+import org.aksw.limes.core.gui.model.ml.BatchLearningModel;
+import org.aksw.limes.core.io.cache.Cache;
+
 public class BatchLearningController extends MachineLearningController {
 
-	public BatchLearningController() {
-		// TODO Auto-generated constructor stub
+	public BatchLearningController(Config config, Cache sourceCache, Cache targetCache) {
+		this.mlModel = new BatchLearningModel(config, sourceCache, targetCache);
 	}
 
 }

@@ -1,17 +1,13 @@
 package org.aksw.limes.core.gui.view.ml;
 
-import java.util.HashMap;
+import org.aksw.limes.core.gui.controller.ml.MachineLearningController;
+import org.aksw.limes.core.gui.view.MainView;
 
 public class BatchLearningView extends MachineLearningView {
 
-	public BatchLearningView() {
-		// TODO Auto-generated constructor stub
+	public BatchLearningView(MainView mainView, MachineLearningController controller) {
+		super(mainView, controller);
 	}
 
-	@Override
-	public void createRootPane(HashMap<String, ?> params) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }
