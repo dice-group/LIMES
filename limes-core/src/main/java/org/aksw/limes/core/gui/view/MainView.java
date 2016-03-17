@@ -189,13 +189,13 @@ public class MainView {
 
 		itemBatchLearning = new MenuItem("Batch Learning");
 		itemBatchLearning.setOnAction(e -> {
-//TODO			controller.showBatchLearning();
+				controller.showBatchLearning();
 		});
 		
 		
 		itemUnsupervisedLearning = new MenuItem("UnsupervisedLearning");
 		itemUnsupervisedLearning.setOnAction(e -> {
-//TODO			controller.showUnsupervisedLearning();
+				controller.showUnsupervisedLearning();
 		});
 
 		itemActiveLearning = new MenuItem("Active Learning");

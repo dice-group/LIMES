@@ -52,6 +52,7 @@ public abstract class MachineLearningModel {
 		switch(algorithmName){
 		case "Lion":
 			this.mlalgorithm = new Lion(sourceCache, targetCache, config);
+			break;
 		default:
 			System.err.println("Unknown algorithm");
 		}

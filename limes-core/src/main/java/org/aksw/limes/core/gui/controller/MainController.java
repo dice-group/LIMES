@@ -10,6 +10,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 import org.aksw.limes.core.gui.controller.ml.ActiveLearningController;
+import org.aksw.limes.core.gui.controller.ml.BatchLearningController;
+import org.aksw.limes.core.gui.controller.ml.UnsupervisedLearningController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Result;
 import org.aksw.limes.core.gui.view.EditClassMatchingView;
@@ -20,6 +22,8 @@ import org.aksw.limes.core.gui.view.ResultView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.WizardView;
 import org.aksw.limes.core.gui.view.ml.ActiveLearningView;
+import org.aksw.limes.core.gui.view.ml.BatchLearningView;
+import org.aksw.limes.core.gui.view.ml.UnsupervisedLearningView;
 
 /**
  * Controller of MainView
@@ -191,23 +195,21 @@ public class MainController {
 		return true;
 	}
 
-	//TODO
-//	/**
-//	 * Show SelfConfig Window
-//	 */
-//	public void showSelfConfig() {
-//		SelfConfigurationView selfConfigView = new SelfConfigurationView(view);
-//		selfConfigView.controller.setCurrentConfig(currentConfig);
-//	}
-//
-//	/**
-//	 * Show the Active Learning Window
-//	 */
-//	public void showActiveLearning() {
-//		if (currentConfig == null)
-//			return;
-//		new ActiveLearningView(view, currentConfig);
-//	}
+	public void showBatchLearning(){
+		if(currentConfig != null){
+		BatchLearningView blv = new BatchLearningView(view, new BatchLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache()));
+		}else{
+			System.err.println("Config is null!");
+		}
+	}
+
+	public void showUnsupervisedLearning(){
+		if(currentConfig != null){
+		UnsupervisedLearningView ulv = new UnsupervisedLearningView(view, new UnsupervisedLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache()));
+		}else{
+			System.err.println("Config is null!");
+		}
+	}
 	
 	public void showActiveLearning(){
 		if(currentConfig != null){
