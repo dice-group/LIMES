@@ -321,6 +321,14 @@
 			<artifactId>jansi</artifactId>
 			<version>1.11</version>
 		</dependency>
+		<!-- JavaFX is not on the default classpath of OpenJDK-->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>javafx</artifactId>
+            <version>2.2</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/lib/ext/jfxrt.jar</systemPath>
+        </dependency>
         <dependency>
             <artifactId>ehcache</artifactId>
             <groupId>net.sf.ehcache</groupId>
