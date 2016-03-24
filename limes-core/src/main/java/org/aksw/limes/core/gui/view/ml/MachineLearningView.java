@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -65,6 +66,7 @@ public abstract class MachineLearningView {
 		ObservableList<String> mloptions = FXCollections.observableArrayList();
 		// FIXME Temporary Solution
 		mloptions.add("Lion");
+		mloptions.add("Eagle");
 		if (this instanceof ActiveLearningView) {
 
 		} else if (this instanceof BatchLearningView) {
@@ -92,10 +94,11 @@ public abstract class MachineLearningView {
 		scene.getStylesheets().add("gui/main.css");
 
 		mlOptionsChooser.setOnAction(e -> {
-			border.getChildren().remove(root);
+			root.getChildren().removeAll(root.getChildren());
 			mlController.setMLAlgorithmToModel(mlOptionsChooser.getValue());
 			showParameters(root, mlOptionsChooser.getValue());
 			border.setCenter(root);
+			learnButton.setDisable(false);
 		});
 
 		Stage stage = new Stage();
@@ -105,6 +108,13 @@ public abstract class MachineLearningView {
 	}
 
 	// public abstract void createRootPane(HashMap<String, ?> params);
+	
+	/**
+	 * Takes the gridpane in the BorderPane and adds the GUI elements fitting for the algorithm
+	 * @param root
+	 * @param algorithm
+	 * @return the GridPane containing the added Nodes
+	 */
 	private GridPane showParameters(GridPane root, String algorithm) {
 		Label inquiriesLabel = new Label("Number of inquiries to user");
 		Spinner<Integer> inquiriesSpinner = new Spinner<Integer>(5, 100, 10, 1);
@@ -280,6 +290,128 @@ public abstract class MachineLearningView {
 
 			root.add(pruneLabel, 0, 9);
 			root.add(pruneCheckBox, 1, 9);
+			break;
+		case "Eagle":
+			Slider crossover = new Slider();
+			Label crossoverLabel = new Label("0.4");
+			Label crossoverText = new Label("Crossover probability");
+			HBox crossoverBox = new HBox();
+			
+			root.add(crossoverText, 0, 6);
+			crossoverBox.getChildren().add(crossover);
+			crossoverBox.getChildren().add(crossoverLabel);
+			root.add(crossoverBox, 1, 6);
+			
+			crossover.setMin(0);
+			crossover.setMax(1);
+			crossover.setValue(0.4);
+			crossover.setShowTickLabels(true);
+			crossover.setShowTickMarks(false);
+			crossover.setMajorTickUnit(0.5);
+			crossover.setMinorTickCount(9);
+			crossover.setSnapToTicks(false);
+			crossover.setBlockIncrement(0.1);
+			
+			crossover.valueProperty().addListener(new ChangeListener<Number>() {
+			        public void changed(ObservableValue<? extends Number> ov,
+			                        Number old_val, Number new_val) {
+			                crossoverLabel.setText(String.format("%.1f", new_val));
+			        }
+			});
+			
+			Label generationsText = new Label("Number of generations");
+			Spinner<Integer> generations = new Spinner<Integer>(5, 100, 5, 5);
+			
+			root.add(generationsText, 0, 7);
+			root.add(generations, 1, 7);
+			
+			ChoiceBox<String> classifierChooser = new ChoiceBox<String>(
+			                FXCollections.observableArrayList("Pseudo F-Measure NGLY12",
+			                                "Pseudo F-Measure NIK+12"));
+			classifierChooser.getSelectionModel().selectedIndexProperty()
+			                .addListener((arg0, value, new_value) -> {
+			                        switch (new_value.intValue()) {
+			                        case 0:
+			                                // TODO
+			
+			                                break;
+			                        case 1:
+			                                // TODO
+			                                break;
+			                        default:
+			                                break;
+			                        }
+			
+			                });
+			HBox mutationsBox = new HBox();
+			Slider mutationRate = new Slider();
+			Label mutationRateLabel = new Label("0.4");
+			Label mutationRateText = new Label("Mutation rate");
+			
+			root.add(mutationRateText, 0, 8);
+			mutationsBox.getChildren().add(mutationRate);
+			mutationsBox.getChildren().add(mutationRateLabel);
+			root.add(mutationsBox, 1, 8);
+			
+			mutationRate.setMin(0);
+			mutationRate.setMax(1);
+			mutationRate.setValue(0.4);
+			mutationRate.setShowTickLabels(true);
+			mutationRate.setShowTickMarks(false);
+			mutationRate.setMajorTickUnit(0.5);
+			mutationRate.setMinorTickCount(9);
+			mutationRate.setSnapToTicks(false);
+			mutationRate.setBlockIncrement(0.1);
+			
+			mutationRate.valueProperty().addListener(new ChangeListener<Number>() {
+			        public void changed(ObservableValue<? extends Number> ov,
+			                        Number old_val, Number new_val) {
+			                mutationRateLabel.setText(String.format("%.1f", new_val));
+			        }
+			});
+			
+			Label populationText = new Label("Population size");
+			Spinner<Integer> population = new Spinner<Integer>(5, 100, 5, 5);
+			
+			root.add(populationText, 0, 9);
+			root.add(population, 1, 9);
+
+			HBox reproductionBox = new HBox();
+			Slider reproductionRate = new Slider();
+			Label reproductionRateLabel = new Label("0.4");
+			Label reproductionRateText = new Label("Reproduction rate");
+			
+			root.add(reproductionRateText, 0, 10);
+			reproductionBox.getChildren().add(reproductionRate);
+			reproductionBox.getChildren().add(reproductionRateLabel);
+			root.add(reproductionBox, 1, 10);
+			
+			reproductionRate.setMin(0);
+			reproductionRate.setMax(1);
+			reproductionRate.setValue(0.4);
+			reproductionRate.setShowTickLabels(true);
+			reproductionRate.setShowTickMarks(false);
+			reproductionRate.setMajorTickUnit(0.5);
+			reproductionRate.setMinorTickCount(9);
+			reproductionRate.setSnapToTicks(false);
+			reproductionRate.setBlockIncrement(0.1);
+			
+			reproductionRate.valueProperty().addListener(new ChangeListener<Number>() {
+			        public void changed(ObservableValue<? extends Number> ov,
+			                        Number old_val, Number new_val) {
+			                reproductionRateLabel.setText(String.format("%.1f", new_val));
+			        }
+			});
+			
+			Label preserveFittestLabel = new Label("Preserve Fittest?");
+			CheckBox preserveFittestCheckBox = new CheckBox();
+			preserveFittestCheckBox.setSelected(true);
+
+			root.add(preserveFittestLabel, 0, 11);
+			root.add(preserveFittestCheckBox, 1, 11);
+			
+			//TODO measure in case this is supervised
+//			if(!(this instanceof UnsupervisedLearningView))
 			break;
 		default:
 			System.err.println("unknown algorithm!");
