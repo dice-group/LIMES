@@ -1,25 +1,25 @@
 package org.aksw.limes.core.gui.model.ml;
 
-import java.util.HashMap;
-
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.ml.algorithm.EagleUnsupervised;
 import org.aksw.limes.core.ml.algorithm.Lion;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithm;
 import org.aksw.limes.core.ml.setting.ActiveLearningSetting;
 import org.aksw.limes.core.ml.setting.BatchLearningSetting;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.aksw.limes.core.ml.setting.UnsupervisedLearningSetting;
+import org.apache.log4j.Logger;
 
 public abstract class MachineLearningModel {
 
-	protected HashMap<String,?> params;
-	
 //	protected MachineLearningView mlview;
 	
 	protected MLAlgorithm mlalgorithm;
+	
+	protected static Logger logger = Logger.getLogger("LIMES");
 	
 	protected LearningSetting learningsetting;
 	
@@ -29,6 +29,10 @@ public abstract class MachineLearningModel {
 	
 	protected Cache targetCache;
 	
+	protected Thread learningThread;
+	
+	protected Mapping learnedMapping;
+	
 	public MachineLearningModel(Config config, Cache sourceCache, Cache targetCache){
 		this.config = config;
 		this.sourceCache = sourceCache;
@@ -36,7 +40,7 @@ public abstract class MachineLearningModel {
 	}
 	
 	
-	public abstract Mapping learn();
+	public abstract void learn(MachineLearningView view);
 
 
 	public MLAlgorithm getMlalgorithm() {
@@ -49,12 +53,20 @@ public abstract class MachineLearningModel {
 	}
 
 	public void initializeData(String algorithmName){
+		//TODO other cases
 		switch(algorithmName){
 		case "Lion":
 			this.mlalgorithm = new Lion(sourceCache, targetCache, config);
 			break;
+		case "Eagle":
+			if (this instanceof UnsupervisedLearningModel){
+			this.mlalgorithm = new EagleUnsupervised(sourceCache, targetCache, config);
+			}else{
+				logger.info("Not implemented yet");
+			}
+			break;
 		default:
-			System.err.println("Unknown algorithm");
+			logger.info("Unknown algorithm");
 		}
 		if(this instanceof ActiveLearningModel){
 			this.learningsetting = new ActiveLearningSetting(mlalgorithm);
@@ -63,7 +75,7 @@ public abstract class MachineLearningModel {
 		}else if(this instanceof UnsupervisedLearningModel){
 			this.learningsetting = new UnsupervisedLearningSetting(mlalgorithm);
 		}else{
-			System.err.println("Unknown subclass of MachineLearningModel");
+			logger.info("Unknown subclass of MachineLearningModel");
 		}
 	}
 

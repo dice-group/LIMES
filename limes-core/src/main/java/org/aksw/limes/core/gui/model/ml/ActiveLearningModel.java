@@ -1,6 +1,7 @@
 package org.aksw.limes.core.gui.model.ml;
 
 import org.aksw.limes.core.gui.model.Config;
+import org.aksw.limes.core.gui.view.ml.MachineLearningView;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 
@@ -11,9 +12,9 @@ public class ActiveLearningModel extends MachineLearningModel {
 	}
 
 	@Override
-	public Mapping learn() {
+	public void learn(MachineLearningView view) {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 }
