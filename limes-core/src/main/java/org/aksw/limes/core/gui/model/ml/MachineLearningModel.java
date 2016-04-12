@@ -1,7 +1,8 @@
 package org.aksw.limes.core.gui.model.ml;
 
+import javafx.concurrent.Task;
+
 import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.gui.view.ml.MachineLearningView;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.ml.algorithm.EagleUnsupervised;
@@ -23,7 +24,7 @@ public abstract class MachineLearningModel {
 	
 	protected LearningSetting learningsetting;
 	
-	protected Config config;
+	private Config config;
 	
 	protected Cache sourceCache;
 	
@@ -31,16 +32,16 @@ public abstract class MachineLearningModel {
 	
 	protected Thread learningThread;
 	
-	protected Mapping learnedMapping;
+	private Mapping learnedMapping;
 	
 	public MachineLearningModel(Config config, Cache sourceCache, Cache targetCache){
-		this.config = config;
+		this.setConfig(config);
 		this.sourceCache = sourceCache;
 		this.targetCache = targetCache;
 	}
 	
 	
-	public abstract void learn(MachineLearningView view);
+	public abstract Task<Void> createLearningTask();
 
 
 	public MLAlgorithm getMlalgorithm() {
@@ -56,11 +57,11 @@ public abstract class MachineLearningModel {
 		//TODO other cases
 		switch(algorithmName){
 		case "Lion":
-			this.mlalgorithm = new Lion(sourceCache, targetCache, config);
+			this.mlalgorithm = new Lion(sourceCache, targetCache, getConfig());
 			break;
 		case "Eagle":
 			if (this instanceof UnsupervisedLearningModel){
-			this.mlalgorithm = new EagleUnsupervised(sourceCache, targetCache, config);
+			this.mlalgorithm = new EagleUnsupervised(sourceCache, targetCache, getConfig());
 			}else{
 				logger.info("Not implemented yet");
 			}
@@ -86,6 +87,36 @@ public abstract class MachineLearningModel {
 
 	public void setLearningsetting(LearningSetting learningsetting) {
 		this.learningsetting = learningsetting;
+	}
+
+
+	public Thread getLearningThread() {
+		return learningThread;
+	}
+
+
+	public void setLearningThread(Thread learningThread) {
+		this.learningThread = learningThread;
+	}
+
+
+	public Mapping getLearnedMapping() {
+		return learnedMapping;
+	}
+
+
+	public void setLearnedMapping(Mapping learnedMapping) {
+		this.learnedMapping = learnedMapping;
+	}
+
+
+	public Config getConfig() {
+		return config;
+	}
+
+
+	public void setConfig(Config config) {
+		this.config = config;
 	}
 
 }

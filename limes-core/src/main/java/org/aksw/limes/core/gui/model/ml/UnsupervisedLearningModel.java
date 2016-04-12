@@ -3,6 +3,7 @@ package org.aksw.limes.core.gui.model.ml;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Result;
@@ -18,9 +19,11 @@ public class UnsupervisedLearningModel extends MachineLearningModel {
 	}
 
 	@Override
-	public void learn(MachineLearningView view) {
-		learningThread = new Thread() {
-			public void run() {
+	public Task<Void> createLearningTask() {
+
+		return new Task<Void>() {
+			@Override
+			protected Void call() {
 				try {
 					mlalgorithm.init(learningsetting, null);
 				} catch (Exception e) {
@@ -28,47 +31,10 @@ public class UnsupervisedLearningModel extends MachineLearningModel {
 					e.printStackTrace();
 				}
 				mlalgorithm.learn(null);
-				learnedMapping = mlalgorithm.computePredictions();
-				onFinish(view);
+				setLearnedMapping(mlalgorithm.computePredictions());
+				return null;
 			}
 		};
-		learningThread.start();
-	}
-
-	private void onFinish(MachineLearningView view) {
-		view.getLearnButton().setDisable(false);
-		// view.mapButton.setOnAction(e -> {
-		ObservableList<Result> results = FXCollections.observableArrayList();
-		learnedMapping.getMap().forEach((sourceURI, map2) -> {
-			map2.forEach((targetURI, value) -> {
-				results.add(new Result(sourceURI, targetURI, value));
-			});
-		});
-
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				ResultView resultView = new ResultView(config);
-				resultView.showResults(results);
-			}
-		});
-		// });
-		if (learnedMapping != null && learnedMapping.size() > 0) {
-			// view.mapButton.setDisable(false);
-			view.getLearningProgress().setVisible(false);
-			logger.info(config.getMetricExpression());
-			view.getMainView().graphBuild.graphBuildController
-					.setConfigFromGraph();
-		} else {
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					view.getLearningProgress().setVisible(false);
-					view.createErrorWindow();
-				}
-			});
-
-		}
 	}
 
 }

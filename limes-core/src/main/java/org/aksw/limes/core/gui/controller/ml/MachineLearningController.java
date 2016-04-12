@@ -1,15 +1,17 @@
 package org.aksw.limes.core.gui.controller.ml;
 
-import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.ml.MachineLearningModel;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
 import org.aksw.limes.core.ml.setting.LearningSetting;
+import org.apache.log4j.Logger;
 
 public abstract class MachineLearningController {
 
 	protected MachineLearningView mlView;
 
 	protected MachineLearningModel mlModel;
+
+	protected static Logger logger = Logger.getLogger("LIMES");
 
 	public MachineLearningView getMlView() {
 		return mlView;
@@ -59,8 +61,14 @@ public abstract class MachineLearningController {
 		this.mlModel.setLearningsetting(params);
 	}
 
-	public void learn(MachineLearningView view) {
-		this.mlModel.learn(view);
+	public abstract void learn(MachineLearningView view);	
+
+	public MachineLearningModel getMlModel() {
+		return mlModel;
+	}
+
+	public void setMlModel(MachineLearningModel mlModel) {
+		this.mlModel = mlModel;
 	}
 
 }

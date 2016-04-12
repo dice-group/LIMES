@@ -40,7 +40,6 @@ public abstract class MachineLearningView {
 
 	private Button learnButton;
 
-	protected ProgressIndicator learningProgress;
 	
 	protected Spinner<Integer> inquiriesSpinner;
 
@@ -116,14 +115,12 @@ public abstract class MachineLearningView {
 		ComboBox<String> mlOptionsChooser = new ComboBox<String>(mloptions);
 		mlOptionsChooser.setPromptText("choose algorithm");
 
-		learningProgress = new ProgressIndicator();
-		learningProgress.setVisible(false);
-		setLearnButton(new Button("learn"));
-		getLearnButton().setDisable(true);
+		learnButton = new Button("learn");
+		learnButton.setDisable(true);
 		HBox buttonWrapper = new HBox();
 		buttonWrapper.setAlignment(Pos.BASELINE_RIGHT);
 		buttonWrapper.setPadding(new Insets(25, 25, 25, 25));
-		buttonWrapper.getChildren().addAll(learningProgress, getLearnButton());
+		buttonWrapper.getChildren().addAll(learnButton);
 		content.getChildren().add(mlOptionsChooser);
 		border.setTop(content);
 		border.setBottom(buttonWrapper);
@@ -135,11 +132,10 @@ public abstract class MachineLearningView {
 			this.mlController.setMLAlgorithmToModel(mlOptionsChooser.getValue());
 			showParameters(root, mlOptionsChooser.getValue());
 			border.setCenter(root);
-			getLearnButton().setDisable(false);
+			learnButton.setDisable(false);
 		});
 		
-		getLearnButton().setOnAction(e -> {
-			learningProgress.setVisible(true);
+		learnButton.setOnAction(e -> {
 			this.mlController.setParameters();
 			getLearnButton().setDisable(true);
 			this.mlController.learn(this);
@@ -473,19 +469,24 @@ public abstract class MachineLearningView {
 		root.setPadding(new Insets(25, 25, 25, 25));
 		return root;
 	}
-	
-	public void createErrorWindow() {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setContentText("Something went wrong!");
+
+	/**
+	 * Shows if an Error occurred
+	 * 
+	 * @param header
+	 *            Caption of the Error
+	 * @param content
+	 *            Error Message
+	 */
+	public void showErrorDialog(String header, String content) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setHeaderText(header);
+		alert.setContentText(content);
 		alert.showAndWait();
 	}
 
 	public MachineLearningController getMlController() {
 		return mlController;
-	}
-
-	public ProgressIndicator getLearningProgress() {
-		return learningProgress;
 	}
 
 	public Spinner<Integer> getInquiriesSpinner() {
@@ -546,10 +547,6 @@ public abstract class MachineLearningView {
 
 	public void setMlController(MachineLearningController mlController) {
 		this.mlController = mlController;
-	}
-
-	public void setLearningProgress(ProgressIndicator learningProgress) {
-		this.learningProgress = learningProgress;
 	}
 
 	public void setInquiriesSpinner(Spinner<Integer> inquiriesSpinner) {
