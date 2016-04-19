@@ -194,12 +194,13 @@ public class EagleUnsupervised extends MLAlgorithm {
 	
 	
 	public static void main(String args[]) {
-		String base = "/home/lyko/svn/LIMES/";
-		String configFile = "../../../svn/LIMES/Examples/GeneticEval/PublicationData.xml";
+		String base = "/home/ohdorno/Dokumente/Arbeit/LIMES/";
+//		String configFile = "../../../svn/LIMES/Examples/GeneticEval/PublicationData.xml";
+		String configFile = "/home/ohdorno/Dokumente/Arbeit/LIMES/Examples/GeneticEval/PublicationData.xml";
 		XMLConfigurationReader reader = new XMLConfigurationReader();
 		Configuration config = reader.read(configFile);
-		config.getSourceInfo().setEndpoint(base+config.getSourceInfo().getEndpoint());
-		config.getTargetInfo().setEndpoint(base+config.getTargetInfo().getEndpoint());
+		config.getSourceInfo().setEndpoint(config.getSourceInfo().getEndpoint());
+		config.getTargetInfo().setEndpoint(config.getTargetInfo().getEndpoint());
 		
 		
 		Cache sC = HybridCache.getData(config.getSourceInfo());

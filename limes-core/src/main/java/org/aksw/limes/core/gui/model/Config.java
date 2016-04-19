@@ -96,6 +96,9 @@ public class Config extends Configuration {
 				verificationThreshold, verificationFile, exemplars, prefixes,
 				outputFormat, executionPlan, granularity, recallRegulator,
 				recallThreshold);
+		metric = new Output();
+		this.sourceEndpoint = new Endpoint(this.sourceInfo);
+		this.targetEndpoint = new Endpoint(this.targetInfo);
 //		this.sourceInfo = new KBInfo();
 //		this.sourceInfo.setVar("?source");
 //		this.targetInfo = new KBInfo();

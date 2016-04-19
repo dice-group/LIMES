@@ -83,7 +83,6 @@ public class MainController {
 		confirmPotentialDataLoss();
 		setCurrentConfig(null);
 		Config newConfig = new Config();
-//System.out.println(newConfig.getSourceEndpoint().toString());
 		new WizardController(() -> {
 			setCurrentConfig(newConfig);
 			view.graphBuild.graphBuildController.deleteGraph();

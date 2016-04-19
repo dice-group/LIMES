@@ -57,7 +57,5 @@ public class EditPropertyMatchingController implements IEditController {
 
 	public void save(ListView<String> sourceProperties, ListView<String> targetProperties) {
 		config.setPropertiesMatching(sourceProperties, targetProperties);
-		System.out.println("EPMC sp: " + config.getSourceEndpoint().getInfo().getProperties().get(0));
-
 	}
 }

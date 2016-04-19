@@ -13,16 +13,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import org.aksw.limes.core.gui.controller.ml.MachineLearningController;
@@ -33,46 +37,45 @@ import org.apache.log4j.Logger;
 public abstract class MachineLearningView {
 
 	private MainView mainView;
-	
+
 	protected static Logger logger = Logger.getLogger("LIMES");
 
 	protected MachineLearningController mlController;
 
 	private Button learnButton;
 
-	
 	protected Spinner<Integer> inquiriesSpinner;
 
 	protected Spinner<Integer> maxDurationSpinner;
 
-	protected Spinner<Integer> maxIterationSpinner; 
+	protected Spinner<Integer> maxIterationSpinner;
 
-	protected Slider maxQualitySlider; 
+	protected Slider maxQualitySlider;
 
-	protected Spinner<String> terminationCriteriaSpinner; 
+	protected Spinner<String> terminationCriteriaSpinner;
 
-	protected Slider terminationCriteriaValueSlider; 
+	protected Slider terminationCriteriaValueSlider;
 
-	protected Slider betaSlider; 
-	
+	protected Slider betaSlider;
+
 	protected Spinner<Integer> populationSpinner;
 
-	protected Slider gammaScoreSlider; 
+	protected Slider gammaScoreSlider;
 
 	protected Slider expansionPenaltySlider;
 
-	protected Slider rewardSlider; 
+	protected Slider rewardSlider;
 
-	protected CheckBox pruneCheckBox; 
+	protected CheckBox pruneCheckBox;
 
-	protected Slider crossoverRateSlider; 
+	protected Slider crossoverRateSlider;
 
-	protected Spinner<Integer> generationsSpinner; 
+	protected Spinner<Integer> generationsSpinner;
 
-	protected Slider mutationRateSlider; 
-	
+	protected Slider mutationRateSlider;
+
 	protected Slider reproductionRateSlider;
-	
+
 	protected CheckBox preserveFittestCheckBox;
 	public static final String[] mlAlgorithms = { "Eagle", "Euclid", "Lion",
 			"Wombat", "Raven", "Ukulele", "Coala", "Acids", "Mandolin",
@@ -127,18 +130,21 @@ public abstract class MachineLearningView {
 		Scene scene = new Scene(border, 300, 400);
 		scene.getStylesheets().add("gui/main.css");
 
-		mlOptionsChooser.setOnAction(e -> {
-			root.getChildren().removeAll(root.getChildren());
-			this.mlController.setMLAlgorithmToModel(mlOptionsChooser.getValue());
-			showParameters(root, mlOptionsChooser.getValue());
-			border.setCenter(root);
-			learnButton.setDisable(false);
-		});
-		
+		mlOptionsChooser
+				.setOnAction(e -> {
+					root.getChildren().removeAll(root.getChildren());
+					this.mlController.setMLAlgorithmToModel(mlOptionsChooser
+							.getValue());
+					showParameters(root, mlOptionsChooser.getValue());
+					border.setCenter(root);
+					learnButton.setDisable(false);
+				});
+
 		learnButton.setOnAction(e -> {
 			this.mlController.setParameters();
 			getLearnButton().setDisable(true);
-			this.mlController.learn(this);
+			new MLPropertyMatchingView(this.mlController.getMlModel().getConfig(), this);
+//			this.mlController.learn(this);
 		});
 
 		Stage stage = new Stage();
@@ -148,9 +154,11 @@ public abstract class MachineLearningView {
 	}
 
 	// public abstract void createRootPane(HashMap<String, ?> params);
-	
+
 	/**
-	 * Takes the gridpane in the BorderPane and adds the GUI elements fitting for the algorithm
+	 * Takes the gridpane in the BorderPane and adds the GUI elements fitting
+	 * for the algorithm
+	 * 
 	 * @param root
 	 * @param algorithm
 	 * @return the GridPane containing the added Nodes
@@ -162,14 +170,12 @@ public abstract class MachineLearningView {
 		root.add(inquiriesSpinner, 1, 0);
 
 		Label maxDurationLabel = new Label("Maximal duration in seconds");
-		maxDurationSpinner = new Spinner<Integer>(5, 100, 60,
-				1);
+		maxDurationSpinner = new Spinner<Integer>(5, 100, 60, 1);
 		root.add(maxDurationLabel, 0, 1);
 		root.add(maxDurationSpinner, 1, 1);
 
 		Label maxIterationLabel = new Label("Maximal number of iterations");
-		maxIterationSpinner = new Spinner<Integer>(5, 100, 60,
-				1);
+		maxIterationSpinner = new Spinner<Integer>(5, 100, 60, 1);
 		root.add(maxIterationLabel, 0, 2);
 		root.add(maxIterationSpinner, 1, 2);
 
@@ -214,10 +220,11 @@ public abstract class MachineLearningView {
 		root.add(terminationCriteriaLabel, 0, 4);
 		root.add(terminationCriteriaSpinner, 1, 4);
 
-		Label terminationCriteriaValueLabel = new Label("Value of termination criteria");
+		Label terminationCriteriaValueLabel = new Label(
+				"Value of termination criteria");
 		Label terminationCriteriaValueValue = new Label("0");
 		terminationCriteriaValueSlider = new Slider();
-		//TODO set ranges according to criteria chosen
+		// TODO set ranges according to criteria chosen
 		terminationCriteriaValueSlider.setMin(0);
 		terminationCriteriaValueSlider.setMax(5);
 		terminationCriteriaValueSlider.setValue(0);
@@ -228,12 +235,14 @@ public abstract class MachineLearningView {
 		terminationCriteriaValueSlider.setSnapToTicks(false);
 		terminationCriteriaValueSlider.setBlockIncrement(0.1);
 
-		terminationCriteriaValueSlider.valueProperty().addListener(new ChangeListener<Number>() {
-			public void changed(ObservableValue<? extends Number> ov,
-					Number old_val, Number new_val) {
-				terminationCriteriaValueValue.setText(String.format("%.1f", new_val));
-			}
-		});
+		terminationCriteriaValueSlider.valueProperty().addListener(
+				new ChangeListener<Number>() {
+					public void changed(ObservableValue<? extends Number> ov,
+							Number old_val, Number new_val) {
+						terminationCriteriaValueValue.setText(String.format(
+								"%.1f", new_val));
+					}
+				});
 
 		root.add(terminationCriteriaValueLabel, 0, 5);
 		root.add(terminationCriteriaValueSlider, 1, 5);
@@ -340,15 +349,14 @@ public abstract class MachineLearningView {
 						public void changed(
 								ObservableValue<? extends Number> ov,
 								Number old_val, Number new_val) {
-							rewardValue.setText(String.format("%.1f",
-									new_val));
+							rewardValue.setText(String.format("%.1f", new_val));
 						}
 					});
 
 			root.add(rewardLabel, 0, 9);
 			root.add(rewardSlider, 1, 9);
 			root.add(rewardValue, 2, 9);
-			
+
 			Label pruneLabel = new Label("Prune Tree?");
 			pruneCheckBox = new CheckBox();
 			pruneCheckBox.setSelected(true);
@@ -361,12 +369,12 @@ public abstract class MachineLearningView {
 			Label crossoverLabel = new Label("0.4");
 			Label crossoverText = new Label("Crossover probability");
 			HBox crossoverBox = new HBox();
-			
+
 			root.add(crossoverText, 0, 7);
 			crossoverBox.getChildren().add(crossoverRateSlider);
 			crossoverBox.getChildren().add(crossoverLabel);
 			root.add(crossoverBox, 1, 7);
-			
+
 			crossoverRateSlider.setMin(0);
 			crossoverRateSlider.setMax(1);
 			crossoverRateSlider.setValue(0.4);
@@ -376,30 +384,33 @@ public abstract class MachineLearningView {
 			crossoverRateSlider.setMinorTickCount(9);
 			crossoverRateSlider.setSnapToTicks(false);
 			crossoverRateSlider.setBlockIncrement(0.1);
-			
-			crossoverRateSlider.valueProperty().addListener(new ChangeListener<Number>() {
-			        public void changed(ObservableValue<? extends Number> ov,
-			                        Number old_val, Number new_val) {
-			                crossoverLabel.setText(String.format("%.1f", new_val));
-			        }
-			});
-			
+
+			crossoverRateSlider.valueProperty().addListener(
+					new ChangeListener<Number>() {
+						public void changed(
+								ObservableValue<? extends Number> ov,
+								Number old_val, Number new_val) {
+							crossoverLabel.setText(String.format("%.1f",
+									new_val));
+						}
+					});
+
 			Label generationsText = new Label("Number of generations");
-			generationsSpinner = new Spinner<Integer>(5, 100, 5, 5);
-			
+			generationsSpinner = new Spinner<Integer>(1, 100, 1, 1);
+
 			root.add(generationsText, 0, 8);
 			root.add(generationsSpinner, 1, 8);
-			
+
 			HBox mutationsBox = new HBox();
 			mutationRateSlider = new Slider();
 			Label mutationRateLabel = new Label("0.4");
 			Label mutationRateText = new Label("Mutation rate");
-			
+
 			root.add(mutationRateText, 0, 9);
 			mutationsBox.getChildren().add(mutationRateSlider);
 			mutationsBox.getChildren().add(mutationRateLabel);
 			root.add(mutationsBox, 1, 9);
-			
+
 			mutationRateSlider.setMin(0);
 			mutationRateSlider.setMax(1);
 			mutationRateSlider.setValue(0.4);
@@ -409,17 +420,20 @@ public abstract class MachineLearningView {
 			mutationRateSlider.setMinorTickCount(9);
 			mutationRateSlider.setSnapToTicks(false);
 			mutationRateSlider.setBlockIncrement(0.1);
-			
-			mutationRateSlider.valueProperty().addListener(new ChangeListener<Number>() {
-			        public void changed(ObservableValue<? extends Number> ov,
-			                        Number old_val, Number new_val) {
-			                mutationRateLabel.setText(String.format("%.1f", new_val));
-			        }
-			});
-			
+
+			mutationRateSlider.valueProperty().addListener(
+					new ChangeListener<Number>() {
+						public void changed(
+								ObservableValue<? extends Number> ov,
+								Number old_val, Number new_val) {
+							mutationRateLabel.setText(String.format("%.1f",
+									new_val));
+						}
+					});
+
 			Label populationText = new Label("Population size");
 			populationSpinner = new Spinner<Integer>(5, 100, 5, 5);
-			
+
 			root.add(populationText, 0, 10);
 			root.add(populationSpinner, 1, 10);
 
@@ -427,12 +441,12 @@ public abstract class MachineLearningView {
 			reproductionRateSlider = new Slider();
 			Label reproductionRateLabel = new Label("0.4");
 			Label reproductionRateText = new Label("Reproduction rate");
-			
+
 			root.add(reproductionRateText, 0, 11);
 			reproductionBox.getChildren().add(reproductionRateSlider);
 			reproductionBox.getChildren().add(reproductionRateLabel);
 			root.add(reproductionBox, 1, 11);
-			
+
 			reproductionRateSlider.setMin(0);
 			reproductionRateSlider.setMax(1);
 			reproductionRateSlider.setValue(0.4);
@@ -442,23 +456,26 @@ public abstract class MachineLearningView {
 			reproductionRateSlider.setMinorTickCount(9);
 			reproductionRateSlider.setSnapToTicks(false);
 			reproductionRateSlider.setBlockIncrement(0.1);
-			
-			reproductionRateSlider.valueProperty().addListener(new ChangeListener<Number>() {
-			        public void changed(ObservableValue<? extends Number> ov,
-			                        Number old_val, Number new_val) {
-			                reproductionRateLabel.setText(String.format("%.1f", new_val));
-			        }
-			});
-			
+
+			reproductionRateSlider.valueProperty().addListener(
+					new ChangeListener<Number>() {
+						public void changed(
+								ObservableValue<? extends Number> ov,
+								Number old_val, Number new_val) {
+							reproductionRateLabel.setText(String.format("%.1f",
+									new_val));
+						}
+					});
+
 			Label preserveFittestLabel = new Label("Preserve Fittest?");
 			preserveFittestCheckBox = new CheckBox();
 			preserveFittestCheckBox.setSelected(true);
 
 			root.add(preserveFittestLabel, 0, 12);
 			root.add(preserveFittestCheckBox, 1, 12);
-			
-			//TODO measure in case this is supervised
-//			if(!(this instanceof UnsupervisedLearningView))
+
+			// TODO measure in case this is supervised
+			// if(!(this instanceof UnsupervisedLearningView))
 			break;
 		default:
 			logger.info("unknown algorithm!");
