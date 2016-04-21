@@ -65,16 +65,15 @@ public class MLPropertyMatchingView {
 				.addAll(config.getTargetInfo().getProperties());
 		Label sourceLabel = new Label("available Source Properties:");
 		Label targetLabel = new Label("available Target Properties:");
-		Label addedSourceLabel = new Label("matched Source Properties:");
-		Label addedTargetLabel = new Label("matched Target Properties:");
+//		Label addedLabel = new Label("matched Properties:");
 		VBox sourceColumn = new VBox();
 		VBox targetColumn = new VBox();
 		sourceColumn.getChildren().addAll(sourceLabel, sourcePropList);
 		targetColumn.getChildren().addAll(targetLabel, targetPropList);
-		Label propertyTypeLabel = new Label("PropertyType");
-		HBox addedLabelBox = new HBox();
-		addedLabelBox.getChildren().addAll(addedSourceLabel, addedTargetLabel,
-				propertyTypeLabel);
+//		Label propertyTypeLabel = new Label("PropertyType");
+//		HBox addedLabelBox = new HBox();
+//		addedLabelBox.getChildren().addAll(addedLabel,
+//				propertyTypeLabel);
 		matchedPropertiesBox = new VBox();
 		cancelButton = new Button("cancel");
 		learnButton = new Button("learn");
@@ -88,8 +87,8 @@ public class MLPropertyMatchingView {
 		HBox.setHgrow(sourceColumn, Priority.ALWAYS);
 		HBox.setHgrow(targetColumn, Priority.ALWAYS);
 		VBox topBox = new VBox();
-		topBox.getChildren().addAll(hb, addedLabelBox);
-		root.setTop(hb);
+		topBox.getChildren().addAll(hb);
+		root.setTop(topBox);
 		root.setCenter(matchedPropertiesBox);
 		root.setBottom(buttons);
 		rootPane = new ScrollPane(root);
@@ -98,6 +97,10 @@ public class MLPropertyMatchingView {
 		Scene scene = new Scene(rootPane, 300, 400);
 		scene.getStylesheets().add("gui/main.css");
 		stage = new Stage();
+//		addedLabelBox.setSpacing(rootPane.getWidth() - addedLabel.getWidth() - propertyTypeLabel.getWidth());
+//		System.out.println("stage: " + stage.getWidth() );
+//		System.out.println("rootPane: " + rootPane.getWidth() );
+//		System.out.println("scen: " + scene.getWidth() );
 		stage.setTitle("LIMES - Property Matching");
 		stage.setScene(scene);
 		stage.show();
@@ -122,7 +125,7 @@ public class MLPropertyMatchingView {
 							0)).getChildren().get(0)).getText();
 					String targetProp = ((Label) ((VBox) row.getChildren().get(
 							0)).getChildren().get(0)).getText();
-					String type = ((Spinner<String>) row.getChildren().get(2))
+					String type = ((Spinner<String>) ((HBox)row.getChildren().get(2)).getChildren().get(0))
 							.getValue();
 					switch (type) {
 					case "String":
@@ -218,9 +221,12 @@ public class MLPropertyMatchingView {
 		Spinner<String> propertyTypeSpinner = new Spinner<String>();
 		propertyTypeSpinner.setValueFactory(svf);
 		Button deleteRowButton = new Button("x");
-		unmatchedPropertyBox.getChildren().addAll(propertyTypeSpinner,
-				deleteRowButton);
-		unmatchedPropertyBox.setAlignment(Pos.BOTTOM_RIGHT);
+		HBox spinnerAndButtonBox = new HBox();
+		spinnerAndButtonBox.setAlignment(Pos.CENTER_RIGHT);
+		HBox.setHgrow(spinnerAndButtonBox, Priority.ALWAYS);
+		spinnerAndButtonBox.getChildren().addAll(propertyTypeSpinner, deleteRowButton);
+		unmatchedPropertyBox.getChildren().add(spinnerAndButtonBox);
+		unmatchedPropertyBox.setAlignment(Pos.CENTER_LEFT);
 		unmatchedPropertyBox.setPrefWidth(stage.getWidth());
 		deleteRowButton
 				.setOnAction(e_ -> {
@@ -246,13 +252,9 @@ public class MLPropertyMatchingView {
 		learnButton.setDisable(false);
 		sourcePropertyUnmatched = false;
 		unmatchedPropertyBox = new HBox();
-		unmatchedPropertyBox.setSpacing(10);
+		unmatchedPropertyBox.setSpacing(20);
 		VBox unmatchedProp1 = new VBox();
-		unmatchedProp1.setFillWidth(true);
-		unmatchedProp1.setAlignment(Pos.BASELINE_RIGHT);
 		VBox unmatchedProp2 = new VBox();
-		unmatchedProp2.setFillWidth(true);
-		unmatchedProp2.setAlignment(Pos.BASELINE_RIGHT);
 		unmatchedPropertyBox.getChildren().addAll(unmatchedProp1,
 				unmatchedProp2);
 		matchedPropertiesBox.getChildren().add(unmatchedPropertyBox);
