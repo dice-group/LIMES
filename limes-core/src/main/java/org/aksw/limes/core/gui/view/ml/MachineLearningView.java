@@ -143,8 +143,8 @@ public abstract class MachineLearningView {
 		learnButton.setOnAction(e -> {
 			this.mlController.setParameters();
 			getLearnButton().setDisable(true);
-			new MLPropertyMatchingView(this.mlController.getMlModel().getConfig(), this);
-//			this.mlController.learn(this);
+//			new MLPropertyMatchingView(this.mlController.getMlModel().getConfig(), this);
+			this.mlController.learn(this);
 		});
 
 		Stage stage = new Stage();

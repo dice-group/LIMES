@@ -59,6 +59,11 @@ public abstract class MachineLearningController {
 			params.setReward(this.mlView.getRewardSlider().getValue());
 			params.setPrune(this.mlView.getPruneCheckBox().isSelected());
 		}
+		if(this.mlModel.getConfig().propertyMapping == null){
+			PropertyMapping propMap = new PropertyMapping();
+			propMap.setDefault(this.mlModel.getConfig().getSourceInfo(), this.mlModel.getConfig().getTargetInfo());
+			params.setPropMap(propMap);
+		}
 		this.mlModel.setLearningsetting(params);
 //		System.out.println("---------------- getLearningSetting()------------------------");
 //		System.out.println("maxDuration: " + this.mlModel.getLearningsetting().getMaxDuration());
