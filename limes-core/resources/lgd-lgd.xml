@@ -40,6 +40,6 @@
 		<FILE>lgd_relaybox_near.nt</FILE>
 		<RELATION>lgdo:near</RELATION>
 	</REVIEW>
-	<EXECUTION>Cannonical</EXECUTION>
+	<EXECUTION>Canonical</EXECUTION>
 	<OUTPUT>TAB</OUTPUT>
 </LIMES>
