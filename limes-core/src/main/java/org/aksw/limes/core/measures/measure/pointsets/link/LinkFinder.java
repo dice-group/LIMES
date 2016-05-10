@@ -12,13 +12,13 @@ import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
+import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 import org.aksw.limes.core.util.Pair;
 
 /**
  * @author sherif class to generate the link pairs between 2 polygons
  */
 public class LinkFinder {
-    public static boolean USE_GREAT_ELLIPTIC_DISTANCE = true;
     protected List<Pair<Point>> linkPairsList;
     protected Polygon small, large;
 
@@ -38,6 +38,9 @@ public class LinkFinder {
 	}
     }
 
+    /**
+     * @return list of link pairs
+     */
     public List<Pair<Point>> getlinkPairsList() {
 	if (linkPairsList.isEmpty()) {
 	    // compute the fair capacity for each of the small polygon points
@@ -64,24 +67,12 @@ public class LinkFinder {
     TreeMap<Double, Point> getSortedNearestPoints(Point x, Polygon Y) {
 	TreeMap<Double, Point> result = new TreeMap<Double, Point>();
 	for (Point y : Y.points) {
-	    result.put(distance(x, y), y);
+	    result.put(PointsetsMeasure.pointToPointDistance(x, y), y);
 	}
 	return result;
     }
 
-    /**
-     * @param x
-     *            Point x
-     * @param y
-     *            Point y
-     * @return Distance between x and y
-     */
-    public double distance(Point x, Point y) {
-	if (USE_GREAT_ELLIPTIC_DISTANCE) {
-	    return GreatEllipticDistance.getDistanceInDegrees(x, y);
-	}
-	return OrthodromicDistance.getDistanceInDegrees(x, y);
-    }
+
 
     public double getRuntimeApproximation(double mappingSize) {
 	throw new UnsupportedOperationException("Not supported yet.");

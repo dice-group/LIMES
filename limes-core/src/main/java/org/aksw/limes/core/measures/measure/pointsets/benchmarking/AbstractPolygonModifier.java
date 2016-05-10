@@ -17,6 +17,9 @@ import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
  */
 public abstract class AbstractPolygonModifier implements PolygonModifier {
 
+    /* (non-Javadoc)
+     * @see org.aksw.limes.core.measures.measure.pointsets.benchmarking.PolygonModifier#modifySet(java.util.Set, double)
+     */
     public Set<Polygon> modifySet(Set<Polygon> dataset, double threshold) {
 	Set<Polygon> polygons = new HashSet<Polygon>();
 	for (Polygon p : dataset) {

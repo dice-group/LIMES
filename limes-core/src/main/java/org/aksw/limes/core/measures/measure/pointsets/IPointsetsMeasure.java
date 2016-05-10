@@ -16,11 +16,6 @@ import org.aksw.limes.core.measures.measure.IMeasure;
  */
 public interface IPointsetsMeasure extends IMeasure {
 
-    public static boolean USE_GREAT_ELLIPTIC_DISTANCE = true; // if false
-							      // orthodomic
-							      // distance will
-							      // be used
-
     public double computeDistance(Polygon X, Polygon Y, double threshold);
 
     public Mapping run(Set<Polygon> source, Set<Polygon> target, double threshold);
