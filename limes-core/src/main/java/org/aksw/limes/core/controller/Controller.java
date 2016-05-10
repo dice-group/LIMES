@@ -16,16 +16,18 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.serializer.ISerializer;
 import org.aksw.limes.core.io.serializer.SerializerFactory;
+import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import java.util.Arrays;
 
 import static org.fusesource.jansi.Ansi.*;
 import static org.fusesource.jansi.Ansi.Color.*;
 
 /**
  * This is the default LIMES Controller used to run the software as CLI.
- *
  * @author Kevin Dreßler
  */
 public class Controller {
@@ -38,31 +40,26 @@ public class Controller {
      * @param args Command line arguments
      */
     public static void main(String[] args) {
+        CommandLine cl = parseCommandLine(args);
+        Configuration config = getConfig(cl);
+        Mapping[] mappings = getMapping(config);
+        writeResults(mappings, config);
+    }
+
+    public static CommandLine parseCommandLine (String[] args) {
         CommandLineParser parser = new DefaultParser();
-        CommandLine cmd;
+        CommandLine cl = null;
         try {
-            cmd = parser.parse(options, args);
-            execute(cmd);
+            cl = parser.parse(options, args);
         } catch (ParseException e) {
             System.out.println(ansi().fg(RED).a("Parsing error:\n\t" + e.getMessage()).reset());
             printHelp();
+            System.exit(-1);
         }
+        return cl;
     }
 
-    private static Options getOptions() {
-        Options options = new Options();
-        options.addOption("f", true, "Format of <config_file_or_uri>, either \"xml\" (default) or \"rdf\"");
-        options.addOption("h", false, "Help");
-        options.addOption("s", false, "Silent run");
-        options.addOption("v", false, "Verbose run");
-        return options;
-    }
-
-    private static void printHelp() {
-        new HelpFormatter().printHelp("limes [OPTION]... <config_file_or_uri>", options);
-    }
-
-    private static void execute(CommandLine cmd) {
+    public static Configuration getConfig (CommandLine cmd) {
         if (cmd.hasOption('h')) {
             printHelp();
             System.exit(0);
@@ -104,6 +101,15 @@ public class Controller {
         // 2. Read configuration
         String configFileOrUri = cmd.getArgs()[0];
         Configuration config = reader.read(configFileOrUri);
+        return config;
+    }
+
+    /**
+     * Execute LIMES
+     * @param cmd CommandLine object containing all specified command line arguments and options
+     */
+    public static Mapping[] getMapping(Configuration config) {
+        Mapping results = null;
 
         // 3. Fill Caches
         HybridCache sourceCache = HybridCache.getData(config.getSourceInfo());
@@ -131,13 +137,39 @@ public class Controller {
             ExecutionEngine engine = ExecutionEngineFactory.getEngine("Default", sourceCache, targetCache,
                     config.getSourceInfo().getVar(), config.getTargetInfo().getVar());
             assert engine != null;
-            Mapping verificationMapping = engine.execute(plan);
-            Mapping acceptanceMapping = verificationMapping.getSubMap(config.getAcceptanceThreshold());
-            String outputFormat = config.getOutputFormat();
-            ISerializer output = SerializerFactory.getSerializer(outputFormat);
-            output.setPrefixes(config.getPrefixes());
-            output.writeToFile(verificationMapping, config.getVerificationRelation(), config.getVerificationFile());
-            output.writeToFile(acceptanceMapping, config.getAcceptanceRelation(), config.getAcceptanceFile());
+            results = engine.execute(plan);
         }
+        Mapping acceptanceMapping = results.getSubMap(config.getAcceptanceThreshold());
+        Mapping verificationMapping = MappingOperations.difference(results, acceptanceMapping);
+        Mapping[] mappings = Arrays.asList(verificationMapping, acceptanceMapping).toArray(new Mapping[2]);
+        return mappings;
+    }
+
+    private static void writeResults (Mapping[] mappings, Configuration config) {
+        String outputFormat = config.getOutputFormat();
+        ISerializer output = SerializerFactory.getSerializer(outputFormat);
+        output.setPrefixes(config.getPrefixes());
+        output.writeToFile(mappings[0], config.getVerificationRelation(), config.getVerificationFile());
+        output.writeToFile(mappings[1], config.getAcceptanceRelation(), config.getAcceptanceFile());
+    }
+
+    /**
+     * Print the usage text
+     */
+    private static void printHelp() {
+        new HelpFormatter().printHelp("limes [OPTION]... <config_file_or_uri>", options);
+    }
+
+    /**
+     * Get available options for CLI
+     * @return Options object containing all available command line options
+     */
+    private static Options getOptions() {
+        Options options = new Options();
+        options.addOption("f", true, "Format of <config_file_or_uri>, either \"xml\" (default) or \"rdf\"");
+        options.addOption("h", false, "Help");
+        options.addOption("s", false, "Silent run");
+        options.addOption("v", false, "Verbose run");
+        return options;
     }
 }

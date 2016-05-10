@@ -71,7 +71,7 @@ public class MemoryMapping extends Mapping implements Serializable {
     public Mapping getSubMap(double threshold) {
 	Mapping m = new MemoryMapping();
 	HashMap<String, TreeSet<String>> pairs;
-	if (reversedMap == null) {
+	if (reversedMap == null || reversedMap.size() == 0) {
 	    initReversedMap();
 	}
 	for (Double d : reversedMap.keySet()) {
