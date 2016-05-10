@@ -331,7 +331,7 @@ public class DataSetChooser {
 	}
 	private static HashMap<MapKey, Object> getPerson1() {
 		// This code needs to be reviewed by Klaus to check where are the missed classes
-		HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+/*		HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
 		// folders & files
 		param.put(MapKey.BASE_FOLDER, "resources/");
 		param.put(MapKey.DATASET_FOLDER, "resources/Persons1/");
@@ -360,7 +360,7 @@ public class DataSetChooser {
 		
 		HybridCache hcSource = new HybridCache();
 	
-		return param;
+		return param;*/
 		return null;
 	}
 	
