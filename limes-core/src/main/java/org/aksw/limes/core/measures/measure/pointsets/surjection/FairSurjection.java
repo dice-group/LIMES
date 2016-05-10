@@ -47,7 +47,6 @@ public class FairSurjection extends PointsetsMeasure {
 	public double computeDistance(Polygon X, Polygon Y, double threshold) {
 		double sum = 0;
 		FairSurjectionFinder fsf = new FairSurjectionFinder(X, Y);
-		USE_GREAT_ELLIPTIC_DISTANCE = IPointsetsMeasure.USE_GREAT_ELLIPTIC_DISTANCE;
 
 		for (Pair<Point> p : fsf.getFairSurjectionPairsList()) {
 

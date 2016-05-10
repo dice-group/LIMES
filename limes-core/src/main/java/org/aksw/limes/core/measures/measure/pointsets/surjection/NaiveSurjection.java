@@ -45,7 +45,6 @@ public class NaiveSurjection extends PointsetsMeasure {
 
 	public double computeDistance(Polygon X, Polygon Y, double threshold) {
 		SurjectionFinder sf = new SurjectionFinder(X, Y);
-		USE_GREAT_ELLIPTIC_DISTANCE = IPointsetsMeasure.USE_GREAT_ELLIPTIC_DISTANCE;
 
 		double sum = 0;
 		for (Pair<Point> p : sf.getSurjectionPairsList()) {
