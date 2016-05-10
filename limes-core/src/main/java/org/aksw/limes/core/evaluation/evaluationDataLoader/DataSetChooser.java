@@ -330,6 +330,7 @@ public class DataSetChooser {
 		return param;
 	}
 	private static HashMap<MapKey, Object> getPerson1() {
+		// This code needs to be reviewed by Klaus to check where are the missed classes
 		HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
 		// folders & files
 		param.put(MapKey.BASE_FOLDER, "resources/");
@@ -349,6 +350,8 @@ public class DataSetChooser {
 		
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
 		param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFile((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.SOURCE_FILE), type));
+		param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFile((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.SOURCE_FILE), type));
+
 		param.put(MapKey.TARGET_CACHE, Experiment.readOAEIFile((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.TARGET_FILE), type));
 		param.put(MapKey.REFERENCE_MAPPING, Experiment.readOAEIMapping((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.REFERENCE_FILE)));
 		
@@ -358,6 +361,7 @@ public class DataSetChooser {
 		HybridCache hcSource = new HybridCache();
 	
 		return param;
+		return null;
 	}
 	
 	private static HashMap<MapKey, Object> getOAEI2014Books() {
@@ -389,7 +393,7 @@ public class DataSetChooser {
 	}
 	
 	private static HashMap<MapKey, Object> getPerson1CSV() {
-		HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+		/*HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
 		// folders & files
 		param.put(MapKey.BASE_FOLDER, "resources/");
 		param.put(MapKey.DATASET_FOLDER, "Persons1/");
@@ -411,11 +415,12 @@ public class DataSetChooser {
 		param.put(MapKey.TARGET_CACHE, tC);
 		Oracle o = OracleFactory.getOracle(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.DATASET_FOLDER)+param.get(MapKey.REFERENCE_FILE), "CSV", "simple");
 		param.put(MapKey.REFERENCE_MAPPING, o.getMapping());
-		return param;
+		return param;*/
+		return null;
 	}
 	
 	private static HashMap<MapKey, Object> getPerson2() {
-		HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+		/*HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
 		// folders & files
 		param.put(MapKey.BASE_FOLDER, "resources/");
 		param.put(MapKey.DATASET_FOLDER, "resources/Persons2/");
@@ -443,11 +448,12 @@ public class DataSetChooser {
 		
 		param.put(MapKey.SOURCE_CLASS, "http://www.okkam.org/ontology_person1.owl#Person");
 		param.put(MapKey.TARGET_CLASS, "okkamperson2:Person");
-		return param;
+		return param;*/
+		return null;
 	}
 	
 	private static HashMap<MapKey, Object> getPerson2CSV() {
-		HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+		/*HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
 		// folders & files
 		param.put(MapKey.BASE_FOLDER, "resources/");
 		param.put(MapKey.DATASET_FOLDER, "Persons2/");
@@ -469,11 +475,12 @@ public class DataSetChooser {
 		param.put(MapKey.TARGET_CACHE, tC);
 		Oracle o = OracleFactory.getOracle(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.DATASET_FOLDER)+param.get(MapKey.REFERENCE_FILE), "CSV", "simple");
 		param.put(MapKey.REFERENCE_MAPPING, o.getMapping());
-		return param;
+		return param;*/
+		return null;
 	}
 	
 	private static HashMap<MapKey, Object> getRestaurant() {
-		HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+		/*HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
 		// folders & files
 		param.put(MapKey.BASE_FOLDER, "resources/");
 		param.put(MapKey.DATASET_FOLDER, "Restaurants/");
@@ -501,12 +508,13 @@ public class DataSetChooser {
 		
 		param.put(MapKey.SOURCE_CLASS, "http://www.okkam.org/ontology_restaurant1.owl#Restaurant");
 		param.put(MapKey.TARGET_CLASS, "http://www.okkam.org/ontology_restaurant2.owl#Restaurant");
-		return param;
+		return param;*/
+		return null;
 	}
 	
 	private static HashMap<MapKey, Object> getRestaurantCSV() {
 		
-		HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+		/*HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
 		// folders & files
 		param.put(MapKey.BASE_FOLDER, "resources/");
 		param.put(MapKey.DATASET_FOLDER, "Restaurants/");
@@ -532,12 +540,13 @@ public class DataSetChooser {
 		
 		param.put(MapKey.SOURCE_CLASS, "http://www.okkam.org/ontology_restaurant1.owl#Restaurant");
 		param.put(MapKey.TARGET_CLASS, "http://www.okkam.org/ontology_restaurant2.owl#Restaurant");
-		return param;
+		return param;*/
+		return null;
 	}
 	
 	
 	private static HashMap<MapKey, Object> getDBLPACM() {
-		HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+		/*HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
 		// folders & files
 		param.put(MapKey.BASE_FOLDER, "Examples/GeneticEval/");
 		param.put(MapKey.DATASET_FOLDER, "Datasets/DBLP-ACM/");
@@ -561,11 +570,12 @@ public class DataSetChooser {
 		
 		param.put(MapKey.SOURCE_CLASS, "dblp:book");
 		param.put(MapKey.TARGET_CLASS, "acm:book");
-		return param;
+		return param;*/
+		return null;
 	}
 	
 	private static HashMap<MapKey, Object> getAbtBuy() {
-		HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+		/*HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
 		// folders & files
 		param.put(MapKey.BASE_FOLDER, "Examples/GeneticEval/");
 		param.put(MapKey.DATASET_FOLDER, "Datasets/Abt-Buy/");
@@ -588,11 +598,12 @@ public class DataSetChooser {
 		param.put(MapKey.REFERENCE_MAPPING, OracleFactory.getOracle((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.DATASET_FOLDER)+param.get(MapKey.REFERENCE_FILE), "csv", "simple").getMapping());
 		param.put(MapKey.SOURCE_CLASS, "abt:product");
 		param.put(MapKey.TARGET_CLASS, "buy:product");
-		return param;
+		return param;*/
+		return null;
 	}
 	
 	private static HashMap<MapKey, Object> getDBLPScholar() {
-		HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+		/*HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
 		// folders & files
 		param.put(MapKey.BASE_FOLDER, "Examples/GeneticEval/");
 		param.put(MapKey.DATASET_FOLDER, "Datasets/DBLP-Scholar/");
@@ -617,11 +628,12 @@ public class DataSetChooser {
 		
 		param.put(MapKey.SOURCE_CLASS, "dblp:book");
 		param.put(MapKey.TARGET_CLASS, "scholar:book");
-		return param;
+		return param;*/
+		return null;
 	}
 	
 	private static HashMap<MapKey, Object> getAmazonGoogleProducts() {
-		HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+		/*HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
 		// folders & files
 		param.put(MapKey.BASE_FOLDER, "Examples/GeneticEval/");
 		param.put(MapKey.DATASET_FOLDER, "Datasets/Amazon-GoogleProducts/");
@@ -645,11 +657,12 @@ public class DataSetChooser {
 		
 		param.put(MapKey.SOURCE_CLASS, "amazon:product");
 		param.put(MapKey.TARGET_CLASS, "google:product");
-		return param;
+		return param;*/
+		return null;
 	}
 	
 	private static HashMap<MapKey, Object> getDBPediaLinkedMDB() {
-		HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+		/*HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
 		// folders & files
 		param.put(MapKey.BASE_FOLDER, "Examples/GeneticEval/");
 		param.put(MapKey.DATASET_FOLDER, "Datasets/dbpedia-linkedmdb/");
@@ -673,7 +686,8 @@ public class DataSetChooser {
 		
 		param.put(MapKey.SOURCE_CLASS, "dbpedia:film");
 		param.put(MapKey.TARGET_CLASS, "linkedmdb:movie");
-		return param;
+		return param;*/
+		return null;
 	}
 	
 	private static HashMap<MapKey, Object> getDrugs() {
@@ -681,7 +695,7 @@ public class DataSetChooser {
 		// folders & files
 		param.put(MapKey.BASE_FOLDER, "Examples/GeneticEval/");
 		param.put(MapKey.DATASET_FOLDER, "Datasets/dailymed-drugbank-ingredients/");
-		param.put(MapKey.CONFIG_FILE, "dailymed-drugbank.xml");
+		/*param.put(MapKey.CONFIG_FILE, "dailymed-drugbank.xml");
 		param.put(MapKey.REFERENCE_FILE, "reference2.csv");
 		param.put(MapKey.SOURCE_FILE, "source2.csv");
 		param.put(MapKey.TARGET_FILE, "target2.csv");
@@ -701,7 +715,8 @@ public class DataSetChooser {
 		
 		param.put(MapKey.SOURCE_CLASS, "dailymed:drug");
 		param.put(MapKey.TARGET_CLASS, "drugbank:drug");
-		return param;
+		return param;*/
+		return null;
 	}
 	
 	
