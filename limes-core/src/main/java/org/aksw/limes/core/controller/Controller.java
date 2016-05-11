@@ -42,7 +42,7 @@ public class Controller {
     public static void main(String[] args) {
         CommandLine cl = parseCommandLine(args);
         Configuration config = getConfig(cl);
-        Mapping[] mappings = getMapping(config);
+        ResultMappings mappings = getMapping(config);
         writeResults(mappings, config);
     }
 
@@ -108,7 +108,7 @@ public class Controller {
      * Execute LIMES
      * @param cmd CommandLine object containing all specified command line arguments and options
      */
-    public static Mapping[] getMapping(Configuration config) {
+    public static ResultMappings getMapping(Configuration config) {
         Mapping results = null;
 
         // 3. Fill Caches
@@ -141,16 +141,15 @@ public class Controller {
         }
         Mapping acceptanceMapping = results.getSubMap(config.getAcceptanceThreshold());
         Mapping verificationMapping = MappingOperations.difference(results, acceptanceMapping);
-        Mapping[] mappings = Arrays.asList(verificationMapping, acceptanceMapping).toArray(new Mapping[2]);
-        return mappings;
+        return new ResultMappings(verificationMapping, acceptanceMapping);
     }
 
-    private static void writeResults (Mapping[] mappings, Configuration config) {
+    private static void writeResults (ResultMappings mappings, Configuration config) {
         String outputFormat = config.getOutputFormat();
         ISerializer output = SerializerFactory.getSerializer(outputFormat);
         output.setPrefixes(config.getPrefixes());
-        output.writeToFile(mappings[0], config.getVerificationRelation(), config.getVerificationFile());
-        output.writeToFile(mappings[1], config.getAcceptanceRelation(), config.getAcceptanceFile());
+        output.writeToFile(mappings.getVerificationMapping(), config.getVerificationRelation(), config.getVerificationFile());
+        output.writeToFile(mappings.getAcceptanceMapping(), config.getAcceptanceRelation(), config.getAcceptanceFile());
     }
 
     /**
