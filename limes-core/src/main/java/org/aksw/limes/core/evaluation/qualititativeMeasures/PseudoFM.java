@@ -16,7 +16,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  *
  */
 @Deprecated
-public class PseudoFMeasur {
+public class PseudoFM {
 	/* FIXME QualitiveMeasure interface is not suitable, as we need additional
 	 * input: URIs of source and target. 
 	 */
@@ -33,14 +33,14 @@ public class PseudoFMeasur {
 	public void setUse1To1Mapping(boolean use1To1Mapping) {
 		this.use1To1Mapping = use1To1Mapping;
 	}
-	public PseudoFMeasur() {}
+	public PseudoFM() {}
 	
 	/**
 	 * Use this constructor to toggle between symmetric precision (true) and the older asymmetric
 	 * Pseudo-Precision (false)
 	 * @param symmetricPrecision
 	 */
-	public PseudoFMeasur(final boolean symmetricPrecision) {
+	public PseudoFM(final boolean symmetricPrecision) {
 		this();
 		this.symmetricPrecision = symmetricPrecision;
 	}

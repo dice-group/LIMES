@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasur;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFM;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
@@ -89,7 +89,7 @@ public class LionPrune extends MLAlgorithm {
 	protected double beta = 1d;
 	/**Set time of evaluation in seconds*/
 	protected long maxDuration = 600;
-	protected PseudoFMeasur pfm;
+	protected PseudoFM pfm;
 	/*for experiments*/
 	protected static boolean debuggingInput = false;
 	public static boolean hardRootExpansion = true;
@@ -123,7 +123,7 @@ public class LionPrune extends MLAlgorithm {
 		this.loopsRootExpanded = new LinkedList<Integer>();
 		
 		
-		pfm = new PseudoFMeasur();
+		pfm = new PseudoFM();
 		heuristic.setLearningSetting(setting);
 		operator.setLearningSetting(setting);
 		engine = ExecutionEngineFactory.getEngine("default", 

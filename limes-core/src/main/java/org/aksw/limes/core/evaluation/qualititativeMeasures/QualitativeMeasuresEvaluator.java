@@ -1,10 +1,10 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.aksw.limes.core.evaluation.evaluator.EvaluatorFactory;
 import org.aksw.limes.core.evaluation.evaluator.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluator.MeasureType;
 import org.aksw.limes.core.io.mapping.Mapping;
@@ -23,7 +23,11 @@ public class QualitativeMeasuresEvaluator {
 	{
 		for (MeasureType measureType : evaluationMeasures) {
 			
-			if(measureType.equals(MeasureType.precision))
+			QualitativeMeasure measure = EvaluatorFactory.getQualitativeMeasure(measureType);
+			double evaluationValue = measure.calculate(predictions, goldStandard);
+			evaluations.put(measureType, evaluationValue);
+			
+	/*		if(measureType.equals(MeasureType.precision))
 				evaluatePrecision(predictions,goldStandard);
 			else if (measureType.equals(MeasureType.recall))
 				evaluateRecall(predictions,goldStandard);
@@ -39,12 +43,12 @@ public class QualitativeMeasuresEvaluator {
 				evaluateAccuracy(predictions,goldStandard);
 			else if (measureType.equals(MeasureType.auc))
 				evaluateAUC(predictions,goldStandard);
-			else System.out.println("Error: unrecognized evaluation measure");
+			else System.out.println("Error: unrecognized evaluation measure");*/
 		}
 		
 		return evaluations;
 	}
-	private void evaluatePrecision(Mapping predictions, GoldStandard goldStandard)
+	/*private void evaluatePrecision(Mapping predictions, GoldStandard goldStandard)
 	{
 		double precision = new Precision().calculate(predictions, goldStandard);
 		evaluations.put(MeasureType.precision, precision);
@@ -96,7 +100,7 @@ public class QualitativeMeasuresEvaluator {
 		evaluatePFMeasure(predictions,goldStandard);
 		evaluateAccuracy(predictions,goldStandard);
 		evaluateAUC(predictions,goldStandard);
-	}
+	}*/
 }
 
 /*public class Evaluate {

@@ -26,18 +26,15 @@ public class QualitativeMeasuresTest {
 
 	@Test
 	public void test() {
-//		Model model = ModelFactory.createDefaultModel();
-//		Set<Link> m1 = new TreeSet<Link>();
-//		Set<Link> m2 = new TreeSet<Link>();
-//		Set<Link> ref = new TreeSet<Link>();
 
-		Mapping goldStandard = initGoldStandardList();
-		Mapping predictions = initPredictionsList();
 		List<String> dataSet =initDataSet();
-		
+		Mapping predictions = initPredictionsList();
+		Mapping goldStandard = initGoldStandardList();
 		Set<MeasureType> measure = initEvalMeasures();
-		measure.add(MeasureType.precision);
-		Map<MeasureType,Double> calculations = testEvaluate(predictions,goldStandard,dataSet,dataSet,measure);
+		
+		GoldStandard gs = new GoldStandard(goldStandard,dataSet,dataSet);
+		
+		Map<MeasureType,Double> calculations = testQualitativeEvaluator(predictions,gs,measure);
 		
 		double precision = calculations.get(MeasureType.precision);
 		assertTrue(precision == 0.7);
@@ -63,9 +60,8 @@ public class QualitativeMeasuresTest {
 
 
 	}
-	private Map<MeasureType,Double> testEvaluate(Mapping predictions,Mapping goldStandard,List<String> sourceUris,List<String> targetUris,Set<MeasureType> evaluationMeasure)
+	private Map<MeasureType,Double> testQualitativeEvaluator(Mapping predictions,GoldStandard gs,Set<MeasureType> evaluationMeasure)
 	{
-		GoldStandard gs = new GoldStandard(goldStandard,sourceUris,targetUris);
 		return new QualitativeMeasuresEvaluator().evaluate(predictions, gs, evaluationMeasure);
 	}
 	private Mapping initGoldStandardList()

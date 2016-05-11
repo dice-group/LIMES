@@ -1,6 +1,6 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasur;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFM;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
@@ -32,11 +32,11 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
 	LinkSpecGeneticLearnerConfig config;
 	public ExecutionEngine engine;
 	double beta = 1.0d;
-	PseudoFMeasur pfm = new PseudoFMeasur();
+	PseudoFM pfm = new PseudoFM();
 	private static PseudoFMeasureFitnessFunction instance = null;
 	
 	
-	private PseudoFMeasureFitnessFunction(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasur pfm, Cache c1, Cache c2) {
+	private PseudoFMeasureFitnessFunction(LinkSpecGeneticLearnerConfig a_config, PseudoFM pfm, Cache c1, Cache c2) {
 		config = a_config;
 		sourceCache = c1;
 		targetCache = c2;
@@ -120,7 +120,7 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
 	}
 	
 	/**Singleton pattern*/
-	public static PseudoFMeasureFitnessFunction getInstance(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasur pfm, Cache c1, Cache c2) {
+	public static PseudoFMeasureFitnessFunction getInstance(LinkSpecGeneticLearnerConfig a_config, PseudoFM pfm, Cache c1, Cache c2) {
 		if(instance == null) {
 			return instance = new PseudoFMeasureFitnessFunction(a_config, pfm, c1, c2);
 		} else {
@@ -132,11 +132,11 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
 		instance = null;
 	}
 	
-	public PseudoFMeasur getMeasure() {
+	public PseudoFM getMeasure() {
 		return pfm;
 	}
 
-	public void setMeasure(PseudoFMeasur pfm) {
+	public void setMeasure(PseudoFM pfm) {
 		this.pfm = pfm;
 	}
 	public double getBeta() {

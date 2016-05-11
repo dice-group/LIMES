@@ -1,6 +1,6 @@
 package org.aksw.limes.core.ml.setting;
 
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasur;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFM;
 import org.aksw.limes.core.ml.algorithm.IMLAlgorithm;
 
 /**
@@ -20,13 +20,13 @@ public class UnsupervisedLearningSetting extends LearningSetting {
 		algorithm.learn(null);
 	}
 	
-	PseudoFMeasur measure = new PseudoFMeasur();
+	PseudoFM measure = new PseudoFM();
 
-	public PseudoFMeasur getPseudoMeasure() {
+	public PseudoFM getPseudoMeasure() {
 		return measure;
 	}
 
-	public void setMeasure(PseudoFMeasur measure) {
+	public void setMeasure(PseudoFM measure) {
 		this.measure = measure;
 	}
 
