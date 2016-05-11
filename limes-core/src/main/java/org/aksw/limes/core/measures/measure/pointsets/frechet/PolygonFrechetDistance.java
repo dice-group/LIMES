@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
+import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;

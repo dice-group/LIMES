@@ -1,10 +1,10 @@
 package org.aksw.limes.core.measures.measure.pointsets;
 
 import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
+import org.aksw.limes.core.measures.mapper.pointsets.GreatEllipticDistance;
+import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
+import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.Measure;
 
 public abstract class PointsetsMeasure extends Measure implements IPointsetsMeasure{

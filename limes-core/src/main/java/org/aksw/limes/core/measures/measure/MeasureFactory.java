@@ -1,24 +1,20 @@
 package org.aksw.limes.core.measures.measure;
 
-import org.apache.log4j.Logger;
-import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.measures.mapper.Mapper;
-import org.aksw.limes.core.measures.mapper.atomic.EDJoin;
-import org.aksw.limes.core.measures.mapper.atomic.ExactMatchMapper;
-import org.aksw.limes.core.measures.mapper.atomic.JaroMapper;
-import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
-import org.aksw.limes.core.measures.mapper.atomic.PPJoinPlusPlus;
-import org.aksw.limes.core.measures.mapper.atomic.RatcliffObershelpMapper;
-import org.aksw.limes.core.measures.mapper.atomic.SoundexMapper;
-import org.aksw.limes.core.measures.mapper.atomic.SymmetricHausdorffMapper;
-import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
-import org.aksw.limes.core.measures.mapper.atomic.event.PredecessorMapper;
-import org.aksw.limes.core.measures.mapper.atomic.event.SuccessorMapper;
-import org.aksw.limes.core.measures.mapper.atomic.event.ConcurrentMapper;
-import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
-import org.aksw.limes.core.measures.measure.date.DayMeasure;
-import org.aksw.limes.core.measures.measure.date.SimpleDateMeasure;
-import org.aksw.limes.core.measures.measure.date.YearMeasure;
+import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
+import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
+import org.aksw.limes.core.measures.mapper.space.HR3;
+import org.aksw.limes.core.measures.mapper.string.EDJoin;
+import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
+import org.aksw.limes.core.measures.mapper.string.JaroMapper;
+import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
+import org.aksw.limes.core.measures.mapper.string.RatcliffObershelpMapper;
+import org.aksw.limes.core.measures.mapper.string.SoundexMapper;
+import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGram;
+import org.aksw.limes.core.measures.mapper.temporal.ConcurrentMapper;
+import org.aksw.limes.core.measures.mapper.temporal.PredecessorMapper;
+import org.aksw.limes.core.measures.mapper.temporal.SuccessorMapper;
+import org.aksw.limes.core.measures.measure.pointsets.GeoDistance;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverage;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechet;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.NaiveHausdorff;
@@ -31,7 +27,6 @@ import org.aksw.limes.core.measures.measure.pointsets.sumofmin.NaiveSumOfMin;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjection;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjection;
 import org.aksw.limes.core.measures.measure.space.EuclideanMetric;
-import org.aksw.limes.core.measures.measure.space.GeoDistance;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
 import org.aksw.limes.core.measures.measure.string.ExactMatch;
 import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
@@ -74,12 +69,6 @@ public class MeasureFactory {
 	    m = new GeoDistance();
 	} else if (name.toLowerCase().startsWith("symmetrichausdorff")) {
 	    m = new SymmetricHausdorff();
-	} else if (name.toLowerCase().startsWith("datesim")) {
-	    m = new SimpleDateMeasure();
-	} else if (name.toLowerCase().startsWith("daysim")) {
-	    m = new DayMeasure();
-	} else if (name.toLowerCase().startsWith("yearsim")) {
-	    m = new YearMeasure();
 	} else if (name.toLowerCase().startsWith("geomn")) {
 	    m = new NaiveMin();
 	} else if (name.toLowerCase().startsWith("geomx")) {
@@ -140,7 +129,7 @@ public class MeasureFactory {
 	else if (measure.toLowerCase().startsWith("exactmatch")) {
 	    am = new ExactMatchMapper();
 	} else if (measure.toLowerCase().startsWith("euclid")) {
-	    am = new TotalOrderBlockingMapper();
+	    am = new HR3();
 	} else if (measure.toLowerCase().startsWith("hausdorff")) {
 	    am = new OrchidMapper();
 	} else if (measure.toLowerCase().startsWith("orthodromic")) {

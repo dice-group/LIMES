@@ -6,7 +6,7 @@ package org.aksw.limes.core.measures.measure.pointsets.benchmarking;
 
 import java.util.Set;
 
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
 /**
  * Implements the polygon modifier interface. It provides basic functions for
