@@ -12,8 +12,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.GoldStandard;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.QuantitativeMeasuresEvaluator;
+import org.aksw.limes.core.evaluation.evaluator.GoldStandard;
+import org.aksw.limes.core.evaluation.evaluator.MeasureType;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 
@@ -65,7 +66,7 @@ public class QualitativeMeasuresTest {
 	private Map<MeasureType,Double> testEvaluate(Mapping predictions,Mapping goldStandard,List<String> sourceUris,List<String> targetUris,Set<MeasureType> evaluationMeasure)
 	{
 		GoldStandard gs = new GoldStandard(goldStandard,sourceUris,targetUris);
-		return new QuantitativeMeasuresEvaluator().evaluate(predictions, gs, evaluationMeasure);
+		return new QualitativeMeasuresEvaluator().evaluate(predictions, gs, evaluationMeasure);
 	}
 	private Mapping initGoldStandardList()
 	{

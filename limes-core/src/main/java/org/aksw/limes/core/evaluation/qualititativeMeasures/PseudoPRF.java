@@ -1,5 +1,6 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
+import org.aksw.limes.core.evaluation.evaluator.GoldStandard;
 import org.aksw.limes.core.io.mapping.Mapping;
 
 public abstract class PseudoPRF extends PRF{ 

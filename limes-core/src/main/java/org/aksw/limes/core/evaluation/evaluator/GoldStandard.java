@@ -1,4 +1,4 @@
-package org.aksw.limes.core.evaluation.qualititativeMeasures;
+package org.aksw.limes.core.evaluation.evaluator;
 
 import java.util.List;
 

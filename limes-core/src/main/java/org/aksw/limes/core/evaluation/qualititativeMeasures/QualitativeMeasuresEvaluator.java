@@ -5,14 +5,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.aksw.limes.core.evaluation.MeasureType;
+import org.aksw.limes.core.evaluation.evaluator.GoldStandard;
+import org.aksw.limes.core.evaluation.evaluator.MeasureType;
 import org.aksw.limes.core.io.mapping.Mapping;
 
 /**
  * @author mofeed
  *
  */
-public class QuantitativeMeasuresEvaluator {
+public class QualitativeMeasuresEvaluator {
 	
 	Map<MeasureType,Double> evaluations = new HashMap<MeasureType,Double>();
 	

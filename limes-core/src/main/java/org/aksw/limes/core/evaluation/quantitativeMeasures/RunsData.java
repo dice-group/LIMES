@@ -8,7 +8,7 @@ import java.util.Map;
  * @author mofeed
  *
  */
-public class RunsData implements QualitativeMeasure{
+public class RunsData implements QuantitativeMeasure{
 
 	// list of recorded runs, each with its information like id,time,memory,.....
 	protected Map<Long, RunRecord> runs = new HashMap<Long, RunRecord>();

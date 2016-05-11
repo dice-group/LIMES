@@ -1,7 +1,7 @@
 package org.aksw.limes.core.ml.setting;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.QuantitativeMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasure;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.ml.algorithm.IMLAlgorithm;
@@ -34,7 +34,7 @@ public abstract class LearningSetting {
 	float crossoverRate = 0.3f;
 	boolean preserveFittest = true;
 	// supervised
-	QuantitativeMeasure measure = new FMeasure();
+	QualitativeMeasure measure = new FMeasure();
 	
 	//LION parameters
 	double gammaScore = 0.15d;
@@ -142,11 +142,11 @@ public abstract class LearningSetting {
 		this.reward = reward;
 	}
 
-	public QuantitativeMeasure getMeasure() {
+	public QualitativeMeasure getMeasure() {
 		return measure;
 	}
 
-	public void setMeasure(QuantitativeMeasure measure) {
+	public void setMeasure(QualitativeMeasure measure) {
 		this.measure = measure;
 	}
 

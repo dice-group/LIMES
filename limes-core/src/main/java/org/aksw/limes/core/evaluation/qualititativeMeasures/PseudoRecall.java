@@ -3,6 +3,7 @@ package org.aksw.limes.core.evaluation.qualititativeMeasures;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.aksw.limes.core.evaluation.evaluator.GoldStandard;
 import org.aksw.limes.core.io.mapping.Mapping;
 
 public class PseudoRecall  extends PseudoPRF {
