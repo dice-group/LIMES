@@ -70,10 +70,7 @@ public class QualitativeMeasuresTest {
 	}
 	private Map<MeasureType,Double> testEvaluate(Mapping predictions,Mapping goldStandard,List<String> sourceUris,List<String> targetUris,Set<MeasureType> evaluationMeasure)
 	{
-		GoldStandard gs = new GoldStandard();
-		gs.goldStandard = goldStandard;
-		gs.sourceUris = sourceUris;
-		gs.targetUris = targetUris;
+		GoldStandard gs = new GoldStandard(goldStandard,sourceUris,targetUris);
 		return new QuantitativeMeasuresEvaluator().evaluate(predictions, gs, evaluationMeasure);
 	}
 	private Mapping initGoldStandardList()

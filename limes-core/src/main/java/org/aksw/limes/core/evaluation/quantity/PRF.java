@@ -3,10 +3,7 @@
  */
 package org.aksw.limes.core.evaluation.quantity;
 
-import java.util.Set;
-
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.model.Link;
 
 
 /**

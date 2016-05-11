@@ -41,11 +41,8 @@ public class Evaluator {
 //				algorithm.learn(trainingData)
 				predictions = algorithm.computePredictions();
 				/////////prepare gold standard information
-				GoldStandard goldstandard = new GoldStandard();
-				goldstandard.sourceUris = dataset.source.getAllUris();
-				goldstandard.targetUris = dataset.target.getAllUris();
-				goldstandard.goldStandard = dataset.goldStandard;
-				
+				GoldStandard goldstandard = new GoldStandard(dataset.goldStandard,dataset.source.getAllUris(),dataset.target.getAllUris());
+		
 				evaluationResults = eval.evaluate(predictions,goldstandard, QlMeasures);
 				overallEvaluations.put(algorithm.getName(), dataset.pairName,evaluationResults);
 
@@ -131,9 +128,7 @@ public class Evaluator {
 			}
 
 			//////////////
-			GoldStandard goldStandard = new GoldStandard();
-			goldStandard.sourceUris = dataset.source.getAllUris();
-			goldStandard.targetUris = dataset.target.getAllUris();
+			GoldStandard goldStandard = new GoldStandard(null,dataset.source.getAllUris(),dataset.target.getAllUris());
 			
 			// train and test folds
 			for(int i=0; i<folds; i++) {

@@ -179,8 +179,7 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 	 */
 	private double getMeasure(Mapping a_mapping, Mapping reference, double crossProduct) {
 		// These two statements are added by Mofeed to suite the change in QMeasure's new structure
-		GoldStandard goldStandard = new GoldStandard();
-		goldStandard.goldStandard = reference;
+		GoldStandard goldStandard = new GoldStandard(reference);
 		double quality = measure.calculate(a_mapping, goldStandard);
 		// TODO check
 		return quality;

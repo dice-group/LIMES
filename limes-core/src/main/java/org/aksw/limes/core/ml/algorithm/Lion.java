@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.aksw.limes.core.evaluation.quantity.PseudoFMeasure;
+import org.aksw.limes.core.evaluation.quantity.PseudoFMeasur;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
@@ -77,7 +77,7 @@ public class Lion extends MLAlgorithm {
 	protected ExecutionEngine engine;
 	UnsupervisedLearningSetting setting;
 
-	protected PseudoFMeasure pfm;
+	protected PseudoFMeasur pfm;
 	/*for experiments*/
 	protected static boolean debuggingInput = false;
 	//TODO either move to setting or finalize strategy
@@ -117,7 +117,7 @@ public class Lion extends MLAlgorithm {
 		this.loopsRootExpanded = new LinkedList<Integer>();
 		
 		// setting parameters
-		pfm = new PseudoFMeasure();
+		pfm = new PseudoFMeasur();
 		heuristic.setLearningSetting(setting);
 		operator.setLearningSetting(setting);
 		engine = ExecutionEngineFactory.getEngine("default", 

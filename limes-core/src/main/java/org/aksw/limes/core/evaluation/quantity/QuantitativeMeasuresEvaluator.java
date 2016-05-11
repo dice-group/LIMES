@@ -29,11 +29,11 @@ public class QuantitativeMeasuresEvaluator {
 			else if (measureType.equals(MeasureType.fmeasure))
 				evaluateFMeasure(predictions,goldStandard);
 			else if (measureType.equals(MeasureType.pseuFMeasure))
-				evaluatePFMeasure(predictions,goldStandard.sourceUris,goldStandard.targetUris);
+				evaluatePFMeasure(predictions,goldStandard);
 			else if (measureType.equals(MeasureType.pseuPrecision))
-				evaluatePPrecision(predictions,goldStandard.sourceUris,goldStandard.targetUris);
+				evaluatePPrecision(predictions,goldStandard);
 			else if (measureType.equals(MeasureType.PseuRecall))
-				evaluatePRecall(predictions,goldStandard.sourceUris,goldStandard.targetUris);
+				evaluatePRecall(predictions,goldStandard);
 			else if (measureType.equals(MeasureType.accuracy))
 				evaluateAccuracy(predictions,goldStandard);
 			else if (measureType.equals(MeasureType.auc))
@@ -58,19 +58,19 @@ public class QuantitativeMeasuresEvaluator {
 		double fmeasure = new FMeasure().calculate(predictions, goldStandard);
 		evaluations.put(MeasureType.fmeasure, fmeasure);
 	}
-	private void evaluatePPrecision(Mapping predictions,List<String> sourceUris, List<String> targetUris)
+	private void evaluatePPrecision(Mapping predictions,GoldStandard goldStandard)
 	{
-		double pPrecision = new PseudoFMeasure().getPseudoPrecision(sourceUris,targetUris,predictions);
+		double pPrecision = new PseudoPrecision().calculate(predictions, goldStandard) ;
 		evaluations.put(MeasureType.pseuPrecision, pPrecision);
 	}
-	private void evaluatePRecall(Mapping predictions,List<String> sourceUris, List<String> targetUris)
+	private void evaluatePRecall(Mapping predictions,GoldStandard goldStandard)
 	{
-		double pRecall = new PseudoFMeasure().getPseudoRecall(sourceUris,targetUris,predictions);
+		double pRecall = new PseudoRecall().calculate(predictions, goldStandard);
 		evaluations.put(MeasureType.PseuRecall, pRecall);
 	}
-	private void evaluatePFMeasure(Mapping predictions,List<String> sourceUris, List<String> targetUris)
+	private void evaluatePFMeasure(Mapping predictions,GoldStandard goldStandard)
 	{
-		double pfmeasure = new PseudoFMeasure().getPseudoFMeasure(sourceUris,targetUris,predictions);
+		double pfmeasure = new PseudoFMeasure().calculate(predictions, goldStandard);
 		evaluations.put(MeasureType.pseuFMeasure, pfmeasure);
 	}
 
@@ -90,9 +90,9 @@ public class QuantitativeMeasuresEvaluator {
 		evaluatePrecision(predictions,goldStandard);
 		evaluateRecall(predictions,goldStandard);
 		evaluateFMeasure(predictions,goldStandard);
-		evaluatePPrecision(predictions,goldStandard.sourceUris,goldStandard.targetUris);
-		evaluatePRecall(predictions,goldStandard.sourceUris,goldStandard.targetUris);
-		evaluatePFMeasure(predictions,goldStandard.sourceUris,goldStandard.targetUris);
+		evaluatePPrecision(predictions,goldStandard);
+		evaluatePRecall(predictions,goldStandard);
+		evaluatePFMeasure(predictions,goldStandard);
 		evaluateAccuracy(predictions,goldStandard);
 		evaluateAUC(predictions,goldStandard);
 	}
