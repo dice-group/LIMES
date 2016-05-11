@@ -13,7 +13,6 @@ import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 import org.aksw.limes.core.util.Pair;
 
@@ -88,15 +87,7 @@ public class NaiveSurjection extends PointsetsMeasure {
 		return m;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(java.lang.Object, java.lang.Object)
-	 */
-	public double getSimilarity(Object a, Object b) {
-		Polygon p1 = OrchidMapper.getPolygon((String) a);
-		Polygon p2 = OrchidMapper.getPolygon((String) b);
-		double d = computeDistance(p1, p2, 0);
-		return 1d / (1d + (double) d);
-	}
+
 
 	public String getType() {
 		return "geodistance";

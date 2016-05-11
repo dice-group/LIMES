@@ -112,12 +112,6 @@ public class NaiveFrechet extends PointsetsMeasure {
 		return OrthodromicDistance.getDistanceInDegrees(x, y);
 	}
 
-	public double getSimilarity(Object a, Object b) {
-		Polygon p1 = OrchidMapper.getPolygon((String) a);
-		Polygon p2 = OrchidMapper.getPolygon((String) b);
-		double d = computeDistance(p1, p2, 0);
-		return 1d / (1d + (double) d);
-	}
 
 	public String getType() {
 		return "geodistance";
