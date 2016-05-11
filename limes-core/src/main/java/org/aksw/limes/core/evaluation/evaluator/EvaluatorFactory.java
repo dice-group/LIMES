@@ -6,12 +6,18 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoPrecision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRecall;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 
+/**
+ * This Factory class give a measure object based on the specified measure type.
+ * This object can be used through its method calculate() to evaluate the retrieved mappings
+ * @author mofeed
+ * @version 1.0
+ */
 public class EvaluatorFactory {
 
-	public static QualitativeMeasure getQualitativeMeasure(MeasureType measure)
+	public static IQualitativeMeasure getQualitativeMeasure(MeasureType measure)
 	{
 		if(measure.equals(MeasureType.precision))
 			return new Precision();

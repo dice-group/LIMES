@@ -12,6 +12,7 @@ import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
  * Just a little helper method to get PropertyMappings of the evaluation datasets.
  * @author Klaus Lyko
  *@author Mofeed Hassan
+ *@version 1.0
  */
 public class PropMapper {
 	

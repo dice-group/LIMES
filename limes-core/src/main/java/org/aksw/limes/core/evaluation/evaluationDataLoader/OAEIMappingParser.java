@@ -13,6 +13,12 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 
+/**
+ * This class  is responsible for parsing the mappings generated in the OAEI tests
+ * @author klaus
+ * @author mofeed
+ * @version 1.0
+ */
 public class OAEIMappingParser extends DefaultHandler {
 
 	Mapping m = new MappingFactory().createMapping("HYBIRD_MAPPING");

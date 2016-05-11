@@ -1,8 +1,19 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
-import org.aksw.limes.core.evaluation.evaluator.GoldStandard;
+import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.io.mapping.Mapping;
 
+/**
+ * Implements a quality measure for unsupervised ML algorihtms, dubbed pseudo F-Measure. 
+ * Thereby, not relying on any gold standard. The basic idea is to measure the quality of the
+ * a given Mapping by calc. how close it is to an assumed 1-to-1 Mapping between source and 
+ * target.
+ * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
+ * @author ngonga
+ * @author mofeed hassan
+ * @version 1.0
+ *
+ */
 public class PseudoPrecision extends PseudoPRF {
 
 public PseudoPrecision() {}

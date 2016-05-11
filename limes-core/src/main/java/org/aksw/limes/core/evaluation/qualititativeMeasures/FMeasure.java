@@ -1,14 +1,15 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
-import org.aksw.limes.core.evaluation.evaluator.GoldStandard;
+import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.io.mapping.Mapping;
 
 /**
+ * F-Measure is the wieghted average of the precision and recall
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
- * @version 2015-11-03
+ * @version 1.0
  *
  */
-public class FMeasure extends PRF implements QualitativeMeasure {
+public class FMeasure extends PRF implements IQualitativeMeasure {
 
 	@Override
 	public double calculate(Mapping predictions, GoldStandard goldStandard) {

@@ -1,6 +1,6 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
-import org.aksw.limes.core.evaluation.evaluator.GoldStandard;
+import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.io.mapping.Mapping;
 
 /**
@@ -12,9 +12,9 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @author Klaus Lyko <lyko@informatik.uni-leizig.de>
- * @version 2016-02-26
+ * @version 1.0
  */
-public class AUC extends PRF implements QualitativeMeasure {
+public class AUC extends PRF implements IQualitativeMeasure {
 
 	@Override
 	public double calculate(Mapping predictions, GoldStandard goldStandard) {

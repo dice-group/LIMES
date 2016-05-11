@@ -3,15 +3,22 @@
  */
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
-import org.aksw.limes.core.evaluation.evaluator.GoldStandard;
+import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.io.mapping.Mapping;
 
 
 /**
+ * This class cointains three methods that calculate such values:
+ * true-positive: the results classified as positive and the classification is correct.
+ * false-positive: the results classified as positive and the classification is incorrect.
+ * true-negative:	the results classified as negative and the classification is correct.
+ * false-positive:	the results classified as negative and the classification is incorrect.
+ * These values are used by Measures classes to evaluate the mappings results
  * @author mofeed
  * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
+ * @version 1.0
  */
-public abstract class PRF implements QualitativeMeasure{
+public abstract class PRF implements IQualitativeMeasure{
 	public abstract double calculate(Mapping predictions, GoldStandard goldStandard);
 	
 	/**
@@ -48,6 +55,12 @@ public abstract class PRF implements QualitativeMeasure{
         return FNCounter;
     }
 	
+	/**
+	 * @param goldStandardSize : the size of the gold standard mapping
+	 * @param sourceDatasetSize: the size of the source dataset
+	 * @param targetDatasetSize: the size of the target dataset
+	 * @return the number of truly classified negative
+	 */
 	public static double trueNegative(final long goldStandardSize, final long sourceDatasetSize, final long targetDatasetSize)
     {
 		return (sourceDatasetSize*targetDatasetSize) -goldStandardSize;

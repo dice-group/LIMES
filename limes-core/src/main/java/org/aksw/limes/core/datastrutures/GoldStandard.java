@@ -1,9 +1,14 @@
-package org.aksw.limes.core.evaluation.evaluator;
+package org.aksw.limes.core.datastrutures;
 
 import java.util.List;
 
 import org.aksw.limes.core.io.mapping.Mapping;
 
+/**
+ * This class contains the gold standard mapping and the sopurce and target URIs
+ * @author mofeed
+ * @version 1.0
+ */
 public class GoldStandard {
 	public Mapping goldStandard;
 	public List<String> sourceUris;

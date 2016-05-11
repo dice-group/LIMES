@@ -9,7 +9,7 @@ import java.util.List;
  * @version 2015-11-03
  *
  */
-public interface QuantitativeMeasure {
+public interface IQuantitativeMeasure {
 	RunRecord getRun(long runId);
 	void addRun(RunRecord record);
 	List<RunRecord> getRuns();

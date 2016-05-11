@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.aksw.limes.core.datastrutures.Task;
+import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
-import org.aksw.limes.core.evaluation.quantitativeMeasures.QuantitativeMeasure;
+import org.aksw.limes.core.evaluation.quantitativeMeasures.IQuantitativeMeasure;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
@@ -18,13 +20,22 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
 /**
- *
+ * This evaluator is responsible for evaluating set of datasets that have source,target,goldstandard and mappings against set of measures
+ * @author mofeed
+ * @version 1.0
  */
 public class Evaluator {
 
 	private QualitativeMeasuresEvaluator eval = new QualitativeMeasuresEvaluator();
 	
-	public Table<String,String,Map<MeasureType, Double>> evaluate(Set<MLAlgorithm> algorithms, Set<DataSetsPair> datasets, Set<MeasureType> QlMeasures, Set<QuantitativeMeasure> QnMeasures)
+	/**
+	 * @param algorithms: the set of algorithms used to generate the predicted mappings
+	 * @param datasets: the set of dataets to apply the algorithms on them. The should include source Cache, target Cache, goldstandard and predicted mapping
+	 * @param QlMeasures: set of qualitative measures
+	 * @param QnMeasures; set of quantitative measures
+	 * @return table contains the results corresponding to the algorithms and measures
+	 */
+	public Table<String,String,Map<MeasureType, Double>> evaluate(Set<MLAlgorithm> algorithms, Set<Task> datasets, Set<MeasureType> QlMeasures, Set<IQuantitativeMeasure> QnMeasures)
 	{
 		Table<String,String,Map<MeasureType, Double>> overallEvaluations = HashBasedTable.create();// multimap stores aglortihmName:datasetname:List of evaluations
 		
@@ -32,7 +43,7 @@ public class Evaluator {
 		Map<MeasureType, Double> evaluationResults = null;
 		
 		for (MLAlgorithm algorithm : algorithms) {// select a ML algorithm
-			for (DataSetsPair dataset : datasets) {// select a dataset-pair to evaluate each ML algorithm on
+			for (Task dataset : datasets) {// select a dataset-pair to evaluate each ML algorithm on
 				algorithm.setSourceCache(dataset.source);
 				algorithm.setTargetCache(dataset.target);
 				// XXX ???
@@ -62,13 +73,13 @@ public class Evaluator {
 	 * @param qnMeasures
 	 * @return
 	 */
-	public Table<String, String, Map<MeasureType, Double>> crossValidate(MLAlgorithm algorithm, Set<DataSetsPair> datasets, 
-			int folds, Set<MeasureType> qlMeasures, Set<QuantitativeMeasure> qnMeasures) {
+	public Table<String, String, Map<MeasureType, Double>> crossValidate(MLAlgorithm algorithm, Set<Task> datasets, 
+			int folds, Set<MeasureType> qlMeasures, Set<IQuantitativeMeasure> qnMeasures) {
 		
 		Table<String, String, Map<MeasureType, Double>> evalTable = HashBasedTable.create();// multimap stores aglortihmName:datasetname:List of evaluations
 		
 		// select a dataset-pair to evaluate each ML algorithm on
-		for (DataSetsPair dataset : datasets) {
+		for (Task dataset : datasets) {
 			
 			Cache source = dataset.source;
 			ArrayList<Instance> srcInstances = source.getAllInstances();

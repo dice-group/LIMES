@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
-import org.aksw.limes.core.evaluation.evaluator.GoldStandard;
+import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluator.MeasureType;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.io.mapping.Mapping;

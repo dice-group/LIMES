@@ -7,8 +7,8 @@ import java.util.Map.Entry;
 import org.jgap.gp.GPFitnessFunction;
 import org.jgap.gp.IGPProgram;
 import org.jgap.gp.impl.ProgramChromosome;
-import org.aksw.limes.core.evaluation.evaluator.GoldStandard;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasure;
+import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
@@ -51,7 +51,7 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 	protected Cache trimmedTargetCache;
 //	protected int numberOfExamples = 0;
 	
-	protected QualitativeMeasure measure;
+	protected IQualitativeMeasure measure;
 	
 	protected double crossProduct;
 	public static final String fScore="fScore";
@@ -78,7 +78,7 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 		
 	}
 	
-	private ExpressionFitnessFunction(LinkSpecGeneticLearnerConfig a_config, QualitativeMeasure measure, Mapping reference) {
+	private ExpressionFitnessFunction(LinkSpecGeneticLearnerConfig a_config, IQualitativeMeasure measure, Mapping reference) {
 		this(a_config);		
 		m_config = a_config;
 //		optimalMapping = reference;
@@ -186,7 +186,7 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 	}
 	
 	
-	public static ExpressionFitnessFunction getInstance(LinkSpecGeneticLearnerConfig a_config, QualitativeMeasure measure,  Mapping reference) {
+	public static ExpressionFitnessFunction getInstance(LinkSpecGeneticLearnerConfig a_config, IQualitativeMeasure measure,  Mapping reference) {
 		if(instance == null) {
 				instance = new ExpressionFitnessFunction(a_config, measure, reference);
 		}
