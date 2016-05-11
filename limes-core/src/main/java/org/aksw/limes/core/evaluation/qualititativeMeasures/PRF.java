@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.aksw.limes.core.evaluation.quantity;
+package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
 import org.aksw.limes.core.io.mapping.Mapping;
 

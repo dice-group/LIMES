@@ -1,6 +1,6 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
-import org.aksw.limes.core.evaluation.quantity.PseudoFMeasur;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasur;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;

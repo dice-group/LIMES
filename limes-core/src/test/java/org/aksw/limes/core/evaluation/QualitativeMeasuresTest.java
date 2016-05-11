@@ -12,14 +12,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
-
-import com.google.common.collect.Multimap;
-
-import org.aksw.limes.core.evaluation.quantity.FMeasure;
-import org.aksw.limes.core.evaluation.quantity.GoldStandard;
-import org.aksw.limes.core.evaluation.quantity.Precision;
-import org.aksw.limes.core.evaluation.quantity.QuantitativeMeasuresEvaluator;
-import org.aksw.limes.core.evaluation.quantity.Recall;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.GoldStandard;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.QuantitativeMeasuresEvaluator;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 

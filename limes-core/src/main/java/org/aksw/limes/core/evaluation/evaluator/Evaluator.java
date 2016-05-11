@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.aksw.limes.core.evaluation.MeasureType;
-import org.aksw.limes.core.evaluation.quality.QualitativeMeasure;
-import org.aksw.limes.core.evaluation.quantity.GoldStandard;
-import org.aksw.limes.core.evaluation.quantity.QuantitativeMeasuresEvaluator;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.GoldStandard;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.QuantitativeMeasuresEvaluator;
+import org.aksw.limes.core.evaluation.quantitativeMeasures.QualitativeMeasure;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;

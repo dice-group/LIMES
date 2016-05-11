@@ -5,8 +5,8 @@ package org.aksw.limes.core.evaluation;
 
 import static org.junit.Assert.*;
 
-import org.aksw.limes.core.evaluation.quality.RunRecord;
-import org.aksw.limes.core.evaluation.quality.RunsData;
+import org.aksw.limes.core.evaluation.quantitativeMeasures.RunRecord;
+import org.aksw.limes.core.evaluation.quantitativeMeasures.RunsData;
 import org.junit.Test;
 
 /**

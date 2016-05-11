@@ -1,7 +1,7 @@
 package org.aksw.limes.core.ml.setting;
 
-import org.aksw.limes.core.evaluation.quantity.FMeasure;
-import org.aksw.limes.core.evaluation.quantity.QuantitativeMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.QuantitativeMeasure;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.ml.algorithm.IMLAlgorithm;

@@ -1,4 +1,4 @@
-package org.aksw.limes.core.evaluation.quality;
+package org.aksw.limes.core.evaluation.quantitativeMeasures;
 
 /**
  * @author mofeed
