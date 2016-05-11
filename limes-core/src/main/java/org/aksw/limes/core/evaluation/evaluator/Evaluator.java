@@ -12,6 +12,7 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithm;
 
 import com.google.common.collect.HashBasedTable;
@@ -85,8 +86,11 @@ public class Evaluator {
 			for(int i=0; i<folds; i++) {
 				srcParts[i] = new MemoryCache();
 				srcFolds[i] = new MemoryCache();
-				srcMap[i] = MappingFactory.createMapping(dataset.pairName + "_mapping_" + i);
-				srcGold[i] = MappingFactory.createMapping(dataset.pairName + "_goldstd_" + i);
+				// AN: Changed the type of mapping as the input is a type, not the name
+				// srcMap[i] = MappingFactory.createMapping(dataset.pairName + "_mapping_" + i);
+				//srcGold[i] = MappingFactory.createMapping(dataset.pairName + "_goldstd_" + i);
+				srcMap[i] = MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
+				srcGold[i] = MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
 			}
 			
 			// randomly distribute instances into #folds partitions

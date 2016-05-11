@@ -16,6 +16,7 @@ import org.aksw.limes.core.io.config.reader.IConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 /*import de.uni_leipzig.simba.genetics.util.OAEIMappingParser;
 import de.uni_leipzig.simba.genetics.util.PropMapper;
 import de.uni_leipzig.simba.io.ConfigReader;
@@ -764,7 +765,7 @@ public class DataSetChooser {
 	 */
 	public static Mapping fixReferenceMap(Mapping original, Cache sC, Cache tC) {
 		int count = 0;
-		Mapping fixed = new MappingFactory().createMapping("MEMORY_MAPPING");
+		Mapping fixed =  MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
 		for(String sk : original.getMap().keySet()) {
 			if(sC.containsUri(sk)) {
 				for(String tk : original.getMap().get(sk).keySet()) {
