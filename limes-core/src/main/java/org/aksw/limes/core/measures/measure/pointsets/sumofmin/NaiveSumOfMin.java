@@ -59,6 +59,8 @@ public class NaiveSumOfMin extends PointsetsMeasure {
 		}
 		return sum;
 	}
+	
+	
 
 	/**
 	 * @param x Point
