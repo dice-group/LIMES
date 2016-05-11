@@ -8,8 +8,6 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 
@@ -45,7 +43,7 @@ public class NaiveMax extends PointsetsMeasure {
 		double d;
 		for (Point x : X.points) {
 			for (Point y : Y.points) {
-				d = distance(x, y);
+				d = pointToPointDistance(x, y);
 				if (max < d) {
 					max = d;
 				}
@@ -65,7 +63,7 @@ public class NaiveMax extends PointsetsMeasure {
 		double d;
 		for (Point x : X.points) {
 			for (Point y : Y.points) {
-				d = (new NaiveMax()).distance(x, y);
+				d = pointToPointDistance(x, y);
 				if (max < d) {
 					max = d;
 				}

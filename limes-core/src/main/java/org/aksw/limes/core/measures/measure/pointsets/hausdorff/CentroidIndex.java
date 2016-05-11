@@ -75,7 +75,7 @@ public class CentroidIndex extends PolygonIndex {
 	    centroids.put(p.uri, new Circle(average(p.points.get(from), p.points.get(to)), maxDistance / 2.0));
 	}
 
-	// else take the point itself
+	// else take the point itself 
 	else {
 	    centroids.put(p.uri, new Circle(p.points.get(0), 0.0));
 	}

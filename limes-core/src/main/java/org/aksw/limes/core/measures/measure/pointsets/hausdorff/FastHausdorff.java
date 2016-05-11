@@ -28,7 +28,7 @@ public class FastHausdorff extends NaiveHausdorff {
 		for (Point x : X.points) {
 			min = Float.POSITIVE_INFINITY;
 			for (Point y : Y.points) {
-				d = distance(x, y);
+				d = pointToPointDistance(x, y);
 				if (min > d) {
 					min = d;
 				}

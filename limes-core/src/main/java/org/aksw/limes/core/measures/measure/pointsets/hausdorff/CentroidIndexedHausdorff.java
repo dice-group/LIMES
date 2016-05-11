@@ -56,7 +56,7 @@ public class CentroidIndexedHausdorff extends IndexedHausdorff {
 		double d;
 		for (Polygon s : source) {
 			for (Polygon t : target) {
-				d = distance(sourceIndex.centroids.get(s.uri).center,
+				d = pointToPointDistance(sourceIndex.centroids.get(s.uri).center,
 						((CentroidIndex) targetIndex).centroids.get(t.uri).center);
 				if (d - (sourceIndex.centroids.get(s.uri).radius
 						+ ((CentroidIndex) targetIndex).centroids.get(t.uri).radius) <= threshold) {
@@ -76,7 +76,7 @@ public class CentroidIndexedHausdorff extends IndexedHausdorff {
 	@Override
 	public double computeDistance(Polygon X, Polygon Y, double threshold) {
 		// centroid distance check
-		double d = distance(sourceIndex.centroids.get(X.uri).center,
+		double d = pointToPointDistance(sourceIndex.centroids.get(X.uri).center,
 				((CentroidIndex) targetIndex).centroids.get(Y.uri).center);
 		if (d - (sourceIndex.centroids.get(X.uri).radius
 				+ ((CentroidIndex) targetIndex).centroids.get(Y.uri).radius) > threshold) {

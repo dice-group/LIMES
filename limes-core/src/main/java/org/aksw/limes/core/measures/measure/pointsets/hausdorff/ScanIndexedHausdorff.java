@@ -141,7 +141,7 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
 	public Map<Integer, List<Integer>> initToCompute(Polygon s, Polygon t, double threshold, Mapping knownDistances) {
 		// 1. compute first distance
 		Map<Integer, List<Integer>> toCompute = new HashMap<Integer, List<Integer>>();
-		double approx, d = distance(s.points.get(0), t.points.get(0));
+		double approx, d = pointToPointDistance(s.points.get(0), t.points.get(0));
 		if (d <= threshold) {
 			knownDistances.add(0 + "", 0 + "", d);
 		}
@@ -203,7 +203,7 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
 		Map.Entry<Integer, List<Integer>> entries = toCompute.entrySet().iterator().next();
 		sIndex = entries.getKey();
 		tIndex = entries.getValue().get(0);
-		double approx, d = distance(s.points.get(sIndex), t.points.get(tIndex));
+		double approx, d = pointToPointDistance(s.points.get(sIndex), t.points.get(tIndex));
 
 		if (d <= threshold) {
 			knownDistances.add(sIndex + "", tIndex + "", d);
