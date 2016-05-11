@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 *
 * @author ngonga
 */
-public class TopologyMeasureFactory {
+public class SpaceMeasureFactory {
 
    static Logger logger = Logger.getLogger("LIMES");
 

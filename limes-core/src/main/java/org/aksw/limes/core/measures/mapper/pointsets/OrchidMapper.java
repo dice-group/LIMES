@@ -9,11 +9,11 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.PropertyFetcher;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
-import org.aksw.limes.core.measures.mapper.string.PropertyFetcher;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.SetMeasureFactory.Type;
 

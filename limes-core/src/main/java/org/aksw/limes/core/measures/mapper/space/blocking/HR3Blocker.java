@@ -2,89 +2,91 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.aksw.limes.core.measures.mapper.topology.blocking;
+package org.aksw.limes.core.measures.mapper.space.blocking;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.TreeSet;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
-import org.aksw.limes.core.measures.measure.space.TopologyMeasureFactory;
+import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.apache.log4j.Logger;
 
 /**
- *
+ * This class implements the HR3 algorithm which can ensure that a certain RRR
+ * is reached.
  * @author ngonga
  */
-public class VariableGranularityBlocker implements BlockingModule {
-    static Logger logger = Logger.getLogger("LIMES");
+public class HR3Blocker implements BlockingModule {
+        static Logger logger = Logger.getLogger("LIMES");
     int dim = 2;
     ArrayList<Double> thresholds;
     ArrayList<String> properties;
     ISpaceMeasure measure;
     Instance zero;
     int granularity;
-
-    public VariableGranularityBlocker(String props, String measureName, double threshold) {
+    HashMap<ArrayList<Integer>, ArrayList<ArrayList<Integer>>> cache;
+    public HR3Blocker(String props, String measureName, double threshold) {
+        logger.info("Using HR3");
         thresholds = new ArrayList<Double>();
         properties = new ArrayList<String>();
         String[] split = props.split("\\|");
         dim = split.length;
-        measure = TopologyMeasureFactory.getMeasure(measureName, dim);
+        measure = SpaceMeasureFactory.getMeasure(measureName, dim);
         for (int i = 0; i < dim; i++) {
             thresholds.add(measure.getThreshold(i, threshold));
             properties.add(split[i]);
         }
         granularity = 2;
+        cache = new HashMap<ArrayList<Integer>, ArrayList<ArrayList<Integer>>> ();
     }
 
-    public VariableGranularityBlocker(String props, String measureName, double threshold, int _granularity) {
+    //Simple init meant to reuse the getBlocksTocompare methods
+    public HR3Blocker(int granularity, int dimensions)
+    {
+        this.granularity = granularity;
+        dim = dimensions;
+    }
+    
+    public HR3Blocker(String props, String measureName, double threshold, int _granularity) {
+//        logger.info("Using HR3");
         thresholds = new ArrayList<Double>();
         properties = new ArrayList<String>();
         String[] split = props.split("\\|");
         dim = split.length;
-        measure = TopologyMeasureFactory.getMeasure(measureName, dim);
+        measure = SpaceMeasureFactory.getMeasure(measureName, dim);
         for (int i = 0; i < dim; i++) {
             thresholds.add(measure.getThreshold(i, threshold));
             properties.add(split[i]);
         }
         granularity = _granularity;
+        cache = new HashMap<ArrayList<Integer>, ArrayList<ArrayList<Integer>>> ();
     }
 
     public void setGranularity(int n) {
         granularity = n;
     }
 
-    /** Computes the block ID for a given instance a. The idea behind the blocking
-     * is to tile the target space into blocks of dimension thresdhold^dimensions.
-     * Each instance s from the source space is then compared with the blocks lying
-     * directly around s's block and the block where s is.
-     * @param a The instance whose blockId is to be computed
-     * @return The ID for the block of a
+    /** Computes the blocks that are to be compared with a given block
+     * @param blockId ID of the block for which comparisons are needed
+     * @return List of IDs that are to be compared
      */
     public ArrayList<ArrayList<Integer>> getBlocksToCompare(ArrayList<Integer> blockId) {
         int dim = blockId.size();
         if (dim == 0) {
             return new ArrayList<ArrayList<Integer>>();
         }
+//        if(cache.containsKey(blockId)) 
+//        {
+//            return cache.get(blockId);
+//        }
         ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+        ArrayList<ArrayList<Integer>> hr3result = new ArrayList<ArrayList<Integer>>();
         result.add(blockId);
 
-        ArrayList<ArrayList<Integer>> toAdd = new ArrayList<ArrayList<Integer>>();
-
-        // add 2*granularity+1 lists and initialize therewith
-//        ArrayList<Integer> entry;
-//        for (int i = 0; i < 2 * granularity + 1; i++) {
-//            entry = new ArrayList<Integer>();
-//            toAdd.add(entry);
-//        }
-//
-//        for (int i = 0; i < dim; i++) {
-//            for (int j = (-1) * granularity; j <= granularity; j++) {
-//                toAdd.get(j).add(0);
-//            }
-//        }
+        ArrayList<ArrayList<Integer>> toAdd;
         ArrayList<Integer> id;
 
         for (int i = 0; i < dim; i++) {
@@ -118,8 +120,33 @@ public class VariableGranularityBlocker implements BlockingModule {
                 }
             }
         }
-        //System.out.println(result.size());
-        return result;
+        
+        //now run hr3 check 
+        int alphaPowered = (int)Math.pow(granularity, dim);
+        ArrayList<Integer> block;
+        int hr3Index;
+        int index;
+        for(int i=0; i<result.size(); i++)
+        {            
+            hr3Index = 0;
+            block = result.get(i);
+            for(int j=0; j<dim; j++)
+            {
+                if(block.get(j) == blockId.get(j))
+                {
+                    hr3Index = 0;
+                    break;
+                }
+                else
+                {
+                    index = (Math.abs(blockId.get(j) - block.get(j)) - 1);
+                    hr3Index = hr3Index + (int)Math.pow(index, dim);
+                }
+            }
+            if(hr3Index < alphaPowered) hr3result.add(block);
+        }
+      
+        return hr3result;
     }
 
     public ArrayList<Integer> getBlockId(Instance a) {
@@ -269,7 +296,7 @@ public class VariableGranularityBlocker implements BlockingModule {
         cache.addTriple("B", "lon", "2");
         cache.addTriple("B", "lat", "1");
 
-        VariableGranularityBlocker blocker = new VariableGranularityBlocker("lon|lat", "euclidean", 0.5);
+        HR3Blocker blocker = new HR3Blocker("lon|lat", "euclidean", 0.5);
 
         blocker.setGranularity(3);
 

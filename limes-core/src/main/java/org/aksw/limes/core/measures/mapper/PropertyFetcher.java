@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.aksw.limes.core.measures.mapper.string;
+package org.aksw.limes.core.measures.mapper;
 
 
 import java.util.ArrayList;

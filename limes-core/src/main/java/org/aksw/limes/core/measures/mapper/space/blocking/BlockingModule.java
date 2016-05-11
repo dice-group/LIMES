@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package org.aksw.limes.core.measures.mapper.topology.blocking;
+package org.aksw.limes.core.measures.mapper.space.blocking;
 
 import java.util.ArrayList;
 

@@ -4,6 +4,7 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.PropertyFetcher;
 import org.aksw.limes.core.measures.mapper.string.jarowinkler.LengthQuicksort;
 import org.aksw.limes.core.measures.mapper.string.jarowinkler.TrieFilter;
 import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;

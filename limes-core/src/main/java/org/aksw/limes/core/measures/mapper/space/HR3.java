@@ -9,10 +9,10 @@ import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
-import org.aksw.limes.core.measures.mapper.topology.blocking.BlockingFactory;
-import org.aksw.limes.core.measures.mapper.topology.blocking.BlockingModule;
+import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
+import org.aksw.limes.core.measures.mapper.space.blocking.BlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
-import org.aksw.limes.core.measures.measure.space.TopologyMeasureFactory;
+import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -105,7 +105,7 @@ public class HR3 extends Mapper {
 		granularity);
 
 	// initialize the measure for similarity computation
-	ISpaceMeasure measure = TopologyMeasureFactory.getMeasure(p.getOperator(), dimensions);
+	ISpaceMeasure measure = SpaceMeasureFactory.getMeasure(p.getOperator(), dimensions);
 
 	// compute blockid for each of the elements of the target
 	// implement our simple yet efficient blocking approach

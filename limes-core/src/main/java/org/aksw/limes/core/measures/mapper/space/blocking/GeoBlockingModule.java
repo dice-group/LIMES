@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.aksw.limes.core.measures.mapper.topology.blocking;
+package org.aksw.limes.core.measures.mapper.space.blocking;
 
 
 import java.util.ArrayList;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
-import org.aksw.limes.core.measures.measure.space.TopologyMeasureFactory;
+import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.apache.log4j.Logger;
 
 /**
@@ -35,7 +35,7 @@ public class GeoBlockingModule implements BlockingModule {
         if (dim > 2) {
             logger.warn("Dimensions higher than 2. Hope we are on a " + (dim + 1) + "D planet.");
         }
-        measure = TopologyMeasureFactory.getMeasure(measureName, dim);
+        measure = SpaceMeasureFactory.getMeasure(measureName, dim);
         for (int i = 0; i < dim; i++) {
             thresholds.add(measure.getThreshold(i, threshold));
             properties.add(split[i]);

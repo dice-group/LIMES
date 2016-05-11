@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package org.aksw.limes.core.measures.mapper.topology.blocking;
+package org.aksw.limes.core.measures.mapper.space.blocking;
 
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.TreeSet;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
-import org.aksw.limes.core.measures.measure.space.TopologyMeasureFactory;
+import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 
 /**
  *
@@ -47,7 +47,7 @@ public class EuclideanBlockingModule implements BlockingModule {
         properties = new ArrayList<String>();
         String[] split = props.split("\\|");
         dim = split.length;
-        measure = TopologyMeasureFactory.getMeasure(measureName, dim);
+        measure = SpaceMeasureFactory.getMeasure(measureName, dim);
         for(int i=0; i<dim; i++)
         {
             thresholds.add(measure.getThreshold(i, threshold));

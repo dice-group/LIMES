@@ -39,7 +39,7 @@ public class BlockIdGenerator {
         properties = new ArrayList<String>();
         String[] split = props.split("\\|");
         dim = split.length;
-        measure = TopologyMeasureFactory.getMeasure(measureName, dim);
+        measure = SpaceMeasureFactory.getMeasure(measureName, dim);
         for(int i=0; i<dim; i++)
         {
             thresholds.add(measure.getThreshold(i, threshold));
