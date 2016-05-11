@@ -1,0 +1,7 @@
+-- No plans constructed for MAX, MIN and ADD operators
+-- If a filter function requires a condition value, then it cannot be null. LIMES will exit
+-- ONE filterInstruction per NestedPlan
+-- In case of Plan with instruction list, if the mapping of Instr1 overwrittes the mapping of Instr2 in the buffer, the mapping is set at the end of the buffer
+-- Planners create only NestedPlans
+-- In MeasureFactory: getMeasure always returns a measure instance even in case of null, empty or wrong measure expression (a lot of functions depend on this)
+-- getRuntimeApproximation for measures

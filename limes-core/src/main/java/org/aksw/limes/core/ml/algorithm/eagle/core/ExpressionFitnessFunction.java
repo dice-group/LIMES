@@ -11,6 +11,7 @@ import org.aksw.limes.core.evaluation.evaluator.GoldStandard;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasure;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
+import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
@@ -87,7 +88,7 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 		// get Engines
 		trimKnowledgeBases(reference);
 		
-		fullEngine = ExecutionEngineFactory.getEngine("default", sC, tC, a_config.source.getVar(), a_config.target.getVar());
+		fullEngine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sC, tC, a_config.source.getVar(), a_config.target.getVar());
 		
 		this.measure=measure;
 		crossProduct = trimmedSourceCache.size() * trimmedTargetCache.size();
@@ -255,7 +256,7 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 			trimmedTargetCache = trimmed[1];		
 			logger.info("Trimming to "+trimmed[0].size()+" and "+trimmed[1].size()+" caches.");
 			crossProduct = trimmedSourceCache.size() * trimmedTargetCache.size();
-			engine = ExecutionEngineFactory.getEngine("default", 
+			engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, 
 					trimmedSourceCache, trimmedTargetCache, 
 					this.m_config.source.getVar(), this.m_config.target.getVar());
 
@@ -275,12 +276,12 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 	 */
 	public void useFullCaches(boolean value) {
 		if(value) {
-			engine = ExecutionEngineFactory.getEngine("default", 
+			engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, 
 					trimmedSourceCache, trimmedTargetCache, 
 					this.m_config.source.getVar(), this.m_config.target.getVar());
 		}
 		else {
-			engine = ExecutionEngineFactory.getEngine("default", 
+			engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, 
 					sC, tC,
 					this.m_config.source.getVar(), this.m_config.target.getVar());
 		}
@@ -322,7 +323,7 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 					trimmedTargetCache.addInstance(tC.getInstance(tUri));
 				}
 			}
-		engine = ExecutionEngineFactory.getEngine("default", 
+		engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, 
 				trimmedSourceCache, trimmedTargetCache,
 				this.m_config.source.getVar(), this.m_config.target.getVar());
 		crossProduct = trimmedSourceCache.size() * trimmedTargetCache.size();

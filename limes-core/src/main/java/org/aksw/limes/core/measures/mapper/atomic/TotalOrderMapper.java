@@ -10,7 +10,8 @@ import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
 
 import org.aksw.limes.core.measures.mapper.Mapper;
-import org.aksw.limes.core.measures.measure.metricfactory.SimpleMetricFactory;
+import org.aksw.limes.core.measures.measure.Measure;
+import org.aksw.limes.core.measures.measure.MeasureFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +19,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 /**
- * DEPRECATED
  * 
  * @author ngonga
  */
@@ -81,9 +81,8 @@ public class TotalOrderMapper extends Mapper {
 	    }
 	}
 
-	SimpleMetricFactory factory = new SimpleMetricFactory("", "");
-	factory.setExpression(expression);
-
+	
+	Measure m = MeasureFactory.getMeasure(expression);
 	Comparator<Double> comparator = Collections.reverseOrder();
 	Collections.sort(valueList, comparator);
 	// 2. search for closest match for each element of source
@@ -92,7 +91,7 @@ public class TotalOrderMapper extends Mapper {
 		int index = binarySearch(valueList, new Double(value));
 		// 3. go to the left until sim is below threshold
 		for (int i = index; i >= 0; i--) {
-		    if (factory.getSimilarity(key, valueList.get(i) + "") >= threshold) {
+		    if (m.getSimilarity(key, valueList.get(i) + "") >= threshold) {
 
 		    }
 		}

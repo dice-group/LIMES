@@ -1,6 +1,7 @@
 package org.aksw.limes.core.measures.measure;
 
 import org.apache.log4j.Logger;
+import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.atomic.EDJoin;
 import org.aksw.limes.core.measures.mapper.atomic.ExactMatchMapper;
@@ -11,6 +12,9 @@ import org.aksw.limes.core.measures.mapper.atomic.RatcliffObershelpMapper;
 import org.aksw.limes.core.measures.mapper.atomic.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.atomic.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
+import org.aksw.limes.core.measures.mapper.atomic.event.PredecessorMapper;
+import org.aksw.limes.core.measures.mapper.atomic.event.SuccessorMapper;
+import org.aksw.limes.core.measures.mapper.atomic.event.ConcurrentMapper;
 import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
 import org.aksw.limes.core.measures.measure.date.DayMeasure;
 import org.aksw.limes.core.measures.measure.date.SimpleDateMeasure;
@@ -38,8 +42,6 @@ import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 
 public class MeasureFactory {
 
-    static Logger logger = Logger.getLogger("LIMES");
-
     public static Measure getMeasure(String name) {
 	Measure m;
 	if (name == null) {
@@ -62,58 +64,43 @@ public class MeasureFactory {
 	    m = new Levenshtein();
 	} else if (name.toLowerCase().startsWith("qgrams")) {
 	    m = new QGramSimilarity();
-	} else if (name.toLowerCase().startsWith("exactmatch")) {// NO
-								 // getRuntimeApproximation
+	} else if (name.toLowerCase().startsWith("exactmatch")) {
 	    m = new ExactMatch();
 	} else if (name.toLowerCase().startsWith("hausdorff")) {
 	    m = new NaiveHausdorff();
-	} else if (name.toLowerCase().startsWith("orthodromic")) {// NO
-								  // getRuntimeApproximation
+	} else if (name.toLowerCase().startsWith("orthodromic")) {
 	    // change this by implementing measure interface in
 	    // orthodromicdistance class
 	    m = new GeoDistance();
-	} else if (name.toLowerCase().startsWith("symmetrichausdorff")) {// NO
-									 // getRuntimeApproximation
+	} else if (name.toLowerCase().startsWith("symmetrichausdorff")) {
 	    m = new SymmetricHausdorff();
 	} else if (name.toLowerCase().startsWith("datesim")) {
 	    m = new SimpleDateMeasure();
-	} else if (name.toLowerCase().startsWith("daysim")) {// NO
-							     // getRuntimeApproximation
+	} else if (name.toLowerCase().startsWith("daysim")) {
 	    m = new DayMeasure();
-	} else if (name.toLowerCase().startsWith("yearsim")) {// NO
-							      // getRuntimeApproximation
+	} else if (name.toLowerCase().startsWith("yearsim")) {
 	    m = new YearMeasure();
-	} else if (name.toLowerCase().startsWith("geomn")) {// NO
-							    // getRuntimeApproximation
+	} else if (name.toLowerCase().startsWith("geomn")) {
 	    m = new NaiveMin();
-	} else if (name.toLowerCase().startsWith("geomx")) {// NO
-							    // getRuntimeApproximation
+	} else if (name.toLowerCase().startsWith("geomx")) {
 	    m = new NaiveMax();
-	} else if (name.toLowerCase().startsWith("geoavg")) {// NO
-							     // getRuntimeApproximation
+	} else if (name.toLowerCase().startsWith("geoavg")) {
 	    m = new NaiveAverage();
-	} else if (name.toLowerCase().startsWith("geomean")) {// NO
-							      // getRuntimeApproximation
+	} else if (name.toLowerCase().startsWith("geomean")) {
 	    m = new NaiveMean();
-	} else if (name.toLowerCase().startsWith("frechet")) {// NO
-							      // getRuntimeApproximation
+	} else if (name.toLowerCase().startsWith("frechet")) {
 	    m = new NaiveFrechet();
-	} else if (name.toLowerCase().startsWith("geolink")) {// NO
-							      // getRuntimeApproximation
+	} else if (name.toLowerCase().startsWith("geolink")) {
 	    m = new NaiveLink();
-	} else if (name.toLowerCase().startsWith("geosummn")) {// NO
-							       // getRuntimeApproximation
+	} else if (name.toLowerCase().startsWith("geosummn")) {
 	    m = new NaiveSumOfMin();
-	} else if (name.toLowerCase().startsWith("surjection")) {// NO
-								 // getRuntimeApproximation
+	} else if (name.toLowerCase().startsWith("surjection")) {
 	    m = new NaiveSurjection();
-	} else if (name.toLowerCase().startsWith("fairsurjection")) {// NO
-								     // getRuntimeApproximation
+	} else if (name.toLowerCase().startsWith("fairsurjection")) {
 	    m = new FairSurjection();
 	} else {
 	    m = new TrigramMeasure();
 	}
-
 	return m;
     }
 
@@ -150,7 +137,7 @@ public class MeasureFactory {
 	} // else if (measure.toLowerCase().startsWith("monge")) { //problem in
 	  // getMappingSizeApproximation
 	  // am = new MongeElkanMapper();}
-	  else if (measure.toLowerCase().startsWith("exactmatch")) {
+	else if (measure.toLowerCase().startsWith("exactmatch")) {
 	    am = new ExactMatchMapper();
 	} else if (measure.toLowerCase().startsWith("euclid")) {
 	    am = new TotalOrderBlockingMapper();
@@ -182,11 +169,16 @@ public class MeasureFactory {
 	    am = new OrchidMapper();
 	} else if (measure.toLowerCase().startsWith("fairsurjection")) {
 	    am = new OrchidMapper();
+	} else if (measure.toLowerCase().startsWith("successor")) {
+	    am = new SuccessorMapper();
+	} else if (measure.toLowerCase().startsWith("predecessor")) {
+	    am = new PredecessorMapper();
+	} else if (measure.toLowerCase().startsWith("concurrent")) {
+	    am = new ConcurrentMapper();
 	} else {
 	    am = null;
 	}
-
 	return am;
-    }
 
+    }
 }

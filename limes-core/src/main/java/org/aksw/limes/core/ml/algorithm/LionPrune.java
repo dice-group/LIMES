@@ -18,6 +18,7 @@ import java.util.TreeSet;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFM;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
+import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
 import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
 import org.aksw.limes.core.execution.planning.planner.Planner;
 import org.aksw.limes.core.io.cache.Cache;
@@ -126,7 +127,7 @@ public class LionPrune extends MLAlgorithm {
 		pfm = new PseudoFM();
 		heuristic.setLearningSetting(setting);
 		operator.setLearningSetting(setting);
-		engine = ExecutionEngineFactory.getEngine("default", 
+		engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, 
 				this.getSourceCache(), 
 				this.getTargetCache(), 
 				this.getConfiguration().getSourceInfo().getVar(), 
