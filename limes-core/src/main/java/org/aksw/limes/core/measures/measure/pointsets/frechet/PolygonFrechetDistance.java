@@ -29,6 +29,12 @@ public class PolygonFrechetDistance {
 	static GeometryFactory gf = new GeometryFactory();
 	static double delta = 0.01;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param p1 Polygon
+	 * @param p2 Polygon
+	 */
 	public PolygonFrechetDistance(Polygon p1, Polygon p2) {
 		poly1 = p1;
 		poly2 = p2;
@@ -57,6 +63,11 @@ public class PolygonFrechetDistance {
 		return cv[index].doubleValue();
 	}
 
+	/**
+	 * @param p Point
+	 * @param poly Polygon
+	 * @return Frechet distance between the point p and the polygon poly
+	 */
 	public double getFrechetPointToPolygonDistance(Point p, Polygon poly) {
 		ArrayList<Double> list = new ArrayList<Double>();
 
@@ -85,6 +96,9 @@ public class PolygonFrechetDistance {
 		return min;
 	}
 
+	/**
+	 * @return critical values
+	 */
 	public Double[] computeCriticalValues() {
 		ArrayList<Double> list = new ArrayList<Double>();
 
@@ -215,6 +229,13 @@ public class PolygonFrechetDistance {
 		return list.toArray(new Double[list.size()]);
 	}
 
+	/**
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @return the slope between the 2 points (x1, y1) and (x2, y2) 
+	 */
 	private double getSlope(double x1, double y1, double x2, double y2) {
 		if ((x2 - x1) == 0)
 			return Double.MAX_VALUE;
@@ -243,6 +264,10 @@ public class PolygonFrechetDistance {
 		return mid;
 	}
 
+	/**
+	 * @param epsilon
+	 * @return
+	 */
 	public boolean isFrechet(double epsilon) {
 		if (epsilon == Double.POSITIVE_INFINITY || epsilon == Double.NEGATIVE_INFINITY)
 			return false;
@@ -442,6 +467,11 @@ public class PolygonFrechetDistance {
 		return retVal;
 	}
 
+	/**
+	 * @param coord
+	 * @param ls
+	 * @return
+	 */
 	private double getProportion(Coordinate coord, LineString ls) {
 		// coord is a point in line ls
 		Coordinate[] ends = ls.getCoordinates();

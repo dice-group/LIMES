@@ -40,9 +40,7 @@ public class FairSurjection extends PointsetsMeasure {
 		computations = 0;
 	}
 
-	public int getComputations() {
-		return computations;
-	}
+
 
 	public double computeDistance(Polygon X, Polygon Y, double threshold) {
 		double sum = 0;

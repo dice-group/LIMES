@@ -32,9 +32,6 @@ public class NaiveMin extends PointsetsMeasure {
 		computations = 0;
 	}
 
-	public int getComputations() {
-		return computations;
-	}
 
 	/* (non-Javadoc)
 	 * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#computeDistance(org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, double)

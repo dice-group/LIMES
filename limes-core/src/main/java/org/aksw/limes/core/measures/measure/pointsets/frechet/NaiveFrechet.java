@@ -7,13 +7,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 
@@ -50,12 +47,6 @@ public class NaiveFrechet extends PointsetsMeasure {
 		computations = 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#getComputations()
-	 */
-	public int getComputations() {
-		return computations;
-	}
 
 	/**
 	 * @param X First polygon
@@ -77,13 +68,10 @@ public class NaiveFrechet extends PointsetsMeasure {
 	/**
 	 * Computes the SetMeasure distance for a source and target set
 	 *
-	 * @param source
-	 *            Source polygons
-	 * @param target
-	 *            Target polygons
-	 * @param threshold
-	 *            Distance threshold
-	 * @return Mapping of uris
+	 * @param source Source polygons
+	 * @param target Target polygons
+	 * @param threshold Distance threshold
+	 * @return Mapping from source to rtarget resources
 	 */
 	public Mapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
 		Mapping m = new MemoryMapping();
@@ -98,25 +86,17 @@ public class NaiveFrechet extends PointsetsMeasure {
 		return m;
 	}
 
-	/**
-	 * @param x
-	 *            Point x
-	 * @param y
-	 *            Point y
-	 * @return Distance between x and y
+
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.measures.measure.IMeasure#getType()
 	 */
-	public double distance(Point x, Point y) {
-		if (USE_GREAT_ELLIPTIC_DISTANCE) {
-			return GreatEllipticDistance.getDistanceInDegrees(x, y);
-		}
-		return OrthodromicDistance.getDistanceInDegrees(x, y);
-	}
-
-
 	public String getType() {
 		return "geodistance";
 	}
 
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance, java.lang.String, java.lang.String)
+	 */
 	public double getSimilarity(Instance a, Instance b, String property1, String property2) {
 		TreeSet<String> source = a.getProperty(property1);
 		TreeSet<String> target = b.getProperty(property2);
@@ -141,6 +121,9 @@ public class NaiveFrechet extends PointsetsMeasure {
 		return 1d / (1d + (double) d);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(double)
+	 */
 	public double getRuntimeApproximation(double mappingSize) {
 		return mappingSize / 1000d;
 	}

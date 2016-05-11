@@ -35,12 +35,7 @@ public class NaiveSurjection extends PointsetsMeasure {
 		computations = 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#getComputations()
-	 */
-	public int getComputations() {
-		return computations;
-	}
+
 
 	public double computeDistance(Polygon X, Polygon Y, double threshold) {
 		SurjectionFinder sf = new SurjectionFinder(X, Y);

@@ -72,8 +72,8 @@ public class GeOxygeneFrechet extends PointsetsMeasure {
 	}
 
 	/**
-	 * @param X
-	 * @param Y
+	 * @param X Polygon
+	 * @param Y Polygon
 	 * @param threshold
 	 * @return the GeOxygeneFrechet distance between X and Y
 	 */

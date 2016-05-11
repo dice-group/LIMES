@@ -36,4 +36,11 @@ public abstract class PointsetsMeasure extends Measure implements IPointsetsMeas
 		return OrthodromicDistance.getDistanceInDegrees(x, y);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#getComputations()
+	 */
+	public int getComputations() {
+		return computations;
+	}
+	
 }
