@@ -8,6 +8,7 @@ import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
+import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterFactoryType;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.IConfigurationReader;
@@ -126,7 +127,7 @@ public class Controller {
             //todo: tie to MLAlgorithmFactory when implemented
         } else {
             // 4.2. Rewriting
-            Rewriter rw = RewriterFactory.getRewriter("Default");
+            Rewriter rw = RewriterFactory.getRewriter(RewriterFactoryType.DEFAULT);
             LinkSpecification ls = new LinkSpecification(config.getMetricExpression(), config.getVerificationThreshold());
             LinkSpecification rwLs = rw.rewrite(ls);
             // 4.3. Planning
