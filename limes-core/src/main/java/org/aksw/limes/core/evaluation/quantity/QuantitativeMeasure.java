@@ -10,6 +10,6 @@ import org.aksw.limes.core.io.mapping.Mapping;
  */
 public interface QuantitativeMeasure {
 	
-	public double calculate(Mapping predictions, Mapping goldStandard);
+	public double calculate(Mapping predictions, GoldStandard goldStandard);
 
 }

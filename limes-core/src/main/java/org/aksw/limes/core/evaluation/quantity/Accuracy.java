@@ -12,20 +12,11 @@ import org.aksw.limes.core.io.mapping.Mapping;
 public class Accuracy extends PRF implements QuantitativeMeasure {
 
 	@Override
-	public double calculate(Mapping predictions, Mapping goldStandard) {
-/*		double truePositiveValue = trueFalsePositive(predictions, goldStandard, true);
-		double allPositiveValue = goldStandard.size();
+	public double calculate(Mapping predictions, GoldStandard goldStandard) {
+		double truePositiveValue = trueFalsePositive(predictions, goldStandard.goldStandard, true);
+		long allPositiveValue = goldStandard.goldStandard.size();
 		//double falsePositiveValue = trueFalsePositive(predictions, goldStandard, false);
-		double trueNegativeValue = trueNegative(allPositiveValue, sourceDatasetSize, targetDatasetSize);*/
-		return 0;
+		double trueNegativeValue = trueNegative(allPositiveValue, goldStandard.targetUris.size() , goldStandard.sourceUris.size());
+		return (truePositiveValue + trueNegativeValue)/(goldStandard.targetUris.size() + goldStandard.sourceUris.size());
 	}
-	
-	public double calculate(Mapping predictions, Mapping goldStandard, long sourceDatasetSize, long targetDatasetSize) {
-		double truePositiveValue = trueFalsePositive(predictions, goldStandard, true);
-		long allPositiveValue = goldStandard.size();
-		//double falsePositiveValue = trueFalsePositive(predictions, goldStandard, false);
-		double trueNegativeValue = trueNegative(allPositiveValue, sourceDatasetSize, targetDatasetSize);
-		return (truePositiveValue + trueNegativeValue)/(sourceDatasetSize + targetDatasetSize);
-	}
-
 }

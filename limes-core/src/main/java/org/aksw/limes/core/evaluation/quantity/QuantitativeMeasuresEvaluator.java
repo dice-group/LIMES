@@ -18,7 +18,7 @@ public class QuantitativeMeasuresEvaluator {
 	
 	
 	//long sourceDatasetSize, long targetDatasetSize
-	public Map<MeasureType,Double> evaluate (Mapping predictions, Mapping goldStandard,List<String> sourceUris, List<String> targetUris ,Set<MeasureType> evaluationMeasures)
+	public Map<MeasureType,Double> evaluate (Mapping predictions, GoldStandard goldStandard ,Set<MeasureType> evaluationMeasures)
 	{
 		for (MeasureType measureType : evaluationMeasures) {
 			
@@ -29,13 +29,13 @@ public class QuantitativeMeasuresEvaluator {
 			else if (measureType.equals(MeasureType.fmeasure))
 				evaluateFMeasure(predictions,goldStandard);
 			else if (measureType.equals(MeasureType.pseuFMeasure))
-				evaluatePFMeasure(predictions,sourceUris,targetUris);
+				evaluatePFMeasure(predictions,goldStandard.sourceUris,goldStandard.targetUris);
 			else if (measureType.equals(MeasureType.pseuPrecision))
-				evaluatePPrecision(predictions,sourceUris,targetUris);
+				evaluatePPrecision(predictions,goldStandard.sourceUris,goldStandard.targetUris);
 			else if (measureType.equals(MeasureType.PseuRecall))
-				evaluatePRecall(predictions,sourceUris,targetUris);
+				evaluatePRecall(predictions,goldStandard.sourceUris,goldStandard.targetUris);
 			else if (measureType.equals(MeasureType.accuracy))
-				evaluateAccuracy(predictions,goldStandard,sourceUris.size(),targetUris.size());
+				evaluateAccuracy(predictions,goldStandard);
 			else if (measureType.equals(MeasureType.auc))
 				evaluateAUC(predictions,goldStandard);
 			else System.out.println("Error: unrecognized evaluation measure");
@@ -43,17 +43,17 @@ public class QuantitativeMeasuresEvaluator {
 		
 		return evaluations;
 	}
-	private void evaluatePrecision(Mapping predictions, Mapping goldStandard)
+	private void evaluatePrecision(Mapping predictions, GoldStandard goldStandard)
 	{
 		double precision = new Precision().calculate(predictions, goldStandard);
 		evaluations.put(MeasureType.precision, precision);
 	}
-	private void evaluateRecall(Mapping predictions, Mapping goldStandard)
+	private void evaluateRecall(Mapping predictions, GoldStandard goldStandard)
 	{
 		double recall = new Recall().calculate(predictions, goldStandard);
 		evaluations.put(MeasureType.recall, recall);
 	}
-	private void evaluateFMeasure(Mapping predictions, Mapping goldStandard)
+	private void evaluateFMeasure(Mapping predictions, GoldStandard goldStandard)
 	{
 		double fmeasure = new FMeasure().calculate(predictions, goldStandard);
 		evaluations.put(MeasureType.fmeasure, fmeasure);
@@ -74,26 +74,26 @@ public class QuantitativeMeasuresEvaluator {
 		evaluations.put(MeasureType.pseuFMeasure, pfmeasure);
 	}
 
-	private void evaluateAccuracy(Mapping predictions, Mapping goldStandard,long sourceUrisSize, long targetUrisSize)
+	private void evaluateAccuracy(Mapping predictions, GoldStandard goldStandard)
 	{
-		double accuracy = new Accuracy().calculate(predictions, goldStandard,sourceUrisSize,targetUrisSize);
+		double accuracy = new Accuracy().calculate(predictions, goldStandard);
 		evaluations.put(MeasureType.accuracy, accuracy);
 	}
-	private void evaluateAUC(Mapping predictions, Mapping goldStandard)
+	private void evaluateAUC(Mapping predictions, GoldStandard goldStandard)
 	{
 		double auc = new AUC().calculate(predictions, goldStandard);
 		evaluations.put(MeasureType.auc, auc);
 	}
 	@SuppressWarnings("unused")
-	private void evaluateAll(Mapping predictions, Mapping goldStandard,List<String> sourceUris, List<String> targetUris)
+	private void evaluateAll(Mapping predictions, GoldStandard goldStandard)
 	{
 		evaluatePrecision(predictions,goldStandard);
 		evaluateRecall(predictions,goldStandard);
 		evaluateFMeasure(predictions,goldStandard);
-		evaluatePPrecision(predictions,sourceUris,targetUris);
-		evaluatePRecall(predictions,sourceUris,targetUris);
-		evaluatePFMeasure(predictions,sourceUris,targetUris);
-		evaluateAccuracy(predictions,goldStandard,sourceUris.size(),targetUris.size());
+		evaluatePPrecision(predictions,goldStandard.sourceUris,goldStandard.targetUris);
+		evaluatePRecall(predictions,goldStandard.sourceUris,goldStandard.targetUris);
+		evaluatePFMeasure(predictions,goldStandard.sourceUris,goldStandard.targetUris);
+		evaluateAccuracy(predictions,goldStandard);
 		evaluateAUC(predictions,goldStandard);
 	}
 }

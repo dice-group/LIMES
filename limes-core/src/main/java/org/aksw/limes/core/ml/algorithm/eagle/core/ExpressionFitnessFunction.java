@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import org.jgap.gp.GPFitnessFunction;
 import org.jgap.gp.IGPProgram;
 import org.jgap.gp.impl.ProgramChromosome;
+import org.aksw.limes.core.evaluation.quantity.GoldStandard;
 import org.aksw.limes.core.evaluation.quantity.QuantitativeMeasure;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
@@ -177,7 +178,10 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 	 * @return
 	 */
 	private double getMeasure(Mapping a_mapping, Mapping reference, double crossProduct) {
-		double quality = measure.calculate(a_mapping, reference);
+		// These two statements are added by Mofeed to suite the change in QMeasure's new structure
+		GoldStandard goldStandard = new GoldStandard();
+		goldStandard.goldStandard = reference;
+		double quality = measure.calculate(a_mapping, goldStandard);
 		// TODO check
 		return quality;
 	}

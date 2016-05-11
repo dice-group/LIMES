@@ -15,6 +15,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @author ngonga
  *
  */
+@Deprecated
 public class PseudoFMeasure {
 	/* FIXME QualitiveMeasure interface is not suitable, as we need additional
 	 * input: URIs of source and target. 

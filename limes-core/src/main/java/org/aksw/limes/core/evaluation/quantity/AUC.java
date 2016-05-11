@@ -16,7 +16,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
 public class AUC extends PRF implements QuantitativeMeasure {
 
 	@Override
-	public double calculate(Mapping predictions, Mapping goldStandard) {
+	public double calculate(Mapping predictions, GoldStandard goldStandard) {
 		/*
 		 * Technical it calculates Area under curve values. Thus, we need some
 		 * sort of time dependent measurements. So, the QualitiveMeasurement

@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.aksw.limes.core.evaluation.MeasureType;
 import org.aksw.limes.core.evaluation.quality.QualitativeMeasure;
+import org.aksw.limes.core.evaluation.quantity.GoldStandard;
 import org.aksw.limes.core.evaluation.quantity.QuantitativeMeasuresEvaluator;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
@@ -34,13 +35,18 @@ public class Evaluator {
 		
 		for (MLAlgorithm algorithm : algorithms) {// select a ML algorithm
 			for (DataSetsPair dataset : datasets) {// select a dataset-pair to evaluate each ML algorithm on
-				
 				algorithm.setSourceCache(dataset.source);
 				algorithm.setTargetCache(dataset.target);
 				// XXX ???
 //				algorithm.learn(trainingData)
 				predictions = algorithm.computePredictions();
-				evaluationResults = eval.evaluate(predictions, dataset.goldStandard, dataset.source.getAllUris(), dataset.target.getAllUris(), QlMeasures);
+				/////////prepare gold standard information
+				GoldStandard goldstandard = new GoldStandard();
+				goldstandard.sourceUris = dataset.source.getAllUris();
+				goldstandard.targetUris = dataset.target.getAllUris();
+				goldstandard.goldStandard = dataset.goldStandard;
+				
+				evaluationResults = eval.evaluate(predictions,goldstandard, QlMeasures);
 				overallEvaluations.put(algorithm.getName(), dataset.pairName,evaluationResults);
 
 			}
@@ -124,6 +130,11 @@ public class Evaluator {
 				}	
 			}
 
+			//////////////
+			GoldStandard goldStandard = new GoldStandard();
+			goldStandard.sourceUris = dataset.source.getAllUris();
+			goldStandard.targetUris = dataset.target.getAllUris();
+			
 			// train and test folds
 			for(int i=0; i<folds; i++) {
 				
@@ -131,11 +142,8 @@ public class Evaluator {
 				// target cache is invariant
 				
 				algorithm.learn(srcMap[i]);
-				
-				evalTable.put(algorithm.getName() + " - fold "+i, 
-						dataset.pairName,
-						eval.evaluate(algorithm.computePredictions(), srcGold[i], dataset.source.getAllUris(), 
-								dataset.target.getAllUris(), qlMeasures));
+				goldStandard.goldStandard = srcGold[i];
+				evalTable.put(algorithm.getName() + " - fold "+i,dataset.pairName,eval.evaluate(algorithm.computePredictions(), goldStandard, qlMeasures));
 			}
 		}
 		

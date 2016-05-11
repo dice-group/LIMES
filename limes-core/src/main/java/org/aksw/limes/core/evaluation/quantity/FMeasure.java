@@ -7,10 +7,10 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @version 2015-11-03
  *
  */
-public class FMeasure implements QuantitativeMeasure {
+public class FMeasure extends PRF implements QuantitativeMeasure {
 
 	@Override
-	public double calculate(Mapping predictions, Mapping goldStandard) {
+	public double calculate(Mapping predictions, GoldStandard goldStandard) {
 		
 		double p = new Precision().calculate(predictions, goldStandard);
 		double r = new Recall().calculate(predictions, goldStandard);
