@@ -10,8 +10,8 @@ import java.util.TreeSet;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
+import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 
 import com.vividsolutions.jts.geom.GeometryFactory;

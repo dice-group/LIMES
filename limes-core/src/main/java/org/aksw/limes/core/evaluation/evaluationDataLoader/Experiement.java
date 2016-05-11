@@ -7,6 +7,8 @@ import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import java.io.*;
+import java.lang.management.MemoryType;
+
 import org.apache.log4j.Logger;
 /**
  * 	@author mofeed
@@ -19,7 +21,7 @@ public class Experiement {
     static String CSVSEPARATOR = ",";
 
     public static Mapping readOAEIMapping(String file) {
-        Mapping m = MappingFactory.createMapping("memorymapping");
+        Mapping m = MappingFactory.createMapping(MappingFactory.MappingType.MEMORY_MAPPING);
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
             //read properties;

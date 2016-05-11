@@ -8,8 +8,8 @@ import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.PolygonIndex;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+import org.aksw.limes.core.measures.mapper.pointsets.PolygonIndex;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 
 import java.util.HashMap;

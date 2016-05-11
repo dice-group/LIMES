@@ -13,15 +13,15 @@ import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.measures.mapper.atomic.EDJoin;
-import org.aksw.limes.core.measures.mapper.atomic.ExactMatchMapper;
-import org.aksw.limes.core.measures.mapper.atomic.JaroMapper;
-import org.aksw.limes.core.measures.mapper.atomic.MongeElkanMapper;
-import org.aksw.limes.core.measures.mapper.atomic.OrchidMapper;
-import org.aksw.limes.core.measures.mapper.atomic.PPJoinPlusPlus;
-import org.aksw.limes.core.measures.mapper.atomic.SoundexMapper;
-import org.aksw.limes.core.measures.mapper.atomic.TotalOrderBlockingMapper;
-import org.aksw.limes.core.measures.mapper.atomic.fastngram.FastNGram;
+import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
+import org.aksw.limes.core.measures.mapper.space.HR3;
+import org.aksw.limes.core.measures.mapper.string.EDJoin;
+import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
+import org.aksw.limes.core.measures.mapper.string.JaroMapper;
+import org.aksw.limes.core.measures.mapper.string.MongeElkanMapper;
+import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
+import org.aksw.limes.core.measures.mapper.string.SoundexMapper;
+import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGram;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 
 /**

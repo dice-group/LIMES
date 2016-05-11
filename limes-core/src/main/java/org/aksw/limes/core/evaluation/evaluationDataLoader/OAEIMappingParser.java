@@ -12,6 +12,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 
 /**
  * This class  is responsible for parsing the mappings generated in the OAEI tests
@@ -21,7 +22,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
  */
 public class OAEIMappingParser extends DefaultHandler {
 
-	Mapping m = new MappingFactory().createMapping("HYBIRD_MAPPING");
+	Mapping m = MappingFactory.createMapping(MappingType.HYBIRD_MAPPING);
 	String xmlFile = "";
 	
 	String tmpValue;

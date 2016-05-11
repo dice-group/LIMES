@@ -273,6 +273,8 @@ public class EvaluationData {
 			case SOURCE_FILE : return getSourceFileName();
 			case TARGET_CACHE : return getTargetCache();
 			case TARGET_FILE : return getTargetFileName();
+		default:
+			break;
 		}		
 		return null;
 	}

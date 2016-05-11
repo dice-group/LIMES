@@ -3,6 +3,7 @@ package org.aksw.limes.core.ml.algorithm.eagle.core;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFM;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
+import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
@@ -41,7 +42,7 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
 		sourceCache = c1;
 		targetCache = c2;
 		this.pfm = pfm;
-		engine = ExecutionEngineFactory.getEngine("default", c1, c2, a_config.source.getVar(), a_config.target.getVar());
+		engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, c1, c2, a_config.source.getVar(), a_config.target.getVar());
 	}
 	
 	@Override

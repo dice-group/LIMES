@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
  * @author kleanthi
  */
 public abstract class ExecutionEngine implements IExecutionEngine {
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger(ExecutionEngine.class.getName());
     // contains the results
     protected List<MemoryMapping> buffer;
     protected String sourceVariable;

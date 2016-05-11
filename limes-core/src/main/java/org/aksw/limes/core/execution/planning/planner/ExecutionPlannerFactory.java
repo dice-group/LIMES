@@ -5,7 +5,7 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.apache.log4j.Logger;
 
 public class ExecutionPlannerFactory {
-    public static final String DEFAULT = "canonical";
+    public static final String DEFAULT = "default";
     public static final String HELIOS = "helios";
     public static final String DYNAMIC = "dynamic";
     private static final Logger logger = Logger.getLogger(ExecutionEngineFactory.class.getName());

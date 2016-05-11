@@ -2,11 +2,13 @@ package org.aksw.limes.core.controller;
 
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
+import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
+import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterFactoryType;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.IConfigurationReader;
@@ -125,7 +127,7 @@ public class Controller {
             //todo: tie to MLAlgorithmFactory when implemented
         } else {
             // 4.2. Rewriting
-            Rewriter rw = RewriterFactory.getRewriter("Default");
+            Rewriter rw = RewriterFactory.getRewriter(RewriterFactoryType.DEFAULT);
             LinkSpecification ls = new LinkSpecification(config.getMetricExpression(), config.getVerificationThreshold());
             LinkSpecification rwLs = rw.rewrite(ls);
             // 4.3. Planning
@@ -134,7 +136,7 @@ public class Controller {
             NestedPlan plan = planner.plan(rwLs);
 
             // 5. Execution
-            ExecutionEngine engine = ExecutionEngineFactory.getEngine("Default", sourceCache, targetCache,
+            ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache,
                     config.getSourceInfo().getVar(), config.getTargetInfo().getVar());
             assert engine != null;
             results = engine.execute(plan);

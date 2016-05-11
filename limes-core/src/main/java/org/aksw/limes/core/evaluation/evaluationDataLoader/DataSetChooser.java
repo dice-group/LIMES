@@ -17,8 +17,16 @@ import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.Experiement;
 import org.aksw.limes.core.evaluation.oracle.IOracle;
-import org.aksw.limes.core.evaluation.oracle.OracleFactory;;
+import org.aksw.limes.core.evaluation.oracle.OracleFactory;
 
+import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
+/*import de.uni_leipzig.simba.genetics.util.OAEIMappingParser;
+import de.uni_leipzig.simba.genetics.util.PropMapper;
+import de.uni_leipzig.simba.io.ConfigReader;
+import de.uni_leipzig.simba.io.rdfconfig.RDFConfigReader;
+import de.uni_leipzig.simba.learning.oracle.oracle.Oracle;
+import de.uni_leipzig.simba.learning.oracle.oracle.OracleFactory;
+import de.uni_leipzig.simba.selfconfig.Experiment;*/
 
 /**
  * Class to grant central access to evaluation datasets.
@@ -704,7 +712,7 @@ public class DataSetChooser {
 	}
 	
 	
-	public static void main(String args[]) {
+/*	public static void main(String args[]) {
 //		for(DataSets ds : DataSets.values())
 //			getData(ds);
 //		
@@ -714,7 +722,7 @@ public class DataSetChooser {
 		
 		EvaluationData fixedRest = DataSetChooser.getData(DataSets.RESTAURANTS_FIXED);
 		System.out.println("RefMap fixed size="+fixedRest.getReferenceMapping().size());
-	}
+	}*/
 	
 	public static Set<MapKey> getLoggingKeys() {
 		HashSet<MapKey> set = new HashSet<MapKey>();
@@ -748,7 +756,7 @@ public class DataSetChooser {
 	 */
 	public static Mapping fixReferenceMap(Mapping original, Cache sC, Cache tC) {
 		int count = 0;
-		Mapping fixed = new MappingFactory().createMapping("MEMORY_MAPPING");
+		Mapping fixed =  MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
 		for(String sk : original.getMap().keySet()) {
 			if(sC.containsUri(sk)) {
 				for(String tk : original.getMap().get(sk).keySet()) {

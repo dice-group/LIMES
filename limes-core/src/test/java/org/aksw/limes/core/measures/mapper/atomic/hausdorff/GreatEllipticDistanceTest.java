@@ -1,8 +1,8 @@
 package org.aksw.limes.core.measures.mapper.atomic.hausdorff;
 
 
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.GreatEllipticDistance;
-import org.aksw.limes.core.measures.mapper.atomic.hausdorff.OrthodromicDistance;
+import org.aksw.limes.core.measures.mapper.pointsets.GreatEllipticDistance;
+import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
 import org.junit.Test;
 
 public class GreatEllipticDistanceTest {
