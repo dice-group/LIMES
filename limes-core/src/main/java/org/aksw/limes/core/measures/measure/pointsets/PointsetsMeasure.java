@@ -22,5 +22,5 @@ public abstract class PointsetsMeasure extends Measure implements IPointsetsMeas
 		}
 		return OrthodromicDistance.getDistanceInDegrees(x, y);
 	}
-
+	
 }
