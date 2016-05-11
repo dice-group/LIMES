@@ -23,14 +23,14 @@ public class ControllerTest {
         CommandLine cl = Controller.parseCommandLine(Arrays.asList("./resources/lgd-lgd.xml").toArray(new String[1]));
         Configuration config = Controller.getConfig(cl);
         config.setOutputFormat("N3");
-        Mapping[] mappings = Controller.getMapping(config);
+        ResultMappings mappings = Controller.getMapping(config);
         Map<String, String> oldAccepted = getOldLIMESMapping(System.getProperty("user.dir") + "/resources/lgd_relaybox_near.nt");
         Map<String, String> oldReview = getOldLIMESMapping(System.getProperty("user.dir") + "/resources/lgd_relaybox_verynear.nt");
         for (String s : oldReview.keySet()) {
-            assertTrue(mappings[0].contains(s,oldReview.get(s)));
+            assertTrue(mappings.getVerificationMapping().contains(s,oldReview.get(s)));
         }
         for (String s : oldAccepted.keySet()) {
-            assertTrue(mappings[1].contains(s,oldAccepted.get(s)));
+            assertTrue(mappings.getAcceptanceMapping().contains(s,oldAccepted.get(s)));
         }
     }
 
