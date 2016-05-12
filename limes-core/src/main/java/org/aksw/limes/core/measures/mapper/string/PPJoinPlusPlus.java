@@ -9,7 +9,6 @@ package org.aksw.limes.core.measures.mapper.string;
  * @author ngonga
  */
 import algorithms.ppjoinplus.Record;
-import de.uni_leipzig.simba.measures.MeasureFactory;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,11 +29,8 @@ import org.aksw.limes.core.io.parser.Parser;
 import java.util.ArrayList;
 
 import org.aksw.limes.core.measures.mapper.Mapper;
-import org.aksw.limes.core.measures.measure.Measure;
-import org.aksw.limes.core.measures.measure.string.CosineMeasure;
+import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.string.IStringMeasure;
-import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
-import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.apache.log4j.Logger;
 
 class Position {
