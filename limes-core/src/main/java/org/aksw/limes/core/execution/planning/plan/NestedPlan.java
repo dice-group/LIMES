@@ -25,9 +25,10 @@ import com.mxgraph.view.mxStylesheet;
  * @author kleanthi
  */
 public class NestedPlan extends Plan {
-    protected List<NestedPlan> subPlans;
-    protected Command operator;
-    protected Instruction filteringInstruction;
+    private List<NestedPlan> subPlans;
+    private Command operator;
+    private Instruction filteringInstruction;
+    private boolean isExecuted;
 
     public NestedPlan() {
 	super();
@@ -300,20 +301,7 @@ public class NestedPlan extends Plan {
 
     }
 
-    /**
-     * Returns the filterInstruction of a NestedPlan
-     *
-     * @return filterInstruction as string
-     */
-    public String getFilterString(String filter) {
-	String[] parts = filter.split("\t");
-	String result = parts[0];
-	if (!parts[1].equals("null")) {
-	    result = result + "\n" + parts[1];
-	}
-	result = result + "\n" + parts[2];
-	return result;
-    }
+    
 
     /**
      * Returns the threshold to be used when reconstructing the metric that led
@@ -468,118 +456,13 @@ public class NestedPlan extends Plan {
 	return s.length();
     }
 
-    /**
-     * Returns the string representation of the instruction of an atomic
-     * NestedPlan
-     * 
-     * @return Instruction as a string
-     */
-    private String getInstructionString(List<Instruction> list) {
-	Instruction i = list.get(0);
-	String result = i.getCommand() + "\n";
-	result = result + i.getMeasureExpression() + "\n";
-	result = result + i.getThreshold();
-	return result;
+
+    public boolean isExecuted() {
+	return isExecuted;
     }
 
-    
-    /**
-     * Graphic representation of the current NestedPlan
-     * 
-     */
-    public void draw(mxGraph graph, Object root) {
-	int charsize = 8;
-	Object parent = graph.getDefaultParent();
-	if (isAtomic()) {
-	    Object v;
-	    if (getInstructionList() != null && !getInstructionList().isEmpty()) {
-		String inst = getInstructionString(getInstructionList());
-		v = graph.insertVertex(parent, null, inst, 20, 40, getSize(inst) * charsize, 45, "ROUNDED");
-	    } else {
-		String filter = getFilterString(getFilteringInstruction().toString());
-		v = graph.insertVertex(parent, null, filter, 20, 40, getSize(filter) * charsize, 45, "ROUNDED");
-	    }
-	    if (root != null) {
-		graph.insertEdge(parent, null, "", root, v);
-	    }
-	} else {
-	    Object v1, v2;
-	    String filter;
-	    if (getFilteringInstruction() != null) {
-		filter = getFilterString(getFilteringInstruction().toString());
-	    } else {
-		filter = "NULL";
-	    }
-	    // String inst = getInstructionString(instructionList);
-	    v1 = graph.insertVertex(parent, null, filter, 20, 40, getSize(filter) * charsize, 45, "ROUNDED");
-	    v2 = graph.insertVertex(parent, null, getOperator(), 20, 40, (getOperator() + "").length() * charsize, 45,
-		    "RECTANGLE");
-	    graph.insertEdge(parent, null, "", root, v1);
-	    graph.insertEdge(parent, null, "", v1, v2);
-	    for (NestedPlan p : getSubPlans()) {
-		p.draw(graph, v2);
-	    }
-	}
-    }
-
-    /**
-     * Representation of the current NestedPlan as a Graph
-     * 
-     * @return NestedPlan as a Graph
-     */
-    public mxGraph getGraph() {
-	mxGraph graph = new mxGraph();
-
-	mxStylesheet stylesheet = graph.getStylesheet();
-	Hashtable<String, Object> rounded = new Hashtable<String, Object>();
-	rounded.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_ELLIPSE);
-	rounded.put(mxConstants.STYLE_OPACITY, 50);
-	rounded.put(mxConstants.STYLE_FILLCOLOR, "#FF5240");
-	rounded.put(mxConstants.STYLE_FONTCOLOR, "#000000");
-	stylesheet.putCellStyle("ROUNDED", rounded);
-
-	Hashtable<String, Object> rectangle = new Hashtable<String, Object>();
-	rectangle.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_RECTANGLE);
-	rectangle.put(mxConstants.STYLE_OPACITY, 50);
-	rectangle.put(mxConstants.STYLE_FILLCOLOR, "#5FEB3B");
-	rectangle.put(mxConstants.STYLE_FONTCOLOR, "#000000");
-	stylesheet.putCellStyle("RECTANGLE", rectangle);
-
-	@SuppressWarnings("unused")
-	Object parent = graph.getDefaultParent();
-	graph.getModel().beginUpdate();
-	try {
-
-	    draw(graph, null);
-	} finally {
-	    graph.getModel().endUpdate();
-	}
-	mxCompactTreeLayout layout = new mxCompactTreeLayout(graph);
-	layout.setHorizontal(false);
-	layout.execute(graph.getDefaultParent());
-	return graph;
-    }
-
-    /**
-     * Drawing of the current NestedPlan
-     * 
-     */
-    public void draw() {
-	mxGraph graph = getGraph();
-	mxGraphComponent graphComponent = new mxGraphComponent(graph);
-	graphComponent.getViewport().setOpaque(false);
-	graphComponent.setBackground(Color.WHITE);
-
-	JFrame frame = new JFrame();
-
-	frame.setSize(500, 500);
-	frame.setLocation(300, 200);
-	frame.setBackground(Color.white);
-
-	frame.add(graphComponent);
-	frame.pack();
-	frame.setVisible(true);
-	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public void setExecuted(boolean isExecuted) {
+	this.isExecuted = isExecuted;
     }
 
 }

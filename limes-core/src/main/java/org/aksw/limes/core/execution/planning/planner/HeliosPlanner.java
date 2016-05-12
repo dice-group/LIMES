@@ -101,6 +101,7 @@ public class HeliosPlanner extends Planner {
      *            Input link specification
      * @return NestedPlan of the input link specification
      */
+    @Override
     public NestedPlan plan(LinkSpecification spec) {
 	return plan(spec, source, target, new MemoryMapping(), new MemoryMapping());
     }

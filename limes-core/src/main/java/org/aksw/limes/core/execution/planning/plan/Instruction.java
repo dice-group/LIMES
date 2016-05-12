@@ -15,7 +15,7 @@ public class Instruction {
     static Logger logger = Logger.getLogger("LIMES");
 
     public enum Command {
-	RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR;
+	RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER;
     };
 
     private Command command;
