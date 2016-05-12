@@ -20,9 +20,9 @@ public abstract class Mapping implements IMapping {
 	protected int size;
 	protected String predicate ;
 
-	
 
-	
+
+
 	public abstract double getConfidence(String key, String value);
 
 	public abstract void add(String key, String value, double confidence);
@@ -40,7 +40,7 @@ public abstract class Mapping implements IMapping {
 	public abstract Mapping getBestOneToNMapping();
 
 	public abstract Mapping getSubMap(double threshold);
-	
+
 	/**
 	 * Get the predicate URI, which defaults to OWL.sameAs.
 	 * 
@@ -53,10 +53,25 @@ public abstract class Mapping implements IMapping {
 		this.predicate = OWL.sameAs.getURI(); //default
 	}
 
+	/**
+	 * Returns the best one to one mapping with a bias towards the source Should
+	 * actually be solved with Hospital residents
+	 *
+	 * @param m
+	 * @return
+	 */
+	public Mapping getBestOneToOneMappings(Mapping m) {
+		Mapping m2 = m.getBestOneToNMapping();
+		m2 = m2.reverseSourceTarget();
+		m2 = m2.getBestOneToNMapping();
+		m2 = m2.reverseSourceTarget();
+		return m2;
+	}
+
 	public HashMap<Double, HashMap<String, TreeSet<String>>> getReversedMap() {
 		return reversedMap;
 	}
-	
+
 	public String getPredicateURI() {
 		return predicate;
 	}
@@ -127,5 +142,5 @@ public abstract class Mapping implements IMapping {
 		return true;
 	}
 
-	
+
 }
