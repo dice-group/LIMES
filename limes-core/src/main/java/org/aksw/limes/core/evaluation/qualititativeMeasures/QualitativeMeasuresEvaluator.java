@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorFactory;
-import org.aksw.limes.core.evaluation.evaluator.MeasureType;
+import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.io.mapping.Mapping;
 
 /**
@@ -16,7 +16,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  */
 public class QualitativeMeasuresEvaluator {
 	
-	Map<MeasureType,Double> evaluations = new HashMap<MeasureType,Double>();
+	Map<EvaluatorType,Double> evaluations = new HashMap<EvaluatorType,Double>();
 	
 	
 	/**
@@ -25,11 +25,11 @@ public class QualitativeMeasuresEvaluator {
 	 * @param evaluationMeasures: Set of Measures to evaluate the resulted mappings against
 	 * @return a Map contains the measure name and the corresponding calculated value
 	 */
-	public Map<MeasureType,Double> evaluate (Mapping predictions, GoldStandard goldStandard ,Set<MeasureType> evaluationMeasures)
+	public Map<EvaluatorType,Double> evaluate (Mapping predictions, GoldStandard goldStandard ,Set<EvaluatorType> evaluationMeasures)
 	{
-		for (MeasureType measureType : evaluationMeasures) {
+		for (EvaluatorType measureType : evaluationMeasures) {
 			
-			IQualitativeMeasure measure = EvaluatorFactory.getQualitativeMeasure(measureType);
+			IQualitativeMeasure measure = EvaluatorFactory.create(measureType);
 			double evaluationValue = measure.calculate(predictions, goldStandard);
 			evaluations.put(measureType, evaluationValue);
 			

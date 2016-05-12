@@ -13,7 +13,7 @@ import java.util.Set;
 
 import org.junit.Test;
 import org.aksw.limes.core.datastrutures.GoldStandard;
-import org.aksw.limes.core.evaluation.evaluator.MeasureType;
+import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
@@ -30,37 +30,37 @@ public class QualitativeMeasuresTest {
 		List<String> dataSet =initDataSet();
 		Mapping predictions = initPredictionsList();
 		Mapping goldStandard = initGoldStandardList();
-		Set<MeasureType> measure = initEvalMeasures();
+		Set<EvaluatorType> measure = initEvalMeasures();
 		
 		GoldStandard gs = new GoldStandard(goldStandard,dataSet,dataSet);
 		
-		Map<MeasureType,Double> calculations = testQualitativeEvaluator(predictions,gs,measure);
+		Map<EvaluatorType,Double> calculations = testQualitativeEvaluator(predictions,gs,measure);
 		
-		double precision = calculations.get(MeasureType.precision);
+		double precision = calculations.get(EvaluatorType.PRECISION);
 		assertTrue(precision == 0.7);
 		
-		double recall = calculations.get(MeasureType.recall);
+		double recall = calculations.get(EvaluatorType.RECALL);
 		assertTrue(recall == 0.7);
 		
-		double fmeasure = calculations.get(MeasureType.fmeasure);
+		double fmeasure = calculations.get(EvaluatorType.F_MEASURE);
 		assertTrue(fmeasure == 0.7);
 		
-		double accuracy = calculations.get(MeasureType.accuracy);
+		double accuracy = calculations.get(EvaluatorType.ACCURACY);
 		assertTrue(accuracy == 4.85);
 		
-		double pprecision = calculations.get(MeasureType.pseuPrecision);
+		double pprecision = calculations.get(EvaluatorType.P_PRECISION);
 		assertTrue(pprecision == 0.8);
 		
-		double precall = calculations.get(MeasureType.PseuRecall);
+		double precall = calculations.get(EvaluatorType.P_RECALL);
 		assertTrue(precall == 0.8);
 		
 		
-		double pfmeasure = calculations.get(MeasureType.pseuFMeasure);
+		double pfmeasure = calculations.get(EvaluatorType.PF_MEASURE);
 		assertTrue(pfmeasure > 0.7 && pfmeasure < 0.9);
 
 
 	}
-	private Map<MeasureType,Double> testQualitativeEvaluator(Mapping predictions,GoldStandard gs,Set<MeasureType> evaluationMeasure)
+	private Map<EvaluatorType,Double> testQualitativeEvaluator(Mapping predictions,GoldStandard gs,Set<EvaluatorType> evaluationMeasure)
 	{
 		return new QualitativeMeasuresEvaluator().evaluate(predictions, gs, evaluationMeasure);
 	}
@@ -115,17 +115,17 @@ public class QualitativeMeasuresTest {
 		return dataSet;
 
 	}
-	private Set<MeasureType> initEvalMeasures()
+	private Set<EvaluatorType> initEvalMeasures()
 	{
-		Set<MeasureType> measure = new HashSet<MeasureType>();
+		Set<EvaluatorType> measure = new HashSet<EvaluatorType>();
 
-		measure.add(MeasureType.precision);
-		measure.add(MeasureType.recall);
-		measure.add(MeasureType.fmeasure);
-		measure.add(MeasureType.accuracy);
-		measure.add(MeasureType.pseuPrecision);
-		measure.add(MeasureType.PseuRecall);
-		measure.add(MeasureType.pseuFMeasure);
+		measure.add(EvaluatorType.PRECISION);
+		measure.add(EvaluatorType.RECALL);
+		measure.add(EvaluatorType.F_MEASURE);
+		measure.add(EvaluatorType.ACCURACY);
+		measure.add(EvaluatorType.P_PRECISION);
+		measure.add(EvaluatorType.P_RECALL);
+		measure.add(EvaluatorType.PF_MEASURE);
 		
 		
 		return measure;

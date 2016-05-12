@@ -3,11 +3,10 @@ package org.aksw.limes.core.execution.planning.plan;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.apache.log4j.Logger;
 
 public class Plan implements IPlan {
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger(Plan.class.getName());
     protected double runtimeCost;
     protected double mappingSize;
     protected double selectivity;
