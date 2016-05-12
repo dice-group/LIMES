@@ -11,8 +11,9 @@ import org.aksw.limes.core.io.mapping.MemoryMapping;
 import java.util.*;
 import java.util.logging.Logger;
 
+import org.aksw.limes.core.measures.measure.MeasureFactory;
+import org.aksw.limes.core.measures.measure.MeasureFactory.MeasureType;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.SetMeasureFactory;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorff;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff;
 
@@ -42,7 +43,7 @@ public class GeoHR3 {
     public boolean verbose = false;
     public long indexingTime;
 
-    public GeoHR3(float distanceThreshold, int granularity, SetMeasureFactory.Type hd) {
+    public GeoHR3(float distanceThreshold, int granularity, MeasureType hd) {
 	this.angularThreshold = (float) ((distanceThreshold * 180) / (Math.PI * OrthodromicDistance.R));
 	this.distanceThreshold = distanceThreshold;
 	this.granularity = granularity;
@@ -54,7 +55,7 @@ public class GeoHR3 {
 	longMax = (int) Math.floor(180f / delta) - 1;
 	longMin = (int) Math.floor(-180f / delta);
 
-	setMeasure = SetMeasureFactory.getMeasure(hd);
+	setMeasure = MeasureFactory.getMeasure(hd);
 
     }
 
