@@ -17,21 +17,21 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
  */
 public class EvaluatorFactory {
 
-	public static IQualitativeMeasure getQualitativeMeasure(MeasureType measure)
+	public static IQualitativeMeasure create(EvaluatorType measure)
 	{
-		if(measure.equals(MeasureType.precision))
+		if(measure == EvaluatorType.PRECISION)
 			return new Precision();
-		else if(measure.equals(MeasureType.recall))
+		else if(measure == EvaluatorType.RECALL)
 			return new Recall();
-		else if(measure.equals(MeasureType.fmeasure))
+		else if(measure == EvaluatorType.F_MEASURE)
 			return new FMeasure();
-		else if(measure.equals(MeasureType.pseuPrecision))
+		else if(measure == EvaluatorType.P_PRECISION)
 			return new PseudoPrecision();
-		else if(measure.equals(MeasureType.PseuRecall))
+		else if(measure == EvaluatorType.P_RECALL)
 			return new PseudoRecall();
-		else if(measure.equals(MeasureType.pseuFMeasure))
+		else if(measure == EvaluatorType.PF_MEASURE)
 			return new PseudoFMeasure();
-		else if(measure.equals(MeasureType.accuracy))
+		else if(measure == EvaluatorType.ACCURACY)
 			return new Accuracy();
 		return null;
 	}

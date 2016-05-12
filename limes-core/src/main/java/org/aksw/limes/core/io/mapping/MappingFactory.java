@@ -12,6 +12,7 @@ public class MappingFactory {
 	private static final Logger logger = Logger.getLogger(MappingFactory.class.getName());
 	
 	public enum MappingType{
+		DEFAULT, // currently memory mapping 
 		MEMORY_MAPPING,
 		HYBIRD_MAPPING,
 		FILE_MAPPING
@@ -25,7 +26,8 @@ public class MappingFactory {
 	 */
 	public static Mapping createMapping(MappingType type) {
 		logger.info("Getting Mapping with name " + type);
-
+		if(type == MappingType.DEFAULT)
+			return new MemoryMapping();
 		if(type == MappingType.MEMORY_MAPPING)
 			return new MemoryMapping();
 		if(type == MappingType.HYBIRD_MAPPING)

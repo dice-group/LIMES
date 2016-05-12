@@ -36,12 +36,12 @@ public class Evaluator {
 	 * @param QnMeasures; set of quantitative measures
 	 * @return table contains the results corresponding to the algorithms and measures
 	 */
-	public Table<String,String,Map<MeasureType, Double>> evaluate(Set<MLAlgorithm> algorithms, Set<Task> datasets, Set<MeasureType> QlMeasures, Set<IQuantitativeMeasure> QnMeasures)
+	public Table<String,String,Map<EvaluatorType, Double>> evaluate(Set<MLAlgorithm> algorithms, Set<Task> datasets, Set<EvaluatorType> QlMeasures, Set<IQuantitativeMeasure> QnMeasures)
 	{
-		Table<String,String,Map<MeasureType, Double>> overallEvaluations = HashBasedTable.create();// multimap stores aglortihmName:datasetname:List of evaluations
+		Table<String,String,Map<EvaluatorType, Double>> overallEvaluations = HashBasedTable.create();// multimap stores aglortihmName:datasetname:List of evaluations
 		
 		Mapping predictions=null;
-		Map<MeasureType, Double> evaluationResults = null;
+		Map<EvaluatorType, Double> evaluationResults = null;
 		
 		for (MLAlgorithm algorithm : algorithms) {// select a ML algorithm
 			for (Task dataset : datasets) {// select a dataset-pair to evaluate each ML algorithm on
@@ -74,10 +74,10 @@ public class Evaluator {
 	 * @param qnMeasures
 	 * @return
 	 */
-	public Table<String, String, Map<MeasureType, Double>> crossValidate(MLAlgorithm algorithm, Set<Task> datasets, 
-			int folds, Set<MeasureType> qlMeasures, Set<IQuantitativeMeasure> qnMeasures) {
+	public Table<String, String, Map<EvaluatorType, Double>> crossValidate(MLAlgorithm algorithm, Set<Task> datasets, 
+			int folds, Set<EvaluatorType> qlMeasures, Set<IQuantitativeMeasure> qnMeasures) {
 		
-		Table<String, String, Map<MeasureType, Double>> evalTable = HashBasedTable.create();// multimap stores aglortihmName:datasetname:List of evaluations
+		Table<String, String, Map<EvaluatorType, Double>> evalTable = HashBasedTable.create();// multimap stores aglortihmName:datasetname:List of evaluations
 		
 		// select a dataset-pair to evaluate each ML algorithm on
 		for (Task dataset : datasets) {

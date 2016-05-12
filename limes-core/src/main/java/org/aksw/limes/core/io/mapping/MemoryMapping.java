@@ -286,20 +286,7 @@ public class MemoryMapping extends Mapping implements Serializable {
 	return m;
     }
 
-    /**
-     * Returns the best one to one mapping with a bias towards the source Should
-     * actually be solved with Hospital residents
-     *
-     * @param m
-     * @return
-     */
-    public static Mapping getBestOneToOneMappings(Mapping m) {
-	Mapping m2 = m.getBestOneToNMapping();
-	m2 = m2.reverseSourceTarget();
-	m2 = m2.getBestOneToNMapping();
-	m2 = m2.reverseSourceTarget();
-	return m2;
-    }
+
 
     public String pairsOutput() {
 	String s = "";
