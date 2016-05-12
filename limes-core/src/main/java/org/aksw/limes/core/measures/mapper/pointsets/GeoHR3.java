@@ -55,7 +55,7 @@ public class GeoHR3 {
 	longMax = (int) Math.floor(180f / delta) - 1;
 	longMin = (int) Math.floor(-180f / delta);
 
-	setMeasure = MeasureFactory.getMeasure(hd);
+	setMeasure = (IPointsetsMeasure) MeasureFactory.getMeasure(hd);
 
     }
 
