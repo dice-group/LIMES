@@ -15,6 +15,7 @@ import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngi
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
+import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.ExecutionPlannerType;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -224,12 +225,12 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 	public Mapping getMapping(LinkSpecification spec, boolean full) {
 		try {
 			if(full) {
-				IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerFactory.DEFAULT,
+				IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT,
 						sC, tC);
 				NestedPlan plan = planner.plan(spec);		
 				return fullEngine.execute(plan);
 			} else {
-				IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerFactory.DEFAULT,
+				IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT,
 						trimmedSourceCache, trimmedTargetCache);
 				NestedPlan plan = planner.plan(spec);		
 				return engine.execute(plan);
