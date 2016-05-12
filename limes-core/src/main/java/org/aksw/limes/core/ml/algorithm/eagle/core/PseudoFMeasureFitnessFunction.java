@@ -6,6 +6,7 @@ import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
+import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.ExecutionPlannerType;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -106,7 +107,7 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
 	 */
 	public Mapping getMapping(LinkSpecification spec) {
 		try {
-			IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerFactory.DEFAULT,
+			IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT,
 					sourceCache, targetCache);
 			NestedPlan plan = planner.plan(spec);		
 			return engine.execute(plan);
