@@ -5,6 +5,7 @@ import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
+import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.ExecutionPlannerType;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
@@ -131,7 +132,8 @@ public class Controller {
             LinkSpecification ls = new LinkSpecification(config.getMetricExpression(), config.getVerificationThreshold());
             LinkSpecification rwLs = rw.rewrite(ls);
             // 4.3. Planning
-            IPlanner planner = ExecutionPlannerFactory.getPlanner(config.getExecutionPlan(), sourceCache, targetCache);
+            ExecutionPlannerType executionPlanerType = ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlan().toLowerCase());
+			IPlanner planner = ExecutionPlannerFactory.getPlanner(executionPlanerType, sourceCache, targetCache);
             assert planner != null;
             NestedPlan plan = planner.plan(rwLs);
 

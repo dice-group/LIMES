@@ -5,27 +5,51 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.apache.log4j.Logger;
 
 public class ExecutionPlannerFactory {
-    public static final String DEFAULT = "default";
-    public static final String HELIOS = "helios";
-    public static final String DYNAMIC = "dynamic";
     private static final Logger logger = Logger.getLogger(ExecutionEngineFactory.class.getName());
 
+    public enum ExecutionPlannerType{
+    	DEFAULT, CANONICAL, HELIOS, DYNAMIC ;
+    }
+    
+    public static final String DEFAULT = "default";
+    public static final String CANONICAL = "canonical";
+    public static final String HELIOS = "helios";
+    public static final String DYNAMIC = "dynamic";
+    
+    public static ExecutionPlannerType getExecutionPlannerType(String name){
+    	if(name.equals(DEFAULT)){
+    		return ExecutionPlannerType.DEFAULT;
+    	}
+    	if(name.equals(CANONICAL)){
+    		return ExecutionPlannerType.CANONICAL;
+    	}
+    	if(name.equals(DYNAMIC)){
+    		return ExecutionPlannerType.DYNAMIC;
+    	}
+    	if(name.equals(HELIOS)){
+    		return ExecutionPlannerType.HELIOS;
+    	}
+    	logger.error("Sorry, " + name.toString() + " is not yet implemented. Exit with error ...");
+    	System.exit(1);
+    	return null;
+    }
+    
     /**
      * @param name,
      *            type of the Execution Planner
      * @return a specific execution engine instance
      * @author kleanthi
      */
-    public static IPlanner getPlanner(String name, Cache source, Cache target) {
+    public static IPlanner getPlanner(ExecutionPlannerType type, Cache source, Cache target) {
 
-	if (name.equalsIgnoreCase(DEFAULT))
+	if (type == ExecutionPlannerType.DEFAULT)
 	    return new CanonicalPlanner();
-	if (name.equalsIgnoreCase(HELIOS))
+	if (type == ExecutionPlannerType.HELIOS)
 	    return new HeliosPlanner(target, target);
-	//if (name.equalsIgnoreCase(DYNAMIC))
+	//if (type == ExecutionPlannerType.DYNAMIC)
 	//   return new DynamicPlanner(source, target);
 
-	logger.error("Sorry, " + name + " is not yet implemented. Exit with error ...");
+	logger.error("Sorry, " + type.toString() + " is not yet implemented. Exit with error ...");
 	System.exit(1);
 	return null;
     }
