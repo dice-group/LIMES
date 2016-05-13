@@ -186,7 +186,7 @@ public class EagleSupervised extends MLAlgorithm{
 	private MLResult createResult() {
 		MLResult result = new MLResult();
 		result.setLinkSpecification(getLinkSpecification(allBest));
-		result.setMapping(fitness.getMapping(getLinkSpecification(allBest), true));
+//		result.setMapping(fitness.getMapping(getLinkSpecification(allBest), true));
 		result.setQuality(allBest.getFitnessValue());
 		result.addDetail("specifiactions", bestSolutions);
 		result.addDetail("controversyMatches", calculateOracleQuestions(parameters.getInquerySize()));

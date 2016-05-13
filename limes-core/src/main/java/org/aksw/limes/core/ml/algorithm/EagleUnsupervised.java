@@ -184,7 +184,7 @@ public class EagleUnsupervised extends MLAlgorithm {
 	private MLResult createMLResult() {
 		MLResult result = new MLResult();
 		result.setLinkSpecification(getLinkSpecification(allBest));
-		result.setMapping(fitness.calculateMapping(allBest));
+//		result.setMapping(fitness.calculateMapping(allBest));
 		result.setQuality(allBest.getFitnessValue());
 		result.addDetail("specifiactions", specifications);
 		return result;

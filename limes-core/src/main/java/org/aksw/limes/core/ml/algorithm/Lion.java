@@ -331,7 +331,7 @@ public class Lion extends MLAlgorithm {
 	// resLog.writeTreeString(startNode.toTreeString());
 
 	result.setLinkSpecification(this.best.getSpec());
-	result.setMapping(getMapping(this.best.getSpec()));
+//	result.setMapping(getMapping(this.best.getSpec()));
 	result.setQuality(this.best.getScore());
 	return result;
     }
