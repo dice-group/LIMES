@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.mappers;
+package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra;
 
 import java.util.ArrayList;
 import java.util.TreeMap;

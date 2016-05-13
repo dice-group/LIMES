@@ -14,7 +14,7 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.mappers.AllenAlgebraMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.AllenAlgebraMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.mappers.atomic.BeginBegin;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.mappers.atomic.BeginEnd;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.mappers.atomic.EndBegin;
