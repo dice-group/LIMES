@@ -281,15 +281,19 @@ public class HeliosPlanner extends Planner {
     }
 
     /**
-     * Computes the best conjunctive instructionList for one pair of nested
-     * plans
+     * Find the least costly plan for a link specification with AND operator.
+     * Computes all possible nested plans given the children plans and whether
+     * or not they have been executed previously.
      *
-     * @param left
-     *            Left instructionList
-     * @param right
-     *            Right instructionList
+     * @param spec,
+     *            the link specification
+     * @param left,
+     *            left child nested plan
+     * @param right,
+     *            right child nested plan
      * @param selectivity
-     * @return NestedPlan
+     * @return the resulting nested plan for the input spec, that is least
+     *         costly
      */
     public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, NestedPlan right,
 	    double selectivity) {

@@ -265,7 +265,7 @@ public class Config extends Configuration {
 				SimpleExecutionEngine ee = new SimpleExecutionEngine(
 						sourceCache, targetCache, getSourceInfo().getVar(),
 						getTargetInfo().getVar());
-				mapping = ee.execute(plan);
+				mapping = ee.executeStatic(plan);
 				mapping.getMap().forEach((sourceURI, map2) -> {
 					map2.forEach((targetURI, value) -> {
 						results.add(new Result(sourceURI, targetURI, value));

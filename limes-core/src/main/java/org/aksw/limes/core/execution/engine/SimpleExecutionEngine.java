@@ -1,6 +1,7 @@
 package org.aksw.limes.core.execution.engine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.aksw.limes.core.execution.engine.filter.LinearFilter;
@@ -8,20 +9,15 @@ import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.execution.planning.plan.Plan;
+import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
+import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
-import org.aksw.limes.core.measures.mapper.space.HR3;
-import org.aksw.limes.core.measures.mapper.string.EDJoin;
-import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
-import org.aksw.limes.core.measures.mapper.string.JaroMapper;
-import org.aksw.limes.core.measures.mapper.string.MongeElkanMapper;
-import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
-import org.aksw.limes.core.measures.mapper.string.SoundexMapper;
-import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGram;
+import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 
 /**
@@ -33,6 +29,9 @@ import org.aksw.limes.core.measures.measure.MeasureFactory;
  * @author kleanthi
  */
 public class SimpleExecutionEngine extends ExecutionEngine {
+
+    private HashMap<String, Mapping> dynamicResults = new HashMap<String, Mapping>();
+
     /**
      * Implements running the run operator. Assume atomic measures
      *
@@ -56,7 +55,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      *            An execution plan
      * @return The mapping obtained from executing the plan
      */
-    public Mapping execute(Plan plan) {
+    public Mapping executeInstructions(Plan plan) {
 	buffer = new ArrayList<MemoryMapping>();
 	if (plan.isEmpty()) {
 	    logger.info("Plan is empty. Done.");
@@ -72,7 +71,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 	    if (inst.getCommand().equals(Command.RUN)) {
 		m = executeRun(inst);
 	    } // runs the filter operator
-	    else if (inst.getCommand().equals(Command.FILTER)) {
+	    else if (inst.getCommand().equals(Command.FILTER) || inst.getCommand().equals(Command.REVERSEFILTER)) {
 		m = executeFilter(inst, buffer.get(inst.getSourceMapping()));
 	    } // runs set operations such as intersection,
 	    else if (inst.getCommand().equals(Command.INTERSECTION)) {
@@ -231,22 +230,22 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * 
      * @return The mapping obtained from executing the plan
      */
-    public Mapping execute(NestedPlan plan) {
+    public Mapping executeStatic(NestedPlan plan) {
 	// empty nested plan contains nothing
 	Mapping m = new MemoryMapping();
 	if (plan.isEmpty()) {
 	} // atomic nested plan just contain simple list of instructions
 	else if (plan.isAtomic()) {
-	    m = execute((Plan) plan);
+	    m = executeInstructions(plan);
 	} // nested plans contain subplans, an operator for merging the results
 	  // of the subplans and a filter for filtering the results of the
 	  // subplan
 	else {
 	    // run all the subplans
-	    m = execute(plan.getSubPlans().get(0));
+	    m = executeStatic(plan.getSubPlans().get(0));
 	    Mapping m2, result = m;
 	    for (int i = 1; i < plan.getSubPlans().size(); i++) {
-		m2 = execute(plan.getSubPlans().get(i));
+		m2 = executeStatic(plan.getSubPlans().get(i));
 		if (plan.getOperator().equals(Command.INTERSECTION)) {
 		    result = executeIntersection(m, m2);
 		} // union
@@ -266,6 +265,152 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 	    if (plan.getFilteringInstruction() != null) {
 		m = executeFilter(plan.getFilteringInstruction(), m);
 	    }
+	}
+	return m;
+    }
+
+    /**
+     * If a plan is atomic: it gets run and the result mapping gets pushed on
+     * the stack if its complex: the operator/filter is used on the top 2
+     * objects on the stack which get popped the result mapping of this gets
+     * pushed back on the stack
+     * 
+     * @param nestedPlan
+     *            which has not yet been executed
+     * @return Mapping
+     */
+    public Mapping executeDynamic(LinkSpecification spec, DynamicPlanner planner) {
+	long begin = System.currentTimeMillis();
+	long end = 0;
+	Mapping m = new MemoryMapping();
+	NestedPlan plan = new NestedPlan();
+	// create function to check if linkspec has been seen before
+	if (!planner.isExecuted(spec)) {
+	    String dependent = planner.getDependency(spec);
+	    if (dependent != null) {
+		Mapping dependentM = dynamicResults.get(dependent);
+		if (spec.getThreshold() > 0) {
+		    // create a temporary filtering instruction
+		    Instruction tempFilteringInstruction = new Instruction(Instruction.Command.FILTER, null,
+			    spec.getThreshold() + "", -1, -1, 0);
+		    m = executeFilter(tempFilteringInstruction, dependentM);
+		}
+	    } else {
+		if (spec.isEmpty()) {
+		} else if (spec.isAtomic()) {
+		    plan = planner.getPlan(spec);
+		    if (plan.isEmpty()) // in case the init LS is atomic
+			plan = planner.plan(spec);
+		    m = executeInstructions(plan);
+		} else {
+		    // complex not seen before
+		    // call plan
+		    plan = planner.plan(spec);
+		    // get specification that corresponds to the first subplan
+		    LinkSpecification firstSpec = planner.getLinkSpec(plan.getSubPlans().get(0));
+		    // run first specification
+		    m = executeDynamic(firstSpec, planner);
+		    Mapping m2, result = m;
+		    if (spec.getOperator().equals(Operator.AND)) {
+			// replan
+			plan = planner.plan(spec);
+			// second plan is filter
+			if (plan.getOperator() == null) {
+			    if (plan.getFilteringInstruction().getCommand().equals(Command.FILTER)) {
+				result = executeFilter(plan.getFilteringInstruction(), m);
+			    }
+			    // }
+			} else { // second plan is run
+			    LinkSpecification secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
+			    m2 = executeDynamic(secondSpec, planner);
+			    result = executeIntersection(m, m2);
+			}
+		    } // union
+		    else if (spec.getOperator().equals(Operator.OR)) {
+			logger.info(plan.getSubPlans().get(1));
+			LinkSpecification secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
+			if (secondSpec == null) {
+			    plan = planner.plan(spec);
+			    secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
+			}
+			logger.info(secondSpec);
+			m2 = executeDynamic(secondSpec, planner);
+			result = executeUnion(m, m2);
+
+		    } // diff
+		    else if (spec.getOperator().equals(Operator.MINUS)) {
+			// replan
+			plan = planner.plan(spec);
+			// second plan is (reverse) filter
+			if (plan.getOperator() == null) {
+			    if (plan.getFilteringInstruction().getCommand().equals(Command.REVERSEFILTER)) {
+				result = executeFilter(plan.getFilteringInstruction(), m);
+				
+			    }
+			} else { // second plan is run
+			    LinkSpecification secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
+			    m2 = executeDynamic(secondSpec, planner);
+			    result = executeDifference(m, m2);
+
+			}
+		    } else if (spec.getOperator().equals(Operator.XOR)) {
+			LinkSpecification secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
+			m2 = executeDynamic(secondSpec, planner);
+			result = executeExclusiveOr(m, m2);
+		    }
+		    m = result;
+		    if (plan.getOperator() != null) {
+			if (plan.getFilteringInstruction() != null) {
+			    m = executeFilter(plan.getFilteringInstruction(), m);
+			}
+		    }
+
+		}
+	    } // save results
+	    dynamicResults.put(spec.toString(), new MemoryMapping());
+	    dynamicResults.put(spec.toString(), m);
+	    end = System.currentTimeMillis();
+	    double msize = m.getNumberofMappings();
+	    double selectivity = msize / (source.size() * target.size());
+	    planner.updatePlan(spec, end - begin, selectivity, msize);
+	} else {
+	    if (dynamicResults.containsKey(spec.toString())) {
+		m = dynamicResults.get(spec.toString());
+	    } else {
+		logger.info("Result for spec: " + spec + " not stored.Exiting..");
+		System.exit(1);
+	    }
+	}
+	return m;
+    }
+
+    /**
+     * Implementation of the execution of link specification. The execution
+     * engine chooses which execute function is going to be invoked given the
+     * planner. For the Canonical and Helios planners, the execution of link
+     * specifications has been modeled as a linear process wherein a LS is
+     * potentially first rewritten, planned and finally executed. Subsequently,
+     * the plan never changes and simply executed. For the Dynamic planner, we
+     * enable a flow of information from the execution engine back to the
+     * planner, that uses intermediary execution results to improve plans
+     * generated previously.
+     *
+     * @param spec,
+     *            the link specification, after it was re-written
+     * @param planner,
+     *            the chosen planner
+     * 
+     * @return The mapping obtained from executing the plan of spec
+     */
+    @Override
+    public Mapping execute(LinkSpecification spec, IPlanner planner) {
+	Mapping m = new MemoryMapping();
+	if (planner instanceof DynamicPlanner) {
+	    ((DynamicPlanner) planner).initSteps(spec);
+	    m = executeDynamic(spec, (DynamicPlanner) planner);
+	} else {
+	    NestedPlan plan = planner.plan(spec);
+	    m = executeStatic(plan);
 	}
 	return m;
     }

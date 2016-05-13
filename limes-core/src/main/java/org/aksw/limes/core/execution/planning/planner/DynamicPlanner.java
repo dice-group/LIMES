@@ -18,8 +18,6 @@ import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.apache.log4j.Logger;
 
-
-
 /**
  *
  * Impelements Dynamic Planner class.
@@ -32,22 +30,19 @@ public class DynamicPlanner extends Planner {
     private Cache target;
     private Language lang;
     // <String representation of LinkSpec, corresponding plan>
-    private Map<String, NestedPlan> allPlans = new HashMap<String, NestedPlan>();
+    private Map<String, NestedPlan> plans = new HashMap<String, NestedPlan>();
     // <String representation of LinkSpec, LinkSpec>
     private Map<String, LinkSpecification> specifications = new HashMap<String, LinkSpecification>();
     // <String represantion of LinkSpec A, LinkSpec B>
     // where LinkSpec B and C are subsumption of LinkSpec A
     private Map<String, LinkSpecification> dependencies = new HashMap<String, LinkSpecification>();
 
-    public DynamicPlanner(Cache s, Cache t, LinkSpecification spec) {
+    public DynamicPlanner(Cache s, Cache t) {
 	source = s;
 	target = t;
 	lang = Language.EN;
-	initSteps(spec);
     }
 
-    
-  
     /**
      * Initialize allPlans map
      *
@@ -56,15 +51,15 @@ public class DynamicPlanner extends Planner {
      */
     public void initSteps(LinkSpecification spec) {
 	NestedPlan plan = new NestedPlan();
-	if (!allPlans.containsKey(spec.toString())) {
+	if (!plans.containsKey(spec.toString())) {
 	    if (spec.isAtomic()) {
-		allPlans.put(spec.toString(), plan);
+		plans.put(spec.toString(), plan);
 		specifications.put(spec.toString(), spec);
 	    } else {
 		for (LinkSpecification child : spec.getChildren()) {
 		    initSteps(child);
 		}
-		allPlans.put(spec.toString(), plan);
+		plans.put(spec.toString(), plan);
 		specifications.put(spec.toString(), spec);
 	    }
 	}
@@ -140,7 +135,7 @@ public class DynamicPlanner extends Planner {
      * @return true if the plan is executed
      */
     public boolean isExecuted(LinkSpecification spec) {
-	return (allPlans.get(spec.toString()).isExecuted());
+	return (plans.get(spec.toString()).isExecuted());
     }
 
     /**
@@ -177,27 +172,31 @@ public class DynamicPlanner extends Planner {
 	}
 	return cost;
     }
+
     /**
      * Find the plan of a specification
      *
-     * @param spec, the link specification
-     *            
+     * @param spec,
+     *            the link specification
+     * 
      * @return plan, the plan that corresponds to the input specification
      */
     public NestedPlan getPlan(LinkSpecification spec) {
-	if (allPlans.containsKey(spec.toString()))
-	    return allPlans.get(spec.toString());
+	if (plans.containsKey(spec.toString()))
+	    return plans.get(spec.toString());
 	return null;
     }
+
     /**
      * Find the specification that corresponds to a plan
      *
-     * @param plan, the nested plan
-     *            
+     * @param plan,
+     *            the nested plan
+     * 
      * @return spec, the spec that corresponds to the input plan
      */
     public LinkSpecification getLinkSpec(NestedPlan plan) {
-	for (Map.Entry<String, NestedPlan> entry : allPlans.entrySet()) {
+	for (Map.Entry<String, NestedPlan> entry : plans.entrySet()) {
 	    String spec = entry.getKey();
 	    NestedPlan value = entry.getValue();
 	    if (value.equals(plan))
@@ -205,7 +204,7 @@ public class DynamicPlanner extends Planner {
 	}
 	return null;
     }
-    
+
     /**
      * Updates the characteristics of a plan
      *
@@ -219,20 +218,22 @@ public class DynamicPlanner extends Planner {
      *            the real mapping size returned when the plan is executed
      */
     public void updatePlan(LinkSpecification spec, double rt, double selectivity, double msize) {
-	if (!allPlans.containsKey(spec.toString())) {
+	if (!plans.containsKey(spec.toString())) {
 	    logger.error("Specification: " + spec.getFullExpression() + " was not initialised. Exiting..");
 	    System.exit(1);
 	}
-	NestedPlan plan = allPlans.get(spec.toString());
+	NestedPlan plan = plans.get(spec.toString());
 	plan.setRuntimeCost(rt);
 	plan.setSelectivity(selectivity);
 	plan.setMappingSize(msize);
 	plan.setExecuted(true);
-	//logger.info("Runtime is: " + plan.runtimeCost + " mappingsize is: " + plan.mappingSize + " selectivity is: "
-	//	+ plan.selectivity);
-	allPlans.put(spec.toString(), plan);
+	// logger.info("Runtime is: " + plan.runtimeCost + " mappingsize is: " +
+	// plan.mappingSize + " selectivity is: "
+	// + plan.selectivity);
+	plans.put(spec.toString(), plan);
 	createDependencies(spec);
     }
+
     /**
      * Generates a NestedPlan for a link specification
      *
@@ -245,7 +246,7 @@ public class DynamicPlanner extends Planner {
 	return plan(spec, source, target, new MemoryMapping(), new MemoryMapping());
 
     }
-    
+
     /**
      * Generates a instructionList based on the optimality assumption used in
      * databases
@@ -262,13 +263,13 @@ public class DynamicPlanner extends Planner {
      *            Size of target mapping
      * @return Nested instructionList for the given spec
      */
-    public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, MemoryMapping sourceMapping, MemoryMapping targetMapping) {
+    public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, MemoryMapping sourceMapping,
+	    MemoryMapping targetMapping) {
 	NestedPlan plan = new NestedPlan();
 	// if plan is executed, just return the plan
 	// remember that the plan is automatically updated once it is executed
-	plan = allPlans.get(spec.toString());
+	plan = plans.get(spec.toString());
 	if (plan.isExecuted()) {
-	    //logger.info("Already executed");
 	    return plan;
 	}
 	plan = new NestedPlan();
@@ -281,14 +282,14 @@ public class DynamicPlanner extends Planner {
 	    plan.setRuntimeCost(getAtomicRuntimeCosts(p.getOperator(), spec.getThreshold()));
 	    plan.setMappingSize(getAtomicMappingSizes(p.getOperator(), spec.getThreshold()));
 	    plan.setSelectivity(plan.getMappingSize() / (double) (source.size() * target.size()));
-	    
+
 	} else {
 	    if (spec.getOperator().equals(Operator.OR)) {
 		List<NestedPlan> children = new ArrayList<NestedPlan>();
 		double runtimeCost = 0;
 		for (LinkSpecification child : spec.getChildren()) {
 		    NestedPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
-		    logger.info("Child is: "+child+" with plan: "+childPlan);
+		    logger.info("Child is: " + child + " with plan: " + childPlan);
 		    children.add(childPlan);
 		    runtimeCost = runtimeCost + childPlan.getRuntimeCost();
 		}
@@ -369,24 +370,29 @@ public class DynamicPlanner extends Planner {
 		plan = getBestConjunctivePlan(spec, children.get(0), children.get(1), selectivity);
 	    }
 	}
-	this.allPlans.put(spec.toString(), plan);
-	//logger.info("--------------------------------------------------------------------");
+	this.plans.put(spec.toString(), plan);
+	// logger.info("--------------------------------------------------------------------");
 	return plan;
 
     }
 
     /**
-     * Puts all the options to this.steps Computes the best difference
-     * instructionList for one pair of nested plans
+     * Find the least costly plan for a link specification with MINUS operator.
+     * Computes all possible nested plans given the children plans and whether
+     * or not they have been executed previously.
      *
-     * @param left
-     *            Left instructionList
-     * @param right
-     *            Right instructionList
+     * @param spec,
+     *            the link specification
+     * @param left,
+     *            left child nested plan
+     * @param right,
+     *            right child nested plan
      * @param selectivity
-     * @return
+     * @return the resulting nested plan for the input spec, that is least
+     *         costly
      */
-    public NestedPlan getBestDifferencePlan(LinkSpecification spec, NestedPlan left, NestedPlan right, double selectivity) {
+    public NestedPlan getBestDifferencePlan(LinkSpecification spec, NestedPlan left, NestedPlan right,
+	    double selectivity) {
 	double runtime1 = 0, runtime2 = 0;
 	NestedPlan result = new NestedPlan();
 	double mappingSize = source.size() * target.size() * selectivity;
@@ -474,17 +480,22 @@ public class DynamicPlanner extends Planner {
     }
 
     /**
-     * Puts all the options to this.steps Computes the best conjunctive
-     * instructionList for one pair of nested plans
+     * Find the least costly plan for a link specification with AND operator.
+     * Computes all possible nested plans given the children plans and whether
+     * or not they have been executed previously.
      *
-     * @param left
-     *            Left instructionList
-     * @param right
-     *            Right instructionList
+     * @param spec,
+     *            the link specification
+     * @param left,
+     *            left child nested plan
+     * @param right,
+     *            right child nested plan
      * @param selectivity
-     * @return
+     * @return the resulting nested plan for the input spec, that is least
+     *         costly
      */
-    public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, NestedPlan right, double selectivity) {
+    public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, NestedPlan right,
+	    double selectivity) {
 	double runtime1 = 0, runtime2 = 0, runtime3 = 0;
 	NestedPlan result = new NestedPlan();
 

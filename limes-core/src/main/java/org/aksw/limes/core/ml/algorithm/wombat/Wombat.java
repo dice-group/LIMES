@@ -17,6 +17,7 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
+import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
@@ -145,7 +146,7 @@ public abstract class Wombat {
 		ExecutionEngine ee = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, source, target, "?x", "?y");
 		Plan plan = new Plan();
 		plan.addInstruction(inst);
-		return ee.execute(plan);
+		return ((SimpleExecutionEngine) ee).executeInstructions(plan);
 	}
 	
 	/**
@@ -168,10 +169,10 @@ public abstract class Wombat {
 			LinkSpecification rwLs = rw.rewrite(ls);
 			IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, source, target);
 			assert planner != null;
-			NestedPlan plan = planner.plan(rwLs);
+			
 			ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, source, target,"?x", "?y");
 			assert engine != null;
-			Mapping resultMap = engine.execute(plan);
+			Mapping resultMap = engine.execute(rwLs, planner);
 			map = resultMap.getSubMap(threshold);
 		}
 		return map;

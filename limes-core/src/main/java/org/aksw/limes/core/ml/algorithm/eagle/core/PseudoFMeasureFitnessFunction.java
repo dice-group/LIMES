@@ -109,8 +109,7 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
 		try {
 			IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT,
 					sourceCache, targetCache);
-			NestedPlan plan = planner.plan(spec);		
-			return engine.execute(plan);
+			return engine.execute(spec, planner);
 		} catch(Exception e) {
 			e.printStackTrace();
 			String out = "Error getMapping() in PFM (" +  config.source.getId() + " - " + config.target.getId() +") with metric: "+spec+" \n"+ e.getMessage();

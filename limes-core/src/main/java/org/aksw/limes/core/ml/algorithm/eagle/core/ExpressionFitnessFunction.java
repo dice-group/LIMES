@@ -227,13 +227,11 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 			if(full) {
 				IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT,
 						sC, tC);
-				NestedPlan plan = planner.plan(spec);		
-				return fullEngine.execute(plan);
+				return fullEngine.execute(spec, planner);
 			} else {
 				IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT,
 						trimmedSourceCache, trimmedTargetCache);
-				NestedPlan plan = planner.plan(spec);		
-				return engine.execute(plan);
+				return engine.execute(spec, planner);
 			}
 		}catch(Exception e) {
 			logger.error("Exception execution expression "+spec+ " : full? " + full);

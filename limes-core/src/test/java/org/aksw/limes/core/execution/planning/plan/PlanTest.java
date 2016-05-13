@@ -125,14 +125,14 @@ public class PlanTest {
 
 	System.out.println("Plan size with Union: " + plan.size());
 	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
-	Mapping mUnion = ee.execute(plan);
+	Mapping mUnion = ee.executeInstructions(plan);
 	System.out.println("Size of Mapping with Union: " + mUnion.size());
 
 	plan.removeInstruction(union);
 	plan.addInstruction(instersection);
 
 	System.out.println("Plan size with Intersection: " + plan.size());
-	Mapping mIntersection = ee.execute(plan);
+	Mapping mIntersection = ee.executeInstructions(plan);
 	System.out.println("Size of Mapping with Intersection: " + mIntersection.size());
 	
 	assertTrue(!mUnion.toString().equals(mIntersection.toString()));

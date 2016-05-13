@@ -2,6 +2,10 @@ package org.aksw.limes.core.execution.engine;
 
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
+import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.ExecutionPlannerType;
+import org.aksw.limes.core.execution.planning.planner.IPlanner;
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 
 /**
@@ -12,20 +16,17 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @author kleanthi
  */
 public interface IExecutionEngine {
-    /**
-     * Implementation of the execution of a nested plan.
-     *
-     * @param plan, A nested plan
-     * @return The mapping obtained from executing the plan
-     */
-    Mapping execute(NestedPlan plan);
     
     /**
      * Implementation of the execution of an execution plan.
      *
-     * @param plan, An (execution) plan
+     * @param source, the source cache
+     * @param target, the target cache
+     * @param spec, the link specification
+     * @param plannerType, the type of the planner
+     * 
      * @return The mapping obtained from executing the plan
      */
-    Mapping execute(Plan plan);
+    Mapping execute(LinkSpecification spec, IPlanner planner);
 
 }

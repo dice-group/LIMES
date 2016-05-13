@@ -2,7 +2,9 @@ package org.aksw.limes.core.execution.engine;
 
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
+import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 
@@ -16,37 +18,24 @@ import org.aksw.limes.core.io.mapping.MemoryMapping;
  */
 public class ParallelExecutionEngine extends ExecutionEngine {
 
-    
     public ParallelExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
 	super(source, target, sourceVar, targetVar);
 	// TODO Auto-generated constructor stub
     }
 
     /**
-     * Implementation of the execution of a nested plan.
-     * Instructions of the plan are implemented in parallel.
+     * Implementation of the execution of an execution plan. Instructions of the
+     * plan are implemented in parallel.
      *
-     * @param plan A nested plan
+     * @param spec,
+     *            the input link specification
+     * @param planner,
+     *            the chosen planner
      * @return The mapping from running the plan
      */
     @Override
-    public MemoryMapping execute(NestedPlan plan) {
+    public Mapping execute(LinkSpecification spec, IPlanner planner) {
 	throw new UnsupportedOperationException("Not implemented yet");
     }
-    /**
-     * Implementation of the execution of an execution plan.
-     * Instructions of the plan are implemented in parallel.
-     *
-     * @param plan An execution plan
-     * @return The mapping from running the plan
-     */
-    @Override
-    public Mapping execute(Plan plan) {
-	throw new UnsupportedOperationException("Not implemented yet");
 
-    }
-
-    
-
-    
 }

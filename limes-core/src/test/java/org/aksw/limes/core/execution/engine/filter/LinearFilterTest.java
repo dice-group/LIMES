@@ -84,7 +84,7 @@ public class LinearFilterTest {
 	plan.setInstructionList(new ArrayList<Instruction>());
 	Instruction run1 = new Instruction(Command.RUN, "cosine(x.name, y.name)", "0.3", -1, -1, 0);
 	plan.addInstruction(run1);
-	Mapping m1 = ee.execute(plan);
+	Mapping m1 = ee.executeInstructions(plan);
 	System.out.println("Size before: " + m1.getNumberofMappings());
 	System.out.println(m1);
 
@@ -124,7 +124,7 @@ public class LinearFilterTest {
 	plan.setInstructionList(new ArrayList<Instruction>());
 	Instruction run1 = new Instruction(Command.RUN, "cosine(x.name, y.name)", "0.3", -1, -1, 0);
 	plan.addInstruction(run1);
-	Mapping m1 = ee.execute(plan);
+	Mapping m1 = ee.executeInstructions(plan);
 	System.out.println("Size before: " + m1.getNumberofMappings());
 	System.out.println(m1);
 
@@ -157,7 +157,7 @@ public class LinearFilterTest {
 	plan.setInstructionList(new ArrayList<Instruction>());
 	Instruction run1 = new Instruction(Command.RUN, "cosine(x.name, y.name)", "0.3", -1, -1, 0);
 	plan.addInstruction(run1);
-	Mapping m1 = ee.execute(plan);
+	Mapping m1 = ee.executeInstructions(plan);
 	System.out.println("Size before: " + m1.getNumberofMappings());
 	System.out.println(m1);
 
@@ -202,7 +202,7 @@ public class LinearFilterTest {
 	plan.setInstructionList(new ArrayList<Instruction>());
 	Instruction run1 = new Instruction(Command.RUN, "qgrams(x.name, y.name)", "0.3", -1, -1, 0);
 	plan.addInstruction(run1);
-	Mapping m1 = ee.execute(plan);
+	Mapping m1 = ee.executeInstructions(plan);
 	System.out.println("Size before: " + m1.getNumberofMappings());
 	System.out.println(m1);
 
@@ -243,7 +243,7 @@ public class LinearFilterTest {
 	plan.setInstructionList(new ArrayList<Instruction>());
 	Instruction run1 = new Instruction(Command.RUN, "qgrams(x.name, y.name)", "0.3", -1, -1, 0);
 	plan.addInstruction(run1);
-	Mapping m1 = ee.execute(plan);
+	Mapping m1 = ee.executeInstructions(plan);
 	System.out.println("Size before: " + m1.getNumberofMappings());
 	System.out.println(m1);
 
@@ -304,7 +304,7 @@ public class LinearFilterTest {
 	plan.setInstructionList(new ArrayList<Instruction>());
 	Instruction run1 = new Instruction(Command.RUN, "leven(x.name, y.name)", "0.13", -1, -1, 0);
 	plan.addInstruction(run1);
-	Mapping m1 = ee.execute(plan);
+	Mapping m1 = ee.executeInstructions(plan);
 	System.out.println("Size before: " + m1.getNumberofMappings());
 	System.out.println(m1);
 
@@ -312,7 +312,7 @@ public class LinearFilterTest {
 	plan2.setInstructionList(new ArrayList<Instruction>());
 	Instruction run2 = new Instruction(Command.RUN, "qgrams(x.name, y.name)", "0.3", -1, -1, 0);
 	plan2.addInstruction(run2);
-	Mapping m2 = ee.execute(plan2);
+	Mapping m2 = ee.executeInstructions(plan2);
 	System.out.println("Size before: " + m2.getNumberofMappings());
 	System.out.println(m2);
 

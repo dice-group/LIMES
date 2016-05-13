@@ -97,13 +97,13 @@ public class SimpleExecutionEngineTest {
 
 	Plan smallPlan1 = new Plan();
 	smallPlan1.addInstruction(run1);
-	Mapping m1 = ee.execute(smallPlan1);
+	Mapping m1 = ee.executeInstructions(smallPlan1);
 	System.out.println("Small plan 1: " + m1.getNumberofMappings());
 	assertTrue(ee.buffer.get(0).equals(m1));
 
 	Plan smallPlan2 = new Plan();
 	smallPlan2.addInstruction(run2);
-	Mapping m2 = ee.execute(smallPlan2);
+	Mapping m2 = ee.executeInstructions(smallPlan2);
 	System.out.println("Small plan 2: " + m2.getNumberofMappings());
 	assertTrue(ee.buffer.get(1).equals(m2));
 
@@ -111,7 +111,7 @@ public class SimpleExecutionEngineTest {
 	plan2.addInstruction(run1);
 	plan2.addInstruction(run2);
 	plan2.addInstruction(union);
-	Mapping mUnion2 = ee.execute(plan2);
+	Mapping mUnion2 = ee.executeInstructions(plan2);
 	assertTrue(ee.buffer.get(15).equals(mUnion2));
 	System.out.println("Union mapping: " + mUnion2.getNumberofMappings());
 
@@ -132,13 +132,13 @@ public class SimpleExecutionEngineTest {
 
 	Plan smallPlan1 = new Plan();
 	smallPlan1.addInstruction(run1);
-	Mapping m1 = ee.execute(smallPlan1);
+	Mapping m1 = ee.executeInstructions(smallPlan1);
 	System.out.println("Small plan 1: " + m1.getNumberofMappings());
 	assertTrue(ee.buffer.get(0).equals(m1));
 
 	Plan smallPlan2 = new Plan();
 	smallPlan2.addInstruction(run2);
-	Mapping m2 = ee.execute(smallPlan2);
+	Mapping m2 = ee.executeInstructions(smallPlan2);
 	System.out.println("Small plan 2: " + m2.getNumberofMappings());
 	assertTrue(ee.buffer.get(1).equals(m2));
 
@@ -146,7 +146,7 @@ public class SimpleExecutionEngineTest {
 	plan2.addInstruction(run1);
 	plan2.addInstruction(run2);
 	plan2.addInstruction(union);
-	Mapping mUnion2 = ee.execute(plan2);
+	Mapping mUnion2 = ee.executeInstructions(plan2);
 	assertTrue(ee.buffer.size() == 3);
 
 	assertTrue(ee.buffer.get(2).equals(mUnion2));
@@ -174,7 +174,7 @@ public class SimpleExecutionEngineTest {
 	plan2.addInstruction(run1);
 	plan2.addInstruction(run2);
 	plan2.addInstruction(union);
-	Mapping mUnion2 = ee.execute(plan2);
+	Mapping mUnion2 = ee.executeInstructions(plan2);
 	System.out.println("executeUnion with self: " + mUnion.getNumberofMappings());
 	System.out.println("Union as set of Instructions with self: " + mUnion2.getNumberofMappings());
 
@@ -212,7 +212,7 @@ public class SimpleExecutionEngineTest {
 	plan3.addInstruction(run1);
 	plan3.addInstruction(run2);
 	plan3.addInstruction(intersection);
-	Mapping mIntersection2 = ee.execute(plan3);
+	Mapping mIntersection2 = ee.executeInstructions(plan3);
 	System.out.println("executeIntersection with self: " + mIntersection.getNumberofMappings());
 	System.out.println("Intersection as set of Instructions with self: " + mIntersection2.getNumberofMappings());
 
@@ -249,7 +249,7 @@ public class SimpleExecutionEngineTest {
 	plan4.addInstruction(run1);
 	plan4.addInstruction(run2);
 	plan4.addInstruction(difference);
-	Mapping mDifference2 = ee.execute(plan4);
+	Mapping mDifference2 = ee.executeInstructions(plan4);
 	System.out.println("executeDifference with self: " + mDifference.getNumberofMappings());
 	System.out.println("Difference as set of Instructions with self: " + mDifference2.getNumberofMappings());
 	// A - A = 0
@@ -287,7 +287,7 @@ public class SimpleExecutionEngineTest {
 	plan5.addInstruction(run1);
 	plan5.addInstruction(run2);
 	plan5.addInstruction(xor);
-	Mapping mXor2 = ee.execute(plan5);
+	Mapping mXor2 = ee.executeInstructions(plan5);
 	System.out.println("executeExclusiveOr with self: " + mXor.getNumberofMappings());
 	System.out.println("Xor as set of Instructions with self: " + mXor2.getNumberofMappings());
 
@@ -320,7 +320,7 @@ public class SimpleExecutionEngineTest {
 
 	// 1) run as a NestedPlan calling execute function
 	NestedPlan plan = cp.plan(ls);
-	Mapping m = ee.execute(plan);
+	Mapping m = ee.executeStatic(plan);
 	System.out.println("LS -> planner -> NestedPlan -> execute function: " + m.getNumberofMappings());
 	// 2) run Instruction by calling executeRun
 	Mapping m2 = ee.executeRun(run1);
@@ -328,12 +328,12 @@ public class SimpleExecutionEngineTest {
 	// 3) run as a Plan with ONLY instruction calling run function
 	Plan plan2 = new Plan();
 	plan2.addInstruction(run1);
-	Mapping m3 = ee.execute(plan2);
+	Mapping m3 = ee.executeInstructions(plan2);
 	System.out.println("Plan (with Instruction) + execute: " + m3.getNumberofMappings());
 	// 3) run as a Plan with ONLY instruction calling run function
 	NestedPlan plan3 = new NestedPlan();
 	plan3.addInstruction(run1);
-	Mapping m4 = ee.execute(plan3);
+	Mapping m4 = ee.executeStatic(plan3);
 	System.out.println("nestedPlan (with Instruction) + execute: " + m4.getNumberofMappings());
 	/////////////////////////////////////////////////////////////////////
 
@@ -365,7 +365,7 @@ public class SimpleExecutionEngineTest {
 
 	// 1) run as a NestedPlan calling execute function
 	NestedPlan plan = cp.plan(ls);
-	Mapping m = ee.execute(plan);
+	Mapping m = ee.executeStatic(plan);
 	System.out.println("LS -> planner -> NestedPlan -> execute function: " + m.getNumberofMappings());
 
 	// 2) execute runs independently
@@ -381,7 +381,7 @@ public class SimpleExecutionEngineTest {
 	plan2.addInstruction(run2);
 	plan2.addInstruction(union);
 	plan2.addInstruction(filter);
-	Mapping m3 = ee.execute(plan2);
+	Mapping m3 = ee.executeInstructions(plan2);
 	System.out.println("Plan (with Instructions) + execute: " + m3.getNumberofMappings());
 
 	// 4) run as a nestedplan with ONLY instruction calling execute function
@@ -390,7 +390,7 @@ public class SimpleExecutionEngineTest {
 	plan3.addInstruction(run2);
 	plan3.addInstruction(union);
 	plan3.addInstruction(filter);
-	Mapping m4 = ee.execute(plan3);
+	Mapping m4 = ee.executeStatic(plan3);
 	System.out.println("nestedPlan (with Instructions) + execute: " + m4.getNumberofMappings());
 
 	/////////////////////////////////////////////////////////////////////
@@ -435,7 +435,7 @@ public class SimpleExecutionEngineTest {
 
 	// 1) run as a NestedPlan calling execute function
 	NestedPlan plan = cp.plan(ls);
-	Mapping m = ee.execute(plan);
+	Mapping m = ee.executeStatic(plan);
 	System.out.println("LS -> planner -> NestedPlan -> execute function: " + m.getNumberofMappings());
 	// 2) execute runs independently
 	Mapping mSource = ee.executeRun(run1);
@@ -449,7 +449,7 @@ public class SimpleExecutionEngineTest {
 	plan2.addInstruction(run2);
 	plan2.addInstruction(intersection);
 	plan2.addInstruction(filter);
-	Mapping m3 = ee.execute(plan2);
+	Mapping m3 = ee.executeInstructions(plan2);
 	System.out.println("Plan (with Instructions) + execute: " + m3.getNumberofMappings());
 	// 4) run as a nestedplan with ONLY instruction calling execute function
 	NestedPlan plan3 = new NestedPlan();
@@ -457,7 +457,7 @@ public class SimpleExecutionEngineTest {
 	plan3.addInstruction(run2);
 	plan3.addInstruction(intersection);
 	plan3.addInstruction(filter);
-	Mapping m4 = ee.execute(plan3);
+	Mapping m4 = ee.executeStatic(plan3);
 	System.out.println("nestedPlan (with Instructions) + execute: " + m4.getNumberofMappings());
 
 	/////////////////////////////////////////////////////////////////////
@@ -501,7 +501,7 @@ public class SimpleExecutionEngineTest {
 
 	/// 1) run as a NestedPlan calling execute function
 	NestedPlan plan = cp.plan(ls);
-	Mapping m = ee.execute(plan);
+	Mapping m = ee.executeStatic(plan);
 	System.out.println("LS -> planner -> NestedPlan -> execute function: " + m.getNumberofMappings());
 	// 2) execute runs independently
 	Mapping mSource = ee.executeRun(run1);
@@ -515,7 +515,7 @@ public class SimpleExecutionEngineTest {
 	plan2.addInstruction(run2);
 	plan2.addInstruction(difference);
 	plan2.addInstruction(filter);
-	Mapping m3 = ee.execute(plan2);
+	Mapping m3 = ee.executeInstructions(plan2);
 	System.out.println("Plan (with Instructions) + execute: " + m3.getNumberofMappings());
 	// 4) run as a nestedplan with ONLY instruction calling execute function
 	NestedPlan plan3 = new NestedPlan();
@@ -523,7 +523,7 @@ public class SimpleExecutionEngineTest {
 	plan3.addInstruction(run2);
 	plan3.addInstruction(difference);
 	plan3.addInstruction(filter);
-	Mapping m4 = ee.execute(plan3);
+	Mapping m4 = ee.executeStatic(plan3);
 	System.out.println("nestedPlan (with Instructions) + execute: " + m4.getNumberofMappings());
 
 	/////////////////////////////////////////////////////////////////////
@@ -570,7 +570,7 @@ public class SimpleExecutionEngineTest {
 
 	/// 1) run as a NestedPlan calling execute function
 	NestedPlan plan = cp.plan(ls);
-	Mapping m = ee.execute(plan);
+	Mapping m = ee.executeStatic(plan);
 	System.out.println("LS -> planner -> NestedPlan -> execute function: " + m.getNumberofMappings());
 	// 2) execute runs independently
 	Mapping mSource = ee.executeRun(run1);
@@ -584,7 +584,7 @@ public class SimpleExecutionEngineTest {
 	plan2.addInstruction(run2);
 	plan2.addInstruction(xor);
 	plan2.addInstruction(filter);
-	Mapping m3 = ee.execute(plan2);
+	Mapping m3 = ee.executeInstructions(plan2);
 	System.out.println("Plan (with Instructions) + execute: " + m3.getNumberofMappings());
 	// 4) run as a nestedplan with ONLY instruction calling execute function
 	Plan plan3 = new NestedPlan();
@@ -592,7 +592,7 @@ public class SimpleExecutionEngineTest {
 	plan3.addInstruction(run2);
 	plan3.addInstruction(xor);
 	plan3.addInstruction(filter);
-	Mapping m4 = ee.execute(plan2);
+	Mapping m4 = ee.executeInstructions(plan2);
 	System.out.println("nestedPlan (with Instructions) + execute: " + m4.getNumberofMappings());
 
 	/////////////////////////////////////////////////////////////////////
@@ -629,7 +629,7 @@ public class SimpleExecutionEngineTest {
 
 	
 	Plan plan = cp.plan(ls);
-	Mapping m = ee.execute(plan);
+	Mapping m = ee.executeInstructions(plan);
 	System.out.println(m);
 
 	System.out.println("---------------------------------");
