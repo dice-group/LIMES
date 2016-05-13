@@ -18,7 +18,7 @@ import org.aksw.limes.core.measures.mapper.Mapper;
  * 
  * @author kleanthi
  */
-public abstract class simpleTemporalMapper extends Mapper {
+public abstract class SimpleTemporalMapper implements ISimpleTemporalMapper {
 
     /**
      * Extract first property (beginDate) from metric expression.
