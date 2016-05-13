@@ -27,13 +27,22 @@ public class Configuration implements IConfiguration{
 	protected double verificationThreshold;
 	protected String verificationFile;
 	protected int exemplars 					= -1;
-	protected Map<String, String> prefixes 		= new HashMap<String, String>();;
+	protected Map<String, String> prefixes 		= new HashMap<String, String>();
 	protected String outputFormat;
 	protected String executionPlan 				= "simple";
 	protected int granularity 					= 2;
 	protected String recallRegulator;
 	protected double recallThreshold;
+	protected Map<String, String> mlParameters 		= new HashMap<String, String>();;
 
+
+	public Map<String, String> getMlParameters() {
+		return mlParameters;
+	}
+
+	public void addMlParameter(String mlParameterName, String mlParameterValue) {
+		this.mlParameters.put(mlParameterName, mlParameterValue);
+	}
 
 	public Configuration(){
 	}
