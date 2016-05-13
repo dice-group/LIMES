@@ -25,9 +25,9 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.Set;
 
-public class Overalps extends AllenAlgebraMapper {
+public class Overlaps extends AllenAlgebraMapper {
 
-    public Overalps() {
+    public Overlaps() {
 	// (BB1 & EE1) \ (EB0 U EB1)
 	this.getRequiredAtomicRelations().add(1);
 	this.getRequiredAtomicRelations().add(7);

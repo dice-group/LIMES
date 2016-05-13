@@ -12,6 +12,18 @@ import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
 import org.aksw.limes.core.measures.mapper.string.RatcliffObershelpMapper;
 import org.aksw.limes.core.measures.mapper.string.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGram;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.After;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.Before;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.During;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.DuringReverse;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.Finishes;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsFinishedBy;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsMetBy;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsOverlappedBy;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsStartedBy;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.Meets;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.Overlaps;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.Starts;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.ConcurrentMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.PredecessorMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.SuccessorMapper;
@@ -91,7 +103,20 @@ public class MeasureFactory {
 	public static final String TMP_SUCCESSOR 		= "tmp_successor";
 	public static final String TMP_PREDECESSOR 		= "tmp_predecessor";
 	public static final String TMP_CONCURRENT 		= "tmp_concurrent";
-	
+	public static final String TMP_BEFORE = "tmp_before";
+	public static final String TMP_AFTER = "tmp_after";
+	public static final String TMP_MEETS = "tmp_meets";
+	public static final String TMP_ISMETBY = "tmp_ismetby";
+	public static final String TMP_FINISHES = "tmp_finishes";
+	public static final String TMP_ISFINISHEDBY = "tmp_isfinishedby";
+	public static final String TMP_STARTS = "tmp_starts";
+	public static final String TMP_ISSTARTEDBY = "tmp_isstartedby";
+	public static final String TMP_DURING = "tmp_during";
+	public static final String TMP_DURINGREVERSE = "tmp_duringreverse";
+	public static final String TMP_OVERLAPS = "tmp_overlaps";
+	public static final String TMP_ISOVERLAPPEDBY = "tmp_isoverlappedby";
+
+
 	// others
 	public static final String RATCLIFF 			= "RATCLIFF2";
 	public static final String SOUNDEX 				= "soundex";
@@ -305,7 +330,31 @@ public class MeasureFactory {
 			am = new PredecessorMapper();
 		} else if (measure.toLowerCase().startsWith(TMP_CONCURRENT)) {
 			am = new ConcurrentMapper();
-		} else {
+		} else if (measure.toLowerCase().startsWith(TMP_BEFORE)) {
+			am = new Before();
+		} else if (measure.toLowerCase().startsWith(TMP_AFTER)) {
+			am = new After();
+		} else if (measure.toLowerCase().startsWith(TMP_MEETS)) {
+			am = new Meets();
+		}else if (measure.toLowerCase().startsWith(TMP_ISMETBY)) {
+			am = new IsMetBy();
+		}else if (measure.toLowerCase().startsWith(TMP_FINISHES)) {
+			am = new Finishes();
+		}else if (measure.toLowerCase().startsWith(TMP_ISFINISHEDBY)) {
+			am = new IsFinishedBy();
+		}else if (measure.toLowerCase().startsWith(TMP_STARTS)) {
+			am = new Starts();
+		}else if (measure.toLowerCase().startsWith(TMP_ISSTARTEDBY)) {
+			am = new IsStartedBy();
+		}else if (measure.toLowerCase().startsWith(TMP_DURING)) {
+			am = new During();
+		}else if (measure.toLowerCase().startsWith(TMP_DURINGREVERSE)) {
+			am = new DuringReverse();
+		}else if (measure.toLowerCase().startsWith(TMP_OVERLAPS)) {
+			am = new Overlaps();
+		}else if (measure.toLowerCase().startsWith(TMP_ISOVERLAPPEDBY)) {
+			am = new IsOverlappedBy();
+		}else {
 			am = null;
 		}
 		return am;

@@ -11,8 +11,9 @@ import java.util.TreeSet;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.measures.mapper.Mapper;
 
-public abstract class AllenAlgebraMapper implements IAllenAlgebraMapper {
+public abstract class AllenAlgebraMapper extends Mapper implements IAllenAlgebraMapper {
 
     private ArrayList<Integer> requiredAtomicRelations = new ArrayList<Integer>();
     /**
