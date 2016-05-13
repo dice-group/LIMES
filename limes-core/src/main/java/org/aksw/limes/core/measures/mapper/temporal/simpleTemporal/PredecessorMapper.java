@@ -9,7 +9,7 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 
-public class PredecessorMapper extends TemporalMapper {
+public class PredecessorMapper extends simpleTemporalMapper {
 
     /**
      * Maps a set of source instances to their predecessor target instances. The
