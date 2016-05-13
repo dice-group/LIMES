@@ -16,6 +16,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.string.EDJoin;
+import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
 
 /**
@@ -123,15 +124,22 @@ public class MeasureProcessor {
 		logger.fatal("Property values could not be read. Exiting");
 		System.exit(1);
 	    } else {
-		if (mapper instanceof EDJoin || measure instanceof QGramSimilarity)
-		    return measure.getSimilarity(sourceInstance, targetInstance, property1, property2);
 
-		Mapping m = mapper.getMapping(source, target, sourceVar, targetVar, expression, threshold);
-		for (String s : m.getMap().keySet()) {
-		    for (String t : m.getMap().get(s).keySet()) {
-			return m.getMap().get(s).get(t);
+		if (mapper instanceof PPJoinPlusPlus) {
+		    Mapping m = mapper.getMapping(source, target, sourceVar, targetVar, expression, threshold);
+		    for (String s : m.getMap().keySet()) {
+			for (String t : m.getMap().get(s).keySet()) {
+			    return m.getMap().get(s).get(t);
+			}
 		    }
+		} else {
+		    double similarity = measure.getSimilarity(sourceInstance, targetInstance, property1, property2);
+		    if (similarity >= threshold)
+			return similarity;
+		    else
+			return 0;
 		}
+
 	    }
 	} else {
 	    if (p.getOperator().equalsIgnoreCase("MAX") | p.getOperator().equalsIgnoreCase("OR")
