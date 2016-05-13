@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.mapper.temporal;
+package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
 
 
 import java.util.Map;

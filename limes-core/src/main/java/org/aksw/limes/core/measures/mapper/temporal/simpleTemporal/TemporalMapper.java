@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.mapper.temporal;
+package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,7 +39,7 @@ public abstract class TemporalMapper extends Mapper {
     }
 
     /**
-     * Extract second property (endDate or machineID) from metric expression.
+     * Extract second property (machineID) from metric expression.
      * 
      * @param expression,
      *            the metric expression
