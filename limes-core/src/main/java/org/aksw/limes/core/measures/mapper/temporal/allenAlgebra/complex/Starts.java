@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.mappers.complex;
+package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,8 +16,8 @@ import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.AllenAlgebraMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.mappers.atomic.BeginBegin;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.mappers.atomic.EndEnd;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.BeginBegin;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.EndEnd;
 
 import java.util.Map;
 import java.util.Map.Entry;

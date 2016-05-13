@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.mappers.atomic;
+package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
