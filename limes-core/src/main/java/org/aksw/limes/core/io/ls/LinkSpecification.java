@@ -232,7 +232,7 @@ public class LinkSpecification implements ILinkSpecification {
 				rightSpec.readSpec(p.getTerm2(), theta);
 				filterExpression = null;
 				setThreshold(theta);
-				fullExpression = "MIN(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
+				fullExpression = "AND(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(OR)) {
 				setOperator(Operator.OR);
@@ -248,7 +248,7 @@ public class LinkSpecification implements ILinkSpecification {
 				rightSpec.readSpec(p.getTerm2(), theta);
 				filterExpression = null;
 				setThreshold(theta);
-				fullExpression = "MAX(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
+				fullExpression = "OR(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(XOR)) {
 				setOperator(Operator.XOR);
@@ -272,7 +272,7 @@ public class LinkSpecification implements ILinkSpecification {
 				rightSpec.readSpec(p.getTerm2(), (theta - p.getCoef1()) / p.getCoef2());
 				filterExpression = spec;
 				setThreshold(theta);
-				fullExpression = "ADD(" + leftSpec.fullExpression + "|" + ((theta - p.getCoef2()) / p.getCoef1()) + ","
+				fullExpression = "AND(" + leftSpec.fullExpression + "|" + ((theta - p.getCoef2()) / p.getCoef1()) + ","
 						+ rightSpec.fullExpression + "|" + ((theta - p.getCoef1()) / p.getCoef2()) + ")";
 
 			}
