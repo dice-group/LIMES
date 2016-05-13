@@ -45,6 +45,8 @@ public class ExecutionPlannerFactory {
 
 	if (type == ExecutionPlannerType.DEFAULT)
 	    return new CanonicalPlanner();
+	if (type == ExecutionPlannerType.CANONICAL)
+	    return new CanonicalPlanner();
 	if (type == ExecutionPlannerType.HELIOS)
 	    return new HeliosPlanner(target, target);
 	if (type == ExecutionPlannerType.DYNAMIC)
