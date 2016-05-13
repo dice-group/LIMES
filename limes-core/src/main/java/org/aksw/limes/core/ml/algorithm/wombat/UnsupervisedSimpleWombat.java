@@ -8,17 +8,21 @@ import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.ml.algorithm.MLResult;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
+import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.log4j.Logger;
 
 
 
 
 public class UnsupervisedSimpleWombat extends Wombat {
+	protected static final String ALGORITHM_NAME = "Unsupervised Simple Wombat";
 	static Logger logger = Logger.getLogger(UnsupervisedSimpleWombat.class.getName());
 
 	public double penaltyWeight = 0.5d;
@@ -42,15 +46,14 @@ public class UnsupervisedSimpleWombat extends Wombat {
 		AND, OR, DIFF
 	};
 
-	public UnsupervisedSimpleWombat(Cache source, Cache target, Mapping examples, double minCoverage) {
-		sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(source, minCoverage);
-		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(target, minCoverage);
+	public UnsupervisedSimpleWombat(Cache sourceCache, Cache targetCache, Mapping examples, double minCoverage, Configuration configuration) {
+    	super(sourceCache, targetCache, configuration);
+		sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, minCoverage);
+		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetCache, minCoverage);
 		this.minCoverage = minCoverage;
-		this.source = source;
-		this.target = target;
 		measures = new HashSet<>(Arrays.asList("jaccard", "trigrams"));	
-		sourceUris = source.getAllUris(); 
-		targetUris = target.getAllUris();
+		sourceUris = sourceCache.getAllUris(); 
+		targetUris = targetCache.getAllUris();
 	}
 
 
@@ -64,10 +67,6 @@ public class UnsupervisedSimpleWombat extends Wombat {
 		return bestSolution.map;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.uni_leipzig.simba.lgg.LGG#getMetricExpression()
-	 */
-	@Override
 	public String getMetricExpression() {
 		if(bestSolution == null){
 			bestSolution =  getBestSolution();
@@ -222,5 +221,39 @@ public class UnsupervisedSimpleWombat extends Wombat {
 			return new RefinementNode(fscore, mapping, metricExpr);
 		}
 		return new RefinementNode(fscore, null, metricExpr);
+	}
+
+
+	@Override
+	public String getName() {
+		return ALGORITHM_NAME;
+	}
+
+
+	@Override
+	public MLResult learn(Mapping trainingData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Mapping computePredictions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void init(LearningSetting parameters, Mapping trainingData) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void terminate() {
+		// TODO Auto-generated method stub
+		
 	}
 }

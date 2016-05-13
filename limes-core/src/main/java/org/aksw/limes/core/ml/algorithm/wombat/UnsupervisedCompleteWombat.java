@@ -17,12 +17,15 @@ import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.ml.algorithm.MLResult;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
+import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -32,6 +35,7 @@ import org.apache.log4j.Logger;
  * @author sherif
  */
 public class UnsupervisedCompleteWombat extends Wombat {
+	protected static final String ALGORITHM_NAME = "Unsupervised Complete Wombat";
 	
 	static Logger logger = Logger.getLogger(UnsupervisedCompleteWombat.class.getName());
 	private static int EXPERIMENT_MAX_TIME_IN_MINUTES = 10;
@@ -55,20 +59,19 @@ public class UnsupervisedCompleteWombat extends Wombat {
 	/**
 	 * Constructor
 	 *
-	 * @param source
-	 * @param target
+	 * @param sourceCache
+	 * @param targetCache
 	 * @param examples
 	 * @param minCoverage
 	 */
-	public UnsupervisedCompleteWombat(Cache source, Cache target, Mapping examples, double minCoverage) {
-		sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(source, minCoverage);
-		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(target, minCoverage);
+	public UnsupervisedCompleteWombat(Cache sourceCache, Cache targetCache, Mapping examples, double minCoverage, Configuration configuration) {
+    	super(sourceCache, targetCache, configuration);
+		sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, minCoverage);
+		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetCache, minCoverage);
 		this.minCoverage = minCoverage;
-		this.source = source;
-		this.target = target;
 		measures = new HashSet<>(Arrays.asList("jaccard", "trigrams"));	
-		sourceUris = source.getAllUris(); 
-		targetUris = target.getAllUris();
+		sourceUris = sourceCache.getAllUris(); 
+		targetUris = targetCache.getAllUris();
 	}
 
 
@@ -86,10 +89,6 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		return getMapingOfMetricExpression(bestSolution.metricExpression);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.uni_leipzig.simba.lgg.LGG#getMetricExpression()
-	 */
-	@Override
 	public String getMetricExpression() {
 		if(bestSolution == null){
 			bestSolution =  getBestSolution();
@@ -475,11 +474,6 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		// get the most promising child
 		Tree<RefinementNode> mostPromisingChild = new Tree<RefinementNode>(new RefinementNode());
 		for(Tree<RefinementNode> child : r.getchildren()){
-			//			if(usePruning && child.getValue().maxFMeasure < mostPromisingChild.getValue().fMeasure){
-			//				long time = System.currentTimeMillis();
-			//				prune(child);
-			//				pruningTime += System.currentTimeMillis() - time;
-			//			}
 			if(child.getValue().fMeasure >= 0){
 				Tree<RefinementNode> promisingChild = findMostPromisingNode(child, overall);
 				if( promisingChild.getValue().fMeasure > mostPromisingChild.getValue().fMeasure  ){
@@ -502,27 +496,6 @@ public class UnsupervisedCompleteWombat extends Wombat {
 			}
 	}
 
-
-	//	/**
-	//	 * @param child
-	//	 * @author sherif
-	//	 */
-	//	private void prune(Tree<RefinementNode> t) {
-	//		pruneNodeCount ++;
-	////		t.remove();
-	//		t.getValue().metricExpression = "Pruned";
-	//		t.getValue().precision = -Double.MAX_VALUE;
-	//		t.getValue().recall	= -Double.MAX_VALUE;
-	//		t.getValue().fMeasure = -Double.MAX_VALUE;
-	//		t.getValue().maxFMeasure = -Double.MAX_VALUE;
-	//		t.getValue().map = null;
-	//		if(t.getchildren() != null && t.getchildren().size() > 0){
-	//			for( Tree<RefinementNode> child : t.getchildren()){
-	//				t.removeChild(child);
-	//			}
-	//		}
-	//	}
-
 	/**
 	 * @param node
 	 * @return Complexity of the input node as the number of operators included in its metric expression
@@ -533,6 +506,46 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		return  StringUtils.countMatches(e, "OR(") + 
 				StringUtils.countMatches(e, "AND(") + 
 				StringUtils.countMatches(e, "MINUS(");
+	}
+
+
+	@Override
+	public String getName() {
+		return ALGORITHM_NAME;
+	}
+
+
+
+	@Override
+	public MLResult learn(Mapping trainingData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	/**
+	 * run conjunctive merge
+	 */
+	@Override
+	public Mapping computePredictions() {
+        return null;
+	}
+
+
+
+	@Override
+	public void init(LearningSetting parameters, Mapping trainingData) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void terminate() {
+		// TODO Auto-generated method stub
+		
 	}
 
 

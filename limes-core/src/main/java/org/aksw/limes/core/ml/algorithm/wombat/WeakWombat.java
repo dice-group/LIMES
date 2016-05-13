@@ -13,11 +13,14 @@ import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.ml.algorithm.MLResult;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
+import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.log4j.Logger;
 
 
@@ -27,6 +30,7 @@ import org.apache.log4j.Logger;
  *
  */
 public class WeakWombat extends Wombat {
+	protected static final String ALGORITHM_NAME = "Weak Wombat";
 	static Logger logger = Logger.getLogger(WeakWombat.class.getName());
 
 	public double penaltyWeight = 0.5d;
@@ -61,27 +65,20 @@ public class WeakWombat extends Wombat {
 	};
 
 	/**
-	 * ** TODO 
-	 * 1- Get relevant source and target resources from sample 
-	 * 2- Sample source and target caches 
-	 * 3- Run algorithm on samples of source and target 
-	 * 4- Get mapping function 
-	 * 5- Execute on the whole
-	 */
-	/**
 	 * Constructor
 	 *
-	 * @param source
-	 * @param target
+	 * @param sourceCache
+	 * @param targetChache
 	 * @param examples
 	 * @param minCoverage
 	 */
-	public WeakWombat(Cache source, Cache target, Mapping examples, double minCoverage) {
-		sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(source, minCoverage);
-		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(target, minCoverage);
+	public WeakWombat(Cache sourceCache, Cache targetChache, Mapping examples, double minCoverage, Configuration configuration) {
+		super(sourceCache, targetChache, configuration);
+		sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, minCoverage);
+		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetChache, minCoverage);
 		this.minCoverage = minCoverage;
-		this.source = source;
-		this.target = target;
+		this.source = sourceCache;
+		this.target = targetChache;
 		measures = new HashSet<>(Arrays.asList(
 				"jaccard",
 				"trigrams"
@@ -102,10 +99,7 @@ public class WeakWombat extends Wombat {
 		return bestSolution.map;
 	}
 	
-	/* (non-Javadoc)
-	 * @see de.uni_leipzig.simba.lgg.LGG#getMetricExpression()
-	 */
-	@Override
+
 	public String getMetricExpression() {
 		if(bestSolution == null){
 			bestSolution =  getBestSolution();
@@ -215,7 +209,7 @@ public class WeakWombat extends Wombat {
 			if(child.getValue().recall >= 0){
 				Tree<RefinementNode> promesyChild = getMostPromisingNode(child, penaltyWeight);
 				double newFitness;
-				newFitness = promesyChild.getValue().recall - penaltyWeight * computePenality(promesyChild);
+				newFitness = promesyChild.getValue().recall - penaltyWeight * computePenalty(promesyChild);
 				if( newFitness > mostPromesyChild.getValue().recall  ){
 					mostPromesyChild = promesyChild;
 				}
@@ -233,15 +227,49 @@ public class WeakWombat extends Wombat {
 
 
 	/**
-	 * @return 
+	 * @return childrenPenalty + complexityPenalty
 	 * @author sherif
 	 */
-	private double computePenality(Tree<RefinementNode> promesyChild) {
+	private double computePenalty(Tree<RefinementNode> promesyChild) {
 		long childrenCount = promesyChild.size() - 1;
 		double childrenPenalty = (CHILDREN_PENALTY_WEIGHT * childrenCount) / root.size();
 		long level = promesyChild.level();
-		double complextyPenalty = (COMPLEXITY_PENALTY_WEIGHT * level) / root.depth();
-		return  childrenPenalty + complextyPenalty;
+		double complexityPenalty = (COMPLEXITY_PENALTY_WEIGHT * level) / root.depth();
+		return  childrenPenalty + complexityPenalty;
+	}
+
+
+	@Override
+	public String getName() {
+		return ALGORITHM_NAME;
+	}
+
+
+	@Override
+	public MLResult learn(Mapping trainingData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Mapping computePredictions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void init(LearningSetting parameters, Mapping trainingData) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void terminate() {
+		// TODO Auto-generated method stub
+		
 	}
 
 

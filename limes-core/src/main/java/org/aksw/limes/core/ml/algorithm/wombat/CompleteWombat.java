@@ -15,11 +15,15 @@ import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.config.Configuration;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.ml.algorithm.MLResult;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
+import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -29,7 +33,9 @@ import org.apache.log4j.Logger;
  * @author sherif
  */
 public class CompleteWombat extends Wombat {
-	static Logger logger = Logger.getLogger(CompleteWombat.class.getName());
+	protected static final String ALGORITHM_NAME = "Complete Wombat";
+	
+	protected static Logger logger = Logger.getLogger(CompleteWombat.class.getName());
 
 	
 	private int iterationNr = 0;
@@ -41,13 +47,8 @@ public class CompleteWombat extends Wombat {
 	public int pruneNodeCount = 0;
 	public long pruningTime = 0;
 
-	/**
-	 * 1- Get relevant source and target resources from sample 
-	 * 2- Sample source and target caches 
-	 * 3- Run algorithm on samples of source and target 
-	 * 4- Get mapping function 
-	 * 5- Execute on the whole
-	 */
+	RefinementNode bestSolutionNode = null; 
+
 	/**
 	 * Constructor
 	 *
@@ -56,12 +57,11 @@ public class CompleteWombat extends Wombat {
 	 * @param examples
 	 * @param minCoverage
 	 */
-	public CompleteWombat(Cache source, Cache target, Mapping examples, double minCoverage) {
-		sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(source, minCoverage);
-		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(target, minCoverage);
+	public CompleteWombat(Cache sourceCache, Cache targetChache, Mapping examples, double minCoverage, Configuration configuration) {
+		super(sourceCache, targetChache, configuration);
+		sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, minCoverage);
+		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetChache, minCoverage);
 		this.minCoverage = minCoverage;
-		this.source = source;
-		this.target = target;
 		this.reference = examples;
 	}
 
@@ -78,18 +78,6 @@ public class CompleteWombat extends Wombat {
 		}
 		return getMapingOfMetricExpression(bestSolution.metricExpression);
 	}
-
-	/* (non-Javadoc)
-	 * @see de.uni_leipzig.simba.lgg.LGG#getMetricExpression()
-	 */
-	@Override
-	public String getMetricExpression() {
-		if(bestSolution == null){
-			bestSolution =  getBestSolution();
-		}
-		return bestSolution.metricExpression;
-	}
-
 
 
 	/**
@@ -572,8 +560,60 @@ public class CompleteWombat extends Wombat {
 		return StringUtils.countMatches(e, "OR(") + StringUtils.countMatches(e, "AND(") + StringUtils.countMatches(e, "MINUS(");
 	}
 
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.ml.algorithm.IMLAlgorithm#getName()
+	 */
+	@Override
+	public String getName() {
+		return ALGORITHM_NAME;
+	}
+	
 
 
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.ml.algorithm.IMLAlgorithm#computePredictions()
+	 */
+	@Override
+	public Mapping computePredictions() {
+		if(bestSolutionNode == null){
+			bestSolutionNode =  getBestSolution();
+		}
+		return bestSolutionNode.map;
+	}
 
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.ml.algorithm.IMLAlgorithm#learn(org.aksw.limes.core.io.mapping.Mapping)
+	 */
+	@Override
+	public MLResult learn(Mapping trainingData) {
+		if(bestSolutionNode == null){
+			bestSolutionNode =  getBestSolution();
+		}
+		String bestMetricExpr = bestSolutionNode.metricExpression;
+		double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|")+1, bestMetricExpr.length()));
+		Mapping bestMapping = bestSolutionNode.map;
+		LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
+		double bestFMeasure = bestSolutionNode.fMeasure;
+		MLResult result= new MLResult(bestLS, bestMapping, bestFMeasure, null);
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.ml.algorithm.IMLAlgorithm#init(org.aksw.limes.core.ml.setting.LearningSetting, org.aksw.limes.core.io.mapping.Mapping)
+	 */
+	@Override
+	public void init(LearningSetting parameters, Mapping trainingData) throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.ml.algorithm.IMLAlgorithm#terminate()
+	 */
+	@Override
+	public void terminate() {
+		// TODO Auto-generated method stub
+
+	}
 
 }

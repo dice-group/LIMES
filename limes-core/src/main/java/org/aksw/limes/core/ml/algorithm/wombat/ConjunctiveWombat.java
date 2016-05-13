@@ -10,11 +10,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.ml.algorithm.MLResult;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
+import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.log4j.Logger;
 
 /**
@@ -22,33 +25,25 @@ import org.apache.log4j.Logger;
  *
  */
 public class ConjunctiveWombat extends Wombat {
+	protected static final String ALGORITHM_NAME = "Conjunctive Wombat";
 
 	static Logger logger = Logger.getLogger(ConjunctiveWombat.class.getName());
     public boolean STRICT = true;
     Set<String> measures;
 
     /**
-     * ** TODO 
-     * 1- Get relevant source and target resources from sample 
-     * 2- Sample source and target caches 
-     * 3- Run algorithm on samples of source and target 
-     * 4- Get mapping function 
-     * 5- Execute on the whole
-     */
-    /**
      * Constructor
      *
-     * @param source
-     * @param target
+     * @param sourceCache
+     * @param targetCache
      * @param examples
      * @param minCoverage
      */
-    public ConjunctiveWombat(Cache source, Cache target, Mapping examples, double minCoverage) {
-        sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(source, minCoverage);
-        targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(target, minCoverage);
+    public ConjunctiveWombat(Cache sourceCache, Cache targetCache, Mapping examples, double minCoverage, Configuration configuration) {
+    	super(sourceCache, targetCache, configuration);
+        sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, minCoverage);
+        targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetCache, minCoverage);
         this.minCoverage = minCoverage;
-        this.source = source;
-        this.target = target;
         measures = new HashSet<>();
         measures.add("jaccard");
         measures.add("trigrams");
@@ -57,25 +52,7 @@ public class ConjunctiveWombat extends Wombat {
 
 
 
-    /* (non-Javadoc)
-     * @see de.uni_leipzig.simba.lgg.LGG#getMapping()
-     * 
-     * run conjunctive merge
-     */
-    public Mapping getMapping() {
-        Mapping result;
-        List<ExtendedClassifier> classifiers = getAllInitialClassifiers();
-        result = classifiers.get(0).mapping;
-        for (int i = 1; i < classifiers.size(); i++) {
-            result = MappingOperations.union(result, classifiers.get(i).mapping);
-        }
-        return result;
-    }
-    
-	/* (non-Javadoc)
-	 * @see de.uni_leipzig.simba.lgg.LGG#getMetricExpression()
-	 */
-	@Override
+
 	public String getMetricExpression() {
 		String result = new String();
         List<ExtendedClassifier> classifiers = getAllInitialClassifiers();
@@ -106,7 +83,7 @@ public class ConjunctiveWombat extends Wombat {
         }
 
         //get data
-        Mapping sample = MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
+        Mapping sample = MappingFactory.createMapping(MappingType.DEFAULT);
         int count = 0;
         for (String key : reference.getMap().keySet()) {
             if (index.contains(count)) {
@@ -118,5 +95,50 @@ public class ConjunctiveWombat extends Wombat {
     }
 
 
+
+	@Override
+	public String getName() {
+		return ALGORITHM_NAME;
+	}
+
+
+
+	@Override
+	public MLResult learn(Mapping trainingData) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	/**
+	 * run conjunctive merge
+	 */
+	@Override
+	public Mapping computePredictions() {
+        Mapping result;
+        List<ExtendedClassifier> classifiers = getAllInitialClassifiers();
+        result = classifiers.get(0).mapping;
+        for (int i = 1; i < classifiers.size(); i++) {
+            result = MappingOperations.union(result, classifiers.get(i).mapping);
+        }
+        return result;
+	}
+
+
+
+	@Override
+	public void init(LearningSetting parameters, Mapping trainingData) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void terminate() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

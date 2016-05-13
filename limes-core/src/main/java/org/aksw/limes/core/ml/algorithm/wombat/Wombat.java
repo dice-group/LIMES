@@ -16,8 +16,8 @@ import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
-import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
+import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
@@ -28,35 +28,47 @@ import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterFactoryType;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithm;
 import org.apache.log4j.Logger;
 
+
 /**
+ * This class uses Least General Generalization (LGG) to learn Link Specifications
+ * 
  * @author sherif
  *
  */
-/**
- * @author sherif
- *
- */
-public abstract class Wombat {   
+public abstract class Wombat extends MLAlgorithm{   
+	
+	public Wombat(Cache sourceCache, Cache targetCache, Configuration configuration) {
+		super(sourceCache, targetCache, configuration);
+		// TODO Auto-generated constructor stub
+	}
+
 	static Logger logger = Logger.getLogger(Wombat.class.getName());
 	
 	protected Tree<RefinementNode> root = null;
-	protected static double MAX_FITNESS_THRESHOLD = 1;
-	protected static long MAX_TREE_SIZE = 2000;//10000;
-	protected static int MAX_ITER_NR = 3;//Integer.MAX_VALUE;
-	protected static int MAX_ITER_TIME_MIN = 10;
-	protected double MIN_THRESHOLD = 0.4;
-	protected double learningRate = 0.9;
-	protected boolean verbose = false;
+	
+	// Termination criteria
+	protected static double MAX_FITNESS_THRESHOLD 	= 1;
+	protected static long MAX_TREE_SIZE 			= 2000;//10000;
+	protected static int MAX_ITER_NR 				= 3;//Integer.MAX_VALUE;
+	protected static int MAX_ITER_TIME_MIN 			= 10;
+	
+	// Properties selection parameters
+	protected double MIN_THRESHOLD 					= 0.4;
+	protected double LEARNING_RATE 					= 0.9;
 	protected Map<String, Double> sourcePropertiesCoverageMap; //coverage map for latter computations
 	protected Map<String, Double> targetPropertiesCoverageMap; //coverage map for latter computations
+	
+	
+	protected boolean verbose = false;
 	protected double minCoverage;
-	protected Cache source, target;
 	protected Mapping reference;
 	
 	public enum Operator {
@@ -72,8 +84,6 @@ public abstract class Wombat {
 			,"ngrams"
 			));
 	
-	abstract Mapping getMapping();
-	abstract String getMetricExpression();
 	
     /**
      * @return initial classifiers
@@ -98,8 +108,8 @@ public abstract class Wombat {
      * Computes the atomic classifiers by finding the highest possible F-measure
      * achievable on a given property pair
      *
-     * @param source Source cache
-     * @param target Target cache
+     * @param sourceCache Source cache
+     * @param targetCache Target cache
      * @param sourceProperty Property of source to use
      * @param targetProperty Property of target to use
      * @param measure Measure to be used
@@ -110,16 +120,14 @@ public abstract class Wombat {
         double maxOverlap = 0;
         double theta = 1.0;
         Mapping bestMapping = MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
-        for (double threshold = 1d; threshold > MIN_THRESHOLD; threshold = threshold * learningRate) {
+        for (double threshold = 1d; threshold > MIN_THRESHOLD; threshold = threshold * LEARNING_RATE) {
             Mapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
             double overlap = new Recall().calculate(mapping, new GoldStandard(reference));
-            if (maxOverlap < overlap) //only interested in largest threshold with recall 1
-            {
+            if (maxOverlap < overlap){ //only interested in largest threshold with recall 1
                 bestMapping = mapping;
                 theta = threshold;
                 maxOverlap = overlap;
                 bestMapping = mapping;
-//                System.out.println("Works for " + sourceProperty + ", " + targetProperty + ", " + threshold + ", " + overlap);
             }
         }
         ExtendedClassifier cp = new ExtendedClassifier(measure, theta);
@@ -131,8 +139,8 @@ public abstract class Wombat {
     }
 
 	/**
-	 * @param source cache
-	 * @param target cache
+	 * @param sourceCache cache
+	 * @param targetCache cache
 	 * @param sourceProperty
 	 * @param targetProperty
 	 * @param measure 
@@ -143,7 +151,7 @@ public abstract class Wombat {
 	public Mapping executeAtomicMeasure(String sourceProperty, String targetProperty, String measure, double threshold) {
 		String measureExpression = measure + "(x." + sourceProperty + ", y." + targetProperty + ")";
 		Instruction inst = new Instruction(Instruction.Command.RUN, measureExpression, threshold + "", -1, -1, -1);
-		ExecutionEngine ee = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, source, target, "?x", "?y");
+		ExecutionEngine ee = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache, "?x", "?y");
 		Plan plan = new Plan();
 		plan.addInstruction(inst);
 		return ((SimpleExecutionEngine) ee).executeInstructions(plan);
@@ -153,6 +161,7 @@ public abstract class Wombat {
 	 * Looks first for the input metricExpression in the already constructed tree,
 	 * if found the corresponding mapping is returned. 
 	 * Otherwise, the SetConstraintsMapper is generate the mapping from the metricExpression.
+	 * 
 	 * @param metricExpression
 	 * @return Mapping corresponding to the input metric expression 
 	 * @author sherif
@@ -167,10 +176,10 @@ public abstract class Wombat {
 			Rewriter rw = RewriterFactory.getRewriter(RewriterFactoryType.DEFAULT);
 			LinkSpecification ls = new LinkSpecification(metricExpression, threshold);
 			LinkSpecification rwLs = rw.rewrite(ls);
-			IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, source, target);
+			IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceCache, targetCache);
 			assert planner != null;
-			
-			ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, source, target,"?x", "?y");
+			NestedPlan plan = planner.plan(rwLs);
+			ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache,"?x", "?y");
 			assert engine != null;
 			Mapping resultMap = engine.execute(rwLs, planner);
 			map = resultMap.getSubMap(threshold);

@@ -6,96 +6,62 @@ package org.aksw.limes.core.ml.algorithm.wombat;
 
 
 import java.util.List;
-import java.util.Map;
 
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.config.Configuration;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.ml.algorithm.MLResult;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
+import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.log4j.Logger;
 
 
 
+
 /**
+ * This class use the simple Wombat LGG-based strategy for learning link specifications
+
+ * @author sherif
  *
- * @author ngonga
  */
 public class SimplWombat extends Wombat {
+
+	protected static final String ALGORITHM_NAME = "Simple Wombat";
+
 	static Logger logger = Logger.getLogger(SimplWombat.class.getName());
 
 	public double penaltyWeight = 0.5d;
 
-	public static double MAX_FITNESS_THRESHOLD = 1;
-	public static long MAX_TREE_SIZE = 2000;
-	public static int MAX_ITER_NR = 10;
-	public static long CHILDREN_PENALTY_WEIGHT = 1;
-	public static long COMPLEXITY_PENALTY_WEIGHT = 1;
-	public boolean STRICT = true;
-	public double MIN_THRESHOLD = 0.4;
-	public double learningRate = 0.9;
-	public boolean verbose = false;
-	Map<String, Double> sourcePropertiesCoverageMap; //coverage map for latter computations
-	Map<String, Double> targetPropertiesCoverageMap;//coverage map for latter computations
-	RefinementNode bestSolution = null; 
+	protected static long CHILDREN_PENALTY_WEIGHT = 1;
+	protected static long COMPLEXITY_PENALTY_WEIGHT = 1;
 
-	double minCoverage;
-	Cache source, target;
+	RefinementNode bestSolutionNode = null; 
 
-	Mapping reference;
-
-	public Tree<RefinementNode> root = null;
-	public List<ExtendedClassifier> classifiers = null;
+	protected List<ExtendedClassifier> classifiers = null;
 	protected int iterationNr = 0;
 
 
 	/**
-	 * ** TODO 
-	 * 1- Get relevant source and target resources from sample 
-	 * 2- Sample source and target caches 
-	 * 3- Run algorithm on samples of source and target 
-	 * 4- Get mapping function 
-	 * 5- Execute on the whole
-	 */
-	/**
 	 * Constructor
-	 *
-	 * @param source
-	 * @param target
+	 * 
+	 * @param sourceCache
+	 * @param targetChache
 	 * @param examples
 	 * @param minCoverage
+	 * @param configuration
 	 */
-	public SimplWombat(Cache source, Cache target, Mapping examples, double minCoverage) {
-		sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(source, minCoverage);
-		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(target, minCoverage);
+	public SimplWombat(Cache sourceCache, Cache targetChache, Mapping examples, double minCoverage, Configuration configuration) {
+		super(sourceCache, targetChache, configuration);
+		sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, minCoverage);
+		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetChache, minCoverage);
 		this.minCoverage = minCoverage;
-		this.source = source;
-		this.target = target;
 		reference = examples;
-	}
-
-	/* (non-Javadoc)
-	 * @see de.uni_leipzig.simba.lgg.LGG#getMapping()
-	 */
-	public Mapping getMapping() {
-		if(bestSolution == null){
-			bestSolution =  getBestSolution();
-		}
-		return bestSolution.map;
-	}
-
-	/* (non-Javadoc)
-	 * @see de.uni_leipzig.simba.lgg.LGG#getMetricExpression()
-	 */
-	@Override
-	public String getMetricExpression() {
-		if(bestSolution == null){
-			bestSolution =  getBestSolution();
-		}
-		return bestSolution.metricExpression;
 	}
 
 	/**
@@ -196,7 +162,7 @@ public class SimplWombat extends Wombat {
 			if(child.getValue().fMeasure >= 0){
 				Tree<RefinementNode> promesyChild = getMostPromisingNode(child, penaltyWeight);
 				double newFitness;
-				newFitness = promesyChild.getValue().fMeasure - penaltyWeight * computePenality(promesyChild);
+				newFitness = promesyChild.getValue().fMeasure - penaltyWeight * computePenalty(promesyChild);
 				if( newFitness > mostPromesyChild.getValue().fMeasure  ){
 					mostPromesyChild = promesyChild;
 				}
@@ -214,15 +180,64 @@ public class SimplWombat extends Wombat {
 
 
 	/**
-	 * @return 
+	 * @return children penalty + complexity penalty
 	 * @author sherif
 	 */
-	private double computePenality(Tree<RefinementNode> promesyChild) {
+	private double computePenalty(Tree<RefinementNode> promesyChild) {
 		long childrenCount = promesyChild.size() - 1;
 		double childrenPenalty = (CHILDREN_PENALTY_WEIGHT * childrenCount) / root.size();
 		long level = promesyChild.level();
-		double complextyPenalty = (COMPLEXITY_PENALTY_WEIGHT * level) / root.depth();
-		return  childrenPenalty + complextyPenalty;
+		double complexityPenalty = (COMPLEXITY_PENALTY_WEIGHT * level) / root.depth();
+		return  childrenPenalty + complexityPenalty;
+	}
+
+	@Override
+	public String getName() {
+		return ALGORITHM_NAME;
+	}
+	
+
+
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.ml.algorithm.IMLAlgorithm#computePredictions()
+	 */
+	@Override
+	public Mapping computePredictions() {
+		if(bestSolutionNode == null){
+			bestSolutionNode =  getBestSolution();
+		}
+		return bestSolutionNode.map;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.aksw.limes.core.ml.algorithm.IMLAlgorithm#learn(org.aksw.limes.core.io.mapping.Mapping)
+	 */
+	@Override
+	public MLResult learn(Mapping trainingData) {
+		if(bestSolutionNode == null){
+			bestSolutionNode =  getBestSolution();
+		}
+		String bestMetricExpr = bestSolutionNode.metricExpression;
+		double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|")+1, bestMetricExpr.length()));
+		Mapping bestMapping = bestSolutionNode.map;
+		LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
+		double bestFMeasure = bestSolutionNode.fMeasure;
+		MLResult result= new MLResult(bestLS, bestMapping, bestFMeasure, null);
+		return result;
+	}
+
+
+
+	@Override
+	public void init(LearningSetting parameters, Mapping trainingData) throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void terminate() {
+		// TODO Auto-generated method stub
+
 	}
 
 
