@@ -150,14 +150,12 @@ public class HeliosPlannerTest {
 	// atomic plans have filteringinstructions
 	assertTrue(plan.getFilteringInstruction() != null);
 
-	CanonicalPlanner cp = new CanonicalPlanner();
-	NestedPlan plan2 = cp.plan(ls);
-
-	assertTrue(plan.equals(plan2) == true);
     }
 
-    @Test
-    public void PlanWithWrongOperator() {
+   
+    /*
+     *  @Test
+     *  public void PlanWithWrongOperator() {
 	System.out.println("PlanWithWrongOperator");
 
 	HeliosPlanner p = new HeliosPlanner(source, target);
@@ -169,7 +167,7 @@ public class HeliosPlannerTest {
 	NestedPlan plan = p.plan(ls);
 	assertTrue(plan != null);
 
-    }
+    }*/
 
     @Test
     public void AtomicEqual() {
@@ -235,49 +233,7 @@ public class HeliosPlannerTest {
 	assertTrue(plan.equals(planNew));
     }
 
-    @Test
-    public void ComplexEqualExtended() {
-	System.out.println("ComplexEqualExtended");
-
-	HeliosPlanner p = new HeliosPlanner(source, target);
-
-	LinkSpecification ls = new LinkSpecification(
-		"AND(cosine(x.description,y.description)|0.3,OR(cosine(x.description,y.description)|0.5,cosine(x.title,y.name)|0.6)|0.7)",
-		0.8);
-	System.out.println(ls.isAtomic());
-
-	NestedPlan plan = p.plan(ls);
-	//////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////
-
-	//////////////////////////////////////////////////////////////////////////////////
-	NestedPlan plan3 = new NestedPlan();
-
-	NestedPlan plan31 = new NestedPlan();
-	Instruction run2 = new Instruction(Command.RUN, "cosine(x.description,y.description)", "0.5", -1, -1, 0);
-	plan31.addInstruction(run2);
-	NestedPlan plan32 = new NestedPlan();
-	Instruction run3 = new Instruction(Command.RUN, "cosine(x.title,y.name)", "0.6", -1, -1, 0);
-	plan32.addInstruction(run3);
-
-	plan3.setSubPlans(new ArrayList<NestedPlan>());
-	plan3.addSubplan(plan31);
-	plan3.addSubplan(plan32);
-
-	plan3.setOperator(Command.UNION);
-	plan3.setFilteringInstruction(new Instruction(Command.FILTER, null, "0.7", -1, -1, 0));
-
-	/////////////////////////////////////////////////////////////////////////////////////
-	NestedPlan planNew = new NestedPlan();
-	planNew.setSubPlans(new ArrayList<NestedPlan>());
-	Instruction filter = new Instruction(Command.FILTER, "cosine(x.description,y.description)", "0.3", -1, -1, 0);
-	filter.setMainThreshold("0.8");
-	planNew.setFilteringInstruction(filter);
-	planNew.addSubplan(plan3);
-	planNew.setOperator(null);
-
-	assertTrue(plan.equals(planNew));
-    }
+    
 
     @Test
     public void filterCosts() {
@@ -298,10 +254,7 @@ public class HeliosPlannerTest {
 	t = new ArrayList<String>();
 	t.add("cosine");
 	assertTrue(p.getFilterCosts(t, 0) == 0);
-	
-	t = new ArrayList<String>();
-	t.add("jarowinkler");
-	assertTrue(p.getFilterCosts(t, 500) == 0);
+
 	
 
     }
@@ -311,14 +264,14 @@ public class HeliosPlannerTest {
 	System.out.println("runtimeApproximation");
 	HeliosPlanner p = new HeliosPlanner(source, target);
 
-	assertTrue(p.getAtomicRuntimeCosts(null, 0.5) != 0);
+	
 	assertTrue(p.getAtomicRuntimeCosts("cosine", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("jaccard", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("jaro", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("euclidean", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("levenshtein", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("qgrams", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("hausdorff", 0.5) != 0);
+	assertTrue(p.getAtomicRuntimeCosts("geo_hausdorff", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("datesim", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("overlap", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("soundex", 0.5) != 0);
@@ -333,7 +286,7 @@ public class HeliosPlannerTest {
 	System.out.println(source.size());
 	System.out.println(target.size());
 
-	assertTrue(p.getAtomicMappingSizes(null, 0.5) != 0);
+	
 	assertTrue(p.getAtomicMappingSizes("cosine", 0.5) != 0);
 	assertTrue(p.getAtomicMappingSizes("jaccard", 0.5) != 0);
 	assertTrue(p.getAtomicMappingSizes("jaro", 0.5) != 0);
@@ -342,23 +295,22 @@ public class HeliosPlannerTest {
 	assertTrue(p.getAtomicMappingSizes("qgrams", 0.5) != 0);
 	assertTrue(p.getAtomicMappingSizes("exactmatch", 0.5) != 0.0d);
 	
-	assertTrue(p.getAtomicMappingSizes("orthodromic", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("symmetrichausdorff", 0.5) != 0);
+	assertTrue(p.getAtomicMappingSizes("geo_orthodromic", 0.5) != 0);
+	assertTrue(p.getAtomicMappingSizes("geo_symmetrichausdorff", 0.5) != 0);
 	assertTrue(p.getAtomicMappingSizes("yearsim", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geomn", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geomx", 0.5) != 0);
+	assertTrue(p.getAtomicMappingSizes("geo_min", 0.5) != 0);
+	assertTrue(p.getAtomicMappingSizes("geo_max", 0.5) != 0);
 	
-	assertTrue(p.getAtomicMappingSizes("geoavg", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geomean", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("frechet", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geolink", 0.5) != 0);
+	assertTrue(p.getAtomicMappingSizes("geo_avg", 0.5) != 0);
+	assertTrue(p.getAtomicMappingSizes("geo_mean", 0.5) != 0);
+	assertTrue(p.getAtomicMappingSizes("geo_frechet", 0.5) != 0);
+	assertTrue(p.getAtomicMappingSizes("geo_link", 0.5) != 0);
 	
-	assertTrue(p.getAtomicMappingSizes("geosummn", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("surjection", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("fairsurjection", 0.5) != 0);
+	assertTrue(p.getAtomicMappingSizes("geo_sum_of_min", 0.5) != 0);
+	assertTrue(p.getAtomicMappingSizes("geo_surjection", 0.5) != 0);
+	assertTrue(p.getAtomicMappingSizes("geo_fairsurjection", 0.5) != 0);
 
-	assertTrue(p.getAtomicMappingSizes("hausdorff", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("datesim", 0.5) != 0);
+	assertTrue(p.getAtomicMappingSizes("geo_hausdorff", 0.5) != 0);
 	assertTrue(p.getAtomicMappingSizes("overlap", 0.5) != 0);
 	assertTrue(p.getAtomicMappingSizes("soundex", 0.5) != 0);
 

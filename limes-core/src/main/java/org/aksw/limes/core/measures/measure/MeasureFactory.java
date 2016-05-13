@@ -91,7 +91,7 @@ public class MeasureFactory {
 	public static final String TMP_SUCCESSOR 		= "tmp_successor";
 	public static final String TMP_PREDECESSOR 		= "tmp_predecessor";
 	public static final String TMP_CONCURRENT 		= "tmp_concurrent";
-
+	
 	// others
 	public static final String RATCLIFF 			= "RATCLIFF2";
 	public static final String SOUNDEX 				= "soundex";
@@ -285,7 +285,11 @@ public class MeasureFactory {
 			am = new OrchidMapper();
 		} else if (measure.toLowerCase().startsWith(GEO_MAX)) {
 			am = new OrchidMapper();
-		} else if (measure.toLowerCase().startsWith(GEO_SUM_OF_MIN)) {
+		} else if (measure.toLowerCase().startsWith(GEO_AVG)) {
+			am = new OrchidMapper();
+		} else if (measure.toLowerCase().startsWith(GEO_MEAN)) {
+			am = new OrchidMapper();
+		}else if (measure.toLowerCase().startsWith(GEO_SUM_OF_MIN)) {
 			am = new OrchidMapper();
 		} else if (measure.toLowerCase().startsWith(GEO_FRECHET)) {
 			am = new OrchidMapper();
