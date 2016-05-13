@@ -8,7 +8,7 @@ public class PseudoRefPrecision extends PseudoPrecision{
 	public double calculate(Mapping predictions, GoldStandard goldStandard) {
 		Mapping res = predictions;
     	if(use1To1Mapping)
-    		res = predictions.getBestOneToOneMappings(predictions); // the first call of prediction just to call the method
+    		res = predictions.getBestOneToOneMappings(predictions); // the first call of prediction just to call the method; ya i know
         double p = res.getMap().keySet().size();
         double q = 0;
         for (String s : res.getMap().keySet()) {

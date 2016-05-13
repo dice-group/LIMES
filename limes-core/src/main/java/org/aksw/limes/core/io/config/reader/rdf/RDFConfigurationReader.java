@@ -239,9 +239,10 @@ public class RDFConfigurationReader implements IConfigurationReader{
 	{
 		long startTime = System.currentTimeMillis();
 		Model model=ModelFactory.createDefaultModel();
+		String tmp =System.getProperty("user.dir")+"/"+fileNameOrUri;
 		java.io.InputStream in = FileManager.get().open(System.getProperty("user.dir")+"/"+fileNameOrUri );
 		if (in == null) {
-			throw new IllegalArgumentException(fileNameOrUri + " not found");
+			throw new IllegalArgumentException(fileNameOrUri + " not found");//resources/datasets/persons1.xml
 		}
 		if(fileNameOrUri.contains(".ttl") || fileNameOrUri.contains(".n3")){
 			logger.info("Opening Turtle file");
