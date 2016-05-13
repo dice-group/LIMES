@@ -38,6 +38,9 @@ import org.aksw.limes.core.measures.measure.string.Jaro;
 import org.aksw.limes.core.measures.measure.string.Levenshtein;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
+import org.aksw.limes.core.measures.measure.temporal.ConcurrentMeasure;
+import org.aksw.limes.core.measures.measure.temporal.PredecessorMeasure;
+import org.aksw.limes.core.measures.measure.temporal.SuccessorMeasure;
 
 
 public class MeasureFactory {
@@ -214,6 +217,12 @@ public class MeasureFactory {
 			m = new NaiveSurjection();
 		} else if (name.toLowerCase().startsWith(GEO_FAIR_SURJECTION)) {
 			m = new FairSurjection();
+		}else if (name.toLowerCase().startsWith(TMP_SUCCESSOR)) {
+			m = new SuccessorMeasure();
+		} else if (name.toLowerCase().startsWith(TMP_PREDECESSOR)) {
+			m = new PredecessorMeasure();
+		} else if (name.toLowerCase().startsWith(TMP_CONCURRENT)) {
+			m = new ConcurrentMeasure();
 		} else {
 			m = new TrigramMeasure();
 		}

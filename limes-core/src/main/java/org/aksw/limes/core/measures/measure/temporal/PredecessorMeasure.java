@@ -2,7 +2,7 @@ package org.aksw.limes.core.measures.measure.temporal;
 
 import org.aksw.limes.core.io.cache.Instance;
 
-public class PredessecorMeasure extends TemporalMeasure {
+public class PredecessorMeasure extends TemporalMeasure {
 
     @Override
     public double getSimilarity(Object a, Object b) {
