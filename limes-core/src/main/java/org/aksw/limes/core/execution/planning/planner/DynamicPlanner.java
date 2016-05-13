@@ -44,7 +44,11 @@ public class DynamicPlanner extends Planner {
     }
 
     /**
-     * Initialize allPlans map
+     * Initialize Plans and Specifications maps. Plans map includes the string
+     * representation of a link specifications as keys and the corresponding
+     * plans as values. Specifications map include the string representation of
+     * a link specifications as keys and the corresponding link specification
+     * instances as values.
      *
      * @param spec,
      *            the original link specification

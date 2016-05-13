@@ -103,7 +103,7 @@ public class CosineMeasure extends StringMeasure {
     public int getAlpha(int xTokensNumber, int yTokensNumber, double threshold) {
 	return (int) Math.ceil((float) (threshold * Math.sqrt(xTokensNumber * yTokensNumber)));
     }
-
+    @Override
     public double getRuntimeApproximation(double mappingSize) {
 	return mappingSize / 1000d;
     }

@@ -60,6 +60,23 @@ public class MeasureProcessor {
      * corresponding mapper. Be aware that EDJoin and QGramsSimilarity do not
      * work with Caches of one instance.
      */
+    /**
+     * Returns similarity between two instances given a metric expression.
+     * 
+     * @param sourceInstance,
+     *            the source instance
+     * @param targetInstance,
+     *            the target instance
+     * @param expression,
+     *            the metric expression
+     * @param threshold,
+     *            the threshold
+     * @param sourceVar,
+     *            the source variable
+     * @param targetVar,
+     *            the target variable
+     * @return the similarity of sourceInstance and targetInstance
+     */
     public static double getSimilarity(Instance sourceInstance, Instance targetInstance, String expression,
 	    double threshold, String sourceVar, String targetVar) {
 

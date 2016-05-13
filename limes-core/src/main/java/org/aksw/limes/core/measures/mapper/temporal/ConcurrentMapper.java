@@ -9,9 +9,8 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.IMapper.Language;
 
-public class ConcurrentMapper extends EventMapper {
+public class ConcurrentMapper extends TemporalMapper {
     /**
      * Maps a set of source instances to their concurrent target instances. The
      * mapping contains n-to-m relations. Each source instance takes as

@@ -120,16 +120,4 @@ public class BlockIdGenerator {
         }
         return result;
     }
-
-
-    public static void main(String args[])
-    {
-        ArrayList<Integer> blockId = new ArrayList<Integer>();
-        ArrayList<Integer> blockId2 = new ArrayList<Integer>();
-        blockId.add(0); blockId2.add(0);
-        blockId.add(0);blockId2.add(0);
-        blockId.add(0);blockId2.add(0);
-        System.out.println(BlockIdGenerator.getBlocksToCompare(blockId));
-        System.out.println(blockId.equals(blockId2));
-    }
 }

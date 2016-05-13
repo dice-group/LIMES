@@ -1,5 +1,6 @@
 package org.aksw.limes.core.measures.mapper.temporal;
 
+
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -9,7 +10,7 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 
-public class SuccessorMapper extends EventMapper {
+public class SuccessorMapper extends TemporalMapper {
     
     /**
      * Maps a set of source instances to their successor target instances. The

@@ -55,19 +55,11 @@ public class EuclideanMetric extends SpaceMeasure {
 			if (min > entry)
 			    min = entry;
 		    } catch (Exception e) {
-			// logger.warn(e.getMessage());
-			// logger.warn("One of "+value1+" and "+value2+" is not
-			// a number.");
-			// logger.warn(a.getUri()+" or "+b.getUri()+" contains
-			// wrong data.");
-			// logger.warn("Similarity will be set to 0.");
 		    }
 		}
 	    }
 	    sim = sim + min;
 	}
-	// logger.info("Similarity of "+a.getUri()+" and "+b.getUri()+" is
-	// "+1.0/Math.sqrt(sim));
 	return 1.0 / (1 + Math.sqrt(sim));
     }
 
@@ -87,7 +79,7 @@ public class EuclideanMetric extends SpaceMeasure {
 	return (1 - simThreshold) / simThreshold;
     }
 
-    // fake value
+    @Override
     public double getRuntimeApproximation(double mappingSize) {
 	return mappingSize / 1000d;
     }
