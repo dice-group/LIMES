@@ -224,10 +224,10 @@ public class EagleSupervised extends MLAlgorithm{
         }
         // get most controversy matches
         logger.info("Getting " + size + " controversy match candidates from " + candidateMaps.size() + " maps...");;
-        List<org.aksw.limes.core.ml.algorithm.eagle.core.ALDecider.Triple> controversyMatches = alDecider.getControversyCandidates(candidateMaps, size);
+        List<ALDecider.Triple> controversyMatches = alDecider.getControversyCandidates(candidateMaps, size);
         // construct answer
         Mapping answer = new MemoryMapping();
-        for (org.aksw.limes.core.ml.algorithm.eagle.core.ALDecider.Triple t : controversyMatches) {
+        for (ALDecider.Triple t : controversyMatches) {
             answer.add(t.getSourceUri(), t.getTargetUri(), t.getSimilarity());
         }
         return answer;

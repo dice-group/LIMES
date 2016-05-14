@@ -119,8 +119,7 @@ public class EagleUnsupervised extends MLAlgorithm {
 		}
 		/* consider population if neccessary */
 		if (bestHere == null) {
-		    logger.debug("Determing best program failed, consider the whole population");
-		    System.err.println("Determing best program failed, consider the whole population");
+		    logger.debug("Determining best program failed, consider the whole population.");
 		    for (IGPProgram p : pop.getGPPrograms()) {
 				if (p != null) {
 				    double fitM = fitness.calculateRawFitness(p);

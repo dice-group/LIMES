@@ -21,3 +21,6 @@ hs_err_pid*
 
 # folder Eagle uses default for caches
 cache/
+
+# generated outputs
+/*.nt
