@@ -188,46 +188,6 @@ public class EagleUnsupervised extends MLAlgorithm {
 		result.addDetail("specifiactions", specifications);
 		return result;
 	}
-	
-	
-	
-	
-	public static void main(String args[]) {
-		String base = "/home/ohdorno/Dokumente/Arbeit/LIMES/";
-//		String configFile = "../../../svn/LIMES/Examples/GeneticEval/PublicationData.xml";
-		String configFile = "/home/ohdorno/Dokumente/Arbeit/LIMES/Examples/GeneticEval/PublicationData.xml";
-		XMLConfigurationReader reader = new XMLConfigurationReader();
-		Configuration config = reader.read(configFile);
-		config.getSourceInfo().setEndpoint(config.getSourceInfo().getEndpoint());
-		config.getTargetInfo().setEndpoint(config.getTargetInfo().getEndpoint());
-		
-		
-		Cache sC = HybridCache.getData(config.getSourceInfo());
-		
-		HybridCache tC = HybridCache.getData(config.getTargetInfo());
-		
-		EagleUnsupervised eagle = new EagleUnsupervised(sC,tC,config);
-		
-		UnsupervisedLearningSetting setting = new UnsupervisedLearningSetting(eagle);
-		PropertyMapping propMap = new PropertyMapping();
-		propMap.addStringPropertyMatch("title", "title");
-		propMap.addStringPropertyMatch("authors", "authors");
-		propMap.addStringPropertyMatch("venue", "venue");
-		propMap.addNumberPropertyMatch("year", "year");
-		setting.setPropMap(propMap);
-		
-		setting.setGenerations(3);
-		setting.setPopulation(10);
-		
-		try {
-			eagle.init(setting, new MemoryMapping());
-			MLResult result = eagle.learn(new MemoryMapping());
-			System.out.println(result);
-		} catch (InvalidConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
+
 	
 }

@@ -40,17 +40,17 @@ public class WombatFactory {
 	 */
 	public static Wombat createOperator(WombatType type, Cache source, Cache target, Mapping examples, double minCoverage, Configuration config) {
 		if(type == WombatType.SIMPLE)
-			return new SimplWombat(source, target, examples, minCoverage, config);
+			return new SimplWombat(source, target, examples, config);
 		if(type == WombatType.COMPLETE )
-			return new CompleteWombat(source, target, examples, minCoverage, config);
+			return new CompleteWombat(source, target, examples, config);
 		if(type == WombatType.CONJUNCTIVE)
-			return new ConjunctiveWombat(source, target, examples, minCoverage, config);
+			return new ConjunctiveWombat(source, target, examples, config);
 		if(type == WombatType.WEAK)
-			return new WeakWombat(source, target, examples, minCoverage, config);
+			return new WeakWombat(source, target, examples, config);
 		if(type == WombatType.UNSUPERVISED_SIMPLE)
-			return new UnsupervisedSimpleWombat(source, target, examples, minCoverage, config);
+			return new UnsupervisedSimpleWombat(source, target, examples, config);
 		if(type == WombatType.UNSUPERVISED_COMPLETE)
-			return new UnsupervisedCompleteWombat(source, target, examples, minCoverage, config);
+			return new UnsupervisedCompleteWombat(source, target, examples, config);
 		return null;
 	}
 

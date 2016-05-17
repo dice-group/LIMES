@@ -17,7 +17,6 @@ import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.MLResult;
-import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.log4j.Logger;
 
@@ -56,11 +55,8 @@ public class SimplWombat extends Wombat {
 	 * @param minCoverage
 	 * @param configuration
 	 */
-	public SimplWombat(Cache sourceCache, Cache targetChache, Mapping examples, double minCoverage, Configuration configuration) {
+	public SimplWombat(Cache sourceCache, Cache targetChache, Mapping examples, Configuration configuration) {
 		super(sourceCache, targetChache, configuration);
-		sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, minCoverage);
-		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetChache, minCoverage);
-		this.minCoverage = minCoverage;
 		reference = examples;
 	}
 

@@ -8,7 +8,6 @@ package org.aksw.limes.core.ml.algorithm.wombat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.Tree;
@@ -19,7 +18,6 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.MLResult;
-import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.log4j.Logger;
 
@@ -43,12 +41,7 @@ public class WeakWombat extends Wombat {
 	public boolean STRICT = true;
 	public double MIN_THRESHOLD = 0.4;
 	public double learningRate = 0.9;
-	public boolean verbose = false;
-	Map<String, Double> sourcePropertiesCoverageMap; //coverage map for latter computations
-	Map<String, Double> targetPropertiesCoverageMap;//coverage map for latter computations
 
-	double minCoverage;
-	Cache source, target;
 	Set<String> measures;
 	Mapping reference;
 
@@ -72,13 +65,10 @@ public class WeakWombat extends Wombat {
 	 * @param examples
 	 * @param minCoverage
 	 */
-	public WeakWombat(Cache sourceCache, Cache targetChache, Mapping examples, double minCoverage, Configuration configuration) {
+	public WeakWombat(Cache sourceCache, Cache targetChache, Mapping examples, Configuration configuration) {
 		super(sourceCache, targetChache, configuration);
-		sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, minCoverage);
-		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetChache, minCoverage);
-		this.minCoverage = minCoverage;
-		this.source = sourceCache;
-		this.target = targetChache;
+		this.sourceCache = sourceCache;
+		this.targetCache = targetChache;
 		measures = new HashSet<>(Arrays.asList(
 				"jaccard",
 				"trigrams"

@@ -19,7 +19,6 @@ import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
-import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.ExecutionPlannerType;
@@ -45,9 +44,13 @@ import org.apache.log4j.Logger;
  */
 public abstract class Wombat extends MLAlgorithm{   
 	
+	protected static final String PARAMETER_MAX_TREE_SIZE			= "max fitness threshould";
+	protected static final String PARAMETER_MAX_ITERATIONS_NUMBER	= "max iterations number";
+	protected static final String PARAMETER_MAX_ITERATION_TIME		= "max iteration time";
+	protected static final String PARAMETER_EXECUSION_TIME			= "max execution time";
+	
 	public Wombat(Cache sourceCache, Cache targetCache, Configuration configuration) {
 		super(sourceCache, targetCache, configuration);
-		// TODO Auto-generated constructor stub
 	}
 
 	static Logger logger = Logger.getLogger(Wombat.class.getName());
@@ -57,18 +60,17 @@ public abstract class Wombat extends MLAlgorithm{
 	// Termination criteria
 	protected static double MAX_FITNESS_THRESHOLD 	= 1;
 	protected static long MAX_TREE_SIZE 			= 2000;//10000;
-	protected static int MAX_ITER_NR 				= 3;//Integer.MAX_VALUE;
+	protected static int MAX_ITER_NR 				= 3;//Integer.MAX_VALUE; 
 	protected static int MAX_ITER_TIME_MIN 			= 10;
 	
 	// Properties selection parameters
-	protected double MIN_THRESHOLD 					= 0.4;
+	protected double minPropertyCoverage			= 0.4;
 	protected double LEARNING_RATE 					= 0.9;
 	protected Map<String, Double> sourcePropertiesCoverageMap; //coverage map for latter computations
 	protected Map<String, Double> targetPropertiesCoverageMap; //coverage map for latter computations
 	
-	
 	protected boolean verbose = false;
-	protected double minCoverage;
+
 	protected Mapping reference;
 	
 	public enum Operator {
@@ -120,7 +122,7 @@ public abstract class Wombat extends MLAlgorithm{
         double maxOverlap = 0;
         double theta = 1.0;
         Mapping bestMapping = MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
-        for (double threshold = 1d; threshold > MIN_THRESHOLD; threshold = threshold * LEARNING_RATE) {
+        for (double threshold = 1d; threshold > minPropertyCoverage; threshold = threshold * LEARNING_RATE) {
             Mapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
             double overlap = new Recall().calculate(mapping, new GoldStandard(reference));
             if (maxOverlap < overlap){ //only interested in largest threshold with recall 1
@@ -178,7 +180,6 @@ public abstract class Wombat extends MLAlgorithm{
 			LinkSpecification rwLs = rw.rewrite(ls);
 			IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceCache, targetCache);
 			assert planner != null;
-			NestedPlan plan = planner.plan(rwLs);
 			ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache,"?x", "?y");
 			assert engine != null;
 			Mapping resultMap = engine.execute(rwLs, planner);
@@ -209,27 +210,4 @@ public abstract class Wombat extends MLAlgorithm{
 		return null;
 	}
 	
-//	/** OLD CODE
-//	 * Looks first for the input metricExpression in the already constructed tree,
-//	 * if found the corresponding mapping is returned. 
-//	 * Otherwise, the SetConstraintsMapper is generate the mapping from the metricExpression.
-//	 * @param metricExpression
-//	 * @return Mapping corresponding to the input metric expression 
-//	 * @author sherif
-//	 */
-//	private Mapping getMapingOfMetric(String metricExpression) {
-//		Mapping map = null;
-//		if(RefinementNode.saveMapping){
-//			map = getMapingOfMetricFromTree( metricExpression,root);
-//		}
-//		if(map == null){
-//			//			logger.info("Generating mapping for: " + metricExpression);
-//			SetConstraintsMapper mapper = SetConstraintsMapperFactory.getMapper("simple",
-//					new KBInfo("?x"), new KBInfo("?y"), source, target, new LinearFilter(), 2);
-//			String expression = metricExpression.substring(0, metricExpression.lastIndexOf("|"));
-//			Double threshold = Double.parseDouble(metricExpression.substring(metricExpression.lastIndexOf("|")+1, metricExpression.length()));
-//			map = mapper.getLinks(expression, threshold);
-//		}
-//		return map;
-//	}
 }

@@ -24,7 +24,6 @@ import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.MLResult;
-import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -64,11 +63,8 @@ public class UnsupervisedCompleteWombat extends Wombat {
 	 * @param examples
 	 * @param minCoverage
 	 */
-	public UnsupervisedCompleteWombat(Cache sourceCache, Cache targetCache, Mapping examples, double minCoverage, Configuration configuration) {
+	public UnsupervisedCompleteWombat(Cache sourceCache, Cache targetCache, Mapping examples, Configuration configuration) {
     	super(sourceCache, targetCache, configuration);
-		sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, minCoverage);
-		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetCache, minCoverage);
-		this.minCoverage = minCoverage;
 		measures = new HashSet<>(Arrays.asList("jaccard", "trigrams"));	
 		sourceUris = sourceCache.getAllUris(); 
 		targetUris = targetCache.getAllUris();
