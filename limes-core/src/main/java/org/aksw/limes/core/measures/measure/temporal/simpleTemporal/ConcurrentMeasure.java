@@ -1,8 +1,8 @@
-package org.aksw.limes.core.measures.measure.temporal;
+package org.aksw.limes.core.measures.measure.temporal.simpleTemporal;
 
 import org.aksw.limes.core.io.cache.Instance;
 
-public class ConcurrentMeasure extends TemporalMeasure {
+public class ConcurrentMeasure extends SimpleTemporalMeasure {
 
     @Override
     public double getSimilarity(Object a, Object b) {

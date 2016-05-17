@@ -1,8 +1,8 @@
-package org.aksw.limes.core.measures.measure.temporal;
+package org.aksw.limes.core.measures.measure.temporal.simpleTemporal;
 
 import org.aksw.limes.core.measures.measure.Measure;
 
-public abstract class TemporalMeasure extends Measure implements ITemporalMeasure {
+public abstract class SimpleTemporalMeasure extends Measure implements ISimpleTemporalMeasure {
     /**
      * Extract first property (beginDate) from metric expression.
      * 

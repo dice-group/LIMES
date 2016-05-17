@@ -50,9 +50,9 @@ import org.aksw.limes.core.measures.measure.string.Jaro;
 import org.aksw.limes.core.measures.measure.string.Levenshtein;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
-import org.aksw.limes.core.measures.measure.temporal.ConcurrentMeasure;
-import org.aksw.limes.core.measures.measure.temporal.PredecessorMeasure;
-import org.aksw.limes.core.measures.measure.temporal.SuccessorMeasure;
+import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
+import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
+import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
 
 public class MeasureFactory {
 
@@ -69,6 +69,7 @@ public class MeasureFactory {
     public static final String TRIGRAM = "trigram";
     public static final String JACCARD = "jaccard";
     public static final String EXACTMATCH = "exactmatch";
+    public static final String SOUNDEX = "soundex";
 
     // number measures
     public static final String EUCLIDEAN = "euclidean";
@@ -105,11 +106,6 @@ public class MeasureFactory {
     public static final String TMP_DURINGREVERSE = "tmp_duringreverse";
     public static final String TMP_OVERLAPS = "tmp_overlaps";
     public static final String TMP_ISOVERLAPPEDBY = "tmp_isoverlappedby";
-
-    // others
-    public static final String RATCLIFF = "RATCLIFF2";
-    public static final String SOUNDEX = "soundex";
-    public static final String MONGE = "monge";
 
     public static MeasureType getTypeFromExpression(String expression) {
 	String measure = expression.toLowerCase();
@@ -205,7 +201,7 @@ public class MeasureFactory {
 	    m = new QGramSimilarity();
 	} else if (name.toLowerCase().startsWith(SOUNDEX)) {
 	    m = new TrigramMeasure();
-	}else if (name.toLowerCase().startsWith(EUCLIDEAN)) {
+	} else if (name.toLowerCase().startsWith(EUCLIDEAN)) {
 	    m = new EuclideanMetric();
 	} else if (name.toLowerCase().startsWith(GEO_HAUSDORFF)) {
 	    m = new NaiveHausdorff();
