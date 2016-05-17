@@ -66,7 +66,7 @@ public class MeasureFactory {
     public static final String COSINE = "cosine";
     public static final String LEVENSHTEIN = "levenshtein";
     public static final String OVERLAP = "overlap";
-    public static final String TRIGRAMS = "trigrams";
+    public static final String TRIGRAM = "trigram";
     public static final String JACCARD = "jaccard";
     public static final String EXACTMATCH = "exactmatch";
 
@@ -189,18 +189,24 @@ public class MeasureFactory {
 	}
 	if (name.toLowerCase().startsWith(COSINE)) {
 	    m = new CosineMeasure();
+	} else if (name.toLowerCase().startsWith(EXACTMATCH)) {
+	    m = new ExactMatch();
 	} else if (name.toLowerCase().startsWith(JACCARD)) {
 	    m = new JaccardMeasure();
 	} else if (name.toLowerCase().startsWith(JARO)) {
 	    m = new Jaro();
-	} else if (name.toLowerCase().startsWith(EUCLIDEAN)) {
-	    m = new EuclideanMetric();
 	} else if (name.toLowerCase().startsWith(LEVENSHTEIN)) {
 	    m = new Levenshtein();
+	} else if (name.toLowerCase().startsWith(OVERLAP)) {
+	    m = new TrigramMeasure();
+	} else if (name.toLowerCase().startsWith(TRIGRAM)) {
+	    m = new TrigramMeasure();
 	} else if (name.toLowerCase().startsWith(QGRAMS)) {
 	    m = new QGramSimilarity();
-	} else if (name.toLowerCase().startsWith(EXACTMATCH)) {
-	    m = new ExactMatch();
+	} else if (name.toLowerCase().startsWith(SOUNDEX)) {
+	    m = new TrigramMeasure();
+	}else if (name.toLowerCase().startsWith(EUCLIDEAN)) {
+	    m = new EuclideanMetric();
 	} else if (name.toLowerCase().startsWith(GEO_HAUSDORFF)) {
 	    m = new NaiveHausdorff();
 	} else if (name.toLowerCase().startsWith(GEO_ORTHODROMIC)) {
@@ -248,29 +254,25 @@ public class MeasureFactory {
      */
     public static Mapper getMapper(String measure) {
 	Mapper am;
-	if (measure.toLowerCase().startsWith(LEVENSHTEIN)) {
-	    am = new EDJoin();
-	} else if (measure.toLowerCase().startsWith(QGRAMS)) {
-	    am = new FastNGram();
-	} // else if (measure.toLowerCase().startsWith(JAROWINKLER)) {
-	  // //problematic
-	  // am = new JaroWinklerMapper(); }
-	else if (measure.toLowerCase().startsWith(JARO)) {
-	    am = new JaroMapper();
-	} else if (measure.toLowerCase().startsWith(TRIGRAMS)) {
+
+	if (measure.toLowerCase().startsWith(COSINE)) {
 	    am = new PPJoinPlusPlus();
+	} else if (measure.toLowerCase().startsWith(EXACTMATCH)) {
+	    am = new ExactMatchMapper();
 	} else if (measure.toLowerCase().startsWith(JACCARD)) {
 	    am = new PPJoinPlusPlus();
+	} else if (measure.toLowerCase().startsWith(JARO)) {
+	    am = new JaroMapper();
+	} else if (measure.toLowerCase().startsWith(LEVENSHTEIN)) {
+	    am = new EDJoin();
 	} else if (measure.toLowerCase().startsWith(OVERLAP)) {
 	    am = new PPJoinPlusPlus();
-	} else if (measure.toLowerCase().startsWith(COSINE)) {
+	} else if (measure.toLowerCase().startsWith(QGRAMS)) {
+	    am = new FastNGram();
+	} else if (measure.toLowerCase().startsWith(TRIGRAM)) {
 	    am = new PPJoinPlusPlus();
 	} else if (measure.toLowerCase().startsWith(SOUNDEX)) {
 	    am = new SoundexMapper();
-	} else if (measure.toLowerCase().startsWith(RATCLIFF)) {
-	    am = new RatcliffObershelpMapper();
-	} else if (measure.toLowerCase().startsWith(EXACTMATCH)) {
-	    am = new ExactMatchMapper();
 	} else if (measure.toLowerCase().startsWith(EUCLIDEAN)) {
 	    am = new HR3();
 	} else if (measure.toLowerCase().startsWith(GEO_HAUSDORFF)) {
