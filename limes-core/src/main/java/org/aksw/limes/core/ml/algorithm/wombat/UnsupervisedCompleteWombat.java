@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.Tree;
@@ -106,10 +107,10 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		logger.info("Most promising node: " + mostPromisingNode.getValue());
 		iterationNr ++;
 		long endTime = System.currentTimeMillis() + EXPERIMENT_MAX_TIME_IN_MINUTES * 60000; 
-		while((mostPromisingNode.getValue().fMeasure) < MAX_FITNESS_THRESHOLD	 
+		while((mostPromisingNode.getValue().fMeasure) < maxFitnessThreshold	 
 				&& (System.currentTimeMillis() < endTime)
-				&& root.size() <= MAX_TREE_SIZE
-				&& iterationNr <= MAX_ITER_NR)
+				&& root.size() <= maxRefineTreeSize
+				&& iterationNr <= maxIterationNumber)
 		{
 			iterationNr++;
 			mostPromisingNode = expandNode(mostPromisingNode);
@@ -542,6 +543,14 @@ public class UnsupervisedCompleteWombat extends Wombat {
 	public void terminate() {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+
+	@Override
+	public Set<String> parameters() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

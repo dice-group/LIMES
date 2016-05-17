@@ -44,30 +44,40 @@ import org.apache.log4j.Logger;
  */
 public abstract class Wombat extends MLAlgorithm{   
 	
-	protected static final String PARAMETER_MAX_TREE_SIZE			= "max fitness threshould";
-	protected static final String PARAMETER_MAX_ITERATIONS_NUMBER	= "max iterations number";
-	protected static final String PARAMETER_MAX_ITERATION_TIME		= "max iteration time";
-	protected static final String PARAMETER_EXECUSION_TIME			= "max execution time";
+
 	
-	public Wombat(Cache sourceCache, Cache targetCache, Configuration configuration) {
-		super(sourceCache, targetCache, configuration);
-	}
+	protected Set<String> wombatParameters = new HashSet<>(); 
 
 	static Logger logger = Logger.getLogger(Wombat.class.getName());
 	
-	protected Tree<RefinementNode> root = null;
+	protected Tree<RefinementNode> refinementTreeRoot = null;
 	
-	// Termination criteria
-	protected static double MAX_FITNESS_THRESHOLD 	= 1;
-	protected static long MAX_TREE_SIZE 			= 2000;//10000;
-	protected static int MAX_ITER_NR 				= 3;//Integer.MAX_VALUE; 
-	protected static int MAX_ITER_TIME_MIN 			= 10;
+	// Parameters
+	protected static final String PARAMETER_MAX_REFINEMENT_TREE_SIZE 	= "max refinement tree size";
+	protected static long	maxRefineTreeSize 							= 2000;
 	
-	// Properties selection parameters
-	protected double minPropertyCoverage			= 0.4;
-	protected double LEARNING_RATE 					= 0.9;
+	protected static final String PARAMETER_MAX_ITERATIONS_NUMBER		= "max iterations number";
+	protected static int maxIterationNumber 							= 3;
+	
+	protected static final String PARAMETER_MAX_ITERATION_TIME_IN_M		= "max iteration time in minutes";
+	protected static int maxIterationTimeInMin 							= 20;
+	
+	protected static final String PARAMETER_EXECUTION_TIME_IN_M			= "max execution time in minutes";
+	protected static int maxExecutionInMin 								= 600;
+	
+	protected static final String PARAMETER_MAX_FITNESS_THRESHOLD		= "max fitness threshold";
+	protected static double maxFitnessThreshold		= 1;
+	
+	protected static final String PARAMETER_MIN_PROPERTY_COVERAGE		= "minimum properity coverage";
+	protected double minPropertyCoverage								= 0.4;
+	
+	protected static final String PARAMETER_PROPERTY_LEARNING_RATE		= "properity learning rate";
+	protected double propertyLearningRate 			= 0.9;
+	
 	protected Map<String, Double> sourcePropertiesCoverageMap; //coverage map for latter computations
 	protected Map<String, Double> targetPropertiesCoverageMap; //coverage map for latter computations
+	
+	protected Set<String> measures = new HashSet<>(Arrays.asList("jaccard","trigrams","cosine","ngrams"));
 	
 	protected boolean verbose = false;
 
@@ -77,14 +87,9 @@ public abstract class Wombat extends MLAlgorithm{
 		AND, OR, MINUS
 	};
 	
-	
-	//TODO: make measures configurables
-	Set<String> measures = new HashSet<>(Arrays.asList(
-			"jaccard"
-			,"trigrams"
-			,"cosine"
-			,"ngrams"
-			));
+	public Wombat(Cache sourceCache, Cache targetCache, Configuration configuration) {
+		super(sourceCache, targetCache, configuration);
+	}
 	
 	
     /**
@@ -122,7 +127,7 @@ public abstract class Wombat extends MLAlgorithm{
         double maxOverlap = 0;
         double theta = 1.0;
         Mapping bestMapping = MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
-        for (double threshold = 1d; threshold > minPropertyCoverage; threshold = threshold * LEARNING_RATE) {
+        for (double threshold = 1d; threshold > minPropertyCoverage; threshold = threshold * propertyLearningRate) {
             Mapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
             double overlap = new Recall().calculate(mapping, new GoldStandard(reference));
             if (maxOverlap < overlap){ //only interested in largest threshold with recall 1
@@ -171,7 +176,7 @@ public abstract class Wombat extends MLAlgorithm{
 	protected Mapping getMapingOfMetricExpression(String metricExpression) {
 		Mapping map = null;
 		if(RefinementNode.saveMapping){
-			map = getMapingOfMetricFromTree( metricExpression,root);
+			map = getMapingOfMetricFromTree( metricExpression,refinementTreeRoot);
 		}
 		if(map == null){
 			Double threshold = Double.parseDouble(metricExpression.substring(metricExpression.lastIndexOf("|")+1, metricExpression.length()));
@@ -210,4 +215,8 @@ public abstract class Wombat extends MLAlgorithm{
 		return null;
 	}
 	
+	@Override
+	public Set<String> parameters() {	
+		return wombatParameters;
+	}
 }

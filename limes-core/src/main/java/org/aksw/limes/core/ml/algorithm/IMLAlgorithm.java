@@ -1,5 +1,7 @@
 package org.aksw.limes.core.ml.algorithm;
 
+import java.util.Set;
+
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 
@@ -47,5 +49,7 @@ public interface IMLAlgorithm {
 	 * 
 	 */
 	void terminate();
+	
+	Set<String> parameters();
 	
 }

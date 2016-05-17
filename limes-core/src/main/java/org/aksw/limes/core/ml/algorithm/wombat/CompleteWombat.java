@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.Tree;
@@ -85,30 +86,30 @@ public class CompleteWombat extends Wombat {
 		diffs = getClassifiersDiffPermutations(classifiers);
 		createRefinementTreeRoot();
 		RefinementNode.rMax = computeMaxRecall(classifiers);
-		Tree<RefinementNode> mostPromisingNode = findMostPromisingNode(root, false);
+		Tree<RefinementNode> mostPromisingNode = findMostPromisingNode(refinementTreeRoot, false);
 		long time = System.currentTimeMillis();
-		pruneTree(root, mostPromisingNode.getValue().fMeasure);
+		pruneTree(refinementTreeRoot, mostPromisingNode.getValue().fMeasure);
 		pruningTime += System.currentTimeMillis() - time;
 		logger.info("Most promising node: " + mostPromisingNode.getValue());
 		iterationNr ++;
-		while((mostPromisingNode.getValue().fMeasure) < MAX_FITNESS_THRESHOLD	 
+		while((mostPromisingNode.getValue().fMeasure) < maxFitnessThreshold	 
 				//				&& (root.size() - pruneNodeCount) <= MAX_TREE_SIZE
 				//				&& root.size() <= MAX_TREE_SIZE
-				&& iterationNr <= MAX_ITER_NR)
+				&& iterationNr <= maxIterationNumber)
 		{
 			System.out.println("Running iteration number " + iterationNr);
 			iterationNr++;
 			mostPromisingNode = expandNode(mostPromisingNode);
-			mostPromisingNode = findMostPromisingNode(root, false);
+			mostPromisingNode = findMostPromisingNode(refinementTreeRoot, false);
 			time = System.currentTimeMillis();
-			pruneTree(root, mostPromisingNode.getValue().fMeasure);
+			pruneTree(refinementTreeRoot, mostPromisingNode.getValue().fMeasure);
 			pruningTime += System.currentTimeMillis() - time;
 			if(mostPromisingNode.getValue().fMeasure == -Double.MAX_VALUE){
 				break; // no better solution can be found
 			}
 			logger.info("Most promising node: " + mostPromisingNode.getValue());
 		}
-		RefinementNode bestSolution = findMostPromisingNode(root, true).getValue();
+		RefinementNode bestSolution = findMostPromisingNode(refinementTreeRoot, true).getValue();
 		logger.info("Overall Best Solution: " + bestSolution);
 		if(!RefinementNode.saveMapping){
 			bestSolution.map = getMapingOfMetricExpression(bestSolution.metricExpression);
@@ -178,15 +179,15 @@ public class CompleteWombat extends Wombat {
 	 */
 	private void createRefinementTreeRoot(){
 		RefinementNode initialNode = new RefinementNode(-Double.MAX_VALUE, new MemoryMapping(), "");
-		root = new Tree<RefinementNode>(null,initialNode, null);
+		refinementTreeRoot = new Tree<RefinementNode>(null,initialNode, null);
 		for( String diffExpr : diffs.keySet()){
 			Mapping diffMapping = diffs.get(diffExpr);
 			RefinementNode n = createNode(diffExpr,diffMapping);
-			root.addChild(new Tree<RefinementNode>(root,n, null));
+			refinementTreeRoot.addChild(new Tree<RefinementNode>(refinementTreeRoot,n, null));
 		}
 		if(verbose){
-			System.out.println("Tree size:" + root.size());
-			root.print();
+			System.out.println("Tree size:" + refinementTreeRoot.size());
+			refinementTreeRoot.print();
 		}
 	}
 
@@ -215,8 +216,8 @@ public class CompleteWombat extends Wombat {
 			}
 		}
 		if(verbose){
-			System.out.println("Tree size:" + root.size());
-			root.print();
+			System.out.println("Tree size:" + refinementTreeRoot.size());
+			refinementTreeRoot.print();
 		}
 		return node;
 	}
@@ -228,7 +229,7 @@ public class CompleteWombat extends Wombat {
 	 * @author sherif
 	 */
 	private boolean inRefinementTree(String metricExpression) {
-		return inRefinementTree(metricExpression, root);
+		return inRefinementTree(metricExpression, refinementTreeRoot);
 	}
 
 	/**
@@ -610,6 +611,13 @@ public class CompleteWombat extends Wombat {
 	public void terminate() {
 		// TODO Auto-generated method stub
 
+	}
+
+
+	@Override
+	public Set<String> parameters() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

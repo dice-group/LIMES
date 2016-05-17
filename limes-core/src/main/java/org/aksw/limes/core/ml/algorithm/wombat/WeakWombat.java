@@ -33,9 +33,6 @@ public class WeakWombat extends Wombat {
 
 	public double penaltyWeight = 0.5d;
 
-	public static double MAX_FITNESS_THRESHOLD = 1;
-	public static long MAX_TREE_SIZE = 200;
-	public static int MAX_ITER_NR = 100;
 	public static long CHILDREN_PENALTY_WEIGHT = 1;
 	public static long COMPLEXITY_PENALTY_WEIGHT = 1;
 	public boolean STRICT = true;
@@ -109,9 +106,9 @@ public class WeakWombat extends Wombat {
 		Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(root, penaltyWeight);
 		logger.info("Most promising node: " + mostPromisingNode.getValue());
 		iterationNr ++;
-		while((mostPromisingNode.getValue().fMeasure) < MAX_FITNESS_THRESHOLD	 
-				&& root.size() <= MAX_TREE_SIZE
-				&& iterationNr <= MAX_ITER_NR)
+		while((mostPromisingNode.getValue().fMeasure) < maxFitnessThreshold	 
+				&& root.size() <= maxRefineTreeSize
+				&& iterationNr <= maxIterationNumber)
 		{
 			iterationNr++;
 			mostPromisingNode = expandNode(mostPromisingNode);
@@ -260,6 +257,13 @@ public class WeakWombat extends Wombat {
 	public void terminate() {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public Set<String> parameters() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

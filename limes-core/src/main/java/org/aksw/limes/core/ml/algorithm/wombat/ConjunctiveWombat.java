@@ -137,4 +137,13 @@ public class ConjunctiveWombat extends Wombat {
 
 	}
 
+
+
+
+	@Override
+	public Set<String> parameters() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

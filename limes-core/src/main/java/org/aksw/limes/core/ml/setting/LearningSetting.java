@@ -1,18 +1,46 @@
 package org.aksw.limes.core.ml.setting;
 
+import java.util.Map;
+import org.apache.log4j.Logger;
+
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.ml.algorithm.IMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+import org.apache.commons.collections15.map.HashedMap;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @author Klaus Lyko
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version May 17, 2016
  */
 public abstract class LearningSetting {
+	protected static Logger logger = Logger.getLogger(LearningSetting.class.getName());
 	
+	protected Map<String, String> parameters = new HashedMap<>();
+	
+	String getParameterValue(String parameterName){
+		if(parameters.containsKey(parameterName)){
+			return parameters.get(parameterName);
+		}
+		logger.error("Parameter " + parameterName + " is not set. Exit with error!");
+		System.exit(1);
+		return null;
+	}
+	
+	double getParameterDoubleValue(String parameterName){
+		if(parameters.containsKey(parameterName)){
+			return Double.parseDouble(parameters.get(parameterName));
+		}
+		logger.error("Parameter " + parameterName + " is not set. Exit with error!");
+		System.exit(1);
+		return -Double.MAX_VALUE;
+	}
+	
+	
+	
+// ---------------------- TO BE REMOVED ---------------------------------
 	protected IMLAlgorithm algorithm;
 	int inquerySize = 10;
 	/**maximal duration in seconds*/

@@ -3,6 +3,7 @@ package org.aksw.limes.core.ml.algorithm.wombat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.Tree;
@@ -81,9 +82,9 @@ public class UnsupervisedSimpleWombat extends Wombat {
 		Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(root, penaltyWeight);
 		logger.info("Most promising node: " + mostPromisingNode.getValue());
 		iterationNr ++;
-		while((mostPromisingNode.getValue().fMeasure) < MAX_FITNESS_THRESHOLD	 
-				&& root.size() <= MAX_TREE_SIZE
-				&& iterationNr <= MAX_ITER_NR)
+		while((mostPromisingNode.getValue().fMeasure) < maxFitnessThreshold	 
+				&& root.size() <= maxRefineTreeSize
+				&& iterationNr <= maxIterationNumber)
 		{
 			iterationNr++;
 			mostPromisingNode = expandNode(mostPromisingNode);
@@ -251,5 +252,12 @@ public class UnsupervisedSimpleWombat extends Wombat {
 	public void terminate() {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public Set<String> parameters() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -4,6 +4,7 @@ package org.aksw.limes.core.ml.algorithm;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
@@ -231,6 +232,12 @@ public class EagleSupervised extends MLAlgorithm{
             answer.add(t.getSourceUri(), t.getTargetUri(), t.getSimilarity());
         }
         return answer;
+	}
+
+	@Override
+	public Set<String> parameters() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

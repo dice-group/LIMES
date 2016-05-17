@@ -1187,4 +1187,10 @@ public class Lion extends MLAlgorithm {
 
     }
 
+	@Override
+	public Set<String> parameters() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

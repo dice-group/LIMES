@@ -11,63 +11,51 @@ import org.apache.log4j.Logger;
  * @version 2015-11-09
  *
  */
-public abstract class MLAlgorithm implements IMLAlgorithm {
+public abstract class MLAlgorithm2 implements IMLAlgorithm {
 	
 	protected Configuration configuration;
 	protected Cache sourceCache;
 	protected Cache targetCache;
-	static Logger logger = Logger.getLogger(MLAlgorithm.class.getName());
+	static Logger logger = Logger.getLogger(IMLAlgorithm.class.getName());
+//	protected Mapping mapping;
 
-	/**
-	 * @param sourceCache
-	 * @param targetCache
-	 * @param configuration
-	 */
-	protected MLAlgorithm(Cache sourceCache, Cache targetCache, Configuration configuration) {//, Mapping mapping) {
+	public MLAlgorithm2(Cache sourceCache, Cache targetCache, Configuration configuration) {//, Mapping mapping) {
 		super();
 		this.setSourceCache(sourceCache);
 		this.setTargetCache(targetCache);
 		this.setConfiguration(configuration);
+//		this.mapping = mapping;
 	}
+//	
+//	private void setOutStreams(String name) throws FileNotFoundException {
+//		File stdFile = new File(name+"_stdOut.txt");
+//		PrintStream stdOut = new PrintStream(new FileOutputStream(stdFile, false));
+//		File errFile = new File(name+"_errOut.txt");
+//		PrintStream errOut = new PrintStream(new FileOutputStream(errFile, false));
+//		System.setErr(errOut);
+//		System.setOut(stdOut);
+//	}
 
-	/**
-	 * @return the LIMES configuration
-	 */
 	public Configuration getConfiguration() {
 		return configuration;
 	}
 
-	/**
-	 * @param configuration the LIMES configuration
-	 */
 	public void setConfiguration(Configuration configuration) {
 		this.configuration = configuration;
 	}
 
-	/**
-	 * @return the source dataset cache
-	 */
 	public Cache getSourceCache() {
 		return sourceCache;
 	}
 
-	/**
-	 * @param sourceCache the source dataset cache
-	 */
 	public void setSourceCache(Cache sourceCache) {
 		this.sourceCache = sourceCache;
 	}
 
-	/**
-	 * @return the target dataset cache
-	 */
 	public Cache getTargetCache() {
 		return targetCache;
 	}
 
-	/**
-	 * @param targetCache the target dataset cache
-	 */
 	public void setTargetCache(Cache targetCache) {
 		this.targetCache = targetCache;
 	}

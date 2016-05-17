@@ -3,6 +3,7 @@ package org.aksw.limes.core.ml.algorithm;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.HybridCache;
@@ -187,6 +188,12 @@ public class EagleUnsupervised extends MLAlgorithm {
 		result.setQuality(allBest.getFitnessValue());
 		result.addDetail("specifiactions", specifications);
 		return result;
+	}
+
+	@Override
+	public Set<String> parameters() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	
