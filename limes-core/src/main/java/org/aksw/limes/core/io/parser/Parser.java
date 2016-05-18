@@ -43,11 +43,11 @@ public class Parser implements IParser {
         //tests for operation labels. If they can be found, then our expression
         //is not atomic
         String copy = expression.toLowerCase();
-        if (!copy.contains("max(") && !copy.contains("min(")
-                && !copy.contains("and(") && !copy.contains("or(")
-                && !copy.contains("add(") && !copy.contains("xor(")
-                && !copy.contains("minus(") && !copy.contains("mult(")
-                && !copy.contains("diff(")) {
+        if (!copy.startsWith("max(") && !copy.startsWith("min(")
+                && !copy.startsWith("and(") && !copy.startsWith("or(")
+                && !copy.startsWith("add(") && !copy.startsWith("xor(")
+                && !copy.startsWith("minus(") && !copy.startsWith("mult(")
+                && !copy.startsWith("diff(")) {
             return true;
         } else {
             return false;

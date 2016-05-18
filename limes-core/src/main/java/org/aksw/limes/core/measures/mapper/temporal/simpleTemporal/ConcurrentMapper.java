@@ -50,7 +50,7 @@ public class ConcurrentMapper extends SimpleTemporalMapper {
 
     @Override
     public String getName() {
-	return "concurrent";
+	return "Concurrent";
     }
 
     @Override

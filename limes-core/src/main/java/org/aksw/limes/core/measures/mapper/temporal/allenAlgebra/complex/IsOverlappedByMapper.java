@@ -1,33 +1,23 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.AllenAlgebraMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.BeginBegin;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.BeginEnd;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.EndBegin;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.EndEnd;
 
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 
-public class IsOverlappedBy extends AllenAlgebraMapper {
-    public IsOverlappedBy() {
+public class IsOverlappedByMapper extends AllenAlgebraMapper {
+    public IsOverlappedByMapper() {
 	// { BE1 \ (BB0 U BB1) } \ (EE0 U EE1)
 	this.getRequiredAtomicRelations().add(3);
 	this.getRequiredAtomicRelations().add(0);

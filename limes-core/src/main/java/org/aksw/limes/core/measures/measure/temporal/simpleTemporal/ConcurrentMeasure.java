@@ -1,8 +1,9 @@
 package org.aksw.limes.core.measures.measure.temporal.simpleTemporal;
 
 import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
 
-public class ConcurrentMeasure extends SimpleTemporalMeasure {
+public class ConcurrentMeasure extends TemporalMeasure {
 
     @Override
     public double getSimilarity(Object a, Object b) {
@@ -10,8 +11,8 @@ public class ConcurrentMeasure extends SimpleTemporalMeasure {
 	String split1[] = ((String) a).split("\\|");
 	String split2[] = ((String) b).split("\\|");
 
-	if (Double.valueOf(split1[0]).equals(Double.valueOf(split2[0]))
-		&& Double.valueOf(split1[1]).equals(Double.valueOf(split2[1])))
+	if (new Double(split1[0]).equals(new Double(split2[0]))
+		&& new Double(split1[1]).equals(new Double(split2[1])))
 	    sim = 1;
 	else
 	    sim = 0;

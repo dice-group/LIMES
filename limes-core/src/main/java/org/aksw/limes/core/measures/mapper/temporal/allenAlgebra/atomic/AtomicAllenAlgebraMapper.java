@@ -46,7 +46,7 @@ public abstract class AtomicAllenAlgebraMapper {
      * 
      * @return first property of metric expression as string
      */
-    public static String getBeginProperty(String properties) {
+    protected static String getBeginProperty(String properties) {
 	properties = properties.substring(properties.indexOf(".") + 1, properties.length());
 	int plusIndex = properties.indexOf("|");
 	if (properties.indexOf("|") != -1) {
@@ -64,7 +64,7 @@ public abstract class AtomicAllenAlgebraMapper {
      * 
      * @return first property of metric expression as string
      */
-    public static String getEndProperty(String properties) {
+    protected static String getEndProperty(String properties) {
 	properties = properties.substring(properties.indexOf(".") + 1, properties.length());
 	int plusIndex = properties.indexOf("|");
 	if (properties.indexOf("|") != -1) {
@@ -89,7 +89,7 @@ public abstract class AtomicAllenAlgebraMapper {
      * @return blocks, a map of sets with unique begin dates as keys and set of
      *         instances (string representation) as values
      */
-    public static TreeMap<Long, Set<String>> orderByBeginDate(Cache cache, String expression) {
+    protected static TreeMap<Long, Set<String>> orderByBeginDate(Cache cache, String expression) {
 	TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
 	Parser p = new Parser(expression, 0.0d);
 	String property = getBeginProperty(p.getTerm1());
@@ -135,7 +135,7 @@ public abstract class AtomicAllenAlgebraMapper {
      * @return blocks, a map of sets with unique end dates as keys and set of
      *         instances (string representation) as values
      */
-    public static TreeMap<Long, Set<String>> orderByEndDate(Cache cache, String expression) {
+    protected static TreeMap<Long, Set<String>> orderByEndDate(Cache cache, String expression) {
 	TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
 	Parser p = new Parser(expression, 0.0d);
 	String property = getEndProperty(p.getTerm1());
@@ -177,7 +177,7 @@ public abstract class AtomicAllenAlgebraMapper {
      * 
      * @return concurrentEvents, the map of concurrent events
      */
-    public static TreeMap<String, Set<String>> mapConcurrent(TreeMap<Long, Set<String>> sources,
+    protected static TreeMap<String, Set<String>> mapConcurrent(TreeMap<Long, Set<String>> sources,
 	    TreeMap<Long, Set<String>> targets) {
 	TreeMap<String, Set<String>> concurrentEvents = new TreeMap<String, Set<String>>();
 
@@ -209,7 +209,7 @@ public abstract class AtomicAllenAlgebraMapper {
      * 
      * @return concurrentEvents, the map of predecessor events
      */
-    public static TreeMap<String, Set<String>> mapPredecessor(TreeMap<Long, Set<String>> sources,
+    protected static TreeMap<String, Set<String>> mapPredecessor(TreeMap<Long, Set<String>> sources,
 	    TreeMap<Long, Set<String>> targets) {
 	TreeMap<String, Set<String>> concurrentEvents = new TreeMap<String, Set<String>>();
 

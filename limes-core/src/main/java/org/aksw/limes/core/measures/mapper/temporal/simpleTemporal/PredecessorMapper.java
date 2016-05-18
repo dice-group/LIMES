@@ -49,7 +49,7 @@ public class PredecessorMapper extends SimpleTemporalMapper {
 
     @Override
     public String getName() {
-	return "predecessor";
+	return "Predecessor";
     }
 
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {

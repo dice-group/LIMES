@@ -8,21 +8,21 @@ import org.aksw.limes.core.measures.mapper.string.EDJoin;
 import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
 import org.aksw.limes.core.measures.mapper.string.JaroMapper;
 import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
-import org.aksw.limes.core.measures.mapper.string.RatcliffObershelpMapper;
 import org.aksw.limes.core.measures.mapper.string.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGram;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.After;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.Before;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.During;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.DuringReverse;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.Finishes;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsFinishedBy;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsMetBy;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsOverlappedBy;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsStartedBy;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.Meets;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.Overlaps;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.Starts;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.AfterMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.BeforeMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.DuringMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.DuringReverseMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.EqualsMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.FinishesMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsFinishedByMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsMetByMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsOverlappedByMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsStartedByMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.MeetsMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.OverlapsMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.StartsMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.ConcurrentMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.PredecessorMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.SuccessorMapper;
@@ -50,6 +50,19 @@ import org.aksw.limes.core.measures.measure.string.Jaro;
 import org.aksw.limes.core.measures.measure.string.Levenshtein;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.AfterMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.BeforeMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.DuringMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.DuringReverseMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.EqualsMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.FinishesMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsFinishedByMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsMetByMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsOverlappedByMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsStartedByMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.MeetsMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.OverlapsMeasure;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.StartsMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
@@ -106,6 +119,7 @@ public class MeasureFactory {
     public static final String TMP_DURINGREVERSE = "tmp_duringreverse";
     public static final String TMP_OVERLAPS = "tmp_overlaps";
     public static final String TMP_ISOVERLAPPEDBY = "tmp_isoverlappedby";
+    public static final String TMP_EQUALS = "tmp_equals";
 
     public static MeasureType getTypeFromExpression(String expression) {
 	String measure = expression.toLowerCase();
@@ -235,8 +249,34 @@ public class MeasureFactory {
 	    m = new PredecessorMeasure();
 	} else if (name.toLowerCase().startsWith(TMP_CONCURRENT)) {
 	    m = new ConcurrentMeasure();
-	} else {
-	    m = new TrigramMeasure();
+	} else if (name.toLowerCase().startsWith(TMP_BEFORE)) {
+	    m = new BeforeMeasure();
+	} else if (name.toLowerCase().startsWith(TMP_AFTER)) {
+	    m = new AfterMeasure();
+	} else if (name.toLowerCase().startsWith(TMP_MEETS)) {
+	    m = new MeetsMeasure();
+	} else if (name.toLowerCase().startsWith(TMP_ISMETBY)) {
+	    m = new IsMetByMeasure();
+	} else if (name.toLowerCase().startsWith(TMP_FINISHES)) {
+	    m = new FinishesMeasure();
+	} else if (name.toLowerCase().startsWith(TMP_ISFINISHEDBY)) {
+	    m = new IsFinishedByMeasure();
+	} else if (name.toLowerCase().startsWith(TMP_STARTS)) {
+	    m = new StartsMeasure();
+	} else if (name.toLowerCase().startsWith(TMP_ISSTARTEDBY)) {
+	    m = new IsStartedByMeasure();
+	} else if (name.toLowerCase().startsWith(TMP_DURING)) {
+	    m = new DuringMeasure();
+	} else if (name.toLowerCase().startsWith(TMP_DURINGREVERSE)) {
+	    m = new DuringReverseMeasure();
+	} else if (name.toLowerCase().startsWith(TMP_OVERLAPS)) {
+	    m = new OverlapsMeasure();
+	} else if (name.toLowerCase().startsWith(TMP_ISOVERLAPPEDBY)) {
+	    m = new IsOverlappedByMeasure();
+	}else if (name.toLowerCase().startsWith(TMP_EQUALS)) {
+	    m = new EqualsMeasure();
+	}else {
+	    m = null;
 	}
 	return m;
     }
@@ -304,30 +344,32 @@ public class MeasureFactory {
 	} else if (measure.toLowerCase().startsWith(TMP_CONCURRENT)) {
 	    am = new ConcurrentMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_BEFORE)) {
-	    am = new Before();
+	    am = new BeforeMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_AFTER)) {
-	    am = new After();
+	    am = new AfterMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_MEETS)) {
-	    am = new Meets();
+	    am = new MeetsMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_ISMETBY)) {
-	    am = new IsMetBy();
+	    am = new IsMetByMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_FINISHES)) {
-	    am = new Finishes();
+	    am = new FinishesMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_ISFINISHEDBY)) {
-	    am = new IsFinishedBy();
+	    am = new IsFinishedByMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_STARTS)) {
-	    am = new Starts();
+	    am = new StartsMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_ISSTARTEDBY)) {
-	    am = new IsStartedBy();
+	    am = new IsStartedByMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_DURING)) {
-	    am = new During();
+	    am = new DuringMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_DURINGREVERSE)) {
-	    am = new DuringReverse();
+	    am = new DuringReverseMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_OVERLAPS)) {
-	    am = new Overlaps();
+	    am = new OverlapsMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_ISOVERLAPPEDBY)) {
-	    am = new IsOverlappedBy();
-	} else {
+	    am = new IsOverlappedByMapper();
+	} else if (measure.toLowerCase().startsWith(TMP_EQUALS)) {
+	    am = new EqualsMapper();
+	}else {
 	    am = null;
 	}
 	return am;

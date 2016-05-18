@@ -49,7 +49,7 @@ public class SuccessorMapper extends SimpleTemporalMapper {
 
     @Override
     public String getName() {
-	return "successor";
+	return "Successor";
     }
     @Override
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {

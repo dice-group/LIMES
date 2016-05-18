@@ -15,8 +15,8 @@ import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.EndEnd;
 import java.util.Map;
 import java.util.Set;
 
-public class Finishes extends AllenAlgebraMapper {
-    public Finishes() {
+public class FinishesMapper extends AllenAlgebraMapper {
+    public FinishesMapper() {
 	// EE0 \\ (BB0 U BB1)
 	this.getRequiredAtomicRelations().add(6);
 	this.getRequiredAtomicRelations().add(0);
