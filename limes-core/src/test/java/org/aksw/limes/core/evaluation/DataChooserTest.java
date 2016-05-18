@@ -13,15 +13,14 @@ public class DataChooserTest {
 		String[] datasets ={"PERSON1","PERSON1_CSV","PERSON2","PERSON2_CSV","RESTAURANTS","OAEI2014BOOKS"};
 		//"RESTAURANTS_CSV","DBLPACM","ABTBUY","DBLPSCHOLAR","AMAZONGOOGLE","DBPLINKEDMDB","DRUGS"
 			try{
-			/*	for(DataSets ds : DataSets.values())
+				for(String ds : datasets)
 				{
 					System.out.println(ds);
 					DataSetChooser.getData(ds);
-				}*/
+				}
 					
-			for (String dataset : datasets) {
-				DataSetChooser.getData("DBLPACM");
-			}
+				
+			//	DataSetChooser.getData("DRUGS");
 			} catch(Exception e) {
 				assertTrue(false);
 			}

@@ -94,9 +94,8 @@ public class DataSetChooser {
 	}
 
 	public enum DataSets {
-		PERSON1,PERSON2,RESTAURANTS,RESTAURANTS_FIXED,DBLPACM,ABTBUY,DBLPSCHOLAR,AMAZONGOOGLE,DBPLINKEDMDB,DRUGS,
-		PERSON1_CSV,PERSON2_CSV,RESTAURANTS_CSV,
-		OAEI2014BOOKS//,TOWNS, VILLAGES, MOVIES
+		PERSON1,PERSON1_CSV,PERSON2,PERSON2_CSV,RESTAURANTS,OAEI2014BOOKS,
+		RESTAURANTS_FIXED,DBLPACM,ABTBUY,DBLPSCHOLAR,AMAZONGOOGLE,DBPLINKEDMDB,DRUGS,RESTAURANTS_CSV//,TOWNS, VILLAGES, MOVIES
 	}
 	
 	public static EvaluationData getData(String dataSetName) {
@@ -145,7 +144,7 @@ public class DataSetChooser {
 			case "OAEI2014BOOKS":
 				param = getOAEI2014Books();
 				break;
-			case "TOWNS":
+		/*	case "TOWNS":
 				param = getTowns();
 				break;
 			case "VILLAGES":
@@ -153,7 +152,7 @@ public class DataSetChooser {
 				break;
 			case "MOVIES":
 				param = getMovies();
-				break;
+				break;*/
 		}
 		param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
 		param.put(MapKey.MAX_RUNS, 5);

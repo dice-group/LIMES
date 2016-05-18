@@ -34,7 +34,7 @@ public class Evaluator {
 	 * @param datasets: the set of dataets to apply the algorithms on them. The should include source Cache, target Cache, goldstandard and predicted mapping
 	 * @param QlMeasures: set of qualitative measures
 	 * @param QnMeasures; set of quantitative measures
-	 * @return table contains the results corresponding to the algorithms and measures
+	 * @return table contains the results corresponding to the algorithms and measures (algorithm,measure,{measure,value})
 	 */
 	public Table<String,String,Map<EvaluatorType, Double>> evaluate(Set<MLAlgorithm> algorithms, Set<Task> datasets, Set<EvaluatorType> QlMeasures, Set<IQuantitativeMeasure> QnMeasures)
 	{
