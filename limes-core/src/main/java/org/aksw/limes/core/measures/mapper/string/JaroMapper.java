@@ -51,20 +51,6 @@ public class JaroMapper extends Mapper {
 	return runWithoutPrefixFilter(sourceMap, targetMap, threshold);
     }
 
-    public Map<String, Set<String>> getValueToUriMap(Cache c, String property) {
-	Map<String, Set<String>> result = new HashMap<String, Set<String>>();
-	List<String> uris = c.getAllUris();
-	for (String uri : uris) {
-	    Set<String> values = c.getInstance(uri).getProperty(property);
-	    for (String value : values) {
-		if (!result.containsKey(value)) {
-		    result.put(value, new HashSet<String>());
-		}
-		result.get(value).add(uri);
-	    }
-	}
-	return result;
-    }
     @Override
     public String getName() {
 	return "jaro";

@@ -4,7 +4,7 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 
 public interface IMapper {
-    public enum Language {
+    enum Language {
 	EN, FR, DE, NULL
     };
 
@@ -26,8 +26,8 @@ public interface IMapper {
      *            threshold of link specification
      * @return a mapping, the resulting mapping
      */
-    public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-	    double threshold);
+    Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+                       double threshold);
     /**
      * Returns the estimated time needed to obtain the mapping computed by a mapper
      * specification
@@ -43,7 +43,7 @@ public interface IMapper {
      * 
      * @return estimated runtime, as double
      */
-    public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language);
+    double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language);
     /**
      * Returns the estimated mapping size of the mapping computed by a mapper
      * specification
@@ -59,12 +59,12 @@ public interface IMapper {
      * 
      * @return estimated execution time, as double
      */
-    public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language);
+    double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language);
     /**
      * Returns the name of the current Mapper
      *
      * 
      * @return Mapper name as a string
      */
-    public String getName();
+    String getName();
 }

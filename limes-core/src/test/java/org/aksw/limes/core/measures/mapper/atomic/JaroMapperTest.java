@@ -71,7 +71,7 @@ public class JaroMapperTest extends JaroMapper {
 	return map;
     }
 
-    @Test
+
     private void test(int sourceSize, int targetSize, double threshold) {
 	Map<String, Set<String>> sourceMap = generateRandomMap(sourceSize);
 	Map<String, Set<String>> targetMap = generateRandomMap(targetSize);
