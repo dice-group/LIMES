@@ -7,18 +7,18 @@ import static org.junit.Assert.*;
 
 import org.aksw.limes.core.datastrutures.Task;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser.DataSets;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.evaluator.Evaluator;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
-import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.ml.algorithm.EagleSupervised;
 import org.aksw.limes.core.ml.algorithm.EagleUnsupervised;
 import org.aksw.limes.core.ml.algorithm.Lion;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.MLResult;
-import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.junit.Test;
+
+import com.google.common.collect.Table;
+
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -43,6 +43,7 @@ public class EvaluatorTest {
 	 */
 	public void testEvaluator()
 	{
+		try{
 		Set<MLAlgorithm> algorithms = new TreeSet<MLAlgorithm>();
 		Set<Task> tasks = initializeDataSets();
 		Set<EvaluatorType> evaluators = initializeEvaluators();
@@ -51,7 +52,11 @@ public class EvaluatorTest {
 			algorithms.add(new EagleUnsupervised(null, null, null));
 			algorithms.add(new Lion(null, null, null));
 		}
-		evaluator.evaluate(algorithms, tasks, evaluators, null);
+		Table<String, String, Map<EvaluatorType, Double>> results = evaluator.evaluate(algorithms, tasks, evaluators, null);
+			} catch(Exception e) {
+				assertTrue(false);
+			}
+			assertTrue(true);
 	}
 
 	private Set<EvaluatorType> initializeEvaluators()
