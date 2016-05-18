@@ -48,6 +48,8 @@ public class LIMES {
 	public static final Property outputFormat 		= property("outputFormat");
 	public static final Property mlParameterName	= property("mlParameterName");
 	public static final Property mlParameterValue	= property("mlParameterValue");
+	public static final Property hasMLAlgorithm		= property("hasMLAlgorithm");
+	public static final Property mlAlgorithmName	= property("mlAlgorithmName");
 	
 	public static final Resource LimesSpecs 		= resource("LimesSpecs");
 	public static final Resource SourceDataset 		= resource("SourceDataset");
@@ -56,5 +58,6 @@ public class LIMES {
 	public static final Resource Acceptance 		= resource("Acceptance");
 	public static final Resource Review 			= resource("Review");
 	public static final Resource MLParameter		= resource("MLParameter");
+	public static final Resource MLAlgorithm		= resource("MLAlgorithm");
 	
 }

@@ -96,13 +96,20 @@ public class RDFConfigurationReader implements IConfigurationReader{
 		}
 
 		//9. ML parameters
-		if(configModel.contains(specsSubject, RDF.type, LIMES.MLParameter)) {
-			readMLParameters();
+		if(configModel.contains(specsSubject, LIMES.hasMLAlgorithm , (RDFNode) null)) {
+			Resource mlAlgorithmUri = getObject(specsSubject, LIMES.hasMLAlgorithm , true).asResource();
+			readMLAlgorithmParameters(mlAlgorithmUri);
 		}
 		return configuration;
 	}
 
-	private void readMLParameters() {
+	private void readMLAlgorithmParameters(Resource mlAlgorithmUri) {
+		if(!configModel.contains(mlAlgorithmUri, RDF.type, LIMES.MLAlgorithm)){
+			logger.error(mlAlgorithmUri + " missing type. Exit with error");
+			System.exit(1);
+		}
+		RDFNode mlAlgorithmName = getObject(mlAlgorithmUri, LIMES.mlAlgorithmName, true);
+		configuration.setMlAlgorithmName(mlAlgorithmName.toString());
 		StmtIterator parametersItr = configModel.listStatements(null, RDF.type, LIMES.MLParameter);
 		while(parametersItr.hasNext()) {
 			Resource ParameterSubject = parametersItr.next().getSubject();

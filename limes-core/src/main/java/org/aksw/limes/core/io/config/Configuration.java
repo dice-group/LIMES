@@ -31,7 +31,16 @@ public class Configuration implements IConfiguration {
     protected String outputFormat;
     protected String executionPlan = "simple";
     protected int granularity = 2;
-    protected Map<String, String> mlParameters = new HashMap<String, String>();;
+    protected String mlAlgorithmName = null ;
+    public String getMlAlgorithmName() {
+		return mlAlgorithmName;
+	}
+
+	public void setMlAlgorithmName(String mlAlgorithmName) {
+		this.mlAlgorithmName = mlAlgorithmName;
+	}
+
+	protected Map<String, String> mlParameters = new HashMap<String, String>();;
 
     public Map<String, String> getMlParameters() {
 	return mlParameters;
