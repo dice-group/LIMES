@@ -345,7 +345,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 			if (plan.getOperator() == null) {
 			    if (plan.getFilteringInstruction().getCommand().equals(Command.REVERSEFILTER)) {
 				result = executeFilter(plan.getFilteringInstruction(), m);
-				
+
 			    }
 			} else { // second plan is run
 			    LinkSpecification secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
@@ -405,8 +405,8 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     @Override
     public Mapping execute(LinkSpecification spec, IPlanner planner) {
 	Mapping m = new MemoryMapping();
-	if (planner instanceof DynamicPlanner) {
-	    ((DynamicPlanner) planner).initSteps(spec);
+	spec = planner.normalize(spec);
+	if (planner.isStatic() == false) {
 	    m = executeDynamic(spec, (DynamicPlanner) planner);
 	} else {
 	    NestedPlan plan = planner.plan(spec);

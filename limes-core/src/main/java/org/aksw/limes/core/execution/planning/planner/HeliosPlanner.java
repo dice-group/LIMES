@@ -6,6 +6,7 @@ import java.util.List;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
@@ -351,5 +352,16 @@ public class HeliosPlanner extends Planner {
 	result.setSelectivity(selectivity);
 	result.setMappingSize(source.size() * target.size() * selectivity);
 	return result;
+    }
+
+    @Override
+    public boolean isStatic() {
+	return true;
+    }
+
+    @Override
+    public LinkSpecification normalize(LinkSpecification spec) {
+	LinkSpecification ls = new ExtendedLinkSpecification(spec.getFullExpression(), spec.getThreshold());
+	return ls;
     }
 }

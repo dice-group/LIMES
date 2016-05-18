@@ -56,14 +56,24 @@ public class CanonicalPlanner extends Planner {
 		plan.setOperator(Command.XOR);
 	    } else if (spec.getOperator().equals(Operator.MINUS)) {
 		plan.setOperator(Command.DIFF);
-	    }else{
-		System.out.println("Wrong operator: "+spec.getOperator()+". at LS: "+spec);
+	    } else {
+		System.out.println("Wrong operator: " + spec.getOperator() + ". at LS: " + spec);
 		return null;
 	    }
-	    plan.setFilteringInstruction(new Instruction(Command.FILTER, spec.getFilterExpression(),
-		    spec.getThreshold() + "", -1, -1, 0));
+	    plan.setFilteringInstruction(
+		    new Instruction(Command.FILTER, spec.getFilterExpression(), spec.getThreshold() + "", -1, -1, 0));
 	}
 	return plan;
+    }
+
+    @Override
+    public boolean isStatic() {
+	return true;
+    }
+
+    @Override
+    public LinkSpecification normalize(LinkSpecification spec) {
+	return spec;
     }
 
 }

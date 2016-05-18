@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
@@ -53,7 +54,7 @@ public class DynamicPlanner extends Planner {
      * @param spec,
      *            the original link specification
      */
-    public void initSteps(LinkSpecification spec) {
+    public void init(LinkSpecification spec) {
 	NestedPlan plan = new NestedPlan();
 	if (!plans.containsKey(spec.toString())) {
 	    if (spec.isAtomic()) {
@@ -61,7 +62,7 @@ public class DynamicPlanner extends Planner {
 		specifications.put(spec.toString(), spec);
 	    } else {
 		for (LinkSpecification child : spec.getChildren()) {
-		    initSteps(child);
+		    init(child);
 		}
 		plans.put(spec.toString(), plan);
 		specifications.put(spec.toString(), spec);
@@ -647,6 +648,18 @@ public class DynamicPlanner extends Planner {
 	}
 
 	return result;
+    }
+
+    @Override
+    public boolean isStatic() {
+	return false;
+    }
+
+    @Override
+    public LinkSpecification normalize(LinkSpecification spec) {
+	LinkSpecification ls = new ExtendedLinkSpecification(spec.getFullExpression(), spec.getThreshold());
+	this.init(ls);
+	return ls;
     }
 
 }
