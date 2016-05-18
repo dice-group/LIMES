@@ -18,10 +18,9 @@ import java.util.LinkedList;
  * is confidently less than or equal to that threshold.
  *
  * @author Kevin Dreßler
- * https://github.com/kvndrsslr/SemanticWeb-QuickJaroWinkler
- */
+ * */
 
-public class JaroWinkler extends StringMeasure implements TrieFilterableStringMeasure  {
+public class JaroWinkler extends StringMeasure implements ITrieFilterableStringMeasure {
 
     private static char[][] sp =
             {{'A','E'},{'A','I'},{'A','O'},{'A','U'},{'B','V'},{'E','I'},{'E','O'},{'E','U'},
@@ -263,7 +262,7 @@ public class JaroWinkler extends StringMeasure implements TrieFilterableStringMe
 
     @Override
     public double getSimilarity(Object a, Object b) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return proximity(a.toString(), b.toString());
     }
 
     @Override
@@ -295,6 +294,6 @@ public class JaroWinkler extends StringMeasure implements TrieFilterableStringMe
 
     @Override
     public double getRuntimeApproximation(double mappingSize) {
-        return -1d;
+        return mappingSize / 5000d;
     }
 }

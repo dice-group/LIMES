@@ -50,7 +50,7 @@ public class Controller {
 	}
 
 	public static CommandLine parseCommandLine(String[] args) {
-		CommandLineParser parser = new DefaultParser();
+		CommandLineParser parser = new BasicParser();
 		CommandLine cl = null;
 		try {
 			cl = parser.parse(options, args);

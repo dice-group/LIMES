@@ -5,7 +5,7 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 import java.util.LinkedList;
 
-public class RatcliffObershelpMeasure extends StringMeasure implements TrieFilterableStringMeasure {
+public class RatcliffObershelpMeasure extends StringMeasure implements ITrieFilterableStringMeasure {
 
     /**
      * the current score will be stored here.
@@ -172,7 +172,7 @@ public class RatcliffObershelpMeasure extends StringMeasure implements TrieFilte
 
     @Override
     public double getSimilarity(Object a, Object b) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return proximity(a.toString(), b.toString());
     }
 
     @Override
@@ -202,6 +202,6 @@ public class RatcliffObershelpMeasure extends StringMeasure implements TrieFilte
 
     @Override
     public double getRuntimeApproximation(double mappingSize) {
-        return -1d;
+        return mappingSize / 5000d;
     }
 }

@@ -16,8 +16,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Matches one list of strings against the other, using the given JaroWinkler
- * and an optional range filter
+ * Mapper for bounded Jaro-Winkler distances using an efficient length-partitioning- and trie-pruning-based
+ * approach in parallel.
  */
 public class JaroWinklerMapper extends Mapper {
 
@@ -44,75 +44,71 @@ public class JaroWinklerMapper extends Mapper {
 	@Override
 	public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
 							  double threshold) {
-
 		logger.info("Running JaroWinklerMapper");
-
-		List<String> listA, listB;
-		JaroWinkler metric = new JaroWinkler();
-		List<String> properties = PropertyFetcher.getProperties(expression, threshold);
-		Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
-		Map<String, Set<String>> targetMap = getValueToUriMap(target, properties.get(1));
-		listA = new ArrayList<>(sourceMap.keySet());
-		listB = new ArrayList<>(targetMap.keySet());
-
-		ConcurrentHashMap<String, Map<String, Double>> similarityBook;
-
-		similarityBook = new ConcurrentHashMap<>(listA.size(), 1.0f);
-
-		List<String> red, blue;
-		red = listA;
-		blue = listB;
-		LengthQuicksort.sort(red);
-		LengthQuicksort.sort(blue);
-		// red is the list with the longest string
+        List<String> properties = PropertyFetcher.getProperties(expression, threshold);
+        List<String> listA, listB;
+        // generate value to uri maps
+        Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
+        Map<String, Set<String>> targetMap = getValueToUriMap(target, properties.get(1));
+        // get lists of strings to match
+        listA = new ArrayList<>(sourceMap.keySet());
+        listB = new ArrayList<>(targetMap.keySet());
+        // sort lists
+		LengthQuicksort.sort(listA);
+		LengthQuicksort.sort(listB);
+        // swap lists iff the largest string in listB is larger than the largest string in listA
         boolean swapped = false;
-		if (red.get(red.size() - 1).length() < blue.get(blue.size() - 1).length()) {
-			List<String> temp = red;
-			red = blue;
-			blue = temp;
+		if (listA.get(listA.size() - 1).length() < listB.get(listB.size() - 1).length()) {
+			List<String> temp = listA;
+			listA = listB;
+			listB = temp;
             swapped = true;
 		}
-
-		List<Pair<List<String>, List<String>>> tempPairs = new LinkedList<>();
-		// generate length filtered partitions
+        // set up partitioning of lists of strings based on strings lengths
+        JaroWinkler metric = new JaroWinkler();
+		List<Pair<List<String>, List<String>>> partitions = new LinkedList<>();
+        // only attempt to partition iff it makes sense mathematically, that is, the upper bound is well defined
+        // (cf. "On the efficient execution of bounded Jaro-Winkler distances")
 		if (metric.lengthUpperBound(1, threshold) != -1) {
 			List<ImmutableTriple<Integer, Integer, Integer>> sliceBoundaries = metric
-					.getPartitionBounds(blue.get(blue.size() - 1).length(), threshold);
+					.getPartitionBounds(listB.get(listB.size() - 1).length(), threshold);
 			for (ImmutableTriple<Integer, Integer, Integer> sliceBoundary : sliceBoundaries) {
 				MutablePair<List<String>, List<String>> m = new MutablePair<>();
 				m.setLeft(new LinkedList<>());
 				m.setRight(new LinkedList<>());
-				for (String s : red)
+				for (String s : listA)
 					if (s.length() >= sliceBoundary.getMiddle() && s.length() <= sliceBoundary.getRight())
 						m.getLeft().add(s);
 					else if (s.length() > sliceBoundary.getRight())
 						break;
-				for (String s : blue)
+				for (String s : listB)
 					if (s.length() == sliceBoundary.getLeft())
 						m.getRight().add(s);
 					else if (s.length() > sliceBoundary.getLeft())
 						break;
 				if (m.getRight().size() > 0 && m.getLeft().size() > 0)
-					tempPairs.add(m);
+					partitions.add(m);
 			}
+        // else, we have just one big partition
 		} else {
 			MutablePair<List<String>, List<String>> m = new MutablePair<>();
-			m.setLeft(red);
-			m.setRight(blue);
-			tempPairs.add(m);
+			m.setLeft(listA);
+			m.setRight(listB);
+			partitions.add(m);
 		}
 
-		logger.info("Partitioned into " + String.valueOf(tempPairs.size()) + " sets.");
+        // setting up parallel execution of matching
+		logger.info("Partitioned into " + String.valueOf(partitions.size()) + " sets.");
 		logger.info("Initializing Threadpool for " + String.valueOf(Runtime.getRuntime().availableProcessors())
 				+ " threads.");
-
-		// create thread pool, one thread per partition
-		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-		// executor = Executors.newFixedThreadPool(1);
-		for (Pair<List<String>, List<String>> tempPair : tempPairs) {
+        ConcurrentHashMap<String, Map<String, Double>> similarityBook = new ConcurrentHashMap<>(listA.size(), 1.0f);
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        // instantiate and queue up workers
+		for (Pair<List<String>, List<String>> tempPair : partitions) {
 			Runnable worker = new TrieFilter(tempPair, similarityBook, metric.clone(), threshold);
 			executor.execute(worker);
 		}
+        // wait for threads in pool
 		executor.shutdown();
 		while (!executor.isTerminated()) {
 			try {
@@ -121,6 +117,7 @@ public class JaroWinklerMapper extends Mapper {
 				e.printStackTrace();
 			}
 		}
+        // return result
 		logger.info("Similarity Book has " + String.valueOf(similarityBook.size()) + " entries.");
 		return getUriToUriMapping(similarityBook, sourceMap, targetMap, swapped);
 	}
