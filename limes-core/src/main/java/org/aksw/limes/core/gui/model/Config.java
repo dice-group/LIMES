@@ -93,9 +93,8 @@ public class Config extends Configuration {
 			double recallThreshold) {
 		super(sourceInfo, targetInfo, metricExpression, acceptanceRelation,
 				verificationRelation, acceptanceThreshold, acceptanceFile,
-				verificationThreshold, verificationFile, exemplars, prefixes,
-				outputFormat, executionPlan, granularity, recallRegulator,
-				recallThreshold);
+				verificationThreshold, verificationFile, prefixes,
+				outputFormat, executionPlan, granularity);
 		metric = new Output();
 		this.sourceEndpoint = new Endpoint(this.sourceInfo);
 		this.targetEndpoint = new Endpoint(this.targetInfo);
@@ -153,10 +152,9 @@ public class Config extends Configuration {
 					tmp.getVerificationRelation(),
 					tmp.getAcceptanceThreshold(), tmp.getAcceptanceFile(),
 					tmp.getVerificationThreshold(), tmp.getVerificationFile(),
-					tmp.getExemplars(), (HashMap<String, String>)tmp.getPrefixes(),
+					tmp.getGranularity(), (HashMap<String, String>)tmp.getPrefixes(),
 					tmp.getOutputFormat(), tmp.getExecutionPlan(),
-					tmp.getGranularity(), tmp.getRecallRegulator(),
-					tmp.getRecallThreshold());
+					tmp.getGranularity(), tmp.getAcceptanceFile(), tmp.getAcceptanceThreshold());
 		}
 //		if (outConfig == null) {
 //			throw new Exception("Error parsing config");
