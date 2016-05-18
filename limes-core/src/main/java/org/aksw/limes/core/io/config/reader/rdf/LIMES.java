@@ -55,6 +55,6 @@ public class LIMES {
 	public static final Resource Metric 			= resource("Metric");
 	public static final Resource Acceptance 		= resource("Acceptance");
 	public static final Resource Review 			= resource("Review");
-	public static final Resource MLParameters		= resource("MLParameters");
+	public static final Resource MLParameter		= resource("MLParameter");
 	
 }

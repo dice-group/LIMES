@@ -14,7 +14,6 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
@@ -103,14 +102,14 @@ public class RDFConfigurationReader implements IConfigurationReader{
 		}
 
 		//9. ML parameters
-		if(configModel.contains(specsSubject, RDF.type, LIMES.MLParameters)) {
+		if(configModel.contains(specsSubject, RDF.type, LIMES.MLParameter)) {
 			readMLParameters();
 		}
 		return configuration;
 	}
 
 	private void readMLParameters() {
-		StmtIterator parametersItr = configModel.listStatements(null, RDF.type, LIMES.MLParameters);
+		StmtIterator parametersItr = configModel.listStatements(null, RDF.type, LIMES.MLParameter);
 		while(parametersItr.hasNext()) {
 			Resource ParameterSubject = parametersItr.next().getSubject();
 			RDFNode mlParameterName = getObject(ParameterSubject, LIMES.mlParameterName, false);
