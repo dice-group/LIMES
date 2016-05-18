@@ -5,9 +5,12 @@ import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.PropertyFetcher;
+import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.log4j.Logger;
+
+import javax.sound.midi.Soundbank;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -23,7 +26,7 @@ import java.util.Set;
  */
 public class SoundexMapper extends Mapper {
 
-	static final int codeLength = 6;
+
 
 	static class TrieNode {
 
@@ -122,8 +125,7 @@ public class SoundexMapper extends Mapper {
 	public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
 							  double threshold) {
 
-		logger.info("Running SoundexMapper with code length " + String.valueOf(codeLength) + "\n Example: "
-				+ getCode("Beispielswortwelcheslangist"));
+		logger.info("Running SoundexMapper with code length " + String.valueOf(SoundexMeasure.codeLength));
 
 		List<String> listA, listB;
 		Map<String, List<Integer>> invListA, invListB;
@@ -160,7 +162,6 @@ public class SoundexMapper extends Mapper {
 								nodeEntry.getValue()));
 					}
 				}
-
 			}
 		}
 		Mapping result = new MemoryMapping();
@@ -173,7 +174,7 @@ public class SoundexMapper extends Mapper {
 					for (String sourceUri : sourceMap.get(a)) {
 						for (String targetUri : targetMap.get(b)) {
 							result.add(sourceUri, targetUri,
-									(1.0d - (t.getLeft().doubleValue() / (double) codeLength)));
+									(1.0d - (t.getLeft().doubleValue() / (double) SoundexMeasure.codeLength)));
 						}
 					}
 				}
@@ -182,77 +183,11 @@ public class SoundexMapper extends Mapper {
 		return result;
 	}
 
-	private int getCode(char x) {
-		switch (x) {
-			case 'B':
-			case 'F':
-			case 'P':
-			case 'V':
-				return 1;
-			case 'C':
-			case 'G':
-			case 'J':
-			case 'K':
-			case 'Q':
-			case 'S':
-			case 'X':
-			case 'Z':
-				return 2;
-			case 'D':
-			case 'T':
-				return 3;
-			case 'L':
-				return 4;
-			case 'M':
-			case 'N':
-				return 5;
-			case 'R':
-				return 6;
-			default:
-				return -1;
-		}
-	}
-
-	private String getCode(String string) {
-		char[] in = string.toUpperCase().toCharArray();
-		char[] out = new char[codeLength];
-		int i = 0;
-		int j = 0;
-		while (i < in.length && j < codeLength) {
-			if (in[i] != 'A' && in[i] != 'E' && in[i] != 'I' && in[i] != 'O' && in[i] != 'U' && in[i] != 'Y'
-					&& in[i] != 'H' && in[i] != 'W') {
-				// consonants are added to output
-				if (j == 0) {
-					out[j] = in[i];
-					j++;
-				} else {
-					int t = getCode(in[i]);
-					if (t > 0) {
-						out[j] = String.valueOf(t).charAt(0);
-						j++;
-					}
-				}
-				// double consonants are skipped
-				if (i < in.length - 1 && in[i] == in[i + 1])
-					i++;
-					// double consonants with 'h' or 'w' inbetween are skipped too
-				else if (i < in.length - 2 && in[i] == in[i + 2] && (in[i + 1] == 'H' || in[i + 1] == 'W'))
-					i += 2;
-			}
-			i++;
-		}
-		while (j < codeLength) {
-			out[j] = '0';
-			j++;
-		}
-		return String.valueOf(out);
-	}
-
 	private Map<String, List<Integer>> getInvertedList (List<String> list) {
         Map<String, List<Integer>> result = new HashMap<>(list.size());
         for (int i = 0, listASize = list.size(); i < listASize; i++) {
             String s = list.get(i);
-            String code = getCode(s);
+            String code = SoundexMeasure.getCode(s);
             List<Integer> ref;
             if (!result.containsKey(code)) {
                 ref = new LinkedList<>();
@@ -278,7 +213,7 @@ public class SoundexMapper extends Mapper {
 	}
 
 	private int getMaxDistance(double threshold) {
-		return new Double(Math.floor(codeLength * (1 - threshold))).intValue();
+		return new Double(Math.floor(SoundexMeasure.codeLength * (1 - threshold))).intValue();
 	};
 
 }

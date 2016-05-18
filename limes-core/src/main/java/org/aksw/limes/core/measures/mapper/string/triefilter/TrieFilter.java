@@ -1,12 +1,16 @@
 package org.aksw.limes.core.measures.mapper.string.triefilter;
 
-import org.aksw.limes.core.measures.measure.string.TrieFilterableStringMeasure;
+import org.aksw.limes.core.measures.measure.string.ITrieFilterableStringMeasure;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentMap;
 
+/**
+ * Implementation of measure-specific tree-pruning as a runnable worker class.
+ */
 public class TrieFilter implements Runnable {
 
 	private double threshold;
@@ -14,13 +18,20 @@ public class TrieFilter implements Runnable {
 	private List<Pair<List<String>, List<String>>> matchCandidateListPairs;
 	private Map<String, Map<String, Double>> tempResult;
 	private final Map<String, Map<String, Double>> result;
-	private TrieFilterableStringMeasure metric;
+	private ITrieFilterableStringMeasure metric;
 	private TrieNode trieRoot;
 	private boolean swapped;
 	private int minLenInA, maxLenInA;
 
-	public TrieFilter(Pair<List<String>, List<String>> lists, Map<String, Map<String, Double>> result,
-					  TrieFilterableStringMeasure metric, double threshold) {
+    /**
+     * Construct a worker
+     * @param lists list of input partitions ((S_1, T_1), ... , (S_n, T_n))
+     * @param result concurrent map for returning results
+     * @param metric a string measure enhanced with methods using inherent properties to determine when to prune
+     * @param threshold the similarity threshold value
+     */
+	public TrieFilter(Pair<List<String>, List<String>> lists, ConcurrentMap<String, Map<String, Double>> result,
+                      ITrieFilterableStringMeasure metric, double threshold) {
 		this.threshold = threshold;
 		this.result = result;
 		this.metric = metric;
@@ -150,6 +161,10 @@ public class TrieFilter implements Runnable {
 					.add(new MutablePair<List<String>, List<String>>(partition, new LinkedList<>(matchCandidateList)));
 	}
 
+    /**
+     * utility class for constructing a trie
+     */
+    //@todo generalize and reuse
 	class TrieNode {
 
 		public List<String> data;
