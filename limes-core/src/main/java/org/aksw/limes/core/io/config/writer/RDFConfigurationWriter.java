@@ -104,12 +104,8 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
 		m.add(metric, RDF.type, LIMES.Metric);
 		m.add(metric, LIMES.expression, configuration.getMetricExpression());
 
-		//4. Number of exemplars
-		if(configuration.getExemplars() > 0){
-			m.add(s, LIMES.exemplars, configuration.getExemplars() + "");
-		}
 
-		//5. ACCEPTANCE file and conditions
+		//4. ACCEPTANCE file and conditions
 		Resource acceptance = ResourceFactory.createResource(uri + "_acceptance");
 		m.add(s, LIMES.hasAcceptance, acceptance);
 		m.add(acceptance, RDF.type, LIMES.Acceptance);
@@ -117,7 +113,7 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
 		m.add(acceptance, LIMES.file, ResourceFactory.createResource(configuration.getAcceptanceFile()));
 		m.add(acceptance, LIMES.relation, createResource(m, configuration.getAcceptanceRelation()));
 
-		//6. VERIFICATION file and conditions
+		//5. VERIFICATION file and conditions
 		Resource review = ResourceFactory.createResource(uri + "_review");
 		m.add(s, LIMES.hasReview, review);
 		m.add(review, RDF.type, LIMES.Review);
@@ -125,13 +121,13 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
 		m.add(review, LIMES.file, ResourceFactory.createResource(configuration.getVerificationFile()));
 		m.add(review, LIMES.relation, createResource(m, configuration.getVerificationRelation()));
 
-		//7. EXECUTION plan
+		//6. EXECUTION plan
 		m.add(s, LIMES.executionPlan, configuration.getExecutionPlan());
 
-		//8. TILING if necessary 
+		//7. TILING if necessary 
 		m.add(s, LIMES.granularity, ResourceFactory.createTypedLiteral(configuration.getGranularity()));
 
-		//9. OUTPUT format
+		//8. OUTPUT format
 		if(configuration.getOutputFormat() != null){
 			m.add(s, LIMES.outputFormat, configuration.getOutputFormat());
 		}

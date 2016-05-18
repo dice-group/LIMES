@@ -65,37 +65,32 @@ public class RDFConfigurationReader implements IConfigurationReader{
 		Resource metric = (Resource) getObject(specsSubject, LIMES.hasMetric, true);
 		configuration.setMetricExpression(getObject(metric, LIMES.expression, true).toString());
 		
-		//4. Number of exemplars
-		RDFNode ex = getObject(specsSubject, LIMES.exemplars, false);
-		if(ex != null){
-			configuration.setExemplars(Integer.parseInt(ex.toString()));
-		}
 
-		//5. ACCEPTANCE file and conditions
+		//4. ACCEPTANCE file and conditions
 		Resource acceptance = (Resource) getObject(specsSubject, LIMES.hasAcceptance, true);
 		configuration.setAcceptanceThreshold(parseDouble(getObject(acceptance, LIMES.threshold, true).toString()));
 		configuration.setAcceptanceFile(getObject(acceptance, LIMES.file, true).toString());
 		configuration.setAcceptanceRelation(getObject(acceptance, LIMES.relation, true).toString());
 
-		//6. VERIFICATION file and conditions
+		//5. VERIFICATION file and conditions
 		Resource review = (Resource) getObject(specsSubject, LIMES.hasReview, true);
 		configuration.setVerificationThreshold(parseDouble(getObject(review, LIMES.threshold, true).toString()));
 		configuration.setVerificationFile(getObject(review, LIMES.file, true).toString());
 		configuration.setVerificationRelation(getObject(review, LIMES.relation, true).toString());
 
-		//7. EXECUTION plan
+		//6. EXECUTION plan
 		RDFNode execution = getObject(specsSubject, LIMES.executionPlan, false);
 		if(execution != null){
 			configuration.setExecutionPlan(execution.toString());
 		}
 
-		//8. TILING if necessary 
+		//7. TILING if necessary 
 		RDFNode g = getObject(specsSubject, LIMES.granularity, false);
 		if(g != null){
 			configuration.setGranularity(Integer.parseInt(g.toString()));
 		}
 
-		//9. OUTPUT format
+		//8. OUTPUT format
 		RDFNode output = getObject(specsSubject, LIMES.outputFormat, false);
 		if(output != null){
 			configuration.setOutputFormat(output.toString());

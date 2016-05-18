@@ -34,7 +34,6 @@ public class XMLConfigurationReader implements IConfigurationReader{
 
 	// Constants
 	private static final String FILE 			= "FILE";
-	private static final String REGULATORTYPE 	= "REGULATORTYPE";
 	private static final String GRANULARITY 	= "GRANULARITY";
 	private static final String TARGET 			= "TARGET";
 	private static final String LABEL 			= "LABEL";
@@ -44,7 +43,6 @@ public class XMLConfigurationReader implements IConfigurationReader{
 	private static final String ACCEPTANCE 		= "ACCEPTANCE";
 	private static final String EXECUTION 		= "EXECUTION";
 	private static final String OUTPUT 			= "OUTPUT";
-	private static final String EXEMPLARS 		= "EXEMPLARS";
 	private static final String TYPE 			= "TYPE";
 	private static final String VAR 			= "VAR";
 	private static final String ID 				= "ID";
@@ -239,13 +237,8 @@ public class XMLConfigurationReader implements IConfigurationReader{
 				//3.METRIC
 				list = xmlDocument.getElementsByTagName(METRIC);
 				configuration.setMetricExpression(getText(list.item(0)));
-				//4. Number of exemplars
-				list = xmlDocument.getElementsByTagName(EXEMPLARS);
-				if (list.getLength() > 0) {
-					configuration.setExemplars(Integer.parseInt(getText(list.item(0))));
-					//                   logger.info("Computation will be carried out with " + exemplars + " exemplars");
-				}
-				//5. ACCEPTANCE file and conditions
+				
+				//4. ACCEPTANCE file and conditions
 				list = xmlDocument.getElementsByTagName(ACCEPTANCE);
 				children = list.item(0).getChildNodes();
 				for (int i = 0; i < children.getLength(); i++) {
@@ -262,7 +255,7 @@ public class XMLConfigurationReader implements IConfigurationReader{
 				//                logger.info("Instances with similarity beyond " + acceptanceThreshold + " "
 						//                        + "will be written in " + acceptanceFile + " and linked with " + acceptanceRelation);
 
-				//6. VERIFICATION file and conditions
+				//5. VERIFICATION file and conditions
 				list = xmlDocument.getElementsByTagName(REVIEW);
 				children = list.item(0).getChildNodes();
 				for (int i = 0; i < children.getLength(); i++) {
@@ -277,7 +270,7 @@ public class XMLConfigurationReader implements IConfigurationReader{
 					}
 				}
 
-				//7. EXECUTION plan
+				//6. EXECUTION plan
 				if (list.getLength() > 0) {
 					list = xmlDocument.getElementsByTagName(EXECUTION);
 					children = list.item(0).getChildNodes();
@@ -286,7 +279,7 @@ public class XMLConfigurationReader implements IConfigurationReader{
 				} else {
 					//                    logger.info("Linking will be carried out by using the default execution plan");
 				}
-				//8. TILING if necessary
+				//7. TILING if necessary
 				list = xmlDocument.getElementsByTagName(GRANULARITY);
 				if (list.getLength() > 0) {
 					children = list.item(0).getChildNodes();
@@ -296,7 +289,7 @@ public class XMLConfigurationReader implements IConfigurationReader{
 					//                  logger.info("Linking will be carried by using the default granularity.");
 				}
 
-				//9. OUTPUT format
+				//8. OUTPUT format
 				list = xmlDocument.getElementsByTagName(OUTPUT);
 				if (list.getLength() > 0) {
 					children = list.item(0).getChildNodes();
@@ -308,23 +301,7 @@ public class XMLConfigurationReader implements IConfigurationReader{
 				//                logger.info("Instances with similarity between " + verificationThreshold + " "
 				//                        + "and " + acceptanceThreshold + " will be written in " + verificationFile
 				//                        + " and linked with " + verificationRelation);
-				//10. Guaranteed Recall
-				list = xmlDocument.getElementsByTagName("RECALL");
-				if (list.getLength() > 0) {
-					children = list.item(0).getChildNodes();
-
-					for (int i = 0; i < children.getLength(); i++) {
-						Node child = children.item(i);
-						if (child.getNodeName().equals(REGULATORTYPE)) {
-							configuration.setRecallRegulator(getText(child));
-						} else if (child.getNodeName().equals(THRESHOLD)) {
-							configuration.setRecallThreshold(Double.parseDouble(getText(child)));
-						}
-
-					}
-				} else {
-					//                  logger.info("Linking will be carried by using the default granularity.");
-				}
+				
 
 			}
 		} catch (Exception e) {

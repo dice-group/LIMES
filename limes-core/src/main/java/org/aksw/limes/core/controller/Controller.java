@@ -140,7 +140,8 @@ public class Controller {
 			assert planner != null;
 
 			// 5. Execution
-			ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache,
+			ExecutionEngineType executionEngineType = ExecutionEngineFactory.getExecutionEngineType(config.getExecutionPlan().toLowerCase());
+			ExecutionEngine engine = ExecutionEngineFactory.getEngine(executionEngineType, sourceCache, targetCache,
 					config.getSourceInfo().getVar(), config.getTargetInfo().getVar());
 			assert engine != null;
 			results = engine.execute(rwLs, planner);
