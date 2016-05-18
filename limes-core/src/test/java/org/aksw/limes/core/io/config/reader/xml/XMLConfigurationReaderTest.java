@@ -67,13 +67,10 @@ public class XMLConfigurationReaderTest {
 				"lgd_relaybox_verynear.nt",			//acceptanceFile
 				0.5,								//verificationThreshold
 				"lgd_relaybox_near.nt",				//verificationFile
-				-1,									//exemplars
 				prefixes,							//prefixes
 				"TAB",								//outputFormat
 				"Simple",							//executionPlan
-				2,									//granularity
-				null,								//recallRegulator
-				0.0									//recallThreshold
+				2									//granularity
 				);
 
 		XMLConfigurationReader c = new XMLConfigurationReader();
