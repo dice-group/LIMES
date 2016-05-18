@@ -1,19 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.aksw.limes.core.measures.mapper.string;
-
-import java.lang.String;
-import java.util.*;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
-import org.aksw.limes.core.measures.mapper.IMapper.Language;
+import org.aksw.limes.core.measures.mapper.PropertyFetcher;
 import org.apache.log4j.Logger;
+
+import java.util.*;
 
 /**
  *
@@ -21,130 +15,77 @@ import org.apache.log4j.Logger;
  */
 public class ExactMatchMapper extends Mapper {
 
-    static Logger logger = Logger.getLogger(ExactMatchMapper.class.getName());
+	static Logger logger = Logger.getLogger(ExactMatchMapper.class.getName());
 
-    /**
-     * Computes a mapping between a source and a target.
-     *
-     * @param source
-     *            Source cache
-     * @param target
-     *            Target cache
-     * @param sourceVar
-     *            Variable for the source dataset
-     * @param targetVar
-     *            Variable for the target dataset
-     * @param expression
-     *            Expression to process.
-     * @param threshold
-     *            Similarity threshold
-     * @return A mapping which contains links between the source instances and
-     *         the target instances
-     */
-    @Override
-    public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-	    double threshold) {
+	/**
+	 * Computes a mapping between a source and a target.
+	 *
+	 * @param source
+	 *            Source cache
+	 * @param target
+	 *            Target cache
+	 * @param sourceVar
+	 *            Variable for the source dataset
+	 * @param targetVar
+	 *            Variable for the target dataset
+	 * @param expression
+	 *            Expression to process.
+	 * @param threshold
+	 *            Similarity threshold
+	 * @return A mapping which contains links between the source instances and
+	 *         the target instances
+	 */
+	@Override
+	public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+							  double threshold) {
 
-	logger.info("Starting ExactMatchMapper");
-	String property1 = null, property2 = null;
-	// get property labels
-	Parser p = new Parser(expression, threshold);
-
-	// get first property label
-	String term1 = "?" + p.getTerm1();
-	String term2 = "?" + p.getTerm2();
-	String split[];
-	String var;
-
-	if (term1.contains(".")) {
-	    split = term1.split("\\.");
-	    var = split[0];
-	    if (var.equals(sourceVar)) {
-		property1 = split[1];
-	    } else {
-		property2 = split[1];
-	    }
-	} else {
-	    property1 = term1;
+		logger.info("Starting ExactMatchMapper");
+		List<String> properties = PropertyFetcher.getProperties(expression, threshold);
+        // if no properties then terminate
+        if (properties.get(0) == null || properties.get(1) == null) {
+            logger.fatal("Property values could not be read. Exiting");
+            System.exit(1);
+        }
+		Map<String, Set<String>> sourceIndex = getValueToUriMap(source, properties.get(0));
+		Map<String, Set<String>> targetIndex = getValueToUriMap(target, properties.get(1));
+		Mapping m = new MemoryMapping();
+        boolean swapped = sourceIndex.keySet().size() > targetIndex.keySet().size();
+        (swapped ? sourceIndex : targetIndex).keySet().stream().filter(targetIndex::containsKey).forEach(value -> {
+            for (String sourceUri : (swapped ? sourceIndex : targetIndex).get(value)) {
+                for (String targetUri : (swapped ? targetIndex : sourceIndex).get(value)) {
+                    m.add(sourceUri, targetUri, 1d);
+                }
+            }
+        });
+        return m;
 	}
 
-	// get second property label
-	if (term2.contains(".")) {
-	    split = term2.split("\\.");
-	    var = split[0];
-	    if (var.equals(sourceVar)) {
-		property1 = split[1];
-	    } else {
-		property2 = split[1];
-	    }
-	} else {
-	    property2 = term2;
-	}
-
-	// if no properties then terminate
-	if (property1 == null || property2 == null) {
-	    logger.fatal("Property values could not be read. Exiting");
-	    System.exit(1);
-	}
-
-	if (!p.isAtomic()) {
-	    logger.fatal("Mappers can only deal with atomic expression");
-	    logger.fatal("Expression " + expression + " was given to a mapper to process");
-	    System.exit(1);
-	}
-
-	Map<String, Set<String>> sourceIndex = index(source, property1);
-	Map<String, Set<String>> targetIndex = index(target, property2);
-
-	Mapping m = new MemoryMapping();
-
-	if (sourceIndex.keySet().size() < targetIndex.keySet().size()) {
-	    for (String value : sourceIndex.keySet()) {
-		if (targetIndex.containsKey(value)) {
-		    for (String sourceUri : sourceIndex.get(value)) {
-			for (String targetUri : targetIndex.get(value)) {
-			    m.add(sourceUri, targetUri, 1d);
+	public Map<String, Set<String>> index(Cache c, String property) {
+		Map<String, Set<String>> index = new HashMap<String, Set<String>>();
+		for (String uri : c.getAllUris()) {
+			TreeSet<String> values = c.getInstance(uri).getProperty(property);
+			for (String v : values) {
+				if (!index.containsKey(v)) {
+					index.put(v, new HashSet<>());
+				}
+				index.get(v).add(uri);
 			}
-		    }
 		}
-	    }
-	} else {
-	    for (String value : targetIndex.keySet()) {
-		if (sourceIndex.containsKey(value)) {
-		    for (String sourceUri : sourceIndex.get(value)) {
-			for (String targetUri : targetIndex.get(value)) {
-			    m.add(sourceUri, targetUri, 1d);
-			}
-		    }
-		}
-	    }
+		return index;
 	}
-	return m;
-    }
 
-    public Map<String, Set<String>> index(Cache c, String property) {
-	Map<String, Set<String>> index = new HashMap<String, Set<String>>();
-	for (String uri : c.getAllUris()) {
-	    TreeSet<String> values = c.getInstance(uri).getProperty(property);
-	    for (String v : values) {
-		if (!index.containsKey(v)) {
-		    index.put(v, new HashSet<String>());
-		}
-		index.get(v).add(uri);
-	    }
+	@Override
+	public String getName() {
+		return "exactMatch";
 	}
-	return index;
-    }
-    @Override
-    public String getName() {
-	return "exactMatch";
-    }
-    @Override
-    public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
-	return 1000d;
-    }
-    @Override
-    public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
-	return 1000d;
-    }
+
+	@Override
+	public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
+		return 1000d;
+	}
+
+	@Override
+	public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
+		return 1000d;
+	}
 }
