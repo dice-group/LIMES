@@ -28,7 +28,7 @@ import com.hp.hpl.jena.vocabulary.RDFS;
 public class RDFConfigurationReader implements IConfigurationReader{
 	private static final Logger logger = Logger.getLogger(RDFConfigurationReader.class.getName());
 
-	
+
 	/**
 	 * @param inputFile path to RDF configuration file
 	 * @return A filled Configuration object from the inputFile 
@@ -64,7 +64,6 @@ public class RDFConfigurationReader implements IConfigurationReader{
 		//3.METRIC
 		Resource metric = (Resource) getObject(specsSubject, LIMES.hasMetric, true);
 		configuration.setMetricExpression(getObject(metric, LIMES.expression, true).toString());
-		
 
 		//4. ACCEPTANCE file and conditions
 		Resource acceptance = (Resource) getObject(specsSubject, LIMES.hasAcceptance, true);
@@ -95,9 +94,24 @@ public class RDFConfigurationReader implements IConfigurationReader{
 		if(output != null){
 			configuration.setOutputFormat(output.toString());
 		}
+
+		//9. ML parameters
+		if(configModel.contains(specsSubject, RDF.type, LIMES.MLParameter)) {
+			readMLParameters();
+		}
 		return configuration;
 	}
-	
+
+	private void readMLParameters() {
+		StmtIterator parametersItr = configModel.listStatements(null, RDF.type, LIMES.MLParameter);
+		while(parametersItr.hasNext()) {
+			Resource ParameterSubject = parametersItr.next().getSubject();
+			RDFNode mlParameterName = getObject(ParameterSubject, LIMES.mlParameterName, false);
+			RDFNode mlParametervalue =getObject(ParameterSubject, LIMES.mlParameterValue, false);
+			configuration.addMlParameter(mlParameterName.toString(), mlParametervalue.toString());
+		}
+	}
+
 	private static Model configModel = ModelFactory.createDefaultModel();
 	private Resource specsSubject;
 
@@ -147,7 +161,7 @@ public class RDFConfigurationReader implements IConfigurationReader{
 		}
 		kbinfo.setPrefixes(configuration.getPrefixes());
 	}
-	
+
 	/**
 	 * @param s
 	 * @return
@@ -234,7 +248,6 @@ public class RDFConfigurationReader implements IConfigurationReader{
 	{
 		long startTime = System.currentTimeMillis();
 		Model model=ModelFactory.createDefaultModel();
-		String tmp =System.getProperty("user.dir")+"/"+fileNameOrUri;
 		java.io.InputStream in = FileManager.get().open(System.getProperty("user.dir")+"/"+fileNameOrUri );
 		if (in == null) {
 			throw new IllegalArgumentException(fileNameOrUri + " not found");//resources/datasets/persons1.xml

@@ -38,16 +38,16 @@ public class CompleteWombat extends Wombat {
 	protected static Logger logger = Logger.getLogger(CompleteWombat.class.getName());
 
 	
-	private int iterationNr = 0;
-	private Map<String, Mapping>  diffs;
-	private RefinementNode bestSolution = null;
-	public static boolean usePruning = false;
+	protected int iterationNr = 0;
+	protected Map<String, Mapping>  diffs;
+	protected RefinementNode bestSolution = null;
+	protected static boolean usePruning = false;
 
 	// for evaluation
-	public int pruneNodeCount = 0;
-	public long pruningTime = 0;
+	protected int pruneNodeCount = 0;
+	protected long pruningTime = 0;
 
-	RefinementNode bestSolutionNode = null; 
+	protected RefinementNode bestSolutionNode = null; 
 
 	/**
 	 * Constructor
@@ -93,8 +93,7 @@ public class CompleteWombat extends Wombat {
 		logger.info("Most promising node: " + mostPromisingNode.getValue());
 		iterationNr ++;
 		while((mostPromisingNode.getValue().fMeasure) < maxFitnessThreshold	 
-				//				&& (root.size() - pruneNodeCount) <= MAX_TREE_SIZE
-				//				&& root.size() <= MAX_TREE_SIZE
+				&& (refinementTreeRoot.size() - pruneNodeCount) <= maxRefineTreeSize
 				&& iterationNr <= maxIterationNumber)
 		{
 			System.out.println("Running iteration number " + iterationNr);

@@ -29,30 +29,22 @@ import org.apache.log4j.Logger;
  */
 public class WeakWombat extends Wombat {
 	protected static final String ALGORITHM_NAME = "Weak Wombat";
-	static Logger logger = Logger.getLogger(WeakWombat.class.getName());
+	private static Logger logger = Logger.getLogger(WeakWombat.class.getName());
 
-	public double penaltyWeight = 0.5d;
+	protected double penaltyWeight = 0.5d;
 
-	public static long CHILDREN_PENALTY_WEIGHT = 1;
-	public static long COMPLEXITY_PENALTY_WEIGHT = 1;
-	public boolean STRICT = true;
-	public double MIN_THRESHOLD = 0.4;
-	public double learningRate = 0.9;
+	protected static long CHILDREN_PENALTY_WEIGHT = 1;
+	protected static long COMPLEXITY_PENALTY_WEIGHT = 1;
+	protected boolean STRICT = true;
 
-	Set<String> measures;
-	Mapping reference;
+	protected Set<String> measures;
+	protected Mapping reference;
 
-	public Tree<RefinementNode> root = null;
-	private List<ExtendedClassifier> classifiers = null;
-	private int iterationNr = 0;
+	protected List<ExtendedClassifier> classifiers = null;
+	protected int iterationNr = 0;
 
 	private RefinementNode bestSolution;
 
-
-
-	public enum Operator {
-		AND, DIFF
-	};
 
 	/**
 	 * Constructor
@@ -103,22 +95,22 @@ public class WeakWombat extends Wombat {
 	public RefinementNode getBestSolution(){
 		classifiers = getAllInitialClassifiers();
 		createRefinementTreeRoot();
-		Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(root, penaltyWeight);
+		Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
 		logger.info("Most promising node: " + mostPromisingNode.getValue());
 		iterationNr ++;
 		while((mostPromisingNode.getValue().fMeasure) < maxFitnessThreshold	 
-				&& root.size() <= maxRefineTreeSize
+				&& refinementTreeRoot.size() <= maxRefineTreeSize
 				&& iterationNr <= maxIterationNumber)
 		{
 			iterationNr++;
 			mostPromisingNode = expandNode(mostPromisingNode);
-			mostPromisingNode = getMostPromisingNode(root, penaltyWeight);
+			mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
 			if(mostPromisingNode.getValue().recall == -Double.MAX_VALUE){
 				break; // no better solution can be found
 			}
 			logger.info("Most promising node: " + mostPromisingNode.getValue());
 		}
-		RefinementNode bestSolution = getMostPromisingNode(root, 0).getValue();
+		RefinementNode bestSolution = getMostPromisingNode(refinementTreeRoot, 0).getValue();
 		logger.info("Overall Best Solution: " + bestSolution);
 		return bestSolution;
 	}
@@ -131,7 +123,7 @@ public class WeakWombat extends Wombat {
 	 */
 	private void createRefinementTreeRoot(){
 		RefinementNode initialNode = new RefinementNode();
-		root = new Tree<RefinementNode>(null,initialNode, null);
+		refinementTreeRoot = new Tree<RefinementNode>(null,initialNode, null);
 		Mapping unionMapping = classifiers.get(0).mapping;
 		String unionMetricExpr =  classifiers.get(0).getMetricExpression();
 		for (int i = 1; i < classifiers.size(); i++) {
@@ -139,9 +131,9 @@ public class WeakWombat extends Wombat {
 			unionMetricExpr = "OR(" + unionMetricExpr + "," + classifiers.get(i).getMetricExpression() + ")|0";
 		}
 		RefinementNode n = new RefinementNode(unionMapping, unionMetricExpr,reference);
-		root.addChild(new Tree<RefinementNode>(root,n, null));
+		refinementTreeRoot.addChild(new Tree<RefinementNode>(refinementTreeRoot,n, null));
 		if(verbose){
-			root.print();
+			refinementTreeRoot.print();
 		}
 	}
 
@@ -161,7 +153,7 @@ public class WeakWombat extends Wombat {
 				if(node.getValue().metricExpression != c.getMetricExpression()){ // do not create the same metricExpression again 
 					if(op.equals(Operator.AND)){
 						map = MappingOperations.intersection(node.getValue().map, c.mapping);
-					}else if(op.equals(Operator.DIFF)){
+					}else if(op.equals(Operator.MINUS)){
 						map = MappingOperations.difference(node.getValue().map, c.mapping);
 					}
 					String metricExpr = op + "(" + node.getValue().metricExpression + "," + c.getMetricExpression() +")|0";
@@ -171,7 +163,7 @@ public class WeakWombat extends Wombat {
 			}
 		}
 		if(verbose){
-			root.print();
+			refinementTreeRoot.print();
 		}
 		return node;
 	}
@@ -219,9 +211,9 @@ public class WeakWombat extends Wombat {
 	 */
 	private double computePenalty(Tree<RefinementNode> promesyChild) {
 		long childrenCount = promesyChild.size() - 1;
-		double childrenPenalty = (CHILDREN_PENALTY_WEIGHT * childrenCount) / root.size();
+		double childrenPenalty = (CHILDREN_PENALTY_WEIGHT * childrenCount) / refinementTreeRoot.size();
 		long level = promesyChild.level();
-		double complexityPenalty = (COMPLEXITY_PENALTY_WEIGHT * level) / root.depth();
+		double complexityPenalty = (COMPLEXITY_PENALTY_WEIGHT * level) / refinementTreeRoot.depth();
 		return  childrenPenalty + complexityPenalty;
 	}
 

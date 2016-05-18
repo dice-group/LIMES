@@ -33,7 +33,6 @@ public class UnsupervisedSimpleWombat extends Wombat {
 	public boolean verbose = false;
 	RefinementNode bestSolution = null; 
 
-	public Tree<RefinementNode> root = null;
 	public List<ExtendedClassifier> classifiers = null;
 	protected int iterationNr = 0;
 
@@ -79,22 +78,22 @@ public class UnsupervisedSimpleWombat extends Wombat {
 	public RefinementNode getBestSolution(){
 		classifiers = getAllInitialClassifiers();
 		createRefinementTreeRoot();
-		Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(root, penaltyWeight);
+		Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
 		logger.info("Most promising node: " + mostPromisingNode.getValue());
 		iterationNr ++;
 		while((mostPromisingNode.getValue().fMeasure) < maxFitnessThreshold	 
-				&& root.size() <= maxRefineTreeSize
+				&& refinementTreeRoot.size() <= maxRefineTreeSize
 				&& iterationNr <= maxIterationNumber)
 		{
 			iterationNr++;
 			mostPromisingNode = expandNode(mostPromisingNode);
-			mostPromisingNode = getMostPromisingNode(root, penaltyWeight);
+			mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
 			if(mostPromisingNode.getValue().fMeasure == -Double.MAX_VALUE){
 				break; // no better solution can be found
 			}
 			logger.info("Most promising node: " + mostPromisingNode.getValue());
 		}
-		RefinementNode bestSolution = getMostPromisingNode(root, 0).getValue();
+		RefinementNode bestSolution = getMostPromisingNode(refinementTreeRoot, 0).getValue();
 		logger.info("Overall Best Solution: " + bestSolution);
 		return bestSolution;
 	}
@@ -108,13 +107,13 @@ public class UnsupervisedSimpleWombat extends Wombat {
 	 */
 	protected void createRefinementTreeRoot(){
 		RefinementNode initialNode = new RefinementNode(-Double.MAX_VALUE, MappingFactory.createMapping(MappingType.DEFAULT), "");
-		root = new Tree<RefinementNode>(null,initialNode, null);
+		refinementTreeRoot = new Tree<RefinementNode>(null,initialNode, null);
 		for(ExtendedClassifier c : classifiers){
 			RefinementNode n = createNode(c.getMetricExpression(),c.mapping,c.fMeasure);
-			root.addChild(new Tree<RefinementNode>(root,n, null));
+			refinementTreeRoot.addChild(new Tree<RefinementNode>(refinementTreeRoot,n, null));
 		}
 		if(verbose){
-			root.print();
+			refinementTreeRoot.print();
 		}
 	}
 
@@ -147,7 +146,7 @@ public class UnsupervisedSimpleWombat extends Wombat {
 			}
 		}
 		if(verbose){
-			root.print();
+			refinementTreeRoot.print();
 		}
 		return node;
 	}
@@ -193,9 +192,9 @@ public class UnsupervisedSimpleWombat extends Wombat {
 	 */
 	private double computePenality(Tree<RefinementNode> promesyChild) {
 		long childrenCount = promesyChild.size() - 1;
-		double childrenPenalty = (CHILDREN_PENALTY_WEIGHT * childrenCount) / root.size();
+		double childrenPenalty = (CHILDREN_PENALTY_WEIGHT * childrenCount) / refinementTreeRoot.size();
 		long level = promesyChild.level();
-		double complextyPenalty = (COMPLEXITY_PENALTY_WEIGHT * level) / root.depth();
+		double complextyPenalty = (COMPLEXITY_PENALTY_WEIGHT * level) / refinementTreeRoot.depth();
 		return  childrenPenalty + complextyPenalty;
 	}
 	
