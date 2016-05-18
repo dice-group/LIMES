@@ -46,7 +46,7 @@ public abstract class Wombat extends MLAlgorithm{
 	
 
 	
-	protected Set<String> wombatParameters = new HashSet<>(); 
+	protected Set<String> wombatParameterNames = new HashSet<>(); 
 
 	static Logger logger = Logger.getLogger(Wombat.class.getName());
 	
@@ -63,7 +63,7 @@ public abstract class Wombat extends MLAlgorithm{
 	protected static int maxIterationTimeInMin 							= 20;
 	
 	protected static final String PARAMETER_EXECUTION_TIME_IN_M			= "max execution time in minutes";
-	protected static int maxExecutionInMin 								= 600;
+	protected static int maxExecutionTimeInMin							= 600;
 	
 	protected static final String PARAMETER_MAX_FITNESS_THRESHOLD		= "max fitness threshold";
 	protected static double maxFitnessThreshold		= 1;
@@ -89,6 +89,13 @@ public abstract class Wombat extends MLAlgorithm{
 	
 	public Wombat(Cache sourceCache, Cache targetCache, Configuration configuration) {
 		super(sourceCache, targetCache, configuration);
+		wombatParameterNames.add(PARAMETER_MAX_REFINEMENT_TREE_SIZE);
+		wombatParameterNames.add(PARAMETER_MAX_ITERATIONS_NUMBER);
+		wombatParameterNames.add(PARAMETER_MAX_ITERATION_TIME_IN_M);
+		wombatParameterNames.add(PARAMETER_EXECUTION_TIME_IN_M);
+		wombatParameterNames.add(PARAMETER_MAX_FITNESS_THRESHOLD);
+		wombatParameterNames.add(PARAMETER_MIN_PROPERTY_COVERAGE);
+		wombatParameterNames.add(PARAMETER_PROPERTY_LEARNING_RATE);
 	}
 	
 	
@@ -217,6 +224,6 @@ public abstract class Wombat extends MLAlgorithm{
 	
 	@Override
 	public Set<String> parameters() {	
-		return wombatParameters;
+		return wombatParameterNames;
 	}
 }

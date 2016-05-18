@@ -36,13 +36,7 @@ public class Configuration implements IConfiguration{
 	protected Map<String, String> mlParameters 		= new HashMap<String, String>();;
 
 
-	public Map<String, String> getMlParameters() {
-		return mlParameters;
-	}
 
-	public void addMlParameter(String mlParameterName, String mlParameterValue) {
-		this.mlParameters.put(mlParameterName, mlParameterValue);
-	}
 
 	public Configuration(){
 	}
@@ -204,6 +198,22 @@ public class Configuration implements IConfiguration{
 
 	public void setRecallThreshold(double recallThreshold) {
 		this.recallThreshold = recallThreshold;
+	}
+	
+	public void addMlParameters(String mlParameterName, String mlParameterValue) {
+		this.mlParameters.put(mlParameterName, mlParameterValue);
+	}
+	
+	public void setMlParameters(Map<String, String> mlParameters) {
+		this.mlParameters = mlParameters;
+	}
+
+	public Map<String, String> getMlParameters() {
+		return mlParameters;
+	}
+
+	public void addMlParameter(String mlParameterName, String mlParameterValue) {
+		this.mlParameters.put(mlParameterName, mlParameterValue);
 	}
 
 	@Override

@@ -5,9 +5,7 @@
 package org.aksw.limes.core.ml.algorithm.wombat;
 
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.io.cache.Cache;
@@ -39,8 +37,11 @@ public class SimplWombat extends Wombat {
 
 	public double penaltyWeight = 0.5d;
 
-	protected static long CHILDREN_PENALTY_WEIGHT = 1;
-	protected static long COMPLEXITY_PENALTY_WEIGHT = 1;
+	protected static final String PARAMETER_CHILDREN_PENALTY_WEIT	= "children penalty weit";
+	protected static long childrenPenaltyWeit 						= 1;
+	
+	protected static final String PARAMETER_COMPLEXITY_PENALTY_WEIT	= "complexity penalty weit";
+	protected static long complexityPenaltyWeit 					= 1;
 
 	RefinementNode bestSolutionNode = null; 
 
@@ -60,6 +61,8 @@ public class SimplWombat extends Wombat {
 	public SimplWombat(Cache sourceCache, Cache targetChache, Mapping examples, Configuration configuration) {
 		super(sourceCache, targetChache, configuration);
 		reference = examples;
+		wombatParameterNames.add(PARAMETER_CHILDREN_PENALTY_WEIT);
+		wombatParameterNames.add(PARAMETER_COMPLEXITY_PENALTY_WEIT);
 	}
 
 	/**
@@ -183,9 +186,9 @@ public class SimplWombat extends Wombat {
 	 */
 	private double computePenalty(Tree<RefinementNode> promesyChild) {
 		long childrenCount = promesyChild.size() - 1;
-		double childrenPenalty = (CHILDREN_PENALTY_WEIGHT * childrenCount) / refinementTreeRoot.size();
+		double childrenPenalty = (childrenPenaltyWeit * childrenCount) / refinementTreeRoot.size();
 		long level = promesyChild.level();
-		double complexityPenalty = (COMPLEXITY_PENALTY_WEIGHT * level) / refinementTreeRoot.depth();
+		double complexityPenalty = (complexityPenaltyWeit * level) / refinementTreeRoot.depth();
 		return  childrenPenalty + complexityPenalty;
 	}
 

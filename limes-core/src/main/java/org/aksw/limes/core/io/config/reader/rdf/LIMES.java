@@ -26,33 +26,35 @@ public class LIMES {
 
 	public static String getURI(){ return uri;	}
 
-	public static final Property hasSource		= property("hasSource");
-	public static final Property hasTarget		= property("hasTarget");
-	public static final Property hasMetric		= property("hasMetric");
-	public static final Property hasAcceptance	= property("hasAcceptance");
-	public static final Property hasReview		= property("hasReview");
-	public static final Property endPoint		= property("endPoint");
-	public static final Property variable		= property("variable");
-	public static final Property pageSize		= property("pageSize");
-	public static final Property restriction 	= property("restriction");
-	public static final Property property 		= property("property");
-	public static final Property expression 	= property("expression");
-	public static final Property threshold 		= property("threshold");
-	public static final Property file 			= property("file");
-	public static final Property relation 		= property("relation");
-	public static final Property graph 			= property("graph");
-	public static final Property type 			= property("type");
-	public static final Property exemplars 		= property("examplars");
-	public static final Property executionPlan 	= property("executionPlan");
-	public static final Property granularity 	= property("granularity");
-	public static final Property outputFormat 	= property("outputFormat");
+	public static final Property hasSource			= property("hasSource");
+	public static final Property hasTarget			= property("hasTarget");
+	public static final Property hasMetric			= property("hasMetric");
+	public static final Property hasAcceptance		= property("hasAcceptance");
+	public static final Property hasReview			= property("hasReview");
+	public static final Property endPoint			= property("endPoint");
+	public static final Property variable			= property("variable");
+	public static final Property pageSize			= property("pageSize");
+	public static final Property restriction 		= property("restriction");
+	public static final Property property 			= property("property");
+	public static final Property expression		 	= property("expression");
+	public static final Property threshold 			= property("threshold");
+	public static final Property file 				= property("file");
+	public static final Property relation 			= property("relation");
+	public static final Property graph 				= property("graph");
+	public static final Property type 				= property("type");
+	public static final Property exemplars 			= property("examplars");
+	public static final Property executionPlan 		= property("executionPlan");
+	public static final Property granularity 		= property("granularity");
+	public static final Property outputFormat 		= property("outputFormat");
+	public static final Property mlParameterName	= property("mlParameterName");
+	public static final Property mlParameterValue	= property("mlParameterValue");
 	
-	public static final Resource LimesSpecs 	= resource( "LimesSpecs" );
-	public static final Resource SourceDataset 	= resource( "SourceDataset" );
-	public static final Resource TargetDataset 	= resource( "TargetDataset" );
-	public static final Resource Metric 		= resource( "Metric" );
-	public static final Resource Acceptance 	= resource( "Acceptance" );
-	public static final Resource Review 		= resource( "Review" );
-	
+	public static final Resource LimesSpecs 		= resource("LimesSpecs");
+	public static final Resource SourceDataset 		= resource("SourceDataset");
+	public static final Resource TargetDataset 		= resource("TargetDataset");
+	public static final Resource Metric 			= resource("Metric");
+	public static final Resource Acceptance 		= resource("Acceptance");
+	public static final Resource Review 			= resource("Review");
+	public static final Resource MLParameters		= resource("MLParameters");
 	
 }
