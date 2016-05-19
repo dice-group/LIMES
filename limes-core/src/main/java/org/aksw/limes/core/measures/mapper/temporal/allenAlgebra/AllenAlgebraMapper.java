@@ -1,16 +1,9 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra;
 
 import java.util.ArrayList;
-import java.util.TreeMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.mapper.Mapper;
 
 public abstract class AllenAlgebraMapper extends Mapper implements IAllenAlgebraMapper {

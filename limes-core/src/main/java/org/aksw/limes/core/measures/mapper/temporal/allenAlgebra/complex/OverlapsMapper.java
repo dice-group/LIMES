@@ -42,7 +42,6 @@ public class OverlapsMapper extends AllenAlgebraMapper {
 	TreeMap<String, Set<String>> mapEB1 = maps.get(3);
 
 	for (Map.Entry<String, Set<String>> entryBB1 : mapBB1.entrySet()) {
-	    long start = System.currentTimeMillis();
 	    // get targets from EB1
 	    String instanceBB1 = entryBB1.getKey();
 	    Set<String> setBB1 = entryBB1.getValue();
