@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
 import algorithms.StoppUhr;
 import algorithms.Token;
 
+import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
@@ -249,7 +250,13 @@ public class PPJoinPlusPlus extends Mapper {
 		} else {
 		}
 
-		measure = (IStringMeasure) MeasureFactory.getMeasure(p.getOperator());
+		try {
+		    measure = (IStringMeasure) MeasureFactory.getMeasure(p.getOperator());
+		} catch (InvalidMeasureException e) {
+		    e.printStackTrace();
+		    System.err.println("Exiting..");
+		    System.exit(1);
+		}
 		// logger.info("Beginninng comparison per se");
 		if (measure != null) {
 			// logger.info("Using measure " + measure.getName());

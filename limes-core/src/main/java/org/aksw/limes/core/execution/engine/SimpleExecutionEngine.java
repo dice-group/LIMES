@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.engine.filter.LinearFilter;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
@@ -137,10 +138,16 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     public Mapping executeRun(Instruction inst) {
 	double threshold = Double.parseDouble(inst.getThreshold());
 	// generate correct mapper
-	IMapper mapper = MeasureFactory.getMapper(inst.getMeasureExpression());
-	if (mapper != null)
+	IMapper mapper;
+	try {
+	    mapper = MeasureFactory.getMapper(inst.getMeasureExpression());
 	    return mapper.getMapping(source, target, sourceVariable, targetVariable, inst.getMeasureExpression(),
 		    threshold);
+	} catch (InvalidMeasureException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	   
 	return new MemoryMapping();
     }
 

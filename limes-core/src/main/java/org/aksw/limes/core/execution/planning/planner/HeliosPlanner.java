@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
+import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
@@ -57,7 +58,14 @@ public class HeliosPlanner extends Planner {
      * @return runtime, estimated runtime cost of the metric expression
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
-	Mapper am = MeasureFactory.getMapper(measure);
+	Mapper am = null;
+	try {
+	    am = MeasureFactory.getMapper(measure);
+	} catch (InvalidMeasureException e) {
+	    e.printStackTrace();
+	    System.err.println("Exiting..");
+	    System.exit(1);
+	}
 	return am.getRuntimeApproximation(source.size(), target.size(), threshold, lang);
     }
 
@@ -71,7 +79,14 @@ public class HeliosPlanner extends Planner {
      * @return size, estimated size of returned mapping
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
-	Mapper am = MeasureFactory.getMapper(measure);
+	Mapper am = null;
+	try {
+	    am = MeasureFactory.getMapper(measure);
+	} catch (InvalidMeasureException e) {
+	    e.printStackTrace();
+	    System.err.println("Exiting..");
+	    System.exit(1);
+	}
 	return am.getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
     }
 
@@ -88,12 +103,15 @@ public class HeliosPlanner extends Planner {
 	double cost = 0;
 	if (measures != null) {
 	    for (String measure : measures) {
-		Measure m = MeasureFactory.getMeasure(measure);
-		if (m != null) {
-		    double tempCost = m.getRuntimeApproximation(mappingSize);
-		    if (tempCost >= 0)
-			cost += tempCost;
+		double tempCost = 0;
+		try {
+		    tempCost = MeasureFactory.getMeasure(measure).getRuntimeApproximation(mappingSize);
+		} catch (InvalidMeasureException e) {
+		    e.printStackTrace();
+		    System.err.println("Exiting..");
+		    System.exit(1);
 		}
+		cost += tempCost;
 	    }
 	}
 	return cost;

@@ -1,5 +1,6 @@
 package org.aksw.limes.core.measures.measure;
 
+import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
@@ -91,7 +92,7 @@ public class MeasureFactory {
 
     // Point-set measures
     public static final String GEO_ORTHODROMIC = "geo_orthodromic";
-    //public static final String GEO_ELLIPTIC = "geo_elliptic";
+    // public static final String GEO_ELLIPTIC = "geo_elliptic";
     public static final String GEO_HAUSDORFF = "geo_hausdorff";
     public static final String GEO_FAIR_SURJECTION = "geo_fairsurjection";
     public static final String GEO_MAX = "geo_max";
@@ -102,7 +103,7 @@ public class MeasureFactory {
     public static final String GEO_LINK = "geo_link";
     public static final String GEO_SUM_OF_MIN = "geo_sum_of_min";
     public static final String GEO_SURJECTION = "geo_surjection";
-    //public static final String GEO_QUINLAN = "geo_quinlan";
+    // public static final String GEO_QUINLAN = "geo_quinlan";
     public static final String GEO_SYMMETRIC_HAUSDORFF = "geo_symmetrichausdorff";
 
     // Temporal measures
@@ -143,9 +144,9 @@ public class MeasureFactory {
 	if (measure.startsWith(GEO_LINK)) {
 	    return MeasureType.GEO_LINK;
 	}
-	//if (measure.startsWith(GEO_QUINLAN)) {
-	//    return MeasureType.GEO_QUINLAN;
-	//}
+	// if (measure.startsWith(GEO_QUINLAN)) {
+	// return MeasureType.GEO_QUINLAN;
+	// }
 	if (measure.startsWith(GEO_SUM_OF_MIN)) {
 	    return MeasureType.GEO_SUM_OF_MIN;
 	}
@@ -192,10 +193,17 @@ public class MeasureFactory {
 	}
 	return measure;
     }
-
-    public static Measure getMeasure(String name) {
+    /**
+     * Get measure name to metric.
+     *
+     * @param measure,
+     *            name of measure
+     * @return m, the corresponding measure
+     * @throws InvalidMeasureException
+     */
+    public static Measure getMeasure(String name) throws InvalidMeasureException {
 	Measure m = null;
-	
+
 	if (name.toLowerCase().startsWith(COSINE)) {
 	    m = new CosineMeasure();
 	} else if (name.toLowerCase().startsWith(EXACTMATCH)) {
@@ -275,8 +283,7 @@ public class MeasureFactory {
 	} else if (name.toLowerCase().startsWith(TMP_EQUALS)) {
 	    m = new EqualsMeasure();
 	} else {
-	    logger.info("Unknown measure "+name+". Exiting..");
-	    System.exit(1);
+	    throw new InvalidMeasureException(name);
 	}
 	return m;
     }
@@ -287,8 +294,9 @@ public class MeasureFactory {
      * @param measure,
      *            name of measure
      * @return am, mapper corresponding to measure
+     * @throws InvalidMeasureException
      */
-    public static Mapper getMapper(String measure) {
+    public static Mapper getMapper(String measure) throws InvalidMeasureException {
 	Mapper am = null;
 
 	if (measure.toLowerCase().startsWith(COSINE)) {
@@ -370,8 +378,7 @@ public class MeasureFactory {
 	} else if (measure.toLowerCase().startsWith(TMP_EQUALS)) {
 	    am = new EqualsMapper();
 	} else {
-	    logger.info("Unknown measure "+measure+". Exiting..");
-	    System.exit(1);
+	    throw new InvalidMeasureException(measure);
 	}
 	return am;
 

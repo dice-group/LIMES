@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
@@ -83,8 +84,22 @@ public class MeasureProcessor {
 
 	Parser p = new Parser(expression, threshold);
 	if (p.isAtomic()) {
-	    Measure measure = MeasureFactory.getMeasure(p.getOperator());
-	    Mapper mapper = MeasureFactory.getMapper(p.getOperator());
+	    Measure measure = null;
+	    try {
+		measure = MeasureFactory.getMeasure(p.getOperator());
+	    } catch (InvalidMeasureException e) {
+		e.printStackTrace();
+		System.err.println("Exiting..");
+		System.exit(1);
+	    }
+	    Mapper mapper = null;
+	    try {
+		mapper = MeasureFactory.getMapper(p.getOperator());
+	    } catch (InvalidMeasureException e) {
+		e.printStackTrace();
+		System.err.println("Exiting..");
+		System.exit(1);
+	    }
 	    Cache source = new HybridCache();
 	    Cache target = new HybridCache();
 	    source.addInstance(sourceInstance);
@@ -237,7 +252,13 @@ public class MeasureProcessor {
 	List<String> measures = getMeasures(measureExpression);
 	double runtime = 0;
 	for (int i = 0; i < measures.size(); i++)
-	    runtime = runtime + MeasureFactory.getMeasure(measures.get(i)).getRuntimeApproximation(mappingSize);
+	    try {
+		runtime = runtime + MeasureFactory.getMeasure(measures.get(i)).getRuntimeApproximation(mappingSize);
+	    } catch (InvalidMeasureException e) {
+		e.printStackTrace();
+		System.err.println("Exiting..");
+		System.exit(1);
+	    }
 	return runtime;
     }
 }
