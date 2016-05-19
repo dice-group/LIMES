@@ -5,18 +5,22 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.aksw.limes.core.execution.engine.ExecutionEngine;
+import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class HeliosPlannerTest {
+public class DynamicPlannerTest {
+
     public Cache source = new MemoryCache();
     public Cache target = new MemoryCache();
 
@@ -76,79 +80,57 @@ public class HeliosPlannerTest {
     public void EmptyPlan() {
 	System.out.println("EmptyPlan");
 
-	HeliosPlanner p = new HeliosPlanner(source, target);
+	Mapping m = new MemoryMapping();
+	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
+	DynamicPlanner p = new DynamicPlanner(source, target);
 	LinkSpecification ls = new LinkSpecification();
-	NestedPlan plan = p.plan(ls);
-	assertTrue(plan.isEmpty() == true);
+
+	try {
+	    m = e.execute(ls, p);
+	} catch (Exception e1) {
+	    System.err.println("Empty input ls.");
+	}
+
+	assertTrue(m.size() == 0);
     }
 
     @Test
     public void AtomicPlan() {
 	System.out.println("AtomicPlan");
+	Mapping m = new MemoryMapping();
 
-	HeliosPlanner p = new HeliosPlanner(source, target);
+	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
+	DynamicPlanner p = new DynamicPlanner(source, target);
 	LinkSpecification ls = new LinkSpecification("jaccard(x.surname, y.surname)", 0.8);
-	NestedPlan plan = p.plan(ls);
-	assertTrue(plan.isEmpty() == false);
-	assertTrue(plan.isAtomic() == true);
+	try {
+	    m = e.execute(ls, p);
+	} catch (Exception e1) {
+	    System.err.println("Empty input ls.");
+	}
+	assertTrue(m.size() != 0);
 
 	// atomic plans have instructions lists
-	assertTrue(plan.getInstructionList().isEmpty() == false);
-	// atomic plans don't have subplans
-	assertTrue(plan.getSubPlans() == null);
-	// atomic plans don't have filteringinstructions
-	assertTrue(plan.getFilteringInstruction() == null);
+	NestedPlan plan = p.getPlans().get(ls.toString());
+	assertTrue(plan != null);
+	assertTrue(plan.isAtomic() == true);
 
     }
 
-    @Test
-    public void ComplexPlanLS() {
-	System.out.println("ComplexPlanLS");
-
-	HeliosPlanner p = new HeliosPlanner(source, target);
-	LinkSpecification ls = new LinkSpecification(
-		"AND(jaccard(x.title,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728,XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728,trigrams(x.title,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.description,y.description)|0.7728)|0.5807)",
-		0.8);
-	NestedPlan plan = p.plan(ls);
-	assertTrue(plan.isEmpty() == false);
-	assertTrue(plan.isAtomic() == false);
-
-	// atomic plans have instructions lists = the instructions lists of
-	// their subplans if any
-	assertTrue(plan.getInstructionList().isEmpty() == false);
-	assertTrue(plan.getInstructionList().size() == 8);
-
-	// atomic plans have subplans
-	assertTrue(plan.getSubPlans().isEmpty() == false);
-	// atomic plans have filteringinstructions
-	assertTrue(plan.getFilteringInstruction() != null);
-
-	CanonicalPlanner cp = new CanonicalPlanner();
-	NestedPlan plan2 = cp.plan(ls);
-
-	assertTrue(plan.equals(plan2) == false);
-    }
+    
     @Test
     public void ComplexPlanExtendedLS() {
 	System.out.println("ComplexPlanExtendedLS");
 
-	HeliosPlanner p = new HeliosPlanner(source, target);
-	ExtendedLinkSpecification ls = new ExtendedLinkSpecification(
-		"OR(jaccard(x.title,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728,XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.title,y.name)|0.6029)|0.7728,trigrams(x.title,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.description,y.description)|0.7728)|0.5807)",
+	LinkSpecification ls = new LinkSpecification(
+		"OR(jaccard(x.surname,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,trigrams(x.surname,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.description,y.description)|0.7728)|0.5807)",
 		0.8);
-	NestedPlan plan = p.plan(ls);
-	assertTrue(plan.isEmpty() == false);
-	assertTrue(plan.isAtomic() == false);
 
-	// atomic plans have instructions lists = the instructions lists of
-	// their subplans if any
-	assertTrue(plan.getInstructionList().isEmpty() == false);
-	assertTrue(plan.getInstructionList().size() > 9);
+	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
+	DynamicPlanner p = new DynamicPlanner(source, target);
+	Mapping m = e.execute(ls, p);
 
-	// atomic plans have subplans
-	assertTrue(plan.getSubPlans().isEmpty() == false);
-	// atomic plans have filteringinstructions
-	assertTrue(plan.getFilteringInstruction() != null);
+	LinkSpecification ls2 = p.normalize(ls);
+	assertTrue(p.getPlans().get(ls2.toString()) != null);
 
     }
 
@@ -156,72 +138,26 @@ public class HeliosPlannerTest {
     public void AtomicEqual() {
 	System.out.println("AtomicEqual");
 
-	HeliosPlanner p = new HeliosPlanner(source, target);
+	DynamicPlanner p = new DynamicPlanner(source, target);
 
-	LinkSpecification ls = new LinkSpecification("cosine(x.label,y.label)", 0.8);
+	LinkSpecification ls = new LinkSpecification("cosine(x.name,y.name)", 0.8);
 	System.out.println(ls.isAtomic());
 
-	NestedPlan plan = p.plan(ls);
+	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
+	Mapping m = e.execute(ls, p);
 
 	NestedPlan plan2 = new NestedPlan();
-	Instruction run1 = new Instruction(Command.RUN, "cosine(x.label,y.label)", "0.8", -1, -1, 0);
+	Instruction run1 = new Instruction(Command.RUN, "cosine(x.name,y.name)", "0.8", -1, -1, 0);
 	plan2.addInstruction(run1);
 
-	assertTrue(plan.equals(plan2));
-    }
-
-    @Test
-    public void ComplexEqual() {
-	System.out.println("ComplexEqual");
-
-	HeliosPlanner p = new HeliosPlanner(source, target);
-
-	LinkSpecification ls = new LinkSpecification(
-		"OR(cosine(x.description,y.description)|0.3,OR(cosine(x.description,y.description)|0.5,cosine(x.title,y.name)|0.6)|0.7)",
-		0.8);
-	System.out.println(ls.isAtomic());
-
-	NestedPlan plan = p.plan(ls);
-	//////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////
-
-	NestedPlan plan2 = new NestedPlan();
-	Instruction run1 = new Instruction(Command.RUN, "cosine(x.description,y.description)", "0.3", -1, -1, 0);
-	plan2.addInstruction(run1);
-	//////////////////////////////////////////////////////////////////////////////////
-	NestedPlan plan3 = new NestedPlan();
-
-	NestedPlan plan31 = new NestedPlan();
-	Instruction run2 = new Instruction(Command.RUN, "cosine(x.description,y.description)", "0.5", -1, -1, 0);
-	plan31.addInstruction(run2);
-	NestedPlan plan32 = new NestedPlan();
-	Instruction run3 = new Instruction(Command.RUN, "cosine(x.title,y.name)", "0.6", -1, -1, 0);
-	plan32.addInstruction(run3);
-
-	plan3.setSubPlans(new ArrayList<NestedPlan>());
-	plan3.addSubplan(plan31);
-	plan3.addSubplan(plan32);
-
-	plan3.setOperator(Command.UNION);
-	plan3.setFilteringInstruction(new Instruction(Command.FILTER, null, "0.7", -1, -1, 0));
-
-	/////////////////////////////////////////////////////////////////////////////////////
-	NestedPlan planNew = new NestedPlan();
-	planNew.setSubPlans(new ArrayList<NestedPlan>());
-	planNew.addSubplan(plan2);
-	planNew.addSubplan(plan3);
-	planNew.setOperator(Command.UNION);
-	planNew.setFilteringInstruction(new Instruction(Command.FILTER, null, "0.8", -1, -1, 0));
-
-	assertTrue(plan.equals(planNew));
+	assertTrue(p.getPlans().get(ls.toString()).equals(plan2));
     }
 
     
-
     @Test
     public void filterCosts() {
 	System.out.println("filterCosts");
-	HeliosPlanner p = new HeliosPlanner(source, target);
+	DynamicPlanner p = new DynamicPlanner(source, target);
 
 	assertTrue(p.getFilterCosts(null, 500) == 0);
 	List<String> t = new ArrayList<String>();
@@ -231,21 +167,20 @@ public class HeliosPlannerTest {
 	t = new ArrayList<String>();
 	assertTrue(p.getFilterCosts(t, 500) == 0);
 
-	//t.add("blabla");
-	//assertTrue(p.getFilterCosts(t, 500) != 0);
+	// t.add("blabla");
+	// assertTrue(p.getFilterCosts(t, 500) != 0);
 
 	t = new ArrayList<String>();
 	t.add("cosine");
 	assertTrue(p.getFilterCosts(t, 0) == 0);
 
     }
-    
+
     @Test
     public void runtimeApproximation() {
 	System.out.println("runtimeApproximation");
-	HeliosPlanner p = new HeliosPlanner(source, target);
+	DynamicPlanner p = new DynamicPlanner(source, target);
 
-	
 	assertTrue(p.getAtomicRuntimeCosts("jaro", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("qgrams", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("cosine", 0.5) != 0);
@@ -257,9 +192,9 @@ public class HeliosPlannerTest {
 	assertTrue(p.getAtomicRuntimeCosts("soundex", 0.5) != 0);
 
 	assertTrue(p.getAtomicRuntimeCosts("euclidean", 0.5) != 0);
-	
+
 	assertTrue(p.getAtomicRuntimeCosts("geo_orthodromic", 0.5) != 0);
-	//assertTrue(p.getAtomicRuntimeCosts("geo_elliptic", 0.5) != 0);
+	// assertTrue(p.getAtomicRuntimeCosts("geo_elliptic", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("geo_hausdorff", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("geo_fairsurjection", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("geo_max", 0.5) != 0);
@@ -270,7 +205,7 @@ public class HeliosPlannerTest {
 	assertTrue(p.getAtomicRuntimeCosts("geo_link", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("geo_sum_of_min", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("geo_surjection", 0.5) != 0);
-	//assertTrue(p.getAtomicRuntimeCosts("geo_quinlan", 0.5) != 0);
+	// assertTrue(p.getAtomicRuntimeCosts("geo_quinlan", 0.5) != 0);
 	assertTrue(p.getAtomicRuntimeCosts("geo_symmetrichausdorff", 0.5) != 0);
 
 	assertTrue(p.getAtomicRuntimeCosts("tmp_successor", 0.5) != 0);
@@ -291,11 +226,11 @@ public class HeliosPlannerTest {
 	assertTrue(p.getAtomicRuntimeCosts("tmp_equals", 0.5) != 0);
 
     }
-    
+
     @Test
     public void mappingApproximation() {
 	System.out.println("mappingApproximation");
-	HeliosPlanner p = new HeliosPlanner(source, target);
+	DynamicPlanner p = new DynamicPlanner(source, target);
 	System.out.println(source.size());
 	System.out.println(target.size());
 
@@ -310,9 +245,9 @@ public class HeliosPlannerTest {
 	assertTrue(p.getAtomicMappingSizes("soundex", 0.5) != 0);
 
 	assertTrue(p.getAtomicMappingSizes("euclidean", 0.5) != 0);
-	
+
 	assertTrue(p.getAtomicMappingSizes("geo_orthodromic", 0.5) != 0);
-	//assertTrue(p.getAtomicMappingSizes("geo_elliptic", 0.5) != 0);
+	// assertTrue(p.getAtomicMappingSizes("geo_elliptic", 0.5) != 0);
 	assertTrue(p.getAtomicMappingSizes("geo_hausdorff", 0.5) != 0);
 	assertTrue(p.getAtomicMappingSizes("geo_fairsurjection", 0.5) != 0);
 	assertTrue(p.getAtomicMappingSizes("geo_max", 0.5) != 0);
@@ -323,7 +258,7 @@ public class HeliosPlannerTest {
 	assertTrue(p.getAtomicMappingSizes("geo_link", 0.5) != 0);
 	assertTrue(p.getAtomicMappingSizes("geo_sum_of_min", 0.5) != 0);
 	assertTrue(p.getAtomicMappingSizes("geo_surjection", 0.5) != 0);
-	//assertTrue(p.getAtomicMappingSizes("geo_quinlan", 0.5) != 0);
+	// assertTrue(p.getAtomicMappingSizes("geo_quinlan", 0.5) != 0);
 	assertTrue(p.getAtomicMappingSizes("geo_symmetrichausdorff", 0.5) != 0);
 
 	assertTrue(p.getAtomicMappingSizes("tmp_successor", 0.5) != 0);
@@ -342,7 +277,7 @@ public class HeliosPlannerTest {
 	assertTrue(p.getAtomicMappingSizes("tmp_overlaps", 0.5) != 0);
 	assertTrue(p.getAtomicMappingSizes("tmp_isoverlappedby", 0.5) != 0);
 	assertTrue(p.getAtomicMappingSizes("tmp_equals", 0.5) != 0);
-		
+
     }
 
 }

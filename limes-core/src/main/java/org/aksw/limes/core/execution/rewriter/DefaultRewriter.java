@@ -9,6 +9,8 @@ public class DefaultRewriter extends Rewriter {
     
     @Override
     public LinkSpecification rewrite(LinkSpecification spec) {
+	if(spec.isEmpty())
+	    throw new IllegalArgumentException();
 	return spec;
     }
     

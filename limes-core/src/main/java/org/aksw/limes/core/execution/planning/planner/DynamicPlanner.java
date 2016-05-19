@@ -32,6 +32,10 @@ public class DynamicPlanner extends Planner {
     private Language lang;
     // <String representation of LinkSpec, corresponding plan>
     private Map<String, NestedPlan> plans = new HashMap<String, NestedPlan>();
+    public Map<String, NestedPlan> getPlans() {
+        return plans;
+    }
+
     // <String representation of LinkSpec, LinkSpec>
     private Map<String, LinkSpecification> specifications = new HashMap<String, LinkSpecification>();
     // <String represantion of LinkSpec A, LinkSpec B>
@@ -657,8 +661,11 @@ public class DynamicPlanner extends Planner {
 
     @Override
     public LinkSpecification normalize(LinkSpecification spec) {
+	if(spec.isEmpty()){
+	    return spec;
+	}
 	LinkSpecification ls = new ExtendedLinkSpecification(spec.getFullExpression(), spec.getThreshold());
-	this.init(ls);
+	init(ls);
 	return ls;
     }
 

@@ -405,6 +405,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     @Override
     public Mapping execute(LinkSpecification spec, IPlanner planner) {
 	Mapping m = new MemoryMapping();
+
 	spec = planner.normalize(spec);
 	if (planner.isStatic() == false) {
 	    m = executeDynamic(spec, (DynamicPlanner) planner);
@@ -412,6 +413,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 	    NestedPlan plan = planner.plan(spec);
 	    m = executeStatic(plan);
 	}
+
 	return m;
     }
 

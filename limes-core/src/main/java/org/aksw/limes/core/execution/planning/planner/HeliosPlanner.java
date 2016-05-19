@@ -14,7 +14,7 @@ import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
-
+import org.aksw.limes.core.measures.measure.Measure;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.apache.log4j.Logger;
@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
  */
 public class HeliosPlanner extends Planner {
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger(HeliosPlanner.class.getName());
     public Cache source;
     public Cache target;
     public Language lang;
@@ -88,9 +88,12 @@ public class HeliosPlanner extends Planner {
 	double cost = 0;
 	if (measures != null) {
 	    for (String measure : measures) {
-		double tempCost = MeasureFactory.getMeasure(measure).getRuntimeApproximation(mappingSize);
-		if (tempCost >= 0)
-		    cost += tempCost;
+		Measure m = MeasureFactory.getMeasure(measure);
+		if (m != null) {
+		    double tempCost = m.getRuntimeApproximation(mappingSize);
+		    if (tempCost >= 0)
+			cost += tempCost;
+		}
 	    }
 	}
 	return cost;

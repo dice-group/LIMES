@@ -66,8 +66,10 @@ import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.StartsMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
+import org.apache.log4j.Logger;
 
 public class MeasureFactory {
+    static Logger logger = Logger.getLogger(MeasureFactory.class.getName());
 
     public enum MeasureType { // TODO add other measures
 	GEO_NAIVE_HAUSDORFF, GEO_INDEXED_HAUSDORFF, GEO_FAST_HAUSDORFF, GEO_CENTROIDHAUSDORFF, GEO_SCAN_HAUSDORFF, GEO_MIN, GEO_MAX, GEO_AVG, GEO_SUM_OF_MIN, GEO_LINK, GEO_QUINLAN, GEO_FRECHET, GEO_SURJECTION, GEO_FAIR_SURJECTION, GEO_MEAN
@@ -89,7 +91,7 @@ public class MeasureFactory {
 
     // Point-set measures
     public static final String GEO_ORTHODROMIC = "geo_orthodromic";
-    public static final String GEO_ELLIPTIC = "geo_elliptic";
+    //public static final String GEO_ELLIPTIC = "geo_elliptic";
     public static final String GEO_HAUSDORFF = "geo_hausdorff";
     public static final String GEO_FAIR_SURJECTION = "geo_fairsurjection";
     public static final String GEO_MAX = "geo_max";
@@ -100,7 +102,7 @@ public class MeasureFactory {
     public static final String GEO_LINK = "geo_link";
     public static final String GEO_SUM_OF_MIN = "geo_sum_of_min";
     public static final String GEO_SURJECTION = "geo_surjection";
-    public static final String GEO_QUINLAN = "geo_quinlan";
+    //public static final String GEO_QUINLAN = "geo_quinlan";
     public static final String GEO_SYMMETRIC_HAUSDORFF = "geo_symmetrichausdorff";
 
     // Temporal measures
@@ -141,9 +143,9 @@ public class MeasureFactory {
 	if (measure.startsWith(GEO_LINK)) {
 	    return MeasureType.GEO_LINK;
 	}
-	if (measure.startsWith(GEO_QUINLAN)) {
-	    return MeasureType.GEO_QUINLAN;
-	}
+	//if (measure.startsWith(GEO_QUINLAN)) {
+	//    return MeasureType.GEO_QUINLAN;
+	//}
 	if (measure.startsWith(GEO_SUM_OF_MIN)) {
 	    return MeasureType.GEO_SUM_OF_MIN;
 	}
@@ -192,11 +194,8 @@ public class MeasureFactory {
     }
 
     public static Measure getMeasure(String name) {
-	Measure m;
-	if (name == null) {
-	    m = new TrigramMeasure();
-	    return m;
-	}
+	Measure m = null;
+	
 	if (name.toLowerCase().startsWith(COSINE)) {
 	    m = new CosineMeasure();
 	} else if (name.toLowerCase().startsWith(EXACTMATCH)) {
@@ -273,10 +272,11 @@ public class MeasureFactory {
 	    m = new OverlapsMeasure();
 	} else if (name.toLowerCase().startsWith(TMP_ISOVERLAPPEDBY)) {
 	    m = new IsOverlappedByMeasure();
-	}else if (name.toLowerCase().startsWith(TMP_EQUALS)) {
+	} else if (name.toLowerCase().startsWith(TMP_EQUALS)) {
 	    m = new EqualsMeasure();
-	}else {
-	    m = null;
+	} else {
+	    logger.info("Unknown measure "+name+". Exiting..");
+	    System.exit(1);
 	}
 	return m;
     }
@@ -289,7 +289,7 @@ public class MeasureFactory {
      * @return am, mapper corresponding to measure
      */
     public static Mapper getMapper(String measure) {
-	Mapper am;
+	Mapper am = null;
 
 	if (measure.toLowerCase().startsWith(COSINE)) {
 	    am = new PPJoinPlusPlus();
@@ -369,8 +369,9 @@ public class MeasureFactory {
 	    am = new IsOverlappedByMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_EQUALS)) {
 	    am = new EqualsMapper();
-	}else {
-	    am = null;
+	} else {
+	    logger.info("Unknown measure "+measure+". Exiting..");
+	    System.exit(1);
 	}
 	return am;
 

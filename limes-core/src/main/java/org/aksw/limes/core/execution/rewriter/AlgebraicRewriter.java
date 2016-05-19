@@ -11,6 +11,8 @@ public class AlgebraicRewriter extends Rewriter {
 
     @Override
     public LinkSpecification rewrite(LinkSpecification spec) {
+	if(spec.isEmpty())
+	    throw new IllegalArgumentException();
 	// rewrite only non-atomic specs
 	if (spec.size() <= 1)
 	    return spec;
