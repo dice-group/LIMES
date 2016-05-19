@@ -72,9 +72,11 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 	    if (inst.getCommand().equals(Command.RUN)) {
 		m = executeRun(inst);
 	    } // runs the filter operator
-	    else if (inst.getCommand().equals(Command.FILTER) || inst.getCommand().equals(Command.REVERSEFILTER)) {
+	    else if (inst.getCommand().equals(Command.FILTER)) {
 		m = executeFilter(inst, buffer.get(inst.getSourceMapping()));
-	    } // runs set operations such as intersection,
+	    } else if (inst.getCommand().equals(Command.REVERSEFILTER)) {
+		m = executeReverseFilter(inst, buffer.get(inst.getSourceMapping()));
+	    }// runs set operations such as intersection,
 	    else if (inst.getCommand().equals(Command.INTERSECTION)) {
 		m = executeIntersection(buffer.get(inst.getSourceMapping()), buffer.get(inst.getTargetMapping()));
 	    } // union
@@ -150,7 +152,20 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 	   
 	return new MemoryMapping();
     }
-
+    /**
+     * Runs the reverse filtering operator
+     *
+     * @param inst
+     *            Instruction
+     * @param input
+     *            Mapping that is to be filtered
+     * @return Filtered mapping
+     */
+    private Mapping executeReverseFilter(Instruction inst, Mapping input) {
+	LinearFilter filter = new LinearFilter();
+	return filter.reversefilter(input, inst.getMeasureExpression(), Double.parseDouble(inst.getThreshold()),
+		Double.parseDouble(inst.getMainThreshold()), source, target, sourceVariable, targetVariable);
+    }
     /**
      * Runs the filtering operator
      *
@@ -334,13 +349,11 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 			}
 		    } // union
 		    else if (spec.getOperator().equals(Operator.OR)) {
-			logger.info(plan.getSubPlans().get(1));
 			LinkSpecification secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
 			if (secondSpec == null) {
 			    plan = planner.plan(spec);
 			    secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
 			}
-			logger.info(secondSpec);
 			m2 = executeDynamic(secondSpec, planner);
 			result = executeUnion(m, m2);
 
