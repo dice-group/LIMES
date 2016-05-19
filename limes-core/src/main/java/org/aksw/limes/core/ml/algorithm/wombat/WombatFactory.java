@@ -11,7 +11,7 @@ import java.util.List;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 
 
@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
  *
  */
 public class WombatFactory {
-	private static final Logger logger = Logger.getLogger(WombatFactory.class.getName());
+//	private static final Logger logger = Logger.getLogger(WombatFactory.class.getName());
 
 	protected static final String CONJUNCTIVE 			= "conjunctive";
 	protected static final String SIMPLE				= "simple";

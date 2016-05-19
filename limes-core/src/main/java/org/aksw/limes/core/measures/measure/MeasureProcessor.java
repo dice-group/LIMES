@@ -15,11 +15,8 @@ import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.Mapper;
-import org.aksw.limes.core.measures.mapper.string.EDJoin;
 import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
-import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
 
 /**
  *

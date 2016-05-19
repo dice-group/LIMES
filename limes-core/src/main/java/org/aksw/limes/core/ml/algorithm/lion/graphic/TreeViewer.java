@@ -2,9 +2,7 @@ package org.aksw.limes.core.ml.algorithm.lion.graphic;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.TreeSet;
 
 import javax.swing.JFrame;
@@ -12,12 +10,15 @@ import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 
 import org.aksw.limes.core.ml.algorithm.lion.SearchTreeNode;
 
 public class TreeViewer extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
 	/**
