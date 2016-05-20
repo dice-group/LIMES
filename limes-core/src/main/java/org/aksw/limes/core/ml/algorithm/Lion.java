@@ -135,8 +135,8 @@ public class Lion extends MLAlgorithm {
      * 
      * @throws IOException
      */
-    public MLResult learn(Mapping trainingData) {
-	MLResult result = new MLResult();
+    public MLModel learn(Mapping trainingData) {
+	MLModel result = new MLModel();
 	// highest accuracy so far, used for pruning
 	double highestAccuracy = 0.0;
 	SearchTreeNode nextNode;
@@ -1178,7 +1178,7 @@ public class Lion extends MLAlgorithm {
 
 	try {
 	    lion.init(setting, new MemoryMapping());
-	    MLResult result = lion.learn(new MemoryMapping());
+	    MLModel result = lion.learn(new MemoryMapping());
 	    System.out.println(result);
 	} catch (InvalidConfigurationException e) {
 	    // TODO Auto-generated catch block

@@ -65,7 +65,7 @@ public class LionTest {
 		try {
 			lion.init(param, null);
 			
-			MLResult result = lion.learn(null);
+			MLModel result = lion.learn(null);
 			System.out.println(result);
 			System.out.println(result.getMapping());
 			

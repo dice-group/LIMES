@@ -17,7 +17,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.ml.algorithm.MLResult;
+import org.aksw.limes.core.ml.algorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.log4j.Logger;
 
@@ -225,7 +225,7 @@ public class WeakWombat extends Wombat {
 
 
 	@Override
-	public MLResult learn(Mapping trainingData) {
+	public MLModel learn(Mapping trainingData) {
 		// TODO Auto-generated method stub
 		return null;
 	}

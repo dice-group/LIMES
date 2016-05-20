@@ -11,15 +11,15 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @author Klaus Lyko
  *
  */
-public class MLResult {
+public class MLModel {
 	protected LinkSpecification linkspec;
 	protected Mapping mapping;
 	protected double quality;
 	protected Map<String, Object> details = new HashMap<String, Object>();
 	
-	public MLResult(){	}
+	public MLModel(){	}
 
-	public MLResult(LinkSpecification linkspec, Mapping mapping, double quality, Map<String, Object> details) {
+	public MLModel(LinkSpecification linkspec, Mapping mapping, double quality, Map<String, Object> details) {
 		super();
 		this.linkspec = linkspec;
 		this.mapping = mapping;

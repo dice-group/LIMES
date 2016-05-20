@@ -65,7 +65,7 @@ public class EagleUnsupervisedTest {
 		try {
 			eus.init(param, null);
 			
-			MLResult result = eus.learn(null);
+			MLModel result = eus.learn(null);
 			System.out.println(result);
 			System.out.println(result.getMapping());
 			
