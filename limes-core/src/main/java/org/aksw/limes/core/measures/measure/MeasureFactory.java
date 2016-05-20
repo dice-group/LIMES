@@ -190,6 +190,7 @@ public class MeasureFactory {
 	}
 	return measure;
     }
+
     /**
      * Get measure name to metric.
      *
@@ -269,10 +270,10 @@ public class MeasureFactory {
 	    m = new StartsMeasure();
 	} else if (name.toLowerCase().startsWith(TMP_ISSTARTEDBY)) {
 	    m = new IsStartedByMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_DURING)) {
-	    m = new DuringMeasure();
 	} else if (name.toLowerCase().startsWith(TMP_DURINGREVERSE)) {
 	    m = new DuringReverseMeasure();
+	} else if (name.toLowerCase().startsWith(TMP_DURING)) {
+	    m = new DuringMeasure();
 	} else if (name.toLowerCase().startsWith(TMP_OVERLAPS)) {
 	    m = new OverlapsMeasure();
 	} else if (name.toLowerCase().startsWith(TMP_ISOVERLAPPEDBY)) {
@@ -364,10 +365,10 @@ public class MeasureFactory {
 	    am = new StartsMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_ISSTARTEDBY)) {
 	    am = new IsStartedByMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_DURING)) {
-	    am = new DuringMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_DURINGREVERSE)) {
 	    am = new DuringReverseMapper();
+	} else if (measure.toLowerCase().startsWith(TMP_DURING)) {
+	    am = new DuringMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_OVERLAPS)) {
 	    am = new OverlapsMapper();
 	} else if (measure.toLowerCase().startsWith(TMP_ISOVERLAPPEDBY)) {

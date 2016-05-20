@@ -43,17 +43,16 @@ public abstract class AtomicAllenAlgebraMapper {
      * 
      * @param expression,
      *            metric expression
-     * @throws IllegalArgumentException
      * @return first property of metric expression as string
      */
-    protected static String getBeginProperty(String properties) throws IllegalArgumentException {
+    protected static String getBeginProperty(String properties) {
 	properties = properties.substring(properties.indexOf(".") + 1, properties.length());
 	int plusIndex = properties.indexOf("|");
 	if (properties.indexOf("|") != -1) {
 	    String p1 = properties.substring(0, plusIndex);
 	    return p1;
 	} else
-	    throw new IllegalArgumentException();
+	    return properties;
     }
 
     /**
@@ -92,13 +91,7 @@ public abstract class AtomicAllenAlgebraMapper {
     protected static TreeMap<Long, Set<String>> orderByBeginDate(Cache cache, String expression) {
 	TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
 	Parser p = new Parser(expression, 0.0d);
-	String property = null;
-	try {
-	    property = getBeginProperty(p.getTerm1());
-	} catch (IllegalArgumentException e1) {
-	    logger.error("Wrong or missing property in " + p.getTerm1());
-	    System.exit(1);
-	}
+	String property = getBeginProperty(p.getTerm1());
 
 	for (Instance instance : cache.getAllInstances()) {
 	    TreeSet<String> time = instance.getProperty(property);
@@ -122,7 +115,6 @@ public abstract class AtomicAllenAlgebraMapper {
 	    }
 
 	}
-	logger.info(blocks.size());
 	return blocks;
     }
 
@@ -148,7 +140,7 @@ public abstract class AtomicAllenAlgebraMapper {
 	try {
 	    property = getEndProperty(p.getTerm1());
 	} catch (IllegalArgumentException e1) {
-	    logger.error("Wrong or missing property in " + p.getTerm1());
+	    logger.error("Missing end property in " + p.getTerm1() + ". Exiting..");
 	    System.exit(1);
 	}
 
@@ -174,7 +166,6 @@ public abstract class AtomicAllenAlgebraMapper {
 	    }
 
 	}
-	logger.info(blocks.size());
 	return blocks;
     }
 

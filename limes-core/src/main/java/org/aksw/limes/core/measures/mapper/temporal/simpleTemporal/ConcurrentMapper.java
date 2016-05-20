@@ -9,6 +9,7 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
+import org.apache.log4j.Logger;
 
 public class ConcurrentMapper extends SimpleTemporalMapper {
     /**
@@ -19,6 +20,8 @@ public class ConcurrentMapper extends SimpleTemporalMapper {
      * 
      * @author kleanthi
      */
+    protected static final Logger logger = Logger.getLogger(ConcurrentMapper.class.getName());
+
     @Override
     public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
 	    double threshold) {
@@ -28,7 +31,13 @@ public class ConcurrentMapper extends SimpleTemporalMapper {
 	
 	TreeMap<String, Set<Instance>> sources = this.orderByBeginDate(source, expression);
 	TreeMap<String, Set<Instance>> targets = this.orderByBeginDate(target, expression);
-	String machineID = this.getSecondProperty(p.getTerm1());
+	String machineID = null;
+	try {
+	    machineID = this.getSecondProperty(p.getTerm1());
+	} catch (IllegalArgumentException e) {
+	    logger.error("Missing machine id property in " + p.getTerm1() + ".Exiting..");
+	    System.exit(1);
+	}
 
 	for (Map.Entry<String, Set<Instance>> sourceEntry : sources.entrySet()) {
 	    String epochSource = sourceEntry.getKey();

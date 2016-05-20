@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.mapper.temporal;
+package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
 
 import static org.junit.Assert.*;
 
@@ -16,7 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TemporalMeasureTest {
+public class SimpleTemporalMapperTest {
 
     public Cache source = new MemoryCache();
     public Cache target = new MemoryCache();

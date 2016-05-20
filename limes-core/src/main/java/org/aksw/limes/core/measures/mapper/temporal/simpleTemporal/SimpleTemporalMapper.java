@@ -43,17 +43,17 @@ public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemp
      * 
      * @param expression,
      *            the metric expression
-     * 
+     * @throws IllegalArgumentException
      * @return second property of metric expression as string
      */
-    protected String getSecondProperty(String properties) {
+    protected String getSecondProperty(String properties) throws IllegalArgumentException{
 	properties = properties.substring(properties.indexOf(".") + 1, properties.length());
 	int plusIndex = properties.indexOf("|");
 	if (properties.indexOf("|") != -1) {
 	    String p1 = properties.substring(plusIndex + 1, properties.length());
 	    return p1;
 	} else
-	    return properties;
+	    throw new IllegalArgumentException();
     }
 
     /**
