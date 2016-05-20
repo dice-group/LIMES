@@ -1,5 +1,7 @@
 package org.aksw.limes.core.measures.measure;
 
+import static org.junit.Assert.*;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
@@ -21,12 +23,12 @@ public class MeasureProcessorTest {
 	target.addTriple("S3", "pub", "test1");
 	target.addTriple("S3", "conf", "conf three");
 
-	System.out.println(MeasureProcessor.getSimilarity(source.getInstance("S1"), target.getInstance("S3"),
-		"ADD(0.5*trigram(x.conf, y.conf),0.5*cosine(y.conf, x.conf))", 0.4,"?x", "?y"));
+	assertTrue(MeasureProcessor.getSimilarity(source.getInstance("S1"), target.getInstance("S3"),
+		"ADD(0.5*trigram(x.conf, y.conf),0.5*cosine(y.conf, x.conf))", 0.4,"?x", "?y") > 0.0);
 	
-	System.out.println(MeasureProcessor
-		.getMeasures("AND(jaccard(x.authors,y.authors)|0.4278,overlap(x.authors,y.authors)|0.4278)"));
-	System.out.println(MeasureProcessor.getMeasures("trigrams(x.conf, y.conf)"));
+	assertTrue(MeasureProcessor
+		.getMeasures("AND(jaccard(x.authors,y.authors)|0.4278,overlap(x.authors,y.authors)|0.4278)").isEmpty() == false);
+	
 
     }
 }

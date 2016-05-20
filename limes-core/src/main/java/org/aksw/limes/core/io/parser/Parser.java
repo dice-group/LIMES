@@ -92,7 +92,6 @@ public class Parser implements IParser {
             try {
                 coef2 = Double.parseDouble(split[0]);
                 term2 = split[1];
-                System.out.println(coef2);
             } catch (Exception e) {
                 coef2 = 1.0;
                 logger.warn("Error parsing " + term2 + " for coefficient");

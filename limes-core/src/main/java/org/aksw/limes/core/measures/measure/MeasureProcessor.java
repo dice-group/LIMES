@@ -159,7 +159,6 @@ public class MeasureProcessor {
 		    Mapping m = mapper.getMapping(source, target, sourceVar, targetVar, expression, threshold);
 		    for (String s : m.getMap().keySet()) {
 			for (String t : m.getMap().get(s).keySet()) {
-			    
 			    return m.getMap().get(s).get(t);
 			}
 		    }
@@ -208,7 +207,7 @@ public class MeasureProcessor {
 			p.getThreshold1(), sourceVar, targetVar);
 		double secondChild = p.getCoef2() * getSimilarity(sourceInstance, targetInstance, p.getTerm2(),
 			p.getThreshold2(), sourceVar, targetVar);
-		//System.out.println(firstChild+" "+secondChild);
+		
 		if (firstChild + secondChild >= parentThreshold)
 		    return firstChild + secondChild;
 		else
