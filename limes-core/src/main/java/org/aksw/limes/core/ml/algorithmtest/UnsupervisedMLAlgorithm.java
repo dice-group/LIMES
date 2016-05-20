@@ -25,7 +25,7 @@ public class UnsupervisedMLAlgorithm extends AUnsupervisedMLAlgorithm {
 	}
 	
 	@Override
-	protected MLModel learn(PseudoFMeasure pfm) {
+	public MLModel learn(PseudoFMeasure pfm) {
 		return ml.learn(pfm);
 	}
 

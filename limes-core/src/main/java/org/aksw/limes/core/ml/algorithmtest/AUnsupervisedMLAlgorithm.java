@@ -6,6 +6,6 @@ import org.aksw.limes.core.ml.algorithm.MLModel;
 
 public abstract class AUnsupervisedMLAlgorithm extends AMLAlgorithm {
 
-	protected abstract MLModel learn(PseudoFMeasure pfm);
+	public abstract MLModel learn(PseudoFMeasure pfm);
 
 }

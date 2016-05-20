@@ -25,12 +25,12 @@ public class ActiveMLAlgorithm extends AActiveMLAlgorithm {
 	}
 	
 	@Override
-	protected Mapping getNextExamples(int size) {
+	public Mapping getNextExamples(int size) {
 		return ml.getNextExamples(size);
 	}
 
 	@Override
-	protected MLModel activeLearn(Mapping oracleMapping) {
+	public MLModel activeLearn(Mapping oracleMapping) {
 		return ml.activeLearn(oracleMapping);
 	}
 

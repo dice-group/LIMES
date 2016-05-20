@@ -6,8 +6,8 @@ import org.aksw.limes.core.ml.algorithm.MLModel;
 
 public abstract class AActiveMLAlgorithm extends AMLAlgorithm {
 	
-	protected abstract Mapping getNextExamples(int size);
+	public abstract Mapping getNextExamples(int size);
 
-	protected abstract MLModel activeLearn(Mapping oracleMapping);
+	public abstract MLModel activeLearn(Mapping oracleMapping);
 
 }

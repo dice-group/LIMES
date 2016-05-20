@@ -14,7 +14,7 @@ public class UsageTest {
 			e.printStackTrace();
 		}
 		
-		System.out.println(eagle);
+		
 		
 		
 	}

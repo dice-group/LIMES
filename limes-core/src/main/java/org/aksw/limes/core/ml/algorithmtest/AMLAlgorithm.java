@@ -9,7 +9,7 @@ public abstract class AMLAlgorithm {
 		
 	protected ACoreMLAlgorithm ml;
 	
-	protected String getName() {
+	public String getName() {
 		return ml.getName();
 	}
 

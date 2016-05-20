@@ -25,7 +25,7 @@ public class SupervisedMLAlgorithm extends ASupervisedMLAlgorithm {
 	}
 
 	@Override
-	protected MLModel learn(Mapping trainingData) {
+	public MLModel learn(Mapping trainingData) {
 		return ml.learn(trainingData);
 	}
 
