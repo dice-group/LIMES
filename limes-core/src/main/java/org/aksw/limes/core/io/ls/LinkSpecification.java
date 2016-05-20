@@ -28,20 +28,20 @@ public class LinkSpecification implements ILinkSpecification {
 	protected static final String MIN 	= "MIN";
 	protected static final String AND 	= "AND";
 
-	private double threshold;
-	private Operator operator;
-	private List<LinkSpecification> children; // children must be a list because
+	protected double threshold;
+	protected Operator operator;
+	protected List<LinkSpecification> children; // children must be a list because
 	// not all operators are
 	// commutative
-	private List<LinkSpecification> dependencies;// dependencies are the list of
+	protected List<LinkSpecification> dependencies;// dependencies are the list of
 	// specs whose result set is
 	// included in the result set
 	// of this node
 	protected String filterExpression;
 	protected LinkSpecification parent;
 	// just a quick hack to have lower borders for advanced threshold searches
-	public double lowThreshold = 0d;
-	private double quality = 0d;
+	private double lowThreshold = 0d;
+	protected double quality = 0d;
 	// If the LinkSpecification is atomic the measure and properties are this.
 	// filterexpression: e.g. trigrams(s.label,t.label).
 	protected String atomicMeasure = ""; // eg. trigrams...
@@ -204,7 +204,7 @@ public class LinkSpecification implements ILinkSpecification {
 	 */
 	public void readSpec(String spec, double theta) {
 
-		Parser p = new Parser(spec, getThreshold());
+		Parser p = new Parser(spec, theta);
 		if (p.isAtomic()) {
 			filterExpression = spec;
 			setThreshold(theta);
@@ -268,12 +268,12 @@ public class LinkSpecification implements ILinkSpecification {
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(ADD)) {
 				setOperator(Operator.AND);
-				leftSpec.readSpec(p.getTerm1(), (theta - p.getCoef2()) / p.getCoef1());
-				rightSpec.readSpec(p.getTerm2(), (theta - p.getCoef1()) / p.getCoef2());
+				leftSpec.readSpec(p.getTerm1(), Math.abs(theta - p.getCoef2()) / p.getCoef1());
+				rightSpec.readSpec(p.getTerm2(), Math.abs(theta - p.getCoef1()) / p.getCoef2());
 				filterExpression = spec;
 				setThreshold(theta);
-				fullExpression = "AND(" + leftSpec.fullExpression + "|" + ((theta - p.getCoef2()) / p.getCoef1()) + ","
-						+ rightSpec.fullExpression + "|" + ((theta - p.getCoef1()) / p.getCoef2()) + ")";
+				fullExpression = "AND(" + leftSpec.fullExpression + "|" + (Math.abs(theta - p.getCoef2()) / p.getCoef1()) + ","
+						+ rightSpec.fullExpression + "|" + (Math.abs(theta - p.getCoef1()) / p.getCoef2()) + ")";
 
 			}
 		}
@@ -335,7 +335,7 @@ public class LinkSpecification implements ILinkSpecification {
 	public LinkSpecification clone() {
 		LinkSpecification clone = new LinkSpecification();
 		clone.setThreshold(threshold);
-		clone.lowThreshold = lowThreshold;
+		clone.setLowThreshold(lowThreshold);
 		clone.setOperator(operator);
 		clone.filterExpression = filterExpression;
 		clone.prop1 = prop1;
@@ -640,6 +640,14 @@ public class LinkSpecification implements ILinkSpecification {
 
 	public void setQuality(double quality) {
 		this.quality = quality;
+	}
+
+	public double getLowThreshold() {
+	    return lowThreshold;
+	}
+
+	public void setLowThreshold(double lowThreshold) {
+	    this.lowThreshold = lowThreshold;
 	}
 
 }

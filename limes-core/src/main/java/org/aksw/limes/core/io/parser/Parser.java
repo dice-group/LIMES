@@ -92,6 +92,7 @@ public class Parser implements IParser {
             try {
                 coef2 = Double.parseDouble(split[0]);
                 term2 = split[1];
+                System.out.println(coef2);
             } catch (Exception e) {
                 coef2 = 1.0;
                 logger.warn("Error parsing " + term2 + " for coefficient");
@@ -128,8 +129,6 @@ public class Parser implements IParser {
                 }
             }
 
-            logger.debug("Term 1 = "+term1);
-            logger.debug("Term 2 = "+term2);
             getCoef1();
             getCoef2();
             //now compute thresholds based on operations
@@ -139,9 +138,8 @@ public class Parser implements IParser {
                 setThreshold2(getThreshold());
             } else if (operator.equalsIgnoreCase(ADD)) {
                 operator = ADD;
-                System.out.println("Coef1 = " + coef1 + ", Coef2 = " + coef2);
-                setThreshold1((getThreshold() - coef2) / coef1);
-                setThreshold2((getThreshold() - coef1) / coef2);
+                setThreshold1(Math.abs(getThreshold() - coef2) / coef1);
+                setThreshold2(Math.abs(getThreshold() - coef1) / coef2);
             } else if (operator.equalsIgnoreCase(MULT)) {
                 operator = MULT;
                 setThreshold1(getThreshold() / (coef2 * coef1));

@@ -430,7 +430,7 @@ public class LionPrune extends MLAlgorithm {
 		    for (Double d : threshs) {
 			LinkSpecification copy = spec.clone();
 			copy.setThreshold(d);
-			copy.lowThreshold = low;
+			copy.setLowThreshold(low);
 			low = d;
 			if (newMap) {
 			    map = getMapping(copy);
@@ -496,7 +496,7 @@ public class LionPrune extends MLAlgorithm {
 
 	SearchTreeNode node = new SearchTreeNode(parentNode, spec, accuracy, expansionPenalty);
 	node.highThreshold = spec.getThreshold();
-	node.lowThreshold = spec.lowThreshold;
+	node.lowThreshold = spec.getLowThreshold();
 
 	if (bestScore < accuracy || best.isRoot()) {
 	    bestScore = accuracy;
@@ -873,9 +873,9 @@ public class LionPrune extends MLAlgorithm {
 	} else {
 	    LinkSpecification child1 = childs.get(0).clone();
 	    LinkSpecification child2 = childs.get(1).clone();
-	    List<Double> threshs1 = UpwardLengthLimitRefinementOperator.allOptimizedThresholds(child1.lowThreshold,
+	    List<Double> threshs1 = UpwardLengthLimitRefinementOperator.allOptimizedThresholds(child1.getLowThreshold(),
 		    child1.getThreshold(), thresholdGrid);
-	    List<Double> threshs2 = UpwardLengthLimitRefinementOperator.allOptimizedThresholds(child2.lowThreshold,
+	    List<Double> threshs2 = UpwardLengthLimitRefinementOperator.allOptimizedThresholds(child2.getLowThreshold(),
 		    child2.getThreshold(), thresholdGrid);
 	    double low1 = 0;
 	    double low2 = 0;
@@ -889,7 +889,7 @@ public class LionPrune extends MLAlgorithm {
 		    child2 = child2.clone();
 		    child1.setThreshold(d1);
 		    child2.setThreshold(d2);
-		    child2.lowThreshold = low2;
+		    child2.setLowThreshold(low2);
 		    low2 = d2;
 
 		    LinkSpecification copy = spec.clone();
@@ -915,7 +915,7 @@ public class LionPrune extends MLAlgorithm {
 		    }
 		}
 
-		child1.lowThreshold = low1;
+		child1.setLowThreshold(low1);
 		low1 = d1;
 	    }
 

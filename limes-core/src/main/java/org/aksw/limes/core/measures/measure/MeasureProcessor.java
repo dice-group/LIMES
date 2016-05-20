@@ -148,7 +148,7 @@ public class MeasureProcessor {
 	    } else {
 		property2 = term2;
 	    }
-
+	    
 	    // if no properties then terminate
 	    if (property1 == null || property2 == null) {
 		logger.fatal("Property values could not be read. Exiting");
@@ -159,6 +159,7 @@ public class MeasureProcessor {
 		    Mapping m = mapper.getMapping(source, target, sourceVar, targetVar, expression, threshold);
 		    for (String s : m.getMap().keySet()) {
 			for (String t : m.getMap().get(s).keySet()) {
+			    
 			    return m.getMap().get(s).get(t);
 			}
 		    }
@@ -195,8 +196,7 @@ public class MeasureProcessor {
 			sourceVar, targetVar);
 
 		double minSimilarity = Math.min(firstChild, secondChild);
-		if (firstChild == 0 && secondChild == 0)
-		    return 0;
+		// find min value between or terms
 		if (minSimilarity >= parentThreshold)
 		    return minSimilarity;
 		else
@@ -208,6 +208,7 @@ public class MeasureProcessor {
 			p.getThreshold1(), sourceVar, targetVar);
 		double secondChild = p.getCoef2() * getSimilarity(sourceInstance, targetInstance, p.getTerm2(),
 			p.getThreshold2(), sourceVar, targetVar);
+		//System.out.println(firstChild+" "+secondChild);
 		if (firstChild + secondChild >= parentThreshold)
 		    return firstChild + secondChild;
 		else

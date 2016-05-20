@@ -32,7 +32,7 @@ public class ExtendedLinkSpecification extends LinkSpecification {
      */
     public void readSpec(String spec, double theta) {
 
-	Parser p = new Parser(spec, getThreshold());
+	Parser p = new Parser(spec, theta);
 	if (p.isAtomic()) {
 	    filterExpression = spec;
 	    setThreshold(theta);
@@ -100,12 +100,12 @@ public class ExtendedLinkSpecification extends LinkSpecification {
 
 	    } else if (p.getOperator().equalsIgnoreCase(ADD)) {
 		setOperator(Operator.AND);
-		leftSpec.readSpec(p.getTerm1(), (theta - p.getCoef2()) / p.getCoef1());
-		rightSpec.readSpec(p.getTerm2(), (theta - p.getCoef1()) / p.getCoef2());
+		leftSpec.readSpec(p.getTerm1(), Math.abs(theta - p.getCoef2()) / p.getCoef1());
+		rightSpec.readSpec(p.getTerm2(), Math.abs(theta - p.getCoef1()) / p.getCoef2());
 		filterExpression = spec;
 		setThreshold(theta);
-		fullExpression = "AND(" + leftSpec.fullExpression + "|" + ((theta - p.getCoef2()) / p.getCoef1()) + ","
-			+ rightSpec.fullExpression + "|" + ((theta - p.getCoef1()) / p.getCoef2()) + ")";
+		fullExpression = "AND(" + leftSpec.fullExpression + "|" + (Math.abs(theta - p.getCoef2()) / p.getCoef1()) + ","
+			+ rightSpec.fullExpression + "|" + (Math.abs(theta - p.getCoef1()) / p.getCoef2()) + ")";
 
 	    }
 	}

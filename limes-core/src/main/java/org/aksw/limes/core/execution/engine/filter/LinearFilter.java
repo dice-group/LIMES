@@ -106,7 +106,7 @@ public class LinearFilter implements IFilter {
      * @param map
      *            Input mapping
      * @param threshold
-     *            Similarity threshold
+     *            filter similarity threshold
      * @param mainThreshold
      *            Parent similarity threshold
      * @param source,
@@ -169,7 +169,7 @@ public class LinearFilter implements IFilter {
      * @param map
      *            Input mapping
      * @param threshold
-     *            Similarity threshold
+     *            filter similarity threshold
      * @param mainThreshold
      *            Parent similarity threshold
      * @param source,
