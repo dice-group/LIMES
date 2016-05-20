@@ -6,6 +6,7 @@ import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
+import org.aksw.limes.core.execution.planning.planner.HeliosPlanner;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -156,14 +157,15 @@ public class PredecessorMapperTest {
 
 	DynamicPlanner p = new DynamicPlanner(source, target);
 	Mapping m = e.execute(ls, p);
-	System.out.println(m);
 
 	CanonicalPlanner p2 = new CanonicalPlanner();
-	Mapping m2 = e.execute(ls, p2);
+	Mapping mm = e.execute(ls, p2);
 
-	System.out.println(m2);
+	HeliosPlanner p3 = new HeliosPlanner(source, target);
+	Mapping mmm = e.execute(ls, p3);
 
-	assertTrue(m.equals(m2));
+	assertTrue(m.equals(mm));
+	assertTrue(mm.equals(mmm));
 
     }
 
@@ -177,15 +179,15 @@ public class PredecessorMapperTest {
 
 	DynamicPlanner p = new DynamicPlanner(source, target);
 	Mapping m = e.execute(ls, p);
-	System.out.println(m);
 
 	CanonicalPlanner p2 = new CanonicalPlanner();
-	Mapping m2 = e.execute(ls, p2);
+	Mapping mm = e.execute(ls, p2);
 
-	System.out.println(m2);
+	HeliosPlanner p3 = new HeliosPlanner(source, target);
+	Mapping mmm = e.execute(ls, p3);
 
-	assertTrue(m.equals(m2));
-
+	assertTrue(m.equals(mm));
+	assertTrue(mm.equals(mmm));
     }
 
     @Test
@@ -207,15 +209,15 @@ public class PredecessorMapperTest {
 		"MINUS(tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)|1.0,trigrams(x.name,y.name)|0.8)",
 		1.0);
 	Mapping m = e.execute(ls, p);
-	System.out.println(m);
 
 	CanonicalPlanner p2 = new CanonicalPlanner();
 	Mapping mm = e.execute(ls, p2);
 
-	System.out.println(mm);
+	HeliosPlanner p3 = new HeliosPlanner(source, target);
+	Mapping mmm = e.execute(ls, p3);
 
 	assertTrue(m.equals(mm));
-
+	assertTrue(mm.equals(mmm));
     }
 
     @Test
@@ -237,14 +239,15 @@ public class PredecessorMapperTest {
 		"XOR(trigrams(x.name,y.name)|0.8,tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)|1.0)",
 		1.0);
 	Mapping m = e.execute(ls, p);
-	System.out.println(m);
 
 	CanonicalPlanner p2 = new CanonicalPlanner();
 	Mapping mm = e.execute(ls, p2);
 
-	System.out.println(mm);
+	HeliosPlanner p3 = new HeliosPlanner(source, target);
+	Mapping mmm = e.execute(ls, p3);
 
 	assertTrue(m.equals(mm));
+	assertTrue(mm.equals(mmm));
 
     }
 

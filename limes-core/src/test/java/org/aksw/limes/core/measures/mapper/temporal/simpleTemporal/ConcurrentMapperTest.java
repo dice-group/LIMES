@@ -6,6 +6,7 @@ import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
+import org.aksw.limes.core.execution.planning.planner.HeliosPlanner;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -17,6 +18,7 @@ import org.junit.Test;
 public class ConcurrentMapperTest {
     public Cache source = new MemoryCache();
     public Cache target = new MemoryCache();
+
     @Before
     public void setUp() {
 	source = new MemoryCache();
@@ -31,7 +33,7 @@ public class ConcurrentMapperTest {
 	source.addTriple("S2", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-05-20T08:21:04+02:00");
 	source.addTriple("S2", "http://myOntology#MachineID", "26");
 	source.addTriple("S2", "name", "abce");
-	
+
 	source.addTriple("S3", "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime", "2015-05-20T08:24:04+02:00");
 	source.addTriple("S3", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-05-20T08:24:04+02:00");
 	source.addTriple("S3", "http://myOntology#MachineID", "26");
@@ -41,7 +43,7 @@ public class ConcurrentMapperTest {
 	source.addTriple("S4", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-05-20T08:31:04+02:00");
 	source.addTriple("S4", "http://myOntology#MachineID", "27");
 	source.addTriple("S4", "name", "ping");
-	
+
 	source.addTriple("S5", "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime", "2015-05-20T08:21:04+02:00");
 	source.addTriple("S5", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-05-20T08:21:04+02:00");
 	source.addTriple("S5", "http://myOntology#MachineID", "27");
@@ -51,7 +53,7 @@ public class ConcurrentMapperTest {
 	source.addTriple("S6", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-06-20T08:21:04+02:00");
 	source.addTriple("S6", "http://myOntology#MachineID", "27");
 	source.addTriple("S6", "name", "blabla");
-	
+
 	source.addTriple("S7", "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime", "2015-06-20T08:21:04+02:00");
 	source.addTriple("S7", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-06-20T08:21:04+02:00");
 	source.addTriple("S7", "http://myOntology#MachineID", "28");
@@ -130,105 +132,122 @@ public class ConcurrentMapperTest {
 	source = null;
 	target = null;
     }
+
     @Test
     public void simpleLS() {
 	System.out.println("simpleLS");
-	LinkSpecification ls = new LinkSpecification("tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)",0.5);
+	LinkSpecification ls = new LinkSpecification(
+		"tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)",
+		0.5);
 	DynamicPlanner p = new DynamicPlanner(source, target);
 	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 	Mapping m = e.execute(ls, p);
 	System.out.println(m);
 
     }
-    
+
     @Test
     public void complexLS() {
 	System.out.println("complexLS");
-	LinkSpecification ls = new LinkSpecification("OR(tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)|1.0,trigrams(x.name,y.name)|0.8)",1.0);
+	LinkSpecification ls = new LinkSpecification(
+		"OR(tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)|1.0,trigrams(x.name,y.name)|0.8)",
+		1.0);
 	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 
 	DynamicPlanner p = new DynamicPlanner(source, target);
 	Mapping m = e.execute(ls, p);
-	System.out.println(m);
-	
-	CanonicalPlanner p2 = new CanonicalPlanner();
-	Mapping m2 = e.execute(ls, p2);
-	
-	System.out.println(m2);
-	
-	assertTrue(m.equals(m2));
 
+	CanonicalPlanner p2 = new CanonicalPlanner();
+	Mapping mm = e.execute(ls, p2);
+
+	HeliosPlanner p3 = new HeliosPlanner(source, target);
+	Mapping mmm = e.execute(ls, p3);
+
+	assertTrue(m.equals(mm));
+	assertTrue(mm.equals(mmm));
 
     }
-    
+
     @Test
     public void complexLS2() {
 	System.out.println("complexLS2");
-	LinkSpecification ls = new LinkSpecification("AND(tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)|1.0,trigrams(x.name,y.name)|0.8)",1.0);
+	LinkSpecification ls = new LinkSpecification(
+		"AND(tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)|1.0,trigrams(x.name,y.name)|0.8)",
+		1.0);
 	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 
 	DynamicPlanner p = new DynamicPlanner(source, target);
 	Mapping m = e.execute(ls, p);
-	System.out.println(m);
-	
-	CanonicalPlanner p2 = new CanonicalPlanner();
-	Mapping m2 = e.execute(ls, p2);
-	
-	System.out.println(m2);
-	
-	assertTrue(m.equals(m2));
 
+	CanonicalPlanner p2 = new CanonicalPlanner();
+	Mapping mm = e.execute(ls, p2);
+
+	HeliosPlanner p3 = new HeliosPlanner(source, target);
+	Mapping mmm = e.execute(ls, p3);
+
+	assertTrue(m.equals(mm));
+	assertTrue(mm.equals(mmm));
     }
-    
+
     @Test
     public void complexLS3() {
 	System.out.println("complexLS3");
 	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 	DynamicPlanner p = new DynamicPlanner(source, target);
 
-	LinkSpecification ls1 = new LinkSpecification("tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)",1.0);
-	LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)",0.8);
+	LinkSpecification ls1 = new LinkSpecification(
+		"tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)",
+		1.0);
+	LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)", 0.8);
 	Mapping m1 = e.execute(ls1, p);
 	Mapping m2 = e.execute(ls2, p);
 	System.out.println(m1);
 	System.out.println(m2);
-	
-	LinkSpecification ls = new LinkSpecification("MINUS(tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)|1.0,trigrams(x.name,y.name)|0.8)",1.0);
+
+	LinkSpecification ls = new LinkSpecification(
+		"MINUS(tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)|1.0,trigrams(x.name,y.name)|0.8)",
+		1.0);
 	Mapping m = e.execute(ls, p);
-	System.out.println(m);
-	
+
 	CanonicalPlanner p2 = new CanonicalPlanner();
 	Mapping mm = e.execute(ls, p2);
-	
-	System.out.println(mm);
-	
+
+	HeliosPlanner p3 = new HeliosPlanner(source, target);
+	Mapping mmm = e.execute(ls, p3);
+
 	assertTrue(m.equals(mm));
+	assertTrue(mm.equals(mmm));
 
     }
-    
+
     @Test
     public void complexLS4() {
 	System.out.println("complexLS4");
 	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 	DynamicPlanner p = new DynamicPlanner(source, target);
 
-	LinkSpecification ls1 = new LinkSpecification("tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)",1.0);
-	LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)",0.8);
+	LinkSpecification ls1 = new LinkSpecification(
+		"tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)",
+		1.0);
+	LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)", 0.8);
 	Mapping m1 = e.execute(ls1, p);
 	Mapping m2 = e.execute(ls2, p);
 	System.out.println(m1);
 	System.out.println(m2);
-	
-	LinkSpecification ls = new LinkSpecification("XOR(tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)|1.0,trigrams(x.name,y.name)|0.8)",1.0);
+
+	LinkSpecification ls = new LinkSpecification(
+		"XOR(tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)|1.0,trigrams(x.name,y.name)|0.8)",
+		1.0);
 	Mapping m = e.execute(ls, p);
-	System.out.println(m);
-	
+
 	CanonicalPlanner p2 = new CanonicalPlanner();
 	Mapping mm = e.execute(ls, p2);
-	
-	System.out.println(mm);
-	
+
+	HeliosPlanner p3 = new HeliosPlanner(source, target);
+	Mapping mmm = e.execute(ls, p3);
+
 	assertTrue(m.equals(mm));
+	assertTrue(mm.equals(mmm));
 
     }
 
