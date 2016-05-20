@@ -6,8 +6,10 @@ import java.util.Date;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
+import org.apache.log4j.Logger;
 
-public class SuccessorMeasure extends TemporalMeasure{
+public class SuccessorMeasure extends TemporalMeasure {
+    private static final Logger logger = Logger.getLogger(SuccessorMeasure.class.getName());
 
     @Override
     public double getSimilarity(Object a, Object b) {
@@ -42,8 +44,9 @@ public class SuccessorMeasure extends TemporalMeasure{
     @Override
     public double getSimilarity(Instance a, Instance b, String property1, String property2) {
 	String beginDate1 = this.getFirstProperty(property1);
+	
 	String beginDate2 = this.getFirstProperty(property2);
-
+	
 	String s1 = new String(a.getProperty(beginDate1).first());
 	String s2 = new String(b.getProperty(beginDate2).first());
 

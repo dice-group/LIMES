@@ -43,17 +43,17 @@ public abstract class AtomicAllenAlgebraMapper {
      * 
      * @param expression,
      *            metric expression
-     * 
+     * @throws IllegalArgumentException
      * @return first property of metric expression as string
      */
-    protected static String getBeginProperty(String properties) {
+    protected static String getBeginProperty(String properties) throws IllegalArgumentException {
 	properties = properties.substring(properties.indexOf(".") + 1, properties.length());
 	int plusIndex = properties.indexOf("|");
 	if (properties.indexOf("|") != -1) {
 	    String p1 = properties.substring(0, plusIndex);
 	    return p1;
 	} else
-	    return properties;
+	    throw new IllegalArgumentException();
     }
 
     /**
@@ -61,17 +61,17 @@ public abstract class AtomicAllenAlgebraMapper {
      * 
      * @param expression,
      *            metric expression
-     * 
+     * @throws IllegalArgumentException
      * @return first property of metric expression as string
      */
-    protected static String getEndProperty(String properties) {
+    protected static String getEndProperty(String properties) throws IllegalArgumentException {
 	properties = properties.substring(properties.indexOf(".") + 1, properties.length());
 	int plusIndex = properties.indexOf("|");
 	if (properties.indexOf("|") != -1) {
 	    String p1 = properties.substring(plusIndex + 1, properties.length());
 	    return p1;
 	} else
-	    return properties;
+	    throw new IllegalArgumentException();
     }
 
     /**
@@ -92,7 +92,13 @@ public abstract class AtomicAllenAlgebraMapper {
     protected static TreeMap<Long, Set<String>> orderByBeginDate(Cache cache, String expression) {
 	TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
 	Parser p = new Parser(expression, 0.0d);
-	String property = getBeginProperty(p.getTerm1());
+	String property = null;
+	try {
+	    property = getBeginProperty(p.getTerm1());
+	} catch (IllegalArgumentException e1) {
+	    logger.error("Wrong or missing property in " + p.getTerm1());
+	    System.exit(1);
+	}
 
 	for (Instance instance : cache.getAllInstances()) {
 	    TreeSet<String> time = instance.getProperty(property);
@@ -138,7 +144,13 @@ public abstract class AtomicAllenAlgebraMapper {
     protected static TreeMap<Long, Set<String>> orderByEndDate(Cache cache, String expression) {
 	TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
 	Parser p = new Parser(expression, 0.0d);
-	String property = getEndProperty(p.getTerm1());
+	String property = null;
+	try {
+	    property = getEndProperty(p.getTerm1());
+	} catch (IllegalArgumentException e1) {
+	    logger.error("Wrong or missing property in " + p.getTerm1());
+	    System.exit(1);
+	}
 
 	for (Instance instance : cache.getAllInstances()) {
 	    TreeSet<String> time = instance.getProperty(property);

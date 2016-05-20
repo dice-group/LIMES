@@ -6,8 +6,10 @@ import java.util.Date;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
+import org.apache.log4j.Logger;
 
 public class PredecessorMeasure extends TemporalMeasure {
+    private static final Logger logger = Logger.getLogger(PredecessorMeasure.class.getName());
 
     @Override
     public double getSimilarity(Object a, Object b) {

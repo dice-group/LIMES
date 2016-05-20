@@ -8,10 +8,9 @@ public abstract class TemporalMeasure extends Measure implements ITemporalMeasur
      * 
      * @param expression,
      *            metric expression
-     * 
      * @return first property of metric expression as string
      */
-    protected String getFirstProperty(String properties) {
+    public String getFirstProperty(String properties) throws IllegalArgumentException{
 	int plusIndex = properties.indexOf("|");
 	if (properties.indexOf("|") != -1) {
 	    String p1 = properties.substring(0, plusIndex);
@@ -25,15 +24,14 @@ public abstract class TemporalMeasure extends Measure implements ITemporalMeasur
      * 
      * @param expression,
      *            the metric expression
-     * 
      * @return second property of metric expression as string
      */
-    protected String getSecondProperty(String properties) {
+    public String getSecondProperty(String properties) throws IllegalArgumentException{
 	int plusIndex = properties.indexOf("|");
 	if (properties.indexOf("|") != -1) {
 	    String p1 = properties.substring(plusIndex + 1, properties.length());
 	    return p1;
 	} else
-	    return properties;
+	    throw new IllegalArgumentException();
     }
 }

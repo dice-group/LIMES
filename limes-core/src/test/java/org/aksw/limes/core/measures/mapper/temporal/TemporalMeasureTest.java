@@ -1,23 +1,22 @@
-package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
+package org.aksw.limes.core.measures.mapper.temporal;
 
 import static org.junit.Assert.*;
 
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
-import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
-import org.aksw.limes.core.execution.planning.planner.HeliosPlanner;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
+import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SuccessorMapperTest {
-
-
+public class TemporalMeasureTest {
 
     public Cache source = new MemoryCache();
     public Cache target = new MemoryCache();
@@ -137,122 +136,18 @@ public class SuccessorMapperTest {
     }
 
     @Test
-    public void simpleLS() {
-	System.out.println("simpleLS");
+    public void firstProperty() {
+	System.out.println("firstProperty");
 	LinkSpecification ls = new LinkSpecification(
-		"tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)",
+		"tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)",
 		0.5);
-	DynamicPlanner p = new DynamicPlanner(source, target);
-	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
-	Mapping m = e.execute(ls, p);
-	System.out.println(m);
-
+	Instance s1 = source.getInstance("S1");
+	Instance t1 = target.getInstance("T1");
+	String property1 = "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID";
+	String property2 = "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID";
+	ConcurrentMeasure c = new ConcurrentMeasure();
+	double sim = c.getSimilarity(s1, t1, property1, property2);
+	System.out.println(sim);
     }
-
-    @Test
-    public void complexLS() {
-	System.out.println("complexLS");
-	LinkSpecification ls = new LinkSpecification(
-		"OR(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)|1.0,trigrams(x.name,y.name)|0.8)",
-		1.0);
-	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
-
-	DynamicPlanner p = new DynamicPlanner(source, target);
-	Mapping m = e.execute(ls, p);
-
-	CanonicalPlanner p2 = new CanonicalPlanner();
-	Mapping mm = e.execute(ls, p2);
-
-	HeliosPlanner p3 = new HeliosPlanner(source, target);
-	Mapping mmm = e.execute(ls, p3);
-
-	assertTrue(m.equals(mm));
-	assertTrue(mm.equals(mmm));
-
-    }
-
-    @Test
-    public void complexLS2() {
-	System.out.println("complexLS2");
-	LinkSpecification ls = new LinkSpecification(
-		"AND(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)|1.0,trigrams(x.name,y.name)|0.3)",
-		1.0);
-	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
-
-	DynamicPlanner p = new DynamicPlanner(source, target);
-	Mapping m = e.execute(ls, p);
-
-	CanonicalPlanner p2 = new CanonicalPlanner();
-	Mapping mm = e.execute(ls, p2);
-
-	HeliosPlanner p3 = new HeliosPlanner(source, target);
-	Mapping mmm = e.execute(ls, p3);
-
-	assertTrue(m.equals(mm));
-	assertTrue(mm.equals(mmm));
-    }
-
-    @Test
-    public void complexLS3() {
-	System.out.println("complexLS3");
-	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
-	DynamicPlanner p = new DynamicPlanner(source, target);
-
-	LinkSpecification ls1 = new LinkSpecification(
-		"tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)",
-		1.0);
-	LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)", 0.8);
-	Mapping m1 = e.execute(ls1, p);
-	Mapping m2 = e.execute(ls2, p);
-	System.out.println(m1);
-	System.out.println(m2);
-
-	LinkSpecification ls = new LinkSpecification(
-		"MINUS(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)|1.0,trigrams(x.name,y.name)|0.8)",
-		1.0);
-	Mapping m = e.execute(ls, p);
-
-	CanonicalPlanner p2 = new CanonicalPlanner();
-	Mapping mm = e.execute(ls, p2);
-
-	HeliosPlanner p3 = new HeliosPlanner(source, target);
-	Mapping mmm = e.execute(ls, p3);
-
-	assertTrue(m.equals(mm));
-	assertTrue(mm.equals(mmm));
-
-    }
-
-    @Test
-    public void complexLS4() {
-	System.out.println("complexLS4");
-	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
-	DynamicPlanner p = new DynamicPlanner(source, target);
-
-	LinkSpecification ls1 = new LinkSpecification(
-		"tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)",
-		1.0);
-	LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)", 0.8);
-	Mapping m1 = e.execute(ls1, p);
-	Mapping m2 = e.execute(ls2, p);
-	System.out.println(m1);
-	System.out.println(m2);
-
-	LinkSpecification ls = new LinkSpecification(
-		"XOR(trigrams(x.name,y.name)|0.8,tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)|1.0)",
-		1.0);
-	Mapping m = e.execute(ls, p);
-
-	CanonicalPlanner p2 = new CanonicalPlanner();
-	Mapping mm = e.execute(ls, p2);
-
-	HeliosPlanner p3 = new HeliosPlanner(source, target);
-	Mapping mmm = e.execute(ls, p3);
-
-	assertTrue(m.equals(mm));
-	assertTrue(mm.equals(mmm));
-
-    }
-
 
 }
