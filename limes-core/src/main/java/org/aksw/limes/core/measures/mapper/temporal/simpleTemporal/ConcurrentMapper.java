@@ -25,7 +25,7 @@ public class ConcurrentMapper extends SimpleTemporalMapper {
 
 	Mapping m = new MemoryMapping();
 	Parser p = new Parser(expression, threshold);
-
+	
 	TreeMap<String, Set<Instance>> sources = this.orderByBeginDate(source, expression);
 	TreeMap<String, Set<Instance>> targets = this.orderByBeginDate(target, expression);
 	String machineID = this.getSecondProperty(p.getTerm1());

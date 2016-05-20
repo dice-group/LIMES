@@ -1,5 +1,9 @@
 package org.aksw.limes.core.measures.measure.temporal.simpleTemporal;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
 
@@ -10,8 +14,24 @@ public class SuccessorMeasure extends TemporalMeasure{
 	double sim = 0;
 	String split1[] = ((String) a).split("\\|");
 	String split2[] = ((String) b).split("\\|");
-	
-	if (new Double(split1[0]) < (new Double(split2[0])))
+	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+	Date date1, date2;
+	long epoch1 = 0, epoch2 = 0;
+	try {
+	    date1 = df.parse(split1[0]);
+	    epoch1 = date1.getTime();
+	} catch (ParseException e) {
+	    System.err.println("Exiting..");
+	}
+	try {
+	    date2 = df.parse(split2[0]);
+	    epoch2 = date2.getTime();
+	} catch (ParseException e) {
+	    System.err.println("Exiting..");
+
+	}
+
+	if (epoch1 < epoch2)
 	    sim = 1;
 	else
 	    sim = 0;
@@ -21,16 +41,13 @@ public class SuccessorMeasure extends TemporalMeasure{
 
     @Override
     public double getSimilarity(Instance a, Instance b, String property1, String property2) {
-	double sim = 0;
 	String beginDate1 = this.getFirstProperty(property1);
 	String beginDate2 = this.getFirstProperty(property2);
-	
-	if (new Double(a.getProperty(beginDate1).first()) < ((new Double(b.getProperty(beginDate2).first()))))
-	    sim = 1;
-	else
-	    sim = 0;
 
-	return sim;
+	String s1 = new String(a.getProperty(beginDate1).first());
+	String s2 = new String(b.getProperty(beginDate2).first());
+
+	return this.getSimilarity(s1, s2);
     }
 
     @Override

@@ -1,5 +1,9 @@
 package org.aksw.limes.core.measures.measure.temporal.simpleTemporal;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
 
@@ -10,9 +14,24 @@ public class ConcurrentMeasure extends TemporalMeasure {
 	double sim = 0;
 	String split1[] = ((String) a).split("\\|");
 	String split2[] = ((String) b).split("\\|");
+	
+	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+	Date date1, date2;
+	long epoch1 = 0, epoch2 = 0;
+	try {
+	    date1 = df.parse(split1[0]);
+	    epoch1 = date1.getTime();
+	} catch (ParseException e) {
+	    System.err.println("Exiting..");
+	}
+	try {
+	    date2 = df.parse(split2[0]);
+	    epoch2 = date2.getTime();
+	} catch (ParseException e) {
+	    System.err.println("Exiting..");
 
-	if (new Double(split1[0]).equals(new Double(split2[0]))
-		&& new Double(split1[1]).equals(new Double(split2[1])))
+	}
+	if (epoch1 == epoch2 && split1[1].equals(split2[1]))
 	    sim = 1;
 	else
 	    sim = 0;
@@ -22,22 +41,17 @@ public class ConcurrentMeasure extends TemporalMeasure {
 
     @Override
     public double getSimilarity(Instance a, Instance b, String property1, String property2) {
-	double sim = 0;
 	String beginDate1 = this.getFirstProperty(property1);
 	String beginDate2 = this.getFirstProperty(property2);
 
 	String machineID1 = this.getSecondProperty(property1);
 	String machineID2 = this.getSecondProperty(property2);
 
-	if (new Double(a.getProperty(beginDate1).first())
-		== ((new Double(b.getProperty(beginDate2).first())))
-		&& new Double(a.getProperty(machineID1).first())
-			== ((new Double(b.getProperty(machineID2).first()))))
-	    sim = 1;
-	else
-	    sim = 0;
-
-	return sim;
+	String s1 = new String(a.getProperty(beginDate1).first()+"|"+a.getProperty(machineID1));
+	String s2 = new String(b.getProperty(beginDate2).first()+"|"+b.getProperty(machineID2));
+	
+	return this.getSimilarity(s1, s2);
+	
     }
 
     @Override
