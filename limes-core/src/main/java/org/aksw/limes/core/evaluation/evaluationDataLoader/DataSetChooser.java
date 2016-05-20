@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.HybridCache;
-import org.aksw.limes.core.io.config.reader.IConfigurationReader;
+import org.aksw.limes.core.io.config.reader.ConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.Mapping;
@@ -263,7 +263,7 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_movies.csv");
 		param.put(MapKey.NAME, "movies");
 		// data
-		IConfigurationReader cR = new RDFConfigurationReader();
+		ConfigurationReader cR = new RDFConfigurationReader();
 		cR.read(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
 		param.put(MapKey.CONFIG_READER, cR);
 		
@@ -293,7 +293,7 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_villages.csv");
 		param.put(MapKey.NAME, "villages");
 		// data
-		IConfigurationReader cR = new RDFConfigurationReader();
+		ConfigurationReader cR = new RDFConfigurationReader();
 		cR.read(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
 		param.put(MapKey.CONFIG_READER, cR);
 		
@@ -320,7 +320,7 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_cities.csv");
 		param.put(MapKey.NAME, "towns");
 		// data
-		IConfigurationReader cR = new RDFConfigurationReader();
+		ConfigurationReader cR = new RDFConfigurationReader();
 		cR.read(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
 		param.put(MapKey.CONFIG_READER, cR);
 		
@@ -348,7 +348,7 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Persons1.csv");
 		param.put(MapKey.NAME, "Persons1");
 		// data
-		IConfigurationReader cR = new XMLConfigurationReader();
+		ConfigurationReader cR = new XMLConfigurationReader();
 		cR.read(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
 		param.put(MapKey.CONFIG_READER, cR);
 		
@@ -380,7 +380,7 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_OAEI2014.csv");
 		param.put(MapKey.NAME, "OAEI2014");
 		// data
-		IConfigurationReader cR = new XMLConfigurationReader();
+		ConfigurationReader cR = new XMLConfigurationReader();
 		cR.read(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
 		param.put(MapKey.CONFIG_READER, cR);
 		
@@ -407,7 +407,7 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_RESULTS_FOLDER, "resources/results/");
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Persons1.csv");
 		param.put(MapKey.NAME, "Persons1_CSV");
-		IConfigurationReader cR = new XMLConfigurationReader();
+		ConfigurationReader cR = new XMLConfigurationReader();
 		cR.read((String)param.get(MapKey.BASE_FOLDER)+(String)param.get(MapKey.CONFIG_FILE));
 		HybridCache sC = HybridCache.getData(cR.configuration.getSourceInfo());
 		HybridCache tC = HybridCache.getData(cR.configuration.getTargetInfo());
@@ -440,7 +440,7 @@ public class DataSetChooser {
 //		Cache tC =  Experiment.readOAEIFile((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.TARGET_FILE), type);
 //		Experiment.toCsvFile(tC, (String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.TARGET_FILE)+".csv");
 //		Experiment.toCsvFile(Experiment.readOAEIMapping((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.REFERENCE_FILE)), (String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.REFERENCE_FILE)+".csv");
-		IConfigurationReader cR = new XMLConfigurationReader();
+		ConfigurationReader cR = new XMLConfigurationReader();
 		cR.read(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
 		param.put(MapKey.CONFIG_READER, cR);
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
@@ -465,7 +465,7 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Persons2.csv");
 		param.put(MapKey.NAME, "Persons2_CSV");
 		// data
-		IConfigurationReader cR = new XMLConfigurationReader();
+		ConfigurationReader cR = new XMLConfigurationReader();
 		cR.read((String)param.get(MapKey.BASE_FOLDER)+(String)param.get(MapKey.CONFIG_FILE));
 		HybridCache sC = HybridCache.getData(cR.configuration.getSourceInfo());
 		HybridCache tC = HybridCache.getData(cR.configuration.getTargetInfo());
@@ -498,7 +498,7 @@ public class DataSetChooser {
 //		Experiment.toCsvFile(tC, (String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.TARGET_FILE)+".csv");
 //		Experiment.toCsvFile(Experiment.readOAEIMapping((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.REFERENCE_FILE)), (String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.REFERENCE_FILE)+".csv");
 	
-		IConfigurationReader cR = new XMLConfigurationReader();
+		ConfigurationReader cR = new XMLConfigurationReader();
 		cR.read(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
 		param.put(MapKey.CONFIG_READER, cR);
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
@@ -525,7 +525,7 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Restaurants.csv");
 		param.put(MapKey.NAME, "Restaurants_CSV");
 		// data
-		IConfigurationReader cR = new XMLConfigurationReader();
+		ConfigurationReader cR = new XMLConfigurationReader();
 		cR.read((String)param.get(MapKey.BASE_FOLDER)+(String)param.get(MapKey.CONFIG_FILE));
 		HybridCache sC = HybridCache.getData(cR.configuration.getSourceInfo());
 		HybridCache tC = HybridCache.getData(cR.configuration.getTargetInfo());
@@ -556,7 +556,7 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_DBLP-ACM.csv");
 		param.put(MapKey.NAME, "DBLP-ACM");
 		// data
-		IConfigurationReader cR = new XMLConfigurationReader();
+		ConfigurationReader cR = new XMLConfigurationReader();
 		cR.read((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
 		System.out.println(cR.configuration);
 		param.put(MapKey.CONFIG_READER, cR);
@@ -584,7 +584,7 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Abt-Buy.csv");
 		param.put(MapKey.NAME, "Abt-Buy");
 		// data
-		IConfigurationReader cR = new XMLConfigurationReader();
+		ConfigurationReader cR = new XMLConfigurationReader();
 		cR.read((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
 		
 		param.put(MapKey.CONFIG_READER, cR);
@@ -611,7 +611,7 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_DBLP-Scholar.csv");
 		param.put(MapKey.NAME, "DBLP-SCHOLAR");
 		// data
-		IConfigurationReader cR = new XMLConfigurationReader();
+		ConfigurationReader cR = new XMLConfigurationReader();
 		cR.read((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
 		
 		param.put(MapKey.CONFIG_READER, cR);
@@ -640,7 +640,7 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Amazon-GoogleProducts.csv");
 		param.put(MapKey.NAME, "Amazon-GoogleProducts");
 		// data
-		IConfigurationReader cR = new XMLConfigurationReader();
+		ConfigurationReader cR = new XMLConfigurationReader();
 		cR.read((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
 		
 		param.put(MapKey.CONFIG_READER, cR);
@@ -668,7 +668,7 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_DBPedia-LinkedMDB.csv");
 		param.put(MapKey.NAME, "DBPedia-LinkedMDB");
 		// data
-		IConfigurationReader cR = new XMLConfigurationReader();
+		ConfigurationReader cR = new XMLConfigurationReader();
 		cR.read((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
 		
 		param.put(MapKey.CONFIG_READER, cR);
@@ -696,7 +696,7 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Drugs.csv");
 		param.put(MapKey.NAME, "Drugs");
 		// data
-		IConfigurationReader cR = new XMLConfigurationReader();
+		ConfigurationReader cR = new XMLConfigurationReader();
 		cR.read((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
 		
 		param.put(MapKey.CONFIG_READER, cR);

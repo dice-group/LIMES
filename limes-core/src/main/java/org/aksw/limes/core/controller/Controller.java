@@ -11,7 +11,7 @@ import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterFactoryType;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
-import org.aksw.limes.core.io.config.reader.IConfigurationReader;
+import org.aksw.limes.core.io.config.reader.ConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -91,7 +91,7 @@ public class Controller {
 	    format = "xml";
 	}
 
-	IConfigurationReader reader = null;
+	ConfigurationReader reader = null;
 	switch (format) {
 	case "xml":
 	    reader = new XMLConfigurationReader();

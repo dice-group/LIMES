@@ -28,7 +28,7 @@ import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.config.reader.IConfigurationReader;
+import org.aksw.limes.core.io.config.reader.ConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.config.writer.RDFConfigurationWriter;
@@ -94,7 +94,7 @@ public class Config extends Configuration {
 		super(sourceInfo, targetInfo, metricExpression, acceptanceRelation,
 				verificationRelation, acceptanceThreshold, acceptanceFile,
 				verificationThreshold, verificationFile, prefixes,
-				outputFormat, executionPlan, granularity);
+				outputFormat, executionPlan, granularity, null, null);
 		metric = new Output();
 		this.sourceEndpoint = new Endpoint(this.sourceInfo);
 		this.targetEndpoint = new Endpoint(this.targetInfo);
@@ -129,7 +129,7 @@ public class Config extends Configuration {
 	 *             FileNotFoundException
 	 */
 	public static Config loadFromFile(File file) throws Exception {
-		IConfigurationReader reader = null;
+		ConfigurationReader reader = null;
 		if (file.getAbsolutePath().contains(".xml")) {
 			reader = new XMLConfigurationReader();
 		} else if (file.getAbsolutePath().contains(".rdf")

@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.aksw.limes.core.io.config.reader.IConfigurationReader;
+import org.aksw.limes.core.io.config.reader.ConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 /**
@@ -22,13 +22,13 @@ public class PropMapper {
 	 * @return
 	 */
 	public static PropertyMapping getPropertyMapping(String configFile) {		
-		IConfigurationReader cR = new RDFConfigurationReader();
+		ConfigurationReader cR = new RDFConfigurationReader();
 		cR.read(configFile);
 		return  getPropertyMapping(cR, configFile);
 		
 	}
 	
-	public static PropertyMapping getPropertyMapping(IConfigurationReader cR, String name) {
+	public static PropertyMapping getPropertyMapping(ConfigurationReader cR, String name) {
 		
 		PropertyMapping pM = new PropertyMapping();
 

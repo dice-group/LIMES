@@ -37,9 +37,9 @@ limes:wombat
       limes:hasParameter limes:parameter1.
       
 limes:parameter1 
-	  a 	MLParameter ;
-	  mlParameterName "max execution time in minutes"
-	  mlParameterValue "60" .
+	  a 	 limes:MLParameter ;
+	  limes:mlParameterName "max execution time in minutes" ;
+	  limes:mlParameterValue "60" .
 
 limes:linkedgeodataTOlinkedgeodataAcceptance
       a       limes:Acceptance ;

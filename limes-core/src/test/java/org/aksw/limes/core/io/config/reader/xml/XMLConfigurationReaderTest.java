@@ -70,11 +70,14 @@ public class XMLConfigurationReaderTest {
 				prefixes,							//prefixes
 				"TAB",								//outputFormat
 				"Simple",							//executionPlan
-				2									//granularity
+				2,									//granularity
+				new String(),						//MLAlgorithmName
+				new HashMap<String, String>()		//MLAlgorithmParameters
 				);
 
 		XMLConfigurationReader c = new XMLConfigurationReader();
 		Configuration fileConf = c.read("/resources/lgd-lgd.xml");
+		System.out.println(fileConf);
 
 		assertTrue(testConf.equals(fileConf));
 	}

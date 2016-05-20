@@ -24,7 +24,7 @@ limes:linkedgeodataTOlinkedgeodata
       limes:hasSource limes:linkedgeodataTOlinkedgeodataSource ;
       limes:hasTarget limes:linkedgeodataTOlinkedgeodataTarget ;
       limes:outputFormat "TAB" .
-
+      
 limes:linkedgeodataTOlinkedgeodataReview
       a       limes:Review ;
       limes:file "lgd_relaybox_near.nt" ;

@@ -14,7 +14,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.config.reader.IConfigurationReader;
+import org.aksw.limes.core.io.config.reader.ConfigurationReader;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
@@ -29,7 +29,7 @@ import org.xml.sax.SAXException;
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 12, 2015
  */
-public class XMLConfigurationReader implements IConfigurationReader{
+public class XMLConfigurationReader extends ConfigurationReader{
 	private static final Logger logger = Logger.getLogger(XMLConfigurationReader.class.getName());
 
 	// Constants
@@ -76,7 +76,7 @@ public class XMLConfigurationReader implements IConfigurationReader{
 	 */
 	@Override
 	public Configuration read(String filePath) {
-		try {
+		try {			
 			//System.out.println("file://"+System.getProperty("user.dir")+"/"+filePath);
 			//String s = System.getProperty("user.dir")+"/"+filePath;
 			String s = filePath;
@@ -92,7 +92,7 @@ public class XMLConfigurationReader implements IConfigurationReader{
 		return configuration;
 	}
 
-	public void afterPropertiesSet() {
+	public void afterPropertiesSet(Configuration configuration) {
 		configuration.getSourceInfo().afterPropertiesSet();
 		configuration.getTargetInfo().afterPropertiesSet();
 

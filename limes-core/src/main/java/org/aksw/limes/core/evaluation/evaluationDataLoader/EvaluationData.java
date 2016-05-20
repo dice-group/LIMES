@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser.MapKey;
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.config.reader.IConfigurationReader;
+import org.aksw.limes.core.io.config.reader.ConfigurationReader;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 
@@ -30,7 +30,7 @@ public class EvaluationData {
 	private String evauationResultFolder = "resources/results/";
 	private String evaluationResultFileName;
 	
-	private IConfigurationReader configReader;
+	private ConfigurationReader configReader;
 	private PropertyMapping propertyMapping;
 	private Cache sourceCache;
 	private Cache targetCache;
@@ -166,13 +166,13 @@ public class EvaluationData {
 	/**
 	 * @return the configReader
 	 */
-	public IConfigurationReader getConfigReader() {
+	public ConfigurationReader getConfigReader() {
 		return configReader;
 	}
 	/**
 	 * @param configReader the configReader to set
 	 */
-	public void setConfigReader(IConfigurationReader configReader) {
+	public void setConfigReader(ConfigurationReader configReader) {
 		this.configReader = configReader;
 	}
 	/**
@@ -234,7 +234,7 @@ public class EvaluationData {
 		EvaluationData data = new EvaluationData();
 		data.baseFolder = (String) map.get(MapKey.BASE_FOLDER);
 		data.configFileName = (String) map.get(MapKey.CONFIG_FILE);
-		data.configReader = (IConfigurationReader) map.get(MapKey.CONFIG_READER);
+		data.configReader = (ConfigurationReader) map.get(MapKey.CONFIG_READER);
 		data.datasetFolder = (String) map.get(MapKey.DATASET_FOLDER);
 		data.evaluationResultFileName = (String) map.get(MapKey.EVALUATION_FILENAME);
 		data.evauationResultFolder = (String) map.get(MapKey.EVALUATION_RESULTS_FOLDER);

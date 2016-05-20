@@ -6,14 +6,13 @@ import org.aksw.limes.core.io.config.Configuration;
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 12, 2015
  */
-public interface IConfigurationReader {
+public abstract class ConfigurationReader {
 	
-	Configuration configuration = new Configuration();
-
+	public Configuration configuration = new Configuration();
 	/**
 	 * @param filePath
 	 * @return filled configuration object from the input file
 	 */
-	Configuration read(String filePath);
+	abstract public Configuration read(String filePath);
 	
 }
