@@ -5,7 +5,7 @@ import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
-import org.aksw.limes.core.ml.setting.LearningSetting;
+import org.aksw.limes.core.ml.setting.LearningParameters;
 
 public class ACIDS extends ACoreMLAlgorithm {
 
@@ -15,9 +15,9 @@ public class ACIDS extends ACoreMLAlgorithm {
 	}
 
 	@Override
-	protected void init(LearningSetting ls, Cache source, Cache target) {
-		// TODO Auto-generated method stub
-		
+	protected void init(LearningParameters lp, Cache source, Cache target) {
+		super.init(lp, source, target);
+		// TODO
 	}
 
 	@Override
@@ -53,5 +53,6 @@ public class ACIDS extends ACoreMLAlgorithm {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 }

@@ -6,7 +6,7 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 
-public class UnsupervisedMLAlgorithm extends AUnsupervisedMLAlgorithm {
+public class UnsupervisedMLAlgorithm extends AMLAlgorithm {
 	
 	public final static MLImplementationType ML_IMPLEMENTATION_TYPE = MLImplementationType.UNSUPERVISED;
 	
@@ -25,7 +25,6 @@ public class UnsupervisedMLAlgorithm extends AUnsupervisedMLAlgorithm {
 		
 	}
 	
-	@Override
 	public MLModel learn(PseudoFMeasure pfm) throws UnsupportedMLImplementationException {
 		return ml.learn(pfm);
 	}

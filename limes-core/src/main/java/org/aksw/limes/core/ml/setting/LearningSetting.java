@@ -10,12 +10,16 @@ import org.aksw.limes.core.ml.oldalgorithm.IMLAlgorithm;
 import org.apache.commons.collections15.map.HashedMap;
 
 /**
+ * @deprecated Use LearningParameters instead
+ * 
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @author Klaus Lyko
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version May 17, 2016
  */
+@Deprecated
 public abstract class LearningSetting {
+	
 	protected static Logger logger = Logger.getLogger(LearningSetting.class.getName());
 	
 	protected Map<String, String> parameters = new HashedMap<>();

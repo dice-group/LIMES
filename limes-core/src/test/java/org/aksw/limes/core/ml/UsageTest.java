@@ -4,6 +4,8 @@ import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.ml.algorithm.ACIDS;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.EAGLE;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.junit.Test;
@@ -17,14 +19,13 @@ public class UsageTest {
 
 		SupervisedMLAlgorithm eagle = null;
 		try {
-			eagle = new SupervisedMLAlgorithm(EAGLE.class);
+			eagle = MLAlgorithmFactory.createMLAlgorithm(EAGLE.class, 
+					MLImplementationType.SUPERVISED_BATCH).asSupervised();
 		} catch (UnsupportedMLImplementationException e) {
 			e.printStackTrace();
 			fail();
 		}
 		assert (eagle.getClass().equals(SupervisedMLAlgorithm.class));
-		
-		
 		
 	}
 
@@ -33,7 +34,8 @@ public class UsageTest {
 
 		UnsupervisedMLAlgorithm eagleU = null;
 		try {
-			eagleU = new UnsupervisedMLAlgorithm(EAGLE.class);
+			eagleU = MLAlgorithmFactory.createMLAlgorithm(EAGLE.class,
+					MLImplementationType.UNSUPERVISED).asUnsupervised();
 		} catch (UnsupportedMLImplementationException e) {
 			e.printStackTrace();
 			fail();
@@ -47,7 +49,8 @@ public class UsageTest {
 
 		ActiveMLAlgorithm acids = null;
 		try {
-			acids = new ActiveMLAlgorithm(ACIDS.class);
+			acids = MLAlgorithmFactory.createMLAlgorithm(ACIDS.class,
+					MLImplementationType.SUPERVISED_ACTIVE).asActive();
 		} catch (UnsupportedMLImplementationException e) {
 			e.printStackTrace();
 			fail();
@@ -61,7 +64,8 @@ public class UsageTest {
 
 		boolean itFails = false;
 		try {
-			new ActiveMLAlgorithm(EAGLE.class);
+			MLAlgorithmFactory.createMLAlgorithm(EAGLE.class,
+					MLImplementationType.SUPERVISED_ACTIVE);
 		} catch (UnsupportedMLImplementationException e) {
 			itFails = true;
 		}

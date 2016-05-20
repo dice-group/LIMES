@@ -6,7 +6,7 @@ import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 
-public class SupervisedMLAlgorithm extends ASupervisedMLAlgorithm {
+public class SupervisedMLAlgorithm extends AMLAlgorithm {
 	
 	public final static MLImplementationType ML_IMPLEMENTATION_TYPE = MLImplementationType.SUPERVISED_BATCH;
 	
@@ -25,7 +25,6 @@ public class SupervisedMLAlgorithm extends ASupervisedMLAlgorithm {
 		
 	}
 
-	@Override
 	public MLModel learn(Mapping trainingData) throws UnsupportedMLImplementationException {
 		return ml.learn(trainingData);
 	}
