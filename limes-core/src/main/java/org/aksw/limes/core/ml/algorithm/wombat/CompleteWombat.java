@@ -22,7 +22,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.ml.algorithm.MLResult;
+import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -581,7 +581,7 @@ public class CompleteWombat extends Wombat {
 	 * @see org.aksw.limes.core.ml.algorithm.IMLAlgorithm#learn(org.aksw.limes.core.io.mapping.Mapping)
 	 */
 	@Override
-	public MLResult learn(Mapping trainingData) {
+	public MLModel learn(Mapping trainingData) {
 		if(bestSolutionNode == null){
 			bestSolutionNode =  getBestSolution();
 		}
@@ -590,7 +590,7 @@ public class CompleteWombat extends Wombat {
 		Mapping bestMapping = bestSolutionNode.map;
 		LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
 		double bestFMeasure = bestSolutionNode.fMeasure;
-		MLResult result= new MLResult(bestLS, bestMapping, bestFMeasure, null);
+		MLModel result= new MLModel(bestLS, bestMapping, bestFMeasure, null);
 		return result;
 	}
 

@@ -32,7 +32,7 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithm;
+import org.aksw.limes.core.ml.oldalgorithm.MLAlgorithm;
 import org.apache.log4j.Logger;
 
 

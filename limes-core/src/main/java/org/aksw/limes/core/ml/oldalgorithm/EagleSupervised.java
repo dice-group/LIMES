@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm;
+package org.aksw.limes.core.ml.oldalgorithm;
 
 
 import java.util.HashSet;
@@ -44,7 +44,7 @@ public class EagleSupervised extends MLAlgorithm{
 	}
 
 	@Override
-	public MLResult learn(Mapping trainingData) {
+	public MLModel learn(Mapping trainingData) {
 		turn++;
 		fitness.addToReference(extractPositiveMatches(trainingData));
 		fitness.fillCachesIncrementally(trainingData);
@@ -54,7 +54,7 @@ public class EagleSupervised extends MLAlgorithm{
 			bestSolutions.add(determineFittest(gp, gen));
 		}
 		
-		MLResult result = createResult();
+		MLModel result = createResult();
 		return result;
 	}
 
@@ -184,8 +184,8 @@ public class EagleSupervised extends MLAlgorithm{
 		return (LinkSpecification) pc.getNode(0).execute_object(pc, 0, args);
 	}
 	
-	private MLResult createResult() {
-		MLResult result = new MLResult();
+	private MLModel createResult() {
+		MLModel result = new MLModel();
 		result.setLinkSpecification(getLinkSpecification(allBest));
 //		result.setMapping(fitness.getMapping(getLinkSpecification(allBest), true));
 		result.setQuality(allBest.getFitnessValue());

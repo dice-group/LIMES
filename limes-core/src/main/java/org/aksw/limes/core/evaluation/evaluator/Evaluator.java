@@ -15,7 +15,7 @@ import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithm;
+import org.aksw.limes.core.ml.oldalgorithm.MLAlgorithm;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;

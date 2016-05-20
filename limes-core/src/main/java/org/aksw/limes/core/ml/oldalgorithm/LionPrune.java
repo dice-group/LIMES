@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm;
+package org.aksw.limes.core.ml.oldalgorithm;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -136,8 +136,8 @@ public class LionPrune extends MLAlgorithm {
      * 
      * @throws IOException
      */
-    public MLResult start() throws IOException {
-	MLResult result = new MLResult();
+    public MLModel start() throws IOException {
+	MLModel result = new MLModel();
 	// highest accuracy so far
 	double highestAccuracy = 0.0;
 	SearchTreeNode nextNode;
@@ -1119,8 +1119,8 @@ public class LionPrune extends MLAlgorithm {
     }
 
     @Override
-    public MLResult learn(Mapping trainingData) {
-	MLResult result = new MLResult();
+    public MLModel learn(Mapping trainingData) {
+	MLModel result = new MLModel();
 	try {
 	    return start();
 	} catch (IOException e) {

@@ -1,6 +1,7 @@
-package org.aksw.limes.core.ml;
-import org.aksw.limes.core.ml.algorithm.EagleUnsupervised;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithm;
+package org.aksw.limes.core.ml.oldalgorithm;
+
+import org.aksw.limes.core.ml.oldalgorithm.EagleUnsupervised;
+import org.aksw.limes.core.ml.oldalgorithm.MLAlgorithm;
 import org.aksw.limes.core.ml.setting.ActiveLearningSetting;
 import org.junit.Test;
 

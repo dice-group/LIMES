@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm;
+package org.aksw.limes.core.ml.oldalgorithm;
 
 
 import java.util.LinkedList;
@@ -61,7 +61,7 @@ public class EagleUnsupervised extends MLAlgorithm {
 	}
 
 	@Override
-	public MLResult learn(Mapping trainingData) {
+	public MLModel learn(Mapping trainingData) {
 		specifications = new LinkedList<LinkSpecification>();
 		logger.info("Start learning");
 		for (int gen = 1; gen <= parameters.getGenerations(); gen++) {
@@ -181,8 +181,8 @@ public class EagleUnsupervised extends MLAlgorithm {
 	 * Constructs the MLResult for this run.
 	 * @return
 	 */
-	private MLResult createMLResult() {
-		MLResult result = new MLResult();
+	private MLModel createMLResult() {
+		MLModel result = new MLModel();
 		result.setLinkSpecification(getLinkSpecification(allBest));
 //		result.setMapping(fitness.calculateMapping(allBest));
 		result.setQuality(allBest.getFitnessValue());

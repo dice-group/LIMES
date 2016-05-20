@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm;
+package org.aksw.limes.core.ml.oldalgorithm;
 
 import static org.junit.Assert.assertTrue;
 
@@ -11,10 +11,12 @@ import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+import org.aksw.limes.core.ml.oldalgorithm.Lion;
+import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.UnsupervisedLearningSetting;
 import org.junit.Test;
 
-public class EagleUnsupervisedTest {
+public class LionTest {
 	@Test
 	public void test() {
 		Cache sc = new MemoryCache();
@@ -57,22 +59,22 @@ public class EagleUnsupervisedTest {
 		pm.addStringPropertyMatch("name", "name");
 		pm.addStringPropertyMatch("surname", "surname");
 		
-		EagleUnsupervised eus = new EagleUnsupervised(sc, tc, config);
+		Lion lion = new Lion(sc, tc, config);
 		
-		UnsupervisedLearningSetting param = new UnsupervisedLearningSetting(eus);
+		UnsupervisedLearningSetting param = new UnsupervisedLearningSetting(lion);
 		param.setPropMap(pm);
-		
+		param.setMaxDuration(5);
 		try {
-			eus.init(param, null);
+			lion.init(param, null);
 			
-			MLResult result = eus.learn(null);
+			MLModel result = lion.learn(null);
 			System.out.println(result);
 			System.out.println(result.getMapping());
 			
 			assertTrue(result != null);
 			assertTrue(result.mapping.size()>0);
 			assertTrue(!result.linkspec.isEmpty());
-			assertTrue(result.details.size()>0);
+		
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
