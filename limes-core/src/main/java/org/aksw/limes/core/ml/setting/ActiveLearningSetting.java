@@ -1,8 +1,8 @@
 package org.aksw.limes.core.ml.setting;
 
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.MLModel;
+import org.aksw.limes.core.ml.oldalgorithm.MLAlgorithm;
+import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>

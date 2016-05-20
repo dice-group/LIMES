@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithmtest;
+package org.aksw.limes.core.ml.algorithm;
 
 public enum MLImplementationType {
 

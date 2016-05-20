@@ -1,8 +1,8 @@
-package org.aksw.limes.core.ml.algorithmtest;
+package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.ml.algorithm.MLModel;
+import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 
 public abstract class AMLAlgorithm {

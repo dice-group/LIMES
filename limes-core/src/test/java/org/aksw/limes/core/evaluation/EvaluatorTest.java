@@ -10,10 +10,10 @@ import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.evaluator.Evaluator;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
-import org.aksw.limes.core.ml.algorithm.EagleSupervised;
-import org.aksw.limes.core.ml.algorithm.EagleUnsupervised;
-import org.aksw.limes.core.ml.algorithm.Lion;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithm;
+import org.aksw.limes.core.ml.oldalgorithm.EagleSupervised;
+import org.aksw.limes.core.ml.oldalgorithm.EagleUnsupervised;
+import org.aksw.limes.core.ml.oldalgorithm.Lion;
+import org.aksw.limes.core.ml.oldalgorithm.MLAlgorithm;
 import org.junit.Test;
 
 import com.google.common.collect.Table;

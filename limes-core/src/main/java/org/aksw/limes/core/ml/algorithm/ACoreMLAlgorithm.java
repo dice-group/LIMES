@@ -1,9 +1,10 @@
-package org.aksw.limes.core.ml.algorithmtest;
+package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
+import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.ml.algorithm.MLModel;
+import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 
 public abstract class ACoreMLAlgorithm {
@@ -30,15 +31,16 @@ public abstract class ACoreMLAlgorithm {
 	 * @param trainingData
 	 * @return
 	 */
-	protected abstract MLModel learn(Mapping trainingData);
+	protected abstract MLModel learn(Mapping trainingData) throws UnsupportedMLImplementationException;
 
 	/**
 	 * Learning method for unsupervised core ML algorithm implementations.
 	 * 
 	 * @param pfm
 	 * @return
+	 * @throws UnsupportedMLImplementationException 
 	 */
-	protected abstract MLModel learn(PseudoFMeasure pfm);
+	protected abstract MLModel learn(PseudoFMeasure pfm) throws UnsupportedMLImplementationException;
 
 	/**
 	 * Predict/generate links from source to target based on mlModel.
@@ -63,8 +65,9 @@ public abstract class ACoreMLAlgorithm {
 	 * 
 	 * @param size
 	 * @return
+	 * @throws UnsupportedMLImplementationException 
 	 */
-	protected abstract Mapping getNextExamples(int size);
+	protected abstract Mapping getNextExamples(int size) throws UnsupportedMLImplementationException;
 	
 	/**
 	 * Learning method for supervised active core ML algorithm implementations.
@@ -72,6 +75,6 @@ public abstract class ACoreMLAlgorithm {
 	 * @param oracleMapping
 	 * @return
 	 */
-	protected abstract MLModel activeLearn(Mapping oracleMapping);
+	protected abstract MLModel activeLearn(Mapping oracleMapping) throws UnsupportedMLImplementationException;
 	
 }

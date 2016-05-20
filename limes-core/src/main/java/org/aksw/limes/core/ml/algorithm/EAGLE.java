@@ -1,9 +1,10 @@
-package org.aksw.limes.core.ml.algorithmtest;
+package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
+import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.ml.algorithm.MLModel;
+import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 
 public class EAGLE extends ACoreMLAlgorithm {
@@ -46,13 +47,13 @@ public class EAGLE extends ACoreMLAlgorithm {
 	}
 
 	@Override
-	protected Mapping getNextExamples(int size) {
-		throw new UnsupportedOperationException(MLImplementationType.SUPERVISED_ACTIVE + " implementation of "+this.getName()+" not supported.");
+	protected Mapping getNextExamples(int size) throws UnsupportedMLImplementationException {
+		throw new UnsupportedMLImplementationException(this.getName());
 	}
 
 	@Override
-	protected MLModel activeLearn(Mapping oracleMapping) {
-		throw new UnsupportedOperationException(MLImplementationType.SUPERVISED_ACTIVE + " implementation of "+this.getName()+" not supported.");
+	protected MLModel activeLearn(Mapping oracleMapping) throws UnsupportedMLImplementationException {
+		throw new UnsupportedMLImplementationException(this.getName());
 	}
 
 }
