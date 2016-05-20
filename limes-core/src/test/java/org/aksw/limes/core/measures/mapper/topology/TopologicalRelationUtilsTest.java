@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.mapper.atomic.topology;
+package org.aksw.limes.core.measures.mapper.topology;
 
 import static org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper.getPoints;
 
