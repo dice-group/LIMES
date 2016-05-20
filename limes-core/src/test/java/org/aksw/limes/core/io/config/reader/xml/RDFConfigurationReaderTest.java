@@ -7,12 +7,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
-import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
+
 
 /**
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
@@ -20,8 +21,6 @@ import org.junit.Test;
  */
 public class RDFConfigurationReaderTest
 {
-	private static final Logger logger = Logger.getLogger(RDFConfigurationReaderTest.class.getName());
-
 	Map<String, String> prefixes = new HashMap<>();
 	Map<String, Map<String, String>> functions = new HashMap<>();
 
@@ -43,7 +42,6 @@ public class RDFConfigurationReaderTest
 	
 	@Test
 	public void testRDFReaderForMLAgorithm(){
-		logger.info("Test 1----------------");
 
 		KBInfo sourceInfo = new KBInfo(
 				"linkedgeodata", 													//String id
@@ -96,16 +94,11 @@ public class RDFConfigurationReaderTest
 
 		RDFConfigurationReader c = new RDFConfigurationReader();
 		Configuration fileConf = c.read("/resources/lgd-lgd-ml.ttl");
-		logger.info(fileConf);
-		logger.info("----------------");
-		logger.info(testConf);
 		assertTrue(testConf.equals(fileConf));
-		logger.info("End Test 1----------------");
 	}
 	
 	@Test
 	public void testRDFReaderForMetric(){
-		logger.info("Test 2----------------");
 
 		KBInfo sourceInfo = new KBInfo(
 				"linkedgeodata", 													//String id
@@ -154,11 +147,7 @@ public class RDFConfigurationReaderTest
 				);
 		RDFConfigurationReader c = new RDFConfigurationReader();
 		Configuration fileConf = c.read("/resources/lgd-lgd.ttl");
-		logger.info(fileConf);
-		logger.info("----------------");
-		logger.info(testConf);
 		assertTrue(testConf.equals(fileConf));
-		logger.info("End Test 2----------------");
 	}
 
 
