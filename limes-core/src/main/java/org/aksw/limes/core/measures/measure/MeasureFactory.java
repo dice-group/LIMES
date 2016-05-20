@@ -144,9 +144,6 @@ public class MeasureFactory {
 	if (measure.startsWith(GEO_LINK)) {
 	    return MeasureType.GEO_LINK;
 	}
-	// if (measure.startsWith(GEO_QUINLAN)) {
-	// return MeasureType.GEO_QUINLAN;
-	// }
 	if (measure.startsWith(GEO_SUM_OF_MIN)) {
 	    return MeasureType.GEO_SUM_OF_MIN;
 	}

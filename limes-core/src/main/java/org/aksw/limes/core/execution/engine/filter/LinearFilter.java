@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
  */
 public class LinearFilter implements IFilter {
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger(LinearFilter.class.getName());
 
     /**
      * Filter a mapping solely with respect to a threshold.
@@ -54,7 +54,7 @@ public class LinearFilter implements IFilter {
      *            Input mapping
      * @param threshold
      *            Similarity threshold
-          * @param source,
+     * @param source,
      *            Source cache
      * @param target,
      *            Target cache
@@ -62,7 +62,7 @@ public class LinearFilter implements IFilter {
      *            Source variable
      * @param targetVar,
      *            Target variable
-     *            
+     * 
      * @return results, all links from map such that the expression and the
      *         threshold holds
      */
@@ -70,13 +70,12 @@ public class LinearFilter implements IFilter {
 	    String targetVar) {
 	double sim = 0.0;
 	Instance s, t;
-	
+
 	if (condition == null) {
-	    System.err.println("Null condition in filter function (LinearFilter). Exiting..");
+	    logger.error("Null condition in filter function (LinearFilter). Exiting..");
 	    System.exit(1);
 	}
-	if(threshold == 0.0d)
-	    return map;
+
 	Mapping result = new MemoryMapping();
 	// 2. run on all pairs and remove those
 	for (String key : map.getMap().keySet()) {
@@ -107,7 +106,7 @@ public class LinearFilter implements IFilter {
      * @param map
      *            Input mapping
      * @param threshold
-     *            Similarity threshold
+     *            filter similarity threshold
      * @param mainThreshold
      *            Parent similarity threshold
      * @param source,
@@ -133,9 +132,7 @@ public class LinearFilter implements IFilter {
 	    System.err.println("Null condition in extended filter function (LinearFilter). Exiting..");
 	    System.exit(1);
 	}
-	if(threshold == 0.0d && mainThreshold == 0.0d)
-	   return map;
-	// 2. run on all pairs and remove those
+
 	for (String key : map.getMap().keySet()) {
 	    s = source.getInstance(key);
 	    for (String value : map.getMap().get(key).keySet()) {
@@ -152,6 +149,66 @@ public class LinearFilter implements IFilter {
 		    }
 		}
 
+	    }
+	}
+	return result;
+
+    }
+
+    /**
+     * 
+     * Filter a mapping with respect to an expression and two thresholds. Used
+     * by DYNAMIC planner in case of an MINUS optimization strategy. The input
+     * mapping produced by executing the left child of a
+     * specification that has MINUS as operator, will be filtered by using the
+     * expression and the threshold of the right child. In order for a link to
+     * be included in the output mapping, it must not pass the filtering
+     * criterion expressed by the right child.
+     * 
+     *
+     * @param map
+     *            Input mapping
+     * @param threshold
+     *            filter similarity threshold
+     * @param mainThreshold
+     *            Parent similarity threshold
+     * @param source,
+     *            Source cache
+     * @param target,
+     *            Target cache
+     * @param sourceVar,
+     *            Source variable
+     * @param targetVar,
+     *            Target variable
+     * 
+     * @return results, all links from map such that the expression, the
+     *         threshold and the mainThreshold holds
+     * 
+     */
+    public Mapping reversefilter(Mapping map, String condition, double threshold, double mainThreshold, Cache source,
+	    Cache target, String sourceVar, String targetVar) {
+
+	double sim = 0.0;
+	Instance s, t;
+	Mapping result = new MemoryMapping();
+	// 2. run on all pairs and remove those
+	for (String key : map.getMap().keySet()) {
+	    s = source.getInstance(key);
+	    for (String value : map.getMap().get(key).keySet()) {
+		t = target.getInstance(value);
+		sim = MeasureProcessor.getSimilarity(s, t, condition, threshold, sourceVar, targetVar);
+		System.out.println(s.getUri()+" "+t.getUri()+" "+sim);
+		// check if sim is lower than the second's child threshold.
+		// special case: threshold and sim are 0, then the link is
+		// accepted
+		if (sim < threshold) {
+		    System.out.println("passed");
+		    double sim2 = map.getMap().get(s.getUri()).get(t.getUri());
+		    if (sim2 >= mainThreshold) {
+			System.out.println("passed");
+			result.add(s.getUri(), t.getUri(), sim2);
+		    }
+		}
 	    }
 	}
 	return result;

@@ -7,6 +7,6 @@ public class InvalidMeasureException extends Exception {
     private static final long serialVersionUID = 6971779912538326113L;
 
     public InvalidMeasureException(String name) {
-	super("Unknown measure " + name + ". Exiting..");
+	super("Unknown measure " + name + ".");
     }
 }

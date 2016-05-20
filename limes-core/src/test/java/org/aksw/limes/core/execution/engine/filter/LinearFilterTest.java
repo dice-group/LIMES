@@ -48,7 +48,7 @@ public class LinearFilterTest {
 	source.addTriple("S5", "name", "ole");
 	source.addTriple("S5", "age", "56");
 
-	target.addTriple("T1", "surname", "georg");
+	target.addTriple("T1", "surname", "pp");
 	target.addTriple("T1", "name", "klea");
 	target.addTriple("T1", "age", "26");
 
@@ -152,7 +152,7 @@ public class LinearFilterTest {
     public void complexFilterWithComplexcCondition1() {
 	System.out.println("complexFilterWithComplexcCondition1");
 	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
-
+ 
 	Plan plan = new Plan();
 	plan.setInstructionList(new ArrayList<Instruction>());
 	Instruction run1 = new Instruction(Command.RUN, "cosine(x.name, y.name)", "0.3", -1, -1, 0);
@@ -178,13 +178,8 @@ public class LinearFilterTest {
 	System.out.println("Higher threshold: " + m2.getNumberofMappings());
 	assertTrue(m1.getNumberofMappings() > m2.getNumberofMappings());
 
-	Mapping m21 = f.filter(m1, "OR(overlap(x.name, y.name)|0.8,qgrams(x.name, y.name)|0.9)", 0.2, source, target,
-		"?x", "?y");
-	System.out.println("Higher threshold2: " + m21.getNumberofMappings());
-	assertTrue(m1.getNumberofMappings() == m21.getNumberofMappings());
-
-	// relax output
-	Mapping m3 = f.filter(m1, "OR(overlap(x.name, y.name)|0.1,qgrams(x.name, y.name)|0.1)", 0.2, source, target,
+	// relax filter
+	Mapping m3 = f.filter(m1, "OR(overlap(x.name, y.name)|0.1, qgrams(x.name, y.name)|0.1)", 0.2, source, target,
 		"?x", "?y");
 	System.out.println("Lower threshold: " + m3.getNumberofMappings());
 	assertTrue(m1.getNumberofMappings() == m3.getNumberofMappings());
@@ -294,7 +289,64 @@ public class LinearFilterTest {
 	System.out.println("------------------------");
 
     }
+    @Test
+    public void complexReverseFilterWithAtomicCondition() {
+	System.out.println("complexReverseFilterWithAtomicCondition");
+	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
 
+	Plan plan = new Plan();
+	plan.setInstructionList(new ArrayList<Instruction>());
+	Instruction run1 = new Instruction(Command.RUN, "qgrams(x.name, y.name)", "0.3", -1, -1, 0);
+	plan.addInstruction(run1);
+	Mapping m1 = ee.executeInstructions(plan);
+	System.out.println("Size before: " + m1.getNumberofMappings());
+	System.out.println(m1);
+	System.out.println("\n");
+	
+	
+	Plan plan2 = new Plan();
+	Instruction run2 = new Instruction(Command.RUN, "jaccard(x.name, y.name)", "0.7", -1, -1, 0);
+	plan2.setInstructionList(new ArrayList<Instruction>());
+	plan2.addInstruction(run2);
+	Mapping mm = ee.executeInstructions(plan2);
+	System.out.println("Size before: " + mm.getNumberofMappings());
+	System.out.println(mm);
+	
+	LinearFilter f = new LinearFilter();
+	Mapping m0 = f.reversefilter(m1, "overlap(x.name, y.name)", 0.0, 0.0, source, target, "?x", "?y");
+	System.out.println("0 thresholds everywhere: " + m0.getNumberofMappings());
+	assertTrue(m1.getNumberofMappings() > m0.getNumberofMappings());
+	System.out.println("\n");
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	Plan plan3 = new Plan();
+	Instruction run3 = new Instruction(Command.RUN, "overlap(x.name, y.name)", "0.7", -1, -1, 0);
+	plan3.setInstructionList(new ArrayList<Instruction>());
+	plan3.addInstruction(run3);
+	Mapping mmm = ee.executeInstructions(plan2);
+	System.out.println("Size before: " + mmm.getNumberofMappings());
+	System.out.println(mmm);
+	
+	Mapping m02 = f.reversefilter(m1, "overlap(x.name, y.name)", 0.7, 0.0, source, target, "?x", "?y");
+	System.out.println("non 0 threshold: " + m02.getNumberofMappings());
+	assertTrue(m1.getNumberofMappings() != m02.getNumberofMappings());
+	System.out.println("\n");
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	Mapping m2 = f.reversefilter(m1, "overlap(x.name, y.name)", 0.4, 0.6, source, target, "?x", "?y");
+	System.out.println("Higher threshold: " + m2.getNumberofMappings());
+	assertTrue(m1.getNumberofMappings() > m2.getNumberofMappings());
+	System.out.println("\n");
+
+	// relax output
+	Mapping m3 = f.reversefilter(m1, "overlap(x.name, y.name)", 0.2, 0.4, source, target, "?x", "?y");
+	System.out.println("Lower threshold: " + m3.getNumberofMappings());
+	assertTrue(m1.getNumberofMappings() != m3.getNumberofMappings());
+	System.out.println("\n");
+
+	
+	System.out.println("------------------------");
+
+    }
     @Test
     public void filterWithCoEfficient() {
 	System.out.println("filterWithCoEfficient");
@@ -302,7 +354,7 @@ public class LinearFilterTest {
 
 	Plan plan = new Plan();
 	plan.setInstructionList(new ArrayList<Instruction>());
-	Instruction run1 = new Instruction(Command.RUN, "leven(x.name, y.name)", "0.13", -1, -1, 0);
+	Instruction run1 = new Instruction(Command.RUN, "levenshtein(x.name, y.name)", "0.13", -1, -1, 0);
 	plan.addInstruction(run1);
 	Mapping m1 = ee.executeInstructions(plan);
 	System.out.println("Size before: " + m1.getNumberofMappings());

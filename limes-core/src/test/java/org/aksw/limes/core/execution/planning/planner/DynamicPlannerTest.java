@@ -122,7 +122,7 @@ public class DynamicPlannerTest {
 	System.out.println("ComplexPlanExtendedLS");
 
 	LinkSpecification ls = new LinkSpecification(
-		"OR(jaccard(x.surname,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.description,y.description)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,trigrams(x.surname,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.description,y.description)|0.7728)|0.5807)",
+		"OR(jaccard(x.surname,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,trigrams(x.surname,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.name,y.name)|0.7728)|0.5807)",
 		0.8);
 
 	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
@@ -176,108 +176,6 @@ public class DynamicPlannerTest {
 
     }
 
-    @Test
-    public void runtimeApproximation() {
-	System.out.println("runtimeApproximation");
-	DynamicPlanner p = new DynamicPlanner(source, target);
-
-	assertTrue(p.getAtomicRuntimeCosts("jaro", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("qgrams", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("cosine", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("levenshtein", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("overlap", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("trigram", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("jaccard", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("exactmatch", 0.5) != 0.0d);
-	assertTrue(p.getAtomicRuntimeCosts("soundex", 0.5) != 0);
-
-	assertTrue(p.getAtomicRuntimeCosts("euclidean", 0.5) != 0);
-
-	assertTrue(p.getAtomicRuntimeCosts("geo_orthodromic", 0.5) != 0);
-	// assertTrue(p.getAtomicRuntimeCosts("geo_elliptic", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("geo_hausdorff", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("geo_fairsurjection", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("geo_max", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("geo_mean", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("geo_min", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("geo_avg", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("geo_frechet", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("geo_link", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("geo_sum_of_min", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("geo_surjection", 0.5) != 0);
-	// assertTrue(p.getAtomicRuntimeCosts("geo_quinlan", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("geo_symmetrichausdorff", 0.5) != 0);
-
-	assertTrue(p.getAtomicRuntimeCosts("tmp_successor", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_predecessor", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_concurrent", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_before", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_after", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_meets", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_ismetby", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_finishes", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_isfinishedby", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_starts", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_isstartedby", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_during", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_duringreverse", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_overlaps", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_isoverlappedby", 0.5) != 0);
-	assertTrue(p.getAtomicRuntimeCosts("tmp_equals", 0.5) != 0);
-
-    }
-
-    @Test
-    public void mappingApproximation() {
-	System.out.println("mappingApproximation");
-	DynamicPlanner p = new DynamicPlanner(source, target);
-	System.out.println(source.size());
-	System.out.println(target.size());
-
-	assertTrue(p.getAtomicMappingSizes("jaro", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("qgrams", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("cosine", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("levenshtein", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("overlap", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("trigram", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("jaccard", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("exactmatch", 0.5) != 0.0d);
-	assertTrue(p.getAtomicMappingSizes("soundex", 0.5) != 0);
-
-	assertTrue(p.getAtomicMappingSizes("euclidean", 0.5) != 0);
-
-	assertTrue(p.getAtomicMappingSizes("geo_orthodromic", 0.5) != 0);
-	// assertTrue(p.getAtomicMappingSizes("geo_elliptic", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geo_hausdorff", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geo_fairsurjection", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geo_max", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geo_mean", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geo_min", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geo_avg", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geo_frechet", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geo_link", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geo_sum_of_min", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geo_surjection", 0.5) != 0);
-	// assertTrue(p.getAtomicMappingSizes("geo_quinlan", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("geo_symmetrichausdorff", 0.5) != 0);
-
-	assertTrue(p.getAtomicMappingSizes("tmp_successor", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_predecessor", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_concurrent", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_before", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_after", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_meets", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_ismetby", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_finishes", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_isfinishedby", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_starts", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_isstartedby", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_during", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_duringreverse", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_overlaps", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_isoverlappedby", 0.5) != 0);
-	assertTrue(p.getAtomicMappingSizes("tmp_equals", 0.5) != 0);
-
-    }
+   
 
 }

@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.mapper.atomic;
+package org.aksw.limes.core.measures.mapper.string;
 
 
 import java.util.HashMap;

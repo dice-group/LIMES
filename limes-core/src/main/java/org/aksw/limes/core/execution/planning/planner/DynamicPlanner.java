@@ -320,7 +320,6 @@ public class DynamicPlanner extends Planner {
 		double runtimeCost = 0;
 		for (LinkSpecification child : spec.getChildren()) {
 		    NestedPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
-		    logger.info("Child is: " + child + " with plan: " + childPlan);
 		    children.add(childPlan);
 		    runtimeCost = runtimeCost + childPlan.getRuntimeCost();
 		}
