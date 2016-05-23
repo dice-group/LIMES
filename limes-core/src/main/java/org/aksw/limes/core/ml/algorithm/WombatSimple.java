@@ -88,15 +88,13 @@ public class WombatSimple extends AWombat {
 
 	@Override
 	protected Mapping predict(Cache source, Cache target, MLModel mlModel) {
-		if(bestSolutionNode == null){
-			bestSolutionNode =  getBestSolution();
-		}
-		return bestSolutionNode.map;
+		String metricExpression = mlModel.getLinkSpecification().toString();
+		return getPredictions(metricExpression, source, target);
 	}
 
 	@Override
 	protected boolean supports(MLImplementationType mlType) {
-		return super.supports(mlType);
+		return mlType == MLImplementationType.SUPERVISED_BATCH || mlType == MLImplementationType.UNSUPERVISED;
 	}
 
 	@Override

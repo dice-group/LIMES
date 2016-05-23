@@ -37,7 +37,7 @@ public abstract class ACoreMLAlgorithm {
 	 * @param targetCache
 	 */
 	protected void init(LearningParameters lp, Cache sourceCache, Cache targetCache) {
-		this.parameters = lp;
+		this.parameters.putAll(lp);
 		this.sourceCache = sourceCache;
 		this.targetCache = targetCache;
 	}

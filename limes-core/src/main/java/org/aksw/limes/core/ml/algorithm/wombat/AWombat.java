@@ -4,20 +4,16 @@
  */
 package org.aksw.limes.core.ml.algorithm.wombat;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.Tree;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
-import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
+import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
@@ -29,13 +25,10 @@ import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterFactoryTyp
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
 import org.aksw.limes.core.ml.setting.LearningParameters;
-import org.apache.commons.collections15.map.HashedMap;
 import org.apache.log4j.Logger;
 
 
@@ -108,10 +101,7 @@ public abstract class AWombat extends ACoreMLAlgorithm{
 		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetCache, minPropertyCoverage);
 	}
 	
-	@Override
-	protected boolean supports(MLImplementationType mlType) {
-		return mlType == MLImplementationType.SUPERVISED_BATCH || mlType == MLImplementationType.UNSUPERVISED;
-	}
+
 
 
 
@@ -150,17 +140,32 @@ public abstract class AWombat extends ACoreMLAlgorithm{
 			map = getMapingOfMetricFromTree( metricExpression,refinementTreeRoot);
 		}
 		if(map == null){
-			Double threshold = Double.parseDouble(metricExpression.substring(metricExpression.lastIndexOf("|")+1, metricExpression.length()));
-			Rewriter rw = RewriterFactory.getRewriter(RewriterFactoryType.DEFAULT);
-			LinkSpecification ls = new LinkSpecification(metricExpression, threshold);
-			LinkSpecification rwLs = rw.rewrite(ls);
-			IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceCache, targetCache);
-			assert planner != null;
-			ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache,"?x", "?y");
-			assert engine != null;
-			Mapping resultMap = engine.execute(rwLs, planner);
-			map = resultMap.getSubMap(threshold);
+			map = getPredictions(metricExpression,sourceCache, targetCache);
 		}
+		return map;
+	}
+	
+	
+	/**
+	 * get mapping from source cache to target cache using metricExpression
+	 * @param metricExpression
+	 * @param sCache
+	 * @param tCache
+	 * @return
+	 */
+	protected Mapping getPredictions(String metricExpression, Cache sCache, Cache tCache) {
+		Mapping map;
+		Double threshold = Double.parseDouble(metricExpression.substring(metricExpression.lastIndexOf("|")+1, metricExpression.length()));
+		Rewriter rw = RewriterFactory.getRewriter(RewriterFactoryType.DEFAULT);
+		LinkSpecification ls = new LinkSpecification(metricExpression, threshold);
+		LinkSpecification rwLs = rw.rewrite(ls);
+		
+		IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sCache, tCache);
+		assert planner != null;
+		ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sCache, tCache,"?x", "?y");
+		assert engine != null;
+		Mapping resultMap = engine.execute(rwLs, planner);
+		map = resultMap.getSubMap(threshold);
 		return map;
 	}
 	
