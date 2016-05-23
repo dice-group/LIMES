@@ -35,6 +35,7 @@ import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
 import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.apache.commons.collections15.map.HashedMap;
 import org.apache.log4j.Logger;
 
 

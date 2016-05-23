@@ -16,6 +16,7 @@ public class SupervisedMLAlgorithm extends AMLAlgorithm {
 			Constructor<? extends ACoreMLAlgorithm> ctor = clazz.getDeclaredConstructor();
 			ml = ctor.newInstance();
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new UnsupportedMLImplementationException(ml.getName());
 		}
 		

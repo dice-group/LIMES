@@ -9,7 +9,7 @@ import org.aksw.limes.core.ml.setting.LearningParameters;
 
 public abstract class ACoreMLAlgorithm {
 
-	protected LearningParameters parameters;
+	protected LearningParameters parameters = new LearningParameters();
 	
 	protected Cache sourceCache;
 	
