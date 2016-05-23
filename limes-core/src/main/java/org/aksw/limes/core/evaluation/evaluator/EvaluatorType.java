@@ -9,5 +9,5 @@ package org.aksw.limes.core.evaluation.evaluator;
  * @version 1.0
  */
 public enum EvaluatorType {
-	PRECISION, RECALL, F_MEASURE, PF_MEASURE, P_PRECISION, P_RECALL, ACCURACY, AUC, ALL
+	PRECISION, RECALL, F_MEASURE, P_PRECISION, P_RECALL, PF_MEASURE, ACCURACY, AUC,PR_PRECISION,PR_RECALL,PRF_MEASURE, ALL
 }

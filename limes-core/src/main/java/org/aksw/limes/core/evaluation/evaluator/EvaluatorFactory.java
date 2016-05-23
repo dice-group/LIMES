@@ -6,6 +6,9 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoPrecision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRecall;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefFMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefPrecision;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefRecall;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 
@@ -31,8 +34,16 @@ public class EvaluatorFactory {
 			return new PseudoRecall();
 		else if(measure == EvaluatorType.PF_MEASURE)
 			return new PseudoFMeasure();
+		else if(measure == EvaluatorType.PR_PRECISION)
+			return new PseudoRefPrecision();
+		else if(measure == EvaluatorType.PR_RECALL)
+			return new PseudoRefRecall();
+		else if(measure == EvaluatorType.PRF_MEASURE)
+			return new PseudoRefFMeasure();
 		else if(measure == EvaluatorType.ACCURACY)
 			return new Accuracy();
+		
+	
 		return null;
 	}
 }
