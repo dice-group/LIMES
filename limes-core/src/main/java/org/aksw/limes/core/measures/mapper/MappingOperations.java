@@ -1,13 +1,10 @@
 package org.aksw.limes.core.measures.mapper;
 
+import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 
 public class MappingOperations {
-
-    public enum Operator {
-	AND, OR, DIFF, XOR, MINUS
-    };
 
     /**
      * Relies on operators to perform set operations on mappings
@@ -20,14 +17,14 @@ public class MappingOperations {
      *            Set pperator
      * @return Resulting mapping
      */
-    public static Mapping getMapping(Mapping source, Mapping target, Operator op) {
-	if (op.equals(Operator.AND))
+    public static Mapping getMapping(Mapping source, Mapping target, LogicOperator op) {
+	if (op.equals(LogicOperator.AND))
 	    return intersection(source, target);
-	if (op.equals(Operator.OR))
+	if (op.equals(LogicOperator.OR))
 	    return union(source, target);
-	if (op.equals(Operator.DIFF))
+	if (op.equals(LogicOperator.DIFF))
 	    return difference(source, target);
-	if (op.equals(Operator.XOR))
+	if (op.equals(LogicOperator.XOR))
 	    return union(difference(source, target), difference(target, source).reverseSourceTarget());
 	return new MemoryMapping();
     }
@@ -43,11 +40,11 @@ public class MappingOperations {
      *            mapping size of target
      * @return operator runtime as double
      */
-    public static double getRuntimeApproximation(Operator op, int mappingSize1, int mappingSize2) {
-	if (op.equals(Operator.AND)) {
+    public static double getRuntimeApproximation(LogicOperator op, int mappingSize1, int mappingSize2) {
+	if (op.equals(LogicOperator.AND)) {
 	    return 1d;
 	}
-	if (op.equals(Operator.OR)) {
+	if (op.equals(LogicOperator.OR)) {
 	    return 1d;
 	}
 	return 1d;
@@ -64,12 +61,12 @@ public class MappingOperations {
      *            mapping size of target
      * @return operator mapping size as double
      */
-    public static double getMappingSizeApproximation(Operator op, int mappingSize1, int mappingSize2) {
-	if (op.equals(Operator.AND))
+    public static double getMappingSizeApproximation(LogicOperator op, int mappingSize1, int mappingSize2) {
+	if (op.equals(LogicOperator.AND))
 	    return Math.min(mappingSize1, mappingSize2);
-	if (op.equals(Operator.OR))
+	if (op.equals(LogicOperator.OR))
 	    return Math.max(mappingSize1, mappingSize2);
-	if (op.equals(Operator.DIFF) || op.equals(Operator.XOR))
+	if (op.equals(LogicOperator.DIFF) || op.equals(LogicOperator.XOR))
 	    return Math.max(mappingSize1, mappingSize2) - Math.min(mappingSize1, mappingSize2);
 	else
 	    return 0d;

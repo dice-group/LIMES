@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
+import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.io.cache.Cache;
@@ -14,7 +15,6 @@ import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
-import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 import org.aksw.limes.core.measures.measure.Measure;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
@@ -165,7 +165,7 @@ public class HeliosPlanner extends Planner {
 	    plan.setSelectivity(plan.getMappingSize() / (double) (source.size() * target.size()));
 	} else {
 	    // no optimization for non AND operators really
-	    if (!spec.getOperator().equals(Operator.AND)) {
+	    if (!spec.getOperator().equals(LogicOperator.AND)) {
 		List<NestedPlan> children = new ArrayList<NestedPlan>();
 		// set children and update costs
 		plan.setRuntimeCost(0);
@@ -181,7 +181,7 @@ public class HeliosPlanner extends Planner {
 			spec.getThreshold() + "", -1, -1, 0));
 		// set operator
 		double selectivity;
-		if (spec.getOperator().equals(Operator.OR)) {
+		if (spec.getOperator().equals(LogicOperator.OR)) {
 		    plan.setOperator(Instruction.Command.UNION);
 		    selectivity = 1 - children.get(0).getSelectivity();
 		    for (int i = 1; i < children.size(); i++) {
@@ -195,7 +195,7 @@ public class HeliosPlanner extends Planner {
 			}
 		    }
 		    plan.setSelectivity(1 - selectivity);
-		} else if (spec.getOperator().equals(Operator.MINUS)) {
+		} else if (spec.getOperator().equals(LogicOperator.MINUS)) {
 		    plan.setOperator(Instruction.Command.DIFF);
 		    // p(A \ B \ C \ ... ) = p(A) \ p(B U C U ...)
 		    selectivity = children.get(0).getSelectivity();
@@ -210,7 +210,7 @@ public class HeliosPlanner extends Planner {
 			}
 		    }
 		    plan.setSelectivity(selectivity);
-		} else if (spec.getOperator().equals(Operator.XOR)) {
+		} else if (spec.getOperator().equals(LogicOperator.XOR)) {
 		    plan.setOperator(Instruction.Command.XOR);
 		    // A XOR B = (A U B) \ (A & B)
 		    selectivity = children.get(0).getSelectivity();
@@ -229,7 +229,7 @@ public class HeliosPlanner extends Planner {
 		}
 
 	    } // here we can optimize.
-	    else if (spec.getOperator().equals(Operator.AND)) {
+	    else if (spec.getOperator().equals(LogicOperator.AND)) {
 		List<NestedPlan> children = new ArrayList<NestedPlan>();
 		plan.setRuntimeCost(0);
 		double selectivity = 1d;

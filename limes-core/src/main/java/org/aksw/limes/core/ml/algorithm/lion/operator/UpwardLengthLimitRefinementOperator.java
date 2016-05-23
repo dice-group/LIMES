@@ -6,11 +6,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 import org.aksw.limes.core.measures.measure.Measure;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
 import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
@@ -85,7 +85,7 @@ public class UpwardLengthLimitRefinementOperator
 					for(LinkSpecification child : atoms) {
 	
 						LinkSpecification disjunction = new LinkSpecification();
-						disjunction.setOperator(Operator.OR);
+						disjunction.setOperator(LogicOperator.OR);
 						LinkSpecification oldChild = spec.clone();
 						oldChild = disjunction;
 						disjunction.addChild(oldChild);
@@ -100,7 +100,7 @@ public class UpwardLengthLimitRefinementOperator
 							linkSpecs.add(disjunction);
 					}
 				} else { // create disjunctions of size >= 3
-					Set<LinkSpecification> conjunctions =  generateAllConjunctions(maxLength, Operator.OR);
+					Set<LinkSpecification> conjunctions =  generateAllConjunctions(maxLength, LogicOperator.OR);
 					logger.error("Expanding root with maxlength="+maxLength+" into "+conjunctions.size()+" OR");
 					for(LinkSpecification conjunction : conjunctions)
 						linkSpecs.add(conjunction);
@@ -116,7 +116,7 @@ public class UpwardLengthLimitRefinementOperator
 		/* bottom again with expansion >= 2
 		 * Create all possible conjunctions (of size maxlength)  of atomic measure*/
 		if((spec== null || spec.isEmpty()) && maxLength >= 2) {
-			Set<LinkSpecification> conjunctions =  generateAllConjunctions(maxLength, Operator.AND);
+			Set<LinkSpecification> conjunctions =  generateAllConjunctions(maxLength, LogicOperator.AND);
 			logger.error("Expanding root with maxlength="+maxLength+" into "+conjunctions.size()+" ANDs");
 			for(LinkSpecification conjunction : conjunctions)
 				linkSpecs.add(conjunction);
@@ -127,7 +127,7 @@ public class UpwardLengthLimitRefinementOperator
 		 *  new Root: same operator as spec AND
 		 * 		refine each child: recursivRefined, should decrease thresholds
 		 */
-		if(!spec.isAtomic() && spec.getOperator()==Operator.AND) {
+		if(!spec.isAtomic() && spec.getOperator()==LogicOperator.AND) {
 			logger.error("Refining complex AND LS with conjunction: "+spec+"");
 			for(int i = 0; i<spec.getChildren().size(); i++) {
 //				System.out.println("Generating "+i+"th new Root for "+spec.children.get(i));
@@ -162,7 +162,7 @@ public class UpwardLengthLimitRefinementOperator
 		 *  new Root: same operator as spec
 		 * 		refine each child: recursivRefined
 		 */
-		if(spec.getOperator() == Operator.OR) {
+		if(spec.getOperator() == LogicOperator.OR) {
 			logger.debug("Attempting to expand OR");
 			if(spec.getChildren()==null || spec.getChildren().size()==0)
 				return linkSpecs;
@@ -320,7 +320,7 @@ public class UpwardLengthLimitRefinementOperator
 	 * @param size
 	 * @return
 	 */
-	private Set<LinkSpecification> generateAllConjunctions(int size, Operator op) {
+	private Set<LinkSpecification> generateAllConjunctions(int size, LogicOperator op) {
 		Double[] atomsThres = { 1d };
 		List<LinkSpecification> atomics = getAllAtomicMeasures(atomsThres);
 		Set<LinkSpecification> allAtomics = new HashSet<LinkSpecification>();
@@ -331,7 +331,7 @@ public class UpwardLengthLimitRefinementOperator
 		logger.info("create all conjunctions of size " + Math.min(atomics.size(), size));
 		for(Set<LinkSpecification> set : SetUtilities.sizeRestrictPowerSet(allAtomics, Math.min(5, size))) {
 			LinkSpecification conjunction = new LinkSpecification();
-			conjunction.setOperator(Operator.AND);
+			conjunction.setOperator(LogicOperator.AND);
 //			conjunction.operator = op;
 			double threshold = 0d;
 			if(set.size()<=1)

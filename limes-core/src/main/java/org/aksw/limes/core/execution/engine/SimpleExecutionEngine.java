@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.engine.filter.LinearFilter;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
@@ -18,7 +19,6 @@ import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 
 /**
@@ -333,7 +333,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 		    // run first specification
 		    m = executeDynamic(firstSpec, planner);
 		    Mapping m2, result = m;
-		    if (spec.getOperator().equals(Operator.AND)) {
+		    if (spec.getOperator().equals(LogicOperator.AND)) {
 			// replan
 			plan = planner.plan(spec);
 			// second plan is filter
@@ -348,7 +348,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 			    result = executeIntersection(m, m2);
 			}
 		    } // union
-		    else if (spec.getOperator().equals(Operator.OR)) {
+		    else if (spec.getOperator().equals(LogicOperator.OR)) {
 			LinkSpecification secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
 			if (secondSpec == null) {
 			    plan = planner.plan(spec);
@@ -358,7 +358,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 			result = executeUnion(m, m2);
 
 		    } // diff
-		    else if (spec.getOperator().equals(Operator.MINUS)) {
+		    else if (spec.getOperator().equals(LogicOperator.MINUS)) {
 			// replan
 			plan = planner.plan(spec);
 			// second plan is (reverse) filter
@@ -373,7 +373,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 			    result = executeDifference(m, m2);
 
 			}
-		    } else if (spec.getOperator().equals(Operator.XOR)) {
+		    } else if (spec.getOperator().equals(LogicOperator.XOR)) {
 			LinkSpecification secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
 			m2 = executeDynamic(secondSpec, planner);
 			result = executeExclusiveOr(m, m2);

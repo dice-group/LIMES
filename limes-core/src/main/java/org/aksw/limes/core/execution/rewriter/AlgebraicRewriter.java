@@ -3,9 +3,9 @@ package org.aksw.limes.core.execution.rewriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 
 public class AlgebraicRewriter extends Rewriter {
 
@@ -252,7 +252,7 @@ public class AlgebraicRewriter extends Rewriter {
 	    // dependencies
 	    // if all children of a conjuction depend on L' then the father of
 	    // the conjuction depends on L'
-	    if (spec.getOperator() == Operator.AND && spec.getChildren().get(0).hasDependencies()) {
+	    if (spec.getOperator() == LogicOperator.AND && spec.getChildren().get(0).hasDependencies()) {
 		newDependencies = spec.getChildren().get(0).getDependencies();
 		for (int i = 1; i < spec.getChildren().size(); i++) {
 		    if (!spec.getChildren().get(i).hasDependencies()) {
@@ -263,7 +263,7 @@ public class AlgebraicRewriter extends Rewriter {
 		}
 	    }
 	    // if operator = OR, then merge all
-	    if (spec.getOperator() == Operator.OR) {
+	    if (spec.getOperator() == LogicOperator.OR) {
 		newDependencies = new ArrayList<LinkSpecification>();
 		for (LinkSpecification child : spec.getChildren()) {
 		    if (child.hasDependencies()) {
@@ -324,7 +324,7 @@ public class AlgebraicRewriter extends Rewriter {
 	}
 
 	// first collapse children which depend on each other
-	if (spec.getOperator() == Operator.AND) {
+	if (spec.getOperator() == LogicOperator.AND) {
 	    List<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
 	    newChildren.addAll(spec.getChildren());
 	    System.out.println("======================================================");
@@ -357,7 +357,7 @@ public class AlgebraicRewriter extends Rewriter {
 
 	    }
 	    spec.setChildren(newChildren);
-	} else if (spec.getOperator() == Operator.OR) {
+	} else if (spec.getOperator() == LogicOperator.OR) {
 	    List<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
 	    newChildren.addAll(spec.getChildren());
 	    System.out.println("======================================================");

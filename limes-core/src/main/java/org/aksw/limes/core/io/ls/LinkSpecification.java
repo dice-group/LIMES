@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 import org.apache.log4j.Logger;
 
 /**
@@ -29,7 +29,7 @@ public class LinkSpecification implements ILinkSpecification {
 	protected static final String AND 	= "AND";
 
 	protected double threshold;
-	protected Operator operator;
+	protected LogicOperator operator;
 	protected List<LinkSpecification> children; // children must be a list because
 	// not all operators are
 	// commutative
@@ -156,7 +156,7 @@ public class LinkSpecification implements ILinkSpecification {
 	 */
 	public void getAllChildren() {
 		for (LinkSpecification child : getChildren()) {
-			if (this.getOperator() == Operator.OR) {
+			if (this.getOperator() == LogicOperator.OR) {
 				logger.info(this.parent);
 				this.parent = child;
 				logger.info(this.parent);
@@ -219,7 +219,7 @@ public class LinkSpecification implements ILinkSpecification {
 			getChildren().add(rightSpec);
 
 			if (p.getOperator().equalsIgnoreCase(AND)) {
-				setOperator(Operator.AND);
+				setOperator(LogicOperator.AND);
 				leftSpec.readSpec(p.getTerm1(), p.getThreshold1());
 				rightSpec.readSpec(p.getTerm2(), p.getThreshold2());
 				filterExpression = null;
@@ -227,7 +227,7 @@ public class LinkSpecification implements ILinkSpecification {
 				fullExpression = "AND(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(MIN)) {
-				setOperator(Operator.AND);
+				setOperator(LogicOperator.AND);
 				leftSpec.readSpec(p.getTerm1(), theta);
 				rightSpec.readSpec(p.getTerm2(), theta);
 				filterExpression = null;
@@ -235,7 +235,7 @@ public class LinkSpecification implements ILinkSpecification {
 				fullExpression = "AND(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(OR)) {
-				setOperator(Operator.OR);
+				setOperator(LogicOperator.OR);
 				leftSpec.readSpec(p.getTerm1(), p.getThreshold1());
 				rightSpec.readSpec(p.getTerm2(), p.getThreshold2());
 				filterExpression = null;
@@ -243,7 +243,7 @@ public class LinkSpecification implements ILinkSpecification {
 				fullExpression = "OR(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(MAX)) {
-				setOperator(Operator.OR);
+				setOperator(LogicOperator.OR);
 				leftSpec.readSpec(p.getTerm1(), theta);
 				rightSpec.readSpec(p.getTerm2(), theta);
 				filterExpression = null;
@@ -251,7 +251,7 @@ public class LinkSpecification implements ILinkSpecification {
 				fullExpression = "OR(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(XOR)) {
-				setOperator(Operator.XOR);
+				setOperator(LogicOperator.XOR);
 				leftSpec.readSpec(p.getTerm1(), p.getThreshold1());
 				rightSpec.readSpec(p.getTerm2(), p.getThreshold2());
 				filterExpression = null;
@@ -259,7 +259,7 @@ public class LinkSpecification implements ILinkSpecification {
 				fullExpression = "XOR(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(MINUS)) {
-				setOperator(Operator.MINUS);
+				setOperator(LogicOperator.MINUS);
 				leftSpec.readSpec(p.getTerm1(), p.getThreshold1());
 				rightSpec.readSpec(p.getTerm2(), p.getThreshold2());
 				filterExpression = null;
@@ -267,7 +267,7 @@ public class LinkSpecification implements ILinkSpecification {
 				fullExpression = "MINUS(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(ADD)) {
-				setOperator(Operator.AND);
+				setOperator(LogicOperator.AND);
 				leftSpec.readSpec(p.getTerm1(), Math.abs(theta - p.getCoef2()) / p.getCoef1());
 				rightSpec.readSpec(p.getTerm2(), Math.abs(theta - p.getCoef1()) / p.getCoef2());
 				filterExpression = spec;
@@ -589,11 +589,11 @@ public class LinkSpecification implements ILinkSpecification {
 		this.threshold = threshold;
 	}
 
-	public Operator getOperator() {
+	public LogicOperator getOperator() {
 		return operator;
 	}
 
-	public void setOperator(Operator operator) {
+	public void setOperator(LogicOperator operator) {
 		this.operator = operator;
 	}
 

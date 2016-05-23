@@ -8,6 +8,7 @@ import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameters;
 
 public class Eagle extends ACoreMLAlgorithm {
+	protected static final String ALGORITHM_NAME = "Eagle";
 	
 	protected Eagle() {
 		//
@@ -15,7 +16,7 @@ public class Eagle extends ACoreMLAlgorithm {
 
 	@Override
 	protected String getName() {
-		return "EAGLE";
+		return ALGORITHM_NAME;
 	}
 
 	@Override

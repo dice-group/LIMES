@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
@@ -315,7 +315,7 @@ public class DynamicPlanner extends Planner {
 	    plan.setSelectivity(plan.getMappingSize() / (double) (source.size() * target.size()));
 
 	} else {
-	    if (spec.getOperator().equals(Operator.OR)) {
+	    if (spec.getOperator().equals(LogicOperator.OR)) {
 		List<NestedPlan> children = new ArrayList<NestedPlan>();
 		double runtimeCost = 0;
 		for (LinkSpecification child : spec.getChildren()) {
@@ -340,7 +340,7 @@ public class DynamicPlanner extends Planner {
 		plan.setSelectivity(1 - selectivity);
 		// MAPPING SIZE
 		plan.setMappingSize(source.size() * target.size() * plan.getSelectivity());
-	    } else if (spec.getOperator().equals(Operator.XOR)) {
+	    } else if (spec.getOperator().equals(LogicOperator.XOR)) {
 		List<NestedPlan> children = new ArrayList<NestedPlan>();
 		double runtimeCost = 0;
 		for (LinkSpecification child : spec.getChildren()) {
@@ -368,7 +368,7 @@ public class DynamicPlanner extends Planner {
 		// MAPPING SIZE
 		plan.setMappingSize(source.size() * target.size() * plan.getSelectivity());
 
-	    } else if (spec.getOperator().equals(Operator.MINUS)) {
+	    } else if (spec.getOperator().equals(LogicOperator.MINUS)) {
 		List<NestedPlan> children = new ArrayList<NestedPlan>();
 		plan.setRuntimeCost(0);
 		for (LinkSpecification child : spec.getChildren()) {
@@ -383,7 +383,7 @@ public class DynamicPlanner extends Planner {
 		}
 		plan = getBestDifferencePlan(spec, children.get(0), children.get(1), selectivity);
 
-	    } else if (spec.getOperator().equals(Operator.AND)) {
+	    } else if (spec.getOperator().equals(LogicOperator.AND)) {
 		List<NestedPlan> children = new ArrayList<NestedPlan>();
 		plan.setRuntimeCost(0);
 		for (LinkSpecification child : spec.getChildren()) {

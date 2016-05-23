@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFM;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
@@ -22,7 +23,6 @@ import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.MappingOperations.Operator;
 import org.aksw.limes.core.ml.algorithm.lion.DefaultRefinementHeuristic;
 import org.aksw.limes.core.ml.algorithm.lion.RefinementHeuristic;
 import org.aksw.limes.core.ml.algorithm.lion.SearchTreeNode;
@@ -901,7 +901,7 @@ public class LionPrune extends MLAlgorithm {
 		    copy.addChild(child1);
 		    copy.addChild(child2);
 
-		    if (spec.getOperator() == Operator.AND)
+		    if (spec.getOperator() == LogicOperator.AND)
 			copy.setThreshold(Math.max(d1, d2));
 		    else
 			copy.setThreshold(Math.min(d1, d2));
