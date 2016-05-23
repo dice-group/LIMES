@@ -3,7 +3,7 @@ package org.aksw.limes.core.ml;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.ml.algorithm.ACIDS;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.EAGLE;
+import org.aksw.limes.core.ml.algorithm.Eagle;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
@@ -19,7 +19,7 @@ public class UsageTest {
 
 		SupervisedMLAlgorithm eagle = null;
 		try {
-			eagle = MLAlgorithmFactory.createMLAlgorithm(EAGLE.class, 
+			eagle = MLAlgorithmFactory.createMLAlgorithm(Eagle.class, 
 					MLImplementationType.SUPERVISED_BATCH).asSupervised();
 		} catch (UnsupportedMLImplementationException e) {
 			e.printStackTrace();
@@ -34,7 +34,7 @@ public class UsageTest {
 
 		UnsupervisedMLAlgorithm eagleU = null;
 		try {
-			eagleU = MLAlgorithmFactory.createMLAlgorithm(EAGLE.class,
+			eagleU = MLAlgorithmFactory.createMLAlgorithm(Eagle.class,
 					MLImplementationType.UNSUPERVISED).asUnsupervised();
 		} catch (UnsupportedMLImplementationException e) {
 			e.printStackTrace();
@@ -64,7 +64,7 @@ public class UsageTest {
 
 		boolean itFails = false;
 		try {
-			MLAlgorithmFactory.createMLAlgorithm(EAGLE.class,
+			MLAlgorithmFactory.createMLAlgorithm(Eagle.class,
 					MLImplementationType.SUPERVISED_ACTIVE);
 		} catch (UnsupportedMLImplementationException e) {
 			itFails = true;
