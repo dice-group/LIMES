@@ -33,13 +33,13 @@ public abstract class ACoreMLAlgorithm {
 	 * Initialize the core ML algorithm.
 	 * 
 	 * @param ls
-	 * @param source
-	 * @param target
+	 * @param sourceCache
+	 * @param targetCache
 	 */
-	protected void init(LearningParameters lp, Cache source, Cache target) {
+	protected void init(LearningParameters lp, Cache sourceCache, Cache targetCache) {
 		this.parameters = lp;
-		this.sourceCache = source;
-		this.targetCache = target;
+		this.sourceCache = sourceCache;
+		this.targetCache = targetCache;
 	}
 
 	/**

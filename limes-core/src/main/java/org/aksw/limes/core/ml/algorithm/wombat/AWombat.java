@@ -26,11 +26,15 @@ import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterFactoryType;
+import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
+import org.aksw.limes.core.ml.setting.LearningParameters;
 import org.apache.log4j.Logger;
 
 
@@ -41,8 +45,6 @@ import org.apache.log4j.Logger;
  *
  */
 public abstract class AWombat extends ACoreMLAlgorithm{   
-	
-
 	
 	protected Set<String> wombatParameterNames = new HashSet<>(); 
 
@@ -77,13 +79,10 @@ public abstract class AWombat extends ACoreMLAlgorithm{
 	protected Map<String, Double> 	sourcePropertiesCoverageMap; //coverage map for latter computations
 	protected Map<String, Double> 	targetPropertiesCoverageMap; //coverage map for latter computations
 	
-	
-	
+//	protected Mapping reference;
+//	
 
-	protected Mapping reference;
-	
-
-	public AWombat() {
+	protected AWombat() {
 		super();
 		setDefaultParameters();
 	}
@@ -100,60 +99,21 @@ public abstract class AWombat extends ACoreMLAlgorithm{
 		parameters.put(PARAMETER_VERBOSE, String.valueOf(false));
 		parameters.put(PARAMETER_MEASURES, String.valueOf(measures));
 	}
+	
+	@Override
+	protected void init(LearningParameters lp, Cache sourceCache, Cache targetCache) {
+		super.init(lp, sourceCache, targetCache);
+		sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, minPropertyCoverage);
+		targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetCache, minPropertyCoverage);
+	}
+	
+	@Override
+	protected boolean supports(MLImplementationType mlType) {
+		return mlType == MLImplementationType.SUPERVISED_BATCH || mlType == MLImplementationType.UNSUPERVISED;
+	}
 
 
-	/**
-     * @return initial classifiers
-     */
-    public List<ExtendedClassifier> getAllInitialClassifiers() {
-    	logger.info("Geting all initial classifiers ...");
-        List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
-        for (String p : sourcePropertiesCoverageMap.keySet()) {
-            for (String q : targetPropertiesCoverageMap.keySet()) {
-                for (String m : measures) {
-                    ExtendedClassifier cp = getInitialClassifier(p, q, m);
-                    //only add if classifier covers all entries
-                    initialClassifiers.add(cp);
-                }
-            }
-        }
-        logger.info("Done computing all initial classifiers.");
-        return initialClassifiers;
-    }
-    
-    /**
-     * Computes the atomic classifiers by finding the highest possible F-measure
-     * achievable on a given property pair
-     *
-     * @param sourceCache Source cache
-     * @param targetCache Target cache
-     * @param sourceProperty Property of source to use
-     * @param targetProperty Property of target to use
-     * @param measure Measure to be used
-     * @param reference Reference mapping
-     * @return Best simple classifier
-     */
-    private ExtendedClassifier getInitialClassifier(String sourceProperty, String targetProperty, String measure) {
-        double maxOverlap = 0;
-        double theta = 1.0;
-        Mapping bestMapping = MappingFactory.createMapping(MappingType.DEFAULT);
-        for (double threshold = 1d; threshold > minPropertyCoverage; threshold = threshold * propertyLearningRate) {
-            Mapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
-            double overlap = new Recall().calculate(mapping, new GoldStandard(reference));
-            if (maxOverlap < overlap){ //only interested in largest threshold with recall 1
-                bestMapping = mapping;
-                theta = threshold;
-                maxOverlap = overlap;
-                bestMapping = mapping;
-            }
-        }
-        ExtendedClassifier cp = new ExtendedClassifier(measure, theta);
-        cp.fMeasure = maxOverlap;
-        cp.sourceProperty = sourceProperty;
-        cp.targetProperty = targetProperty;
-        cp.mapping = bestMapping;
-        return cp;
-    }
+
 
 	/**
 	 * @param sourceCache cache

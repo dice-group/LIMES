@@ -20,13 +20,13 @@ import org.aksw.limes.core.measures.mapper.MappingOperations;
  */
 public class RefinementNode implements Comparable<RefinementNode> {
 
-	public double precision = -Double.MAX_VALUE;
-	public double recall = -Double.MAX_VALUE;
-	public double fMeasure = -Double.MAX_VALUE;
-	public double maxFMeasure = 1d;
-	public Mapping map = new MemoryMapping();
-	public String metricExpression = new String();
-	public static double rMax = -Double.MAX_VALUE;
+	public double precision 		= -Double.MAX_VALUE;
+	public double recall 			= -Double.MAX_VALUE;
+	public double fMeasure 			= -Double.MAX_VALUE;
+	public double maxFMeasure 		= 1d;
+	public Mapping map 				= new MemoryMapping();
+	public String metricExpression 	= new String();
+	public static double rMax 		= -Double.MAX_VALUE;
 
 	public static boolean saveMapping = true;
 

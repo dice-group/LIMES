@@ -1,14 +1,17 @@
 package org.aksw.limes.core.ml.algorithm;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -35,13 +38,15 @@ public class WombatSimple extends AWombat {
 	protected Tree<RefinementNode> refinementTreeRoot = null;
 	protected Map<String, Double> sourcePropertiesCoverageMap; //coverage map for latter computations
 	protected Map<String, Double> targetPropertiesCoverageMap; //coverage map for latter computations
+	
 	protected Set<String> measures = new HashSet<>(Arrays.asList("jaccard","trigrams","cosine","ngrams"));
 	
-	protected Mapping reference;
 	protected RefinementNode bestSolutionNode = null; 
 	protected List<ExtendedClassifier> classifiers = null;
 	protected int iterationNr = 0;
-	private double penaltyWeight = 0.5d;;
+	private double penaltyWeight = 0.5d;
+
+	private Mapping trainingData;;
 	
 	
 	protected WombatSimple() {
@@ -56,13 +61,13 @@ public class WombatSimple extends AWombat {
 	}
 
 	@Override
-	protected void init(LearningParameters lp, Cache source, Cache target) {
-		super.init(lp, source, target);
-		// TODO Auto-generated method stub
+	protected void init(LearningParameters lp, Cache sourceCache, Cache targetCache) {
+		super.init(lp, sourceCache, targetCache);
 	}
 
 	@Override
 	protected MLModel learn(Mapping trainingData) {
+		this.trainingData = trainingData;
 		if(bestSolutionNode == null){ // not to do learning twice
 			bestSolutionNode =  getBestSolution();
 		}
@@ -91,7 +96,7 @@ public class WombatSimple extends AWombat {
 
 	@Override
 	protected boolean supports(MLImplementationType mlType) {
-		return mlType == MLImplementationType.SUPERVISED_BATCH || mlType == MLImplementationType.UNSUPERVISED;
+		return super.supports(mlType);
 	}
 
 	@Override
@@ -109,13 +114,13 @@ public class WombatSimple extends AWombat {
 	 * @author sherif
 	 */
 	public RefinementNode getBestSolution(){
-		classifiers = getAllInitialClassifiers();
+		classifiers = findInitialClassifiers();
 		createRefinementTreeRoot();
 		Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
 		logger.info("Most promising node: " + mostPromisingNode.getValue());
 		iterationNr ++;
 		while((mostPromisingNode.getValue().fMeasure) < maxFitnessThreshold	 
-				//				&& root.size() <= MAX_TREE_SIZE
+				&& refinementTreeRoot.size() <= maxRefineTreeSize
 				&& iterationNr <= maxIterationNumber)
 		{
 			iterationNr++;
@@ -131,6 +136,62 @@ public class WombatSimple extends AWombat {
 		return bestSolution;
 	}
 
+	
+	/**
+     * @return initial classifiers
+     */
+    public List<ExtendedClassifier> findInitialClassifiers() {
+    	logger.info("Geting all initial classifiers ...");
+        List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
+        for (String p : sourcePropertiesCoverageMap.keySet()) {
+            for (String q : targetPropertiesCoverageMap.keySet()) {
+                for (String m : measures) {
+                    ExtendedClassifier cp = findInitialClassifier(p, q, m);
+                    //only add if classifier covers all entries
+                    initialClassifiers.add(cp);
+                }
+            }
+        }
+        logger.info("Done computing all initial classifiers.");
+        return initialClassifiers;
+    }
+    
+
+    /**
+     * Computes the atomic classifiers by finding the highest possible F-measure
+     * achievable on a given property pair
+     *
+     * @param sourceCache Source cache
+     * @param targetCache Target cache
+     * @param sourceProperty Property of source to use
+     * @param targetProperty Property of target to use
+     * @param measure Measure to be used
+     * @param trainingData 
+     * @param reference Reference mapping
+     * @return Best simple classifier
+     */
+    private ExtendedClassifier findInitialClassifier(String sourceProperty, String targetProperty, String measure) {
+        double maxOverlap = 0;
+        double theta = 1.0;
+        Mapping bestMapping = MappingFactory.createMapping(MappingType.DEFAULT);
+        for (double threshold = 1d; threshold > minPropertyCoverage; threshold = threshold * propertyLearningRate) {
+            Mapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
+            double overlap = new Recall().calculate(mapping, new GoldStandard(trainingData));
+            if (maxOverlap < overlap){ //only interested in largest threshold with recall 1
+                bestMapping = mapping;
+                theta = threshold;
+                maxOverlap = overlap;
+                bestMapping = mapping;
+            }
+        }
+        ExtendedClassifier cp = new ExtendedClassifier(measure, theta);
+        cp.fMeasure = maxOverlap;
+        cp.sourceProperty = sourceProperty;
+        cp.targetProperty = targetProperty;
+        cp.mapping = bestMapping;
+        return cp;
+    }
+    
 	/**
 	 * Get the most promising node as the node with the best F-score
 	 *  
@@ -200,7 +261,7 @@ public class WombatSimple extends AWombat {
 						map = MappingOperations.difference(node.getValue().map, c.mapping);
 					}
 					String metricExpr = op + "(" + node.getValue().metricExpression + "," + c.getMetricExpression() +")|0";
-					RefinementNode child = new RefinementNode(map, metricExpr,reference);
+					RefinementNode child = new RefinementNode(map, metricExpr,trainingData);
 					node.addChild(new Tree<RefinementNode>(child));
 				}
 			}
