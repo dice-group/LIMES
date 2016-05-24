@@ -21,12 +21,10 @@ import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.Ex
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
-import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterFactoryType;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
 import org.aksw.limes.core.ml.setting.LearningParameters;
 import org.apache.log4j.Logger;
@@ -154,11 +152,8 @@ public abstract class AWombat extends ACoreMLAlgorithm{
      */
     protected Mapping getPredictions(LinkSpecification ls, Cache sCache, Cache tCache) {
         Mapping map;
-//        Double threshold = Double.parseDouble(metricExpression.substring(metricExpression.lastIndexOf("|")+1, metricExpression.length()));
         Rewriter rw = RewriterFactory.getDefaultRewriter();
-//        LinkSpecification ls = new LinkSpecification(metricExpression, threshold);
         LinkSpecification rwLs = rw.rewrite(ls);
-
         IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sCache, tCache);
         assert planner != null;
         ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sCache, tCache,"?x", "?y");

@@ -1,11 +1,14 @@
 package org.aksw.limes.core.ml;
 
+import static org.junit.Assert.fail;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.io.config.Configuration;
-import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
@@ -13,15 +16,8 @@ import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.aksw.limes.core.ml.oldalgorithm.Lion;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
-import org.aksw.limes.core.ml.setting.UnsupervisedLearningSetting;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class SimpleWombatTest {
 
