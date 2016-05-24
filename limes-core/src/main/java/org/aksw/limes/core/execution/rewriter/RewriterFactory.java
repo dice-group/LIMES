@@ -6,16 +6,29 @@ public class RewriterFactory {
 
     private static final Logger logger = Logger.getLogger(RewriterFactory.class.getName());
 
-    public enum RewriterFactoryType{
-        DEFAULT,
-        ALGEBRAIC
+    public enum RewriterFactoryType {
+        DEFAULT, ALGEBRAIC
     }
+
+    public static final String DEFAULT = "default";
+    public static final String ALGEBRAIC = "algebraic";
 
     /**
      * @return default rewriter implementation
      */
     public static Rewriter getDefaultRewriter() {
         return getRewriter(RewriterFactoryType.DEFAULT);
+    }
+
+    public static RewriterFactoryType getRewriterFactoryType(String name) {
+        if (name.equalsIgnoreCase(DEFAULT)) {
+            return RewriterFactoryType.DEFAULT;
+        }
+        if (name.equalsIgnoreCase(ALGEBRAIC)) {
+            return RewriterFactoryType.ALGEBRAIC;
+        }
+        logger.error("Sorry, " + name + " is not yet implemented. Returning the default rewriter type instead...");
+        return RewriterFactoryType.DEFAULT;
     }
     
     /**
@@ -24,11 +37,14 @@ public class RewriterFactory {
      * @author kleanthi
      */
     public static Rewriter getRewriter(RewriterFactoryType type) {
-        if (type == RewriterFactoryType.DEFAULT)
-            return new DefaultRewriter();
-        //if (name.equalsIgnoreCase(ALGEBRAIC))
-        //    return new AlgebraicRewriter();
-        logger.warn(type.toString() + " is not yet implemented. Generating " + RewriterFactoryType.DEFAULT + " rewriter ...");
-        return getDefaultRewriter();
+        switch (type) {
+            case DEFAULT:
+                return new DefaultRewriter();
+//            case ALGEBRAIC:
+//                return new AlgebraicRewriter();
+            default:
+                logger.warn(type.toString() + " is not yet implemented. Returning the default rewriter instead...");
+                return getDefaultRewriter();
+        }
     }
 }

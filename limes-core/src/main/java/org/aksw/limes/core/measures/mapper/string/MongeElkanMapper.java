@@ -29,21 +29,21 @@ public class MongeElkanMapper extends Mapper {
 
 
     /**
-     * @param source
+     * @param sourceMap
      *            Texts to compare with target
-     * @param target
+     * @param targetMap
      *            Texts to compare with source
      * @param threshold
      *            is the minimum similarity of the results
      * @return all results of source compare with target together with the
      *         similarity of them
      */
-    public Map<String, Map<String, Double>> mongeElkan(Set<String> source, Set<String> target, double threshold) {
-        Iterator<String> sit = source.iterator();
+    public Mapping getMapping(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap, double threshold) {
+        Iterator<String> sit = sourceMap.keySet().iterator();
         double resultDouble;
-        Map<String, Map<String, Double>> result = new HashMap<>();
+        Map<String, Map<String, Double>> similarityBook = new HashMap<>();
         while (sit.hasNext()) {
-            Iterator<String> tit = target.iterator();
+            Iterator<String> tit = targetMap.keySet().iterator();
             String sourceString = sit.next();
             HashMap<String, Double> resultB = new HashMap<>();
             while (tit.hasNext()) {
@@ -53,7 +53,18 @@ public class MongeElkanMapper extends Mapper {
                     resultB.put(targetString, resultDouble);
                 }
             }
-            result.put(sourceString, resultB);
+            similarityBook.put(sourceString, resultB);
+        }
+        logger.info("Similarity Book has " + String.valueOf(similarityBook.size()) + " entries.");
+        Mapping result = new MemoryMapping();
+        for (String s : similarityBook.keySet()) {
+            for (String t : similarityBook.get(s).keySet()) {
+                for (String sourceUri : sourceMap.get(s)) {
+                    for (String targetUri : targetMap.get(t)) {
+                        result.add(sourceUri, targetUri, similarityBook.get(s).get(t));
+                    }
+                }
+            }
         }
         return result;
     }
@@ -114,19 +125,7 @@ public class MongeElkanMapper extends Mapper {
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
         Map<String, Set<String>> targetMap = getValueToUriMap(target, properties.get(1));
-        Map<String, Map<String, Double>> similarityBook = mongeElkan(sourceMap.keySet(), targetMap.keySet(), threshold);
-        logger.info("Similarity Book has " + String.valueOf(similarityBook.size()) + " entries.");
-        Mapping result = new MemoryMapping();
-        for (String s : similarityBook.keySet()) {
-            for (String t : similarityBook.get(s).keySet()) {
-                for (String sourceUri : sourceMap.get(s)) {
-                    for (String targetUri : targetMap.get(t)) {
-                        result.add(sourceUri, targetUri, similarityBook.get(s).get(t));
-                    }
-                }
-            }
-        }
-        return result;
+        return getMapping(sourceMap, targetMap, threshold);
     }
 
     @Override

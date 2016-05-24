@@ -19,126 +19,124 @@ import java.util.concurrent.Executors;
 
 public class RatcliffObershelpMapper extends Mapper {
 
-	static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger("LIMES");
 
 
-	/**
-	 * Computes a mapping between a source and a target.
-	 *
-	 * @param source
-	 *            Source cache
-	 * @param target
-	 *            Target cache
-	 * @param sourceVar
-	 *            Variable for the source dataset
-	 * @param targetVar
-	 *            Variable for the target dataset
-	 * @param expression
-	 *            Expression to process.
-	 * @param threshold
-	 *            Similarity threshold
-	 * @return A mapping which contains links between the source instances and
-	 *         the target instances
-	 */
-	@Override
-	public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-							  double threshold) {
+    /**
+     * Computes a mapping between a source and a target.
+     *
+     * @param source
+     *            Source cache
+     * @param target
+     *            Target cache
+     * @param sourceVar
+     *            Variable for the source dataset
+     * @param targetVar
+     *            Variable for the target dataset
+     * @param expression
+     *            Expression to process.
+     * @param threshold
+     *            Similarity threshold
+     * @return A mapping which contains links between the source instances and
+     *         the target instances
+     */
+    @Override
+    public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+                              double threshold) {
+        logger.info("Running RatcliffObershelpMapper");
+        List<String> properties = PropertyFetcher.getProperties(expression, threshold);
+        Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
+        Map<String, Set<String>> targetMap = getValueToUriMap(target, properties.get(1));
+        return getMapping(sourceMap, targetMap, threshold);
+    }
 
-		logger.info("Running RatcliffObershelpMapper");
+    protected Mapping getMapping(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap, double threshold) {
+        List<String> listA, listB;
+        listA = new ArrayList<>(sourceMap.keySet());
+        listB = new ArrayList<>(targetMap.keySet());
+        RatcliffObershelpMeasure metric = new RatcliffObershelpMeasure();
+        ConcurrentHashMap<String, Map<String, Double>> similarityBook = new ConcurrentHashMap<>(listA.size(), 1.0f);
+        List<String> red, blue;
+        red = listA;
+        blue = listB;
+        LengthQuicksort.sort(red);
+        LengthQuicksort.sort(blue);
+        // red is the list with the longest string
+        boolean swapped = false;
+        if (red.get(red.size() - 1).length() < blue.get(blue.size() - 1).length()) {
+            List<String> temp = red;
+            red = blue;
+            blue = temp;
+            swapped = true;
+        }
 
-		List<String> listA, listB;
-		List<String> properties = PropertyFetcher.getProperties(expression, threshold);
-		Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
-		Map<String, Set<String>> targetMap = getValueToUriMap(target, properties.get(1));
-		listA = new ArrayList<>(sourceMap.keySet());
-		listB = new ArrayList<>(targetMap.keySet());
-		RatcliffObershelpMeasure metric = new RatcliffObershelpMeasure();
+        List<Pair<List<String>, List<String>>> tempPairs = new LinkedList<>();
+        // generate length filtered partitions
+        if (metric.lengthUpperBound(1, threshold) != -1) {
+            List<ImmutableTriple<Integer, Integer, Integer>> sliceBoundaries = metric
+                    .getPartitionBounds(blue.get(blue.size() - 1).length(), threshold);
+            for (ImmutableTriple<Integer, Integer, Integer> sliceBoundary : sliceBoundaries) {
+                MutablePair<List<String>, List<String>> m = new MutablePair<>();
+                m.setLeft(new LinkedList<String>());
+                m.setRight(new LinkedList<String>());
+                for (String s : red)
+                    if (s.length() >= sliceBoundary.getMiddle() && s.length() <= sliceBoundary.getRight())
+                        m.getLeft().add(s);
+                    else if (s.length() > sliceBoundary.getRight())
+                        break;
+                for (String s : blue)
+                    if (s.length() == sliceBoundary.getLeft())
+                        m.getRight().add(s);
+                    else if (s.length() > sliceBoundary.getLeft())
+                        break;
+                if (m.getRight().size() > 0 && m.getLeft().size() > 0)
+                    tempPairs.add(m);
+            }
+        } else {
+            MutablePair<List<String>, List<String>> m = new MutablePair<>();
+            m.setLeft(red);
+            m.setRight(blue);
+            tempPairs.add(m);
+        }
 
-		ConcurrentHashMap<String, Map<String, Double>> similarityBook;
+        int poolSize = Runtime.getRuntime().availableProcessors();
+        poolSize = poolSize > tempPairs.size() ? tempPairs.size() : poolSize;
 
-		similarityBook = new ConcurrentHashMap<>(listA.size(), 1.0f);
+        logger.info("Partitioned into " + String.valueOf(tempPairs.size()) + " sets.");
+        logger.info("Initializing Threadpool for " + String.valueOf(Runtime.getRuntime().availableProcessors())
+                + " threads.");
 
-		List<String> red, blue;
-		red = listA;
-		blue = listB;
-		LengthQuicksort.sort(red);
-		LengthQuicksort.sort(blue);
-		// red is the list with the longest string
-		boolean swapped = false;
-		if (red.get(red.size() - 1).length() < blue.get(blue.size() - 1).length()) {
-			List<String> temp = red;
-			red = blue;
-			blue = temp;
-			swapped = true;
-		}
+        // create thread pool, one thread per partition
+        ExecutorService executor = Executors.newFixedThreadPool(poolSize);
+        // executor = Executors.newFixedThreadPool(1);
+        for (Pair<List<String>, List<String>> tempPair : tempPairs) {
+            Runnable worker = new TrieFilter(tempPair, similarityBook, new RatcliffObershelpMeasure(), threshold);
+            executor.execute(worker);
+        }
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        logger.info("Similarity Book has " + String.valueOf(similarityBook.size()) + " entries.");
+        return getUriToUriMapping(similarityBook, sourceMap, targetMap, swapped);
+    }
 
-		List<Pair<List<String>, List<String>>> tempPairs = new LinkedList<>();
-		// generate length filtered partitions
-		if (metric.lengthUpperBound(1, threshold) != -1) {
-			List<ImmutableTriple<Integer, Integer, Integer>> sliceBoundaries = metric
-					.getPartitionBounds(blue.get(blue.size() - 1).length(), threshold);
-			for (ImmutableTriple<Integer, Integer, Integer> sliceBoundary : sliceBoundaries) {
-				MutablePair<List<String>, List<String>> m = new MutablePair<>();
-				m.setLeft(new LinkedList<String>());
-				m.setRight(new LinkedList<String>());
-				for (String s : red)
-					if (s.length() >= sliceBoundary.getMiddle() && s.length() <= sliceBoundary.getRight())
-						m.getLeft().add(s);
-					else if (s.length() > sliceBoundary.getRight())
-						break;
-				for (String s : blue)
-					if (s.length() == sliceBoundary.getLeft())
-						m.getRight().add(s);
-					else if (s.length() > sliceBoundary.getLeft())
-						break;
-				if (m.getRight().size() > 0 && m.getLeft().size() > 0)
-					tempPairs.add(m);
-			}
-		} else {
-			MutablePair<List<String>, List<String>> m = new MutablePair<>();
-			m.setLeft(red);
-			m.setRight(blue);
-			tempPairs.add(m);
-		}
+    @Override
+    public String getName() {
+        return "ratcliff-obershelp";
+    }
 
-		int poolSize = Runtime.getRuntime().availableProcessors();
-		poolSize = poolSize > tempPairs.size() ? tempPairs.size() : poolSize;
+    @Override
+    public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
+        return -1d;
+    }
 
-		logger.info("Partitioned into " + String.valueOf(tempPairs.size()) + " sets.");
-		logger.info("Initializing Threadpool for " + String.valueOf(Runtime.getRuntime().availableProcessors())
-				+ " threads.");
-
-		// create thread pool, one thread per partition
-		ExecutorService executor = Executors.newFixedThreadPool(poolSize);
-		// executor = Executors.newFixedThreadPool(1);
-		for (Pair<List<String>, List<String>> tempPair : tempPairs) {
-			Runnable worker = new TrieFilter(tempPair, similarityBook, new RatcliffObershelpMeasure(), threshold);
-			executor.execute(worker);
-		}
-		executor.shutdown();
-		while (!executor.isTerminated()) {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		logger.info("Similarity Book has " + String.valueOf(similarityBook.size()) + " entries.");
-		return getUriToUriMapping(similarityBook, sourceMap, targetMap, swapped);
-	}
-
-	@Override
-	public String getName() {
-		return "ratcliff-obershelp";
-	}
-
-	@Override
-	public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
-		return -1d;
-	}
-
-	@Override
-	public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
-		return -1d;
-	}
+    @Override
+    public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
+        return -1d;
+    }
 }

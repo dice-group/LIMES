@@ -9,7 +9,7 @@ public class ExecutionPlannerFactory {
     private static final Logger logger = Logger.getLogger(ExecutionEngineFactory.class.getName());
 
     public enum ExecutionPlannerType {
-	DEFAULT, CANONICAL, HELIOS, DYNAMIC;
+        DEFAULT, CANONICAL, HELIOS, DYNAMIC;
     }
 
     public static final String DEFAULT = "default";
@@ -18,21 +18,20 @@ public class ExecutionPlannerFactory {
     public static final String DYNAMIC = "dynamic";
 
     public static ExecutionPlannerType getExecutionPlannerType(String name) {
-	if (name.equals(DEFAULT)) {
-	    return ExecutionPlannerType.DEFAULT;
-	}
-	if (name.equals(CANONICAL)) {
-	    return ExecutionPlannerType.CANONICAL;
-	}
-	if (name.equals(DYNAMIC)) {
-	    return ExecutionPlannerType.DYNAMIC;
-	}
-	if (name.equals(HELIOS)) {
-	    return ExecutionPlannerType.HELIOS;
-	}
-	logger.error("Sorry, " + name.toString() + " is not yet implemented. Exit with error ...");
-	System.exit(1);
-	return null;
+        if (name.equalsIgnoreCase(DEFAULT)) {
+            return ExecutionPlannerType.DEFAULT;
+        }
+        if (name.equalsIgnoreCase(CANONICAL)) {
+            return ExecutionPlannerType.CANONICAL;
+        }
+        if (name.equalsIgnoreCase(DYNAMIC)) {
+            return ExecutionPlannerType.DYNAMIC;
+        }
+        if (name.equalsIgnoreCase(HELIOS)) {
+            return ExecutionPlannerType.HELIOS;
+        }
+        logger.warn("Sorry, " + name + " is not yet implemented. Returning the default planner type instead...");
+        return ExecutionPlannerType.HELIOS;
     }
 
     /**
@@ -43,17 +42,18 @@ public class ExecutionPlannerFactory {
      */
     public static Planner getPlanner(ExecutionPlannerType type, Cache source, Cache target) {
 
-	if (type == ExecutionPlannerType.DEFAULT)
-	    return new CanonicalPlanner();
-	if (type == ExecutionPlannerType.CANONICAL)
-	    return new CanonicalPlanner();
-	if (type == ExecutionPlannerType.HELIOS)
-	    return new HeliosPlanner(target, target);
-	if (type == ExecutionPlannerType.DYNAMIC)
-	 return new DynamicPlanner(source, target);
-
-	logger.error("Sorry, " + type.toString() + " is not yet implemented. Exit with error ...");
-	System.exit(1);
-	return null;
+        switch (type) {
+            case DEFAULT:
+                return new CanonicalPlanner();
+            case CANONICAL:
+                return new CanonicalPlanner();
+            case HELIOS:
+                return new HeliosPlanner(target, target);
+            case DYNAMIC:
+                return new DynamicPlanner(source, target);
+            default:
+                logger.warn("Sorry, " + type.toString() + " is not yet implemented. Returning the default planner instead...");
+                return new CanonicalPlanner();
+        }
     }
 }

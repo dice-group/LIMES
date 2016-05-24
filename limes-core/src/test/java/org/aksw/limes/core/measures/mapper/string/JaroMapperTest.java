@@ -30,7 +30,7 @@ public class JaroMapperTest extends JaroMapper {
      * @return Set of characters contained in it
      */
     protected Set<Character> getCharSet(String s) {
-	Set<Character> result = new HashSet<Character>();
+	Set<Character> result = new HashSet<>();
 	char[] characters = s.toCharArray();
 	for (int i = 0; i < characters.length; i++) {
 	    result.add(characters[i]);

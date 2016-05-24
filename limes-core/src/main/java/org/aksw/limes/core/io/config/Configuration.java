@@ -1,5 +1,9 @@
 package org.aksw.limes.core.io.config;
 
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,7 +35,10 @@ public class Configuration implements IConfiguration {
     protected int granularity = 2;
     protected String mlAlgorithmName = new String();
 	protected Map<String, String> mlParameters = new HashMap<String, String>();
-    
+    protected String mlImplementationType = new String("batch");
+    protected Mapping mlTrainingData = new MemoryMapping();
+    protected PseudoFMeasure mlPseudoFMeasure = new PseudoFMeasure();
+
     public Configuration() {
     }
 
@@ -308,5 +315,19 @@ public class Configuration implements IConfiguration {
 	}
 
 
+    public String getMlImplementationType() {
+        return mlImplementationType;
+    }
 
+    public void setMlImplementationType(String mlImplementationType) {
+        this.mlImplementationType = mlImplementationType;
+    }
+
+    public Mapping getMlTrainingData() {
+        return mlTrainingData;
+    }
+
+    public PseudoFMeasure getMlPseudoFMeasure() {
+        return mlPseudoFMeasure;
+    }
 }

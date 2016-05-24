@@ -29,7 +29,7 @@
 		<RESTRICTION>?y a lgdo:RelayBox</RESTRICTION>
 		<PROPERTY>geom:geometry/geos:asWKT RENAME polygon</PROPERTY>
 	</TARGET>
-	<METRIC>hausdorff(x.polygon, y.polygon)</METRIC>
+	<METRIC>geo_hausdorff(x.polygon, y.polygon)</METRIC>
 	<ACCEPTANCE>
 		<THRESHOLD>0.9</THRESHOLD>
 		<FILE>lgd_relaybox_verynear.nt</FILE>
@@ -40,6 +40,6 @@
 		<FILE>lgd_relaybox_near.nt</FILE>
 		<RELATION>lgdo:near</RELATION>
 	</REVIEW>
-	<EXECUTION>Canonical</EXECUTION>
+	<EXECUTION>Default</EXECUTION>
 	<OUTPUT>TAB</OUTPUT>
 </LIMES>
