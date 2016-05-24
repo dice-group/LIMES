@@ -15,7 +15,7 @@ public class Instruction {
     static Logger logger = Logger.getLogger("LIMES");
 
     public enum Command {
-	RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER;
+        RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER;
     };
 
     private Command command;
@@ -42,19 +42,19 @@ public class Instruction {
      * 
      */
     public Instruction(Command c, String measure, String thrs, int source, int target, int result) {
-	command = c;
-	measureExpression = measure;
-	threshold = thrs;
-	sourceMapping = source;
-	targetMapping = target;
-	resultIndex = result;
+        command = c;
+        measureExpression = measure;
+        threshold = thrs;
+        sourceMapping = source;
+        targetMapping = target;
+        resultIndex = result;
     }
 
     /**
      * @return current result index
      */
     public int getResultIndex() {
-	return resultIndex;
+        return resultIndex;
     }
 
     /**
@@ -63,14 +63,14 @@ public class Instruction {
      *            result index to set
      */
     public void setResultIndex(int resultIndex) {
-	this.resultIndex = resultIndex;
+        this.resultIndex = resultIndex;
     }
 
     /**
      * @return current command
      */
     public Command getCommand() {
-	return command;
+        return command;
     }
 
     /**
@@ -79,14 +79,14 @@ public class Instruction {
      *            command to set
      */
     public void setCommand(Command command) {
-	this.command = command;
+        this.command = command;
     }
 
     /**
      * @return current measure expression
      */
     public String getMeasureExpression() {
-	return measureExpression;
+        return measureExpression;
     }
 
     /**
@@ -95,14 +95,14 @@ public class Instruction {
      *            measure expression to set
      */
     public void setMeasureExpression(String measureExpression) {
-	this.measureExpression = measureExpression;
+        this.measureExpression = measureExpression;
     }
 
     /**
      * @return current source mapping
      */
     public int getSourceMapping() {
-	return sourceMapping;
+        return sourceMapping;
     }
 
     /**
@@ -111,14 +111,14 @@ public class Instruction {
      *            source mapping to set
      */
     public void setSourceMapping(int sourceMapping) {
-	this.sourceMapping = sourceMapping;
+        this.sourceMapping = sourceMapping;
     }
 
     /**
      * @return current target mapping
      */
     public int getTargetMapping() {
-	return targetMapping;
+        return targetMapping;
     }
 
     /**
@@ -127,14 +127,14 @@ public class Instruction {
      *            target mapping to set
      */
     public void setTargetMapping(int targetMapping) {
-	this.targetMapping = targetMapping;
+        this.targetMapping = targetMapping;
     }
 
     /**
      * @return current threshold
      */
     public String getThreshold() {
-	return threshold;
+        return threshold;
     }
 
     /**
@@ -143,7 +143,7 @@ public class Instruction {
      *            threshold to set
      */
     public void setThreshold(String threshold) {
-	this.threshold = threshold;
+        this.threshold = threshold;
     }
 
     /**
@@ -152,32 +152,32 @@ public class Instruction {
      *            main threshold to set
      */
     public void setMainThreshold(String threshold) {
-	this.mainThreshold = threshold;
+        this.mainThreshold = threshold;
     }
 
     /**
      * @return current mainThreshold
      */
     public String getMainThreshold() {
-	return this.mainThreshold;
+        return this.mainThreshold;
     }
 
     @Override
     public boolean equals(Object other) {
-	Instruction i = (Instruction) other;
-	if (i == null)
-	    return false;
+        Instruction i = (Instruction) other;
+        if (i == null)
+            return false;
 
-	if (this.mainThreshold == null && i.getMainThreshold() == null)
-	    return (this.toSmallString().equals(((Instruction) other).toSmallString()));
-	if (this.mainThreshold != null && i.getMainThreshold() == null)
-	    return false;
-	if (this.mainThreshold == null && i.getMainThreshold() != null)
-	    return false;
-	if (this.mainThreshold.equals(i.getMainThreshold()))
-	    return (this.toSmallString().equals(((Instruction) other).toSmallString()));
+        if (this.mainThreshold == null && i.getMainThreshold() == null)
+            return (this.toSmallString().equals(((Instruction) other).toSmallString()));
+        if (this.mainThreshold != null && i.getMainThreshold() == null)
+            return false;
+        if (this.mainThreshold == null && i.getMainThreshold() != null)
+            return false;
+        if (this.mainThreshold.equals(i.getMainThreshold()))
+            return (this.toSmallString().equals(((Instruction) other).toSmallString()));
 
-	return false;
+        return false;
     }
 
     /**
@@ -187,51 +187,51 @@ public class Instruction {
      * @return s, instruction as string
      */
     private String toSmallString() {
-	String s = "";
-	if (command.equals(Command.RUN)) {
-	    s = "RUN\t";
-	} else if (command.equals(Command.FILTER)) {
-	    s = "FILTER\t";
-	} else if (command.equals(Command.DIFF)) {
-	    s = "DIFF\t";
-	} else if (command.equals(Command.INTERSECTION)) {
-	    s = "INTERSECTION\t";
-	} else if (command.equals(Command.UNION)) {
-	    s = "UNION\t";
-	} else if (command.equals(Command.XOR)) {
-	    s = "XOR\t";
-	}
+        String s = "";
+        if (command.equals(Command.RUN)) {
+            s = "RUN\t";
+        } else if (command.equals(Command.FILTER)) {
+            s = "FILTER\t";
+        } else if (command.equals(Command.DIFF)) {
+            s = "DIFF\t";
+        } else if (command.equals(Command.INTERSECTION)) {
+            s = "INTERSECTION\t";
+        } else if (command.equals(Command.UNION)) {
+            s = "UNION\t";
+        } else if (command.equals(Command.XOR)) {
+            s = "XOR\t";
+        }
 
-	s = s + measureExpression + "\t";
-	s = s + threshold + "\t";
-	return s;
+        s = s + measureExpression + "\t";
+        s = s + threshold + "\t";
+        return s;
     }
 
     @Override
     public Instruction clone() {
 
-	Command command = this.command;
-	int sourceMapping = this.sourceMapping;
-	int targetMapping = this.targetMapping;
-	int resultIndex = this.resultIndex;
+        Command command = this.command;
+        int sourceMapping = this.sourceMapping;
+        int targetMapping = this.targetMapping;
+        int resultIndex = this.resultIndex;
 
-	Instruction newInstruction = new Instruction(command, "", "", sourceMapping, targetMapping, resultIndex);
-	if (this.mainThreshold == null)
-	    newInstruction.setMainThreshold(null);
-	else
-	    newInstruction.setMainThreshold(new String(this.mainThreshold));
+        Instruction newInstruction = new Instruction(command, "", "", sourceMapping, targetMapping, resultIndex);
+        if (this.mainThreshold == null)
+            newInstruction.setMainThreshold(null);
+        else
+            newInstruction.setMainThreshold(new String(this.mainThreshold));
 
-	if (this.threshold == null)
-	    newInstruction.setThreshold(null);
-	else
-	    newInstruction.setThreshold(new String(this.threshold));
+        if (this.threshold == null)
+            newInstruction.setThreshold(null);
+        else
+            newInstruction.setThreshold(new String(this.threshold));
 
-	if (this.measureExpression == null)
-	    newInstruction.setMeasureExpression(null);
-	else
-	    newInstruction.setMeasureExpression(new String(this.measureExpression));
+        if (this.measureExpression == null)
+            newInstruction.setMeasureExpression(null);
+        else
+            newInstruction.setMeasureExpression(new String(this.measureExpression));
 
-	return newInstruction;
+        return newInstruction;
     }
 
     /**
@@ -240,27 +240,27 @@ public class Instruction {
      * @return s, instruction as string
      */
     public String toString() {
-	String s = "";
-	if (command.equals(Command.RUN)) {
-	    s = "RUN\t";
-	} else if (command.equals(Command.FILTER)) {
-	    s = "FILTER\t";
-	} else if (command.equals(Command.DIFF)) {
-	    s = "DIFF\t";
-	} else if (command.equals(Command.INTERSECTION)) {
-	    s = "INTERSECTION\t";
-	} else if (command.equals(Command.UNION)) {
-	    s = "UNION\t";
-	} else if (command.equals(Command.XOR)) {
-	    s = "XOR\t";
-	}
+        String s = "";
+        if (command.equals(Command.RUN)) {
+            s = "RUN\t";
+        } else if (command.equals(Command.FILTER)) {
+            s = "FILTER\t";
+        } else if (command.equals(Command.DIFF)) {
+            s = "DIFF\t";
+        } else if (command.equals(Command.INTERSECTION)) {
+            s = "INTERSECTION\t";
+        } else if (command.equals(Command.UNION)) {
+            s = "UNION\t";
+        } else if (command.equals(Command.XOR)) {
+            s = "XOR\t";
+        }
 
-	s = s + measureExpression + "\t";
-	s = s + threshold + "\t";
-	s = s + sourceMapping + "\t";
-	s = s + targetMapping + "\t";
-	s = s + resultIndex;
-	return s;
+        s = s + measureExpression + "\t";
+        s = s + threshold + "\t";
+        s = s + sourceMapping + "\t";
+        s = s + targetMapping + "\t";
+        s = s + resultIndex;
+        return s;
     }
 
 }

@@ -9,96 +9,98 @@ import org.aksw.limes.core.ml.setting.LearningParameters;
 
 public abstract class ACoreMLAlgorithm {
 
-	protected LearningParameters parameters = new LearningParameters();
-	
-	protected Cache sourceCache;
-	
-	protected Cache targetCache;
-	
-	/**
-	 * Name of the core ML algorithm.
-	 * 
-	 * @return
-	 */
-	protected abstract String getName();
+    protected LearningParameters parameters = new LearningParameters();
 
-	/**
-	 * @return current core ML algorithm parameters and their default values
-	 */
-	protected LearningParameters getParameters() {
-		return parameters;
-	}
+    protected Cache sourceCache;
 
-	/**
-	 * Initialize the core ML algorithm.
-	 * 
-	 * @param ls
-	 * @param sourceCache
-	 * @param targetCache
-	 */
-	protected void init(LearningParameters lp, Cache sourceCache, Cache targetCache) {
-		this.parameters.putAll(lp);
-		this.sourceCache = sourceCache;
-		this.targetCache = targetCache;
-	}
+    protected Cache targetCache;
 
-	/**
-	 * Learning method for supervised core ML algorithm implementations, where
-	 * the confidence values for each pair in the trainingData determine its
-	 * truth degree.
-	 * 
-	 * @param trainingData
-	 * @return
-	 */
-	protected abstract MLModel learn(Mapping trainingData)
-			throws UnsupportedMLImplementationException;
+    /**
+     * Name of the core ML algorithm.
+     * 
+     * @return
+     */
+    protected abstract String getName();
 
-	/**
-	 * Learning method for unsupervised core ML algorithm implementations.
-	 * 
-	 * @param pfm
-	 * @return
-	 * @throws UnsupportedMLImplementationException
-	 */
-	protected abstract MLModel learn(PseudoFMeasure pfm)
-			throws UnsupportedMLImplementationException;
+    /**
+     * @return current core ML algorithm parameters and their default values
+     */
+    protected LearningParameters getParameters() {
+        return parameters;
+    }
 
-	/**
-	 * Predict/generate links from source to target based on mlModel.
-	 * 
-	 * @param source
-	 * @param target
-	 * @param mlModel
-	 * @return
-	 */
-	protected abstract Mapping predict(Cache source, Cache target,
-			MLModel mlModel);
+    /**
+     * Initialize the core ML algorithm.
+     * 
+     * @param ls
+     * @param sourceCache
+     * @param targetCache
+     */
+    protected void init(LearningParameters lp, Cache sourceCache, Cache targetCache) {
+        if(lp != null && !lp.isEmpty()){
+            this.parameters.putAll(lp);
+        }
+        this.sourceCache = sourceCache;
+        this.targetCache = targetCache;
+    }
 
-	/**
-	 * Check whether the mlType is supported.
-	 * 
-	 * @param mlType
-	 * @return
-	 */
-	protected abstract boolean supports(MLImplementationType mlType);
+    /**
+     * Learning method for supervised core ML algorithm implementations, where
+     * the confidence values for each pair in the trainingData determine its
+     * truth degree.
+     * 
+     * @param trainingData
+     * @return
+     */
+    protected abstract MLModel learn(Mapping trainingData)
+            throws UnsupportedMLImplementationException;
 
-	/**
-	 * Get a set of examples to be added to the mapping.
-	 * 
-	 * @param size
-	 * @return
-	 * @throws UnsupportedMLImplementationException
-	 */
-	protected abstract Mapping getNextExamples(int size)
-			throws UnsupportedMLImplementationException;
+    /**
+     * Learning method for unsupervised core ML algorithm implementations.
+     * 
+     * @param pfm
+     * @return
+     * @throws UnsupportedMLImplementationException
+     */
+    protected abstract MLModel learn(PseudoFMeasure pfm)
+            throws UnsupportedMLImplementationException;
 
-	/**
-	 * Learning method for supervised active core ML algorithm implementations.
-	 * 
-	 * @param oracleMapping
-	 * @return
-	 */
-	protected abstract MLModel activeLearn(Mapping oracleMapping)
-			throws UnsupportedMLImplementationException;
+    /**
+     * Predict/generate links from source to target based on mlModel.
+     * 
+     * @param source
+     * @param target
+     * @param mlModel
+     * @return
+     */
+    protected abstract Mapping predict(Cache source, Cache target,
+            MLModel mlModel);
+
+    /**
+     * Check whether the mlType is supported.
+     * 
+     * @param mlType
+     * @return
+     */
+    protected abstract boolean supports(MLImplementationType mlType);
+
+    /**
+     * Get a set of examples to be added to the mapping.
+     * 
+     * @param size
+     * @return
+     * @throws UnsupportedMLImplementationException
+     */
+    protected abstract Mapping getNextExamples(int size)
+            throws UnsupportedMLImplementationException;
+
+    /**
+     * Learning method for supervised active core ML algorithm implementations.
+     * 
+     * @param oracleMapping
+     * @return
+     */
+    protected abstract MLModel activeLearn(Mapping oracleMapping)
+            throws UnsupportedMLImplementationException;
 
 }

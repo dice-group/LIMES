@@ -32,15 +32,6 @@ public class WombatSimple extends AWombat {
 
 	protected static Logger logger = Logger.getLogger(WombatSimple.class.getName());
 	
-
-	
-	// local fields
-	protected Tree<RefinementNode> refinementTreeRoot = null;
-	protected Map<String, Double> sourcePropertiesCoverageMap; //coverage map for latter computations
-	protected Map<String, Double> targetPropertiesCoverageMap; //coverage map for latter computations
-	
-	protected Set<String> measures = new HashSet<>(Arrays.asList("jaccard","trigrams","cosine","ngrams"));
-	
 	protected RefinementNode bestSolutionNode = null; 
 	protected List<ExtendedClassifier> classifiers = null;
 	protected int iterationNr = 0;
@@ -52,8 +43,6 @@ public class WombatSimple extends AWombat {
 	protected WombatSimple() {
 		super();
 	}
-
-
 
 	@Override
 	protected String getName() {
@@ -88,8 +77,8 @@ public class WombatSimple extends AWombat {
 
 	@Override
 	protected Mapping predict(Cache source, Cache target, MLModel mlModel) {
-		String metricExpression = mlModel.getLinkSpecification().toString();
-		return getPredictions(metricExpression, source, target);
+		LinkSpecification ls = mlModel.getLinkSpecification();
+		return getPredictions(ls, source, target);
 	}
 
 	@Override
@@ -171,7 +160,7 @@ public class WombatSimple extends AWombat {
     private ExtendedClassifier findInitialClassifier(String sourceProperty, String targetProperty, String measure) {
         double maxOverlap = 0;
         double theta = 1.0;
-        Mapping bestMapping = MappingFactory.createMapping(MappingType.DEFAULT);
+        Mapping bestMapping = MappingFactory.createDefaultMapping();
         for (double threshold = 1d; threshold > minPropertyCoverage; threshold = threshold * propertyLearningRate) {
             Mapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
             double overlap = new Recall().calculate(mapping, new GoldStandard(trainingData));
