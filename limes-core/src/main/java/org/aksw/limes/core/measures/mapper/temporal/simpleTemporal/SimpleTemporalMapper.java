@@ -75,7 +75,7 @@ public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemp
 
 	TreeMap<String, Set<Instance>> blocks = new TreeMap<String, Set<Instance>>();
 	Parser p = new Parser(expression, 0.0d);
-	String property = getFirstProperty(p.getTerm1());
+	String property = getFirstProperty(p.getLeftTerm());
 	for (Instance instance : cache.getAllInstances()) {
 	    TreeSet<String> time = instance.getProperty(property);
 	    for (String value : time) {

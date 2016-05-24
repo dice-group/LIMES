@@ -192,8 +192,8 @@ public class AlgebraicRewriter extends Rewriter {
 	List<String> result = new ArrayList<String>();
 	if (spec.isAtomic()) {
 	    Parser p = new Parser(spec.getFilterExpression(), spec.getThreshold());
-	    result.add(p.getTerm1());
-	    result.add(p.getTerm2());
+	    result.add(p.getLeftTerm());
+	    result.add(p.getRightTerm());
 	}
 	return result;
     }

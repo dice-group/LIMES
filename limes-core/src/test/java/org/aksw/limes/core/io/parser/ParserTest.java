@@ -15,9 +15,9 @@ public class ParserTest {
 		if (p.isAtomic()) {
 			logger.debug("-->" + s + " with threshold " + threshold + " will be carried out.");
 		} else {
-			printParsingTree(p.term1, p.getThreshold1());
-			printParsingTree(p.term2, p.getThreshold2());
-			logger.debug("--> <" + p.operator + "> will be carried out on " + p.term1 + " and " + p.term2 + " with "
+			printParsingTree(p.leftTerm, p.getThreshold1());
+			printParsingTree(p.rightTerm, p.getThreshold2());
+			logger.debug("--> <" + p.operator + "> will be carried out on " + p.leftTerm + " and " + p.rightTerm + " with "
 					+ "threshold " + threshold);
 		}
 	}
@@ -36,8 +36,8 @@ public class ParserTest {
 	public void testParcer() {
 		Parser p = new Parser("MAX(trigrams(x.skos:prefLabel,y.rdfs:label),trigrams(x.osnp:valueLabel, y.rdfs:label))", 0.5);
 		assertTrue(p.getOperator().equals(Parser.MAX));
-		assertTrue(p.getTerm1().equals("trigrams(x.skos:prefLabel,y.rdfs:label)"));
-		assertTrue(p.getTerm2().equals("trigrams(x.osnp:valueLabel,y.rdfs:label)"));
+		assertTrue(p.getLeftTerm().equals("trigrams(x.skos:prefLabel,y.rdfs:label)"));
+		assertTrue(p.getRightTerm().equals("trigrams(x.osnp:valueLabel,y.rdfs:label)"));
 	}
 
 }

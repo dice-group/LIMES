@@ -33,9 +33,9 @@ public class ConcurrentMapper extends SimpleTemporalMapper {
 	TreeMap<String, Set<Instance>> targets = this.orderByBeginDate(target, expression);
 	String machineID = null;
 	try {
-	    machineID = this.getSecondProperty(p.getTerm1());
+	    machineID = this.getSecondProperty(p.getLeftTerm());
 	} catch (IllegalArgumentException e) {
-	    logger.error("Missing machine id property in " + p.getTerm1() + ".Exiting..");
+	    logger.error("Missing machine id property in " + p.getLeftTerm() + ".Exiting..");
 	    System.exit(1);
 	}
 

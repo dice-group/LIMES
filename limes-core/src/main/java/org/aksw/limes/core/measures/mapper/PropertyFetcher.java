@@ -14,7 +14,7 @@ public class PropertyFetcher {
     public static List<String> getProperties(String expression, double threshold) {
         // get property labels
         Parser p = new Parser(expression, threshold);
-        return Arrays.asList(getPropertyLabel(p.getTerm1()), getPropertyLabel(p.getTerm2()));
+        return Arrays.asList(getPropertyLabel(p.getLeftTerm()), getPropertyLabel(p.getRightTerm()));
     }
 
     private static String getPropertyLabel(String term) {

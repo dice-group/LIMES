@@ -415,8 +415,8 @@ public class CompleteWombat extends Wombat {
 		double threshold = Double.parseDouble(metricExpr.substring(metricExpr.lastIndexOf("|")+1, metricExpr.length()));;
 		String metric = metricExpr.substring(0, metricExpr.lastIndexOf("|"));
 		Parser p = new Parser(metric, threshold );
-		result.add(p.getTerm1() + "|" + p.getCoef1());
-		result.add(p.getTerm2() + "|" + p.getCoef2());
+		result.add(p.getLeftTerm() + "|" + p.getLeftCoefficient());
+		result.add(p.getRightTerm() + "|" + p.getRightCoefficient());
 		return result;
 	}
 

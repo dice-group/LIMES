@@ -220,60 +220,60 @@ public class LinkSpecification implements ILinkSpecification {
 
 			if (p.getOperator().equalsIgnoreCase(AND)) {
 				setOperator(LogicOperator.AND);
-				leftSpec.readSpec(p.getTerm1(), p.getThreshold1());
-				rightSpec.readSpec(p.getTerm2(), p.getThreshold2());
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
 				filterExpression = null;
 				setThreshold(theta);
 				fullExpression = "AND(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(MIN)) {
 				setOperator(LogicOperator.AND);
-				leftSpec.readSpec(p.getTerm1(), theta);
-				rightSpec.readSpec(p.getTerm2(), theta);
+				leftSpec.readSpec(p.getLeftTerm(), theta);
+				rightSpec.readSpec(p.getRightTerm(), theta);
 				filterExpression = null;
 				setThreshold(theta);
 				fullExpression = "AND(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(OR)) {
 				setOperator(LogicOperator.OR);
-				leftSpec.readSpec(p.getTerm1(), p.getThreshold1());
-				rightSpec.readSpec(p.getTerm2(), p.getThreshold2());
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
 				filterExpression = null;
 				setThreshold(theta);
 				fullExpression = "OR(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(MAX)) {
 				setOperator(LogicOperator.OR);
-				leftSpec.readSpec(p.getTerm1(), theta);
-				rightSpec.readSpec(p.getTerm2(), theta);
+				leftSpec.readSpec(p.getLeftTerm(), theta);
+				rightSpec.readSpec(p.getRightTerm(), theta);
 				filterExpression = null;
 				setThreshold(theta);
 				fullExpression = "OR(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(XOR)) {
 				setOperator(LogicOperator.XOR);
-				leftSpec.readSpec(p.getTerm1(), p.getThreshold1());
-				rightSpec.readSpec(p.getTerm2(), p.getThreshold2());
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
 				filterExpression = null;
 				setThreshold(theta);
 				fullExpression = "XOR(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(MINUS)) {
 				setOperator(LogicOperator.MINUS);
-				leftSpec.readSpec(p.getTerm1(), p.getThreshold1());
-				rightSpec.readSpec(p.getTerm2(), p.getThreshold2());
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
 				filterExpression = null;
 				setThreshold(theta);
 				fullExpression = "MINUS(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			} else if (p.getOperator().equalsIgnoreCase(ADD)) {
 				setOperator(LogicOperator.AND);
-				leftSpec.readSpec(p.getTerm1(), Math.abs(theta - p.getCoef2()) / p.getCoef1());
-				rightSpec.readSpec(p.getTerm2(), Math.abs(theta - p.getCoef1()) / p.getCoef2());
+				leftSpec.readSpec(p.getLeftTerm(), Math.abs(theta - p.getRightCoefficient()) / p.getLeftCoefficient());
+				rightSpec.readSpec(p.getRightTerm(), Math.abs(theta - p.getLeftCoefficient()) / p.getRightCoefficient());
 				filterExpression = spec;
 				setThreshold(theta);
-				fullExpression = "AND(" + leftSpec.fullExpression + "|" + (Math.abs(theta - p.getCoef2()) / p.getCoef1()) + ","
-						+ rightSpec.fullExpression + "|" + (Math.abs(theta - p.getCoef1()) / p.getCoef2()) + ")";
+				fullExpression = "AND(" + leftSpec.fullExpression + "|" + (Math.abs(theta - p.getRightCoefficient()) / p.getLeftCoefficient()) + ","
+						+ rightSpec.fullExpression + "|" + (Math.abs(theta - p.getLeftCoefficient()) / p.getRightCoefficient()) + ")";
 
 			}
 		}

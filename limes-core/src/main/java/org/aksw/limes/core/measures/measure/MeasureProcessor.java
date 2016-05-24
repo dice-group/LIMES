@@ -39,8 +39,8 @@ public class MeasureProcessor {
 	if (p.isAtomic()) {
 	    results.add(p.getOperator());
 	} else {
-	    results.addAll(getMeasures(p.getTerm1()));
-	    results.addAll(getMeasures(p.getTerm2()));
+	    results.addAll(getMeasures(p.getLeftTerm()));
+	    results.addAll(getMeasures(p.getRightTerm()));
 	}
 	return results;
     }
@@ -104,8 +104,8 @@ public class MeasureProcessor {
 
 	    String property1 = null, property2 = null;
 
-	    String term1 = "?" + p.getTerm1();
-	    String term2 = "?" + p.getTerm2();
+	    String term1 = "?" + p.getLeftTerm();
+	    String term2 = "?" + p.getRightTerm();
 	    String split[];
 	    String var;
 
@@ -175,9 +175,9 @@ public class MeasureProcessor {
 	    if (p.getOperator().equalsIgnoreCase("MAX") | p.getOperator().equalsIgnoreCase("OR")
 		    | p.getOperator().equalsIgnoreCase("XOR")) {
 		double parentThreshold = p.getThreshold();
-		double firstChild = getSimilarity(sourceInstance, targetInstance, p.getTerm1(), p.getThreshold1(),
+		double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(), p.getThreshold1(),
 			sourceVar, targetVar);
-		double secondChild = getSimilarity(sourceInstance, targetInstance, p.getTerm2(), p.getThreshold2(),
+		double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
 			sourceVar, targetVar);
 
 		double maxSimilarity = Math.max(firstChild, secondChild);
@@ -189,9 +189,9 @@ public class MeasureProcessor {
 	    }
 	    if (p.getOperator().equalsIgnoreCase("MIN") | p.getOperator().equalsIgnoreCase("AND")) {
 		double parentThreshold = p.getThreshold();
-		double firstChild = getSimilarity(sourceInstance, targetInstance, p.getTerm1(), p.getThreshold1(),
+		double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(), p.getThreshold1(),
 			sourceVar, targetVar);
-		double secondChild = getSimilarity(sourceInstance, targetInstance, p.getTerm2(), p.getThreshold2(),
+		double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
 			sourceVar, targetVar);
 
 		double minSimilarity = Math.min(firstChild, secondChild);
@@ -203,9 +203,9 @@ public class MeasureProcessor {
 	    }
 	    if (p.getOperator().equalsIgnoreCase("ADD")) {
 		double parentThreshold = p.getThreshold();
-		double firstChild = p.getCoef1() * getSimilarity(sourceInstance, targetInstance, p.getTerm1(),
+		double firstChild = p.getLeftCoefficient() * getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(),
 			p.getThreshold1(), sourceVar, targetVar);
-		double secondChild = p.getCoef2() * getSimilarity(sourceInstance, targetInstance, p.getTerm2(),
+		double secondChild = p.getRightCoefficient() * getSimilarity(sourceInstance, targetInstance, p.getRightTerm(),
 			p.getThreshold2(), sourceVar, targetVar);
 		
 		if (firstChild + secondChild >= parentThreshold)
@@ -217,9 +217,9 @@ public class MeasureProcessor {
 		// logger.warn("Not sure what to do with operator " + p.op + ".
 		// Using MAX.");
 		double parentThreshold = p.getThreshold();
-		double firstChild = getSimilarity(sourceInstance, targetInstance, p.getTerm1(), p.getThreshold1(),
+		double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(), p.getThreshold1(),
 			sourceVar, targetVar);
-		double secondChild = getSimilarity(sourceInstance, targetInstance, p.getTerm2(), p.getThreshold2(),
+		double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
 			sourceVar, targetVar);
 		// the second similarity must be 0 in order for the instance to
 		// have a change to be included at the final result

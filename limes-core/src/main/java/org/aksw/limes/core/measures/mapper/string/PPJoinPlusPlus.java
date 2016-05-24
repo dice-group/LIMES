@@ -150,8 +150,8 @@ public class PPJoinPlusPlus extends Mapper {
 		Parser p = new Parser(expression, threshold);
 
 		// get first property label
-		String term1 = "?" + p.getTerm1();
-		String term2 = "?" + p.getTerm2();
+		String term1 = "?" + p.getLeftTerm();
+		String term2 = "?" + p.getRightTerm();
 		String split[];
 		String var;
 

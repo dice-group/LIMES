@@ -71,7 +71,7 @@ public class HR3 extends Mapper {
 	// get property labels
 	Parser p = new Parser(expression, threshold);
 	// get first property label
-	String term1 = p.getTerm1();
+	String term1 = p.getLeftTerm();
 	if (term1.contains(".")) {
 	    String split[] = term1.split("\\.");
 	    property1 = split[1];
@@ -83,7 +83,7 @@ public class HR3 extends Mapper {
 	}
 
 	// get second property label
-	String term2 = p.getTerm2();
+	String term2 = p.getRightTerm();
 	if (term2.contains(".")) {
 	    String split[] = term2.split("\\.");
 	    property2 = split[1];

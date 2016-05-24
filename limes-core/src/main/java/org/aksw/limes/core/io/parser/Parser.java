@@ -17,10 +17,10 @@ public class Parser implements IParser {
 	private double threshold;
 	private double threshold1;
     private double threshold2;
-    protected double coef1;
-    protected double coef2;
-    protected String term1;
-    protected String term2;
+    protected double leftCoefficient;
+    protected double rightCoefficient;
+    protected String leftTerm;
+    protected String rightTerm;
     protected String operator;
     protected String expression;
 	
@@ -55,49 +55,49 @@ public class Parser implements IParser {
     }
 
 
-    public String getTerm1() {
-        return term1;
+    public String getLeftTerm() {
+        return leftTerm;
     }
 
     public String getOperator() {
         return operator;
     }
 
-    public String getTerm2() {
-        return term2;
+    public String getRightTerm() {
+        return rightTerm;
     }
 
-    public double getCoef1() {
-        coef1 = 1.0;
-        if (term1.contains("*")) {
-            String split[] = term1.split("\\*");
+    public double getLeftCoefficient() {
+        leftCoefficient = 1.0;
+        if (leftTerm.contains("*")) {
+            String split[] = leftTerm.split("\\*");
             try {
-                coef1 = Double.parseDouble(split[0]);
-                term1 = split[1];
+                leftCoefficient = Double.parseDouble(split[0]);
+                leftTerm = split[1];
             } catch (Exception e) {
-                logger.warn("Error parsing " + term1 + " for coefficient <" + coef1 + ">");
-                coef1 = 1;
+                logger.warn("Error parsing " + leftTerm + " for coefficient <" + leftCoefficient + ">");
+                leftCoefficient = 1;
                 //e.printStackTrace();
                 //logger.warn(e.getStackTrace()[0].toString());
             }
         }
-        return coef1;
+        return leftCoefficient;
     }
 
-    public double getCoef2() {
-        coef2 = 1;
+    public double getRightCoefficient() {
+        rightCoefficient = 1;
         //  System.out.println("Parsing "+term2);
-        if (term2.contains("*")) {
-            String split[] = term2.split("\\*");
+        if (rightTerm.contains("*")) {
+            String split[] = rightTerm.split("\\*");
             try {
-                coef2 = Double.parseDouble(split[0]);
-                term2 = split[1];
+                rightCoefficient = Double.parseDouble(split[0]);
+                rightTerm = split[1];
             } catch (Exception e) {
-                coef2 = 1.0;
-                logger.warn("Error parsing " + term2 + " for coefficient");
+                rightCoefficient = 1.0;
+                logger.warn("Error parsing " + rightTerm + " for coefficient");
             }
         }
-        return coef2;
+        return rightCoefficient;
     }
 
     /**
@@ -123,13 +123,13 @@ public class Parser implements IParser {
                     found = true;
 
                 } else if (counter == 1 && found && noOpExpression.charAt(i) == ',') {
-                    term1 = noOpExpression.substring(0, i);
-                    term2 = noOpExpression.substring(i + 1);
+                    leftTerm = noOpExpression.substring(0, i);
+                    rightTerm = noOpExpression.substring(i + 1);
                 }
             }
 
-            getCoef1();
-            getCoef2();
+            getLeftCoefficient();
+            getRightCoefficient();
             //now compute thresholds based on operations
             //first numeric operations
             if (operator.equalsIgnoreCase(MIN) || operator.equalsIgnoreCase(MAX)) {
@@ -137,41 +137,41 @@ public class Parser implements IParser {
                 setThreshold2(getThreshold());
             } else if (operator.equalsIgnoreCase(ADD)) {
                 operator = ADD;
-                setThreshold1(Math.abs(getThreshold() - coef2) / coef1);
-                setThreshold2(Math.abs(getThreshold() - coef1) / coef2);
+                setThreshold1(Math.abs(getThreshold() - rightCoefficient) / leftCoefficient);
+                setThreshold2(Math.abs(getThreshold() - leftCoefficient) / rightCoefficient);
             } else if (operator.equalsIgnoreCase(MULT)) {
                 operator = MULT;
-                setThreshold1(getThreshold() / (coef2 * coef1));
+                setThreshold1(getThreshold() / (rightCoefficient * leftCoefficient));
                 setThreshold2(getThreshold1());
             } //now set constraints. separator for sets and thresholds is |
             //thus one can write
             // AND(sim(a,b)|0.5,sim(b,d)|0.7)
             // and then set global threshold to the minimal value wanted
             else {
-                int index = term1.lastIndexOf("|");
+                int index = leftTerm.lastIndexOf("|");
                 String t;
-                String set1 = term1.substring(0, index);
+                String set1 = leftTerm.substring(0, index);
                 //              System.out.println("Term1 filtered = "+set1);
-                t = term1.substring(index + 1, term1.length());
+                t = leftTerm.substring(index + 1, leftTerm.length());
                 //              System.out.println("Term = "+set1+", filter = "+t);
                 setThreshold1(Double.parseDouble(t));
-                term1 = set1;
+                leftTerm = set1;
 
-                index = term2.lastIndexOf("|");
-                String set2 = term2.substring(0, index);
+                index = rightTerm.lastIndexOf("|");
+                String set2 = rightTerm.substring(0, index);
 //                System.out.println("Term2 filtered = "+set2);
-                t = term2.substring(index + 1, term2.length());
+                t = rightTerm.substring(index + 1, rightTerm.length());
 //                System.out.println("Term = "+set2+", filter = "+t);
                 setThreshold2(Double.parseDouble(t));
-                term2 = set2;
+                rightTerm = set2;
             }
         }//atomic
         else {
             operator = expression.substring(0, expression.indexOf("("));
             String noOpExpression = expression.substring(expression.indexOf("(") + 1, expression.lastIndexOf(")"));
             String split[] = noOpExpression.split(",");
-            term1 = split[0];
-            term2 = split[1];
+            leftTerm = split[0];
+            rightTerm = split[1];
         }
     }
 
