@@ -11,7 +11,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @version 1.0
  *
  */
-public class Recall extends PRF implements IQualitativeMeasure {
+public class Recall extends APRF implements IQualitativeMeasure {
 
 	@Override
 	public double calculate(Mapping predictions, GoldStandard goldStandard) {

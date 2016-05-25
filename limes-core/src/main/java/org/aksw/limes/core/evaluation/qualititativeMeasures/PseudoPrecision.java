@@ -14,7 +14,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @version 1.0
  *
  */
-public class PseudoPrecision extends PseudoPRF {
+public class PseudoPrecision extends APseudoPRF {
 
 public PseudoPrecision() {}
 	
