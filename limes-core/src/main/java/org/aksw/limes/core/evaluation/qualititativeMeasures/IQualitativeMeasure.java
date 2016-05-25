@@ -11,7 +11,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  *
  */
 public interface IQualitativeMeasure {
-	
-	public double calculate(Mapping predictions, GoldStandard goldStandard);
+
+    public double calculate(Mapping predictions, GoldStandard goldStandard);
 
 }

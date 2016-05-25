@@ -10,15 +10,15 @@ import org.aksw.limes.core.io.mapping.Mapping;
  */
 
 public interface IOracle {
-	/** Returns true if the mapping contains the two URIs, else false
-	 * 
-	 * @param uri1 First instance in instance pair
-	 * @param uri2 Second instance in instance pair
-	 * @return
-	 */
-	public boolean ask(String uri1, String uri2);
-	public void loadData(Mapping m);
-        public int size();
-        public Mapping getMapping();
-        public String getType();
+    /** Returns true if the mapping contains the two URIs, else false
+     * 
+     * @param uri1 First instance in instance pair
+     * @param uri2 Second instance in instance pair
+     * @return
+     */
+    public boolean ask(String uri1, String uri2);
+    public void loadData(Mapping m);
+    public int size();
+    public Mapping getMapping();
+    public String getType();
 }

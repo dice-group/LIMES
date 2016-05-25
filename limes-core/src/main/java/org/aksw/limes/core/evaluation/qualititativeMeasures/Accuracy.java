@@ -14,12 +14,12 @@ import org.aksw.limes.core.io.mapping.Mapping;
  */
 public class Accuracy extends APRF implements IQualitativeMeasure {
 
-	@Override
-	public double calculate(Mapping predictions, GoldStandard goldStandard) {
-		double truePositiveValue = trueFalsePositive(predictions, goldStandard.goldStandard, true);
-		long allPositiveValue = goldStandard.goldStandard.size();
-		//double falsePositiveValue = trueFalsePositive(predictions, goldStandard, false);
-		double trueNegativeValue = trueNegative(allPositiveValue, goldStandard.targetUris.size() , goldStandard.sourceUris.size());
-		return (truePositiveValue + trueNegativeValue)/(goldStandard.targetUris.size() + goldStandard.sourceUris.size());
-	}
+    @Override
+    public double calculate(Mapping predictions, GoldStandard goldStandard) {
+        double truePositiveValue = trueFalsePositive(predictions, goldStandard.goldStandard, true);
+        long allPositiveValue = goldStandard.goldStandard.size();
+        //double falsePositiveValue = trueFalsePositive(predictions, goldStandard, false);
+        double trueNegativeValue = trueNegative(allPositiveValue, goldStandard.targetUris.size() , goldStandard.sourceUris.size());
+        return (truePositiveValue + trueNegativeValue)/(goldStandard.targetUris.size() + goldStandard.sourceUris.size());
+    }
 }
