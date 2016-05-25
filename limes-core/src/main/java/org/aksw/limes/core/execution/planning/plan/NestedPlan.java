@@ -1,20 +1,10 @@
 package org.aksw.limes.core.execution.planning.plan;
 
-import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
-
-import javax.swing.JFrame;
 
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
-
-import com.mxgraph.layout.mxCompactTreeLayout;
-import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.util.mxConstants;
-import com.mxgraph.view.mxGraph;
-import com.mxgraph.view.mxStylesheet;
 
 /**
  * Implements execution plan that is given to an execution engine. Note that the

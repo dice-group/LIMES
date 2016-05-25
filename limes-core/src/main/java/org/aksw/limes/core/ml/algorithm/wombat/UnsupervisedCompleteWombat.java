@@ -78,10 +78,10 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		if(bestSolution == null){
 			bestSolution =  getBestSolution();
 		}
-		if(RefinementNode.saveMapping){
-			return bestSolution.map;
+		if(RefinementNode.isSaveMapping()){
+			return bestSolution.getMap();
 		}
-		return getMapingOfMetricExpression(bestSolution.metricExpression);
+		return getMapingOfMetricExpression(bestSolution.getMetricExpression());
 	}
 
 	public String getMetricExpression() {
@@ -105,7 +105,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		logger.info("Most promising node: " + mostPromisingNode.getValue());
 		iterationNr ++;
 		long endTime = System.currentTimeMillis() + maxExecutionTimeInMin * 60000; 
-		while((mostPromisingNode.getValue().fMeasure) < maxFitnessThreshold	 
+		while((mostPromisingNode.getValue().getfMeasure()) < maxFitnessThreshold	 
 				&& (System.currentTimeMillis() < endTime)
 				&& refinementTreeRoot.size() <= maxRefineTreeSize
 				&& iterationNr <= maxIterationNumber)
@@ -113,15 +113,15 @@ public class UnsupervisedCompleteWombat extends Wombat {
 			iterationNr++;
 			mostPromisingNode = expandNode(mostPromisingNode);
 			mostPromisingNode = findMostPromisingNode(refinementTreeRoot, false);
-			if(mostPromisingNode.getValue().fMeasure == -Double.MAX_VALUE){
+			if(mostPromisingNode.getValue().getfMeasure() == -Double.MAX_VALUE){
 				break; // no better solution can be found
 			}
 			logger.info("Most promising node: " + mostPromisingNode.getValue());
 		}
 		RefinementNode bestSolution = findMostPromisingNode(refinementTreeRoot, true).getValue();
 		logger.info("Overall Best Solution: " + bestSolution);
-		if(!RefinementNode.saveMapping){
-			bestSolution.map = getMapingOfMetricExpression(bestSolution.metricExpression);
+		if(!RefinementNode.isSaveMapping()){
+			bestSolution.setMap(getMapingOfMetricExpression(bestSolution.getMetricExpression()));
 		}
 		return bestSolution;
 	}
@@ -176,7 +176,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		// Add children
 		List<RefinementNode> childrenNodes = refine(node);
 		for (RefinementNode n : childrenNodes) {
-			if(!inRefinementTree(n.metricExpression)){
+			if(!inRefinementTree(n.getMetricExpression())){
 				node.addChild(new Tree<RefinementNode>(n));
 			}
 		}
@@ -184,7 +184,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		if(node.level() == 1){
 			List<RefinementNode> siblingNodes = createConjunctionsWithDiffNodes(node);
 			for (RefinementNode n : siblingNodes) {
-				if(!inRefinementTree(n.metricExpression)){
+				if(!inRefinementTree(n.getMetricExpression())){
 					node.getParent().addChild(new Tree<RefinementNode>(n));
 				}
 			}
@@ -217,7 +217,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		if(treeRoot == null){
 			return false;
 		}
-		if(treeRoot.getValue().metricExpression.equals(metricExpression)){
+		if(treeRoot.getValue().getMetricExpression().equals(metricExpression)){
 			return true;
 		}
 		if(treeRoot.getchildren() != null){
@@ -240,7 +240,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		List<RefinementNode> result = new ArrayList<>();
 		String 	childMetricExpr = new String();
 		Mapping childMap = MappingFactory.createMapping(MappingType.DEFAULT);
-		String 	nodeMetricExpr = node.getValue().metricExpression;
+		String 	nodeMetricExpr = node.getValue().getMetricExpression();
 
 		if(isRoot(nodeMetricExpr)){
 			for(String diffExpr : diffs.keySet()){
@@ -265,7 +265,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 				for(int j = 0 ; j < subMetricExpr.size() ; j++){
 					if(i == j){
 						for(RefinementNode n : refine(new Tree<RefinementNode>(createNode(subMetricExpr.get(i))))){
-							childSubMetricExpr.add(n.metricExpression);
+							childSubMetricExpr.add(n.getMetricExpression());
 						}
 					}else{
 						childSubMetricExpr.add(subMetricExpr.get(i));
@@ -292,7 +292,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 				for(int j = 0 ; j < subMetricExpr.size() ; j++){
 					if(i == j){
 						for(RefinementNode n : refine(new Tree<RefinementNode>(createNode(subMetricExpr.get(i))))){
-							childSubMetricExpr.add(n.metricExpression);
+							childSubMetricExpr.add(n.getMetricExpression());
 						}
 					}else{
 						childSubMetricExpr.add(subMetricExpr.get(i));
@@ -327,12 +327,12 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		List<RefinementNode> result = new ArrayList<>();
 		for(String diffExpr : diffs.keySet()){
 			Mapping diffMapping = diffs.get(diffExpr);
-			String childMetricExpr = "OR(" + node.getValue().metricExpression + "," + diffExpr + ")|0.0" ;
+			String childMetricExpr = "OR(" + node.getValue().getMetricExpression() + "," + diffExpr + ")|0.0" ;
 			Mapping nodeMaping = MappingFactory.createMapping(MappingType.DEFAULT);
-			if(RefinementNode.saveMapping){
-				nodeMaping = node.getValue().map;
+			if(RefinementNode.isSaveMapping()){
+				nodeMaping = node.getValue().getMap();
 			}else{
-				nodeMaping = getMapingOfMetricExpression(node.getValue().metricExpression);
+				nodeMaping = getMapingOfMetricExpression(node.getValue().getMetricExpression());
 			}
 			Mapping childMap = MappingOperations.union(nodeMaping, diffMapping);
 			result.add(createNode(childMetricExpr, childMap));
@@ -351,12 +351,12 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		for(String diffExpr : diffs.keySet()){
 			Mapping diffMapping = diffs.get(diffExpr);
 			Mapping nodeMaping = MappingFactory.createMapping(MappingType.DEFAULT);
-			if(RefinementNode.saveMapping){
-				nodeMaping = node.getValue().map;
+			if(RefinementNode.isSaveMapping()){
+				nodeMaping = node.getValue().getMap();
 			}else{
-				nodeMaping = getMapingOfMetricExpression(node.getValue().metricExpression);
+				nodeMaping = getMapingOfMetricExpression(node.getValue().getMetricExpression());
 			}
-			String childMetricExpr = "AND(" + node.getValue().metricExpression + "," + diffExpr + ")|0.0" ;
+			String childMetricExpr = "AND(" + node.getValue().getMetricExpression() + "," + diffExpr + ")|0.0" ;
 			Mapping childMap = MappingOperations.intersection(nodeMaping, diffMapping);
 			result.add(createNode(childMetricExpr, childMap));
 		}
@@ -407,7 +407,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 	}
 
 	private RefinementNode createNode(String metricExpr,Mapping mapping, double fscore) {
-		if(RefinementNode.saveMapping){
+		if(RefinementNode.isSaveMapping()){
 			return new RefinementNode(fscore, mapping, metricExpr);
 		}
 		return new RefinementNode(fscore, null, metricExpr);
@@ -469,11 +469,11 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		// get the most promising child
 		Tree<RefinementNode> mostPromisingChild = new Tree<RefinementNode>(new RefinementNode());
 		for(Tree<RefinementNode> child : r.getchildren()){
-			if(child.getValue().fMeasure >= 0){
+			if(child.getValue().getfMeasure() >= 0){
 				Tree<RefinementNode> promisingChild = findMostPromisingNode(child, overall);
-				if( promisingChild.getValue().fMeasure > mostPromisingChild.getValue().fMeasure  ){
+				if( promisingChild.getValue().getfMeasure() > mostPromisingChild.getValue().getfMeasure()  ){
 					mostPromisingChild = promisingChild;
-				}else if((promisingChild.getValue().fMeasure == mostPromisingChild.getValue().fMeasure)
+				}else if((promisingChild.getValue().getfMeasure() == mostPromisingChild.getValue().getfMeasure())
 						&& (computeExpressionComplexity(promisingChild) < computeExpressionComplexity(mostPromisingChild))){
 					mostPromisingChild = promisingChild;
 				}
@@ -482,8 +482,8 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		if(overall){ // return the best leaf
 			return mostPromisingChild;
 		}else // return the best over all node 
-			if((r.getValue().fMeasure > mostPromisingChild.getValue().fMeasure)
-					|| (r.getValue().fMeasure == mostPromisingChild.getValue().fMeasure
+			if((r.getValue().getfMeasure() > mostPromisingChild.getValue().getfMeasure())
+					|| (r.getValue().getfMeasure() == mostPromisingChild.getValue().getfMeasure()
 					&& computeExpressionComplexity(r) < computeExpressionComplexity(mostPromisingChild))){
 				return r;
 			}else{
@@ -497,7 +497,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 	 * @author sherif
 	 */
 	private int computeExpressionComplexity(Tree<RefinementNode> node) {
-		String e = node.getValue().metricExpression;
+		String e = node.getValue().getMetricExpression();
 		return  StringUtils.countMatches(e, "OR(") + 
 				StringUtils.countMatches(e, "AND(") + 
 				StringUtils.countMatches(e, "MINUS(");

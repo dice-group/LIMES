@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.config.reader.ConfigurationReader;
+import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.apache.log4j.Logger;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -24,7 +24,7 @@ import com.hp.hpl.jena.vocabulary.RDFS;
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 12, 2015
  */
-public class RDFConfigurationReader extends ConfigurationReader{
+public class RDFConfigurationReader extends AConfigurationReader{
     private static final Logger logger = Logger.getLogger(RDFConfigurationReader.class.getName());
     Configuration configuration = new Configuration();
 
@@ -37,8 +37,8 @@ public class RDFConfigurationReader extends ConfigurationReader{
      * @author sherif
      */
     @Override
-    public Configuration read(String inputFile) {
-        return read(readModel(inputFile));
+    public Configuration read() {
+        return read(readModel(fileNameOrUri));
     }
 
     /**
@@ -134,7 +134,8 @@ public class RDFConfigurationReader extends ConfigurationReader{
      *
      *@author sherif
      */
-    public RDFConfigurationReader() {
+    public RDFConfigurationReader(String fileNameOrUri) {
+        super(fileNameOrUri);
     }
 
     /**
@@ -259,8 +260,7 @@ public class RDFConfigurationReader extends ConfigurationReader{
      * @return
      * @author sherif
      */
-    public static Model readModel(String fileNameOrUri)
-    {
+    public static Model readModel(String fileNameOrUri){
         long startTime = System.currentTimeMillis();
         Model model = ModelFactory.createDefaultModel();
 

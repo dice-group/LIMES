@@ -1154,8 +1154,8 @@ public class Lion extends MLAlgorithm {
     public static void main(String args[]) {
 	String base = "/home/lyko/svn/LIMES/";
 	String configFile = "../../../svn/LIMES/Examples/GeneticEval/PublicationData.xml";
-	XMLConfigurationReader reader = new XMLConfigurationReader();
-	Configuration config = reader.read(configFile);
+	XMLConfigurationReader reader = new XMLConfigurationReader(configFile);
+	Configuration config = reader.read();
 	config.getSourceInfo().setEndpoint(base + config.getSourceInfo().getEndpoint());
 	config.getTargetInfo().setEndpoint(base + config.getTargetInfo().getEndpoint());
 

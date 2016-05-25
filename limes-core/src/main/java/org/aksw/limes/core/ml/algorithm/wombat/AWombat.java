@@ -170,8 +170,8 @@ public abstract class AWombat extends ACoreMLAlgorithm{
      */
     protected Mapping getMapingOfMetricFromTree(String metricExpression, Tree<RefinementNode> r) {
         if(r!= null){
-            if(r.getValue().metricExpression.equals(metricExpression)){
-                return r.getValue().map;
+            if(r.getValue().getMetricExpression().equals(metricExpression)){
+                return r.getValue().getMap();
             }
             if(r.getchildren() != null && r.getchildren().size() > 0){
                 for(Tree<RefinementNode> c : r.getchildren()){

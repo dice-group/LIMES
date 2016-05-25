@@ -182,7 +182,7 @@ public abstract class Wombat extends MLAlgorithm{
 	 */
 	protected Mapping getMapingOfMetricExpression(String metricExpression) {
 		Mapping map = null;
-		if(RefinementNode.saveMapping){
+		if(RefinementNode.isSaveMapping()){
 			map = getMapingOfMetricFromTree( metricExpression,refinementTreeRoot);
 		}
 		if(map == null){
@@ -207,8 +207,8 @@ public abstract class Wombat extends MLAlgorithm{
 	 */
 	protected Mapping getMapingOfMetricFromTree(String metricExpression, Tree<RefinementNode> r) {
 		if(r!= null){
-			if(r.getValue().metricExpression.equals(metricExpression)){
-				return r.getValue().map;
+			if(r.getValue().getMetricExpression().equals(metricExpression)){
+				return r.getValue().getMap();
 			}
 			if(r.getchildren() != null && r.getchildren().size() > 0){
 				for(Tree<RefinementNode> c : r.getchildren()){
