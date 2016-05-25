@@ -132,8 +132,6 @@ public class LinkSpecification implements ILinkSpecification {
 	 * @return True if the spec is empty, all false
 	 */
 	public boolean isEmpty() {
-		if (getThreshold() <= 0)
-			return (getThreshold() <= 0);
 		if (filterExpression == null && (getChildren() == null || getChildren().isEmpty()))
 			return true;
 		return false;
