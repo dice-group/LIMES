@@ -8,7 +8,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
 
 
 /**
- * This class cointains three methods that calculate such values:
+ * This class contains three methods that calculate such values:
  * true-positive: the results classified as positive and the classification is correct.
  * false-positive: the results classified as positive and the classification is incorrect.
  * true-negative:	the results classified as negative and the classification is correct.

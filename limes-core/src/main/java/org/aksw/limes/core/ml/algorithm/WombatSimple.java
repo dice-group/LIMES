@@ -6,6 +6,9 @@ import java.util.List;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.datastrutures.Tree;
+import org.aksw.limes.core.evaluation.evaluator.EvaluatorFactory;
+import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
@@ -61,13 +64,13 @@ public class WombatSimple extends AWombat {
     protected MLModel learn(Mapping trainingData) {
         this.trainingData = trainingData;
         if(bestSolutionNode == null){ // not to do learning twice
-            bestSolutionNode =  getBestSolution();
+            bestSolutionNode =  findBestSolution();
         }
         String bestMetricExpr = bestSolutionNode.getMetricExpression();
         double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|")+1, bestMetricExpr.length()));
         Mapping bestMapping = bestSolutionNode.getMap();
         LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
-        double bestFMeasure = bestSolutionNode.getfMeasure();
+        double bestFMeasure = bestSolutionNode.getFMeasure();
         MLModel result= new MLModel(bestLS, bestMapping, bestFMeasure, null);
         return result;
     }
@@ -75,16 +78,7 @@ public class WombatSimple extends AWombat {
     @Override
     protected MLModel learn(PseudoFMeasure pfm) {
         this.pseudoFMeasure = pfm;
-        if(bestSolutionNode == null){ // not to do learning twice
-            bestSolutionNode =  getBestSolution();
-        }
-        String bestMetricExpr = bestSolutionNode.getMetricExpression();
-        double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|")+1, bestMetricExpr.length()));
-        Mapping bestMapping = bestSolutionNode.getMap();
-        LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
-        double bestFMeasure = bestSolutionNode.getfMeasure();
-        MLModel result= new MLModel(bestLS, bestMapping, bestFMeasure, null);
-        return result;
+        return learn((Mapping) null);
     }
 
     @Override
@@ -112,20 +106,20 @@ public class WombatSimple extends AWombat {
      * @return RefinementNode containing the best over all solution
      * @author sherif
      */
-    public RefinementNode getBestSolution(){
+    public RefinementNode findBestSolution(){
         classifiers = findInitialClassifiers();
         createRefinementTreeRoot();
         Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
         logger.info("Most promising node: " + mostPromisingNode.getValue());
         iterationNr ++;
-        while((mostPromisingNode.getValue().getfMeasure()) < maxFitnessThreshold	 
+        while((mostPromisingNode.getValue().getFMeasure()) < maxFitnessThreshold	 
                 && refinementTreeRoot.size() <= maxRefineTreeSize
                 && iterationNr <= maxIterationNumber)
         {
             iterationNr++;
             mostPromisingNode = expandNode(mostPromisingNode);
             mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
-            if(mostPromisingNode.getValue().getfMeasure() == -Double.MAX_VALUE){
+            if(mostPromisingNode.getValue().getFMeasure() == -Double.MAX_VALUE){
                 break; // no better solution can be found
             }
             logger.info("Most promising node: " + mostPromisingNode.getValue());
@@ -175,7 +169,7 @@ public class WombatSimple extends AWombat {
         Mapping bestMapping = MappingFactory.createDefaultMapping();
         for (double threshold = 1d; threshold > minPropertyCoverage; threshold = threshold * propertyLearningRate) {
             Mapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
-            double overlap = new Recall().calculate(mapping, new GoldStandard(trainingData));
+            double overlap = recall(mapping);
             if (maxOverlap < overlap){ //only interested in largest threshold with recall 1
                 bestMapping = mapping;
                 theta = threshold;
@@ -189,6 +183,16 @@ public class WombatSimple extends AWombat {
         cp.targetProperty = targetProperty;
         cp.mapping = bestMapping;
         return cp;
+    }
+
+    private double recall(Mapping predictions) {
+        if(pseudoFMeasure == null){
+            // get real recall based on training data 
+            return new Recall().calculate(predictions, new GoldStandard(trainingData));
+        }
+        // compute pseudo-recall
+        IQualitativeMeasure r = EvaluatorFactory.create(EvaluatorType.P_RECALL);
+        return r.calculate(predictions, new GoldStandard(null, sourceUris, targetUris));
     }
 
     /**
@@ -207,11 +211,11 @@ public class WombatSimple extends AWombat {
         // get mostPromesyChild of children
         Tree<RefinementNode> mostPromesyChild = new Tree<RefinementNode>(new RefinementNode());
         for(Tree<RefinementNode> child : r.getchildren()){
-            if(child.getValue().getfMeasure() >= 0){
+            if(child.getValue().getFMeasure() >= 0){
                 Tree<RefinementNode> promesyChild = getMostPromisingNode(child, penaltyWeight);
                 double newFitness;
-                newFitness = promesyChild.getValue().getfMeasure() - penaltyWeight * computePenalty(promesyChild);
-                if( newFitness > mostPromesyChild.getValue().getfMeasure()  ){
+                newFitness = promesyChild.getValue().getFMeasure() - penaltyWeight * computePenalty(promesyChild);
+                if( newFitness > mostPromesyChild.getValue().getFMeasure()  ){
                     mostPromesyChild = promesyChild;
                 }
             }
@@ -219,7 +223,7 @@ public class WombatSimple extends AWombat {
         // return the argmax{root, mostPromesyChild}
         if(penaltyWeight > 0){
             return mostPromesyChild;
-        }else if(r.getValue().getfMeasure() >= mostPromesyChild.getValue().getfMeasure()){
+        }else if(r.getValue().getFMeasure() >= mostPromesyChild.getValue().getFMeasure()){
             return r;
         }else{
             return mostPromesyChild;

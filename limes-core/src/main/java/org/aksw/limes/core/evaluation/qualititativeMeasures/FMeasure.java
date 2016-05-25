@@ -11,17 +11,25 @@ import org.aksw.limes.core.io.mapping.Mapping;
  */
 public class FMeasure extends APRF implements IQualitativeMeasure {
 
-	@Override
-	public double calculate(Mapping predictions, GoldStandard goldStandard) {
-		
-		double p = new Precision().calculate(predictions, goldStandard);
-		double r = new Recall().calculate(predictions, goldStandard);
-		
-		if(p + r > 0d)
-			return 2 * p * r / (p + r);
-		else
-			return 0d;
-		
-	}
+    @Override
+    public double calculate(Mapping predictions, GoldStandard goldStandard) {
+
+        double p = precision(predictions, goldStandard);
+        double r = recall(predictions, goldStandard);
+
+        if(p + r > 0d)
+            return 2 * p * r / (p + r);
+        else
+            return 0d;
+
+    }
+
+    public double recall(Mapping predictions, GoldStandard goldStandard) {
+        return new Recall().calculate(predictions, goldStandard);
+    }
+
+    public double precision(Mapping predictions, GoldStandard goldStandard) {
+        return new Precision().calculate(predictions, goldStandard);
+    }
 
 }

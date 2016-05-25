@@ -11,6 +11,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * Thereby, not relying on any gold standard. The basic idea is to measure the quality of the
  * a given Mapping by calc. how close it is to an assumed 1-to-1 Mapping between source and 
  * target.
+ * @deprecated Use {@link PseudoFMeasure} instead
  * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
  * @author ngonga
  *

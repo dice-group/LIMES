@@ -39,7 +39,7 @@ public PseudoPrecision() {}
 	public double calculate(Mapping predictions, GoldStandard goldStandard) {
 		Mapping res = predictions;
     	Mapping rev = res.reverseSourceTarget();
-    	if(use1To1Mapping) {
+    	if(useOneToOneMapping) {
     		res = predictions.getBestOneToNMapping();
     		rev = res.reverseSourceTarget().getBestOneToNMapping();
     	}

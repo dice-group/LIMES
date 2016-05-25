@@ -42,7 +42,7 @@ public class PseudoRecall  extends APseudoPRF {
 	
 	public double calculate(Mapping predictions, GoldStandard goldStandard) {
     	Mapping res = predictions;
-    	if(use1To1Mapping) {
+    	if(useOneToOneMapping) {
     		res = predictions.getBestOneToNMapping();
     	}
         double q = res.getMap().keySet().size();

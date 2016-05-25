@@ -14,7 +14,7 @@ public class PseudoRefRecall extends PseudoRecall{
 	@Override
 	public double calculate(Mapping predictions, GoldStandard goldStandard) {
 		Mapping res = predictions;
-    	if(use1To1Mapping)
+    	if(useOneToOneMapping)
     		res = predictions.getBestOneToOneMappings(predictions);// the first call of prediction just to call the method; ya i know
         double size = 0;
         for (String s : res.getMap().keySet()) {
