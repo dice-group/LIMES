@@ -76,7 +76,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                 m = executeFilter(inst, buffer.get(inst.getSourceMapping()));
             } else if (inst.getCommand().equals(Command.REVERSEFILTER)) {
                 m = executeReverseFilter(inst, buffer.get(inst.getSourceMapping()));
-            }// runs set operations such as intersection,
+            } // runs set operations such as intersection,
             else if (inst.getCommand().equals(Command.INTERSECTION)) {
                 m = executeIntersection(buffer.get(inst.getSourceMapping()), buffer.get(inst.getTargetMapping()));
             } // union
@@ -152,6 +152,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 
         return new MemoryMapping();
     }
+
     /**
      * Runs the reverse filtering operator
      *
@@ -166,6 +167,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
         return filter.reversefilter(input, inst.getMeasureExpression(), Double.parseDouble(inst.getThreshold()),
                 Double.parseDouble(inst.getMainThreshold()), source, target, sourceVariable, targetVariable);
     }
+
     /**
      * Runs the filtering operator
      *
@@ -260,8 +262,8 @@ public class SimpleExecutionEngine extends ExecutionEngine {
         else if (plan.isAtomic()) {
             m = executeInstructions(plan);
         } // nested plans contain subplans, an operator for merging the results
-        // of the subplans and a filter for filtering the results of the
-        // subplan
+          // of the subplans and a filter for filtering the results of the
+          // subplan
         else {
             // run all the subplans
             m = executeStatic(plan.getSubPlans().get(0));
@@ -364,7 +366,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                         // second plan is (reverse) filter
                         if (plan.getOperator() == null) {
                             if (plan.getFilteringInstruction().getCommand().equals(Command.REVERSEFILTER)) {
-                                result = executeFilter(plan.getFilteringInstruction(), m);
+                                result = executeReverseFilter(plan.getFilteringInstruction(), m);
 
                             }
                         } else { // second plan is run

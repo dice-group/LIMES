@@ -200,6 +200,8 @@ public class Instruction {
             s = "UNION\t";
         } else if (command.equals(Command.XOR)) {
             s = "XOR\t";
+        } else if (command.equals(Command.REVERSEFILTER)) {
+            s = "REVERSEFILTER\t";
         }
 
         s = s + measureExpression + "\t";
@@ -253,6 +255,8 @@ public class Instruction {
             s = "UNION\t";
         } else if (command.equals(Command.XOR)) {
             s = "XOR\t";
+        } else if (command.equals(Command.REVERSEFILTER)) {
+            s = "REVERSEFILTER\t";
         }
 
         s = s + measureExpression + "\t";

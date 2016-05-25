@@ -37,10 +37,10 @@ public abstract class ExecutionEngine implements IExecutionEngine {
      *            Target variable (usually "?y")
      */
     public ExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
-	this.buffer = new ArrayList<MemoryMapping>();
-	this.source = source;
-	this.target = target;
-	this.sourceVariable = sourceVar;
-	this.targetVariable = targetVar;
+        this.buffer = new ArrayList<MemoryMapping>();
+        this.source = source;
+        this.target = target;
+        this.sourceVariable = sourceVar;
+        this.targetVariable = targetVar;
     }
 }
