@@ -6,10 +6,16 @@ package org.aksw.limes.core.ml.algorithm.wombat;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.Tree;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
@@ -37,12 +43,10 @@ import org.apache.log4j.Logger;
  *
  */
 public abstract class AWombat extends ACoreMLAlgorithm{   
-
-    protected Set<String> wombatParameterNames = new HashSet<>(); 
-
+    
     static Logger logger = Logger.getLogger(AWombat.class.getName());
+    
 
-    protected Tree<RefinementNode> refinementTreeRoot = null;
 
     // Parameters
     protected static final String 	PARAMETER_MAX_REFINEMENT_TREE_SIZE 		= "max refinement tree size";
@@ -59,6 +63,8 @@ public abstract class AWombat extends ACoreMLAlgorithm{
     protected double 				minPropertyCoverage						= 0.4;
     protected static final String 	PARAMETER_PROPERTY_LEARNING_RATE		= "properity learning rate";
     protected double 				propertyLearningRate 					= 0.9;
+    protected static final String   PARAMETER_OVERALL_PENALTY_WEIT         = "overall penalty weit";
+    protected double                overallPenaltyWeight = 0.5d;
     protected static final String 	PARAMETER_CHILDREN_PENALTY_WEIT			= "children penalty weit";
     protected static long 			childrenPenaltyWeit 					= 1;
     protected static final String 	PARAMETER_COMPLEXITY_PENALTY_WEIT		= "complexity penalty weit";
@@ -71,6 +77,16 @@ public abstract class AWombat extends ACoreMLAlgorithm{
     // fields
     protected Map<String, Double> 	sourcePropertiesCoverageMap; //coverage map for latter computations
     protected Map<String, Double> 	targetPropertiesCoverageMap; //coverage map for latter computations
+    
+    protected PseudoFMeasure pseudoFMeasure = null;
+    public static List<String> sourceUris; 
+    public static List<String> targetUris;
+
+    protected Mapping trainingData;
+    
+    protected Set<String> wombatParameterNames = new HashSet<>(); 
+
+    protected Tree<RefinementNode> refinementTreeRoot = null;
 
 
     protected AWombat() {
@@ -85,6 +101,7 @@ public abstract class AWombat extends ACoreMLAlgorithm{
         parameters.put(PARAMETER_MAX_FITNESS_THRESHOLD,String.valueOf(maxFitnessThreshold));
         parameters.put(PARAMETER_MIN_PROPERTY_COVERAGE,String.valueOf(minPropertyCoverage));
         parameters.put(PARAMETER_PROPERTY_LEARNING_RATE,String.valueOf(propertyLearningRate));
+        parameters.put(PARAMETER_OVERALL_PENALTY_WEIT, String.valueOf(overallPenaltyWeight));
         parameters.put(PARAMETER_CHILDREN_PENALTY_WEIT, String.valueOf(childrenPenaltyWeit));
         parameters.put(PARAMETER_COMPLEXITY_PENALTY_WEIT, String.valueOf(complexityPenaltyWeit));
         parameters.put(PARAMETER_VERBOSE, String.valueOf(false));
@@ -184,5 +201,48 @@ public abstract class AWombat extends ACoreMLAlgorithm{
         }
         return null;
     }	
+    
+    
+    /**
+     * calculate either a real or a pseudo-F-Measure
+     * @param predictions
+     * @return
+     */
+    protected double fMeasure(Mapping predictions) {
+        if(pseudoFMeasure == null){
+            // get real F-Measure based on training data 
+            return new FMeasure().calculate(predictions, new GoldStandard(trainingData));
+        }
+        // compute pseudo-F-Measure
+        return pseudoFMeasure.calculate(predictions, new GoldStandard(null, sourceUris, targetUris));
+    }
+
+    /**
+     * calculate either a real or a pseudo-Precision
+     * @param predictions
+     * @return
+     */
+    protected double precision(Mapping predictions) {
+        if(pseudoFMeasure == null){
+            // get real precision based on training data 
+            return new Precision().calculate(predictions, new GoldStandard(trainingData));
+        }
+        // compute pseudo-precision
+        return pseudoFMeasure.precision(predictions, new GoldStandard(null, sourceUris, targetUris));
+    }
+    
+    /**
+     * calculate either a real or a pseudo-Recall
+     * @param predictions
+     * @return
+     */
+    protected double recall(Mapping predictions) {
+        if(pseudoFMeasure == null){
+            // get real recall based on training data 
+            return new Recall().calculate(predictions, new GoldStandard(trainingData));
+        }
+        // compute pseudo-recall
+        return pseudoFMeasure.recall(predictions, new GoldStandard(null, sourceUris, targetUris));
+    }
 
 }

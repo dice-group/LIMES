@@ -8,7 +8,9 @@ import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorFactory;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
@@ -38,12 +40,7 @@ public class WombatSimple extends AWombat {
 
     private Mapping trainingData;;
 
-    private PseudoFMeasure pseudoFMeasure = null;
-    private static final double BETA = 2.0;
-    public static List<String> sourceUris; 
-    public static List<String> targetUris;
-
-
+    
     protected WombatSimple() {
         super();
     }
@@ -185,15 +182,6 @@ public class WombatSimple extends AWombat {
         return cp;
     }
 
-    private double recall(Mapping predictions) {
-        if(pseudoFMeasure == null){
-            // get real recall based on training data 
-            return new Recall().calculate(predictions, new GoldStandard(trainingData));
-        }
-        // compute pseudo-recall
-        IQualitativeMeasure r = EvaluatorFactory.create(EvaluatorType.P_RECALL);
-        return r.calculate(predictions, new GoldStandard(null, sourceUris, targetUris));
-    }
 
     /**
      * Get the most promising node as the node with the best F-score
