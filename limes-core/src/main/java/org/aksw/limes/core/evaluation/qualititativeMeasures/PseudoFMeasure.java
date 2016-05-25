@@ -13,7 +13,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @author mofeed hassan
  * @version 1.0
  */
-public class PseudoFMeasure  extends PseudoPRF {
+public class PseudoFMeasure  extends APseudoPRF {
 
     public PseudoFMeasure() {}
 

@@ -12,7 +12,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @version 1.0
  */
-public class Accuracy extends PRF implements IQualitativeMeasure {
+public class Accuracy extends APRF implements IQualitativeMeasure {
 
 	@Override
 	public double calculate(Mapping predictions, GoldStandard goldStandard) {

@@ -17,7 +17,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @version 1.0
  *
  */
-public class PseudoRecall  extends PseudoPRF {
+public class PseudoRecall  extends APseudoPRF {
 	public PseudoRecall() {}
 	
 	/**

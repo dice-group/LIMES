@@ -11,7 +11,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @author mofeed
  * @version 1.0
  */
-public abstract class PseudoPRF extends PRF{
+public abstract class APseudoPRF extends APRF{
     public abstract double calculate(Mapping predictions, GoldStandard goldStandard);
     public boolean symmetricPrecision = true;
     boolean use1To1Mapping = false;
