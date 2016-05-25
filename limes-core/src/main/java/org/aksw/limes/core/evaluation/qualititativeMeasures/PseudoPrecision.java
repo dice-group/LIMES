@@ -25,7 +25,7 @@ public PseudoPrecision() {}
 	 */
 	public PseudoPrecision(final boolean symmetricPrecision) {
 		this();
-		this.symmetricPrecision = symmetricPrecision;
+		this.setSymmetricPrecision(symmetricPrecision);
 	}
 	
     /** Computes the pseudo-precision, which is basically how well the mapping 
@@ -44,11 +44,11 @@ public PseudoPrecision() {}
     		rev = res.reverseSourceTarget().getBestOneToNMapping();
     	}
     	double p = res.getMap().keySet().size();
-    	if(symmetricPrecision)
+    	if(isSymmetricPrecision())
     		p = res.getMap().keySet().size()+rev.getMap().keySet().size();
         double q = 0;
         for (String s : predictions.getMap().keySet()) {
-        	if(symmetricPrecision)
+        	if(isSymmetricPrecision())
         		q = q + 2*predictions.getMap().get(s).size();
         	else
         		q = q + predictions.getMap().get(s).size();

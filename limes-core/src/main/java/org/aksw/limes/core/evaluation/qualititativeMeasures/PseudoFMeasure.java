@@ -24,7 +24,7 @@ public class PseudoFMeasure  extends APseudoPRF {
      */
     public PseudoFMeasure(final boolean symmetricPrecision) {
         this();
-        this.symmetricPrecision = symmetricPrecision;
+        this.setSymmetricPrecision(symmetricPrecision);
     }
     /** Computes the balanced Pseudo-F1-measure.
      *

@@ -44,9 +44,9 @@ public class Experiement {
         }
         return m;
     }
-   
 
-    
+
+
     public static Cache readOAEIFile(String file, String token) {
         Cache c = new MemoryCache();
         BufferedReader reader=null;
@@ -73,12 +73,12 @@ public class Experiement {
             e.printStackTrace();
         }
         finally{try {
-			reader.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}}
-//        logger.info(c);
+            reader.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }}
+        //        logger.info(c);
         c.resetIterator();
         return c;
     }

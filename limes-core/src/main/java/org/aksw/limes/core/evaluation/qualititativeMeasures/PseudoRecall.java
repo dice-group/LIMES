@@ -27,7 +27,7 @@ public class PseudoRecall  extends APseudoPRF {
 	 */
 	public PseudoRecall(final boolean symmetricPrecision) {
 		this();
-		this.symmetricPrecision = symmetricPrecision;
+		this.setSymmetricPrecision(symmetricPrecision);
 	}
 	
 	
