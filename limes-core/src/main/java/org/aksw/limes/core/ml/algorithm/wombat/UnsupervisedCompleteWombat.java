@@ -79,7 +79,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 			bestSolution =  getBestSolution();
 		}
 		if(RefinementNode.isSaveMapping()){
-			return bestSolution.getMap();
+			return bestSolution.getMapping();
 		}
 		return getMapingOfMetricExpression(bestSolution.getMetricExpression());
 	}
@@ -136,7 +136,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		for(int i = 0 ; i < c.size() ; i++){
 			for(int j = 0 ; j < c.size() ; j++){
 				if(i != j ){
-					Mapping m = MappingOperations.difference(c.get(i).mapping, c.get(j).mapping);
+					Mapping m = MappingOperations.difference(c.get(i).getMapping(), c.get(j).getMapping());
 					String e = "MINUS(" + c.get(i).getMetricExpression() + "," + c.get(j).getMetricExpression() + ")|0.0"; 
 					diffs.put(e ,m);	
 				}
@@ -330,7 +330,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 			String childMetricExpr = "OR(" + node.getValue().getMetricExpression() + "," + diffExpr + ")|0.0" ;
 			Mapping nodeMaping = MappingFactory.createMapping(MappingType.DEFAULT);
 			if(RefinementNode.isSaveMapping()){
-				nodeMaping = node.getValue().getMap();
+				nodeMaping = node.getValue().getMapping();
 			}else{
 				nodeMaping = getMapingOfMetricExpression(node.getValue().getMetricExpression());
 			}
@@ -352,7 +352,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 			Mapping diffMapping = diffs.get(diffExpr);
 			Mapping nodeMaping = MappingFactory.createMapping(MappingType.DEFAULT);
 			if(RefinementNode.isSaveMapping()){
-				nodeMaping = node.getValue().getMap();
+				nodeMaping = node.getValue().getMapping();
 			}else{
 				nodeMaping = getMapingOfMetricExpression(node.getValue().getMetricExpression());
 			}

@@ -13,7 +13,7 @@ import org.aksw.limes.core.ml.algorithm.euclid.SimpleClassifier;
  */
 public class ExtendedClassifier extends SimpleClassifier {
     
-    public Mapping mapping;
+    protected Mapping mapping;
     
     public ExtendedClassifier(String measure, double threshold){
         super(measure, threshold);
@@ -21,6 +21,14 @@ public class ExtendedClassifier extends SimpleClassifier {
     
     public ExtendedClassifier(String measure, double threshold, String sourceProperty, String targetProperty){
         super(measure, threshold, sourceProperty, targetProperty);
+    }
+
+    public Mapping getMapping() {
+        return mapping;
+    }
+
+    public void setMapping(Mapping mapping) {
+        this.mapping = mapping;
     }
     
 }

@@ -75,7 +75,7 @@ public class WeakWombat extends Wombat {
 		if(bestSolution == null){
 			bestSolution =  getBestSolution();
 		}
-		return bestSolution.getMap();
+		return bestSolution.getMapping();
 	}
 	
 
@@ -124,10 +124,10 @@ public class WeakWombat extends Wombat {
 	private void createRefinementTreeRoot(){
 		RefinementNode initialNode = new RefinementNode();
 		refinementTreeRoot = new Tree<RefinementNode>(null,initialNode, null);
-		Mapping unionMapping = classifiers.get(0).mapping;
+		Mapping unionMapping = classifiers.get(0).getMapping();
 		String unionMetricExpr =  classifiers.get(0).getMetricExpression();
 		for (int i = 1; i < classifiers.size(); i++) {
-			unionMapping = MappingOperations.union(unionMapping, classifiers.get(i).mapping);
+			unionMapping = MappingOperations.union(unionMapping, classifiers.get(i).getMapping());
 			unionMetricExpr = "OR(" + unionMetricExpr + "," + classifiers.get(i).getMetricExpression() + ")|0";
 		}
 		RefinementNode n = new RefinementNode(unionMapping, unionMetricExpr,reference);
@@ -152,9 +152,9 @@ public class WeakWombat extends Wombat {
 			for(Operator op : Operator.values()){
 				if(node.getValue().getMetricExpression() != c.getMetricExpression()){ // do not create the same metricExpression again 
 					if(op.equals(Operator.AND)){
-						map = MappingOperations.intersection(node.getValue().getMap(), c.mapping);
+						map = MappingOperations.intersection(node.getValue().getMapping(), c.getMapping());
 					}else if(op.equals(Operator.MINUS)){
-						map = MappingOperations.difference(node.getValue().getMap(), c.mapping);
+						map = MappingOperations.difference(node.getValue().getMapping(), c.getMapping());
 					}
 					String metricExpr = op + "(" + node.getValue().getMetricExpression() + "," + c.getMetricExpression() +")|0";
 					RefinementNode child = new RefinementNode(map, metricExpr,reference);

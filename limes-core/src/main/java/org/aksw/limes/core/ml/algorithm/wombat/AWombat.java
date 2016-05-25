@@ -73,7 +73,8 @@ public abstract class AWombat extends ACoreMLAlgorithm{
     protected boolean 				verbose 								= false;
     protected static final String 	PARAMETER_MEASURES						= "measures";
     protected Set<String> 			measures 								= new HashSet<>(Arrays.asList("jaccard","trigrams","cosine","qgrams"));
-
+    protected static final String   PARAMETER_SAVE_MAPPING                  = "save mapping";
+    protected static boolean        saveMapping                             = true;
     // fields
     protected Map<String, Double> 	sourcePropertiesCoverageMap; //coverage map for latter computations
     protected Map<String, Double> 	targetPropertiesCoverageMap; //coverage map for latter computations
@@ -106,6 +107,7 @@ public abstract class AWombat extends ACoreMLAlgorithm{
         parameters.put(PARAMETER_COMPLEXITY_PENALTY_WEIT, String.valueOf(complexityPenaltyWeit));
         parameters.put(PARAMETER_VERBOSE, String.valueOf(false));
         parameters.put(PARAMETER_MEASURES, String.valueOf(measures));
+        parameters.put(PARAMETER_SAVE_MAPPING, String.valueOf(saveMapping));
     }
 
     @Override
@@ -113,6 +115,7 @@ public abstract class AWombat extends ACoreMLAlgorithm{
         super.init(lp, sourceCache, targetCache);
         sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, minPropertyCoverage);
         targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetCache, minPropertyCoverage);
+        RefinementNode.setSaveMapping(saveMapping);
     }
 
 
@@ -188,7 +191,7 @@ public abstract class AWombat extends ACoreMLAlgorithm{
     protected Mapping getMapingOfMetricFromTree(String metricExpression, Tree<RefinementNode> r) {
         if(r!= null){
             if(r.getValue().getMetricExpression().equals(metricExpression)){
-                return r.getValue().getMap();
+                return r.getValue().getMapping();
             }
             if(r.getchildren() != null && r.getchildren().size() > 0){
                 for(Tree<RefinementNode> c : r.getchildren()){

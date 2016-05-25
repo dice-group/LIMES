@@ -13,13 +13,20 @@ import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.log4j.Logger;
 
 
 
-
+/**
+ * @deprecated use {@link WombatSimple} instead
+ * 
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version May 25, 2016
+ */
+@Deprecated
 public class UnsupervisedSimpleWombat extends Wombat {
 	protected static final String ALGORITHM_NAME = "Unsupervised Simple Wombat";
 	static Logger logger = Logger.getLogger(UnsupervisedSimpleWombat.class);
@@ -59,7 +66,7 @@ public class UnsupervisedSimpleWombat extends Wombat {
 		if(bestSolution == null){
 			bestSolution =  getBestSolution();
 		}
-		return bestSolution.getMap();
+		return bestSolution.getMapping();
 	}
 
 	public String getMetricExpression() {
@@ -108,7 +115,7 @@ public class UnsupervisedSimpleWombat extends Wombat {
 		RefinementNode initialNode = new RefinementNode(-Double.MAX_VALUE, MappingFactory.createDefaultMapping(), "");
 		refinementTreeRoot = new Tree<RefinementNode>(null,initialNode, null);
 		for(ExtendedClassifier c : classifiers){
-			RefinementNode n = createNode(c.getMetricExpression(),c.mapping,c.fMeasure);
+			RefinementNode n = createNode(c.getMetricExpression(),c.getMapping(),c.getfMeasure());
 			refinementTreeRoot.addChild(new Tree<RefinementNode>(refinementTreeRoot,n, null));
 		}
 		if(verbose){
@@ -132,11 +139,11 @@ public class UnsupervisedSimpleWombat extends Wombat {
 			for(Operator op : Operator.values()){
 				if(node.getValue().getMetricExpression() != c.getMetricExpression()){ // do not create the same metricExpression again 
 					if(op.equals(Operator.AND)){
-						mapping = MappingOperations.intersection(node.getValue().getMap(), c.mapping);
+						mapping = MappingOperations.intersection(node.getValue().getMapping(), c.getMapping());
 					}else if(op.equals(Operator.OR)){
-						mapping = MappingOperations.union(node.getValue().getMap(), c.mapping);
+						mapping = MappingOperations.union(node.getValue().getMapping(), c.getMapping());
 					}else if(op.equals(Operator.DIFF)){
-						mapping = MappingOperations.difference(node.getValue().getMap(), c.mapping);
+						mapping = MappingOperations.difference(node.getValue().getMapping(), c.getMapping());
 					}
 					String metricExpr = op + "(" + node.getValue().getMetricExpression() + "," + c.getMetricExpression() +")|0";
 					RefinementNode child = createNode(metricExpr, mapping);

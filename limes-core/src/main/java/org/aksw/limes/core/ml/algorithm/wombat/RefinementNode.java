@@ -20,14 +20,14 @@ import org.aksw.limes.core.measures.mapper.MappingOperations;
  */
 public class RefinementNode implements Comparable<RefinementNode> {
 
-    protected double precision             = -Double.MAX_VALUE;
-    protected double recall                = -Double.MAX_VALUE;
+    protected static double rMax 		   = -Double.MAX_VALUE;
+    protected static boolean saveMapping   = true;
+	protected double precision             = -Double.MAX_VALUE;
+	protected double recall                = -Double.MAX_VALUE;
 	protected double fMeasure              = -Double.MAX_VALUE;
 	protected double maxFMeasure           = 1d;
 	protected Mapping map                  = new MemoryMapping();
 	protected String metricExpression 	   = new String();
-	protected static double rMax 		   = -Double.MAX_VALUE;
-	protected static boolean saveMapping   = true;
 
 	/**
 	 * Constructor
@@ -36,6 +36,7 @@ public class RefinementNode implements Comparable<RefinementNode> {
 	 */
 	public RefinementNode() {
 	}
+
 
 	/**
 	 * Constructor
@@ -51,6 +52,24 @@ public class RefinementNode implements Comparable<RefinementNode> {
 		this.setMap(map);
 		this.setMetricExpression(metricExpression);
 	}
+
+
+	/**
+	 * Note: basically used for unsupervised version of WOMBAT 
+	 * @param map
+	 * @param metricExpression
+	 * @param fMeasure
+	 */
+	public RefinementNode(Mapping map, String metricExpression, double fMeasure) {
+		super();
+		this.setfMeasure(fMeasure);
+		this.setMap(saveMapping ? map : null);
+		this.setMetricExpression(metricExpression);
+
+	}
+
+
+
 
 	/**
 	 * Constructor
@@ -72,22 +91,17 @@ public class RefinementNode implements Comparable<RefinementNode> {
 		this.setMetricExpression(metricExpression);
 	}
 
-
-	/**
-	 * Note: basically used for unsupervised version of WOMBAT 
-	 * @param map
-	 * @param metricExpression
-	 * @param fMeasure
+    /* (non-Javadoc)
+	 * Compare RefinementNodes based on fitness
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public RefinementNode(Mapping map, String metricExpression, double fMeasure) {
-		super();
-		this.setfMeasure(fMeasure);
-		this.setMap(saveMapping ? map : null);
-		this.setMetricExpression(metricExpression);
+	@Override
+	public int compareTo(RefinementNode o) {
+		return (int) (fMeasure - o.getFMeasure());
 
 	}
 
-	private double computeMaxPrecision(Mapping map, Mapping refMap) {
+    private double computeMaxPrecision(Mapping map, Mapping refMap) {
 		Mapping falsePos = new MemoryMapping();
 		for(String key: map.getMap().keySet()){
 			for(String value : map.getMap().get(key).keySet()){
@@ -100,8 +114,72 @@ public class RefinementNode implements Comparable<RefinementNode> {
 		return (double)refMap.size()/(double)(refMap.size() + m.size());
 	}
 
+    public double getFMeasure() {
+        return fMeasure;
+    }
 
-	/* (non-Javadoc)
+    public Mapping getMapping() {
+        return map;
+    }
+
+    /**
+	 * @return max F-Score
+	 * @author sherif
+	 */
+	public double getMaxFMeasure() {
+		return 0;
+	}
+
+    public String getMetricExpression() {
+        return metricExpression;
+    }
+
+    public double getPrecision() {
+        return precision;
+    }
+
+    public double getRecall() {
+        return recall;
+    }
+
+    public void setfMeasure(double fMeasure) {
+        this.fMeasure = fMeasure;
+    }
+
+    public void setMap(Mapping map) {
+        this.map = map;
+    }
+
+    public void setMaxFMeasure(double maxFMeasure) {
+        this.maxFMeasure = maxFMeasure;
+    }
+
+    public void setMetricExpression(String metricExpression) {
+        this.metricExpression = metricExpression;
+    }
+
+    public void setPrecision(double precision) {
+        this.precision = precision;
+    }
+
+    public void setRecall(double recall) {
+        this.recall = recall;
+    }
+    
+    public static double getrMax() {
+        return rMax;
+    }
+    public static boolean isSaveMapping() {
+        return saveMapping;
+    }
+    public static void setrMax(double rMax) {
+        RefinementNode.rMax = rMax;
+    }
+    public static void setSaveMapping(boolean saveMapping) {
+        RefinementNode.saveMapping = saveMapping;
+    }
+
+    /* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -112,86 +190,4 @@ public class RefinementNode implements Comparable<RefinementNode> {
 				//				" (P = " + precision + ", " + "R = " + recall + ", " + "F = " + fMeasure + ")";
 				" (F = " + getFMeasure() + ")";
 	}
-
-
-	/* (non-Javadoc)
-	 * Compare RefinementNodes based on fitness
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	@Override
-	public int compareTo(RefinementNode o) {
-		return (int) (fMeasure - o.getFMeasure());
-
-	}
-
-
-
-
-	/**
-	 * @return max F-Score
-	 * @author sherif
-	 */
-	public double getMaxFMeasure() {
-		return 0;
-	}
-
-    public double getFMeasure() {
-        return fMeasure;
-    }
-
-    public void setfMeasure(double fMeasure) {
-        this.fMeasure = fMeasure;
-    }
-
-    public double getPrecision() {
-        return precision;
-    }
-
-    public void setPrecision(double precision) {
-        this.precision = precision;
-    }
-
-    public double getRecall() {
-        return recall;
-    }
-
-    public void setRecall(double recall) {
-        this.recall = recall;
-    }
-
-    public void setMaxFMeasure(double maxFMeasure) {
-        this.maxFMeasure = maxFMeasure;
-    }
-
-    public Mapping getMap() {
-        return map;
-    }
-
-    public void setMap(Mapping map) {
-        this.map = map;
-    }
-
-    public String getMetricExpression() {
-        return metricExpression;
-    }
-
-    public void setMetricExpression(String metricExpression) {
-        this.metricExpression = metricExpression;
-    }
-
-    public static double getrMax() {
-        return rMax;
-    }
-
-    public static void setrMax(double rMax) {
-        RefinementNode.rMax = rMax;
-    }
-
-    public static boolean isSaveMapping() {
-        return saveMapping;
-    }
-
-    public static void setSaveMapping(boolean saveMapping) {
-        RefinementNode.saveMapping = saveMapping;
-    }
 }

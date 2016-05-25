@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
@@ -14,29 +15,22 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
+import org.junit.Before;
 import org.junit.Test;
 
 public class SimpleWombatTest {
 
-    @Test
-    public void testSupervisedBatch() throws UnsupportedMLImplementationException {
+    Cache sc = new MemoryCache();
+    Cache tc = new MemoryCache();
 
-        SupervisedMLAlgorithm wombatSimple = null;
-        try {
-            wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class, 
-                    MLImplementationType.SUPERVISED_BATCH).asSupervised();
-        } catch (UnsupportedMLImplementationException e) {
-            e.printStackTrace();
-            fail();
-        }
-        assert (wombatSimple.getClass().equals(SupervisedMLAlgorithm.class));
+    Mapping trainingMap, refMap;
 
-        Cache sc = new MemoryCache();
-        Cache tc = new MemoryCache();
-
+    @Before
+    public void init(){
         List<String> props = new LinkedList<String>();
         props.add("name");
         props.add("surname");
@@ -62,34 +56,48 @@ public class SimpleWombatTest {
         pm.addStringPropertyMatch("name", "name");
         pm.addStringPropertyMatch("surname", "surname");
 
-        Mapping trainingData = MappingFactory.createDefaultMapping();
-        trainingData.add("ex:i1", "ex:i1", 1d);
-        wombatSimple.init(null, sc, tc);
-        MLModel mlModel = wombatSimple.learn(trainingData);
-        Mapping resultMap = wombatSimple.predict(sc, tc, mlModel);
-
-        Mapping refMap = MappingFactory.createDefaultMapping();
+        trainingMap = MappingFactory.createDefaultMapping();
+        trainingMap.add("ex:i1", "ex:i1", 1d);
+        
+        refMap = MappingFactory.createDefaultMapping();
         refMap.add("ex:i1", "ex:i1", 1d);
         refMap.add("ex:i3", "ex:i3", 1d);
+    }
 
+    @Test
+    public void testSupervisedBatch() throws UnsupportedMLImplementationException {
+        SupervisedMLAlgorithm wombatSimple = null;
+        try {
+            wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class, 
+                    MLImplementationType.SUPERVISED_BATCH).asSupervised();
+        } catch (UnsupportedMLImplementationException e) {
+            e.printStackTrace();
+            fail();
+        }
+        assert (wombatSimple.getClass().equals(SupervisedMLAlgorithm.class));
+        wombatSimple.init(null, sc, tc);
+        MLModel mlModel = wombatSimple.learn(trainingMap);
+        Mapping resultMap = wombatSimple.predict(sc, tc, mlModel);
         assert(resultMap.equals(refMap));
-
     }
 
 
-    //	@Test
-    //	public void testUnsupervised() {
-    //
-    //		UnsupervisedMLAlgorithm wombatSimpleU = null;
-    //		try {
-    //			wombatSimpleU = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
-    //					MLImplementationType.UNSUPERVISED).asUnsupervised();
-    //		} catch (UnsupportedMLImplementationException e) {
-    //			e.printStackTrace();
-    //			fail();
-    //		}
-    //		assert (wombatSimpleU.getClass().equals(UnsupervisedMLAlgorithm.class));
-    //
-    //	}
+    @Test
+    public void testUnsupervised() throws UnsupportedMLImplementationException {
+        UnsupervisedMLAlgorithm wombatSimpleU = null;
+        try {
+            wombatSimpleU = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
+                    MLImplementationType.UNSUPERVISED).asUnsupervised();
+        } catch (UnsupportedMLImplementationException e) {
+            e.printStackTrace();
+            fail();
+        }
+        assert (wombatSimpleU.getClass().equals(UnsupervisedMLAlgorithm.class));
+        trainingMap = null;
+        wombatSimpleU.init(null, sc, tc);
+        MLModel mlModel = wombatSimpleU.learn(new PseudoFMeasure());
+        Mapping resultMap = wombatSimpleU.predict(sc, tc, mlModel);
+        assert(resultMap.equals(refMap));
+    }
 
 }

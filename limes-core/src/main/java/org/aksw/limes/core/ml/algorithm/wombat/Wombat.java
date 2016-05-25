@@ -145,10 +145,10 @@ public abstract class Wombat extends MLAlgorithm{
             }
         }
         ExtendedClassifier cp = new ExtendedClassifier(measure, theta);
-        cp.fMeasure = maxOverlap;
+        cp.setfMeasure(maxOverlap);
         cp.sourceProperty = sourceProperty;
         cp.targetProperty = targetProperty;
-        cp.mapping = bestMapping;
+        cp.setMapping(bestMapping);
         return cp;
     }
 
@@ -208,7 +208,7 @@ public abstract class Wombat extends MLAlgorithm{
 	protected Mapping getMapingOfMetricFromTree(String metricExpression, Tree<RefinementNode> r) {
 		if(r!= null){
 			if(r.getValue().getMetricExpression().equals(metricExpression)){
-				return r.getValue().getMap();
+				return r.getValue().getMapping();
 			}
 			if(r.getchildren() != null && r.getchildren().size() > 0){
 				for(Tree<RefinementNode> c : r.getchildren()){

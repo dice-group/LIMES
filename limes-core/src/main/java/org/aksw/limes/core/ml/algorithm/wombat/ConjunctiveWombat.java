@@ -114,9 +114,9 @@ public class ConjunctiveWombat extends Wombat {
 	public Mapping computePredictions() {
 		Mapping result;
 		List<ExtendedClassifier> classifiers = getAllInitialClassifiers();
-		result = classifiers.get(0).mapping;
+		result = classifiers.get(0).getMapping();
 		for (int i = 1; i < classifiers.size(); i++) {
-			result = MappingOperations.union(result, classifiers.get(i).mapping);
+			result = MappingOperations.union(result, classifiers.get(i).getMapping());
 		}
 		return result;
 	}
