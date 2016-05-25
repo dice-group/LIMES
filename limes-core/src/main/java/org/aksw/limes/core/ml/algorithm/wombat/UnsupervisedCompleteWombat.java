@@ -105,7 +105,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		logger.info("Most promising node: " + mostPromisingNode.getValue());
 		iterationNr ++;
 		long endTime = System.currentTimeMillis() + maxExecutionTimeInMin * 60000; 
-		while((mostPromisingNode.getValue().getfMeasure()) < maxFitnessThreshold	 
+		while((mostPromisingNode.getValue().getFMeasure()) < maxFitnessThreshold	 
 				&& (System.currentTimeMillis() < endTime)
 				&& refinementTreeRoot.size() <= maxRefineTreeSize
 				&& iterationNr <= maxIterationNumber)
@@ -113,7 +113,7 @@ public class UnsupervisedCompleteWombat extends Wombat {
 			iterationNr++;
 			mostPromisingNode = expandNode(mostPromisingNode);
 			mostPromisingNode = findMostPromisingNode(refinementTreeRoot, false);
-			if(mostPromisingNode.getValue().getfMeasure() == -Double.MAX_VALUE){
+			if(mostPromisingNode.getValue().getFMeasure() == -Double.MAX_VALUE){
 				break; // no better solution can be found
 			}
 			logger.info("Most promising node: " + mostPromisingNode.getValue());
@@ -469,11 +469,11 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		// get the most promising child
 		Tree<RefinementNode> mostPromisingChild = new Tree<RefinementNode>(new RefinementNode());
 		for(Tree<RefinementNode> child : r.getchildren()){
-			if(child.getValue().getfMeasure() >= 0){
+			if(child.getValue().getFMeasure() >= 0){
 				Tree<RefinementNode> promisingChild = findMostPromisingNode(child, overall);
-				if( promisingChild.getValue().getfMeasure() > mostPromisingChild.getValue().getfMeasure()  ){
+				if( promisingChild.getValue().getFMeasure() > mostPromisingChild.getValue().getFMeasure()  ){
 					mostPromisingChild = promisingChild;
-				}else if((promisingChild.getValue().getfMeasure() == mostPromisingChild.getValue().getfMeasure())
+				}else if((promisingChild.getValue().getFMeasure() == mostPromisingChild.getValue().getFMeasure())
 						&& (computeExpressionComplexity(promisingChild) < computeExpressionComplexity(mostPromisingChild))){
 					mostPromisingChild = promisingChild;
 				}
@@ -482,8 +482,8 @@ public class UnsupervisedCompleteWombat extends Wombat {
 		if(overall){ // return the best leaf
 			return mostPromisingChild;
 		}else // return the best over all node 
-			if((r.getValue().getfMeasure() > mostPromisingChild.getValue().getfMeasure())
-					|| (r.getValue().getfMeasure() == mostPromisingChild.getValue().getfMeasure()
+			if((r.getValue().getFMeasure() > mostPromisingChild.getValue().getFMeasure())
+					|| (r.getValue().getFMeasure() == mostPromisingChild.getValue().getFMeasure()
 					&& computeExpressionComplexity(r) < computeExpressionComplexity(mostPromisingChild))){
 				return r;
 			}else{

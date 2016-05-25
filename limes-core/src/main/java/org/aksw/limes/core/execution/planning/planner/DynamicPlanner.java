@@ -35,7 +35,7 @@ public class DynamicPlanner extends Planner {
     private Map<String, NestedPlan> plans = new HashMap<String, NestedPlan>();
 
     public Map<String, NestedPlan> getPlans() {
-	return plans;
+        return plans;
     }
 
     // <String representation of LinkSpec, LinkSpec>
@@ -45,9 +45,9 @@ public class DynamicPlanner extends Planner {
     private Map<String, LinkSpecification> dependencies = new HashMap<String, LinkSpecification>();
 
     public DynamicPlanner(Cache s, Cache t) {
-	source = s;
-	target = t;
-	lang = Language.EN;
+        source = s;
+        target = t;
+        lang = Language.EN;
     }
 
     /**
@@ -61,19 +61,19 @@ public class DynamicPlanner extends Planner {
      *            the original link specification
      */
     public void init(LinkSpecification spec) {
-	NestedPlan plan = new NestedPlan();
-	if (!plans.containsKey(spec.toString())) {
-	    if (spec.isAtomic()) {
-		plans.put(spec.toString(), plan);
-		specifications.put(spec.toString(), spec);
-	    } else {
-		for (LinkSpecification child : spec.getChildren()) {
-		    init(child);
-		}
-		plans.put(spec.toString(), plan);
-		specifications.put(spec.toString(), spec);
-	    }
-	}
+        NestedPlan plan = new NestedPlan();
+        if (!plans.containsKey(spec.toString())) {
+            if (spec.isAtomic()) {
+                plans.put(spec.toString(), plan);
+                specifications.put(spec.toString(), spec);
+            } else {
+                for (LinkSpecification child : spec.getChildren()) {
+                    init(child);
+                }
+                plans.put(spec.toString(), plan);
+                specifications.put(spec.toString(), spec);
+            }
+        }
     }
 
     /**
@@ -94,19 +94,19 @@ public class DynamicPlanner extends Planner {
      *            the recently executed specification
      */
     public void createDependencies(LinkSpecification spec) {
-	for (Entry<String, LinkSpecification> entry : specifications.entrySet()) {
-	    String dependentString = entry.getKey();
-	    LinkSpecification dependent = entry.getValue();
-	    if (spec.getFullExpression().equals(dependent.getFullExpression())
-		    && spec.getThreshold() < dependent.getThreshold()) {
-		if (dependencies.containsKey(dependentString)) {
-		    LinkSpecification oldDependent = dependencies.get(dependentString);
-		    if (oldDependent.getThreshold() < spec.getThreshold())
-			dependencies.put(dependentString, spec);
-		} else
-		    dependencies.put(dependentString, spec);
-	    }
-	}
+        for (Entry<String, LinkSpecification> entry : specifications.entrySet()) {
+            String dependentString = entry.getKey();
+            LinkSpecification dependent = entry.getValue();
+            if (spec.getFullExpression().equals(dependent.getFullExpression())
+                    && spec.getThreshold() < dependent.getThreshold()) {
+                if (dependencies.containsKey(dependentString)) {
+                    LinkSpecification oldDependent = dependencies.get(dependentString);
+                    if (oldDependent.getThreshold() < spec.getThreshold())
+                        dependencies.put(dependentString, spec);
+                } else
+                    dependencies.put(dependentString, spec);
+            }
+        }
     }
 
     /**
@@ -119,11 +119,11 @@ public class DynamicPlanner extends Planner {
      * @return string representation of specification that spec depends upon
      */
     public String getDependency(LinkSpecification spec) {
-	String specString = spec.toString();
-	if (dependencies.containsKey(specString)) {
-	    return dependencies.get(spec.toString()).toString();
-	}
-	return null;
+        String specString = spec.toString();
+        if (dependencies.containsKey(specString)) {
+            return dependencies.get(spec.toString()).toString();
+        }
+        return null;
     }
 
     /**
@@ -136,15 +136,15 @@ public class DynamicPlanner extends Planner {
      * @return runtime, estimated runtime cost of the metric expression
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
-	Mapper am = null;
-	try {
-	    am = MeasureFactory.getMapper(measure);
-	} catch (InvalidMeasureException e) {
-	    e.printStackTrace();
-	    System.err.println("Exiting..");
-	    System.exit(1);
-	}
-	return am.getRuntimeApproximation(source.size(), target.size(), threshold, lang);
+        Mapper am = null;
+        try {
+            am = MeasureFactory.getMapper(measure);
+        } catch (InvalidMeasureException e) {
+            e.printStackTrace();
+            System.err.println("Exiting..");
+            System.exit(1);
+        }
+        return am.getRuntimeApproximation(source.size(), target.size(), threshold, lang);
     }
 
     /**
@@ -157,15 +157,15 @@ public class DynamicPlanner extends Planner {
      * @return size, estimated size of returned mapping
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
-	Mapper am = null;
-	try {
-	    am = MeasureFactory.getMapper(measure);
-	} catch (InvalidMeasureException e) {
-	    e.printStackTrace();
-	    System.err.println("Exiting..");
-	    System.exit(1);
-	}
-	return am.getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
+        Mapper am = null;
+        try {
+            am = MeasureFactory.getMapper(measure);
+        } catch (InvalidMeasureException e) {
+            e.printStackTrace();
+            System.err.println("Exiting..");
+            System.exit(1);
+        }
+        return am.getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
     }
 
     /**
@@ -174,7 +174,7 @@ public class DynamicPlanner extends Planner {
      * @return true if the plan is executed
      */
     public boolean isExecuted(LinkSpecification spec) {
-	return (plans.get(spec.toString()).isExecuted());
+        return (plans.get(spec.toString()).isExecuted());
     }
 
     /**
@@ -187,21 +187,21 @@ public class DynamicPlanner extends Planner {
      * @return cost, estimated runtime cost of filteringInstruction(s)
      */
     public double getFilterCosts(List<String> measures, int mappingSize) {
-	double cost = 0;
-	if (measures != null) {
-	    for (String measure : measures) {
-		double tempCost = 0;
-		try {
-		    tempCost = MeasureFactory.getMeasure(measure).getRuntimeApproximation(mappingSize);
-		} catch (InvalidMeasureException e) {
-		    e.printStackTrace();
-		    System.err.println("Exiting..");
-		    System.exit(1);
-		}
-		cost += tempCost;
-	    }
-	}
-	return cost;
+        double cost = 0;
+        if (measures != null) {
+            for (String measure : measures) {
+                double tempCost = 0;
+                try {
+                    tempCost = MeasureFactory.getMeasure(measure).getRuntimeApproximation(mappingSize);
+                } catch (InvalidMeasureException e) {
+                    e.printStackTrace();
+                    System.err.println("Exiting..");
+                    System.exit(1);
+                }
+                cost += tempCost;
+            }
+        }
+        return cost;
     }
 
     /**
@@ -213,9 +213,9 @@ public class DynamicPlanner extends Planner {
      * @return plan, the plan that corresponds to the input specification
      */
     public NestedPlan getPlan(LinkSpecification spec) {
-	if (plans.containsKey(spec.toString()))
-	    return plans.get(spec.toString());
-	return null;
+        if (plans.containsKey(spec.toString()))
+            return plans.get(spec.toString());
+        return null;
     }
 
     /**
@@ -227,13 +227,13 @@ public class DynamicPlanner extends Planner {
      * @return spec, the spec that corresponds to the input plan
      */
     public LinkSpecification getLinkSpec(NestedPlan plan) {
-	for (Map.Entry<String, NestedPlan> entry : plans.entrySet()) {
-	    String spec = entry.getKey();
-	    NestedPlan value = entry.getValue();
-	    if (value.equals(plan))
-		return specifications.get(spec);
-	}
-	return null;
+        for (Map.Entry<String, NestedPlan> entry : plans.entrySet()) {
+            String spec = entry.getKey();
+            NestedPlan value = entry.getValue();
+            if (value.equals(plan))
+                return specifications.get(spec);
+        }
+        return null;
     }
 
     /**
@@ -249,20 +249,20 @@ public class DynamicPlanner extends Planner {
      *            the real mapping size returned when the plan is executed
      */
     public void updatePlan(LinkSpecification spec, double rt, double selectivity, double msize) {
-	if (!plans.containsKey(spec.toString())) {
-	    logger.error("Specification: " + spec.getFullExpression() + " was not initialised. Exiting..");
-	    System.exit(1);
-	}
-	NestedPlan plan = plans.get(spec.toString());
-	plan.setRuntimeCost(rt);
-	plan.setSelectivity(selectivity);
-	plan.setMappingSize(msize);
-	plan.setExecuted(true);
-	// logger.info("Runtime is: " + plan.runtimeCost + " mappingsize is: " +
-	// plan.mappingSize + " selectivity is: "
-	// + plan.selectivity);
-	plans.put(spec.toString(), plan);
-	createDependencies(spec);
+        if (!plans.containsKey(spec.toString())) {
+            logger.error("Specification: " + spec.getFullExpression() + " was not initialised. Exiting..");
+            System.exit(1);
+        }
+        NestedPlan plan = plans.get(spec.toString());
+        plan.setRuntimeCost(rt);
+        plan.setSelectivity(selectivity);
+        plan.setMappingSize(msize);
+        plan.setExecuted(true);
+        // logger.info("Runtime is: " + plan.runtimeCost + " mappingsize is: " +
+        // plan.mappingSize + " selectivity is: "
+        // + plan.selectivity);
+        plans.put(spec.toString(), plan);
+        createDependencies(spec);
     }
 
     /**
@@ -274,7 +274,7 @@ public class DynamicPlanner extends Planner {
      */
     @Override
     public NestedPlan plan(LinkSpecification spec) {
-	return plan(spec, source, target, new MemoryMapping(), new MemoryMapping());
+        return plan(spec, source, target, new MemoryMapping(), new MemoryMapping());
 
     }
 
@@ -295,114 +295,114 @@ public class DynamicPlanner extends Planner {
      * @return Nested instructionList for the given spec
      */
     public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, MemoryMapping sourceMapping,
-	    MemoryMapping targetMapping) {
-	NestedPlan plan = new NestedPlan();
-	// if plan is executed, just return the plan
-	// remember that the plan is automatically updated once it is executed
-	plan = plans.get(spec.toString());
-	if (plan.isExecuted()) {
-	    return plan;
-	}
-	plan = new NestedPlan();
-	// atomic specs are simply ran
-	if (spec.isAtomic()) {
-	    Parser p = new Parser(spec.getFilterExpression(), spec.getThreshold());
-	    plan.setInstructionList(new ArrayList<Instruction>());
-	    plan.addInstruction(new Instruction(Instruction.Command.RUN, spec.getFilterExpression(),
-		    spec.getThreshold() + "", -1, -1, 0));
-	    plan.setRuntimeCost(getAtomicRuntimeCosts(p.getOperator(), spec.getThreshold()));
-	    plan.setMappingSize(getAtomicMappingSizes(p.getOperator(), spec.getThreshold()));
-	    plan.setSelectivity(plan.getMappingSize() / (double) (source.size() * target.size()));
+            MemoryMapping targetMapping) {
+        NestedPlan plan = new NestedPlan();
+        // if plan is executed, just return the plan
+        // remember that the plan is automatically updated once it is executed
+        plan = plans.get(spec.toString());
+        if (plan.isExecuted()) {
+            return plan;
+        }
+        plan = new NestedPlan();
+        // atomic specs are simply ran
+        if (spec.isAtomic()) {
+            Parser p = new Parser(spec.getFilterExpression(), spec.getThreshold());
+            plan.setInstructionList(new ArrayList<Instruction>());
+            plan.addInstruction(new Instruction(Instruction.Command.RUN, spec.getFilterExpression(),
+                    spec.getThreshold() + "", -1, -1, 0));
+            plan.setRuntimeCost(getAtomicRuntimeCosts(p.getOperator(), spec.getThreshold()));
+            plan.setMappingSize(getAtomicMappingSizes(p.getOperator(), spec.getThreshold()));
+            plan.setSelectivity(plan.getMappingSize() / (double) (source.size() * target.size()));
 
-	} else {
-	    if (spec.getOperator().equals(LogicOperator.OR)) {
-		List<NestedPlan> children = new ArrayList<NestedPlan>();
-		double runtimeCost = 0;
-		for (LinkSpecification child : spec.getChildren()) {
-		    NestedPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
-		    children.add(childPlan);
-		    runtimeCost = runtimeCost + childPlan.getRuntimeCost();
-		}
-		// RUNTIME
-		plan.setRuntimeCost(runtimeCost + (spec.getChildren().size() - 1));
-		// SUBPLANS
-		plan.setSubPlans(children);
-		// FILTERING INSTRUCTION
-		plan.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
-			spec.getThreshold() + "", -1, -1, 0));
-		// OPERATOR
-		plan.setOperator(Instruction.Command.UNION);
-		// SELECTIVITY
-		double selectivity = 1 - children.get(0).getSelectivity();
-		for (int i = 1; i < children.size(); i++) {
-		    selectivity = selectivity * (1 - children.get(i).getSelectivity());
-		}
-		plan.setSelectivity(1 - selectivity);
-		// MAPPING SIZE
-		plan.setMappingSize(source.size() * target.size() * plan.getSelectivity());
-	    } else if (spec.getOperator().equals(LogicOperator.XOR)) {
-		List<NestedPlan> children = new ArrayList<NestedPlan>();
-		double runtimeCost = 0;
-		for (LinkSpecification child : spec.getChildren()) {
-		    NestedPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
-		    children.add(childPlan);
-		    runtimeCost = runtimeCost + childPlan.getRuntimeCost();
-		}
-		// RUNTIME
-		plan.setRuntimeCost(runtimeCost + (spec.getChildren().size() - 1));
-		// SUBPLANS
-		plan.setSubPlans(children);
-		// FILTERING INSTRUCTION
-		plan.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
-			spec.getThreshold() + "", -1, -1, 0));
-		// OPERATOR
-		plan.setOperator(Instruction.Command.XOR);
-		// SELECTIVITY
-		// A XOR B = (A U B) \ (A & B)
-		double selectivity = children.get(0).getSelectivity();
-		for (int i = 1; i < children.size(); i++) {
-		    selectivity = (1 - (1 - selectivity) * (1 - children.get(i).getSelectivity()))
-			    * (1 - selectivity * children.get(i).getSelectivity());
-		}
-		plan.setSelectivity(selectivity);
-		// MAPPING SIZE
-		plan.setMappingSize(source.size() * target.size() * plan.getSelectivity());
+        } else {
+            if (spec.getOperator().equals(LogicOperator.OR)) {
+                List<NestedPlan> children = new ArrayList<NestedPlan>();
+                double runtimeCost = 0;
+                for (LinkSpecification child : spec.getChildren()) {
+                    NestedPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
+                    children.add(childPlan);
+                    runtimeCost = runtimeCost + childPlan.getRuntimeCost();
+                }
+                // RUNTIME
+                plan.setRuntimeCost(runtimeCost + (spec.getChildren().size() - 1));
+                // SUBPLANS
+                plan.setSubPlans(children);
+                // FILTERING INSTRUCTION
+                plan.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+                        spec.getThreshold() + "", -1, -1, 0));
+                // OPERATOR
+                plan.setOperator(Instruction.Command.UNION);
+                // SELECTIVITY
+                double selectivity = 1 - children.get(0).getSelectivity();
+                for (int i = 1; i < children.size(); i++) {
+                    selectivity = selectivity * (1 - children.get(i).getSelectivity());
+                }
+                plan.setSelectivity(1 - selectivity);
+                // MAPPING SIZE
+                plan.setMappingSize(source.size() * target.size() * plan.getSelectivity());
+            } else if (spec.getOperator().equals(LogicOperator.XOR)) {
+                List<NestedPlan> children = new ArrayList<NestedPlan>();
+                double runtimeCost = 0;
+                for (LinkSpecification child : spec.getChildren()) {
+                    NestedPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
+                    children.add(childPlan);
+                    runtimeCost = runtimeCost + childPlan.getRuntimeCost();
+                }
+                // RUNTIME
+                plan.setRuntimeCost(runtimeCost + (spec.getChildren().size() - 1));
+                // SUBPLANS
+                plan.setSubPlans(children);
+                // FILTERING INSTRUCTION
+                plan.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+                        spec.getThreshold() + "", -1, -1, 0));
+                // OPERATOR
+                plan.setOperator(Instruction.Command.XOR);
+                // SELECTIVITY
+                // A XOR B = (A U B) \ (A & B)
+                double selectivity = children.get(0).getSelectivity();
+                for (int i = 1; i < children.size(); i++) {
+                    selectivity = (1 - (1 - selectivity) * (1 - children.get(i).getSelectivity()))
+                            * (1 - selectivity * children.get(i).getSelectivity());
+                }
+                plan.setSelectivity(selectivity);
+                // MAPPING SIZE
+                plan.setMappingSize(source.size() * target.size() * plan.getSelectivity());
 
-	    } else if (spec.getOperator().equals(LogicOperator.MINUS)) {
-		List<NestedPlan> children = new ArrayList<NestedPlan>();
-		plan.setRuntimeCost(0);
-		for (LinkSpecification child : spec.getChildren()) {
-		    NestedPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
-		    children.add(childPlan);
-		}
-		// SELECTIVITY
-		double selectivity = children.get(0).getSelectivity();
-		for (int i = 1; i < children.size(); i++) {
-		    // selectivity is not influenced by bestConjuctivePlan
-		    selectivity = selectivity * (1 - children.get(i).getSelectivity());
-		}
-		plan = getBestDifferencePlan(spec, children.get(0), children.get(1), selectivity);
+            } else if (spec.getOperator().equals(LogicOperator.MINUS)) {
+                List<NestedPlan> children = new ArrayList<NestedPlan>();
+                plan.setRuntimeCost(0);
+                for (LinkSpecification child : spec.getChildren()) {
+                    NestedPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
+                    children.add(childPlan);
+                }
+                // SELECTIVITY
+                double selectivity = children.get(0).getSelectivity();
+                for (int i = 1; i < children.size(); i++) {
+                    // selectivity is not influenced by bestConjuctivePlan
+                    selectivity = selectivity * (1 - children.get(i).getSelectivity());
+                }
+                plan = getBestDifferencePlan(spec, children.get(0), children.get(1), selectivity);
 
-	    } else if (spec.getOperator().equals(LogicOperator.AND)) {
-		List<NestedPlan> children = new ArrayList<NestedPlan>();
-		plan.setRuntimeCost(0);
-		for (LinkSpecification child : spec.getChildren()) {
-		    NestedPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
-		    children.add(childPlan);
-		}
-		// SELECTIVITY
-		double selectivity = 1d;
-		for (int i = 1; i < children.size(); i++) {
-		    // selectivity is not influenced by bestConjuctivePlan
-		    selectivity = selectivity * children.get(i).getSelectivity();
-		}
-		// this puts all options to this.steps and returns the best plan
-		plan = getBestConjunctivePlan(spec, children.get(0), children.get(1), selectivity);
-	    }
-	}
-	this.plans.put(spec.toString(), plan);
-	// logger.info("--------------------------------------------------------------------");
-	return plan;
+            } else if (spec.getOperator().equals(LogicOperator.AND)) {
+                List<NestedPlan> children = new ArrayList<NestedPlan>();
+                plan.setRuntimeCost(0);
+                for (LinkSpecification child : spec.getChildren()) {
+                    NestedPlan childPlan = plan(child, source, target, sourceMapping, targetMapping);
+                    children.add(childPlan);
+                }
+                // SELECTIVITY
+                double selectivity = 1d;
+                for (int i = 1; i < children.size(); i++) {
+                    // selectivity is not influenced by bestConjuctivePlan
+                    selectivity = selectivity * children.get(i).getSelectivity();
+                }
+                // this puts all options to this.steps and returns the best plan
+                plan = getBestConjunctivePlan(spec, children.get(0), children.get(1), selectivity);
+            }
+        }
+        this.plans.put(spec.toString(), plan);
+        // logger.info("--------------------------------------------------------------------");
+        return plan;
 
     }
 
@@ -422,91 +422,91 @@ public class DynamicPlanner extends Planner {
      *         costly
      */
     public NestedPlan getBestDifferencePlan(LinkSpecification spec, NestedPlan left, NestedPlan right,
-	    double selectivity) {
-	double runtime1 = 0, runtime2 = 0;
-	NestedPlan result = new NestedPlan();
-	double mappingSize = source.size() * target.size() * selectivity;
+            double selectivity) {
+        double runtime1 = 0, runtime2 = 0;
+        NestedPlan result = new NestedPlan();
+        double mappingSize = source.size() * target.size() * selectivity;
 
-	// both children are executed: do DIFF
-	if (left.isExecuted() && right.isExecuted()) {
-	    // OPERATOR
-	    result.setOperator(Instruction.Command.DIFF);
-	    // SUBPLANS
-	    List<NestedPlan> plans = new ArrayList<NestedPlan>();
-	    plans.add(left);
-	    plans.add(right);
-	    result.setSubPlans(plans);
-	    // FILTERING INSTRUCTION
-	    result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
-		    spec.getThreshold() + "", -1, -1, 0));
-	    // RUNTIME
-	    // result.runtimeCost = left.runtimeCost + right.runtimeCost;
-	    result.setRuntimeCost(0.0d);
-	    // SELECTIVITY
-	    result.setSelectivity(selectivity);
-	    // MAPPING SIZE
-	    result.setMappingSize(mappingSize);
-	    return result;
-	} // if right child is executed, then there is one option: run left and
-	  // then do filter
-	else if (!left.isExecuted() && right.isExecuted()) {
-	    // OPERATOR
-	    result.setOperator(Instruction.Command.DIFF);
-	    // FILTERING INSTRUCTION
-	    result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
-		    spec.getThreshold() + "", -1, -1, 0));
-	    // SUBPLANS
-	    List<NestedPlan> plans = new ArrayList<NestedPlan>();
-	    plans.add(left);
-	    plans.add(right);
-	    result.setSubPlans(plans);
-	    // RUNTIME
-	    // seems like a good idea ..
-	    // result.runtimeCost = left.runtimeCost + right.runtimeCost;
-	    result.setRuntimeCost(left.getRuntimeCost());
-	    // SELECTIVITY
-	    result.setSelectivity(selectivity);
-	    // MAPPING SIZE
-	    result.setMappingSize(mappingSize);
-	    return result;
-	}
-	// if left is/isn't executed and right is not executed: run right, DIFF
-	// OR REVERSEFILTER with right
-	// never add the runtime of left if it is already executed
-	// first instructionList: run both children and then merge
-	if (!left.isExecuted())
-	    runtime1 = left.getRuntimeCost();
-	runtime1 = runtime1 + right.getRuntimeCost();
-	////////////////////////////////////////////////////////////////////////
-	// second instructionList: run left child and use right child as filter
-	if (!left.isExecuted())
-	    runtime2 = left.getRuntimeCost();
-	runtime2 = runtime2 + getFilterCosts(right.getAllMeasures(),
-		(int) Math.ceil(source.size() * target.size() * right.getSelectivity()));
+        // both children are executed: do DIFF
+        if (left.isExecuted() && right.isExecuted()) {
+            // OPERATOR
+            result.setOperator(Instruction.Command.DIFF);
+            // SUBPLANS
+            List<NestedPlan> plans = new ArrayList<NestedPlan>();
+            plans.add(left);
+            plans.add(right);
+            result.setSubPlans(plans);
+            // FILTERING INSTRUCTION
+            result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+                    spec.getThreshold() + "", -1, -1, 0));
+            // RUNTIME
+            // result.runtimeCost = left.runtimeCost + right.runtimeCost;
+            result.setRuntimeCost(0.0d);
+            // SELECTIVITY
+            result.setSelectivity(selectivity);
+            // MAPPING SIZE
+            result.setMappingSize(mappingSize);
+            return result;
+        } // if right child is executed, then there is one option: run left and
+          // then do filter
+        else if (!left.isExecuted() && right.isExecuted()) {
+            // OPERATOR
+            result.setOperator(Instruction.Command.DIFF);
+            // FILTERING INSTRUCTION
+            result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+                    spec.getThreshold() + "", -1, -1, 0));
+            // SUBPLANS
+            List<NestedPlan> plans = new ArrayList<NestedPlan>();
+            plans.add(left);
+            plans.add(right);
+            result.setSubPlans(plans);
+            // RUNTIME
+            // seems like a good idea ..
+            // result.runtimeCost = left.runtimeCost + right.runtimeCost;
+            result.setRuntimeCost(left.getRuntimeCost());
+            // SELECTIVITY
+            result.setSelectivity(selectivity);
+            // MAPPING SIZE
+            result.setMappingSize(mappingSize);
+            return result;
+        }
+        // if left is/isn't executed and right is not executed: run right, DIFF
+        // OR REVERSEFILTER with right
+        // never add the runtime of left if it is already executed
+        // first instructionList: run both children and then merge
+        if (!left.isExecuted())
+            runtime1 = left.getRuntimeCost();
+        runtime1 = runtime1 + right.getRuntimeCost();
+        ////////////////////////////////////////////////////////////////////////
+        // second instructionList: run left child and use right child as filter
+        if (!left.isExecuted())
+            runtime2 = left.getRuntimeCost();
+        runtime2 = runtime2 + getFilterCosts(right.getAllMeasures(),
+                (int) Math.ceil(source.size() * target.size() * right.getSelectivity()));
 
-	double min = Math.min(runtime1, runtime2);
-	if (min == runtime1) {
-	    result.setOperator(Instruction.Command.DIFF);
-	    List<NestedPlan> plans = new ArrayList<NestedPlan>();
-	    plans.add(left);
-	    plans.add(right);
-	    result.setSubPlans(plans);
-	    result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
-		    spec.getThreshold() + "", -1, -1, 0));
-	} else if (min == runtime2) {
-	    String rightChild = spec.getChildren().get(1).getFullExpression();
-	    result.setFilteringInstruction(new Instruction(Instruction.Command.REVERSEFILTER, rightChild,
-		    spec.getChildren().get(1).getThreshold() + "", -1, -1, 0));
-	    result.getFilteringInstruction().setMainThreshold(spec.getThreshold() + "");
-	    result.setOperator(null);
-	    List<NestedPlan> plans = new ArrayList<NestedPlan>();
-	    plans.add(left);
-	    result.setSubPlans(plans);
-	}
-	result.setRuntimeCost(min);
-	result.setSelectivity(selectivity);
-	result.setMappingSize(mappingSize);
-	return result;
+        double min = Math.min(runtime1, runtime2);
+        if (min == runtime1) {
+            result.setOperator(Instruction.Command.DIFF);
+            List<NestedPlan> plans = new ArrayList<NestedPlan>();
+            plans.add(left);
+            plans.add(right);
+            result.setSubPlans(plans);
+            result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+                    spec.getThreshold() + "", -1, -1, 0));
+        } else if (min == runtime2) {
+            String rightChild = spec.getChildren().get(1).getFullExpression();
+            result.setFilteringInstruction(new Instruction(Instruction.Command.REVERSEFILTER, rightChild,
+                    spec.getChildren().get(1).getThreshold() + "", -1, -1, 0));
+            result.getFilteringInstruction().setMainThreshold(spec.getThreshold() + "");
+            result.setOperator(null);
+            List<NestedPlan> plans = new ArrayList<NestedPlan>();
+            plans.add(left);
+            result.setSubPlans(plans);
+        }
+        result.setRuntimeCost(min);
+        result.setSelectivity(selectivity);
+        result.setMappingSize(mappingSize);
+        return result;
     }
 
     /**
@@ -525,169 +525,169 @@ public class DynamicPlanner extends Planner {
      *         costly
      */
     public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, NestedPlan right,
-	    double selectivity) {
-	double runtime1 = 0, runtime2 = 0, runtime3 = 0;
-	NestedPlan result = new NestedPlan();
+            double selectivity) {
+        double runtime1 = 0, runtime2 = 0, runtime3 = 0;
+        NestedPlan result = new NestedPlan();
 
-	// both children are executed: do AND
-	if (left.isExecuted() && right.isExecuted()) {
-	    // OPERATOR
-	    result.setOperator(Instruction.Command.INTERSECTION);
-	    // SUBPLANS
-	    List<NestedPlan> plans = new ArrayList<NestedPlan>();
-	    plans.add(left);
-	    plans.add(right);
-	    result.setSubPlans(plans);
-	    // FILTERING INSTRUCTION
-	    result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
-		    spec.getThreshold() + "", -1, -1, 0));
-	    // RUNTIME
-	    // result.runtimeCost = left.runtimeCost + right.runtimeCost;
-	    result.setRuntimeCost(0.0d);
-	    // SELECTIVITY
-	    result.setSelectivity(selectivity);
-	    // MAPPING SIZE
-	    result.setMappingSize(source.size() * target.size() * selectivity);
-	    return result;
-	} // left is executed, right is not: RUN B, FILTER OR FILTER WITH B
-	else if (left.isExecuted() && !right.isExecuted()) {
-	    // first instructionList: run both children and then merge
-	    runtime1 = right.getRuntimeCost();
-	    // second instructionList: run left child and use right child as
-	    // filter
-	    // RUNTIME
-	    runtime2 = getFilterCosts(right.getAllMeasures(),
-		    (int) Math.ceil(source.size() * target.size() * right.getSelectivity()));
+        // both children are executed: do AND
+        if (left.isExecuted() && right.isExecuted()) {
+            // OPERATOR
+            result.setOperator(Instruction.Command.INTERSECTION);
+            // SUBPLANS
+            List<NestedPlan> plans = new ArrayList<NestedPlan>();
+            plans.add(left);
+            plans.add(right);
+            result.setSubPlans(plans);
+            // FILTERING INSTRUCTION
+            result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+                    spec.getThreshold() + "", -1, -1, 0));
+            // RUNTIME
+            // result.runtimeCost = left.runtimeCost + right.runtimeCost;
+            result.setRuntimeCost(0.0d);
+            // SELECTIVITY
+            result.setSelectivity(selectivity);
+            // MAPPING SIZE
+            result.setMappingSize(source.size() * target.size() * selectivity);
+            return result;
+        } // left is executed, right is not: RUN B, FILTER OR FILTER WITH B
+        else if (left.isExecuted() && !right.isExecuted()) {
+            // first instructionList: run both children and then merge
+            runtime1 = right.getRuntimeCost();
+            // second instructionList: run left child and use right child as
+            // filter
+            // RUNTIME
+            runtime2 = getFilterCosts(right.getAllMeasures(),
+                    (int) Math.ceil(source.size() * target.size() * right.getSelectivity()));
 
-	    double min = Math.min(runtime1, runtime2);
-	    if (min == runtime1) {
-		result.setOperator(Instruction.Command.INTERSECTION);
-		List<NestedPlan> plans = new ArrayList<NestedPlan>();
-		plans.add(left);
-		plans.add(right);
-		result.setSubPlans(plans);
-		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
-			spec.getThreshold() + "", -1, -1, 0));
-	    } else {
-		String rightChild = spec.getChildren().get(1).getFullExpression();
-		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, rightChild,
-			spec.getChildren().get(1).getThreshold() + "", -1, -1, 0));
-		result.getFilteringInstruction().setMainThreshold(spec.getThreshold() + "");
-		result.setOperator(null);
-		List<NestedPlan> plans = new ArrayList<NestedPlan>();
-		plans.add(left);
-		result.setSubPlans(plans);
-	    }
-	    result.setRuntimeCost(min);
-	    result.setSelectivity(selectivity);
-	    result.setMappingSize(source.size() * target.size() * selectivity);
-	    return result;
+            double min = Math.min(runtime1, runtime2);
+            if (min == runtime1) {
+                result.setOperator(Instruction.Command.INTERSECTION);
+                List<NestedPlan> plans = new ArrayList<NestedPlan>();
+                plans.add(left);
+                plans.add(right);
+                result.setSubPlans(plans);
+                result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+                        spec.getThreshold() + "", -1, -1, 0));
+            } else {
+                String rightChild = spec.getChildren().get(1).getFullExpression();
+                result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, rightChild,
+                        spec.getChildren().get(1).getThreshold() + "", -1, -1, 0));
+                result.getFilteringInstruction().setMainThreshold(spec.getThreshold() + "");
+                result.setOperator(null);
+                List<NestedPlan> plans = new ArrayList<NestedPlan>();
+                plans.add(left);
+                result.setSubPlans(plans);
+            }
+            result.setRuntimeCost(min);
+            result.setSelectivity(selectivity);
+            result.setMappingSize(source.size() * target.size() * selectivity);
+            return result;
 
-	} // left is not executed: RUN A, FILTER OR FILTER WITH A
-	else if (!left.isExecuted() && right.isExecuted()) {
-	    // first instructionList: run both children and then merge
-	    // runtime1 = left.runtimeCost + right.runtimeCost;
-	    runtime1 = left.getRuntimeCost();
-	    // third instructionList: run right child and use left child as
-	    // runtime3 = right.runtimeCost;
-	    runtime3 = getFilterCosts(left.getAllMeasures(),
-		    (int) Math.ceil(source.size() * target.size() * left.getSelectivity()));
+        } // left is not executed: RUN A, FILTER OR FILTER WITH A
+        else if (!left.isExecuted() && right.isExecuted()) {
+            // first instructionList: run both children and then merge
+            // runtime1 = left.runtimeCost + right.runtimeCost;
+            runtime1 = left.getRuntimeCost();
+            // third instructionList: run right child and use left child as
+            // runtime3 = right.runtimeCost;
+            runtime3 = getFilterCosts(left.getAllMeasures(),
+                    (int) Math.ceil(source.size() * target.size() * left.getSelectivity()));
 
-	    double min = Math.min(runtime1, runtime3);
-	    if (min == runtime1) {
-		result.setOperator(Instruction.Command.INTERSECTION);
-		List<NestedPlan> plans = new ArrayList<NestedPlan>();
-		plans.add(left);
-		plans.add(right);
-		result.setSubPlans(plans);
-		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
-			spec.getThreshold() + "", -1, -1, 0));
+            double min = Math.min(runtime1, runtime3);
+            if (min == runtime1) {
+                result.setOperator(Instruction.Command.INTERSECTION);
+                List<NestedPlan> plans = new ArrayList<NestedPlan>();
+                plans.add(left);
+                plans.add(right);
+                result.setSubPlans(plans);
+                result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+                        spec.getThreshold() + "", -1, -1, 0));
 
-	    } else // min == runtime3
-	    {
-		String leftChild = spec.getChildren().get(0).getFullExpression();
-		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, leftChild,
-			spec.getChildren().get(0).getThreshold() + "", -1, -1, 0));
-		result.getFilteringInstruction().setMainThreshold(spec.getThreshold() + "");
-		result.setOperator(null);
-		List<NestedPlan> plans = new ArrayList<NestedPlan>();
-		plans.add(right);
-		result.setSubPlans(plans);
-	    }
-	    result.setRuntimeCost(min);
-	    result.setSelectivity(selectivity);
-	    result.setMappingSize(source.size() * target.size() * selectivity);
-	    return result;
+            } else // min == runtime3
+            {
+                String leftChild = spec.getChildren().get(0).getFullExpression();
+                result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, leftChild,
+                        spec.getChildren().get(0).getThreshold() + "", -1, -1, 0));
+                result.getFilteringInstruction().setMainThreshold(spec.getThreshold() + "");
+                result.setOperator(null);
+                List<NestedPlan> plans = new ArrayList<NestedPlan>();
+                plans.add(right);
+                result.setSubPlans(plans);
+            }
+            result.setRuntimeCost(min);
+            result.setSelectivity(selectivity);
+            result.setMappingSize(source.size() * target.size() * selectivity);
+            return result;
 
-	} // if either of the children is executed, then 3 options available
-	else if (!left.isExecuted() && !right.isExecuted()) {
-	    // first instructionList: run both children and then merge
-	    runtime1 = left.getRuntimeCost() + right.getRuntimeCost();
-	    // second instructionList: run left child and use right child as
-	    // filter
-	    runtime2 = left.getRuntimeCost();
-	    runtime2 = runtime2 + getFilterCosts(right.getAllMeasures(),
-		    (int) Math.ceil(source.size() * target.size() * right.getSelectivity()));
+        } // if either of the children is executed, then 3 options available
+        else if (!left.isExecuted() && !right.isExecuted()) {
+            // first instructionList: run both children and then merge
+            runtime1 = left.getRuntimeCost() + right.getRuntimeCost();
+            // second instructionList: run left child and use right child as
+            // filter
+            runtime2 = left.getRuntimeCost();
+            runtime2 = runtime2 + getFilterCosts(right.getAllMeasures(),
+                    (int) Math.ceil(source.size() * target.size() * right.getSelectivity()));
 
-	    // third instructionList: run right child and use left child as
-	    // filter
-	    runtime3 = right.getRuntimeCost();
-	    runtime3 = runtime3 + getFilterCosts(left.getAllMeasures(),
-		    (int) Math.ceil(source.size() * target.size() * left.getSelectivity()));
+            // third instructionList: run right child and use left child as
+            // filter
+            runtime3 = right.getRuntimeCost();
+            runtime3 = runtime3 + getFilterCosts(left.getAllMeasures(),
+                    (int) Math.ceil(source.size() * target.size() * left.getSelectivity()));
 
-	    double min = Math.min(Math.min(runtime3, runtime2), runtime1);
-	    if (min == runtime1) {
-		result.setOperator(Instruction.Command.INTERSECTION);
-		List<NestedPlan> plans = new ArrayList<NestedPlan>();
-		plans.add(left);
-		plans.add(right);
-		result.setSubPlans(plans);
-		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
-			spec.getThreshold() + "", -1, -1, 0));
+            double min = Math.min(Math.min(runtime3, runtime2), runtime1);
+            if (min == runtime1) {
+                result.setOperator(Instruction.Command.INTERSECTION);
+                List<NestedPlan> plans = new ArrayList<NestedPlan>();
+                plans.add(left);
+                plans.add(right);
+                result.setSubPlans(plans);
+                result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+                        spec.getThreshold() + "", -1, -1, 0));
 
-	    } else if (min == runtime2) {
-		String rightChild = spec.getChildren().get(1).getFullExpression();
-		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, rightChild,
-			spec.getChildren().get(1).getThreshold() + "", -1, -1, 0));
-		result.getFilteringInstruction().setMainThreshold(spec.getThreshold() + "");
-		result.setOperator(null);
-		List<NestedPlan> plans = new ArrayList<NestedPlan>();
-		plans.add(left);
-		result.setSubPlans(plans);
+            } else if (min == runtime2) {
+                String rightChild = spec.getChildren().get(1).getFullExpression();
+                result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, rightChild,
+                        spec.getChildren().get(1).getThreshold() + "", -1, -1, 0));
+                result.getFilteringInstruction().setMainThreshold(spec.getThreshold() + "");
+                result.setOperator(null);
+                List<NestedPlan> plans = new ArrayList<NestedPlan>();
+                plans.add(left);
+                result.setSubPlans(plans);
 
-	    } else // min == runtime3
-	    {
-		String leftChild = spec.getChildren().get(0).getFullExpression();
-		result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, leftChild,
-			spec.getChildren().get(0).getThreshold() + "", -1, -1, 0));
-		result.getFilteringInstruction().setMainThreshold(spec.getThreshold() + "");
-		result.setOperator(null);
-		List<NestedPlan> plans = new ArrayList<NestedPlan>();
-		plans.add(right);
-		result.setSubPlans(plans);
-	    }
-	    result.setRuntimeCost(min);
-	    result.setSelectivity(selectivity);
-	    result.setMappingSize(source.size() * target.size() * selectivity);
-	    return result;
-	}
+            } else // min == runtime3
+            {
+                String leftChild = spec.getChildren().get(0).getFullExpression();
+                result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, leftChild,
+                        spec.getChildren().get(0).getThreshold() + "", -1, -1, 0));
+                result.getFilteringInstruction().setMainThreshold(spec.getThreshold() + "");
+                result.setOperator(null);
+                List<NestedPlan> plans = new ArrayList<NestedPlan>();
+                plans.add(right);
+                result.setSubPlans(plans);
+            }
+            result.setRuntimeCost(min);
+            result.setSelectivity(selectivity);
+            result.setMappingSize(source.size() * target.size() * selectivity);
+            return result;
+        }
 
-	return result;
+        return result;
     }
 
     @Override
     public boolean isStatic() {
-	return false;
+        return false;
     }
 
     @Override
     public LinkSpecification normalize(LinkSpecification spec) {
-	if (spec.isEmpty()) {
-	    return spec;
-	}
-	LinkSpecification ls = new ExtendedLinkSpecification(spec.getFullExpression(), spec.getThreshold());
-	init(ls);
-	return ls;
+        if (spec.isEmpty()) {
+            return spec;
+        }
+        LinkSpecification ls = new ExtendedLinkSpecification(spec.getFullExpression(), spec.getThreshold());
+        init(ls);
+        return ls;
     }
 
 }

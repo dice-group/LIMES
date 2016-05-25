@@ -23,7 +23,7 @@ public class OracleFactory {
      * @return An oracle that contains the data found at filePath
      */
     public static IOracle getOracle(String filePath, String inputType, String oracleType) {
-    	IMappingReader reader=null;
+        IMappingReader reader=null;
         IOracle oracle;
         System.out.println("Getting reader of type " + inputType);
         if (inputType.equalsIgnoreCase("csv")) //scan input types here
@@ -31,7 +31,7 @@ public class OracleFactory {
             reader = new CSVMappingReader();
         } else if (inputType.equalsIgnoreCase("xml")) //scan input types here
         {
-        	//commented by mofeed to check if it exists or not and the possibilities of adding it
+            //commented by mofeed to check if it exists or not and the possibilities of adding it
             //reader = new XMLMappingReader();
         } else if (inputType.equalsIgnoreCase("tab")) //scan input types here
         {
@@ -41,7 +41,7 @@ public class OracleFactory {
         {
             reader = new CSVMappingReader();
         }
-         //now readData
+        //now readData
         Mapping m = reader.read(filePath);
 
         //finally return the right type of oracle
@@ -52,7 +52,7 @@ public class OracleFactory {
         {
             oracle = new SimpleOracle(m);
         }
-//        oracle.loadData(m);
+        //        oracle.loadData(m);
         return oracle;
     }
 }

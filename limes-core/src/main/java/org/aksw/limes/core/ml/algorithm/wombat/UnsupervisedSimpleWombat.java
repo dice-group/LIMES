@@ -80,14 +80,14 @@ public class UnsupervisedSimpleWombat extends Wombat {
 		Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
 		logger.info("Most promising node: " + mostPromisingNode.getValue());
 		iterationNr ++;
-		while((mostPromisingNode.getValue().getfMeasure()) < maxFitnessThreshold	 
+		while((mostPromisingNode.getValue().getFMeasure()) < maxFitnessThreshold	 
 				&& refinementTreeRoot.size() <= maxRefineTreeSize
 				&& iterationNr <= maxIterationNumber)
 		{
 			iterationNr++;
 			mostPromisingNode = expandNode(mostPromisingNode);
 			mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
-			if(mostPromisingNode.getValue().getfMeasure() == -Double.MAX_VALUE){
+			if(mostPromisingNode.getValue().getFMeasure() == -Double.MAX_VALUE){
 				break; // no better solution can be found
 			}
 			logger.info("Most promising node: " + mostPromisingNode.getValue());
@@ -166,11 +166,11 @@ public class UnsupervisedSimpleWombat extends Wombat {
 		// get mostPromesyChild of children
 		Tree<RefinementNode> mostPromesyChild = new Tree<RefinementNode>(new RefinementNode());
 		for(Tree<RefinementNode> child : r.getchildren()){
-			if(child.getValue().getfMeasure() >= 0){
+			if(child.getValue().getFMeasure() >= 0){
 				Tree<RefinementNode> promesyChild = getMostPromisingNode(child, penaltyWeight);
 				double newFitness;
-				newFitness = promesyChild.getValue().getfMeasure() - penaltyWeight * computePenality(promesyChild);
-				if( newFitness > mostPromesyChild.getValue().getfMeasure()  ){
+				newFitness = promesyChild.getValue().getFMeasure() - penaltyWeight * computePenality(promesyChild);
+				if( newFitness > mostPromesyChild.getValue().getFMeasure()  ){
 					mostPromesyChild = promesyChild;
 				}
 			}
@@ -178,7 +178,7 @@ public class UnsupervisedSimpleWombat extends Wombat {
 		// return the argmax{root, mostPromesyChild}
 		if(penaltyWeight > 0){
 			return mostPromesyChild;
-		}else if(r.getValue().getfMeasure() >= mostPromesyChild.getValue().getfMeasure()){
+		}else if(r.getValue().getFMeasure() >= mostPromesyChild.getValue().getFMeasure()){
 			return r;
 		}else{
 			return mostPromesyChild;

@@ -15,25 +15,25 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @version 1.0
  */
 public class QualitativeMeasuresEvaluator {
-	
-	Map<EvaluatorType,Double> evaluations = new HashMap<EvaluatorType,Double>();
-	
-	
-	/**
-	 * @param prediction: the results predicted to represent mappings between two datasets
-	 * @param goldStandard: It is an object that contains {Mapping-> gold standard, List of source URIs, List of target URIs}
-	 * @param evaluationMeasures: Set of Measures to evaluate the resulted mappings against
-	 * @return a Map contains the measure name and the corresponding calculated value
-	 */
-	public Map<EvaluatorType,Double> evaluate (Mapping predictions, GoldStandard goldStandard ,Set<EvaluatorType> evaluationMeasures)
-	{
-		for (EvaluatorType measureType : evaluationMeasures) {
-			
-			IQualitativeMeasure measure = EvaluatorFactory.create(measureType);
-			double evaluationValue = measure.calculate(predictions, goldStandard);
-			evaluations.put(measureType, evaluationValue);
-			
-	/*		if(measureType.equals(MeasureType.precision))
+
+    Map<EvaluatorType,Double> evaluations = new HashMap<EvaluatorType,Double>();
+
+
+    /**
+     * @param prediction: the results predicted to represent mappings between two datasets
+     * @param goldStandard: It is an object that contains {Mapping-> gold standard, List of source URIs, List of target URIs}
+     * @param evaluationMeasures: Set of Measures to evaluate the resulted mappings against
+     * @return a Map contains the measure name and the corresponding calculated value
+     */
+    public Map<EvaluatorType,Double> evaluate (Mapping predictions, GoldStandard goldStandard ,Set<EvaluatorType> evaluationMeasures)
+    {
+        for (EvaluatorType measureType : evaluationMeasures) {
+
+            IQualitativeMeasure measure = EvaluatorFactory.create(measureType);
+            double evaluationValue = measure.calculate(predictions, goldStandard);
+            evaluations.put(measureType, evaluationValue);
+
+            /*		if(measureType.equals(MeasureType.precision))
 				evaluatePrecision(predictions,goldStandard);
 			else if (measureType.equals(MeasureType.recall))
 				evaluateRecall(predictions,goldStandard);
@@ -50,11 +50,11 @@ public class QualitativeMeasuresEvaluator {
 			else if (measureType.equals(MeasureType.auc))
 				evaluateAUC(predictions,goldStandard);
 			else System.out.println("Error: unrecognized evaluation measure");*/
-		}
-		
-		return evaluations;
-	}
-	/*private void evaluatePrecision(Mapping predictions, GoldStandard goldStandard)
+        }
+
+        return evaluations;
+    }
+    /*private void evaluatePrecision(Mapping predictions, GoldStandard goldStandard)
 	{
 		double precision = new Precision().calculate(predictions, goldStandard);
 		evaluations.put(MeasureType.precision, precision);
@@ -115,7 +115,7 @@ public class QualitativeMeasuresEvaluator {
 	//long sourceDatasetSize, long targetDatasetSize
 	public Map<EvalFunc,Double> evaluate (Mapping predictions, Mapping goldStandard,List<String> sourceUris, List<String> targetUris ,EvalFunc evaluationFunc)
 	{
-		
+
 		if(evaluationFunc.equals(EvalFunc.precision))
 			evaluatePrecision(predictions,goldStandard);
 		else if (evaluationFunc.equals(EvalFunc.recall))

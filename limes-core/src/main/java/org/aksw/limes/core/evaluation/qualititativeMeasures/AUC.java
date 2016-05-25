@@ -16,18 +16,18 @@ import org.aksw.limes.core.io.mapping.Mapping;
  */
 public class AUC extends APRF implements IQualitativeMeasure {
 
-	@Override
-	public double calculate(Mapping predictions, GoldStandard goldStandard) {
-		/*
-		 * Technical it calculates Area under curve values. Thus, we need some
-		 * sort of time dependent measurements. So, the QualitiveMeasurement
-		 * interface is too specific. Furthermore, its more a quantitive
-		 * measure!
-		 * 
-		 * => Answer: see header.
-		 */
+    @Override
+    public double calculate(Mapping predictions, GoldStandard goldStandard) {
+        /*
+         * Technical it calculates Area under curve values. Thus, we need some
+         * sort of time dependent measurements. So, the QualitiveMeasurement
+         * interface is too specific. Furthermore, its more a quantitive
+         * measure!
+         * 
+         * => Answer: see header.
+         */
 
-		return 0;
-	}
+        return 0;
+    }
 
 }

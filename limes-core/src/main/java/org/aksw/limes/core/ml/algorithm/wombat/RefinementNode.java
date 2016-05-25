@@ -110,7 +110,7 @@ public class RefinementNode implements Comparable<RefinementNode> {
 				getMetricExpression() + 
 				//				this.hashCode()+
 				//				" (P = " + precision + ", " + "R = " + recall + ", " + "F = " + fMeasure + ")";
-				" (F = " + getfMeasure() + ")";
+				" (F = " + getFMeasure() + ")";
 	}
 
 
@@ -120,7 +120,7 @@ public class RefinementNode implements Comparable<RefinementNode> {
 	 */
 	@Override
 	public int compareTo(RefinementNode o) {
-		return (int) (fMeasure - o.getfMeasure());
+		return (int) (fMeasure - o.getFMeasure());
 
 	}
 
@@ -135,7 +135,7 @@ public class RefinementNode implements Comparable<RefinementNode> {
 		return 0;
 	}
 
-    public double getfMeasure() {
+    public double getFMeasure() {
         return fMeasure;
     }
 

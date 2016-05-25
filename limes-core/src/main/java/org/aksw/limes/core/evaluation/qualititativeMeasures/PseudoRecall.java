@@ -18,20 +18,20 @@ import org.aksw.limes.core.io.mapping.Mapping;
  *
  */
 public class PseudoRecall  extends APseudoPRF {
-	public PseudoRecall() {}
-	
-	/**
-	 * Use this constructor to toggle between symmetric precision (true) and the older asymmetric
-	 * Pseudo-Precision (false)
-	 * @param symmetricPrecision
-	 */
-	public PseudoRecall(final boolean symmetricPrecision) {
-		this();
-		this.setSymmetricPrecision(symmetricPrecision);
-	}
-	
-	
-	/** The assumption here is a follows. We compute how many of the s and t
+    public PseudoRecall() {}
+
+    /**
+     * Use this constructor to toggle between symmetric precision (true) and the older asymmetric
+     * Pseudo-Precision (false)
+     * @param symmetricPrecision
+     */
+    public PseudoRecall(final boolean symmetricPrecision) {
+        this();
+        this.setSymmetricPrecision(symmetricPrecision);
+    }
+
+
+    /** The assumption here is a follows. We compute how many of the s and t
      * were mapped. 
      * @param sourceUris URIs in source cache
      * @param targetUris URIs in target cache
@@ -39,12 +39,12 @@ public class PseudoRecall  extends APseudoPRF {
      * @param Run mapping minimally and apply filtering. Compare the runtime of both approaches
      * @return Pseudo recall 
      */
-	
-	public double calculate(Mapping predictions, GoldStandard goldStandard) {
-    	Mapping res = predictions;
-    	if(use1To1Mapping) {
-    		res = predictions.getBestOneToNMapping();
-    	}
+
+    public double calculate(Mapping predictions, GoldStandard goldStandard) {
+        Mapping res = predictions;
+        if(useOneToOneMapping) {
+            res = predictions.getBestOneToNMapping();
+        }
         double q = res.getMap().keySet().size();
         Set<String> values = new HashSet<String>();
         for (String s : res.getMap().keySet()) {
@@ -55,5 +55,5 @@ public class PseudoRecall  extends APseudoPRF {
         }
         double reference = (double)(goldStandard.sourceUris.size() + goldStandard.targetUris.size());
         return (q + values.size())/ reference;
-	}
+    }
 }

@@ -98,7 +98,7 @@ public class WeakWombat extends Wombat {
 		Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
 		logger.info("Most promising node: " + mostPromisingNode.getValue());
 		iterationNr ++;
-		while((mostPromisingNode.getValue().getfMeasure()) < maxFitnessThreshold	 
+		while((mostPromisingNode.getValue().getFMeasure()) < maxFitnessThreshold	 
 				&& refinementTreeRoot.size() <= maxRefineTreeSize
 				&& iterationNr <= maxIterationNumber)
 		{
@@ -197,7 +197,7 @@ public class WeakWombat extends Wombat {
 		// return the argmax{root, mostPromesyChild}
 		if(penaltyWeight > 0){
 			return mostPromesyChild;
-		}else if(r.getValue().getfMeasure() >= mostPromesyChild.getValue().getfMeasure()){
+		}else if(r.getValue().getFMeasure() >= mostPromesyChild.getValue().getFMeasure()){
 			return r;
 		}else{
 			return mostPromesyChild;

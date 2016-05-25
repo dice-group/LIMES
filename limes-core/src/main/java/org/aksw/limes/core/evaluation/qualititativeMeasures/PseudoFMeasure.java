@@ -8,6 +8,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * Thereby, not relying on any gold standard. The basic idea is to measure the quality of the
  * a given Mapping by calc. how close it is to an assumed 1-to-1 Mapping between source and 
  * target.
+ * 
  * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
  * @author ngonga
  * @author mofeed hassan
@@ -48,11 +49,21 @@ public class PseudoFMeasure  extends APseudoPRF {
      * @return Pseudo measure
      */
     public double getPseudoFMeasure(Mapping predictions,GoldStandard goldStandard, double beta) {
-        double p = new PseudoPrecision().calculate(predictions, goldStandard);// getPseudoPrecision(sourceUris, targetUris, result);
-        double r = new PseudoRecall().calculate(predictions, goldStandard); //getPseudoRecall(sourceUris, targetUris, result);        
-        if(p==0 && r==0) return 0.0;
+        double p = precision(predictions, goldStandard);// getPseudoPrecision(sourceUris, targetUris, result);
+        double r = recall(predictions, goldStandard); //getPseudoRecall(sourceUris, targetUris, result);        
+        if(p==0 && r==0){ 
+            return 0.0;
+        }
         double f = (1 + beta * beta) * p * r / (beta * beta * p + r);
         return f;
+    }
+
+    public double recall(Mapping predictions, GoldStandard goldStandard) {
+        return new PseudoRecall().calculate(predictions, goldStandard);
+    }
+
+    public double precision(Mapping predictions, GoldStandard goldStandard) {
+        return new PseudoPrecision().calculate(predictions, goldStandard);
     }
 
 }

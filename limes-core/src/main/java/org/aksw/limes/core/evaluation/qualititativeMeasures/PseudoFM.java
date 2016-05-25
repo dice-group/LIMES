@@ -11,41 +11,42 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * Thereby, not relying on any gold standard. The basic idea is to measure the quality of the
  * a given Mapping by calc. how close it is to an assumed 1-to-1 Mapping between source and 
  * target.
+ * @deprecated Use {@link PseudoFMeasure} instead
  * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
  * @author ngonga
  *
  */
 @Deprecated
 public class PseudoFM {
-	/* FIXME QualitiveMeasure interface is not suitable, as we need additional
-	 * input: URIs of source and target. 
-	 */
-	
-	public boolean symmetricPrecision = true;
-	boolean use1To1Mapping = false;
+    /* FIXME QualitiveMeasure interface is not suitable, as we need additional
+     * input: URIs of source and target. 
+     */
 
-	/**
-	 * @return the use1To1Mapping
-	 */
-	public boolean isUse1To1Mapping() {
-		return use1To1Mapping;
-	}
-	public void setUse1To1Mapping(boolean use1To1Mapping) {
-		this.use1To1Mapping = use1To1Mapping;
-	}
-	public PseudoFM() {}
-	
-	/**
-	 * Use this constructor to toggle between symmetric precision (true) and the older asymmetric
-	 * Pseudo-Precision (false)
-	 * @param symmetricPrecision
-	 */
-	public PseudoFM(final boolean symmetricPrecision) {
-		this();
-		this.symmetricPrecision = symmetricPrecision;
-	}
-	
-	/** Computes the balanced Pseudo-F1-measure.
+    public boolean symmetricPrecision = true;
+    boolean use1To1Mapping = false;
+
+    /**
+     * @return the use1To1Mapping
+     */
+    public boolean isUse1To1Mapping() {
+        return use1To1Mapping;
+    }
+    public void setUse1To1Mapping(boolean use1To1Mapping) {
+        this.use1To1Mapping = use1To1Mapping;
+    }
+    public PseudoFM() {}
+
+    /**
+     * Use this constructor to toggle between symmetric precision (true) and the older asymmetric
+     * Pseudo-Precision (false)
+     * @param symmetricPrecision
+     */
+    public PseudoFM(final boolean symmetricPrecision) {
+        this();
+        this.symmetricPrecision = symmetricPrecision;
+    }
+
+    /** Computes the balanced Pseudo-F1-measure.
      * 
      * @param sourceUris Source URIs 
      * @param targetUris Target URIs
@@ -57,7 +58,7 @@ public class PseudoFM {
             Mapping result) {
         return getPseudoFMeasure(sourceUris, targetUris, result, 1);
     }
-	
+
     /** Computes Pseudo-f-measure for different beta values
      * 
      * @param sourceUris Source URIs 
@@ -74,7 +75,7 @@ public class PseudoFM {
         double f = (1 + beta * beta) * p * r / (beta * beta * p + r);
         return f;
     }
-  
+
     /** Computes the pseudo-precision, which is basically how well the mapping 
      * maps one single s to one single t
      * @param sourceUris List of source uris
@@ -83,26 +84,26 @@ public class PseudoFM {
      * @return Pseudo precision score
      */
     public double getPseudoPrecision(List<String> sourceUris, List<String> targetUris, Mapping result) {
-    	Mapping res = result;
-    	Mapping rev = res.reverseSourceTarget();
-    	if(use1To1Mapping) {
-    		res = result.getBestOneToNMapping();
-    		rev = res.reverseSourceTarget().getBestOneToNMapping();
-    	}
-    	double p = res.getMap().keySet().size();
-    	if(symmetricPrecision)
-    		p = res.getMap().keySet().size()+rev.getMap().keySet().size();
+        Mapping res = result;
+        Mapping rev = res.reverseSourceTarget();
+        if(use1To1Mapping) {
+            res = result.getBestOneToNMapping();
+            rev = res.reverseSourceTarget().getBestOneToNMapping();
+        }
+        double p = res.getMap().keySet().size();
+        if(symmetricPrecision)
+            p = res.getMap().keySet().size()+rev.getMap().keySet().size();
         double q = 0;
         for (String s : result.getMap().keySet()) {
-        	if(symmetricPrecision)
-        		q = q + 2*result.getMap().get(s).size();
-        	else
-        		q = q + result.getMap().get(s).size();
+            if(symmetricPrecision)
+                q = q + 2*result.getMap().get(s).size();
+            else
+                q = q + result.getMap().get(s).size();
         }
         if(p==0 || q==0) return 0;
         return p / q;
     }
-  
+
     /** The assumption here is a follows. We compute how many of the s and t
      * were mapped. 
      * @param sourceUris URIs in source cache
@@ -113,10 +114,10 @@ public class PseudoFM {
      */
     public double getPseudoRecall(List<String> sourceUris, List<String> targetUris,
             Mapping result) {
-    	Mapping res = result;
-    	if(use1To1Mapping) {
-    		res = result.getBestOneToNMapping();
-    	}
+        Mapping res = result;
+        if(use1To1Mapping) {
+            res = result.getBestOneToNMapping();
+        }
         double q = res.getMap().keySet().size();
         Set<String> values = new HashSet<String>();
         for (String s : res.getMap().keySet()) {
@@ -128,6 +129,6 @@ public class PseudoFM {
         double reference = (double)(sourceUris.size() + targetUris.size());
         return (q + values.size())/ reference;
     }
-    
+
 
 }
