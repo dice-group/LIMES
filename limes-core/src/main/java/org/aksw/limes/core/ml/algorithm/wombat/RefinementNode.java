@@ -20,15 +20,14 @@ import org.aksw.limes.core.measures.mapper.MappingOperations;
  */
 public class RefinementNode implements Comparable<RefinementNode> {
 
-	public double precision 		= -Double.MAX_VALUE;
-	public double recall 			= -Double.MAX_VALUE;
-	public double fMeasure 			= -Double.MAX_VALUE;
-	public double maxFMeasure 		= 1d;
-	public Mapping map 				= new MemoryMapping();
-	public String metricExpression 	= new String();
-	public static double rMax 		= -Double.MAX_VALUE;
-
-	public static boolean saveMapping = true;
+    protected double precision             = -Double.MAX_VALUE;
+    protected double recall                = -Double.MAX_VALUE;
+	protected double fMeasure              = -Double.MAX_VALUE;
+	protected double maxFMeasure           = 1d;
+	protected Mapping map                  = new MemoryMapping();
+	protected String metricExpression 	   = new String();
+	protected static double rMax 		   = -Double.MAX_VALUE;
+	protected static boolean saveMapping   = true;
 
 	/**
 	 * Constructor
@@ -48,9 +47,9 @@ public class RefinementNode implements Comparable<RefinementNode> {
 	 */
 	public RefinementNode(double fMeasure, Mapping map, String metricExpression) {
 		super();
-		this.fMeasure = fMeasure;
-		this.map = map;
-		this.metricExpression = metricExpression;
+		this.setfMeasure(fMeasure);
+		this.setMap(map);
+		this.setMetricExpression(metricExpression);
 	}
 
 	/**
@@ -64,13 +63,13 @@ public class RefinementNode implements Comparable<RefinementNode> {
 	 */
 	public RefinementNode(Mapping map, String metricExpression, Mapping refMap) {
 		super();
-		this.precision 	= new Precision().calculate(map, new GoldStandard(refMap));
-		this.recall 	= new Recall().calculate(map, new GoldStandard(refMap));
-		this.fMeasure = (this.precision == 0 && this.recall == 0) ? 0 : 2 * precision * recall / (precision + recall);
+		this.setPrecision(new Precision().calculate(map, new GoldStandard(refMap)));
+		this.setRecall(new Recall().calculate(map, new GoldStandard(refMap)));
+		this.setfMeasure((precision == 0 && recall == 0) ? 0 : 2 * precision * recall / (precision + recall));
 		double pMax = computeMaxPrecision(map, refMap);
-		this.maxFMeasure = 2 * pMax * rMax / (pMax + rMax);
-		this.map = saveMapping ? map : null;
-		this.metricExpression = metricExpression;
+		this.setMaxFMeasure(2 * pMax * rMax / (pMax + rMax));
+		this.setMap(saveMapping ? map : null);
+		this.setMetricExpression(metricExpression);
 	}
 
 
@@ -82,9 +81,9 @@ public class RefinementNode implements Comparable<RefinementNode> {
 	 */
 	public RefinementNode(Mapping map, String metricExpression, double fMeasure) {
 		super();
-		this.fMeasure = fMeasure;
-		this.map = saveMapping ? map : null;
-		this.metricExpression = metricExpression;
+		this.setfMeasure(fMeasure);
+		this.setMap(saveMapping ? map : null);
+		this.setMetricExpression(metricExpression);
 
 	}
 
@@ -108,10 +107,10 @@ public class RefinementNode implements Comparable<RefinementNode> {
 	@Override
 	public String toString() {
 		return 
-				metricExpression + 
+				getMetricExpression() + 
 				//				this.hashCode()+
 				//				" (P = " + precision + ", " + "R = " + recall + ", " + "F = " + fMeasure + ")";
-				" (F = " + fMeasure + ")";
+				" (F = " + getfMeasure() + ")";
 	}
 
 
@@ -121,7 +120,7 @@ public class RefinementNode implements Comparable<RefinementNode> {
 	 */
 	@Override
 	public int compareTo(RefinementNode o) {
-		return (int) (fMeasure - o.fMeasure);
+		return (int) (fMeasure - o.getfMeasure());
 
 	}
 
@@ -135,4 +134,64 @@ public class RefinementNode implements Comparable<RefinementNode> {
 	public double getMaxFMeasure() {
 		return 0;
 	}
+
+    public double getfMeasure() {
+        return fMeasure;
+    }
+
+    public void setfMeasure(double fMeasure) {
+        this.fMeasure = fMeasure;
+    }
+
+    public double getPrecision() {
+        return precision;
+    }
+
+    public void setPrecision(double precision) {
+        this.precision = precision;
+    }
+
+    public double getRecall() {
+        return recall;
+    }
+
+    public void setRecall(double recall) {
+        this.recall = recall;
+    }
+
+    public void setMaxFMeasure(double maxFMeasure) {
+        this.maxFMeasure = maxFMeasure;
+    }
+
+    public Mapping getMap() {
+        return map;
+    }
+
+    public void setMap(Mapping map) {
+        this.map = map;
+    }
+
+    public String getMetricExpression() {
+        return metricExpression;
+    }
+
+    public void setMetricExpression(String metricExpression) {
+        this.metricExpression = metricExpression;
+    }
+
+    public static double getrMax() {
+        return rMax;
+    }
+
+    public static void setrMax(double rMax) {
+        RefinementNode.rMax = rMax;
+    }
+
+    public static boolean isSaveMapping() {
+        return saveMapping;
+    }
+
+    public static void setSaveMapping(boolean saveMapping) {
+        RefinementNode.saveMapping = saveMapping;
+    }
 }

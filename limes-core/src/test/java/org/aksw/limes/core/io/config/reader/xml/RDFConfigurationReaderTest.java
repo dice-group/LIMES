@@ -92,8 +92,8 @@ public class RDFConfigurationReaderTest
 				mlParameters						//MLAlgorithmParameters
 				);
 
-		RDFConfigurationReader c = new RDFConfigurationReader();
-		Configuration fileConf = c.read("/resources/lgd-lgd-ml.ttl");
+		RDFConfigurationReader c = new RDFConfigurationReader("/resources/lgd-lgd-ml.ttl");
+		Configuration fileConf = c.read();
 		assertTrue(testConf.equals(fileConf));
 	}
 	
@@ -145,8 +145,8 @@ public class RDFConfigurationReaderTest
 				new String(),						//MLAlgorithmName
 				new HashMap<>()						//MLAlgorithmParameters
 				);
-		RDFConfigurationReader c = new RDFConfigurationReader();
-		Configuration fileConf = c.read("/resources/lgd-lgd.ttl");
+		RDFConfigurationReader c = new RDFConfigurationReader("/resources/lgd-lgd.ttl");
+		Configuration fileConf = c.read();
 		assertTrue(testConf.equals(fileConf));
 	}
 

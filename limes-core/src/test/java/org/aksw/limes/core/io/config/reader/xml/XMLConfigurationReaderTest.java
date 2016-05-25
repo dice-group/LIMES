@@ -75,8 +75,8 @@ public class XMLConfigurationReaderTest {
 				new HashMap<String, String>()		//MLAlgorithmParameters
 				);
 
-		XMLConfigurationReader c = new XMLConfigurationReader();
-		Configuration fileConf = c.read("/resources/lgd-lgd.xml");
+		XMLConfigurationReader c = new XMLConfigurationReader("/resources/lgd-lgd.xml");
+		Configuration fileConf = c.read();
 		System.out.println(fileConf);
 
 		assertTrue(testConf.equals(fileConf));

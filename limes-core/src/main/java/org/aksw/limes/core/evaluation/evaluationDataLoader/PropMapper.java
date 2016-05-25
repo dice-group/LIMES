@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.aksw.limes.core.io.config.reader.ConfigurationReader;
+import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 /**
@@ -22,28 +22,28 @@ public class PropMapper {
 	 * @return
 	 */
 	public static PropertyMapping getPropertyMapping(String configFile) {		
-		ConfigurationReader cR = new RDFConfigurationReader();
-		cR.read(configFile);
+		AConfigurationReader cR = new RDFConfigurationReader(configFile);
+		cR.read();
 		return  getPropertyMapping(cR, configFile);
 		
 	}
 	
-	public static PropertyMapping getPropertyMapping(ConfigurationReader cR, String name) {
+	public static PropertyMapping getPropertyMapping(AConfigurationReader cR, String name) {
 		
 		PropertyMapping pM = new PropertyMapping();
 
 		if(!name.substring(name.lastIndexOf("/")+1).startsWith("dbpedia-linkedmdb") 
 				&& !name.substring(name.lastIndexOf("/")+1).startsWith("dailymed-drugbank")) { 
-			int max = Math.max(cR.configuration.getSourceInfo().getProperties().size(), cR.configuration.getTargetInfo().getProperties().size())-1;		
+			int max = Math.max(cR.getConfiguration().getSourceInfo().getProperties().size(), cR.getConfiguration().getTargetInfo().getProperties().size())-1;		
 			for(int i = 0; i<max; i++) {
-				pM.addStringPropertyMatch(cR.configuration.getSourceInfo().getProperties().get(i), cR.configuration.getTargetInfo().getProperties().get(i));
+				pM.addStringPropertyMatch(cR.getConfiguration().getSourceInfo().getProperties().get(i), cR.getConfiguration().getTargetInfo().getProperties().get(i));
 			}
-			pM.addDatePropertyMatch(cR.configuration.getSourceInfo().getProperties().get(max), cR.configuration.getTargetInfo().getProperties().get(max));
+			pM.addDatePropertyMatch(cR.getConfiguration().getSourceInfo().getProperties().get(max), cR.getConfiguration().getTargetInfo().getProperties().get(max));
 		}
 		else {
-			int max = Math.max(cR.configuration.getSourceInfo().getProperties().size(), cR.configuration.getTargetInfo().getProperties().size()-1);		
+			int max = Math.max(cR.getConfiguration().getSourceInfo().getProperties().size(), cR.getConfiguration().getTargetInfo().getProperties().size()-1);		
 			for(int i = 0; i<max; i++) {
-				pM.addStringPropertyMatch(cR.configuration.getSourceInfo().getProperties().get(i), cR.configuration.getTargetInfo().getProperties().get(i));
+				pM.addStringPropertyMatch(cR.getConfiguration().getSourceInfo().getProperties().get(i), cR.getConfiguration().getTargetInfo().getProperties().get(i));
 			}                        
 		}
 		System.out.println("PM: "+pM);

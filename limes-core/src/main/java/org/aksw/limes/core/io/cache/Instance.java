@@ -17,8 +17,7 @@ import org.apache.log4j.*;
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 25, 2015
  */
-@SuppressWarnings("rawtypes")
-public class Instance implements Comparable, Serializable {
+public class Instance implements Comparable<Object>, Serializable {
 	private static final Logger logger = Logger.getLogger(Instance.class.getName());
 
 	/**
@@ -98,13 +97,10 @@ public class Instance implements Comparable, Serializable {
 	 * @return TreeSet of values associated with this URI
 	 */
 	public TreeSet<String> getProperty(String propUri) {
-		// propUri = propUri.toLowerCase();
 		if (properties.containsKey(propUri)) {
 			return properties.get(propUri);
 		} else {
 			logger.warn("Failed to access property <" + propUri + "> on " + uri);
-			// System.out.println(properties);
-			// System.exit(1);
 			return new TreeSet<String>();
 		}
 	}

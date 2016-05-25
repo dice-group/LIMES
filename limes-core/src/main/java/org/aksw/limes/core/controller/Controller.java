@@ -1,34 +1,30 @@
 package org.aksw.limes.core.controller;
 
+import static org.fusesource.jansi.Ansi.ansi;
+import static org.fusesource.jansi.Ansi.Color.RED;
+
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
-import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
-import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.ExecutionPlannerType;
-import org.aksw.limes.core.execution.planning.planner.IPlanner;
-import org.aksw.limes.core.execution.planning.planner.Planner;
-import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
-import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterFactoryType;
-import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
-import org.aksw.limes.core.io.config.reader.ConfigurationReader;
+import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
-import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.serializer.ISerializer;
 import org.aksw.limes.core.io.serializer.SerializerFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.setting.LearningParameters;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
-import static org.fusesource.jansi.Ansi.*;
-import static org.fusesource.jansi.Ansi.Color.*;
 
 /**
  * This is the default LIMES Controller used to run the software as CLI.
@@ -97,23 +93,24 @@ public class Controller {
             format = "xml";
         }
 
-        ConfigurationReader reader = null;
+        AConfigurationReader reader = null;
+        String configFileOrUri = cmd.getArgs()[0];
         switch (format) {
             case "xml":
-                reader = new XMLConfigurationReader();
+                reader = new XMLConfigurationReader(configFileOrUri);
                 break;
             case "rdf":
-                reader = new RDFConfigurationReader();
+                reader = new RDFConfigurationReader(configFileOrUri);
                 break;
             default:
-                System.out.println(ansi().fg(RED).a("Error:\n\t Not a valid format: \"" + format + "\"!").reset());
+                logger.error("Error:\n\t Not a valid format: \"" + format + "\"!");
                 printHelp();
                 System.exit(1);
         }
 
         // 2. Read configuration
-        String configFileOrUri = cmd.getArgs()[0];
-        return reader.read(configFileOrUri);
+        
+        return reader.read();
     }
 
     /**

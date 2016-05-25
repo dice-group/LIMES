@@ -75,7 +75,7 @@ public class WeakWombat extends Wombat {
 		if(bestSolution == null){
 			bestSolution =  getBestSolution();
 		}
-		return bestSolution.map;
+		return bestSolution.getMap();
 	}
 	
 
@@ -98,14 +98,14 @@ public class WeakWombat extends Wombat {
 		Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
 		logger.info("Most promising node: " + mostPromisingNode.getValue());
 		iterationNr ++;
-		while((mostPromisingNode.getValue().fMeasure) < maxFitnessThreshold	 
+		while((mostPromisingNode.getValue().getfMeasure()) < maxFitnessThreshold	 
 				&& refinementTreeRoot.size() <= maxRefineTreeSize
 				&& iterationNr <= maxIterationNumber)
 		{
 			iterationNr++;
 			mostPromisingNode = expandNode(mostPromisingNode);
 			mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
-			if(mostPromisingNode.getValue().recall == -Double.MAX_VALUE){
+			if(mostPromisingNode.getValue().getRecall() == -Double.MAX_VALUE){
 				break; // no better solution can be found
 			}
 			logger.info("Most promising node: " + mostPromisingNode.getValue());
@@ -150,13 +150,13 @@ public class WeakWombat extends Wombat {
 		Mapping map = MappingFactory.createMapping(MappingType.DEFAULT);
 		for(ExtendedClassifier c : classifiers ){
 			for(Operator op : Operator.values()){
-				if(node.getValue().metricExpression != c.getMetricExpression()){ // do not create the same metricExpression again 
+				if(node.getValue().getMetricExpression() != c.getMetricExpression()){ // do not create the same metricExpression again 
 					if(op.equals(Operator.AND)){
-						map = MappingOperations.intersection(node.getValue().map, c.mapping);
+						map = MappingOperations.intersection(node.getValue().getMap(), c.mapping);
 					}else if(op.equals(Operator.MINUS)){
-						map = MappingOperations.difference(node.getValue().map, c.mapping);
+						map = MappingOperations.difference(node.getValue().getMap(), c.mapping);
 					}
-					String metricExpr = op + "(" + node.getValue().metricExpression + "," + c.getMetricExpression() +")|0";
+					String metricExpr = op + "(" + node.getValue().getMetricExpression() + "," + c.getMetricExpression() +")|0";
 					RefinementNode child = new RefinementNode(map, metricExpr,reference);
 					node.addChild(new Tree<RefinementNode>(child));
 				}
@@ -185,11 +185,11 @@ public class WeakWombat extends Wombat {
 		// get mostPromesyChild of children
 		Tree<RefinementNode> mostPromesyChild = new Tree<RefinementNode>(new RefinementNode());
 		for(Tree<RefinementNode> child : r.getchildren()){
-			if(child.getValue().recall >= 0){
+			if(child.getValue().getRecall() >= 0){
 				Tree<RefinementNode> promesyChild = getMostPromisingNode(child, penaltyWeight);
 				double newFitness;
-				newFitness = promesyChild.getValue().recall - penaltyWeight * computePenalty(promesyChild);
-				if( newFitness > mostPromesyChild.getValue().recall  ){
+				newFitness = promesyChild.getValue().getRecall() - penaltyWeight * computePenalty(promesyChild);
+				if( newFitness > mostPromesyChild.getValue().getRecall()  ){
 					mostPromesyChild = promesyChild;
 				}
 			}
@@ -197,7 +197,7 @@ public class WeakWombat extends Wombat {
 		// return the argmax{root, mostPromesyChild}
 		if(penaltyWeight > 0){
 			return mostPromesyChild;
-		}else if(r.getValue().fMeasure >= mostPromesyChild.getValue().fMeasure){
+		}else if(r.getValue().getfMeasure() >= mostPromesyChild.getValue().getfMeasure()){
 			return r;
 		}else{
 			return mostPromesyChild;

@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.HybridCache;
-import org.aksw.limes.core.io.config.reader.ConfigurationReader;
+import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.Mapping;
@@ -263,13 +263,13 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_movies.csv");
 		param.put(MapKey.NAME, "movies");
 		// data
-		ConfigurationReader cR = new RDFConfigurationReader();
-		cR.read(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		AConfigurationReader cR = new RDFConfigurationReader(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		cR.read();
 		param.put(MapKey.CONFIG_READER, cR);
 		
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
-		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.configuration.getSourceInfo()));
-		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.configuration.getTargetInfo()));
+		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
+		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
 		param.put(MapKey.REFERENCE_MAPPING, null);
 		
 		param.put(MapKey.SOURCE_CLASS, "http://dbpedia.org/ontology/Film");
@@ -293,13 +293,13 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_villages.csv");
 		param.put(MapKey.NAME, "villages");
 		// data
-		ConfigurationReader cR = new RDFConfigurationReader();
-		cR.read(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		AConfigurationReader cR = new RDFConfigurationReader(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		cR.read();
 		param.put(MapKey.CONFIG_READER, cR);
 		
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
-		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.configuration.getSourceInfo()));
-		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.configuration.getTargetInfo()));
+		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
+		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
 		param.put(MapKey.REFERENCE_MAPPING, null);
 		
 		param.put(MapKey.SOURCE_CLASS, "http://dbpedia.org/ontology/Village");
@@ -320,13 +320,13 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_cities.csv");
 		param.put(MapKey.NAME, "towns");
 		// data
-		ConfigurationReader cR = new RDFConfigurationReader();
-		cR.read(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		AConfigurationReader cR = new RDFConfigurationReader(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		cR.read();
 		param.put(MapKey.CONFIG_READER, cR);
 		
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
-		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.configuration.getSourceInfo()));
-		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.configuration.getTargetInfo()));
+		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
+		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
 		param.put(MapKey.REFERENCE_MAPPING, null);
 		
 		param.put(MapKey.SOURCE_CLASS, "http://dbpedia.org/ontology/Town");
@@ -348,8 +348,8 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Persons1.csv");
 		param.put(MapKey.NAME, "Persons1");
 		// data
-		ConfigurationReader cR = new XMLConfigurationReader();
-		cR.read(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		AConfigurationReader cR = new XMLConfigurationReader(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		cR.read();
 		param.put(MapKey.CONFIG_READER, cR);
 		
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
@@ -362,7 +362,6 @@ public class DataSetChooser {
 		param.put(MapKey.SOURCE_CLASS, "http://www.okkam.org/ontology_person1.owl#Person");
 		param.put(MapKey.TARGET_CLASS, "okkamperson2:Person");
 		
-		HybridCache hcSource = new HybridCache();
 	
 		return param;
 	}
@@ -380,13 +379,13 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_OAEI2014.csv");
 		param.put(MapKey.NAME, "OAEI2014");
 		// data
-		ConfigurationReader cR = new XMLConfigurationReader();
-		cR.read(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		AConfigurationReader cR = new XMLConfigurationReader(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		cR.read();
 		param.put(MapKey.CONFIG_READER, cR);
 		
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
-		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.configuration.getSourceInfo()));
-		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.configuration.getTargetInfo()));
+		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
+		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
 		OAEIMappingParser mappingParser = new OAEIMappingParser((String)param.get(MapKey.BASE_FOLDER)+(String)param.get(MapKey.REFERENCE_FILE));
 		param.put(MapKey.REFERENCE_MAPPING, mappingParser.parseDocument());
 		
@@ -407,10 +406,10 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_RESULTS_FOLDER, "resources/results/");
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Persons1.csv");
 		param.put(MapKey.NAME, "Persons1_CSV");
-		ConfigurationReader cR = new XMLConfigurationReader();
-		cR.read((String)param.get(MapKey.BASE_FOLDER)+(String)param.get(MapKey.CONFIG_FILE));
-		HybridCache sC = HybridCache.getData(cR.configuration.getSourceInfo());
-		HybridCache tC = HybridCache.getData(cR.configuration.getTargetInfo());
+		AConfigurationReader cR = new XMLConfigurationReader((String)param.get(MapKey.BASE_FOLDER)+(String)param.get(MapKey.CONFIG_FILE));
+		cR.read();
+		HybridCache sC = HybridCache.getData(cR.getConfiguration().getSourceInfo());
+		HybridCache tC = HybridCache.getData(cR.getConfiguration().getTargetInfo());
 		// data	
 		param.put(MapKey.CONFIG_READER, cR);
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
@@ -440,8 +439,8 @@ public class DataSetChooser {
 //		Cache tC =  Experiment.readOAEIFile((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.TARGET_FILE), type);
 //		Experiment.toCsvFile(tC, (String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.TARGET_FILE)+".csv");
 //		Experiment.toCsvFile(Experiment.readOAEIMapping((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.REFERENCE_FILE)), (String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.REFERENCE_FILE)+".csv");
-		ConfigurationReader cR = new XMLConfigurationReader();
-		cR.read(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		AConfigurationReader cR = new XMLConfigurationReader(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		cR.read();
 		param.put(MapKey.CONFIG_READER, cR);
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
 		param.put(MapKey.SOURCE_CACHE, Experiement.readOAEIFile((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.SOURCE_FILE), type));
@@ -465,10 +464,10 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Persons2.csv");
 		param.put(MapKey.NAME, "Persons2_CSV");
 		// data
-		ConfigurationReader cR = new XMLConfigurationReader();
-		cR.read((String)param.get(MapKey.BASE_FOLDER)+(String)param.get(MapKey.CONFIG_FILE));
-		HybridCache sC = HybridCache.getData(cR.configuration.getSourceInfo());
-		HybridCache tC = HybridCache.getData(cR.configuration.getTargetInfo());
+		AConfigurationReader cR = new XMLConfigurationReader((String)param.get(MapKey.BASE_FOLDER)+(String)param.get(MapKey.CONFIG_FILE));
+		cR.read();
+		HybridCache sC = HybridCache.getData(cR.getConfiguration().getSourceInfo());
+		HybridCache tC = HybridCache.getData(cR.getConfiguration().getTargetInfo());
 		
 		param.put(MapKey.CONFIG_READER, cR);
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
@@ -498,8 +497,8 @@ public class DataSetChooser {
 //		Experiment.toCsvFile(tC, (String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.TARGET_FILE)+".csv");
 //		Experiment.toCsvFile(Experiment.readOAEIMapping((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.REFERENCE_FILE)), (String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.REFERENCE_FILE)+".csv");
 	
-		ConfigurationReader cR = new XMLConfigurationReader();
-		cR.read(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		AConfigurationReader cR = new XMLConfigurationReader(""+param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		cR.read();
 		param.put(MapKey.CONFIG_READER, cR);
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
 		param.put(MapKey.SOURCE_CACHE, Experiement.readOAEIFile(/*(String)param.get(MapKey.BASE_FOLDER)+*/param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.SOURCE_FILE), type));
@@ -525,10 +524,10 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Restaurants.csv");
 		param.put(MapKey.NAME, "Restaurants_CSV");
 		// data
-		ConfigurationReader cR = new XMLConfigurationReader();
-		cR.read((String)param.get(MapKey.BASE_FOLDER)+(String)param.get(MapKey.CONFIG_FILE));
-		HybridCache sC = HybridCache.getData(cR.configuration.getSourceInfo());
-		HybridCache tC = HybridCache.getData(cR.configuration.getTargetInfo());
+		AConfigurationReader cR = new XMLConfigurationReader((String)param.get(MapKey.BASE_FOLDER)+(String)param.get(MapKey.CONFIG_FILE));
+		cR.read();
+		HybridCache sC = HybridCache.getData(cR.getConfiguration().getSourceInfo());
+		HybridCache tC = HybridCache.getData(cR.getConfiguration().getTargetInfo());
 
 		param.put(MapKey.CONFIG_READER, cR);
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
@@ -556,15 +555,14 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_DBLP-ACM.csv");
 		param.put(MapKey.NAME, "DBLP-ACM");
 		// data
-		ConfigurationReader cR = new XMLConfigurationReader();
-		cR.read((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
-		System.out.println(cR.configuration);
+		AConfigurationReader cR = new XMLConfigurationReader((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		cR.read();
+		System.out.println(cR.getConfiguration());
 		param.put(MapKey.CONFIG_READER, cR);
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
-		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.configuration.getSourceInfo()));
-		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.configuration.getTargetInfo()));
+		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
+		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
 		param.put(MapKey.REFERENCE_MAPPING, OracleFactory.getOracle((String)/*param.get(MapKey.BASE_FOLDER)+*/param.get(MapKey.DATASET_FOLDER)+param.get(MapKey.REFERENCE_FILE), "csv", "simple").getMapping());
-		int i = 0;
 		param.put(MapKey.SOURCE_CLASS, "dblp:book");
 		param.put(MapKey.TARGET_CLASS, "acm:book");
 		return param;
@@ -584,13 +582,13 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Abt-Buy.csv");
 		param.put(MapKey.NAME, "Abt-Buy");
 		// data
-		ConfigurationReader cR = new XMLConfigurationReader();
-		cR.read((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		AConfigurationReader cR = new XMLConfigurationReader((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		cR.read();
 		
 		param.put(MapKey.CONFIG_READER, cR);
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
-		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.configuration.getSourceInfo()));
-		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.configuration.getTargetInfo()));
+		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
+		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
 		param.put(MapKey.REFERENCE_MAPPING, OracleFactory.getOracle((String)/*param.get(MapKey.BASE_FOLDER)+*/param.get(MapKey.DATASET_FOLDER)+param.get(MapKey.REFERENCE_FILE), "csv", "simple").getMapping());
 		param.put(MapKey.SOURCE_CLASS, "abt:product");
 		param.put(MapKey.TARGET_CLASS, "buy:product");
@@ -611,14 +609,14 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_DBLP-Scholar.csv");
 		param.put(MapKey.NAME, "DBLP-SCHOLAR");
 		// data
-		ConfigurationReader cR = new XMLConfigurationReader();
-		cR.read((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		AConfigurationReader cR = new XMLConfigurationReader((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		cR.read();
 		
 		param.put(MapKey.CONFIG_READER, cR);
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
 		
-		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.configuration.getSourceInfo()));
-		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.configuration.getTargetInfo()));
+		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
+		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
 		param.put(MapKey.REFERENCE_MAPPING, OracleFactory.getOracle((String)/*param.get(MapKey.BASE_FOLDER)+*/param.get(MapKey.DATASET_FOLDER)+param.get(MapKey.REFERENCE_FILE), "csv", "simple").getMapping());
 		
 		param.put(MapKey.SOURCE_CLASS, "dblp:book");
@@ -640,13 +638,13 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Amazon-GoogleProducts.csv");
 		param.put(MapKey.NAME, "Amazon-GoogleProducts");
 		// data
-		ConfigurationReader cR = new XMLConfigurationReader();
-		cR.read((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		AConfigurationReader cR = new XMLConfigurationReader((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		cR.read();
 		
 		param.put(MapKey.CONFIG_READER, cR);
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
-		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.configuration.getSourceInfo()));
-		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.configuration.getTargetInfo()));
+		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
+		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
 		param.put(MapKey.REFERENCE_MAPPING, OracleFactory.getOracle((String)/*param.get(MapKey.BASE_FOLDER)+*/param.get(MapKey.DATASET_FOLDER)+param.get(MapKey.REFERENCE_FILE), "csv", "simple").getMapping());
 		
 		param.put(MapKey.SOURCE_CLASS, "amazon:product");
@@ -668,13 +666,13 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_DBPedia-LinkedMDB.csv");
 		param.put(MapKey.NAME, "DBPedia-LinkedMDB");
 		// data
-		ConfigurationReader cR = new XMLConfigurationReader();
-		cR.read((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		AConfigurationReader cR = new XMLConfigurationReader((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		cR.read();
 		
 		param.put(MapKey.CONFIG_READER, cR);
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
-		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.configuration.getSourceInfo()));
-		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.configuration.getTargetInfo()));
+		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
+		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
 		param.put(MapKey.REFERENCE_MAPPING, OracleFactory.getOracle((String)/*param.get(MapKey.BASE_FOLDER)+*/param.get(MapKey.DATASET_FOLDER)+param.get(MapKey.REFERENCE_FILE), "csv", "simple").getMapping());
 		
 		param.put(MapKey.SOURCE_CLASS, "dbpedia:film");
@@ -696,13 +694,13 @@ public class DataSetChooser {
 		param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Drugs.csv");
 		param.put(MapKey.NAME, "Drugs");
 		// data
-		ConfigurationReader cR = new XMLConfigurationReader();
-		cR.read((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		AConfigurationReader cR = new XMLConfigurationReader((String)param.get(MapKey.BASE_FOLDER)+param.get(MapKey.CONFIG_FILE));
+		cR.read();
 		
 		param.put(MapKey.CONFIG_READER, cR);
 		param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String)param.get(MapKey.BASE_FOLDER), (String)param.get(MapKey.CONFIG_FILE)));
-		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.configuration.getSourceInfo()));
-		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.configuration.getTargetInfo()));
+		param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
+		param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
 		param.put(MapKey.REFERENCE_MAPPING, OracleFactory.getOracle((String)/*param.get(MapKey.BASE_FOLDER)+*/param.get(MapKey.DATASET_FOLDER)+param.get(MapKey.REFERENCE_FILE), "csv", "simple").getMapping());
 		
 		param.put(MapKey.SOURCE_CLASS, "dailymed:drug");

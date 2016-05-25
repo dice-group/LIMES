@@ -18,7 +18,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
  * @version 1.0
  */
-public abstract class PRF implements IQualitativeMeasure{
+public abstract class APRF implements IQualitativeMeasure{
 	public abstract double calculate(Mapping predictions, GoldStandard goldStandard);
 	
 	/**

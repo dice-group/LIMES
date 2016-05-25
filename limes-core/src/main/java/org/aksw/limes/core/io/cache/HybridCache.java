@@ -35,17 +35,17 @@ import org.apache.log4j.Logger;
  * @version Nov 25, 2015
  */
 public class HybridCache extends MemoryCache implements Serializable{
-	static Logger logger = Logger.getLogger(HybridCache.class.getName());
-	
-	private static final long serialVersionUID = -2268344215686055231L;
-	// maps uris to instance. A bit redundant as instance contain their URI
-	protected HashMap<String, Instance> instanceMap;
+    static Logger logger = Logger.getLogger(HybridCache.class.getName());
+
+    private static final long serialVersionUID = -2268344215686055231L;
+    // maps uris to instance. A bit redundant as instance contain their URI
+    protected HashMap<String, Instance> instanceMap;
     //Iterator for getting next instance
-	protected Iterator<Instance> instanceIterator;
-    
+    protected Iterator<Instance> instanceIterator;
+
     // pointing to the parent folder of the "cache" folder
     private File folder = new File("");
-    
+
     public HybridCache() {
         instanceMap = new HashMap<String, Instance>();
     }
@@ -54,8 +54,8 @@ public class HybridCache extends MemoryCache implements Serializable{
      * @param folder File pointing to the the parent folder of the (to-be-created) "cache" folder.
      */
     public HybridCache(File folder) {
-    	this();
-    	setFolder(folder);
+        this();
+        setFolder(folder);
     }
 
     /**
@@ -63,10 +63,10 @@ public class HybridCache extends MemoryCache implements Serializable{
      * @return null if no next instance, else the next instance
      */
     public Instance getNextInstance() {
-    	if(instanceIterator == null) {
-    		instanceIterator = instanceMap.values().iterator();
-    	}
-    	
+        if(instanceIterator == null) {
+            instanceIterator = instanceMap.values().iterator();
+        }
+
         if (instanceIterator.hasNext()) {
             return instanceIterator.next();
         } else {
@@ -83,11 +83,7 @@ public class HybridCache extends MemoryCache implements Serializable{
     }
 
     public void addInstance(Instance i) {
-//    	System.out.println("Adding Instance " + i);
-        if (instanceMap.containsKey(i.getUri())) {
-//            Instance m = instanceMap.get(i.getUri());
-
-        } else {
+        if (!instanceMap.containsKey(i.getUri())) {
             instanceMap.put(i.getUri(), i);
         }
     }
@@ -110,7 +106,6 @@ public class HybridCache extends MemoryCache implements Serializable{
      * @return The size of the cache
      */
     public int size() {
-        //logger.info("Size of key set = "+instanceMap.keySet().size());
         return instanceMap.size();
     }
 
@@ -121,7 +116,6 @@ public class HybridCache extends MemoryCache implements Serializable{
      * @param o The value of the property of p for the entity s
      */
     public void addTriple(String s, String p, String o) {
-    	//logger.info(instanceMap.containsKey(s));
         if (instanceMap.containsKey(s)) {
             Instance m = instanceMap.get(s);
             m.addProperty(p, o);
@@ -155,14 +149,14 @@ public class HybridCache extends MemoryCache implements Serializable{
     }
 
     /**
-	 *
-	 * @param i The instance to look for
-	 * @return true if the URI of the instance is found in the cache
-	 */
-	public boolean containsInstance(Instance i) {
-	    return instanceMap.containsKey(i.getUri());
-	}
-	/** Tries to serialize the content of the cache to a file. If it fails,
+     *
+     * @param i The instance to look for
+     * @return true if the URI of the instance is found in the cache
+     */
+    public boolean containsInstance(Instance i) {
+        return instanceMap.containsKey(i.getUri());
+    }
+    /** Tries to serialize the content of the cache to a file. If it fails,
      * no file is written to avoid the corruption of future data sources.
      * 
      * @param file File wherein the content of the cache is to be serialized
@@ -190,10 +184,10 @@ public class HybridCache extends MemoryCache implements Serializable{
      * @throws IOException
      */
     public static HybridCache loadFromFile(File file) throws IOException {
-    	String path = file.getAbsolutePath();
+        String path = file.getAbsolutePath();
         String parentPath = path.substring(0, path.lastIndexOf("cache"));
         File parent = new File(parentPath);
-        
+
         FileInputStream in = new FileInputStream(file);
         ObjectInputStream deSerializer = new ObjectInputStream(in);
         HybridCache cache;
@@ -210,10 +204,10 @@ public class HybridCache extends MemoryCache implements Serializable{
     }
 
     public static HybridCache getData(KBInfo kb) {
-    	return getData(new File(""), kb);
+        return getData(new File(""), kb);
     }
-    
-    
+
+
     /**
      * Method to get Data of the specified endpoint, and cache it to the "cache" folder in the folder specified.
      * @param folder Path to the parent folder of the "cache" folder.
@@ -240,7 +234,7 @@ public class HybridCache extends MemoryCache implements Serializable{
             }
         } //2. If it does not work, then get it from data sourceInfo as specified
         catch (Exception e) {
-//        	e.printStackTrace();
+            e.printStackTrace();
             // need to add a QueryModuleFactory
             logger.info("No cached data found for " + kb.getId());
             IQueryModule module = QueryModuleFactory.getQueryModule(kb.getType(), kb);
@@ -254,16 +248,16 @@ public class HybridCache extends MemoryCache implements Serializable{
 
         return cache;
     }
-    
+
     /** This method is used by learners which do not have prefix information.
-    *
-    * @param kb Info to the knowledge base to query
-    * @return A cache filled with the entities to link
-    */
+     *
+     * @param kb Info to the knowledge base to query
+     * @return A cache filled with the entities to link
+     */
     public static HybridCache getNoPrefixData(KBInfo kb) {
-    	return getNoPrefixData(new File (""), kb);
+        return getNoPrefixData(new File (""), kb);
     }
-    
+
     /** This method is used by learners which do not have prefix information and with a specified folder containing the cache folder.
      *
      * @param folder Path to parent folder of the supposed cache folder.
@@ -301,19 +295,19 @@ public class HybridCache extends MemoryCache implements Serializable{
         return cache;
     }
 
-    
+
     /**
      * Returns the file  pointing to the parent folder of cache.
      * @return
      */
-	public File getFolder() {
-		return folder;
-	}
-	/**
-	 * Set the parent folder of the cache sub folder.
-	 * @param folder Pointing to the parent folder holding the cache. 
-	 */
-	public void setFolder(File folder) {
-			this.folder = folder;
-	}
+    public File getFolder() {
+        return folder;
+    }
+    /**
+     * Set the parent folder of the cache sub folder.
+     * @param folder Pointing to the parent folder holding the cache. 
+     */
+    public void setFolder(File folder) {
+        this.folder = folder;
+    }
 }

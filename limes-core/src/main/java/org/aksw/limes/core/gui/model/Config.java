@@ -28,7 +28,7 @@ import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.config.reader.ConfigurationReader;
+import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.config.writer.RDFConfigurationWriter;
@@ -129,14 +129,14 @@ public class Config extends Configuration {
 	 *             FileNotFoundException
 	 */
 	public static Config loadFromFile(File file) throws Exception {
-		ConfigurationReader reader = null;
+		AConfigurationReader reader = null;
 		if (file.getAbsolutePath().contains(".xml")) {
-			reader = new XMLConfigurationReader();
+			reader = new XMLConfigurationReader(file.getPath());
 		} else if (file.getAbsolutePath().contains(".rdf")
 				|| file.getAbsolutePath().contains(".ttl")
 				|| file.getAbsolutePath().contains(".n3")
 				|| file.getAbsolutePath().contains(".nt")) {
-			reader = new RDFConfigurationReader();
+			reader = new RDFConfigurationReader(file.getPath());
 		} else {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setHeaderText("An Error occurred!");
@@ -146,7 +146,7 @@ public class Config extends Configuration {
 		Config outConfig;
 		try (InputStream is = new FileInputStream(file);
 				BufferedInputStream bis = new BufferedInputStream(is);) {
-			Configuration tmp = reader.read(file.getPath());
+			Configuration tmp = reader.read();
 			outConfig = new Config(tmp.getSourceInfo(), tmp.getTargetInfo(),
 					tmp.getMetricExpression(), tmp.getAcceptanceRelation(),
 					tmp.getVerificationRelation(),

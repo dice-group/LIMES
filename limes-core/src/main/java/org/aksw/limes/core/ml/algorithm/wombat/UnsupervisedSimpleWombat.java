@@ -12,7 +12,6 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningSetting;
@@ -23,7 +22,7 @@ import org.apache.log4j.Logger;
 
 public class UnsupervisedSimpleWombat extends Wombat {
 	protected static final String ALGORITHM_NAME = "Unsupervised Simple Wombat";
-	static Logger logger = Logger.getLogger(UnsupervisedSimpleWombat.class.getName());
+	static Logger logger = Logger.getLogger(UnsupervisedSimpleWombat.class);
 
 	public double penaltyWeight = 0.5d;
 
@@ -60,7 +59,7 @@ public class UnsupervisedSimpleWombat extends Wombat {
 		if(bestSolution == null){
 			bestSolution =  getBestSolution();
 		}
-		return bestSolution.map;
+		return bestSolution.getMap();
 	}
 
 	public String getMetricExpression() {
@@ -81,14 +80,14 @@ public class UnsupervisedSimpleWombat extends Wombat {
 		Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
 		logger.info("Most promising node: " + mostPromisingNode.getValue());
 		iterationNr ++;
-		while((mostPromisingNode.getValue().fMeasure) < maxFitnessThreshold	 
+		while((mostPromisingNode.getValue().getfMeasure()) < maxFitnessThreshold	 
 				&& refinementTreeRoot.size() <= maxRefineTreeSize
 				&& iterationNr <= maxIterationNumber)
 		{
 			iterationNr++;
 			mostPromisingNode = expandNode(mostPromisingNode);
 			mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
-			if(mostPromisingNode.getValue().fMeasure == -Double.MAX_VALUE){
+			if(mostPromisingNode.getValue().getfMeasure() == -Double.MAX_VALUE){
 				break; // no better solution can be found
 			}
 			logger.info("Most promising node: " + mostPromisingNode.getValue());
@@ -106,7 +105,7 @@ public class UnsupervisedSimpleWombat extends Wombat {
 	 * @author sherif
 	 */
 	protected void createRefinementTreeRoot(){
-		RefinementNode initialNode = new RefinementNode(-Double.MAX_VALUE, MappingFactory.createMapping(MappingType.DEFAULT), "");
+		RefinementNode initialNode = new RefinementNode(-Double.MAX_VALUE, MappingFactory.createDefaultMapping(), "");
 		refinementTreeRoot = new Tree<RefinementNode>(null,initialNode, null);
 		for(ExtendedClassifier c : classifiers){
 			RefinementNode n = createNode(c.getMetricExpression(),c.mapping,c.fMeasure);
@@ -128,18 +127,18 @@ public class UnsupervisedSimpleWombat extends Wombat {
 	 * @author sherif
 	 */
 	private Tree<RefinementNode> expandNode(Tree<RefinementNode> node) {
-		Mapping mapping = MappingFactory.createMapping(MappingType.DEFAULT);
+		Mapping mapping = MappingFactory.createDefaultMapping();
 		for(ExtendedClassifier c : classifiers ){
 			for(Operator op : Operator.values()){
-				if(node.getValue().metricExpression != c.getMetricExpression()){ // do not create the same metricExpression again 
+				if(node.getValue().getMetricExpression() != c.getMetricExpression()){ // do not create the same metricExpression again 
 					if(op.equals(Operator.AND)){
-						mapping = MappingOperations.intersection(node.getValue().map, c.mapping);
+						mapping = MappingOperations.intersection(node.getValue().getMap(), c.mapping);
 					}else if(op.equals(Operator.OR)){
-						mapping = MappingOperations.union(node.getValue().map, c.mapping);
+						mapping = MappingOperations.union(node.getValue().getMap(), c.mapping);
 					}else if(op.equals(Operator.DIFF)){
-						mapping = MappingOperations.difference(node.getValue().map, c.mapping);
+						mapping = MappingOperations.difference(node.getValue().getMap(), c.mapping);
 					}
-					String metricExpr = op + "(" + node.getValue().metricExpression + "," + c.getMetricExpression() +")|0";
+					String metricExpr = op + "(" + node.getValue().getMetricExpression() + "," + c.getMetricExpression() +")|0";
 					RefinementNode child = createNode(metricExpr, mapping);
 					node.addChild(new Tree<RefinementNode>(child));
 				}
@@ -167,11 +166,11 @@ public class UnsupervisedSimpleWombat extends Wombat {
 		// get mostPromesyChild of children
 		Tree<RefinementNode> mostPromesyChild = new Tree<RefinementNode>(new RefinementNode());
 		for(Tree<RefinementNode> child : r.getchildren()){
-			if(child.getValue().fMeasure >= 0){
+			if(child.getValue().getfMeasure() >= 0){
 				Tree<RefinementNode> promesyChild = getMostPromisingNode(child, penaltyWeight);
 				double newFitness;
-				newFitness = promesyChild.getValue().fMeasure - penaltyWeight * computePenality(promesyChild);
-				if( newFitness > mostPromesyChild.getValue().fMeasure  ){
+				newFitness = promesyChild.getValue().getfMeasure() - penaltyWeight * computePenality(promesyChild);
+				if( newFitness > mostPromesyChild.getValue().getfMeasure()  ){
 					mostPromesyChild = promesyChild;
 				}
 			}
@@ -179,7 +178,7 @@ public class UnsupervisedSimpleWombat extends Wombat {
 		// return the argmax{root, mostPromesyChild}
 		if(penaltyWeight > 0){
 			return mostPromesyChild;
-		}else if(r.getValue().fMeasure >= mostPromesyChild.getValue().fMeasure){
+		}else if(r.getValue().getfMeasure() >= mostPromesyChild.getValue().getfMeasure()){
 			return r;
 		}else{
 			return mostPromesyChild;
@@ -213,7 +212,7 @@ public class UnsupervisedSimpleWombat extends Wombat {
 	}
 	
 	private RefinementNode createNode(String metricExpr,Mapping mapping, double fscore) {
-		if(RefinementNode.saveMapping){
+		if(RefinementNode.isSaveMapping()){
 			return new RefinementNode(fscore, mapping, metricExpr);
 		}
 		return new RefinementNode(fscore, null, metricExpr);
