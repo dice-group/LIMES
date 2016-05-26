@@ -5,16 +5,11 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.apache.log4j.Logger;
 
 public class ExecutionPlannerFactory {
-    private static final Logger logger = Logger.getLogger(ExecutionEngineFactory.class.getName());
-
-    public enum ExecutionPlannerType {
-        DEFAULT, CANONICAL, HELIOS, DYNAMIC;
-    }
-
     public static final String DEFAULT = "default";
     public static final String CANONICAL = "canonical";
     public static final String HELIOS = "helios";
     public static final String DYNAMIC = "dynamic";
+    private static final Logger logger = Logger.getLogger(ExecutionEngineFactory.class.getName());
 
     public static ExecutionPlannerType getExecutionPlannerType(String name) {
         if (name.equalsIgnoreCase(DEFAULT)) {
@@ -35,7 +30,7 @@ public class ExecutionPlannerFactory {
 
     /**
      * @param name,
-     *            type of the Execution Planner
+     *         type of the Execution Planner
      * @return a specific execution engine instance
      * @author kleanthi
      */
@@ -54,5 +49,9 @@ public class ExecutionPlannerFactory {
                 logger.warn("Sorry, " + type.toString() + " is not yet implemented. Returning the default planner instead...");
                 return new CanonicalPlanner();
         }
+    }
+
+    public enum ExecutionPlannerType {
+        DEFAULT, CANONICAL, HELIOS, DYNAMIC;
     }
 }

@@ -1,5 +1,8 @@
 package org.aksw.limes.core.io.serializer;
 
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.apache.log4j.Logger;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -10,9 +13,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.aksw.limes.core.io.mapping.Mapping;
-import org.apache.log4j.Logger;
-
 /**
  * Implements a simple serializer that generates NTriple files.
  *
@@ -22,8 +22,8 @@ import org.apache.log4j.Logger;
  */
 public class NtSerializer implements ISerializer {
 
-	private static Logger logger = Logger.getLogger(NtSerializer.class.getName());
-	protected PrintWriter writer;
+    private static Logger logger = Logger.getLogger(NtSerializer.class.getName());
+    protected PrintWriter writer;
     protected Set<String> statements;
     protected Map<String, String> prefixMap;
     protected File folder = new File("");
@@ -36,6 +36,24 @@ public class NtSerializer implements ISerializer {
     public NtSerializer(HashMap<String, String> prefixes) {
         statements = new TreeSet<String>();
         prefixMap = prefixes;
+    }
+
+    /**
+     * Expands a string by replacing a prefix by its full value
+     *
+     * @param s
+     *         Input string
+     * @param predicate
+     *         Predicate to expand with
+     * @return Expanded version of s
+     */
+    public static String expand(String s, String predicate) {
+        if (predicate != null && s.indexOf(":") > 0) {
+            String split[] = s.split(":");
+            return predicate + split[1];
+        } else {
+            return s;
+        }
     }
 
     public void addStatement(String subject, String predicate, String object, double similarity) {
@@ -58,11 +76,14 @@ public class NtSerializer implements ISerializer {
      * assume that the class already knows all the prefixes used in the uris and
      * expands those.
      *
-     * @param m Mapping to serialize
-     * @param predicate Predicate to use while serializing
-     * @param file File in which the mapping is to be serialized
+     * @param m
+     *         Mapping to serialize
+     * @param predicate
+     *         Predicate to use while serializing
+     * @param file
+     *         File in which the mapping is to be serialized
      */
-    public void writeToFile(Mapping m, String predicate, String file) {
+    public void writeToFile(AMapping m, String predicate, String file) {
         open(file);
         String predicatePrefix = getPrefix(predicate);
 
@@ -82,30 +103,18 @@ public class NtSerializer implements ISerializer {
     }
 
     /**
-     * Expands a string by replacing a prefix by its full value
-     *
-     * @param s Input string
-     * @param predicate Predicate to expand with
-     * @return Expanded version of s
-     */
-    public static String expand(String s, String predicate) {
-        if (predicate != null && s.indexOf(":") > 0) {
-            String split[] = s.split(":");
-            return predicate + split[1];
-        } else {
-            return s;
-        }
-    }
-
-    /**
      * Writes in the file statement by statement. Rather slow, not to be used
      *
-     * @param subject Source object of a mapping, subject of the triple to be
-     * written
-     * @param predicate Predicate to be written
-     * @param object Target object of a mapping, object of the triple to be
-     * written
-     * @param similarity Similarity achieved by the subject and object
+     * @param subject
+     *         Source object of a mapping, subject of the triple to be
+     *         written
+     * @param predicate
+     *         Predicate to be written
+     * @param object
+     *         Target object of a mapping, object of the triple to be
+     *         written
+     * @param similarity
+     *         Similarity achieved by the subject and object
      */
     public void printStatement(String subject, String predicate, String object, double similarity) {
         String predicatePrefix = getPrefix(predicate);
@@ -161,7 +170,7 @@ public class NtSerializer implements ISerializer {
         try {
             // if no parent folder is given, then take that of the config that was set by the controller
             if (!file.contains("/") && !file.contains("\\")) {
-                String filePath = folder.getAbsolutePath()+File.separatorChar+file;
+                String filePath = folder.getAbsolutePath() + File.separatorChar + file;
                 writer = new PrintWriter(new BufferedWriter(new FileWriter(filePath)));
             } else {
                 writer = new PrintWriter(new BufferedWriter(new FileWriter(file)));

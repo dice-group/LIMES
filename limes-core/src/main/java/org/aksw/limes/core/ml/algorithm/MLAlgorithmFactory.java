@@ -16,7 +16,7 @@ public class MLAlgorithmFactory {
 
     public static final Logger logger = Logger.getLogger(MLAlgorithmFactory.class);
 
-    public static Class<? extends ACoreMLAlgorithm> getAlgorithmType (String name) {
+    public static Class<? extends ACoreMLAlgorithm> getAlgorithmType(String name) {
         if (name.equalsIgnoreCase(EAGLE)) {
             return Eagle.class;
         }
@@ -35,7 +35,7 @@ public class MLAlgorithmFactory {
         return WombatSimple.class;
     }
 
-    public static MLImplementationType getImplementationType (String name) {
+    public static MLImplementationType getImplementationType(String name) {
         if (name.equalsIgnoreCase(SUPERVISED_ACTIVE)) {
             return MLImplementationType.SUPERVISED_ACTIVE;
         }
@@ -49,19 +49,19 @@ public class MLAlgorithmFactory {
         return MLImplementationType.SUPERVISED_BATCH;
     }
 
-	public static AMLAlgorithm createMLAlgorithm(Class<? extends ACoreMLAlgorithm> clazz, MLImplementationType mlType) throws UnsupportedMLImplementationException {
-		
-		switch(mlType) {
-		case SUPERVISED_BATCH:
-			return new SupervisedMLAlgorithm(clazz);
-		case UNSUPERVISED:
-			return new UnsupervisedMLAlgorithm(clazz);
-		case SUPERVISED_ACTIVE:
-			return new ActiveMLAlgorithm(clazz);
-		default:
-			throw new UnsupportedMLImplementationException(clazz.getName());
-		}
+    public static AMLAlgorithm createMLAlgorithm(Class<? extends ACoreMLAlgorithm> clazz, MLImplementationType mlType) throws UnsupportedMLImplementationException {
 
-	}
-	
+        switch (mlType) {
+            case SUPERVISED_BATCH:
+                return new SupervisedMLAlgorithm(clazz);
+            case UNSUPERVISED:
+                return new UnsupervisedMLAlgorithm(clazz);
+            case SUPERVISED_ACTIVE:
+                return new ActiveMLAlgorithm(clazz);
+            default:
+                throw new UnsupportedMLImplementationException(clazz.getName());
+        }
+
+    }
+
 }

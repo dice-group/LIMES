@@ -1,11 +1,5 @@
 package org.aksw.limes.core.evaluation.evaluationDataLoader;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.aksw.limes.core.evaluation.oracle.IOracle;
 import org.aksw.limes.core.evaluation.oracle.OracleFactory;
 import org.aksw.limes.core.io.cache.Cache;
@@ -13,9 +7,18 @@ import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
+import org.apache.log4j.Logger;
+import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.Assert.assertTrue;
+
 /*import de.uni_leipzig.simba.genetics.util.OAEIMappingParser;
 import de.uni_leipzig.simba.genetics.util.PropMapper;
 import de.uni_leipzig.simba.io.ConfigReader;
@@ -23,12 +26,10 @@ import de.uni_leipzig.simba.io.rdfconfig.RDFConfigReader;
 import de.uni_leipzig.simba.learning.oracle.oracle.Oracle;
 import de.uni_leipzig.simba.learning.oracle.oracle.OracleFactory;
 import de.uni_leipzig.simba.selfconfig.Experiment;*/
-import org.apache.log4j.Logger;
-import org.junit.Test;
 
 /**
  * Class to grant central access to evaluation datasets.
- * 
+ *
  * @author Klaus Lyko
  * @author Mofeed Hassan
  */
@@ -36,132 +37,52 @@ public class DataSetChooser {
 
     static Logger logger = Logger.getLogger("LIMES");
 
-    /**
-     * Enumeration of the Hashmap keys for the evaluation datasets.
-     * 
-     * @author Klaus Lyko
-     */
-    enum MapKey {
-        /**
-         * Path to the folder holding the configuration XML and Property Mapping
-         * file.
-         **/
-        BASE_FOLDER("basefolder"),
-        /**
-         * Path to the folder holding the files for source, target dumps
-         * specified in the configuration XML.
-         **/
-        DATASET_FOLDER("datasetfolder"),
-        /** Name of the LIMES configuration XML file. **/
-        CONFIG_FILE("config"),
-        /**
-         * Name of the file with the reference mapping. Complete Path via
-         * concatenation with the BASE_FOLDER.
-         **/
-        REFERENCE_FILE("reference"),
-        /**
-         * Name of the file holding the source instances. Complete Path via
-         * concatenation with the BASE_FOLDER and DATASET_FOLDER.
-         **/
-        SOURCE_FILE("file1"),
-        /**
-         * Name of the file holding the target instances. Complete Path via
-         * concatenation with the BASE_FOLDER and DATASET_FOLDER.
-         **/
-        TARGET_FILE("file1"),
-        /** Path to the folder where the result files should be written. **/
-        EVALUATION_RESULTS_FOLDER("evalfolder"),
-        /** Common name of the evaluation result files. **/
-        EVALUATION_FILENAME("evalfilename"),
-        /** Name of the experiment. **/
-        NAME("name"),
-        /** Key of the field holding the Cache of the source. **/
-        SOURCE_CACHE("sourcecache"),
-        /** Key of the field holding the Cache of the target. **/
-        TARGET_CACHE("targetcache"),
-        /** Key of the field holding the PropertyMapping. **/
-        PROPERTY_MAPPING("propertymapping"),
-        /** Key of the field holding the reference mapping. **/
-        REFERENCE_MAPPING("referencemapping"),
-        /** MAX_RUNS **/
-        MAX_RUNS("maxruns"),
-        /** Instance of config reader **/
-        CONFIG_READER("configreader"),
-        /** Name of source class */
-        SOURCE_CLASS("sourceclass"),
-        /** Name of target class */
-        TARGET_CLASS("targetclass");
-        /**
-         * @param key
-         */
-        private MapKey(final String key) {
-            this.key = key;
-        }
-
-        private final String key;
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see java.lang.Enum#toString()
-         */
-        public String toString() {
-            return key;
-        }
-    }
-
-    public enum DataSets {
-        PERSON1, PERSON1_CSV, PERSON2, PERSON2_CSV, RESTAURANTS, OAEI2014BOOKS, RESTAURANTS_FIXED, DBLPACM, ABTBUY, DBLPSCHOLAR, AMAZONGOOGLEPRODUCTS, DBPLINKEDMDB, DRUGS, RESTAURANTS_CSV// ,TOWNS,
-                                                                                                                                                                                           // VILLAGES,
-                                                                                                                                                                                           // MOVIES
-    }
-
     public static EvaluationData getData(String dataSetName) {
         String d = dataSetName.replaceAll("-", "").toUpperCase();
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         switch (d) {
-        case "PERSON1":
-            param = getPerson1();
-            break;
-        case "PERSON2":
-            param = getPerson2();
-            break;
-        case "RESTAURANTS":
-            param = getRestaurant();
-            break;
-        case "RESTAURANTSFIXED":
-            param = getRestaurant();
-            break;
-        case "DBLPACM":
-            param = getDBLPACM();
-            break;
-        case "ABTBUY":
-            param = getAbtBuy();
-            break;
-        case "DBLPSCHOLAR":
-            param = getDBLPScholar();
-            break;
-        case "AMAZONGOOGLEPRODUCTS":
-            param = getAmazonGoogleProducts();
-            break;
-        case "DBPLINKEDMDB":
-            param = getDBPediaLinkedMDB();
-            break;
-        case "DRUGS":
-            param = getDrugs();
-            break;
-        case "PERSON1_CSV":
-            param = getPerson1CSV();
-            break;
-        case "PERSON2_CSV":
-            param = getPerson2CSV();
-            break;
-        case "RESTAURANTS_CSV":
-            param = getRestaurantCSV();
-            break;
-        case "OAEI2014BOOKS":
-            param = getOAEI2014Books();
-            break;
+            case "PERSON1":
+                param = getPerson1();
+                break;
+            case "PERSON2":
+                param = getPerson2();
+                break;
+            case "RESTAURANTS":
+                param = getRestaurant();
+                break;
+            case "RESTAURANTSFIXED":
+                param = getRestaurant();
+                break;
+            case "DBLPACM":
+                param = getDBLPACM();
+                break;
+            case "ABTBUY":
+                param = getAbtBuy();
+                break;
+            case "DBLPSCHOLAR":
+                param = getDBLPScholar();
+                break;
+            case "AMAZONGOOGLEPRODUCTS":
+                param = getAmazonGoogleProducts();
+                break;
+            case "DBPLINKEDMDB":
+                param = getDBPediaLinkedMDB();
+                break;
+            case "DRUGS":
+                param = getDrugs();
+                break;
+            case "PERSON1_CSV":
+                param = getPerson1CSV();
+                break;
+            case "PERSON2_CSV":
+                param = getPerson2CSV();
+                break;
+            case "RESTAURANTS_CSV":
+                param = getRestaurantCSV();
+                break;
+            case "OAEI2014BOOKS":
+                param = getOAEI2014Books();
+                break;
         /*
          * case "TOWNS": param = getTowns(); break; case "VILLAGES": param =
          * getVillages(); break; case "MOVIES": param = getMovies(); break;
@@ -170,7 +91,7 @@ public class DataSetChooser {
         param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
         param.put(MapKey.MAX_RUNS, 5);
         EvaluationData data = EvaluationData.buildFromHashMap(param);
-        Mapping fixed = fixReferenceMap(data.getReferenceMapping(), data.getSourceCache(), data.getTargetCache());
+        AMapping fixed = fixReferenceMap(data.getReferenceMapping(), data.getSourceCache(), data.getTargetCache());
         if (d.equals("RESTAURANTSFIXED")) {
             data.setReferenceMapping(fixed);
             data.setName("Restaurants_fixed");
@@ -180,103 +101,103 @@ public class DataSetChooser {
 
     /**
      * Central class to configure evaluation datasets.
-     * 
+     *
      * @param a
-     *            DataSets enum
+     *         DataSets enum
      * @return HashMap
-     *         <table>
-     *         <tr>
-     *         <th>String key</th>
-     *         <th>Object data</th>
-     *         </tr>
-     *         <tr>
-     *         <td>MapKey.BASE_FOLDER</td>
-     *         <td></td>
-     *         </tr>
-     *         <tr>
-     *         <td>MapKey.DATASET_FOLDER</td>
-     *         <td></td>
-     *         </tr>
-     *         <tr>
-     *         <td>MapKey.CONFIG_FILE</td>
-     *         <td></td>
-     *         </tr>
-     *         <tr>
-     *         <td>"referencepath"</td>
-     *         <td></td>
-     *         </tr>
-     *         <tr>
-     *         <td>MapKey.EVALUATION_RESULTS_FOLDER</td>
-     *         <td></td>
-     *         </tr>
-     *         <tr>
-     *         <td>MapKey.EVALUATION_FILENAME</td>
-     *         <td></td>
-     *         </tr>
-     * 
-     *         <tr>
-     *         <td>MapKey.SOURCE_CACHE</td>
-     *         <td>Source Cache</td>
-     *         </tr>
-     *         <tr>
-     *         <td>MapKey.TARGET_CACHE</td>
-     *         <td>Target Cache</td>
-     *         </tr>
-     *         <tr>
-     *         <td>MapKey.PROPERTY_MAPPING</td>
-     *         <td>PopertyMapping</td>
-     *         </tr>
-     *         <tr>
-     *         <td>MapKey.REFERENCE_MAPPING</td>
-     *         <td>Gold standard Mapping</td>
-     *         </tr>
-     *         </table>
+     * <table>
+     * <tr>
+     * <th>String key</th>
+     * <th>Object data</th>
+     * </tr>
+     * <tr>
+     * <td>MapKey.BASE_FOLDER</td>
+     * <td></td>
+     * </tr>
+     * <tr>
+     * <td>MapKey.DATASET_FOLDER</td>
+     * <td></td>
+     * </tr>
+     * <tr>
+     * <td>MapKey.CONFIG_FILE</td>
+     * <td></td>
+     * </tr>
+     * <tr>
+     * <td>"referencepath"</td>
+     * <td></td>
+     * </tr>
+     * <tr>
+     * <td>MapKey.EVALUATION_RESULTS_FOLDER</td>
+     * <td></td>
+     * </tr>
+     * <tr>
+     * <td>MapKey.EVALUATION_FILENAME</td>
+     * <td></td>
+     * </tr>
+     * <p>
+     * <tr>
+     * <td>MapKey.SOURCE_CACHE</td>
+     * <td>Source Cache</td>
+     * </tr>
+     * <tr>
+     * <td>MapKey.TARGET_CACHE</td>
+     * <td>Target Cache</td>
+     * </tr>
+     * <tr>
+     * <td>MapKey.PROPERTY_MAPPING</td>
+     * <td>PopertyMapping</td>
+     * </tr>
+     * <tr>
+     * <td>MapKey.REFERENCE_MAPPING</td>
+     * <td>Gold standard Mapping</td>
+     * </tr>
+     * </table>
      */
     public static EvaluationData getData(DataSets a) {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         switch (a) {
-        case PERSON1:
-            param = getPerson1();
-            break;
-        case PERSON2:
-            param = getPerson2();
-            break;
-        case RESTAURANTS:
-            param = getRestaurant();
-            break;
-        case RESTAURANTS_FIXED:
-            param = getRestaurant();
-            break;
-        case DBLPACM:
-            param = getDBLPACM();
-            break;
-        case ABTBUY:
-            param = getAbtBuy();
-            break;
-        case DBLPSCHOLAR:
-            param = getDBLPScholar();
-            break;
-        case AMAZONGOOGLEPRODUCTS:
-            param = getAmazonGoogleProducts();
-            break;
-        case DBPLINKEDMDB:
-            param = getDBPediaLinkedMDB();
-            break;
-        case DRUGS:
-            param = getDrugs();
-            break;
-        case PERSON1_CSV:
-            param = getPerson1CSV();
-            break;
-        case PERSON2_CSV:
-            param = getPerson2CSV();
-            break;
-        case RESTAURANTS_CSV:
-            param = getRestaurantCSV();
-            break;
-        case OAEI2014BOOKS:
-            param = getOAEI2014Books();
-            break;
+            case PERSON1:
+                param = getPerson1();
+                break;
+            case PERSON2:
+                param = getPerson2();
+                break;
+            case RESTAURANTS:
+                param = getRestaurant();
+                break;
+            case RESTAURANTS_FIXED:
+                param = getRestaurant();
+                break;
+            case DBLPACM:
+                param = getDBLPACM();
+                break;
+            case ABTBUY:
+                param = getAbtBuy();
+                break;
+            case DBLPSCHOLAR:
+                param = getDBLPScholar();
+                break;
+            case AMAZONGOOGLEPRODUCTS:
+                param = getAmazonGoogleProducts();
+                break;
+            case DBPLINKEDMDB:
+                param = getDBPediaLinkedMDB();
+                break;
+            case DRUGS:
+                param = getDrugs();
+                break;
+            case PERSON1_CSV:
+                param = getPerson1CSV();
+                break;
+            case PERSON2_CSV:
+                param = getPerson2CSV();
+                break;
+            case RESTAURANTS_CSV:
+                param = getRestaurantCSV();
+                break;
+            case OAEI2014BOOKS:
+                param = getOAEI2014Books();
+                break;
         /*
          * case TOWNS: param = getTowns(); break; case VILLAGES: param =
          * getVillages(); break; case MOVIES: param = getMovies(); break;
@@ -287,7 +208,7 @@ public class DataSetChooser {
         param.put(MapKey.MAX_RUNS, 5);
         EvaluationData data = EvaluationData.buildFromHashMap(param);
         if (a.equals(DataSets.RESTAURANTS_FIXED)) {
-            Mapping fixed = fixReferenceMap(data.getReferenceMapping(), data.getSourceCache(), data.getTargetCache());
+            AMapping fixed = fixReferenceMap(data.getReferenceMapping(), data.getSourceCache(), data.getTargetCache());
             data.setReferenceMapping(fixed);
             data.setName("Restaurants_fixed");
         }
@@ -333,10 +254,10 @@ public class DataSetChooser {
         param.put(MapKey.BASE_FOLDER, "resources/");
         param.put(MapKey.DATASET_FOLDER, "resources/DB-LINKGEODATA_VILLAGES/");
         param.put(MapKey.CONFIG_FILE, "dbpedia_linkedgeodata_villages.ttl"); // TODO:
-                                                                             // CREATE
-                                                                             // AND
-                                                                             // ADD
-                                                                             // THIS
+        // CREATE
+        // AND
+        // ADD
+        // THIS
         param.put(MapKey.REFERENCE_FILE, null);
         param.put(MapKey.SOURCE_FILE, "villagesDB.ttl");
         param.put(MapKey.TARGET_FILE, "villagesLINKGEODATA.ttl");
@@ -367,10 +288,10 @@ public class DataSetChooser {
         param.put(MapKey.BASE_FOLDER, "resources/");
         param.put(MapKey.DATASET_FOLDER, "resources/DB-LINKGEODATA_TOWNS/");
         param.put(MapKey.CONFIG_FILE, "dbpedia_linkedgeodata_towns.ttl"); // TODO:
-                                                                          // CREATE
-                                                                          // AND
-                                                                          // ADD
-                                                                          // THIS
+        // CREATE
+        // AND
+        // ADD
+        // THIS
         param.put(MapKey.REFERENCE_FILE, null);
         param.put(MapKey.SOURCE_FILE, "townsDB.ttl");
         param.put(MapKey.TARGET_FILE, "townsLINKGEODATA.ttl");
@@ -859,6 +780,19 @@ public class DataSetChooser {
         return param;
     }
 
+    public static Set<MapKey> getLoggingKeys() {
+        HashSet<MapKey> set = new HashSet<MapKey>();
+        set.add(MapKey.NAME);
+        return set;
+    }
+
+    /**
+     * Static getter for the common evaluation folder,
+     */
+    public static String getEvalFolder() {
+        return "resources/results/";
+    }
+
     /*
      * public static void main(String args[]) { // for(DataSets ds :
      * DataSets.values()) // getData(ds); // // EvaluationData data =
@@ -873,45 +807,21 @@ public class DataSetChooser {
      * "RefMap fixed size="+fixedRest.getReferenceMapping().size()); }
      */
 
-    public static Set<MapKey> getLoggingKeys() {
-        HashSet<MapKey> set = new HashSet<MapKey>();
-        set.add(MapKey.NAME);
-        return set;
-    }
-
-    /**
-     * Static getter for the common evaluation folder,
-     */
-    public static String getEvalFolder() {
-        return "resources/results/";
-    }
-
-    @Test
-    public void testAll() {
-        try {
-            for (DataSets ds : DataSets.values())
-                getData(ds);
-        } catch (Exception e) {
-            assertTrue(false);
-        }
-        assertTrue(true);
-    }
-
     /**
      * Method to remove mapping which corresponding instance doesn't exist.
-     * 
+     *
      * @param original
-     *            Mapping original Mapping.
+     *         Mapping original Mapping.
      * @param sC
-     *            Source Cache.
+     *         Source Cache.
      * @param tC
-     *            Target Cache.
+     *         Target Cache.
      * @return A Mapping holding only those mappings of the original for which
-     *         instance where found in the source or target Caches.
+     * instance where found in the source or target Caches.
      */
-    public static Mapping fixReferenceMap(Mapping original, Cache sC, Cache tC) {
+    public static AMapping fixReferenceMap(AMapping original, Cache sC, Cache tC) {
         int count = 0;
-        Mapping fixed = MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
+        AMapping fixed = MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
         for (String sk : original.getMap().keySet()) {
             if (sC.containsUri(sk)) {
                 for (String tk : original.getMap().get(sk).keySet()) {
@@ -927,6 +837,122 @@ public class DataSetChooser {
         }
         logger.info("Removed " + count + " mappings as the instances are not found in the Caches");
         return fixed;
+    }
+
+    @Test
+    public void testAll() {
+        try {
+            for (DataSets ds : DataSets.values())
+                getData(ds);
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+        assertTrue(true);
+    }
+
+    /**
+     * Enumeration of the Hashmap keys for the evaluation datasets.
+     *
+     * @author Klaus Lyko
+     */
+    enum MapKey {
+        /**
+         * Path to the folder holding the configuration XML and Property Mapping
+         * file.
+         **/
+        BASE_FOLDER("basefolder"),
+        /**
+         * Path to the folder holding the files for source, target dumps
+         * specified in the configuration XML.
+         **/
+        DATASET_FOLDER("datasetfolder"),
+        /**
+         * Name of the LIMES configuration XML file.
+         **/
+        CONFIG_FILE("config"),
+        /**
+         * Name of the file with the reference mapping. Complete Path via
+         * concatenation with the BASE_FOLDER.
+         **/
+        REFERENCE_FILE("reference"),
+        /**
+         * Name of the file holding the source instances. Complete Path via
+         * concatenation with the BASE_FOLDER and DATASET_FOLDER.
+         **/
+        SOURCE_FILE("file1"),
+        /**
+         * Name of the file holding the target instances. Complete Path via
+         * concatenation with the BASE_FOLDER and DATASET_FOLDER.
+         **/
+        TARGET_FILE("file1"),
+        /**
+         * Path to the folder where the result files should be written.
+         **/
+        EVALUATION_RESULTS_FOLDER("evalfolder"),
+        /**
+         * Common name of the evaluation result files.
+         **/
+        EVALUATION_FILENAME("evalfilename"),
+        /**
+         * Name of the experiment.
+         **/
+        NAME("name"),
+        /**
+         * Key of the field holding the Cache of the source.
+         **/
+        SOURCE_CACHE("sourcecache"),
+        /**
+         * Key of the field holding the Cache of the target.
+         **/
+        TARGET_CACHE("targetcache"),
+        /**
+         * Key of the field holding the PropertyMapping.
+         **/
+        PROPERTY_MAPPING("propertymapping"),
+        /**
+         * Key of the field holding the reference mapping.
+         **/
+        REFERENCE_MAPPING("referencemapping"),
+        /**
+         * MAX_RUNS
+         **/
+        MAX_RUNS("maxruns"),
+        /**
+         * Instance of config reader
+         **/
+        CONFIG_READER("configreader"),
+        /**
+         * Name of source class
+         */
+        SOURCE_CLASS("sourceclass"),
+        /**
+         * Name of target class
+         */
+        TARGET_CLASS("targetclass");
+
+        private final String key;
+
+        /**
+         * @param key
+         */
+        private MapKey(final String key) {
+            this.key = key;
+        }
+
+        /*
+         * (non-Javadoc)
+         *
+         * @see java.lang.Enum#toString()
+         */
+        public String toString() {
+            return key;
+        }
+    }
+
+    public enum DataSets {
+        PERSON1, PERSON1_CSV, PERSON2, PERSON2_CSV, RESTAURANTS, OAEI2014BOOKS, RESTAURANTS_FIXED, DBLPACM, ABTBUY, DBLPSCHOLAR, AMAZONGOOGLEPRODUCTS, DBPLINKEDMDB, DRUGS, RESTAURANTS_CSV// ,TOWNS,
+        // VILLAGES,
+        // MOVIES
     }
 
 }

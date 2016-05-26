@@ -4,12 +4,11 @@
  */
 package org.aksw.limes.core.measures.measure.string;
 
-import java.util.TreeSet;
-
 import org.aksw.limes.core.io.cache.Instance;
 
+import java.util.TreeSet;
+
 /**
- *
  * @author ngonga
  */
 public class TrigramMeasure extends StringMeasure {

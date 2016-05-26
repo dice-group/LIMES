@@ -7,71 +7,73 @@ import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.apache.log4j.Logger;
 
 /**
- * @deprecated use {@link ACoreMLAlgorithm} instead
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @author Klaus Lyko
  * @version 2015-11-09
- *
+ * @deprecated use {@link ACoreMLAlgorithm} instead
  */
 @Deprecated
 public abstract class MLAlgorithm implements IMLAlgorithm {
-	
-	protected Configuration configuration;
-	protected Cache sourceCache;
-	protected Cache targetCache;
-	static Logger logger = Logger.getLogger(MLAlgorithm.class.getName());
 
-	/**
-	 * @param sourceCache
-	 * @param targetCache
-	 * @param configuration
-	 */
-	protected MLAlgorithm(Cache sourceCache, Cache targetCache, Configuration configuration) {//, Mapping mapping) {
-		super();
-		this.setSourceCache(sourceCache);
-		this.setTargetCache(targetCache);
-		this.setConfiguration(configuration);
-	}
+    static Logger logger = Logger.getLogger(MLAlgorithm.class.getName());
+    protected Configuration configuration;
+    protected Cache sourceCache;
+    protected Cache targetCache;
 
-	/**
-	 * @return the LIMES configuration
-	 */
-	public Configuration getConfiguration() {
-		return configuration;
-	}
+    /**
+     * @param sourceCache
+     * @param targetCache
+     * @param configuration
+     */
+    protected MLAlgorithm(Cache sourceCache, Cache targetCache, Configuration configuration) {//, Mapping mapping) {
+        super();
+        this.setSourceCache(sourceCache);
+        this.setTargetCache(targetCache);
+        this.setConfiguration(configuration);
+    }
 
-	/**
-	 * @param configuration the LIMES configuration
-	 */
-	public void setConfiguration(Configuration configuration) {
-		this.configuration = configuration;
-	}
+    /**
+     * @return the LIMES configuration
+     */
+    public Configuration getConfiguration() {
+        return configuration;
+    }
 
-	/**
-	 * @return the source dataset cache
-	 */
-	public Cache getSourceCache() {
-		return sourceCache;
-	}
+    /**
+     * @param configuration
+     *         the LIMES configuration
+     */
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
+    }
 
-	/**
-	 * @param sourceCache the source dataset cache
-	 */
-	public void setSourceCache(Cache sourceCache) {
-		this.sourceCache = sourceCache;
-	}
+    /**
+     * @return the source dataset cache
+     */
+    public Cache getSourceCache() {
+        return sourceCache;
+    }
 
-	/**
-	 * @return the target dataset cache
-	 */
-	public Cache getTargetCache() {
-		return targetCache;
-	}
+    /**
+     * @param sourceCache
+     *         the source dataset cache
+     */
+    public void setSourceCache(Cache sourceCache) {
+        this.sourceCache = sourceCache;
+    }
 
-	/**
-	 * @param targetCache the target dataset cache
-	 */
-	public void setTargetCache(Cache targetCache) {
-		this.targetCache = targetCache;
-	}
+    /**
+     * @return the target dataset cache
+     */
+    public Cache getTargetCache() {
+        return targetCache;
+    }
+
+    /**
+     * @param targetCache
+     *         the target dataset cache
+     */
+    public void setTargetCache(Cache targetCache) {
+        this.targetCache = targetCache;
+    }
 }

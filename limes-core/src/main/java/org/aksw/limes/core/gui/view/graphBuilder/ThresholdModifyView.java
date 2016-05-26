@@ -15,137 +15,137 @@ import javafx.stage.Stage;
 
 public class ThresholdModifyView {
 
-	private Label acceptanceThresholdlabel = null;
-	private TextField acceptanceThresholdinput = null;
+    private Label acceptanceThresholdlabel = null;
+    private TextField acceptanceThresholdinput = null;
 
-	// TODO let user choose relation of thresholds using
-	// ConfigReader.verificationRelation or ConfigReader.acceptanceRelation
-	public ThresholdModifyView(GraphBuildView gbv, NodeView node) {
-		Stage stage = new Stage();
-		VBox root = new VBox();
+    // TODO let user choose relation of thresholds using
+    // ConfigReader.verificationRelation or ConfigReader.acceptanceRelation
+    public ThresholdModifyView(GraphBuildView gbv, NodeView node) {
+        Stage stage = new Stage();
+        VBox root = new VBox();
 
-		HBox verThresh = new HBox(25);
-		HBox accThresh = new HBox(23);
-		HBox buttons = new HBox(100);
+        HBox verThresh = new HBox(25);
+        HBox accThresh = new HBox(23);
+        HBox buttons = new HBox(100);
 
-		String verThreshLabeltext = "";
-		String accThreshLabeltext = "";
+        String verThreshLabeltext = "";
+        String accThreshLabeltext = "";
 
-		if (node.nodeShape == NodeView.OPERATOR) {
-			verThreshLabeltext = node.nodeData.getChilds().get(0).id
-					+ " threshold: ";
-			if (node.nodeData.getChilds().size() != 1) {
-				accThreshLabeltext = node.nodeData.getChilds().get(1).id
-						+ " threshold: ";
-			}
-		} else {
-			verThreshLabeltext = "Verification threshold: ";
-			accThreshLabeltext = "Acceptance threshold: ";
-		}
-		int index = gbv.nodeList.indexOf(node);
-		Label verificationThresholdlabel = new Label(verThreshLabeltext);
-		TextField verificationThresholdinput = new TextField();
-		verificationThresholdinput.setPromptText("value between 0 and 1");
-		verThresh.getChildren().addAll(verificationThresholdlabel,
-				verificationThresholdinput);
-		if (!(node.nodeShape == NodeView.OPERATOR && node.nodeData.getChilds()
-				.size() == 1)) {
-			acceptanceThresholdlabel = new Label(accThreshLabeltext);
-			acceptanceThresholdinput = new TextField();
-			acceptanceThresholdinput.setPromptText("value between 0 and 1");
-			accThresh.getChildren().addAll(acceptanceThresholdlabel,
-					acceptanceThresholdinput);
-		}
-		Button save = new Button("Save");
-		save.setOnAction(new EventHandler<ActionEvent>() {
+        if (node.nodeShape == NodeView.OPERATOR) {
+            verThreshLabeltext = node.nodeData.getChilds().get(0).id
+                    + " threshold: ";
+            if (node.nodeData.getChilds().size() != 1) {
+                accThreshLabeltext = node.nodeData.getChilds().get(1).id
+                        + " threshold: ";
+            }
+        } else {
+            verThreshLabeltext = "Verification threshold: ";
+            accThreshLabeltext = "Acceptance threshold: ";
+        }
+        int index = gbv.nodeList.indexOf(node);
+        Label verificationThresholdlabel = new Label(verThreshLabeltext);
+        TextField verificationThresholdinput = new TextField();
+        verificationThresholdinput.setPromptText("value between 0 and 1");
+        verThresh.getChildren().addAll(verificationThresholdlabel,
+                verificationThresholdinput);
+        if (!(node.nodeShape == NodeView.OPERATOR && node.nodeData.getChilds()
+                .size() == 1)) {
+            acceptanceThresholdlabel = new Label(accThreshLabeltext);
+            acceptanceThresholdinput = new TextField();
+            acceptanceThresholdinput.setPromptText("value between 0 and 1");
+            accThresh.getChildren().addAll(acceptanceThresholdlabel,
+                    acceptanceThresholdinput);
+        }
+        Button save = new Button("Save");
+        save.setOnAction(new EventHandler<ActionEvent>() {
 
-			@Override
-			public void handle(ActionEvent e) {
-				if (node.nodeShape == NodeView.OPERATOR
-						&& node.nodeData.getChilds().size() == 1) {
-					if ((verificationThresholdinput.getText() != null && !verificationThresholdinput
-							.getText().isEmpty())) {
+            @Override
+            public void handle(ActionEvent e) {
+                if (node.nodeShape == NodeView.OPERATOR
+                        && node.nodeData.getChilds().size() == 1) {
+                    if ((verificationThresholdinput.getText() != null && !verificationThresholdinput
+                            .getText().isEmpty())) {
 
-						try {
-							String acc = verificationThresholdinput.getText()
-									.replaceAll(",", ".");
-							gbv.nodeList.get(index).nodeData.param1 = Double
-									.parseDouble(acc);
-						} catch (NumberFormatException exc) {
-							Alert alert = new Alert(AlertType.INFORMATION);
-							alert.setContentText("Value is not legitimate!");
-							alert.showAndWait();
-						}
+                        try {
+                            String acc = verificationThresholdinput.getText()
+                                    .replaceAll(",", ".");
+                            gbv.nodeList.get(index).nodeData.param1 = Double
+                                    .parseDouble(acc);
+                        } catch (NumberFormatException exc) {
+                            Alert alert = new Alert(AlertType.INFORMATION);
+                            alert.setContentText("Value is not legitimate!");
+                            alert.showAndWait();
+                        }
 
-					} else {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setContentText("You have not entered a value!");
-						alert.showAndWait();
-					}
-					if (gbv.nodeList.get(index).nodeData.param1 != null) {
-						stage.close();
-						gbv.draw();
-					}
-				} else {
-					if ((acceptanceThresholdinput.getText() != null
-							&& !acceptanceThresholdinput.getText().isEmpty()
-							&& verificationThresholdinput.getText() != null && !verificationThresholdinput
-							.getText().isEmpty())) {
-						try {
-							String acc = acceptanceThresholdinput.getText()
-									.replaceAll(",", ".");
-							gbv.nodeList.get(index).nodeData.param1 = Double
-									.parseDouble(acc);
-							String ver = verificationThresholdinput.getText()
-									.replaceAll(",", ".");
-							gbv.nodeList.get(index).nodeData.param2 = Double
-									.parseDouble(ver);
-						} catch (NumberFormatException exc) {
-							Alert alert = new Alert(AlertType.INFORMATION);
-							alert.setContentText("Values are not legitimate!");
-							alert.showAndWait();
-						}
+                    } else {
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setContentText("You have not entered a value!");
+                        alert.showAndWait();
+                    }
+                    if (gbv.nodeList.get(index).nodeData.param1 != null) {
+                        stage.close();
+                        gbv.draw();
+                    }
+                } else {
+                    if ((acceptanceThresholdinput.getText() != null
+                            && !acceptanceThresholdinput.getText().isEmpty()
+                            && verificationThresholdinput.getText() != null && !verificationThresholdinput
+                            .getText().isEmpty())) {
+                        try {
+                            String acc = acceptanceThresholdinput.getText()
+                                    .replaceAll(",", ".");
+                            gbv.nodeList.get(index).nodeData.param1 = Double
+                                    .parseDouble(acc);
+                            String ver = verificationThresholdinput.getText()
+                                    .replaceAll(",", ".");
+                            gbv.nodeList.get(index).nodeData.param2 = Double
+                                    .parseDouble(ver);
+                        } catch (NumberFormatException exc) {
+                            Alert alert = new Alert(AlertType.INFORMATION);
+                            alert.setContentText("Values are not legitimate!");
+                            alert.showAndWait();
+                        }
 
-					} else {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setContentText("Entered values are incomplete!");
-						alert.showAndWait();
-					}
+                    } else {
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setContentText("Entered values are incomplete!");
+                        alert.showAndWait();
+                    }
 
-					if (gbv.nodeList.get(index).nodeData.param1 != null
-							&& gbv.nodeList.get(index).nodeData.param2 != null) {
-						stage.close();
-						gbv.draw();
-					}
-				}
-			}
-		});
+                    if (gbv.nodeList.get(index).nodeData.param1 != null
+                            && gbv.nodeList.get(index).nodeData.param2 != null) {
+                        stage.close();
+                        gbv.draw();
+                    }
+                }
+            }
+        });
 
-		Button cancel = new Button("Cancel");
-		cancel.setOnAction(new EventHandler<ActionEvent>() {
+        Button cancel = new Button("Cancel");
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
 
-			@Override
-			public void handle(ActionEvent e) {
-				stage.close();
-			}
-		});
+            @Override
+            public void handle(ActionEvent e) {
+                stage.close();
+            }
+        });
 
-		buttons.getChildren().addAll(save, cancel);
-		buttons.setPadding(new Insets(5, 50, 1, 50));
-		buttons.setSpacing(120);
+        buttons.getChildren().addAll(save, cancel);
+        buttons.setPadding(new Insets(5, 50, 1, 50));
+        buttons.setSpacing(120);
 
-		if (!(node.nodeShape == NodeView.OPERATOR && node.nodeData.getChilds()
-				.size() == 1)) {
-			root.getChildren().addAll(verThresh, accThresh, buttons);
-		} else {
-			root.getChildren().addAll(verThresh, buttons);
-		}
-		root.setPadding(new Insets(5, 5, 5, 5));
-		Scene scene = new Scene(root);
-		stage.setTitle("Modify Thresholds");
-		stage.setResizable(false);
-		stage.setScene(scene);
-		stage.show();
-	}
+        if (!(node.nodeShape == NodeView.OPERATOR && node.nodeData.getChilds()
+                .size() == 1)) {
+            root.getChildren().addAll(verThresh, accThresh, buttons);
+        } else {
+            root.getChildren().addAll(verThresh, buttons);
+        }
+        root.setPadding(new Insets(5, 5, 5, 5));
+        Scene scene = new Scene(root);
+        stage.setTitle("Modify Thresholds");
+        stage.setResizable(false);
+        stage.setScene(scene);
+        stage.show();
+    }
 
 }

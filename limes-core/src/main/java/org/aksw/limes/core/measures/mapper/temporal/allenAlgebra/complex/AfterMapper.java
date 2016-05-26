@@ -1,16 +1,12 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.AllenAlgebraMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.BeginEnd;
+
+import java.util.*;
 
 public class AfterMapper extends AllenAlgebraMapper {
     Cache source;
@@ -28,8 +24,8 @@ public class AfterMapper extends AllenAlgebraMapper {
     }
 
     @Override
-    public Mapping getMapping(ArrayList<TreeMap<String, Set<String>>> maps) {
-        Mapping m = MappingFactory.createDefaultMapping();
+    public AMapping getMapping(ArrayList<TreeMap<String, Set<String>>> maps) {
+        AMapping m = MappingFactory.createDefaultMapping();
         TreeMap<String, Set<String>> mapBE0 = maps.get(0);
         TreeMap<String, Set<String>> mapBE1 = maps.get(1);
 
@@ -61,8 +57,8 @@ public class AfterMapper extends AllenAlgebraMapper {
     }
 
     @Override
-    public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-            double threshold) {
+    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+                               double threshold) {
         this.source = source;
         this.target = target;
         ArrayList<TreeMap<String, Set<String>>> maps = new ArrayList<TreeMap<String, Set<String>>>();
@@ -72,7 +68,7 @@ public class AfterMapper extends AllenAlgebraMapper {
         maps.add(be.getConcurrentEvents(source, target, expression));
         maps.add(be.getPredecessorEvents(source, target, expression));
 
-        Mapping m = getMapping(maps);
+        AMapping m = getMapping(maps);
         return m;
     }
 

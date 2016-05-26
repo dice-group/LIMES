@@ -1,31 +1,26 @@
 package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 /**
  * Abstract class of temporal relations mappers.
- * 
+ *
  * @author kleanthi
  */
 public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemporalMapper {
 
     /**
      * Extract first property (beginDate) from metric expression.
-     * 
+     *
      * @param expression,
-     *            metric expression
-     * 
+     *         metric expression
      * @return first property of metric expression as string
      */
     protected String getFirstProperty(String properties) {
@@ -40,11 +35,11 @@ public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemp
 
     /**
      * Extract second property (machineID) from metric expression.
-     * 
+     *
      * @param expression,
-     *            the metric expression
-     * @throws IllegalArgumentException
+     *         the metric expression
      * @return second property of metric expression as string
+     * @throws IllegalArgumentException
      */
     protected String getSecondProperty(String properties) throws IllegalArgumentException {
         properties = properties.substring(properties.indexOf(".") + 1, properties.length());
@@ -61,15 +56,13 @@ public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemp
      * instance, it retrieves its begin date property, converts its value to an
      * epoch (string) using the SimpleDateFormat function and places the
      * instance inside the corresponding set("bucket") of instances.
-     * 
+     *
      * @param cache,
-     *            the cache of instances
-     * 
+     *         the cache of instances
      * @param expression,
-     *            the metric expression
-     * 
+     *         the metric expression
      * @return blocks, a map of sets with unique begin dates as keys and set of
-     *         instances as values
+     * instances as values
      */
     protected TreeMap<String, Set<Instance>> orderByBeginDate(Cache cache, String expression) {
 

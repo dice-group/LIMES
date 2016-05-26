@@ -1,16 +1,16 @@
 package org.aksw.limes.core.execution.planning.plan;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implements execution plan that is given to an execution engine. Note that the
  * subPlans fields is set to null by the instructor. Before adding a subplan for
  * the first time, the subPlans field must be initiated.
- * 
+ *
  * @author ngonga
  * @author kleanthi
  */
@@ -28,7 +28,7 @@ public class NestedPlan extends Plan {
 
     /**
      * Returns the set of sub-Plans of the plan
-     * 
+     *
      * @return subPlans
      */
     public List<NestedPlan> getSubPlans() {
@@ -37,9 +37,9 @@ public class NestedPlan extends Plan {
 
     /**
      * Set the sub-Plans of the plan
-     * 
+     *
      * @param subPlans
-     *            to set
+     *         to set
      */
     public void setSubPlans(List<NestedPlan> subPlans) {
         this.subPlans = subPlans;
@@ -47,7 +47,7 @@ public class NestedPlan extends Plan {
 
     /**
      * Returns the operator of the plan
-     * 
+     *
      * @return operator
      */
     public Command getOperator() {
@@ -56,9 +56,9 @@ public class NestedPlan extends Plan {
 
     /**
      * Set the operator of the plan
-     * 
+     *
      * @param operator
-     *            to set
+     *         to set
      */
     public void setOperator(Command operator) {
         this.operator = operator;
@@ -66,7 +66,7 @@ public class NestedPlan extends Plan {
 
     /**
      * Returns the filtering Instruction of the plan
-     * 
+     *
      * @return filteringInstruction
      */
     public Instruction getFilteringInstruction() {
@@ -75,9 +75,9 @@ public class NestedPlan extends Plan {
 
     /**
      * Set the filtering Instruction of the plan
-     * 
+     *
      * @param filteringInstruction
-     *            to set
+     *         to set
      */
     public void setFilteringInstruction(Instruction filteringInstruction) {
         this.filteringInstruction = filteringInstruction;
@@ -93,7 +93,7 @@ public class NestedPlan extends Plan {
 
     /**
      * Checks whether the current NestedPlan is atomic or not.
-     * 
+     *
      * @return true, if current NestedPlan is atomic. false, if otherwise
      */
     public boolean isAtomic() {
@@ -131,7 +131,7 @@ public class NestedPlan extends Plan {
 
     /**
      * Generates a clone of the current NestedPlan
-     * 
+     *
      * @return clone, clone of current NestedPlan
      */
     public NestedPlan clone() {
@@ -181,9 +181,9 @@ public class NestedPlan extends Plan {
     /**
      * Adds a sub-Plan to the current list of subPlans, if there is no list one
      * will be created
-     * 
+     *
      * @param subplan
-     *            to be added
+     *         to be added
      */
     public void addSubplan(NestedPlan subplan) {
         if (subplan != null) {
@@ -195,7 +195,7 @@ public class NestedPlan extends Plan {
 
     /**
      * Get all the metric expressions of the current NestedPlan
-     * 
+     *
      * @return List of all metric expressions
      */
     public List<String> getAllMeasures() {
@@ -225,7 +225,7 @@ public class NestedPlan extends Plan {
 
     /**
      * String representation of NestedPlan
-     * 
+     *
      * @return NestedPlan as string
      */
     public String toString() {
@@ -307,7 +307,7 @@ public class NestedPlan extends Plan {
 
     /**
      * String representation of NestedPlan as a set of commands
-     * 
+     *
      * @return NestedPlan as a set of commands
      */
     public String finalPlan() {

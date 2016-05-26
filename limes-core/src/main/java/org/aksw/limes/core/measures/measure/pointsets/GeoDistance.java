@@ -11,13 +11,14 @@ import org.aksw.limes.core.measures.measure.space.SpaceMeasure;
  * Computes a similarity based on the geo distance of two points. Assumes that the
  * input consists of latitute and longitude of two points. The similarity is computed
  * as 1/(1+d) where d is the distance between the two points.
+ *
  * @author ngonga
  */
 public class GeoDistance extends SpaceMeasure {
 
-    int dimension = 2;
     private static double D2R = Math.PI / 180;
     private static double radius = 6367;
+    int dimension = 2;
 
     public void setDimension(int n) {
         dimension = n;
@@ -25,7 +26,7 @@ public class GeoDistance extends SpaceMeasure {
 
     public double getThreshold(int dimension, double simThreshold) {
         //transforms the similarity threshold into an angular threshold
-        return (1 - simThreshold)/(radius * simThreshold);
+        return (1 - simThreshold) / (radius * simThreshold);
     }
 
     //assume lat|long
@@ -82,6 +83,6 @@ public class GeoDistance extends SpaceMeasure {
     }
 
     public double getRuntimeApproximation(double mappingSize) {
-	return mappingSize / 1000d;
+        return mappingSize / 1000d;
     }
 }

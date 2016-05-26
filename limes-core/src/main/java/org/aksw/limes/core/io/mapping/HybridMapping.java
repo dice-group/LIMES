@@ -6,63 +6,62 @@ import java.util.HashMap;
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 12, 2015
  */
-public class HybridMapping extends Mapping {
+public class HybridMapping extends AMapping {
 
     public HybridMapping reverseSourceTarget() {
-	// TODO Auto-generated method stub
-	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
 
     public int size() {
-	// TODO Auto-generated method stub
-	return 0;
+        // TODO Auto-generated method stub
+        return 0;
     }
 
     public void add(String key, String value, Double double1) {
-	// TODO Auto-generated method stub
-	
+        // TODO Auto-generated method stub
+
     }
 
     public void add(String key, HashMap<String, Double> hashMap) {
-	// TODO Auto-generated method stub
-	
+        // TODO Auto-generated method stub
+
     }
 
     public double getConfidence(String key, String value) {
-	// TODO Auto-generated method stub
-	return 0.0d;
+        // TODO Auto-generated method stub
+        return 0.0d;
     }
 
     @Override
     public void add(String key, String value, double sim) {
-	// TODO Auto-generated method stub
-	
+        // TODO Auto-generated method stub
+
     }
 
     @Override
     public int getNumberofMappings() {
-	// TODO Auto-generated method stub
-	return 0;
+        // TODO Auto-generated method stub
+        return 0;
     }
 
     @Override
     public boolean contains(String key, String value) {
-	// TODO Auto-generated method stub
-	return false;
+        // TODO Auto-generated method stub
+        return false;
     }
 
-	@Override
-	public Mapping getBestOneToNMapping() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public AMapping getBestOneToNMapping() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Mapping getSubMap(double threshold) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public AMapping getSubMap(double threshold) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	
 
 }

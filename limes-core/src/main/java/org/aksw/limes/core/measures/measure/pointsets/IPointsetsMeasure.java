@@ -4,21 +4,20 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets;
 
-import java.util.Set;
-
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.IMeasure;
 
+import java.util.Set;
+
 /**
- *
  * @author ngonga
  */
 public interface IPointsetsMeasure extends IMeasure {
 
     public double computeDistance(Polygon X, Polygon Y, double threshold);
 
-    public Mapping run(Set<Polygon> source, Set<Polygon> target, double threshold);
+    public AMapping run(Set<Polygon> source, Set<Polygon> target, double threshold);
 
     public int getComputations();
 

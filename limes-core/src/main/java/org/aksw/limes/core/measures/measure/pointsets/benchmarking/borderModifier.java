@@ -4,12 +4,12 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.benchmarking;
 
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
 /**
  * In order not to generate a self intersecting modified polygons, in this
@@ -25,36 +25,36 @@ public class borderModifier extends AbstractPolygonModifier {
      * +threshold to its latitude and longitude
      *
      * @param poly
-     *            Polygon to modify
+     *         Polygon to modify
      * @param threshold
-     *            Error range
+     *         Error range
      * @return Modified polygon with the same name
      */
     public Polygon modify(Polygon poly, double threshold) {
-	if (poly.points.size() <= 2) {
-	    return (new MeasurementErrorModifier()).modify(poly, 1.0);
-	}
-	Polygon result = new Polygon(poly.uri);
-	List<Point> points = new ArrayList<Point>();
-	for (int i = 0; i < poly.points.size(); i++) {
-	    double x1 = poly.points.get(i).coordinates.get(0), y1 = poly.points.get(i).coordinates.get(1),
-		    x2 = poly.points.get((i + 1) % poly.points.size()).coordinates.get(0),
-		    y2 = poly.points.get((i + 1) % poly.points.size()).coordinates.get(1);
+        if (poly.points.size() <= 2) {
+            return (new MeasurementErrorModifier()).modify(poly, 1.0);
+        }
+        Polygon result = new Polygon(poly.uri);
+        List<Point> points = new ArrayList<Point>();
+        for (int i = 0; i < poly.points.size(); i++) {
+            double x1 = poly.points.get(i).coordinates.get(0), y1 = poly.points.get(i).coordinates.get(1),
+                    x2 = poly.points.get((i + 1) % poly.points.size()).coordinates.get(0),
+                    y2 = poly.points.get((i + 1) % poly.points.size()).coordinates.get(1);
 
-	    double t = threshold; // Math.random();
-	    double x = x1 + (x2 - x1) * t;
-	    double y = y1 + (y2 - y1) * t;
-	    List<Double> coordinates = new ArrayList<Double>(Arrays.asList(x, y));
-	    points.add(new Point(poly.points.get(i).label, coordinates));
+            double t = threshold; // Math.random();
+            double x = x1 + (x2 - x1) * t;
+            double y = y1 + (y2 - y1) * t;
+            List<Double> coordinates = new ArrayList<Double>(Arrays.asList(x, y));
+            points.add(new Point(poly.points.get(i).label, coordinates));
 
-	}
-	result.points = points;
-	return result;
+        }
+        result.points = points;
+        return result;
     }
 
     @Override
     public String getName() {
-	return "InLineMeasurementErrorModifier";
+        return "InLineMeasurementErrorModifier";
     }
 
 }

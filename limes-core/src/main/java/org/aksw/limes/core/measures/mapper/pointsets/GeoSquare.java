@@ -17,41 +17,42 @@ public class GeoSquare {
     public Set<Polygon> elements;
 
     public GeoSquare() {
-	elements = new HashSet<Polygon>();
+        elements = new HashSet<Polygon>();
     }
 
     /**
      * String representation of elements.
-     * 
+     *
      * @return elements, as a string
      */
     public String toString() {
-	return elements.toString();
+        return elements.toString();
     }
+
     /**
      * Return the size of the polygon
-     * 
+     *
      * @return size, the number of elements in the polygon
      */
     public long size() {
-	long size = 0;
-	for (Polygon p : elements) {
-	    size += p.size();
-	}
-	return size;
+        long size = 0;
+        for (Polygon p : elements) {
+            size += p.size();
+        }
+        return size;
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (obj == null)
-	    return false;
-	if (obj == this)
-	    return true;
-	if (!(obj instanceof GeoSquare))
-	    return false;
+        if (obj == null)
+            return false;
+        if (obj == this)
+            return true;
+        if (!(obj instanceof GeoSquare))
+            return false;
 
-	GeoSquare o = (GeoSquare) obj;
-	return elements.equals(o.elements);
+        GeoSquare o = (GeoSquare) obj;
+        return elements.equals(o.elements);
     }
 
 }

@@ -9,10 +9,11 @@ import org.aksw.limes.core.io.cache.Cache;
 
 /**
  * Interface for query modules
+ *
  * @author ngonga
  */
 public interface IQueryModule {
-	
+
     /**
      * @param cache
      */

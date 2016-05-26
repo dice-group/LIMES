@@ -5,37 +5,16 @@ import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.space.HR3;
-import org.aksw.limes.core.measures.mapper.string.EDJoin;
-import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
-import org.aksw.limes.core.measures.mapper.string.JaroMapper;
-import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
-import org.aksw.limes.core.measures.mapper.string.SoundexMapper;
+import org.aksw.limes.core.measures.mapper.string.*;
 import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGram;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.AfterMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.BeforeMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.DuringMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.DuringReverseMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.EqualsMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.FinishesMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsFinishedByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsMetByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsOverlappedByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsStartedByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.MeetsMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.OverlapsMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.StartsMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.*;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.ConcurrentMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.PredecessorMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.SuccessorMapper;
 import org.aksw.limes.core.measures.measure.pointsets.GeoDistance;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverage;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechet;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorff;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.FastHausdorff;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.NaiveHausdorff;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.ScanIndexedHausdorff;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.SymmetricHausdorff;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.*;
 import org.aksw.limes.core.measures.measure.pointsets.link.NaiveLink;
 import org.aksw.limes.core.measures.measure.pointsets.max.NaiveMax;
 import org.aksw.limes.core.measures.measure.pointsets.mean.NaiveMean;
@@ -44,41 +23,19 @@ import org.aksw.limes.core.measures.measure.pointsets.sumofmin.NaiveSumOfMin;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjection;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjection;
 import org.aksw.limes.core.measures.measure.space.EuclideanMetric;
-import org.aksw.limes.core.measures.measure.string.CosineMeasure;
-import org.aksw.limes.core.measures.measure.string.ExactMatch;
-import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
-import org.aksw.limes.core.measures.measure.string.Jaro;
-import org.aksw.limes.core.measures.measure.string.Levenshtein;
-import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
-import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.AfterMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.BeforeMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.DuringMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.DuringReverseMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.EqualsMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.FinishesMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsFinishedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsMetByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsOverlappedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsStartedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.MeetsMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.OverlapsMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.StartsMeasure;
+import org.aksw.limes.core.measures.measure.string.*;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.*;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
 import org.apache.log4j.Logger;
 
 public class MeasureFactory {
-    static Logger logger = Logger.getLogger(MeasureFactory.class.getName());
-
-    public enum MeasureType { // TODO add other measures
-        GEO_NAIVE_HAUSDORFF, GEO_INDEXED_HAUSDORFF, GEO_FAST_HAUSDORFF, GEO_CENTROIDHAUSDORFF, GEO_SCAN_HAUSDORFF, GEO_MIN, GEO_MAX, GEO_AVG, GEO_SUM_OF_MIN, GEO_LINK, GEO_QUINLAN, GEO_FRECHET, GEO_SURJECTION, GEO_FAIR_SURJECTION, GEO_MEAN
-    };
-
     // String measures
     public static final String JARO = "jaro";
     public static final String QGRAMS = "qgrams";
+
+    ;
     public static final String COSINE = "cosine";
     public static final String LEVENSHTEIN = "levenshtein";
     public static final String OVERLAP = "overlap";
@@ -86,10 +43,8 @@ public class MeasureFactory {
     public static final String JACCARD = "jaccard";
     public static final String EXACTMATCH = "exactmatch";
     public static final String SOUNDEX = "soundex";
-
     // number measures
     public static final String EUCLIDEAN = "euclidean";
-
     // Point-set measures
     public static final String GEO_ORTHODROMIC = "geo_orthodromic";
     // public static final String GEO_ELLIPTIC = "geo_elliptic";
@@ -105,7 +60,6 @@ public class MeasureFactory {
     public static final String GEO_SURJECTION = "geo_surjection";
     // public static final String GEO_QUINLAN = "geo_quinlan";
     public static final String GEO_SYMMETRIC_HAUSDORFF = "geo_symmetrichausdorff";
-
     // Temporal measures
     public static final String TMP_SUCCESSOR = "tmp_successor";
     public static final String TMP_PREDECESSOR = "tmp_predecessor";
@@ -123,6 +77,7 @@ public class MeasureFactory {
     public static final String TMP_OVERLAPS = "tmp_overlaps";
     public static final String TMP_ISOVERLAPPEDBY = "tmp_isoverlappedby";
     public static final String TMP_EQUALS = "tmp_equals";
+    static Logger logger = Logger.getLogger(MeasureFactory.class.getName());
 
     public static MeasureType getTypeFromExpression(String expression) {
         String measure = expression.toLowerCase();
@@ -195,7 +150,7 @@ public class MeasureFactory {
      * Get measure name to metric.
      *
      * @param measure,
-     *            name of measure
+     *         name of measure
      * @return m, the corresponding measure
      * @throws InvalidMeasureException
      */
@@ -290,7 +245,7 @@ public class MeasureFactory {
      * Get mapper to measure
      *
      * @param measure,
-     *            name of measure
+     *         name of measure
      * @return am, mapper corresponding to measure
      * @throws InvalidMeasureException
      */
@@ -380,5 +335,9 @@ public class MeasureFactory {
         }
         return am;
 
+    }
+
+    public enum MeasureType { // TODO add other measures
+        GEO_NAIVE_HAUSDORFF, GEO_INDEXED_HAUSDORFF, GEO_FAST_HAUSDORFF, GEO_CENTROIDHAUSDORFF, GEO_SCAN_HAUSDORFF, GEO_MIN, GEO_MAX, GEO_AVG, GEO_SUM_OF_MIN, GEO_LINK, GEO_QUINLAN, GEO_FRECHET, GEO_SURJECTION, GEO_FAIR_SURJECTION, GEO_MEAN
     }
 }

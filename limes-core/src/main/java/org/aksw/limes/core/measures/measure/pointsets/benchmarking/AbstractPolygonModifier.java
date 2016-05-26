@@ -4,10 +4,10 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.benchmarking;
 
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
 /**
  * Implements the polygon modifier abstract class. It is responsible for
@@ -21,10 +21,10 @@ public abstract class AbstractPolygonModifier implements PolygonModifier {
      * @see org.aksw.limes.core.measures.measure.pointsets.benchmarking.PolygonModifier#modifySet(java.util.Set, double)
      */
     public Set<Polygon> modifySet(Set<Polygon> dataset, double threshold) {
-	Set<Polygon> polygons = new HashSet<Polygon>();
-	for (Polygon p : dataset) {
-	    polygons.add(modify(p, threshold));
-	}
-	return polygons;
+        Set<Polygon> polygons = new HashSet<Polygon>();
+        for (Polygon p : dataset) {
+            polygons.add(modify(p, threshold));
+        }
+        return polygons;
     }
 }

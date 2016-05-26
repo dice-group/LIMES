@@ -4,9 +4,9 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.benchmarking;
 
-import java.util.Set;
-
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+
+import java.util.Set;
 
 /**
  * Implements the polygon modifier interface. It provides basic functions for
@@ -19,12 +19,10 @@ public interface PolygonModifier {
      * Modifies a set of polygons give a threshold
      *
      * @param dataset,
-     *            set of polygons
+     *         set of polygons
      * @param threshold,
-     *            the threshold
-     * 
+     *         the threshold
      * @return set of polygons, modified
-     * 
      * @author ngonga
      */
     Set<Polygon> modifySet(Set<Polygon> dataset, double threshold);
@@ -33,12 +31,10 @@ public interface PolygonModifier {
      * Modifies a polygon given a threshold.
      *
      * @param polygon,
-     *            the polygon
+     *         the polygon
      * @param threshold,
-     *            the threshold
-     * 
+     *         the threshold
      * @return a polygon, modified
-     * 
      * @author ngonga
      */
     Polygon modify(Polygon p, double threshold);
@@ -46,10 +42,7 @@ public interface PolygonModifier {
     /**
      * Return name of modifier class
      *
-     * 
      * @return name of modifier, as string
-     * 
-     * 
      */
     String getName();
 }

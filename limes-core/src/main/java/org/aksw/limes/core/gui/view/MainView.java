@@ -1,20 +1,10 @@
 package org.aksw.limes.core.gui.view;
 
-import java.io.File;
-
-import org.aksw.limes.core.gui.controller.MainController;
-import org.aksw.limes.core.gui.view.graphBuilder.GraphBuildView;
-
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -24,216 +14,213 @@ import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.aksw.limes.core.gui.controller.MainController;
+import org.aksw.limes.core.gui.view.graphBuilder.GraphBuildView;
+
+import java.io.File;
 
 /**
  * Main View of the Application
- * 
- * @author Manuel Jacob
  *
+ * @author Manuel Jacob
  */
 public class MainView {
-	/**
-	 * Corresponding Controller
-	 */
-	private MainController controller;
-	/**
-	 * MenuItem to do a Save Operation
-	 */
-	private MenuItem itemSave;
+    /**
+     * Toolbox of the MainView adds Nodes to Graph
+     */
+    public ToolBox toolBox;
+    /**
+     * GraphBuildView to Model and View the Metric
+     */
+    public GraphBuildView graphBuild;
+    /**
+     * Corresponding Controller
+     */
+    private MainController controller;
+    /**
+     * MenuItem to do a Save Operation
+     */
+    private MenuItem itemSave;
+    /**
+     * Button to run mapping
+     */
+    private Button runButton;
+    /**
+     * MenuItem to start the BatchLearning Dialog
+     */
+    private MenuItem itemBatchLearning;
+    /**
+     * MenuItem to start the UnsupervisedLearning Dialog
+     */
+    private MenuItem itemUnsupervisedLearning;
+    /**
+     * MenuItem to start the Active Learning Dialog
+     */
+    private MenuItem itemActiveLearning;
 
-	/**
-	 * Button to run mapping
-	 */
-	private Button runButton;
+    /**
+     * Constructor
+     *
+     * @param stage
+     *         Used Stage of the Application
+     */
+    public MainView(Stage stage) {
+        showWindow(stage);
+    }
 
-	/**
-	 * MenuItem to start the BatchLearning Dialog
-	 */
-	private MenuItem itemBatchLearning;
+    /**
+     * Sets corresponding Controller
+     *
+     * @param controller
+     *         Corresponding Controller
+     */
+    public void setController(MainController controller) {
+        this.controller = controller;
+    }
 
-	/**
-	 * MenuItem to start the UnsupervisedLearning Dialog
-	 */
-	private MenuItem itemUnsupervisedLearning;
+    /**
+     * Builds and Shows the Window
+     *
+     * @param stage
+     */
+    private void showWindow(Stage stage) {
+        BorderPane root = new BorderPane();
 
-	/**
-	 * Toolbox of the MainView adds Nodes to Graph
-	 */
-	public ToolBox toolBox;
+        MenuBar menuBar = buildMenuBar(stage);
+        FlowPane flow = new FlowPane(Orientation.HORIZONTAL);
+        flow.setAlignment(Pos.CENTER_RIGHT);
+        flow.setStyle("-fx-background-color: linear-gradient(to top, -fx-base, derive(-fx-base,30%));");
+        flow.getChildren().add(new ImageView(new Image("gui/limes.png")));
+        HBox menuBox = new HBox(0);
+        menuBox.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(flow, Priority.ALWAYS);
+        menuBox.getChildren().addAll(menuBar, flow);
+        toolBox = new ToolBox(this);
+        graphBuild = new GraphBuildView(toolBox);
+        HBox runBox = new HBox(0);
+        runBox.setAlignment(Pos.CENTER_RIGHT);
+        runButton = new Button("Run");
+        runButton.setOnAction(e -> {
+            controller.map();
+        });
+        runBox.getChildren().add(runButton);
+        root.setTop(menuBox);
+        root.setLeft(toolBox);
+        root.setRight(graphBuild);
+        root.setBottom(runBox);
+        graphBuild.widthProperty().bind(
+                root.widthProperty().subtract(toolBox.widthProperty()));
+        graphBuild.heightProperty().bind(toolBox.heightProperty());
 
-	/**
-	 * GraphBuildView to Model and View the Metric
-	 */
-	public GraphBuildView graphBuild;
+        graphBuild.start();
 
-	/**
-	 * MenuItem to start the Active Learning Dialog
-	 */
-	private MenuItem itemActiveLearning;
+        Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add("gui/main.css");
+        stage.setMinHeight(600);
+        stage.setMinWidth(600);
+        stage.setTitle("LIMES");
+        stage.setScene(scene);
+        stage.show();
+    }
 
-	/**
-	 * Constructor
-	 * 
-	 * @param stage
-	 *            Used Stage of the Application
-	 */
-	public MainView(Stage stage) {
-		showWindow(stage);
-	}
+    /**
+     * Builds and returns MenuBar for the MainView
+     *
+     * @param stage
+     *         Used Stage of the Application
+     * @return MenuBar of the Application
+     */
+    private MenuBar buildMenuBar(Window stage) {
+        Menu menuFile = new Menu("File");
+        MenuItem itemNew = new MenuItem("New");
+        itemNew.setOnAction(e -> controller.newConfig(new WizardView(),
+                new EditEndpointsView(), new EditClassMatchingView(),
+                new EditPropertyMatchingView()));
+        menuFile.getItems().add(itemNew);
+        menuFile.getItems().add(new SeparatorMenuItem());
+        MenuItem itemLoad = new MenuItem("Load config");
+        itemLoad.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            File file = fileChooser.showOpenDialog(stage);
+            if (file != null) {
+                controller.loadConfig(file);
+            }
+        });
+        menuFile.getItems().add(itemLoad);
+        itemSave = new MenuItem("Save config");
+        itemSave.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            File file = fileChooser.showSaveDialog(stage);
+            if (file != null) {
+                controller.saveConfig(file);
+            }
+        });
+        menuFile.getItems().add(itemSave);
+        menuFile.getItems().add(new SeparatorMenuItem());
+        MenuItem itemExit = new MenuItem("Exit");
+        itemExit.setOnAction(e -> controller.exit());
+        menuFile.getItems().add(itemExit);
 
-	/**
-	 * Sets corresponding Controller
-	 * 
-	 * @param controller
-	 *            Corresponding Controller
-	 */
-	public void setController(MainController controller) {
-		this.controller = controller;
-	}
+        Menu menuLayout = new Menu("Layout");
+        MenuItem layoutGraph = new MenuItem("Refresh Layout");
+        layoutGraph.setOnAction(e -> {
+            graphBuild.graphBuildController.layoutGraph();
+        });
+        MenuItem deleteGraph = new MenuItem("Delete Graph");
+        deleteGraph.setOnAction(e -> {
+            graphBuild.graphBuildController.deleteGraph();
+        });
+        menuLayout.getItems().addAll(layoutGraph, deleteGraph);
 
-	/**
-	 * Builds and Shows the Window
-	 * 
-	 * @param stage
-	 */
-	private void showWindow(Stage stage) {
-		BorderPane root = new BorderPane();
+        Menu menuLearn = new Menu("Learn");
 
-		MenuBar menuBar = buildMenuBar(stage);
-		FlowPane flow = new FlowPane(Orientation.HORIZONTAL);
-		flow.setAlignment(Pos.CENTER_RIGHT);
-		flow.setStyle("-fx-background-color: linear-gradient(to top, -fx-base, derive(-fx-base,30%));");
-		flow.getChildren().add(new ImageView(new Image("gui/limes.png")));
-		HBox menuBox = new HBox(0);
-		menuBox.setAlignment(Pos.CENTER_LEFT);
-		HBox.setHgrow(flow, Priority.ALWAYS);
-		menuBox.getChildren().addAll(menuBar, flow);
-		toolBox = new ToolBox(this);
-		graphBuild = new GraphBuildView(toolBox);
-		HBox runBox = new HBox(0);
-		runBox.setAlignment(Pos.CENTER_RIGHT);
-		runButton = new Button("Run");
-		runButton.setOnAction(e -> {
-			controller.map();
-		});
-		runBox.getChildren().add(runButton);
-		root.setTop(menuBox);
-		root.setLeft(toolBox);
-		root.setRight(graphBuild);
-		root.setBottom(runBox);
-		graphBuild.widthProperty().bind(
-				root.widthProperty().subtract(toolBox.widthProperty()));
-		graphBuild.heightProperty().bind(toolBox.heightProperty());
+        itemBatchLearning = new MenuItem("Batch Learning");
+        itemBatchLearning.setOnAction(e -> {
+            controller.showBatchLearning();
+        });
 
-		graphBuild.start();
 
-		Scene scene = new Scene(root, 800, 600);
-		scene.getStylesheets().add("gui/main.css");
-		stage.setMinHeight(600);
-		stage.setMinWidth(600);
-		stage.setTitle("LIMES");
-		stage.setScene(scene);
-		stage.show();
-	}
+        itemUnsupervisedLearning = new MenuItem("UnsupervisedLearning");
+        itemUnsupervisedLearning.setOnAction(e -> {
+            controller.showUnsupervisedLearning();
+        });
 
-	/**
-	 * Builds and returns MenuBar for the MainView
-	 * 
-	 * @param stage
-	 *            Used Stage of the Application
-	 * @return MenuBar of the Application
-	 */
-	private MenuBar buildMenuBar(Window stage) {
-		Menu menuFile = new Menu("File");
-		MenuItem itemNew = new MenuItem("New");
-		itemNew.setOnAction(e -> controller.newConfig(new WizardView(),
-				new EditEndpointsView(), new EditClassMatchingView(),
-				new EditPropertyMatchingView()));
-		menuFile.getItems().add(itemNew);
-		menuFile.getItems().add(new SeparatorMenuItem());
-		MenuItem itemLoad = new MenuItem("Load config");
-		itemLoad.setOnAction(e -> {
-			FileChooser fileChooser = new FileChooser();
-			File file = fileChooser.showOpenDialog(stage);
-			if (file != null) {
-				controller.loadConfig(file);
-			}
-		});
-		menuFile.getItems().add(itemLoad);
-		itemSave = new MenuItem("Save config");
-		itemSave.setOnAction(e -> {
-			FileChooser fileChooser = new FileChooser();
-			File file = fileChooser.showSaveDialog(stage);
-			if (file != null) {
-				controller.saveConfig(file);
-			}
-		});
-		menuFile.getItems().add(itemSave);
-		menuFile.getItems().add(new SeparatorMenuItem());
-		MenuItem itemExit = new MenuItem("Exit");
-		itemExit.setOnAction(e -> controller.exit());
-		menuFile.getItems().add(itemExit);
+        itemActiveLearning = new MenuItem("Active Learning");
+        itemActiveLearning.setOnAction(e -> {
+            controller.showActiveLearning();
+        });
+        menuLearn.getItems().add(itemActiveLearning);
+        menuLearn.getItems().add(itemBatchLearning);
+        menuLearn.getItems().add(itemUnsupervisedLearning);
+        return new MenuBar(menuFile, menuLayout, menuLearn);
+    }
 
-		Menu menuLayout = new Menu("Layout");
-		MenuItem layoutGraph = new MenuItem("Refresh Layout");
-		layoutGraph.setOnAction(e -> {
-			graphBuild.graphBuildController.layoutGraph();
-		});
-		MenuItem deleteGraph = new MenuItem("Delete Graph");
-		deleteGraph.setOnAction(e -> {
-			graphBuild.graphBuildController.deleteGraph();
-		});
-		menuLayout.getItems().addAll(layoutGraph, deleteGraph);
+    /**
+     * Shows the Loaded Config, if it is Loaded
+     *
+     * @param isLoaded
+     *         True if Config is Loaded
+     */
+    public void showLoadedConfig(boolean isLoaded) {
+        itemSave.setDisable(!isLoaded);
+        runButton.setDisable(!isLoaded);
+        itemBatchLearning.setDisable(!isLoaded);
+        itemUnsupervisedLearning.setDisable(!isLoaded);
+        itemActiveLearning.setDisable(!isLoaded);
+    }
 
-		Menu menuLearn = new Menu("Learn");
-
-		itemBatchLearning = new MenuItem("Batch Learning");
-		itemBatchLearning.setOnAction(e -> {
-				controller.showBatchLearning();
-		});
-		
-		
-		itemUnsupervisedLearning = new MenuItem("UnsupervisedLearning");
-		itemUnsupervisedLearning.setOnAction(e -> {
-				controller.showUnsupervisedLearning();
-		});
-
-		itemActiveLearning = new MenuItem("Active Learning");
-		itemActiveLearning.setOnAction(e -> {
-				controller.showActiveLearning();
-		});
-		menuLearn.getItems().add(itemActiveLearning);
-		menuLearn.getItems().add(itemBatchLearning);
-		menuLearn.getItems().add(itemUnsupervisedLearning);
-		return new MenuBar(menuFile, menuLayout, menuLearn);
-	}
-
-	/**
-	 * Shows the Loaded Config, if it is Loaded
-	 * 
-	 * @param isLoaded
-	 *            True if Config is Loaded
-	 */
-	public void showLoadedConfig(boolean isLoaded) {
-		itemSave.setDisable(!isLoaded);
-		runButton.setDisable(!isLoaded);
-		itemBatchLearning.setDisable(!isLoaded);
-		itemUnsupervisedLearning.setDisable(!isLoaded);
-		itemActiveLearning.setDisable(!isLoaded);
-	}
-
-	/**
-	 * Shows if an Error occurred
-	 * 
-	 * @param header
-	 *            Caption of the Error
-	 * @param content
-	 *            Error Message
-	 */
-	public void showErrorDialog(String header, String content) {
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setHeaderText(header);
-		alert.setContentText(content);
-		alert.showAndWait();
-	}
+    /**
+     * Shows if an Error occurred
+     *
+     * @param header
+     *         Caption of the Error
+     * @param content
+     *         Error Message
+     */
+    public void showErrorDialog(String header, String content) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 }

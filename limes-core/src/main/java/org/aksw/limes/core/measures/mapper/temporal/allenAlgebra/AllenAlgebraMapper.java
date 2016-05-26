@@ -1,76 +1,71 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra;
 
+import org.aksw.limes.core.measures.mapper.Mapper;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.aksw.limes.core.measures.mapper.Mapper;
-
 public abstract class AllenAlgebraMapper extends Mapper implements IAllenAlgebraMapper {
 
     private ArrayList<Integer> requiredAtomicRelations = new ArrayList<Integer>();
-    /**
-     * Returns the set of atomic relations.
-     * 
-     * @return requiredAtomicRelations
-     */
-    public ArrayList<Integer> getRequiredAtomicRelations() {
-	return requiredAtomicRelations;
-    }
-  
+
     /**
      * Performs union between two sets of uris.
-     * 
+     *
      * @param set1,
-     *            first set of uris
-     * 
+     *         first set of uris
      * @param set2,
-     *            second set of uris
-     * 
+     *         second set of uris
      * @return the union of set1 and set2
      */
     protected static Set<String> union(Set<String> set1, Set<String> set2) {
-	Set<String> temp = new HashSet<String>(set1);
-	temp.addAll(new HashSet<String>(set2));
-	return temp;
+        Set<String> temp = new HashSet<String>(set1);
+        temp.addAll(new HashSet<String>(set2));
+        return temp;
 
     }
+
     /**
      * Performs intersection between two sets of uris.
-     * 
+     *
      * @param set1,
-     *            first set of uris
-     * 
+     *         first set of uris
      * @param set2,
-     *            second set of uris
-     * 
+     *         second set of uris
      * @return the intersection of set1 and set2
      */
     protected static Set<String> intersection(Set<String> set1, Set<String> set2) {
-	Set<String> temp = new HashSet<String>(set1);
-	temp.retainAll(new HashSet<String>(set2));
-	return temp;
+        Set<String> temp = new HashSet<String>(set1);
+        temp.retainAll(new HashSet<String>(set2));
+        return temp;
 
     }
+
     /**
      * Performs difference between two sets of uris.
-     * 
+     *
      * @param set1,
-     *            first set of uris
-     * 
+     *         first set of uris
      * @param set2,
-     *            second set of uris
-     * 
+     *         second set of uris
      * @return the difference of set1 and set2
      */
     protected static Set<String> difference(Set<String> set1, Set<String> set2) {
-	Set<String> temp = new HashSet<String>(set1);
-	temp.removeAll(new HashSet<String>(set2));
-	return temp;
+        Set<String> temp = new HashSet<String>(set1);
+        temp.removeAll(new HashSet<String>(set2));
+        return temp;
 
     }
-   
 
-    
+    /**
+     * Returns the set of atomic relations.
+     *
+     * @return requiredAtomicRelations
+     */
+    public ArrayList<Integer> getRequiredAtomicRelations() {
+        return requiredAtomicRelations;
+    }
+
 
 }

@@ -7,14 +7,14 @@ import org.aksw.limes.core.io.cache.Cache;
 
 public class BatchLearningController extends MachineLearningController {
 
-	public BatchLearningController(Config config, Cache sourceCache, Cache targetCache) {
-		this.mlModel = new BatchLearningModel(config, sourceCache, targetCache);
-	}
+    public BatchLearningController(Config config, Cache sourceCache, Cache targetCache) {
+        this.mlModel = new BatchLearningModel(config, sourceCache, targetCache);
+    }
 
-	@Override
-	public void learn(MachineLearningView view) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void learn(MachineLearningView view) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

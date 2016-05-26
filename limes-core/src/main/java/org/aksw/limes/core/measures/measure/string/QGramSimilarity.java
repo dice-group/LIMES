@@ -5,16 +5,15 @@
 package org.aksw.limes.core.measures.measure.string;
 
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.mapper.string.fastngram.NGramTokenizer;
 import org.aksw.limes.core.measures.mapper.string.fastngram.Tokenizer;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
- *
  * @author ngonga
  */
 public class QGramSimilarity extends StringMeasure {
@@ -28,6 +27,10 @@ public class QGramSimilarity extends StringMeasure {
 
     public QGramSimilarity() {
         tokenizer = new NGramTokenizer();
+    }
+
+    public static void main(String args[]) {
+        System.out.println(new QGramSimilarity().getSimilarity("abcd", "abcde"));
     }
 
     public double getSimilarity(String x, String y) {
@@ -47,10 +50,6 @@ public class QGramSimilarity extends StringMeasure {
         K.retainAll(Y);
         double z = (double) K.size();
         return z / (x + y - z);
-    }
-
-    public static void main(String args[]) {
-        System.out.println(new QGramSimilarity().getSimilarity("abcd", "abcde"));
     }
 
     public int getPrefixLength(int tokensNumber, double threshold) {
@@ -104,6 +103,6 @@ public class QGramSimilarity extends StringMeasure {
     }
 
     public double getRuntimeApproximation(double mappingSize) {
-        return mappingSize/1000d;
+        return mappingSize / 1000d;
     }
 }

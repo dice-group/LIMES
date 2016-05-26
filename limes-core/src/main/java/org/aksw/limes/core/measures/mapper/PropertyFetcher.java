@@ -1,12 +1,11 @@
 package org.aksw.limes.core.measures.mapper;
 
+import org.aksw.limes.core.io.parser.Parser;
+
 import java.util.Arrays;
 import java.util.List;
 
-import org.aksw.limes.core.io.parser.Parser;
-
 /**
- *
  * @author ngonga
  */
 public class PropertyFetcher {

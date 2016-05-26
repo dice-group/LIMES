@@ -1,36 +1,32 @@
 package org.aksw.limes.core.ml;
 
-import static org.junit.Assert.fail;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
-import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.WombatSimple;
+import org.aksw.limes.core.ml.algorithm.*;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.junit.Assert.fail;
 
 public class SimpleWombatTest {
 
     Cache sc = new MemoryCache();
     Cache tc = new MemoryCache();
 
-    Mapping trainingMap, refMap;
+    AMapping trainingMap, refMap;
 
     @Before
-    public void init(){
+    public void init() {
         List<String> props = new LinkedList<String>();
         props.add("name");
         props.add("surname");
@@ -41,7 +37,7 @@ public class SimpleWombatTest {
         Instance i2 = new Instance("ex:i2");
         i2.addProperty("name", "John");
         i2.addProperty("surname", "Doe");
-        Instance i3= new Instance("ex:i3");
+        Instance i3 = new Instance("ex:i3");
         i3.addProperty("name", "Claus");
         i3.addProperty("surname", "Stadler");
 
@@ -58,7 +54,7 @@ public class SimpleWombatTest {
 
         trainingMap = MappingFactory.createDefaultMapping();
         trainingMap.add("ex:i1", "ex:i1", 1d);
-        
+
         refMap = MappingFactory.createDefaultMapping();
         refMap.add("ex:i1", "ex:i1", 1d);
         refMap.add("ex:i3", "ex:i3", 1d);
@@ -68,7 +64,7 @@ public class SimpleWombatTest {
     public void testSupervisedBatch() throws UnsupportedMLImplementationException {
         SupervisedMLAlgorithm wombatSimple = null;
         try {
-            wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class, 
+            wombatSimple = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
                     MLImplementationType.SUPERVISED_BATCH).asSupervised();
         } catch (UnsupportedMLImplementationException e) {
             e.printStackTrace();
@@ -77,8 +73,8 @@ public class SimpleWombatTest {
         assert (wombatSimple.getClass().equals(SupervisedMLAlgorithm.class));
         wombatSimple.init(null, sc, tc);
         MLModel mlModel = wombatSimple.learn(trainingMap);
-        Mapping resultMap = wombatSimple.predict(sc, tc, mlModel);
-        assert(resultMap.equals(refMap));
+        AMapping resultMap = wombatSimple.predict(sc, tc, mlModel);
+        assert (resultMap.equals(refMap));
     }
 
 
@@ -96,8 +92,8 @@ public class SimpleWombatTest {
         trainingMap = null;
         wombatSimpleU.init(null, sc, tc);
         MLModel mlModel = wombatSimpleU.learn(new PseudoFMeasure());
-        Mapping resultMap = wombatSimpleU.predict(sc, tc, mlModel);
-        assert(resultMap.equals(refMap));
+        AMapping resultMap = wombatSimpleU.predict(sc, tc, mlModel);
+        assert (resultMap.equals(refMap));
     }
 
 }

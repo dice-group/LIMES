@@ -1,33 +1,31 @@
 package org.aksw.limes.core.io.query;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.RDFReader;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.RDFReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * @author ngonga Can load from a resource as well.
  */
 public class FileQueryModule implements IQueryModule {
 
-    private Logger logger = Logger.getLogger(FileQueryModule.class.getName());
-
     KBInfo kb;
     Model model;
+    private Logger logger = Logger.getLogger(FileQueryModule.class.getName());
 
     /**
      * Constructor
-     * 
+     *
      * @param kbinfo
-     *            Loads the endpoint as a file and if that fails as a resource.
+     *         Loads the endpoint as a file and if that fails as a resource.
      */
     @SuppressWarnings("resource")
     public FileQueryModule(KBInfo kbinfo) {
@@ -61,9 +59,9 @@ public class FileQueryModule implements IQueryModule {
 
     /**
      * Reads data from a model in the model registry
-     * 
+     *
      * @param c
-     *            Cache to be filled
+     *         Cache to be filled
      */
     public void fillCache(Cache c) {
         SparqlQueryModule sqm = new SparqlQueryModule(kb);

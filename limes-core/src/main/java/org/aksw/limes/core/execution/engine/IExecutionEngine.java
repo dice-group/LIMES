@@ -2,7 +2,7 @@ package org.aksw.limes.core.execution.engine;
 
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 
 /**
  * Implements the engine interface. The engine gets a series of instructions in
@@ -12,17 +12,20 @@ import org.aksw.limes.core.io.mapping.Mapping;
  * @author kleanthi
  */
 public interface IExecutionEngine {
-    
+
     /**
      * Implementation of the execution of an execution plan.
      *
-     * @param source, the source cache
-     * @param target, the target cache
-     * @param spec, the link specification
-     * @param plannerType, the type of the planner
-     * 
+     * @param source,
+     *         the source cache
+     * @param target,
+     *         the target cache
+     * @param spec,
+     *         the link specification
+     * @param plannerType,
+     *         the type of the planner
      * @return The mapping obtained from executing the plan
      */
-    Mapping execute(LinkSpecification spec, IPlanner planner);
+    AMapping execute(LinkSpecification spec, IPlanner planner);
 
 }

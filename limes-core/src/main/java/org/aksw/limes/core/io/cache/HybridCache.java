@@ -1,21 +1,15 @@
 package org.aksw.limes.core.io.cache;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.query.IQueryModule;
 import org.aksw.limes.core.io.query.NoPrefixSparqlQueryModule;
 import org.aksw.limes.core.io.query.QueryModuleFactory;
 import org.apache.log4j.Logger;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 
 /**
@@ -26,18 +20,17 @@ import org.apache.log4j.Logger;
  * which is obviously more efficient for online data sources (no HTTP latency,
  * offline processing, etc.). Else, it retrieves the data, generates a hash and
  * caches it on the hard drive.
- * Enhancing it with folders: specify the folder, where the application has 
+ * Enhancing it with folders: specify the folder, where the application has
  * permissions to read and write files.
- * 
+ *
  * @author ngonga
  * @author Lyko
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 25, 2015
  */
-public class HybridCache extends MemoryCache implements Serializable{
-    static Logger logger = Logger.getLogger(HybridCache.class.getName());
-
+public class HybridCache extends MemoryCache implements Serializable {
     private static final long serialVersionUID = -2268344215686055231L;
+    static Logger logger = Logger.getLogger(HybridCache.class.getName());
     // maps uris to instance. A bit redundant as instance contain their URI
     protected HashMap<String, Instance> instanceMap;
     //Iterator for getting next instance
@@ -49,9 +42,12 @@ public class HybridCache extends MemoryCache implements Serializable{
     public HybridCache() {
         instanceMap = new HashMap<String, Instance>();
     }
+
     /**
      * Create cache specifying the parent folder. Make shure the Application has write permissions there.
-     * @param folder File pointing to the the parent folder of the (to-be-created) "cache" folder.
+     *
+     * @param folder
+     *         File pointing to the the parent folder of the (to-be-created) "cache" folder.
      */
     public HybridCache(File folder) {
         this();
@@ -59,127 +55,10 @@ public class HybridCache extends MemoryCache implements Serializable{
     }
 
     /**
-     * Returns the next instance in the list of instances
-     * @return null if no next instance, else the next instance
-     */
-    public Instance getNextInstance() {
-        if(instanceIterator == null) {
-            instanceIterator = instanceMap.values().iterator();
-        }
-
-        if (instanceIterator.hasNext()) {
-            return instanceIterator.next();
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Returns all the instance contained in the cache
-     * @return ArrayList containing all instances
-     */
-    public ArrayList<Instance> getAllInstances() {
-        return new ArrayList<Instance>(instanceMap.values());
-    }
-
-    public void addInstance(Instance i) {
-        if (!instanceMap.containsKey(i.getUri())) {
-            instanceMap.put(i.getUri(), i);
-        }
-    }
-
-    /**
+     * Tries to load the content of the cache from a file
      *
-     * @param uri URI to look for
-     * @return The instance with the URI uri if it is in the cache, else null
-     */
-    public Instance getInstance(String uri) {
-        if (instanceMap.containsKey(uri)) {
-            return instanceMap.get(uri);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     *
-     * @return The size of the cache
-     */
-    public int size() {
-        return instanceMap.size();
-    }
-
-    /**
-     * Adds a new spo statement to the cache
-     * @param s The URI of the instance linked to o via p
-     * @param p The property which links s and o
-     * @param o The value of the property of p for the entity s
-     */
-    public void addTriple(String s, String p, String o) {
-        if (instanceMap.containsKey(s)) {
-            Instance m = instanceMap.get(s);
-            m.addProperty(p, o);
-        } else {
-            Instance m = new Instance(s);
-            m.addProperty(p, o);
-            instanceMap.put(s, m);
-        }
-    }
-
-    /**
-     *
-     * @param uri The URI to looks for
-     * @return True if an instance with the URI uri is found in the cache, else false
-     */
-    public boolean containsUri(String uri) {
-        return instanceMap.containsKey(uri);
-    }
-
-    public void resetIterator() {
-        instanceIterator = instanceMap.values().iterator();
-    }
-
-    @Override
-    public String toString() {
-        return instanceMap.toString();
-    }
-
-    public ArrayList<String> getAllUris() {
-        return new ArrayList<String>(instanceMap.keySet());
-    }
-
-    /**
-     *
-     * @param i The instance to look for
-     * @return true if the URI of the instance is found in the cache
-     */
-    public boolean containsInstance(Instance i) {
-        return instanceMap.containsKey(i.getUri());
-    }
-    /** Tries to serialize the content of the cache to a file. If it fails,
-     * no file is written to avoid the corruption of future data sources.
-     * 
-     * @param file File wherein the content of the cache is to be serialized
-     * @throws IOException
-     */
-    public void saveToFile(File file) {
-        FileOutputStream out;
-        logger.info("Serializing " + size() + " objects to " + file.getAbsolutePath());
-
-        try {
-            out = new FileOutputStream(file);
-            ObjectOutputStream serializer = new ObjectOutputStream(out);
-            serializer.writeObject(this);
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            file.delete();
-        }
-    }
-
-    /** Tries to load the content of the cache from a file
-     *
-     * @param file File from which the content is to be loaded
+     * @param file
+     *         File from which the content is to be loaded
      * @return A Hybrid cache
      * @throws IOException
      */
@@ -207,20 +86,22 @@ public class HybridCache extends MemoryCache implements Serializable{
         return getData(new File(""), kb);
     }
 
-
     /**
      * Method to get Data of the specified endpoint, and cache it to the "cache" folder in the folder specified.
-     * @param folder Path to the parent folder of the "cache" folder.
-     * @param kb Endpoint specification.
+     *
+     * @param folder
+     *         Path to the parent folder of the "cache" folder.
+     * @param kb
+     *         Endpoint specification.
      * @return
      */
     public static HybridCache getData(File folder, KBInfo kb) {
 
         HybridCache cache = new HybridCache(folder);
         //1. Try to get content from a serialization
-        String hash = kb.hashCode()+"";
-        File cacheFile = new File(folder+"cache/" + hash + ".ser");
-        logger.info("Checking for file "+cacheFile.getAbsolutePath());
+        String hash = kb.hashCode() + "";
+        File cacheFile = new File(folder + "cache/" + hash + ".ser");
+        logger.info("Checking for file " + cacheFile.getAbsolutePath());
         try {
             if (cacheFile.exists()) {
                 logger.info("Found cached data. Loading data from file " + cacheFile.getAbsolutePath());
@@ -240,34 +121,39 @@ public class HybridCache extends MemoryCache implements Serializable{
             IQueryModule module = QueryModuleFactory.getQueryModule(kb.getType(), kb);
             module.fillCache(cache);
 
-            if (!new File(folder.getAbsolutePath()+ File.separatorChar + "cache").exists() || !new File(folder.getAbsolutePath()+ File.separatorChar + "cache").isDirectory()) {
-                new File(folder.getAbsolutePath()+ File.separatorChar + "cache").mkdir();
+            if (!new File(folder.getAbsolutePath() + File.separatorChar + "cache").exists() || !new File(folder.getAbsolutePath() + File.separatorChar + "cache").isDirectory()) {
+                new File(folder.getAbsolutePath() + File.separatorChar + "cache").mkdir();
             }
-            cache.saveToFile(new File(folder.getAbsolutePath()+ File.separatorChar + "cache/" + hash + ".ser"));
+            cache.saveToFile(new File(folder.getAbsolutePath() + File.separatorChar + "cache/" + hash + ".ser"));
         }
 
         return cache;
     }
 
-    /** This method is used by learners which do not have prefix information.
+    /**
+     * This method is used by learners which do not have prefix information.
      *
-     * @param kb Info to the knowledge base to query
+     * @param kb
+     *         Info to the knowledge base to query
      * @return A cache filled with the entities to link
      */
     public static HybridCache getNoPrefixData(KBInfo kb) {
-        return getNoPrefixData(new File (""), kb);
+        return getNoPrefixData(new File(""), kb);
     }
 
-    /** This method is used by learners which do not have prefix information and with a specified folder containing the cache folder.
+    /**
+     * This method is used by learners which do not have prefix information and with a specified folder containing the cache folder.
      *
-     * @param folder Path to parent folder of the supposed cache folder.
-     * @param kb Info to the knowledge base to query
+     * @param folder
+     *         Path to parent folder of the supposed cache folder.
+     * @param kb
+     *         Info to the knowledge base to query
      * @return A cache filled with the entities to link
      */
     public static HybridCache getNoPrefixData(File folder, KBInfo kb) {
         HybridCache cache = new HybridCache();
         //1. Try to get content from a serialization
-        File cacheFile = new File(folder.getAbsolutePath()+ File.separatorChar +"cache/" + kb.hashCode() + ".ser");
+        File cacheFile = new File(folder.getAbsolutePath() + File.separatorChar + "cache/" + kb.hashCode() + ".ser");
         try {
             if (cacheFile.exists()) {
                 logger.info("Found cached data. Loading data from file " + cacheFile.getAbsolutePath());
@@ -286,26 +172,156 @@ public class HybridCache extends MemoryCache implements Serializable{
             NoPrefixSparqlQueryModule module = new NoPrefixSparqlQueryModule(kb);
             module.fillCache(cache);
 
-            if (!new File(folder.getAbsolutePath()+ File.separatorChar + "cache").exists() || !new File(folder.getAbsolutePath()+ File.separatorChar + "cache").isDirectory()) {
-                new File(folder.getAbsolutePath()+ File.separatorChar + "cache").mkdir();
+            if (!new File(folder.getAbsolutePath() + File.separatorChar + "cache").exists() || !new File(folder.getAbsolutePath() + File.separatorChar + "cache").isDirectory()) {
+                new File(folder.getAbsolutePath() + File.separatorChar + "cache").mkdir();
             }
-            cache.saveToFile(new File(folder.getAbsolutePath()+ File.separatorChar + "cache/" + kb.hashCode() + ".ser"));
+            cache.saveToFile(new File(folder.getAbsolutePath() + File.separatorChar + "cache/" + kb.hashCode() + ".ser"));
         }
 
         return cache;
     }
 
+    /**
+     * Returns the next instance in the list of instances
+     *
+     * @return null if no next instance, else the next instance
+     */
+    public Instance getNextInstance() {
+        if (instanceIterator == null) {
+            instanceIterator = instanceMap.values().iterator();
+        }
+
+        if (instanceIterator.hasNext()) {
+            return instanceIterator.next();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns all the instance contained in the cache
+     *
+     * @return ArrayList containing all instances
+     */
+    public ArrayList<Instance> getAllInstances() {
+        return new ArrayList<Instance>(instanceMap.values());
+    }
+
+    public void addInstance(Instance i) {
+        if (!instanceMap.containsKey(i.getUri())) {
+            instanceMap.put(i.getUri(), i);
+        }
+    }
+
+    /**
+     * @param uri
+     *         URI to look for
+     * @return The instance with the URI uri if it is in the cache, else null
+     */
+    public Instance getInstance(String uri) {
+        if (instanceMap.containsKey(uri)) {
+            return instanceMap.get(uri);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @return The size of the cache
+     */
+    public int size() {
+        return instanceMap.size();
+    }
+
+    /**
+     * Adds a new spo statement to the cache
+     *
+     * @param s
+     *         The URI of the instance linked to o via p
+     * @param p
+     *         The property which links s and o
+     * @param o
+     *         The value of the property of p for the entity s
+     */
+    public void addTriple(String s, String p, String o) {
+        if (instanceMap.containsKey(s)) {
+            Instance m = instanceMap.get(s);
+            m.addProperty(p, o);
+        } else {
+            Instance m = new Instance(s);
+            m.addProperty(p, o);
+            instanceMap.put(s, m);
+        }
+    }
+
+    /**
+     * @param uri
+     *         The URI to looks for
+     * @return True if an instance with the URI uri is found in the cache, else false
+     */
+    public boolean containsUri(String uri) {
+        return instanceMap.containsKey(uri);
+    }
+
+    public void resetIterator() {
+        instanceIterator = instanceMap.values().iterator();
+    }
+
+    @Override
+    public String toString() {
+        return instanceMap.toString();
+    }
+
+    public ArrayList<String> getAllUris() {
+        return new ArrayList<String>(instanceMap.keySet());
+    }
+
+    /**
+     * @param i
+     *         The instance to look for
+     * @return true if the URI of the instance is found in the cache
+     */
+    public boolean containsInstance(Instance i) {
+        return instanceMap.containsKey(i.getUri());
+    }
+
+    /**
+     * Tries to serialize the content of the cache to a file. If it fails,
+     * no file is written to avoid the corruption of future data sources.
+     *
+     * @param file
+     *         File wherein the content of the cache is to be serialized
+     * @throws IOException
+     */
+    public void saveToFile(File file) {
+        FileOutputStream out;
+        logger.info("Serializing " + size() + " objects to " + file.getAbsolutePath());
+
+        try {
+            out = new FileOutputStream(file);
+            ObjectOutputStream serializer = new ObjectOutputStream(out);
+            serializer.writeObject(this);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            file.delete();
+        }
+    }
 
     /**
      * Returns the file  pointing to the parent folder of cache.
+     *
      * @return
      */
     public File getFolder() {
         return folder;
     }
+
     /**
      * Set the parent folder of the cache sub folder.
-     * @param folder Pointing to the parent folder holding the cache. 
+     *
+     * @param folder
+     *         Pointing to the parent folder holding the cache.
      */
     public void setFolder(File folder) {
         this.folder = folder;

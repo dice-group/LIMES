@@ -13,33 +13,28 @@ import org.apache.log4j.Logger;
 public class Instruction {
 
     static Logger logger = Logger.getLogger("LIMES");
-
-    public enum Command {
-        RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER;
-    };
-
     private Command command;
+
+    ;
     private String measureExpression;
     private String threshold;
     private int sourceMapping;
     private int targetMapping;
     private int resultIndex;
     private String mainThreshold = null;
-
     /**
      * Constructor
      *
      * @param c
-     *            Command
+     *         Command
      * @param measure
-     *            Measure expression
+     *         Measure expression
      * @param t
-     *            Threshold
+     *         Threshold
      * @param source
-     *            Source mapping
+     *         Source mapping
      * @param target
-     *            Target mapping TODO: what is result?
-     * 
+     *         Target mapping TODO: what is result?
      */
     public Instruction(Command c, String measure, String thrs, int source, int target, int result) {
         command = c;
@@ -58,9 +53,8 @@ public class Instruction {
     }
 
     /**
-     * 
      * @param resultIndex,
-     *            result index to set
+     *         result index to set
      */
     public void setResultIndex(int resultIndex) {
         this.resultIndex = resultIndex;
@@ -74,9 +68,8 @@ public class Instruction {
     }
 
     /**
-     * 
      * @param command,
-     *            command to set
+     *         command to set
      */
     public void setCommand(Command command) {
         this.command = command;
@@ -90,9 +83,8 @@ public class Instruction {
     }
 
     /**
-     * 
      * @param measureExpression,
-     *            measure expression to set
+     *         measure expression to set
      */
     public void setMeasureExpression(String measureExpression) {
         this.measureExpression = measureExpression;
@@ -106,9 +98,8 @@ public class Instruction {
     }
 
     /**
-     * 
      * @param sourceMapping,
-     *            source mapping to set
+     *         source mapping to set
      */
     public void setSourceMapping(int sourceMapping) {
         this.sourceMapping = sourceMapping;
@@ -122,9 +113,8 @@ public class Instruction {
     }
 
     /**
-     * 
      * @param targetMapping,
-     *            target mapping to set
+     *         target mapping to set
      */
     public void setTargetMapping(int targetMapping) {
         this.targetMapping = targetMapping;
@@ -138,21 +128,11 @@ public class Instruction {
     }
 
     /**
-     * 
      * @param threshold,
-     *            threshold to set
+     *         threshold to set
      */
     public void setThreshold(String threshold) {
         this.threshold = threshold;
-    }
-
-    /**
-     * 
-     * @param threshold,
-     *            main threshold to set
-     */
-    public void setMainThreshold(String threshold) {
-        this.mainThreshold = threshold;
     }
 
     /**
@@ -160,6 +140,14 @@ public class Instruction {
      */
     public String getMainThreshold() {
         return this.mainThreshold;
+    }
+
+    /**
+     * @param threshold,
+     *         main threshold to set
+     */
+    public void setMainThreshold(String threshold) {
+        this.mainThreshold = threshold;
     }
 
     @Override
@@ -183,7 +171,7 @@ public class Instruction {
     /**
      * String representation of the Instruction excluding source, target and
      * result index.
-     * 
+     *
      * @return s, instruction as string
      */
     private String toSmallString() {
@@ -238,7 +226,7 @@ public class Instruction {
 
     /**
      * String representation of Instruction
-     * 
+     *
      * @return s, instruction as string
      */
     public String toString() {
@@ -265,6 +253,10 @@ public class Instruction {
         s = s + targetMapping + "\t";
         s = s + resultIndex;
         return s;
+    }
+
+    public enum Command {
+        RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER;
     }
 
 }

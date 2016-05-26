@@ -1,13 +1,13 @@
 package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
 
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
 
 public class SuccessorMapper extends SimpleTemporalMapper {
 
@@ -16,14 +16,14 @@ public class SuccessorMapper extends SimpleTemporalMapper {
      * mapping contains n-to-m relations. Each source instance takes as
      * successors the set of target instances with the lowest begin date that is
      * higher than the begin date of the source instance.
-     * 
+     *
      * @author kleanthi
      */
     @Override
-    public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-            double threshold) {
+    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+                               double threshold) {
 
-        Mapping m = MappingFactory.createDefaultMapping();
+        AMapping m = MappingFactory.createDefaultMapping();
 
         TreeMap<String, Set<Instance>> sources = this.orderByBeginDate(source, expression);
         TreeMap<String, Set<Instance>> targets = this.orderByBeginDate(target, expression);

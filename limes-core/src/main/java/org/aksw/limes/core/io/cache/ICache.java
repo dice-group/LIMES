@@ -5,5 +5,5 @@ package org.aksw.limes.core.io.cache;
  * @version Nov 25, 2015
  */
 public interface ICache {
-   
+
 }

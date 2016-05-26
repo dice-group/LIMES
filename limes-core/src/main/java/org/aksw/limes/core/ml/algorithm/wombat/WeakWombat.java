@@ -5,15 +5,10 @@
 package org.aksw.limes.core.ml.algorithm.wombat;
 
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
@@ -21,244 +16,244 @@ import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**
  * @author sherif
- *
  */
 public class WeakWombat extends Wombat {
-	protected static final String ALGORITHM_NAME = "Weak Wombat";
-	private static Logger logger = Logger.getLogger(WeakWombat.class.getName());
+    protected static final String ALGORITHM_NAME = "Weak Wombat";
+    protected static long CHILDREN_PENALTY_WEIGHT = 1;
+    protected static long COMPLEXITY_PENALTY_WEIGHT = 1;
+    private static Logger logger = Logger.getLogger(WeakWombat.class.getName());
+    protected double penaltyWeight = 0.5d;
+    protected boolean STRICT = true;
 
-	protected double penaltyWeight = 0.5d;
+    protected Set<String> measures;
+    protected AMapping reference;
 
-	protected static long CHILDREN_PENALTY_WEIGHT = 1;
-	protected static long COMPLEXITY_PENALTY_WEIGHT = 1;
-	protected boolean STRICT = true;
+    protected List<ExtendedClassifier> classifiers = null;
+    protected int iterationNr = 0;
 
-	protected Set<String> measures;
-	protected Mapping reference;
-
-	protected List<ExtendedClassifier> classifiers = null;
-	protected int iterationNr = 0;
-
-	private RefinementNode bestSolution;
+    private RefinementNode bestSolution;
 
 
-	/**
-	 * Constructor
-	 *
-	 * @param sourceCache
-	 * @param targetChache
-	 * @param examples
-	 * @param minCoverage
-	 */
-	public WeakWombat(Cache sourceCache, Cache targetChache, Mapping examples, Configuration configuration) {
-		super(sourceCache, targetChache, configuration);
-		this.sourceCache = sourceCache;
-		this.targetCache = targetChache;
-		measures = new HashSet<>(Arrays.asList(
-				"jaccard",
-				"trigrams"
-				//"cosine",
-				//"hausdorff"
-				));
-		reference = examples;
-	}
-
-	
-	/* (non-Javadoc)
-	 * @see de.uni_leipzig.simba.lgg.LGG#getMapping()
-	 */
-	public Mapping getMapping() {
-		if(bestSolution == null){
-			bestSolution =  getBestSolution();
-		}
-		return bestSolution.getMapping();
-	}
-	
-
-	public String getMetricExpression() {
-		if(bestSolution == null){
-			bestSolution =  getBestSolution();
-		}
-		return bestSolution.metricExpression;
-	}
-	
-	
-
-	/**
-	 * @return RefinementNode containing the best over all solution
-	 * @author sherif
-	 */
-	public RefinementNode getBestSolution(){
-		classifiers = getAllInitialClassifiers();
-		createRefinementTreeRoot();
-		Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
-		logger.info("Most promising node: " + mostPromisingNode.getValue());
-		iterationNr ++;
-		while((mostPromisingNode.getValue().getFMeasure()) < maxFitnessThreshold	 
-				&& refinementTreeRoot.size() <= maxRefineTreeSize
-				&& iterationNr <= maxIterationNumber)
-		{
-			iterationNr++;
-			mostPromisingNode = expandNode(mostPromisingNode);
-			mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
-			if(mostPromisingNode.getValue().getRecall() == -Double.MAX_VALUE){
-				break; // no better solution can be found
-			}
-			logger.info("Most promising node: " + mostPromisingNode.getValue());
-		}
-		RefinementNode bestSolution = getMostPromisingNode(refinementTreeRoot, 0).getValue();
-		logger.info("Overall Best Solution: " + bestSolution);
-		return bestSolution;
-	}
-
-	/**
-	 * initiate the refinement tree as a root node  
-	 * with one child node contains a union of all initial classifiers
-	 * @return
-	 * @author sherif
-	 */
-	private void createRefinementTreeRoot(){
-		RefinementNode initialNode = new RefinementNode();
-		refinementTreeRoot = new Tree<RefinementNode>(null,initialNode, null);
-		Mapping unionMapping = classifiers.get(0).getMapping();
-		String unionMetricExpr =  classifiers.get(0).getMetricExpression();
-		for (int i = 1; i < classifiers.size(); i++) {
-			unionMapping = MappingOperations.union(unionMapping, classifiers.get(i).getMapping());
-			unionMetricExpr = "OR(" + unionMetricExpr + "," + classifiers.get(i).getMetricExpression() + ")|0";
-		}
-		RefinementNode n = new RefinementNode(unionMapping, unionMetricExpr,reference);
-		refinementTreeRoot.addChild(new Tree<RefinementNode>(refinementTreeRoot,n, null));
-		if(verbose){
-			refinementTreeRoot.print();
-		}
-	}
-
-	/**
-	 * Expand an input refinement node by applying 
-	 * all available operators to the input refinement 
-	 * node's mapping with all other classifiers' mappings
-	 *   
-	 * @param node Refinement node to be expanded
-	 * @return The input tree node after expansion
-	 * @author sherif
-	 */
-	private Tree<RefinementNode> expandNode(Tree<RefinementNode> node) {
-		Mapping map = MappingFactory.createMapping(MappingType.DEFAULT);
-		for(ExtendedClassifier c : classifiers ){
-			for(Operator op : Operator.values()){
-				if(node.getValue().getMetricExpression() != c.getMetricExpression()){ // do not create the same metricExpression again 
-					if(op.equals(Operator.AND)){
-						map = MappingOperations.intersection(node.getValue().getMapping(), c.getMapping());
-					}else if(op.equals(Operator.MINUS)){
-						map = MappingOperations.difference(node.getValue().getMapping(), c.getMapping());
-					}
-					String metricExpr = op + "(" + node.getValue().getMetricExpression() + "," + c.getMetricExpression() +")|0";
-					RefinementNode child = new RefinementNode(map, metricExpr,reference);
-					node.addChild(new Tree<RefinementNode>(child));
-				}
-			}
-		}
-		if(verbose){
-			refinementTreeRoot.print();
-		}
-		return node;
-	}
+    /**
+     * Constructor
+     *
+     * @param sourceCache
+     * @param targetChache
+     * @param examples
+     * @param minCoverage
+     */
+    public WeakWombat(Cache sourceCache, Cache targetChache, AMapping examples, Configuration configuration) {
+        super(sourceCache, targetChache, configuration);
+        this.sourceCache = sourceCache;
+        this.targetCache = targetChache;
+        measures = new HashSet<>(Arrays.asList(
+                "jaccard",
+                "trigrams"
+                //"cosine",
+                //"hausdorff"
+        ));
+        reference = examples;
+    }
 
 
-	/**
-	 * Get the most promising node as the node with the best recall then precision
-	 *  
-	 * @param r The whole refinement tree
-	 * @param penaltyWeight 
-	 * @return most promising node from the input tree r
-	 * @author sherif
-	 */
-	private Tree<RefinementNode> getMostPromisingNode(Tree<RefinementNode> r, double penaltyWeight){
-		// trivial case
-		if(r.getchildren() == null || r.getchildren().size() == 0){
-			return r;
-		}
-		// get mostPromesyChild of children
-		Tree<RefinementNode> mostPromesyChild = new Tree<RefinementNode>(new RefinementNode());
-		for(Tree<RefinementNode> child : r.getchildren()){
-			if(child.getValue().getRecall() >= 0){
-				Tree<RefinementNode> promesyChild = getMostPromisingNode(child, penaltyWeight);
-				double newFitness;
-				newFitness = promesyChild.getValue().getRecall() - penaltyWeight * computePenalty(promesyChild);
-				if( newFitness > mostPromesyChild.getValue().getRecall()  ){
-					mostPromesyChild = promesyChild;
-				}
-			}
-		}
-		// return the argmax{root, mostPromesyChild}
-		if(penaltyWeight > 0){
-			return mostPromesyChild;
-		}else if(r.getValue().getFMeasure() >= mostPromesyChild.getValue().getFMeasure()){
-			return r;
-		}else{
-			return mostPromesyChild;
-		}
-	}
+    /* (non-Javadoc)
+     * @see de.uni_leipzig.simba.lgg.LGG#getMapping()
+     */
+    public AMapping getMapping() {
+        if (bestSolution == null) {
+            bestSolution = getBestSolution();
+        }
+        return bestSolution.getMapping();
+    }
 
 
-	/**
-	 * @return childrenPenalty + complexityPenalty
-	 * @author sherif
-	 */
-	private double computePenalty(Tree<RefinementNode> promesyChild) {
-		long childrenCount = promesyChild.size() - 1;
-		double childrenPenalty = (CHILDREN_PENALTY_WEIGHT * childrenCount) / refinementTreeRoot.size();
-		long level = promesyChild.level();
-		double complexityPenalty = (COMPLEXITY_PENALTY_WEIGHT * level) / refinementTreeRoot.depth();
-		return  childrenPenalty + complexityPenalty;
-	}
+    public String getMetricExpression() {
+        if (bestSolution == null) {
+            bestSolution = getBestSolution();
+        }
+        return bestSolution.metricExpression;
+    }
 
 
-	@Override
-	public String getName() {
-		return ALGORITHM_NAME;
-	}
+    /**
+     * @return RefinementNode containing the best over all solution
+     * @author sherif
+     */
+    public RefinementNode getBestSolution() {
+        classifiers = getAllInitialClassifiers();
+        createRefinementTreeRoot();
+        Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
+        logger.info("Most promising node: " + mostPromisingNode.getValue());
+        iterationNr++;
+        while ((mostPromisingNode.getValue().getFMeasure()) < maxFitnessThreshold
+                && refinementTreeRoot.size() <= maxRefineTreeSize
+                && iterationNr <= maxIterationNumber) {
+            iterationNr++;
+            mostPromisingNode = expandNode(mostPromisingNode);
+            mostPromisingNode = getMostPromisingNode(refinementTreeRoot, penaltyWeight);
+            if (mostPromisingNode.getValue().getRecall() == -Double.MAX_VALUE) {
+                break; // no better solution can be found
+            }
+            logger.info("Most promising node: " + mostPromisingNode.getValue());
+        }
+        RefinementNode bestSolution = getMostPromisingNode(refinementTreeRoot, 0).getValue();
+        logger.info("Overall Best Solution: " + bestSolution);
+        return bestSolution;
+    }
+
+    /**
+     * initiate the refinement tree as a root node
+     * with one child node contains a union of all initial classifiers
+     *
+     * @return
+     * @author sherif
+     */
+    private void createRefinementTreeRoot() {
+        RefinementNode initialNode = new RefinementNode();
+        refinementTreeRoot = new Tree<RefinementNode>(null, initialNode, null);
+        AMapping unionMapping = classifiers.get(0).getMapping();
+        String unionMetricExpr = classifiers.get(0).getMetricExpression();
+        for (int i = 1; i < classifiers.size(); i++) {
+            unionMapping = MappingOperations.union(unionMapping, classifiers.get(i).getMapping());
+            unionMetricExpr = "OR(" + unionMetricExpr + "," + classifiers.get(i).getMetricExpression() + ")|0";
+        }
+        RefinementNode n = new RefinementNode(unionMapping, unionMetricExpr, reference);
+        refinementTreeRoot.addChild(new Tree<RefinementNode>(refinementTreeRoot, n, null));
+        if (verbose) {
+            refinementTreeRoot.print();
+        }
+    }
+
+    /**
+     * Expand an input refinement node by applying
+     * all available operators to the input refinement
+     * node's mapping with all other classifiers' mappings
+     *
+     * @param node
+     *         Refinement node to be expanded
+     * @return The input tree node after expansion
+     * @author sherif
+     */
+    private Tree<RefinementNode> expandNode(Tree<RefinementNode> node) {
+        AMapping map = MappingFactory.createMapping(MappingType.DEFAULT);
+        for (ExtendedClassifier c : classifiers) {
+            for (Operator op : Operator.values()) {
+                if (node.getValue().getMetricExpression() != c.getMetricExpression()) { // do not create the same metricExpression again
+                    if (op.equals(Operator.AND)) {
+                        map = MappingOperations.intersection(node.getValue().getMapping(), c.getMapping());
+                    } else if (op.equals(Operator.MINUS)) {
+                        map = MappingOperations.difference(node.getValue().getMapping(), c.getMapping());
+                    }
+                    String metricExpr = op + "(" + node.getValue().getMetricExpression() + "," + c.getMetricExpression() + ")|0";
+                    RefinementNode child = new RefinementNode(map, metricExpr, reference);
+                    node.addChild(new Tree<RefinementNode>(child));
+                }
+            }
+        }
+        if (verbose) {
+            refinementTreeRoot.print();
+        }
+        return node;
+    }
 
 
-	@Override
-	public MLModel learn(Mapping trainingData) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /**
+     * Get the most promising node as the node with the best recall then precision
+     *
+     * @param r
+     *         The whole refinement tree
+     * @param penaltyWeight
+     * @return most promising node from the input tree r
+     * @author sherif
+     */
+    private Tree<RefinementNode> getMostPromisingNode(Tree<RefinementNode> r, double penaltyWeight) {
+        // trivial case
+        if (r.getchildren() == null || r.getchildren().size() == 0) {
+            return r;
+        }
+        // get mostPromesyChild of children
+        Tree<RefinementNode> mostPromesyChild = new Tree<RefinementNode>(new RefinementNode());
+        for (Tree<RefinementNode> child : r.getchildren()) {
+            if (child.getValue().getRecall() >= 0) {
+                Tree<RefinementNode> promesyChild = getMostPromisingNode(child, penaltyWeight);
+                double newFitness;
+                newFitness = promesyChild.getValue().getRecall() - penaltyWeight * computePenalty(promesyChild);
+                if (newFitness > mostPromesyChild.getValue().getRecall()) {
+                    mostPromesyChild = promesyChild;
+                }
+            }
+        }
+        // return the argmax{root, mostPromesyChild}
+        if (penaltyWeight > 0) {
+            return mostPromesyChild;
+        } else if (r.getValue().getFMeasure() >= mostPromesyChild.getValue().getFMeasure()) {
+            return r;
+        } else {
+            return mostPromesyChild;
+        }
+    }
 
 
-	@Override
-	public Mapping computePredictions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /**
+     * @return childrenPenalty + complexityPenalty
+     * @author sherif
+     */
+    private double computePenalty(Tree<RefinementNode> promesyChild) {
+        long childrenCount = promesyChild.size() - 1;
+        double childrenPenalty = (CHILDREN_PENALTY_WEIGHT * childrenCount) / refinementTreeRoot.size();
+        long level = promesyChild.level();
+        double complexityPenalty = (COMPLEXITY_PENALTY_WEIGHT * level) / refinementTreeRoot.depth();
+        return childrenPenalty + complexityPenalty;
+    }
 
 
-	@Override
-	public void init(LearningSetting parameters, Mapping trainingData) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public String getName() {
+        return ALGORITHM_NAME;
+    }
 
 
-	@Override
-	public void terminate() {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public MLModel learn(AMapping trainingData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 
-	@Override
-	public Set<String> parameters() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public AMapping computePredictions() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 
+    @Override
+    public void init(LearningSetting parameters, AMapping trainingData) throws Exception {
+        // TODO Auto-generated method stub
+
+    }
+
+
+    @Override
+    public void terminate() {
+        // TODO Auto-generated method stub
+
+    }
+
+
+    @Override
+    public Set<String> parameters() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 
 }

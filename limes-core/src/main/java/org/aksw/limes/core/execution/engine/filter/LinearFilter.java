@@ -2,7 +2,7 @@ package org.aksw.limes.core.execution.engine.filter;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
@@ -22,17 +22,17 @@ public class LinearFilter implements IFilter {
      * Filter a mapping solely with respect to a threshold.
      *
      * @param map
-     *            Input mapping
+     *         Input mapping
      * @param threshold
-     *            Similarity threshold
+     *         Similarity threshold
      * @return result, all links from map such that sim >= threshold
      */
-    public Mapping filter(Mapping map, double threshold) {
+    public AMapping filter(AMapping map, double threshold) {
         double sim = 0.0;
         if (threshold <= 0.0) {
             return map;
         } else {
-            Mapping result = MappingFactory.createDefaultMapping();
+            AMapping result = MappingFactory.createDefaultMapping();
             // run on all pairs and remove those whose similarity is below
             // the threshold
             for (String key : map.getMap().keySet()) {
@@ -49,25 +49,24 @@ public class LinearFilter implements IFilter {
 
     /**
      * Filter a mapping with respect to an expression and a threshold.
-     * 
+     *
      * @param map
-     *            Input mapping
+     *         Input mapping
      * @param threshold
-     *            Similarity threshold
+     *         Similarity threshold
      * @param source,
-     *            Source cache
+     *         Source cache
      * @param target,
-     *            Target cache
+     *         Target cache
      * @param sourceVar,
-     *            Source variable
+     *         Source variable
      * @param targetVar,
-     *            Target variable
-     * 
+     *         Target variable
      * @return results, all links from map such that the expression and the
-     *         threshold holds
+     * threshold holds
      */
-    public Mapping filter(Mapping map, String condition, double threshold, Cache source, Cache target, String sourceVar,
-            String targetVar) {
+    public AMapping filter(AMapping map, String condition, double threshold, Cache source, Cache target, String sourceVar,
+                           String targetVar) {
         double sim = 0.0;
         Instance s, t;
 
@@ -76,7 +75,7 @@ public class LinearFilter implements IFilter {
             System.exit(1);
         }
 
-        Mapping result = MappingFactory.createDefaultMapping();
+        AMapping result = MappingFactory.createDefaultMapping();
         // 2. run on all pairs and remove those
         for (String key : map.getMap().keySet()) {
             s = source.getInstance(key);
@@ -93,7 +92,6 @@ public class LinearFilter implements IFilter {
     }
 
     /**
-     * 
      * Filter a mapping with respect to an expression and two thresholds. Used
      * by HELIOS/DYNAMIC planner in case of an AND optimization strategy. The
      * input mapping produced by executing one of the children specifications of
@@ -101,32 +99,29 @@ public class LinearFilter implements IFilter {
      * expression and the threshold of the other child. In order for a link to
      * be included in the output mapping, it must also pass the parent
      * specification threshold.
-     * 
      *
      * @param map
-     *            Input mapping
+     *         Input mapping
      * @param threshold
-     *            filter similarity threshold
+     *         filter similarity threshold
      * @param mainThreshold
-     *            Parent similarity threshold
+     *         Parent similarity threshold
      * @param source,
-     *            Source cache
+     *         Source cache
      * @param target,
-     *            Target cache
+     *         Target cache
      * @param sourceVar,
-     *            Source variable
+     *         Source variable
      * @param targetVar,
-     *            Target variable
-     * 
+     *         Target variable
      * @return results, all links from map such that the expression, the
-     *         threshold and the mainThreshold holds
-     * 
+     * threshold and the mainThreshold holds
      */
-    public Mapping filter(Mapping map, String condition, double threshold, double mainThreshold, Cache source,
-            Cache target, String sourceVar, String targetVar) {
+    public AMapping filter(AMapping map, String condition, double threshold, double mainThreshold, Cache source,
+                           Cache target, String sourceVar, String targetVar) {
         double sim = 0.0;
         Instance s, t;
-        Mapping result = MappingFactory.createDefaultMapping();
+        AMapping result = MappingFactory.createDefaultMapping();
         if (condition == null) {
             System.err.println("Null condition in extended filter function (LinearFilter). Exiting..");
             System.exit(1);
@@ -155,7 +150,6 @@ public class LinearFilter implements IFilter {
     }
 
     /**
-     * 
      * Filter a mapping with respect to an expression and two thresholds. Used
      * by DYNAMIC planner in case of an MINUS optimization strategy. The input
      * mapping produced by executing the left child of a specification that has
@@ -163,33 +157,30 @@ public class LinearFilter implements IFilter {
      * threshold of the right child. In order for a link to be included in the
      * output mapping, it must not pass the filtering criterion expressed by the
      * right child.
-     * 
      *
      * @param map
-     *            Input mapping
+     *         Input mapping
      * @param threshold
-     *            filter similarity threshold
+     *         filter similarity threshold
      * @param mainThreshold
-     *            Parent similarity threshold
+     *         Parent similarity threshold
      * @param source,
-     *            Source cache
+     *         Source cache
      * @param target,
-     *            Target cache
+     *         Target cache
      * @param sourceVar,
-     *            Source variable
+     *         Source variable
      * @param targetVar,
-     *            Target variable
-     * 
+     *         Target variable
      * @return results, all links from map such that the expression, the
-     *         threshold and the mainThreshold holds
-     * 
+     * threshold and the mainThreshold holds
      */
-    public Mapping reversefilter(Mapping map, String condition, double threshold, double mainThreshold, Cache source,
-            Cache target, String sourceVar, String targetVar) {
+    public AMapping reversefilter(AMapping map, String condition, double threshold, double mainThreshold, Cache source,
+                                  Cache target, String sourceVar, String targetVar) {
 
         double sim = 0.0;
         Instance s, t;
-        Mapping result = MappingFactory.createDefaultMapping();
+        AMapping result = MappingFactory.createDefaultMapping();
         if (condition == null) {
             System.err.println("Null condition in extended reverse filter function (LinearFilter). Exiting..");
             System.exit(1);
@@ -221,27 +212,25 @@ public class LinearFilter implements IFilter {
      * filter(intersection(m1, m2), linear_combination_condition) leading to
      * re-computations. This implementation avoid that by reusing the
      * similarities that have already been computed
-     * 
-     * 
+     *
      * @param map1
-     *            First input mapping
+     *         First input mapping
      * @param map2
-     *            Second input mapping
+     *         Second input mapping
      * @param coef1
-     *            First co-efficient
+     *         First co-efficient
      * @param coef2
-     *            Second co-efficient
+     *         Second co-efficient
      * @param threshold
-     *            Similarity threshold
+     *         Similarity threshold
      * @param threshold
-     *            Operation to be applied on input mappings
-     * 
+     *         Operation to be applied on input mappings
      * @return results, all links from map such that the expression, the
-     *         threshold and the mainThreshold holds
+     * threshold and the mainThreshold holds
      */
-    public Mapping filter(Mapping m1, Mapping m2, double coef1, double coef2, double threshold, String operation) {
-        Mapping m = MappingOperations.intersection(m1, m2);
-        Mapping result = MappingFactory.createDefaultMapping();
+    public AMapping filter(AMapping m1, AMapping m2, double coef1, double coef2, double threshold, String operation) {
+        AMapping m = MappingOperations.intersection(m1, m2);
+        AMapping result = MappingFactory.createDefaultMapping();
         double sim;
         // we can be sure that each key in m is also in m1 and m2 as we used
         // intersection

@@ -1,14 +1,14 @@
 package org.aksw.limes.core.measures.mapper;
 
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.measures.measure.Measure;
+import org.aksw.limes.core.util.RandomStringGenerator;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.measure.Measure;
-import org.aksw.limes.core.util.RandomStringGenerator;
 
 /**
  * @author Kevin Dreßler
@@ -16,9 +16,9 @@ import org.aksw.limes.core.util.RandomStringGenerator;
  * @since 1.0
  */
 public class MapperTest {
-    public static Mapping bruteForce(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
-                                 double threshold, Measure measure) {
-        Mapping m = MappingFactory.createDefaultMapping();
+    public static AMapping bruteForce(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
+                                      double threshold, Measure measure) {
+        AMapping m = MappingFactory.createDefaultMapping();
         double sim;
         for (String s : sourceMap.keySet()) {
             for (String t : targetMap.keySet()) {

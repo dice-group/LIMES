@@ -1,120 +1,118 @@
 package org.aksw.limes.core.gui.controller;
 
-import java.io.File;
-import java.io.IOException;
-
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.InstanceProperty;
 import org.aksw.limes.core.gui.model.Result;
 import org.aksw.limes.core.gui.view.ResultView;
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.writer.CSVMappingWriter;
 import org.aksw.limes.core.io.mapping.writer.RDFMappingWriter;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Controller for Resultview
- * 
- * @author Daniel Obraczka, Sascha Hahne
  *
+ * @author Daniel Obraczka, Sascha Hahne
  */
 public class ResultController {
 
-	/**
-	 * ResultView to manipulate
-	 */
-	private ResultView view;
+    /**
+     * ResultView to manipulate
+     */
+    private ResultView view;
 
-	/**
-	 * Config to get instance information
-	 */
-	private Config currentConfig;
+    /**
+     * Config to get instance information
+     */
+    private Config currentConfig;
 
-	/**
-	 * Constructor
-	 * 
-	 * @param view
-	 *            corresponding view
-	 * @param config
-	 */
-	public ResultController(ResultView view, Config config) {
-		this.view = view;
-		this.currentConfig = config;
-	}
+    /**
+     * Constructor
+     *
+     * @param view
+     *         corresponding view
+     * @param config
+     */
+    public ResultController(ResultView view, Config config) {
+        this.view = view;
+        this.currentConfig = config;
+    }
 
-	/**
-	 * shows the properties of an instancematch
-	 * 
-	 * @param item
-	 *            the clicked instancematch of the Resultview
-	 */
-	public void showProperties(Result item) {
-		String sourceURI = item.getSourceURI();
-		String targetURI = item.getTargetURI();
+    /**
+     * shows the properties of an instancematch
+     *
+     * @param item
+     *         the clicked instancematch of the Resultview
+     */
+    public void showProperties(Result item) {
+        String sourceURI = item.getSourceURI();
+        String targetURI = item.getTargetURI();
 
-		ObservableList<InstanceProperty> sourcePropertyList = FXCollections
-				.observableArrayList();
-		ObservableList<InstanceProperty> targetPropertyList = FXCollections
-				.observableArrayList();
+        ObservableList<InstanceProperty> sourcePropertyList = FXCollections
+                .observableArrayList();
+        ObservableList<InstanceProperty> targetPropertyList = FXCollections
+                .observableArrayList();
 
-		Instance i1 = currentConfig.getSourceEndpoint().getCache()
-				.getInstance(sourceURI);
-		Instance i2 = currentConfig.getTargetEndpoint().getCache()
-				.getInstance(targetURI);
-		for (String prop : i1.getAllProperties()) {
-			String value = "";
-			for (String s : i1.getProperty(prop)) {
-				value += s + " ";
-			}
-			sourcePropertyList.add(new InstanceProperty(prop, value));
+        Instance i1 = currentConfig.getSourceEndpoint().getCache()
+                .getInstance(sourceURI);
+        Instance i2 = currentConfig.getTargetEndpoint().getCache()
+                .getInstance(targetURI);
+        for (String prop : i1.getAllProperties()) {
+            String value = "";
+            for (String s : i1.getProperty(prop)) {
+                value += s + " ";
+            }
+            sourcePropertyList.add(new InstanceProperty(prop, value));
 
-		}
+        }
 
-		view.showSourceInstance(sourcePropertyList);
+        view.showSourceInstance(sourcePropertyList);
 
-		for (String prop : i2.getAllProperties()) {
-			String value = "";
-			for (String s : i2.getProperty(prop)) {
-				value += s + " ";
-			}
-			targetPropertyList.add(new InstanceProperty(prop, value));
-		}
-		view.showTargetInstance(targetPropertyList);
-	}
+        for (String prop : i2.getAllProperties()) {
+            String value = "";
+            for (String s : i2.getProperty(prop)) {
+                value += s + " ";
+            }
+            targetPropertyList.add(new InstanceProperty(prop, value));
+        }
+        view.showTargetInstance(targetPropertyList);
+    }
 
-	/**
-	 * Save Results to File
-	 * 
-	 * @param results
-	 *            Results of ResultView
-	 * @param file
-	 *            Path to File
-	 */
-	public void saveResults(Mapping mapping, File file) {
-		try{
-		String format = file.getName().substring(file.getName().lastIndexOf("."),file.getName().length());
-		if(format.equals(".csv")){
-			CSVMappingWriter csvwriter = new CSVMappingWriter();
-			csvwriter.write(mapping, file.getAbsolutePath());
-		}else{
-			RDFMappingWriter rdfwriter = new RDFMappingWriter();
-			rdfwriter.write(mapping, file.getAbsolutePath());
-		}
-		}catch(IOException e){
-			e.printStackTrace();
-		}
-		
-	}
+    /**
+     * Save Results to File
+     *
+     * @param results
+     *         Results of ResultView
+     * @param file
+     *         Path to File
+     */
+    public void saveResults(AMapping mapping, File file) {
+        try {
+            String format = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
+            if (format.equals(".csv")) {
+                CSVMappingWriter csvwriter = new CSVMappingWriter();
+                csvwriter.write(mapping, file.getAbsolutePath());
+            } else {
+                RDFMappingWriter rdfwriter = new RDFMappingWriter();
+                rdfwriter.write(mapping, file.getAbsolutePath());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	public Config getCurrentConfig() {
-		return currentConfig;
-	}
+    }
 
-	public void setCurrentConfig(Config currentConfig) {
-		this.currentConfig = currentConfig;
-	}
-	
+    public Config getCurrentConfig() {
+        return currentConfig;
+    }
+
+    public void setCurrentConfig(Config currentConfig) {
+        this.currentConfig = currentConfig;
+    }
+
 }

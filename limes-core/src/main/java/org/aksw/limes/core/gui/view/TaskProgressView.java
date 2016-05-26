@@ -1,7 +1,5 @@
 package org.aksw.limes.core.gui.view;
 
-import org.aksw.limes.core.gui.controller.TaskProgressController;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
@@ -14,71 +12,72 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.aksw.limes.core.gui.controller.TaskProgressController;
 
 public class TaskProgressView {
-	private Stage stage;
-	private TaskProgressController controller;
-	private StringProperty informationLabel;
-	private ProgressBar progressBar;
+    private Stage stage;
+    private TaskProgressController controller;
+    private StringProperty informationLabel;
+    private ProgressBar progressBar;
 
-	public TaskProgressView(String title) {
-		showWindow(title);
-	}
+    public TaskProgressView(String title) {
+        showWindow(title);
+    }
 
-	public void setController(TaskProgressController controller) {
-		this.controller = controller;
-	}
+    public void setController(TaskProgressController controller) {
+        this.controller = controller;
+    }
 
-	private void showWindow(String title) {
-		BorderPane mainPane = new BorderPane();
+    private void showWindow(String title) {
+        BorderPane mainPane = new BorderPane();
 
-		Label label = new Label(title);
-		Label information = new Label("");
-		informationLabel = new SimpleStringProperty(" ");
-		information.textProperty().bind(informationLabel);
-		
-		progressBar = new ProgressBar();
+        Label label = new Label(title);
+        Label information = new Label("");
+        informationLabel = new SimpleStringProperty(" ");
+        information.textProperty().bind(informationLabel);
 
-		HBox hb = new HBox();
-		hb.setSpacing(5);
-		hb.setAlignment(Pos.CENTER);
-		hb.getChildren().addAll(label, progressBar);
-		VBox vb = new VBox();
-		vb.getChildren().addAll(hb, information);
-		vb.setAlignment(Pos.CENTER);
-		mainPane.setTop(vb);
+        progressBar = new ProgressBar();
 
-		Button cancelButton = new Button("Cancel");
+        HBox hb = new HBox();
+        hb.setSpacing(5);
+        hb.setAlignment(Pos.CENTER);
+        hb.getChildren().addAll(label, progressBar);
+        VBox vb = new VBox();
+        vb.getChildren().addAll(hb, information);
+        vb.setAlignment(Pos.CENTER);
+        mainPane.setTop(vb);
 
-		HBox hb2 = new HBox();
-		hb2.setSpacing(5);
-		hb2.setAlignment(Pos.CENTER);
-		hb2.getChildren().addAll(cancelButton);
-		mainPane.setBottom(hb2);
+        Button cancelButton = new Button("Cancel");
 
-		// cancels the mapping and closes the window
-		cancelButton.setOnAction(event -> {
-			controller.cancel();
-		});
+        HBox hb2 = new HBox();
+        hb2.setSpacing(5);
+        hb2.setAlignment(Pos.CENTER);
+        hb2.getChildren().addAll(cancelButton);
+        mainPane.setBottom(hb2);
 
-		Scene scene = new Scene(mainPane, 250, 60, Color.WHITE);
-		scene.getStylesheets().add("gui/main.css");
-		stage = new Stage();
-		stage.setAlwaysOnTop(true);
-		stage.setTitle(title);
-		stage.setScene(scene);
-		stage.show();
-	}
+        // cancels the mapping and closes the window
+        cancelButton.setOnAction(event -> {
+            controller.cancel();
+        });
 
-	public void close() {
-		stage.close();
-	}
+        Scene scene = new Scene(mainPane, 250, 60, Color.WHITE);
+        scene.getStylesheets().add("gui/main.css");
+        stage = new Stage();
+        stage.setAlwaysOnTop(true);
+        stage.setTitle(title);
+        stage.setScene(scene);
+        stage.show();
+    }
 
-	public StringProperty getInformationLabel() {
-		return informationLabel;
-	}
+    public void close() {
+        stage.close();
+    }
 
-	public ProgressBar getProgressBar() {
-		return progressBar;
-	}
+    public StringProperty getInformationLabel() {
+        return informationLabel;
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
 }

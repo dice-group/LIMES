@@ -1,30 +1,21 @@
 package org.aksw.limes.core.io.query;
 
-import java.util.Iterator;
-
+import com.hp.hpl.jena.query.*;
+import com.hp.hpl.jena.rdf.model.Model;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFormatter;
-import com.hp.hpl.jena.query.Syntax;
-import com.hp.hpl.jena.rdf.model.Model;
+import java.util.Iterator;
 
 /**
- *
  * @author ngonga
  */
 public class SparqlQueryModule implements IQueryModule {
 
-    private Logger logger = Logger.getLogger(SparqlQueryModule.class.getName());
     protected KBInfo kb;
+    private Logger logger = Logger.getLogger(SparqlQueryModule.class.getName());
 
     public SparqlQueryModule(KBInfo kbinfo) {
         kb = kbinfo;
@@ -34,8 +25,8 @@ public class SparqlQueryModule implements IQueryModule {
      * Reads from a SPARQL endpoint and writes the results in a cache
      *
      * @param cache
-     *            The cache in which the content on the SPARQL endpoint is to be
-     *            written
+     *         The cache in which the content on the SPARQL endpoint is to be
+     *         written
      */
     public void fillCache(Cache cache) {
         fillCache(cache, true);
@@ -45,11 +36,11 @@ public class SparqlQueryModule implements IQueryModule {
      * Reads from a SPARQL endpoint or a file and writes the results in a cache
      *
      * @param cache
-     *            The cache in which the content on the SPARQL endpoint is to be
-     *            written
+     *         The cache in which the content on the SPARQL endpoint is to be
+     *         written
      * @param isSparql
-     *            True if the endpoint is a remote SPARQL endpoint, else assume
-     *            that is is a Jena model
+     *         True if the endpoint is a remote SPARQL endpoint, else assume
+     *         that is is a Jena model
      */
     public void fillCache(Cache cache, boolean isSparql) {
         long startTime = System.currentTimeMillis();

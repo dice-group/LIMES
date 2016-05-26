@@ -1,7 +1,7 @@
 package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameters;
 
@@ -17,7 +17,7 @@ public abstract class AMLAlgorithm {
         ml.init(lp, source, target);
     }
 
-    public Mapping predict(Cache source, Cache target, MLModel mlModel) {
+    public AMapping predict(Cache source, Cache target, MLModel mlModel) {
         return ml.predict(source, target, mlModel);
     }
 

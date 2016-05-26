@@ -1,22 +1,17 @@
 package org.aksw.limes.core.measures.mapper.string;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.PropertyFetcher;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.apache.log4j.Logger;
 
+import java.util.*;
+
 /**
  * @author Peggy Lucke
- *
  */
 public class MongeElkanMapper extends Mapper {
 
@@ -26,6 +21,7 @@ public class MongeElkanMapper extends Mapper {
     private String split = " ";
     // underlying trigram measure provided
     private TrigramMeasure trigram = new TrigramMeasure();
+
     // Token divide by another character as space
     public void setSplit(String split) {
         this.split = split;
@@ -34,15 +30,15 @@ public class MongeElkanMapper extends Mapper {
 
     /**
      * @param sourceMap
-     *            Texts to compare with target
+     *         Texts to compare with target
      * @param targetMap
-     *            Texts to compare with source
+     *         Texts to compare with source
      * @param threshold
-     *            is the minimum similarity of the results
+     *         is the minimum similarity of the results
      * @return all results of source compare with target together with the
-     *         similarity of them
+     * similarity of them
      */
-    public Mapping getMapping(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap, double threshold) {
+    public AMapping getMapping(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap, double threshold) {
         Iterator<String> sit = sourceMap.keySet().iterator();
         double resultDouble;
         Map<String, Map<String, Double>> similarityBook = new HashMap<>();
@@ -60,7 +56,7 @@ public class MongeElkanMapper extends Mapper {
             similarityBook.put(sourceString, resultB);
         }
         logger.info("Similarity Book has " + String.valueOf(similarityBook.size()) + " entries.");
-        Mapping result = MappingFactory.createDefaultMapping();
+        AMapping result = MappingFactory.createDefaultMapping();
         for (String s : similarityBook.keySet()) {
             for (String t : similarityBook.get(s).keySet()) {
                 for (String sourceUri : sourceMap.get(s)) {
@@ -80,7 +76,7 @@ public class MongeElkanMapper extends Mapper {
         double simB = 0;
         double result = 0;
         float maxNumber = sourceToken.length;
-	/*
+    /*
 	 * the minimum of the result to reach the threshold
 	 */
         float treshMin = (float) (maxNumber * threshold);
@@ -122,8 +118,8 @@ public class MongeElkanMapper extends Mapper {
     }
 
     @Override
-    public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                              double threshold) {
+    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+                               double threshold) {
         logger.info("Running MongeElkanMapper");
 
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);

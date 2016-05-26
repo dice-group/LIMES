@@ -1,19 +1,5 @@
 package org.aksw.limes.core.ml.oldalgorithm;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFM;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
@@ -27,7 +13,7 @@ import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.algorithm.lion.DefaultRefinementHeuristic;
@@ -41,656 +27,670 @@ import org.aksw.limes.core.ml.setting.UnsupervisedLearningSetting;
 import org.apache.log4j.Logger;
 import org.jgap.InvalidConfigurationException;
 
+import java.io.*;
+import java.util.*;
+
 //
 //import com.jamonapi.Monitor;
 //import com.jamonapi.MonitorFactory;
 //
 
 /**
- * 
  * Refinement based learning algorithm for link specs.
- * 
+ *
  * @author Klaus Lyko
  * @author Jens Lehmann
  * @author mofeed
  */
 public class Lion extends MLAlgorithm {
 
-    public boolean advancedThreholdSearch = false;
-    public int thresholdGrid = 3;
-
+    // TODO either move to setting or finalize strategy
+    public static boolean hardRootExpansion = true;
     protected static Logger logger = Logger.getLogger("LIMES");
     protected static int globalTime = 1000;
-    protected LengthLimitedRefinementOperator operator;
     // bMofeed
     protected static int IdCounter = 0;
+    /* for experiments */
+    protected static boolean debuggingInput = false;
+    public boolean advancedThreholdSearch = false;
     // eMofeed
-
+    public int thresholdGrid = 3;
+    protected LengthLimitedRefinementOperator operator;
     // all nodes in the search tree (used for selecting most promising node)
     protected TreeSet<SearchTreeNode> nodes;
     protected RefinementHeuristic heuristic;
+    // redundancy
     // root of search tree
     protected SearchTreeNode startNode; // it is null
     protected HashSet<LinkSpecification> specs; // m:note- here check the
-						// redundancy
-
     protected Planner planner;
     protected ExecutionEngine engine;
-    UnsupervisedLearningSetting setting;
-
     protected PseudoFM pfm;
-    /* for experiments */
-    protected static boolean debuggingInput = false;
-    // TODO either move to setting or finalize strategy
-    public static boolean hardRootExpansion = true;
     protected List<Integer> loopsRootExpanded = new LinkedList<Integer>();
-    /** Best Score so far **/
+    /**
+     * Best Score so far
+     **/
     protected double bestScore = 0;
-    /** Link specification with highest PFM */
+    /**
+     * Link specification with highest PFM
+     */
     protected SearchTreeNode best = null;
-
     protected boolean newBest = false; // needed to decide whether we log a new
-				       // best node
+    UnsupervisedLearningSetting setting;
+    // best node
 
     /**
      * Constructor
-     * 
+     *
      * @param sourceCache
      * @param targetCache
      * @param config
      */
     public Lion(Cache sourceCache, Cache targetCache, Configuration config) {
-	super(sourceCache, targetCache, config);
-	nodes = new TreeSet<SearchTreeNode>();
-	heuristic = new DefaultRefinementHeuristic();
-	operator = new UpwardLengthLimitRefinementOperator();
-	operator.setConfiguration(getConfiguration());
-	heuristic.setLearningSetting(setting);
-	ExecutionPlannerType executionPlanerType = ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlan().toLowerCase());
+        super(sourceCache, targetCache, config);
+        nodes = new TreeSet<SearchTreeNode>();
+        heuristic = new DefaultRefinementHeuristic();
+        operator = new UpwardLengthLimitRefinementOperator();
+        operator.setConfiguration(getConfiguration());
+        heuristic.setLearningSetting(setting);
+        ExecutionPlannerType executionPlanerType = ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlan().toLowerCase());
         planner = ExecutionPlannerFactory.getPlanner(executionPlanerType, sourceCache, targetCache);
     }
 
-    @Override
-    public void init(LearningSetting parameters, Mapping trainingData) throws InvalidConfigurationException {
-	setting = (UnsupervisedLearningSetting) parameters;
-	// this.gammaScore = setting.getGammaScore();
-	// this.expansionPenalty = setting.getExpansionPenalty();
-	// this.maxDuration = setting.getMaxDuration();
-	// this.reward = setting.getExpansionPenalty();
-	this.loopsRootExpanded = new LinkedList<Integer>();
+    public static void main(String args[]) {
+        String base = "/home/lyko/svn/LIMES/";
+        String configFile = "../../../svn/LIMES/Examples/GeneticEval/PublicationData.xml";
+        XMLConfigurationReader reader = new XMLConfigurationReader(configFile);
+        Configuration config = reader.read();
+        config.getSourceInfo().setEndpoint(base + config.getSourceInfo().getEndpoint());
+        config.getTargetInfo().setEndpoint(base + config.getTargetInfo().getEndpoint());
 
-	// setting parameters
-	pfm = new PseudoFM();
-	heuristic.setLearningSetting(setting);
-	operator.setLearningSetting(setting);
-	engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, this.getSourceCache(),
-		this.getTargetCache(), this.getConfiguration().getSourceInfo().getVar(),
-		this.getConfiguration().getTargetInfo().getVar());
+        Cache sC = HybridCache.getData(config.getSourceInfo());
+
+        HybridCache tC = HybridCache.getData(config.getTargetInfo());
+
+        Lion lion = new Lion(sC, tC, config);
+
+        UnsupervisedLearningSetting setting = new UnsupervisedLearningSetting(lion);
+        PropertyMapping propMap = new PropertyMapping();
+        propMap.addStringPropertyMatch("title", "title");
+        propMap.addStringPropertyMatch("authors", "authors");
+        propMap.addStringPropertyMatch("venue", "venue");
+        propMap.addNumberPropertyMatch("year", "year");
+
+        setting.setPropMap(propMap);
+        setting.setTerminationCriteria(TerminationCriteria.duration, 10);
+
+        try {
+            lion.init(setting, MappingFactory.createDefaultMapping());
+            MLModel result = lion.learn(MappingFactory.createDefaultMapping());
+            System.out.println(result);
+        } catch (InvalidConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void init(LearningSetting parameters, AMapping trainingData) throws InvalidConfigurationException {
+        setting = (UnsupervisedLearningSetting) parameters;
+        // this.gammaScore = setting.getGammaScore();
+        // this.expansionPenalty = setting.getExpansionPenalty();
+        // this.maxDuration = setting.getMaxDuration();
+        // this.reward = setting.getExpansionPenalty();
+        this.loopsRootExpanded = new LinkedList<Integer>();
+
+        // setting parameters
+        pfm = new PseudoFM();
+        heuristic.setLearningSetting(setting);
+        operator.setLearningSetting(setting);
+        engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, this.getSourceCache(),
+                this.getTargetCache(), this.getConfiguration().getSourceInfo().getVar(),
+                this.getConfiguration().getTargetInfo().getVar());
 
     }
 
     /**
      * Start algorithm
-     * 
+     *
      * @throws IOException
      */
-    public MLModel learn(Mapping trainingData) {
-	MLModel result = new MLModel();
-	// highest accuracy so far, used for pruning
-	double highestAccuracy = 0.0;
-	SearchTreeNode nextNode;
-	startNode = new SearchTreeNode(new LinkSpecification(), setting.getGammaScore(), setting.getExpansionPenalty());
-	startNode.addSpecificName("root");
-	startNode.setExpansion(1);
-	nodes.add(startNode);
-	// bMofeed
-	startNode.nodeId = IdCounter++; // give id
-	startNode.creationTime = globalTime; // set creation time for node
-	startNode.createHistoryevent(globalTime++); // add it to the history for
-						    // attributes
-	// eMofeed
-	long startTime = System.currentTimeMillis();
-	int loop = 0;
-	long dur = 0;
-	int nextRootNode = 100;
-	while (true) {
-	    boolean terminate = false;
-	    // TerminationCriteria criteria = setting.getTerminationCriteria();
-	    switch (setting.getTerminationCriteria()) {
-	    case quality:
-		terminate = checkTermination(bestScore);
-		break;
-	    case iteration:
-		terminate = checkTermination(loop);
-		break;
-	    default:
-		terminate = checkTermination(dur);
-		break;
-	    }
-	    if (terminate) {
-		logger.info("LION Finished using termination criteria " + setting.getTerminationCriteria() + ": loop="
-			+ loop + " dur=" + dur / 1000 + " quality=" + bestScore + ">"
-			+ setting.getTerminationCriteriaValue());
-		System.out.println("LION Finished using termination criteria " + setting.getTerminationCriteria()
-			+ ": loop=" + loop + " dur=" + dur / 1000 + " quality=" + bestScore + ">"
-			+ setting.getTerminationCriteriaValue());
-		break;
-	    }
-	    if (loop % 10 == 0)
-		logger.info("Loop " + loop + " searchtree.size=" + nodes.size());
+    public MLModel learn(AMapping trainingData) {
+        MLModel result = new MLModel();
+        // highest accuracy so far, used for pruning
+        double highestAccuracy = 0.0;
+        SearchTreeNode nextNode;
+        startNode = new SearchTreeNode(new LinkSpecification(), setting.getGammaScore(), setting.getExpansionPenalty());
+        startNode.addSpecificName("root");
+        startNode.setExpansion(1);
+        nodes.add(startNode);
+        // bMofeed
+        startNode.nodeId = IdCounter++; // give id
+        startNode.creationTime = globalTime; // set creation time for node
+        startNode.createHistoryevent(globalTime++); // add it to the history for
+        // attributes
+        // eMofeed
+        long startTime = System.currentTimeMillis();
+        int loop = 0;
+        long dur = 0;
+        int nextRootNode = 100;
+        while (true) {
+            boolean terminate = false;
+            // TerminationCriteria criteria = setting.getTerminationCriteria();
+            switch (setting.getTerminationCriteria()) {
+                case quality:
+                    terminate = checkTermination(bestScore);
+                    break;
+                case iteration:
+                    terminate = checkTermination(loop);
+                    break;
+                default:
+                    terminate = checkTermination(dur);
+                    break;
+            }
+            if (terminate) {
+                logger.info("LION Finished using termination criteria " + setting.getTerminationCriteria() + ": loop="
+                        + loop + " dur=" + dur / 1000 + " quality=" + bestScore + ">"
+                        + setting.getTerminationCriteriaValue());
+                System.out.println("LION Finished using termination criteria " + setting.getTerminationCriteria()
+                        + ": loop=" + loop + " dur=" + dur / 1000 + " quality=" + bestScore + ">"
+                        + setting.getTerminationCriteriaValue());
+                break;
+            }
+            if (loop % 10 == 0)
+                logger.info("Loop " + loop + " searchtree.size=" + nodes.size());
 
-	    newBest = false;
-	    if (loop == 1) {
-		logger.info("intial treesize: " + nodes.size());
-		Iterator<SearchTreeNode> it = nodes.descendingIterator();
-		while (it.hasNext()) {
-		    SearchTreeNode within = it.next();
-		    System.out.println(
-			    "score= " + within.getScore() + " penScore=" + within.getPenaltyScore() + " =>" + within);
-		}
-		// System.out.println("Next:="+getNextNodeToExpand());
+            newBest = false;
+            if (loop == 1) {
+                logger.info("intial treesize: " + nodes.size());
+                Iterator<SearchTreeNode> it = nodes.descendingIterator();
+                while (it.hasNext()) {
+                    SearchTreeNode within = it.next();
+                    System.out.println(
+                            "score= " + within.getScore() + " penScore=" + within.getPenaltyScore() + " =>" + within);
+                }
+                // System.out.println("Next:="+getNextNodeToExpand());
 
-	    }
-	    // mofeed
-	    // System.out.println("Size of the treeset "+nodes.size()+"
-	    // nodes\n");
-	    // System.out.println("Nr of Childs of root
-	    // "+startNode.getChildren().size()+" nodes\n");
-	    // if(nodes.size() > 100)
-	    // {
-	    // System.out.println("Generating graph-----------------------\n");
-	    // GraphGenerator g = new GraphGenerator();
-	    // g.createGraphRecursive(startNode);
-	    //
-	    // g.createGraphItersive(nodes);
-	    // g.writeGraphDynamically();
-	    // g.displayGraph();
-	    // g.writeGraph();
-	    // }
-	    // remember best node
+            }
+            // mofeed
+            // System.out.println("Size of the treeset "+nodes.size()+"
+            // nodes\n");
+            // System.out.println("Nr of Childs of root
+            // "+startNode.getChildren().size()+" nodes\n");
+            // if(nodes.size() > 100)
+            // {
+            // System.out.println("Generating graph-----------------------\n");
+            // GraphGenerator g = new GraphGenerator();
+            // g.createGraphRecursive(startNode);
+            //
+            // g.createGraphItersive(nodes);
+            // g.writeGraphDynamically();
+            // g.displayGraph();
+            // g.writeGraph();
+            // }
+            // remember best node
 
-	    // SearchTreeNode best = getMaxNode();
-	    /** Should be the case upon initialization **/
-	    if (best == null) {
-		best = startNode;
+            // SearchTreeNode best = getMaxNode();
+            /** Should be the case upon initialization **/
+            if (best == null) {
+                best = startNode;
 
-		// memList.add(new EvaluationMemory(best, loop,
-		// System.currentTimeMillis()-startTime));
-	    }
-	    dur = System.currentTimeMillis() - startTime;
-	    // chose best node according to heuristics
-	    if (hardRootExpansion) {
-		if (loop == nextRootNode) {// 0, 50, 100
+                // memList.add(new EvaluationMemory(best, loop,
+                // System.currentTimeMillis()-startTime));
+            }
+            dur = System.currentTimeMillis() - startTime;
+            // chose best node according to heuristics
+            if (hardRootExpansion) {
+                if (loop == nextRootNode) {// 0, 50, 100
 
-		    nextNode = startNode;
-		    if (loop == nextRootNode)
-			nextRootNode *= 10;
-		    logger.error("Loop " + loop + " expanding rootNode... Time passed " + (dur / 1000) + " s");
-		} else {
-		    nextNode = getNextNodeToExpand();
-		}
+                    nextNode = startNode;
+                    if (loop == nextRootNode)
+                        nextRootNode *= 10;
+                    logger.error("Loop " + loop + " expanding rootNode... Time passed " + (dur / 1000) + " s");
+                } else {
+                    nextNode = getNextNodeToExpand();
+                }
 
-	    } else {
-		nextNode = getNextNodeToExpand();
-	    }
-	    logger.debug("BEST loop(" + loop + ")" + best);
-	    if (nextNode.isRoot()) {
-		loopsRootExpanded.add(loop);
-	    }
-	    // int horizExp = nextNode.getExpansion();
-	    // logger.error("Loop "+loop+" expansion="+horizExp+ " refining
-	    // node:"+nextNode+"\n \twith score "+nextNode.getScore());//+ ":
-	    // "+nextNode.toTreeString());
-	    // apply operator
-	    Set<LinkSpecification> refinements = refineNode(nextNode, startTime);
+            } else {
+                nextNode = getNextNodeToExpand();
+            }
+            logger.debug("BEST loop(" + loop + ")" + best);
+            if (nextNode.isRoot()) {
+                loopsRootExpanded.add(loop);
+            }
+            // int horizExp = nextNode.getExpansion();
+            // logger.error("Loop "+loop+" expansion="+horizExp+ " refining
+            // node:"+nextNode+"\n \twith score "+nextNode.getScore());//+ ":
+            // "+nextNode.toTreeString());
+            // apply operator
+            Set<LinkSpecification> refinements = refineNode(nextNode, startTime);
 
-	    logger.info("\t refined into " + refinements.size());
-	    int nrOfRef = refinements.size();
-	    int nrOfChilds = 0;
-	    long now = System.currentTimeMillis() - startTime;
-	    Iterator<LinkSpecification> it = refinements.iterator();
-	    while (refinements.size() != 0 && !timeBasedTermination(now, setting.getMaxDuration()) && it.hasNext()) {
-		// pick element from set
-		LinkSpecification refinement = it.next();
+            logger.info("\t refined into " + refinements.size());
+            int nrOfRef = refinements.size();
+            int nrOfChilds = 0;
+            long now = System.currentTimeMillis() - startTime;
+            Iterator<LinkSpecification> it = refinements.iterator();
+            while (refinements.size() != 0 && !timeBasedTermination(now, setting.getMaxDuration()) && it.hasNext()) {
+                // pick element from set
+                LinkSpecification refinement = it.next();
 
-		if (refinement.getThreshold() <= 0.1) {
-		    logger.info("Ignoring refinement " + refinement + "\n due to too low threshold");
-		    // resLog.writeLogString("Ignoring refinement
-		    // "+refinement+"\n due to too low threshold");
-		    continue;
-		}
-		if (!refinement.equals(nextNode.getSpec())) {
-		    SearchTreeNode added = addNode(refinement, nextNode);
+                if (refinement.getThreshold() <= 0.1) {
+                    logger.info("Ignoring refinement " + refinement + "\n due to too low threshold");
+                    // resLog.writeLogString("Ignoring refinement
+                    // "+refinement+"\n due to too low threshold");
+                    continue;
+                }
+                if (!refinement.equals(nextNode.getSpec())) {
+                    SearchTreeNode added = addNode(refinement, nextNode);
 
-		    if (added != null) {
-			if (highestAccuracy < added.getScore()) {
-			    highestAccuracy = added.getScore();
-			    logger.info("New highest accuracy: " + highestAccuracy + " accieved by node " + added);
-			}
-			if (added.getScore() > nextNode.getScore()) {
-			    added.setReward(setting.getReward());
-			}
-			logger.info("\t added child: " + added);
-			nrOfChilds++;
-		    }
-		}
+                    if (added != null) {
+                        if (highestAccuracy < added.getScore()) {
+                            highestAccuracy = added.getScore();
+                            logger.info("New highest accuracy: " + highestAccuracy + " accieved by node " + added);
+                        }
+                        if (added.getScore() > nextNode.getScore()) {
+                            added.setReward(setting.getReward());
+                        }
+                        logger.info("\t added child: " + added);
+                        nrOfChilds++;
+                    }
+                }
 
-		// adding nodes is potentially computationally expensive, so we
-		// have
-		// to check whether max time is exceeded
-		now = dur = System.currentTimeMillis() - startTime;
+                // adding nodes is potentially computationally expensive, so we
+                // have
+                // to check whether max time is exceeded
+                now = dur = System.currentTimeMillis() - startTime;
 
-	    }
-	    // resLog.writeLogString(loop+": Expanded exp
-	    // (sc:="+nextNode.getPenaltyScore()+" -
-	    // maxF:="+nextNode.maxAcchievablePFM+")="+nextNode+"
-	    // "+nextNode.specificName+" into "+nrOfRef+" nodes. Successfully
-	    // added: "+nrOfChilds);
-	    // if(newBest)
-	    // memList.add(new EvaluationMemory(best, loop,
-	    // System.currentTimeMillis()-startTime));
-	    logger.info("Added " + nrOfChilds + " nodes to tree");
-	    if (nrOfChilds == 0) {
-		logger.debug("Not added any childs don't expand this node again");
-		nextNode.expand = false;
-	    }
-	    // if(nextNode.getExpansion()>=3)
-	    // resLog.logEntry(loop, nextNode, refinements, highestAccuracy);
-	    // if(debuggingInput && (!nextNode.getSpec().isAtomic() ||
-	    // nextNode.getExpansion()>2 )) {
-	    // System.out.println("Press enter for next loop");
-	    // InputStreamReader converter = new InputStreamReader(System.in);
-	    // BufferedReader in = new BufferedReader(converter);
-	    // in.readLine();
-	    // }
-	    loop++;
-	    if (setting.isPrune()) {
-		pruneSearchTree(bestScore);
-	    }
+            }
+            // resLog.writeLogString(loop+": Expanded exp
+            // (sc:="+nextNode.getPenaltyScore()+" -
+            // maxF:="+nextNode.maxAcchievablePFM+")="+nextNode+"
+            // "+nextNode.specificName+" into "+nrOfRef+" nodes. Successfully
+            // added: "+nrOfChilds);
+            // if(newBest)
+            // memList.add(new EvaluationMemory(best, loop,
+            // System.currentTimeMillis()-startTime));
+            logger.info("Added " + nrOfChilds + " nodes to tree");
+            if (nrOfChilds == 0) {
+                logger.debug("Not added any childs don't expand this node again");
+                nextNode.expand = false;
+            }
+            // if(nextNode.getExpansion()>=3)
+            // resLog.logEntry(loop, nextNode, refinements, highestAccuracy);
+            // if(debuggingInput && (!nextNode.getSpec().isAtomic() ||
+            // nextNode.getExpansion()>2 )) {
+            // System.out.println("Press enter for next loop");
+            // InputStreamReader converter = new InputStreamReader(System.in);
+            // BufferedReader in = new BufferedReader(converter);
+            // in.readLine();
+            // }
+            loop++;
+            if (setting.isPrune()) {
+                pruneSearchTree(bestScore);
+            }
 
-	} // while learning
+        } // while learning
 
-	// memList.add(new EvaluationMemory(best, loop,
-	// System.currentTimeMillis()-startTime));
+        // memList.add(new EvaluationMemory(best, loop,
+        // System.currentTimeMillis()-startTime));
 
-	// String s = "Loops of root was expanded: ";
-	// for(Integer i : this.loopsRootExpanded) {
-	// s+= ", "+i;
-	// }
-	// s+="\n";
-	// s+=" SearchTree.size =" + nodes.size() + "\n";
-	// resLog.writeString(s);
-	// logger.error("Computing Scores");
-	// computeScores();
-	// System.out.println("Generating graph for "+nodes.size()+" nodes\n");
-	// try {
-	// FileUtils.writeStringToFile(new
-	// File("resources/results/searchTree.txt"), startNode.toTreeString());
-	// }catch(Exception e){}
-	// resLog.writeTreeString(startNode.toTreeString());
+        // String s = "Loops of root was expanded: ";
+        // for(Integer i : this.loopsRootExpanded) {
+        // s+= ", "+i;
+        // }
+        // s+="\n";
+        // s+=" SearchTree.size =" + nodes.size() + "\n";
+        // resLog.writeString(s);
+        // logger.error("Computing Scores");
+        // computeScores();
+        // System.out.println("Generating graph for "+nodes.size()+" nodes\n");
+        // try {
+        // FileUtils.writeStringToFile(new
+        // File("resources/results/searchTree.txt"), startNode.toTreeString());
+        // }catch(Exception e){}
+        // resLog.writeTreeString(startNode.toTreeString());
 
-	result.setLinkSpecification(this.best.getSpec());
+        result.setLinkSpecification(this.best.getSpec());
 //	result.setMapping(getMapping(this.best.getSpec()));
-	result.setQuality(this.best.getScore());
-	return result;
+        result.setQuality(this.best.getScore());
+        return result;
     }
 
     /**
      * Traverses all nodes in the search space to find the next node to expand:
      * the one with the highest (penalty) score, which is allowed to be further
      * exanded.
-     * 
+     *
      * @return SearchTreeNode to expand using the operator.
      */
     protected SearchTreeNode getNextNodeToExpand() {
-	// we expand the best node of those, which have not achieved 100%
-	// accuracy
-	// already and have a horizontal expansion equal to their length
-	// (rationale: further extension is likely to add irrelevant syntactical
-	// constructs)
-	// logger.info("Get next node, treeset size="+nodes.size() );
-	Iterator<SearchTreeNode> it = nodes.descendingIterator();
+        // we expand the best node of those, which have not achieved 100%
+        // accuracy
+        // already and have a horizontal expansion equal to their length
+        // (rationale: further extension is likely to add irrelevant syntactical
+        // constructs)
+        // logger.info("Get next node, treeset size="+nodes.size() );
+        Iterator<SearchTreeNode> it = nodes.descendingIterator();
 
-	double maxScore = -1d;
-	double maxAchievable = -1d;
-	SearchTreeNode next = null;
-	while (it.hasNext()) {
+        double maxScore = -1d;
+        double maxAchievable = -1d;
+        SearchTreeNode next = null;
+        while (it.hasNext()) {
 
-	    SearchTreeNode node = it.next();
-	    if (hardRootExpansion) // ignore root if its choosen manually
-		if (node.isRoot())
-		    continue;
-	    if (node.expand) {
-		if (node.getPenaltyScore() > maxScore) {
-		    maxScore = node.getPenaltyScore();
-		    maxAchievable = node.maxAcchievablePFM;
-		    next = node;
-		}
+            SearchTreeNode node = it.next();
+            if (hardRootExpansion) // ignore root if its choosen manually
+                if (node.isRoot())
+                    continue;
+            if (node.expand) {
+                if (node.getPenaltyScore() > maxScore) {
+                    maxScore = node.getPenaltyScore();
+                    maxAchievable = node.maxAcchievablePFM;
+                    next = node;
+                } else {
+                    if (node.maxAcchievablePFM > maxScore && maxAchievable < node.maxAcchievablePFM) {
+                        next = node;
+                        maxScore = node.getPenaltyScore();
+                        maxAchievable = node.maxAcchievablePFM;
+                    }
+                }
+            } // if node.expand
+        } // end while
 
-		else {
-		    if (node.maxAcchievablePFM > maxScore && maxAchievable < node.maxAcchievablePFM) {
-			next = node;
-			maxScore = node.getPenaltyScore();
-			maxAchievable = node.maxAcchievablePFM;
-		    }
-		}
-	    } // if node.expand
-	} // end while
+        if (maxScore > -1d) {
+            return next;
+        }
+        // this should practically never be called, since for any reasonable
+        // learning
+        // task, we will always have at least one node with less than 100%
+        // accuracy
 
-	if (maxScore > -1d) {
-	    return next;
-	}
-	// this should practically never be called, since for any reasonable
-	// learning
-	// task, we will always have at least one node with less than 100%
-	// accuracy
-
-	return nodes.last();
+        return nodes.last();
     }
 
     /**
      * Refines a node: removes it from set, creates all refinement and adds it
      * again, with incremented threshold.
-     * 
+     *
      * @param node
-     *            Node to refine
+     *         Node to refine
      * @return all refined LinkSpecs.
      */
     protected Set<LinkSpecification> refineNode(SearchTreeNode node, long start) {
-	// we have to remove and add the node since its heuristic evaluation
-	// changes through the expansion
-	// (you *must not* include any criteria in the heuristic which are
-	// modified outside of this method,
-	// otherwise you may see rarely occurring but critical false ordering in
-	// the nodes set)
-	nodes.remove(node);
+        // we have to remove and add the node since its heuristic evaluation
+        // changes through the expansion
+        // (you *must not* include any criteria in the heuristic which are
+        // modified outside of this method,
+        // otherwise you may see rarely occurring but critical false ordering in
+        // the nodes set)
+        nodes.remove(node);
 
-	int horizExp = node.getExpansion();
-	Set<LinkSpecification> refinements = operator.refine(node.getSpec(), horizExp);
-	// bMofeed
-	// Threshold may be changed get snapshot for the new change
-	// System.out.println("Created refinements "+refinements.size()+" for
-	// node "+node);
-	node.createHistoryevent(globalTime++);
-	// eMofeed
-	// if(node.getSpec().isAtomic()) {String str = "refined "+node+"
-	// into\n";
-	// for(LinkSpec ls : refinements) {
-	// str += "\n"+ls;
-	// }
-	// this.resLog.writeLogString(str);
-	// }
-	node.incExpansion();
-	if (node.getExpansion() > 2) {
-	    // node.expand = false;
-	    // logger.info("DON'T expand this atomic anymore!!!:
-	    // exp="+node.getExpansion()+" node="+node.toTreeString());
-	}
-	if (!advancedThreholdSearch || node.isRoot()) {
-	    // logger.error("No optimized threshold search on root node of it
-	    // isn't applied");
-	    nodes.add(node);
-	    return refinements;
-	} else {
+        int horizExp = node.getExpansion();
+        Set<LinkSpecification> refinements = operator.refine(node.getSpec(), horizExp);
+        // bMofeed
+        // Threshold may be changed get snapshot for the new change
+        // System.out.println("Created refinements "+refinements.size()+" for
+        // node "+node);
+        node.createHistoryevent(globalTime++);
+        // eMofeed
+        // if(node.getSpec().isAtomic()) {String str = "refined "+node+"
+        // into\n";
+        // for(LinkSpec ls : refinements) {
+        // str += "\n"+ls;
+        // }
+        // this.resLog.writeLogString(str);
+        // }
+        node.incExpansion();
+        if (node.getExpansion() > 2) {
+            // node.expand = false;
+            // logger.info("DON'T expand this atomic anymore!!!:
+            // exp="+node.getExpansion()+" node="+node.toTreeString());
+        }
+        if (!advancedThreholdSearch || node.isRoot()) {
+            // logger.error("No optimized threshold search on root node of it
+            // isn't applied");
+            nodes.add(node);
+            return refinements;
+        } else {
 
-	    // logger.error("Atempting optimized threshold on
-	    // "+refinements.size()+" children of node "+node);
-	    // System.out.println("Trying advanced threshold opitimization");
-	    TreeSet<LinkSpecification> allOpt = new TreeSet<LinkSpecification>();
+            // logger.error("Atempting optimized threshold on
+            // "+refinements.size()+" children of node "+node);
+            // System.out.println("Trying advanced threshold opitimization");
+            TreeSet<LinkSpecification> allOpt = new TreeSet<LinkSpecification>();
 
-	    List<Double> threshs = UpwardLengthLimitRefinementOperator.allOptimizedThresholds(node.lowThreshold,
-		    node.highThreshold, thresholdGrid);
+            List<Double> threshs = UpwardLengthLimitRefinementOperator.allOptimizedThresholds(node.lowThreshold,
+                    node.highThreshold, thresholdGrid);
 
-	    for (LinkSpecification spec : refinements) {
-		allOpt.add(spec);
-		double bestQuali = Double.MIN_NORMAL;
-		if (spec.isAtomic()) {
-		    double low = 0;
-		    boolean newMap = true;
-		    Mapping map = null;
-		    for (Double d : threshs) {
-			LinkSpecification copy = spec.clone();
-			copy.setThreshold(d);
-			copy.setLowThreshold(low);
-			low = d;
-			if (newMap) {
-			    map = getMapping(copy);
-			    newMap = false;
-			} else {
-			    map = map.getSubMap(d);
-			}
-			double score = getQuality(map);
-			if (score >= bestQuali) {
-			    bestQuali = score;
-			    allOpt.add(copy);
-			}
-		    }
-		    // logger.error("Added "+allOpt.size()+" threshold-optimized
-		    // atom specs");
-		} else {
-		    // logger.error("Trying to optimize Thresholds on spec
-		    // "+spec);
-		    // allOpt.add(spec);
-		    Collection<LinkSpecification> answer = complexOptimization(spec, start);
-		    // logger.error("Complex threshold opimization on spec
-		    // created "+answer.size()+" new specs");
-		    allOpt.addAll(answer);
-		}
-	    }
-	    // node.optimizeThreshold = false;
-	    nodes.add(node);
-	    return allOpt;
-	}
+            for (LinkSpecification spec : refinements) {
+                allOpt.add(spec);
+                double bestQuali = Double.MIN_NORMAL;
+                if (spec.isAtomic()) {
+                    double low = 0;
+                    boolean newMap = true;
+                    AMapping map = null;
+                    for (Double d : threshs) {
+                        LinkSpecification copy = spec.clone();
+                        copy.setThreshold(d);
+                        copy.setLowThreshold(low);
+                        low = d;
+                        if (newMap) {
+                            map = getMapping(copy);
+                            newMap = false;
+                        } else {
+                            map = map.getSubMap(d);
+                        }
+                        double score = getQuality(map);
+                        if (score >= bestQuali) {
+                            bestQuali = score;
+                            allOpt.add(copy);
+                        }
+                    }
+                    // logger.error("Added "+allOpt.size()+" threshold-optimized
+                    // atom specs");
+                } else {
+                    // logger.error("Trying to optimize Thresholds on spec
+                    // "+spec);
+                    // allOpt.add(spec);
+                    Collection<LinkSpecification> answer = complexOptimization(spec, start);
+                    // logger.error("Complex threshold opimization on spec
+                    // created "+answer.size()+" new specs");
+                    allOpt.addAll(answer);
+                }
+            }
+            // node.optimizeThreshold = false;
+            nodes.add(node);
+            return allOpt;
+        }
     }
 
     /**
      * Add node to search tree if it is not too weak returns true if node was
      * added and false otherwise
-     * 
+     *
      * @param spec
-     *            LinkSpec of the node to be created
+     *         LinkSpec of the node to be created
      * @param parentNode
-     *            parent of the new one => to create search tree
+     *         parent of the new one => to create search tree
      * @return new SearchNode based upon the spec.
      */
     protected SearchTreeNode addNode(LinkSpecification spec, SearchTreeNode parentNode) {
 
-	// redundancy check (return if redundant)
-	// Monitor monRed = MonitorFactory.start("redundancy");
-	// boolean nonRedundant = specs.add(spec);
-	// monRed.stop();
-	//// logger.info("adding Node: "+nonRedundant+": "+spec);
-	// if(!nonRedundant) {
-	// logger.info("redundandt: "+spec);
-	// return null;
-	// }
-	// m:note-accuracy = F measure
-	// Monitor monPFM = MonitorFactory.start("pfm");
-	Mapping map = getMapping(spec);
-	double accuracy = getQuality(map);
+        // redundancy check (return if redundant)
+        // Monitor monRed = MonitorFactory.start("redundancy");
+        // boolean nonRedundant = specs.add(spec);
+        // monRed.stop();
+        //// logger.info("adding Node: "+nonRedundant+": "+spec);
+        // if(!nonRedundant) {
+        // logger.info("redundandt: "+spec);
+        // return null;
+        // }
+        // m:note-accuracy = F measure
+        // Monitor monPFM = MonitorFactory.start("pfm");
+        AMapping map = getMapping(spec);
+        double accuracy = getQuality(map);
 
-	// monPFM.stop();
-	if (accuracy == -1) {
-	    logger.error("Not adding " + spec + " due to PFM==-1");
-	    return null;
-	}
+        // monPFM.stop();
+        if (accuracy == -1) {
+            logger.error("Not adding " + spec + " due to PFM==-1");
+            return null;
+        }
 
-	SearchTreeNode node = new SearchTreeNode(parentNode, spec, accuracy, setting.getExpansionPenalty());
-	node.highThreshold = spec.getThreshold();
-	node.lowThreshold = spec.getLowThreshold();
+        SearchTreeNode node = new SearchTreeNode(parentNode, spec, accuracy, setting.getExpansionPenalty());
+        node.highThreshold = spec.getThreshold();
+        node.lowThreshold = spec.getLowThreshold();
 
-	if (bestScore < accuracy || best.isRoot()) {
-	    bestScore = accuracy;
-	    logger.info("Setting new best" + node);
-	    best = node;
-	    newBest = true;
-	}
-	// if(spec.isAtomic())
-	// {
-	node.setExpansion(0);
-	// }
-	// bMofeed
-	node.creationTime = globalTime; // assign the creation time
-	node.createHistoryevent(globalTime++); // record the event for
-					       // attributes values
-	// eMofeed
+        if (bestScore < accuracy || best.isRoot()) {
+            bestScore = accuracy;
+            logger.info("Setting new best" + node);
+            best = node;
+            newBest = true;
+        }
+        // if(spec.isAtomic())
+        // {
+        node.setExpansion(0);
+        // }
+        // bMofeed
+        node.creationTime = globalTime; // assign the creation time
+        node.createHistoryevent(globalTime++); // record the event for
+        // attributes values
+        // eMofeed
 
-	double maxAcievable = maxAcievableFScore(map, this.getSourceCache().getAllUris().size(),
-		this.getTargetCache().getAllUris().size());
-	node.maxAcchievablePFM = maxAcievable;
-	boolean added = false;
-	if (best != null && !best.isRoot())
-	    if (maxAcievable < best.getScore()) {
-		logger.info("Not adding spec with score " + node.getScore() + " due to maxAcievableTest");
-		// resLog.writeLogString("Not adding spec "+ node + " due to
-		// maxAcievableTest");
-		return null;
-	    }
-	// if(maxAcievable < parentNode.maxAcchievablePFM) {
-	// logger.info("Not adding spec with score "+ node.getScore() +" due to
-	// maxAcievableTest with parent");
-	// resLog.writeLogString("Not adding spec "+ node + " due to
-	// maxAcievableTest with parent");
-	// return null;
-	// }
-	added = nodes.add(node);
-	if (!added) {
-	    // Iterator<SearchTreeNode>nodes.iterator()
-	    // logger.error("Failed adding node "+node+" to treeset");
-	    // Iterator<SearchTreeNode> it = nodes.iterator();
-	    // while(it.hasNext()) {
-	    // SearchTreeNode o = it.next();
-	    // if(o.equals(node))
-	    // logger.error("Because it already contains:"+o);
-	    // }
+        double maxAcievable = maxAcievableFScore(map, this.getSourceCache().getAllUris().size(),
+                this.getTargetCache().getAllUris().size());
+        node.maxAcchievablePFM = maxAcievable;
+        boolean added = false;
+        if (best != null && !best.isRoot())
+            if (maxAcievable < best.getScore()) {
+                logger.info("Not adding spec with score " + node.getScore() + " due to maxAcievableTest");
+                // resLog.writeLogString("Not adding spec "+ node + " due to
+                // maxAcievableTest");
+                return null;
+            }
+        // if(maxAcievable < parentNode.maxAcchievablePFM) {
+        // logger.info("Not adding spec with score "+ node.getScore() +" due to
+        // maxAcievableTest with parent");
+        // resLog.writeLogString("Not adding spec "+ node + " due to
+        // maxAcievableTest with parent");
+        // return null;
+        // }
+        added = nodes.add(node);
+        if (!added) {
+            // Iterator<SearchTreeNode>nodes.iterator()
+            // logger.error("Failed adding node "+node+" to treeset");
+            // Iterator<SearchTreeNode> it = nodes.iterator();
+            // while(it.hasNext()) {
+            // SearchTreeNode o = it.next();
+            // if(o.equals(node))
+            // logger.error("Because it already contains:"+o);
+            // }
 
-	    return null;
-	    // resLog.writeLogString("Failed adding node "+node+" to treeset");
-	} else {
-	    node.nodeId = IdCounter++; // assign an id to the new node and
-				       // increment it for future
-	    parentNode.addChild(node);
-	    // resLog.writeLogString("Added node (score="+node.getScore()+" |
-	    // "+node.getPenaltyScore()+") with
-	    // thresh"+node.getSpec().threshold+": "+node);
-	    logger.info(
-		    "Node added score" + node.getScore() + " max=" + node.maxAcchievablePFM + "to treeset: " + node);
-	}
-	logger.debug("Adding node with with thresholdborders: " + node.lowThreshold + " - " + node.highThreshold);
-	return node;
+            return null;
+            // resLog.writeLogString("Failed adding node "+node+" to treeset");
+        } else {
+            node.nodeId = IdCounter++; // assign an id to the new node and
+            // increment it for future
+            parentNode.addChild(node);
+            // resLog.writeLogString("Added node (score="+node.getScore()+" |
+            // "+node.getPenaltyScore()+") with
+            // thresh"+node.getSpec().threshold+": "+node);
+            logger.info(
+                    "Node added score" + node.getScore() + " max=" + node.maxAcchievablePFM + "to treeset: " + node);
+        }
+        logger.debug("Adding node with with thresholdborders: " + node.lowThreshold + " - " + node.highThreshold);
+        return node;
     }
 
     boolean timeBasedTermination(long dur, long end) {
-	if (setting.getTerminationCriteria() != TerminationCriteria.duration)
-	    return false;
-	if (dur / 1000 > end) {
-	    // System.out.println("dur"+dur+"/1000 > "+end+" ==true");
-	    return true;
+        if (setting.getTerminationCriteria() != TerminationCriteria.duration)
+            return false;
+        if (dur / 1000 > end) {
+            // System.out.println("dur"+dur+"/1000 > "+end+" ==true");
+            return true;
 
-	}
+        }
 
-	return false;
+        return false;
     }
 
     /**
      * /** Prototype to test whether it makes sense to further explore this
      * node. This is done by computing the maximum accievable PFM.
-     * 
+     *
      * @param actMapping
      * @param K_i
-     *            size of source caches (#uris)
+     *         size of source caches (#uris)
      * @param K_j
-     *            size of target caches (#uris)
+     *         size of target caches (#uris)
      * @return True if the test holds and there is space to further explore this
-     *         node.
+     * node.
      */
-    protected double maxAcievableFScore(Mapping actMapping, double K_i, double K_j) {
+    protected double maxAcievableFScore(AMapping actMapping, double K_i, double K_j) {
 
-	// double realPFM = getPseudoFMeasure(spec);
-	// logger.error("Computing maximal achievable for a spec with actual
-	// PFM="+realPFM+" ...");
-	// variables
-	double max_prec = 0;
-	double max_rec = 0;
+        // double realPFM = getPseudoFMeasure(spec);
+        // logger.error("Computing maximal achievable for a spec with actual
+        // PFM="+realPFM+" ...");
+        // variables
+        double max_prec = 0;
+        double max_rec = 0;
 
-	// first get actual Mapping
-	// Mapping actMapping = engine.run(planner.plan(spec));
-	// all source instances with atleast 1 map partner
-	double lambda_ij = actMapping.getMap().keySet().size();
-	// all target instances with atleast 2 map patner
-	double lambda_ji = actMapping.reverseSourceTarget().getMap().keySet().size();
+        // first get actual Mapping
+        // Mapping actMapping = engine.run(planner.plan(spec));
+        // all source instances with atleast 1 map partner
+        double lambda_ij = actMapping.getMap().keySet().size();
+        // all target instances with atleast 2 map patner
+        double lambda_ji = actMapping.reverseSourceTarget().getMap().keySet().size();
 
-	if (lambda_ij > lambda_ji) {
-	    // logger.error("Switching lambdas: lambda_ij="+lambda_ij+"
-	    // lambda_ji="+lambda_ji+". Switching now...");
-	    double mem = lambda_ij;
-	    lambda_ij = lambda_ji;
-	    lambda_ji = mem;
-	}
-	// double K_i = evalData.getSourceCache().getAllUris().size();
-	// double K_j = evalData.getTargetCache().getAllUris().size();
-	double M_ij = actMapping.size();
-	// logger.info("K_i="+K_i+" K_j="+K_j+" M_ij="+M_ij);
-	double test_1 = (2 * K_i + 2 * lambda_ji - 2 * actMapping.size()) / (K_i + K_j);
-	// logger.error("test_1="+test_1);
+        if (lambda_ij > lambda_ji) {
+            // logger.error("Switching lambdas: lambda_ij="+lambda_ij+"
+            // lambda_ji="+lambda_ji+". Switching now...");
+            double mem = lambda_ij;
+            lambda_ij = lambda_ji;
+            lambda_ji = mem;
+        }
+        // double K_i = evalData.getSourceCache().getAllUris().size();
+        // double K_j = evalData.getTargetCache().getAllUris().size();
+        double M_ij = actMapping.size();
+        // logger.info("K_i="+K_i+" K_j="+K_j+" M_ij="+M_ij);
+        double test_1 = (2 * K_i + 2 * lambda_ji - 2 * actMapping.size()) / (K_i + K_j);
+        // logger.error("test_1="+test_1);
 
-	if ((setting.getBeta() * setting.getBeta()) > test_1) {
-	    // logger.info("Using 1st definition of maxPFM:");
-	    max_prec = (K_i + K_j) / (2 * (M_ij + K_j - lambda_ji));
-	    max_rec = 1;
-	} else {
-	    // logger.info("Using 2nd definition of maxPFM:");
-	    max_prec = (2 * K_i + lambda_ji - lambda_ij) / (2 * (M_ij + K_i - lambda_ij));
-	    max_rec = (2 * K_i + lambda_ji - lambda_ij) / (K_i + K_j);
-	}
+        if ((setting.getBeta() * setting.getBeta()) > test_1) {
+            // logger.info("Using 1st definition of maxPFM:");
+            max_prec = (K_i + K_j) / (2 * (M_ij + K_j - lambda_ji));
+            max_rec = 1;
+        } else {
+            // logger.info("Using 2nd definition of maxPFM:");
+            max_prec = (2 * K_i + lambda_ji - lambda_ij) / (2 * (M_ij + K_i - lambda_ij));
+            max_rec = (2 * K_i + lambda_ji - lambda_ij) / (K_i + K_j);
+        }
 
-	double max_PFM = (1 + setting.getBeta() * setting.getBeta()) * max_prec
-		/ ((setting.getBeta() * setting.getBeta() * max_prec) + max_rec);
+        double max_PFM = (1 + setting.getBeta() * setting.getBeta()) * max_prec
+                / ((setting.getBeta() * setting.getBeta() * max_prec) + max_rec);
 
-	return max_PFM;
+        return max_PFM;
     }
 
     /**
      * Method computes PFM on an LinkSpec
-     * 
+     *
      * @param spec
      * @return Double PFM [0,1]
      */
-    protected double getQuality(Mapping map) {
-	Double res = 0d;
-	if (map.size() == 0) {
-	    // logger.info("getScore of empty LS: return 0");
-	    return 0;
-	}
+    protected double getQuality(AMapping map) {
+        Double res = 0d;
+        if (map.size() == 0) {
+            // logger.info("getScore of empty LS: return 0");
+            return 0;
+        }
 
-	// logger.info("Executing LinkSpec "+spec);
+        // logger.info("Executing LinkSpec "+spec);
 
-	// mapping = Mapping.getBestOneToOneMappings(mapping);
-	res = pfm.getPseudoFMeasure(this.getSourceCache().getAllUris(), this.getTargetCache().getAllUris(), map,
-		setting.getBeta());
-	// logger.info("getQuality(): PFM="+res);
+        // mapping = Mapping.getBestOneToOneMappings(mapping);
+        res = pfm.getPseudoFMeasure(this.getSourceCache().getAllUris(), this.getTargetCache().getAllUris(), map,
+                setting.getBeta());
+        // logger.info("getQuality(): PFM="+res);
 
-	return res;
-    }
-
-    protected Mapping getMapping(LinkSpecification spec) {
-	if (spec.isEmpty())
-	    return MappingFactory.createDefaultMapping();
-	Mapping mapping = MappingFactory.createDefaultMapping();
-	try {
-	    mapping = engine.execute(spec,planner);
-	} catch (Exception e) {
-	    System.err.print("Error executing spec " + spec);
-	    // resLog.writeLogString("Exception executing spec "+spec);
-	    e.printStackTrace();
-
-	} catch (OutOfMemoryError err) {
-	    System.err.print("Error executing spec " + spec);
-	    // resLog.writeLogString("Error executing spec "+spec);
-	    err.printStackTrace();
-
-	}
-	return mapping;
+        return res;
     }
 
     // private EvaluationMemory setRealScores(EvaluationMemory mem) {
@@ -722,56 +722,56 @@ public class Lion extends MLAlgorithm {
     // return mem;
     // }
 
+    protected AMapping getMapping(LinkSpecification spec) {
+        if (spec.isEmpty())
+            return MappingFactory.createDefaultMapping();
+        AMapping mapping = MappingFactory.createDefaultMapping();
+        try {
+            mapping = engine.execute(spec, planner);
+        } catch (Exception e) {
+            System.err.print("Error executing spec " + spec);
+            // resLog.writeLogString("Exception executing spec "+spec);
+            e.printStackTrace();
+
+        } catch (OutOfMemoryError err) {
+            System.err.print("Error executing spec " + spec);
+            // resLog.writeLogString("Error executing spec "+spec);
+            err.printStackTrace();
+
+        }
+        return mapping;
+    }
+
     ////////////////////////////////////////
     boolean checkTreeScores(double upperlimit) {
-	for (SearchTreeNode treeNode : nodes) {
-	    if (treeNode.getScore() < upperlimit)
-		return false;
-	}
-	return true;
+        for (SearchTreeNode treeNode : nodes) {
+            if (treeNode.getScore() < upperlimit)
+                return false;
+        }
+        return true;
     }
 
     /**
      * Best node according to its score in SearchTree. Doesn't return root!.
-     * 
+     *
      * @return
      */
     SearchTreeNode getMaxNode() {
-	double maxScore = -1;
-	SearchTreeNode maxTreeNode = null;
+        double maxScore = -1;
+        SearchTreeNode maxTreeNode = null;
 
-	for (SearchTreeNode treeNode : nodes) {
-	    if (treeNode.getScore() > maxScore && !treeNode.isRoot() && treeNode.getSpec() != null) {
-		maxTreeNode = treeNode;
-		maxScore = treeNode.getScore();
-	    }
-	    if (treeNode.getScore() == maxScore) {
-		if (maxTreeNode.getExpansion() > treeNode.getExpansion())
-		    maxTreeNode = treeNode;
-	    }
-	}
+        for (SearchTreeNode treeNode : nodes) {
+            if (treeNode.getScore() > maxScore && !treeNode.isRoot() && treeNode.getSpec() != null) {
+                maxTreeNode = treeNode;
+                maxScore = treeNode.getScore();
+            }
+            if (treeNode.getScore() == maxScore) {
+                if (maxTreeNode.getExpansion() > treeNode.getExpansion())
+                    maxTreeNode = treeNode;
+            }
+        }
 
-	return maxTreeNode;
-    }
-
-    protected void computeScores() {
-	// resLog.writeRealTitle();
-	// int i = 0;
-	// logger.error("Serializing "+memList.size()+" entries.");
-	// for(EvaluationMemory mem : memList) {
-	// mem = setRealScores(mem);
-	//// resLog.logEntry(mem);
-	// if(i%100 == 0)
-	// logger.info("Computing "+i+"th entry of "+memList.size());
-	// i++;
-	// }
-	// logger.error("Start Writing");
-	// try {
-	// resLog.logEntries(memList);
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
+        return maxTreeNode;
     }
 
     ///////////////////////////////////////
@@ -839,6 +839,26 @@ public class Lion extends MLAlgorithm {
     // this.reward = reward;
     // }
 
+    protected void computeScores() {
+        // resLog.writeRealTitle();
+        // int i = 0;
+        // logger.error("Serializing "+memList.size()+" entries.");
+        // for(EvaluationMemory mem : memList) {
+        // mem = setRealScores(mem);
+        //// resLog.logEntry(mem);
+        // if(i%100 == 0)
+        // logger.info("Computing "+i+"th entry of "+memList.size());
+        // i++;
+        // }
+        // logger.error("Start Writing");
+        // try {
+        // resLog.logEntries(memList);
+        // } catch (IOException e) {
+        // // TODO Auto-generated catch block
+        // e.printStackTrace();
+        // }
+    }
+
     // /**
     // * Just to test the high accievable test.
     // */
@@ -866,173 +886,161 @@ public class Lion extends MLAlgorithm {
     // }
     //
     private void setOutStreams(String name) throws FileNotFoundException {
-	File stdFile = new File(name + "_stdOut.txt");
-	PrintStream stdOut = new PrintStream(new FileOutputStream(stdFile, false));
-	File errFile = new File(name + "_errOut.txt");
-	PrintStream errOut = new PrintStream(new FileOutputStream(errFile, false));
-	System.setErr(errOut);
-	System.setOut(stdOut);
+        File stdFile = new File(name + "_stdOut.txt");
+        PrintStream stdOut = new PrintStream(new FileOutputStream(stdFile, false));
+        File errFile = new File(name + "_errOut.txt");
+        PrintStream errOut = new PrintStream(new FileOutputStream(errFile, false));
+        System.setErr(errOut);
+        System.setOut(stdOut);
     }
 
     /**
      * Attempt to implement a more effective threshold Optimization on complex
      * LinkSpecs. TODO optimize Mapping computation: remember both child maps =>
      * apply new Thresholds if possible => compute either AND or OR
-     * 
+     *
      * @param spec
      * @return
      */
     private Collection<LinkSpecification> complexOptimization(LinkSpecification spec, long start) {
-	List<LinkSpecification> specs = new LinkedList<LinkSpecification>();
-	if (spec.isAtomic())
-	    return specs;
+        List<LinkSpecification> specs = new LinkedList<LinkSpecification>();
+        if (spec.isAtomic())
+            return specs;
 
-	List<LinkSpecification> childs = spec.getAllLeaves();
-	if (childs.size() != 2) {
-	    // logger.error("Complex LinkSpec has more then 2 Children");
-	    specs.add(spec);
-	    return specs;
-	} else {
-	    LinkSpecification child1 = childs.get(0).clone();
-	    LinkSpecification child2 = childs.get(1).clone();
-	    List<Double> threshs1 = UpwardLengthLimitRefinementOperator.allOptimizedThresholds(child1.getLowThreshold(),
-		    child1.getThreshold(), thresholdGrid);
-	    List<Double> threshs2 = UpwardLengthLimitRefinementOperator.allOptimizedThresholds(child2.getLowThreshold(),
-		    child2.getThreshold(), thresholdGrid);
-	    double low1 = 0;
-	    double low2 = 0;
-	    double bestQuali = Double.MIN_NORMAL;
-	    for (Double d1 : threshs1) {
-		for (Double d2 : threshs2) {
-		    if (setting.getTerminationCriteria() == TerminationCriteria.duration
-			    && timeBasedTermination(System.currentTimeMillis() - start, setting.getMaxDuration())) {
-			return specs;
-		    }
-		    child1 = child1.clone();
-		    child2 = child2.clone();
-		    child1.setThreshold(d1);
-		    child2.setThreshold(d2);
-		    child2.setLowThreshold(low2);
-		    low2 = d2;
+        List<LinkSpecification> childs = spec.getAllLeaves();
+        if (childs.size() != 2) {
+            // logger.error("Complex LinkSpec has more then 2 Children");
+            specs.add(spec);
+            return specs;
+        } else {
+            LinkSpecification child1 = childs.get(0).clone();
+            LinkSpecification child2 = childs.get(1).clone();
+            List<Double> threshs1 = UpwardLengthLimitRefinementOperator.allOptimizedThresholds(child1.getLowThreshold(),
+                    child1.getThreshold(), thresholdGrid);
+            List<Double> threshs2 = UpwardLengthLimitRefinementOperator.allOptimizedThresholds(child2.getLowThreshold(),
+                    child2.getThreshold(), thresholdGrid);
+            double low1 = 0;
+            double low2 = 0;
+            double bestQuali = Double.MIN_NORMAL;
+            for (Double d1 : threshs1) {
+                for (Double d2 : threshs2) {
+                    if (setting.getTerminationCriteria() == TerminationCriteria.duration
+                            && timeBasedTermination(System.currentTimeMillis() - start, setting.getMaxDuration())) {
+                        return specs;
+                    }
+                    child1 = child1.clone();
+                    child2 = child2.clone();
+                    child1.setThreshold(d1);
+                    child2.setThreshold(d2);
+                    child2.setLowThreshold(low2);
+                    low2 = d2;
 
-		    LinkSpecification copy = spec.clone();
-		    try {
-			copy.setChildren(new ArrayList<LinkSpecification>());
-			copy.setDependencies(new ArrayList<LinkSpecification>());
-		    } catch (Exception e) {
-		    }
-		    copy.addChild(child1);
-		    copy.addChild(child2);
+                    LinkSpecification copy = spec.clone();
+                    try {
+                        copy.setChildren(new ArrayList<LinkSpecification>());
+                        copy.setDependencies(new ArrayList<LinkSpecification>());
+                    } catch (Exception e) {
+                    }
+                    copy.addChild(child1);
+                    copy.addChild(child2);
 
-		    if (spec.getOperator() == LogicOperator.AND)
-			copy.setThreshold(Math.max(d1, d2));
-		    else
-			copy.setThreshold(Math.min(d1, d2));
-		    double score = getQuality(getMapping(copy));
-		    // System.out.println("tetsted quali ("+score+") of spec:
-		    // "+copy);
-		    if (score > bestQuali) {
-			bestQuali = score;
-			copy.setQuality(score);
-			specs.add(copy);
-		    }
-		}
+                    if (spec.getOperator() == LogicOperator.AND)
+                        copy.setThreshold(Math.max(d1, d2));
+                    else
+                        copy.setThreshold(Math.min(d1, d2));
+                    double score = getQuality(getMapping(copy));
+                    // System.out.println("tetsted quali ("+score+") of spec:
+                    // "+copy);
+                    if (score > bestQuali) {
+                        bestQuali = score;
+                        copy.setQuality(score);
+                        specs.add(copy);
+                    }
+                }
 
-		child1.setLowThreshold(low1);
-		low1 = d1;
-	    }
+                child1.setLowThreshold(low1);
+                low1 = d1;
+            }
 
-	}
+        }
 
-	return specs;
+        return specs;
 
     }
 
     private void pruneSearchTree(double bestPFM) {
-	Iterator<SearchTreeNode> iterator = nodes.descendingIterator();
-	logger.info("Check Weak Nodes");
+        Iterator<SearchTreeNode> iterator = nodes.descendingIterator();
+        logger.info("Check Weak Nodes");
 
-	while (iterator.hasNext()) {
-	    SearchTreeNode current = iterator.next();
-	    logger.info("Check Weak =[spec-->" + current.getSpec() + ": score -->" + current.getScore()
-		    + ": best score -->" + current.getBestScore());
+        while (iterator.hasNext()) {
+            SearchTreeNode current = iterator.next();
+            logger.info("Check Weak =[spec-->" + current.getSpec() + ": score -->" + current.getScore()
+                    + ": best score -->" + current.getBestScore());
 
-	    if (current.getBestScore() < bestPFM && Math.abs(current.getBestScore() - bestPFM) > 0.01
-		    && current.getParent() != null)// this node is weak adn not
-						   // root
-	    {
-		current.setWeakNode(true);
-		logger.info("Assigned to be Weak =[spec-->" + current.getSpec() + ": score -->" + current.getScore()
-			+ ": best score -->" + current.getBestScore());
-	    }
-	}
-	iterator = nodes.descendingIterator();
-	while (iterator.hasNext()) {
-	    SearchTreeNode current = iterator.next();
-	    if (current.isWeakNode() && !current.isRoot())// this node is weak
-							  // and not root
-	    {
-		prune(current, "cutoff");
-	    }
-	}
-	iterator = nodes.descendingIterator();
-	TreeSet<SearchTreeNode> copy = new TreeSet<SearchTreeNode>();
-	copy.addAll(nodes);
-	while (iterator.hasNext()) {
-	    SearchTreeNode current = iterator.next();
-	    if (current.isWeakNode())// this node is weak and not root
-		copy.remove(current);
-	}
-	if (nodes.size() != copy.size())
-	    logger.info("Pruned search tree. Of " + nodes.size() + " " + copy.size() + " remain");
-	nodes = copy;
+            if (current.getBestScore() < bestPFM && Math.abs(current.getBestScore() - bestPFM) > 0.01
+                    && current.getParent() != null)// this node is weak adn not
+            // root
+            {
+                current.setWeakNode(true);
+                logger.info("Assigned to be Weak =[spec-->" + current.getSpec() + ": score -->" + current.getScore()
+                        + ": best score -->" + current.getBestScore());
+            }
+        }
+        iterator = nodes.descendingIterator();
+        while (iterator.hasNext()) {
+            SearchTreeNode current = iterator.next();
+            if (current.isWeakNode() && !current.isRoot())// this node is weak
+            // and not root
+            {
+                prune(current, "cutoff");
+            }
+        }
+        iterator = nodes.descendingIterator();
+        TreeSet<SearchTreeNode> copy = new TreeSet<SearchTreeNode>();
+        copy.addAll(nodes);
+        while (iterator.hasNext()) {
+            SearchTreeNode current = iterator.next();
+            if (current.isWeakNode())// this node is weak and not root
+                copy.remove(current);
+        }
+        if (nodes.size() != copy.size())
+            logger.info("Pruned search tree. Of " + nodes.size() + " " + copy.size() + " remain");
+        nodes = copy;
     }
 
     private void prune(SearchTreeNode weakNode, String pruneMethod) {
-	if (pruneMethod.equals("shiftUp")) {
-	    // add the node children to it parent
-	    for (SearchTreeNode child : weakNode.getChildren()) {
-		weakNode.getParent().addChild(child);
-	    }
-	    // remove the weak node from its parent children
-	    weakNode.getParent().getChildren().remove(weakNode);
-	    // remove from list of traversed nodes
-	    nodes.remove(weakNode);
-	    // remove its spec form the list
-	    specs.remove(weakNode.getSpec());
-	} else if (pruneMethod.equals("cutoff")) {
-	    // remove it from the list of parent children
-	    weakNode.getParent().getChildren().remove(weakNode);
-	    // remove its connection to it parent
-	    weakNode.setParent(null);
-	    /*
+        if (pruneMethod.equals("shiftUp")) {
+            // add the node children to it parent
+            for (SearchTreeNode child : weakNode.getChildren()) {
+                weakNode.getParent().addChild(child);
+            }
+            // remove the weak node from its parent children
+            weakNode.getParent().getChildren().remove(weakNode);
+            // remove from list of traversed nodes
+            nodes.remove(weakNode);
+            // remove its spec form the list
+            specs.remove(weakNode.getSpec());
+        } else if (pruneMethod.equals("cutoff")) {
+            // remove it from the list of parent children
+            weakNode.getParent().getChildren().remove(weakNode);
+            // remove its connection to it parent
+            weakNode.setParent(null);
+        /*
 	     * Note: Here the weak node spec. is not removed from the specs
 	     * list, in purpose when it is generated again due to the same
 	     * parent refinement it won't be added as it is already useless
 	     */
-	}
+        }
     }
 
     private boolean terminateUsingNoise(double noise, int positiveEx) {
-	Iterator<SearchTreeNode> iterator = nodes.descendingIterator();
-	while (iterator.hasNext()) {
-	    SearchTreeNode current = iterator.next();
-	    if (current.getScore() < noise * positiveEx)
-		return false;
-	}
-	return true;
-    }
-
-    private boolean checkTermination(double value) {
-	// value can be max fmeasure required or max expamsitermTypeon required
-	if (setting.getTerminationCriteria() == TerminationCriteria.quality) {
-	    return value > setting.getTerminationCriteriaValue();
-	} else if (setting.getTerminationCriteria() == TerminationCriteria.iteration)
-	    return value > setting.getMaxIteration();
-	else if (setting.getTerminationCriteria() == TerminationCriteria.duration)
-	    return (value / 1000) >= setting.getMaxDuration();
-	// fallback for not yet implemented termination criteria
-	return (value / 1000) >= setting.getMaxDuration();
+        Iterator<SearchTreeNode> iterator = nodes.descendingIterator();
+        while (iterator.hasNext()) {
+            SearchTreeNode current = iterator.next();
+            if (current.getScore() < noise * positiveEx)
+                return false;
+        }
+        return true;
     }
 
     // ---------------------------------------------------------------------------------
@@ -1135,61 +1143,38 @@ public class Lion extends MLAlgorithm {
     // System.out.println("lev max ="+levMax);
     // }
 
-    @Override
-    public String getName() {
-	return "LION unsupervised";
+    private boolean checkTermination(double value) {
+        // value can be max fmeasure required or max expamsitermTypeon required
+        if (setting.getTerminationCriteria() == TerminationCriteria.quality) {
+            return value > setting.getTerminationCriteriaValue();
+        } else if (setting.getTerminationCriteria() == TerminationCriteria.iteration)
+            return value > setting.getMaxIteration();
+        else if (setting.getTerminationCriteria() == TerminationCriteria.duration)
+            return (value / 1000) >= setting.getMaxDuration();
+        // fallback for not yet implemented termination criteria
+        return (value / 1000) >= setting.getMaxDuration();
     }
 
     @Override
-    public Mapping computePredictions() {
-	return getMapping(this.best.getSpec());
+    public String getName() {
+        return "LION unsupervised";
+    }
+
+    @Override
+    public AMapping computePredictions() {
+        return getMapping(this.best.getSpec());
     }
 
     @Override
     public void terminate() {
-	// TODO Auto-generated method stub
+        // TODO Auto-generated method stub
 
     }
 
-    public static void main(String args[]) {
-	String base = "/home/lyko/svn/LIMES/";
-	String configFile = "../../../svn/LIMES/Examples/GeneticEval/PublicationData.xml";
-	XMLConfigurationReader reader = new XMLConfigurationReader(configFile);
-	Configuration config = reader.read();
-	config.getSourceInfo().setEndpoint(base + config.getSourceInfo().getEndpoint());
-	config.getTargetInfo().setEndpoint(base + config.getTargetInfo().getEndpoint());
-
-	Cache sC = HybridCache.getData(config.getSourceInfo());
-
-	HybridCache tC = HybridCache.getData(config.getTargetInfo());
-
-	Lion lion = new Lion(sC, tC, config);
-
-	UnsupervisedLearningSetting setting = new UnsupervisedLearningSetting(lion);
-	PropertyMapping propMap = new PropertyMapping();
-	propMap.addStringPropertyMatch("title", "title");
-	propMap.addStringPropertyMatch("authors", "authors");
-	propMap.addStringPropertyMatch("venue", "venue");
-	propMap.addNumberPropertyMatch("year", "year");
-
-	setting.setPropMap(propMap);
-	setting.setTerminationCriteria(TerminationCriteria.duration, 10);
-
-	try {
-	    lion.init(setting, MappingFactory.createDefaultMapping());
-	    MLModel result = lion.learn(MappingFactory.createDefaultMapping());
-	    System.out.println(result);
-	} catch (InvalidConfigurationException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-
+    @Override
+    public Set<String> parameters() {
+        // TODO Auto-generated method stub
+        return null;
     }
-
-	@Override
-	public Set<String> parameters() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

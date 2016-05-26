@@ -1,13 +1,9 @@
 package org.aksw.limes.core.io.mapping;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.util.RandomStringGenerator;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * This class contains the mappings computed by an organizer. Each URI from the
@@ -16,12 +12,12 @@ import org.aksw.limes.core.util.RandomStringGenerator;
  * for further processing that simply stores the mapping results in memory. It
  * is important to notice that if (s, t, sim1) are already in the mapping and
  * (s, t, sim2) is added then the mapping will contain (s, t, max(sim1, sim2))
- * 
+ *
  * @author ngonga
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 24, 2015
  */
-public class MemoryMapping extends Mapping implements Serializable {
+public class MemoryMapping extends AMapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,8 +26,8 @@ public class MemoryMapping extends Mapping implements Serializable {
 
     }
 
-    public static Mapping generateRandomMapping(int mappingSize, int minSize, int maxSize) {
-        Mapping m = MappingFactory.createDefaultMapping();
+    public static AMapping generateRandomMapping(int mappingSize, int minSize, int maxSize) {
+        AMapping m = MappingFactory.createDefaultMapping();
         RandomStringGenerator generator = new RandomStringGenerator(minSize, maxSize);
         while (m.getNumberofMappings() < mappingSize) {
             m.add(generator.generateString(), generator.generateString(), Math.random());
@@ -65,11 +61,11 @@ public class MemoryMapping extends Mapping implements Serializable {
      * filter(mapping, threshold) but should be faster
      *
      * @param threshold
-     *            Similarity threshold for filtering
+     *         Similarity threshold for filtering
      * @return Mapping that contains all elements (s,t) with sim(s,t)>=threshold
      */
-    public Mapping getSubMap(double threshold) {
-        Mapping m = MappingFactory.createDefaultMapping();
+    public AMapping getSubMap(double threshold) {
+        AMapping m = MappingFactory.createDefaultMapping();
         HashMap<String, TreeSet<String>> pairs;
         if (reversedMap == null || reversedMap.size() == 0) {
             initReversedMap();
@@ -91,10 +87,10 @@ public class MemoryMapping extends Mapping implements Serializable {
      * Add a batch of similarities to the mapping
      *
      * @param uri
-     *            A resource from the source knowledge base
+     *         A resource from the source knowledge base
      * @param instances
-     *            Map containing uris from the target knowledge base and their
-     *            similarity to uri
+     *         Map containing uris from the target knowledge base and their
+     *         similarity to uri
      */
     public void add(String uri, HashMap<String, Double> instances) {
         if (!map.containsKey(uri)) {
@@ -120,11 +116,11 @@ public class MemoryMapping extends Mapping implements Serializable {
      * Add one entry to the mapping
      *
      * @param source
-     *            Uri in the source knowledge bases
+     *         Uri in the source knowledge bases
      * @param target
-     *            Mapping uri in the target knowledge base
+     *         Mapping uri in the target knowledge base
      * @param similarity
-     *            Similarity of uri and mappingUri
+     *         Similarity of uri and mappingUri
      */
     @Override
     public void add(String source, String target, double similarity) {
@@ -152,9 +148,9 @@ public class MemoryMapping extends Mapping implements Serializable {
      * returned. Else 0 is returned
      *
      * @param sourceInstance
-     *            Instance from the source knowledge base
+     *         Instance from the source knowledge base
      * @param targetInstance
-     *            Instance from the target knowledge base
+     *         Instance from the target knowledge base
      * @return Similarity of the two instances according to the mapping
      */
     @Override
@@ -171,9 +167,9 @@ public class MemoryMapping extends Mapping implements Serializable {
      * Checks whether a mapping contains a particular entry
      *
      * @param sourceInstance
-     *            Key URI
+     *         Key URI
      * @param targetInstance
-     *            Value URI
+     *         Value URI
      * @return True if mapping contains (key, value), else false.
      */
     @Override
@@ -220,8 +216,8 @@ public class MemoryMapping extends Mapping implements Serializable {
      * @return Best one to one mapping
      */
     @Override
-    public Mapping getBestOneToNMapping() {
-        Mapping result = MappingFactory.createDefaultMapping();
+    public AMapping getBestOneToNMapping() {
+        AMapping result = MappingFactory.createDefaultMapping();
         for (String s : map.keySet()) {
             double maxSim = 0;
             Set<String> target = new HashSet<String>();
@@ -248,8 +244,8 @@ public class MemoryMapping extends Mapping implements Serializable {
      *
      * @return Reversed map
      */
-    public Mapping reverseSourceTarget() {
-        Mapping m = MappingFactory.createDefaultMapping();
+    public AMapping reverseSourceTarget() {
+        AMapping m = MappingFactory.createDefaultMapping();
         for (String s : map.keySet()) {
             for (String t : map.get(s).keySet()) {
                 m.add(t, s, map.get(s).get(t));
@@ -258,9 +254,9 @@ public class MemoryMapping extends Mapping implements Serializable {
         return m;
     }
 
-    public Mapping scale(double d) {
+    public AMapping scale(double d) {
         if (d != 0) {
-            Mapping m = MappingFactory.createDefaultMapping();
+            AMapping m = MappingFactory.createDefaultMapping();
             for (String s : map.keySet()) {
                 for (String t : map.get(s).keySet()) {
                     m.add(s, t, map.get(s).get(t) / d);
@@ -272,8 +268,8 @@ public class MemoryMapping extends Mapping implements Serializable {
         }
     }
 
-    public Mapping trim() {
-        Mapping m = MappingFactory.createDefaultMapping();
+    public AMapping trim() {
+        AMapping m = MappingFactory.createDefaultMapping();
         for (String s : map.keySet()) {
             for (String t : map.get(s).keySet()) {
                 if (map.get(s).get(t) > 1d) {
@@ -300,12 +296,12 @@ public class MemoryMapping extends Mapping implements Serializable {
      * Union of two maps: returns all pairs of sources s and targets t of this
      * map and the other. The scores will be the maximum score of either this or
      * the other.
-     * 
+     *
      * @param other
      * @return
      */
-    public Mapping union(Mapping other) {
-        Mapping result = MappingFactory.createDefaultMapping();
+    public AMapping union(AMapping other) {
+        AMapping result = MappingFactory.createDefaultMapping();
         result.map.putAll(this.map);
         result.size = size();
         for (String s : other.map.keySet()) {

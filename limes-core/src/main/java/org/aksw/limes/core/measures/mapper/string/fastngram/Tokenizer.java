@@ -7,7 +7,6 @@ package org.aksw.limes.core.measures.mapper.string.fastngram;
 import java.util.Set;
 
 /**
- *
  * @author ngonga
  */
 public interface Tokenizer {

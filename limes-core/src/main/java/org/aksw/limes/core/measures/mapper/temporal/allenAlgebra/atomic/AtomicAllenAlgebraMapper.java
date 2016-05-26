@@ -1,19 +1,13 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.parser.Parser;
 import org.apache.log4j.Logger;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Abstract class of atomic Allen's Algebra atomic Relations. The main idea
@@ -24,25 +18,18 @@ import org.apache.log4j.Logger;
  * described using two time points b(s) and e(s). To compose the atomic interval
  * relations, we define all possible binary relations between the begin and end
  * points of two event resources s = (b(s), e(s)) and t = (b(t), e(t)).
- * 
  */
 public abstract class AtomicAllenAlgebraMapper {
     protected static final Logger logger = Logger.getLogger(AtomicAllenAlgebraMapper.class.getName());
-
-    public abstract TreeMap<String, Set<String>> getConcurrentEvents(Cache source, Cache target, String expression);
-
-    public abstract TreeMap<String, Set<String>> getPredecessorEvents(Cache source, Cache target, String expression);
-
-    public abstract String getName();
 
     public AtomicAllenAlgebraMapper() {
     }
 
     /**
      * Extract first property (beginDate) from metric expression.
-     * 
+     *
      * @param expression,
-     *            metric expression
+     *         metric expression
      * @return first property of metric expression as string
      */
     protected static String getBeginProperty(String properties) {
@@ -57,11 +44,11 @@ public abstract class AtomicAllenAlgebraMapper {
 
     /**
      * Extract second property (endDate) from metric expression.
-     * 
+     *
      * @param expression,
-     *            metric expression
-     * @throws IllegalArgumentException
+     *         metric expression
      * @return first property of metric expression as string
+     * @throws IllegalArgumentException
      */
     protected static String getEndProperty(String properties) throws IllegalArgumentException {
         properties = properties.substring(properties.indexOf(".") + 1, properties.length());
@@ -78,15 +65,13 @@ public abstract class AtomicAllenAlgebraMapper {
      * instance, it retrieves its begin date property, converts its value to an
      * epoch (string) using the SimpleDateFormat function and places the
      * instance inside the corresponding set("bucket") of instances.
-     * 
+     *
      * @param cache,
-     *            the cache of instances
-     * 
+     *         the cache of instances
      * @param expression,
-     *            the metric expression
-     * 
+     *         the metric expression
      * @return blocks, a map of sets with unique begin dates as keys and set of
-     *         instances (string representation) as values
+     * instances (string representation) as values
      */
     protected static TreeMap<Long, Set<String>> orderByBeginDate(Cache cache, String expression) {
         TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
@@ -123,15 +108,13 @@ public abstract class AtomicAllenAlgebraMapper {
      * instance, it retrieves its end date property, converts its value to an
      * epoch (string) using the SimpleDateFormat function and places the
      * instance inside the corresponding set("bucket") of instances.
-     * 
+     *
      * @param cache,
-     *            the cache of instances
-     * 
+     *         the cache of instances
      * @param expression,
-     *            the metric expression
-     * 
+     *         the metric expression
      * @return blocks, a map of sets with unique end dates as keys and set of
-     *         instances (string representation) as values
+     * instances (string representation) as values
      */
     protected static TreeMap<Long, Set<String>> orderByEndDate(Cache cache, String expression) {
         TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
@@ -171,17 +154,15 @@ public abstract class AtomicAllenAlgebraMapper {
 
     /**
      * Returns the set of concurrent target events for each source instance.
-     * 
+     *
      * @param sources,
-     *            set of source instances ordered by begin/end date
-     * 
+     *         set of source instances ordered by begin/end date
      * @param targets,
-     *            set of target instances ordered by begin/end date
-     * 
+     *         set of target instances ordered by begin/end date
      * @return concurrentEvents, the map of concurrent events
      */
     protected static TreeMap<String, Set<String>> mapConcurrent(TreeMap<Long, Set<String>> sources,
-            TreeMap<Long, Set<String>> targets) {
+                                                                TreeMap<Long, Set<String>> targets) {
         TreeMap<String, Set<String>> concurrentEvents = new TreeMap<String, Set<String>>();
 
         for (Map.Entry<Long, Set<String>> sourceEntry : sources.entrySet()) {
@@ -203,17 +184,15 @@ public abstract class AtomicAllenAlgebraMapper {
 
     /**
      * Returns the set of predecessor target events for each source instance.
-     * 
+     *
      * @param sources,
-     *            set of source instances ordered by begin/end date
-     * 
+     *         set of source instances ordered by begin/end date
      * @param targets,
-     *            set of target instances ordered by begin/end date
-     * 
+     *         set of target instances ordered by begin/end date
      * @return concurrentEvents, the map of predecessor events
      */
     protected static TreeMap<String, Set<String>> mapPredecessor(TreeMap<Long, Set<String>> sources,
-            TreeMap<Long, Set<String>> targets) {
+                                                                 TreeMap<Long, Set<String>> targets) {
         TreeMap<String, Set<String>> concurrentEvents = new TreeMap<String, Set<String>>();
 
         for (Map.Entry<Long, Set<String>> sourceEntry : sources.entrySet()) {
@@ -246,4 +225,10 @@ public abstract class AtomicAllenAlgebraMapper {
         return concurrentEvents;
 
     }
+
+    public abstract TreeMap<String, Set<String>> getConcurrentEvents(Cache source, Cache target, String expression);
+
+    public abstract TreeMap<String, Set<String>> getPredecessorEvents(Cache source, Cache target, String expression);
+
+    public abstract String getName();
 }

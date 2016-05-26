@@ -4,84 +4,83 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.hausdorff;
 
-import java.util.Set;
-
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
+import java.util.Set;
+
 /**
- *
  * @author ngonga
  */
 public class CentroidIndexedHausdorff extends IndexedHausdorff {
 
-	public CentroidIndex sourceIndex;
-	boolean verbose = false;
-	public IndexedHausdorff ih = new IndexedHausdorff();
+    public CentroidIndex sourceIndex;
+    public IndexedHausdorff ih = new IndexedHausdorff();
+    boolean verbose = false;
 
-	/**
-	 * Constructor
-	 */
-	public CentroidIndexedHausdorff() {
-		ih = new IndexedHausdorff();
-	}
+    /**
+     * Constructor
+     */
+    public CentroidIndexedHausdorff() {
+        ih = new IndexedHausdorff();
+    }
 
-	/**
-	 * @param source
-	 * @param target
-	 */
-	public void computeIndexes(Set<Polygon> source, Set<Polygon> target) {
-		sourceIndex = new CentroidIndex();
-		sourceIndex.index(source);
-		targetIndex = new CentroidIndex();
-		targetIndex.index(target);
-		ih.targetIndex = targetIndex;
-	}
+    /**
+     * @param source
+     * @param target
+     */
+    public void computeIndexes(Set<Polygon> source, Set<Polygon> target) {
+        sourceIndex = new CentroidIndex();
+        sourceIndex.index(source);
+        targetIndex = new CentroidIndex();
+        targetIndex.index(target);
+        ih.targetIndex = targetIndex;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff#run(java.util.Set, java.util.Set, double)
-	 */
-	@Override
-	public Mapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
-		// first run indexing
-		Mapping m = MappingFactory.createDefaultMapping();
-		targetIndex = new CentroidIndex();
-		sourceIndex = new CentroidIndex();
-		// long begin = System.currentTimeMillis();
-		targetIndex.index(target);
-		sourceIndex.index(source);
-		ih.targetIndex = targetIndex;
+    /* (non-Javadoc)
+     * @see org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff#run(java.util.Set, java.util.Set, double)
+     */
+    @Override
+    public AMapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
+        // first run indexing
+        AMapping m = MappingFactory.createDefaultMapping();
+        targetIndex = new CentroidIndex();
+        sourceIndex = new CentroidIndex();
+        // long begin = System.currentTimeMillis();
+        targetIndex.index(target);
+        sourceIndex.index(source);
+        ih.targetIndex = targetIndex;
 
-		double d;
-		for (Polygon s : source) {
-			for (Polygon t : target) {
-				d = pointToPointDistance(sourceIndex.centroids.get(s.uri).center,
-						((CentroidIndex) targetIndex).centroids.get(t.uri).center);
-				if (d - (sourceIndex.centroids.get(s.uri).radius
-						+ ((CentroidIndex) targetIndex).centroids.get(t.uri).radius) <= threshold) {
-					d = computeDistance(s, t, threshold);
-					if (d <= threshold) {
-						m.add(s.uri, t.uri, d);
-					}
-				}
-			}
-		}
-		return m;
-	}
+        double d;
+        for (Polygon s : source) {
+            for (Polygon t : target) {
+                d = pointToPointDistance(sourceIndex.centroids.get(s.uri).center,
+                        ((CentroidIndex) targetIndex).centroids.get(t.uri).center);
+                if (d - (sourceIndex.centroids.get(s.uri).radius
+                        + ((CentroidIndex) targetIndex).centroids.get(t.uri).radius) <= threshold) {
+                    d = computeDistance(s, t, threshold);
+                    if (d <= threshold) {
+                        m.add(s.uri, t.uri, d);
+                    }
+                }
+            }
+        }
+        return m;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff#computeDistance(org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, double)
-	 */
-	@Override
-	public double computeDistance(Polygon X, Polygon Y, double threshold) {
-		// centroid distance check
-		double d = pointToPointDistance(sourceIndex.centroids.get(X.uri).center,
-				((CentroidIndex) targetIndex).centroids.get(Y.uri).center);
-		if (d - (sourceIndex.centroids.get(X.uri).radius
-				+ ((CentroidIndex) targetIndex).centroids.get(Y.uri).radius) > threshold) {
-			return threshold + 1;
-		}
-		return ih.computeDistance(X, Y, threshold);
-	}
+    /* (non-Javadoc)
+     * @see org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff#computeDistance(org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, double)
+     */
+    @Override
+    public double computeDistance(Polygon X, Polygon Y, double threshold) {
+        // centroid distance check
+        double d = pointToPointDistance(sourceIndex.centroids.get(X.uri).center,
+                ((CentroidIndex) targetIndex).centroids.get(Y.uri).center);
+        if (d - (sourceIndex.centroids.get(X.uri).radius
+                + ((CentroidIndex) targetIndex).centroids.get(Y.uri).radius) > threshold) {
+            return threshold + 1;
+        }
+        return ih.computeDistance(X, Y, threshold);
+    }
 }

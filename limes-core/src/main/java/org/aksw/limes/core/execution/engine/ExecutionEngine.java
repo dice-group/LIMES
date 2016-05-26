@@ -1,11 +1,11 @@
 package org.aksw.limes.core.execution.engine;
 
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.mapping.Mapping;
-import org.apache.log4j.Logger;
 
 /**
  * Implements the execution engine abstract class. The idea is that the engine
@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 public abstract class ExecutionEngine implements IExecutionEngine {
     static Logger logger = Logger.getLogger(ExecutionEngine.class.getName());
     // contains the results
-    protected List<Mapping> buffer;
+    protected List<AMapping> buffer;
     protected String sourceVariable;
     protected String targetVariable;
     protected Cache source;
@@ -28,13 +28,13 @@ public abstract class ExecutionEngine implements IExecutionEngine {
      * Constructor for an execution engine.
      *
      * @param source,
-     *            Source cache
+     *         Source cache
      * @param target,
-     *            Target cache
+     *         Target cache
      * @param sourceVar,
-     *            Source variable (usually "?x")
+     *         Source variable (usually "?x")
      * @param targetVar,
-     *            Target variable (usually "?y")
+     *         Target variable (usually "?y")
      */
     public ExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
         this.buffer = new ArrayList<>();

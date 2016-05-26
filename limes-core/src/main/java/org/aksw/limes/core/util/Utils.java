@@ -5,15 +5,14 @@ package org.aksw.limes.core.util;
  * and open the template in the editor.
  */
 
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.apache.log4j.Logger;
+
 import java.util.HashMap;
 import java.util.List;
 
-import org.aksw.limes.core.io.mapping.Mapping;
-import org.apache.log4j.Logger;
-
 
 /**
- *
  * @author ngonga
  */
 public class Utils {
@@ -28,7 +27,7 @@ public class Utils {
      */
     static Logger logger = Logger.getLogger(Utils.class.getName());
 
-    public static double getPrecision(Mapping reference, Mapping computed) {
+    public static double getPrecision(AMapping reference, AMapping computed) {
         double size = (double) computed.size();
         double count = 0;
         for (String key : computed.getMap().keySet()) {
@@ -49,7 +48,7 @@ public class Utils {
      * @param computed
      * @return Recall
      */
-    public static double getRecall(Mapping reference, Mapping computed) {
+    public static double getRecall(AMapping reference, AMapping computed) {
         double size = (double) reference.size();
         double count = 0;
         for (String key : computed.getMap().keySet()) {
@@ -70,7 +69,7 @@ public class Utils {
      * @param computed
      * @return Recall
      */
-    public static double getFscore(Mapping reference, Mapping computed) {
+    public static double getFscore(AMapping reference, AMapping computed) {
         double sizeC = (double) computed.size();
         double sizeR = (double) reference.size();
         double count = 0;
@@ -95,7 +94,7 @@ public class Utils {
      * @return Precision, Recall and F-Score. The entries for the Hashmap are
      * "precision", "recall" and "fscore".
      */
-    public static HashMap<String, Double> getPRF(Mapping reference, Mapping computed) {
+    public static HashMap<String, Double> getPRF(AMapping reference, AMapping computed) {
         HashMap<String, Double> result = new HashMap<String, Double>();
         double sizeC = (double) computed.size();
         double sizeR = (double) reference.size();
@@ -120,11 +119,12 @@ public class Utils {
     /**
      * Splits camel case strings into lower case string separated with a " "
      *
-     * @param s Input string in camel case
+     * @param s
+     *         Input string in camel case
      * @return Split string
      */
     @SuppressWarnings("unused")
-	private static String splitAtCamelCase(String s) {
+    private static String splitAtCamelCase(String s) {
         String regex = "([a-z])([A-Z])";
         String replacement = "$1 $2";
         return s.replaceAll(regex, replacement).toLowerCase();
@@ -142,17 +142,16 @@ public class Utils {
             mean += data.get(i);
         }
         mean /= n;
-       // calculate the sum of squares 
+        // calculate the sum of squares
         double sum = 0;
         for (int i = 0; i < n; i++) {
             final double v = data.get(i) - mean;
             sum += v * v;
         }
-    // Change to ( n - 1 ) to n if you have complete data instead of a sample. 
+        // Change to ( n - 1 ) to n if you have complete data instead of a sample.
         return Math.sqrt(sum / (n - 1));
     }
-    
-    
+
 
     public static double getMean(List<Double> data) {
 // sd is sqrt of sum of (values-mean) squared divided by n - 1 

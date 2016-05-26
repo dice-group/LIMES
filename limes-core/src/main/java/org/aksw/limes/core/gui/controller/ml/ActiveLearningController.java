@@ -7,14 +7,14 @@ import org.aksw.limes.core.io.cache.Cache;
 
 public class ActiveLearningController extends MachineLearningController {
 
-	public ActiveLearningController(Config config, Cache sourceCache, Cache targetCache) {
-		this.mlModel = new ActiveLearningModel(config, sourceCache, targetCache);
-	}
+    public ActiveLearningController(Config config, Cache sourceCache, Cache targetCache) {
+        this.mlModel = new ActiveLearningModel(config, sourceCache, targetCache);
+    }
 
-	@Override
-	public void learn(MachineLearningView view) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void learn(MachineLearningView view) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

@@ -1,16 +1,16 @@
 package org.aksw.limes.core.measures.mapper.string;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.Map;
-import java.util.Set;
-
 import org.aksw.commons.util.StopWatch;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.MapperTest;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.string.JaroWinkler;
 import org.junit.Test;
+
+import java.util.Map;
+import java.util.Set;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Kevin Dreßler
@@ -28,10 +28,10 @@ public class JaroWinklerMapperTest extends MapperTest {
         Map<String, Set<String>> t = generateRandomMap(targetSize);
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        Mapping m1 = jwm.getMapping(s, t, theta);
+        AMapping m1 = jwm.getMapping(s, t, theta);
         stopWatch.getElapsedTime();
         stopWatch.start();
-        Mapping m2 = bruteForce(s, t, theta, new JaroWinkler());
+        AMapping m2 = bruteForce(s, t, theta, new JaroWinkler());
         stopWatch.getElapsedTime();
         stopWatch.stop();
         assertTrue(MappingOperations.difference(m1, m2).size() == 0);

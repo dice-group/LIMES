@@ -5,20 +5,19 @@ package org.aksw.limes.core.measures.measure;
  * and open the template in the editor.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author ngonga
  */
 public class MeasureProcessor {
@@ -27,9 +26,9 @@ public class MeasureProcessor {
 
     /**
      * Computes a list that contains all measures used in a given expression
-     * 
+     *
      * @param expression
-     *            Expression
+     *         Expression
      * @return List of all measures used
      */
     public static List<String> getMeasures(String expression) {
@@ -58,25 +57,26 @@ public class MeasureProcessor {
      * corresponding mapper. Be aware that EDJoin and QGramsSimilarity do not
      * work with Caches of one instance.
      */
+
     /**
      * Returns similarity between two instances given a metric expression.
-     * 
+     *
      * @param sourceInstance,
-     *            the source instance
+     *         the source instance
      * @param targetInstance,
-     *            the target instance
+     *         the target instance
      * @param expression,
-     *            the metric expression
+     *         the metric expression
      * @param threshold,
-     *            the threshold
+     *         the threshold
      * @param sourceVar,
-     *            the source variable
+     *         the source variable
      * @param targetVar,
-     *            the target variable
+     *         the target variable
      * @return the similarity of sourceInstance and targetInstance
      */
     public static double getSimilarity(Instance sourceInstance, Instance targetInstance, String expression,
-            double threshold, String sourceVar, String targetVar) {
+                                       double threshold, String sourceVar, String targetVar) {
 
         Parser p = new Parser(expression, threshold);
         if (p.isAtomic()) {
@@ -155,12 +155,12 @@ public class MeasureProcessor {
             } else {
 
                 //if (mapper instanceof PPJoinPlusPlus) {
-                    Mapping m = mapper.getMapping(source, target, sourceVar, targetVar, expression, threshold);
-                    for (String s : m.getMap().keySet()) {
-                        for (String t : m.getMap().get(s).keySet()) {
-                            return m.getMap().get(s).get(t);
-                        }
+                AMapping m = mapper.getMapping(source, target, sourceVar, targetVar, expression, threshold);
+                for (String s : m.getMap().keySet()) {
+                    for (String t : m.getMap().get(s).keySet()) {
+                        return m.getMap().get(s).get(t);
                     }
+                }
                 /*} else {
                     // logger.info(mapper);
                     double similarity = measure.getSimilarity(sourceInstance, targetInstance, property1, property2);
@@ -240,11 +240,11 @@ public class MeasureProcessor {
 
     /**
      * Returns the approximation of the runtime for a certain expression
-     * 
+     *
      * @param measureExpression
-     *            Expression
+     *         Expression
      * @param mappingSize
-     *            Size of the mapping to process
+     *         Size of the mapping to process
      * @return Runtime approximation
      */
     public static double getCosts(String measureExpression, double mappingSize) {

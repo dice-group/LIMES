@@ -1,21 +1,20 @@
 package org.aksw.limes.core.measures.mapper;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+
+import java.util.*;
 
 public abstract class Mapper implements IMapper {
 
     /**
      * Helper method, refactored from common setup code of Mappers
-     * @param c  Input cache
-     * @param property  Maps underlying property
+     *
+     * @param c
+     *         Input cache
+     * @param property
+     *         Maps underlying property
      * @return reversed Map from literal values to resource uris for a specified property
      */
     protected Map<String, Set<String>> getValueToUriMap(Cache c, String property) {
@@ -35,14 +34,19 @@ public abstract class Mapper implements IMapper {
 
     /**
      * Helper method, refactored from common return code blocks.
-     * @param valueMap  Mapping from values to values with similarity score
-     * @param sourceValueToUriMap  ValueToUriMap constructed from a source cache
-     * @param targetValueToUriMap  ValueToUriMap constructed from a target cache
-     * @param swapped True if source and target have been swapped in the valueMap
+     *
+     * @param valueMap
+     *         Mapping from values to values with similarity score
+     * @param sourceValueToUriMap
+     *         ValueToUriMap constructed from a source cache
+     * @param targetValueToUriMap
+     *         ValueToUriMap constructed from a target cache
+     * @param swapped
+     *         True if source and target have been swapped in the valueMap
      * @return Mapping from source resource uri to target resource uri
      */
-    protected Mapping getUriToUriMapping(Map<String, Map<String, Double>> valueMap, Map<String, Set<String>> sourceValueToUriMap, Map<String, Set<String>> targetValueToUriMap, boolean swapped) {
-        Mapping result = MappingFactory.createDefaultMapping();
+    protected AMapping getUriToUriMapping(Map<String, Map<String, Double>> valueMap, Map<String, Set<String>> sourceValueToUriMap, Map<String, Set<String>> targetValueToUriMap, boolean swapped) {
+        AMapping result = MappingFactory.createDefaultMapping();
         for (String s : valueMap.keySet()) {
             for (String t : valueMap.get(s).keySet()) {
                 if (sourceValueToUriMap.get(swapped ? t : s) != null)
@@ -56,7 +60,7 @@ public abstract class Mapper implements IMapper {
         return result;
     }
 
-    protected Mapping getUriToUriMapping(Map<String, Map<String, Double>> valueMap, Map<String, Set<String>> sourceValueToUriMap, Map<String, Set<String>> targetValueToUriMap) {
+    protected AMapping getUriToUriMapping(Map<String, Map<String, Double>> valueMap, Map<String, Set<String>> sourceValueToUriMap, Map<String, Set<String>> targetValueToUriMap) {
         return getUriToUriMapping(valueMap, sourceValueToUriMap, targetValueToUriMap, false);
     }
 

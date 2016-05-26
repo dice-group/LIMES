@@ -1,32 +1,26 @@
 package org.aksw.limes.core.io.config.reader.rdf;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
+import com.hp.hpl.jena.rdf.model.*;
+import com.hp.hpl.jena.util.FileManager;
+import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.util.FileManager;
-import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 12, 2015
  */
-public class RDFConfigurationReader extends AConfigurationReader{
+public class RDFConfigurationReader extends AConfigurationReader {
     private static final Logger logger = Logger.getLogger(RDFConfigurationReader.class.getName());
     Configuration configuration = new Configuration();
 
@@ -34,7 +28,48 @@ public class RDFConfigurationReader extends AConfigurationReader{
     private Resource specsSubject;
 
     /**
-     * @param inputFile path to RDF configuration file
+     * @author sherif
+     */
+    public RDFConfigurationReader(String fileNameOrUri) {
+        super(fileNameOrUri);
+    }
+
+    /**
+     * read RDF model from file/URL
+     *
+     * @param fileNameOrUri
+     * @return
+     * @author sherif
+     */
+    public static Model readModel(String fileNameOrUri) {
+        long startTime = System.currentTimeMillis();
+        Model model = ModelFactory.createDefaultModel();
+
+        String path = System.getProperty("user.dir") + fileNameOrUri;
+        try (InputStream in = FileManager.get().open(path)) {
+            if (fileNameOrUri.contains(".ttl") || fileNameOrUri.contains(".n3")) {
+                logger.info("Opening Turtle file");
+                model.read(in, null, "TTL");
+            } else if (fileNameOrUri.contains(".rdf")) {
+                logger.info("Opening RDFXML file");
+                model.read(in, null);
+            } else if (fileNameOrUri.contains(".nt")) {
+                logger.info("Opening N-Triples file");
+                model.read(in, null, "N-TRIPLE");
+            } else {
+                logger.info("Content negotiation to get RDFXML from " + fileNameOrUri);
+                model.read(fileNameOrUri);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        logger.info("Loading " + fileNameOrUri + " is done in " + (System.currentTimeMillis() - startTime) + "ms.");
+        return model;
+    }
+
+    /**
+     * @param inputFile
+     *         path to RDF configuration file
      * @return A filled Configuration object from the inputFile
      * @author sherif
      */
@@ -48,12 +83,12 @@ public class RDFConfigurationReader extends AConfigurationReader{
      * @return true if the configurationModel contains all mandatory properties
      * @author sherif
      */
-    public Configuration read(Model configurationModel){
+    public Configuration read(Model configurationModel) {
         configModel = configurationModel;
         StmtIterator stats = configModel.listStatements(null, RDF.type, LIMES.LimesSpecs);
-        if(stats.hasNext()){
+        if (stats.hasNext()) {
             specsSubject = stats.next().getSubject();
-        }else{
+        } else {
             logger.error("Missing " + LIMES.LimesSpecs + ", Exit with error.");
             System.exit(1);
         }
@@ -67,16 +102,16 @@ public class RDFConfigurationReader extends AConfigurationReader{
         readKBDescription((Resource) getObject(specsSubject, LIMES.hasTarget, true));
 
         //3. METRIC
-        if(configModel.contains(specsSubject, LIMES.hasMetric , (RDFNode) null)) {
+        if (configModel.contains(specsSubject, LIMES.hasMetric, (RDFNode) null)) {
             Resource metric = (Resource) getObject(specsSubject, LIMES.hasMetric, true);
             configuration.setMetricExpression(getObject(metric, LIMES.expression, true).toString());
         } else
 
             //4. ML Algorithm
-            if(configModel.contains(specsSubject, LIMES.hasMLAlgorithm , (RDFNode) null)) {
-                Resource mlAlgorithmUri = getObject(specsSubject, LIMES.hasMLAlgorithm , true).asResource();
+            if (configModel.contains(specsSubject, LIMES.hasMLAlgorithm, (RDFNode) null)) {
+                Resource mlAlgorithmUri = getObject(specsSubject, LIMES.hasMLAlgorithm, true).asResource();
                 readMLAlgorithmParameters(mlAlgorithmUri);
-            }else{
+            } else {
                 logger.error("No Metric / ML Algorithm provided, exit with error ");
                 System.exit(1);
             }
@@ -95,19 +130,19 @@ public class RDFConfigurationReader extends AConfigurationReader{
 
         //7. EXECUTION plan
         RDFNode execution = getObject(specsSubject, LIMES.executionPlan, false);
-        if(execution != null){
+        if (execution != null) {
             configuration.setExecutionPlan(execution.toString());
         }
 
         //8. TILING if necessary
         RDFNode g = getObject(specsSubject, LIMES.granularity, false);
-        if(g != null){
+        if (g != null) {
             configuration.setGranularity(Integer.parseInt(g.toString()));
         }
 
         //9. OUTPUT format
         RDFNode output = getObject(specsSubject, LIMES.outputFormat, false);
-        if(output != null){
+        if (output != null) {
             configuration.setOutputFormat(output.toString());
         }
 
@@ -116,65 +151,58 @@ public class RDFConfigurationReader extends AConfigurationReader{
     }
 
     private void readMLAlgorithmParameters(Resource mlAlgorithmUri) {
-        if(!configModel.contains(mlAlgorithmUri, RDF.type, LIMES.MLAlgorithm)){
+        if (!configModel.contains(mlAlgorithmUri, RDF.type, LIMES.MLAlgorithm)) {
             logger.error(mlAlgorithmUri + " missing type. Exit with error");
             System.exit(1);
         }
         RDFNode mlAlgorithmName = getObject(mlAlgorithmUri, LIMES.mlAlgorithmName, true);
         configuration.setMlAlgorithmName(mlAlgorithmName.toString());
         StmtIterator parametersItr = configModel.listStatements(null, RDF.type, LIMES.MLParameter);
-        while(parametersItr.hasNext()) {
+        while (parametersItr.hasNext()) {
             Resource ParameterSubject = parametersItr.next().getSubject();
             RDFNode mlParameterName = getObject(ParameterSubject, LIMES.mlParameterName, false);
-            RDFNode mlParametervalue =getObject(ParameterSubject, LIMES.mlParameterValue, false);
+            RDFNode mlParametervalue = getObject(ParameterSubject, LIMES.mlParameterValue, false);
             configuration.addMlParameter(mlParameterName.toString(), mlParametervalue.toString());
         }
     }
 
-
-    /**
-     *
-     *@author sherif
-     */
-    public RDFConfigurationReader(String fileNameOrUri) {
-        super(fileNameOrUri);
-    }
-
     /**
      * Read either the source or the dataset description
+     *
      * @param kb
      * @author sherif
      */
     public void readKBDescription(Resource kb) {
         KBInfo kbinfo = null;
-        if(configModel.contains(kb, RDF.type, LIMES.SourceDataset)) {
+        if (configModel.contains(kb, RDF.type, LIMES.SourceDataset)) {
             kbinfo = configuration.getSourceInfo();
-        }else if(configModel.contains(kb, RDF.type, LIMES.TargetDataset)) {
+        } else if (configModel.contains(kb, RDF.type, LIMES.TargetDataset)) {
             kbinfo = configuration.getTargetInfo();
-        }else{
+        } else {
             logger.error("Either " + LIMES.SourceDataset + " or " + LIMES.TargetDataset + " type statement is missing");
             System.exit(1);
         }
-        kbinfo.setId(getObject(kb, RDFS.label, true).toString());;
+        kbinfo.setId(getObject(kb, RDFS.label, true).toString());
+        ;
         kbinfo.setEndpoint(getObject(kb, LIMES.endPoint, true).toString());
         RDFNode graph = getObject(kb, LIMES.graph, false);
-        if(graph != null){
+        if (graph != null) {
             kbinfo.setGraph(graph.toString());
         }
-        for(RDFNode r : getObjects(kb, LIMES.restriction, false)){
+        for (RDFNode r : getObjects(kb, LIMES.restriction, false)) {
             String restriction = r.toString();
             if (restriction.endsWith(".")) {
                 restriction = restriction.substring(0, restriction.length() - 1);
             }
             kbinfo.addRestriction(restriction);
         }
-        for(RDFNode properity : getObjects(kb, LIMES.property, true)){
+        for (RDFNode properity : getObjects(kb, LIMES.property, true)) {
             XMLConfigurationReader.processProperty(kbinfo, properity.toString());
         }
         kbinfo.setPageSize(parseInt(getObject(kb, LIMES.pageSize, true).toString()));
         kbinfo.setVar(getObject(kb, LIMES.variable, true).toString());
         RDFNode type = getObject(kb, LIMES.type, false);
-        if(type != null){
+        if (type != null) {
             kbinfo.setType(type.toString().toLowerCase());
         }
         kbinfo.setPrefixes(configuration.getPrefixes());
@@ -185,11 +213,11 @@ public class RDFConfigurationReader extends AConfigurationReader{
      * @return
      * @author sherif
      */
-    private int parseInt(String s){
-        if(s.contains("^")){
+    private int parseInt(String s) {
+        if (s.contains("^")) {
             s = s.substring(0, s.indexOf("^"));
         }
-        if(s.contains("@")){
+        if (s.contains("@")) {
             s = s.substring(0, s.indexOf("@"));
         }
         return Integer.parseInt(s);
@@ -198,17 +226,18 @@ public class RDFConfigurationReader extends AConfigurationReader{
     /**
      * @param s
      * @param p
-     * @param isMandatory if set the program exit in case o not found,
-     * 			otherwise a null value returned
+     * @param isMandatory
+     *         if set the program exit in case o not found,
+     *         otherwise a null value returned
      * @return the object o of triple (s, p, o) if exists, null otherwise
      * @author sherif
      */
-    private RDFNode getObject(Resource s, Property p, boolean isMandatory){
+    private RDFNode getObject(Resource s, Property p, boolean isMandatory) {
         StmtIterator statements = configModel.listStatements(s, p, (RDFNode) null);
-        if(statements.hasNext()){
+        if (statements.hasNext()) {
             return statements.next().getObject();
-        }else{
-            if(isMandatory){
+        } else {
+            if (isMandatory) {
                 logger.error("Missing mandatory property " + p + ", Exit with error.");
                 System.exit(1);
             }
@@ -219,72 +248,40 @@ public class RDFConfigurationReader extends AConfigurationReader{
     /**
      * @param s
      * @param p
-     * @param isMandatory if set the program exit in case o not found,
-     * 			otherwise a null value returned
+     * @param isMandatory
+     *         if set the program exit in case o not found,
+     *         otherwise a null value returned
      * @return Set of all objects o of triples (s, p, o) if exist, null otherwise
      * @author sherif
      */
-    private Set<RDFNode> getObjects(Resource s, Property p, boolean isMandatory){
+    private Set<RDFNode> getObjects(Resource s, Property p, boolean isMandatory) {
         Set<RDFNode> result = new HashSet<>();
         StmtIterator statements = configModel.listStatements(s, p, (RDFNode) null);
-        while(statements.hasNext()){
+        while (statements.hasNext()) {
             result.add(statements.next().getObject());
         }
-        if(isMandatory && result.size() == 0){
+        if (isMandatory && result.size() == 0) {
             logger.error("Missing mandatory property: " + p + ", Exit with error.");
             System.exit(1);
-        }else if(result.size() == 0){
+        } else if (result.size() == 0) {
             return null;
         }
         return result;
     }
-
 
     /**
      * @param s
      * @return
      * @author sherif
      */
-    private double parseDouble(String s){
-        if(s.contains("^")){
+    private double parseDouble(String s) {
+        if (s.contains("^")) {
             s = s.substring(0, s.indexOf("^"));
         }
-        if(s.contains("@")){
+        if (s.contains("@")) {
             s = s.substring(0, s.indexOf("@"));
         }
         return Double.parseDouble(s);
-    }
-
-
-    /**
-     * read RDF model from file/URL
-     * @param fileNameOrUri
-     * @return
-     * @author sherif
-     */
-    public static Model readModel(String fileNameOrUri){
-        long startTime = System.currentTimeMillis();
-        Model model = ModelFactory.createDefaultModel();
-
-        String path = System.getProperty("user.dir")+fileNameOrUri;
-        try(InputStream in = FileManager.get().open(path ))
-        {
-            if(fileNameOrUri.contains(".ttl") || fileNameOrUri.contains(".n3")){
-                logger.info("Opening Turtle file");
-                model.read(in, null, "TTL");
-            }else if(fileNameOrUri.contains(".rdf")){
-                logger.info("Opening RDFXML file");
-                model.read(in, null);
-            }else if(fileNameOrUri.contains(".nt")){
-                logger.info("Opening N-Triples file");
-                model.read(in, null, "N-TRIPLE");
-            }else{
-                logger.info("Content negotiation to get RDFXML from " + fileNameOrUri);
-                model.read(fileNameOrUri);
-            }
-        } catch(IOException e) {throw new RuntimeException(e);}
-        logger.info("Loading " + fileNameOrUri + " is done in " + (System.currentTimeMillis()-startTime) + "ms.");
-        return model;
     }
 
 }

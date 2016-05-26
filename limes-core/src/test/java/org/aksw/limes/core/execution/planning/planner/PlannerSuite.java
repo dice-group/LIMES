@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    CanonicalPlannerTest.class,HeliosPlannerTest.class,PlannerFactoryTest.class
+        CanonicalPlannerTest.class, HeliosPlannerTest.class, PlannerFactoryTest.class
 })
 public class PlannerSuite {
 

@@ -4,51 +4,20 @@
  */
 package org.aksw.limes.core.ml.algorithm.euclid;
 
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.measures.measure.Measure;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.measures.measure.Measure;
-
 /**
- *
  * @author ngonga
  */
 public class LinearSelfConfigurator implements ISelfConfigurator {
 
-	@Override
-	public void computeMeasure(Cache source, Cache target, String[] parameters) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getMeasure() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getThreshold() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Mapping getResults() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setMeasure(Measure measure) {
-		// TODO Auto-generated method stub
-		
-	}
-
-//	//execution mode. STRICT = true leads to a strong bias towards precision by
+    //	//execution mode. STRICT = true leads to a strong bias towards precision by
 //	//ensuring that the initial classifiers are classifiers that have the
 //	//maximal threshold that leads to the best pseudo-f-measure. False leads to the
 //	// best classifier with the smallest threshold
@@ -146,32 +115,62 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
 //	 * @param minCoverage Threshold for coverage
 //	 * @return Map of property to coverage
 //	 */
-	public static Map<String, Double> getPropertyStats(Cache c, double minCoverage) {
-		Map<String, Double> buffer = new HashMap<String, Double>();
-		Map<String, Double> result = new HashMap<String, Double>();
+    public static Map<String, Double> getPropertyStats(Cache c, double minCoverage) {
+        Map<String, Double> buffer = new HashMap<String, Double>();
+        Map<String, Double> result = new HashMap<String, Double>();
 
-		//first count how often properties appear across instances
-		for (Instance i : c.getAllInstances()) {
-			for (String p : i.getAllProperties()) {
-				if (!buffer.containsKey(p)) {
-					buffer.put(p, 1.0);
-				} else {
-					buffer.put(p, buffer.get(p) + 1);
-				}
-			}
-		}
+        //first count how often properties appear across instances
+        for (Instance i : c.getAllInstances()) {
+            for (String p : i.getAllProperties()) {
+                if (!buffer.containsKey(p)) {
+                    buffer.put(p, 1.0);
+                } else {
+                    buffer.put(p, buffer.get(p) + 1);
+                }
+            }
+        }
 
-		//then compute their coverage
-		double total = (double) c.getAllInstances().size();
-		double coverage;
-		for (String p : buffer.keySet()) {
-			coverage = (double) buffer.get(p) / total;
-			if (coverage >= minCoverage) {
-				result.put(p, coverage);
-			}
-		}
-		return result;
-	}
+        //then compute their coverage
+        double total = (double) c.getAllInstances().size();
+        double coverage;
+        for (String p : buffer.keySet()) {
+            coverage = (double) buffer.get(p) / total;
+            if (coverage >= minCoverage) {
+                result.put(p, coverage);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void computeMeasure(Cache source, Cache target, String[] parameters) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public String getMeasure() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setMeasure(Measure measure) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public String getThreshold() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public AMapping getResults() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 //
 //	public static String getPropertyType(Cache c, String p) {
 //		for (Instance i : c.getAllInstances()) {

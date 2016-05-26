@@ -6,9 +6,8 @@ import java.util.Map;
 
 /**
  * @author mofeed
- *
  */
-public class RunsData implements IQuantitativeMeasure{
+public class RunsData implements IQuantitativeMeasure {
 
     // list of recorded runs, each with its information like id,time,memory,.....
     protected Map<Long, RunRecord> runs = new HashMap<Long, RunRecord>();
@@ -35,11 +34,11 @@ public class RunsData implements IQuantitativeMeasure{
     // get information of specific run
     @Override
     public double getRunInfo(long runId, String Info) {
-        if(Info.equals("Id"))
+        if (Info.equals("Id"))
             return runs.get(Long.valueOf(runId)).getRunId();
-        else if(Info.equals("Time"))
+        else if (Info.equals("Time"))
             return runs.get(Long.valueOf(runId)).getRunTime();
-        else if(Info.equals("Memory"))
+        else if (Info.equals("Memory"))
             return runs.get(Long.valueOf(runId)).getRunMemory();
         else return 0;
     }
@@ -47,7 +46,7 @@ public class RunsData implements IQuantitativeMeasure{
     // adding new run to list
     @Override
     public void addRun(RunRecord record) {
-        runs.put(record.getRunId(),record);
+        runs.put(record.getRunId(), record);
 
     }
 

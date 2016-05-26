@@ -5,18 +5,21 @@
 package org.aksw.limes.core.ml.algorithm.euclid;
 
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.measure.Measure;
 
 /**
- *
  * @author ngonga
  */
 public interface ISelfConfigurator {
     public void computeMeasure(Cache source, Cache target, String parameters[]);
+
     public String getMeasure();
-    public String getThreshold();
-    public Mapping getResults();    
+
     public void setMeasure(Measure measure);
+
+    public String getThreshold();
+
+    public AMapping getResults();
 
 }

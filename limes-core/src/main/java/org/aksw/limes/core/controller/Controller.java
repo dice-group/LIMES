@@ -1,8 +1,5 @@
 package org.aksw.limes.core.controller;
 
-import static org.fusesource.jansi.Ansi.ansi;
-import static org.fusesource.jansi.Ansi.Color.RED;
-
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
@@ -12,22 +9,16 @@ import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.serializer.ISerializer;
 import org.aksw.limes.core.io.serializer.SerializerFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.setting.LearningParameters;
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.log4j.Level;
+import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import static org.fusesource.jansi.Ansi.Color.RED;
+import static org.fusesource.jansi.Ansi.ansi;
 
 /**
  * This is the default LIMES Controller used to run the software as CLI.
@@ -43,7 +34,7 @@ public class Controller {
      * Take configuration file as argument and run the specified linking task.
      *
      * @param args
-     *            Command line arguments
+     *         Command line arguments
      */
     public static void main(String[] args) {
         CommandLine cl = parseCommandLine(args);
@@ -106,7 +97,7 @@ public class Controller {
         }
 
         // 2. Read configuration
-        
+
         return reader.read();
     }
 
@@ -114,10 +105,10 @@ public class Controller {
      * Execute LIMES
      *
      * @param config
-     *            LIMES configuration object
+     *         LIMES configuration object
      */
     public static ResultMappings getMapping(Configuration config) {
-        Mapping results = null;
+        AMapping results = null;
 
         // 3. Fill Caches
         HybridCache sourceCache = HybridCache.getData(config.getSourceInfo());
@@ -141,8 +132,8 @@ public class Controller {
                     ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlan()),
                     ExecutionEngineFactory.getExecutionEngineType(config.getExecutionPlan()));
         }
-        Mapping acceptanceMapping = results.getSubMap(config.getAcceptanceThreshold());
-        Mapping verificationMapping = MappingOperations.difference(results, acceptanceMapping);
+        AMapping acceptanceMapping = results.getSubMap(config.getAcceptanceThreshold());
+        AMapping verificationMapping = MappingOperations.difference(results, acceptanceMapping);
         return new ResultMappings(verificationMapping, acceptanceMapping);
     }
 

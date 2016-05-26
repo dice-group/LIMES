@@ -1,14 +1,13 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic;
 
+import org.aksw.limes.core.io.cache.Cache;
+
 import java.util.Set;
 import java.util.TreeMap;
-
-import org.aksw.limes.core.io.cache.Cache;
 
 /**
  * Atomic class for Allen's Algebra Temporal relations. It orders both source
  * and target events by their end property.
- * 
  */
 public class EndEnd extends AtomicAllenAlgebraMapper {
     public EndEnd() {

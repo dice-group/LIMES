@@ -1,16 +1,7 @@
 package org.aksw.limes.core.measures.mapper.string;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.PropertyFetcher;
 import org.aksw.limes.core.measures.mapper.string.triefilter.LengthQuicksort;
@@ -20,6 +11,11 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Mapper for bounded Jaro-Winkler distances using an efficient length-partitioning- and trie-pruning-based
@@ -33,23 +29,23 @@ public class JaroWinklerMapper extends Mapper {
      * Computes a mapping between a source and a target.
      *
      * @param source
-     *            Source cache
+     *         Source cache
      * @param target
-     *            Target cache
+     *         Target cache
      * @param sourceVar
-     *            Variable for the source dataset
+     *         Variable for the source dataset
      * @param targetVar
-     *            Variable for the target dataset
+     *         Variable for the target dataset
      * @param expression
-     *            Expression to process.
+     *         Expression to process.
      * @param threshold
-     *            Similarity threshold
+     *         Similarity threshold
      * @return A mapping which contains links between the source instances and
-     *         the target instances
+     * the target instances
      */
     @Override
-    public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                              double threshold) {
+    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+                               double threshold) {
         logger.info("Running JaroWinklerMapper");
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         // generate value to uri maps
@@ -58,7 +54,7 @@ public class JaroWinklerMapper extends Mapper {
         return getMapping(sourceMap, targetMap, threshold);
     }
 
-    protected Mapping getMapping(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap, double threshold) {
+    protected AMapping getMapping(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap, double threshold) {
         List<String> listA, listB;
         // get lists of strings to match
         listA = new ArrayList<>(sourceMap.keySet());
@@ -99,7 +95,7 @@ public class JaroWinklerMapper extends Mapper {
                 if (m.getRight().size() > 0 && m.getLeft().size() > 0)
                     partitions.add(m);
             }
-        // else, we have just one big partition
+            // else, we have just one big partition
         } else {
             MutablePair<List<String>, List<String>> m = new MutablePair<>();
             m.setLeft(listA);

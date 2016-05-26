@@ -1,17 +1,15 @@
 package org.aksw.limes.core.io.query;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.hp.hpl.jena.rdf.model.Model;
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.rdf.model.Model;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Enables one to register Jena Models as backends for the SparqlQueryModule
  *
  * @author Claus Stadler <cstadler@informatik.uni-leipzig.de>
- *
  */
 public class ModelRegistry {
     static Logger logger = Logger.getLogger("LIMES");
@@ -26,16 +24,16 @@ public class ModelRegistry {
         return instance;
     }
 
-    public Map<String, Model> getMap() {
-        return map;
-    }
-
     public static void register(String name, Model model) {
         getInstance().getMap().put(name, model);
-        logger.info("Registry = "+ getInstance().map.keySet());
+        logger.info("Registry = " + getInstance().map.keySet());
     }
 
     public static void unregister(String name) {
         getInstance().getMap().remove(name);
+    }
+
+    public Map<String, Model> getMap() {
+        return map;
     }
 }

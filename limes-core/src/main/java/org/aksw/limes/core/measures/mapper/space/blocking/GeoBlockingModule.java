@@ -5,16 +5,17 @@
 package org.aksw.limes.core.measures.mapper.space.blocking;
 
 
-import java.util.ArrayList;
-
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
+
 /**
  * Not tested yet. Works on the angles by transforming the thresholds into angular
  * thresholds. Does everything modulo 90 and 180°.
+ *
  * @author ngonga
  */
 public class GeoBlockingModule implements BlockingModule {
@@ -48,9 +49,11 @@ public class GeoBlockingModule implements BlockingModule {
         }
     }
 
-    /** Generate IDs for blocks
+    /**
+     * Generate IDs for blocks
      *
-     * @param blockId ID of the input point
+     * @param blockId
+     *         ID of the input point
      * @return IDs of blocks for points to map
      */
     public ArrayList<ArrayList<Integer>> getBlocksToCompare(ArrayList<Integer> blockId) {
@@ -100,16 +103,16 @@ public class GeoBlockingModule implements BlockingModule {
                 if (properties.get(i).startsWith("la")) {
 
                     if (value > latLimit) {
-                        result.get(i).set(j, value - 2*latLimit);
+                        result.get(i).set(j, value - 2 * latLimit);
                     } else if (value < latLimit) {
-                        result.get(i).set(j, value + 2*latLimit);
+                        result.get(i).set(j, value + 2 * latLimit);
                     }
                 }
                 if (properties.get(i).startsWith("lo")) {
                     if (value > longLimit) {
-                        result.get(i).set(j, value - 2*longLimit);
+                        result.get(i).set(j, value - 2 * longLimit);
                     } else if (value < longLimit) {
-                        result.get(i).set(j, value + 2*longLimit);
+                        result.get(i).set(j, value + 2 * longLimit);
                     }
                 }
             }
@@ -126,16 +129,16 @@ public class GeoBlockingModule implements BlockingModule {
 
             if (properties.get(i).startsWith("la")) {
                 if (value > latLimit) {
-                    value = value - 2*latLimit;
+                    value = value - 2 * latLimit;
                 } else if (value < latLimit) {
-                    value = value + 2*latLimit;
+                    value = value + 2 * latLimit;
                 }
             }
             if (properties.get(i).startsWith("lo")) {
                 if (value > longLimit) {
-                    value = value - 2*longLimit;
+                    value = value - 2 * longLimit;
                 } else if (value < longLimit) {
-                    value = value + 2*longLimit;
+                    value = value + 2 * longLimit;
                 }
             }
             blockId = (int) java.lang.Math.floor(value / thresholds.get(i));
@@ -144,20 +147,24 @@ public class GeoBlockingModule implements BlockingModule {
         return blockIds;
     }
 
-    /** We assume that every point has exactly one longitude and one latitude
-     * 
-     * @param a Instance with lat and long
+    /**
+     * We assume that every point has exactly one longitude and one latitude
+     *
+     * @param a
+     *         Instance with lat and long
      * @return Block id of instance
      */
     public ArrayList<ArrayList<Integer>> getAllBlockIds(Instance a) {
         ArrayList<ArrayList<Integer>> list = new ArrayList<ArrayList<Integer>>();
         list.add(getBlockId(a));
-            return list;
+        return list;
     }
-    
-        /** We assume that every point has exactly one longitude and one latitude
-     * 
-     * @param a Instance with lat and long
+
+    /**
+     * We assume that every point has exactly one longitude and one latitude
+     *
+     * @param a
+     *         Instance with lat and long
      * @return Block id of instance
      */
     public ArrayList<ArrayList<Integer>> getAllSourceIds(Instance a, String props) {
@@ -172,23 +179,23 @@ public class GeoBlockingModule implements BlockingModule {
 
             if (sourceProps[i].startsWith("la")) {
                 if (value > latLimit) {
-                    value = value - 2*latLimit;
+                    value = value - 2 * latLimit;
                 } else if (value < latLimit) {
-                    value = value + 2*latLimit;
+                    value = value + 2 * latLimit;
                 }
             }
             if (sourceProps[i].startsWith("lo")) {
                 if (value > longLimit) {
-                    value = value - 2*longLimit;
+                    value = value - 2 * longLimit;
                 } else if (value < longLimit) {
-                    value = value + 2*longLimit;
+                    value = value + 2 * longLimit;
                 }
             }
             blockId = (int) java.lang.Math.floor(value / thresholds.get(i));
 
             blockIds.add(blockId);
         }
-        
+
         return list;
     }
 }

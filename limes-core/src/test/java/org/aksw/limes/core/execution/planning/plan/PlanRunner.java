@@ -11,10 +11,10 @@ import org.junit.runners.Suite.SuiteClasses;
 public class PlanRunner {
 
     public void main() {
-	Result result = JUnitCore.runClasses(PlanSuite.class);
-	System.out.println(result.wasSuccessful());
-	//TestSuite suite = new TestSuite(ExecutionEngineFactoryTest.class);
-	//TestResult result = new TestResult();
-	//suite.run(result);
+        Result result = JUnitCore.runClasses(PlanSuite.class);
+        System.out.println(result.wasSuccessful());
+        //TestSuite suite = new TestSuite(ExecutionEngineFactoryTest.class);
+        //TestResult result = new TestResult();
+        //suite.run(result);
     }
 }

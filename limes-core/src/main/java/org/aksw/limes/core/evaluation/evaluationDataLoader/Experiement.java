@@ -1,29 +1,30 @@
 /**
- * 
+ *
  */
 package org.aksw.limes.core.evaluation.evaluationDataLoader;
+
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.MemoryCache;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.apache.log4j.Logger;
 /**
- * 	@author mofeed
- *  @author ngonga
- *
+ * @author mofeed
+ * @author ngonga
  */
 public class Experiement {
     static Logger logger = Logger.getLogger("LIMES");
     static String SEPARATOR = "\t";
     static String CSVSEPARATOR = ",";
 
-    public static Mapping readOAEIMapping(String file) {
-        Mapping m = MappingFactory.createMapping(MappingFactory.MappingType.MEMORY_MAPPING);
+    public static AMapping readOAEIMapping(String file) {
+        AMapping m = MappingFactory.createMapping(MappingFactory.MappingType.MEMORY_MAPPING);
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
             //read properties;
@@ -48,10 +49,9 @@ public class Experiement {
     }
 
 
-
     public static Cache readOAEIFile(String file, String token) {
         Cache c = new MemoryCache();
-        BufferedReader reader=null;
+        BufferedReader reader = null;
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
             //read properties;
@@ -73,19 +73,18 @@ public class Experiement {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
-        finally{try {
-            reader.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }}
         //        logger.info(c);
         c.resetIterator();
         return c;
     }
-
-
 
 
 }

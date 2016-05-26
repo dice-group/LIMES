@@ -2,12 +2,11 @@ package org.aksw.limes.core.evaluation.quantitativeMeasures;
 
 /**
  * @author mofeed
- *
  */
 public class RunRecord {
     private long runId;
     private double runTime;
-    private double runMemory=0;
+    private double runMemory = 0;
 
     /**
      * @param runId
@@ -17,6 +16,7 @@ public class RunRecord {
         this.runId = runId;
         this.runTime = runTime;
     }
+
     /**
      * @param runId
      * @param runTime
@@ -28,31 +28,37 @@ public class RunRecord {
     }
 
 
-
     public long getRunId() {
         return runId;
     }
+
     public void setRunId(long runId) {
         this.runId = runId;
     }
+
     public double getRunTime() {
         return runTime;
     }
+
     public void setRunTime(double runTime) {
         this.runTime = runTime;
     }
+
     public double getRunMemory() {
         return runMemory;
     }
+
     public void setRunMemory(double runMemory) {
         this.runMemory = runMemory;
     }
+
     @Override
     public boolean equals(Object run) {
-        return  ( runId == ((RunRecord)run).getRunId());
+        return (runId == ((RunRecord) run).getRunId());
     }
+
     @Override
     public String toString() {
-        return runId+":"+runTime+":"+runMemory;
+        return runId + ":" + runTime + ":" + runMemory;
     }
 }

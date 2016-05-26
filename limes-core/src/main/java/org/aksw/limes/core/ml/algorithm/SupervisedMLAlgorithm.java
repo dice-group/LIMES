@@ -1,10 +1,10 @@
 package org.aksw.limes.core.ml.algorithm;
 
-import java.lang.reflect.Constructor;
-
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
+
+import java.lang.reflect.Constructor;
 
 public class SupervisedMLAlgorithm extends AMLAlgorithm {
 
@@ -20,13 +20,13 @@ public class SupervisedMLAlgorithm extends AMLAlgorithm {
             throw new UnsupportedMLImplementationException(ml.getName());
         }
 
-        if(!ml.supports(ML_IMPLEMENTATION_TYPE)) {
+        if (!ml.supports(ML_IMPLEMENTATION_TYPE)) {
             throw new UnsupportedMLImplementationException(ml.getName());
         }
 
     }
 
-    public MLModel learn(Mapping trainingData) throws UnsupportedMLImplementationException {
+    public MLModel learn(AMapping trainingData) throws UnsupportedMLImplementationException {
         return ml.learn(trainingData);
     }
 

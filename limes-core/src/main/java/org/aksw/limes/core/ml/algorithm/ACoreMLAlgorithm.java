@@ -3,7 +3,7 @@ package org.aksw.limes.core.ml.algorithm;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameters;
 
@@ -17,7 +17,7 @@ public abstract class ACoreMLAlgorithm {
 
     /**
      * Name of the core ML algorithm.
-     * 
+     *
      * @return
      */
     protected abstract String getName();
@@ -31,13 +31,13 @@ public abstract class ACoreMLAlgorithm {
 
     /**
      * Initialize the core ML algorithm.
-     * 
+     *
      * @param ls
      * @param sourceCache
      * @param targetCache
      */
     protected void init(LearningParameters lp, Cache sourceCache, Cache targetCache) {
-        if(lp != null && !lp.isEmpty()){
+        if (lp != null && !lp.isEmpty()) {
             this.parameters.putAll(lp);
         }
         this.sourceCache = sourceCache;
@@ -48,16 +48,16 @@ public abstract class ACoreMLAlgorithm {
      * Learning method for supervised core ML algorithm implementations, where
      * the confidence values for each pair in the trainingData determine its
      * truth degree.
-     * 
+     *
      * @param trainingData
      * @return
      */
-    protected abstract MLModel learn(Mapping trainingData)
+    protected abstract MLModel learn(AMapping trainingData)
             throws UnsupportedMLImplementationException;
 
     /**
      * Learning method for unsupervised core ML algorithm implementations.
-     * 
+     *
      * @param pfm
      * @return
      * @throws UnsupportedMLImplementationException
@@ -67,18 +67,18 @@ public abstract class ACoreMLAlgorithm {
 
     /**
      * Predict/generate links from source to target based on mlModel.
-     * 
+     *
      * @param source
      * @param target
      * @param mlModel
      * @return
      */
-    protected abstract Mapping predict(Cache source, Cache target,
-            MLModel mlModel);
+    protected abstract AMapping predict(Cache source, Cache target,
+                                        MLModel mlModel);
 
     /**
      * Check whether the mlType is supported.
-     * 
+     *
      * @param mlType
      * @return
      */
@@ -86,21 +86,21 @@ public abstract class ACoreMLAlgorithm {
 
     /**
      * Get a set of examples to be added to the mapping.
-     * 
+     *
      * @param size
      * @return
      * @throws UnsupportedMLImplementationException
      */
-    protected abstract Mapping getNextExamples(int size)
+    protected abstract AMapping getNextExamples(int size)
             throws UnsupportedMLImplementationException;
 
     /**
      * Learning method for supervised active core ML algorithm implementations.
-     * 
+     *
      * @param oracleMapping
      * @return
      */
-    protected abstract MLModel activeLearn(Mapping oracleMapping)
+    protected abstract MLModel activeLearn(AMapping oracleMapping)
             throws UnsupportedMLImplementationException;
 
 }

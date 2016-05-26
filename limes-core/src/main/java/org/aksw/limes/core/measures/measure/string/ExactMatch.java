@@ -6,8 +6,8 @@ package org.aksw.limes.core.measures.measure.string;
 
 
 import org.aksw.limes.core.io.cache.Instance;
+
 /**
- *
  * @author ngonga
  */
 public class ExactMatch extends StringMeasure {
@@ -29,7 +29,7 @@ public class ExactMatch extends StringMeasure {
     }
 
     public double getSimilarity(int overlap, int lengthA, int lengthB) {
-        if(overlap == lengthA && lengthA == lengthB) return 1d;
+        if (overlap == lengthA && lengthA == lengthB) return 1d;
         return 0d;
     }
 
@@ -38,7 +38,7 @@ public class ExactMatch extends StringMeasure {
     }
 
     public double getSimilarity(Object a, Object b) {
-        if((a+"").equals(b+"")) return 1d;
+        if ((a + "").equals(b + "")) return 1d;
         return 0d;
     }
 
@@ -47,14 +47,12 @@ public class ExactMatch extends StringMeasure {
     }
 
     public double getSimilarity(Instance a, Instance b, String property1, String property2) {
-        for(String source: a.getProperty(property1))
-        {
-            for(String target: b.getProperty(property2))
-            {
-                if(source.equals(target))
+        for (String source : a.getProperty(property1)) {
+            for (String target : b.getProperty(property2)) {
+                if (source.equals(target))
                     return 1d;
             }
-        
+
         }
         return 0d;
     }
@@ -64,7 +62,7 @@ public class ExactMatch extends StringMeasure {
     }
 
     public double getRuntimeApproximation(double mappingSize) {
-	return mappingSize / 1000d;
+        return mappingSize / 1000d;
     }
-    
+
 }

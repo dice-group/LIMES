@@ -6,8 +6,8 @@ import org.aksw.limes.core.util.Clonable;
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 12, 2015
  */
-public interface ILinkSpecification extends Clonable<ILinkSpecification>{
+public interface ILinkSpecification extends Clonable<ILinkSpecification> {
 
-	int compareTo(Object o);
+    int compareTo(Object o);
 
 }

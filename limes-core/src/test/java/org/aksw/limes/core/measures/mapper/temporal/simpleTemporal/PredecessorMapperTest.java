@@ -1,7 +1,5 @@
 package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
 
-import static org.junit.Assert.assertTrue;
-
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
@@ -10,10 +8,12 @@ import org.aksw.limes.core.execution.planning.planner.HeliosPlanner;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class PredecessorMapperTest {
 
@@ -103,12 +103,12 @@ public class PredecessorMapperTest {
                 0.5);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
-        Mapping m = e.execute(ls, p);
+        AMapping m = e.execute(ls, p);
         System.out.println(m);
 
         p = new DynamicPlanner(source, target);
         LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)", 0.8);
-        Mapping m2 = e.execute(ls2, p);
+        AMapping m2 = e.execute(ls2, p);
         System.out.println(m2);
     }
 
@@ -121,13 +121,13 @@ public class PredecessorMapperTest {
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         DynamicPlanner p = new DynamicPlanner(source, target);
-        Mapping m = e.execute(ls, p);
+        AMapping m = e.execute(ls, p);
 
         CanonicalPlanner p2 = new CanonicalPlanner();
-        Mapping mm = e.execute(ls, p2);
+        AMapping mm = e.execute(ls, p2);
 
         HeliosPlanner p3 = new HeliosPlanner(source, target);
-        Mapping mmm = e.execute(ls, p3);
+        AMapping mmm = e.execute(ls, p3);
 
         assertTrue(m.equals(mm));
         assertTrue(mm.equals(mmm));
@@ -143,14 +143,14 @@ public class PredecessorMapperTest {
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         DynamicPlanner p = new DynamicPlanner(source, target);
-        Mapping m = e.execute(ls, p);
+        AMapping m = e.execute(ls, p);
         System.out.println(p.getPlans().get(ls.toString()));
 
         CanonicalPlanner p2 = new CanonicalPlanner();
-        Mapping mm = e.execute(ls, p2);
+        AMapping mm = e.execute(ls, p2);
 
         HeliosPlanner p3 = new HeliosPlanner(source, target);
-        Mapping mmm = e.execute(ls, p3);
+        AMapping mmm = e.execute(ls, p3);
 
         System.out.println(m);
 
@@ -167,22 +167,22 @@ public class PredecessorMapperTest {
         LinkSpecification ls = new LinkSpecification(
                 "MINUS(tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
-        
+
         DynamicPlanner p = new DynamicPlanner(source, target);
-        Mapping m = e.execute(ls, p);
+        AMapping m = e.execute(ls, p);
         System.out.println(p.getPlans().get(ls.toString()));
-        
+
         e = new SimpleExecutionEngine(source, target, "?x", "?y");
         CanonicalPlanner p2 = new CanonicalPlanner();
-        Mapping mm = e.execute(ls, p2);
+        AMapping mm = e.execute(ls, p2);
 
         e = new SimpleExecutionEngine(source, target, "?x", "?y");
         HeliosPlanner p3 = new HeliosPlanner(source, target);
-        Mapping mmm = e.execute(ls, p3);
+        AMapping mmm = e.execute(ls, p3);
 
         System.out.println(m);
         System.out.println(mm);
-        
+
         assertTrue(m.equals(mm));
         assertTrue(mm.equals(mmm));
     }
@@ -197,21 +197,21 @@ public class PredecessorMapperTest {
                 "tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)",
                 1.0);
         LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)", 0.8);
-        Mapping m1 = e.execute(ls1, p);
-        Mapping m2 = e.execute(ls2, p);
+        AMapping m1 = e.execute(ls1, p);
+        AMapping m2 = e.execute(ls2, p);
         System.out.println(m1);
         System.out.println(m2);
 
         LinkSpecification ls = new LinkSpecification(
                 "XOR(trigrams(x.name,y.name)|0.8,tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)|1.0)",
                 1.0);
-        Mapping m = e.execute(ls, p);
+        AMapping m = e.execute(ls, p);
 
         CanonicalPlanner p2 = new CanonicalPlanner();
-        Mapping mm = e.execute(ls, p2);
+        AMapping mm = e.execute(ls, p2);
 
         HeliosPlanner p3 = new HeliosPlanner(source, target);
-        Mapping mmm = e.execute(ls, p3);
+        AMapping mmm = e.execute(ls, p3);
 
         assertTrue(m.equals(mm));
         assertTrue(mm.equals(mmm));

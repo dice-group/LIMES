@@ -1,15 +1,15 @@
 package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.apache.log4j.Logger;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class ConcurrentMapper extends SimpleTemporalMapper {
     /**
@@ -17,16 +17,16 @@ public class ConcurrentMapper extends SimpleTemporalMapper {
      * mapping contains n-to-m relations. Each source instance takes as
      * concurrent events the set of target instances with the same begin date
      * property and the same machine id property of the source instance.
-     * 
+     *
      * @author kleanthi
      */
     protected static final Logger logger = Logger.getLogger(ConcurrentMapper.class.getName());
 
     @Override
-    public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-            double threshold) {
+    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+                               double threshold) {
 
-        Mapping m = MappingFactory.createDefaultMapping();
+        AMapping m = MappingFactory.createDefaultMapping();
         Parser p = new Parser(expression, threshold);
 
         TreeMap<String, Set<Instance>> sources = this.orderByBeginDate(source, expression);

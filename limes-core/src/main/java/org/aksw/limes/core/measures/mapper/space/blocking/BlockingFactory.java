@@ -5,10 +5,7 @@
 package org.aksw.limes.core.measures.mapper.space.blocking;
 
 
-
-
 /**
- *
  * @author ngonga
  */
 public class BlockingFactory {

@@ -1,12 +1,5 @@
 package org.aksw.limes.core.controller;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
@@ -14,26 +7,17 @@ import org.aksw.limes.core.io.query.FileQueryModule;
 import org.apache.commons.cli.CommandLine;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.assertTrue;
+
 /**
  * @author Kevin Dreßler
  */
 public class ControllerTest {
-
-    @Test
-    public void test() {
-        CommandLine cl = Controller.parseCommandLine(Arrays.asList("./resources/lgd-lgd.xml").toArray(new String[1]));
-        Configuration config = Controller.getConfig(cl);
-        config.setOutputFormat("N3");
-        ResultMappings mappings = Controller.getMapping(config);
-        Map<String, String> oldAccepted = getOldLIMESMapping(System.getProperty("user.dir") + "/resources/lgd_relaybox_near.nt");
-        Map<String, String> oldReview = getOldLIMESMapping(System.getProperty("user.dir") + "/resources/lgd_relaybox_verynear.nt");
-        for (String s : oldReview.keySet()) {
-            assertTrue(mappings.getVerificationMapping().contains(s,oldReview.get(s)));
-        }
-        for (String s : oldAccepted.keySet()) {
-            assertTrue(mappings.getAcceptanceMapping().contains(s,oldAccepted.get(s)));
-        }
-    }
 
     private static Map<String, String> getOldLIMESMapping(String filePath) {
         KBInfo kb = new KBInfo();
@@ -55,5 +39,21 @@ public class ControllerTest {
             }
         }
         return result;
+    }
+
+    @Test
+    public void test() {
+        CommandLine cl = Controller.parseCommandLine(Arrays.asList("./resources/lgd-lgd.xml").toArray(new String[1]));
+        Configuration config = Controller.getConfig(cl);
+        config.setOutputFormat("N3");
+        ResultMappings mappings = Controller.getMapping(config);
+        Map<String, String> oldAccepted = getOldLIMESMapping(System.getProperty("user.dir") + "/resources/lgd_relaybox_near.nt");
+        Map<String, String> oldReview = getOldLIMESMapping(System.getProperty("user.dir") + "/resources/lgd_relaybox_verynear.nt");
+        for (String s : oldReview.keySet()) {
+            assertTrue(mappings.getVerificationMapping().contains(s, oldReview.get(s)));
+        }
+        for (String s : oldAccepted.keySet()) {
+            assertTrue(mappings.getAcceptanceMapping().contains(s, oldAccepted.get(s)));
+        }
     }
 }

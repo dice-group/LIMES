@@ -1,17 +1,16 @@
 package org.aksw.limes.core.execution.planning.planner;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * Impelements Cannonical Planner class.
- * 
+ *
  * @author ngonga
  * @author kleanthi
  */
@@ -24,7 +23,7 @@ public class CanonicalPlanner extends Planner {
      * Generates a NestedPlan for a link specification
      *
      * @param spec
-     *            Input link specification
+     *         Input link specification
      * @return NestedPlan of the input link specification
      */
     public NestedPlan plan(LinkSpecification spec) {

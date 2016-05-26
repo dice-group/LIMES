@@ -7,23 +7,22 @@ import org.apache.log4j.Logger;
  * @version DEC 2, 2015
  */
 public class Parser implements IParser {
-	public static final Logger logger = Logger.getLogger(Parser.class.getName());
-	
-	public static final String MULT = "MULT";
-	public static final String ADD = "ADD";
-	public static final String MAX = "MAX";
-	public static final String MIN = "MIN";
+    public static final Logger logger = Logger.getLogger(Parser.class.getName());
 
-	private double threshold;
-	private double threshold1;
-    private double threshold2;
+    public static final String MULT = "MULT";
+    public static final String ADD = "ADD";
+    public static final String MAX = "MAX";
+    public static final String MIN = "MIN";
     protected double leftCoefficient;
     protected double rightCoefficient;
     protected String leftTerm;
     protected String rightTerm;
     protected String operator;
     protected String expression;
-	
+    private double threshold;
+    private double threshold1;
+    private double threshold2;
+
 
     public Parser(String input, double theta) {
         expression = input.replaceAll(" ", "");
@@ -32,7 +31,7 @@ public class Parser implements IParser {
         getTerms();
     }
 
-    
+
     /**
      * Tests whether an expression is atomic or not
      *
@@ -176,33 +175,33 @@ public class Parser implements IParser {
     }
 
 
-	public double getThreshold2() {
-		return threshold2;
-	}
-
-	
-	public void setThreshold2(double threshold2) {
-		this.threshold2 = threshold2;
-	}
+    public double getThreshold2() {
+        return threshold2;
+    }
 
 
-	public double getThreshold1() {
-		return threshold1;
-	}
+    public void setThreshold2(double threshold2) {
+        this.threshold2 = threshold2;
+    }
 
 
-	public void setThreshold1(double threshold1) {
-		this.threshold1 = threshold1;
-	}
+    public double getThreshold1() {
+        return threshold1;
+    }
 
 
-	public double getThreshold() {
-	    return threshold;
-	}
+    public void setThreshold1(double threshold1) {
+        this.threshold1 = threshold1;
+    }
 
 
-	public void setThreshold(double threshold) {
-	    this.threshold = threshold;
-	}
+    public double getThreshold() {
+        return threshold;
+    }
+
+
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
+    }
 
 }

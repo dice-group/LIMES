@@ -5,9 +5,9 @@ import org.aksw.limes.core.gui.view.MainView;
 
 public class BatchLearningView extends MachineLearningView {
 
-	public BatchLearningView(MainView mainView, MachineLearningController controller) {
-		super(mainView, controller);
-	}
+    public BatchLearningView(MainView mainView, MachineLearningController controller) {
+        super(mainView, controller);
+    }
 
 
 }

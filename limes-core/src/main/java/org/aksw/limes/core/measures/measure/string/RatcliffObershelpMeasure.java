@@ -1,9 +1,9 @@
 package org.aksw.limes.core.measures.measure.string;
 
-import java.util.LinkedList;
-
 import org.aksw.limes.core.io.cache.Instance;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
+
+import java.util.LinkedList;
 
 public class RatcliffObershelpMeasure extends StringMeasure implements ITrieFilterableStringMeasure {
 
@@ -14,22 +14,22 @@ public class RatcliffObershelpMeasure extends StringMeasure implements ITrieFilt
 
     @Override
     public double characterFrequencyUpperBound(int l1, int l2, int m) {
-        return (2*(double)m)/((double)l1+(double)l2);
+        return (2 * (double) m) / ((double) l1 + (double) l2);
     }
 
     @Override
     public int characterMatchLowerBound(int l1, int l2, double threshold) {
-        return (int) Math.round(Math.ceil(threshold*(double)(l1+l2)/2.0d));
+        return (int) Math.round(Math.ceil(threshold * (double) (l1 + l2) / 2.0d));
     }
 
     @Override
     public int lengthLowerBound(int l1, double threshold) {
-        return (int) Math.round(Math.ceil((threshold)/(2-threshold)*(double)l1));
+        return (int) Math.round(Math.ceil((threshold) / (2 - threshold) * (double) l1));
     }
 
     @Override
     public int lengthUpperBound(int l1, double threshold) {
-        return (int) Math.round(Math.floor((2-threshold)/(threshold)*(double)l1));
+        return (int) Math.round(Math.floor((2 - threshold) / (threshold) * (double) l1));
     }
 
     @Override

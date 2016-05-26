@@ -1,9 +1,5 @@
 package org.aksw.limes.core.execution.engine;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.engine.filter.LinearFilter;
@@ -15,13 +11,17 @@ import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Implements the default execution engine class. The idea is that the engine
@@ -33,18 +33,18 @@ import org.apache.log4j.Logger;
  */
 public class SimpleExecutionEngine extends ExecutionEngine {
 
-    private HashMap<String, Mapping> dynamicResults = new HashMap<String, Mapping>();
     static Logger logger = Logger.getLogger(SimpleExecutionEngine.class.getName());
+    private HashMap<String, AMapping> dynamicResults = new HashMap<String, AMapping>();
 
     /**
      * Implements running the run operator. Assume atomic measures
      *
      * @param inst
-     *            Instruction
+     *         Instruction
      * @param source
-     *            Source cache
+     *         Source cache
      * @param target
-     *            Target cache
+     *         Target cache
      * @return MemoryMapping
      */
     public SimpleExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
@@ -56,17 +56,17 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * executes complex Link Specifications.
      *
      * @param plan
-     *            An execution plan
+     *         An execution plan
      * @return The mapping obtained from executing the plan
      */
-    public Mapping executeInstructions(Plan plan) {
+    public AMapping executeInstructions(Plan plan) {
         buffer = new ArrayList<>();
         if (plan.isEmpty()) {
             logger.info("Plan is empty. Done.");
             return MappingFactory.createDefaultMapping();
         }
         List<Instruction> instructions = plan.getInstructionList();
-        Mapping m = MappingFactory.createDefaultMapping();
+        AMapping m = MappingFactory.createDefaultMapping();
         for (int i = 0; i < instructions.size(); i++) {
             Instruction inst = instructions.get(i);
             // get the index for writing the results
@@ -137,10 +137,10 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Implements the execution of the run operator. Assume atomic measures.
      *
      * @param inst
-     *            atomic run Instruction
+     *         atomic run Instruction
      * @return The mapping obtained from executing the atomic run Instruction
      */
-    public Mapping executeRun(Instruction inst) {
+    public AMapping executeRun(Instruction inst) {
         double threshold = Double.parseDouble(inst.getThreshold());
         // generate correct mapper
         IMapper mapper;
@@ -160,12 +160,12 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Runs the reverse filtering operator
      *
      * @param inst
-     *            Instruction
+     *         Instruction
      * @param input
-     *            Mapping that is to be filtered
+     *         Mapping that is to be filtered
      * @return Filtered mapping
      */
-    private Mapping executeReverseFilter(Instruction inst, Mapping input) {
+    private AMapping executeReverseFilter(Instruction inst, AMapping input) {
         LinearFilter filter = new LinearFilter();
         return filter.reversefilter(input, inst.getMeasureExpression(), Double.parseDouble(inst.getThreshold()),
                 Double.parseDouble(inst.getMainThreshold()), source, target, sourceVariable, targetVariable);
@@ -175,14 +175,14 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Runs the filtering operator
      *
      * @param inst
-     *            filter Instruction
+     *         filter Instruction
      * @param input
-     *            Mapping that is to be filtered
+     *         Mapping that is to be filtered
      * @return filtered Mapping
      */
-    public Mapping executeFilter(Instruction inst, Mapping input) {
+    public AMapping executeFilter(Instruction inst, AMapping input) {
         LinearFilter filter = new LinearFilter();
-        Mapping m = MappingFactory.createDefaultMapping();
+        AMapping m = MappingFactory.createDefaultMapping();
         if (inst.getMeasureExpression() == null)
             m = filter.filter(input, Double.parseDouble(inst.getThreshold()));
         else {
@@ -201,12 +201,12 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Implements the difference of Mappings
      *
      * @param m1
-     *            First Mapping
+     *         First Mapping
      * @param m2
-     *            Second Mapping
+     *         Second Mapping
      * @return Intersection of m1 and m2
      */
-    public Mapping executeDifference(Mapping m1, Mapping m2) {
+    public AMapping executeDifference(AMapping m1, AMapping m2) {
         return MappingOperations.difference(m1, m2);
     }
 
@@ -214,12 +214,12 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Implements the exclusive or of Mappings
      *
      * @param m1
-     *            First Mapping
+     *         First Mapping
      * @param m2
-     *            Second Mapping
+     *         Second Mapping
      * @return Intersection of m1 and m2
      */
-    public Mapping executeExclusiveOr(Mapping m1, Mapping m2) {
+    public AMapping executeExclusiveOr(AMapping m1, AMapping m2) {
         return MappingOperations.xor(m1, m2);
     }
 
@@ -227,12 +227,12 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Implements the intersection of Mappings
      *
      * @param m1
-     *            First Mapping
+     *         First Mapping
      * @param m2
-     *            Second Mapping
+     *         Second Mapping
      * @return Intersection of m1 and m2
      */
-    public Mapping executeIntersection(Mapping m1, Mapping m2) {
+    public AMapping executeIntersection(AMapping m1, AMapping m2) {
         return MappingOperations.intersection(m1, m2);
     }
 
@@ -240,12 +240,12 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Implements the union of Mappings
      *
      * @param m1
-     *            First Mapping
+     *         First Mapping
      * @param m2
-     *            Second Mapping
+     *         Second Mapping
      * @return Intersection of m1 and m2
      */
-    public Mapping executeUnion(Mapping m1, Mapping m2) {
+    public AMapping executeUnion(AMapping m1, AMapping m2) {
         return MappingOperations.union(m1, m2);
     }
 
@@ -253,24 +253,23 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Implementation of the execution of a nested plan.
      *
      * @param plan,
-     *            A nested plan
-     * 
+     *         A nested plan
      * @return The mapping obtained from executing the plan
      */
-    public Mapping executeStatic(NestedPlan plan) {
+    public AMapping executeStatic(NestedPlan plan) {
         // empty nested plan contains nothing
-        Mapping m = MappingFactory.createDefaultMapping();
+        AMapping m = MappingFactory.createDefaultMapping();
         if (plan.isEmpty()) {
         } // atomic nested plan just contain simple list of instructions
         else if (plan.isAtomic()) {
             m = executeInstructions(plan);
         } // nested plans contain subplans, an operator for merging the results
-          // of the subplans and a filter for filtering the results of the
-          // subplan
+        // of the subplans and a filter for filtering the results of the
+        // subplan
         else {
             // run all the subplans
             m = executeStatic(plan.getSubPlans().get(0));
-            Mapping m2, result = m;
+            AMapping m2, result = m;
             for (int i = 1; i < plan.getSubPlans().size(); i++) {
                 m2 = executeStatic(plan.getSubPlans().get(i));
                 if (plan.getOperator().equals(Command.INTERSECTION)) {
@@ -290,7 +289,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                     Mapping mright = executeIntersection(m, m2);
                     mright = f.filter(mright, Double.parseDouble(plan.getThreshold()));
                     result = executeDifference(mleft, mright);*/
-                    result = executeExclusiveOr(m ,m2);
+                    result = executeExclusiveOr(m, m2);
                 }
                 m = result;
             }
@@ -311,21 +310,21 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * the stack if its complex: the operator/filter is used on the top 2
      * objects on the stack which get popped the result mapping of this gets
      * pushed back on the stack
-     * 
+     *
      * @param nestedPlan
-     *            which has not yet been executed
+     *         which has not yet been executed
      * @return Mapping
      */
-    public Mapping executeDynamic(LinkSpecification spec, DynamicPlanner planner) {
+    public AMapping executeDynamic(LinkSpecification spec, DynamicPlanner planner) {
         long begin = System.currentTimeMillis();
         long end = 0;
-        Mapping m = MappingFactory.createDefaultMapping();
+        AMapping m = MappingFactory.createDefaultMapping();
         NestedPlan plan = new NestedPlan();
         // create function to check if linkspec has been seen before
         if (!planner.isExecuted(spec)) {
             String dependent = planner.getDependency(spec);
             if (dependent != null) {
-                Mapping dependentM = dynamicResults.get(dependent);
+                AMapping dependentM = dynamicResults.get(dependent);
                 if (spec.getThreshold() > 0) {
                     // create a temporary filtering instruction
                     Instruction tempFilteringInstruction = new Instruction(Instruction.Command.FILTER, null,
@@ -347,7 +346,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                     LinkSpecification firstSpec = planner.getLinkSpec(plan.getSubPlans().get(0));
                     // run first specification
                     m = executeDynamic(firstSpec, planner);
-                    Mapping m2, result = m;
+                    AMapping m2, result = m;
                     if (spec.getOperator().equals(LogicOperator.AND)) {
                         // replan
                         plan = planner.plan(spec);
@@ -433,15 +432,14 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * generated previously.
      *
      * @param spec,
-     *            the link specification, after it was re-written
+     *         the link specification, after it was re-written
      * @param planner,
-     *            the chosen planner
-     * 
+     *         the chosen planner
      * @return The mapping obtained from executing the plan of spec
      */
     @Override
-    public Mapping execute(LinkSpecification spec, IPlanner planner) {
-        Mapping m = MappingFactory.createDefaultMapping();
+    public AMapping execute(LinkSpecification spec, IPlanner planner) {
+        AMapping m = MappingFactory.createDefaultMapping();
 
         spec = planner.normalize(spec);
         //logger.info(spec);

@@ -1,9 +1,9 @@
 package org.aksw.limes.core.io.ls;
 
-import java.util.ArrayList;
-
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.parser.Parser;
+
+import java.util.ArrayList;
 
 public class ExtendedLinkSpecification extends LinkSpecification {
 
@@ -20,15 +20,16 @@ public class ExtendedLinkSpecification extends LinkSpecification {
     }
 
     // @Override
+
     /**
      * Reads a spec expression into its canonical form Don't forget to optimize
      * the filters by checking (if threshold_left and threshold_right >= theta,
      * then theta = 0)
      *
      * @param spec
-     *            Spec expression to read
+     *         Spec expression to read
      * @param theta
-     *            Global threshold
+     *         Global threshold
      */
     public void readSpec(String spec, double theta) {
 
@@ -88,7 +89,7 @@ public class ExtendedLinkSpecification extends LinkSpecification {
                 filterExpression = null;
                 setThreshold(theta);
                 fullExpression = "MINUS(" + leftSpec.fullExpression + "|" + 0.0 + ","
-                        + rightSpec.fullExpression + "|" + 0.0  + ")";
+                        + rightSpec.fullExpression + "|" + 0.0 + ")";
             } else if (p.getOperator().equalsIgnoreCase(MINUS)) {
                 setOperator(LogicOperator.MINUS);
                 leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());

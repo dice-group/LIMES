@@ -7,8 +7,8 @@ package org.aksw.limes.core.measures.measure.string;
 
 
 import org.aksw.limes.core.io.cache.Instance;
+
 /**
- *
  * @author ngonga
  */
 public class Levenshtein extends StringMeasure {
@@ -34,7 +34,7 @@ public class Levenshtein extends StringMeasure {
     }
 
     public double getSimilarity(Object a, Object b) {
-        return (new uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein()).getSimilarity(a+"", b+"");
+        return (new uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein()).getSimilarity(a + "", b + "");
     }
 
     public String getType() {
@@ -65,7 +65,7 @@ public class Levenshtein extends StringMeasure {
 
     //fake value
     public double getRuntimeApproximation(double mappingSize) {
-        return mappingSize/5000d;
+        return mappingSize / 5000d;
     }
 
 }

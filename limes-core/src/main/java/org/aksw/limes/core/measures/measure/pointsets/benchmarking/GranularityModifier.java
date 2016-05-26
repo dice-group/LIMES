@@ -4,14 +4,13 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.benchmarking;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author ngonga
  */
 public class GranularityModifier extends AbstractPolygonModifier {
@@ -27,26 +26,26 @@ public class GranularityModifier extends AbstractPolygonModifier {
      * @return polygon, the modified polygon
      */
     public Polygon modify(Polygon p, double threshold) {
-	if (threshold > 1) {
-	    threshold = 1d / threshold;
-	}
-	Polygon q = new Polygon(p.uri);
-	// ensure that we have at least one point
-	List<Point> points = new ArrayList<Point>();
-	points.add(p.points.get(0));
+        if (threshold > 1) {
+            threshold = 1d / threshold;
+        }
+        Polygon q = new Polygon(p.uri);
+        // ensure that we have at least one point
+        List<Point> points = new ArrayList<Point>();
+        points.add(p.points.get(0));
 
-	// rest is added probabilistically
-	for (int i = 1; i < p.points.size(); i++) {
-	    if (Math.random() <= threshold) {
-		points.add(p.points.get(i));
-	    }
-	}
-	q.points = points;
-	return q;
+        // rest is added probabilistically
+        for (int i = 1; i < p.points.size(); i++) {
+            if (Math.random() <= threshold) {
+                points.add(p.points.get(i));
+            }
+        }
+        q.points = points;
+        return q;
     }
 
     public String getName() {
-	return "GranularityModifier";
+        return "GranularityModifier";
     }
 
 }

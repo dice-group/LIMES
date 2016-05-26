@@ -1,20 +1,16 @@
 package org.aksw.limes.core.io.config;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+
+import java.util.*;
 
 //import org.apache.log4j.Logger;
 
 /**
  * Contain all LIMES configuration parameters
- * 
+ *
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 12, 2015
  */
@@ -22,321 +18,317 @@ public class Configuration implements IConfiguration {
 
     protected KBInfo sourceInfo = new KBInfo();
     protected KBInfo targetInfo = new KBInfo();
-    
+
     protected String metricExpression = new String();
-    
+
     protected String acceptanceRelation = new String();
-    
+
     protected String verificationRelation = new String();
-    
+
     protected double acceptanceThreshold;
     protected String acceptanceFile;
-    
+
     protected double verificationThreshold;
     protected String verificationFile;
-    
+
     protected Map<String, String> prefixes = new HashMap<String, String>();
 
     protected String outputFormat;
-    
+
     protected String executionPlan = "simple";
     protected int granularity = 2;
-    
+
     protected String mlAlgorithmName = new String();
-	protected Map<String, String> mlParameters = new HashMap<String, String>();
+    protected Map<String, String> mlParameters = new HashMap<String, String>();
     protected String mlImplementationType = new String("batch");
-    protected Mapping mlTrainingData = MappingFactory.createDefaultMapping();
+    protected AMapping mlTrainingData = MappingFactory.createDefaultMapping();
     protected PseudoFMeasure mlPseudoFMeasure = new PseudoFMeasure();
 
     public Configuration() {
     }
 
     public Configuration(KBInfo sourceInfo, KBInfo targetInfo, String metricExpression, String acceptanceRelation,
-			String verificationRelation, double acceptanceThreshold, String acceptanceFile,
-			double verificationThreshold, String verificationFile, Map<String, String> prefixes, String outputFormat,
-			String executionPlan, int granularity, String mlAlgorithmName, Map<String, String> mlParameters) {
-		super();
-		this.sourceInfo = sourceInfo;
-		this.targetInfo = targetInfo;
-		this.metricExpression = metricExpression;
-		this.acceptanceRelation = acceptanceRelation;
-		this.verificationRelation = verificationRelation;
-		this.acceptanceThreshold = acceptanceThreshold;
-		this.acceptanceFile = acceptanceFile;
-		this.verificationThreshold = verificationThreshold;
-		this.verificationFile = verificationFile;
-		this.prefixes = prefixes;
-		this.outputFormat = outputFormat;
-		this.executionPlan = executionPlan;
-		this.granularity = granularity;
-		this.mlAlgorithmName = mlAlgorithmName;
-		this.mlParameters = mlParameters;
-	}
-
-
-
-	public void addMlParameter(String mlParameterName, String mlParameterValue) {
-	this.mlParameters.put(mlParameterName, mlParameterValue);
+                         String verificationRelation, double acceptanceThreshold, String acceptanceFile,
+                         double verificationThreshold, String verificationFile, Map<String, String> prefixes, String outputFormat,
+                         String executionPlan, int granularity, String mlAlgorithmName, Map<String, String> mlParameters) {
+        super();
+        this.sourceInfo = sourceInfo;
+        this.targetInfo = targetInfo;
+        this.metricExpression = metricExpression;
+        this.acceptanceRelation = acceptanceRelation;
+        this.verificationRelation = verificationRelation;
+        this.acceptanceThreshold = acceptanceThreshold;
+        this.acceptanceFile = acceptanceFile;
+        this.verificationThreshold = verificationThreshold;
+        this.verificationFile = verificationFile;
+        this.prefixes = prefixes;
+        this.outputFormat = outputFormat;
+        this.executionPlan = executionPlan;
+        this.granularity = granularity;
+        this.mlAlgorithmName = mlAlgorithmName;
+        this.mlParameters = mlParameters;
     }
 
-	public void addPrefixes(String label, String namespace) {
-	this.prefixes.put(label, namespace);
+
+    public void addMlParameter(String mlParameterName, String mlParameterValue) {
+        this.mlParameters.put(mlParameterName, mlParameterValue);
+    }
+
+    public void addPrefixes(String label, String namespace) {
+        this.prefixes.put(label, namespace);
     }
 
     @Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Configuration other = (Configuration) obj;
-		if (acceptanceFile == null) {
-			if (other.acceptanceFile != null)
-				return false;
-		} else if (!acceptanceFile.equals(other.acceptanceFile))
-			return false;
-		if (acceptanceRelation == null) {
-			if (other.acceptanceRelation != null)
-				return false;
-		} else if (!acceptanceRelation.equals(other.acceptanceRelation))
-			return false;
-		if (Double.doubleToLongBits(acceptanceThreshold) != Double.doubleToLongBits(other.acceptanceThreshold))
-			return false;
-		if (executionPlan == null) {
-			if (other.executionPlan != null)
-				return false;
-		} else if (!executionPlan.equals(other.executionPlan))
-			return false;
-		if (granularity != other.granularity)
-			return false;
-		if (metricExpression == null) {
-			if (other.metricExpression != null)
-				return false;
-		} else if (!metricExpression.equals(other.metricExpression))
-			return false;
-		if (mlAlgorithmName == null) {
-			if (other.mlAlgorithmName != null)
-				return false;
-		} else if (!mlAlgorithmName.equals(other.mlAlgorithmName))
-			return false;
-		if (mlParameters == null) {
-			if (other.mlParameters != null)
-				return false;
-		} else if (!mlParameters.equals(other.mlParameters))
-			return false;
-		if (outputFormat == null) {
-			if (other.outputFormat != null)
-				return false;
-		} else if (!outputFormat.equals(other.outputFormat))
-			return false;
-		if (prefixes == null) {
-			if (other.prefixes != null)
-				return false;
-		} else if (!prefixes.equals(other.prefixes))
-			return false;
-		if (sourceInfo == null) {
-			if (other.sourceInfo != null)
-				return false;
-		} else if (!sourceInfo.equals(other.sourceInfo))
-			return false;
-		if (targetInfo == null) {
-			if (other.targetInfo != null)
-				return false;
-		} else if (!targetInfo.equals(other.targetInfo))
-			return false;
-		if (verificationFile == null) {
-			if (other.verificationFile != null)
-				return false;
-		} else if (!verificationFile.equals(other.verificationFile))
-			return false;
-		if (verificationRelation == null) {
-			if (other.verificationRelation != null)
-				return false;
-		} else if (!verificationRelation.equals(other.verificationRelation))
-			return false;
-		if (Double.doubleToLongBits(verificationThreshold) != Double.doubleToLongBits(other.verificationThreshold))
-			return false;
-		return true;
-	}
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Configuration other = (Configuration) obj;
+        if (acceptanceFile == null) {
+            if (other.acceptanceFile != null)
+                return false;
+        } else if (!acceptanceFile.equals(other.acceptanceFile))
+            return false;
+        if (acceptanceRelation == null) {
+            if (other.acceptanceRelation != null)
+                return false;
+        } else if (!acceptanceRelation.equals(other.acceptanceRelation))
+            return false;
+        if (Double.doubleToLongBits(acceptanceThreshold) != Double.doubleToLongBits(other.acceptanceThreshold))
+            return false;
+        if (executionPlan == null) {
+            if (other.executionPlan != null)
+                return false;
+        } else if (!executionPlan.equals(other.executionPlan))
+            return false;
+        if (granularity != other.granularity)
+            return false;
+        if (metricExpression == null) {
+            if (other.metricExpression != null)
+                return false;
+        } else if (!metricExpression.equals(other.metricExpression))
+            return false;
+        if (mlAlgorithmName == null) {
+            if (other.mlAlgorithmName != null)
+                return false;
+        } else if (!mlAlgorithmName.equals(other.mlAlgorithmName))
+            return false;
+        if (mlParameters == null) {
+            if (other.mlParameters != null)
+                return false;
+        } else if (!mlParameters.equals(other.mlParameters))
+            return false;
+        if (outputFormat == null) {
+            if (other.outputFormat != null)
+                return false;
+        } else if (!outputFormat.equals(other.outputFormat))
+            return false;
+        if (prefixes == null) {
+            if (other.prefixes != null)
+                return false;
+        } else if (!prefixes.equals(other.prefixes))
+            return false;
+        if (sourceInfo == null) {
+            if (other.sourceInfo != null)
+                return false;
+        } else if (!sourceInfo.equals(other.sourceInfo))
+            return false;
+        if (targetInfo == null) {
+            if (other.targetInfo != null)
+                return false;
+        } else if (!targetInfo.equals(other.targetInfo))
+            return false;
+        if (verificationFile == null) {
+            if (other.verificationFile != null)
+                return false;
+        } else if (!verificationFile.equals(other.verificationFile))
+            return false;
+        if (verificationRelation == null) {
+            if (other.verificationRelation != null)
+                return false;
+        } else if (!verificationRelation.equals(other.verificationRelation))
+            return false;
+        if (Double.doubleToLongBits(verificationThreshold) != Double.doubleToLongBits(other.verificationThreshold))
+            return false;
+        return true;
+    }
 
     public String getAcceptanceFile() {
-	return acceptanceFile;
+        return acceptanceFile;
+    }
+
+    public void setAcceptanceFile(String acceptanceFile) {
+        this.acceptanceFile = acceptanceFile;
     }
 
     public String getAcceptanceRelation() {
-	return acceptanceRelation;
+        return acceptanceRelation;
+    }
+
+    public void setAcceptanceRelation(String acceptanceRelation) {
+        this.acceptanceRelation = acceptanceRelation;
     }
 
     public double getAcceptanceThreshold() {
-	return acceptanceThreshold;
+        return acceptanceThreshold;
+    }
+
+    public void setAcceptanceThreshold(double acceptanceThreshold) {
+        this.acceptanceThreshold = acceptanceThreshold;
     }
 
     @Override
     public Set<String> getConfigurationParametersNames() {
-	return new HashSet<String>(Arrays.asList("sourceInfo", "targetInfo", "metricExpression", "acceptanceRelation",
-		"verificationRelation", "acceptanceThreshold", "acceptanceFile", "verificationThreshold",
-		"verificationFile", "exemplars", "prefixes", "outputFormat", "executionPlan", "granularity",
-		"recallRegulator", "recallThreshold"));
+        return new HashSet<String>(Arrays.asList("sourceInfo", "targetInfo", "metricExpression", "acceptanceRelation",
+                "verificationRelation", "acceptanceThreshold", "acceptanceFile", "verificationThreshold",
+                "verificationFile", "exemplars", "prefixes", "outputFormat", "executionPlan", "granularity",
+                "recallRegulator", "recallThreshold"));
     }
 
     public String getExecutionPlan() {
-	return executionPlan;
+        return executionPlan;
+    }
+
+    public void setExecutionPlan(String executionPlan) {
+        this.executionPlan = executionPlan;
     }
 
     public int getGranularity() {
-	return granularity;
+        return granularity;
+    }
+
+    public void setGranularity(int granularity) {
+        this.granularity = granularity;
     }
 
     public String getMetricExpression() {
-	return metricExpression;
+        return metricExpression;
+    }
+
+    public void setMetricExpression(String metricExpression) {
+        this.metricExpression = metricExpression;
     }
 
     public String getMlAlgorithmName() {
-		return mlAlgorithmName;
-	}
+        return mlAlgorithmName;
+    }
+
+    public void setMlAlgorithmName(String mlAlgorithmName) {
+        this.mlAlgorithmName = mlAlgorithmName;
+    }
 
     public String getMlImplementationType() {
         return mlImplementationType;
     }
 
+    public void setMlImplementationType(String mlImplementationType) {
+        this.mlImplementationType = mlImplementationType;
+    }
+
     public Map<String, String> getMlParameters() {
-	return mlParameters;
+        return mlParameters;
     }
 
     public PseudoFMeasure getMlPseudoFMeasure() {
         return mlPseudoFMeasure;
     }
 
-    public Mapping getMlTrainingData() {
+    public AMapping getMlTrainingData() {
         return mlTrainingData;
     }
 
     public String getOutputFormat() {
-	return outputFormat;
+        return outputFormat;
+    }
+
+    public void setOutputFormat(String outputFormat) {
+        this.outputFormat = outputFormat;
     }
 
     public Map<String, String> getPrefixes() {
-	return prefixes;
+        return prefixes;
+    }
+
+    public void setPrefixes(HashMap<String, String> prefixes) {
+        this.prefixes = prefixes;
     }
 
     public KBInfo getSourceInfo() {
-	return sourceInfo;
-    }
-
-    public KBInfo getTargetInfo() {
-	return targetInfo;
-    }
-
-    public String getVerificationFile() {
-	return verificationFile;
-    }
-
-    public String getVerificationRelation() {
-	return verificationRelation;
-    }
-
-    public double getVerificationThreshold() {
-	return verificationThreshold;
-    }
-
-    @Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((acceptanceFile == null) ? 0 : acceptanceFile.hashCode());
-		result = prime * result + ((acceptanceRelation == null) ? 0 : acceptanceRelation.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(acceptanceThreshold);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((executionPlan == null) ? 0 : executionPlan.hashCode());
-		result = prime * result + granularity;
-		result = prime * result + ((metricExpression == null) ? 0 : metricExpression.hashCode());
-		result = prime * result + ((mlAlgorithmName == null) ? 0 : mlAlgorithmName.hashCode());
-		result = prime * result + ((mlParameters == null) ? 0 : mlParameters.hashCode());
-		result = prime * result + ((outputFormat == null) ? 0 : outputFormat.hashCode());
-		result = prime * result + ((prefixes == null) ? 0 : prefixes.hashCode());
-		result = prime * result + ((sourceInfo == null) ? 0 : sourceInfo.hashCode());
-		result = prime * result + ((targetInfo == null) ? 0 : targetInfo.hashCode());
-		result = prime * result + ((verificationFile == null) ? 0 : verificationFile.hashCode());
-		result = prime * result + ((verificationRelation == null) ? 0 : verificationRelation.hashCode());
-		temp = Double.doubleToLongBits(verificationThreshold);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
-	}
-
-    public void setAcceptanceFile(String acceptanceFile) {
-	this.acceptanceFile = acceptanceFile;
-    }
-
-    public void setAcceptanceRelation(String acceptanceRelation) {
-	this.acceptanceRelation = acceptanceRelation;
-    }
-
-    public void setAcceptanceThreshold(double acceptanceThreshold) {
-	this.acceptanceThreshold = acceptanceThreshold;
-    }
-
-    public void setExecutionPlan(String executionPlan) {
-	this.executionPlan = executionPlan;
-    }
-
-    public void setGranularity(int granularity) {
-	this.granularity = granularity;
-    }
-
-    public void setMetricExpression(String metricExpression) {
-	this.metricExpression = metricExpression;
-    }
-
-    public void setMlAlgorithmName(String mlAlgorithmName) {
-		this.mlAlgorithmName = mlAlgorithmName;
-	}
-
-    public void setMlImplementationType(String mlImplementationType) {
-        this.mlImplementationType = mlImplementationType;
-    }
-
-
-
-    public void setOutputFormat(String outputFormat) {
-	this.outputFormat = outputFormat;
-    }
-
-	public void setPrefixes(HashMap<String, String> prefixes) {
-	this.prefixes = prefixes;
+        return sourceInfo;
     }
 
     public void setSourceInfo(KBInfo sourceInfo) {
-	this.sourceInfo = sourceInfo;
+        this.sourceInfo = sourceInfo;
     }
 
-	public void setTargetInfo(KBInfo targetInfo) {
-	this.targetInfo = targetInfo;
+    public KBInfo getTargetInfo() {
+        return targetInfo;
     }
 
+    public void setTargetInfo(KBInfo targetInfo) {
+        this.targetInfo = targetInfo;
+    }
+
+    public String getVerificationFile() {
+        return verificationFile;
+    }
 
     public void setVerificationFile(String verificationFile) {
-	this.verificationFile = verificationFile;
+        this.verificationFile = verificationFile;
+    }
+
+    public String getVerificationRelation() {
+        return verificationRelation;
     }
 
     public void setVerificationRelation(String verificationRelation) {
-	this.verificationRelation = verificationRelation;
+        this.verificationRelation = verificationRelation;
+    }
+
+    public double getVerificationThreshold() {
+        return verificationThreshold;
     }
 
     public void setVerificationThreshold(double verificationThreshold) {
-	this.verificationThreshold = verificationThreshold;
+        this.verificationThreshold = verificationThreshold;
     }
 
     @Override
-	public String toString() {
-		return "Configuration [sourceInfo=" + sourceInfo + ", targetInfo=" + targetInfo + ", metricExpression="
-				+ metricExpression + ", acceptanceRelation=" + acceptanceRelation + ", verificationRelation="
-				+ verificationRelation + ", acceptanceThreshold=" + acceptanceThreshold + ", acceptanceFile="
-				+ acceptanceFile + ", verificationThreshold=" + verificationThreshold + ", verificationFile="
-				+ verificationFile + ", prefixes=" + prefixes + ", outputFormat=" + outputFormat + ", executionPlan="
-				+ executionPlan + ", granularity=" + granularity + ", mlAlgorithmName=" + mlAlgorithmName
-				+ ", mlParameters=" + mlParameters + "]";
-	}
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((acceptanceFile == null) ? 0 : acceptanceFile.hashCode());
+        result = prime * result + ((acceptanceRelation == null) ? 0 : acceptanceRelation.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(acceptanceThreshold);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + ((executionPlan == null) ? 0 : executionPlan.hashCode());
+        result = prime * result + granularity;
+        result = prime * result + ((metricExpression == null) ? 0 : metricExpression.hashCode());
+        result = prime * result + ((mlAlgorithmName == null) ? 0 : mlAlgorithmName.hashCode());
+        result = prime * result + ((mlParameters == null) ? 0 : mlParameters.hashCode());
+        result = prime * result + ((outputFormat == null) ? 0 : outputFormat.hashCode());
+        result = prime * result + ((prefixes == null) ? 0 : prefixes.hashCode());
+        result = prime * result + ((sourceInfo == null) ? 0 : sourceInfo.hashCode());
+        result = prime * result + ((targetInfo == null) ? 0 : targetInfo.hashCode());
+        result = prime * result + ((verificationFile == null) ? 0 : verificationFile.hashCode());
+        result = prime * result + ((verificationRelation == null) ? 0 : verificationRelation.hashCode());
+        temp = Double.doubleToLongBits(verificationThreshold);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Configuration [sourceInfo=" + sourceInfo + ", targetInfo=" + targetInfo + ", metricExpression="
+                + metricExpression + ", acceptanceRelation=" + acceptanceRelation + ", verificationRelation="
+                + verificationRelation + ", acceptanceThreshold=" + acceptanceThreshold + ", acceptanceFile="
+                + acceptanceFile + ", verificationThreshold=" + verificationThreshold + ", verificationFile="
+                + verificationFile + ", prefixes=" + prefixes + ", outputFormat=" + outputFormat + ", executionPlan="
+                + executionPlan + ", granularity=" + granularity + ", mlAlgorithmName=" + mlAlgorithmName
+                + ", mlParameters=" + mlParameters + "]";
+    }
 }

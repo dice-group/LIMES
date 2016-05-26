@@ -5,80 +5,80 @@ import java.util.Set;
 
 /**
  * Property of metric
- * 
- * @author Daniel Obraczka, Sascha Hahne
  *
+ * @author Daniel Obraczka, Sascha Hahne
  */
 public class Property extends Node {
-	/**
-	 * returns identifiers
-	 * 
-	 * @return identifier
-	 */
-	@Override
-	public Set<String> identifiers() {
-		return Collections.<String> emptySet();
-	}
+    /**
+     * Origin
+     */
+    protected final Origin origin;
 
-	/**
-	 * returns maxChilds
-	 */
-	public byte getMaxChilds() {
-		return 0;
-	}
+    /**
+     * Constructor
+     *
+     * @param id
+     *         of property
+     * @param origin
+     *         of property
+     */
+    public Property(String id, Origin origin) {
+        super(id);
+        String regex = "\\w+\\.\\w+:?\\w+";
+        if (!id.matches(regex))
+            throw new MetricFormatException("id \"" + id
+                    + "\" does not confirm to the regex " + regex);
+        this.origin = origin;
+    }
 
-	/**
-	 * Origin
-	 *
-	 */
-	public enum Origin {
-		SOURCE, TARGET
-	};
+    /**
+     * returns identifiers
+     *
+     * @return identifier
+     */
+    @Override
+    public Set<String> identifiers() {
+        return Collections.<String>emptySet();
+    }
 
-	/**
-	 * Origin
-	 */
-	protected final Origin origin;
+    ;
 
-	/**
-	 * validChildClasses
-	 */
-	@Override
-	public Set<Class<? extends Node>> validChildClasses() {
-		return Collections.emptySet();
-	}
+    /**
+     * returns maxChilds
+     */
+    public byte getMaxChilds() {
+        return 0;
+    }
 
-	/**
-	 * return if Child is accepted
-	 */
-	@Override
-	public boolean acceptsChild(Node n) {
-		return false;
-	}
+    /**
+     * validChildClasses
+     */
+    @Override
+    public Set<Class<? extends Node>> validChildClasses() {
+        return Collections.emptySet();
+    }
 
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 *            of property
-	 * @param origin
-	 *            of property
-	 */
-	public Property(String id, Origin origin) {
-		super(id);
-		String regex = "\\w+\\.\\w+:?\\w+";
-		if (!id.matches(regex))
-			throw new MetricFormatException("id \"" + id
-					+ "\" does not confirm to the regex " + regex);
-		this.origin = origin;
-	}
+    /**
+     * return if Child is accepted
+     */
+    @Override
+    public boolean acceptsChild(Node n) {
+        return false;
+    }
 
-	/**
-	 * Getter Origin
-	 * 
-	 * @return This Origin
-	 */
-	public Origin getOrigin() {
-		return this.origin;
-	}
+    /**
+     * Getter Origin
+     *
+     * @return This Origin
+     */
+    public Origin getOrigin() {
+        return this.origin;
+    }
+
+    /**
+     * Origin
+     */
+    public enum Origin {
+        SOURCE, TARGET
+    }
 }

@@ -5,16 +5,15 @@
 package org.aksw.limes.core.measures.mapper.space.blocking;
 
 
-import java.util.ArrayList;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.TreeSet;
+
 /**
- *
  * @author ngonga
  */
 public class VariableGranularityBlocker implements BlockingModule {
@@ -52,15 +51,107 @@ public class VariableGranularityBlocker implements BlockingModule {
         granularity = _granularity;
     }
 
+    public static ArrayList<Double> copyList(ArrayList<Double> list) {
+        ArrayList<Double> copy = new ArrayList<Double>();
+        if (list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                copy.add(list.get(i));
+            }
+        }
+        return copy;
+    }
+
+    public static ArrayList<ArrayList<Double>> addIdsToList(ArrayList<ArrayList<Double>> keys,
+                                                            TreeSet<String> propValues) {
+        ArrayList<ArrayList<Double>> result = new ArrayList<ArrayList<Double>>();
+        ArrayList<Double> values = new ArrayList<Double>();
+        double value = 0;
+        for (String s : propValues) {
+            try {
+                value = Double.parseDouble(s);
+            } catch (Exception e) {
+                logger.warn(s + " is not a number. Will be replaced by 0.");
+            }
+            values.add(value);
+        }
+        if (keys.size() == 0) {
+            for (int j = 0; j < values.size(); j++) {
+                ArrayList<Double> list = new ArrayList<Double>();
+                list.add(values.get(j));
+                result.add(list);
+            }
+        } else {
+            ArrayList<Double> copy;
+            for (int i = 0; i < keys.size(); i++) {
+                for (int j = 0; j < values.size(); j++) {
+                    copy = copyList(keys.get(i));
+                    copy.add(values.get(j));
+                    result.add(copy);
+                }
+            }
+        }
+        return result;
+    }
+
+    public static void main(String args[]) {
+
+        ArrayList<ArrayList<Double>> keys = new ArrayList<ArrayList<Double>>();
+        TreeSet<String> key = new TreeSet<String>();
+        key.add(1.0 + "");
+        key.add(2.0 + "");
+
+        TreeSet<String> key2 = new TreeSet<String>();
+        key2.add(1.0 + "");
+        key2.add(2.0 + "");
+
+        TreeSet<String> key3 = new TreeSet<String>();
+        key3.add(1.0 + "");
+        key3.add(2.0 + "");
+
+
+        System.out.println(keys);
+        keys = addIdsToList(keys, key);
+        System.out.println(keys);
+        keys = addIdsToList(keys, key2);
+        System.out.println(keys);
+        keys = addIdsToList(keys, key3);
+        System.out.println(keys);
+
+
+        //MemoryCache cache = new MemoryCache();
+        /**
+         cache.addTriple("A", "lon", "1");
+         cache.addTriple("A", "lat", "1");
+         cache.addTriple("B", "lon", "2");
+         cache.addTriple("B", "lat", "1");
+
+         VariableGranularityBlocker blocker = new VariableGranularityBlocker("lon|lat", "euclidean", 0.5);
+
+         blocker.setGranularity(3);
+
+         System.out.println(blocker.getBlockId(cache.getInstance("A")));
+         System.out.println(blocker.getBlockId(cache.getInstance("B")));
+
+         ArrayList<Integer> blockId = new ArrayList<Integer>();
+         blockId.add(0);
+         blockId.add(0);
+         System.out.println(blocker.getBlocksToCompare(blockId).size());
+         System.out.println(blocker.getBlocksToCompare(blockId));
+         * */
+    }
+
     public void setGranularity(int n) {
         granularity = n;
     }
 
-    /** Computes the block ID for a given instance a. The idea behind the blocking
+    /**
+     * Computes the block ID for a given instance a. The idea behind the blocking
      * is to tile the target space into blocks of dimension thresdhold^dimensions.
      * Each instance s from the source space is then compared with the blocks lying
      * directly around s's block and the block where s is.
-     * @param a The instance whose blockId is to be computed
+     *
+     * @param a
+     *         The instance whose blockId is to be computed
      * @return The ID for the block of a
      */
     public ArrayList<ArrayList<Integer>> getBlocksToCompare(ArrayList<Integer> blockId) {
@@ -134,10 +225,13 @@ public class VariableGranularityBlocker implements BlockingModule {
         return blockIds;
     }
 
-    /** Computes all the block ids for a given instance. If it is known that
+    /**
+     * Computes all the block ids for a given instance. If it is known that
      * the coordinates of an instance are unique, then use getBlockId. If not, use
      * this method.
-     * @param a Instance, whose ids are to be returned
+     *
+     * @param a
+     *         Instance, whose ids are to be returned
      * @return An ArrayList of blockids
      */
     public ArrayList<ArrayList<Integer>> getAllBlockIds(Instance a) {
@@ -148,12 +242,10 @@ public class VariableGranularityBlocker implements BlockingModule {
         for (int i = 0; i < dim; i++) {
             combinations = addIdsToList(combinations, a.getProperty(properties.get(i)));
         }
-        for(int i=0; i<combinations.size(); i++)
-        {
+        for (int i = 0; i < combinations.size(); i++) {
             ArrayList<Double> combination = combinations.get(i);
             ArrayList<Integer> block = new ArrayList<Integer>();
-            for(int j=0; j<combination.size();j++)
-            {
+            for (int j = 0; j < combination.size(); j++) {
                 blockId = (int) java.lang.Math.floor((granularity * combination.get(j)) / thresholds.get(j));
                 block.add(blockId);
             }
@@ -161,126 +253,35 @@ public class VariableGranularityBlocker implements BlockingModule {
         }
         return blockIds;
     }
-    
-        /** Computes all the block ids for a given instance. If it is known that
+
+    /**
+     * Computes all the block ids for a given instance. If it is known that
      * the coordinates of an instance are unique, then use getBlockId. If not, use
      * this method.
-     * @param a Instance, whose ids are to be returned
+     *
+     * @param a
+     *         Instance, whose ids are to be returned
      * @return An ArrayList of blockids
      */
     public ArrayList<ArrayList<Integer>> getAllSourceIds(Instance a, String props) {
         int blockId;
         String sourceProps[] = props.split("\\|");
-        
+
         ArrayList<ArrayList<Integer>> blockIds = new ArrayList<ArrayList<Integer>>();
         ArrayList<ArrayList<Double>> combinations = new ArrayList<ArrayList<Double>>();
         //get all property combinations
         for (int i = 0; i < dim; i++) {
             combinations = addIdsToList(combinations, a.getProperty(sourceProps[i]));
         }
-        for(int i=0; i<combinations.size(); i++)
-        {
+        for (int i = 0; i < combinations.size(); i++) {
             ArrayList<Double> combination = combinations.get(i);
             ArrayList<Integer> block = new ArrayList<Integer>();
-            for(int j=0; j<combination.size();j++)
-            {
+            for (int j = 0; j < combination.size(); j++) {
                 blockId = (int) java.lang.Math.floor((granularity * combination.get(j)) / thresholds.get(j));
                 block.add(blockId);
             }
             blockIds.add(block);
         }
         return blockIds;
-    }
-
-    public static ArrayList<Double> copyList(ArrayList<Double> list) {
-        ArrayList<Double> copy = new ArrayList<Double>();
-        if (list.size() > 0) {
-            for (int i = 0; i < list.size(); i++) {
-                copy.add(list.get(i));
-            }
-        }
-        return copy;
-    }
-
-    public static ArrayList<ArrayList<Double>> addIdsToList(ArrayList<ArrayList<Double>> keys,
-            TreeSet<String> propValues) {
-        ArrayList<ArrayList<Double>> result = new ArrayList<ArrayList<Double>>();
-        ArrayList<Double> values = new ArrayList<Double>();
-        double value = 0;
-        for (String s : propValues) {
-            try
-            {
-                value = Double.parseDouble(s);
-            }
-            catch(Exception e)
-            {
-                logger.warn(s + " is not a number. Will be replaced by 0.");
-            }
-            values.add(value);
-        }
-        if (keys.size() == 0) {
-            for (int j = 0; j < values.size(); j++) {
-                ArrayList<Double> list = new ArrayList<Double>();
-                list.add(values.get(j));                
-                result.add(list);
-            }
-        } else {
-            ArrayList<Double> copy;
-            for (int i = 0; i < keys.size(); i++) {
-                for (int j = 0; j < values.size(); j++) {
-                    copy = copyList(keys.get(i));
-                    copy.add(values.get(j));
-                    result.add(copy);
-                }
-            }
-        }
-        return result;
-    }
-
-    public static void main(String args[]) {
-
-        ArrayList<ArrayList<Double>> keys = new ArrayList<ArrayList<Double>>();
-        TreeSet<String> key = new TreeSet<String>();
-        key.add(1.0 + "");
-        key.add(2.0 + "");
-
-        TreeSet<String> key2 = new TreeSet<String>();
-        key2.add(1.0 + "");
-        key2.add(2.0 + "");
-
-        TreeSet<String> key3 = new TreeSet<String>();
-        key3.add(1.0 + "");
-        key3.add(2.0+"");
-
-        
-        System.out.println(keys);
-        keys = addIdsToList(keys, key);
-        System.out.println(keys);
-        keys = addIdsToList(keys, key2);
-        System.out.println(keys);
-        keys = addIdsToList(keys, key3);
-        System.out.println(keys);
-
-
-        //MemoryCache cache = new MemoryCache();
-        /**
-        cache.addTriple("A", "lon", "1");
-        cache.addTriple("A", "lat", "1");
-        cache.addTriple("B", "lon", "2");
-        cache.addTriple("B", "lat", "1");
-
-        VariableGranularityBlocker blocker = new VariableGranularityBlocker("lon|lat", "euclidean", 0.5);
-
-        blocker.setGranularity(3);
-
-        System.out.println(blocker.getBlockId(cache.getInstance("A")));
-        System.out.println(blocker.getBlockId(cache.getInstance("B")));
-
-        ArrayList<Integer> blockId = new ArrayList<Integer>();
-        blockId.add(0);
-        blockId.add(0);
-        System.out.println(blocker.getBlocksToCompare(blockId).size());
-        System.out.println(blocker.getBlocksToCompare(blockId));
-         * */
     }
 }

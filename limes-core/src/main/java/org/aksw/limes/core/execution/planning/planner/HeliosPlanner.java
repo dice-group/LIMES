@@ -1,8 +1,5 @@
 package org.aksw.limes.core.execution.planning.planner;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
@@ -10,7 +7,7 @@ import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
@@ -19,10 +16,12 @@ import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * Impelements Helios Planner class.
- * 
+ *
  * @author ngonga
  * @author kleanthi
  */
@@ -37,9 +36,9 @@ public class HeliosPlanner extends Planner {
      * Constructor. Caches are needed for statistic computations.
      *
      * @param s
-     *            Source cache
+     *         Source cache
      * @param t
-     *            Target get
+     *         Target get
      */
     public HeliosPlanner(Cache s, Cache t) {
         source = s;
@@ -51,9 +50,9 @@ public class HeliosPlanner extends Planner {
      * Computes atomic costs for a metric expression
      *
      * @param measure,
-     *            measure of metric expression
+     *         measure of metric expression
      * @param threshold,
-     *            threshold of metric expression
+     *         threshold of metric expression
      * @return runtime, estimated runtime cost of the metric expression
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
@@ -72,9 +71,9 @@ public class HeliosPlanner extends Planner {
      * Computes atomic mapping sizes for a measure
      *
      * @param measure,
-     *            measure of metric expression
+     *         measure of metric expression
      * @param threshold,
-     *            threshold of metric expression
+     *         threshold of metric expression
      * @return size, estimated size of returned mapping
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
@@ -93,9 +92,9 @@ public class HeliosPlanner extends Planner {
      * Computes costs for a filtering
      *
      * @param filterExpression
-     *            Expression used to filter
+     *         Expression used to filter
      * @param mappingSize
-     *            Size of mapping
+     *         Size of mapping
      * @return cost, estimated runtime cost of filteringInstruction(s)
      */
     public double getFilterCosts(List<String> measures, int mappingSize) {
@@ -120,7 +119,7 @@ public class HeliosPlanner extends Planner {
      * Generates a NestedPlan for a link specification
      *
      * @param spec
-     *            Input link specification
+     *         Input link specification
      * @return NestedPlan of the input link specification
      */
     @Override
@@ -133,19 +132,19 @@ public class HeliosPlanner extends Planner {
      * databases
      *
      * @param spec
-     *            Input link specification
+     *         Input link specification
      * @param source
-     *            Source cache
+     *         Source cache
      * @param target
-     *            Target cache
+     *         Target cache
      * @param sourceMapping
-     *            Size of source mapping
+     *         Size of source mapping
      * @param targetMapping
-     *            Size of target mapping
+     *         Size of target mapping
      * @return plan, a NestedPlan for the input link specification
      */
-    public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, Mapping sourceMapping,
-            Mapping targetMapping) {
+    public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, AMapping sourceMapping,
+                           AMapping targetMapping) {
         NestedPlan plan = new NestedPlan();
         // atomic specs are simply ran
         if (spec == null)
@@ -190,7 +189,7 @@ public class HeliosPlanner extends Planner {
                         if (plan.getFilteringInstruction().getMeasureExpression() != null) {
                             plan.setRuntimeCost(plan.getRuntimeCost()
                                     + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
-                                            source.size() * target.size() * (1 - selectivity)));
+                                    source.size() * target.size() * (1 - selectivity)));
                         }
                     }
                     plan.setSelectivity(1 - selectivity);
@@ -205,7 +204,7 @@ public class HeliosPlanner extends Planner {
                         if (plan.getFilteringInstruction().getMeasureExpression() != null) {
                             plan.setRuntimeCost(plan.getRuntimeCost()
                                     + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
-                                            source.size() * target.size() * (1 - selectivity)));
+                                    source.size() * target.size() * (1 - selectivity)));
                         }
                     }
                     plan.setSelectivity(selectivity);
@@ -221,7 +220,7 @@ public class HeliosPlanner extends Planner {
                         if (plan.getFilteringInstruction().getMeasureExpression() != null) {
                             plan.setRuntimeCost(plan.getRuntimeCost()
                                     + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
-                                            source.size() * target.size() * selectivity));
+                                    source.size() * target.size() * selectivity));
                         }
                     }
                     plan.setSelectivity(selectivity);
@@ -250,9 +249,9 @@ public class HeliosPlanner extends Planner {
      * computing the best instructionList for (leftmost, all others)
      *
      * @param plans
-     *            List of plans
+     *         List of plans
      * @param selectivity
-     *            Selectivity of the instructionList (known beforehand)
+     *         Selectivity of the instructionList (known beforehand)
      * @return NestedPlan
      */
     public NestedPlan getBestConjunctivePlan(LinkSpecification spec, List<NestedPlan> plans, double selectivity) {
@@ -279,15 +278,15 @@ public class HeliosPlanner extends Planner {
      * against a list of plans by calling back the method
      *
      * @param left
-     *            Left instructionList
+     *         Left instructionList
      * @param plans
-     *            List of other plans
+     *         List of other plans
      * @param selectivity
-     *            Overall selectivity
+     *         Overall selectivity
      * @return NestedPlan
      */
     public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, List<NestedPlan> plans,
-            double selectivity) {
+                                             double selectivity) {
         if (plans == null) {
             return left;
         }
@@ -308,17 +307,17 @@ public class HeliosPlanner extends Planner {
      * or not they have been executed previously.
      *
      * @param spec,
-     *            the link specification
+     *         the link specification
      * @param left,
-     *            left child nested plan
+     *         left child nested plan
      * @param right,
-     *            right child nested plan
+     *         right child nested plan
      * @param selectivity
      * @return the resulting nested plan for the input spec, that is least
-     *         costly
+     * costly
      */
     public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, NestedPlan right,
-            double selectivity) {
+                                             double selectivity) {
         double runtime1 = 0, runtime2, runtime3;
         NestedPlan result = new NestedPlan();
         // first instructionList: run both children and then merge

@@ -1,14 +1,14 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
-import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.AMapping;
 
 /**
  * Quantitative measure representing the area under the curve of ROC (see <a
  * href=
  * 'https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve'>
  * here</a>).
- * 
+ *
  * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @author Klaus Lyko <lyko@informatik.uni-leizig.de>
@@ -17,7 +17,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
 public class AUC extends APRF implements IQualitativeMeasure {
 
     @Override
-    public double calculate(Mapping predictions, GoldStandard goldStandard) {
+    public double calculate(AMapping predictions, GoldStandard goldStandard) {
         /*
          * Technical it calculates Area under curve values. Thus, we need some
          * sort of time dependent measurements. So, the QualitiveMeasurement

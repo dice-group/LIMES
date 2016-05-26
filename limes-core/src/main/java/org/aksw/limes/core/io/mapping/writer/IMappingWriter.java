@@ -1,8 +1,8 @@
 package org.aksw.limes.core.io.mapping.writer;
 
-import java.io.IOException;
+import org.aksw.limes.core.io.mapping.AMapping;
 
-import org.aksw.limes.core.io.mapping.Mapping;
+import java.io.IOException;
 
 /**
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
@@ -10,7 +10,7 @@ import org.aksw.limes.core.io.mapping.Mapping;
  */
 public interface IMappingWriter {
 
-	void write(Mapping mapping, String outputFile) throws IOException;
+    void write(AMapping mapping, String outputFile) throws IOException;
 
-	void write(Mapping mapping, String outputFile, String format) throws IOException;
+    void write(AMapping mapping, String outputFile, String format) throws IOException;
 }

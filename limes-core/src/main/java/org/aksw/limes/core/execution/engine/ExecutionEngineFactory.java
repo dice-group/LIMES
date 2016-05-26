@@ -5,13 +5,10 @@ import org.apache.log4j.Logger;
 
 public class ExecutionEngineFactory {
 
-    public enum ExecutionEngineType {
-        DEFAULT, SIMPLE
-    };
-
     public static final String DEFAULT = "default";
-    public static final String SIMPLE = "simple";
 
+    ;
+    public static final String SIMPLE = "simple";
     private static final Logger logger = Logger.getLogger(ExecutionEngineFactory.class.getName());
 
     public static ExecutionEngineType getExecutionEngineType(String name) {
@@ -27,18 +24,16 @@ public class ExecutionEngineFactory {
 
     /**
      * @param name,
-     *            type of the Execution Engine
+     *         type of the Execution Engine
      * @param source,
-     *            Source cache
+     *         Source cache
      * @param target,
-     *            Target cache
+     *         Target cache
      * @param sourceVar,
-     *            Source variable (usually "?x")
+     *         Source variable (usually "?x")
      * @param targetVar,
-     *            Target variable (usually "?y")
-     *
+     *         Target variable (usually "?y")
      * @return a specific execution engine instance
-     *
      * @author kleanthi
      */
     public static ExecutionEngine getEngine(ExecutionEngineType name, Cache source, Cache target, String sourceVar,
@@ -51,5 +46,9 @@ public class ExecutionEngineFactory {
                 logger.error("Sorry, " + name + " is not yet implemented. Returning the default execution engine instead...");
                 return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
         }
+    }
+
+    public enum ExecutionEngineType {
+        DEFAULT, SIMPLE
     }
 }
