@@ -11,16 +11,18 @@ import java.io.FileReader;
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 12, 2015
  */
-public class CSVMappingReader implements IMappingReader {
+public class CSVMappingReader extends AMappingReader {
     static Logger logger = Logger.getLogger(CSVMappingReader.class.getName());
 
     protected String delimiter;
 
-    public CSVMappingReader() {
+    public CSVMappingReader(String file) {
+        super(System.getProperty("user.dir") + "/" + file);
         this.delimiter = ",";
     }
 
-    public CSVMappingReader(String delimiter) {
+    public CSVMappingReader(String file, String delimiter) {
+        super(System.getProperty("user.dir") + "/" + file);
         this.delimiter = delimiter;
     }
 
@@ -32,9 +34,8 @@ public class CSVMappingReader implements IMappingReader {
      * In case of only 2 columns, all similarities is set to 1
      */
     @Override
-    public AMapping read(String file) {
+    public AMapping read() {
         try {
-            file = System.getProperty("user.dir") + "/" + file;
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line = reader.readLine();
             reader.close();

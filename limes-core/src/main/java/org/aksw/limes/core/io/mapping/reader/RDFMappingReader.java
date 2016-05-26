@@ -10,9 +10,12 @@ import java.io.FileReader;
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 12, 2015
  */
-public class RDFMappingReader implements IMappingReader {
+public class RDFMappingReader extends AMappingReader {
 
 
+    public RDFMappingReader(String file){
+        super(System.getProperty("user.dir") + "/" + file);
+    }
     /**
      * Reads mapping from nt file
      *
@@ -20,10 +23,9 @@ public class RDFMappingReader implements IMappingReader {
      *         Input file for reading
      * @return Mapping that represents the content of the file
      */
-    public static AMapping readNtFile(String file) {
+    public AMapping readNtFile() {
         AMapping m = MappingFactory.createDefaultMapping();
         try {
-            file = System.getProperty("user.dir") + "/" + file;
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String s = reader.readLine();
             String split[];
@@ -41,9 +43,9 @@ public class RDFMappingReader implements IMappingReader {
     }
 
     @Override
-    public AMapping read(String file) {
+    public AMapping read() {
         if (file.endsWith(".nt") || file.endsWith(".n3")) {
-            return readNtFile(file);
+            return readNtFile();
         }
         return null;
     }

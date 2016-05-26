@@ -8,6 +8,7 @@ import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -112,7 +113,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
                 Resource mlAlgorithmUri = getObject(specsSubject, LIMES.hasMLAlgorithm, true).asResource();
                 readMLAlgorithmParameters(mlAlgorithmUri);
             } else {
-                logger.error("No Metric / ML Algorithm provided, exit with error ");
+                logger.error("Neither Metric nor ML Algorithm provided, exit with error ");
                 System.exit(1);
             }
 
@@ -151,12 +152,28 @@ public class RDFConfigurationReader extends AConfigurationReader {
     }
 
     private void readMLAlgorithmParameters(Resource mlAlgorithmUri) {
-        if (!configModel.contains(mlAlgorithmUri, RDF.type, LIMES.MLAlgorithm)) {
-            logger.error(mlAlgorithmUri + " missing type. Exit with error");
-            System.exit(1);
+        // read MLAlgorithm type 
+        if (configModel.contains(mlAlgorithmUri, RDF.type, LIMES.SupervisedMLAlgorithm)) {
+            configuration.setMlImplementationType(MLImplementationType.SUPERVISED_BATCH);
+        }else  if (configModel.contains(mlAlgorithmUri, RDF.type, LIMES.UnsupervisedMLAlgorithm)) {
+            configuration.setMlImplementationType(MLImplementationType.UNSUPERVISED);
+        }else  if (configModel.contains(mlAlgorithmUri, RDF.type, LIMES.ActiveMLAlgorithm)) {
+            configuration.setMlImplementationType(MLImplementationType.SUPERVISED_ACTIVE);
+        }else{
+            logger.warn(mlAlgorithmUri + " missing ML type. use the default type: " + LIMES.UnsupervisedMLAlgorithm);
+            configuration.setMlImplementationType(MLImplementationType.UNSUPERVISED);
         }
+        // read training data
+        if(configuration.getMlImplementationType() == MLImplementationType.SUPERVISED_BATCH ||
+                configuration.getMlImplementationType() == MLImplementationType.SUPERVISED_ACTIVE){
+            RDFNode trainingDataFile = getObject(mlAlgorithmUri, LIMES.hasTrainingDataFile, true);
+            configuration.setTrainingDataFile(trainingDataFile.toString());
+        }
+        // read MLAlgorithm name
         RDFNode mlAlgorithmName = getObject(mlAlgorithmUri, LIMES.mlAlgorithmName, true);
         configuration.setMlAlgorithmName(mlAlgorithmName.toString());
+
+        // read MLAlgorithm parameters
         StmtIterator parametersItr = configModel.listStatements(null, RDF.type, LIMES.MLParameter);
         while (parametersItr.hasNext()) {
             Resource ParameterSubject = parametersItr.next().getSubject();

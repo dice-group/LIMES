@@ -2,7 +2,7 @@ package org.aksw.limes.core.evaluation.oracle;
 
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
-import org.aksw.limes.core.io.mapping.reader.IMappingReader;
+import org.aksw.limes.core.io.mapping.reader.AMappingReader;
 
 //import de.uni_leipzig.simba.learning.oracle.mappingreader.XMLMappingReader;
 
@@ -29,26 +29,26 @@ public class OracleFactory {
      * @return An oracle that contains the data found at filePath
      */
     public static IOracle getOracle(String filePath, String inputType, String oracleType) {
-        IMappingReader reader = null;
+        AMappingReader reader = null;
         IOracle oracle;
         System.out.println("Getting reader of type " + inputType);
         if (inputType.equalsIgnoreCase("csv")) //scan input types here
         {
-            reader = new CSVMappingReader();
+            reader = new CSVMappingReader(filePath);
         } else if (inputType.equalsIgnoreCase("xml")) //scan input types here
         {
             //commented by mofeed to check if it exists or not and the possibilities of adding it
             //reader = new XMLMappingReader();
         } else if (inputType.equalsIgnoreCase("tab")) //scan input types here
         {
-            reader = new CSVMappingReader();
+            reader = new CSVMappingReader(filePath);
             ((CSVMappingReader) reader).setDelimiter("\t");
         } else //default
         {
-            reader = new CSVMappingReader();
+            reader = new CSVMappingReader(filePath);
         }
         //now readData
-        AMapping m = reader.read(filePath);
+        AMapping m = reader.read();
 
         //finally return the right type of oracle
         if (inputType.equals("simple")) //scan input types here

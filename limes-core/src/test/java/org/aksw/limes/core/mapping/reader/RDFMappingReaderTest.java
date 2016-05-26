@@ -15,8 +15,8 @@ public class RDFMappingReaderTest {
         testMap.add("http://dbpedia.org/resource/Berlin", "http://linkedgeodata.org/triplify/node240109189", 1.0d);
         testMap.setPredicate("http://www.w3.org/2002/07/owl#sameAs");
 
-        RDFMappingReader r = new RDFMappingReader();
-        AMapping readMap = r.read("/resources/mapping-test.nt");
+        RDFMappingReader r = new RDFMappingReader("/resources/mapping-test.nt");
+        AMapping readMap = r.read();
 
         assertTrue(readMap.equals(testMap));
     }

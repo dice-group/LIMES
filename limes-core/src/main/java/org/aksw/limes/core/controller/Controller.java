@@ -122,7 +122,7 @@ public class Controller {
                 lp.putAll(config.getMlParameters());
                 results = MLPipeline.execute(sourceCache, targetCache,
                         config.getMlAlgorithmName(), config.getMlImplementationType(),
-                        lp , config.getMlTrainingData(), config.getMlPseudoFMeasure());
+                        lp , config.getTrainingDataFile(), config.getMlPseudoFMeasure());
             } catch (UnsupportedMLImplementationException e) {
                 e.printStackTrace();
             }

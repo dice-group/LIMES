@@ -15,8 +15,8 @@ public class CSVMappingReaderTest {
         testMap.add("http://dbpedia.org/resource/Berlin", "http://linkedgeodata.org/triplify/node240109189", 1.0d);
         testMap.setPredicate("http://www.w3.org/2002/07/owl#sameAs");
 
-        CSVMappingReader r = new CSVMappingReader(",");
-        AMapping readMap = r.read("/resources/mapping-3col-test.csv");
+        CSVMappingReader r = new CSVMappingReader("/resources/mapping-3col-test.csv", ",");
+        AMapping readMap = r.read();
 
         assertTrue(readMap.equals(testMap));
     }
@@ -26,8 +26,8 @@ public class CSVMappingReaderTest {
         AMapping testMap = MappingFactory.createDefaultMapping();
         testMap.add("http://dbpedia.org/resource/Berlin", "http://linkedgeodata.org/triplify/node240109189", 0.999d);
 
-        CSVMappingReader r = new CSVMappingReader(",");
-        AMapping readMap = r.read("/resources/mapping-3col-sim-test.csv");
+        CSVMappingReader r = new CSVMappingReader("/resources/mapping-3col-sim-test.csv", ",");
+        AMapping readMap = r.read();
 
         assertTrue(readMap.equals(testMap));
     }
@@ -37,8 +37,8 @@ public class CSVMappingReaderTest {
         AMapping testMap = MappingFactory.createDefaultMapping();
         testMap.add("http://dbpedia.org/resource/Berlin", "http://linkedgeodata.org/triplify/node240109189", 1d);
 
-        CSVMappingReader r = new CSVMappingReader(",");
-        AMapping readMap = r.read("/resources/mapping-2col-test.csv");
+        CSVMappingReader r = new CSVMappingReader("/resources/mapping-2col-test.csv", ",");
+        AMapping readMap = r.read();
 
         assertTrue(readMap.equals(testMap));
     }

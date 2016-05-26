@@ -1,12 +1,10 @@
 package org.aksw.limes.core.io.config;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 
 import java.util.*;
 
-//import org.apache.log4j.Logger;
 
 /**
  * Contain all LIMES configuration parameters
@@ -40,8 +38,8 @@ public class Configuration implements IConfiguration {
 
     protected String mlAlgorithmName = new String();
     protected Map<String, String> mlParameters = new HashMap<String, String>();
-    protected String mlImplementationType = new String("batch");
-    protected AMapping mlTrainingData = MappingFactory.createDefaultMapping();
+    protected MLImplementationType mlImplementationType = MLImplementationType.SUPERVISED_BATCH;
+    private String trainingDataFile = null;
     protected PseudoFMeasure mlPseudoFMeasure = new PseudoFMeasure();
 
     public Configuration() {
@@ -160,24 +158,12 @@ public class Configuration implements IConfiguration {
         return acceptanceFile;
     }
 
-    public void setAcceptanceFile(String acceptanceFile) {
-        this.acceptanceFile = acceptanceFile;
-    }
-
     public String getAcceptanceRelation() {
         return acceptanceRelation;
     }
 
-    public void setAcceptanceRelation(String acceptanceRelation) {
-        this.acceptanceRelation = acceptanceRelation;
-    }
-
     public double getAcceptanceThreshold() {
         return acceptanceThreshold;
-    }
-
-    public void setAcceptanceThreshold(double acceptanceThreshold) {
-        this.acceptanceThreshold = acceptanceThreshold;
     }
 
     @Override
@@ -192,40 +178,20 @@ public class Configuration implements IConfiguration {
         return executionPlan;
     }
 
-    public void setExecutionPlan(String executionPlan) {
-        this.executionPlan = executionPlan;
-    }
-
     public int getGranularity() {
         return granularity;
-    }
-
-    public void setGranularity(int granularity) {
-        this.granularity = granularity;
     }
 
     public String getMetricExpression() {
         return metricExpression;
     }
 
-    public void setMetricExpression(String metricExpression) {
-        this.metricExpression = metricExpression;
-    }
-
     public String getMlAlgorithmName() {
         return mlAlgorithmName;
     }
 
-    public void setMlAlgorithmName(String mlAlgorithmName) {
-        this.mlAlgorithmName = mlAlgorithmName;
-    }
-
-    public String getMlImplementationType() {
+    public MLImplementationType getMlImplementationType() {
         return mlImplementationType;
-    }
-
-    public void setMlImplementationType(String mlImplementationType) {
-        this.mlImplementationType = mlImplementationType;
     }
 
     public Map<String, String> getMlParameters() {
@@ -236,65 +202,38 @@ public class Configuration implements IConfiguration {
         return mlPseudoFMeasure;
     }
 
-    public AMapping getMlTrainingData() {
-        return mlTrainingData;
-    }
-
     public String getOutputFormat() {
         return outputFormat;
-    }
-
-    public void setOutputFormat(String outputFormat) {
-        this.outputFormat = outputFormat;
     }
 
     public Map<String, String> getPrefixes() {
         return prefixes;
     }
 
-    public void setPrefixes(HashMap<String, String> prefixes) {
-        this.prefixes = prefixes;
-    }
-
     public KBInfo getSourceInfo() {
         return sourceInfo;
-    }
-
-    public void setSourceInfo(KBInfo sourceInfo) {
-        this.sourceInfo = sourceInfo;
     }
 
     public KBInfo getTargetInfo() {
         return targetInfo;
     }
 
-    public void setTargetInfo(KBInfo targetInfo) {
-        this.targetInfo = targetInfo;
+    public String getTrainingDataFile() {
+        return trainingDataFile;
     }
 
     public String getVerificationFile() {
         return verificationFile;
     }
 
-    public void setVerificationFile(String verificationFile) {
-        this.verificationFile = verificationFile;
-    }
-
     public String getVerificationRelation() {
         return verificationRelation;
-    }
-
-    public void setVerificationRelation(String verificationRelation) {
-        this.verificationRelation = verificationRelation;
     }
 
     public double getVerificationThreshold() {
         return verificationThreshold;
     }
 
-    public void setVerificationThreshold(double verificationThreshold) {
-        this.verificationThreshold = verificationThreshold;
-    }
 
     @Override
     public int hashCode() {
@@ -319,6 +258,70 @@ public class Configuration implements IConfiguration {
         temp = Double.doubleToLongBits(verificationThreshold);
         result = prime * result + (int) (temp ^ (temp >>> 32));
         return result;
+    }
+
+    public void setAcceptanceFile(String acceptanceFile) {
+        this.acceptanceFile = acceptanceFile;
+    }
+
+    public void setAcceptanceRelation(String acceptanceRelation) {
+        this.acceptanceRelation = acceptanceRelation;
+    }
+
+    public void setAcceptanceThreshold(double acceptanceThreshold) {
+        this.acceptanceThreshold = acceptanceThreshold;
+    }
+
+    public void setExecutionPlan(String executionPlan) {
+        this.executionPlan = executionPlan;
+    }
+
+    public void setGranularity(int granularity) {
+        this.granularity = granularity;
+    }
+
+    public void setMetricExpression(String metricExpression) {
+        this.metricExpression = metricExpression;
+    }
+
+    public void setMlAlgorithmName(String mlAlgorithmName) {
+        this.mlAlgorithmName = mlAlgorithmName;
+    }
+
+    public void setMlImplementationType(MLImplementationType mlImplementationType) {
+        this.mlImplementationType = mlImplementationType;
+    }
+
+    public void setOutputFormat(String outputFormat) {
+        this.outputFormat = outputFormat;
+    }
+
+    public void setPrefixes(HashMap<String, String> prefixes) {
+        this.prefixes = prefixes;
+    }
+
+    public void setSourceInfo(KBInfo sourceInfo) {
+        this.sourceInfo = sourceInfo;
+    }
+
+    public void setTargetInfo(KBInfo targetInfo) {
+        this.targetInfo = targetInfo;
+    }
+
+    public void setTrainingDataFile(String trainingDataFile) {
+        this.trainingDataFile = trainingDataFile;
+    }
+
+    public void setVerificationFile(String verificationFile) {
+        this.verificationFile = verificationFile;
+    }
+
+    public void setVerificationRelation(String verificationRelation) {
+        this.verificationRelation = verificationRelation;
+    }
+
+    public void setVerificationThreshold(double verificationThreshold) {
+        this.verificationThreshold = verificationThreshold;
     }
 
     @Override

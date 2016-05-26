@@ -38,6 +38,8 @@ public class LIMES {
     public static final Property mlParameterValue = property("mlParameterValue");
     public static final Property hasMLAlgorithm = property("hasMLAlgorithm");
     public static final Property mlAlgorithmName = property("mlAlgorithmName");
+    public static final Property hasTrainingDataFile = property("hasTrainingDataFile");
+    
     public static final Resource LimesSpecs = resource("LimesSpecs");
     public static final Resource SourceDataset = resource("SourceDataset");
     public static final Resource TargetDataset = resource("TargetDataset");
@@ -45,7 +47,9 @@ public class LIMES {
     public static final Resource Acceptance = resource("Acceptance");
     public static final Resource Review = resource("Review");
     public static final Resource MLParameter = resource("MLParameter");
-    public static final Resource MLAlgorithm = resource("MLAlgorithm");
+    public static final Resource SupervisedMLAlgorithm = resource("SupervisedMLAlgorithm");
+    public static final Resource UnsupervisedMLAlgorithm = resource("UnsupervisedMLAlgorithm");
+    public static final Resource ActiveMLAlgorithm = resource("ActiveMLAlgorithm");
 
     private static Property property(String name) {
         Property result = ResourceFactory.createProperty(uri + name);
