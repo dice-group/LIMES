@@ -2,6 +2,7 @@ package org.aksw.limes.core.io.config;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.aksw.limes.core.ml.setting.LearningParameters;
 
 import java.util.*;
 
@@ -14,33 +15,34 @@ import java.util.*;
  */
 public class Configuration implements IConfiguration {
 
-    protected KBInfo sourceInfo = new KBInfo();
-    protected KBInfo targetInfo = new KBInfo();
+    protected KBInfo                sourceInfo = new KBInfo();
+    protected KBInfo                targetInfo = new KBInfo();
 
-    protected String metricExpression = new String();
+    protected String                metricExpression = new String();
 
-    protected String acceptanceRelation = new String();
+    protected String                acceptanceRelation = new String();
 
-    protected String verificationRelation = new String();
+    protected String                verificationRelation = new String();
 
-    protected double acceptanceThreshold;
-    protected String acceptanceFile;
+    protected double                acceptanceThreshold;
+    protected String                acceptanceFile;
 
-    protected double verificationThreshold;
-    protected String verificationFile;
+    protected double                verificationThreshold;
+    protected String                verificationFile;
 
-    protected Map<String, String> prefixes = new HashMap<String, String>();
+    protected Map<String, String>   prefixes = new HashMap<String, String>();
 
-    protected String outputFormat;
+    protected String                outputFormat;
 
-    protected String executionPlan = "simple";
-    protected int granularity = 2;
+    protected String                executionPlan = "simple";
+    
+    protected int                   granularity = 2;
 
-    protected String mlAlgorithmName = new String();
-    protected Map<String, String> mlParameters = new HashMap<String, String>();
-    protected MLImplementationType mlImplementationType = MLImplementationType.SUPERVISED_BATCH;
-    private String trainingDataFile = null;
-    protected PseudoFMeasure mlPseudoFMeasure = new PseudoFMeasure();
+    protected String                mlAlgorithmName = new String();
+    protected LearningParameters    mlParameters =null;
+    protected MLImplementationType  mlImplementationType = MLImplementationType.UNSUPERVISED;
+    private String                  trainingDataFile = null;
+    protected PseudoFMeasure        mlPseudoFMeasure = null;
 
     public Configuration() {
     }
@@ -48,7 +50,7 @@ public class Configuration implements IConfiguration {
     public Configuration(KBInfo sourceInfo, KBInfo targetInfo, String metricExpression, String acceptanceRelation,
                          String verificationRelation, double acceptanceThreshold, String acceptanceFile,
                          double verificationThreshold, String verificationFile, Map<String, String> prefixes, String outputFormat,
-                         String executionPlan, int granularity, String mlAlgorithmName, Map<String, String> mlParameters) {
+                         String executionPlan, int granularity, String mlAlgorithmName, LearningParameters mlParameters) {
         super();
         this.sourceInfo = sourceInfo;
         this.targetInfo = targetInfo;
@@ -194,7 +196,7 @@ public class Configuration implements IConfiguration {
         return mlImplementationType;
     }
 
-    public Map<String, String> getMlParameters() {
+    public LearningParameters getMlParameters() {
         return mlParameters;
     }
 

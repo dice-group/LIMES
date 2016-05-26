@@ -32,7 +32,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
      * @author sherif
      */
     public RDFConfigurationReader(String fileNameOrUri) {
-        super(fileNameOrUri);
+        super(System.getProperty("user.dir") + "/" + fileNameOrUri);
     }
 
     /**

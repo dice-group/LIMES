@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  * @version Nov 12, 2015
  */
 public class XMLConfigurationReader extends AConfigurationReader {
-    private static final Logger logger = Logger.getLogger(XMLConfigurationReader.class.getName());
+    private static final Logger logger = Logger.getLogger(XMLConfigurationReader.class);
 
     // Constants
     private static final String FILE = "FILE";
@@ -58,7 +58,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
      * Constructor
      */
     public XMLConfigurationReader(String fileNameOrUri) {
-        super(fileNameOrUri);
+        super(System.getProperty("user.dir") + "/" + fileNameOrUri);
     }
 
     public static void processProperty(KBInfo kbinfo, String property) {
@@ -212,7 +212,6 @@ public class XMLConfigurationReader extends AConfigurationReader {
     public Configuration validateAndRead(InputStream input, String filePath) {
         DtdChecker dtdChecker = new DtdChecker();
         try {
-            //            InputStream input = new FileInputStream(inputString);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             //make sure document is valid
             factory.setValidating(true);
@@ -223,7 +222,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 @Override
                 public InputSource resolveEntity(String publicId, String systemId)
                         throws SAXException, IOException {
-//                    System.out.println(systemId);
+                    //                    System.out.println(systemId);
                     if (systemId.contains("limes.dtd")) {
                         String dtd = System.getProperty("user.dir") + "/resources/limes.dtd";
                         return new InputSource(dtd);
@@ -255,12 +254,10 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 list = xmlDocument.getElementsByTagName(SOURCE);
                 children = list.item(0).getChildNodes();
                 processKBDescription(SOURCE, children);
-                //                logger.info("Source = " + sourceInfo);
                 //2. Target information
                 list = xmlDocument.getElementsByTagName(TARGET);
                 children = list.item(0).getChildNodes();
                 processKBDescription(TARGET, children);
-                //                logger.info("Target = " + targetInfo);
                 //3.METRIC
                 list = xmlDocument.getElementsByTagName(METRIC);
                 getConfiguration().setMetricExpression(getText(list.item(0)));
@@ -279,8 +276,6 @@ public class XMLConfigurationReader extends AConfigurationReader {
                         getConfiguration().setAcceptanceRelation(getText(child));
                     }
                 }
-                //                logger.info("Instances with similarity beyond " + acceptanceThreshold + " "
-                //                        + "will be written in " + acceptanceFile + " and linked with " + acceptanceRelation);
 
                 //5. VERIFICATION file and conditions
                 list = xmlDocument.getElementsByTagName(REVIEW);
@@ -302,18 +297,13 @@ public class XMLConfigurationReader extends AConfigurationReader {
                     list = xmlDocument.getElementsByTagName(EXECUTION);
                     children = list.item(0).getChildNodes();
                     getConfiguration().setExecutionPlan(getText(list.item(0)));
-                    //                    logger.info("Linking will be carried out by using the " + executionPlan + " execution plan");
-                } else {
-                    //                    logger.info("Linking will be carried out by using the default execution plan");
                 }
                 //7. TILING if necessary
                 list = xmlDocument.getElementsByTagName(GRANULARITY);
                 if (list.getLength() > 0) {
                     children = list.item(0).getChildNodes();
                     getConfiguration().setGranularity(Integer.parseInt(getText(list.item(0))));
-                    //                  logger.info("Linking will be carried by using granularity " + granularity);
                 } else {
-                    //                  logger.info("Linking will be carried by using the default granularity.");
                 }
 
                 //8. OUTPUT format
@@ -321,41 +311,15 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 if (list.getLength() > 0) {
                     children = list.item(0).getChildNodes();
                     getConfiguration().setOutputFormat(getText(list.item(0)));
-                    //                    logger.info("Output will be written in " + outputFormat + " format.");
-                } else {
-                    //                   logger.info("Output will be written in N3 format.");
-                }
-                //                logger.info("Instances with similarity between " + verificationThreshold + " "
-                //                        + "and " + acceptanceThreshold + " will be written in " + verificationFile
-                //                        + " and linked with " + verificationRelation);
-
-
+                } 
             }
         } catch (Exception e) {
             logger.warn(e.getMessage());
             e.printStackTrace();
             logger.warn("Some values were not set. Crossing my fingers and using defaults.");
         }
-        //        logger.info("File " + input + " is valid.");
-        //        return dtdChecker.valid;
         return getConfiguration();
     }
-
-
-    //    /**
-    //     * Returns config of targetInfo knowledge base
-    //     *
-    //     * @return The KBInfo describing the targetInfo knowledge base
-    //     */
-    //    public KBInfo getTargetInfo() {
-    //        return targetInfo;
-    //    }
-
-    //    public static void main(String args[]) {
-    //        ConfigReader cr = new ConfigReader();
-    //        String file = "Release_Examples/dblp-semanticwebresearcher.xml";
-    //        cr.validateAndRead(file);
-    //    }
 
     public void modifyMetricExpression(LinkSpecification spec) {
         for (LinkSpecification atomicSpec : spec.getAllLeaves()) {
@@ -364,23 +328,13 @@ public class XMLConfigurationReader extends AConfigurationReader {
             Pattern p = Pattern.compile(Pattern.quote(m) + "\\|\\d*\\.\\d+");
             String metricExpr = getConfiguration().getMetricExpression();
             Matcher mac = p.matcher(metricExpr);
-            //System.out.println(mac.find());
-            //System.out.println(mac.start());
-            //System.out.println(mac.end());
-            //System.out.println(metricExpr.substring(mac.start(), mac.end()));
             if (mac.find()) {
                 int start = mac.start();
                 int end = mac.end();
-
                 String subStr = metricExpr.substring(start, end);
-                //System.out.println(subStr);
                 String[] arr = subStr.split("\\|");
-                //System.out.println(arr[1]);
-                //System.out.println(Double.toString(atomicSpec.threshold));
                 getConfiguration().setMetricExpression(metricExpr.replace(subStr, arr[0] + "|" + Double.toString(atomicSpec.getThreshold())));
             }
         }
-
-
     }
 }

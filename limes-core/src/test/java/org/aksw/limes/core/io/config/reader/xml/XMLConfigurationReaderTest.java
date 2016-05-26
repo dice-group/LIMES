@@ -2,6 +2,7 @@ package org.aksw.limes.core.io.config.reader.xml;
 
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.ml.setting.LearningParameters;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class XMLConfigurationReaderTest {
                 "Simple",                            //executionPlan
                 2,                                    //granularity
                 new String(),                        //MLAlgorithmName
-                new HashMap<String, String>()        //MLAlgorithmParameters
+                new LearningParameters()        //MLAlgorithmParameters
         );
 
         XMLConfigurationReader c = new XMLConfigurationReader("/resources/lgd-lgd.xml");

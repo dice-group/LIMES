@@ -3,6 +3,7 @@ package org.aksw.limes.core.io.config.reader.xml;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
+import org.aksw.limes.core.ml.setting.LearningParameters;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -65,7 +66,7 @@ public class RDFConfigurationReaderTest {
                 "sparql"                                                            //String type
         );
 
-        Map<String, String> mlParameters = new HashMap<>();
+        LearningParameters mlParameters = new LearningParameters();
         mlParameters.put("max execution time in minutes", "60");
 
         Configuration testConf = new Configuration(
@@ -125,19 +126,19 @@ public class RDFConfigurationReaderTest {
         Configuration testConf = new Configuration(
                 sourceInfo,
                 targetInfo,
-                "hausdorff(x.polygon, y.polygon)",    //metricExpression
-                "lgdo:near",                        //acceptanceRelation
-                "lgdo:near",                        //verificationRelation
-                0.9,                                //acceptanceThreshold
-                "lgd_relaybox_verynear.nt",            //acceptanceFile
-                0.5,                                //verificationThreshold
-                "lgd_relaybox_near.nt",                //verificationFile
+                "hausdorff(x.polygon, y.polygon)",   //metricExpression
+                "lgdo:near",                         //acceptanceRelation
+                "lgdo:near",                         //verificationRelation
+                0.9,                                 //acceptanceThreshold
+                "lgd_relaybox_verynear.nt",          //acceptanceFile
+                0.5,                                 //verificationThreshold
+                "lgd_relaybox_near.nt",              //verificationFile
                 prefixes,                            //prefixes
-                "TAB",                                //outputFormat
+                "TAB",                               //outputFormat
                 "Simple",                            //executionPlan
-                2,                                    //granularity
+                2,                                   //granularity
                 new String(),                        //MLAlgorithmName
-                new HashMap<>()                        //MLAlgorithmParameters
+                new LearningParameters()             //MLAlgorithmParameters
         );
         RDFConfigurationReader c = new RDFConfigurationReader("/resources/lgd-lgd.ttl");
         Configuration fileConf = c.read();
