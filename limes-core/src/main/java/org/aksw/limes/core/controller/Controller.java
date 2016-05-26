@@ -26,6 +26,9 @@ import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 /**
  * This is the default LIMES Controller used to run the software as CLI.
  *
@@ -74,14 +77,8 @@ public class Controller {
             System.exit(1);
         }
         // II. Configure Logger
-        // @todo Make this work
-        if (cmd.hasOption('s')) {
-            logger.info("Disable logging...");
-//            logger.setLevel(Level.OFF);
-            logger.info("Disabled logging?");
-        } else if (cmd.hasOption('v')) {
-            logger.setLevel(Level.INFO);
-        }
+        //@todo: use slf4j in whole project, remove all references to log4j and use log4j2 as provider for slf4j.
+        //@todo: add verbose/silent options
         // 1. Determine appropriate ConfigurationReader
         String format;
         if (cmd.hasOption('f')) {
@@ -174,8 +171,8 @@ public class Controller {
         Options options = new Options();
         options.addOption("f", true, "Format of <config_file_or_uri>, either \"xml\" (default) or \"rdf\"");
         options.addOption("h", false, "Help");
-        options.addOption("s", false, "Silent run");
-        options.addOption("v", false, "Verbose run");
+//        options.addOption("s", false, "Silent run");
+//        options.addOption("v", false, "Verbose run");
         return options;
     }
 }
