@@ -120,9 +120,10 @@ public class Controller {
             try {
                 LearningParameters lp = new LearningParameters();
                 lp.putAll(config.getMlParameters());
+                lp = (LearningParameters) config.getMlParameters();
                 results = MLPipeline.execute(sourceCache, targetCache,
                         config.getMlAlgorithmName(), config.getMlImplementationType(),
-                        lp , config.getTrainingDataFile(), config.getMlPseudoFMeasure());
+                        lp , config.getTrainingDataFile(), config.getMlPseudoFMeasure(), 10);
             } catch (UnsupportedMLImplementationException e) {
                 e.printStackTrace();
             }
@@ -134,6 +135,7 @@ public class Controller {
                     ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlan()),
                     ExecutionEngineFactory.getExecutionEngineType(config.getExecutionPlan()));
         }
+        assert results != null;
         AMapping acceptanceMapping = results.getSubMap(config.getAcceptanceThreshold());
         AMapping verificationMapping = MappingOperations.difference(results, acceptanceMapping);
         return new ResultMappings(verificationMapping, acceptanceMapping);

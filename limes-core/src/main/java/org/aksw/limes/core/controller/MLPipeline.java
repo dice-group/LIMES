@@ -24,7 +24,7 @@ public class MLPipeline {
     public static final Logger logger = Logger.getLogger(MLPipeline.class);
 
     public static AMapping execute(Cache source, Cache target, String mlAlgrorithmName, MLImplementationType mlImplementationType,
-            LearningParameters learningParameters, String trainingDataFile, PseudoFMeasure pfm) throws UnsupportedMLImplementationException {
+                                   LearningParameters learningParameters, String trainingDataFile, PseudoFMeasure pfm, int maxIt) throws UnsupportedMLImplementationException {
         Class<? extends ACoreMLAlgorithm> clazz = MLAlgorithmFactory.getAlgorithmType(mlAlgrorithmName);
         MLModel mlm;
         AMapping trainingDataMap = MappingFactory.createDefaultMapping();
@@ -51,7 +51,7 @@ public class MLPipeline {
             String evaluationMsg;
             logger.info("Please rate the following examples with a number in [-1,+1].\n\t" +
                     "(-1 =: strong negative example, +1 =: strong positive example)");
-            for (int c = 0; c < 10; c++) {
+            for (int c = 0; c < maxIt; c++) {
                 mlm = mla.activeLearn(trainingDataMap);
                 AMapping m = mla.predict(source, target, mlm);
                 //Set<Map.Entry<String, HashMap<String, Double>>> entries = mlm.getMapping().getMap().entrySet();

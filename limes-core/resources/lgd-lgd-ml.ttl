@@ -32,9 +32,9 @@ limes:linkedgeodataTOlinkedgeodataReview
       limes:threshold "0.5" .
 
 limes:wombat
-      a       limes:SupervisedMLAlgorithm ;
+      a       limes:UnsupervisedMLAlgorithm ;
       limes:mlAlgorithmName "wombat simple" ;
-      limes:hasTrainingDataFile "/resources/lgd-lgd-training.ttl" ;
+      limes:hasTrainingDataFile "./resources/lgd-lgd-training.ttl" ;
       limes:hasParameter limes:parameter1.
       
 limes:parameter1 
