@@ -24,7 +24,7 @@ import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
  */
 public class MeasureProcessor {
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger(MeasureProcessor.class.getName());
 
     /**
      * Computes a list that contains all measures used in a given expression
@@ -155,20 +155,21 @@ public class MeasureProcessor {
                 System.exit(1);
             } else {
 
-                if (mapper instanceof PPJoinPlusPlus) {
+                //if (mapper instanceof PPJoinPlusPlus) {
                     Mapping m = mapper.getMapping(source, target, sourceVar, targetVar, expression, threshold);
                     for (String s : m.getMap().keySet()) {
                         for (String t : m.getMap().get(s).keySet()) {
                             return m.getMap().get(s).get(t);
                         }
                     }
-                } else {
+                /*} else {
+                    // logger.info(mapper);
                     double similarity = measure.getSimilarity(sourceInstance, targetInstance, property1, property2);
                     if (similarity >= threshold)
                         return similarity;
                     else
                         return 0;
-                }
+                }*/
 
             }
         } else {
@@ -194,6 +195,8 @@ public class MeasureProcessor {
                 double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
                         sourceVar, targetVar);
 
+                if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
+                    return 0;
                 double minSimilarity = Math.min(firstChild, secondChild);
                 // find min value between or terms
                 if (minSimilarity >= parentThreshold)
@@ -223,7 +226,7 @@ public class MeasureProcessor {
                         sourceVar, targetVar);
                 // the second similarity must be 0 in order for the instance to
                 // have a change to be included at the final result
-                if (secondChild == 0) {
+                if (secondChild < p.getThreshold2()) {
                     if (firstChild >= parentThreshold)
                         return firstChild;
                     else

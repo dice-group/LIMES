@@ -29,51 +29,51 @@ public class CanonicalPlanner extends Planner {
      * @return NestedPlan of the input link specification
      */
     public NestedPlan plan(LinkSpecification spec) {
-	NestedPlan plan = new NestedPlan();
-	// atomic specs are simply ran
-	if (spec == null)
-	    return plan;
-	if (spec.isEmpty())
-	    return plan;
-	if (spec.isAtomic()) {
-	    // nested plan have a null instruction list as default
-	    plan.addInstruction(new Instruction(Instruction.Command.RUN, spec.getFilterExpression(),
-		    spec.getThreshold() + "", -1, -1, 0));
-	} else {
-	    List<NestedPlan> children = new ArrayList<NestedPlan>();
-	    // set children
-	    for (LinkSpecification child : spec.getChildren()) {
-		NestedPlan childPlan = plan(child);
-		children.add(childPlan);
-	    }
-	    plan.setSubPlans(children);
-	    // set operator
-	    if (spec.getOperator().equals(LogicOperator.AND)) {
-		plan.setOperator(Command.INTERSECTION);
-	    } else if (spec.getOperator().equals(LogicOperator.OR)) {
-		plan.setOperator(Command.UNION);
-	    } else if (spec.getOperator().equals(LogicOperator.XOR)) {
-		plan.setOperator(Command.XOR);
-	    } else if (spec.getOperator().equals(LogicOperator.MINUS)) {
-		plan.setOperator(Command.DIFF);
-	    } else {
-		System.out.println("Wrong operator: " + spec.getOperator() + ". at LS: " + spec);
-		return null;
-	    }
-	    plan.setFilteringInstruction(
-		    new Instruction(Command.FILTER, spec.getFilterExpression(), spec.getThreshold() + "", -1, -1, 0));
-	}
-	return plan;
+        NestedPlan plan = new NestedPlan();
+        // atomic specs are simply ran
+        if (spec == null)
+            return plan;
+        if (spec.isEmpty())
+            return plan;
+        if (spec.isAtomic()) {
+            // nested plan have a null instruction list as default
+            plan.addInstruction(new Instruction(Instruction.Command.RUN, spec.getFilterExpression(),
+                    spec.getThreshold() + "", -1, -1, 0));
+        } else {
+            List<NestedPlan> children = new ArrayList<NestedPlan>();
+            // set children
+            for (LinkSpecification child : spec.getChildren()) {
+                NestedPlan childPlan = plan(child);
+                children.add(childPlan);
+            }
+            plan.setSubPlans(children);
+            // set operator
+            if (spec.getOperator().equals(LogicOperator.AND)) {
+                plan.setOperator(Instruction.Command.INTERSECTION);
+            } else if (spec.getOperator().equals(LogicOperator.OR)) {
+                plan.setOperator(Instruction.Command.UNION);
+            } else if (spec.getOperator().equals(LogicOperator.XOR)) {
+                plan.setOperator(Instruction.Command.XOR);
+            } else if (spec.getOperator().equals(LogicOperator.MINUS)) {
+                plan.setOperator(Instruction.Command.DIFF);
+            } else {
+                System.out.println("Wrong operator: " + spec.getOperator() + ". at LS: " + spec);
+                return null;
+            }
+            plan.setFilteringInstruction(
+                    new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(), spec.getThreshold() + "", -1, -1, 0));
+        }
+        return plan;
     }
 
     @Override
     public boolean isStatic() {
-	return true;
+        return true;
     }
 
     @Override
     public LinkSpecification normalize(LinkSpecification spec) {
-	return spec;
+        return spec;
     }
 
 }

@@ -29,13 +29,13 @@ public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemp
      * @return first property of metric expression as string
      */
     protected String getFirstProperty(String properties) {
-	properties = properties.substring(properties.indexOf(".") + 1, properties.length());
-	int plusIndex = properties.indexOf("|");
-	if (properties.indexOf("|") != -1) {
-	    String p1 = properties.substring(0, plusIndex);
-	    return p1;
-	} else
-	    return properties;
+        properties = properties.substring(properties.indexOf(".") + 1, properties.length());
+        int plusIndex = properties.indexOf("|");
+        if (properties.indexOf("|") != -1) {
+            String p1 = properties.substring(0, plusIndex);
+            return p1;
+        } else
+            return properties;
     }
 
     /**
@@ -46,14 +46,14 @@ public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemp
      * @throws IllegalArgumentException
      * @return second property of metric expression as string
      */
-    protected String getSecondProperty(String properties) throws IllegalArgumentException{
-	properties = properties.substring(properties.indexOf(".") + 1, properties.length());
-	int plusIndex = properties.indexOf("|");
-	if (properties.indexOf("|") != -1) {
-	    String p1 = properties.substring(plusIndex + 1, properties.length());
-	    return p1;
-	} else
-	    throw new IllegalArgumentException();
+    protected String getSecondProperty(String properties) throws IllegalArgumentException {
+        properties = properties.substring(properties.indexOf(".") + 1, properties.length());
+        int plusIndex = properties.indexOf("|");
+        if (properties.indexOf("|") != -1) {
+            String p1 = properties.substring(plusIndex + 1, properties.length());
+            return p1;
+        } else
+            throw new IllegalArgumentException();
     }
 
     /**
@@ -68,36 +68,36 @@ public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemp
      * @param expression,
      *            the metric expression
      * 
-     * @return blocks, a map of sets with unique begin dates as keys and
-     *         set of instances as values
+     * @return blocks, a map of sets with unique begin dates as keys and set of
+     *         instances as values
      */
     protected TreeMap<String, Set<Instance>> orderByBeginDate(Cache cache, String expression) {
 
-	TreeMap<String, Set<Instance>> blocks = new TreeMap<String, Set<Instance>>();
-	Parser p = new Parser(expression, 0.0d);
-	String property = getFirstProperty(p.getLeftTerm());
-	for (Instance instance : cache.getAllInstances()) {
-	    TreeSet<String> time = instance.getProperty(property);
-	    for (String value : time) {
-		try {
-		    // 2015-04-22T11:29:51+02:00
-		    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-		    Date date = df.parse(value);
-		    long epoch = date.getTime();
-		    if (!blocks.containsKey(String.valueOf(epoch))) {
-			Set<Instance> l = new HashSet<Instance>();
-			l.add(instance);
-			blocks.put(String.valueOf(epoch), l);
-		    } else {
-			blocks.get(String.valueOf(epoch)).add(instance);
-		    }
-		} catch (ParseException e) {
-		    e.printStackTrace();
-		}
-	    }
+        TreeMap<String, Set<Instance>> blocks = new TreeMap<String, Set<Instance>>();
+        Parser p = new Parser(expression, 0.0d);
+        String property = getFirstProperty(p.getLeftTerm());
+        for (Instance instance : cache.getAllInstances()) {
+            TreeSet<String> time = instance.getProperty(property);
+            for (String value : time) {
+                try {
+                    // 2015-04-22T11:29:51+02:00
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+                    Date date = df.parse(value);
+                    long epoch = date.getTime();
+                    if (!blocks.containsKey(String.valueOf(epoch))) {
+                        Set<Instance> l = new HashSet<Instance>();
+                        l.add(instance);
+                        blocks.put(String.valueOf(epoch), l);
+                    } else {
+                        blocks.get(String.valueOf(epoch)).add(instance);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
 
-	}
-	return blocks;
+        }
+        return blocks;
 
     }
 

@@ -73,7 +73,7 @@ public class MeasureFactory {
     static Logger logger = Logger.getLogger(MeasureFactory.class.getName());
 
     public enum MeasureType { // TODO add other measures
-	GEO_NAIVE_HAUSDORFF, GEO_INDEXED_HAUSDORFF, GEO_FAST_HAUSDORFF, GEO_CENTROIDHAUSDORFF, GEO_SCAN_HAUSDORFF, GEO_MIN, GEO_MAX, GEO_AVG, GEO_SUM_OF_MIN, GEO_LINK, GEO_QUINLAN, GEO_FRECHET, GEO_SURJECTION, GEO_FAIR_SURJECTION, GEO_MEAN
+        GEO_NAIVE_HAUSDORFF, GEO_INDEXED_HAUSDORFF, GEO_FAST_HAUSDORFF, GEO_CENTROIDHAUSDORFF, GEO_SCAN_HAUSDORFF, GEO_MIN, GEO_MAX, GEO_AVG, GEO_SUM_OF_MIN, GEO_LINK, GEO_QUINLAN, GEO_FRECHET, GEO_SURJECTION, GEO_FAIR_SURJECTION, GEO_MEAN
     };
 
     // String measures
@@ -125,70 +125,70 @@ public class MeasureFactory {
     public static final String TMP_EQUALS = "tmp_equals";
 
     public static MeasureType getTypeFromExpression(String expression) {
-	String measure = expression.toLowerCase();
-	if (measure.startsWith(GEO_MEAN)) {
-	    return MeasureType.GEO_MEAN;
-	}
-	if (measure.startsWith(GEO_MIN)) {
-	    return MeasureType.GEO_MIN;
-	}
-	if (measure.startsWith(GEO_MAX)) {
-	    return MeasureType.GEO_MAX;
-	}
-	if (measure.startsWith(GEO_FRECHET)) {
-	    return MeasureType.GEO_FRECHET;
-	}
-	if (measure.startsWith(GEO_AVG)) {
-	    return MeasureType.GEO_AVG;
-	}
-	if (measure.startsWith(GEO_LINK)) {
-	    return MeasureType.GEO_LINK;
-	}
-	if (measure.startsWith(GEO_SUM_OF_MIN)) {
-	    return MeasureType.GEO_SUM_OF_MIN;
-	}
-	if (measure.startsWith(GEO_SURJECTION)) {
-	    return MeasureType.GEO_SURJECTION;
-	}
-	if (measure.startsWith(GEO_FAIR_SURJECTION)) {
-	    return MeasureType.GEO_FAIR_SURJECTION;
-	} else {
-	    return MeasureType.GEO_INDEXED_HAUSDORFF;
-	}
+        String measure = expression.toLowerCase();
+        if (measure.startsWith(GEO_MEAN)) {
+            return MeasureType.GEO_MEAN;
+        }
+        if (measure.startsWith(GEO_MIN)) {
+            return MeasureType.GEO_MIN;
+        }
+        if (measure.startsWith(GEO_MAX)) {
+            return MeasureType.GEO_MAX;
+        }
+        if (measure.startsWith(GEO_FRECHET)) {
+            return MeasureType.GEO_FRECHET;
+        }
+        if (measure.startsWith(GEO_AVG)) {
+            return MeasureType.GEO_AVG;
+        }
+        if (measure.startsWith(GEO_LINK)) {
+            return MeasureType.GEO_LINK;
+        }
+        if (measure.startsWith(GEO_SUM_OF_MIN)) {
+            return MeasureType.GEO_SUM_OF_MIN;
+        }
+        if (measure.startsWith(GEO_SURJECTION)) {
+            return MeasureType.GEO_SURJECTION;
+        }
+        if (measure.startsWith(GEO_FAIR_SURJECTION)) {
+            return MeasureType.GEO_FAIR_SURJECTION;
+        } else {
+            return MeasureType.GEO_INDEXED_HAUSDORFF;
+        }
     }
 
     public static Measure getMeasure(MeasureType type) {
-	Measure measure;
-	if (type == MeasureType.GEO_NAIVE_HAUSDORFF) {
-	    measure = new NaiveHausdorff();
-	} else if (type == MeasureType.GEO_FAST_HAUSDORFF) {
-	    measure = new FastHausdorff();
-	} else if (type == MeasureType.GEO_INDEXED_HAUSDORFF) {
-	    measure = new IndexedHausdorff();
-	} else if (type == MeasureType.GEO_SCAN_HAUSDORFF) {
-	    measure = new ScanIndexedHausdorff();
-	} else if (type == MeasureType.GEO_MIN) {
-	    measure = new NaiveMin();
-	} else if (type == MeasureType.GEO_MAX) {
-	    measure = new NaiveMax();
-	} else if (type == MeasureType.GEO_AVG) {
-	    measure = new NaiveAverage();
-	} else if (type == MeasureType.GEO_SUM_OF_MIN) {
-	    measure = new NaiveSumOfMin();
-	} else if (type == MeasureType.GEO_LINK) {
-	    measure = new NaiveLink();
-	} else if (type == MeasureType.GEO_FRECHET) {
-	    measure = new NaiveFrechet();
-	} else if (type == MeasureType.GEO_SURJECTION) {
-	    measure = new NaiveSurjection();
-	} else if (type == MeasureType.GEO_FAIR_SURJECTION) {
-	    measure = new FairSurjection();
-	} else if (type == MeasureType.GEO_MEAN) {
-	    measure = new NaiveMean();
-	} else {
-	    measure = new CentroidIndexedHausdorff();
-	}
-	return measure;
+        Measure measure;
+        if (type == MeasureType.GEO_NAIVE_HAUSDORFF) {
+            measure = new NaiveHausdorff();
+        } else if (type == MeasureType.GEO_FAST_HAUSDORFF) {
+            measure = new FastHausdorff();
+        } else if (type == MeasureType.GEO_INDEXED_HAUSDORFF) {
+            measure = new IndexedHausdorff();
+        } else if (type == MeasureType.GEO_SCAN_HAUSDORFF) {
+            measure = new ScanIndexedHausdorff();
+        } else if (type == MeasureType.GEO_MIN) {
+            measure = new NaiveMin();
+        } else if (type == MeasureType.GEO_MAX) {
+            measure = new NaiveMax();
+        } else if (type == MeasureType.GEO_AVG) {
+            measure = new NaiveAverage();
+        } else if (type == MeasureType.GEO_SUM_OF_MIN) {
+            measure = new NaiveSumOfMin();
+        } else if (type == MeasureType.GEO_LINK) {
+            measure = new NaiveLink();
+        } else if (type == MeasureType.GEO_FRECHET) {
+            measure = new NaiveFrechet();
+        } else if (type == MeasureType.GEO_SURJECTION) {
+            measure = new NaiveSurjection();
+        } else if (type == MeasureType.GEO_FAIR_SURJECTION) {
+            measure = new FairSurjection();
+        } else if (type == MeasureType.GEO_MEAN) {
+            measure = new NaiveMean();
+        } else {
+            measure = new CentroidIndexedHausdorff();
+        }
+        return measure;
     }
 
     /**
@@ -200,90 +200,90 @@ public class MeasureFactory {
      * @throws InvalidMeasureException
      */
     public static Measure getMeasure(String name) throws InvalidMeasureException {
-	Measure m = null;
+        Measure m = null;
 
-	if (name.toLowerCase().startsWith(COSINE)) {
-	    m = new CosineMeasure();
-	} else if (name.toLowerCase().startsWith(EXACTMATCH)) {
-	    m = new ExactMatch();
-	} else if (name.toLowerCase().startsWith(JACCARD)) {
-	    m = new JaccardMeasure();
-	} else if (name.toLowerCase().startsWith(JARO)) {
-	    m = new Jaro();
-	} else if (name.toLowerCase().startsWith(LEVENSHTEIN)) {
-	    m = new Levenshtein();
-	} else if (name.toLowerCase().startsWith(OVERLAP)) {
-	    m = new TrigramMeasure();
-	} else if (name.toLowerCase().startsWith(TRIGRAM)) {
-	    m = new TrigramMeasure();
-	} else if (name.toLowerCase().startsWith(QGRAMS)) {
-	    m = new QGramSimilarity();
-	} else if (name.toLowerCase().startsWith(SOUNDEX)) {
-	    m = new TrigramMeasure();
-	} else if (name.toLowerCase().startsWith(EUCLIDEAN)) {
-	    m = new EuclideanMetric();
-	} else if (name.toLowerCase().startsWith(GEO_HAUSDORFF)) {
-	    m = new NaiveHausdorff();
-	} else if (name.toLowerCase().startsWith(GEO_ORTHODROMIC)) {
-	    // change this by implementing measure interface in
-	    // orthodromicdistance class
-	    m = new GeoDistance();
-	} else if (name.toLowerCase().startsWith(GEO_SYMMETRIC_HAUSDORFF)) {
-	    m = new SymmetricHausdorff();
-	} else if (name.toLowerCase().startsWith(GEO_MIN)) {
-	    m = new NaiveMin();
-	} else if (name.toLowerCase().startsWith(GEO_MAX)) {
-	    m = new NaiveMax();
-	} else if (name.toLowerCase().startsWith(GEO_AVG)) {
-	    m = new NaiveAverage();
-	} else if (name.toLowerCase().startsWith(GEO_MEAN)) {
-	    m = new NaiveMean();
-	} else if (name.toLowerCase().startsWith(GEO_FRECHET)) {
-	    m = new NaiveFrechet();
-	} else if (name.toLowerCase().startsWith(GEO_LINK)) {
-	    m = new NaiveLink();
-	} else if (name.toLowerCase().startsWith(GEO_SUM_OF_MIN)) {
-	    m = new NaiveSumOfMin();
-	} else if (name.toLowerCase().startsWith(GEO_SURJECTION)) {
-	    m = new NaiveSurjection();
-	} else if (name.toLowerCase().startsWith(GEO_FAIR_SURJECTION)) {
-	    m = new FairSurjection();
-	} else if (name.toLowerCase().startsWith(TMP_SUCCESSOR)) {
-	    m = new SuccessorMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_PREDECESSOR)) {
-	    m = new PredecessorMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_CONCURRENT)) {
-	    m = new ConcurrentMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_BEFORE)) {
-	    m = new BeforeMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_AFTER)) {
-	    m = new AfterMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_MEETS)) {
-	    m = new MeetsMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_ISMETBY)) {
-	    m = new IsMetByMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_FINISHES)) {
-	    m = new FinishesMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_ISFINISHEDBY)) {
-	    m = new IsFinishedByMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_STARTS)) {
-	    m = new StartsMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_ISSTARTEDBY)) {
-	    m = new IsStartedByMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_DURINGREVERSE)) {
-	    m = new DuringReverseMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_DURING)) {
-	    m = new DuringMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_OVERLAPS)) {
-	    m = new OverlapsMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_ISOVERLAPPEDBY)) {
-	    m = new IsOverlappedByMeasure();
-	} else if (name.toLowerCase().startsWith(TMP_EQUALS)) {
-	    m = new EqualsMeasure();
-	} else {
-	    throw new InvalidMeasureException(name);
-	}
-	return m;
+        if (name.toLowerCase().startsWith(COSINE)) {
+            m = new CosineMeasure();
+        } else if (name.toLowerCase().startsWith(EXACTMATCH)) {
+            m = new ExactMatch();
+        } else if (name.toLowerCase().startsWith(JACCARD)) {
+            m = new JaccardMeasure();
+        } else if (name.toLowerCase().startsWith(JARO)) {
+            m = new Jaro();
+        } else if (name.toLowerCase().startsWith(LEVENSHTEIN)) {
+            m = new Levenshtein();
+        } else if (name.toLowerCase().startsWith(OVERLAP)) {
+            m = new TrigramMeasure();
+        } else if (name.toLowerCase().startsWith(TRIGRAM)) {
+            m = new TrigramMeasure();
+        } else if (name.toLowerCase().startsWith(QGRAMS)) {
+            m = new QGramSimilarity();
+        } else if (name.toLowerCase().startsWith(SOUNDEX)) {
+            m = new TrigramMeasure();
+        } else if (name.toLowerCase().startsWith(EUCLIDEAN)) {
+            m = new EuclideanMetric();
+        } else if (name.toLowerCase().startsWith(GEO_HAUSDORFF)) {
+            m = new NaiveHausdorff();
+        } else if (name.toLowerCase().startsWith(GEO_ORTHODROMIC)) {
+            // change this by implementing measure interface in
+            // orthodromicdistance class
+            m = new GeoDistance();
+        } else if (name.toLowerCase().startsWith(GEO_SYMMETRIC_HAUSDORFF)) {
+            m = new SymmetricHausdorff();
+        } else if (name.toLowerCase().startsWith(GEO_MIN)) {
+            m = new NaiveMin();
+        } else if (name.toLowerCase().startsWith(GEO_MAX)) {
+            m = new NaiveMax();
+        } else if (name.toLowerCase().startsWith(GEO_AVG)) {
+            m = new NaiveAverage();
+        } else if (name.toLowerCase().startsWith(GEO_MEAN)) {
+            m = new NaiveMean();
+        } else if (name.toLowerCase().startsWith(GEO_FRECHET)) {
+            m = new NaiveFrechet();
+        } else if (name.toLowerCase().startsWith(GEO_LINK)) {
+            m = new NaiveLink();
+        } else if (name.toLowerCase().startsWith(GEO_SUM_OF_MIN)) {
+            m = new NaiveSumOfMin();
+        } else if (name.toLowerCase().startsWith(GEO_SURJECTION)) {
+            m = new NaiveSurjection();
+        } else if (name.toLowerCase().startsWith(GEO_FAIR_SURJECTION)) {
+            m = new FairSurjection();
+        } else if (name.toLowerCase().startsWith(TMP_SUCCESSOR)) {
+            m = new SuccessorMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_PREDECESSOR)) {
+            m = new PredecessorMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_CONCURRENT)) {
+            m = new ConcurrentMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_BEFORE)) {
+            m = new BeforeMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_AFTER)) {
+            m = new AfterMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_MEETS)) {
+            m = new MeetsMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_ISMETBY)) {
+            m = new IsMetByMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_FINISHES)) {
+            m = new FinishesMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_ISFINISHEDBY)) {
+            m = new IsFinishedByMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_STARTS)) {
+            m = new StartsMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_ISSTARTEDBY)) {
+            m = new IsStartedByMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_DURINGREVERSE)) {
+            m = new DuringReverseMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_DURING)) {
+            m = new DuringMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_OVERLAPS)) {
+            m = new OverlapsMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_ISOVERLAPPEDBY)) {
+            m = new IsOverlappedByMeasure();
+        } else if (name.toLowerCase().startsWith(TMP_EQUALS)) {
+            m = new EqualsMeasure();
+        } else {
+            throw new InvalidMeasureException(name);
+        }
+        return m;
     }
 
     /**
@@ -295,90 +295,90 @@ public class MeasureFactory {
      * @throws InvalidMeasureException
      */
     public static Mapper getMapper(String measure) throws InvalidMeasureException {
-	Mapper am = null;
+        Mapper am = null;
 
-	if (measure.toLowerCase().startsWith(COSINE)) {
-	    am = new PPJoinPlusPlus();
-	} else if (measure.toLowerCase().startsWith(EXACTMATCH)) {
-	    am = new ExactMatchMapper();
-	} else if (measure.toLowerCase().startsWith(JACCARD)) {
-	    am = new PPJoinPlusPlus();
-	} else if (measure.toLowerCase().startsWith(JARO)) {
-	    am = new JaroMapper();
-	} else if (measure.toLowerCase().startsWith(LEVENSHTEIN)) {
-	    am = new EDJoin();
-	} else if (measure.toLowerCase().startsWith(OVERLAP)) {
-	    am = new PPJoinPlusPlus();
-	} else if (measure.toLowerCase().startsWith(QGRAMS)) {
-	    am = new FastNGram();
-	} else if (measure.toLowerCase().startsWith(TRIGRAM)) {
-	    am = new PPJoinPlusPlus();
-	} else if (measure.toLowerCase().startsWith(SOUNDEX)) {
-	    am = new SoundexMapper();
-	} else if (measure.toLowerCase().startsWith(EUCLIDEAN)) {
-	    am = new HR3();
-	} else if (measure.toLowerCase().startsWith(GEO_HAUSDORFF)) {
-	    am = new OrchidMapper();
-	} else if (measure.toLowerCase().startsWith(GEO_ORTHODROMIC)) {
-	    // the hausdorff distance is the same as the orthodromic distance
-	    // for single points
-	    am = new OrchidMapper();
-	} else if (measure.toLowerCase().startsWith(GEO_SYMMETRIC_HAUSDORFF)) {
-	    am = new SymmetricHausdorffMapper();
-	} else if (measure.toLowerCase().startsWith(GEO_MIN)) {
-	    am = new OrchidMapper();
-	} else if (measure.toLowerCase().startsWith(GEO_MAX)) {
-	    am = new OrchidMapper();
-	} else if (measure.toLowerCase().startsWith(GEO_AVG)) {
-	    am = new OrchidMapper();
-	} else if (measure.toLowerCase().startsWith(GEO_MEAN)) {
-	    am = new OrchidMapper();
-	} else if (measure.toLowerCase().startsWith(GEO_SUM_OF_MIN)) {
-	    am = new OrchidMapper();
-	} else if (measure.toLowerCase().startsWith(GEO_FRECHET)) {
-	    am = new OrchidMapper();
-	} else if (measure.toLowerCase().startsWith(GEO_LINK)) {
-	    am = new OrchidMapper();
-	} else if (measure.toLowerCase().startsWith(GEO_SURJECTION)) {
-	    am = new OrchidMapper();
-	} else if (measure.toLowerCase().startsWith(GEO_FAIR_SURJECTION)) {
-	    am = new OrchidMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_SUCCESSOR)) {
-	    am = new SuccessorMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_PREDECESSOR)) {
-	    am = new PredecessorMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_CONCURRENT)) {
-	    am = new ConcurrentMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_BEFORE)) {
-	    am = new BeforeMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_AFTER)) {
-	    am = new AfterMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_MEETS)) {
-	    am = new MeetsMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_ISMETBY)) {
-	    am = new IsMetByMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_FINISHES)) {
-	    am = new FinishesMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_ISFINISHEDBY)) {
-	    am = new IsFinishedByMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_STARTS)) {
-	    am = new StartsMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_ISSTARTEDBY)) {
-	    am = new IsStartedByMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_DURINGREVERSE)) {
-	    am = new DuringReverseMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_DURING)) {
-	    am = new DuringMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_OVERLAPS)) {
-	    am = new OverlapsMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_ISOVERLAPPEDBY)) {
-	    am = new IsOverlappedByMapper();
-	} else if (measure.toLowerCase().startsWith(TMP_EQUALS)) {
-	    am = new EqualsMapper();
-	} else {
-	    throw new InvalidMeasureException(measure);
-	}
-	return am;
+        if (measure.toLowerCase().startsWith(COSINE)) {
+            am = new PPJoinPlusPlus();
+        } else if (measure.toLowerCase().startsWith(EXACTMATCH)) {
+            am = new ExactMatchMapper();
+        } else if (measure.toLowerCase().startsWith(JACCARD)) {
+            am = new PPJoinPlusPlus();
+        } else if (measure.toLowerCase().startsWith(JARO)) {
+            am = new JaroMapper();
+        } else if (measure.toLowerCase().startsWith(LEVENSHTEIN)) {
+            am = new EDJoin();
+        } else if (measure.toLowerCase().startsWith(OVERLAP)) {
+            am = new PPJoinPlusPlus();
+        } else if (measure.toLowerCase().startsWith(QGRAMS)) {
+            am = new FastNGram();
+        } else if (measure.toLowerCase().startsWith(TRIGRAM)) {
+            am = new PPJoinPlusPlus();
+        } else if (measure.toLowerCase().startsWith(SOUNDEX)) {
+            am = new SoundexMapper();
+        } else if (measure.toLowerCase().startsWith(EUCLIDEAN)) {
+            am = new HR3();
+        } else if (measure.toLowerCase().startsWith(GEO_HAUSDORFF)) {
+            am = new OrchidMapper();
+        } else if (measure.toLowerCase().startsWith(GEO_ORTHODROMIC)) {
+            // the hausdorff distance is the same as the orthodromic distance
+            // for single points
+            am = new OrchidMapper();
+        } else if (measure.toLowerCase().startsWith(GEO_SYMMETRIC_HAUSDORFF)) {
+            am = new SymmetricHausdorffMapper();
+        } else if (measure.toLowerCase().startsWith(GEO_MIN)) {
+            am = new OrchidMapper();
+        } else if (measure.toLowerCase().startsWith(GEO_MAX)) {
+            am = new OrchidMapper();
+        } else if (measure.toLowerCase().startsWith(GEO_AVG)) {
+            am = new OrchidMapper();
+        } else if (measure.toLowerCase().startsWith(GEO_MEAN)) {
+            am = new OrchidMapper();
+        } else if (measure.toLowerCase().startsWith(GEO_SUM_OF_MIN)) {
+            am = new OrchidMapper();
+        } else if (measure.toLowerCase().startsWith(GEO_FRECHET)) {
+            am = new OrchidMapper();
+        } else if (measure.toLowerCase().startsWith(GEO_LINK)) {
+            am = new OrchidMapper();
+        } else if (measure.toLowerCase().startsWith(GEO_SURJECTION)) {
+            am = new OrchidMapper();
+        } else if (measure.toLowerCase().startsWith(GEO_FAIR_SURJECTION)) {
+            am = new OrchidMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_SUCCESSOR)) {
+            am = new SuccessorMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_PREDECESSOR)) {
+            am = new PredecessorMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_CONCURRENT)) {
+            am = new ConcurrentMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_BEFORE)) {
+            am = new BeforeMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_AFTER)) {
+            am = new AfterMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_MEETS)) {
+            am = new MeetsMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_ISMETBY)) {
+            am = new IsMetByMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_FINISHES)) {
+            am = new FinishesMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_ISFINISHEDBY)) {
+            am = new IsFinishedByMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_STARTS)) {
+            am = new StartsMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_ISSTARTEDBY)) {
+            am = new IsStartedByMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_DURINGREVERSE)) {
+            am = new DuringReverseMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_DURING)) {
+            am = new DuringMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_OVERLAPS)) {
+            am = new OverlapsMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_ISOVERLAPPEDBY)) {
+            am = new IsOverlappedByMapper();
+        } else if (measure.toLowerCase().startsWith(TMP_EQUALS)) {
+            am = new EqualsMapper();
+        } else {
+            throw new InvalidMeasureException(measure);
+        }
+        return am;
 
     }
 }

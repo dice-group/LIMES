@@ -177,7 +177,7 @@ public class MappingOperations {
      * @return XOR(map1, map2)
      */
     public static Mapping xor(Mapping map1, Mapping map2) {
-	return difference(union(map1, map2), intersection(map1, map2));
+        return difference(union(map1, map2), intersection(map1, map2));
     }
 
 }

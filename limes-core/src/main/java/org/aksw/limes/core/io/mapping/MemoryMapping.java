@@ -24,19 +24,19 @@ import org.aksw.limes.core.util.RandomStringGenerator;
 public class MemoryMapping extends Mapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
-   
+
     public MemoryMapping() {
-	super();
-	
+        super();
+
     }
 
     public static Mapping generateRandomMapping(int mappingSize, int minSize, int maxSize) {
-	Mapping m = new MemoryMapping();
-	RandomStringGenerator generator = new RandomStringGenerator(minSize, maxSize);
-	while (m.getNumberofMappings() < mappingSize) {
-	    m.add(generator.generateString(), generator.generateString(), Math.random());
-	}
-	return m;
+        Mapping m = new MemoryMapping();
+        RandomStringGenerator generator = new RandomStringGenerator(minSize, maxSize);
+        while (m.getNumberofMappings() < mappingSize) {
+            m.add(generator.generateString(), generator.generateString(), Math.random());
+        }
+        return m;
     }
 
     /**
@@ -44,19 +44,19 @@ public class MemoryMapping extends Mapping implements Serializable {
      * uses the similarity scores as key.
      */
     public void initReversedMap() {
-	reversedMap = new HashMap<Double, HashMap<String, TreeSet<String>>>();
-	for (String s : map.keySet()) {
-	    for (String t : map.get(s).keySet()) {
-		double sim = map.get(s).get(t);
-		if (!reversedMap.containsKey(sim)) {
-		    reversedMap.put(sim, new HashMap<String, TreeSet<String>>());
-		}
-		if (!reversedMap.get(sim).containsKey(s)) {
-		    reversedMap.get(sim).put(s, new TreeSet<String>());
-		}
-		reversedMap.get(sim).get(s).add(t);
-	    }
-	}
+        reversedMap = new HashMap<Double, HashMap<String, TreeSet<String>>>();
+        for (String s : map.keySet()) {
+            for (String t : map.get(s).keySet()) {
+                double sim = map.get(s).get(t);
+                if (!reversedMap.containsKey(sim)) {
+                    reversedMap.put(sim, new HashMap<String, TreeSet<String>>());
+                }
+                if (!reversedMap.get(sim).containsKey(s)) {
+                    reversedMap.get(sim).put(s, new TreeSet<String>());
+                }
+                reversedMap.get(sim).get(s).add(t);
+            }
+        }
     }
 
     /**
@@ -69,22 +69,22 @@ public class MemoryMapping extends Mapping implements Serializable {
      * @return Mapping that contains all elements (s,t) with sim(s,t)>=threshold
      */
     public Mapping getSubMap(double threshold) {
-	Mapping m = new MemoryMapping();
-	HashMap<String, TreeSet<String>> pairs;
-	if (reversedMap == null || reversedMap.size() == 0) {
-	    initReversedMap();
-	}
-	for (Double d : reversedMap.keySet()) {
-	    if (d.doubleValue() >= threshold) {
-		pairs = reversedMap.get(d);
-		for (String s : pairs.keySet()) {
-		    for (String t : pairs.get(s)) {
-			m.add(s, t, d);
-		    }
-		}
-	    }
-	}
-	return m;
+        Mapping m = new MemoryMapping();
+        HashMap<String, TreeSet<String>> pairs;
+        if (reversedMap == null || reversedMap.size() == 0) {
+            initReversedMap();
+        }
+        for (Double d : reversedMap.keySet()) {
+            if (d.doubleValue() >= threshold) {
+                pairs = reversedMap.get(d);
+                for (String s : pairs.keySet()) {
+                    for (String t : pairs.get(s)) {
+                        m.add(s, t, d);
+                    }
+                }
+            }
+        }
+        return m;
     }
 
     /**
@@ -97,23 +97,23 @@ public class MemoryMapping extends Mapping implements Serializable {
      *            similarity to uri
      */
     public void add(String uri, HashMap<String, Double> instances) {
-	if (!map.containsKey(uri)) {
-	    map.put(uri, instances);
-	    size += instances.size();
-	} else {
-	    Iterator<String> keyIter = instances.keySet().iterator();
-	    String mappingUri;
-	    while (keyIter.hasNext()) {
-		mappingUri = keyIter.next();
-		add(uri, mappingUri, instances.get(mappingUri));
-		// size++;
-	    }
-	}
+        if (!map.containsKey(uri)) {
+            map.put(uri, instances);
+            size += instances.size();
+        } else {
+            Iterator<String> keyIter = instances.keySet().iterator();
+            String mappingUri;
+            while (keyIter.hasNext()) {
+                mappingUri = keyIter.next();
+                add(uri, mappingUri, instances.get(mappingUri));
+                // size++;
+            }
+        }
     }
 
     @Override
     public int size() {
-	return size;
+        return size;
     }
 
     /**
@@ -128,23 +128,23 @@ public class MemoryMapping extends Mapping implements Serializable {
      */
     @Override
     public void add(String source, String target, double similarity) {
-	if (map.containsKey(source)) {
-	    // System.out.print("Found duplicate key " + uri);
-	    if (map.get(source).containsKey(target)) {
-		// System.out.println(" and value " + mappingUri);
-		if (similarity > map.get(source).get(target)) {
-		    map.get(source).put(target, similarity);
-		}
-	    } else {
-		map.get(source).put(target, similarity);
-		size++;
-	    }
-	} else {
-	    HashMap<String, Double> help = new HashMap<String, Double>();
-	    help.put(target, similarity);
-	    map.put(source, help);
-	    size++;
-	}
+        if (map.containsKey(source)) {
+            // System.out.print("Found duplicate key " + uri);
+            if (map.get(source).containsKey(target)) {
+                // System.out.println(" and value " + mappingUri);
+                if (similarity > map.get(source).get(target)) {
+                    map.get(source).put(target, similarity);
+                }
+            } else {
+                map.get(source).put(target, similarity);
+                size++;
+            }
+        } else {
+            HashMap<String, Double> help = new HashMap<String, Double>();
+            help.put(target, similarity);
+            map.put(source, help);
+            size++;
+        }
     }
 
     /**
@@ -159,14 +159,14 @@ public class MemoryMapping extends Mapping implements Serializable {
      */
     @Override
     public double getConfidence(String sourceInstance, String targetInstance) {
-	if (map.containsKey(sourceInstance)) {
-	    if (map.get(sourceInstance).containsKey(targetInstance)) {
-		return map.get(sourceInstance).get(targetInstance);
-	    }
-	}
-	return 0;
+        if (map.containsKey(sourceInstance)) {
+            if (map.get(sourceInstance).containsKey(targetInstance)) {
+                return map.get(sourceInstance).get(targetInstance);
+            }
+        }
+        return 0;
     }
-    
+
     /**
      * Checks whether a mapping contains a particular entry
      *
@@ -178,23 +178,23 @@ public class MemoryMapping extends Mapping implements Serializable {
      */
     @Override
     public boolean contains(String sourceInstance, String targetInstance) {
-	if (map.containsKey(sourceInstance)) {
-	    if (map.get(sourceInstance).containsKey(targetInstance)) {
-		return true;
-	    }
-	}
-	return false;
+        if (map.containsKey(sourceInstance)) {
+            if (map.get(sourceInstance).containsKey(targetInstance)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public String toString() {
-	String s = "";
-	for (String key : map.keySet()) {
-	    for (String value : map.get(key).keySet()) {
-		s = s + "[" + key + " -> (" + value + "|" + map.get(key).get(value) + ")]\n";
-	    }
-	}
-	return s;
+        String s = "";
+        for (String key : map.keySet()) {
+            for (String value : map.get(key).keySet()) {
+                s = s + "[" + key + " -> (" + value + "|" + map.get(key).get(value) + ")]\n";
+            }
+        }
+        return s;
     }
 
     /**
@@ -204,12 +204,12 @@ public class MemoryMapping extends Mapping implements Serializable {
      */
     @Override
     public int getNumberofMappings() {
-	int size = 0;
-	for (String s : map.keySet()) {
-	    HashMap<String, Double> m = map.get(s);
-	    size = size + m.size();
-	}
-	return size;
+        int size = 0;
+        for (String s : map.keySet()) {
+            HashMap<String, Double> m = map.get(s);
+            size = size + m.size();
+        }
+        return size;
     }
 
     /**
@@ -221,26 +221,26 @@ public class MemoryMapping extends Mapping implements Serializable {
      */
     @Override
     public Mapping getBestOneToNMapping() {
-	Mapping result = new MemoryMapping();
-	for (String s : map.keySet()) {
-	    double maxSim = 0;
-	    Set<String> target = new HashSet<String>();
-	    ;
-	    for (String t : map.get(s).keySet()) {
-		if (getConfidence(s, t) == maxSim) {
-		    target.add(t);
-		}
-		if (getConfidence(s, t) > maxSim) {
-		    maxSim = getConfidence(s, t);
-		    target = new HashSet<String>();
-		    target.add(t);
-		}
-	    }
-	    for (String t : target) {
-		result.add(s, t, maxSim);
-	    }
-	}
-	return result;
+        Mapping result = new MemoryMapping();
+        for (String s : map.keySet()) {
+            double maxSim = 0;
+            Set<String> target = new HashSet<String>();
+            ;
+            for (String t : map.get(s).keySet()) {
+                if (getConfidence(s, t) == maxSim) {
+                    target.add(t);
+                }
+                if (getConfidence(s, t) > maxSim) {
+                    maxSim = getConfidence(s, t);
+                    target = new HashSet<String>();
+                    target.add(t);
+                }
+            }
+            for (String t : target) {
+                result.add(s, t, maxSim);
+            }
+        }
+        return result;
     }
 
     /**
@@ -249,53 +249,51 @@ public class MemoryMapping extends Mapping implements Serializable {
      * @return Reversed map
      */
     public Mapping reverseSourceTarget() {
-	Mapping m = new MemoryMapping();
-	for (String s : map.keySet()) {
-	    for (String t : map.get(s).keySet()) {
-		m.add(t, s, map.get(s).get(t));
-	    }
-	}
-	return m;
+        Mapping m = new MemoryMapping();
+        for (String s : map.keySet()) {
+            for (String t : map.get(s).keySet()) {
+                m.add(t, s, map.get(s).get(t));
+            }
+        }
+        return m;
     }
 
     public Mapping scale(double d) {
-	if (d != 0) {
-	    Mapping m = new MemoryMapping();
-	    for (String s : map.keySet()) {
-		for (String t : map.get(s).keySet()) {
-		    m.add(s, t, map.get(s).get(t) / d);
-		}
-	    }
-	    return m;
-	} else {
-	    return this;
-	}
+        if (d != 0) {
+            Mapping m = new MemoryMapping();
+            for (String s : map.keySet()) {
+                for (String t : map.get(s).keySet()) {
+                    m.add(s, t, map.get(s).get(t) / d);
+                }
+            }
+            return m;
+        } else {
+            return this;
+        }
     }
 
     public Mapping trim() {
-	Mapping m = new MemoryMapping();
-	for (String s : map.keySet()) {
-	    for (String t : map.get(s).keySet()) {
-		if (map.get(s).get(t) > 1d) {
-		    m.add(s, t, 1d);
-		} else {
-		    m.add(s, t, map.get(s).get(t));
-		}
-	    }
-	}
-	return m;
+        Mapping m = new MemoryMapping();
+        for (String s : map.keySet()) {
+            for (String t : map.get(s).keySet()) {
+                if (map.get(s).get(t) > 1d) {
+                    m.add(s, t, 1d);
+                } else {
+                    m.add(s, t, map.get(s).get(t));
+                }
+            }
+        }
+        return m;
     }
 
-
-
     public String pairsOutput() {
-	String s = "";
-	for (String key : map.keySet()) {
-	    for (String value : map.get(key).keySet()) {
-		s = s + key + "," + value + "\n";
-	    }
-	}
-	return s;
+        String s = "";
+        for (String key : map.keySet()) {
+            for (String value : map.get(key).keySet()) {
+                s = s + key + "," + value + "\n";
+            }
+        }
+        return s;
     }
 
     /**
@@ -307,22 +305,22 @@ public class MemoryMapping extends Mapping implements Serializable {
      * @return
      */
     public Mapping union(Mapping other) {
-	Mapping result = new MemoryMapping();
-	result.map.putAll(this.map);
-	result.size = size();
-	for (String s : other.map.keySet()) {
-	    result.add(s, other.map.get(s));
-	    // for(Entry<String, Double> t : other.map.get(s).entrySet()) {
-	    // if(result.contains(s, t.getKey())) {
-	    // double val = Math.max(result.getSimilarity(s,
-	    // t.getKey()),t.getValue());
-	    // result.map.get(s).put(t.getKey(), val);
-	    // } else {
-	    // result.add(s, t.getKey(), t.getValue());
-	    // }
-	    // }
-	}
-	return result;
+        Mapping result = new MemoryMapping();
+        result.map.putAll(this.map);
+        result.size = size();
+        for (String s : other.map.keySet()) {
+            result.add(s, other.map.get(s));
+            // for(Entry<String, Double> t : other.map.get(s).entrySet()) {
+            // if(result.contains(s, t.getKey())) {
+            // double val = Math.max(result.getSimilarity(s,
+            // t.getKey()),t.getValue());
+            // result.map.get(s).put(t.getKey(), val);
+            // } else {
+            // result.add(s, t.getKey(), t.getValue());
+            // }
+            // }
+        }
+        return result;
     }
 
 }

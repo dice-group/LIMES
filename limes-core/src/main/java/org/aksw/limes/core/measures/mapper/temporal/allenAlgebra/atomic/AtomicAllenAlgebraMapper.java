@@ -46,13 +46,13 @@ public abstract class AtomicAllenAlgebraMapper {
      * @return first property of metric expression as string
      */
     protected static String getBeginProperty(String properties) {
-	properties = properties.substring(properties.indexOf(".") + 1, properties.length());
-	int plusIndex = properties.indexOf("|");
-	if (properties.indexOf("|") != -1) {
-	    String p1 = properties.substring(0, plusIndex);
-	    return p1;
-	} else
-	    return properties;
+        properties = properties.substring(properties.indexOf(".") + 1, properties.length());
+        int plusIndex = properties.indexOf("|");
+        if (properties.indexOf("|") != -1) {
+            String p1 = properties.substring(0, plusIndex);
+            return p1;
+        } else
+            return properties;
     }
 
     /**
@@ -64,13 +64,13 @@ public abstract class AtomicAllenAlgebraMapper {
      * @return first property of metric expression as string
      */
     protected static String getEndProperty(String properties) throws IllegalArgumentException {
-	properties = properties.substring(properties.indexOf(".") + 1, properties.length());
-	int plusIndex = properties.indexOf("|");
-	if (properties.indexOf("|") != -1) {
-	    String p1 = properties.substring(plusIndex + 1, properties.length());
-	    return p1;
-	} else
-	    throw new IllegalArgumentException();
+        properties = properties.substring(properties.indexOf(".") + 1, properties.length());
+        int plusIndex = properties.indexOf("|");
+        if (properties.indexOf("|") != -1) {
+            String p1 = properties.substring(plusIndex + 1, properties.length());
+            return p1;
+        } else
+            throw new IllegalArgumentException();
     }
 
     /**
@@ -89,33 +89,33 @@ public abstract class AtomicAllenAlgebraMapper {
      *         instances (string representation) as values
      */
     protected static TreeMap<Long, Set<String>> orderByBeginDate(Cache cache, String expression) {
-	TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
-	Parser p = new Parser(expression, 0.0d);
-	String property = getBeginProperty(p.getLeftTerm());
+        TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
+        Parser p = new Parser(expression, 0.0d);
+        String property = getBeginProperty(p.getLeftTerm());
 
-	for (Instance instance : cache.getAllInstances()) {
-	    TreeSet<String> time = instance.getProperty(property);
+        for (Instance instance : cache.getAllInstances()) {
+            TreeSet<String> time = instance.getProperty(property);
 
-	    for (String value : time) {
-		try {
-		    // 2015-04-22T11:29:51+02:00
-		    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-		    Date date = df.parse(value);
-		    long epoch = date.getTime();
-		    if (!blocks.containsKey(epoch)) {
-			Set<String> l = new HashSet<String>();
-			l.add(instance.getUri());
-			blocks.put(epoch, l);
-		    } else {
-			blocks.get(epoch).add(instance.getUri());
-		    }
-		} catch (ParseException e) {
-		    e.printStackTrace();
-		}
-	    }
+            for (String value : time) {
+                try {
+                    // 2015-04-22T11:29:51+02:00
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+                    Date date = df.parse(value);
+                    long epoch = date.getTime();
+                    if (!blocks.containsKey(epoch)) {
+                        Set<String> l = new HashSet<String>();
+                        l.add(instance.getUri());
+                        blocks.put(epoch, l);
+                    } else {
+                        blocks.get(epoch).add(instance.getUri());
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
 
-	}
-	return blocks;
+        }
+        return blocks;
     }
 
     /**
@@ -134,39 +134,39 @@ public abstract class AtomicAllenAlgebraMapper {
      *         instances (string representation) as values
      */
     protected static TreeMap<Long, Set<String>> orderByEndDate(Cache cache, String expression) {
-	TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
-	Parser p = new Parser(expression, 0.0d);
-	String property = null;
-	try {
-	    property = getEndProperty(p.getLeftTerm());
-	} catch (IllegalArgumentException e1) {
-	    logger.error("Missing end property in " + p.getLeftTerm() + ". Exiting..");
-	    System.exit(1);
-	}
+        TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
+        Parser p = new Parser(expression, 0.0d);
+        String property = null;
+        try {
+            property = getEndProperty(p.getLeftTerm());
+        } catch (IllegalArgumentException e1) {
+            logger.error("Missing end property in " + p.getLeftTerm() + ". Exiting..");
+            System.exit(1);
+        }
 
-	for (Instance instance : cache.getAllInstances()) {
-	    TreeSet<String> time = instance.getProperty(property);
+        for (Instance instance : cache.getAllInstances()) {
+            TreeSet<String> time = instance.getProperty(property);
 
-	    for (String value : time) {
-		try {
-		    // 2015-04-22T11:29:51+02:00
-		    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-		    Date date = df.parse(value);
-		    long epoch = date.getTime();
-		    if (!blocks.containsKey(epoch)) {
-			Set<String> l = new HashSet<String>();
-			l.add(instance.getUri());
-			blocks.put(epoch, l);
-		    } else {
-			blocks.get(epoch).add(instance.getUri());
-		    }
-		} catch (ParseException e) {
-		    e.printStackTrace();
-		}
-	    }
+            for (String value : time) {
+                try {
+                    // 2015-04-22T11:29:51+02:00
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+                    Date date = df.parse(value);
+                    long epoch = date.getTime();
+                    if (!blocks.containsKey(epoch)) {
+                        Set<String> l = new HashSet<String>();
+                        l.add(instance.getUri());
+                        blocks.put(epoch, l);
+                    } else {
+                        blocks.get(epoch).add(instance.getUri());
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
 
-	}
-	return blocks;
+        }
+        return blocks;
     }
 
     /**
@@ -181,23 +181,23 @@ public abstract class AtomicAllenAlgebraMapper {
      * @return concurrentEvents, the map of concurrent events
      */
     protected static TreeMap<String, Set<String>> mapConcurrent(TreeMap<Long, Set<String>> sources,
-	    TreeMap<Long, Set<String>> targets) {
-	TreeMap<String, Set<String>> concurrentEvents = new TreeMap<String, Set<String>>();
+            TreeMap<Long, Set<String>> targets) {
+        TreeMap<String, Set<String>> concurrentEvents = new TreeMap<String, Set<String>>();
 
-	for (Map.Entry<Long, Set<String>> sourceEntry : sources.entrySet()) {
+        for (Map.Entry<Long, Set<String>> sourceEntry : sources.entrySet()) {
 
-	    Long sourceTimeStamp = sourceEntry.getKey();
-	    Set<String> sourceInstances = sourceEntry.getValue();
+            Long sourceTimeStamp = sourceEntry.getKey();
+            Set<String> sourceInstances = sourceEntry.getValue();
 
-	    Set<String> tempTargets = targets.get(sourceTimeStamp);
-	    if (tempTargets != null) {
-		for (String sourceInstance : sourceInstances) {
-		    concurrentEvents.put(sourceInstance, tempTargets);
-		}
-	    }
-	}
+            Set<String> tempTargets = targets.get(sourceTimeStamp);
+            if (tempTargets != null) {
+                for (String sourceInstance : sourceInstances) {
+                    concurrentEvents.put(sourceInstance, tempTargets);
+                }
+            }
+        }
 
-	return concurrentEvents;
+        return concurrentEvents;
 
     }
 
@@ -213,37 +213,37 @@ public abstract class AtomicAllenAlgebraMapper {
      * @return concurrentEvents, the map of predecessor events
      */
     protected static TreeMap<String, Set<String>> mapPredecessor(TreeMap<Long, Set<String>> sources,
-	    TreeMap<Long, Set<String>> targets) {
-	TreeMap<String, Set<String>> concurrentEvents = new TreeMap<String, Set<String>>();
+            TreeMap<Long, Set<String>> targets) {
+        TreeMap<String, Set<String>> concurrentEvents = new TreeMap<String, Set<String>>();
 
-	for (Map.Entry<Long, Set<String>> sourceEntry : sources.entrySet()) {
+        for (Map.Entry<Long, Set<String>> sourceEntry : sources.entrySet()) {
 
-	    Long sourceTimeStamp = sourceEntry.getKey();
-	    Set<String> sourceInstances = sourceEntry.getValue();
+            Long sourceTimeStamp = sourceEntry.getKey();
+            Set<String> sourceInstances = sourceEntry.getValue();
 
-	    SortedMap<Long, Set<String>> tempTargets = targets.tailMap(sourceTimeStamp);
+            SortedMap<Long, Set<String>> tempTargets = targets.tailMap(sourceTimeStamp);
 
-	    if (tempTargets != null) {
+            if (tempTargets != null) {
 
-		Set<String> subTargets = new TreeSet<String>();
-		for (Map.Entry<Long, Set<String>> targetEntry : tempTargets.entrySet()) {
-		    Long targetTimeStamp = targetEntry.getKey();
+                Set<String> subTargets = new TreeSet<String>();
+                for (Map.Entry<Long, Set<String>> targetEntry : tempTargets.entrySet()) {
+                    Long targetTimeStamp = targetEntry.getKey();
 
-		    if (!targetTimeStamp.equals(sourceTimeStamp)) {
-			subTargets.addAll(targetEntry.getValue());
-		    }
-		}
-		if (!subTargets.isEmpty()) {
-		    for (String sourceInstance : sourceInstances) {
-			concurrentEvents.put(sourceInstance, subTargets);
+                    if (!targetTimeStamp.equals(sourceTimeStamp)) {
+                        subTargets.addAll(targetEntry.getValue());
+                    }
+                }
+                if (!subTargets.isEmpty()) {
+                    for (String sourceInstance : sourceInstances) {
+                        concurrentEvents.put(sourceInstance, subTargets);
 
-		    }
-		}
+                    }
+                }
 
-	    }
-	}
+            }
+        }
 
-	return concurrentEvents;
+        return concurrentEvents;
 
     }
 }

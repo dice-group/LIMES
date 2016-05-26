@@ -127,7 +127,6 @@ public class LinearFilter implements IFilter {
         double sim = 0.0;
         Instance s, t;
         Mapping result = new MemoryMapping();
-
         if (condition == null) {
             System.err.println("Null condition in extended filter function (LinearFilter). Exiting..");
             System.exit(1);
@@ -140,12 +139,12 @@ public class LinearFilter implements IFilter {
                 sim = MeasureProcessor.getSimilarity(s, t, condition, threshold, sourceVar, targetVar);
                 // result must pass the filter threshold first!
                 if (sim >= threshold) {
-                    double sim2 = map.getMap().get(s.getUri()).get(t.getUri());
+                    double sim2 = map.getConfidence(key, value);
                     double minSimilarity = Math.min(sim, sim2);
                     // min similarity because of AND operator
                     // check if min sim passes the bigger threshold
                     if (minSimilarity >= mainThreshold) {
-                        result.add(s.getUri(), t.getUri(), minSimilarity);
+                        result.add(key, value, minSimilarity);
                     }
                 }
 
@@ -191,6 +190,10 @@ public class LinearFilter implements IFilter {
         double sim = 0.0;
         Instance s, t;
         Mapping result = new MemoryMapping();
+        if (condition == null) {
+            System.err.println("Null condition in extended reverse filter function (LinearFilter). Exiting..");
+            System.exit(1);
+        }
         // 2. run on all pairs and remove those
         for (String key : map.getMap().keySet()) {
             s = source.getInstance(key);
@@ -200,10 +203,10 @@ public class LinearFilter implements IFilter {
                 // check if sim is lower than the second's child threshold.
                 // special case: threshold and sim are 0, then the link is
                 // accepted
-                if (sim < threshold) {
-                    double sim2 = map.getMap().get(s.getUri()).get(t.getUri());
+                if (sim == 0) {
+                    double sim2 = map.getConfidence(key, value);
                     if (sim2 >= mainThreshold) {
-                        result.add(s.getUri(), t.getUri(), sim2);
+                        result.add(key, value, sim2);
                     }
                 }
             }

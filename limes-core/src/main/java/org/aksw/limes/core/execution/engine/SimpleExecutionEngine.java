@@ -20,6 +20,7 @@ import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
+import org.apache.log4j.Logger;
 
 /**
  * Implements the default execution engine class. The idea is that the engine
@@ -32,6 +33,7 @@ import org.aksw.limes.core.measures.measure.MeasureFactory;
 public class SimpleExecutionEngine extends ExecutionEngine {
 
     private HashMap<String, Mapping> dynamicResults = new HashMap<String, Mapping>();
+    static Logger logger = Logger.getLogger(SimpleExecutionEngine.class.getName());
 
     /**
      * Implements running the run operator. Assume atomic measures
@@ -280,16 +282,26 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                     result = executeDifference(m, m2);
                     // exclusive or
                 } else if (plan.getOperator().equals(Command.XOR)) {
-                    result = executeExclusiveOr(m, m2);
+                    /*LinearFilter f = new LinearFilter();
+                    Mapping mleft = executeUnion(m, m2);
+                    mleft = f.filter(mleft, Double.parseDouble(plan.getThreshold()));
+
+                    Mapping mright = executeIntersection(m, m2);
+                    mright = f.filter(mright, Double.parseDouble(plan.getThreshold()));
+                    result = executeDifference(mleft, mright);*/
+                    result = executeExclusiveOr(m ,m2);
                 }
                 m = result;
             }
             // only run filtering if there is a filter indeed, else simply
             // return MemoryMapping
             if (plan.getFilteringInstruction() != null) {
+                //logger.info("Size of mapping before filtering: " + m.getNumberofMappings());
                 m = executeFilter(plan.getFilteringInstruction(), m);
             }
         }
+        //logger.info("Current plan:" + plan);
+        //logger.info("Size of mapping: " + m.getNumberofMappings());
         return m;
     }
 
@@ -403,6 +415,8 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                 System.exit(1);
             }
         }
+        //logger.info("Current spec:" + spec);
+        //logger.info("Size of mapping: " + m.getNumberofMappings());
         return m;
     }
 
@@ -429,6 +443,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
         Mapping m = new MemoryMapping();
 
         spec = planner.normalize(spec);
+        //logger.info(spec);
         if (planner.isStatic() == false) {
             m = executeDynamic(spec, (DynamicPlanner) planner);
         } else {

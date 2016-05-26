@@ -14,50 +14,50 @@ public class PredecessorMapper extends SimpleTemporalMapper {
     /**
      * Maps a set of source instances to their predecessor target instances. The
      * mapping contains n-to-m relations. Each source instance takes as
-     * predecessors the set of target instances with the highest begin date
-     * that is lower than the begin date of the source instance.
+     * predecessors the set of target instances with the highest begin date that
+     * is lower than the begin date of the source instance.
      * 
      * @author kleanthi
      */
     @Override
     public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-	    double threshold) {
+            double threshold) {
 
-	Mapping m = new MemoryMapping();
+        Mapping m = new MemoryMapping();
 
-	TreeMap<String, Set<Instance>> sources = this.orderByBeginDate(source, expression);
-	TreeMap<String, Set<Instance>> targets = this.orderByBeginDate(target, expression);
+        TreeMap<String, Set<Instance>> sources = this.orderByBeginDate(source, expression);
+        TreeMap<String, Set<Instance>> targets = this.orderByBeginDate(target, expression);
 
-	for (Map.Entry<String, Set<Instance>> sourceEntry : sources.entrySet()) {
-	    String epochSource = sourceEntry.getKey();
+        for (Map.Entry<String, Set<Instance>> sourceEntry : sources.entrySet()) {
+            String epochSource = sourceEntry.getKey();
 
-	    String lowerEpoch = targets.lowerKey(epochSource);
-	    if (lowerEpoch != null) {
-		Set<Instance> sourceInstances = sourceEntry.getValue();
-		Set<Instance> targetInstances = targets.get(lowerEpoch);
-		for (Instance i : sourceInstances) {
-		    for (Instance j : targetInstances) {
-			m.add(i.getUri(), j.getUri(), 1);
-		    }
-		}
-	    }
-	}
+            String lowerEpoch = targets.lowerKey(epochSource);
+            if (lowerEpoch != null) {
+                Set<Instance> sourceInstances = sourceEntry.getValue();
+                Set<Instance> targetInstances = targets.get(lowerEpoch);
+                for (Instance i : sourceInstances) {
+                    for (Instance j : targetInstances) {
+                        m.add(i.getUri(), j.getUri(), 1);
+                    }
+                }
+            }
+        }
 
-	return m;
+        return m;
 
     }
 
     @Override
     public String getName() {
-	return "Predecessor";
+        return "Predecessor";
     }
 
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
-	return 1000d;
+        return 1000d;
     }
 
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
-	return 1000d;
+        return 1000d;
     }
 
 }
