@@ -118,9 +118,11 @@ public class Controller {
         boolean isAlgorithm = !config.getMlAlgorithmName().equals("");
         if (isAlgorithm) {
             try {
+                LearningParameters lp = new LearningParameters();
+                lp.putAll(config.getMlParameters());
                 results = MLPipeline.execute(sourceCache, targetCache,
                         config.getMlAlgorithmName(), config.getMlImplementationType(),
-                        (LearningParameters) config.getMlParameters(), config.getMlTrainingData(), config.getMlPseudoFMeasure());
+                        lp , config.getMlTrainingData(), config.getMlPseudoFMeasure());
             } catch (UnsupportedMLImplementationException e) {
                 e.printStackTrace();
             }

@@ -15,7 +15,7 @@ public class MappingFactory {
      * @return the default Mapping implementation
      */
     public static AMapping createDefaultMapping() {
-        return createMapping(MappingType.DEFAULT);
+        return new MemoryMapping();
     }
 
     /**
@@ -25,9 +25,9 @@ public class MappingFactory {
      */
     public static AMapping createMapping(MappingType type) {
         if (type == MappingType.DEFAULT)
-            return MappingFactory.createDefaultMapping();
+            return createDefaultMapping();
         if (type == MappingType.MEMORY_MAPPING)
-            return MappingFactory.createDefaultMapping();
+            return new MemoryMapping();
         if (type == MappingType.HYBIRD_MAPPING)
             return new HybridMapping();
         if (type == MappingType.FILE_MAPPING)
