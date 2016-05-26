@@ -2,6 +2,7 @@ package org.aksw.limes.core.gui.controller;
 
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
+
 import org.aksw.limes.core.gui.model.ClassMatchingNode;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Endpoint;

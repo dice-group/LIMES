@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 
 
 public class CSVSerializerTest {
 	
 	 public static void main(String args[]) {
-		 Mapping m = new MemoryMapping();
+		 Mapping m = MappingFactory.createDefaultMapping();
 		 m.add("foo:a", "foo:b", 1d);
 		 m.add("aa", "bb", 1d);
 		 m.add("foo:aaaa", "foo:bb", 0.8d);

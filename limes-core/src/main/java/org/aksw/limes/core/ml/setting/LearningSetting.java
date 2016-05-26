@@ -2,12 +2,12 @@ package org.aksw.limes.core.ml.setting;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.oldalgorithm.IMLAlgorithm;
 import org.apache.commons.collections15.map.HashedMap;
+import org.apache.log4j.Logger;
 
 /**
  * @deprecated Use LearningParameters instead

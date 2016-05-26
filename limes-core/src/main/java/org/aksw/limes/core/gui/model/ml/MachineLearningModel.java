@@ -1,7 +1,5 @@
 package org.aksw.limes.core.gui.model.ml;
 
-import javafx.concurrent.Task;
-
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
@@ -13,6 +11,8 @@ import org.aksw.limes.core.ml.setting.BatchLearningSetting;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.aksw.limes.core.ml.setting.UnsupervisedLearningSetting;
 import org.apache.log4j.Logger;
+
+import javafx.concurrent.Task;
 
 public abstract class MachineLearningModel {
 

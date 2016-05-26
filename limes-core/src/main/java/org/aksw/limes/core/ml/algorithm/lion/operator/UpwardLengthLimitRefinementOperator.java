@@ -9,7 +9,6 @@ import java.util.Set;
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.measures.measure.Measure;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;

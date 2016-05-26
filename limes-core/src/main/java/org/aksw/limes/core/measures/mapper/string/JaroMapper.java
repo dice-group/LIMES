@@ -4,14 +4,17 @@
  */
 package org.aksw.limes.core.measures.mapper.string;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.PropertyFetcher;
-
-import java.util.*;
-
 import org.aksw.limes.core.measures.measure.string.Jaro;
 import org.apache.log4j.Logger;
 
@@ -79,7 +82,7 @@ public class JaroMapper extends Mapper {
 		Set<String> target = targetMap.keySet();
 		Map<Integer, Set<String>> sourceLengthIndex = getLengthIndex(source);
 		Map<Integer, Set<String>> targetLengthIndex = getLengthIndex(target);
-		Mapping result = new MemoryMapping();
+		Mapping result = MappingFactory.createDefaultMapping();
 		double maxSourceLength, maxTargetLength;
 
 		for (Integer sourceLength : sourceLengthIndex.keySet()) {
@@ -115,7 +118,7 @@ public class JaroMapper extends Mapper {
 		Map<Integer, Set<String>> sourceLengthIndex = getLengthIndex(source);
 		Map<Integer, Set<String>> targetLengthIndex = getLengthIndex(target);
 
-		Mapping result = new MemoryMapping();
+		Mapping result = MappingFactory.createDefaultMapping();
 		double maxSourceLength, maxTargetLength, similarity, theta;
 		List<Character> sourceMappingCharacters, targetMappingCharacters;
 		Set<Character> sourcePrefix, targetPrefix;
@@ -193,7 +196,7 @@ public class JaroMapper extends Mapper {
 		Map<Integer, Set<String>> sourceLengthIndex = getLengthIndex(source);
 		Map<Integer, Set<String>> targetLengthIndex = getLengthIndex(target);
 
-		Mapping result = new MemoryMapping();
+		Mapping result = MappingFactory.createDefaultMapping();
 		double maxSourceLength, maxTargetLength, similarity, theta;
 		List<Character> sourceMappingCharacters, targetMappingCharacters;
 		int halfLength, transpositions, lengthFilterCount = 0, characterFilterCount = 0;

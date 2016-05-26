@@ -4,17 +4,17 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.hausdorff;
 
-import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.aksw.limes.core.measures.mapper.pointsets.PolygonIndex;
-import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+import org.aksw.limes.core.measures.mapper.pointsets.PolygonIndex;
+import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 
 /**
  *
@@ -45,7 +45,7 @@ public class IndexedHausdorff extends PointsetsMeasure {
 	 */
 	public Mapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
 		// first run indexing
-		Mapping m = new MemoryMapping();
+		Mapping m = MappingFactory.createDefaultMapping();
 		targetIndex = new PolygonIndex();
 		targetIndex.index(target);
 		double d;

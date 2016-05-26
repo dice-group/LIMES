@@ -2,7 +2,7 @@ package org.aksw.limes.core.measures.mapper;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 
 public class MappingOperations {
 
@@ -26,7 +26,7 @@ public class MappingOperations {
 	    return difference(source, target);
 	if (op.equals(LogicOperator.XOR))
 	    return union(difference(source, target), difference(target, source).reverseSourceTarget());
-	return new MemoryMapping();
+	return MappingFactory.createDefaultMapping();
     }
 
     /**
@@ -82,7 +82,7 @@ public class MappingOperations {
      * @return map1 \ map2
      */
     public static Mapping difference(Mapping map1, Mapping map2) {
-	Mapping map = new MemoryMapping();
+	Mapping map = MappingFactory.createDefaultMapping();
 
 	// go through all the keys in map1
 	for (String key : map1.getMap().keySet()) {
@@ -114,10 +114,10 @@ public class MappingOperations {
      * @return Intersection of map1 and map2
      */
     public static Mapping intersection(Mapping map1, Mapping map2) {
-	Mapping map = new MemoryMapping();
+	Mapping map = MappingFactory.createDefaultMapping();
 	// takes care of not running the filter if some set is empty
 	if (map1.size() == 0 || map2.size() == 0) {
-	    return new MemoryMapping();
+	    return MappingFactory.createDefaultMapping();
 	}
 	// go through all the keys in map1
 	for (String key : map1.getMap().keySet()) {
@@ -151,7 +151,7 @@ public class MappingOperations {
      * @return Union of map1 and map2
      */
     public static Mapping union(Mapping map1, Mapping map2) {
-	Mapping map = new MemoryMapping();
+	Mapping map = MappingFactory.createDefaultMapping();
 	// go through all the keys in map1
 	for (String key : map1.getMap().keySet()) {
 	    for (String value : map1.getMap().get(key).keySet()) {

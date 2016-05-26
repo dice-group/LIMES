@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverage;
 import org.junit.Test;
 
 public class NaiveAverageTest {

@@ -1,10 +1,10 @@
 package org.aksw.limes.core.gui.model.ml;
 
-import javafx.concurrent.Task;
-
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
+
+import javafx.concurrent.Task;
 
 public class UnsupervisedLearningModel extends MachineLearningModel {
 
@@ -20,8 +20,8 @@ public class UnsupervisedLearningModel extends MachineLearningModel {
 			@Override
 			protected Void call() {
 				try {
-					mlalgorithm.init(learningsetting, new MemoryMapping());
-					mlalgorithm.learn(new MemoryMapping());
+					mlalgorithm.init(learningsetting, MappingFactory.createDefaultMapping());
+					mlalgorithm.learn(MappingFactory.createDefaultMapping());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

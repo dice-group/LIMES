@@ -3,6 +3,11 @@ package org.aksw.limes.core.gui.view.ml;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.aksw.limes.core.gui.controller.ml.MachineLearningController;
+import org.aksw.limes.core.gui.view.MainView;
+import org.aksw.limes.core.ml.setting.LearningSetting.TerminationCriteria;
+import org.apache.log4j.Logger;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -13,26 +18,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import org.aksw.limes.core.gui.controller.ml.MachineLearningController;
-import org.aksw.limes.core.gui.view.MainView;
-import org.aksw.limes.core.ml.setting.LearningSetting.TerminationCriteria;
-import org.apache.log4j.Logger;
 
 public abstract class MachineLearningView {
 

@@ -1,10 +1,14 @@
 package org.aksw.limes.core.measures.mapper;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
-
-import java.util.*;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 
 public abstract class Mapper implements IMapper {
 
@@ -38,7 +42,7 @@ public abstract class Mapper implements IMapper {
      * @return Mapping from source resource uri to target resource uri
      */
     protected Mapping getUriToUriMapping(Map<String, Map<String, Double>> valueMap, Map<String, Set<String>> sourceValueToUriMap, Map<String, Set<String>> targetValueToUriMap, boolean swapped) {
-        Mapping result = new MemoryMapping();
+        Mapping result = MappingFactory.createDefaultMapping();
         for (String s : valueMap.keySet()) {
             for (String t : valueMap.get(s).keySet()) {
                 if (sourceValueToUriMap.get(swapped ? t : s) != null)

@@ -13,10 +13,11 @@ import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
+import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.apache.log4j.Logger;
 
@@ -274,7 +275,7 @@ public class DynamicPlanner extends Planner {
      */
     @Override
     public NestedPlan plan(LinkSpecification spec) {
-        return plan(spec, source, target, new MemoryMapping(), new MemoryMapping());
+        return plan(spec, source, target, MappingFactory.createDefaultMapping(), MappingFactory.createDefaultMapping());
 
     }
 
@@ -294,8 +295,7 @@ public class DynamicPlanner extends Planner {
      *            Size of target mapping
      * @return Nested instructionList for the given spec
      */
-    public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, MemoryMapping sourceMapping,
-            MemoryMapping targetMapping) {
+    public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, Mapping sourceMapping, Mapping targetMapping) {
         NestedPlan plan = new NestedPlan();
         // if plan is executed, just return the plan
         // remember that the plan is automatically updated once it is executed

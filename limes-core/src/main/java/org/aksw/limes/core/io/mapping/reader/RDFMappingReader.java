@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 
 /**
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
@@ -28,7 +28,7 @@ public class RDFMappingReader implements IMappingReader{
      * @return Mapping that represents the content of the file
      */
     public static Mapping readNtFile(String file) {
-        Mapping m = new MemoryMapping();
+        Mapping m = MappingFactory.createDefaultMapping();
         try {
         	file = System.getProperty("user.dir") + "/" + file;
             BufferedReader reader = new BufferedReader(new FileReader(file));

@@ -1,18 +1,17 @@
 package org.aksw.limes.core.measures.mapper;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.junit.Test;
 
 public class SetOperationsTest {
     
     @Test
     public void test() {
-	Mapping a = new MemoryMapping();
-	Mapping b = new MemoryMapping();
+	Mapping a = MappingFactory.createDefaultMapping();
+	Mapping b = MappingFactory.createDefaultMapping();
 	a.add("c", "c", 0.5);
 	a.add("a", "z", 0.5);
 	a.add("a", "d", 0.5);

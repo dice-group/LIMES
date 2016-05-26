@@ -1,7 +1,7 @@
 package org.aksw.limes.core.controller;
 
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 
 /**
  * @author sherif
@@ -15,8 +15,8 @@ public class ResultMappings {
 	 * Constructor
 	 */
 	ResultMappings(){
-		this.verificationMapping = new MemoryMapping();
-		this.acceptanceMapping 	 = new MemoryMapping();
+		this.verificationMapping = MappingFactory.createDefaultMapping();
+		this.acceptanceMapping 	 = MappingFactory.createDefaultMapping();
 	}
 	
 	/**

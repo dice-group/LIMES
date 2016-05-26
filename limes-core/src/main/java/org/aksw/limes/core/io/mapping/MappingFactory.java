@@ -32,9 +32,9 @@ public class MappingFactory {
      */
     public static Mapping createMapping(MappingType type) {
         if(type == MappingType.DEFAULT)
-            return new MemoryMapping();
+            return MappingFactory.createDefaultMapping();
         if(type == MappingType.MEMORY_MAPPING)
-            return new MemoryMapping();
+            return MappingFactory.createDefaultMapping();
         if(type == MappingType.HYBIRD_MAPPING)
             return new HybridMapping();
         if(type == MappingType.FILE_MAPPING)

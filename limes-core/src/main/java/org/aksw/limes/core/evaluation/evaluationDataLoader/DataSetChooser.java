@@ -1,14 +1,13 @@
 package org.aksw.limes.core.evaluation.evaluationDataLoader;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-import org.junit.Test;
-
+import org.aksw.limes.core.evaluation.oracle.IOracle;
+import org.aksw.limes.core.evaluation.oracle.OracleFactory;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
@@ -16,10 +15,6 @@ import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.Experiement;
-import org.aksw.limes.core.evaluation.oracle.IOracle;
-import org.aksw.limes.core.evaluation.oracle.OracleFactory;
-
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 /*import de.uni_leipzig.simba.genetics.util.OAEIMappingParser;
 import de.uni_leipzig.simba.genetics.util.PropMapper;
@@ -28,6 +23,8 @@ import de.uni_leipzig.simba.io.rdfconfig.RDFConfigReader;
 import de.uni_leipzig.simba.learning.oracle.oracle.Oracle;
 import de.uni_leipzig.simba.learning.oracle.oracle.OracleFactory;
 import de.uni_leipzig.simba.selfconfig.Experiment;*/
+import org.apache.log4j.Logger;
+import org.junit.Test;
 
 /**
  * Class to grant central access to evaluation datasets.

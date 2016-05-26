@@ -10,7 +10,7 @@ import java.util.TreeSet;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
@@ -67,7 +67,7 @@ public class NaiveLink extends PointsetsMeasure {
 	 * @return Mapping of of resources from source to target
 	 */
 	public Mapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
-		Mapping m = new MemoryMapping();
+		Mapping m = MappingFactory.createDefaultMapping();
 		for (Polygon s : source) {
 			for (Polygon t : target) {
 				double d = computeDistance(s, t, threshold);

@@ -3,18 +3,18 @@ package org.aksw.limes.core.gui.view.graphBuilder;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.aksw.limes.core.gui.controller.GraphBuildController;
+import org.aksw.limes.core.gui.model.Config;
+import org.aksw.limes.core.gui.model.metric.Node;
+import org.aksw.limes.core.gui.model.metric.Output;
+import org.aksw.limes.core.gui.view.ToolBox;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-
-import org.aksw.limes.core.gui.controller.GraphBuildController;
-import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.gui.model.metric.Node;
-import org.aksw.limes.core.gui.model.metric.Output;
-import org.aksw.limes.core.gui.view.ToolBox;
 
 public class GraphBuildView extends Canvas {
 

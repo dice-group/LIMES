@@ -5,10 +5,10 @@
 package org.aksw.limes.core.measures.mapper.topology;
 
 
+import java.util.Set;
+
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-
-import java.util.Set;
 
 /**
  * Interface for mappers that check for RCC-8 topological relations

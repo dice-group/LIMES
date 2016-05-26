@@ -1,6 +1,6 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -13,7 +13,7 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsStartedByMeasure;
 import org.junit.After;
 import org.junit.Before;
@@ -114,7 +114,7 @@ public class IsStartedByMapperTest {
 	Mapping m = e.execute(ls, p);
 	System.out.println(m);
 
-	Mapping m2 = new MemoryMapping();
+	Mapping m2 = MappingFactory.createDefaultMapping();
 	for (Instance s : source.getAllInstances()) {
 	    for (Instance t : target.getAllInstances()) {
 		IsStartedByMeasure measure = new IsStartedByMeasure();
@@ -140,7 +140,7 @@ public class IsStartedByMapperTest {
 	LinkSpecification ls2 = new LinkSpecification(
 		"tmp_starts(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
 	Mapping m2 = e.execute(ls2, p);
-	Mapping m3 = new MemoryMapping();
+	Mapping m3 = MappingFactory.createDefaultMapping();
 	for (String s : m2.getMap().keySet()) {
 	    for (String t : m2.getMap().get(s).keySet()) {
 		m3.add(t, s, 1);

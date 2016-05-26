@@ -1,16 +1,9 @@
 package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
 
-import static org.junit.Assert.*;
-
-import org.aksw.limes.core.execution.engine.ExecutionEngine;
-import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
-import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.junit.After;
 import org.junit.Before;

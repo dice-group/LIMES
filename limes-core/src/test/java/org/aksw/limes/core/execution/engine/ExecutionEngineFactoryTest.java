@@ -1,6 +1,6 @@
 package org.aksw.limes.core.execution.engine;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
 import org.junit.After;

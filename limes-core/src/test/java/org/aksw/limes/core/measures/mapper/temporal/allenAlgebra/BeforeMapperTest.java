@@ -1,6 +1,6 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
@@ -10,7 +10,7 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.BeforeMeasure;
 import org.junit.After;
 import org.junit.Before;
@@ -93,7 +93,7 @@ public class BeforeMapperTest {
 	Mapping m = e.execute(ls, p);
 	System.out.println(m);
 	
-	Mapping m2 = new MemoryMapping();
+	Mapping m2 = MappingFactory.createDefaultMapping();
 	for(Instance s: source.getAllInstances()){
 	    for(Instance t: target.getAllInstances()){
 		BeforeMeasure measure = new BeforeMeasure();

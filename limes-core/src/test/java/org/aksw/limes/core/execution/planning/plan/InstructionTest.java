@@ -1,7 +1,7 @@
 package org.aksw.limes.core.execution.planning.plan;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.junit.Test;

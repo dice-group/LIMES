@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.aksw.limes.core.measures.mapper.topology.TopologicalRelationUtils;
 import org.junit.Test;
 
 public class TopologicalRelationUtilsTest {

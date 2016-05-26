@@ -1,9 +1,8 @@
 package org.aksw.limes.core.evaluation;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser.DataSets;
 import org.junit.Test;
 
 public class DataChooserTest {

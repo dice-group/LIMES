@@ -2,14 +2,14 @@ package org.aksw.limes.core.evaluation.evaluator;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Accuracy;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoPrecision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRecall;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefPrecision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefRecall;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 
 /**

@@ -22,7 +22,7 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.lion.DefaultRefinementHeuristic;
 import org.aksw.limes.core.ml.algorithm.lion.RefinementHeuristic;
 import org.aksw.limes.core.ml.algorithm.lion.SearchTreeNode;
@@ -659,8 +659,8 @@ public class LionPrune extends MLAlgorithm {
 
     protected Mapping getMapping(LinkSpecification spec) {
 	if (spec.isEmpty())
-	    return new MemoryMapping();
-	Mapping mapping = new MemoryMapping();
+	    return MappingFactory.createDefaultMapping();
+	Mapping mapping = MappingFactory.createDefaultMapping();
 	try {
 	    mapping = engine.execute(spec, planner);
 	} catch (Exception e) {
@@ -831,7 +831,7 @@ public class LionPrune extends MLAlgorithm {
     // public static void testMaxAchievableFMeasure() {
     // RefinementBasedLearningAlgorithm alg = new
     // RefinementBasedLearningAlgorithm(DataSetChooser.getData(DataSets.PERSON1));
-    // Mapping m = new MemoryMapping();
+    // Mapping m = MappingFactory.createDefaultMapping();
     // PseudoFMeasure pfm = new PseudoFMeasure();
     // List<String> sL = new LinkedList();
     // List<String> tL = new LinkedList();

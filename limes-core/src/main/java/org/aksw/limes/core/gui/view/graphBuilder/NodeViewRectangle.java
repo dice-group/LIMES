@@ -1,11 +1,11 @@
 package org.aksw.limes.core.gui.view.graphBuilder;
 
+import org.aksw.limes.core.gui.model.metric.Node;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import javafx.scene.text.Text;
-
-import org.aksw.limes.core.gui.model.metric.Node;
 
 public class NodeViewRectangle {
 	private NodeView node;

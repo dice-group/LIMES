@@ -1,8 +1,8 @@
 package org.aksw.limes.core.execution.rewriter;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import org.aksw.limes.core.execution.rewriter.AlgebraicRewriter;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.junit.Test;
 

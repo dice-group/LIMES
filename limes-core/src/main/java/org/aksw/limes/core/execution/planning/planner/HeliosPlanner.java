@@ -3,18 +3,18 @@ package org.aksw.limes.core.execution.planning.planner;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
-import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
+import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
+import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.apache.log4j.Logger;
@@ -125,7 +125,7 @@ public class HeliosPlanner extends Planner {
      */
     @Override
     public NestedPlan plan(LinkSpecification spec) {
-        return plan(spec, source, target, new MemoryMapping(), new MemoryMapping());
+        return plan(spec, source, target, MappingFactory.createDefaultMapping(), MappingFactory.createDefaultMapping());
     }
 
     /**
@@ -144,8 +144,8 @@ public class HeliosPlanner extends Planner {
      *            Size of target mapping
      * @return plan, a NestedPlan for the input link specification
      */
-    public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, MemoryMapping sourceMapping,
-            MemoryMapping targetMapping) {
+    public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, Mapping sourceMapping,
+            Mapping targetMapping) {
         NestedPlan plan = new NestedPlan();
         // atomic specs are simply ran
         if (spec == null)

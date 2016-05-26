@@ -1,7 +1,8 @@
 package org.aksw.limes.core.io.parser;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;

@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.util.Pair;
 import org.apache.log4j.Logger;
 
@@ -17,10 +17,10 @@ import org.apache.log4j.Logger;
 public class PropertyMapping {
 	Logger logger = Logger.getLogger("Limes");
 	private boolean aMatchWasSet = false;
-	private Mapping propMapping = new MemoryMapping();
-	private Mapping numberProps = new MemoryMapping();
-	private Mapping dateProps = new MemoryMapping();
-	private Mapping pointsetProps = new MemoryMapping();
+	private Mapping propMapping = MappingFactory.createDefaultMapping();
+	private Mapping numberProps = MappingFactory.createDefaultMapping();
+	private Mapping dateProps = MappingFactory.createDefaultMapping();
+	private Mapping pointsetProps = MappingFactory.createDefaultMapping();
 	
 	public List<Pair<String>> stringPropPairs = new ArrayList<Pair<String>>();
 	public List<Pair<String>> pointsetPropPairs = new ArrayList<Pair<String>>();

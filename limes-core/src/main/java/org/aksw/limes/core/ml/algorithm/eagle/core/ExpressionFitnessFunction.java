@@ -4,25 +4,24 @@ package org.aksw.limes.core.ml.algorithm.eagle.core;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import org.jgap.gp.GPFitnessFunction;
-import org.jgap.gp.IGPProgram;
-import org.jgap.gp.impl.ProgramChromosome;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
-import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
-import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.ExecutionPlannerType;
+import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.eagle.util.CacheTrimmer;
 import org.apache.log4j.Logger;
+import org.jgap.gp.GPFitnessFunction;
+import org.jgap.gp.IGPProgram;
+import org.jgap.gp.impl.ProgramChromosome;
 
 /**
  * Implementation of our custom FitnessFunction.
@@ -118,7 +117,7 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 		// get actual Mapping
 		Object[] args = {};
 		ProgramChromosome pc = p.getChromosome(0);
-		Mapping actualMapping = new MemoryMapping();
+		Mapping actualMapping = MappingFactory.createDefaultMapping();
 		LinkSpecification spec = (LinkSpecification)pc.getNode(0).execute_object(pc, 0, args);
 			String expr = spec.getFilterExpression();
 			if(expr.indexOf("falseProp")>-1) {
@@ -153,7 +152,7 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 
 	public double calculateRawMeasure(IGPProgram p) {
 		ProgramChromosome pc = p.getChromosome(0);
-		Mapping actualMapping = new MemoryMapping();
+		Mapping actualMapping = MappingFactory.createDefaultMapping();
 		Object[] args = {};
 		LinkSpecification spec = (LinkSpecification)pc.getNode(0).execute_object(pc, 0, args);		
 			String expr = spec.getFilterExpression();
@@ -235,12 +234,12 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
 			}
 		}catch(Exception e) {
 			logger.error("Exception execution expression "+spec+ " : full? " + full);
-			return new MemoryMapping();
+			return MappingFactory.createDefaultMapping();
 		}
 		
 		catch(java.lang.OutOfMemoryError e) {
 			logger.warn("Out of memory trying to get Map for expression\""+spec+"\".");
-			return new MemoryMapping();
+			return MappingFactory.createDefaultMapping();
 		}
 	}
 	

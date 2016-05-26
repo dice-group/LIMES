@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.apache.log4j.Logger;
 
 
@@ -194,10 +194,10 @@ public class ALDecider {
 	
 	
 	public static void main(String[] args) {
-		Mapping a = new MemoryMapping();
-		Mapping b = new MemoryMapping();
-		Mapping c = new MemoryMapping();
-		Mapping d = new MemoryMapping();
+		Mapping a = MappingFactory.createDefaultMapping();
+		Mapping b = MappingFactory.createDefaultMapping();
+		Mapping c = MappingFactory.createDefaultMapping();
+		Mapping d = MappingFactory.createDefaultMapping();
 //		Mapping e = new Mapping();
 //		Mapping f = new Mapping();
 		a.add("a", "y", 1);
@@ -226,7 +226,7 @@ public class ALDecider {
 		System.out.println("aLD.getControversyMatches(mapList)\n"+result0);
 		result = aLD.getControversyCandidates(mapList, 1);
 		System.out.println(result);
-		aLD.setKnown(new MemoryMapping());
+		aLD.setKnown(MappingFactory.createDefaultMapping());
 		aLD.retrieved.clear();
 		
 		result = aLD.getControversyCandidates(mapList, 2);

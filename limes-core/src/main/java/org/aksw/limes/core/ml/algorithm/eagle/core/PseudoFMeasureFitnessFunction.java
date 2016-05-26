@@ -4,14 +4,13 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFM;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
-import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.ExecutionPlannerType;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.apache.log4j.Logger;
 import org.jgap.gp.GPFitnessFunction;
 import org.jgap.gp.IGPProgram;
@@ -80,7 +79,7 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
 				Object[] args = {};
 				ProgramChromosome pc = null;
 				pc = p.getChromosome(0);
-				Mapping actualMapping = new MemoryMapping();
+				Mapping actualMapping = MappingFactory.createDefaultMapping();
 				LinkSpecification spec = (LinkSpecification)pc.getNode(0).execute_object(pc, 0, args);
 				// get Mapping 
 				logger.info("ls = "+spec);
@@ -90,7 +89,7 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
 				catch(java.lang.OutOfMemoryError e) {
 					e.printStackTrace(); // should not happen
 					System.err.println(e.getMessage());
-					return new MemoryMapping();
+					return MappingFactory.createDefaultMapping();
 				}
 				return actualMapping;
 	}
@@ -115,7 +114,7 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
 			String out = "Error getMapping() in PFM (" +  config.source.getId() + " - " + config.target.getId() +") with metric: "+spec+" \n"+ e.getMessage();
 			System.err.println(out);
 			logger.error(out);
-			return new MemoryMapping();
+			return MappingFactory.createDefaultMapping();
 		}
 		
 	}

@@ -1,6 +1,6 @@
 package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;

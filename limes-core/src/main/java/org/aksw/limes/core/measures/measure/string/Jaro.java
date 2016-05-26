@@ -4,10 +4,10 @@
  */
 package org.aksw.limes.core.measures.measure.string;
 
-import org.aksw.limes.core.io.cache.Instance;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.aksw.limes.core.io.cache.Instance;
 
 /**
  *

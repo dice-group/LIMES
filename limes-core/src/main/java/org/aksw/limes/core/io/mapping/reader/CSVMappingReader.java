@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.apache.log4j.Logger;
 
 /**
@@ -76,7 +76,7 @@ public class CSVMappingReader implements IMappingReader{
 	 * @return
 	 */
 	public Mapping readTwoColumnFile(String file) {
-		Mapping m = new MemoryMapping();
+		Mapping m = MappingFactory.createDefaultMapping();
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String s = reader.readLine();
@@ -106,7 +106,7 @@ public class CSVMappingReader implements IMappingReader{
 	 * @return
 	 */
 	public Mapping readThreeColumnFileWithSimilarity(String file) {
-		Mapping m = new MemoryMapping();
+		Mapping m = MappingFactory.createDefaultMapping();
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String s = reader.readLine();
@@ -134,7 +134,7 @@ public class CSVMappingReader implements IMappingReader{
 	 * @return
 	 */
 	public Mapping readThreeColumnFile(String file) {
-		Mapping m = new MemoryMapping();
+		Mapping m = MappingFactory.createDefaultMapping();
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String s = reader.readLine();

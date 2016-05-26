@@ -77,8 +77,8 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
 //	String MEASURE = "own";
 //	/* usupervised approaches need a reference mapping to compute qualities*/
 //    boolean supervised = false;
-//    Mapping reference = new MemoryMapping(); // all true instance pairs.
-//    public Mapping asked = new MemoryMapping();// all known instance pairs.
+//    Mapping reference = MappingFactory.createDefaultMapping(); // all true instance pairs.
+//    public Mapping asked = MappingFactory.createDefaultMapping();// all known instance pairs.
 //
 //	/**
 //	 * Constructor
@@ -320,10 +320,10 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
 //	 */
 //	public Mapping getOverallMapping(Map<SimpleClassifier, Mapping> mappings, double threshold) {
 //		if (mappings.isEmpty()) {
-//			return new MemoryMapping();
+//			return MappingFactory.createDefaultMapping();
 //		}
 //		Mapping reference = mappings.get(mappings.keySet().iterator().next());
-//		Mapping result = new MemoryMapping();
+//		Mapping result = MappingFactory.createDefaultMapping();
 //		for (String s : reference.getMap().keySet()) {
 //			for (String t : reference.getMap().get(s).keySet()) {
 //				double score = 0;
@@ -471,7 +471,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
 //	 * @return
 //	 */
 //	public Mapping getBestOneToOneMapping(Mapping m) {
-//		Mapping result = new MemoryMapping();
+//		Mapping result = MappingFactory.createDefaultMapping();
 //		for (String s : m.getMap().keySet()) {
 //			double maxSim = 0;
 //			Set<String> target = new HashSet<String>();;
@@ -540,7 +540,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
 //	  }
 //	  
 //	  public Mapping minimizeToKnow(Mapping map) {
-//		  Mapping minimal = new MemoryMapping();
+//		  Mapping minimal = MappingFactory.createDefaultMapping();
 //		  for(String sUri : map.getMap().keySet()) {
 //			  for(String tUri : map.getMap().get(sUri).keySet()) {
 //				  if(asked.getMap().containsKey(sUri)) {

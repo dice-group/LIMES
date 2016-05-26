@@ -3,10 +3,9 @@ package org.aksw.limes.core.execution.planning.planner;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
-import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
+import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 
 /**

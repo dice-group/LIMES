@@ -4,11 +4,14 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.hausdorff;
 
-import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
 /**
  *
@@ -18,7 +21,7 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
 
 	@Override
 	public double computeDistance(Polygon s, Polygon t, double threshold) {
-		Mapping knownDistances = new MemoryMapping();
+		Mapping knownDistances = MappingFactory.createDefaultMapping();
 		Map<Integer, List<Integer>> toCompute = initToCompute(s, t, threshold, knownDistances);
 
 		boolean checkTermination;

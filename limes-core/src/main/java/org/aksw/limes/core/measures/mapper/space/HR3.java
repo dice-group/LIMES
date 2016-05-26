@@ -4,20 +4,19 @@
  */
 package org.aksw.limes.core.measures.mapper.space;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeSet;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
 import org.aksw.limes.core.measures.mapper.space.blocking.BlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeSet;
-
 import org.apache.log4j.Logger;
 // * Previously call ToralOrderBlockingMapper
 
@@ -60,7 +59,7 @@ public class HR3 extends Mapper {
      */
     public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
 	    double threshold) {
-	Mapping mapping = new MemoryMapping();
+	Mapping mapping = MappingFactory.createDefaultMapping();
 
 	// maps each block id to a set of instances. Actually one should
 	// integrate LIMES here

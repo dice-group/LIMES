@@ -4,7 +4,12 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.ml.algorithm.*;
+import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameters;
 

@@ -4,13 +4,17 @@
  */
 package org.aksw.limes.core.measures.mapper.pointsets;
 
-import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
-
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory.MeasureType;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
@@ -243,7 +247,7 @@ public class GeoHR3 {
 	    System.out.println("Angular Threshold = " + angularThreshold);
 	    System.out.println("Index = " + source);
 	}
-	Mapping m = new MemoryMapping();
+	Mapping m = MappingFactory.createDefaultMapping();
 
 	double d;
 	if (setMeasure instanceof CentroidIndexedHausdorff) {

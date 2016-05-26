@@ -1,7 +1,12 @@
 package org.aksw.limes.core.gui.view;
 
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
+
 import java.util.List;
+
+import org.aksw.limes.core.gui.controller.EditPropertyMatchingController;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -19,9 +24,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-
-import org.aksw.limes.core.gui.controller.EditPropertyMatchingController;
-import org.aksw.limes.core.gui.util.SourceOrTarget;
 
 /**
  * View class for edit properties step in create wizard

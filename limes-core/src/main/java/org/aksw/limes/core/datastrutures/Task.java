@@ -2,8 +2,8 @@ package org.aksw.limes.core.datastrutures;
 
 import java.util.List;
 
-import org.aksw.limes.core.io.cache.*;
-import org.aksw.limes.core.io.mapping.*;
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
 /**
  * This class contains all information regarding a dataset used for evaluating an algorithm
  * It includes the name, cache of the source dataset, cache of the target dataset, the mapping predicted and the gold standard

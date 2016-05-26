@@ -25,13 +25,13 @@ public class MemoryMapping extends Mapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public MemoryMapping() {
+    protected MemoryMapping() {
         super();
 
     }
 
     public static Mapping generateRandomMapping(int mappingSize, int minSize, int maxSize) {
-        Mapping m = new MemoryMapping();
+        Mapping m = MappingFactory.createDefaultMapping();
         RandomStringGenerator generator = new RandomStringGenerator(minSize, maxSize);
         while (m.getNumberofMappings() < mappingSize) {
             m.add(generator.generateString(), generator.generateString(), Math.random());
@@ -69,7 +69,7 @@ public class MemoryMapping extends Mapping implements Serializable {
      * @return Mapping that contains all elements (s,t) with sim(s,t)>=threshold
      */
     public Mapping getSubMap(double threshold) {
-        Mapping m = new MemoryMapping();
+        Mapping m = MappingFactory.createDefaultMapping();
         HashMap<String, TreeSet<String>> pairs;
         if (reversedMap == null || reversedMap.size() == 0) {
             initReversedMap();
@@ -221,7 +221,7 @@ public class MemoryMapping extends Mapping implements Serializable {
      */
     @Override
     public Mapping getBestOneToNMapping() {
-        Mapping result = new MemoryMapping();
+        Mapping result = MappingFactory.createDefaultMapping();
         for (String s : map.keySet()) {
             double maxSim = 0;
             Set<String> target = new HashSet<String>();
@@ -249,7 +249,7 @@ public class MemoryMapping extends Mapping implements Serializable {
      * @return Reversed map
      */
     public Mapping reverseSourceTarget() {
-        Mapping m = new MemoryMapping();
+        Mapping m = MappingFactory.createDefaultMapping();
         for (String s : map.keySet()) {
             for (String t : map.get(s).keySet()) {
                 m.add(t, s, map.get(s).get(t));
@@ -260,7 +260,7 @@ public class MemoryMapping extends Mapping implements Serializable {
 
     public Mapping scale(double d) {
         if (d != 0) {
-            Mapping m = new MemoryMapping();
+            Mapping m = MappingFactory.createDefaultMapping();
             for (String s : map.keySet()) {
                 for (String t : map.get(s).keySet()) {
                     m.add(s, t, map.get(s).get(t) / d);
@@ -273,7 +273,7 @@ public class MemoryMapping extends Mapping implements Serializable {
     }
 
     public Mapping trim() {
-        Mapping m = new MemoryMapping();
+        Mapping m = MappingFactory.createDefaultMapping();
         for (String s : map.keySet()) {
             for (String t : map.get(s).keySet()) {
                 if (map.get(s).get(t) > 1d) {
@@ -305,7 +305,7 @@ public class MemoryMapping extends Mapping implements Serializable {
      * @return
      */
     public Mapping union(Mapping other) {
-        Mapping result = new MemoryMapping();
+        Mapping result = MappingFactory.createDefaultMapping();
         result.map.putAll(this.map);
         result.size = size();
         for (String s : other.map.keySet()) {

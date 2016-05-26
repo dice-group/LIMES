@@ -10,7 +10,7 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ALDecider;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionFitnessFunction;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem;
@@ -63,7 +63,7 @@ public class EagleSupervised extends MLAlgorithm{
 		if(allBest != null)
 			return fitness.getMapping(getLinkSpecification(allBest), true);
 		logger.error("No link specification calculated so far.");
-		return new MemoryMapping();
+		return MappingFactory.createDefaultMapping();
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class EagleSupervised extends MLAlgorithm{
 	 * @return
 	 */
 	private Mapping extractPositiveMatches(Mapping trainingData) {
-		Mapping positives = new MemoryMapping();
+		Mapping positives = MappingFactory.createDefaultMapping();
 		for(String sUri : trainingData.getMap().keySet())
 			for(String tUri : trainingData.getMap().get(sUri).keySet()) {
 				double confidence = trainingData.getConfidence(sUri, tUri);
@@ -227,7 +227,7 @@ public class EagleSupervised extends MLAlgorithm{
         logger.info("Getting " + size + " controversy match candidates from " + candidateMaps.size() + " maps...");;
         List<ALDecider.Triple> controversyMatches = alDecider.getControversyCandidates(candidateMaps, size);
         // construct answer
-        Mapping answer = new MemoryMapping();
+        Mapping answer = MappingFactory.createDefaultMapping();
         for (ALDecider.Triple t : controversyMatches) {
             answer.add(t.getSourceUri(), t.getTargetUri(), t.getSimilarity());
         }

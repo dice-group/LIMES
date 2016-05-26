@@ -1,28 +1,26 @@
 package org.aksw.limes.core.measures.mapper.string;
 
-import algorithms.edjoin.Record;
-import algorithms.edjoin.QGram;
-import algorithms.StoppUhr;
-import algorithms.edjoin.MismatchingQGram;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.PropertyFetcher;
 import org.apache.log4j.Logger;
 
+import algorithms.StoppUhr;
 import algorithms.Token;
-
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import algorithms.edjoin.MismatchingQGram;
+import algorithms.edjoin.QGram;
+import algorithms.edjoin.Record;
 
 /**
  *
@@ -70,7 +68,7 @@ public class EDJoin extends Mapper {
 		threshold = (1 - threshold) / threshold;
 
 		this.comparisons = 0;
-		mapping = new MemoryMapping();
+		mapping = MappingFactory.createDefaultMapping();
 		if (threshold < 0) {
 			logger.info("Wrong threshold setting. Returning empty mapping.");
 			return mapping;

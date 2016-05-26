@@ -1,16 +1,15 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.AllenAlgebraMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.BeginEnd;
-
-import java.util.Map;
-import java.util.Set;
 
 public class IsMetByMapper extends AllenAlgebraMapper {
     public IsMetByMapper() {
@@ -25,7 +24,7 @@ public class IsMetByMapper extends AllenAlgebraMapper {
 
     @Override
     public Mapping getMapping(ArrayList<TreeMap<String, Set<String>>> maps) {
-	Mapping m = new MemoryMapping();
+	Mapping m = MappingFactory.createDefaultMapping();
 	TreeMap<String, Set<String>> mapBE0 = maps.get(0);
 	for (Map.Entry<String, Set<String>> entryBE0 : mapBE0.entrySet()) {
 	    String instancBE0 = entryBE0.getKey();

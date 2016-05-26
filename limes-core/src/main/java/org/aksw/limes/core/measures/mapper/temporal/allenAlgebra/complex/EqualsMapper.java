@@ -1,18 +1,17 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.AllenAlgebraMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.BeginBegin;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.EndEnd;
-
-import java.util.Map;
-import java.util.Set;
 
 public class EqualsMapper extends AllenAlgebraMapper {
     public EqualsMapper() {
@@ -29,7 +28,7 @@ public class EqualsMapper extends AllenAlgebraMapper {
 
     @Override
     public Mapping getMapping(ArrayList<TreeMap<String, Set<String>>> maps) {
-	Mapping m = new MemoryMapping();
+	Mapping m = MappingFactory.createDefaultMapping();
 
 	TreeMap<String, Set<String>> mapBB0 = maps.get(0);
 	TreeMap<String, Set<String>> mapEE1 = maps.get(1);

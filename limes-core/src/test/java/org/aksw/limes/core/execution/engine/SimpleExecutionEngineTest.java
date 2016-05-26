@@ -1,19 +1,18 @@
 package org.aksw.limes.core.execution.engine;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
+import org.aksw.limes.core.execution.planning.plan.Instruction;
+import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
-import org.aksw.limes.core.execution.planning.plan.Instruction;
-import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -183,7 +182,7 @@ public class SimpleExecutionEngineTest {
 	assertTrue(mUnion.getNumberofMappings() == mUnion2.getNumberofMappings());
 	assertTrue(mUnion.getNumberofMappings() == mSource.getNumberofMappings());
 
-	Mapping emptyMapping = new MemoryMapping();
+	Mapping emptyMapping = MappingFactory.createDefaultMapping();
 	Mapping mEmpty = ee.executeUnion(mSource, emptyMapping);
 	System.out.println("executeUnion with empty: " + mEmpty.getNumberofMappings());
 	// A U 0 = A
@@ -222,7 +221,7 @@ public class SimpleExecutionEngineTest {
 	assertTrue(mIntersection.getNumberofMappings() == mSource.getNumberofMappings());
 
 	// A & 0 = 0
-	Mapping emptyMapping = new MemoryMapping();
+	Mapping emptyMapping = MappingFactory.createDefaultMapping();
 	Mapping mEmpty = ee.executeIntersection(mSource, emptyMapping);
 	System.out.println("executeIntersection with empty: " + mEmpty.getNumberofMappings());
 	assertTrue(mSource.getNumberofMappings() >= mEmpty.getNumberofMappings());
@@ -259,7 +258,7 @@ public class SimpleExecutionEngineTest {
 	assertTrue(mDifference.getNumberofMappings() == 0);
 
 	// A - 0 = A
-	Mapping emptyMapping = new MemoryMapping();
+	Mapping emptyMapping = MappingFactory.createDefaultMapping();
 	Mapping mEmpty = ee.executeDifference(mSource, emptyMapping);
 	System.out.println("mDifference with empty: " + mEmpty.getNumberofMappings());
 	assertTrue(mSource.getNumberofMappings() == mEmpty.getNumberofMappings());
@@ -298,7 +297,7 @@ public class SimpleExecutionEngineTest {
 	assertTrue(mXor.getNumberofMappings() <= mSource.getNumberofMappings());
 
 	// (A U 0) - (A & 0) = A - 0 = A
-	Mapping emptyMapping = new MemoryMapping();
+	Mapping emptyMapping = MappingFactory.createDefaultMapping();
 	Mapping mEmpty = ee.executeExclusiveOr(mSource, emptyMapping);
 	System.out.println("mXor with empty: " + mEmpty.getNumberofMappings());
 	assertTrue(mSource.getNumberofMappings() == mEmpty.getNumberofMappings());

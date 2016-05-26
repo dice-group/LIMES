@@ -7,6 +7,10 @@ import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.aksw.limes.core.gui.controller.EditClassMatchingController;
+import org.aksw.limes.core.gui.model.ClassMatchingNode;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
+
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
@@ -18,10 +22,6 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-
-import org.aksw.limes.core.gui.controller.EditClassMatchingController;
-import org.aksw.limes.core.gui.model.ClassMatchingNode;
-import org.aksw.limes.core.gui.util.SourceOrTarget;
 
 /**
  * View class for class matching step in create wizard

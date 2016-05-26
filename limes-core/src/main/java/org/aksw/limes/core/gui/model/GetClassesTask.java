@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javafx.application.Platform;
-import javafx.concurrent.Task;
-
 import org.aksw.limes.core.gui.util.sparql.SPARQLHelper;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.io.config.KBInfo;
 
 import com.hp.hpl.jena.rdf.model.Model;
+
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 
 public class GetClassesTask extends Task<List<ClassMatchingNode>> {
 	private KBInfo info;

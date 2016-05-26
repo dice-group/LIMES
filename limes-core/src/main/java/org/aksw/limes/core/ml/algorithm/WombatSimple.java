@@ -13,7 +13,6 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.aksw.limes.core.ml.algorithm.wombat.ExtendedClassifier;
@@ -232,7 +231,7 @@ public class WombatSimple extends AWombat {
      * @author sherif
      */
     private Tree<RefinementNode> expandNode(Tree<RefinementNode> node) {
-        Mapping map = new MemoryMapping();
+        Mapping map = MappingFactory.createDefaultMapping();
         for(ExtendedClassifier c : classifiers ){
             for(LogicOperator op : LogicOperator.values()){
                 if(node.getValue().getMetricExpression() != c.getMetricExpression()){ // do not create the same metricExpression again 

@@ -3,7 +3,7 @@
  */
 package org.aksw.limes.core.evaluation;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Test;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.junit.Test;
 
 /**
  * @author mofeed
@@ -67,7 +67,7 @@ public class QualitativeMeasuresTest {
 	private Mapping initGoldStandardList()
 	{
 	
-		Mapping gold = new MemoryMapping();
+		Mapping gold = MappingFactory.createDefaultMapping();
 		gold.add("http://dbpedia.org/resource/A", "http://dbpedia.org/resource/A", 1);
 		gold.add("http://dbpedia.org/resource/B", "http://dbpedia.org/resource/B", 1);
 		gold.add("http://dbpedia.org/resource/C", "http://dbpedia.org/resource/C", 1);
@@ -84,7 +84,7 @@ public class QualitativeMeasuresTest {
 	private Mapping initPredictionsList()
 	{
 		
-		Mapping pred = new MemoryMapping();
+		Mapping pred = MappingFactory.createDefaultMapping();
 		pred.add("http://dbpedia.org/resource/A", "http://dbpedia.org/resource/A", 1);
 		pred.add("http://dbpedia.org/resource/B", "http://dbpedia.org/resource/B", 1);
 		pred.add("http://dbpedia.org/resource/C", "http://dbpedia.org/resource/C", 1);

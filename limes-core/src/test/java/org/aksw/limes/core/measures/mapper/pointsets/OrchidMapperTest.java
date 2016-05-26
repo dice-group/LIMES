@@ -1,7 +1,6 @@
 package org.aksw.limes.core.measures.mapper.pointsets;
 
 
-import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.junit.Test;
 
 public class OrchidMapperTest {

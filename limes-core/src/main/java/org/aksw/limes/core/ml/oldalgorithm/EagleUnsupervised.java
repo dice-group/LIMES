@@ -6,16 +6,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
-import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem;
 import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.aksw.limes.core.ml.algorithm.eagle.core.PseudoFMeasureFitnessFunction;
-import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.aksw.limes.core.ml.setting.UnsupervisedLearningSetting;
 import org.jgap.InvalidConfigurationException;
@@ -82,7 +79,7 @@ public class EagleUnsupervised extends MLAlgorithm {
 			
 		} else {
 			logger.error("No link specification was learned yet. Returning empty Mapping.");
-			return new MemoryMapping();
+			return MappingFactory.createDefaultMapping();
 		}		
 		return fitness.calculateMapping(allBest);
 	}

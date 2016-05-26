@@ -1,13 +1,18 @@
 package org.aksw.limes.core.measures.mapper.string;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.PropertyFetcher;
 import org.apache.log4j.Logger;
-
-import java.util.*;
 
 /**
  *
@@ -48,7 +53,7 @@ public class ExactMatchMapper extends Mapper {
         }
 		Map<String, Set<String>> sourceIndex = getValueToUriMap(source, properties.get(0));
 		Map<String, Set<String>> targetIndex = getValueToUriMap(target, properties.get(1));
-		Mapping m = new MemoryMapping();
+		Mapping m = MappingFactory.createDefaultMapping();
         boolean swapped = sourceIndex.keySet().size() > targetIndex.keySet().size();
         (swapped ? sourceIndex : targetIndex).keySet().stream().filter(targetIndex::containsKey).forEach(value -> {
             for (String sourceUri : (swapped ? sourceIndex : targetIndex).get(value)) {

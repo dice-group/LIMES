@@ -3,6 +3,9 @@ package org.aksw.limes.core.ml.algorithm.eagle.core;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.aksw.limes.core.io.ls.LinkSpecification;
+import org.aksw.limes.core.util.Pair;
+import org.apache.log4j.Logger;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.CommandGene;
 import org.jgap.gp.GPProblem;
@@ -10,9 +13,6 @@ import org.jgap.gp.function.SubProgram;
 import org.jgap.gp.impl.GPConfiguration;
 import org.jgap.gp.impl.GPGenotype;
 import org.jgap.gp.terminal.Terminal;
-import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.util.Pair;
-import org.apache.log4j.Logger;
 
 
 

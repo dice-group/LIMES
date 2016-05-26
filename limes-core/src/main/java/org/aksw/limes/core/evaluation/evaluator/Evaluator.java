@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.aksw.limes.core.datastrutures.Task;
 import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.datastrutures.Task;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.IQuantitativeMeasure;
 import org.aksw.limes.core.io.cache.Cache;

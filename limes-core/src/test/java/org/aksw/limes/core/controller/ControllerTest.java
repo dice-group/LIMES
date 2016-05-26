@@ -1,17 +1,18 @@
 package org.aksw.limes.core.controller;
 
-import org.aksw.limes.core.io.cache.HybridCache;
-import org.aksw.limes.core.io.config.Configuration;
-import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.query.FileQueryModule;
-import org.apache.commons.cli.CommandLine;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import static org.junit.Assert.*;
+
+import org.aksw.limes.core.io.cache.HybridCache;
+import org.aksw.limes.core.io.config.Configuration;
+import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.io.query.FileQueryModule;
+import org.apache.commons.cli.CommandLine;
+import org.junit.Test;
 
 /**
  * @author Kevin Dreßler

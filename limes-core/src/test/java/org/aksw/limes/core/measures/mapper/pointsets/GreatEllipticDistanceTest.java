@@ -1,8 +1,6 @@
 package org.aksw.limes.core.measures.mapper.pointsets;
 
 
-import org.aksw.limes.core.measures.mapper.pointsets.GreatEllipticDistance;
-import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
 import org.junit.Test;
 
 public class GreatEllipticDistanceTest {

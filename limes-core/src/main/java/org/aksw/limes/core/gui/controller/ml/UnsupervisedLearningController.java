@@ -1,25 +1,18 @@
 package org.aksw.limes.core.gui.controller.ml;
 
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
-
-import org.aksw.limes.core.gui.controller.EditPropertyMatchingController;
 import org.aksw.limes.core.gui.controller.TaskProgressController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Result;
 import org.aksw.limes.core.gui.model.ml.UnsupervisedLearningModel;
-import org.aksw.limes.core.gui.view.EditPropertyMatchingView;
 import org.aksw.limes.core.gui.view.ResultView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
 import org.aksw.limes.core.io.cache.Cache;
+
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 
 public class UnsupervisedLearningController extends MachineLearningController {
 

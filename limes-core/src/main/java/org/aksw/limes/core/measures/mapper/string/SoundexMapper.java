@@ -1,15 +1,5 @@
 package org.aksw.limes.core.measures.mapper.string;
 
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.Mapper;
-import org.aksw.limes.core.measures.mapper.PropertyFetcher;
-import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
-import org.apache.commons.lang3.tuple.MutableTriple;
-import org.apache.commons.lang3.tuple.Triple;
-import org.apache.log4j.Logger;
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -18,6 +8,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.PropertyFetcher;
+import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
+import org.apache.commons.lang3.tuple.MutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
+import org.apache.log4j.Logger;
 
 /**
  * @author Kevin Dreßler
@@ -162,7 +162,7 @@ public class SoundexMapper extends Mapper {
 				}
 			}
 		}
-		Mapping result = new MemoryMapping();
+		Mapping result = MappingFactory.createDefaultMapping();
 		while (!similarityBook.isEmpty()) {
 			Triple<Integer, List<Integer>, List<Integer>> t = similarityBook.pop();
 			for (Integer i : t.getMiddle()) {

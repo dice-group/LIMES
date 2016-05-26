@@ -7,7 +7,7 @@ import java.util.TreeMap;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.apache.log4j.Logger;
 
@@ -26,7 +26,7 @@ public class ConcurrentMapper extends SimpleTemporalMapper {
     public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
 
-        Mapping m = new MemoryMapping();
+        Mapping m = MappingFactory.createDefaultMapping();
         Parser p = new Parser(expression, threshold);
 
         TreeMap<String, Set<Instance>> sources = this.orderByBeginDate(source, expression);

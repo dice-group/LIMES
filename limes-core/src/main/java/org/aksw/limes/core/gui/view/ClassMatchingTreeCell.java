@@ -1,9 +1,9 @@
 package org.aksw.limes.core.gui.view;
 
+import org.aksw.limes.core.gui.model.ClassMatchingNode;
+
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeCell;
-
-import org.aksw.limes.core.gui.model.ClassMatchingNode;
 
 public class ClassMatchingTreeCell extends TreeCell<ClassMatchingNode> {
 	@Override

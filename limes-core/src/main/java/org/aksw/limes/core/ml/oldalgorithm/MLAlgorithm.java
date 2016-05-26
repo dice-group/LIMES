@@ -3,14 +3,17 @@ package org.aksw.limes.core.ml.oldalgorithm;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
+import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.apache.log4j.Logger;
 
 /**
+ * @deprecated use {@link ACoreMLAlgorithm} instead
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @author Klaus Lyko
  * @version 2015-11-09
  *
  */
+@Deprecated
 public abstract class MLAlgorithm implements IMLAlgorithm {
 	
 	protected Configuration configuration;

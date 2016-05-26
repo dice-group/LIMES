@@ -3,9 +3,6 @@ package org.aksw.limes.core.gui.controller;
 import java.io.File;
 import java.io.IOException;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.InstanceProperty;
 import org.aksw.limes.core.gui.model.Result;
@@ -14,6 +11,9 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.io.mapping.writer.CSVMappingWriter;
 import org.aksw.limes.core.io.mapping.writer.RDFMappingWriter;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * Controller for Resultview

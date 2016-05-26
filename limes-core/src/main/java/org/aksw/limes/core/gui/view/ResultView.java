@@ -2,6 +2,12 @@ package org.aksw.limes.core.gui.view;
 
 import java.io.File;
 
+import org.aksw.limes.core.gui.controller.ResultController;
+import org.aksw.limes.core.gui.model.Config;
+import org.aksw.limes.core.gui.model.InstanceProperty;
+import org.aksw.limes.core.gui.model.Result;
+import org.aksw.limes.core.io.mapping.Mapping;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -16,12 +22,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import org.aksw.limes.core.gui.controller.ResultController;
-import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.gui.model.InstanceProperty;
-import org.aksw.limes.core.gui.model.Result;
-import org.aksw.limes.core.io.mapping.Mapping;
 
 /**
  * View to show the Results of the LIMES-query, and their Instances

@@ -10,7 +10,7 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.apache.log4j.Logger;
 
 /**
@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
  */
 public class CacheTrimmer {
 
-	Mapping reference = new MemoryMapping();
+	Mapping reference = MappingFactory.createDefaultMapping();
 	/**
 	 * Method to scale down a reference mapping given by an Oracle.
 	 * Only the first <i>max</i> <code>Entries</code> are used. 
@@ -28,7 +28,7 @@ public class CacheTrimmer {
 	 * @return <code>Mapping</code> scaled down to max entries.
 	 */
 	public static Mapping trimExamples(Mapping m, int max) {
-		Mapping output = new MemoryMapping();
+		Mapping output = MappingFactory.createDefaultMapping();
 		
 		HashMap<String, HashMap<String, Double>> map = m.getMap();
 		int count = 0;
@@ -57,7 +57,7 @@ public class CacheTrimmer {
 	 * @return
 	 */
 	public static Mapping trimExamplesRandomly(Mapping m, int max) {
-		Mapping output = new MemoryMapping();
+		Mapping output = MappingFactory.createDefaultMapping();
 
 		while(output.size()<Math.min(max, m.size())) {			
 			Random rand = new Random(System.currentTimeMillis());
@@ -87,7 +87,7 @@ public class CacheTrimmer {
 	 * @return
 	 */
 	public static Mapping getRandomTrainingData(Mapping m, int max) {
-		Mapping output = new MemoryMapping();
+		Mapping output = MappingFactory.createDefaultMapping();
 		int breakPoint = Math.min(max, m.getMap().keySet().size());
 		while(output.getMap().keySet().size()<breakPoint) {
 			Random rand = new Random(System.currentTimeMillis());
@@ -154,7 +154,7 @@ public class CacheTrimmer {
 		Cache h1 = new MemoryCache();
 		Cache h2 = new MemoryCache();
 		int countQuestions = 0;
-		Mapping alreadyAsked = new MemoryMapping();
+		Mapping alreadyAsked = MappingFactory.createDefaultMapping();
 		
 		ArrayList<String> uris1=hc1.getAllUris();
 		ArrayList<String> uris2=hc2.getAllUris();

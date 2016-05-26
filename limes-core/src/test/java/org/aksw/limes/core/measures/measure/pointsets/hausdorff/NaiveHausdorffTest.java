@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.NaiveHausdorff;
 import org.junit.Test;
 
 public class NaiveHausdorffTest {

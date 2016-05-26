@@ -4,11 +4,11 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.hausdorff;
 
-import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-
 import java.util.Set;
+
+import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
 /**
  *
@@ -45,7 +45,7 @@ public class CentroidIndexedHausdorff extends IndexedHausdorff {
 	@Override
 	public Mapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
 		// first run indexing
-		Mapping m = new MemoryMapping();
+		Mapping m = MappingFactory.createDefaultMapping();
 		targetIndex = new CentroidIndex();
 		sourceIndex = new CentroidIndex();
 		// long begin = System.currentTimeMillis();

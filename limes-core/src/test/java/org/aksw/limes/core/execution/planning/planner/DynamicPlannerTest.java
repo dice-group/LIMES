@@ -1,6 +1,6 @@
 package org.aksw.limes.core.execution.planning.planner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,13 +8,13 @@ import java.util.List;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
-import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
+import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -80,7 +80,7 @@ public class DynamicPlannerTest {
     public void EmptyPlan() {
 	System.out.println("EmptyPlan");
 
-	Mapping m = new MemoryMapping();
+	Mapping m = MappingFactory.createDefaultMapping();
 	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 	DynamicPlanner p = new DynamicPlanner(source, target);
 	LinkSpecification ls = new LinkSpecification();
@@ -97,7 +97,7 @@ public class DynamicPlannerTest {
     @Test
     public void AtomicPlan() {
 	System.out.println("AtomicPlan");
-	Mapping m = new MemoryMapping();
+	Mapping m = MappingFactory.createDefaultMapping();
 
 	ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 	DynamicPlanner p = new DynamicPlanner(source, target);

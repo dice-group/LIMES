@@ -4,12 +4,7 @@
  */
 package org.aksw.limes.core.measures.mapper.string;
 
-/**
- *
- * @author ngonga
- */
-import algorithms.ppjoinplus.Record;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,22 +12,24 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import algorithms.StoppUhr;
-import algorithms.Token;
-
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
-
-import java.util.ArrayList;
-
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.string.IStringMeasure;
 import org.apache.log4j.Logger;
+
+import algorithms.StoppUhr;
+import algorithms.Token;
+/**
+ *
+ * @author ngonga
+ */
+import algorithms.ppjoinplus.Record;
 
 class Position {
 
@@ -138,7 +135,7 @@ public class PPJoinPlusPlus extends Mapper {
 	public Mapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
 							  double threshold) {
 		MAX_DEPTH = 2;
-		mapping = new MemoryMapping();
+		mapping = MappingFactory.createDefaultMapping();
 		// logger.info("Starting PPJoinPlus");
 		if (threshold < 0) {
 			throw new RuntimeException("Verification threshold must be >= 0");

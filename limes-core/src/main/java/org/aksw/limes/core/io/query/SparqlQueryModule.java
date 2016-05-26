@@ -1,7 +1,5 @@
 package org.aksw.limes.core.io.query;
 
-import com.hp.hpl.jena.query.*;
-
 import java.util.Iterator;
 
 import org.aksw.limes.core.io.cache.Cache;
@@ -9,6 +7,14 @@ import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFormatter;
+import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Model;
 
 /**

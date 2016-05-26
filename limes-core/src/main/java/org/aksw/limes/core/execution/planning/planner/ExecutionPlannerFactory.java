@@ -2,7 +2,6 @@ package org.aksw.limes.core.execution.planning.planner;
 
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.apache.log4j.Logger;
 
 public class ExecutionPlannerFactory {

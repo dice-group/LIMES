@@ -9,7 +9,7 @@ import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 
 
@@ -26,7 +26,7 @@ public class RefinementNode implements Comparable<RefinementNode> {
 	protected double recall                = -Double.MAX_VALUE;
 	protected double fMeasure              = -Double.MAX_VALUE;
 	protected double maxFMeasure           = 1d;
-	protected Mapping map                  = new MemoryMapping();
+	protected Mapping map                  = MappingFactory.createDefaultMapping();
 	protected String metricExpression 	   = new String();
 
 	/**
@@ -102,7 +102,7 @@ public class RefinementNode implements Comparable<RefinementNode> {
 	}
 
     private double computeMaxPrecision(Mapping map, Mapping refMap) {
-		Mapping falsePos = new MemoryMapping();
+		Mapping falsePos = MappingFactory.createDefaultMapping();
 		for(String key: map.getMap().keySet()){
 			for(String value : map.getMap().get(key).keySet()){
 				if(refMap.getMap().containsKey(key) || refMap.getReversedMap().containsKey(value)){

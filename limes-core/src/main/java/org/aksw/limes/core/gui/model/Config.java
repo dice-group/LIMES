@@ -11,12 +11,6 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ListView;
-
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.planner.HeliosPlanner;
@@ -36,6 +30,12 @@ import org.aksw.limes.core.io.config.writer.XMLConfigurationWriter;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ListView;
 
 /**
  * Contains all important information of the LIMES-Query

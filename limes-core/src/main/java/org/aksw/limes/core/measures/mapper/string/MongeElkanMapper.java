@@ -1,14 +1,18 @@
 package org.aksw.limes.core.measures.mapper.string;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.PropertyFetcher;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.apache.log4j.Logger;
-
-import java.util.*;
 
 /**
  * @author Peggy Lucke
@@ -56,7 +60,7 @@ public class MongeElkanMapper extends Mapper {
             similarityBook.put(sourceString, resultB);
         }
         logger.info("Similarity Book has " + String.valueOf(similarityBook.size()) + " entries.");
-        Mapping result = new MemoryMapping();
+        Mapping result = MappingFactory.createDefaultMapping();
         for (String s : similarityBook.keySet()) {
             for (String t : similarityBook.get(s).keySet()) {
                 for (String sourceUri : sourceMap.get(s)) {

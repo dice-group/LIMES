@@ -19,7 +19,7 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
@@ -177,7 +177,7 @@ public class CompleteWombat extends Wombat {
 	 * @author sherif
 	 */
 	private void createRefinementTreeRoot(){
-		RefinementNode initialNode = new RefinementNode(-Double.MAX_VALUE, new MemoryMapping(), "");
+		RefinementNode initialNode = new RefinementNode(-Double.MAX_VALUE, MappingFactory.createDefaultMapping(), "");
 		refinementTreeRoot = new Tree<RefinementNode>(null,initialNode, null);
 		for( String diffExpr : diffs.keySet()){
 			Mapping diffMapping = diffs.get(diffExpr);
@@ -264,7 +264,7 @@ public class CompleteWombat extends Wombat {
 	private List<RefinementNode> refine(final Tree<RefinementNode> node) {
 		List<RefinementNode> result = new ArrayList<>();
 		String 	childMetricExpr = new String();
-		Mapping childMap = new MemoryMapping();
+		Mapping childMap = MappingFactory.createDefaultMapping();
 		String 	nodeMetricExpr = node.getValue().getMetricExpression();
 
 		if(isRoot(nodeMetricExpr)){
@@ -353,7 +353,7 @@ public class CompleteWombat extends Wombat {
 		for(String diffExpr : diffs.keySet()){
 			Mapping diffMapping = diffs.get(diffExpr);
 			String childMetricExpr = "OR(" + node.getValue().getMetricExpression() + "," + diffExpr + ")|0.0" ;
-			Mapping nodeMaping = new MemoryMapping();
+			Mapping nodeMaping = MappingFactory.createDefaultMapping();
 			if(RefinementNode.isSaveMapping()){
 				nodeMaping = node.getValue().getMapping();
 			}else{
@@ -375,7 +375,7 @@ public class CompleteWombat extends Wombat {
 		List<RefinementNode> result = new ArrayList<>();
 		for(String diffExpr : diffs.keySet()){
 			Mapping diffMapping = diffs.get(diffExpr);
-			Mapping nodeMaping = new MemoryMapping();
+			Mapping nodeMaping = MappingFactory.createDefaultMapping();
 			if(RefinementNode.isSaveMapping()){
 				nodeMaping = node.getValue().getMapping();
 			}else{

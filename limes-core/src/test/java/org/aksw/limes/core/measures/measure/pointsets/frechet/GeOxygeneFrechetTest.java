@@ -7,8 +7,6 @@ import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.frechet.GeOxygeneFrechet;
-import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechet;
 import org.junit.Test;
 
 public class GeOxygeneFrechetTest {

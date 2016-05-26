@@ -3,6 +3,10 @@ package org.aksw.limes.core.gui.view;
 
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
+
+import org.aksw.limes.core.gui.controller.EditEndpointsController;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -16,9 +20,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-
-import org.aksw.limes.core.gui.controller.EditEndpointsController;
-import org.aksw.limes.core.gui.util.SourceOrTarget;
 
 /**
  * View to Edit EndPoints of Limes Query

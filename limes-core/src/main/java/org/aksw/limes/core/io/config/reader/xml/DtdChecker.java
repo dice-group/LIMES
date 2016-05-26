@@ -4,9 +4,9 @@
  */
 package org.aksw.limes.core.io.config.reader.xml;
 
-import org.xml.sax.SAXParseException;
+import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
-import org.apache.log4j.*;
+import org.xml.sax.SAXParseException;
 
 /**
  * Checks a link specification against the LIMES DTD.

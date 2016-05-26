@@ -2,7 +2,6 @@ package org.aksw.limes.core.gui.controller.ml;
 
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.ml.ActiveLearningModel;
-import org.aksw.limes.core.gui.view.ml.ActiveLearningView;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
 import org.aksw.limes.core.io.cache.Cache;
 

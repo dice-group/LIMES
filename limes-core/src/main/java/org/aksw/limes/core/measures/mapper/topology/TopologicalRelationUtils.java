@@ -4,22 +4,23 @@
  */
 package org.aksw.limes.core.measures.mapper.topology;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
-
-
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.GeoIndex;
 import org.aksw.limes.core.measures.mapper.pointsets.GeoSquare;
 import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.ParseException;
 
 /**
  * Useful utils for the topological relations.
@@ -133,7 +134,7 @@ public class TopologicalRelationUtils {
         	System.out.println("|Target squares|= " + target.squares.keySet().size());
         	System.out.println("Index = " + source);
         }
-        Mapping m = new MemoryMapping();
+        Mapping m = MappingFactory.createDefaultMapping();
 
         for (Integer sourceLatIndex : source.squares.keySet()) {
             for (Integer sourceLongIndex : source.squares.get(sourceLatIndex).keySet()) {

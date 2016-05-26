@@ -7,15 +7,16 @@ import java.util.List;
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.engine.filter.LinearFilter;
-import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
+import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.Mapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
@@ -59,13 +60,13 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * @return The mapping obtained from executing the plan
      */
     public Mapping executeInstructions(Plan plan) {
-        buffer = new ArrayList<MemoryMapping>();
+        buffer = new ArrayList<>();
         if (plan.isEmpty()) {
             logger.info("Plan is empty. Done.");
-            return new MemoryMapping();
+            return MappingFactory.createDefaultMapping();
         }
         List<Instruction> instructions = plan.getInstructionList();
-        Mapping m = new MemoryMapping();
+        Mapping m = MappingFactory.createDefaultMapping();
         for (int i = 0; i < instructions.size(); i++) {
             Instruction inst = instructions.get(i);
             // get the index for writing the results
@@ -115,7 +116,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                     // where the user wanted to have it
                     // new mappings are added at the end
                     while ((index + 1) > buffer.size()) {
-                        buffer.add(new MemoryMapping());
+                        buffer.add(MappingFactory.createDefaultMapping());
                     }
                     buffer.set(index, (MemoryMapping) m);
                 }
@@ -126,7 +127,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
         // just in case the return operator was forgotten.
         // then we return the last mapping computed
         if (buffer.isEmpty()) {
-            return new MemoryMapping();
+            return MappingFactory.createDefaultMapping();
         } else {
             return buffer.get(buffer.size() - 1);
         }
@@ -152,7 +153,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
             e.printStackTrace();
         }
 
-        return new MemoryMapping();
+        return MappingFactory.createDefaultMapping();
     }
 
     /**
@@ -181,7 +182,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      */
     public Mapping executeFilter(Instruction inst, Mapping input) {
         LinearFilter filter = new LinearFilter();
-        Mapping m = new MemoryMapping();
+        Mapping m = MappingFactory.createDefaultMapping();
         if (inst.getMeasureExpression() == null)
             m = filter.filter(input, Double.parseDouble(inst.getThreshold()));
         else {
@@ -258,7 +259,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      */
     public Mapping executeStatic(NestedPlan plan) {
         // empty nested plan contains nothing
-        Mapping m = new MemoryMapping();
+        Mapping m = MappingFactory.createDefaultMapping();
         if (plan.isEmpty()) {
         } // atomic nested plan just contain simple list of instructions
         else if (plan.isAtomic()) {
@@ -318,7 +319,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     public Mapping executeDynamic(LinkSpecification spec, DynamicPlanner planner) {
         long begin = System.currentTimeMillis();
         long end = 0;
-        Mapping m = new MemoryMapping();
+        Mapping m = MappingFactory.createDefaultMapping();
         NestedPlan plan = new NestedPlan();
         // create function to check if linkspec has been seen before
         if (!planner.isExecuted(spec)) {
@@ -401,7 +402,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 
                 }
             } // save results
-            dynamicResults.put(spec.toString(), new MemoryMapping());
+            dynamicResults.put(spec.toString(), MappingFactory.createDefaultMapping());
             dynamicResults.put(spec.toString(), m);
             end = System.currentTimeMillis();
             double msize = m.getNumberofMappings();
@@ -440,7 +441,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      */
     @Override
     public Mapping execute(LinkSpecification spec, IPlanner planner) {
-        Mapping m = new MemoryMapping();
+        Mapping m = MappingFactory.createDefaultMapping();
 
         spec = planner.normalize(spec);
         //logger.info(spec);

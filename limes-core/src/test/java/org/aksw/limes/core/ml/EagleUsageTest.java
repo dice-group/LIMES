@@ -1,5 +1,7 @@
 package org.aksw.limes.core.ml;
 
+import static org.junit.Assert.fail;
+
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.ml.algorithm.ACIDS;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
@@ -9,8 +11,6 @@ import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class EagleUsageTest {
 

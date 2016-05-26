@@ -3,7 +3,7 @@ package org.aksw.limes.core.execution.engine.filter;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.Mapping;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.apache.log4j.Logger;
@@ -32,7 +32,7 @@ public class LinearFilter implements IFilter {
         if (threshold <= 0.0) {
             return map;
         } else {
-            Mapping result = new MemoryMapping();
+            Mapping result = MappingFactory.createDefaultMapping();
             // run on all pairs and remove those whose similarity is below
             // the threshold
             for (String key : map.getMap().keySet()) {
@@ -76,7 +76,7 @@ public class LinearFilter implements IFilter {
             System.exit(1);
         }
 
-        Mapping result = new MemoryMapping();
+        Mapping result = MappingFactory.createDefaultMapping();
         // 2. run on all pairs and remove those
         for (String key : map.getMap().keySet()) {
             s = source.getInstance(key);
@@ -126,7 +126,7 @@ public class LinearFilter implements IFilter {
             Cache target, String sourceVar, String targetVar) {
         double sim = 0.0;
         Instance s, t;
-        Mapping result = new MemoryMapping();
+        Mapping result = MappingFactory.createDefaultMapping();
         if (condition == null) {
             System.err.println("Null condition in extended filter function (LinearFilter). Exiting..");
             System.exit(1);
@@ -189,7 +189,7 @@ public class LinearFilter implements IFilter {
 
         double sim = 0.0;
         Instance s, t;
-        Mapping result = new MemoryMapping();
+        Mapping result = MappingFactory.createDefaultMapping();
         if (condition == null) {
             System.err.println("Null condition in extended reverse filter function (LinearFilter). Exiting..");
             System.exit(1);
@@ -241,7 +241,7 @@ public class LinearFilter implements IFilter {
      */
     public Mapping filter(Mapping m1, Mapping m2, double coef1, double coef2, double threshold, String operation) {
         Mapping m = MappingOperations.intersection(m1, m2);
-        Mapping result = new MemoryMapping();
+        Mapping result = MappingFactory.createDefaultMapping();
         double sim;
         // we can be sure that each key in m is also in m1 and m2 as we used
         // intersection

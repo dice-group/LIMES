@@ -3,7 +3,12 @@
  */
 package org.aksw.limes.core.evaluation;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.aksw.limes.core.datastrutures.Task;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
@@ -17,10 +22,6 @@ import org.aksw.limes.core.ml.oldalgorithm.MLAlgorithm;
 import org.junit.Test;
 
 import com.google.common.collect.Table;
-
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 
 /**

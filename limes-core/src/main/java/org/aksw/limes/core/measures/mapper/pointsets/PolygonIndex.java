@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.apache.log4j.Logger;
 
 /**
