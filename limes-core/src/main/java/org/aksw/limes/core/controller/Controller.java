@@ -27,6 +27,7 @@ import static org.fusesource.jansi.Ansi.ansi;
  */
 public class Controller {
 
+    private static final int MAX_ITERATIONS_NUMBER = 10;
     private static final Logger logger = Logger.getLogger(Controller.class.getName());
     private static Options options = getOptions();
 
@@ -63,7 +64,7 @@ public class Controller {
         }
         // I. Has Argument?
         if (cmd.getArgs().length < 1) {
-            System.out.println(ansi().fg(RED).a("Error:\n\t Please specify a configuration file to use!").reset());
+            logger.error("Error:\n\t Please specify a configuration file to use!");
             printHelp();
             System.exit(1);
         }
@@ -75,10 +76,10 @@ public class Controller {
         if (cmd.hasOption('f')) {
             format = cmd.getOptionValue("f").toLowerCase();
         } else {
-            // for now just assume XML
+            // for now just assume RDF
             // @todo implement full proof ConfigurationReaderFactory to handle
             // format detection.
-            format = "xml";
+            format = "rdf";
         }
 
         AConfigurationReader reader = null;
@@ -118,12 +119,15 @@ public class Controller {
         boolean isAlgorithm = !config.getMlAlgorithmName().equals("");
         if (isAlgorithm) {
             try {
-                LearningParameters lp = new LearningParameters();
-                lp.putAll(config.getMlParameters());
-                lp = (LearningParameters) config.getMlParameters();
-                results = MLPipeline.execute(sourceCache, targetCache,
-                        config.getMlAlgorithmName(), config.getMlImplementationType(),
-                        lp , config.getTrainingDataFile(), config.getMlPseudoFMeasure(), 10);
+                results = MLPipeline.execute(
+                        sourceCache, 
+                        targetCache,
+                        config.getMlAlgorithmName(), 
+                        config.getMlImplementationType(),
+                        config.getMlParameters(),
+                        config.getTrainingDataFile(), 
+                        config.getMlPseudoFMeasure(),
+                        MAX_ITERATIONS_NUMBER);
             } catch (UnsupportedMLImplementationException e) {
                 e.printStackTrace();
             }
@@ -135,7 +139,6 @@ public class Controller {
                     ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlan()),
                     ExecutionEngineFactory.getExecutionEngineType(config.getExecutionPlan()));
         }
-        assert results != null;
         AMapping acceptanceMapping = results.getSubMap(config.getAcceptanceThreshold());
         AMapping verificationMapping = MappingOperations.difference(results, acceptanceMapping);
         return new ResultMappings(verificationMapping, acceptanceMapping);

@@ -38,6 +38,8 @@ import java.util.*;
  * @author sherif
  */
 public abstract class AWombat extends ACoreMLAlgorithm {
+    
+    static Logger logger = Logger.getLogger(AWombat.class.getName());
 
     // Parameters
     protected static final String PARAMETER_MAX_REFINEMENT_TREE_SIZE = "max refinement tree size";
@@ -53,23 +55,22 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected static final String PARAMETER_VERBOSE = "verbose";
     protected static final String PARAMETER_MEASURES = "measures";
     protected static final String PARAMETER_SAVE_MAPPING = "save mapping";
+    
     public static List<String> sourceUris;
     public static List<String> targetUris;
-    protected static long maxRefineTreeSize = 2000;
-    protected static int maxIterationNumber = 3;
-    protected static int maxIterationTimeInMin = 20;
-    protected static int maxExecutionTimeInMin = 600;
-    protected static double maxFitnessThreshold = 1;
-    protected static long childrenPenaltyWeit = 1;
-    protected static long complexityPenaltyWeit = 1;
-    protected static boolean saveMapping = true;
-    static Logger logger = Logger.getLogger(AWombat.class.getName());
+    protected long maxRefineTreeSize = 2000;
+    protected int maxIterationNumber = 3;
+    protected int maxIterationTimeInMin = 20;
+    protected int maxExecutionTimeInMin = 600;
+    protected double maxFitnessThreshold = 1;
+    protected long childrenPenaltyWeit = 1;
+    protected long complexityPenaltyWeit = 1;
+    protected boolean saveMapping = true;
     protected double minPropertyCoverage = 0.4;
     protected double propertyLearningRate = 0.9;
     protected double overallPenaltyWeight = 0.5d;
     protected boolean verbose = false;
     protected Set<String> measures = new HashSet<>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams"));
-    // fields
     protected Map<String, Double> sourcePropertiesCoverageMap; //coverage map for latter computations
     protected Map<String, Double> targetPropertiesCoverageMap; //coverage map for latter computations
     protected PseudoFMeasure pseudoFMeasure = null;

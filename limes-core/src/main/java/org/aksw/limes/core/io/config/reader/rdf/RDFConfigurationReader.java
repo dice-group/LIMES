@@ -46,8 +46,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
         long startTime = System.currentTimeMillis();
         Model model = ModelFactory.createDefaultModel();
 
-        String path = System.getProperty("user.dir") + fileNameOrUri;
-        try (InputStream in = FileManager.get().open(path)) {
+        try (InputStream in = FileManager.get().open(fileNameOrUri)) {
             if (fileNameOrUri.contains(".ttl") || fileNameOrUri.contains(".n3")) {
                 logger.info("Opening Turtle file");
                 model.read(in, null, "TTL");

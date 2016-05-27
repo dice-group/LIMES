@@ -39,7 +39,7 @@ public class Configuration implements IConfiguration {
     protected int                   granularity = 2;
 
     protected String                mlAlgorithmName = new String();
-    protected LearningParameters    mlParameters =null;
+    protected LearningParameters    mlParameters = new LearningParameters();
     protected MLImplementationType  mlImplementationType = MLImplementationType.UNSUPERVISED;
     private String                  trainingDataFile = null;
     protected PseudoFMeasure        mlPseudoFMeasure = null;

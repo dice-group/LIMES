@@ -23,8 +23,16 @@ public class MLPipeline {
 
     public static final Logger logger = Logger.getLogger(MLPipeline.class);
 
-    public static AMapping execute(Cache source, Cache target, String mlAlgrorithmName, MLImplementationType mlImplementationType,
-                                   LearningParameters learningParameters, String trainingDataFile, PseudoFMeasure pfm, int maxIt) throws UnsupportedMLImplementationException {
+    public static AMapping execute(
+            Cache source, 
+            Cache target, 
+            String mlAlgrorithmName, 
+            MLImplementationType mlImplementationType,
+            LearningParameters learningParameters,
+            String trainingDataFile, 
+            PseudoFMeasure pfm, 
+            int maxIt
+            ) throws UnsupportedMLImplementationException {
         Class<? extends ACoreMLAlgorithm> clazz = MLAlgorithmFactory.getAlgorithmType(mlAlgrorithmName);
         MLModel mlm;
         AMapping trainingDataMap = MappingFactory.createDefaultMapping();
@@ -90,6 +98,7 @@ public class MLPipeline {
         case UNSUPERVISED:
             UnsupervisedMLAlgorithm mlu = new UnsupervisedMLAlgorithm(clazz);
             mlu.init(learningParameters, source, target);
+            pfm = new PseudoFMeasure();
             mlm = mlu.learn(pfm);
             return mlu.predict(source, target, mlm);
         default:
