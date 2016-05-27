@@ -338,9 +338,7 @@ public class HeliosPlanner extends Planner {
                 (int) Math.ceil(source.size() * target.size() * left.getSelectivity()));
 
         double min = Math.min(Math.min(runtime3, runtime2), runtime1);
-        // //just for tests
-        // min = -10d;
-        // runtime2 = -10d;
+        
         if (min == runtime1) {
             result.setOperator(Instruction.Command.INTERSECTION);
             List<NestedPlan> subplans = new ArrayList<NestedPlan>();
@@ -380,6 +378,9 @@ public class HeliosPlanner extends Planner {
 
     @Override
     public LinkSpecification normalize(LinkSpecification spec) {
+        if (spec.isEmpty()) {
+            return spec;
+        }
         LinkSpecification ls = new ExtendedLinkSpecification(spec.getFullExpression(), spec.getThreshold());
         return ls;
     }

@@ -17,30 +17,29 @@ import java.util.*;
  */
 public class SoundexMapper extends Mapper {
 
-
     static Logger logger = Logger.getLogger("LIMES");
 
     /**
      * Computes a mapping between a source and a target.
      *
      * @param source
-     *         Source cache
+     *            Source cache
      * @param target
-     *         Target cache
+     *            Target cache
      * @param sourceVar
-     *         Variable for the source dataset
+     *            Variable for the source dataset
      * @param targetVar
-     *         Variable for the target dataset
+     *            Variable for the target dataset
      * @param expression
-     *         Expression to process.
+     *            Expression to process.
      * @param threshold
-     *         Similarity threshold
+     *            Similarity threshold
      * @return A mapping which contains links between the source instances and
-     * the target instances
+     *         the target instances
      */
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
 
         logger.info("Running SoundexMapper with code length " + String.valueOf(SoundexMeasure.codeLength));
 
@@ -97,6 +96,7 @@ public class SoundexMapper extends Mapper {
                 }
             }
         }
+        
         return result;
     }
 

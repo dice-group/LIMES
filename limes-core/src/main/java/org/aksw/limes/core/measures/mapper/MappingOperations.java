@@ -1,84 +1,17 @@
 package org.aksw.limes.core.measures.mapper;
 
-import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 
 public class MappingOperations {
 
     /**
-     * Relies on operators to perform set operations on mappings
-     *
-     * @param source
-     *         Source mapping
-     * @param target
-     *         Target mapping
-     * @param op
-     *         Set pperator
-     * @return Resulting mapping
-     */
-    public static AMapping getMapping(AMapping source, AMapping target, LogicOperator op) {
-        if (op.equals(LogicOperator.AND))
-            return intersection(source, target);
-        if (op.equals(LogicOperator.OR))
-            return union(source, target);
-        if (op.equals(LogicOperator.DIFF))
-            return difference(source, target);
-        if (op.equals(LogicOperator.XOR))
-            return union(difference(source, target), difference(target, source).reverseSourceTarget());
-        return MappingFactory.createDefaultMapping();
-    }
-
-    /**
-     * Get runtime approximation for operator
-     *
-     * @param op,
-     *         operator
-     * @param mappingSize1
-     *         mapping size of source
-     * @param mappingSize2
-     *         mapping size of target
-     * @return operator runtime as double
-     */
-    public static double getRuntimeApproximation(LogicOperator op, int mappingSize1, int mappingSize2) {
-        if (op.equals(LogicOperator.AND)) {
-            return 1d;
-        }
-        if (op.equals(LogicOperator.OR)) {
-            return 1d;
-        }
-        return 1d;
-    }
-
-    /**
-     * Get mapping size approximation for operator
-     *
-     * @param op,
-     *         operator
-     * @param mappingSize1
-     *         mapping size of source
-     * @param mappingSize2
-     *         mapping size of target
-     * @return operator mapping size as double
-     */
-    public static double getMappingSizeApproximation(LogicOperator op, int mappingSize1, int mappingSize2) {
-        if (op.equals(LogicOperator.AND))
-            return Math.min(mappingSize1, mappingSize2);
-        if (op.equals(LogicOperator.OR))
-            return Math.max(mappingSize1, mappingSize2);
-        if (op.equals(LogicOperator.DIFF) || op.equals(LogicOperator.XOR))
-            return Math.max(mappingSize1, mappingSize2) - Math.min(mappingSize1, mappingSize2);
-        else
-            return 0d;
-    }
-
-    /**
      * Computes the difference of two mappings.
      *
      * @param map1
-     *         First mapping
+     *            First mapping
      * @param map2
-     *         Second mapping
+     *            Second mapping
      * @return map1 \ map2
      */
     public static AMapping difference(AMapping map1, AMapping map2) {
@@ -108,9 +41,9 @@ public class MappingOperations {
      * both mappings the minimal similarity is taken
      *
      * @param map1
-     *         First mapping
+     *            First mapping
      * @param map2
-     *         Second mapping
+     *            Second mapping
      * @return Intersection of map1 and map2
      */
     public static AMapping intersection(AMapping map1, AMapping map2) {
@@ -145,9 +78,9 @@ public class MappingOperations {
      * mappings the maximal similarity is taken
      *
      * @param map1
-     *         First mapping
+     *            First mapping
      * @param map2
-     *         Second mapping
+     *            Second mapping
      * @return Union of map1 and map2
      */
     public static AMapping union(AMapping map1, AMapping map2) {
@@ -165,19 +98,6 @@ public class MappingOperations {
             }
         }
         return map;
-    }
-
-    /**
-     * Implements the exclusive or operator
-     *
-     * @param map1
-     *         First map
-     * @param map2
-     *         Second map
-     * @return XOR(map1, map2)
-     */
-    public static AMapping xor(AMapping map1, AMapping map2) {
-        return difference(union(map1, map2), intersection(map1, map2));
     }
 
 }

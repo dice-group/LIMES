@@ -27,18 +27,18 @@ public class MongeElkanMapper extends Mapper {
         this.split = split;
     }
 
-
     /**
      * @param sourceMap
-     *         Texts to compare with target
+     *            Texts to compare with target
      * @param targetMap
-     *         Texts to compare with source
+     *            Texts to compare with source
      * @param threshold
-     *         is the minimum similarity of the results
+     *            is the minimum similarity of the results
      * @return all results of source compare with target together with the
-     * similarity of them
+     *         similarity of them
      */
-    public AMapping getMapping(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap, double threshold) {
+    public AMapping getMapping(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
+            double threshold) {
         Iterator<String> sit = sourceMap.keySet().iterator();
         double resultDouble;
         Map<String, Map<String, Double>> similarityBook = new HashMap<>();
@@ -76,9 +76,9 @@ public class MongeElkanMapper extends Mapper {
         double simB = 0;
         double result = 0;
         float maxNumber = sourceToken.length;
-    /*
-	 * the minimum of the result to reach the threshold
-	 */
+        /*
+         * the minimum of the result to reach the threshold
+         */
         float treshMin = (float) (maxNumber * threshold);
         for (String sourceString : sourceToken) {// ein a
             double maxSim = 0;
@@ -92,11 +92,11 @@ public class MongeElkanMapper extends Mapper {
                 }
             }
             maxNumber -= 1 - maxSim;
-	    /*
-	     * add 0.0001 for rounding errors. if the similarity of all source
-	     * tokens with the target tokens don't reach the minimum threshold,
-	     * there are no result, so break the algorithm.
-	     */
+            /*
+             * add 0.0001 for rounding errors. if the similarity of all source
+             * tokens with the target tokens don't reach the minimum threshold,
+             * there are no result, so break the algorithm.
+             */
             if (treshMin > maxNumber + 0.0001) {
                 result = 0;
                 break;
@@ -119,7 +119,7 @@ public class MongeElkanMapper extends Mapper {
 
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
         logger.info("Running MongeElkanMapper");
 
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);

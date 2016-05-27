@@ -509,7 +509,7 @@ public class EDJoin extends Mapper {
                 }
             }
         }
-
+        
         return mapping;
     }
 

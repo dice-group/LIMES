@@ -55,15 +55,15 @@ class PartitionResult {
 
     /**
      * @param l
-     *         right bound of the left partition
+     *            right bound of the left partition
      * @param r
-     *         left bound of the right partition
+     *            left bound of the right partition
      * @param f
-     *         a flag indicating whether the token w is in the searching
-     *         range
+     *            a flag indicating whether the token w is in the searching
+     *            range
      * @param diff
-     *         a flag indicating whether the probing token w is not found in
-     *         a record
+     *            a flag indicating whether the probing token w is not found in
+     *            a record
      */
     public PartitionResult(int l, int r, int f, int diff) {
         this.l = l;
@@ -95,7 +95,7 @@ class PartitionResult {
  */
 public class PPJoinPlusPlus extends Mapper {
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger(PPJoinPlusPlus.class.getName());
     private static int MAX_DEPTH;
     private static AMapping mapping = null;
     private static HashMap<Integer, String> sourceMap;
@@ -106,13 +106,13 @@ public class PPJoinPlusPlus extends Mapper {
      * Berechnet die Überlappung zwischen zwei Datensätzen mithilfe ihrer Tokens
      *
      * @param x
-     *         erster Datensatz
+     *            erster Datensatz
      * @param beginnX
-     *         Position des Anfangstokens vom ersten Datensatz
+     *            Position des Anfangstokens vom ersten Datensatz
      * @param y
-     *         zweiter Datensatz
+     *            zweiter Datensatz
      * @param beginnY
-     *         Position des Anfangstokens vom zweiten Datensatz
+     *            Position des Anfangstokens vom zweiten Datensatz
      * @return Überlappung von x und y
      */
     public static int overlap(Record x, int beginnX, Record y, int beginnY) {
@@ -131,7 +131,7 @@ public class PPJoinPlusPlus extends Mapper {
     }
 
     private static int suffixFilter(Record x, int xBeginn, int xEnd, Record y, int yBeginn, int yEnd, int H_max,
-                                    int depth) {
+            int depth) {
         int xSize = xEnd - xBeginn + 1;
         int ySize = yEnd - yBeginn + 1;
         if (depth > MAX_DEPTH) {
@@ -145,22 +145,22 @@ public class PPJoinPlusPlus extends Mapper {
         // int mid = (yBeginn + yEnd) / 2;
         Token w = y.tokens[mid];
 
-	/*
-	 * ---funktioniert nicht immer korrekt
-	 * (java.lang.ArrayIndexOutOfBoundsException bei partition)---
-	 *
-	 * int o = (H_max - Math.abs( xSize - ySize)) / 2; //always divisible
-	 * int ol, or; if( xSize < ySize){ ol = 1; or = 0; }else{ ol = 0; or =
-	 * 1; } PartitionResult pr = partition( x, w, mid - o - Math.abs( xSize
-	 * - ySize) * ol, mid + o + Math.abs( xSize - ySize) * or);
-	 * /*-------------------------------
-	 */
+        /*
+         * ---funktioniert nicht immer korrekt
+         * (java.lang.ArrayIndexOutOfBoundsException bei partition)---
+         *
+         * int o = (H_max - Math.abs( xSize - ySize)) / 2; //always divisible
+         * int ol, or; if( xSize < ySize){ ol = 1; or = 0; }else{ ol = 0; or =
+         * 1; } PartitionResult pr = partition( x, w, mid - o - Math.abs( xSize
+         * - ySize) * ol, mid + o + Math.abs( xSize - ySize) * or);
+         * /*-------------------------------
+         */
         PartitionResult pr = partition(x, w, xBeginn, xEnd);
 
-	/*
-	 * ---nicht nötig--- if( pr.f == 0){ return H_max + 1; }
-	 * -------------------
-	 */
+        /*
+         * ---nicht nötig--- if( pr.f == 0){ return H_max + 1; }
+         * -------------------
+         */
         int xlSize = pr.l - xBeginn + 1;
         int xrSize = xEnd - pr.r + 1;
         int ylSize = mid - yBeginn;
@@ -182,11 +182,11 @@ public class PPJoinPlusPlus extends Mapper {
     }
 
     private static PartitionResult partition(Record s, Token w, int l, int r) {
-	/*
-	 * ---funktioniert nicht immer korrekt--- if( s.tokens[l].compareTo(w) >
-	 * 0 || s.tokens[r].compareTo(w) < 0){ return new PartitionResult( -1,
-	 * -1, 0, 1); } /*------------------------------
-	 */
+        /*
+         * ---funktioniert nicht immer korrekt--- if( s.tokens[l].compareTo(w) >
+         * 0 || s.tokens[r].compareTo(w) < 0){ return new PartitionResult( -1,
+         * -1, 0, 1); } /*------------------------------
+         */
 
         if (s.tokens[l].compareTo(w) > 0) {
             return new PartitionResult(l - 1, l, 1, 1);
@@ -210,13 +210,13 @@ public class PPJoinPlusPlus extends Mapper {
      * than w in the global ordering within x.tokens[l..r].
      *
      * @param x
-     *         a record
+     *            a record
      * @param l
-     *         the left bound of searching range
+     *            the left bound of searching range
      * @param r
-     *         the right bound of searching range
+     *            the right bound of searching range
      * @param w
-     *         a token
+     *            a token
      * @return the position of the first token in x that is no smaller than w
      */
     private static int binarySearch(Record x, int l, int r, Token w) {
@@ -316,22 +316,22 @@ public class PPJoinPlusPlus extends Mapper {
      * Computes a mapping between a source and a target.
      *
      * @param source
-     *         Source cache
+     *            Source cache
      * @param target
-     *         Target cache
+     *            Target cache
      * @param sourceVar
-     *         Variable for the source dataset
+     *            Variable for the source dataset
      * @param targetVar
-     *         Variable for the target dataset
+     *            Variable for the target dataset
      * @param expression
-     *         Expression to process.
+     *            Expression to process.
      * @param threshold
-     *         Similarity threshold
+     *            Similarity threshold
      * @return A mapping which contains links between the source instances and
-     * the target instances
+     *         the target instances
      */
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
         MAX_DEPTH = 2;
         mapping = MappingFactory.createDefaultMapping();
         // logger.info("Starting PPJoinPlus");
@@ -536,6 +536,16 @@ public class PPJoinPlusPlus extends Mapper {
         }
         // logger.info("Mapping carried out using " + comparisons + "
         // comparisons.");
+        AMapping tempMapping = MappingFactory.createDefaultMapping();
+        for (String key : mapping.getMap().keySet()) {
+            for (String value : mapping.getMap().get(key).keySet()) {
+                double confidence = mapping.getConfidence(key, value);
+                if (confidence >= threshold) {
+                    tempMapping.add(key, value, confidence);
+                }
+            }
+        }
+        //mapping = tempMapping;
         return mapping;
     }
 
@@ -561,25 +571,25 @@ public class PPJoinPlusPlus extends Mapper {
                 } else if (compRes > 0) {
                     int ubound = value.currentOverlap + key.tokens.length
                             - /*
-                   * key.prefixLength
-			       */ key.midPrefix;
+                               * key.prefixLength
+                               */ key.midPrefix;
                     if (ubound >= value.alpha) {
                         overlap += overlap(currentRec, value.currentOverlap, key,
-				/*
-				 * key.prefixLength
-				 */ key.midPrefix);
+                                /*
+                                 * key.prefixLength
+                                 */ key.midPrefix);
                     }
                 } else { // Fehler in Pseudocode; dieser Fall falsch behandelt
                     // --> Duplikate fehlen!
                     int ubound = value.currentOverlap + Math.min(currentRec.tokens.length - currentRec.prefixLength,
                             key.tokens.length - /*
-						 * key.prefixLength
-						 */ key.midPrefix);
+                                                 * key.prefixLength
+                                                 */ key.midPrefix);
                     if (ubound >= value.alpha) {
                         overlap += overlap(currentRec, currentRec.prefixLength, key,
-				/*
-				 * key.prefixLength
-				 */ key.midPrefix);
+                                /*
+                                 * key.prefixLength
+                                 */ key.midPrefix);
                     }
                 }
                 if (overlap >= value.alpha) {
