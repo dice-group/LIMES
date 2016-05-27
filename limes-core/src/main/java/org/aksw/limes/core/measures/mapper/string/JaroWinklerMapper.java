@@ -124,8 +124,10 @@ public class JaroWinklerMapper extends Mapper {
             }
         }
         // return result
-        logger.info("Similarity Book has " + String.valueOf(similarityBook.size()) + " entries.");
-        return getUriToUriMapping(similarityBook, sourceMap, targetMap, swapped);
+        //logger.info("Similarity Book has " + String.valueOf(similarityBook.size()) + " entries.");
+        AMapping mapping = getUriToUriMapping(similarityBook, sourceMap, targetMap, swapped);
+        
+        return mapping;
     }
 
     @Override

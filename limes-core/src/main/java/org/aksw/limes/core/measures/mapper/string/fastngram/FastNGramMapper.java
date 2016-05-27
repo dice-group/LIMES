@@ -18,7 +18,7 @@ import java.util.*;
 /**
  * @author ngonga
  */
-public class FastNGram extends Mapper {
+public class FastNGramMapper extends Mapper {
 
     static Logger logger = Logger.getLogger("LIMES");
     static int q = 3;
@@ -72,6 +72,16 @@ public class FastNGram extends Mapper {
             }
 
         }
+        AMapping tempMapping = MappingFactory.createDefaultMapping();
+        for (String key : result.getMap().keySet()) {
+            for (String value : result.getMap().get(key).keySet()) {
+                double confidence = result.getConfidence(key, value);
+                if (confidence >= threshold) {
+                    tempMapping.add(key, value, confidence);
+                }
+            }
+        }
+        result = tempMapping;
         return result;
     }
 
@@ -83,22 +93,22 @@ public class FastNGram extends Mapper {
      * Computes a mapping between a source and a target.
      *
      * @param source
-     *         Source cache
+     *            Source cache
      * @param target
-     *         Target cache
+     *            Target cache
      * @param sourceVar
-     *         Variable for the source dataset
+     *            Variable for the source dataset
      * @param targetVar
-     *         Variable for the target dataset
+     *            Variable for the target dataset
      * @param expression
-     *         Expression to process.
+     *            Expression to process.
      * @param threshold
-     *         Similarity threshold
+     *            Similarity threshold
      * @return A mapping which contains links between the source instances and
-     * the target instances
+     *         the target instances
      */
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
         AMapping mapping = MappingFactory.createDefaultMapping();
         if (threshold <= 0) {
             logger.warn("Wrong threshold setting. Returning empty mapping.");
@@ -199,7 +209,7 @@ public class FastNGram extends Mapper {
 
         // run the algorithm
         // logger.info("Computing mappings");
-        AMapping m = FastNGram.compute(sourceMap.keySet(), targetMap.keySet(), q, threshold);
+        AMapping m = FastNGramMapper.compute(sourceMap.keySet(), targetMap.keySet(), q, threshold);
         AMapping result = MappingFactory.createDefaultMapping();
         for (String s : m.getMap().keySet()) {
             for (String t : m.getMap().get(s).keySet()) {

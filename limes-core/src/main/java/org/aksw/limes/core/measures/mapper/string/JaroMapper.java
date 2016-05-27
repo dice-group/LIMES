@@ -25,23 +25,23 @@ public class JaroMapper extends Mapper {
      * Computes a mapping between a source and a target.
      *
      * @param source
-     *         Source cache
+     *            Source cache
      * @param target
-     *         Target cache
+     *            Target cache
      * @param sourceVar
-     *         Variable for the source dataset
+     *            Variable for the source dataset
      * @param targetVar
-     *         Variable for the target dataset
+     *            Variable for the target dataset
      * @param expression
-     *         Expression to process.
+     *            Expression to process.
      * @param threshold
-     *         Similarity threshold
+     *            Similarity threshold
      * @return A mapping which contains links between the source instances and
-     * the target instances
+     *         the target instances
      */
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
         logger.info("Running JaroMapper");
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
@@ -73,7 +73,7 @@ public class JaroMapper extends Mapper {
     }
 
     public AMapping runLenghtOnly(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
-                                  double threshold) {
+            double threshold) {
         Jaro j = new Jaro();
         Set<String> source = sourceMap.keySet();
         Set<String> target = targetMap.keySet();
@@ -162,7 +162,7 @@ public class JaroMapper extends Mapper {
                                         similarity = ((sourceMappingCharacters.size() / (float) sourceLength)
                                                 + (targetMappingCharacters.size() / (float) targetLength)
                                                 + ((sourceMappingCharacters.size() - transpositions)
-                                                / (float) sourceMappingCharacters.size()))
+                                                        / (float) sourceMappingCharacters.size()))
                                                 / 3.0;
                                         if (similarity >= threshold) {
                                             for (String sourceUri : sourceMap.get(s)) {
@@ -187,7 +187,7 @@ public class JaroMapper extends Mapper {
     }
 
     public AMapping runWithoutPrefixFilter(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
-                                           double threshold) {
+            double threshold) {
         Set<String> source = sourceMap.keySet();
         Set<String> target = targetMap.keySet();
         Map<Integer, Set<String>> sourceLengthIndex = getLengthIndex(source);
@@ -221,7 +221,7 @@ public class JaroMapper extends Mapper {
                                     similarity = ((sourceMappingCharacters.size() / (float) sourceLength)
                                             + (targetMappingCharacters.size() / (float) targetLength)
                                             + (sourceMappingCharacters.size() - transpositions)
-                                            / (float) sourceMappingCharacters.size())
+                                                    / (float) sourceMappingCharacters.size())
                                             / 3.0;
                                     if (similarity >= threshold) {
                                         for (String sourceUri : sourceMap.get(s)) {
@@ -237,10 +237,14 @@ public class JaroMapper extends Mapper {
                 }
             }
         }
-        System.out.println(lengthFilterCount + " = " + ((double) lengthFilterCount) / (source.size() * target.size()));
-
-        System.out.println(
-                characterFilterCount + " = " + ((double) characterFilterCount) / (source.size() * target.size()));
+        /*
+         * System.out.println(lengthFilterCount + " = " + ((double)
+         * lengthFilterCount) / (source.size() * target.size()));
+         * 
+         * System.out.println( characterFilterCount + " = " + ((double)
+         * characterFilterCount) / (source.size() * target.size()));
+         */
+       
         return result;
     }
 
@@ -269,7 +273,7 @@ public class JaroMapper extends Mapper {
      * Returns the set of characters contained in a string
      *
      * @param s
-     *         Input String
+     *            Input String
      * @return Set of characters contained in it
      */
     private Set<Character> getCharSet(String s, int length) {

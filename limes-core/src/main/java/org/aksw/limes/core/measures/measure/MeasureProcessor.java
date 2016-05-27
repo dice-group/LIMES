@@ -80,14 +80,7 @@ public class MeasureProcessor {
 
         Parser p = new Parser(expression, threshold);
         if (p.isAtomic()) {
-            Measure measure = null;
-            try {
-                measure = MeasureFactory.getMeasure(p.getOperator());
-            } catch (InvalidMeasureException e) {
-                e.printStackTrace();
-                System.err.println("Exiting..");
-                System.exit(1);
-            }
+           
             Mapper mapper = null;
             try {
                 mapper = MeasureFactory.getMapper(p.getOperator());
@@ -153,23 +146,18 @@ public class MeasureProcessor {
                 logger.fatal("Property values could not be read. Exiting");
                 System.exit(1);
             } else {
-
+                double similarity = 0.0d;
                 //if (mapper instanceof PPJoinPlusPlus) {
                 AMapping m = mapper.getMapping(source, target, sourceVar, targetVar, expression, threshold);
                 for (String s : m.getMap().keySet()) {
                     for (String t : m.getMap().get(s).keySet()) {
-                        return m.getMap().get(s).get(t);
+                        similarity = m.getMap().get(s).get(t);
                     }
                 }
-                /*} else {
-                    // logger.info(mapper);
-                    double similarity = measure.getSimilarity(sourceInstance, targetInstance, property1, property2);
-                    if (similarity >= threshold)
-                        return similarity;
-                    else
-                        return 0;
-                }*/
-
+                if(similarity >= threshold)
+                    return similarity;
+                else
+                    return 0.0d;
             }
         } else {
             if (p.getOperator().equalsIgnoreCase("MAX") | p.getOperator().equalsIgnoreCase("OR")

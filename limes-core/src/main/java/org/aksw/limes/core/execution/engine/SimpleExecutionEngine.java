@@ -90,7 +90,12 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                 m = executeDifference(buffer.get(inst.getSourceMapping()), buffer.get(inst.getTargetMapping()));
             } // xor
             else if (inst.getCommand().equals(Command.XOR)) {
-                m = executeExclusiveOr(buffer.get(inst.getSourceMapping()), buffer.get(inst.getTargetMapping()));
+                LinearFilter f = new LinearFilter();
+                AMapping m1 = executeUnion(buffer.get(inst.getSourceMapping()), buffer.get(inst.getTargetMapping()));
+                m1 = f.filter(m1, Double.parseDouble(inst.getThreshold()));
+                AMapping m2 = executeIntersection(buffer.get(inst.getSourceMapping()), buffer.get(inst.getTargetMapping()));
+                m2 = f.filter(m2, Double.parseDouble(inst.getThreshold()));
+                m = executeDifference(m1,m2);
             } // end of processing. Return the indicated mapping
             else if (inst.getCommand().equals(Command.RETURN)) {
                 logger.info("Reached return command. Returning results.");
@@ -209,20 +214,6 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     public AMapping executeDifference(AMapping m1, AMapping m2) {
         return MappingOperations.difference(m1, m2);
     }
-
-    /**
-     * Implements the exclusive or of Mappings
-     *
-     * @param m1
-     *         First Mapping
-     * @param m2
-     *         Second Mapping
-     * @return Intersection of m1 and m2
-     */
-    public AMapping executeExclusiveOr(AMapping m1, AMapping m2) {
-        return MappingOperations.xor(m1, m2);
-    }
-
     /**
      * Implements the intersection of Mappings
      *
@@ -282,26 +273,23 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                     result = executeDifference(m, m2);
                     // exclusive or
                 } else if (plan.getOperator().equals(Command.XOR)) {
-                    /*LinearFilter f = new LinearFilter();
-                    Mapping mleft = executeUnion(m, m2);
+                    LinearFilter f = new LinearFilter();
+                    AMapping mleft = executeUnion(m, m2);
                     mleft = f.filter(mleft, Double.parseDouble(plan.getThreshold()));
 
-                    Mapping mright = executeIntersection(m, m2);
+                    AMapping mright = executeIntersection(m, m2);
                     mright = f.filter(mright, Double.parseDouble(plan.getThreshold()));
-                    result = executeDifference(mleft, mright);*/
-                    result = executeExclusiveOr(m, m2);
+                    result = executeDifference(mleft, mright);
                 }
                 m = result;
             }
             // only run filtering if there is a filter indeed, else simply
             // return MemoryMapping
             if (plan.getFilteringInstruction() != null) {
-                //logger.info("Size of mapping before filtering: " + m.getNumberofMappings());
                 m = executeFilter(plan.getFilteringInstruction(), m);
             }
         }
-        //logger.info("Current plan:" + plan);
-        //logger.info("Size of mapping: " + m.getNumberofMappings());
+       
         return m;
     }
 
@@ -342,6 +330,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                     // complex not seen before
                     // call plan
                     plan = planner.plan(spec);
+                    //logger.info("Second plan: "+plan.getSubPlans().get(1));
                     // get specification that corresponds to the first subplan
                     LinkSpecification firstSpec = planner.getLinkSpec(plan.getSubPlans().get(0));
                     // run first specification
@@ -389,8 +378,18 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                         }
                     } else if (spec.getOperator().equals(LogicOperator.XOR)) {
                         LinkSpecification secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
+                        if (secondSpec == null) {
+                            plan = planner.plan(spec);
+                            secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
+                        }
                         m2 = executeDynamic(secondSpec, planner);
-                        result = executeExclusiveOr(m, m2);
+                        LinearFilter f = new LinearFilter();
+                        AMapping mleft = executeUnion(m, m2);
+                        mleft = f.filter(mleft, Double.parseDouble(plan.getThreshold()));
+
+                        AMapping mright = executeIntersection(m, m2);
+                        mright = f.filter(mright, Double.parseDouble(plan.getThreshold()));
+                        result = executeDifference(mleft, mright);
                     }
                     m = result;
                     if (plan.getOperator() != null) {

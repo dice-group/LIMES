@@ -1,5 +1,6 @@
 package org.aksw.limes.core.execution.engine;
 
+import org.aksw.limes.core.execution.engine.filter.LinearFilter;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
@@ -90,7 +91,7 @@ public class SimpleExecutionEngineTest {
     public void bufferTest() {
         System.out.println("bufferTest");
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
-        Instruction run1 = new Instruction(Command.RUN, "monge(x.surname, y.surname)", "0.9", -1, -1, 0);
+        Instruction run1 = new Instruction(Command.RUN, "qgrams(x.surname, y.surname)", "0.9", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "trigrams(x.name, y.name)", "0.4", -1, -1, 1);
         Instruction union = new Instruction(Command.UNION, "", "0.4", 0, 1, 15);
 
@@ -277,10 +278,16 @@ public class SimpleExecutionEngineTest {
         Instruction run1 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "jaccard(x.surname, y.surname)", "0.3", -1, -1, 1);
         Instruction xor = new Instruction(Command.XOR, "", "0.4", 0, 1, 2);
-
         AMapping mSource = ee.executeRun(run1);
         System.out.println("Source : " + mSource.getNumberofMappings());
-        AMapping mXor = ee.executeExclusiveOr(mSource, mSource);
+        
+        LinearFilter f = new LinearFilter();
+        AMapping mleft = ee.executeUnion(mSource, mSource);
+        mleft = f.filter(mleft, 0.4);
+
+        AMapping mright = ee.executeIntersection(mSource, mSource);
+        mright = f.filter(mright, 0.4);
+        AMapping mXor = ee.executeDifference(mleft, mright);
 
         Plan plan5 = new Plan();
         plan5.addInstruction(run1);
@@ -298,12 +305,24 @@ public class SimpleExecutionEngineTest {
 
         // (A U 0) - (A & 0) = A - 0 = A
         AMapping emptyMapping = MappingFactory.createDefaultMapping();
-        AMapping mEmpty = ee.executeExclusiveOr(mSource, emptyMapping);
+        f = new LinearFilter();
+        mleft = ee.executeUnion(mSource, emptyMapping);
+        mleft = f.filter(mleft, 0.4);
+
+        mright = ee.executeIntersection(mSource, emptyMapping);
+        mright = f.filter(mright, 0.4);
+        AMapping mEmpty = ee.executeDifference(mleft, mright);
         System.out.println("mXor with empty: " + mEmpty.getNumberofMappings());
         assertTrue(mSource.getNumberofMappings() == mEmpty.getNumberofMappings());
         assertTrue(mEmpty.toString().equals(mSource.toString()));
 
-        AMapping totalEmpty = ee.executeExclusiveOr(emptyMapping, emptyMapping);
+        f = new LinearFilter();
+        mleft = ee.executeUnion(emptyMapping, emptyMapping);
+        mleft = f.filter(mleft, 0.4);
+
+        mright = ee.executeIntersection(emptyMapping, emptyMapping);
+        mright = f.filter(mright, 0.4);
+        AMapping totalEmpty = ee.executeDifference(mleft, mright);
         System.out.println("executeExclusiveOr with totalEmpty with empty: " + totalEmpty.getNumberofMappings());
         assertTrue(totalEmpty.toString().equals(""));
         System.out.println("---------------------------------");
@@ -559,7 +578,7 @@ public class SimpleExecutionEngineTest {
         Instruction run1 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.5", -1, -1, 0);
         Instruction run2 = new Instruction(Command.RUN, "soundex(x.name, y.name)", "0.5", -1, -1, 1);
         // instructions for UNION command
-        Instruction xor = new Instruction(Command.XOR, "", "", 0, 1, 2);
+        Instruction xor = new Instruction(Command.XOR, "", "0.5", 0, 1, 2);
         Instruction filter = new Instruction(Command.FILTER, null, "0.5", 2, -1, -1);
 
         // engine
@@ -571,49 +590,23 @@ public class SimpleExecutionEngineTest {
         NestedPlan plan = cp.plan(ls);
         AMapping m = ee.executeStatic(plan);
         System.out.println("LS -> planner -> NestedPlan -> execute function: " + m.getNumberofMappings());
-        // 2) execute runs independently
-        AMapping mSource = ee.executeRun(run1);
-        AMapping mTarget = ee.executeRun(run2);
-        AMapping m2 = ee.executeExclusiveOr(mSource, mTarget);
-        m2 = ee.executeFilter(filter, m2);
-        System.out.println("run Instruction + execute*: " + m2.getNumberofMappings());
-        // 3) run as a plan with ONLY instruction calling execute function
-        Plan plan2 = new Plan();
-        plan2.addInstruction(run1);
-        plan2.addInstruction(run2);
-        plan2.addInstruction(xor);
-        plan2.addInstruction(filter);
-        AMapping m3 = ee.executeInstructions(plan2);
-        System.out.println("Plan (with Instructions) + execute: " + m3.getNumberofMappings());
+        
         // 4) run as a nestedplan with ONLY instruction calling execute function
         Plan plan3 = new NestedPlan();
         plan3.addInstruction(run1);
         plan3.addInstruction(run2);
         plan3.addInstruction(xor);
         plan3.addInstruction(filter);
-        AMapping m4 = ee.executeInstructions(plan2);
+        AMapping m4 = ee.executeInstructions(plan3);
         System.out.println("nestedPlan (with Instructions) + execute: " + m4.getNumberofMappings());
 
         /////////////////////////////////////////////////////////////////////
-        System.out.println("Size of left child: " + mSource.size());
-        System.out.println("Size of right child: " + mTarget.size());
-        assertTrue(m.getNumberofMappings() == m2.getNumberofMappings());
-        assertTrue(m2.getNumberofMappings() == m3.getNumberofMappings());
-        assertTrue(m3.getNumberofMappings() == m4.getNumberofMappings());
+       
+        assertTrue(m.getNumberofMappings() == m4.getNumberofMappings());
 
-        assertTrue(m.toString().equals(m2.toString()));
-        assertTrue(m2.toString().equals(m3.toString()));
-        assertTrue(m3.toString().equals(m4.toString()));
+        assertTrue(m.toString().equals(m4.toString()));
 
-        if (mSource.size() == 0 && mTarget.size() == 0) {
-            assertTrue(m.getNumberofMappings() == 0);
-        } else {
-            if (!mSource.toString().equals(mTarget.toString()))
-                assertTrue(m.getNumberofMappings() >= 0);
-            else
-                assertTrue(m.getNumberofMappings() == 0);
-        }
-
+   
         System.out.println("---------------------------------");
 
     }

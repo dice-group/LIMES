@@ -6,7 +6,7 @@ import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.space.HR3;
 import org.aksw.limes.core.measures.mapper.string.*;
-import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGram;
+import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGramMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.*;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.ConcurrentMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.PredecessorMapper;
@@ -265,7 +265,7 @@ public class MeasureFactory {
         } else if (measure.toLowerCase().startsWith(OVERLAP)) {
             am = new PPJoinPlusPlus();
         } else if (measure.toLowerCase().startsWith(QGRAMS)) {
-            am = new FastNGram();
+            am = new FastNGramMapper();
         } else if (measure.toLowerCase().startsWith(TRIGRAM)) {
             am = new PPJoinPlusPlus();
         } else if (measure.toLowerCase().startsWith(SOUNDEX)) {

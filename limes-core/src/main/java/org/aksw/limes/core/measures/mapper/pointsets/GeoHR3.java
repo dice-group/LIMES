@@ -62,7 +62,7 @@ public class GeoHR3 {
      * Computes the geo squares for each polygon
      *
      * @param input
-     *         Set of polygon to be indexed
+     *            Set of polygon to be indexed
      * @return Index for all polygons
      */
     public GeoIndex assignSquares(Set<Polygon> input) {
@@ -93,9 +93,9 @@ public class GeoHR3 {
      * 90° is 0.
      *
      * @param latIndex
-     *         Latitude index of square for which "neighbors" are required
+     *            Latitude index of square for which "neighbors" are required
      * @param longIndex
-     *         Longitude index
+     *            Longitude index
      * @return List of "neighbors"
      */
     public Set<List<Integer>> getSquaresToCompare(int latIndex, int longIndex, GeoIndex index) {
@@ -122,11 +122,11 @@ public class GeoHR3 {
             // we have reached the north or south pole
             if (realLat == latMax || realLat == latMin) {
                 for (int deltaLong = longMin; deltaLong <= longMax; deltaLong++) {
-                    toCompare.add(Arrays.asList(new Integer[]{realLat, deltaLong}));
+                    toCompare.add(Arrays.asList(new Integer[] { realLat, deltaLong }));
                 }
             } // if latitude index is negative then take the circle above, i.e.,
-            // else take the one below. Equivalent to taking the latitude
-            // circle with the largest radius
+              // else take the one below. Equivalent to taking the latitude
+              // circle with the largest radius
             else {
                 if (realLat < 0) {
                     localGranularity = (int) Math
@@ -155,7 +155,7 @@ public class GeoHR3 {
                     } else if (realLong < (-1) * (longMax + 1)) {
                         realLong = 2 * (longMax + 1) + realLong;
                     }
-                    toCompare.add(Arrays.asList(new Integer[]{realLat, realLong}));
+                    toCompare.add(Arrays.asList(new Integer[] { realLat, realLong }));
                 }
             }
         }
@@ -222,9 +222,9 @@ public class GeoHR3 {
      * implementation. FastHausdorff is used as default
      *
      * @param sourceData,
-     *         Source polygons
+     *            Source polygons
      * @param targetData,
-     *         Target polygons
+     *            Target polygons
      * @return Mapping of polygons
      */
     public AMapping run(Set<Polygon> sourceData, Set<Polygon> targetData) {
