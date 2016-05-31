@@ -21,6 +21,7 @@ import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.Ex
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
+import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterFactoryType;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -133,25 +134,34 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         return ((SimpleExecutionEngine) ee).executeInstructions(plan);
     }
 
-//    /**
-//     * Looks first for the input metricExpression in the already constructed tree,
-//     * if found the corresponding mapping is returned. 
-//     * Otherwise, the SetConstraintsMapper is generate the mapping from the metricExpression.
-//     * 
-//     * @param metricExpression
-//     * @return Mapping corresponding to the input metric expression 
-//     * @author sherif
-//     */
-//    protected Mapping getMapingOfMetricExpression(String metricExpression) {
-//        Mapping map = null;
-//        if(RefinementNode.saveMapping){
-//            map = getMapingOfMetricFromTree( metricExpression,refinementTreeRoot);
-//        }
-//        if(map == null){
-//            map = getPredictions(new LinkSpecification(metricExpression),sourceCache, targetCache);
-//        }
-//        return map;
-//    }
+    /**
+     * Looks first for the input metricExpression in the already constructed tree,
+     * if found the corresponding mapping is returned.
+     * Otherwise, the SetConstraintsMapper is generate the mapping from the metricExpression.
+     *
+     * @param metricExpression
+     * @return Mapping corresponding to the input metric expression
+     * @author sherif
+     */
+    protected AMapping getMapingOfMetricExpression(String metricExpression) {
+        AMapping map = null;
+        if (RefinementNode.isSaveMapping()) {
+            map = getMapingOfMetricFromTree(metricExpression, refinementTreeRoot);
+        }
+        if (map == null) {
+            Double threshold = Double.parseDouble(metricExpression.substring(metricExpression.lastIndexOf("|") + 1, metricExpression.length()));
+            Rewriter rw = RewriterFactory.getRewriter(RewriterFactoryType.DEFAULT);
+            LinkSpecification ls = new LinkSpecification(metricExpression, threshold);
+            LinkSpecification rwLs = rw.rewrite(ls);
+            IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceCache, targetCache);
+            assert planner != null;
+            ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache, "?x", "?y");
+            assert engine != null;
+            AMapping resultMap = engine.execute(rwLs, planner);
+            map = resultMap.getSubMap(threshold);
+        }
+        return map;
+    }
 
 
     /**
@@ -241,6 +251,38 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         }
         // compute pseudo-recall
         return pseudoFMeasure.recall(predictions, new GoldStandard(null, sourceUris, targetUris));
+    }
+    
+    /**
+     * Create new RefinementNode using either real or pseudo-F-Measure
+     *
+     * @param mapping
+     * @param metricExpr
+     * @return
+     */
+    protected RefinementNode createNode(AMapping mapping, String metricExpr) {
+        if(!saveMapping){
+            mapping = null;
+        }
+        if (isUnsupervised) {
+            return new RefinementNode(mapping, metricExpr, trainingData);
+        }
+        double pfm = pseudoFMeasure.calculate(mapping, new GoldStandard(null, sourceUris, targetUris));
+        return new RefinementNode(pfm, mapping, metricExpr);
+    }
+
+
+    /**
+     * @param childMetricExpr
+     * @return
+     * @author sherif
+     */
+    protected RefinementNode createNode(String metricExpr) {
+        AMapping map = null;
+        if(saveMapping){
+            map = getMapingOfMetricExpression(metricExpr);
+        }
+        return createNode(map, metricExpr);
     }
 
 }

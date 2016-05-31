@@ -266,20 +266,6 @@ public class WombatSimple extends AWombat {
     }
 
 
-    /**
-     * Create new RefinementNode using either real or pseudo-F-Measure
-     *
-     * @param mapping
-     * @param metricExpr
-     * @return
-     */
-    protected RefinementNode createNode(AMapping mapping, String metricExpr) {
-        if (isUnsupervised) {
-            return new RefinementNode(mapping, metricExpr, trainingData);
-        }
-        double pfm = pseudoFMeasure.calculate(mapping, new GoldStandard(null, sourceUris, targetUris));
-        return new RefinementNode(pfm, mapping, metricExpr);
-    }
 
     /**
      * initiate the refinement tree as a root node  with set of
