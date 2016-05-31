@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.junit.Assert.fail;
 
-public class SimpleWombatTest {
+public class WombatSimpleTest {
 
     Cache sc = new MemoryCache();
     Cache tc = new MemoryCache();

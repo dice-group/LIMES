@@ -642,7 +642,7 @@ public class WombatComplete extends AWombat {
         for (int i = 1; i < classifiers.size(); i++) {
             unionMaping = MappingOperations.union(unionMaping, classifiers.get(i).getMapping());
         }
-        return new Recall().calculate(unionMaping, new GoldStandard(trainingData));
+        return recall(unionMaping);
     }
     
     /**
