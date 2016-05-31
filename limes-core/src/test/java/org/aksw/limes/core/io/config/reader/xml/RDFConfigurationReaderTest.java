@@ -85,6 +85,7 @@ public class RDFConfigurationReaderTest {
                 2,                                    //granularity
                 "wombat simple",                    //MLAlgorithmName
                 mlParameters                        //MLAlgorithmParameters
+                ,null,null,null
         );
 
         RDFConfigurationReader c = new RDFConfigurationReader("/resources/lgd-lgd-ml.ttl");
@@ -139,6 +140,7 @@ public class RDFConfigurationReaderTest {
                 2,                                   //granularity
                 new String(),                        //MLAlgorithmName
                 new LearningParameters()             //MLAlgorithmParameters
+                ,null,null,null
         );
         RDFConfigurationReader c = new RDFConfigurationReader("/resources/lgd-lgd.ttl");
         Configuration fileConf = c.read();

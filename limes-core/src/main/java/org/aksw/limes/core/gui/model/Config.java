@@ -89,7 +89,7 @@ public class Config extends Configuration {
         super(sourceInfo, targetInfo, metricExpression, acceptanceRelation,
                 verificationRelation, acceptanceThreshold, acceptanceFile,
                 verificationThreshold, verificationFile, prefixes,
-                outputFormat, executionPlan, granularity, null, null);
+                outputFormat, executionPlan, granularity, null, null, null,null, null);
         metric = new Output();
         this.sourceEndpoint = new Endpoint(this.sourceInfo);
         this.targetEndpoint = new Endpoint(this.targetInfo);

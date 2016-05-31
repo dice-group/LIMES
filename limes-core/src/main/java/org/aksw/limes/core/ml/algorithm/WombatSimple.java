@@ -31,6 +31,7 @@ public class WombatSimple extends AWombat {
     protected int iterationNr = 0;
 
 
+
     protected WombatSimple() {
         super();
     }
@@ -64,7 +65,12 @@ public class WombatSimple extends AWombat {
 
     @Override
     protected MLModel learn(PseudoFMeasure pfm) {
-        this.pseudoFMeasure = pfm;
+        if(pfm != null){
+            this.pseudoFMeasure = pfm;
+        }else{ // use default PFM
+            this.pseudoFMeasure = new PseudoFMeasure();
+        }
+        this.isUnsupervised = true;
         return learn((AMapping) null);
     }
 
@@ -181,8 +187,7 @@ public class WombatSimple extends AWombat {
     /**
      * Get the most promising node as the node with the best F-score
      *
-     * @param r
-     *         The whole refinement tree
+     * @param r  The whole refinement tree
      * @param penaltyWeight
      * @return most promising node from the input tree r
      * @author sherif
@@ -269,7 +274,7 @@ public class WombatSimple extends AWombat {
      * @return
      */
     protected RefinementNode createNode(AMapping mapping, String metricExpr) {
-        if (pseudoFMeasure == null) {
+        if (isUnsupervised) {
             return new RefinementNode(mapping, metricExpr, trainingData);
         }
         double pfm = pseudoFMeasure.calculate(mapping, new GoldStandard(null, sourceUris, targetUris));

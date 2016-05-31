@@ -39,7 +39,8 @@ public class LIMES {
     public static final Property hasMLAlgorithm = property("hasMLAlgorithm");
     public static final Property mlAlgorithmName = property("mlAlgorithmName");
     public static final Property hasTrainingDataFile = property("hasTrainingDataFile");
-    
+    public static final Property pseudoFMeasure = property("pseudoFMeasure");
+
     public static final Resource LimesSpecs = resource("LimesSpecs");
     public static final Resource SourceDataset = resource("SourceDataset");
     public static final Resource TargetDataset = resource("TargetDataset");

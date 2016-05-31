@@ -1,5 +1,7 @@
 package org.aksw.limes.core.controller;
 
+import org.aksw.limes.core.evaluation.evaluator.EvaluatorFactory;
+import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
@@ -10,6 +12,7 @@ import org.aksw.limes.core.ml.algorithm.*;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameters;
 import org.apache.log4j.Logger;
+
 
 import java.util.*;
 
@@ -30,7 +33,7 @@ public class MLPipeline {
             MLImplementationType mlImplementationType,
             LearningParameters learningParameters,
             String trainingDataFile, 
-            PseudoFMeasure pfm, 
+            EvaluatorType pfmType, 
             int maxIt
             ) throws UnsupportedMLImplementationException {
         Class<? extends ACoreMLAlgorithm> clazz = MLAlgorithmFactory.getAlgorithmType(mlAlgrorithmName);
@@ -42,6 +45,7 @@ public class MLPipeline {
             RDFMappingReader mappingReader = new RDFMappingReader(trainingDataFile);
             trainingDataMap = mappingReader.read();
         }
+        
         switch (mlImplementationType) {
         case SUPERVISED_BATCH:
             SupervisedMLAlgorithm mls = new SupervisedMLAlgorithm(clazz);
@@ -98,7 +102,10 @@ public class MLPipeline {
         case UNSUPERVISED:
             UnsupervisedMLAlgorithm mlu = new UnsupervisedMLAlgorithm(clazz);
             mlu.init(learningParameters, source, target);
-            pfm = new PseudoFMeasure();
+            PseudoFMeasure pfm = null;    
+            if(pfmType != null){
+                pfm = (PseudoFMeasure) EvaluatorFactory.create(pfmType);
+            }
             mlm = mlu.learn(pfm);
             return mlu.predict(source, target, mlm);
         default:

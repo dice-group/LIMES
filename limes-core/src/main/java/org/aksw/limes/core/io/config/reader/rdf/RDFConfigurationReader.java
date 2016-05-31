@@ -4,6 +4,8 @@ import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
+
+import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
@@ -110,7 +112,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
             //4. ML Algorithm
             if (configModel.contains(specsSubject, LIMES.hasMLAlgorithm, (RDFNode) null)) {
                 Resource mlAlgorithmUri = getObject(specsSubject, LIMES.hasMLAlgorithm, true).asResource();
-                readMLAlgorithmParameters(mlAlgorithmUri);
+                readMLAlgorithmConfigurations(mlAlgorithmUri);
             } else {
                 logger.error("Neither Metric nor ML Algorithm provided, exit with error ");
                 System.exit(1);
@@ -150,24 +152,37 @@ public class RDFConfigurationReader extends AConfigurationReader {
         return configuration;
     }
 
-    private void readMLAlgorithmParameters(Resource mlAlgorithmUri) {
+    private void readMLAlgorithmConfigurations(Resource mlAlgorithmUri) {
         // read MLAlgorithm type 
         if (configModel.contains(mlAlgorithmUri, RDF.type, LIMES.SupervisedMLAlgorithm)) {
             configuration.setMlImplementationType(MLImplementationType.SUPERVISED_BATCH);
-        }else  if (configModel.contains(mlAlgorithmUri, RDF.type, LIMES.UnsupervisedMLAlgorithm)) {
-            configuration.setMlImplementationType(MLImplementationType.UNSUPERVISED);
-        }else  if (configModel.contains(mlAlgorithmUri, RDF.type, LIMES.ActiveMLAlgorithm)) {
-            configuration.setMlImplementationType(MLImplementationType.SUPERVISED_ACTIVE);
-        }else{
-            logger.warn(mlAlgorithmUri + " missing ML type. use the default type: " + LIMES.UnsupervisedMLAlgorithm);
-            configuration.setMlImplementationType(MLImplementationType.UNSUPERVISED);
-        }
-        // read training data
-        if(configuration.getMlImplementationType() == MLImplementationType.SUPERVISED_BATCH ||
-                configuration.getMlImplementationType() == MLImplementationType.SUPERVISED_ACTIVE){
+
+            // read training data
             RDFNode trainingDataFile = getObject(mlAlgorithmUri, LIMES.hasTrainingDataFile, true);
             configuration.setTrainingDataFile(trainingDataFile.toString());
         }
+        else if (configModel.contains(mlAlgorithmUri, RDF.type, LIMES.UnsupervisedMLAlgorithm)) {
+            configuration.setMlImplementationType(MLImplementationType.UNSUPERVISED);
+
+            // read pseudo-F-Measure
+            RDFNode pfm = getObject(mlAlgorithmUri, LIMES.pseudoFMeasure, false);
+            if(pfm != null){
+                EvaluatorType evalType = EvaluatorType.valueOf(pfm.toString());
+                if(evalType == null){
+                    logger.warn(pfm.toString() + " is not valid pseudo-F-Measure, continue with the default pseudo-F-Measure.");
+                }else{
+                    configuration.setMlPseudoFMeasure(evalType);
+                }
+            }
+            
+        }else if (configModel.contains(mlAlgorithmUri, RDF.type, LIMES.ActiveMLAlgorithm)) {
+            configuration.setMlImplementationType(MLImplementationType.SUPERVISED_ACTIVE);
+        }
+        else{
+            logger.warn(mlAlgorithmUri + " missing ML type. use the default type: " + LIMES.UnsupervisedMLAlgorithm);
+            configuration.setMlImplementationType(MLImplementationType.UNSUPERVISED);
+        }
+        
         // read MLAlgorithm name
         RDFNode mlAlgorithmName = getObject(mlAlgorithmUri, LIMES.mlAlgorithmName, true);
         configuration.setMlAlgorithmName(mlAlgorithmName.toString());

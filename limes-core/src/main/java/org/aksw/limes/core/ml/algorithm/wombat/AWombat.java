@@ -75,6 +75,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected Map<String, Double> targetPropertiesCoverageMap; //coverage map for latter computations
     protected PseudoFMeasure pseudoFMeasure = null;
     protected AMapping trainingData;
+    protected boolean isUnsupervised = false;
 
     protected Set<String> wombatParameterNames = new HashSet<>();
 
@@ -204,7 +205,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * @return
      */
     protected double fMeasure(AMapping predictions) {
-        if (pseudoFMeasure == null) {
+        if (isUnsupervised) {
             // get real F-Measure based on training data 
             return new FMeasure().calculate(predictions, new GoldStandard(trainingData));
         }
@@ -219,7 +220,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * @return
      */
     protected double precision(AMapping predictions) {
-        if (pseudoFMeasure == null) {
+        if (isUnsupervised) {
             // get real precision based on training data 
             return new Precision().calculate(predictions, new GoldStandard(trainingData));
         }
@@ -234,7 +235,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * @return
      */
     protected double recall(AMapping predictions) {
-        if (pseudoFMeasure == null) {
+        if (isUnsupervised) {
             // get real recall based on training data 
             return new Recall().calculate(predictions, new GoldStandard(trainingData));
         }

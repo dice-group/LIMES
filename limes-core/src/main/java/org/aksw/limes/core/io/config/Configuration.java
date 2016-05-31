@@ -1,5 +1,6 @@
 package org.aksw.limes.core.io.config;
 
+import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.setting.LearningParameters;
@@ -41,16 +42,20 @@ public class Configuration implements IConfiguration {
     protected String                mlAlgorithmName = new String();
     protected LearningParameters    mlParameters = new LearningParameters();
     protected MLImplementationType  mlImplementationType = MLImplementationType.UNSUPERVISED;
-    private String                  trainingDataFile = null;
-    protected PseudoFMeasure        mlPseudoFMeasure = null;
+    private String                  mlTrainingDataFile = null;
+    private EvaluatorType          mlPseudoFMeasure = null;
 
     public Configuration() {
     }
 
+
+
+
     public Configuration(KBInfo sourceInfo, KBInfo targetInfo, String metricExpression, String acceptanceRelation,
-                         String verificationRelation, double acceptanceThreshold, String acceptanceFile,
-                         double verificationThreshold, String verificationFile, Map<String, String> prefixes, String outputFormat,
-                         String executionPlan, int granularity, String mlAlgorithmName, LearningParameters mlParameters) {
+            String verificationRelation, double acceptanceThreshold, String acceptanceFile,
+            double verificationThreshold, String verificationFile, Map<String, String> prefixes, String outputFormat,
+            String executionPlan, int granularity, String mlAlgorithmName, LearningParameters mlParameters,
+            MLImplementationType mlImplementationType, String mlTrainingDataFile, EvaluatorType mlPseudoFMeasure) {
         super();
         this.sourceInfo = sourceInfo;
         this.targetInfo = targetInfo;
@@ -67,7 +72,12 @@ public class Configuration implements IConfiguration {
         this.granularity = granularity;
         this.mlAlgorithmName = mlAlgorithmName;
         this.mlParameters = mlParameters;
+        this.mlImplementationType = mlImplementationType;
+        this.mlTrainingDataFile = mlTrainingDataFile;
+        this.mlPseudoFMeasure = mlPseudoFMeasure;
     }
+
+
 
 
     public void addMlParameter(String mlParameterName, String mlParameterValue) {
@@ -200,7 +210,7 @@ public class Configuration implements IConfiguration {
         return mlParameters;
     }
 
-    public PseudoFMeasure getMlPseudoFMeasure() {
+    public EvaluatorType getMlPseudoFMeasure() {
         return mlPseudoFMeasure;
     }
 
@@ -221,7 +231,7 @@ public class Configuration implements IConfiguration {
     }
 
     public String getTrainingDataFile() {
-        return trainingDataFile;
+        return mlTrainingDataFile;
     }
 
     public String getVerificationFile() {
@@ -311,7 +321,7 @@ public class Configuration implements IConfiguration {
     }
 
     public void setTrainingDataFile(String trainingDataFile) {
-        this.trainingDataFile = trainingDataFile;
+        this.mlTrainingDataFile = trainingDataFile;
     }
 
     public void setVerificationFile(String verificationFile) {
@@ -335,5 +345,9 @@ public class Configuration implements IConfiguration {
                 + verificationFile + ", prefixes=" + prefixes + ", outputFormat=" + outputFormat + ", executionPlan="
                 + executionPlan + ", granularity=" + granularity + ", mlAlgorithmName=" + mlAlgorithmName
                 + ", mlParameters=" + mlParameters + "]";
+    }
+
+    public void setMlPseudoFMeasure(EvaluatorType mlPseudoFMeasure) {
+        this.mlPseudoFMeasure = mlPseudoFMeasure;
     }
 }
