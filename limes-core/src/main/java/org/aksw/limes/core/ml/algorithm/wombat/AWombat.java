@@ -39,7 +39,7 @@ import java.util.*;
  * @author sherif
  */
 public abstract class AWombat extends ACoreMLAlgorithm {
-    
+
     static Logger logger = Logger.getLogger(AWombat.class.getName());
 
     // Parameters
@@ -56,7 +56,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected static final String PARAMETER_VERBOSE = "verbose";
     protected static final String PARAMETER_MEASURES = "measures";
     protected static final String PARAMETER_SAVE_MAPPING = "save mapping";
-    
+
     public static List<String> sourceUris;
     public static List<String> targetUris;
     protected long maxRefineTreeSize = 2000;
@@ -216,11 +216,11 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      */
     protected double fMeasure(AMapping predictions) {
         if (isUnsupervised) {
-            // get real F-Measure based on training data 
-            return new FMeasure().calculate(predictions, new GoldStandard(trainingData));
+            // compute pseudo-F-Measure
+            return pseudoFMeasure.calculate(predictions, new GoldStandard(null, sourceUris, targetUris));            
         }
-        // compute pseudo-F-Measure
-        return pseudoFMeasure.calculate(predictions, new GoldStandard(null, sourceUris, targetUris));
+        // get real F-Measure based on training data 
+        return new FMeasure().calculate(predictions, new GoldStandard(trainingData));
     }
 
     /**
@@ -231,11 +231,11 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      */
     protected double precision(AMapping predictions) {
         if (isUnsupervised) {
-            // get real precision based on training data 
-            return new Precision().calculate(predictions, new GoldStandard(trainingData));
+            // compute pseudo-precision
+            return pseudoFMeasure.precision(predictions, new GoldStandard(null, sourceUris, targetUris));
         }
-        // compute pseudo-precision
-        return pseudoFMeasure.precision(predictions, new GoldStandard(null, sourceUris, targetUris));
+        // get real precision based on training data 
+        return new Precision().calculate(predictions, new GoldStandard(trainingData));
     }
 
     /**
@@ -246,13 +246,14 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      */
     protected double recall(AMapping predictions) {
         if (isUnsupervised) {
-            // get real recall based on training data 
-            return new Recall().calculate(predictions, new GoldStandard(trainingData));
+            // compute pseudo-recall
+            return pseudoFMeasure.recall(predictions, new GoldStandard(null, sourceUris, targetUris));
         }
-        // compute pseudo-recall
-        return pseudoFMeasure.recall(predictions, new GoldStandard(null, sourceUris, targetUris));
+        // get real recall based on training data 
+        return new Recall().calculate(predictions, new GoldStandard(trainingData));
+
     }
-    
+
     /**
      * Create new RefinementNode using either real or pseudo-F-Measure
      *
@@ -265,10 +266,10 @@ public abstract class AWombat extends ACoreMLAlgorithm {
             mapping = null;
         }
         if (isUnsupervised) {
-            return new RefinementNode(mapping, metricExpr, trainingData);
+            double pfm = pseudoFMeasure.calculate(mapping, new GoldStandard(null, sourceUris, targetUris));
+            return new RefinementNode(pfm, mapping, metricExpr);
         }
-        double pfm = pseudoFMeasure.calculate(mapping, new GoldStandard(null, sourceUris, targetUris));
-        return new RefinementNode(pfm, mapping, metricExpr);
+        return new RefinementNode(mapping, metricExpr, trainingData);        
     }
 
 

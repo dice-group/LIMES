@@ -51,6 +51,10 @@ public class WombatSimple extends AWombat {
     @Override
     protected MLModel learn(AMapping trainingData) {
         this.trainingData = trainingData;
+        return learn();
+    }
+
+    private MLModel learn() {
         if (bestSolutionNode == null) { // not to do learning twice
             bestSolutionNode = findBestSolution();
         }
@@ -71,7 +75,7 @@ public class WombatSimple extends AWombat {
             this.pseudoFMeasure = new PseudoFMeasure();
         }
         this.isUnsupervised = true;
-        return learn((AMapping) null);
+        return learn();
     }
 
     @Override
