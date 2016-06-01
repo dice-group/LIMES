@@ -11,21 +11,24 @@ import org.apache.log4j.Logger;
 /**
  * Implements the linear filter class.
  *
- * @author ngonga
- * @author kleanthi
+ * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
  */
 public class LinearFilter implements IFilter {
 
     static Logger logger = Logger.getLogger(LinearFilter.class.getName());
 
     /**
-     * Filter a mapping solely with respect to a threshold.
+     * Naive filter function for mapping using a threshold as filtering
+     * criterion. The output mapping includes set of links from the initial
+     * mapping that have a similarity above the input threshold.
      *
-     * @param map
-     *         Input mapping
-     * @param threshold
-     *         Similarity threshold
-     * @return result, all links from map such that sim >= threshold
+     * @param map,
+     *            Map bearing the results of Link Specification
+     * @param threshold,
+     *            Value of threshold
+     * @return AMapping, Filtered mapping that satisfies sim >= threshold
      */
     public AMapping filter(AMapping map, double threshold) {
         double sim = 0.0;
@@ -48,25 +51,30 @@ public class LinearFilter implements IFilter {
     }
 
     /**
-     * Filter a mapping with respect to an expression and a threshold.
+     * Filter function for mapping using a condition and a threshold as
+     * filtering criterion. The output mapping includes set of links from the
+     * initial mapping whose similarity based on the input condition is above
+     * the input threshold.
      *
-     * @param map
-     *         Input mapping
-     * @param threshold
-     *         Similarity threshold
+     * @param map,
+     *            Map bearing the results of Link Specification
+     * @param condition,
+     *            the condition for filtering
+     * @param threshold,
+     *            Value of threshold
      * @param source,
-     *         Source cache
+     *            Source Knowledge base
      * @param target,
-     *         Target cache
+     *            Target Knowledge base
      * @param sourceVar,
-     *         Source variable
+     *            Source property
      * @param targetVar,
-     *         Target variable
-     * @return results, all links from map such that the expression and the
-     * threshold holds
+     *            Target property
+     * @return AMapping, Filtered mapping that satisfies both the condition and
+     *         the threshold
      */
-    public AMapping filter(AMapping map, String condition, double threshold, Cache source, Cache target, String sourceVar,
-                           String targetVar) {
+    public AMapping filter(AMapping map, String condition, double threshold, Cache source, Cache target,
+            String sourceVar, String targetVar) {
         double sim = 0.0;
         Instance s, t;
 
@@ -92,33 +100,36 @@ public class LinearFilter implements IFilter {
     }
 
     /**
-     * Filter a mapping with respect to an expression and two thresholds. Used
-     * by HELIOS/DYNAMIC planner in case of an AND optimization strategy. The
-     * input mapping produced by executing one of the children specifications of
-     * a specification that has AND as operator, will be filtered by using the
-     * expression and the threshold of the other child. In order for a link to
-     * be included in the output mapping, it must also pass the parent
-     * specification threshold.
+     * Filter function for mapping using a condition and two thresholds as
+     * filtering criterion. Used by HELIOS/DYNAMIC planner in case of an AND
+     * optimization strategy. The input mapping produced by executing one of the
+     * children specifications of a specification with an AND operator, will be
+     * filtered using the expression and the threshold of the other child. In
+     * order for a link to be included in the output mapping, it must also
+     * fulfill the input condition and have an initial similarity above the
+     * mainThreshold.
      *
-     * @param map
-     *         Input mapping
-     * @param threshold
-     *         filter similarity threshold
-     * @param mainThreshold
-     *         Parent similarity threshold
+     * @param map,
+     *            Map bearing the results of Link Specification
+     * @param condition,
+     *            the condition for filtering
+     * @param threshold,
+     *            Value of the first threshold
+     * @param mainThreshold,
+     *            Value of second threshold
      * @param source,
-     *         Source cache
+     *            Source Knowledge base
      * @param target,
-     *         Target cache
+     *            Target Knowledge base
      * @param sourceVar,
-     *         Source variable
+     *            Source property
      * @param targetVar,
-     *         Target variable
-     * @return results, all links from map such that the expression, the
-     * threshold and the mainThreshold holds
+     *            Target property
+     * @return AMapping, Filtered mapping that satisfies both the condition and
+     *         the thresholds
      */
     public AMapping filter(AMapping map, String condition, double threshold, double mainThreshold, Cache source,
-                           Cache target, String sourceVar, String targetVar) {
+            Cache target, String sourceVar, String targetVar) {
         double sim = 0.0;
         Instance s, t;
         AMapping result = MappingFactory.createDefaultMapping();
@@ -126,7 +137,7 @@ public class LinearFilter implements IFilter {
             System.err.println("Null condition in extended filter function (LinearFilter). Exiting..");
             System.exit(1);
         }
-       
+
         for (String key : map.getMap().keySet()) {
             s = source.getInstance(key);
             for (String value : map.getMap().get(key).keySet()) {
@@ -150,33 +161,35 @@ public class LinearFilter implements IFilter {
     }
 
     /**
-     * Filter a mapping with respect to an expression and two thresholds. Used
-     * by DYNAMIC planner in case of an MINUS optimization strategy. The input
-     * mapping produced by executing the left child of a specification that has
-     * MINUS as operator, will be filtered by using the expression and the
-     * threshold of the right child. In order for a link to be included in the
-     * output mapping, it must not pass the filtering criterion expressed by the
-     * right child.
+     * Reverse filter function for mapping using a condition and two thresholds
+     * as filtering criterion. Used by DYNAMIC planner in case of an MINUS
+     * optimization strategy. The input mapping produced by executing the left
+     * child of a specification with a MINUS operator, will be filtered by the
+     * expression and the threshold of the right child. In order for a link to
+     * be included in the output mapping, it must not fulfill the input
+     * condition and its initial similarity must be above the mainThreshold.
      *
-     * @param map
-     *         Input mapping
-     * @param threshold
-     *         filter similarity threshold
-     * @param mainThreshold
-     *         Parent similarity threshold
+     * @param map,
+     *            Map bearing the results of Link Specification
+     * @param condition,
+     *            the condition for filtering
+     * @param threshold,
+     *            Value of the first threshold
+     * @param mainThreshold,
+     *            Value of second threshold
      * @param source,
-     *         Source cache
+     *            Source Knowledge base
      * @param target,
-     *         Target cache
+     *            Target Knowledge base
      * @param sourceVar,
-     *         Source variable
+     *            Source property
      * @param targetVar,
-     *         Target variable
-     * @return results, all links from map such that the expression, the
-     * threshold and the mainThreshold holds
+     *            Target property
+     * @return Mapping, Filtered mapping that satisfies both the condition and
+     *         the thresholds
      */
     public AMapping reversefilter(AMapping map, String condition, double threshold, double mainThreshold, Cache source,
-                                  Cache target, String sourceVar, String targetVar) {
+            Cache target, String sourceVar, String targetVar) {
 
         double sim = 0.0;
         Instance s, t;
@@ -191,7 +204,7 @@ public class LinearFilter implements IFilter {
             for (String value : map.getMap().get(key).keySet()) {
                 t = target.getInstance(value);
                 sim = MeasureProcessor.getSimilarity(s, t, condition, threshold, sourceVar, targetVar);
-                // similarity of s and t must be 0 to be accepted 
+                // similarity of s and t must be 0 to be accepted
                 if (sim == 0) {
                     double sim2 = map.getConfidence(key, value);
                     if (sim2 >= mainThreshold) {
@@ -205,26 +218,29 @@ public class LinearFilter implements IFilter {
     }
 
     /**
-     * Implements a filter for the special case of linear combinations and
-     * multiplications. The straight forward way would be to compute
-     * filter(intersection(m1, m2), linear_combination_condition) leading to
-     * re-computations. This implementation avoid that by reusing the
-     * similarities that have already been computed
+     * Filter for linear combinations when operation is set to "add", given the
+     * expression a*sim1 + b*sim2 >= t or multiplication given the expression
+     * (a*sim1)*(b*sim2) >= t, which is not likely to be used. Implements a
+     * filter for the special case of linear combinations and multiplications.
+     * The straight forward way would be to compute filter(intersection(m1, m2),
+     * linear_combination_condition) leading to re-computations. This
+     * implementation avoid that by reusing the similarities that have already
+     * been computed.
      *
-     * @param map1
-     *         First input mapping
-     * @param map2
-     *         Second input mapping
-     * @param coef1
-     *         First co-efficient
-     * @param coef2
-     *         Second co-efficient
-     * @param threshold
-     *         Similarity threshold
-     * @param threshold
-     *         Operation to be applied on input mappings
-     * @return results, all links from map such that the expression, the
-     * threshold and the mainThreshold holds
+     * @param map1,
+     *            Map bearing the results of sim1 >= (t-b)/a for add, sim1 >=
+     *            t/(a*b) for mult
+     * @param map2,
+     *            Map bearing the results of sim2 >= (t-a)/b for add, sim2 >=
+     *            t/(a*b) for mult
+     * @param coef1,
+     *            Value of first coefficient
+     * @param coef2,
+     *            Value of second coefficient
+     * @param threshold,
+     *            Value of t
+     * @return Mapping, Filtered mapping that satisfies a*sim1 + b*sim2 >= t for
+     *         add, (a*sim1)*(b*sim2) >= t for mult
      */
     public AMapping filter(AMapping m1, AMapping m2, double coef1, double coef2, double threshold, String operation) {
         AMapping m = MappingOperations.intersection(m1, m2);
