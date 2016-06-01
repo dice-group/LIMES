@@ -34,8 +34,6 @@ public class MeasureFactory {
     // String measures
     public static final String JARO = "jaro";
     public static final String QGRAMS = "qgrams";
-
-    ;
     public static final String COSINE = "cosine";
     public static final String LEVENSHTEIN = "levenshtein";
     public static final String OVERLAP = "overlap";
@@ -150,7 +148,7 @@ public class MeasureFactory {
      * Get measure name to metric.
      *
      * @param measure,
-     *         name of measure
+     *            name of measure
      * @return m, the corresponding measure
      * @throws InvalidMeasureException
      */
@@ -174,7 +172,7 @@ public class MeasureFactory {
         } else if (name.toLowerCase().startsWith(QGRAMS)) {
             m = new QGramSimilarity();
         } else if (name.toLowerCase().startsWith(SOUNDEX)) {
-            m = new TrigramMeasure();
+            m = new SoundexMeasure();
         } else if (name.toLowerCase().startsWith(EUCLIDEAN)) {
             m = new EuclideanMetric();
         } else if (name.toLowerCase().startsWith(GEO_HAUSDORFF)) {
@@ -245,7 +243,7 @@ public class MeasureFactory {
      * Get mapper to measure
      *
      * @param measure,
-     *         name of measure
+     *            name of measure
      * @return am, mapper corresponding to measure
      * @throws InvalidMeasureException
      */
