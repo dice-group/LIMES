@@ -15,8 +15,7 @@ limes:linkedgeodataTOlinkedgeodataTarget
 
 limes:linkedgeodataTOlinkedgeodata
       a       limes:LimesSpecs ;
-      limes:examplars "-1" ;
-      limes:executionPlan "Simple" ;
+      limes:hasExecutionParameters limes:executionParameters ;
       limes:granularity "2" ;
       limes:hasAcceptance limes:linkedgeodataTOlinkedgeodataAcceptance ;
       limes:hasMetric limes:linkedgeodataTOlinkedgeodataMetric ;
@@ -24,6 +23,13 @@ limes:linkedgeodataTOlinkedgeodata
       limes:hasSource limes:linkedgeodataTOlinkedgeodataSource ;
       limes:hasTarget limes:linkedgeodataTOlinkedgeodataTarget ;
       limes:outputFormat "TAB" .
+      
+limes:executionParameters
+	  a limes:ExecutionParameters ;
+	  limes:executionPlanner "default" ;
+	  limes:executionRewriter "default" ;
+	  limes:executionEngine "default" .
+	  
       
 limes:linkedgeodataTOlinkedgeodataReview
       a       limes:Review ;
@@ -33,7 +39,7 @@ limes:linkedgeodataTOlinkedgeodataReview
 
 limes:linkedgeodataTOlinkedgeodataMetric
       a       limes:Metric ;
-      limes:expression "hausdorff(x.polygon, y.polygon)" .
+      limes:expression "geo_hausdorff(x.polygon, y.polygon)" .
 
 limes:linkedgeodataTOlinkedgeodataAcceptance
       a       limes:Acceptance ;

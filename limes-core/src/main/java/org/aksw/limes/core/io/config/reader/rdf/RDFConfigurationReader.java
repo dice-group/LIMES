@@ -130,11 +130,9 @@ public class RDFConfigurationReader extends AConfigurationReader {
         configuration.setVerificationFile(getObject(review, LIMES.file, true).toString());
         configuration.setVerificationRelation(getObject(review, LIMES.relation, true).toString());
 
-        //7. EXECUTION plan
-        RDFNode execution = getObject(specsSubject, LIMES.executionPlan, false);
-        if (execution != null) {
-            configuration.setExecutionPlan(execution.toString());
-        }
+        //7. EXECUTION 
+        RDFNode exeParamsSubject = getObject(specsSubject, LIMES.hasExecutionParameters, false);
+        readExecutionParameters(exeParamsSubject);
 
         //8. TILING if necessary
         RDFNode g = getObject(specsSubject, LIMES.granularity, false);
@@ -148,8 +146,33 @@ public class RDFConfigurationReader extends AConfigurationReader {
             configuration.setOutputFormat(output.toString());
         }
 
-
         return configuration;
+    }
+
+    protected void readExecutionParameters(RDFNode exeParamsSubject) {
+        if(exeParamsSubject != null){
+            Resource exeParamResource = exeParamsSubject.asResource();
+            RDFNode exePlanner = getObject(exeParamResource, LIMES.executionPlanner, false);
+            if (exePlanner != null) {
+                configuration.setExecutionPlanner(exePlanner.toString());
+            } else {
+                logger.info("Use default execution planner.");
+            }
+            RDFNode exeRewriter = getObject(exeParamResource, LIMES.executionRewriter, false);
+            if (exeRewriter != null) {
+                configuration.setExecutionPlanner(exeRewriter.toString());
+            } else {
+                logger.info("Use default execution rewriter.");
+            }  
+            RDFNode exeEngine = getObject(exeParamResource, LIMES.executionEngine, false);
+            if (exeEngine != null) {
+                configuration.setExecutionPlanner(exeEngine.toString());
+            } else {
+                logger.info("Use default execution engine.");
+            } 
+        }else {
+            logger.info("Use default execution parameters.");
+        }
     }
 
     private void readMLAlgorithmConfigurations(Resource mlAlgorithmUri) {
@@ -174,7 +197,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
                     configuration.setMlPseudoFMeasure(evalType);
                 }
             }
-            
+
         }else if (configModel.contains(mlAlgorithmUri, RDF.type, LIMES.ActiveMLAlgorithm)) {
             configuration.setMlImplementationType(MLImplementationType.SUPERVISED_ACTIVE);
         }
@@ -182,7 +205,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
             logger.warn(mlAlgorithmUri + " missing ML type. use the default type: " + LIMES.UnsupervisedMLAlgorithm);
             configuration.setMlImplementationType(MLImplementationType.UNSUPERVISED);
         }
-        
+
         // read MLAlgorithm name
         RDFNode mlAlgorithmName = getObject(mlAlgorithmUri, LIMES.mlAlgorithmName, true);
         configuration.setMlAlgorithmName(mlAlgorithmName.toString());

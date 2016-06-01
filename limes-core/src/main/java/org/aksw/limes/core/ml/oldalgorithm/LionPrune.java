@@ -110,7 +110,7 @@ public class LionPrune extends MLAlgorithm {
         specs = new HashSet<>();
         heuristic = new DefaultRefinementHeuristic();
         operator = new UpwardLengthLimitRefinementOperator();
-        ExecutionPlannerType executionPlanerType = ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlan().toLowerCase());
+        ExecutionPlannerType executionPlanerType = ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlanner().toLowerCase());
         planner = ExecutionPlannerFactory.getPlanner(executionPlanerType, sourceCache, targetCache);
     }
 

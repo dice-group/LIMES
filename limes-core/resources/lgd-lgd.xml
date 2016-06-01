@@ -40,6 +40,12 @@
 		<FILE>lgd_relaybox_near.nt</FILE>
 		<RELATION>lgdo:near</RELATION>
 	</REVIEW>
-	<EXECUTION>Default</EXECUTION>
+
+	<EXECUTION>
+		<REWRITER>default</REWRITER>
+		<PLANNER>default</PLANNER>
+		<ENGINE>default</ENGINE>
+	</EXECUTION>
+
 	<OUTPUT>TAB</OUTPUT>
 </LIMES>

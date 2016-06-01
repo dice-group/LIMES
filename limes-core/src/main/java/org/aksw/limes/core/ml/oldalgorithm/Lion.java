@@ -94,7 +94,7 @@ public class Lion extends MLAlgorithm {
         operator = new UpwardLengthLimitRefinementOperator();
         operator.setConfiguration(getConfiguration());
         heuristic.setLearningSetting(setting);
-        ExecutionPlannerType executionPlanerType = ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlan().toLowerCase());
+        ExecutionPlannerType executionPlanerType = ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlanner().toLowerCase());
         planner = ExecutionPlannerFactory.getPlanner(executionPlanerType, sourceCache, targetCache);
     }
 

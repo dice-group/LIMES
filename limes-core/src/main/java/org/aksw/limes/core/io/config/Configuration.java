@@ -6,7 +6,6 @@ import org.aksw.limes.core.ml.setting.LearningParameters;
 
 import java.util.*;
 
-
 /**
  * Contain all LIMES configuration parameters
  *
@@ -15,46 +14,46 @@ import java.util.*;
  */
 public class Configuration implements IConfiguration {
 
-    protected KBInfo                sourceInfo = new KBInfo();
-    protected KBInfo                targetInfo = new KBInfo();
+    protected KBInfo sourceInfo = new KBInfo();
+    protected KBInfo targetInfo = new KBInfo();
 
-    protected String                metricExpression = new String();
+    protected String metricExpression = new String();
 
-    protected String                acceptanceRelation = new String();
+    protected String acceptanceRelation = new String();
 
-    protected String                verificationRelation = new String();
+    protected String verificationRelation = new String();
 
-    protected double                acceptanceThreshold;
-    protected String                acceptanceFile;
+    protected double acceptanceThreshold;
+    protected String acceptanceFile;
 
-    protected double                verificationThreshold;
-    protected String                verificationFile;
+    protected double verificationThreshold;
+    protected String verificationFile;
 
-    protected Map<String, String>   prefixes = new HashMap<String, String>();
+    protected Map<String, String> prefixes = new HashMap<String, String>();
 
-    protected String                outputFormat;
+    protected String outputFormat;
 
-    protected String                executionPlan = "simple";
-    
-    protected int                   granularity = 2;
+    protected String executionRewriter = "default";
+    protected String executionPlanner = "default";
+    protected String executionEngine = "default";
 
-    protected String                mlAlgorithmName = new String();
-    protected LearningParameters    mlParameters = new LearningParameters();
-    protected MLImplementationType  mlImplementationType = MLImplementationType.UNSUPERVISED;
-    private String                  mlTrainingDataFile = null;
-    private EvaluatorType          mlPseudoFMeasure = null;
+    protected int granularity = 2;
+
+    protected String mlAlgorithmName = new String();
+    protected LearningParameters mlParameters = new LearningParameters();
+    protected MLImplementationType mlImplementationType = MLImplementationType.UNSUPERVISED;
+    private String mlTrainingDataFile = null;
+    private EvaluatorType mlPseudoFMeasure = null;
 
     public Configuration() {
     }
 
-
-
-
     public Configuration(KBInfo sourceInfo, KBInfo targetInfo, String metricExpression, String acceptanceRelation,
             String verificationRelation, double acceptanceThreshold, String acceptanceFile,
             double verificationThreshold, String verificationFile, Map<String, String> prefixes, String outputFormat,
-            String executionPlan, int granularity, String mlAlgorithmName, LearningParameters mlParameters,
-            MLImplementationType mlImplementationType, String mlTrainingDataFile, EvaluatorType mlPseudoFMeasure) {
+            String executionRewriter, String executionPlanner, String executionEngine, int granularity,
+            String mlAlgorithmName, LearningParameters mlParameters, MLImplementationType mlImplementationType,
+            String mlTrainingDataFile, EvaluatorType mlPseudoFMeasure) {
         super();
         this.sourceInfo = sourceInfo;
         this.targetInfo = targetInfo;
@@ -67,7 +66,9 @@ public class Configuration implements IConfiguration {
         this.verificationFile = verificationFile;
         this.prefixes = prefixes;
         this.outputFormat = outputFormat;
-        this.executionPlan = executionPlan;
+        this.executionRewriter = executionRewriter;
+        this.executionPlanner = executionPlanner;
+        this.executionEngine = executionEngine;
         this.granularity = granularity;
         this.mlAlgorithmName = mlAlgorithmName;
         this.mlParameters = mlParameters;
@@ -76,93 +77,12 @@ public class Configuration implements IConfiguration {
         this.mlPseudoFMeasure = mlPseudoFMeasure;
     }
 
-
-
-
     public void addMlParameter(String mlParameterName, String mlParameterValue) {
         this.mlParameters.put(mlParameterName, mlParameterValue);
     }
 
     public void addPrefixes(String label, String namespace) {
         this.prefixes.put(label, namespace);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Configuration other = (Configuration) obj;
-        if (acceptanceFile == null) {
-            if (other.acceptanceFile != null)
-                return false;
-        } else if (!acceptanceFile.equals(other.acceptanceFile))
-            return false;
-        if (acceptanceRelation == null) {
-            if (other.acceptanceRelation != null)
-                return false;
-        } else if (!acceptanceRelation.equals(other.acceptanceRelation))
-            return false;
-        if (Double.doubleToLongBits(acceptanceThreshold) != Double.doubleToLongBits(other.acceptanceThreshold))
-            return false;
-        if (executionPlan == null) {
-            if (other.executionPlan != null)
-                return false;
-        } else if (!executionPlan.equals(other.executionPlan))
-            return false;
-        if (granularity != other.granularity)
-            return false;
-        if (metricExpression == null) {
-            if (other.metricExpression != null)
-                return false;
-        } else if (!metricExpression.equals(other.metricExpression))
-            return false;
-        if (mlAlgorithmName == null) {
-            if (other.mlAlgorithmName != null)
-                return false;
-        } else if (!mlAlgorithmName.equals(other.mlAlgorithmName))
-            return false;
-        if (mlParameters == null) {
-            if (other.mlParameters != null)
-                return false;
-        } else if (!mlParameters.equals(other.mlParameters))
-            return false;
-        if (outputFormat == null) {
-            if (other.outputFormat != null)
-                return false;
-        } else if (!outputFormat.equals(other.outputFormat))
-            return false;
-        if (prefixes == null) {
-            if (other.prefixes != null)
-                return false;
-        } else if (!prefixes.equals(other.prefixes))
-            return false;
-        if (sourceInfo == null) {
-            if (other.sourceInfo != null)
-                return false;
-        } else if (!sourceInfo.equals(other.sourceInfo))
-            return false;
-        if (targetInfo == null) {
-            if (other.targetInfo != null)
-                return false;
-        } else if (!targetInfo.equals(other.targetInfo))
-            return false;
-        if (verificationFile == null) {
-            if (other.verificationFile != null)
-                return false;
-        } else if (!verificationFile.equals(other.verificationFile))
-            return false;
-        if (verificationRelation == null) {
-            if (other.verificationRelation != null)
-                return false;
-        } else if (!verificationRelation.equals(other.verificationRelation))
-            return false;
-        if (Double.doubleToLongBits(verificationThreshold) != Double.doubleToLongBits(other.verificationThreshold))
-            return false;
-        return true;
     }
 
     public String getAcceptanceFile() {
@@ -183,10 +103,6 @@ public class Configuration implements IConfiguration {
                 "verificationRelation", "acceptanceThreshold", "acceptanceFile", "verificationThreshold",
                 "verificationFile", "exemplars", "prefixes", "outputFormat", "executionPlan", "granularity",
                 "recallRegulator", "recallThreshold"));
-    }
-
-    public String getExecutionPlan() {
-        return executionPlan;
     }
 
     public int getGranularity() {
@@ -245,32 +161,6 @@ public class Configuration implements IConfiguration {
         return verificationThreshold;
     }
 
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((acceptanceFile == null) ? 0 : acceptanceFile.hashCode());
-        result = prime * result + ((acceptanceRelation == null) ? 0 : acceptanceRelation.hashCode());
-        long temp;
-        temp = Double.doubleToLongBits(acceptanceThreshold);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        result = prime * result + ((executionPlan == null) ? 0 : executionPlan.hashCode());
-        result = prime * result + granularity;
-        result = prime * result + ((metricExpression == null) ? 0 : metricExpression.hashCode());
-        result = prime * result + ((mlAlgorithmName == null) ? 0 : mlAlgorithmName.hashCode());
-        result = prime * result + ((mlParameters == null) ? 0 : mlParameters.hashCode());
-        result = prime * result + ((outputFormat == null) ? 0 : outputFormat.hashCode());
-        result = prime * result + ((prefixes == null) ? 0 : prefixes.hashCode());
-        result = prime * result + ((sourceInfo == null) ? 0 : sourceInfo.hashCode());
-        result = prime * result + ((targetInfo == null) ? 0 : targetInfo.hashCode());
-        result = prime * result + ((verificationFile == null) ? 0 : verificationFile.hashCode());
-        result = prime * result + ((verificationRelation == null) ? 0 : verificationRelation.hashCode());
-        temp = Double.doubleToLongBits(verificationThreshold);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        return result;
-    }
-
     public void setAcceptanceFile(String acceptanceFile) {
         this.acceptanceFile = acceptanceFile;
     }
@@ -281,10 +171,6 @@ public class Configuration implements IConfiguration {
 
     public void setAcceptanceThreshold(double acceptanceThreshold) {
         this.acceptanceThreshold = acceptanceThreshold;
-    }
-
-    public void setExecutionPlan(String executionPlan) {
-        this.executionPlan = executionPlan;
     }
 
     public void setGranularity(int granularity) {
@@ -335,15 +221,184 @@ public class Configuration implements IConfiguration {
         this.verificationThreshold = verificationThreshold;
     }
 
+    public String getExecutionRewriter() {
+        return executionRewriter;
+    }
+
+    public void setExecutionRewriter(String executionRewriter) {
+        this.executionRewriter = executionRewriter;
+    }
+
+    public String getExecutionPlanner() {
+        return executionPlanner;
+    }
+
+    public void setExecutionPlanner(String executionPlanner) {
+        this.executionPlanner = executionPlanner;
+    }
+
+    public String getExecutionEngine() {
+        return executionEngine;
+    }
+
+    public void setExecutionEngine(String executionEngine) {
+        this.executionEngine = executionEngine;
+    }
+
+    public String getMlTrainingDataFile() {
+        return mlTrainingDataFile;
+    }
+
     @Override
     public String toString() {
         return "Configuration [sourceInfo=" + sourceInfo + ", targetInfo=" + targetInfo + ", metricExpression="
                 + metricExpression + ", acceptanceRelation=" + acceptanceRelation + ", verificationRelation="
                 + verificationRelation + ", acceptanceThreshold=" + acceptanceThreshold + ", acceptanceFile="
                 + acceptanceFile + ", verificationThreshold=" + verificationThreshold + ", verificationFile="
-                + verificationFile + ", prefixes=" + prefixes + ", outputFormat=" + outputFormat + ", executionPlan="
-                + executionPlan + ", granularity=" + granularity + ", mlAlgorithmName=" + mlAlgorithmName
-                + ", mlParameters=" + mlParameters + "]";
+                + verificationFile + ", prefixes=" + prefixes + ", outputFormat=" + outputFormat
+                + ", executionRewriter=" + executionRewriter + ", executionPlanner=" + executionPlanner
+                + ", executionEngine=" + executionEngine + ", granularity=" + granularity + ", mlAlgorithmName="
+                + mlAlgorithmName + ", mlParameters=" + mlParameters + ", mlImplementationType=" + mlImplementationType
+                + ", mlTrainingDataFile=" + mlTrainingDataFile + ", mlPseudoFMeasure=" + mlPseudoFMeasure + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((acceptanceFile == null) ? 0 : acceptanceFile.hashCode());
+        result = prime * result + ((acceptanceRelation == null) ? 0 : acceptanceRelation.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(acceptanceThreshold);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + ((executionEngine == null) ? 0 : executionEngine.hashCode());
+        result = prime * result + ((executionPlanner == null) ? 0 : executionPlanner.hashCode());
+        result = prime * result + ((executionRewriter == null) ? 0 : executionRewriter.hashCode());
+        result = prime * result + granularity;
+        result = prime * result + ((metricExpression == null) ? 0 : metricExpression.hashCode());
+        result = prime * result + ((mlAlgorithmName == null) ? 0 : mlAlgorithmName.hashCode());
+        result = prime * result + ((mlImplementationType == null) ? 0 : mlImplementationType.hashCode());
+        result = prime * result + ((mlParameters == null) ? 0 : mlParameters.hashCode());
+        result = prime * result + ((mlPseudoFMeasure == null) ? 0 : mlPseudoFMeasure.hashCode());
+        result = prime * result + ((mlTrainingDataFile == null) ? 0 : mlTrainingDataFile.hashCode());
+        result = prime * result + ((outputFormat == null) ? 0 : outputFormat.hashCode());
+        result = prime * result + ((prefixes == null) ? 0 : prefixes.hashCode());
+        result = prime * result + ((sourceInfo == null) ? 0 : sourceInfo.hashCode());
+        result = prime * result + ((targetInfo == null) ? 0 : targetInfo.hashCode());
+        result = prime * result + ((verificationFile == null) ? 0 : verificationFile.hashCode());
+        result = prime * result + ((verificationRelation == null) ? 0 : verificationRelation.hashCode());
+        temp = Double.doubleToLongBits(verificationThreshold);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Configuration other = (Configuration) obj;
+        if (acceptanceFile == null) {
+            if (other.acceptanceFile != null)
+                return false;
+        } else if (!acceptanceFile.equals(other.acceptanceFile))
+            return false;
+        if (acceptanceRelation == null) {
+            if (other.acceptanceRelation != null)
+                return false;
+        } else if (!acceptanceRelation.equals(other.acceptanceRelation))
+            return false;
+        if (Double.doubleToLongBits(acceptanceThreshold) != Double.doubleToLongBits(other.acceptanceThreshold))
+            return false;
+        if (executionEngine == null) {
+            if (other.executionEngine != null)
+                return false;
+        } else if (!executionEngine.equals(other.executionEngine))
+            return false;
+        if (executionPlanner == null) {
+            if (other.executionPlanner != null)
+                return false;
+        } else if (!executionPlanner.equals(other.executionPlanner))
+            return false;
+        if (executionRewriter == null) {
+            if (other.executionRewriter != null)
+                return false;
+        } else if (!executionRewriter.equals(other.executionRewriter))
+            return false;
+        if (granularity != other.granularity)
+            return false;
+        if (metricExpression == null) {
+            if (other.metricExpression != null)
+                return false;
+        } else if (!metricExpression.equals(other.metricExpression))
+            return false;
+        if (mlAlgorithmName == null) {
+            if (other.mlAlgorithmName != null)
+                return false;
+        } else if (!mlAlgorithmName.equals(other.mlAlgorithmName))
+            return false;
+        if (mlImplementationType != other.mlImplementationType)
+            return false;
+        if (mlParameters == null) {
+            if (other.mlParameters != null)
+                return false;
+        } else if (!mlParameters.equals(other.mlParameters))
+            return false;
+        if (mlPseudoFMeasure != other.mlPseudoFMeasure)
+            return false;
+        if (mlTrainingDataFile == null) {
+            if (other.mlTrainingDataFile != null)
+                return false;
+        } else if (!mlTrainingDataFile.equals(other.mlTrainingDataFile))
+            return false;
+        if (outputFormat == null) {
+            if (other.outputFormat != null)
+                return false;
+        } else if (!outputFormat.equals(other.outputFormat))
+            return false;
+        if (prefixes == null) {
+            if (other.prefixes != null)
+                return false;
+        } else if (!prefixes.equals(other.prefixes))
+            return false;
+        if (sourceInfo == null) {
+            if (other.sourceInfo != null)
+                return false;
+        } else if (!sourceInfo.equals(other.sourceInfo))
+            return false;
+        if (targetInfo == null) {
+            if (other.targetInfo != null)
+                return false;
+        } else if (!targetInfo.equals(other.targetInfo))
+            return false;
+        if (verificationFile == null) {
+            if (other.verificationFile != null)
+                return false;
+        } else if (!verificationFile.equals(other.verificationFile))
+            return false;
+        if (verificationRelation == null) {
+            if (other.verificationRelation != null)
+                return false;
+        } else if (!verificationRelation.equals(other.verificationRelation))
+            return false;
+        if (Double.doubleToLongBits(verificationThreshold) != Double.doubleToLongBits(other.verificationThreshold))
+            return false;
+        return true;
+    }
+
+    public void setMlTrainingDataFile(String mlTrainingDataFile) {
+        this.mlTrainingDataFile = mlTrainingDataFile;
+    }
+
+    public void setPrefixes(Map<String, String> prefixes) {
+        this.prefixes = prefixes;
+    }
+
+    public void setMlParameters(LearningParameters mlParameters) {
+        this.mlParameters = mlParameters;
     }
 
     public void setMlPseudoFMeasure(EvaluatorType mlPseudoFMeasure) {

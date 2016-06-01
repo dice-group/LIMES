@@ -135,8 +135,8 @@ public class Controller {
                     config.getMetricExpression(), config.getVerificationThreshold(),
                     config.getSourceInfo().getVar(), config.getTargetInfo().getVar(),
                     RewriterFactory.getRewriterFactoryType("default"),
-                    ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlan()),
-                    ExecutionEngineFactory.getExecutionEngineType(config.getExecutionPlan()));
+                    ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlanner()),
+                    ExecutionEngineFactory.getExecutionEngineType(config.getExecutionPlanner()));
         }
         AMapping acceptanceMapping = results.getSubMap(config.getAcceptanceThreshold());
         AMapping verificationMapping = MappingOperations.difference(results, acceptanceMapping);

@@ -18,6 +18,7 @@ public class LIMES {
     public static final Property hasTarget = property("hasTarget");
     public static final Property hasMetric = property("hasMetric");
     public static final Property hasAcceptance = property("hasAcceptance");
+    public static final Property hasExecutionParameters = property("hasExecutionParameters");
     public static final Property hasReview = property("hasReview");
     public static final Property endPoint = property("endPoint");
     public static final Property variable = property("variable");
@@ -30,8 +31,9 @@ public class LIMES {
     public static final Property relation = property("relation");
     public static final Property graph = property("graph");
     public static final Property type = property("type");
-    public static final Property exemplars = property("examplars");
-    public static final Property executionPlan = property("executionPlan");
+    public static final Property executionPlanner = property("executionPlanner");
+    public static final Property executionRewriter = property("executionRewriter");
+    public static final Property executionEngine = property("executionEngine");
     public static final Property granularity = property("granularity");
     public static final Property outputFormat = property("outputFormat");
     public static final Property mlParameterName = property("mlParameterName");
@@ -45,6 +47,7 @@ public class LIMES {
     public static final Resource SourceDataset = resource("SourceDataset");
     public static final Resource TargetDataset = resource("TargetDataset");
     public static final Resource Metric = resource("Metric");
+    public static final Resource ExecutionParameters = resource("ExecutionParameters");
     public static final Resource Acceptance = resource("Acceptance");
     public static final Resource Review = resource("Review");
     public static final Resource MLParameter = resource("MLParameter");

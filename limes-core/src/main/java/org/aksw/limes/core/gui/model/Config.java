@@ -5,6 +5,8 @@ import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ListView;
+
+import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.planner.HeliosPlanner;
@@ -23,7 +25,9 @@ import org.aksw.limes.core.io.config.writer.RDFConfigurationWriter;
 import org.aksw.limes.core.io.config.writer.XMLConfigurationWriter;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+import org.aksw.limes.core.ml.setting.LearningParameters;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -33,6 +37,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 
@@ -84,12 +89,11 @@ public class Config extends Configuration {
                   String acceptanceFile, double verificationThreshold,
                   String verificationFile, int exemplars,
                   HashMap<String, String> prefixes, String outputFormat,
-                  String executionPlan, int granularity, String recallRegulator,
+                  String executionPlanner, int granularity, String recallRegulator,
                   double recallThreshold) {
-        super(sourceInfo, targetInfo, metricExpression, acceptanceRelation,
-                verificationRelation, acceptanceThreshold, acceptanceFile,
-                verificationThreshold, verificationFile, prefixes,
-                outputFormat, executionPlan, granularity, null, null, null,null, null);
+        super(sourceInfo, targetInfo, metricExpression, acceptanceRelation, verificationRelation, acceptanceThreshold,
+                acceptanceFile, verificationThreshold, verificationFile, prefixes, outputFormat, null,
+                executionPlanner, null, granularity, null, null, null,null, null);
         metric = new Output();
         this.sourceEndpoint = new Endpoint(this.sourceInfo);
         this.targetEndpoint = new Endpoint(this.targetInfo);
@@ -100,6 +104,8 @@ public class Config extends Configuration {
 //		metric = new Output();
 
     }
+    
+    
 
     // /**
     // * Constructor
@@ -113,6 +119,7 @@ public class Config extends Configuration {
     // this.targetEndpoint = new Endpoint(reader.targetInfo);
     // this.propertyMapping = new PropertyMapping();
     // }
+
 
     /**
      * loads the linkspec from file
@@ -148,7 +155,7 @@ public class Config extends Configuration {
                     tmp.getAcceptanceThreshold(), tmp.getAcceptanceFile(),
                     tmp.getVerificationThreshold(), tmp.getVerificationFile(),
                     tmp.getGranularity(), (HashMap<String, String>) tmp.getPrefixes(),
-                    tmp.getOutputFormat(), tmp.getExecutionPlan(),
+                    tmp.getOutputFormat(), tmp.getExecutionPlanner(),
                     tmp.getGranularity(), tmp.getAcceptanceFile(), tmp.getAcceptanceThreshold());
         }
 //		if (outConfig == null) {

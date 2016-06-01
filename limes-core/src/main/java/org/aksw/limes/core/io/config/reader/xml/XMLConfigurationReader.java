@@ -28,31 +28,33 @@ public class XMLConfigurationReader extends AConfigurationReader {
     private static final Logger logger = Logger.getLogger(XMLConfigurationReader.class);
 
     // Constants
-    private static final String FILE = "FILE";
-    private static final String GRANULARITY = "GRANULARITY";
-    private static final String TARGET = "TARGET";
-    private static final String LABEL = "LABEL";
-    private static final String RELATION = "RELATION";
-    private static final String THRESHOLD = "THRESHOLD";
-    private static final String REVIEW = "REVIEW";
-    private static final String ACCEPTANCE = "ACCEPTANCE";
-    private static final String EXECUTION = "EXECUTION";
-    private static final String OUTPUT = "OUTPUT";
-    private static final String TYPE = "TYPE";
-    private static final String VAR = "VAR";
-    private static final String ID = "ID";
-    private static final String SOURCE = "SOURCE";
-    private static final String PREFIX = "PREFIX";
-    private static final String PAGESIZE = "PAGESIZE";
-    private static final String ENDPOINT = "ENDPOINT";
-    private static final String GRAPH = "GRAPH";
-    private static final String RESTRICTION = "RESTRICTION";
-    private static final String PROPERTY = "PROPERTY";
-    private static final String AS = " AS ";
-    private static final String RENAME = " RENAME ";
-    private static final String METRIC = "METRIC";
-    private static final String NAMESPACE = "NAMESPACE";
-
+    protected static final String FILE = "FILE";
+    protected static final String GRANULARITY = "GRANULARITY";
+    protected static final String TARGET = "TARGET";
+    protected static final String LABEL = "LABEL";
+    protected static final String RELATION = "RELATION";
+    protected static final String THRESHOLD = "THRESHOLD";
+    protected static final String REVIEW = "REVIEW";
+    protected static final String ACCEPTANCE = "ACCEPTANCE";
+    protected static final String EXECUTION = "EXECUTION";
+    protected static final String OUTPUT = "OUTPUT";
+    protected static final String TYPE = "TYPE";
+    protected static final String VAR = "VAR";
+    protected static final String ID = "ID";
+    protected static final String SOURCE = "SOURCE";
+    protected static final String PREFIX = "PREFIX";
+    protected static final String PAGESIZE = "PAGESIZE";
+    protected static final String ENDPOINT = "ENDPOINT";
+    protected static final String GRAPH = "GRAPH";
+    protected static final String RESTRICTION = "RESTRICTION";
+    protected static final String PROPERTY = "PROPERTY";
+    protected static final String AS = " AS ";
+    protected static final String RENAME = " RENAME ";
+    protected static final String METRIC = "METRIC";
+    protected static final String NAMESPACE = "NAMESPACE";
+    protected static final String REWRITER = "REWRITER";
+    protected static final String PLANNER = "PLANNER";
+    protected static final String ENGINE = "ENGINE";
 
     /**
      * Constructor
@@ -152,7 +154,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
             e.printStackTrace();
             logger.warn("Some values were not set. Crossing my fingers and using defaults.");
         }
-        return getConfiguration();
+        return configuration;
     }
 
     public void afterPropertiesSet(Configuration configuration) {
@@ -166,9 +168,9 @@ public class XMLConfigurationReader extends AConfigurationReader {
     public void processKBDescription(String kb, NodeList children) {
         KBInfo kbinfo;
         if (kb.equalsIgnoreCase("source")) {
-            kbinfo = getConfiguration().getSourceInfo();
+            kbinfo = configuration.getSourceInfo();
         } else {
-            kbinfo = getConfiguration().getTargetInfo();
+            kbinfo = configuration.getTargetInfo();
         }
 
         String property;
@@ -197,7 +199,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 kbinfo.setType(getText(child));
             }
         }
-        kbinfo.setPrefixes(getConfiguration().getPrefixes());
+        kbinfo.setPrefixes(configuration.getPrefixes());
     }
 
     /**
@@ -248,7 +250,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                         }
                     }
                     logger.info(label);
-                    getConfiguration().addPrefixes(label, namespace);
+                    configuration.addPrefixes(label, namespace);
                 }
                 //1. Source information
                 list = xmlDocument.getElementsByTagName(SOURCE);
@@ -260,7 +262,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 processKBDescription(TARGET, children);
                 //3.METRIC
                 list = xmlDocument.getElementsByTagName(METRIC);
-                getConfiguration().setMetricExpression(getText(list.item(0)));
+                configuration.setMetricExpression(getText(list.item(0)));
 
                 //4. ACCEPTANCE file and conditions
                 list = xmlDocument.getElementsByTagName(ACCEPTANCE);
@@ -268,12 +270,12 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 for (int i = 0; i < children.getLength(); i++) {
                     Node child = children.item(i);
                     if (child.getNodeName().equals(THRESHOLD)) {
-                        getConfiguration().setAcceptanceThreshold(Double.parseDouble(getText(child)));
+                        configuration.setAcceptanceThreshold(Double.parseDouble(getText(child)));
                     } else if (child.getNodeName().equals(FILE)) {
                         String file = getText(child);
-                        getConfiguration().setAcceptanceFile(file);
+                        configuration.setAcceptanceFile(file);
                     } else if (child.getNodeName().equals(RELATION)) {
-                        getConfiguration().setAcceptanceRelation(getText(child));
+                        configuration.setAcceptanceRelation(getText(child));
                     }
                 }
 
@@ -283,26 +285,45 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 for (int i = 0; i < children.getLength(); i++) {
                     Node child = children.item(i);
                     if (child.getNodeName().equals(THRESHOLD)) {
-                        getConfiguration().setVerificationThreshold(Double.parseDouble(getText(child)));
+                        configuration.setVerificationThreshold(Double.parseDouble(getText(child)));
                     } else if (child.getNodeName().equals(FILE)) {
                         String file = getText(child);
-                        getConfiguration().setVerificationFile(file);
+                        configuration.setVerificationFile(file);
                     } else if (child.getNodeName().equals(RELATION)) {
-                        getConfiguration().setVerificationRelation(getText(child));
+                        configuration.setVerificationRelation(getText(child));
                     }
                 }
 
-                //6. EXECUTION plan
+                //6. EXECUTION 
+                //                if (list.getLength() > 0) {
+                //                    list = xmlDocument.getElementsByTagName(EXECUTION);
+                //                    children = list.item(0).getChildNodes();
+                //                    configuration.setExecutionPlan(getText(list.item(0)));
+                //                }
                 if (list.getLength() > 0) {
                     list = xmlDocument.getElementsByTagName(EXECUTION);
-                    children = list.item(0).getChildNodes();
-                    getConfiguration().setExecutionPlan(getText(list.item(0)));
+                    for (int i = 0; i < list.getLength(); i++) {
+                        children = list.item(i).getChildNodes();
+                        for (int j = 0; j < children.getLength(); j++) {
+                            Node child = children.item(j);
+                            if (child.getNodeName().equals(REWRITER)) {
+                                configuration.setExecutionRewriter(getText(child));
+                            } else if (child.getNodeName().equals(PLANNER)) {
+                                configuration.setExecutionPlanner(getText(child));
+                            }else if (child.getNodeName().equals(ENGINE)) {
+                                configuration.setExecutionEngine(getText(child));
+                            }
+                        }
+                        logger.info(label);
+                        configuration.addPrefixes(label, namespace);
+                    }
                 }
+
                 //7. TILING if necessary
                 list = xmlDocument.getElementsByTagName(GRANULARITY);
                 if (list.getLength() > 0) {
                     children = list.item(0).getChildNodes();
-                    getConfiguration().setGranularity(Integer.parseInt(getText(list.item(0))));
+                    configuration.setGranularity(Integer.parseInt(getText(list.item(0))));
                 } else {
                 }
 
@@ -310,7 +331,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 list = xmlDocument.getElementsByTagName(OUTPUT);
                 if (list.getLength() > 0) {
                     children = list.item(0).getChildNodes();
-                    getConfiguration().setOutputFormat(getText(list.item(0)));
+                    configuration.setOutputFormat(getText(list.item(0)));
                 } 
             }
         } catch (Exception e) {
@@ -318,7 +339,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
             e.printStackTrace();
             logger.warn("Some values were not set. Crossing my fingers and using defaults.");
         }
-        return getConfiguration();
+        return configuration;
     }
 
     public void modifyMetricExpression(LinkSpecification spec) {
@@ -326,14 +347,14 @@ public class XMLConfigurationReader extends AConfigurationReader {
             String m = atomicSpec.getFilterExpression();
             logger.info(m);
             Pattern p = Pattern.compile(Pattern.quote(m) + "\\|\\d*\\.\\d+");
-            String metricExpr = getConfiguration().getMetricExpression();
+            String metricExpr = configuration.getMetricExpression();
             Matcher mac = p.matcher(metricExpr);
             if (mac.find()) {
                 int start = mac.start();
                 int end = mac.end();
                 String subStr = metricExpr.substring(start, end);
                 String[] arr = subStr.split("\\|");
-                getConfiguration().setMetricExpression(metricExpr.replace(subStr, arr[0] + "|" + Double.toString(atomicSpec.getThreshold())));
+                configuration.setMetricExpression(metricExpr.replace(subStr, arr[0] + "|" + Double.toString(atomicSpec.getThreshold())));
             }
         }
     }

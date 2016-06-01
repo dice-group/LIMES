@@ -126,8 +126,10 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
         m.add(review, LIMES.file, ResourceFactory.createResource(configuration.getVerificationFile()));
         m.add(review, LIMES.relation, createResource(m, configuration.getVerificationRelation()));
 
-        //6. EXECUTION plan
-        m.add(s, LIMES.executionPlan, configuration.getExecutionPlan());
+        //6. EXECUTION
+        m.add(s, LIMES.executionPlanner, configuration.getExecutionPlanner());
+        m.add(s, LIMES.executionRewriter, configuration.getExecutionRewriter());
+        m.add(s, LIMES.executionEngine, configuration.getExecutionEngine());
 
         //7. TILING if necessary
         m.add(s, LIMES.granularity, ResourceFactory.createTypedLiteral(configuration.getGranularity()));

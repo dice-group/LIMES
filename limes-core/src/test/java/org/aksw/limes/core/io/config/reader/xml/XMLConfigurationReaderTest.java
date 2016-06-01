@@ -3,10 +3,12 @@ package org.aksw.limes.core.io.config.reader.xml;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,19 +20,23 @@ import static org.junit.Assert.assertTrue;
  * @version Jan 15, 2016
  */
 public class XMLConfigurationReaderTest {
-    @Test
-    public void testXmlReader() {
-        HashMap<String, String> prefixes = new HashMap<>();
+    
+    Map<String, String> prefixes = new HashMap<>();
+    Map<String, Map<String, String>> functions = new HashMap<>();
+    KBInfo sourceInfo, targetInfo;
+
+    @Before
+    public void init() {
         prefixes.put("geos", "http://www.opengis.net/ont/geosparql#");
         prefixes.put("lgdo", "http://linkedgeodata.org/ontology/");
         prefixes.put("geom", "http://geovocab.org/geometry#");
-
-        Map<String, Map<String, String>> functions = new HashMap<>();
+        prefixes = Collections.unmodifiableMap(prefixes);
         HashMap<String, String> f = new HashMap<String, String>();
         f.put("polygon", null);
         functions.put("geom:geometry/geos:asWKT", f);
-
-        KBInfo sourceInfo = new KBInfo(
+        functions = Collections.unmodifiableMap(functions);
+        
+        sourceInfo = new KBInfo(
                 "linkedgeodata",                                                  //String id
                 "http://linkedgeodata.org/sparql",                                //String endpoint
                 null,                                                             //String graph
@@ -44,7 +50,7 @@ public class XMLConfigurationReaderTest {
                 "sparql"                                                          //String type
         );
 
-        KBInfo targetInfo = new KBInfo(
+        targetInfo = new KBInfo(
                 "linkedgeodata",                                                  //String id
                 "http://linkedgeodata.org/sparql",                                //String endpoint
                 null,                                                             //String graph
@@ -57,29 +63,32 @@ public class XMLConfigurationReaderTest {
                 2000,                                                             //int pageSize
                 "sparql"                                                          //String type
         );
-        Configuration testConf = new Configuration(
-                sourceInfo,
-                targetInfo,
-                "hausdorff(x.polygon, y.polygon)", //metricExpression
-                "lgdo:near",                       //acceptanceRelation
-                "lgdo:near",                       //verificationRelation
-                0.9,                               //acceptanceThreshold
-                "lgd_relaybox_verynear.nt",        //acceptanceFile
-                0.5,                               //verificationThreshold
-                "lgd_relaybox_near.nt",            //verificationFile
-                prefixes,                          //prefixes
-                "TAB",                             //outputFormat
-                "Simple",                          //executionPlan
-                2,                                 //granularity
-                new String(),                      //MLAlgorithmName
-                new LearningParameters()           //MLAlgorithmParameters
-                ,null,null,null
-        );
+    }
+    @Test
+    public void testXmlReader() {
+
+        Configuration testConf = new Configuration();
+        testConf.setSourceInfo(sourceInfo);
+        testConf.setTargetInfo(targetInfo);
+        testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
+        testConf.setAcceptanceRelation("lgdo:near");       
+        testConf.setVerificationRelation("lgdo:near");
+        testConf.setAcceptanceThreshold(0.9); 
+        testConf.setAcceptanceFile("lgd_relaybox_verynear.nt");
+        testConf.setVerificationThreshold(0.5);
+        testConf.setVerificationFile("lgd_relaybox_near.nt");
+        testConf.setPrefixes(prefixes);
+        testConf.setOutputFormat("TAB");
+        testConf.setExecutionRewriter("default");
+        testConf.setExecutionPlanner("default");
+        testConf.setExecutionEngine("default");
 
         XMLConfigurationReader c = new XMLConfigurationReader("/resources/lgd-lgd.xml");
         Configuration fileConf = c.read();
-        System.out.println(fileConf);
-
+        
+        System.out.println(fileConf.getPrefixes());
+        System.out.println(testConf.getPrefixes());
+        
         assertTrue(testConf.equals(fileConf));
     }
 

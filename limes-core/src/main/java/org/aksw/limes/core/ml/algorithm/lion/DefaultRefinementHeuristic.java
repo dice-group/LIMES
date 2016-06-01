@@ -13,6 +13,7 @@ import java.util.List;
  *
  * @author Jens Lehmann
  */
+@Deprecated
 public class DefaultRefinementHeuristic implements RefinementHeuristic {
     static Logger logger = Logger.getLogger("LIMES");
     /*
