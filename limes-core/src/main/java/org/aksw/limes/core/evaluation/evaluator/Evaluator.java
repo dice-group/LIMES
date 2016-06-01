@@ -72,6 +72,7 @@ public class Evaluator {
             for (TaskAlgorithm tAlgorithm : TaskAlgorithms) {     //iterate over algorithms tasks(type,algorithm,parameter)
                 for (TaskData dataset : datasets) {     //iterate over datasets(name,source,target,mapping,training,pseudofm)
                     tAlgorithm.getMlAlgorithm().init(tAlgorithm.getMlParameter(), dataset.source, dataset.target);//initialize the algorithm with source and target data, passing its parameters too
+                    
                     ACoreMLAlgorithm ml = tAlgorithm.getMlAlgorithm().getMl(); //get the core machine learning working inside the algorithm
                     MLModel mlModel= null; // model resulting from the learning process
                     if(tAlgorithm.getMlType().equals(MLImplementationType.SUPERVISED_BATCH))
