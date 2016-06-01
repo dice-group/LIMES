@@ -40,11 +40,11 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Implements running the run operator. Assume atomic measures
      *
      * @param inst
-     *         Instruction
+     *            Instruction
      * @param source
-     *         Source cache
+     *            Source cache
      * @param target
-     *         Target cache
+     *            Target cache
      * @return MemoryMapping
      */
     public SimpleExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
@@ -56,7 +56,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * executes complex Link Specifications.
      *
      * @param plan
-     *         An execution plan
+     *            An execution plan
      * @return The mapping obtained from executing the plan
      */
     public AMapping executeInstructions(Plan plan) {
@@ -93,9 +93,10 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                 LinearFilter f = new LinearFilter();
                 AMapping m1 = executeUnion(buffer.get(inst.getSourceMapping()), buffer.get(inst.getTargetMapping()));
                 m1 = f.filter(m1, Double.parseDouble(inst.getThreshold()));
-                AMapping m2 = executeIntersection(buffer.get(inst.getSourceMapping()), buffer.get(inst.getTargetMapping()));
+                AMapping m2 = executeIntersection(buffer.get(inst.getSourceMapping()),
+                        buffer.get(inst.getTargetMapping()));
                 m2 = f.filter(m2, Double.parseDouble(inst.getThreshold()));
-                m = executeDifference(m1,m2);
+                m = executeDifference(m1, m2);
             } // end of processing. Return the indicated mapping
             else if (inst.getCommand().equals(Command.RETURN)) {
                 logger.info("Reached return command. Returning results.");
@@ -142,7 +143,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Implements the execution of the run operator. Assume atomic measures.
      *
      * @param inst
-     *         atomic run Instruction
+     *            atomic run Instruction
      * @return The mapping obtained from executing the atomic run Instruction
      */
     public AMapping executeRun(Instruction inst) {
@@ -165,9 +166,9 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Runs the reverse filtering operator
      *
      * @param inst
-     *         Instruction
+     *            Instruction
      * @param input
-     *         Mapping that is to be filtered
+     *            Mapping that is to be filtered
      * @return Filtered mapping
      */
     private AMapping executeReverseFilter(Instruction inst, AMapping input) {
@@ -180,9 +181,9 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Runs the filtering operator
      *
      * @param inst
-     *         filter Instruction
+     *            filter Instruction
      * @param input
-     *         Mapping that is to be filtered
+     *            Mapping that is to be filtered
      * @return filtered Mapping
      */
     public AMapping executeFilter(Instruction inst, AMapping input) {
@@ -206,21 +207,22 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Implements the difference of Mappings
      *
      * @param m1
-     *         First Mapping
+     *            First Mapping
      * @param m2
-     *         Second Mapping
+     *            Second Mapping
      * @return Intersection of m1 and m2
      */
     public AMapping executeDifference(AMapping m1, AMapping m2) {
         return MappingOperations.difference(m1, m2);
     }
+
     /**
      * Implements the intersection of Mappings
      *
      * @param m1
-     *         First Mapping
+     *            First Mapping
      * @param m2
-     *         Second Mapping
+     *            Second Mapping
      * @return Intersection of m1 and m2
      */
     public AMapping executeIntersection(AMapping m1, AMapping m2) {
@@ -231,9 +233,9 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Implements the union of Mappings
      *
      * @param m1
-     *         First Mapping
+     *            First Mapping
      * @param m2
-     *         Second Mapping
+     *            Second Mapping
      * @return Intersection of m1 and m2
      */
     public AMapping executeUnion(AMapping m1, AMapping m2) {
@@ -244,7 +246,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Implementation of the execution of a nested plan.
      *
      * @param plan,
-     *         A nested plan
+     *            A nested plan
      * @return The mapping obtained from executing the plan
      */
     public AMapping executeStatic(NestedPlan plan) {
@@ -255,8 +257,8 @@ public class SimpleExecutionEngine extends ExecutionEngine {
         else if (plan.isAtomic()) {
             m = executeInstructions(plan);
         } // nested plans contain subplans, an operator for merging the results
-        // of the subplans and a filter for filtering the results of the
-        // subplan
+          // of the subplans and a filter for filtering the results of the
+          // subplan
         else {
             // run all the subplans
             m = executeStatic(plan.getSubPlans().get(0));
@@ -265,12 +267,15 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                 m2 = executeStatic(plan.getSubPlans().get(i));
                 if (plan.getOperator().equals(Command.INTERSECTION)) {
                     result = executeIntersection(m, m2);
+
                 } // union
                 else if (plan.getOperator().equals(Command.UNION)) {
                     result = executeUnion(m, m2);
+
                 } // diff
                 else if (plan.getOperator().equals(Command.DIFF)) {
                     result = executeDifference(m, m2);
+
                     // exclusive or
                 } else if (plan.getOperator().equals(Command.XOR)) {
                     LinearFilter f = new LinearFilter();
@@ -289,7 +294,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                 m = executeFilter(plan.getFilteringInstruction(), m);
             }
         }
-       
+
         return m;
     }
 
@@ -300,7 +305,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * pushed back on the stack
      *
      * @param nestedPlan
-     *         which has not yet been executed
+     *            which has not yet been executed
      * @return Mapping
      */
     public AMapping executeDynamic(LinkSpecification spec, DynamicPlanner planner) {
@@ -326,11 +331,16 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                     if (plan.isEmpty()) // in case the init LS is atomic
                         plan = planner.plan(spec);
                     m = executeInstructions(plan);
+                    if (m.getMap().containsKey("journals/tods/FranklinCL97")) {
+                        if (m.getMap().get("journals/tods/FranklinCL97").containsKey("lD-FChcNZUQJ")) {
+                            logger.info(m.getConfidence("journals/tods/FranklinCL97", "lD-FChcNZUQJ"));
+                        }
+                    }
                 } else {
                     // complex not seen before
                     // call plan
                     plan = planner.plan(spec);
-                    //logger.info("Second plan: "+plan.getSubPlans().get(1));
+                    // logger.info("Second plan: "+plan.getSubPlans().get(1));
                     // get specification that corresponds to the first subplan
                     LinkSpecification firstSpec = planner.getLinkSpec(plan.getSubPlans().get(0));
                     // run first specification
@@ -349,6 +359,11 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                             LinkSpecification secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
                             m2 = executeDynamic(secondSpec, planner);
                             result = executeIntersection(m, m2);
+                            if (result.getMap().containsKey("journals/tods/FranklinCL97")) {
+                                if (result.getMap().get("journals/tods/FranklinCL97").containsKey("lD-FChcNZUQJ")) {
+                                    logger.info(result.getConfidence("journals/tods/FranklinCL97", "lD-FChcNZUQJ"));
+                                }
+                            }
                         }
                     } // union
                     else if (spec.getOperator().equals(LogicOperator.OR)) {
@@ -359,6 +374,11 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                         }
                         m2 = executeDynamic(secondSpec, planner);
                         result = executeUnion(m, m2);
+                        if (result.getMap().containsKey("journals/tods/FranklinCL97")) {
+                            if (result.getMap().get("journals/tods/FranklinCL97").containsKey("lD-FChcNZUQJ")) {
+                                logger.info(result.getConfidence("journals/tods/FranklinCL97", "lD-FChcNZUQJ"));
+                            }
+                        }
 
                     } // diff
                     else if (spec.getOperator().equals(LogicOperator.MINUS)) {
@@ -414,8 +434,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                 System.exit(1);
             }
         }
-        //logger.info("Current spec:" + spec);
-        //logger.info("Size of mapping: " + m.getNumberofMappings());
+
         return m;
     }
 
@@ -431,9 +450,9 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * generated previously.
      *
      * @param spec,
-     *         the link specification, after it was re-written
+     *            the link specification, after it was re-written
      * @param planner,
-     *         the chosen planner
+     *            the chosen planner
      * @return The mapping obtained from executing the plan of spec
      */
     @Override
@@ -441,7 +460,6 @@ public class SimpleExecutionEngine extends ExecutionEngine {
         AMapping m = MappingFactory.createDefaultMapping();
 
         spec = planner.normalize(spec);
-        //logger.info(spec);
         if (planner.isStatic() == false) {
             m = executeDynamic(spec, (DynamicPlanner) planner);
         } else {

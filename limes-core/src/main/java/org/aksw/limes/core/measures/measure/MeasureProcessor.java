@@ -28,7 +28,7 @@ public class MeasureProcessor {
      * Computes a list that contains all measures used in a given expression
      *
      * @param expression
-     *         Expression
+     *            Expression
      * @return List of all measures used
      */
     public static List<String> getMeasures(String expression) {
@@ -62,25 +62,25 @@ public class MeasureProcessor {
      * Returns similarity between two instances given a metric expression.
      *
      * @param sourceInstance,
-     *         the source instance
+     *            the source instance
      * @param targetInstance,
-     *         the target instance
+     *            the target instance
      * @param expression,
-     *         the metric expression
+     *            the metric expression
      * @param threshold,
-     *         the threshold
+     *            the threshold
      * @param sourceVar,
-     *         the source variable
+     *            the source variable
      * @param targetVar,
-     *         the target variable
+     *            the target variable
      * @return the similarity of sourceInstance and targetInstance
      */
     public static double getSimilarity(Instance sourceInstance, Instance targetInstance, String expression,
-                                       double threshold, String sourceVar, String targetVar) {
+            double threshold, String sourceVar, String targetVar) {
 
         Parser p = new Parser(expression, threshold);
         if (p.isAtomic()) {
-           
+
             Mapper mapper = null;
             try {
                 mapper = MeasureFactory.getMapper(p.getOperator());
@@ -147,14 +147,13 @@ public class MeasureProcessor {
                 System.exit(1);
             } else {
                 double similarity = 0.0d;
-                //if (mapper instanceof PPJoinPlusPlus) {
                 AMapping m = mapper.getMapping(source, target, sourceVar, targetVar, expression, threshold);
                 for (String s : m.getMap().keySet()) {
                     for (String t : m.getMap().get(s).keySet()) {
-                        similarity = m.getMap().get(s).get(t);
+                        similarity = m.getConfidence(s, t);
                     }
                 }
-                if(similarity >= threshold)
+                if (similarity >= threshold)
                     return similarity;
                 else
                     return 0.0d;
@@ -211,7 +210,8 @@ public class MeasureProcessor {
                         sourceVar, targetVar);
                 double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
                         sourceVar, targetVar);
-                // the second similarity must be 0 in order for the instance to
+                // the second similarity must be less than the second child
+                // threshold in order for the instance to
                 // have a change to be included at the final result
                 if (secondChild < p.getThreshold2()) {
                     if (firstChild >= parentThreshold)
@@ -230,9 +230,9 @@ public class MeasureProcessor {
      * Returns the approximation of the runtime for a certain expression
      *
      * @param measureExpression
-     *         Expression
+     *            Expression
      * @param mappingSize
-     *         Size of the mapping to process
+     *            Size of the mapping to process
      * @return Runtime approximation
      */
     public static double getCosts(String measureExpression, double mappingSize) {

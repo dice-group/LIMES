@@ -131,12 +131,7 @@ public class LinearFilter implements IFilter {
             s = source.getInstance(key);
             for (String value : map.getMap().get(key).keySet()) {
                 t = target.getInstance(value);
-                
                 sim = MeasureProcessor.getSimilarity(s, t, condition, threshold, sourceVar, targetVar);
-                /*if(key.equals("b0003517ls") && value.equals("http://www.google.com/base/feeds/snippets/11976142486373245711")){
-                    logger.info("Found them: "+sim);
-                    logger.info("Found them: "+map.getConfidence(key, value));
-                }*/
                 // result must pass the filter threshold first!
                 if (sim >= threshold) {
                     double sim2 = map.getConfidence(key, value);
@@ -196,9 +191,7 @@ public class LinearFilter implements IFilter {
             for (String value : map.getMap().get(key).keySet()) {
                 t = target.getInstance(value);
                 sim = MeasureProcessor.getSimilarity(s, t, condition, threshold, sourceVar, targetVar);
-                // check if sim is lower than the second's child threshold.
-                // special case: threshold and sim are 0, then the link is
-                // accepted
+                // similarity of s and t must be 0 to be accepted 
                 if (sim == 0) {
                     double sim2 = map.getConfidence(key, value);
                     if (sim2 >= mainThreshold) {

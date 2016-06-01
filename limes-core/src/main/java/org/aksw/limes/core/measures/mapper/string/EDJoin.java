@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class EDJoin extends Mapper {
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger(EDJoin.class.getName());
     private static int Q = -1;
     private static AMapping mapping = null;
     private static HashMap<Integer, String> sourceMap;
@@ -64,7 +64,7 @@ public class EDJoin extends Mapper {
     }
 
     private static int verification(Record currentRec, HashMap<Integer, Record> candidates, ArrayList<String> objects,
-                                    int q, int threshold) {
+            int q, int threshold) {
         int count = 0;
         String id1, id2;
         Iterator<Record> iter = candidates.values().iterator();
@@ -72,14 +72,14 @@ public class EDJoin extends Mapper {
             Record y = iter.next();
             compareQGramsResult compResult = compareQGrams(currentRec, y, threshold);
 
-	    /*
-	     * count filtering
-	     */
+            /*
+             * count filtering
+             */
             if (compResult.e1 <= q * threshold) {
                 int e2 = minEditErrors(compResult.Q, q);
-		/*
-		 * location-based mismatch filtering
-		 */
+                /*
+                 * location-based mismatch filtering
+                 */
                 if (e2 <= threshold) {
                     int e3 = contentFilter(objects.get(currentRec.id), objects.get(y.id), compResult.Q, threshold, q);
                     if (e3 <= 2 * threshold) {
@@ -280,9 +280,9 @@ public class EDJoin extends Mapper {
      * Berechnet die Edit-Distanz zwischen zwei Zeichenketten.
      *
      * @param x
-     *         erste Zeichenkette
+     *            erste Zeichenkette
      * @param y
-     *         zweite Zeichenkette
+     *            zweite Zeichenkette
      * @return Edit-Distanz
      */
     public static int editDistance(String x, String y) {
@@ -343,23 +343,24 @@ public class EDJoin extends Mapper {
      * Computes a mapping between a source and a target.
      *
      * @param source
-     *         Source cache
+     *            Source cache
      * @param target
-     *         Target cache
+     *            Target cache
      * @param sourceVar
-     *         Variable for the source dataset
+     *            Variable for the source dataset
      * @param targetVar
-     *         Variable for the target dataset
+     *            Variable for the target dataset
      * @param expression
-     *         Expression to process.
+     *            Expression to process.
      * @param threshold
-     *         Similarity threshold
+     *            Similarity threshold
      * @return A mapping which contains links between the source instances and
-     * the target instances
+     *         the target instances
      */
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
+        
         if (Q <= 1) {
             Q = 3;
         }
@@ -436,11 +437,11 @@ public class EDJoin extends Mapper {
         // run the core of EdJoin
         String id1, id2;
         for (int i = 0; i < records.length; i++) {
-        /*
-	     * if the length of a record is smaller than q, then we cannot use
-	     * the q-gram approach and have to go for comparison without q-gram
-	     * filtering
-	     */
+            /*
+             * if the length of a record is smaller than q, then we cannot use
+             * the q-gram approach and have to go for comparison without q-gram
+             * filtering
+             */
             if (records[i].qGrams.length == 0 && records[i].s.length() > 0) {
                 String x = records[i].s;
                 for (int j = i + 1; j < records.length; j++) {
@@ -456,6 +457,8 @@ public class EDJoin extends Mapper {
                                     id1 = sourceMap.get(records[i].id);
                                     id2 = targetMap.get(records[j].id);
                                     // CORRECT
+                                    // if ((1.0 / (1 + (double) ed)) >=
+                                    // threshold)
                                     mapping.add(id1, id2, 1.0 / (1 + (double) ed));
                                 } else // should not be necessary
                                 {
@@ -465,6 +468,8 @@ public class EDJoin extends Mapper {
                                         id2 = targetMap.get(records[i].id);
 
                                         // CORRECT
+                                        // if ((1.0 / (1 + (double) ed)) >=
+                                        // threshold)
                                         mapping.add(id1, id2, 1.0 / (1 + (double) ed));
                                         // mapping.add(id2, id1, similarity);
                                     }
@@ -509,6 +514,13 @@ public class EDJoin extends Mapper {
                 }
             }
         }
+        /*
+         * AMapping tempMapping = MappingFactory.createDefaultMapping(); for
+         * (String key : mapping.getMap().keySet()) { for (String value :
+         * mapping.getMap().get(key).keySet()) { double confidence =
+         * mapping.getConfidence(key, value); if (confidence < threshold) {
+         * tempMapping.add(key, value, confidence); } } } mapping = tempMapping;
+         */
         
         return mapping;
     }

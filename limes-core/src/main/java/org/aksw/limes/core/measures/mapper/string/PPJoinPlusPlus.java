@@ -545,7 +545,7 @@ public class PPJoinPlusPlus extends Mapper {
                 }
             }
         }
-        //mapping = tempMapping;
+        mapping = tempMapping;
         return mapping;
     }
 
