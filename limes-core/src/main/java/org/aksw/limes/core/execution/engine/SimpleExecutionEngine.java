@@ -84,25 +84,25 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                 m = executeRun(inst);
             } // runs the filter operator
             else if (inst.getCommand().equals(Command.FILTER)) {
-                m = executeFilter(inst, buffer.get(inst.getSourceMapping()));
+                m = executeFilter(inst, buffer.get(inst.getSourceIndex()));
             } else if (inst.getCommand().equals(Command.REVERSEFILTER)) {
-                m = executeReverseFilter(inst, buffer.get(inst.getSourceMapping()));
+                m = executeReverseFilter(inst, buffer.get(inst.getSourceIndex()));
             } // runs set operations such as intersection,
             else if (inst.getCommand().equals(Command.INTERSECTION)) {
-                m = executeIntersection(buffer.get(inst.getSourceMapping()), buffer.get(inst.getTargetMapping()));
+                m = executeIntersection(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
             } // union
             else if (inst.getCommand().equals(Command.UNION)) {
-                m = executeUnion(buffer.get(inst.getSourceMapping()), buffer.get(inst.getTargetMapping()));
+                m = executeUnion(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
             } // diff
             else if (inst.getCommand().equals(Command.DIFF)) {
-                m = executeDifference(buffer.get(inst.getSourceMapping()), buffer.get(inst.getTargetMapping()));
+                m = executeDifference(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
             } // xor
             else if (inst.getCommand().equals(Command.XOR)) {
                 LinearFilter f = new LinearFilter();
-                AMapping m1 = executeUnion(buffer.get(inst.getSourceMapping()), buffer.get(inst.getTargetMapping()));
+                AMapping m1 = executeUnion(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
                 m1 = f.filter(m1, Double.parseDouble(inst.getThreshold()));
-                AMapping m2 = executeIntersection(buffer.get(inst.getSourceMapping()),
-                        buffer.get(inst.getTargetMapping()));
+                AMapping m2 = executeIntersection(buffer.get(inst.getSourceIndex()),
+                        buffer.get(inst.getTargetIndex()));
                 m2 = f.filter(m2, Double.parseDouble(inst.getThreshold()));
                 m = executeDifference(m1, m2);
             } // end of processing. Return the indicated mapping
