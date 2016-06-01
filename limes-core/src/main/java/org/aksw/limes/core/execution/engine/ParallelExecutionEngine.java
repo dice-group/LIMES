@@ -6,12 +6,14 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 
 /**
- * Implements the default parallel engine class. The idea is that the engine
- * gets a series of instructions in the form of an execution plan and runs these
- * instructions in parallel and returns a mapping.
+ * Implements the default execution engine class. The idea is that the engine
+ * gets as input a link specification and a planner type, executes the
+ * independent parts of the plan returned from the planner in parallel and
+ * returns a MemoryMemoryMapping.
  *
- * @author ngonga
- * @author kleanthi
+ *
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
  */
 public class ParallelExecutionEngine extends ExecutionEngine {
 
@@ -21,13 +23,13 @@ public class ParallelExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Implementation of the execution of an execution plan. Instructions of the
-     * plan are implemented in parallel.
+     * Implementation of the execution of an execution plan. Independent parts
+     * of the plan are executed in parallel.
      *
      * @param spec,
-     *         the input link specification
+     *            The input link specification
      * @param planner,
-     *         the chosen planner
+     *            The chosen planner
      * @return The mapping from running the plan
      */
     @Override

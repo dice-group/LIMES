@@ -25,35 +25,43 @@ import java.util.List;
 
 /**
  * Implements the default execution engine class. The idea is that the engine
- * gets a series of instructions in the form of an execution plan and runs these
- * instructions sequentially and returns a MemoryMemoryMapping.
+ * gets as input a link specification and a planner type, executes the
+ * independent parts of the plan returned from the planner sequentially and
+ * returns a MemoryMemoryMapping.
  *
- * @author ngonga
- * @author kleanthi
+ * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
  */
 public class SimpleExecutionEngine extends ExecutionEngine {
 
-    static Logger logger = Logger.getLogger(SimpleExecutionEngine.class.getName());
+    static Logger logger = Logger.getLogger(SimpleExecutionEngine.class);
+    /**
+     * Map of intermediate mappings. Used for dynamic planning.
+     */
     private HashMap<String, AMapping> dynamicResults = new HashMap<String, AMapping>();
 
     /**
-     * Implements running the run operator. Assume atomic measures
+     * Constructor for a simple execution engine.
      *
-     * @param inst
-     *            Instruction
-     * @param source
+     * @param source,
      *            Source cache
-     * @param target
+     * @param target,
      *            Target cache
-     * @return MemoryMapping
+     * @param sourceVar,
+     *            Source variable
+     * @param targetVar,
+     *            Target variable
      */
     public SimpleExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
         super(source, target, sourceVar, targetVar);
     }
 
     /**
-     * Implementation of the execution of a plan. Be aware that this doesn't
-     * executes complex Link Specifications.
+     * Implementation of the execution of a plan. It receives a plan as a set of
+     * instructions and executes them sequentially. This function does not
+     * execute nested plans. In case of a RUN command, the instruction must
+     * include an atomic link specification.
      *
      * @param plan
      *            An execution plan
@@ -99,7 +107,6 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                 m = executeDifference(m1, m2);
             } // end of processing. Return the indicated mapping
             else if (inst.getCommand().equals(Command.RETURN)) {
-                logger.info("Reached return command. Returning results.");
                 if (buffer.isEmpty()) {
                     return m;
                 }
@@ -140,11 +147,12 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Implements the execution of the run operator. Assume atomic measures.
+     * Implements the execution of the RUN operator. The input instruction must
+     * include an atomic link specification.
      *
-     * @param inst
-     *            atomic run Instruction
-     * @return The mapping obtained from executing the atomic run Instruction
+     * @param inst,
+     *            Atomic RUN instruction
+     * @return The mapping obtained from executing the atomic RUN instruction
      */
     public AMapping executeRun(Instruction inst) {
         double threshold = Double.parseDouble(inst.getThreshold());
@@ -155,7 +163,6 @@ public class SimpleExecutionEngine extends ExecutionEngine {
             return mapper.getMapping(source, target, sourceVariable, targetVariable, inst.getMeasureExpression(),
                     threshold);
         } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -163,11 +170,11 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Runs the reverse filtering operator
+     * Runs the reverse filtering operator.
      *
-     * @param inst
-     *            Instruction
-     * @param input
+     * @param inst,
+     *            Input instruction with REVERSEFILTER command
+     * @param input,
      *            Mapping that is to be filtered
      * @return Filtered mapping
      */
@@ -178,11 +185,11 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Runs the filtering operator
+     * Runs the filtering operator.
      *
-     * @param inst
-     *            filter Instruction
-     * @param input
+     * @param inst,
+     *            Input instruction with FILTER command
+     * @param input,
      *            Mapping that is to be filtered
      * @return filtered Mapping
      */
@@ -204,20 +211,20 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Implements the difference of Mappings
+     * Implements the difference between two mappings.
      *
      * @param m1
      *            First Mapping
      * @param m2
      *            Second Mapping
-     * @return Intersection of m1 and m2
+     * @return Difference of m1 and m2
      */
     public AMapping executeDifference(AMapping m1, AMapping m2) {
         return MappingOperations.difference(m1, m2);
     }
 
     /**
-     * Implements the intersection of Mappings
+     * Implements the intersection between two mappings.
      *
      * @param m1
      *            First Mapping
@@ -230,7 +237,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Implements the union of Mappings
+     * Implements the union between two mappings.
      *
      * @param m1
      *            First Mapping
@@ -243,10 +250,16 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Implementation of the execution of a nested plan.
+     * Executes an immutable nested plan in lNr depth first oder. See
+     * {@link #execute(LinkSpecification, IPlanner)}. If a plan is atomic, it is
+     * executed and the result mapping is returned. If it is complex, the
+     * operator is used on the top 2 previously retrieved mappings and the
+     * result mapping of the previous step gets filtered using the filtering
+     * instruction of the plan (if any).
      *
      * @param plan,
-     *            A nested plan
+     *            A nested plan created by a static planner (Canonical or
+     *            Helios)
      * @return The mapping obtained from executing the plan
      */
     public AMapping executeStatic(NestedPlan plan) {
@@ -267,15 +280,12 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                 m2 = executeStatic(plan.getSubPlans().get(i));
                 if (plan.getOperator().equals(Command.INTERSECTION)) {
                     result = executeIntersection(m, m2);
-
                 } // union
                 else if (plan.getOperator().equals(Command.UNION)) {
                     result = executeUnion(m, m2);
-
                 } // diff
                 else if (plan.getOperator().equals(Command.DIFF)) {
                     result = executeDifference(m, m2);
-
                     // exclusive or
                 } else if (plan.getOperator().equals(Command.XOR)) {
                     LinearFilter f = new LinearFilter();
@@ -299,14 +309,33 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * If a plan is atomic: it gets run and the result mapping gets pushed on
-     * the stack if its complex: the operator/filter is used on the top 2
-     * objects on the stack which get popped the result mapping of this gets
-     * pushed back on the stack
+     * Executes an input link specification L in a dynamic fashion. See
+     * {@link #execute(LinkSpecification, IPlanner)}. If L is already executed,
+     * then the corresponding mapping is retrieved from the dynamicResults and
+     * returned. If L is not executed, then the function checks if there is
+     * another previously executed specification A with the same fullExpression
+     * ( {@link org.aksw.limes.core.io.ls.LinkSpecification#fullExpression} but
+     * lower threshold. If A exists, then it retrieves the mapping of A, filters
+     * it with input link specification threshold and returns the mapping. If A
+     * does not exist, the function checks whether L is atomic or not. If L is
+     * atomic then the planner creates a nested plan P with a RUN instruction.
+     * The function executes P and the retrieved mapping is returned. If L is
+     * not atomic, then the planner creates an initial plan P for L and the
+     * function executes the first subPlan of P, P1. Then, if L has an OR or XOR
+     * operator, the second subPlan of P, P2 is executed, the operator functions
+     * is applied to the mappings returned by P1 and P2 and the resulting
+     * mapping is filtered and returned. In case of an AND or MINUS operator,
+     * the executeDynamic function invokes the planning function again to
+     * re-plan the remaining non-executed parts of P (if any). Then it executes
+     * the second sub-plan of P, that can vary given from the initial given the
+     * intermediate executed steps of the first plan.
+     * 
      *
-     * @param nestedPlan
-     *            which has not yet been executed
-     * @return Mapping
+     * @param spec,
+     *            the input link specification
+     * @param planner,
+     *            the dynamic planner
+     * @return The mapping obtained from executing the link specification.
      */
     public AMapping executeDynamic(LinkSpecification spec, DynamicPlanner planner) {
         long begin = System.currentTimeMillis();
@@ -331,16 +360,10 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                     if (plan.isEmpty()) // in case the init LS is atomic
                         plan = planner.plan(spec);
                     m = executeInstructions(plan);
-                    if (m.getMap().containsKey("journals/tods/FranklinCL97")) {
-                        if (m.getMap().get("journals/tods/FranklinCL97").containsKey("lD-FChcNZUQJ")) {
-                            logger.info(m.getConfidence("journals/tods/FranklinCL97", "lD-FChcNZUQJ"));
-                        }
-                    }
                 } else {
                     // complex not seen before
                     // call plan
                     plan = planner.plan(spec);
-                    // logger.info("Second plan: "+plan.getSubPlans().get(1));
                     // get specification that corresponds to the first subplan
                     LinkSpecification firstSpec = planner.getLinkSpec(plan.getSubPlans().get(0));
                     // run first specification
@@ -359,11 +382,6 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                             LinkSpecification secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
                             m2 = executeDynamic(secondSpec, planner);
                             result = executeIntersection(m, m2);
-                            if (result.getMap().containsKey("journals/tods/FranklinCL97")) {
-                                if (result.getMap().get("journals/tods/FranklinCL97").containsKey("lD-FChcNZUQJ")) {
-                                    logger.info(result.getConfidence("journals/tods/FranklinCL97", "lD-FChcNZUQJ"));
-                                }
-                            }
                         }
                     } // union
                     else if (spec.getOperator().equals(LogicOperator.OR)) {
@@ -374,12 +392,6 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                         }
                         m2 = executeDynamic(secondSpec, planner);
                         result = executeUnion(m, m2);
-                        if (result.getMap().containsKey("journals/tods/FranklinCL97")) {
-                            if (result.getMap().get("journals/tods/FranklinCL97").containsKey("lD-FChcNZUQJ")) {
-                                logger.info(result.getConfidence("journals/tods/FranklinCL97", "lD-FChcNZUQJ"));
-                            }
-                        }
-
                     } // diff
                     else if (spec.getOperator().equals(LogicOperator.MINUS)) {
                         // replan
@@ -439,21 +451,21 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     }
 
     /**
-     * Implementation of the execution of link specification. The execution
-     * engine chooses which execute function is going to be invoked given the
-     * planner. For the Canonical and Helios planners, the execution of link
-     * specifications has been modeled as a linear process wherein a LS is
-     * potentially first rewritten, planned and finally executed. Subsequently,
-     * the plan never changes and simply executed. For the Dynamic planner, we
-     * enable a flow of information from the execution engine back to the
-     * planner, that uses intermediary execution results to improve plans
-     * generated previously.
+     * Executes a link specification. The execution engine chooses which execute
+     * function is going to be invoked given the planner. For the Canonical and
+     * Helios planner, the execution of link specifications has been modeled as
+     * a linear process wherein a LS is potentially first rewritten, planned and
+     * finally executed. Subsequently, the plan never changes and is simply
+     * executed. For the Dynamic planner, we enable a flow of information from
+     * the execution engine back to the planner, that uses intermediary
+     * execution results to improve plans generated previously.
      *
      * @param spec,
-     *            the link specification, after it was re-written
+     *            The link specification, after it was re-written
      * @param planner,
-     *            the chosen planner
-     * @return The mapping obtained from executing the plan of spec
+     *            The chosen planner
+     * @return The mapping obtained from executing the plan of the input link
+     *         specification
      */
     @Override
     public AMapping execute(LinkSpecification spec, IPlanner planner) {

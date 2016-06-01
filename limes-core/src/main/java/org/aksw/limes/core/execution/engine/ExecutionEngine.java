@@ -8,33 +8,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implements the execution engine abstract class. The idea is that the engine
- * gets a series of instructions in the form of an execution plan and runs these
- * instructions and returns a mapping
+ * Implements the execution engine abstract class. The engine gets as input a
+ * link specification and a planner type, executes the plan returned from the
+ * planner and returns the set of links as a mapping.
  *
- * @author ngonga
- * @author kleanthi
+ * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
  */
 public abstract class ExecutionEngine implements IExecutionEngine {
-    static Logger logger = Logger.getLogger(ExecutionEngine.class.getName());
-    // contains the results
+    static Logger logger = Logger.getLogger(ExecutionEngine.class);
+    /**
+     * List of intermediate mappings.
+     */
     protected List<AMapping> buffer;
+    /**
+     * Source variable (usually "?x").
+     */
     protected String sourceVariable;
+    /**
+     * Target variable (usually "?y").
+     */
     protected String targetVariable;
+    /**
+     *  Source cache.
+     */
     protected Cache source;
+    /**
+     *  Target cache.
+     */
     protected Cache target;
 
     /**
      * Constructor for an execution engine.
      *
      * @param source,
-     *         Source cache
+     *            Source cache
      * @param target,
-     *         Target cache
+     *            Target cache
      * @param sourceVar,
-     *         Source variable (usually "?x")
+     *            Source variable 
      * @param targetVar,
-     *         Target variable (usually "?y")
+     *            Target variable
      */
     public ExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
         this.buffer = new ArrayList<>();
