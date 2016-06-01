@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.aksw.limes.core.measures.mapper.string;
 
 import org.aksw.limes.core.io.cache.Cache;
@@ -196,7 +192,7 @@ public class JaroMapper extends Mapper {
         AMapping result = MappingFactory.createDefaultMapping();
         double maxSourceLength, maxTargetLength, similarity, theta;
         List<Character> sourceMappingCharacters, targetMappingCharacters;
-        int halfLength, transpositions, lengthFilterCount = 0, characterFilterCount = 0;
+        int halfLength, transpositions;
 
         // length-aware filter
         for (Integer sourceLength : sourceLengthIndex.keySet()) {
@@ -210,14 +206,12 @@ public class JaroMapper extends Mapper {
                 if (sourceLength <= maxSourceLength && targetLength <= maxTargetLength) {
                     for (String s : sourceLengthIndex.get(sourceLength)) {
                         for (String t : targetLengthIndex.get(targetLength)) {
-                            lengthFilterCount++;
                             sourceMappingCharacters = Jaro.getCommonCharacters(s, t, halfLength);
                             if (sourceMappingCharacters.size() >= theta) {
                                 targetMappingCharacters = Jaro.getCommonCharacters(t, s, halfLength);
                                 transpositions = Jaro.getTranspositions(sourceMappingCharacters,
                                         targetMappingCharacters);
                                 if (transpositions != -1) {
-                                    characterFilterCount++;
                                     similarity = ((sourceMappingCharacters.size() / (float) sourceLength)
                                             + (targetMappingCharacters.size() / (float) targetLength)
                                             + (sourceMappingCharacters.size() - transpositions)

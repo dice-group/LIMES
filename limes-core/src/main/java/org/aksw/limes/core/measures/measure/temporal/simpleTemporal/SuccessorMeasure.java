@@ -2,14 +2,12 @@ package org.aksw.limes.core.measures.measure.temporal.simpleTemporal;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
-import org.apache.log4j.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SuccessorMeasure extends TemporalMeasure {
-    private static final Logger logger = Logger.getLogger(SuccessorMeasure.class.getName());
 
     @Override
     public double getSimilarity(Object a, Object b) {
