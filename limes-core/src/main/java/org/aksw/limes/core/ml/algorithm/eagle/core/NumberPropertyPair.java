@@ -1,6 +1,6 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
-import org.aksw.limes.core.util.Pair;
+import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.apache.log4j.Logger;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
@@ -21,7 +21,7 @@ public class NumberPropertyPair extends CommandGene implements IMutateable, IClo
     private static final long serialVersionUID = 5370919913629489323L;
     final Logger logger = Logger.getLogger("LIMES");
     int pairIndex;
-    Pair<String> pair;
+    PairSimilar<String> pair;
     boolean mutateable;
     LinkSpecGeneticLearnerConfig config;
 

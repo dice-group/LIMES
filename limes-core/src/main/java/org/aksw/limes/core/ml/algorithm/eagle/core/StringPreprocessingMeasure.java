@@ -1,7 +1,7 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
+import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
-import org.aksw.limes.core.util.Pair;
 import org.apache.log4j.Logger;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
@@ -132,7 +132,7 @@ public class StringPreprocessingMeasure
      */
     public Class getChildType(IGPProgram a_ind, int a_chromNum) {
         if (a_chromNum == 0)
-            return Pair.class;
+            return PairSimilar.class;
         else
             return CommandGene.DoubleClass;
 
@@ -165,7 +165,7 @@ public class StringPreprocessingMeasure
     public Object execute_object(ProgramChromosome a_chrom, int a_n, Object[] args) {
         double threshold;
         @SuppressWarnings("unchecked")
-        Pair<String> propPair = (Pair<String>) a_chrom.execute_object(a_n, 0, args);
+        PairSimilar<String> propPair = (PairSimilar<String>) a_chrom.execute_object(a_n, 0, args);
         threshold = a_chrom.execute_double(a_n, 1, args);
 
         LinkSpecGeneticLearnerConfig ExpConfig = (LinkSpecGeneticLearnerConfig) getGPConfiguration();
@@ -244,7 +244,7 @@ public class StringPreprocessingMeasure
     public boolean isValid(ProgramChromosome a_program, int a_index) {
         Object[] o = new Object[0];
         LinkSpecGeneticLearnerConfig expConfig = (LinkSpecGeneticLearnerConfig) getGPConfiguration();
-        Pair propPair = (Pair) a_program.execute_object(a_index, 0, o);
+        PairSimilar propPair = (PairSimilar) a_program.execute_object(a_index, 0, o);
         return expConfig.getPropertyMapping().isMatch(propPair.a.toString(), propPair.b.toString());
     }
 

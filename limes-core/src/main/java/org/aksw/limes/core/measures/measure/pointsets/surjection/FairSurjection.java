@@ -3,6 +3,7 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.surjection;
 
+import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -10,7 +11,6 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
-import org.aksw.limes.core.util.Pair;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -49,7 +49,7 @@ public class FairSurjection extends PointsetsMeasure {
         double sum = 0;
         FairSurjectionFinder fsf = new FairSurjectionFinder(X, Y);
 
-        for (Pair<Point> p : fsf.getFairSurjectionPairsList()) {
+        for (PairSimilar<Point> p : fsf.getFairSurjectionPairsList()) {
             sum = PointsetsMeasure.pointToPointDistance(p.a, p.b);
         }
         return sum;
@@ -59,7 +59,7 @@ public class FairSurjection extends PointsetsMeasure {
         double sum = 0;
         FairSurjectionFinder fsf = new FairSurjectionFinder(X, Y);
 
-        for (Pair<Point> p : fsf.getFairSurjectionPairsList()) {
+        for (PairSimilar<Point> p : fsf.getFairSurjectionPairsList()) {
 
             sum += pointToPointDistance(p.a, p.b);
         }
