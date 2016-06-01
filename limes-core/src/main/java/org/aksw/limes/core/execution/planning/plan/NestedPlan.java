@@ -7,83 +7,128 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implements execution plan that is given to an execution engine. Note that the
- * subPlans fields is set to null by the instructor. Before adding a subplan for
- * the first time, the subPlans field must be initiated.
+ * Implements the nested plan of a link specification. Note that the subPlans fields
+ * is set to null by the instructor. Before adding a subplan for the first time,
+ * the subPlans field must be initiated.
  *
- * @author ngonga
- * @author kleanthi
+ * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
  */
 public class NestedPlan extends Plan {
+    /**
+     * List of nested sub-plans.
+     */
     private List<NestedPlan> subPlans;
+    /**
+     * Operator of the nested plan.
+     */
     private Command operator;
+    /**
+     * Filtering Instruction of the nested plan.
+     */
     private Instruction filteringInstruction;
-    private boolean isExecuted;
+    /**
+     * Fields that declares if the current nested plan is executed or not.
+     */
+    private boolean executionStatus;
 
+    /**
+     * Constructor of the NestedPlan class.
+     */
     public NestedPlan() {
         super();
         subPlans = null;
         filteringInstruction = null;
     }
 
+    /* Getters and setters */
     /**
-     * Returns the set of sub-Plans of the plan
+     * Returns the set of sub-plans of the current plan.
      *
-     * @return subPlans
+     * @return subPlans, the current sub-plans
      */
     public List<NestedPlan> getSubPlans() {
         return subPlans;
     }
 
     /**
-     * Set the sub-Plans of the plan
+     * Sets the sub-plans of the plan.
      *
-     * @param subPlans
-     *         to set
+     * @param subPlans,
+     *            the sub-plans to set
      */
     public void setSubPlans(List<NestedPlan> subPlans) {
         this.subPlans = subPlans;
     }
 
     /**
-     * Returns the operator of the plan
+     * Returns the operator of the plan.
      *
-     * @return operator
+     * @return operator, the operator of the plan
      */
     public Command getOperator() {
         return operator;
     }
 
     /**
-     * Set the operator of the plan
+     * Sets the operator of the plan.
      *
-     * @param operator
-     *         to set
+     * @param operator,
+     *            the operator to set
      */
     public void setOperator(Command operator) {
         this.operator = operator;
     }
 
     /**
-     * Returns the filtering Instruction of the plan
+     * Returns the filtering Instruction of the plan.
      *
-     * @return filteringInstruction
+     * @return filteringInstruction, the filtering instruction of the plan
      */
     public Instruction getFilteringInstruction() {
         return filteringInstruction;
     }
 
     /**
-     * Set the filtering Instruction of the plan
+     * Sets the filtering Instruction of the plan.
      *
-     * @param filteringInstruction
-     *         to set
+     * @param filteringInstruction,
+     *            the filtering instruction to set
      */
     public void setFilteringInstruction(Instruction filteringInstruction) {
         this.filteringInstruction = filteringInstruction;
     }
 
+    /**
+     * Returns the execution status of the plan.
+     *
+     * @return executionStatus, true if the plan has been executed or false
+     *         otherwise
+     */
+    public boolean getExecutionStatus() {
+        return executionStatus;
+    }
+
+    /**
+     * Updates the execution status of the plan. If the plan has just been
+     * executed then it changes the value from false to true.
+     *
+     * @param executionStatus,
+     *            true if the plan has just been executed or false otherwise.
+     */
+    public void setExecutionStatus(boolean isExecuted) {
+        this.executionStatus = isExecuted;
+    }
+
     @Override
+    /**
+     * Checks if the plan is empty. Returns true if and only if the instruction
+     * list is empty and both the sub-plans and the filtering instructions are
+     * null.
+     *
+     * @return true if the plan is empty and false otherwise
+     */
     public boolean isEmpty() {
         // instructionList is initiliazed as new list
         // subplans are null until a function initiliazes it
@@ -92,9 +137,10 @@ public class NestedPlan extends Plan {
     }
 
     /**
-     * Checks whether the current NestedPlan is atomic or not.
+     * Checks whether the current plan is atomic or not. A plan is atomic if its
+     * sub-plans are null or if the existing sub-plans are empty.
      *
-     * @return true, if current NestedPlan is atomic. false, if otherwise
+     * @return true if the plan is atomic and false otherwise
      */
     public boolean isAtomic() {
         if (subPlans == null) {
@@ -107,6 +153,13 @@ public class NestedPlan extends Plan {
         return false;
     }
 
+    /**
+     * Returns the list of instructions contained in a instructionList. If the
+     * plan is not atomic, then the functions returns all the instructions of
+     * each atomic nested plan included in the current plan.
+     *
+     * @return List of instructions
+     */
     @Override
     public List<Instruction> getInstructionList() {
         List<Instruction> instructions = new ArrayList<Instruction>();
@@ -124,16 +177,25 @@ public class NestedPlan extends Plan {
         return instructions;
     }
 
+    /**
+     * Returns the size of the current plan. The size of a plan is equal to the
+     * size of its instruction list.
+     *
+     * @return size, the size of the plan
+     */
     @Override
     public int size() {
         return (this.getInstructionList().size());
     }
 
     /**
-     * Generates a clone of the current NestedPlan
+     * Returns a clone of the current plan. Each non-primitive field of the
+     * current plan is cloned by invoking the clone function of the
+     * corresponding class.
      *
-     * @return clone, clone of current NestedPlan
+     * @return clone, the clone of the current plan
      */
+    @Override
     public NestedPlan clone() {
         NestedPlan clone = new NestedPlan();
 
@@ -179,11 +241,11 @@ public class NestedPlan extends Plan {
     }
 
     /**
-     * Adds a sub-Plan to the current list of subPlans, if there is no list one
-     * will be created
+     * Adds a sub-Plan to the current list of sub-plans. If there is no list one
+     * will be created.
      *
-     * @param subplan
-     *         to be added
+     * @param subplan,
+     *            the sub-plan to be added
      */
     public void addSubplan(NestedPlan subplan) {
         if (subplan != null) {
@@ -194,7 +256,7 @@ public class NestedPlan extends Plan {
     }
 
     /**
-     * Get all the metric expressions of the current NestedPlan
+     * Returns all the metric expressions of the current plan.
      *
      * @return List of all metric expressions
      */
@@ -224,12 +286,12 @@ public class NestedPlan extends Plan {
     }
 
     /**
-     * String representation of NestedPlan
+     * String representation of the current plan.
      *
-     * @return NestedPlan as string
+     * @return str, the string representation of the current plan
      */
     public String toString() {
-        String pre = ("Selectivity = " + selectivity);
+        String str = ("Selectivity = " + selectivity);
         if (isEmpty()) {
             return "Empty plan";
         }
@@ -238,28 +300,28 @@ public class NestedPlan extends Plan {
                 if (subPlans != null) {
                     if (!subPlans.isEmpty()) {
                         // instructionList, filteringInstruction, subplans
-                        return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
+                        return "\nBEGIN\n" + str + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
                                 + "\n" + operator + "\nSubplans\n" + "\n" + subPlans + "\nEND\n-----";
                     } else
                         // instructionList, filteringInstruction
-                        return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
+                        return "\nBEGIN\n" + str + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
                                 + "\nEND\n-----";
                 } else {
                     // instructionList, filteringInstruction
-                    return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
+                    return "\nBEGIN\n" + str + "-----\n" + filteringInstruction + "\n-----\n" + instructionList
                             + "\nEND\n-----";
                 }
             } else {
                 if (subPlans != null) {
                     if (!subPlans.isEmpty()) {
                         // instructionList, subplans
-                        return "\nBEGIN\n" + pre + "-----\n" + instructionList + "\n" + operator + "\nSubplans\n"
+                        return "\nBEGIN\n" + str + "-----\n" + instructionList + "\n" + operator + "\nSubplans\n"
                                 + subPlans + "\nEND\n-----";
                     } else
                         // instructionList
-                        return "\nBEGIN\n" + pre + "-----\n" + instructionList + "\nEND\n-----";
+                        return "\nBEGIN\n" + str + "-----\n" + instructionList + "\nEND\n-----";
                 } else {
-                    return "\nBEGIN\n" + pre + "-----\n" + instructionList + "\nEND\n-----";
+                    return "\nBEGIN\n" + str + "-----\n" + instructionList + "\nEND\n-----";
                 }
 
             }
@@ -268,32 +330,33 @@ public class NestedPlan extends Plan {
                 if (subPlans != null) {
                     if (!subPlans.isEmpty()) {
                         // filteringInstruction, subplans
-                        return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\n-----\n" + operator
+                        return "\nBEGIN\n" + str + "-----\n" + filteringInstruction + "\n-----\n" + operator
                                 + "\nSubplans\n" + "\n" + subPlans + "\nEND\n-----";
                     } else
                         // filteringInstruction
-                        return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\nEND\n-----";
+                        return "\nBEGIN\n" + str + "-----\n" + filteringInstruction + "\nEND\n-----";
                 } else {
                     // filteringInstruction
-                    return "\nBEGIN\n" + pre + "-----\n" + filteringInstruction + "\nEND\n-----";
+                    return "\nBEGIN\n" + str + "-----\n" + filteringInstruction + "\nEND\n-----";
                 }
             } else {
                 if (subPlans != null) {
                     if (!subPlans.isEmpty()) {
                         // subplans
-                        return "\nBEGIN\n" + pre + "-----\n" + operator + "\nSubplans\n" + "\n" + subPlans
+                        return "\nBEGIN\n" + str + "-----\n" + operator + "\nSubplans\n" + "\n" + subPlans
                                 + "\nEND\n-----";
                     }
                 }
             }
         }
-        return pre;
+        return str;
 
     }
 
     /**
-     * Returns the threshold to be used when reconstructing the metric that led
-     * to the current NestedPlan
+     * Returns the threshold of the current plan. If the filtering instruction
+     * is not null, then it returns the threshold of the filtering instruction
+     * and 0 otherwise.
      *
      * @return Threshold as string
      */
@@ -306,7 +369,7 @@ public class NestedPlan extends Plan {
     }
 
     /**
-     * String representation of NestedPlan as a set of commands
+     * Returns a string representation of current plan as a set of commands.
      *
      * @return NestedPlan as a set of commands
      */
@@ -362,6 +425,16 @@ public class NestedPlan extends Plan {
         return null;
     }
 
+    /**
+     * Compares the current plan with another plan, P. If P is null then it
+     * returns false. If both plans are atomic, then the functions returns true
+     * if they have the same instruction list. If both plans are complex, then
+     * the function checks if each field of the current plan is equal to the
+     * corresponding field of P. If one of the plans is atomic and the other is
+     * not, then it returns false.
+     *
+     * @return true if both plans are equal, and false otherwise
+     */
     @Override
     public boolean equals(Object other) {
         NestedPlan o = (NestedPlan) other;
@@ -426,14 +499,6 @@ public class NestedPlan extends Plan {
         // one plan is atomic, the other is not
         return false;
 
-    }
-
-    public boolean isExecuted() {
-        return isExecuted;
-    }
-
-    public void setExecuted(boolean isExecuted) {
-        this.isExecuted = isExecuted;
     }
 
 }

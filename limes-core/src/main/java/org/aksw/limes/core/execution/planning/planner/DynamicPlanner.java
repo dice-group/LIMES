@@ -172,7 +172,7 @@ public class DynamicPlanner extends Planner {
      * @return true if the plan is executed
      */
     public boolean isExecuted(LinkSpecification spec) {
-        return (plans.get(spec.toString()).isExecuted());
+        return (plans.get(spec.toString()).getExecutionStatus());
     }
 
     /**
@@ -253,7 +253,7 @@ public class DynamicPlanner extends Planner {
         plan.setRuntimeCost(rt);
         plan.setSelectivity(selectivity);
         plan.setMappingSize(msize);
-        plan.setExecuted(true);
+        plan.setExecutionStatus(true);
         // logger.info("Runtime is: " + plan.runtimeCost + " mappingsize is: " +
         // plan.mappingSize + " selectivity is: "
         // + plan.selectivity);
@@ -298,7 +298,7 @@ public class DynamicPlanner extends Planner {
         // if plan is executed, just return the plan
         // remember that the plan is automatically updated once it is executed
         plan = plans.get(spec.toString());
-        if (plan.isExecuted()) {
+        if (plan.getExecutionStatus()) {
             return plan;
         }
         plan = new NestedPlan();
@@ -428,7 +428,7 @@ public class DynamicPlanner extends Planner {
         double mappingSize = source.size() * target.size() * selectivity;
 
         // both children are executed: do DIFF
-        if (left.isExecuted() && right.isExecuted()) {
+        if (left.getExecutionStatus() && right.getExecutionStatus()) {
             // OPERATOR
             result.setOperator(Instruction.Command.DIFF);
             // SUBPLANS
@@ -449,7 +449,7 @@ public class DynamicPlanner extends Planner {
             return result;
         } // if right child is executed, then there is one option: run left and
           // then do filter
-        else if (!left.isExecuted() && right.isExecuted()) {
+        else if (!left.getExecutionStatus() && right.getExecutionStatus()) {
             // OPERATOR
             result.setOperator(Instruction.Command.DIFF);
             // FILTERING INSTRUCTION
@@ -474,12 +474,12 @@ public class DynamicPlanner extends Planner {
         // OR REVERSEFILTER with right
         // never add the runtime of left if it is already executed
         // first instructionList: run both children and then merge
-        if (!left.isExecuted())
+        if (!left.getExecutionStatus())
             runtime1 = left.getRuntimeCost();
         runtime1 = runtime1 + right.getRuntimeCost();
         ////////////////////////////////////////////////////////////////////////
         // second instructionList: run left child and use right child as filter
-        if (!left.isExecuted())
+        if (!left.getExecutionStatus())
             runtime2 = left.getRuntimeCost();
         runtime2 = runtime2 + getFilterCosts(right.getAllMeasures(),
                 (int) Math.ceil(source.size() * target.size() * right.getSelectivity()));
@@ -530,7 +530,7 @@ public class DynamicPlanner extends Planner {
         NestedPlan result = new NestedPlan();
 
         // both children are executed: do AND
-        if (left.isExecuted() && right.isExecuted()) {
+        if (left.getExecutionStatus() && right.getExecutionStatus()) {
             // OPERATOR
             result.setOperator(Instruction.Command.INTERSECTION);
             // SUBPLANS
@@ -550,7 +550,7 @@ public class DynamicPlanner extends Planner {
             result.setMappingSize(source.size() * target.size() * selectivity);
             return result;
         } // left is executed, right is not: RUN B, FILTER OR FILTER WITH B
-        else if (left.isExecuted() && !right.isExecuted()) {
+        else if (left.getExecutionStatus() && !right.getExecutionStatus()) {
             // first instructionList: run both children and then merge
             runtime1 = right.getRuntimeCost();
             // second instructionList: run left child and use right child as
@@ -584,7 +584,7 @@ public class DynamicPlanner extends Planner {
             return result;
 
         } // left is not executed: RUN A, FILTER OR FILTER WITH A
-        else if (!left.isExecuted() && right.isExecuted()) {
+        else if (!left.getExecutionStatus() && right.getExecutionStatus()) {
             // first instructionList: run both children and then merge
             // runtime1 = left.runtimeCost + right.runtimeCost;
             runtime1 = left.getRuntimeCost();
@@ -620,7 +620,7 @@ public class DynamicPlanner extends Planner {
             return result;
 
         } // if either of the children is executed, then 3 options available
-        else if (!left.isExecuted() && !right.isExecuted()) {
+        else if (!left.getExecutionStatus() && !right.getExecutionStatus()) {
             // first instructionList: run both children and then merge
             runtime1 = left.getRuntimeCost() + right.getRuntimeCost();
             // second instructionList: run left child and use right child as

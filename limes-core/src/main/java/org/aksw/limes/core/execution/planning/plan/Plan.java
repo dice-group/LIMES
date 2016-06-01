@@ -5,13 +5,37 @@ import org.apache.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implements the plan of a link specification. A plan consists of a set of
+ * instructions that are going to be executed sequentially or in parallel by an
+ * execution engine.
+ *
+ * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
+ */
 public class Plan implements IPlan {
-    static Logger logger = Logger.getLogger(Plan.class.getName());
+    static Logger logger = Logger.getLogger(Plan.class);
+    /**
+     * The runtime of the plan.
+     */
     protected double runtimeCost;
+    /**
+     * The size of returned mapping of the plan.
+     */
     protected double mappingSize;
+    /**
+     * The selectivity of the plan.
+     */
     protected double selectivity;
+    /**
+     * The list of instructions of the plan.
+     */
     protected List<Instruction> instructionList;
 
+    /**
+     * Constructor of Plan class.
+     */
     public Plan() {
         instructionList = new ArrayList<Instruction>();
         runtimeCost = 0d;
@@ -20,6 +44,14 @@ public class Plan implements IPlan {
 
     }
 
+    /**
+     * Adds an instruction to the instructionList. Each new instruction is added
+     * at the end of the list. If an instructions can not be added, a
+     * corresponding message is displayed.
+     *
+     * @param instruction,
+     *            the Instruction to add
+     */
     @Override
     public void addInstruction(Instruction instruction) {
         if (instruction != null) {
@@ -31,6 +63,14 @@ public class Plan implements IPlan {
 
     }
 
+    /**
+     * Removes the i-th instruction from the instructionList. If the index is
+     * lower than 0 or higher than the size of the current list, the removal
+     * fails and a corresponding message is displayed.
+     *
+     * @param i,
+     *            Index of instruction to remove
+     */
     @Override
     public void removeInstruction(int i) {
         if (i >= getInstructionList().size() || i < 0)
@@ -39,41 +79,53 @@ public class Plan implements IPlan {
             instructionList.remove(i);
     }
 
+    /**
+     * Removes an instruction from a instructionList.
+     *
+     * @param i
+     *            Instruction to remove
+     */
     @Override
     public void removeInstruction(Instruction i) {
         instructionList.remove(i);
     }
 
+    /**
+     * Returns the list of instructions contained in a instructionList.
+     *
+     * @return List of instructions
+     */
     @Override
     public List<Instruction> getInstructionList() {
         return instructionList;
     }
 
     /**
-     * Set the instructionList of the plan
+     * Sets the instructionList of the plan.
      *
-     * @param instructionList
-     *         to set
+     * @param instructionList,
+     *            the instruction list to set
      */
     public void setInstructionList(List<Instruction> instructionList) {
         this.instructionList = instructionList;
     }
 
     /**
-     * Checks whether the instructionList of the current NestedPlan is empty
+     * Checks whether the instructionList of the current plan is empty.
      *
-     * @return true or false
+     * @return true if it is empty or false otherwise
      */
     public boolean isEmpty() {
         return instructionList.isEmpty();
     }
 
-    @Override
     /**
-     * Check if two plans are equal.
+     * Checks if two plans are equal. Two plans are equal if their instructions
+     * lists are the same.
      *
-     * @return true or false, if the plans have the same instruction list or not
+     * @return true if they are equal or false otherwise
      */
+    @Override
     public boolean equals(Object other) {
         Plan o = (Plan) other;
         if (o == null)
@@ -83,10 +135,13 @@ public class Plan implements IPlan {
     }
 
     /**
-     * Generates a clone of the current NestedPlan
+     * Returns a clone of the current plan. Each non-primitive field of the
+     * current plan is cloned by invoking the clone function of the
+     * corresponding class.
      *
-     * @return Clone of current NestedPlan
+     * @return clone, the clone of the current plan
      */
+    @Override
     public Plan clone() {
         Plan clone = new Plan();
 
@@ -113,66 +168,67 @@ public class Plan implements IPlan {
     }
 
     /**
-     * Returns the size of the instructionList of the current NestedPlan
+     * Returns the size of the current plan. The size of a plan is equal to the
+     * size of its instruction list.
      *
-     * @return Number of instructions in the instructionList
+     * @return size, the size of the plan
      */
     public int size() {
         return instructionList.size();
     }
 
     /**
-     * Returns the runtime cost of the plan
+     * Returns the runtime cost of the current plan.
      *
-     * @return runtimeCost
+     * @return runtimeCost, the runtime of the current plan
      */
     public double getRuntimeCost() {
         return runtimeCost;
     }
 
     /**
-     * Set the runtime cost of the plan
+     * Sets the runtime cost of the plan.
      *
-     * @param runtimeCost
-     *         to set
+     * @param runtimeCost,
+     *            the runtime cost to set
      */
     public void setRuntimeCost(double runtimeCost) {
         this.runtimeCost = runtimeCost;
     }
 
     /**
-     * Returns the mapping size of the plan
+     * Returns the mapping size of the plan.
      *
-     * @return mappingSize
+     * @return mappingSize, the mapping size of the current plan
      */
     public double getMappingSize() {
         return mappingSize;
     }
 
     /**
-     * Set the mapping size of the plan
+     * Sets the mapping size of the plan.
      *
-     * @param mappingSize
-     *         to set
+     * @param mappingSize,
+     *            the mapping size to set
      */
     public void setMappingSize(double mappingSize) {
         this.mappingSize = mappingSize;
     }
 
     /**
-     * Returns the selectivity of the plan
+     * Returns the selectivity of the plan.
      *
-     * @return selectivity
+     * @return selectivity, the selectivity of the current plan
      */
     public double getSelectivity() {
         return selectivity;
     }
 
     /**
-     * Set the selectivity of the plan
+     * Sets the selectivity of the plan.
      *
-     * @param selectivity
-     *         to set
+     * @param selectivity,
+     *            the selectivity value to set
      */
     public void setSelectivity(double selectivity) {
         this.selectivity = selectivity;

@@ -6,150 +6,219 @@ import org.apache.log4j.Logger;
  * Implements Instruction class. Instruction is an essential component of the
  * execution plan. An execution is expressed as a set of instruction objects.
  *
- * @author ngonga
- * @author kleanthi
+ * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
  */
 
 public class Instruction {
+    /**
+     * Enum class of allowed command.
+     */
+    public enum Command {
+        RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER;
+    }
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger(Instruction.class);
+    /**
+     * Command of Instruction.
+     */
     private Command command;
-
-    ;
+    /**
+     * Measure expression of Instruction.
+     */
     private String measureExpression;
+    /**
+     * Metric threshold of Instruction.
+     */
     private String threshold;
-    private int sourceMapping;
-    private int targetMapping;
-    private int resultIndex;
+    /**
+     * Main metric threshold of Instruction in case of non-null
+     * measureExpression.
+     */
     private String mainThreshold = null;
     /**
-     * Constructor
+     * Index for storing the source mapping in the execution engine buffer.
+     */
+    private int sourceIndex;
+    /**
+     * Index for storing the target mapping in the execution engine buffer.
+     */
+    private int targetIndex;
+    /**
+     * Index for storing the result mapping in the execution engine buffer.
+     * 
+     */
+    private int resultIndex;
+
+    /**
+     * Constructor of Instruction class.
      *
-     * @param c
-     *         Command
-     * @param measure
-     *         Measure expression
-     * @param t
-     *         Threshold
-     * @param source
-     *         Source mapping
-     * @param target
-     *         Target mapping TODO: what is result?
+     * @param c,
+     *            Command
+     * @param measure,
+     *            Measure expression
+     * @param t,
+     *            Threshold
+     * @param source,
+     *            Source index
+     * @param target,
+     *            Target index
+     * @param result,
+     *            Result index
+     * 
      */
     public Instruction(Command c, String measure, String thrs, int source, int target, int result) {
         command = c;
         measureExpression = measure;
         threshold = thrs;
-        sourceMapping = source;
-        targetMapping = target;
+        sourceIndex = source;
+        targetIndex = target;
         resultIndex = result;
     }
 
+    /* Setters and Getters for private fields */
     /**
-     * @return current result index
+     * Returns the result index of the instruction.
+     *
+     * @return resultIndex, the result index of the instruction
      */
     public int getResultIndex() {
         return resultIndex;
     }
 
     /**
+     * Sets the result index of the instruction.
+     *
      * @param resultIndex,
-     *         result index to set
+     *            the resultIndex to set
      */
     public void setResultIndex(int resultIndex) {
         this.resultIndex = resultIndex;
     }
 
     /**
-     * @return current command
+     * Returns the command of the instruction.
+     *
+     * @return command, the command of the instruction
      */
     public Command getCommand() {
         return command;
     }
 
     /**
+     * Sets the command of the instruction.
+     *
      * @param command,
-     *         command to set
+     *            the command to set
      */
     public void setCommand(Command command) {
         this.command = command;
     }
 
     /**
-     * @return current measure expression
+     * Returns the measure expression of the instruction.
+     *
+     * @return measureExpression, the measure expression of the instruction
      */
     public String getMeasureExpression() {
         return measureExpression;
     }
 
     /**
-     * @param measureExpression,
-     *         measure expression to set
+     * Sets the measure expression of the instruction.
+     *
+     * @param measure
+     *            expression, the measure expression to set
      */
     public void setMeasureExpression(String measureExpression) {
         this.measureExpression = measureExpression;
     }
 
     /**
-     * @return current source mapping
+     * Returns the resource index of the instruction.
+     *
+     * @return resourceIndex, the resource index of the instruction
      */
-    public int getSourceMapping() {
-        return sourceMapping;
+    public int getSourceIndex() {
+        return sourceIndex;
     }
 
     /**
-     * @param sourceMapping,
-     *         source mapping to set
+     * Sets the source index of the instruction.
+     *
+     * @param resourceIndex,
+     *            the resourceIndex to set
      */
-    public void setSourceMapping(int sourceMapping) {
-        this.sourceMapping = sourceMapping;
+    public void setSourceIndex(int resourceIndex) {
+        this.sourceIndex = resourceIndex;
     }
 
     /**
-     * @return current target mapping
+     * Returns the target index of the instruction.
+     *
+     * @return targetIndex, the target index of the instruction
      */
-    public int getTargetMapping() {
-        return targetMapping;
+    public int getTargetIndex() {
+        return targetIndex;
     }
 
     /**
-     * @param targetMapping,
-     *         target mapping to set
+     * Sets the target index of the instruction.
+     *
+     * @param targetIndex,
+     *            the targetIndex to set
      */
-    public void setTargetMapping(int targetMapping) {
-        this.targetMapping = targetMapping;
+    public void setTargetIndex(int targetIndex) {
+        this.targetIndex = targetIndex;
     }
 
     /**
-     * @return current threshold
+     * Returns the threshold of the instruction.
+     *
+     * @return threshold, the threshold of the instruction
      */
     public String getThreshold() {
         return threshold;
     }
 
     /**
+     * Sets the threshold of the instruction.
+     *
      * @param threshold,
-     *         threshold to set
+     *            the threshold to set
      */
     public void setThreshold(String threshold) {
         this.threshold = threshold;
     }
 
     /**
-     * @return current mainThreshold
+     * Sets the mainThreshold of the instruction.
+     *
+     * @param mainThreshold,
+     *            the mainThreshold to set
      */
     public String getMainThreshold() {
         return this.mainThreshold;
     }
 
     /**
-     * @param threshold,
-     *         main threshold to set
+     * Sets the mainThreshold of the instruction.
+     *
+     * @param mainThreshold,
+     *            the mainThreshold to set
      */
     public void setMainThreshold(String threshold) {
         this.mainThreshold = threshold;
     }
 
+    /**
+     * Compares the current instruction with another instruction, I. If I is
+     * null then it returns false. Otherwise, the function checks if each field
+     * of the current instruction is equal to the corresponding field of I.
+     *
+     * @return true if both instructios are equal, and false otherwise
+     */
     @Override
     public boolean equals(Object other) {
         Instruction i = (Instruction) other;
@@ -170,9 +239,9 @@ public class Instruction {
 
     /**
      * String representation of the Instruction excluding source, target and
-     * result index.
+     * result index. For internal use only.
      *
-     * @return s, instruction as string
+     * @return s, string representations of instruction
      */
     private String toSmallString() {
         String s = "";
@@ -201,8 +270,8 @@ public class Instruction {
     public Instruction clone() {
 
         Command command = this.command;
-        int sourceMapping = this.sourceMapping;
-        int targetMapping = this.targetMapping;
+        int sourceMapping = this.sourceIndex;
+        int targetMapping = this.targetIndex;
         int resultIndex = this.resultIndex;
 
         Instruction newInstruction = new Instruction(command, "", "", sourceMapping, targetMapping, resultIndex);
@@ -225,9 +294,9 @@ public class Instruction {
     }
 
     /**
-     * String representation of Instruction
+     * String representation of Instruction.
      *
-     * @return s, instruction as string
+     * @return s, string representations of instruction
      */
     public String toString() {
         String s = "";
@@ -249,14 +318,10 @@ public class Instruction {
 
         s = s + measureExpression + "\t";
         s = s + threshold + "\t";
-        s = s + sourceMapping + "\t";
-        s = s + targetMapping + "\t";
+        s = s + sourceIndex + "\t";
+        s = s + targetIndex + "\t";
         s = s + resultIndex;
         return s;
-    }
-
-    public enum Command {
-        RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER;
     }
 
 }
