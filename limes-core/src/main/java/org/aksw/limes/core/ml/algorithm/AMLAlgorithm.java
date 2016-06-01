@@ -42,4 +42,8 @@ public abstract class AMLAlgorithm {
         return getMl().getParameters();
     }
 
+    public void setMl(ACoreMLAlgorithm ml) {
+        this.ml = ml;
+    }
+
 }

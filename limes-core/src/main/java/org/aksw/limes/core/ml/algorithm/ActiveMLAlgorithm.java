@@ -14,23 +14,23 @@ public class ActiveMLAlgorithm extends AMLAlgorithm {
 
         try {
             Constructor<? extends ACoreMLAlgorithm> ctor = clazz.getDeclaredConstructor();
-            ml = ctor.newInstance();
+            setMl(ctor.newInstance());
         } catch (Exception e) {
-            throw new UnsupportedMLImplementationException(ml.getName());
+            throw new UnsupportedMLImplementationException(getMl().getName());
         }
 
-        if (!ml.supports(ML_IMPLEMENTATION_TYPE)) {
-            throw new UnsupportedMLImplementationException(ml.getName());
+        if (!getMl().supports(ML_IMPLEMENTATION_TYPE)) {
+            throw new UnsupportedMLImplementationException(getMl().getName());
         }
 
     }
 
     public AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
-        return ml.getNextExamples(size);
+        return getMl().getNextExamples(size);
     }
 
     public MLModel activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
-        return ml.activeLearn(oracleMapping);
+        return getMl().activeLearn(oracleMapping);
     }
 
 
