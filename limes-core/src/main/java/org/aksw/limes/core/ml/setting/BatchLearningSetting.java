@@ -7,6 +7,7 @@ import org.aksw.limes.core.ml.oldalgorithm.IMLAlgorithm;
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @author Klaus Lyko
  */
+@Deprecated
 public class BatchLearningSetting extends LearningSetting {
 
     int inquirySize = 10;

@@ -10,6 +10,7 @@ import org.junit.Test;
  * @author Klaus Lyko
  * @version 2015-11-09
  */
+@Deprecated
 public class MLAlgorithmTest {
 
     @Test

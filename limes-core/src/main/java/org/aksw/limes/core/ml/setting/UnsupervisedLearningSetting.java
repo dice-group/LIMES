@@ -7,6 +7,7 @@ import org.aksw.limes.core.ml.oldalgorithm.IMLAlgorithm;
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @author Klaus Lyko
  */
+@Deprecated
 public class UnsupervisedLearningSetting extends LearningSetting {
 
     PseudoFM measure = new PseudoFM();

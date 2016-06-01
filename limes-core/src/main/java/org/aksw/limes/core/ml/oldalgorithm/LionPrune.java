@@ -37,6 +37,7 @@ import java.util.*;
  * @author Jens Lehmann
  * @author Klaus Lyko
  */
+@Deprecated
 public class LionPrune extends MLAlgorithm {
 
     public static boolean hardRootExpansion = true;

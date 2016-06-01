@@ -41,11 +41,11 @@ public class MLPipeline {
         AMapping trainingDataMap = MappingFactory.createDefaultMapping();
         if(mlImplementationType == MLImplementationType.SUPERVISED_ACTIVE ||
                 mlImplementationType == MLImplementationType.SUPERVISED_BATCH){
-         // TODO make it check for different readers 
+            // TODO make it check for different readers 
             RDFMappingReader mappingReader = new RDFMappingReader(trainingDataFile);
             trainingDataMap = mappingReader.read();
         }
-        
+
         switch (mlImplementationType) {
         case SUPERVISED_BATCH:
             SupervisedMLAlgorithm mls = new SupervisedMLAlgorithm(clazz);
@@ -54,7 +54,7 @@ public class MLPipeline {
             return mls.predict(source, target, mlm);
         case SUPERVISED_ACTIVE:
             // for active learning, need to reiterate and prompt the user for evaluation of examples:
-//            boolean stopLearning = false;
+            //            boolean stopLearning = false;
             ActiveMLAlgorithm mla = new ActiveMLAlgorithm(clazz);
             mla.init(learningParameters, source, target);
             Scanner scan = new Scanner(System.in);

@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-
+@Deprecated
 public class EagleSupervised extends MLAlgorithm {
     int turn = 0;
     List<IGPProgram> bestSolutions = new LinkedList<IGPProgram>();

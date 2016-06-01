@@ -9,6 +9,7 @@ import java.util.Set;
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @author Klaus Lyko
  */
+@Deprecated
 public interface IMLAlgorithm {
 
     /**

@@ -8,6 +8,7 @@ import org.aksw.limes.core.ml.oldalgorithm.MLModel;
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @author Klaus Lyko
  */
+@Deprecated
 public class ActiveLearningSetting extends BatchLearningSetting {
 
     private int numQueries = 10;

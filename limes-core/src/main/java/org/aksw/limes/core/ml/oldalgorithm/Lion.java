@@ -42,6 +42,7 @@ import java.util.*;
  * @author Jens Lehmann
  * @author mofeed
  */
+@Deprecated
 public class Lion extends MLAlgorithm {
 
     // TODO either move to setting or finalize strategy

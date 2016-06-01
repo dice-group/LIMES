@@ -1,6 +1,7 @@
 package org.aksw.limes.core.ml.oldalgorithm;
 
 import org.aksw.limes.core.io.cache.Cache;
+
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.Configuration;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
+@Deprecated
 public class EagleUnsupervisedTest {
     @Test
     public void test() {

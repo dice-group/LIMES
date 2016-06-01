@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Klaus Lyko
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version May 17, 2016
- * @deprecated Use LearningParameters instead
+ * @deprecated Use {@link}{@link LearningParameters} instead
  */
 @Deprecated
 public abstract class LearningSetting {
