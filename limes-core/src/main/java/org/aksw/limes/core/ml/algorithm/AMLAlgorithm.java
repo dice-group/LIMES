@@ -7,18 +7,23 @@ import org.aksw.limes.core.ml.setting.LearningParameters;
 
 public abstract class AMLAlgorithm {
 
-    protected ACoreMLAlgorithm ml;
+    private ACoreMLAlgorithm ml;
 
     public String getName() {
-        return ml.getName();
+        return getMl().getName();
     }
 
+    public ACoreMLAlgorithm getMl() {
+        return ml;
+    }
+
+
     public void init(LearningParameters lp, Cache source, Cache target) {
-        ml.init(lp, source, target);
+        getMl().init(lp, source, target);
     }
 
     public AMapping predict(Cache source, Cache target, MLModel mlModel) {
-        return ml.predict(source, target, mlModel);
+        return getMl().predict(source, target, mlModel);
     }
 
     public SupervisedMLAlgorithm asSupervised() {
@@ -34,7 +39,7 @@ public abstract class AMLAlgorithm {
     }
 
     public LearningParameters getParameters() {
-        return ml.getParameters();
+        return getMl().getParameters();
     }
 
 }

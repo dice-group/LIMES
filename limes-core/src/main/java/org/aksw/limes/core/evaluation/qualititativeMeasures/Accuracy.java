@@ -16,8 +16,8 @@ public class Accuracy extends APRF implements IQualitativeMeasure {
 
     @Override
     public double calculate(AMapping predictions, GoldStandard goldStandard) {
-        double truePositiveValue = trueFalsePositive(predictions, goldStandard.goldStandard, true);
-        long allPositiveValue = goldStandard.goldStandard.size();
+        double truePositiveValue = trueFalsePositive(predictions, goldStandard.goldStandardMappings, true);
+        long allPositiveValue = goldStandard.goldStandardMappings.size();
         //double falsePositiveValue = trueFalsePositive(predictions, goldStandard, false);
         double trueNegativeValue = trueNegative(allPositiveValue, goldStandard.targetUris.size(), goldStandard.sourceUris.size());
         return (truePositiveValue + trueNegativeValue) / (goldStandard.targetUris.size() + goldStandard.sourceUris.size());
