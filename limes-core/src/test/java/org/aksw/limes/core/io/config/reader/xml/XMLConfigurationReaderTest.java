@@ -2,6 +2,7 @@ package org.aksw.limes.core.io.config.reader.xml;
 
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.setting.LearningParameters;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,8 +65,10 @@ public class XMLConfigurationReaderTest {
                 "sparql"                                                          //String type
         );
     }
+    
+    
     @Test
-    public void testXmlReader() {
+    public void testXmlReaderMetric() {
 
         Configuration testConf = new Configuration();
         testConf.setSourceInfo(sourceInfo);
@@ -85,9 +88,34 @@ public class XMLConfigurationReaderTest {
 
         XMLConfigurationReader c = new XMLConfigurationReader("/resources/lgd-lgd.xml");
         Configuration fileConf = c.read();
-        
-        System.out.println(fileConf.getPrefixes());
-        System.out.println(testConf.getPrefixes());
+
+        assertTrue(testConf.equals(fileConf));
+    }
+    
+    @Test
+    public void testXmlReaderMLAlgorithm() {
+
+        LearningParameters mlParameters = new LearningParameters();
+        mlParameters.put("max execution time in minutes", "60");
+
+        Configuration testConf = new Configuration();
+        testConf.setSourceInfo(sourceInfo);
+        testConf.setTargetInfo(targetInfo);
+        testConf.setAcceptanceRelation("lgdo:near");       
+        testConf.setVerificationRelation("lgdo:near");
+        testConf.setAcceptanceThreshold(0.9); 
+        testConf.setAcceptanceFile("lgd_relaybox_verynear.nt");
+        testConf.setVerificationThreshold(0.5);
+        testConf.setVerificationFile("lgd_relaybox_near.nt");
+        testConf.setPrefixes(prefixes);
+        testConf.setOutputFormat("TAB");
+        testConf.setMlAlgorithmName("wombat simple");
+        testConf.setMlImplementationType(MLImplementationType.SUPERVISED_BATCH);
+        testConf.setTrainingDataFile("trainingData.nt");
+//        testConf.setMlParameters(mlParameters);
+
+        XMLConfigurationReader c = new XMLConfigurationReader("/resources/lgd-lgd-ml.xml");
+        Configuration fileConf = c.read();
         
         assertTrue(testConf.equals(fileConf));
     }
