@@ -54,7 +54,7 @@ public class MLPipeline {
             return mls.predict(source, target, mlm);
         case SUPERVISED_ACTIVE:
             // for active learning, need to reiterate and prompt the user for evaluation of examples:
-            boolean stopLearning = false;
+//            boolean stopLearning = false;
             ActiveMLAlgorithm mla = new ActiveMLAlgorithm(clazz);
             mla.init(learningParameters, source, target);
             Scanner scan = new Scanner(System.in);

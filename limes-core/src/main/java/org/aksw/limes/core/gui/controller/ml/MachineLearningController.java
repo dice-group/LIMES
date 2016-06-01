@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 public abstract class MachineLearningController {
 
-    protected static Logger logger = Logger.getLogger("LIMES");
+    protected static Logger logger = Logger.getLogger(MachineLearningController.class);
     protected MachineLearningView mlView;
     protected MachineLearningModel mlModel;
 

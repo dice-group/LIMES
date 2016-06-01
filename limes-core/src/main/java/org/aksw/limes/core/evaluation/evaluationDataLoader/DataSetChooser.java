@@ -5,7 +5,6 @@ import org.aksw.limes.core.evaluation.oracle.OracleFactory;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
-import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -35,54 +34,54 @@ import de.uni_leipzig.simba.selfconfig.Experiment;*/
  */
 public class DataSetChooser {
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger(DataSetChooser.class);
 
     public static EvaluationData getData(String dataSetName) {
         String d = dataSetName.replaceAll("-", "").toUpperCase();
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         switch (d) {
-            case "PERSON1":
-                param = getPerson1();
-                break;
-            case "PERSON2":
-                param = getPerson2();
-                break;
-            case "RESTAURANTS":
-                param = getRestaurant();
-                break;
-            case "RESTAURANTSFIXED":
-                param = getRestaurant();
-                break;
-            case "DBLPACM":
-                param = getDBLPACM();
-                break;
-            case "ABTBUY":
-                param = getAbtBuy();
-                break;
-            case "DBLPSCHOLAR":
-                param = getDBLPScholar();
-                break;
-            case "AMAZONGOOGLEPRODUCTS":
-                param = getAmazonGoogleProducts();
-                break;
-            case "DBPLINKEDMDB":
-                param = getDBPediaLinkedMDB();
-                break;
-            case "DRUGS":
-                param = getDrugs();
-                break;
-            case "PERSON1_CSV":
-                param = getPerson1CSV();
-                break;
-            case "PERSON2_CSV":
-                param = getPerson2CSV();
-                break;
-            case "RESTAURANTS_CSV":
-                param = getRestaurantCSV();
-                break;
-            case "OAEI2014BOOKS":
-                param = getOAEI2014Books();
-                break;
+        case "PERSON1":
+            param = getPerson1();
+            break;
+        case "PERSON2":
+            param = getPerson2();
+            break;
+        case "RESTAURANTS":
+            param = getRestaurant();
+            break;
+        case "RESTAURANTSFIXED":
+            param = getRestaurant();
+            break;
+        case "DBLPACM":
+            param = getDBLPACM();
+            break;
+        case "ABTBUY":
+            param = getAbtBuy();
+            break;
+        case "DBLPSCHOLAR":
+            param = getDBLPScholar();
+            break;
+        case "AMAZONGOOGLEPRODUCTS":
+            param = getAmazonGoogleProducts();
+            break;
+        case "DBPLINKEDMDB":
+            param = getDBPediaLinkedMDB();
+            break;
+        case "DRUGS":
+            param = getDrugs();
+            break;
+        case "PERSON1_CSV":
+            param = getPerson1CSV();
+            break;
+        case "PERSON2_CSV":
+            param = getPerson2CSV();
+            break;
+        case "RESTAURANTS_CSV":
+            param = getRestaurantCSV();
+            break;
+        case "OAEI2014BOOKS":
+            param = getOAEI2014Books();
+            break;
         /*
          * case "TOWNS": param = getTowns(); break; case "VILLAGES": param =
          * getVillages(); break; case "MOVIES": param = getMovies(); break;
@@ -103,105 +102,102 @@ public class DataSetChooser {
      * Central class to configure evaluation datasets.
      *
      * @param a
-     *         DataSets enum
+     *            DataSets enum
      * @return HashMap
-     * <table>
-     * <tr>
-     * <th>String key</th>
-     * <th>Object data</th>
-     * </tr>
-     * <tr>
-     * <td>MapKey.BASE_FOLDER</td>
-     * <td></td>
-     * </tr>
-     * <tr>
-     * <td>MapKey.DATASET_FOLDER</td>
-     * <td></td>
-     * </tr>
-     * <tr>
-     * <td>MapKey.CONFIG_FILE</td>
-     * <td></td>
-     * </tr>
-     * <tr>
-     * <td>"referencepath"</td>
-     * <td></td>
-     * </tr>
-     * <tr>
-     * <td>MapKey.EVALUATION_RESULTS_FOLDER</td>
-     * <td></td>
-     * </tr>
-     * <tr>
-     * <td>MapKey.EVALUATION_FILENAME</td>
-     * <td></td>
-     * </tr>
-     * <p>
-     * <tr>
-     * <td>MapKey.SOURCE_CACHE</td>
-     * <td>Source Cache</td>
-     * </tr>
-     * <tr>
-     * <td>MapKey.TARGET_CACHE</td>
-     * <td>Target Cache</td>
-     * </tr>
-     * <tr>
-     * <td>MapKey.PROPERTY_MAPPING</td>
-     * <td>PopertyMapping</td>
-     * </tr>
-     * <tr>
-     * <td>MapKey.REFERENCE_MAPPING</td>
-     * <td>Gold standard Mapping</td>
-     * </tr>
-     * </table>
+     *         <table>
+     *         <tr>
+     *         <th>String key</th>
+     *         <th>Object data</th>
+     *         </tr>
+     *         <tr>
+     *         <td>MapKey.BASE_FOLDER</td>
+     *         <td></td>
+     *         </tr>
+     *         <tr>
+     *         <td>MapKey.DATASET_FOLDER</td>
+     *         <td></td>
+     *         </tr>
+     *         <tr>
+     *         <td>MapKey.CONFIG_FILE</td>
+     *         <td></td>
+     *         </tr>
+     *         <tr>
+     *         <td>"referencepath"</td>
+     *         <td></td>
+     *         </tr>
+     *         <tr>
+     *         <td>MapKey.EVALUATION_RESULTS_FOLDER</td>
+     *         <td></td>
+     *         </tr>
+     *         <tr>
+     *         <td>MapKey.EVALUATION_FILENAME</td>
+     *         <td></td>
+     *         </tr>
+     *         <p>
+     *         <tr>
+     *         <td>MapKey.SOURCE_CACHE</td>
+     *         <td>Source Cache</td>
+     *         </tr>
+     *         <tr>
+     *         <td>MapKey.TARGET_CACHE</td>
+     *         <td>Target Cache</td>
+     *         </tr>
+     *         <tr>
+     *         <td>MapKey.PROPERTY_MAPPING</td>
+     *         <td>PopertyMapping</td>
+     *         </tr>
+     *         <tr>
+     *         <td>MapKey.REFERENCE_MAPPING</td>
+     *         <td>Gold standard Mapping</td>
+     *         </tr>
+     *         </table>
      */
     public static EvaluationData getData(DataSets a) {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         switch (a) {
-            case PERSON1:
-                param = getPerson1();
-                break;
-            case PERSON2:
-                param = getPerson2();
-                break;
-            case RESTAURANTS:
-                param = getRestaurant();
-                break;
-            case RESTAURANTS_FIXED:
-                param = getRestaurant();
-                break;
-            case DBLPACM:
-                param = getDBLPACM();
-                break;
-            case ABTBUY:
-                param = getAbtBuy();
-                break;
-            case DBLPSCHOLAR:
-                param = getDBLPScholar();
-                break;
-            case AMAZONGOOGLEPRODUCTS:
-                param = getAmazonGoogleProducts();
-                break;
-            case DBPLINKEDMDB:
-                param = getDBPediaLinkedMDB();
-                break;
-            case DRUGS:
-                param = getDrugs();
-                break;
-            case PERSON1_CSV:
-                param = getPerson1CSV();
-                break;
-            case PERSON2_CSV:
-                param = getPerson2CSV();
-                break;
-            case RESTAURANTS_CSV:
-                param = getRestaurantCSV();
-                break;
-            case OAEI2014BOOKS:
-                param = getOAEI2014Books();
-                break;
-        /*
-         * case TOWNS: param = getTowns(); break; case VILLAGES: param =
-         * getVillages(); break; case MOVIES: param = getMovies(); break;
-         */
+        case PERSON1:
+            param = getPerson1();
+            break;
+        case PERSON2:
+            param = getPerson2();
+            break;
+        case RESTAURANTS:
+            param = getRestaurant();
+            break;
+        case RESTAURANTS_FIXED:
+            param = getRestaurant();
+            break;
+        case DBLPACM:
+            param = getDBLPACM();
+            break;
+        case ABTBUY:
+            param = getAbtBuy();
+            break;
+        case DBLPSCHOLAR:
+            param = getDBLPScholar();
+            break;
+        case AMAZONGOOGLEPRODUCTS:
+            param = getAmazonGoogleProducts();
+            break;
+        case DBPLINKEDMDB:
+            param = getDBPediaLinkedMDB();
+            break;
+        case DRUGS:
+            param = getDrugs();
+            break;
+        case PERSON1_CSV:
+            param = getPerson1CSV();
+            break;
+        case PERSON2_CSV:
+            param = getPerson2CSV();
+            break;
+        case RESTAURANTS_CSV:
+            param = getRestaurantCSV();
+            break;
+        case OAEI2014BOOKS:
+            param = getOAEI2014Books();
+            break;
+
         }
 
         param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
@@ -213,107 +209,6 @@ public class DataSetChooser {
             data.setName("Restaurants_fixed");
         }
         return data;
-    }
-
-    private static HashMap<MapKey, Object> getMovies() {
-
-        HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
-        // folders & files
-        param.put(MapKey.BASE_FOLDER, "resources/");
-        param.put(MapKey.DATASET_FOLDER, "resources/DB-LINKEDMDB_MOVIES/");
-        param.put(MapKey.CONFIG_FILE, "dbpedia_linkedmdb.ttl");
-        param.put(MapKey.REFERENCE_FILE, null);
-        param.put(MapKey.SOURCE_FILE, "moviesDB.ttl");
-        param.put(MapKey.TARGET_FILE, "moviesLINKEDMDB.ttl");
-
-        param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
-        param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_movies.csv");
-        param.put(MapKey.NAME, "movies");
-        // data
-        AConfigurationReader cR = new RDFConfigurationReader(
-                "" + param.get(MapKey.BASE_FOLDER) + param.get(MapKey.CONFIG_FILE));
-        cR.read();
-        param.put(MapKey.CONFIG_READER, cR);
-
-        param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
-                (String) param.get(MapKey.CONFIG_FILE)));
-        param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
-        param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
-        param.put(MapKey.REFERENCE_MAPPING, null);
-
-        param.put(MapKey.SOURCE_CLASS, "http://dbpedia.org/ontology/Film");
-
-        param.put(MapKey.TARGET_CLASS, "http://data.linkedmdb.org/resource/movie/film");
-        return param;
-
-    }
-
-    private static HashMap<MapKey, Object> getVillages() {
-        HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
-        // folders & files
-        param.put(MapKey.BASE_FOLDER, "resources/");
-        param.put(MapKey.DATASET_FOLDER, "resources/DB-LINKGEODATA_VILLAGES/");
-        param.put(MapKey.CONFIG_FILE, "dbpedia_linkedgeodata_villages.ttl"); // TODO:
-        // CREATE
-        // AND
-        // ADD
-        // THIS
-        param.put(MapKey.REFERENCE_FILE, null);
-        param.put(MapKey.SOURCE_FILE, "villagesDB.ttl");
-        param.put(MapKey.TARGET_FILE, "villagesLINKGEODATA.ttl");
-
-        param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
-        param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_villages.csv");
-        param.put(MapKey.NAME, "villages");
-        // data
-        AConfigurationReader cR = new RDFConfigurationReader(
-                "" + param.get(MapKey.BASE_FOLDER) + param.get(MapKey.CONFIG_FILE));
-        cR.read();
-        param.put(MapKey.CONFIG_READER, cR);
-
-        param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
-                (String) param.get(MapKey.CONFIG_FILE)));
-        param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
-        param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
-        param.put(MapKey.REFERENCE_MAPPING, null);
-
-        param.put(MapKey.SOURCE_CLASS, "http://dbpedia.org/ontology/Village");
-        param.put(MapKey.TARGET_CLASS, "http://linkedgeodata.org/ontology/Village");
-        return param;
-    }
-
-    private static HashMap<MapKey, Object> getTowns() {
-        HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
-        // folders & files
-        param.put(MapKey.BASE_FOLDER, "resources/");
-        param.put(MapKey.DATASET_FOLDER, "resources/DB-LINKGEODATA_TOWNS/");
-        param.put(MapKey.CONFIG_FILE, "dbpedia_linkedgeodata_towns.ttl"); // TODO:
-        // CREATE
-        // AND
-        // ADD
-        // THIS
-        param.put(MapKey.REFERENCE_FILE, null);
-        param.put(MapKey.SOURCE_FILE, "townsDB.ttl");
-        param.put(MapKey.TARGET_FILE, "townsLINKGEODATA.ttl");
-
-        param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
-        param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_cities.csv");
-        param.put(MapKey.NAME, "towns");
-        // data
-        AConfigurationReader cR = new RDFConfigurationReader(
-                "" + param.get(MapKey.BASE_FOLDER) + param.get(MapKey.CONFIG_FILE));
-        cR.read();
-        param.put(MapKey.CONFIG_READER, cR);
-
-        param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
-                (String) param.get(MapKey.CONFIG_FILE)));
-        param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
-        param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
-        param.put(MapKey.REFERENCE_MAPPING, null);
-
-        param.put(MapKey.SOURCE_CLASS, "http://dbpedia.org/ontology/Town");
-        param.put(MapKey.TARGET_CLASS, "http://linkedgeodata.org/ontology/Town");
-        return param;
     }
 
     private static HashMap<MapKey, Object> getPerson1() {
@@ -811,13 +706,13 @@ public class DataSetChooser {
      * Method to remove mapping which corresponding instance doesn't exist.
      *
      * @param original
-     *         Mapping original Mapping.
+     *            Mapping original Mapping.
      * @param sC
-     *         Source Cache.
+     *            Source Cache.
      * @param tC
-     *         Target Cache.
+     *            Target Cache.
      * @return A Mapping holding only those mappings of the original for which
-     * instance where found in the source or target Caches.
+     *         instance where found in the source or target Caches.
      */
     public static AMapping fixReferenceMap(AMapping original, Cache sC, Cache tC) {
         int count = 0;

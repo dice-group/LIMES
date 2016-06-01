@@ -13,7 +13,6 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.serializer.ISerializer;
 import org.aksw.limes.core.io.serializer.SerializerFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.ml.setting.LearningParameters;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 

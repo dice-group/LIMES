@@ -19,19 +19,19 @@ import java.io.InputStreamReader;
  * @author ngonga
  */
 public class Experiement {
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger(Experiement.class);
     static String SEPARATOR = "\t";
     static String CSVSEPARATOR = ",";
 
     public static AMapping readOAEIMapping(String file) {
-        AMapping m = MappingFactory.createMapping(MappingFactory.MappingType.MEMORY_MAPPING);
+        AMapping m = MappingFactory.createDefaultMapping();
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
             //read properties;
             String s = reader.readLine();
             String e1 = "", e2;
             while (s != null) {
-                String[] split = s.split(" ");
+                //                String[] split = s.split(" ");
                 {
                     if (s.contains("entity1")) {
                         e1 = s.substring(s.indexOf("=") + 2, s.lastIndexOf(">") - 2);
@@ -42,6 +42,7 @@ public class Experiement {
                     s = reader.readLine();
                 }
             }
+            reader.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

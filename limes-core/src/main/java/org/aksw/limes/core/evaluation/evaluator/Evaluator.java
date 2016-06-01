@@ -102,8 +102,8 @@ public class Evaluator {
                 // AN: Changed the type of mapping as the input is a type, not the name
                 // srcMap[i] = MappingFactory.createMapping(dataset.pairName + "_mapping_" + i);
                 //srcGold[i] = MappingFactory.createMapping(dataset.pairName + "_goldstd_" + i);
-                srcMap[i] = MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
-                srcGold[i] = MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
+                srcMap[i] = MappingFactory.createDefaultMapping();
+                srcGold[i] = MappingFactory.createDefaultMapping();
             }
 
             // randomly distribute instances into #folds partitions
