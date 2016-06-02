@@ -102,7 +102,6 @@ public abstract class MachineLearningView {
 //        mloptions.add("Lion");
 //        mloptions.add("Eagle");
         mloptions.add("Wombat Simple");
-        mloptions.add("dont click this");
         if (this instanceof ActiveLearningView) {
 
         } else if (this instanceof BatchLearningView) {
@@ -132,14 +131,6 @@ public abstract class MachineLearningView {
                     root.getChildren().removeAll(root.getChildren());
                     this.mlController.setMLAlgorithmToModel(mlOptionsChooser
                             .getValue());
-	    AMLAlgorithm wombat = this.mlController.getMlModel().getMlalgorithm();
-            ((AWombat) wombat.getMl()).setDefaultParameters();
-            Iterator<String> parameterKeyIterator = wombat.getParameters().keySet().iterator();
-            LearningParameters params = wombat.getParameters();
-            while(parameterKeyIterator.hasNext()){
-                String key = parameterKeyIterator.next();
-                logger.error(key + " : " + params.get(key));
-            }
                     showParameters(root, mlOptionsChooser.getValue());
                     border.setCenter(root);
                     learnButton.setDisable(false);
@@ -174,7 +165,7 @@ public abstract class MachineLearningView {
 	    root = setWombatParameters(root);
 	    break;
 	case "wombat simple":
-//	    root = setWombatParameters(root);
+	    root = setWombatParameters(root);
 	    break;
 	default:
 	    logger.error("Unknown Machine Learning Algorithm");
@@ -506,13 +497,12 @@ public abstract class MachineLearningView {
     private GridPane setWombatParameters(GridPane root){
 	AMLAlgorithm wombat = this.mlController.getMlModel().getMlalgorithm();
 	((AWombat) wombat.getMl()).setDefaultParameters();
-	Iterator<String> parameterKeyIterator = wombat.getParameters().keySet().iterator();
 	LearningParameters params = wombat.getParameters();
 
         HBox maxRefinementTreeSizeBox = new HBox();
         maxRefinementTreeSizeSlider = new Slider();
-        Label maxRefinementTreeSizeText = new Label(parameterKeyIterator.next());
-        Label maxRefinementTreeSizeLabel = new Label(params.get(maxRefinementTreeSizeText.getText()));
+        Label maxRefinementTreeSizeText = new Label(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE);
+        Label maxRefinementTreeSizeLabel = new Label(params.get(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE));
 
         root.add(maxRefinementTreeSizeText, 0, 0);
         maxRefinementTreeSizeBox.getChildren().add(maxRefinementTreeSizeSlider);
@@ -521,7 +511,7 @@ public abstract class MachineLearningView {
 
         maxRefinementTreeSizeSlider.setMin(0);
         maxRefinementTreeSizeSlider.setMax(5000);
-        maxRefinementTreeSizeSlider.setValue(Double.valueOf(maxRefinementTreeSizeLabel.getText()));
+        maxRefinementTreeSizeSlider.setValue(Integer.valueOf(params.get(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE)));
         maxRefinementTreeSizeSlider.setShowTickLabels(true);
         maxRefinementTreeSizeSlider.setShowTickMarks(false);
         maxRefinementTreeSizeSlider.setMajorTickUnit(2500);
@@ -534,15 +524,15 @@ public abstract class MachineLearningView {
                     public void changed(
                             ObservableValue<? extends Number> ov,
                             Number old_val, Number new_val) {
-                        maxRefinementTreeSizeLabel.setText(String.format("%d",
+                        maxRefinementTreeSizeLabel.setText(String.format("%.0f",
                                 new_val));
                     }
                 });
 
         HBox maxIterationsNumberBox = new HBox();
         maxIterationsNumberSlider = new Slider();
-        Label maxIterationsNumberText = new Label(parameterKeyIterator.next());
-        Label maxIterationsNumberLabel = new Label(params.get(maxIterationsNumberText.getText()));
+        Label maxIterationsNumberText = new Label(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER);
+        Label maxIterationsNumberLabel = new Label(params.get(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER));
 
         root.add(maxIterationsNumberText, 0, 1);
         maxIterationsNumberBox.getChildren().add(maxIterationsNumberSlider);
@@ -551,7 +541,7 @@ public abstract class MachineLearningView {
 
         maxIterationsNumberSlider.setMin(0);
         maxIterationsNumberSlider.setMax(100);
-        maxIterationsNumberSlider.setValue(Double.valueOf(maxIterationsNumberLabel.getText()));
+        maxIterationsNumberSlider.setValue(Integer.valueOf(params.get(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER)));
         maxIterationsNumberSlider.setShowTickLabels(true);
         maxIterationsNumberSlider.setShowTickMarks(false);
         maxIterationsNumberSlider.setMajorTickUnit(50);
@@ -564,15 +554,15 @@ public abstract class MachineLearningView {
                     public void changed(
                             ObservableValue<? extends Number> ov,
                             Number old_val, Number new_val) {
-                        maxIterationsNumberLabel.setText(String.format("%d",
+                        maxIterationsNumberLabel.setText(String.format("%.0f",
                                 new_val));
                     }
                 });
 
         HBox maxIterationsTimeInMinutesBox = new HBox();
         maxIterationsTimeInMinutesSlider = new Slider();
-        Label maxIterationsTimeInMinutesText = new Label(parameterKeyIterator.next());
-        Label maxIterationsTimeInMinutesLabel = new Label(params.get(maxIterationsTimeInMinutesText.getText()));
+        Label maxIterationsTimeInMinutesText = new Label(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES);
+        Label maxIterationsTimeInMinutesLabel = new Label(params.get(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES));
 
         root.add(maxIterationsTimeInMinutesText, 0, 2);
         maxIterationsTimeInMinutesBox.getChildren().add(maxIterationsTimeInMinutesSlider);
@@ -581,7 +571,7 @@ public abstract class MachineLearningView {
 
         maxIterationsTimeInMinutesSlider.setMin(0);
         maxIterationsTimeInMinutesSlider.setMax(100);
-        maxIterationsTimeInMinutesSlider.setValue(Double.valueOf(maxIterationsTimeInMinutesLabel.getText()));
+        maxIterationsTimeInMinutesSlider.setValue(Integer.valueOf(params.get(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES)));
         maxIterationsTimeInMinutesSlider.setShowTickLabels(true);
         maxIterationsTimeInMinutesSlider.setShowTickMarks(false);
         maxIterationsTimeInMinutesSlider.setMajorTickUnit(50);
@@ -594,15 +584,15 @@ public abstract class MachineLearningView {
                     public void changed(
                             ObservableValue<? extends Number> ov,
                             Number old_val, Number new_val) {
-                        maxIterationsTimeInMinutesLabel.setText(String.format("%d",
+                        maxIterationsTimeInMinutesLabel.setText(String.format("%.0f",
                                 new_val));
                     }
                 });
 
         HBox executionTimeInMinutesBox = new HBox();
         executionTimeInMinutesSlider = new Slider();
-        Label executionTimeInMinutesText = new Label(parameterKeyIterator.next());
-        Label executionTimeInMinutesLabel = new Label(params.get(executionTimeInMinutesText.getText()));
+        Label executionTimeInMinutesText = new Label(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES);
+        Label executionTimeInMinutesLabel = new Label(params.get(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES));
 
         root.add(executionTimeInMinutesText, 0, 3);
         executionTimeInMinutesBox.getChildren().add(executionTimeInMinutesSlider);
@@ -611,7 +601,7 @@ public abstract class MachineLearningView {
 
         executionTimeInMinutesSlider.setMin(0);
         executionTimeInMinutesSlider.setMax(100);
-        executionTimeInMinutesSlider.setValue(Double.valueOf(executionTimeInMinutesLabel.getText()));
+        executionTimeInMinutesSlider.setValue(Integer.valueOf(params.get(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES)));
         executionTimeInMinutesSlider.setShowTickLabels(true);
         executionTimeInMinutesSlider.setShowTickMarks(false);
         executionTimeInMinutesSlider.setMajorTickUnit(50);
@@ -624,15 +614,15 @@ public abstract class MachineLearningView {
                     public void changed(
                             ObservableValue<? extends Number> ov,
                             Number old_val, Number new_val) {
-                        executionTimeInMinutesLabel.setText(String.format("%d",
+                        executionTimeInMinutesLabel.setText(String.format("%.0f",
                                 new_val));
                     }
                 });
 
         HBox maxFitnessThresholdBox = new HBox();
         maxFitnessThresholdSlider = new Slider();
-        Label maxFitnessThresholdText = new Label(parameterKeyIterator.next());
-        Label maxFitnessThresholdLabel = new Label(params.get(maxFitnessThresholdText.getText()));
+        Label maxFitnessThresholdText = new Label(AWombat.PARAMETER_MAX_FITNESS_THRESHOLD);
+        Label maxFitnessThresholdLabel = new Label(params.get(AWombat.PARAMETER_MAX_FITNESS_THRESHOLD));
 
         root.add(maxFitnessThresholdText, 0, 4);
         maxFitnessThresholdBox.getChildren().add(maxFitnessThresholdSlider);
@@ -641,7 +631,7 @@ public abstract class MachineLearningView {
 
         maxFitnessThresholdSlider.setMin(0);
         maxFitnessThresholdSlider.setMax(1);
-        maxFitnessThresholdSlider.setValue(Double.valueOf(maxFitnessThresholdLabel.getText()));
+        maxFitnessThresholdSlider.setValue(Double.valueOf(params.get(AWombat.PARAMETER_MAX_FITNESS_THRESHOLD)));
         maxFitnessThresholdSlider.setShowTickLabels(true);
         maxFitnessThresholdSlider.setShowTickMarks(false);
         maxFitnessThresholdSlider.setMajorTickUnit(0.5);
@@ -661,8 +651,8 @@ public abstract class MachineLearningView {
 
         HBox minPropertyCoverageBox = new HBox();
         minPropertyCoverageSlider = new Slider();
-        Label minPropertyCoverageText = new Label(parameterKeyIterator.next());
-        Label minPropertyCoverageLabel = new Label(params.get(minPropertyCoverageText.getText()));
+        Label minPropertyCoverageText = new Label(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE);
+        Label minPropertyCoverageLabel = new Label(params.get(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE));
 
         root.add(minPropertyCoverageText, 0, 5);
         minPropertyCoverageBox.getChildren().add(minPropertyCoverageSlider);
@@ -671,7 +661,7 @@ public abstract class MachineLearningView {
 
         minPropertyCoverageSlider.setMin(0);
         minPropertyCoverageSlider.setMax(1);
-        minPropertyCoverageSlider.setValue(Double.valueOf(minPropertyCoverageLabel.getText()));
+        minPropertyCoverageSlider.setValue(Double.valueOf(params.get(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE)));
         minPropertyCoverageSlider.setShowTickLabels(true);
         minPropertyCoverageSlider.setShowTickMarks(false);
         minPropertyCoverageSlider.setMajorTickUnit(0.5);
@@ -691,8 +681,8 @@ public abstract class MachineLearningView {
 
         HBox propertyLearningRateBox = new HBox();
         propertyLearningRateSlider = new Slider();
-        Label propertyLearningRateText = new Label(parameterKeyIterator.next());
-        Label propertyLearningRateLabel = new Label(params.get(propertyLearningRateText.getText()));
+        Label propertyLearningRateText = new Label(AWombat.PARAMETER_PROPERTY_LEARNING_RATE);
+        Label propertyLearningRateLabel = new Label(params.get(AWombat.PARAMETER_PROPERTY_LEARNING_RATE));
 
         root.add(propertyLearningRateText, 0, 6);
         propertyLearningRateBox.getChildren().add(propertyLearningRateSlider);
@@ -701,7 +691,7 @@ public abstract class MachineLearningView {
 
         propertyLearningRateSlider.setMin(0);
         propertyLearningRateSlider.setMax(1);
-        propertyLearningRateSlider.setValue(Double.valueOf(propertyLearningRateLabel.getText()));
+        propertyLearningRateSlider.setValue(Double.valueOf(params.get(AWombat.PARAMETER_PROPERTY_LEARNING_RATE)));
         propertyLearningRateSlider.setShowTickLabels(true);
         propertyLearningRateSlider.setShowTickMarks(false);
         propertyLearningRateSlider.setMajorTickUnit(0.5);
@@ -721,8 +711,8 @@ public abstract class MachineLearningView {
 
         HBox overallPenaltyWeitBox = new HBox();
         overallPenaltyWeitSlider = new Slider();
-        Label overallPenaltyWeitText = new Label(parameterKeyIterator.next());
-        Label overallPenaltyWeitLabel = new Label(params.get(overallPenaltyWeitText.getText()));
+        Label overallPenaltyWeitText = new Label(AWombat.PARAMETER_OVERALL_PENALTY_WEIT);
+        Label overallPenaltyWeitLabel = new Label(params.get(AWombat.PARAMETER_OVERALL_PENALTY_WEIT));
 
         root.add(overallPenaltyWeitText, 0, 7);
         overallPenaltyWeitBox.getChildren().add(overallPenaltyWeitSlider);
@@ -731,7 +721,7 @@ public abstract class MachineLearningView {
 
         overallPenaltyWeitSlider.setMin(0);
         overallPenaltyWeitSlider.setMax(1);
-        logger.error("text: " + overallPenaltyWeitLabel.getText());
+        logger.error("text: " + params.get(AWombat.PARAMETER_OVERALL_PENALTY_WEIT));
         overallPenaltyWeitSlider.setValue(Double.valueOf(overallPenaltyWeitLabel.getText()));
         overallPenaltyWeitSlider.setShowTickLabels(true);
         overallPenaltyWeitSlider.setShowTickMarks(false);
@@ -752,8 +742,8 @@ public abstract class MachineLearningView {
 
         HBox childrenPenaltyWeitBox = new HBox();
         childrenPenaltyWeitSlider = new Slider();
-        Label childrenPenaltyWeitText = new Label(parameterKeyIterator.next());
-        Label childrenPenaltyWeitLabel = new Label(params.get(childrenPenaltyWeitText.getText()));
+        Label childrenPenaltyWeitText = new Label(AWombat.PARAMETER_CHILDREN_PENALTY_WEIT);
+        Label childrenPenaltyWeitLabel = new Label(params.get(AWombat.PARAMETER_CHILDREN_PENALTY_WEIT));
 
         root.add(childrenPenaltyWeitText, 0, 8);
         childrenPenaltyWeitBox.getChildren().add(childrenPenaltyWeitSlider);
@@ -762,7 +752,7 @@ public abstract class MachineLearningView {
 
         childrenPenaltyWeitSlider.setMin(0);
         childrenPenaltyWeitSlider.setMax(100);
-        childrenPenaltyWeitSlider.setValue(Double.valueOf(childrenPenaltyWeitLabel.getText()));
+        childrenPenaltyWeitSlider.setValue(Integer.valueOf(params.get(AWombat.PARAMETER_CHILDREN_PENALTY_WEIT)));
         childrenPenaltyWeitSlider.setShowTickLabels(true);
         childrenPenaltyWeitSlider.setShowTickMarks(false);
         childrenPenaltyWeitSlider.setMajorTickUnit(50);
@@ -775,15 +765,15 @@ public abstract class MachineLearningView {
                     public void changed(
                             ObservableValue<? extends Number> ov,
                             Number old_val, Number new_val) {
-                        childrenPenaltyWeitLabel.setText(String.format("%d",
+                        childrenPenaltyWeitLabel.setText(String.format("%.0f",
                                 new_val));
                     }
                 });
 
         HBox complexityPenaltyWeitBox = new HBox();
         complexityPenaltyWeitSlider = new Slider();
-        Label complexityPenaltyWeitText = new Label(parameterKeyIterator.next());
-        Label complexityPenaltyWeitLabel = new Label(params.get(complexityPenaltyWeitText.getText()));
+        Label complexityPenaltyWeitText = new Label(AWombat.PARAMETER_COMPLEXITY_PENALTY_WEIT);
+        Label complexityPenaltyWeitLabel = new Label(params.get(AWombat.PARAMETER_COMPLEXITY_PENALTY_WEIT));
 
         root.add(complexityPenaltyWeitText, 0, 9);
         complexityPenaltyWeitBox.getChildren().add(complexityPenaltyWeitSlider);
@@ -792,7 +782,7 @@ public abstract class MachineLearningView {
 
         complexityPenaltyWeitSlider.setMin(0);
         complexityPenaltyWeitSlider.setMax(100);
-        complexityPenaltyWeitSlider.setValue(Double.valueOf(complexityPenaltyWeitLabel.getText()));
+        complexityPenaltyWeitSlider.setValue(Integer.valueOf(params.get(AWombat.PARAMETER_COMPLEXITY_PENALTY_WEIT)));
         complexityPenaltyWeitSlider.setShowTickLabels(true);
         complexityPenaltyWeitSlider.setShowTickMarks(false);
         complexityPenaltyWeitSlider.setMajorTickUnit(50);
@@ -805,18 +795,18 @@ public abstract class MachineLearningView {
                     public void changed(
                             ObservableValue<? extends Number> ov,
                             Number old_val, Number new_val) {
-                        complexityPenaltyWeitLabel.setText(String.format("%d",
+                        complexityPenaltyWeitLabel.setText(String.format("%.0f",
                                 new_val));
                     }
                 });
 
-        Label verboseLabel = new Label(parameterKeyIterator.next());
+        Label verboseLabel = new Label(AWombat.PARAMETER_VERBOSE);
         verboseCheckBox = new CheckBox();
         verboseCheckBox.setSelected(false);
         root.add(verboseLabel, 0, 10);
         root.add(verboseCheckBox, 1, 10);
 
-        Label measuresLabel = new Label(parameterKeyIterator.next());
+        Label measuresLabel = new Label(AWombat.PARAMETER_MEASURES);
         List<String> measuresList = new ArrayList<String>();
         String[] measureArray = params.get(measuresLabel.getText()).replace("[","").replace("]", "").split(",");
         for (int i = 0; i < measureArray.length; i++) {
@@ -831,7 +821,7 @@ public abstract class MachineLearningView {
         root.add(measuresLabel, 0, 11);
         root.add(measuresSpinner, 1, 11);
 
-        Label saveMappingLabel = new Label(parameterKeyIterator.next());
+        Label saveMappingLabel = new Label(AWombat.PARAMETER_SAVE_MAPPING);
         saveMappingCheckBox = new CheckBox();
         saveMappingCheckBox.setSelected(false);
         root.add(saveMappingLabel, 0, 12);

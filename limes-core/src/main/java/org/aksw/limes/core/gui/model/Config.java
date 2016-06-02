@@ -146,8 +146,6 @@ public class Config extends Configuration {
             alert.showAndWait();
         }
         Config outConfig;
-        try (InputStream is = new FileInputStream(file);
-             BufferedInputStream bis = new BufferedInputStream(is);) {
             Configuration tmp = reader.read();
             outConfig = new Config(tmp.getSourceInfo(), tmp.getTargetInfo(),
                     tmp.getMetricExpression(), tmp.getAcceptanceRelation(),
@@ -157,7 +155,6 @@ public class Config extends Configuration {
                     tmp.getGranularity(), (HashMap<String, String>) tmp.getPrefixes(),
                     tmp.getOutputFormat(), tmp.getExecutionPlanner(),
                     tmp.getGranularity(), tmp.getAcceptanceFile(), tmp.getAcceptanceThreshold());
-        }
 //		if (outConfig == null) {
 //			throw new Exception("Error parsing config");
 //		}

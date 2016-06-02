@@ -1,9 +1,11 @@
 package org.aksw.limes.core.gui.model.ml;
 
 import javafx.concurrent.Task;
+
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 
 public class UnsupervisedLearningModel extends MachineLearningModel {
 
@@ -18,14 +20,15 @@ public class UnsupervisedLearningModel extends MachineLearningModel {
         return new Task<Void>() {
             @Override
             protected Void call() {
+        	MLModel model = null;
                 try {
-                    mlalgorithm.init(learningsetting, MappingFactory.createDefaultMapping());
-                    mlalgorithm.learn(MappingFactory.createDefaultMapping());
+                    mlalgorithm.init(learningParameters, sourceCache, targetCache);
+                    model = mlalgorithm.asUnsupervised().learn(new PseudoFMeasure());
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                setLearnedMapping(mlalgorithm.computePredictions());
+                setLearnedMapping(mlalgorithm.predict(sourceCache, targetCache, model));
                 return null;
             }
         };
