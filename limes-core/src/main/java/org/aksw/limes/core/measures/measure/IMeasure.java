@@ -52,7 +52,7 @@ public interface IMeasure {
      * Returns name of a measure.
      *
      * 
-     * @return The runtime of the measure
+     * @return Measure name as a string
      */
     public String getName();
 

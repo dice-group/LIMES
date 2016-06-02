@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.mapper;
+package org.aksw.limes.core.measures.mapper.pointsets;
 
 import org.aksw.limes.core.io.parser.Parser;
 

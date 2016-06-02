@@ -3,7 +3,7 @@ package org.aksw.limes.core.measures.mapper.string;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.Mapper;
-import org.aksw.limes.core.measures.mapper.PropertyFetcher;
+import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.mapper.string.triefilter.LengthQuicksort;
 import org.aksw.limes.core.measures.mapper.string.triefilter.TrieFilter;
 import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;

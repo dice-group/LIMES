@@ -2,11 +2,17 @@ package org.aksw.limes.core.measures.mapper;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
-
+/**
+ * Implements the mapper interface.
+ *
+ * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
+ */
 public interface IMapper {
     /**
      * Returns a mapping given a source, a target knowledge base and a link
-     * specification
+     * specification.
      *
      * @param source
      *         source cache
@@ -29,7 +35,7 @@ public interface IMapper {
 
     /**
      * Returns the estimated time needed to obtain the mapping computed by a mapper
-     * specification
+     * specification.
      *
      * @param sourceSize
      *         source size
@@ -45,7 +51,7 @@ public interface IMapper {
 
     /**
      * Returns the estimated mapping size of the mapping computed by a mapper
-     * specification
+     * specification.
      *
      * @param sourceSize
      *         source size
@@ -60,7 +66,7 @@ public interface IMapper {
     double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language);
 
     /**
-     * Returns the name of the current Mapper
+     * Returns the name of a mapper.
      *
      * @return Mapper name as a string
      */

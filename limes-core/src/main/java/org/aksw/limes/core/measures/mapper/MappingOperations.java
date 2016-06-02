@@ -2,7 +2,12 @@ package org.aksw.limes.core.measures.mapper;
 
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-
+/**
+ * Implements the mapping operations abstract class.
+ *
+ * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
+ * @version 1.0
+ */
 public class MappingOperations {
 
     /**
@@ -38,7 +43,7 @@ public class MappingOperations {
 
     /**
      * Computes the intersection of two mappings. In case an entry exists in
-     * both mappings the minimal similarity is taken
+     * both mappings the minimal similarity is taken.
      *
      * @param map1
      *            First mapping
@@ -75,7 +80,7 @@ public class MappingOperations {
 
     /**
      * Computes the union of two mappings. In case an entry exists in both
-     * mappings the maximal similarity is taken
+     * mappings the maximal similarity is taken.
      *
      * @param map1
      *            First mapping
