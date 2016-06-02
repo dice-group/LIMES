@@ -37,8 +37,8 @@ public class ExactMatch extends StringMeasure {
         return true;
     }
 
-    public double getSimilarity(Object a, Object b) {
-        if ((a + "").equals(b + "")) return 1d;
+    public double getSimilarity(Object object1, Object object2) {
+        if ((object1 + "").equals(object2 + "")) return 1d;
         return 0d;
     }
 
@@ -46,9 +46,9 @@ public class ExactMatch extends StringMeasure {
         return "string";
     }
 
-    public double getSimilarity(Instance a, Instance b, String property1, String property2) {
-        for (String source : a.getProperty(property1)) {
-            for (String target : b.getProperty(property2)) {
+    public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
+        for (String source : instance1.getProperty(property1)) {
+            for (String target : instance2.getProperty(property2)) {
                 if (source.equals(target))
                     return 1d;
             }

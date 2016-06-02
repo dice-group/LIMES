@@ -23,9 +23,9 @@ public class EuclideanMetric extends SpaceMeasure {
         dim = dimension;
     }
 
-    public double getSimilarity(Object a, Object b) {
-        String split1[] = ((String) a).split("\\|");
-        String split2[] = ((String) b).split("\\|");
+    public double getSimilarity(Object object1, Object object2) {
+        String split1[] = ((String) object1).split("\\|");
+        String split2[] = ((String) object2).split("\\|");
         double sim = 0;
         double entry;
         for (int i = 0; i < dim; i++) {
@@ -39,7 +39,7 @@ public class EuclideanMetric extends SpaceMeasure {
         return "spatial";
     }
 
-    public double getSimilarity(Instance a, Instance b, String properties1, String properties2) {
+    public double getSimilarity(Instance instance1, Instance instance2, String properties1, String properties2) {
         String p1[] = properties1.split("\\|");
         String p2[] = properties2.split("\\|");
         double sim = 0;
@@ -47,8 +47,8 @@ public class EuclideanMetric extends SpaceMeasure {
         double entry;
         for (int i = 0; i < p1.length; i++) {
             min = Integer.MAX_VALUE;
-            for (String value1 : a.getProperty(p1[i])) {
-                for (String value2 : b.getProperty(p2[i])) {
+            for (String value1 : instance1.getProperty(p1[i])) {
+                for (String value2 : instance2.getProperty(p2[i])) {
                     try {
                         entry = new Double(value1) - new Double(value2);
                         entry = entry * entry;

@@ -32,19 +32,19 @@ public class CosineMeasure extends StringMeasure {
         return new CosineSimilarity().getSimilarity(r1, r2);
     }
 
-    public double getSimilarity(Object a, Object b) {
-        return new CosineSimilarity().getSimilarity(a + "", b + "");
+    public double getSimilarity(Object object1, Object object2) {
+        return new CosineSimilarity().getSimilarity(object1 + "", object2 + "");
     }
 
     public String getType() {
         return "string";
     }
 
-    public double getSimilarity(Instance a, Instance b, String property1, String property2) {
+    public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         double sim = 0;
         double max = 0;
-        for (String p1 : a.getProperty(property1)) {
-            for (String p2 : b.getProperty(property2)) {
+        for (String p1 : instance1.getProperty(property1)) {
+            for (String p2 : instance2.getProperty(property2)) {
                 sim = getSimilarity(p1, p2);
                 if (max < sim) {
                     max = sim;

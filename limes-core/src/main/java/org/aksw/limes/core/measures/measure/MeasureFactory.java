@@ -30,6 +30,15 @@ import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorM
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
 import org.apache.log4j.Logger;
 
+/**
+ * Implements the measure factory class.
+ *
+ * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
+ * @author Mohamed Ahmed Sherif <msherif@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * 
+ * @version 1.0
+ */
 public class MeasureFactory {
     // String measures
     public static final String JARO = "jaro";
@@ -56,7 +65,6 @@ public class MeasureFactory {
     public static final String GEO_LINK = "geo_link";
     public static final String GEO_SUM_OF_MIN = "geo_sum_of_min";
     public static final String GEO_SURJECTION = "geo_surjection";
-    // public static final String GEO_QUINLAN = "geo_quinlan";
     public static final String GEO_SYMMETRIC_HAUSDORFF = "geo_symmetrichausdorff";
     // Temporal measures
     public static final String TMP_SUCCESSOR = "tmp_successor";
@@ -77,7 +85,15 @@ public class MeasureFactory {
     public static final String TMP_EQUALS = "tmp_equals";
     static Logger logger = Logger.getLogger(MeasureFactory.class.getName());
 
-    public static MeasureType getTypeFromExpression(String expression) {
+    /**
+     * Factory function for retrieving a measure name from the set of allowed
+     * types.
+     * 
+     * @param name,
+     *            The name/type of the measure.
+     * @return a specific measure type
+     */
+    public static MeasureType getMeasureType(String expression) {
         String measure = expression.toLowerCase();
         if (measure.startsWith(GEO_MEAN)) {
             return MeasureType.GEO_MEAN;
@@ -110,6 +126,15 @@ public class MeasureFactory {
         }
     }
 
+    /**
+     * Factory function for retrieving the desired measure instance.
+     * 
+     * @param type,
+     *            Type of the measure
+     * 
+     * @return a specific measure instance
+     * 
+     */
     public static Measure getMeasure(MeasureType type) {
         Measure measure;
         if (type == MeasureType.GEO_NAIVE_HAUSDORFF) {
@@ -145,12 +170,15 @@ public class MeasureFactory {
     }
 
     /**
-     * Get measure name to metric.
-     *
-     * @param measure,
-     *            name of measure
-     * @return m, the corresponding measure
+     * Factory function for retrieving the desired measure instance.
+     * 
+     * @param name,
+     *            Name of the measure
+     * 
+     * @return a specific measure instance
      * @throws InvalidMeasureException
+     * 
+     * 
      */
     public static Measure getMeasure(String name) throws InvalidMeasureException {
         Measure m = null;
@@ -240,12 +268,15 @@ public class MeasureFactory {
     }
 
     /**
-     * Get mapper to measure
-     *
+     * Factory function for retrieving the desired mapper instance given an
+     * input measure name.
+     * 
      * @param measure,
-     *            name of measure
-     * @return am, mapper corresponding to measure
+     *            Name of the measure
+     * 
+     * @return a specific mapper instance
      * @throws InvalidMeasureException
+     * 
      */
     public static Mapper getMapper(String measure) throws InvalidMeasureException {
         Mapper am = null;

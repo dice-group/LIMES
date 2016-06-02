@@ -13,10 +13,10 @@ public class DuringMeasure extends TemporalMeasure {
 
     // EE1 \ (BB0 U BB1)
     @Override
-    public double getSimilarity(Object a, Object b) {
+    public double getSimilarity(Object object1, Object object2) {
         double sim = 0;
-        String split1[] = ((String) a).split("\\|");
-        String split2[] = ((String) b).split("\\|");
+        String split1[] = ((String) object1).split("\\|");
+        String split2[] = ((String) object2).split("\\|");
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
         Date date1, date2;
         long beginDate1 = 0, endDate1 = 0, beginDate2 = 0, endDate2 = 0;
@@ -53,7 +53,7 @@ public class DuringMeasure extends TemporalMeasure {
     }
 
     @Override
-    public double getSimilarity(Instance a, Instance b, String property1, String property2) {
+    public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         String beginDate1 = this.getFirstProperty(property1);
         String beginDate2 = this.getFirstProperty(property2);
 
@@ -74,8 +74,8 @@ public class DuringMeasure extends TemporalMeasure {
                     "During measure requires both begin and end date of the event. End date property is missing. Exiting..");
             System.exit(1);
         }
-        String s1 = new String(a.getProperty(beginDate1).first() + "|" + a.getProperty(endDate1).first());
-        String s2 = new String(b.getProperty(beginDate2).first() + "|" + b.getProperty(endDate2).first());
+        String s1 = new String(instance1.getProperty(beginDate1).first() + "|" + instance1.getProperty(endDate1).first());
+        String s2 = new String(instance2.getProperty(beginDate2).first() + "|" + instance2.getProperty(endDate2).first());
 
         return this.getSimilarity(s1, s2);
     }

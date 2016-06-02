@@ -1,7 +1,11 @@
 package org.aksw.limes.core.execution.rewriter;
 
-import org.apache.log4j.Logger;
-
+/**
+ * Implements the Rewriter abstract class. It takes as input a link specification
+ * and re-writers it.
+ *
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
+ */
 public abstract class Rewriter implements IRewriter {
-    static Logger logger = Logger.getLogger("LIMES");
 }

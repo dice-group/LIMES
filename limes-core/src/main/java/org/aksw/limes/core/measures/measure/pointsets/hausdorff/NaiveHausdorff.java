@@ -117,9 +117,9 @@ public class NaiveHausdorff extends PointsetsMeasure {
     /* (non-Javadoc)
      * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance, java.lang.String, java.lang.String)
      */
-    public double getSimilarity(Instance a, Instance b, String property1, String property2) {
-        TreeSet<String> source = a.getProperty(property1);
-        TreeSet<String> target = b.getProperty(property2);
+    public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
+        TreeSet<String> source = instance1.getProperty(property1);
+        TreeSet<String> target = instance2.getProperty(property2);
         Set<Polygon> sourcePolygons = new HashSet<Polygon>();
         Set<Polygon> targetPolygons = new HashSet<Polygon>();
         for (String s : source) {

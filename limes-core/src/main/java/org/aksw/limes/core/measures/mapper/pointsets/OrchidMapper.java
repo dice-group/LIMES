@@ -98,7 +98,7 @@ public class OrchidMapper extends Mapper {
         Set<Polygon> sourcePolygons = getPolygons(source, properties.get(0));
         Set<Polygon> targetPolygons = getPolygons(target, properties.get(1));
         float theta = (1 / (float) threshold) - 1;
-        MeasureType type = MeasureFactory.getTypeFromExpression(expression);
+        MeasureType type = MeasureFactory.getMeasureType(expression);
         GeoHR3 orchid = new GeoHR3(theta, GeoHR3.DEFAULT_GRANULARITY, type);
         return orchid.run(sourcePolygons, targetPolygons);
     }

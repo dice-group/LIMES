@@ -45,17 +45,17 @@ public class OverlapMeasure extends StringMeasure {
         return overlap;
     }
 
-    public double getSimilarity(Object a, Object b) {
+    public double getSimilarity(Object object1, Object object2) {
         double counter = 0;
 
         TreeSet<String> tokens1 = new TreeSet<String>();
         TreeSet<String> tokens2 = new TreeSet<String>();
 
-        String split1[] = ((String) a).split(" ");
+        String split1[] = ((String) object1).split(" ");
         for (int i = 0; i < split1.length; i++)
             tokens1.add(split1[i]);
 
-        String split2[] = ((String) b).split(" ");
+        String split2[] = ((String) object2).split(" ");
         for (int i = 0; i < split2.length; i++)
             tokens2.add(split2[i]);
 
@@ -69,11 +69,11 @@ public class OverlapMeasure extends StringMeasure {
         return "string";
     }
 
-    public double getSimilarity(Instance a, Instance b, String property1, String property2) {
+    public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
 
         double max = 0, sim;
-        for (String p1 : a.getProperty(property1)) {
-            for (String p2 : b.getProperty(property2)) {
+        for (String p1 : instance1.getProperty(property1)) {
+            for (String p2 : instance2.getProperty(property2)) {
                 sim = getSimilarity(p1, p2);
                 if (sim > max)
                     max = sim;

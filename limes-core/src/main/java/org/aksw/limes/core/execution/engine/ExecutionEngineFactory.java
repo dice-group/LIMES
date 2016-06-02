@@ -53,7 +53,7 @@ public class ExecutionEngineFactory {
     /**
      * Factory function for retrieving the desired execution engine instance.
      * 
-     * @param name,
+     * @param type,
      *            type of the Execution Engine
      * @param source,
      *            Source cache
@@ -66,15 +66,15 @@ public class ExecutionEngineFactory {
      * @return a specific execution engine instance
      * 
      */
-    public static ExecutionEngine getEngine(ExecutionEngineType name, Cache source, Cache target, String sourceVar,
+    public static ExecutionEngine getEngine(ExecutionEngineType type, Cache source, Cache target, String sourceVar,
             String targetVar) {
-        switch (name) {
+        switch (type) {
         case DEFAULT:
         case SIMPLE:
             return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
         default:
             logger.error(
-                    "Sorry, " + name + " is not yet implemented. Returning the default execution engine instead...");
+                    "Sorry, " + type + " is not yet implemented. Returning the default execution engine instead...");
             return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
         }
     }

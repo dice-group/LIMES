@@ -30,9 +30,9 @@ public abstract class PointsetsMeasure extends Measure implements IPointsetsMeas
     /* (non-Javadoc)
      * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(java.lang.Object, java.lang.Object)
      */
-    public double getSimilarity(Object a, Object b) {
-        Polygon p1 = OrchidMapper.getPolygon((String) a);
-        Polygon p2 = OrchidMapper.getPolygon((String) b);
+    public double getSimilarity(Object object1, Object object2) {
+        Polygon p1 = OrchidMapper.getPolygon((String) object1);
+        Polygon p2 = OrchidMapper.getPolygon((String) object2);
         double d = computeDistance(p1, p2, 0f);
         return 1d / (1d + (double) d);
     }

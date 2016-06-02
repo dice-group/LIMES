@@ -30,9 +30,9 @@ public class GeoDistance extends SpaceMeasure {
     }
 
     //assume lat|long
-    public double getSimilarity(Object a, Object b) {
-        String p1[] = ((String) a).split("\\|");
-        String p2[] = ((String) b).split("\\|");
+    public double getSimilarity(Object object1, Object object2) {
+        String p1[] = ((String) object1).split("\\|");
+        String p2[] = ((String) object2).split("\\|");
 
         double lat1 = Double.parseDouble(p1[0]);
         double lon1 = Double.parseDouble(p1[1]);
@@ -50,25 +50,25 @@ public class GeoDistance extends SpaceMeasure {
         return "spatial";
     }
 
-    public double getSimilarity(Instance a, Instance b, String property1, String property2) {
+    public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         String p1[] = property1.split("\\|");
         String p2[] = property1.split("\\|");
         double lon1, lon2, lat1, lat2;
 
         if (p1[0].toLowerCase().startsWith("lo")) {
-            lon1 = Double.parseDouble(a.getProperty(p1[0]).first());
-            lat1 = Double.parseDouble(a.getProperty(p1[1]).first());
+            lon1 = Double.parseDouble(instance1.getProperty(p1[0]).first());
+            lat1 = Double.parseDouble(instance1.getProperty(p1[1]).first());
         } else {
-            lat1 = Double.parseDouble(a.getProperty(p1[0]).first());
-            lon1 = Double.parseDouble(a.getProperty(p1[1]).first());
+            lat1 = Double.parseDouble(instance1.getProperty(p1[0]).first());
+            lon1 = Double.parseDouble(instance1.getProperty(p1[1]).first());
         }
 
         if (p2[0].toLowerCase().startsWith("lo")) {
-            lon2 = Double.parseDouble(a.getProperty(p2[0]).first());
-            lat2 = Double.parseDouble(a.getProperty(p2[1]).first());
+            lon2 = Double.parseDouble(instance1.getProperty(p2[0]).first());
+            lat2 = Double.parseDouble(instance1.getProperty(p2[1]).first());
         } else {
-            lat2 = Double.parseDouble(a.getProperty(p2[0]).first());
-            lon2 = Double.parseDouble(a.getProperty(p2[1]).first());
+            lat2 = Double.parseDouble(instance1.getProperty(p2[0]).first());
+            lon2 = Double.parseDouble(instance1.getProperty(p2[1]).first());
         }
 
         double value1 = Math.pow(Math.sin((lat1 - lat2) / 2.0), 2)
