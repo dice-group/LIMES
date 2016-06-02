@@ -16,10 +16,20 @@ import org.aksw.limes.core.io.mapping.AMapping;
  * @version 1.0
  */
 public class ParallelExecutionEngine extends ExecutionEngine {
-
+    /**
+     * Constructor for a parallel execution engine.
+     *
+     * @param source,
+     *            Source cache
+     * @param target,
+     *            Target cache
+     * @param sourceVar,
+     *            Source variable
+     * @param targetVar,
+     *            Target variable
+     */
     public ParallelExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
         super(source, target, sourceVar, targetVar);
-        // TODO Auto-generated constructor stub
     }
 
     /**

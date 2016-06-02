@@ -22,21 +22,39 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * Impelements Dynamic Planner class.
+ * Implements the Dynamic planner class. It receives a link specification as
+ * input and generates a mutable NestedPlan.
  *
- * @author kleanthi
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
  */
 public class DynamicPlanner extends Planner {
-    static Logger logger = Logger.getLogger(DynamicPlanner.class.getName());
+    static Logger logger = Logger.getLogger(DynamicPlanner.class);
+    /**
+     * Source cache.
+     */
     private Cache source;
+    /**
+     * Target cache.
+     */
     private Cache target;
+    /**
+     * Language of the source/target data.
+     */
     private Language lang;
-    // <String representation of LinkSpec, corresponding plan>
+    /**
+     * Sub-link specifications (as string) and their corresponding plans.
+     */
     private Map<String, NestedPlan> plans = new HashMap<String, NestedPlan>();
-    // <String representation of LinkSpec, LinkSpec>
+    /**
+     * Sub-link specifications (as string) and their corresponding original
+     * representation.
+     */
     private Map<String, LinkSpecification> specifications = new HashMap<String, LinkSpecification>();
-    // <String represantion of LinkSpec A, LinkSpec B>
-    // where LinkSpec B and C are subsumption of LinkSpec A
+    /**
+     * Sub-link specifications (as string) and their corresponding depended
+     * specifications.
+     */
     private Map<String, LinkSpecification> dependencies = new HashMap<String, LinkSpecification>();
 
     public DynamicPlanner(Cache s, Cache t) {
@@ -50,14 +68,10 @@ public class DynamicPlanner extends Planner {
     }
 
     /**
-     * Initialize Plans and Specifications maps. Plans map includes the string
-     * representation of a link specifications as keys and the corresponding
-     * plans as values. Specifications map include the string representation of
-     * a link specifications as keys and the corresponding link specification
-     * instances as values.
+     * Initialize plans and specifications fields.
      *
      * @param spec,
-     *            the original link specification
+     *            The input link specification
      */
     public void init(LinkSpecification spec) {
         NestedPlan plan = new NestedPlan();
@@ -76,13 +90,13 @@ public class DynamicPlanner extends Planner {
     }
 
     /**
-     * Create/Update dependency between recently executed specification and
-     * other specification(s). A specification L2 is dependent on an executed
-     * specification L1 if: L1 and L2 have the same metric expression and L1
-     * threshold < L2 threshold. Using this definition, L2 is a subsumption of
-     * L1. Therefore, the execution of the initial specification L is
-     * speeded-up. Instead of fully executing L2, dynamic planner informs the
-     * execution engine about the dependency between L2 and L1, and the
+     * Create/Update dependency between a recently executed specification and an
+     * other specification. A specification L2 is dependent on an executed
+     * specification L1 if L1 and L2 have the same metric expression and L1
+     * threshold is lower that L2's threshold. Using this definition, L2 is a
+     * sub-sumption of L1. Therefore, the execution of the initial specification
+     * L is speeded-up. Instead of fully executing L2, dynamic planner informs
+     * the execution engine about the dependency between L2 and L1, and the
      * execution engine retrieves the mapping of L1 from the results buffer and
      * creates a temporary filtering instruction in order to get L2's mapping
      * from L1's mapping. If L2 is dependent on L1 but it is already dependent
@@ -109,11 +123,11 @@ public class DynamicPlanner extends Planner {
     }
 
     /**
-     * Finds and returns specification that the specification parameter is
+     * Returns specification to whom the input specification parameter is
      * dependent upon, if any.
      *
      * @param spec,
-     *            the dependent specification
+     *            The dependent specification
      * @return string representation of specification that spec depends upon
      */
     public String getDependency(LinkSpecification spec) {
@@ -125,13 +139,16 @@ public class DynamicPlanner extends Planner {
     }
 
     /**
-     * Computes atomic costs for a metric expression
+     * Computes atomic costs for a metric expression. If the metric expression
+     * of is not supported by the framework, it throws an
+     * InvalidMeasureException exception.
      *
      * @param measure,
-     *            measure of metric expression
+     *            Measure of metric expression
      * @param threshold,
-     *            threshold of metric expression
+     *            Threshold of metric expression
      * @return runtime, estimated runtime cost of the metric expression
+     * @throws InvalidMeasureException
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
         Mapper am = null;
@@ -146,15 +163,18 @@ public class DynamicPlanner extends Planner {
     }
 
     /**
-     * Computes atomic mapping sizes for a measure
+     * Computes atomic mapping sizes for a measure. If the metric expression of
+     * is not supported by the framework, it throws an InvalidMeasureException
+     * exception.
      *
      * @param measure,
-     *            measure of metric expression
+     *            Measure of metric expression
      * @param threshold,
-     *            threshold of metric expression
+     *            Threshold of metric expression
      * @return size, estimated size of returned mapping
+     * @throws InvalidMeasureException
      */
-    public double getAtomicMappingSizes(String measure, double threshold) {
+    double getAtomicMappingSizes(String measure, double threshold) {
         Mapper am = null;
         try {
             am = MeasureFactory.getMapper(measure);
@@ -167,20 +187,22 @@ public class DynamicPlanner extends Planner {
     }
 
     /**
-     * checks if the plan of the specified link specification is executed
+     * Checks if the plan of the specified link specification is executed.
      *
-     * @return true if the plan is executed
+     * @return true if the plan is executed, or false otherwise
      */
     public boolean isExecuted(LinkSpecification spec) {
         return (plans.get(spec.toString()).getExecutionStatus());
     }
 
     /**
-     * Computes costs for a filtering
+     * Computes costs for a filtering instruction. If the metric expression of
+     * the filtering instruction is not supported by the framework, it throws an
+     * InvalidMeasureException exception.
      *
-     * @param filterExpression
+     * @param filterExpression,
      *            Expression used to filter
-     * @param mappingSize
+     * @param mappingSize,
      *            Size of mapping
      * @return cost, estimated runtime cost of filteringInstruction(s)
      */
@@ -203,11 +225,11 @@ public class DynamicPlanner extends Planner {
     }
 
     /**
-     * Find the plan of a specification
+     * Returns the corresponding plan of a specification.
      *
      * @param spec,
-     *            the link specification
-     * @return plan, the plan that corresponds to the input specification
+     *            The link specification
+     * @return plan, the plan of the input specification
      */
     public NestedPlan getPlan(LinkSpecification spec) {
         if (plans.containsKey(spec.toString()))
@@ -216,11 +238,11 @@ public class DynamicPlanner extends Planner {
     }
 
     /**
-     * Find the specification that corresponds to a plan
+     * Returns the specification from which the input plan was generated.
      *
      * @param plan,
-     *            the nested plan
-     * @return spec, the spec that corresponds to the input plan
+     *            The nested plan
+     * @return spec, the spec of the input plan
      */
     public LinkSpecification getLinkSpec(NestedPlan plan) {
         for (Map.Entry<String, NestedPlan> entry : plans.entrySet()) {
@@ -233,10 +255,10 @@ public class DynamicPlanner extends Planner {
     }
 
     /**
-     * Updates the characteristics of a plan
+     * Updates the characteristics of a plan once it is executed.
      *
      * @param spec,
-     *            the corresponding link specification
+     *            the link specification from which the plan was generated
      * @param rt,
      *            the real runtime of the plan
      * @param selectivity,
@@ -254,17 +276,15 @@ public class DynamicPlanner extends Planner {
         plan.setSelectivity(selectivity);
         plan.setMappingSize(msize);
         plan.setExecutionStatus(true);
-        // logger.info("Runtime is: " + plan.runtimeCost + " mappingsize is: " +
-        // plan.mappingSize + " selectivity is: "
-        // + plan.selectivity);
+
         plans.put(spec.toString(), plan);
         createDependencies(spec);
     }
 
     /**
-     * Generates a NestedPlan for a link specification
+     * Generates a NestedPlan for a link specification.
      *
-     * @param spec
+     * @param spec,
      *            Input link specification
      * @return NestedPlan of the input link specification
      */
@@ -276,25 +296,27 @@ public class DynamicPlanner extends Planner {
 
     /**
      * Generates a instructionList based on the optimality assumption used in
-     * databases
+     * databases. If the input link specification has an AND or a MINUS
+     * operator, then the plan function will find the least costly plan from a
+     * set of alternatives (see {@link #getBestConjunctivePlan},
+     * {@link #getBestDifferencePlan} resp.).
      *
-     * @param spec
-     *            Specification for which a instructionList is needed
-     * @param source
+     * @param spec,
+     *            Input link specification
+     * @param source,
      *            Source cache
-     * @param target
+     * @param target,
      *            Target cache
-     * @param sourceMapping
+     * @param sourceMapping,
      *            Size of source mapping
-     * @param targetMapping
+     * @param targetMapping,
      *            Size of target mapping
-     * @return Nested instructionList for the given spec
+     * @return plan, a NestedPlan for the input link specification
      */
     public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, AMapping sourceMapping,
             AMapping targetMapping) {
         NestedPlan plan = new NestedPlan();
-        
-        
+
         // if plan is executed, just return the plan
         // remember that the plan is automatically updated once it is executed
         plan = plans.get(spec.toString());
@@ -399,8 +421,8 @@ public class DynamicPlanner extends Planner {
             }
         }
         this.plans.put(spec.toString(), plan);
-        //logger.info(spec);
-        //logger.info(plan);
+        // logger.info(spec);
+        // logger.info(plan);
         // logger.info("--------------------------------------------------------------------");
         return plan;
 
@@ -408,16 +430,26 @@ public class DynamicPlanner extends Planner {
 
     /**
      * Find the least costly plan for a link specification with MINUS operator.
-     * Computes all possible nested plans given the children plans and whether
-     * or not they have been executed previously.
-     *
+     * Computes all possible nested plans given the children plans. If none of
+     * the children plans are executed or only the left child plan is executed,
+     * then the functions chooses either to (1) Execute both children plans,
+     * perform difference and filter the resulting mapping using the threshold
+     * of the link specification, or (2) Execute the plan of the left child, use
+     * the right child measure expression as a filer and then filter the
+     * resulting mapping using the threshold of the link specification. If the
+     * right child plan is executed, then the least costly plan is (1). The
+     * selection of the best alternative is based upon runtime estimations
+     * obtained for each of the atomic measure expressions included in the
+     * children specifications.
+     * 
      * @param spec,
      *            the link specification
      * @param left,
      *            left child nested plan
      * @param right,
      *            right child nested plan
-     * @param selectivity
+     * @param selectivity,
+     *            the overall selectivity
      * @return the resulting nested plan for the input spec, that is least
      *         costly
      */
@@ -511,16 +543,30 @@ public class DynamicPlanner extends Planner {
 
     /**
      * Find the least costly plan for a link specification with AND operator.
-     * Computes all possible nested plans given the children plans and whether
-     * or not they have been executed previously.
-     *
+     * Computes all possible nested plans given the children plans. If none of
+     * the children plans are executed then the functions chooses either to (1)
+     * Execute both children plans, perform intersection and filter the
+     * resulting mapping using the threshold of the link specification, or (2)
+     * Execute the plan of the left child, use the right child measure
+     * expression as a filer and then filter the resulting mapping using the
+     * threshold of the link specification, or (3) Execute the plan of the right
+     * child, use the left child measure expression as a filer and then filter
+     * the resulting mapping using the threshold of the link specification. If
+     * the left child plan is executed, then the least costly plan is either (1)
+     * or (2). If the right child plan is executed, then the least costly plan
+     * is either (1) or (3). If both children plans are executed then the least
+     * costly plan is (1). The selection of the best alternative is based upon
+     * runtime estimations obtained for each of the atomic measure expressions
+     * included in the children specifications.
+     * 
      * @param spec,
      *            the link specification
      * @param left,
      *            left child nested plan
      * @param right,
      *            right child nested plan
-     * @param selectivity
+     * @param selectivity,
+     *            the overall selectivity
      * @return the resulting nested plan for the input spec, that is least
      *         costly
      */
@@ -675,11 +721,27 @@ public class DynamicPlanner extends Planner {
         return result;
     }
 
+    /**
+     * Returns the status of the planner.
+     *
+     * @return false
+     */
     @Override
     public boolean isStatic() {
         return false;
     }
 
+    /**
+     * Normalization of input link specification. In case of XOR operator, the
+     * output specification uses the extended form of XOR (i.e.
+     * XOR(cosine(x.name,y.name)|0.5, overlap(x.label,y.label)|0.6)>=0.8 will
+     * transformed into MINUS(OR(cosine(x.name,y.name)|0.5,
+     * overlap(x.label,y.label)|0.6)|0.8, AND(cosine(x.name,y.name)|0.5,
+     * overlap(x.label,y.label)|0.6)|0.8) )>=0.8
+     *
+     * @param spec,
+     *            The normalized link specification
+     */
     @Override
     public LinkSpecification normalize(LinkSpecification spec) {
         if (spec.isEmpty()) {

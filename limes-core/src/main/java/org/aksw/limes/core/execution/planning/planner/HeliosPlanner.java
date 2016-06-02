@@ -20,40 +20,54 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Impelements Helios Planner class.
+ * Implements the Helios planner class. It receives a link specification as
+ * input and generates an immutable NestedPlan.
  *
- * @author ngonga
- * @author kleanthi
+ * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
  */
 public class HeliosPlanner extends Planner {
 
-    static Logger logger = Logger.getLogger(HeliosPlanner.class.getName());
+    static Logger logger = Logger.getLogger(HeliosPlanner.class);
+    /**
+     * Source cache.
+     */
     public Cache source;
+    /**
+     * Target cache.
+     */
     public Cache target;
+    /**
+     * Language of the source/target data.
+     */
     public Language lang;
 
     /**
-     * Constructor. Caches are needed for statistic computations.
+     * Constructor of the Helios planner class.
      *
-     * @param s
-     *         Source cache
-     * @param t
-     *         Target get
+     * @param s,
+     *            Source cache
+     * @param t,
+     *            Target get
      */
-    public HeliosPlanner(Cache s, Cache t) {
-        source = s;
-        target = t;
-        lang = Language.NULL;
+    public HeliosPlanner(Cache source, Cache target) {
+        this.source = source;
+        this.target = target;
+        this.lang = Language.NULL;
     }
 
     /**
-     * Computes atomic costs for a metric expression
+     * Computes atomic costs for a metric expression. If the metric expression
+     * of is not supported by the framework, it throws an
+     * InvalidMeasureException exception.
      *
      * @param measure,
-     *         measure of metric expression
+     *            Measure of metric expression
      * @param threshold,
-     *         threshold of metric expression
+     *            Threshold of metric expression
      * @return runtime, estimated runtime cost of the metric expression
+     * @throws InvalidMeasureException
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
         Mapper am = null;
@@ -68,13 +82,16 @@ public class HeliosPlanner extends Planner {
     }
 
     /**
-     * Computes atomic mapping sizes for a measure
+     * Computes atomic mapping sizes for a measure. If the metric expression of
+     * is not supported by the framework, it throws an InvalidMeasureException
+     * exception.
      *
      * @param measure,
-     *         measure of metric expression
+     *            Measure of metric expression
      * @param threshold,
-     *         threshold of metric expression
+     *            Threshold of metric expression
      * @return size, estimated size of returned mapping
+     * @throws InvalidMeasureException
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
         Mapper am = null;
@@ -89,12 +106,14 @@ public class HeliosPlanner extends Planner {
     }
 
     /**
-     * Computes costs for a filtering
+     * Computes costs for a filtering instruction. If the metric expression of
+     * the filtering instruction is not supported by the framework, it throws an
+     * InvalidMeasureException exception.
      *
-     * @param filterExpression
-     *         Expression used to filter
-     * @param mappingSize
-     *         Size of mapping
+     * @param filterExpression,
+     *            Expression used to filter
+     * @param mappingSize,
+     *            Size of mapping
      * @return cost, estimated runtime cost of filteringInstruction(s)
      */
     public double getFilterCosts(List<String> measures, int mappingSize) {
@@ -116,10 +135,10 @@ public class HeliosPlanner extends Planner {
     }
 
     /**
-     * Generates a NestedPlan for a link specification
+     * Generates a NestedPlan for a link specification.
      *
-     * @param spec
-     *         Input link specification
+     * @param spec,
+     *            Input link specification
      * @return NestedPlan of the input link specification
      */
     @Override
@@ -129,22 +148,24 @@ public class HeliosPlanner extends Planner {
 
     /**
      * Generates a NestedPlan based on the optimality assumption used in
-     * databases
+     * databases. If the input link specification has an AND operator, then the
+     * plan function will find the least costly plan from a set of alternatives
+     * (see {@link #getBestConjunctivePlan} }.
      *
-     * @param spec
-     *         Input link specification
-     * @param source
-     *         Source cache
-     * @param target
-     *         Target cache
-     * @param sourceMapping
-     *         Size of source mapping
-     * @param targetMapping
-     *         Size of target mapping
+     * @param spec,
+     *            Input link specification
+     * @param source,
+     *            Source cache
+     * @param target,
+     *            Target cache
+     * @param sourceMapping,
+     *            Size of source mapping
+     * @param targetMapping,
+     *            Size of target mapping
      * @return plan, a NestedPlan for the input link specification
      */
     public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, AMapping sourceMapping,
-                           AMapping targetMapping) {
+            AMapping targetMapping) {
         NestedPlan plan = new NestedPlan();
         // atomic specs are simply ran
         if (spec == null)
@@ -189,7 +210,7 @@ public class HeliosPlanner extends Planner {
                         if (plan.getFilteringInstruction().getMeasureExpression() != null) {
                             plan.setRuntimeCost(plan.getRuntimeCost()
                                     + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
-                                    source.size() * target.size() * (1 - selectivity)));
+                                            source.size() * target.size() * (1 - selectivity)));
                         }
                     }
                     plan.setSelectivity(1 - selectivity);
@@ -204,7 +225,7 @@ public class HeliosPlanner extends Planner {
                         if (plan.getFilteringInstruction().getMeasureExpression() != null) {
                             plan.setRuntimeCost(plan.getRuntimeCost()
                                     + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
-                                    source.size() * target.size() * (1 - selectivity)));
+                                            source.size() * target.size() * (1 - selectivity)));
                         }
                     }
                     plan.setSelectivity(selectivity);
@@ -220,7 +241,7 @@ public class HeliosPlanner extends Planner {
                         if (plan.getFilteringInstruction().getMeasureExpression() != null) {
                             plan.setRuntimeCost(plan.getRuntimeCost()
                                     + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
-                                    source.size() * target.size() * selectivity));
+                                            source.size() * target.size() * selectivity));
                         }
                     }
                     plan.setSelectivity(selectivity);
@@ -244,15 +265,15 @@ public class HeliosPlanner extends Planner {
     }
 
     /**
-     * Compute the left-order best instructionList for a list of plans. Only
+     * Computes the left-order best instructionList for a list of plans. Only
      * needed when AND has more than 2 children. Simply splits the task in
-     * computing the best instructionList for (leftmost, all others)
+     * computing the best instructionList for (leftmost, all others).
      *
-     * @param plans
-     *         List of plans
-     * @param selectivity
-     *         Selectivity of the instructionList (known beforehand)
-     * @return NestedPlan
+     * @param plans,
+     *            List of plans
+     * @param selectivity,
+     *            Selectivity of the instructionList (known beforehand)
+     * @return NestedPlan of the input link specification
      */
     public NestedPlan getBestConjunctivePlan(LinkSpecification spec, List<NestedPlan> plans, double selectivity) {
         if (plans == null) {
@@ -275,18 +296,18 @@ public class HeliosPlanner extends Planner {
 
     /**
      * Computes the best conjunctive instructionList for a instructionList
-     * against a list of plans by calling back the method
+     * against a list of plans by calling back the method.
      *
-     * @param left
-     *         Left instructionList
-     * @param plans
-     *         List of other plans
-     * @param selectivity
-     *         Overall selectivity
-     * @return NestedPlan
+     * @param left,
+     *            Left instructionList
+     * @param plans,
+     *            List of other plans
+     * @param selectivity,
+     *            Overall selectivity
+     * @return NestedPlan of the input link specification
      */
     public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, List<NestedPlan> plans,
-                                             double selectivity) {
+            double selectivity) {
         if (plans == null) {
             return left;
         }
@@ -303,21 +324,30 @@ public class HeliosPlanner extends Planner {
 
     /**
      * Find the least costly plan for a link specification with AND operator.
-     * Computes all possible nested plans given the children plans and whether
-     * or not they have been executed previously.
+     * Computes all possible nested plans given the children plans: (1) Execute
+     * both children plans, perform intersection and filter the resulting
+     * mapping using the threshold of the link specification. (2) Execute the
+     * plan of the left child, use the right child measure expression as a filer
+     * and then filter the resulting mapping using the threshold of the link
+     * specification. (3) Execute the plan of the right child, use the left
+     * child measure expression as a filer and then filter the resulting mapping
+     * using the threshold of the link specification. The selection of the best
+     * alternative is based upon runtime estimations obtained for each of the
+     * atomic measure expressions included in the children specifications.
      *
      * @param spec,
-     *         the link specification
+     *            the link specification
      * @param left,
-     *         left child nested plan
+     *            left child nested plan
      * @param right,
-     *         right child nested plan
-     * @param selectivity
+     *            right child nested plan
+     * @param selectivity,
+     *            the overall selectivity
      * @return the resulting nested plan for the input spec, that is least
-     * costly
+     *         costly
      */
     public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, NestedPlan right,
-                                             double selectivity) {
+            double selectivity) {
         double runtime1 = 0, runtime2, runtime3;
         NestedPlan result = new NestedPlan();
         // first instructionList: run both children and then merge
@@ -338,7 +368,7 @@ public class HeliosPlanner extends Planner {
                 (int) Math.ceil(source.size() * target.size() * left.getSelectivity()));
 
         double min = Math.min(Math.min(runtime3, runtime2), runtime1);
-        
+
         if (min == runtime1) {
             result.setOperator(Instruction.Command.INTERSECTION);
             List<NestedPlan> subplans = new ArrayList<NestedPlan>();
@@ -371,11 +401,27 @@ public class HeliosPlanner extends Planner {
         return result;
     }
 
+    /**
+     * Returns the status of the planner.
+     *
+     * @return true
+     */
     @Override
     public boolean isStatic() {
         return true;
     }
 
+    /**
+     * Normalization of input link specification. In case of XOR operator, the
+     * output specification uses the extended form of XOR (i.e.
+     * XOR(cosine(x.name,y.name)|0.5, overlap(x.label,y.label)|0.6)>=0.8 will
+     * transformed into MINUS(OR(cosine(x.name,y.name)|0.5,
+     * overlap(x.label,y.label)|0.6)|0.8, AND(cosine(x.name,y.name)|0.5,
+     * overlap(x.label,y.label)|0.6)|0.8) )>=0.8
+     *
+     * @param spec,
+     *            The normalized link specification
+     */
     @Override
     public LinkSpecification normalize(LinkSpecification spec) {
         if (spec.isEmpty()) {
