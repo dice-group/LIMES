@@ -11,20 +11,26 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+/**
+ * Implements the concurrent mapper class.
+ *
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
+ */
 public class ConcurrentMapper extends SimpleTemporalMapper {
+    
+    protected static final Logger logger = Logger.getLogger(ConcurrentMapper.class.getName());
     /**
      * Maps a set of source instances to their concurrent target instances. The
-     * mapping contains n-to-m relations. Each source instance takes as
+     * mapping contains 1-to-m relations. Each source instance takes as
      * concurrent events the set of target instances with the same begin date
      * property and the same machine id property of the source instance.
      *
-     * @author kleanthi
+     * @return a mapping, the resulting mapping
      */
-    protected static final Logger logger = Logger.getLogger(ConcurrentMapper.class.getName());
-
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
 
         AMapping m = MappingFactory.createDefaultMapping();
         Parser p = new Parser(expression, threshold);
@@ -57,16 +63,25 @@ public class ConcurrentMapper extends SimpleTemporalMapper {
         return m;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return "Concurrent";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;

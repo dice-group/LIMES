@@ -10,18 +10,21 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Abstract class of atomic Allen's Algebra atomic Relations. The main idea
- * behind this approach is to represent each Allen's Algebra Relation as a
- * Boolean combination of atomic relations. By computing each of the atomic
- * relations only once and only if needed, we can decrease the overall runtime
- * of the computation of a given set of Allen relations. Each event s can be
- * described using two time points b(s) and e(s). To compose the atomic interval
+ * Abstract class of atomic Allen's relations. The main idea behind this
+ * approach is to represent each Allen's Algebra relation as a Boolean
+ * combination of atomic relations. By computing each of the atomic relations
+ * only once and only if needed, we can decrease the overall runtime of the
+ * computation of a given set of Allen relations. Each event s can be described
+ * using two time points b(s) and e(s). To compose the atomic interval
  * relations, we define all possible binary relations between the begin and end
  * points of two event resources s = (b(s), e(s)) and t = (b(t), e(t)).
  */
 public abstract class AtomicAllenAlgebraMapper {
-    protected static final Logger logger = Logger.getLogger(AtomicAllenAlgebraMapper.class.getName());
+    protected static final Logger logger = Logger.getLogger(AtomicAllenAlgebraMapper.class);
 
+    /**
+     * Constructor of AtomicAllenAlgebraMapper class.
+     */
     public AtomicAllenAlgebraMapper() {
     }
 
@@ -29,7 +32,7 @@ public abstract class AtomicAllenAlgebraMapper {
      * Extract first property (beginDate) from metric expression.
      *
      * @param expression,
-     *         metric expression
+     *            The metric expression
      * @return first property of metric expression as string
      */
     protected static String getBeginProperty(String properties) {
@@ -46,7 +49,7 @@ public abstract class AtomicAllenAlgebraMapper {
      * Extract second property (endDate) from metric expression.
      *
      * @param expression,
-     *         metric expression
+     *            The metric expression
      * @return first property of metric expression as string
      * @throws IllegalArgumentException
      */
@@ -67,11 +70,11 @@ public abstract class AtomicAllenAlgebraMapper {
      * instance inside the corresponding set("bucket") of instances.
      *
      * @param cache,
-     *         the cache of instances
+     *            The cache of instances
      * @param expression,
-     *         the metric expression
+     *            The metric expression
      * @return blocks, a map of sets with unique begin dates as keys and set of
-     * instances (string representation) as values
+     *         instances (string representation) as values
      */
     protected static TreeMap<Long, Set<String>> orderByBeginDate(Cache cache, String expression) {
         TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
@@ -110,11 +113,11 @@ public abstract class AtomicAllenAlgebraMapper {
      * instance inside the corresponding set("bucket") of instances.
      *
      * @param cache,
-     *         the cache of instances
+     *            The cache of instances
      * @param expression,
-     *         the metric expression
+     *            The metric expression
      * @return blocks, a map of sets with unique end dates as keys and set of
-     * instances (string representation) as values
+     *         instances (string representation) as values
      */
     protected static TreeMap<Long, Set<String>> orderByEndDate(Cache cache, String expression) {
         TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
@@ -153,16 +156,16 @@ public abstract class AtomicAllenAlgebraMapper {
     }
 
     /**
-     * Returns the set of concurrent target events for each source instance.
+     * Maps each source event to its set of concurrent target events.
      *
      * @param sources,
-     *         set of source instances ordered by begin/end date
+     *            The set of source instances ordered by begin/end date
      * @param targets,
-     *         set of target instances ordered by begin/end date
+     *            The set of target instances ordered by begin/end date
      * @return concurrentEvents, the map of concurrent events
      */
     protected static TreeMap<String, Set<String>> mapConcurrent(TreeMap<Long, Set<String>> sources,
-                                                                TreeMap<Long, Set<String>> targets) {
+            TreeMap<Long, Set<String>> targets) {
         TreeMap<String, Set<String>> concurrentEvents = new TreeMap<String, Set<String>>();
 
         for (Map.Entry<Long, Set<String>> sourceEntry : sources.entrySet()) {
@@ -183,16 +186,16 @@ public abstract class AtomicAllenAlgebraMapper {
     }
 
     /**
-     * Returns the set of predecessor target events for each source instance.
+     * Maps each source event to its set of predecessor target events.
      *
      * @param sources,
-     *         set of source instances ordered by begin/end date
+     *            The set of source instances ordered by begin/end date
      * @param targets,
-     *         set of target instances ordered by begin/end date
+     *            The set of target instances ordered by begin/end date
      * @return concurrentEvents, the map of predecessor events
      */
     protected static TreeMap<String, Set<String>> mapPredecessor(TreeMap<Long, Set<String>> sources,
-                                                                 TreeMap<Long, Set<String>> targets) {
+            TreeMap<Long, Set<String>> targets) {
         TreeMap<String, Set<String>> concurrentEvents = new TreeMap<String, Set<String>>();
 
         for (Map.Entry<Long, Set<String>> sourceEntry : sources.entrySet()) {
@@ -226,9 +229,34 @@ public abstract class AtomicAllenAlgebraMapper {
 
     }
 
+    /**
+     * Returns the set of concurrent target events for each source instance.
+     *
+     * @param source,
+     *            The source cache
+     * @param target,
+     *            The target cache
+     * @return concurrentEvents, set of concurrent target events for each source
+     *         instance.
+     */
     public abstract TreeMap<String, Set<String>> getConcurrentEvents(Cache source, Cache target, String expression);
 
+    /**
+     * Returns the set of predecessor target events for each source instance.
+     *
+     * @param source,
+     *            The source cache
+     * @param target,
+     *            The target cache
+     * @return predecessorEvents, set of predecessor target events for each
+     *         source instance.
+     */
     public abstract TreeMap<String, Set<String>> getPredecessorEvents(Cache source, Cache target, String expression);
 
+    /**
+     * Returns the name of the atomic Allen's temporal mapper.
+     *
+     * @return Mapper name as a string
+     */
     public abstract String getName();
 }

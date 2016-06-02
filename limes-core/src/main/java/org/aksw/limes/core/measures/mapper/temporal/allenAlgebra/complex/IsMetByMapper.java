@@ -11,17 +11,36 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+/**
+ * Class for Allen's temporal relation "IsMetBy". Given two events X and Y, it
+ * implements X mi Y.
+ */
 public class IsMetByMapper extends AllenAlgebraMapper {
+    /**
+     * Constructor of IsMetByMapper class.
+     */
     public IsMetByMapper() {
         // BE0
         this.getRequiredAtomicRelations().add(2);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return "IsMetBy";
     }
 
+    /**
+     * Maps each source instance to a set of target instances that began
+     * strictly before the aforementioned source instance, using the BeginEnd
+     * Allen relation. The mapping contains 1-to-m relations. A source event is
+     * linked to a target event if the begin date of the source event is the
+     * same as the end date of the target event.
+     * 
+     * @return a mapping, the resulting mapping
+     */
     @Override
     public AMapping getMapping(ArrayList<TreeMap<String, Set<String>>> maps) {
         AMapping m = MappingFactory.createDefaultMapping();
@@ -37,9 +56,16 @@ public class IsMetByMapper extends AllenAlgebraMapper {
         return m;
     }
 
+    /**
+     * Maps each source instance to a set of target instances that began
+     * strictly before the aforementioned source instance, using the BeginEnd
+     * Allen relation.
+     * 
+     * @return a mapping, the resulting mapping
+     */
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
         ArrayList<TreeMap<String, Set<String>>> maps = new ArrayList<TreeMap<String, Set<String>>>();
         BeginEnd be = new BeginEnd();
         // BE0
@@ -48,9 +74,18 @@ public class IsMetByMapper extends AllenAlgebraMapper {
         return m;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
 
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;

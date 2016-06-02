@@ -9,18 +9,39 @@ import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.EndEnd;
 
 import java.util.*;
 
+/**
+ * Class for Allen's temporal relation "Starts". Given two events X and Y, it
+ * implements X s Y.
+ */
 public class StartsMapper extends AllenAlgebraMapper {
+    /**
+     * Constructor of StartsMapper class.
+     */
     public StartsMapper() {
         // BB0 & EE1
         this.getRequiredAtomicRelations().add(0);
         this.getRequiredAtomicRelations().add(7);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return "Starts";
     }
 
+    /**
+     * Maps each source instance to a set of target instances that begin at the
+     * same time of the aforementioned source instance but terminate after,
+     * using the BeginBegin and EndEnd Allen relations. The mapping contains
+     * 1-to-m relations. A source event is linked to a target event if the begin
+     * date of the source event is the same as the begin date of the target
+     * event and the end date of the source instance is lower than the end date
+     * of the target event.
+     * 
+     * @return a mapping, the resulting mapping
+     */
     @Override
     public AMapping getMapping(ArrayList<TreeMap<String, Set<String>>> maps) {
         AMapping m = MappingFactory.createDefaultMapping();
@@ -48,9 +69,16 @@ public class StartsMapper extends AllenAlgebraMapper {
 
     }
 
+    /**
+     * Maps each source instance to a set of target instances that begin at the
+     * same time of the aforementioned source instance but terminate after,
+     * using the BeginBegin and EndEnd Allen relations.
+     * 
+     * @return a mapping, the resulting mapping
+     */
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
         ArrayList<TreeMap<String, Set<String>>> maps = new ArrayList<TreeMap<String, Set<String>>>();
         EndEnd ee = new EndEnd();
         BeginBegin bb = new BeginBegin();
@@ -62,10 +90,16 @@ public class StartsMapper extends AllenAlgebraMapper {
         return m;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
     }

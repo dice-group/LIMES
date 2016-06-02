@@ -9,19 +9,25 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+/**
+ * Implements the predecessor mapper class.
+ *
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
+ */
 public class PredecessorMapper extends SimpleTemporalMapper {
 
     /**
      * Maps a set of source instances to their predecessor target instances. The
-     * mapping contains n-to-m relations. Each source instance takes as
+     * mapping contains 1-to-m relations. Each source instance takes as
      * predecessors the set of target instances with the highest begin date that
      * is lower than the begin date of the source instance.
      *
-     * @author kleanthi
+     * @return a mapping, the resulting mapping
      */
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
 
         AMapping m = MappingFactory.createDefaultMapping();
 
@@ -47,15 +53,26 @@ public class PredecessorMapper extends SimpleTemporalMapper {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return "Predecessor";
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
     }

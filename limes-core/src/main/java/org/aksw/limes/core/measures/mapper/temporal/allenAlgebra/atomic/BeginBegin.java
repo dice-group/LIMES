@@ -6,20 +6,27 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * Atomic class for Allen's Algebra Temporal relations. It orders both source
+ * Atomic class for Allen's temporal relations. It orders both source
  * and target events by their begin property.
  */
 public class BeginBegin extends AtomicAllenAlgebraMapper {
+    /**
+     * Constructor of BeginBegin class.
+     */
     public BeginBegin() {
     }
 
-    ;
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return "BeginBegin";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TreeMap<String, Set<String>> getConcurrentEvents(Cache source, Cache target, String expression) {
         TreeMap<Long, Set<String>> sources = AtomicAllenAlgebraMapper.orderByBeginDate(source, expression);
@@ -28,6 +35,9 @@ public class BeginBegin extends AtomicAllenAlgebraMapper {
         return events;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TreeMap<String, Set<String>> getPredecessorEvents(Cache source, Cache target, String expression) {
         TreeMap<Long, Set<String>> sources = AtomicAllenAlgebraMapper.orderByBeginDate(source, expression);

@@ -8,21 +8,46 @@ import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.BeginEnd
 
 import java.util.*;
 
+/**
+ * Class for Allen's temporal relation "After". Given two events X and Y, it
+ * implements X > Y.
+ */
 public class AfterMapper extends AllenAlgebraMapper {
+    /**
+     * Source cache.
+     */
     Cache source;
+    /**
+     * Target cache.
+     */
     Cache target;
 
+    /**
+     * Constructor of AfterMapper class.
+     */
     public AfterMapper() {
         // SxT \ (BE0 U BE1)
         this.getRequiredAtomicRelations().add(2);
         this.getRequiredAtomicRelations().add(3);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return "After";
     }
 
+    /**
+     * Maps each source instance to a set of target instances that occurred
+     * after the aforementioned source instance, using the BeginEnd atomic Allen
+     * relation. The mapping contains 1-to-m relations. A source event is linked
+     * to a target event if the begin date of the source event is higher than
+     * the end date of the target event.
+     * 
+     * @return a mapping, the resulting mapping
+     */
     @Override
     public AMapping getMapping(ArrayList<TreeMap<String, Set<String>>> maps) {
         AMapping m = MappingFactory.createDefaultMapping();
@@ -56,9 +81,16 @@ public class AfterMapper extends AllenAlgebraMapper {
         return m;
     }
 
+    /**
+     * Maps each source instance to a set of target instances that occurred
+     * after the aforementioned source instance, using the BeginEnd atomic Allen
+     * relation.
+     *
+     * @return a mapping, the resulting mapping
+     */
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
         this.source = source;
         this.target = target;
         ArrayList<TreeMap<String, Set<String>>> maps = new ArrayList<TreeMap<String, Set<String>>>();
@@ -72,11 +104,17 @@ public class AfterMapper extends AllenAlgebraMapper {
         return m;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
