@@ -1,6 +1,6 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
-import org.aksw.limes.core.util.Pair;
+import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.apache.log4j.Logger;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
@@ -13,7 +13,7 @@ import org.jgap.util.ICloneable;
 public class PointSetPropertyPair extends CommandGene implements IMutateable, ICloneable {
     final Logger logger = Logger.getLogger("LIMES");
     int pairIndex;
-    Pair<String> pair;
+    PairSimilar<String> pair;
     boolean mutateable;
     LinkSpecGeneticLearnerConfig config;
 

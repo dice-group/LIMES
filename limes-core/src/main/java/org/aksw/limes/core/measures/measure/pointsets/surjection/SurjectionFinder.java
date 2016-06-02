@@ -3,10 +3,10 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.surjection;
 
+import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
-import org.aksw.limes.core.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
  *         smaller one.
  */
 public class SurjectionFinder {
-    protected List<Pair<Point>> surjectionPairsList;
+    protected List<PairSimilar<Point>> surjectionPairsList;
     protected Polygon small, large;
 
     /**
@@ -27,7 +27,7 @@ public class SurjectionFinder {
      * @author sherif
      */
     SurjectionFinder(Polygon X, Polygon Y) {
-        surjectionPairsList = new ArrayList<Pair<Point>>();
+        surjectionPairsList = new ArrayList<PairSimilar<Point>>();
         if (X.points.size() < Y.points.size()) {
             small = X;
             large = Y;
@@ -40,7 +40,7 @@ public class SurjectionFinder {
     /**
      * @return SurjectionPairsList
      */
-    public List<Pair<Point>> getSurjectionPairsList() {
+    public List<PairSimilar<Point>> getSurjectionPairsList() {
         if (surjectionPairsList.isEmpty()) {
             Polygon largeCopy = new Polygon(large);
 
@@ -48,7 +48,7 @@ public class SurjectionFinder {
             // and add the pairs (l,s) to the surjectionPairsList
             for (Point s : small.points) {
                 Point l = getNearestPoint(s, largeCopy);
-                surjectionPairsList.add(new Pair<Point>(l, s));
+                surjectionPairsList.add(new PairSimilar<Point>(l, s));
                 largeCopy.remove(l);
             }
 
@@ -57,7 +57,7 @@ public class SurjectionFinder {
             // and add the pairs (l,s) to the surjectionPairsList
             for (Point l : largeCopy.points) {
                 Point s = getNearestPoint(l, small);
-                surjectionPairsList.add(new Pair<Point>(l, s));
+                surjectionPairsList.add(new PairSimilar<Point>(l, s));
             }
         }
         return surjectionPairsList;

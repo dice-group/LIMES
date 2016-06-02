@@ -3,10 +3,10 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.link;
 
+import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
-import org.aksw.limes.core.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.TreeMap;
  * @author sherif class to generate the link pairs between 2 polygons
  */
 public class LinkFinder {
-    protected List<Pair<Point>> linkPairsList;
+    protected List<PairSimilar<Point>> linkPairsList;
     protected Polygon small, large;
 
     /**
@@ -30,7 +30,7 @@ public class LinkFinder {
      * @author sherif
      */
     public LinkFinder(Polygon X, Polygon Y) {
-        linkPairsList = new ArrayList<Pair<Point>>();
+        linkPairsList = new ArrayList<PairSimilar<Point>>();
         if (X.points.size() < Y.points.size()) {
             small = X;
             large = Y;
@@ -43,7 +43,7 @@ public class LinkFinder {
     /**
      * @return list of link pairs
      */
-    public List<Pair<Point>> getlinkPairsList() {
+    public List<PairSimilar<Point>> getlinkPairsList() {
         if (linkPairsList.isEmpty()) {
             // compute the fair capacity for each of the small polygon points
             int fairCapacity = (int) Math.ceil((double) large.points.size() / (double) small.points.size());
@@ -55,7 +55,7 @@ public class LinkFinder {
                 // linkPairsList
                 for (Entry<Double, Point> e : nearestPoints.entrySet()) {
                     Point l = e.getValue();
-                    linkPairsList.add(new Pair<Point>(l, s));
+                    linkPairsList.add(new PairSimilar<Point>(l, s));
                     fairCount++;
                     // if the fair capacity reached the go to the next point
                     if (fairCount == fairCapacity)

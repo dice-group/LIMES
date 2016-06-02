@@ -58,4 +58,10 @@ public class Eagle extends ACoreMLAlgorithm {
         throw new UnsupportedMLImplementationException(this.getName());
     }
 
+    @Override
+    protected void setDefaultParameters() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

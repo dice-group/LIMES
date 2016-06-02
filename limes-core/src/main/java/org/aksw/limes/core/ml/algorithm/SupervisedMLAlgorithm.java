@@ -14,20 +14,20 @@ public class SupervisedMLAlgorithm extends AMLAlgorithm {
 
         try {
             Constructor<? extends ACoreMLAlgorithm> ctor = clazz.getDeclaredConstructor();
-            ml = ctor.newInstance();
+            setMl(ctor.newInstance());
         } catch (Exception e) {
             e.printStackTrace();
-            throw new UnsupportedMLImplementationException(ml.getName());
+            throw new UnsupportedMLImplementationException(getMl().getName());
         }
 
-        if (!ml.supports(ML_IMPLEMENTATION_TYPE)) {
-            throw new UnsupportedMLImplementationException(ml.getName());
+        if (!getMl().supports(ML_IMPLEMENTATION_TYPE)) {
+            throw new UnsupportedMLImplementationException(getMl().getName());
         }
 
     }
 
     public MLModel learn(AMapping trainingData) throws UnsupportedMLImplementationException {
-        return ml.learn(trainingData);
+        return getMl().learn(trainingData);
     }
 
 

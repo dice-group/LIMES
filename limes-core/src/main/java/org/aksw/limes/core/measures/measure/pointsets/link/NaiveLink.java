@@ -3,6 +3,7 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.link;
 
+import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -10,7 +11,6 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
-import org.aksw.limes.core.util.Pair;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,7 +39,7 @@ public class NaiveLink extends PointsetsMeasure {
         double sum = 0;
         LinkFinder fsf = new LinkFinder(X, Y);
 
-        for (Pair<Point> p : fsf.getlinkPairsList()) {
+        for (PairSimilar<Point> p : fsf.getlinkPairsList()) {
             sum = PointsetsMeasure.pointToPointDistance(p.a, p.b);
         }
         return sum;
@@ -49,7 +49,7 @@ public class NaiveLink extends PointsetsMeasure {
         double sum = 0;
         LinkFinder fsf = new LinkFinder(X, Y);
 
-        for (Pair<Point> p : fsf.getlinkPairsList()) {
+        for (PairSimilar<Point> p : fsf.getlinkPairsList()) {
             sum += PointsetsMeasure.pointToPointDistance(p.a, p.b);
         }
         return sum;

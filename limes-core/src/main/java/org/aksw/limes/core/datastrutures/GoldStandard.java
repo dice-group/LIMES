@@ -11,18 +11,18 @@ import java.util.List;
  * @version 1.0
  */
 public class GoldStandard {
-    public AMapping goldStandard;
+    public AMapping goldStandardMappings;
     public List<String> sourceUris;
     public List<String> targetUris;
 
     public GoldStandard(AMapping goldStandard, List<String> sourceUris, List<String> targetUris) {
         super();
-        this.goldStandard = goldStandard;
+        this.goldStandardMappings = goldStandard;
         this.sourceUris = sourceUris;
         this.targetUris = targetUris;
     }
 
     public GoldStandard(AMapping m) {
-        this.goldStandard = m;
+        this.goldStandardMappings = m;
     }
 }

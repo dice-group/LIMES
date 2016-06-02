@@ -1,7 +1,7 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
+import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.util.Pair;
 import org.apache.log4j.Logger;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.CommandGene;
@@ -132,7 +132,7 @@ public class ExpressionProblem extends GPProblem {
 
         //foreach string propPair atleast 1
         for (int i = 0; i < config.getPropertyMapping().stringPropPairs.size(); i++) {
-            nodes.add(new StringPropertyPair(config, Pair.class, ResourceTerminalType.STRINGPROPPAIR.intValue(), true, i));
+            nodes.add(new StringPropertyPair(config, PairSimilar.class, ResourceTerminalType.STRINGPROPPAIR.intValue(), true, i));
         }
 
         nodes.add(new Terminal(config, CommandGene.DoubleClass, 0.0d, 1.0d, false,
@@ -186,7 +186,7 @@ public class ExpressionProblem extends GPProblem {
             // add pairs of Properties
             for (int anz = 0; anz < 11; anz++)
                 for (int i = 0; i < config.getPropertyMapping().stringPropPairs.size(); i++) {
-                    nodes.add(new StringPropertyPair(config, Pair.class, ResourceTerminalType.STRINGPROPPAIR.intValue(), true, i));
+                    nodes.add(new StringPropertyPair(config, PairSimilar.class, ResourceTerminalType.STRINGPROPPAIR.intValue(), true, i));
                 }
         }
         return nodes;

@@ -123,7 +123,7 @@ public class Controller {
                         targetCache,
                         config.getMlAlgorithmName(), 
                         config.getMlImplementationType(),
-                        config.getMlParameters(),
+                        config.getMlAlgorithmParameters(),
                         config.getTrainingDataFile(), 
                         config.getMlPseudoFMeasure(),
                         MAX_ITERATIONS_NUMBER);

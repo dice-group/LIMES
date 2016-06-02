@@ -43,19 +43,19 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     static Logger logger = Logger.getLogger(AWombat.class.getName());
 
     // Parameters
-    protected static final String PARAMETER_MAX_REFINEMENT_TREE_SIZE = "max refinement tree size";
-    protected static final String PARAMETER_MAX_ITERATIONS_NUMBER = "max iterations number";
-    protected static final String PARAMETER_MAX_ITERATION_TIME_IN_MINUTES = "max iteration time in minutes";
-    protected static final String PARAMETER_EXECUTION_TIME_IN_MINUTES = "max execution time in minutes";
-    protected static final String PARAMETER_MAX_FITNESS_THRESHOLD = "max fitness threshold";
-    protected static final String PARAMETER_MIN_PROPERTY_COVERAGE = "minimum properity coverage";
-    protected static final String PARAMETER_PROPERTY_LEARNING_RATE = "properity learning rate";
-    protected static final String PARAMETER_OVERALL_PENALTY_WEIT = "overall penalty weit";
-    protected static final String PARAMETER_CHILDREN_PENALTY_WEIT = "children penalty weit";
-    protected static final String PARAMETER_COMPLEXITY_PENALTY_WEIT = "complexity penalty weit";
-    protected static final String PARAMETER_VERBOSE = "verbose";
-    protected static final String PARAMETER_MEASURES = "measures";
-    protected static final String PARAMETER_SAVE_MAPPING = "save mapping";
+    public static final String PARAMETER_MAX_REFINEMENT_TREE_SIZE = "max refinement tree size";
+    public static final String PARAMETER_MAX_ITERATIONS_NUMBER = "max iterations number";
+    public static final String PARAMETER_MAX_ITERATION_TIME_IN_MINUTES = "max iteration time in minutes";
+    public static final String PARAMETER_EXECUTION_TIME_IN_MINUTES = "max execution time in minutes";
+    public static final String PARAMETER_MAX_FITNESS_THRESHOLD = "max fitness threshold";
+    public static final String PARAMETER_MIN_PROPERTY_COVERAGE = "minimum properity coverage";
+    public static final String PARAMETER_PROPERTY_LEARNING_RATE = "properity learning rate";
+    public static final String PARAMETER_OVERALL_PENALTY_WEIT = "overall penalty weit";
+    public static final String PARAMETER_CHILDREN_PENALTY_WEIT = "children penalty weit";
+    public static final String PARAMETER_COMPLEXITY_PENALTY_WEIT = "complexity penalty weit";
+    public static final String PARAMETER_VERBOSE = "verbose";
+    public static final String PARAMETER_MEASURES = "measures";
+    public static final String PARAMETER_SAVE_MAPPING = "save mapping";
 
     public static List<String> sourceUris;
     public static List<String> targetUris;
@@ -261,15 +261,19 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         map = resultMap.getSubMap(ls.getThreshold());
         return map;
     }
+    
     public double getPropertyLearningRate() {
         return propertyLearningRate;
     }
+    
     public PseudoFMeasure getPseudoFMeasure() {
         return pseudoFMeasure;
     }
+    
     public AMapping getTrainingData() {
         return trainingData;
     }
+    
     @Override
     protected void init(LearningParameters lp, Cache sourceCache, Cache targetCache) {
         super.init(lp, sourceCache, targetCache);
@@ -277,12 +281,15 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetCache, minPropertyCoverage);
         RefinementNode.setSaveMapping(saveMapping);
     }
+    
     public boolean isSaveMapping() {
         return saveMapping;
     }
+    
     public boolean isUnsupervised() {
         return isUnsupervised;
     }
+    
     public boolean isVerbose() {
         return verbose;
     }
@@ -315,13 +322,17 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         return new Recall().calculate(predictions, new GoldStandard(trainingData));
 
     }
+    
     public void setChildrenPenaltyWeit(long childrenPenaltyWeit) {
         this.childrenPenaltyWeit = childrenPenaltyWeit;
     }
+    
     public void setComplexityPenaltyWeit(long complexityPenaltyWeit) {
         this.complexityPenaltyWeit = complexityPenaltyWeit;
     }
-    private void setDefaultParameters() {
+    
+    @Override
+    public void setDefaultParameters() {
         parameters.put(PARAMETER_MAX_REFINEMENT_TREE_SIZE, String.valueOf(maxRefineTreeSize));
         parameters.put(PARAMETER_MAX_ITERATIONS_NUMBER, String.valueOf(maxIterationNumber));
         parameters.put(PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, String.valueOf(maxIterationTimeInMin));

@@ -1,9 +1,9 @@
 package org.aksw.limes.core.ml.algorithm.eagle.util;
 
+import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.util.Pair;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -16,10 +16,10 @@ import java.util.List;
  * @author Klaus Lyko *
  */
 public class PropertyMapping {
-    public List<Pair<String>> stringPropPairs = new ArrayList<Pair<String>>();
-    public List<Pair<String>> pointsetPropPairs = new ArrayList<Pair<String>>();
-    public List<Pair<String>> numberPropPairs = new ArrayList<Pair<String>>();
-    public List<Pair<String>> datePropPairs = new ArrayList<Pair<String>>();
+    public List<PairSimilar<String>> stringPropPairs = new ArrayList<PairSimilar<String>>();
+    public List<PairSimilar<String>> pointsetPropPairs = new ArrayList<PairSimilar<String>>();
+    public List<PairSimilar<String>> numberPropPairs = new ArrayList<PairSimilar<String>>();
+    public List<PairSimilar<String>> datePropPairs = new ArrayList<PairSimilar<String>>();
     public HashSet<String> sourceStringProps = new HashSet<String>();
     public HashSet<String> targetStringProps = new HashSet<String>();
     public HashSet<String> sourcePointsetProps = new HashSet<String>();
@@ -50,7 +50,7 @@ public class PropertyMapping {
             sourceStringProps.add(sourceProp);
             targetStringProps.add(targetProp);
             aMatchWasSet = true;
-            Pair<String> pair = new Pair<String>(sourceProp, targetProp);
+            PairSimilar<String> pair = new PairSimilar<String>(sourceProp, targetProp);
             if (!stringPropPairs.contains(pair))
                 stringPropPairs.add(pair);
         }
@@ -70,7 +70,7 @@ public class PropertyMapping {
             sourceNumberProps.add(sourceProp);
             targetNumberProps.add(targetProp);
             aMatchWasSet = true;
-            Pair<String> pair = new Pair<String>(sourceProp, targetProp);
+            PairSimilar<String> pair = new PairSimilar<String>(sourceProp, targetProp);
             if (!numberPropPairs.contains(pair))
                 numberPropPairs.add(pair);
         }
@@ -90,7 +90,7 @@ public class PropertyMapping {
             sourceDateProps.add(sourceProp);
             targetDateProps.add(targetProp);
             aMatchWasSet = true;
-            Pair<String> pair = new Pair<String>(sourceProp, targetProp);
+            PairSimilar<String> pair = new PairSimilar<String>(sourceProp, targetProp);
             if (!datePropPairs.contains(pair))
                 datePropPairs.add(pair);
         }
@@ -110,7 +110,7 @@ public class PropertyMapping {
             sourcePointsetProps.add(sourceProp);
             targetPointsetProps.add(targetProp);
             aMatchWasSet = true;
-            Pair<String> pair = new Pair<String>(sourceProp, targetProp);
+            PairSimilar<String> pair = new PairSimilar<String>(sourceProp, targetProp);
             if (!pointsetPropPairs.contains(pair))
                 pointsetPropPairs.add(pair);
         }

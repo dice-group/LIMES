@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author Klaus Lyko
  */
-@Deprecated
+
 public class MLModel {
     protected LinkSpecification linkspec;
     protected AMapping mapping;

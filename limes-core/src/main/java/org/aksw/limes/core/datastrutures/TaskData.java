@@ -1,7 +1,9 @@
 package org.aksw.limes.core.datastrutures;
 
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.datastrutures.GoldStandard;
 
 import java.util.List;
 
@@ -12,37 +14,40 @@ import java.util.List;
  * @author mofeed
  * @version 1.0
  */
-public class Task {
-    public String pairName;
+public class TaskData {
+    public String dataName;
     public Cache source;
     public Cache target;
     public AMapping mapping;
-    public AMapping goldStandard;
+    public AMapping training; // for supervised tasks
+    public PseudoFMeasure pseudoFMeasure; // for unsupervised tasks
 
-    public Task(AMapping goldStandard, AMapping mapping, Cache source, Cache target) {
+    public GoldStandard goldStandard;
+
+    public TaskData(GoldStandard goldStandard, AMapping mapping, Cache source, Cache target) {
         this.goldStandard = goldStandard;
         this.mapping = mapping;
         this.source = source;
         this.target = target;
     }
 
-    public Task(AMapping goldStandard, Cache source, Cache target) {
+    public TaskData(GoldStandard goldStandard, Cache source, Cache target) {
         this.goldStandard = goldStandard;
         this.source = source;
         this.target = target;
     }
 
-    public Task(AMapping mapping, AMapping goldStandard) {
+    public TaskData(AMapping mapping, GoldStandard goldStandard) {
         this.goldStandard = goldStandard;
         this.mapping = mapping;
     }
 
-    public Task(AMapping mapping) {
+    public TaskData(AMapping mapping) {
         this.mapping = mapping;
     }
 
-    public Task(String name) {
-        this.pairName = name;
+    public TaskData(String name) {
+        this.dataName = name;
     }
 
     public List<String> getSourceURIs() {

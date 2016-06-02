@@ -1,9 +1,9 @@
-package org.aksw.limes.core.util;
+package org.aksw.limes.core.datastrutures;
 
-public class Pair<T> {
+public class PairSimilar<T> {
     public final T a, b;
 
-    public Pair(T a, T b) {
+    public PairSimilar(T a, T b) {
         super();
         this.a = a;
         this.b = b;
@@ -30,7 +30,7 @@ public class Pair<T> {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Pair<?> other = (Pair<?>) obj;
+        PairSimilar<?> other = (PairSimilar<?>) obj;
         if (a == null) {
             if (other.a != null)
                 return false;

@@ -1,9 +1,9 @@
 package org.aksw.limes.core.measures.measure.pointsets.link;
 
 
+import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.aksw.limes.core.util.Pair;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -30,7 +30,7 @@ public class LinkFinderTest {
         Polygon B = new Polygon("B", Arrays.asList(new Point[]{a2, b2, c2, d2, e2, f2, g2, h2, i2}));
 
         LinkFinder lf = new LinkFinder(A, B);
-        for (Pair<Point> p : lf.getlinkPairsList()) {
+        for (PairSimilar<Point> p : lf.getlinkPairsList()) {
             System.out.println(p.a.label + "<-->" + p.b.label);
         }
     }

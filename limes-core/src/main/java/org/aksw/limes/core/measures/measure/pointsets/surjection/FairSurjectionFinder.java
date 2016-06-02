@@ -3,10 +3,10 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.surjection;
 
+import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
-import org.aksw.limes.core.util.Pair;
 
 import java.util.List;
 import java.util.Map.Entry;
@@ -33,7 +33,7 @@ public class FairSurjectionFinder extends SurjectionFinder {
     /**
      * @return List of fair surjection pairs
      */
-    public List<Pair<Point>> getFairSurjectionPairsList() {
+    public List<PairSimilar<Point>> getFairSurjectionPairsList() {
         if (surjectionPairsList.isEmpty()) {
             // compute the fair capacity for each of the small polygon points
             int fairCapacity = (int) Math.ceil((double) large.points.size() / (double) small.points.size());
@@ -45,7 +45,7 @@ public class FairSurjectionFinder extends SurjectionFinder {
                 // surjectionPairsList
                 for (Entry<Double, Point> e : nearestPoints.entrySet()) {
                     Point l = e.getValue();
-                    surjectionPairsList.add(new Pair<Point>(l, s));
+                    surjectionPairsList.add(new PairSimilar<Point>(l, s));
                     fairCount++;
                     // if the fair capacity reached the go to the next point
                     if (fairCount == fairCapacity)

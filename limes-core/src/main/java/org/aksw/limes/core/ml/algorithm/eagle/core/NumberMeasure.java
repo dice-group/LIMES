@@ -1,8 +1,8 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
 
+import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
-import org.aksw.limes.core.util.Pair;
 import org.apache.log4j.Logger;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.CommandGene;
@@ -103,7 +103,7 @@ public class NumberMeasure extends CommandGene implements IMutateable, ICloneabl
 
     public Class getChildType(IGPProgram a_ind, int a_chromNum) {
         if (a_chromNum == 0)
-            return Pair.class;
+            return PairSimilar.class;
         else
             return CommandGene.DoubleClass;
 
@@ -116,7 +116,7 @@ public class NumberMeasure extends CommandGene implements IMutateable, ICloneabl
     @Override
     public Object execute_object(ProgramChromosome a_chrom, int a_n, Object[] args) {
         @SuppressWarnings("unchecked")
-        Pair<String> propPair = (Pair<String>) a_chrom.execute_object(a_n, 0, args);
+        PairSimilar<String> propPair = (PairSimilar<String>) a_chrom.execute_object(a_n, 0, args);
         double threshold = a_chrom.execute_double(a_n, 1, args);
         ;
 
@@ -142,7 +142,7 @@ public class NumberMeasure extends CommandGene implements IMutateable, ICloneabl
         Object[] o = new Object[0];
         LinkSpecGeneticLearnerConfig expConfig = (LinkSpecGeneticLearnerConfig) getGPConfiguration();
         @SuppressWarnings("unchecked")
-        Pair<String> propPair = (Pair<String>) a_program.execute_object(a_index, 0, o);
+        PairSimilar<String> propPair = (PairSimilar<String>) a_program.execute_object(a_index, 0, o);
         return expConfig.hasNumericProperties() && expConfig.getPropertyMapping().isMatch(propPair.a, propPair.b);
     }
 

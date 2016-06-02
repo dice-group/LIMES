@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 
 public class MLAlgorithmFactory {
 
+    
     public static final String EAGLE = "eagle";
     public static final String WOMBAT_SIMPLE = "wombat simple";
     public static final String WOMBAT_COMPLETE = "wombat complete";
@@ -13,6 +14,7 @@ public class MLAlgorithmFactory {
     public static final String SUPERVISED_ACTIVE = "supervised active";
     public static final String SUPERVISED_BATCH = "supervised batch";
     public static final String UNSUPERVISED = "unsupervised";
+    public static final String DEFAULT_ML_ALGORITHM = WOMBAT_SIMPLE;
 
     public static final Logger logger = Logger.getLogger(MLAlgorithmFactory.class);
 
@@ -31,7 +33,7 @@ public class MLAlgorithmFactory {
             //@todo: fix this
             return null;
         }
-        logger.warn(name + " is not implemented yet. Using 'wombat simple'...");
+        logger.warn(name + " is not implemented yet. Using '" + DEFAULT_ML_ALGORITHM + "'...");
         return WombatSimple.class;
     }
 
@@ -45,8 +47,8 @@ public class MLAlgorithmFactory {
         if (name.equalsIgnoreCase(UNSUPERVISED)) {
             return MLImplementationType.UNSUPERVISED;
         }
-        logger.warn(name + " is not implemented yet. Using 'supervised batch' as default...");
-        return MLImplementationType.SUPERVISED_BATCH;
+        logger.warn(name + " is not implemented yet. Using '" + UNSUPERVISED+ "' as default...");
+        return MLImplementationType.UNSUPERVISED;
     }
 
     public static AMLAlgorithm createMLAlgorithm(Class<? extends ACoreMLAlgorithm> clazz, MLImplementationType mlType) throws UnsupportedMLImplementationException {

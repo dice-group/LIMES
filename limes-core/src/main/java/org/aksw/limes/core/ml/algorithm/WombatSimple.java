@@ -1,6 +1,5 @@
 package org.aksw.limes.core.ml.algorithm;
 
-import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;

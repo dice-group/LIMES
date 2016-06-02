@@ -1,9 +1,7 @@
 package org.aksw.limes.core.ml.algorithm;
 
-import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
