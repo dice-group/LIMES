@@ -25,11 +25,11 @@ public class MeasureProcessor {
     static Logger logger = Logger.getLogger(MeasureProcessor.class.getName());
 
     /**
-     * Computes a list that contains all measures used in a given expression
+     * Computes a list that contains all measures used in a given expression.
      *
-     * @param expression
-     *            Expression
-     * @return List of all measures used
+     * @param expression,
+     *            The input metric expression
+     * @return List of all measures included in the input expression
      */
     public static List<String> getMeasures(String expression) {
         List<String> results = new ArrayList<String>();
@@ -227,13 +227,13 @@ public class MeasureProcessor {
     }
 
     /**
-     * Returns the approximation of the runtime for a certain expression
+     * Returns the approximation of the runtime for a certain expression.
      *
-     * @param measureExpression
-     *            Expression
-     * @param mappingSize
-     *            Size of the mapping to process
-     * @return Runtime approximation
+     * @param measureExpression,
+     *            The input metric expression
+     * @param mappingSize,
+     *            The size of the mapping returned by the metric expression
+     * @return Runtime approximation of the measure expression
      */
     public static double getCosts(String measureExpression, double mappingSize) {
         List<String> measures = getMeasures(measureExpression);

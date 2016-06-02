@@ -22,12 +22,12 @@ public class TrigramMeasure extends StringMeasure {
     }
 
     // need to set back p1 to p2 and p2 to p1
-    public double getSimilarity(Instance a, Instance b, String property1, String property2) {
+    public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         double sim = 0;
         double max = 0;
 
-        for (String p1 : a.getProperty(property1)) {
-            for (String p2 : b.getProperty(property2)) {
+        for (String p1 : instance1.getProperty(property1)) {
+            for (String p2 : instance2.getProperty(property2)) {
                 sim = getSimilarity(p1, p2);
                 if (max < sim) {
                     max = sim;
@@ -41,9 +41,9 @@ public class TrigramMeasure extends StringMeasure {
         return "Trigram";
     }
 
-    public double getSimilarity(Object a, Object b) {
-        String p1 = "  " + a + "  ";
-        String p2 = "  " + b + "  ";
+    public double getSimilarity(Object object1, Object object2) {
+        String p1 = "  " + object1 + "  ";
+        String p2 = "  " + object2 + "  ";
 
         if (p1.length() == 4 && p2.length() == 4)
             return 1.0;

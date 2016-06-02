@@ -240,8 +240,8 @@ public class IndexedHausdorff extends PointsetsMeasure {
     /* (non-Javadoc)
      * @see org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure#getSimilarity(java.lang.Object, java.lang.Object)
      */
-    public double getSimilarity(Object a, Object b) {
-        return nh.getSimilarity(a, b);
+    public double getSimilarity(Object object1, Object object2) {
+        return nh.getSimilarity(object1, object2);
     }
 
     /* (non-Javadoc)
@@ -254,8 +254,8 @@ public class IndexedHausdorff extends PointsetsMeasure {
     /* (non-Javadoc)
      * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance, java.lang.String, java.lang.String)
      */
-    public double getSimilarity(Instance a, Instance b, String property1, String property2) {
-        return nh.getSimilarity(a, b, property1, property2);
+    public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
+        return nh.getSimilarity(instance1, instance2, property1, property2);
     }
 
     /* (non-Javadoc)

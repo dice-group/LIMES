@@ -97,7 +97,7 @@ public class Jaro extends StringMeasure {
                 + (common1.size() - transpositions) / ((float) common1.size())) / 3.0f;
     }
 
-    public double getSimilarity(Object a, Object b) {
+    public double getSimilarity(Object object1, Object object2) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -105,11 +105,11 @@ public class Jaro extends StringMeasure {
         return "string";
     }
 
-    public double getSimilarity(Instance a, Instance b, String property1, String property2) {
+    public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         double value = 0;
         double sim = 0;
-        for (String source : a.getProperty(property1)) {
-            for (String target : b.getProperty(property2)) {
+        for (String source : instance1.getProperty(property1)) {
+            for (String target : instance2.getProperty(property2)) {
                 sim = getSimilarity(source, target);
                 if (sim > value) {
                     value = sim;

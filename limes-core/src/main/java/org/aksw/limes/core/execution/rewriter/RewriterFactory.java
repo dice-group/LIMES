@@ -57,7 +57,7 @@ public class RewriterFactory {
     /**
      * Factory function for retrieving the desired rewriter instance.
      * 
-     * @param name,
+     * @param type,
      *            type of the Rewriter
      * 
      * @return a specific rewriter instance

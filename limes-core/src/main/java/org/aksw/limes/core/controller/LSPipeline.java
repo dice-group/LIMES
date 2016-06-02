@@ -18,26 +18,25 @@ import org.aksw.limes.core.io.mapping.AMapping;
  */
 public class LSPipeline {
     /**
-     * Execute a LS given a string metric expression and a double threshold, generating a mapping.
+     * Execute a LS given a string metric expression and a double threshold,
+     * generating a mapping.
      */
-    public static AMapping execute(Cache sourceCache, Cache targetCache, String metricExpression,
-                                   double threshold, String sourceVar, String targetVar,
-                                   RewriterFactory.RewriterFactoryType rewriterFactoryType,
-                                   ExecutionPlannerFactory.ExecutionPlannerType executionPlannerType,
-                                   ExecutionEngineFactory.ExecutionEngineType executionEngineType) {
+    public static AMapping execute(Cache sourceCache, Cache targetCache, String metricExpression, double threshold,
+            String sourceVar, String targetVar, RewriterFactory.RewriterFactoryType rewriterFactoryType,
+            ExecutionPlannerFactory.ExecutionPlannerType executionPlannerType,
+            ExecutionEngineFactory.ExecutionEngineType executionEngineType) {
         LinkSpecification ls = new LinkSpecification(metricExpression, threshold);
-        return execute(sourceCache, targetCache, ls, sourceVar, targetVar,
-                rewriterFactoryType, executionPlannerType, executionEngineType);
+        return execute(sourceCache, targetCache, ls, sourceVar, targetVar, rewriterFactoryType, executionPlannerType,
+                executionEngineType);
     }
 
     /**
      * Execute a LS object, generating a mapping.
      */
-    public static AMapping execute(Cache sourceCache, Cache targetCache, LinkSpecification ls,
-                                   String sourceVar, String targetVar,
-                                   RewriterFactory.RewriterFactoryType rewriterFactoryType,
-                                   ExecutionPlannerFactory.ExecutionPlannerType executionPlannerType,
-                                   ExecutionEngineFactory.ExecutionEngineType executionEngineType) {
+    public static AMapping execute(Cache sourceCache, Cache targetCache, LinkSpecification ls, String sourceVar,
+            String targetVar, RewriterFactory.RewriterFactoryType rewriterFactoryType,
+            ExecutionPlannerFactory.ExecutionPlannerType executionPlannerType,
+            ExecutionEngineFactory.ExecutionEngineType executionEngineType) {
         // Optimize LS by rewriting
         Rewriter rw = RewriterFactory.getRewriter(rewriterFactoryType);
         assert rw != null;
@@ -53,11 +52,11 @@ public class LSPipeline {
     }
 
     /**
-     * Execute a given LS with default rewriter, planner and execution engine, generating a mapping.
+     * Execute a given LS with default rewriter, planner and execution engine,
+     * generating a mapping.
      */
     public static AMapping execute(Cache sourceCache, Cache targetCache, LinkSpecification ls) {
-        return execute(sourceCache, targetCache, ls, "?x", "?y",
-                RewriterFactory.RewriterFactoryType.DEFAULT,
+        return execute(sourceCache, targetCache, ls, "?x", "?y", RewriterFactory.RewriterFactoryType.DEFAULT,
                 ExecutionPlannerFactory.ExecutionPlannerType.DEFAULT,
                 ExecutionEngineFactory.ExecutionEngineType.DEFAULT);
     }

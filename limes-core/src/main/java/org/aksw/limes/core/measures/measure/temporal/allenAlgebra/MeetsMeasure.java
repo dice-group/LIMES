@@ -13,10 +13,10 @@ public class MeetsMeasure extends TemporalMeasure {
 
     // EB0
     @Override
-    public double getSimilarity(Object a, Object b) {
+    public double getSimilarity(Object object1, Object object2) {
         double sim = 0;
-        String split1[] = ((String) a).split("\\|");
-        String split2[] = ((String) b).split("\\|");
+        String split1[] = ((String) object1).split("\\|");
+        String split2[] = ((String) object2).split("\\|");
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
         Date date1, date2;
@@ -43,7 +43,7 @@ public class MeetsMeasure extends TemporalMeasure {
     }
 
     @Override
-    public double getSimilarity(Instance a, Instance b, String property1, String property2) {
+    public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         String endDate1 = null;
         try {
             endDate1 = this.getSecondProperty(property1);
@@ -54,8 +54,8 @@ public class MeetsMeasure extends TemporalMeasure {
         }
         String beginDate2 = this.getFirstProperty(property2);
 
-        String s1 = new String("*" + "|" + a.getProperty(endDate1).first());
-        String s2 = new String(b.getProperty(beginDate2).first());
+        String s1 = new String("*" + "|" + instance1.getProperty(endDate1).first());
+        String s2 = new String(instance2.getProperty(beginDate2).first());
 
         return this.getSimilarity(s1, s2);
     }

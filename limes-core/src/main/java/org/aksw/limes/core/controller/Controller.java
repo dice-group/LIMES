@@ -34,7 +34,7 @@ public class Controller {
      * Take configuration file as argument and run the specified linking task.
      *
      * @param args
-     *         Command line arguments
+     *            Command line arguments
      */
     public static void main(String[] args) {
         CommandLine cl = parseCommandLine(args);
@@ -68,8 +68,9 @@ public class Controller {
             System.exit(1);
         }
         // II. Configure Logger
-        //@todo: use slf4j in whole project, remove all references to log4j and use log4j2 as provider for slf4j.
-        //@todo: add verbose/silent options
+        // @todo: use slf4j in whole project, remove all references to log4j and
+        // use log4j2 as provider for slf4j.
+        // @todo: add verbose/silent options
         // 1. Determine appropriate ConfigurationReader
         String format;
         if (cmd.hasOption('f')) {
@@ -84,16 +85,16 @@ public class Controller {
         AConfigurationReader reader = null;
         String configFileOrUri = cmd.getArgs()[0];
         switch (format) {
-            case "xml":
-                reader = new XMLConfigurationReader(configFileOrUri);
-                break;
-            case "rdf":
-                reader = new RDFConfigurationReader(configFileOrUri);
-                break;
-            default:
-                logger.error("Error:\n\t Not a valid format: \"" + format + "\"!");
-                printHelp();
-                System.exit(1);
+        case "xml":
+            reader = new XMLConfigurationReader(configFileOrUri);
+            break;
+        case "rdf":
+            reader = new RDFConfigurationReader(configFileOrUri);
+            break;
+        default:
+            logger.error("Error:\n\t Not a valid format: \"" + format + "\"!");
+            printHelp();
+            System.exit(1);
         }
 
         // 2. Read configuration
@@ -105,7 +106,7 @@ public class Controller {
      * Execute LIMES
      *
      * @param config
-     *         LIMES configuration object
+     *            LIMES configuration object
      */
     public static ResultMappings getMapping(Configuration config) {
         AMapping results = null;
@@ -118,25 +119,18 @@ public class Controller {
         boolean isAlgorithm = !config.getMlAlgorithmName().equals("");
         if (isAlgorithm) {
             try {
-                results = MLPipeline.execute(
-                        sourceCache, 
-                        targetCache,
-                        config.getMlAlgorithmName(), 
-                        config.getMlImplementationType(),
-                        config.getMlAlgorithmParameters(),
-                        config.getTrainingDataFile(), 
-                        config.getMlPseudoFMeasure(),
-                        MAX_ITERATIONS_NUMBER);
+                results = MLPipeline.execute(sourceCache, targetCache, config.getMlAlgorithmName(),
+                        config.getMlImplementationType(), config.getMlAlgorithmParameters(),
+                        config.getTrainingDataFile(), config.getMlPseudoFMeasure(), MAX_ITERATIONS_NUMBER);
             } catch (UnsupportedMLImplementationException e) {
                 e.printStackTrace();
             }
         } else {
-            results = LSPipeline.execute(sourceCache, targetCache,
-                    config.getMetricExpression(), config.getVerificationThreshold(),
-                    config.getSourceInfo().getVar(), config.getTargetInfo().getVar(),
+            results = LSPipeline.execute(sourceCache, targetCache, config.getMetricExpression(),
+                    config.getVerificationThreshold(), config.getSourceInfo().getVar(), config.getTargetInfo().getVar(),
                     RewriterFactory.getRewriterFactoryType("default"),
                     ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlanner()),
-                    ExecutionEngineFactory.getExecutionEngineType(config.getExecutionPlanner()));
+                    ExecutionEngineFactory.getExecutionEngineType(config.getExecutionEngine()));
         }
         AMapping acceptanceMapping = results.getSubMap(config.getAcceptanceThreshold());
         AMapping verificationMapping = MappingOperations.difference(results, acceptanceMapping);
@@ -168,8 +162,8 @@ public class Controller {
         Options options = new Options();
         options.addOption("f", true, "Format of <config_file_or_uri>, either \"xml\" (default) or \"rdf\"");
         options.addOption("h", false, "Help");
-//        options.addOption("s", false, "Silent run");
-//        options.addOption("v", false, "Verbose run");
+        // options.addOption("s", false, "Silent run");
+        // options.addOption("v", false, "Verbose run");
         return options;
     }
 }

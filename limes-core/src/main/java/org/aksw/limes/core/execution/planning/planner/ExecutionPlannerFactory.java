@@ -38,7 +38,7 @@ public class ExecutionPlannerFactory {
     public static final String DYNAMIC = "dynamic";
 
     /**
-     * Factory function for retrieving an planner name from the set of allowed
+     * Factory function for retrieving a planner name from the set of allowed
      * types.
      * 
      * @param name,
@@ -65,7 +65,7 @@ public class ExecutionPlannerFactory {
     /**
      * Factory function for retrieving the desired planner instance.
      * 
-     * @param name,
+     * @param type,
      *            type of the Planner
      * @param source,
      *            Source cache
