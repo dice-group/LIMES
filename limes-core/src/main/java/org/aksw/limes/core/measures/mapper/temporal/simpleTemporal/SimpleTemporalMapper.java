@@ -10,17 +10,18 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Abstract class of temporal relations mappers.
+ * Abstract class of simple temporal relations mapper.
  *
- * @author kleanthi
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
  */
 public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemporalMapper {
 
     /**
-     * Extract first property (beginDate) from metric expression.
+     * Extracts first property (beginDate) from metric expression.
      *
      * @param expression,
-     *         metric expression
+     *            The metric expression
      * @return first property of metric expression as string
      */
     protected String getFirstProperty(String properties) {
@@ -34,10 +35,10 @@ public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemp
     }
 
     /**
-     * Extract second property (machineID) from metric expression.
+     * Extracts second property (machineID) from metric expression.
      *
      * @param expression,
-     *         the metric expression
+     *            The metric expression
      * @return second property of metric expression as string
      * @throws IllegalArgumentException
      */
@@ -58,11 +59,11 @@ public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemp
      * instance inside the corresponding set("bucket") of instances.
      *
      * @param cache,
-     *         the cache of instances
+     *            the cache of instances
      * @param expression,
-     *         the metric expression
+     *            the metric expression
      * @return blocks, a map of sets with unique begin dates as keys and set of
-     * instances as values
+     *         instances as values
      */
     protected TreeMap<String, Set<Instance>> orderByBeginDate(Cache cache, String expression) {
 

@@ -3,64 +3,69 @@ package org.aksw.limes.core.measures.mapper;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 
+/**
+ * Implements the mapper interface.
+ *
+ * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
+ */
 public interface IMapper {
     /**
      * Returns a mapping given a source, a target knowledge base and a link
-     * specification
+     * specification.
      *
      * @param source
-     *         source cache
+     *            source cache
      * @param target
-     *         target cache
+     *            target cache
      * @param sourceVar
-     *         source property variable
+     *            source property variable
      * @param targetVar
-     *         size property variable
+     *            size property variable
      * @param expression
-     *         metric expression of link specification
+     *            metric expression of link specification
      * @param threshold
-     *         threshold of link specification
+     *            threshold of link specification
      * @return a mapping, the resulting mapping
      */
     AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                        double threshold);
+            double threshold);
 
     ;
 
     /**
-     * Returns the estimated time needed to obtain the mapping computed by a mapper
-     * specification
+     * Returns the estimated time needed to obtain the mapping computed by the mapper.
      *
      * @param sourceSize
-     *         source size
+     *            source size
      * @param targetSize
-     *         target size
+     *            target size
      * @param theta
-     *         atomic specification threshold
+     *            atomic specification threshold
      * @param language
-     *         language of source and target variables
+     *            language of source and target variables
      * @return estimated runtime, as double
      */
     double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language);
 
     /**
-     * Returns the estimated mapping size of the mapping computed by a mapper
-     * specification
+     * Returns the estimated mapping size of the mapping computed by the mapper.
      *
      * @param sourceSize
-     *         source size
+     *            source size
      * @param targetSize
-     *         target size
+     *            target size
      * @param theta
-     *         atomic specification threshold
+     *            atomic specification threshold
      * @param language
-     *         language of source and target variables
+     *            language of source and target variables
      * @return estimated execution time, as double
      */
     double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language);
 
     /**
-     * Returns the name of the current Mapper
+     * Returns the name of the mapper.
      *
      * @return Mapper name as a string
      */

@@ -1,6 +1,9 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex;
 
-
+/**
+ * Class for Allen's temporal relation "Overlaps". Given two events X and
+ * Y, it implements X o Y.
+ */
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -12,7 +15,9 @@ import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.EndEnd;
 import java.util.*;
 
 public class OverlapsMapper extends AllenAlgebraMapper {
-
+    /**
+     * Constructor of OverlapsMapper class.
+     */
     public OverlapsMapper() {
         // (BB1 & EE1) \ (EB0 U EB1)
         this.getRequiredAtomicRelations().add(1);
@@ -22,11 +27,26 @@ public class OverlapsMapper extends AllenAlgebraMapper {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return "OverlapBefore: (BB1 & EE1) \\ (EB0 U EB1)";
     }
 
+    /**
+     * Maps each source instance to a set of target instances that is overlapped
+     * by the aforementioned source instance, using the EndBegin, BeginBegin and
+     * EndEnd Allen relations. The mapping contains 1-to-m relations. A source
+     * event is linked to a target event if the begin date of the source event
+     * is the same as the begin date of the target event and the end date of the
+     * source event is the same as the end date of the target event and the end
+     * date of the source event is higher than the begin date of the target
+     * event.
+     * 
+     * @return a mapping, the resulting mapping
+     */
     @Override
     public AMapping getMapping(ArrayList<TreeMap<String, Set<String>>> maps) {
         AMapping m = MappingFactory.createDefaultMapping();
@@ -66,9 +86,16 @@ public class OverlapsMapper extends AllenAlgebraMapper {
         return m;
     }
 
+    /**
+     * Maps each source instance to a set of target instances that is overlapped
+     * by the aforementioned source instance, using the EndBegin, BeginBegin and
+     * EndEnd Allen relations.
+     * 
+     * @return a mapping, the resulting mapping
+     */
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
         ArrayList<TreeMap<String, Set<String>>> maps = new ArrayList<TreeMap<String, Set<String>>>();
         EndEnd ee = new EndEnd();
         BeginBegin bb = new BeginBegin();
@@ -84,10 +111,18 @@ public class OverlapsMapper extends AllenAlgebraMapper {
         return m;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
     }

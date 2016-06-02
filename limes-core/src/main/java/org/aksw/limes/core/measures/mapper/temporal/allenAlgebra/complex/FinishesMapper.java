@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex;
 
-
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -10,7 +9,14 @@ import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.EndEnd;
 
 import java.util.*;
 
+/**
+ * Class for Allen's temporal relation "Finishes". Given two events X and Y, it
+ * implements X f Y.
+ */
 public class FinishesMapper extends AllenAlgebraMapper {
+    /**
+     * Constructor of FinishesMapper class.
+     */
     public FinishesMapper() {
         // EE0 \\ (BB0 U BB1)
         this.getRequiredAtomicRelations().add(6);
@@ -18,11 +24,25 @@ public class FinishesMapper extends AllenAlgebraMapper {
         this.getRequiredAtomicRelations().add(1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return "Finishes";
     }
 
+    /**
+     * Maps each source instance to a set of target instances that began before
+     * the aforementioned source instance but finished at the same time, using
+     * the BeginBegin and EndEnd atomic Allen relations. The mapping contains
+     * 1-to-m relations. A source event is linked to a target event if the begin
+     * date of the source event is higher than the begin date of the target
+     * event and if the end date of the source event is the same as the end date
+     * of the target event.
+     * 
+     * @return a mapping, the resulting mapping
+     */
     @Override
     public AMapping getMapping(ArrayList<TreeMap<String, Set<String>>> maps) {
         AMapping m = MappingFactory.createDefaultMapping();
@@ -32,7 +52,6 @@ public class FinishesMapper extends AllenAlgebraMapper {
         TreeMap<String, Set<String>> mapBB1 = maps.get(2);
 
         for (Map.Entry<String, Set<String>> entryEE0 : mapEE0.entrySet()) {
-
 
             String instanceEE0 = entryEE0.getKey();
             Set<String> setEE0 = entryEE0.getValue();
@@ -47,7 +66,6 @@ public class FinishesMapper extends AllenAlgebraMapper {
             Set<String> union = AllenAlgebraMapper.union(setBB0, setBB1);
             Set<String> difference = AllenAlgebraMapper.difference(setEE0, union);
 
-
             if (!difference.isEmpty()) {
                 for (String targetInstanceUri : difference) {
                     m.add(instanceEE0, targetInstanceUri, 1);
@@ -59,9 +77,16 @@ public class FinishesMapper extends AllenAlgebraMapper {
 
     }
 
+    /**
+     * Maps each source instance to a set of target instances that began before
+     * the aforementioned source instance but finished at the same time, using
+     * the BeginBegin and EndEnd atomic Allen relations.
+     *
+     * @return a mapping, the resulting mapping
+     */
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
         ArrayList<TreeMap<String, Set<String>>> maps = new ArrayList<TreeMap<String, Set<String>>>();
         EndEnd ee = new EndEnd();
         BeginBegin bb = new BeginBegin();
@@ -74,10 +99,17 @@ public class FinishesMapper extends AllenAlgebraMapper {
         return m;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
     }
