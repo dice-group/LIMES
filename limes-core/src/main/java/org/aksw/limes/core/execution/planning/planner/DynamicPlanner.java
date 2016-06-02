@@ -174,7 +174,7 @@ public class DynamicPlanner extends Planner {
      * @return size, estimated size of returned mapping
      * @throws InvalidMeasureException
      */
-    double getAtomicMappingSizes(String measure, double threshold) {
+    public double getAtomicMappingSizes(String measure, double threshold) {
         Mapper am = null;
         try {
             am = MeasureFactory.getMapper(measure);
