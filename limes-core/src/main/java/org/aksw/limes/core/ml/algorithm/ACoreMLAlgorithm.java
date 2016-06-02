@@ -28,6 +28,11 @@ public abstract class ACoreMLAlgorithm {
     protected LearningParameters getParameters() {
         return parameters;
     }
+    
+    /**
+     * Set default ACoreMLAlgorithm parameters values
+     */
+    protected abstract void setDefaultParameters();
 
     /**
      * Initialize the core ML algorithm.
