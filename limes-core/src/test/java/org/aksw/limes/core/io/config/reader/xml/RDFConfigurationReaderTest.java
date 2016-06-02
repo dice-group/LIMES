@@ -82,7 +82,7 @@ public class RDFConfigurationReaderTest {
         testConf.setPrefixes(prefixes);
         testConf.setOutputFormat("TAB");
         testConf.setMlAlgorithmName("wombat simple");
-        testConf.setMlParameters(mlParameters);
+        testConf.setMlAlgorithmParameters(mlParameters);
 
         RDFConfigurationReader c = new RDFConfigurationReader("/resources/lgd-lgd-ml.ttl");
         Configuration fileConf = c.read();

@@ -216,7 +216,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
             Resource ParameterSubject = parametersItr.next().getSubject();
             RDFNode mlParameterName = getObject(ParameterSubject, LIMES.mlParameterName, false);
             RDFNode mlParametervalue = getObject(ParameterSubject, LIMES.mlParameterValue, false);
-            configuration.addMlParameter(mlParameterName.toString(), mlParametervalue.toString());
+            configuration.addMlAlgorithmParameter(mlParameterName.toString(), mlParametervalue.toString());
         }
     }
 

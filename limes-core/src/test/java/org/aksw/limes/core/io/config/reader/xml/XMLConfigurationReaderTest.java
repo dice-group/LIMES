@@ -97,6 +97,7 @@ public class XMLConfigurationReaderTest {
 
         LearningParameters mlParameters = new LearningParameters();
         mlParameters.put("max execution time in minutes", "60");
+        mlParameters.put("max refinement tree size", "2000");
 
         Configuration testConf = new Configuration();
         testConf.setSourceInfo(sourceInfo);
@@ -112,7 +113,7 @@ public class XMLConfigurationReaderTest {
         testConf.setMlAlgorithmName("wombat simple");
         testConf.setMlImplementationType(MLImplementationType.SUPERVISED_BATCH);
         testConf.setTrainingDataFile("trainingData.nt");
-//        testConf.setMlParameters(mlParameters);
+        testConf.setMlAlgorithmParameters(mlParameters);
 
         XMLConfigurationReader c = new XMLConfigurationReader("/resources/lgd-lgd-ml.xml");
         Configuration fileConf = c.read();

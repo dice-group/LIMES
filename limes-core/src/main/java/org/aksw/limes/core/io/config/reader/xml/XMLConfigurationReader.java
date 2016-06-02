@@ -8,6 +8,7 @@ import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
@@ -60,7 +61,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
     protected static final String NAME = "NAME";
     protected static final String TRAINING = "TRAINING";
     protected static final String VALUE = "VALUE";
-    protected static final String PARAMETER = "RARAMETER";
+    protected static final String PARAMETER = "PARAMETER";
 
     /**
      * Constructor
@@ -282,11 +283,16 @@ public class XMLConfigurationReader extends AConfigurationReader {
                                 if (child.getNodeName().equals(NAME)) {
                                     configuration.setMlAlgorithmName(getText(child));
                                 } else if (child.getNodeName().equals(TYPE)) {
-                                    configuration.setMlImplementationType(MLAlgorithmFactory.getImplementationType(getText(child)));
+                                    configuration.setMlImplementationType(
+                                            MLAlgorithmFactory.getImplementationType(getText(child)));
                                 } else if (child.getNodeName().equals(TRAINING)) {
                                     configuration.setMlTrainingDataFile(getText(child));
+                                } else if (child.getNodeName().equals(PARAMETER)) {
+                                    Element e = (Element) child;
+                                    String mlParameterName = getText(e.getElementsByTagName(NAME).item(0).getChildNodes().item(0));
+                                    String mlParameterValue = getText(e.getElementsByTagName(VALUE).item(0).getChildNodes().item(0));
+                                    configuration.addMlAlgorithmParameter(mlParameterName, mlParameterValue);
                                 }
-                                // READ PARAMETERS
                             }
                         }
                     } else {

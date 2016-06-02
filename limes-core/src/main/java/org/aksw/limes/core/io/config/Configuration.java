@@ -40,7 +40,7 @@ public class Configuration implements IConfiguration {
     protected int granularity = 2;
 
     protected String mlAlgorithmName = new String();
-    protected LearningParameters mlParameters = new LearningParameters();
+    protected LearningParameters mlAlgorithmParameters = new LearningParameters();
     protected MLImplementationType mlImplementationType = MLImplementationType.UNSUPERVISED;
     private String mlTrainingDataFile = null;
     private EvaluatorType mlPseudoFMeasure = null;
@@ -71,14 +71,14 @@ public class Configuration implements IConfiguration {
         this.executionEngine = executionEngine;
         this.granularity = granularity;
         this.mlAlgorithmName = mlAlgorithmName;
-        this.mlParameters = mlParameters;
+        this.mlAlgorithmParameters = mlParameters;
         this.mlImplementationType = mlImplementationType;
         this.mlTrainingDataFile = mlTrainingDataFile;
         this.mlPseudoFMeasure = mlPseudoFMeasure;
     }
 
-    public void addMlParameter(String mlParameterName, String mlParameterValue) {
-        this.mlParameters.put(mlParameterName, mlParameterValue);
+    public void addMlAlgorithmParameter(String mlParameterName, String mlParameterValue) {
+        this.mlAlgorithmParameters.put(mlParameterName, mlParameterValue);
     }
 
     public void addPrefixes(String label, String namespace) {
@@ -121,8 +121,8 @@ public class Configuration implements IConfiguration {
         return mlImplementationType;
     }
 
-    public LearningParameters getMlParameters() {
-        return mlParameters;
+    public LearningParameters getMlAlgorithmParameters() {
+        return mlAlgorithmParameters;
     }
 
     public EvaluatorType getMlPseudoFMeasure() {
@@ -258,7 +258,7 @@ public class Configuration implements IConfiguration {
                 + verificationFile + ", prefixes=" + prefixes + ", outputFormat=" + outputFormat
                 + ", executionRewriter=" + executionRewriter + ", executionPlanner=" + executionPlanner
                 + ", executionEngine=" + executionEngine + ", granularity=" + granularity + ", mlAlgorithmName="
-                + mlAlgorithmName + ", mlParameters=" + mlParameters + ", mlImplementationType=" + mlImplementationType
+                + mlAlgorithmName + ", mlParameters=" + mlAlgorithmParameters + ", mlImplementationType=" + mlImplementationType
                 + ", mlTrainingDataFile=" + mlTrainingDataFile + ", mlPseudoFMeasure=" + mlPseudoFMeasure + "]";
     }
 
@@ -278,7 +278,7 @@ public class Configuration implements IConfiguration {
         result = prime * result + ((metricExpression == null) ? 0 : metricExpression.hashCode());
         result = prime * result + ((mlAlgorithmName == null) ? 0 : mlAlgorithmName.hashCode());
         result = prime * result + ((mlImplementationType == null) ? 0 : mlImplementationType.hashCode());
-        result = prime * result + ((mlParameters == null) ? 0 : mlParameters.hashCode());
+        result = prime * result + ((mlAlgorithmParameters == null) ? 0 : mlAlgorithmParameters.hashCode());
         result = prime * result + ((mlPseudoFMeasure == null) ? 0 : mlPseudoFMeasure.hashCode());
         result = prime * result + ((mlTrainingDataFile == null) ? 0 : mlTrainingDataFile.hashCode());
         result = prime * result + ((outputFormat == null) ? 0 : outputFormat.hashCode());
@@ -342,10 +342,10 @@ public class Configuration implements IConfiguration {
             return false;
         if (mlImplementationType != other.mlImplementationType)
             return false;
-        if (mlParameters == null) {
-            if (other.mlParameters != null)
+        if (mlAlgorithmParameters == null) {
+            if (other.mlAlgorithmParameters != null)
                 return false;
-        } else if (!mlParameters.equals(other.mlParameters))
+        } else if (!mlAlgorithmParameters.equals(other.mlAlgorithmParameters))
             return false;
         if (mlPseudoFMeasure != other.mlPseudoFMeasure)
             return false;
@@ -397,8 +397,8 @@ public class Configuration implements IConfiguration {
         this.prefixes = prefixes;
     }
 
-    public void setMlParameters(LearningParameters mlParameters) {
-        this.mlParameters = mlParameters;
+    public void setMlAlgorithmParameters(LearningParameters mlParameters) {
+        this.mlAlgorithmParameters = mlParameters;
     }
 
     public void setMlPseudoFMeasure(EvaluatorType mlPseudoFMeasure) {
