@@ -8,7 +8,7 @@ import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
-import org.aksw.limes.core.measures.measure.MeasureFactory.MeasureType;
+import org.aksw.limes.core.measures.measure.MeasureFactory.TemporalMeasureType;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorff;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff;
@@ -42,7 +42,7 @@ public class GeoHR3 {
     protected float distanceThreshold;
     int latMax, latMin, longMax, longMin;
 
-    public GeoHR3(float distanceThreshold, int granularity, MeasureType hd) {
+    public GeoHR3(float distanceThreshold, int granularity, TemporalMeasureType hd) {
         this.angularThreshold = (float) ((distanceThreshold * 180) / (Math.PI * OrthodromicDistance.R));
         this.distanceThreshold = distanceThreshold;
         this.granularity = granularity;
