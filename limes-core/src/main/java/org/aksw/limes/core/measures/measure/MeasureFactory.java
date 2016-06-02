@@ -93,7 +93,7 @@ public class MeasureFactory {
      *            The name/type of the measure.
      * @return a specific measure type
      */
-    public static MeasureType getMeasureType(String expression) {
+    public static MeasureType getTemporalMeasureType(String expression) {
         String measure = expression.toLowerCase();
         if (measure.startsWith(GEO_MEAN)) {
             return MeasureType.GEO_MEAN;
@@ -135,7 +135,7 @@ public class MeasureFactory {
      * @return a specific measure instance
      * 
      */
-    public static Measure getMeasure(MeasureType type) {
+    public static Measure getTemporalMeasure(MeasureType type) {
         Measure measure;
         if (type == MeasureType.GEO_NAIVE_HAUSDORFF) {
             measure = new NaiveHausdorff();
