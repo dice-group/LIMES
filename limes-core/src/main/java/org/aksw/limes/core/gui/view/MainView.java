@@ -176,7 +176,8 @@ public class MainView {
 
         itemBatchLearning = new MenuItem("Batch Learning");
         itemBatchLearning.setOnAction(e -> {
-            controller.showBatchLearning();
+//            controller.showBatchLearning();
+            showErrorDialog("Sorry!", "This function is not implemented yet!");
         });
 
 
