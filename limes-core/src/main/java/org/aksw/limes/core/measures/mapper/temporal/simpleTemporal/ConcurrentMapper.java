@@ -19,7 +19,7 @@ import java.util.TreeMap;
  */
 public class ConcurrentMapper extends SimpleTemporalMapper {
     
-    protected static final Logger logger = Logger.getLogger(ConcurrentMapper.class.getName());
+    protected static final Logger logger = Logger.getLogger(ConcurrentMapper.class);
     /**
      * Maps a set of source instances to their concurrent target instances. The
      * mapping contains 1-to-m relations. Each source instance takes as

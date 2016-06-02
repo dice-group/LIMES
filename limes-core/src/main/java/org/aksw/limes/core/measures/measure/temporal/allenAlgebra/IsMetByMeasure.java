@@ -7,11 +7,19 @@ import org.apache.log4j.Logger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+/**
+ * Implements the temporal is met by measure class.
+ *
+ * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @version 1.0
+ */
 public class IsMetByMeasure extends TemporalMeasure {
     private static final Logger logger = Logger.getLogger(IsMetByMeasure.class.getName());
 
     // BE0
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getSimilarity(Object object1, Object object2) {
         double sim = 0;
@@ -42,6 +50,14 @@ public class IsMetByMeasure extends TemporalMeasure {
         return sim;
     }
 
+    /**
+     * Returns the similarity between two instances given their begin and end
+     * dates. If the first instance has a begin date equal to the end date of the
+     * second Instance, then their similarity is 1, and 0 otherwise.
+     * 
+     *
+     * @return The similarity of the instances
+     */
     @Override
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         String endDate2 = null;
@@ -60,17 +76,26 @@ public class IsMetByMeasure extends TemporalMeasure {
         return this.getSimilarity(s1, s2);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getRuntimeApproximation(double mappingSize) {
         return mappingSize / 1000d;
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return "IsMetBy";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getType() {
         return "temporal";
