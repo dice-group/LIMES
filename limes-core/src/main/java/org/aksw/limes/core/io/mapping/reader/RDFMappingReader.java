@@ -8,19 +8,22 @@ import java.io.FileReader;
 
 /**
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
- * @version Nov 12, 2015
+ * @version Jun 3, 2016
  */
 public class RDFMappingReader extends AMappingReader {
 
 
+    private static final String N3 = ".n3";
+    private static final String NT = ".nt";
+    private static final String SPACE = " ";
+
     public RDFMappingReader(String file){
-        super(System.getProperty("user.dir") + "/" + file);
+        super(file);
     }
     /**
      * Reads mapping from nt file
      *
-     * @param file
-     *         Input file for reading
+     * @param file  input file for reading
      * @return Mapping that represents the content of the file
      */
     public AMapping readNtFile() {
@@ -31,7 +34,7 @@ public class RDFMappingReader extends AMappingReader {
             String split[];
             while (s != null) {
                 //split first line
-                split = s.split(" ");
+                split = s.split(SPACE);
                 m.add(split[0].substring(1, split[0].length() - 1), split[2].substring(1, split[2].length() - 1), 1.0);
                 s = reader.readLine();
             }
@@ -44,7 +47,7 @@ public class RDFMappingReader extends AMappingReader {
 
     @Override
     public AMapping read() {
-        if (file.endsWith(".nt") || file.endsWith(".n3")) {
+        if (file.endsWith(NT) || file.endsWith(N3)) {
             return readNtFile();
         }
         return null;

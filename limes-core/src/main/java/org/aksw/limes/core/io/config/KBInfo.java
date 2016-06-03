@@ -15,14 +15,16 @@ import java.util.Map.Entry;
 
 /**
  * Contains the information necessary to access a knowledge base
- *
- * @author ngonga
+ * 
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
- * @version Nov 12, 2015
+ * @version Jun 3, 2016
  */
 public class KBInfo implements Serializable {
 
+    private static final String DEFAULT_QUERY_TYPE = "sparql";
+    
     private static final long serialVersionUID = 7915400434442160847L;
+    
     protected String id;
     protected String endpoint;
     protected String graph;
@@ -47,9 +49,9 @@ public class KBInfo implements Serializable {
         optionalProperties = new ArrayList<String>();
         prefixes = new HashMap<String, String>();
         functions = new HashMap<String, Map<String, String>>();
-        //-1 means query all at once
-        pageSize = -1;
-        type = "sparql"; //default value
+        
+        pageSize = -1;      //-1 means query all at once
+        type = DEFAULT_QUERY_TYPE;    //default value
     }
 
     /**

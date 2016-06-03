@@ -17,7 +17,6 @@ import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;

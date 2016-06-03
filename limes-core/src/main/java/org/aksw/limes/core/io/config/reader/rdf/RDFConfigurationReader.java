@@ -21,7 +21,7 @@ import java.util.Set;
 
 /**
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
- * @version Nov 12, 2015
+ * @version Jun 03, 2016
  */
 public class RDFConfigurationReader extends AConfigurationReader {
     private static final Logger logger = Logger.getLogger(RDFConfigurationReader.class.getName());
@@ -34,7 +34,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
      * @author sherif
      */
     public RDFConfigurationReader(String fileNameOrUri) {
-        super(System.getProperty("user.dir") + "/" + fileNameOrUri);
+        super(fileNameOrUri);
     }
 
     /**
