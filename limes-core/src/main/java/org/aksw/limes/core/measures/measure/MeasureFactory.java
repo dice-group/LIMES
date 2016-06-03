@@ -31,7 +31,9 @@ import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMea
 import org.apache.log4j.Logger;
 
 /**
- * Implements the measure factory class.
+ * Implements the measure factory class. For each measure name, the factory
+ * returns an object of the corresponding measure or the mapper. The same mapper
+ * can correspond to more than one measure.
  *
  * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
  * @author Mohamed Ahmed Sherif <msherif@informatik.uni-leipzig.de>
@@ -40,6 +42,8 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public class MeasureFactory {
+    static Logger logger = Logger.getLogger(MeasureFactory.class);
+
     // String measures
     public static final String JARO = "jaro";
     public static final String QGRAMS = "qgrams";
@@ -83,7 +87,6 @@ public class MeasureFactory {
     public static final String TMP_OVERLAPS = "tmp_overlaps";
     public static final String TMP_ISOVERLAPPEDBY = "tmp_isoverlappedby";
     public static final String TMP_EQUALS = "tmp_equals";
-    static Logger logger = Logger.getLogger(MeasureFactory.class.getName());
 
     /**
      * Factory function for retrieving a measure name from the set of allowed

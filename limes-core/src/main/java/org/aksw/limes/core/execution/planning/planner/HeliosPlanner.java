@@ -54,7 +54,7 @@ public class HeliosPlanner extends Planner {
     public HeliosPlanner(Cache source, Cache target) {
         this.source = source;
         this.target = target;
-        this.lang = Language.NULL;
+        this.lang = Language.EN;
     }
 
     /**

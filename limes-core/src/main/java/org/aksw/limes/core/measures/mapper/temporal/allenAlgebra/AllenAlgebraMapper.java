@@ -8,7 +8,8 @@ import java.util.Set;
 
 /**
  * Abstract class of Allen's temporal relations mapper. It computes basic
- * functions between uris.
+ * functions between uris. For more information about Allen's Algebra @see
+ * https://en.wikipedia.org/wiki/Allen's_interval_algebra
  *
  * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
  * @version 1.0
