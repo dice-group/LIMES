@@ -446,7 +446,7 @@ public class PPJoinPlusPlus extends Mapper {
         }
 
         try {
-            measure = (IStringMeasure) MeasureFactory.getMeasure(p.getOperator());
+            measure = (IStringMeasure) MeasureFactory.createMeasure(p.getOperator());
         } catch (InvalidMeasureException e) {
             e.printStackTrace();
             System.err.println("Exiting..");

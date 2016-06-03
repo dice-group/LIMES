@@ -175,73 +175,73 @@ public class MeasureFactoryTest {
         DynamicPlanner p = new DynamicPlanner(source, target);
 
         try {
-            assertTrue(MeasureFactory.getMeasure("geo_orthodromic") != null);
+            assertTrue(MeasureFactory.createMeasure("geo_orthodromic") != null);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
-            assertTrue(MeasureFactory.getMeasure("geo_hausdorff") != null);
+            assertTrue(MeasureFactory.createMeasure("geo_hausdorff") != null);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
-            assertTrue(MeasureFactory.getMeasure("geo_fairsurjection") != null);
+            assertTrue(MeasureFactory.createMeasure("geo_fairsurjection") != null);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
-            assertTrue(MeasureFactory.getMeasure("geo_max") != null);
+            assertTrue(MeasureFactory.createMeasure("geo_max") != null);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
-            assertTrue(MeasureFactory.getMeasure("geo_mean") != null);
+            assertTrue(MeasureFactory.createMeasure("geo_mean") != null);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
-            assertTrue(MeasureFactory.getMeasure("geo_min") != null);
+            assertTrue(MeasureFactory.createMeasure("geo_min") != null);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
-            assertTrue(MeasureFactory.getMeasure("geo_avg") != null);
+            assertTrue(MeasureFactory.createMeasure("geo_avg") != null);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
-            assertTrue(MeasureFactory.getMeasure("geo_frechet") != null);
+            assertTrue(MeasureFactory.createMeasure("geo_frechet") != null);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
-            assertTrue(MeasureFactory.getMeasure("geo_link") != null);
+            assertTrue(MeasureFactory.createMeasure("geo_link") != null);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
-            assertTrue(MeasureFactory.getMeasure("geo_sum_of_min") != null);
+            assertTrue(MeasureFactory.createMeasure("geo_sum_of_min") != null);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
-            assertTrue(MeasureFactory.getMeasure("geo_surjection") != null);
+            assertTrue(MeasureFactory.createMeasure("geo_surjection") != null);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
-            assertTrue(MeasureFactory.getMeasure("geo_symmetrichausdorff") != null);
+            assertTrue(MeasureFactory.createMeasure("geo_symmetrichausdorff") != null);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

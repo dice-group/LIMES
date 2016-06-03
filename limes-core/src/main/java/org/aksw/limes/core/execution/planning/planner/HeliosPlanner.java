@@ -12,6 +12,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.apache.log4j.Logger;
@@ -72,7 +73,7 @@ public class HeliosPlanner extends Planner {
     public double getAtomicRuntimeCosts(String measure, double threshold) {
         Mapper am = null;
         try {
-            am = MeasureFactory.getMapper(measure);
+            am = MapperFactory.createMapper(measure);
         } catch (InvalidMeasureException e) {
             e.printStackTrace();
             System.err.println("Exiting..");
@@ -96,7 +97,7 @@ public class HeliosPlanner extends Planner {
     public double getAtomicMappingSizes(String measure, double threshold) {
         Mapper am = null;
         try {
-            am = MeasureFactory.getMapper(measure);
+            am = MapperFactory.createMapper(measure);
         } catch (InvalidMeasureException e) {
             e.printStackTrace();
             System.err.println("Exiting..");
@@ -122,7 +123,7 @@ public class HeliosPlanner extends Planner {
             for (String measure : measures) {
                 double tempCost = 0;
                 try {
-                    tempCost = MeasureFactory.getMeasure(measure).getRuntimeApproximation(mappingSize);
+                    tempCost = MeasureFactory.createMeasure(measure).getRuntimeApproximation(mappingSize);
                 } catch (InvalidMeasureException e) {
                     e.printStackTrace();
                     System.err.println("Exiting..");
