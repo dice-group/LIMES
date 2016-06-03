@@ -15,6 +15,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
+import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.string.IStringMeasure;
 import org.apache.log4j.Logger;
 
@@ -446,7 +447,8 @@ public class PPJoinPlusPlus extends Mapper {
         }
 
         try {
-            measure = (IStringMeasure) MeasureFactory.createMeasure(p.getOperator());
+            MeasureType type = MeasureFactory.getMeasureType(p.getOperator());
+            measure = (IStringMeasure) MeasureFactory.createMeasure(type);
         } catch (InvalidMeasureException e) {
             e.printStackTrace();
             System.err.println("Exiting..");

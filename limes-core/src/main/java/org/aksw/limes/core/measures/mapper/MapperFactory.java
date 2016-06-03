@@ -26,9 +26,11 @@ import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.StartsM
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.ConcurrentMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.PredecessorMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.SuccessorMapper;
+import org.aksw.limes.core.measures.measure.MeasureType;
+
 
 public class MapperFactory {
-    
+
     // String measures
     public static final String JARO = "jaro";
     public static final String QGRAMS = "qgrams";
@@ -39,13 +41,19 @@ public class MapperFactory {
     public static final String JACCARD = "jaccard";
     public static final String EXACTMATCH = "exactmatch";
     public static final String SOUNDEX = "soundex";
+
     // number measures
     public static final String EUCLIDEAN = "euclidean";
     // Point-set measures
     public static final String GEO_ORTHODROMIC = "geo_orthodromic";
-    // public static final String GEO_ELLIPTIC = "geo_elliptic";
     public static final String GEO_HAUSDORFF = "geo_hausdorff";
-    public static final String GEO_FAIR_SURJECTION = "geo_fairsurjection";
+    public static final String GEO_NAIVE_HAUSDORFF = "geo_naivehausdorff";
+    public static final String GEO_INDEXED_HAUSDORFF = "geo_indexedhausdorff";
+    public static final String GEO_FAST_HAUSDORFF = "geo_fasthausdorff";
+    public static final String GEO_SYMMETRIC_HAUSDORFF = "geo_symmetrichausdorff";
+    public static final String GEO_CENTROID_INDEXED_HAUSDORFF = "geo_centroidindexedhausdorff";
+    public static final String GEO_SCAN_INDEXED_HAUSDORFF = "geo_scanhausdorff";
+
     public static final String GEO_MAX = "geo_max";
     public static final String GEO_MEAN = "geo_mean";
     public static final String GEO_MIN = "geo_min";
@@ -54,7 +62,7 @@ public class MapperFactory {
     public static final String GEO_LINK = "geo_link";
     public static final String GEO_SUM_OF_MIN = "geo_sum_of_min";
     public static final String GEO_SURJECTION = "geo_surjection";
-    public static final String GEO_SYMMETRIC_HAUSDORFF = "geo_symmetrichausdorff";
+    public static final String GEO_FAIR_SURJECTION = "geo_fairsurjection";
     // Temporal measures
     public static final String TMP_SUCCESSOR = "tmp_successor";
     public static final String TMP_PREDECESSOR = "tmp_predecessor";
@@ -72,9 +80,7 @@ public class MapperFactory {
     public static final String TMP_OVERLAPS = "tmp_overlaps";
     public static final String TMP_IS_OVERLAPPED_BY = "tmp_isoverlappedby";
     public static final String TMP_EQUALS = "tmp_equals";
-    
-    
-    
+
     /**
      * Factory function for retrieving the desired mapper instance given an
      * input measure name.
@@ -86,98 +92,86 @@ public class MapperFactory {
      * @throws InvalidMeasureException
      * 
      */
-    //TODO use MeasureType instead of mesure name string 
-    public static Mapper createMapper(String measure) throws InvalidMeasureException {
-        Mapper am = null;
-        // String measures
-        if (measure.toLowerCase().startsWith(COSINE)) {
-            am = new PPJoinPlusPlus();
-        } else if (measure.toLowerCase().startsWith(EXACTMATCH)) {
-            am = new ExactMatchMapper();
-        } else if (measure.toLowerCase().startsWith(JACCARD)) {
-            am = new PPJoinPlusPlus();
-        } else if (measure.toLowerCase().startsWith(JARO)) {
-            am = new JaroMapper();
-        } else if (measure.toLowerCase().startsWith(LEVENSHTEIN)) {
-            am = new EDJoin();
-        } else if (measure.toLowerCase().startsWith(OVERLAP)) {
-            am = new PPJoinPlusPlus();
-        } else if (measure.toLowerCase().startsWith(QGRAMS)) {
-            am = new FastNGramMapper();
-        } else if (measure.toLowerCase().startsWith(TRIGRAM)) {
-            am = new PPJoinPlusPlus();
-        } else if (measure.toLowerCase().startsWith(SOUNDEX)) {
-            am = new SoundexMapper();
-        } else if (measure.toLowerCase().startsWith(EUCLIDEAN)) {
-            am = new HR3();
-        } else 
-            
-            //point set measures
-            if (measure.toLowerCase().startsWith(GEO_HAUSDORFF)) {
-            am = new OrchidMapper();
-        } else if (measure.toLowerCase().startsWith(GEO_ORTHODROMIC)) {
-            // the hausdorff distance is the same as the orthodromic distance
-            // for single points
-            am = new OrchidMapper();
-        } else if (measure.toLowerCase().startsWith(GEO_SYMMETRIC_HAUSDORFF)) {
-            am = new SymmetricHausdorffMapper();
-        } else if (measure.toLowerCase().startsWith(GEO_MIN)) {
-            am = new OrchidMapper();
-        } else if (measure.toLowerCase().startsWith(GEO_MAX)) {
-            am = new OrchidMapper();
-        } else if (measure.toLowerCase().startsWith(GEO_AVG)) {
-            am = new OrchidMapper();
-        } else if (measure.toLowerCase().startsWith(GEO_MEAN)) {
-            am = new OrchidMapper();
-        } else if (measure.toLowerCase().startsWith(GEO_SUM_OF_MIN)) {
-            am = new OrchidMapper();
-        } else if (measure.toLowerCase().startsWith(GEO_FRECHET)) {
-            am = new OrchidMapper();
-        } else if (measure.toLowerCase().startsWith(GEO_LINK)) {
-            am = new OrchidMapper();
-        } else if (measure.toLowerCase().startsWith(GEO_SURJECTION)) {
-            am = new OrchidMapper();
-        } else if (measure.toLowerCase().startsWith(GEO_FAIR_SURJECTION)) {
-            am = new OrchidMapper();
-        } else 
-            
-            // temporal measures
-            if (measure.toLowerCase().startsWith(TMP_SUCCESSOR)) {     
-            am = new SuccessorMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_PREDECESSOR)) {
-            am = new PredecessorMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_CONCURRENT)) {
-            am = new ConcurrentMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_BEFORE)) {
-            am = new BeforeMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_AFTER)) {
-            am = new AfterMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_MEETS)) {
-            am = new MeetsMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_IS_MET_BY)) {
-            am = new IsMetByMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_FINISHES)) {
-            am = new FinishesMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_IS_FINISHED_BY)) {
-            am = new IsFinishedByMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_STARTS)) {
-            am = new StartsMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_IS_STARTED_BY)) {
-            am = new IsStartedByMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_DURING_REVERSE)) {
-            am = new DuringReverseMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_DURING)) {
-            am = new DuringMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_OVERLAPS)) {
-            am = new OverlapsMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_IS_OVERLAPPED_BY)) {
-            am = new IsOverlappedByMapper();
-        } else if (measure.toLowerCase().startsWith(TMP_EQUALS)) {
-            am = new EqualsMapper();
-        } else {
-            throw new InvalidMeasureException(measure);
+    // TODO use MeasureType instead of mesure name string
+    public static Mapper createMapper(MeasureType type) throws InvalidMeasureException {
+        switch (type) {
+        case JARO:
+            return new JaroMapper();
+        case QGRAMS:
+            return new FastNGramMapper();
+        case COSINE:
+        case OVERLAP:
+        case TRIGRAM:
+        case JACCARD:
+            return new PPJoinPlusPlus();
+        case LEVENSHTEIN:
+            return new EDJoin();
+
+        case EXACTMATCH:
+            return new ExactMatchMapper();
+        case SOUNDEX:
+            return new SoundexMapper();
+        ///////////////////////
+        case EUCLIDEAN:
+            return new HR3();
+        ///////////////////////
+        case GEO_ORTHODROMIC:
+        case GEO_HAUSDORFF:
+        case GEO_NAIVE_HAUSDORFF:
+        case GEO_INDEXED_HAUSDORFF:
+        case GEO_FAST_HAUSDORFF:
+        case GEO_CENTROID_INDEXED_HAUSDORFF:
+        case GEO_SCAN_INDEXED_HAUSDORFF:
+            return new OrchidMapper();
+        case GEO_SYMMETRIC_HAUSDORFF:
+            return new SymmetricHausdorffMapper();
+        ///////////////////////
+        case GEO_MAX:
+        case GEO_MEAN:
+        case GEO_MIN:
+        case GEO_AVG:
+        case GEO_FRECHET:
+        case GEO_LINK:
+        case GEO_SUM_OF_MIN:
+        case GEO_SURJECTION:
+        case GEO_FAIR_SURJECTION:
+            return new OrchidMapper();
+        ///////////////////////
+        case TMP_SUCCESSOR:
+            return new SuccessorMapper();
+        case TMP_PREDECESSOR:
+            return new PredecessorMapper();
+        case TMP_CONCURRENT:
+            return new ConcurrentMapper();
+        case TMP_AFTER:
+            return new AfterMapper();
+        case TMP_BEFORE:
+            return new BeforeMapper();
+        case TMP_MEETS:
+            return new MeetsMapper();
+        case TMP_IS_MET_BY:
+            return new IsMetByMapper();
+        case TMP_FINISHES:
+            return new FinishesMapper();
+        case TMP_IS_FINISHED_BY:
+            return new IsFinishedByMapper();
+        case TMP_STARTS:
+            return new StartsMapper();
+        case TMP_IS_STARTED_BY:
+            return new IsStartedByMapper();
+        case TMP_DURING:
+            return new DuringMapper();
+        case TMP_DURING_REVERSE:
+            return new DuringReverseMapper();
+        case TMP_OVERLAPS:
+            return new OverlapsMapper();
+        case TMP_IS_OVERLAPPED_BY:
+            return new IsOverlappedByMapper();
+        case TMP_EQUALS:
+            return new EqualsMapper();
+        default:
+            throw new InvalidMeasureException(type.toString());
         }
-        return am;
 
     }
 

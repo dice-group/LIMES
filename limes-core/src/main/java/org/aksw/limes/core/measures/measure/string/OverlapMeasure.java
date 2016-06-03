@@ -5,7 +5,6 @@
 
 package org.aksw.limes.core.measures.measure.string;
 
-
 import org.aksw.limes.core.io.cache.Instance;
 
 import java.util.TreeSet;
@@ -17,7 +16,7 @@ public class OverlapMeasure extends StringMeasure {
 
     public static void main(String args[]) {
         String a = "aa ab ac";
-        String b[] = {"ab bc bd", "aa bd", "cd cc dd"};
+        String b[] = { "ab bc bd", "aa bd", "cd cc dd" };
         for (String s : b) {
             OverlapMeasure om = new OverlapMeasure();
             System.out.println(om.getSimilarity(a, s));
@@ -28,7 +27,7 @@ public class OverlapMeasure extends StringMeasure {
         return (int) (tokensNumber - threshold + 1);
     }
 
-    //positional filtering does not help for overlap
+    // positional filtering does not help for overlap
     public int getMidLength(int tokensNumber, double threshold) {
         return Integer.MAX_VALUE;
     }
@@ -60,7 +59,8 @@ public class OverlapMeasure extends StringMeasure {
             tokens2.add(split2[i]);
 
         for (String s : tokens2) {
-            if (tokens1.contains(s)) counter++;
+            if (tokens1.contains(s))
+                counter++;
         }
         return counter;
     }
@@ -91,7 +91,7 @@ public class OverlapMeasure extends StringMeasure {
     }
 
     public double getRuntimeApproximation(double mappingSize) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return mappingSize / 1000d;
     }
 
 }

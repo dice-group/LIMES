@@ -5,6 +5,7 @@
 package org.aksw.limes.core.measures.mapper.pointsets;
 
 import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
@@ -54,7 +55,11 @@ public class GeoHR3 {
         longMax = (int) Math.floor(180f / delta) - 1;
         longMin = (int) Math.floor(-180f / delta);
 
-        setMeasure = (IPointsetsMeasure) MeasureFactory.getGeoMeasure(hd);
+        try {
+            setMeasure = (IPointsetsMeasure) MeasureFactory.createMeasure(hd);
+        } catch (InvalidMeasureException e) {
+            System.exit(1);
+        }
 
     }
 

@@ -15,6 +15,7 @@ import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
+import org.aksw.limes.core.measures.measure.MeasureType;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -71,15 +72,18 @@ public class HeliosPlanner extends Planner {
      * @throws InvalidMeasureException
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
-        Mapper am = null;
+
+        Mapper mapper = null;
         try {
-            am = MapperFactory.createMapper(measure);
+            MeasureType type = MeasureFactory.getMeasureType(measure);
+            mapper = MapperFactory.createMapper(type);
         } catch (InvalidMeasureException e) {
             e.printStackTrace();
             System.err.println("Exiting..");
             System.exit(1);
         }
-        return am.getRuntimeApproximation(source.size(), target.size(), threshold, lang);
+        return mapper.getRuntimeApproximation(source.size(), target.size(), threshold, lang);
+    
     }
 
     /**
@@ -95,15 +99,16 @@ public class HeliosPlanner extends Planner {
      * @throws InvalidMeasureException
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
-        Mapper am = null;
+        Mapper mapper = null;
         try {
-            am = MapperFactory.createMapper(measure);
+            MeasureType type = MeasureFactory.getMeasureType(measure);
+            mapper = MapperFactory.createMapper(type);
         } catch (InvalidMeasureException e) {
             e.printStackTrace();
             System.err.println("Exiting..");
             System.exit(1);
         }
-        return am.getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
+        return mapper.getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
     }
 
     /**
@@ -123,7 +128,8 @@ public class HeliosPlanner extends Planner {
             for (String measure : measures) {
                 double tempCost = 0;
                 try {
-                    tempCost = MeasureFactory.createMeasure(measure).getRuntimeApproximation(mappingSize);
+                    MeasureType type = MeasureFactory.getMeasureType(measure);
+                    tempCost = MeasureFactory.createMeasure(type).getRuntimeApproximation(mappingSize);
                 } catch (InvalidMeasureException e) {
                     e.printStackTrace();
                     System.err.println("Exiting..");

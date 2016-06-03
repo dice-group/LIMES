@@ -46,7 +46,7 @@ public class JaroWinklerMapper extends Mapper {
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
                                double threshold) {
-        logger.info("Running JaroWinklerMapper");
+        
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         // generate value to uri maps
         Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
@@ -104,9 +104,7 @@ public class JaroWinklerMapper extends Mapper {
         }
 
         // setting up parallel execution of matching
-        logger.info("Partitioned into " + String.valueOf(partitions.size()) + " sets.");
-        logger.info("Initializing Threadpool for " + String.valueOf(Runtime.getRuntime().availableProcessors())
-                + " threads.");
+       
         ConcurrentHashMap<String, Map<String, Double>> similarityBook = new ConcurrentHashMap<>(listA.size(), 1.0f);
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         // instantiate and queue up workers

@@ -17,6 +17,8 @@ import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.measures.measure.MeasureFactory;
+import org.aksw.limes.core.measures.measure.MeasureType;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -159,7 +161,8 @@ public class SimpleExecutionEngine extends ExecutionEngine {
         // generate correct mapper
         IMapper mapper;
         try {
-            mapper = MapperFactory.createMapper(inst.getMeasureExpression());
+            MeasureType type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            mapper = MapperFactory.createMapper(type);
             return mapper.getMapping(source, target, sourceVariable, targetVariable, inst.getMeasureExpression(),
                     threshold);
         } catch (InvalidMeasureException e) {
