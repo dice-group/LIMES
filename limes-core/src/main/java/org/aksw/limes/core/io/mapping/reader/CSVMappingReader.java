@@ -24,7 +24,7 @@ public class CSVMappingReader extends AMappingReader {
     }
 
     public CSVMappingReader(String file, String delimiter) {
-        super(file);
+        this(file);
         this.delimiter = delimiter;
     }
 
