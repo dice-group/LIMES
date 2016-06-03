@@ -96,36 +96,36 @@ public class MeasureFactory {
      *            The name/type of the measure.
      * @return a specific measure type
      */
-    public static TemporalMeasureType getTemporalMeasureType(String expression) {
+    public static GeoMeasureType getGeoMeasureType(String expression) {
         String measure = expression.toLowerCase();
         if (measure.startsWith(GEO_MEAN)) {
-            return TemporalMeasureType.GEO_MEAN;
+            return GeoMeasureType.GEO_MEAN;
         }
         if (measure.startsWith(GEO_MIN)) {
-            return TemporalMeasureType.GEO_MIN;
+            return GeoMeasureType.GEO_MIN;
         }
         if (measure.startsWith(GEO_MAX)) {
-            return TemporalMeasureType.GEO_MAX;
+            return GeoMeasureType.GEO_MAX;
         }
         if (measure.startsWith(GEO_FRECHET)) {
-            return TemporalMeasureType.GEO_FRECHET;
+            return GeoMeasureType.GEO_FRECHET;
         }
         if (measure.startsWith(GEO_AVG)) {
-            return TemporalMeasureType.GEO_AVG;
+            return GeoMeasureType.GEO_AVG;
         }
         if (measure.startsWith(GEO_LINK)) {
-            return TemporalMeasureType.GEO_LINK;
+            return GeoMeasureType.GEO_LINK;
         }
         if (measure.startsWith(GEO_SUM_OF_MIN)) {
-            return TemporalMeasureType.GEO_SUM_OF_MIN;
+            return GeoMeasureType.GEO_SUM_OF_MIN;
         }
         if (measure.startsWith(GEO_SURJECTION)) {
-            return TemporalMeasureType.GEO_SURJECTION;
+            return GeoMeasureType.GEO_SURJECTION;
         }
         if (measure.startsWith(GEO_FAIR_SURJECTION)) {
-            return TemporalMeasureType.GEO_FAIR_SURJECTION;
+            return GeoMeasureType.GEO_FAIR_SURJECTION;
         } else {
-            return TemporalMeasureType.GEO_INDEXED_HAUSDORFF;
+            return GeoMeasureType.GEO_INDEXED_HAUSDORFF;
         }
     }
 
@@ -138,33 +138,33 @@ public class MeasureFactory {
      * @return a specific measure instance
      * 
      */
-    public static Measure getTemporalMeasure(TemporalMeasureType type) {
+    public static Measure getGeoMeasure(GeoMeasureType type) {
         Measure measure;
-        if (type == TemporalMeasureType.GEO_NAIVE_HAUSDORFF) {
+        if (type == GeoMeasureType.GEO_NAIVE_HAUSDORFF) {
             measure = new NaiveHausdorff();
-        } else if (type == TemporalMeasureType.GEO_FAST_HAUSDORFF) {
+        } else if (type == GeoMeasureType.GEO_FAST_HAUSDORFF) {
             measure = new FastHausdorff();
-        } else if (type == TemporalMeasureType.GEO_INDEXED_HAUSDORFF) {
+        } else if (type == GeoMeasureType.GEO_INDEXED_HAUSDORFF) {
             measure = new IndexedHausdorff();
-        } else if (type == TemporalMeasureType.GEO_SCAN_HAUSDORFF) {
+        } else if (type == GeoMeasureType.GEO_SCAN_HAUSDORFF) {
             measure = new ScanIndexedHausdorff();
-        } else if (type == TemporalMeasureType.GEO_MIN) {
+        } else if (type == GeoMeasureType.GEO_MIN) {
             measure = new NaiveMin();
-        } else if (type == TemporalMeasureType.GEO_MAX) {
+        } else if (type == GeoMeasureType.GEO_MAX) {
             measure = new NaiveMax();
-        } else if (type == TemporalMeasureType.GEO_AVG) {
+        } else if (type == GeoMeasureType.GEO_AVG) {
             measure = new NaiveAverage();
-        } else if (type == TemporalMeasureType.GEO_SUM_OF_MIN) {
+        } else if (type == GeoMeasureType.GEO_SUM_OF_MIN) {
             measure = new NaiveSumOfMin();
-        } else if (type == TemporalMeasureType.GEO_LINK) {
+        } else if (type == GeoMeasureType.GEO_LINK) {
             measure = new NaiveLink();
-        } else if (type == TemporalMeasureType.GEO_FRECHET) {
+        } else if (type == GeoMeasureType.GEO_FRECHET) {
             measure = new NaiveFrechet();
-        } else if (type == TemporalMeasureType.GEO_SURJECTION) {
+        } else if (type == GeoMeasureType.GEO_SURJECTION) {
             measure = new NaiveSurjection();
-        } else if (type == TemporalMeasureType.GEO_FAIR_SURJECTION) {
+        } else if (type == GeoMeasureType.GEO_FAIR_SURJECTION) {
             measure = new FairSurjection();
-        } else if (type == TemporalMeasureType.GEO_MEAN) {
+        } else if (type == GeoMeasureType.GEO_MEAN) {
             measure = new NaiveMean();
         } else {
             measure = new CentroidIndexedHausdorff();
@@ -369,7 +369,7 @@ public class MeasureFactory {
 
     }
 
-    public enum TemporalMeasureType { // TODO add other measures
+    public enum GeoMeasureType { // TODO add other measures
         GEO_NAIVE_HAUSDORFF, GEO_INDEXED_HAUSDORFF, GEO_FAST_HAUSDORFF, GEO_CENTROIDHAUSDORFF, GEO_SCAN_HAUSDORFF, GEO_MIN, GEO_MAX, GEO_AVG, GEO_SUM_OF_MIN, GEO_LINK, GEO_QUINLAN, GEO_FRECHET, GEO_SURJECTION, GEO_FAIR_SURJECTION, GEO_MEAN
     }
 }
