@@ -28,7 +28,6 @@ import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.PredecessorMa
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.SuccessorMapper;
 import org.aksw.limes.core.measures.measure.MeasureType;
 
-
 public class MapperFactory {
 
     // String measures
@@ -52,7 +51,7 @@ public class MapperFactory {
     public static final String GEO_FAST_HAUSDORFF = "geo_fasthausdorff";
     public static final String GEO_SYMMETRIC_HAUSDORFF = "geo_symmetrichausdorff";
     public static final String GEO_CENTROID_INDEXED_HAUSDORFF = "geo_centroidindexedhausdorff";
-    public static final String GEO_SCAN_INDEXED_HAUSDORFF = "geo_scanhausdorff";
+    public static final String GEO_SCAN_INDEXED_HAUSDORFF = "geo_scanindexedhausdorff";
 
     public static final String GEO_MAX = "geo_max";
     public static final String GEO_MEAN = "geo_mean";
@@ -101,7 +100,7 @@ public class MapperFactory {
             return new FastNGramMapper();
         case COSINE:
         case OVERLAP:
-        case TRIGRAM:
+        case TRIGRAMS:
         case JACCARD:
             return new PPJoinPlusPlus();
         case LEVENSHTEIN:
@@ -159,10 +158,10 @@ public class MapperFactory {
             return new StartsMapper();
         case TMP_IS_STARTED_BY:
             return new IsStartedByMapper();
-        case TMP_DURING:
-            return new DuringMapper();
         case TMP_DURING_REVERSE:
             return new DuringReverseMapper();
+        case TMP_DURING:
+            return new DuringMapper();
         case TMP_OVERLAPS:
             return new OverlapsMapper();
         case TMP_IS_OVERLAPPED_BY:
