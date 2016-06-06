@@ -1,17 +1,25 @@
 package org.aksw.limes.core.io.query;
 
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import org.aksw.jena_sparql_api.delay.core.QueryExecutionFactoryDelay;
-import org.aksw.jena_sparql_api.http.QueryExecutionFactoryHttp;
+import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
+
+import org.aksw.jena_sparql_api.cache.core.QueryExecutionFactoryCacheEx;
+import org.aksw.jena_sparql_api.cache.extra.CacheBackend;
+import org.aksw.jena_sparql_api.cache.extra.CacheFrontend;
+import org.aksw.jena_sparql_api.cache.extra.CacheFrontendImpl;
+import org.aksw.jena_sparql_api.cache.h2.CacheCoreH2;
+import org.aksw.jena_sparql_api.core.FluentQueryExecutionFactory;
+import org.aksw.jena_sparql_api.core.SparqlServiceReference;
 import org.aksw.jena_sparql_api.pagination.core.QueryExecutionFactoryPaginated;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.apache.log4j.Logger;
 
-import java.sql.SQLException;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.sparql.core.DatasetDescription;
 
 //import org.aksw.jena_sparql_api.cache.h2.CacheCoreH2;
 
@@ -27,7 +35,7 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
     private int delayer = 1000;
     private int pageSize = 900;
     private long timeToLive = 24l * 60l * 60l * 1000l;
-    private String cacheDirectory = "cache";
+    private String cacheDirectory = System.getProperty("user.dir") + "/cache";
 
     public ResilientSparqlQueryModule(KBInfo kbInfo) {
         super(kbInfo);
@@ -102,23 +110,50 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
 
     protected org.aksw.jena_sparql_api.core.QueryExecutionFactory initQueryExecution(KBInfo kbInfo) throws ClassNotFoundException, SQLException {
         org.aksw.jena_sparql_api.core.QueryExecutionFactory qef;
-        if (kbInfo.getGraph() != null) {
-            qef = new QueryExecutionFactoryHttp(kbInfo.getEndpoint(), kbInfo.getGraph());
-        } else {
-            qef = new QueryExecutionFactoryHttp(kbInfo.getEndpoint());
+        
+        DatasetDescription dd = new DatasetDescription();
+        if(kbInfo.getGraph() != null) {
+                dd.addDefaultGraphURI(kbInfo.getGraph());
         }
-        qef = new QueryExecutionFactoryDelay(qef, retryDelayimMS);
+        
+        SparqlServiceReference ssr = new SparqlServiceReference(kbInfo.getEndpoint(), dd);
+        
+        int retryCount = 3;
+        int requestDelayInMs = 50;
+        qef = FluentQueryExecutionFactory
+            .http(ssr)
+            .config()
+                .withRetry(retryCount, retryDelayimMS, TimeUnit.MILLISECONDS)
+                .withDelay(requestDelayInMs, TimeUnit.MILLISECONDS)
+            .end()
+            .create();
+
+//        if (kbInfo.getGraph() != null) {
+//            qef = new QueryExecutionFactoryHttp(kbInfo.getEndpoint(), kbInfo.getGraph());
+//        } else {
+//            qef = new QueryExecutionFactoryHttp(kbInfo.getEndpoint());
+//            
+//        }
+//        qef = new QueryExecutionFactoryDelay(qef, retryDelayimMS);
         //TODO FIX chache issue
-//		if (cacheDirectory != null) {
-//			CacheBackend cacheBackend = CacheCoreH2.create(true, cacheDirectory,
-//					kbInfo.getEndpoint().replaceAll("[:/]", "_"), timeToLive, true);
-//			CacheFrontend cacheFrontend = new CacheFrontendImpl(cacheBackend);
-//			qef = new QueryExecutionFactoryCacheEx(qef, cacheFrontend);
-//		} else {
-//			logger.info("The cache directory has not been set. Creating an uncached SPARQL client.");
-//		}
+		if (cacheDirectory != null) {
+		    //CacheUtilsH2.createCacheFrontend(cacheDirectory, kbInfo.getEndpoint().replaceAll("[:/]", "_"), timeToLive);
+		    
+			CacheBackend cacheBackend = CacheCoreH2.create(true, cacheDirectory,
+					kbInfo.getEndpoint().replaceAll("[:/]", "_"), timeToLive, false);
+
+			CacheFrontend cacheFrontend = new CacheFrontendImpl(cacheBackend);
+			qef = new QueryExecutionFactoryCacheEx(qef, cacheFrontend);
+			//fluent.withCache(cacheFrontend);
+		} else {
+			logger.info("The cache directory has not been set. Creating an uncached SPARQL client.");
+		}
+		
+		
         try {
-            return new QueryExecutionFactoryPaginated(qef, pageSize);
+            qef = new QueryExecutionFactoryPaginated(qef, pageSize);            
+            return qef;
+            //return new QueryExecutionFactoryPaginated(qef, pageSize);
         } catch (Exception e) {
             logger.warn("Couldn't create Factory with pagination. Returning Factory without pagination. Exception: " +
                     e.getLocalizedMessage());

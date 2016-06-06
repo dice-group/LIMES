@@ -1,6 +1,6 @@
 package org.aksw.limes.core.io.query;
 
-import com.hp.hpl.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Model;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;

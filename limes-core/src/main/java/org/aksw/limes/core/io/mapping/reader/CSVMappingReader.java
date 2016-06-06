@@ -55,7 +55,7 @@ public class CSVMappingReader extends AMappingReader {
                         return readThreeColumnFile(file);
                     }
                 } else {
-                    logger.error("Format not supported");
+                    logger.fatal("Format not supported");
                     System.exit(1);
                 }
             }

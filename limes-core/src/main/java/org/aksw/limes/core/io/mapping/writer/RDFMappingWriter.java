@@ -1,6 +1,6 @@
 package org.aksw.limes.core.io.mapping.writer;
 
-import com.hp.hpl.jena.rdf.model.*;
+import org.apache.jena.rdf.model.*;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.apache.log4j.Logger;
 

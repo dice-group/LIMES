@@ -1,6 +1,6 @@
 package org.aksw.limes.core.io.query;
 
-import com.hp.hpl.jena.query.*;
+import org.apache.jena.query.*;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.apache.log4j.Logger;

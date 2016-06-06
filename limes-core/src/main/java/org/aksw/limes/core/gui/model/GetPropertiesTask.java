@@ -1,6 +1,6 @@
 package org.aksw.limes.core.gui.model;
 
-import com.hp.hpl.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Model;
 import javafx.concurrent.Task;
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.gui.util.sparql.SPARQLHelper;

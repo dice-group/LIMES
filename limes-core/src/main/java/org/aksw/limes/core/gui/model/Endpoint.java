@@ -1,6 +1,6 @@
 package org.aksw.limes.core.gui.model;
 
-import com.hp.hpl.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Model;
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.io.cache.Cache;

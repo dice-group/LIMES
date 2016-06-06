@@ -17,6 +17,7 @@ import static org.junit.Assert.assertTrue;
  * @version Jan 15, 2016
  */
 public class RDFConfigurationReaderTest {
+    
     Map<String, String> prefixes = new HashMap<>();
     Map<String, Map<String, String>> functions = new HashMap<>();
     KBInfo sourceInfo, targetInfo;

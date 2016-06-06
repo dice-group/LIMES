@@ -1,6 +1,6 @@
 package org.aksw.limes.core.io.mapping;
 
-import com.hp.hpl.jena.vocabulary.OWL;
+import org.apache.jena.vocabulary.OWL;
 
 import java.util.HashMap;
 import java.util.TreeSet;
