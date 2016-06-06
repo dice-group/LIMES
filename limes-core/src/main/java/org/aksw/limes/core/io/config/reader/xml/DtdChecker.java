@@ -13,7 +13,7 @@ import org.xml.sax.SAXParseException;
  *
  * @author ngonga
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
- * @version Nov 12, 2015
+ * @version Jun 03, 2016
  */
 public class DtdChecker implements org.xml.sax.ErrorHandler {
 

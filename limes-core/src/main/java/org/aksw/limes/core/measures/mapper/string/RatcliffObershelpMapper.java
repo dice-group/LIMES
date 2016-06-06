@@ -43,7 +43,6 @@ public class RatcliffObershelpMapper extends Mapper {
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
                                double threshold) {
-        logger.info("Running RatcliffObershelpMapper");
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
         Map<String, Set<String>> targetMap = getValueToUriMap(target, properties.get(1));
@@ -102,9 +101,7 @@ public class RatcliffObershelpMapper extends Mapper {
         int poolSize = Runtime.getRuntime().availableProcessors();
         poolSize = poolSize > tempPairs.size() ? tempPairs.size() : poolSize;
 
-        logger.info("Partitioned into " + String.valueOf(tempPairs.size()) + " sets.");
-        logger.info("Initializing Threadpool for " + String.valueOf(Runtime.getRuntime().availableProcessors())
-                + " threads.");
+        
 
         // create thread pool, one thread per partition
         ExecutorService executor = Executors.newFixedThreadPool(poolSize);
@@ -121,7 +118,7 @@ public class RatcliffObershelpMapper extends Mapper {
                 e.printStackTrace();
             }
         }
-        logger.info("Similarity Book has " + String.valueOf(similarityBook.size()) + " entries.");
+        
         return getUriToUriMapping(similarityBook, sourceMap, targetMap, swapped);
     }
 

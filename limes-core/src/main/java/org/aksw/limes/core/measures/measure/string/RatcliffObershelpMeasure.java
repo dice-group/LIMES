@@ -36,7 +36,8 @@ public class RatcliffObershelpMeasure extends StringMeasure implements ITrieFilt
     public LinkedList<ImmutableTriple<Integer, Integer, Integer>> getPartitionBounds(int maxSize, double threshold) {
         LinkedList<ImmutableTriple<Integer, Integer, Integer>> sliceBoundaries = new LinkedList<>();
         for (int t = 1; t <= maxSize; t++) {
-            sliceBoundaries.add(new ImmutableTriple<>(t, lengthLowerBound(t, threshold), lengthUpperBound(t, threshold)));
+            sliceBoundaries
+                    .add(new ImmutableTriple<>(t, lengthLowerBound(t, threshold), lengthUpperBound(t, threshold)));
         }
         return sliceBoundaries;
     }
@@ -78,12 +79,10 @@ public class RatcliffObershelpMeasure extends StringMeasure implements ITrieFilt
         String leftPartS1 = s1.substring(0, index1);
         String rightPartS2 = s2.substring(index2 + substring.length());
         String leftPartS2 = s2.substring(0, index2);
-        if (rightPartS1 != null && !rightPartS1.isEmpty()
-                && rightPartS2 != null && !rightPartS2.isEmpty()) {
+        if (rightPartS1 != null && !rightPartS1.isEmpty() && rightPartS2 != null && !rightPartS2.isEmpty()) {
             processRatcliffAlgorithm(rightPartS1, rightPartS2);
         }
-        if (leftPartS1 != null && !leftPartS1.isEmpty() && leftPartS2 != null
-                && !leftPartS2.isEmpty()) {
+        if (leftPartS1 != null && !leftPartS1.isEmpty() && leftPartS2 != null && !leftPartS2.isEmpty()) {
             processRatcliffAlgorithm(leftPartS1, leftPartS2);
         }
     }
@@ -202,6 +201,6 @@ public class RatcliffObershelpMeasure extends StringMeasure implements ITrieFilt
 
     @Override
     public double getRuntimeApproximation(double mappingSize) {
-        return mappingSize / 5000d;
+        return 1000d;
     }
 }

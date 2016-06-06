@@ -5,10 +5,11 @@
 package org.aksw.limes.core.measures.mapper.pointsets;
 
 import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
-import org.aksw.limes.core.measures.measure.MeasureFactory.TemporalMeasureType;
+import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorff;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff;
@@ -42,7 +43,7 @@ public class GeoHR3 {
     protected float distanceThreshold;
     int latMax, latMin, longMax, longMin;
 
-    public GeoHR3(float distanceThreshold, int granularity, TemporalMeasureType hd) {
+    public GeoHR3(float distanceThreshold, int granularity, MeasureType hd) {
         this.angularThreshold = (float) ((distanceThreshold * 180) / (Math.PI * OrthodromicDistance.R));
         this.distanceThreshold = distanceThreshold;
         this.granularity = granularity;
@@ -54,7 +55,11 @@ public class GeoHR3 {
         longMax = (int) Math.floor(180f / delta) - 1;
         longMin = (int) Math.floor(-180f / delta);
 
-        setMeasure = (IPointsetsMeasure) MeasureFactory.getTemporalMeasure(hd);
+        try {
+            setMeasure = (IPointsetsMeasure) MeasureFactory.createMeasure(hd);
+        } catch (InvalidMeasureException e) {
+            System.exit(1);
+        }
 
     }
 

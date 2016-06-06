@@ -84,7 +84,8 @@ public class RDFConfigurationReaderTest {
         testConf.setMlAlgorithmName("wombat simple");
         testConf.setMlAlgorithmParameters(mlParameters);
 
-        RDFConfigurationReader c = new RDFConfigurationReader("/resources/lgd-lgd-ml.ttl");
+        String file = System.getProperty("user.dir") + "/resources/lgd-lgd-ml.ttl";
+        RDFConfigurationReader c = new RDFConfigurationReader(file);
         Configuration fileConf = c.read();
         assertTrue(testConf.equals(fileConf));
     }
@@ -105,7 +106,8 @@ public class RDFConfigurationReaderTest {
         testConf.setPrefixes(prefixes);
         testConf.setOutputFormat("TAB");
 
-        RDFConfigurationReader c = new RDFConfigurationReader("/resources/lgd-lgd.ttl");
+        String file = System.getProperty("user.dir") + "/resources/lgd-lgd.ttl";
+        RDFConfigurationReader c = new RDFConfigurationReader(file);
         Configuration fileConf = c.read();
         assertTrue(testConf.equals(fileConf));
     }

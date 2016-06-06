@@ -12,6 +12,7 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -83,7 +84,9 @@ public class MeasureProcessor {
 
             Mapper mapper = null;
             try {
-                mapper = MeasureFactory.getMapper(p.getOperator());
+                
+                MeasureType type = MeasureFactory.getMeasureType(p.getOperator());
+                mapper = MapperFactory.createMapper(type);
             } catch (InvalidMeasureException e) {
                 e.printStackTrace();
                 System.err.println("Exiting..");
@@ -240,7 +243,8 @@ public class MeasureProcessor {
         double runtime = 0;
         for (int i = 0; i < measures.size(); i++)
             try {
-                runtime = runtime + MeasureFactory.getMeasure(measures.get(i)).getRuntimeApproximation(mappingSize);
+                MeasureType type = MeasureFactory.getMeasureType(measures.get(i));
+                runtime = runtime + MeasureFactory.createMeasure(type).getRuntimeApproximation(mappingSize);
             } catch (InvalidMeasureException e) {
                 e.printStackTrace();
                 System.err.println("Exiting..");

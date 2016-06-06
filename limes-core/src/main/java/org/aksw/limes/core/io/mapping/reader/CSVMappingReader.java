@@ -9,20 +9,22 @@ import java.io.FileReader;
 
 /**
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
- * @version Nov 12, 2015
+ * @version Jun 3, 2016
  */
 public class CSVMappingReader extends AMappingReader {
+    private static final String COMMA = ",";
+
     static Logger logger = Logger.getLogger(CSVMappingReader.class.getName());
 
     protected String delimiter;
 
     public CSVMappingReader(String file) {
-        super(System.getProperty("user.dir") + "/" + file);
-        this.delimiter = ",";
+        super(file);
+        this.delimiter = COMMA;
     }
 
     public CSVMappingReader(String file, String delimiter) {
-        super(System.getProperty("user.dir") + "/" + file);
+        this(file);
         this.delimiter = delimiter;
     }
 

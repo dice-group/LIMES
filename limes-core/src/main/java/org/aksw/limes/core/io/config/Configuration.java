@@ -7,13 +7,13 @@ import org.aksw.limes.core.ml.setting.LearningParameters;
 import java.util.*;
 
 /**
- * Contain all LIMES configuration parameters
- *
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
- * @version Nov 12, 2015
+ * @version Jun 3, 2016
  */
 public class Configuration implements IConfiguration {
 
+    private static final String DEFAULT = "default";
+    
     protected KBInfo sourceInfo = new KBInfo();
     protected KBInfo targetInfo = new KBInfo();
 
@@ -33,9 +33,9 @@ public class Configuration implements IConfiguration {
 
     protected String outputFormat;
 
-    protected String executionRewriter = "default";
-    protected String executionPlanner = "default";
-    protected String executionEngine = "default";
+    protected String executionRewriter = DEFAULT;
+    protected String executionPlanner = DEFAULT;
+    protected String executionEngine = DEFAULT;
 
     protected int granularity = 2;
 

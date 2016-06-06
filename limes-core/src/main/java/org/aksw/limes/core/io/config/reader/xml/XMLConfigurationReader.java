@@ -5,7 +5,6 @@ import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
-import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -24,7 +23,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
- * @version Nov 12, 2015
+ * @version Jun 03, 2016
  */
 public class XMLConfigurationReader extends AConfigurationReader {
     private static final Logger logger = Logger.getLogger(XMLConfigurationReader.class);
@@ -67,7 +66,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
      * Constructor
      */
     public XMLConfigurationReader(String fileNameOrUri) {
-        super(System.getProperty("user.dir") + "/" + fileNameOrUri);
+        super(fileNameOrUri);
     }
 
     public static void processProperty(KBInfo kbinfo, String property) {
