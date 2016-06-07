@@ -95,5 +95,22 @@ public class WombatSimpleTest {
         AMapping resultMap = wombatSimpleU.predict(sc, tc, mlModel);
         assert (resultMap.equals(refMap));
     }
+    
+    @Test
+    public void testActive() throws UnsupportedMLImplementationException {
+        ActiveMLAlgorithm wombatSimpleA = null;
+        try {
+            wombatSimpleA = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
+                    MLImplementationType.SUPERVISED_ACTIVE).asActive();
+        } catch (UnsupportedMLImplementationException e) {
+            e.printStackTrace();
+            fail();
+        }
+        assert (wombatSimpleA.getClass().equals(ActiveMLAlgorithm.class));
+        wombatSimpleA.init(null, sc, tc);
+        MLModel mlModel = wombatSimpleA.activeLearn(trainingMap);
+        AMapping resultMap = wombatSimpleA.predict(sc, tc, mlModel);
+        assert (resultMap.equals(refMap));
+    }
 
 }

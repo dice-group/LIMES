@@ -27,17 +27,17 @@ public class ResilientSparqlQueryModuleTest {
         functions.put("rdfs:label", f);
 
         KBInfo kbInfo = new KBInfo(
-                "DBpedia",                                                            //String id
-                "http://dbpedia.org/sparql",                                        //String endpoint
-                null,                                                                //String graph
-                "?x",                                                                //String var
-                new ArrayList<String>(Arrays.asList("rdfs:label")),                    //List<String> properties
-                null,                    //List<String> optionlProperties
-                new ArrayList<String>(Arrays.asList("?x rdf:type dbpo:Drug")),        //ArrayList<String> restrictions
-                functions,                                                        //Map<String, Map<String, String>> functions
-                prefixes,                                                            //Map<String, String> prefixes
-                1000,                                                                //int pageSize
-                "sparql"                                                            //String type
+                "DBpedia",                                                     //String id
+                "http://dbpedia.org/sparql",                                   //String endpoint
+                null,                                                          //String graph
+                "?x",                                                          //String var
+                new ArrayList<String>(Arrays.asList("rdfs:label")),            //List<String> properties
+                null,                                                          //List<String> optionlProperties
+                new ArrayList<String>(Arrays.asList("?x rdf:type dbpo:Drug")), //ArrayList<String> restrictions
+                functions,                                                     //Map<String, Map<String, String>> functions
+                prefixes,                                                      //Map<String, String> prefixes
+                1000,                                                          //int pageSize
+                "sparql"                                                       //String type
         );
 
         ResilientSparqlQueryModule rsqm = new ResilientSparqlQueryModule(kbInfo);

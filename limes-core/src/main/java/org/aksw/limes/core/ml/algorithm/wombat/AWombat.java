@@ -36,7 +36,8 @@ import java.util.*;
 /**
  * This class uses Least General Generalization (LGG) to learn Link Specifications
  *
- * @author sherif
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Jun 7, 2016
  */
 public abstract class AWombat extends ACoreMLAlgorithm {
 
