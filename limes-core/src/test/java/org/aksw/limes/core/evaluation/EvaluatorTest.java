@@ -54,10 +54,14 @@ public class EvaluatorTest {
     private static final String PARAMETER_VERBOSE = "verbose";
     private static final String PARAMETER_MEASURES = "measures";
     private static final String PARAMETER_SAVE_MAPPING = "save mapping";
+    
+    private static final int folds=5;
+    private static final boolean crossValidate=false;
+
 /////////////////////////////////////////////////////////////////////////////////////////    
-    final public String[] datasetsList = {"PERSON1", "PERSON1_CSV", "PERSON2", "PERSON2_CSV", "RESTAURANTS", "OAEI2014BOOKS"};
+    final public String[] datasetsList = {"PERSON1"/*, "PERSON1_CSV", "PERSON2", "PERSON2_CSV", "RESTAURANTS", "OAEI2014BOOKS"*/};
  //   final public String[] algorithmsList = {"SUPERVISED_ACTIVE:EAGLE", "SUPERVISED_BATCH:EAGLE", "UNSUPERVISED:EAGLE"};
-    final public String[] algorithmsList = {"SUPERVISED_ACTIVE:WOMBATSIMPLE", "SUPERVISED_BATCH:WOMBATSIMPLE", "UNSUPERVISED:WOMBATSIMPLE"};
+    final public String[] algorithmsList = {"UNSUPERVISED:WOMBATSIMPLE","SUPERVISED_BATCH:WOMBATSIMPLE"};
 /////////////////////////////////////////////////////////////////////////////////////////////////
     public Evaluator evaluator = new Evaluator();
     public List<TaskAlgorithm> mlAlgorithms = new ArrayList<TaskAlgorithm>();
@@ -66,7 +70,10 @@ public class EvaluatorTest {
 
     @Test
     public void test() {
-        testEvaluator();
+        if(!crossValidate)
+            testCrossValidate();
+        else
+            testEvaluator();
     }
 
     /**
@@ -89,6 +96,25 @@ public class EvaluatorTest {
            Table<String, String, Map<EvaluatorType, Double>> results = evaluator.evaluate(mlAlgorithms, tasks, evaluators, null);
            
         } catch (Exception e) {
+            System.out.println(e.getMessage());
+            assertTrue(false);
+        }
+        assertTrue(true);
+    }
+    
+    public void testCrossValidate() {
+        try {
+            
+            initializeDataSets();
+            initializeEvaluators();
+            initializeMLAlgorithms();
+            for (TaskAlgorithm tAlgorithm : mlAlgorithms) {
+                Table<String, String, Map<EvaluatorType, Double>> results = evaluator.crossValidate(tAlgorithm.getMlAlgorithm(), tasks,folds, evaluators, null);
+
+            }
+           
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
             assertTrue(false);
         }
         assertTrue(true);
@@ -173,39 +199,39 @@ public class EvaluatorTest {
                 {
                     if(algorithmInfo[0].equals("EAGLE"))//create its core as eagle - it will be enclosed inside SupervisedMLAlgorithm that extends AMLAlgorithm
                         algorithm =  MLAlgorithmFactory.createMLAlgorithm(Eagle.class,algType).asActive(); //create an eagle learning algorithm
-                    else if(algorithmInfo[0].equals("WOMBATSIMPLE"))
+                    else if(algorithmInfo[1].equals("WOMBATSIMPLE"))
                     {
                         algorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,algType).asActive(); //create an eagle learning algorithm
- /*                       WombatSimple ws = (WombatSimple)algorithm.getMl();
-                        ws.setDefaultParameters();*/
+                        WombatSimple ws = (WombatSimple)algorithm.getMl();
+                        ws.setDefaultParameters();
                     }
-                   mlParameter = initializeLearningParameters(MLImplementationType.SUPERVISED_ACTIVE,algorithmInfo[0]);
+                   mlParameter = initializeLearningParameters(MLImplementationType.SUPERVISED_ACTIVE,algorithmInfo[1]);
 
                 }
                 else if(algType.equals(MLImplementationType.SUPERVISED_BATCH))
                 {
                     if(algorithmInfo[0].equals("EAGLE"))
                         algorithm =  MLAlgorithmFactory.createMLAlgorithm(Eagle.class,algType).asSupervised(); //create an eagle learning algorithm
-                    else if(algorithmInfo[0].equals("WOMBATSIMPLE"))
+                    else if(algorithmInfo[1].equals("WOMBATSIMPLE"))
                     {
                         algorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,algType).asSupervised(); //create an eagle learning algorithm
-                        WombatSimple ws = (WombatSimple)algorithm.getMl();
-                        ws.setDefaultParameters();
+/*                        WombatSimple ws = (WombatSimple)algorithm.getMl();
+                        ws.setDefaultParameters();*/
                     }
-                //    mlParameter = initializeLearningParameters(MLImplementationType.SUPERVISED_BATCH,algorithmInfo[0]);
+                    mlParameter = initializeLearningParameters(MLImplementationType.SUPERVISED_BATCH,algorithmInfo[1]);
 
                 }
                 else if(algType.equals(MLImplementationType.UNSUPERVISED))
                 {
                     if(algorithmInfo[0].equals("EAGLE"))
                         algorithm =  MLAlgorithmFactory.createMLAlgorithm(Eagle.class,algType).asUnsupervised(); //create an eagle learning algorithm
-                    else if(algorithmInfo[0].equals("WOMBATSIMPLE"))
+                    else if(algorithmInfo[1].equals("WOMBATSIMPLE"))
                     {
                         algorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,algType).asUnsupervised(); //create an eagle learning algorithm
-                        WombatSimple ws = (WombatSimple)algorithm.getMl();
-                        ws.setDefaultParameters();
+/*                        WombatSimple ws = (WombatSimple)algorithm.getMl();
+                        ws.setDefaultParameters();*/
                     }
-                //    mlParameter = initializeLearningParameters(MLImplementationType.UNSUPERVISED,algorithmInfo[0]);
+                    mlParameter = initializeLearningParameters(MLImplementationType.UNSUPERVISED,algorithmInfo[1]);
 
                 }
                 
@@ -222,15 +248,16 @@ public class EvaluatorTest {
     }
 
     private void initializeDataSets() {
-        TaskData task = null;
+        TaskData task = new TaskData();
         DataSetChooser dataSets = new DataSetChooser();
         try {
             for (String ds : datasetsList) {
                 System.out.println(ds);
-                task.dataName = ds;
                 EvaluationData c = DataSetChooser.getData(ds);
                 GoldStandard gs = new GoldStandard(c.getReferenceMapping());
-                task = new TaskData(gs,null, c.getSourceCache(), c.getTargetCache());
+                task = new TaskData(gs, c.getSourceCache(), c.getTargetCache());
+                task.dataName = ds;
+
                 //TODO assign the training data and the pseudoFM
                 tasks.add(task);
             }
@@ -238,6 +265,7 @@ public class EvaluatorTest {
 
             //	DataSetChooser.getData("DRUGS");
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             assertTrue(false);
         }
         assertTrue(true);

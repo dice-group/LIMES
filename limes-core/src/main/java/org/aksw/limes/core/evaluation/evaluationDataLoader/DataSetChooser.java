@@ -218,7 +218,7 @@ public class DataSetChooser {
         // folders & files
         param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
         param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Persons1/");
-        param.put(MapKey.CONFIG_FILE, "persons1.xml");
+        param.put(MapKey.CONFIG_FILE, "personsNew.xml");
         param.put(MapKey.REFERENCE_FILE, "dataset11_dataset12_goldstandard_person.xml");
         param.put(MapKey.SOURCE_FILE, "person11.nt");
         param.put(MapKey.TARGET_FILE, "person12.nt");

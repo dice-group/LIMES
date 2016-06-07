@@ -14,7 +14,7 @@ import java.util.List;
  * @author mofeed
  * @version 1.0
  */
-public class TaskData {
+public class TaskData implements Comparable<TaskData> {
     public String dataName;
     public Cache source;
     public Cache target;
@@ -24,6 +24,7 @@ public class TaskData {
 
     public GoldStandard goldStandard;
 
+    public TaskData(){};
     public TaskData(GoldStandard goldStandard, AMapping mapping, Cache source, Cache target) {
         this.goldStandard = goldStandard;
         this.mapping = mapping;
@@ -33,6 +34,7 @@ public class TaskData {
 
     public TaskData(GoldStandard goldStandard, Cache source, Cache target) {
         this.goldStandard = goldStandard;
+        this.mapping = goldStandard.goldStandardMappings;
         this.source = source;
         this.target = target;
     }
@@ -57,6 +59,10 @@ public class TaskData {
     public List<String> getTargetURIs() {
         return target.getAllUris();
     }
+    @Override
+    public int compareTo(TaskData other) {
+        return this.dataName.compareTo(other.dataName);
+    }
 
-
+ 
 }
