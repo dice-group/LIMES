@@ -1,5 +1,10 @@
 package org.aksw.limes.core.ml.algorithm;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeSet;
+
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
@@ -18,11 +23,6 @@ import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameters;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
-
 /**
  * Simple implementation of the Wombat algorithm
  * Fast implementation, that is not complete
@@ -34,7 +34,6 @@ public class WombatSimple extends AWombat {
     protected static final String ALGORITHM_NAME = "Wombat Simple";
 
     protected int activeLearningRate = 3;
-    protected int feedbackRate = 3;
 
     protected static Logger logger = Logger.getLogger(WombatSimple.class.getName());
 
@@ -105,73 +104,67 @@ public class WombatSimple extends AWombat {
 
     @Override
     protected AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
-        throw new UnsupportedMLImplementationException(this.getName());
+        List<RefinementNode> bestNodes = getBestKNodes(refinementTreeRoot, activeLearningRate);
+        AMapping intersectionMapping = MappingFactory.createDefaultMapping();
+        AMapping unionMapping = MappingFactory.createDefaultMapping();
+
+        for(RefinementNode sn : bestNodes){
+            intersectionMapping = MappingOperations.intersection(intersectionMapping, sn.getMapping());
+            unionMapping = MappingOperations.union(unionMapping, sn.getMapping());
+        }
+        AMapping posEntropyMapping = MappingOperations.difference(unionMapping, intersectionMapping);
+
+        TreeSet<LinkEntropy> linkEntropy = new TreeSet<>();
+        int entropyPos = 0, entropyNeg = 0;
+        for(String s : posEntropyMapping.getMap().keySet()){
+            for(String t : posEntropyMapping.getMap().get(s).keySet()){
+                // compute Entropy(s,t)
+                for(RefinementNode sn : bestNodes){
+                    if(sn.getMapping().contains(s, t)){
+                        entropyPos++;
+                    }else{
+                        entropyNeg++;
+                    }
+                }
+                int entropy = entropyPos * entropyNeg;
+                linkEntropy.add(new LinkEntropy(s, t, entropy));
+            }
+        }
+        // get highestEntropyLinks
+        List<LinkEntropy> highestEntropyLinks = new ArrayList<>();
+        int i = 0;
+        Iterator<LinkEntropy> itr = linkEntropy.descendingIterator();
+        while(itr.hasNext() && i < size) {
+            highestEntropyLinks.add(itr.next());
+            i++;
+        }
+        AMapping result = MappingFactory.createDefaultMapping();
+        for(LinkEntropy l: highestEntropyLinks){
+            result.add(l.getSourceUri(), l.getTargetUri(), l.getEntropy());
+        }
+        return result;
+    }
+    
+    @Override
+    protected MLModel activeLearn(){
+        return learn(new PseudoFMeasure());
     }
 
     @Override
     protected MLModel activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
-        this.pseudoFMeasure = new PseudoFMeasure();
-        this.isUnsupervised = true;
-        
-        classifiers = findInitialClassifiers();
-        createRefinementTreeRoot();
-        
-        AMapping highestEntropyLinks = getHighestEntropyLinks();
         this.isUnsupervised = false;
-        
-        // Feedback from oracle
-        AMapping feedbackMapping = feedback(highestEntropyLinks, oracleMapping);
-        
-        //update training data
-        trainingData = MappingFactory.createDefaultMapping();
-        trainingData = MappingOperations.union(trainingData, feedbackMapping);
-        
+        trainingData = MappingOperations.union(trainingData, oracleMapping);
         updateScores(refinementTreeRoot);
-        
-        Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, overallPenaltyWeight);
-        logger.info("Most promising node: " + mostPromisingNode.getValue());
-        iterationNr++;
-        while ((mostPromisingNode.getValue().getFMeasure()) < maxFitnessThreshold
-                && refinementTreeRoot.size() <= maxRefineTreeSize
-                && iterationNr <= maxIterationNumber) {
-            iterationNr++;
-            mostPromisingNode = expandNode(mostPromisingNode);
-            mostPromisingNode = getMostPromisingNode(refinementTreeRoot, overallPenaltyWeight);
-            if (mostPromisingNode.getValue().getFMeasure() == -Double.MAX_VALUE) {
-                break; // no better solution can be found
-            }
-            logger.info("Most promising node: " + mostPromisingNode.getValue());
-        }
-        
-        highestEntropyLinks = getHighestEntropyLinks();
-        feedbackMapping = feedback(highestEntropyLinks, oracleMapping);
-        trainingData = MappingOperations.union(trainingData, feedbackMapping);
-        updateScores(refinementTreeRoot);
-        
-        RefinementNode bestSolution = getMostPromisingNode(refinementTreeRoot, 0).getValue();
-        logger.info("Overall Best Solution: " + bestSolution);
-        
-        String bestMetricExpr = bestSolution.getMetricExpression();
+        bestSolutionNode = findBestSolution();
+        String bestMetricExpr = bestSolutionNode.getMetricExpression();
         double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|") + 1, bestMetricExpr.length()));
-        AMapping bestMapping = bestSolution.getMapping();
+        AMapping bestMapping = bestSolutionNode.getMapping();
         LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
-        double bestFMeasure = bestSolution.getFMeasure();
-        MLModel result = new MLModel(bestLS, bestMapping, bestFMeasure, null);
-        return result;
+        double bestFMeasure = bestSolutionNode.getFMeasure();
+        return new MLModel(bestLS, bestMapping, bestFMeasure, null);
     }
 
-    private AMapping feedback(AMapping highestEntropyLinks, AMapping oracleMapping) {
-        AMapping result = MappingFactory.createDefaultMapping();
-        
-        for(String s : highestEntropyLinks.getMap().keySet()){
-            for(String t : highestEntropyLinks.getMap().get(s).keySet()){
-                if(oracleMapping.contains(s, t)){
-                    result.add(s, t, highestEntropyLinks.getMap().get(s).get(t));
-                }
-            }
-        }
-        return result;
-    }
+
 
     /**
      * update precision, recall and F-Measure of the refinement tree r
@@ -195,50 +188,6 @@ public class WombatSimple extends AWombat {
             }
         }
     }
-
-    protected AMapping getHighestEntropyLinks() {
-        List<RefinementNode> bestNodes = getBestKNodes(refinementTreeRoot, activeLearningRate);
-        AMapping intersectionMapping = MappingFactory.createDefaultMapping();
-        AMapping unionMapping = MappingFactory.createDefaultMapping();
-        
-        for(RefinementNode sn : bestNodes){
-            intersectionMapping = MappingOperations.intersection(intersectionMapping, sn.getMapping());
-            unionMapping = MappingOperations.union(unionMapping, sn.getMapping());
-        }
-        AMapping posEntropyMapping = MappingOperations.difference(unionMapping, intersectionMapping);
-        
-        TreeSet<LinkEntropy> linkEntropy = new TreeSet<>();
-        int entropyPos = 0, entropyNeg = 0;
-        for(String s : posEntropyMapping.getMap().keySet()){
-            for(String t : posEntropyMapping.getMap().get(s).keySet()){
-                // compute Entropy(s,t)
-                for(RefinementNode sn : bestNodes){
-                    if(sn.getMapping().contains(s, t)){
-                        entropyPos++;
-                    }else{
-                        entropyNeg++;
-                    }
-                }
-                int entropy = entropyPos * entropyNeg;
-                linkEntropy.add(new LinkEntropy(s, t, entropy));
-            }
-        }
-        // get highestEntropyLinks
-        List<LinkEntropy> highestEntropyLinks = new ArrayList<>();
-        int i = 0;
-        Iterator<LinkEntropy> itr = linkEntropy.descendingIterator();
-        while(itr.hasNext() && i < feedbackRate) {
-            highestEntropyLinks.add(itr.next());
-           i++;
-        }
-        
-        AMapping result = MappingFactory.createDefaultMapping();
-        for(LinkEntropy l: highestEntropyLinks){
-            result.add(l.getSourceUri(), l.getTargetUri(), l.getEntropy());
-        }
-        return result;
-    }
-
 
 
     /**
@@ -372,13 +321,13 @@ public class WombatSimple extends AWombat {
         int i = 0;
         Iterator<RefinementNode> itr = sortedNodes.descendingIterator();
         while(itr.hasNext() && i < k) {
-           resultList.add(itr.next());
-           i++;
+            resultList.add(itr.next());
+            i++;
         }
         return resultList;
     }
 
-    
+
     /**
      * @param r the root of the refinement tree
      * @param penaltyWeight

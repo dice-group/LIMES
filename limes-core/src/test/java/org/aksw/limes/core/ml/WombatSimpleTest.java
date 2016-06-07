@@ -74,7 +74,7 @@ public class WombatSimpleTest {
         wombatSimple.init(null, sc, tc);
         MLModel mlModel = wombatSimple.learn(trainingMap);
         AMapping resultMap = wombatSimple.predict(sc, tc, mlModel);
-        assert (resultMap.equals(refMap));
+        assert (resultMap.equals(refMap));  
     }
 
 
@@ -108,9 +108,25 @@ public class WombatSimpleTest {
         }
         assert (wombatSimpleA.getClass().equals(ActiveMLAlgorithm.class));
         wombatSimpleA.init(null, sc, tc);
-        MLModel mlModel = wombatSimpleA.activeLearn(trainingMap);
+        wombatSimpleA.activeLearn();
+        AMapping nextExamples = wombatSimpleA.getNextExamples(3);
+        AMapping oracleFeedback = oracleFeedback(nextExamples,trainingMap);
+        MLModel mlModel = wombatSimpleA.activeLearn(oracleFeedback);
         AMapping resultMap = wombatSimpleA.predict(sc, tc, mlModel);
         assert (resultMap.equals(refMap));
+    }
+    
+    private AMapping oracleFeedback(AMapping predictionMapping, AMapping referenceMapping) {
+        AMapping result = MappingFactory.createDefaultMapping();
+
+        for(String s : predictionMapping.getMap().keySet()){
+            for(String t : predictionMapping.getMap().get(s).keySet()){
+                if(referenceMapping.contains(s, t)){
+                    result.add(s, t, predictionMapping.getMap().get(s).get(t));
+                }
+            }
+        }
+        return result;
     }
 
 }

@@ -7,6 +7,10 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameters;
 
+/**
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Jun 7, 2016
+ */
 public abstract class ACoreMLAlgorithm {
 
     protected LearningParameters parameters = new LearningParameters();
@@ -107,5 +111,15 @@ public abstract class ACoreMLAlgorithm {
      */
     protected abstract MLModel activeLearn(AMapping oracleMapping)
             throws UnsupportedMLImplementationException;
+    
+    /**
+     * Learning method for supervised active core ML algorithm implementations
+     * Normally, it is used as a first step to train the ML model in unsupervised 
+     * way before going through the active learning process
+     * 
+     * @return
+     * @throws UnsupportedMLImplementationException
+     */
+    protected abstract MLModel activeLearn() throws UnsupportedMLImplementationException;
 
 }

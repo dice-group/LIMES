@@ -25,6 +25,7 @@ import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterFactoryTyp
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
 import org.aksw.limes.core.ml.setting.LearningParameters;
@@ -79,7 +80,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected Map<String, Double> targetPropertiesCoverageMap; //coverage map for latter computations
     
     protected PseudoFMeasure pseudoFMeasure = null;
-    protected AMapping trainingData;
+    protected AMapping trainingData = MappingFactory.createDefaultMapping();
     protected boolean isUnsupervised = false;
     protected Set<String> wombatParameterNames = new HashSet<>();
     protected Tree<RefinementNode> refinementTreeRoot = null;

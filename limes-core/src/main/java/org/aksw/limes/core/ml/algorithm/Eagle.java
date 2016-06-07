@@ -64,4 +64,9 @@ public class Eagle extends ACoreMLAlgorithm {
         
     }
 
+    @Override
+    protected MLModel activeLearn() throws UnsupportedMLImplementationException {
+        throw new UnsupportedMLImplementationException(this.getName());
+    }
+
 }

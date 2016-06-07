@@ -687,4 +687,9 @@ public class WombatComplete extends AWombat {
         return false;
     }
 
+    @Override
+    protected MLModel activeLearn() throws UnsupportedMLImplementationException {
+        throw new UnsupportedMLImplementationException(this.getName());
+    }
+
 }

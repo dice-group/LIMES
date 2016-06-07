@@ -29,6 +29,10 @@ public class ActiveMLAlgorithm extends AMLAlgorithm {
         return getMl().getNextExamples(size);
     }
 
+    public MLModel activeLearn() throws UnsupportedMLImplementationException {
+        return getMl().activeLearn();
+    }
+    
     public MLModel activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
         return getMl().activeLearn(oracleMapping);
     }
