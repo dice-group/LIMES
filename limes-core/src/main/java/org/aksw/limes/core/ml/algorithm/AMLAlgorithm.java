@@ -1,9 +1,11 @@
 package org.aksw.limes.core.ml.algorithm;
 
+import java.util.List;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
-import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 
 public abstract class AMLAlgorithm {
 
@@ -18,7 +20,7 @@ public abstract class AMLAlgorithm {
     }
 
 
-    public void init(LearningParameters lp, Cache source, Cache target) {
+    public void init(List<LearningParameter> lp, Cache source, Cache target) {
         getMl().init(lp, source, target);
     }
 
@@ -38,7 +40,7 @@ public abstract class AMLAlgorithm {
         return (ActiveMLAlgorithm) this;
     }
 
-    public LearningParameters getParameters() {
+    public List<LearningParameter> getParameters() {
         return getMl().getParameters();
     }
 

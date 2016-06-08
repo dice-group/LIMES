@@ -1,18 +1,20 @@
 package org.aksw.limes.core.datastrutures;
 
+import java.util.List;
+
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 
 public class TaskAlgorithm {
     private MLImplementationType mlType;
     private AMLAlgorithm mlAlgorithm;
-    private LearningParameters mlParameter;
+    private List<LearningParameter> mlParameter;
 
     public TaskAlgorithm() {
     }
     
-    public TaskAlgorithm(MLImplementationType mlType,AMLAlgorithm mlAlgorithm,LearningParameters mlParameter) {
+    public TaskAlgorithm(MLImplementationType mlType,AMLAlgorithm mlAlgorithm,List<LearningParameter> mlParameter) {
         this.mlType = mlType;
         this.mlAlgorithm=mlAlgorithm;
         this.mlParameter=mlParameter;
@@ -34,11 +36,11 @@ public class TaskAlgorithm {
         this.mlAlgorithm = mlAlgorithm;
     }
 
-    public LearningParameters getMlParameter() {
+    public List<LearningParameter> getMlParameter() {
         return mlParameter;
     }
 
-    public void setMlParameter(LearningParameters mlParameter) {
+    public void setMlParameter(List<LearningParameter> mlParameter) {
         this.mlParameter = mlParameter;
     }
 }

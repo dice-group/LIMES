@@ -26,9 +26,10 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
-import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -277,7 +278,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     }
     
     @Override
-    protected void init(LearningParameters lp, Cache sourceCache, Cache targetCache) {
+    protected void init(List<LearningParameter> lp, Cache sourceCache, Cache targetCache) {
         super.init(lp, sourceCache, targetCache);
         sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, minPropertyCoverage);
         targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetCache, minPropertyCoverage);
@@ -335,19 +336,19 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     
     @Override
     public void setDefaultParameters() {
-        parameters.put(PARAMETER_MAX_REFINEMENT_TREE_SIZE, String.valueOf(maxRefineTreeSize));
-        parameters.put(PARAMETER_MAX_ITERATIONS_NUMBER, String.valueOf(maxIterationNumber));
-        parameters.put(PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, String.valueOf(maxIterationTimeInMin));
-        parameters.put(PARAMETER_EXECUTION_TIME_IN_MINUTES, String.valueOf(maxExecutionTimeInMin));
-        parameters.put(PARAMETER_MAX_FITNESS_THRESHOLD, String.valueOf(maxFitnessThreshold));
-        parameters.put(PARAMETER_MIN_PROPERTY_COVERAGE, String.valueOf(minPropertyCoverage));
-        parameters.put(PARAMETER_PROPERTY_LEARNING_RATE, String.valueOf(propertyLearningRate));
-        parameters.put(PARAMETER_OVERALL_PENALTY_WEIT, String.valueOf(overallPenaltyWeight));
-        parameters.put(PARAMETER_CHILDREN_PENALTY_WEIT, String.valueOf(childrenPenaltyWeit));
-        parameters.put(PARAMETER_COMPLEXITY_PENALTY_WEIT, String.valueOf(complexityPenaltyWeit));
-        parameters.put(PARAMETER_VERBOSE, String.valueOf(false));
-        parameters.put(PARAMETER_MEASURES, String.valueOf(measures));
-        parameters.put(PARAMETER_SAVE_MAPPING, String.valueOf(saveMapping));
+        parameters.add(new LearningParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize, Integer.class, 10d, Integer.MAX_VALUE, 10d, PARAMETER_MAX_REFINEMENT_TREE_SIZE));
+        parameters.add(new LearningParameter(PARAMETER_MAX_ITERATIONS_NUMBER, maxIterationNumber, Integer.class, 1d, Integer.MAX_VALUE, 10d, PARAMETER_MAX_ITERATIONS_NUMBER));
+        parameters.add(new LearningParameter(PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, maxIterationTimeInMin, Integer.class, 1d, Integer.MAX_VALUE,1, PARAMETER_MAX_ITERATION_TIME_IN_MINUTES));
+        parameters.add(new LearningParameter(PARAMETER_EXECUTION_TIME_IN_MINUTES, maxExecutionTimeInMin, Integer.class, 1d, Integer.MAX_VALUE,1,PARAMETER_EXECUTION_TIME_IN_MINUTES));
+        parameters.add(new LearningParameter(PARAMETER_MAX_FITNESS_THRESHOLD, maxFitnessThreshold, Double.class, 0d, 1d, 0.01d, PARAMETER_MAX_FITNESS_THRESHOLD));
+        parameters.add(new LearningParameter(PARAMETER_MIN_PROPERTY_COVERAGE, minPropertyCoverage, Double.class, 0d, 1d, 0.01d, PARAMETER_MIN_PROPERTY_COVERAGE));
+        parameters.add(new LearningParameter(PARAMETER_PROPERTY_LEARNING_RATE, propertyLearningRate,Double.class, 0d, 1d, 0.01d, PARAMETER_PROPERTY_LEARNING_RATE));
+        parameters.add(new LearningParameter(PARAMETER_OVERALL_PENALTY_WEIT, overallPenaltyWeight, Double.class, 0d, 1d, 0.01d, PARAMETER_OVERALL_PENALTY_WEIT));
+        parameters.add(new LearningParameter(PARAMETER_CHILDREN_PENALTY_WEIT, childrenPenaltyWeit, Double.class, 0d, 1d, 0.01d, PARAMETER_CHILDREN_PENALTY_WEIT));
+        parameters.add(new LearningParameter(PARAMETER_COMPLEXITY_PENALTY_WEIT, complexityPenaltyWeit, Double.class, 0d, 1d, 0.01d, PARAMETER_COMPLEXITY_PENALTY_WEIT));
+        parameters.add(new LearningParameter(PARAMETER_VERBOSE, verbose, Boolean.class, 0, 1, 0, PARAMETER_VERBOSE));
+        parameters.add(new LearningParameter(PARAMETER_MEASURES, measures, MeasureType.class, 0, 0, 0, PARAMETER_MEASURES));
+        parameters.add(new LearningParameter(PARAMETER_SAVE_MAPPING, saveMapping, Boolean.class, 0, 1, 0, PARAMETER_SAVE_MAPPING));
     }
 
     public void setMaxExecutionTimeInMin(int maxExecutionTimeInMin) {

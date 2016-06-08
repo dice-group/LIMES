@@ -1,11 +1,14 @@
 package org.aksw.limes.core.ml.algorithm;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
-import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 
 /**
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
@@ -13,7 +16,7 @@ import org.aksw.limes.core.ml.setting.LearningParameters;
  */
 public abstract class ACoreMLAlgorithm {
 
-    protected LearningParameters parameters = new LearningParameters();
+    protected List<LearningParameter> parameters = new ArrayList<>();
 
     protected Cache sourceCache;
 
@@ -29,7 +32,7 @@ public abstract class ACoreMLAlgorithm {
     /**
      * @return current core ML algorithm parameters and their default values
      */
-    protected LearningParameters getParameters() {
+    protected List<LearningParameter> getParameters() {
         return parameters;
     }
     
@@ -45,9 +48,9 @@ public abstract class ACoreMLAlgorithm {
      * @param sourceCache
      * @param targetCache
      */
-    protected void init(LearningParameters lp, Cache sourceCache, Cache targetCache) {
+    protected void init(List<LearningParameter> lp, Cache sourceCache, Cache targetCache) {
         if (lp != null && !lp.isEmpty()) {
-            this.parameters.putAll(lp);
+            this.parameters.addAll(lp);
         }
         this.sourceCache = sourceCache;
         this.targetCache = targetCache;
@@ -114,8 +117,8 @@ public abstract class ACoreMLAlgorithm {
     
     /**
      * Learning method for supervised active core ML algorithm implementations
-     * Normally, it is used as a first step to train the ML model in unsupervised 
-     * way before going through the active learning process
+     * Normally, it is used as a first step to initialize the ML model 
+     * before going through the active learning process
      * 
      * @return
      * @throws UnsupportedMLImplementationException

@@ -13,7 +13,7 @@ import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.aksw.limes.core.ml.algorithm.wombat.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
-import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -55,7 +55,7 @@ public class WombatComplete extends AWombat {
     }
 
     @Override
-    protected void init(LearningParameters lp, Cache sourceCache, Cache targetCache) {
+    protected void init(List<LearningParameter> lp, Cache sourceCache, Cache targetCache) {
         super.init(lp, sourceCache, targetCache);
         sourceUris = sourceCache.getAllUris();
         targetUris = targetCache.getAllUris();
