@@ -1,22 +1,31 @@
 package org.aksw.limes.core.gui.controller;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+
 import org.aksw.limes.core.gui.controller.ml.ActiveLearningController;
 import org.aksw.limes.core.gui.controller.ml.BatchLearningController;
 import org.aksw.limes.core.gui.controller.ml.UnsupervisedLearningController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Result;
-import org.aksw.limes.core.gui.view.*;
+import org.aksw.limes.core.gui.view.EditClassMatchingView;
+import org.aksw.limes.core.gui.view.EditEndpointsView;
+import org.aksw.limes.core.gui.view.EditPropertyMatchingView;
+import org.aksw.limes.core.gui.view.MainView;
+import org.aksw.limes.core.gui.view.ResultView;
+import org.aksw.limes.core.gui.view.TaskProgressView;
+import org.aksw.limes.core.gui.view.WizardView;
 import org.aksw.limes.core.gui.view.ml.ActiveLearningView;
 import org.aksw.limes.core.gui.view.ml.BatchLearningView;
 import org.aksw.limes.core.gui.view.ml.UnsupervisedLearningView;
-
-import java.io.File;
 
 /**
  * Controller of MainView
@@ -85,9 +94,13 @@ public class MainController {
             setCurrentConfig(Config.loadFromFile(file));
         } catch (Exception e) {
             e.printStackTrace();
+            //to display stack trace in error window
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
             view.showErrorDialog(
                     "Exception while loading config: " + e.getMessage(),
-                    e.getMessage());
+                    sw.toString());
         }
     }
 

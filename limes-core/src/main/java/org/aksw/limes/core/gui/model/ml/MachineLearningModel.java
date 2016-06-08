@@ -21,8 +21,8 @@ public abstract class MachineLearningModel {
     protected Cache sourceCache;
     protected Cache targetCache;
     protected Thread learningThread;
-    private Config config;
-    private AMapping learnedMapping;
+    protected Config config;
+    protected AMapping learnedMapping;
 
     public MachineLearningModel(Config config, Cache sourceCache, Cache targetCache) {
         this.setConfig(config);

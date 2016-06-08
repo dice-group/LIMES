@@ -2,9 +2,8 @@ package org.aksw.limes.core.gui.controller.ml;
 
 import org.aksw.limes.core.gui.model.ml.MachineLearningModel;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
-import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.aksw.limes.core.ml.setting.LearningParameters;
-import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.log4j.Logger;
 
 public abstract class MachineLearningController {
@@ -28,6 +27,21 @@ public abstract class MachineLearningController {
     public void setParameters() {
 	//TODO other cases
 	LearningParameters params = new LearningParameters();
+        params.put(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, String.valueOf(mlView.getMaxRefinementTreeSizeSlider().getValue()));
+        params.put(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, String.valueOf(mlView.getMaxIterationsNumberSlider().getValue()));
+        params.put(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, String.valueOf(mlView.getMaxIterationsNumberSlider().getValue()));
+        params.put(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, String.valueOf(mlView.getExecutionTimeInMinutesSlider().getValue()));
+        params.put(AWombat.PARAMETER_MAX_FITNESS_THRESHOLD, String.valueOf(mlView.getMaxFitnessThresholdSlider().getValue()));
+        params.put(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, String.valueOf(mlView.getMinPropertyCoverageSlider().getValue()));
+        params.put(AWombat.PARAMETER_PROPERTY_LEARNING_RATE, String.valueOf(mlView.getPropertyLearningRateSlider().getValue()));
+        params.put(AWombat.PARAMETER_OVERALL_PENALTY_WEIT, String.valueOf(mlView.getOverallPenaltyWeitSlider()));
+        params.put(AWombat.PARAMETER_CHILDREN_PENALTY_WEIT, String.valueOf(mlView.getChildrenPenaltyWeitSlider().getValue()));
+        params.put(AWombat.PARAMETER_COMPLEXITY_PENALTY_WEIT, String.valueOf(mlView.getComplexityPenaltyWeitSlider().getValue()));
+        params.put(AWombat.PARAMETER_VERBOSE, String.valueOf(mlView.getVerboseCheckBox().isSelected()));
+        params.put(AWombat.PARAMETER_MEASURES, String.valueOf(mlView.getMeasuresSpinner().getValue()));
+        params.put(AWombat.PARAMETER_SAVE_MAPPING, String.valueOf(mlView.getSaveMappingCheckBox().isSelected()));
+        this.mlModel.setLearningParameters(params);
+
 //        LearningSetting params = this.mlModel.getLearningsetting();
 //        params.setInquerySize(this.mlView.getInquiriesSpinner().getValue());
 //        params.setMaxDuration(this.mlView.getMaxDurationSpinner().getValue());

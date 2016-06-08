@@ -29,6 +29,7 @@ import javafx.stage.Stage;
 import org.aksw.limes.core.gui.controller.ml.MachineLearningController;
 import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.aksw.limes.core.ml.setting.LearningParameters;
 import org.aksw.limes.core.ml.setting.LearningSetting.TerminationCriteria;
@@ -36,9 +37,6 @@ import org.apache.log4j.Logger;
 
 public abstract class MachineLearningView {
 
-    public static final String[] mlAlgorithms = {"Eagle", "Euclid", "Lion",
-            "Wombat", "Raven", "Ukulele", "Coala", "Acids", "Mandolin",
-            "Cluster"};
     protected static Logger logger = Logger.getLogger("LIMES");
 
     protected MachineLearningController mlController;
@@ -806,6 +804,7 @@ public abstract class MachineLearningView {
         root.add(verboseLabel, 0, 10);
         root.add(verboseCheckBox, 1, 10);
 
+        //TODO I think this is not correct since it should be possible to select multiple measures
         Label measuresLabel = new Label(AWombat.PARAMETER_MEASURES);
         List<String> measuresList = new ArrayList<String>();
         String[] measureArray = params.get(measuresLabel.getText()).replace("[","").replace("]", "").split(",");
@@ -1006,5 +1005,118 @@ public abstract class MachineLearningView {
     public void setMainView(MainView mainView) {
         this.mainView = mainView;
     }
+
+    public MachineLearningController getMlController() {
+        return mlController;
+    }
+
+    public Slider getMaxRefinementTreeSizeSlider() {
+        return maxRefinementTreeSizeSlider;
+    }
+
+    public Slider getMaxIterationsNumberSlider() {
+        return maxIterationsNumberSlider;
+    }
+
+    public Slider getMaxIterationsTimeInMinutesSlider() {
+        return maxIterationsTimeInMinutesSlider;
+    }
+
+    public Slider getExecutionTimeInMinutesSlider() {
+        return executionTimeInMinutesSlider;
+    }
+
+    public Slider getMaxFitnessThresholdSlider() {
+        return maxFitnessThresholdSlider;
+    }
+
+    public Slider getMinPropertyCoverageSlider() {
+        return minPropertyCoverageSlider;
+    }
+
+    public Slider getPropertyLearningRateSlider() {
+        return propertyLearningRateSlider;
+    }
+
+    public Slider getOverallPenaltyWeitSlider() {
+        return overallPenaltyWeitSlider;
+    }
+
+    public Slider getChildrenPenaltyWeitSlider() {
+        return childrenPenaltyWeitSlider;
+    }
+
+    public Slider getComplexityPenaltyWeitSlider() {
+        return complexityPenaltyWeitSlider;
+    }
+
+    public CheckBox getVerboseCheckBox() {
+        return verboseCheckBox;
+    }
+
+    public CheckBox getSaveMappingCheckBox() {
+        return saveMappingCheckBox;
+    }
+
+    public Spinner<String> getMeasuresSpinner() {
+        return measuresSpinner;
+    }
+
+    public void setMlController(MachineLearningController mlController) {
+        this.mlController = mlController;
+    }
+
+    public void setMaxRefinementTreeSizeSlider(Slider maxRefinementTreeSizeSlider) {
+        this.maxRefinementTreeSizeSlider = maxRefinementTreeSizeSlider;
+    }
+
+    public void setMaxIterationsNumberSlider(Slider maxIterationsNumberSlider) {
+        this.maxIterationsNumberSlider = maxIterationsNumberSlider;
+    }
+
+    public void setMaxIterationsTimeInMinutesSlider(Slider maxIterationsTimeInMinutesSlider) {
+        this.maxIterationsTimeInMinutesSlider = maxIterationsTimeInMinutesSlider;
+    }
+
+    public void setExecutionTimeInMinutesSlider(Slider executionTimeInMinutesSlider) {
+        this.executionTimeInMinutesSlider = executionTimeInMinutesSlider;
+    }
+
+    public void setMaxFitnessThresholdSlider(Slider maxFitnessThresholdSlider) {
+        this.maxFitnessThresholdSlider = maxFitnessThresholdSlider;
+    }
+
+    public void setMinPropertyCoverageSlider(Slider minPropertyCoverageSlider) {
+        this.minPropertyCoverageSlider = minPropertyCoverageSlider;
+    }
+
+    public void setPropertyLearningRateSlider(Slider propertyLearningRateSlider) {
+        this.propertyLearningRateSlider = propertyLearningRateSlider;
+    }
+
+    public void setOverallPenaltyWeitSlider(Slider overallPenaltyWeitSlider) {
+        this.overallPenaltyWeitSlider = overallPenaltyWeitSlider;
+    }
+
+    public void setChildrenPenaltyWeitSlider(Slider childrenPenaltyWeitSlider) {
+        this.childrenPenaltyWeitSlider = childrenPenaltyWeitSlider;
+    }
+
+    public void setComplexityPenaltyWeitSlider(Slider complexityPenaltyWeitSlider) {
+        this.complexityPenaltyWeitSlider = complexityPenaltyWeitSlider;
+    }
+
+    public void setVerboseCheckBox(CheckBox verboseCheckBox) {
+        this.verboseCheckBox = verboseCheckBox;
+    }
+
+    public void setSaveMappingCheckBox(CheckBox saveMappingCheckBox) {
+        this.saveMappingCheckBox = saveMappingCheckBox;
+    }
+
+    public void setMeasuresSpinner(Spinner<String> measuresSpinner) {
+        this.measuresSpinner = measuresSpinner;
+    }
+    
 
 }
