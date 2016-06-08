@@ -1,9 +1,11 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorFactory;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +18,8 @@ import java.util.Set;
  * @version 1.0
  */
 public class QualitativeMeasuresEvaluator {
+    static Logger logger = Logger.getLogger(QualitativeMeasuresEvaluator.class);
+
 
     Map<EvaluatorType, Double> evaluations = new HashMap<EvaluatorType, Double>();
 

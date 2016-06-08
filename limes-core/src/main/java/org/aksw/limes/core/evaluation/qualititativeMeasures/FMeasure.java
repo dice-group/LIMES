@@ -1,7 +1,9 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.apache.log4j.Logger;
 
 /**
  * F-Measure is the wieghted average of the precision and recall
@@ -10,6 +12,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
  * @version 1.0
  */
 public class FMeasure extends APRF implements IQualitativeMeasure {
+    static Logger logger = Logger.getLogger(FMeasure.class);
 
     @Override
     public double calculate(AMapping predictions, GoldStandard goldStandard) {

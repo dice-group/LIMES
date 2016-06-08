@@ -40,6 +40,7 @@ import static org.junit.Assert.fail;
 /**
  * @author mofeed
  */
+@Deprecated
 public class EvaluatorTest {
     private static final String PARAMETER_MAX_REFINEMENT_TREE_SIZE = "max refinement tree size";
     private static final String PARAMETER_MAX_ITERATIONS_NUMBER = "max iterations number";
@@ -61,7 +62,7 @@ public class EvaluatorTest {
 /////////////////////////////////////////////////////////////////////////////////////////    
     final public String[] datasetsList = {"PERSON1"/*, "PERSON1_CSV", "PERSON2", "PERSON2_CSV", "RESTAURANTS", "OAEI2014BOOKS"*/};
  //   final public String[] algorithmsList = {"SUPERVISED_ACTIVE:EAGLE", "SUPERVISED_BATCH:EAGLE", "UNSUPERVISED:EAGLE"};
-    final public String[] algorithmsList = {"UNSUPERVISED:WOMBATSIMPLE","SUPERVISED_BATCH:WOMBATSIMPLE"};
+    final public String[] algorithmsList = {"UNSUPERVISED:WOMBATSIMPLE"/*,"SUPERVISED_BATCH:WOMBATSIMPLE"*/};
 /////////////////////////////////////////////////////////////////////////////////////////////////
     public Evaluator evaluator = new Evaluator();
     public List<TaskAlgorithm> mlAlgorithms = new ArrayList<TaskAlgorithm>();
@@ -71,9 +72,9 @@ public class EvaluatorTest {
     @Test
     public void test() {
         if(!crossValidate)
-            testCrossValidate();
-        else
             testEvaluator();
+        else
+            testCrossValidate();
     }
 
     /**
@@ -94,6 +95,7 @@ public class EvaluatorTest {
             initializeEvaluators();
             initializeMLAlgorithms();
            Table<String, String, Map<EvaluatorType, Double>> results = evaluator.evaluate(mlAlgorithms, tasks, evaluators, null);
+           System.in.read();
            
         } catch (Exception e) {
             System.out.println(e.getMessage());

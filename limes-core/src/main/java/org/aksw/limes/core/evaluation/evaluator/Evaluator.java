@@ -7,6 +7,7 @@ import com.google.common.collect.Table;
 import org.aksw.limes.core.datastrutures.TaskAlgorithm;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.TaskData;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.IQuantitativeMeasure;
@@ -27,6 +28,7 @@ import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.oldalgorithm.MLAlgorithm;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.apache.log4j.Logger;
 
 import static org.junit.Assert.fail;
 
@@ -43,6 +45,8 @@ import java.util.Set;
  * @version 1.0
  */
 public class Evaluator {
+    static Logger logger = Logger.getLogger(Evaluator.class);
+
 
     private QualitativeMeasuresEvaluator eval = new QualitativeMeasuresEvaluator();
     

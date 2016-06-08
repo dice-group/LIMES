@@ -1,7 +1,9 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.apache.log4j.Logger;
 
 /**
  * This method calculates the accuracy of the mapping. It is defined as the proportion of true results (positive or negative) to the total number
@@ -13,6 +15,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
  * @version 1.0
  */
 public class Accuracy extends APRF implements IQualitativeMeasure {
+    static Logger logger = Logger.getLogger(Accuracy.class);
 
     @Override
     public double calculate(AMapping predictions, GoldStandard goldStandard) {
