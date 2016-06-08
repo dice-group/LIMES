@@ -1,6 +1,8 @@
 package org.aksw.limes.core.evaluation.evaluator;
 
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.*;
+import org.apache.log4j.Logger;
 
 /**
  * This Factory class give a measure object based on the specified measure type.
@@ -10,6 +12,8 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.*;
  * @version 1.0
  */
 public class EvaluatorFactory {
+    static Logger logger = Logger.getLogger(EvaluatorFactory.class);
+
 
     public static IQualitativeMeasure create(EvaluatorType measure) {
         if (measure == EvaluatorType.PRECISION)

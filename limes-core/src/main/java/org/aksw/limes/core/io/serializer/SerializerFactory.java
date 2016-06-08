@@ -16,7 +16,7 @@ public class SerializerFactory {
         if (name.toLowerCase().trim().startsWith("tab")) return new TabSeparatedSerializer();
         if (name.toLowerCase().trim().startsWith("csv")) return new CSVSerializer();
         if (name.toLowerCase().trim().startsWith("ttl") || name.toLowerCase().trim().startsWith("turtle"))
-            return new TtlSerializer();
+            return new TTLSerializer();
         if (name.toLowerCase().trim().startsWith("nt") || name.toLowerCase().trim().startsWith("turtle"))
             return new NtSerializer();
         else {

@@ -1,5 +1,6 @@
 package org.aksw.limes.core.evaluation.oracle;
 
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.apache.log4j.Logger;
 
@@ -11,7 +12,7 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public class SimpleOracle implements IOracle {
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger(SimpleOracle.class);
     AMapping mapping;
 
     public SimpleOracle() {

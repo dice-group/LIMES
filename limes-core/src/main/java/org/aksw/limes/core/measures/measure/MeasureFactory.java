@@ -64,7 +64,7 @@ public class MeasureFactory {
     public static final String COSINE = "cosine";
     public static final String LEVENSHTEIN = "levenshtein";
     public static final String OVERLAP = "overlap";
-    public static final String TRIGRAM = "trigram";
+    public static final String TRIGRAMS = "trigram";
     public static final String JACCARD = "jaccard";
     public static final String EXACTMATCH = "exactmatch";
     public static final String SOUNDEX = "soundex";
@@ -79,7 +79,7 @@ public class MeasureFactory {
     public static final String GEO_FAST_HAUSDORFF = "geo_fasthausdorff";
     public static final String GEO_SYMMETRIC_HAUSDORFF = "geo_symmetrichausdorff";
     public static final String GEO_CENTROID_INDEXED_HAUSDORFF = "geo_centroidindexedhausdorff";
-    public static final String GEO_SCAN_INDEXED_HAUSDORFF = "geo_scanhausdorff";
+    public static final String GEO_SCAN_INDEXED_HAUSDORFF = "geo_scanindexedhausdorff";
 
     public static final String GEO_MAX = "geo_max";
     public static final String GEO_MEAN = "geo_mean";
@@ -116,7 +116,7 @@ public class MeasureFactory {
      * @param name,
      *            The name/type of the measure.
      * @return a specific measure type
-     * @throws InvalidMeasureException 
+     * @throws InvalidMeasureException
      */
     public static MeasureType getMeasureType(String expression) throws InvalidMeasureException {
         String measure = expression.toLowerCase();
@@ -136,8 +136,8 @@ public class MeasureFactory {
         if (measure.startsWith(OVERLAP)) {
             return MeasureType.OVERLAP;
         }
-        if (measure.startsWith(TRIGRAM)) {
-            return MeasureType.TRIGRAM;
+        if (measure.startsWith(TRIGRAMS)) {
+            return MeasureType.TRIGRAMS;
         }
         if (measure.startsWith(JACCARD)) {
             return MeasureType.JACCARD;
@@ -224,12 +224,13 @@ public class MeasureFactory {
         if (measure.startsWith(TMP_BEFORE)) {
             return MeasureType.TMP_BEFORE;
         }
-        if (measure.startsWith(TMP_DURING)) {
-            return MeasureType.TMP_DURING;
-        }
         if (measure.startsWith(TMP_DURING_REVERSE)) {
             return MeasureType.TMP_DURING_REVERSE;
         }
+        if (measure.startsWith(TMP_DURING)) {
+            return MeasureType.TMP_DURING;
+        }
+
         if (measure.startsWith(TMP_EQUALS)) {
             return MeasureType.TMP_EQUALS;
         }
@@ -256,8 +257,7 @@ public class MeasureFactory {
         }
         if (measure.startsWith(TMP_STARTS)) {
             return MeasureType.TMP_STARTS;
-        }
-        else
+        } else
             throw new InvalidMeasureException(measure);
     }
 
@@ -268,11 +268,11 @@ public class MeasureFactory {
      *            Type of the measure
      * 
      * @return a specific measure instance
-     * @throws InvalidMeasureException 
+     * @throws InvalidMeasureException
      * 
      */
     public static Measure createMeasure(MeasureType type) throws InvalidMeasureException {
-        
+
         switch (type) {
         case JARO:
             return new Jaro();
@@ -284,7 +284,7 @@ public class MeasureFactory {
             return new Levenshtein();
         case OVERLAP:
             return new OverlapMeasure();
-        case TRIGRAM:
+        case TRIGRAMS:
             return new TrigramMeasure();
         case JACCARD:
             return new JaccardMeasure();
@@ -312,9 +312,9 @@ public class MeasureFactory {
             return new CentroidIndexedHausdorff();
         case GEO_SCAN_INDEXED_HAUSDORFF:
             return new ScanIndexedHausdorff();
-            ///////////////////////
+        ///////////////////////
         case GEO_MAX:
-           return new NaiveMax();
+            return new NaiveMax();
         case GEO_MEAN:
             return new NaiveMean();
         case GEO_MIN:
@@ -322,7 +322,7 @@ public class MeasureFactory {
         case GEO_AVG:
             return new NaiveAverage();
         case GEO_FRECHET:
-            return new NaiveFrechet();    
+            return new NaiveFrechet();
         case GEO_LINK:
             return new NaiveLink();
         case GEO_SUM_OF_MIN:
@@ -331,7 +331,7 @@ public class MeasureFactory {
             return new NaiveSurjection();
         case GEO_FAIR_SURJECTION:
             return new FairSurjection();
-            ///////////////////////
+        ///////////////////////
         case TMP_SUCCESSOR:
             return new SuccessorMeasure();
         case TMP_PREDECESSOR:
@@ -345,30 +345,29 @@ public class MeasureFactory {
         case TMP_MEETS:
             return new MeetsMeasure();
         case TMP_IS_MET_BY:
-            return new IsMetByMeasure();  
+            return new IsMetByMeasure();
         case TMP_FINISHES:
-            return new FinishesMeasure();  
+            return new FinishesMeasure();
         case TMP_IS_FINISHED_BY:
-            return new IsFinishedByMeasure(); 
+            return new IsFinishedByMeasure();
         case TMP_STARTS:
-            return new StartsMeasure(); 
+            return new StartsMeasure();
         case TMP_IS_STARTED_BY:
-            return new IsStartedByMeasure();    
+            return new IsStartedByMeasure();
         case TMP_DURING:
-            return new DuringMeasure(); 
+            return new DuringMeasure();
         case TMP_DURING_REVERSE:
-            return new DuringReverseMeasure();   
+            return new DuringReverseMeasure();
         case TMP_OVERLAPS:
-            return new OverlapsMeasure(); 
+            return new OverlapsMeasure();
         case TMP_IS_OVERLAPPED_BY:
-            return new IsOverlappedByMeasure();  
+            return new IsOverlappedByMeasure();
         case TMP_EQUALS:
-            return new EqualsMeasure();  
+            return new EqualsMeasure();
         default:
             throw new InvalidMeasureException(type.toString());
         }
-        
+
     }
 
-    
 }

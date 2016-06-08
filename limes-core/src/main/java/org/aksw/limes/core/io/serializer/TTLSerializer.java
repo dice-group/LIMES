@@ -21,10 +21,10 @@ import java.util.TreeSet;
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Nov 25, 2015
  */
-public class TtlSerializer implements ISerializer {
+public class TTLSerializer implements ISerializer {
 
     PrintWriter writer;
-    Logger logger = Logger.getLogger(TtlSerializer.class.getName());
+    Logger logger = Logger.getLogger(TTLSerializer.class.getName());
     TreeSet<String> statements; //List of statements to be printed
     Map<String, String> prefixList;
     File folder = new File("");
@@ -32,7 +32,7 @@ public class TtlSerializer implements ISerializer {
     /**
      * Constructor
      */
-    public TtlSerializer() {
+    public TTLSerializer() {
         statements = new TreeSet<String>();
         prefixList = new HashMap<String, String>();
     }

@@ -7,6 +7,8 @@ import com.google.common.collect.Table;
 import org.aksw.limes.core.datastrutures.TaskAlgorithm;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.TaskData;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.IQuantitativeMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
@@ -26,6 +28,7 @@ import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.oldalgorithm.MLAlgorithm;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.apache.log4j.Logger;
 
 import static org.junit.Assert.fail;
 
@@ -42,6 +45,8 @@ import java.util.Set;
  * @version 1.0
  */
 public class Evaluator {
+    static Logger logger = Logger.getLogger(Evaluator.class);
+
 
     private QualitativeMeasuresEvaluator eval = new QualitativeMeasuresEvaluator();
     
@@ -121,7 +126,7 @@ public class Evaluator {
      * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
      * @version 2016-02-26
      */
-    public Table<String, String, Map<EvaluatorType, Double>> crossValidate(MLAlgorithm algorithm, Set<TaskData> datasets,
+    public Table<String, String, Map<EvaluatorType, Double>> crossValidate(AMLAlgorithm algorithm, Set<TaskData> datasets,
             int folds, Set<EvaluatorType> qlMeasures, Set<IQuantitativeMeasure> qnMeasures) {
 
         Table<String, String, Map<EvaluatorType, Double>> evalTable = HashBasedTable.create();// multimap stores aglortihmName:datasetname:List of evaluations
@@ -192,13 +197,25 @@ public class Evaluator {
 
             // train and test folds
             for (int i = 0; i < folds; i++) {
-
-                algorithm.setSourceCache(srcFolds[i]);
+                
+               // algorithm .setSourceCache(srcFolds[i]); 
+                algorithm.init(null, srcFolds[i], null);
                 // target cache is invariant
+                MLModel model =null;
+                //algorithm.learn(srcMap[i]);
+                
+                    try {
+                        if(algorithm instanceof SupervisedMLAlgorithm)
+                            model = algorithm.asSupervised().learn(srcMap[i]);
+                        else if(algorithm instanceof ActiveMLAlgorithm)
+                            model = algorithm.asActive().activeLearn(srcMap[i]);
+                    } catch (UnsupportedMLImplementationException e) {
+                        e.printStackTrace();
+                    }
 
-                algorithm.learn(srcMap[i]);
+                
                 goldStandard.goldStandardMappings = srcGold[i];
-                evalTable.put(algorithm.getName() + " - fold " + i, dataset.dataName, eval.evaluate(algorithm.computePredictions(), goldStandard, qlMeasures));
+                evalTable.put(algorithm.getName() + " - fold " + i, dataset.dataName, eval.evaluate(algorithm.predict(srcFolds[i], srcFolds[i], model), goldStandard, qlMeasures));
             }
         }
 

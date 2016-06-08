@@ -1,7 +1,7 @@
 package org.aksw.limes.core.io.query;
 
-import com.hp.hpl.jena.query.*;
-import com.hp.hpl.jena.rdf.model.Model;
+import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Model;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;

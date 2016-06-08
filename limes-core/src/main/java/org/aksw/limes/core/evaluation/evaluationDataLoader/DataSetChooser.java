@@ -40,6 +40,9 @@ public class DataSetChooser {
         String d = dataSetName.replaceAll("-", "").toUpperCase();
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         switch (d) {
+        case "PERSONNew":
+            param = getPersonNew();
+            break;
         case "PERSON1":
             param = getPerson1();
             break;
@@ -209,6 +212,47 @@ public class DataSetChooser {
             data.setName("Restaurants_fixed");
         }
         return data;
+    }
+    
+    private static HashMap<MapKey, Object> getPersonNew() {
+        // This code needs to be reviewed by Klaus to check where are the missed
+        // classes
+        HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+        // folders & files
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Persons1/");
+        param.put(MapKey.CONFIG_FILE, "personsNew.xml");
+        param.put(MapKey.REFERENCE_FILE, "dataset11_dataset12_goldstandard_person.xml");
+        param.put(MapKey.SOURCE_FILE, "person11.nt");
+        param.put(MapKey.TARGET_FILE, "person12.nt");
+       // param.put(MapKey.TRAINING, "dataset11_dataset12_training_person.xml");
+
+        String type = "-Person";
+        param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
+        param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Persons1.csv");
+        param.put(MapKey.NAME, "Persons1");
+        // data
+        AConfigurationReader cR = new XMLConfigurationReader(
+                "" + param.get(MapKey.BASE_FOLDER) + param.get(MapKey.CONFIG_FILE));
+        cR.read();
+        param.put(MapKey.CONFIG_READER, cR);
+
+        param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
+                (String) param.get(MapKey.CONFIG_FILE)));
+        param.put(MapKey.SOURCE_CACHE, Experiement.readOAEIFile(
+                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
+        param.put(MapKey.SOURCE_CACHE, Experiement.readOAEIFile(
+                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
+
+        param.put(MapKey.TARGET_CACHE, Experiement.readOAEIFile(
+                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.TARGET_FILE), type));
+        param.put(MapKey.REFERENCE_MAPPING, Experiement.readOAEIMapping(
+                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.REFERENCE_FILE)));
+
+        param.put(MapKey.SOURCE_CLASS, "http://www.okkam.org/ontology_person1.owl#Person");
+        param.put(MapKey.TARGET_CLASS, "okkamperson2:Person");
+
+        return param;
     }
 
     private static HashMap<MapKey, Object> getPerson1() {
@@ -781,6 +825,11 @@ public class DataSetChooser {
          **/
         TARGET_FILE("file1"),
         /**
+         * Name of the file holding training data. 
+         * Complete Path via concatenation with the BASE_FOLDER and DATASET_FOLDER.
+         **/
+        TRAINING("training"),
+        /**
          * Path to the folder where the result files should be written.
          **/
         EVALUATION_RESULTS_FOLDER("evalfolder"),
@@ -824,6 +873,8 @@ public class DataSetChooser {
          * Name of target class
          */
         TARGET_CLASS("targetclass");
+        
+
 
         private final String key;
 

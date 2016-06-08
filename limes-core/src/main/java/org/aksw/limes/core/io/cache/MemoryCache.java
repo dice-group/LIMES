@@ -1,7 +1,7 @@
 package org.aksw.limes.core.io.cache;
 
-import com.hp.hpl.jena.rdf.model.*;
-import com.hp.hpl.jena.vocabulary.RDF;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.vocabulary.RDF;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
 
 import java.util.*;

@@ -60,5 +60,10 @@ public class ACIDS extends ACoreMLAlgorithm {
         
     }
 
+    @Override
+    protected MLModel activeLearn() throws UnsupportedMLImplementationException {
+        throw new UnsupportedMLImplementationException(this.getName());
+    }
+
 
 }

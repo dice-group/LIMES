@@ -1,6 +1,5 @@
 package org.aksw.limes.core.datastrutures;
 
-import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.setting.LearningParameters;

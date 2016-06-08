@@ -82,12 +82,6 @@ public class ExtendedLinkSpecification extends LinkSpecification {
                         + rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
             } else if (p.getOperator().equalsIgnoreCase(XOR)) {
                 setOperator(LogicOperator.MINUS);
-                /*leftSpec.readSpec("OR(" + p.getLeftTerm() + "|" + p.getThreshold1() + "," + p.getRightTerm() + "|"
-                        + p.getThreshold2() + ")", 0.0);
-                rightSpec.readSpec("AND(" + p.getLeftTerm() + "|" + p.getThreshold1() + "," + p.getRightTerm() + "|"
-                        + p.getThreshold2() + ")", 0.0);
-                fullExpression = "MINUS(" + leftSpec.fullExpression + "|" + 0.0 + ","
-                        + rightSpec.fullExpression + "|" + 0.0 + ")";*/
                 leftSpec.readSpec("OR(" + p.getLeftTerm() + "|" + p.getThreshold1() + "," + p.getRightTerm() + "|"
                         + p.getThreshold2() + ")", theta);
                 rightSpec.readSpec("AND(" + p.getLeftTerm() + "|" + p.getThreshold1() + "," + p.getRightTerm() + "|"

@@ -3,9 +3,9 @@
  */
 package org.aksw.limes.core.io.config.reader.rdf;
 
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
 
 /**
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>

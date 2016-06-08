@@ -1,7 +1,9 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.apache.log4j.Logger;
 
 /**
  * It can be defined as the ratio of the retrieved correct results relative to the total number of the retrieved results,i.e. Tp/(Tp+Fp).
@@ -11,6 +13,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
  * @version 1.0
  */
 public class Precision extends APRF implements IQualitativeMeasure {
+    static Logger logger = Logger.getLogger(Precision.class);
 
     @Override
     public double calculate(AMapping predictions, GoldStandard goldStandard) {

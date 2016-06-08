@@ -1,7 +1,9 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.apache.log4j.Logger;
 
 /**
  * It measures how far the algorithm retrieved correct results out of the all existed correct results.
@@ -12,6 +14,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
  * @version 1.0
  */
 public class Recall extends APRF implements IQualitativeMeasure {
+    static Logger logger = Logger.getLogger(Recall.class);
 
     @Override
     public double calculate(AMapping predictions, GoldStandard goldStandard) {

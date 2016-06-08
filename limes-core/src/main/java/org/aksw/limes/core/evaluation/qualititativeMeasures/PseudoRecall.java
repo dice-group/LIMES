@@ -1,7 +1,9 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.apache.log4j.Logger;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +20,8 @@ import java.util.Set;
  * @version 1.0
  */
 public class PseudoRecall extends APseudoPRF {
+    static Logger logger = Logger.getLogger(PseudoRecall.class);
+
     public PseudoRecall() {
     }
 
