@@ -39,7 +39,7 @@ public abstract class ACoreMLAlgorithm {
     /**
      * Set default ACoreMLAlgorithm parameters values
      */
-    protected abstract void setDefaultParameters();
+    public abstract void setDefaultParameters();
 
     /**
      * Initialize the core ML algorithm.
