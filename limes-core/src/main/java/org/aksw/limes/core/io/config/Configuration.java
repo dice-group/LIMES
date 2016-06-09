@@ -2,7 +2,7 @@ package org.aksw.limes.core.io.config;
 
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 
 import java.util.*;
 
@@ -40,7 +40,7 @@ public class Configuration implements IConfiguration {
     protected int granularity = 2;
 
     protected String mlAlgorithmName = new String();
-    protected LearningParameters mlAlgorithmParameters = new LearningParameters();
+    protected List<LearningParameter> mlAlgorithmParameters = new ArrayList<>();
     protected MLImplementationType mlImplementationType = MLImplementationType.UNSUPERVISED;
     private String mlTrainingDataFile = null;
     private EvaluatorType mlPseudoFMeasure = null;
@@ -52,7 +52,7 @@ public class Configuration implements IConfiguration {
             String verificationRelation, double acceptanceThreshold, String acceptanceFile,
             double verificationThreshold, String verificationFile, Map<String, String> prefixes, String outputFormat,
             String executionRewriter, String executionPlanner, String executionEngine, int granularity,
-            String mlAlgorithmName, LearningParameters mlParameters, MLImplementationType mlImplementationType,
+            String mlAlgorithmName, List<LearningParameter> mlParameters, MLImplementationType mlImplementationType,
             String mlTrainingDataFile, EvaluatorType mlPseudoFMeasure) {
         super();
         this.sourceInfo = sourceInfo;
@@ -78,7 +78,10 @@ public class Configuration implements IConfiguration {
     }
 
     public void addMlAlgorithmParameter(String mlParameterName, String mlParameterValue) {
-        this.mlAlgorithmParameters.put(mlParameterName, mlParameterValue);
+        LearningParameter lp = new LearningParameter();
+        lp.setName(mlParameterName);
+        lp.setValue(mlParameterValue);
+        this.mlAlgorithmParameters.add(lp);
     }
 
     public void addPrefixes(String label, String namespace) {
@@ -121,7 +124,7 @@ public class Configuration implements IConfiguration {
         return mlImplementationType;
     }
 
-    public LearningParameters getMlAlgorithmParameters() {
+    public List<LearningParameter> getMlAlgorithmParameters() {
         return mlAlgorithmParameters;
     }
 
@@ -397,7 +400,7 @@ public class Configuration implements IConfiguration {
         this.prefixes = prefixes;
     }
 
-    public void setMlAlgorithmParameters(LearningParameters mlParameters) {
+    public void setMlAlgorithmParameters(List<LearningParameter> mlParameters) {
         this.mlAlgorithmParameters = mlParameters;
     }
 

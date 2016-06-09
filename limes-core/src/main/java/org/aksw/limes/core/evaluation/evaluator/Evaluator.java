@@ -27,7 +27,7 @@ import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.oldalgorithm.MLAlgorithm;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
-import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.apache.log4j.Logger;
 
 import static org.junit.Assert.fail;

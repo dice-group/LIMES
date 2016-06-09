@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.aksw.limes.core.evaluation.evaluator.Evaluator;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.junit.Test;
 

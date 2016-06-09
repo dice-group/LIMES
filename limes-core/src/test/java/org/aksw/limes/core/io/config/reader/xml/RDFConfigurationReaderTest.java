@@ -3,7 +3,7 @@ package org.aksw.limes.core.io.config.reader.xml;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
-import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -68,8 +68,11 @@ public class RDFConfigurationReaderTest {
     @Test
     public void testRDFReaderForMLAgorithm() {
         
-        LearningParameters mlParameters = new LearningParameters();
-        mlParameters.put("max execution time in minutes", "60");
+        List<LearningParameter> mlParameters = new ArrayList<>();
+        LearningParameter lp = new LearningParameter();
+        lp.setName("max execution time in minutes");
+        lp.setValue(60);
+        mlParameters.add(lp);
 
         Configuration testConf = new Configuration();
         testConf.setSourceInfo(sourceInfo);

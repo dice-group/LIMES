@@ -3,27 +3,7 @@
  */
 package org.aksw.limes.core.evaluation;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Table;
-
-import org.aksw.limes.core.datastrutures.GoldStandard;
-import org.aksw.limes.core.datastrutures.TaskAlgorithm;
-import org.aksw.limes.core.datastrutures.TaskData;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
-import org.aksw.limes.core.evaluation.evaluator.Evaluator;
-import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
-import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.Eagle;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
-import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.algorithm.WombatSimple;
-import org.aksw.limes.core.ml.setting.LearningParameters;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,8 +13,24 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.datastrutures.TaskAlgorithm;
+import org.aksw.limes.core.datastrutures.TaskData;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
+import org.aksw.limes.core.evaluation.evaluator.Evaluator;
+import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
+import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
+import org.aksw.limes.core.measures.measure.MeasureType;
+import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.Eagle;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.aksw.limes.core.ml.algorithm.WombatSimple;
+import org.aksw.limes.core.ml.setting.LearningParameter;
+import org.junit.Test;
+
+import com.google.common.collect.Table;
 
 
 /**
@@ -138,8 +134,8 @@ public class EvaluatorTest {
         assertTrue(true);
     }
     
-    private LearningParameters initializeLearningParameters(MLImplementationType mlType, String className) {
-        LearningParameters lParameters = null;
+    private List<LearningParameter> initializeLearningParameters(MLImplementationType mlType, String className) {
+        List<LearningParameter> lParameters = null;
         if(mlType.equals(MLImplementationType.UNSUPERVISED))
             {
                 if(className.equals("WOMBATSIMPLE"))
@@ -162,24 +158,25 @@ public class EvaluatorTest {
 
     }
     
-    private LearningParameters initializeWombatSimple()
+    private List<LearningParameter> initializeWombatSimple()
     {
-        LearningParameters wombaParameters = new LearningParameters();
+        List<LearningParameter> wombaParameters = new ArrayList<>();
         
-        wombaParameters.put(PARAMETER_MAX_REFINEMENT_TREE_SIZE,String.valueOf(2000));
-        wombaParameters.put(PARAMETER_MAX_ITERATIONS_NUMBER, String.valueOf(3));
-        wombaParameters.put(PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, String.valueOf(20));
-        wombaParameters.put(PARAMETER_EXECUTION_TIME_IN_MINUTES, String.valueOf(600));
-        wombaParameters.put(PARAMETER_MAX_FITNESS_THRESHOLD, String.valueOf(1));
-        wombaParameters.put(PARAMETER_MIN_PROPERTY_COVERAGE, String.valueOf(0.4));
-        wombaParameters.put(PARAMETER_PROPERTY_LEARNING_RATE, String.valueOf(0.9));
-        wombaParameters.put(PARAMETER_OVERALL_PENALTY_WEIT, String.valueOf(0.5d));
-        wombaParameters.put(PARAMETER_CHILDREN_PENALTY_WEIT, String.valueOf(1));
-        wombaParameters.put(PARAMETER_COMPLEXITY_PENALTY_WEIT, String.valueOf(1));
-        wombaParameters.put(PARAMETER_VERBOSE, String.valueOf(false));
-        wombaParameters.put(PARAMETER_MEASURES, String.valueOf(new HashSet<String>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams"))));
-        wombaParameters.put(PARAMETER_SAVE_MAPPING, String.valueOf(true));
-        return wombaParameters;
+        wombaParameters.add(new LearningParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE, 2000, Integer.class, 10d, Integer.MAX_VALUE, 10d, PARAMETER_MAX_REFINEMENT_TREE_SIZE));
+        wombaParameters.add(new LearningParameter(PARAMETER_MAX_ITERATIONS_NUMBER, 3, Integer.class, 1d, Integer.MAX_VALUE, 10d, PARAMETER_MAX_ITERATIONS_NUMBER));
+        wombaParameters.add(new LearningParameter(PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, 20, Integer.class, 1d, Integer.MAX_VALUE,1, PARAMETER_MAX_ITERATION_TIME_IN_MINUTES));
+        wombaParameters.add(new LearningParameter(PARAMETER_EXECUTION_TIME_IN_MINUTES, 600, Integer.class, 1d, Integer.MAX_VALUE,1,PARAMETER_EXECUTION_TIME_IN_MINUTES));
+        wombaParameters.add(new LearningParameter(PARAMETER_MAX_FITNESS_THRESHOLD, 1, Double.class, 0d, 1d, 0.01d, PARAMETER_MAX_FITNESS_THRESHOLD));
+        wombaParameters.add(new LearningParameter(PARAMETER_MIN_PROPERTY_COVERAGE, 0.4, Double.class, 0d, 1d, 0.01d, PARAMETER_MIN_PROPERTY_COVERAGE));
+        wombaParameters.add(new LearningParameter(PARAMETER_PROPERTY_LEARNING_RATE, 0.9,Double.class, 0d, 1d, 0.01d, PARAMETER_PROPERTY_LEARNING_RATE));
+        wombaParameters.add(new LearningParameter(PARAMETER_OVERALL_PENALTY_WEIT, 0.5, Double.class, 0d, 1d, 0.01d, PARAMETER_OVERALL_PENALTY_WEIT));
+        wombaParameters.add(new LearningParameter(PARAMETER_CHILDREN_PENALTY_WEIT, 1, Double.class, 0d, 1d, 0.01d, PARAMETER_CHILDREN_PENALTY_WEIT));
+        wombaParameters.add(new LearningParameter(PARAMETER_COMPLEXITY_PENALTY_WEIT, 1, Double.class, 0d, 1d, 0.01d, PARAMETER_COMPLEXITY_PENALTY_WEIT));
+        wombaParameters.add(new LearningParameter(PARAMETER_VERBOSE, false, Boolean.class, 0, 1, 0, PARAMETER_VERBOSE));
+        wombaParameters.add(new LearningParameter(PARAMETER_MEASURES, new HashSet<String>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams")), MeasureType.class, 0, 0, 0, PARAMETER_MEASURES));
+        wombaParameters.add(new LearningParameter(PARAMETER_SAVE_MAPPING, true, Boolean.class, 0, 1, 0, PARAMETER_SAVE_MAPPING));           
+        return wombaParameters;   
+        
     }
     //remember
     //---------AMLAlgorithm(concrete:SupervisedMLAlgorithm,ActiveMLAlgorithm or UnsupervisedMLAlgorithm--------
@@ -195,7 +192,7 @@ public class EvaluatorTest {
                 String[] algorithmInfo = alg.split(":");// split to get the type and the name of the algorithm
                 MLImplementationType algType = MLImplementationType.valueOf(algorithmInfo[0]);// get the type of the algorithm
                 //TODO implement initializeLearningParameters()
-                LearningParameters mlParameter = null;
+                List<LearningParameter> mlParameter = null;
                 AMLAlgorithm algorithm = null;
                 if(algType.equals(MLImplementationType.SUPERVISED_ACTIVE))
                 {

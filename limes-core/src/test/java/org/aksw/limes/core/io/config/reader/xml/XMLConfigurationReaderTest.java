@@ -3,7 +3,7 @@ package org.aksw.limes.core.io.config.reader.xml;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
@@ -96,9 +97,14 @@ public class XMLConfigurationReaderTest {
     @Test
     public void testXmlReaderMLAlgorithm() {
 
-        LearningParameters mlParameters = new LearningParameters();
-        mlParameters.put("max execution time in minutes", "60");
-        mlParameters.put("max refinement tree size", "2000");
+        List<LearningParameter> mlParameters = new ArrayList<>();
+        LearningParameter lp = new LearningParameter();
+        lp.setName("max execution time in minutes");
+        lp.setValue(60);
+        mlParameters.add(lp);
+        lp.setName("max refinement tree size");
+        lp.setValue(2000);
+        mlParameters.add(lp);
 
         Configuration testConf = new Configuration();
         testConf.setSourceInfo(sourceInfo);

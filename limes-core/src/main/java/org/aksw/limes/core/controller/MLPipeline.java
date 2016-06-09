@@ -10,7 +10,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
 import org.aksw.limes.core.ml.algorithm.*;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
-import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.apache.log4j.Logger;
 
 
@@ -31,7 +31,7 @@ public class MLPipeline {
             Cache target, 
             String mlAlgrorithmName, 
             MLImplementationType mlImplementationType,
-            LearningParameters learningParameters,
+            List<LearningParameter> learningParameters,
             String trainingDataFile, 
             EvaluatorType pfmType, 
             int maxIt

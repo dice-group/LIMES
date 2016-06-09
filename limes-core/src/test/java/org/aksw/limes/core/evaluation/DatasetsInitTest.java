@@ -15,7 +15,6 @@ import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.junit.Test;
 
 
