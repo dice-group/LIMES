@@ -3,10 +3,10 @@ package org.aksw.limes.core.gui.model;
 import javafx.beans.property.SimpleBooleanProperty;
 
 /**
- * Stores information about possible results during the supervised
- * genetic/active learning process
+ * Stores information about possible results during the 
+ * active learning process
  *
- * @author sunset
+ * @author Daniel Obraczka
  */
 public class ActiveLearningResult extends Result {
 
