@@ -61,7 +61,7 @@ public class Eagle extends ACoreMLAlgorithm {
     }
 
     @Override
-    protected void setDefaultParameters() {
+    public void setDefaultParameters() {
         // TODO Auto-generated method stub
         
     }

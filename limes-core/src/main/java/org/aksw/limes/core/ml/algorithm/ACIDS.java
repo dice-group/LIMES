@@ -57,7 +57,7 @@ public class ACIDS extends ACoreMLAlgorithm {
     }
 
     @Override
-    protected void setDefaultParameters() {
+    public void setDefaultParameters() {
         // TODO Auto-generated method stub
         
     }
