@@ -1,5 +1,7 @@
 package org.aksw.limes.core.gui.model.ml;
 
+import java.util.List;
+
 import javafx.concurrent.Task;
 
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
@@ -8,7 +10,7 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
-import org.aksw.limes.core.ml.setting.LearningParameters;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.apache.log4j.Logger;
 
 public abstract class MachineLearningModel {
@@ -17,7 +19,7 @@ public abstract class MachineLearningModel {
 
     protected static Logger logger = Logger.getLogger("LIMES");
     protected AMLAlgorithm mlalgorithm;
-    protected LearningParameters learningParameters;
+    protected List<LearningParameter> learningParameters;
     protected Cache sourceCache;
     protected Cache targetCache;
     protected Thread learningThread;
@@ -42,11 +44,11 @@ public abstract class MachineLearningModel {
         this.mlalgorithm = mlalgorithm;
     }
 
-    public LearningParameters getLearningParameters() {
+    public List<LearningParameter> getLearningParameters() {
         return learningParameters;
     }
 
-    public void setLearningParameters(LearningParameters learningParameters) {
+    public void setLearningParameters(List<LearningParameter> learningParameters) {
         this.learningParameters = learningParameters;
     }
 
