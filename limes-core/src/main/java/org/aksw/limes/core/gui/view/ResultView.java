@@ -155,11 +155,12 @@ public class ResultView {
                 "value");
         columnValue.setCellValueFactory(new PropertyValueFactory<>("value"));
         table.getColumns().add(columnValue);
-        table.setOnMouseClicked(e -> {
+        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
             controller.showProperties(table.getSelectionModel()
                     .getSelectedItem());
+            }
         });
-
         // set size
         columnSource.prefWidthProperty().bind(
                 table.widthProperty().divide(40).multiply(17));
