@@ -12,7 +12,7 @@ import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 public class ActiveLearningModel extends MachineLearningModel {
     
     private AMapping nextExamples = MappingFactory.createDefaultMapping();
-    public static final int nextExamplesNum = 3;
+    public static final int nextExamplesNum = 10;
 
     public ActiveLearningModel(Config config, Cache sourceCache, Cache targetCache) {
         super(config, sourceCache, targetCache);
@@ -26,7 +26,7 @@ public class ActiveLearningModel extends MachineLearningModel {
         	MLModel model = null;
                 try {
                     mlalgorithm.init(learningParameters, sourceCache, targetCache);
-                    mlalgorithm.asActive().activeLearn();
+                    model = mlalgorithm.asActive().activeLearn();
                     nextExamples = mlalgorithm.asActive().getNextExamples(nextExamplesNum);
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
