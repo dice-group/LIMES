@@ -32,10 +32,12 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.gui.controller.ml.MachineLearningController;
 import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.apache.log4j.Logger;
 
@@ -43,6 +45,7 @@ public abstract class MachineLearningView {
 
     protected static Logger logger = Logger.getLogger("LIMES");
 
+    private static final String[] algorithms = {MLAlgorithmFactory.EAGLE, MLAlgorithmFactory.LION, MLAlgorithmFactory.WOMBAT_COMPLETE, MLAlgorithmFactory.WOMBAT_SIMPLE};
     protected MachineLearningController mlController;
     private MainView mainView;
     private Button learnButton;
@@ -54,7 +57,6 @@ public abstract class MachineLearningView {
 	createMLAlgorithmsRootPane();
     }
 
-    // TODO finish
 
     /**
      * checks if the MLAlgorithm is implemented for this LearningSetting
@@ -69,18 +71,31 @@ public abstract class MachineLearningView {
 	GridPane root = new GridPane();
 
 	ObservableList<String> mloptions = FXCollections.observableArrayList();
-	// FIXME Temporary Solution
-	// mloptions.add("Lion");
-	// mloptions.add("Eagle");
-	mloptions.add("Wombat Simple");
+	for(int i=0; i < algorithms.length; i++){
 	if (this instanceof ActiveLearningView) {
-
+	    try {
+		AMLAlgorithm algorithm = MLAlgorithmFactory.createMLAlgorithm(MLAlgorithmFactory.getAlgorithmType(algorithms[i]), MLAlgorithmFactory.getImplementationType(MLAlgorithmFactory.SUPERVISED_ACTIVE));
+		mloptions.add(algorithm.getName());
+	    } catch (Exception e1) {
+		// TODO Auto-generated catch block
+	    }
 	} else if (this instanceof BatchLearningView) {
-
+	    try {
+		AMLAlgorithm algorithm = MLAlgorithmFactory.createMLAlgorithm(MLAlgorithmFactory.getAlgorithmType(algorithms[i]), MLAlgorithmFactory.getImplementationType(MLAlgorithmFactory.SUPERVISED_BATCH));
+		mloptions.add(algorithm.getName());
+	    } catch (Exception e1) {
+		// TODO Auto-generated catch block
+	    }
 	} else if (this instanceof UnsupervisedLearningView) {
-
+	    try {
+		AMLAlgorithm algorithm = MLAlgorithmFactory.createMLAlgorithm(MLAlgorithmFactory.getAlgorithmType(algorithms[i]), MLAlgorithmFactory.getImplementationType(MLAlgorithmFactory.UNSUPERVISED));
+		mloptions.add(algorithm.getName());
+	    } catch (Exception e1) {
+		// TODO Auto-generated catch block
+	    }
 	} else {
 	    logger.info("Unknown subclass of MachineLearningView");
+	}
 	}
 	ComboBox<String> mlOptionsChooser = new ComboBox<String>(mloptions);
 	mlOptionsChooser.setPromptText("choose algorithm");
@@ -119,8 +134,6 @@ public abstract class MachineLearningView {
 	stage.setScene(scene);
 	stage.show();
     }
-
-    // public abstract void createRootPane(HashMap<String, ?> params);
 
     /**
      * Takes the gridpane in the BorderPane and adds the GUI elements fitting
@@ -275,313 +288,6 @@ public abstract class MachineLearningView {
 
     }
 
-    /*
-     * private GridPane setWombatParameters(GridPane root){ AMLAlgorithm wombat
-     * = this.mlController.getMlModel().getMlalgorithm(); ((AWombat)
-     * wombat.getMl()).setDefaultParameters(); LearningParameters params =
-     * wombat.getParameters();
-     * 
-     * HBox maxRefinementTreeSizeBox = new HBox(); maxRefinementTreeSizeSlider =
-     * new Slider(); Label maxRefinementTreeSizeText = new
-     * Label(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE); Label
-     * maxRefinementTreeSizeLabel = new
-     * Label(params.get(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE));
-     * 
-     * root.add(maxRefinementTreeSizeText, 0, 0);
-     * maxRefinementTreeSizeBox.getChildren().add(maxRefinementTreeSizeSlider);
-     * maxRefinementTreeSizeBox.getChildren().add(maxRefinementTreeSizeLabel);
-     * root.add(maxRefinementTreeSizeBox, 1, 0);
-     * 
-     * maxRefinementTreeSizeSlider.setMin(0);
-     * maxRefinementTreeSizeSlider.setMax(5000);
-     * maxRefinementTreeSizeSlider.setValue
-     * (Integer.valueOf(params.get(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE
-     * ))); maxRefinementTreeSizeSlider.setShowTickLabels(true);
-     * maxRefinementTreeSizeSlider.setShowTickMarks(false);
-     * maxRefinementTreeSizeSlider.setMajorTickUnit(2500);
-     * maxRefinementTreeSizeSlider.setMinorTickCount(100);
-     * maxRefinementTreeSizeSlider.setSnapToTicks(true);
-     * maxRefinementTreeSizeSlider.setBlockIncrement(100);
-     * 
-     * maxRefinementTreeSizeSlider.valueProperty().addListener( new
-     * ChangeListener<Number>() { public void changed( ObservableValue<? extends
-     * Number> ov, Number old_val, Number new_val) {
-     * maxRefinementTreeSizeLabel.setText(String.format("%.0f", new_val)); } });
-     * 
-     * HBox maxIterationsNumberBox = new HBox(); maxIterationsNumberSlider = new
-     * Slider(); Label maxIterationsNumberText = new
-     * Label(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER); Label
-     * maxIterationsNumberLabel = new
-     * Label(params.get(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER));
-     * 
-     * root.add(maxIterationsNumberText, 0, 1);
-     * maxIterationsNumberBox.getChildren().add(maxIterationsNumberSlider);
-     * maxIterationsNumberBox.getChildren().add(maxIterationsNumberLabel);
-     * root.add(maxIterationsNumberBox, 1, 1);
-     * 
-     * maxIterationsNumberSlider.setMin(0);
-     * maxIterationsNumberSlider.setMax(100);
-     * maxIterationsNumberSlider.setValue(
-     * Integer.valueOf(params.get(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER)));
-     * maxIterationsNumberSlider.setShowTickLabels(true);
-     * maxIterationsNumberSlider.setShowTickMarks(false);
-     * maxIterationsNumberSlider.setMajorTickUnit(50);
-     * maxIterationsNumberSlider.setMinorTickCount(1);
-     * maxIterationsNumberSlider.setSnapToTicks(true);
-     * maxIterationsNumberSlider.setBlockIncrement(1);
-     * 
-     * maxIterationsNumberSlider.valueProperty().addListener( new
-     * ChangeListener<Number>() { public void changed( ObservableValue<? extends
-     * Number> ov, Number old_val, Number new_val) {
-     * maxIterationsNumberLabel.setText(String.format("%.0f", new_val)); } });
-     * 
-     * HBox maxIterationsTimeInMinutesBox = new HBox();
-     * maxIterationsTimeInMinutesSlider = new Slider(); Label
-     * maxIterationsTimeInMinutesText = new
-     * Label(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES); Label
-     * maxIterationsTimeInMinutesLabel = new
-     * Label(params.get(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES));
-     * 
-     * root.add(maxIterationsTimeInMinutesText, 0, 2);
-     * maxIterationsTimeInMinutesBox
-     * .getChildren().add(maxIterationsTimeInMinutesSlider);
-     * maxIterationsTimeInMinutesBox
-     * .getChildren().add(maxIterationsTimeInMinutesLabel);
-     * root.add(maxIterationsTimeInMinutesBox, 1, 2);
-     * 
-     * maxIterationsTimeInMinutesSlider.setMin(0);
-     * maxIterationsTimeInMinutesSlider.setMax(100);
-     * maxIterationsTimeInMinutesSlider
-     * .setValue(Integer.valueOf(params.get(AWombat
-     * .PARAMETER_MAX_ITERATION_TIME_IN_MINUTES)));
-     * maxIterationsTimeInMinutesSlider.setShowTickLabels(true);
-     * maxIterationsTimeInMinutesSlider.setShowTickMarks(false);
-     * maxIterationsTimeInMinutesSlider.setMajorTickUnit(50);
-     * maxIterationsTimeInMinutesSlider.setMinorTickCount(1);
-     * maxIterationsTimeInMinutesSlider.setSnapToTicks(true);
-     * maxIterationsTimeInMinutesSlider.setBlockIncrement(1);
-     * 
-     * maxIterationsTimeInMinutesSlider.valueProperty().addListener( new
-     * ChangeListener<Number>() { public void changed( ObservableValue<? extends
-     * Number> ov, Number old_val, Number new_val) {
-     * maxIterationsTimeInMinutesLabel.setText(String.format("%.0f", new_val));
-     * } });
-     * 
-     * HBox executionTimeInMinutesBox = new HBox(); executionTimeInMinutesSlider
-     * = new Slider(); Label executionTimeInMinutesText = new
-     * Label(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES); Label
-     * executionTimeInMinutesLabel = new
-     * Label(params.get(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES));
-     * 
-     * root.add(executionTimeInMinutesText, 0, 3);
-     * executionTimeInMinutesBox.getChildren
-     * ().add(executionTimeInMinutesSlider);
-     * executionTimeInMinutesBox.getChildren().add(executionTimeInMinutesLabel);
-     * root.add(executionTimeInMinutesBox, 1, 3);
-     * 
-     * executionTimeInMinutesSlider.setMin(0);
-     * executionTimeInMinutesSlider.setMax(100);
-     * executionTimeInMinutesSlider.setValue
-     * (Integer.valueOf(params.get(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES
-     * ))); executionTimeInMinutesSlider.setShowTickLabels(true);
-     * executionTimeInMinutesSlider.setShowTickMarks(false);
-     * executionTimeInMinutesSlider.setMajorTickUnit(50);
-     * executionTimeInMinutesSlider.setMinorTickCount(1);
-     * executionTimeInMinutesSlider.setSnapToTicks(true);
-     * executionTimeInMinutesSlider.setBlockIncrement(1);
-     * 
-     * executionTimeInMinutesSlider.valueProperty().addListener( new
-     * ChangeListener<Number>() { public void changed( ObservableValue<? extends
-     * Number> ov, Number old_val, Number new_val) {
-     * executionTimeInMinutesLabel.setText(String.format("%.0f", new_val)); }
-     * });
-     * 
-     * HBox maxFitnessThresholdBox = new HBox(); maxFitnessThresholdSlider = new
-     * Slider(); Label maxFitnessThresholdText = new
-     * Label(AWombat.PARAMETER_MAX_FITNESS_THRESHOLD); Label
-     * maxFitnessThresholdLabel = new
-     * Label(params.get(AWombat.PARAMETER_MAX_FITNESS_THRESHOLD));
-     * 
-     * root.add(maxFitnessThresholdText, 0, 4);
-     * maxFitnessThresholdBox.getChildren().add(maxFitnessThresholdSlider);
-     * maxFitnessThresholdBox.getChildren().add(maxFitnessThresholdLabel);
-     * root.add(maxFitnessThresholdBox, 1, 4);
-     * 
-     * maxFitnessThresholdSlider.setMin(0); maxFitnessThresholdSlider.setMax(1);
-     * maxFitnessThresholdSlider
-     * .setValue(Double.valueOf(params.get(AWombat.PARAMETER_MAX_FITNESS_THRESHOLD
-     * ))); maxFitnessThresholdSlider.setShowTickLabels(true);
-     * maxFitnessThresholdSlider.setShowTickMarks(false);
-     * maxFitnessThresholdSlider.setMajorTickUnit(0.5);
-     * maxFitnessThresholdSlider.setMinorTickCount(9);
-     * maxFitnessThresholdSlider.setSnapToTicks(true);
-     * maxFitnessThresholdSlider.setBlockIncrement(0.01);
-     * 
-     * maxFitnessThresholdSlider.valueProperty().addListener( new
-     * ChangeListener<Number>() { public void changed( ObservableValue<? extends
-     * Number> ov, Number old_val, Number new_val) {
-     * maxFitnessThresholdLabel.setText(String.format("%.1f", new_val)); } });
-     * 
-     * HBox minPropertyCoverageBox = new HBox(); minPropertyCoverageSlider = new
-     * Slider(); Label minPropertyCoverageText = new
-     * Label(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE); Label
-     * minPropertyCoverageLabel = new
-     * Label(params.get(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE));
-     * 
-     * root.add(minPropertyCoverageText, 0, 5);
-     * minPropertyCoverageBox.getChildren().add(minPropertyCoverageSlider);
-     * minPropertyCoverageBox.getChildren().add(minPropertyCoverageLabel);
-     * root.add(minPropertyCoverageBox, 1, 5);
-     * 
-     * minPropertyCoverageSlider.setMin(0); minPropertyCoverageSlider.setMax(1);
-     * minPropertyCoverageSlider
-     * .setValue(Double.valueOf(params.get(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE
-     * ))); minPropertyCoverageSlider.setShowTickLabels(true);
-     * minPropertyCoverageSlider.setShowTickMarks(false);
-     * minPropertyCoverageSlider.setMajorTickUnit(0.5);
-     * minPropertyCoverageSlider.setMinorTickCount(9);
-     * minPropertyCoverageSlider.setSnapToTicks(true);
-     * minPropertyCoverageSlider.setBlockIncrement(0.01);
-     * 
-     * minPropertyCoverageSlider.valueProperty().addListener( new
-     * ChangeListener<Number>() { public void changed( ObservableValue<? extends
-     * Number> ov, Number old_val, Number new_val) {
-     * minPropertyCoverageLabel.setText(String.format("%.1f", new_val)); } });
-     * 
-     * HBox propertyLearningRateBox = new HBox(); propertyLearningRateSlider =
-     * new Slider(); Label propertyLearningRateText = new
-     * Label(AWombat.PARAMETER_PROPERTY_LEARNING_RATE); Label
-     * propertyLearningRateLabel = new
-     * Label(params.get(AWombat.PARAMETER_PROPERTY_LEARNING_RATE));
-     * 
-     * root.add(propertyLearningRateText, 0, 6);
-     * propertyLearningRateBox.getChildren().add(propertyLearningRateSlider);
-     * propertyLearningRateBox.getChildren().add(propertyLearningRateLabel);
-     * root.add(propertyLearningRateBox, 1, 6);
-     * 
-     * propertyLearningRateSlider.setMin(0);
-     * propertyLearningRateSlider.setMax(1);
-     * propertyLearningRateSlider.setValue(
-     * Double.valueOf(params.get(AWombat.PARAMETER_PROPERTY_LEARNING_RATE)));
-     * propertyLearningRateSlider.setShowTickLabels(true);
-     * propertyLearningRateSlider.setShowTickMarks(false);
-     * propertyLearningRateSlider.setMajorTickUnit(0.5);
-     * propertyLearningRateSlider.setMinorTickCount(9);
-     * propertyLearningRateSlider.setSnapToTicks(true);
-     * propertyLearningRateSlider.setBlockIncrement(0.01);
-     * 
-     * propertyLearningRateSlider.valueProperty().addListener( new
-     * ChangeListener<Number>() { public void changed( ObservableValue<? extends
-     * Number> ov, Number old_val, Number new_val) {
-     * propertyLearningRateLabel.setText(String.format("%.1f", new_val)); } });
-     * 
-     * HBox overallPenaltyWeitBox = new HBox(); overallPenaltyWeitSlider = new
-     * Slider(); Label overallPenaltyWeitText = new
-     * Label(AWombat.PARAMETER_OVERALL_PENALTY_WEIT); Label
-     * overallPenaltyWeitLabel = new
-     * Label(params.get(AWombat.PARAMETER_OVERALL_PENALTY_WEIT));
-     * 
-     * root.add(overallPenaltyWeitText, 0, 7);
-     * overallPenaltyWeitBox.getChildren().add(overallPenaltyWeitSlider);
-     * overallPenaltyWeitBox.getChildren().add(overallPenaltyWeitLabel);
-     * root.add(overallPenaltyWeitBox, 1, 7);
-     * 
-     * overallPenaltyWeitSlider.setMin(0); overallPenaltyWeitSlider.setMax(1);
-     * logger.error("text: " +
-     * params.get(AWombat.PARAMETER_OVERALL_PENALTY_WEIT));
-     * overallPenaltyWeitSlider
-     * .setValue(Double.valueOf(overallPenaltyWeitLabel.getText()));
-     * overallPenaltyWeitSlider.setShowTickLabels(true);
-     * overallPenaltyWeitSlider.setShowTickMarks(false);
-     * overallPenaltyWeitSlider.setMajorTickUnit(0.5);
-     * overallPenaltyWeitSlider.setMinorTickCount(9);
-     * overallPenaltyWeitSlider.setSnapToTicks(true);
-     * overallPenaltyWeitSlider.setBlockIncrement(0.01);
-     * 
-     * overallPenaltyWeitSlider.valueProperty().addListener( new
-     * ChangeListener<Number>() { public void changed( ObservableValue<? extends
-     * Number> ov, Number old_val, Number new_val) {
-     * overallPenaltyWeitLabel.setText(String.format("%.1f", new_val)); } });
-     * 
-     * HBox childrenPenaltyWeitBox = new HBox(); childrenPenaltyWeitSlider = new
-     * Slider(); Label childrenPenaltyWeitText = new
-     * Label(AWombat.PARAMETER_CHILDREN_PENALTY_WEIT); Label
-     * childrenPenaltyWeitLabel = new
-     * Label(params.get(AWombat.PARAMETER_CHILDREN_PENALTY_WEIT));
-     * 
-     * root.add(childrenPenaltyWeitText, 0, 8);
-     * childrenPenaltyWeitBox.getChildren().add(childrenPenaltyWeitSlider);
-     * childrenPenaltyWeitBox.getChildren().add(childrenPenaltyWeitLabel);
-     * root.add(childrenPenaltyWeitBox, 1, 8);
-     * 
-     * childrenPenaltyWeitSlider.setMin(0);
-     * childrenPenaltyWeitSlider.setMax(100);
-     * childrenPenaltyWeitSlider.setValue(
-     * Integer.valueOf(params.get(AWombat.PARAMETER_CHILDREN_PENALTY_WEIT)));
-     * childrenPenaltyWeitSlider.setShowTickLabels(true);
-     * childrenPenaltyWeitSlider.setShowTickMarks(false);
-     * childrenPenaltyWeitSlider.setMajorTickUnit(50);
-     * childrenPenaltyWeitSlider.setMinorTickCount(10);
-     * childrenPenaltyWeitSlider.setSnapToTicks(true);
-     * childrenPenaltyWeitSlider.setBlockIncrement(1);
-     * 
-     * childrenPenaltyWeitSlider.valueProperty().addListener( new
-     * ChangeListener<Number>() { public void changed( ObservableValue<? extends
-     * Number> ov, Number old_val, Number new_val) {
-     * childrenPenaltyWeitLabel.setText(String.format("%.0f", new_val)); } });
-     * 
-     * HBox complexityPenaltyWeitBox = new HBox(); complexityPenaltyWeitSlider =
-     * new Slider(); Label complexityPenaltyWeitText = new
-     * Label(AWombat.PARAMETER_COMPLEXITY_PENALTY_WEIT); Label
-     * complexityPenaltyWeitLabel = new
-     * Label(params.get(AWombat.PARAMETER_COMPLEXITY_PENALTY_WEIT));
-     * 
-     * root.add(complexityPenaltyWeitText, 0, 9);
-     * complexityPenaltyWeitBox.getChildren().add(complexityPenaltyWeitSlider);
-     * complexityPenaltyWeitBox.getChildren().add(complexityPenaltyWeitLabel);
-     * root.add(complexityPenaltyWeitBox, 1, 9);
-     * 
-     * complexityPenaltyWeitSlider.setMin(0);
-     * complexityPenaltyWeitSlider.setMax(100);
-     * complexityPenaltyWeitSlider.setValue
-     * (Integer.valueOf(params.get(AWombat.PARAMETER_COMPLEXITY_PENALTY_WEIT)));
-     * complexityPenaltyWeitSlider.setShowTickLabels(true);
-     * complexityPenaltyWeitSlider.setShowTickMarks(false);
-     * complexityPenaltyWeitSlider.setMajorTickUnit(50);
-     * complexityPenaltyWeitSlider.setMinorTickCount(10);
-     * complexityPenaltyWeitSlider.setSnapToTicks(true);
-     * complexityPenaltyWeitSlider.setBlockIncrement(1);
-     * 
-     * complexityPenaltyWeitSlider.valueProperty().addListener( new
-     * ChangeListener<Number>() { public void changed( ObservableValue<? extends
-     * Number> ov, Number old_val, Number new_val) {
-     * complexityPenaltyWeitLabel.setText(String.format("%.0f", new_val)); } });
-     * 
-     * Label verboseLabel = new Label(AWombat.PARAMETER_VERBOSE);
-     * verboseCheckBox = new CheckBox(); verboseCheckBox.setSelected(false);
-     * root.add(verboseLabel, 0, 10); root.add(verboseCheckBox, 1, 10);
-     * 
-     * //TODO I think this is not correct since it should be possible to select
-     * multiple measures Label measuresLabel = new
-     * Label(AWombat.PARAMETER_MEASURES); List<String> measuresList = new
-     * ArrayList<String>(); String[] measureArray =
-     * params.get(measuresLabel.getText()).replace("[","").replace("]",
-     * "").split(","); for (int i = 0; i < measureArray.length; i++) {
-     * measuresList.add(measureArray[i]); } ObservableList<String>
-     * obsTermCritList = FXCollections .observableList(measuresList);
-     * SpinnerValueFactory<String> svf = new
-     * SpinnerValueFactory.ListSpinnerValueFactory<>( obsTermCritList);
-     * measuresSpinner = new Spinner<String>();
-     * measuresSpinner.setValueFactory(svf); root.add(measuresLabel, 0, 11);
-     * root.add(measuresSpinner, 1, 11);
-     * 
-     * Label saveMappingLabel = new Label(AWombat.PARAMETER_SAVE_MAPPING);
-     * saveMappingCheckBox = new CheckBox();
-     * saveMappingCheckBox.setSelected(false); root.add(saveMappingLabel, 0,
-     * 12); root.add(saveMappingCheckBox, 1, 12);
-     * 
-     * return root; }
-     */
     /**
      * Shows if an Error occurred
      *
