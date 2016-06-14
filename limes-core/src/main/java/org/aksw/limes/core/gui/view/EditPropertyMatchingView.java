@@ -197,18 +197,4 @@ public class EditPropertyMatchingView implements IEditView {
         sourcePropList.setItems(sourceProperties);
         targetPropList.setItems(targetProperties);
     }
-
-
-    /**
-     * Shows an error if something went wrong
-     *
-     * @param header
-     * @param content
-     */
-    public void showError(String header, String content) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
 }
