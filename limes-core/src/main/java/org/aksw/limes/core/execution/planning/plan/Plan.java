@@ -1,9 +1,9 @@
 package org.aksw.limes.core.execution.planning.plan;
 
-import org.apache.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 /**
  * Implements the plan of a link specification. A plan consists of a set of

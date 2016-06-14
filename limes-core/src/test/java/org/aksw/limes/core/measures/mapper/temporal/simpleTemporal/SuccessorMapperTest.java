@@ -1,5 +1,7 @@
 package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
 
+import static org.junit.Assert.assertTrue;
+
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
@@ -12,8 +14,6 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
 
 public class SuccessorMapperTest {
 

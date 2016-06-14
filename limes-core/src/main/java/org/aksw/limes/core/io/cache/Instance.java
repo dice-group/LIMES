@@ -1,12 +1,12 @@
 package org.aksw.limes.core.io.cache;
 
-import org.apache.log4j.Logger;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
+
+import org.apache.log4j.Logger;
 
 /**
  * Contains all the data related to a particular URI, i.e., all the (s p o)

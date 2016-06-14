@@ -1,21 +1,25 @@
 package org.aksw.limes.core.ml.algorithm.lion.operator;
 
 
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.measure.Measure;
-import org.aksw.limes.core.measures.measure.string.*;
+import org.aksw.limes.core.measures.measure.string.CosineMeasure;
+import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
+import org.aksw.limes.core.measures.measure.string.Levenshtein;
+import org.aksw.limes.core.measures.measure.string.StringMeasure;
+import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.aksw.limes.core.util.SetUtilities;
 import org.apache.log4j.Logger;
-
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Default implementation of the length limited refinement operator

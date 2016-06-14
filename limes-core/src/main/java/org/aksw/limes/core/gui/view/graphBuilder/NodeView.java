@@ -1,14 +1,15 @@
 package org.aksw.limes.core.gui.view.graphBuilder;
 
+import java.util.List;
+import java.util.Vector;
+
+import org.aksw.limes.core.gui.model.metric.Node;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
-import org.aksw.limes.core.gui.model.metric.Node;
-
-import java.util.List;
-import java.util.Vector;
 
 public class NodeView {
 

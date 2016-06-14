@@ -2,8 +2,6 @@ package org.aksw.limes.core.gui.model.ml;
 
 import java.util.List;
 
-import javafx.concurrent.Task;
-
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.io.cache.Cache;
@@ -12,6 +10,8 @@ import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.apache.log4j.Logger;
+
+import javafx.concurrent.Task;
 
 public abstract class MachineLearningModel {
 

@@ -1,11 +1,11 @@
 package org.aksw.limes.core.gui.model.metric;
 
-import org.aksw.limes.core.gui.model.metric.Property.Origin;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.aksw.limes.core.gui.model.metric.Property.Origin;
 
 /**
  * To Measure similarities

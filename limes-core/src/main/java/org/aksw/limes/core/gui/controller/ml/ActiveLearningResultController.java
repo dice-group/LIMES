@@ -1,8 +1,5 @@
 package org.aksw.limes.core.gui.controller.ml;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.gui.model.ActiveLearningResult;
 import org.aksw.limes.core.gui.model.Config;
@@ -13,6 +10,9 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * Controller that corresponds to the view

@@ -1,5 +1,19 @@
 package org.aksw.limes.core.ml.oldalgorithm;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFM;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
@@ -26,9 +40,6 @@ import org.aksw.limes.core.ml.setting.LearningSetting.TerminationCriteria;
 import org.aksw.limes.core.ml.setting.UnsupervisedLearningSetting;
 import org.apache.log4j.Logger;
 import org.jgap.InvalidConfigurationException;
-
-import java.io.*;
-import java.util.*;
 
 //
 //import com.jamonapi.Monitor;

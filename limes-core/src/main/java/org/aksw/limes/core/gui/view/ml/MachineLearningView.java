@@ -3,6 +3,14 @@ package org.aksw.limes.core.gui.view.ml;
 import java.util.List;
 import java.util.Set;
 
+import org.aksw.limes.core.gui.controller.ml.MachineLearningController;
+import org.aksw.limes.core.gui.view.MainView;
+import org.aksw.limes.core.measures.measure.MeasureType;
+import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
+import org.aksw.limes.core.ml.setting.LearningParameter;
+import org.apache.log4j.Logger;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -31,15 +39,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-
-import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.gui.controller.ml.MachineLearningController;
-import org.aksw.limes.core.gui.view.MainView;
-import org.aksw.limes.core.measures.measure.MeasureType;
-import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
-import org.aksw.limes.core.ml.setting.LearningParameter;
-import org.apache.log4j.Logger;
 
 public abstract class MachineLearningView {
 

@@ -1,15 +1,15 @@
 package org.aksw.limes.core.gui.controller;
 
 
+import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
+import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
+
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Endpoint;
 import org.aksw.limes.core.gui.util.SourceOrTarget;
 import org.aksw.limes.core.gui.view.EditEndpointsView;
 import org.aksw.limes.core.gui.view.IEditView;
 import org.aksw.limes.core.io.config.KBInfo;
-
-import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
-import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 
 /**
  * Controls EditEndpointsView

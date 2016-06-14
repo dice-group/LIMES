@@ -1,12 +1,12 @@
 package org.aksw.limes.core.io.query;
 
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.config.KBInfo;
-import org.apache.log4j.Logger;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.config.KBInfo;
+import org.apache.log4j.Logger;
 
 /**
  * This class reads vectors contained in a text file so as to enable LIMES to

@@ -1,12 +1,12 @@
 package org.aksw.limes.core.gui.model.ml;
 
-import javafx.concurrent.Task;
-
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
+
+import javafx.concurrent.Task;
 
 public class BatchLearningModel extends MachineLearningModel {
 

@@ -1,8 +1,8 @@
 package org.aksw.limes.core.ml.algorithm.lion;
 
-import org.aksw.limes.core.ml.setting.LearningSetting;
-
 import java.util.Comparator;
+
+import org.aksw.limes.core.ml.setting.LearningSetting;
 
 /**
  * Search algorithm heuristic for the refinement based algorithm.

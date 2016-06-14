@@ -3,8 +3,10 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.frechet;
 
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.util.GeometricShapeFactory;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -12,9 +14,8 @@ import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.util.GeometricShapeFactory;
 
 /**
  * @author sherif

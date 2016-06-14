@@ -1,5 +1,8 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
 import org.apache.log4j.Logger;
 import org.jgap.InvalidConfigurationException;
@@ -10,9 +13,6 @@ import org.jgap.gp.impl.GPConfiguration;
 import org.jgap.gp.impl.ProgramChromosome;
 import org.jgap.util.CloneException;
 import org.jgap.util.ICloneable;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * CommandGene to also support evolution of preprocessing.

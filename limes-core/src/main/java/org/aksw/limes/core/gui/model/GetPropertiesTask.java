@@ -1,13 +1,14 @@
 package org.aksw.limes.core.gui.model;
 
-import org.apache.jena.rdf.model.Model;
-import javafx.concurrent.Task;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.gui.util.sparql.SPARQLHelper;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.apache.jena.rdf.model.Model;
 
-import java.util.ArrayList;
-import java.util.List;
+import javafx.concurrent.Task;
 
 public class GetPropertiesTask extends Task<List<String>> {
     private KBInfo info;

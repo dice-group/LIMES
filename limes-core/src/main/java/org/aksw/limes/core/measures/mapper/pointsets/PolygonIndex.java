@@ -4,12 +4,12 @@
  */
 package org.aksw.limes.core.measures.mapper.pointsets;
 
-import org.aksw.limes.core.datastrutures.Point;
-import org.apache.log4j.Logger;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import org.aksw.limes.core.datastrutures.Point;
+import org.apache.log4j.Logger;
 
 /**
  * @author ngonga

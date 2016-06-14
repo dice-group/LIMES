@@ -1,6 +1,9 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
@@ -19,9 +22,6 @@ import org.apache.log4j.Logger;
 import org.jgap.gp.GPFitnessFunction;
 import org.jgap.gp.IGPProgram;
 import org.jgap.gp.impl.ProgramChromosome;
-
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 /**
  * Implementation of our custom FitnessFunction.

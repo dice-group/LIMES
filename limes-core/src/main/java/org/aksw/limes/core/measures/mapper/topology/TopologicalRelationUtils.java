@@ -4,9 +4,13 @@
  */
 package org.aksw.limes.core.measures.mapper.topology;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.GeoIndex;
@@ -14,12 +18,9 @@ import org.aksw.limes.core.measures.mapper.pointsets.GeoSquare;
 import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.ParseException;
 
 /**
  * Useful utils for the topological relations.

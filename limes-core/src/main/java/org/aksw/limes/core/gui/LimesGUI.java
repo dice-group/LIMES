@@ -1,12 +1,13 @@
 package org.aksw.limes.core.gui;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+import java.util.Locale;
+
 import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.view.MainView;
 import org.apache.log4j.BasicConfigurator;
 
-import java.util.Locale;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
  * Starts the LinkDiscovery Application, with Extra

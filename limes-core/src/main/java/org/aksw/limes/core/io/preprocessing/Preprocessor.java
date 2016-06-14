@@ -1,11 +1,11 @@
 package org.aksw.limes.core.io.preprocessing;
 
-import org.apache.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import org.apache.log4j.Logger;
 
 /**
  * @author ngonga

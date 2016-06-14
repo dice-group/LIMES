@@ -4,9 +4,14 @@
  */
 package org.aksw.limes.core.measures.mapper.string;
 
-import algorithms.StoppUhr;
-import algorithms.Token;
-import algorithms.ppjoinplus.Record;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
@@ -19,7 +24,9 @@ import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.string.IStringMeasure;
 import org.apache.log4j.Logger;
 
-import java.util.*;
+import algorithms.StoppUhr;
+import algorithms.Token;
+import algorithms.ppjoinplus.Record;
 
 /**
  * @author ngonga

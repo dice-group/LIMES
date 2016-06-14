@@ -1,9 +1,9 @@
 package org.aksw.limes.core.ml.oldalgorithm;
 
+import java.util.Set;
+
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.setting.LearningSetting;
-
-import java.util.Set;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>

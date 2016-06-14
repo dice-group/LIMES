@@ -1,14 +1,14 @@
 package org.aksw.limes.core.evaluation.evaluator;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Table;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.aksw.limes.core.datastrutures.TaskAlgorithm;
 import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.datastrutures.TaskAlgorithm;
 import org.aksw.limes.core.datastrutures.TaskData;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.IQuantitativeMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
@@ -17,26 +17,16 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
-import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.Eagle;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
-import org.aksw.limes.core.ml.oldalgorithm.MLAlgorithm;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.apache.log4j.Logger;
 
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 
 /**
  * This evaluator is responsible for evaluating set of datasets that have source,target,goldstandard and mappings against set of measures
@@ -78,7 +68,7 @@ public class Evaluator {
                 for (TaskData dataset : datasets) {     //iterate over datasets(name,source,target,mapping,training,pseudofm)
                     tAlgorithm.getMlAlgorithm().init(tAlgorithm.getMlParameter(), dataset.source, dataset.target);//initialize the algorithm with source and target data, passing its parameters too
                     
-                    ACoreMLAlgorithm ml = tAlgorithm.getMlAlgorithm().getMl(); //get the core machine learning working inside the algorithm
+//                    ACoreMLAlgorithm ml = tAlgorithm.getMlAlgorithm().getMl(); //get the core machine learning working inside the algorithm
                     MLModel mlModel= null; // model resulting from the learning process
                     if(tAlgorithm.getMlType().equals(MLImplementationType.SUPERVISED_BATCH))
                     {

@@ -1,11 +1,11 @@
 package org.aksw.limes.core.util;
 
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 /**
  * Class to help creating sets.

@@ -1,22 +1,27 @@
 package org.aksw.limes.core.gui.view;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import java.io.File;
+
 import org.aksw.limes.core.gui.controller.ResultController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.InstanceProperty;
 import org.aksw.limes.core.gui.model.Result;
 import org.aksw.limes.core.io.mapping.AMapping;
 
-import java.io.File;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 /**
  * View to show the Results of the LIMES-query, and their Instances

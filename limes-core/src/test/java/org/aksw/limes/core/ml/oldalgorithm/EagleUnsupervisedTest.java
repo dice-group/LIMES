@@ -1,7 +1,11 @@
 package org.aksw.limes.core.ml.oldalgorithm;
 
-import org.aksw.limes.core.io.cache.Cache;
+import static org.junit.Assert.assertTrue;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.Configuration;
@@ -9,11 +13,6 @@ import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.setting.UnsupervisedLearningSetting;
 import org.junit.Test;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.junit.Assert.assertTrue;
 
 @Deprecated
 public class EagleUnsupervisedTest {

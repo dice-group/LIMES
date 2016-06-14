@@ -1,10 +1,12 @@
 package org.aksw.limes.core.measures.mapper.string;
 
-import algorithms.StoppUhr;
-import algorithms.Token;
-import algorithms.edjoin.MismatchingQGram;
-import algorithms.edjoin.QGram;
-import algorithms.edjoin.Record;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -14,7 +16,11 @@ import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.apache.log4j.Logger;
 
-import java.util.*;
+import algorithms.StoppUhr;
+import algorithms.Token;
+import algorithms.edjoin.MismatchingQGram;
+import algorithms.edjoin.QGram;
+import algorithms.edjoin.Record;
 
 /**
  * @author ngonga

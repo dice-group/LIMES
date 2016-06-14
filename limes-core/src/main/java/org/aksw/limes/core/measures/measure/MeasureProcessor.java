@@ -1,5 +1,8 @@
 package org.aksw.limes.core.measures.measure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -14,9 +17,6 @@ import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.apache.log4j.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author ngonga

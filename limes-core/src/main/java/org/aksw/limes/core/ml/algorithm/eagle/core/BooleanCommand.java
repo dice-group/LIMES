@@ -1,5 +1,8 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
 import org.jgap.gp.CommandGene;
@@ -9,9 +12,6 @@ import org.jgap.gp.impl.GPConfiguration;
 import org.jgap.gp.impl.ProgramChromosome;
 import org.jgap.util.CloneException;
 import org.jgap.util.ICloneable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class implements Boolean Operators. Childrens are either NesetedBooleans or Measures.

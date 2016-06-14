@@ -1,9 +1,9 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic;
 
-import org.aksw.limes.core.io.cache.Cache;
-
 import java.util.Set;
 import java.util.TreeMap;
+
+import org.aksw.limes.core.io.cache.Cache;
 
 /**
  * Atomic class for Allen's temporal relations. It orders both source

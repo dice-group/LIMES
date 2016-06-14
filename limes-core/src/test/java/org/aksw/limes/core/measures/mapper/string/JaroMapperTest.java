@@ -1,17 +1,17 @@
 package org.aksw.limes.core.measures.mapper.string;
 
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.string.Jaro;
 import org.aksw.limes.core.util.RandomStringGenerator;
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public class JaroMapperTest extends JaroMapper {
 

@@ -1,8 +1,8 @@
 package org.aksw.limes.core.datastrutures;
 
-import org.aksw.limes.core.io.mapping.AMapping;
-
 import java.util.List;
+
+import org.aksw.limes.core.io.mapping.AMapping;
 
 /**
  * This class contains the gold standard mapping and the sopurce and target URIs

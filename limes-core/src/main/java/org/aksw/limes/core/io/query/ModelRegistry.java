@@ -1,10 +1,10 @@
 package org.aksw.limes.core.io.query;
 
-import org.apache.jena.rdf.model.Model;
-import org.apache.log4j.Logger;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.jena.rdf.model.Model;
+import org.apache.log4j.Logger;
 
 /**
  * Enables one to register Jena Models as backends for the SparqlQueryModule

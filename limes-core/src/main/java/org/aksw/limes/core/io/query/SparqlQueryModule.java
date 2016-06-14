@@ -1,13 +1,20 @@
 package org.aksw.limes.core.io.query;
 
-import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.Model;
+import java.util.Iterator;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFormatter;
+import org.apache.jena.query.Syntax;
+import org.apache.jena.rdf.model.Model;
 import org.apache.log4j.Logger;
-
-import java.util.Iterator;
 
 /**
  * @author ngonga

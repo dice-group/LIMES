@@ -1,24 +1,29 @@
 package org.aksw.limes.core.gui.view;
 
+import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
+
+import java.util.List;
+
+import org.aksw.limes.core.gui.controller.EditPropertyMatchingController;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.aksw.limes.core.gui.controller.EditPropertyMatchingController;
-import org.aksw.limes.core.gui.util.SourceOrTarget;
-
-import java.util.List;
-
-import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 
 /**
  * View class for edit properties step in create wizard

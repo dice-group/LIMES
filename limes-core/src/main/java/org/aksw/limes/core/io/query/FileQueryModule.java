@@ -1,16 +1,16 @@
 package org.aksw.limes.core.io.query;
 
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.RDFReader;
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.config.KBInfo;
-import org.apache.log4j.Logger;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.config.KBInfo;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.RDFReader;
+import org.apache.log4j.Logger;
 
 /**
  * @author ngonga Can load from a resource as well.

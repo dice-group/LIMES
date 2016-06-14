@@ -1,6 +1,10 @@
 package org.aksw.limes.core.ml.oldalgorithm;
 
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -17,10 +21,6 @@ import org.jgap.gp.IGPProgram;
 import org.jgap.gp.impl.GPGenotype;
 import org.jgap.gp.impl.GPPopulation;
 import org.jgap.gp.impl.ProgramChromosome;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 
 /**

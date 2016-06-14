@@ -5,9 +5,9 @@
 
 package org.aksw.limes.core.measures.measure.space;
 
-import org.aksw.limes.core.io.cache.Instance;
-
 import java.util.ArrayList;
+
+import org.aksw.limes.core.io.cache.Instance;
 
 /**
  * @author ngonga

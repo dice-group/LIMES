@@ -4,13 +4,13 @@
  */
 package org.aksw.limes.core.ml.algorithm.euclid;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.measure.Measure;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author ngonga

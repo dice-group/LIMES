@@ -1,12 +1,13 @@
 package org.aksw.limes.core.gui.model;
 
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ListView;
+import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 
-import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
+import java.io.File;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.List;
+
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.planner.HeliosPlanner;
@@ -25,21 +26,13 @@ import org.aksw.limes.core.io.config.writer.RDFConfigurationWriter;
 import org.aksw.limes.core.io.config.writer.XMLConfigurationWriter;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ListView;
 
 /**
  * Contains all important information of the LIMES-Query

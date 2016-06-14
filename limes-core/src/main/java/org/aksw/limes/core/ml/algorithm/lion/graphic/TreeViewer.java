@@ -1,13 +1,17 @@
 package org.aksw.limes.core.ml.algorithm.lion.graphic;
 
-import org.aksw.limes.core.ml.algorithm.lion.SearchTreeNode;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.tree.DefaultMutableTreeNode;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
 import java.util.Enumeration;
 import java.util.TreeSet;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTree;
+import javax.swing.border.EmptyBorder;
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import org.aksw.limes.core.ml.algorithm.lion.SearchTreeNode;
 
 public class TreeViewer extends JFrame {
 

@@ -4,9 +4,6 @@
  */
 package org.aksw.limes.core.io.serializer;
 
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.apache.log4j.Logger;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -15,6 +12,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
+
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.apache.log4j.Logger;
 
 /**
  * @author ngonga

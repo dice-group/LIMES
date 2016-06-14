@@ -1,17 +1,17 @@
 package org.aksw.limes.core.io.query;
 
 
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.preprocessing.Preprocessor;
-import org.aksw.limes.core.util.DataCleaner;
-import org.apache.log4j.Logger;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
+
+import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.io.preprocessing.Preprocessor;
+import org.aksw.limes.core.util.DataCleaner;
+import org.apache.log4j.Logger;
 
 
 /**

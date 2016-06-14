@@ -1,14 +1,14 @@
 package org.aksw.limes.core.ml.algorithm.eagle.util;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.apache.log4j.Logger;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 /**
  * Class to define a mapping of the properties of 2 knowledge bases.

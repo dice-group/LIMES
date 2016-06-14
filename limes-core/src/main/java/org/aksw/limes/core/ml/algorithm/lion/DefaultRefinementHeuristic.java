@@ -1,10 +1,10 @@
 package org.aksw.limes.core.ml.algorithm.lion;
 
+import java.util.List;
+
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.apache.log4j.Logger;
-
-import java.util.List;
 
 
 /**

@@ -1,11 +1,11 @@
 package org.aksw.limes.core.io.mapping.reader;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.apache.log4j.Logger;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
 
 /**
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>

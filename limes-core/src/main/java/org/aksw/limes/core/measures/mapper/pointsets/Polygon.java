@@ -4,13 +4,14 @@
  */
 package org.aksw.limes.core.measures.mapper.pointsets;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.aksw.limes.core.datastrutures.Point;
+
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
-import org.aksw.limes.core.datastrutures.Point;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author ngonga

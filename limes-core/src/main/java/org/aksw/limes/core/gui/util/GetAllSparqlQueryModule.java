@@ -4,17 +4,17 @@ package org.aksw.limes.core.gui.util;
  * and open the template in the editor.
  */
 
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.Model;
+import java.lang.reflect.Field;
+import java.util.logging.Logger;
+
 import org.aksw.limes.core.gui.util.sparql.SPARQLHelper;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.query.ModelRegistry;
 import org.aksw.limes.core.io.query.SparqlQueryModule;
-
-import java.lang.reflect.Field;
-import java.util.logging.Logger;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.Model;
 
 /**
  * Simple modification of SparqlQueryModule but instead of only returning a part this class gets everything.

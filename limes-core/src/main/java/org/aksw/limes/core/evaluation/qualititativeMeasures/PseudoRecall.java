@@ -1,12 +1,11 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
-import org.aksw.limes.core.datastrutures.GoldStandard;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.apache.log4j.Logger;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.apache.log4j.Logger;
 
 /**
  * Implements a quality measure for unsupervised ML algorihtms, dubbed pseudo F-Measure.

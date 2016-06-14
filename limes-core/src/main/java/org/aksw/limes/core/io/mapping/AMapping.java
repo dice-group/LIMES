@@ -1,9 +1,9 @@
 package org.aksw.limes.core.io.mapping;
 
-import org.apache.jena.vocabulary.OWL;
-
 import java.util.HashMap;
 import java.util.TreeSet;
+
+import org.apache.jena.vocabulary.OWL;
 
 /**
  * @author ngonga

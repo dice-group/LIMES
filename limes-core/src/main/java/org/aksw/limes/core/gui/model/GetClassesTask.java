@@ -1,16 +1,17 @@
 package org.aksw.limes.core.gui.model;
 
-import org.apache.jena.rdf.model.Model;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
-import org.aksw.limes.core.gui.util.sparql.SPARQLHelper;
-import org.aksw.limes.core.gui.view.TaskProgressView;
-import org.aksw.limes.core.io.config.KBInfo;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import org.aksw.limes.core.gui.util.sparql.SPARQLHelper;
+import org.aksw.limes.core.gui.view.TaskProgressView;
+import org.aksw.limes.core.io.config.KBInfo;
+import org.apache.jena.rdf.model.Model;
+
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 
 public class GetClassesTask extends Task<List<ClassMatchingNode>> {
     private KBInfo info;

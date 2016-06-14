@@ -1,12 +1,12 @@
 package org.aksw.limes.core.measures.measure.temporal.allenAlgebra;
 
-import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
-import org.apache.log4j.Logger;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
+import org.apache.log4j.Logger;
 
 /**
  * Implements the temporal overlaps measure class.

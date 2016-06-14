@@ -1,8 +1,8 @@
 package org.aksw.limes.core.execution.planning.plan;
 
-import org.aksw.limes.core.util.Clonable;
-
 import java.util.List;
+
+import org.aksw.limes.core.util.Clonable;
 
 /**
  * Implements the Plan Interface. 

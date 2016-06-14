@@ -1,8 +1,5 @@
 package org.aksw.limes.core.io.serializer;
 
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.apache.log4j.Logger;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -12,6 +9,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.apache.log4j.Logger;
 
 /**
  * Implements a simple serializer that generates NTriple files.

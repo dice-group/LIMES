@@ -1,11 +1,11 @@
 package org.aksw.limes.core.mapping.reader;
 
+import static org.junit.Assert.assertTrue;
+
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
 import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
 
 public class CSVMappingReaderTest {
 

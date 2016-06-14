@@ -1,9 +1,9 @@
 package org.aksw.limes.core.measures.measure.string;
 
+import java.util.LinkedList;
+
 import org.aksw.limes.core.io.cache.Instance;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
-
-import java.util.LinkedList;
 
 public class RatcliffObershelpMeasure extends StringMeasure implements ITrieFilterableStringMeasure {
 

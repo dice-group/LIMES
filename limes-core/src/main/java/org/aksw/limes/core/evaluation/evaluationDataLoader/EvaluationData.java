@@ -1,14 +1,14 @@
 package org.aksw.limes.core.evaluation.evaluationDataLoader;
 
+import java.io.File;
+import java.util.Map;
+
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser.MapKey;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.apache.log4j.Logger;
-
-import java.io.File;
-import java.util.Map;
 
 //import java.util.Map;
 

@@ -1,6 +1,6 @@
 package org.aksw.limes.core.measures.mapper;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;

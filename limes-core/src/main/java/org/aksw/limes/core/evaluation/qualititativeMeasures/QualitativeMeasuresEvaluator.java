@@ -1,15 +1,14 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import org.aksw.limes.core.datastrutures.GoldStandard;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorFactory;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.apache.log4j.Logger;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * This class's function is to evaluate mappings against several qaulitative measures

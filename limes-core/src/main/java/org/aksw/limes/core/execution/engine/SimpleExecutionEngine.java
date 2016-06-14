@@ -1,5 +1,9 @@
 package org.aksw.limes.core.execution.engine;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.engine.filter.LinearFilter;
@@ -20,10 +24,6 @@ import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.apache.log4j.Logger;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Implements the default execution engine class. The idea is that the engine

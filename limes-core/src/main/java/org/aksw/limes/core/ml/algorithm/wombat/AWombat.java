@@ -4,6 +4,13 @@
  */
 package org.aksw.limes.core.ml.algorithm.wombat;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
@@ -31,8 +38,6 @@ import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.apache.log4j.Logger;
-
-import java.util.*;
 
 
 /**

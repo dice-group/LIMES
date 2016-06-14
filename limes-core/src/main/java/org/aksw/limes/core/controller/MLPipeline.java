@@ -1,5 +1,13 @@
 package org.aksw.limes.core.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.Set;
+
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorFactory;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
@@ -8,13 +16,15 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
-import org.aksw.limes.core.ml.algorithm.*;
+import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.apache.log4j.Logger;
-
-
-import java.util.*;
 
 /**
  * Execution pipeline for generating mappings using ML.

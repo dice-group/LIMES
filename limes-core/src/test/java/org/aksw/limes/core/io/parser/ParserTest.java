@@ -1,11 +1,11 @@
 package org.aksw.limes.core.io.parser;
 
 
-import org.apache.log4j.Logger;
-import org.junit.Test;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.apache.log4j.Logger;
+import org.junit.Test;
 
 
 public class ParserTest {

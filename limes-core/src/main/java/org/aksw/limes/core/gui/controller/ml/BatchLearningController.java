@@ -1,10 +1,5 @@
 package org.aksw.limes.core.gui.controller.ml;
 
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-
 import org.aksw.limes.core.gui.controller.TaskProgressController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Result;
@@ -13,6 +8,11 @@ import org.aksw.limes.core.gui.view.ResultView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
 import org.aksw.limes.core.io.cache.Cache;
+
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 
 public class BatchLearningController extends MachineLearningController {
 

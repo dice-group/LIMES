@@ -5,12 +5,12 @@
 package org.aksw.limes.core.measures.mapper.space.blocking;
 
 
+import java.util.ArrayList;
+
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.apache.log4j.Logger;
-
-import java.util.ArrayList;
 
 /**
  * Not tested yet. Works on the angles by transforming the thresholds into angular

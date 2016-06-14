@@ -4,6 +4,14 @@
  */
 package org.aksw.limes.core.measures.mapper.pointsets;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
+
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -13,9 +21,6 @@ import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorff;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff;
-
-import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * Still need to add tabu list. Basically checks whether two polygons have

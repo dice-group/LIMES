@@ -1,10 +1,10 @@
 package org.aksw.limes.core.gui.model.metric;
 
-import org.aksw.limes.core.gui.model.metric.Property.Origin;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.aksw.limes.core.gui.model.metric.Property.Origin;
 
 /**
  * Parses Metric to Expression for the Config Reader

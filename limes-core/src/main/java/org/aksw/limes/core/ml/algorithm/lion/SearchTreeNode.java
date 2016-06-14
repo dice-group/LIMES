@@ -1,13 +1,13 @@
 package org.aksw.limes.core.ml.algorithm.lion;
 
-import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.ml.algorithm.lion.graphic.NodeHistory;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
+import org.aksw.limes.core.io.ls.LinkSpecification;
+import org.aksw.limes.core.ml.algorithm.lion.graphic.NodeHistory;
 
 
 /**

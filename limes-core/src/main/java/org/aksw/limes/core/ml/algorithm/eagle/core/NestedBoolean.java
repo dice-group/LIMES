@@ -1,5 +1,9 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
 import org.apache.log4j.Logger;
 import org.jgap.InvalidConfigurationException;
@@ -11,10 +15,6 @@ import org.jgap.gp.impl.GPConfiguration;
 import org.jgap.gp.impl.ProgramChromosome;
 import org.jgap.util.CloneException;
 import org.jgap.util.ICloneable;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Command for Link Spec trees with multiple Boolean Commands:

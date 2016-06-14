@@ -1,5 +1,8 @@
 package org.aksw.limes.core.execution.planning.planner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
@@ -17,9 +20,6 @@ import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.apache.log4j.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Implements the Helios planner class. It receives a link specification as

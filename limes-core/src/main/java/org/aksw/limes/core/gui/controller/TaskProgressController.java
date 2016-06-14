@@ -1,13 +1,14 @@
 package org.aksw.limes.core.gui.controller;
 
-import javafx.concurrent.Task;
-import org.aksw.limes.core.gui.view.TaskProgressView;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+
+import org.aksw.limes.core.gui.view.TaskProgressView;
+
+import javafx.concurrent.Task;
 
 public class TaskProgressController {
     private static final ExecutorService executorService = Executors

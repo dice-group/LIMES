@@ -1,10 +1,10 @@
 package org.aksw.limes.core.execution.planning.plan;
 
-import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
-import org.aksw.limes.core.measures.measure.MeasureProcessor;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
+import org.aksw.limes.core.measures.measure.MeasureProcessor;
 
 /**
  * Implements the nested plan of a link specification. Note that the subPlans fields

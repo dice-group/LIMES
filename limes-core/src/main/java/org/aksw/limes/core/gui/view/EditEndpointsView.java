@@ -1,20 +1,25 @@
 package org.aksw.limes.core.gui.view;
 
 
+import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
+import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
+
+import org.aksw.limes.core.gui.controller.EditEndpointsController;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Control;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import org.aksw.limes.core.gui.controller.EditEndpointsController;
-import org.aksw.limes.core.gui.util.SourceOrTarget;
-
-import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
-import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 
 /**
  * View to Edit EndPoints of Limes Query

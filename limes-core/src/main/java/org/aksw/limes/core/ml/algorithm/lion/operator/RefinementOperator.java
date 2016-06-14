@@ -1,8 +1,8 @@
 package org.aksw.limes.core.ml.algorithm.lion.operator;
 
-import org.aksw.limes.core.io.ls.LinkSpecification;
-
 import java.util.Set;
+
+import org.aksw.limes.core.io.ls.LinkSpecification;
 
 /**
  * Interface for all refinement operators based on link specifications.

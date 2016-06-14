@@ -3,7 +3,6 @@ package org.aksw.limes.core.ml.oldalgorithm;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
-import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.apache.log4j.Logger;
 

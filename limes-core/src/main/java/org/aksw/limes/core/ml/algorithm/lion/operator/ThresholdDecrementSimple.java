@@ -1,9 +1,9 @@
 package org.aksw.limes.core.ml.algorithm.lion.operator;
 
-import org.aksw.limes.core.io.ls.LinkSpecification;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import org.aksw.limes.core.io.ls.LinkSpecification;
 
 public class ThresholdDecrementSimple implements ThresholdDecreaser {
 
