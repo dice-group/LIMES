@@ -1,14 +1,15 @@
 package org.aksw.limes.core.gui.controller;
 
+import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
+import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 import javafx.scene.control.ListView;
+
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.GetPropertiesTask;
 import org.aksw.limes.core.gui.view.EditPropertyMatchingView;
 import org.aksw.limes.core.gui.view.IEditView;
+import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
-
-import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
-import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 
 /**
  * Controller class for property matching step in create wizard
@@ -39,14 +40,14 @@ public class EditPropertyMatchingController implements IEditController {
         taskProgressController.addTask(getSourcePropertiesTask, properties -> {
             view.showAvailableProperties(SOURCE, properties);
         }, error -> {
-            view.showError("Error while loading source properties",
-                    error.getMessage());
+            MainView.showErrorWithStacktrace("An error occured", "Error while loading source properties",
+                    getSourcePropertiesTask.getException());
         });
         taskProgressController.addTask(getTargetPropertiesTask, properties -> {
             view.showAvailableProperties(TARGET, properties);
         }, error -> {
-            view.showError("Error while loading target properties",
-                    error.getMessage());
+            MainView.showErrorWithStacktrace("An error occured", "Error while loading target properties",
+                    getTargetPropertiesTask.getException());
         });
     }
 

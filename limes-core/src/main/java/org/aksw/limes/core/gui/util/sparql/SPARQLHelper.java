@@ -264,7 +264,8 @@ public class SPARQLHelper {
 
     static Set<String> getPropertiesWithDomain(String endpoint, String graph, String clazz, Model model) {
         long start = System.currentTimeMillis();
-        String query = PrefixHelper.addPrefixes("select ?p where {?p rdfs:domain " + wrapIfNecessary(clazz) + "}");
+//        String query = PrefixHelper.addPrefixes("select ?p where {?p rdfs:domain " + wrapIfNecessary(clazz) + "}");
+        String query = PrefixHelper.addPrefixes("select distinct ?p where { ?i a " + wrapIfNecessary(clazz) + " .  ?i ?p ?o . }");
         Set<String> properties = resultSetToList(querySelect(query, endpoint, graph, model));
         long end = System.currentTimeMillis();
         logger.trace(properties.size() + " properties with domain " + clazz + " from endpoint " + endpoint + " in " + (end - start) + " ms.");
