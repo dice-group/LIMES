@@ -1,15 +1,16 @@
 package org.aksw.limes.core.gui.controller;
 
+import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
+import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
+
 import org.aksw.limes.core.gui.model.ClassMatchingNode;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Endpoint;
 import org.aksw.limes.core.gui.model.GetClassesTask;
 import org.aksw.limes.core.gui.view.EditClassMatchingView;
 import org.aksw.limes.core.gui.view.IEditView;
+import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
-
-import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
-import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 
 /**
  * Controller class for class matching step in create wizard
@@ -45,8 +46,8 @@ public class EditClassMatchingController implements IEditController {
                             sourceEndpoint.getCurrentClass());
                 },
                 error -> {
-                    view.showError("Error while loading source classes",
-                            error.getMessage());
+                    MainView.showErrorWithStacktrace("Error while loading source classes",
+                            error.getMessage(), getSourceClassesTask.getException());
                 });
         taskProgressController.addTask(
                 getTargetClassesTask,
@@ -55,8 +56,8 @@ public class EditClassMatchingController implements IEditController {
                             targetEndpoint.getCurrentClass());
                 },
                 error -> {
-                    view.showError("Error while loading target classes",
-                            error.getMessage());
+                    MainView.showErrorWithStacktrace("Error while loading target classes",
+                            error.getMessage(),getTargetClassesTask.getException());
                 });
     }
 

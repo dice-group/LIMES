@@ -115,6 +115,7 @@ public abstract class MachineLearningView {
 	mlOptionsChooser.setOnAction(e -> {
 	    root.getChildren().removeAll(root.getChildren());
 	    this.mlController.setMLAlgorithmToModel(mlOptionsChooser.getValue());
+	    this.mlController.getMlModel().getMlalgorithm().getMl().setDefaultParameters();
 	    showParameters(root, mlOptionsChooser.getValue());
 	    border.setCenter(root);
 	    learnButton.setDisable(false);

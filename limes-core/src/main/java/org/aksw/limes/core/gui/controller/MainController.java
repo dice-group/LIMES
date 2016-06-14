@@ -98,9 +98,9 @@ public class MainController {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
-            view.showErrorDialog(
+            MainView.showErrorWithStacktrace("An error occured",
                     "Exception while loading config: " + e.getMessage(),
-                    sw.toString());
+                    e);
         }
     }
 
@@ -118,8 +118,8 @@ public class MainController {
         try {
             currentConfig.save(file);
         } catch (Exception e) {
-            view.showErrorDialog("Exception while saving config: " + e,
-                    e.getMessage());
+            MainView.showErrorWithStacktrace("An error occured", "Exception while saving config: " + e.getMessage(),
+                    e);
         }
     }
 
@@ -166,8 +166,8 @@ public class MainController {
                         resultView.showResults(results);
                     },
                     error -> {
-                        view.showErrorDialog("Error during mapping",
-                                error.getMessage());
+                        MainView.showErrorWithStacktrace("Error during mapping",
+                                error.getMessage(), mapTask.getException());
                     });
         }
     }
