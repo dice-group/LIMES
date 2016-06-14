@@ -71,34 +71,34 @@ public class SPARQLHelper {
     //
     private final static Logger logger = Logger.getLogger(SPARQLHelper.class.getName());
 
-//    public static void main(String args[]) {
-//        SPARQLHelper h = new SPARQLHelper();
-//        KBInfo info = new KBInfo();
-////		File file = new File("C:/Users/Lyko/SAIM/EPStore/person11.nt");
-//
-//        File file = new File("/home/ohdorno/workspace/LIMES/resources/Persons1/person11.nt");
-//        info.setEndpoint(file.getAbsolutePath());
-//        try {
-//            FileQueryModule fQModule = (FileQueryModule) QueryModuleFactory.getQueryModule("N-TRIPLE", info);
-//            Model model = ModelRegistry.getInstance().getMap().get(info.getEndpoint());
-//            if (model == null) {
-//                throw new RuntimeException("No model with id '" + info.getEndpoint() + "' registered");
-//            } else {
-//                logger.info("Successfully read data of type: " + info.getType());
-//                logger.info("Registered Model of size ... " + model.size());
-//                Set<String> set = SPARQLHelper.rootClassesUncached(info.getEndpoint(), null, model);
-//                System.out.println("Retrieved Classes...");
-//                int i = 0;
-//                for (String className : set) {
-//                    System.out.println((i++) + ".: " + className);
-//                }
-//
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
+    public static void main(String args[]) {
+        SPARQLHelper h = new SPARQLHelper();
+        KBInfo info = new KBInfo();
+//		File file = new File("C:/Users/Lyko/SAIM/EPStore/person11.nt");
+
+        File file = new File("/home/ohdorno/workspace/LIMES/resources/Persons1/person11.nt");
+        info.setEndpoint(file.getAbsolutePath());
+        try {
+            FileQueryModule fQModule = (FileQueryModule) QueryModuleFactory.getQueryModule("N-TRIPLE", info);
+            Model model = ModelRegistry.getInstance().getMap().get(info.getEndpoint());
+            if (model == null) {
+                throw new RuntimeException("No model with id '" + info.getEndpoint() + "' registered");
+            } else {
+                logger.info("Successfully read data of type: " + info.getType());
+                logger.info("Registered Model of size ... " + model.size());
+                Set<String> set = SPARQLHelper.rootClassesUncached(info.getEndpoint(), null, model);
+                System.out.println("Retrieved Classes...");
+                int i = 0;
+                for (String className : set) {
+                    System.out.println((i++) + ".: " + className);
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public static String formatPrefixes(Map<String, String> prefixes) {
         if (prefixes.isEmpty()) return "";
@@ -264,8 +264,7 @@ public class SPARQLHelper {
 
     static Set<String> getPropertiesWithDomain(String endpoint, String graph, String clazz, Model model) {
         long start = System.currentTimeMillis();
-//        String query = PrefixHelper.addPrefixes("select ?p where {?p rdfs:domain " + wrapIfNecessary(clazz) + "}");
-        String query = PrefixHelper.addPrefixes("select distinct ?p where { ?i a " + wrapIfNecessary(clazz) + " .  ?i ?p ?o . }");
+        String query = PrefixHelper.addPrefixes("select ?p where {?p rdfs:domain " + wrapIfNecessary(clazz) + "}");
         Set<String> properties = resultSetToList(querySelect(query, endpoint, graph, model));
         long end = System.currentTimeMillis();
         logger.trace(properties.size() + " properties with domain " + clazz + " from endpoint " + endpoint + " in " + (end - start) + " ms.");
