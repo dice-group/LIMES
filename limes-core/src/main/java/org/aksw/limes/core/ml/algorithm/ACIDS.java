@@ -3,6 +3,7 @@ package org.aksw.limes.core.ml.algorithm;
 import java.util.List;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
+import org.aksw.limes.core.exceptions.NotYetImplementedException;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -20,6 +21,7 @@ public class ACIDS extends ACoreMLAlgorithm {
     protected void init(List<LearningParameter> lp, Cache source, Cache target) {
         super.init(lp, source, target);
         // TODO
+        throw new NotYetImplementedException("ACIDS algorithm was not implemented into this version of LIMES.");
     }
 
     @Override
