@@ -29,9 +29,7 @@ public class QGramSimilarity extends StringMeasure {
         tokenizer = new NGramTokenizer();
     }
 
-    public static void main(String args[]) {
-        System.out.println(new QGramSimilarity().getSimilarity("abcd", "abcde"));
-    }
+    
 
     public double getSimilarity(String x, String y) {
         Set<String> yTokens = tokenizer.tokenize(y, q);

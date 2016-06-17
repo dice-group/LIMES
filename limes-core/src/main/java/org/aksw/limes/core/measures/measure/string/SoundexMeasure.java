@@ -145,7 +145,7 @@ public class SoundexMeasure extends StringMeasure {
 
     @Override
     public double getRuntimeApproximation(double mappingSize) {
-        return mappingSize / 5000d;
+        return mappingSize / 1000d;
     }
 
 }

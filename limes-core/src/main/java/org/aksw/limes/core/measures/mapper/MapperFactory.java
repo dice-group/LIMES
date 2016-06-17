@@ -7,6 +7,7 @@ import org.aksw.limes.core.measures.mapper.space.HR3;
 import org.aksw.limes.core.measures.mapper.string.EDJoin;
 import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
 import org.aksw.limes.core.measures.mapper.string.JaroMapper;
+import org.aksw.limes.core.measures.mapper.string.JaroWinklerMapper;
 import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
 import org.aksw.limes.core.measures.mapper.string.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGramMapper;
@@ -40,6 +41,7 @@ public class MapperFactory {
     public static final String JACCARD = "jaccard";
     public static final String EXACTMATCH = "exactmatch";
     public static final String SOUNDEX = "soundex";
+    public static final String JAROWINKLER = "jarowinkler";
 
     // number measures
     public static final String EUCLIDEAN = "euclidean";
@@ -94,6 +96,8 @@ public class MapperFactory {
     // TODO use MeasureType instead of mesure name string
     public static Mapper createMapper(MeasureType type) throws InvalidMeasureException {
         switch (type) {
+        case JAROWINKLER:
+            return new JaroWinklerMapper();
         case JARO:
             return new JaroMapper();
         case QGRAMS:
@@ -105,7 +109,7 @@ public class MapperFactory {
             return new PPJoinPlusPlus();
         case LEVENSHTEIN:
             return new EDJoin();
-
+            
         case EXACTMATCH:
             return new ExactMatchMapper();
         case SOUNDEX:

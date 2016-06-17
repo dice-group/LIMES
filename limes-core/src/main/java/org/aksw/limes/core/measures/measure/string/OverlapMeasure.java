@@ -14,15 +14,7 @@ import java.util.TreeSet;
  */
 public class OverlapMeasure extends StringMeasure {
 
-    public static void main(String args[]) {
-        String a = "aa ab ac";
-        String b[] = { "ab bc bd", "aa bd", "cd cc dd" };
-        for (String s : b) {
-            OverlapMeasure om = new OverlapMeasure();
-            System.out.println(om.getSimilarity(a, s));
-        }
-    }
-
+    
     public int getPrefixLength(int tokensNumber, double threshold) {
         return (int) (tokensNumber - threshold + 1);
     }

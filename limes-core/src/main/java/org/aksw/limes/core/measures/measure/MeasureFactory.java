@@ -22,6 +22,7 @@ import org.aksw.limes.core.measures.measure.string.CosineMeasure;
 import org.aksw.limes.core.measures.measure.string.ExactMatch;
 import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
 import org.aksw.limes.core.measures.measure.string.Jaro;
+import org.aksw.limes.core.measures.measure.string.JaroWinkler;
 import org.aksw.limes.core.measures.measure.string.Levenshtein;
 import org.aksw.limes.core.measures.measure.string.OverlapMeasure;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
@@ -68,7 +69,7 @@ public class MeasureFactory {
     public static final String JACCARD = "jaccard";
     public static final String EXACTMATCH = "exactmatch";
     public static final String SOUNDEX = "soundex";
-
+    public static final String JAROWINKLER = "jarowinkler";
     // number measures
     public static final String EUCLIDEAN = "euclidean";
     // Point-set measures
@@ -121,6 +122,9 @@ public class MeasureFactory {
     public static MeasureType getMeasureType(String expression) throws InvalidMeasureException {
         String measure = expression.toLowerCase();
 
+        if (measure.startsWith(JAROWINKLER))
+            return MeasureType.JAROWINKLER;
+        
         if (measure.startsWith(JARO)) {
             return MeasureType.JARO;
         }
@@ -274,6 +278,8 @@ public class MeasureFactory {
     public static Measure createMeasure(MeasureType type) throws InvalidMeasureException {
 
         switch (type) {
+        case JAROWINKLER:
+            return new JaroWinkler();
         case JARO:
             return new Jaro();
         case QGRAMS:
@@ -283,7 +289,7 @@ public class MeasureFactory {
         case LEVENSHTEIN:
             return new Levenshtein();
         case OVERLAP:
-            return new OverlapMeasure();
+            return new TrigramMeasure();
         case TRIGRAMS:
             return new TrigramMeasure();
         case JACCARD:
