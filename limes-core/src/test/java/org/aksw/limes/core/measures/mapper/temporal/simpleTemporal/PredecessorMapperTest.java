@@ -156,8 +156,10 @@ public class PredecessorMapperTest {
 
         System.out.println(mm);
 
-        assertTrue(m.equals(mm));
-        assertTrue(mm.equals(mmm));
+        assertTrue(!m.equals(mm));
+        assertTrue(!mm.equals(mmm));
+        assertTrue(m.equals(mmm));
+
     }
 
     @Test
@@ -214,7 +216,8 @@ public class PredecessorMapperTest {
         AMapping mmm = e.execute(ls, p3);
 
         assertTrue(m.equals(mm));
-        assertTrue(mm.equals(mmm));
+        assertTrue(!mm.equals(mmm));
+        assertTrue(!m.equals(mmm));
 
     }
 
