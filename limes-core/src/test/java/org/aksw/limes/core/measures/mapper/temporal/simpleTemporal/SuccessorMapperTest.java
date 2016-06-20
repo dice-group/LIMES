@@ -147,8 +147,9 @@ public class SuccessorMapperTest {
         HeliosPlanner p3 = new HeliosPlanner(source, target);
         AMapping mmm = e.execute(ls, p3);
 
-        assertTrue(m.equals(mm));
-        assertTrue(mm.equals(mmm));
+        assertTrue(!m.equals(mm));
+        assertTrue(!mm.equals(mmm));
+        assertTrue(m.equals(mmm));
     }
 
     @Test
@@ -209,8 +210,8 @@ public class SuccessorMapperTest {
         AMapping mmm = e.execute(ls, p3);
 
         assertTrue(m.equals(mm));
-        assertTrue(mm.equals(mmm));
-
+        assertTrue(!mm.equals(mmm));
+        assertTrue(!m.equals(mmm));
     }
 
 }

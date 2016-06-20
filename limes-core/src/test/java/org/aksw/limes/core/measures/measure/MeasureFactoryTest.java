@@ -335,7 +335,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof OverlapMeasure);
+            assertTrue(measure instanceof TrigramMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
