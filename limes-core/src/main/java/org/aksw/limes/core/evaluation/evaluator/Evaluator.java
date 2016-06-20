@@ -76,7 +76,8 @@ public class Evaluator {
         try{
             for (TaskAlgorithm tAlgorithm : TaskAlgorithms) {     //iterate over algorithms tasks(type,algorithm,parameter)
                 for (TaskData dataset : datasets) {     //iterate over datasets(name,source,target,mapping,training,pseudofm)
-                    tAlgorithm.getMlAlgorithm().init(tAlgorithm.getMlParameter(), dataset.source, dataset.target);//initialize the algorithm with source and target data, passing its parameters too
+                  //initialize the algorithm with source and target data, passing its parameters too ( if it is null in case of WOMBAT it will use its defaults)
+                    tAlgorithm.getMlAlgorithm().init(null/*tAlgorithm.getMlParameter()*/, dataset.source, dataset.target);
                     
                     ACoreMLAlgorithm ml = tAlgorithm.getMlAlgorithm().getMl(); //get the core machine learning working inside the algorithm
                     MLModel mlModel= null; // model resulting from the learning process
@@ -101,6 +102,8 @@ public class Evaluator {
                         UnsupervisedMLAlgorithm sml =(UnsupervisedMLAlgorithm)tAlgorithm.getMlAlgorithm();
                         mlModel = sml.learn(dataset.pseudoFMeasure);
                         predictions = tAlgorithm.getMlAlgorithm().predict(dataset.source, dataset.target, mlModel);
+                        logger.info(predictions);
+                        logger.info("after evaluation");
                         evaluationResults = eval.evaluate(predictions, dataset.goldStandard, QlMeasures);
                         overallEvaluations.put(tAlgorithm.getMlAlgorithm().getName(), dataset.dataName, evaluationResults);
                     }
@@ -137,7 +140,7 @@ public class Evaluator {
             Cache source = dataset.source;
             ArrayList<Instance> srcInstances = source.getAllInstances();
             AMapping mapping = dataset.mapping;
-            AMapping goldstd = dataset.goldStandard.goldStandardMappings;
+            AMapping goldstd = dataset.goldStandard.referenceMappings;
 
             // create source partitions: S into S1, .., Sk
             Cache[] srcParts = new Cache[folds];
@@ -214,7 +217,7 @@ public class Evaluator {
                     }
 
                 
-                goldStandard.goldStandardMappings = srcGold[i];
+                goldStandard.referenceMappings = srcGold[i];
                 evalTable.put(algorithm.getName() + " - fold " + i, dataset.dataName, eval.evaluate(algorithm.predict(srcFolds[i], srcFolds[i], model), goldStandard, qlMeasures));
             }
         }

@@ -34,7 +34,7 @@ public class TaskData implements Comparable<TaskData> {
 
     public TaskData(GoldStandard goldStandard, Cache source, Cache target) {
         this.goldStandard = goldStandard;
-        this.mapping = goldStandard.goldStandardMappings;
+        this.mapping = goldStandard.referenceMappings;
         this.source = source;
         this.target = target;
     }

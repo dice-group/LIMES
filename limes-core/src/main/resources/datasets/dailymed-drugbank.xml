@@ -32,6 +32,10 @@
 		<FILE>dailymed_drugbank_incredients_reviewme.txt</FILE>
 		<RELATION>owl:sameAs</RELATION>
 	</REVIEW>
-	<EXECUTION>SIMPLE</EXECUTION>
+		<EXECUTION>
+		<REWRITER>default</REWRITER>
+		<PLANNER>default</PLANNER>
+		<ENGINE>default</ENGINE>
+	</EXECUTION>
 	<OUTPUT>N3</OUTPUT>
 </LIMES>

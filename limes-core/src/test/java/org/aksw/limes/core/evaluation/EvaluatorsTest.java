@@ -10,11 +10,14 @@ import org.aksw.limes.core.datastrutures.TaskAlgorithm;
 import org.aksw.limes.core.datastrutures.TaskData;
 import org.aksw.limes.core.evaluation.evaluator.Evaluator;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.google.common.collect.Table;
 
 public class EvaluatorsTest {
+    static Logger logger = Logger.getLogger(EvaluatorsTest.class);
+
 
     final private String[] datasetsList = {"PERSON1"/*, "PERSON1_CSV", "PERSON2", "PERSON2_CSV", "RESTAURANTS", "OAEI2014BOOKS"*/};
     final private String[] algorithmsListData = {"UNSUPERVISED:WOMBATSIMPLE"/*,"SUPERVISED_BATCH:WOMBATSIMPLE"*/};
@@ -42,6 +45,14 @@ public class EvaluatorsTest {
             List<TaskAlgorithm> algorithms = al.initializeMLAlgorithms(algorithmsListData);
             
             Table<String, String, Map<EvaluatorType, Double>> results = evaluator.evaluate(algorithms, tasks, evaluators, null);
+            
+            for (String mlAlgorithm : results.rowKeySet()) {
+                for (String dataset : results.columnKeySet()) {
+                    for (EvaluatorType measure : results.get(mlAlgorithm, dataset).keySet()) {
+                        System.out.println(mlAlgorithm+"\t"+dataset+"\t"+measure+"\t"+results.get(mlAlgorithm, dataset).get(measure));
+                    }
+                }
+            }
            
         } catch (Exception e) {
             System.out.println(e.getMessage());
