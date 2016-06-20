@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.aksw.limes.core</groupId>
 	<artifactId>limes-core</artifactId>
@@ -7,7 +6,6 @@
 	<name>LIMES</name>
 	<description>LIMES – Link Discovery Framework for Metric Spaces.</description>
 	<url>http://aksw.org/Projects/LIMES</url>
-
 
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -21,8 +19,28 @@
 	</scm>
 
 	<build>
-
 		<plugins>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.7.201606060606</version>
+				<executions>
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- Temporary solution! -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -81,7 +99,7 @@
 				<version>2.17</version>
 				<configuration>
 					<forkMode>pertest</forkMode>
-					<argLine>-Xms256m -Xmx512m</argLine>
+					<argLine>${argLine} -Xms256m -Xmx512m</argLine>
 					<testFailureIgnore>false</testFailureIgnore>
 					<skipTests>false</skipTests>
 				</configuration>
