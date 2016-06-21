@@ -1,6 +1,7 @@
 package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTreeLearning;
 import org.apache.log4j.Logger;
 
 public class MLAlgorithmFactory {
@@ -10,6 +11,7 @@ public class MLAlgorithmFactory {
     public static final String WOMBAT_SIMPLE = "wombat simple";
     public static final String WOMBAT_COMPLETE = "wombat complete";
     public static final String LION = "lion";
+    public static final String DTL = "dtl";
 
     public static final String SUPERVISED_ACTIVE = "supervised active";
     public static final String SUPERVISED_BATCH = "supervised batch";
@@ -32,6 +34,9 @@ public class MLAlgorithmFactory {
         if (name.equalsIgnoreCase(LION)) {
             //@todo: fix this
             return null;
+        }
+        if(name.equalsIgnoreCase(DTL)){
+            return DecisionTreeLearning.class;
         }
         logger.warn(name + " is not implemented yet. Using '" + DEFAULT_ML_ALGORITHM + "'...");
         return WombatSimple.class;
