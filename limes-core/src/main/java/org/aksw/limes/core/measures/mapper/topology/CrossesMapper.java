@@ -15,9 +15,8 @@ import java.util.Set;
  *
  * @author psmeros
  */
-public class CrossesMapper implements TopologicRelationMapper {
+public class CrossesMapper implements ITopologicRelationMapper {
 
-    float theta = 10;
 
     /**
      * @param sourceData
@@ -28,7 +27,6 @@ public class CrossesMapper implements TopologicRelationMapper {
      */
     @Override
     public AMapping getMapping(Set<Polygon> sourceData, Set<Polygon> targetData) {
-        TopologicalRelationUtils.theta = this.theta;
-        return TopologicalRelationUtils.getMapping(sourceData, targetData, TopologicalRelationUtils.CROSSES);
+        return RADON.getMapping(sourceData, targetData, RADON.CROSSES);
     }
 }

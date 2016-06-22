@@ -14,9 +14,8 @@ import java.util.Set;
  *
  * @author psmeros
  */
-public class TouchesMapper implements TopologicRelationMapper {
+public class TouchesMapper implements ITopologicRelationMapper {
 
-    float theta = 10;
 
     /**
      * @param sourceData
@@ -27,7 +26,6 @@ public class TouchesMapper implements TopologicRelationMapper {
      */
     @Override
     public AMapping getMapping(Set<Polygon> sourceData, Set<Polygon> targetData) {
-        TopologicalRelationUtils.theta = this.theta;
-        return TopologicalRelationUtils.getMapping(sourceData, targetData, TopologicalRelationUtils.TOUCHES);
+        return RADON.getMapping(sourceData, targetData, RADON.TOUCHES);
     }
 }

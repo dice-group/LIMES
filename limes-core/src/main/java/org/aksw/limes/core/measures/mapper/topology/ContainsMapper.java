@@ -15,9 +15,8 @@ import java.util.Set;
  *
  * @author psmeros
  */
-public class ContainsMapper implements TopologicRelationMapper {
+public class ContainsMapper implements ITopologicRelationMapper {
 
-    float theta = 10;
 
     /**
      * @param sourceData
@@ -28,7 +27,6 @@ public class ContainsMapper implements TopologicRelationMapper {
      */
     @Override
     public AMapping getMapping(Set<Polygon> sourceData, Set<Polygon> targetData) {
-        TopologicalRelationUtils.theta = this.theta;
-        return TopologicalRelationUtils.getMapping(sourceData, targetData, TopologicalRelationUtils.CONTAINS);
+        return RADON.getMapping(sourceData, targetData, RADON.CONTAINS);
     }
 }

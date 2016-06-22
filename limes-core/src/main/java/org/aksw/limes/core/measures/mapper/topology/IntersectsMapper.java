@@ -14,9 +14,7 @@ import java.util.Set;
  *
  * @author psmeros
  */
-public class IntersectsMapper implements TopologicRelationMapper {
-
-    float theta = 10;
+public class IntersectsMapper implements ITopologicRelationMapper {
 
     /**
      * @param sourceData
@@ -27,7 +25,6 @@ public class IntersectsMapper implements TopologicRelationMapper {
      */
     @Override
     public AMapping getMapping(Set<Polygon> sourceData, Set<Polygon> targetData) {
-        TopologicalRelationUtils.theta = this.theta;
-        return TopologicalRelationUtils.getMapping(sourceData, targetData, TopologicalRelationUtils.INTERSECTS);
+        return RADON.getMapping(sourceData, targetData, RADON.INTERSECTS);
     }
 }

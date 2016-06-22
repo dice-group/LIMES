@@ -14,9 +14,8 @@ import java.util.Set;
  *
  * @author psmeros
  */
-public class EqualsMapper implements TopologicRelationMapper {
+public class EqualsMapper implements ITopologicRelationMapper {
 
-    float theta = 10;
 
     /**
      * @param sourceData
@@ -27,7 +26,6 @@ public class EqualsMapper implements TopologicRelationMapper {
      */
     @Override
     public AMapping getMapping(Set<Polygon> sourceData, Set<Polygon> targetData) {
-        TopologicalRelationUtils.theta = this.theta;
-        return TopologicalRelationUtils.getMapping(sourceData, targetData, TopologicalRelationUtils.EQUALS);
+        return RADON.getMapping(sourceData, targetData, RADON.EQUALS);
     }
 }
