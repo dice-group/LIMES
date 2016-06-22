@@ -79,22 +79,22 @@ public class Controller {
             // for now just assume RDF
             // @todo implement full proof ConfigurationReaderFactory to handle
             // format detection.
-            format = "rdf";
+            format = "xml";
         }
 
         AConfigurationReader reader = null;
         String configFileOrUri = cmd.getArgs()[0];
         switch (format) {
-        case "xml":
-            reader = new XMLConfigurationReader(configFileOrUri);
-            break;
-        case "rdf":
-            reader = new RDFConfigurationReader(configFileOrUri);
-            break;
-        default:
-            logger.error("Error:\n\t Not a valid format: \"" + format + "\"!");
-            printHelp();
-            System.exit(1);
+            case "xml":
+                reader = new XMLConfigurationReader(configFileOrUri);
+                break;
+            case "rdf":
+                reader = new RDFConfigurationReader(configFileOrUri);
+                break;
+            default:
+                logger.error("Error:\n\t Not a valid format: \"" + format + "\"!");
+                printHelp();
+                System.exit(1);
         }
 
         // 2. Read configuration
@@ -128,7 +128,7 @@ public class Controller {
         } else {
             results = LSPipeline.execute(sourceCache, targetCache, config.getMetricExpression(),
                     config.getVerificationThreshold(), config.getSourceInfo().getVar(), config.getTargetInfo().getVar(),
-                    RewriterFactory.getRewriterFactoryType("default"),
+                    RewriterFactory.getRewriterFactoryType(config.getExecutionRewriter()),
                     ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlanner()),
                     ExecutionEngineFactory.getExecutionEngineType(config.getExecutionEngine()));
         }

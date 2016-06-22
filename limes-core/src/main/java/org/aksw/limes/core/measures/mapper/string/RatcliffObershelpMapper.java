@@ -2,6 +2,7 @@ package org.aksw.limes.core.measures.mapper.string;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.mapper.string.triefilter.LengthQuicksort;
@@ -76,8 +77,8 @@ public class RatcliffObershelpMapper extends Mapper {
                     .getPartitionBounds(blue.get(blue.size() - 1).length(), threshold);
             for (ImmutableTriple<Integer, Integer, Integer> sliceBoundary : sliceBoundaries) {
                 MutablePair<List<String>, List<String>> m = new MutablePair<>();
-                m.setLeft(new LinkedList<String>());
-                m.setRight(new LinkedList<String>());
+                m.setLeft(new LinkedList<>());
+                m.setRight(new LinkedList<>());
                 for (String s : red)
                     if (s.length() >= sliceBoundary.getMiddle() && s.length() <= sliceBoundary.getRight())
                         m.getLeft().add(s);
@@ -99,8 +100,10 @@ public class RatcliffObershelpMapper extends Mapper {
         }
 
         int poolSize = Runtime.getRuntime().availableProcessors();
+        if (tempPairs.size() == 0) {
+            return MappingFactory.createDefaultMapping();
+        }
         poolSize = poolSize > tempPairs.size() ? tempPairs.size() : poolSize;
-
         
 
         // create thread pool, one thread per partition
