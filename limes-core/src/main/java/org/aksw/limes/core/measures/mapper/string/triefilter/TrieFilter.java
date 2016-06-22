@@ -163,7 +163,7 @@ public class TrieFilter implements Runnable {
         }
         if (matchCandidateList.size() > 0)
             matchCandidateListPairs
-                    .add(new MutablePair<List<String>, List<String>>(partition, new LinkedList<>(matchCandidateList)));
+                    .add(new MutablePair<List<String>, List<String>>(new LinkedList<>(matchCandidateList), partition));
     }
 
     /**
