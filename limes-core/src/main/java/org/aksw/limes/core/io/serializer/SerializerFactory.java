@@ -1,6 +1,7 @@
 package org.aksw.limes.core.io.serializer;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author ngonga
@@ -8,7 +9,7 @@ import org.apache.log4j.Logger;
  * @version Nov 25, 2015
  */
 public class SerializerFactory {
-    private static Logger logger = Logger.getLogger(SerializerFactory.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(SerializerFactory.class.getName());
 
     public static ISerializer getSerializer(String name) {
         logger.info("Getting serializer with name " + name);

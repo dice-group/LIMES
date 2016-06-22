@@ -3,7 +3,8 @@ package org.aksw.limes.core.evaluation.qualititativeMeasures;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * * This class cointains three methods that calculate such values:
@@ -15,7 +16,7 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public abstract class APseudoPRF extends APRF {
-    static Logger logger = Logger.getLogger(APseudoPRF.class);
+    static Logger logger = LoggerFactory.getLogger(APseudoPRF.class);
 
     public boolean symmetricPrecision = true;
     boolean useOneToOneMapping = false;

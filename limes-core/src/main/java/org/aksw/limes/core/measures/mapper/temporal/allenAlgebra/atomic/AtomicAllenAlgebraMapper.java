@@ -3,7 +3,8 @@ package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.parser.Parser;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,7 +21,7 @@ import java.util.*;
  * points of two event resources s = (b(s), e(s)) and t = (b(t), e(t)).
  */
 public abstract class AtomicAllenAlgebraMapper {
-    protected static final Logger logger = Logger.getLogger(AtomicAllenAlgebraMapper.class);
+    protected static final Logger logger = LoggerFactory.getLogger(AtomicAllenAlgebraMapper.class);
 
     /**
      * Constructor of AtomicAllenAlgebraMapper class.

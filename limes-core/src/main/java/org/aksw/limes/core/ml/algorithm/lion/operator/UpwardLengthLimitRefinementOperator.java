@@ -10,7 +10,8 @@ import org.aksw.limes.core.measures.measure.string.*;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.aksw.limes.core.util.SetUtilities;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -27,7 +28,7 @@ public class UpwardLengthLimitRefinementOperator
 //		extends UpwardRefinementOperator 
         implements LengthLimitedRefinementOperator {
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("LIMES");
     static Set<StringMeasure> stringMeasures = new HashSet<StringMeasure>();
     LearningSetting setting;
 

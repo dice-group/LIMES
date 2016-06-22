@@ -1,6 +1,7 @@
 package org.aksw.limes.core.execution.planning.plan;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements Instruction class. Instruction is an essential component of the
@@ -19,7 +20,7 @@ public class Instruction {
         RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER;
     }
 
-    static Logger logger = Logger.getLogger(Instruction.class);
+    static Logger logger = LoggerFactory.getLogger(Instruction.class);
     /**
      * Command of Instruction.
      */

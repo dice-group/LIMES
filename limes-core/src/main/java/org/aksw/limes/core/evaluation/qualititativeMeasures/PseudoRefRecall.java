@@ -6,13 +6,14 @@ package org.aksw.limes.core.evaluation.qualititativeMeasures;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author mofeed
  */
 public class PseudoRefRecall extends PseudoRecall {
-    static Logger logger = Logger.getLogger(PseudoRefRecall.class);
+    static Logger logger = LoggerFactory.getLogger(PseudoRefRecall.class);
 
     @Override
     public double calculate(AMapping predictions, GoldStandard goldStandard) {

@@ -6,7 +6,8 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -15,7 +16,7 @@ import java.util.*;
  */
 public class MongeElkanMapper extends Mapper {
 
-    static Logger logger = Logger.getLogger(MongeElkanMapper.class.getName());
+    static Logger logger = LoggerFactory.getLogger(MongeElkanMapper.class.getName());
 
     // Tokens are divide by space
     private String split = " ";

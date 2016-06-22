@@ -4,7 +4,8 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.ml.algorithm.lion.SearchTreeNode;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,7 +20,7 @@ import java.util.*;
  */
 public class GraphGenerator {
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("LIMES");
     /**
      * @param args
      */

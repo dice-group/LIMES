@@ -13,7 +13,9 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.MapperFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MarkerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ import java.util.List;
  */
 public class MeasureProcessor {
 
-    static Logger logger = Logger.getLogger(MeasureProcessor.class.getName());
+    static Logger logger = LoggerFactory.getLogger(MeasureProcessor.class.getName());
 
     /**
      * Computes a list that contains all measures used in a given expression.
@@ -146,7 +148,7 @@ public class MeasureProcessor {
 
             // if no properties then terminate
             if (property1 == null || property2 == null) {
-                logger.fatal("Property values could not be read. Exiting");
+                logger.error(MarkerFactory.getMarker("FATAL"), "Property values could not be read. Exiting");
                 System.exit(1);
             } else {
                 double similarity = 0.0d;

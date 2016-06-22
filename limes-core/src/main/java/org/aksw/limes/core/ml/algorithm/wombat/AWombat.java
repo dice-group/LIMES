@@ -30,7 +30,8 @@ import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
 import org.aksw.limes.core.ml.setting.LearningParameter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -43,7 +44,7 @@ import java.util.*;
  */
 public abstract class AWombat extends ACoreMLAlgorithm {
 
-    static Logger logger = Logger.getLogger(AWombat.class.getName());
+    static Logger logger = LoggerFactory.getLogger(AWombat.class.getName());
 
     // Parameters
     public static final String PARAMETER_MAX_REFINEMENT_TREE_SIZE = "max refinement tree size";

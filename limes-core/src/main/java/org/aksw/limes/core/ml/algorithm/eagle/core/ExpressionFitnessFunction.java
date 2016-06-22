@@ -15,7 +15,8 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.eagle.util.CacheTrimmer;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jgap.gp.GPFitnessFunction;
 import org.jgap.gp.IGPProgram;
 import org.jgap.gp.impl.ProgramChromosome;
@@ -40,7 +41,7 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
     private static final long serialVersionUID = 1L;
     /** Complete optimal Mapping. Note that it should only hold matches! */
 //	protected Mapping optimalMapping;
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("LIMES");
     private static ExpressionFitnessFunction instance = null;
     public ExecutionEngine engine;
     public ExecutionEngine fullEngine;

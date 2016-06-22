@@ -2,7 +2,8 @@ package org.aksw.limes.core.io.query;
 
 
 import org.aksw.limes.core.io.config.KBInfo;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author ngonga
@@ -11,7 +12,7 @@ import org.apache.log4j.Logger;
  */
 public class QueryModuleFactory {
 
-    static Logger logger = Logger.getLogger(QueryModuleFactory.class.getName());
+    static Logger logger = LoggerFactory.getLogger(QueryModuleFactory.class.getName());
 
     public static IQueryModule getQueryModule(String name, KBInfo kbinfo) {
         logger.info("Generating <" + name + "> reader");

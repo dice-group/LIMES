@@ -5,7 +5,8 @@
 package org.aksw.limes.core.measures.mapper.pointsets;
 
 import org.aksw.limes.core.datastrutures.Point;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.Set;
  */
 public class PolygonIndex {
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("LIMES");
     public Map<String, Map<Point, Map<Point, Double>>> distanceIndex;
     public Map<String, Polygon> polygonIndex;
     public int computations;

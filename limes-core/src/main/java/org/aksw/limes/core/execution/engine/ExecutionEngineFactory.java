@@ -1,7 +1,8 @@
 package org.aksw.limes.core.execution.engine;
 
 import org.aksw.limes.core.io.cache.Cache;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements the execution engine factory class. The execution engine factory
@@ -12,7 +13,7 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public class ExecutionEngineFactory {
-    private static final Logger logger = Logger.getLogger(ExecutionEngineFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExecutionEngineFactory.class);
 
     /**
      * Enum class of allowed execution engine types.

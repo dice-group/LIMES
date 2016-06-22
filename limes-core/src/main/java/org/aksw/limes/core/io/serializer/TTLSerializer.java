@@ -5,7 +5,8 @@
 package org.aksw.limes.core.io.serializer;
 
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,7 +25,7 @@ import java.util.TreeSet;
 public class TTLSerializer implements ISerializer {
 
     PrintWriter writer;
-    Logger logger = Logger.getLogger(TTLSerializer.class.getName());
+    Logger logger = LoggerFactory.getLogger(TTLSerializer.class.getName());
     TreeSet<String> statements; //List of statements to be printed
     Map<String, String> prefixList;
     File folder = new File("");

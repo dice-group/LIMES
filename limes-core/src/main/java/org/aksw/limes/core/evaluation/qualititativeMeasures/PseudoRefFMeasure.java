@@ -3,10 +3,11 @@ package org.aksw.limes.core.evaluation.qualititativeMeasures;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PseudoRefFMeasure extends PseudoFMeasure {
-    static Logger logger = Logger.getLogger(PseudoRefFMeasure.class);
+    static Logger logger = LoggerFactory.getLogger(PseudoRefFMeasure.class);
 
     public double calculate(AMapping predictions, GoldStandard goldStandard, double beta) {
 

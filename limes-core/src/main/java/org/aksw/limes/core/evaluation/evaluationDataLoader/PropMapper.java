@@ -3,7 +3,8 @@ package org.aksw.limes.core.evaluation.evaluationDataLoader;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -18,7 +19,7 @@ import java.io.IOException;
  * @version 1.0
  */
 public class PropMapper {
-    static Logger logger = Logger.getLogger(PropMapper.class);
+    static Logger logger = LoggerFactory.getLogger(PropMapper.class);
 
 
     /**

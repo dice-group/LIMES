@@ -5,7 +5,8 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,7 +127,7 @@ public class CacheTrimmer {
      * @return Array holding both resulting Caches, where the Cache for the source is at index 0. Cache for the target knowledge base at index 1.
      */
     public static Cache[] processData(Cache sC, Cache tC, AMapping m) {
-        Logger logger = Logger.getLogger("LIMES");
+        Logger logger = LoggerFactory.getLogger("LIMES");
         if (m.getSize() <= 100)
             logger.info("Scaling Caches down to " + m);
         Cache[] ret = new Cache[2];
@@ -185,7 +186,7 @@ public class CacheTrimmer {
         }
         ret[0] = h1;
         ret[1] = h2;
-        Logger logger = Logger.getLogger("LIMES");
+        Logger logger = LoggerFactory.getLogger("LIMES");
         logger.info("asking random " + numberOfQuestions + " questions got me " + reference.size() + " valid links");
         if (reference.getSize() < numberOfQuestions / 2) {
             AMapping ref2 = trimExamplesRandomly(m, numberOfQuestions / 2);

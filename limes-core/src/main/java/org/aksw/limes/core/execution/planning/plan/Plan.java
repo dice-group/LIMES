@@ -1,6 +1,7 @@
 package org.aksw.limes.core.execution.planning.plan;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
  * @version 1.0
  */
 public class Plan implements IPlan {
-    static Logger logger = Logger.getLogger(Plan.class);
+    static Logger logger = LoggerFactory.getLogger(Plan.class);
     /**
      * The runtime of the plan.
      */

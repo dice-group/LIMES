@@ -3,7 +3,8 @@ package org.aksw.limes.core.io.query;
 import org.apache.jena.query.*;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -28,7 +29,7 @@ public class NoPrefixSparqlQueryModule implements IQueryModule {
      */
     public void fillCache(Cache cache) {
 
-        Logger logger = Logger.getLogger("LIMES");
+        Logger logger = LoggerFactory.getLogger("LIMES");
         long startTime = System.currentTimeMillis();
         String query = "";
         // fill in variable for the different properties to be retrieved

@@ -1,7 +1,8 @@
 package org.aksw.limes.core.io.serializer;
 
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,7 +23,7 @@ import java.util.TreeSet;
  */
 public class NtSerializer implements ISerializer {
 
-    private static Logger logger = Logger.getLogger(NtSerializer.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(NtSerializer.class.getName());
     protected PrintWriter writer;
     protected Set<String> statements;
     protected Map<String, String> prefixMap;

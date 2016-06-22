@@ -3,7 +3,8 @@ package org.aksw.limes.core.ml.algorithm.eagle.core;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.CommandGene;
 import org.jgap.gp.IGPProgram;
@@ -25,7 +26,7 @@ public class NumberMeasure extends CommandGene implements IMutateable, ICloneabl
      *
      */
     private static final long serialVersionUID = -2615468774498850743L;
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("LIMES");
     // per default not mutable
     private boolean m_mutateable;
 

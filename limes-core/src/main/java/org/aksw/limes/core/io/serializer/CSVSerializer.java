@@ -1,6 +1,7 @@
 package org.aksw.limes.core.io.serializer;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -8,7 +9,7 @@ import org.apache.log4j.Logger;
  * @version Nov 25, 2015
  */
 public class CSVSerializer extends TabSeparatedSerializer {
-    private static Logger logger = Logger.getLogger(CSVSerializer.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(CSVSerializer.class.getName());
     public String SEPARATOR = ",";
 
     public String getName() {

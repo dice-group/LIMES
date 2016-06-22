@@ -15,7 +15,8 @@ import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedH
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff;
 
 import java.util.*;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Still need to add tabu list. Basically checks whether two polygons have
@@ -29,7 +30,7 @@ public class GeoHR3 {
     // when using
     // this index
 
-    public static final Logger logger = Logger.getLogger("LIMES");
+    public static final Logger logger = LoggerFactory.getLogger(GeoHR3.class);
     public static boolean threshold = false;
     public static double DEFAULT_THRESHOLD = 1f;
     public static int DEFAULT_GRANULARITY = 4;

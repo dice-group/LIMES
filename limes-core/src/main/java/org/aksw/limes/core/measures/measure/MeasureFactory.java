@@ -44,7 +44,8 @@ import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.StartsMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements the measure factory class. For each measure name, the factory
@@ -57,7 +58,7 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public class MeasureFactory {
-    static Logger logger = Logger.getLogger(MeasureFactory.class);
+    static Logger logger = LoggerFactory.getLogger(MeasureFactory.class);
 
     // String measures
     public static final String JARO = "jaro";

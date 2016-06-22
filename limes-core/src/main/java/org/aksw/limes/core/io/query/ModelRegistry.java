@@ -1,7 +1,8 @@
 package org.aksw.limes.core.io.query;
 
 import org.apache.jena.rdf.model.Model;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Map;
  * @author Claus Stadler <cstadler@informatik.uni-leipzig.de>
  */
 public class ModelRegistry {
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("LIMES");
 
     private static ModelRegistry instance = null;
     private Map<String, Model> map = new HashMap<String, Model>();

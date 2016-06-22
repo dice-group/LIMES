@@ -5,7 +5,8 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
@@ -16,7 +17,7 @@ import org.apache.log4j.Logger;
 @Deprecated
 public abstract class MLAlgorithm implements IMLAlgorithm {
 
-    static Logger logger = Logger.getLogger(MLAlgorithm.class.getName());
+    static Logger logger = LoggerFactory.getLogger(MLAlgorithm.class.getName());
     protected Configuration configuration;
     protected Cache sourceCache;
     protected Cache targetCache;

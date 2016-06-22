@@ -1,7 +1,8 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
 import org.jgap.gp.CommandGene;
@@ -19,7 +20,7 @@ public class StringPropertyPair extends CommandGene implements IMutateable, IClo
      *
      */
     private static final long serialVersionUID = 7725242441490770801L;
-    final Logger logger = Logger.getLogger("LIMES");
+    final Logger logger = LoggerFactory.getLogger("LIMES");
     int pairIndex;
     PairSimilar<String> pair;
     boolean mutateable;

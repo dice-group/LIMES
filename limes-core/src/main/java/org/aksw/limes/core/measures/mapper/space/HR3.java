@@ -13,7 +13,8 @@ import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
 import org.aksw.limes.core.measures.mapper.space.blocking.BlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ import java.util.TreeSet;
  * @author ngonga
  */
 public class HR3 extends Mapper {
-    static Logger logger = Logger.getLogger(HR3.class.getName());
+    static Logger logger = LoggerFactory.getLogger(HR3.class.getName());
 
     public int granularity = 4;
 

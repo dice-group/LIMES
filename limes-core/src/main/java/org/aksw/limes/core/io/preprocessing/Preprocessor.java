@@ -1,6 +1,7 @@
 package org.aksw.limes.core.io.preprocessing;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class Preprocessor {
     public static final String AT = "@";
     public static final String NO_LANG = "nolang";
     public static final String NUMBER = "number";
-    static Logger logger = Logger.getLogger(Preprocessor.class.getName());
+    static Logger logger = LoggerFactory.getLogger(Preprocessor.class.getName());
 
     public static String process(String entry, String functionChain) {
         String result = entry.split("\\^")[0];

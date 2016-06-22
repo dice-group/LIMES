@@ -1,7 +1,8 @@
 package org.aksw.limes.core.measures.measure.space;
 
 import org.aksw.limes.core.measures.measure.pointsets.GeoDistance;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -9,7 +10,7 @@ import org.apache.log4j.Logger;
  */
 public class SpaceMeasureFactory {
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("LIMES");
 
     public static ISpaceMeasure getMeasure(String name, int dimension) {
 //   	System.out.println("SpaceMesure.getMeasure("+name+")");

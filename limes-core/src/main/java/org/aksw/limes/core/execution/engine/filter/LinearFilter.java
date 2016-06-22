@@ -6,7 +6,8 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements the linear filter class.
@@ -17,7 +18,7 @@ import org.apache.log4j.Logger;
  */
 public class LinearFilter implements IFilter {
 
-    static Logger logger = Logger.getLogger(LinearFilter.class.getName());
+    static Logger logger = LoggerFactory.getLogger(LinearFilter.class.getName());
 
     /**
      * Naive filter function for mapping using a threshold as filtering

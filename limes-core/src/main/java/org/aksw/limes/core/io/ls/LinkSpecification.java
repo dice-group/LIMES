@@ -2,7 +2,8 @@ package org.aksw.limes.core.io.ls;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.parser.Parser;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -21,7 +22,7 @@ public class LinkSpecification implements ILinkSpecification {
     protected static final String XOR = "XOR";
     protected static final String MIN = "MIN";
     protected static final String AND = "AND";
-    private static final Logger logger = Logger.getLogger(LinkSpecification.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(LinkSpecification.class.getName());
     protected double threshold;
     protected LogicOperator operator;
     protected List<LinkSpecification> children; // children must be a list
@@ -146,9 +147,9 @@ public class LinkSpecification implements ILinkSpecification {
     public void getAllChildren() {
         for (LinkSpecification child : getChildren()) {
             if (this.getOperator() == LogicOperator.OR) {
-                logger.info(this.parent);
+                logger.info(this.parent.toString());
                 this.parent = child;
-                logger.info(this.parent);
+                logger.info(this.parent.toString());
             }
             if (!child.isAtomic())
                 child.getAllChildren();

@@ -6,7 +6,8 @@
 package org.aksw.limes.core.measures.measure.space;
 
 import org.aksw.limes.core.io.cache.Instance;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements a spatial similarity based on the Euclidean distance. The
@@ -16,7 +17,7 @@ import org.apache.log4j.Logger;
  * @author ngonga
  */
 public class EuclideanMetric extends SpaceMeasure {
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("LIMES");
     public double dim = 2;
 
     public void setDimension(int dimension) {

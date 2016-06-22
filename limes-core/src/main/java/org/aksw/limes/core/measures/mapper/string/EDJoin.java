@@ -12,7 +12,9 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MarkerFactory;
 
 import java.util.*;
 
@@ -21,7 +23,7 @@ import java.util.*;
  */
 public class EDJoin extends Mapper {
 
-    static Logger logger = Logger.getLogger(EDJoin.class.getName());
+    static Logger logger = LoggerFactory.getLogger(EDJoin.class.getName());
     private static int Q = -1;
     private static AMapping mapping = null;
     private static HashMap<Integer, String> sourceMap;
@@ -380,15 +382,15 @@ public class EDJoin extends Mapper {
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         // if no properties then terminate
         if (properties.get(0) == null || properties.get(1) == null) {
-            logger.fatal("Property 1 = " + properties.get(0) + ", Property 2 = " + properties.get(1));
-            logger.fatal("Property values could not be read. Exiting");
+            logger.error(MarkerFactory.getMarker("FATAL"),"Property 1 = " + properties.get(0) + ", Property 2 = " + properties.get(1));
+            logger.error(MarkerFactory.getMarker("FATAL"),"Property values could not be read. Exiting");
             System.exit(1);
         }
 
         // if expression is not atomic terminate
         if (!p.isAtomic()) {
-            logger.fatal("Mappers can only deal with atomic expression");
-            logger.fatal("Expression " + expression + " was given to a mapper to process");
+            logger.error(MarkerFactory.getMarker("FATAL"),"Mappers can only deal with atomic expression");
+            logger.error(MarkerFactory.getMarker("FATAL"),"Expression " + expression + " was given to a mapper to process");
             System.exit(1);
         }
 

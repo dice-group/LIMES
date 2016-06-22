@@ -1,6 +1,7 @@
 package org.aksw.limes.core.io.cache;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import java.util.TreeSet;
  * @version Nov 25, 2015
  */
 public class Instance implements Comparable<Object>, Serializable {
-    private static final Logger logger = Logger.getLogger(Instance.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(Instance.class.getName());
 
     /**
      *

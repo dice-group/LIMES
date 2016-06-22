@@ -39,11 +39,12 @@ import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.setting.LearningParameter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class MachineLearningView {
 
-    protected static Logger logger = Logger.getLogger("LIMES");
+    protected static Logger logger = LoggerFactory.getLogger("LIMES");
 
     private static final String[] algorithms = {MLAlgorithmFactory.EAGLE, MLAlgorithmFactory.LION, MLAlgorithmFactory.WOMBAT_COMPLETE, MLAlgorithmFactory.WOMBAT_SIMPLE};
     protected MachineLearningController mlController;

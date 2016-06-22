@@ -1,7 +1,8 @@
 package org.aksw.limes.core.io.mapping;
 
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -9,7 +10,7 @@ import org.apache.log4j.Logger;
  * @version Nov 12, 2015
  */
 public class MappingFactory {
-    private static final Logger logger = Logger.getLogger(MappingFactory.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(MappingFactory.class.getName());
 
     /**
      * @return the default Mapping implementation

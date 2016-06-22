@@ -5,7 +5,9 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.aksw.limes.core.util.DataCleaner;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MarkerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -20,7 +22,7 @@ import java.util.regex.Pattern;
  * @version Nov 23, 2015
  */
 public class CsvQueryModule implements IQueryModule {
-    Logger logger = Logger.getLogger(CsvQueryModule.class.getName());
+    Logger logger = LoggerFactory.getLogger(CsvQueryModule.class.getName());
     KBInfo kb;
     private String SEP = ",";
 
@@ -81,7 +83,7 @@ public class CsvQueryModule implements IQueryModule {
             reader.close();
             logger.info("Retrieved " + c.size() + " statements");
         } catch (Exception e) {
-            logger.fatal("Exception:" + e.getMessage());
+            logger.error(MarkerFactory.getMarker("FATAL"),"Exception:" + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -94,7 +96,7 @@ public class CsvQueryModule implements IQueryModule {
      *         Cache in which the content is to be written
      */
     public void fillAllInCache(Cache c) {
-        Logger logger = Logger.getLogger("LIMES");
+        Logger logger = LoggerFactory.getLogger("LIMES");
         String s = "";
         try {
             // in case a CSV is use, endpoint is the file to read
@@ -143,7 +145,7 @@ public class CsvQueryModule implements IQueryModule {
             reader.close();
             logger.info("Retrieved " + c.size() + " statements");
         } catch (Exception e) {
-            logger.fatal("Exception:" + e.getMessage());
+            logger.error(MarkerFactory.getMarker("FATAL"),"Exception:" + e.getMessage());
             logger.warn(s);
             e.printStackTrace();
         }

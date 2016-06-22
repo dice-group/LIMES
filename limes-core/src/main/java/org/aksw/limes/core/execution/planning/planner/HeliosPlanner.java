@@ -16,7 +16,8 @@ import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.measures.measure.MeasureType;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ import java.util.List;
  */
 public class HeliosPlanner extends Planner {
 
-    static Logger logger = Logger.getLogger(HeliosPlanner.class);
+    static Logger logger = LoggerFactory.getLogger(HeliosPlanner.class);
     /**
      * Source cache.
      */

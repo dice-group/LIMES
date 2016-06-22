@@ -5,7 +5,9 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFReader;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MarkerFactory;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,7 +21,7 @@ public class FileQueryModule implements IQueryModule {
 
     KBInfo kb;
     Model model;
-    private Logger logger = Logger.getLogger(FileQueryModule.class.getName());
+    private Logger logger = LoggerFactory.getLogger(FileQueryModule.class.getName());
 
     /**
      * Constructor
@@ -41,7 +43,7 @@ public class FileQueryModule implements IQueryModule {
             } catch (FileNotFoundException e) {
                 in = getClass().getClassLoader().getResourceAsStream(kb.getEndpoint());
                 if (in == null) {
-                    logger.fatal("endpoint could not be loaded as a file or resource");
+                    logger.error(MarkerFactory.getMarker("FATAL"),"endpoint could not be loaded as a file or resource");
                     return;
                 }
             }
@@ -53,7 +55,7 @@ public class FileQueryModule implements IQueryModule {
             reader.close();
             in.close();
         } catch (Exception e) {
-            logger.fatal("Error loading endpoint", e);
+            logger.error(MarkerFactory.getMarker("FATAL"),"Error loading endpoint", e);
         }
     }
 

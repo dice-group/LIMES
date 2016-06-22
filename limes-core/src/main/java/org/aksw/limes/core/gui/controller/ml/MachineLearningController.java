@@ -2,11 +2,12 @@ package org.aksw.limes.core.gui.controller.ml;
 
 import org.aksw.limes.core.gui.model.ml.MachineLearningModel;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class MachineLearningController {
 
-    protected static Logger logger = Logger.getLogger("LIMES");
+    protected static Logger logger = LoggerFactory.getLogger("LIMES");
     protected MachineLearningView mlView;
     protected MachineLearningModel mlModel;
 

@@ -2,7 +2,8 @@ package org.aksw.limes.core.ml.algorithm.lion;
 
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.ml.setting.LearningSetting;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  */
 @Deprecated
 public class DefaultRefinementHeuristic implements RefinementHeuristic {
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("LIMES");
     /*
      * Evaluation: check influence of expansion and bonus
      */

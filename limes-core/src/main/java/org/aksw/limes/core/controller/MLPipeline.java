@@ -11,7 +11,8 @@ import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
 import org.aksw.limes.core.ml.algorithm.*;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.util.*;
@@ -24,7 +25,7 @@ import java.util.*;
  */
 public class MLPipeline {
 
-    public static final Logger logger = Logger.getLogger(MLPipeline.class);
+    public static final Logger logger = LoggerFactory.getLogger(MLPipeline.class);
 
     public static AMapping execute(
             Cache source,

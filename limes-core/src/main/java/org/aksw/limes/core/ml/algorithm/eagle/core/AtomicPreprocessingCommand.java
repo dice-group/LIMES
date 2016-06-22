@@ -1,7 +1,8 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
 import org.jgap.gp.CommandGene;
@@ -26,7 +27,7 @@ public class AtomicPreprocessingCommand extends CommandGene
         implements IMutateable, ICloneable {
     private static final long serialVersionUID = 8798097200717090109L;
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("LIMES");
     public Set<String> functions = new HashSet<String>();
     boolean is_mutable = true;
     String command = "lowercase";

@@ -13,7 +13,8 @@ import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.query.FileQueryModule;
 import org.aksw.limes.core.io.query.ModelRegistry;
 import org.aksw.limes.core.io.query.QueryModuleFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -25,7 +26,7 @@ import java.util.*;
 @SuppressWarnings("all")
 public class SPARQLHelper {
 
-    //	protected static transient final Logger log = Logger.getLogger(SPARQLHelper.class.toString());
+    //	protected static transient final Logger log = LoggerFactory.getLogger(SPARQLHelper.class.toString());
     //	public static final String GEONAMES_ENDPOINT_INTERNAL = "http://lgd.aksw.org:8900/sparql";
     public static final String DBPEDIA_ENDPOINT_OFFICIAL = "http://dbpedia.org/sparql";
     public static final String DBPEDIA_ENDPOINT_LIVE = "http://live.dbpedia.org/sparql";
@@ -69,7 +70,7 @@ public class SPARQLHelper {
     //		}
     //	}
     //
-    private final static Logger logger = Logger.getLogger(SPARQLHelper.class.getName());
+    private final static Logger logger = LoggerFactory.getLogger(SPARQLHelper.class.getName());
 
     public static void main(String args[]) {
         SPARQLHelper h = new SPARQLHelper();

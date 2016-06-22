@@ -2,7 +2,8 @@ package org.aksw.limes.core.execution.engine;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
  * @version 1.0
  */
 public abstract class ExecutionEngine implements IExecutionEngine {
-    static Logger logger = Logger.getLogger(ExecutionEngine.class);
+    static Logger logger = LoggerFactory.getLogger(ExecutionEngine.class);
     /**
      * List of intermediate mappings.
      */

@@ -4,7 +4,8 @@ import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.query.IQueryModule;
 import org.aksw.limes.core.io.query.NoPrefixSparqlQueryModule;
 import org.aksw.limes.core.io.query.QueryModuleFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import java.util.Iterator;
  */
 public class HybridCache extends MemoryCache implements Serializable {
     private static final long serialVersionUID = -2268344215686055231L;
-    static Logger logger = Logger.getLogger(HybridCache.class.getName());
+    static Logger logger = LoggerFactory.getLogger(HybridCache.class.getName());
     // maps uris to instance. A bit redundant as instance contain their URI
     protected HashMap<String, Instance> instanceMap;
     //Iterator for getting next instance

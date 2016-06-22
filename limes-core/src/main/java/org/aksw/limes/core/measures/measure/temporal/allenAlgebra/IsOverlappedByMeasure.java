@@ -2,7 +2,8 @@ package org.aksw.limes.core.measures.measure.temporal.allenAlgebra;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,7 +16,7 @@ import java.util.Date;
  * @version 1.0
  */
 public class IsOverlappedByMeasure extends TemporalMeasure {
-    private static final Logger logger = Logger.getLogger(IsOverlappedByMeasure.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(IsOverlappedByMeasure.class.getName());
 
     // { BE1 \ (BB0 U BB1) } \ (EE0 U EE1)
     /**

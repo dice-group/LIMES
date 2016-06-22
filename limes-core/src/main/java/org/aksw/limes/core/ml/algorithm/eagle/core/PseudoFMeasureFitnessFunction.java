@@ -11,7 +11,8 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jgap.gp.GPFitnessFunction;
 import org.jgap.gp.IGPProgram;
 import org.jgap.gp.impl.ProgramChromosome;
@@ -28,7 +29,7 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
      *
      */
     private static final long serialVersionUID = -7114137172832439294L;
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("LIMES");
     private static PseudoFMeasureFitnessFunction instance = null;
     public ExecutionEngine engine;
     Cache sourceCache, targetCache;

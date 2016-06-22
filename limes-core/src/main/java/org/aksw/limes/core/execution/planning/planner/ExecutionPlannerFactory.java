@@ -1,7 +1,8 @@
 package org.aksw.limes.core.execution.planning.planner;
 
 import org.aksw.limes.core.io.cache.Cache;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements the planner factory class. The planner factory class is
@@ -11,7 +12,7 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public class ExecutionPlannerFactory {
-    private static final Logger logger = Logger.getLogger(ExecutionPlannerFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExecutionPlannerFactory.class);
 
     /**
      * Enum class of allowed planner types.

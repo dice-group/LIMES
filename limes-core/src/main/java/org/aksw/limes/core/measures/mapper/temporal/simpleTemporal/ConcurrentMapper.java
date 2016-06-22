@@ -5,7 +5,8 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Set;
@@ -19,7 +20,7 @@ import java.util.TreeMap;
  */
 public class ConcurrentMapper extends SimpleTemporalMapper {
     
-    protected static final Logger logger = Logger.getLogger(ConcurrentMapper.class);
+    protected static final Logger logger = LoggerFactory.getLogger(ConcurrentMapper.class);
     /**
      * Maps a set of source instances to their concurrent target instances. The
      * mapping contains 1-to-m relations. Each source instance takes as

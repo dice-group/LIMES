@@ -3,7 +3,8 @@ package org.aksw.limes.core.evaluation.qualititativeMeasures;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements a quality measure for unsupervised ML algorihtms, dubbed pseudo F-Measure.
@@ -17,7 +18,7 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public class PseudoFMeasure extends APseudoPRF {
-    static Logger logger = Logger.getLogger(PseudoFMeasure.class);
+    static Logger logger = LoggerFactory.getLogger(PseudoFMeasure.class);
 
     public PseudoFMeasure() {
     }

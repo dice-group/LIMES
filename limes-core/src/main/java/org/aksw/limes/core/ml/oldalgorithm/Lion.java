@@ -24,7 +24,8 @@ import org.aksw.limes.core.ml.algorithm.lion.operator.UpwardLengthLimitRefinemen
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.aksw.limes.core.ml.setting.LearningSetting.TerminationCriteria;
 import org.aksw.limes.core.ml.setting.UnsupervisedLearningSetting;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jgap.InvalidConfigurationException;
 
 import java.io.*;
@@ -47,7 +48,7 @@ public class Lion extends MLAlgorithm {
 
     // TODO either move to setting or finalize strategy
     public static boolean hardRootExpansion = true;
-    protected static Logger logger = Logger.getLogger("LIMES");
+    protected static Logger logger = LoggerFactory.getLogger("LIMES");
     protected static int globalTime = 1000;
     // bMofeed
     protected static int IdCounter = 0;

@@ -2,7 +2,9 @@ package org.aksw.limes.core.io.query;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MarkerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -42,7 +44,7 @@ public class VectorQueryModule implements IQueryModule {
      *         The cache to be filled
      */
     public void fillCache(Cache c) {
-        Logger logger = Logger.getLogger("LIMES");
+        Logger logger = LoggerFactory.getLogger("LIMES");
         try {
 
             // in case a CSV is used, endpoint is the file to read
@@ -68,7 +70,7 @@ public class VectorQueryModule implements IQueryModule {
             reader.close();
             logger.info("Retrieved " + c.size() + " statements");
         } catch (Exception e) {
-            logger.fatal("Exception:" + e.getMessage());
+            logger.error(MarkerFactory.getMarker("FATAL"),"Exception:" + e.getMessage());
             e.printStackTrace();
         }
     }

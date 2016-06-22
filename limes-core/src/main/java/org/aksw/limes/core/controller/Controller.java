@@ -14,7 +14,8 @@ import org.aksw.limes.core.io.serializer.ISerializer;
 import org.aksw.limes.core.io.serializer.SerializerFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.apache.commons.cli.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.fusesource.jansi.Ansi.Color.RED;
 import static org.fusesource.jansi.Ansi.ansi;
@@ -27,14 +28,14 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class Controller {
 
     private static final int MAX_ITERATIONS_NUMBER = 10;
-    private static final Logger logger = Logger.getLogger(Controller.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(Controller.class.getName());
     private static Options options = getOptions();
 
     /**
      * Take configuration file as argument and run the specified linking task.
      *
      * @param args
-     *            Command line arguments
+     *            Command line arguments)
      */
     public static void main(String[] args) {
         CommandLine cl = parseCommandLine(args);

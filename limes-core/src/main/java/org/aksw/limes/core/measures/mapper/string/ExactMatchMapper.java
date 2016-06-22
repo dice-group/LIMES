@@ -5,7 +5,9 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MarkerFactory;
 
 import java.util.*;
 
@@ -14,7 +16,7 @@ import java.util.*;
  */
 public class ExactMatchMapper extends Mapper {
 
-    static Logger logger = Logger.getLogger(ExactMatchMapper.class.getName());
+    static Logger logger = LoggerFactory.getLogger(ExactMatchMapper.class.getName());
 
     /**
      * Computes a mapping between a source and a target.
@@ -42,7 +44,7 @@ public class ExactMatchMapper extends Mapper {
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         // if no properties then terminate
         if (properties.get(0) == null || properties.get(1) == null) {
-            logger.fatal("Property values could not be read. Exiting");
+            logger.error(MarkerFactory.getMarker("FATAL"),"Property values could not be read. Exiting");
             System.exit(1);
         }
         Map<String, Set<String>> sourceIndex = getValueToUriMap(source, properties.get(0));

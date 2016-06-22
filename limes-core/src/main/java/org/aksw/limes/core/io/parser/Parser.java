@@ -1,13 +1,14 @@
 package org.aksw.limes.core.io.parser;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version DEC 2, 2015
  */
 public class Parser implements IParser {
-    public static final Logger logger = Logger.getLogger(Parser.class.getName());
+    public static final Logger logger = LoggerFactory.getLogger(Parser.class.getName());
 
     public static final String MULT = "MULT";
     public static final String ADD = "ADD";

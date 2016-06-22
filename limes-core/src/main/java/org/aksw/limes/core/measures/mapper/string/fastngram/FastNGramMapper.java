@@ -11,7 +11,9 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MarkerFactory;
 
 import java.util.*;
 
@@ -20,7 +22,7 @@ import java.util.*;
  */
 public class FastNGramMapper extends Mapper {
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("LIMES");
     static int q = 3;
 
     public static AMapping compute(Set<String> source, Set<String> target, int q, double threshold) {
@@ -167,14 +169,14 @@ public class FastNGramMapper extends Mapper {
         }
         // if no properties then terminate
         if (property1 == null || property2 == null) {
-            logger.fatal("Property 1 = " + property1 + ", Property 2 = " + property2);
-            logger.fatal("Property values could not be read. Exiting");
+            logger.error(MarkerFactory.getMarker("FATAL"),"Property 1 = " + property1 + ", Property 2 = " + property2);
+            logger.error(MarkerFactory.getMarker("FATAL"),"Property values could not be read. Exiting");
             System.exit(1);
         }
 
         if (!p.isAtomic()) {
-            logger.fatal("Mappers can only deal with atomic expression");
-            logger.fatal("Expression " + expression + " was given to a mapper to process");
+            logger.error(MarkerFactory.getMarker("FATAL"),"Mappers can only deal with atomic expression");
+            logger.error(MarkerFactory.getMarker("FATAL"),"Expression " + expression + " was given to a mapper to process");
             System.exit(1);
         }
 

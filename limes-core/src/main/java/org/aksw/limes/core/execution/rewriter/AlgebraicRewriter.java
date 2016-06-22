@@ -3,7 +3,8 @@ package org.aksw.limes.core.execution.rewriter;
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.parser.Parser;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
  * @version 1.0
  */
 public class AlgebraicRewriter extends Rewriter {
-    static Logger logger = Logger.getLogger(AlgebraicRewriter.class);
+    static Logger logger = LoggerFactory.getLogger(AlgebraicRewriter.class);
 
     /**
      * Rewrites a Link Specification. The idea is that the rewriter gets as

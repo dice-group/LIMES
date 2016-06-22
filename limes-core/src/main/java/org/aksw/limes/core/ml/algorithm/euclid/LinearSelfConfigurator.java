@@ -24,7 +24,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
 //	public boolean STRICT = true;
 //	public int ITERATIONS_MAX = 1000;
 //	public double MIN_THRESHOLD = 0.3;
-//	static Logger logger = Logger.getLogger("LIMES");
+//	static Logger logger = LoggerFactory.getLogger("LIMES");
 //
 //	public enum Strategy {
 //		FMEASURE, THRESHOLD, PRECISION, RECALL

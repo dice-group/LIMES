@@ -3,7 +3,8 @@ package org.aksw.limes.core.evaluation.oracle;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.aksw.limes.core.io.mapping.reader.AMappingReader;
 
 //import de.uni_leipzig.simba.learning.oracle.mappingreader.XMLMappingReader;
@@ -17,7 +18,7 @@ import org.aksw.limes.core.io.mapping.reader.AMappingReader;
  * @version 1.0
  */
 public class OracleFactory {
-    static Logger logger = Logger.getLogger(OracleFactory.class);
+    static Logger logger = LoggerFactory.getLogger(OracleFactory.class);
 
     /**
      * Creates an oracle based on the input type (i.e., the type of file within which the

@@ -14,7 +14,9 @@ import org.aksw.limes.core.io.query.ModelRegistry;
 import org.aksw.limes.core.io.query.SparqlQueryModule;
 
 import java.lang.reflect.Field;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Simple modification of SparqlQueryModule but instead of only returning a part this class gets everything.
@@ -24,7 +26,7 @@ import java.util.logging.Logger;
  */
 @SuppressWarnings("all")
 public class GetAllSparqlQueryModule extends SparqlQueryModule {
-    private final static Logger LOGGER = Logger.getLogger(GetAllSparqlQueryModule.class.getName());
+    private final static Logger LOGGER = LoggerFactory.getLogger(GetAllSparqlQueryModule.class);
     // amout of subjects read in
     Integer subjectLimit = null;
 

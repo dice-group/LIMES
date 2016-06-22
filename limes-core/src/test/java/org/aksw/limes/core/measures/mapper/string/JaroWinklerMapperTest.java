@@ -20,16 +20,18 @@ public class JaroWinklerMapperTest extends MapperTest {
 
     @Test
     public void testGetMapping() {
-        double theta = 0.92d;
-        int sourceSize = 1000;
-        int targetSize = 1000;
+        double theta = 0.8d;
+        int sourceSize = 1;
+        int targetSize = 1;
         JaroWinklerMapper jwm = new JaroWinklerMapper();
+//        RatcliffObershelpMapper rom = new RatcliffObershelpMapper();
         Map<String, Set<String>> s = generateRandomMap(sourceSize);
         Map<String, Set<String>> t = generateRandomMap(targetSize);
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         AMapping m1 = jwm.getMapping(s, t, theta);
-        stopWatch.getElapsedTime();
+//        AMapping m1 = rom.getMapping(s, t, theta);
+//        stopWatch.getElapsedTime();
         stopWatch.start();
         AMapping m2 = bruteForce(s, t, theta, new JaroWinkler());
         stopWatch.getElapsedTime();

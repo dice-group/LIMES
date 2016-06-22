@@ -1,7 +1,8 @@
 package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MLAlgorithmFactory {
 
@@ -16,7 +17,7 @@ public class MLAlgorithmFactory {
     public static final String UNSUPERVISED = "unsupervised";
     public static final String DEFAULT_ML_ALGORITHM = WOMBAT_SIMPLE;
 
-    public static final Logger logger = Logger.getLogger(MLAlgorithmFactory.class);
+    public static final Logger logger = LoggerFactory.getLogger(MLAlgorithmFactory.class);
 
     public static Class<? extends ACoreMLAlgorithm> getAlgorithmType(String name) {
         if (name.equalsIgnoreCase(EAGLE)) {

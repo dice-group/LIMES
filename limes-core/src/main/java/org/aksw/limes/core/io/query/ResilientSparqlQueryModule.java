@@ -17,7 +17,8 @@ import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.sparql.core.DatasetDescription;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -27,7 +28,7 @@ import org.apache.log4j.Logger;
  */
 public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQueryModule {
    
-    protected Logger logger = Logger.getLogger(ResilientSparqlQueryModule.class);
+    protected Logger logger = LoggerFactory.getLogger(ResilientSparqlQueryModule.class);
     
     protected int retryCount = 5;
     protected int retryDelayInMS = 500;

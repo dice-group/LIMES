@@ -6,7 +6,8 @@ package org.aksw.limes.core.util;
  */
 
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,7 @@ public class Utils {
      * @param computed
      * @return Precision
      */
-    static Logger logger = Logger.getLogger(Utils.class.getName());
+    static Logger logger = LoggerFactory.getLogger(Utils.class.getName());
 
     public static double getPrecision(AMapping reference, AMapping computed) {
         double size = (double) computed.size();

@@ -1,7 +1,8 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
 import org.jgap.gp.CommandGene;
@@ -28,7 +29,7 @@ public class NestedBoolean extends CommandGene
      *
      */
     private static final long serialVersionUID = 7875735649199172973L;
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("LIMES");
     boolean is_mutable = true;
     private String command = "AND";
     private List<String> supportedMetrics;

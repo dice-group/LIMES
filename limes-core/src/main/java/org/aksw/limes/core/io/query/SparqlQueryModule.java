@@ -5,7 +5,8 @@ import org.apache.jena.rdf.model.Model;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 
@@ -15,7 +16,7 @@ import java.util.Iterator;
 public class SparqlQueryModule implements IQueryModule {
 
     protected KBInfo kb;
-    private Logger logger = Logger.getLogger(SparqlQueryModule.class.getName());
+    private Logger logger = LoggerFactory.getLogger(SparqlQueryModule.class.getName());
 
     public SparqlQueryModule(KBInfo kbinfo) {
         kb = kbinfo;

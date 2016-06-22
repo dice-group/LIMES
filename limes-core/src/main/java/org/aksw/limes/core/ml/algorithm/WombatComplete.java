@@ -15,7 +15,8 @@ import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ import java.util.Map;
 public class WombatComplete extends AWombat {
     protected static final String ALGORITHM_NAME = "Wombat Complete";
 
-    protected static Logger logger = Logger.getLogger(WombatComplete.class.getName());
+    protected static Logger logger = LoggerFactory.getLogger(WombatComplete.class.getName());
     
     protected static boolean usePruning = false;
 

@@ -9,7 +9,8 @@ import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -34,7 +35,7 @@ import de.uni_leipzig.simba.selfconfig.Experiment;*/
  */
 public class DataSetChooser {
 
-    static Logger logger = Logger.getLogger(DataSetChooser.class);
+    static Logger logger = LoggerFactory.getLogger(DataSetChooser.class);
 
     public static EvaluationData getData(String dataSetName) {
         String d = dataSetName.replaceAll("-", "").toUpperCase();

@@ -5,7 +5,8 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Map;
@@ -24,7 +25,7 @@ import java.util.Map;
  * @author Mofeed Hassan
  */
 public class EvaluationData {
-    static Logger logger = Logger.getLogger(EvaluationData.class);
+    static Logger logger = LoggerFactory.getLogger(EvaluationData.class);
 
     private String name;
     private String baseFolder = "reources/";

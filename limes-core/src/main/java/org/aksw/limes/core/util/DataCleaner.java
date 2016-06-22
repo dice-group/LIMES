@@ -1,7 +1,8 @@
 package org.aksw.limes.core.util;
 
 import org.aksw.limes.core.io.config.KBInfo;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -10,7 +11,7 @@ import org.apache.log4j.Logger;
  * @version Nov 23, 2015
  */
 public class DataCleaner {
-    static Logger logger = Logger.getLogger(DataCleaner.class.getName());
+    static Logger logger = LoggerFactory.getLogger(DataCleaner.class.getName());
 
     KBInfo kbInfo;
 

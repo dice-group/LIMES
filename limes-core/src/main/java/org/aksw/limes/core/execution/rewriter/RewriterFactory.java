@@ -1,6 +1,7 @@
 package org.aksw.limes.core.execution.rewriter;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements the rewriter factory class. The rewriter factory class is
@@ -10,7 +11,7 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public class RewriterFactory {
-    private static final Logger logger = Logger.getLogger(RewriterFactory.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(RewriterFactory.class.getName());
 
     /**
      * Enum class of allowed rewriter types.

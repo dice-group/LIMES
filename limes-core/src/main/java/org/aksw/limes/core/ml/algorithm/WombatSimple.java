@@ -21,7 +21,8 @@ import org.aksw.limes.core.ml.algorithm.wombat.LinkEntropy;
 import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Simple implementation of the Wombat algorithm
@@ -35,7 +36,7 @@ public class WombatSimple extends AWombat {
 
     protected int activeLearningRate = 3;
 
-    protected static Logger logger = Logger.getLogger(WombatSimple.class.getName());
+    protected static Logger logger = LoggerFactory.getLogger(WombatSimple.class.getName());
 
     protected RefinementNode bestSolutionNode = null;
     protected List<ExtendedClassifier> classifiers = null;

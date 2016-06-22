@@ -2,7 +2,9 @@ package org.aksw.limes.core.io.mapping.reader;
 
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MarkerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -14,7 +16,7 @@ import java.io.FileReader;
 public class CSVMappingReader extends AMappingReader {
     private static final String COMMA = ",";
 
-    static Logger logger = Logger.getLogger(CSVMappingReader.class.getName());
+    static Logger logger = LoggerFactory.getLogger(CSVMappingReader.class.getName());
 
     protected String delimiter;
 
@@ -55,7 +57,7 @@ public class CSVMappingReader extends AMappingReader {
                         return readThreeColumnFile(file);
                     }
                 } else {
-                    logger.fatal("Format not supported");
+                    logger.error(MarkerFactory.getMarker("FATAL"),"Format not supported");
                     System.exit(1);
                 }
             }

@@ -9,7 +9,8 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.rdf.LIMES;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.io.IOException;
  * @version Nov 12, 2015
  */
 public class RDFConfigurationWriter implements IConfigurationWriter {
-    private static final Logger logger = Logger.getLogger(RDFConfigurationWriter.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(RDFConfigurationWriter.class.getName());
 
     public static void writeModel(Model model, String format, String outputFile) throws IOException {
         logger.info("Saving dataset to " + outputFile + " ...");

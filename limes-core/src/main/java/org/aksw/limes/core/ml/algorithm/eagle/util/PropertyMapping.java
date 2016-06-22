@@ -4,7 +4,8 @@ import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,7 +29,7 @@ public class PropertyMapping {
     public HashSet<String> targetNumberProps = new HashSet<String>();
     public HashSet<String> sourceDateProps = new HashSet<String>();
     public HashSet<String> targetDateProps = new HashSet<String>();
-    Logger logger = Logger.getLogger("Limes");
+    Logger logger = LoggerFactory.getLogger("Limes");
     private boolean aMatchWasSet = false;
     private AMapping propMapping = MappingFactory.createDefaultMapping();
     private AMapping numberProps = MappingFactory.createDefaultMapping();

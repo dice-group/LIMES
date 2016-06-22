@@ -7,7 +7,8 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -19,7 +20,7 @@ import java.io.InputStreamReader;
  * @author ngonga
  */
 public class Experiement {
-    static Logger logger = Logger.getLogger(Experiement.class);
+    static Logger logger = LoggerFactory.getLogger(Experiement.class);
     static String SEPARATOR = "\t";
     static String CSVSEPARATOR = ",";
 

@@ -15,7 +15,8 @@ import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ import java.util.Map.Entry;
  * @version 1.0
  */
 public class DynamicPlanner extends Planner {
-    static Logger logger = Logger.getLogger(DynamicPlanner.class);
+    static Logger logger = LoggerFactory.getLogger(DynamicPlanner.class);
     /**
      * Source cache.
      */

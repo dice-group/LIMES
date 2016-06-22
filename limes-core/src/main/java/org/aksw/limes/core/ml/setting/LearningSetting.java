@@ -5,7 +5,8 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.oldalgorithm.IMLAlgorithm;
 import org.apache.commons.collections15.map.HashedMap;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -19,7 +20,7 @@ import java.util.Map;
 @Deprecated
 public abstract class LearningSetting {
 
-    protected static Logger logger = Logger.getLogger(LearningSetting.class.getName());
+    protected static Logger logger = LoggerFactory.getLogger(LearningSetting.class.getName());
 
     protected Map<String, String> parameters = new HashedMap<>();
     // ---------------------- TO BE REMOVED ---------------------------------

@@ -3,7 +3,8 @@ package org.aksw.limes.core.evaluation.evaluationDataLoader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -21,7 +22,7 @@ import java.io.IOException;
  * @version 1.0
  */
 public class OAEIMappingParser extends DefaultHandler {
-    static Logger logger = Logger.getLogger(OAEIMappingParser.class);
+    static Logger logger = LoggerFactory.getLogger(OAEIMappingParser.class);
 
 
     AMapping m = MappingFactory.createMapping(MappingType.HYBIRD_MAPPING);

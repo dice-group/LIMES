@@ -2,7 +2,8 @@ package org.aksw.limes.core.ml.algorithm.eagle.core;
 
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -27,7 +28,7 @@ import java.util.Map.Entry;
  */
 public class ALDecider {
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("LIMES");
 
     /* Remember already retrieved Triples, to avoid asking about them twice. */
     public HashSet<Triple> retrieved = new HashSet<Triple>();

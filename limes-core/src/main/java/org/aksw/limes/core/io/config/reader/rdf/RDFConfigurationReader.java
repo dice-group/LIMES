@@ -11,7 +11,8 @@ import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +25,7 @@ import java.util.Set;
  * @version Jun 03, 2016
  */
 public class RDFConfigurationReader extends AConfigurationReader {
-    private static final Logger logger = Logger.getLogger(RDFConfigurationReader.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(RDFConfigurationReader.class.getName());
     Configuration configuration = new Configuration();
 
     private Model configModel = ModelFactory.createDefaultModel();

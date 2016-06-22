@@ -4,7 +4,9 @@
  */
 package org.aksw.limes.core.io.config.reader.xml;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MarkerFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -18,7 +20,7 @@ import org.xml.sax.SAXParseException;
 public class DtdChecker implements org.xml.sax.ErrorHandler {
 
     protected boolean valid = true;
-    private Logger logger = Logger.getLogger(DtdChecker.class.getName());
+    private Logger logger = LoggerFactory.getLogger(DtdChecker.class.getName());
 
     /**
      * Carries out the validation in case a fatal parsing error occur.
@@ -28,8 +30,8 @@ public class DtdChecker implements org.xml.sax.ErrorHandler {
      * @throws SAXParseException
      */
     public void fatalError(SAXParseException e) throws SAXException {
-        logger.fatal("Error at " + e.getLineNumber() + " line.");
-        logger.fatal(e.getMessage());
+        logger.error(MarkerFactory.getMarker("FATAL"),"Error at " + e.getLineNumber() + " line.");
+        logger.error(MarkerFactory.getMarker("FATAL"),e.getMessage());
         valid = false;
     }
 

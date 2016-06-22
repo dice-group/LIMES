@@ -1,7 +1,8 @@
 package org.aksw.limes.core.io.parser;
 
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -9,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 
 
 public class ParserTest {
-    private static final Logger logger = Logger.getLogger(ParserTest.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(ParserTest.class.getName());
 
     public void printParsingTree(String s, double threshold) {
         Parser p = new Parser(s, threshold);

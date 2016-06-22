@@ -6,7 +6,8 @@ import com.vividsolutions.jts.io.ParseException;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -305,7 +306,7 @@ public class RADON {
     // best measure according to our evaluation in the RADON paper
     public static String heuristicStatMeasure = "avg";
 
-    private static final Logger logger = Logger.getLogger(RADON.class);
+    private static final Logger logger = LoggerFactory.getLogger(RADON.class);
 
     public static AMapping getMapping(Set<Polygon> sourceData, Set<Polygon> targetData, String relation) {
         Map<String, Geometry> source, target;

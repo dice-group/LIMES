@@ -6,7 +6,8 @@ package org.aksw.limes.core.evaluation.qualititativeMeasures;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -22,7 +23,7 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public abstract class APRF implements IQualitativeMeasure {
-    static Logger logger = Logger.getLogger(APRF.class);
+    static Logger logger = LoggerFactory.getLogger(APRF.class);
 
     /**
      * @param predictions

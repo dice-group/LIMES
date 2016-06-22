@@ -2,7 +2,8 @@ package org.aksw.limes.core.io.mapping.writer;
 
 import org.apache.jena.rdf.model.*;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.io.IOException;
  * @version Nov 12, 2015
  */
 public class RDFMappingWriter implements IMappingWriter {
-    private static final Logger logger = Logger.getLogger(RDFMappingWriter.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(RDFMappingWriter.class.getName());
 
     public Model mappingModel = ModelFactory.createDefaultModel();
 

@@ -10,13 +10,14 @@ import org.aksw.limes.core.datastrutures.TaskAlgorithm;
 import org.aksw.limes.core.datastrutures.TaskData;
 import org.aksw.limes.core.evaluation.evaluator.Evaluator;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Test;
 
 import com.google.common.collect.Table;
 
 public class EvaluatorsTest {
-    static Logger logger = Logger.getLogger(EvaluatorsTest.class);
+    static Logger logger = LoggerFactory.getLogger(EvaluatorsTest.class);
 
 
     final private String[] datasetsList = {"PERSON1"/*, "PERSON1_CSV", "PERSON2", "PERSON2_CSV", "RESTAURANTS", "OAEI2014BOOKS"*/};

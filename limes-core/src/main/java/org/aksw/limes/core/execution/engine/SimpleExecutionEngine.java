@@ -19,7 +19,8 @@ import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +38,7 @@ import java.util.List;
  */
 public class SimpleExecutionEngine extends ExecutionEngine {
 
-    static Logger logger = Logger.getLogger(SimpleExecutionEngine.class);
+    static Logger logger = LoggerFactory.getLogger(SimpleExecutionEngine.class);
     /**
      * Map of intermediate mappings. Used for dynamic planning.
      */

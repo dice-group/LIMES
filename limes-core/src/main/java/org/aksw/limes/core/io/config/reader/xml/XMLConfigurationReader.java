@@ -5,7 +5,8 @@ import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -26,7 +27,7 @@ import java.util.regex.Pattern;
  * @version Jun 03, 2016
  */
 public class XMLConfigurationReader extends AConfigurationReader {
-    private static final Logger logger = Logger.getLogger(XMLConfigurationReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(XMLConfigurationReader.class);
 
     // Constants
     protected static final String FILE = "FILE";

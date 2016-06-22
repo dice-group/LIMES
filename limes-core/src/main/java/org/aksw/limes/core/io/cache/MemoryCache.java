@@ -6,7 +6,8 @@ import org.aksw.limes.core.io.preprocessing.Preprocessor;
 
 import java.util.*;
 
-//import org.apache.log4j.Logger;
+//import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements a cache that is exclusively in memory. Fastest cache as it does
