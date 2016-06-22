@@ -103,8 +103,7 @@ public class Evaluator {
                         UnsupervisedMLAlgorithm sml =(UnsupervisedMLAlgorithm)tAlgorithm.getMlAlgorithm();
                         mlModel = sml.learn(dataset.pseudoFMeasure);
                         predictions = tAlgorithm.getMlAlgorithm().predict(dataset.source, dataset.target, mlModel);
-                        logger.info(predictions.toString());
-                        logger.info("after evaluation");
+                        logger.info("Start the evaluation of the results");
                         evaluationResults = eval.evaluate(predictions, dataset.goldStandard, QlMeasures);
                         overallEvaluations.put(tAlgorithm.getMlAlgorithm().getName(), dataset.dataName, evaluationResults);
                     }

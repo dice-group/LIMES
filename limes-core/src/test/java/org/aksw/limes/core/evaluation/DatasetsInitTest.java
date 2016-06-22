@@ -41,7 +41,7 @@ public class DatasetsInitTest {
             for (String ds : datasetsList) {
                 System.out.println(ds);
                 EvaluationData c = DataSetChooser.getData(ds);
-                GoldStandard gs = new GoldStandard(c.getReferenceMapping());
+                GoldStandard gs = new GoldStandard(c.getReferenceMapping(),c.getSourceCache(),c.getTargetCache());
                 //extract training data
                 
                 AMapping reference =  c.getReferenceMapping();

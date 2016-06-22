@@ -20,12 +20,12 @@ public class EvaluatorsInitTest {
         try {
             evaluators=new TreeSet<EvaluatorType>();
             evaluators.add(EvaluatorType.PRECISION);
-             evaluators.add(EvaluatorType.RECALL);
+            evaluators.add(EvaluatorType.RECALL);
             evaluators.add(EvaluatorType.F_MEASURE);
-          evaluators.add(EvaluatorType.P_PRECISION);
-/*              evaluators.add(EvaluatorType.P_RECALL);
+            evaluators.add(EvaluatorType.P_PRECISION);
+            evaluators.add(EvaluatorType.P_RECALL);
             evaluators.add(EvaluatorType.PF_MEASURE);
-            evaluators.add(EvaluatorType.ACCURACY);*/
+            evaluators.add(EvaluatorType.ACCURACY);
             return evaluators;
         } catch (Exception e) {
             assertTrue(false);
