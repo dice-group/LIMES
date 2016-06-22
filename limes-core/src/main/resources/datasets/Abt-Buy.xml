@@ -25,15 +25,15 @@
 		<TYPE>CSV</TYPE>
 	</TARGET>
 	
-	<METRIC>cosine(x.name,y.name)</METRIC>
+	<METRIC>jarowinkler(x.name,y.name)</METRIC>
 	<ACCEPTANCE>
-		<THRESHOLD>0.6065832358304951</THRESHOLD>
+		<THRESHOLD>0.5431</THRESHOLD>
 		<FILE>pub_accepted.txt</FILE>
 		<RELATION>owl:sameAs</RELATION>
 	</ACCEPTANCE>
 	
 	<REVIEW>
-		<THRESHOLD>0.5</THRESHOLD>
+		<THRESHOLD>0.5431</THRESHOLD>
 		<FILE>pub_reviewme.txt</FILE>
 		<RELATION>owl:sameAs</RELATION>
 	</REVIEW>
