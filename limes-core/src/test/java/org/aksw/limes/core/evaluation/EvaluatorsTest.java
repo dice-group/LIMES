@@ -20,8 +20,8 @@ public class EvaluatorsTest {
     static Logger logger = LoggerFactory.getLogger(EvaluatorsTest.class);
 
 
-    final private String[] datasetsList = {"PERSON1"/*, "PERSON1_CSV", "PERSON2", "PERSON2_CSV", "RESTAURANTS", "OAEI2014BOOKS"*/};
-    final private String[] algorithmsListData = {"UNSUPERVISED:WOMBATSIMPLE"/*,"SUPERVISED_BATCH:WOMBATSIMPLE"*/};
+    final private String[] datasetsList = {"PERSON1"/*, "PERSON2", "PERSON1_CSV", "PERSON2_CSV", "RESTAURANTS", "OAEI2014BOOKS"*/};
+    final private String[] algorithmsListData = {/*"UNSUPERVISED:WOMBATSIMPLE"*//*"SUPERVISED_BATCH:WOMBATSIMPLE"*/"SUPERVISED_ACTIVE:WOMBATSIMPLE"};
 
     private static final int folds=5;
     private static final boolean crossValidate=false; 

@@ -19,7 +19,7 @@ import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.junit.Test;
 
 public class AlgorithmsInitTest {
-    final public String[] algorithmsListData = {"UNSUPERVISED:WOMBATSIMPLE"/*,"SUPERVISED_BATCH:WOMBATSIMPLE"*/};
+    final public String[] algorithmsListData = {/*"UNSUPERVISED:WOMBATSIMPLE"*/"SUPERVISED_BATCH:WOMBATSIMPLE"};
 
 
     @Test
@@ -55,8 +55,6 @@ public class AlgorithmsInitTest {
                     else if(algorithmTitles[1].equals("WOMBATSIMPLE"))
                     {
                         mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,algType).asActive(); //create an eagle learning algorithm
-                        WombatSimple ws = (WombatSimple)mlAlgorithm.getMl();
-                        ws.setDefaultParameters();
                     }
                    mlParameter = initializeLearningParameters(MLImplementationType.SUPERVISED_ACTIVE,algorithmTitles[1]);
 
@@ -68,8 +66,6 @@ public class AlgorithmsInitTest {
                     else if(algorithmTitles[1].equals("WOMBATSIMPLE"))
                     {
                         mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,algType).asSupervised(); //create an eagle learning algorithm
-/*                        WombatSimple ws = (WombatSimple)algorithm.getMl();
-                        ws.setDefaultParameters();*/
                     }
                     mlParameter = initializeLearningParameters(MLImplementationType.SUPERVISED_BATCH,algorithmTitles[1]);
 
@@ -81,8 +77,6 @@ public class AlgorithmsInitTest {
                     else if(algorithmTitles[1].equals("WOMBATSIMPLE"))
                     {
                         mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,algType).asUnsupervised(); //create an eagle learning algorithm
-/*                        WombatSimple ws = (WombatSimple)algorithm.getMl();
-                        ws.setDefaultParameters();*/
                     }
                     mlParameter = initializeLearningParameters(MLImplementationType.UNSUPERVISED,algorithmTitles[1]);
 

@@ -76,30 +76,41 @@ public class Evaluator {
         Map<EvaluatorType, Double> evaluationResults = null;
         try{
             for (TaskAlgorithm tAlgorithm : TaskAlgorithms) {     //iterate over algorithms tasks(type,algorithm,parameter)
+                logger.info("Running algorihm: "+tAlgorithm.getMlAlgorithm().getName());
                 for (TaskData dataset : datasets) {     //iterate over datasets(name,source,target,mapping,training,pseudofm)
+                    logger.info("Used dataset: "+dataset.dataName);
                   //initialize the algorithm with source and target data, passing its parameters too ( if it is null in case of WOMBAT it will use its defaults)
-                    tAlgorithm.getMlAlgorithm().init(null/*tAlgorithm.getMlParameter()*/, dataset.source, dataset.target);
+                    tAlgorithm.getMlAlgorithm().init(null, dataset.source, dataset.target);
                     
                     ACoreMLAlgorithm ml = tAlgorithm.getMlAlgorithm().getMl(); //get the core machine learning working inside the algorithm
                     MLModel mlModel= null; // model resulting from the learning process
                     if(tAlgorithm.getMlType().equals(MLImplementationType.SUPERVISED_BATCH))
                     {
+                        logger.info("Implementation type: "+MLImplementationType.SUPERVISED_BATCH);
                         SupervisedMLAlgorithm sml =(SupervisedMLAlgorithm)tAlgorithm.getMlAlgorithm();
                         mlModel = sml.learn(dataset.training);
                         predictions = tAlgorithm.getMlAlgorithm().predict(dataset.source, dataset.target, mlModel);
+                        logger.info("Start the evaluation of the results");
                         evaluationResults = eval.evaluate(predictions, dataset.goldStandard, QlMeasures);
                         overallEvaluations.put(tAlgorithm.getMlAlgorithm().getName(), dataset.dataName, evaluationResults);
                     }
                     else if(tAlgorithm.getMlType().equals(MLImplementationType.SUPERVISED_ACTIVE))
                     {
+                        logger.info("Implementation type: "+MLImplementationType.SUPERVISED_ACTIVE);
                         ActiveMLAlgorithm sml =(ActiveMLAlgorithm)tAlgorithm.getMlAlgorithm();
-                        mlModel = sml.activeLearn(dataset.training);
+                        sml.activeLearn();
+                        //mlModel = sml.activeLearn(dataset.training);
+                        AMapping nextExamples = sml.getNextExamples((int)0.5*dataset.training.size());
+                        AMapping oracleFeedback = oracleFeedback(nextExamples,dataset.training);
+                        mlModel = sml.activeLearn(oracleFeedback);
                         predictions = tAlgorithm.getMlAlgorithm().predict(dataset.source, dataset.target, mlModel);
+                        logger.info("Start the evaluation of the results");
                         evaluationResults = eval.evaluate(predictions, dataset.goldStandard, QlMeasures);
                         overallEvaluations.put(tAlgorithm.getMlAlgorithm().getName(), dataset.dataName, evaluationResults);
                     }
                     else if(tAlgorithm.getMlType().equals(MLImplementationType.UNSUPERVISED))
                     {
+                        logger.info("Implementation type: "+MLImplementationType.UNSUPERVISED);
                         UnsupervisedMLAlgorithm sml =(UnsupervisedMLAlgorithm)tAlgorithm.getMlAlgorithm();
                         mlModel = sml.learn(dataset.pseudoFMeasure);
                         predictions = tAlgorithm.getMlAlgorithm().predict(dataset.source, dataset.target, mlModel);
@@ -225,31 +236,18 @@ public class Evaluator {
         return evalTable;
 
     }
+    // used by evaluator in the Supervised_Active
+    private AMapping oracleFeedback(AMapping predictionMapping, AMapping referenceMapping) {
+        AMapping result = MappingFactory.createDefaultMapping();
 
-    /*	public Multimap<String, Map<String,Map<MeasureType, Double>>> evaluate(Set<MLAlgorithm> algorithms, Set<DataSetsPair> datasets, Set<MeasureType> QlMeasures, Set<QuantitativeMeasure> QnMeasures)
-    {
-		Multimap<String, Map<String,Map<MeasureType, Double>>> overallEvaluations = HashMultimap.create();// multimap stores aglortihmName:datasetname:List of evaluations
-		Map<String,Map<MeasureType, Double>> datasetPairsEvaluations = new HashMap<String,Map<MeasureType, Double>>();// map stores dataset name:set of measures and their values
-		Mapping predictions=null;
-		Map<MeasureType, Double> evaluationResults = null;
-		for (MLAlgorithm algorithm : algorithms) {// select a ML algorithm
-			for (DataSetsPair dataset : datasets) {// select a dataset-pair to evaluate each ML algorithm on
-
-				algorithm.setSourceCache(dataset.source);
-				algorithm.setTargetCache(dataset.target);
-				predictions = algorithm.computePredictions();
-				for (MeasureType measure : QlMeasures) {
-					evaluationResults = eval.evaluate(predictions, dataset.goldStandard, dataset.source.getAllUris(), dataset.target.getAllUris(), measure);
-
-					datasetPairsEvaluations.put(dataset.pairName, evaluationResults); 
-				}
-				overallEvaluations.put(algorithm.getName(), datasetPairsEvaluations);
-
-			}
-		}
-
-		return overallEvaluations;
-
-	}*/
+        for(String s : predictionMapping.getMap().keySet()){
+            for(String t : predictionMapping.getMap().get(s).keySet()){
+                if(referenceMapping.contains(s, t)){
+                    result.add(s, t, predictionMapping.getMap().get(s).get(t));
+                }
+            }
+        }
+        return result;
+    }
 
 }
