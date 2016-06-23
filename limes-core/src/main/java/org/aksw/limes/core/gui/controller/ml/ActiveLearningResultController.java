@@ -12,7 +12,7 @@ import org.aksw.limes.core.gui.view.ml.ActiveLearningResultView;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.ml.oldalgorithm.MLModel;
+import org.aksw.limes.core.ml.algorithm.MLResults;
 
 /**
  * Controller that corresponds to the view
@@ -117,7 +117,7 @@ public class ActiveLearningResultController {
 				.observableArrayList();
 		Thread thread = new Thread() {
 			public void run() {
-			    MLModel mlModel = null;
+			    MLResults mlModel = null;
 			    try {
 				mlModel = model.getMlalgorithm().asActive().activeLearn(trainingMap);
 				model.setNextExamples(model.getMlalgorithm().asActive().getNextExamples(ActiveLearningModel.nextExamplesNum));

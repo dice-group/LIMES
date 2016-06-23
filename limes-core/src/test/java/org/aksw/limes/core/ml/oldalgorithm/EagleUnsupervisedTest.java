@@ -1,11 +1,11 @@
 package org.aksw.limes.core.ml.oldalgorithm;
 
 import org.aksw.limes.core.io.cache.Cache;
-
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.setting.UnsupervisedLearningSetting;
 import org.junit.Test;
@@ -67,14 +67,14 @@ public class EagleUnsupervisedTest {
         try {
             eus.init(param, null);
 
-            MLModel result = eus.learn(null);
+            MLResults result = eus.learn(null);
             System.out.println(result);
             System.out.println(result.getMapping());
 
             assertTrue(result != null);
-            assertTrue(result.mapping.size() > 0);
-            assertTrue(!result.linkspec.isEmpty());
-            assertTrue(result.details.size() > 0);
+            assertTrue(result.getMapping().size() > 0);
+            assertTrue(!result.getLinkSpecification().isEmpty());
+            assertTrue(result.getDetails().size() > 0);
 
         } catch (Exception e) {
             // TODO Auto-generated catch block

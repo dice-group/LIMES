@@ -2,7 +2,6 @@ package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 
 import java.lang.reflect.Constructor;
 
@@ -26,7 +25,7 @@ public class SupervisedMLAlgorithm extends AMLAlgorithm {
 
     }
 
-    public MLModel learn(AMapping trainingData) throws UnsupportedMLImplementationException {
+    public MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
         return getMl().learn(trainingData);
     }
 

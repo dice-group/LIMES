@@ -9,11 +9,9 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
 import org.aksw.limes.core.ml.algorithm.*;
-import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import java.util.*;
 
@@ -38,7 +36,7 @@ public class MLPipeline {
             int maxIt
     ) throws UnsupportedMLImplementationException {
         Class<? extends ACoreMLAlgorithm> clazz = MLAlgorithmFactory.getAlgorithmType(mlAlgrorithmName);
-        MLModel mlm;
+        MLResults mlm;
         AMapping trainingDataMap = MappingFactory.createDefaultMapping();
         if (
                 mlImplementationType == MLImplementationType.SUPERVISED_BATCH){

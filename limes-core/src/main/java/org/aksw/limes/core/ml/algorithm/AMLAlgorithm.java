@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 
 public abstract class AMLAlgorithm {
@@ -24,7 +23,7 @@ public abstract class AMLAlgorithm {
         getMl().init(lp, source, target);
     }
 
-    public AMapping predict(Cache source, Cache target, MLModel mlModel) {
+    public AMapping predict(Cache source, Cache target, MLResults mlModel) {
         return getMl().predict(source, target, mlModel);
     }
 

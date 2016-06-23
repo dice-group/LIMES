@@ -9,7 +9,6 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.*;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -72,7 +71,7 @@ public class WombatSimpleTest {
         }
         assert (wombatSimple.getClass().equals(SupervisedMLAlgorithm.class));
         wombatSimple.init(null, sc, tc);
-        MLModel mlModel = wombatSimple.learn(trainingMap);
+        MLResults mlModel = wombatSimple.learn(trainingMap);
         AMapping resultMap = wombatSimple.predict(sc, tc, mlModel);
         assert (resultMap.equals(refMap));  
     }
@@ -91,7 +90,7 @@ public class WombatSimpleTest {
         assert (wombatSimpleU.getClass().equals(UnsupervisedMLAlgorithm.class));
         trainingMap = null;
         wombatSimpleU.init(null, sc, tc);
-        MLModel mlModel = wombatSimpleU.learn(new PseudoFMeasure());
+        MLResults mlModel = wombatSimpleU.learn(new PseudoFMeasure());
         AMapping resultMap = wombatSimpleU.predict(sc, tc, mlModel);
         assert (resultMap.equals(refMap));
     }
@@ -111,7 +110,7 @@ public class WombatSimpleTest {
         wombatSimpleA.activeLearn();
         AMapping nextExamples = wombatSimpleA.getNextExamples(3);
         AMapping oracleFeedback = oracleFeedback(nextExamples,trainingMap);
-        MLModel mlModel = wombatSimpleA.activeLearn(oracleFeedback);
+        MLResults mlModel = wombatSimpleA.activeLearn(oracleFeedback);
         AMapping resultMap = wombatSimpleA.predict(sc, tc, mlModel);
         assert (resultMap.equals(refMap));
     }

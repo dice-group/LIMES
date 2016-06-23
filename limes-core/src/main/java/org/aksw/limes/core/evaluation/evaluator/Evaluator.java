@@ -23,10 +23,10 @@ import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.Eagle;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.oldalgorithm.MLAlgorithm;
-import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +83,7 @@ public class Evaluator {
                     tAlgorithm.getMlAlgorithm().init(null, dataset.source, dataset.target);
                     
                     ACoreMLAlgorithm ml = tAlgorithm.getMlAlgorithm().getMl(); //get the core machine learning working inside the algorithm
-                    MLModel mlModel= null; // model resulting from the learning process
+                    MLResults mlModel= null; // model resulting from the learning process
                     if(tAlgorithm.getMlType().equals(MLImplementationType.SUPERVISED_BATCH))
                     {
                         logger.info("Implementation type: "+MLImplementationType.SUPERVISED_BATCH);
@@ -215,7 +215,7 @@ public class Evaluator {
                // algorithm .setSourceCache(srcFolds[i]); 
                 algorithm.init(null, srcFolds[i], null);
                 // target cache is invariant
-                MLModel model =null;
+                MLResults model =null;
                 //algorithm.learn(srcMap[i]);
                 
                     try {

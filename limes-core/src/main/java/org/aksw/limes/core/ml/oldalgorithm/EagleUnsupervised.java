@@ -6,6 +6,7 @@ import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem;
 import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.aksw.limes.core.ml.algorithm.eagle.core.PseudoFMeasureFitnessFunction;
@@ -60,7 +61,7 @@ public class EagleUnsupervised extends MLAlgorithm {
     }
 
     @Override
-    public MLModel learn(AMapping trainingData) {
+    public MLResults learn(AMapping trainingData) {
         specifications = new LinkedList<LinkSpecification>();
         logger.info("Start learning");
         for (int gen = 1; gen <= parameters.getGenerations(); gen++) {
@@ -185,8 +186,8 @@ public class EagleUnsupervised extends MLAlgorithm {
      *
      * @return
      */
-    private MLModel createMLResult() {
-        MLModel result = new MLModel();
+    private MLResults createMLResult() {
+        MLResults result = new MLResults();
         result.setLinkSpecification(getLinkSpecification(allBest));
 //		result.setMapping(fitness.calculateMapping(allBest));
         result.setQuality(allBest.getFitnessValue());

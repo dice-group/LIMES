@@ -5,6 +5,7 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.setting.UnsupervisedLearningSetting;
 import org.junit.Test;
@@ -66,13 +67,13 @@ public class LionTest {
         try {
             lion.init(param, null);
 
-            MLModel result = lion.learn(null);
+            MLResults result = lion.learn(null);
             System.out.println(result);
             System.out.println(result.getMapping());
 
             assertTrue(result != null);
-            assertTrue(result.mapping.size() > 0);
-            assertTrue(!result.linkspec.isEmpty());
+            assertTrue(result.getMapping().size() > 0);
+            assertTrue(!result.getLinkSpecification().isEmpty());
 
 
         } catch (Exception e) {

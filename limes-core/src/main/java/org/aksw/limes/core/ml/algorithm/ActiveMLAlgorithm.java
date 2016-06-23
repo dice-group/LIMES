@@ -2,7 +2,6 @@ package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 
 import java.lang.reflect.Constructor;
 
@@ -29,11 +28,11 @@ public class ActiveMLAlgorithm extends AMLAlgorithm {
         return getMl().getNextExamples(size);
     }
 
-    public MLModel activeLearn() throws UnsupportedMLImplementationException {
+    public MLResults activeLearn() throws UnsupportedMLImplementationException {
         return getMl().activeLearn();
     }
     
-    public MLModel activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
+    public MLResults activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
         return getMl().activeLearn(oracleMapping);
     }
 

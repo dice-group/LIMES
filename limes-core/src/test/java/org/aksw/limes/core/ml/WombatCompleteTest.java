@@ -9,7 +9,6 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.*;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -72,7 +71,7 @@ public class WombatCompleteTest {
         }
         assert (wombatComplete.getClass().equals(SupervisedMLAlgorithm.class));
         wombatComplete.init(null, sc, tc);
-        MLModel mlModel = wombatComplete.learn(trainingMap);
+        MLResults mlModel = wombatComplete.learn(trainingMap);
         AMapping resultMap = wombatComplete.predict(sc, tc, mlModel);
         assert (resultMap.equals(refMap));
     }
@@ -91,7 +90,7 @@ public class WombatCompleteTest {
         assert (wombatCompleteU.getClass().equals(UnsupervisedMLAlgorithm.class));
         trainingMap = null;
         wombatCompleteU.init(null, sc, tc);
-        MLModel mlModel = wombatCompleteU.learn(new PseudoFMeasure());
+        MLResults mlModel = wombatCompleteU.learn(new PseudoFMeasure());
         AMapping resultMap = wombatCompleteU.predict(sc, tc, mlModel);
         assert (resultMap.equals(refMap));
     }

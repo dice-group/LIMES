@@ -7,7 +7,6 @@ import org.aksw.limes.core.exceptions.NotYetImplementedException;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 
 public class ACIDS extends ACoreMLAlgorithm {
@@ -25,18 +24,18 @@ public class ACIDS extends ACoreMLAlgorithm {
     }
 
     @Override
-    protected MLModel learn(AMapping trainingData) {
+    protected MLResults learn(AMapping trainingData) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    protected MLModel learn(PseudoFMeasure pfm) throws UnsupportedMLImplementationException {
+    protected MLResults learn(PseudoFMeasure pfm) throws UnsupportedMLImplementationException {
         throw new UnsupportedMLImplementationException(this.getName());
     }
 
     @Override
-    protected AMapping predict(Cache source, Cache target, MLModel mlModel) {
+    protected AMapping predict(Cache source, Cache target, MLResults mlModel) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -53,7 +52,7 @@ public class ACIDS extends ACoreMLAlgorithm {
     }
 
     @Override
-    protected MLModel activeLearn(AMapping oracleMapping) {
+    protected MLResults activeLearn(AMapping oracleMapping) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -65,7 +64,7 @@ public class ACIDS extends ACoreMLAlgorithm {
     }
 
     @Override
-    protected MLModel activeLearn() throws UnsupportedMLImplementationException {
+    protected MLResults activeLearn() throws UnsupportedMLImplementationException {
         throw new UnsupportedMLImplementationException(this.getName());
     }
 

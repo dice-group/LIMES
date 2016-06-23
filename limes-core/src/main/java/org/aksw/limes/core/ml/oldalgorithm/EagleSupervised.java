@@ -6,6 +6,7 @@ import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ALDecider;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionFitnessFunction;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem;
@@ -44,7 +45,7 @@ public class EagleSupervised extends MLAlgorithm {
     }
 
     @Override
-    public MLModel learn(AMapping trainingData) {
+    public MLResults learn(AMapping trainingData) {
         turn++;
         fitness.addToReference(extractPositiveMatches(trainingData));
         fitness.fillCachesIncrementally(trainingData);
@@ -54,7 +55,7 @@ public class EagleSupervised extends MLAlgorithm {
             bestSolutions.add(determineFittest(gp, gen));
         }
 
-        MLModel result = createResult();
+        MLResults result = createResult();
         return result;
     }
 
@@ -188,8 +189,8 @@ public class EagleSupervised extends MLAlgorithm {
         return (LinkSpecification) pc.getNode(0).execute_object(pc, 0, args);
     }
 
-    private MLModel createResult() {
-        MLModel result = new MLModel();
+    private MLResults createResult() {
+        MLResults result = new MLResults();
         result.setLinkSpecification(getLinkSpecification(allBest));
 //		result.setMapping(fitness.getMapping(getLinkSpecification(allBest), true));
         result.setQuality(allBest.getFitnessValue());

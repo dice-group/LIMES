@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
+import org.aksw.limes.core.exceptions.NoSuchParameterException;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 
 /**
@@ -49,7 +49,7 @@ public abstract class ACoreMLAlgorithm {
      * @param targetCache
      */
     protected void init(List<LearningParameter> lp, Cache sourceCache, Cache targetCache) {
-        if (lp != null && !lp.isEmpty()) {
+        if (lp != null) {
             this.parameters.addAll(lp);
         }
         this.sourceCache = sourceCache;
@@ -64,7 +64,7 @@ public abstract class ACoreMLAlgorithm {
      * @param trainingData
      * @return
      */
-    protected abstract MLModel learn(AMapping trainingData)
+    protected abstract MLResults learn(AMapping trainingData)
             throws UnsupportedMLImplementationException;
 
     /**
@@ -74,7 +74,7 @@ public abstract class ACoreMLAlgorithm {
      * @return
      * @throws UnsupportedMLImplementationException
      */
-    protected abstract MLModel learn(PseudoFMeasure pfm)
+    protected abstract MLResults learn(PseudoFMeasure pfm)
             throws UnsupportedMLImplementationException;
 
     /**
@@ -86,7 +86,7 @@ public abstract class ACoreMLAlgorithm {
      * @return
      */
     protected abstract AMapping predict(Cache source, Cache target,
-                                        MLModel mlModel);
+                                        MLResults mlModel);
 
     /**
      * Check whether the mlType is supported.
@@ -112,7 +112,7 @@ public abstract class ACoreMLAlgorithm {
      * @param oracleMapping
      * @return
      */
-    protected abstract MLModel activeLearn(AMapping oracleMapping)
+    protected abstract MLResults activeLearn(AMapping oracleMapping)
             throws UnsupportedMLImplementationException;
     
     /**
@@ -123,6 +123,22 @@ public abstract class ACoreMLAlgorithm {
      * @return
      * @throws UnsupportedMLImplementationException
      */
-    protected abstract MLModel activeLearn() throws UnsupportedMLImplementationException;
+    protected abstract MLResults activeLearn() throws UnsupportedMLImplementationException;
+
+    
+    /**
+     * Get parameter by name.
+     * 
+     * @param name
+     * @return
+     * @throws NoSuchParameterException
+     */
+    protected Object getParameter(String name) {
+    	for(LearningParameter par : parameters)
+    		if(par.getName().equals(name))
+    			return par.getValue();
+    	return new NoSuchParameterException(name);
+    }
+
 
 }

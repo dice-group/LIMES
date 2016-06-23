@@ -6,7 +6,7 @@ import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
-import org.aksw.limes.core.ml.oldalgorithm.MLModel;
+import org.aksw.limes.core.ml.algorithm.MLResults;
 
 public class BatchLearningModel extends MachineLearningModel {
 
@@ -19,7 +19,7 @@ public class BatchLearningModel extends MachineLearningModel {
         return new Task<Void>() {
             @Override
             protected Void call() {
-        	MLModel model = null;
+        	MLResults model = null;
                 try {
                     mlalgorithm.init(learningParameters, sourceCache, targetCache);
                     RDFMappingReader mappingReader = new RDFMappingReader(config.getMlTrainingDataFile());
