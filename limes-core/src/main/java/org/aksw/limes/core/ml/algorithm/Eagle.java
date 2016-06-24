@@ -54,28 +54,28 @@ public class Eagle extends ACoreMLAlgorithm {
 	
     protected static final String ALGORITHM_NAME = "Eagle";
     
-    protected static final String GENERATIONS = "generations";
-    protected static final String PRESERVE_FITTEST = "preserve_fittest";
-    protected static final String MAX_DURATION = "max_duration";
-    protected static final String INQUIRY_SIZE = "inquiry_size";
-    protected static final String MAX_ITERATIONS = "max_iterations";
-    protected static final String MAX_QUALITY = "max_quality";
-    protected static final String TERMINATION_CRITERIA = "termination_criteria";
-    protected static final String TERMINATION_CRITERIA_VALUE = "termination_criteria_value";
-    protected static final String BETA = "beta";
-    protected static final String POPULATION = "population";
-    protected static final String MUTATION_RATE = "mutation_rate";
-    protected static final String REPRODUCTION_RATE = "reproduction_rate";
-    protected static final String CROSSOVER_RATE = "crossover_rate";
-    protected static final String PSEUDO_FMEASURE = "pseudo_fmeasure";
+    public static final String GENERATIONS = "generations";
+    public static final String PRESERVE_FITTEST = "preserve_fittest";
+    public static final String MAX_DURATION = "max_duration";
+    public static final String INQUIRY_SIZE = "inquiry_size";
+    public static final String MAX_ITERATIONS = "max_iterations";
+    public static final String MAX_QUALITY = "max_quality";
+    public static final String TERMINATION_CRITERIA = "termination_criteria";
+    public static final String TERMINATION_CRITERIA_VALUE = "termination_criteria_value";
+    public static final String BETA = "beta";
+    public static final String POPULATION = "population";
+    public static final String MUTATION_RATE = "mutation_rate";
+    public static final String REPRODUCTION_RATE = "reproduction_rate";
+    public static final String CROSSOVER_RATE = "crossover_rate";
+    public static final String PSEUDO_FMEASURE = "pseudo_fmeasure";
     
     protected static final String GAMMA_SCORE = "gamma_score";
     protected static final String EXPANSION_PENALTY = "expansion_penalty";
     protected static final String REWARD = "reward";
     protected static final String PRUNE = "prune";
 
-    protected static final String MEASURE = "measure";
-    protected static final String PROPERTY_MAPPING = "property_mapping";
+    public static final String MEASURE = "measure";
+    public static final String PROPERTY_MAPPING = "property_mapping";
     
     
     // ========================================================================
@@ -85,6 +85,7 @@ public class Eagle extends ACoreMLAlgorithm {
     
     protected Eagle() {
     	super();
+    	setDefaultParameters();
     }
 
     @Override
@@ -95,7 +96,6 @@ public class Eagle extends ACoreMLAlgorithm {
     @Override
     protected void init(List<LearningParameter> lp, Cache source, Cache target) {
         super.init(lp, source, target);
-        this.parameters = lp;
         this.turn = 0;
         this.bestSolutions = new LinkedList<IGPProgram>();
     }
@@ -227,6 +227,9 @@ public class Eagle extends ACoreMLAlgorithm {
     	
         LinkSpecGeneticLearnerConfig jgapConfig = new LinkSpecGeneticLearnerConfig(getConfiguration().getSourceInfo(), getConfiguration().getTargetInfo(), pm);
 
+        jgapConfig.sC = sourceCache;
+        jgapConfig.tC = targetCache;
+        
         jgapConfig.setPopulationSize((Integer) getParameter(POPULATION));
         jgapConfig.setCrossoverProb((Float) getParameter(CROSSOVER_RATE));
         jgapConfig.setMutationProb((Float) getParameter(MUTATION_RATE));
@@ -236,12 +239,14 @@ public class Eagle extends ACoreMLAlgorithm {
 
         if(trainingData != null) { // supervised
         	
-        	fitness = ExpressionFitnessFunction.getInstance(jgapConfig, (FMeasure) getParameter(MEASURE), trainingData);
+        	FMeasure fm = (FMeasure) getParameter(MEASURE);
+        	fitness = ExpressionFitnessFunction.getInstance(jgapConfig, fm, trainingData);
         	jgapConfig.setFitnessFunction(fitness);
         	
         } else { // unsupervised
         	
-        	pfmFitness = PseudoFMeasureFitnessFunction.getInstance(jgapConfig, (PseudoFM) getParameter(PSEUDO_FMEASURE), sourceCache, targetCache);
+        	PseudoFM pfm = (PseudoFM) getParameter(PSEUDO_FMEASURE);
+			pfmFitness = PseudoFMeasureFitnessFunction.getInstance(jgapConfig, pfm, sourceCache, targetCache);
         	jgapConfig.setFitnessFunction(pfmFitness);
         	
         }

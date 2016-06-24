@@ -130,6 +130,10 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
         AMapping actualMapping = MappingFactory.createDefaultMapping();
         LinkSpecification spec = (LinkSpecification) pc.getNode(0).execute_object(pc, 0, args);
         String expr = spec.getFilterExpression();
+        
+        if(expr == null)
+        	return 5d; // manually return bad fitness
+        
         if (expr.indexOf("falseProp") > -1) {
             return 8d;
         }

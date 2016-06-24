@@ -36,7 +36,8 @@ public class MLResults {
         s.append("RESULT:\n");
         s.append("LS: " + linkspec + "\n");
         s.append("Quality: " + quality + "\n");
-        s.append("Mapping: " + mapping.size() + "\n");
+        if(mapping != null)
+        	s.append("Mapping: " + mapping.size() + "\n");
         return s.toString();
     }
 
