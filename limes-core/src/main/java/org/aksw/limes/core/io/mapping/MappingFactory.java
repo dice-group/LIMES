@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif {@literal <}sherif {@literal @} informatik.uni-leipzig.de{@literal >}
  * @version Nov 12, 2015
  */
 public class MappingFactory {
@@ -20,7 +20,7 @@ public class MappingFactory {
     }
 
     /**
-     * @param type
+     * @param type of mapping
      * @return a specific module instance given its module's name
      * @author sherif
      */

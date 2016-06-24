@@ -21,13 +21,7 @@ import java.util.TreeSet;
  */
 public class GeOxygeneFrechet extends PointsetsMeasure {
 
-    /**
-     * @param X
-     *         First polygon
-     * @param Y
-     *         Second polygon
-     * @return Distance between X and Y
-     */
+    
     public GeOxygeneFrechet() {
         computations = 0;
     }
@@ -62,7 +56,7 @@ public class GeOxygeneFrechet extends PointsetsMeasure {
      *         Polygon
      * @param Y
      *         Polygon
-     * @param threshold
+     * @param threshold, distance threshold
      * @return the GeOxygeneFrechet distance between X and Y
      */
     public static double distance(Polygon X, Polygon Y, double threshold) {

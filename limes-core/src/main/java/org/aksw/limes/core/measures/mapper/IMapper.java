@@ -6,8 +6,10 @@ import org.aksw.limes.core.io.mapping.AMapping;
 /**
  * Implements the mapper interface.
  *
- * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala {@literal <}georgala {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
 public interface IMapper {
@@ -35,7 +37,8 @@ public interface IMapper {
     ;
 
     /**
-     * Returns the estimated time needed to obtain the mapping computed by the mapper.
+     * Returns the estimated time needed to obtain the mapping computed by the
+     * mapper.
      *
      * @param sourceSize
      *            source size

@@ -7,7 +7,10 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
  * Implements the planner interface. It is responsible for generating a plan for
  * an input link specification.
  *
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala {@literal <}georgala {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
 public interface IPlanner {
@@ -31,7 +34,8 @@ public interface IPlanner {
      * Normalization of input link specification.
      *
      * @param spec,
-     *            The normalized link specification
+     *            The link specification to normalize
+     * @return The normalized link specification
      */
     public LinkSpecification normalize(LinkSpecification spec);
 }

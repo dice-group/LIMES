@@ -7,7 +7,7 @@ import org.aksw.limes.core.ml.setting.LearningParameter;
 import java.util.*;
 
 /**
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif {@literal <}sherif {@literal @} informatik.uni-leipzig.de{@literal >}
  * @version Jun 3, 2016
  */
 public class Configuration implements IConfiguration {

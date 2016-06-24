@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif {@literal <}sherif {@literal @} informatik.uni-leipzig.de{@literal >}
  * @version DEC 2, 2015
  */
 public class Parser implements IParser {
@@ -103,7 +103,6 @@ public class Parser implements IParser {
     /**
      * Splits the expression into two terms
      *
-     * @return
      */
     public void getTerms() {
         if (!isAtomic()) {

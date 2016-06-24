@@ -28,7 +28,7 @@ import java.util.Map.Entry;
  * Implements the Dynamic planner class. It receives a link specification as
  * input and generates a mutable NestedPlan.
  *
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala {@literal <}georgala {@literal @} informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
 public class DynamicPlanner extends Planner {
@@ -151,7 +151,7 @@ public class DynamicPlanner extends Planner {
      * @param threshold,
      *            Threshold of metric expression
      * @return runtime, estimated runtime cost of the metric expression
-     * @throws InvalidMeasureException
+     * 
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
         Mapper mapper = null;
@@ -176,7 +176,7 @@ public class DynamicPlanner extends Planner {
      * @param threshold,
      *            Threshold of metric expression
      * @return size, estimated size of returned mapping
-     * @throws InvalidMeasureException
+     * 
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
         Mapper mapper = null;
@@ -194,6 +194,7 @@ public class DynamicPlanner extends Planner {
     /**
      * Checks if the plan of the specified link specification is executed.
      *
+     * @param spec, The input link specification 
      * @return true if the plan is executed, or false otherwise
      */
     public boolean isExecuted(LinkSpecification spec) {
@@ -205,8 +206,8 @@ public class DynamicPlanner extends Planner {
      * the filtering instruction is not supported by the framework, it throws an
      * InvalidMeasureException exception.
      *
-     * @param filterExpression,
-     *            Expression used to filter
+     * @param measures,
+     *            Set of expressions used to filter
      * @param mappingSize,
      *            Size of mapping
      * @return cost, estimated runtime cost of filteringInstruction(s)
@@ -740,10 +741,10 @@ public class DynamicPlanner extends Planner {
     /**
      * Normalization of input link specification. In case of XOR operator, the
      * output specification uses the extended form of XOR (i.e.
-     * XOR(cosine(x.name,y.name)|0.5, overlap(x.label,y.label)|0.6)>=0.8 will
+     * XOR(cosine(x.name,y.name)|0.5, overlap(x.label,y.label)|0.6){@literal >}=0.8 will
      * transformed into MINUS(OR(cosine(x.name,y.name)|0.5,
      * overlap(x.label,y.label)|0.6)|0.8, AND(cosine(x.name,y.name)|0.5,
-     * overlap(x.label,y.label)|0.6)|0.8) )>=0.8
+     * overlap(x.label,y.label)|0.6)|0.8) ){@literal >}=0.8
      *
      * @param spec,
      *            The normalized link specification

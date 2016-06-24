@@ -7,9 +7,9 @@ import java.util.TreeSet;
 
 /**
  * @author ngonga
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
- * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif {@literal <}sherif {@literal @} informatik.uni-leipzig.de{@literal >}
+ * @author Tommaso Soru {@literal <}tsoru {@literal @} informatik.uni-leipzig.de{@literal >} 
+ * @author Klaus Lyko {@literal <}lyko {@literal @} informatik.uni-leipzig.de{@literal >}
  * @version 2015-11-24
  */
 public abstract class AMapping implements IMapping {
@@ -20,11 +20,7 @@ public abstract class AMapping implements IMapping {
     protected String predicate;
 
 
-    /**
-     * Get the predicate URI, which defaults to OWL.sameAs.
-     *
-     * @return the predicate URI
-     */
+    
     public AMapping() {
         this.map = new HashMap<String, HashMap<String, Double>>();
         this.reversedMap = new HashMap<Double, HashMap<String, TreeSet<String>>>();
@@ -54,8 +50,8 @@ public abstract class AMapping implements IMapping {
      * Returns the best one to one mapping with a bias towards the source Should
      * actually be solved with Hospital residents
      *
-     * @param m
-     * @return
+     * @param m, the input mapping
+     * @return the best one-to-one mapping of m
      */
     public AMapping getBestOneToOneMappings(AMapping m) {
         AMapping m2 = m.getBestOneToNMapping();
@@ -64,7 +60,11 @@ public abstract class AMapping implements IMapping {
         m2 = m2.reverseSourceTarget();
         return m2;
     }
-
+    /**
+     * Get the predicate URI, which defaults to OWL.sameAs.
+     *
+     * @return the predicate URI
+     */
     public HashMap<Double, HashMap<String, TreeSet<String>>> getReversedMap() {
         return reversedMap;
     }

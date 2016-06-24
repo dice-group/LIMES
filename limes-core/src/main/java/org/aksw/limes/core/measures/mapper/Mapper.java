@@ -9,7 +9,8 @@ import java.util.*;
 /**
  * Implements the mapper abstract class.
  *
- * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
 public abstract class Mapper implements IMapper {

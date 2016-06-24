@@ -86,8 +86,8 @@ public class MapperFactory {
      * Factory function for retrieving the desired mapper instance given an
      * input measure name.
      * 
-     * @param measure,
-     *            Name of the measure
+     * @param type,
+     *            type of the measure
      * 
      * @return a specific mapper instance
      * @throws InvalidMeasureException

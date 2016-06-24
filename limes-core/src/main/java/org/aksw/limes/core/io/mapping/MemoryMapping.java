@@ -14,7 +14,7 @@ import java.util.*;
  * (s, t, sim2) is added then the mapping will contain (s, t, max(sim1, sim2))
  *
  * @author ngonga
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif {@literal <}sherif {@literal @} informatik.uni-leipzig.de{@literal >}
  * @version Nov 24, 2015
  */
 public class MemoryMapping extends AMapping implements Serializable {
@@ -62,7 +62,7 @@ public class MemoryMapping extends AMapping implements Serializable {
      *
      * @param threshold
      *         Similarity threshold for filtering
-     * @return Mapping that contains all elements (s,t) with sim(s,t)>=threshold
+     * @return Mapping that contains all elements (s,t) with sim(s,t) {@literal <} = threshold
      */
     public AMapping getSubMap(double threshold) {
         AMapping m = MappingFactory.createDefaultMapping();
@@ -297,8 +297,8 @@ public class MemoryMapping extends AMapping implements Serializable {
      * map and the other. The scores will be the maximum score of either this or
      * the other.
      *
-     * @param other
-     * @return
+     * @param other, the second mapping
+     * @return the union of the two mappings
      */
     public AMapping union(AMapping other) {
         AMapping result = MappingFactory.createDefaultMapping();

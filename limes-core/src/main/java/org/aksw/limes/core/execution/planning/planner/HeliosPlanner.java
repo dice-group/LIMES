@@ -26,8 +26,10 @@ import java.util.List;
  * Implements the Helios planner class. It receives a link specification as
  * input and generates an immutable NestedPlan.
  *
- * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala {@literal <}georgala {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
 public class HeliosPlanner extends Planner {
@@ -49,9 +51,9 @@ public class HeliosPlanner extends Planner {
     /**
      * Constructor of the Helios planner class.
      *
-     * @param s,
+     * @param source,
      *            Source cache
-     * @param t,
+     * @param target,
      *            Target get
      */
     public HeliosPlanner(Cache source, Cache target) {
@@ -70,7 +72,6 @@ public class HeliosPlanner extends Planner {
      * @param threshold,
      *            Threshold of metric expression
      * @return runtime, estimated runtime cost of the metric expression
-     * @throws InvalidMeasureException
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
 
@@ -84,7 +85,7 @@ public class HeliosPlanner extends Planner {
             System.exit(1);
         }
         return mapper.getRuntimeApproximation(source.size(), target.size(), threshold, lang);
-    
+
     }
 
     /**
@@ -97,7 +98,6 @@ public class HeliosPlanner extends Planner {
      * @param threshold,
      *            Threshold of metric expression
      * @return size, estimated size of returned mapping
-     * @throws InvalidMeasureException
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
         Mapper mapper = null;
@@ -117,8 +117,8 @@ public class HeliosPlanner extends Planner {
      * the filtering instruction is not supported by the framework, it throws an
      * InvalidMeasureException exception.
      *
-     * @param filterExpression,
-     *            Expression used to filter
+     * @param measures,
+     *            The set of expressions used to filter
      * @param mappingSize,
      *            Size of mapping
      * @return cost, estimated runtime cost of filteringInstruction(s)
@@ -277,6 +277,8 @@ public class HeliosPlanner extends Planner {
      * needed when AND has more than 2 children. Simply splits the task in
      * computing the best instructionList for (leftmost, all others).
      *
+     * @param spec,
+     *            Input link specification
      * @param plans,
      *            List of plans
      * @param selectivity,
@@ -306,6 +308,8 @@ public class HeliosPlanner extends Planner {
      * Computes the best conjunctive instructionList for a instructionList
      * against a list of plans by calling back the method.
      *
+     * @param spec,
+     *            Input link specification
      * @param left,
      *            Left instructionList
      * @param plans,
@@ -422,10 +426,10 @@ public class HeliosPlanner extends Planner {
     /**
      * Normalization of input link specification. In case of XOR operator, the
      * output specification uses the extended form of XOR (i.e.
-     * XOR(cosine(x.name,y.name)|0.5, overlap(x.label,y.label)|0.6)>=0.8 will
-     * transformed into MINUS(OR(cosine(x.name,y.name)|0.5,
+     * XOR(cosine(x.name,y.name)|0.5, overlap(x.label,y.label)|0.6){@literal >}
+     * =0.8 will transformed into MINUS(OR(cosine(x.name,y.name)|0.5,
      * overlap(x.label,y.label)|0.6)|0.8, AND(cosine(x.name,y.name)|0.5,
-     * overlap(x.label,y.label)|0.6)|0.8) )>=0.8
+     * overlap(x.label,y.label)|0.6)|0.8) ){@literal >}=0.8
      *
      * @param spec,
      *            The normalized link specification

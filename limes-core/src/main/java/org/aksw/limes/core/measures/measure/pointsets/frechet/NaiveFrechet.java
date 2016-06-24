@@ -27,27 +27,19 @@ public class NaiveFrechet extends PointsetsMeasure {
     public int computations;
     Polygon poly1, poly2;
 
-    /**
-     * Brute force approach to computing the Frechet distance between two
-     * polygons
-     *
-     * @param X
-     *         First polygon
-     * @param Y
-     *         Second polygon
-     * @return Distance between X and Y
-     */
+    
     public NaiveFrechet() {
         computations = 0;
     }
 
     /**
      * @param X
-     *         First polygon
+     *            First polygon
      * @param Y
-     *         Second polygon
-     * @param threshold
-     * @returnDistance between X and Y
+     *            Second polygon
+     * @param threshold,
+     *            the distance threshold
+     * @return Distance between X and Y
      */
     public static double distance(Polygon X, Polygon Y, double threshold) {
         return new NaiveFrechet().computeDistance(X, Y, threshold);
@@ -58,7 +50,9 @@ public class NaiveFrechet extends PointsetsMeasure {
         return frechetDistance.computeFrechetDistance();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.aksw.limes.core.measures.measure.IMeasure#getName()
      */
     public String getName() {
@@ -69,11 +63,11 @@ public class NaiveFrechet extends PointsetsMeasure {
      * Computes the SetMeasure distance for a source and target set
      *
      * @param source
-     *         Source polygons
+     *            Source polygons
      * @param target
-     *         Target polygons
+     *            Target polygons
      * @param threshold
-     *         Distance threshold
+     *            Distance threshold
      * @return Mapping from source to rtarget resources
      */
     public AMapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
@@ -89,16 +83,22 @@ public class NaiveFrechet extends PointsetsMeasure {
         return m;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.aksw.limes.core.measures.measure.IMeasure#getType()
      */
     public String getType() {
         return "geodistance";
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance, java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.
+     * limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance,
+     * java.lang.String, java.lang.String)
      */
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         TreeSet<String> source = instance1.getProperty(property1);
@@ -124,8 +124,12 @@ public class NaiveFrechet extends PointsetsMeasure {
         return 1d / (1d + (double) d);
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(
+     * double)
      */
     public double getRuntimeApproximation(double mappingSize) {
         return mappingSize / 1000d;
