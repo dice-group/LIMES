@@ -15,8 +15,9 @@ import java.io.IOException;
  * Just a little helper method to get PropertyMappings of the evaluation datasets.
  *
  * @author Klaus Lyko
- * @author Mofeed Hassan
+ * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
  * @version 1.0
+ * @since 1.0
  */
 public class PropMapper {
     static Logger logger = LoggerFactory.getLogger(PropMapper.class);

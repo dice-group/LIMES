@@ -14,8 +14,9 @@ import org.aksw.limes.core.io.mapping.reader.AMappingReader;
  * Factory class that gives different types of oracles based on the file type
  *
  * @author ngonga
- * @author mofeed
+ * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
  * @version 1.0
+ * @since 1.0
  */
 public class OracleFactory {
     static Logger logger = LoggerFactory.getLogger(OracleFactory.class);

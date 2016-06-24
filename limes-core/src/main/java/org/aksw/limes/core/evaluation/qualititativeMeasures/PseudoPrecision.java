@@ -14,8 +14,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
  * @author ngonga
- * @author mofeed hassan
+ * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
  * @version 1.0
+ * @since 1.0
  */
 public class PseudoPrecision extends APseudoPRF {
     static Logger logger = LoggerFactory.getLogger(PseudoPrecision.class);
@@ -24,8 +25,7 @@ public class PseudoPrecision extends APseudoPRF {
     }
 
     /**
-     * Use this constructor to toggle between symmetric precision (true) and the older asymmetric
-     * Pseudo-Precision (false)
+     * Use this constructor to toggle between symmetric precision (true) and the older asymmetric Pseudo-Precision (false)
      *
      * @param symmetricPrecision
      */
@@ -34,17 +34,12 @@ public class PseudoPrecision extends APseudoPRF {
         this.setSymmetricPrecision(symmetricPrecision);
     }
 
-    /**
-     * Computes the pseudo-precision, which is basically how well the mapping
-     * maps one single s to one single t
-     *
-     * @param sourceUris
-     *         List of source uris
-     * @param targetUris
-     *         List of target uris
-     * @param result
-     *         Mapping of source to targer uris
-     * @return Pseudo precision score
+    /** 
+     * The method calculates the pseudo precision of the machine learning predictions compared to a gold standard , which is basically how well the mapping
+     * maps one single s to one single t.
+     * @param predictions The predictions provided by a machine learning algorithm.
+     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs.
+     * @return double - This returns the calculated pseudo precision.
      */
     @Override
     public double calculate(AMapping predictions, GoldStandard goldStandard) {

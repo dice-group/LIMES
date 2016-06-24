@@ -6,11 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This Factory class give a measure object based on the specified measure type.
- * This object can be used through its method calculate() to evaluate the retrieved mappings
+ * This Factory class gives a measure object based on the specified measure type.<br>
+ * This object can be used through its method calculate() to evaluate the generated mappings
  *
- * @author mofeed
+ * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
  * @version 1.0
+ * @since 1.0
  */
 public class EvaluatorFactory {
     static Logger logger = LoggerFactory.getLogger(EvaluatorFactory.class);

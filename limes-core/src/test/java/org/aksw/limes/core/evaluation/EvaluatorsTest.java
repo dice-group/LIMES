@@ -20,8 +20,8 @@ public class EvaluatorsTest {
     static Logger logger = LoggerFactory.getLogger(EvaluatorsTest.class);
 
 
-    final private String[] datasetsList = {"PERSON1"/*, "PERSON2", "PERSON1_CSV", "PERSON2_CSV", "RESTAURANTS", "OAEI2014BOOKS"*/};
-    final private String[] algorithmsListData = {/*"UNSUPERVISED:WOMBATSIMPLE"*//*"SUPERVISED_BATCH:WOMBATSIMPLE"*/"SUPERVISED_ACTIVE:WOMBATSIMPLE"};
+    final private String[] datasetsList = {"RESTAURANTS"/*,"PERSON1",  "PERSON2", "PERSON1_CSV", "PERSON2_CSV", "OAEI2014BOOKS"*/};
+    final private String[] algorithmsListData = {"UNSUPERVISED:WOMBATSIMPLE","SUPERVISED_BATCH:WOMBATSIMPLE","SUPERVISED_ACTIVE:WOMBATSIMPLE"/**/};
 
     private static final int folds=5;
     private static final boolean crossValidate=false; 
@@ -43,10 +43,11 @@ public class EvaluatorsTest {
             
             Set<TaskData> tasks = ds.initializeDataSets(datasetsList);
             Set<EvaluatorType> evaluators = ev.initializeEvaluators();
-            List<TaskAlgorithm> algorithms = al.initializeMLAlgorithms(algorithmsListData);
+            List<TaskAlgorithm> algorithms = al.initializeMLAlgorithms(algorithmsListData,datasetsList.length);
             
             Table<String, String, Map<EvaluatorType, Double>> results = evaluator.evaluate(algorithms, tasks, evaluators, null);
             
+           
             for (String mlAlgorithm : results.rowKeySet()) {
                 for (String dataset : results.columnKeySet()) {
                     for (EvaluatorType measure : results.get(mlAlgorithm, dataset).keySet()) {
@@ -73,7 +74,7 @@ public class EvaluatorsTest {
             
             Set<TaskData> tasks = ds.initializeDataSets(datasetsList);
             Set<EvaluatorType> evaluators = ev.initializeEvaluators();
-            List<TaskAlgorithm> algorithms = al.initializeMLAlgorithms(algorithmsListData);
+            List<TaskAlgorithm> algorithms = al.initializeMLAlgorithms(algorithmsListData,datasetsList.length);
             
             for (TaskAlgorithm tAlgorithm : algorithms) {
                 Table<String, String, Map<EvaluatorType, Double>> results = evaluator.crossValidate(tAlgorithm.getMlAlgorithm(), tasks,folds, evaluators, null);

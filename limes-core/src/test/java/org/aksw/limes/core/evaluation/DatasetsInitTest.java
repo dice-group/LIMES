@@ -22,10 +22,9 @@ import org.junit.Test;
 
 
 public class DatasetsInitTest {
-
     static Logger logger = LoggerFactory.getLogger(DatasetsInitTest.class.getName());
     final public double factor =0.1;
-    final public String[] datasetsList = {"PERSON1"/*, "PERSON1_CSV", "PERSON2", "PERSON2_CSV", "RESTAURANTS", "OAEI2014BOOKS"*/};
+    final public String[] defultDatasetsList = {"PERSON1"/*, "PERSON1_CSV", "PERSON2", "PERSON2_CSV", "RESTAURANTS", "OAEI2014BOOKS"*/};
     // public Set<TaskData> tasks =new TreeSet<TaskData>();
 
 
@@ -35,9 +34,9 @@ public class DatasetsInitTest {
         initializeDataSets(null);
     }
 
-    public Set<TaskData> initializeDataSets(String[] dl) {
-        if(dl==null)
-            dl=datasetsList;
+    public Set<TaskData> initializeDataSets(String[] datasetsList) {
+        if(datasetsList==null)
+            datasetsList=defultDatasetsList;
         Set<TaskData> tasks =new TreeSet<TaskData>();
         TaskData task = new TaskData();
         try {
@@ -46,10 +45,10 @@ public class DatasetsInitTest {
                 EvaluationData c = DataSetChooser.getData(ds);
                 GoldStandard gs = new GoldStandard(c.getReferenceMapping(),c.getSourceCache(),c.getTargetCache());
                 //extract training data
-                
+
                 AMapping reference =  c.getReferenceMapping();
                 AMapping training = extractTrainingData(reference, factor);
-               // assertTrue(training.size() == 50);
+                // assertTrue(training.size() == 50);
                 task = new TaskData(gs, c.getSourceCache(), c.getTargetCache());
                 task.dataName = ds;
                 task.training = training;
@@ -73,9 +72,9 @@ public class DatasetsInitTest {
         for(int i=0 ; i< trainingSize ;i++)
         {
             String       sourceInstance = keys.get( random.nextInt(keys.size()) );
-                HashMap<String,Double>       targetInstance     = refMap.get(sourceInstance);
-                keys.remove(sourceInstance);
-                training.add(sourceInstance, targetInstance);
+            HashMap<String,Double>       targetInstance     = refMap.get(sourceInstance);
+            keys.remove(sourceInstance);
+            training.add(sourceInstance, targetInstance);
         }
 
         return training;

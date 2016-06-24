@@ -31,12 +31,19 @@ import de.uni_leipzig.simba.selfconfig.Experiment;*/
  * Class to grant central access to evaluation datasets.
  *
  * @author Klaus Lyko
- * @author Mofeed Hassan
+ * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @version 1.0
+ * @since 1.0
  */
 public class DataSetChooser {
 
     static Logger logger = LoggerFactory.getLogger(DataSetChooser.class);
 
+    /**
+     * provides the information of the link specification path, the gold standard path, the datasets path and additional information of a required dataset
+     * @param dataSetName The name of the dataset to get its information given as string
+     * @return The parameters to load the dataset
+     */
     public static EvaluationData getData(String dataSetName) {
         String d = dataSetName.replaceAll("-", "").toUpperCase();
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
@@ -216,8 +223,6 @@ public class DataSetChooser {
     }
     
     private static HashMap<MapKey, Object> getPersonNew() {
-        // This code needs to be reviewed by Klaus to check where are the missed
-        // classes
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
         param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
@@ -257,8 +262,6 @@ public class DataSetChooser {
     }
 
     private static HashMap<MapKey, Object> getPerson1() {
-        // This code needs to be reviewed by Klaus to check where are the missed
-        // classes
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
         param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
@@ -534,7 +537,6 @@ public class DataSetChooser {
         AConfigurationReader cR = new XMLConfigurationReader(
                 (String) param.get(MapKey.BASE_FOLDER) + param.get(MapKey.CONFIG_FILE));
         cR.read();
-        System.out.println(cR.getConfiguration());
         param.put(MapKey.CONFIG_READER, cR);
         param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
                 (String) param.get(MapKey.CONFIG_FILE)));
