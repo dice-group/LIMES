@@ -168,16 +168,34 @@
             <version>1.7.21</version>
         </dependency>
 
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>slf4j-simple</artifactId>-->
+            <!--<version>1.7.21</version>-->
+        <!--</dependency>-->
+
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.21</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.6.1</version>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
             <version>1.7.21</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.6.1</version>
         </dependency>
 
 		<!--<dependency>-->
@@ -322,11 +340,11 @@
 			<artifactId>jts</artifactId>
 			<version>1.13</version>
 		</dependency>
-		<dependency>
-			<groupId>org.matheclipse</groupId>
-			<artifactId>matheclipse-core</artifactId>
-			<version>0.0.7</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.matheclipse</groupId>-->
+			<!--<artifactId>matheclipse-core</artifactId>-->
+			<!--<version>0.0.7</version>-->
+		<!--</dependency>-->
 
 		<dependency>
 			<groupId>algorithms.edjoin</groupId>
