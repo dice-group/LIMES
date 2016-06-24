@@ -13,8 +13,10 @@ import java.util.List;
  * link specification and a planner type, executes the plan returned from the
  * planner and returns the set of links as a mapping.
  *
- * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala {@literal <}georgala {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
 public abstract class ExecutionEngine implements IExecutionEngine {
@@ -32,11 +34,11 @@ public abstract class ExecutionEngine implements IExecutionEngine {
      */
     protected String targetVariable;
     /**
-     *  Source cache.
+     * Source cache.
      */
     protected Cache source;
     /**
-     *  Target cache.
+     * Target cache.
      */
     protected Cache target;
 
@@ -48,7 +50,7 @@ public abstract class ExecutionEngine implements IExecutionEngine {
      * @param target,
      *            Target cache
      * @param sourceVar,
-     *            Source variable 
+     *            Source variable
      * @param targetVar,
      *            Target variable
      */

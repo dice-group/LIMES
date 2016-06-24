@@ -51,9 +51,12 @@ import org.slf4j.LoggerFactory;
  * Implements the measure factory class. For each measure name, the factory
  * returns an object of the corresponding measure.
  *
- * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
- * @author Mohamed Ahmed Sherif <msherif@informatik.uni-leipzig.de>
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala {@literal <}georgala {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
+ * @author Mohamed Ahmed Sherif {@literal <}sherif {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
  * 
  * @version 1.0
  */
@@ -115,17 +118,18 @@ public class MeasureFactory {
      * Factory function for retrieving a measure name from the set of allowed
      * types.
      * 
-     * @param name,
+     * @param expression,
      *            The name/type of the measure.
      * @return a specific measure type
-     * @throws InvalidMeasureException
+     * @throws InvalidMeasureException,
+     *             if the type of the measure is invalid
      */
     public static MeasureType getMeasureType(String expression) throws InvalidMeasureException {
         String measure = expression.toLowerCase();
 
         if (measure.startsWith(JAROWINKLER))
             return MeasureType.JAROWINKLER;
-        
+
         if (measure.startsWith(JARO)) {
             return MeasureType.JARO;
         }

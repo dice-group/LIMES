@@ -32,8 +32,10 @@ import java.util.List;
  * independent parts of the plan returned from the planner sequentially and
  * returns a MemoryMemoryMapping.
  *
- * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala {@literal <}georgala {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
 public class SimpleExecutionEngine extends ExecutionEngine {
@@ -104,8 +106,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                 LinearFilter f = new LinearFilter();
                 AMapping m1 = executeUnion(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
                 m1 = f.filter(m1, Double.parseDouble(inst.getThreshold()));
-                AMapping m2 = executeIntersection(buffer.get(inst.getSourceIndex()),
-                        buffer.get(inst.getTargetIndex()));
+                AMapping m2 = executeIntersection(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
                 m2 = f.filter(m2, Double.parseDouble(inst.getThreshold()));
                 m = executeDifference(m1, m2);
             } // end of processing. Return the indicated mapping

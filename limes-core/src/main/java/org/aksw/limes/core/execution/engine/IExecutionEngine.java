@@ -8,8 +8,10 @@ import org.aksw.limes.core.io.mapping.AMapping;
  * Implements the engine interface. The engine is responsible for executing the
  * input link specification object.
  *
- * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala {@literal <}georgala {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
 public interface IExecutionEngine {
@@ -17,10 +19,6 @@ public interface IExecutionEngine {
     /**
      * Implementation of the execution of a link specification.
      *
-     * @param source,
-     *            the source cache
-     * @param target,
-     *            the target cache
      * @param spec,
      *            the link specification
      * @param plannerType,

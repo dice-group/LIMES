@@ -90,10 +90,10 @@ public class MapperFactory {
      *            type of the measure
      * 
      * @return a specific mapper instance
-     * @throws InvalidMeasureException
+     * @throws InvalidMeasureException, if the type of the measure is invalid
      * 
      */
-    // TODO use MeasureType instead of mesure name string
+    
     public static Mapper createMapper(MeasureType type) throws InvalidMeasureException {
         switch (type) {
         case JAROWINKLER:
