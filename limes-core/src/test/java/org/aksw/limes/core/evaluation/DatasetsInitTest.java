@@ -15,12 +15,15 @@ import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Test;
 
 
 
 public class DatasetsInitTest {
 
+    static Logger logger = LoggerFactory.getLogger(DatasetsInitTest.class.getName());
     final public double factor =0.1;
     final public String[] datasetsList = {"PERSON1"/*, "PERSON1_CSV", "PERSON2", "PERSON2_CSV", "RESTAURANTS", "OAEI2014BOOKS"*/};
     // public Set<TaskData> tasks =new TreeSet<TaskData>();
@@ -39,7 +42,7 @@ public class DatasetsInitTest {
         TaskData task = new TaskData();
         try {
             for (String ds : datasetsList) {
-                System.out.println(ds);
+                logger.info(ds);
                 EvaluationData c = DataSetChooser.getData(ds);
                 GoldStandard gs = new GoldStandard(c.getReferenceMapping(),c.getSourceCache(),c.getTargetCache());
                 //extract training data
