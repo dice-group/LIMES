@@ -13,7 +13,7 @@ public abstract class AMLAlgorithm {
     public String getName() {
         return getMl().getName();
     }
-
+    
     public ACoreMLAlgorithm getMl() {
         return ml;
     }

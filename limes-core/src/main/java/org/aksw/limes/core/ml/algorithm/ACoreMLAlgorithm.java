@@ -7,6 +7,7 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.NoSuchParameterException;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 
@@ -21,8 +22,24 @@ public abstract class ACoreMLAlgorithm {
     protected Cache sourceCache;
 
     protected Cache targetCache;
+    
+    protected Configuration configuration;
 
     /**
+     * @return the configuration
+     */
+    public Configuration getConfiguration() {
+		return configuration;
+	}
+
+	/**
+	 * @param configuration the configuration
+	 */
+	public void setConfiguration(Configuration configuration) {
+		this.configuration = configuration;
+	}
+
+	/**
      * Name of the core ML algorithm.
      *
      * @return

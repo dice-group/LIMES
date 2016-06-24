@@ -19,6 +19,7 @@ public class MLResults {
     protected Map<String, Object> details = new HashMap<String, Object>();
 
     public MLResults() {
+    	super();
     }
 
     public MLResults(LinkSpecification linkspec, AMapping mapping, double quality, Map<String, Object> details) {
@@ -31,12 +32,12 @@ public class MLResults {
 
     @Override
     public String toString() {
-        String s = "RESULT:\n";
-        s += "LS: " + linkspec + "\n";
-        s += "Quality: " + quality + "\n";
-        s += "Mapping: " + mapping.size() + "\n";
-
-        return s;
+        StringBuilder s = new StringBuilder();
+        s.append("RESULT:\n");
+        s.append("LS: " + linkspec + "\n");
+        s.append("Quality: " + quality + "\n");
+        s.append("Mapping: " + mapping.size() + "\n");
+        return s.toString();
     }
 
     public LinkSpecification getLinkSpecification() {

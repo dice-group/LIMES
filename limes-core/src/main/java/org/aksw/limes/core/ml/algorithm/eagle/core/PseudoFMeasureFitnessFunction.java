@@ -1,6 +1,7 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFM;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
@@ -26,7 +27,7 @@ import org.jgap.gp.impl.ProgramChromosome;
 public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements IFitnessFunction {
 
     /**
-     *
+     *	
      */
     private static final long serialVersionUID = -7114137172832439294L;
     static Logger logger = LoggerFactory.getLogger("LIMES");
@@ -35,7 +36,9 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
     Cache sourceCache, targetCache;
     LinkSpecGeneticLearnerConfig config;
     double beta = 1.0d;
+    
     PseudoFM pfm = new PseudoFM();
+    PseudoFMeasure ppfm = new PseudoFMeasure();
 
 
     private PseudoFMeasureFitnessFunction(LinkSpecGeneticLearnerConfig a_config, PseudoFM pfm, Cache c1, Cache c2) {
@@ -107,7 +110,13 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
     }
 
     public Double calculatePseudoMeasure(IGPProgram p) {
+    	
+    	// TODO replace this with new class below
+    	
         return pfm.getPseudoFMeasure(sourceCache.getAllUris(), targetCache.getAllUris(), calculateMapping(p), beta);
+        
+//        return ppfm.getPseudoFMeasure(predictions, goldStandard, beta);
+        
     }
 
     /**
