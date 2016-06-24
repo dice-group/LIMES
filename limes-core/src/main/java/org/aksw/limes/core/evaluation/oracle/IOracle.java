@@ -7,8 +7,9 @@ import org.aksw.limes.core.io.mapping.AMapping;
  * This data will be mostly given as a mapping
  *
  * @author ngonga
- * @author Mofeed Hassan
+ * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
  * @version 1.0
+ * @since 1.0
  */
 
 public interface IOracle {

@@ -13,10 +13,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * This class's function is to evaluate mappings against several qaulitative measures
+ * The class implements the evaluate method to evaluate mappings against several qualitative measures
  *
- * @author mofeed
+ * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
  * @version 1.0
+ * @since 1.0
  */
 public class QualitativeMeasuresEvaluator {
     static Logger logger = LoggerFactory.getLogger(QualitativeMeasuresEvaluator.class);
@@ -26,13 +27,10 @@ public class QualitativeMeasuresEvaluator {
 
 
     /**
-     * @param prediction:
-     *         the results predicted to represent mappings between two datasets
-     * @param goldStandard:
-     *         It is an object that contains {Mapping-> gold standard, List of source URIs, List of target URIs}
-     * @param evaluationMeasures:
-     *         Set of Measures to evaluate the resulted mappings against
-     * @return a Map contains the measure name and the corresponding calculated value
+     * @param predictions The predictions provided by a machine learning algorithm
+     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
+     * @param evaluationMeasures It is the set of qualitative measures to evaluate the predicted mappings
+     * @return Map - It contains the measure name and the corresponding calculated value
      */
     public Map<EvaluatorType, Double> evaluate(AMapping predictions, GoldStandard goldStandard, Set<EvaluatorType> evaluationMeasures) {
         for (EvaluatorType measureType : evaluationMeasures) {

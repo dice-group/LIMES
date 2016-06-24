@@ -19,6 +19,7 @@ import java.util.Set;
  * @author ngonga
  * @author mofeed hassan
  * @version 1.0
+ * @since 1.0
  */
 public class PseudoRecall extends APseudoPRF {
     static Logger logger = LoggerFactory.getLogger(PseudoRecall.class);
@@ -38,19 +39,12 @@ public class PseudoRecall extends APseudoPRF {
     }
 
 
-    /**
-     * The assumption here is a follows. We compute how many of the s and t
+    /** 
+     * The method calculates the pseudo recall of the machine learning predictions compared to a gold standard , which is how many of the s and t
      * were mapped.
-     *
-     * @param sourceUris
-     *         URIs in source cache
-     * @param targetUris
-     *         URIs in target cache
-     * @param result
-     *         Mapping computed by our learner
-     * @param Run
-     *         mapping minimally and apply filtering. Compare the runtime of both approaches
-     * @return Pseudo recall
+     * @param predictions The predictions provided by a machine learning algorithm.
+     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs.
+     * @return double - This returns the calculated pseudo recall.
      */
 
     public double calculate(AMapping predictions, GoldStandard goldStandard) {

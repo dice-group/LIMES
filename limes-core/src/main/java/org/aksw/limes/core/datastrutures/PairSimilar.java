@@ -1,5 +1,12 @@
 package org.aksw.limes.core.datastrutures;
 
+/**
+ * This generic class combines pair of data  from same datatypes
+ *
+ * @version 1.0
+ * @since 1.0
+ */
+
 public class PairSimilar<T> {
     public final T a, b;
 

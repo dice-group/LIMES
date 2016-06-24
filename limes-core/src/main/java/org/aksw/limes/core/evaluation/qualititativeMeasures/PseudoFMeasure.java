@@ -7,14 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implements a quality measure for unsupervised ML algorihtms, dubbed pseudo F-Measure.
+ * Implements a quality measure for unsupervised ML algorihtms, dubbed pseudo F-Measure.<br>
  * Thereby, not relying on any gold standard. The basic idea is to measure the quality of the
- * a given Mapping by calc. how close it is to an assumed 1-to-1 Mapping between source and
+ * given Mapping by calculating how close it is to an assumed 1-to-1 Mapping between source and
  * target.
  *
  * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
  * @author ngonga
- * @author mofeed hassan
+ * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
  * @version 1.0
  */
 public class PseudoFMeasure extends APseudoPRF {
@@ -34,36 +34,22 @@ public class PseudoFMeasure extends APseudoPRF {
         this.setSymmetricPrecision(symmetricPrecision);
     }
 
-    /**
-     * Computes the balanced Pseudo-F1-measure.
-     *
-     * @param sourceUris
-     *         Source URIs
-     * @param targetUris
-     *         Target URIs
-     * @param result
-     *         Mapping resulting from ML algorihtms
-     * @param beta
-     *         Beta for F-beta
-     * @return Pseudo measure
+    /** 
+     * The method calculates the pseudo F-Measure of the machine learning predictions compared to a gold standard for beta = 1 .
+     * @param predictions The predictions provided by a machine learning algorithm.
+     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs.
+     * @return double - This returns the calculated pseudo F-Measure.
      */
     @Override
     public double calculate(AMapping predictions, GoldStandard goldStandard) {
         return getPseudoFMeasure(predictions, goldStandard, 1);
     }
-
-    /**
-     * Computes Pseudo-f-measure for different beta values
-     *
-     * @param sourceUris
-     *         Source URIs
-     * @param targetUris
-     *         Target URIs
-     * @param result
-     *         Mapping resulting from ML algorihtms
-     * @param beta
-     *         Beta for F-beta
-     * @return Pseudo measure
+    /** 
+     * The method calculates the pseudo F-Measure of the machine learning predictions compared to a gold standard for different beta values
+     * @param predictions The predictions provided by a machine learning algorithm
+     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
+     * @param beta   Beta for F-beta
+     * @return double - This returns the calculated pseudo F-Measure
      */
     public double getPseudoFMeasure(AMapping predictions, GoldStandard goldStandard, double beta) {
         double p = precision(predictions, goldStandard);// getPseudoPrecision(sourceUris, targetUris, result);
@@ -75,10 +61,22 @@ public class PseudoFMeasure extends APseudoPRF {
         return f;
     }
 
+    /** 
+     * The method calculates the pseudo recall of the machine learning predictions compared to a gold standard
+     * @param predictions The predictions provided by a machine learning algorithm
+     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
+     * @return double - This returns the calculated pseudo recall
+     */
     public double recall(AMapping predictions, GoldStandard goldStandard) {
         return new PseudoRecall().calculate(predictions, goldStandard);
     }
 
+    /** 
+     * The method calculates the pseudo precision of the machine learning predictions compared to a gold standard
+     * @param predictions The predictions provided by a machine learning algorithm
+     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
+     * @return double - This returns the calculated pseudo precision
+     */
     public double precision(AMapping predictions, GoldStandard goldStandard) {
         return new PseudoPrecision().calculate(predictions, goldStandard);
     }

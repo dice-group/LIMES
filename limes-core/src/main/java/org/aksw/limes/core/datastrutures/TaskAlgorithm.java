@@ -6,9 +6,20 @@ import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 
+/**
+ * This class combines a machine learning algorithm information to be executed  
+ *
+ * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @version 1.0
+ * @since 1.0
+ */
+
 public class TaskAlgorithm {
+    /** The implementation type of the machine learning algorithm such as unsupervised, supervised batch and supervised active */
     private MLImplementationType mlType;
+    /** The machine learning algorithm method such as EAGLE, WOMBAT and  LION */
     private AMLAlgorithm mlAlgorithm;
+    /** The parameters required by the machine learning algorithm*/
     private List<LearningParameter> mlParameter;
 
     public TaskAlgorithm() {

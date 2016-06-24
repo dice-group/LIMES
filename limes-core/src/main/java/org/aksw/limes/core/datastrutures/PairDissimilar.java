@@ -1,7 +1,13 @@
 package org.aksw.limes.core.datastrutures;
 
 
-
+/**
+ * This generic class combines pair of data  from different datatypes
+ *
+ * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @version 1.0
+ * @since 1.0
+ */
 public class PairDissimilar<S,T> {
     public final S a;
     public final T b;

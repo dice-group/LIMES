@@ -19,10 +19,12 @@ import java.util.Map;
  * Class to specify evaluation parameters. Hold all neeeded data: caches, ConfigReader, and additional folder settings.
  * <p>
  * To support the older HashMap setting,
- * it profides a static constructor-like method <code>buildFromHashMap(Map<MapKey, Object> map)</code>.
+ * it provides a static constructor-like method <code>buildFromHashMap(Map<MapKey, Object> map)</code>.
  *
  * @author Klaus Lyko
- * @author Mofeed Hassan
+ * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @version 1.0
+ * @since 1.0
  */
 public class EvaluationData {
     static Logger logger = LoggerFactory.getLogger(EvaluationData.class);
@@ -302,10 +304,10 @@ public class EvaluationData {
     }
 
     /**
-     * Getter for using the debrecated MapKeys.
+     * Getter for using the deprecated MapKeys.
      *
-     * @param key
-     * @return
+     * @param key the key for the required information required concerning teh dataset
+     * @return The corresponding information to the given key such as the base folder
      */
     public Object getValue(MapKey key) {
         switch (key) {

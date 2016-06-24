@@ -5,14 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author mofeed
- */
+ * The class represents a set of the run records
+ * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @version 1.0
+ * @since 1.0 */
 public class RunsData implements IQuantitativeMeasure {
 
-    // list of recorded runs, each with its information like id,time,memory,.....
+    /** list of recorded runs, each with its information like id,time,memory...etc */
     protected Map<Long, RunRecord> runs = new HashMap<Long, RunRecord>();
 
-    // retrieves a run information based on giben Id
+    // retrieves a run information based on given Id
     @Override
     public RunRecord getRun(long runId) {
         return runs.get(Long.valueOf(runId));
