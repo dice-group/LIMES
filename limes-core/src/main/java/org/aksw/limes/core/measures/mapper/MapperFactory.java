@@ -90,7 +90,7 @@ public class MapperFactory {
      *            type of the measure
      * 
      * @return a specific mapper instance
-     * @throws InvalidMeasureException, if the type of the measure is invalid
+     * @throws InvalidMeasureException if the type of the measure is invalid
      * 
      */
     

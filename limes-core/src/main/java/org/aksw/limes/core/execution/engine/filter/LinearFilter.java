@@ -12,8 +12,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Implements the linear filter class.
  *
- * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala {@literal <}georgala {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
 public class LinearFilter implements IFilter {
@@ -29,7 +31,7 @@ public class LinearFilter implements IFilter {
      *            Map bearing the results of Link Specification
      * @param threshold,
      *            Value of threshold
-     * @return AMapping, Filtered mapping that satisfies sim >= threshold
+     * @return AMapping, Filtered mapping that satisfies sim {@literal >}= threshold
      */
     public AMapping filter(AMapping map, double threshold) {
         double sim = 0.0;
@@ -220,19 +222,19 @@ public class LinearFilter implements IFilter {
 
     /**
      * Filter for linear combinations when operation is set to "add", given the
-     * expression a*sim1 + b*sim2 >= t or multiplication given the expression
-     * (a*sim1)*(b*sim2) >= t, which is not likely to be used. Implements a
+     * expression a*sim1 + b*sim2 {@literal >}= t or multiplication given the expression
+     * (a*sim1)*(b*sim2) {@literal >}= t, which is not likely to be used. Implements a
      * filter for the special case of linear combinations and multiplications.
      * The straight forward way would be to compute filter(intersection(m1, m2),
      * linear_combination_condition) leading to re-computations. This
      * implementation avoid that by reusing the similarities that have already
      * been computed.
      *
-     * @param map1,
-     *            Map bearing the results of sim1 >= (t-b)/a for add, sim1 >=
+     * @param m1,
+     *            Map bearing the results of sim1 {@literal >}= (t-b)/a for add, sim1 {@literal >}=
      *            t/(a*b) for mult
-     * @param map2,
-     *            Map bearing the results of sim2 >= (t-a)/b for add, sim2 >=
+     * @param m2,
+     *            Map bearing the results of sim2 {@literal >}= (t-a)/b for add, sim2 {@literal >}=
      *            t/(a*b) for mult
      * @param coef1,
      *            Value of first coefficient
@@ -240,8 +242,10 @@ public class LinearFilter implements IFilter {
      *            Value of second coefficient
      * @param threshold,
      *            Value of t
-     * @return Mapping, Filtered mapping that satisfies a*sim1 + b*sim2 >= t for
-     *         add, (a*sim1)*(b*sim2) >= t for mult
+     * @param operation,
+     *            Mathematical operation         
+     * @return Mapping, Filtered mapping that satisfies a*sim1 + b*sim2 {@literal >}= t for
+     *         add, (a*sim1)*(b*sim2) {@literal >}= t for mult
      */
     public AMapping filter(AMapping m1, AMapping m2, double coef1, double coef2, double threshold, String operation) {
         AMapping m = MappingOperations.intersection(m1, m2);

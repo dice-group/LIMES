@@ -121,7 +121,7 @@ public class MeasureFactory {
      * @param expression,
      *            The name/type of the measure.
      * @return a specific measure type
-     * @throws InvalidMeasureException,
+     * @throws InvalidMeasureException
      *             if the type of the measure is invalid
      */
     public static MeasureType getMeasureType(String expression) throws InvalidMeasureException {
@@ -277,7 +277,7 @@ public class MeasureFactory {
      *            Type of the measure
      * 
      * @return a specific measure instance
-     * @throws InvalidMeasureException
+     * @exception InvalidMeasureException if the measure type is invalid
      * 
      */
     public static Measure createMeasure(MeasureType type) throws InvalidMeasureException {

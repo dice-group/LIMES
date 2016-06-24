@@ -6,8 +6,10 @@ import org.aksw.limes.core.io.mapping.AMapping;
 /**
  * IFilter implements the filter interface.
  * 
- * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala {@literal <}georgala {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  * 
  * 
@@ -22,7 +24,8 @@ public interface IFilter {
      *            Map bearing the results of Link Specification
      * @param threshold,
      *            Value of threshold
-     * @return AMapping, Filtered mapping that satisfies sim >= threshold
+     * @return AMapping, Filtered mapping that satisfies sim {@literal >}=
+     *         threshold
      */
     public AMapping filter(AMapping map, double threshold);
 
@@ -104,23 +107,27 @@ public interface IFilter {
 
     /**
      * Filter for linear combinations when operation is set to "add", given the
-     * expression a*sim1 + b*sim2 >= t or multiplication given the expression
-     * (a*sim1)*(b*sim2) >= t, which is not likely to be used.
+     * expression a*sim1 + b*sim2 {@literal >}= t or multiplication given the
+     * expression (a*sim1)*(b*sim2) {@literal >}= t, which is not likely to be
+     * used.
      *
      * @param map1,
-     *            Map bearing the results of sim1 >= (t-b)/a for add, sim1 >=
-     *            t/(a*b) for mult
+     *            Map bearing the results of sim1 {@literal >}= (t-b)/a for add,
+     *            sim1 {@literal >}= t/(a*b) for mult
      * @param map2,
-     *            Map bearing the results of sim2 >= (t-a)/b for add, sim2 >=
-     *            t/(a*b) for mult
+     *            Map bearing the results of sim2 {@literal >}= (t-a)/b for add,
+     *            sim2 {@literal >}= t/(a*b) for mult
      * @param coef1,
      *            Value of first coefficient
      * @param coef2,
      *            Value of second coefficient
      * @param threshold,
      *            Value of t
-     * @return Mapping, Filtered mapping that satisfies a*sim1 + b*sim2 >= t for
-     *         add, (a*sim1)*(b*sim2) >= t for mult
+     * @param operation,
+     *            Mathematical operation
+     * @return Mapping, Filtered mapping that satisfies a*sim1 + b*sim2
+     *         {@literal >}= t for add, (a*sim1)*(b*sim2) {@literal >}= t for
+     *         mult
      */
     public AMapping filter(AMapping map1, AMapping map2, double coef1, double coef2, double threshold,
             String operation);

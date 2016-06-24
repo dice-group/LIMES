@@ -21,7 +21,7 @@ public interface IExecutionEngine {
      *
      * @param spec,
      *            the link specification
-     * @param plannerType,
+     * @param planner,
      *            the type of the planner
      * @return The mapping obtained from executing the plan
      */

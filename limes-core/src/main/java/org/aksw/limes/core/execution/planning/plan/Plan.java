@@ -11,8 +11,10 @@ import java.util.List;
  * instructions that are going to be executed sequentially or in parallel by an
  * execution engine.
  *
- * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala {@literal <}georgala {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
 public class Plan implements IPlan {

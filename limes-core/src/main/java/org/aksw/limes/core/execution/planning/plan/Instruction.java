@@ -7,8 +7,10 @@ import org.slf4j.LoggerFactory;
  * Implements Instruction class. Instruction is an essential component of the
  * execution plan. An execution is expressed as a set of instruction objects.
  *
- * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala {@literal <}georgala {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
 
@@ -59,7 +61,7 @@ public class Instruction {
      *            Command
      * @param measure,
      *            Measure expression
-     * @param t,
+     * @param thrs,
      *            Threshold
      * @param source,
      *            Source index
@@ -129,7 +131,7 @@ public class Instruction {
     /**
      * Sets the measure expression of the instruction.
      *
-     * @param measure
+     * @param measureExpression
      *            expression, the measure expression to set
      */
     public void setMeasureExpression(String measureExpression) {
@@ -194,10 +196,9 @@ public class Instruction {
     }
 
     /**
-     * Sets the mainThreshold of the instruction.
+     * Returns the mainThreshold of the instruction.
      *
-     * @param mainThreshold,
-     *            the mainThreshold to set
+     * @return mainThreshold
      */
     public String getMainThreshold() {
         return this.mainThreshold;
@@ -206,7 +207,7 @@ public class Instruction {
     /**
      * Sets the mainThreshold of the instruction.
      *
-     * @param mainThreshold,
+     * @param threshold,
      *            the mainThreshold to set
      */
     public void setMainThreshold(String threshold) {

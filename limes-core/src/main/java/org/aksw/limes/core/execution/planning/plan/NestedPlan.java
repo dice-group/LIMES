@@ -11,8 +11,10 @@ import java.util.List;
  * is set to null by the instructor. Before adding a subplan for the first time,
  * the subPlans field must be initiated.
  *
- * @author Axel-C. Ngonga Ngomo <ngonga@informatik.uni-leipzig.de>
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala {@literal <}georgala {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
 public class NestedPlan extends Plan {
@@ -117,8 +119,8 @@ public class NestedPlan extends Plan {
      * @param executionStatus,
      *            true if the plan has just been executed or false otherwise.
      */
-    public void setExecutionStatus(boolean isExecuted) {
-        this.executionStatus = isExecuted;
+    public void setExecutionStatus(boolean executionStatus) {
+        this.executionStatus = executionStatus;
     }
 
     @Override

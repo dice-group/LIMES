@@ -7,7 +7,8 @@ import java.util.List;
 /**
  * Implements the Plan Interface. 
  *
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala {@literal <}georgala {@literal @}
+ *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
 public interface IPlan extends Clonable<IPlan> {
