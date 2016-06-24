@@ -8,6 +8,7 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFM;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
+import org.aksw.limes.core.exceptions.NotYetImplementedException;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -220,6 +221,8 @@ public class Eagle extends ACoreMLAlgorithm {
      */
     private void setUp(AMapping trainingData) throws InvalidConfigurationException {
     	
+    	logger.info("Setting up EAGLE...");
+    	
     	PropertyMapping pm = (PropertyMapping) getParameter(PROPERTY_MAPPING);
     	
         LinkSpecGeneticLearnerConfig jgapConfig = new LinkSpecGeneticLearnerConfig(getConfiguration().getSourceInfo(), getConfiguration().getTargetInfo(), pm);
@@ -234,14 +237,15 @@ public class Eagle extends ACoreMLAlgorithm {
         if(trainingData != null) { // supervised
         	
         	fitness = ExpressionFitnessFunction.getInstance(jgapConfig, (FMeasure) getParameter(MEASURE), trainingData);
+        	jgapConfig.setFitnessFunction(fitness);
         	
         } else { // unsupervised
         	
         	pfmFitness = PseudoFMeasureFitnessFunction.getInstance(jgapConfig, (PseudoFM) getParameter(PSEUDO_FMEASURE), sourceCache, targetCache);
+        	jgapConfig.setFitnessFunction(pfmFitness);
         	
         }
         
-        jgapConfig.setFitnessFunction(fitness);
 
         GPProblem gpP;
 
@@ -380,7 +384,7 @@ public class Eagle extends ACoreMLAlgorithm {
         // fallback solution if we have too less candidates
         if (metrics.size() <= 1) {
             // TODO implement
-            logger.error("Not implemented yet.");
+        	throw new NotYetImplementedException("Fallback solution if we have too less candidates.");
         }
 
         // get mappings for all distinct metrics
@@ -451,6 +455,10 @@ public class Eagle extends ACoreMLAlgorithm {
 
         return bestHere;
     }
+
+	public int getTurn() {
+		return turn;
+	}
 
 
 
