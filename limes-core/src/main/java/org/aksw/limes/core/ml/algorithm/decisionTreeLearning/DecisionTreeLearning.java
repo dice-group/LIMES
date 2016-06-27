@@ -201,7 +201,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 			    } else {
 				if (label) {
 				    String classValue = "negative";
-				    if (value != 1.0) {
+				    if (value == 1.0) {
 					classValue = "positive";
 				    }
 				    inst.setValue(i, classValue);
