@@ -3,6 +3,7 @@ package org.aksw.limes.core.gui.view.ml;
 import java.util.List;
 import java.util.Set;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -46,7 +47,8 @@ public abstract class MachineLearningView {
 
     protected static Logger logger = LoggerFactory.getLogger("LIMES");
 
-    private static final String[] algorithms = {MLAlgorithmFactory.EAGLE, MLAlgorithmFactory.LION, MLAlgorithmFactory.WOMBAT_COMPLETE, MLAlgorithmFactory.WOMBAT_SIMPLE};
+    private static final String[] algorithms = { MLAlgorithmFactory.EAGLE, MLAlgorithmFactory.LION, MLAlgorithmFactory.WOMBAT_COMPLETE,
+	    MLAlgorithmFactory.WOMBAT_SIMPLE };
     protected MachineLearningController mlController;
     private MainView mainView;
     private Button learnButton;
@@ -57,7 +59,6 @@ public abstract class MachineLearningView {
 	this.mlController.setMlView(this);
 	createMLAlgorithmsRootPane();
     }
-
 
     /**
      * checks if the MLAlgorithm is implemented for this LearningSetting
@@ -72,31 +73,34 @@ public abstract class MachineLearningView {
 	GridPane root = new GridPane();
 
 	ObservableList<String> mloptions = FXCollections.observableArrayList();
-	for(int i=0; i < algorithms.length; i++){
-	if (this instanceof ActiveLearningView) {
-	    try {
-		AMLAlgorithm algorithm = MLAlgorithmFactory.createMLAlgorithm(MLAlgorithmFactory.getAlgorithmType(algorithms[i]), MLAlgorithmFactory.getImplementationType(MLAlgorithmFactory.SUPERVISED_ACTIVE));
-		mloptions.add(algorithm.getName());
-	    } catch (Exception e1) {
-		// TODO Auto-generated catch block
+	for (int i = 0; i < algorithms.length; i++) {
+	    if (this instanceof ActiveLearningView) {
+		try {
+		    AMLAlgorithm algorithm = MLAlgorithmFactory.createMLAlgorithm(MLAlgorithmFactory.getAlgorithmType(algorithms[i]),
+			    MLAlgorithmFactory.getImplementationType(MLAlgorithmFactory.SUPERVISED_ACTIVE));
+		    mloptions.add(algorithm.getName());
+		} catch (Exception e1) {
+		    // TODO Auto-generated catch block
+		}
+	    } else if (this instanceof BatchLearningView) {
+		try {
+		    AMLAlgorithm algorithm = MLAlgorithmFactory.createMLAlgorithm(MLAlgorithmFactory.getAlgorithmType(algorithms[i]),
+			    MLAlgorithmFactory.getImplementationType(MLAlgorithmFactory.SUPERVISED_BATCH));
+		    mloptions.add(algorithm.getName());
+		} catch (Exception e1) {
+		    // TODO Auto-generated catch block
+		}
+	    } else if (this instanceof UnsupervisedLearningView) {
+		try {
+		    AMLAlgorithm algorithm = MLAlgorithmFactory.createMLAlgorithm(MLAlgorithmFactory.getAlgorithmType(algorithms[i]),
+			    MLAlgorithmFactory.getImplementationType(MLAlgorithmFactory.UNSUPERVISED));
+		    mloptions.add(algorithm.getName());
+		} catch (Exception e1) {
+		    // TODO Auto-generated catch block
+		}
+	    } else {
+		logger.info("Unknown subclass of MachineLearningView");
 	    }
-	} else if (this instanceof BatchLearningView) {
-	    try {
-		AMLAlgorithm algorithm = MLAlgorithmFactory.createMLAlgorithm(MLAlgorithmFactory.getAlgorithmType(algorithms[i]), MLAlgorithmFactory.getImplementationType(MLAlgorithmFactory.SUPERVISED_BATCH));
-		mloptions.add(algorithm.getName());
-	    } catch (Exception e1) {
-		// TODO Auto-generated catch block
-	    }
-	} else if (this instanceof UnsupervisedLearningView) {
-	    try {
-		AMLAlgorithm algorithm = MLAlgorithmFactory.createMLAlgorithm(MLAlgorithmFactory.getAlgorithmType(algorithms[i]), MLAlgorithmFactory.getImplementationType(MLAlgorithmFactory.UNSUPERVISED));
-		mloptions.add(algorithm.getName());
-	    } catch (Exception e1) {
-		// TODO Auto-generated catch block
-	    }
-	} else {
-	    logger.info("Unknown subclass of MachineLearningView");
-	}
 	}
 	ComboBox<String> mlOptionsChooser = new ComboBox<String>(mloptions);
 	mlOptionsChooser.setPromptText("choose algorithm");
@@ -125,9 +129,6 @@ public abstract class MachineLearningView {
 	learnButton.setOnAction(e -> {
 	    this.mlController.setParameters();
 	    learnButton.setDisable(true);
-	    // new
-	    // MLPropertyMatchingView(this.mlController.getMlModel().getConfig(),
-	    // this);
 		this.mlController.learn(this);
 	    });
 
@@ -202,8 +203,10 @@ public abstract class MachineLearningView {
 	    public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
 		if (integer) {
 		    parameterLabel.setText(String.format("%.0f", new_val));
+		    param.setValue(new_val.intValue());
 		} else {
 		    parameterLabel.setText(String.format("%.2f", new_val));
+		    param.setValue(new_val.doubleValue());
 		}
 	    }
 	});
@@ -214,6 +217,11 @@ public abstract class MachineLearningView {
 	CheckBox parameterCheckBox = new CheckBox();
 	parameterCheckBox.setTooltip(new Tooltip(param.getDescription()));
 	parameterCheckBox.setSelected(false);
+	parameterCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+	    public void changed(ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) {
+		param.setValue(new_val);
+	    }
+	});
 	root.add(parameterLabel, 0, position);
 	root.add(parameterCheckBox, 1, position);
     }
@@ -222,15 +230,15 @@ public abstract class MachineLearningView {
     private void addMeasureTypeParameterHBox(LearningParameter param, GridPane root, int position) {
 	Label parameterLabel = new Label(param.getName());
 	ListView<MeasureTypeItem> parameterListView = new ListView<>();
+	MeasureTypeItem.setParams((Set<String>)param.getValue());
 	for (int i = 0; i < MeasureType.values().length; i++) {
 	    String measure = MeasureType.values()[i].toString().toLowerCase();
 	    MeasureTypeItem item = null;
-	    if(((Set<String>)param.getValue()).contains(measure)){
+	    if (((Set<String>) param.getValue()).contains(measure)) {
 		item = new MeasureTypeItem(measure, true);
-	    }else{
+	    } else {
 		item = new MeasureTypeItem(measure, false);
 	    }
-
 	    parameterListView.getItems().add(item);
 	}
 	parameterListView.setCellFactory(CheckBoxListCell.forListView(new Callback<MeasureTypeItem, ObservableValue<Boolean>>() {
@@ -250,36 +258,51 @@ public abstract class MachineLearningView {
 
     }
 
-    public static class MeasureTypeItem {
+    private static class MeasureTypeItem {
 	private final StringProperty name = new SimpleStringProperty();
 	private final BooleanProperty on = new SimpleBooleanProperty();
+	private static Set<String> params;
 
-	public MeasureTypeItem(String name, boolean on) {
+	private MeasureTypeItem(String name, boolean on) {
 	    setName(name);
 	    setOn(on);
+	    this.on.addListener(new ChangeListener<Boolean>() {
+	            @Override
+	            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+	        	if(newValue){
+	        	    params.add(name);
+	        	}else{
+	        	    params.remove(name);
+	        	}
+	            }
+	        });
+	}
+	
+	private static final void setParams(Set<String>p){
+	    params = p;
 	}
 
-	public final StringProperty nameProperty() {
+	private final StringProperty nameProperty() {
 	    return this.name;
 	}
 
-	public final String getName() {
+	private final String getName() {
 	    return this.nameProperty().get();
 	}
 
-	public final void setName(final String name) {
+	private final void setName(final String name) {
 	    this.nameProperty().set(name);
 	}
 
-	public final BooleanProperty onProperty() {
+	private final BooleanProperty onProperty() {
 	    return this.on;
 	}
 
-	public final boolean isOn() {
+	private final boolean isOn() {
 	    return this.onProperty().get();
 	}
 
-	public final void setOn(final boolean on) {
+	private final void setOn(final boolean on) {
 	    this.onProperty().set(on);
 	}
 
