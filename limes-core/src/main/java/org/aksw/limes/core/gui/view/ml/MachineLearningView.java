@@ -127,7 +127,6 @@ public abstract class MachineLearningView {
 	});
 
 	learnButton.setOnAction(e -> {
-	    this.mlController.setParameters();
 	    learnButton.setDisable(true);
 		this.mlController.learn(this);
 	    });
