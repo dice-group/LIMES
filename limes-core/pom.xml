@@ -134,6 +134,21 @@
 				<artifactId>maven-pmd-plugin</artifactId>
 				<version>3.6</version>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.17</version>
+				<configuration>
+					<configLocation>resources/checkstyle.xml</configLocation>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>checkstyle</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
 		</plugins>
 	</reporting>
 
@@ -211,12 +226,6 @@
 			<artifactId>log4j-core</artifactId>
 			<version>2.6.1</version>
 		</dependency>
-
-		<!--<dependency>-->
-		<!--<groupId>org.apache.logging.log4j</groupId>-->
-		<!--<artifactId>log4j-core</artifactId>-->
-		<!--<version>2.5</version>-->
-		<!--</dependency>-->
 
 		<dependency>
 			<groupId>com.ibm.icu</groupId>
@@ -354,12 +363,6 @@
 			<artifactId>jts</artifactId>
 			<version>1.13</version>
 		</dependency>
-		<!--<dependency>-->
-		<!--<groupId>org.matheclipse</groupId>-->
-		<!--<artifactId>matheclipse-core</artifactId>-->
-		<!--<version>0.0.7</version>-->
-		<!--</dependency>-->
-
 		<dependency>
 			<groupId>algorithms.edjoin</groupId>
 			<artifactId>edjoin-plus</artifactId>
@@ -387,22 +390,6 @@
 			<artifactId>commons-collections</artifactId>
 			<version>3.2</version>
 		</dependency>
-		<!-- ======= -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.apache.jena</groupId> -->
-		<!-- <artifactId>jena</artifactId> -->
-		<!-- <version>2.6.4</version> -->
-		<!-- <exclusions> -->
-		<!-- <exclusion> -->
-		<!-- <artifactId>slf4j-api</artifactId> -->
-		<!-- <groupId>org.slf4j</groupId> -->
-		<!-- </exclusion> -->
-		<!-- <exclusion> -->
-		<!-- <artifactId>slf4j-log4j12</artifactId> -->
-		<!-- <groupId>org.slf4j</groupId> -->
-		<!-- </exclusion> -->
-		<!-- </exclusions> -->
-		<!-- </dependency> -->
 		<dependency>
 			<groupId>ssjoin</groupId>
 			<artifactId>ssjoin</artifactId>
