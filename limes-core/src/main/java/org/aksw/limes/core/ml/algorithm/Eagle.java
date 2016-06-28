@@ -32,6 +32,7 @@ import org.jgap.gp.impl.ProgramChromosome;
 
 /**
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Klaus Lyko
  *
  */
 public class Eagle extends ACoreMLAlgorithm {
@@ -344,10 +345,6 @@ public class Eagle extends ACoreMLAlgorithm {
     private MLResults createSupervisedResult() {
         MLResults result = new MLResults();
         result.setLinkSpecification(getLinkSpecification(allBest));
-        
-        // TODO I don't know why this is turned off...
-//		result.setMapping(fitness.getMapping(getLinkSpecification(allBest), true));
-        
         result.setQuality(allBest.getFitnessValue());
         result.addDetail("specifiactions", bestSolutions);
         result.addDetail("controversyMatches", calculateOracleQuestions((Integer) getParameter(INQUIRY_SIZE)));
@@ -362,7 +359,6 @@ public class Eagle extends ACoreMLAlgorithm {
     private MLResults createUnsupervisedResult() {
         MLResults result = new MLResults();
         result.setLinkSpecification(getLinkSpecification(allBest));
-//		result.setMapping(fitness.calculateMapping(allBest));
         result.setQuality(allBest.getFitnessValue());
         result.addDetail("specifiactions", specifications);
         return result;

@@ -2,7 +2,6 @@ package org.aksw.limes.core.ml;
 
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,16 +14,13 @@ import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.Eagle;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -108,7 +104,6 @@ public class EagleTest {
         assert (resultMap.equals(refMap));  
     }
 
-
     @Test
     public void testUnsupervised() throws UnsupportedMLImplementationException {
         UnsupervisedMLAlgorithm eagleUnsup = null;
@@ -130,37 +125,4 @@ public class EagleTest {
         assert (resultMap.equals(refMap));
     }
     
-//    @Test
-//    public void testActive() throws UnsupportedMLImplementationException {
-//        ActiveMLAlgorithm wombatSimpleA = null;
-//        try {
-//            wombatSimpleA = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
-//                    MLImplementationType.SUPERVISED_ACTIVE).asActive();
-//        } catch (UnsupportedMLImplementationException e) {
-//            e.printStackTrace();
-//            fail();
-//        }
-//        assert (wombatSimpleA.getClass().equals(ActiveMLAlgorithm.class));
-//        wombatSimpleA.init(null, sc, tc);
-//        wombatSimpleA.activeLearn();
-//        AMapping nextExamples = wombatSimpleA.getNextExamples(3);
-//        AMapping oracleFeedback = oracleFeedback(nextExamples,trainingMap);
-//        MLResults mlModel = wombatSimpleA.activeLearn(oracleFeedback);
-//        AMapping resultMap = wombatSimpleA.predict(sc, tc, mlModel);
-//        assert (resultMap.equals(refMap));
-//    }
-//    
-//    private AMapping oracleFeedback(AMapping predictionMapping, AMapping referenceMapping) {
-//        AMapping result = MappingFactory.createDefaultMapping();
-//
-//        for(String s : predictionMapping.getMap().keySet()){
-//            for(String t : predictionMapping.getMap().get(s).keySet()){
-//                if(referenceMapping.contains(s, t)){
-//                    result.add(s, t, predictionMapping.getMap().get(s).get(t));
-//                }
-//            }
-//        }
-//        return result;
-//    }
-
 }

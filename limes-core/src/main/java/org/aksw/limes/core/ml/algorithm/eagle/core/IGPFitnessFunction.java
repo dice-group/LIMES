@@ -18,5 +18,4 @@ public abstract class IGPFitnessFunction extends GPFitnessFunction implements IF
 	
 	public abstract void fillCachesIncrementally(AMapping matches);
 	
-	
 }

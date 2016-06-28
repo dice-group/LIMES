@@ -1,9 +1,7 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFM;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
-import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
@@ -14,17 +12,17 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.jgap.gp.GPFitnessFunction;
 import org.jgap.gp.IGPProgram;
 import org.jgap.gp.impl.ProgramChromosome;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Fitness function to evolve metric expression using a PseudoMeasue
  *
- * @author Lyko
+ * @author Klaus Lyko
+ * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  */
 public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
 
