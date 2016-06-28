@@ -34,7 +34,7 @@ import java.util.Map.Entry;
  *
  * @author Klaus Lyko
  */
-public class ExpressionFitnessFunction extends GPFitnessFunction implements IFitnessFunction {
+public class ExpressionFitnessFunction extends IGPFitnessFunction {
     public static final String fScore = "fScore";
     public static final String recall = "recall";
     public static final String precision = "precision";

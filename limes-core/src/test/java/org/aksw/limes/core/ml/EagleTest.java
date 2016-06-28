@@ -109,24 +109,27 @@ public class EagleTest {
     }
 
 
-//    @Test
-//    public void testUnsupervised() throws UnsupportedMLImplementationException {
-//        UnsupervisedMLAlgorithm wombatSimpleU = null;
-//        try {
-//            wombatSimpleU = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
-//                    MLImplementationType.UNSUPERVISED).asUnsupervised();
-//        } catch (UnsupportedMLImplementationException e) {
-//            e.printStackTrace();
-//            fail();
-//        }
-//        assert (wombatSimpleU.getClass().equals(UnsupervisedMLAlgorithm.class));
-//        trainingMap = null;
-//        wombatSimpleU.init(null, sc, tc);
-//        MLResults mlModel = wombatSimpleU.learn(new PseudoFMeasure());
-//        AMapping resultMap = wombatSimpleU.predict(sc, tc, mlModel);
-//        assert (resultMap.equals(refMap));
-//    }
-//    
+    @Test
+    public void testUnsupervised() throws UnsupportedMLImplementationException {
+        UnsupervisedMLAlgorithm eagleUnsup = null;
+        try {
+            eagleUnsup = MLAlgorithmFactory.createMLAlgorithm(Eagle.class,
+                    MLImplementationType.UNSUPERVISED).asUnsupervised();
+        } catch (UnsupportedMLImplementationException e) {
+            e.printStackTrace();
+            fail();
+        }
+        assert (eagleUnsup.getClass().equals(UnsupervisedMLAlgorithm.class));
+        trainingMap = null;
+        eagleUnsup.init(null, sc, tc);
+        eagleUnsup.getMl().setConfiguration(config);
+        eagleUnsup.setParameter(Eagle.PROPERTY_MAPPING, pm);
+
+        MLResults mlModel = eagleUnsup.learn(new PseudoFMeasure());
+        AMapping resultMap = eagleUnsup.predict(sc, tc, mlModel);
+        assert (resultMap.equals(refMap));
+    }
+    
 //    @Test
 //    public void testActive() throws UnsupportedMLImplementationException {
 //        ActiveMLAlgorithm wombatSimpleA = null;

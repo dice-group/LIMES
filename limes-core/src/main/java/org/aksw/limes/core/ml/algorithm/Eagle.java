@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFM;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.NotYetImplementedException;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
@@ -17,6 +16,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ALDecider;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionFitnessFunction;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem;
+import org.aksw.limes.core.ml.algorithm.eagle.core.IGPFitnessFunction;
 import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.aksw.limes.core.ml.algorithm.eagle.core.PseudoFMeasureFitnessFunction;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
@@ -38,7 +38,7 @@ public class Eagle extends ACoreMLAlgorithm {
 	
 	//======================= COMMON VARIABLES ======================
     private IGPProgram allBest = null;
-    private ExpressionFitnessFunction fitness;
+    private IGPFitnessFunction fitness;
     private GPGenotype gp;
 	
 	//================ SUPERVISED-LEARNING VARIABLES ================
@@ -48,7 +48,6 @@ public class Eagle extends ACoreMLAlgorithm {
 
     //=============== UNSUPERVISED-LEARNING VARIABLES ===============
     private List<LinkSpecification> specifications;
-    private PseudoFMeasureFitnessFunction pfmFitness;
 
     //======================= PARAMETER NAMES =======================
 	
@@ -145,13 +144,13 @@ public class Eagle extends ACoreMLAlgorithm {
         logger.info("Start learning");
         for (int gen = 1; gen <= nGen; gen++) {
             gp.evolve();
-            IGPProgram currentBest = determinFittest(gp, gen);
+            IGPProgram currentBest = determineFittestUnsup(gp, gen);
             LinkSpecification currentBestMetric = getLinkSpecification(currentBest);
             //TODO: save the best LS of each generation
             specifications.add(currentBestMetric);
         }
 
-        allBest = determinFittest(gp, nGen);
+        allBest = determineFittestUnsup(gp, nGen);
         return createUnsupervisedResult();
         
     }
@@ -159,7 +158,7 @@ public class Eagle extends ACoreMLAlgorithm {
     @Override
     protected AMapping predict(Cache source, Cache target, MLResults mlModel) {
         if (allBest != null)
-            return fitness.getMapping(getLinkSpecification(allBest), true);
+            return fitness.getMapping(mlModel.getLinkSpecification(), true);
         logger.error("No link specification calculated so far.");
         return MappingFactory.createDefaultMapping();
     }
@@ -241,13 +240,15 @@ public class Eagle extends ACoreMLAlgorithm {
         	
         	FMeasure fm = (FMeasure) getParameter(MEASURE);
         	fitness = ExpressionFitnessFunction.getInstance(jgapConfig, fm, trainingData);
+        	org.jgap.Configuration.reset();
         	jgapConfig.setFitnessFunction(fitness);
         	
         } else { // unsupervised
         	
-        	PseudoFM pfm = (PseudoFM) getParameter(PSEUDO_FMEASURE);
-			pfmFitness = PseudoFMeasureFitnessFunction.getInstance(jgapConfig, pfm, sourceCache, targetCache);
-        	jgapConfig.setFitnessFunction(pfmFitness);
+        	PseudoFMeasure pfm = (PseudoFMeasure) getParameter(PSEUDO_FMEASURE);
+        	fitness = PseudoFMeasureFitnessFunction.getInstance(jgapConfig, pfm, sourceCache, targetCache);
+        	org.jgap.Configuration.reset();
+        	jgapConfig.setFitnessFunction(fitness);
         	
         }
         
@@ -417,7 +418,7 @@ public class Eagle extends ACoreMLAlgorithm {
      * @param gen
      * @return
      */
-    private IGPProgram determinFittest(GPGenotype gp, int gen) {
+    private IGPProgram determineFittestUnsup(GPGenotype gp, int gen) {
 
         GPPopulation pop = gp.getGPPopulation();
         pop.sortByFitness();

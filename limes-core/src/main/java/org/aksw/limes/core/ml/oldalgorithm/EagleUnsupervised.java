@@ -30,6 +30,8 @@ import java.util.Set;
  * algorithm EAGLE whereas the fitness value of n individual (a link specification)
  * is computed according to its PFM.
  *
+ * XXX not working anymore after refactor!
+ * 
  * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  * @author Klaus Lyko
  */
@@ -159,7 +161,8 @@ public class EagleUnsupervised extends MLAlgorithm {
         jgapConfig.setReproductionProb(parameters.getReproductionRate());
         jgapConfig.setPropertyMapping(parameters.getPropMap());
 
-        fitness = PseudoFMeasureFitnessFunction.getInstance(jgapConfig, parameters.getPseudoMeasure(), getSourceCache(), getTargetCache());
+        // XXX
+        fitness = PseudoFMeasureFitnessFunction.getInstance(jgapConfig, null, getSourceCache(), getTargetCache());
 //		fitness.setBeta(parameters.getBeta());
         jgapConfig.setFitnessFunction(fitness);
 

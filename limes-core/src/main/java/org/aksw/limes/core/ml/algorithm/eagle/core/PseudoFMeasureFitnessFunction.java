@@ -1,7 +1,9 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
+import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFM;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
+import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
@@ -24,7 +26,7 @@ import org.jgap.gp.impl.ProgramChromosome;
  *
  * @author Lyko
  */
-public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements IFitnessFunction {
+public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
 
     /**
      *	
@@ -37,11 +39,9 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
     LinkSpecGeneticLearnerConfig config;
     double beta = 1.0d;
     
-    PseudoFM pfm = new PseudoFM();
-    PseudoFMeasure ppfm = new PseudoFMeasure();
+    PseudoFMeasure pfm;
 
-
-    private PseudoFMeasureFitnessFunction(LinkSpecGeneticLearnerConfig a_config, PseudoFM pfm, Cache c1, Cache c2) {
+    private PseudoFMeasureFitnessFunction(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasure pfm, Cache c1, Cache c2) {
         config = a_config;
         sourceCache = c1;
         targetCache = c2;
@@ -52,7 +52,7 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
     /**
      * Singleton pattern
      */
-    public static PseudoFMeasureFitnessFunction getInstance(LinkSpecGeneticLearnerConfig a_config, PseudoFM pfm, Cache c1, Cache c2) {
+    public static PseudoFMeasureFitnessFunction getInstance(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasure pfm, Cache c1, Cache c2) {
         if (instance == null) {
             return instance = new PseudoFMeasureFitnessFunction(a_config, pfm, c1, c2);
         } else {
@@ -109,23 +109,25 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
         return actualMapping;
     }
 
+    /**
+     * @param p
+     * @return
+     */
     public Double calculatePseudoMeasure(IGPProgram p) {
-    	
-    	// TODO replace this with new class below
-    	
-        return pfm.getPseudoFMeasure(sourceCache.getAllUris(), targetCache.getAllUris(), calculateMapping(p), beta);
         
-//        return ppfm.getPseudoFMeasure(predictions, goldStandard, beta);
+    	// mapping
+        AMapping mapping = calculateMapping(p);
+        // gold standard is not needed by pseudoFM
+        GoldStandard gold = new GoldStandard(mapping, sourceCache, targetCache);
+        
+        return pfm.getPseudoFMeasure(mapping, gold, beta);
         
     }
 
     /**
-     * Executes metric to get mapping for given metric.
-     *
-     * @param metric
-     *         Metric String.
-     * @param threshold
-     *         Acceptance threshold: 0<=threshold<=1.
+     * Get or create a mapping from a link specification (Metric String + Acceptance threshold: 0<=threshold<=1).
+     * 
+     * @param spec the link specification
      * @return Mapping m={sURI, tURI} of all pairs who satisfy the metric.
      */
     public AMapping getMapping(LinkSpecification spec) {
@@ -150,11 +152,11 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
         instance = null;
     }
 
-    public PseudoFM getMeasure() {
+    public PseudoFMeasure getMeasure() {
         return pfm;
     }
 
-    public void setMeasure(PseudoFM pfm) {
+    public void setMeasure(PseudoFMeasure pfm) {
         this.pfm = pfm;
     }
 
@@ -174,6 +176,16 @@ public class PseudoFMeasureFitnessFunction extends GPFitnessFunction implements 
     public double calculateRawMeasure(IGPProgram p) {
         return calculatePseudoMeasure(p);
     }
+
+	@Override
+	public void addToReference(AMapping m) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void fillCachesIncrementally(AMapping matches) {
+		throw new UnsupportedOperationException();
+	}
 
 
 //	public void addPropertyChangeListener(PropertyChangeListener l) {
