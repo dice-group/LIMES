@@ -68,11 +68,6 @@ public class Eagle extends ACoreMLAlgorithm {
     public static final String REPRODUCTION_RATE = "reproduction_rate";
     public static final String CROSSOVER_RATE = "crossover_rate";
     public static final String PSEUDO_FMEASURE = "pseudo_fmeasure";
-    
-    protected static final String GAMMA_SCORE = "gamma_score";
-    protected static final String EXPANSION_PENALTY = "expansion_penalty";
-    protected static final String REWARD = "reward";
-    protected static final String PRUNE = "prune";
 
     public static final String MEASURE = "measure";
     public static final String PROPERTY_MAPPING = "property_mapping";
@@ -197,12 +192,6 @@ public class Eagle extends ACoreMLAlgorithm {
     	parameters.add(new LearningParameter(CROSSOVER_RATE, 0.3f, Float.class, 0f, 1f, Double.NaN, CROSSOVER_RATE));
     	parameters.add(new LearningParameter(MEASURE, new FMeasure(), IQualitativeMeasure.class, Double.NaN, Double.NaN, Double.NaN, MEASURE));
     	parameters.add(new LearningParameter(PROPERTY_MAPPING, new PropertyMapping(), PropertyMapping.class, Double.NaN, Double.NaN, Double.NaN, PROPERTY_MAPPING));
-    	
-    	// LION parameters (?)
-    	parameters.add(new LearningParameter(GAMMA_SCORE, 0.15d, Double.class, 0d, Double.MAX_VALUE, Double.NaN, GAMMA_SCORE));
-    	parameters.add(new LearningParameter(EXPANSION_PENALTY, 0.7d, Double.class, 0d, Double.MAX_VALUE, Double.NaN, EXPANSION_PENALTY));
-    	parameters.add(new LearningParameter(REWARD, 1.2, Double.class, 0d, Double.MAX_VALUE, Double.NaN, REWARD));
-    	parameters.add(new LearningParameter(PRUNE, true, Boolean.class, Double.NaN, Double.NaN, Double.NaN, PRUNE));
     	
         
     }
