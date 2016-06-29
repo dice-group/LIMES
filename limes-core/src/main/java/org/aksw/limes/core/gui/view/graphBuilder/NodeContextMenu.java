@@ -4,6 +4,13 @@ package org.aksw.limes.core.gui.view.graphBuilder;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 
+/**
+ * Used when a {@link org.aksw.limes.core.gui.view.graphBuilder.NodeView} is right-clicked to show a small menu to give the possibility
+ * to link to another node or delete it
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public class NodeContextMenu extends ContextMenu {
     /**
      * Corresponding View
@@ -35,8 +42,8 @@ public class NodeContextMenu extends ContextMenu {
      *
      * @param view
      *         Corresponding view
-     * @param nodeIndex
-     *         index in GraphBuildView.NodeViewList of clicked Node
+     * @param clickedNode
+     *         clicked Node
      */
     public NodeContextMenu(GraphBuildView view, NodeView clickedNode) {
         this.graphBuildView = view;

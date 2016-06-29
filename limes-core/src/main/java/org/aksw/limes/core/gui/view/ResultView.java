@@ -19,9 +19,10 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import java.io.File;
 
 /**
- * View to show the Results of the LIMES-query, and their Instances
+ * View to show the results of the query, and their instances
  *
- * @author Daniel Obraczka, Sascha Hahne
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 
 public class ResultView {
@@ -63,6 +64,7 @@ public class ResultView {
 
     /**
      * Constructor
+     * @param config the current config
      */
     public ResultView(Config config) {
         createWindow();
@@ -230,10 +232,18 @@ public class ResultView {
         targetInstanceTable.setItems(instanceProperty);
     }
 
+    /**
+     * returns the mapping
+     * @return mapping
+     */
     public AMapping getMapping() {
         return mapping;
     }
 
+    /**
+     * sets mapping
+     * @param mapping mapping
+     */
     public void setMapping(AMapping mapping) {
         this.mapping = mapping;
     }

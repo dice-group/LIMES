@@ -3,9 +3,10 @@ package org.aksw.limes.core.gui.view;
 import javafx.scene.Parent;
 
 /**
- * Interface for the EditEndPoint Dialog
+ * Interface for steps in {@link org.aksw.limes.core.gui.view.WizardView}
  *
- * @author Manuel Jacob, Felix Brei
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public interface IEditView {
     /**

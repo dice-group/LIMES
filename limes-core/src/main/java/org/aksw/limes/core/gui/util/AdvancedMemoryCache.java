@@ -8,7 +8,10 @@ import java.security.InvalidParameterException;
 import java.util.*;
 
 /**
- * @author Konrad Höffner
+ * subclass of memory cache extended with {@link #getCommonProperties(Double, Integer)}
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
  */
 @SuppressWarnings("all")
 public class AdvancedMemoryCache extends MemoryCache implements Serializable {
@@ -34,7 +37,7 @@ public class AdvancedMemoryCache extends MemoryCache implements Serializable {
      *         for it to be counted as common property. Set to 0 if you want no restriction on this.
      * @param limit
      *         a non-negative integer value, specifying the maximum amount of properties to return.
-     *         If there are more than {@link limit} after the exclusion with {@threshold}, the most common properties of those are returned.
+     *         If there are more than limit after the exclusion with threshold, the most common properties of those are returned.
      * @return the most common properties sorted by occurrence in descending order.
      * Each property p is counted at most once for each instance s, even if there are multiple triples (s,p,o).  	 * Example: getCommonProperties(0.5) will only return properties which are used by at least half of the uris in the cache.
      */
@@ -89,59 +92,4 @@ public class AdvancedMemoryCache extends MemoryCache implements Serializable {
         return properties.toArray(new String[0]);
     }
 
-    public void removeNonLiteralTriples() {
-        HashMap<String, Instance> newInstanceMap = new HashMap<String, Instance>();
-        for (String uri : this.getAllUris()) {
-            Instance instance = this.getInstance(uri);
-            Instance newInstance = null;
-            //boolean isObjectProperty = false;
-            for (String property : instance.getAllProperties()) {
-                //System.out.println(property+" "+instance.getProperties().get(property));
-                for (String object : instance.getProperty(property)) {
-                    if (!object.startsWith("http://")) {
-                        if (newInstance == null) {
-                            newInstance = new Instance(uri);
-                        }
-                        newInstance.addProperty(property, object);
-                    }
-                }
-            }
-            if (newInstance != null) {
-                newInstanceMap.put(uri, newInstance);
-            }
-        }
-//		this.instanceMap = newInstanceMap;
-    }
-
-    public void saveToFile(File file) throws IOException {
-        FileOutputStream out = new FileOutputStream(file);
-        ObjectOutputStream serializer = new ObjectOutputStream(out);
-        serializer.writeObject(this);
-        serializer.close();
-    }
-
-    public void shrinkCache(double factor) {
-        if (factor < 0 || factor > 1) throw new InvalidParameterException("The factor has to be in [0,1].");
-        int size = this.getAllInstances().size();
-        shrinkCache((int) (factor * size));
-    }
-
-//	/**Removes instances from the cache until only {@link numberOfInstances} are left.
-//	 * @param numberOfInstances the number of instances to keep
-//	 */
-//	public void shrinkCache(int numberOfInstances)
-//	{
-//		synchronized (this)
-//		{
-//			if(this.getAllInstances().size()<=numberOfInstances) return;
-//			HashMap<String,Instance> newInstanceMap = new HashMap<String,Instance>();//(instanceMap);
-//			Iterator<String> it = instanceMap.keySet().iterator();
-//			for(int i=0;i<numberOfInstances;i++)
-//			{
-//				String key = it.next();
-//				newInstanceMap.put(key,instanceMap.get(key));
-//			}
-////			instanceMap = newInstanceMap;
-//		}
-//	}
 }

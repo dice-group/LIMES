@@ -42,14 +42,15 @@ import java.util.Map;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 
 /**
- * Contains all important information of the LIMES-Query
+ * Contains all important information for the graphical representation
  *
- * @author Manuel Jacob, Sascha Hahne, Daniel Obraczka, Felix Brei
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class Config extends Configuration {
 
     /**
-     * PorpertyMapping of current query
+     * PropertyMapping of current query
      */
     public PropertyMapping propertyMapping;
     /**
@@ -82,6 +83,25 @@ public class Config extends Configuration {
 	this.targetEndpoint = new Endpoint(this.targetInfo);
     }
 
+    /**
+     * Constructor calls super constructor and creates new metric and endpoints
+     * @param sourceInfo sourceInfo
+     * @param targetInfo targetInfo
+     * @param metricExpression metricExpression
+     * @param acceptanceRelation acceptanceRelation
+     * @param verificationRelation verificationRelation
+     * @param acceptanceThreshold acceptanceThreshold
+     * @param acceptanceFile acceptanceFile
+     * @param verificationThreshold verificationThreshold
+     * @param verificationFile verificationFile
+     * @param exemplars exemplars
+     * @param prefixes prefixes
+     * @param outputFormat outputFormat
+     * @param executionPlanner executionPlanner
+     * @param granularity granularity
+     * @param recallRegulator recallRegulator
+     * @param recallThreshold recallThreshold
+     */
     public Config(KBInfo sourceInfo, KBInfo targetInfo, String metricExpression, String acceptanceRelation, String verificationRelation,
 	    double acceptanceThreshold, String acceptanceFile, double verificationThreshold, String verificationFile, int exemplars,
 	    HashMap<String, String> prefixes, String outputFormat, String executionPlanner, int granularity, String recallRegulator, double recallThreshold) {
@@ -165,7 +185,7 @@ public class Config extends Configuration {
     /**
      * Sets the acceptanceThreshold
      *
-     * @param acceptanceThreshold
+     * @param acceptanceThreshold threshold
      */
     public void setAcceptanceThreshold(double acceptanceThreshold) {
 	if (metric == null)
@@ -300,10 +320,9 @@ public class Config extends Configuration {
     }
 
     /**
-     * Setter PropertyMatching
-     *
-     * @param propertyPairs
-     *            Pairs of Properties
+     * sets property matching
+     * @param sourcePropertiesToAdd source properties
+     * @param targetPropertiesToAdd target properties
      */
     public void setPropertiesMatching(ListView<String> sourcePropertiesToAdd, ListView<String> targetPropertiesToAdd) {
 	List<String> sourceProperties = sourceEndpoint.getInfo().getProperties();
@@ -320,6 +339,11 @@ public class Config extends Configuration {
 	}
     }
 
+    /**
+     * adds a function to endpoint and adds appropriate prefix
+     * @param endpoint
+     * @param property
+     */
     private void addFunction(Endpoint endpoint, String property) {
 	KBInfo info = endpoint.getInfo();
 	String abbr = PrefixHelper.abbreviate(property);
@@ -332,10 +356,18 @@ public class Config extends Configuration {
 	info.getPrefixes().put(prefixToAdd, PrefixHelper.getURI(prefixToAdd));
     }
 
+    /**
+     * returns mapping
+     * @return mapping
+     */
     public AMapping getMapping() {
 	return mapping;
     }
 
+    /**
+     * sets mapping
+     * @param mapping mapping
+     */
     public void setMapping(AMapping mapping) {
 	this.mapping = mapping;
     }

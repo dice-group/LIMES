@@ -12,14 +12,30 @@ import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 
 /**
- * Controller class for property matching step in create wizard
+ * Controller class for property matching step in {@link WizardController}
  *
- * @author Manuel Jacob
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class EditPropertyMatchingController implements IEditController {
+
+    /**
+     * Config of the LIMES Query
+     */
     private Config config;
+
+    /**
+     * corresponding view
+     */
     private EditPropertyMatchingView view;
 
+    /**
+     * constructor initializes object variables and sets this controller to the corresponding view
+     * @param config
+     *         Config of Limes Query
+     * @param view
+     *         corresponding EditEndpointsView
+     */
     public EditPropertyMatchingController(Config config,
                                           EditPropertyMatchingView view) {
         this.config = config;
@@ -27,6 +43,10 @@ public class EditPropertyMatchingController implements IEditController {
         view.setController(this);
     }
 
+    /**
+     * Creates and starts the tasks to load the properties from this source and target endpoint.
+     * After finishing the properties are displayed in the view or if errors are encountered an error window is shown
+     */
     @Override
     public void load() {
         GetPropertiesTask getSourcePropertiesTask = config.getSourceEndpoint()
@@ -51,11 +71,19 @@ public class EditPropertyMatchingController implements IEditController {
         });
     }
 
+    /**
+     * Returns the corresponding view
+     */
     @Override
     public IEditView getView() {
         return view;
     }
 
+    /**
+     * Saves the properties
+     * @param sourceProperties source properties to save
+     * @param targetProperties target properties to save
+     */
     public void save(ListView<String> sourceProperties, ListView<String> targetProperties) {
         config.setPropertiesMatching(sourceProperties, targetProperties);
     }

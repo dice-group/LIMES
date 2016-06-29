@@ -12,14 +12,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Task for loading classes in {@link org.aksw.limes.core.gui.view.WizardView}   
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public class GetClassesTask extends Task<List<ClassMatchingNode>> {
+    /**
+     * info
+     */
     private KBInfo info;
+    /**
+     * model
+     */
     private Model model;
+    /**
+     * view for displaying progress of task
+     */
     private TaskProgressView view;
+    /**
+     * used for progress
+     */
     private int counter;
+    /**
+     * used for progress
+     */
     private int maxSize;
+    /**
+     * progress
+     */
     private double progress;
 
+    /**
+     * Constructor
+     * @param info
+     * @param model
+     * @param view
+     */
     GetClassesTask(KBInfo info, Model model, TaskProgressView view) {
         this.info = info;
         this.model = model;
@@ -39,6 +69,11 @@ public class GetClassesTask extends Task<List<ClassMatchingNode>> {
         return result;
     }
 
+    /**
+     * loads the classes and displays progress in progress bar
+     * @param classes
+     * @return
+     */
     private List<ClassMatchingNode> getClassMatchingNodes(Set<String> classes) {
         maxSize += classes.size();
         if (isCancelled()) {

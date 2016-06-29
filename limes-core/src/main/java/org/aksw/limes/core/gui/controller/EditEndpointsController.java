@@ -12,9 +12,12 @@ import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 
 /**
- * Controls EditEndpointsView
+ * 
+ * Controller class for editing endpoint step in {@link WizardController}
+ * 
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  *
- * @author Manuel Jacob, Felix Brei
  */
 public class EditEndpointsController implements IEditController {
     /**
@@ -22,10 +25,13 @@ public class EditEndpointsController implements IEditController {
      */
     private Config config;
 
+   /**
+    * Corresponding view 
+    */
     private EditEndpointsView view;
 
     /**
-     * Constructor
+     * Constructor initializes object variables and sets this controller to the corresponding view
      *
      * @param config
      *         Config of Limes Query
@@ -38,6 +44,9 @@ public class EditEndpointsController implements IEditController {
         view.setController(this);
     }
 
+    /**
+     * displays the endpoints
+     */
     @Override
     public void load() {
         KBInfo sourceEndpoint = config.getSourceInfo();
@@ -51,15 +60,15 @@ public class EditEndpointsController implements IEditController {
     /**
      * Saves edited Endpoint
      *
-     * @param source
+     * @param sourceOrTarget
      *         if True Source else Target
      * @param idNamespace
      *         Namespace of Endpoint
      * @param graph
-     *         TODO
+     *         graph
      * @param pageSize
      *         length of Query
-     * @param.getEndpoint()URL URL of the Endpoint
+     * @param endpointURL URL of the Endpoint
      */
     public void save(SourceOrTarget sourceOrTarget, String endpointURL,
                      String idNamespace, String graph, String pageSize) {
@@ -74,6 +83,9 @@ public class EditEndpointsController implements IEditController {
         endpoint.update();
     }
 
+    /**
+     * Returns the corresponding view
+     */
     @Override
     public IEditView getView() {
         return view;

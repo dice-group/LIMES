@@ -2,94 +2,76 @@ package org.aksw.limes.core.gui.controller.ml;
 
 import org.aksw.limes.core.gui.model.ml.MachineLearningModel;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+/**
+ * This class handles the interaction between the {@link org.aksw.limes.core.gui.view.ml.MachineLearningView}
+ *  and the {@link org.aksw.limes.core.gui.model.ml.MachineLearningModel} according to the MVC Pattern for the machine learning.
+ *  It implements all methods except the learn method.
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public abstract class MachineLearningController {
 
+    /**
+     * the logger for this class
+     */
     protected static Logger logger = LoggerFactory.getLogger("LIMES");
+    
+    /**
+     * the corresponding view
+     */
     protected MachineLearningView mlView;
+    
+    /**
+     * the corresponding model
+     */
     protected MachineLearningModel mlModel;
 
+    /**
+     * returns the corresponding model
+     * @return mlView
+     */
     public MachineLearningView getMlView() {
         return mlView;
     }
 
+    /**
+     * sets the corresponding view
+     * @param mlView corresponding view
+     */
     public void setMlView(MachineLearningView mlView) {
         this.mlView = mlView;
     }
 
+    /**
+     * calls {@link MachineLearningModel#initializeData(String)}
+     * @param algorithmName name of the algorithm
+     */
     public void setMLAlgorithmToModel(String algorithmName) {
         this.mlModel.initializeData(algorithmName);
     }
 
-    public void setParameters() {
-	//TODO other cases
-
-//        LearningSetting params = this.mlModel.getLearningsetting();
-//        params.setInquerySize(this.mlView.getInquiriesSpinner().getValue());
-//        params.setMaxDuration(this.mlView.getMaxDurationSpinner().getValue());
-//        params.setMaxIteration(this.mlView.getMaxIterationSpinner().getValue());
-//        params.setMaxQuality(this.mlView.getMaxQualitySlider().getValue());
-//        params.setTerminationCriteria(
-//                LearningSetting.TerminationCriteria.valueOf(this.mlView
-//                        .getTerminationCriteriaSpinner().getValue()),
-//                this.mlView.getTerminationCriteriaValueSlider().getValue());
-//        params.setBeta(this.mlView.getBetaSlider().getValue());
-//        if (this.mlModel.getMlalgorithm().getName().startsWith("EAGLE")) {
-//            System.out.println(this.mlModel.getMlalgorithm().getName());
-//            params.setGenerations(this.mlView.getGenerationsSpinner()
-//                    .getValue());
-//            params.setPopulation(this.mlView.getPopulationSpinner().getValue());
-//            params.setMutationRate((float) this.mlView.getMutationRateSlider()
-//                    .getValue());
-//            params.setReproductionRate((float) this.mlView
-//                    .getReproductionRateSlider().getValue());
-//            params.setCrossoverRate((float) this.mlView
-//                    .getCrossoverRateSlider().getValue());
-//            params.setPreserveFittest(this.mlView.getPreserveFittestCheckBox()
-//                    .isSelected());
-//            // TODO set measure
-//        } else if (this.mlModel.getMlalgorithm().getName().equals("LION")) {
-//            System.out.println(this.mlModel.getMlalgorithm().getName());
-//            params.setGammaScore(this.mlView.getGammaScoreSlider().getValue());
-//            params.setExpansionPenalty(this.mlView.getExpansionPenaltySlider()
-//                    .getValue());
-//            params.setReward(this.mlView.getRewardSlider().getValue());
-//            params.setPrune(this.mlView.getPruneCheckBox().isSelected());
-//        }
-//        if (this.mlModel.getConfig().propertyMapping == null) {
-//            PropertyMapping propMap = new PropertyMapping();
-//            propMap.setDefault(this.mlModel.getConfig().getSourceInfo(), this.mlModel.getConfig().getTargetInfo());
-//            params.setPropMap(propMap);
-//        }
-//        this.mlModel.setLearningsetting(params);
-//		System.out.println("---------------- getLearningSetting()------------------------");
-//		System.out.println("maxDuration: " + this.mlModel.getLearningsetting().getMaxDuration());
-//		System.out.println("maxIteration: " + this.mlModel.getLearningsetting().getMaxIteration());
-//		System.out.println("maxQuality: " + this.mlModel.getLearningsetting().getMaxQuality());
-//		System.out.println("terminationCriteria: " + this.mlModel.getLearningsetting().getTerminationCriteria());
-//		System.out.println("terminationCriteriaValue: " + this.mlModel.getLearningsetting().getTerminationCriteriaValue());
-//		System.out.println("beta: " + this.mlModel.getLearningsetting().getBeta());
-//		System.out.println("generations: " + this.mlModel.getLearningsetting().getGenerations());
-//		System.out.println("population: " + this.mlModel.getLearningsetting().getPopulation());
-//		System.out.println("mutationRate: " + this.mlModel.getLearningsetting().getMutationRate());
-//		System.out.println("reproductionRate: " + this.mlModel.getLearningsetting().getReproductionRate());
-//		System.out.println("crossoverRate: " + this.mlModel.getLearningsetting().getCrossoverRate());
-//		System.out.println("preserveFittest: " + this.mlModel.getLearningsetting().isPreserveFittest());
-//		System.out.println("gammaScore: " + this.mlModel.getLearningsetting().getGammaScore());
-//		System.out.println("expansionPenalty: " + this.mlModel.getLearningsetting().getExpansionPenalty());
-//		System.out.println("reward: " + this.mlModel.getLearningsetting().getReward());
-//		System.out.println("prune: " + this.mlModel.getLearningsetting().isPrune());
-	
-    }
-
+    /**
+     * the abstract learn function to be implemented by the subclasses
+     * @param view corresponding view
+     */
     public abstract void learn(MachineLearningView view);
 
+    /**
+     * returns the corresponding model
+     * @return mlModel
+     */
     public MachineLearningModel getMlModel() {
         return mlModel;
     }
 
+    /**
+     * sets the corresponding model
+     * @param mlModel corresponding model
+     */
     public void setMlModel(MachineLearningModel mlModel) {
         this.mlModel = mlModel;
     }

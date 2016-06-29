@@ -7,13 +7,29 @@ import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 
+/**
+ * this class is responsible for the data handling according to the MVC Pattern for the unsupervised learning
+ *  
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public class UnsupervisedLearningModel extends MachineLearningModel {
 
+    /**
+     * constructor
+     * @param config contains the information
+     * @param sourceCache source
+     * @param targetCache target
+     */
     public UnsupervisedLearningModel(Config config, Cache sourceCache,
                                      Cache targetCache) {
         super(config, sourceCache, targetCache);
     }
 
+    /**
+     * creates a new active learning task for the given algorithm
+     */
     @Override
     public Task<Void> createLearningTask() {
 

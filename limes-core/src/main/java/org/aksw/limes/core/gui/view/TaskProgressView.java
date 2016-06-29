@@ -14,20 +14,41 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.aksw.limes.core.gui.controller.TaskProgressController;
 
+/**
+ * popup window to show progress to the user
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public class TaskProgressView {
     private Stage stage;
     private TaskProgressController controller;
+    /**
+     * displays what is happening at the moment
+     */
     private StringProperty informationLabel;
     private ProgressBar progressBar;
 
+    /**
+     * Constructor builds the window with the given title
+     * @param title title of window
+     */
     public TaskProgressView(String title) {
         showWindow(title);
     }
 
+    /**
+     * sets the controller
+     * @param controller controller
+     */
     public void setController(TaskProgressController controller) {
         this.controller = controller;
     }
 
+    /**
+     * builds the window
+     * @param title
+     */
     private void showWindow(String title) {
         BorderPane mainPane = new BorderPane();
 
@@ -69,14 +90,25 @@ public class TaskProgressView {
         stage.show();
     }
 
+    /**
+     * closes the window
+     */
     public void close() {
         stage.close();
     }
 
+    /**
+     * returns the informationLabel
+     * @return label
+     */
     public StringProperty getInformationLabel() {
         return informationLabel;
     }
 
+    /**
+     * returns the progress bar
+     * @return progress bar
+     */
     public ProgressBar getProgressBar() {
         return progressBar;
     }

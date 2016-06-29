@@ -5,9 +5,10 @@ import javafx.beans.property.SimpleStringProperty;
 
 
 /**
- * Contains all important information of the result of an instancematch
+ * Contains all important information of the result of an instance match
  *
- * @author Manuel Jacob
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class Result {
 

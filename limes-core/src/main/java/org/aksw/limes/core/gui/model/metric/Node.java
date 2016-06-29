@@ -5,6 +5,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+/**
+ * class to represent graphical nodes
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public abstract class Node {
     /**
      * Color of node

@@ -8,7 +8,8 @@ import java.util.Set;
 /**
  * Output of metric
  *
- * @author Daniel Obraczka, Sascha Hahne
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class Output extends Node {
 

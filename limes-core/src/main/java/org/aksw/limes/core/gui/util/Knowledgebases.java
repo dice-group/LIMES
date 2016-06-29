@@ -1,6 +1,12 @@
 package org.aksw.limes.core.gui.util;
 
 
+/**
+ * Helper class which contains knowledgebases as Strings
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 @SuppressWarnings("all")
 public class Knowledgebases {
     public static final String DBPEDIA_ENDPOINT = "http://dbpedia.org/sparql";

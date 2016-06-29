@@ -9,13 +9,35 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+/**
+ * Class to show user progress if tasks are being executed in the background
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public class TaskProgressController {
+    
+    /**
+     * holds the tasks
+     */
     private static final ExecutorService executorService = Executors
             .newCachedThreadPool();
 
+    /**
+     * corresponding view
+     */
     private TaskProgressView view;
+    
+    /**
+     * set with the tasks to be executed
+     */
     private Set<Task<?>> tasks;
 
+    /**
+     * constructor
+     * @param view corresponding view
+     * @param tasks tasks to execute
+     */
     public TaskProgressController(TaskProgressView view,
                                   Task<?>... tasks) {
         view.setController(this);
@@ -23,10 +45,21 @@ public class TaskProgressController {
         this.tasks = new HashSet<Task<?>>();
     }
 
+    /**
+     * returns executorService
+     * @return executorService
+     */
     public static ExecutorService getExecutorservice() {
         return executorService;
     }
 
+    /**
+     * adds a new task with the desired callbacks on either success or error
+     * @param task task to be executed
+     * @param successCallback called on success
+     * @param errorCallback called on failure
+     * @param <T> throwable
+     */
     public <T> void addTask(Task<T> task, Consumer<T> successCallback,
                             Consumer<Throwable> errorCallback) {
         task.setOnSucceeded(event -> {
@@ -51,6 +84,9 @@ public class TaskProgressController {
         executorService.submit(task);
     }
 
+    /**
+     * cancels all tasks
+     */
     public void cancel() {
         for (Task<?> task : tasks) {
             task.cancel();

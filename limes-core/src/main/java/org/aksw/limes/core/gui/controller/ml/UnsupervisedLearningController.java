@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+
 import org.aksw.limes.core.gui.controller.TaskProgressController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Result;
@@ -13,14 +14,34 @@ import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
 import org.aksw.limes.core.io.cache.Cache;
 
+/**
+ * This class handles the interaction between the {@link MachineLearningView}
+ *  and the {@link UnsupervisedLearningModel} according to the MVC Pattern for the unsupervised learning
+ *
+ *  
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public class UnsupervisedLearningController extends MachineLearningController {
 
+    /**
+     * Constructor creates the according {@link UnsupervisedLearningModel}
+     * @param config contains information
+     * @param sourceCache source
+     * @param targetCache target
+     */
     public UnsupervisedLearningController(Config config, Cache sourceCache,
                                           Cache targetCache) {
         this.mlModel = new UnsupervisedLearningModel(config, sourceCache,
                 targetCache);
     }
 
+    /**
+     * Creates a learning task and launches a {@link TaskProgressView}.
+     * The results are shown in a {@link ResultView}
+     * @param view MachineLearningView to manipulate elements in it
+     */
     @Override
     public void learn(MachineLearningView view) {
         Task<Void> learnTask = this.mlModel.createLearningTask();

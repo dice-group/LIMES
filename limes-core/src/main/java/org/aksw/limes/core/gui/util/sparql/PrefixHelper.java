@@ -8,9 +8,15 @@ import static org.aksw.limes.core.gui.util.sparql.PrefixHelper.LazyLoaded.prefix
 import static org.aksw.limes.core.gui.util.sparql.PrefixHelper.LazyLoaded.uriToPrefix;
 
 /**
- * @author Konrad H�ffner
+ * Helper class for prefixes in sparql queries
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
  */
 public class PrefixHelper {
+    /**
+     * prefixes
+     */
     final static String[][] prefixArray = {
             {"foaf", "http://xmlns.com/foaf/0.1/"},
             {"lgdo", "http://linkedgeodata.org/ontology/"},
@@ -514,11 +520,6 @@ public class PrefixHelper {
             {"sider", "http://www4.wiwiss.fu-berlin.de/sider/resource/sider/"},
             {"diseasome", "http://www4.wiwiss.fu-berlin.de/diseasome/resource/diseasome/"},
             {"bibbaseontology", "http://data.bibbase.org/ontology/#"}};
-    //final static File prefixCSV = new File("config/prefixes.csv");
-    // public static final PrefixHelper INSTANCE = new PrefixHelper(new File("config/prefix.csv"));
-
-    // no bidirectional map as the there may be multiple prefixes for the same URI
-    // in this case uriToPrefix contains the most common prefix
 
     /**
      * Adds a new prefix to the PrefixHelper (not persistent). Threadsafe.
@@ -573,7 +574,11 @@ public class PrefixHelper {
     }
 
     /**
+     * 
      * returns only the subset of the given prefixes that is referenced in the query
+     * @param prefixes prefixes to restrict
+     * @param query query from which the prefixes to be restricted are extracted
+     * @return restricted prefixes
      */
     public static Map<String, String> restrictPrefixes(Map<String, String> prefixes, String query) {
         Map<String, String> restrictedPrefixes = new HashMap<String, String>();
@@ -585,14 +590,28 @@ public class PrefixHelper {
         return restrictedPrefixes;
     }
 
+    /**
+     * returns prefixes
+     * @return prefixes
+     */
     public static Map<String, String> getPrefixes() {
         return Collections.unmodifiableMap(prefixToURI);
     }
 
+    /**
+     * returns prefixes
+     * @param uri uri
+     * @return prefix prefix
+     */
     public static String getPrefix(String uri) {
         return uriToPrefix.get(uri);
     }
 
+    /**
+     * returns uri
+     * @param prefix prefix
+     * @return uri uri
+     */
     public static synchronized String getURI(String prefix) {
 //		if(prefix.endsWith(":"))
 //			prefix = prefix.substring(0, prefix.length()-1);
@@ -625,6 +644,11 @@ public class PrefixHelper {
         return uri.substring(0, baseURIEnd + 1);
     }
 
+    /**
+     * returns the abbreviation of an uri
+     * @param uri uri
+     * @return abbreviation abbreviation
+     */
     public static String abbreviate(String uri) {
         if (!uri.startsWith("http://")) return uri;
         int baseURIEnd = Math.max(uri.lastIndexOf('#'), uri.lastIndexOf('/'));
@@ -639,6 +663,11 @@ public class PrefixHelper {
         return uri;
     }
 
+    /**
+     * expands an uri (reversal of abbreviation)
+     * @param shortURI shortURI
+     * @return expanded URI
+     */
     public static String expand(String shortURI) {
         // already expanded?
         if (shortURI.startsWith("http://")) {
@@ -658,87 +687,11 @@ public class PrefixHelper {
         return shortURI.replace(prefix + ':', baseURI);
     }
 
-    // init from file:
-    //	private static void init()
-    //	{
-    //		try
-    //		{
-    //			prefixToURI = new HashMap<String,String>();
-    //			uriToPrefix = new HashMap<String,String>();
-    //			@Cleanup BufferedReader in = new BufferedReader(new FileReader(prefixCSV));
-    //
-    //			String line;
-    //			while((line = in.readLine())!=null)
-    //			{
-    //				if(line.isEmpty()) continue; // sometimes there is a newline at the end of the file, don't want to crash there
-    //				String[] tokens = line.split("\t");
-    //				if(tokens.length!=2)
-    //				{
-    //					throw new IOException("Error in the following line in the csv: \""+line+"\". " +
-    //					"Expected exactly 2 columns separated by a tabulator character.");
-    //				}
-    //				prefixToURI.put(tokens[0], tokens[1]);
-    //				// file is sorted by popularity of the prefix in descending order
-    //				// in case of conflicts we want the most popular prefix
-    //				if(!uriToPrefix.containsKey(tokens[1])) {uriToPrefix.put(tokens[1],tokens[0]);}
-    //			}
-    //		}
-    //		catch(Exception e) {throw new RuntimeException("Prefix Helper could not be initialized.",e);}
-    //	}
-
-    // init from string, better for gwt which does not allow file reading on client
-
-
-    //	public PrefixHelper(File file)
-    //	{
-    //
-    //	}
-
-    //	public static void saveToPropertiesFile(Map<String,String> shortToLongForm, File f) throws IOException
-    //	{
-    //		Properties p = new Properties();
-    //		for(String shortForm : shortToLongForm.keySet())
-    //		{
-    //			String longForm = shortToLongForm.get(shortForm);
-    //			p.put(shortForm, longForm);
-    //		}
-    //		FileWriter out = new FileWriter(f);
-    //		p.store(out, null);
-    //		out.close();
-    //	}
-
-    //	public static void saveToCSVFile(Map<String,String> shortToLongForm, File f) throws IOException
-    //	{
-    //		PrintWriter out = new PrintWriter(new FileWriter(f));
-    //		for(String shortForm : shortToLongForm.keySet())
-    //		{
-    //			String longForm = shortToLongForm.get(shortForm);
-    //			out.println(shortForm+'\t'+longForm);
-    //		}
-    //		out.close();
-    //	}
-    //
-    //
-    //	public static SortedMap<String,String> loadFromPropertiesFile(File f) throws IOException
-    //	{
-    //		FileReader in = new FileReader(f);
-    //		Properties p = new Properties();
-    //		p.load(in);
-    //		in.close();
-    //
-    //		SortedMap<String,String> prefixes = new TreeMap<String,String>();
-    //
-    //		for(String shortForm :p.stringPropertyNames())
-    //		{
-    //			String longForm = p.getProperty(shortForm);
-    //			prefixes.put(shortForm, longForm);
-    //		}
-    //		return prefixes;
-    //	}
-
 
     /**
-     * Transforms a prefix map into sparql "PREFIX x: <...>" statements.
+     * Transforms a prefix map into sparql "PREFIX x: {@literal <}...{@literal >}" statements.
+     * @param prefixes prefixes
+     * @return formatted prefix
      */
     public static String formatPrefixes(Map<String, String> prefixes) {
         if (prefixes.isEmpty()) return "";
@@ -748,28 +701,6 @@ public class PrefixHelper {
         }
         return prefixSPARQLString.substring(0, prefixSPARQLString.length() - 1);
     }
-
-    //	private static SortedMap<String,String> loadFromCSVFile(File f) throws IOException
-    //	{
-    //		BufferedReader in = new BufferedReader(new FileReader(f));
-    //		SortedMap<String,String> prefixes = new TreeMap<String,String>();
-    //
-    //		String line;
-    //		while((line = in.readLine())!=null)
-    //		{
-    //			if(line.isEmpty()) continue; // sometimes there is a newline at the end of the file, don't want to crash there
-    //			String[] tokens = line.split("\t");
-    //			if(tokens.length!=2)
-    //			{
-    //				throw new IOException("Error in the following line in the csv: \""+line+"\". " +
-    //				"Expected exactly 2 columns separated by a tabulator character.");
-    //			}
-    //			prefixes.put(tokens[0], tokens[1]);
-    //		}
-    //		in.close();
-    //		return prefixes;
-    //	}
-    // created with		 "sed "s|\t|\",\"|" | sed "s|$|\"\\},|" | sed "s|^|\\{\"|" > prefixes_array.txt"
 
     protected static class LazyLoaded {
         static final Map<String, String> prefixToURI;

@@ -5,7 +5,8 @@ import javafx.beans.property.SimpleStringProperty;
 /**
  * Contains the properties of an instance
  *
- * @author Sascha Hahne, Daniel Obraczka
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class InstanceProperty {
 

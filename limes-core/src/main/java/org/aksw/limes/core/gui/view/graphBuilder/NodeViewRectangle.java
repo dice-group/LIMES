@@ -6,6 +6,12 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.text.Text;
 import org.aksw.limes.core.gui.model.metric.Node;
 
+/**
+ * used for the shape of a {@link org.aksw.limes.core.gui.view.graphBuilder.NodeView}
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public class NodeViewRectangle {
     public static final Color targetCol = Color.rgb(23, 104, 19);
     public static final Color sourceCol = Color.rgb(128, 23, 26);
@@ -25,6 +31,14 @@ public class NodeViewRectangle {
     private Color HeadTextCol;
     private Node nodeData;
 
+    /**
+     * Constructor 
+     * @param x x position
+     * @param y y position
+     * @param nodeShape shape
+     * @param node nodeview
+     * @param nodeData data model
+     */
     public NodeViewRectangle(double x, double y, int nodeShape, NodeView node,
                              Node nodeData) {
         this.x = x;
@@ -57,6 +71,10 @@ public class NodeViewRectangle {
 
     }
 
+    /**
+     * draws the NodeViewRectangle object according to its variables in the {@link javafx.scene.canvas.GraphicsContext}
+     * @param gc GraphicsContext
+     */
     public void drawNodeViewRectangle(GraphicsContext gc) {
         if (this.color != metricCol) {
             gc.setFill(Color.rgb(243, 243, 243));

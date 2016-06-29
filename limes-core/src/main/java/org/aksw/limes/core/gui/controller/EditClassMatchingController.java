@@ -13,20 +13,40 @@ import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 
 /**
- * Controller class for class matching step in create wizard
+ * 
+ * Controller class for class matching step in {@link WizardController}
+ * 
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  *
- * @author Manuel Jacob
  */
 public class EditClassMatchingController implements IEditController {
+    /**
+     * Config of the LIMES Query
+     */
     private Config config;
+    /**
+     * corresponding view
+     */
     private EditClassMatchingView view;
 
+    /**
+     * constructor initializes object variables and sets this controller to the corresponding view
+     * @param config
+     *         Config of Limes Query
+     * @param view
+     *         corresponding EditEndpointsView
+     */
     EditClassMatchingController(Config config, EditClassMatchingView view) {
         this.config = config;
         this.view = view;
         view.setController(this);
     }
 
+    /**
+     * Creates and starts the tasks to load the classes from this source and target endpoint.
+     * After finishing the classes are displayed in the view or if errors are encountered an error window is shown
+     */
     @Override
     public void load() {
         TaskProgressView taskProgressView = new TaskProgressView("Get classes");
@@ -61,12 +81,20 @@ public class EditClassMatchingController implements IEditController {
                 });
     }
 
+    /**
+     * Saves the selected classes
+     * @param sourceClass class for source
+     * @param targetClass class for target
+     */
     public void save(ClassMatchingNode sourceClass,
                      ClassMatchingNode targetClass) {
         config.getSourceEndpoint().setCurrentClass(sourceClass);
         config.getTargetEndpoint().setCurrentClass(targetClass);
     }
 
+    /**
+     * returns the corresponding view
+     */
     @Override
     public IEditView getView() {
         return view;

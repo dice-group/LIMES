@@ -2,6 +2,8 @@ package org.aksw.limes.core.gui.model.metric;
 
 /**
  * Exception if Metric is not in the right Format
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class MetricFormatException extends RuntimeException {
 

@@ -15,9 +15,10 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 
 /**
- * Controller that corresponds to the view
+ * This class handles the user input from {@link ActiveLearningResultView}
  * 
- * @author Daniel Obraczka
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  *
  */
 public class ActiveLearningResultController {
@@ -27,15 +28,15 @@ public class ActiveLearningResultController {
 	 */
 	private ActiveLearningResultView view;
 
-	/**
-	 * ResultView to manipulate
-	 */
 
 	/**
 	 * Config to get instance information
 	 */
 	private Config currentConfig;
 
+	/**
+	 * The corresponding model
+	 */
 	private ActiveLearningModel model;
 
 	/**
@@ -51,10 +52,10 @@ public class ActiveLearningResultController {
 	}
 
 	/**
-	 * Default constructor
-	 * 
-	 * @param v
-	 *            View that is to be observed
+	 * Constructor
+	 * @param v view
+	 * @param c config
+	 * @param m model
 	 */
 	public ActiveLearningResultController(ActiveLearningResultView v, Config c,
 			ActiveLearningModel m) {
@@ -64,10 +65,10 @@ public class ActiveLearningResultController {
 	}
 
 	/**
-	 * shows the properties of an instancematch
+	 * shows the properties of matched instances 
 	 * 
 	 * @param item
-	 *            the clicked instancematch of the Resultview
+	 *            the clicked matched instances of the ActiveLearningResultView
 	 */
 	public void showProperties(ActiveLearningResult item) {
 		String sourceURI = item.getSourceURI();
@@ -103,6 +104,9 @@ public class ActiveLearningResultController {
 		view.showTargetInstance(targetPropertyList);
 	}
 
+	/**
+	 * Starts a new active learning process as a thread
+	 */
 	public void learnButtonPressed() {
 	    AMapping trainingMap = MappingFactory.createDefaultMapping();
 		view.learnProgress.setVisible(true);
@@ -138,6 +142,10 @@ public class ActiveLearningResultController {
 		thread.start();
 	}
 
+	/**
+	 * Gets called after the active learning thread is finished and displays the results
+	 * @param results
+	 */
 	private void onFinish(ObservableList<ActiveLearningResult> results) {
 		view.learnProgress.setVisible(false);
 		view.showResults(results);

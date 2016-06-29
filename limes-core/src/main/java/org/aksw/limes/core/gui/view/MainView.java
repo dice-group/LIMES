@@ -33,7 +33,8 @@ import org.aksw.limes.core.gui.view.graphBuilder.GraphBuildView;
 /**
  * Main View of the Application
  *
- * @author Manuel Jacob
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class MainView {
     /**
@@ -220,21 +221,13 @@ public class MainView {
         itemActiveLearning.setDisable(!isLoaded);
     }
 
-//    /**
-//     * Shows if an Error occurred
-//     *
-//     * @param header
-//     *         Caption of the Error
-//     * @param content
-//     *         Error Message
-//     */
-//    public void showErrorDialog(String header, String content) {
-//        Alert alert = new Alert(AlertType.ERROR);
-//        alert.setHeaderText(header);
-//        alert.setContentText(content);
-//        alert.showAndWait();
-//    }
 
+    /**
+     * shows an error with the given header and content message, also displays the stack trace
+     * @param header header of message
+     * @param content content of message
+     * @param ex thrown exception
+     */
     public static void showErrorWithStacktrace(String header, String content, Throwable ex) {
 	Alert alert = new Alert(AlertType.ERROR);
 	alert.setHeaderText(header);

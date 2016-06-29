@@ -22,12 +22,15 @@ import java.net.URLDecoder;
 import java.util.*;
 
 
-//// TODO: move all sparql stuff into aksw commons
+/**
+ * Helper class for sparql queries
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 @SuppressWarnings("all")
 public class SPARQLHelper {
 
-    //	protected static transient final Logger log = LoggerFactory.getLogger(SPARQLHelper.class.toString());
-    //	public static final String GEONAMES_ENDPOINT_INTERNAL = "http://lgd.aksw.org:8900/sparql";
     public static final String DBPEDIA_ENDPOINT_OFFICIAL = "http://dbpedia.org/sparql";
     public static final String DBPEDIA_ENDPOINT_LIVE = "http://live.dbpedia.org/sparql";
     public static final String DBPEDIA_ENDPOINT = DBPEDIA_ENDPOINT_OFFICIAL;
@@ -36,71 +39,14 @@ public class SPARQLHelper {
      */
     static final Set<String> blackset = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(new String[]
             {"http://dbpedia.org/property/wikiPageUsesTemplate", "http://dbpedia.org/property/wikiPageExternalLink"})));
-    //
-    //	public static final String DBPEDIA_ENDPOINT = DBPEDIA_ENDPOINT_OFFICIAL;
-    //
-    //	public static final String LGD_ENDPOINT = "http://linkedgeodata.org/sparql/";
-    //	//public static int TIMEOUT = 10000;
-    //
-    //	/**
-    //	 * @param text a string in two-row csv format.
-    //	 * @return a map with an entry for each line where the first row is the key and the second row the value
-    //	 */
-    //	public static Map<String, String> textToMap(String text)
-    //	{
-    //		HashMap<String,String> prefixes = new HashMap<String,String>();
-    //		Scanner in = new Scanner(text);
-    //		while(in.hasNext())
-    //		{
-    //			String[] tokens = in.nextLine().split("\t");
-    //			if(tokens.length==2) prefixes.put(tokens[0],tokens[1]);
-    //		}
-    //		return prefixes;
-    //	}
-    //
-    //	public static Map<String,String> getDefaultPrefixes()
-    //	{
-    //		try
-    //		{
-    //			return textToMap(FileUtils.readFileToString(new File("config/default_prefixes.csv")));
-    //		} catch (IOException e)
-    //		{
-    //			e.printStackTrace();
-    //			return new HashMap<String, String>();
-    //		}
-    //	}
-    //
     private final static Logger logger = LoggerFactory.getLogger(SPARQLHelper.class.getName());
 
-    public static void main(String args[]) {
-        SPARQLHelper h = new SPARQLHelper();
-        KBInfo info = new KBInfo();
-//		File file = new File("C:/Users/Lyko/SAIM/EPStore/person11.nt");
 
-        File file = new File("/home/ohdorno/workspace/LIMES/resources/Persons1/person11.nt");
-        info.setEndpoint(file.getAbsolutePath());
-        try {
-            FileQueryModule fQModule = (FileQueryModule) QueryModuleFactory.getQueryModule("N-TRIPLE", info);
-            Model model = ModelRegistry.getInstance().getMap().get(info.getEndpoint());
-            if (model == null) {
-                throw new RuntimeException("No model with id '" + info.getEndpoint() + "' registered");
-            } else {
-                logger.info("Successfully read data of type: " + info.getType());
-                logger.info("Registered Model of size ... " + model.size());
-                Set<String> set = SPARQLHelper.rootClassesUncached(info.getEndpoint(), null, model);
-                System.out.println("Retrieved Classes...");
-                int i = 0;
-                for (String className : set) {
-                    System.out.println((i++) + ".: " + className);
-                }
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
+    /**
+     * puts prefixes in a usable format for sparql query
+     * @param prefixes prefixes to format
+     * @return formatted prefixes
+     */
     public static String formatPrefixes(Map<String, String> prefixes) {
         if (prefixes.isEmpty()) return "";
         StringBuffer prefixSPARQLString = new StringBuffer();
@@ -111,13 +57,23 @@ public class SPARQLHelper {
     }
 
     /**
-     * @return the last part of a RDF resource url, e.g. http://dbpedia.org/ontology/City -> City,
-     * http://example.org/ontology#something -> something
+     * gets the last part of a URL
+     * @param url url to get the last part of
+     * @return the last part of a RDF resource url, e.g. http://dbpedia.org/ontology/City - {@literal >} City,
+     * http://example.org/ontology#something -{@literal >} something
      */
     public static String lastPartOfURL(String url) {
         return url.substring(Math.max(url.lastIndexOf('#'), url.lastIndexOf('/')) + 1);
     }
 
+    /**
+     * returns subclasses of class
+     * @param endpoint endpoint
+     * @param graph graph
+     * @param clazz class to get subclasses from
+     * @param model model
+     * @return subclasses
+     */
     public static Set<String> subclassesOf(String endpoint, String graph, String clazz, Model model) {
         Cache cache = CacheManager.getInstance().getCache("subclasses");
         List<String> key = Arrays.asList(new String[]{endpoint, graph, clazz});
@@ -132,6 +88,14 @@ public class SPARQLHelper {
         return (Set<String>) element.getValue();
     }
 
+    /**
+     * returns subclasses of uncached class
+     * @param endpoint endpoint
+     * @param graph graph
+     * @param clazz class to get subclasses from
+     * @param model model
+     * @return subclasses
+     */
     public static Set<String> subClassesOfUncached(String endpoint, String graph, String clazz, Model model) {
         final int MAX_CHILDREN = 100;
         String query = "SELECT distinct(?class) WHERE { ?class rdfs:subClassOf " + wrapIfNecessary(clazz) + ". } LIMIT " + MAX_CHILDREN;
@@ -141,6 +105,10 @@ public class SPARQLHelper {
 
     /**
      * returns the root classes of a SPARQL endpoint's ontology ({owl:Thing} normally).
+     * @param endpoint endpoint
+     * @param graph graph
+     * @param model model
+     * @return rootClasses
      */
     public static Set<String> rootClasses(String endpoint, String graph, Model model) {
         Cache cache = CacheManager.getInstance().getCache("rootclasses");
@@ -159,6 +127,10 @@ public class SPARQLHelper {
 
     /**
      * returns the root classes of a SPARQL endpoint's ontology ({owl:Thing} normally).
+     * @param endpoint endpoint
+     * @param graph graph
+     * @param model model
+     * @return rootClasses
      */
     public static Set<String> rootClassesUncached(String endpoint, String graph, Model model) {
         {
@@ -210,11 +182,24 @@ public class SPARQLHelper {
 
     }
 
+    /**
+     * helper function for wrapping
+     * @param uriString string to wrap
+     * @return wrapped string
+     */
     public static String wrapIfNecessary(String uriString) {
         if (uriString.startsWith("http://")) return "<" + uriString + ">";
         return uriString;
     }
 
+    /**
+     * gets properties
+     * @param endpoint endpoint
+     * @param graph graph
+     * @param className class name to get properties from
+     * @param model model
+     * @return set of properties
+     */
     public static Set<String> properties(String endpoint, String graph, String className, Model model) {
         Cache cache = CacheManager.getInstance().getCache("properties");
         List<String> key = Arrays.asList(new String[]{endpoint, graph, className});
@@ -232,10 +217,12 @@ public class SPARQLHelper {
     /**
      * Get all Properties of the given knowledge base
      *
-     * @param endpoint
+     * @param endpoint endpoint
      * @param graph
      *         can be null (recommended as e.g. rdf:label doesn't have to be in the graph)
-     * @return
+     * @param className name of class to get properties from
+     * @param model model
+     * @return set of properties
      */
     public static Set<String> propertiesUncached(String endpoint, String graph, String className, Model model) {
         if (className.isEmpty()) {
@@ -263,6 +250,14 @@ public class SPARQLHelper {
         }
     }
 
+    /**
+     * executes sparql query to get properties
+     * @param endpoint
+     * @param graph
+     * @param clazz
+     * @param model
+     * @return
+     */
     static Set<String> getPropertiesWithDomain(String endpoint, String graph, String clazz, Model model) {
         long start = System.currentTimeMillis();
 //        String query = PrefixHelper.addPrefixes("select ?p where {?p rdfs:domain " + wrapIfNecessary(clazz) + "}");
@@ -292,6 +287,14 @@ public class SPARQLHelper {
     //	}
     //
 
+    /**
+     * creates a new object of QueryExecution
+     * @param query query
+     * @param graph graph
+     * @param endpoint endpoint
+     * @param model model
+     * @return QueryExecution object
+     */
     public static QueryExecution queryExecution(String query, String graph, String endpoint, Model model) {
         ARQ.setNormalMode();
         Query sparqlQuery = QueryFactory.create(query, Syntax.syntaxARQ);
@@ -315,6 +318,11 @@ public class SPARQLHelper {
         return qexec;
     }
 
+    /**
+     * puts result to list
+     * @param rs set of results
+     * @return set of results
+     */
     public static Set<String> resultSetToList(ResultSet rs) {
         Set<String> list = new HashSet<String>();
         while (rs.hasNext()) {
@@ -330,6 +338,14 @@ public class SPARQLHelper {
         return list;
     }
 
+    /**
+     * executes query
+     * @param query query
+     * @param endpoint endpoint
+     * @param graph graph
+     * @param model model
+     * @return ResultSet
+     */
     public static ResultSet querySelect(String query, String endpoint, String graph, Model model) {
         try {
             //QueryExecution qexec = queryExecutionDirect(query,graph,endpoint);
@@ -341,6 +357,12 @@ public class SPARQLHelper {
         }
     }
 
+    /**
+     * returns samples
+     * @param kb
+     * @param sampleSize
+     * @return
+     */
     protected static AdvancedMemoryCache getSample(KBInfo kb, int sampleSize) {
         String hashString = Integer.toString(kb.hashCode());
         if (!samples.containsKey(hashString)) {
@@ -349,6 +371,12 @@ public class SPARQLHelper {
         return samples.get(hashString);
     }
 
+    /**
+     * generates samples
+     * @param kb
+     * @param sampleSize
+     * @return
+     */
     protected static AdvancedMemoryCache generateSample(KBInfo kb, int sampleSize) {
         GetAllSparqlQueryModule queryModule = new GetAllSparqlQueryModule(kb, sampleSize);
         AdvancedMemoryCache cache = new AdvancedMemoryCache();
@@ -360,6 +388,15 @@ public class SPARQLHelper {
         return cache;
     }
 
+    /**
+     * returns the common properties
+     * @param kb knowledgebase 
+     * @param threshold threshold
+     * @param limit limit
+     * @param sampleSize size of sample
+     * @return string array of common properties
+     * @throws Exception thrown if something goes wrong
+     */
     public static String[] commonProperties(KBInfo kb, double threshold, Integer limit, Integer sampleSize) throws Exception {
         return getSample(kb, sampleSize).getCommonProperties(threshold, limit);
     }

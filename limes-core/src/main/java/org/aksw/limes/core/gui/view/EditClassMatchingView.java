@@ -28,9 +28,10 @@ import org.aksw.limes.core.gui.model.ClassMatchingNode;
 import org.aksw.limes.core.gui.util.SourceOrTarget;
 
 /**
- * View class for class matching step in create wizard
+ * used for class matching step in {@link WizardView}
  *
- * @author Manuel Jacob
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class EditClassMatchingView implements IEditView {
     private EditClassMatchingController controller;
@@ -38,14 +39,24 @@ public class EditClassMatchingView implements IEditView {
     private TreeView<ClassMatchingNode> sourceTreeView;
     private TreeView<ClassMatchingNode> targetTreeView;
 
+    /**
+     * Constructor creates the root pane
+     */
     EditClassMatchingView() {
 	createRootPane();
     }
 
+    /**
+     * sets the corresponding controller
+     * @param controller controller
+     */
     public void setController(EditClassMatchingController controller) {
 	this.controller = controller;
     }
 
+    /**
+     * helper class to create rootPane
+     */
     private void createRootPane() {
 	HBox hbox = new HBox();
 	Node sourcePanelWithTitle = createClassMatchingPane(SOURCE);
@@ -60,11 +71,19 @@ public class EditClassMatchingView implements IEditView {
 	rootPane.setFitToWidth(true);
     }
 
+    /**
+     * returns the pane
+     */
     @Override
     public Parent getPane() {
 	return rootPane;
     }
 
+    /**
+     * Create source or target pane depending on the given enum
+     * @param sourceOrTarget
+     * @return
+     */
     private Node createClassMatchingPane(SourceOrTarget sourceOrTarget) {
 	BorderPane pane = new BorderPane();
 
@@ -81,6 +100,12 @@ public class EditClassMatchingView implements IEditView {
 	}
     }
 
+    /**
+     * adds the children to the class
+     * @param parent
+     * @param childNodes
+     * @param shouldSelect
+     */
     private void addTreeChildren(TreeItem<ClassMatchingNode> parent, List<ClassMatchingNode> childNodes, Predicate<ClassMatchingNode> shouldSelect) {
 	for (ClassMatchingNode childNode : childNodes) {
 	    TreeItem<ClassMatchingNode> child = new TreeItem<ClassMatchingNode>(childNode);
@@ -89,6 +114,12 @@ public class EditClassMatchingView implements IEditView {
 	}
     }
 
+    /**
+     * shows the tree after classes are loaded from controller
+     * @param sourceOrTarget enum for source or target
+     * @param items list of class matching nodes
+     * @param currentClass current class matching node
+     */
     public void showTree(SourceOrTarget sourceOrTarget, List<ClassMatchingNode> items, ClassMatchingNode currentClass) {
 	TreeItem<ClassMatchingNode> root = new TreeItem<ClassMatchingNode>();
 	addTreeChildren(root, items, node -> node == currentClass);
@@ -97,6 +128,9 @@ public class EditClassMatchingView implements IEditView {
 	treeView.setRoot(root);
     }
 
+    /**
+     * saves the selected classes to the config
+     */
     @Override
     public void save() {
 	TreeItem<ClassMatchingNode> selectedSourceClass = sourceTreeView.getSelectionModel().getSelectedItem();

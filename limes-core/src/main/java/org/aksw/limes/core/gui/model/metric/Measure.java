@@ -8,7 +8,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * To Measure similarities
+ * data model class to graphically represent measures
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
  */
 public class Measure extends Node {
     /**

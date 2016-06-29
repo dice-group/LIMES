@@ -17,7 +17,8 @@ import java.io.IOException;
 /**
  * Controller for Resultview
  *
- * @author Daniel Obraczka, Sascha Hahne
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class ResultController {
 
@@ -36,7 +37,7 @@ public class ResultController {
      *
      * @param view
      *         corresponding view
-     * @param config
+     * @param config current config
      */
     public ResultController(ResultView view, Config config) {
         this.view = view;
@@ -44,10 +45,10 @@ public class ResultController {
     }
 
     /**
-     * shows the properties of an instancematch
+     * shows the properties of matched instances
      *
      * @param item
-     *         the clicked instancematch of the Resultview
+     *         the clicked matched instances of the Resultview
      */
     public void showProperties(Result item) {
         String sourceURI = item.getSourceURI();
@@ -84,10 +85,10 @@ public class ResultController {
     }
 
     /**
-     * Save Results to File
+     * Save results to file
      *
-     * @param results
-     *         Results of ResultView
+     * @param mapping
+     *         results of ResultView
      * @param file
      *         Path to File
      */
@@ -107,10 +108,18 @@ public class ResultController {
 
     }
 
+    /**
+     * returns current config
+     * @return config
+     */
     public Config getCurrentConfig() {
         return currentConfig;
     }
 
+    /**
+     * sets current config
+     * @param currentConfig current config
+     */
     public void setCurrentConfig(Config currentConfig) {
         this.currentConfig = currentConfig;
     }

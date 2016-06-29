@@ -9,7 +9,8 @@ import java.util.*;
  * Subclass of KBInfo that adds a view convenience methods such as different constructors and better error messages.
  * Also contains additional fields like the classes so that you can't downgrade AdvancedKBInfo to KBInfo without some information losses.
  *
- * @author Konrad Höffner
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 @SuppressWarnings("all")
 public class AdvancedKBInfo extends KBInfo implements Serializable {
@@ -58,8 +59,13 @@ public class AdvancedKBInfo extends KBInfo implements Serializable {
     }
 
     /**
+     * 
      * Creates an instance of this class without restrictions.
-     **/
+     * @param id id
+     * @param endpoint endpoint
+     * @param var var
+     * @param graph graph
+     */
     public AdvancedKBInfo(String id, String endpoint, String var, String graph) {
         this(id, endpoint, var, graph, Collections.<String>emptyList(),
                 null,
@@ -67,8 +73,15 @@ public class AdvancedKBInfo extends KBInfo implements Serializable {
     }
 
     /**
+     * 
      * Creates an instance of this class with a single restriction property and object.
-     **/
+     * @param id id
+     * @param endpoint endpoint
+     * @param var var
+     * @param graph graph
+     * @param restrictionProperty restrictionProperty
+     * @param restrictionObject restrictionObject
+     */
     public AdvancedKBInfo(String id, String endpoint, String var, String graph, String restrictionProperty, String restrictionObject) {
         this(id, endpoint, var, graph, Collections.<String>emptyList(),
                 Collections.singleton(new Restriction(restrictionProperty, restrictionObject)),
@@ -81,10 +94,14 @@ public class AdvancedKBInfo extends KBInfo implements Serializable {
     //		this(id,endpoint,"?var",graph,restrictionProperty,restrictionObject);
     //	}
 
+
     /**
-     * Example: "rdfs:label" -> "http://www.w3.org/2000/01/rdf-schema#label".
-     **/
-    // TODO: move somewhere else?
+     * 
+     * Example: "rdfs:label" -{@literal >} "http://www.w3.org/2000/01/rdf-schema#label".
+     * @param url url
+     * @param prefixes prefixes
+     * @return expanded prefix
+     */
     public static String expandPrefix(String url, Map<String, String> prefixes) {
         if (url.startsWith("http") || url.startsWith("<")) return url;
         for (String prefix : prefixes.keySet()) {
@@ -96,10 +113,10 @@ public class AdvancedKBInfo extends KBInfo implements Serializable {
     }
 
     /**
-     * Like {@link expandPrefix(String,Map<String,String>)} but does this for all properties in the knowledge base.
+     * Like {@link #expandPrefix(String, Map)} but does this for all properties in the knowledge base.
      *
      * @param prefixes
-     *         A map with prefixes as keys and their corresponding full uris as values.<br/>
+     *         A map with prefixes as keys and their corresponding full uris as values.{@literal <}br/ {@literal >}
      *         Example: map.put("rdfs","http://www.w3.org/2000/01/rdf-schema#");
      **/
     // TODO: move somewhere else?

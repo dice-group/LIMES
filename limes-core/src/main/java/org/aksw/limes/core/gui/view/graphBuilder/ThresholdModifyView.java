@@ -13,13 +13,22 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * used to represent a popup menu to set the thresholds in a link specification
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public class ThresholdModifyView {
 
     private Label acceptanceThresholdlabel = null;
     private TextField acceptanceThresholdinput = null;
 
-    // TODO let user choose relation of thresholds using
-    // ConfigReader.verificationRelation or ConfigReader.acceptanceRelation
+    /**
+     * Constructor builds the whole view
+     * @param gbv GraphBuildView
+     * @param node NodeView
+     */
     public ThresholdModifyView(GraphBuildView gbv, NodeView node) {
         Stage stage = new Stage();
         VBox root = new VBox();

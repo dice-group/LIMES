@@ -8,6 +8,9 @@ import java.util.List;
 
 /**
  * Parses Metric to Expression for the Config Reader
+ * 
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class MetricParser {
     /**
@@ -154,7 +157,7 @@ public class MetricParser {
      * @param sourceVar
      *         Label
      * @return Metric as Output
-     * @throws MetricFormatException
+     * @throws MetricFormatException thrown if there is something wrong
      */
     public static Output parse(String s, String sourceVar)
             throws MetricFormatException {

@@ -17,9 +17,10 @@ import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 
 /**
- * View to Edit EndPoints of Limes Query
+ * used for editing endpoints step in {@link org.aksw.limes.core.gui.view.WizardView}
  *
- * @author Manuel Jacob, Felix Brei
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class EditEndpointsView implements IEditView {
     /**
@@ -131,7 +132,7 @@ public class EditEndpointsView implements IEditView {
     /**
      * Fills the Textfield with the Information
      *
-     * @param source
+     * @param sourceOrTarget
      *         if True source else Target
      * @param endpoint
      *         URL of the Endpoint

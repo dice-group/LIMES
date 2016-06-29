@@ -64,21 +64,20 @@ public class ActiveLearningResultView {
 
 	private ActiveLearningModel model;
 
-	private ActiveLearningView view;
-
 	public ProgressIndicator learnProgress;
 
 	/**
-	 * Default constructor
+	 * Default constructor builds the view
+	 * @param c config
+	 * @param m model
 	 */
-	public ActiveLearningResultView(Config c, ActiveLearningModel m,
-			ActiveLearningView v) {
+	public ActiveLearningResultView(Config c, ActiveLearningModel m
+			) {
 
 		this.model = m;
 		this.config = c;
 		this.controller = new ActiveLearningResultController(this, config,
 				model);
-		view = v;
 
 		Stage stage = new Stage();
 
@@ -233,6 +232,10 @@ public class ActiveLearningResultView {
 
 	}
 
+	/**
+	 * updates the view with the results
+	 * @param results results fo active learning
+	 */
 	public void showResults(ObservableList<ActiveLearningResult> results) {
 		table.setItems(results);
 	}
@@ -259,10 +262,18 @@ public class ActiveLearningResultView {
 		targetInstanceTable.setItems(instanceProperty);
 	}
 
+	/**
+	 * returns the corresponding controller
+	 * @return controller
+	 */
 	public ActiveLearningResultController getActiveLearningResultController() {
 		return this.controller;
 	}
 
+	/**
+	 * returns the matching table
+	 * @return table
+	 */
 	public TableView<ActiveLearningResult> getMatchingTable() {
 		return this.table;
 	}

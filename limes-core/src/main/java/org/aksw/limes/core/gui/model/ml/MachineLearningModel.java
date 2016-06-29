@@ -14,19 +14,55 @@ import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * this class is responsible for the data handling according to the MVC Pattern for the machine learning
+ *  
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public abstract class MachineLearningModel {
 
-//	protected MachineLearningView mlview;
 
+    /**
+     * logger for this class
+     */
     protected static Logger logger = LoggerFactory.getLogger("LIMES");
+    /**
+     * algorithm
+     */
     protected AMLAlgorithm mlalgorithm;
+    /**
+     * parameters
+     */
     protected List<LearningParameter> learningParameters;
+    /**
+     * sourceCache
+     */
     protected Cache sourceCache;
+    /**
+     * targetCache
+     */
     protected Cache targetCache;
+    /**
+     * thread in which the learning is done
+     */
     protected Thread learningThread;
+    /**
+     * configuration
+     */
     protected Config config;
+    /**
+     * the resulting mapping of a learning process
+     */
     protected AMapping learnedMapping;
 
+    /**
+     * constructor
+     * @param config contains the information
+     * @param sourceCache source
+     * @param targetCache target
+     */
     public MachineLearningModel(Config config, Cache sourceCache, Cache targetCache) {
         this.setConfig(config);
         this.sourceCache = sourceCache;
@@ -34,25 +70,49 @@ public abstract class MachineLearningModel {
     }
 
 
+    /**
+     * creates the learning task for this algorithm 
+     * @return the task
+     */
     public abstract Task<Void> createLearningTask();
 
 
+    /**
+     * return algorithm
+     * @return the algorithm
+     */
     public AMLAlgorithm getMlalgorithm() {
         return mlalgorithm;
     }
 
+    /**
+     * set algorithm
+     * @param mlalgorithm the algorithm to be set
+     */
     public void setMlalgorithm(AMLAlgorithm mlalgorithm) {
         this.mlalgorithm = mlalgorithm;
     }
 
+    /**
+     * return learning parameters
+     * @return learningParameters
+     */
     public List<LearningParameter> getLearningParameters() {
         return learningParameters;
     }
 
+    /**
+     * set learning parameters
+     * @param learningParameters the parameters
+     */
     public void setLearningParameters(List<LearningParameter> learningParameters) {
         this.learningParameters = learningParameters;
     }
 
+    /**
+     * creates a new mlalgorithm using {@link MLAlgorithmFactory}
+     * @param algorithmName the algorithm name
+     */
     public void initializeData(String algorithmName) {
         //TODO other cases
 	algorithmName = algorithmName.toLowerCase();
@@ -74,56 +134,57 @@ public abstract class MachineLearningModel {
 	    logger.error("Unsupported Machine Learning Implementation!");
 	    e.printStackTrace();
 	}
-//        switch (algorithmName) {
-//            case "Lion":
-//                this.mlalgorithm = new Lion(sourceCache, targetCache, getConfig());
-//                break;
-//            case "Eagle":
-//                if (this instanceof UnsupervisedLearningModel) {
-//                    this.mlalgorithm = new EagleUnsupervised(sourceCache, targetCache, getConfig());
-//                } else {
-//                    logger.info("Not implemented yet");
-//                }
-//                break;
-//            default:
-//                logger.info("Unknown algorithm");
-//        }
-//        if (this instanceof ActiveLearningModel) {
-//            this.learningsetting = new ActiveLearningSetting(mlalgorithm);
-//        } else if (this instanceof BatchLearningModel) {
-//            this.learningsetting = new BatchLearningSetting(mlalgorithm);
-//        } else if (this instanceof UnsupervisedLearningModel) {
-//            this.learningsetting = new UnsupervisedLearningSetting(mlalgorithm);
-//        } else {
-//            logger.info("Unknown subclass of MachineLearningModel");
-//        }
     }
 
+    /**
+     * return learning thread
+     * @return the thread
+     */
     public Thread getLearningThread() {
         return learningThread;
     }
 
 
+    /**
+     * set learning thread
+     * @param learningThread th thread to be set
+     */
     public void setLearningThread(Thread learningThread) {
         this.learningThread = learningThread;
     }
 
 
+    /**
+     * get learned mapping
+     * @return the learned mapping
+     */
     public AMapping getLearnedMapping() {
         return learnedMapping;
     }
 
 
+    /**
+     * set learnedMapping
+     * @param learnedMapping learned mapping
+     */
     public void setLearnedMapping(AMapping learnedMapping) {
         this.learnedMapping = learnedMapping;
     }
 
 
+    /**
+     * return config
+     * @return the config
+     */
     public Config getConfig() {
         return config;
     }
 
 
+    /**
+     * set config
+     * @param config config
+     */
     public void setConfig(Config config) {
         this.config = config;
     }

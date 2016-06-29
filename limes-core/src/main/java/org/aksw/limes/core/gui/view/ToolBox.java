@@ -19,9 +19,10 @@ import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 
 /**
- * Panel in MainView which contains the specific Nodes to add to the Graph
+ * Panel in MainView which contains the specific nodes, measures and operators to add to the graph
  *
- * @author Sascha Hahne
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class ToolBox extends VBox {
 
@@ -53,7 +54,8 @@ public class ToolBox extends VBox {
     private MainView view;
 
     /**
-     * Constructor
+     * Constructor builds view and adds listeners to elements
+     * @param view main view
      */
     public ToolBox(MainView view) {
         generateView(this);

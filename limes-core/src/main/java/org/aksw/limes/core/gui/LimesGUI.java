@@ -11,7 +11,8 @@ import java.util.Locale;
 /**
  * Starts the LinkDiscovery Application, with Extra
  *
- * @author Manuel Jacob
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class LimesGUI extends Application {
 
@@ -27,12 +28,12 @@ public class LimesGUI extends Application {
         launch(args);
     }
 
-    @Override
     /**
      * Opens a new Window for the Application
      * @param primaryStage View to initialize Application
-     * @exception Thrown if initialization didn't work properly
+     * @exception Exception Thrown if initialization didn't work properly
      */
+    @Override
     public void start(Stage primaryStage) throws Exception {
         MainView mainView = new MainView(primaryStage);
         MainController mainController = new MainController(mainView);

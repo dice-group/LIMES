@@ -3,7 +3,6 @@ package org.aksw.limes.core.gui.view.ml;
 import java.util.List;
 import java.util.Set;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -33,39 +32,74 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.gui.controller.ml.MachineLearningController;
 import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class MachineLearningView {
+/**
+ * This class creates the gui elements for the machine learning according to the parameters of the machine learning algorithm selected.
+ *  
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
+public class MachineLearningView {
 
+    /**
+     * the logger for this class
+     */
     protected static Logger logger = LoggerFactory.getLogger("LIMES");
 
+    /**
+     * array containing all implemented algorithms
+     */
     private static final String[] algorithms = { MLAlgorithmFactory.EAGLE, MLAlgorithmFactory.LION, MLAlgorithmFactory.WOMBAT_COMPLETE,
 	    MLAlgorithmFactory.WOMBAT_SIMPLE };
+    
+    /**
+     * corresponding controller
+     */
     protected MachineLearningController mlController;
+    
+    /**
+     * main view of the LIMES application
+     */
     private MainView mainView;
+    
+    /**
+     * button that starts the learning
+     */
     private Button learnButton;
+    
+    /**
+     * type of view
+     */
+    private MLImplementationType type;
 
-    public MachineLearningView(MainView mainView, MachineLearningController mlController) {
+    /**
+     * default constructor setting the variables and creating the view by calling {@link #createMLAlgorithmsRootPane()}
+     * @param mainView main view
+     * @param mlController controller
+     * @param type implementation type: active, batch, unsupervised
+     */
+    public MachineLearningView(MainView mainView, MachineLearningController mlController, MLImplementationType type) {
 	this.mainView = mainView;
 	this.mlController = mlController;
 	this.mlController.setMlView(this);
 	createMLAlgorithmsRootPane();
+	this.type = type;
     }
 
     /**
      * checks if the MLAlgorithm is implemented for this LearningSetting
      * corresponding to the subclass of MachineLearningView and creates the
      * rootPane accordingly
-     *
-     * @return ComboBox with corresponding options
      */
     public void createMLAlgorithmsRootPane() {
 	BorderPane border = new BorderPane();
@@ -74,7 +108,7 @@ public abstract class MachineLearningView {
 
 	ObservableList<String> mloptions = FXCollections.observableArrayList();
 	for (int i = 0; i < algorithms.length; i++) {
-	    if (this instanceof ActiveLearningView) {
+	    if (type == MLImplementationType.SUPERVISED_ACTIVE) {
 		try {
 		    AMLAlgorithm algorithm = MLAlgorithmFactory.createMLAlgorithm(MLAlgorithmFactory.getAlgorithmType(algorithms[i]),
 			    MLAlgorithmFactory.getImplementationType(MLAlgorithmFactory.SUPERVISED_ACTIVE));
@@ -82,7 +116,7 @@ public abstract class MachineLearningView {
 		} catch (Exception e1) {
 		    // TODO Auto-generated catch block
 		}
-	    } else if (this instanceof BatchLearningView) {
+	    } else if (type == MLImplementationType.SUPERVISED_BATCH) {
 		try {
 		    AMLAlgorithm algorithm = MLAlgorithmFactory.createMLAlgorithm(MLAlgorithmFactory.getAlgorithmType(algorithms[i]),
 			    MLAlgorithmFactory.getImplementationType(MLAlgorithmFactory.SUPERVISED_BATCH));
@@ -90,7 +124,7 @@ public abstract class MachineLearningView {
 		} catch (Exception e1) {
 		    // TODO Auto-generated catch block
 		}
-	    } else if (this instanceof UnsupervisedLearningView) {
+	    } else if (type == MLImplementationType.UNSUPERVISED) {
 		try {
 		    AMLAlgorithm algorithm = MLAlgorithmFactory.createMLAlgorithm(MLAlgorithmFactory.getAlgorithmType(algorithms[i]),
 			    MLAlgorithmFactory.getImplementationType(MLAlgorithmFactory.UNSUPERVISED));
@@ -138,8 +172,8 @@ public abstract class MachineLearningView {
     }
 
     /**
-     * Takes the gridpane in the BorderPane and adds the GUI elements fitting
-     * for the algorithm
+     * Takes the gridpane in the BorderPane and adds the gui elements fitting
+     * for the algorithm. The value of the according learning parameter gets changed if the value of the gui element is changed.
      *
      * @param root
      * @param algorithm
@@ -175,6 +209,13 @@ public abstract class MachineLearningView {
 	return root;
     }
 
+    /**
+     * creates a {@link javafx.scene.layout.HBox} with the information from the learning parameter if it is a Integer or Double
+     * @param param
+     * @param root
+     * @param position
+     * @param integer
+     */
     private void addNumberParameterHBox(LearningParameter param, GridPane root, int position, boolean integer) {
 
 	HBox parameterBox = new HBox();
@@ -210,7 +251,13 @@ public abstract class MachineLearningView {
 	    }
 	});
     }
-
+    
+    /**
+     * creates a {@link javafx.scene.layout.HBox} with the information from the learning parameter if it is a Boolean
+     * @param param
+     * @param root
+     * @param position
+     */
     private void addBooleanParameterHBox(LearningParameter param, GridPane root, int position) {
 	Label parameterLabel = new Label(param.getName());
 	CheckBox parameterCheckBox = new CheckBox();
@@ -225,6 +272,12 @@ public abstract class MachineLearningView {
 	root.add(parameterCheckBox, 1, position);
     }
 
+    /**
+     * creates a {@link javafx.scene.layout.HBox} with the information from the learning parameter if it is a {@link org.aksw.limes.core.measures.measure.MeasureType}
+     * @param param
+     * @param root
+     * @param position
+     */
     @SuppressWarnings("unchecked")
     private void addMeasureTypeParameterHBox(LearningParameter param, GridPane root, int position) {
 	Label parameterLabel = new Label(param.getName());
@@ -257,11 +310,32 @@ public abstract class MachineLearningView {
 
     }
 
+    /**
+     * class for the parameterHBox to use for the cell factory of the ListView
+     * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+     *         studserv.uni-leipzig.de{@literal >}
+     *
+     */
     private static class MeasureTypeItem {
+	
+	/**
+	 * name of the MeasureType
+	 */
 	private final StringProperty name = new SimpleStringProperty();
+	/**
+	 * true if it is selected
+	 */
 	private final BooleanProperty on = new SimpleBooleanProperty();
+	/**
+	 * the LearningParameters to all MeasureTypeItems
+	 */
 	private static Set<String> params;
 
+	/**
+	 * Constructor sets variables and implements listener on {@link #on} the change {@link #params} according to user input
+	 * @param name
+	 * @param on
+	 */
 	private MeasureTypeItem(String name, boolean on) {
 	    setName(name);
 	    setOn(on);
@@ -277,34 +351,65 @@ public abstract class MachineLearningView {
 	        });
 	}
 	
+	/**
+	 * sets params
+	 * @param p
+	 */
 	private static final void setParams(Set<String>p){
 	    params = p;
 	}
 
+	/**
+	 * returns nameProperty
+	 * @return
+	 */
 	private final StringProperty nameProperty() {
 	    return this.name;
 	}
 
+	/**
+	 * returns name as String
+	 * @return
+	 */
 	private final String getName() {
 	    return this.nameProperty().get();
 	}
 
+	/**
+	 * sets name
+	 * @param name
+	 */
 	private final void setName(final String name) {
 	    this.nameProperty().set(name);
 	}
 
+	/**
+	 * returns on
+	 * @return
+	 */
 	private final BooleanProperty onProperty() {
 	    return this.on;
 	}
 
+	/**
+	 * returns value of on
+	 * @return
+	 */
 	private final boolean isOn() {
 	    return this.onProperty().get();
 	}
 
+	/**
+	 * sets on
+	 * @param on
+	 */
 	private final void setOn(final boolean on) {
 	    this.onProperty().set(on);
 	}
 
+	/**
+	 * returns name as String
+	 */
 	@Override
 	public String toString() {
 	    return getName();
@@ -327,10 +432,18 @@ public abstract class MachineLearningView {
 	alert.showAndWait();
     }
 
+    /**
+     * returns learn button
+     * @return learnButton
+     */
     public Button getLearnButton() {
 	return learnButton;
     }
 
+    /**
+     * returns mainView
+     * @return mainView
+     */
     public MainView getMainView() {
 	return mainView;
     }

@@ -23,22 +23,21 @@ import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.gui.view.ResultView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.WizardView;
-import org.aksw.limes.core.gui.view.ml.ActiveLearningView;
-import org.aksw.limes.core.gui.view.ml.BatchLearningView;
-import org.aksw.limes.core.gui.view.ml.UnsupervisedLearningView;
+import org.aksw.limes.core.gui.view.ml.MachineLearningView;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 
 /**
- * Controller of MainView
- *
- * @author Manuel Jacob
+ * This class handles the user input from {@link org.aksw.limes.core.gui.view.MainView}
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class MainController {
     /**
-     * Corresponding View to the Controller
+     * Corresponding view to the controller
      */
     private MainView view;
     /**
-     * Config of the Current Limes-Query
+     * Config of the current limes-query
      */
     private Config currentConfig;
 
@@ -54,8 +53,7 @@ public class MainController {
     }
 
     /**
-     * Starts a New Limes Query-Config, drops the current Config
-     *
+     * Opens a new {@link WizardView} an drops the current config
      * @param createWizardView
      *         Basic View
      * @param editEndpointsView
@@ -83,7 +81,7 @@ public class MainController {
     }
 
     /**
-     * Reads Config from File, drops currentConfig
+     * Reads config from file, drops current config
      *
      * @param file
      *         Linkpec-Config File in XML format
@@ -105,7 +103,7 @@ public class MainController {
     }
 
     /**
-     * Saves Current Config in Valid XML Format to a File
+     * Saves current config to a file
      *
      * @param file
      *         Location to save the File
@@ -124,7 +122,7 @@ public class MainController {
     }
 
     /**
-     * Terminates the Program
+     * Terminates the program
      */
     public void exit() {
         confirmPotentialDataLoss();
@@ -138,14 +136,12 @@ public class MainController {
         if (currentConfig == null) {
             return;
         }
-        // TODO: Prüfe, ob Änderungen seit letztem Speichervorgang vorliegen. Im
-        // Moment sind Änderungen noch nicht implementiert, also muss auch kein
-        // Dialog angezeigt werden.
+        //TODO check if data changed, since we cannot really save anything this is left for future implementation
         // view.showDataLossDialog();
     }
 
     /**
-     * Starts the Limes-Query and shows the Results
+     * Starts the limes-query as a new task and shows the results
      */
     public void map() {
         if (currentConfig == null) {
@@ -173,7 +169,7 @@ public class MainController {
     }
 
     /**
-     * Check if Metric is complete
+     * Check if metric is complete
      */
     private boolean checkAndUpdateMetric() {
         if (view.graphBuild.edited
@@ -187,25 +183,34 @@ public class MainController {
         return true;
     }
 
+    /**
+     * Creates a new {@link MachineLearningView} for batch learning
+     */
     public void showBatchLearning() {
         if (currentConfig != null) {
-            BatchLearningView blv = new BatchLearningView(view, new BatchLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache()));
+            new MachineLearningView(view, new BatchLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache()), MLImplementationType.SUPERVISED_BATCH);
         } else {
             System.err.println("Config is null!");
         }
     }
 
+    /**
+     * Creates a new {@link MachineLearningView} for unsupervised learning
+     */
     public void showUnsupervisedLearning() {
         if (currentConfig != null) {
-            UnsupervisedLearningView ulv = new UnsupervisedLearningView(view, new UnsupervisedLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache()));
+            new MachineLearningView(view, new UnsupervisedLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache()), MLImplementationType.UNSUPERVISED);
         } else {
             System.err.println("Config is null!");
         }
     }
 
+    /**
+     * Creates a new {@link MachineLearningView} for active learning
+     */
     public void showActiveLearning() {
         if (currentConfig != null) {
-            ActiveLearningView alv = new ActiveLearningView(view, new ActiveLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache()));
+            new MachineLearningView(view, new ActiveLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache()), MLImplementationType.SUPERVISED_ACTIVE);
         } else {
             System.err.println("Config is null!");
         }
@@ -220,6 +225,10 @@ public class MainController {
         return this.currentConfig;
     }
 
+    /**
+     * sets a config and updates the view accordingly
+     * @param currentConfig
+     */
     private void setCurrentConfig(Config currentConfig) {
         this.currentConfig = currentConfig;
         view.showLoadedConfig(currentConfig != null);

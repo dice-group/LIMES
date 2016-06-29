@@ -3,10 +3,11 @@ package org.aksw.limes.core.gui.model;
 import javafx.beans.property.SimpleBooleanProperty;
 
 /**
- * Stores information about possible results during the 
+ * Stores information about link candidates during the 
  * active learning process
  *
- * @author Daniel Obraczka
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class ActiveLearningResult extends Result {
 
@@ -30,6 +31,10 @@ public class ActiveLearningResult extends Result {
         isMatch = new SimpleBooleanProperty(false);
     }
 
+    /**
+     * return isMatch
+     * @return isMatch
+     */
     public SimpleBooleanProperty isMatchProperty() {
         return isMatch;
     }

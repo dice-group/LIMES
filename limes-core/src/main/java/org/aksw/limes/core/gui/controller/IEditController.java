@@ -5,7 +5,8 @@ import org.aksw.limes.core.gui.view.IEditView;
 /**
  * Interface for controllers for step in wizard
  *
- * @author Manuel Jacob
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public interface IEditController {
     /**
@@ -20,5 +21,9 @@ public interface IEditController {
         getView().save();
     }
 
+    /**
+     * return view
+     * @return the view
+     */
     public IEditView getView();
 }

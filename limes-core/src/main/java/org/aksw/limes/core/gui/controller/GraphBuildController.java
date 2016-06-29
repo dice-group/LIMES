@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Controller of GraphBuildView, Controlls drawing and moving auf Node Elements
+ * Controller of GraphBuildView, controls drawing and moving of Node Elements
  *
- * @author Daniel Obraczka, Sascha Hahne
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class GraphBuildController {
 
@@ -31,11 +32,9 @@ public class GraphBuildController {
 
     /**
      * Constructor
-     *
-     * @param currentConfig
-     *         Current Limes query Config
-     * @param view
-     *         Corresponding View
+     * @param currentConfig config
+     * @param view corresponding view
+     * @param toolbox toolbox of mainview
      */
     public GraphBuildController(Config currentConfig, GraphBuildView view,
                                 ToolBox toolbox) {
@@ -46,9 +45,8 @@ public class GraphBuildController {
 
     /**
      * Constructor
-     *
-     * @param view
-     *         Corresponding View
+     * @param view view
+     * @param toolbox toolbox
      */
     public GraphBuildController(GraphBuildView view, ToolBox toolbox) {
 
@@ -67,7 +65,7 @@ public class GraphBuildController {
     }
 
     /**
-     * Takes the Configuration and generates the Graph
+     * Takes the configuration and generates the Graph
      */
     public void generateGraphFromConfig() {
         graphBuildView.nodeList.clear();
@@ -86,7 +84,7 @@ public class GraphBuildController {
     }
 
     /**
-     * Takes the Graph and writes the Information to the Config
+     * Takes the graph and writes the information to the config
      */
     public void setConfigFromGraph() {
         // Get the output node manually, since it is not guaranteed to be the
@@ -99,7 +97,8 @@ public class GraphBuildController {
     }
 
     /**
-     * Get Output Node of the Graph
+     * Get output node of the graph
+     * @return NodeView or null if output node cannot be found
      */
     public NodeView getOutputNode() {
         for (int i = 0; i < graphBuildView.nodeList.size(); i++) {
@@ -112,7 +111,7 @@ public class GraphBuildController {
     }
 
     /**
-     * Delete CurrentGraph
+     * Delete current graph
      */
     public void deleteGraph() {
         graphBuildView.nodeList.clear();
@@ -121,10 +120,8 @@ public class GraphBuildController {
         graphBuildView.draw();
     }
 
-    ;
-
     /**
-     * Refresh the Layout of the Graph
+     * Refresh the layout of the graph
      */
     public void layoutGraph() {
         double h = graphBuildView.getHeight();
@@ -170,7 +167,7 @@ public class GraphBuildController {
     }
 
     /**
-     * Helper function for Layout Graph
+     * Helper function for layout graph
      *
      * @param index
      *         index to set to 0
@@ -191,12 +188,12 @@ public class GraphBuildController {
     }
 
     /**
-     * Recursive Function to Link NodeView as there Datamodell is linked
+     * Recursive function to link {@link org.aksw.core.gui.view.graphBuilder.NodeView} according to the underlying data model 
      *
      * @param parent
      *         Parent NodeView
      * @param node
-     *         Node to be prooved
+     *         data model
      * @param nodeList
      *         NodeList to be modified
      * @return modified NodeList

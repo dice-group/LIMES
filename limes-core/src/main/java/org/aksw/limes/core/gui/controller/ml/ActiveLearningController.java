@@ -11,16 +11,34 @@ import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.ml.ActiveLearningModel;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.ml.ActiveLearningResultView;
-import org.aksw.limes.core.gui.view.ml.ActiveLearningView;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
 import org.aksw.limes.core.io.cache.Cache;
 
+/**
+ * This class handles the interaction between the {@link MachineLearningView}
+ *  and the {@link ActiveLearningModel} according to the MVC Pattern for the supervised active learning
+ *  
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public class ActiveLearningController extends MachineLearningController {
 
+    /**
+     * Constructor creates the according {@link ActiveLearningModel}
+     * @param config containing information
+     * @param sourceCache source information
+     * @param targetCache target information
+     */
     public ActiveLearningController(Config config, Cache sourceCache, Cache targetCache) {
 	this.mlModel = new ActiveLearningModel(config, sourceCache, targetCache);
     }
 
+    /**
+     * Creates a learning task and launches a {@link TaskProgressView}.
+     * The results are shown in a {@link ActiveLearningResultView}
+     * @param view MachineLearningView to manipulate elements in it
+     */
     @Override
     public void learn(MachineLearningView view) {
 	Task<Void> learnTask = this.mlModel.createLearningTask();
@@ -39,8 +57,7 @@ public class ActiveLearningController extends MachineLearningController {
 		Platform.runLater(new Runnable() {
 		    @Override
 		    public void run() {
-		ActiveLearningResultView activeLearningResultView = new ActiveLearningResultView(mlModel.getConfig(), (ActiveLearningModel) mlModel,
-			(ActiveLearningView) view);
+		ActiveLearningResultView activeLearningResultView = new ActiveLearningResultView(mlModel.getConfig(), (ActiveLearningModel) mlModel);
 		activeLearningResultView.showResults(results);
 		    }
 		    //TODO error handling

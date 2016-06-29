@@ -21,9 +21,11 @@ import java.util.List;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 
 /**
- * View class for edit properties step in create wizard
  *
- * @author Manuel Jacob
+ * used for property matching step in {@link org.aksw.limes.core.gui.view.WizardView}
+ * 
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
  */
 public class EditPropertyMatchingView implements IEditView {
     private EditPropertyMatchingController controller;
@@ -39,6 +41,9 @@ public class EditPropertyMatchingView implements IEditView {
     private ObservableList<String> targetProperties = FXCollections
             .observableArrayList();
 
+    /**
+     * Constructor creates the root pane and adds listeners
+     */
     EditPropertyMatchingView() {
         createRootPane();
         addListeners();
@@ -47,13 +52,16 @@ public class EditPropertyMatchingView implements IEditView {
     /**
      * Sets the corresponding Controller
      *
-     * @param controller
+     * @param controller controller
      */
     public void setController(EditPropertyMatchingController controller) {
         this.controller = controller;
     }
 
 
+    /**
+     * creates the root pane
+     */
     private void createRootPane() {
         sourcePropList = new ListView<String>();
         targetPropList = new ListView<String>();
@@ -83,6 +91,10 @@ public class EditPropertyMatchingView implements IEditView {
         rootPane.setFitToWidth(true);
     }
 
+    /**
+     * adds listener to properties to display changes after loading them is finished.
+     * also adds functionality
+     */
     private void addListeners() {
 
         sourceProperties.addListener(new ListChangeListener() {
@@ -179,8 +191,8 @@ public class EditPropertyMatchingView implements IEditView {
     /**
      * Shows the available properties
      *
-     * @param sourceOrTarget
-     * @param properties
+     * @param sourceOrTarget enum for source or target
+     * @param properties list of properties to show
      */
     public void showAvailableProperties(SourceOrTarget sourceOrTarget,
                                         List<String> properties) {
@@ -202,8 +214,8 @@ public class EditPropertyMatchingView implements IEditView {
     /**
      * Shows an error if something went wrong
      *
-     * @param header
-     * @param content
+     * @param header header of error 
+     * @param content content of message
      */
     public void showError(String header, String content) {
         Alert alert = new Alert(AlertType.ERROR);

@@ -10,6 +10,12 @@ import org.aksw.limes.core.gui.model.metric.Node;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * Graphical representation of a node
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public class NodeView {
 
     /**
@@ -209,7 +215,7 @@ public class NodeView {
     /**
      * Deletes Parent from NodeView and unlinks data models
      *
-     * @param parent
+     * @param parent parent node
      */
     public void deleteParent(NodeView parent) {
         parent.nodeData.removeChild(nodeData);
@@ -272,18 +278,34 @@ public class NodeView {
         this.nodeData.removeParent();
     }
 
+    /**
+     * returns width
+     * @return width
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * returns height
+     * @return height
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * returns midLinkX
+     * @return midLinkX
+     */
     public int getMidLinkX() {
         return midLinkX;
     }
 
+    /**
+     * returns midLinkY
+     * @return midLinkY
+     */
     public int getMidLinkY() {
         return midLinkY;
     }

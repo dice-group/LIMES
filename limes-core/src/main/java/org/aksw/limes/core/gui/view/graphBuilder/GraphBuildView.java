@@ -15,6 +15,12 @@ import org.aksw.limes.core.gui.view.ToolBox;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Class to graphically represent link specifications as linked {@link org.aksw.limes.core.gui.view.graphBuilder.NodeView}
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public class GraphBuildView extends Canvas {
 
     /**
@@ -65,10 +71,12 @@ public class GraphBuildView extends Canvas {
     private double[] mousePosition = {0, 0};
 
     /**
-     * Constructor
+     * Constructor initializes nodeList and adds a new output node.
+     * Creates the corresponding controller with config
      *
      * @param currentConfig
      *         Current used Configmodel
+     *	@param toolbox toolbox of the main view
      */
     public GraphBuildView(Config currentConfig, ToolBox toolbox) {
         widthProperty().addListener(evt -> draw());
@@ -84,7 +92,9 @@ public class GraphBuildView extends Canvas {
     }
 
     /**
-     * Constructor
+     * Constructor initializes nodeList and adds a new output node.
+     * Creates the corresponding controller with config
+     * @param toolbox toolbox of the main view
      */
     public GraphBuildView(ToolBox toolbox) {
         widthProperty().addListener(evt -> draw());
@@ -109,19 +119,19 @@ public class GraphBuildView extends Canvas {
     @Override
     /**
      * Set Width of Canvas
-     * @param width
+     * @param height height
      */
-    public double prefWidth(double height) {
+    public double prefWidth(double width) {
         return getWidth();
     }
 
     /**
      * Set Height of Canvas
      *
-     * @params height
+     * @param height height
      */
     @Override
-    public double prefHeight(double width) {
+    public double prefHeight(double height) {
         return getHeight();
     }
 
