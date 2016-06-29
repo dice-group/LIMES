@@ -2,8 +2,10 @@ package org.aksw.limes.core.ml.algorithm.lion.operator;
 
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -41,6 +43,14 @@ public interface LengthLimitedRefinementOperator {
      * @param setting
      */
     public void setLearningSetting(LearningSetting setting);
+
+    
+    /**
+     * Sets LearningParameters.
+     *
+     * @param setting
+     */
+    public void setLearningParameters(List<LearningParameter> par);
 
     /**
      * Sets Configuration

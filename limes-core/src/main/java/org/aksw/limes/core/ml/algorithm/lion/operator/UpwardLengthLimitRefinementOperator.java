@@ -8,6 +8,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.measure.Measure;
 import org.aksw.limes.core.measures.measure.string.*;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.aksw.limes.core.util.SetUtilities;
 import org.slf4j.Logger;
@@ -30,7 +31,9 @@ public class UpwardLengthLimitRefinementOperator
 
     static Logger logger = LoggerFactory.getLogger("LIMES");
     static Set<StringMeasure> stringMeasures = new HashSet<StringMeasure>();
+    
     LearningSetting setting;
+    List<LearningParameter> par;
 
 //	 EvaluationData evalData;
     Configuration configuration;
@@ -431,5 +434,10 @@ public class UpwardLengthLimitRefinementOperator
 //		System.out.println(ref);
 //		assertTrue(ref.children.size() == 2);
 //	}
+
+	@Override
+	public void setLearningParameters(List<LearningParameter> par) {
+		this.par = par;
+	}
 
 }

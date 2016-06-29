@@ -1,6 +1,7 @@
 package org.aksw.limes.core.ml.algorithm.lion;
 
 import org.aksw.limes.core.io.ls.LinkSpecification;
+import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,9 @@ public class DefaultRefinementHeuristic implements RefinementHeuristic {
     // penalty for long link specs
     public double expansionPenaltyFactor = 0.1;
     public double bonus = 0.1;    //what best value to assign ??
+    
     LearningSetting setting;
+    List<LearningParameter> par;
 
     //	@Override
     public int compare(SearchTreeNode node1, SearchTreeNode node2) {
@@ -81,4 +84,9 @@ public class DefaultRefinementHeuristic implements RefinementHeuristic {
     public void setLearningSetting(LearningSetting setting) {
         this.setting = setting;
     }
+
+	@Override
+	public void setLearningParameters(List<LearningParameter> par) {
+		this.par = par;
+	}
 }

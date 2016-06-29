@@ -126,9 +126,11 @@ public class Lion extends ACoreMLAlgorithm {
         
         pfm = new PseudoFMeasure();
         
-        // TODO settings must be taken from List<LearningParameter>
 //        heuristic.setLearningSetting(setting);
+        heuristic.setLearningParameters(lp);
 //        operator.setLearningSetting(setting);
+        operator.setLearningParameters(lp);
+        
         engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache,
                 targetCache, this.getConfiguration().getSourceInfo().getVar(),
                 this.getConfiguration().getTargetInfo().getVar());
