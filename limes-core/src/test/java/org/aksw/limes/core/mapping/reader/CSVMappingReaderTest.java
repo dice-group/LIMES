@@ -12,10 +12,14 @@ public class CSVMappingReaderTest {
     @Test
     public void csvMappingThreeColTester() {
         AMapping testMap = MappingFactory.createDefaultMapping();
-        testMap.add("http://dbpedia.org/resource/Berlin", "http://linkedgeodata.org/triplify/node240109189", 1.0d);
-        testMap.setPredicate("http://www.w3.org/2002/07/owl#sameAs");
+        
+        testMap.add("http://linkedgeodata.org/triplify/node2806760713","http://linkedgeodata.org/triplify/node2478449224",1.0d);
+        testMap.add("http://linkedgeodata.org/triplify/node2806760713","http://linkedgeodata.org/triplify/node1387111642",1.0d);
+        testMap.add("http://linkedgeodata.org/triplify/node2806760713","http://linkedgeodata.org/triplify/node2406512815",1.0d);
+        testMap.setPredicate("http://linkedgeodata.org/ontology/near");
 
-        CSVMappingReader r = new CSVMappingReader("/resources/mapping-3col-test.csv", ",");
+        String file = System.getProperty("user.dir") + "/resources/mapping-3col-test.csv";
+        CSVMappingReader r = new CSVMappingReader(file, ",");
         AMapping readMap = r.read();
 
         assertTrue(readMap.equals(testMap));
@@ -25,8 +29,9 @@ public class CSVMappingReaderTest {
     public void csvMappingThreeColWithSimilarityTester() {
         AMapping testMap = MappingFactory.createDefaultMapping();
         testMap.add("http://dbpedia.org/resource/Berlin", "http://linkedgeodata.org/triplify/node240109189", 0.999d);
-
-        CSVMappingReader r = new CSVMappingReader("/resources/mapping-3col-sim-test.csv", ",");
+        
+        String file = System.getProperty("user.dir") + "/resources/mapping-3col-sim-test.csv";
+        CSVMappingReader r = new CSVMappingReader(file, ",");
         AMapping readMap = r.read();
 
         assertTrue(readMap.equals(testMap));
@@ -37,7 +42,8 @@ public class CSVMappingReaderTest {
         AMapping testMap = MappingFactory.createDefaultMapping();
         testMap.add("http://dbpedia.org/resource/Berlin", "http://linkedgeodata.org/triplify/node240109189", 1d);
 
-        CSVMappingReader r = new CSVMappingReader("/resources/mapping-2col-test.csv", ",");
+        String file = System.getProperty("user.dir") + "/resources/mapping-2col-test.csv";
+        CSVMappingReader r = new CSVMappingReader(file, ",");
         AMapping readMap = r.read();
 
         assertTrue(readMap.equals(testMap));

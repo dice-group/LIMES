@@ -42,10 +42,6 @@
 			<NAME>max execution time in minutes</NAME>
 			<VALUE>60</VALUE>
 		</PARAMETER>
-		<PARAMETER> 
-			<NAME>max refinement tree size</NAME>
-			<VALUE>2000</VALUE>
-		</PARAMETER>
 	</MLALGORITHM>
 	
 	<ACCEPTANCE>

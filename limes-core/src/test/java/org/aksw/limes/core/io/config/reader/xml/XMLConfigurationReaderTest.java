@@ -102,9 +102,6 @@ public class XMLConfigurationReaderTest {
         lp.setName("max execution time in minutes");
         lp.setValue(60);
         mlParameters.add(lp);
-        lp.setName("max refinement tree size");
-        lp.setValue(2000);
-        mlParameters.add(lp);
 
         Configuration testConf = new Configuration();
         testConf.setSourceInfo(sourceInfo);
