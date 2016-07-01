@@ -37,7 +37,6 @@ public class QuantitativeMeasuresTest {
 
         assertTrue(runs.getRun(11).getRunTime() == r1.getRunTime());
         assertTrue(runs.getRunInfo(12, "Time") == r2.getRunTime());
-        assertTrue(res1.getRunTime() < res3.getRunTime());
 
 
     }
