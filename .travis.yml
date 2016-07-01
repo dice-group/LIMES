@@ -1,8 +1,0 @@
-dist: trusty # use LTS ubuntu with latest jdk
-sudo: false
-language: java
-jdk:
-  - oraclejdk8
-
-install: cd limes-core && mvn install -U -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.test.skip=true
-script: cd limes-core && mvn test
