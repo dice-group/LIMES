@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.TaskAlgorithm;
 import org.aksw.limes.core.datastrutures.TaskData;
+import org.aksw.limes.core.datastrutures.evaluationRun;
 import org.aksw.limes.core.evaluation.evaluator.Evaluator;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.slf4j.Logger;
@@ -21,71 +22,72 @@ public class EvaluatorsTest {
 
 
     final private String[] datasetsList = {"RESTAURANTS"/*,"PERSON1",  "PERSON2", "PERSON1_CSV", "PERSON2_CSV", "OAEI2014BOOKS"*/};
-    final private String[] algorithmsListData = {"UNSUPERVISED:WOMBATSIMPLE","SUPERVISED_BATCH:WOMBATSIMPLE"/*,"SUPERVISED_ACTIVE:WOMBATSIMPLE"*/};
+    final private String[] algorithmsListData = {"UNSUPERVISED:WOMBATSIMPLE","SUPERVISED_BATCH:WOMBATSIMPLE","SUPERVISED_ACTIVE:WOMBATSIMPLE"/**/};
 
     private static final int folds=5;
     private static final boolean crossValidate=false; 
-    
+
     @Test
     public void test() {
-/*        if(crossValidate)
+        /*        if(crossValidate)
             testCrossValidate();
         else*/
-            testEvaluator();
+        testEvaluator();
     }
     public void testEvaluator() {
         try {
-            
+
             DatasetsInitTest ds = new DatasetsInitTest();
             EvaluatorsInitTest ev = new EvaluatorsInitTest();
             AlgorithmsInitTest al = new AlgorithmsInitTest();
             Evaluator evaluator = new Evaluator();
-            
+
             Set<TaskData> tasks = ds.initializeDataSets(datasetsList);
             Set<EvaluatorType> evaluators = ev.initializeEvaluators();
             List<TaskAlgorithm> algorithms = al.initializeMLAlgorithms(algorithmsListData,datasetsList.length);
-            
-            Table<String, String, Map<EvaluatorType, Double>> results = evaluator.evaluate(algorithms, tasks, evaluators, null);
-            
-           
-            for (String mlAlgorithm : results.rowKeySet()) {
-                for (String dataset : results.columnKeySet()) {
-                    for (EvaluatorType measure : results.get(mlAlgorithm, dataset).keySet()) {
-                        System.out.println(mlAlgorithm+"\t"+dataset+"\t"+measure+"\t"+results.get(mlAlgorithm, dataset).get(measure));
-                    }
-                }
+
+            List<evaluationRun> results = evaluator.evaluate(algorithms, tasks, evaluators, null);
+            for (evaluationRun er : results) {
+                er.display();
             }
-           
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             assertTrue(false);
         }
         assertTrue(true);
     }
-    
-    
+
+
     public void testCrossValidate() {
         try {
-            
+
             DatasetsInitTest ds = new DatasetsInitTest();
             EvaluatorsInitTest ev = new EvaluatorsInitTest();
             AlgorithmsInitTest al = new AlgorithmsInitTest();
             Evaluator evaluator = new Evaluator();
-            
+
             Set<TaskData> tasks = ds.initializeDataSets(datasetsList);
             Set<EvaluatorType> evaluators = ev.initializeEvaluators();
             List<TaskAlgorithm> algorithms = al.initializeMLAlgorithms(algorithmsListData,datasetsList.length);
-            
+            List<evaluationRun> results =null;
             for (TaskAlgorithm tAlgorithm : algorithms) {
+                results = evaluator.crossValidate(tAlgorithm.getMlAlgorithm(), tasks,folds, evaluators, null);
+            }
+            for (evaluationRun er : results) {
+                er.display();
+            }
+            /*for (TaskAlgorithm tAlgorithm : algorithms) {
                 Table<String, String, Map<EvaluatorType, Double>> results = evaluator.crossValidate(tAlgorithm.getMlAlgorithm(), tasks,folds, evaluators, null);
 
-            }
-           
+            }*/
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             assertTrue(false);
         }
         assertTrue(true);
     }
+
 
 }

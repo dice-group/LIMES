@@ -14,6 +14,7 @@ public class RunRecord {
     /** The memory space utilized by the run*/
     private double runMemory = 0;
 
+    public RunRecord() {}
     /**
      * @param runId the id of the run
      * @param runTime the time duration recorded by the run
