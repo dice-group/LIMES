@@ -32,10 +32,12 @@ public class QuantitativeMeasuresTest {
 
         RunRecord res1 = runs.getRun(11);
         RunRecord res2 = runs.getRun(12);
+        RunRecord res3 = runs.getRun(13);
+
 
         assertTrue(runs.getRun(11).getRunTime() == r1.getRunTime());
         assertTrue(runs.getRunInfo(12, "Time") == r2.getRunTime());
-        assertTrue(res1.getRunTime() < res2.getRunTime());
+        assertTrue(res1.getRunTime() < res3.getRunTime());
 
 
     }
