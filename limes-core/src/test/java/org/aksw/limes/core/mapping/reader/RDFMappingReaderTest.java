@@ -10,12 +10,16 @@ import static org.junit.Assert.assertTrue;
 public class RDFMappingReaderTest {
 
     @Test
-    public void csvMappingThreeColTester() {
+    public void rdfMappingThreeColTester() {
         AMapping testMap = MappingFactory.createDefaultMapping();
-        testMap.add("http://dbpedia.org/resource/Berlin", "http://linkedgeodata.org/triplify/node240109189", 1.0d);
-        testMap.setPredicate("http://www.w3.org/2002/07/owl#sameAs");
+        
+        testMap.add("http://linkedgeodata.org/triplify/node2806760713","http://linkedgeodata.org/triplify/node2478449224",1.0d);
+        testMap.add("http://linkedgeodata.org/triplify/node2806760713","http://linkedgeodata.org/triplify/node1387111642",1.0d);
+        testMap.add("http://linkedgeodata.org/triplify/node2806760713","http://linkedgeodata.org/triplify/node2406512815",1.0d);
+        testMap.setPredicate("http://linkedgeodata.org/ontology/near");
 
-        RDFMappingReader r = new RDFMappingReader("/resources/mapping-test.nt");
+        String file = System.getProperty("user.dir") + "/resources/mapping-test.nt";
+        RDFMappingReader r = new RDFMappingReader(file);
         AMapping readMap = r.read();
 
         assertTrue(readMap.equals(testMap));
