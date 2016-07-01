@@ -1,4 +1,4 @@
 language: java
 sudo: false
 
-script: mvn test
+script: cd limes-code && mvn test
