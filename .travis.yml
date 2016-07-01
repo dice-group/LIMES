@@ -1,4 +1,6 @@
 language: java
 sudo: false
 
-script: cd limes-code && mvn test
+script:
+  - ls
+  - cd AKSW/LIMES-dev/limes-code && mvn test
