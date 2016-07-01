@@ -1,3 +1,4 @@
+dist: trusty # use LTS ubuntu with latest jdk
 sudo: false
 language: java
 jdk:
