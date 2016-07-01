@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  * to switch on/off the claculation mode of being symmetric in case of precision or retrieving
  * one-to-one mapping
  *
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */
@@ -34,37 +34,36 @@ public abstract class APseudoPRF extends APRF {
 
     /**
      * The method checks if one-to-one mapping is used
-     * @return boolean
+     * @return boolean - true if one-to-one mapping is used
      */
     public boolean isUse1To1Mapping() {
         return useOneToOneMapping;
     }
     /**
      * The method retrieves the flag value of one-to-one mapping
-     * @return boolean
+     * @return boolean - the value of the one-to-one flag
      */
     public boolean getUse1To1Mapping() {
         return useOneToOneMapping;
     }
     /**
      * The method sets the one-to-one mapping flag
-     * @param The boolean value to be assigned to the flag
-     * @return boolean
+     * @param use1To1Mapping The boolean value to be assigned to the flag
+     * 
      */
     public void setUse1To1Mapping(boolean use1To1Mapping) {
         this.useOneToOneMapping = use1To1Mapping;
     }
     /**
      * The method checks if symmetric precision flag is used
-     * @return boolean
+     * @return boolean - true if symmetric precision is used
      */
     public boolean isSymmetricPrecision() {
         return symmetricPrecision;
     }
     /**
      * The method sets the symmetric precision flag
-     * @param The boolean value to be assigned to the flag
-     * @return boolean
+     * @param symmetricPrecision The boolean value to be assigned to the flag
      */
     public void setSymmetricPrecision(boolean symmetricPrecision) {
         this.symmetricPrecision = symmetricPrecision;

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * This class contains the gold standard mapping and the source and target URIs
  *
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

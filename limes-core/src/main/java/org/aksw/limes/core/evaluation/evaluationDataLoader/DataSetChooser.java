@@ -31,7 +31,7 @@ import de.uni_leipzig.simba.selfconfig.Experiment;*/
  * Class to grant central access to evaluation datasets.
  *
  * @author Klaus Lyko
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */
@@ -115,7 +115,9 @@ public class DataSetChooser {
      * @param a
      *            DataSets enum
      * @return HashMap
-     *         <table>
+     *         <table summary="This table shows the list of information required to load the dataset which are stored in this hash map as a key that represents
+     *         the information title and the value of such item">
+     *         <caption>Paths and files required to load a dataset</caption>
      *         <tr>
      *         <th>String key</th>
      *         <th>Object data</th>
@@ -144,7 +146,7 @@ public class DataSetChooser {
      *         <td>MapKey.EVALUATION_FILENAME</td>
      *         <td></td>
      *         </tr>
-     *         <p>
+
      *         <tr>
      *         <td>MapKey.SOURCE_CACHE</td>
      *         <td>Source Cache</td>
@@ -730,6 +732,7 @@ public class DataSetChooser {
 
     /**
      * Static getter for the common evaluation folder,
+     * @return String- the path to the evaluation folder
      */
     public static String getEvalFolder() {
         return "resources/results/";

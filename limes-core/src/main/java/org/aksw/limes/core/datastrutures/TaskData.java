@@ -11,7 +11,7 @@ import java.util.List;
  * This class contains all information regarding a dataset used for evaluating an algorithm.<br>
  * It includes the name, cache of the source dataset, cache of the target dataset, the mapping predicted and the gold standard
  *
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

@@ -12,7 +12,7 @@ import java.util.Set;
  * a given Mapping by calc. how close it is to an assumed 1-to-1 Mapping between source and
  * target.
  *
- * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  * @author ngonga
  * @deprecated Use {@link PseudoFMeasure} instead
  */
@@ -32,7 +32,7 @@ public class PseudoFM {
      * Use this constructor to toggle between symmetric precision (true) and the older asymmetric
      * Pseudo-Precision (false)
      *
-     * @param symmetricPrecision
+     * @param symmetricPrecision sets/clears the flag for symmetric precision
      */
     public PseudoFM(final boolean symmetricPrecision) {
         this();
@@ -59,8 +59,6 @@ public class PseudoFM {
      *         Target URIs
      * @param result
      *         Mapping resulting from ML algorihtms
-     * @param beta
-     *         Beta for F-beta
      * @return Pseudo measure
      */
     public double getPseudoFMeasure(List<String> sourceUris, List<String> targetUris,

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
  * This Factory class gives a measure object based on the specified measure type.<br>
  * This object can be used through its method calculate() to evaluate the generated mappings
  *
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

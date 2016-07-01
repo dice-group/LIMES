@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 /**
  * It can be defined as the ratio of the retrieved correct results relative to the total number of the retrieved results,i.e. Tp/(Tp+Fp).
  *
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

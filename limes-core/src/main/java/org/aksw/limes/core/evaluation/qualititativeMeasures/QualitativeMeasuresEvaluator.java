@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * The class implements the evaluate method to evaluate mappings against several qualitative measures
  *
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

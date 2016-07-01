@@ -9,7 +9,7 @@ import org.aksw.limes.core.ml.setting.LearningParameter;
 /**
  * This class combines a machine learning algorithm information to be executed  
  *
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

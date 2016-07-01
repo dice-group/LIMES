@@ -4,7 +4,7 @@ package org.aksw.limes.core.datastrutures;
 /**
  * This generic class combines pair of data  from different datatypes
  *
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

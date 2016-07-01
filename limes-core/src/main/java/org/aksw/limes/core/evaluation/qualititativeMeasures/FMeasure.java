@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 /**
  * F-Measure is the weighted average of the precision and recall
  *
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

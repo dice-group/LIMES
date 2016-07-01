@@ -7,7 +7,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
  * This data will be mostly given as a mapping
  *
  * @author ngonga
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */
@@ -20,7 +20,7 @@ public interface IOracle {
      *         First instance in instance pair
      * @param uri2
      *         Second instance in instance pair
-     * @return
+     * @return boolean - true if exist otherwise false
      */
     public boolean ask(String uri1, String uri2);
 

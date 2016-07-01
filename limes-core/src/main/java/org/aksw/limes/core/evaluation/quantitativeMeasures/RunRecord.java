@@ -2,7 +2,7 @@ package org.aksw.limes.core.evaluation.quantitativeMeasures;
 
 /**
  * The class represents the structure of run record where the run quantitative information are recorded
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

@@ -12,9 +12,9 @@ import org.slf4j.LoggerFactory;
  * given Mapping by calculating how close it is to an assumed 1-to-1 Mapping between source and
  * target.
  *
- * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  * @author ngonga
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */
@@ -24,6 +24,7 @@ public class PseudoRefFMeasure extends PseudoFMeasure {
      * The method calculates the pseudo reference F-Measure of the machine learning predictions compared to a gold standard for beta = 1 .
      * @param predictions The predictions provided by a machine learning algorithm.
      * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs.
+     * @param beta this values specifies how F-Measure is biased between precision and recall
      * @return double - This returns the calculated pseudo reference F-Measure.
      */
     public double calculate(AMapping predictions, GoldStandard goldStandard, double beta) {

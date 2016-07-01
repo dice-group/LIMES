@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
  * The class represents the accuracy of the mapping which is defined as the proportion of true results (positive or negative) to the total number
  * of the population, (T+) + (T-)/(+) + (-)),  T+: true positive, T-:True negative(mxn-goldstandard-F+), +: all postitive (gold standard), -: all possible links out of gold standard(mxn-gold)
  *
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

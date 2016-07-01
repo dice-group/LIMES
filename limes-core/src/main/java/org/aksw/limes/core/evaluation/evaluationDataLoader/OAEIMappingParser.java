@@ -18,7 +18,7 @@ import java.io.IOException;
  * This class  is responsible for parsing the mappings generated in the OAEI tests
  *
  * @author klaus
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

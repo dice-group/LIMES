@@ -42,7 +42,7 @@ import java.util.Set;
 /**
  * This evaluator is responsible for evaluating set of datasets that have source, target, gold standard and mappings against set of measures
  *
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */
@@ -60,7 +60,7 @@ public class Evaluator {
     //---------------------------------------------------------------------------------------------------------
 
     /**
-     * @param algorithms  the set of algorithms used to generate the predicted mappings
+     * @param TaskAlgorithms  the set of algorithms used to generate the predicted mappings
      * @param datasets    the set of the datasets to apply the algorithms on them. The should include source Cache, target Cache, goldstandard and predicted mapping
      * @param QlMeasures  the set of qualitative measures
      * @param QnMeasures  the set of quantitative measures
@@ -129,14 +129,14 @@ public class Evaluator {
      
 
    /**
-     * @param algorithms  the set of algorithms used to generate the predicted mappings
+     * @param algorithm  the algorithm used to generate the predicted mappings
      * @param datasets    the set of the datasets to apply the algorithms on them. The should include source Cache, target Cache, goldstandard and predicted mapping
      * @param folds the number of subsamples to divide the data (k)
-     * @param QlMeasures  the set of qualitative measures
-     * @param QnMeasures  the set of quantitative measures
+     * @param qlMeasures  the set of qualitative measures
+     * @param qnMeasures  the set of quantitative measures
      * @return Table -  contains the results corresponding to the algorithms and measures (algorithm,measure,{measure,value})
      * 
-     * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+     * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
      * @version 2016-02-26
      */
     public Table<String, String, Map<EvaluatorType, Double>> crossValidate(AMLAlgorithm algorithm, Set<TaskData> datasets,

@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * TODO Assertions!
  *
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @author Klaus Lyko
  * @version 2015-11-09
  */

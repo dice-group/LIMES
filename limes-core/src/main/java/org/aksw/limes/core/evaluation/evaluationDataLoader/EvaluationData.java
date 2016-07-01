@@ -19,10 +19,10 @@ import java.util.Map;
  * Class to specify evaluation parameters. Hold all neeeded data: caches, ConfigReader, and additional folder settings.
  * <p>
  * To support the older HashMap setting,
- * it provides a static constructor-like method <code>buildFromHashMap(Map<MapKey, Object> map)</code>.
+ * it provides a static constructor-like method  {@code buildFromHashMap(Map<MapKey, Object> map)}.
  *
  * @author Klaus Lyko
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

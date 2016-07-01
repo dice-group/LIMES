@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
  * This class represents a naive oracle
  *
  * @author ngonga
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */
@@ -36,7 +36,7 @@ public class SimpleOracle implements IOracle {
         return (mapping.contains(uri1, uri2) || mapping.contains(uri2, uri1));
     }
     /** Loads the oracle with the given mapping
-     * @param the source mapping to assign to oracle*/
+     * @param m the source mapping to assign to oracle*/
 
     public void loadData(AMapping m) {
         mapping = m;

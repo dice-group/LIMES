@@ -5,8 +5,8 @@ import java.util.List;
 
 /**
  * An Interface specifies the method signatures to be implemented by all quantitative measures
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */
@@ -32,6 +32,7 @@ public interface IQuantitativeMeasure {
     /**
      * It sets the run record with its information
      * @param runId the id of the run
+     * @param record the run record data
      */
     void setRun(long runId, RunRecord record);
     /**

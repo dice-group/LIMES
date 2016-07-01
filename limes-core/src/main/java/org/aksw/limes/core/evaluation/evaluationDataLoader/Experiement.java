@@ -18,7 +18,7 @@ import java.io.InputStreamReader;
 /**
  * The class reads an OAEI from a file
  * @author ngonga
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

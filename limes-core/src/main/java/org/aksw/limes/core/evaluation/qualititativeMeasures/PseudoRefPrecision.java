@@ -11,9 +11,9 @@ import org.slf4j.LoggerFactory;
  * given Mapping by calculating how close it is to an assumed 1-to-1 Mapping between source and
  * target.
  *
- * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  * @author ngonga
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

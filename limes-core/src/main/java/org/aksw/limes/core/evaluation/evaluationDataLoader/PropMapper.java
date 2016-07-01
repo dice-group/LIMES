@@ -15,7 +15,7 @@ import java.io.IOException;
  * Just a little helper method to get PropertyMappings of the evaluation datasets.
  *
  * @author Klaus Lyko
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */
@@ -59,7 +59,7 @@ public class PropMapper {
 
     /**
      * Get propertyMapping from a file with the same name as the LIMES config file without ".xml" concateneted with
-     * "propertymatch". Content should be lines <i>Source Property \t Target Property \t {"number", "string"}.
+     * "propertymatch". Content should be lines <i>Source Property \t Target Property \t {"number", "string"}</i>.
      * E.g. "dbo:name	refs:label	string".
      *
      * @param folder

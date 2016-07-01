@@ -15,7 +15,7 @@ import java.util.Set;
  * a given Mapping by calc. how close it is to an assumed 1-to-1 Mapping between source and
  * target.
  *
- * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  * @author ngonga
  * @author mofeed hassan
  * @version 1.0
@@ -31,7 +31,7 @@ public class PseudoRecall extends APseudoPRF {
      * Use this constructor to toggle between symmetric precision (true) and the older asymmetric
      * Pseudo-Precision (false)
      *
-     * @param symmetricPrecision
+     * @param symmetricPrecision sets/resets the symmetric precision flag
      */
     public PseudoRecall(final boolean symmetricPrecision) {
         this();

@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
  * It measures how far the algorithm retrieved correct results out of the all existed correct results.<br>
  * It is defined to be the ratio between the true positive to the total number of correct results whether retrieved or not
  *
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

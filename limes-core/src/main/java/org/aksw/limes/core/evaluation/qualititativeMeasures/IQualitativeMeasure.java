@@ -6,8 +6,8 @@ import org.aksw.limes.core.io.mapping.AMapping;
 /**
  * An Interface specifies the calculate method signature to be implemented by all qualitative measures
  *
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */

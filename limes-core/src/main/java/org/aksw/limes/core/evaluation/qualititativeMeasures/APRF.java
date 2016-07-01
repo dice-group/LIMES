@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
  * It contains set of methods that calculate the values of <b>true-positive</b>, <b>false-positive</b>, <b>true-negative</b> and <b>false-negative</b> which
  * are used by evaluators classes to evaluate the mappings results.<br>
  *
- * @author Klaus Lyko <lyko@informatik.uni-leipzig.de>
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */
@@ -62,7 +62,7 @@ public abstract class APRF implements IQualitativeMeasure {
 
     /**
     * The method calculates the true-negative results such that the result is claimed by a machine learning as a negative one and the claim is true.<br>
-     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
+     * @param goldStandardSize It represents the size of the gold standard (reference mapping)
      * @param sourceDatasetSize It represents the number of the source URIs
      * @param targetDatasetSize It represents the number of the source URIs
      * @return double This returns the number of true negative links

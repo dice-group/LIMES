@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
  * 'https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve'>
  * here</a>).
  *
- * @author Mofeed Hassan <mounir@informatik.uni-leipzig.de>
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @author Klaus Lyko <lyko@informatik.uni-leizig.de>
  * @version 1.0
  */

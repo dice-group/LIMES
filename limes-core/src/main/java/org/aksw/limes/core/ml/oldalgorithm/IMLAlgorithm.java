@@ -6,7 +6,7 @@ import org.aksw.limes.core.ml.setting.LearningSetting;
 import java.util.Set;
 
 /**
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @author Klaus Lyko
  */
 @Deprecated
