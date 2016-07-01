@@ -1,5 +1,4 @@
 language: java
 sudo: false
 
-script:
-  - cd limes-core && mvn test
+script: cd limes-core && mvn install -U -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.test.skip=true && mvn test
