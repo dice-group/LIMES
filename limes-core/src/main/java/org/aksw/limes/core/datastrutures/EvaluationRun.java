@@ -5,6 +5,7 @@ package org.aksw.limes.core.datastrutures;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.RunRecord;
@@ -16,28 +17,29 @@ import org.aksw.limes.core.evaluation.quantitativeMeasures.RunRecord;
  * @since 1.0
  */
 
-public class evaluationRun {
+public class EvaluationRun {
+    private final int stringSize=200;
     /** The name of the used machine learning algorithm e.g. EAGLE*/
-    String algorithmName="";
+    private String algorithmName="";
     /** The impementation of the machine learning algorithm e.g. UNSUPERVISED */
-    String implementationType="";
+    private String implementationType="";
     /** The used dataset for evaluation*/
-    String datasetName="";
+    private String datasetName="";
     /** The qualitative measures scores e.g. F-MEASURE*/
     Map<EvaluatorType, Double> qualititativeScores = new HashMap<EvaluatorType, Double>();
     /** The quantitative measures record */
     RunRecord quanititativeRecord = new RunRecord();
     
-    public evaluationRun(){};
+    public EvaluationRun(){};
     /** 
      * @param  algorithmName The name of the evaluated algorithm
      * @param  datasetName The name of used dataset for evaluation
      * @param  evaluatorsScores A map of pairs (evaluator,score), e.g (F-MEASURE,0.9)
      * */
-    public evaluationRun(String algorithmName, String datasetName,Map<EvaluatorType, Double> evaluatorsScores)
+    public EvaluationRun(String algorithmName, String datasetName,Map<EvaluatorType, Double> evaluatorsScores)
     {
-        this.algorithmName=algorithmName;
-        this.datasetName = datasetName;
+        this.algorithmName = algorithmName;
+        this.datasetName=datasetName;
         for (EvaluatorType evaluator : evaluatorsScores.keySet()) {
             this.qualititativeScores.put(evaluator, evaluatorsScores.get(evaluator));
         }
@@ -48,11 +50,11 @@ public class evaluationRun {
      * @param  datasetName The name of used dataset for evaluation
      * @param  evaluatorsScores A map of pairs (evaluator,score), e.g (F-MEASURE,0.9)
      * */
-    public evaluationRun(String algorithmName,String implementation, String datasetName,Map<EvaluatorType, Double> evaluatorsScores)
+    public EvaluationRun(String algorithmName,String implementation, String datasetName,Map<EvaluatorType, Double> evaluatorsScores)
     {
-        this.algorithmName=algorithmName;
-        this.datasetName = datasetName;
-        this.implementationType = implementation;
+        this.algorithmName = algorithmName;
+        this.datasetName=datasetName;
+        this.implementationType=implementation;
         for (EvaluatorType evaluator : evaluatorsScores.keySet()) {
             this.qualititativeScores.put(evaluator, evaluatorsScores.get(evaluator));
         }
@@ -63,23 +65,31 @@ public class evaluationRun {
      * @param  evaluatorsScores A map of pairs (evaluator,score), e.g (F-MEASURE,0.9)
      * @param  quantitativeRecord A record of the quantitative measures values
      * */
-    public evaluationRun(String algorithmName, String datasetName,Map<EvaluatorType, Double> evaluatorsScores, RunRecord quantitativeRecord)
+    public EvaluationRun(String algorithmName, String datasetName,Map<EvaluatorType, Double> evaluatorsScores, RunRecord quantitativeRecord)
     {
-        this.algorithmName=algorithmName;
-        this.datasetName = datasetName;
+        this.algorithmName = algorithmName;
+        this.datasetName=datasetName;
         for (EvaluatorType evaluator : evaluatorsScores.keySet()) {
             this.qualititativeScores.put(evaluator, evaluatorsScores.get(evaluator));
         }
         this.quanititativeRecord = quantitativeRecord;
     }
+    
+    
+    
+    public Set<EvaluatorType> getQualititativeMeasures()
+    {
+        return qualititativeScores.keySet();
+    }
+    
     /**
      * This method displays the evaluation run values in a tabular form
      */
     public void display()
     {
         System.out.println("==================================================================================================================");
-        System.out.println("ALGORITHM NAME\tIMPLEMENTATION\tDATASET");
-        System.out.println(algorithmName+"\t"+implementationType+"\t"+datasetName);
+        System.out.println("ALGORITHM_NAME\tIMPLEMENTATION\tDATASET");
+        System.out.println(getAlgorithmName()+"\t"+getImplementationType()+"\t"+getDatasetName());
         System.out.println("------------------------------------------------------------------------------------------------------------------");
         for (EvaluatorType evaluator : qualititativeScores.keySet()) {
             System.out.println(evaluator+"\t"+qualititativeScores.get(evaluator));
@@ -90,21 +100,36 @@ public class evaluationRun {
     }
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(200);
-        sb.append(algorithmName);
-        sb.append(":");
-        sb.append(implementationType);
-        sb.append(":");
-        sb.append(datasetName);
-        sb.append(":");
+        String erString = Serialize(":");
+        return erString+"\n";
+    }
+    
+    public String Serialize(String separator)
+    {
+        StringBuilder sb = new StringBuilder(stringSize);
+        sb.append(getAlgorithmName());
+        sb.append(separator);
+        sb.append(getImplementationType());
+        sb.append(separator);
+        sb.append(getDatasetName());
+        sb.append(separator);
         for (EvaluatorType evaluator : qualititativeScores.keySet()) {
-            sb.append(evaluator);
-            sb.append("=");
             sb.append(qualititativeScores.get(evaluator).toString());
-            sb.append(":");
+            sb.append(separator);
         }
-        sb.append("\n");
         return sb.toString();
     }
+    public String getAlgorithmName() {
+        return algorithmName;
+    }
+
+    public String getImplementationType() {
+        return implementationType;
+    }
+
+    public String getDatasetName() {
+        return datasetName;
+    }
+
 
 }

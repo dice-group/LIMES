@@ -247,14 +247,14 @@ public class DataSetChooser {
 
         param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
                 (String) param.get(MapKey.CONFIG_FILE)));
-        param.put(MapKey.SOURCE_CACHE, Experiement.readOAEIFile(
+        param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFile(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
-        param.put(MapKey.SOURCE_CACHE, Experiement.readOAEIFile(
+        param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFile(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
 
-        param.put(MapKey.TARGET_CACHE, Experiement.readOAEIFile(
+        param.put(MapKey.TARGET_CACHE, Experiment.readOAEIFile(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.TARGET_FILE), type));
-        param.put(MapKey.REFERENCE_MAPPING, Experiement.readOAEIMapping(
+        param.put(MapKey.REFERENCE_MAPPING, Experiment.readOAEIMapping(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.REFERENCE_FILE)));
 
         param.put(MapKey.SOURCE_CLASS, "http://www.okkam.org/ontology_person1.owl#Person");
@@ -284,14 +284,14 @@ public class DataSetChooser {
 
         param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
                 (String) param.get(MapKey.CONFIG_FILE)));
-        param.put(MapKey.SOURCE_CACHE, Experiement.readOAEIFile(
+        param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFile(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
-        param.put(MapKey.SOURCE_CACHE, Experiement.readOAEIFile(
+        param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFile(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
 
-        param.put(MapKey.TARGET_CACHE, Experiement.readOAEIFile(
+        param.put(MapKey.TARGET_CACHE, Experiment.readOAEIFile(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.TARGET_FILE), type));
-        param.put(MapKey.REFERENCE_MAPPING, Experiement.readOAEIMapping(
+        param.put(MapKey.REFERENCE_MAPPING, Experiment.readOAEIMapping(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.REFERENCE_FILE)));
 
         param.put(MapKey.SOURCE_CLASS, "http://www.okkam.org/ontology_person1.owl#Person");
@@ -393,11 +393,11 @@ public class DataSetChooser {
         param.put(MapKey.CONFIG_READER, cR);
         param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
                 (String) param.get(MapKey.CONFIG_FILE)));
-        param.put(MapKey.SOURCE_CACHE, Experiement.readOAEIFile(
+        param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFile(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
-        param.put(MapKey.TARGET_CACHE, Experiement.readOAEIFile(
+        param.put(MapKey.TARGET_CACHE, Experiment.readOAEIFile(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.TARGET_FILE), type));
-        param.put(MapKey.REFERENCE_MAPPING, Experiement.readOAEIMapping(
+        param.put(MapKey.REFERENCE_MAPPING, Experiment.readOAEIMapping(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.REFERENCE_FILE)));
 
         param.put(MapKey.SOURCE_CLASS, "http://www.okkam.org/ontology_person1.owl#Person");
@@ -468,17 +468,17 @@ public class DataSetChooser {
         param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
                 (String) param.get(MapKey.CONFIG_FILE)));
         param.put(MapKey.SOURCE_CACHE,
-                Experiement.readOAEIFile(
+                Experiment.readOAEIFile(
                         /* (String)param.get(MapKey.BASE_FOLDER)+ */param.get(MapKey.DATASET_FOLDER)
                                 + (String) param.get(MapKey.SOURCE_FILE),
                         type));
         param.put(MapKey.TARGET_CACHE,
-                Experiement.readOAEIFile(
+                Experiment.readOAEIFile(
                         /* (String)param.get(MapKey.BASE_FOLDER)+ */param.get(MapKey.DATASET_FOLDER)
                                 + (String) param.get(MapKey.TARGET_FILE),
                         type));
         param.put(MapKey.REFERENCE_MAPPING,
-                Experiement.readOAEIMapping(
+                Experiment.readOAEIMapping(
                         /* (String)param.get(MapKey.BASE_FOLDER)+ */param.get(MapKey.DATASET_FOLDER)
                                 + (String) param.get(MapKey.REFERENCE_FILE)));
 

@@ -22,8 +22,8 @@ import java.io.InputStreamReader;
  * @version 1.0
  * @since 1.0
  */
-public class Experiement {
-    static Logger logger = LoggerFactory.getLogger(Experiement.class);
+public class Experiment {
+    static Logger logger = LoggerFactory.getLogger(Experiment.class);
     static String SEPARATOR = "\t";
     static String CSVSEPARATOR = ",";
 

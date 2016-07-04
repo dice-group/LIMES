@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ public class QualitativeMeasuresEvaluator {
     static Logger logger = LoggerFactory.getLogger(QualitativeMeasuresEvaluator.class);
 
 
-    Map<EvaluatorType, Double> evaluations = new HashMap<EvaluatorType, Double>();
+    Map<EvaluatorType, Double> evaluations = new LinkedHashMap<EvaluatorType, Double>(); //new HashMap<EvaluatorType, Double>();
 
 
     /**
