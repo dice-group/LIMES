@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.TaskAlgorithm;
 import org.aksw.limes.core.datastrutures.TaskData;
-import org.aksw.limes.core.datastrutures.evaluationRun;
+import org.aksw.limes.core.datastrutures.EvaluationRun;
 import org.aksw.limes.core.evaluation.evaluator.Evaluator;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.slf4j.Logger;
@@ -46,9 +46,12 @@ public class EvaluatorsTest {
             Set<EvaluatorType> evaluators = ev.initializeEvaluators();
             List<TaskAlgorithm> algorithms = al.initializeMLAlgorithms(algorithmsListData,datasetsList.length);
 
-            List<evaluationRun> results = evaluator.evaluate(algorithms, tasks, evaluators, null);
-            for (evaluationRun er : results) {
+            List<EvaluationRun> results = evaluator.evaluate(algorithms, tasks, evaluators, null);
+            for (EvaluationRun er : results) {
                 er.display();
+            }
+            for (EvaluationRun er : results) {
+                System.out.println(er);
             }
 
         } catch (Exception e) {
@@ -70,11 +73,11 @@ public class EvaluatorsTest {
             Set<TaskData> tasks = ds.initializeDataSets(datasetsList);
             Set<EvaluatorType> evaluators = ev.initializeEvaluators();
             List<TaskAlgorithm> algorithms = al.initializeMLAlgorithms(algorithmsListData,datasetsList.length);
-            List<evaluationRun> results =null;
+            List<EvaluationRun> results =null;
             for (TaskAlgorithm tAlgorithm : algorithms) {
                 results = evaluator.crossValidate(tAlgorithm.getMlAlgorithm(), tasks,folds, evaluators, null);
             }
-            for (evaluationRun er : results) {
+            for (EvaluationRun er : results) {
                 er.display();
             }
             /*for (TaskAlgorithm tAlgorithm : algorithms) {
