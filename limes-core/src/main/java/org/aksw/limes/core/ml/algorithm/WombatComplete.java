@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * The complete Wombat algorithm (slow implementation)
  * 
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jun 7, 2016
  */
 public class WombatComplete extends AWombat {

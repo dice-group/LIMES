@@ -15,7 +15,7 @@ import java.util.TreeSet;
  * an instance contains all the data linked to a particular instance ;)
  *
  * @author ngonga
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Nov 25, 2015
  */
 public class Instance implements Comparable<Object>, Serializable {

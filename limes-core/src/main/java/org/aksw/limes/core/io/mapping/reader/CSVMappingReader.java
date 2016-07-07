@@ -10,7 +10,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 /**
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jun 3, 2016
  */
 public class CSVMappingReader extends AMappingReader {

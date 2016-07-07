@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author ngonga
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Nov 23, 2015
  */
 public class CsvQueryModule implements IQueryModule {

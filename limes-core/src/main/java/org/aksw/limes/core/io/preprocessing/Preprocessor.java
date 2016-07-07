@@ -10,7 +10,7 @@ import java.util.regex.PatternSyntaxException;
 
 /**
  * @author ngonga
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Nov 23, 2015
  */
 public class Preprocessor {

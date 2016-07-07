@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 
 
 /**
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jan 15, 2016
  */
 public class XMLConfigurationReaderTest {

@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author ngonga
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Nov 23, 2015
  */
 public class QueryModuleFactory {

@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * metrics of the metric factory for maximum flexibility.
  *
  * @author ngonga
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Nov 23, 2015
  */
 public class VectorQueryModule implements IQueryModule {

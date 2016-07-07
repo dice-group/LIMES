@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jun 6, 2016
  */
 public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQueryModule {

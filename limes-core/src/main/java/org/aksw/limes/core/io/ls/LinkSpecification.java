@@ -9,7 +9,7 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 /**
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @author Klaus Lyko
  * @version Nov 12, 2015
  */

@@ -9,7 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Nov 12, 2015
  */
 public class RDFMappingWriter implements IMappingWriter {

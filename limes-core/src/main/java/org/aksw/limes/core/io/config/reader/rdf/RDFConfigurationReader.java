@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jun 03, 2016
  */
 public class RDFConfigurationReader extends AConfigurationReader {

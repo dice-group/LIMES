@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author ngonga
  * @author Klaus Lyko
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Nov 25, 2015
  */
 public class MemoryCache extends Cache {

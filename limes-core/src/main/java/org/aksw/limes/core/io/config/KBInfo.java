@@ -16,7 +16,7 @@ import java.util.Map.Entry;
 /**
  * Contains the information necessary to access a knowledge base
  * 
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jun 3, 2016
  */
 public class KBInfo implements Serializable {

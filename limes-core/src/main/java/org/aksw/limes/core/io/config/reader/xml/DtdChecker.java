@@ -14,7 +14,7 @@ import org.xml.sax.SAXParseException;
  * Checks a link specification against the LIMES DTD.
  *
  * @author ngonga
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jun 03, 2016
  */
 public class DtdChecker implements org.xml.sax.ErrorHandler {

@@ -5,7 +5,7 @@ package org.aksw.limes.core.io.cache;
  * that do not fit in memory.
  *
  * @author ngonga
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Nov 23, 2015
  */
 public class FileCache {

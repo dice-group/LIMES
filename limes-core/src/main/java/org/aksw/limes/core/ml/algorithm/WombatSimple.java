@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * Simple implementation of the Wombat algorithm
  * Fast implementation, that is not complete
  * 
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jun 7, 2016
  */
 public class WombatSimple extends AWombat {

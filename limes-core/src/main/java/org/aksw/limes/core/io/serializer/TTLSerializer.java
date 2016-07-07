@@ -19,7 +19,7 @@ import java.util.TreeSet;
 
 /**
  * @author ngonga
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Nov 25, 2015
  */
 public class TTLSerializer implements ISerializer {

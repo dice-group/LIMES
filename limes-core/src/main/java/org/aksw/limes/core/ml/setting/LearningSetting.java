@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @author Klaus Lyko
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version May 17, 2016
  * @deprecated Use {@link}{@link LearningParameter} instead
  */

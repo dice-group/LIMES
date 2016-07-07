@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Nov 25, 2015
  */
 public class CSVSerializer extends TabSeparatedSerializer {
