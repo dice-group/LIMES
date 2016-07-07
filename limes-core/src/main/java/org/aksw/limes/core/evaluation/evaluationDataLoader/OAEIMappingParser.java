@@ -38,15 +38,16 @@ public class OAEIMappingParser extends DefaultHandler {
         this.xmlFile = file;
     }
 
-  /*  *//**
-     * @param args
-     *//*
+  /*  
     public static void main(String[] args) {
         OAEIMappingParser parser = new OAEIMappingParser("resources/OAEI2014/oaei2014_identity_mappings.rdf");
         AMapping m = parser.parseDocument();
         System.out.println(m.size());
     }*/
-
+/**
+ * 
+ * @return AMapping-The mapping of the two datasets
+ */
     public AMapping parseDocument() {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         try {
