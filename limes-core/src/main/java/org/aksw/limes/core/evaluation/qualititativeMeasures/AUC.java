@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
- * @author Klaus Lyko <lyko@informatik.uni-leizig.de>
+ * @author Klaus Lyko (lyko@informatik.uni-leizig.de)
  * @version 1.0
  */
 public class AUC extends APRF implements IQualitativeMeasure {

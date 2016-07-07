@@ -54,7 +54,7 @@ public class EvaluationData {
      *
      * @param map
      *         HashMap meeting the standards of the {@link DataSetChooser}.
-     * @return
+     * @return EvaluationData-Contains all information regarding the evaluation such as dataset folder, dataset files and property mapping
      */
     public static EvaluationData buildFromHashMap(Map<MapKey, Object> map) {
         EvaluationData data = new EvaluationData();

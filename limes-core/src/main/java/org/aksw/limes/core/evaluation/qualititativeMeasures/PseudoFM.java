@@ -98,7 +98,7 @@ public class PseudoFM {
      *         List of target uris
      * @param result
      *         Mapping of source to targer uris
-     * @return Pseudo precision score
+     * @return double-Pseudo precision score
      */
     public double getPseudoPrecision(List<String> sourceUris, List<String> targetUris, AMapping result) {
         AMapping res = result;
@@ -123,17 +123,11 @@ public class PseudoFM {
 
     /**
      * The assumption here is a follows. We compute how many of the s and t
-     * were mapped.
-     *
-     * @param sourceUris
-     *         URIs in source cache
-     * @param targetUris
-     *         URIs in target cache
-     * @param result
-     *         Mapping computed by our learner
-     * @param Run
-     *         mapping minimally and apply filtering. Compare the runtime of both approaches
-     * @return Pseudo recall
+     * were mapped. 
+     * @param sourceUris URIs in source cache
+     * @param targetUris URIs in target cache
+     * @param result Mapping computed by our learner
+     * @return double-Pseudo recall
      */
     public double getPseudoRecall(List<String> sourceUris, List<String> targetUris,
                                   AMapping result) {

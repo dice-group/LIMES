@@ -25,9 +25,8 @@ public class PropMapper {
 
     /**
      * We basically decide by the name of the config file.
-     *
-     * @param configFile
-     * @return
+     * @param configFile The configureation file path
+     * @return PropertyMapping-The properties mapping between the two datasets
      */
     public static PropertyMapping getPropertyMapping(String configFile) {
         AConfigurationReader cR = new RDFConfigurationReader(configFile);
@@ -36,6 +35,12 @@ public class PropMapper {
 
     }
 
+    /**
+     * 
+     * @param cR An AConfigurationReader object that contains the configuration informmation
+     * @param name The name of the property mapping file
+     * @return PropertyMapping-The properties mapping between the two datasets
+     */
     public static PropertyMapping getPropertyMapping(AConfigurationReader cR, String name) {
 
         PropertyMapping pM = new PropertyMapping();
@@ -62,10 +67,8 @@ public class PropMapper {
      * "propertymatch". Content should be lines <i>Source Property \t Target Property \t {"number", "string"}</i>.
      * E.g. "dbo:name	refs:label	string".
      *
-     * @param folder
-     *         Path of the folder
-     * @param name
-     *         Name of the LIMES config file.
+     * @param folder   Path of the folder
+     * @param name     Name of the LIMES config file.
      * @return PropertyMapping read from the file.
      */
     @SuppressWarnings("finally")

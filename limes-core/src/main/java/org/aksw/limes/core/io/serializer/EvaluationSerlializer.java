@@ -70,10 +70,8 @@ public class EvaluationSerlializer {
      * Gets a list of evaluation run's results and serializes it to a file using the specified separator. The method
      * assume that the class already knows the separator which specifies the file extension too
      *
-     * @param m
-     *         List to serialize
-     * @param file
-     *         File in which the mapping is to be serialized
+     * @param evaluation List to serialize
+     * @param file   The file in which the mapping is to be serialized
      */
     
     public void writeToFile(List<EvaluationRun> evaluation, String file) {
