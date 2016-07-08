@@ -21,8 +21,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Jun 03, 2016
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Jul 8, 2016
  */
 public class RDFConfigurationReader extends AConfigurationReader {
     private static final Logger logger = LoggerFactory.getLogger(RDFConfigurationReader.class.getName());
@@ -32,7 +32,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
     private Resource specsSubject;
 
     /**
-     * @author sherif
+     * @param fileNameOrUri file name or URI to be read
      */
     public RDFConfigurationReader(String fileNameOrUri) {
         super(fileNameOrUri);
@@ -41,9 +41,8 @@ public class RDFConfigurationReader extends AConfigurationReader {
     /**
      * read RDF model from file/URL
      *
-     * @param fileNameOrUri
-     * @return
-     * @author sherif
+     * @param fileNameOrUri file name or URI to be read
+     * @return Model that contains the data in the fileNameOrUri
      */
     public static Model readModel(String fileNameOrUri) {
         long startTime = System.currentTimeMillis();
@@ -71,10 +70,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
     }
 
     /**
-     * @param inputFile
-     *         path to RDF configuration file
      * @return A filled Configuration object from the inputFile
-     * @author sherif
      */
     @Override
     public Configuration read() {
@@ -82,9 +78,8 @@ public class RDFConfigurationReader extends AConfigurationReader {
     }
 
     /**
-     * @param configurationModel
+     * @param configurationModel A model filled with the configurations
      * @return true if the configurationModel contains all mandatory properties
-     * @author sherif
      */
     public Configuration read(Model configurationModel) {
         configModel = configurationModel;
@@ -224,11 +219,11 @@ public class RDFConfigurationReader extends AConfigurationReader {
     /**
      * Read either the source or the dataset description
      *
-     * @param kb
-     * @author sherif
+     * @param kb knowledge base resource URI
      */
     public void readKBDescription(Resource kb) {
         KBInfo kbinfo = null;
+
         if (configModel.contains(kb, RDF.type, LIMES.SourceDataset)) {
             kbinfo = configuration.getSourceInfo();
         } else if (configModel.contains(kb, RDF.type, LIMES.TargetDataset)) {

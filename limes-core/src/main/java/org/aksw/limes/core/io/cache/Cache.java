@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Nov 25, 2015
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Jul 8, 2015
  */
 public abstract class Cache implements ICache {
     public abstract void addInstance(Instance i);
@@ -42,7 +42,7 @@ public abstract class Cache implements ICache {
      *
      * @param propertyProcess
      *         Map maps propertyNames to preprocessing functions.
-     * @return
+     * @return cacheof processed data
      */
     public abstract Cache processData(Map<String, String> propertyProcess);
 
@@ -55,7 +55,7 @@ public abstract class Cache implements ICache {
      *         Name of the new property to process data into.
      * @param processingChain
      *         Preprocessing Expression.
-     * @return
+     * @return Cache after property add 
      */
     public abstract Cache addProperty(String sourcePropertyName, String targetPropertyName, String processingChain);
 

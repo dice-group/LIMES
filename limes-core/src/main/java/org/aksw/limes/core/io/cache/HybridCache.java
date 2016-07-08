@@ -24,10 +24,10 @@ import java.util.Iterator;
  * Enhancing it with folders: specify the folder, where the application has
  * permissions to read and write files.
  *
- * @author ngonga
+ * @author ngonga <ngonga@informatik.uni-leipzig.de>
  * @author Lyko
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Nov 25, 2015
+ * @version Jul 8, 2016
  */
 public class HybridCache extends MemoryCache implements Serializable {
     private static final long serialVersionUID = -2268344215686055231L;
@@ -61,7 +61,7 @@ public class HybridCache extends MemoryCache implements Serializable {
      * @param file
      *         File from which the content is to be loaded
      * @return A Hybrid cache
-     * @throws IOException
+     * @throws IOException if file not found
      */
     public static HybridCache loadFromFile(File file) throws IOException {
         String path = file.getAbsolutePath();
@@ -94,7 +94,7 @@ public class HybridCache extends MemoryCache implements Serializable {
      *         Path to the parent folder of the "cache" folder.
      * @param kb
      *         Endpoint specification.
-     * @return
+     * @return HybridCache of the data
      */
     public static HybridCache getData(File folder, KBInfo kb) {
 
@@ -292,7 +292,6 @@ public class HybridCache extends MemoryCache implements Serializable {
      *
      * @param file
      *         File wherein the content of the cache is to be serialized
-     * @throws IOException
      */
     public void saveToFile(File file) {
         FileOutputStream out;
@@ -312,7 +311,7 @@ public class HybridCache extends MemoryCache implements Serializable {
     /**
      * Returns the file  pointing to the parent folder of cache.
      *
-     * @return
+     * @return File folder
      */
     public File getFolder() {
         return folder;

@@ -10,12 +10,15 @@ import org.aksw.limes.core.io.cache.Cache;
 /**
  * Interface for query modules
  *
- * @author ngonga
+ * @author ngonga <ngonga@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Jul 8, 2016
  */
 public interface IQueryModule {
 
+
     /**
-     * @param cache
+     * @param cache Cache object to be filled
      */
-    public void fillCache(Cache c);
+    public void fillCache(Cache cache);
 }

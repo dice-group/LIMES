@@ -16,15 +16,15 @@ import java.util.Map.Entry;
 /**
  * Contains the information necessary to access a knowledge base
  * 
- * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Jun 3, 2016
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Jul 8, 2016
  */
 public class KBInfo implements Serializable {
 
     private static final String DEFAULT_QUERY_TYPE = "sparql";
-    
+
     private static final long serialVersionUID = 7915400434442160847L;
-    
+
     protected String id;
     protected String endpoint;
     protected String graph;
@@ -49,37 +49,23 @@ public class KBInfo implements Serializable {
         optionalProperties = new ArrayList<String>();
         prefixes = new HashMap<String, String>();
         functions = new HashMap<String, Map<String, String>>();
-        
+
         pageSize = -1;      //-1 means query all at once
         type = DEFAULT_QUERY_TYPE;    //default value
     }
 
     /**
-     * @param var
-     * @author sherif
+     * @param var variable name
      */
     public KBInfo(String var) {
         this();
         this.var = var;
     }
 
-    /**
-     * @param id
-     * @param endpoint
-     * @param graph
-     * @param var
-     * @param properties
-     * @param restrictions
-     * @param functions
-     * @param prefixes
-     * @param pageSize
-     * @param type
-     * @author sherif
-     */
     public KBInfo(String id, String endpoint, String graph, String var,
-                  List<String> properties, List<String> optionalProperties,
-                  ArrayList<String> restrictions, Map<String, Map<String, String>> functions,
-                  Map<String, String> prefixes, int pageSize, String type) {
+            List<String> properties, List<String> optionalProperties,
+            ArrayList<String> restrictions, Map<String, Map<String, String>> functions,
+            Map<String, String> prefixes, int pageSize, String type) {
         super();
         this.id = id;
         this.endpoint = endpoint;
@@ -316,6 +302,7 @@ public class KBInfo implements Serializable {
     /**
      * Returns the class contained in the restriction
      *
+     * @param expanded is expanded
      * @return Class label
      */
     public String getClassOfendpoint(boolean expanded) {
@@ -337,7 +324,7 @@ public class KBInfo implements Serializable {
     /**
      * Returns class URI if restriction to a rdf:type exists
      *
-     * @return
+     * @return class restriction string
      */
     public String getClassRestriction() {
         String ret = null;

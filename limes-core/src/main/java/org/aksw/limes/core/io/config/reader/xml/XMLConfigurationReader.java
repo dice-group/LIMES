@@ -23,8 +23,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Jun 03, 2016
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Jul 8, 2016
  */
 public class XMLConfigurationReader extends AConfigurationReader {
     private static final Logger logger = LoggerFactory.getLogger(XMLConfigurationReader.class);
@@ -65,9 +65,11 @@ public class XMLConfigurationReader extends AConfigurationReader {
 
     /**
      * Constructor
+     * 
+     * @param xmlFile The input XML file
      */
-    public XMLConfigurationReader(String fileNameOrUri) {
-        super(fileNameOrUri);
+    public XMLConfigurationReader(String xmlFile) {
+        super(xmlFile);
     }
 
     public static void processProperty(KBInfo kbinfo, String property) {
@@ -109,9 +111,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
     /**
      * Returns the content of a node
      *
-     * @param node
-     *            an item of the form <NODE> text </NODE>
-     * @return The text between <NODE> and </NODE>
+     * @param  node NODE tag with text
+     * @return The text within the NODE tag
      */
     public static String getText(Node node) {
 
@@ -144,8 +145,6 @@ public class XMLConfigurationReader extends AConfigurationReader {
      * LIMES DTD and contains everything needed. NB: The path to the DTD must be
      * specified in the input file
      *
-     * @param input
-     *            The input XML file
      * @return filled out configuration if parsing was successful, else false
      */
     @Override
@@ -212,8 +211,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
      * everything needed. NB: The path to the DTD must be specified in the input
      * file
      *
-     * @param input
-     *            The input XML file as Stream
+     * @param input The input XML file as Stream
+     * @param filePath path of the XML file
      * @return true if parsing was successful, else false
      */
     public Configuration validateAndRead(InputStream input, String filePath) {

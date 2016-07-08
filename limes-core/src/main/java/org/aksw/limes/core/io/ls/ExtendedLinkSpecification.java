@@ -5,6 +5,10 @@ import org.aksw.limes.core.io.parser.Parser;
 
 import java.util.ArrayList;
 
+/**
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Jul 8, 2016
+ */
 public class ExtendedLinkSpecification extends LinkSpecification {
 
     public ExtendedLinkSpecification() {
@@ -22,14 +26,12 @@ public class ExtendedLinkSpecification extends LinkSpecification {
     // @Override
 
     /**
-     * Reads a spec expression into its canonical form Don't forget to optimize
-     * the filters by checking (if threshold_left and threshold_right >= theta,
-     * then theta = 0)
+     * Reads a link specification expression into its canonical form Don't forget to optimize
+     * the filters by checking 
+     * (if threshold_left and threshold_right grater than or equals to theta, then theta equals 0)
      *
-     * @param spec
-     *         Spec expression to read
-     * @param theta
-     *         Global threshold
+     * @param spec  Spec expression to read
+     * @param theta Global threshold
      */
     public void readSpec(String spec, double theta) {
 

@@ -6,17 +6,15 @@ import org.aksw.limes.core.io.preprocessing.Preprocessor;
 
 import java.util.*;
 
-//import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implements a cache that is exclusively in memory. Fastest cache as it does
  * not need to read from the hard drive.
  *
- * @author ngonga
+ * @author ngonga <ngonga@informatik.uni-leipzig.de>
  * @author Klaus Lyko
- * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Nov 25, 2015
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Jul 8, 2015
  */
 public class MemoryCache extends Cache {
     // maps uris to instance. A bit redundant as instance contain their URI
@@ -196,7 +194,7 @@ public class MemoryCache extends Cache {
     /**
      * Returns a set of properties (most likely) all instances have.
      *
-     * @return
+     * @return set of all properties
      */
     public Set<String> getAllProperties() {
         // logger.info("Get all properties...");

@@ -14,9 +14,9 @@ import java.util.TreeSet;
  * statements where s is a particular URI. From the point of view of linking, it
  * an instance contains all the data linked to a particular instance ;)
  *
- * @author ngonga
- * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Nov 25, 2015
+ * @author ngonga <ngonga@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Jul 8, 2016
  */
 public class Instance implements Comparable<Object>, Serializable {
     private static final Logger logger = LoggerFactory.getLogger(Instance.class.getName());
@@ -94,7 +94,7 @@ public class Instance implements Comparable<Object>, Serializable {
     /**
      * Return all the values for a given property
      *
-     * @param propUri
+     * @param propUri property URI
      * @return TreeSet of values associated with this URI
      */
     public TreeSet<String> getProperty(String propUri) {
