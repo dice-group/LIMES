@@ -15,6 +15,7 @@ import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.algorithm.lion.DefaultRefinementHeuristic;
 import org.aksw.limes.core.ml.algorithm.lion.RefinementHeuristic;
@@ -125,7 +126,7 @@ public class Lion extends MLAlgorithm {
 
         try {
             lion.init(setting, MappingFactory.createDefaultMapping());
-            MLModel result = lion.learn(MappingFactory.createDefaultMapping());
+            MLResults result = lion.learn(MappingFactory.createDefaultMapping());
             System.out.println(result);
         } catch (InvalidConfigurationException e) {
             // TODO Auto-generated catch block
@@ -158,8 +159,8 @@ public class Lion extends MLAlgorithm {
      *
      * @throws IOException
      */
-    public MLModel learn(AMapping trainingData) {
-        MLModel result = new MLModel();
+    public MLResults learn(AMapping trainingData) {
+        MLResults result = new MLResults();
         // highest accuracy so far, used for pruning
         double highestAccuracy = 0.0;
         SearchTreeNode nextNode;

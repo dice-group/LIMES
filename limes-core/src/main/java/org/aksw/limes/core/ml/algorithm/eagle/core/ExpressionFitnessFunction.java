@@ -1,6 +1,9 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
@@ -15,14 +18,10 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.eagle.util.CacheTrimmer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.jgap.gp.GPFitnessFunction;
 import org.jgap.gp.IGPProgram;
 import org.jgap.gp.impl.ProgramChromosome;
-
-import java.util.HashMap;
-import java.util.Map.Entry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of our custom FitnessFunction.
@@ -33,8 +32,9 @@ import java.util.Map.Entry;
  * FIXME fix QualityMeasures to work on Mappings!
  *
  * @author Klaus Lyko
+ * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
  */
-public class ExpressionFitnessFunction extends GPFitnessFunction implements IFitnessFunction {
+public class ExpressionFitnessFunction extends IGPFitnessFunction {
     public static final String fScore = "fScore";
     public static final String recall = "recall";
     public static final String precision = "precision";
@@ -130,6 +130,10 @@ public class ExpressionFitnessFunction extends GPFitnessFunction implements IFit
         AMapping actualMapping = MappingFactory.createDefaultMapping();
         LinkSpecification spec = (LinkSpecification) pc.getNode(0).execute_object(pc, 0, args);
         String expr = spec.getFilterExpression();
+        
+        if(expr == null)
+        	return 5d; // manually return bad fitness
+        
         if (expr.indexOf("falseProp") > -1) {
             return 8d;
         }

@@ -2,9 +2,9 @@ package org.aksw.limes.core.ml.algorithm;
 
 import java.util.List;
 
+import org.aksw.limes.core.exceptions.NoSuchParameterException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 
 public abstract class AMLAlgorithm {
@@ -14,7 +14,7 @@ public abstract class AMLAlgorithm {
     public String getName() {
         return getMl().getName();
     }
-
+    
     public ACoreMLAlgorithm getMl() {
         return ml;
     }
@@ -24,7 +24,7 @@ public abstract class AMLAlgorithm {
         getMl().init(lp, source, target);
     }
 
-    public AMapping predict(Cache source, Cache target, MLModel mlModel) {
+    public AMapping predict(Cache source, Cache target, MLResults mlModel) {
         return getMl().predict(source, target, mlModel);
     }
 
@@ -47,5 +47,15 @@ public abstract class AMLAlgorithm {
     public void setMl(ACoreMLAlgorithm ml) {
         this.ml = ml;
     }
+
+	public void setParameter(String par, Object val) {
+        for(LearningParameter lp : getParameters())
+        	if(lp.getName().equals(par)) {
+        		lp.setValue(val);
+        		return;
+        	}
+        // if not found
+        throw new NoSuchParameterException(par);
+	}
 
 }

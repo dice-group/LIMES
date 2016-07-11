@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.oldalgorithm;
+package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -12,16 +12,17 @@ import java.util.Map;
  * @author Klaus Lyko
  */
 
-public class MLModel {
+public class MLResults {
     protected LinkSpecification linkspec;
     protected AMapping mapping;
     protected double quality;
     protected Map<String, Object> details = new HashMap<String, Object>();
 
-    public MLModel() {
+    public MLResults() {
+    	super();
     }
 
-    public MLModel(LinkSpecification linkspec, AMapping mapping, double quality, Map<String, Object> details) {
+    public MLResults(LinkSpecification linkspec, AMapping mapping, double quality, Map<String, Object> details) {
         super();
         this.linkspec = linkspec;
         this.mapping = mapping;
@@ -31,12 +32,13 @@ public class MLModel {
 
     @Override
     public String toString() {
-        String s = "RESULT:\n";
-        s += "LS: " + linkspec + "\n";
-        s += "Quality: " + quality + "\n";
-        s += "Mapping: " + mapping.size() + "\n";
-
-        return s;
+        StringBuilder s = new StringBuilder();
+        s.append("RESULT:\n");
+        s.append("LS: " + linkspec + "\n");
+        s.append("Quality: " + quality + "\n");
+        if(mapping != null)
+        	s.append("Mapping: " + mapping.size() + "\n");
+        return s.toString();
     }
 
     public LinkSpecification getLinkSpecification() {

@@ -12,7 +12,6 @@ import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.aksw.limes.core.ml.algorithm.wombat.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;
-import org.aksw.limes.core.ml.oldalgorithm.MLModel;
 import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -63,12 +62,12 @@ public class WombatComplete extends AWombat {
     }
 
     @Override
-    protected MLModel learn(AMapping trainingData) {
+    protected MLResults learn(AMapping trainingData) {
         this.trainingData = trainingData;
         return learn();
     }
 
-    private MLModel learn() {
+    private MLResults learn() {
         if (bestSolutionNode == null) { // not to do learning twice
             bestSolutionNode = findBestSolution();
         }
@@ -77,12 +76,12 @@ public class WombatComplete extends AWombat {
         AMapping bestMapping = bestSolutionNode.getMapping();
         LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
         double bestFMeasure = bestSolutionNode.getFMeasure();
-        MLModel result = new MLModel(bestLS, bestMapping, bestFMeasure, null);
+        MLResults result = new MLResults(bestLS, bestMapping, bestFMeasure, null);
         return result;
     }
 
     @Override
-    protected MLModel learn(PseudoFMeasure pfm) {
+    protected MLResults learn(PseudoFMeasure pfm) {
         if(pfm != null){
             this.pseudoFMeasure = pfm;
         }else{ // use default PFM
@@ -93,7 +92,7 @@ public class WombatComplete extends AWombat {
     }
 
     @Override
-    protected AMapping predict(Cache source, Cache target, MLModel mlModel) {
+    protected AMapping predict(Cache source, Cache target, MLResults mlModel) {
         LinkSpecification ls = mlModel.getLinkSpecification();
         return getPredictions(ls, source, target);
     }
@@ -109,7 +108,7 @@ public class WombatComplete extends AWombat {
     }
 
     @Override
-    protected MLModel activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
+    protected MLResults activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
         throw new UnsupportedMLImplementationException(this.getName());
     }
 
@@ -689,7 +688,7 @@ public class WombatComplete extends AWombat {
     }
 
     @Override
-    protected MLModel activeLearn() throws UnsupportedMLImplementationException {
+    protected MLResults activeLearn() throws UnsupportedMLImplementationException {
         throw new UnsupportedMLImplementationException(this.getName());
     }
 

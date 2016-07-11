@@ -13,6 +13,7 @@ import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.lion.DefaultRefinementHeuristic;
 import org.aksw.limes.core.ml.algorithm.lion.RefinementHeuristic;
 import org.aksw.limes.core.ml.algorithm.lion.SearchTreeNode;
@@ -138,8 +139,8 @@ public class LionPrune extends MLAlgorithm {
      *
      * @throws IOException
      */
-    public MLModel start() throws IOException {
-        MLModel result = new MLModel();
+    public MLResults start() throws IOException {
+        MLResults result = new MLResults();
         // highest accuracy so far
         double highestAccuracy = 0.0;
         SearchTreeNode nextNode;
@@ -1120,8 +1121,8 @@ public class LionPrune extends MLAlgorithm {
     }
 
     @Override
-    public MLModel learn(AMapping trainingData) {
-        MLModel result = new MLModel();
+    public MLResults learn(AMapping trainingData) {
+        MLResults result = new MLResults();
         try {
             return start();
         } catch (IOException e) {

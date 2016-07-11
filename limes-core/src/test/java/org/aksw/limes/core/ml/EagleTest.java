@@ -1,29 +1,43 @@
 package org.aksw.limes.core.ml;
 
+import static org.junit.Assert.fail;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
+import org.aksw.limes.core.io.config.Configuration;
+import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.ml.algorithm.*;
+import org.aksw.limes.core.ml.algorithm.Eagle;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.aksw.limes.core.ml.algorithm.MLResults;
+import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.junit.Assert.fail;
-
-public class WombatCompleteTest {
+/**
+ * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ *
+ */
+public class EagleTest {
 
     Cache sc = new MemoryCache();
     Cache tc = new MemoryCache();
 
     AMapping trainingMap, refMap;
 
+    Configuration config = new Configuration();
+    PropertyMapping pm = new PropertyMapping();
+    
     @Before
     public void init() {
         List<String> props = new LinkedList<String>();
@@ -47,52 +61,68 @@ public class WombatCompleteTest {
         tc.addInstance(i2);
         tc.addInstance(i3);
 
-        PropertyMapping pm = new PropertyMapping();
-        pm.addStringPropertyMatch("name", "name");
-        pm.addStringPropertyMatch("surname", "surname");
-
         trainingMap = MappingFactory.createDefaultMapping();
         trainingMap.add("ex:i1", "ex:i1", 1d);
 
         refMap = MappingFactory.createDefaultMapping();
         refMap.add("ex:i1", "ex:i1", 1d);
         refMap.add("ex:i3", "ex:i3", 1d);
+        
+        KBInfo si = new KBInfo();
+        si.setVar("?x");
+        si.setProperties(props);
+
+        KBInfo ti = new KBInfo();
+        ti.setVar("?y");
+        ti.setProperties(props);
+
+        config.setSourceInfo(si);
+        config.setTargetInfo(ti);
+        
+        pm.addStringPropertyMatch("name", "name");
+        pm.addStringPropertyMatch("surname", "surname");
+
     }
 
     @Test
     public void testSupervisedBatch() throws UnsupportedMLImplementationException {
-        SupervisedMLAlgorithm wombatComplete = null;
+        SupervisedMLAlgorithm eagleSup = null;
         try {
-            wombatComplete = MLAlgorithmFactory.createMLAlgorithm(WombatComplete.class,
+            eagleSup = MLAlgorithmFactory.createMLAlgorithm(Eagle.class,
                     MLImplementationType.SUPERVISED_BATCH).asSupervised();
         } catch (UnsupportedMLImplementationException e) {
             e.printStackTrace();
             fail();
         }
-        assert (wombatComplete.getClass().equals(SupervisedMLAlgorithm.class));
-        wombatComplete.init(null, sc, tc);
-        MLResults mlModel = wombatComplete.learn(trainingMap);
-        AMapping resultMap = wombatComplete.predict(sc, tc, mlModel);
-        assert (resultMap.equals(refMap));
+        assert (eagleSup.getClass().equals(SupervisedMLAlgorithm.class));
+        eagleSup.init(null, sc, tc);
+        eagleSup.getMl().setConfiguration(config);
+        eagleSup.setParameter(Eagle.PROPERTY_MAPPING, pm);
+        
+        MLResults mlModel = eagleSup.learn(trainingMap);
+        AMapping resultMap = eagleSup.predict(sc, tc, mlModel);
+        assert (resultMap.equals(refMap));  
     }
-
 
     @Test
     public void testUnsupervised() throws UnsupportedMLImplementationException {
-        UnsupervisedMLAlgorithm wombatCompleteU = null;
+        UnsupervisedMLAlgorithm eagleUnsup = null;
         try {
-            wombatCompleteU = MLAlgorithmFactory.createMLAlgorithm(WombatComplete.class,
+            eagleUnsup = MLAlgorithmFactory.createMLAlgorithm(Eagle.class,
                     MLImplementationType.UNSUPERVISED).asUnsupervised();
         } catch (UnsupportedMLImplementationException e) {
             e.printStackTrace();
             fail();
         }
-        assert (wombatCompleteU.getClass().equals(UnsupervisedMLAlgorithm.class));
+        assert (eagleUnsup.getClass().equals(UnsupervisedMLAlgorithm.class));
         trainingMap = null;
-        wombatCompleteU.init(null, sc, tc);
-        MLResults mlModel = wombatCompleteU.learn(new PseudoFMeasure());
-        AMapping resultMap = wombatCompleteU.predict(sc, tc, mlModel);
+        eagleUnsup.init(null, sc, tc);
+        eagleUnsup.getMl().setConfiguration(config);
+        eagleUnsup.setParameter(Eagle.PROPERTY_MAPPING, pm);
+
+        MLResults mlModel = eagleUnsup.learn(new PseudoFMeasure());
+        AMapping resultMap = eagleUnsup.predict(sc, tc, mlModel);
         assert (resultMap.equals(refMap));
     }
-
+    
 }

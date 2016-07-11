@@ -1,6 +1,7 @@
 package org.aksw.limes.core.ml.oldalgorithm;
 
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 
 import java.util.Set;
@@ -26,7 +27,7 @@ public interface IMLAlgorithm {
      *         mapping as training data
      * @return an object containing the learned link specification and details about the training task
      */
-    public MLModel learn(AMapping trainingData);
+    public MLResults learn(AMapping trainingData);
 
     /**
      * Compute the mapping, i.e. all predicted links among source and target datasets.

@@ -5,7 +5,7 @@ import javafx.concurrent.Task;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.ml.oldalgorithm.MLModel;
+import org.aksw.limes.core.ml.algorithm.MLResults;
 
 /**
  * this class is responsible for the data handling according to the MVC Pattern for the unsupervised learning
@@ -36,7 +36,7 @@ public class UnsupervisedLearningModel extends MachineLearningModel {
         return new Task<Void>() {
             @Override
             protected Void call() {
-        	MLModel model = null;
+        	MLResults model = null;
                 try {
                     mlalgorithm.init(learningParameters, sourceCache, targetCache);
                     model = mlalgorithm.asUnsupervised().learn(new PseudoFMeasure());
