@@ -2,8 +2,8 @@ package org.aksw.limes.core.io.config.reader.xml;
 
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.junit.Before;
 import org.junit.Test;
 

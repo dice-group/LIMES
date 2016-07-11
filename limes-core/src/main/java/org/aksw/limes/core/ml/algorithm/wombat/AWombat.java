@@ -28,8 +28,8 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

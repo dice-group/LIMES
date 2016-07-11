@@ -21,7 +21,6 @@ import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.aksw.limes.core.ml.algorithm.eagle.core.PseudoFMeasureFitnessFunction;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.algorithm.eagle.util.TerminationCriteria;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.apache.log4j.Logger;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.GPProblem;

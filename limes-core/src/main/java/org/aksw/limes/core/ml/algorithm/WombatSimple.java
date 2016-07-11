@@ -19,7 +19,6 @@ import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.aksw.limes.core.ml.algorithm.wombat.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.wombat.LinkEntropy;
 import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

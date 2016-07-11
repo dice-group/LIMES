@@ -1,8 +1,8 @@
 package org.aksw.limes.core.io.config;
 
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 
 import java.util.*;
 

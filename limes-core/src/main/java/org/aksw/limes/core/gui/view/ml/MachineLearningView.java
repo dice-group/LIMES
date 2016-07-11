@@ -36,9 +36,9 @@ import org.aksw.limes.core.gui.controller.ml.MachineLearningController;
 import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,6 @@
 package org.aksw.limes.core.ml.algorithm.lion;
 
-import org.aksw.limes.core.ml.setting.LearningParameter;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 
 import java.util.Comparator;

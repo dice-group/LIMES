@@ -7,7 +7,6 @@ import org.aksw.limes.core.exceptions.NotYetImplementedException;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 
 public class ACIDS extends ACoreMLAlgorithm {
 

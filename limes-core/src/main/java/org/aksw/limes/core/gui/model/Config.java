@@ -25,9 +25,9 @@ import org.aksw.limes.core.io.config.writer.RDFConfigurationWriter;
 import org.aksw.limes.core.io.config.writer.XMLConfigurationWriter;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 
 import java.io.BufferedInputStream;
 import java.io.File;

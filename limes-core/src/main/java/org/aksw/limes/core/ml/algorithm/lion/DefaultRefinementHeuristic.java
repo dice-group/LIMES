@@ -1,7 +1,7 @@
 package org.aksw.limes.core.ml.algorithm.lion;
 
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.ml.setting.LearningParameter;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.setting.LearningSetting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

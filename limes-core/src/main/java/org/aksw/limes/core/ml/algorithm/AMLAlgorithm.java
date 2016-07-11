@@ -5,7 +5,6 @@ import java.util.List;
 import org.aksw.limes.core.exceptions.NoSuchParameterException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 
 /**
  * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)

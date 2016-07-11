@@ -9,8 +9,8 @@ import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

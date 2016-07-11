@@ -1,6 +1,10 @@
-package org.aksw.limes.core.ml.setting;
+package org.aksw.limes.core.ml.algorithm;
 
 
+/**
+ * @author sherif
+ *
+ */
 public class LearningParameter {
 
     protected String name;
@@ -13,6 +17,15 @@ public class LearningParameter {
 
     
     
+    /**
+     * @param name
+     * @param value
+     * @param clazz
+     * @param rangeStart
+     * @param rangeEnd
+     * @param rangeStep
+     * @param description
+     */
     public LearningParameter(String name, Object value, Class<?> clazz, double rangeStart, double rangeEnd,
             double rangeStep, String description) {
         super();
@@ -25,62 +38,107 @@ public class LearningParameter {
         this.description = description;
     }
 
+    /**
+     * 
+     */
     public LearningParameter(){
         super();
     }
     
+    /**
+     * @return
+     */
     public double getRangeStep() {
         return rangeStep;
     }
 
+    /**
+     * @param rangeStep
+     */
     public void setRangeStep(double rangeStep) {
         this.rangeStep = rangeStep;
     }
 
+    /**
+     * @return
+     */
     public String getName() {
         return name;
     }
     
+    /**
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
     
+    /**
+     * @return
+     */
     public Object getValue() {
         return value;
     }
     
+    /**
+     * @param value
+     */
     public void setValue(Object value) {
         this.value = value;
     }
     
+    /**
+     * @return
+     */
     public Class<?> getClazz() {
         return clazz;
     }
     
+    /**
+     * @param clazz
+     */
     public void setClazz(Class<?> clazz) {
         this.clazz = clazz;
     }
     
+    /**
+     * @return
+     */
     public double getRangeStart() {
         return rangeStart;
     }
     
+    /**
+     * @param rangeStart
+     */
     public void setRangeStart(double rangeStart) {
         this.rangeStart = rangeStart;
     }
     
+    /**
+     * @return
+     */
     public double getRangeEnd() {
         return rangeEnd;
     }
     
+    /**
+     * @param rangeEnd
+     */
     public void setRangeEnd(double rangeEnd) {
         this.rangeEnd = rangeEnd;
     }
     
+    /**
+     * @return
+     */
     public String getDescription() {
         return description;
     }
     
+    /**
+     * @param description
+     */
     public void setDescription(String description) {
         this.description = description;
     }

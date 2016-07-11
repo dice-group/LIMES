@@ -34,7 +34,6 @@ import org.aksw.limes.core.ml.algorithm.lion.RefinementHeuristic;
 import org.aksw.limes.core.ml.algorithm.lion.SearchTreeNode;
 import org.aksw.limes.core.ml.algorithm.lion.operator.LengthLimitedRefinementOperator;
 import org.aksw.limes.core.ml.algorithm.lion.operator.UpwardLengthLimitRefinementOperator;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.apache.log4j.Logger;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.GPProblem;

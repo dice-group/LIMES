@@ -14,11 +14,11 @@ import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.Eagle;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.WombatComplete;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 import org.junit.Test;
 
 public class AlgorithmsInitTest {

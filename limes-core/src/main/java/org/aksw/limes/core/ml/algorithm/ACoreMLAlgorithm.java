@@ -9,7 +9,6 @@ import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.setting.LearningParameter;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
