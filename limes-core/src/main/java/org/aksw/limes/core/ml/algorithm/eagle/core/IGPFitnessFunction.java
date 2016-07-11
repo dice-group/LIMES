@@ -4,7 +4,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.jgap.gp.GPFitnessFunction;
 
 /**
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  *
  */
 public abstract class IGPFitnessFunction extends GPFitnessFunction implements IFitnessFunction {

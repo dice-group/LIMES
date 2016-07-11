@@ -1,5 +1,9 @@
 package org.aksw.limes.core.exceptions;
 
+/**
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
+ *
+ */
 public class UnsupportedMLImplementationException extends Exception {
 
     /**

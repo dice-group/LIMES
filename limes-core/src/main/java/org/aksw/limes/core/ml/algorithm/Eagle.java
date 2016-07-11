@@ -31,7 +31,7 @@ import org.jgap.gp.impl.GPPopulation;
 import org.jgap.gp.impl.ProgramChromosome;
 
 /**
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @author Klaus Lyko
  *
  */

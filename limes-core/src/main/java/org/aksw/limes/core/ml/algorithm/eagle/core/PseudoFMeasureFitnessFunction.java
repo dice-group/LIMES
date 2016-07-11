@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * Fitness function to evolve metric expression using a PseudoMeasue
  *
  * @author Klaus Lyko
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  */
 public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
 

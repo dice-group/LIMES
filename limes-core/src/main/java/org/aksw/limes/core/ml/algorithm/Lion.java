@@ -45,10 +45,11 @@ import org.jgap.gp.impl.ProgramChromosome;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @author Klaus Lyko
  *
  */
+@Deprecated
 public class Lion extends ACoreMLAlgorithm {
 	
 	//==========================  VARIABLES =========================

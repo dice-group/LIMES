@@ -30,13 +30,9 @@ import java.util.Set;
  * algorithm EAGLE whereas the fitness value of n individual (a link specification)
  * is computed according to its PFM.
  *
-<<<<<<< HEAD
- * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
-=======
  * XXX not working anymore after refactor!
  * 
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
->>>>>>> dev-ml
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @author Klaus Lyko
  */
 @Deprecated

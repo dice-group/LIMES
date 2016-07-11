@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * FIXME fix QualityMeasures to work on Mappings!
  *
  * @author Klaus Lyko
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  */
 public class ExpressionFitnessFunction extends IGPFitnessFunction {
     public static final String fScore = "fScore";

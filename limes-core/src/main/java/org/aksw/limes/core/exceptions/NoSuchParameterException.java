@@ -1,7 +1,7 @@
 package org.aksw.limes.core.exceptions;
 
 /**
- * @author Tommaso Soru <tsoru@informatik.uni-leipzig.de>
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  *
  */
 public class NoSuchParameterException extends RuntimeException {
