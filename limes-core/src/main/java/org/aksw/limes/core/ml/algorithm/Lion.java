@@ -104,6 +104,9 @@ public class Lion extends ACoreMLAlgorithm {
     
     protected static Logger logger = Logger.getLogger(Lion.class);
     
+    /**
+     * Lion constructor.
+     */
     protected Lion() {
     	super();
     	setDefaultParameters();
@@ -211,8 +214,9 @@ public class Lion extends ACoreMLAlgorithm {
     
     /**
      * Configures LION.
-     * @throws InvalidConfigurationException 
-     *
+     * 
+     * @param trainingData training data
+     * @throws InvalidConfigurationException
      */
     private void setUp(AMapping trainingData) throws InvalidConfigurationException {
     	

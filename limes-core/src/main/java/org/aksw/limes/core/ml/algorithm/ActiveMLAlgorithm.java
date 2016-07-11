@@ -5,10 +5,18 @@ import org.aksw.limes.core.io.mapping.AMapping;
 
 import java.lang.reflect.Constructor;
 
+/**
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
+ *
+ */
 public class ActiveMLAlgorithm extends AMLAlgorithm {
 
     public final static MLImplementationType ML_IMPLEMENTATION_TYPE = MLImplementationType.SUPERVISED_ACTIVE;
 
+    /**
+     * @param clazz the CoreMLAlgorithm class
+     * @throws UnsupportedMLImplementationException
+     */
     public ActiveMLAlgorithm(Class<? extends ACoreMLAlgorithm> clazz) throws UnsupportedMLImplementationException {
 
         try {
@@ -24,14 +32,28 @@ public class ActiveMLAlgorithm extends AMLAlgorithm {
 
     }
 
+    /**
+     * @param size number of examples to return
+     * @return the mapping
+     * @throws UnsupportedMLImplementationException
+     */
     public AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
         return getMl().getNextExamples(size);
     }
 
+    /**
+     * @return wrap with results
+     * @throws UnsupportedMLImplementationException
+     */
     public MLResults activeLearn() throws UnsupportedMLImplementationException {
         return getMl().activeLearn();
     }
     
+    /**
+     * @param oracleMapping mapping from the oracle
+     * @return wrap with results
+     * @throws UnsupportedMLImplementationException
+     */
     public MLResults activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
         return getMl().activeLearn(oracleMapping);
     }

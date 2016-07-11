@@ -45,6 +45,9 @@ public class WombatComplete extends AWombat {
     protected long pruningTime = 0;
 
 
+    /**
+     * WombatComplete constructor.
+     */
     protected WombatComplete() {
         super();
     }
@@ -67,6 +70,9 @@ public class WombatComplete extends AWombat {
         return learn();
     }
 
+    /**
+     * @return wrap with results
+     */
     private MLResults learn() {
         if (bestSolutionNode == null) { // not to do learning twice
             bestSolutionNode = findBestSolution();
@@ -153,8 +159,8 @@ public class WombatComplete extends AWombat {
     }
     
     /**
-     * @param r
-     * @param fMeasure
+     * @param r tree of refinement nodes
+     * @param f f-measure
      * @author sherif
      */
     private void pruneTree(Tree<RefinementNode> r, double f) {
@@ -240,7 +246,7 @@ public class WombatComplete extends AWombat {
     
     
     /**
-     * @param node
+     * @param node tree of refinement nodes
      * @return Complexity of the input node as the number of operators included in its metric expression
      * @author sherif
      */
@@ -251,7 +257,7 @@ public class WombatComplete extends AWombat {
 
 
     /**
-     * @param child
+     * @param t tree of refinement nodes
      * @author sherif
      */
     private void prune(Tree<RefinementNode> t) {
@@ -295,19 +301,12 @@ public class WombatComplete extends AWombat {
      * Computes the atomic classifiers by finding the highest possible F-measure
      * achievable on a given property pair
      *
-     * @param sourceCache
-     *         Source cache
-     * @param targetCache
-     *         Target cache
      * @param sourceProperty
      *         Property of source to use
      * @param targetProperty
      *         Property of target to use
      * @param measure
      *         Measure to be used
-     * @param trainingMap
-     * @param reference
-     *         Reference mapping
      * @return Best simple classifier
      */
     private ExtendedClassifier findInitialClassifier(String sourceProperty, String targetProperty, String measure) {
@@ -337,7 +336,7 @@ public class WombatComplete extends AWombat {
      * Get the most promising node as the node with the best F-score
      *
      * @param r  The whole refinement tree
-     * @param penaltyWeight
+     * @param penaltyWeight penalty weight
      * @return most promising node from the input tree r
      * @author sherif
      */
@@ -369,6 +368,7 @@ public class WombatComplete extends AWombat {
     }
 
     /**
+     * @param promesyChild promesy child
      * @return children penalty + complexity penalty
      * @author sherif
      */
@@ -502,7 +502,7 @@ public class WombatComplete extends AWombat {
     /**
      * @param nodeMetricExpr
      * @param nodeMapping
-     * @return list of nodes L ∪ A_i \ A_j | A_i ∈ P, A_j ∈ P, where P is the set if initial classifiers
+     * @return list of nodes L \cup A_i \ A_j | A_i \in P, A_j \in P, where P is the set if initial classifiers
      * @author sherif
      */
     private List<RefinementNode> createDisjunctionsWithDiffNodes(Tree<RefinementNode> node) {
@@ -554,7 +554,7 @@ public class WombatComplete extends AWombat {
     /**
      * @param nodeMetricExpr
      * @param nodeMapping
-     * @return list of nodes L ∪ A_i \ A_j | A_i ∈ P, A_j ∈ P, where P is the set if initial classifiers
+     * @return list of nodes L \cup A_i \ A_j | A_i \in P, A_j \in P, where P is the set if initial classifiers
      * @author sherif
      */
     private List<RefinementNode> createConjunctionsWithDiffNodes(Tree<RefinementNode> node) {

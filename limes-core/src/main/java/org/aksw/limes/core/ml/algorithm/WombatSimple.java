@@ -43,6 +43,9 @@ public class WombatSimple extends AWombat {
 
 
 
+    /**
+     * WombatSimple constructor.
+     */
     protected WombatSimple() {
         super();
     }
@@ -65,6 +68,9 @@ public class WombatSimple extends AWombat {
         return learn();
     }
 
+    /**
+     * @return wrap with results
+     */
     private MLResults learn() {
         if (bestSolutionNode == null) { // not to do learning twice
             bestSolutionNode = findBestSolution();
@@ -241,13 +247,9 @@ public class WombatSimple extends AWombat {
      * Computes the atomic classifiers by finding the highest possible F-measure
      * achievable on a given property pair
      *
-     * @param sourceCache Source cache
-     * @param targetCache Target cache
      * @param sourceProperty Property of source to use
      * @param targetProperty Property of target to use
      * @param measure Measure to be used
-     * @param trainingMap
-     * @param reference Reference mapping
      * @return Best simple classifier
      */
     private ExtendedClassifier findInitialClassifier(String sourceProperty, String targetProperty, String measure) {

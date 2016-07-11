@@ -122,6 +122,7 @@ public class AddMetric extends CommandGene
         execute_object(a_chrom, a_n, args);
     }
 
+    @Override
     public CommandGene applyMutation(int a_index, double a_percentage)
             throws InvalidConfigurationException {
         if (!is_mutateable) {
@@ -136,9 +137,11 @@ public class AddMetric extends CommandGene
     }
 
     /**
-     * @TODO implement
+     * @return
+     * @throws InvalidConfigurationException
      */
     public CommandGene applyMutation() throws InvalidConfigurationException {
+    	// TODO implement
         return this;
     }
 

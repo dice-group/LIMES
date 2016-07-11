@@ -42,7 +42,7 @@ public abstract class ACoreMLAlgorithm {
 	/**
      * Name of the core ML algorithm.
      *
-     * @return
+     * @return Name of the core ML algorithm.
      */
     protected abstract String getName();
 
@@ -61,9 +61,9 @@ public abstract class ACoreMLAlgorithm {
     /**
      * Initialize the core ML algorithm.
      *
-     * @param ls
-     * @param sourceCache
-     * @param targetCache
+     * @param lp learning parameters
+     * @param sourceCache the source cache
+     * @param targetCache the target cache
      */
     protected void init(List<LearningParameter> lp, Cache sourceCache, Cache targetCache) {
         if (lp != null) {
@@ -79,7 +79,7 @@ public abstract class ACoreMLAlgorithm {
      * truth degree.
      *
      * @param trainingData
-     * @return
+     * @return wrap with results
      */
     protected abstract MLResults learn(AMapping trainingData)
             throws UnsupportedMLImplementationException;
@@ -88,7 +88,7 @@ public abstract class ACoreMLAlgorithm {
      * Learning method for unsupervised core ML algorithm implementations.
      *
      * @param pfm
-     * @return
+     * @return wrap with results
      * @throws UnsupportedMLImplementationException
      */
     protected abstract MLResults learn(PseudoFMeasure pfm)
@@ -100,7 +100,7 @@ public abstract class ACoreMLAlgorithm {
      * @param source
      * @param target
      * @param mlModel
-     * @return
+     * @return the mapping
      */
     protected abstract AMapping predict(Cache source, Cache target,
                                         MLResults mlModel);
@@ -109,7 +109,7 @@ public abstract class ACoreMLAlgorithm {
      * Check whether the mlType is supported.
      *
      * @param mlType
-     * @return
+     * @return a boolean value
      */
     protected abstract boolean supports(MLImplementationType mlType);
 
@@ -117,7 +117,7 @@ public abstract class ACoreMLAlgorithm {
      * Get a set of examples to be added to the mapping.
      *
      * @param size
-     * @return
+     * @return the mapping
      * @throws UnsupportedMLImplementationException
      */
     protected abstract AMapping getNextExamples(int size)
@@ -126,8 +126,8 @@ public abstract class ACoreMLAlgorithm {
     /**
      * Learning method for supervised active core ML algorithm implementations.
      *
-     * @param oracleMapping
-     * @return
+     * @param oracleMapping mapping from the oracle
+     * @return wrap with results
      */
     protected abstract MLResults activeLearn(AMapping oracleMapping)
             throws UnsupportedMLImplementationException;
@@ -137,7 +137,7 @@ public abstract class ACoreMLAlgorithm {
      * Normally, it is used as a first step to initialize the ML model 
      * before going through the active learning process
      * 
-     * @return
+     * @return wrap with results
      * @throws UnsupportedMLImplementationException
      */
     protected abstract MLResults activeLearn() throws UnsupportedMLImplementationException;
@@ -146,8 +146,8 @@ public abstract class ACoreMLAlgorithm {
     /**
      * Get parameter by name.
      * 
-     * @param name
-     * @return
+     * @param name parameter name
+     * @return the parameter as Object
      * @throws NoSuchParameterException
      */
     protected Object getParameter(String name) {

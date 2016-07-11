@@ -19,6 +19,10 @@ public class MLAlgorithmFactory {
 
     public static final Logger logger = LoggerFactory.getLogger(MLAlgorithmFactory.class);
 
+    /**
+     * @param name algorithm name
+     * @return the core ML algorithm
+     */
     public static Class<? extends ACoreMLAlgorithm> getAlgorithmType(String name) {
         if (name.equalsIgnoreCase(EAGLE)) {
             return Eagle.class;
@@ -38,6 +42,10 @@ public class MLAlgorithmFactory {
         return WombatSimple.class;
     }
 
+    /**
+     * @param name implementation type as string
+     * @return the implementation type as enum
+     */
     public static MLImplementationType getImplementationType(String name) {
         if (name.equalsIgnoreCase(SUPERVISED_ACTIVE)) {
             return MLImplementationType.SUPERVISED_ACTIVE;
@@ -52,6 +60,12 @@ public class MLAlgorithmFactory {
         return MLImplementationType.UNSUPERVISED;
     }
 
+    /**
+     * @param clazz the core ML algorithm class
+     * @param mlType the implementation type
+     * @return the ML algorithm
+     * @throws UnsupportedMLImplementationException
+     */
     public static AMLAlgorithm createMLAlgorithm(Class<? extends ACoreMLAlgorithm> clazz, MLImplementationType mlType) throws UnsupportedMLImplementationException {
 
         switch (mlType) {

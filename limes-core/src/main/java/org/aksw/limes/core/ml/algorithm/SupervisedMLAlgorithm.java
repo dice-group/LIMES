@@ -5,10 +5,18 @@ import org.aksw.limes.core.io.mapping.AMapping;
 
 import java.lang.reflect.Constructor;
 
+/**
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
+ *
+ */
 public class SupervisedMLAlgorithm extends AMLAlgorithm {
 
     public final static MLImplementationType ML_IMPLEMENTATION_TYPE = MLImplementationType.SUPERVISED_BATCH;
 
+    /**
+     * @param clazz the core ML algorithm class
+     * @throws UnsupportedMLImplementationException
+     */
     public SupervisedMLAlgorithm(Class<? extends ACoreMLAlgorithm> clazz) throws UnsupportedMLImplementationException {
 
         try {
@@ -25,6 +33,11 @@ public class SupervisedMLAlgorithm extends AMLAlgorithm {
 
     }
 
+    /**
+     * @param trainingData training data
+     * @return wrap with results
+     * @throws UnsupportedMLImplementationException
+     */
     public MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
         return getMl().learn(trainingData);
     }

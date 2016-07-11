@@ -78,6 +78,9 @@ public class Eagle extends ACoreMLAlgorithm {
     
     protected static Logger logger = Logger.getLogger(Eagle.class);
     
+    /**
+     * Eagle constructor.
+     */
     protected Eagle() {
     	super();
     	setDefaultParameters();
@@ -205,8 +208,9 @@ public class Eagle extends ACoreMLAlgorithm {
     
     /**
      * Configures EAGLE.
-     * @throws InvalidConfigurationException 
      *
+     * @param trainingData training data
+     * @throws InvalidConfigurationException
      */
     private void setUp(AMapping trainingData) throws InvalidConfigurationException {
     	
@@ -253,7 +257,7 @@ public class Eagle extends ACoreMLAlgorithm {
     /**
      * Returns only positive matches, that are those with a confidence higher then 0.
      *
-     * @param trainingData
+     * @param trainingData training data
      * @return
      */
     private AMapping extractPositiveMatches(AMapping trainingData) {
@@ -270,8 +274,8 @@ public class Eagle extends ACoreMLAlgorithm {
     /**
      * Method to compute best individuals by hand.
      *
-     * @param gp
-     * @param gen
+     * @param gp GP genotype
+     * @param gen number of generations
      * @return
      */
     private IGPProgram determineFittest(GPGenotype gp, int gen) {
@@ -322,8 +326,8 @@ public class Eagle extends ACoreMLAlgorithm {
     /**
      * Computes for a given jgap Program its corresponding link specification.
      *
-     * @param p
-     * @return
+     * @param p the GP program
+     * @return the link specification
      */
     private LinkSpecification getLinkSpecification(IGPProgram p) {
         Object[] args = {};
@@ -331,6 +335,9 @@ public class Eagle extends ACoreMLAlgorithm {
         return (LinkSpecification) pc.getNode(0).execute_object(pc, 0, args);
     }
 
+    /**
+     * @return wrap with results
+     */
     private MLResults createSupervisedResult() {
         MLResults result = new MLResults();
         result.setLinkSpecification(getLinkSpecification(allBest));
@@ -343,7 +350,7 @@ public class Eagle extends ACoreMLAlgorithm {
     /**
      * Constructs the MLResult for this run.
      *
-     * @return
+     * @return wrap with results
      */
     private MLResults createUnsupervisedResult() {
         MLResults result = new MLResults();
@@ -354,6 +361,10 @@ public class Eagle extends ACoreMLAlgorithm {
     }
 
 
+    /**
+     * @param size number of questions
+     * @return the mapping
+     */
     private AMapping calculateOracleQuestions(int size) {
         // first get all Mappings for the current population
         logger.info("Getting mappings for output");
@@ -399,9 +410,9 @@ public class Eagle extends ACoreMLAlgorithm {
     /**
      * Method to compute best individuals by hand.
      *
-     * @param gp
-     * @param gen
-     * @return
+     * @param gp GP genotype
+     * @param gen number of generations
+     * @return the GP program
      */
     private IGPProgram determineFittestUnsup(GPGenotype gp, int gen) {
 
@@ -447,6 +458,9 @@ public class Eagle extends ACoreMLAlgorithm {
         return bestHere;
     }
 
+	/**
+	 * @return current turn
+	 */
 	public int getTurn() {
 		return turn;
 	}

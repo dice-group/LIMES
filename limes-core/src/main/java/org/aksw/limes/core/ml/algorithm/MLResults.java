@@ -18,10 +18,21 @@ public class MLResults {
     protected double quality;
     protected Map<String, Object> details = new HashMap<String, Object>();
 
+    /**
+     * MLResults constructor.
+     */
     public MLResults() {
     	super();
     }
 
+    /**
+     * MLResults full constructor.
+     * 
+     * @param linkspec the link specification
+     * @param mapping the mapping
+     * @param quality the value of quality measure
+     * @param details additional computation details
+     */
     public MLResults(LinkSpecification linkspec, AMapping mapping, double quality, Map<String, Object> details) {
         super();
         this.linkspec = linkspec;
@@ -41,34 +52,61 @@ public class MLResults {
         return s.toString();
     }
 
+    /**
+     * @return the link specification
+     */
     public LinkSpecification getLinkSpecification() {
         return linkspec;
     }
 
+    /**
+     * @param spec the link specification
+     */
     public void setLinkSpecification(LinkSpecification spec) {
         this.linkspec = spec;
     }
 
+    /**
+     * @return the mapping
+     */
     public AMapping getMapping() {
         return mapping;
     }
 
+    /**
+     * @param mapping the mapping
+     */
     public void setMapping(AMapping mapping) {
         this.mapping = mapping;
     }
 
+    /**
+     * @return the value of quality measure
+     */
     public double getQuality() {
         return quality;
     }
 
+    /**
+     * @param quality the value of quality measure
+     */
     public void setQuality(double quality) {
         this.quality = quality;
     }
 
+    /**
+     * Add additional computation detail.
+     * 
+     * @param key computation detail name
+     * @param value computation detail value
+     */
     public void addDetail(String key, Object value) {
         details.put(key, value);
     }
 
+    /**
+     * @return the additional computation details
+     */
     public Map<String, Object> getDetails() {
         return details;
     }
