@@ -14,6 +14,7 @@ import java.util.List;
  */
 public interface RefinementHeuristic extends Comparator<SearchTreeNode> {
 
+	@Deprecated
     void setLearningSetting(LearningSetting setting);
     
     void setLearningParameters(List<LearningParameter> par);

@@ -42,6 +42,7 @@ public interface LengthLimitedRefinementOperator {
      *
      * @param setting
      */
+    @Deprecated
     public void setLearningSetting(LearningSetting setting);
 
     
