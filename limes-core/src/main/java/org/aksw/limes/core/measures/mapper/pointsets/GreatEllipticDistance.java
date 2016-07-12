@@ -65,9 +65,9 @@ public class GreatEllipticDistance {
      *         Longitude of second point
      * @return Distance between both points
      */
-    public static double getDistance(double lat1, double lon1, double lat2, double lon2) {
+    public static double getDistance(double lat1, double long1, double lat2, double long2) {
         double a = 6378137, b = 6356752.314245, f = 1 / 298.257223563;
-        double L = lon2 - lon1;
+        double L = long2 - long1;
         double U1 = Math.atan((1 - f) * Math.tan(lat1));
         double U2 = Math.atan((1 - f) * Math.tan(lat2));
         double sinU1 = Math.sin(U1), cosU1 = Math.cos(U1);

@@ -29,7 +29,7 @@ public class NaiveAverage extends PointsetsMeasure {
      *         Polygon
      * @param Y
      *         Polygon
-     * @param threshold
+     * @param threshold of the distance
      * @return the average distance between X and Y
      */
     public static double distance(Polygon X, Polygon Y, double threshold) {
@@ -43,6 +43,7 @@ public class NaiveAverage extends PointsetsMeasure {
      *         First polygon
      * @param Y
      *         Second polygon
+     * @param threshold of the distance
      * @return Distance between the two polygons
      */
     public double computeDistance(Polygon X, Polygon Y, double threshold) {

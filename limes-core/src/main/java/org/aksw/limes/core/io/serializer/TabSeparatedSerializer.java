@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Nov 25, 2015
+ * @version Jul 12, 2016
  */
 public class TabSeparatedSerializer extends NtSerializer {
 
@@ -86,7 +86,7 @@ public class TabSeparatedSerializer extends NtSerializer {
     }
 
     /**
-     * @param seperator
+     * @param seperator to be set
      */
     public void setSeperator(String seperator) {
         this.seperator = seperator;

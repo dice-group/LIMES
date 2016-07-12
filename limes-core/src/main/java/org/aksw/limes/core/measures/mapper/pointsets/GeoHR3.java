@@ -98,10 +98,9 @@ public class GeoHR3 {
      * selecting squares at the poles, one has to take all squares as the cos of
      * 90° is 0.
      *
-     * @param latIndex
-     *            Latitude index of square for which "neighbors" are required
-     * @param longIndex
-     *            Longitude index
+     * @param latIndex Latitude index of square for which "neighbors" are required
+     * @param longIndex Longitude index
+     * @param index GeoIndex
      * @return List of "neighbors"
      */
     public Set<List<Integer>> getSquaresToCompare(int latIndex, int longIndex, GeoIndex index) {

@@ -10,17 +10,19 @@ import org.apache.jena.rdf.model.StmtIterator;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Jun 3, 2016
+ * @version Jul 12, 2016
  */
 public class RDFMappingReader extends AMappingReader {
 
+    /**
+     * @param file  input file for reading
+     */
     public RDFMappingReader(String file){
         super(file);
     }
     /**
      * Reads mapping from RDF file (NT, N3, TTL, JASON-LD)
      *
-     * @param file  input file for reading
      * @return Mapping that represents the content of the file
      */
     @Override

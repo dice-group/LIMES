@@ -14,7 +14,7 @@ import java.util.Set;
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public interface PolygonModifier {
+public interface IPolygonModifier {
     /**
      * Modifies a set of polygons give a threshold
      *

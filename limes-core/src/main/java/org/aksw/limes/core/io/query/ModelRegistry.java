@@ -10,7 +10,9 @@ import java.util.Map;
 /**
  * Enables one to register Jena Models as backends for the SparqlQueryModule
  *
- * @author Claus Stadler <cstadler@informatik.uni-leipzig.de>
+ * @author Claus Stadler (cstadler@informatik.uni-leipzig.de)
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 12, 2016
  */
 public class ModelRegistry {
     static Logger logger = LoggerFactory.getLogger("LIMES");

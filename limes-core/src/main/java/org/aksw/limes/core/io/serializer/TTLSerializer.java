@@ -20,7 +20,7 @@ import java.util.TreeSet;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Nov 25, 2015
+ * @version Jul 12, 2016
  */
 public class TTLSerializer implements ISerializer {
 
@@ -73,12 +73,9 @@ public class TTLSerializer implements ISerializer {
      * Write the content of the mapping including the expansion of the prefixes
      * to a file
      *
-     * @param prefixes
-     *         List of prefixes
-     * @param m
-     *         Mapping to be written
-     * @param file
-     *         Output file
+     * @param m Mapping to be written
+     * @param predicate mapping predicate used to connect subjects and objects
+     * @param file Output file
      */
     public void writeToFile(AMapping m, String predicate, String file) {
         open(file);

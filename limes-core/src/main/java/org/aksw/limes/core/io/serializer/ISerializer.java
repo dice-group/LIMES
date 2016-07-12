@@ -11,27 +11,22 @@ import java.util.Map;
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Nov 25, 2015
+ * @version Jul 12, 2016
  */
 public interface ISerializer {
 
     /**
      * Writes the whole results of a mapping to a file
      *
-     * @param prefixes
-     *         Set of prefixes used
-     * @param m
-     *         Mapping computed by an organizer
-     * @param file
-     *         Output file, where the results are to be written
+     * @param m  Mapping computed by an organizer
+     * @param file Output file, where the results are to be written
      */
     public void writeToFile(AMapping m, String predicate, String file);
 
     /**
      * Sets the prefixes to be used in the file.
      *
-     * @param prefixes
-     *         List of prefixes to use
+     * @param prefixes List of prefixes to use
      */
     public void setPrefixes(Map<String, String> prefixes);
 
@@ -52,12 +47,10 @@ public interface ISerializer {
      * Adds a triple to the buffer of the serializer. Requires the method open
      * to have been carried out
      *
-     * @param subject
-     *         The subject of the triple
-     * @param predicate
-     *         The predicate of the triple
-     * @param object
-     *         The object of the triple
+     * @param subject The subject of the triple
+     * @param predicate The predicate of the triple
+     * @param object The object of the triple
+     * @param similarity value
      */
     public void addStatement(String subject, String predicate, String object, double similarity);
 

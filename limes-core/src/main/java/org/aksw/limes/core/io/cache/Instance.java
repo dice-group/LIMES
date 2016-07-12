@@ -16,7 +16,7 @@ import java.util.TreeSet;
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Jul 8, 2016
+ * @version Jul 12, 2016
  */
 public class Instance implements Comparable<Object>, Serializable {
     private static final Logger logger = LoggerFactory.getLogger(Instance.class.getName());
@@ -164,7 +164,7 @@ public class Instance implements Comparable<Object>, Serializable {
     /**
      * Removes property with URI uri from this Instance
      *
-     * @param uri
+     * @param uri of the property to be removed
      */
     public void removePropery(String uri) {
         if (properties.containsKey(uri)) {

@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Jun 6, 2016
+ * @version Jul 12, 2016
  */
 public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQueryModule {
    
@@ -116,10 +116,10 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
     }
 
     /**
-     * @param kbInfo
-     * @return
-     * @throws ClassNotFoundException
-     * @throws SQLException
+     * @param kbInfo knowledge base information object
+     * @return QueryExecutionFactory object
+     * @throws ClassNotFoundException if class not found
+     * @throws SQLException if SQL contains errors
      */
     protected QueryExecutionFactory initQueryExecution(KBInfo kbInfo) throws ClassNotFoundException, SQLException {
        QueryExecutionFactory qef;

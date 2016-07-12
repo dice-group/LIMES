@@ -57,9 +57,8 @@ public class LinkSpecification implements ILinkSpecification {
 
     /**
      * Creates a spec with a measure read inside
-     *
-     * @param measure
-     *         String representation of the spec
+     * @param measure String representation of the spec
+     * @param threshold of the spec
      */
     public LinkSpecification(String measure, double threshold) {
         setOperator(null);
@@ -79,7 +78,7 @@ public class LinkSpecification implements ILinkSpecification {
     /**
      * Adds a child to the current node of the spec
      *
-     * @param spec
+     * @param spec to be added
      */
     public void addChild(LinkSpecification spec) {
         if (getChildren() == null)
@@ -90,7 +89,7 @@ public class LinkSpecification implements ILinkSpecification {
     /**
      * Adds a child to the current node of the spec
      *
-     * @param spec
+     * @param spec to be added
      */
     public void addDependency(LinkSpecification spec) {
         if (getDependencies() == null)
@@ -114,6 +113,7 @@ public class LinkSpecification implements ILinkSpecification {
 
     /**
      * Checks whether a spec has dependencies
+     * @return true if the spec has dependencies, false otherwise
      */
     public boolean hasDependencies() {
         if (getDependencies() == null)
@@ -140,9 +140,7 @@ public class LinkSpecification implements ILinkSpecification {
     }
 
     /**
-     * Returns all leaves of the link spec
-     *
-     * @return List of atomic spec, i.e., all leaves of the link spec
+     * get all leaves of the link spec
      */
     public void getAllChildren() {
         for (LinkSpecification child : getChildren()) {
@@ -181,13 +179,11 @@ public class LinkSpecification implements ILinkSpecification {
 
     /**
      * Reads a spec expression into its canonical form Don't forget to optimize
-     * the filters by checking (if threshold_left and threshold_right >= theta,
-     * then theta = 0)
+     * the filters by checking (if threshold_left and threshold_right grater 
+     * than or equal to theta, then theta = 0)
      *
-     * @param spec
-     *         Spec expression to read
-     * @param theta
-     *         Global threshold
+     * @param spec expression to read
+     * @param theta Global threshold
      */
     public void readSpec(String spec, double theta) {
 
@@ -388,7 +384,7 @@ public class LinkSpecification implements ILinkSpecification {
     }
 
     /**
-     * Returns the filter expression implemented in the spec
+     * @return the filter expression implemented in the spec
      */
     public String getMeasure() {
         if (isAtomic())

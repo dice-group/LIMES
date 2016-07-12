@@ -11,7 +11,7 @@ import java.io.FileReader;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Jun 3, 2016
+ * @version Jul 12, 2016
  */
 public class CSVMappingReader extends AMappingReader {
     private static final String COMMA = ",";
@@ -20,11 +20,18 @@ public class CSVMappingReader extends AMappingReader {
 
     protected String delimiter;
 
+    /**
+     * @param file  input file for reading
+     */
     public CSVMappingReader(String file) {
         super(file);
         this.delimiter = COMMA;
     }
 
+    /**
+     * @param file  input file for reading
+     * @param delimiter of the file
+     */
     public CSVMappingReader(String file, String delimiter) {
         this(file);
         this.delimiter = delimiter;
@@ -74,9 +81,8 @@ public class CSVMappingReader extends AMappingReader {
      * Second column contains Target URIs
      * All similarities is set to 1
      *
-     * @param file
-     * @param separator
-     * @return
+     * @param file 2 columns CSV file to read the mapping from
+     * @return AMapping object contains the mapping
      */
     public AMapping readTwoColumnFile(String file) {
         AMapping m = MappingFactory.createDefaultMapping();
@@ -104,8 +110,8 @@ public class CSVMappingReader extends AMappingReader {
      * Second column contains Target URIs
      * Third column contains similarity
      *
-     * @param file
-     * @return
+     * @param file 3 columns CSV file (third column is the confidence value) to read the mapping from
+     * @return AMapping object contains the mapping
      */
     public AMapping readThreeColumnFileWithSimilarity(String file) {
         AMapping m = MappingFactory.createDefaultMapping();
@@ -132,8 +138,8 @@ public class CSVMappingReader extends AMappingReader {
      * Second column contains linking property
      * Third column contains Target URIs
      *
-     * @param file
-     * @return
+     * @param file 3 columns CSV file to read the mapping from
+     * @return AMapping object contains the mapping
      */
     public AMapping readThreeColumnFile(String file) {
         AMapping m = MappingFactory.createDefaultMapping();
@@ -172,7 +178,7 @@ public class CSVMappingReader extends AMappingReader {
     /**
      * set the delimiter used for reading the mapping from csv file
      *
-     * @param delimiter
+     * @param delimiter to be set
      */
     public void setDelimiter(String delimiter) {
         this.delimiter = delimiter;

@@ -41,7 +41,7 @@ public class PolygonIndex {
      * Indexes a list of polygons by mapping the uri of each polygon to the
      * corresponding distanceIndex
      *
-     * @param polygons
+     * @param polygons to be indexed
      */
     public void index(Set<Polygon> polygons) {
         for (Polygon x : polygons) {
@@ -53,9 +53,7 @@ public class PolygonIndex {
      * Indexes the distances between the points in a given polygon and adds
      * polygon to list of indexes
      *
-     * @param p
-     *         Input polygon
-     * @return Distances between all points in the polygon
+     * @param p Input polygon
      */
     public void index(Polygon p) {
         Map<Point, Map<Point, Double>> index = new HashMap<Point, Map<Point, Double>>();

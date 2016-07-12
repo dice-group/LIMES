@@ -131,8 +131,8 @@ public class NtSerializer implements ISerializer {
     /**
      * Method to print prefixes: "@prefix key: url ."
      *
-     * @param prefixMap
-     * @param file
+     * @param prefixMap to be printed
+     * @param file file name
      */
     public void printPrefixes(Map<String, String> prefixMap, String file) {
         open(file);

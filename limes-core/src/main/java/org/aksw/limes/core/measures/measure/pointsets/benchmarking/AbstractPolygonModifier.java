@@ -15,7 +15,7 @@ import java.util.Set;
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public abstract class AbstractPolygonModifier implements PolygonModifier {
+public abstract class AbstractPolygonModifier implements IPolygonModifier {
 
     /* (non-Javadoc)
      * @see org.aksw.limes.core.measures.measure.pointsets.benchmarking.PolygonModifier#modifySet(java.util.Set, double)

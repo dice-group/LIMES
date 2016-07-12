@@ -90,7 +90,7 @@ public class Polygon {
      * Returns a Geometry from the Points of the Polygon
      *
      * @return Geometry
-     * @throws com.vividsolutions.jts.io.ParseException
+     * @throws com.vividsolutions.jts.io.ParseException if Geometry is not valid
      */
     public Geometry getGeometry() throws ParseException {
         String geometryString = "Polygon ((";
