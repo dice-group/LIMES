@@ -12,6 +12,9 @@ public class InvalidMeasureException extends Exception {
 
     /**
      * Constructor of InvalidMeasureException class.
+     * 
+     * @param name,
+     *            Name of the wrong measure
      */
     public InvalidMeasureException(String name) {
         super("Unknown measure " + name + ".");

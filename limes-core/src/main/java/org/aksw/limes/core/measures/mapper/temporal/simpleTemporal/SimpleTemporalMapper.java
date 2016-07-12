@@ -24,14 +24,14 @@ public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemp
      *            The metric expression
      * @return first property of metric expression as string
      */
-    protected String getFirstProperty(String properties) {
-        properties = properties.substring(properties.indexOf(".") + 1, properties.length());
-        int plusIndex = properties.indexOf("|");
-        if (properties.indexOf("|") != -1) {
-            String p1 = properties.substring(0, plusIndex);
+    protected String getFirstProperty(String expression) {
+        expression = expression.substring(expression.indexOf(".") + 1, expression.length());
+        int plusIndex = expression.indexOf("|");
+        if (expression.indexOf("|") != -1) {
+            String p1 = expression.substring(0, plusIndex);
             return p1;
         } else
-            return properties;
+            return expression;
     }
 
     /**
@@ -40,13 +40,14 @@ public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemp
      * @param expression,
      *            The metric expression
      * @return second property of metric expression as string
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException,
+     *             if endDate property is not declared
      */
-    protected String getSecondProperty(String properties) throws IllegalArgumentException {
-        properties = properties.substring(properties.indexOf(".") + 1, properties.length());
-        int plusIndex = properties.indexOf("|");
-        if (properties.indexOf("|") != -1) {
-            String p1 = properties.substring(plusIndex + 1, properties.length());
+    protected String getSecondProperty(String expression) throws IllegalArgumentException {
+        expression = expression.substring(expression.indexOf(".") + 1, expression.length());
+        int plusIndex = expression.indexOf("|");
+        if (expression.indexOf("|") != -1) {
+            String p1 = expression.substring(plusIndex + 1, expression.length());
             return p1;
         } else
             throw new IllegalArgumentException();

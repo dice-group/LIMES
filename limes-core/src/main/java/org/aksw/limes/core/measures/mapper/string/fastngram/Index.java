@@ -27,7 +27,7 @@ public class Index {
      * Constructor for similarities others than trigrams
      *
      * @param _q
-     *         value of n for n-grams
+     *            value of n for n-grams
      */
     public Index(int _q) {
         sizeTokenIndex = new HashMap<Integer, Map<String, Set<String>>>();
@@ -39,7 +39,7 @@ public class Index {
      * Tokenizes a string and adds it to the index
      *
      * @param s
-     *         String to index
+     *            String to index
      * @return The number of tokens generated for s
      */
     public Set<String> addString(String s) {
@@ -62,8 +62,10 @@ public class Index {
     /**
      * Returns all strings to a given token
      *
+     * @param size,
+     *            Size of token
      * @param token
-     *         Input token
+     *            Input token
      * @return All strings that contain this token
      */
     public Set<String> getStrings(int size, String token) {
@@ -82,7 +84,7 @@ public class Index {
      * Returns all strings of size size
      *
      * @param size
-     *         Size requirement
+     *            Size requirement
      * @return All strings which consist of "size" different tokens
      */
     public Map<String, Set<String>> getStrings(int size) {

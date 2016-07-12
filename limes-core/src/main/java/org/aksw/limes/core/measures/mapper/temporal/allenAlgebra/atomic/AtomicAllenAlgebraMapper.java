@@ -39,14 +39,14 @@ public abstract class AtomicAllenAlgebraMapper {
      *            The metric expression
      * @return first property of metric expression as string
      */
-    protected static String getBeginProperty(String properties) {
-        properties = properties.substring(properties.indexOf(".") + 1, properties.length());
-        int plusIndex = properties.indexOf("|");
-        if (properties.indexOf("|") != -1) {
-            String p1 = properties.substring(0, plusIndex);
+    protected static String getBeginProperty(String expression) {
+        expression = expression.substring(expression.indexOf(".") + 1, expression.length());
+        int plusIndex = expression.indexOf("|");
+        if (expression.indexOf("|") != -1) {
+            String p1 = expression.substring(0, plusIndex);
             return p1;
         } else
-            return properties;
+            return expression;
     }
 
     /**
@@ -55,13 +55,14 @@ public abstract class AtomicAllenAlgebraMapper {
      * @param expression,
      *            The metric expression
      * @return first property of metric expression as string
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException,
+     *             if endDate property is not declared
      */
-    protected static String getEndProperty(String properties) throws IllegalArgumentException {
-        properties = properties.substring(properties.indexOf(".") + 1, properties.length());
-        int plusIndex = properties.indexOf("|");
-        if (properties.indexOf("|") != -1) {
-            String p1 = properties.substring(plusIndex + 1, properties.length());
+    protected static String getEndProperty(String expression) throws IllegalArgumentException {
+        expression = expression.substring(expression.indexOf(".") + 1, expression.length());
+        int plusIndex = expression.indexOf("|");
+        if (expression.indexOf("|") != -1) {
+            String p1 = expression.substring(plusIndex + 1, expression.length());
             return p1;
         } else
             throw new IllegalArgumentException();
@@ -240,6 +241,8 @@ public abstract class AtomicAllenAlgebraMapper {
      *            The source cache
      * @param target,
      *            The target cache
+     * @param expression,
+     *            The metric expression
      * @return concurrentEvents, set of concurrent target events for each source
      *         instance.
      */
@@ -252,6 +255,8 @@ public abstract class AtomicAllenAlgebraMapper {
      *            The source cache
      * @param target,
      *            The target cache
+     * @param expression,
+     *            The metric expression
      * @return predecessorEvents, set of predecessor target events for each
      *         source instance.
      */

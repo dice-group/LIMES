@@ -15,13 +15,13 @@ public abstract class TemporalMeasure extends Measure implements ITemporalMeasur
      *         metric expression
      * @return first property of metric expression as string
      */
-    public String getFirstProperty(String properties) throws IllegalArgumentException {
-        int plusIndex = properties.indexOf("|");
-        if (properties.indexOf("|") != -1) {
-            String p1 = properties.substring(0, plusIndex);
+    public String getFirstProperty(String expression) throws IllegalArgumentException {
+        int plusIndex = expression.indexOf("|");
+        if (expression.indexOf("|") != -1) {
+            String p1 = expression.substring(0, plusIndex);
             return p1;
         } else
-            return properties;
+            return expression;
     }
 
     /**
@@ -31,10 +31,10 @@ public abstract class TemporalMeasure extends Measure implements ITemporalMeasur
      *         the metric expression
      * @return second property of metric expression as string
      */
-    public String getSecondProperty(String properties) throws IllegalArgumentException {
-        int plusIndex = properties.indexOf("|");
-        if (properties.indexOf("|") != -1) {
-            String p1 = properties.substring(plusIndex + 1, properties.length());
+    public String getSecondProperty(String expression) throws IllegalArgumentException {
+        int plusIndex = expression.indexOf("|");
+        if (expression.indexOf("|") != -1) {
+            String p1 = expression.substring(plusIndex + 1, expression.length());
             return p1;
         } else
             throw new IllegalArgumentException();
