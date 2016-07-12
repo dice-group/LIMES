@@ -10,8 +10,7 @@ import java.util.TreeMap;
 /**
  * Implements the Allen's temporal relation mapper interface.
  *
- * @author Kleanthi Georgala {@literal <}georgala {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public interface IAllenAlgebraMapper extends IMapper {

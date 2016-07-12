@@ -12,8 +12,7 @@ import java.util.*;
 /**
  * Abstract class of simple temporal relations mapper.
  *
- * @author Kleanthi Georgala {@literal <}georgala {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemporalMapper {

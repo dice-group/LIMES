@@ -28,7 +28,7 @@ import java.util.Map.Entry;
  * Implements the Dynamic planner class. It receives a link specification as
  * input and generates a mutable NestedPlan.
  *
- * @author Kleanthi Georgala {@literal <}georgala {@literal @} informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public class DynamicPlanner extends Planner {

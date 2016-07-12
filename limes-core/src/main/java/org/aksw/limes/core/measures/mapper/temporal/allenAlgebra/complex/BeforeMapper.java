@@ -14,6 +14,9 @@ import java.util.TreeMap;
 /**
  * Class for Allen's temporal relation "Before". Given two events X and Y, it
  * implements X < Y.
+ * 
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
  */
 public class BeforeMapper extends AllenAlgebraMapper {
     /**

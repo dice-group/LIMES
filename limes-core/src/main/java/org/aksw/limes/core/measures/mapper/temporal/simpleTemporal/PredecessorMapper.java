@@ -12,8 +12,7 @@ import java.util.TreeMap;
 /**
  * Implements the predecessor mapper class.
  *
- * @author Kleanthi Georgala {@literal <}georgala {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public class PredecessorMapper extends SimpleTemporalMapper {

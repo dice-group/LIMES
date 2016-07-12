@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Implements the temporal equals measure class.
  *
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public class EqualsMeasure extends TemporalMeasure {
@@ -65,8 +65,8 @@ public class EqualsMeasure extends TemporalMeasure {
     /**
      * Returns the similarity between two instances given their begin and end
      * dates. If the first instance has a begin date equal to the begin date of
-     * the second instance and its end date is equal to the end date of the second
-     * instance, then their similarity is 1, and 0 otherwise.
+     * the second instance and its end date is equal to the end date of the
+     * second instance, then their similarity is 1, and 0 otherwise.
      * 
      *
      * @return The similarity of the instances

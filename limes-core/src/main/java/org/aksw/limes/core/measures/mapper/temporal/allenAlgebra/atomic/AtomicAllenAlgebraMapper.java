@@ -19,6 +19,9 @@ import java.util.*;
  * using two time points b(s) and e(s). To compose the atomic interval
  * relations, we define all possible binary relations between the begin and end
  * points of two event resources s = (b(s), e(s)) and t = (b(t), e(t)).
+ * 
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
  */
 public abstract class AtomicAllenAlgebraMapper {
     protected static final Logger logger = LoggerFactory.getLogger(AtomicAllenAlgebraMapper.class);

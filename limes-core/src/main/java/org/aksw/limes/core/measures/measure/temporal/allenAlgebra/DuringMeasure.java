@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Implements the temporal during measure class.
  *
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public class DuringMeasure extends TemporalMeasure {
@@ -65,8 +65,8 @@ public class DuringMeasure extends TemporalMeasure {
     /**
      * Returns the similarity between two instances given their begin and end
      * dates. If the first instance has a end date lower than the end date of
-     * the second instance and its begin date is higher than the begin date of the
-     * second instance, then their similarity is 1, and 0 otherwise.
+     * the second instance and its begin date is higher than the begin date of
+     * the second instance, then their similarity is 1, and 0 otherwise.
      * 
      *
      * @return The similarity of the instances

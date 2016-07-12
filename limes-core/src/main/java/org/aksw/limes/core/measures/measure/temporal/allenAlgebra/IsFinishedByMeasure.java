@@ -8,10 +8,11 @@ import org.slf4j.LoggerFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 /**
  * Implements the temporal is finished by measure class.
  *
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public class IsFinishedByMeasure extends TemporalMeasure {
@@ -92,8 +93,10 @@ public class IsFinishedByMeasure extends TemporalMeasure {
                     "IsFinishedBy measure requires both begin and end date of the event. End date property is missing. Exiting..");
             System.exit(1);
         }
-        String s1 = new String(instance1.getProperty(beginDate1).first() + "|" + instance1.getProperty(endDate1).first());
-        String s2 = new String(instance2.getProperty(beginDate2).first() + "|" + instance2.getProperty(endDate2).first());
+        String s1 = new String(
+                instance1.getProperty(beginDate1).first() + "|" + instance1.getProperty(endDate1).first());
+        String s2 = new String(
+                instance2.getProperty(beginDate2).first() + "|" + instance2.getProperty(endDate2).first());
 
         return this.getSimilarity(s1, s2);
     }

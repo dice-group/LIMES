@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Implements the temporal is started by measure class.
  *
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public class IsStartedByMeasure extends TemporalMeasure {

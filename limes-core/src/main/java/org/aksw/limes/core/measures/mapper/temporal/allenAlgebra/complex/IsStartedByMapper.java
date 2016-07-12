@@ -12,6 +12,9 @@ import java.util.*;
 /**
  * Class for Allen's temporal relation "IsStartedBy". Given two events X and Y,
  * it implements X si Y.
+ * 
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
  */
 public class IsStartedByMapper extends AllenAlgebraMapper {
     /**

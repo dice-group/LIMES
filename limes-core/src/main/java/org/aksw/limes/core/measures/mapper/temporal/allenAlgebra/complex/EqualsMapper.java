@@ -12,6 +12,9 @@ import java.util.*;
 /**
  * Class for Allen's temporal relation "Equals". Given two events X and Y, it
  * implements X = Y.
+ * 
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
  */
 public class EqualsMapper extends AllenAlgebraMapper {
     /**

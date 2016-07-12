@@ -3,6 +3,9 @@ package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex;
 /**
  * Class for Allen's temporal relation "Overlaps". Given two events X and
  * Y, it implements X o Y.
+ * 
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
  */
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;

@@ -14,6 +14,9 @@ import java.util.TreeMap;
 /**
  * Class for Allen's temporal relation "IsMetBy". Given two events X and Y, it
  * implements X mi Y.
+ * 
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
  */
 public class IsMetByMapper extends AllenAlgebraMapper {
     /**

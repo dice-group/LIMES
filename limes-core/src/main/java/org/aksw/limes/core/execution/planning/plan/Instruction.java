@@ -7,10 +7,8 @@ import org.slf4j.LoggerFactory;
  * Implements Instruction class. Instruction is an essential component of the
  * execution plan. An execution is expressed as a set of instruction objects.
  *
- * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
- * @author Kleanthi Georgala {@literal <}georgala {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 

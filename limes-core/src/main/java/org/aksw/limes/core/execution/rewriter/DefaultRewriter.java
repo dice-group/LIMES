@@ -7,8 +7,8 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
  * returned without any modification.
  * 
  *
- * @author Kleanthi Georgala {@literal <}georgala {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public class DefaultRewriter extends Rewriter {

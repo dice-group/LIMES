@@ -9,8 +9,7 @@ import org.slf4j.LoggerFactory;
  * class is responsible for choosing and creating the corresponding execution
  * engine object.
  *
- * @author Kleanthi Georgala {@literal <}georgala {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public class ExecutionEngineFactory {

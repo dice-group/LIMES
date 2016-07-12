@@ -14,6 +14,9 @@ import java.util.TreeMap;
 /**
  * Class for Allen's temporal relation "Meets". Given two events X and Y, it
  * implements X m Y.
+ * 
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
  */
 public class MeetsMapper extends AllenAlgebraMapper {
     /**

@@ -12,6 +12,9 @@ import java.util.*;
 /**
  * Class for Allen's temporal relation "Finishes". Given two events X and Y, it
  * implements X f Y.
+ * 
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
  */
 public class FinishesMapper extends AllenAlgebraMapper {
     /**

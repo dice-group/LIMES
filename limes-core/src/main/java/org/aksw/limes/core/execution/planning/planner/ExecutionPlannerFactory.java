@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
  * Implements the planner factory class. The planner factory class is
  * responsible for choosing and creating the corresponding planner object.
  *
- * @author Kleanthi Georgala {@literal <}georgala {@literal @} informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public class ExecutionPlannerFactory {

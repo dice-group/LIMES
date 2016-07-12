@@ -7,10 +7,8 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
  * Implements the planner interface. It is responsible for generating a plan for
  * an input link specification.
  *
- * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
- * @author Kleanthi Georgala {@literal <}georgala {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public interface IPlanner {

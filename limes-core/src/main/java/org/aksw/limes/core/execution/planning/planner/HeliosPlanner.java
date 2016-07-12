@@ -26,10 +26,7 @@ import java.util.List;
  * Implements the Helios planner class. It receives a link specification as
  * input and generates an immutable NestedPlan.
  *
- * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
- * @author Kleanthi Georgala {@literal <}georgala {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public class HeliosPlanner extends Planner {

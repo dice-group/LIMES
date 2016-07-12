@@ -32,10 +32,8 @@ import java.util.List;
  * independent parts of the plan returned from the planner sequentially and
  * returns a MemoryMemoryMapping.
  *
- * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
- * @author Kleanthi Georgala {@literal <}georgala {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public class SimpleExecutionEngine extends ExecutionEngine {

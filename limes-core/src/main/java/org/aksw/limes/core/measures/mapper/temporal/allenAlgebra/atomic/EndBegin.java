@@ -6,9 +6,11 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * Atomic class for Allen's temporal relations. It orders source events
- * by their end date property and the target events by their begin date
- * property.
+ * Atomic class for Allen's temporal relations. It orders source events by their
+ * end date property and the target events by their begin date property.
+ * 
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
  */
 public class EndBegin extends AtomicAllenAlgebraMapper {
     public EndBegin() {

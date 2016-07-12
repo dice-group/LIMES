@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * Implements the temporal predecessor measure class.
  *
- * @author Kleanthi Georgala <georgala@informatik.uni-leipzig.de>
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public class PredecessorMeasure extends TemporalMeasure {

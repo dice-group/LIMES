@@ -11,6 +11,9 @@ import java.util.*;
 /**
  * Class for Allen's temporal relation "After". Given two events X and Y, it
  * implements X > Y.
+ * 
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
  */
 public class AfterMapper extends AllenAlgebraMapper {
     /**

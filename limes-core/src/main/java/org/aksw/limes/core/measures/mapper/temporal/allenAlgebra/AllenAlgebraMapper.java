@@ -11,8 +11,7 @@ import java.util.Set;
  * functions between uris. For more information about Allen's Algebra @see
  * https://en.wikipedia.org/wiki/Allen's_interval_algebra
  *
- * @author Kleanthi Georgala {@literal <}georgala {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
 public abstract class AllenAlgebraMapper extends Mapper implements IAllenAlgebraMapper {
