@@ -7,7 +7,7 @@ import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import java.util.*;
 
 /**
- * @author Mohamed Sherif {@literal <}sherif {@literal @} informatik.uni-leipzig.de{@literal >}
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jun 3, 2016
  */
 public class Configuration implements IConfiguration {
