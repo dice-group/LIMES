@@ -111,7 +111,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     }
 
     /**
-     * @param childMetricExpr
+     * @param metricExpr
      * @return
      * @author sherif
      */
@@ -124,10 +124,6 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     }
 
     /**
-     * @param sourceCache
-     *         cache
-     * @param targetCache
-     *         cache
      * @param sourceProperty
      * @param targetProperty
      * @param measure
@@ -197,7 +193,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     }
 
     /**
-     * @param string
+     * @param metricExpression
+     * @param r
      * @return return mapping of the input metricExpression from the search tree
      * @author sherif
      */
@@ -245,10 +242,11 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     public double getOverallPenaltyWeight() {
         return overallPenaltyWeight;
     }
+    
     /**
      * get mapping from source cache to target cache using metricExpression
      *
-     * @param metricExpression
+     * @param ls
      * @param sCache
      * @param tCache
      * @return

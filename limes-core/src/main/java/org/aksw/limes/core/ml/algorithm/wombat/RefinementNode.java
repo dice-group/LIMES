@@ -70,10 +70,9 @@ public class RefinementNode implements Comparable<RefinementNode> {
     /**
      * Constructor
      *
-     * @param PRECISION
-     * @param RECALL
      * @param map
      * @param metricExpression
+     * @param refMap
      * @author sherif
      */
     public RefinementNode(AMapping map, String metricExpression, AMapping refMap) {

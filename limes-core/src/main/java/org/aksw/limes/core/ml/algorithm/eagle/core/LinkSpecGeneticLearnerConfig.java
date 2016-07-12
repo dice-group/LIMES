@@ -30,11 +30,11 @@ public class LinkSpecGeneticLearnerConfig extends GPConfiguration {
     /**
      * Constructor.
      *
-     * @param sourceCache
+     * @param KBIsource
      *         Specifies the source knowledge base.
-     * @param targetCache
+     * @param KBItarget
      *         Specifies the target knowledge base.
-     * @param propMap
+     * @param propMapping
      *         A Mapping of Properties of both source and target.
      * @throws InvalidConfigurationException
      */

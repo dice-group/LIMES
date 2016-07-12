@@ -57,7 +57,7 @@ public class BooleanCommand extends CommandGene
      * @param a_returnType
      *         Define the return type of this node.
      * @throws InvalidConfigurationException
-     * @TODO For a future version also allow other boolean measures to be children of this node.
+     * TODO For a future version also allow other boolean measures to be children of this node.
      */
     public BooleanCommand(final GPConfiguration a_conf, Class a_returnType, String command)
             throws InvalidConfigurationException {

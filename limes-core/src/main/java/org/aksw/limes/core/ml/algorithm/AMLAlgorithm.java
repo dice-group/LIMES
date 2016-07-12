@@ -33,8 +33,8 @@ public abstract class AMLAlgorithm {
      * Initialize the ML Algorithm.
      * 
      * @param lp learning parameters
-     * @param sourceCache the source cache
-     * @param targetCache the target cache
+     * @param source the source cache
+     * @param target the target cache
      */
     public void init(List<LearningParameter> lp, Cache source, Cache target) {
         getMl().init(lp, source, target);

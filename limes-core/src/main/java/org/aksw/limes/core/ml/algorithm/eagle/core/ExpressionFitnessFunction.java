@@ -226,10 +226,8 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
      * Method to create the mapping based on the specified expression and acceptance threshold.
      * As of now this just wraps around the the SetConstraintsMapper getLinks() function.
      *
-     * @param expression
-     *         LIMES metric expression used to compare instances of the source and target knowledgebases.
-     * @param accThreshold
-     *         global acceptance threshold.
+     * @param spec
+     *         LIMES link specification used to compare instances of the source and target knowledgebases.
      * @param full
      *         if set use full otherwise trimmed caches.
      * @return

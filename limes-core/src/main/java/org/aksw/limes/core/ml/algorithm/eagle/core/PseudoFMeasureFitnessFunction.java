@@ -123,7 +123,7 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
     }
 
     /**
-     * Get or create a mapping from a link specification (Metric String + Acceptance threshold: 0<=threshold<=1).
+     * Get or create a mapping from a link specification (Metric String + Acceptance threshold: 0&lt;=threshold&lt;=1).
      * 
      * @param spec the link specification
      * @return Mapping m={sURI, tURI} of all pairs who satisfy the metric.

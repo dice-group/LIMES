@@ -19,9 +19,9 @@ import java.util.Set;
  * CommandGene to also support evolution of preprocessing.
  *
  * @author Klaus Lyko
- * @TODO untested
- * @TODO unused
- * @TODO check mutation
+ * TODO untested
+ * TODO unused
+ * TODO check mutation
  */
 public class AtomicPreprocessingCommand extends CommandGene
         implements IMutateable, ICloneable {

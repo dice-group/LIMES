@@ -400,7 +400,6 @@ public class WombatSimple extends AWombat {
      * initiate the refinement tree as a root node  with set of
      * children nodes containing all initial classifiers
      *
-     * @return
      * @author sherif
      */
     protected void createRefinementTreeRoot() {

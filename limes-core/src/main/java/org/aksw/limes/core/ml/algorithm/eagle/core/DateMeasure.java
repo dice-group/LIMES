@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 
 /**
  * Basic Measure for dates as of now we only support the yearmeasure which basically calculates the
- * the similarity yearsim(years1, year2) of two years within a decade. Whereas if the difference <= 1 year
+ * the similarity yearsim(years1, year2) of two years within a decade. Whereas if the difference &lt;= 1 year
  * yearsim = 1; iff the difference is greater then 10 years yearsim = 0.
  * <p>
  * Please note that in order to work revistit the PropertyMapping supllied/computed to the learner

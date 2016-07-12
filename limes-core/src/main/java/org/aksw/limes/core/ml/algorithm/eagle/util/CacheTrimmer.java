@@ -25,7 +25,7 @@ public class CacheTrimmer {
      * Method to scale down a reference mapping given by an Oracle.
      * Only the first <i>max</i> <code>Entries</code> are used.
      *
-     * @param pM
+     * @param m
      *         Oracle holding all data.
      * @param max
      * @return <code>Mapping</code> scaled down to max entries.
