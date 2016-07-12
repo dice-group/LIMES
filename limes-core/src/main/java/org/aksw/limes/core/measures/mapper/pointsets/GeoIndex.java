@@ -7,7 +7,7 @@ package org.aksw.limes.core.measures.mapper.pointsets;
 import java.util.*;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class GeoIndex {
     public Map<Integer, Map<Integer, GeoSquare>> squares;

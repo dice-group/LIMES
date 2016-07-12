@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Iterator;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class SparqlQueryModule implements IQueryModule {
 

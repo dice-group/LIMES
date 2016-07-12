@@ -9,8 +9,7 @@ import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.BeginEnd
 import java.util.*;
 
 /**
- * Class for Allen's temporal relation "After". Given two events X and Y, it
- * implements X > Y.
+ * Class for Allen's temporal relation "After". 
  * 
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0

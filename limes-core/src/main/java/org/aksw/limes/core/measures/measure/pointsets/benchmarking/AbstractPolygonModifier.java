@@ -13,7 +13,7 @@ import java.util.Set;
  * Implements the polygon modifier abstract class. It is responsible for
  * modifying a set of polygons.
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public abstract class AbstractPolygonModifier implements PolygonModifier {
 

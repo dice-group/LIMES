@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This class represents a naive oracle
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0

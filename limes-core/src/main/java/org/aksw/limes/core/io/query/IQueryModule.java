@@ -10,7 +10,7 @@ import org.aksw.limes.core.io.cache.Cache;
 /**
  * Interface for query modules
  *
- * @author ngonga <ngonga@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Jul 8, 2016
  */

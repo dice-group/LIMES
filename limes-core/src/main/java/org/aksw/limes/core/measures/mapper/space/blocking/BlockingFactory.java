@@ -6,7 +6,7 @@ package org.aksw.limes.core.measures.mapper.space.blocking;
 
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class BlockingFactory {
 

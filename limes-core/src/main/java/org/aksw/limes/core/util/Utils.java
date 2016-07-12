@@ -14,7 +14,7 @@ import java.util.List;
 
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class Utils {
 

@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * Interface for mappers that check for RCC-8 topological relations
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public interface ITopologicRelationMapper {
     public AMapping getMapping(Set<Polygon> source, Set<Polygon> target);

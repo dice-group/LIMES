@@ -11,7 +11,7 @@ import java.util.*;
  * Implements a cache that is exclusively in memory. Fastest cache as it does
  * not need to read from the hard drive.
  *
- * @author ngonga <ngonga@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Klaus Lyko
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Jul 8, 2015

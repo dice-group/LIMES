@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  * target.
  *
  * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0

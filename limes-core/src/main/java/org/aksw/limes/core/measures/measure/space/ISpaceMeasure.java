@@ -8,7 +8,7 @@ package org.aksw.limes.core.measures.measure.space;
 import org.aksw.limes.core.measures.measure.IMeasure;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public interface ISpaceMeasure extends IMeasure {
     public void setDimension(int n);

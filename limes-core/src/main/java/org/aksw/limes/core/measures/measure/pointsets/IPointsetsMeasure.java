@@ -11,7 +11,7 @@ import org.aksw.limes.core.measures.measure.IMeasure;
 import java.util.Set;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public interface IPointsetsMeasure extends IMeasure {
 

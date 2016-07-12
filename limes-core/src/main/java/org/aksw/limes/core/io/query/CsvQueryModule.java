@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Nov 23, 2015
  */

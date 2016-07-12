@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class Index {
 

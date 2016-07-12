@@ -9,7 +9,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.measure.Measure;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public interface ISelfConfigurator {
     public void computeMeasure(Cache source, Cache target, String parameters[]);

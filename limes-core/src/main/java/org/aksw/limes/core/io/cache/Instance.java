@@ -14,8 +14,8 @@ import java.util.TreeSet;
  * statements where s is a particular URI. From the point of view of linking, it
  * an instance contains all the data linked to a particular instance ;)
  *
- * @author ngonga <ngonga@informatik.uni-leipzig.de>
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 8, 2016
  */
 public class Instance implements Comparable<Object>, Serializable {

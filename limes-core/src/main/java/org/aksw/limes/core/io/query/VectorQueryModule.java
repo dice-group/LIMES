@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * The file format is assumed to be URI\tVector. The vector itself is read by the
  * metrics of the metric factory for maximum flexibility.
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Nov 23, 2015
  */

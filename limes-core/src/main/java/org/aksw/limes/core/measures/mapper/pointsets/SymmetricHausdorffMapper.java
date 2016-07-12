@@ -10,7 +10,7 @@ import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class SymmetricHausdorffMapper extends Mapper {
     /**

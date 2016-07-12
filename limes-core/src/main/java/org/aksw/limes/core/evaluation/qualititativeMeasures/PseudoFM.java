@@ -13,7 +13,7 @@ import java.util.Set;
  * target.
  *
  * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @deprecated Use {@link PseudoFMeasure} instead
  */
 @Deprecated

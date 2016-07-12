@@ -5,7 +5,7 @@
 package org.aksw.limes.core.ml.algorithm.euclid;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class SimpleClassifier {
     public String measure = null;

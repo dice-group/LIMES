@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class NaiveHausdorff extends PointsetsMeasure {
 

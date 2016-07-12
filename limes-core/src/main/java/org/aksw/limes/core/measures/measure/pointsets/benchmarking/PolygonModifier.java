@@ -12,7 +12,7 @@ import java.util.Set;
  * Implements the polygon modifier interface. It provides basic functions for
  * modifying a set of polygons.
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public interface PolygonModifier {
     /**
@@ -23,7 +23,7 @@ public interface PolygonModifier {
      * @param threshold,
      *         the threshold
      * @return set of polygons, modified
-     * @author ngonga
+     * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
      */
     Set<Polygon> modifySet(Set<Polygon> dataset, double threshold);
 
@@ -35,7 +35,7 @@ public interface PolygonModifier {
      * @param threshold,
      *         the threshold
      * @return a polygon, modified
-     * @author ngonga
+     * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
      */
     Polygon modify(Polygon p, double threshold);
 

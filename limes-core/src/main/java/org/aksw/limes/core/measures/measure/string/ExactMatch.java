@@ -8,7 +8,7 @@ package org.aksw.limes.core.measures.measure.string;
 import org.aksw.limes.core.io.cache.Instance;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class ExactMatch extends StringMeasure {
 

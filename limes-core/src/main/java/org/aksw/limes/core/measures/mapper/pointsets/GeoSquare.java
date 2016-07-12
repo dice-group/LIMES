@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Same as a hypercube for polygons
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class GeoSquare {
 

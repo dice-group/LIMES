@@ -16,7 +16,7 @@ import java.util.Set;
  * target.
  *
  * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author mofeed hassan
  * @version 1.0
  * @since 1.0

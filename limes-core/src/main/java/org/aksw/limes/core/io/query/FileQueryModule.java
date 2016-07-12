@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * @author ngonga Can load from a resource as well.
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class FileQueryModule implements IQueryModule {
 

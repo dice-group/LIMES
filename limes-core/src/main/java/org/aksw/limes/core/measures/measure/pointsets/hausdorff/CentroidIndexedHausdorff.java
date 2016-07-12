@@ -11,7 +11,7 @@ import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import java.util.Set;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class CentroidIndexedHausdorff extends IndexedHausdorff {
 

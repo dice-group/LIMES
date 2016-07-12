@@ -13,7 +13,7 @@ import org.xml.sax.SAXParseException;
 /**
  * Checks a link specification against the LIMES DTD.
  *
- * @author ngonga <ngonga@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
  * @version Jul 8, 2016
  */

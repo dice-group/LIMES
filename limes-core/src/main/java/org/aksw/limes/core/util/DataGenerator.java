@@ -3,7 +3,7 @@ package org.aksw.limes.core.util;
 import org.aksw.limes.core.io.cache.Cache;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public interface DataGenerator {
     public static String LABEL = "label";

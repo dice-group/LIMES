@@ -8,7 +8,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.euclid.SimpleClassifier;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class ExtendedClassifier extends SimpleClassifier {
 

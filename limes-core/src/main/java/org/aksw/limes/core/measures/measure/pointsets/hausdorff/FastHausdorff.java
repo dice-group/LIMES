@@ -8,7 +8,7 @@ import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class FastHausdorff extends NaiveHausdorff {
 

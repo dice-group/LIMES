@@ -24,7 +24,7 @@ import java.util.TreeSet;
 /**
  * Uses metric spaces to create blocks.
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class HR3 extends Mapper {
     static Logger logger = LoggerFactory.getLogger(HR3.class.getName());

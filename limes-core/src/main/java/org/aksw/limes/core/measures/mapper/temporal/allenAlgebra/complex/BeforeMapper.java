@@ -12,8 +12,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * Class for Allen's temporal relation "Before". Given two events X and Y, it
- * implements X < Y.
+ * Class for Allen's temporal relation "Before". 
  * 
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0

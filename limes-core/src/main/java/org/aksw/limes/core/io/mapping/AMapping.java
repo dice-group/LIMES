@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.TreeSet;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif {@literal <}sherif {@literal @} informatik.uni-leipzig.de{@literal >}
  * @author Tommaso Soru {@literal <}tsoru {@literal @} informatik.uni-leipzig.de{@literal >} 
  * @author Klaus Lyko {@literal <}lyko {@literal @} informatik.uni-leipzig.de{@literal >}

@@ -7,7 +7,7 @@ package org.aksw.limes.core.measures.measure.pointsets.hausdorff;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class SymmetricHausdorff extends NaiveHausdorff {
 

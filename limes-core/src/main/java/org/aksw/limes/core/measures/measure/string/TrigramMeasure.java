@@ -9,7 +9,7 @@ import org.aksw.limes.core.io.cache.Instance;
 import java.util.TreeSet;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class TrigramMeasure extends StringMeasure {
 

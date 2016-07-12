@@ -24,7 +24,7 @@ import java.util.Iterator;
  * Enhancing it with folders: specify the folder, where the application has
  * permissions to read and write files.
  *
- * @author ngonga <ngonga@informatik.uni-leipzig.de>
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Lyko
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 8, 2016

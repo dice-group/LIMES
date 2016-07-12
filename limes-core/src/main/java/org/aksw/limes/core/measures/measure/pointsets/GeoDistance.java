@@ -12,7 +12,7 @@ import org.aksw.limes.core.measures.measure.space.SpaceMeasure;
  * input consists of latitute and longitude of two points. The similarity is computed
  * as 1/(1+d) where d is the distance between the two points.
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class GeoDistance extends SpaceMeasure {
 

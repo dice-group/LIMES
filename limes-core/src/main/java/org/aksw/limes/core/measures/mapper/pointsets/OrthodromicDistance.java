@@ -7,7 +7,7 @@ package org.aksw.limes.core.measures.mapper.pointsets;
 import org.aksw.limes.core.datastrutures.Point;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class OrthodromicDistance {
 

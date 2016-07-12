@@ -13,7 +13,7 @@ import java.util.*;
  * is important to notice that if (s, t, sim1) are already in the mapping and
  * (s, t, sim2) is added then the mapping will contain (s, t, max(sim1, sim2))
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif {@literal <}sherif {@literal @} informatik.uni-leipzig.de{@literal >}
  * @version Nov 24, 2015
  */

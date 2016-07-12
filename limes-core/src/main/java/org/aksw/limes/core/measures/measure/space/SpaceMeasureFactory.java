@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class SpaceMeasureFactory {
 

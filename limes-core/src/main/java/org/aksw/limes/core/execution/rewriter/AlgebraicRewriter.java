@@ -15,8 +15,7 @@ import java.util.List;
  * time-efficient link specification.
  *
  *
- * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * 
  * @version 1.0
  */

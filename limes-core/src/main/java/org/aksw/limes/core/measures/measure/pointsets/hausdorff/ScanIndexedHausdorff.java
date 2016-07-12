@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
 

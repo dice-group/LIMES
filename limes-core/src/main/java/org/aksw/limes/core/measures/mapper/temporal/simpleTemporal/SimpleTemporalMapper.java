@@ -40,7 +40,7 @@ public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemp
      * @param expression,
      *            The metric expression
      * @return second property of metric expression as string
-     * @throws IllegalArgumentException,
+     * @throws IllegalArgumentException
      *             if endDate property is not declared
      */
     protected String getSecondProperty(String expression) throws IllegalArgumentException {

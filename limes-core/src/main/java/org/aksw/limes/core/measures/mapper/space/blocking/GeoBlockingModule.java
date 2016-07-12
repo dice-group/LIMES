@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * Not tested yet. Works on the angles by transforming the thresholds into angular
  * thresholds. Does everything modulo 90 and 180°.
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class GeoBlockingModule implements BlockingModule {
 

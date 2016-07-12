@@ -8,7 +8,7 @@ package org.aksw.limes.core.measures.measure.string;
 import org.aksw.limes.core.measures.measure.IMeasure;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public interface IStringMeasure extends IMeasure {
     /**

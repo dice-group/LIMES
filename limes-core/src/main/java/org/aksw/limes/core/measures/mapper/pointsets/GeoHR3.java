@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * already been compared and rejected Should also check whether the polygon
  * combination is already part of the result
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class GeoHR3 {
     // this angularThreshold in is degrees, thus need to convert km to degrees

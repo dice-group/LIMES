@@ -55,7 +55,7 @@ public abstract class AtomicAllenAlgebraMapper {
      * @param expression,
      *            The metric expression
      * @return first property of metric expression as string
-     * @throws IllegalArgumentException,
+     * @throws IllegalArgumentException
      *             if endDate property is not declared
      */
     protected static String getEndProperty(String expression) throws IllegalArgumentException {

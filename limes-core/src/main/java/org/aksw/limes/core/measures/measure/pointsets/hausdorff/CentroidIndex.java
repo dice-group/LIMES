@@ -20,7 +20,7 @@ import java.util.Map;
  * axis. Also stores the radius of the smallest circle which contains the
  * polygon entirely
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class CentroidIndex extends PolygonIndex {
 

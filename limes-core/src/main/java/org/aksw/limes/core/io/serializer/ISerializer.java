@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Interface for serializers
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Nov 25, 2015
  */

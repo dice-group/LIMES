@@ -6,7 +6,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
  * Basic idea is that the interface can load reference data and act as a user in simulations
  * This data will be mostly given as a mapping
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0

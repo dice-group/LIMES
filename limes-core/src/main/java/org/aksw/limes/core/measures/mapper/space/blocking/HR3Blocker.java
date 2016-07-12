@@ -19,7 +19,7 @@ import java.util.TreeSet;
  * This class implements the HR3 algorithm which can ensure that a certain RRR
  * is reached.
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class HR3Blocker implements BlockingModule {
     static Logger logger = LoggerFactory.getLogger("LIMES");

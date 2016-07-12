@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * similarity is computed as 1/(1+d), where d is the distance between the two
  * points. Consequently d = 0 -> sim = 1 and d = Infinity -> sim = 0
  *
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class EuclideanMetric extends SpaceMeasure {
     static Logger logger = LoggerFactory.getLogger("LIMES");

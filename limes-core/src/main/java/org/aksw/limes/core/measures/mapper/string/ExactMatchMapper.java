@@ -12,7 +12,7 @@ import org.slf4j.MarkerFactory;
 import java.util.*;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class ExactMatchMapper extends Mapper {
 

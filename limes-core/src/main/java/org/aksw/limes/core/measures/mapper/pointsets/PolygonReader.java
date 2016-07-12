@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * @author ngonga
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class PolygonReader {
     private static final Logger logger = LoggerFactory.getLogger(PolygonReader.class.getName());
