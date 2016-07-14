@@ -46,7 +46,7 @@ public class EvaluationSerializerTest {
         try {
             EvaluationSerlializer evaSer = new EvaluationSerlializer();
             evaSer.setSeparator(",");
-            evaSer.writeToFile(results, "/home/mofeed/Documents/results.csv");
+            evaSer.writeToFile(results, "resources/evauationResults.csv");
             evaSer.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());

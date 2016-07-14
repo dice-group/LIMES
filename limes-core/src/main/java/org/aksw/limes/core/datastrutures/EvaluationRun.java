@@ -117,6 +117,7 @@ public class EvaluationRun {
             sb.append(qualititativeScores.get(evaluator).toString());
             sb.append(separator);
         }
+        sb.replace(sb.length()-1, sb.length(), "");
         return sb.toString();
     }
     public String getAlgorithmName() {

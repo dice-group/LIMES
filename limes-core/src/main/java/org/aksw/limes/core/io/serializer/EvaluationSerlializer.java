@@ -103,6 +103,7 @@ public class EvaluationSerlializer {
             sb.append(evaluatorType);
             sb.append(separator);
         }
+        sb.replace(sb.length()-1, sb.length(), "");
         return sb.toString();
 
     }
