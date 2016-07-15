@@ -18,13 +18,15 @@ public class LearningParameter {
     
     
     /**
-     * @param name
-     * @param value
-     * @param clazz
-     * @param rangeStart
-     * @param rangeEnd
-     * @param rangeStep
-     * @param description
+     * Constructor
+     * 
+     * @param name parameter's name
+     * @param value parameter's value
+     * @param clazz parameter's class
+     * @param rangeStart parameter's range start
+     * @param rangeEnd parameter's range end
+     * @param rangeStep parameter's range step
+     * @param description parameter's description
      */
     public LearningParameter(String name, Object value, Class<?> clazz, double rangeStart, double rangeEnd,
             double rangeStep, String description) {
@@ -39,105 +41,105 @@ public class LearningParameter {
     }
 
     /**
-     * 
+     * Constructor
      */
     public LearningParameter(){
         super();
     }
     
     /**
-     * @return
+     * @return parameter's range step
      */
     public double getRangeStep() {
         return rangeStep;
     }
 
     /**
-     * @param rangeStep
+     * @param rangeStep to be set
      */
     public void setRangeStep(double rangeStep) {
         this.rangeStep = rangeStep;
     }
 
     /**
-     * @return
+     * @return parameter's name
      */
     public String getName() {
         return name;
     }
     
     /**
-     * @param name
+     * @param name to be set
      */
     public void setName(String name) {
         this.name = name;
     }
     
     /**
-     * @return
+     * @return parameter's value
      */
     public Object getValue() {
         return value;
     }
     
     /**
-     * @param value
+     * @param value to be set
      */
     public void setValue(Object value) {
         this.value = value;
     }
     
     /**
-     * @return
+     * @return parameter's class 
      */
     public Class<?> getClazz() {
         return clazz;
     }
     
     /**
-     * @param clazz
+     * @param clazz to be set
      */
     public void setClazz(Class<?> clazz) {
         this.clazz = clazz;
     }
     
     /**
-     * @return
+     * @return parameter's range start as double
      */
     public double getRangeStart() {
         return rangeStart;
     }
     
     /**
-     * @param rangeStart
+     * @param rangeStart to be set
      */
     public void setRangeStart(double rangeStart) {
         this.rangeStart = rangeStart;
     }
     
     /**
-     * @return
+     * @return parameter's range end
      */
     public double getRangeEnd() {
         return rangeEnd;
     }
     
     /**
-     * @param rangeEnd
+     * @param rangeEnd to be set
      */
     public void setRangeEnd(double rangeEnd) {
         this.rangeEnd = rangeEnd;
     }
     
     /**
-     * @return
+     * @return parameter's description
      */
     public String getDescription() {
         return description;
     }
     
     /**
-     * @param description
+     * @param description to be set
      */
     public void setDescription(String description) {
         this.description = description;

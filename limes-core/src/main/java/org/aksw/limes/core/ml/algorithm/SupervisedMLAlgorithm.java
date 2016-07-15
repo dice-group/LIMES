@@ -15,7 +15,7 @@ public class SupervisedMLAlgorithm extends AMLAlgorithm {
 
     /**
      * @param clazz the core ML algorithm class
-     * @throws UnsupportedMLImplementationException
+     * @throws UnsupportedMLImplementationException Exception
      */
     public SupervisedMLAlgorithm(Class<? extends ACoreMLAlgorithm> clazz) throws UnsupportedMLImplementationException {
 
@@ -36,7 +36,7 @@ public class SupervisedMLAlgorithm extends AMLAlgorithm {
     /**
      * @param trainingData training data
      * @return wrap with results
-     * @throws UnsupportedMLImplementationException
+     * @throws UnsupportedMLImplementationException Exception
      */
     public MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
         return getMl().learn(trainingData);

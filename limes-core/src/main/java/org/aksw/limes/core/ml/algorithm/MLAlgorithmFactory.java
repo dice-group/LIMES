@@ -64,7 +64,7 @@ public class MLAlgorithmFactory {
      * @param clazz the core ML algorithm class
      * @param mlType the implementation type
      * @return the ML algorithm
-     * @throws UnsupportedMLImplementationException
+     * @throws UnsupportedMLImplementationException Exception
      */
     public static AMLAlgorithm createMLAlgorithm(Class<? extends ACoreMLAlgorithm> clazz, MLImplementationType mlType) throws UnsupportedMLImplementationException {
 

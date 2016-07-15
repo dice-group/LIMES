@@ -15,7 +15,7 @@ public class ActiveMLAlgorithm extends AMLAlgorithm {
 
     /**
      * @param clazz the CoreMLAlgorithm class
-     * @throws UnsupportedMLImplementationException
+     * @throws UnsupportedMLImplementationException if ML implementation is not supported
      */
     public ActiveMLAlgorithm(Class<? extends ACoreMLAlgorithm> clazz) throws UnsupportedMLImplementationException {
 
@@ -35,7 +35,7 @@ public class ActiveMLAlgorithm extends AMLAlgorithm {
     /**
      * @param size number of examples to return
      * @return the mapping
-     * @throws UnsupportedMLImplementationException
+     * @throws UnsupportedMLImplementationException if ML implementation is not supported
      */
     public AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
         return getMl().getNextExamples(size);
@@ -43,7 +43,7 @@ public class ActiveMLAlgorithm extends AMLAlgorithm {
 
     /**
      * @return wrap with results
-     * @throws UnsupportedMLImplementationException
+     * @throws UnsupportedMLImplementationException Exception
      */
     public MLResults activeLearn() throws UnsupportedMLImplementationException {
         return getMl().activeLearn();
@@ -52,7 +52,7 @@ public class ActiveMLAlgorithm extends AMLAlgorithm {
     /**
      * @param oracleMapping mapping from the oracle
      * @return wrap with results
-     * @throws UnsupportedMLImplementationException
+     * @throws UnsupportedMLImplementationException if ML implementation is not supported
      */
     public MLResults activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
         return getMl().activeLearn(oracleMapping);

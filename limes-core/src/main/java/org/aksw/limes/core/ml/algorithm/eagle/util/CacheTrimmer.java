@@ -25,9 +25,8 @@ public class CacheTrimmer {
      * Method to scale down a reference mapping given by an Oracle.
      * Only the first <i>max</i> <code>Entries</code> are used.
      *
-     * @param m
-     *         Oracle holding all data.
-     * @param max
+     * @param m Oracle holding all data.
+     * @param max number of examples
      * @return <code>Mapping</code> scaled down to max entries.
      */
     public static AMapping trimExamples(AMapping m, int max) {
@@ -41,11 +40,11 @@ public class CacheTrimmer {
                 break;
             String key = e.getKey();
             HashMap<String, Double> value = e.getValue();
-//			Set<String> vSet=value.keySet();
+            //			Set<String> vSet=value.keySet();
             output.add(key, value);
-//			for(String match: vSet) {
-//				System.out.println(key+" => "+match+" : "+value.get(match));
-//			}
+            //			for(String match: vSet) {
+            //				System.out.println(key+" => "+match+" : "+value.get(match));
+            //			}
 
             count++;
         }
@@ -57,9 +56,9 @@ public class CacheTrimmer {
      * get a random set of source uris of the reference mapping and for each one target
      * uri it is mapped to!
      *
-     * @param m
-     * @param max
-     * @return
+     * @param m Mapping
+     * @param max number of examples
+     * @return AMapping
      */
     public static AMapping trimExamplesRandomly(AMapping m, int max) {
         AMapping output = MappingFactory.createDefaultMapping();
@@ -89,9 +88,9 @@ public class CacheTrimmer {
      * mapping m. The approach here is to randomly select source URIs of m and for each add
      * ALL target URIs it is mapped to.
      *
-     * @param m
-     * @param max
-     * @return
+     * @param m Mapping
+     * @param max number of examples
+     * @return AMapping
      */
     public static AMapping getRandomTrainingData(AMapping m, int max) {
         AMapping output = MappingFactory.createDefaultMapping();
@@ -209,39 +208,10 @@ public class CacheTrimmer {
         return ret;
     }
 
-    //
-//	public static void main(String[] args) {
-//		String configFile = "Examples/GeneticEval/PublicationData.xml";
-//		String file = "Examples/GeneticEval/Datasets/DBLP-ACM/DBLP-ACM_perfectMapping.csv";
-//	
-//		configFile = "Examples/GeneticEval/DBLP-Scholar.xml";
-//		file = "Examples/GeneticEval/Datasets/DBLP-Scholar/DBLP-Scholar_perfectMapping.csv";
-//		
-//		Oracle o = OracleFactory.getOracle(file, "csv", "simple");
-//		o.getMapping();
-////		Mapping optimalMapping = o.getMapping();
-//		//o.loadData(optimalMapping);
-//		
-//		CacheTrimmer trimmer = new CacheTrimmer();
-//		
-//		
-//		
-////		Mapping res = trimExamples(o, 10);
-////		System.out.println(res);	
-//		
-//		ConfigReader cR = new ConfigReader();
-//		cR.validateAndRead(configFile);
-//		HybridCache sC = HybridCache.getData(cR.getSourceInfo());		
-//		HybridCache rC = HybridCache.getData(cR.getTargetInfo());
-//		HybridCache[] caches = trimmer.processDataEqually(sC, rC, o, 50);
-//		System.out.println(trimmer.getReferenceMapping().size());
-//		System.out.println("Cache 1: ");
-//		System.out.println(caches[0].size());
-//		System.out.println("Cache 2: ");
-//		System.out.println(caches[1].size());
-//	
-//	}
-//	
+
+    /**
+     * @return reference mapping
+     */
     public AMapping getReferenceMapping() {
         return reference;
     }

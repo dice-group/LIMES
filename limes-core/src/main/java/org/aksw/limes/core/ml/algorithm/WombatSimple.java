@@ -175,7 +175,7 @@ public class WombatSimple extends AWombat {
      * update precision, recall and F-Measure of the refinement tree r
      * based on either training data or PFM
      *  
-     * @param r
+     * @param r refinement tree
      */
     protected void updateScores(Tree<RefinementNode> r) {
         if (r.getchildren() == null || r.getchildren().size() == 0) {
@@ -197,7 +197,6 @@ public class WombatSimple extends AWombat {
 
     /**
      * @return RefinementNode containing the best over all solution
-     * @author sherif
      */
     public RefinementNode findBestSolution() {
         classifiers = findInitialClassifiers();
@@ -278,9 +277,8 @@ public class WombatSimple extends AWombat {
      * Get the most promising node as the node with the best F-score
      *
      * @param r  The whole refinement tree
-     * @param penaltyWeight
+     * @param penaltyWeight from 0 to 1
      * @return most promising node from the input tree r
-     * @author sherif
      */
     protected Tree<RefinementNode> getMostPromisingNode(Tree<RefinementNode> r, double penaltyWeight) {
         // trivial case
@@ -312,7 +310,7 @@ public class WombatSimple extends AWombat {
 
     /**
      * @param r the root of the refinement tree
-     * @param k
+     * @param k number of best nodes
      * @return sorted list of best k tree nodes
      */
     protected List<RefinementNode> getBestKNodes(Tree<RefinementNode> r, int k) {
@@ -331,7 +329,8 @@ public class WombatSimple extends AWombat {
 
     /**
      * @param r the root of the refinement tree
-     * @param penaltyWeight
+     * @param penaltyWeight from 0 to 1
+     * @param result refinment tree
      * @return sorted list of tree nodes
      */
     protected TreeSet<RefinementNode> getSortedNodes(Tree<RefinementNode> r, double penaltyWeight, TreeSet<RefinementNode> result) {
@@ -350,7 +349,6 @@ public class WombatSimple extends AWombat {
 
     /**
      * @return children penalty + complexity penalty
-     * @author sherif
      */
     private double computePenalty(Tree<RefinementNode> promesyChild) {
         long childrenCount = promesyChild.size() - 1;
@@ -400,7 +398,6 @@ public class WombatSimple extends AWombat {
      * initiate the refinement tree as a root node  with set of
      * children nodes containing all initial classifiers
      *
-     * @author sherif
      */
     protected void createRefinementTreeRoot() {
         RefinementNode initialNode = new RefinementNode(-Double.MAX_VALUE, MappingFactory.createMapping(MappingType.DEFAULT), "");

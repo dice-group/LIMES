@@ -137,7 +137,7 @@ public class AddMetric extends CommandGene
     }
 
     /**
-     * @return
+     * @return CommandGene
      * @throws InvalidConfigurationException
      */
     public CommandGene applyMutation() throws InvalidConfigurationException {

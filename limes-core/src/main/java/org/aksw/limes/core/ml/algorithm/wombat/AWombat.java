@@ -95,9 +95,9 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     /**
      * Create new RefinementNode using either real or pseudo-F-Measure
      *
-     * @param mapping
-     * @param metricExpr
-     * @return
+     * @param mapping of the node 
+     * @param metricExpr learning specifications
+     * @return new RefinementNode
      */
     protected RefinementNode createNode(AMapping mapping, String metricExpr) {
         if(!saveMapping){
@@ -111,9 +111,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     }
 
     /**
-     * @param metricExpr
-     * @return
-     * @author sherif
+     * @param metricExpr learning specifications
+     * @return new RefinementNode
      */
     protected RefinementNode createNode(String metricExpr) {
         AMapping map = null;
@@ -124,10 +123,10 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     }
 
     /**
-     * @param sourceProperty
-     * @param targetProperty
-     * @param measure
-     * @param threshold
+     * @param sourceProperty URI
+     * @param targetProperty URI
+     * @param measure name
+     * @param threshold of the LS
      * @return Mapping from source to target resources after applying
      * the atomic mapper measure(sourceProperity, targetProperty)
      */
@@ -143,8 +142,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     /**
      * calculate either a real or a pseudo-F-Measure
      *
-     * @param predictions
-     * @return
+     * @param predictions Mapping
+     * @return F-measure
      */
     protected double fMeasure(AMapping predictions) {
         if (isUnsupervised) {
@@ -168,9 +167,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * if found the corresponding mapping is returned.
      * Otherwise, the SetConstraintsMapper is generate the mapping from the metricExpression.
      *
-     * @param metricExpression
+     * @param metricExpression learning specifications
      * @return Mapping corresponding to the input metric expression
-     * @author sherif
      */
     protected AMapping getMapingOfMetricExpression(String metricExpression) {
         AMapping map = null;
@@ -193,10 +191,9 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     }
 
     /**
-     * @param metricExpression
-     * @param r
+     * @param metricExpression learning specifications
+     * @param r refinement tree
      * @return return mapping of the input metricExpression from the search tree
-     * @author sherif
      */
     protected AMapping getMapingOfMetricFromTree(String metricExpression, Tree<RefinementNode> r) {
         if (r != null) {
@@ -246,10 +243,10 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     /**
      * get mapping from source cache to target cache using metricExpression
      *
-     * @param ls
-     * @param sCache
-     * @param tCache
-     * @return
+     * @param ls learning specifications
+     * @param sCache source Cache
+     * @param tCache target Cache
+     * @return Mapping from sCache to tCache
      */
     protected AMapping getPredictions(LinkSpecification ls, Cache sCache, Cache tCache) {
         AMapping map;
@@ -298,8 +295,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     /**
      * calculate either a real or a pseudo-Precision
      *
-     * @param predictions
-     * @return
+     * @param predictions Mapping
+     * @return precision
      */
     protected double precision(AMapping predictions) {
         if (isUnsupervised) {
@@ -312,8 +309,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     /**
      * calculate either a real or a pseudo-Recall
      *
-     * @param predictions
-     * @return
+     * @param predictions Mapping
+     * @return recall
      */
     protected double recall(AMapping predictions) {
         if (isUnsupervised) {

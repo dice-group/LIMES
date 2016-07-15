@@ -212,8 +212,8 @@ public class PropertyMapping {
     /**
      * Just a littler help function to set default property mapping.
      *
-     * @param source
-     * @param target
+     * @param source knowledge base information
+     * @param target knowledge base information
      */
     public void setDefault(KBInfo source, KBInfo target) {
 //		just for the evaluation!!!

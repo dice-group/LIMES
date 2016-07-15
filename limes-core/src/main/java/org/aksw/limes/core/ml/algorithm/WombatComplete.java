@@ -25,7 +25,7 @@ import java.util.Map;
  * The complete Wombat algorithm (slow implementation)
  * 
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Jun 7, 2016
+ * @version Jul 15, 2016
  */
 public class WombatComplete extends AWombat {
     protected static final String ALGORITHM_NAME = "Wombat Complete";
@@ -634,10 +634,9 @@ public class WombatComplete extends AWombat {
     }
     
     /**
-     * @param classifiers
+     * @param classifiers initial learned classifiers
      * @return maximum achievable recall as the recall of the mapping generated
      * from disjunctions of all initial mappings
-     * @author sherif
      */
     public double computeMaxRecall(List<ExtendedClassifier> classifiers) {
         AMapping unionMaping;

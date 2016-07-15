@@ -15,7 +15,7 @@ public class UnsupervisedMLAlgorithm extends AMLAlgorithm {
 
     /**
      * @param clazz the core ML algorithm class
-     * @throws UnsupportedMLImplementationException
+     * @throws UnsupportedMLImplementationException Exception
      */
     public UnsupervisedMLAlgorithm(Class<? extends ACoreMLAlgorithm> clazz) throws UnsupportedMLImplementationException {
 
@@ -35,7 +35,7 @@ public class UnsupervisedMLAlgorithm extends AMLAlgorithm {
     /**
      * @param pfm the pseudo f-measure
      * @return wrap with results
-     * @throws UnsupportedMLImplementationException
+     * @throws UnsupportedMLImplementationException Exception
      */
     public MLResults learn(PseudoFMeasure pfm) throws UnsupportedMLImplementationException {
         return getMl().learn(pfm);
