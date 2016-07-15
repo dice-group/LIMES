@@ -44,7 +44,7 @@ public class RewriterFactory {
      *            The name/type of the rewriter.
      * @return a specific rewriter type
      */
-    public static RewriterType getRewriterFactoryType(String name) {
+    public static RewriterType getRewriterType(String name) {
         if (name.equalsIgnoreCase(DEFAULT)) {
             return RewriterType.DEFAULT;
         }

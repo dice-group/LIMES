@@ -108,6 +108,9 @@ public class Controller {
      *
      * @param config
      *            LIMES configuration object
+     *
+     * @return Instance of ResultMapping
+     *
      */
     public static ResultMappings getMapping(Configuration config) {
         AMapping results = null;
@@ -129,7 +132,7 @@ public class Controller {
         } else {
             results = LSPipeline.execute(sourceCache, targetCache, config.getMetricExpression(),
                     config.getVerificationThreshold(), config.getSourceInfo().getVar(), config.getTargetInfo().getVar(),
-                    RewriterFactory.getRewriterFactoryType(config.getExecutionRewriter()),
+                    RewriterFactory.getRewriterType(config.getExecutionRewriter()),
                     ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlanner()),
                     ExecutionEngineFactory.getExecutionEngineType(config.getExecutionEngine()));
         }

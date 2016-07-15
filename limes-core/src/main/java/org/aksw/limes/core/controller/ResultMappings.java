@@ -20,6 +20,8 @@ public class ResultMappings {
 
     /**
      * Constructor
+     * @param verificationMapping Mapping where acceptanceThreshold &gt; sim &gt;= verificationThreshold
+     * @param acceptanceMapping Mapping where sim &gt;= acceptanceThreshold
      */
     public ResultMappings(AMapping verificationMapping, AMapping acceptanceMapping) {
         super();
@@ -28,32 +30,20 @@ public class ResultMappings {
     }
 
     /**
-     * @return the verification mapping
+     * Getter for verification part
+     * @return verification mapping
      */
     public AMapping getVerificationMapping() {
         return verificationMapping;
     }
 
-    /**
-     * @param verificationMapping
-     */
-    public void setVerificationMapping(AMapping verificationMapping) {
-        this.verificationMapping = verificationMapping;
-    }
 
     /**
+     * Getter for acceptance part
      * @return acceptance mapping
      */
     public AMapping getAcceptanceMapping() {
         return acceptanceMapping;
     }
-
-    /**
-     * @param acceptanceMapping
-     */
-    public void setAcceptanceMapping(AMapping acceptanceMapping) {
-        this.acceptanceMapping = acceptanceMapping;
-    }
-
 
 }

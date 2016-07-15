@@ -20,25 +20,47 @@ public class LSPipeline {
     /**
      * Execute a LS given a string metric expression and a double threshold,
      * generating a mapping.
+     *
+     * @param sourceCache Resources from source KB
+     * @param targetCache Resources from target KB
+     * @param metricExpression Specifies which measures are used and how they are combined to assert the similarity
+     *                         between two resources
+     * @param threshold Minimal similarity value for resource pairs to be included in the generated mapping
+     * @param sourceVar Name of SPARQL variable for resources from source KB
+     * @param targetVar Name of SPARQL variable for resources from target KB
+     * @param rewriterType Specifies rewriter module to use
+     * @param executionPlannerType Specifies executionPlanner module to use
+     * @param executionEngineType Specifies executionEngine module to use
+     * @return Mapping of resources in sourceCache to resources in targetCache with similarity &gt; threshold
      */
     public static AMapping execute(Cache sourceCache, Cache targetCache, String metricExpression, double threshold,
-            String sourceVar, String targetVar, RewriterFactory.RewriterFactoryType rewriterFactoryType,
-            ExecutionPlannerFactory.ExecutionPlannerType executionPlannerType,
-            ExecutionEngineFactory.ExecutionEngineType executionEngineType) {
+                                   String sourceVar, String targetVar, RewriterFactory.RewriterType rewriterType,
+                                   ExecutionPlannerFactory.ExecutionPlannerType executionPlannerType,
+                                   ExecutionEngineFactory.ExecutionEngineType executionEngineType) {
         LinkSpecification ls = new LinkSpecification(metricExpression, threshold);
-        return execute(sourceCache, targetCache, ls, sourceVar, targetVar, rewriterFactoryType, executionPlannerType,
+        return execute(sourceCache, targetCache, ls, sourceVar, targetVar, rewriterType, executionPlannerType,
                 executionEngineType);
     }
 
     /**
-     * Execute a LS object, generating a mapping.
+     * Execute a given LS, generating a mapping.
+     *
+     * @param sourceCache Resources from source KB
+     * @param targetCache Resources from target KB
+     * @param ls LIMES Link Specification
+     * @param sourceVar Name of SPARQL variable for resources from source KB
+     * @param targetVar Name of SPARQL variable for resources from target KB
+     * @param rewriterType Specifies rewriter module to use
+     * @param executionPlannerType Specifies executionPlanner module to use
+     * @param executionEngineType Specifies executionEngine module to use
+     * @return Mapping of resources in sourceCache to resources in targetCache with similarity &gt; threshold
      */
     public static AMapping execute(Cache sourceCache, Cache targetCache, LinkSpecification ls, String sourceVar,
-            String targetVar, RewriterFactory.RewriterFactoryType rewriterFactoryType,
-            ExecutionPlannerFactory.ExecutionPlannerType executionPlannerType,
-            ExecutionEngineFactory.ExecutionEngineType executionEngineType) {
+                                   String targetVar, RewriterFactory.RewriterType rewriterType,
+                                   ExecutionPlannerFactory.ExecutionPlannerType executionPlannerType,
+                                   ExecutionEngineFactory.ExecutionEngineType executionEngineType) {
         // Optimize LS by rewriting
-        Rewriter rw = RewriterFactory.getRewriter(rewriterFactoryType);
+        Rewriter rw = RewriterFactory.getRewriter(rewriterType);
         assert rw != null;
         LinkSpecification rwLs = rw.rewrite(ls);
         // Planning execution of the LS
@@ -54,9 +76,14 @@ public class LSPipeline {
     /**
      * Execute a given LS with default rewriter, planner and execution engine,
      * generating a mapping.
+     *
+     * @param sourceCache Resources from source KB
+     * @param targetCache Resources from target KB
+     * @param ls LIMES Link Specification
+     * @return Mapping of resources in sourceCache to resources in targetCache with similarity &gt; threshold
      */
     public static AMapping execute(Cache sourceCache, Cache targetCache, LinkSpecification ls) {
-        return execute(sourceCache, targetCache, ls, "?x", "?y", RewriterFactory.RewriterFactoryType.DEFAULT,
+        return execute(sourceCache, targetCache, ls, "?x", "?y", RewriterFactory.RewriterType.DEFAULT,
                 ExecutionPlannerFactory.ExecutionPlannerType.DEFAULT,
                 ExecutionEngineFactory.ExecutionEngineType.DEFAULT);
     }
