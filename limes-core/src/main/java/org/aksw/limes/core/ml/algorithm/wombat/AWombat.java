@@ -21,7 +21,7 @@ import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.Ex
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
-import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterFactoryType;
+import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterType;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -179,7 +179,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         }
         if (map == null) {
             Double threshold = Double.parseDouble(metricExpression.substring(metricExpression.lastIndexOf("|") + 1, metricExpression.length()));
-            Rewriter rw = RewriterFactory.getRewriter(RewriterFactoryType.DEFAULT);
+            Rewriter rw = RewriterFactory.getRewriter(RewriterType.DEFAULT);
             LinkSpecification ls = new LinkSpecification(metricExpression, threshold);
             LinkSpecification rwLs = rw.rewrite(ls);
             IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceCache, targetCache);

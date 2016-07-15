@@ -16,7 +16,7 @@ public class RewriterFactory {
     /**
      * Enum class of allowed rewriter types.
      */
-    public enum RewriterFactoryType {
+    public enum RewriterType {
         DEFAULT, ALGEBRAIC
     }
 
@@ -33,7 +33,7 @@ public class RewriterFactory {
      * @return default rewriter implementation
      */
     public static Rewriter getDefaultRewriter() {
-        return getRewriter(RewriterFactoryType.DEFAULT);
+        return getRewriter(RewriterType.DEFAULT);
     }
 
     /**
@@ -44,15 +44,15 @@ public class RewriterFactory {
      *            The name/type of the rewriter.
      * @return a specific rewriter type
      */
-    public static RewriterFactoryType getRewriterFactoryType(String name) {
+    public static RewriterType getRewriterFactoryType(String name) {
         if (name.equalsIgnoreCase(DEFAULT)) {
-            return RewriterFactoryType.DEFAULT;
+            return RewriterType.DEFAULT;
         }
         if (name.equalsIgnoreCase(ALGEBRAIC)) {
-            return RewriterFactoryType.ALGEBRAIC;
+            return RewriterType.ALGEBRAIC;
         }
         logger.error("Sorry, " + name + " is not yet implemented. Returning the default rewriter type instead...");
-        return RewriterFactoryType.DEFAULT;
+        return RewriterType.DEFAULT;
     }
 
     /**
@@ -64,7 +64,7 @@ public class RewriterFactory {
      * @return a specific rewriter instance
      * 
      */
-    public static Rewriter getRewriter(RewriterFactoryType type) {
+    public static Rewriter getRewriter(RewriterType type) {
         switch (type) {
         case DEFAULT:
             return new DefaultRewriter();
