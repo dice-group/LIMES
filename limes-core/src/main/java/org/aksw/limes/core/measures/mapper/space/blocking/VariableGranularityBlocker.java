@@ -94,52 +94,6 @@ public class VariableGranularityBlocker implements BlockingModule {
         return result;
     }
 
-    public static void main(String args[]) {
-
-        ArrayList<ArrayList<Double>> keys = new ArrayList<ArrayList<Double>>();
-        TreeSet<String> key = new TreeSet<String>();
-        key.add(1.0 + "");
-        key.add(2.0 + "");
-
-        TreeSet<String> key2 = new TreeSet<String>();
-        key2.add(1.0 + "");
-        key2.add(2.0 + "");
-
-        TreeSet<String> key3 = new TreeSet<String>();
-        key3.add(1.0 + "");
-        key3.add(2.0 + "");
-
-
-        System.out.println(keys);
-        keys = addIdsToList(keys, key);
-        System.out.println(keys);
-        keys = addIdsToList(keys, key2);
-        System.out.println(keys);
-        keys = addIdsToList(keys, key3);
-        System.out.println(keys);
-
-
-        //MemoryCache cache = new MemoryCache();
-        /**
-         cache.addTriple("A", "lon", "1");
-         cache.addTriple("A", "lat", "1");
-         cache.addTriple("B", "lon", "2");
-         cache.addTriple("B", "lat", "1");
-
-         VariableGranularityBlocker blocker = new VariableGranularityBlocker("lon|lat", "euclidean", 0.5);
-
-         blocker.setGranularity(3);
-
-         System.out.println(blocker.getBlockId(cache.getInstance("A")));
-         System.out.println(blocker.getBlockId(cache.getInstance("B")));
-
-         ArrayList<Integer> blockId = new ArrayList<Integer>();
-         blockId.add(0);
-         blockId.add(0);
-         System.out.println(blocker.getBlocksToCompare(blockId).size());
-         System.out.println(blocker.getBlocksToCompare(blockId));
-         * */
-    }
 
     public void setGranularity(int n) {
         granularity = n;
@@ -151,8 +105,7 @@ public class VariableGranularityBlocker implements BlockingModule {
      * Each instance s from the source space is then compared with the blocks lying
      * directly around s's block and the block where s is.
      *
-     * @param a
-     *         The instance whose blockId is to be computed
+     * @param blockId The instance whose blockId is to be computed
      * @return The ID for the block of a
      */
     public ArrayList<ArrayList<Integer>> getBlocksToCompare(ArrayList<Integer> blockId) {
@@ -165,30 +118,15 @@ public class VariableGranularityBlocker implements BlockingModule {
 
         ArrayList<ArrayList<Integer>> toAdd = new ArrayList<ArrayList<Integer>>();
 
-        // add 2*granularity+1 lists and initialize therewith
-//        ArrayList<Integer> entry;
-//        for (int i = 0; i < 2 * granularity + 1; i++) {
-//            entry = new ArrayList<Integer>();
-//            toAdd.add(entry);
-//        }
-//
-//        for (int i = 0; i < dim; i++) {
-//            for (int j = (-1) * granularity; j <= granularity; j++) {
-//                toAdd.get(j).add(0);
-//            }
-//        }
         ArrayList<Integer> id;
 
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < Math.pow(2 * granularity + 1, i); j++) {
-                //System.out.println("Result"+result);
                 id = result.get(j);
-                //System.out.println(j+" -> "+id);
                 toAdd = new ArrayList<ArrayList<Integer>>();
                 for (int k = 0; k < 2 * granularity; k++) {
                     toAdd.add(new ArrayList<Integer>());
                 }
-                //System.out.println(toAdd.size());
                 for (int k = 0; k < dim; k++) {
                     if (k != i) {
                         for (int l = 0; l < 2 * granularity; l++) {
@@ -202,7 +140,6 @@ public class VariableGranularityBlocker implements BlockingModule {
                             toAdd.get(l + granularity).add(id.get(k) + l + 1);
                         }
                     }
-                    //System.out.println(i+". "+(k+1)+". "+toAdd);
                 }
                 //Merge results
                 for (int l = 0; l < 2 * granularity; l++) {
@@ -210,7 +147,6 @@ public class VariableGranularityBlocker implements BlockingModule {
                 }
             }
         }
-        //System.out.println(result.size());
         return result;
     }
 
@@ -231,8 +167,7 @@ public class VariableGranularityBlocker implements BlockingModule {
      * the coordinates of an instance are unique, then use getBlockId. If not, use
      * this method.
      *
-     * @param a
-     *         Instance, whose ids are to be returned
+     * @param a Instance, whose ids are to be returned
      * @return An ArrayList of blockids
      */
     public ArrayList<ArrayList<Integer>> getAllBlockIds(Instance a) {
@@ -260,8 +195,7 @@ public class VariableGranularityBlocker implements BlockingModule {
      * the coordinates of an instance are unique, then use getBlockId. If not, use
      * this method.
      *
-     * @param a
-     *         Instance, whose ids are to be returned
+     * @param a Instance, whose ids are to be returned
      * @return An ArrayList of blockids
      */
     public ArrayList<ArrayList<Integer>> getAllSourceIds(Instance a, String props) {

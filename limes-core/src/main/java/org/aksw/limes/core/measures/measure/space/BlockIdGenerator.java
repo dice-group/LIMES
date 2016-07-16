@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 16, 2016
  */
 public class BlockIdGenerator {
     int dim = 2;
@@ -20,6 +22,7 @@ public class BlockIdGenerator {
     Instance zero;
 
     /**
+     * 
      * Initializes the generator. The basic idea here is the following: First, pick
      * a random instance origin. That is the center upon which the block ids will be computed.
      * Each measure can return the threshold for blocking that is equivalent to the similarity
@@ -27,14 +30,10 @@ public class BlockIdGenerator {
      * for metrics that squeeze space, this might not be the case. It is important to notice that
      * the generation assumes that the size of props.split("|") is the same as dimensions.
      *
-     * @param origin
-     *         The random instance used as reference for computing block ids
      * @param props
      *         List of properties that make up each dimension
      * @param measureName
      *         Name of the measure to be used to compute the similarity of instances
-     * @param dimensions
-     *         Number of dimensions to be considered
      * @param threshold
      *         General similarity threshold for blocking
      */
@@ -52,12 +51,12 @@ public class BlockIdGenerator {
     }
 
     /**
-     * Returns the ids of all the blocks surrounding a given block for comparison
+     * Computes the ids of all the blocks surrounding a given block for comparison
      * Will be extremely useful for parallelizing as we can use blocking on T and S
      * as then put use locality
      *
      * @param blockId
-     * @return
+     * @return the ids of all the blocks surrounding a given block for comparison
      */
     public static ArrayList<ArrayList<Integer>> getBlocksToCompare(ArrayList<Integer> blockId) {
         int dim = blockId.size();
@@ -105,8 +104,7 @@ public class BlockIdGenerator {
      * Each instance s from the source space is then compared with the blocks lying
      * directly around s's block and the block where s is.
      *
-     * @param a
-     *         The instance whose blockId is to be computed
+     * @param a The instance whose blockId is to be computed
      * @return The ID for the block of a
      */
     public ArrayList<Integer> getBlockId(Instance a) {

@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author sherif class to find the surjection of the larger polygon to the
- *         smaller one.
+ * class to find the surjection of the larger polygon to the smaller one.
+ * 
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 15, 2016
  */
 public class SurjectionFinder {
     protected List<PairSimilar<Point>> surjectionPairsList;

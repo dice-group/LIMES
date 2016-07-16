@@ -32,17 +32,13 @@ public class EuclideanBlockingModule implements BlockingModule {
      * for metrics that squeeze space, this might not be the case. It is important to notice that
      * the generation assumes that the size of props.split("|") is the same as dimensions.
      *
-     * @param origin
-     *         The random instance used as reference for computing block ids
      * @param props
      *         List of properties that make up each dimension
      * @param measureName
      *         Name of the measure to be used to compute the similarity of instances
-     * @param dimensions
-     *         Number of dimensions to be considered
      * @param threshold
      *         General similarity threshold for the metric. This threshold is transformed
-     *         into a distance threshold, as sim = a -> d = (1 - a)/a. The space tiling is carried out
+     *         into a distance threshold, as sim = a, d = (1 - a)/a. The space tiling is carried out
      *         according to distances, not similarities. Still, we can ensure that all points within the
      *         similarity range are found.
      */
@@ -70,11 +66,10 @@ public class EuclideanBlockingModule implements BlockingModule {
     }
 
     public static ArrayList<ArrayList<Double>> addIdsToList(ArrayList<ArrayList<Double>> keys,
-                                                            TreeSet<String> propValues) {
+            TreeSet<String> propValues) {
         ArrayList<ArrayList<Double>> result = new ArrayList<ArrayList<Double>>();
         ArrayList<Double> values = new ArrayList<Double>();
         for (String s : propValues) {
-//        	System.out.println("----------------------------------------------------------------------S: "+s);
             values.add(Double.parseDouble(s));
         }
         if (keys.size() == 0) {
@@ -96,26 +91,6 @@ public class EuclideanBlockingModule implements BlockingModule {
         return result;
     }
 
-    public static void main(String args[]) {
-        MemoryCache cache = new MemoryCache();
-        cache.addTriple("A", "lon", "1");
-        cache.addTriple("A", "lat", "1");
-        cache.addTriple("B", "lon", "2");
-        cache.addTriple("B", "lat", "1");
-
-        EuclideanBlockingModule blocker = new EuclideanBlockingModule("lon|lat", "euclidean", 0.25);
-
-        System.out.println(blocker.getBlockId(cache.getInstance("A")));
-        System.out.println(blocker.getBlockId(cache.getInstance("B")));
-
-        ArrayList<Integer> blockId = new ArrayList<Integer>();
-        ArrayList<Integer> blockId2 = new ArrayList<Integer>();
-        blockId.add(0);
-        blockId.add(0);
-        //blockId.add(0);
-        System.out.println((new EuclideanBlockingModule("", "", 0.5)).getBlocksToCompare(blockId));
-        System.out.println(blockId.equals(blockId2));
-    }
 
     /**
      * Computes the block ID for a given instance a. The idea behind the blocking
@@ -123,8 +98,7 @@ public class EuclideanBlockingModule implements BlockingModule {
      * Each instance s from the source space is then compared with the blocks lying
      * directly around s's block and the block where s is.
      *
-     * @param a
-     *         The instance whose blockId is to be computed
+     * @param a The instance whose blockId is to be computed
      * @return The ID for the block of a
      */
     public ArrayList<Integer> getBlockId(Instance a) {
@@ -140,12 +114,12 @@ public class EuclideanBlockingModule implements BlockingModule {
     }
 
     /**
-     * Returns the ids of all the blocks surrounding a given block for comparison
+     * Computes the ids of all the blocks surrounding a given block for comparison
      * Will be extremely useful for parallelizing as we can use blocking on T and S
      * as then put use locality
      *
-     * @param blockId
-     * @return
+     * @param blockId index
+     * @return the ids of all the blocks surrounding a given block for comparison
      */
     public ArrayList<ArrayList<Integer>> getBlocksToCompare(ArrayList<Integer> blockId) {
         int dim = blockId.size();

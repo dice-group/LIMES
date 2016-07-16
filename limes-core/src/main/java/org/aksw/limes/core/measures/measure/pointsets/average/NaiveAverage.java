@@ -15,8 +15,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
+
 /**
- * @author sherif
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 15, 2016
  */
 public class NaiveAverage extends PointsetsMeasure {
 

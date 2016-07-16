@@ -17,24 +17,14 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * @author sherif
- */
-
-/**
- * @author sherif
- *
+ * Approach to computing the Surjection distance between two polygons
+ * 
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 15, 2016
  */
 public class FairSurjection extends PointsetsMeasure {
 
     public int computations;
-
-    /**
-     * Approach to computing the Surjection distance between two polygons
-     *
-     * @param X First polygon
-     * @param Y Second polygon
-     * @return the fair Surjection distance between X and Y
-     */
     public FairSurjection() {
         computations = 0;
     }

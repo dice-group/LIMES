@@ -7,6 +7,10 @@ import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.Measure;
 
+/**
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 15, 2016
+ */
 public abstract class PointsetsMeasure extends Measure implements IPointsetsMeasure {
 
     public static boolean USE_GREAT_ELLIPTIC_DISTANCE = false;

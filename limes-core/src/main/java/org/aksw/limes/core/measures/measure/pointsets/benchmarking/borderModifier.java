@@ -16,7 +16,8 @@ import java.util.List;
  * modifier, for each line segment p1 p2 across the input polygon we generate 2
  * random points within the line segment p1 p2
  *
- * @author sherif
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 15, 2016
  */
 public class borderModifier extends AbstractPolygonModifier {
 

@@ -109,52 +109,6 @@ public class HR3Blocker implements BlockingModule {
         return result;
     }
 
-    public static void main(String args[]) {
-
-        ArrayList<ArrayList<Double>> keys = new ArrayList<ArrayList<Double>>();
-        TreeSet<String> key = new TreeSet<String>();
-        key.add(1.0 + "");
-        key.add(2.0 + "");
-
-        TreeSet<String> key2 = new TreeSet<String>();
-        key2.add(1.0 + "");
-        key2.add(2.0 + "");
-
-        TreeSet<String> key3 = new TreeSet<String>();
-        key3.add(1.0 + "");
-        key3.add(2.0 + "");
-
-
-        System.out.println(keys);
-        keys = addIdsToList(keys, key);
-        System.out.println(keys);
-        keys = addIdsToList(keys, key2);
-        System.out.println(keys);
-        keys = addIdsToList(keys, key3);
-        System.out.println(keys);
-
-
-        //MemoryCache cache = new MemoryCache();
-        /**
-         cache.addTriple("A", "lon", "1");
-         cache.addTriple("A", "lat", "1");
-         cache.addTriple("B", "lon", "2");
-         cache.addTriple("B", "lat", "1");
-
-         HR3Blocker blocker = new HR3Blocker("lon|lat", "euclidean", 0.5);
-
-         blocker.setGranularity(3);
-
-         System.out.println(blocker.getBlockId(cache.getInstance("A")));
-         System.out.println(blocker.getBlockId(cache.getInstance("B")));
-
-         ArrayList<Integer> blockId = new ArrayList<Integer>();
-         blockId.add(0);
-         blockId.add(0);
-         System.out.println(blocker.getBlocksToCompare(blockId).size());
-         System.out.println(blocker.getBlocksToCompare(blockId));
-         * */
-    }
 
     public void setGranularity(int n) {
         granularity = n;

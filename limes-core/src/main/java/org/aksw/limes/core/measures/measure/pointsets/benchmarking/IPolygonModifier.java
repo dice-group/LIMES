@@ -23,21 +23,17 @@ public interface IPolygonModifier {
      * @param threshold,
      *         the threshold
      * @return set of polygons, modified
-     * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
      */
     Set<Polygon> modifySet(Set<Polygon> dataset, double threshold);
 
     /**
      * Modifies a polygon given a threshold.
      *
-     * @param polygon,
-     *         the polygon
-     * @param threshold,
-     *         the threshold
-     * @return a polygon, modified
-     * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+     * @param polygon to be modified
+     * @param threshold of modification
+     * @return modified polygon, 
      */
-    Polygon modify(Polygon p, double threshold);
+    Polygon modify(Polygon polygon, double threshold);
 
     /**
      * Return name of modifier class

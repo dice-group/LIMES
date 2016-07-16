@@ -8,6 +8,8 @@ import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
 /**
+ * Efficient computation of the Hausdorff distance between two polygons
+ * 
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class FastHausdorff extends NaiveHausdorff {
@@ -20,7 +22,6 @@ public class FastHausdorff extends NaiveHausdorff {
     }
 
     /**
-     * Efficient computation of the Hausdorff distance between two polygons
      *
      * @param X
      *         First polygon

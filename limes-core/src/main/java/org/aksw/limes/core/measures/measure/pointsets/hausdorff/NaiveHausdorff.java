@@ -17,6 +17,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
+ * Brute force approach to computing the SetMeasure distance between two
+ * polygons
+ * 
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class NaiveHausdorff extends PointsetsMeasure {
@@ -24,14 +27,7 @@ public class NaiveHausdorff extends PointsetsMeasure {
     public int computations;
 
     /**
-     * Brute force approach to computing the SetMeasure distance between two
-     * polygons
-     *
-     * @param X
-     *         First polygon
-     * @param Y
-     *         Second polygon
-     * @return Distance between the two polygons
+     * Constructor
      */
     public NaiveHausdorff() {
         computations = 0;

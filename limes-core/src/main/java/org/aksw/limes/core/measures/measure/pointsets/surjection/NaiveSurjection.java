@@ -17,21 +17,15 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * @author sherif
+ * Approach to computing the Surjection distance between two polygons
+ * 
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 15, 2016
  */
 public class NaiveSurjection extends PointsetsMeasure {
 
     public int computations;
 
-    /**
-     * Approach to computing the Surjection distance between two polygons
-     *
-     * @param X
-     *         First polygon
-     * @param Y
-     *         Second polygon
-     * @return Distance between the two polygons
-     */
     public NaiveSurjection() {
         computations = 0;
     }

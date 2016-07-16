@@ -13,18 +13,21 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 /**
- * @author sherif
  *         <p>
  *         enhanced variant of the surjection, in which the surjection
  *         must be fair. The surjection between sets X and Y is fair if η' maps
  *         lements of X as evenly as possible to Y.
  */
+/**
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 15, 2016
+ */
 public class FairSurjectionFinder extends SurjectionFinder {
 
 
     /**
-     * @param X
-     * @param Y
+     * @param X source polygon
+     * @param Y target polygon
      */
     FairSurjectionFinder(Polygon X, Polygon Y) {
         super(X, Y);
