@@ -14,18 +14,15 @@ import java.util.List;
 
 
 /**
+ * Computes the precision of the mapping computed with respect to the
+ * mapping reference.
+ * 
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @version Jul 18, 2016
  */
 public class Utils {
 
-    /**
-     * Computes the precision of the mapping computed with respect to the
-     * mapping reference.
-     *
-     * @param reference
-     * @param computed
-     * @return Precision
-     */
     static Logger logger = LoggerFactory.getLogger(Utils.class.getName());
 
     public static double getPrecision(AMapping reference, AMapping computed) {
@@ -45,8 +42,8 @@ public class Utils {
      * Computes the recall of the mapping computed with respect to the mapping
      * reference.
      *
-     * @param reference
-     * @param computed
+     * @param reference Mapping
+     * @param computed Mapping
      * @return Recall
      */
     public static double getRecall(AMapping reference, AMapping computed) {
@@ -90,8 +87,8 @@ public class Utils {
      * Computes all stats (i.e. precision, recall, f-score) of the mapping
      * computed with respect to the mapping reference.
      *
-     * @param reference
-     * @param computed
+     * @param reference Mapping
+     * @param computed Mapping
      * @return Precision, Recall and F-Score. The entries for the Hashmap are
      * "precision", "recall" and "fscore".
      */
@@ -120,8 +117,7 @@ public class Utils {
     /**
      * Splits camel case strings into lower case string separated with a " "
      *
-     * @param s
-     *         Input string in camel case
+     * @param s Input string in camel case
      * @return Split string
      */
     @SuppressWarnings("unused")
@@ -132,8 +128,8 @@ public class Utils {
     }
 
     public static double getStandardDeviation(List<Double> data) {
-// sd is sqrt of sum of (values-mean) squared divided by n - 1 
-// Calculate the mean 
+        // sd is sqrt of sum of (values-mean) squared divided by n - 1 
+        // Calculate the mean 
         double mean = 0;
         final int n = data.size();
         if (n < 2) {
@@ -155,8 +151,8 @@ public class Utils {
 
 
     public static double getMean(List<Double> data) {
-// sd is sqrt of sum of (values-mean) squared divided by n - 1 
-// Calculate the mean 
+        // sd is sqrt of sum of (values-mean) squared divided by n - 1 
+        // Calculate the mean 
         double mean = 0;
         final int n = data.size();
         if (n < 2) {
