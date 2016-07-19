@@ -24,9 +24,9 @@ public class LinkFinder {
      * Constructor
      *
      * @param X
-     *         Polygon
+     *            Polygon
      * @param Y
-     *         Polygon
+     *            Polygon
      * @author sherif
      */
     public LinkFinder(Polygon X, Polygon Y) {
@@ -68,9 +68,9 @@ public class LinkFinder {
 
     /**
      * @param x
-     *         Point
+     *            Point
      * @param Y
-     *         Point
+     *            Point
      * @return Sorted nearest points
      */
     TreeMap<Double, Point> getSortedNearestPoints(Point x, Polygon Y) {
@@ -86,8 +86,7 @@ public class LinkFinder {
      * @return
      */
     public double getRuntimeApproximation(double mappingSize) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return mappingSize / 1000d;
     }
-
 
 }

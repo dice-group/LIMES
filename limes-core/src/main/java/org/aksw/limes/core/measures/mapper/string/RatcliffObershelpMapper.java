@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 
 public class RatcliffObershelpMapper extends Mapper {
 
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger(RatcliffObershelpMapper.class);
 
 
     /**
@@ -133,11 +133,11 @@ public class RatcliffObershelpMapper extends Mapper {
 
     @Override
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
-        return -1d;
+        return 1000d;
     }
 
     @Override
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
-        return -1d;
+        return 1000d;
     }
 }

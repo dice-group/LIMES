@@ -4,14 +4,12 @@
  */
 package org.aksw.limes.core.measures.measure.string;
 
-
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.mapper.string.fastngram.NGramTokenizer;
 import org.aksw.limes.core.measures.mapper.string.fastngram.Tokenizer;
 
 import java.util.HashSet;
 import java.util.Set;
-
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -29,8 +27,6 @@ public class QGramSimilarity extends StringMeasure {
         tokenizer = new NGramTokenizer();
     }
 
-    
-
     public double getSimilarity(String x, String y) {
         Set<String> yTokens = tokenizer.tokenize(y, q);
         Set<String> xTokens = tokenizer.tokenize(x, q);
@@ -40,7 +36,7 @@ public class QGramSimilarity extends StringMeasure {
     public double getSimilarity(Set<String> X, Set<String> Y) {
         double x = (double) X.size();
         double y = (double) Y.size();
-        //create a kopy of X
+        // create a kopy of X
         Set<String> K = new HashSet<String>();
         for (String s : X) {
             K.add(s);

@@ -24,8 +24,9 @@ import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
 import org.aksw.limes.core.measures.measure.string.Jaro;
 import org.aksw.limes.core.measures.measure.string.JaroWinkler;
 import org.aksw.limes.core.measures.measure.string.Levenshtein;
-import org.aksw.limes.core.measures.measure.string.OverlapMeasure;
+import org.aksw.limes.core.measures.measure.string.MongeElkanMeasure;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
+import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
 import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.AfterMeasure;
@@ -51,12 +52,9 @@ import org.slf4j.LoggerFactory;
  * Implements the measure factory class. For each measure name, the factory
  * returns an object of the corresponding measure.
  *
- * @author Axel-C. Ngonga Ngomo {@literal <}ngonga {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
- * @author Kleanthi Georgala {@literal <}georgala {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
- * @author Mohamed Ahmed Sherif {@literal <}sherif {@literal @}
- *         informatik.uni-leipzig.de{@literal >}
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * 
  * @version 1.0
  */
@@ -74,6 +72,8 @@ public class MeasureFactory {
     public static final String EXACTMATCH = "exactmatch";
     public static final String SOUNDEX = "soundex";
     public static final String JAROWINKLER = "jarowinkler";
+    public static final String MONGEELKAN = "mongeelkan";
+    public static final String RATCLIFF = "ratcliff";
     // number measures
     public static final String EUCLIDEAN = "euclidean";
     // Point-set measures
@@ -156,7 +156,14 @@ public class MeasureFactory {
         }
         if (measure.startsWith(SOUNDEX)) {
             return MeasureType.SOUNDEX;
-        } ////////////////////////////
+        }
+        if (measure.startsWith(MONGEELKAN)) {
+            return MeasureType.MONGEELKAN;
+        }
+        if (measure.startsWith(RATCLIFF)) {
+            return MeasureType.RATCLIFF;
+        }
+        ////////////////////////////
         if (measure.startsWith(EUCLIDEAN)) {
             return MeasureType.EUCLIDEAN;
         }
@@ -277,7 +284,8 @@ public class MeasureFactory {
      *            Type of the measure
      * 
      * @return a specific measure instance
-     * @exception InvalidMeasureException if the measure type is invalid
+     * @exception InvalidMeasureException
+     *                if the measure type is invalid
      * 
      */
     public static Measure createMeasure(MeasureType type) throws InvalidMeasureException {
@@ -303,6 +311,10 @@ public class MeasureFactory {
             return new ExactMatch();
         case SOUNDEX:
             return new SoundexMeasure();
+        case MONGEELKAN:
+            return new MongeElkanMeasure();
+        case RATCLIFF:
+            return new RatcliffObershelpMeasure();
         ///////////////////////
         case EUCLIDEAN:
             return new EuclideanMetric();

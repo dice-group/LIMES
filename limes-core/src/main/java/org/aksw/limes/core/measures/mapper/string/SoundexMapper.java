@@ -8,8 +8,7 @@ import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import java.util.*;
 
@@ -17,8 +16,6 @@ import java.util.*;
  * @author Kevin Dreßler
  */
 public class SoundexMapper extends Mapper {
-
-    static Logger logger = LoggerFactory.getLogger("LIMES");
 
     /**
      * Computes a mapping between a source and a target.
@@ -41,8 +38,6 @@ public class SoundexMapper extends Mapper {
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-
-        logger.info("Running SoundexMapper with code length " + String.valueOf(SoundexMeasure.codeLength));
 
         List<String> listA, listB;
         Map<String, List<Integer>> invListA, invListB;

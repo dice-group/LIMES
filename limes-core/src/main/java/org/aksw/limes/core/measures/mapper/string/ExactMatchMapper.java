@@ -16,35 +16,34 @@ import java.util.*;
  */
 public class ExactMatchMapper extends Mapper {
 
-    static Logger logger = LoggerFactory.getLogger(ExactMatchMapper.class.getName());
+    static Logger logger = LoggerFactory.getLogger(ExactMatchMapper.class);
 
     /**
      * Computes a mapping between a source and a target.
      *
      * @param source
-     *         Source cache
+     *            Source cache
      * @param target
-     *         Target cache
+     *            Target cache
      * @param sourceVar
-     *         Variable for the source dataset
+     *            Variable for the source dataset
      * @param targetVar
-     *         Variable for the target dataset
+     *            Variable for the target dataset
      * @param expression
-     *         Expression to process.
+     *            Expression to process.
      * @param threshold
-     *         Similarity threshold
+     *            Similarity threshold
      * @return A mapping which contains links between the source instances and
-     * the target instances
+     *         the target instances
      */
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
 
-        logger.info("Starting ExactMatchMapper");
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         // if no properties then terminate
         if (properties.get(0) == null || properties.get(1) == null) {
-            logger.error(MarkerFactory.getMarker("FATAL"),"Property values could not be read. Exiting");
+            logger.error(MarkerFactory.getMarker("FATAL"), "Property values could not be read. Exiting");
             System.exit(1);
         }
         Map<String, Set<String>> sourceIndex = getValueToUriMap(source, properties.get(0));

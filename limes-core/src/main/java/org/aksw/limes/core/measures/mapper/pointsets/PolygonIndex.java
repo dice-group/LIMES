@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class PolygonIndex {
 
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger(PolygonIndex.class);
     public Map<String, Map<Point, Map<Point, Double>>> distanceIndex;
     public Map<String, Polygon> polygonIndex;
     public int computations;
@@ -41,7 +41,8 @@ public class PolygonIndex {
      * Indexes a list of polygons by mapping the uri of each polygon to the
      * corresponding distanceIndex
      *
-     * @param polygons to be indexed
+     * @param polygons
+     *            to be indexed
      */
     public void index(Set<Polygon> polygons) {
         for (Polygon x : polygons) {
@@ -53,7 +54,8 @@ public class PolygonIndex {
      * Indexes the distances between the points in a given polygon and adds
      * polygon to list of indexes
      *
-     * @param p Input polygon
+     * @param p
+     *            Input polygon
      */
     public void index(Polygon p) {
         Map<Point, Map<Point, Double>> index = new HashMap<Point, Map<Point, Double>>();
@@ -78,11 +80,11 @@ public class PolygonIndex {
      * label uri Returns -1 if nothing is found
      *
      * @param uri
-     *         Label of the polygon
+     *            Label of the polygon
      * @param x
-     *         First point from the polygon
+     *            First point from the polygon
      * @param y
-     *         Second point from the polygon
+     *            Second point from the polygon
      * @return Distance between x and y
      */
     public double getDistance(String uri, Point x, Point y) {

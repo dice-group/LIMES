@@ -38,8 +38,12 @@ public class CentroidIndexedHausdorff extends IndexedHausdorff {
         ih.targetIndex = targetIndex;
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff#run(java.util.Set, java.util.Set, double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff
+     * #run(java.util.Set, java.util.Set, double)
      */
     @Override
     public AMapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
@@ -69,8 +73,14 @@ public class CentroidIndexedHausdorff extends IndexedHausdorff {
         return m;
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff#computeDistance(org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff
+     * #computeDistance(org.aksw.limes.core.measures.mapper.atomic.hausdorff.
+     * Polygon, org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon,
+     * double)
      */
     @Override
     public double computeDistance(Polygon X, Polygon Y, double threshold) {

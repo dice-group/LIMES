@@ -10,8 +10,6 @@ import org.aksw.limes.core.measures.measure.string.JaroWinkler;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,35 +17,33 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Mapper for bounded Jaro-Winkler distances using an efficient length-partitioning- and trie-pruning-based
- * approach in parallel.
+ * Mapper for bounded Jaro-Winkler distances using an efficient
+ * length-partitioning- and trie-pruning-based approach in parallel.
  */
 public class JaroWinklerMapper extends Mapper {
-
-    static Logger logger = LoggerFactory.getLogger(JaroWinklerMapper.class.getName());
 
     /**
      * Computes a mapping between a source and a target.
      *
      * @param source
-     *         Source cache
+     *            Source cache
      * @param target
-     *         Target cache
+     *            Target cache
      * @param sourceVar
-     *         Variable for the source dataset
+     *            Variable for the source dataset
      * @param targetVar
-     *         Variable for the target dataset
+     *            Variable for the target dataset
      * @param expression
-     *         Expression to process.
+     *            Expression to process.
      * @param threshold
-     *         Similarity threshold
+     *            Similarity threshold
      * @return A mapping which contains links between the source instances and
-     * the target instances
+     *         the target instances
      */
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
-        
+            double threshold) {
+
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         // generate value to uri maps
         Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
@@ -55,7 +51,8 @@ public class JaroWinklerMapper extends Mapper {
         return getMapping(sourceMap, targetMap, threshold);
     }
 
-    protected AMapping getMapping(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap, double threshold) {
+    protected AMapping getMapping(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
+            double threshold) {
         List<String> listA, listB;
         // get lists of strings to match
         listA = new ArrayList<>(sourceMap.keySet());
@@ -63,7 +60,8 @@ public class JaroWinklerMapper extends Mapper {
         // sort lists
         LengthQuicksort.sort(listA);
         LengthQuicksort.sort(listB);
-        // swap lists iff the largest string in listB is larger than the largest string in listA
+        // swap lists iff the largest string in listB is larger than the largest
+        // string in listA
         boolean swapped = false;
         if (listA.get(listA.size() - 1).length() < listB.get(listB.size() - 1).length()) {
             List<String> temp = listA;
@@ -74,7 +72,8 @@ public class JaroWinklerMapper extends Mapper {
         // set up partitioning of lists of strings based on strings lengths
         JaroWinkler metric = new JaroWinkler();
         List<Pair<List<String>, List<String>>> partitions = new LinkedList<>();
-        // only attempt to partition iff it makes sense mathematically, that is, the upper bound is well defined
+        // only attempt to partition iff it makes sense mathematically, that is,
+        // the upper bound is well defined
         // (cf. "On the efficient execution of bounded Jaro-Winkler distances")
         if (metric.lengthUpperBound(1, threshold) != -1) {
             List<ImmutableTriple<Integer, Integer, Integer>> sliceBoundaries = metric
@@ -105,7 +104,7 @@ public class JaroWinklerMapper extends Mapper {
         }
 
         // setting up parallel execution of matching
-       
+
         ConcurrentHashMap<String, Map<String, Double>> similarityBook = new ConcurrentHashMap<>(listA.size(), 1.0f);
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         // instantiate and queue up workers
@@ -123,9 +122,9 @@ public class JaroWinklerMapper extends Mapper {
             }
         }
         // return result
-        //logger.info("Similarity Book has " + String.valueOf(similarityBook.size()) + " entries.");
+
         AMapping mapping = getUriToUriMapping(similarityBook, sourceMap, targetMap, swapped);
-        
+
         return mapping;
     }
 

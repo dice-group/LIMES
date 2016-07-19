@@ -25,6 +25,7 @@ import java.util.TreeSet;
 public class FairSurjection extends PointsetsMeasure {
 
     public int computations;
+
     public FairSurjection() {
         computations = 0;
     }
@@ -56,7 +57,9 @@ public class FairSurjection extends PointsetsMeasure {
         return sum;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.aksw.limes.core.measures.measure.IMeasure#getName()
      */
     public String getName() {
@@ -66,9 +69,12 @@ public class FairSurjection extends PointsetsMeasure {
     /**
      * Computes the SetMeasure distance for a source and target set
      *
-     * @param source Source polygons
-     * @param target Target polygons
-     * @param threshold Distance threshold
+     * @param source
+     *            Source polygons
+     * @param target
+     *            Target polygons
+     * @param threshold
+     *            Distance threshold
      * @return Mapping of uris
      */
     public AMapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
@@ -84,9 +90,12 @@ public class FairSurjection extends PointsetsMeasure {
         return m;
     }
 
-
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(java.lang.Object, java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(java.lang.
+     * Object, java.lang.Object)
      */
     public double getSimilarity(Object object1, Object object2) {
         Polygon p1 = OrchidMapper.getPolygon((String) object1);
@@ -99,8 +108,13 @@ public class FairSurjection extends PointsetsMeasure {
         return "geodistance";
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance, java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.
+     * limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance,
+     * java.lang.String, java.lang.String)
      */
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         TreeSet<String> source = instance1.getProperty(property1);
@@ -126,12 +140,15 @@ public class FairSurjection extends PointsetsMeasure {
         return 1d / (1d + (double) d);
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(
+     * double)
      */
     public double getRuntimeApproximation(double mappingSize) {
         return mappingSize / 1000d;
     }
-
 
 }

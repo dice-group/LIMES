@@ -21,7 +21,7 @@ import java.util.ArrayList;
  */
 public class GeoBlockingModule implements BlockingModule {
 
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger(GeoBlockingModule.class);
     int dim = 2;
     ArrayList<Double> thresholds;
     ArrayList<String> properties;

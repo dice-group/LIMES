@@ -18,9 +18,9 @@ public class IntersectsMapper implements ITopologicRelationMapper {
 
     /**
      * @param sourceData
-     *         Set of Polygons
+     *            Set of Polygons
      * @param targetData
-     *         Set of Polygons
+     *            Set of Polygons
      * @return Mapping
      */
     @Override

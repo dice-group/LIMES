@@ -90,11 +90,11 @@ public class CosineMeasure extends StringMeasure {
      * Threshold for the positional filtering
      *
      * @param xTokensNumber
-     *         Size of the first input string
+     *            Size of the first input string
      * @param yTokensNumber
-     *         Size of the first input string
+     *            Size of the first input string
      * @param threshold
-     *         Similarity threshold
+     *            Similarity threshold
      * @return Threshold for positional filtering
      */
     public int getAlpha(int xTokensNumber, int yTokensNumber, double threshold) {

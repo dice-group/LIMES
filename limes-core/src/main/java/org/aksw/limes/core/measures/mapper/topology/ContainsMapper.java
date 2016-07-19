@@ -4,7 +4,6 @@
  */
 package org.aksw.limes.core.measures.mapper.topology;
 
-
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
@@ -17,12 +16,11 @@ import java.util.Set;
  */
 public class ContainsMapper implements ITopologicRelationMapper {
 
-
     /**
      * @param sourceData
-     *         Set of Polygons
+     *            Set of Polygons
      * @param targetData
-     *         Set of Polygons
+     *            Set of Polygons
      * @return Mapping
      */
     @Override

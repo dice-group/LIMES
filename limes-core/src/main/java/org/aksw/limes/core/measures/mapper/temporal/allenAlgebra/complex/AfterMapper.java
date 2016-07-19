@@ -9,7 +9,7 @@ import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.BeginEnd
 import java.util.*;
 
 /**
- * Class for Allen's temporal relation "After". 
+ * Class for Allen's temporal relation "After".
  * 
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0

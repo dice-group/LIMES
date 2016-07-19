@@ -4,7 +4,6 @@
  */
 package org.aksw.limes.core.measures.measure.string;
 
-
 import org.aksw.limes.core.io.cache.Instance;
 
 /**
@@ -29,7 +28,8 @@ public class ExactMatch extends StringMeasure {
     }
 
     public double getSimilarity(int overlap, int lengthA, int lengthB) {
-        if (overlap == lengthA && lengthA == lengthB) return 1d;
+        if (overlap == lengthA && lengthA == lengthB)
+            return 1d;
         return 0d;
     }
 
@@ -38,7 +38,8 @@ public class ExactMatch extends StringMeasure {
     }
 
     public double getSimilarity(Object object1, Object object2) {
-        if ((object1 + "").equals(object2 + "")) return 1d;
+        if ((object1 + "").equals(object2 + ""))
+            return 1d;
         return 0d;
     }
 

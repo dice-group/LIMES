@@ -8,9 +8,9 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasure;
 
 /**
- * Computes a similarity based on the geo distance of two points. Assumes that the
- * input consists of latitute and longitude of two points. The similarity is computed
- * as 1/(1+d) where d is the distance between the two points.
+ * Computes a similarity based on the geo distance of two points. Assumes that
+ * the input consists of latitute and longitude of two points. The similarity is
+ * computed as 1/(1+d) where d is the distance between the two points.
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
@@ -25,11 +25,11 @@ public class GeoDistance extends SpaceMeasure {
     }
 
     public double getThreshold(int dimension, double simThreshold) {
-        //transforms the similarity threshold into an angular threshold
+        // transforms the similarity threshold into an angular threshold
         return (1 - simThreshold) / (radius * simThreshold);
     }
 
-    //assume lat|long
+    // assume lat|long
     public double getSimilarity(Object object1, Object object2) {
         String p1[] = ((String) object1).split("\\|");
         String p2[] = ((String) object2).split("\\|");

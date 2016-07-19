@@ -34,10 +34,10 @@ public class Jaro extends StringMeasure {
      * @param string2
      * @param distanceSep
      * @return a string buffer of characters from string1 within string2 if they
-     * are of a given distance seperation from the position in string1
+     *         are of a given distance seperation from the position in string1
      */
     public static List<Character> getCommonCharacters(final String string1, final String string2,
-                                                      final int distanceSep) {
+            final int distanceSep) {
         // create a return buffer of characters
         List<Character> returnCommons = new ArrayList<Character>();
         // create a copy of string2 for processing
@@ -69,9 +69,9 @@ public class Jaro extends StringMeasure {
      * gets the similarity of the two strings using Jaro distance.
      *
      * @param string1
-     *         the first input string
+     *            the first input string
      * @param string2
-     *         the second input string
+     *            the second input string
      * @return a value between 0-1 of the similarity
      */
 

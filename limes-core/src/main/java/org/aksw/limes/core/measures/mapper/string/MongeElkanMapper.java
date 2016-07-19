@@ -6,8 +6,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import java.util.*;
 
@@ -15,8 +14,6 @@ import java.util.*;
  * @author Peggy Lucke
  */
 public class MongeElkanMapper extends Mapper {
-
-    static Logger logger = LoggerFactory.getLogger(MongeElkanMapper.class.getName());
 
     // Tokens are divide by space
     private String split = " ";
@@ -56,7 +53,7 @@ public class MongeElkanMapper extends Mapper {
             }
             similarityBook.put(sourceString, resultB);
         }
-        logger.info("Similarity Book has " + String.valueOf(similarityBook.size()) + " entries.");
+        
         AMapping result = MappingFactory.createDefaultMapping();
         for (String s : similarityBook.keySet()) {
             for (String t : similarityBook.get(s).keySet()) {
@@ -121,7 +118,7 @@ public class MongeElkanMapper extends Mapper {
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-        logger.info("Running MongeElkanMapper");
+        
 
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
@@ -141,6 +138,6 @@ public class MongeElkanMapper extends Mapper {
 
     @Override
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
-        return 100d;
+        return 1000d;
     }
 }

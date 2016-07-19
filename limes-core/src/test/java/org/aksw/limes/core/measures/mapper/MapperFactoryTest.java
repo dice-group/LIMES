@@ -7,7 +7,7 @@ import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
-import org.aksw.limes.core.measures.mapper.space.HR3;
+import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
 import org.aksw.limes.core.measures.mapper.string.EDJoin;
 import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
 import org.aksw.limes.core.measures.mapper.string.JaroMapper;
@@ -145,7 +145,7 @@ public class MapperFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             mapper = MapperFactory.createMapper(type);
-            assertTrue(mapper instanceof HR3);
+            assertTrue(mapper instanceof HR3Mapper);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

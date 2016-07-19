@@ -58,11 +58,11 @@ public class NaiveSurjection extends PointsetsMeasure {
      * Computes the SetMeasure distance for a source and target set
      *
      * @param source
-     *         Source polygons
+     *            Source polygons
      * @param target
-     *         Target polygons
+     *            Target polygons
      * @param threshold
-     *         Distance threshold
+     *            Distance threshold
      * @return Mapping of uris from source to target
      */
     public AMapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
@@ -77,7 +77,6 @@ public class NaiveSurjection extends PointsetsMeasure {
         }
         return m;
     }
-
 
     public String getType() {
         return "geodistance";
@@ -110,6 +109,5 @@ public class NaiveSurjection extends PointsetsMeasure {
     public double getRuntimeApproximation(double mappingSize) {
         return mappingSize / 1000d;
     }
-
 
 }

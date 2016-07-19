@@ -56,11 +56,11 @@ public class NaiveLink extends PointsetsMeasure {
      * Computes the SetMeasure distance for a source and target set
      *
      * @param source
-     *         Source polygons
+     *            Source polygons
      * @param target
-     *         Target polygons
+     *            Target polygons
      * @param threshold
-     *         Distance threshold
+     *            Distance threshold
      * @return Mapping of of resources from source to target
      */
     public AMapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
@@ -76,13 +76,17 @@ public class NaiveLink extends PointsetsMeasure {
         return m;
     }
 
-
     public String getType() {
         return "geodistance";
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance, java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.
+     * limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance,
+     * java.lang.String, java.lang.String)
      */
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         TreeSet<String> source = instance1.getProperty(property1);

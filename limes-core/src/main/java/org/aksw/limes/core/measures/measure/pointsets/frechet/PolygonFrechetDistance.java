@@ -13,7 +13,6 @@ import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
@@ -29,9 +28,9 @@ public class PolygonFrechetDistance {
      * Constructor
      *
      * @param p1
-     *         Polygon
+     *            Polygon
      * @param p2
-     *         Polygon
+     *            Polygon
      */
     public PolygonFrechetDistance(Polygon p1, Polygon p2) {
         poly1 = p1;
@@ -63,9 +62,9 @@ public class PolygonFrechetDistance {
 
     /**
      * @param p
-     *         Point
+     *            Point
      * @param poly
-     *         Polygon
+     *            Polygon
      * @return Frechet distance between the point p and the polygon poly
      */
     public double getFrechetPointToPolygonDistance(Point p, Polygon poly) {
@@ -176,7 +175,7 @@ public class PolygonFrechetDistance {
                 c2 = new Coordinate(midPoint.x + step, bisectSlope * step + midPoint.y);
                 // (c1, midPoint, c2) is the bisector linestring of the
                 // linesegment(i,j)
-                ls = gf.createLineString(new Coordinate[]{c1, midPoint, c2});
+                ls = gf.createLineString(new Coordinate[] { c1, midPoint, c2 });
                 temp = gf.createLineString(poly2Curve);
                 if (ls.intersects(temp)) {
                     try {
@@ -214,7 +213,7 @@ public class PolygonFrechetDistance {
                     c1 = new Coordinate(midPoint.x - step, bisectSlope * (-step) + midPoint.y);
                     c2 = new Coordinate(midPoint.x + step, bisectSlope * step + midPoint.y);
                 }
-                ls = gf.createLineString(new Coordinate[]{c1, midPoint, c2});
+                ls = gf.createLineString(new Coordinate[] { c1, midPoint, c2 });
                 temp = gf.createLineString(poly1Curve);
 
                 if (ls.intersects(temp)) {
@@ -277,9 +276,9 @@ public class PolygonFrechetDistance {
                 poly1.points.get(1).coordinates.get(0), poly1.points.get(1).coordinates.get(1),
                 poly2.points.get(0).coordinates.get(0), poly2.points.get(0).coordinates.get(1)) > epsilon &&
 
-                Line2D.ptSegDist(poly1.points.get(0).coordinates.get(0), poly1.points.get(0).coordinates.get(1),
-                        poly1.points.get(1).coordinates.get(0), poly1.points.get(1).coordinates.get(1),
-                        poly2.points.get(1).coordinates.get(0), poly2.points.get(1).coordinates.get(1)) > epsilon) {
+        Line2D.ptSegDist(poly1.points.get(0).coordinates.get(0), poly1.points.get(0).coordinates.get(1),
+                poly1.points.get(1).coordinates.get(0), poly1.points.get(1).coordinates.get(1),
+                poly2.points.get(1).coordinates.get(0), poly2.points.get(1).coordinates.get(1)) > epsilon) {
 
             return false;
         }
@@ -288,9 +287,9 @@ public class PolygonFrechetDistance {
                 poly2.points.get(1).coordinates.get(0), poly2.points.get(1).coordinates.get(1),
                 poly1.points.get(0).coordinates.get(0), poly1.points.get(0).coordinates.get(1)) > epsilon &&
 
-                Line2D.ptSegDist(poly2.points.get(0).coordinates.get(0), poly2.points.get(0).coordinates.get(1),
-                        poly2.points.get(1).coordinates.get(0), poly2.points.get(1).coordinates.get(1),
-                        poly1.points.get(1).coordinates.get(0), poly1.points.get(1).coordinates.get(1)) > epsilon) {
+        Line2D.ptSegDist(poly2.points.get(0).coordinates.get(0), poly2.points.get(0).coordinates.get(1),
+                poly2.points.get(1).coordinates.get(0), poly2.points.get(1).coordinates.get(1),
+                poly1.points.get(1).coordinates.get(0), poly1.points.get(1).coordinates.get(1)) > epsilon) {
 
             return false;
         }
@@ -303,12 +302,12 @@ public class PolygonFrechetDistance {
                 poly2.points.get(poly2.points.size() - 1).coordinates.get(0),
                 poly2.points.get(poly2.points.size() - 1).coordinates.get(1)) > epsilon &&
 
-                Line2D.ptSegDist(poly1.points.get(poly1.points.size() - 2).coordinates.get(0),
-                        poly1.points.get(poly1.points.size() - 2).coordinates.get(1),
-                        poly1.points.get(poly1.points.size() - 1).coordinates.get(0),
-                        poly1.points.get(poly1.points.size() - 1).coordinates.get(1),
-                        poly2.points.get(poly2.points.size() - 2).coordinates.get(0),
-                        poly2.points.get(poly2.points.size() - 2).coordinates.get(1)) > epsilon) {
+        Line2D.ptSegDist(poly1.points.get(poly1.points.size() - 2).coordinates.get(0),
+                poly1.points.get(poly1.points.size() - 2).coordinates.get(1),
+                poly1.points.get(poly1.points.size() - 1).coordinates.get(0),
+                poly1.points.get(poly1.points.size() - 1).coordinates.get(1),
+                poly2.points.get(poly2.points.size() - 2).coordinates.get(0),
+                poly2.points.get(poly2.points.size() - 2).coordinates.get(1)) > epsilon) {
 
             return false;
         }
@@ -319,12 +318,12 @@ public class PolygonFrechetDistance {
                 poly1.points.get(poly1.points.size() - 2).coordinates.get(0),
                 poly1.points.get(poly1.points.size() - 2).coordinates.get(1)) > epsilon &&
 
-                Line2D.ptSegDist(poly2.points.get(poly2.points.size() - 2).coordinates.get(0),
-                        poly2.points.get(poly2.points.size() - 2).coordinates.get(1),
-                        poly2.points.get(poly2.points.size() - 1).coordinates.get(0),
-                        poly2.points.get(poly2.points.size() - 1).coordinates.get(1),
-                        poly1.points.get(poly1.points.size() - 1).coordinates.get(0),
-                        poly1.points.get(poly1.points.size() - 1).coordinates.get(1)) > epsilon) {
+        Line2D.ptSegDist(poly2.points.get(poly2.points.size() - 2).coordinates.get(0),
+                poly2.points.get(poly2.points.size() - 2).coordinates.get(1),
+                poly2.points.get(poly2.points.size() - 1).coordinates.get(0),
+                poly2.points.get(poly2.points.size() - 1).coordinates.get(1),
+                poly1.points.get(poly1.points.size() - 1).coordinates.get(0),
+                poly1.points.get(poly1.points.size() - 1).coordinates.get(1)) > epsilon) {
 
             return false;
         }
@@ -353,7 +352,7 @@ public class PolygonFrechetDistance {
 
                 } else {
                     // make line string out of j's two end points
-                    tempLsQ = gf.createLineString(new Coordinate[]{q1, q2});
+                    tempLsQ = gf.createLineString(new Coordinate[] { q1, q2 });
 
                     // make circle with i's first end point
                     gsf.setCentre(p1);
@@ -396,7 +395,7 @@ public class PolygonFrechetDistance {
                 if (val1 > epsilon) {
                     c[i][j] = d[i][j] = -1;
                 } else {
-                    tempLsP = gf.createLineString(new Coordinate[]{p1, p2});
+                    tempLsP = gf.createLineString(new Coordinate[] { p1, p2 });
                     gsf.setCentre(q1);
                     gsf.setSize(2 * epsilon + delta);
                     tempCircle = gsf.createCircle();

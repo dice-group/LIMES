@@ -10,7 +10,7 @@ import org.aksw.limes.core.datastrutures.Point;
  * length s of the great elliptic curve. With the ellipsoid constants a, f, e^2
  * and e'^2
  *
- * @author sherif
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  */
 public class GreatEllipticDistance {
 
@@ -18,9 +18,9 @@ public class GreatEllipticDistance {
      * Computes and returns distance between two points.
      *
      * @param x,
-     *         first point
+     *            first point
      * @param y,
-     *         second point
+     *            second point
      * @return the distance between x and y
      */
     public static double getDistanceInDegrees(Point x, Point y) {
@@ -34,13 +34,13 @@ public class GreatEllipticDistance {
      * radians.
      *
      * @param lat1,
-     *         Latitude of first point
+     *            Latitude of first point
      * @param long1,
-     *         Longitude of first point
+     *            Longitude of first point
      * @param lat2,
-     *         Latitude of second point
+     *            Latitude of second point
      * @param long2,
-     *         Longitude of second point
+     *            Longitude of second point
      * @return Distance between both points
      */
     public static double getDistanceInDegrees(double lat1, double long1, double lat2, double long2) {
@@ -56,13 +56,13 @@ public class GreatEllipticDistance {
      * latitudes/longitudes are in Radians
      *
      * @param lat1,
-     *         Latitude of first point
+     *            Latitude of first point
      * @param long1,
-     *         Longitude of first point
+     *            Longitude of first point
      * @param lat2,
-     *         Latitude of second point
+     *            Latitude of second point
      * @param long2,
-     *         Longitude of second point
+     *            Longitude of second point
      * @return Distance between both points
      */
     public static double getDistance(double lat1, double long1, double lat2, double long2) {

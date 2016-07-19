@@ -4,7 +4,6 @@
  */
 package org.aksw.limes.core.measures.mapper.topology;
 
-
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 

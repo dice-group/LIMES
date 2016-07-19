@@ -23,7 +23,7 @@ import java.util.*;
  */
 public class EDJoin extends Mapper {
 
-    static Logger logger = LoggerFactory.getLogger(EDJoin.class.getName());
+    static Logger logger = LoggerFactory.getLogger(EDJoin.class);
     private static int Q = -1;
     private static AMapping mapping = null;
     private static HashMap<Integer, String> sourceMap;
@@ -362,7 +362,7 @@ public class EDJoin extends Mapper {
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-        
+
         if (Q <= 1) {
             Q = 3;
         }
@@ -382,15 +382,17 @@ public class EDJoin extends Mapper {
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         // if no properties then terminate
         if (properties.get(0) == null || properties.get(1) == null) {
-            logger.error(MarkerFactory.getMarker("FATAL"),"Property 1 = " + properties.get(0) + ", Property 2 = " + properties.get(1));
-            logger.error(MarkerFactory.getMarker("FATAL"),"Property values could not be read. Exiting");
+            logger.error(MarkerFactory.getMarker("FATAL"),
+                    "Property 1 = " + properties.get(0) + ", Property 2 = " + properties.get(1));
+            logger.error(MarkerFactory.getMarker("FATAL"), "Property values could not be read. Exiting");
             System.exit(1);
         }
 
         // if expression is not atomic terminate
         if (!p.isAtomic()) {
-            logger.error(MarkerFactory.getMarker("FATAL"),"Mappers can only deal with atomic expression");
-            logger.error(MarkerFactory.getMarker("FATAL"),"Expression " + expression + " was given to a mapper to process");
+            logger.error(MarkerFactory.getMarker("FATAL"), "Mappers can only deal with atomic expression");
+            logger.error(MarkerFactory.getMarker("FATAL"),
+                    "Expression " + expression + " was given to a mapper to process");
             System.exit(1);
         }
 
@@ -523,7 +525,7 @@ public class EDJoin extends Mapper {
          * mapping.getConfidence(key, value); if (confidence < threshold) {
          * tempMapping.add(key, value, confidence); } } } mapping = tempMapping;
          */
-        
+
         return mapping;
     }
 

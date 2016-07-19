@@ -18,9 +18,9 @@ public abstract class PointsetsMeasure extends Measure implements IPointsetsMeas
 
     /**
      * @param x
-     *         Point x
+     *            Point x
      * @param y
-     *         Point y
+     *            Point y
      * @return Point-to-point distance between x and y
      */
     public static double pointToPointDistance(Point x, Point y) {
@@ -31,8 +31,12 @@ public abstract class PointsetsMeasure extends Measure implements IPointsetsMeas
         return OrthodromicDistance.getDistanceInDegrees(x, y);
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(java.lang.Object, java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(java.lang.
+     * Object, java.lang.Object)
      */
     public double getSimilarity(Object object1, Object object2) {
         Polygon p1 = OrchidMapper.getPolygon((String) object1);
@@ -41,8 +45,11 @@ public abstract class PointsetsMeasure extends Measure implements IPointsetsMeas
         return 1d / (1d + (double) d);
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#getComputations()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#
+     * getComputations()
      */
     public int getComputations() {
         return computations;

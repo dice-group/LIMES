@@ -28,27 +28,28 @@ public class RADON {
         public final static String MED = "median";
         public static boolean swap = false;
 
-        public static double[] decideForTheta (GridSizeHeuristics s, GridSizeHeuristics t, String measure) {
+        public static double[] decideForTheta(GridSizeHeuristics s, GridSizeHeuristics t, String measure) {
             double[] stats;
             switch (measure) {
-                case MAX:
-                    stats = new double[]{s.maxX, s.maxY, t.maxX, t.maxY};
-                    break;
-                case AVG:
-                    stats = new double[]{s.avgX, s.avgY, t.avgX, t.avgY};
-                    break;
-                case MED:
-                    stats = new double[]{s.medX, s.medY, t.medX, t.medY};
-                    break;
-                case MIN:
-                default:
-                    stats = new double[]{s.minX, s.minY, t.minX, t.minY};
+            case MAX:
+                stats = new double[] { s.maxX, s.maxY, t.maxX, t.maxY };
+                break;
+            case AVG:
+                stats = new double[] { s.avgX, s.avgY, t.avgX, t.avgY };
+                break;
+            case MED:
+                stats = new double[] { s.medX, s.medY, t.medX, t.medY };
+                break;
+            case MIN:
+            default:
+                stats = new double[] { s.minX, s.minY, t.minX, t.minY };
             }
             double estAreaS = stats[0] * stats[1] * s.size;
             double estAreaT = stats[2] * stats[3] * t.size;
-            // we want to swap towards the smallest area coverage to optimizethe number of comparisons
+            // we want to swap towards the smallest area coverage to optimizethe
+            // number of comparisons
             swap = estAreaS > estAreaT;
-            return new double[]{(2.0d)/(stats[0]+stats[2]), (2.0d)/(stats[1]+stats[3])};
+            return new double[] { (2.0d) / (stats[0] + stats[2]), (2.0d) / (stats[1] + stats[3]) };
         }
 
         private double size;
@@ -74,14 +75,14 @@ public class RADON {
             this.size = input.size();
             Arrays.sort(x);
             this.minX = x[0];
-            this.maxX = x[x.length-1];
+            this.maxX = x[x.length - 1];
             this.avgX = Arrays.stream(x).average().getAsDouble();
-            this.medX = x.length % 2 == 0 ? (x[x.length/2 - 1] + x[x.length/2]) / 2.0d : x[x.length/2];
+            this.medX = x.length % 2 == 0 ? (x[x.length / 2 - 1] + x[x.length / 2]) / 2.0d : x[x.length / 2];
             Arrays.sort(y);
             this.minY = y[0];
-            this.maxY = y[y.length-1];
+            this.maxY = y[y.length - 1];
             this.avgY = Arrays.stream(y).average().getAsDouble();
-            this.medY = y.length % 2 == 0 ? (y[y.length/2 - 1] + y[y.length/2]) / 2.0d : y[y.length/2];
+            this.medY = y.length % 2 == 0 ? (y[y.length / 2 - 1] + y[y.length / 2]) / 2.0d : y[y.length / 2];
         }
 
         public double getSize() {
@@ -122,11 +123,9 @@ public class RADON {
 
         public String toString() {
             DecimalFormat df = new DecimalFormat("0.0000");
-            return "[MIN(" + df.format(minX) + ";" + df.format(minY) +
-                    ");MAX(" + df.format(maxX) + ";" + df.format(maxY) +
-                    ";AVG(" + df.format(avgX) + ";" + df.format(avgY) +
-                    ");MED(" + df.format(medX) + ";" + df.format(medY) +
-                    ")]";
+            return "[MIN(" + df.format(minX) + ";" + df.format(minY) + ");MAX(" + df.format(maxX) + ";"
+                    + df.format(maxY) + ";AVG(" + df.format(avgX) + ";" + df.format(avgY) + ");MED(" + df.format(medX)
+                    + ";" + df.format(medY) + ")]";
         }
 
     }
@@ -166,18 +165,17 @@ public class RADON {
             return lat1 == i.lat1 && lat2 == i.lat2 && lon1 == i.lon1 && lon2 == i.lon2;
         }
 
-
     }
 
     public static class SquareIndex {
 
         public HashMap<Integer, HashMap<Integer, List<MBBIndex>>> map = new HashMap<>();
 
-        public SquareIndex () {
+        public SquareIndex() {
 
         }
 
-        public SquareIndex (int capacity) {
+        public SquareIndex(int capacity) {
             this.map = new HashMap<>(capacity);
         }
 
@@ -215,9 +213,9 @@ public class RADON {
         @Override
         public void run() {
             Map<String, Set<String>> temp = new HashMap<>();
-            for (int i = 0; i < scheduled.size(); i+=2) {
+            for (int i = 0; i < scheduled.size(); i += 2) {
                 MBBIndex s = scheduled.get(i);
-                MBBIndex t = scheduled.get(i+1);
+                MBBIndex t = scheduled.get(i + 1);
                 if (relate(s.polygon, t.polygon, relation)) {
                     if (!temp.containsKey(s.uri)) {
                         temp.put(s.uri, new HashSet<>());
@@ -230,7 +228,7 @@ public class RADON {
             }
         }
 
-        public void schedule (MBBIndex s, MBBIndex t) {
+        public void schedule(MBBIndex s, MBBIndex t) {
             scheduled.add(s);
             scheduled.add(t);
         }
@@ -241,24 +239,24 @@ public class RADON {
 
         private static Boolean relate(Geometry geometry1, Geometry geometry2, String relation) {
             switch (relation) {
-                case EQUALS:
-                    return geometry1.equals(geometry2);
-                case DISJOINT:
-                    return geometry1.disjoint(geometry2);
-                case INTERSECTS:
-                    return geometry1.intersects(geometry2);
-                case TOUCHES:
-                    return geometry1.touches(geometry2);
-                case CROSSES:
-                    return geometry1.crosses(geometry2);
-                case WITHIN:
-                    return geometry1.within(geometry2);
-                case CONTAINS:
-                    return geometry1.contains(geometry2);
-                case OVERLAPS:
-                    return geometry1.overlaps(geometry2);
-                default:
-                    return geometry1.relate(geometry2, relation);
+            case EQUALS:
+                return geometry1.equals(geometry2);
+            case DISJOINT:
+                return geometry1.disjoint(geometry2);
+            case INTERSECTS:
+                return geometry1.intersects(geometry2);
+            case TOUCHES:
+                return geometry1.touches(geometry2);
+            case CROSSES:
+                return geometry1.crosses(geometry2);
+            case WITHIN:
+                return geometry1.within(geometry2);
+            case CONTAINS:
+                return geometry1.contains(geometry2);
+            case OVERLAPS:
+                return geometry1.overlaps(geometry2);
+            default:
+                return geometry1.relate(geometry2, relation);
             }
         }
     }
@@ -268,11 +266,11 @@ public class RADON {
         private AMapping m;
         private List<Map<String, Set<String>>> localResults = new ArrayList<>();
 
-        public Merger (List<Map<String, Set<String>>> results, AMapping m) {
+        public Merger(List<Map<String, Set<String>>> results, AMapping m) {
             this.m = m;
             // copy over entries to local list
             synchronized (results) {
-                for (Iterator<Map<String, Set<String>>> iterator = results.listIterator(); iterator.hasNext(); ) {
+                for (Iterator<Map<String, Set<String>>> iterator = results.listIterator(); iterator.hasNext();) {
                     localResults.add(iterator.next());
                     iterator.remove();
                 }
@@ -329,14 +327,17 @@ public class RADON {
         return getMapping(source, target, relation);
     }
 
-    public static AMapping getMapping(Map<String, Geometry> sourceData, Map<String, Geometry> targetData, String relation) {
+    public static AMapping getMapping(Map<String, Geometry> sourceData, Map<String, Geometry> targetData,
+            String relation) {
         double thetaX, thetaY;
         int numThreads = new Double(Math.ceil((double) Runtime.getRuntime().availableProcessors() / 2.0d)).intValue();
         // Relation thats actually used for computation.
-        // Might differ from input relation when swapping occurs or the input relation is 'disjoint'.
+        // Might differ from input relation when swapping occurs or the input
+        // relation is 'disjoint'.
         String rel = relation;
 
-        // When relation for AMapping M is 'disjoint' we compute AMapping M' relation 'intersects'
+        // When relation for AMapping M is 'disjoint' we compute AMapping M'
+        // relation 'intersects'
         // and return M = (S x T) \ M'
         boolean disjointStrategy = rel.equals(DISJOINT);
         if (disjointStrategy)
@@ -385,19 +386,17 @@ public class RADON {
                         for (MBBIndex b : target) {
                             if (!computed.get(a.uri).contains(b.uri)) {
                                 computed.get(a.uri).add(b.uri);
-                                boolean compute =
-                                        (rel.equals(CONTAINS) && a.contains(b))
-                                                || (rel.equals(WITHIN) && b.contains(a))
-                                                || (rel.equals(EQUALS) && a.equals(b))
-                                                || rel.equals(INTERSECTS)
-                                                || rel.equals(CROSSES)
-                                                || rel.equals(TOUCHES)
-                                                || rel.equals(OVERLAPS);
+                                boolean compute = (rel.equals(CONTAINS) && a.contains(b))
+                                        || (rel.equals(WITHIN) && b.contains(a)) || (rel.equals(EQUALS) && a.equals(b))
+                                        || rel.equals(INTERSECTS) || rel.equals(CROSSES) || rel.equals(TOUCHES)
+                                        || rel.equals(OVERLAPS);
                                 if (compute) {
                                     if (numThreads == 1) {
                                         if (Matcher.relate(a.polygon, b.polygon, rel)) {
-                                            if (swapped)    m.add(b.uri, a.uri, 1.0);
-                                            else            m.add(a.uri, b.uri, 1.0);
+                                            if (swapped)
+                                                m.add(b.uri, a.uri, 1.0);
+                                            else
+                                                m.add(a.uri, b.uri, 1.0);
                                         }
                                     } else {
                                         matcher.schedule(a, b);
@@ -435,7 +434,7 @@ public class RADON {
                 mergerExec.execute(new Merger(results, m));
             }
             mergerExec.shutdown();
-            while(!mergerExec.isTerminated()) {
+            while (!mergerExec.isTerminated()) {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -459,7 +458,7 @@ public class RADON {
         return m;
     }
 
-    public static SquareIndex index (Map<String, Geometry> input, SquareIndex extIndex, double thetaX, double thetaY) {
+    public static SquareIndex index(Map<String, Geometry> input, SquareIndex extIndex, double thetaX, double thetaY) {
         SquareIndex result = new SquareIndex();
 
         for (String p : input.keySet()) {
@@ -489,4 +488,3 @@ public class RADON {
         return result;
     }
 }
-

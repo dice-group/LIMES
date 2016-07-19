@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.measure.pointsets.frechet;
 
-
 import fr.ign.cogit.geoxygene.api.spatial.coordgeom.ILineSegment;
 import fr.ign.cogit.geoxygene.distance.Frechet;
 import fr.ign.cogit.geoxygene.spatial.coordgeom.DirectPosition;
@@ -22,7 +21,6 @@ import java.util.TreeSet;
  */
 public class GeOxygeneFrechet extends PointsetsMeasure {
 
-    
     public GeOxygeneFrechet() {
         computations = 0;
     }
@@ -31,7 +29,7 @@ public class GeOxygeneFrechet extends PointsetsMeasure {
      * Convert polygon to ILineSegment
      *
      * @param poly
-     *         Polygon
+     *            Polygon
      * @return ILineSegment out of the input poly
      */
     public static ILineSegment toLineSegment(Polygon poly) {
@@ -54,10 +52,11 @@ public class GeOxygeneFrechet extends PointsetsMeasure {
 
     /**
      * @param X
-     *         Polygon
+     *            Polygon
      * @param Y
-     *         Polygon
-     * @param threshold, distance threshold
+     *            Polygon
+     * @param threshold,
+     *            distance threshold
      * @return the GeOxygeneFrechet distance between X and Y
      */
     public static double distance(Polygon X, Polygon Y, double threshold) {
@@ -72,14 +71,19 @@ public class GeOxygeneFrechet extends PointsetsMeasure {
         return f;
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#getComputations()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#
+     * getComputations()
      */
     public int getComputations() {
         return computations;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.aksw.limes.core.measures.measure.IMeasure#getName()
      */
     public String getName() {
@@ -90,11 +94,11 @@ public class GeOxygeneFrechet extends PointsetsMeasure {
      * Computes the SetMeasure distance for a source and target set
      *
      * @param source
-     *         Source polygons
+     *            Source polygons
      * @param target
-     *         Target polygons
+     *            Target polygons
      * @param threshold
-     *         Distance threshold
+     *            Distance threshold
      * @return Mapping from source to target resources
      */
     public AMapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
@@ -110,16 +114,22 @@ public class GeOxygeneFrechet extends PointsetsMeasure {
         return m;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.aksw.limes.core.measures.measure.IMeasure#getType()
      */
     public String getType() {
         return "geodistance";
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance, java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.
+     * limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance,
+     * java.lang.String, java.lang.String)
      */
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         TreeSet<String> source = instance1.getProperty(property1);
@@ -145,11 +155,15 @@ public class GeOxygeneFrechet extends PointsetsMeasure {
         return 1d / (1d + (double) d);
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(
+     * double)
      */
     public double getRuntimeApproximation(double mappingSize) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return mappingSize / 1000d;
     }
 
 }

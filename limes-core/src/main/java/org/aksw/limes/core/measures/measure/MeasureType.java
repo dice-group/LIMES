@@ -1,5 +1,11 @@
 package org.aksw.limes.core.measures.measure;
-
+/**
+ * Implements the measure type class. It includes all measure included in LIMES.
+ *
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @version 1.0
+ */
 public enum MeasureType { 
     GEO_ORTHODROMIC, GEO_HAUSDORFF, GEO_NAIVE_HAUSDORFF, GEO_INDEXED_HAUSDORFF, GEO_FAST_HAUSDORFF, GEO_SYMMETRIC_HAUSDORFF, 
     GEO_CENTROID_INDEXED_HAUSDORFF, GEO_SCAN_INDEXED_HAUSDORFF, GEO_SCAN__INDEXED_HAUSDORFF, GEO_MIN, GEO_MAX, 
@@ -10,5 +16,5 @@ public enum MeasureType {
     TMP_FINISHES, TMP_IS_MET_BY, TMP_MEETS, TMP_AFTER,
     TMP_BEFORE, TMP_CONCURRENT, TMP_PREDECESSOR, TMP_SUCCESSOR,
     COSINE, EXACTMATCH, JACCARD, JARO,LEVENSHTEIN, OVERLAP, 
-    TRIGRAMS, QGRAMS, SOUNDEX, EUCLIDEAN, JAROWINKLER
+    TRIGRAMS, QGRAMS, SOUNDEX, EUCLIDEAN, JAROWINKLER, MONGEELKAN, RATCLIFF
 }

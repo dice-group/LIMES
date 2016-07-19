@@ -40,7 +40,7 @@ public class Polygon {
      * Adds a point to the polygon. Also updates the distance list
      *
      * @param y
-     *         Point to add
+     *            Point to add
      */
     public void add(Point y) {
         points.add(y);
@@ -50,7 +50,7 @@ public class Polygon {
      * removes a point from the polygon. Also updates the distance list
      *
      * @param y
-     *         Point to remove
+     *            Point to remove
      */
     public void remove(Point y) {
         ((List<Point>) points).remove(y);
@@ -90,7 +90,8 @@ public class Polygon {
      * Returns a Geometry from the Points of the Polygon
      *
      * @return Geometry
-     * @throws com.vividsolutions.jts.io.ParseException if Geometry is not valid
+     * @throws com.vividsolutions.jts.io.ParseException
+     *             if Geometry is not valid
      */
     public Geometry getGeometry() throws ParseException {
         String geometryString = "Polygon ((";

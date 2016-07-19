@@ -30,9 +30,9 @@ public class NaiveSumOfMin extends PointsetsMeasure {
 
     /**
      * @param X
-     *         First polygon
+     *            First polygon
      * @param Y
-     *         Second polygon
+     *            Second polygon
      * @param threshold
      * @return sum of minimum distance between the X and Y
      */
@@ -41,8 +41,13 @@ public class NaiveSumOfMin extends PointsetsMeasure {
         return (m.computeDistance(X, Y, threshold) + m.computeDistance(Y, X, threshold)) / 2;
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#computeDistance(org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#
+     * computeDistance(org.aksw.limes.core.measures.mapper.atomic.hausdorff.
+     * Polygon, org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon,
+     * double)
      */
     public double computeDistance(Polygon X, Polygon Y, double threshold) {
         return (SumOfMins(X, Y) + SumOfMins(Y, X)) / 2;
@@ -50,9 +55,9 @@ public class NaiveSumOfMin extends PointsetsMeasure {
 
     /**
      * @param X
-     *         First polygon
+     *            First polygon
      * @param Y
-     *         Second polygon
+     *            Second polygon
      * @return sum of minimum distance between the X and Y
      */
     private double SumOfMins(Polygon X, Polygon Y) {
@@ -65,9 +70,9 @@ public class NaiveSumOfMin extends PointsetsMeasure {
 
     /**
      * @param x
-     *         Point
+     *            Point
      * @param Y
-     *         Polygon
+     *            Polygon
      * @return the minimum distance between x and Y
      */
     private double computeMinDistance(Point x, Polygon Y) {
@@ -81,7 +86,9 @@ public class NaiveSumOfMin extends PointsetsMeasure {
         return min;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.aksw.limes.core.measures.measure.IMeasure#getName()
      */
     public String getName() {
@@ -92,11 +99,11 @@ public class NaiveSumOfMin extends PointsetsMeasure {
      * Computes the SetMeasure distance for a source and target set
      *
      * @param source
-     *         Source polygons
+     *            Source polygons
      * @param target
-     *         Target polygons
+     *            Target polygons
      * @param threshold
-     *         Distance threshold
+     *            Distance threshold
      * @return Mapping of resources from source to target
      */
     public AMapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
@@ -112,16 +119,22 @@ public class NaiveSumOfMin extends PointsetsMeasure {
         return m;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.aksw.limes.core.measures.measure.IMeasure#getType()
      */
     public String getType() {
         return "geodistance";
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance, java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.
+     * limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance,
+     * java.lang.String, java.lang.String)
      */
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         TreeSet<String> source = instance1.getProperty(property1);
@@ -147,8 +160,12 @@ public class NaiveSumOfMin extends PointsetsMeasure {
         return 1d / (1d + (double) d);
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(
+     * double)
      */
     public double getRuntimeApproximation(double mappingSize) {
         return mappingSize / 1000d;

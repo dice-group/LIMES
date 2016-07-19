@@ -24,10 +24,11 @@ import java.util.TreeMap;
  */
 public class FairSurjectionFinder extends SurjectionFinder {
 
-
     /**
-     * @param X source polygon
-     * @param Y target polygon
+     * @param X
+     *            source polygon
+     * @param Y
+     *            target polygon
      */
     FairSurjectionFinder(Polygon X, Polygon Y) {
         super(X, Y);
@@ -61,9 +62,9 @@ public class FairSurjectionFinder extends SurjectionFinder {
 
     /**
      * @param x
-     *         Point
+     *            Point
      * @param Y
-     *         Point
+     *            Point
      * @return SortedNearestPoints
      */
     TreeMap<Double, Point> getSortedNearestPoints(Point x, Polygon Y) {
@@ -74,11 +75,14 @@ public class FairSurjectionFinder extends SurjectionFinder {
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.pointsets.surjection.SurjectionFinder#getRuntimeApproximation(double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.aksw.limes.core.measures.measure.pointsets.surjection.
+     * SurjectionFinder#getRuntimeApproximation(double)
      */
     public double getRuntimeApproximation(double mappingSize) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return mappingSize / 1000d;
     }
 
 }

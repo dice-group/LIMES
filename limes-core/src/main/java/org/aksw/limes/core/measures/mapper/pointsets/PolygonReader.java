@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class PolygonReader {
-    private static final Logger logger = LoggerFactory.getLogger(PolygonReader.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(PolygonReader.class);
 
     public static boolean keepPolygons = true;
 
@@ -29,9 +29,9 @@ public class PolygonReader {
      * Read a number of polygons from a file.
      *
      * @param file,
-     *         name of the file that contains the polygons
+     *            name of the file that contains the polygons
      * @param numberOfEntries,
-     *         number of polygons to be read
+     *            number of polygons to be read
      * @return polygon, as a set
      */
     public static Set<Polygon> readPolygons(String file, int numberOfEntries) {
@@ -56,7 +56,7 @@ public class PolygonReader {
                     // data is stored as long, lat
                     for (int i = 1; i < split.length; i = i + 2) {
                         result.get(split[0]).add(new Point("", Arrays.asList(
-                                new Double[]{Double.parseDouble(split[i + 1]), Double.parseDouble(split[i])})));
+                                new Double[] { Double.parseDouble(split[i + 1]), Double.parseDouble(split[i]) })));
                     }
                 }
                 if (result.keySet().size() == numberOfEntries) {

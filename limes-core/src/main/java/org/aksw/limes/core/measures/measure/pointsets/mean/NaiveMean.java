@@ -26,16 +26,15 @@ public class NaiveMean extends PointsetsMeasure {
 
     public int computations;
 
-
     public NaiveMean() {
         computations = 0;
     }
 
     /**
      * @param X
-     *         Polygon
+     *            Polygon
      * @param Y
-     *         Polygon
+     *            Polygon
      * @param threshold
      * @return the mean distance between X and Y
      */
@@ -59,8 +58,13 @@ public class NaiveMean extends PointsetsMeasure {
         return pointToPointDistance(meanX, meanY);
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#computeDistance(org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#
+     * computeDistance(org.aksw.limes.core.measures.mapper.atomic.hausdorff.
+     * Polygon, org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon,
+     * double)
      */
     public double computeDistance(Polygon X, Polygon Y, double threshold) {
         Point meanX = new Point();
@@ -80,7 +84,9 @@ public class NaiveMean extends PointsetsMeasure {
         return pointToPointDistance(meanX, meanY);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.aksw.limes.core.measures.measure.IMeasure#getName()
      */
     public String getName() {
@@ -91,11 +97,11 @@ public class NaiveMean extends PointsetsMeasure {
      * Computes the SetMeasure distance for a source and target set
      *
      * @param source
-     *         Source polygons
+     *            Source polygons
      * @param target
-     *         Target polygons
+     *            Target polygons
      * @param threshold
-     *         Distance threshold
+     *            Distance threshold
      * @return Mapping of resources from Source to Target
      */
     public AMapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
@@ -112,9 +118,12 @@ public class NaiveMean extends PointsetsMeasure {
         return m;
     }
 
-
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(java.lang.Object, java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(java.lang.
+     * Object, java.lang.Object)
      */
     public double getSimilarity(Object object1, Object object2) {
         Polygon p1 = OrchidMapper.getPolygon((String) object1);
@@ -123,15 +132,22 @@ public class NaiveMean extends PointsetsMeasure {
         return 1d / (1d + (double) d);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.aksw.limes.core.measures.measure.IMeasure#getType()
      */
     public String getType() {
         return "geodistance";
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance, java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.
+     * limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance,
+     * java.lang.String, java.lang.String)
      */
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         TreeSet<String> source = instance1.getProperty(property1);
@@ -157,8 +173,12 @@ public class NaiveMean extends PointsetsMeasure {
         return 1d / (1d + (double) d);
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(
+     * double)
      */
     public double getRuntimeApproximation(double mappingSize) {
         return mappingSize / 1000d;

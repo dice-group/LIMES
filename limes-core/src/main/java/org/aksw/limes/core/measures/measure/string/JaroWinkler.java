@@ -1,21 +1,21 @@
 package org.aksw.limes.core.measures.measure.string;
 
-
 import org.aksw.limes.core.io.cache.Instance;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 import java.util.LinkedList;
 
 /**
- * This class implements the Jaro-Winkler algorithm that was designed as
- * a string subsequence alignment method for matching names in the US Census.
- * It is thus optimized for relatively small sized strings of latin letters only.
- * It provides all the features of the original C implementation by William E. Winkler,
- * although the features that made it specific for name matching may be disabled.
+ * This class implements the Jaro-Winkler algorithm that was designed as a
+ * string subsequence alignment method for matching names in the US Census. It
+ * is thus optimized for relatively small sized strings of latin letters only.
+ * It provides all the features of the original C implementation by William E.
+ * Winkler, although the features that made it specific for name matching may be
+ * disabled.
  * <p>
  * To overcome the complexity O(n*m) for non matching cases a filter is added.
- * Given a threshold it can identify pairs whose Jaro-Winkler proximity
- * is confidently less than or equal to that threshold.
+ * Given a threshold it can identify pairs whose Jaro-Winkler proximity is
+ * confidently less than or equal to that threshold.
  *
  * @author Kevin Dreßler
  */
@@ -23,13 +23,12 @@ import java.util.LinkedList;
 public class JaroWinkler extends StringMeasure implements ITrieFilterableStringMeasure {
 
     public static double winklerBoostThreshold = 0.7d;
-    private static char[][] sp =
-            {{'A', 'E'}, {'A', 'I'}, {'A', 'O'}, {'A', 'U'}, {'B', 'V'}, {'E', 'I'}, {'E', 'O'}, {'E', 'U'},
-                    {'I', 'O'}, {'I', 'U'}, {'O', 'U'}, {'I', 'Y'}, {'E', 'Y'}, {'C', 'G'}, {'E', 'F'},
-                    {'W', 'U'}, {'W', 'V'}, {'X', 'K'}, {'S', 'Z'}, {'X', 'S'}, {'Q', 'C'}, {'U', 'V'},
-                    {'M', 'N'}, {'L', 'I'}, {'Q', 'O'}, {'P', 'R'}, {'I', 'J'}, {'2', 'Z'}, {'5', 'S'},
-                    {'8', 'B'}, {'1', 'I'}, {'1', 'L'}, {'0', 'O'}, {'0', 'Q'}, {'C', 'K'}, {'G', 'J'},
-                    {'E', ' '}, {'Y', ' '}, {'S', ' '}};
+    private static char[][] sp = { { 'A', 'E' }, { 'A', 'I' }, { 'A', 'O' }, { 'A', 'U' }, { 'B', 'V' }, { 'E', 'I' },
+            { 'E', 'O' }, { 'E', 'U' }, { 'I', 'O' }, { 'I', 'U' }, { 'O', 'U' }, { 'I', 'Y' }, { 'E', 'Y' },
+            { 'C', 'G' }, { 'E', 'F' }, { 'W', 'U' }, { 'W', 'V' }, { 'X', 'K' }, { 'S', 'Z' }, { 'X', 'S' },
+            { 'Q', 'C' }, { 'U', 'V' }, { 'M', 'N' }, { 'L', 'I' }, { 'Q', 'O' }, { 'P', 'R' }, { 'I', 'J' },
+            { '2', 'Z' }, { '5', 'S' }, { '8', 'B' }, { '1', 'I' }, { '1', 'L' }, { '0', 'O' }, { '0', 'Q' },
+            { 'C', 'K' }, { 'G', 'J' }, { 'E', ' ' }, { 'Y', ' ' }, { 'S', ' ' } };
     private int[][] adjwt;
 
     private boolean simOn;
@@ -51,7 +50,9 @@ public class JaroWinkler extends StringMeasure implements ITrieFilterableStringM
         int i, j;
         if (characterSimilarityOn) {
             adjwt = new int[91][91];
-            for (i = 0; i < 91; i++) for (j = 0; j < 91; j++) adjwt[i][j] = 0;
+            for (i = 0; i < 91; i++)
+                for (j = 0; j < 91; j++)
+                    adjwt[i][j] = 0;
             for (i = 0; i < 36; i++) {
                 adjwt[sp[i][0]][sp[i][1]] = 3;
                 adjwt[sp[i][1]][sp[i][0]] = 3;
@@ -63,7 +64,7 @@ public class JaroWinkler extends StringMeasure implements ITrieFilterableStringM
      * Is character not numeric?
      *
      * @param c
-     *         character
+     *            character
      * @return true if not numeric, false otherwise
      */
     private boolean notNum(char c) {
@@ -74,13 +75,12 @@ public class JaroWinkler extends StringMeasure implements ITrieFilterableStringM
      * Is Character alphanumeric?
      *
      * @param c
-     *         character
+     *            character
      * @return true if alphanumeric, false otherwise
      */
     private boolean inRange(char c) {
         return (c > 0) && (c < 91);
     }
-
 
     /**
      * Clone method for parallel execution
@@ -92,19 +92,21 @@ public class JaroWinkler extends StringMeasure implements ITrieFilterableStringM
     }
 
     /**
-     * Calculate the proximity of two input strings if
-     * proximity is assured to be over given threshold threshold.
+     * Calculate the proximity of two input strings if proximity is assured to
+     * be over given threshold threshold.
      *
      * @param yang
-     *         string to align on
+     *            string to align on
      * @return similarity score (proximity)
      */
     public double proximity(char[] yin, char[] yang) {
         boolean[] yinFlags = new boolean[yin.length];
         boolean[] yangFlags = new boolean[yang.length];
         int i;
-        for (i = 0; i < yin.length; i++) yinFlags[i] = false;
-        for (i = 0; i < yang.length; i++) yangFlags[i] = false;
+        for (i = 0; i < yin.length; i++)
+            yinFlags[i] = false;
+        for (i = 0; i < yang.length; i++)
+            yangFlags[i] = false;
         boolean matriarch = yin.length > yang.length;
         int len = matriarch ? yang.length : yin.length;
         int range = matriarch ? yin.length : yang.length;
@@ -162,29 +164,28 @@ public class JaroWinkler extends StringMeasure implements ITrieFilterableStringM
         } else {
             sim = (double) m;
         }
-        double weight = sim / ((double) yin.length) + sim / ((double) yang.length)
-                + ((double) (m - t)) / ((double) m);
+        double weight = sim / ((double) yin.length) + sim / ((double) yang.length) + ((double) (m - t)) / ((double) m);
         weight /= 3.0d;
         if (weight > winklerBoostThreshold) {
             k = (len >= 4) ? 4 : len;
-            for (i = 0; ((i < k) && (yin[i] == yang[i]) && notNum(yin[i])); i++) ;
+            for (i = 0; ((i < k) && (yin[i] == yang[i]) && notNum(yin[i])); i++)
+                ;
             if (i > 0)
                 weight += i * 0.1d * (1.0d - weight);
             if (longStrings && len > 4 && m > i + 1 && 2 * m >= len + i && notNum(yin[0]))
-                weight += (1.0d - weight) *
-                        ((double) (m - i - 1)) / ((yin.length + yang.length - i * 2.0d + 2.0d));
+                weight += (1.0d - weight) * ((double) (m - i - 1)) / ((yin.length + yang.length - i * 2.0d + 2.0d));
         }
         return weight;
     }
 
     /**
-     * Calculate the proximity of two input strings if
-     * proximity is assured to be over given threshold threshold.
+     * Calculate the proximity of two input strings if proximity is assured to
+     * be over given threshold threshold.
      *
      * @param yi
-     *         string to be aligned
+     *            string to be aligned
      * @param ya
-     *         string to align on
+     *            string to align on
      * @return similarity score (proximity)
      */
     public double proximity(String yi, String ya) {
@@ -208,7 +209,8 @@ public class JaroWinkler extends StringMeasure implements ITrieFilterableStringM
 
     @Override
     public int characterMatchLowerBound(int l1, int l2, double threshold) {
-        return (int) Math.round(Math.ceil((threshold - 0.6d) * ((3 * (double) l2 * (double) l1) / (0.6d * (((double) l2 + (double) l1))))));
+        return (int) Math.round(Math
+                .ceil((threshold - 0.6d) * ((3 * (double) l2 * (double) l1) / (0.6d * (((double) l2 + (double) l1))))));
     }
 
     public int lengthUpperBound(int l1, double threshold) {
@@ -217,21 +219,18 @@ public class JaroWinkler extends StringMeasure implements ITrieFilterableStringM
         if (threshold <= 0.8d)
             return -1;
         else
-            return (int) Math.round(Math.ceil(
-                    (0.6d * (double) l1) / (3.0d * threshold - 2.4d)
-            ));
+            return (int) Math.round(Math.ceil((0.6d * (double) l1) / (3.0d * threshold - 2.4d)));
     }
 
     public int lengthLowerBound(int l1, double threshold) {
-        return (int) Math.round(Math.floor(
-                (l1 * (3.0d * threshold - 2.4d)) / 0.6d
-        ));
+        return (int) Math.round(Math.floor((l1 * (3.0d * threshold - 2.4d)) / 0.6d));
     }
 
     public LinkedList<ImmutableTriple<Integer, Integer, Integer>> getPartitionBounds(int maxSize, double threshold) {
         LinkedList<ImmutableTriple<Integer, Integer, Integer>> sliceBoundaries = new LinkedList<>();
         for (int t = 1; t <= maxSize; t++) {
-            sliceBoundaries.add(new ImmutableTriple<>(t, lengthLowerBound(t, threshold), lengthUpperBound(t, threshold)));
+            sliceBoundaries
+                    .add(new ImmutableTriple<>(t, lengthLowerBound(t, threshold), lengthUpperBound(t, threshold)));
         }
         return sliceBoundaries;
     }
@@ -300,6 +299,6 @@ public class JaroWinkler extends StringMeasure implements ITrieFilterableStringM
 
     @Override
     public double getRuntimeApproximation(double mappingSize) {
-        return mappingSize / 5000d;
+        return mappingSize / 1000d;
     }
 }

@@ -34,9 +34,9 @@ public class CentroidIndex extends PolygonIndex {
 
     /**
      * @param x
-     *         Point x
+     *            Point x
      * @param y
-     *         Point y
+     *            Point y
      * @return Distance between x and y
      */
     public double distance(Point x, Point y) {

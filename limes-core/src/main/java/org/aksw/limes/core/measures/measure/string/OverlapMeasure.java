@@ -14,7 +14,6 @@ import java.util.TreeSet;
  */
 public class OverlapMeasure extends StringMeasure {
 
-    
     public int getPrefixLength(int tokensNumber, double threshold) {
         return (int) (tokensNumber - threshold + 1);
     }

@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class JaroMapper extends Mapper {
 
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger(JaroMapper.class);
 
     /**
      * Computes a mapping between a source and a target.
@@ -39,7 +39,6 @@ public class JaroMapper extends Mapper {
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-        logger.info("Running JaroMapper");
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
         Map<String, Set<String>> targetMap = getValueToUriMap(target, properties.get(1));
@@ -176,10 +175,6 @@ public class JaroMapper extends Mapper {
                 }
             }
         }
-        System.out.println(lengthFilterCount + " = " + ((double) lengthFilterCount) / (source.size() * target.size()));
-        System.out.println(prefixFilterCount + " = " + ((double) prefixFilterCount) / (source.size() * target.size()));
-        System.out.println(
-                characterFilterCount + " = " + ((double) characterFilterCount) / (source.size() * target.size()));
         return result;
     }
 
@@ -239,7 +234,7 @@ public class JaroMapper extends Mapper {
          * System.out.println( characterFilterCount + " = " + ((double)
          * characterFilterCount) / (source.size() * target.size()));
          */
-       
+
         return result;
     }
 

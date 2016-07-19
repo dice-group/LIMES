@@ -3,12 +3,14 @@ package org.aksw.limes.core.measures.mapper;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
-import org.aksw.limes.core.measures.mapper.space.HR3;
+import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
 import org.aksw.limes.core.measures.mapper.string.EDJoin;
 import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
 import org.aksw.limes.core.measures.mapper.string.JaroMapper;
 import org.aksw.limes.core.measures.mapper.string.JaroWinklerMapper;
+import org.aksw.limes.core.measures.mapper.string.MongeElkanMapper;
 import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
+import org.aksw.limes.core.measures.mapper.string.RatcliffObershelpMapper;
 import org.aksw.limes.core.measures.mapper.string.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGramMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.AfterMapper;
@@ -28,7 +30,16 @@ import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.ConcurrentMap
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.PredecessorMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.SuccessorMapper;
 import org.aksw.limes.core.measures.measure.MeasureType;
-
+/**
+ * Implements the mapper factory class. For each measure name, the factory
+ * returns an object of the corresponding mapper.
+ *
+ * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * 
+ * @version 1.0
+ */
 public class MapperFactory {
 
     // String measures
@@ -42,6 +53,8 @@ public class MapperFactory {
     public static final String EXACTMATCH = "exactmatch";
     public static final String SOUNDEX = "soundex";
     public static final String JAROWINKLER = "jarowinkler";
+    public static final String MONGEELKAN = "mongeelkan";
+    public static final String RATCLIFF = "ratcliff";
 
     // number measures
     public static final String EUCLIDEAN = "euclidean";
@@ -109,14 +122,17 @@ public class MapperFactory {
             return new PPJoinPlusPlus();
         case LEVENSHTEIN:
             return new EDJoin();
-            
         case EXACTMATCH:
             return new ExactMatchMapper();
         case SOUNDEX:
             return new SoundexMapper();
+        case MONGEELKAN:
+            return new MongeElkanMapper();
+        case RATCLIFF:
+            return new RatcliffObershelpMapper();
         ///////////////////////
         case EUCLIDEAN:
-            return new HR3();
+            return new HR3Mapper();
         ///////////////////////
         case GEO_ORTHODROMIC:
         case GEO_HAUSDORFF:

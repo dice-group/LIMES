@@ -38,8 +38,12 @@ public class IndexedHausdorff extends PointsetsMeasure {
         return computations + targetIndex.computations;
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#run(java.util.Set, java.util.Set, double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#run(java
+     * .util.Set, java.util.Set, double)
      */
     public AMapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
         // first run indexing
@@ -60,7 +64,7 @@ public class IndexedHausdorff extends PointsetsMeasure {
 
     /**
      * @param s
-     *         Polygon
+     *            Polygon
      * @return Inner distances of s
      */
     public Map<Point, Map<Point, Double>> getInnerDistances(Polygon s) {
@@ -81,7 +85,8 @@ public class IndexedHausdorff extends PointsetsMeasure {
      * @param threshold
      * @return
      */
-    public Map<String, Map<String, Double>> runWithoutIndex(Set<Polygon> source, Set<Polygon> target, double threshold) {
+    public Map<String, Map<String, Double>> runWithoutIndex(Set<Polygon> source, Set<Polygon> target,
+            double threshold) {
 
         Map<String, Map<String, Double>> map = new HashMap<String, Map<String, Double>>();
         Map<String, Double> mapping;
@@ -168,8 +173,13 @@ public class IndexedHausdorff extends PointsetsMeasure {
         return map;
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#computeDistance(org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#
+     * computeDistance(org.aksw.limes.core.measures.mapper.atomic.hausdorff.
+     * Polygon, org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon,
+     * double)
      */
     public double computeDistance(Polygon X, Polygon Y, double threshold) {
         if (X.uri.equals(Y.uri)) {
@@ -229,39 +239,54 @@ public class IndexedHausdorff extends PointsetsMeasure {
         return max;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.aksw.limes.core.measures.measure.IMeasure#getName()
      */
     public String getName() {
         return "indexedHausdorff";
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure#getSimilarity(java.lang.Object, java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure#
+     * getSimilarity(java.lang.Object, java.lang.Object)
      */
     public double getSimilarity(Object object1, Object object2) {
         return nh.getSimilarity(object1, object2);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.aksw.limes.core.measures.measure.IMeasure#getType()
      */
     public String getType() {
         return nh.getType();
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance, java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.
+     * limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance,
+     * java.lang.String, java.lang.String)
      */
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         return nh.getSimilarity(instance1, instance2, property1, property2);
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(
+     * double)
      */
     public double getRuntimeApproximation(double mappingSize) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return mappingSize / 1000d;
     }
 }

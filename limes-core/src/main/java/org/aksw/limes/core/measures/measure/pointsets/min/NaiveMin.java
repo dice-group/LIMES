@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-
 /**
  * Brute force approach to computing the MAX distance between two polygons
  * 
@@ -30,9 +29,9 @@ public class NaiveMin extends PointsetsMeasure {
 
     /**
      * @param X
-     *         First polygon
+     *            First polygon
      * @param Y
-     *         Second polygon
+     *            Second polygon
      * @param threshold
      * @return
      */
@@ -51,8 +50,13 @@ public class NaiveMin extends PointsetsMeasure {
         return min;
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#computeDistance(org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon, double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure#
+     * computeDistance(org.aksw.limes.core.measures.mapper.atomic.hausdorff.
+     * Polygon, org.aksw.limes.core.measures.mapper.atomic.hausdorff.Polygon,
+     * double)
      */
     public double computeDistance(Polygon X, Polygon Y, double threshold) {
         double min = Double.MAX_VALUE;
@@ -76,11 +80,11 @@ public class NaiveMin extends PointsetsMeasure {
      * Computes the SetMeasure distance for a source and target set
      *
      * @param source
-     *         Source polygons
+     *            Source polygons
      * @param target
-     *         Target polygons
+     *            Target polygons
      * @param threshold
-     *         Distance threshold
+     *            Distance threshold
      * @return Mapping of resources from Source to Target
      */
     public AMapping run(Set<Polygon> source, Set<Polygon> target, double threshold) {
@@ -96,16 +100,22 @@ public class NaiveMin extends PointsetsMeasure {
         return m;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.aksw.limes.core.measures.measure.IMeasure#getType()
      */
     public String getType() {
         return "geodistance";
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance, java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getSimilarity(org.aksw.
+     * limes.core.io.cache.Instance, org.aksw.limes.core.io.cache.Instance,
+     * java.lang.String, java.lang.String)
      */
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         TreeSet<String> source = instance1.getProperty(property1);
@@ -131,9 +141,12 @@ public class NaiveMin extends PointsetsMeasure {
         return 1d / (1d + (double) d);
     }
 
-
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(double)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.IMeasure#getRuntimeApproximation(
+     * double)
      */
     public double getRuntimeApproximation(double mappingSize) {
         return mappingSize / 1000d;

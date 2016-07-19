@@ -201,6 +201,6 @@ public class RatcliffObershelpMeasure extends StringMeasure implements ITrieFilt
 
     @Override
     public double getRuntimeApproximation(double mappingSize) {
-        return 1000d;
+        return mappingSize / 1000d;
     }
 }

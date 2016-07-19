@@ -22,7 +22,7 @@ import java.util.TreeSet;
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class HR3Blocker implements BlockingModule {
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger(HR3Blocker.class);
     int dim = 2;
     ArrayList<Double> thresholds;
     ArrayList<String> properties;
@@ -32,7 +32,6 @@ public class HR3Blocker implements BlockingModule {
     HashMap<ArrayList<Integer>, ArrayList<ArrayList<Integer>>> cache;
 
     public HR3Blocker(String props, String measureName, double threshold) {
-        logger.info("Using HR3");
         thresholds = new ArrayList<Double>();
         properties = new ArrayList<String>();
         String[] split = props.split("\\|");

@@ -28,7 +28,7 @@ public class SoundexMeasure extends StringMeasure {
                 // double consonants are skipped
                 if (i < in.length - 1 && in[i] == in[i + 1])
                     i++;
-                    // double consonants with 'h' or 'w' inbetween are skipped too
+                // double consonants with 'h' or 'w' inbetween are skipped too
                 else if (i < in.length - 2 && in[i] == in[i + 2] && (in[i + 1] == 'H' || in[i + 1] == 'W'))
                     i += 2;
             }
@@ -43,32 +43,32 @@ public class SoundexMeasure extends StringMeasure {
 
     private static int getCode(char x) {
         switch (x) {
-            case 'B':
-            case 'F':
-            case 'P':
-            case 'V':
-                return 1;
-            case 'C':
-            case 'G':
-            case 'J':
-            case 'K':
-            case 'Q':
-            case 'S':
-            case 'X':
-            case 'Z':
-                return 2;
-            case 'D':
-            case 'T':
-                return 3;
-            case 'L':
-                return 4;
-            case 'M':
-            case 'N':
-                return 5;
-            case 'R':
-                return 6;
-            default:
-                return -1;
+        case 'B':
+        case 'F':
+        case 'P':
+        case 'V':
+            return 1;
+        case 'C':
+        case 'G':
+        case 'J':
+        case 'K':
+        case 'Q':
+        case 'S':
+        case 'X':
+        case 'Z':
+            return 2;
+        case 'D':
+        case 'T':
+            return 3;
+        case 'L':
+            return 4;
+        case 'M':
+        case 'N':
+            return 5;
+        case 'R':
+            return 6;
+        default:
+            return -1;
         }
     }
 

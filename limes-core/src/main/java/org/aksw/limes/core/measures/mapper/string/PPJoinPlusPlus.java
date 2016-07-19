@@ -396,14 +396,15 @@ public class PPJoinPlusPlus extends Mapper {
         }
         // if no properties then terminate
         if (property1 == null || property2 == null) {
-            logger.error(MarkerFactory.getMarker("FATAL"),"Property 1 = " + property1 + ", Property 2 = " + property2);
-            logger.error(MarkerFactory.getMarker("FATAL"),"Property values could not be read. Exiting");
+            logger.error(MarkerFactory.getMarker("FATAL"), "Property 1 = " + property1 + ", Property 2 = " + property2);
+            logger.error(MarkerFactory.getMarker("FATAL"), "Property values could not be read. Exiting");
             // System.exit(1);
         }
 
         if (!p.isAtomic()) {
-            logger.error(MarkerFactory.getMarker("FATAL"),"Mappers can only deal with atomic expression");
-            logger.error(MarkerFactory.getMarker("FATAL"),"Expression " + expression + " was given to a mapper to process");
+            logger.error(MarkerFactory.getMarker("FATAL"), "Mappers can only deal with atomic expression");
+            logger.error(MarkerFactory.getMarker("FATAL"),
+                    "Expression " + expression + " was given to a mapper to process");
             // System.exit(1);
         }
 
@@ -460,7 +461,7 @@ public class PPJoinPlusPlus extends Mapper {
         if (measure != null) {
             // logger.info("Using measure " + measure.getName());
         } else {
-            logger.error(MarkerFactory.getMarker("FATAL"),"Metric is null. Exiting.");
+            logger.error(MarkerFactory.getMarker("FATAL"), "Metric is null. Exiting.");
             System.exit(1);
         }
         for (int i = 0; i < records.length; i++) {

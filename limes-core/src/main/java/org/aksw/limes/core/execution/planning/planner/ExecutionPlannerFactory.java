@@ -84,7 +84,7 @@ public class ExecutionPlannerFactory {
         case CANONICAL:
             return new CanonicalPlanner();
         case HELIOS:
-            return new HeliosPlanner(target, target);
+            return new HeliosPlanner(source, target);
         case DYNAMIC:
             return new DynamicPlanner(source, target);
         default:

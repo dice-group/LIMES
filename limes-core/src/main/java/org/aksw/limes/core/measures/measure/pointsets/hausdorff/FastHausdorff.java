@@ -24,9 +24,9 @@ public class FastHausdorff extends NaiveHausdorff {
     /**
      *
      * @param X
-     *         First polygon
+     *            First polygon
      * @param Y
-     *         Second polygon
+     *            Second polygon
      * @return Distance between the two polygons
      */
     @Override
@@ -52,8 +52,12 @@ public class FastHausdorff extends NaiveHausdorff {
         return max;
     }
 
-    /* (non-Javadoc)
-     * @see org.aksw.limes.core.measures.measure.pointsets.hausdorff.NaiveHausdorff#getName()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.aksw.limes.core.measures.measure.pointsets.hausdorff.NaiveHausdorff#
+     * getName()
      */
     public String getName() {
         return "fast";

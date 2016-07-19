@@ -86,7 +86,7 @@ public class MeasureProcessor {
 
             Mapper mapper = null;
             try {
-                
+
                 MeasureType type = MeasureFactory.getMeasureType(p.getOperator());
                 mapper = MapperFactory.createMapper(type);
             } catch (InvalidMeasureException e) {

@@ -4,7 +4,6 @@ import org.aksw.limes.core.measures.measure.pointsets.GeoDistance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
@@ -13,7 +12,7 @@ public class SpaceMeasureFactory {
     static Logger logger = LoggerFactory.getLogger("LIMES");
 
     public static ISpaceMeasure getMeasure(String name, int dimension) {
-//   	System.out.println("SpaceMesure.getMeasure("+name+")");
+        // System.out.println("SpaceMesure.getMeasure("+name+")");
         if (name.toLowerCase().startsWith("geo")) {
             if (dimension != 2) {
                 logger.warn("Erroneous dimension settings for GeoDistance (" + dimension + ").");
@@ -26,4 +25,3 @@ public class SpaceMeasureFactory {
         }
     }
 }
-

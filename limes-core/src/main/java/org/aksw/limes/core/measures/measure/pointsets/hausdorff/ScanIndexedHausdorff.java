@@ -87,11 +87,11 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
      * @param toCompute
      * @param threshold
      * @return -1 if it is unknown, the known distance if it is known and
-     * (threshold + 1) if the distance is known to be beyond the
-     * threshold
+     *         (threshold + 1) if the distance is known to be beyond the
+     *         threshold
      */
     public double getCurrentApproximation(int sourceIndex, AMapping knownDistances,
-                                          Map<Integer, List<Integer>> toCompute, double threshold) {
+            Map<Integer, List<Integer>> toCompute, double threshold) {
         if (toCompute.containsKey(sourceIndex)) {
             return -1.0; // distance is unknown
         } else {
@@ -113,14 +113,14 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
      * Checks whether a distance computation should be terminated
      *
      * @param s
-     *         Source polygon
+     *            Source polygon
      * @param knownDistances
      * @param toCompute
      * @param threshold
      * @return true if computation should be terminated
      */
     public boolean checkTermination(Polygon s, AMapping knownDistances, Map<Integer, List<Integer>> toCompute,
-                                    double threshold) {
+            double threshold) {
         for (int i = 0; i < s.points.size(); i++) {
             if (getCurrentApproximation(i, knownDistances, toCompute, threshold) > threshold) {
                 return true;
@@ -130,13 +130,18 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
     }
 
     /**
-     * @param sPoly source polygons
-     * @param tPoly target polygons
-     * @param threshold of the distance
-     * @param knownDistances Mapping
+     * @param sPoly
+     *            source polygons
+     * @param tPoly
+     *            target polygons
+     * @param threshold
+     *            of the distance
+     * @param knownDistances
+     *            Mapping
      * @return distances that are still to be computed
      */
-    public Map<Integer, List<Integer>> initToCompute(Polygon sPoly, Polygon tPoly, double threshold, AMapping knownDistances) {
+    public Map<Integer, List<Integer>> initToCompute(Polygon sPoly, Polygon tPoly, double threshold,
+            AMapping knownDistances) {
         // 1. compute first distance
         Map<Integer, List<Integer>> toCompute = new HashMap<Integer, List<Integer>>();
         double approx, d = pointToPointDistance(sPoly.points.get(0), tPoly.points.get(0));
@@ -172,7 +177,8 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
         for (int i = 1; i < sPoly.points.size(); i++) {
             approx = d - (sourceIndex.getDistance(sPoly.uri, sPoly.points.get(0), sPoly.points.get(i)));
             for (int j = 1; j < tPoly.points.size(); j++) {
-                if (approx - targetIndex.getDistance(tPoly.uri, tPoly.points.get(0), tPoly.points.get(j)) <= threshold) {
+                if (approx
+                        - targetIndex.getDistance(tPoly.uri, tPoly.points.get(0), tPoly.points.get(j)) <= threshold) {
                     if (!toCompute.containsKey(i)) {
                         toCompute.put(i, new ArrayList<Integer>());
                     }
@@ -184,15 +190,20 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
     }
 
     /**
-     * @param sPoly source polygons
-     * @param tPoly target polygons
-     * @param threshold of the distance 
-     * @param knownDistances mapping
-     * @param toCompute map
+     * @param sPoly
+     *            source polygons
+     * @param tPoly
+     *            target polygons
+     * @param threshold
+     *            of the distance
+     * @param knownDistances
+     *            mapping
+     * @param toCompute
+     *            map
      * @return distances that are still to be computed
      */
-    public Map<Integer, List<Integer>> updateToCompute(Polygon sPoly, Polygon tPoly, double threshold, AMapping knownDistances,
-                                                       Map<Integer, List<Integer>> toCompute) {
+    public Map<Integer, List<Integer>> updateToCompute(Polygon sPoly, Polygon tPoly, double threshold,
+            AMapping knownDistances, Map<Integer, List<Integer>> toCompute) {
         // 1. compute first distance
         int sIndex, tIndex;
         Map.Entry<Integer, List<Integer>> entries = toCompute.entrySet().iterator().next();
@@ -215,9 +226,11 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
         for (int sIdx : toCompute.keySet()) {
             for (int tIdx : toCompute.get(sIdx)) {
                 if (sIdx == sIndex) {
-                    approx = Math.abs(d - targetIndex.getDistance(tPoly.uri, tPoly.points.get(tIdx), tPoly.points.get(tIndex)));
+                    approx = Math.abs(
+                            d - targetIndex.getDistance(tPoly.uri, tPoly.points.get(tIdx), tPoly.points.get(tIndex)));
                 } else if (tIdx == tIndex) {
-                    approx = Math.abs(d - sourceIndex.getDistance(sPoly.uri, sPoly.points.get(sIdx), sPoly.points.get(sIndex)));
+                    approx = Math.abs(
+                            d - sourceIndex.getDistance(sPoly.uri, sPoly.points.get(sIdx), sPoly.points.get(sIndex)));
                 } else {
                     approx = d - targetIndex.getDistance(tPoly.uri, tPoly.points.get(tIdx), tPoly.points.get(tIndex))
                             - sourceIndex.getDistance(sPoly.uri, sPoly.points.get(sIdx), sPoly.points.get(sIndex));

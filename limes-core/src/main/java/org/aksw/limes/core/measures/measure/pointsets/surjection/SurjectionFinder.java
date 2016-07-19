@@ -23,9 +23,9 @@ public class SurjectionFinder {
 
     /**
      * @param X
-     *         First polygon
+     *            First polygon
      * @param Y
-     *         Second polygon
+     *            Second polygon
      * @author sherif
      */
     SurjectionFinder(Polygon X, Polygon Y) {
@@ -65,12 +65,11 @@ public class SurjectionFinder {
         return surjectionPairsList;
     }
 
-
     /**
      * @param x
-     *         Point
+     *            Point
      * @param Y
-     *         Polygon
+     *            Polygon
      * @return the nearest to x from the points of the polygon Y
      */
     protected Point getNearestPoint(Point x, Polygon Y) {
@@ -91,7 +90,7 @@ public class SurjectionFinder {
      * @return
      */
     public double getRuntimeApproximation(double mappingSize) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return mappingSize / 1000d;
     }
 
 }

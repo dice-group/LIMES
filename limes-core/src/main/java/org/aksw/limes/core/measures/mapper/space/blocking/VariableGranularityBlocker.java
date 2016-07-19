@@ -18,7 +18,7 @@ import java.util.TreeSet;
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class VariableGranularityBlocker implements BlockingModule {
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger(VariableGranularityBlocker.class);
     int dim = 2;
     ArrayList<Double> thresholds;
     ArrayList<String> properties;

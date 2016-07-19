@@ -58,7 +58,7 @@ public class OrchidMapper extends Mapper {
      * Computes a polygon out of a WKT string
      *
      * @param rawValue
-     *         An WKT string
+     *            An WKT string
      * @return A polygon
      */
     public static Polygon getPolygon(String rawValue) {
@@ -74,24 +74,24 @@ public class OrchidMapper extends Mapper {
      * Computes a mapping using the setMeasure distance
      *
      * @param source
-     *         Source cache
+     *            Source cache
      * @param target
-     *         Target cache
+     *            Target cache
      * @param sourceVar
-     *         Variable for the source dataset
+     *            Variable for the source dataset
      * @param targetVar
-     *         Variable for the target dataset
+     *            Variable for the target dataset
      * @param expression
-     *         Expression to process. Leads to termination if the expression
-     *         is not atomic
+     *            Expression to process. Leads to termination if the expression
+     *            is not atomic
      * @param threshold
-     *         Similarity threshold. Is transformed internally into a
-     *         distance threshold theta with threshold = 1/(1+theta)
+     *            Similarity threshold. Is transformed internally into a
+     *            distance threshold theta with threshold = 1/(1+theta)
      * @return A mapping which contains uris whose polygons are such that their
-     * distance is below the set threshold
+     *         distance is below the set threshold
      */
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
 
         // get sets of polygons from properties
@@ -113,11 +113,11 @@ public class OrchidMapper extends Mapper {
      * LINESTRING, POINT, POLYGON
      *
      * @param c
-     *         Cache from which the data is to be fetched
+     *            Cache from which the data is to be fetched
      * @param property
-     *         Property to use
+     *            Property to use
      * @return Set of polygons. Each polygon contains the uri to which it
-     * matches
+     *         matches
      */
     public Set<Polygon> getPolygons(Cache c, String property) {
         Polygon p;
@@ -166,6 +166,5 @@ public class OrchidMapper extends Mapper {
             return 0.006 * (sourceSize + targetSize) - 134.2 * threshold;
         }
     }
-
 
 }
