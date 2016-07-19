@@ -28,8 +28,9 @@ import org.aksw.limes.core.measures.measure.string.ExactMatch;
 import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
 import org.aksw.limes.core.measures.measure.string.Jaro;
 import org.aksw.limes.core.measures.measure.string.Levenshtein;
-import org.aksw.limes.core.measures.measure.string.OverlapMeasure;
+import org.aksw.limes.core.measures.measure.string.MongeElkanMeasure;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
+import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
 import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.AfterMeasure;
@@ -125,7 +126,9 @@ public class MeasureFactoryTest {
         assertTrue(p.getAtomicRuntimeCosts("jaccard", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("exactmatch", 0.5) != 0.0d);
         assertTrue(p.getAtomicRuntimeCosts("soundex", 0.5) != 0);
-
+        assertTrue(p.getAtomicRuntimeCosts("mongeelkan", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("ratcliff", 0.5) != 0);
+        
         assertTrue(p.getAtomicRuntimeCosts("euclidean", 0.5) != 0);
 
         assertTrue(p.getAtomicRuntimeCosts("geo_orthodromic", 0.5) != 0);
@@ -176,7 +179,10 @@ public class MeasureFactoryTest {
         assertTrue(p.getAtomicMappingSizes("jaccard", 0.5) != 0);
         assertTrue(p.getAtomicMappingSizes("exactmatch", 0.5) != 0.0d);
         assertTrue(p.getAtomicMappingSizes("soundex", 0.5) != 0);
-
+        assertTrue(p.getAtomicMappingSizes("mongeelkan", 0.5) != 0);
+        assertTrue(p.getAtomicMappingSizes("ratcliff", 0.5) != 0);
+        
+        
         assertTrue(p.getAtomicMappingSizes("euclidean", 0.5) != 0);
 
         assertTrue(p.getAtomicMappingSizes("geo_orthodromic", 0.5) != 0);
@@ -395,6 +401,28 @@ public class MeasureFactoryTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        str = "mongeelkan(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof MongeElkanMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        str = "ratcliff(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof RatcliffObershelpMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
         /////////////////////////////////////////////////
         str = "euclidean(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
