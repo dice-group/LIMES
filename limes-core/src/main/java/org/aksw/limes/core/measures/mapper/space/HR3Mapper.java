@@ -4,6 +4,7 @@
  */
 package org.aksw.limes.core.measures.mapper.space;
 
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -13,7 +14,6 @@ import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
 import org.aksw.limes.core.measures.mapper.space.blocking.BlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,22 +43,23 @@ public class HR3Mapper extends Mapper {
      * Computes a mapping between a source and a target.
      *
      * @param source
-     *         Source cache
+     *            Source cache
      * @param target
-     *         Target cache
+     *            Target cache
      * @param sourceVar
-     *         Variable for the source dataset
+     *            Variable for the source dataset
      * @param targetVar
-     *         Variable for the target dataset
+     *            Variable for the target dataset
      * @param expression
-     *         Expression to process.
+     *            Expression to process.
      * @param threshold
-     *         Similarity threshold
+     *            Similarity threshold
      * @return A mapping which contains links between the source instances and
-     * the target instances
+     *         the target instances
      */
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
+
         AMapping mapping = MappingFactory.createDefaultMapping();
 
         // maps each block id to a set of instances. Actually one should

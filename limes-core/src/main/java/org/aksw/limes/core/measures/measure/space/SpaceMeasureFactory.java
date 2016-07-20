@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SpaceMeasureFactory {
 
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger(SpaceMeasureFactory.class);
 
     public static ISpaceMeasure getMeasure(String name, int dimension) {
         // System.out.println("SpaceMesure.getMeasure("+name+")");

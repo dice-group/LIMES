@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class EuclideanMetric extends SpaceMeasure {
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger(EuclideanMetric.class);
     public double dim = 2;
 
     public void setDimension(int dimension) {

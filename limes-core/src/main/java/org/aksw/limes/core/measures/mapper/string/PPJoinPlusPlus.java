@@ -8,6 +8,7 @@ import algorithms.StoppUhr;
 import algorithms.Token;
 import algorithms.ppjoinplus.Record;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -98,7 +99,7 @@ class PartitionResult {
  */
 public class PPJoinPlusPlus extends Mapper {
 
-    static Logger logger = LoggerFactory.getLogger(PPJoinPlusPlus.class.getName());
+    static Logger logger = LoggerFactory.getLogger(PPJoinPlusPlus.class);
     private static int MAX_DEPTH;
     private static AMapping mapping = null;
     private static HashMap<Integer, String> sourceMap;
@@ -335,14 +336,19 @@ public class PPJoinPlusPlus extends Mapper {
      */
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
+        
+        try {
+            if (threshold <= 0) {
+                throw new InvalidThresholdException(threshold);
+            }
+        } catch (InvalidThresholdException e) {
+            System.err.println("Exiting..");
+            System.exit(1);
+        }
         MAX_DEPTH = 2;
         mapping = MappingFactory.createDefaultMapping();
         // logger.info("Starting PPJoinPlus");
-        if (threshold < 0) {
-            throw new RuntimeException("Verification threshold must be >= 0");
-            // logger.info("Wrong threshold setting. Returning empty mapping.");
-            // return mapping;
-        }
+        
         String property1 = null, property2 = null;
         // get property labels
         Parser p = new Parser(expression, threshold);

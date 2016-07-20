@@ -1,5 +1,6 @@
 package org.aksw.limes.core.measures.mapper.string;
 
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -8,7 +9,6 @@ import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
-
 
 import java.util.*;
 
@@ -38,7 +38,14 @@ public class SoundexMapper extends Mapper {
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-
+        try {
+            if (threshold <= 0) {
+                throw new InvalidThresholdException(threshold);
+            }
+        } catch (InvalidThresholdException e) {
+            System.err.println("Exiting..");
+            System.exit(1);
+        }
         List<String> listA, listB;
         Map<String, List<Integer>> invListA, invListB;
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
@@ -92,7 +99,7 @@ public class SoundexMapper extends Mapper {
                 }
             }
         }
-        
+
         return result;
     }
 

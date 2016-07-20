@@ -1,5 +1,6 @@
 package org.aksw.limes.core.measures.mapper.string;
 
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.Mapper;
@@ -43,7 +44,14 @@ public class JaroWinklerMapper extends Mapper {
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-
+        try {
+            if (threshold <= 0) {
+                throw new InvalidThresholdException(threshold);
+            }
+        } catch (InvalidThresholdException e) {
+            System.err.println("Exiting..");
+            System.exit(1);
+        }
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         // generate value to uri maps
         Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));

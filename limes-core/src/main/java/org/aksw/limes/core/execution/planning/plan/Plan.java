@@ -50,8 +50,8 @@ public class Plan implements IPlan {
      * at the end of the list. If an instructions can not be added, a
      * corresponding message is displayed.
      *
-     * @param instruction,
-     *            the Instruction to add
+     * @param instruction
+     *            The Instruction to add
      */
     @Override
     public void addInstruction(Instruction instruction) {
@@ -69,26 +69,26 @@ public class Plan implements IPlan {
      * lower than 0 or higher than the size of the current list, the removal
      * fails and a corresponding message is displayed.
      *
-     * @param i,
+     * @param index
      *            Index of instruction to remove
      */
     @Override
-    public void removeInstruction(int i) {
-        if (i >= getInstructionList().size() || i < 0)
+    public void removeInstruction(int index) {
+        if (index >= getInstructionList().size() || index < 0)
             logger.info("ExecutionPlan.removeInstructiun() failed");
         else
-            instructionList.remove(i);
+            instructionList.remove(index);
     }
 
     /**
      * Removes an instruction from a instructionList.
      *
-     * @param i
+     * @param instruction
      *            Instruction to remove
      */
     @Override
-    public void removeInstruction(Instruction i) {
-        instructionList.remove(i);
+    public void removeInstruction(Instruction instruction) {
+        instructionList.remove(instruction);
     }
 
     /**
@@ -104,8 +104,8 @@ public class Plan implements IPlan {
     /**
      * Sets the instructionList of the plan.
      *
-     * @param instructionList,
-     *            the instruction list to set
+     * @param instructionList
+     *            The instruction list to set
      */
     public void setInstructionList(List<Instruction> instructionList) {
         this.instructionList = instructionList;
@@ -140,7 +140,7 @@ public class Plan implements IPlan {
      * current plan is cloned by invoking the clone function of the
      * corresponding class.
      *
-     * @return clone, the clone of the current plan
+     * @return a clone of the current plan
      */
     @Override
     public Plan clone() {
@@ -172,7 +172,7 @@ public class Plan implements IPlan {
      * Returns the size of the current plan. The size of a plan is equal to the
      * size of its instruction list.
      *
-     * @return size, the size of the plan
+     * @return the size of the plan
      */
     public int size() {
         return instructionList.size();
@@ -181,7 +181,7 @@ public class Plan implements IPlan {
     /**
      * Returns the runtime cost of the current plan.
      *
-     * @return runtimeCost, the runtime of the current plan
+     * @return the runtime of the current plan
      */
     public double getRuntimeCost() {
         return runtimeCost;
@@ -190,8 +190,8 @@ public class Plan implements IPlan {
     /**
      * Sets the runtime cost of the plan.
      *
-     * @param runtimeCost,
-     *            the runtime cost to set
+     * @param runtimeCost
+     *            The runtime cost to set
      */
     public void setRuntimeCost(double runtimeCost) {
         this.runtimeCost = runtimeCost;
@@ -200,7 +200,7 @@ public class Plan implements IPlan {
     /**
      * Returns the mapping size of the plan.
      *
-     * @return mappingSize, the mapping size of the current plan
+     * @return the mapping size of the current plan
      */
     public double getMappingSize() {
         return mappingSize;
@@ -209,8 +209,8 @@ public class Plan implements IPlan {
     /**
      * Sets the mapping size of the plan.
      *
-     * @param mappingSize,
-     *            the mapping size to set
+     * @param mappingSize
+     *            The mapping size to set
      */
     public void setMappingSize(double mappingSize) {
         this.mappingSize = mappingSize;
@@ -219,7 +219,7 @@ public class Plan implements IPlan {
     /**
      * Returns the selectivity of the plan.
      *
-     * @return selectivity, the selectivity of the current plan
+     * @return the selectivity of the current plan
      */
     public double getSelectivity() {
         return selectivity;
@@ -228,8 +228,8 @@ public class Plan implements IPlan {
     /**
      * Sets the selectivity of the plan.
      *
-     * @param selectivity,
-     *            the selectivity value to set
+     * @param selectivity
+     *            The selectivity value to set
      */
     public void setSelectivity(double selectivity) {
         this.selectivity = selectivity;

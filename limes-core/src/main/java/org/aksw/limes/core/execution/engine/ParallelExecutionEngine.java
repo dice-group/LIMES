@@ -19,13 +19,13 @@ public class ParallelExecutionEngine extends ExecutionEngine {
     /**
      * Constructor for a parallel execution engine.
      *
-     * @param source,
+     * @param source
      *            Source cache
-     * @param target,
+     * @param target
      *            Target cache
-     * @param sourceVar,
+     * @param sourceVar
      *            Source variable
-     * @param targetVar,
+     * @param targetVar
      *            Target variable
      */
     public ParallelExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
@@ -36,9 +36,9 @@ public class ParallelExecutionEngine extends ExecutionEngine {
      * Implementation of the execution of an execution plan. Independent parts
      * of the plan are executed in parallel.
      *
-     * @param spec,
+     * @param spec
      *            The input link specification
-     * @param planner,
+     * @param planner
      *            The chosen planner
      * @return The mapping from running the plan
      */

@@ -228,7 +228,7 @@ public class NestedPlanTest {
         Instruction run3 = new Instruction(Command.RUN, "trigrams(x.surname, y.surname)", "0.3", -1, -1, 0);
         list.add(run3);
         assertTrue(list.size() != plan.getInstructionList().size());
-
+        //always set instruction list 
         plan.setInstructionList(list);
         assertTrue(list.size() == plan.getInstructionList().size());
 

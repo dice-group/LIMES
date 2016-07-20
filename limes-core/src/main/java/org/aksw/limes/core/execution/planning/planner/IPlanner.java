@@ -15,7 +15,7 @@ public interface IPlanner {
     /**
      * Generates a NestedPlan for a link specification.
      *
-     * @param spec,
+     * @param spec
      *            Input link specification
      * @return NestedPlan of the input link specification
      */
@@ -31,9 +31,9 @@ public interface IPlanner {
     /**
      * Normalization of input link specification.
      *
-     * @param spec,
+     * @param spec
      *            The link specification to normalize
-     * @return The normalized link specification
+     * @return the normalized link specification
      */
     public LinkSpecification normalize(LinkSpecification spec);
 }

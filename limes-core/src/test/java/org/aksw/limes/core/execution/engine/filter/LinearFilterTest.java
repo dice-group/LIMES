@@ -124,9 +124,7 @@ public class LinearFilterTest {
         System.out.println(m1);
 
         LinearFilter f = new LinearFilter();
-        AMapping m0 = f.filter(m1, "overlap(x.name, y.name)", 0.0, source, target, "?x", "?y");
-        System.out.println("0 threshold: " + m0.getNumberofMappings());
-        assertTrue(m1.getNumberofMappings() == m0.getNumberofMappings());
+        
 
         AMapping m2 = f.filter(m1, "overlap(x.name, y.name)", 0.8, source, target, "?x", "?y");
         System.out.println("Higher threshold: " + m2.getNumberofMappings());
@@ -156,10 +154,6 @@ public class LinearFilterTest {
         System.out.println(m1);
 
         LinearFilter f = new LinearFilter();
-        AMapping m0 = f.filter(m1, "OR(overlap(x.name, y.name)|0.0,qgrams(x.name, y.name)|0.0)", 0.0, source, target,
-                "?x", "?y");
-        System.out.println("All thresholds are 0: " + m0.getNumberofMappings());
-        assertTrue(m1.getNumberofMappings() == m0.getNumberofMappings());
 
         AMapping m01 = f.filter(m1, "OR(overlap(x.name, y.name)|0.5,qgrams(x.name, y.name)|0.8)", 0.0, source, target,
                 "?x", "?y");
@@ -196,16 +190,10 @@ public class LinearFilterTest {
         System.out.println(m1);
 
         LinearFilter f = new LinearFilter();
-        AMapping m0 = f.filter(m1, "overlap(x.name, y.name)", 0.0, 0.0, source, target, "?x", "?y");
-        System.out.println("0 thresholds everywhere: " + m0.getNumberofMappings());
-        assertTrue(m1.getNumberofMappings() == m0.getNumberofMappings());
 
-        AMapping m01 = f.filter(m1, "overlap(x.name, y.name)", 0.0, 0.3, source, target, "?x", "?y");
-        System.out.println("non 0 mainThreshold: " + m01.getNumberofMappings());
-        assertTrue(m1.getNumberofMappings() != m01.getNumberofMappings());
 
         AMapping m02 = f.filter(m1, "overlap(x.name, y.name)", 0.3, 0.0, source, target, "?x", "?y");
-        System.out.println("non 0 threshold: " + m02.getNumberofMappings());
+        System.out.println("0 mainthreshold only: " + m02.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() != m02.getNumberofMappings());
 
 
@@ -238,15 +226,7 @@ public class LinearFilterTest {
 
         //all thresholds of the condition are 0, all thresholds of filters are 0
         LinearFilter f = new LinearFilter();
-        AMapping m0 = f.filter(m1, "MINUS(overlap(x.name, y.name)|0.0,qgrams(x.name, y.name)|0.0)", 0.0, 0.0, source,
-                target, "?x", "?y");
-        System.out.println("All thresholds are 0: " + m0.getNumberofMappings());
-        assertTrue(m1.getNumberofMappings() == m0.getNumberofMappings());
-
-        AMapping m01 = f.filter(m1, "MINUS(overlap(x.name, y.name)|0.0,qgrams(x.name, y.name)|0.0)", 0.0, 0.9, source,
-                target, "?x", "?y");
-        System.out.println("All thresholds 0 except from mainThreshold: " + m01.getNumberofMappings());
-        assertTrue(m1.getNumberofMappings() != m01.getNumberofMappings());
+       
 
         AMapping m02 = f.filter(m1, "MINUS(overlap(x.name, y.name)|0.7,qgrams(x.name, y.name)|0.1)", 0.0, 0.0, source,
                 target, "?x", "?y");
@@ -280,6 +260,13 @@ public class LinearFilterTest {
         System.out.println("Lower threshold: " + m3.getNumberofMappings());
         assertTrue(m1.getNumberofMappings() != m3.getNumberofMappings());
 
+        
+        AMapping m4 = f.filter(m1, "MINUS(AND(levenshtein(x.name, y.name)|0.1,jaro(x.name, y.name)|0.1)|0.0, OR(qgrams(x.name, y.name)|0.1,overlap(x.name, y.name)|0.1)|0.5)", 0.8, 0.4, source,
+                target, "?x", "?y");
+        System.out.println("Final touch " + m4.getNumberofMappings());
+        System.out.println(m4);
+
+        assertTrue(m1.getNumberofMappings() != m4.getNumberofMappings());
         System.out.println("------------------------");
 
     }
@@ -299,27 +286,9 @@ public class LinearFilterTest {
         System.out.println("\n");
 
 
-        Plan plan2 = new Plan();
-        Instruction run2 = new Instruction(Command.RUN, "jaccard(x.name, y.name)", "0.7", -1, -1, 0);
-        plan2.setInstructionList(new ArrayList<Instruction>());
-        plan2.addInstruction(run2);
-        AMapping mm = ee.executeInstructions(plan2);
-        System.out.println("Size before: " + mm.getNumberofMappings());
-        System.out.println(mm);
-
         LinearFilter f = new LinearFilter();
-        AMapping m0 = f.reversefilter(m1, "overlap(x.name, y.name)", 0.0, 0.0, source, target, "?x", "?y");
-        System.out.println("0 thresholds everywhere: " + m0.getNumberofMappings());
-        assertTrue(m1.getNumberofMappings() > m0.getNumberofMappings());
-        System.out.println("\n");
+       
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        Plan plan3 = new Plan();
-        Instruction run3 = new Instruction(Command.RUN, "overlap(x.name, y.name)", "0.7", -1, -1, 0);
-        plan3.setInstructionList(new ArrayList<Instruction>());
-        plan3.addInstruction(run3);
-        AMapping mmm = ee.executeInstructions(plan2);
-        System.out.println("Size before: " + mmm.getNumberofMappings());
-        System.out.println(mmm);
 
         AMapping m02 = f.reversefilter(m1, "overlap(x.name, y.name)", 0.7, 0.0, source, target, "?x", "?y");
         System.out.println("non 0 threshold: " + m02.getNumberofMappings());
@@ -338,7 +307,10 @@ public class LinearFilterTest {
         assertTrue(m1.getNumberofMappings() != m3.getNumberofMappings());
         System.out.println("\n");
 
-
+        AMapping m4 = f.reversefilter(m1, "OR(AND(levenshtein(x.name, y.name)|0.1,jaro(x.name, y.name)|0.1)|0.0, OR(qgrams(x.name, y.name)|0.1,overlap(x.name, y.name)|0.1)|0.1)", 0.9, 0.4, source,
+                target, "?x", "?y");
+        System.out.println("Final touch " + m4.getNumberofMappings());
+        System.out.println(m4);
         System.out.println("------------------------");
 
     }

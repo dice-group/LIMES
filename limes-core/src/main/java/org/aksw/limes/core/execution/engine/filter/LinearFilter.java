@@ -18,18 +18,18 @@ import org.slf4j.LoggerFactory;
  */
 public class LinearFilter implements IFilter {
 
-    static Logger logger = LoggerFactory.getLogger(LinearFilter.class.getName());
+    static Logger logger = LoggerFactory.getLogger(LinearFilter.class);
 
     /**
      * Naive filter function for mapping using a threshold as filtering
      * criterion. The output mapping includes set of links from the initial
      * mapping that have a similarity above the input threshold.
      *
-     * @param map,
+     * @param map
      *            Map bearing the results of Link Specification
-     * @param threshold,
+     * @param threshold
      *            Value of threshold
-     * @return AMapping, Filtered mapping that satisfies sim {@literal >}= threshold
+     * @return a filtered mapping that satisfies sim {@literal >}= threshold
      */
     public AMapping filter(AMapping map, double threshold) {
         double sim = 0.0;
@@ -57,22 +57,22 @@ public class LinearFilter implements IFilter {
      * initial mapping whose similarity based on the input condition is above
      * the input threshold.
      *
-     * @param map,
+     * @param map
      *            Map bearing the results of Link Specification
-     * @param condition,
-     *            the condition for filtering
-     * @param threshold,
+     * @param condition
+     *            The condition for filtering
+     * @param threshold
      *            Value of threshold
-     * @param source,
-     *            Source Knowledge base
-     * @param target,
-     *            Target Knowledge base
-     * @param sourceVar,
+     * @param source
+     *            Source knowledge base
+     * @param target
+     *            Target knowledge base
+     * @param sourceVar
      *            Source property
-     * @param targetVar,
+     * @param targetVar
      *            Target property
-     * @return AMapping, Filtered mapping that satisfies both the condition and
-     *         the threshold
+     * @return a filtered mapping that satisfies both the condition and the
+     *         threshold
      */
     public AMapping filter(AMapping map, String condition, double threshold, Cache source, Cache target,
             String sourceVar, String targetVar) {
@@ -110,24 +110,24 @@ public class LinearFilter implements IFilter {
      * fulfill the input condition and have an initial similarity above the
      * mainThreshold.
      *
-     * @param map,
-     *            Map bearing the results of Link Specification
-     * @param condition,
-     *            the condition for filtering
-     * @param threshold,
+     * @param map
+     *            map bearing the results of Link Specification
+     * @param condition
+     *            The condition for filtering
+     * @param threshold
      *            Value of the first threshold
-     * @param mainThreshold,
+     * @param mainThreshold
      *            Value of second threshold
-     * @param source,
-     *            Source Knowledge base
-     * @param target,
-     *            Target Knowledge base
-     * @param sourceVar,
+     * @param source
+     *            Source knowledge base
+     * @param target
+     *            Target knowledge base
+     * @param sourceVar
      *            Source property
-     * @param targetVar,
+     * @param targetVar
      *            Target property
-     * @return AMapping, Filtered mapping that satisfies both the condition and
-     *         the thresholds
+     * @return a filtered mapping that satisfies both the condition and the
+     *         thresholds
      */
     public AMapping filter(AMapping map, String condition, double threshold, double mainThreshold, Cache source,
             Cache target, String sourceVar, String targetVar) {
@@ -170,24 +170,24 @@ public class LinearFilter implements IFilter {
      * be included in the output mapping, it must not fulfill the input
      * condition and its initial similarity must be above the mainThreshold.
      *
-     * @param map,
+     * @param map
      *            Map bearing the results of Link Specification
-     * @param condition,
-     *            the condition for filtering
-     * @param threshold,
+     * @param condition
+     *            The condition for filtering
+     * @param threshold
      *            Value of the first threshold
-     * @param mainThreshold,
+     * @param mainThreshold
      *            Value of second threshold
-     * @param source,
-     *            Source Knowledge base
-     * @param target,
-     *            Target Knowledge base
-     * @param sourceVar,
+     * @param source
+     *            Source knowledge base
+     * @param target
+     *            Target knowledge base
+     * @param sourceVar
      *            Source property
-     * @param targetVar,
+     * @param targetVar
      *            Target property
-     * @return Mapping, Filtered mapping that satisfies both the condition and
-     *         the thresholds
+     * @return a filtered mapping that satisfies both the condition and the
+     *         thresholds
      */
     public AMapping reversefilter(AMapping map, String condition, double threshold, double mainThreshold, Cache source,
             Cache target, String sourceVar, String targetVar) {
@@ -199,12 +199,14 @@ public class LinearFilter implements IFilter {
             System.err.println("Null condition in extended reverse filter function (LinearFilter). Exiting..");
             System.exit(1);
         }
+
         // 2. run on all pairs and remove those
         for (String key : map.getMap().keySet()) {
             s = source.getInstance(key);
             for (String value : map.getMap().get(key).keySet()) {
                 t = target.getInstance(value);
                 sim = MeasureProcessor.getSimilarity(s, t, condition, threshold, sourceVar, targetVar);
+
                 // similarity of s and t must be 0 to be accepted
                 if (sim == 0) {
                     double sim2 = map.getConfidence(key, value);
@@ -220,33 +222,34 @@ public class LinearFilter implements IFilter {
 
     /**
      * Filter for linear combinations when operation is set to "add", given the
-     * expression a*sim1 + b*sim2 {@literal >}= t or multiplication given the expression
-     * (a*sim1)*(b*sim2) {@literal >}= t, which is not likely to be used. Implements a
-     * filter for the special case of linear combinations and multiplications.
-     * The straight forward way would be to compute filter(intersection(m1, m2),
-     * linear_combination_condition) leading to re-computations. This
-     * implementation avoid that by reusing the similarities that have already
-     * been computed.
+     * expression a*sim1 + b*sim2 {@literal >}= t or multiplication given the
+     * expression (a*sim1)*(b*sim2) {@literal >}= t, which is not likely to be
+     * used. Implements a filter for the special case of linear combinations and
+     * multiplications. The straight forward way would be to compute
+     * filter(intersection(m1, m2), linear_combination_condition) leading to
+     * re-computations. This implementation avoid that by reusing the
+     * similarities that have already been computed.
      *
-     * @param m1,
-     *            Map bearing the results of sim1 {@literal >}= (t-b)/a for add, sim1 {@literal >}=
-     *            t/(a*b) for mult
-     * @param m2,
-     *            Map bearing the results of sim2 {@literal >}= (t-a)/b for add, sim2 {@literal >}=
-     *            t/(a*b) for mult
-     * @param coef1,
+     * @param map1
+     *            Map bearing the results of sim1 {@literal >}= (t-b)/a for add,
+     *            sim1 {@literal >}= t/(a*b) for mult
+     * @param map2
+     *            Map bearing the results of sim2 {@literal >}= (t-a)/b for add,
+     *            sim2 {@literal >}= t/(a*b) for mult
+     * @param coef1
      *            Value of first coefficient
-     * @param coef2,
+     * @param coef2
      *            Value of second coefficient
-     * @param threshold,
-     *            Value of t
-     * @param operation,
-     *            Mathematical operation         
-     * @return Mapping, Filtered mapping that satisfies a*sim1 + b*sim2 {@literal >}= t for
-     *         add, (a*sim1)*(b*sim2) {@literal >}= t for mult
+     * @param threshold
+     *            Value of threshold
+     * @param operation
+     *            Mathematical operation
+     * @return a filtered mapping that satisfies a*sim1 + b*sim2 {@literal >}= t
+     *         for add, (a*sim1)*(b*sim2) {@literal >}= t for mult
      */
-    public AMapping filter(AMapping m1, AMapping m2, double coef1, double coef2, double threshold, String operation) {
-        AMapping m = MappingOperations.intersection(m1, m2);
+    public AMapping filter(AMapping map1, AMapping map2, double coef1, double coef2, double threshold,
+            String operation) {
+        AMapping m = MappingOperations.intersection(map1, map2);
         AMapping result = MappingFactory.createDefaultMapping();
         double sim;
         // we can be sure that each key in m is also in m1 and m2 as we used
@@ -254,7 +257,7 @@ public class LinearFilter implements IFilter {
         if (operation.equalsIgnoreCase("add")) {
             for (String key : m.getMap().keySet()) {
                 for (String value : m.getMap().get(key).keySet()) {
-                    sim = coef1 * m1.getConfidence(key, value) + coef2 * m2.getConfidence(key, value);
+                    sim = coef1 * map1.getConfidence(key, value) + coef2 * map2.getConfidence(key, value);
                     if (sim >= threshold) {
                         result.add(key, value, sim);
                     }
@@ -263,7 +266,7 @@ public class LinearFilter implements IFilter {
         } else {
             for (String key : m.getMap().keySet()) {
                 for (String value : m.getMap().get(key).keySet()) {
-                    sim = coef1 * coef2 * m1.getConfidence(key, value) * m2.getConfidence(key, value);
+                    sim = coef1 * coef2 * map1.getConfidence(key, value) * map2.getConfidence(key, value);
                     if (sim >= threshold) {
                         result.add(key, value, sim);
                     }

@@ -1,5 +1,6 @@
 package org.aksw.limes.core.measures.mapper.string;
 
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -39,7 +40,14 @@ public class ExactMatchMapper extends Mapper {
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-
+        try {
+            if (threshold <= 0) {
+                throw new InvalidThresholdException(threshold);
+            }
+        } catch (InvalidThresholdException e) {
+            System.err.println("Exiting..");
+            System.exit(1);
+        }
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         // if no properties then terminate
         if (properties.get(0) == null || properties.get(1) == null) {

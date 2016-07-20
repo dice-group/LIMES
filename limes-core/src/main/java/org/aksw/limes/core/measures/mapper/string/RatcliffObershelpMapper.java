@@ -1,5 +1,6 @@
 package org.aksw.limes.core.measures.mapper.string;
 
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -23,35 +24,44 @@ public class RatcliffObershelpMapper extends Mapper {
 
     static Logger logger = LoggerFactory.getLogger(RatcliffObershelpMapper.class);
 
-
     /**
      * Computes a mapping between a source and a target.
      *
      * @param source
-     *         Source cache
+     *            Source cache
      * @param target
-     *         Target cache
+     *            Target cache
      * @param sourceVar
-     *         Variable for the source dataset
+     *            Variable for the source dataset
      * @param targetVar
-     *         Variable for the target dataset
+     *            Variable for the target dataset
      * @param expression
-     *         Expression to process.
+     *            Expression to process.
      * @param threshold
-     *         Similarity threshold
+     *            Similarity threshold
      * @return A mapping which contains links between the source instances and
-     * the target instances
+     *         the target instances
      */
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
+
+        try {
+            if (threshold <= 0) {
+                throw new InvalidThresholdException(threshold);
+            }
+        } catch (InvalidThresholdException e) {
+            System.err.println("Exiting..");
+            System.exit(1);
+        }
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
         Map<String, Set<String>> targetMap = getValueToUriMap(target, properties.get(1));
         return getMapping(sourceMap, targetMap, threshold);
     }
 
-    protected AMapping getMapping(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap, double threshold) {
+    protected AMapping getMapping(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
+            double threshold) {
         List<String> listA, listB;
         listA = new ArrayList<>(sourceMap.keySet());
         listB = new ArrayList<>(targetMap.keySet());
@@ -105,7 +115,6 @@ public class RatcliffObershelpMapper extends Mapper {
             return MappingFactory.createDefaultMapping();
         }
         poolSize = poolSize > tempPairs.size() ? tempPairs.size() : poolSize;
-        
 
         // create thread pool, one thread per partition
         ExecutorService executor = Executors.newFixedThreadPool(poolSize);
@@ -122,7 +131,7 @@ public class RatcliffObershelpMapper extends Mapper {
                 e.printStackTrace();
             }
         }
-        
+
         return getUriToUriMapping(similarityBook, sourceMap, targetMap, swapped);
     }
 

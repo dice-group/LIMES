@@ -42,7 +42,7 @@ public class ExecutionPlannerFactory {
      * Factory function for retrieving a planner name from the set of allowed
      * types.
      * 
-     * @param name,
+     * @param name
      *            The name/type of the planner.
      * @return a specific planner type
      */
@@ -66,11 +66,11 @@ public class ExecutionPlannerFactory {
     /**
      * Factory function for retrieving the desired planner instance.
      * 
-     * @param type,
-     *            type of the Planner
-     * @param source,
+     * @param type
+     *            Type of the Planner
+     * @param source
      *            Source cache
-     * @param target,
+     * @param target
      *            Target cache
      * 
      * @return a specific planner instance

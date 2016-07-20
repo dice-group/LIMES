@@ -156,8 +156,10 @@ public class MeasureProcessor {
                 for (String s : m.getMap().keySet()) {
                     for (String t : m.getMap().get(s).keySet()) {
                         similarity = m.getConfidence(s, t);
+
                     }
                 }
+                
                 if (similarity >= threshold)
                     return similarity;
                 else
@@ -171,13 +173,18 @@ public class MeasureProcessor {
                         sourceVar, targetVar);
                 double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
                         sourceVar, targetVar);
-
-                double maxSimilarity = Math.max(firstChild, secondChild);
-                // find max value between or terms
-                if (maxSimilarity >= parentThreshold)
-                    return maxSimilarity;
-                else
+                
+                // parentThreshold is 0 and (s,t) are not part of the union
+                if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
                     return 0;
+                else {
+                    // find max value between or terms
+                    double maxSimilarity = Math.max(firstChild, secondChild);
+                    if (maxSimilarity >= parentThreshold)
+                        return maxSimilarity;
+                    else
+                        return 0;
+                }
             }
             if (p.getOperator().equalsIgnoreCase("MIN") | p.getOperator().equalsIgnoreCase("AND")) {
                 double parentThreshold = p.getThreshold();
@@ -185,15 +192,19 @@ public class MeasureProcessor {
                         sourceVar, targetVar);
                 double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
                         sourceVar, targetVar);
-
+                
+                // parentThreshold is 0 and (s,t) are not part of the
+                // intersection
                 if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
                     return 0;
-                double minSimilarity = Math.min(firstChild, secondChild);
-                // find min value between or terms
-                if (minSimilarity >= parentThreshold)
-                    return minSimilarity;
-                else
-                    return 0;
+                else {
+                    // find min value between or terms
+                    double minSimilarity = Math.min(firstChild, secondChild);
+                    if (minSimilarity >= parentThreshold)
+                        return minSimilarity;
+                    else
+                        return 0;
+                }
             }
             if (p.getOperator().equalsIgnoreCase("ADD")) {
                 double parentThreshold = p.getThreshold();
@@ -215,13 +226,15 @@ public class MeasureProcessor {
                         sourceVar, targetVar);
                 double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
                         sourceVar, targetVar);
-                // the second similarity must be less than the second child
-                // threshold in order for the instance to
+                // the second similarity must be 0 in order for the instance to
                 // have a change to be included at the final result
-                if (secondChild < p.getThreshold2()) {
-                    if (firstChild >= parentThreshold)
-                        return firstChild;
-                    else
+                if (secondChild == 0) {
+                    if (firstChild >= p.getThreshold1()) {
+                        if (firstChild >= parentThreshold) {
+                            return firstChild;
+                        } else
+                            return 0;
+                    } else
                         return 0;
                 } else
                     return 0;

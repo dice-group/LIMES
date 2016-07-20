@@ -5,6 +5,8 @@ import algorithms.Token;
 import algorithms.edjoin.MismatchingQGram;
 import algorithms.edjoin.QGram;
 import algorithms.edjoin.Record;
+
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -367,8 +369,16 @@ public class EDJoin extends Mapper {
             Q = 3;
         }
         // convert similarity in distance threshold
+        try {
+            if (threshold <= 0) {
+                throw new InvalidThresholdException(threshold);
+            }
+        } catch (InvalidThresholdException e) {
+            System.err.println("Exiting..");
+            System.exit(1);
+        }
         threshold = (1 - threshold) / threshold;
-
+        
         this.comparisons = 0;
         mapping = MappingFactory.createDefaultMapping();
         if (threshold < 0) {

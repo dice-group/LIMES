@@ -35,7 +35,7 @@ public class ExecutionEngineFactory {
      * Factory function for retrieving an execution engine name from
      * the set of allowed types.
      * 
-     * @param name,
+     * @param name
      *            The name/type of the execution engine.
      * @return a specific execution engine type
      */
@@ -54,15 +54,15 @@ public class ExecutionEngineFactory {
     /**
      * Factory function for retrieving the desired execution engine instance.
      * 
-     * @param type,
-     *            type of the Execution Engine
-     * @param source,
+     * @param type
+     *            Type of the Execution Engine
+     * @param source
      *            Source cache
-     * @param target,
+     * @param target
      *            Target cache
-     * @param sourceVar,
+     * @param sourceVar
      *            Source variable
-     * @param targetVar,
+     * @param targetVar
      *            Target variable
      * @return a specific execution engine instance
      * 

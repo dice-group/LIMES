@@ -34,9 +34,9 @@ public class CanonicalPlanner extends Planner {
      * filtering instruction using the filtering expression and threshold of the
      * input link specification.
      *
-     * @param spec,
+     * @param spec
      *            Input link specification
-     * @return NestedPlan of the input link specification
+     * @return a NestedPlan of the input link specification
      */
     public NestedPlan plan(LinkSpecification spec) {
         NestedPlan plan = new NestedPlan();
@@ -87,7 +87,7 @@ public class CanonicalPlanner extends Planner {
     /**
      * Normalization of input link specification.
      *
-     * @param spec,
+     * @param spec
      *            The input link specification
      */
     @Override

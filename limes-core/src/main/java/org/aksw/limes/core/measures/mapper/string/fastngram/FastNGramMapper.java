@@ -5,6 +5,7 @@
 
 package org.aksw.limes.core.measures.mapper.string.fastngram;
 
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -22,7 +23,7 @@ import java.util.*;
  */
 public class FastNGramMapper extends Mapper {
 
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger(FastNGramMapper.class);
     static int q = 3;
 
     public static AMapping compute(Set<String> source, Set<String> target, int q, double threshold) {
@@ -112,9 +113,13 @@ public class FastNGramMapper extends Mapper {
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
         AMapping mapping = MappingFactory.createDefaultMapping();
-        if (threshold <= 0) {
-            logger.warn("Wrong threshold setting. Returning empty mapping.");
-            return mapping;
+        try {
+            if (threshold <= 0) {
+                throw new InvalidThresholdException(threshold);
+            }
+        } catch (InvalidThresholdException e) {
+            System.err.println("Exiting..");
+            System.exit(1);
         }
         String property1 = null, property2 = null;
         // get property labels

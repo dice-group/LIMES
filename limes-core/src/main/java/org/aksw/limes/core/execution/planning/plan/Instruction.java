@@ -55,17 +55,17 @@ public class Instruction {
     /**
      * Constructor of Instruction class.
      *
-     * @param c,
+     * @param c
      *            Command
-     * @param measure,
+     * @param measure
      *            Measure expression
-     * @param thrs,
+     * @param thrs
      *            Threshold
-     * @param source,
+     * @param source
      *            Source index
-     * @param target,
+     * @param target
      *            Target index
-     * @param result,
+     * @param result
      *            Result index
      * 
      */
@@ -82,7 +82,7 @@ public class Instruction {
     /**
      * Returns the result index of the instruction.
      *
-     * @return resultIndex, the result index of the instruction
+     * @return the result index of the instruction
      */
     public int getResultIndex() {
         return resultIndex;
@@ -91,8 +91,8 @@ public class Instruction {
     /**
      * Sets the result index of the instruction.
      *
-     * @param resultIndex,
-     *            the resultIndex to set
+     * @param resultIndex
+     *            The resultIndex to set
      */
     public void setResultIndex(int resultIndex) {
         this.resultIndex = resultIndex;
@@ -101,7 +101,7 @@ public class Instruction {
     /**
      * Returns the command of the instruction.
      *
-     * @return command, the command of the instruction
+     * @return command of the instruction
      */
     public Command getCommand() {
         return command;
@@ -110,8 +110,8 @@ public class Instruction {
     /**
      * Sets the command of the instruction.
      *
-     * @param command,
-     *            the command to set
+     * @param command
+     *            The command to set
      */
     public void setCommand(Command command) {
         this.command = command;
@@ -120,7 +120,7 @@ public class Instruction {
     /**
      * Returns the measure expression of the instruction.
      *
-     * @return measureExpression, the measure expression of the instruction
+     * @return the measure expression of the instruction
      */
     public String getMeasureExpression() {
         return measureExpression;
@@ -130,7 +130,7 @@ public class Instruction {
      * Sets the measure expression of the instruction.
      *
      * @param measureExpression
-     *            expression, the measure expression to set
+     *            The measure expression to set
      */
     public void setMeasureExpression(String measureExpression) {
         this.measureExpression = measureExpression;
@@ -139,7 +139,7 @@ public class Instruction {
     /**
      * Returns the resource index of the instruction.
      *
-     * @return resourceIndex, the resource index of the instruction
+     * @return the resource index of the instruction
      */
     public int getSourceIndex() {
         return sourceIndex;
@@ -148,8 +148,8 @@ public class Instruction {
     /**
      * Sets the source index of the instruction.
      *
-     * @param resourceIndex,
-     *            the resourceIndex to set
+     * @param resourceIndex
+     *            The resourceIndex to set
      */
     public void setSourceIndex(int resourceIndex) {
         this.sourceIndex = resourceIndex;
@@ -158,7 +158,7 @@ public class Instruction {
     /**
      * Returns the target index of the instruction.
      *
-     * @return targetIndex, the target index of the instruction
+     * @return the target index of the instruction
      */
     public int getTargetIndex() {
         return targetIndex;
@@ -167,8 +167,8 @@ public class Instruction {
     /**
      * Sets the target index of the instruction.
      *
-     * @param targetIndex,
-     *            the targetIndex to set
+     * @param targetIndex
+     *            The targetIndex to set
      */
     public void setTargetIndex(int targetIndex) {
         this.targetIndex = targetIndex;
@@ -177,7 +177,7 @@ public class Instruction {
     /**
      * Returns the threshold of the instruction.
      *
-     * @return threshold, the threshold of the instruction
+     * @return the threshold of the instruction
      */
     public String getThreshold() {
         return threshold;
@@ -186,8 +186,8 @@ public class Instruction {
     /**
      * Sets the threshold of the instruction.
      *
-     * @param threshold,
-     *            the threshold to set
+     * @param threshold
+     *            The threshold to set
      */
     public void setThreshold(String threshold) {
         this.threshold = threshold;
@@ -196,7 +196,7 @@ public class Instruction {
     /**
      * Returns the mainThreshold of the instruction.
      *
-     * @return mainThreshold
+     * @return the mainThreshold
      */
     public String getMainThreshold() {
         return this.mainThreshold;
@@ -205,19 +205,20 @@ public class Instruction {
     /**
      * Sets the mainThreshold of the instruction.
      *
-     * @param threshold,
-     *            the mainThreshold to set
+     * @param threshold
+     *            The mainThreshold to set
      */
     public void setMainThreshold(String threshold) {
         this.mainThreshold = threshold;
     }
 
     /**
-     * Compares the current instruction with another instruction, I. If I is
-     * null then it returns false. Otherwise, the function checks if each field
-     * of the current instruction is equal to the corresponding field of I.
+     * Compares the current instruction with another instruction. If the other
+     * instruction is null then it returns false. Otherwise, the function checks
+     * if each field of the current instruction is equal to the corresponding
+     * field of the other instruction.
      *
-     * @return true if both instructios are equal, and false otherwise
+     * @return true if both instructions are equal, and false otherwise
      */
     @Override
     public boolean equals(Object other) {
@@ -241,7 +242,7 @@ public class Instruction {
      * String representation of the Instruction excluding source, target and
      * result index. For internal use only.
      *
-     * @return s, string representations of instruction
+     * @return a string representations of the instruction
      */
     private String toSmallString() {
         String s = "";
@@ -296,7 +297,7 @@ public class Instruction {
     /**
      * String representation of Instruction.
      *
-     * @return s, string representations of instruction
+     * @return a string representations of instruction
      */
     public String toString() {
         String s = "";

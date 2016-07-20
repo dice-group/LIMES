@@ -21,7 +21,7 @@ public class MappingOperations {
      */
     public static AMapping difference(AMapping map1, AMapping map2) {
         AMapping map = MappingFactory.createDefaultMapping();
-
+        
         // go through all the keys in map1
         for (String key : map1.getMap().keySet()) {
             // if the first term (key) can also be found in map2

@@ -47,13 +47,13 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     /**
      * Constructor for a simple execution engine.
      *
-     * @param source,
+     * @param source
      *            Source cache
-     * @param target,
+     * @param target
      *            Target cache
-     * @param sourceVar,
+     * @param sourceVar
      *            Source variable
-     * @param targetVar,
+     * @param targetVar
      *            Target variable
      */
     public SimpleExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
@@ -152,7 +152,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * Implements the execution of the RUN operator. The input instruction must
      * include an atomic link specification.
      *
-     * @param inst,
+     * @param inst
      *            Atomic RUN instruction
      * @return The mapping obtained from executing the atomic RUN instruction
      */
@@ -175,9 +175,9 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     /**
      * Runs the reverse filtering operator.
      *
-     * @param inst,
+     * @param inst
      *            Input instruction with REVERSEFILTER command
-     * @param input,
+     * @param input
      *            Mapping that is to be filtered
      * @return Filtered mapping
      */
@@ -190,9 +190,9 @@ public class SimpleExecutionEngine extends ExecutionEngine {
     /**
      * Runs the filtering operator.
      *
-     * @param inst,
+     * @param inst
      *            Input instruction with FILTER command
-     * @param input,
+     * @param input
      *            Mapping that is to be filtered
      * @return filtered Mapping
      */
@@ -260,7 +260,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * result mapping of the previous step gets filtered using the filtering
      * instruction of the plan (if any).
      *
-     * @param plan,
+     * @param plan
      *            A nested plan created by a static planner (Canonical or
      *            Helios)
      * @return The mapping obtained from executing the plan
@@ -334,10 +334,10 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * intermediate executed steps of the first plan.
      * 
      *
-     * @param spec,
-     *            the input link specification
+     * @param spec
+     *            The input link specification
      * @param planner,
-     *            the dynamic planner
+     *            The dynamic planner
      * @return The mapping obtained from executing the link specification.
      */
     public AMapping executeDynamic(LinkSpecification spec, DynamicPlanner planner) {
@@ -463,9 +463,9 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * the execution engine back to the planner, that uses intermediary
      * execution results to improve plans generated previously.
      *
-     * @param spec,
+     * @param spec
      *            The link specification, after it was re-written
-     * @param planner,
+     * @param planner
      *            The chosen planner
      * @return The mapping obtained from executing the plan of the input link
      *         specification

@@ -17,9 +17,9 @@ public interface IFilter {
      * criterion.
      *
      * @param map
-     *            a map bearing the results of Link Specification
+     *            Map bearing the results of Link Specification
      * @param threshold
-     *            the value of threshold
+     *            Value of threshold
      * @return a filtered mapping that satisfies sim {@literal >}= threshold
      */
     public AMapping filter(AMapping map, double threshold);
@@ -29,19 +29,19 @@ public interface IFilter {
      * filtering criterion.
      *
      * @param map
-     *            a map bearing the results of Link Specification
+     *            Map bearing the results of Link Specification
      * @param condition
-     *            the condition for filtering
+     *            The condition for filtering
      * @param threshold
-     *            value of threshold
+     *            Value of threshold
      * @param source
-     *            source knowledge base
+     *            Source knowledge base
      * @param target
-     *            target knowledge base
+     *            Target knowledge base
      * @param sourceVar
-     *            source property
+     *            Source property
      * @param targetVar
-     *            target property
+     *            Target property
      * @return a filtered mapping that satisfies both the condition and the
      *         threshold
      */
@@ -53,21 +53,21 @@ public interface IFilter {
      * filtering criterion.
      *
      * @param map
-     *            a map bearing the results of Link Specification
+     *            map bearing the results of Link Specification
      * @param condition
-     *            the condition for filtering
+     *            The condition for filtering
      * @param threshold
-     *            value of the first threshold
+     *            Value of the first threshold
      * @param mainThreshold
-     *            value of second threshold
+     *            Value of second threshold
      * @param source
-     *            source knowledge base
+     *            Source knowledge base
      * @param target
-     *            target knowledge base
+     *            Target knowledge base
      * @param sourceVar
-     *            source property
+     *            Source property
      * @param targetVar
-     *            target property
+     *            Target property
      * @return a filtered mapping that satisfies both the condition and the
      *         thresholds
      */
@@ -79,21 +79,21 @@ public interface IFilter {
      * as filtering criterion.
      *
      * @param map
-     *            a map bearing the results of Link Specification
+     *            Map bearing the results of Link Specification
      * @param condition
-     *            the condition for filtering
+     *            The condition for filtering
      * @param threshold
-     *            value of the first threshold
+     *            Value of the first threshold
      * @param mainThreshold
-     *            value of second threshold
+     *            Value of second threshold
      * @param source
-     *            source knowledge base
+     *            Source knowledge base
      * @param target
-     *            target knowledge base
+     *            Target knowledge base
      * @param sourceVar
-     *            source property
+     *            Source property
      * @param targetVar
-     *            target property
+     *            Target property
      * @return a filtered mapping that satisfies both the condition and the
      *         thresholds
      */
@@ -107,22 +107,21 @@ public interface IFilter {
      * used.
      *
      * @param map1
-     *            a Map bearing the results of sim1 {@literal >}= (t-b)/a for
-     *            add, sim1 {@literal >}= t/(a*b) for mult
+     *            Map bearing the results of sim1 {@literal >}= (t-b)/a for add,
+     *            sim1 {@literal >}= t/(a*b) for mult
      * @param map2
-     *            a map bearing the results of sim2 {@literal >}= (t-a)/b for
-     *            add, sim2 {@literal >}= t/(a*b) for mult
+     *            Map bearing the results of sim2 {@literal >}= (t-a)/b for add,
+     *            sim2 {@literal >}= t/(a*b) for mult
      * @param coef1
-     *            value of first coefficient
+     *            Value of first coefficient
      * @param coef2
-     *            value of second coefficient
+     *            Value of second coefficient
      * @param threshold
-     *            value of threshold
+     *            Value of threshold
      * @param operation
-     *            a mathematical operation
-     * @return a filtered mapping that satisfies a*sim1 + b*sim2
-     *         {@literal >}= t for add, (a*sim1)*(b*sim2) {@literal >}= t for
-     *         mult
+     *            Mathematical operation
+     * @return a filtered mapping that satisfies a*sim1 + b*sim2 {@literal >}= t
+     *         for add, (a*sim1)*(b*sim2) {@literal >}= t for mult
      */
     public AMapping filter(AMapping map1, AMapping map2, double coef1, double coef2, double threshold,
             String operation);

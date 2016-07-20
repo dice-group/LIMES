@@ -125,9 +125,7 @@ public class DynamicPlannerTest {
                 "OR(jaccard(x.surname,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,trigrams(x.surname,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.name,y.name)|0.7728)|0.5807)",
                 0.8);
 
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
-        AMapping m = e.execute(ls, p);
 
         LinkSpecification ls2 = p.normalize(ls);
         assertTrue(p.getPlans().get(ls2.toString()) != null);
@@ -139,17 +137,18 @@ public class DynamicPlannerTest {
         System.out.println("AtomicEqual");
 
         DynamicPlanner p = new DynamicPlanner(source, target);
-
+        
         LinkSpecification ls = new LinkSpecification("cosine(x.name,y.name)", 0.8);
         System.out.println(ls.isAtomic());
-
-        ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
-        AMapping m = e.execute(ls, p);
-
+        ls = p.normalize(ls);
+        ExecutionEngine ee = new SimpleExecutionEngine(source, source, "?x", "?y");
+        AMapping m = ee.execute(ls, p);
+        
         NestedPlan plan2 = new NestedPlan();
         Instruction run1 = new Instruction(Command.RUN, "cosine(x.name,y.name)", "0.8", -1, -1, 0);
         plan2.addInstruction(run1);
 
+        System.out.println(p.getPlans());
         assertTrue(p.getPlans().get(ls.toString()).equals(plan2));
     }
 

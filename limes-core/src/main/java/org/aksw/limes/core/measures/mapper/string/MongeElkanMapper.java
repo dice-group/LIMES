@@ -1,12 +1,12 @@
 package org.aksw.limes.core.measures.mapper.string;
 
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
-
 
 import java.util.*;
 
@@ -37,6 +37,14 @@ public class MongeElkanMapper extends Mapper {
      */
     public AMapping getMapping(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
             double threshold) {
+        try {
+            if (threshold <= 0) {
+                throw new InvalidThresholdException(threshold);
+            }
+        } catch (InvalidThresholdException e) {
+            System.err.println("Exiting..");
+            System.exit(1);
+        }
         Iterator<String> sit = sourceMap.keySet().iterator();
         double resultDouble;
         Map<String, Map<String, Double>> similarityBook = new HashMap<>();
@@ -53,7 +61,7 @@ public class MongeElkanMapper extends Mapper {
             }
             similarityBook.put(sourceString, resultB);
         }
-        
+
         AMapping result = MappingFactory.createDefaultMapping();
         for (String s : similarityBook.keySet()) {
             for (String t : similarityBook.get(s).keySet()) {
@@ -118,7 +126,6 @@ public class MongeElkanMapper extends Mapper {
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-        
 
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));

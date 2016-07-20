@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implements the nested plan of a link specification. Note that the subPlans fields
- * is set to null by the instructor. Before adding a subplan for the first time,
- * the subPlans field must be initiated.
+ * Implements the nested plan of a link specification. Note that the subPlans
+ * fields is set to null by the instructor. Before adding a subplan for the
+ * first time, the subPlans field must be initiated.
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
@@ -46,7 +46,7 @@ public class NestedPlan extends Plan {
     /**
      * Returns the set of sub-plans of the current plan.
      *
-     * @return subPlans, the current sub-plans
+     * @return the current sub-plans
      */
     public List<NestedPlan> getSubPlans() {
         return subPlans;
@@ -55,8 +55,8 @@ public class NestedPlan extends Plan {
     /**
      * Sets the sub-plans of the plan.
      *
-     * @param subPlans,
-     *            the sub-plans to set
+     * @param subPlans
+     *            The sub-plans to set
      */
     public void setSubPlans(List<NestedPlan> subPlans) {
         this.subPlans = subPlans;
@@ -65,7 +65,7 @@ public class NestedPlan extends Plan {
     /**
      * Returns the operator of the plan.
      *
-     * @return operator, the operator of the plan
+     * @return the operator of the plan
      */
     public Command getOperator() {
         return operator;
@@ -74,8 +74,8 @@ public class NestedPlan extends Plan {
     /**
      * Sets the operator of the plan.
      *
-     * @param operator,
-     *            the operator to set
+     * @param operator
+     *            The operator to set
      */
     public void setOperator(Command operator) {
         this.operator = operator;
@@ -84,7 +84,7 @@ public class NestedPlan extends Plan {
     /**
      * Returns the filtering Instruction of the plan.
      *
-     * @return filteringInstruction, the filtering instruction of the plan
+     * @return the filtering instruction of the plan
      */
     public Instruction getFilteringInstruction() {
         return filteringInstruction;
@@ -93,8 +93,8 @@ public class NestedPlan extends Plan {
     /**
      * Sets the filtering Instruction of the plan.
      *
-     * @param filteringInstruction,
-     *            the filtering instruction to set
+     * @param filteringInstruction
+     *            The filtering instruction to set
      */
     public void setFilteringInstruction(Instruction filteringInstruction) {
         this.filteringInstruction = filteringInstruction;
@@ -103,8 +103,7 @@ public class NestedPlan extends Plan {
     /**
      * Returns the execution status of the plan.
      *
-     * @return executionStatus, true if the plan has been executed or false
-     *         otherwise
+     * @return true if the current plan has been executed or false otherwise
      */
     public boolean getExecutionStatus() {
         return executionStatus;
@@ -114,14 +113,14 @@ public class NestedPlan extends Plan {
      * Updates the execution status of the plan. If the plan has just been
      * executed then it changes the value from false to true.
      *
-     * @param executionStatus,
+     * @param executionStatus
      *            true if the plan has just been executed or false otherwise.
      */
     public void setExecutionStatus(boolean executionStatus) {
         this.executionStatus = executionStatus;
     }
 
-    @Override
+    
     /**
      * Checks if the plan is empty. Returns true if and only if the instruction
      * list is empty and both the sub-plans and the filtering instructions are
@@ -129,6 +128,7 @@ public class NestedPlan extends Plan {
      *
      * @return true if the plan is empty and false otherwise
      */
+     @Override
     public boolean isEmpty() {
         // instructionList is initiliazed as new list
         // subplans are null until a function initiliazes it
@@ -158,19 +158,19 @@ public class NestedPlan extends Plan {
      * plan is not atomic, then the functions returns all the instructions of
      * each atomic nested plan included in the current plan.
      *
-     * @return List of instructions
+     * @return a clone of the list of instructions of the current plan
      */
     @Override
     public List<Instruction> getInstructionList() {
         List<Instruction> instructions = new ArrayList<Instruction>();
         for (Instruction inst : instructionList) {
-            instructions.add(inst.clone());
+            instructions.add(inst);
         }
         if (!isAtomic()) {
             for (NestedPlan np : subPlans) {
                 List<Instruction> instructions2 = np.getInstructionList();
                 for (Instruction inst2 : instructions2) {
-                    instructions.add(inst2.clone());
+                    instructions.add(inst2);
                 }
             }
         }
@@ -181,7 +181,7 @@ public class NestedPlan extends Plan {
      * Returns the size of the current plan. The size of a plan is equal to the
      * size of its instruction list.
      *
-     * @return size, the size of the plan
+     * @return the size of the plan
      */
     @Override
     public int size() {
@@ -193,7 +193,7 @@ public class NestedPlan extends Plan {
      * current plan is cloned by invoking the clone function of the
      * corresponding class.
      *
-     * @return clone, the clone of the current plan
+     * @return a clone of the current plan
      */
     @Override
     public NestedPlan clone() {
@@ -244,8 +244,8 @@ public class NestedPlan extends Plan {
      * Adds a sub-Plan to the current list of sub-plans. If there is no list one
      * will be created.
      *
-     * @param subplan,
-     *            the sub-plan to be added
+     * @param subplan
+     *            The sub-plan to be added
      */
     public void addSubplan(NestedPlan subplan) {
         if (subplan != null) {
@@ -288,7 +288,7 @@ public class NestedPlan extends Plan {
     /**
      * String representation of the current plan.
      *
-     * @return str, the string representation of the current plan
+     * @return a string representation of the current plan
      */
     public String toString() {
         String str = ("Selectivity = " + selectivity);
@@ -358,7 +358,7 @@ public class NestedPlan extends Plan {
      * is not null, then it returns the threshold of the filtering instruction
      * and 0 otherwise.
      *
-     * @return Threshold as string
+     * @return the threshold as string
      */
     public String getThreshold() {
         if (filteringInstruction != null) {
@@ -371,7 +371,7 @@ public class NestedPlan extends Plan {
     /**
      * Returns a string representation of current plan as a set of commands.
      *
-     * @return NestedPlan as a set of commands
+     * @return the current plan as a set of commands
      */
     public String finalPlan() {
         if (isEmpty()) {

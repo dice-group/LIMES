@@ -48,9 +48,9 @@ public class HeliosPlanner extends Planner {
     /**
      * Constructor of the Helios planner class.
      *
-     * @param source,
+     * @param source
      *            Source cache
-     * @param target,
+     * @param target
      *            Target get
      */
     public HeliosPlanner(Cache source, Cache target) {
@@ -64,11 +64,11 @@ public class HeliosPlanner extends Planner {
      * of is not supported by the framework, it throws an
      * InvalidMeasureException exception.
      *
-     * @param measure,
+     * @param measure
      *            Measure of metric expression
-     * @param threshold,
+     * @param threshold
      *            Threshold of metric expression
-     * @return runtime, estimated runtime cost of the metric expression
+     * @return estimated runtime cost of the metric expression
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
 
@@ -90,11 +90,11 @@ public class HeliosPlanner extends Planner {
      * is not supported by the framework, it throws an InvalidMeasureException
      * exception.
      *
-     * @param measure,
+     * @param measure
      *            Measure of metric expression
-     * @param threshold,
+     * @param threshold
      *            Threshold of metric expression
-     * @return size, estimated size of returned mapping
+     * @return estimated size of returned mapping
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
         Mapper mapper = null;
@@ -114,11 +114,11 @@ public class HeliosPlanner extends Planner {
      * the filtering instruction is not supported by the framework, it throws an
      * InvalidMeasureException exception.
      *
-     * @param measures,
+     * @param measures
      *            The set of expressions used to filter
-     * @param mappingSize,
+     * @param mappingSize
      *            Size of mapping
-     * @return cost, estimated runtime cost of filteringInstruction(s)
+     * @return estimated runtime cost of filteringInstruction(s)
      */
     public double getFilterCosts(List<String> measures, int mappingSize) {
         double cost = 0;
@@ -142,9 +142,9 @@ public class HeliosPlanner extends Planner {
     /**
      * Generates a NestedPlan for a link specification.
      *
-     * @param spec,
+     * @param spec
      *            Input link specification
-     * @return NestedPlan of the input link specification
+     * @return the corresponding NestedPlan of the input link specification
      */
     @Override
     public NestedPlan plan(LinkSpecification spec) {
@@ -157,17 +157,17 @@ public class HeliosPlanner extends Planner {
      * plan function will find the least costly plan from a set of alternatives
      * (see {@link #getBestConjunctivePlan} }.
      *
-     * @param spec,
+     * @param spec
      *            Input link specification
-     * @param source,
+     * @param source
      *            Source cache
-     * @param target,
+     * @param target
      *            Target cache
-     * @param sourceMapping,
+     * @param sourceMapping
      *            Size of source mapping
-     * @param targetMapping,
+     * @param targetMapping
      *            Size of target mapping
-     * @return plan, a NestedPlan for the input link specification
+     * @return a NestedPlan for the input link specification
      */
     public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, AMapping sourceMapping,
             AMapping targetMapping) {
@@ -274,13 +274,13 @@ public class HeliosPlanner extends Planner {
      * needed when AND has more than 2 children. Simply splits the task in
      * computing the best instructionList for (leftmost, all others).
      *
-     * @param spec,
+     * @param spec
      *            Input link specification
-     * @param plans,
+     * @param plans
      *            List of plans
-     * @param selectivity,
+     * @param selectivity
      *            Selectivity of the instructionList (known beforehand)
-     * @return NestedPlan of the input link specification
+     * @return a NestedPlan of the input link specification
      */
     public NestedPlan getBestConjunctivePlan(LinkSpecification spec, List<NestedPlan> plans, double selectivity) {
         if (plans == null) {
@@ -305,15 +305,15 @@ public class HeliosPlanner extends Planner {
      * Computes the best conjunctive instructionList for a instructionList
      * against a list of plans by calling back the method.
      *
-     * @param spec,
+     * @param spec
      *            Input link specification
-     * @param left,
+     * @param left
      *            Left instructionList
-     * @param plans,
+     * @param plans
      *            List of other plans
-     * @param selectivity,
+     * @param selectivity
      *            Overall selectivity
-     * @return NestedPlan of the input link specification
+     * @return a NestedPlan of the input link specification
      */
     public NestedPlan getBestConjunctivePlan(LinkSpecification spec, NestedPlan left, List<NestedPlan> plans,
             double selectivity) {
@@ -344,14 +344,14 @@ public class HeliosPlanner extends Planner {
      * alternative is based upon runtime estimations obtained for each of the
      * atomic measure expressions included in the children specifications.
      *
-     * @param spec,
-     *            the link specification
-     * @param left,
-     *            left child nested plan
-     * @param right,
-     *            right child nested plan
+     * @param spec
+     *            The link specification
+     * @param left
+     *            Left child nested plan
+     * @param right
+     *            Right child nested plan
      * @param selectivity,
-     *            the overall selectivity
+     *            The overall selectivity
      * @return the resulting nested plan for the input spec, that is least
      *         costly
      */
@@ -428,7 +428,7 @@ public class HeliosPlanner extends Planner {
      * overlap(x.label,y.label)|0.6)|0.8, AND(cosine(x.name,y.name)|0.5,
      * overlap(x.label,y.label)|0.6)|0.8) ){@literal >}=0.8
      *
-     * @param spec,
+     * @param spec
      *            The normalized link specification
      */
     @Override

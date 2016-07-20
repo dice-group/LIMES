@@ -17,10 +17,10 @@ public interface IExecutionEngine {
     /**
      * Implementation of the execution of a link specification.
      *
-     * @param spec,
-     *            the link specification
+     * @param spec
+     *            The link specification
      * @param planner,
-     *            the type of the planner
+     *            The type of the planner
      * @return The mapping obtained from executing the plan
      */
     AMapping execute(LinkSpecification spec, IPlanner planner);

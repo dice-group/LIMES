@@ -6,6 +6,7 @@ package org.aksw.limes.core.measures.mapper.pointsets;
 
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -93,7 +94,14 @@ public class OrchidMapper extends Mapper {
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
-
+        try {
+            if (threshold <= 0) {
+                throw new InvalidThresholdException(threshold);
+            }
+        } catch (InvalidThresholdException e) {
+            System.err.println("Exiting..");
+            System.exit(1);
+        }
         // get sets of polygons from properties
         Set<Polygon> sourcePolygons = getPolygons(source, properties.get(0));
         Set<Polygon> targetPolygons = getPolygons(target, properties.get(1));

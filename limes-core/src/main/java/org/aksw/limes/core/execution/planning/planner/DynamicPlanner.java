@@ -73,7 +73,7 @@ public class DynamicPlanner extends Planner {
     /**
      * Initialize plans and specifications fields.
      *
-     * @param spec,
+     * @param spec
      *            The input link specification
      */
     public void init(LinkSpecification spec) {
@@ -106,8 +106,8 @@ public class DynamicPlanner extends Planner {
      * on another specification L3, then if L1's threshold must be higher than
      * L3' threshold in order to replace the previous L2-L3 dependency.
      *
-     * @param spec,
-     *            the recently executed specification
+     * @param spec
+     *            The recently executed specification
      */
     public void createDependencies(LinkSpecification spec) {
         for (Entry<String, LinkSpecification> entry : specifications.entrySet()) {
@@ -129,9 +129,9 @@ public class DynamicPlanner extends Planner {
      * Returns specification to whom the input specification parameter is
      * dependent upon, if any.
      *
-     * @param spec,
+     * @param spec
      *            The dependent specification
-     * @return string representation of specification that spec depends upon
+     * @return a string representation of specification that spec depends upon
      */
     public String getDependency(LinkSpecification spec) {
         String specString = spec.toString();
@@ -146,9 +146,9 @@ public class DynamicPlanner extends Planner {
      * of is not supported by the framework, it throws an
      * InvalidMeasureException exception.
      *
-     * @param measure,
+     * @param measure
      *            Measure of metric expression
-     * @param threshold,
+     * @param threshold
      *            Threshold of metric expression
      * @return runtime, estimated runtime cost of the metric expression
      * 
@@ -171,11 +171,11 @@ public class DynamicPlanner extends Planner {
      * is not supported by the framework, it throws an InvalidMeasureException
      * exception.
      *
-     * @param measure,
+     * @param measure
      *            Measure of metric expression
-     * @param threshold,
+     * @param threshold
      *            Threshold of metric expression
-     * @return size, estimated size of returned mapping
+     * @return estimated size of returned mapping
      * 
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
@@ -194,7 +194,7 @@ public class DynamicPlanner extends Planner {
     /**
      * Checks if the plan of the specified link specification is executed.
      *
-     * @param spec, The input link specification 
+     * @param spec The input link specification 
      * @return true if the plan is executed, or false otherwise
      */
     public boolean isExecuted(LinkSpecification spec) {
@@ -206,11 +206,11 @@ public class DynamicPlanner extends Planner {
      * the filtering instruction is not supported by the framework, it throws an
      * InvalidMeasureException exception.
      *
-     * @param measures,
+     * @param measures
      *            Set of expressions used to filter
-     * @param mappingSize,
+     * @param mappingSize
      *            Size of mapping
-     * @return cost, estimated runtime cost of filteringInstruction(s)
+     * @return estimated runtime cost of filteringInstruction(s)
      */
     public double getFilterCosts(List<String> measures, int mappingSize) {
         double cost = 0;
@@ -234,9 +234,9 @@ public class DynamicPlanner extends Planner {
     /**
      * Returns the corresponding plan of a specification.
      *
-     * @param spec,
+     * @param spec
      *            The link specification
-     * @return plan, the plan of the input specification
+     * @return the plan of the input specification
      */
     public NestedPlan getPlan(LinkSpecification spec) {
         if (plans.containsKey(spec.toString()))
@@ -247,9 +247,9 @@ public class DynamicPlanner extends Planner {
     /**
      * Returns the specification from which the input plan was generated.
      *
-     * @param plan,
+     * @param plan
      *            The nested plan
-     * @return spec, the spec of the input plan
+     * @return the spec of the input plan
      */
     public LinkSpecification getLinkSpec(NestedPlan plan) {
         for (Map.Entry<String, NestedPlan> entry : plans.entrySet()) {
@@ -264,14 +264,14 @@ public class DynamicPlanner extends Planner {
     /**
      * Updates the characteristics of a plan once it is executed.
      *
-     * @param spec,
-     *            the link specification from which the plan was generated
-     * @param rt,
-     *            the real runtime of the plan
-     * @param selectivity,
-     *            the real selectivity of the plan
-     * @param msize,
-     *            the real mapping size returned when the plan is executed
+     * @param spec
+     *            The link specification from which the plan was generated
+     * @param rt
+     *            The real runtime of the plan
+     * @param selectivity
+     *            The real selectivity of the plan
+     * @param msize
+     *            The real mapping size returned when the plan is executed
      */
     public void updatePlan(LinkSpecification spec, double rt, double selectivity, double msize) {
         if (!plans.containsKey(spec.toString())) {
@@ -291,9 +291,9 @@ public class DynamicPlanner extends Planner {
     /**
      * Generates a NestedPlan for a link specification.
      *
-     * @param spec,
+     * @param spec
      *            Input link specification
-     * @return NestedPlan of the input link specification
+     * @return a NestedPlan of the input link specification
      */
     @Override
     public NestedPlan plan(LinkSpecification spec) {
@@ -308,17 +308,17 @@ public class DynamicPlanner extends Planner {
      * set of alternatives (see {@link #getBestConjunctivePlan},
      * {@link #getBestDifferencePlan} resp.).
      *
-     * @param spec,
+     * @param spec
      *            Input link specification
-     * @param source,
+     * @param source
      *            Source cache
-     * @param target,
+     * @param target
      *            Target cache
-     * @param sourceMapping,
+     * @param sourceMapping
      *            Size of source mapping
-     * @param targetMapping,
+     * @param targetMapping
      *            Size of target mapping
-     * @return plan, a NestedPlan for the input link specification
+     * @return a NestedPlan for the input link specification
      */
     public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, AMapping sourceMapping,
             AMapping targetMapping) {
@@ -449,14 +449,14 @@ public class DynamicPlanner extends Planner {
      * obtained for each of the atomic measure expressions included in the
      * children specifications.
      * 
-     * @param spec,
-     *            the link specification
-     * @param left,
-     *            left child nested plan
-     * @param right,
-     *            right child nested plan
-     * @param selectivity,
-     *            the overall selectivity
+     * @param spec
+     *            The link specification
+     * @param left
+     *            Left child nested plan
+     * @param right
+     *            Right child nested plan
+     * @param selectivity
+     *            The overall selectivity
      * @return the resulting nested plan for the input spec, that is least
      *         costly
      */
@@ -566,14 +566,14 @@ public class DynamicPlanner extends Planner {
      * runtime estimations obtained for each of the atomic measure expressions
      * included in the children specifications.
      * 
-     * @param spec,
-     *            the link specification
-     * @param left,
-     *            left child nested plan
-     * @param right,
-     *            right child nested plan
-     * @param selectivity,
-     *            the overall selectivity
+     * @param spec
+     *            The link specification
+     * @param left
+     *            Left child nested plan
+     * @param right
+     *            Right child nested plan
+     * @param selectivity
+     *            The overall selectivity
      * @return the resulting nested plan for the input spec, that is least
      *         costly
      */
@@ -746,7 +746,7 @@ public class DynamicPlanner extends Planner {
      * overlap(x.label,y.label)|0.6)|0.8, AND(cosine(x.name,y.name)|0.5,
      * overlap(x.label,y.label)|0.6)|0.8) ){@literal >}=0.8
      *
-     * @param spec,
+     * @param spec
      *            The normalized link specification
      */
     @Override

@@ -15,26 +15,26 @@ public interface IPlan extends Clonable<IPlan> {
     /**
      * Adds an instruction to the instructionList.
      *
-     * @param instruction,
-     *         the Instruction to add
+     * @param instruction
+     *         The Instruction to add
      */
     public abstract void addInstruction(Instruction instruction);
 
     /**
      * Removes the i-th instruction from the instructionList.
      *
-     * @param i,
+     * @param index
      *         Index of instruction to remove
      */
-    public abstract void removeInstruction(int i);
+    public abstract void removeInstruction(int index);
 
     /**
-     * Removes an instruction from a instructionList.
+     * Removes san instruction from a instructionList.
      *
-     * @param i
+     * @param instruction
      *         Instruction to remove
      */
-    public abstract void removeInstruction(Instruction i);
+    public abstract void removeInstruction(Instruction instruction);
 
 
     /**
