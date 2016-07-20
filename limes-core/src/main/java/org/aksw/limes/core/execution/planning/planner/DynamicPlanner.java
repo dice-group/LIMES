@@ -14,6 +14,7 @@ import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
+import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -194,7 +195,8 @@ public class DynamicPlanner extends Planner {
     /**
      * Checks if the plan of the specified link specification is executed.
      *
-     * @param spec The input link specification 
+     * @param spec
+     *            The input link specification
      * @return true if the plan is executed, or false otherwise
      */
     public boolean isExecuted(LinkSpecification spec) {
@@ -367,6 +369,13 @@ public class DynamicPlanner extends Planner {
                 plan.setSelectivity(1 - selectivity);
                 // MAPPING SIZE
                 plan.setMappingSize(source.size() * target.size() * plan.getSelectivity());
+                // add filtering costs based on approximation of mapping
+                // size
+                if (plan.getFilteringInstruction().getMeasureExpression() != null) {
+                    plan.setRuntimeCost(plan.getRuntimeCost()
+                            + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
+                                    source.size() * target.size() * plan.getSelectivity()));
+                }
             } else if (spec.getOperator().equals(LogicOperator.XOR)) {
                 List<NestedPlan> children = new ArrayList<NestedPlan>();
                 double runtimeCost = 0;
@@ -394,6 +403,13 @@ public class DynamicPlanner extends Planner {
                 plan.setSelectivity(selectivity);
                 // MAPPING SIZE
                 plan.setMappingSize(source.size() * target.size() * plan.getSelectivity());
+                // add filtering costs based on approximation of mapping
+                // size
+                if (plan.getFilteringInstruction().getMeasureExpression() != null) {
+                    plan.setRuntimeCost(plan.getRuntimeCost()
+                            + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
+                                    source.size() * target.size() * plan.getSelectivity()));
+                }
 
             } else if (spec.getOperator().equals(LogicOperator.MINUS)) {
                 List<NestedPlan> children = new ArrayList<NestedPlan>();
@@ -515,7 +531,15 @@ public class DynamicPlanner extends Planner {
         // first instructionList: run both children and then merge
         if (!left.getExecutionStatus())
             runtime1 = left.getRuntimeCost();
-        runtime1 = runtime1 + right.getRuntimeCost();
+        runtime1 = runtime1 + right.getRuntimeCost() + (spec.getChildren().size() - 1);
+
+        result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+                spec.getThreshold() + "", -1, -1, 0));
+        if (result.getFilteringInstruction().getMeasureExpression() != null) {
+            runtime1 = runtime1 + MeasureProcessor.getCosts(result.getFilteringInstruction().getMeasureExpression(),
+                    (int) Math.ceil(source.size() * target.size() * selectivity));
+        }
+
         ////////////////////////////////////////////////////////////////////////
         // second instructionList: run left child and use right child as filter
         if (!left.getExecutionStatus())
@@ -605,7 +629,13 @@ public class DynamicPlanner extends Planner {
         } // left is executed, right is not: RUN B, FILTER OR FILTER WITH B
         else if (left.getExecutionStatus() && !right.getExecutionStatus()) {
             // first instructionList: run both children and then merge
-            runtime1 = right.getRuntimeCost();
+            runtime1 = right.getRuntimeCost() + (spec.getChildren().size() - 1);
+            result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+                    spec.getThreshold() + "", -1, -1, 0));
+            if (result.getFilteringInstruction().getMeasureExpression() != null) {
+                runtime1 = runtime1 + MeasureProcessor.getCosts(result.getFilteringInstruction().getMeasureExpression(),
+                        (int) Math.ceil(source.size() * target.size() * selectivity));
+            }
             // second instructionList: run left child and use right child as
             // filter
             // RUNTIME
@@ -640,7 +670,13 @@ public class DynamicPlanner extends Planner {
         else if (!left.getExecutionStatus() && right.getExecutionStatus()) {
             // first instructionList: run both children and then merge
             // runtime1 = left.runtimeCost + right.runtimeCost;
-            runtime1 = left.getRuntimeCost();
+            runtime1 = left.getRuntimeCost() + (spec.getChildren().size() - 1);
+            result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+                    spec.getThreshold() + "", -1, -1, 0));
+            if (result.getFilteringInstruction().getMeasureExpression() != null) {
+                runtime1 = runtime1 + MeasureProcessor.getCosts(result.getFilteringInstruction().getMeasureExpression(),
+                        (int) Math.ceil(source.size() * target.size() * selectivity));
+            }
             // third instructionList: run right child and use left child as
             // runtime3 = right.runtimeCost;
             runtime3 = getFilterCosts(left.getAllMeasures(),
@@ -675,7 +711,13 @@ public class DynamicPlanner extends Planner {
         } // if either of the children is executed, then 3 options available
         else if (!left.getExecutionStatus() && !right.getExecutionStatus()) {
             // first instructionList: run both children and then merge
-            runtime1 = left.getRuntimeCost() + right.getRuntimeCost();
+            runtime1 = left.getRuntimeCost() + right.getRuntimeCost() + (spec.getChildren().size() - 1);
+            result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
+                    spec.getThreshold() + "", -1, -1, 0));
+            if (result.getFilteringInstruction().getMeasureExpression() != null) {
+                runtime1 = runtime1 + MeasureProcessor.getCosts(result.getFilteringInstruction().getMeasureExpression(),
+                        (int) Math.ceil(source.size() * target.size() * selectivity));
+            }
             // second instructionList: run left child and use right child as
             // filter
             runtime2 = left.getRuntimeCost();
@@ -741,8 +783,8 @@ public class DynamicPlanner extends Planner {
     /**
      * Normalization of input link specification. In case of XOR operator, the
      * output specification uses the extended form of XOR (i.e.
-     * XOR(cosine(x.name,y.name)|0.5, overlap(x.label,y.label)|0.6){@literal >}=0.8 will
-     * transformed into MINUS(OR(cosine(x.name,y.name)|0.5,
+     * XOR(cosine(x.name,y.name)|0.5, overlap(x.label,y.label)|0.6){@literal >}
+     * =0.8 will transformed into MINUS(OR(cosine(x.name,y.name)|0.5,
      * overlap(x.label,y.label)|0.6)|0.8, AND(cosine(x.name,y.name)|0.5,
      * overlap(x.label,y.label)|0.6)|0.8) ){@literal >}=0.8
      *

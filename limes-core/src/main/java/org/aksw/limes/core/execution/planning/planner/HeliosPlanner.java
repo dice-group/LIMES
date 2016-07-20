@@ -210,13 +210,6 @@ public class HeliosPlanner extends Planner {
                     selectivity = 1 - children.get(0).getSelectivity();
                     for (int i = 1; i < children.size(); i++) {
                         selectivity = selectivity * (1 - children.get(i).getSelectivity());
-                        // add filtering costs based on approximation of mapping
-                        // size
-                        if (plan.getFilteringInstruction().getMeasureExpression() != null) {
-                            plan.setRuntimeCost(plan.getRuntimeCost()
-                                    + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
-                                            source.size() * target.size() * (1 - selectivity)));
-                        }
                     }
                     plan.setSelectivity(1 - selectivity);
                 } else if (spec.getOperator().equals(LogicOperator.MINUS)) {
@@ -225,13 +218,7 @@ public class HeliosPlanner extends Planner {
                     selectivity = children.get(0).getSelectivity();
                     for (int i = 1; i < children.size(); i++) {
                         selectivity = selectivity * (1 - children.get(i).getSelectivity());
-                        // add filtering costs based on approximation of mapping
-                        // size
-                        if (plan.getFilteringInstruction().getMeasureExpression() != null) {
-                            plan.setRuntimeCost(plan.getRuntimeCost()
-                                    + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
-                                            source.size() * target.size() * (1 - selectivity)));
-                        }
+
                     }
                     plan.setSelectivity(selectivity);
                 } else if (spec.getOperator().equals(LogicOperator.XOR)) {
@@ -241,17 +228,16 @@ public class HeliosPlanner extends Planner {
                     for (int i = 1; i < children.size(); i++) {
                         selectivity = (1 - (1 - selectivity) * (1 - children.get(i).getSelectivity()))
                                 * (1 - selectivity * children.get(i).getSelectivity());
-                        // add filtering costs based on approximation of mapping
-                        // size
-                        if (plan.getFilteringInstruction().getMeasureExpression() != null) {
-                            plan.setRuntimeCost(plan.getRuntimeCost()
-                                    + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
-                                            source.size() * target.size() * selectivity));
-                        }
                     }
                     plan.setSelectivity(selectivity);
                 }
-
+                // add filtering costs based on approximation of mapping
+                // size
+                if (plan.getFilteringInstruction().getMeasureExpression() != null) {
+                    plan.setRuntimeCost(plan.getRuntimeCost()
+                            + MeasureProcessor.getCosts(plan.getFilteringInstruction().getMeasureExpression(),
+                                    source.size() * target.size() * plan.getSelectivity()));
+                }
             } // here we can optimize.
             else if (spec.getOperator().equals(LogicOperator.AND)) {
                 List<NestedPlan> children = new ArrayList<NestedPlan>();
@@ -360,7 +346,7 @@ public class HeliosPlanner extends Planner {
         double runtime1 = 0, runtime2, runtime3;
         NestedPlan result = new NestedPlan();
         // first instructionList: run both children and then merge
-        runtime1 = left.getRuntimeCost() + right.getRuntimeCost();
+        runtime1 = left.getRuntimeCost() + right.getRuntimeCost() + (spec.getChildren().size() - 1);
         result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
                 spec.getThreshold() + "", -1, -1, 0));
         if (result.getFilteringInstruction().getMeasureExpression() != null) {
