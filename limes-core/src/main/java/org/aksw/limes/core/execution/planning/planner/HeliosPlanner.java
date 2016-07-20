@@ -346,7 +346,7 @@ public class HeliosPlanner extends Planner {
         double runtime1 = 0, runtime2, runtime3;
         NestedPlan result = new NestedPlan();
         // first instructionList: run both children and then merge
-        runtime1 = left.getRuntimeCost() + right.getRuntimeCost() + (spec.getChildren().size() - 1);
+        runtime1 = left.getRuntimeCost() + right.getRuntimeCost();
         result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
                 spec.getThreshold() + "", -1, -1, 0));
         if (result.getFilteringInstruction().getMeasureExpression() != null) {

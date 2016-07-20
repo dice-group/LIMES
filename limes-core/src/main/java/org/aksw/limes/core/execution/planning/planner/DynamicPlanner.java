@@ -444,9 +444,10 @@ public class DynamicPlanner extends Planner {
             }
         }
         this.plans.put(spec.toString(), plan);
-        // logger.info(spec);
-        // logger.info(plan);
-        // logger.info("--------------------------------------------------------------------");
+        //logger.info(spec+"");
+        //logger.info(plan.getRuntimeCost()+"");
+        //logger.info(plan+"");
+        //logger.info("--------------------------------------------------------------------");
         return plan;
 
     }
@@ -529,24 +530,25 @@ public class DynamicPlanner extends Planner {
         // OR REVERSEFILTER with right
         // never add the runtime of left if it is already executed
         // first instructionList: run both children and then merge
+        
         if (!left.getExecutionStatus())
             runtime1 = left.getRuntimeCost();
-        runtime1 = runtime1 + right.getRuntimeCost() + (spec.getChildren().size() - 1);
-
+        
+        runtime1 = runtime1 + right.getRuntimeCost();
+        
         result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
                 spec.getThreshold() + "", -1, -1, 0));
         if (result.getFilteringInstruction().getMeasureExpression() != null) {
             runtime1 = runtime1 + MeasureProcessor.getCosts(result.getFilteringInstruction().getMeasureExpression(),
                     (int) Math.ceil(source.size() * target.size() * selectivity));
         }
-
         ////////////////////////////////////////////////////////////////////////
         // second instructionList: run left child and use right child as filter
         if (!left.getExecutionStatus())
             runtime2 = left.getRuntimeCost();
         runtime2 = runtime2 + getFilterCosts(right.getAllMeasures(),
                 (int) Math.ceil(source.size() * target.size() * right.getSelectivity()));
-
+        
         double min = Math.min(runtime1, runtime2);
         if (min == runtime1) {
             result.setOperator(Instruction.Command.DIFF);
@@ -629,7 +631,7 @@ public class DynamicPlanner extends Planner {
         } // left is executed, right is not: RUN B, FILTER OR FILTER WITH B
         else if (left.getExecutionStatus() && !right.getExecutionStatus()) {
             // first instructionList: run both children and then merge
-            runtime1 = right.getRuntimeCost() + (spec.getChildren().size() - 1);
+            runtime1 = right.getRuntimeCost();
             result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
                     spec.getThreshold() + "", -1, -1, 0));
             if (result.getFilteringInstruction().getMeasureExpression() != null) {
@@ -670,7 +672,7 @@ public class DynamicPlanner extends Planner {
         else if (!left.getExecutionStatus() && right.getExecutionStatus()) {
             // first instructionList: run both children and then merge
             // runtime1 = left.runtimeCost + right.runtimeCost;
-            runtime1 = left.getRuntimeCost() + (spec.getChildren().size() - 1);
+            runtime1 = left.getRuntimeCost();
             result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
                     spec.getThreshold() + "", -1, -1, 0));
             if (result.getFilteringInstruction().getMeasureExpression() != null) {
@@ -711,7 +713,7 @@ public class DynamicPlanner extends Planner {
         } // if either of the children is executed, then 3 options available
         else if (!left.getExecutionStatus() && !right.getExecutionStatus()) {
             // first instructionList: run both children and then merge
-            runtime1 = left.getRuntimeCost() + right.getRuntimeCost() + (spec.getChildren().size() - 1);
+            runtime1 = left.getRuntimeCost() + right.getRuntimeCost();
             result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
                     spec.getThreshold() + "", -1, -1, 0));
             if (result.getFilteringInstruction().getMeasureExpression() != null) {

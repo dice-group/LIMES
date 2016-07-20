@@ -31,7 +31,7 @@ public class NestedPlan extends Plan {
     /**
      * Fields that declares if the current nested plan is executed or not.
      */
-    private boolean executionStatus;
+    private boolean executionStatus = false;
 
     /**
      * Constructor of the NestedPlan class.

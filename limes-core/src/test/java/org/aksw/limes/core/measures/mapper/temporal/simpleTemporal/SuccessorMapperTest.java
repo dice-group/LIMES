@@ -189,23 +189,16 @@ public class SuccessorMapperTest {
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
-        LinkSpecification ls1 = new LinkSpecification(
-                "tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)",
-                1.0);
-        LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)", 0.8);
-        AMapping m1 = e.execute(ls1, p);
-        AMapping m2 = e.execute(ls2, p);
-        System.out.println(m1);
-        System.out.println(m2);
-
         LinkSpecification ls = new LinkSpecification(
                 "XOR(trigrams(x.name,y.name)|0.8,tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)|1.0)",
                 1.0);
         AMapping m = e.execute(ls, p);
 
+        e = new SimpleExecutionEngine(source, target, "?x", "?y");
         CanonicalPlanner p2 = new CanonicalPlanner();
         AMapping mm = e.execute(ls, p2);
 
+        e = new SimpleExecutionEngine(source, target, "?x", "?y");
         HeliosPlanner p3 = new HeliosPlanner(source, target);
         AMapping mmm = e.execute(ls, p3);
 
