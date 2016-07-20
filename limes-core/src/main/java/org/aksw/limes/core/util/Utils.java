@@ -18,7 +18,7 @@ import java.util.List;
  * mapping reference.
  * 
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
- * @author Mohamed Sherif <sherif@informatik.uni-leipzig.de>
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 18, 2016
  */
 public class Utils {
