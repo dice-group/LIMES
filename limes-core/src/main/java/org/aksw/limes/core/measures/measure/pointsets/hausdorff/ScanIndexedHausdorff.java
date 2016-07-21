@@ -63,10 +63,10 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
     /**
      * Checks whether the map contains the pair (source, target)
      *
-     * @param map
-     * @param source
-     * @param target
-     * @return
+     * @param map index
+     * @param source resource
+     * @param target resource
+     * @return true if the map contains the pair (source, target)
      */
     public boolean contains(Map<Integer, List<Integer>> map, int source, int target) {
         if (!map.containsKey(source)) {
@@ -82,10 +82,10 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
      * Checks whether it is known for the source point with index sourceIndex
      * that all distances to points in p are above the threshold
      *
-     * @param sourceIndex
-     * @param knownDistances
-     * @param toCompute
-     * @param threshold
+     * @param sourceIndex index
+     * @param knownDistances Mapping
+     * @param toCompute map
+     * @param threshold of the distance
      * @return -1 if it is unknown, the known distance if it is known and
      *         (threshold + 1) if the distance is known to be beyond the
      *         threshold
@@ -112,11 +112,10 @@ public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
     /**
      * Checks whether a distance computation should be terminated
      *
-     * @param s
-     *            Source polygon
-     * @param knownDistances
-     * @param toCompute
-     * @param threshold
+     * @param s Source polygon
+     * @param knownDistances Mapping
+     * @param toCompute map
+     * @param threshold of distance
      * @return true if computation should be terminated
      */
     public boolean checkTermination(Polygon s, AMapping knownDistances, Map<Integer, List<Integer>> toCompute,

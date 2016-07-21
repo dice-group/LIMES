@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Class to define a mapping of the properties of 2 knowledge bases.
  *
- * @author Klaus Lyko *
+ * @author Klaus Lyko 
  */
 public class PropertyMapping {
     public List<PairSimilar<String>> stringPropPairs = new ArrayList<PairSimilar<String>>();

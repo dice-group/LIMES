@@ -28,8 +28,7 @@ public class GeOxygeneFrechet extends PointsetsMeasure {
     /**
      * Convert polygon to ILineSegment
      *
-     * @param poly
-     *            Polygon
+     * @param poly Polygon
      * @return ILineSegment out of the input poly
      */
     public static ILineSegment toLineSegment(Polygon poly) {
@@ -51,12 +50,9 @@ public class GeOxygeneFrechet extends PointsetsMeasure {
     }
 
     /**
-     * @param X
-     *            Polygon
-     * @param Y
-     *            Polygon
-     * @param threshold,
-     *            distance threshold
+     * @param X Polygon
+     * @param Y Polygon
+     * @param threshold  distance threshold
      * @return the GeOxygeneFrechet distance between X and Y
      */
     public static double distance(Polygon X, Polygon Y, double threshold) {

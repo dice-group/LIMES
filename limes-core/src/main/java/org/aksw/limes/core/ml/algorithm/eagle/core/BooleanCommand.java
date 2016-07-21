@@ -14,10 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class implements Boolean Operators. Childrens are either NesetedBooleans or Measures.
- * Threrefore, it's not required anymore and can be replaced with NestedBoolean.
+ * Class implements Boolean Operators. Children are either NesetedBooleans or Measures.
+ * Therefore, it's not required anymore and can be replaced with NestedBoolean.
  *
  * @author Klaus Lyko
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
+ * 
  * @deprecated use NestedBoolean.
  */
 public class BooleanCommand extends CommandGene
@@ -41,7 +44,7 @@ public class BooleanCommand extends CommandGene
      *         a_conf A JGAP GPconfiguration instance.
      * @param command
      *         the actual boolean command (AND, OR, XOR)
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public BooleanCommand(final GPConfiguration a_conf, String command)
             throws InvalidConfigurationException {
@@ -56,10 +59,10 @@ public class BooleanCommand extends CommandGene
      *         A JGAP GPconfiguration instance.
      * @param a_returnType
      *         Define the return type of this node.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      * TODO For a future version also allow other boolean measures to be children of this node.
      */
-    public BooleanCommand(final GPConfiguration a_conf, Class a_returnType, String command)
+    public BooleanCommand(final GPConfiguration a_conf, Class<?> a_returnType, String command)
             throws InvalidConfigurationException {
         super(a_conf, 2, a_returnType, 4,
                 new int[]{1, 1}
@@ -76,7 +79,7 @@ public class BooleanCommand extends CommandGene
     }
 
     @Override
-    public Class getChildType(IGPProgram a_ind, int a_chromNum) {
+    public Class<?> getChildType(IGPProgram a_ind, int a_chromNum) {
         return String.class;
     }
 

@@ -23,6 +23,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Klaus Lyko
  * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
 
@@ -49,6 +51,12 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
 
     /**
      * Singleton pattern
+     * 
+     * @param a_config LinkSpecGeneticLearnerConfig
+     * @param pfm PseudoFMeasure
+     * @param c1 Cache
+     * @param c2 Cache
+     * @return instance of PseudoFMeasure Fitness Function
      */
     public static PseudoFMeasureFitnessFunction getInstance(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasure pfm, Cache c1, Cache c2) {
         if (instance == null) {
@@ -66,7 +74,7 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
     /**
      * Determine fitness of the individual p;
      *
-     * @param p
+     * @param p GP programs
      * @return 1-PseudoFMeasure. Or if something wents wrong either 5d, iff p isn't fulfilling all constraints. 8d if executing p results in memory error.
      */
     public double calculateRawFitness(IGPProgram p) {
@@ -108,8 +116,8 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
     }
 
     /**
-     * @param p
-     * @return
+     * @param p GP programs
+     * @return PseudoMeasure
      */
     public Double calculatePseudoMeasure(IGPProgram p) {
         

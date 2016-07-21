@@ -25,6 +25,8 @@ import java.util.Set;
  * and <code>PreprocessingCommand</code>
  *
  * @author Klaus Lyko
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class StringPreprocessingMeasure
         extends CommandGene implements IMutateable, ICloneable {
@@ -55,9 +57,9 @@ public class StringPreprocessingMeasure
      *         Specifies the SubReturnType.
      * @param a_mutateable
      *         true: this Commandgene is mutateable, viz. the LIMES similarity measure might be changed to another one out of the allowed operations.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
-    public StringPreprocessingMeasure(String opName, final GPConfiguration a_conf, Class a_returnType,
+    public StringPreprocessingMeasure(String opName, final GPConfiguration a_conf, Class<?> a_returnType,
                                       int a_subReturnType, boolean a_mutateable) throws InvalidConfigurationException {
         super(a_conf, 2, a_returnType,
                 a_subReturnType,
@@ -83,10 +85,10 @@ public class StringPreprocessingMeasure
      * @param a_mutateable
      *         true: this Commandgene is mutateable, viz. the LIMES similarity measure might be changed
      *         to another one out of the allowed operations.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public StringPreprocessingMeasure(String opName, final GPConfiguration a_conf,
-                                      final Class a_returnType, boolean a_mutateable)
+                                      final Class<?> a_returnType, boolean a_mutateable)
             throws InvalidConfigurationException {
         super(a_conf, 2, a_returnType, 1,
                 new int[]{
@@ -109,7 +111,7 @@ public class StringPreprocessingMeasure
      *         name of the LIMES similarity measure operation (e.g. "trigram").
      * @param a_conf
      *         JGAP GPConfiguration.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public StringPreprocessingMeasure(String opName, final GPConfiguration a_conf)
             throws InvalidConfigurationException {
@@ -131,7 +133,7 @@ public class StringPreprocessingMeasure
      *         The number of the chromosome.
      * @return Class type of the child.
      */
-    public Class getChildType(IGPProgram a_ind, int a_chromNum) {
+    public Class<?> getChildType(IGPProgram a_ind, int a_chromNum) {
         if (a_chromNum == 0)
             return PairSimilar.class;
         else
@@ -214,8 +216,8 @@ public class StringPreprocessingMeasure
     /**
      * Mutates this CommandGene. A random command out of the set of allowed similarity measures is picked.
      *
-     * @return
-     * @throws InvalidConfigurationException
+     * @return A random command out of the set of allowed similarity measures
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public CommandGene applyMutation() throws InvalidConfigurationException {
         String[] aO = {};
@@ -245,7 +247,7 @@ public class StringPreprocessingMeasure
     public boolean isValid(ProgramChromosome a_program, int a_index) {
         Object[] o = new Object[0];
         LinkSpecGeneticLearnerConfig expConfig = (LinkSpecGeneticLearnerConfig) getGPConfiguration();
-        PairSimilar propPair = (PairSimilar) a_program.execute_object(a_index, 0, o);
+        PairSimilar<?> propPair = (PairSimilar<?>) a_program.execute_object(a_index, 0, o);
         return expConfig.getPropertyMapping().isMatch(propPair.a.toString(), propPair.b.toString());
     }
 

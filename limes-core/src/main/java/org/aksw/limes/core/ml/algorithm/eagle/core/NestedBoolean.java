@@ -22,6 +22,8 @@ import java.util.List;
  * Childs are either Measures(StringMeasure or NumberMeasure) or NestedBooleans.
  *
  * @author Klaus Lyko
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class NestedBoolean extends CommandGene
         implements IMutateable, ICloneable {
@@ -41,7 +43,7 @@ public class NestedBoolean extends CommandGene
      *         Name of the boolean operator.
      * @param a_conf
      *         a_conf A JGAP GPconfiguration instance.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public NestedBoolean(String op, final GPConfiguration a_conf)
             throws InvalidConfigurationException {
@@ -59,9 +61,9 @@ public class NestedBoolean extends CommandGene
      *         Define the return type of this node.
      * @param mutable
      *         true means command(AND, OR, XOR) can mutate.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
-    public NestedBoolean(String op, final GPConfiguration a_conf, Class a_returnType, boolean mutable)
+    public NestedBoolean(String op, final GPConfiguration a_conf, Class<?> a_returnType, boolean mutable)
             throws InvalidConfigurationException {
         super(a_conf, 3, a_returnType, 1
                 //);
@@ -90,7 +92,7 @@ public class NestedBoolean extends CommandGene
      *         The number of the chromosome.
      * @return Class type of the child.
      */
-    public Class getChildType(IGPProgram a_ind, int a_chromNum) {
+    public Class<?> getChildType(IGPProgram a_ind, int a_chromNum) {
         //	logger.info("Get child from "+a_ind+" at "+a_chromNum);
         if (a_chromNum == 0)
             return String.class;

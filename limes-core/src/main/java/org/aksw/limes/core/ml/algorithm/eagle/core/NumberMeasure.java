@@ -20,6 +20,8 @@ import java.math.BigDecimal;
  * Class implements a command to compare
  *
  * @author Lyko
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class NumberMeasure extends CommandGene implements IMutateable, ICloneable {
     /**
@@ -41,9 +43,9 @@ public class NumberMeasure extends CommandGene implements IMutateable, ICloneabl
      *         Specifies the SubReturnType.
      * @param a_mutateable
      *         true: enables mutation.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
-    public NumberMeasure(final GPConfiguration a_conf, Class a_returnType,
+    public NumberMeasure(final GPConfiguration a_conf, Class<?> a_returnType,
                          int a_subReturnType, boolean a_mutateable) throws InvalidConfigurationException {
         super(a_conf, 2, a_returnType,
                 a_subReturnType,
@@ -64,10 +66,10 @@ public class NumberMeasure extends CommandGene implements IMutateable, ICloneabl
      *         The return type of this command.
      * @param a_mutateable
      *         true: enables mutation.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public NumberMeasure(final GPConfiguration a_conf,
-                         final Class a_returnType, boolean a_mutateable)
+                         final Class<?> a_returnType, boolean a_mutateable)
             throws InvalidConfigurationException {
         super(a_conf, 2, a_returnType, 1,
                 new int[]{
@@ -83,7 +85,7 @@ public class NumberMeasure extends CommandGene implements IMutateable, ICloneabl
      *
      * @param a_conf
      *         JGAP Configuration instance.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public NumberMeasure(final GPConfiguration a_conf)
             throws InvalidConfigurationException {
@@ -102,7 +104,7 @@ public class NumberMeasure extends CommandGene implements IMutateable, ICloneabl
         return "euclidean(&1)|&2";
     }
 
-    public Class getChildType(IGPProgram a_ind, int a_chromNum) {
+    public Class<?> getChildType(IGPProgram a_ind, int a_chromNum) {
         if (a_chromNum == 0)
             return PairSimilar.class;
         else

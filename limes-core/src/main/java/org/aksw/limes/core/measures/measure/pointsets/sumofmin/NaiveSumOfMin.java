@@ -29,11 +29,9 @@ public class NaiveSumOfMin extends PointsetsMeasure {
     }
 
     /**
-     * @param X
-     *            First polygon
-     * @param Y
-     *            Second polygon
-     * @param threshold
+     * @param X First polygon
+     * @param Y Second polygon
+     * @param threshold of the distance
      * @return sum of minimum distance between the X and Y
      */
     public static double distance(Polygon X, Polygon Y, double threshold) {
@@ -54,10 +52,8 @@ public class NaiveSumOfMin extends PointsetsMeasure {
     }
 
     /**
-     * @param X
-     *            First polygon
-     * @param Y
-     *            Second polygon
+     * @param X First polygon
+     * @param Y Second polygon
      * @return sum of minimum distance between the X and Y
      */
     private double SumOfMins(Polygon X, Polygon Y) {
@@ -69,10 +65,8 @@ public class NaiveSumOfMin extends PointsetsMeasure {
     }
 
     /**
-     * @param x
-     *            Point
-     * @param Y
-     *            Polygon
+     * @param x Point
+     * @param Y Polygon
      * @return the minimum distance between x and Y
      */
     private double computeMinDistance(Point x, Polygon Y) {

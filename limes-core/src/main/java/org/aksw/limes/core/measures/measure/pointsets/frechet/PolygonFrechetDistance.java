@@ -245,6 +245,7 @@ public class PolygonFrechetDistance {
     /**
      * Performs the standard binary search using two comparisons per level.
      *
+     * @param a array to carry out binary search in it 
      * @return index where item is found, or NOT_FOUND.
      */
     public int binarySearch(Double[] a) {
@@ -263,10 +264,6 @@ public class PolygonFrechetDistance {
         return mid;
     }
 
-    /**
-     * @param epsilon
-     * @return
-     */
     public boolean isFrechet(double epsilon) {
         if (epsilon == Double.POSITIVE_INFINITY || epsilon == Double.NEGATIVE_INFINITY)
             return false;

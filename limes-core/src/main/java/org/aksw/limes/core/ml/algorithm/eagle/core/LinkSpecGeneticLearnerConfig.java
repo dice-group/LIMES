@@ -14,6 +14,8 @@ import org.jgap.gp.impl.TournamentSelector;
  * Configure JGAP evolutionary process to be used by genetic link specification leaner.
  *
  * @author Klaus Lyko
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class LinkSpecGeneticLearnerConfig extends GPConfiguration {
     /**
@@ -36,7 +38,7 @@ public class LinkSpecGeneticLearnerConfig extends GPConfiguration {
      *         Specifies the target knowledge base.
      * @param propMapping
      *         A Mapping of Properties of both source and target.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public LinkSpecGeneticLearnerConfig(KBInfo KBIsource, KBInfo KBItarget, PropertyMapping propMapping) throws InvalidConfigurationException {
         super();

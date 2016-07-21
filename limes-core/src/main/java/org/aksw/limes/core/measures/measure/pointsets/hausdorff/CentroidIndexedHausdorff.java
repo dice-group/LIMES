@@ -12,6 +12,8 @@ import java.util.Set;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class CentroidIndexedHausdorff extends IndexedHausdorff {
 
@@ -27,8 +29,8 @@ public class CentroidIndexedHausdorff extends IndexedHausdorff {
     }
 
     /**
-     * @param source
-     * @param target
+     * @param source polygons
+     * @param target polygons
      */
     public void computeIndexes(Set<Polygon> source, Set<Polygon> target) {
         sourceIndex = new CentroidIndex();

@@ -14,10 +14,19 @@ import java.util.Vector;
  * CommandGene to evolve preprocessing of properties. This is planned to be
  * child of a String property.
  *
- * @author Lyko
+ * @author Klaus Lyko
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class StringPreprocessingCommand extends CommandGene implements IMutateable,
         ICloneable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 4353593664193207799L;
+    /**
+     * 
+     */
     public static List<String> functions = new Vector<String>();
     boolean is_mutable = false;
     String function = "lowercase";
@@ -38,7 +47,7 @@ public class StringPreprocessingCommand extends CommandGene implements IMutateab
      *         The preprocessing function, e.g. "lowercase"
      * @param subReturnType
      *         A sub return type to distinguish from other commands.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public StringPreprocessingCommand(final GPConfiguration a_config, String function,
                                       int subReturnType) throws InvalidConfigurationException {
@@ -55,8 +64,7 @@ public class StringPreprocessingCommand extends CommandGene implements IMutateab
      * @param subReturnType
      *         A sub return type to distinguish from other commands.
      * @param is_mutable
-     * @throws InvalidConfigurationException
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public StringPreprocessingCommand(final GPConfiguration a_config, String function,
                                       int subReturnType, boolean is_mutable) throws InvalidConfigurationException {
@@ -74,11 +82,10 @@ public class StringPreprocessingCommand extends CommandGene implements IMutateab
      *         The preprocessing function, e.g. "lowercase"
      * @param subReturnType
      *         A sub return type to distinguish from other commands.
-     * @param is_mutable
-     * @throws InvalidConfigurationException
-     * @throws InvalidConfigurationException
+     * @param is_mutable boolean
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
-    public StringPreprocessingCommand(final GPConfiguration a_config, Class a_returnType,
+    public StringPreprocessingCommand(final GPConfiguration a_config, Class<?> a_returnType,
                                       String function, int subReturnType, boolean is_mutable) throws InvalidConfigurationException {
         super(a_config, 0, a_returnType, subReturnType);
         if (functions.contains(function)) {

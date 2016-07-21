@@ -25,15 +25,17 @@ import java.math.BigDecimal;
  * AND make sure the ExpressionProblem.java is adjusted accordingly to add the measure and DatePropertyPair nodes.
  *
  * @author Klaus Lyko
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
-public class DateMeasure
-        extends CommandGene implements IMutateable, ICloneable {
+public class DateMeasure extends CommandGene implements IMutateable, ICloneable {
+
     private static final long serialVersionUID = 554024445307226859L;
     static Logger logger = LoggerFactory.getLogger("LIMES");
     // Holds the name of this similarity Measure.
     private String operationName = "datesim";
     // Set of all allowed similarity measures. Needed for mutation.
-//	private Set<String> allowedOperations = new HashSet<String>();
+    //	private Set<String> allowedOperations = new HashSet<String>();
     // per default not mutable
     private boolean m_mutateable;
 
@@ -50,17 +52,17 @@ public class DateMeasure
      *         Specifies the SubReturnType.
      * @param a_mutateable
      *         true: this Commandgene is mutateable, viz. the LIMES similarity measure might be changed to another one out of the allowed operations.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
-    public DateMeasure(String opName, final GPConfiguration a_conf, Class a_returnType,
-                       int a_subReturnType, boolean a_mutateable) throws InvalidConfigurationException {
+    public DateMeasure(String opName, final GPConfiguration a_conf, Class<?> a_returnType,
+            int a_subReturnType, boolean a_mutateable) throws InvalidConfigurationException {
         super(a_conf, 2, a_returnType,
                 a_subReturnType,
                 new int[]{
                         ResourceTerminalType.DATEPROPPAIR.intValue(),
                         ResourceTerminalType.THRESHOLD.intValue(),}
-        );
-//		fillOperationSet();
+                );
+        //		fillOperationSet();
         setOperationName(opName);
         m_mutateable = a_mutateable;
         setNoValidation(false);
@@ -79,17 +81,17 @@ public class DateMeasure
      * @param a_mutateable
      *         true: this Commandgene is mutateable, viz. the LIMES similarity measure might be changed
      *         to another one out of the allowed operations.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public DateMeasure(String opName, final GPConfiguration a_conf,
-                       final Class a_returnType, boolean a_mutateable)
-            throws InvalidConfigurationException {
+            final Class<?> a_returnType, boolean a_mutateable)
+                    throws InvalidConfigurationException {
         super(a_conf, 2, a_returnType, 1,
                 new int[]{
                         ResourceTerminalType.DATEPROPPAIR.intValue(),
                         ResourceTerminalType.THRESHOLD.intValue(),}
-        );
-//		fillOperationSet();
+                );
+        //		fillOperationSet();
         setOperationName(opName);
         m_mutateable = a_mutateable;
         setNoValidation(false);
@@ -103,7 +105,7 @@ public class DateMeasure
      *         name of the LIMES similarity measure operation (e.g. "trigram").
      * @param a_conf
      *         JGAP GPConfiguration.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public DateMeasure(String opName, final GPConfiguration a_conf)
             throws InvalidConfigurationException {
@@ -125,7 +127,7 @@ public class DateMeasure
      *         The number of the chromosome.
      * @return Class type of the child.
      */
-    public Class getChildType(IGPProgram a_ind, int a_chromNum) {
+    public Class <?>getChildType(IGPProgram a_ind, int a_chromNum) {
         if (a_chromNum == 0)
             return PairSimilar.class;
         else
@@ -149,7 +151,7 @@ public class DateMeasure
      */
     private void setOperationName(String opName) {
         operationName = opName;
-//		allowedOperations.add(opName);
+        //		allowedOperations.add(opName);
     }
 
     /**
@@ -197,15 +199,15 @@ public class DateMeasure
     /**
      * Mutates this CommandGene. A random command out of the set of allowed similarity measures is picked.
      *
-     * @return
-     * @throws InvalidConfigurationException
+     * @return A random command out of the set of the allowed similarity measures
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public CommandGene applyMutation() throws InvalidConfigurationException {
-//		String[] aO = {};
-//		aO=allowedOperations.toArray(aO);
-//		RandomGenerator randomGen = getGPConfiguration().getRandomGenerator();
-//		String newOp = aO[randomGen.nextInt(aO.length)];
-//		StringMeasure result = new StringMeasure(newOp, getGPConfiguration(), getReturnType(),  getSubReturnType(), m_mutateable);
+        //		String[] aO = {};
+        //		aO=allowedOperations.toArray(aO);
+        //		RandomGenerator randomGen = getGPConfiguration().getRandomGenerator();
+        //		String newOp = aO[randomGen.nextInt(aO.length)];
+        //		StringMeasure result = new StringMeasure(newOp, getGPConfiguration(), getReturnType(),  getSubReturnType(), m_mutateable);
         return this;
     }
 
@@ -228,7 +230,7 @@ public class DateMeasure
     public boolean isValid(ProgramChromosome a_program, int a_index) {
         Object[] o = new Object[0];
         LinkSpecGeneticLearnerConfig expConfig = (LinkSpecGeneticLearnerConfig) getGPConfiguration();
-        PairSimilar propPair = (PairSimilar) a_program.execute_object(a_index, 0, o);
+        PairSimilar<?> propPair = (PairSimilar<?>) a_program.execute_object(a_index, 0, o);
         return expConfig.getPropertyMapping().isMatch(propPair.a.toString(), propPair.b.toString());
     }
 

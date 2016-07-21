@@ -84,5 +84,4 @@ public class FairSurjectionFinder extends SurjectionFinder {
     public double getRuntimeApproximation(double mappingSize) {
         return mappingSize / 1000d;
     }
-
 }

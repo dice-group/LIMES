@@ -24,13 +24,15 @@ import java.util.Set;
  * They all build a expression like <i>similarityMeasure(resource1, resource2)|threshold</i>.
  * Whereas the threshold is ignored if the expression is atomic, i.e. the similarity measure
  * isn't part (argument) of another metric, such as <i>AND</i>).
- * We now expect atleast two parameters: 2 Terminals. Whereas the first is of sub return type
+ * We now expect at least two parameters: 2 Terminals. Whereas the first is of sub return type
  * ResourceTerminalType.SOURCE, the second of ResourceTerminalType.TARGET. This allows us to differentiate the
  * different resources of the two endpoints and avoid silly measures comparing the same resources of the same endpoint.
  * If mutation is turned on, the similarity command might be changed during the evolution process to one of
  * the allowed measures.
  *
  * @author Klaus Lyko
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class StringPreprocessMeasure
         extends CommandGene implements IMutateable, ICloneable {
@@ -60,10 +62,10 @@ public class StringPreprocessMeasure
      * @param a_mutateable
      *         true: this Commandgene is mutateable, viz. the LIMES similarity measure might be changed
      *         to another one out of the allowed operations.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public StringPreprocessMeasure(String opName, final GPConfiguration a_conf,
-                                   final Class a_returnType, boolean a_mutateable)
+                                   final Class<?> a_returnType, boolean a_mutateable)
             throws InvalidConfigurationException {
         super(a_conf, 4, a_returnType, 1,
                 new int[]{
@@ -92,9 +94,9 @@ public class StringPreprocessMeasure
      *         A GPProgram
      * @param a_chromNum
      *         The number of the chromosome.
-     * @return Class type of the child.
+     * @return type of the child.
      */
-    public Class getChildType(IGPProgram a_ind, int a_chromNum) {
+    public Class<?> getChildType(IGPProgram a_ind, int a_chromNum) {
         if (a_chromNum == 0)
             return PairSimilar.class;
         else if (a_chromNum == 2 || a_chromNum == 3)
@@ -181,8 +183,8 @@ public class StringPreprocessMeasure
     /**
      * Mutates this CommandGene. A random command out of the set of allowed similarity measures is picked.
      *
-     * @return
-     * @throws InvalidConfigurationException
+     * @return A random command out of the set of allowed similarity measures
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public CommandGene applyMutation() throws InvalidConfigurationException {
         String[] aO = {};
@@ -212,7 +214,7 @@ public class StringPreprocessMeasure
     public boolean isValid(ProgramChromosome a_program, int a_index) {
         Object[] o = new Object[0];
         LinkSpecGeneticLearnerConfig expConfig = (LinkSpecGeneticLearnerConfig) getGPConfiguration();
-        PairSimilar propPair = (PairSimilar) a_program.execute_object(a_index, 0, o);
+        PairSimilar<?> propPair = (PairSimilar<?>) a_program.execute_object(a_index, 0, o);
         return expConfig.getPropertyMapping().isMatch(propPair.a.toString(), propPair.b.toString());
     }
 

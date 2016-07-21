@@ -23,11 +23,8 @@ public class LinkFinder {
     /**
      * Constructor
      *
-     * @param X
-     *            Polygon
-     * @param Y
-     *            Polygon
-     * @author sherif
+     * @param X Polygon
+     * @param Y Polygon
      */
     public LinkFinder(Polygon X, Polygon Y) {
         linkPairsList = new ArrayList<PairSimilar<Point>>();
@@ -67,10 +64,8 @@ public class LinkFinder {
     }
 
     /**
-     * @param x
-     *            Point
-     * @param Y
-     *            Point
+     * @param x Point
+     * @param Y Point
      * @return Sorted nearest points
      */
     TreeMap<Double, Point> getSortedNearestPoints(Point x, Polygon Y) {
@@ -82,8 +77,8 @@ public class LinkFinder {
     }
 
     /**
-     * @param mappingSize
-     * @return
+     * @param mappingSize mapping size
+     * @return run time approximation
      */
     public double getRuntimeApproximation(double mappingSize) {
         return mappingSize / 1000d;

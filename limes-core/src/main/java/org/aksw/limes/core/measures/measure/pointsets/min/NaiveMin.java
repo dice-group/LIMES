@@ -32,7 +32,7 @@ public class NaiveMin extends PointsetsMeasure {
      *            First polygon
      * @param Y
      *            Second polygon
-     * @param threshold
+     * @param threshold of the distance
      * @return
      */
     public static double distance(Polygon X, Polygon Y, double threshold) {

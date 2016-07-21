@@ -19,6 +19,8 @@ import java.util.Set;
  * Class to chain several preprocessing commands.
  *
  * @author Klaus Lyko
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class ChainedPreprocessingCommand extends CommandGene implements IMutateable, ICloneable {
     private static final long serialVersionUID = 4070812489425199490L;
@@ -63,7 +65,7 @@ public class ChainedPreprocessingCommand extends CommandGene implements IMutatea
      * allowed preprocessing functions is picked.
      *
      * @return A new instance using this command.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public ChainedPreprocessingCommand applyMutation() throws InvalidConfigurationException {
         String[] aO = {};

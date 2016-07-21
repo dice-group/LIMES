@@ -8,12 +8,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.EvaluationRun;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
-import org.aksw.limes.core.io.mapping.AMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

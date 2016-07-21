@@ -21,8 +21,8 @@ public class GranularityModifier extends AbstractPolygonModifier {
      * is less than 1. If it larger than 1, then it is replaced by 1/threshold.
      * The reduction is carried out randomly by "flipping a coin".
      *
-     * @param p
-     * @param threshold
+     * @param p Polygon
+     * @param threshold of distance
      * @return polygon, the modified polygon
      */
     public Polygon modify(Polygon p, double threshold) {

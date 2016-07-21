@@ -25,6 +25,8 @@ import java.util.Map.Entry;
  * </p>
  *
  * @author Klaus Lyko
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class ALDecider {
 

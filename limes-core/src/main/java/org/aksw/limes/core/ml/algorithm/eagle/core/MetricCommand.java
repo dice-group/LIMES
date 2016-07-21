@@ -21,8 +21,10 @@ import org.jgap.util.ICloneable;
  * GP Command for a Link Specification. Either atomic or a complex
  * similarity measure. Either case, it is basically a chromosome expecting two children:
  * a metric (String) and a threshold (double).
+ * 
  * @author Klaus Lyko
- *
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class MetricCommand extends CommandGene
         implements IMutateable, ICloneable {
@@ -34,14 +36,14 @@ public class MetricCommand extends CommandGene
         this(config, LinkSpecification.class);
     }
 
-    public MetricCommand(final GPConfiguration config, Class returnType) throws InvalidConfigurationException {
+    public MetricCommand(final GPConfiguration config, Class<?> returnType) throws InvalidConfigurationException {
         super(config, 2, returnType,
                 88
                 , new int[]{1, ResourceTerminalType.GOBALTHRESHOLD.intValue()}
         );
     }
 
-    public Class getChildType(IGPProgram a_ind, int a_chromNum) {
+    public Class<?> getChildType(IGPProgram a_ind, int a_chromNum) {
         if (a_chromNum == 0)
             return String.class;
         else

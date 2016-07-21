@@ -12,21 +12,18 @@ import org.jgap.util.ICloneable;
 
 
 public class PointSetPropertyPair extends CommandGene implements IMutateable, ICloneable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -5721724318558268858L;
     final Logger logger = LoggerFactory.getLogger("LIMES");
     int pairIndex;
     PairSimilar<String> pair;
     boolean mutateable;
     LinkSpecGeneticLearnerConfig config;
 
-    /**
-     * @param a_conf
-     * @param a_returnType
-     * @param a_subReturnType
-     * @param a_mutateable
-     * @param propPairIndex
-     * @throws InvalidConfigurationException
-     */
-    public PointSetPropertyPair(final LinkSpecGeneticLearnerConfig a_conf, Class a_returnType,
+
+    public PointSetPropertyPair(final LinkSpecGeneticLearnerConfig a_conf, Class<?> a_returnType,
                                 int a_subReturnType, boolean a_mutateable, int propPairIndex) throws InvalidConfigurationException {
         super(a_conf, 0, a_returnType, a_subReturnType);
         mutateable = a_mutateable;
@@ -35,14 +32,8 @@ public class PointSetPropertyPair extends CommandGene implements IMutateable, IC
         pair = config.getPropertyMapping().pointsetPropPairs.get(pairIndex);
     }
 
-    /**
-     * @param a_conf
-     * @param a_returnType
-     * @param a_subReturnType
-     * @param propPairIndex
-     * @throws InvalidConfigurationException
-     */
-    public PointSetPropertyPair(final LinkSpecGeneticLearnerConfig a_conf, Class a_returnType,
+
+    public PointSetPropertyPair(final LinkSpecGeneticLearnerConfig a_conf, Class<?> a_returnType,
                                 int a_subReturnType, int propPairIndex) throws InvalidConfigurationException {
         this(a_conf, a_returnType, a_subReturnType, true, propPairIndex);
     }

@@ -30,9 +30,9 @@ public class Jaro extends StringMeasure {
      * returns a string buffer of characters from string1 within string2 if they
      * are of a given distance seperation from the position in string1.
      *
-     * @param string1
-     * @param string2
-     * @param distanceSep
+     * @param string1 String 
+     * @param string2 String
+     * @param distanceSep distance separator
      * @return a string buffer of characters from string1 within string2 if they
      *         are of a given distance seperation from the position in string1
      */

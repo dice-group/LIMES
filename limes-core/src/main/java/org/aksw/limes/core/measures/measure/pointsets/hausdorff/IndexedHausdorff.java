@@ -63,8 +63,7 @@ public class IndexedHausdorff extends PointsetsMeasure {
     }
 
     /**
-     * @param s
-     *            Polygon
+     * @param s Polygon
      * @return Inner distances of s
      */
     public Map<Point, Map<Point, Double>> getInnerDistances(Polygon s) {
@@ -79,12 +78,6 @@ public class IndexedHausdorff extends PointsetsMeasure {
         return distances;
     }
 
-    /**
-     * @param source
-     * @param target
-     * @param threshold
-     * @return
-     */
     public Map<String, Map<String, Double>> runWithoutIndex(Set<Polygon> source, Set<Polygon> target,
             double threshold) {
 

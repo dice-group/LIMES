@@ -45,9 +45,9 @@ public class RatcliffObershelpMeasure extends StringMeasure implements ITrieFilt
     /**
      * returns the score calculated by the algorithm
      *
-     * @param s1
-     * @param s2
-     * @return double
+     * @param s1 String
+     * @param s2 String
+     * @return double proximity
      */
     public double proximity(String s1, String s2) {
         score = 0;
@@ -64,8 +64,8 @@ public class RatcliffObershelpMeasure extends StringMeasure implements ITrieFilt
      * processes the ratcliff/obershelp-algorithm recursivcely. this method is
      * faster than the iterative option (ca. 5-10%).
      *
-     * @param s1
-     * @param s2
+     * @param s1 String
+     * @param s2 String
      */
     private void processRatcliffAlgorithm(String s1, String s2) {
 
@@ -90,9 +90,9 @@ public class RatcliffObershelpMeasure extends StringMeasure implements ITrieFilt
     /**
      * finds the largest common group of two strings.
      *
-     * @param s
-     * @param t
-     * @return String
+     * @param s String
+     * @param t String
+     * @return longest commen string
      */
     private String findLongestSubstring(String s, String t) {
 

@@ -11,9 +11,11 @@ import org.jgap.gp.impl.ProgramChromosome;
 import org.jgap.util.ICloneable;
 
 /**
- * Class to evolve properites as Pairs.
+ * Class to evolve properties as Pairs.
  *
- * @author Klaus
+ * @author Klaus Lyko
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class StringPropertyPair extends CommandGene implements IMutateable, ICloneable {
     /**
@@ -26,15 +28,7 @@ public class StringPropertyPair extends CommandGene implements IMutateable, IClo
     boolean mutateable;
     LinkSpecGeneticLearnerConfig config;
 
-    /**
-     * @param a_conf
-     * @param a_returnType
-     * @param a_subReturnType
-     * @param a_mutateable
-     * @param propPairIndex
-     * @throws InvalidConfigurationException
-     */
-    public StringPropertyPair(final LinkSpecGeneticLearnerConfig a_conf, Class a_returnType,
+    public StringPropertyPair(final LinkSpecGeneticLearnerConfig a_conf, Class<?> a_returnType,
                               int a_subReturnType, boolean a_mutateable, int propPairIndex) throws InvalidConfigurationException {
         super(a_conf, 0, a_returnType, a_subReturnType);
         mutateable = a_mutateable;
@@ -43,14 +37,7 @@ public class StringPropertyPair extends CommandGene implements IMutateable, IClo
         pair = config.getPropertyMapping().stringPropPairs.get(pairIndex);
     }
 
-    /**
-     * @param a_conf
-     * @param a_returnType
-     * @param a_subReturnType
-     * @param propPairIndex
-     * @throws InvalidConfigurationException
-     */
-    public StringPropertyPair(final LinkSpecGeneticLearnerConfig a_conf, Class a_returnType,
+    public StringPropertyPair(final LinkSpecGeneticLearnerConfig a_conf, Class<?> a_returnType,
                               int a_subReturnType, int propPairIndex) throws InvalidConfigurationException {
         this(a_conf, a_returnType, a_subReturnType, true, propPairIndex);
     }

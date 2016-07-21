@@ -19,6 +19,7 @@ public interface ISerializer {
      * Writes the whole results of a mapping to a file
      *
      * @param m  Mapping computed by an organizer
+     * @param predicate of the mapping
      * @param file Output file, where the results are to be written
      */
     public void writeToFile(AMapping m, String predicate, String file);
@@ -40,8 +41,9 @@ public interface ISerializer {
      *         The predicate of the triple
      * @param object
      *         The object of the triple
+     * @param confidence value
      */
-    public void printStatement(String subject, String predicate, String object, double similarity);
+    public void printStatement(String subject, String predicate, String object, double confidence);
 
     /**
      * Adds a triple to the buffer of the serializer. Requires the method open
@@ -50,9 +52,9 @@ public interface ISerializer {
      * @param subject The subject of the triple
      * @param predicate The predicate of the triple
      * @param object The object of the triple
-     * @param similarity value
+     * @param confidence value
      */
-    public void addStatement(String subject, String predicate, String object, double similarity);
+    public void addStatement(String subject, String predicate, String object, double confidence);
 
     /**
      * Closes the output file
@@ -83,8 +85,8 @@ public interface ISerializer {
     /**
      * Method to open the file with the specific name
      *
-     * @param fileName
-     * @return
+     * @param fileName string
+     * @return file instance
      */
     public File getFile(String fileName);
 

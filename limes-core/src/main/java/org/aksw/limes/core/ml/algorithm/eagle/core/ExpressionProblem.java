@@ -22,6 +22,9 @@ import java.util.List;
  * @author Klaus Lyko
  * @version 1.2
  * @since 1.2 Learning Preprocessing enhanced.
+ * 
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class ExpressionProblem extends GPProblem {
     public static CommandGene SUBPROGRAM;
@@ -31,8 +34,8 @@ public class ExpressionProblem extends GPProblem {
     /**
      * Basic constructor for the EAGLE approaches. Dissables Preprocessing learning.
      *
-     * @param a_conf
-     * @throws InvalidConfigurationException
+     * @param a_conf GPConfiguration
+     * @throws InvalidConfigurationException new Measures and other CommandGenes to also learn Preprocessing
      */
     public ExpressionProblem(GPConfiguration a_conf)
             throws InvalidConfigurationException {
@@ -44,7 +47,7 @@ public class ExpressionProblem extends GPProblem {
      *
      * @param a_conf
      * @param learnPreprocessing
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public ExpressionProblem(GPConfiguration a_conf, boolean learnPreprocessing)
             throws InvalidConfigurationException {
@@ -58,8 +61,8 @@ public class ExpressionProblem extends GPProblem {
         LinkSpecGeneticLearnerConfig config = (LinkSpecGeneticLearnerConfig) getGPConfiguration();
         //	ExpressionApplicationData applData = new ExpressionApplicationData("PublicationData.xml");
         // a program has two chromosomes: first an expression, second a acceptance threshold
-        Class[] types = {LinkSpecification.class};
-        Class[][] argTypes = {{
+        Class<?>[] types = {LinkSpecification.class};
+        Class<?>[][] argTypes = {{
         }
         };
         SUBPROGRAM = new SubProgram(config, new Class[]{String.class, String.class, CommandGene.DoubleClass}, true);
@@ -95,9 +98,9 @@ public class ExpressionProblem extends GPProblem {
      * Constructs CommandGene setup for the basic EAGLE approach, i. e. without
      * Learning Preprocessing.
      *
-     * @param config
-     * @return
-     * @throws InvalidConfigurationException
+     * @param config LinkSpecGeneticLearnerConfig
+     * @return CommandGene setup for the basic EAGLE approach
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     private List<CommandGene> getNormalSetup(LinkSpecGeneticLearnerConfig config) throws InvalidConfigurationException {
         List<CommandGene> nodes = getBasicNodes(config);
@@ -108,9 +111,9 @@ public class ExpressionProblem extends GPProblem {
     /**
      * Constructs CommandGene setup for the enhanced EAGLE approach to also learn preprocessing steps.
      *
-     * @param config
-     * @return
-     * @throws InvalidConfigurationException
+     * @param config LinkSpecGeneticLearnerConfig
+     * @return CommandGene setup for the enhanced EAGLE approach to also learn preprocessing steps
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     private List<CommandGene> getPreprocessingLearningSetup(LinkSpecGeneticLearnerConfig config) throws InvalidConfigurationException {
         List<CommandGene> nodes = getBasicNodes(config);
@@ -121,9 +124,9 @@ public class ExpressionProblem extends GPProblem {
     /**
      * Method creates Basic List of Nodes for evolving only Link Specifications.
      *
-     * @param config
-     * @return List<CommandGene>
-     * @throws InvalidConfigurationException
+     * @param config LinkSpecGeneticLearnerConfig
+     * @return Basic List of Nodes for evolving only Link Specifications
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     private List<CommandGene> getBasicNodes(LinkSpecGeneticLearnerConfig config) throws InvalidConfigurationException {
         SUBPROGRAM = new SubProgram(config, new Class[]{String.class, String.class, CommandGene.DoubleClass}, true);
@@ -196,9 +199,9 @@ public class ExpressionProblem extends GPProblem {
     /**
      * Constructs normal String Measures without preprocessing children.
      *
-     * @param config
-     * @return
-     * @throws InvalidConfigurationException
+     * @param config LinkSpecGeneticLearnerConfig
+     * @return normal String Measures without preprocessing children
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     private List<CommandGene> getStringMeasures(LinkSpecGeneticLearnerConfig config) throws InvalidConfigurationException {
         List<CommandGene> nodes = new LinkedList<CommandGene>();
@@ -215,9 +218,9 @@ public class ExpressionProblem extends GPProblem {
     /**
      * Returns new Measures and other CommandGenes to also learn Preprocessing.
      *
-     * @param config
-     * @return
-     * @throws InvalidConfigurationException
+     * @param config LinkSpecGeneticLearnerConfig
+     * @return new Measures and other CommandGenes to also learn Preprocessing
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     private List<CommandGene> getPreprocessingMeasures(LinkSpecGeneticLearnerConfig config) throws InvalidConfigurationException {
         List<CommandGene> nodes = new LinkedList<CommandGene>();

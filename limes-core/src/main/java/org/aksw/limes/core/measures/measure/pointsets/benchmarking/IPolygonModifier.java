@@ -31,7 +31,7 @@ public interface IPolygonModifier {
      *
      * @param polygon to be modified
      * @param threshold of modification
-     * @return modified polygon, 
+     * @return modified polygon
      */
     Polygon modify(Polygon polygon, double threshold);
 

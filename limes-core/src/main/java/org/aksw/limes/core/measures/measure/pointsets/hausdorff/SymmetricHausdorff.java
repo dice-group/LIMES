@@ -8,6 +8,8 @@ import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class SymmetricHausdorff extends NaiveHausdorff {
 

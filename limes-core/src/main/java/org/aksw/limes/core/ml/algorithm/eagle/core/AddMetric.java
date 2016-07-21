@@ -21,6 +21,8 @@ import java.math.BigDecimal;
  * So LIMES recalculates the thresholds: threshold1 = (threshold - coef2) / coef1;
  *
  * @author Klaus Lyko
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
  */
 public class AddMetric extends CommandGene
         implements IMutateable, ICloneable {
@@ -36,7 +38,7 @@ public class AddMetric extends CommandGene
      *
      * @param config
      *         A GPConfiguration
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public AddMetric(final GPConfiguration config)
             throws InvalidConfigurationException {
@@ -50,9 +52,9 @@ public class AddMetric extends CommandGene
      *         A GPConfiguration
      * @param a_returnType
      *         Class this CommandGene returns on executing.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
-    public AddMetric(final GPConfiguration config, Class a_returnType, boolean mutateable)
+    public AddMetric(final GPConfiguration config, Class<?> a_returnType, boolean mutateable)
             throws InvalidConfigurationException {
         super(config, 4, a_returnType, 8, // 8 = subReturnType
                 new int[]{1, ResourceTerminalType.THRESHOLD.intValue(),
@@ -88,7 +90,7 @@ public class AddMetric extends CommandGene
      *         The number of the chromosome.
      * @return Class type of the child.
      */
-    public Class getChildType(IGPProgram a_ind, int a_chromNum) {
+    public Class<?> getChildType(IGPProgram a_ind, int a_chromNum) {
         if (a_chromNum == 0 || a_chromNum == 2)
             return String.class;
         else
@@ -138,7 +140,7 @@ public class AddMetric extends CommandGene
 
     /**
      * @return CommandGene
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public CommandGene applyMutation() throws InvalidConfigurationException {
     	// TODO implement

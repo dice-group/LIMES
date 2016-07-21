@@ -65,7 +65,7 @@ public class AtomicPreprocessingCommand extends CommandGene
      * allowed preprocessing functions is picked.
      *
      * @return A new instance using this command.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public CommandGene applyMutation() throws InvalidConfigurationException {
         String[] aO = {};

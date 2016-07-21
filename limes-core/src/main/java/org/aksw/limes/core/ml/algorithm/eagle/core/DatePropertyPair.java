@@ -10,6 +10,11 @@ import org.jgap.gp.IMutateable;
 import org.jgap.gp.impl.ProgramChromosome;
 import org.jgap.util.ICloneable;
 
+/**
+ * @author Klaus Lyko
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
+ */
 public class DatePropertyPair extends CommandGene implements IMutateable, ICloneable {
     /**
      *
@@ -21,15 +26,8 @@ public class DatePropertyPair extends CommandGene implements IMutateable, IClone
     boolean mutateable = false;
     LinkSpecGeneticLearnerConfig config;
 
-    /**
-     * @param a_conf
-     * @param a_returnType
-     * @param a_subReturnType
-     * @param a_mutateable
-     * @param propPairIndex
-     * @throws InvalidConfigurationException
-     */
-    public DatePropertyPair(final LinkSpecGeneticLearnerConfig a_conf, Class a_returnType,
+
+    public DatePropertyPair(final LinkSpecGeneticLearnerConfig a_conf, Class<?> a_returnType,
                             int a_subReturnType, boolean a_mutateable, int propPairIndex) throws InvalidConfigurationException {
         super(a_conf, 0, a_returnType, a_subReturnType);
         mutateable = a_mutateable;
@@ -38,14 +36,8 @@ public class DatePropertyPair extends CommandGene implements IMutateable, IClone
         pair = config.getPropertyMapping().datePropPairs.get(pairIndex);
     }
 
-    /**
-     * @param a_conf
-     * @param a_returnType
-     * @param a_subReturnType
-     * @param propPairIndex
-     * @throws InvalidConfigurationException
-     */
-    public DatePropertyPair(final LinkSpecGeneticLearnerConfig a_conf, Class a_returnType,
+
+    public DatePropertyPair(final LinkSpecGeneticLearnerConfig a_conf, Class<?> a_returnType,
                             int a_subReturnType, int propPairIndex) throws InvalidConfigurationException {
         this(a_conf, a_returnType, a_subReturnType, true, propPairIndex);
     }

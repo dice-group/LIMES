@@ -30,11 +30,9 @@ public class NaiveMax extends PointsetsMeasure {
     }
 
     /**
-     * @param X
-     *            Polygon
-     * @param Y
-     *            Polygon
-     * @param threshold
+     * @param X Polygon
+     * @param Y Polygon
+     * @param threshold of the distance
      * @return Max distance between X and Y
      */
     public static double distance(Polygon X, Polygon Y, double threshold) {

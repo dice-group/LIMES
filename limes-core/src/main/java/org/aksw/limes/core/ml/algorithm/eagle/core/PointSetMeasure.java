@@ -19,12 +19,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+/**
+ * @author Klaus Lyko
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Jul 21, 2016
+ */
 public class PointSetMeasure extends CommandGene implements IMutateable, ICloneable {
     /**
      *
      */
     private static final long serialVersionUID = -4901752495126327127L;
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger(PointSetMeasure.class);
+    
     // Holds the name of this similarity Measure.
     private String operationName = "sim";
     // Set of all allowed similarity measures. Needed for mutation.
@@ -50,9 +56,9 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
      *         true: this Commandgene is mutateable, viz. the LIMES
      *         similarity measure might be changed to another one out of the
      *         allowed operations.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException  when an invalid value has been passed to a Configuration object
      */
-    public PointSetMeasure(String opName, final GPConfiguration a_conf, Class a_returnType, int a_subReturnType,
+    public PointSetMeasure(String opName, final GPConfiguration a_conf, Class<?> a_returnType, int a_subReturnType,
                            boolean a_mutateable) throws InvalidConfigurationException {
         super(a_conf, 2, a_returnType, a_subReturnType,
                 new int[]{ResourceTerminalType.POINTSETPROPPAIR.intValue(),
@@ -80,9 +86,9 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
      *         true: this Commandgene is mutateable, viz. the LIMES
      *         similarity measure might be changed to another one out of the
      *         allowed operations.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException  when an invalid value has been passed to a Configuration object
      */
-    public PointSetMeasure(String opName, final GPConfiguration a_conf, final Class a_returnType, boolean a_mutateable)
+    public PointSetMeasure(String opName, final GPConfiguration a_conf, final Class<?> a_returnType, boolean a_mutateable)
             throws InvalidConfigurationException {
         super(a_conf, 2, a_returnType, 1, new int[]{ResourceTerminalType.STRINGPROPPAIR.intValue(),
                 ResourceTerminalType.THRESHOLD.intValue(),});
@@ -102,7 +108,7 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
      *         "trigram").
      * @param a_conf
      *         JGAP GPConfiguration.
-     * @throws InvalidConfigurationException
+     * @throws InvalidConfigurationException  when an invalid value has been passed to a Configuration object
      */
     public PointSetMeasure(String opName, final GPConfiguration a_conf) throws InvalidConfigurationException {
         this(opName, a_conf, String.class, false);
@@ -124,7 +130,7 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
      *         The number of the chromosome.
      * @return Class type of the child.
      */
-    public Class getChildType(IGPProgram a_ind, int a_chromNum) {
+    public Class<?> getChildType(IGPProgram a_ind, int a_chromNum) {
         if (a_chromNum == 0)
             return PairSimilar.class;
             // else if (a_chromNum == 1)
@@ -209,8 +215,8 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
      * Mutates this CommandGene. A random command out of the set of allowed
      * similarity measures is picked.
      *
-     * @return
-     * @throws InvalidConfigurationException
+     * @return A random command out of the set of allowed similarity measures
+     * @throws InvalidConfigurationException  when an invalid value has been passed to a Configuration object
      */
     public CommandGene applyMutation() throws InvalidConfigurationException {
         String[] aO = {};
@@ -242,7 +248,7 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
     public boolean isValid(ProgramChromosome a_program, int a_index) {
         Object[] o = new Object[0];
         LinkSpecGeneticLearnerConfig expConfig = (LinkSpecGeneticLearnerConfig) getGPConfiguration();
-        PairSimilar propPair = (PairSimilar) a_program.execute_object(a_index, 0, o);
+        PairSimilar<?> propPair = (PairSimilar<?>) a_program.execute_object(a_index, 0, o);
         return expConfig.getPropertyMapping().isMatch(propPair.a.toString(), propPair.b.toString());
     }
 

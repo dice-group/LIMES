@@ -63,8 +63,7 @@ public class JaroWinkler extends StringMeasure implements ITrieFilterableStringM
     /**
      * Is character not numeric?
      *
-     * @param c
-     *            character
+     * @param c character
      * @return true if not numeric, false otherwise
      */
     private boolean notNum(char c) {
@@ -85,7 +84,7 @@ public class JaroWinkler extends StringMeasure implements ITrieFilterableStringM
     /**
      * Clone method for parallel execution
      *
-     * @return
+     * @return clone
      */
     public JaroWinkler clone() {
         return new JaroWinkler(uppercase, longStrings, simOn);
@@ -95,6 +94,8 @@ public class JaroWinkler extends StringMeasure implements ITrieFilterableStringM
      * Calculate the proximity of two input strings if proximity is assured to
      * be over given threshold threshold.
      *
+     * @param yin
+     *            string to align on
      * @param yang
      *            string to align on
      * @return similarity score (proximity)
