@@ -34,6 +34,12 @@ import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
 
+/**
+ * This class uses decision trees and an active learning approach to learn link specifications
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     static Logger logger = Logger.getLogger("LIMES");
@@ -46,9 +52,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     private J48 tree;
     private Configuration configuration;
     private HashSet<SourceTargetValue> previouslyPresentedCandidates;
-    // TODO delete this
-    public double lowest = 1.0;
-    public double highest = 0.0;
 
     // Parameters
     public static final String PARAMETER_TRAINING_DATA_SIZE = "training data size";
@@ -89,11 +92,18 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     public static final double threshold = 0.01;
 
+    /**
+     * Constructor uses superconstructor and initializes TreeParser object
+     */
     public DecisionTreeLearning() {
 	super();
 	this.tp = new TreeParser(this);
     }
 
+    /**
+     * Constructor uses superconstructor, initializes TreeParser object and sets configuration
+     * @param c
+     */
     public DecisionTreeLearning(Configuration c) {
 	super();
 	this.configuration = c;
@@ -101,7 +111,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     }
 
     /**
-     * Generates training set out of config if there is a linkspec
+     * Generates training set out of config if there is a linkspec, else returns a random mapping
      * 
      * @return mapping of executed linkspec
      */
@@ -122,6 +132,12 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	return mapping;
     }
 
+    /**
+     * Creates {@link Instances}, with attributes but does not fill them with values 
+     * Attributes are of the form: measure delimiter propertyA | propertyB (without spaces)
+     * @param mapping will be used to create attributes
+     * @return trainingInstances
+     */
     private Instances createEmptyTrainingInstances(AMapping mapping) {
 	ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 	for (PairSimilar<String> propPair : propertyMapping.stringPropPairs) {
@@ -153,6 +169,12 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	return trainingInstances;
     }
 
+    /**
+     * Helper class for easier handling of links or link candidates
+     * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+     *         studserv.uni-leipzig.de{@literal >}
+     *
+     */
     public class SourceTargetValue {
 	String sourceUri;
 	String targetUri;
@@ -225,12 +247,21 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	return "Decision Tree Learning";
     }
 
+    /**
+     * generates an initial training set and calls {@link #activeLearn(AMapping)}
+     */
     @Override
     protected MLResults activeLearn() throws UnsupportedMLImplementationException {
 	AMapping trainingData = generateTrainingSet();
 	return activeLearn(trainingData);
     }
 
+    /**
+     * Creates a training set out of the oracleMapping and uses {@link J48} to build a decision tree
+     * The decision tree gets parsed to a {@link LinkSpecification} by {@link TreeParser}
+     * @param oracleMapping 
+     * @return res wrapper containing learned link specification
+     */
     @Override
     protected MLResults activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
 	//These are the instances labeled by the so we keep them to not present the same pairs twice
@@ -258,6 +289,10 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	return res;
     }
     
+    /**
+     * Takes the options and puts them into a String[] so it can be used as options in {@link J48}
+     * @return array with options
+     */
     private String[] getOptionsArray(){
 	ArrayList<String> tmpOptions = new ArrayList<>();
 	if(unprunedTree){
@@ -300,6 +335,11 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	return tmpOptions.toArray(options);
     }
 
+    /**
+     * calls {@link TreeParser#parseTreePrefix(String)} to parse a {@link LinkSpecification} from a {@link J48} tree
+     * @param tree
+     * @return
+     */
     private LinkSpecification treeToLinkSpec(J48 tree) {
 	LinkSpecification ls = new LinkSpecification();
 	try {
@@ -385,9 +425,16 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	}
 	return getLSwithoutDelta(ls, false);
     }
-    private LinkSpecification getLSwithoutDelta(LinkSpecification ls, boolean parentIsMinus){
+
+    /**
+     * Reverts the delta shifting of the thresholds in the measures
+     * @param ls LinkSpec to be cleaned of the delta shift
+     * @param parentIsMinus true if measure is minus
+     * @return cleaned LinkSpec
+     */
+    private LinkSpecification getLSwithoutDelta(LinkSpecification ls, boolean measureIsMinus){
 	if(ls.isAtomic()){
-	    if(!parentIsMinus){
+	    if(!measureIsMinus){
 		if(ls.getThreshold() != 0){
 		ls.setThreshold((BigDecimal.valueOf(ls.getThreshold()).subtract(BigDecimal.valueOf(TreeParser.delta))).doubleValue()); //have to use BigDecimal because of floating numbers magic
 		}
@@ -412,6 +459,13 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	return ls;
     }
     
+    /**
+     * Returns a "random" mapping
+     * In reality it just takes the first instances of source and target until we have reached the trainingDataSize
+     * @param sC sourceCache
+     * @param tC targetCache
+     * @return random Mapping
+     */
     private AMapping getRandomMapping(Cache sC, Cache tC) {
 	AMapping m = MappingFactory.createDefaultMapping();
 	logger.info("Get random initial training data.");
@@ -526,8 +580,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     @Override
     protected MLResults learn(PseudoFMeasure pfm) throws UnsupportedMLImplementationException {
-	// TODO Auto-generated method stub
-	return null;
+        throw new UnsupportedMLImplementationException(this.getName());
     }
 
     @Override
@@ -535,6 +588,10 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	return mlType == MLImplementationType.SUPERVISED_ACTIVE;
     }
 
+    /**
+     * Executes the {@link #deltaLS} and calculates the compound measure for each instance pair in the resulting mapping
+     * compound measure is sum of |measure(s,t) - threshold of used measure|^2
+     */
     @Override
     protected AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
 	DynamicPlanner dp = new DynamicPlanner(this.sourceCache, this.targetCache);
@@ -545,7 +602,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	deltaMapping.getMap().forEach(
 		(sourceURI, map2) -> {
 		    map2.forEach((targetURI, value) -> {
-			//compound measure is sum of |measure(s,t) - threshold of used measure|^2
 			double compoundMeasureValue = 0;
 			for (Map.Entry<String, Double> entry : TreeParser.measuresUsed.entrySet()) {
 			    compoundMeasureValue += Math.pow(Math.abs(MeasureProcessor.getSimilarity(sourceCache.getInstance(sourceURI), targetCache.getInstance(targetURI),
@@ -570,8 +626,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     @Override
     protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
-	// TODO Auto-generated method stub
-	return null;
+        throw new UnsupportedMLImplementationException(this.getName());
     }
 
     public PropertyMapping getPropertyMapping() {

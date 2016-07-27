@@ -7,6 +7,14 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.util.ParenthesisMatcher;
 import org.apache.log4j.Logger;
 
+import weka.classifiers.trees.J48;
+
+/**
+ * class to parse a {@link J48} tree to a {@link LinkSpecification}
+ * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+ *         studserv.uni-leipzig.de{@literal >}
+ *
+ */
 public class TreeParser {
 
 	static Logger logger = Logger.getLogger(TreeParser.class);
@@ -15,6 +23,10 @@ public class TreeParser {
 	public static final String classPositive = "positive";
 	public static final String classNegative = "negative";
 	
+	/**
+	 * Since the most informative links are the ones near the boundary, where the instance pairs are being classified as links or not, we need to shift the
+	 * threshold of the measure so we can also get the instance pairs that are almost classified as links
+	 */
 	public static final double delta = 0.1;
 	/**
 	 * The measures which are used in this LinkSpecification. The Double value is without delta
@@ -23,10 +35,17 @@ public class TreeParser {
 
 	private DecisionTreeLearning dtl;
 	
+	/**
+	 * Constructor
+	 */
 	public TreeParser(){
 	    
 	}
 
+	/**
+	 * Constructor
+	 * @param dtl corresponding DecisionTreeLearning
+	 */
 	public TreeParser(DecisionTreeLearning dtl) {
 	    this.dtl = dtl;
 	}
@@ -83,6 +102,12 @@ public class TreeParser {
 		return ls;
 	}
 
+	/**
+	 * connect the root and child via AND operator
+	 * @param root root LS
+	 * @param child child LS
+	 * @return connected LinkSpecification
+	 */
 	private LinkSpecification addRootLSToChild(LinkSpecification root,
 			LinkSpecification child) {
 	    //Does not make sense to connect the same LS with AND
@@ -130,6 +155,11 @@ public class TreeParser {
 		return null;
 	}
 
+	/**
+	 * parses an atomic tree to a LinkSpcification
+	 * @param tree to be parsed
+	 * @return parsed LinkSpecification
+	 */
 	private LinkSpecification parseAtomicTree(String tree) {
 	    	//TODO figure out if this is the correct solution
 	    	if(tree.startsWith("positive ")){ 
@@ -170,6 +200,12 @@ public class TreeParser {
 		return ls;
 	}
 
+	/**
+	 * Handles the negation of a measure by using the MINUS operator
+	 * @param metricExpression metric
+	 * @param threshold threshold
+	 * @return resulting LinkSpecification
+	 */
 	private LinkSpecification createLessThanLinkSpec(String metricExpression,
 			String threshold) {
 		Double threshClean = Math.min(1, Double.parseDouble(threshold.substring(3)) + delta);
@@ -218,36 +254,16 @@ public class TreeParser {
 		return res;
 	}
 
+	/**
+	 * if the tree contains more than one delimiter it is not atomic
+	 * @param tree to be checked
+	 * @return true if atomic false else
+	 */
 	private boolean treeIsAtomic(String tree) {
-		// if the tree contains more than one delimiter it is not atomic
 		if (tree.length() - tree.replace(delimiter, "").length() > 1) {
 			return false;
 		}
 		return true;
-	}
-
-	public static void main(String[] args) {
-		TreeParser tp = new TreeParser();
-		LinkSpecification ls;
-		// ls =
-		// tp.parseAtomicTree("jaccard#title|name: <= 0.857143,\n > 0.857143[positive (1528.0/8.0)][negative (108.0)]");
-		// ls =
-		// tp.parseTreePrefix("trigrams#title|name: <= 0.888889,\n > 0.888889[cosine#manufacturer|manufacturer: <= 0.5, \n > 0.5[positive (3.0/1.0)][negative (3.0)]][jaccard#title|name: <= 0.606977, \n > 0.606977[negative (3.0/1.0)][positive (2.0)]]");
-		// System.out.println(tp.getPositiveThreshold("<= 0.888889,\n > 0.888889[negative (1468.0/8.0)][positive (168.0)]"));
-		// System.out.println(tp.parseTreePrefix("[jaccard#title|name: <= 0.857143,\n > 0.857143[positive (1528.0/8.0)][negative (108.0)]]").toString());
-		ls = tp.parseTreePrefix("trigrams#title|name: <= 0.888889, \n > 0.888889[jaccard#description|description: <= 0.487179, \n > 0.487179[exactmatch#manufacturer|manufacturer: <= 0, \n > 0[jaccard#title|name: <= 0.230769, \n > 0.230769[jaro#manufacturer|manufacturer: <= 0, \n > 0[negative (26.0)][cosine#manufacturer|manufacturer: <= 0.5, \n > 0.5[positive (3.0/1.0)][negative (3.0)]]][negative (1369.0/1.0)]][negative (42.0/1.0)]][cosine#manufacturer|manufacturer: <= 0.288675, \n > 0.288675[negative (20.0/1.0)][cosine#title|name: <= 0.606977, \n > 0.606977[negative (3.0/1.0)][positive (2.0)]]]][positive (168.0)]");
-		// System.out.println("trigrams#title|name: <= 0.888889, \n > 0.888889[jaccard#description|description: <= 0.487179, \n > 0.487179[exactmatch#manufacturer|manufacturer: <= 0, \n > 0[jaccard#title|name: <= 0.230769, \n > 0.230769[jaro#manufacturer|manufacturer: <= 0, \n > 0[negative (26.0)][cosine#manufacturer|manufacturer: <= 0.5, \n > 0.5[positive (3.0/1.0)][negative (3.0)]]][negative (1369.0/1.0)]][negative (42.0/1.0)]][cosine#manufacturer|manufacturer: <= 0.288675, \n > 0.288675[negative (20.0/1.0)][cosine#title|name: <= 0.606977, \n > 0.606977[negative (3.0/1.0)][positive (2.0)]]]][positive (168.0)]".substring(46,
-		// 560));
-		// LinkSpecification ls2 = new
-		// LinkSpecification("AND(trigrams(x.name, y.name)|0.5,jaccard(x.title,y.title)|0.4)",
-		// 0.7);
-		// LinkSpecification ls1 = new
-		// LinkSpecification("cosine(x.name, y.name)", 0.7);
-		// LinkSpecification ls3 = new LinkSpecification("AND(" +
-		// ls1.getFullExpression() + "|" + ls1.getThreshold() + "," +
-		// ls2.getFullExpression() + "|" + ls2.getThreshold() + ")", 0.0);
-		// System.out.println(ls3.toStringOneLine());
-		System.out.println(ls.toStringOneLine());
 	}
 
 }
