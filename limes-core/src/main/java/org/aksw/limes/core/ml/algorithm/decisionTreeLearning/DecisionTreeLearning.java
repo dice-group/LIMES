@@ -1,21 +1,16 @@
 package org.aksw.limes.core.ml.algorithm.decisionTreeLearning;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeSet;
 
-import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.PairSimilar;
-import org.aksw.limes.core.datastrutures.TaskData;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
-import org.aksw.limes.core.evaluation.evaluator.Evaluator;
-import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
@@ -27,8 +22,6 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.oldalgorithm.MLModel;
@@ -42,8 +35,6 @@ import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
 
-import com.google.common.collect.Table;
-
 public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     static Logger logger = Logger.getLogger("LIMES");
@@ -51,6 +42,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     private Instances trainingSet;
     private MLModel mlresult;
     private LinkSpecification defaultLS = new LinkSpecification();
+    private LinkSpecification deltaLS;
     private TreeParser tp;
     private J48 tree;
     private Configuration configuration;
@@ -161,6 +153,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	String sourceUri;
 	String targetUri;
 	double value;
+	Double compoundMeasureValue = Double.MAX_VALUE;
 
 	public SourceTargetValue(String s, String t, double v) {
 	    sourceUri = s;
@@ -168,9 +161,16 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    value = v;
 	}
 
+	public SourceTargetValue(String s, String t, double v, Double cmv) {
+	    sourceUri = s;
+	    targetUri = t;
+	    value = v;
+	    compoundMeasureValue = cmv;
+	}
+
 	@Override
 	public String toString() {
-	    return sourceUri + " -> " + targetUri + " : " + value;
+	    return sourceUri + " -> " + targetUri + " : " + value + "     | compound measure value: " + compoundMeasureValue;
 	}
     }
 
@@ -231,19 +231,18 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     protected MLModel activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
 	this.trainingSet = createEmptyTrainingInstances(oracleMapping);
 	fillInstances(trainingSet, oracleMapping, true);
-	LinkSpecification ls = new LinkSpecification();
 	String[] options = getOptionsArray();
 	tree = new J48(); 
 	try {
 	    tree.setOptions(options);
 	    tree.buildClassifier(trainingSet);
-	    ls = treeToLinkSpec(tree);
+	    deltaLS = treeToLinkSpec(tree);
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 	MLModel res = new MLModel();
-	res.setLinkSpecification(ls);
+	res.setLinkSpecification(this.getLSwithoutDelta(deltaLS));
 	this.mlresult = res;
 	return res;
     }
@@ -294,7 +293,9 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	LinkSpecification ls = new LinkSpecification();
 	try {
 	    String treeString = tree.prefix().substring(1, ParenthesisMatcher.findMatchingParenthesis(tree.prefix(), 0));
+	    TreeParser.measuresUsed.clear();
 	    ls = tp.parseTreePrefix(treeString);
+	    System.out.println("Threshold: " + ls.getThreshold());
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
@@ -364,7 +365,41 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    }
 	}
     }
-
+    
+    
+    private LinkSpecification getLSwithoutDelta(LinkSpecification ls){
+	if(ls.getMeasure().startsWith("MINUS")){
+	    return getLSwithoutDelta(ls, true);
+	}
+	return getLSwithoutDelta(ls, false);
+    }
+    private LinkSpecification getLSwithoutDelta(LinkSpecification ls, boolean parentIsMinus){
+	if(ls.isAtomic()){
+	    if(!parentIsMinus){
+		if(ls.getThreshold() != 0){
+		ls.setThreshold((BigDecimal.valueOf(ls.getThreshold()).subtract(BigDecimal.valueOf(TreeParser.delta))).doubleValue()); //have to use BigDecimal because of floating numbers magic
+		}
+		return ls;
+	    }else{
+		ls.setThreshold((BigDecimal.valueOf(ls.getThreshold()).add(BigDecimal.valueOf(TreeParser.delta))).doubleValue());
+		return ls;
+	    }
+	}
+	ArrayList<LinkSpecification>newChildren = new ArrayList<LinkSpecification>();
+	if(ls.getMeasure().startsWith("MINUS")){
+	    for(LinkSpecification l : ls.getChildren()){
+		newChildren.add(getLSwithoutDelta(l, true));
+	    }
+	    ls.setChildren(newChildren);
+	}else{
+	    for(LinkSpecification l : ls.getChildren()){
+		newChildren.add(getLSwithoutDelta(l, false));
+	    }
+	    ls.setChildren(newChildren);
+	}
+	return ls;
+    }
+    
     private AMapping getRandomMapping(Cache sC, Cache tC) {
 	AMapping m = MappingFactory.createDefaultMapping();
 	logger.info("Get random initial training data.");
@@ -383,7 +418,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     private void classifyUnlabeled(HashMap<Instance, SourceTargetValue> instMap) {
 	Iterator<Entry<Instance, SourceTargetValue>> it = instMap.entrySet().iterator();
 	while (it.hasNext()) {
-	    Map.Entry<Instance, SourceTargetValue> pair = (Map.Entry) it.next();
+	    Map.Entry<Instance, SourceTargetValue> pair = it.next();
 	    double clsLabel = 0.0;
 	    try {
 		clsLabel = tree.classifyInstance(pair.getKey());
@@ -397,44 +432,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     }
 
     public static void main(String[] args) {
-	// String configFile =
-	// "/home/ohdorno/Dokumente/Arbeit/LIMES/Examples/GeneticEval/Amazon-GoogleProducts.xml";
-	// XMLConfigurationReader reader = new XMLConfigurationReader();
-	// Configuration config = reader.read(configFile);
-	// config.getSourceInfo()
-	// .setEndpoint(config.getSourceInfo().getEndpoint());
-	// config.getTargetInfo()
-	// .setEndpoint(config.getTargetInfo().getEndpoint());
-	//
-	// Cache sC = HybridCache.getData(config.getSourceInfo());
-	//
-	// HybridCache tC = HybridCache.getData(config.getTargetInfo());
-	//
-	// DecisionTreeLearning dtl = new DecisionTreeLearning(sC, tC, config);
-	//
-	// ActiveLearningSetting setting = new ActiveLearningSetting(dtl);
-	// PropertyMapping propMap = new PropertyMapping();
-	// propMap.addStringPropertyMatch("title", "name");
-	// propMap.addStringPropertyMatch("description", "description");
-	// propMap.addStringPropertyMatch("manufacturer", "manufacturer");
-	// propMap.addNumberPropertyMatch("price", "price");
-	// setting.setPropMap(propMap);
-	// dtl.propertyMapping = propMap;
-	//
-	// Mapping mapping = dtl.generateTrainingSet();
-	// try {
-	// dtl.init(setting, mapping);
-	// System.out.println("learning...");
-	// dtl.learn(mapping);
-	// } catch (Exception e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// String res = "";
-	// for (DataSets d : DataSetChooser.DataSets.values()) {
-	// if (!d.toString().equals("RESTAURANTS_FIXED") &&
-	// !d.toString().startsWith("OAEI")) {
-	// String datasetName = d.toString();
 	String datasetName = DataSetChooser.DataSets.AMAZONGOOGLEPRODUCTS.toString();
 	EvaluationData evalData = DataSetChooser.getData(datasetName);
 	Configuration config = evalData.getConfigReader().read();
@@ -455,79 +452,59 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	try {
+	    dtl.getNextExamples(10);
+	} catch (UnsupportedMLImplementationException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	System.out.println();
 	System.out.println(model.getLinkSpecification().toString());
-	System.out.println("predicting....");
-	AMapping mapping = dtl.predict(evalData.getSourceCache(), evalData.getTargetCache(), model);
-	// System.out.println("printin...");
-	mapping.getMap().forEach((sourceURI, map2) -> {
-	    map2.forEach((targetURI, value) -> {
-		// System.out.println(sourceURI + " -> " + targetURI + " :" +
-		// value);
-		if (value < dtl.lowest) {
-		    dtl.lowest = value;
-		}
-		if (value > dtl.highest) {
-		    dtl.highest = value;
-		}
-	    });
-	});
-	System.out.println("lowest: " + dtl.lowest + " highest: " + dtl.highest);
+//	System.out.println("\n measures used: \n");
+//	Iterator it = TreeParser.measuresUsed.entrySet().iterator();
+//	    while (it.hasNext()) {
+//	        Map.Entry pair = (Map.Entry)it.next();
+//	        System.out.println(pair.getKey() + " = " + pair.getValue());
+//	        it.remove(); // avoids a ConcurrentModificationException
+//	    }
+//	System.out.println();
+//	System.out.println("predicting....");
+//	AMapping mapping = dtl.predict(evalData.getSourceCache(), evalData.getTargetCache(), model);
+//	// System.out.println("printin...");
+//	mapping.getMap().forEach((sourceURI, map2) -> {
+//	    map2.forEach((targetURI, value) -> {
+//		// System.out.println(sourceURI + " -> " + targetURI + " :" +
+//		// value);
+//		if (value < dtl.lowest) {
+//		    dtl.lowest = value;
+//		}
+//		if (value > dtl.highest) {
+//		    dtl.highest = value;
+//		}
+//	    });
+//	});
+//	System.out.println("lowest: " + dtl.lowest + " highest: " + dtl.highest);
 
-	// AMapping randomMapping =
-	// dtl.getRandomMapping(evalData.getSourceCache(),
-	// evalData.getTargetCache());
-	// Instances unlabeled =
-	// dtl.createEmptyTrainingInstances(randomMapping);
-	// HashMap<Instance, SourceTargetValue> instMap =
-	// dtl.fillInstances(unlabeled, randomMapping, false);
-	// dtl.classifyUnlabeled(instMap);
-	// Iterator<Entry<Instance, SourceTargetValue>> it =
-	// instMap.entrySet().iterator();
-	// while (it.hasNext()) {
-	// Map.Entry<Instance, SourceTargetValue> pair = (Map.Entry)it.next();
-	// System.out.println(pair.getKey().classAttribute().value((int)pair.getKey().classValue())
-	// + " = " + pair.getValue());
-	// it.remove(); // avoids a ConcurrentModificationException
-	// }
-
-	// Evaluator evaluator = new Evaluator();
-	// String datasetName =
-	// DataSetChooser.DataSets.AMAZONGOOGLEPRODUCTS.toString();
-	// EvaluationData evalData = DataSetChooser.getData(datasetName);
-	// Set<TaskData> tasks = new TreeSet<TaskData>();
-	// TaskData task = new TaskData();
-	// GoldStandard gs = new GoldStandard(evalData.getReferenceMapping());
-	// task = new TaskData(gs, evalData.getSourceCache(),
-	// evalData.getTargetCache());
-	// task.dataName = datasetName;
-	// tasks.add(task);
-	//
-	// Set<EvaluatorType> evaluators=new TreeSet<EvaluatorType>();
-	//
-	// evaluators.add(EvaluatorType.PRECISION);
-	// evaluators.add(EvaluatorType.RECALL);
-	// evaluators.add(EvaluatorType.F_MEASURE);
-	// evaluators.add(EvaluatorType.P_PRECISION);
-	// evaluators.add(EvaluatorType.P_RECALL);
-	// evaluators.add(EvaluatorType.PF_MEASURE);
-	// evaluators.add(EvaluatorType.ACCURACY);
-	//
-	// Configuration config = evalData.getConfigReader().read();
-	// AMLAlgorithm algo = null;
-	// try {
-	// algo =
-	// MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-	// MLImplementationType.SUPERVISED_ACTIVE);
-	// } catch (UnsupportedMLImplementationException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// ((DecisionTreeLearning)algo.getMl()).setPropertyMapping(evalData.getPropertyMapping());
-	// ((DecisionTreeLearning)algo.getMl()).setConfiguration(config);
-	// Table<String, String, Map<EvaluatorType, Double>> results =
-	// evaluator.crossValidate(algo, tasks,10, evaluators, null);
-	// System.out.println(results.toString());
+//	LinkSpecification ls1 = new LinkSpecification("MINUS(jaccard(x.title,y.title)|0.9,cosine(x.title,y.title)|0.4)",0.0);
+//	System.out.println(dtl.getLSwithoutDelta(ls1, false));
+//	DynamicPlanner dp = new DynamicPlanner(evalData.getSourceCache(), evalData.getTargetCache());
+//	SimpleExecutionEngine ee = new SimpleExecutionEngine(evalData.getSourceCache(), evalData.getTargetCache(), config.getSourceInfo().getVar(), config
+//		.getTargetInfo().getVar());
+//	AMapping mapping = ee.execute(ls1, dp);
+//	System.out.println("ls1: " + mapping.getNumberofMappings());
+//	mapping.getMap().forEach((sourceURI, map2) -> {
+//	    map2.forEach((targetURI, value) -> {
+//		// System.out.println(sourceURI + " -> " + targetURI + " :" +
+//		// value);
+//		if (value < dtl.lowest) {
+//		    dtl.lowest = value;
+//		}
+//		if (value > dtl.highest) {
+//		    dtl.highest = value;
+//		}
+//	    });
+//	});
+//	System.out.println("lowest: " + dtl.lowest + " highest: " + dtl.highest);
 
     }
 
@@ -564,8 +541,38 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     @Override
     protected AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
-	// TODO Auto-generated method stub
-	return null;
+	DynamicPlanner dp = new DynamicPlanner(this.sourceCache, this.targetCache);
+	SimpleExecutionEngine ee = new SimpleExecutionEngine(this.sourceCache, this.targetCache, this.configuration.getSourceInfo().getVar(), this.configuration
+		.getTargetInfo().getVar());
+	AMapping deltaMapping = ee.execute(deltaLS, dp);
+	ArrayList<SourceTargetValue> tmpCandidateList = new ArrayList<SourceTargetValue>();
+	deltaMapping.getMap().forEach(
+		(sourceURI, map2) -> {
+		    map2.forEach((targetURI, value) -> {
+			//compound measure is sum of |measure(s,t) - threshold of used measure|^2
+			double compoundMeasureValue = 0;
+			for (Map.Entry<String, Double> entry : TreeParser.measuresUsed.entrySet()) {
+			    compoundMeasureValue += Math.pow(Math.abs(MeasureProcessor.getSimilarity(sourceCache.getInstance(sourceURI), targetCache.getInstance(targetURI),
+					entry.getKey(), threshold, "?x", "?y") - entry.getValue()),2);
+			}
+			tmpCandidateList.add(new SourceTargetValue(sourceURI, targetURI, value, compoundMeasureValue));
+		    });
+		});
+	tmpCandidateList.sort((s1,s2) -> s1.compoundMeasureValue.compareTo(s2.compoundMeasureValue));
+	
+	//TODO delete this
+	System.out.println("tmpCandidateList:");
+	for(SourceTargetValue s: tmpCandidateList){
+	    System.out.println(s.toString());
+	}
+	System.out.println("\n monstInformativeLinkCandidates: ");
+	AMapping mostInformativeLinkCandidates = MappingFactory.createDefaultMapping();
+	for(int i = 0; i < size; i++){
+	    SourceTargetValue candidate = tmpCandidateList.get(i);
+	    System.out.println(candidate.toString());
+	    mostInformativeLinkCandidates.add(candidate.sourceUri, candidate.targetUri, candidate.value);
+	}
+	return mostInformativeLinkCandidates;
     }
 
     @Override

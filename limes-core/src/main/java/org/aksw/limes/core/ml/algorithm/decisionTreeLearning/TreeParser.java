@@ -1,5 +1,6 @@
 package org.aksw.limes.core.ml.algorithm.decisionTreeLearning;
 
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -13,6 +14,12 @@ public class TreeParser {
 	public static final String delimiter = "§";
 	public static final String classPositive = "positive";
 	public static final String classNegative = "negative";
+	
+	public static final double delta = 0.1;
+	/**
+	 * The measures which are used in this LinkSpecification. The Double value is without delta
+	 */
+	public static HashMap<String, Double> measuresUsed = new HashMap<String, Double>();
 
 	private DecisionTreeLearning dtl;
 	
@@ -142,9 +149,21 @@ public class TreeParser {
 				+ propertyB + ")";
 		String threshold = getPositiveThreshold(tree.substring(
 				tree.indexOf("<"), tree.length()));
+		
+		//add to measures hash map
+		double thresholdDouble = Double.valueOf(threshold.replace(">", "").replace("<=", ""));
+		if(measuresUsed.get(metricExpression)!= null){
+		    if(measuresUsed.get(metricExpression) > thresholdDouble){
+			measuresUsed.put(metricExpression, thresholdDouble);
+		    }
+		}else{
+		    measuresUsed.put(metricExpression, thresholdDouble);
+		}
+		
+		
 		if (threshold.startsWith(">")) {
 			ls = new LinkSpecification(metricExpression,
-					Double.parseDouble(threshold.substring(2)));
+					Math.max(0, Double.parseDouble(threshold.substring(2)) - delta));
 		} else {
 			ls = createLessThanLinkSpec(metricExpression, threshold);
 		}
@@ -153,10 +172,10 @@ public class TreeParser {
 
 	private LinkSpecification createLessThanLinkSpec(String metricExpression,
 			String threshold) {
-		String threshClean = threshold.substring(3);
+		Double threshClean = Math.min(1, Double.parseDouble(threshold.substring(3)) + delta);
 		if (threshClean.equals("0.0"))
 			return new LinkSpecification(metricExpression,
-					Double.parseDouble(threshClean));
+					threshClean);
 
 		return new LinkSpecification("MINUS(" + metricExpression + "|0.0,"
 				+ metricExpression + "|" + threshClean + ")", 0.0);
