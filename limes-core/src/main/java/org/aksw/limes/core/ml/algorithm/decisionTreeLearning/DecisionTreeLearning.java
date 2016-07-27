@@ -3,10 +3,9 @@ package org.aksw.limes.core.ml.algorithm.decisionTreeLearning;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
@@ -46,6 +45,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     private TreeParser tp;
     private J48 tree;
     private Configuration configuration;
+    private HashSet<SourceTargetValue> previouslyPresentedCandidates;
     // TODO delete this
     public double lowest = 1.0;
     public double highest = 0.0;
@@ -107,12 +107,16 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      */
     public AMapping generateTrainingSet() {
 	AMapping mapping = MappingFactory.createDefaultMapping();
-	if (this.configuration.getMetricExpression() != null && !this.configuration.getMetricExpression().isEmpty()) {
-	    defaultLS.readSpec(this.configuration.getMetricExpression(), this.configuration.getAcceptanceThreshold());
-	    DynamicPlanner dp = new DynamicPlanner(sourceCache, targetCache);
-	    SimpleExecutionEngine ee = new SimpleExecutionEngine(sourceCache, targetCache, this.configuration.getSourceInfo().getVar(), this.configuration
-		    .getTargetInfo().getVar());
-	    mapping = ee.execute(defaultLS, dp);
+	if(this.configuration != null){
+	    if (this.configuration.getMetricExpression() != null && !this.configuration.getMetricExpression().isEmpty()) {
+                defaultLS.readSpec(this.configuration.getMetricExpression(), this.configuration.getAcceptanceThreshold());
+                DynamicPlanner dp = new DynamicPlanner(sourceCache, targetCache);
+                SimpleExecutionEngine ee = new SimpleExecutionEngine(sourceCache, targetCache, this.configuration.getSourceInfo().getVar(), this.configuration
+                    .getTargetInfo().getVar());
+                mapping = ee.execute(defaultLS, dp);
+            }
+	}else{
+	    mapping = getRandomMapping(sourceCache, targetCache);
 	}
 	// TODO implement fallback solution
 	return mapping;
@@ -229,6 +233,13 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     @Override
     protected MLModel activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
+	//These are the instances labeled by the so we keep them to not present the same pairs twice
+	oracleMapping.getMap().forEach(
+		(sourceURI, map2) -> {
+		    map2.forEach((targetURI, value) -> {
+			previouslyPresentedCandidates.add(new SourceTargetValue(sourceURI, targetURI, value));
+		    });
+		});
 	this.trainingSet = createEmptyTrainingInstances(oracleMapping);
 	fillInstances(trainingSet, oracleMapping, true);
 	String[] options = getOptionsArray();
@@ -315,6 +326,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     @Override
     public void init(List<LearningParameter> lp, Cache sourceCache, Cache targetCache) {
 	super.init(lp, sourceCache, targetCache);
+	previouslyPresentedCandidates = new HashSet<SourceTargetValue>();
 	if(lp == null){
 	    setDefaultParameters();
 	}else{
@@ -413,22 +425,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    }
 	}
 	return m;
-    }
-
-    private void classifyUnlabeled(HashMap<Instance, SourceTargetValue> instMap) {
-	Iterator<Entry<Instance, SourceTargetValue>> it = instMap.entrySet().iterator();
-	while (it.hasNext()) {
-	    Map.Entry<Instance, SourceTargetValue> pair = it.next();
-	    double clsLabel = 0.0;
-	    try {
-		clsLabel = tree.classifyInstance(pair.getKey());
-	    } catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	    pair.getKey().setClassValue(clsLabel);
-	    it.remove(); // avoids a ConcurrentModificationException
-	}
     }
 
     public static void main(String[] args) {
@@ -555,21 +551,18 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 			    compoundMeasureValue += Math.pow(Math.abs(MeasureProcessor.getSimilarity(sourceCache.getInstance(sourceURI), targetCache.getInstance(targetURI),
 					entry.getKey(), threshold, "?x", "?y") - entry.getValue()),2);
 			}
-			tmpCandidateList.add(new SourceTargetValue(sourceURI, targetURI, value, compoundMeasureValue));
+			SourceTargetValue candidate = new SourceTargetValue(sourceURI, targetURI, value, compoundMeasureValue);
+			if(!previouslyPresentedCandidates.contains(candidate)){
+			    tmpCandidateList.add(candidate);
+			}
 		    });
 		});
 	tmpCandidateList.sort((s1,s2) -> s1.compoundMeasureValue.compareTo(s2.compoundMeasureValue));
 	
 	//TODO delete this
-	System.out.println("tmpCandidateList:");
-	for(SourceTargetValue s: tmpCandidateList){
-	    System.out.println(s.toString());
-	}
-	System.out.println("\n monstInformativeLinkCandidates: ");
 	AMapping mostInformativeLinkCandidates = MappingFactory.createDefaultMapping();
 	for(int i = 0; i < size; i++){
 	    SourceTargetValue candidate = tmpCandidateList.get(i);
-	    System.out.println(candidate.toString());
 	    mostInformativeLinkCandidates.add(candidate.sourceUri, candidate.targetUri, candidate.value);
 	}
 	return mostInformativeLinkCandidates;
