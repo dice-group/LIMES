@@ -6,17 +6,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.EvaluationRun;
-import org.aksw.limes.core.datastrutures.TaskAlgorithm;
-import org.aksw.limes.core.datastrutures.TaskData;
-import org.aksw.limes.core.evaluation.AlgorithmsInitTest;
-import org.aksw.limes.core.evaluation.DatasetsInitTest;
-import org.aksw.limes.core.evaluation.EvaluatorsInitTest;
-import org.aksw.limes.core.evaluation.evaluator.Evaluator;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
-import org.aspectj.lang.annotation.Before;
 import org.junit.Test;
 
 public class EvaluationSerializerTest {
