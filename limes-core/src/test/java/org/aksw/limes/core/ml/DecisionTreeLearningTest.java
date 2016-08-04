@@ -28,6 +28,7 @@ public class DecisionTreeLearningTest {
     Cache tc = new MemoryCache();
 
     AMapping trainingMap, refMap;
+    PropertyMapping pm;
 
     @Before
     public void init() {
@@ -52,7 +53,7 @@ public class DecisionTreeLearningTest {
         tc.addInstance(i2);
         tc.addInstance(i3);
 
-        PropertyMapping pm = new PropertyMapping();
+        pm = new PropertyMapping();
         pm.addStringPropertyMatch("name", "name");
         pm.addStringPropertyMatch("surname", "surname");
 
@@ -74,6 +75,7 @@ public class DecisionTreeLearningTest {
             e.printStackTrace();
             fail();
         }
+        ((DecisionTreeLearning)dtl.getMl()).setPropertyMapping(pm);
         assert (dtl.getClass().equals(ActiveMLAlgorithm.class));
         dtl.init(null, sc, tc);
         dtl.activeLearn();
