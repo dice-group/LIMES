@@ -48,6 +48,6 @@ public class ContainsMapper extends Mapper implements ITopologicRelationMapper {
 
     @Override
     public String getName() {
-        return "contains";
+        return "top_contains";
     }
 }

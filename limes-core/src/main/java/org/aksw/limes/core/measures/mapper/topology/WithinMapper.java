@@ -48,6 +48,6 @@ public class WithinMapper extends Mapper implements ITopologicRelationMapper {
 
     @Override
     public String getName() {
-        return "within";
+        return "top_within";
     }
 }

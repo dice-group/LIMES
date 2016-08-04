@@ -48,6 +48,6 @@ public class CrossesMapper extends Mapper implements ITopologicRelationMapper {
 
     @Override
     public String getName() {
-        return "crosses";
+        return "top_crosses";
     }
 }

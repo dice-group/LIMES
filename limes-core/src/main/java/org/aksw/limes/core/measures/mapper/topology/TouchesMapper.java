@@ -48,6 +48,6 @@ public class TouchesMapper extends Mapper implements ITopologicRelationMapper {
 
     @Override
     public String getName() {
-        return "touches";
+        return "top_touches";
     }
 }

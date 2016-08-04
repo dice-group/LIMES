@@ -48,6 +48,6 @@ public class DisjointMapper extends Mapper implements ITopologicRelationMapper {
 
     @Override
     public String getName() {
-        return "disjoint";
+        return "top_disjoint";
     }
 }

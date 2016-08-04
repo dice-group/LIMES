@@ -48,6 +48,6 @@ public class IntersectsMapper extends Mapper implements ITopologicRelationMapper
 
     @Override
     public String getName() {
-        return "intersects";
+        return "top_intersects";
     }
 }

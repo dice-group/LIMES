@@ -48,6 +48,6 @@ public class OverlapsMapper extends Mapper implements ITopologicRelationMapper {
 
     @Override
     public String getName() {
-        return "overlaps";
+        return "top_overlaps";
     }
 }
