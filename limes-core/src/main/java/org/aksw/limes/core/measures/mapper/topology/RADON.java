@@ -3,9 +3,13 @@ package org.aksw.limes.core.measures.mapper.topology;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.io.WKTReader;
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
+import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -306,6 +310,38 @@ public class RADON {
 
     private static final Logger logger = LoggerFactory.getLogger(RADON.class);
 
+    public static Map<String, Geometry> getGeometryMapFromCache(Cache c, String property) {
+        WKTReader wktReader = new WKTReader();
+        Map<String, Geometry> gMap = new HashMap<>();
+        for (String uri : c.getAllUris()) {
+            Set<String> values = c.getInstance(uri).getProperty(property);
+            if (values.size() > 0) {
+                String wkt = values.iterator().next();
+                try {
+                    gMap.put(uri, wktReader.read(wkt));
+                } catch (ParseException e) {
+                    logger.warn("Skipping malformed geometry at " + uri + "...");
+                }
+            }
+        }
+        return gMap;
+    }
+
+    public static AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression, double threshold, String relation) {
+        try {
+            if (threshold <= 0) {
+                throw new InvalidThresholdException(threshold);
+            }
+        } catch (InvalidThresholdException e) {
+            System.err.println("Exiting..");
+            System.exit(1);
+        }
+        List<String> properties = PropertyFetcher.getProperties(expression, threshold);
+        Map<String, Geometry> sourceMap = getGeometryMapFromCache(source, properties.get(0));
+        Map<String, Geometry> targetMap = getGeometryMapFromCache(target, properties.get(1));
+        return getMapping(sourceMap, targetMap, relation);
+    }
+
     public static AMapping getMapping(Set<Polygon> sourceData, Set<Polygon> targetData, String relation) {
         Map<String, Geometry> source, target;
         source = new HashMap<>();
@@ -373,7 +409,7 @@ public class RADON {
         AMapping m = MappingFactory.createDefaultMapping();
         List<Map<String, Set<String>>> results = Collections.synchronizedList(new ArrayList<>());
         Map<String, Set<String>> computed = new HashMap<>();
-        Matcher matcher = new Matcher(relation, results);
+        Matcher matcher = new Matcher(rel, results);
 
         for (Integer lat : sourceIndex.map.keySet()) {
             for (Integer lon : sourceIndex.map.get(lat).keySet()) {
@@ -402,7 +438,7 @@ public class RADON {
                                         matcher.schedule(a, b);
                                         if (matcher.size() == Matcher.maxSize) {
                                             matchExec.execute(matcher);
-                                            matcher = new Matcher(relation, results);
+                                            matcher = new Matcher(rel, results);
                                             if (results.size() > 0) {
                                                 mergerExec.execute(new Merger(results, m));
                                             }
@@ -448,8 +484,14 @@ public class RADON {
             AMapping disjoint = MappingFactory.createDefaultMapping();
             for (String s : sourceData.keySet()) {
                 for (String t : targetData.keySet()) {
-                    if (!m.contains(s, t)) {
-                        disjoint.add(s, t, 1.0d);
+                    if (swapped) {
+                        if (!m.contains(t, s)) {
+                            disjoint.add(t, s, 1.0d);
+                        }
+                    } else {
+                        if (!m.contains(s, t)) {
+                            disjoint.add(s, t, 1.0d);
+                        }
                     }
                 }
             }
