@@ -409,7 +409,7 @@ public class RADON {
         AMapping m = MappingFactory.createDefaultMapping();
         List<Map<String, Set<String>>> results = Collections.synchronizedList(new ArrayList<>());
         Map<String, Set<String>> computed = new HashMap<>();
-        Matcher matcher = new Matcher(relation, results);
+        Matcher matcher = new Matcher(rel, results);
 
         for (Integer lat : sourceIndex.map.keySet()) {
             for (Integer lon : sourceIndex.map.get(lat).keySet()) {
@@ -438,7 +438,7 @@ public class RADON {
                                         matcher.schedule(a, b);
                                         if (matcher.size() == Matcher.maxSize) {
                                             matchExec.execute(matcher);
-                                            matcher = new Matcher(relation, results);
+                                            matcher = new Matcher(rel, results);
                                             if (results.size() > 0) {
                                                 mergerExec.execute(new Merger(results, m));
                                             }
@@ -484,8 +484,14 @@ public class RADON {
             AMapping disjoint = MappingFactory.createDefaultMapping();
             for (String s : sourceData.keySet()) {
                 for (String t : targetData.keySet()) {
-                    if (!m.contains(s, t)) {
-                        disjoint.add(s, t, 1.0d);
+                    if (swapped) {
+                        if (!m.contains(t, s)) {
+                            disjoint.add(t, s, 1.0d);
+                        }
+                    } else {
+                        if (!m.contains(s, t)) {
+                            disjoint.add(s, t, 1.0d);
+                        }
                     }
                 }
             }
