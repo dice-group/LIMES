@@ -45,6 +45,7 @@ import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.StartsMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
+import org.aksw.limes.core.measures.measure.topology.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +56,7 @@ import org.slf4j.LoggerFactory;
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * 
+ *
  * @version 1.0
  */
 public class MeasureFactory {
@@ -113,11 +114,19 @@ public class MeasureFactory {
     public static final String TMP_OVERLAPS = "tmp_overlaps";
     public static final String TMP_IS_OVERLAPPED_BY = "tmp_isoverlappedby";
     public static final String TMP_EQUALS = "tmp_equals";
-
+    // Topological measures
+    public static final String TOP_EQUALS = "top_equals";
+    public static final String TOP_DISJOINT = "top_disjoint";
+    public static final String TOP_INTERSECTS = "top_intersects";
+    public static final String TOP_OVERLAPS = "top_overlaps";
+    public static final String TOP_CROSSES = "top_crosses";
+    public static final String TOP_CONTAINS = "top_contains";
+    public static final String TOP_WITHIN = "top_within";
+    public static final String TOP_TOUCHES = "top_touches";
     /**
      * Factory function for retrieving a measure name from the set of allowed
      * types.
-     * 
+     *
      * @param expression,
      *            The name/type of the measure.
      * @return a specific measure type
@@ -273,122 +282,163 @@ public class MeasureFactory {
         }
         if (measure.startsWith(TMP_STARTS)) {
             return MeasureType.TMP_STARTS;
+        }
+        if (measure.startsWith(TOP_INTERSECTS)) {
+            return MeasureType.TOP_INTERSECTS;
+        }
+        if (measure.startsWith(TOP_CONTAINS)) {
+            return MeasureType.TOP_CONTAINS;
+        }
+        if (measure.startsWith(TOP_WITHIN)) {
+            return MeasureType.TOP_WITHIN;
+        }
+        if (measure.startsWith(TOP_TOUCHES)) {
+            return MeasureType.TOP_TOUCHES;
+        }
+        if (measure.startsWith(TOP_EQUALS)) {
+            return MeasureType.TOP_EQUALS;
+        }
+        if (measure.startsWith(TOP_DISJOINT)) {
+            return MeasureType.TOP_DISJOINT;
+        }
+        if (measure.startsWith(TOP_CROSSES)) {
+            return MeasureType.TOP_CROSSES;
+        }
+        if (measure.startsWith(TOP_OVERLAPS)) {
+            return MeasureType.TOP_OVERLAPS;
         } else
             throw new InvalidMeasureException(measure);
     }
 
     /**
      * Factory function for retrieving the desired measure instance.
-     * 
+     *
      * @param type,
      *            Type of the measure
-     * 
+     *
      * @return a specific measure instance
      * @exception InvalidMeasureException
      *                if the measure type is invalid
-     * 
+     *
      */
     public static Measure createMeasure(MeasureType type) throws InvalidMeasureException {
 
         switch (type) {
-        case JAROWINKLER:
-            return new JaroWinkler();
-        case JARO:
-            return new Jaro();
-        case QGRAMS:
-            return new QGramSimilarity();
-        case COSINE:
-            return new CosineMeasure();
-        case LEVENSHTEIN:
-            return new Levenshtein();
-        case OVERLAP:
-            return new TrigramMeasure();
-        case TRIGRAMS:
-            return new TrigramMeasure();
-        case JACCARD:
-            return new JaccardMeasure();
-        case EXACTMATCH:
-            return new ExactMatch();
-        case SOUNDEX:
-            return new SoundexMeasure();
-        case MONGEELKAN:
-            return new MongeElkanMeasure();
-        case RATCLIFF:
-            return new RatcliffObershelpMeasure();
-        ///////////////////////
-        case EUCLIDEAN:
-            return new EuclideanMetric();
-        ///////////////////////
-        case GEO_ORTHODROMIC:
-            return new GeoDistance();
-        case GEO_HAUSDORFF:
-            return new NaiveHausdorff();
-        case GEO_NAIVE_HAUSDORFF:
-            return new NaiveHausdorff();
-        case GEO_INDEXED_HAUSDORFF:
-            return new IndexedHausdorff();
-        case GEO_FAST_HAUSDORFF:
-            return new FastHausdorff();
-        case GEO_SYMMETRIC_HAUSDORFF:
-            return new SymmetricHausdorff();
-        case GEO_CENTROID_INDEXED_HAUSDORFF:
-            return new CentroidIndexedHausdorff();
-        case GEO_SCAN_INDEXED_HAUSDORFF:
-            return new ScanIndexedHausdorff();
-        ///////////////////////
-        case GEO_MAX:
-            return new NaiveMax();
-        case GEO_MEAN:
-            return new NaiveMean();
-        case GEO_MIN:
-            return new NaiveMin();
-        case GEO_AVG:
-            return new NaiveAverage();
-        case GEO_FRECHET:
-            return new NaiveFrechet();
-        case GEO_LINK:
-            return new NaiveLink();
-        case GEO_SUM_OF_MIN:
-            return new NaiveSumOfMin();
-        case GEO_SURJECTION:
-            return new NaiveSurjection();
-        case GEO_FAIR_SURJECTION:
-            return new FairSurjection();
-        ///////////////////////
-        case TMP_SUCCESSOR:
-            return new SuccessorMeasure();
-        case TMP_PREDECESSOR:
-            return new PredecessorMeasure();
-        case TMP_CONCURRENT:
-            return new ConcurrentMeasure();
-        case TMP_AFTER:
-            return new AfterMeasure();
-        case TMP_BEFORE:
-            return new BeforeMeasure();
-        case TMP_MEETS:
-            return new MeetsMeasure();
-        case TMP_IS_MET_BY:
-            return new IsMetByMeasure();
-        case TMP_FINISHES:
-            return new FinishesMeasure();
-        case TMP_IS_FINISHED_BY:
-            return new IsFinishedByMeasure();
-        case TMP_STARTS:
-            return new StartsMeasure();
-        case TMP_IS_STARTED_BY:
-            return new IsStartedByMeasure();
-        case TMP_DURING:
-            return new DuringMeasure();
-        case TMP_DURING_REVERSE:
-            return new DuringReverseMeasure();
-        case TMP_OVERLAPS:
-            return new OverlapsMeasure();
-        case TMP_IS_OVERLAPPED_BY:
-            return new IsOverlappedByMeasure();
-        case TMP_EQUALS:
-            return new EqualsMeasure();
-        default:
-            throw new InvalidMeasureException(type.toString());
+            case JAROWINKLER:
+                return new JaroWinkler();
+            case JARO:
+                return new Jaro();
+            case QGRAMS:
+                return new QGramSimilarity();
+            case COSINE:
+                return new CosineMeasure();
+            case LEVENSHTEIN:
+                return new Levenshtein();
+            case OVERLAP:
+                return new TrigramMeasure();
+            case TRIGRAMS:
+                return new TrigramMeasure();
+            case JACCARD:
+                return new JaccardMeasure();
+            case EXACTMATCH:
+                return new ExactMatch();
+            case SOUNDEX:
+                return new SoundexMeasure();
+            case MONGEELKAN:
+                return new MongeElkanMeasure();
+            case RATCLIFF:
+                return new RatcliffObershelpMeasure();
+            ///////////////////////
+            case EUCLIDEAN:
+                return new EuclideanMetric();
+            ///////////////////////
+            case GEO_ORTHODROMIC:
+                return new GeoDistance();
+            case GEO_HAUSDORFF:
+                return new NaiveHausdorff();
+            case GEO_NAIVE_HAUSDORFF:
+                return new NaiveHausdorff();
+            case GEO_INDEXED_HAUSDORFF:
+                return new IndexedHausdorff();
+            case GEO_FAST_HAUSDORFF:
+                return new FastHausdorff();
+            case GEO_SYMMETRIC_HAUSDORFF:
+                return new SymmetricHausdorff();
+            case GEO_CENTROID_INDEXED_HAUSDORFF:
+                return new CentroidIndexedHausdorff();
+            case GEO_SCAN_INDEXED_HAUSDORFF:
+                return new ScanIndexedHausdorff();
+            ///////////////////////
+            case GEO_MAX:
+                return new NaiveMax();
+            case GEO_MEAN:
+                return new NaiveMean();
+            case GEO_MIN:
+                return new NaiveMin();
+            case GEO_AVG:
+                return new NaiveAverage();
+            case GEO_FRECHET:
+                return new NaiveFrechet();
+            case GEO_LINK:
+                return new NaiveLink();
+            case GEO_SUM_OF_MIN:
+                return new NaiveSumOfMin();
+            case GEO_SURJECTION:
+                return new NaiveSurjection();
+            case GEO_FAIR_SURJECTION:
+                return new FairSurjection();
+            ///////////////////////
+            case TMP_SUCCESSOR:
+                return new SuccessorMeasure();
+            case TMP_PREDECESSOR:
+                return new PredecessorMeasure();
+            case TMP_CONCURRENT:
+                return new ConcurrentMeasure();
+            case TMP_AFTER:
+                return new AfterMeasure();
+            case TMP_BEFORE:
+                return new BeforeMeasure();
+            case TMP_MEETS:
+                return new MeetsMeasure();
+            case TMP_IS_MET_BY:
+                return new IsMetByMeasure();
+            case TMP_FINISHES:
+                return new FinishesMeasure();
+            case TMP_IS_FINISHED_BY:
+                return new IsFinishedByMeasure();
+            case TMP_STARTS:
+                return new StartsMeasure();
+            case TMP_IS_STARTED_BY:
+                return new IsStartedByMeasure();
+            case TMP_DURING:
+                return new DuringMeasure();
+            case TMP_DURING_REVERSE:
+                return new DuringReverseMeasure();
+            case TMP_OVERLAPS:
+                return new OverlapsMeasure();
+            case TMP_IS_OVERLAPPED_BY:
+                return new IsOverlappedByMeasure();
+            case TMP_EQUALS:
+                return new EqualsMeasure();
+            ///////////////////////
+            case TOP_EQUALS:
+                return new org.aksw.limes.core.measures.measure.topology.EqualsMeasure();
+            case TOP_DISJOINT:
+                return new DisjointMeasure();
+            case TOP_CONTAINS:
+                return new ContainsMeasure();
+            case TOP_CROSSES:
+                return new CrossesMeasure();
+            case TOP_INTERSECTS:
+                return new IntersectsMeasure();
+            case TOP_OVERLAPS:
+                return new org.aksw.limes.core.measures.measure.topology.OverlapsMeasure();
+            case TOP_TOUCHES:
+                return new TouchesMeasure();
+            case TOP_WITHIN:
+                return new WithinMeasure();
+            default:
+                throw new InvalidMeasureException(type.toString());
         }
 
     }

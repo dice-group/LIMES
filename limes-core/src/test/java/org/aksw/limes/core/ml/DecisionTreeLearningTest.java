@@ -96,28 +96,4 @@ public class DecisionTreeLearningTest {
         }
         return result;
     }
-//    @Test
-//    public void DTLTest() {
-//	EvaluationData evalData = DataSetChooser.getData("ABTBUY");
-//	Configuration config = evalData.getConfigReader().read();
-//	DecisionTreeLearning dtl = new DecisionTreeLearning(config);
-//	dtl.setPropertyMapping(evalData.getPropertyMapping());
-//
-//	MLResults model = null;
-//	try {
-//	    dtl.init(null, evalData.getSourceCache(), evalData.getTargetCache());
-//	    Method activeLearn = null;
-//	    Class[] parameterTypes = {};
-//	    activeLearn = dtl.getClass().getDeclaredMethod("activeLearn", parameterTypes);
-//	    activeLearn.setAccessible(true);
-//	    Object[] parameters = {};
-//	    model = (MLResults) activeLearn.invoke(dtl, parameters);
-//	} catch (Exception e) {
-//	    // TODO Auto-generated catch block
-//	    e.printStackTrace();
-//	}
-//	System.out.println(model.getLinkSpecification().toStringOneLine());
-////	assertEquals("(trigrams(x.name, y.name)|0.89, 0.888889, null, null)", model.getLinkSpecification().toStringOneLine());
-//	AMapping mapping = dtl.predict(evalData.getSourceCache(), evalData.getTargetCache(), model);
-//    }
 }
