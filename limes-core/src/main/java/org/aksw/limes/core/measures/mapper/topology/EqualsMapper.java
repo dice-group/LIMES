@@ -48,6 +48,6 @@ public class EqualsMapper extends Mapper implements ITopologicRelationMapper {
 
     @Override
     public String getName() {
-        return "equals";
+        return "top_equals";
     }
 }
