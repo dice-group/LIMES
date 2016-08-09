@@ -45,7 +45,7 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefPrecision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefRecall;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 import org.aksw.limes.core.gui.controller.ml.MachineLearningController;
-import org.aksw.limes.core.gui.util.IQualitativeMeasureEnum;
+import org.aksw.limes.core.gui.util.EQualitativeMeasure;
 import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
@@ -406,11 +406,11 @@ public class MachineLearningView {
     private void addQualitativeMeasureParameterHBox(LearningParameter param, GridPane root, int position) {
 	Label parameterLabel = new Label(param.getName());
 	ChoiceBox cb = new ChoiceBox();
-	cb.setItems(FXCollections.observableArrayList(getEnumArrayList(IQualitativeMeasureEnum.class)));
+	cb.setItems(FXCollections.observableArrayList(getEnumArrayList(EQualitativeMeasure.class)));
 	try{
 	    //this is a bit hacky
 	    //Since the output of param.getValue().toString() has the form org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure@238723 we take the class name from this 
-	cb.setValue(IQualitativeMeasureEnum.valueOf(param.getValue().toString().substring(param.getValue().toString().lastIndexOf(".") + 1, param.getValue().toString().lastIndexOf("@"))));
+	cb.setValue(EQualitativeMeasure.valueOf(param.getValue().toString().substring(param.getValue().toString().lastIndexOf(".") + 1, param.getValue().toString().lastIndexOf("@"))));
 	}catch(Exception e){
 	    e.printStackTrace();
 	}
