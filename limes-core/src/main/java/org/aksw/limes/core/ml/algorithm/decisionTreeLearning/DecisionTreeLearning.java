@@ -128,7 +128,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 		}else{
 			mapping = getRandomMapping(sourceCache, targetCache);
 		}
-		// TODO implement fallback solution
 		return mapping;
 	}
 

@@ -1,5 +1,6 @@
 package org.aksw.limes.core.ml.algorithm;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -179,6 +180,7 @@ public class Eagle extends ACoreMLAlgorithm {
     @Override
     public void setDefaultParameters() {
         
+        parameters = new ArrayList<>();
     	parameters.add(new LearningParameter(GENERATIONS, 10, Integer.class, 1, Integer.MAX_VALUE, 1, GENERATIONS));
     	parameters.add(new LearningParameter(PRESERVE_FITTEST, true, Boolean.class, Double.NaN, Double.NaN, Double.NaN, PRESERVE_FITTEST));
     	parameters.add(new LearningParameter(MAX_DURATION, 60, Long.class, 0, Long.MAX_VALUE, 1, MAX_DURATION));
@@ -186,7 +188,7 @@ public class Eagle extends ACoreMLAlgorithm {
     	parameters.add(new LearningParameter(MAX_ITERATIONS, 500, Integer.class, 1, Integer.MAX_VALUE, 1, MAX_ITERATIONS));
     	parameters.add(new LearningParameter(MAX_QUALITY, 0.5, Double.class, 0d, 1d, Double.NaN, MAX_QUALITY));
     	parameters.add(new LearningParameter(TERMINATION_CRITERIA, TerminationCriteria.iteration, TerminationCriteria.class, Double.NaN, Double.NaN, Double.NaN, TERMINATION_CRITERIA));
-    	parameters.add(new LearningParameter(TERMINATION_CRITERIA_VALUE, 0, Double.class, 0d, Double.MAX_VALUE, Double.NaN, TERMINATION_CRITERIA_VALUE));
+    	parameters.add(new LearningParameter(TERMINATION_CRITERIA_VALUE, 0.0, Double.class, 0d, Double.MAX_VALUE, Double.NaN, TERMINATION_CRITERIA_VALUE));
     	parameters.add(new LearningParameter(BETA, 1.0, Double.class, 0d, 1d, Double.NaN, BETA));
     	parameters.add(new LearningParameter(POPULATION, 20, Integer.class, 1, Integer.MAX_VALUE, 1, POPULATION));
     	parameters.add(new LearningParameter(MUTATION_RATE, 0.4f, Float.class, 0f, 1f, Double.NaN, MUTATION_RATE));
@@ -216,7 +218,6 @@ public class Eagle extends ACoreMLAlgorithm {
     	logger.info("Setting up EAGLE...");
     	
     	PropertyMapping pm = (PropertyMapping) getParameter(PROPERTY_MAPPING);
-    	
         LinkSpecGeneticLearnerConfig jgapConfig = new LinkSpecGeneticLearnerConfig(getConfiguration().getSourceInfo(), getConfiguration().getTargetInfo(), pm);
 
         jgapConfig.sC = sourceCache;

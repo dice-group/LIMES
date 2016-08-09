@@ -69,8 +69,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected int maxIterationTimeInMin = 20;
     protected int maxExecutionTimeInMin = 600;
     protected double maxFitnessThreshold = 1;
-    protected long childrenPenaltyWeit = 1;
-    protected long complexityPenaltyWeit = 1;
+    protected double childrenPenaltyWeit = 1;
+    protected double complexityPenaltyWeit = 1;
     protected boolean saveMapping = true;
     protected double minPropertyCoverage = 0.4;
     protected double propertyLearningRate = 0.9;
@@ -154,11 +154,11 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         return new FMeasure().calculate(predictions, new GoldStandard(trainingData));
     }
 
-    public long getChildrenPenaltyWeit() {
+    public double getChildrenPenaltyWeit() {
         return childrenPenaltyWeit;
     }
 
-    public long getComplexityPenaltyWeit() {
+    public double getComplexityPenaltyWeit() {
         return complexityPenaltyWeit;
     }
 
@@ -333,7 +333,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     @Override
     public void setDefaultParameters() {
         parameters = new ArrayList<>();
-        parameters.add(new LearningParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize, Integer.class, 10d, Integer.MAX_VALUE, 10d, PARAMETER_MAX_REFINEMENT_TREE_SIZE));
+        parameters.add(new LearningParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize, Long.class, 10d, Long.MAX_VALUE, 10d, PARAMETER_MAX_REFINEMENT_TREE_SIZE));
         parameters.add(new LearningParameter(PARAMETER_MAX_ITERATIONS_NUMBER, maxIterationNumber, Integer.class, 1d, Integer.MAX_VALUE, 10d, PARAMETER_MAX_ITERATIONS_NUMBER));
         parameters.add(new LearningParameter(PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, maxIterationTimeInMin, Integer.class, 1d, Integer.MAX_VALUE,1, PARAMETER_MAX_ITERATION_TIME_IN_MINUTES));
         parameters.add(new LearningParameter(PARAMETER_EXECUTION_TIME_IN_MINUTES, maxExecutionTimeInMin, Integer.class, 1d, Integer.MAX_VALUE,1,PARAMETER_EXECUTION_TIME_IN_MINUTES));
