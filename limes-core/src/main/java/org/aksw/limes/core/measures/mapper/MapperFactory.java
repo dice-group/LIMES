@@ -3,6 +3,7 @@ package org.aksw.limes.core.measures.mapper;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
+import org.aksw.limes.core.measures.mapper.resourcesets.SetJaccardMapper;
 import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
 import org.aksw.limes.core.measures.mapper.string.EDJoin;
 import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
@@ -153,6 +154,8 @@ public class MapperFactory {
                 return new TouchesMapper();
             case TOP_WITHIN:
                 return new WithinMapper();
+            case SET_JACCARD:
+                return new SetJaccardMapper();
             default:
                 throw new InvalidMeasureException(type.toString());
         }
