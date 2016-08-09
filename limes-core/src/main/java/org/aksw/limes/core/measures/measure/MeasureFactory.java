@@ -17,6 +17,7 @@ import org.aksw.limes.core.measures.measure.pointsets.min.NaiveMin;
 import org.aksw.limes.core.measures.measure.pointsets.sumofmin.NaiveSumOfMin;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjection;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjection;
+import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
 import org.aksw.limes.core.measures.measure.space.EuclideanMetric;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
 import org.aksw.limes.core.measures.measure.string.ExactMatch;
@@ -123,6 +124,8 @@ public class MeasureFactory {
     public static final String TOP_CONTAINS = "top_contains";
     public static final String TOP_WITHIN = "top_within";
     public static final String TOP_TOUCHES = "top_touches";
+    // Resource set measures
+    public static final String SET_JACCARD = "set_jaccard";
     /**
      * Factory function for retrieving a measure name from the set of allowed
      * types.
@@ -306,8 +309,11 @@ public class MeasureFactory {
         }
         if (measure.startsWith(TOP_OVERLAPS)) {
             return MeasureType.TOP_OVERLAPS;
-        } else
-            throw new InvalidMeasureException(measure);
+        }
+        if (measure.startsWith(SET_JACCARD)) {
+            return MeasureType.SET_JACCARD;
+        }
+        throw new InvalidMeasureException(measure);
     }
 
     /**
@@ -437,6 +443,8 @@ public class MeasureFactory {
                 return new TouchesMeasure();
             case TOP_WITHIN:
                 return new WithinMeasure();
+            case SET_JACCARD:
+                return new SetJaccardMeasure();
             default:
                 throw new InvalidMeasureException(type.toString());
         }
