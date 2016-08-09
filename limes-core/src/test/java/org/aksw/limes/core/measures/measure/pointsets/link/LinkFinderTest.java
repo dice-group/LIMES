@@ -8,6 +8,10 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
+/**
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
+ */
 public class LinkFinderTest {
 
     @Test
