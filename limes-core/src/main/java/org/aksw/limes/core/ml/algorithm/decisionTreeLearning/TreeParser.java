@@ -162,8 +162,12 @@ public class TreeParser {
 	 */
 	private LinkSpecification parseAtomicTree(String tree) {
 	    	//TODO figure out if this is the correct solution
-	    	if(tree.startsWith("positive ")){ 
-	    	    return dtl.getDefaultLS();
+	    logger.info(tree);
+	    	if(tree.startsWith("positive")){ 
+	    	    return (dtl.getMlresult() != null) ? dtl.getMlresult().getLinkSpecification() : dtl.getDefaultLS();
+	    	}else if(tree.startsWith("negative")){
+	    	    LinkSpecification resLS = (dtl.getMlresult() != null) ? dtl.getMlresult().getLinkSpecification() : dtl.getDefaultLS();
+	    	    return createLessThanLinkSpec(resLS.getFullExpression(), String.valueOf( ">= " + resLS.getThreshold()));
 	    	}
 		LinkSpecification ls = null;
 		if (tree.length() - tree.replace("<", "").length() > 1) {

@@ -2,6 +2,7 @@ package org.aksw.limes.core.ml;
 
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,9 +10,13 @@ import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
+import org.aksw.limes.core.io.config.Configuration;
+import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
@@ -26,6 +31,7 @@ public class DecisionTreeLearningTest {
 
     Cache sc = new MemoryCache();
     Cache tc = new MemoryCache();
+    Configuration config = new Configuration();
 
     AMapping trainingMap, refMap;
     PropertyMapping pm;
@@ -45,13 +51,32 @@ public class DecisionTreeLearningTest {
         Instance i3 = new Instance("ex:i3");
         i3.addProperty("name", "Claus");
         i3.addProperty("surname", "Stadler");
+        Instance i4 = new Instance("ex:i4");
+        i4.addProperty("name", "Hans");
+        i4.addProperty("surname", "Peter");
+        Instance i5 = new Instance("ex:i5");
+        i5.addProperty("name", "Maria");
+        i5.addProperty("surname", "Mustermann");
 
         sc.addInstance(i1);
         sc.addInstance(i3);
+        sc.addInstance(i4);
 
         tc.addInstance(i1);
         tc.addInstance(i2);
         tc.addInstance(i3);
+        tc.addInstance(i5);
+
+        KBInfo si = new KBInfo();
+        si.setVar("?x");
+        si.setProperties(props);
+
+        KBInfo ti = new KBInfo();
+        ti.setVar("?y");
+        ti.setProperties(props);
+
+        config.setSourceInfo(si);
+        config.setTargetInfo(ti);
 
         pm = new PropertyMapping();
         pm.addStringPropertyMatch("name", "name");
@@ -75,9 +100,9 @@ public class DecisionTreeLearningTest {
             e.printStackTrace();
             fail();
         }
-        ((DecisionTreeLearning)dtl.getMl()).setPropertyMapping(pm);
         assert (dtl.getClass().equals(ActiveMLAlgorithm.class));
-        dtl.init(null, sc, tc);
+        dtl.init(setParameters(), sc, tc);
+        dtl.getMl().setConfiguration(config);
         dtl.activeLearn();
         AMapping nextExamples = dtl.getNextExamples(3);
         AMapping oracleFeedback = oracleFeedback(nextExamples,trainingMap);
@@ -97,5 +122,26 @@ public class DecisionTreeLearningTest {
             }
         }
         return result;
+    }
+
+    private List<LearningParameter> setParameters() {
+	ArrayList<LearningParameter> parameters = new ArrayList<>();
+	parameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_TRAINING_DATA_SIZE, 3, Integer.class, 10d, 100000, 10d, DecisionTreeLearning.PARAMETER_TRAINING_DATA_SIZE));
+	parameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_UNPRUNED_TREE, false, Boolean.class, 0, 1, 0, DecisionTreeLearning.PARAMETER_UNPRUNED_TREE));
+	parameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_COLLAPSE_TREE, true, Boolean.class, 0, 1, 1, DecisionTreeLearning.PARAMETER_COLLAPSE_TREE));
+	parameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_PRUNING_CONFIDENCE, 0.25, Double.class, 0d, 1d, 0.01d, DecisionTreeLearning.PARAMETER_PRUNING_CONFIDENCE));
+	parameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_REDUCED_ERROR_PRUNING, false, Boolean.class, 0, 1, 0, DecisionTreeLearning.PARAMETER_REDUCED_ERROR_PRUNING));
+	parameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_FOLD_NUMBER, 3, Integer.class, 0, 10, 1, DecisionTreeLearning.PARAMETER_FOLD_NUMBER));
+	parameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_SUBTREE_RAISING, true, Boolean.class, 0, 1, 0, DecisionTreeLearning.PARAMETER_SUBTREE_RAISING));
+	parameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_CLEAN_UP, true, Boolean.class, 0, 1, 0, DecisionTreeLearning.PARAMETER_CLEAN_UP));
+	parameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_LAPLACE_SMOOTHING, false, Boolean.class, 0, 1, 0, DecisionTreeLearning.PARAMETER_LAPLACE_SMOOTHING));
+	parameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_MDL_CORRECTION, true, Boolean.class, 0, 1, 0, DecisionTreeLearning.PARAMETER_MDL_CORRECTION));
+	parameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_SEED, 1, Integer.class, 0, 100, 1, DecisionTreeLearning.PARAMETER_SEED));
+	parameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_PROPERTY_MAPPING, pm, PropertyMapping.class, Double.NaN, Double.NaN, Double.NaN,
+		DecisionTreeLearning.PARAMETER_PROPERTY_MAPPING));
+	parameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_MAPPING, trainingMap, AMapping.class, Double.NaN, Double.NaN, Double.NaN, DecisionTreeLearning.PARAMETER_MAPPING));
+	parameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_LINK_SPECIFICATION, null , LinkSpecification.class, Double.NaN, Double.NaN, Double.NaN,
+		DecisionTreeLearning.PARAMETER_LINK_SPECIFICATION));
+	return parameters;
     }
 }
