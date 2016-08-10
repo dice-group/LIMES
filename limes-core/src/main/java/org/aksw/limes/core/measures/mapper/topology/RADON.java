@@ -139,6 +139,7 @@ public class RADON {
         public int lat1, lat2, lon1, lon2;
         public Geometry polygon;
         private String uri;
+        private String origin_uri;
 
         public MBBIndex(int lat1, int lon1, int lat2, int lon2, Geometry polygon, String uri) {
             this.lat1 = lat1;
@@ -147,6 +148,17 @@ public class RADON {
             this.lon2 = lon2;
             this.polygon = polygon;
             this.uri = uri;
+            this.origin_uri = uri;
+        }
+
+        public MBBIndex(int lat1, int lon1, int lat2, int lon2, Geometry polygon, String uri, String origin_uri) {
+            this.lat1 = lat1;
+            this.lat2 = lat2;
+            this.lon1 = lon1;
+            this.lon2 = lon2;
+            this.polygon = polygon;
+            this.uri = uri;
+            this.origin_uri = origin_uri;
         }
 
         public boolean contains(MBBIndex i) {
@@ -221,10 +233,10 @@ public class RADON {
                 MBBIndex s = scheduled.get(i);
                 MBBIndex t = scheduled.get(i + 1);
                 if (relate(s.polygon, t.polygon, relation)) {
-                    if (!temp.containsKey(s.uri)) {
-                        temp.put(s.uri, new HashSet<>());
+                    if (!temp.containsKey(s.origin_uri)) {
+                        temp.put(s.origin_uri, new HashSet<>());
                     }
-                    temp.get(s.uri).add(t.uri);
+                    temp.get(s.origin_uri).add(t.origin_uri);
                 }
             }
             synchronized (result) {
@@ -430,9 +442,9 @@ public class RADON {
                                     if (numThreads == 1) {
                                         if (Matcher.relate(a.polygon, b.polygon, rel)) {
                                             if (swapped)
-                                                m.add(b.uri, a.uri, 1.0);
+                                                m.add(b.origin_uri, a.origin_uri, 1.0);
                                             else
-                                                m.add(a.uri, b.uri, 1.0);
+                                                m.add(a.origin_uri, b.origin_uri, 1.0);
                                         }
                                     } else {
                                         matcher.schedule(a, b);
@@ -511,22 +523,38 @@ public class RADON {
             int maxLatIndex = (int) Math.ceil(envelope.getMaxY() * thetaY);
             int minLongIndex = (int) Math.floor(envelope.getMinX() * thetaX);
             int maxLongIndex = (int) Math.ceil(envelope.getMaxX() * thetaX);
-            MBBIndex mbbIndex = new MBBIndex(minLatIndex, minLongIndex, maxLatIndex, maxLongIndex, g, p);
-            if (extIndex == null) {
-                for (int latIndex = minLatIndex; latIndex <= maxLatIndex; latIndex++) {
-                    for (int longIndex = minLongIndex; longIndex <= maxLongIndex; longIndex++) {
-                        result.add(latIndex, longIndex, mbbIndex);
-                    }
-                }
+
+            // Check for passing over 180th meridian. In case its shorter to pass over it, we assume that is what is
+            // meant by the user and we split the geometry into one part east and one part west of 180th meridian.
+
+            if (minLongIndex < (int) Math.floor(-90d * thetaX) && maxLongIndex > (int) Math.ceil(90d * thetaX)) {
+                MBBIndex westernPart = new MBBIndex(minLatIndex, (int) Math.floor(-180d * thetaX), maxLatIndex, minLongIndex, g, p + "<}W", p);
+                addToIndex(westernPart, result, extIndex);
+                MBBIndex easternPart = new MBBIndex(minLatIndex, maxLongIndex, maxLatIndex, (int) Math.ceil(180 * thetaX), g, p + "<}E", p);
+                addToIndex(easternPart, result, extIndex);
             } else {
-                for (int latIndex = minLatIndex; latIndex <= maxLatIndex; latIndex++) {
-                    for (int longIndex = minLongIndex; longIndex <= maxLongIndex; longIndex++) {
-                        if (extIndex.getSquare(latIndex, longIndex) != null)
-                            result.add(latIndex, longIndex, mbbIndex);
-                    }
+                MBBIndex mbbIndex = new MBBIndex(minLatIndex, minLongIndex, maxLatIndex, maxLongIndex, g, p);
+                addToIndex(mbbIndex, result, extIndex);
+            }
+
+        }
+        return result;
+    }
+
+    private static void addToIndex(MBBIndex mbbIndex, SquareIndex result, SquareIndex extIndex) {
+        if (extIndex == null) {
+            for (int latIndex = mbbIndex.lat1; latIndex <= mbbIndex.lat2; latIndex++) {
+                for (int longIndex = mbbIndex.lon1; longIndex <= mbbIndex.lon2; longIndex++) {
+                    result.add(latIndex, longIndex, mbbIndex);
+                }
+            }
+        } else {
+            for (int latIndex = mbbIndex.lat1; latIndex <= mbbIndex.lat2; latIndex++) {
+                for (int longIndex = mbbIndex.lon1; longIndex <= mbbIndex.lon2; longIndex++) {
+                    if (extIndex.getSquare(latIndex, longIndex) != null)
+                        result.add(latIndex, longIndex, mbbIndex);
                 }
             }
         }
-        return result;
     }
 }
