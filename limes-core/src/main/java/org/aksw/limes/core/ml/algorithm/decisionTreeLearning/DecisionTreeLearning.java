@@ -2,31 +2,45 @@ package org.aksw.limes.core.ml.algorithm.decisionTreeLearning;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
+import org.aksw.limes.core.datastrutures.EvaluationRun;
+import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.PairSimilar;
+import org.aksw.limes.core.datastrutures.TaskAlgorithm;
+import org.aksw.limes.core.datastrutures.TaskData;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
+import org.aksw.limes.core.evaluation.evaluator.Evaluator;
+import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
-import org.aksw.limes.core.gui.model.ml.MachineLearningModel;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
+import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.Eagle;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
+import org.aksw.limes.core.ml.algorithm.WombatComplete;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.util.ParenthesisMatcher;
@@ -58,9 +72,9 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     private Configuration configuration;
     private HashSet<SourceTargetValue> previouslyPresentedCandidates;
     /**
-     * true if training data contains only positive/negative examples
+     * true if training data contains positive and negative examples
      */
-    private boolean uniformTrainingData = false;
+    private boolean diverseTrainingData = true;
     /**
      * helper boolean for uniformTrainingData
      */
@@ -69,6 +83,11 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      * helper boolean for uniformTrainingData
      */
     private boolean positiveExample = false;
+    /**
+     * Since the most informative links are the ones near the boundary, where the instance pairs are being classified as links or not, we need to shift the
+     * threshold of the measure so we can also get the instance pairs that are almost classified as links
+     */
+    private static final double delta = 0.1;
 
     // Parameters
     public static final String PARAMETER_TRAINING_DATA_SIZE = "training data size";
@@ -141,6 +160,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      * @return mapping of executed linkspec
      */
     public AMapping getTrainingMapping() {
+	logger.info("Getting initial training mapping...");
 	AMapping mapping = MappingFactory.createDefaultMapping();
 	if (this.initialMapping.size() > 0) {
 	    mapping = this.initialMapping;
@@ -245,7 +265,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      * @param trainingSet
      * @param mapping
      */
-    private HashMap<Instance, SourceTargetValue> fillInstances(Instances trainingSet, AMapping mapping, boolean label) {
+    private HashMap<Instance, SourceTargetValue> fillInstances(Instances trainingSet, AMapping mapping) {
 	HashMap<Instance, SourceTargetValue> instanceMap = new HashMap<Instance, SourceTargetValue>();
 	mapping.getMap().forEach(
 		(sourceURI, map2) -> {
@@ -262,26 +282,23 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 				inst.setValue(i, MeasureProcessor.getSimilarity(sourceCache.getInstance(sourceURI), targetCache.getInstance(targetURI),
 					metricExpression, threshold, "?x", "?y"));
 			    } else {
-				if (label) {
-				    String classValue = "negative";
-				    if (value > 0.7) {
-					classValue = "positive";
-					positiveExample = true;
-				    } else {
-					negativeExample = true;
-				    }
-				    inst.setValue(i, classValue);
+				String classValue = "negative";
+				if (value == 1.0) {
+				classValue = "positive";
+				positiveExample = true;
+				} else {
+				negativeExample = true;
 				}
+				inst.setValue(i, classValue);
 			    }
 			}
 			instanceMap.put(inst, new SourceTargetValue(sourceURI, targetURI, value));
-			// logger.info(sourceURI+" "+ targetURI+" "+ value);
-			// logger.info(inst.toString());
 			trainingSet.add(inst);
 
 		    });
 		});
-	uniformTrainingData = negativeExample ^ positiveExample;
+	diverseTrainingData = negativeExample & positiveExample;
+	logger.info(negativeExample + " & " + positiveExample + " = " + diverseTrainingData);
 	negativeExample = false;
 	positiveExample = false;
 	return instanceMap;
@@ -312,6 +329,10 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      */
     @Override
     protected MLResults activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
+	if(oracleMapping.size() == 0){
+	    logger.error("empty oracle Mapping! Returning empty MLResults!");
+	    return new MLResults();
+	}
 	// These are the instances labeled by the user so we keep them to not
 	// present the same pairs twice
 	oracleMapping.getMap().forEach((sourceURI, map2) -> {
@@ -320,23 +341,27 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    });
 	});
 	this.trainingSet = createEmptyTrainingInstances(oracleMapping);
-	fillInstances(trainingSet, oracleMapping, true);
-	if (uniformTrainingData) {
-	    uniformTrainingData = false;
+	fillInstances(trainingSet, oracleMapping);
+	if (!diverseTrainingData) {
+	    diverseTrainingData = true;
 	    return handleUniformTrainingData(oracleMapping);
 	}
 	String[] options = getOptionsArray();
 	tree = new J48();
 	try {
 	    tree.setOptions(options);
+	    logger.info("Building classifier....");
 	    tree.buildClassifier(trainingSet);
-	    deltaLS = treeToLinkSpec(tree);
+	    logger.info("Parsing tree to LinkSpecification...");
+            LinkSpecification resLS = treeToLinkSpec(tree);
+            this.mlresult = new MLResults();
+            logger.info("Learned LinkSpecification: " + resLS.toStringOneLine());
+            deltaLS = subtractDeltaFromLS(resLS);
+            this.mlresult.setLinkSpecification(resLS);
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	this.mlresult = new MLResults();
-	this.mlresult.setLinkSpecification(this.getLSwithoutDelta(deltaLS));
 	return this.mlresult;
     }
 
@@ -347,14 +372,14 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      * @return mlResult containing the result
      */
     public MLResults handleUniformTrainingData(AMapping oracleMapping) {
-	logger.info("Training Data contains only postive/negative examples. Using Wombat");
+	logger.info("Training Data contains only positive/negative examples. Using Wombat");
 	ActiveMLAlgorithm wombatSimpleA = null;
 	try {
 	    wombatSimpleA = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class, MLImplementationType.SUPERVISED_ACTIVE).asActive();
 	    wombatSimpleA.init(null, sourceCache, targetCache);
 	    wombatSimpleA.activeLearn();
 	    this.mlresult = wombatSimpleA.activeLearn(oracleMapping);
-	    deltaLS = addDeltaToLS(this.mlresult.getLinkSpecification());
+	    deltaLS = subtractDeltaFromLS(this.mlresult.getLinkSpecification());
 	    return this.mlresult;
 	} catch (UnsupportedMLImplementationException e) {
 	    // TODO Auto-generated catch block
@@ -511,11 +536,12 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      *            LinkSpec to be cleaned of the delta shift
      * @return cleaned LinkSpec
      */
-    private LinkSpecification addDeltaToLS(LinkSpecification ls) {
-	if (ls.getMeasure().startsWith("MINUS")) {
-	    return addDeltaToLS(ls, true);
+    private LinkSpecification subtractDeltaFromLS(LinkSpecification ls) {
+	LinkSpecification lsClone = ls.clone();
+	if (lsClone.getMeasure().startsWith("MINUS")) {
+	    return subtractDeltaFromLS(lsClone, true);
 	}
-	return addDeltaToLS(ls, false);
+	return subtractDeltaFromLS(lsClone, false);
     }
 
     /**
@@ -527,193 +553,37 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      *            true if measure is minus
      * @return cleaned LinkSpec
      */
-    private LinkSpecification addDeltaToLS(LinkSpecification ls, boolean measureIsMinus) {
+    private LinkSpecification subtractDeltaFromLS(LinkSpecification ls, boolean measureIsMinus) {
 	if (ls.isAtomic()) {
 	    if (!measureIsMinus) {
-		if (ls.getThreshold() != 1) {
 		    // have to use BigDecimal because of floating numbers magic
-		    ls.setThreshold(Math.min(1,(BigDecimal.valueOf(ls.getThreshold()).add(BigDecimal.valueOf(TreeParser.delta))).doubleValue()));
-		}
+		    ls.setThreshold(Math.max(0.0,(BigDecimal.valueOf(ls.getThreshold()).subtract(BigDecimal.valueOf(delta))).doubleValue()));
+		    if(ls.getFilterExpression().contains("|")){
+			String[] filterArr = ls.getFilterExpression().split("|");
+			logger.info("FULL " + ls.getFullExpression());
+		    }
 		return ls;
 	    } else {
-		ls.setThreshold(Math.max(0,(BigDecimal.valueOf(ls.getThreshold()).subtract(BigDecimal.valueOf(TreeParser.delta))).doubleValue()));
+		if(ls.getThreshold() == 0.0){
+		    return ls;
+		}
+		ls.setThreshold(Math.min(1.0,(BigDecimal.valueOf(ls.getThreshold()).add(BigDecimal.valueOf(delta))).doubleValue()));
 		return ls;
 	    }
 	}
 	ArrayList<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
 	if (ls.getMeasure().startsWith("MINUS")) {
 	    for (LinkSpecification l : ls.getChildren()) {
-		newChildren.add(getLSwithoutDelta(l, true));
+		newChildren.add(subtractDeltaFromLS(l, true));
 	    }
 	    ls.setChildren(newChildren);
 	} else {
 	    for (LinkSpecification l : ls.getChildren()) {
-		newChildren.add(getLSwithoutDelta(l, false));
+		newChildren.add(subtractDeltaFromLS(l, false));
 	    }
 	    ls.setChildren(newChildren);
 	}
 	return ls;
-    }
-
-    private LinkSpecification getLSwithoutDelta(LinkSpecification ls) {
-	if (ls.getMeasure().startsWith("MINUS")) {
-	    return getLSwithoutDelta(ls, true);
-	}
-	return getLSwithoutDelta(ls, false);
-    }
-
-    /**
-     * Reverts the delta shifting of the thresholds in the measures
-     * 
-     * @param ls
-     *            LinkSpec to be cleaned of the delta shift
-     * @param parentIsMinus
-     *            true if measure is minus
-     * @return cleaned LinkSpec
-     */
-    private LinkSpecification getLSwithoutDelta(LinkSpecification ls, boolean measureIsMinus) {
-	if (ls.isAtomic()) {
-	    if (!measureIsMinus) {
-		if (ls.getThreshold() != 0) {
-		    // have to use BigDecimal because of floating numbers magic
-		    ls.setThreshold(Math.max(0,(BigDecimal.valueOf(ls.getThreshold()).subtract(BigDecimal.valueOf(TreeParser.delta))).doubleValue()));
-		}
-		return ls;
-	    } else {
-		ls.setThreshold(Math.min(1,(BigDecimal.valueOf(ls.getThreshold()).add(BigDecimal.valueOf(TreeParser.delta))).doubleValue()));
-		return ls;
-	    }
-	}
-	ArrayList<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
-	if (ls.getMeasure().startsWith("MINUS")) {
-	    for (LinkSpecification l : ls.getChildren()) {
-		newChildren.add(getLSwithoutDelta(l, true));
-	    }
-	    ls.setChildren(newChildren);
-	} else {
-	    for (LinkSpecification l : ls.getChildren()) {
-		newChildren.add(getLSwithoutDelta(l, false));
-	    }
-	    ls.setChildren(newChildren);
-	}
-	return ls;
-    }
-
-    /**
-     * Returns a "random" mapping In reality it just takes the first instances
-     * of source and target until we have reached the trainingDataSize
-     * 
-     * @param sC
-     *            sourceCache
-     * @param tC
-     *            targetCache
-     * @return random Mapping
-     */
-    private AMapping getRandomMapping(Cache sC, Cache tC) {
-	AMapping m = MappingFactory.createDefaultMapping();
-	logger.info("Get random initial training data.");
-	sC.resetIterator();
-	tC.resetIterator();
-
-	trainingDataSize = (sC.size() < trainingDataSize) ? sC.size() : trainingDataSize;
-	trainingDataSize = (tC.size() < trainingDataSize) ? tC.size() : trainingDataSize;
-
-	double thresh = 1.0;
-	while (m.size() < trainingDataSize) {
-	    org.aksw.limes.core.io.cache.Instance inst1 = sC.getNextInstance();
-	    org.aksw.limes.core.io.cache.Instance inst2 = tC.getNextInstance();
-	    if (inst1 != null && inst2 != null) {
-		m.add(inst1.getUri(), inst2.getUri(), thresh);
-		// flip thresh from 1 to 0 or other way round
-		thresh = Math.abs(thresh - 1);
-	    }
-	}
-	return m;
-    }
-
-    public static void main(String[] args) {
-	String datasetName = DataSetChooser.DataSets.AMAZONGOOGLEPRODUCTS.toString();
-	EvaluationData evalData = DataSetChooser.getData(datasetName);
-	Configuration config = evalData.getConfigReader().read();
-	DecisionTreeLearning dtl = new DecisionTreeLearning(config);
-	dtl.propertyMapping = evalData.getPropertyMapping();
-	MLResults model = null;
-	try {
-	    dtl.init(new ArrayList<LearningParameter>(), evalData.getSourceCache(), evalData.getTargetCache());
-	    System.out.println("learning...");
-	    model = dtl.activeLearn();
-	} catch (Exception e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-	try {
-	    System.out.println(dtl.tree.prefix());
-	    System.out.println(dtl.deltaLS);
-	} catch (Exception e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-	try {
-	    dtl.getNextExamples(10);
-	} catch (UnsupportedMLImplementationException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-	System.out.println();
-	System.out.println(model.getLinkSpecification().toString());
-	// System.out.println("\n measures used: \n");
-	// Iterator it = TreeParser.measuresUsed.entrySet().iterator();
-	// while (it.hasNext()) {
-	// Map.Entry pair = (Map.Entry)it.next();
-	// System.out.println(pair.getKey() + " = " + pair.getValue());
-	// it.remove(); // avoids a ConcurrentModificationException
-	// }
-	// System.out.println();
-	// System.out.println("predicting....");
-	// AMapping mapping = dtl.predict(evalData.getSourceCache(),
-	// evalData.getTargetCache(), model);
-	// // System.out.println("printin...");
-	// mapping.getMap().forEach((sourceURI, map2) -> {
-	// map2.forEach((targetURI, value) -> {
-	// // System.out.println(sourceURI + " -> " + targetURI + " :" +
-	// // value);
-	// if (value < dtl.lowest) {
-	// dtl.lowest = value;
-	// }
-	// if (value > dtl.highest) {
-	// dtl.highest = value;
-	// }
-	// });
-	// });
-	// System.out.println("lowest: " + dtl.lowest + " highest: " +
-	// dtl.highest);
-
-	// LinkSpecification ls1 = new
-	// LinkSpecification("MINUS(jaccard(x.title,y.title)|0.9,cosine(x.title,y.title)|0.4)",0.0);
-	// System.out.println(dtl.getLSwithoutDelta(ls1, false));
-	// DynamicPlanner dp = new DynamicPlanner(evalData.getSourceCache(),
-	// evalData.getTargetCache());
-	// SimpleExecutionEngine ee = new
-	// SimpleExecutionEngine(evalData.getSourceCache(),
-	// evalData.getTargetCache(), config.getSourceInfo().getVar(), config
-	// .getTargetInfo().getVar());
-	// AMapping mapping = ee.execute(ls1, dp);
-	// System.out.println("ls1: " + mapping.getNumberofMappings());
-	// mapping.getMap().forEach((sourceURI, map2) -> {
-	// map2.forEach((targetURI, value) -> {
-	// // System.out.println(sourceURI + " -> " + targetURI + " :" +
-	// // value);
-	// if (value < dtl.lowest) {
-	// dtl.lowest = value;
-	// }
-	// if (value > dtl.highest) {
-	// dtl.highest = value;
-	// }
-	// });
-	// });
-	// System.out.println("lowest: " + dtl.lowest + " highest: " +
-	// dtl.highest);
-
     }
 
     public LinkSpecification getDefaultLS() {
@@ -723,7 +593,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     @Override
     public void setDefaultParameters() {
 	parameters = new ArrayList<>();
-	parameters.add(new LearningParameter(PARAMETER_TRAINING_DATA_SIZE, trainingDataSize, Integer.class, 10d, 100000, 10d, PARAMETER_TRAINING_DATA_SIZE));
+	parameters.add(new LearningParameter(PARAMETER_TRAINING_DATA_SIZE, trainingDataSize, Integer.class, 1, 100000, 1, PARAMETER_TRAINING_DATA_SIZE));
 	parameters.add(new LearningParameter(PARAMETER_UNPRUNED_TREE, unprunedTree, Boolean.class, 0, 1, 0, PARAMETER_UNPRUNED_TREE));
 	parameters.add(new LearningParameter(PARAMETER_COLLAPSE_TREE, collapseTree, Boolean.class, 0, 1, 1, PARAMETER_COLLAPSE_TREE));
 	parameters.add(new LearningParameter(PARAMETER_PRUNING_CONFIDENCE, pruningConfidence, Double.class, 0d, 1d, 0.01d, PARAMETER_PRUNING_CONFIDENCE));
@@ -758,6 +628,10 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      */
     @Override
     protected AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
+	if(size == 0){
+	    logger.error("next example size is 0! Returning empty mapping!);");
+	    return MappingFactory.createDefaultMapping();
+	}
 	DynamicPlanner dp = new DynamicPlanner(this.sourceCache, this.targetCache);
 	SimpleExecutionEngine ee = new SimpleExecutionEngine(this.sourceCache, this.targetCache, this.configuration.getSourceInfo().getVar(),
 		this.configuration.getTargetInfo().getVar());
@@ -815,5 +689,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     public MLResults getMlresult() {
 	return mlresult;
     }
+
 
 }

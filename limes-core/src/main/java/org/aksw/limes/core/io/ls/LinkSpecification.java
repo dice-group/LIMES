@@ -324,6 +324,7 @@ public class LinkSpecification implements ILinkSpecification {
         clone.setLowThreshold(lowThreshold);
         clone.setOperator(operator);
         clone.filterExpression = filterExpression;
+        clone.fullExpression = fullExpression;
         clone.prop1 = prop1;
         clone.prop2 = prop2;
         clone.atomicMeasure = atomicMeasure;

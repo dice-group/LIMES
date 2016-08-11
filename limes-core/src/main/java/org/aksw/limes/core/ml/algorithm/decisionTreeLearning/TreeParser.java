@@ -24,11 +24,6 @@ public class TreeParser {
 	public static final String classNegative = "negative";
 	
 	/**
-	 * Since the most informative links are the ones near the boundary, where the instance pairs are being classified as links or not, we need to shift the
-	 * threshold of the measure so we can also get the instance pairs that are almost classified as links
-	 */
-	public static final double delta = 0.1;
-	/**
 	 * The measures which are used in this LinkSpecification. The Double value is without delta
 	 */
 	public static HashMap<String, Double> measuresUsed = new HashMap<String, Double>();
@@ -162,7 +157,6 @@ public class TreeParser {
 	 */
 	private LinkSpecification parseAtomicTree(String tree) {
 	    	//TODO figure out if this is the correct solution
-	    logger.info(tree);
 	    	if(tree.startsWith("positive")){ 
 	    	    return (dtl.getMlresult() != null) ? dtl.getMlresult().getLinkSpecification() : dtl.getDefaultLS();
 	    	}else if(tree.startsWith("negative")){
@@ -197,7 +191,7 @@ public class TreeParser {
 		
 		if (threshold.startsWith(">")) {
 			ls = new LinkSpecification(metricExpression,
-					Math.max(0, Double.parseDouble(threshold.substring(2)) - delta));
+					Math.max(0, Double.parseDouble(threshold.substring(2))));
 		} else {
 			ls = createLessThanLinkSpec(metricExpression, threshold);
 		}
@@ -212,7 +206,7 @@ public class TreeParser {
 	 */
 	private LinkSpecification createLessThanLinkSpec(String metricExpression,
 			String threshold) {
-		Double threshClean = Math.min(1, Double.parseDouble(threshold.substring(3)) + delta);
+		Double threshClean = Math.min(1, Double.parseDouble(threshold.substring(3)));
 		if (threshClean.equals("0.0"))
 			return new LinkSpecification(metricExpression,
 					threshClean);
