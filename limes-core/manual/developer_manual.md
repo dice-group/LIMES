@@ -13,7 +13,7 @@ There are two classes that are fundamental for representing linked data within L
 - **AMapping** stores mostly *output data*, i.e. the mapping that is generated as the result of running LIMES. An entry in a mapping is made up of a pair of URIs and their similarity score.
 
 ## Overview
-![](LIMES%20Flow%20chart.pdf)
+![image](images/LIMES%20Flow%20chart.pdf)
 As you can see from the flow diagram above, LIMES 1.0 mainly consists of 2 separate execution pipelines:
 
 - **LSPipeline** executes a given *Link Specification* on input KB `S` and `T`, resulting in a *Mapping*
