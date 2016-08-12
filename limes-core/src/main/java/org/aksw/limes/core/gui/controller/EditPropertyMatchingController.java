@@ -2,7 +2,6 @@ package org.aksw.limes.core.gui.controller;
 
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
-import javafx.scene.control.ListView;
 
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.GetPropertiesTask;
@@ -10,6 +9,8 @@ import org.aksw.limes.core.gui.view.EditPropertyMatchingView;
 import org.aksw.limes.core.gui.view.IEditView;
 import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
+
+import javafx.scene.control.ListView;
 
 /**
  * Controller class for property matching step in {@link WizardController}

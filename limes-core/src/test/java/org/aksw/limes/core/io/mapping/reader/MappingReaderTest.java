@@ -33,5 +33,18 @@ public class MappingReaderTest {
         AMapping map = r.read();
         assertTrue(map.equals(refMap));
     }
+    
+    @Test
+    public void testReadMappingFrom2ColumnsCSV() {
+        String file = System.getProperty("user.dir") + "/resources/mapping-2col-test.csv";
+        CSVMappingReader r = new CSVMappingReader(file);
+        AMapping map = r.read();
+        map.setPredicate("http://linkedgeodata.org/ontology/near");
+        System.out.println("map:\n " +map);
+        System.out.println("refmap:\n " +refMap);
+        assertTrue(map.equals(refMap));
+    }
+    
+
 
 }

@@ -1,14 +1,14 @@
 package org.aksw.limes.core.io.query;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.ArrayList;
 
 /**
  * This class reads vectors contained in a text file so as to enable LIMES to

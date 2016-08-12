@@ -1,10 +1,14 @@
 package org.aksw.limes.core.measures.mapper;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-
-import java.util.*;
 
 /**
  * Implements the mapper abstract class.

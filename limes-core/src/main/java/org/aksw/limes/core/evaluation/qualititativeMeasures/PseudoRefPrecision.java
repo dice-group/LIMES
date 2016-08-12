@@ -1,7 +1,6 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

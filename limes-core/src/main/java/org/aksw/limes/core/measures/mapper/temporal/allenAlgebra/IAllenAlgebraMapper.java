@@ -1,11 +1,11 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra;
 
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.measures.mapper.IMapper;
-
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeMap;
+
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.measures.mapper.IMapper;
 
 /**
  * Implements the Allen's temporal relation mapper interface.

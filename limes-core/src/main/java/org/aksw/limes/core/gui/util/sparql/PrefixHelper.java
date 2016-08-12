@@ -1,11 +1,11 @@
 package org.aksw.limes.core.gui.util.sparql;
 
+import static org.aksw.limes.core.gui.util.sparql.PrefixHelper.LazyLoaded.prefixToURI;
+import static org.aksw.limes.core.gui.util.sparql.PrefixHelper.LazyLoaded.uriToPrefix;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.aksw.limes.core.gui.util.sparql.PrefixHelper.LazyLoaded.prefixToURI;
-import static org.aksw.limes.core.gui.util.sparql.PrefixHelper.LazyLoaded.uriToPrefix;
 
 /**
  * Helper class for prefixes in sparql queries

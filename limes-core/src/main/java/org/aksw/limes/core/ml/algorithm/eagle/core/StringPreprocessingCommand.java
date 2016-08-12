@@ -1,14 +1,14 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
+import java.util.List;
+import java.util.Vector;
+
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
 import org.jgap.gp.CommandGene;
 import org.jgap.gp.IMutateable;
 import org.jgap.gp.impl.GPConfiguration;
 import org.jgap.util.ICloneable;
-
-import java.util.List;
-import java.util.Vector;
 
 /**
  * CommandGene to evolve preprocessing of properties. This is planned to be

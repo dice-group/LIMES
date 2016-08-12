@@ -1,11 +1,18 @@
 package org.aksw.limes.core.gui.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
-
-import java.io.*;
-import java.security.InvalidParameterException;
-import java.util.*;
 
 /**
  * subclass of memory cache extended with {@link #getCommonProperties(Double, Integer)}

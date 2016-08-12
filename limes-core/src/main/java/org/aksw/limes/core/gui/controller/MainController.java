@@ -4,13 +4,6 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-
 import org.aksw.limes.core.gui.controller.ml.ActiveLearningController;
 import org.aksw.limes.core.gui.controller.ml.BatchLearningController;
 import org.aksw.limes.core.gui.controller.ml.UnsupervisedLearningController;
@@ -25,6 +18,13 @@ import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.WizardView;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 /**
  * This class handles the user input from {@link org.aksw.limes.core.gui.view.MainView}

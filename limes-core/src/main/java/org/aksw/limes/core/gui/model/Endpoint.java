@@ -1,6 +1,5 @@
 package org.aksw.limes.core.gui.model;
 
-import org.apache.jena.rdf.model.Model;
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.io.cache.Cache;
@@ -8,6 +7,7 @@ import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.query.ModelRegistry;
 import org.aksw.limes.core.io.query.QueryModuleFactory;
+import org.apache.jena.rdf.model.Model;
 
 /**
  * Represents an endpoint for graphical representation

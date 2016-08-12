@@ -1,12 +1,17 @@
 package org.aksw.limes.core.measures.mapper.string.triefilter;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+import java.util.concurrent.ConcurrentMap;
+
 import org.aksw.limes.core.measures.measure.string.ITrieFilterableStringMeasure;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * Implementation of measure-specific tree-pruning as a runnable worker class.

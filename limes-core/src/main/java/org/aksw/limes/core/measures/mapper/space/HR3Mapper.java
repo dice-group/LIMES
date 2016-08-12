@@ -4,7 +4,11 @@
  */
 package org.aksw.limes.core.measures.mapper.space;
 
-import org.aksw.limes.core.exceptions.InvalidThresholdException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeSet;
+// * Previously call ToralOrderBlockingMapper
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -14,11 +18,6 @@ import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
 import org.aksw.limes.core.measures.mapper.space.blocking.BlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeSet;
-// * Previously call ToralOrderBlockingMapper
 
 /**
  * Uses metric spaces to create blocks.

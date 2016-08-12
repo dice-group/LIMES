@@ -1,8 +1,8 @@
 package org.aksw.limes.core.measures.measure.string;
 
-import org.apache.commons.lang3.tuple.ImmutableTriple;
-
 import java.util.LinkedList;
+
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 /**
  * Created by kvn on 28/09/15.

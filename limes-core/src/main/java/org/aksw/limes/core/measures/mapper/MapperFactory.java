@@ -30,7 +30,12 @@ import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.StartsM
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.ConcurrentMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.PredecessorMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.SuccessorMapper;
-import org.aksw.limes.core.measures.mapper.topology.*;
+import org.aksw.limes.core.measures.mapper.topology.ContainsMapper;
+import org.aksw.limes.core.measures.mapper.topology.CrossesMapper;
+import org.aksw.limes.core.measures.mapper.topology.DisjointMapper;
+import org.aksw.limes.core.measures.mapper.topology.IntersectsMapper;
+import org.aksw.limes.core.measures.mapper.topology.TouchesMapper;
+import org.aksw.limes.core.measures.mapper.topology.WithinMapper;
 import org.aksw.limes.core.measures.measure.MeasureType;
 /**
  * Implements the mapper factory class. For each measure name, the factory

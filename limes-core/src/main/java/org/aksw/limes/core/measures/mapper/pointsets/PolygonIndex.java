@@ -4,13 +4,13 @@
  */
 package org.aksw.limes.core.measures.mapper.pointsets;
 
-import org.aksw.limes.core.datastrutures.Point;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import org.aksw.limes.core.datastrutures.Point;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)

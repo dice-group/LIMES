@@ -1,5 +1,9 @@
 package org.aksw.limes.core.controller;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorFactory;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
@@ -8,11 +12,16 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
-import org.aksw.limes.core.ml.algorithm.*;
+import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.aksw.limes.core.ml.algorithm.MLResults;
+import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.*;
 
 /**
  * Execution pipeline for generating mappings using ML.

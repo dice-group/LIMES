@@ -1,12 +1,16 @@
 package org.aksw.limes.core.measures.mapper.resourcesets;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
-
-import java.util.*;
 
 /**
  * @author Kevin Dreßler

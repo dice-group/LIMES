@@ -1,17 +1,22 @@
 package org.aksw.limes.core.io.mapping.reader;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.util.DataCleaner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-
 /**
+ * Read AMapping from CSV file
+ * by default the CSV file delimiter is the comma, 
+ * need to be set for other delimiters (including tab)
+ *
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Jul 12, 2016
+ * @version Aug 12, 2016
  */
 public class CSVMappingReader extends AMappingReader {
     private static final String COMMA = ",";
@@ -88,13 +93,14 @@ public class CSVMappingReader extends AMappingReader {
         AMapping m = MappingFactory.createDefaultMapping();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
-            String s = reader.readLine();
+            String line = reader.readLine();
             String split[];
-            while (s != null) {
+            while (line != null) {
                 //split first line
-                split = s.split(delimiter);
+//                split = line.split(delimiter);
+                split = DataCleaner.separate(line, delimiter, 2);
                 m.add(split[0].substring(1, split[0].length() - 1), split[1].substring(1, split[1].length() - 1), 1.0);
-                s = reader.readLine();
+                line = reader.readLine();
             }
             reader.close();
         } catch (Exception e) {
@@ -102,7 +108,8 @@ public class CSVMappingReader extends AMappingReader {
         }
         return m;
     }
-
+    
+    
 
     /**
      * Read Mapping from the input 3 column CSV file

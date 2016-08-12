@@ -4,12 +4,12 @@
  */
 package org.aksw.limes.core.measures.measure.string;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.mapper.string.fastngram.NGramTokenizer;
 import org.aksw.limes.core.measures.mapper.string.fastngram.Tokenizer;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)

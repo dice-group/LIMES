@@ -1,6 +1,6 @@
 package org.aksw.limes.core.measures.mapper;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
@@ -37,8 +37,6 @@ import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.PredecessorMa
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.SuccessorMapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
-import org.aksw.limes.core.measures.measure.string.MongeElkanMeasure;
-import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
