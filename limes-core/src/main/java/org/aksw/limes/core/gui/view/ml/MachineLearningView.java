@@ -182,9 +182,9 @@ public class MachineLearningView {
 	});
 
 	learnButton.setOnAction(e -> {
-	    for(LearningParameter l : this.mlController.getMlModel().getMlalgorithm().getParameters()){
-		System.err.println(l.getValue().toString());
-	    }
+//	    for(LearningParameter l : this.mlController.getMlModel().getMlalgorithm().getParameters()){
+//		System.err.println(l.getValue().toString());
+//	    }
 	    learnButton.setDisable(true);
 	    this.mlController.learn(this);
 	});
@@ -261,7 +261,6 @@ public class MachineLearningView {
     private void addNumberParameterHBox(LearningParameter param, GridPane root, int position) {
 
 	String type = param.getClazz().getSimpleName().toString().toLowerCase().trim();
-	logger.info(param.getName() + " : " + type);
 	Label parameterText = new Label(param.getName());
 	Spinner parameterSpinner = null;
 	int intStep = 1;
