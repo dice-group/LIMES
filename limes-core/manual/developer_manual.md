@@ -8,9 +8,9 @@ This short manual is intended for developers who want to extend LIMES 1.0 and/or
 
 There are two classes that are fundamental for representing linked data within LIMES:
 
-- **ACache** stores mostly *input data*, e.g. linked data retrieved from a triple store or file. In the most cases there are two caches, one for the source *knowledge base* (KB) and one for the target KB.
+- **ACache** stores *input data*, i.e. linked data retrieved from a triple store or file. In the most cases, there are two caches, one for the source *knowledge base* (KB) and one for the target KB.
 
-- **AMapping** stores mostly *output data*, i.e. the mapping that is generated as the result of running LIMES. An entry in a mapping is made up of a pair of URIs and their similarity score.
+- **AMapping** stores *output data*, i.e. the mapping (from source resources to target resources) that is generated as the result of running LIMES. An entry in a mapping is a triple of source URI, linking predicate and target URI. Additionally, Mapping could store the confidence score.
 
 ## Overview
 ![image](images/LIMES%20Flow%20chart.pdf)
