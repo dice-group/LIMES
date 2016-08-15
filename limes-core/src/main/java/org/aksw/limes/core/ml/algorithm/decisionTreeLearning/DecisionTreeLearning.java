@@ -44,7 +44,9 @@ import org.aksw.limes.core.ml.algorithm.WombatComplete;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.util.ParenthesisMatcher;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.hamcrest.core.IsInstanceOf;
 
 import weka.classifiers.trees.J48;
 import weka.core.Attribute;
@@ -165,11 +167,13 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	if (this.initialMapping.size() > 0) {
 	    mapping = this.initialMapping;
 	} else if (this.defaultLS != null) {
+	    logger.info("...by running given LinkSpecification...");
 	    DynamicPlanner dp = new DynamicPlanner(sourceCache, targetCache);
 	    SimpleExecutionEngine ee = new SimpleExecutionEngine(sourceCache, targetCache, this.configuration.getSourceInfo().getVar(), this.configuration
 		    .getTargetInfo().getVar());
 	    mapping = ee.execute(defaultLS, dp);
 	} else if (this.configuration != null) {
+	    logger.info("...by running LinkSpecification from Configuration...");
 	    if (this.configuration.getMetricExpression() != null && !this.configuration.getMetricExpression().isEmpty()) {
 		defaultLS = new LinkSpecification();
 		defaultLS.readSpec(this.configuration.getMetricExpression(), this.configuration.getAcceptanceThreshold());
@@ -279,6 +283,15 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 				String propertyA = measureAndProperties[1];
 				String propertyB = measureAndProperties[2];
 				String metricExpression = measureName + "(x." + propertyA + ", y." + propertyB + ")";
+				if(targetCache.getInstance(targetURI) == null || sourceCache.getInstance(sourceURI) == null){
+				    logger.info("sourceURI: " + sourceURI + " targetURI: " + targetURI + " : " + value);
+				    if(targetCache.getInstance(targetURI) == null){
+					logger.info("target null");
+				    }
+				    if(sourceCache.getInstance(sourceURI) == null){
+					logger.info("source null");
+				    }
+				}
 				inst.setValue(i, MeasureProcessor.getSimilarity(sourceCache.getInstance(sourceURI), targetCache.getInstance(targetURI),
 					metricExpression, threshold, "?x", "?y"));
 			    } else {
@@ -357,6 +370,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
             this.mlresult = new MLResults();
             logger.info("Learned LinkSpecification: " + resLS.toStringOneLine());
             deltaLS = subtractDeltaFromLS(resLS);
+            System.err.println(tree.graph());
             this.mlresult.setLinkSpecification(resLS);
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block
@@ -557,11 +571,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	if (ls.isAtomic()) {
 	    if (!measureIsMinus) {
 		    // have to use BigDecimal because of floating numbers magic
-		    ls.setThreshold(Math.max(0.0,(BigDecimal.valueOf(ls.getThreshold()).subtract(BigDecimal.valueOf(delta))).doubleValue()));
-		    if(ls.getFilterExpression().contains("|")){
-			String[] filterArr = ls.getFilterExpression().split("|");
-			logger.info("FULL " + ls.getFullExpression());
-		    }
+		    ls.setThreshold(Math.max(0.01,(BigDecimal.valueOf(ls.getThreshold()).subtract(BigDecimal.valueOf(delta))).doubleValue()));
 		return ls;
 	    } else {
 		if(ls.getThreshold() == 0.0){
@@ -688,6 +698,201 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     public MLResults getMlresult() {
 	return mlresult;
+    }
+
+    public static void main(String[] args) {
+//=========================== DATASETS INITIALIZATION ===============================
+
+//    final String[] datasetsList = {DataSetChooser.DataSets.DBLPACM.toString()};
+    final String[] datasetsList = {/*DataSetChooser.DataSets.AMAZONGOOGLEPRODUCTS.toString(),*/ DataSetChooser.DataSets.DBPLINKEDMDB.toString(), DataSetChooser.DataSets.PERSON1.toString(), DataSetChooser.DataSets.PERSON2.toString(), /*DataSetChooser.DataSets.DBLPACM.toString(),*/ DataSetChooser.DataSets.DRUGS.toString(), DataSetChooser.DataSets.PERSON1_CSV.toString(), DataSetChooser.DataSets.PERSON2_CSV.toString(), DataSetChooser.DataSets.RESTAURANTS_CSV.toString()};
+        Set<TaskData> tasks =new TreeSet<TaskData>();
+        TaskData task = new TaskData();
+        EvaluationData c = null;
+        try {
+            for (String ds : datasetsList) {
+                logger.info(ds);
+                c = DataSetChooser.getData(ds);
+                GoldStandard gs = new GoldStandard(c.getReferenceMapping(),c.getSourceCache(),c.getTargetCache());
+                //extract training data
+
+                AMapping reference =  c.getReferenceMapping();
+                AMapping training = extractTrainingData(reference, 0.1);
+                task = new TaskData(gs, c.getSourceCache(), c.getTargetCache(), c);
+                task.dataName = ds;
+                task.training = training;
+                tasks.add(task);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
+//========================== EVALUATORS INITIALIZATION =============================
+        Set<EvaluatorType> evaluators=null;
+        try {
+            evaluators=new TreeSet<EvaluatorType>();
+            evaluators.add(EvaluatorType.PRECISION);
+            evaluators.add(EvaluatorType.RECALL);
+            evaluators.add(EvaluatorType.F_MEASURE);
+            evaluators.add(EvaluatorType.P_PRECISION);
+            evaluators.add(EvaluatorType.P_RECALL);
+            evaluators.add(EvaluatorType.PF_MEASURE);
+            evaluators.add(EvaluatorType.ACCURACY);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+//========================= ALGORITHMS INITIALIZATION ============================
+        
+        List<TaskAlgorithm> algorithms = null;
+    final String[] algorithmsList = {"SUPERVISED_ACTIVE:DECISIONTREELEARNING"/*, "SUPERVISED_ACTIVE:WOMBATSIMPLE","SUPERVISED_BATCH:WOMBATSIMPLE",*/ };
+        try
+        {
+            algorithms = new ArrayList<TaskAlgorithm>();
+            for (String algorithmItem : algorithmsList) {
+                String[] algorithmTitles = algorithmItem.split(":");// split to get the type and the name of the algorithm
+                MLImplementationType algType = MLImplementationType.valueOf(algorithmTitles[0]);// get the type of the algorithm
+
+                List<LearningParameter> mlParameter = null;
+                AMLAlgorithm mlAlgorithm = null;
+                //check the mlImplementation Type
+                if(algType.equals(MLImplementationType.SUPERVISED_ACTIVE))
+                {
+                    if(algorithmTitles[1].equals("EAGLE"))//create its core as eagle - it will be enclosed inside SupervisedMLAlgorithm that extends AMLAlgorithm
+                        mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(Eagle.class,algType).asActive(); //create an eagle learning algorithm
+                    else if(algorithmTitles[1].equals("WOMBATSIMPLE"))
+                        mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,algType).asActive(); //create an wombat simple learning algorithm
+                    else if(algorithmTitles[1].equals("WOMBATCOMPLETE"))
+                        mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatComplete.class,algType).asActive(); //create an wombat complete learning algorithm
+                    else if(algorithmTitles[1].equals("DECISIONTREELEARNING")){
+                        mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,algType).asActive(); 
+                    }
+                    
+                   mlParameter = initializeLearningParameters(algorithmTitles[1]);
+
+                }
+                else if(algType.equals(MLImplementationType.SUPERVISED_BATCH))
+                {
+                    if(algorithmTitles[1].equals("EAGLE"))
+                        mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(Eagle.class,algType).asSupervised(); //create an eagle learning algorithm
+                    else if(algorithmTitles[1].equals("WOMBATSIMPLE"))
+                        mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,algType).asSupervised(); //create an wombat simple learning algorithm
+                    else if(algorithmTitles[1].equals("WOMBATCOMPLETE"))
+                        mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatComplete.class,algType).asSupervised(); //create an wombat complete learning algorithm
+                    
+                    mlParameter = initializeLearningParameters(algorithmTitles[1]);
+
+                }
+                else if(algType.equals(MLImplementationType.UNSUPERVISED))
+                {
+                    if(algorithmTitles[1].equals("EAGLE"))
+                        mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(Eagle.class,algType).asUnsupervised(); //create an eagle learning algorithm
+                    else if(algorithmTitles[1].equals("WOMBATSIMPLE"))
+                        mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,algType).asUnsupervised(); //create an wombat simple learning algorithm
+                    else if(algorithmTitles[1].equals("WOMBATCOMPLETE"))
+                        mlAlgorithm =  MLAlgorithmFactory.createMLAlgorithm(WombatComplete.class,algType).asUnsupervised(); //create an wombat complete learning algorithm
+                    
+                    mlParameter = initializeLearningParameters(algorithmTitles[1]);
+
+                }
+                algorithms.add(new TaskAlgorithm(algType, mlAlgorithm, mlParameter));// add to list of algorithms
+            }
+
+        }catch (UnsupportedMLImplementationException e) {
+            e.printStackTrace();
+        }
+            Evaluator evaluator = new Evaluator();
+            List<EvaluationRun> results = evaluator.evaluate(algorithms, tasks, evaluators, null);
+            for (EvaluationRun er : results) {
+                er.display();
+            }
+            for (EvaluationRun er : results) {
+                System.out.println(er);
+            }
+
+    }
+
+    private static AMapping extractTrainingData(AMapping reference, double factor)
+    {
+        AMapping training = MappingFactory.createDefaultMapping();
+        int trainingSize = (int) Math.ceil(factor*reference.getSize());
+        HashMap<String, HashMap<String,Double>> refMap = reference.getMap();
+
+        Random       random    = new Random();
+        List<String> keys      = new ArrayList<String>(refMap.keySet());
+        List<String> values = null;
+        if(reference instanceof MemoryMapping){
+            values = new ArrayList<String>(((MemoryMapping)reference).reverseSourceTarget().getMap().keySet());
+        }else{
+            logger.error("HybridMapping not implemented");
+        }
+        for(int i=0 ; i< trainingSize ;i++){
+            if(i%2 != 0){
+                String sourceInstance = keys.get( random.nextInt(keys.size()) );
+                HashMap<String,Double> targetInstance = refMap.get(sourceInstance);
+                keys.remove(sourceInstance);
+                training.add(sourceInstance, targetInstance);
+            }else{
+                String sourceInstance = keys.get( random.nextInt(keys.size()) );
+                String targetInstance = getRandomTargetInstance(values, random, refMap, sourceInstance, -1);
+                keys.remove(sourceInstance);
+                training.add(sourceInstance, targetInstance, 0d);
+            }
+        }
+        return training;
+    }
+    
+    private static String getRandomTargetInstance(List<String> values, Random random, HashMap<String, HashMap<String,Double>> refMap, String sourceInstance, int previousRandom){
+                int randomInt;
+                do{
+                    randomInt = random.nextInt(values.size());
+                }while(randomInt == previousRandom);
+                
+                String tmpTarget = values.get(randomInt);
+                if(refMap.get(sourceInstance).get(tmpTarget) == null){
+                    return tmpTarget;
+                }
+                return getRandomTargetInstance(values, random, refMap, sourceInstance, randomInt);
+    }
+
+     private static List<LearningParameter> initializeLearningParameters(String className) {
+        List<LearningParameter> lParameters = new ArrayList<>() ;
+            if(className.equals("WOMBATSIMPLE") || className.equals("WOMBATCOMPLETE")){
+                lParameters.add(new LearningParameter("max refinement tree size", 2000, Integer.class, 10, Integer.MAX_VALUE, 10d, "max refinement tree size"));
+                lParameters.add(new LearningParameter("max iterations number", 3, Integer.class, 1d, Integer.MAX_VALUE, 10d, "max iterations number"));
+                lParameters.add(new LearningParameter("max iteration time in minutes", 20, Integer.class, 1d, Integer.MAX_VALUE,1, "max iteration time in minutes"));
+                lParameters.add(new LearningParameter("max execution time in minutes", 600, Integer.class, 1d, Integer.MAX_VALUE,1, "max execution time in minutes"));
+                lParameters.add(new LearningParameter("max fitness threshold", 1, Double.class, 0d, 1d, 0.01d, "max fitness threshold"));
+                lParameters.add(new LearningParameter("minimum properity coverage", 0.4, Double.class, 0d, 1d, 0.01d, "minimum properity coverage"));
+                lParameters.add(new LearningParameter("properity learning rate", 0.9, Double.class, 0d, 1d, 0.01d, "properity learning rate"));
+                lParameters.add(new LearningParameter("overall penalty weit", 0.5, Double.class, 0d, 1d, 0.01d, "overall penalty weit"));
+                lParameters.add(new LearningParameter("children penalty weit", 1, Double.class, 0d, 1d, 0.01d, "children penalty weit"));
+                lParameters.add(new LearningParameter("complexity penalty weit", 1, Double.class, 0d, 1d, 0.01d, "complexity penalty weit"));
+                lParameters.add(new LearningParameter("verbose", false, Boolean.class, 0, 1, 0, "verbose"));
+                lParameters.add(new LearningParameter("measures", new HashSet<String>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams")), MeasureType.class, 0, 0, 0, "measures"));
+                lParameters.add(new LearningParameter("save mapping", true, Boolean.class, 0, 1, 0, "save mapping"));
+            }else if(className.equals("DECISIONTREELEARNING")){
+                lParameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_TRAINING_DATA_SIZE, 10, Integer.class, 1, 100000, 1, DecisionTreeLearning.PARAMETER_TRAINING_DATA_SIZE));
+                lParameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_UNPRUNED_TREE, false, Boolean.class, 0, 1, 0, DecisionTreeLearning.PARAMETER_UNPRUNED_TREE));
+                lParameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_COLLAPSE_TREE, true, Boolean.class, 0, 1, 1, DecisionTreeLearning.PARAMETER_COLLAPSE_TREE));
+                lParameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_PRUNING_CONFIDENCE, 0.25, Double.class, 0d, 1d, 0.01d, DecisionTreeLearning.PARAMETER_PRUNING_CONFIDENCE));
+                lParameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_REDUCED_ERROR_PRUNING, false, Boolean.class, 0, 1, 0, DecisionTreeLearning.PARAMETER_REDUCED_ERROR_PRUNING));
+                lParameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_FOLD_NUMBER, 3, Integer.class, 0, 10, 1, DecisionTreeLearning.PARAMETER_FOLD_NUMBER));
+                lParameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_SUBTREE_RAISING, true, Boolean.class, 0, 1, 0, DecisionTreeLearning.PARAMETER_SUBTREE_RAISING));
+                lParameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_CLEAN_UP, true, Boolean.class, 0, 1, 0, DecisionTreeLearning.PARAMETER_CLEAN_UP));
+                lParameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_LAPLACE_SMOOTHING, false, Boolean.class, 0, 1, 0, DecisionTreeLearning.PARAMETER_LAPLACE_SMOOTHING));
+                lParameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_MDL_CORRECTION, true, Boolean.class, 0, 1, 0, DecisionTreeLearning.PARAMETER_MDL_CORRECTION));
+                lParameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_SEED, 1, Integer.class, 0, 100, 1, DecisionTreeLearning.PARAMETER_SEED));
+                lParameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_PROPERTY_MAPPING, null, PropertyMapping.class, Double.NaN, Double.NaN, Double.NaN, DecisionTreeLearning.PARAMETER_PROPERTY_MAPPING));
+                lParameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_MAPPING, null, AMapping.class, Double.NaN, Double.NaN, Double.NaN, DecisionTreeLearning.PARAMETER_MAPPING));
+                lParameters.add(new LearningParameter(DecisionTreeLearning.PARAMETER_LINK_SPECIFICATION, null , LinkSpecification.class, Double.NaN, Double.NaN, Double.NaN, DecisionTreeLearning.PARAMETER_LINK_SPECIFICATION));
+            }
+
+        return lParameters;
+
+    }
+
+    public void setInitialMapping(AMapping initialMapping) {
+        this.initialMapping = initialMapping;
     }
 
 

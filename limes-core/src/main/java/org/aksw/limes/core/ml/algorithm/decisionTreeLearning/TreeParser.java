@@ -156,7 +156,6 @@ public class TreeParser {
 	 * @return parsed LinkSpecification
 	 */
 	private LinkSpecification parseAtomicTree(String tree) {
-	    	//TODO figure out if this is the correct solution
 	    	if(tree.startsWith("positive")){ 
 	    	    return (dtl.getMlresult() != null) ? dtl.getMlresult().getLinkSpecification() : dtl.getDefaultLS();
 	    	}else if(tree.startsWith("negative")){
@@ -191,7 +190,7 @@ public class TreeParser {
 		
 		if (threshold.startsWith(">")) {
 			ls = new LinkSpecification(metricExpression,
-					Math.max(0, Double.parseDouble(threshold.substring(2))));
+					Math.max(0.1, Double.parseDouble(threshold.substring(2))));
 		} else {
 			ls = createLessThanLinkSpec(metricExpression, threshold);
 		}
@@ -206,12 +205,12 @@ public class TreeParser {
 	 */
 	private LinkSpecification createLessThanLinkSpec(String metricExpression,
 			String threshold) {
-		Double threshClean = Math.min(1, Double.parseDouble(threshold.substring(3)));
+		Double threshClean = Double.parseDouble(threshold.substring(3));
 		if (threshClean.equals("0.0"))
 			return new LinkSpecification(metricExpression,
 					threshClean);
 
-		return new LinkSpecification("MINUS(" + metricExpression + "|0.0,"
+		return new LinkSpecification("MINUS(" + metricExpression + "|0.01,"
 				+ metricExpression + "|" + threshClean + ")", 0.0);
 
 	}
