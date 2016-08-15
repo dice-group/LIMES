@@ -3,10 +3,13 @@ package org.aksw.limes.core.gui.view.ml;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.aksw.limes.core.gui.model.Config;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,10 +24,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.ml.algorithm.LearningParameter;
-import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 
 /**
  * Class that creates a view to let the user match the properties

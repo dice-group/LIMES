@@ -1,19 +1,20 @@
 package org.aksw.limes.core.gui.view.graphBuilder;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+
 import org.aksw.limes.core.gui.controller.GraphBuildController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.metric.Node;
 import org.aksw.limes.core.gui.model.metric.Output;
 import org.aksw.limes.core.gui.view.ToolBox;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 /**
  * Class to graphically represent link specifications as linked {@link org.aksw.limes.core.gui.view.graphBuilder.NodeView}

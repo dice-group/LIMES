@@ -1,5 +1,8 @@
 package org.aksw.limes.core.util;
 
+import java.util.HashMap;
+import java.util.List;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -8,9 +11,6 @@ package org.aksw.limes.core.util;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.List;
 
 
 /**

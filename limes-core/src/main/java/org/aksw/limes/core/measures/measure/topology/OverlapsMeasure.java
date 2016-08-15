@@ -1,10 +1,11 @@
 package org.aksw.limes.core.measures.measure.topology;
 
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.measures.measure.Measure;
+
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
-import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.measures.measure.Measure;
 
 /**
  * Measure that checks for the topological relation overlaps.

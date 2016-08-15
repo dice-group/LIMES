@@ -1,5 +1,7 @@
 package org.aksw.limes.core.measures.measure;
 
+import static org.junit.Assert.assertTrue;
+
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
@@ -52,8 +54,6 @@ import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMea
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
 
 public class MeasureFactoryTest {
 

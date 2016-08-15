@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.aksw.limes.core.gui.controller.MainController;
+import org.aksw.limes.core.gui.view.graphBuilder.GraphBuildView;
+
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,9 +29,6 @@ import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-
-import org.aksw.limes.core.gui.controller.MainController;
-import org.aksw.limes.core.gui.view.graphBuilder.GraphBuildView;
 
 /**
  * Main View of the Application

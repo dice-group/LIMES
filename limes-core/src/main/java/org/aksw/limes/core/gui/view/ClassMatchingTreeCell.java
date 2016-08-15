@@ -1,8 +1,9 @@
 package org.aksw.limes.core.gui.view;
 
+import org.aksw.limes.core.gui.model.ClassMatchingNode;
+
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeCell;
-import org.aksw.limes.core.gui.model.ClassMatchingNode;
 
 /**
  * helper class used in {@link org.aksw.limes.core.gui.view.EditClassMatchingView} to display classes and subclasses as tree

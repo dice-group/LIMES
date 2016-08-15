@@ -3,14 +3,14 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.surjection;
 
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
-
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
 /**
  *         <p>

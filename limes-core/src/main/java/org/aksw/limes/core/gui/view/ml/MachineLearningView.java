@@ -3,6 +3,29 @@ package org.aksw.limes.core.gui.view.ml;
 import java.util.List;
 import java.util.Set;
 
+import org.aksw.limes.core.evaluation.qualititativeMeasures.Accuracy;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoPrecision;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRecall;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefFMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefPrecision;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefRecall;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
+import org.aksw.limes.core.gui.controller.ml.MachineLearningController;
+import org.aksw.limes.core.gui.util.EQualitativeMeasure;
+import org.aksw.limes.core.gui.view.MainView;
+import org.aksw.limes.core.measures.measure.MeasureType;
+import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.aksw.limes.core.ml.algorithm.eagle.util.TerminationCriteria;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -32,29 +55,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-
-import org.aksw.limes.core.evaluation.qualititativeMeasures.Accuracy;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoPrecision;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRecall;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefFMeasure;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefPrecision;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefRecall;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
-import org.aksw.limes.core.gui.controller.ml.MachineLearningController;
-import org.aksw.limes.core.gui.util.EQualitativeMeasure;
-import org.aksw.limes.core.gui.view.MainView;
-import org.aksw.limes.core.measures.measure.MeasureType;
-import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.LearningParameter;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
-import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.algorithm.eagle.util.TerminationCriteria;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class creates the gui elements for the machine learning according to the

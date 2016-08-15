@@ -1,10 +1,10 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra;
 
-import org.aksw.limes.core.measures.mapper.Mapper;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.aksw.limes.core.measures.mapper.Mapper;
 
 /**
  * Abstract class of Allen's temporal relations mapper. It computes basic

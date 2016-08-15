@@ -1,6 +1,5 @@
 package org.aksw.limes.core.evaluation.oracle;
 
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

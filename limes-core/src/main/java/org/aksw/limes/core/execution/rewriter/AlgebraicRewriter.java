@@ -1,13 +1,13 @@
 package org.aksw.limes.core.execution.rewriter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.parser.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Implements the algebraic rewriter class. The idea is that the rewriter gets

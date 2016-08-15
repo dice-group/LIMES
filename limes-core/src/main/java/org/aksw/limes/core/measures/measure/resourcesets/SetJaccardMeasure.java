@@ -1,9 +1,9 @@
 package org.aksw.limes.core.measures.measure.resourcesets;
 
+import java.util.Set;
+
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.Measure;
-
-import java.util.Set;
 
 /**
  * @author Kevin Dreßler

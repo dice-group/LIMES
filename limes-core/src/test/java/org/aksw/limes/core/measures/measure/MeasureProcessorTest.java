@@ -1,10 +1,10 @@
 package org.aksw.limes.core.measures.measure;
 
+import static org.junit.Assert.assertTrue;
+
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
 
 public class MeasureProcessorTest {
 

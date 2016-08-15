@@ -1,5 +1,11 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex;
 
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
 /**
  * Class for Allen's temporal relation "Overlaps". Given two events X and
  * Y, it implements X o Y.
@@ -14,8 +20,6 @@ import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.AllenAlgebraMap
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.BeginBegin;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.EndBegin;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.EndEnd;
-
-import java.util.*;
 
 public class OverlapsMapper extends AllenAlgebraMapper {
     /**

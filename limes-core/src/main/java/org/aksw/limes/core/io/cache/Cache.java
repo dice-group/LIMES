@@ -1,10 +1,10 @@
 package org.aksw.limes.core.io.cache;
 
-import org.apache.jena.rdf.model.Model;
-
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.jena.rdf.model.Model;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)

@@ -1,11 +1,11 @@
 package org.aksw.limes.core.measures.measure.resourcesets;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * @author Kevin Dreßler

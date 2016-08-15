@@ -1,5 +1,10 @@
 package org.aksw.limes.core.execution.planning.planner;
 
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
@@ -10,11 +15,6 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertTrue;
 
 public class HeliosPlannerTest {
     public Cache source = new MemoryCache();

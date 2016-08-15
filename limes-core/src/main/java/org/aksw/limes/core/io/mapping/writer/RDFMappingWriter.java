@@ -1,12 +1,16 @@
 package org.aksw.limes.core.io.mapping.writer;
 
-import org.apache.jena.rdf.model.*;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)

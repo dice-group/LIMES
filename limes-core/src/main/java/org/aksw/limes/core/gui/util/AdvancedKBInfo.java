@@ -1,9 +1,15 @@
 package org.aksw.limes.core.gui.util;
 
-import org.aksw.limes.core.io.config.KBInfo;
-
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import org.aksw.limes.core.io.config.KBInfo;
 
 /**
  * Subclass of KBInfo that adds a view convenience methods such as different constructors and better error messages.

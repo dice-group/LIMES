@@ -1,8 +1,8 @@
 package org.aksw.limes.core.io.mapping.writer;
 
-import org.aksw.limes.core.io.mapping.AMapping;
-
 import java.io.IOException;
+
+import org.aksw.limes.core.io.mapping.AMapping;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
