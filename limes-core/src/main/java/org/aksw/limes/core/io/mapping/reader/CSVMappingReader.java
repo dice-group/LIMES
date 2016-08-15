@@ -99,7 +99,11 @@ public class CSVMappingReader extends AMappingReader {
                 //split first line
 //                split = line.split(delimiter);
                 split = DataCleaner.separate(line, delimiter, 2);
-                m.add(split[0].substring(1, split[0].length() - 1), split[1].substring(1, split[1].length() - 1), 1.0);
+                //check if it's the line with the properties
+                if(!split[0].startsWith("id")){
+//                m.add(split[0].substring(1, split[0].length() - 1), split[1].substring(1, split[1].length() - 1), 1.0);
+                m.add(split[0], split[1], 1.0);
+                }
                 line = reader.readLine();
             }
             reader.close();
@@ -158,7 +162,12 @@ public class CSVMappingReader extends AMappingReader {
                 //split first line
                 split = s.split(delimiter);
                 m.add(removeQuotes(split[0]), removeQuotes(split[2]), 1d);
-                m.setPredicate(removeQuotes(split[1]));
+                if(split[1].startsWith("\"<") && split[1].endsWith(">\"")){
+                    String tmp = removeQuotes(split[1]);
+                    m.setPredicate(tmp.substring(1, tmp.length()-1));
+                }else{
+                    m.setPredicate(removeQuotes(split[1]));
+                }
                 s = reader.readLine();
             }
             reader.close();
