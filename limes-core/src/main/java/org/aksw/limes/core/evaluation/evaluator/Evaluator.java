@@ -1,15 +1,15 @@
 package org.aksw.limes.core.evaluation.evaluator;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Table;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.aksw.limes.core.datastrutures.TaskAlgorithm;
-import org.aksw.limes.core.datastrutures.GoldStandard;
-import org.aksw.limes.core.datastrutures.TaskData;
 import org.aksw.limes.core.datastrutures.EvaluationRun;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
+import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.datastrutures.TaskAlgorithm;
+import org.aksw.limes.core.datastrutures.TaskData;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.IQuantitativeMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
@@ -18,26 +18,15 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
-import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.Eagle;
-import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTreeLearning;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * This evaluator is responsible for evaluating set of datasets that have source, target, gold standard and mappings against set of measures
@@ -91,9 +80,14 @@ public class Evaluator {
                     {
                         logger.info("Implementation type: "+MLImplementationType.SUPERVISED_ACTIVE);
                         ActiveMLAlgorithm sml =(ActiveMLAlgorithm)tAlgorithm.getMlAlgorithm();
+                        sml.getMl().setConfiguration(dataset.evalData.getConfigReader().getConfiguration());
+                        if(tAlgorithm.getMlAlgorithm().getName().equals("Decision Tree Learning")){
+                            ((DecisionTreeLearning)sml.getMl()).setPropertyMapping(dataset.evalData.getPropertyMapping());
+                            ((DecisionTreeLearning)sml.getMl()).setInitialMapping(dataset.training);
+                        }
                         sml.activeLearn();
                         //mlModel = sml.activeLearn(dataset.training);
-                        AMapping nextExamples = sml.getNextExamples((int)0.5*dataset.training.size());
+                        AMapping nextExamples = sml.getNextExamples((int)Math.round(0.5*dataset.training.size()));
                         AMapping oracleFeedback = oracleFeedback(nextExamples,dataset.training);
                         mlModel = sml.activeLearn(oracleFeedback);
                      }
@@ -242,7 +236,10 @@ public class Evaluator {
         for(String s : predictionMapping.getMap().keySet()){
             for(String t : predictionMapping.getMap().get(s).keySet()){
                 if(referenceMapping.contains(s, t)){
-                    result.add(s, t, predictionMapping.getMap().get(s).get(t));
+//                    result.add(s, t, predictionMapping.getMap().get(s).get(t));
+                    result.add(s, t, 1.0);
+                }else{
+                    result.add(s, t, 0.0);
                 }
             }
         }

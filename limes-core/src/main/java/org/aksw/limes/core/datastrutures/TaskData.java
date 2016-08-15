@@ -1,11 +1,11 @@
 package org.aksw.limes.core.datastrutures;
 
+import java.util.List;
+
+import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.datastrutures.GoldStandard;
-
-import java.util.List;
 
 /**
  * This class contains all information regarding a dataset used for evaluating an algorithm.<br>
@@ -30,6 +30,8 @@ public class TaskData implements Comparable<TaskData> {
     public PseudoFMeasure pseudoFMeasure; // for unsupervised tasks
     /** The Gold Standard used to evaluate the machine learning algorithm.<br> It combines the reference mapping and the source and target datasets URIs */
     public GoldStandard goldStandard;
+    
+    public EvaluationData evalData;
 
     public TaskData(){};
     public TaskData(GoldStandard goldStandard, AMapping mapping, Cache source, Cache target) {
@@ -44,6 +46,14 @@ public class TaskData implements Comparable<TaskData> {
         this.mapping = goldStandard.referenceMappings;
         this.source = source;
         this.target = target;
+    }
+
+    public TaskData(GoldStandard goldStandard, Cache source, Cache target, EvaluationData evalData) {
+        this.goldStandard = goldStandard;
+        this.mapping = goldStandard.referenceMappings;
+        this.source = source;
+        this.target = target;
+        this.evalData = evalData;
     }
 
     public TaskData(AMapping mapping, GoldStandard goldStandard) {
