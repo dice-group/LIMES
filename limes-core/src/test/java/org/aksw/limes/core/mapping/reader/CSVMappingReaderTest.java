@@ -61,7 +61,6 @@ public class CSVMappingReaderTest {
 		DataSetChooser.DataSets.DBLPSCHOLAR.toString(), DataSetChooser.DataSets.AMAZONGOOGLEPRODUCTS.toString(),
 		DataSetChooser.DataSets.DBPLINKEDMDB.toString(), DataSetChooser.DataSets.DRUGS.toString()};
 	EvaluationData evalData = null;
-	String failed = "";
 	try {
 	    for (String ds : datasetsList) {
 		evalData = DataSetChooser.getData(ds);
@@ -79,13 +78,8 @@ public class CSVMappingReaderTest {
 
 		    });
 		});
-		if(missing.size() != 0){
-		    failed = failed + " " +ds;
-		}
-//		assertEquals(0, missing.size());
-	    System.out.println(missing.toString());
+		assertEquals(0, missing.size());
 	    }
-	    System.err.println(failed);
 	} catch (Exception e) {
 	    System.out.println(e.getMessage());
 	}
