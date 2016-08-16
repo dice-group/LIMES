@@ -1,2 +1,2 @@
 #!/bin/sh
-ln -s `pwd`/pre-push ../../.git/hooks/pre-push
+ln -sf /pre-push ../../.git/hooks/pre-push
