@@ -119,6 +119,24 @@
 					</archive>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<artifactId>exec-maven-plugin</artifactId>
+				<groupId>org.codehaus.mojo</groupId>
+				<executions>
+					<execution><!-- symlink hooks to git -->
+						<id>Git-Hooks-Setup</id>
+						<phase>test</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>${basedir}/git-hooks/setup.sh</executable>
+							<workingDirectory>${basedir}/git-hooks</workingDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
