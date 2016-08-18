@@ -208,7 +208,7 @@ public class MeasureFactory {
             return MeasureType.GEO_HAUSDORFF;
         }
 
-        if (measure.startsWith()) {
+        if (measure.startsWith(GEO_ORTHODROMIC)) {
             return MeasureType.GEO_ORTHODROMIC;
         }
         //////////////////////////
