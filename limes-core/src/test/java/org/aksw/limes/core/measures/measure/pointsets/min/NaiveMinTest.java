@@ -56,7 +56,7 @@ public class NaiveMinTest {
         Set<Polygon> maltaLgd = new HashSet<Polygon>();
         maltaLgd.add(maltaLgdPoly1);
 
-        NaiveMin min = new NaiveMin();
+        NaiveMinMeasure min = new NaiveMinMeasure();
         System.out.println(min.run(maltaNuts, maltaDbpedia, 90));
 
     }

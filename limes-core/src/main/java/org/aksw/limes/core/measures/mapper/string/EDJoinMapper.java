@@ -28,9 +28,9 @@ import algorithms.edjoin.Record;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class EDJoin extends Mapper {
+public class EDJoinMapper extends Mapper {
 
-    static Logger logger = LoggerFactory.getLogger(EDJoin.class);
+    static Logger logger = LoggerFactory.getLogger(EDJoinMapper.class);
     private static int Q = -1;
     private static AMapping mapping = null;
     private static HashMap<Integer, String> sourceMap;

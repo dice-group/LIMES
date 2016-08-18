@@ -56,7 +56,7 @@ public class NaiveHausdorffTest {
         Set<Polygon> maltaLgd = new HashSet<Polygon>();
         maltaLgd.add(maltaLgdPoly1);
 
-        NaiveHausdorff hausdorff = new NaiveHausdorff();
+        NaiveHausdorffMeasure hausdorff = new NaiveHausdorffMeasure();
         System.out.println(hausdorff.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }

@@ -21,9 +21,9 @@ import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class NaiveMin extends PointsetsMeasure {
+public class NaiveMinMeasure extends PointsetsMeasure {
 
-    public NaiveMin() {
+    public NaiveMinMeasure() {
         computations = 0;
     }
 

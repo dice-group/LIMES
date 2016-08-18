@@ -22,14 +22,14 @@ import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
  * 
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class NaiveHausdorff extends PointsetsMeasure {
+public class NaiveHausdorffMeasure extends PointsetsMeasure {
 
     public int computations;
 
     /**
      * Constructor
      */
-    public NaiveHausdorff() {
+    public NaiveHausdorffMeasure() {
         computations = 0;
     }
 

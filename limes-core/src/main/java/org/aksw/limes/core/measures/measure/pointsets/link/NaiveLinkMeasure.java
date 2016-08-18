@@ -22,9 +22,9 @@ import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class NaiveLink extends PointsetsMeasure {
+public class NaiveLinkMeasure extends PointsetsMeasure {
 
-    public NaiveLink() {
+    public NaiveLinkMeasure() {
         computations = 0;
     }
 

@@ -57,10 +57,10 @@ public class GeOxygeneFrechetTest {
         Set<Polygon> maltaLgd = new HashSet<Polygon>();
         maltaLgd.add(maltaLgdPoly1);
 
-        NaiveFrechet naiveFrechet = new NaiveFrechet();
+        NaiveFrechetMeasure naiveFrechet = new NaiveFrechetMeasure();
         System.out.println("Normal: " + naiveFrechet.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
-        GeOxygeneFrechet geoxygenFrechet = new GeOxygeneFrechet();
+        GeOxygeneFrechetMeasure geoxygenFrechet = new GeOxygeneFrechetMeasure();
         System.out.println("GeOxyGen:" + geoxygenFrechet.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }

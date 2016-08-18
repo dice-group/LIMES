@@ -9,7 +9,7 @@ import org.aksw.limes.core.io.cache.Instance;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class ExactMatch extends StringMeasure {
+public class ExactMatchMeasure extends StringMeasure {
 
     public int getPrefixLength(int tokensNumber, double threshold) {
         throw new UnsupportedOperationException("Not supported yet.");

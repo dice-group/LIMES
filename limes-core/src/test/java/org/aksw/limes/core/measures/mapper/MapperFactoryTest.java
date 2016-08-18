@@ -11,7 +11,7 @@ import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
-import org.aksw.limes.core.measures.mapper.string.EDJoin;
+import org.aksw.limes.core.measures.mapper.string.EDJoinMapper;
 import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
 import org.aksw.limes.core.measures.mapper.string.JaroMapper;
 import org.aksw.limes.core.measures.mapper.string.MongeElkanMapper;
@@ -179,7 +179,7 @@ public class MapperFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             mapper = MapperFactory.createMapper(type);
-            assertTrue(mapper instanceof EDJoin);
+            assertTrue(mapper instanceof EDJoinMapper);
             assertTrue(mapper.getRuntimeApproximation(source.size(), target.size(), 0.6, Language.EN) != 0);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block

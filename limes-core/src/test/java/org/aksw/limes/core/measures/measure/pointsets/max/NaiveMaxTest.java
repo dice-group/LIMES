@@ -56,7 +56,7 @@ public class NaiveMaxTest {
         Set<Polygon> maltaLgd = new HashSet<Polygon>();
         maltaLgd.add(maltaLgdPoly1);
 
-        NaiveMax max = new NaiveMax();
+        NaiveMaxMeasure max = new NaiveMaxMeasure();
         System.out.println(max.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }

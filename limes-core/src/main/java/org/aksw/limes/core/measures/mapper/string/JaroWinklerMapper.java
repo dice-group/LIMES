@@ -16,7 +16,7 @@ import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.mapper.string.triefilter.LengthQuicksort;
 import org.aksw.limes.core.measures.mapper.string.triefilter.TrieFilter;
-import org.aksw.limes.core.measures.measure.string.JaroWinkler;
+import org.aksw.limes.core.measures.measure.string.JaroWinklerMeasure;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -82,7 +82,7 @@ public class JaroWinklerMapper extends Mapper {
             swapped = true;
         }
         // set up partitioning of lists of strings based on strings lengths
-        JaroWinkler metric = new JaroWinkler();
+        JaroWinklerMeasure metric = new JaroWinklerMeasure();
         List<Pair<List<String>, List<String>>> partitions = new LinkedList<>();
         // only attempt to partition iff it makes sense mathematically, that is,
         // the upper bound is well defined

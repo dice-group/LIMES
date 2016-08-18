@@ -56,7 +56,7 @@ public class NaiveFrechetTest {
         Set<Polygon> maltaLgd = new HashSet<Polygon>();
         maltaLgd.add(maltaLgdPoly1);
 
-        NaiveFrechet frechet = new NaiveFrechet();
+        NaiveFrechetMeasure frechet = new NaiveFrechetMeasure();
         System.out.println(frechet.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }

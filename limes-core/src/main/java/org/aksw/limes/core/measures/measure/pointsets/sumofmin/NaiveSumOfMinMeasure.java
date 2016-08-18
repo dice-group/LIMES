@@ -14,7 +14,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.min.NaiveMin;
+import org.aksw.limes.core.measures.measure.pointsets.min.NaiveMinMeasure;
 
 /**
  * Brute force approach to computing the MAX distance between two polygons
@@ -22,9 +22,9 @@ import org.aksw.limes.core.measures.measure.pointsets.min.NaiveMin;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class NaiveSumOfMin extends PointsetsMeasure {
+public class NaiveSumOfMinMeasure extends PointsetsMeasure {
 
-    public NaiveSumOfMin() {
+    public NaiveSumOfMinMeasure() {
         computations = 0;
     }
 
@@ -35,7 +35,7 @@ public class NaiveSumOfMin extends PointsetsMeasure {
      * @return sum of minimum distance between the X and Y
      */
     public static double distance(Polygon X, Polygon Y, double threshold) {
-        NaiveMin m = new NaiveMin();
+        NaiveMinMeasure m = new NaiveMinMeasure();
         return (m.computeDistance(X, Y, threshold) + m.computeDistance(Y, X, threshold)) / 2;
     }
 

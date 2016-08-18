@@ -21,7 +21,7 @@ import com.vividsolutions.jts.util.GeometricShapeFactory;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class NaiveFrechet extends PointsetsMeasure {
+public class NaiveFrechetMeasure extends PointsetsMeasure {
     static GeometricShapeFactory gsf = new GeometricShapeFactory();
     static GeometryFactory gf = new GeometryFactory();
     static double delta = 0.01;
@@ -29,7 +29,7 @@ public class NaiveFrechet extends PointsetsMeasure {
     public int computations;
     Polygon poly1, poly2;
 
-    public NaiveFrechet() {
+    public NaiveFrechetMeasure() {
         computations = 0;
     }
 
@@ -43,7 +43,7 @@ public class NaiveFrechet extends PointsetsMeasure {
      * @return Distance between X and Y
      */
     public static double distance(Polygon X, Polygon Y, double threshold) {
-        return new NaiveFrechet().computeDistance(X, Y, threshold);
+        return new NaiveFrechetMeasure().computeDistance(X, Y, threshold);
     }
 
     public double computeDistance(Polygon X, Polygon Y, double threshold) {

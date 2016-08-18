@@ -20,9 +20,9 @@ import fr.ign.cogit.geoxygene.spatial.coordgeom.GM_LineSegment;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class GeOxygeneFrechet extends PointsetsMeasure {
+public class GeOxygeneFrechetMeasure extends PointsetsMeasure {
 
-    public GeOxygeneFrechet() {
+    public GeOxygeneFrechetMeasure() {
         computations = 0;
     }
 
@@ -57,7 +57,7 @@ public class GeOxygeneFrechet extends PointsetsMeasure {
      * @return the GeOxygeneFrechet distance between X and Y
      */
     public static double distance(Polygon X, Polygon Y, double threshold) {
-        return new GeOxygeneFrechet().computeDistance(X, Y, threshold);
+        return new GeOxygeneFrechetMeasure().computeDistance(X, Y, threshold);
     }
 
     public double computeDistance(Polygon X, Polygon Y, double threshold) {

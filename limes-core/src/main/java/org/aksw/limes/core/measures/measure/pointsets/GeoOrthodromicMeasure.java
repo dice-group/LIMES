@@ -14,7 +14,7 @@ import org.aksw.limes.core.measures.measure.space.SpaceMeasure;
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class GeoDistance extends SpaceMeasure {
+public class GeoOrthodromicMeasure extends SpaceMeasure {
 
     private static double D2R = Math.PI / 180;
     private static double radius = 6367;

@@ -9,7 +9,7 @@ import java.util.Set;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.measures.measure.string.Jaro;
+import org.aksw.limes.core.measures.measure.string.JaroMeasure;
 import org.aksw.limes.core.util.RandomStringGenerator;
 import org.junit.Test;
 
@@ -39,7 +39,7 @@ public class JaroMapperTest extends JaroMapper {
 
     private AMapping bruteForce(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
                                 double threshold) {
-        Jaro j = new Jaro();
+        JaroMeasure j = new JaroMeasure();
         AMapping m = MappingFactory.createDefaultMapping();
         double sim;
         for (String s : sourceMap.keySet()) {

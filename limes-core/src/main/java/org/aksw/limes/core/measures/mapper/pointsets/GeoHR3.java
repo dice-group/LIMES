@@ -18,8 +18,8 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorff;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorffMeasure;
 
 
 /**
@@ -253,12 +253,12 @@ public class GeoHR3 {
         AMapping m = MappingFactory.createDefaultMapping();
 
         double d;
-        if (setMeasure instanceof CentroidIndexedHausdorff) {
-            ((CentroidIndexedHausdorff) setMeasure).computeIndexes(sourceData, targetData);
-        } else if (setMeasure instanceof IndexedHausdorff) {
+        if (setMeasure instanceof CentroidIndexedHausdorffMeasure) {
+            ((CentroidIndexedHausdorffMeasure) setMeasure).computeIndexes(sourceData, targetData);
+        } else if (setMeasure instanceof IndexedHausdorffMeasure) {
             PolygonIndex targetIndex = new PolygonIndex();
             targetIndex.index(targetData);
-            ((IndexedHausdorff) setMeasure).targetIndex = targetIndex;
+            ((IndexedHausdorffMeasure) setMeasure).targetIndex = targetIndex;
         }
         for (Integer latIndex : source.squares.keySet()) {
             for (Integer longIndex : source.squares.get(latIndex).keySet()) {

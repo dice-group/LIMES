@@ -56,7 +56,7 @@ public class NaiveLinkTest {
         Set<Polygon> maltaLgd = new HashSet<Polygon>();
         maltaLgd.add(maltaLgdPoly1);
 
-        NaiveLink link = new NaiveLink();
+        NaiveLinkMeasure link = new NaiveLinkMeasure();
         System.out.println(link.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
         ;
 

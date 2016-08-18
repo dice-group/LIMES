@@ -22,11 +22,11 @@ import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class NaiveMean extends PointsetsMeasure {
+public class NaiveMeanMeasure extends PointsetsMeasure {
 
     public int computations;
 
-    public NaiveMean() {
+    public NaiveMeanMeasure() {
         computations = 0;
     }
 

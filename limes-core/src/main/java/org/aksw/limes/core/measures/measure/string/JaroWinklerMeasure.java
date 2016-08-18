@@ -20,7 +20,7 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
  * @author Kevin Dreßler
  */
 
-public class JaroWinkler extends StringMeasure implements ITrieFilterableStringMeasure {
+public class JaroWinklerMeasure extends StringMeasure implements ITrieFilterableStringMeasure {
 
     public static double winklerBoostThreshold = 0.7d;
     private static char[][] sp = { { 'A', 'E' }, { 'A', 'I' }, { 'A', 'O' }, { 'A', 'U' }, { 'B', 'V' }, { 'E', 'I' },
@@ -37,11 +37,11 @@ public class JaroWinkler extends StringMeasure implements ITrieFilterableStringM
 
     private boolean longStrings;
 
-    public JaroWinkler() {
+    public JaroWinklerMeasure() {
         this(true, false, false);
     }
 
-    public JaroWinkler(boolean uppercaseOn, boolean longStringsOn, boolean characterSimilarityOn) {
+    public JaroWinklerMeasure(boolean uppercaseOn, boolean longStringsOn, boolean characterSimilarityOn) {
         super();
         // initialize options
         this.uppercase = uppercaseOn;
@@ -86,8 +86,8 @@ public class JaroWinkler extends StringMeasure implements ITrieFilterableStringM
      *
      * @return clone
      */
-    public JaroWinkler clone() {
-        return new JaroWinkler(uppercase, longStrings, simOn);
+    public JaroWinklerMeasure clone() {
+        return new JaroWinklerMeasure(uppercase, longStrings, simOn);
     }
 
     /**

@@ -21,11 +21,11 @@ import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class NaiveMax extends PointsetsMeasure {
+public class NaiveMaxMeasure extends PointsetsMeasure {
 
     public int computations;
 
-    public NaiveMax() {
+    public NaiveMaxMeasure() {
         computations = 0;
     }
 

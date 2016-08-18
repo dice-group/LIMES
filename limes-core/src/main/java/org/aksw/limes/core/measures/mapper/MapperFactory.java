@@ -5,7 +5,7 @@ import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.resourcesets.SetJaccardMapper;
 import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
-import org.aksw.limes.core.measures.mapper.string.EDJoin;
+import org.aksw.limes.core.measures.mapper.string.EDJoinMapper;
 import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
 import org.aksw.limes.core.measures.mapper.string.JaroMapper;
 import org.aksw.limes.core.measures.mapper.string.JaroWinklerMapper;
@@ -75,7 +75,7 @@ public class MapperFactory {
             case JACCARD:
                 return new PPJoinPlusPlus();
             case LEVENSHTEIN:
-                return new EDJoin();
+                return new EDJoinMapper();
             case EXACTMATCH:
                 return new ExactMatchMapper();
             case SOUNDEX:
@@ -88,13 +88,13 @@ public class MapperFactory {
             case EUCLIDEAN:
                 return new HR3Mapper();
             ///////////////////////
+            case GEO_CENTROID_INDEXED_HAUSDORFF:
+            case GEO_FAST_HAUSDORFF:
+            case GEO_INDEXED_HAUSDORFF:
+            case GEO_NAIVE_HAUSDORFF:
+            case GEO_SCAN_INDEXED_HAUSDORFF:
             case GEO_ORTHODROMIC:
             case GEO_HAUSDORFF:
-            case GEO_NAIVE_HAUSDORFF:
-            case GEO_INDEXED_HAUSDORFF:
-            case GEO_FAST_HAUSDORFF:
-            case GEO_CENTROID_INDEXED_HAUSDORFF:
-            case GEO_SCAN_INDEXED_HAUSDORFF:
                 return new OrchidMapper();
             case GEO_SYMMETRIC_HAUSDORFF:
                 return new SymmetricHausdorffMapper();
@@ -106,7 +106,7 @@ public class MapperFactory {
             case GEO_FRECHET:
             case GEO_LINK:
             case GEO_SUM_OF_MIN:
-            case GEO_SURJECTION:
+            case GEO_NAIVE_SURJECTION:
             case GEO_FAIR_SURJECTION:
                 return new OrchidMapper();
             ///////////////////////
@@ -143,14 +143,14 @@ public class MapperFactory {
             case TMP_EQUALS:
                 return new EqualsMapper();
             ///////////////////////
-            case TOP_EQUALS:
-                return new org.aksw.limes.core.measures.mapper.topology.EqualsMapper();
-            case TOP_DISJOINT:
-                return new DisjointMapper();
             case TOP_CONTAINS:
                 return new ContainsMapper();
             case TOP_CROSSES:
                 return new CrossesMapper();
+            case TOP_DISJOINT:
+                return new DisjointMapper();
+            case TOP_EQUALS:
+                return new org.aksw.limes.core.measures.mapper.topology.EqualsMapper();
             case TOP_INTERSECTS:
                 return new IntersectsMapper();
             case TOP_OVERLAPS:
@@ -159,6 +159,7 @@ public class MapperFactory {
                 return new TouchesMapper();
             case TOP_WITHIN:
                 return new WithinMapper();
+                
             case SET_JACCARD:
                 return new SetJaccardMapper();
             default:

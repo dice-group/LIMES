@@ -9,7 +9,7 @@ import org.aksw.commons.util.StopWatch;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.MapperTest;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.measures.measure.string.JaroWinkler;
+import org.aksw.limes.core.measures.measure.string.JaroWinklerMeasure;
 import org.junit.Test;
 
 /**
@@ -33,7 +33,7 @@ public class JaroWinklerMapperTest extends MapperTest {
 //        AMapping m1 = rom.getMapping(s, t, theta);
 //        stopWatch.getElapsedTime();
         stopWatch.start();
-        AMapping m2 = bruteForce(s, t, theta, new JaroWinkler());
+        AMapping m2 = bruteForce(s, t, theta, new JaroWinklerMeasure());
         stopWatch.getElapsedTime();
         stopWatch.stop();
         assertTrue(MappingOperations.difference(m1, m2).size() == 0);

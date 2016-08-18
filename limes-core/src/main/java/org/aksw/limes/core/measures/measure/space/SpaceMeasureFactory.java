@@ -1,6 +1,6 @@
 package org.aksw.limes.core.measures.measure.space;
 
-import org.aksw.limes.core.measures.measure.pointsets.GeoDistance;
+import org.aksw.limes.core.measures.measure.pointsets.GeoOrthodromicMeasure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,9 +17,9 @@ public class SpaceMeasureFactory {
             if (dimension != 2) {
                 logger.warn("Erroneous dimension settings for GeoDistance (" + dimension + ").");
             }
-            return new GeoDistance();
+            return new GeoOrthodromicMeasure();
         } else {
-            EuclideanMetric measure = new EuclideanMetric();
+            EuclideanMeasure measure = new EuclideanMeasure();
             measure.setDimension(dimension);
             return measure;
         }

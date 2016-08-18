@@ -12,7 +12,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.Mapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
-import org.aksw.limes.core.measures.measure.string.Jaro;
+import org.aksw.limes.core.measures.measure.string.JaroMeasure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,7 +83,7 @@ public class JaroMapper extends Mapper {
 
     public AMapping runLenghtOnly(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
             double threshold) {
-        Jaro j = new Jaro();
+        JaroMeasure j = new JaroMeasure();
         Set<String> source = sourceMap.keySet();
         Set<String> target = targetMap.keySet();
         Map<Integer, Set<String>> sourceLengthIndex = getLengthIndex(source);
@@ -160,11 +160,11 @@ public class JaroMapper extends Mapper {
                             // character-based filtering
                             if (passed) {
                                 prefixFilterCount++;
-                                sourceMappingCharacters = Jaro.getCommonCharacters(s, t, halfLength);
+                                sourceMappingCharacters = JaroMeasure.getCommonCharacters(s, t, halfLength);
                                 if (sourceMappingCharacters.size() >= theta) {
                                     // if everything maps
-                                    targetMappingCharacters = Jaro.getCommonCharacters(t, s, halfLength);// targetCharacterMap.get(t);
-                                    transpositions = Jaro.getTranspositions(sourceMappingCharacters,
+                                    targetMappingCharacters = JaroMeasure.getCommonCharacters(t, s, halfLength);// targetCharacterMap.get(t);
+                                    transpositions = JaroMeasure.getTranspositions(sourceMappingCharacters,
                                             targetMappingCharacters);
                                     if (transpositions >= 0) {
                                         characterFilterCount++;
@@ -215,10 +215,10 @@ public class JaroMapper extends Mapper {
                 if (sourceLength <= maxSourceLength && targetLength <= maxTargetLength) {
                     for (String s : sourceLengthIndex.get(sourceLength)) {
                         for (String t : targetLengthIndex.get(targetLength)) {
-                            sourceMappingCharacters = Jaro.getCommonCharacters(s, t, halfLength);
+                            sourceMappingCharacters = JaroMeasure.getCommonCharacters(s, t, halfLength);
                             if (sourceMappingCharacters.size() >= theta) {
-                                targetMappingCharacters = Jaro.getCommonCharacters(t, s, halfLength);
-                                transpositions = Jaro.getTranspositions(sourceMappingCharacters,
+                                targetMappingCharacters = JaroMeasure.getCommonCharacters(t, s, halfLength);
+                                transpositions = JaroMeasure.getTranspositions(sourceMappingCharacters,
                                         targetMappingCharacters);
                                 if (transpositions != -1) {
                                     similarity = ((sourceMappingCharacters.size() / (float) sourceLength)

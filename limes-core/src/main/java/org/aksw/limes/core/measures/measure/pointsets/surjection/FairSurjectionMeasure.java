@@ -22,11 +22,11 @@ import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class FairSurjection extends PointsetsMeasure {
+public class FairSurjectionMeasure extends PointsetsMeasure {
 
     public int computations;
 
-    public FairSurjection() {
+    public FairSurjectionMeasure() {
         computations = 0;
     }
 

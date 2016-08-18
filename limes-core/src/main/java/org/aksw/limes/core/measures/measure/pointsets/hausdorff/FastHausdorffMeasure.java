@@ -12,12 +12,12 @@ import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
  * 
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class FastHausdorff extends NaiveHausdorff {
+public class FastHausdorffMeasure extends NaiveHausdorffMeasure {
 
     /**
      * Constructor
      */
-    public FastHausdorff() {
+    public FastHausdorffMeasure() {
         computations = 0;
     }
 

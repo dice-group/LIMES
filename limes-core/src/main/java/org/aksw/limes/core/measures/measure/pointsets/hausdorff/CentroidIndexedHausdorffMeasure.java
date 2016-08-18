@@ -15,17 +15,17 @@ import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 21, 2016
  */
-public class CentroidIndexedHausdorff extends IndexedHausdorff {
+public class CentroidIndexedHausdorffMeasure extends IndexedHausdorffMeasure {
 
     public CentroidIndex sourceIndex;
-    public IndexedHausdorff ih = new IndexedHausdorff();
+    public IndexedHausdorffMeasure ih = new IndexedHausdorffMeasure();
     boolean verbose = false;
 
     /**
      * Constructor
      */
-    public CentroidIndexedHausdorff() {
-        ih = new IndexedHausdorff();
+    public CentroidIndexedHausdorffMeasure() {
+        ih = new IndexedHausdorffMeasure();
     }
 
     /**

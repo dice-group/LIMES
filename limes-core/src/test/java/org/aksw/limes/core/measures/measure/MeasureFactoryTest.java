@@ -8,30 +8,30 @@ import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.measures.measure.pointsets.GeoDistance;
-import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverage;
-import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechet;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorff;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.FastHausdorff;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.NaiveHausdorff;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.ScanIndexedHausdorff;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.SymmetricHausdorff;
-import org.aksw.limes.core.measures.measure.pointsets.link.NaiveLink;
-import org.aksw.limes.core.measures.measure.pointsets.max.NaiveMax;
-import org.aksw.limes.core.measures.measure.pointsets.mean.NaiveMean;
-import org.aksw.limes.core.measures.measure.pointsets.min.NaiveMin;
-import org.aksw.limes.core.measures.measure.pointsets.sumofmin.NaiveSumOfMin;
-import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjection;
-import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjection;
-import org.aksw.limes.core.measures.measure.space.EuclideanMetric;
+import org.aksw.limes.core.measures.measure.pointsets.GeoOrthodromicMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverageMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechetMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.FastHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.NaiveHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.ScanIndexedHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.SymmetricHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.link.NaiveLinkMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.max.NaiveMaxMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.mean.NaiveMeanMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.min.NaiveMinMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.sumofmin.NaiveSumOfMinMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjectionMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjectionMeasure;
+import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
-import org.aksw.limes.core.measures.measure.string.ExactMatch;
+import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
 import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
-import org.aksw.limes.core.measures.measure.string.Jaro;
-import org.aksw.limes.core.measures.measure.string.Levenshtein;
+import org.aksw.limes.core.measures.measure.string.JaroMeasure;
+import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
 import org.aksw.limes.core.measures.measure.string.MongeElkanMeasure;
-import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
+import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
 import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
 import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
@@ -308,7 +308,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof Jaro);
+            assertTrue(measure instanceof JaroMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -319,7 +319,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof QGramSimilarity);
+            assertTrue(measure instanceof QGramSimilarityMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -374,7 +374,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof Levenshtein);
+            assertTrue(measure instanceof LevenshteinMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -385,7 +385,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof ExactMatch);
+            assertTrue(measure instanceof ExactMatchMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -429,7 +429,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof EuclideanMetric);
+            assertTrue(measure instanceof EuclideanMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -440,7 +440,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof GeoDistance);
+            assertTrue(measure instanceof GeoOrthodromicMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -451,7 +451,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof NaiveHausdorff);
+            assertTrue(measure instanceof NaiveHausdorffMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -462,7 +462,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof NaiveHausdorff);
+            assertTrue(measure instanceof NaiveHausdorffMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -473,7 +473,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof IndexedHausdorff);
+            assertTrue(measure instanceof IndexedHausdorffMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -484,7 +484,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof FastHausdorff);
+            assertTrue(measure instanceof FastHausdorffMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -495,7 +495,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof SymmetricHausdorff);
+            assertTrue(measure instanceof SymmetricHausdorffMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -506,7 +506,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof CentroidIndexedHausdorff);
+            assertTrue(measure instanceof CentroidIndexedHausdorffMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -517,7 +517,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof ScanIndexedHausdorff);
+            assertTrue(measure instanceof ScanIndexedHausdorffMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -529,7 +529,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof NaiveMax);
+            assertTrue(measure instanceof NaiveMaxMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -539,7 +539,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof NaiveMean);
+            assertTrue(measure instanceof NaiveMeanMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -549,7 +549,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof NaiveMin);
+            assertTrue(measure instanceof NaiveMinMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -559,7 +559,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof NaiveAverage);
+            assertTrue(measure instanceof NaiveAverageMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -569,7 +569,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof NaiveFrechet);
+            assertTrue(measure instanceof NaiveFrechetMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -579,7 +579,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof NaiveLink);
+            assertTrue(measure instanceof NaiveLinkMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -589,7 +589,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof NaiveSumOfMin);
+            assertTrue(measure instanceof NaiveSumOfMinMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -599,7 +599,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof NaiveSurjection);
+            assertTrue(measure instanceof NaiveSurjectionMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -609,7 +609,7 @@ public class MeasureFactoryTest {
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof FairSurjection);
+            assertTrue(measure instanceof FairSurjectionMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

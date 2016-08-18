@@ -19,19 +19,19 @@ import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class IndexedHausdorff extends PointsetsMeasure {
+public class IndexedHausdorffMeasure extends PointsetsMeasure {
 
     public PolygonIndex targetIndex;
-    public NaiveHausdorff nh;
+    public NaiveHausdorffMeasure nh;
 
     /**
      * Initialization ensures that application fails if points were not indexed
      * before distances are computed
      */
-    public IndexedHausdorff() {
+    public IndexedHausdorffMeasure() {
         targetIndex = null;
         computations = 0;
-        nh = new NaiveHausdorff();
+        nh = new NaiveHausdorffMeasure();
     }
 
     public int getComputations() {

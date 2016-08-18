@@ -56,7 +56,7 @@ public class NaiveMeanTest {
         Set<Polygon> maltaLgd = new HashSet<Polygon>();
         maltaLgd.add(maltaLgdPoly1);
 
-        NaiveMean mean = new NaiveMean();
+        NaiveMeanMeasure mean = new NaiveMeanMeasure();
         System.out.println(mean.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }

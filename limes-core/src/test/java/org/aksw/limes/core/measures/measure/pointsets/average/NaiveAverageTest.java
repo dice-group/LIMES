@@ -57,7 +57,7 @@ public class NaiveAverageTest {
         Set<Polygon> maltaLgd = new HashSet<Polygon>();
         maltaLgd.add(maltaLgdPoly1);
 
-        NaiveAverage avarage = new NaiveAverage();
+        NaiveAverageMeasure avarage = new NaiveAverageMeasure();
         System.out.println(avarage.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }

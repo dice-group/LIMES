@@ -16,7 +16,7 @@ import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class ScanIndexedHausdorff extends CentroidIndexedHausdorff {
+public class ScanIndexedHausdorffMeasure extends CentroidIndexedHausdorffMeasure {
 
     @Override
     public double computeDistance(Polygon s, Polygon t, double threshold) {

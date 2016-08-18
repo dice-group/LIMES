@@ -56,7 +56,7 @@ public class NaiveSumOfMinTest {
         Set<Polygon> maltaLgd = new HashSet<Polygon>();
         maltaLgd.add(maltaLgdPoly1);
 
-        NaiveSumOfMin som = new NaiveSumOfMin();
+        NaiveSumOfMinMeasure som = new NaiveSumOfMinMeasure();
         System.out.println(som.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }

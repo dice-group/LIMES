@@ -11,7 +11,7 @@ import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 21, 2016
  */
-public class SymmetricHausdorff extends NaiveHausdorff {
+public class SymmetricHausdorffMeasure extends NaiveHausdorffMeasure {
 
     /*
      * (non-Javadoc)
@@ -24,7 +24,7 @@ public class SymmetricHausdorff extends NaiveHausdorff {
      */
     @Override
     public double computeDistance(Polygon X, Polygon Y, double threshold) {
-        NaiveHausdorff nh = new NaiveHausdorff();
+        NaiveHausdorffMeasure nh = new NaiveHausdorffMeasure();
         return Math.max(nh.computeDistance(X, Y, threshold), nh.computeDistance(Y, X, threshold));
     }
 

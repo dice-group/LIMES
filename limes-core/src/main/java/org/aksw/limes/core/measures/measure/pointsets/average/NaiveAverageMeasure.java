@@ -20,9 +20,9 @@ import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class NaiveAverage extends PointsetsMeasure {
+public class NaiveAverageMeasure extends PointsetsMeasure {
 
-    public NaiveAverage() {
+    public NaiveAverageMeasure() {
         computations = 0;
     }
 
@@ -35,7 +35,7 @@ public class NaiveAverage extends PointsetsMeasure {
      * @return the average distance between X and Y
      */
     public static double distance(Polygon X, Polygon Y, double threshold) {
-        return new NaiveAverage().computeDistance(X, Y, threshold);
+        return new NaiveAverageMeasure().computeDistance(X, Y, threshold);
     }
 
     /**

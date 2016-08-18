@@ -18,7 +18,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.Mapper;
-import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
+import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
@@ -34,7 +34,7 @@ public class FastNGramMapper extends Mapper {
     public static AMapping compute(Set<String> source, Set<String> target, int q, double threshold) {
         Index index = new Index(q);
         double kappa = (1 + threshold) / threshold;
-        QGramSimilarity sim = new QGramSimilarity(q);
+        QGramSimilarityMeasure sim = new QGramSimilarityMeasure(q);
         Tokenizer tokenizer = new NGramTokenizer();
         Map<String, Set<String>> targetTokens = new HashMap<String, Set<String>>();
         AMapping result = MappingFactory.createDefaultMapping();
