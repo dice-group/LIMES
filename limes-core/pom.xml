@@ -126,7 +126,7 @@
 				<executions>
 					<execution><!-- symlink hooks to git -->
 						<id>Git-Hooks-Setup</id>
-						<phase>test</phase>
+						<phase>install</phase>
 						<goals>
 							<goal>exec</goal>
 						</goals>
