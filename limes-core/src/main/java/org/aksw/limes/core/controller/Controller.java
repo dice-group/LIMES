@@ -1,12 +1,10 @@
 package org.aksw.limes.core.controller;
 
-import static org.fusesource.jansi.Ansi.ansi;
-import static org.fusesource.jansi.Ansi.Color.RED;
-
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
+import org.aksw.limes.core.gui.LimesGUI;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
@@ -16,14 +14,12 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.serializer.ISerializer;
 import org.aksw.limes.core.io.serializer.SerializerFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.fusesource.jansi.Ansi.Color.RED;
+import static org.fusesource.jansi.Ansi.ansi;
 
 /**
  * This is the default LIMES Controller used to run the software as CLI.
@@ -65,6 +61,10 @@ public class Controller {
     public static Configuration getConfig(CommandLine cmd) {
         if (cmd.hasOption('h')) {
             printHelp();
+            System.exit(0);
+        }
+        if (cmd.hasOption('g')){
+            LimesGUI.main(new String[0]);
             System.exit(0);
         }
         // I. Has Argument?
@@ -171,6 +171,7 @@ public class Controller {
         Options options = new Options();
         options.addOption("f", true, "Format of <config_file_or_uri>, either \"xml\" (default) or \"rdf\"");
         options.addOption("h", false, "Help");
+        options.addOption("g", false, "Run GUI");
         // options.addOption("s", false, "Silent run");
         // options.addOption("v", false, "Verbose run");
         return options;
