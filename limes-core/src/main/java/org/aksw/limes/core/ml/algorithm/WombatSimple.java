@@ -352,9 +352,9 @@ public class WombatSimple extends AWombat {
      */
     private double computePenalty(Tree<RefinementNode> promesyChild) {
         long childrenCount = promesyChild.size() - 1;
-        double childrenPenalty = (childrenPenaltyWeit * childrenCount) / refinementTreeRoot.size();
+        double childrenPenalty = (childrenPenaltyWeight * childrenCount) / refinementTreeRoot.size();
         long level = promesyChild.level();
-        double complexityPenalty = (complexityPenaltyWeit * level) / refinementTreeRoot.depth();
+        double complexityPenalty = (complexityPenaltyWeight * level) / refinementTreeRoot.depth();
         return childrenPenalty + complexityPenalty;
     }
 
