@@ -232,11 +232,11 @@ public class MeasureProcessor {
                     if (firstChild >= p.getThreshold1()) {
                         if (firstChild >= parentThreshold) {
                             return firstChild;
-                        } else
+                        } else //similarity smaller than the parent threshold
                             return 0;
-                    } else
+                    } else//similarity smaller than the left child threshold
                         return 0;
-                } else
+                } else //current (s,t) are included in the mapping of the right child
                     return 0;
             }
         }

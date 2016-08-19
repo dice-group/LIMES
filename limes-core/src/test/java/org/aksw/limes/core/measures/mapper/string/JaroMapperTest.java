@@ -36,7 +36,7 @@ public class JaroMapperTest extends JaroMapper {
         }
         return result;
     }
-    @Test
+   
     private AMapping bruteForce(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
                                 double threshold) {
         JaroMeasure j = new JaroMeasure();
@@ -58,7 +58,7 @@ public class JaroMapperTest extends JaroMapper {
         }
         return m;
     }
-    @Test
+    
     public Map<String, Set<String>> generateRandomMap(int size) {
         Map<String, Set<String>> map = new HashMap<String, Set<String>>();
         RandomStringGenerator rsg = new RandomStringGenerator(5, 20);
@@ -71,8 +71,8 @@ public class JaroMapperTest extends JaroMapper {
         return map;
     }
 
-    @Test
-    private void test(int sourceSize, int targetSize, double threshold) {
+    
+    /*private void test(int sourceSize, int targetSize, double threshold) {
         Map<String, Set<String>> sourceMap = generateRandomMap(sourceSize);
         Map<String, Set<String>> targetMap = generateRandomMap(targetSize);
 
@@ -88,8 +88,8 @@ public class JaroMapperTest extends JaroMapper {
         System.out.println("Approach: " + (end - begin));
         System.out.println("Mapping size : " + (m2.getNumberofMappings()));
         System.out.println("Mapping size : " + (MappingOperations.difference(m1, m2)));
-    }
-    @Test
+    }*/
+    
     private void deduplicationTest(JaroMapper jm, int sourceSize, double threshold) {
         Map<String, Set<String>> sourceMap = generateRandomMap(sourceSize);
 
