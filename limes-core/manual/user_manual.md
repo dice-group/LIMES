@@ -323,57 +323,63 @@ LIMES can be also configured using a RDF configuration file, the next
 listing represent the same LIMES configuration used in the previous XML
 file.
 
-    @prefix dc:      <http://purl.org/dc/elements/1.1/> .
-    @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
-    @prefix meshr:   <http://bio2rdf.org/ns/mesh#> .
-    @prefix linkedct:  <http://data.linkedct.org/resource/linkedct/> .
-    @prefix owl:     <http://www.w3.org/2002/07/owl#> .
-    @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-    @prefix limes:   <http://limes.sf.net/ontology/> .
+@prefix geos:    <http://www.opengis.net/ont/geosparql#> .
+@prefix lgdo:    <http://linkedgeodata.org/ontology/> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix geom:    <http://geovocab.org/geometry#> .
+@prefix limes:   <http://limes.sf.net/ontology/> .
 
-    limes:meshToLinkedct
-          a                   limes:LimesSpecs ;
-          limes:hasSource     limes:meshToLinkedctSource ;
-          limes:hasTarget     limes:meshToLinkedctTarget ;
-          limes:hasAcceptance limes:meshToLinkedctAcceptance ;
-          limes:hasMetric     limes:meshToLinkedctMetric ;
-          limes:hasReview     limes:meshToLinkedctReview .
+limes:linkedgeodataTOlinkedgeodataTarget
+      a       limes:TargetDataset ;
+      rdfs:label "linkedgeodata" ;
+      limes:endPoint "http://linkedgeodata.org/sparql" ;
+      limes:pageSize "2000" ;
+      limes:property "geom:geometry/geos:asWKT" ;
+      limes:restriction "?y a lgdo:RelayBox" ;
+      limes:variable "?y" .
 
-    limes:meshToLinkedctSource
-          a                   limes:SourceDataset ;
-          rdfs:label          "mesh" ;
-          limes:endPoint      "http://mesh.bio2rdf.org/sparql" ;
-          limes:variable      "?y" ;
-          limes:pageSize      "5000" ;
-          limes:restriction   "?y rdf:type meshr:Concept" ;
-          limes:property      "dc:title" .
+limes:linkedgeodataTOlinkedgeodata
+      a       limes:LimesSpecs ;
+      limes:hasExecutionParameters limes:executionParameters ;
+      limes:granularity "2" ;
+      limes:hasAcceptance limes:linkedgeodataTOlinkedgeodataAcceptance ;
+      limes:hasMetric limes:linkedgeodataTOlinkedgeodataMetric ;
+      limes:hasReview limes:linkedgeodataTOlinkedgeodataReview ;
+      limes:hasSource limes:linkedgeodataTOlinkedgeodataSource ;
+      limes:hasTarget limes:linkedgeodataTOlinkedgeodataTarget ;
+      limes:outputFormat "TAB" .
+      
+limes:executionParameters
+	  a limes:ExecutionParameters ;
+	  limes:executionPlanner "default" ;
+	  limes:executionRewriter "default" ;
+	  limes:executionEngine "default" .
+	  
+      
+limes:linkedgeodataTOlinkedgeodataReview
+      a       limes:Review ;
+      limes:file "lgd_relaybox_near.nt" ;
+      limes:relation "lgdo:near" ;
+      limes:threshold "0.5" .
 
-    limes:meshToLinkedctTarget
-          a                   limes:TargetDataset ;
-          rdfs:label          "linkedct" ;
-          limes:endPoint      "http://data.linkedct.org/sparql" ;
-          limes:variable      "?x" ;
-          limes:pageSize      "5000" ;
-          limes:restriction   "?x rdf:type linkedct:condition" ;
-          limes:property      "linkedct:condition_name" .
+limes:linkedgeodataTOlinkedgeodataMetric
+      a       limes:Metric ;
+      limes:expression "geo_hausdorff(x.polygon, y.polygon)" .
 
-    limes:meshToLinkedctMetric
-          a                   limes:Metric ;
-          limes:expression
-             "MAX(trigrams(y.dc:title,x.linkedct:condition_name),cosine(y.dc:title,x.linkedct:name))" .
+limes:linkedgeodataTOlinkedgeodataAcceptance
+      a       limes:Acceptance ;
+      limes:file "lgd_relaybox_verynear.nt" ;
+      limes:relation "lgdo:near" ;
+      limes:threshold "0.9" .
 
-    limes:meshToLinkedctAcceptance
-          a                   limes:Acceptance ;
-          limes:threshold     "0.98" ;
-          limes:file          "accepted.txt" ;
-          limes:relation      "owl:sameAs" .
-
-
-    limes:meshToLinkedctReview
-          a                   limes:Review ;
-          limes:threshold     "0.95" ;
-          limes:file          "reviewme.txt" ;
-          limes:relation      "owl:sameAs" .
+limes:linkedgeodataTOlinkedgeodataSource
+      a       limes:SourceDataset ;
+      rdfs:label "linkedgeodata" ;
+      limes:endPoint "http://linkedgeodata.org/sparql" ;
+      limes:pageSize "2000" ;
+      limes:property "geom:geometry/geos:asWKT" ;
+      limes:restriction "?x a lgdo:RelayBox" ;
+      limes:variable "?x" .
 
 The LIMES Distribution
 ======================
