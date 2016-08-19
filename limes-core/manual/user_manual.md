@@ -212,6 +212,33 @@ The similarity between polygons can be measured by using the
 
 More complex distance measures are being added.
 
+## Machine Learning
+In most cases, finding a good eetric expression (i.s. one that achieve high F-Measure) is not a trivial task. Therefore, in LIMES we implemented a number of machine learning algorithm for auto-generation of metric (also called Link Specification). For using a machine learning algorithm in your configuration file use the `MLALGORITHM` tag instead of the `METRIC` tag. For example:
+
+	<MLALGORITHM>
+		<NAME>wombat simple</NAME>
+		<TYPE>supervised batch</TYPE>
+		<TRAINING>trainingData.nt</TRAINING>
+		<PARAMETER> 
+			<NAME>max execution time in minutes</NAME>
+			<VALUE>60</VALUE>
+		</PARAMETER>
+	</MLALGORITHM>
+
+In particular:
+* The the tag `NAME` contains the name of the machine learning algorithm. Currently, we implemented the folowing algorithms:
+    + womabt simple
+    + wombat complete
+    + eagle
+    + euclid
+* The the tag `TYPE` contains the type of the machine learning algorithm, which could tak one of the values:
+    + supervised batch
+    + supervised active
+    + unsupervised
+* The the tag `TRAINING` contains the full path to the training data file. Note that this tag is not required in case of the supervised active and unsupervised learning algorithms
+* The the tag `PARAMETER` contains the the name (using the sub-tag `NAME`) and the value (using the sub-tag `VALUE`) of the used machine learning algorithm parameter. the user can use as many `PARAMETER` tags as it needs. Note that LIMES uses the default values of all unspecified parameters.  
+    	
+    
 ##Acceptance Condition
 Setting the acceptance condition basically consists of setting the value for the threshold above which links are considered to be valid and not to required further curation. This can be carried out as exemplified below.
 
@@ -263,7 +290,9 @@ Three LIMES execution parameters could be set here:
 
 if not set, the default value for each parameter will used be will
 
-## Example of a Configuration File
+
+
+## Example of a Configuration Files
 The following shows the whole configuration file for LIMES explicated in the sections above.
 
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
