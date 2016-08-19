@@ -129,7 +129,7 @@ public class JaroMapper extends Mapper {
         List<Character> sourceMappingCharacters, targetMappingCharacters;
         Set<Character> sourcePrefix, targetPrefix;
         boolean passed;
-        int halfLength, transpositions, lengthFilterCount = 0, prefixFilterCount = 0, characterFilterCount = 0;
+        int halfLength, transpositions;
         int sourcePrefixLength, targetPrefixLength;
         // length-aware filter
         for (Integer sourceLength : sourceLengthIndex.keySet()) {
@@ -147,7 +147,6 @@ public class JaroMapper extends Mapper {
                     for (String s : sourceLengthIndex.get(sourceLength)) {
                         sourcePrefix = getCharSet(s, sourcePrefixLength);
                         for (String t : targetLengthIndex.get(targetLength)) {
-                            lengthFilterCount++;
                             passed = false;
                             // prefix filtering
                             targetPrefix = getCharSet(t, targetPrefixLength);
@@ -159,7 +158,6 @@ public class JaroMapper extends Mapper {
 
                             // character-based filtering
                             if (passed) {
-                                prefixFilterCount++;
                                 sourceMappingCharacters = JaroMeasure.getCommonCharacters(s, t, halfLength);
                                 if (sourceMappingCharacters.size() >= theta) {
                                     // if everything maps
@@ -167,7 +165,6 @@ public class JaroMapper extends Mapper {
                                     transpositions = JaroMeasure.getTranspositions(sourceMappingCharacters,
                                             targetMappingCharacters);
                                     if (transpositions >= 0) {
-                                        characterFilterCount++;
                                         similarity = ((sourceMappingCharacters.size() / (float) sourceLength)
                                                 + (targetMappingCharacters.size() / (float) targetLength)
                                                 + ((sourceMappingCharacters.size() - transpositions)

@@ -3,7 +3,6 @@ package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.junit.After;
 import org.junit.Before;
@@ -131,9 +130,9 @@ public class SimpleTemporalMapperTest {
     @Test
     public void firstProperty() {
         System.out.println("firstProperty");
-        LinkSpecification ls = new LinkSpecification(
-                "tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)",
-                0.5);
+        //LinkSpecification ls = new LinkSpecification(
+        //        "tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)",
+        //        0.5);
         Instance s1 = source.getInstance("S1");
         Instance t1 = target.getInstance("T1");
         String property1 = "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID";

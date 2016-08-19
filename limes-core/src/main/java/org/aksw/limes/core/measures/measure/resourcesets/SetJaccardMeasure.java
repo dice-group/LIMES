@@ -13,7 +13,9 @@ public class SetJaccardMeasure extends Measure {
     @Override
     public double getSimilarity(Object object1, Object object2) {
         if (object1 instanceof Set && object2 instanceof Set) {
+            @SuppressWarnings("unchecked")
             Set<String> s = (Set<String>) object1;
+            @SuppressWarnings("unchecked")
             Set<String> t = (Set<String>) object2;
             if (s.isEmpty() && t.isEmpty())
                 return 1d;

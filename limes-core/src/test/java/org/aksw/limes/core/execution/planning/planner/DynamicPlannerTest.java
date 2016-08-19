@@ -141,8 +141,8 @@ public class DynamicPlannerTest {
         LinkSpecification ls = new LinkSpecification("cosine(x.name,y.name)", 0.8);
         System.out.println(ls.isAtomic());
         ls = p.normalize(ls);
-        ExecutionEngine ee = new SimpleExecutionEngine(source, source, "?x", "?y");
-        AMapping m = ee.execute(ls, p);
+        //ExecutionEngine ee = new SimpleExecutionEngine(source, source, "?x", "?y");
+        //AMapping m = ee.execute(ls, p);
         
         NestedPlan plan2 = new NestedPlan();
         Instruction run1 = new Instruction(Command.RUN, "cosine(x.name,y.name)", "0.8", -1, -1, 0);

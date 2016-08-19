@@ -117,7 +117,7 @@ public class FastNGramMapper extends Mapper {
      */
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-        AMapping mapping = MappingFactory.createDefaultMapping();
+       
         try {
             if (threshold <= 0) {
                 throw new InvalidThresholdException(threshold);
