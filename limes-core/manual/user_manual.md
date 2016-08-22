@@ -211,14 +211,23 @@ In addition, LIMES supports comparing numeric vectors by using the
 * the `Orthodromic` distance and
 * `Great Elliptic` distance
 
-The similarity between polygons can be measured by using the following distances:
-* `Orthodromic`
-* `Naive Hausdorff` 
-* `Indexed Hausdorff` 
-* `Fast Hausdorff` 
-* `Symmetric Hausdorff`
-* `Centroid Indexed Hausdorff`
-* `Scan Indexed Hausdorff`
+The similarity between polygons can be measured by using the following point-set distances:
+* `Geo_Orthodromic`
+* `Geo_NaiveHausdorff` 
+* `Geo_Indexed_Hausdorff` 
+* `Geo_Fast_Hausdorff` 
+* `Geo_Symmetric_Hausdorff`
+* `Geo_Centroid_Indexed_Hausdorff`
+* `Geo_Scan_Indexed_Hausdorff`
+* `Geo_Max`
+* `Geo_Min`
+* `Geo_Mean`
+* `Geo_Avg`
+* `Geo_Frechet`
+* `Geo_Link`
+* `Geo_Sum_Of_Min`
+* `Geo_Naive_Surjection`
+* `Geo_Fair_Surjection`
 
 The temporal relations between event resources can be found by using the following distances:
 * `Successor`
@@ -238,23 +247,15 @@ The temporal relations between event resources can be found by using the followi
 * `IsOverlappedBy`
 * `Equals`
 
-The  relations between event resources can be found by using the following distances:
-* `Successor`
-* `Predecessor`
-* `Concurrent`
-* `Before`
-* `After`
-* `Meets`
-* `IsMetBy`
-* `Finishes`
-* `IsFinishedBy`
-* `Starts`
-* `IsStaredBy`
-* `During`
-* `During Reverse`
-* `Overlaps`
-* `IsOverlappedBy`
+The topological relations between spatial resources can be found by using the following distances:
+* `Contains`
+* `Crosses`
+* `Disjoint`
 * `Equals`
+* `Intersects`
+* `Overlaps`
+* `Touches`
+* `Within`
 
 More complex distance measures are being added.
 
