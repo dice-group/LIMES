@@ -188,7 +188,6 @@ This specification returns all links such that
 1. the trigram similarity of `x`'s `rdfs:label` and `y`'s `dc:title` is greater or equal to 0.9 and 
 2. the 2-dimension euclidean distance of `x`'s `lat` and `long` mit y's `latitude` and `longitude` is greater or equal to `0.7`.
 
-**TODO** Kleanthi completeness 
 
 The current version of LIMES supports the string following metrics:
 
@@ -198,18 +197,18 @@ The current version of LIMES supports the string following metrics:
 * `Levenshtein`
 * `Overlap` 
 * `Jaro` 
-* `Jaro-Winkler`
-* `Monge-Elkan` 
-* `Exact match`
+* `JaroWinkler`
+* `MongeElkan` 
+* `ExactMatch`
 * `Qgrams`
-* `Ratcliff-Obershelp`
+* `RatcliffObershelp`
 * `Soundex`
 * `Trigram`
 
 In addition, LIMES supports comparing numeric vectors by using the 
 * `Euclidean` metric as well as 
-* the `Orthodromic` distance and
-* `Great Elliptic` distance
+* the `Geo_Orthodromic` distance and
+* `Geo_Great_Elliptic` distance
 
 The similarity between polygons can be measured by using the following point-set distances:
 * `Geo_Orthodromic`
@@ -230,32 +229,32 @@ The similarity between polygons can be measured by using the following point-set
 * `Geo_Fair_Surjection`
 
 The temporal relations between event resources can be found by using the following distances:
-* `Successor`
-* `Predecessor`
-* `Concurrent`
-* `Before`
-* `After`
-* `Meets`
-* `IsMetBy`
-* `Finishes`
-* `IsFinishedBy`
-* `Starts`
-* `IsStaredBy`
-* `During`
-* `During Reverse`
-* `Overlaps`
-* `IsOverlappedBy`
-* `Equals`
+* `Tmp_Successor`
+* `Tmp_Predecessor`
+* `Tmp_Concurrent`
+* `Tmp_Before`
+* `Tmp_After`
+* `Tmp_Meets`
+* `Tmp_Is_Met_By`
+* `Tmp_Finishes`
+* `Tmp_Is_Finished_By`
+* `Tmp_Starts`
+* `Tmp_Is_Stared_By`
+* `Tmp_During`
+* `Tmp_During_Reverse`
+* `Tmp_Overlaps`
+* `Tmp_Is_Overlapped_By`
+* `Tmp_Equals`
 
 The topological relations between spatial resources can be found by using the following distances:
-* `Contains`
-* `Crosses`
-* `Disjoint`
-* `Equals`
-* `Intersects`
-* `Overlaps`
-* `Touches`
-* `Within`
+* `Top_Contains`
+* `Top_Crosses`
+* `Top_Disjoint`
+* `Top_Equals`
+* `Top_Intersects`
+* `Top_Overlaps`
+* `Top_Touches`
+* `Top_Within`
 
 More complex distance measures are being added.
 
