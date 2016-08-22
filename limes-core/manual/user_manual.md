@@ -196,7 +196,7 @@ The current version of LIMES supports the string following metrics:
 * `Cosine`
 * `Jaccard`  
 * `Levenshtein`
-* `Overlap` `
+* `Overlap` 
 * `Jaro` 
 * `Jaro-Winkler`
 * `Monge-Elkan` 
@@ -208,12 +208,53 @@ The current version of LIMES supports the string following metrics:
 
 In addition, LIMES supports comparing numeric vectors by using the 
 * `Euclidean` metric as well as 
-* the `Orthodromic` distance.
+* the `Orthodromic` distance and
+* `Great Elliptic` distance
 
-The similarity between polygons can be measured by using the 
+The similarity between polygons can be measured by using the following distances:
+* `Orthodromic`
+* `Naive Hausdorff` 
+* `Indexed Hausdorff` 
+* `Fast Hausdorff` 
+* `Symmetric Hausdorff`
+* `Centroid Indexed Hausdorff`
+* `Scan Indexed Hausdorff`
 
-* `Hausdorff` distance as well as the
-* `SymmetricHausdorff` distance.
+The temporal relations between event resources can be found by using the following distances:
+* `Successor`
+* `Predecessor`
+* `Concurrent`
+* `Before`
+* `After`
+* `Meets`
+* `IsMetBy`
+* `Finishes`
+* `IsFinishedBy`
+* `Starts`
+* `IsStaredBy`
+* `During`
+* `During Reverse`
+* `Overlaps`
+* `IsOverlappedBy`
+* `Equals`
+
+The  relations between event resources can be found by using the following distances:
+* `Successor`
+* `Predecessor`
+* `Concurrent`
+* `Before`
+* `After`
+* `Meets`
+* `IsMetBy`
+* `Finishes`
+* `IsFinishedBy`
+* `Starts`
+* `IsStaredBy`
+* `During`
+* `During Reverse`
+* `Overlaps`
+* `IsOverlappedBy`
+* `Equals`
 
 More complex distance measures are being added.
 
