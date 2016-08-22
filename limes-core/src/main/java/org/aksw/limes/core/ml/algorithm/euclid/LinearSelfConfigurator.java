@@ -10,7 +10,7 @@ import java.util.Map;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.measures.measure.Measure;
+import org.aksw.limes.core.measures.measure.AMeasure;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -155,7 +155,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     }
 
     @Override
-    public void setMeasure(Measure measure) {
+    public void setMeasure(AMeasure measure) {
         // TODO Auto-generated method stub
 
     }

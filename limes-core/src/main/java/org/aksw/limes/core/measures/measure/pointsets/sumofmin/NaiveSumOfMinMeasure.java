@@ -13,7 +13,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.min.NaiveMinMeasure;
 
 /**
@@ -22,7 +22,7 @@ import org.aksw.limes.core.measures.measure.pointsets.min.NaiveMinMeasure;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class NaiveSumOfMinMeasure extends PointsetsMeasure {
+public class NaiveSumOfMinMeasure extends APointsetsMeasure {
 
     public NaiveSumOfMinMeasure() {
         computations = 0;

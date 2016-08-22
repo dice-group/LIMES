@@ -2,7 +2,7 @@ package org.aksw.limes.core.measures.measure;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.measures.measure.pointsets.GeoOrthodromicMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.GreatEllipticMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.GeoGreatEllipticMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverageMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechetMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
@@ -341,7 +341,7 @@ public class MeasureFactory {
      *                if the measure type is invalid
      *
      */
-    public static Measure createMeasure(MeasureType type) throws InvalidMeasureException {
+    public static AMeasure createMeasure(MeasureType type) throws InvalidMeasureException {
 
         switch (type) {
         case JAROWINKLER:
@@ -387,7 +387,7 @@ public class MeasureFactory {
         case GEO_HAUSDORFF:
             return new NaiveHausdorffMeasure();
         case GEO_GREAT_ELLIPTIC:
-            return new GreatEllipticMeasure();
+            return new GeoGreatEllipticMeasure();
         case GEO_ORTHODROMIC:
             return new GeoOrthodromicMeasure();
         ///////////////////////

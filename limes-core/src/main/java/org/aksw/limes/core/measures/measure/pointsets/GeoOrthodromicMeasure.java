@@ -5,7 +5,7 @@
 package org.aksw.limes.core.measures.measure.pointsets;
 
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.measures.measure.space.SpaceMeasure;
+import org.aksw.limes.core.measures.measure.space.ASpaceMeasure;
 
 /**
  * Computes a similarity based on the geo distance of two points. Assumes that
@@ -14,15 +14,9 @@ import org.aksw.limes.core.measures.measure.space.SpaceMeasure;
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class GeoOrthodromicMeasure extends SpaceMeasure {
+public class GeoOrthodromicMeasure extends ASpaceMeasure {
 
-    private static double D2R = Math.PI / 180;
-    private static double radius = 6367;
-    int dimension = 2;
 
-    public void setDimension(int n) {
-        dimension = n;
-    }
 
     public double getThreshold(int dimension, double simThreshold) {
         // transforms the similarity threshold into an angular threshold
@@ -79,7 +73,7 @@ public class GeoOrthodromicMeasure extends SpaceMeasure {
     }
 
     public String getName() {
-        return "geodistance";
+        return "GeoOrthodromicMeasure";
     }
 
     public double getRuntimeApproximation(double mappingSize) {

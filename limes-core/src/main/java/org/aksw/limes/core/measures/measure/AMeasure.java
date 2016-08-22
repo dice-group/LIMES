@@ -7,6 +7,6 @@ package org.aksw.limes.core.measures.measure;
  *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
-public abstract class Measure implements IMeasure {
+public abstract class AMeasure implements IMeasure {
 
 }

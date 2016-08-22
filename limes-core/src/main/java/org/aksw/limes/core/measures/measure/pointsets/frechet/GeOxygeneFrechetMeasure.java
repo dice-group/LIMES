@@ -9,7 +9,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
 
 import fr.ign.cogit.geoxygene.api.spatial.coordgeom.ILineSegment;
 import fr.ign.cogit.geoxygene.distance.Frechet;
@@ -20,7 +20,7 @@ import fr.ign.cogit.geoxygene.spatial.coordgeom.GM_LineSegment;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class GeOxygeneFrechetMeasure extends PointsetsMeasure {
+public class GeOxygeneFrechetMeasure extends APointsetsMeasure {
 
     public GeOxygeneFrechetMeasure() {
         computations = 0;

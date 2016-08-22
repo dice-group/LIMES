@@ -132,12 +132,12 @@ public class WombatComplete extends AWombat {
         long time = System.currentTimeMillis();
         pruneTree(refinementTreeRoot, mostPromisingNode.getValue().getFMeasure());
         pruningTime += System.currentTimeMillis() - time;
-        logger.info("Most promising node: " + mostPromisingNode.getValue());
+        logger.debug("Most promising node: " + mostPromisingNode.getValue());
         iterationNr++;
         while ((mostPromisingNode.getValue().getFMeasure()) < maxFitnessThreshold
                 && (refinementTreeRoot.size() - pruneNodeCount) <= maxRefineTreeSize
                 && iterationNr <= maxIterationNumber) {
-            System.out.println("Running iteration number " + iterationNr);
+            logger.debug("Running iteration number " + iterationNr);
             iterationNr++;
             mostPromisingNode = expandNode(mostPromisingNode);
             mostPromisingNode = findMostPromisingNode(refinementTreeRoot, false);
@@ -147,10 +147,10 @@ public class WombatComplete extends AWombat {
             if (mostPromisingNode.getValue().getFMeasure() == -Double.MAX_VALUE) {
                 break; // no better solution can be found
             }
-            logger.info("Most promising node: " + mostPromisingNode.getValue());
+            logger.debug("Most promising node: " + mostPromisingNode.getValue());
         }
         RefinementNode bestSolution = findMostPromisingNode(refinementTreeRoot, true).getValue();
-        logger.info("Overall Best Solution: " + bestSolution);
+        logger.debug("Overall Best Solution: " + bestSolution);
         if (!RefinementNode.isSaveMapping()) {
             bestSolution.setMap(getMapingOfMetricExpression(bestSolution.getMetricExpression()));
         }
@@ -280,7 +280,7 @@ public class WombatComplete extends AWombat {
      * @return initial classifiers
      */
     public List<ExtendedClassifier> findInitialClassifiers() {
-        logger.info("Geting all initial classifiers ...");
+        logger.debug("Geting all initial classifiers ...");
         List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
         for (String p : sourcePropertiesCoverageMap.keySet()) {
             for (String q : targetPropertiesCoverageMap.keySet()) {
@@ -291,7 +291,7 @@ public class WombatComplete extends AWombat {
                 }
             }
         }
-        logger.info("Done computing all initial classifiers.");
+        logger.debug("Done computing all initial classifiers.");
         return initialClassifiers;
     }
 
@@ -466,7 +466,7 @@ public class WombatComplete extends AWombat {
         } else if (isDisjunction(nodeMetricExpr)) {
             childMetricExpr = new String();
             List<String> subMetricExpr = getSubMetricExpressions(nodeMetricExpr);
-            //          System.out.println("-------------subMetricExpr: "+ subMetricExpr);
+            logger.debug("subMetricExpr: " + subMetricExpr);
             result.add(createNode(subMetricExpr.get(0)));
             List<String> childSubMetricExpr = new ArrayList<>();
             for (int i = 0; i < subMetricExpr.size(); i++) {

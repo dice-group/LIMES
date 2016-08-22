@@ -14,12 +14,12 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.mapper.pointsets.PolygonIndex;
-import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class IndexedHausdorffMeasure extends PointsetsMeasure {
+public class IndexedHausdorffMeasure extends APointsetsMeasure {
 
     public PolygonIndex targetIndex;
     public NaiveHausdorffMeasure nh;

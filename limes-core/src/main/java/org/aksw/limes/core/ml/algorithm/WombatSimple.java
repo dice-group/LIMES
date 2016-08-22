@@ -202,7 +202,7 @@ public class WombatSimple extends AWombat {
         classifiers = findInitialClassifiers();
         createRefinementTreeRoot();
         Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, overallPenaltyWeight);
-        logger.info("Most promising node: " + mostPromisingNode.getValue());
+        logger.debug("Most promising node: " + mostPromisingNode.getValue());
         iterationNr++;
         while ((mostPromisingNode.getValue().getFMeasure()) < maxFitnessThreshold
                 && refinementTreeRoot.size() <= maxRefineTreeSize
@@ -213,10 +213,10 @@ public class WombatSimple extends AWombat {
             if (mostPromisingNode.getValue().getFMeasure() == -Double.MAX_VALUE) {
                 break; // no better solution can be found
             }
-            logger.info("Most promising node: " + mostPromisingNode.getValue());
+            logger.debug("Most promising node: " + mostPromisingNode.getValue());
         }
         RefinementNode bestSolution = getMostPromisingNode(refinementTreeRoot, 0).getValue();
-        logger.info("Overall Best Solution: " + bestSolution);
+        logger.debug("Overall Best Solution: " + bestSolution);
         return bestSolution;
     }
 
@@ -225,7 +225,7 @@ public class WombatSimple extends AWombat {
      * @return initial classifiers
      */
     public List<ExtendedClassifier> findInitialClassifiers() {
-        logger.info("Geting all initial classifiers ...");
+        logger.debug("Geting all initial classifiers ...");
         List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
         for (String p : sourcePropertiesCoverageMap.keySet()) {
             for (String q : targetPropertiesCoverageMap.keySet()) {
@@ -236,7 +236,7 @@ public class WombatSimple extends AWombat {
                 }
             }
         }
-        logger.info("Done computing all initial classifiers.");
+        logger.debug("Done computing all initial classifiers.");
         return initialClassifiers;
     }
 

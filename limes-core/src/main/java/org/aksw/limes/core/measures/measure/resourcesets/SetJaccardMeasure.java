@@ -3,13 +3,13 @@ package org.aksw.limes.core.measures.measure.resourcesets;
 import java.util.Set;
 
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.measures.measure.Measure;
+import org.aksw.limes.core.measures.measure.AMeasure;
 
 /**
  * @author Kevin Dreßler
  * @since 1.0
  */
-public class SetJaccardMeasure extends Measure {
+public class SetJaccardMeasure extends AMeasure {
     @Override
     public double getSimilarity(Object object1, Object object2) {
         if (object1 instanceof Set && object2 instanceof Set) {

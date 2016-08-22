@@ -12,7 +12,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
 
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.util.GeometricShapeFactory;
@@ -21,7 +21,7 @@ import com.vividsolutions.jts.util.GeometricShapeFactory;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class NaiveFrechetMeasure extends PointsetsMeasure {
+public class NaiveFrechetMeasure extends APointsetsMeasure {
     static GeometricShapeFactory gsf = new GeometricShapeFactory();
     static GeometryFactory gf = new GeometryFactory();
     static double delta = 0.01;

@@ -2,7 +2,7 @@ package org.aksw.limes.core.measures.measure.pointsets;
 
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.measures.measure.space.SpaceMeasure;
+import org.aksw.limes.core.measures.measure.space.ASpaceMeasure;
 
 /**
  * implementation of https://en.wikipedia.org/wiki/Vincenty's_formulae Solve the
@@ -14,7 +14,7 @@ import org.aksw.limes.core.measures.measure.space.SpaceMeasure;
  *
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  */
-public class GreatEllipticMeasure extends SpaceMeasure {
+public class GeoGreatEllipticMeasure extends ASpaceMeasure {
 
     /**
      * Computes and returns distance between two points.
@@ -118,27 +118,45 @@ public class GreatEllipticMeasure extends SpaceMeasure {
     }
 
     @Override
-    public void setDimension(int n) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public double getThreshold(int dimension, double simThreshold) {
-        // TODO Auto-generated method stub
-        return 0;
+    	// transforms the similarity threshold into an angular threshold
+        return (1 - simThreshold) / (radius * simThreshold);
     }
 
     @Override
     public double getSimilarity(Object object1, Object object2) {
-        // TODO Auto-generated method stub
-        return 0;
+        String p1[] = ((String) object1).split("\\|");
+        String p2[] = ((String) object2).split("\\|");
+
+        double lat1 = Double.parseDouble(p1[0]);
+        double lon1 = Double.parseDouble(p1[1]);
+        double lat2 = Double.parseDouble(p1[0]);
+        double lon2 = Double.parseDouble(p2[1]);
+        return getDistance(lat1, lon1, lat2, lon2);
     }
 
     @Override
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
-        // TODO Auto-generated method stub
-        return 0;
+        String p1[] = property1.split("\\|");
+        String p2[] = property1.split("\\|");
+        double lon1, lon2, lat1, lat2;
+
+        if (p1[0].toLowerCase().startsWith("lo")) {
+            lon1 = Double.parseDouble(instance1.getProperty(p1[0]).first());
+            lat1 = Double.parseDouble(instance1.getProperty(p1[1]).first());
+        } else {
+            lat1 = Double.parseDouble(instance1.getProperty(p1[0]).first());
+            lon1 = Double.parseDouble(instance1.getProperty(p1[1]).first());
+        }
+
+        if (p2[0].toLowerCase().startsWith("lo")) {
+            lon2 = Double.parseDouble(instance1.getProperty(p2[0]).first());
+            lat2 = Double.parseDouble(instance1.getProperty(p2[1]).first());
+        } else {
+            lat2 = Double.parseDouble(instance1.getProperty(p2[0]).first());
+            lon2 = Double.parseDouble(instance1.getProperty(p2[1]).first());
+        }
+        return getDistance(lat1, lon1, lat2, lon2);
     }
 
     @Override
@@ -148,14 +166,12 @@ public class GreatEllipticMeasure extends SpaceMeasure {
 
     @Override
     public String getName() {
-        // TODO Auto-generated method stub
-        return null;
+        return "GeoGreatEllipticMeasure";
     }
 
     @Override
     public String getType() {
-        // TODO Auto-generated method stub
-        return null;
+    	return "spatial";
     }
 
 }

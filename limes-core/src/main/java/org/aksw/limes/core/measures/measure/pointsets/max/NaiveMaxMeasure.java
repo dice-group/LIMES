@@ -13,7 +13,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
 
 /**
  * Brute force approach to computing the MAX distance between two polygons
@@ -21,7 +21,7 @@ import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class NaiveMaxMeasure extends PointsetsMeasure {
+public class NaiveMaxMeasure extends APointsetsMeasure {
 
     public int computations;
 

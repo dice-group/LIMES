@@ -301,7 +301,7 @@ public class MeasureFactoryTest {
     @Test
     public void test() {
         MeasureType type = null;
-        Measure measure = null;
+        AMeasure measure = null;
         /////////////////////////////////////////////////////////////////////////
         String str = "jaro(x.name,y.name)";
         Instruction inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);

@@ -14,7 +14,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
 
 /**
  * Approach to computing the link distance between two polygons
@@ -22,7 +22,7 @@ import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class NaiveLinkMeasure extends PointsetsMeasure {
+public class NaiveLinkMeasure extends APointsetsMeasure {
 
     public NaiveLinkMeasure() {
         computations = 0;
@@ -33,7 +33,7 @@ public class NaiveLinkMeasure extends PointsetsMeasure {
         LinkFinder fsf = new LinkFinder(X, Y);
 
         for (PairSimilar<Point> p : fsf.getlinkPairsList()) {
-            sum = PointsetsMeasure.pointToPointDistance(p.a, p.b);
+            sum = APointsetsMeasure.pointToPointDistance(p.a, p.b);
         }
         return sum;
     }
@@ -43,7 +43,7 @@ public class NaiveLinkMeasure extends PointsetsMeasure {
         LinkFinder fsf = new LinkFinder(X, Y);
 
         for (PairSimilar<Point> p : fsf.getlinkPairsList()) {
-            sum += PointsetsMeasure.pointToPointDistance(p.a, p.b);
+            sum += APointsetsMeasure.pointToPointDistance(p.a, p.b);
         }
         return sum;
     }

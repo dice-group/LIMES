@@ -9,7 +9,7 @@ import java.util.List;
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
 
 /**
  * class to find the surjection of the larger polygon to the smaller one.
@@ -76,7 +76,7 @@ public class SurjectionFinder {
         double d, min = Double.MAX_VALUE;
         Point result = null;
         for (Point y : Y.points) {
-            d = PointsetsMeasure.pointToPointDistance(x, y);
+            d = APointsetsMeasure.pointToPointDistance(x, y);
             if (d < min) {
                 min = d;
                 result = y;

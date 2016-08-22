@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.measure.Measure;
+import org.aksw.limes.core.measures.measure.AMeasure;
 import org.aksw.limes.core.util.RandomStringGenerator;
 
 /**
@@ -17,7 +17,7 @@ import org.aksw.limes.core.util.RandomStringGenerator;
  */
 public class MapperTest {
     public static AMapping bruteForce(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
-                                      double threshold, Measure measure) {
+                                      double threshold, AMeasure measure) {
         AMapping m = MappingFactory.createDefaultMapping();
         double sim;
         for (String s : sourceMap.keySet()) {

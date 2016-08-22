@@ -1,7 +1,7 @@
 package org.aksw.limes.core.measures.measure.topology;
 
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.measures.measure.Measure;
+import org.aksw.limes.core.measures.measure.AMeasure;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
@@ -12,7 +12,7 @@ import com.vividsolutions.jts.io.WKTReader;
  *
  * @author kdressler
  */
-public class DisjointMeasure extends Measure {
+public class DisjointMeasure extends AMeasure {
     @Override
     public double getSimilarity(Object object1, Object object2) {
         // expects WKT Strings

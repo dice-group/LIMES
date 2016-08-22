@@ -81,7 +81,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected double propertyLearningRate = 0.9;
     protected double overallPenaltyWeight = 0.5d;
     protected boolean verbose = false;
-    protected Set<String> measures = new HashSet<>(Arrays.asList("	"));
+    protected Set<String> measures = new HashSet<>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams"));
 
     protected Map<String, Double> sourcePropertiesCoverageMap; //coverage map for latter computations
     protected Map<String, Double> targetPropertiesCoverageMap; //coverage map for latter computations

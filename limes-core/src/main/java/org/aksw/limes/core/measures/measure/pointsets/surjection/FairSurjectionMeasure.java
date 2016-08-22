@@ -14,7 +14,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
 
 /**
  * Approach to computing the Surjection distance between two polygons
@@ -22,7 +22,7 @@ import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
-public class FairSurjectionMeasure extends PointsetsMeasure {
+public class FairSurjectionMeasure extends APointsetsMeasure {
 
     public int computations;
 
@@ -41,7 +41,7 @@ public class FairSurjectionMeasure extends PointsetsMeasure {
         FairSurjectionFinder fsf = new FairSurjectionFinder(X, Y);
 
         for (PairSimilar<Point> p : fsf.getFairSurjectionPairsList()) {
-            sum = PointsetsMeasure.pointToPointDistance(p.a, p.b);
+            sum = APointsetsMeasure.pointToPointDistance(p.a, p.b);
         }
         return sum;
     }
