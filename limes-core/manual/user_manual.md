@@ -43,7 +43,7 @@ algorithms , new datatypes, new preprocessing functions and others thank
 to its modular architecture displayed in Figure [fig:architecture].
 
 ![Architecture of LIMES](images/architecture.png "fig:")
-
+[fig:architecture]
 
 In general, LIMES can be used to set links between two data sources,
 e.g., a novel data source created by a data publisher and existing data
