@@ -16,7 +16,7 @@ conditions. By these means, LIMES can reduce the number of comparisons
 needed during the mapping process by several orders of magnitude and
 complexity without loosing a single link.
 
-![workflow](images/uml.png "fig:") 
+![LIMES workflow](images/uml.png){workflow} 
 
 The general workflow implemented by the LIMES framework is depicted in
 Figure (#workflow). Given the source S, the target T and a link
