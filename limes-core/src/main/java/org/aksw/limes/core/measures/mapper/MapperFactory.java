@@ -95,6 +95,7 @@ public class MapperFactory {
             case GEO_SCAN_INDEXED_HAUSDORFF:
             case GEO_ORTHODROMIC:
             case GEO_HAUSDORFF:
+            case GEO_GREAT_ELLIPTIC:
                 return new OrchidMapper();
             case GEO_SYMMETRIC_HAUSDORFF:
                 return new SymmetricHausdorffMapper();

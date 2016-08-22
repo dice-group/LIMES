@@ -2,6 +2,7 @@ package org.aksw.limes.core.measures.measure;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.measures.measure.pointsets.GeoOrthodromicMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.GreatEllipticMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverageMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechetMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
@@ -85,6 +86,7 @@ public class MeasureFactory {
     public static final String EUCLIDEAN = "euclidean";
     // Point-set measures
     public static final String GEO_ORTHODROMIC = "geo_orthodromic";
+    public static final String GEO_GREAT_ELLIPTIC = "geo_greatelliptic";
     public static final String GEO_HAUSDORFF = "geo_hausdorff";
     public static final String GEO_NAIVE_HAUSDORFF = "geo_naivehausdorff";
     public static final String GEO_INDEXED_HAUSDORFF = "geo_indexedhausdorff";
@@ -210,6 +212,10 @@ public class MeasureFactory {
 
         if (measure.startsWith(GEO_ORTHODROMIC)) {
             return MeasureType.GEO_ORTHODROMIC;
+        }
+        
+        if (measure.startsWith(GEO_GREAT_ELLIPTIC)) {
+            return MeasureType.GEO_GREAT_ELLIPTIC;
         }
         //////////////////////////
         if (measure.startsWith(GEO_MAX)) {
@@ -380,7 +386,8 @@ public class MeasureFactory {
             return new SymmetricHausdorffMeasure();
         case GEO_HAUSDORFF:
             return new NaiveHausdorffMeasure();
-
+        case GEO_GREAT_ELLIPTIC:
+            return new GreatEllipticMeasure();
         case GEO_ORTHODROMIC:
             return new GeoOrthodromicMeasure();
         ///////////////////////

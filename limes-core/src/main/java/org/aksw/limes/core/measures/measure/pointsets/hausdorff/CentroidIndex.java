@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.pointsets.GreatEllipticDistance;
 import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.mapper.pointsets.PolygonIndex;
+import org.aksw.limes.core.measures.measure.pointsets.GreatEllipticMeasure;
 
 /**
  * Adds the distance from the centroids, which are in the middle of the longest
@@ -39,7 +39,7 @@ public class CentroidIndex extends PolygonIndex {
      */
     public double distance(Point x, Point y) {
         if (USE_GREAT_ELLIPTIC_DISTANCE) {
-            return GreatEllipticDistance.getDistanceInDegrees(x, y);
+            return GreatEllipticMeasure.getDistanceInDegrees(x, y);
         }
         return OrthodromicDistance.getDistanceInDegrees(x, y);
     }

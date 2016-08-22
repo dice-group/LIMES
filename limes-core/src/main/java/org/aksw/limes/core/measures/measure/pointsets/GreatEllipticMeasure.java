@@ -1,6 +1,8 @@
-package org.aksw.limes.core.measures.mapper.pointsets;
+package org.aksw.limes.core.measures.measure.pointsets;
 
 import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.measures.measure.space.SpaceMeasure;
 
 /**
  * implementation of https://en.wikipedia.org/wiki/Vincenty's_formulae Solve the
@@ -12,7 +14,7 @@ import org.aksw.limes.core.datastrutures.Point;
  *
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  */
-public class GreatEllipticDistance {
+public class GreatEllipticMeasure extends SpaceMeasure {
 
     /**
      * Computes and returns distance between two points.
@@ -113,6 +115,47 @@ public class GreatEllipticDistance {
         double s = b * A * (sigma - deltaSigma);
 
         return s / 1000;
+    }
+
+    @Override
+    public void setDimension(int n) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public double getThreshold(int dimension, double simThreshold) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public double getSimilarity(Object object1, Object object2) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public double getRuntimeApproximation(double mappingSize) {
+        return mappingSize / 1000d;
+    }
+
+    @Override
+    public String getName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getType() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

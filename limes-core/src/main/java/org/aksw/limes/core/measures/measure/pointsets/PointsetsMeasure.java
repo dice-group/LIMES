@@ -1,7 +1,6 @@
 package org.aksw.limes.core.measures.measure.pointsets;
 
 import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.pointsets.GreatEllipticDistance;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
@@ -26,7 +25,7 @@ public abstract class PointsetsMeasure extends Measure implements IPointsetsMeas
     public static double pointToPointDistance(Point x, Point y) {
         computations++;
         if (USE_GREAT_ELLIPTIC_DISTANCE) {
-            return GreatEllipticDistance.getDistanceInDegrees(x, y);
+            return GreatEllipticMeasure.getDistanceInDegrees(x, y);
         }
         return OrthodromicDistance.getDistanceInDegrees(x, y);
     }
