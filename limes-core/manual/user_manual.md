@@ -19,7 +19,7 @@ complexity without loosing a single link.
 ![General Workflow of LIMES](images/uml.png "fig:") [fig:workflow]
 
 The general workflow implemented by the LIMES framework is depicted in
-Figure [fig:workflow]. Given the source $S$, the target $T$ and a link
+Figure [fig:workflow]. Given the source S, the target T and a link
 specification, LIMES first separates the different data types to merge.
 Strings are processed by using suffix-, prefix- and position filtering
 in the string mapper. Numeric values (and all values that can be mapped
