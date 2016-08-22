@@ -715,7 +715,7 @@ Version 1.0.0
 -------------
 -  Kernel update
 -  Machine learning algorithm support
--  Added support for several topological functions (within, intersects, ...) **TODO** Kleanti complete
+-  Added support for several topological functions (within, intersects, ...)
 -  New GUI
 
 Version 0.6RC4
