@@ -195,8 +195,16 @@ The current version of LIMES supports the string following metrics:
 * `Trigrams`
 * `Cosine`
 * `Jaccard`  
-* `Levenshtein`.
-* `Overlap`, `Jaro`, `Jaro-Winkler` as well as `Monge-Elkan` are currently being added.
+* `Levenshtein`
+* `Overlap` `
+* `Jaro` 
+* `Jaro-Winkler`
+* `Monge-Elkan` 
+* `Exact match`
+* `Qgrams`
+* `Ratcliff-Obershelp`
+* `Soundex`
+* `Trigram`
 
 In addition, LIMES supports comparing numeric vectors by using the 
 * `Euclidean` metric as well as 
