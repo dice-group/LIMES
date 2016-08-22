@@ -95,12 +95,12 @@ Six properties need to be set.
 
 * Each data source must be given an ID via the tag `ID`.
 * The endpoint of the data source needs to be explicated via the `ENDPOINT` tag. 
-    + In the data to be queried from a SPARQL end point, the `ENDPOINT` tag is set to the SPARQL endpoint URI.
-    + In case the data is stored in a local files (CSV, N3, TURTLE, etc.), `ENDPOINT` tag is to be set to the absolute path of the file containing the data to link.
-* The variable associated with this endpoint must be specified. This is done by setting the `VAR` tag. This variable is used later when specifying the metric used to compare the entities retrieved from the source and target endpoints.
-* The fourth property is set via the `PAGESIZE` tag. This property must be set to the maximal number of triples returned by the SPARQL endpoint to address. For example, the [DBpedia endpoint](http://dbpedia.org/sparql) returns a maximum of 1000 triples for each query. LIMES' SPARQL module can still retrieve all relevant instances for the mapping if given this value. If the SPARQL endpoint does not limit the number of triple it returns or if the input is a file, the value of `PAGESIZE` should be set to -1. 
-* The restrictions of the data to retrieved can be set via the `RESTRICTION` tag. This tag allows to limit the entries that are retrieved the LIMES' query module. In this particular example, we only instances of MESH concepts. 
-* The `PROPERTY` tag allows to specify the properties that will be used during the linking. It is important to note that the property tagcan also be used to specify the preprocessing on the input data. For example, setting `rdfs:label AS nolang`, one can ensure that the language tags get removed from each `rdfs:label` before it is written in the cache. Pre-processing functions can be piped into one another by using `->`. For example, `rdfs:label AS nolang->lowercase` will compute `lowercase(nolang(rdfs:label))`.
+    + If the data is to be queried from a SPARQL end point, the `ENDPOINT` tag must be set to the corresponding SPARQL endpoint URI.
+    + In case the data is stored in a local file (CSV, N3, TURTLE, etc.), `ENDPOINT` tag must be set to the absolute path of the file containing the data.
+* The `VAR` tag describes the variable associated with the aformentioned endpoint. This variable is also used later, when specifying the metric used to link the entities retrieved from the source and target endpoints.
+* The fourth property is set via the `PAGESIZE` tag. This property must be set to the maximal number of triples returned by the SPARQL endpoint. For example, the [DBpedia endpoint](http://dbpedia.org/sparql) returns a maximum of 1000 triples for each query. LIMES' SPARQL module can still retrieve all relevant instances for the mapping even the value is set. If the SPARQL endpoint does not limit the number of triples it returns or if the input is a file, the value of `PAGESIZE` should be set to -1. 
+* The restrictions on the queried data can be set via the `RESTRICTION` tag. This tag allows to constrain the entries that are retrieved the LIMES' query module. In this particular example, we only instances of MESH concepts. 
+* The `PROPERTY` tag allows to specify the properties that will be used during the linking. It is important to note that the property tag can also be used to specify the preprocessing on the input data. For example, setting `rdfs:label AS nolang`, one can ensure that the language tags get removed from each `rdfs:label` before it is written in the cache. Pre-processing functions can be piped into one another by using `->`. For example, `rdfs:label AS nolang->lowercase` will compute `lowercase(nolang(rdfs:label))`.
 
 The pre-processing functions include: 
 * `nolang` for removing language tags, 
@@ -113,7 +113,7 @@ The pre-processing functions include:
 * `fahrenheit` for converting Celsius to Fahrenheit.
 **TODO** Sherif check for completness
 
-Sometimes, generating the right link specification might either require merging property values (for example, the `dc:title` and `foaf:name` of MESH concepts) or splitting property values (for example, comparing the label and `foaf:homepage` of source instances and the `foaf:homepage` of target instances as well as `foaf:homepage AS cleaniri` of the target instances with the `rdfs:label` of target instances. To enable this goal, LIMES provides the `RENAME` operator which simply store either the values of a property or the results of a preprocessing into a different property field. For example, `foaf:homepage AS cleaniri RENAME label` would stored the homepage of a object without all the prefixes in the name property. The user could then access this value during the specification of the similarity measure for comparing sources and target instances. Note that the same property value can be used several times. Thus, the following specification fragment is valid and leads to the the `dc:title` and `foaf:name` of individuals)  of MESH concepts being first cast down to the lowercase and then merged to a single property.
+Sometimes, generating the right link specification might either require merging property values (for example, the `dc:title` and `foaf:name` of MESH concepts) or splitting property values (for example, comparing the label and `foaf:homepage` of source instances and the `foaf:homepage` of target instances as well as `foaf:homepage AS cleaniri` of the target instances with the `rdfs:label` of target instances. To enable this, LIMES provides the `RENAME` operator which simply store either the values of a property or the results of a preprocessing into a different property field. For example, `foaf:homepage AS cleaniri RENAME label` would stored the homepage of a object without all the prefixes in the name property. The user could then access this value during the specification of the similarity measure for comparing sources and target instances. Note that the same property value can be used several times. Thus, the following specification fragment is valid and leads to the the `dc:title` and `foaf:name` of individuals)  of MESH concepts being first cast down to the lowercase and then merged to a single property.
 
     <SOURCE>
         <ID>mesh</ID>
@@ -140,15 +140,14 @@ In addition, the following allows splitting the values of `foaf:homepage` into t
         <TYPE>sparql</TYPE>
     </SOURCE>
 
-In addition, a source type can be set via `TYPE`. The default type is set to `SPARQL` (for a SPARQL endpoint) but LIMES also supports reading files directly from the harddrive. The supported data formats are
+In addition, a source type can be set via `TYPE`. The default type is set to `SPARQL` (for a SPARQL endpoint) but LIMES also supports reading files directly from the hard-drive. The supported data formats are
 * `CSV`: Character-separated file can be loaded directly into LIMES. Note that the separation character is set to `TAB` as a default. The user can alter this setting programmatically. 
 * `N3` (which also reads `NT` files) reads files in the `N3` language.
 * `N-TRIPLE` reads files in W3C's core [N-Triples format](http://www.w3.org/TR/rdf-testcases/\#ntriples)
-*  `TURTLE` allows reading files in the `Turtle` [syntax](http://www.w3.org/TR/turtle/).
+* `TURTLE` allows reading files in the `Turtle` [syntax](http://www.w3.org/TR/turtle/).
 
-Consequently, if you want to download data from a SPARQL endpoint, there is no need to set the `<TYPE>` tag. 
-If instead you want to read the source (or target) data from a file, the `<ENDPOINT>` tag should contain the path to the file to read, e.g. `<ENDPOINT>C:/Files/dbpedia.nt</ENDPOINT>`
-In addition, the `<TYPE>` tag then needs to be set, for example by writing `<TYPE>NT</TYPE>`.
+Moreover, if you want to download data from a SPARQL endpoint, there is no need to set the `<TYPE>` tag. 
+Instead, if you want to read the source (or target) data from a file, you should fill `<ENDPOINT>` tag with the absolute path of the input file, e.g. `<ENDPOINT>C:/Files/dbpedia.nt</ENDPOINT>`, and you should also set the `<TYPE>` tag  with the type of the input data, for example `<TYPE>NT</TYPE>`.
 
 ##Target Data Source
 Configuring the target data source is very similar to configuring the source data source. The only difference lies in the beginning tag, i.e., `TARGET` instead of `SOURCE`. In the example shown below, we retrieve the `condition_name` of a condition from LinkedCT. We do no set the type of the source. Thus, LIMES supposes it is a SPARQL endpoint.
@@ -207,8 +206,8 @@ The current version of LIMES supports the string following metrics:
 * `Trigram`
 
 In addition, LIMES supports comparing numeric vectors by using the 
-* `Euclidean` metric as well as 
-* the `Geo_Orthodromic` distance and
+* `Euclidean` metric 
+* `Geo_Orthodromic` distance 
 * `Geo_Great_Elliptic` distance
 
 The similarity between polygons can be measured by using the following point-set distances:
@@ -229,7 +228,7 @@ The similarity between polygons can be measured by using the following point-set
 * `Geo_Naive_Surjection`
 * `Geo_Fair_Surjection`
 
-The temporal relations between event resources can be found by using the following distances:
+The temporal relations between event resources can be found by using the following relations:
 * `Tmp_Successor`
 * `Tmp_Predecessor`
 * `Tmp_Concurrent`
@@ -247,7 +246,7 @@ The temporal relations between event resources can be found by using the followi
 * `Tmp_Is_Overlapped_By`
 * `Tmp_Equals`
 
-The topological relations between spatial resources can be found by using the following distances:
+The topological relations between spatial resources can be found by using the following relations:
 * `Top_Contains`
 * `Top_Crosses`
 * `Top_Disjoint`
@@ -260,7 +259,7 @@ The topological relations between spatial resources can be found by using the fo
 More complex distance measures are being added.
 
 ## Machine Learning
-In most cases, finding a good eetric expression (i.s. one that achieve high F-Measure) is not a trivial task. Therefore, in LIMES we implemented a number of machine learning algorithm for auto-generation of metric (also called Link Specification). For using a machine learning algorithm in your configuration file use the `MLALGORITHM` tag instead of the `METRIC` tag. For example:
+In most cases, finding a good metric expression (i.s. one that achieve high F-Measure) is not a trivial task. Therefore, in LIMES we implemented a number of machine learning algorithm for auto-generation of metric (also called Link Specification). For using a machine learning algorithm in your configuration file use the `MLALGORITHM` tag instead of the `METRIC` tag. For example:
 
 	<MLALGORITHM>
 		<NAME>wombat simple</NAME>
@@ -282,7 +281,7 @@ In particular:
     + supervised active
     + unsupervised
 * The the tag `TRAINING` contains the full path to the training data file. Note that this tag is not required in case of the supervised active and unsupervised learning algorithms
-* The the tag `PARAMETER` contains the the name (using the sub-tag `NAME`) and the value (using the sub-tag `VALUE`) of the used machine learning algorithm parameter. User can use as many `PARAMETER` tags as (s)he needs. Note that LIMES uses the default values of all unspecified parameters. 
+* The the tag `PARAMETER` contains the the name (using the sub-tag `NAME`) and the value (using the sub-tag `VALUE`) of the used machine learning algorithm parameter. User can use as many `PARAMETER` tags as it is required. Note that LIMES uses the default values of all unspecified parameters. 
 
 The following table contains a list of implemented algorithms together with supported implementations and parameters.
 
@@ -384,7 +383,7 @@ The following table contains a list of implemented algorithms together with supp
     	
   
 ##Acceptance Condition
-Setting the acceptance condition basically consists of setting the value for the threshold above which links are considered to be valid and not to required further curation. This can be carried out as exemplified below.
+Filling the acceptance condition consists of setting the threshold value to the minimum value that two instances must have in order to satisfy a relation. This can be carried out as exemplified below. 
 
     <ACCEPTANCE>
         <THRESHOLD>0.98</THRESHOLD>
@@ -392,7 +391,7 @@ Setting the acceptance condition basically consists of setting the value for the
         <RELATION>owl:sameAs</RELATION>
     </ACCEPTANCE>
 
-By using the \verb#THRESHOLD# tag, the user can set the value for the metric value above which two instances are considered to be linked via the relation specified by using the tag \verb#RELATION#, i.e., \verb#owl:sameAs# in our example. Setting the tag `<FILE>` allows to specify where the links should be written. Currently, LIMES produces output files in the N3 format.
+By using the \verb#THRESHOLD# tag, the user can set the minimum value that two instances must have in order to satisfy the relation specified in the \verb#RELATION# tag, i.e., \verb#owl:sameAs# in our example. Setting the tag `<FILE>` allows to specify where the links should be written. Currently, LIMES produces output files in the N3 format.
 
 Future versions of LIMES will allow to write the output to other streams and in other data formats.
 
@@ -417,7 +416,7 @@ The user can choose positive integers to set the granularity of HYPPO, HR3 or OR
     <GRANULARITY>2</GRANULARITY>.
 
 ## Output Format
-The user can choose between TAB and N3 as output format by setting
+The user can choose between `TAB` and `N3` as output format by setting
 
     <OUTPUT>N3</OUTPUT>
 
