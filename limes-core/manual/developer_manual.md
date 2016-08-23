@@ -41,7 +41,7 @@ This code example, taken from the **LSPipeline** class, demonstrates the usage p
 	return engine.execute(rwLs, planner);
 	
 ###Measures
-LIMES supports a set of metrics that can be used inside a LS to link resources (see [user_manual.md](user_manual.md) for more details). Each metric corresponds to one mapper. One mapper can correspond to more that one metric. The **Measures** package is divided into two sub-packages: **Measure** and **Mapper**:
+LIMES supports a set of metrics that can be used as a part of a LS to link resources (see [user_manual.md](user_manual.md) for more details). Each metric corresponds to one mapper. One mapper can correspond to more that one metric. The **Measures** package is divided into two sub-packages: **Measure** and **Mapper**:
 
 - The **Measure** packages includes the interface **IMeasure**, the abstract class **AMeasure**, the set of metrics implemented in LIMES, a **MeasureType** class, a **MeasureFactory** class and a **MeasureProcessor** class:
 	
