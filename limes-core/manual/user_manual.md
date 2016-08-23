@@ -2,8 +2,7 @@
 
 #User Manual (Version 1.0.0)
 
-Introduction
-============
+##Introduction
 
 LIMES, the **Li**nk Discovery Framework for **Me**tric **S**paces, is a
 framework for discovering links between entities contained in Linked
@@ -102,7 +101,9 @@ Six properties need to be set.
 * The restrictions on the queried data can be set via the `RESTRICTION` tag. This tag allows to constrain the entries that are retrieved the LIMES' query module. In this particular example, we only instances of MESH concepts. 
 * The `PROPERTY` tag allows to specify the properties that will be used during the linking. It is important to note that the property tag can also be used to specify the preprocessing on the input data. For example, setting `rdfs:label AS nolang`, one can ensure that the language tags get removed from each `rdfs:label` before it is written in the cache. Pre-processing functions can be piped into one another by using `->`. For example, `rdfs:label AS nolang->lowercase` will compute `lowercase(nolang(rdfs:label))`.
 
-The pre-processing functions include: 
+### Pre-processing Functions
+
+Currently, LIMES supports the following set of pre-processing functions:
 * `nolang` for removing language tags
 * `lowercase` for converting the input string into lower case
 * `uppercase` for converting the input string into upper case 
@@ -152,7 +153,7 @@ In addition, a source type can be set via `TYPE`. The default type is set to `SP
 Moreover, if you want to download data from a SPARQL endpoint, there is no need to set the `<TYPE>` tag. 
 Instead, if you want to read the source (or target) data from a file, you should fill `<ENDPOINT>` tag with the absolute path of the input file, e.g. `<ENDPOINT>C:/Files/dbpedia.nt</ENDPOINT>`, and you should also set the `<TYPE>` tag  with the type of the input data, for example `<TYPE>NT</TYPE>`.
 
-##Target Data Source
+## Target Data Source
 Configuring the target data source is very similar to configuring the source data source. The only difference lies in the beginning tag, i.e., `TARGET` instead of `SOURCE`. In the example shown below, we retrieve the `condition_name` of a condition from LinkedCT. We do no set the type of the source. Thus, LIMES supposes it is a SPARQL endpoint.
 
     <TARGET>
