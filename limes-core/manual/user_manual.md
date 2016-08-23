@@ -259,6 +259,9 @@ The topological relations between spatial resources can be found by using the fo
 * `Top_Touches`
 * `Top_Within`
 
+To compare sets of resources (e.g. in rdf containers), use the following relations:
+* `Set_Jaccard`
+
 More complex distance measures are being added.
 
 ## Machine Learning
@@ -697,9 +700,14 @@ Once the configuration file (dubbed `config.xml` in this manual) has
 been written, the last step consists of actually running the LIMES
 framework. For this purpose, simply run
 
-`java -jar LIMES.jar config.xml`.
+`java -jar LIMES.jar config.xml [OPTIONS...]`.
 
-In case your system runs out of memory, please use the `-Xmx` option to
+The following options and switches are available:
+* `-h` print out help
+* `-f $format` set format of configuration file, with `$format` being either `"XML"` (default) or `"RDF"`
+* `-g` run GUI version
+
+In case your system runs out of memory, please use the `-Xmx` option (must appear before the -jar option) to
 allocate more memory to the Java Virtual Machine. Please ensure that the
 Data Type Definition file for LIMES, `limes.dtd`, is in the same folder
 as the `LIMES.jar` and everything should run just fine. Enjoy.
