@@ -26,8 +26,8 @@ As you can see from the flow diagram above, LIMES 1.0 mainly consists of 2 separ
 The **LSPipeline** consists of three basic building blocks: **Rewriter**, **Planner** and **ExecutionEngine**. 
 
 - A **Rewriter** aims to simplify a given LS to remove potential redundancy, eventually speeding up its execution.
-- A **Planner** determines which *atomic LS* should be executed first and how to process intermediary results, e.g. it could plan to first run some *atomic LS* and then filter the results using another *atomic LS* instead of running it independently and merging the results.
-- An **ExecutionEngine** executes the *Plan* which results from running the *Planner*. 
+- A **Planner** generates the plan of an input LS. For an *atomic LS*, it generates a simple *Plan* that consists of a *RUN* command. For a *complex LS*, it determines which *atomic LS* should be executed first, how to process intermediary results and identifies dependencies between atomic LSs. For example, a *Planner* can decide to first run some *atomic LS* and then filter the results using another *atomic LS* instead of running it independently and merging the results.
+- An **ExecutionEngine** is responsible for executing the *Plan* of an input LS. It takes as input a LS and a *Planner*, it executes  the *Plan* and returns the set of links as a *AMapping*.
 
 All of these building blocks have several implementations which can be instantiated using the respective factories, i.e. *RewriterFactory*, *PlannerFactory*, *ExecutionEngineFactory*.
 This code example, taken from the **LSPipeline** class, demonstrates the usage pattern:
