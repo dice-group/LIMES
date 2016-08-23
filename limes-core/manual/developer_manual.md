@@ -28,8 +28,12 @@ The **LSPipeline** consists of three basic building blocks: **Rewriter**, **Plan
 - A **Rewriter** aims to simplify a given LS by removing potential redundancy, that eventually speeds up its execution.
 - A **Planner** generates the plan of an input LS. For an *atomic LS*, it generates a simple *Plan* that consists of a *RUN* command. For a *complex LS*, it determines which *atomic LS* should be executed first, how to process intermediary results and identifies dependencies between atomic LSs. For example, a *Planner* can decide to first run some *atomic LS* and then filter the results using another *atomic LS* instead of running it independently and merging the results.
 - An **ExecutionEngine** is responsible for executing the *Plan* of an input LS. It takes as input a LS and a *Planner*, it executes  the *Plan* and returns the set of links as a *AMapping*.
+- All packages have the same hierarchy and they include the following set of classes:
+	- An interface i.e. **IExecutionEngine** that includes all basic functions that an engine must implement.
+	- An abstract class i.e. **ExecutionEngine** that implements the **IExecutionEngine** interface and must be extended by all engine classes.
+	- A factory class i.e. **ExecutionEngineFactory** that returns an object of an engine given an input engine name. 
 
-All of these building blocks have several implementations which can be instantiated using the respective factories, i.e. *RewriterFactory*, *PlannerFactory*, *ExecutionEngineFactory*.
+
 This code example, taken from the **LSPipeline** class, demonstrates the usage pattern:
 
 	Rewriter rw = RewriterFactory.getRewriter(rewriterType);
