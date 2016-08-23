@@ -39,6 +39,14 @@ This code example, taken from the **LSPipeline** class, demonstrates the usage p
 	// Execute the ExecutionPlan obtained from the LS
 	ExecutionEngine engine = ExecutionEngineFactory.getEngine(executionEngineType, sourceCache, targetCache, sourceVar, targetVar);
 	return engine.execute(rwLs, planner);
+
+
+- If you want to create a new engine or planner or rewriter class, you must follow a set of steps:
+
+	* The name of the new class must end with the word "Engine" or "Planner" or "Rewriter".
+	* The new class must extend the ExecutionEngine or Planner or Rewriter abstract class and as a result implement all overriden methods from the corresponding interface. No unsupported functions are allowed.
+	* Go to the corresponding Factory class of the package and include a label for the new class at the enum class of allowed names. Then, create a *public static final* field of String type using the same name of engine/planner/rewriter as the one used in the enum class i.e. *public static final String HELIOS = "helios";* and finally then add the choice of returing this engine/planner/rewriter at the i.e. *getPlannerType* and *getPlanner* functions following the pattern used for other engines/planners/rewriters.
+
 	
 ###Measures
 LIMES supports a set of metrics that can be used as a part of a LS to link resources (see [user_manual.md](user_manual.md) for more details). Each metric corresponds to one mapper. One mapper can correspond to more that one metric. The **Measures** package is divided into two sub-packages: **Measure** and **Mapper**:
@@ -57,7 +65,7 @@ LIMES supports a set of metrics that can be used as a part of a LS to link resou
 
 	* In case a suitable type package exists then:
 	
-		1. The new metric name must include the word Measure at the end.
+		1. The new metric name must end with the word Measure.
 		2. The new metric must extend the type abstract class.
 		3. The new metric must implement all overriden methods of the type interface. No unsupported functions are allowed.
 		4. Go to the **MeasureType** class and add a representative name of that metric.
