@@ -81,8 +81,7 @@ LIMES supports a set of metrics that can be used as a part of a LS to link resou
 	
 	1. The new mapper name must include the word Mapper at the end.
 	2. The new mapper must extend the **AMapper** abstrast class as a result, it must implement all overriden methods of the **IMapper** interface. No unsupported functions are allowed.
-	3. Go to the **MeasureType** class and add a representative name of that metric.
-	4. Go to the **MapperFactory** class and add the choice of returning this mapper at the *createMapper* function following the pattern used for other mappers.
+	3. Go to the **MapperFactory** class and add the choice of returning this mapper at the *createMapper* function following the pattern used for other mappers.
 
 	
 
