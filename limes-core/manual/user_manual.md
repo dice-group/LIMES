@@ -692,7 +692,6 @@ The LIMES Distribution
 
 Running the Framework
 ---------------------
-**TODO** Kevin please update this section
 Once the configuration file (dubbed `config.xml` in this manual) has
 been written, the last step consists of actually running the LIMES
 framework. For this purpose, simply run
