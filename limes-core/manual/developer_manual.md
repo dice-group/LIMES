@@ -14,7 +14,7 @@ There are two classes that are fundamental for representing linked data within L
 
 ## Overview
 ![LIMES workflow](images/uml.png "fig:")
-[fig:workflow] 
+
 
 As you can see from the flow diagram above, LIMES 1.0 mainly consists of 2 separate execution pipelines:
 
