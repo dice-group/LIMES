@@ -25,5 +25,5 @@ Current releases can be found at https://github.com/AKSW/LIMES.
 ## More details
 
 * [Project web site](http://aksw.org/Projects/LIMES)
-* [Full user manual](https://github.com/AKSW/LIMES-dev/blob/dev/limes-core/manual/user_manual.md)
+* [User manual](https://github.com/AKSW/LIMES-dev/blob/dev/limes-core/manual/user_manual.md)
 * [Developer manual](https://github.com/AKSW/LIMES-dev/blob/dev/limes-core/manual/developer_manual.md)
