@@ -39,7 +39,27 @@ This code example, taken from the **LSPipeline** class, demonstrates the usage p
 	// Execute the ExecutionPlan obtained from the LS
 	ExecutionEngine engine = ExecutionEngineFactory.getEngine(executionEngineType, sourceCache, targetCache, sourceVar, targetVar);
 	return engine.execute(rwLs, planner);
+	
+###Measures
+LIMES supports a set of metrics that can be used inside a LS to link resources (see [user_manual.md](user_manual.md) for more details). Each metric corresponds to one mapper. One mapper can correspond to more that one metric. The **Measures** package is divided into two sub-packages: **Measure** and **Mapper**:
 
+- The **Measure** packages includes the interface **IMeasure**, the abstract class **AMeasure**, the set of metrics implemented in LIMES, a **MeasureType** class, a **MeasureFactory** class and a **MeasureProcessor** class:
+	
+	* The **IMeasure** interface includes all the basic functions that any metric class must implement.
+	* The **AMeasure** class implements the **IMeasure** interface.
+	* The **MeasureType** class includes all the labels of the metrics implemented in LIMES. If a developer wants to include a new metric, they have to first add it in this class using a representative name.
+	* The metrics are divided into type packages based on the type of property they are comparing (*string*, *pointsets*, *space*, *topology* and *space*). Each type package includes an interface and an abstract class, i.e. the *string* type package includes the **IStringMeasure** interface and the **IStringMeasure** abstract class. All metrics that belong to a particual type package must implement the corresponding interface and abstract class. Additionally, the type package abstract class must extend **AMeasure** and implement the corresponding type interface. The type interface must extend the **IMeasure** interface. If a developer wants to include a new metric, they have to first find the correct package or create a new type package if there is none representative. If a corresponding package exists, then the new metric class must extend the type abstract class and as a result, it must implement all overriden methods of the type interface. No unsupported functions are allowed. If the developer wants to create a new type package, he has to create a corresponding abstract type class and interface and follow the instructions listed above about extending and implementing existing interfaces and classes.
+	* The **MeasureFactory** class returns an object of a measure given an input measure name. If the developer wants to add a new metric, he has to create a *public static final* field of String type using the same name of metric as the one used in the **MeasureType** class i.e. *public static final String COSINE = "cosine";* and then add the choice of returing this measure at the *getMeasureType* and *createMeasure* functions following the pattern used for other metrics.
+	* The **MeasureProcessor** class is responsible for returning the similarity between two instances, given a simple or complex metric expression and a threshold.
+
+- The **Mapper** has almost the same hierarchy as the **Measure** package. The **Mapper** packages includes the interface **IMapper**, the abstract class **AMapper**, a **MapperFactory** class and a **MappingOperations** class:
+	
+	* The **IMapper** interface includes all the basic functions that any mapper class must implement.
+	* The **AMapper** class implements the **IMapper** interface.
+	* The mappers are divided into type packages based on the type of property their corresponding metrics are comparing (*string*, *pointsets*, *space*, *topology* and *space*).  All mappers must extend the **AMapper** abstrast class. If a developer wants to include a new mapper, they have to first find the correct package or create a new type package if there is none representative. If a corresponding package exists, then the new mapper class must extend the **AMapper** abstrast class as a result, it must implement all overriden methods of the **IMapper** interface. No unsupported functions are allowed. If the developer wants to create a new type package, he should follow the previous instructions regarding extending and implementing existing interfaces and classes. 
+	* The **MapperFactory** class returns an object of a mapper given an input measure name. If the developer wants to add a new mapper, he has add the choice of returing this mapper at the *createMapper* function following the pattern used for other mappers.
+	* The **MappingOperations** includes the basic functions between mappings.
+	
 ## MLPipeline
 
 The **MLPipeline** acts as a simple facade for the three *MLImplementationType*s of *MLAlgorithms* LIMES 1.0 offers: *UNSUPERVISED*, *SUPERVISED\_BATCH*, *SUPERVISED\_ACTIVE*.
