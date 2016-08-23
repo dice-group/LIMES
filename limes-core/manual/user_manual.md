@@ -103,15 +103,18 @@ Six properties need to be set.
 * The `PROPERTY` tag allows to specify the properties that will be used during the linking. It is important to note that the property tag can also be used to specify the preprocessing on the input data. For example, setting `rdfs:label AS nolang`, one can ensure that the language tags get removed from each `rdfs:label` before it is written in the cache. Pre-processing functions can be piped into one another by using `->`. For example, `rdfs:label AS nolang->lowercase` will compute `lowercase(nolang(rdfs:label))`.
 
 The pre-processing functions include: 
-* `nolang` for removing language tags, 
-* `lowercase` for converting the input string into lower case,  
-* `uppercase` for converting the input string into upper case, 
-* `number` for ensuring that only the numeric characters, "." and "," are contained in the input string,
-* `replace(String a,String b)` for replacing each occurrence of `a` with `b`,
-* `cleaniri` for removing all the prefixes from IRIs,
-* `celsius` for converting Fahrenheit to Celsius,
-* `fahrenheit` for converting Celsius to Fahrenheit.
-**TODO** Sherif check for completness
+* `nolang` for removing language tags
+* `lowercase` for converting the input string into lower case
+* `uppercase` for converting the input string into upper case 
+* `number` for ensuring that only the numeric characters, "." and "," are contained in the input string
+* `replace(String a,String b)` for replacing each occurrence of `a` with `b`
+* `regexreplace(String x,String b)` for replacing each occurrence the regular excepression `x` with `b`
+* `cleaniri` for removing all the prefixes from IRIs
+* `celsius` for converting Fahrenheit to Celsius
+* `fahrenheit` for converting Celsius to Fahrenheit
+* `removebraces` for removing the braces
+* `regularAlphabet` for removing nun-alphanumeric characters
+* `uriasstring` returns the last part of an URI as a String. Additional parsing `_` as space
 
 Sometimes, generating the right link specification might either require merging property values (for example, the `dc:title` and `foaf:name` of MESH concepts) or splitting property values (for example, comparing the label and `foaf:homepage` of source instances and the `foaf:homepage` of target instances as well as `foaf:homepage AS cleaniri` of the target instances with the `rdfs:label` of target instances. To enable this, LIMES provides the `RENAME` operator which simply store either the values of a property or the results of a preprocessing into a different property field. For example, `foaf:homepage AS cleaniri RENAME label` would stored the homepage of a object without all the prefixes in the name property. The user could then access this value during the specification of the similarity measure for comparing sources and target instances. Note that the same property value can be used several times. Thus, the following specification fragment is valid and leads to the the `dc:title` and `foaf:name` of individuals)  of MESH concepts being first cast down to the lowercase and then merged to a single property.
 
@@ -255,9 +258,6 @@ The topological relations between spatial resources can be found by using the fo
 * `Top_Overlaps`
 * `Top_Touches`
 * `Top_Within`
-
-To compare sets of resources (e.g. in rdf containers), use the following relations:
-* `Set_Jaccard`
 
 More complex distance measures are being added.
 
@@ -692,23 +692,17 @@ The LIMES Distribution
 
 Running the Framework
 ---------------------
+**TODO** Kevin please update this section
 Once the configuration file (dubbed `config.xml` in this manual) has
 been written, the last step consists of actually running the LIMES
 framework. For this purpose, simply run
 
-`java -jar LIMES.jar config.xml [OPTIONS...]`.
+`java -jar LIMES.jar config.xml`.
 
-The following options and switches are available:
-
-* `-h` print out help
-* `-f $format` set format of configuration file, with `$format` being either `"XML"` (default) or `"RDF"`
-* `-g` run GUI version
-
-In case your system runs out of memory, please use the `-Xmx` option (must appear before the -jar option) to
+In case your system runs out of memory, please use the `-Xmx` option to
 allocate more memory to the Java Virtual Machine. Please ensure that the
 Data Type Definition file for LIMES, `limes.dtd`, is in the same folder
 as the `LIMES.jar` and everything should run just fine. Enjoy.
-
 
 
 
