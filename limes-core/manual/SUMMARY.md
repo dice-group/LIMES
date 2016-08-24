@@ -1,5 +1,7 @@
 # Summary
 
+![image](images/limes_logo.png)
+
 ### Getting Started
 
 * [About this documentation](README.md)
