@@ -1,14 +1,17 @@
+![LIMES Logo](./images/limes_logo.png "fig:")
+
 # LIMES Documentation
 
-* ![LIMES Logo](./images/limes_logo.png "fig:")
-
 This document aims to be a comprehensive guide to LIMES.
-It contains ...
-TODO: completeme
+It is subdivided into four parts: 1) this getting started guide, which introduces the reader to LIMES and shows how to
+install it; 2) an user manual, which details how to use and configure the LIMES java application; 3) a developer manual,
+which describes the internal design and the fundamental building blocks of LIMES for those who want to either extend it 
+or embed it into their own software products; 4) miscellaneous section, featuring a FAQ and release notes.  
 
 ## What is LIMES?
 
 LIMES is ...
+TODO: completeme
 
 ## Help and Support
 
