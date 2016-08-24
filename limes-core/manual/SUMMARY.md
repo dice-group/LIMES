@@ -13,7 +13,12 @@
 
 ### Developer manual
 
-* [TODO: completeme](developer_manual.md)
+* [Introduction](developer_manual.md)
+* [Overview](developer_manual/overview.md)
+* [I/O Classes](developer_manual/io_classes.md)
+* [Measures](developer_manual/measures.md)
+* [LSPipeline](developer_manual/ls_pipeline.md)
+* [MLPipeline](developer_manual/ml_pipeline.md)
 
 --
 
