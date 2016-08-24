@@ -5,12 +5,28 @@ jdk:
 
 addons:
   apt:
+    sources:
+      - sourceline: 'deb https://deb.nodesource.com/node_6.x main'
     packages:
       - oracle-java8-installer
+      - nodejs
 
-install: cd limes-core && mvn install -U -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.test.skip=true
-script: mvn test
+install:
+  # install gitbook globally
+  - npm install -g gitbook
+  # build limes
+  - cd limes-core && mvn install -U -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.test.skip=true
 
+# execute tests
+script:
+  - mvn test
+
+# deploy gitbook after success
+deploy:
+  - cd manual && gitbook build
+  - ls -al
+
+# disable emails, enable slack push
 notifications:
   email: false
   slack:
