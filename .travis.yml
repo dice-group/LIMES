@@ -14,12 +14,10 @@ before_install:
   - npm install -g gitbook
 
 # build limes
-install:
-  - cd limes-core && mvn install -U -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.test.skip=true
+install: cd limes-core && mvn install -U -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.test.skip=true
 
 # execute tests
-script:
-  - mvn test
+script: mvn test
 
 # deploy gitbook after success
 deploy:
