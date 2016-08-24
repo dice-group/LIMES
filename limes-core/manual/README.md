@@ -1,4 +1,6 @@
-# LIMES documentation
+# LIMES Documentation
+
+* ![LIMES Logo](./images/limes_logo.png "fig:")
 
 This document aims to be a comprehensive guide to LIMES.
 It contains ...

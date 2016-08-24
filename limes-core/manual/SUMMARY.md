@@ -1,9 +1,5 @@
 # Summary
 
-### LIMES Documentation
-
-* ![LIMES Logo](./images/limes_logo.png "fig:")
-
 ### Getting Started
 
 * [About this documentation](README.md)
