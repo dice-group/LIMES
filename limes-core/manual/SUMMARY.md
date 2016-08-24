@@ -1,11 +1,15 @@
 # Summary
 
-<img src="./images/limes_logo.png" title="LIMES Logo" alt="LIMES"/>
+### LIMES Documentation
+
+* ![LIMES Logo](./images/limes_logo.png "fig:")
 
 ### Getting Started
 
 * [About this documentation](README.md)
 * [Installation and Setup](README.md)
+
+--
 
 ### User manual
 
@@ -33,6 +37,8 @@
 * [Change Log](user_manual/change_log.md)
 * [Example Use Cases](README.md)
 
+--
+
 ### Developer manual
 
 * [Introduction](developer_manual/index.md)
@@ -43,6 +49,8 @@
 * [MLPipeline](developer_manual/ml_pipeline.md)
 
 --
+
+### Miscellaneous
 
 * [FAQ](README.md)
 * [Release notes](https://github.com/AKSW/LIMES-dev/blob/master/CHANGES.md)
