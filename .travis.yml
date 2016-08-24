@@ -1,4 +1,6 @@
 language: java
+node_js:
+  - stable
 jdk:
   - oraclejdk8
 
@@ -9,8 +11,6 @@ addons:
 
 # install node and gitbook globally
 before_install:
-  - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-  - sudo apt-get install -y nodejs
   - npm install -g gitbook
 
 # build limes
@@ -22,12 +22,15 @@ script:
   - mvn test
 
 # deploy gitbook after success
-after_script:
-  - cd manual && gitbook build
-  - ls -al
+after_success: bash ./gh-deploy.sh
 
 # disable emails, enable slack push
 notifications:
   email: false
   slack:
     secure: W641/UZMvWBySvE/TfBDgJSk5qjGWyf/ujDkDzMRr14tglUaEIwYcpOBXVodrziZDMg2zW+G/n5pO76JQGetdkgeHF7Rv3/aA9DQhGVq+MwatkYrxqqIfFqnp4Pa/gNUKYdPE8BicJI9f5NETc5rRCSesLFpLKHHopZQo24bY0Xve5E/8enPFSZ5Jqz3Bz/VIYSnMDt/xzyl0lLswRno1EFn8vGkNyh8ZV+uzSHx2Hng9G+4qgqVqrvjsIu8/fxvvKkBcMxebkG74JPoXl5CrxG9N6z/1BBYEpFHP9p2lWMHnAXh2jCkHjxkF+Y+k46BgAwqU6Pk/WYI9BKAKcaqgwJsIJHPk/YPMdYI/p9nKDHn99kfitL7Gfa7Wfy2edC0v9KlVemL6y/jAJF+r82tCWGvuON4irBkEUs8kBoIXuvH8yiG/LcfvuzTOIF5Kw3AknvGwSjeIiLx08vSFexQQWIL0cCLoCr5S8YNlQa4Hfux8O4J3itOBosOhy6A1RxYxigPFKojAJLzY5JSemab/8OnHSGjJ4DPGfG/xg+T1vrGcJ9ddQwPhqa+F0NKIMaTQ0ZcoFHVY1ZtDmCvyKiYaxLPQqDpTNGF9CmnCQTQGy+z3BHDYCgb8dh8VopMlYWKQ4kXuXJP4EVkGkoORxRLUaRB3BxHLOVoJmienKzH9EM=
+
+env:
+  global:
+  - ENCRYPTION_LABEL: "eec107ffaeb8"
+  - COMMIT_AUTHOR_EMAIL: "yamalight+travis@gmail.com"
