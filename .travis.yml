@@ -5,16 +5,17 @@ jdk:
 
 addons:
   apt:
-    sources:
-      - sourceline: 'deb https://deb.nodesource.com/node_6.x main'
     packages:
       - oracle-java8-installer
-      - nodejs
 
-install:
-  # install gitbook globally
+# install node and gitbook globally
+before_install:
+  - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+  - sudo apt-get install -y nodejs
   - npm install -g gitbook
-  # build limes
+
+# build limes
+install:
   - cd limes-core && mvn install -U -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.test.skip=true
 
 # execute tests
