@@ -43,7 +43,7 @@ rm -rf _book || exit 0
 # build new
 gitbook build
 # copy new files to out
-cp -r _book ../out
+cp -r _book/** ../out
 # exit to higher level
 cd ..
 
