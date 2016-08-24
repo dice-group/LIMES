@@ -11,7 +11,7 @@ addons:
 
 # install node and gitbook globally
 before_install:
-  - npm install -g gitbook
+  - npm install -g gitbook-cli
 
 # build limes
 install:
