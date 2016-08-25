@@ -6,13 +6,13 @@ package org.aksw.limes.core.measures.mapper.pointsets;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class SymmetricHausdorffMapper extends Mapper {
+public class SymmetricHausdorffMapper extends AMapper {
     /**
      * Computes a mapping between a source and a target.
      *

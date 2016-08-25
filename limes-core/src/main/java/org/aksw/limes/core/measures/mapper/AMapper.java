@@ -17,7 +17,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
  *         informatik.uni-leipzig.de{@literal >}
  * @version 1.0
  */
-public abstract class Mapper implements IMapper {
+public abstract class AMapper implements IMapper {
 
     /**
      * Helper method, re-factored from common setup code of Mappers.

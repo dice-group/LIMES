@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.mapper.string.triefilter.LengthQuicksort;
 import org.aksw.limes.core.measures.mapper.string.triefilter.TrieFilter;
@@ -25,7 +25,7 @@ import org.apache.commons.lang3.tuple.Pair;
  * Mapper for bounded Jaro-Winkler distances using an efficient
  * length-partitioning- and trie-pruning-based approach in parallel.
  */
-public class JaroWinklerMapper extends Mapper {
+public class JaroWinklerMapper extends AMapper {
 
     /**
      * Computes a mapping between a source and a target.

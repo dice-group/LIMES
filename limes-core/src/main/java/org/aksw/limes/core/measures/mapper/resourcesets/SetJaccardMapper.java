@@ -9,14 +9,14 @@ import java.util.Set;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 
 /**
  * @author Kevin Dreßler
  * @since 1.0
  */
-public class SetJaccardMapper extends Mapper {
+public class SetJaccardMapper extends AMapper {
 
     public static class SetSizeQuicksort {
 

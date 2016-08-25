@@ -13,7 +13,7 @@ import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
 import org.aksw.limes.core.measures.mapper.space.blocking.BlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
@@ -24,7 +24,7 @@ import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class HR3Mapper extends Mapper {
+public class HR3Mapper extends AMapper {
 
     public int granularity = 4;
 

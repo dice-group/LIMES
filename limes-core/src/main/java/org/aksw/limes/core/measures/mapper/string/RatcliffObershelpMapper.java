@@ -13,7 +13,7 @@ import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.mapper.string.triefilter.LengthQuicksort;
 import org.aksw.limes.core.measures.mapper.string.triefilter.TrieFilter;
@@ -24,7 +24,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RatcliffObershelpMapper extends Mapper {
+public class RatcliffObershelpMapper extends AMapper {
 
     static Logger logger = LoggerFactory.getLogger(RatcliffObershelpMapper.class);
 

@@ -56,7 +56,7 @@ public class MapperFactory {
      *
      */
 
-    public static Mapper createMapper(MeasureType type) throws InvalidMeasureException {
+    public static AMapper createMapper(MeasureType type) throws InvalidMeasureException {
         switch (type) {
             case JAROWINKLER:
                 return new JaroWinklerMapper();

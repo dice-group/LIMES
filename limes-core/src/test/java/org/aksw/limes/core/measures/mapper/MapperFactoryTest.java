@@ -100,7 +100,7 @@ public class MapperFactoryTest {
     @Test
     public void test() {
         MeasureType type = null;
-        Mapper mapper = null;
+        AMapper mapper = null;
         /////////////////////////////////////////////////////////////////////////
         String str = "jaro(x.name,y.name)";
         Instruction inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);

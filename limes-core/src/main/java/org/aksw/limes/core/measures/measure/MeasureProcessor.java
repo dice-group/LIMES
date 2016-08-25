@@ -14,7 +14,7 @@ import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +84,7 @@ public class MeasureProcessor {
         Parser p = new Parser(expression, threshold);
         if (p.isAtomic()) {
 
-            Mapper mapper = null;
+            AMapper mapper = null;
             try {
 
                 MeasureType type = MeasureFactory.getMeasureType(p.getOperator());

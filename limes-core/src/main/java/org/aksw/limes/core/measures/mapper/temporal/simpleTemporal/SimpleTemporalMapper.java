@@ -11,7 +11,7 @@ import java.util.TreeSet;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 
 /**
  * Abstract class of simple temporal relations mapper.
@@ -19,7 +19,7 @@ import org.aksw.limes.core.measures.mapper.Mapper;
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
-public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemporalMapper {
+public abstract class SimpleTemporalMapper extends AMapper implements ISimpleTemporalMapper {
 
     /**
      * Extracts first property (beginDate) from metric expression.

@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
 /**
@@ -16,7 +16,7 @@ import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
  *
  * @author psmeros
  */
-public class IntersectsMapper extends Mapper implements ITopologicRelationMapper {
+public class IntersectsMapper extends AMapper implements ITopologicRelationMapper {
 
     /**
      * @param sourceData

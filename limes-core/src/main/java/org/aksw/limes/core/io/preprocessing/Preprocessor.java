@@ -14,42 +14,42 @@ import org.slf4j.LoggerFactory;
  * @version Nov 23, 2015
  */
 public class Preprocessor {
-    public static final String DATE = "date";
-    public static final String REPLACE = "replace";
-    public static final String REG_EX_REPLACE = "regexreplace";
-    public static final String FAHRENHEIT = "fahrenheit";
-    public static final String URI_AS_STRING = "uriasstring";
-    public static final String REMOVE_BRACES = "removebraces";
-    public static final String CELSIUS = "celsius";
+    public static final String DATE             = "date";
+    public static final String REPLACE          = "replace";
+    public static final String REG_EX_REPLACE   = "regexreplace";
+    public static final String FAHRENHEIT       = "fahrenheit";
+    public static final String URI_AS_STRING    = "uriasstring";
+    public static final String REMOVE_BRACES    = "removebraces";
+    public static final String CELSIUS          = "celsius";
     public static final String REGULAR_ALPHABET = "regularAlphabet";
-    public static final String UPPER_CASE = "uppercase";
-    public static final String LOWER_CASE = "lowercase";
-    public static final String CLEAN_IRI = "cleaniri";
-    public static final String AT = "@";
-    public static final String NO_LANG = "nolang";
-    public static final String NUMBER = "number";
+    public static final String UPPER_CASE       = "uppercase";
+    public static final String LOWER_CASE       = "lowercase";
+    public static final String CLEAN_IRI        = "cleaniri";
+    public static final String AT               = "@";
+    public static final String NO_LANG          = "nolang";
+    public static final String NUMBER 		    = "number";
     static Logger logger = LoggerFactory.getLogger(Preprocessor.class.getName());
 
     public static String process(String entry, String functionChain) {
         String result = entry.split("\\^")[0];
-        //System.out.println("Function chain = "+functionChain);
+        logger.debug("Function chain = " + functionChain);
         if (functionChain != null) {
             if (!functionChain.equals("")) {
                 {
                     String split[] = functionChain.split("->");
                     for (int i = 0; i < split.length; i++) {
                         result = atomicProcess(result, split[i]);
-                        //System.out.println(result);
+                        logger.debug(result);
                     }
                 }
             }
         }
-        //System.out.println("<"+entry+">" + " -> <" + result+">");
+        logger.debug("<"+entry+">" + " -> <" + result+">");
         return result;
     }
 
     public static String atomicProcess(String entry, String function) {
-        //System.out.println(entry +" -> "+ function);
+        logger.debug(entry +" -> "+ function);
         if (function.length() < 2) {
             return entry;
         }
@@ -63,10 +63,10 @@ public class Preprocessor {
         }
         if (function.startsWith(REPLACE)) {
             //function = function.replaceAll(Pattern.quote("_"), " ");
-            //System.out.println(">>>"+function);
+            logger.debug(">>>"+function);
             String replaced = function.substring(8, function.indexOf(","));
             String replacee = function.substring(function.indexOf(",") + 1, function.indexOf(")"));
-            //System.out.println("<"+replaced + ">, <" + replacee + ">");
+            logger.debug("<"+replaced + ">, <" + replacee + ">");
             return entry.replaceAll(Pattern.quote(replaced), replacee);
         }
         if (function.startsWith(REG_EX_REPLACE)) { //e.g replace((*),)

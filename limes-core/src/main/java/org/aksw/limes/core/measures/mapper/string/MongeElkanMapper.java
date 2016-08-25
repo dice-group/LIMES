@@ -10,14 +10,14 @@ import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 
 /**
  * @author Peggy Lucke
  */
-public class MongeElkanMapper extends Mapper {
+public class MongeElkanMapper extends AMapper {
 
     // Tokens are divide by space
     private String split = " ";

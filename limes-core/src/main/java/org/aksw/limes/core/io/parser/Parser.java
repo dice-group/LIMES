@@ -4,8 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Mohamed Sherif {@literal <}sherif {@literal @} informatik.uni-leipzig.de{@literal >}
- * @version DEC 2, 2015
+ * Parse LS
+ * 
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @version Aug 23, 2016
  */
 public class Parser implements IParser {
     public static final Logger logger = LoggerFactory.getLogger(Parser.class.getName());
@@ -84,9 +86,12 @@ public class Parser implements IParser {
         return leftCoefficient;
     }
 
+    /**
+     * @return right coefficient
+     */
     public double getRightCoefficient() {
         rightCoefficient = 1;
-        //  System.out.println("Parsing "+term2);
+        logger.debug("Parsing " + getRightTerm());
         if (rightTerm.contains("*")) {
             String split[] = rightTerm.split("\\*");
             try {
@@ -111,16 +116,14 @@ public class Parser implements IParser {
             operator = expression.substring(0, expression.indexOf("("));
             String noOpExpression = expression.substring(expression.indexOf("(") + 1, expression.lastIndexOf(")"));
             //get terms
-            //       System.out.println("Expression stripped from operator = "+noOpExpression);
+            logger.debug("Expression stripped from operator = " + noOpExpression);
             for (int i = 0; i < noOpExpression.length(); i++) {
-
                 if (noOpExpression.charAt(i) == '(') {
                     counter++;
                     found = true;
                 } else if (noOpExpression.charAt(i) == ')') {
                     counter--;
                     found = true;
-
                 } else if (counter == 1 && found && noOpExpression.charAt(i) == ',') {
                     leftTerm = noOpExpression.substring(0, i);
                     rightTerm = noOpExpression.substring(i + 1);
@@ -150,17 +153,16 @@ public class Parser implements IParser {
                 int index = leftTerm.lastIndexOf("|");
                 String t;
                 String set1 = leftTerm.substring(0, index);
-                //              System.out.println("Term1 filtered = "+set1);
+                logger.debug("LeftTerm filtered = " + set1);
                 t = leftTerm.substring(index + 1, leftTerm.length());
-                //              System.out.println("Term = "+set1+", filter = "+t);
+                logger.debug("Term = " + set1 + ", filter = "+ t);
                 setThreshold1(Double.parseDouble(t));
                 leftTerm = set1;
-
                 index = rightTerm.lastIndexOf("|");
                 String set2 = rightTerm.substring(0, index);
-//                System.out.println("Term2 filtered = "+set2);
+                logger.debug("RightTerm filtered = " + set2);
                 t = rightTerm.substring(index + 1, rightTerm.length());
-//                System.out.println("Term = "+set2+", filter = "+t);
+                logger.debug("Term = " + set2 + ", filter = " + t);
                 setThreshold2(Double.parseDouble(t));
                 rightTerm = set2;
             }
@@ -175,11 +177,17 @@ public class Parser implements IParser {
     }
 
 
+    /**
+     * @return threshold2
+     */
     public double getThreshold2() {
         return threshold2;
     }
 
 
+    /**
+     * @param threshold2
+     */
     public void setThreshold2(double threshold2) {
         this.threshold2 = threshold2;
     }
