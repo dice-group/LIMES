@@ -97,7 +97,6 @@ public class OrchidMapper extends AMapper {
      */
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-        List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         try {
             if (threshold <= 0) {
                 throw new InvalidThresholdException(threshold);
@@ -106,6 +105,9 @@ public class OrchidMapper extends AMapper {
             System.err.println("Exiting..");
             System.exit(1);
         }
+        
+        List<String> properties = PropertyFetcher.getProperties(expression, threshold);
+        
         // get sets of polygons from properties
         Set<Polygon> sourcePolygons = getPolygons(source, properties.get(0));
         Set<Polygon> targetPolygons = getPolygons(target, properties.get(1));
