@@ -173,6 +173,10 @@ public class RADON {
         }
 
         public boolean contains(MBBIndex i) {
+            return this.lat1 < i.lat1 && this.lon1 < i.lon1 && this.lon2 > i.lon2 && this.lat2 > i.lat2;
+        }
+
+        public boolean covers(MBBIndex i) {
             return this.lat1 <= i.lat1 && this.lon1 <= i.lon1 && this.lon2 >= i.lon2 && this.lat2 >= i.lat2;
         }
 
@@ -280,6 +284,10 @@ public class RADON {
                 return geometry1.within(geometry2);
             case CONTAINS:
                 return geometry1.contains(geometry2);
+            case COVERS:
+                return geometry1.covers(geometry2);
+            case COVEREDBY:
+                return geometry1.coveredBy(geometry2);
             case OVERLAPS:
                 return geometry1.overlaps(geometry2);
             default:
@@ -328,6 +336,8 @@ public class RADON {
     public static final String WITHIN = "within";
     public static final String CONTAINS = "contains";
     public static final String OVERLAPS = "overlaps";
+    public static final String COVERS= "covers";
+    public static final String COVEREDBY = "coveredby";
     // best measure according to our evaluation in the RADON paper
     public static String heuristicStatMeasure = "avg";
 
@@ -415,11 +425,20 @@ public class RADON {
             swap = sourceData;
             sourceData = targetData;
             targetData = swap;
-            swap = null;
-            if (rel.equals(WITHIN))
-                rel = CONTAINS;
-            else if (rel.equals(CONTAINS))
-                rel = WITHIN;
+            switch (rel) {
+                case WITHIN:
+                    rel = CONTAINS;
+                    break;
+                case CONTAINS:
+                    rel = WITHIN;
+                    break;
+                case COVERS:
+                    rel = COVEREDBY;
+                    break;
+                case COVEREDBY:
+                    rel = COVERS;
+                    break;
+            }
         }
 
         // set up indexes
@@ -441,14 +460,17 @@ public class RADON {
                 if (target != null && target.size() > 0) {
                     for (MBBIndex a : source) {
                         if (!computed.containsKey(a.uri))
-                            computed.put(a.uri, new HashSet<String>());
+                            computed.put(a.uri, new HashSet<>());
                         for (MBBIndex b : target) {
                             if (!computed.get(a.uri).contains(b.uri)) {
                                 computed.get(a.uri).add(b.uri);
-                                boolean compute = (rel.equals(CONTAINS) && a.contains(b))
-                                        || (rel.equals(WITHIN) && b.contains(a)) || (rel.equals(EQUALS) && a.equals(b))
-                                        || rel.equals(INTERSECTS) || rel.equals(CROSSES) || rel.equals(TOUCHES)
-                                        || rel.equals(OVERLAPS);
+                                boolean compute =  (rel.equals(COVERS) && a.covers(b))
+                                        || (rel.equals(COVEREDBY) && b.covers(a))
+                                        || (rel.equals(CONTAINS) && a.contains(b))
+                                        || (rel.equals(WITHIN) && b.contains(a))
+                                        || (rel.equals(EQUALS) && a.equals(b))
+                                        || rel.equals(INTERSECTS) || rel.equals(CROSSES)
+                                        || rel.equals(TOUCHES) || rel.equals(OVERLAPS);
                                 if (compute) {
                                     if (numThreads == 1) {
                                         if (Matcher.relate(a.polygon, b.polygon, rel)) {

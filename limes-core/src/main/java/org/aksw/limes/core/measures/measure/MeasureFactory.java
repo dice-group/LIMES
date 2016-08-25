@@ -47,12 +47,7 @@ import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.StartsMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
-import org.aksw.limes.core.measures.measure.topology.ContainsMeasure;
-import org.aksw.limes.core.measures.measure.topology.CrossesMeasure;
-import org.aksw.limes.core.measures.measure.topology.DisjointMeasure;
-import org.aksw.limes.core.measures.measure.topology.IntersectsMeasure;
-import org.aksw.limes.core.measures.measure.topology.TouchesMeasure;
-import org.aksw.limes.core.measures.measure.topology.WithinMeasure;
+import org.aksw.limes.core.measures.measure.topology.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,7 +124,9 @@ public class MeasureFactory {
     public static final String TOP_OVERLAPS = "top_overlaps";
     public static final String TOP_CROSSES = "top_crosses";
     public static final String TOP_CONTAINS = "top_contains";
+    public static final String TOP_COVERS = "top_covers";
     public static final String TOP_WITHIN = "top_within";
+    public static final String TOP_COVEREDBY = "top_coveredby";
     public static final String TOP_TOUCHES = "top_touches";
     // Resource set measures
     public static final String SET_JACCARD = "set_jaccard";
@@ -302,6 +299,9 @@ public class MeasureFactory {
         if (measure.startsWith(TOP_CONTAINS)) {
             return MeasureType.TOP_CONTAINS;
         }
+        if (measure.startsWith(TOP_COVERS)) {
+            return MeasureType.TOP_COVERS;
+        }
         if (measure.startsWith(TOP_CROSSES)) {
             return MeasureType.TOP_CROSSES;
         }
@@ -322,6 +322,9 @@ public class MeasureFactory {
         }
         if (measure.startsWith(TOP_WITHIN)) {
             return MeasureType.TOP_WITHIN;
+        }
+        if (measure.startsWith(TOP_COVEREDBY)) {
+            return MeasureType.TOP_COVEREDBY;
         }
         ////////////////////////////////////////////////////
         if (measure.startsWith(SET_JACCARD)) {
@@ -459,6 +462,10 @@ public class MeasureFactory {
             return new TouchesMeasure();
         case TOP_WITHIN:
             return new WithinMeasure();
+        case TOP_COVERS:
+            return new CoversMeasure();
+        case TOP_COVEREDBY:
+            return new CoveredbyMeasure();
         ///////////////////////
         case SET_JACCARD:
             return new SetJaccardMeasure();

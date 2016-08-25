@@ -30,12 +30,7 @@ import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.StartsM
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.ConcurrentMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.PredecessorMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.SuccessorMapper;
-import org.aksw.limes.core.measures.mapper.topology.ContainsMapper;
-import org.aksw.limes.core.measures.mapper.topology.CrossesMapper;
-import org.aksw.limes.core.measures.mapper.topology.DisjointMapper;
-import org.aksw.limes.core.measures.mapper.topology.IntersectsMapper;
-import org.aksw.limes.core.measures.mapper.topology.TouchesMapper;
-import org.aksw.limes.core.measures.mapper.topology.WithinMapper;
+import org.aksw.limes.core.measures.mapper.topology.*;
 import org.aksw.limes.core.measures.measure.MeasureType;
 /**
  * Implements the mapper factory class. For each measure name, the factory
@@ -160,7 +155,11 @@ public class MapperFactory {
                 return new TouchesMapper();
             case TOP_WITHIN:
                 return new WithinMapper();
-                
+            case TOP_COVERS:
+                return new CoversMapper();
+            case TOP_COVEREDBY:
+                return new CoveredbyMapper();
+            ///////////////////////
             case SET_JACCARD:
                 return new SetJaccardMapper();
             default:
