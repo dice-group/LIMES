@@ -173,7 +173,7 @@ public class RADON {
         }
 
         public boolean contains(MBBIndex i) {
-            return this.lat1 < i.lat1 && this.lon1 < i.lon1 && this.lon2 > i.lon2 && this.lat2 > i.lat2;
+            return this.lat1 <= i.lat1 && this.lon1 <= i.lon1 && this.lon2 >= i.lon2 && this.lat2 >= i.lat2;
         }
 
         public boolean covers(MBBIndex i) {
