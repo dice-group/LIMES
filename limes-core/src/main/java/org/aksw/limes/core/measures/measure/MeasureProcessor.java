@@ -9,6 +9,7 @@ import java.util.List;
  */
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
@@ -152,6 +153,14 @@ public class MeasureProcessor {
                 System.exit(1);
             } else {
                 double similarity = 0.0d;
+                try {
+                    if (threshold <= 0) {
+                        throw new InvalidThresholdException(threshold);
+                    }
+                } catch (InvalidThresholdException e) {
+                    System.err.println("Exiting..");
+                    System.exit(1);
+                }
                 AMapping m = mapper.getMapping(source, target, sourceVar, targetVar, expression, threshold);
                 for (String s : m.getMap().keySet()) {
                     for (String t : m.getMap().get(s).keySet()) {

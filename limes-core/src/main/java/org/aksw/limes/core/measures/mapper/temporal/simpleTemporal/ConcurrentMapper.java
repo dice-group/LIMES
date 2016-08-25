@@ -34,14 +34,6 @@ public class ConcurrentMapper extends SimpleTemporalMapper {
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-        try {
-            if (threshold <= 0) {
-                throw new InvalidThresholdException(threshold);
-            }
-        } catch (InvalidThresholdException e) {
-            System.err.println("Exiting..");
-            System.exit(1);
-        }
         AMapping m = MappingFactory.createDefaultMapping();
         Parser p = new Parser(expression, threshold);
 

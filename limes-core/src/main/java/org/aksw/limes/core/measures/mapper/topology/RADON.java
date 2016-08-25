@@ -361,14 +361,7 @@ public class RADON {
     }
 
     public static AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression, double threshold, String relation) {
-        try {
-            if (threshold <= 0) {
-                throw new InvalidThresholdException(threshold);
-            }
-        } catch (InvalidThresholdException e) {
-            System.err.println("Exiting..");
-            System.exit(1);
-        }
+        
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         Map<String, Geometry> sourceMap = getGeometryMapFromCache(source, properties.get(0));
         Map<String, Geometry> targetMap = getGeometryMapFromCache(target, properties.get(1));

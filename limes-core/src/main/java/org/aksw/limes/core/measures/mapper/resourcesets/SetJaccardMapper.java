@@ -166,14 +166,6 @@ public class SetJaccardMapper extends AMapper {
     @Override
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression, double threshold) {
         // Phase 0: Initialize
-        try {
-            if (threshold <= 0) {
-                throw new InvalidThresholdException(threshold);
-            }
-        } catch (InvalidThresholdException e) {
-            System.err.println("Exiting..");
-            System.exit(1);
-        }
         List<String> properties;
         List<Set<String>> sourceIndex, targetIndex, small, big;
         properties = PropertyFetcher.getProperties(expression, threshold);

@@ -34,14 +34,7 @@ public class SymmetricHausdorffMapper extends AMapper {
      */
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
                                double threshold) {
-        try {
-            if (threshold <= 0) {
-                throw new InvalidThresholdException(threshold);
-            }
-        } catch (InvalidThresholdException e) {
-            System.err.println("Exiting..");
-            System.exit(1);
-        }
+        
         OrchidMapper hm = new OrchidMapper();
         AMapping m1 = hm.getMapping(source, target, sourceVar, targetVar, expression, threshold);
         AMapping m2 = hm.getMapping(target, source, targetVar, sourceVar, expression, threshold);

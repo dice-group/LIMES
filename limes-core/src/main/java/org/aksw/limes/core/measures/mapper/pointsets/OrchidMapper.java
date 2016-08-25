@@ -97,14 +97,6 @@ public class OrchidMapper extends AMapper {
      */
     public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-        try {
-            if (threshold <= 0) {
-                throw new InvalidThresholdException(threshold);
-            }
-        } catch (InvalidThresholdException e) {
-            System.err.println("Exiting..");
-            System.exit(1);
-        }
         
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         

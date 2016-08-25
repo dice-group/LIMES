@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.execution.engine.filter.LinearFilter;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
@@ -163,6 +164,14 @@ public class SimpleExecutionEngine extends ExecutionEngine {
         try {
             MeasureType type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             mapper = MapperFactory.createMapper(type);
+            try {
+                if (threshold <= 0) {
+                    throw new InvalidThresholdException(threshold);
+                }
+            } catch (InvalidThresholdException e) {
+                System.err.println("Exiting..");
+                System.exit(1);
+            }
             return mapper.getMapping(source, target, sourceVariable, targetVariable, inst.getMeasureExpression(),
                     threshold);
         } catch (InvalidMeasureException e) {
