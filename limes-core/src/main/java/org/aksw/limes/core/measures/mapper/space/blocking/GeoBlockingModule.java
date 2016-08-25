@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class GeoBlockingModule implements BlockingModule {
+public class GeoBlockingModule implements IBlockingModule {
 
     static Logger logger = LoggerFactory.getLogger(GeoBlockingModule.class);
     int dim = 2;

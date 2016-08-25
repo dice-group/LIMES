@@ -12,7 +12,7 @@ import org.aksw.limes.core.io.cache.Cache;
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
-public class EndEnd extends AtomicAllenAlgebraMapper {
+public class EndEnd extends AAtomicAllenAlgebraMapper {
     public EndEnd() {
 
     }
@@ -30,9 +30,9 @@ public class EndEnd extends AtomicAllenAlgebraMapper {
      */
     @Override
     public TreeMap<String, Set<String>> getConcurrentEvents(Cache source, Cache target, String expression) {
-        TreeMap<Long, Set<String>> sources = AtomicAllenAlgebraMapper.orderByEndDate(source, expression);
-        TreeMap<Long, Set<String>> targets = AtomicAllenAlgebraMapper.orderByEndDate(target, expression);
-        TreeMap<String, Set<String>> events = AtomicAllenAlgebraMapper.mapConcurrent(sources, targets);
+        TreeMap<Long, Set<String>> sources = AAtomicAllenAlgebraMapper.orderByEndDate(source, expression);
+        TreeMap<Long, Set<String>> targets = AAtomicAllenAlgebraMapper.orderByEndDate(target, expression);
+        TreeMap<String, Set<String>> events = AAtomicAllenAlgebraMapper.mapConcurrent(sources, targets);
         return events;
     }
 
@@ -41,9 +41,9 @@ public class EndEnd extends AtomicAllenAlgebraMapper {
      */
     @Override
     public TreeMap<String, Set<String>> getPredecessorEvents(Cache source, Cache target, String expression) {
-        TreeMap<Long, Set<String>> sources = AtomicAllenAlgebraMapper.orderByEndDate(source, expression);
-        TreeMap<Long, Set<String>> targets = AtomicAllenAlgebraMapper.orderByEndDate(target, expression);
-        TreeMap<String, Set<String>> events = AtomicAllenAlgebraMapper.mapPredecessor(sources, targets);
+        TreeMap<Long, Set<String>> sources = AAtomicAllenAlgebraMapper.orderByEndDate(source, expression);
+        TreeMap<Long, Set<String>> targets = AAtomicAllenAlgebraMapper.orderByEndDate(target, expression);
+        TreeMap<String, Set<String>> events = AAtomicAllenAlgebraMapper.mapPredecessor(sources, targets);
         return events;
     }
 }

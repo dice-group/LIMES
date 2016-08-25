@@ -15,7 +15,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
-import org.aksw.limes.core.measures.mapper.space.blocking.BlockingModule;
+import org.aksw.limes.core.measures.mapper.space.blocking.IBlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 
@@ -100,7 +100,7 @@ public class HR3Mapper extends AMapper {
         // distance threshold. Central for finding the right blocks and might
         // differ from blocker
         // to blocker.
-        BlockingModule generator = BlockingFactory.getBlockingModule(property2, p.getOperator(), threshold,
+        IBlockingModule generator = BlockingFactory.getBlockingModule(property2, p.getOperator(), threshold,
                 granularity);
 
         // initialize the measure for similarity computation

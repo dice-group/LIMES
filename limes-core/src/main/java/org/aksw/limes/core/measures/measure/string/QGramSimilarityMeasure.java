@@ -9,14 +9,14 @@ import java.util.Set;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.mapper.string.fastngram.NGramTokenizer;
-import org.aksw.limes.core.measures.mapper.string.fastngram.Tokenizer;
+import org.aksw.limes.core.measures.mapper.string.fastngram.ITokenizer;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class QGramSimilarityMeasure extends StringMeasure {
 
-    Tokenizer tokenizer;
+    ITokenizer tokenizer;
     int q = 3;
 
     public QGramSimilarityMeasure(int q) {

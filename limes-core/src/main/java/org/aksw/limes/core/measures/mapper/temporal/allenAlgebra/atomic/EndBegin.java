@@ -12,7 +12,7 @@ import org.aksw.limes.core.io.cache.Cache;
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
-public class EndBegin extends AtomicAllenAlgebraMapper {
+public class EndBegin extends AAtomicAllenAlgebraMapper {
     public EndBegin() {
 
     }
@@ -30,9 +30,9 @@ public class EndBegin extends AtomicAllenAlgebraMapper {
      */
     @Override
     public TreeMap<String, Set<String>> getConcurrentEvents(Cache source, Cache target, String expression) {
-        TreeMap<Long, Set<String>> sources = AtomicAllenAlgebraMapper.orderByEndDate(source, expression);
-        TreeMap<Long, Set<String>> targets = AtomicAllenAlgebraMapper.orderByBeginDate(target, expression);
-        TreeMap<String, Set<String>> events = AtomicAllenAlgebraMapper.mapConcurrent(sources, targets);
+        TreeMap<Long, Set<String>> sources = AAtomicAllenAlgebraMapper.orderByEndDate(source, expression);
+        TreeMap<Long, Set<String>> targets = AAtomicAllenAlgebraMapper.orderByBeginDate(target, expression);
+        TreeMap<String, Set<String>> events = AAtomicAllenAlgebraMapper.mapConcurrent(sources, targets);
         return events;
     }
 
@@ -41,9 +41,9 @@ public class EndBegin extends AtomicAllenAlgebraMapper {
      */
     @Override
     public TreeMap<String, Set<String>> getPredecessorEvents(Cache source, Cache target, String expression) {
-        TreeMap<Long, Set<String>> sources = AtomicAllenAlgebraMapper.orderByEndDate(source, expression);
-        TreeMap<Long, Set<String>> targets = AtomicAllenAlgebraMapper.orderByBeginDate(target, expression);
-        TreeMap<String, Set<String>> events = AtomicAllenAlgebraMapper.mapPredecessor(sources, targets);
+        TreeMap<Long, Set<String>> sources = AAtomicAllenAlgebraMapper.orderByEndDate(source, expression);
+        TreeMap<Long, Set<String>> targets = AAtomicAllenAlgebraMapper.orderByBeginDate(target, expression);
+        TreeMap<String, Set<String>> events = AAtomicAllenAlgebraMapper.mapPredecessor(sources, targets);
         return events;
     }
 

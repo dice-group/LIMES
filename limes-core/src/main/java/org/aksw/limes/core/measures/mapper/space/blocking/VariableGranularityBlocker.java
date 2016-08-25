@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class VariableGranularityBlocker implements BlockingModule {
+public class VariableGranularityBlocker implements IBlockingModule {
     static Logger logger = LoggerFactory.getLogger(VariableGranularityBlocker.class);
     int dim = 2;
     ArrayList<Double> thresholds;

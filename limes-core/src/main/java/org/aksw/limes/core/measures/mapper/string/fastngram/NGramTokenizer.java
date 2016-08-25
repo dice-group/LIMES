@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class NGramTokenizer implements Tokenizer {
+public class NGramTokenizer implements ITokenizer {
 
     @Override
     public Set<String> tokenize(String s, int q) {

@@ -15,7 +15,7 @@ import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class EuclideanBlockingModule implements BlockingModule {
+public class EuclideanBlockingModule implements IBlockingModule {
     int dim = 2;
     ArrayList<Double> thresholds;
     ArrayList<String> properties;

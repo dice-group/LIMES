@@ -9,6 +9,6 @@ import java.util.Set;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public interface Tokenizer {
+public interface ITokenizer {
     Set<String> tokenize(String s, int q);
 }

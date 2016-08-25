@@ -35,7 +35,7 @@ public class FastNGramMapper extends AMapper {
         Index index = new Index(q);
         double kappa = (1 + threshold) / threshold;
         QGramSimilarityMeasure sim = new QGramSimilarityMeasure(q);
-        Tokenizer tokenizer = new NGramTokenizer();
+        ITokenizer tokenizer = new NGramTokenizer();
         Map<String, Set<String>> targetTokens = new HashMap<String, Set<String>>();
         AMapping result = MappingFactory.createDefaultMapping();
         // index target

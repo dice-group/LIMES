@@ -29,13 +29,13 @@ import org.slf4j.LoggerFactory;
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
-public abstract class AtomicAllenAlgebraMapper {
-    protected static final Logger logger = LoggerFactory.getLogger(AtomicAllenAlgebraMapper.class);
+public abstract class AAtomicAllenAlgebraMapper {
+    protected static final Logger logger = LoggerFactory.getLogger(AAtomicAllenAlgebraMapper.class);
 
     /**
      * Constructor of AtomicAllenAlgebraMapper class.
      */
-    public AtomicAllenAlgebraMapper() {
+    public AAtomicAllenAlgebraMapper() {
     }
 
     /**

@@ -12,7 +12,7 @@ import org.aksw.limes.core.io.cache.Instance;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public interface BlockingModule {
+public interface IBlockingModule {
     public ArrayList<ArrayList<Integer>> getBlocksToCompare(ArrayList<Integer> blockId);
 
     public ArrayList<Integer> getBlockId(Instance a);

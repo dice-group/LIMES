@@ -10,7 +10,7 @@ package org.aksw.limes.core.measures.mapper.space.blocking;
  */
 public class BlockingFactory {
 
-    public static BlockingModule getBlockingModule(String props, String measureName, double threshold, int granularity) {
+    public static IBlockingModule getBlockingModule(String props, String measureName, double threshold, int granularity) {
         if (measureName.toLowerCase().startsWith("euclidean")) {
             if (granularity > 1) {
                 return new HR3Blocker(props, measureName, threshold, granularity);

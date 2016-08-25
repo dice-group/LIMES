@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class HR3Blocker implements BlockingModule {
+public class HR3Blocker implements IBlockingModule {
     static Logger logger = LoggerFactory.getLogger(HR3Blocker.class);
     int dim = 2;
     ArrayList<Double> thresholds;
