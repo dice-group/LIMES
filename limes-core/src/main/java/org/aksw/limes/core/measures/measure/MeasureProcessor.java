@@ -47,6 +47,7 @@ public class MeasureProcessor {
         return results;
     }
 
+    
     /*
      * When computing similarities using a metric that has PPJoinPlusPlus as
      * mapper, the results returned by the measure (measure.getSimilarity) and
