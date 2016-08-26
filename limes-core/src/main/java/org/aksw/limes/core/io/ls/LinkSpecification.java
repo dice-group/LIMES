@@ -9,8 +9,6 @@ import java.util.Random;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.parser.Parser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -26,7 +24,6 @@ public class LinkSpecification implements ILinkSpecification {
     protected static final String XOR = "XOR";
     protected static final String MIN = "MIN";
     protected static final String AND = "AND";
-    private static final Logger logger = LoggerFactory.getLogger(LinkSpecification.class.getName());
     protected double threshold;
     protected LogicOperator operator;
     protected List<LinkSpecification> children; // children must be a list
@@ -143,22 +140,7 @@ public class LinkSpecification implements ILinkSpecification {
         return getChildren().isEmpty();
     }
 
-    /**
-     * get all leaves of the link spec
-     */
-    public void getAllChildren() {
-        for (LinkSpecification child : getChildren()) {
-            if (this.getOperator() == LogicOperator.OR) {
-                logger.info(this.parent.toString());
-                this.parent = child;
-                logger.info(this.parent.toString());
-            }
-            if (!child.isAtomic())
-                child.getAllChildren();
-        }
-
-    }
-
+    
     /**
      * Create the path of operators for each leaf spec
      */
