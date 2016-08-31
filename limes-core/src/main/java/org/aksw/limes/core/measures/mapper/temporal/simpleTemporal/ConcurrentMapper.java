@@ -33,7 +33,6 @@ public class ConcurrentMapper extends SimpleTemporalMapper {
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-
         AMapping m = MappingFactory.createDefaultMapping();
         Parser p = new Parser(expression, threshold);
 

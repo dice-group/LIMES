@@ -3,7 +3,7 @@
 ### Getting Started
 
 * [About this documentation](README.md)
-* [Installation and Setup](README.md)
+* [Installation and Setup](getting_started/installation.md)
 
 --
 
@@ -31,7 +31,7 @@
 * [Running LIMES](user_manual/running_limes.md)
 * [Known Issues](user_manual/known_issues.md)
 * [Change Log](user_manual/change_log.md)
-* [Example Use Cases](README.md)
+* [Example Use Cases](user_manual/usecases.md)
 
 --
 
@@ -48,5 +48,5 @@
 
 ### Miscellaneous
 
-* [FAQ](README.md)
+* [FAQ](misc/faq.md)
 * [Release notes](https://github.com/AKSW/LIMES-dev/blob/master/CHANGES.md)

@@ -374,14 +374,6 @@ public class EDJoinMapper extends AMapper {
             Q = 3;
         }
         // convert similarity in distance threshold
-        try {
-            if (threshold <= 0) {
-                throw new InvalidThresholdException(threshold);
-            }
-        } catch (InvalidThresholdException e) {
-            System.err.println("Exiting..");
-            System.exit(1);
-        }
         threshold = (1 - threshold) / threshold;
         
         this.comparisons = 0;

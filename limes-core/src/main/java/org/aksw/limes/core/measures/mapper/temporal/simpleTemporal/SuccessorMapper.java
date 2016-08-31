@@ -28,7 +28,6 @@ public class SuccessorMapper extends SimpleTemporalMapper {
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-
         AMapping m = MappingFactory.createDefaultMapping();
 
         TreeMap<String, Set<Instance>> sources = this.orderByBeginDate(source, expression);

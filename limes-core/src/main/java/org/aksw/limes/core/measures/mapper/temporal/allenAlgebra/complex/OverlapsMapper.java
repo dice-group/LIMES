@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 /**
  * Class for Allen's temporal relation "Overlaps". Given two events X and
  * Y, it implements X o Y.

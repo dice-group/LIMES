@@ -44,9 +44,7 @@ import org.aksw.limes.core.ml.algorithm.WombatComplete;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.util.ParenthesisMatcher;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.hamcrest.core.IsInstanceOf;
 
 import weka.classifiers.trees.J48;
 import weka.core.Attribute;

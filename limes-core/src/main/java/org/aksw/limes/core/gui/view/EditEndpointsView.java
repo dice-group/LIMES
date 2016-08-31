@@ -4,8 +4,9 @@ package org.aksw.limes.core.gui.view;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 
-import org.aksw.limes.core.gui.controller.EditEndpointsController;
-import org.aksw.limes.core.gui.util.SourceOrTarget;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,6 +22,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
+import org.aksw.limes.core.gui.controller.EditEndpointsController;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
+
+
 /**
  * used for editing endpoints step in {@link org.aksw.limes.core.gui.view.WizardView}
  *
@@ -28,6 +33,8 @@ import javafx.scene.layout.Priority;
  *         studserv.uni-leipzig.de{@literal >}
  */
 public class EditEndpointsView implements IEditView {
+    private static final String pageSizeError = "Only numbers are permitted!";
+    private static final String endpointURLError = "Invalid URL or file not found!";
     /**
      * Corresponding Controller
      */
@@ -109,6 +116,29 @@ public class EditEndpointsView implements IEditView {
 
         pane.add(new Label("Endpoint URL"), 0, 0);
         TextField endpointURL = new TextField();
+        endpointURL.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+            if (!newValue) { //when focus lost
+        	//check if it is a file
+        	File f = new File(endpointURL.getText());
+        	if(!(f.exists() && !f.isDirectory())) { 
+        	    //check if it is a valid URL
+        	    try{
+        		new URL(endpointURL.getText());
+        	    }catch(MalformedURLException e){
+                    //set the textField to error msg
+                    endpointURL.setText(endpointURLError);
+                    endpointURL.setStyle("-fx-text-inner-color: red;");
+        	    }
+        	}
+            }
+
+        });
+        endpointURL.setOnMouseClicked(e -> {
+            if(endpointURL.getText().equals(endpointURLError)){
+        	endpointURL.setStyle("");
+        	endpointURL.setText("");
+            }
+        });
         pane.add(endpointURL, 1, 0);
 
         pane.add(new Label("ID / Namespace"), 0, 1);
@@ -121,6 +151,22 @@ public class EditEndpointsView implements IEditView {
 
         pane.add(new Label("Page size"), 0, 3);
         TextField pageSize = new TextField();
+        pageSize.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+            if (!newValue) { //when focus lost
+                if(!pageSize.getText().matches("[0-9]+") && !pageSize.getText().equals("-1")){
+                    //set the textField to error msg
+                    pageSize.setText(pageSizeError);
+                    pageSize.setStyle("-fx-text-inner-color: red;");
+                }
+            }
+
+        });
+        pageSize.setOnMouseClicked(e -> {
+            if(pageSize.getText().equals(pageSizeError)){
+        	pageSize.setStyle("");
+        	pageSize.setText("");
+            }
+        });
         pane.add(pageSize, 1, 3);
 
         TextField[] textFields = new TextField[]{endpointURL, idNamespace,

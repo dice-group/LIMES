@@ -153,6 +153,8 @@ public class MainView {
         MenuItem itemLoad = new MenuItem("Load config");
         itemLoad.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LIMES Configuration File (*.xml, *.rdf, *.ttl, *.n3, *.nt)", "*.xml", "*.rdf", "*.ttl", "*.n3", "*.nt");
+            fileChooser.getExtensionFilters().add(extFilter);
             File file = fileChooser.showOpenDialog(stage);
             if (file != null) {
                 controller.loadConfig(file);

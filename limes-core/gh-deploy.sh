@@ -40,6 +40,8 @@ rm -rf out/**/* || exit 0
 cd manual
 # remove old folder if present
 rm -rf _book || exit 0
+# install gitbook deps
+gitbook install
 # build new
 gitbook build
 # copy new files to out

@@ -1,5 +1,5 @@
 # Overview
-![LIMES workflow](../images/uml.png "fig:")
+![LIMES workflow](../images/uml2.png "fig:")
 
 
 As you can see from the flow diagram above, LIMES 1.0 mainly consists of 2 separate execution pipelines:

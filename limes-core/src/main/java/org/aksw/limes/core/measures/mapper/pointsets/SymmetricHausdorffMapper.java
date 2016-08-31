@@ -33,6 +33,7 @@ public class SymmetricHausdorffMapper extends AMapper {
      */
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
                                double threshold) {
+        
         OrchidMapper hm = new OrchidMapper();
         AMapping m1 = hm.getMapping(source, target, sourceVar, targetVar, expression, threshold);
         AMapping m2 = hm.getMapping(target, source, targetVar, sourceVar, expression, threshold);

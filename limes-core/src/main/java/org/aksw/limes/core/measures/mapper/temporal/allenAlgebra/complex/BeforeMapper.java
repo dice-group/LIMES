@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -72,8 +71,9 @@ public class BeforeMapper extends AllenAlgebraMapper {
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
+        
         ArrayList<TreeMap<String, Set<String>>> maps = new ArrayList<TreeMap<String, Set<String>>>();
-
+        
         EndBegin eb = new EndBegin();
         // EB1
         maps.add(eb.getPredecessorEvents(source, target, expression));

@@ -22,9 +22,10 @@ LIMES supports a set of metrics that can be used as a part of a LS to link resou
 		5. Go to the `MeasureFactory` class and create a `public static final` field of String type using the same name of metric as the one used in the `MeasureType` class i.e. `public static final String COSINE = "cosine";` and then add the choice of returing this measure at the `getMeasureType` and `createMeasure` functions following the pattern used for other metrics.
 
 	* In case you want to create a new type package:
+
 		1. Create a new type abstract class that extends `AMeasure` implements `IStringMeasure`.
 		2. Create a new type interface that extends `IMeasure`.
-		3. Follow steps a-e described above.
+		3. Follow steps 1-5 described above.
 
 - The `Mapper` has almost the same hierarchy as the `Measure` package. The `Mapper` packages includes the interface `IMapper`, the abstract class `AMapper`, a `MapperFactory` class and a `MappingOperations` class:
 	
@@ -36,7 +37,6 @@ LIMES supports a set of metrics that can be used as a part of a LS to link resou
 
 - If you want to create a new mapper, you have to follow a set of steps:
 
-	
 	1. The new mapper name must include the word Mapper at the end.
 	2. The new mapper must extend the `AMapper` abstrast class as a result, it must implement all overriden methods of the `IMapper` interface. No unsupported functions are allowed.
 	3. Go to the `MapperFactory` class and add the choice of returning this mapper at the `createMapper` function following the pattern used for other mappers.

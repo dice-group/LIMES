@@ -122,13 +122,13 @@ public class Config extends Configuration {
 		|| file.getAbsolutePath().contains(".nt")) {
 	    reader = new RDFConfigurationReader(file.getPath());
 	} else {
-	    Alert alert = new Alert(AlertType.ERROR);
-	    alert.setHeaderText("An Error occurred!");
-	    alert.setContentText("Unknown filetype!");
-	    alert.showAndWait();
+	    throw new Exception("Unknown filetype!");
 	}
 	Config outConfig;
 	Configuration tmp = reader.read();
+	if(tmp.getSourceInfo().getEndpoint() == null || tmp.getSourceInfo().getEndpoint() == null){
+	    throw new Exception("Invalid configuration file!");
+	}
 	outConfig = new Config(tmp.getSourceInfo(), tmp.getTargetInfo(), tmp.getMetricExpression(), tmp.getAcceptanceRelation(), tmp.getVerificationRelation(),
 		tmp.getAcceptanceThreshold(), tmp.getAcceptanceFile(), tmp.getVerificationThreshold(), tmp.getVerificationFile(), tmp.getGranularity(),
 		(HashMap<String, String>) tmp.getPrefixes(), tmp.getOutputFormat(), tmp.getExecutionPlanner(), tmp.getGranularity(), tmp.getAcceptanceFile(),

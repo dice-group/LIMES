@@ -9,6 +9,7 @@ import java.util.List;
  */
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
@@ -152,6 +153,14 @@ public class MeasureProcessor {
                 System.exit(1);
             } else {
                 double similarity = 0.0d;
+                try {
+                    if (threshold <= 0) {
+                        throw new InvalidThresholdException(threshold);
+                    }
+                } catch (InvalidThresholdException e) {
+                    System.err.println("Exiting..");
+                    System.exit(1);
+                }
                 AMapping m = mapper.getMapping(source, target, sourceVar, targetVar, expression, threshold);
                 for (String s : m.getMap().keySet()) {
                     for (String t : m.getMap().get(s).keySet()) {
@@ -159,7 +168,7 @@ public class MeasureProcessor {
 
                     }
                 }
-                
+
                 if (similarity >= threshold)
                     return similarity;
                 else
@@ -173,7 +182,7 @@ public class MeasureProcessor {
                         sourceVar, targetVar);
                 double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
                         sourceVar, targetVar);
-                
+
                 // parentThreshold is 0 and (s,t) are not part of the union
                 if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
                     return 0;
@@ -192,7 +201,7 @@ public class MeasureProcessor {
                         sourceVar, targetVar);
                 double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
                         sourceVar, targetVar);
-                
+
                 // parentThreshold is 0 and (s,t) are not part of the
                 // intersection
                 if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
@@ -213,14 +222,16 @@ public class MeasureProcessor {
                 double secondChild = p.getRightCoefficient() * getSimilarity(sourceInstance, targetInstance,
                         p.getRightTerm(), p.getThreshold2(), sourceVar, targetVar);
 
-                if (firstChild + secondChild >= parentThreshold)
-                    return firstChild + secondChild;
-                else
+                if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
                     return 0;
+                else {
+                    if (firstChild + secondChild >= parentThreshold)
+                        return firstChild + secondChild;
+                    else
+                        return 0;
+                }
 
-            } else {// perform MINUS as usual
-                // logger.warn("Not sure what to do with operator " + p.op + ".
-                // Using MAX.");
+            } else {
                 double parentThreshold = p.getThreshold();
                 double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(), p.getThreshold1(),
                         sourceVar, targetVar);
@@ -232,11 +243,12 @@ public class MeasureProcessor {
                     if (firstChild >= p.getThreshold1()) {
                         if (firstChild >= parentThreshold) {
                             return firstChild;
-                        } else //similarity smaller than the parent threshold
+                        } else // similarity smaller than the parent threshold
                             return 0;
-                    } else//similarity smaller than the left child threshold
+                    } else// similarity smaller than the left child threshold
                         return 0;
-                } else //current (s,t) are included in the mapping of the right child
+                } else // current (s,t) are included in the mapping of the right
+                       // child
                     return 0;
             }
         }
