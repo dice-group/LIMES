@@ -24,7 +24,6 @@ public class LimesGUI extends Application {
      *         optional arguments on StartUp, No Options implemented yet
      */
     public static void main(String[] args) {
-        Locale.setDefault(new Locale("en", "US"));
         BasicConfigurator.configure();
         launch(args);
     }
@@ -36,6 +35,7 @@ public class LimesGUI extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Locale.setDefault(new Locale("en", "US"));
         MainView mainView = new MainView(primaryStage);
         MainController mainController = new MainController(mainView);
         mainView.setController(mainController);
