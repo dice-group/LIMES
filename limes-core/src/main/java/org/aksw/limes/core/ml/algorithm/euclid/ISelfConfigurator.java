@@ -4,7 +4,7 @@
  */
 package org.aksw.limes.core.ml.algorithm.euclid;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.measure.AMeasure;
 
@@ -12,7 +12,7 @@ import org.aksw.limes.core.measures.measure.AMeasure;
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public interface ISelfConfigurator {
-    public void computeMeasure(Cache source, Cache target, String parameters[]);
+    public void computeMeasure(ACache source, ACache target, String parameters[]);
 
     public String getMeasure();
 

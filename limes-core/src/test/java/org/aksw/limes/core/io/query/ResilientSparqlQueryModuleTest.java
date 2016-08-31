@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class ResilientSparqlQueryModuleTest {
         );
 
         ResilientSparqlQueryModule rsqm = new ResilientSparqlQueryModule(kbInfo);
-        Cache cache = new HybridCache();
+        ACache cache = new HybridCache();
         rsqm.fillCache(cache);
 
         assertTrue(cache.size() > 0);

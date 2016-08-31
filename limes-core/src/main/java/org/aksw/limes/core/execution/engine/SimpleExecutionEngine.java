@@ -13,7 +13,7 @@ import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -56,7 +56,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * @param targetVar
      *            Target variable
      */
-    public SimpleExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
+    public SimpleExecutionEngine(ACache source, ACache target, String sourceVar, String targetVar) {
         super(source, target, sourceVar, targetVar);
     }
 

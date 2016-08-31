@@ -10,7 +10,7 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.NotYetImplementedException;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -92,7 +92,7 @@ public class Eagle extends ACoreMLAlgorithm {
     }
 
     @Override
-    protected void init(List<LearningParameter> lp, Cache source, Cache target) {
+    protected void init(List<LearningParameter> lp, ACache source, ACache target) {
         super.init(lp, source, target);
         this.turn = 0;
         this.bestSolutions = new LinkedList<IGPProgram>();
@@ -155,7 +155,7 @@ public class Eagle extends ACoreMLAlgorithm {
     }
 
     @Override
-    protected AMapping predict(Cache source, Cache target, MLResults mlModel) {
+    protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
         if (allBest != null)
             return fitness.getMapping(mlModel.getLinkSpecification(), true);
         logger.error("No link specification calculated so far.");

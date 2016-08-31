@@ -10,7 +10,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.parser.Parser;
 import org.slf4j.Logger;
@@ -87,7 +87,7 @@ public abstract class AAtomicAllenAlgebraMapper {
      * @return blocks, a map of sets with unique begin dates as keys and set of
      *         instances (string representation) as values
      */
-    protected static TreeMap<Long, Set<String>> orderByBeginDate(Cache cache, String expression) {
+    protected static TreeMap<Long, Set<String>> orderByBeginDate(ACache cache, String expression) {
         TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
         Parser p = new Parser(expression, 0.0d);
         String property = getBeginProperty(p.getLeftTerm());
@@ -130,7 +130,7 @@ public abstract class AAtomicAllenAlgebraMapper {
      * @return blocks, a map of sets with unique end dates as keys and set of
      *         instances (string representation) as values
      */
-    protected static TreeMap<Long, Set<String>> orderByEndDate(Cache cache, String expression) {
+    protected static TreeMap<Long, Set<String>> orderByEndDate(ACache cache, String expression) {
         TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
         Parser p = new Parser(expression, 0.0d);
         String property = null;
@@ -252,7 +252,7 @@ public abstract class AAtomicAllenAlgebraMapper {
      * @return concurrentEvents, set of concurrent target events for each source
      *         instance.
      */
-    public abstract TreeMap<String, Set<String>> getConcurrentEvents(Cache source, Cache target, String expression);
+    public abstract TreeMap<String, Set<String>> getConcurrentEvents(ACache source, ACache target, String expression);
 
     /**
      * Returns the set of predecessor target events for each source instance.
@@ -266,7 +266,7 @@ public abstract class AAtomicAllenAlgebraMapper {
      * @return predecessorEvents, set of predecessor target events for each
      *         source instance.
      */
-    public abstract TreeMap<String, Set<String>> getPredecessorEvents(Cache source, Cache target, String expression);
+    public abstract TreeMap<String, Set<String>> getPredecessorEvents(ACache source, ACache target, String expression);
 
     /**
      * Returns the name of the atomic Allen's temporal mapper.

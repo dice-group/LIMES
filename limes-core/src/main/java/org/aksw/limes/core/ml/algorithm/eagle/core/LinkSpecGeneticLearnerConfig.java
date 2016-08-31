@@ -1,6 +1,6 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.jgap.InvalidConfigurationException;
@@ -24,8 +24,8 @@ public class LinkSpecGeneticLearnerConfig extends GPConfiguration {
     private static final long serialVersionUID = 2787442443170665028L;
     public KBInfo source;
     public KBInfo target;
-    public Cache sC;
-    public Cache tC;
+    public ACache sC;
+    public ACache tC;
     PropertyMapping propMap;
     int granularity = 2;
 

@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.AMapper;
@@ -70,7 +70,7 @@ public abstract class SimpleTemporalMapper extends AMapper implements ISimpleTem
      * @return blocks, a map of sets with unique begin dates as keys and set of
      *         instances as values
      */
-    protected TreeMap<String, Set<Instance>> orderByBeginDate(Cache cache, String expression) {
+    protected TreeMap<String, Set<Instance>> orderByBeginDate(ACache cache, String expression) {
 
         TreeMap<String, Set<Instance>> blocks = new TreeMap<String, Set<Instance>>();
         Parser p = new Parser(expression, 0.0d);

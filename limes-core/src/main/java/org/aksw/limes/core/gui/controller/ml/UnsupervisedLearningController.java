@@ -7,7 +7,7 @@ import org.aksw.limes.core.gui.model.ml.UnsupervisedLearningModel;
 import org.aksw.limes.core.gui.view.ResultView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -31,8 +31,8 @@ public class UnsupervisedLearningController extends MachineLearningController {
      * @param sourceCache source
      * @param targetCache target
      */
-    public UnsupervisedLearningController(Config config, Cache sourceCache,
-                                          Cache targetCache) {
+    public UnsupervisedLearningController(Config config, ACache sourceCache,
+                                          ACache targetCache) {
         this.mlModel = new UnsupervisedLearningModel(config, sourceCache,
                 targetCache);
     }

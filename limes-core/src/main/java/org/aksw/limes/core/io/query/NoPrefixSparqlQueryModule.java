@@ -1,6 +1,6 @@
 package org.aksw.limes.core.io.query;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
@@ -33,7 +33,7 @@ public class NoPrefixSparqlQueryModule implements IQueryModule {
      *         The cache in which the content on the SPARQL endpoint is
      *         to be written
      */
-    public void fillCache(Cache cache) {
+    public void fillCache(ACache cache) {
 
         Logger logger = LoggerFactory.getLogger("LIMES");
         long startTime = System.currentTimeMillis();

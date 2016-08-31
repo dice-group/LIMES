@@ -4,7 +4,7 @@
  */
 package org.aksw.limes.core.measures.mapper.pointsets;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
@@ -31,7 +31,7 @@ public class SymmetricHausdorffMapper extends AMapper {
      * @return A mapping which contains links between the source instances and
      * the target instances
      */
-    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
                                double threshold) {
         OrchidMapper hm = new OrchidMapper();
         AMapping m1 = hm.getMapping(source, target, sourceVar, targetVar, expression, threshold);

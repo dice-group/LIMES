@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -94,8 +94,8 @@ public class MeasureProcessor {
                 System.err.println("Exiting..");
                 System.exit(1);
             }
-            Cache source = new HybridCache();
-            Cache target = new HybridCache();
+            ACache source = new HybridCache();
+            ACache target = new HybridCache();
             source.addInstance(sourceInstance);
             target.addInstance(targetInstance);
 

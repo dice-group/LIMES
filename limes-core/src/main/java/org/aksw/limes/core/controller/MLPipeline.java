@@ -8,7 +8,7 @@ import org.aksw.limes.core.evaluation.evaluator.EvaluatorFactory;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
@@ -34,8 +34,8 @@ public class MLPipeline {
     public static final Logger logger = LoggerFactory.getLogger(MLPipeline.class);
 
     public static AMapping execute(
-            Cache source,
-            Cache target,
+            ACache source,
+            ACache target,
             String mlAlgrorithmName,
             MLImplementationType mlImplementationType,
             List<LearningParameter> learningParameters,

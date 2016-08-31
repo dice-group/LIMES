@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  * @version Jul 12, 2016
  */
 public class Instance implements Comparable<Object>, Serializable {
-    private static final Logger logger = LoggerFactory.getLogger(Instance.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(Instance.class);
 
     /**
      *

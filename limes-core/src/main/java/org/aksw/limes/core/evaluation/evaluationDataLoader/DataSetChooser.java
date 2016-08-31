@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.aksw.limes.core.evaluation.oracle.IOracle;
 import org.aksw.limes.core.evaluation.oracle.OracleFactory;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
@@ -764,7 +764,7 @@ public class DataSetChooser {
      * @return A Mapping holding only those mappings of the original for which
      *         instance where found in the source or target Caches.
      */
-    public static AMapping fixReferenceMap(AMapping original, Cache sC, Cache tC) {
+    public static AMapping fixReferenceMap(AMapping original, ACache sC, ACache tC) {
         int count = 0;
         AMapping fixed = MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
         for (String sk : original.getMap().keySet()) {

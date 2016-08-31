@@ -2,7 +2,7 @@ package org.aksw.limes.core.gui.model;
 
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.gui.view.TaskProgressView;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.query.ModelRegistry;
@@ -23,7 +23,7 @@ public class Endpoint {
     /**
      * cache
      */
-    private Cache cache;
+    private ACache cache;
     /**
      * model
      */
@@ -67,7 +67,7 @@ public class Endpoint {
      * returns cache
      * @return cache
      */
-    public Cache getCache() {
+    public ACache getCache() {
         if (cache == null) {
             cache = HybridCache.getData(info);
         }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.aksw.limes.core.util.DataCleaner;
@@ -41,7 +41,7 @@ public class CsvQueryModule implements IQueryModule {
      * @param c
      *         Cache in which the content is to be written
      */
-    public void fillCache(Cache c) {
+    public void fillCache(ACache c) {
         try {
             // in case a CSV is use, endpoint is the file to read
             BufferedReader reader = new BufferedReader(new FileReader(kb.getEndpoint()));
@@ -95,7 +95,7 @@ public class CsvQueryModule implements IQueryModule {
      * @param c
      *         Cache in which the content is to be written
      */
-    public void fillAllInCache(Cache c) {
+    public void fillAllInCache(ACache c) {
         Logger logger = LoggerFactory.getLogger("LIMES");
         String s = "";
         try {

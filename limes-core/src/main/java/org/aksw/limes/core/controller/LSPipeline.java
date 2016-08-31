@@ -6,7 +6,7 @@ import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.planning.planner.Planner;
 import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 
@@ -33,7 +33,7 @@ public class LSPipeline {
      * @param executionEngineType Specifies executionEngine module to use
      * @return Mapping of resources in sourceCache to resources in targetCache with similarity &gt; threshold
      */
-    public static AMapping execute(Cache sourceCache, Cache targetCache, String metricExpression, double threshold,
+    public static AMapping execute(ACache sourceCache, ACache targetCache, String metricExpression, double threshold,
                                    String sourceVar, String targetVar, RewriterFactory.RewriterType rewriterType,
                                    ExecutionPlannerFactory.ExecutionPlannerType executionPlannerType,
                                    ExecutionEngineFactory.ExecutionEngineType executionEngineType) {
@@ -55,7 +55,7 @@ public class LSPipeline {
      * @param executionEngineType Specifies executionEngine module to use
      * @return Mapping of resources in sourceCache to resources in targetCache with similarity &gt; threshold
      */
-    public static AMapping execute(Cache sourceCache, Cache targetCache, LinkSpecification ls, String sourceVar,
+    public static AMapping execute(ACache sourceCache, ACache targetCache, LinkSpecification ls, String sourceVar,
                                    String targetVar, RewriterFactory.RewriterType rewriterType,
                                    ExecutionPlannerFactory.ExecutionPlannerType executionPlannerType,
                                    ExecutionEngineFactory.ExecutionEngineType executionEngineType) {
@@ -82,7 +82,7 @@ public class LSPipeline {
      * @param ls LIMES Link Specification
      * @return Mapping of resources in sourceCache to resources in targetCache with similarity &gt; threshold
      */
-    public static AMapping execute(Cache sourceCache, Cache targetCache, LinkSpecification ls) {
+    public static AMapping execute(ACache sourceCache, ACache targetCache, LinkSpecification ls) {
         return execute(sourceCache, targetCache, ls, "?x", "?y", RewriterFactory.RewriterType.DEFAULT,
                 ExecutionPlannerFactory.ExecutionPlannerType.DEFAULT,
                 ExecutionEngineFactory.ExecutionEngineType.DEFAULT);

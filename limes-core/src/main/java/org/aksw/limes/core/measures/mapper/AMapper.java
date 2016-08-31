@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 
@@ -29,7 +29,7 @@ public abstract class AMapper implements IMapper {
      * @return reversed Map from literal values to resource uris for a specified
      *         property
      */
-    protected Map<String, Set<String>> getValueToUriMap(Cache cache, String property) {
+    protected Map<String, Set<String>> getValueToUriMap(ACache cache, String property) {
         Map<String, Set<String>> result = new HashMap<>();
         List<String> uris = cache.getAllUris();
         for (String uri : uris) {

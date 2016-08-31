@@ -3,7 +3,7 @@ package org.aksw.limes.core.execution.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +34,11 @@ public abstract class ExecutionEngine implements IExecutionEngine {
     /**
      * Source cache.
      */
-    protected Cache source;
+    protected ACache source;
     /**
      * Target cache.
      */
-    protected Cache target;
+    protected ACache target;
 
     /**
      * Constructor for an execution engine.
@@ -52,7 +52,7 @@ public abstract class ExecutionEngine implements IExecutionEngine {
      * @param targetVar
      *            Target variable
      */
-    public ExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
+    public ExecutionEngine(ACache source, ACache target, String sourceVar, String targetVar) {
         this.buffer = new ArrayList<>();
         this.source = source;
         this.target = target;

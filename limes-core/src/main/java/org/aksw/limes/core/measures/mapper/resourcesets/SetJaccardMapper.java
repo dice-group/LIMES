@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.AMapper;
@@ -163,7 +163,7 @@ public class SetJaccardMapper extends AMapper {
     }
 
     @Override
-    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression, double threshold) {
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression, double threshold) {
         // Phase 0: Initialize
         List<String> properties;
         List<Set<String>> sourceIndex, targetIndex, small, big;
@@ -195,7 +195,7 @@ public class SetJaccardMapper extends AMapper {
         return result;
     }
 
-    private List<Set<String>> buildIndex(Cache c, String p) {
+    private List<Set<String>> buildIndex(ACache c, String p) {
         List<Set<String>> index = new ArrayList<>();
         // Phase 1: Build index
         for (String uri : c.getAllUris()) {

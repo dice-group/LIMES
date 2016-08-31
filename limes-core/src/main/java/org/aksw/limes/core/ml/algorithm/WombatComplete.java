@@ -8,7 +8,7 @@ import java.util.Map;
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -57,7 +57,7 @@ public class WombatComplete extends AWombat {
     }
 
     @Override
-    protected void init(List<LearningParameter> lp, Cache sourceCache, Cache targetCache) {
+    protected void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
         super.init(lp, sourceCache, targetCache);
         sourceUris = sourceCache.getAllUris();
         targetUris = targetCache.getAllUris();
@@ -97,7 +97,7 @@ public class WombatComplete extends AWombat {
     }
 
     @Override
-    protected AMapping predict(Cache source, Cache target, MLResults mlModel) {
+    protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
         LinkSpecification ls = mlModel.getLinkSpecification();
         return getPredictions(ls, source, target);
     }

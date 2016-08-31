@@ -7,7 +7,7 @@ import org.aksw.limes.core.gui.model.ml.ActiveLearningModel;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.ml.ActiveLearningResultView;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -30,7 +30,7 @@ public class ActiveLearningController extends MachineLearningController {
      * @param sourceCache source information
      * @param targetCache target information
      */
-    public ActiveLearningController(Config config, Cache sourceCache, Cache targetCache) {
+    public ActiveLearningController(Config config, ACache sourceCache, ACache targetCache) {
 	this.mlModel = new ActiveLearningModel(config, sourceCache, targetCache);
     }
 

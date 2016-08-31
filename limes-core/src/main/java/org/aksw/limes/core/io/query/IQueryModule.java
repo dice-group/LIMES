@@ -5,7 +5,7 @@
 
 package org.aksw.limes.core.io.query;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 
 /**
  * Interface for query modules
@@ -20,5 +20,5 @@ public interface IQueryModule {
     /**
      * @param cache Cache object to be filled
      */
-    public void fillCache(Cache cache);
+    public void fillCache(ACache cache);
 }

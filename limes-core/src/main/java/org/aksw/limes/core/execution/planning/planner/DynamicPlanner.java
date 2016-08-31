@@ -10,7 +10,7 @@ import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -37,11 +37,11 @@ public class DynamicPlanner extends Planner {
     /**
      * Source cache.
      */
-    private Cache source;
+    private ACache source;
     /**
      * Target cache.
      */
-    private Cache target;
+    private ACache target;
     /**
      * Language of the source/target data.
      */
@@ -61,7 +61,7 @@ public class DynamicPlanner extends Planner {
      */
     private Map<String, LinkSpecification> dependencies = new HashMap<String, LinkSpecification>();
 
-    public DynamicPlanner(Cache s, Cache t) {
+    public DynamicPlanner(ACache s, ACache t) {
         source = s;
         target = t;
         lang = Language.EN;
@@ -322,7 +322,7 @@ public class DynamicPlanner extends Planner {
      *            Size of target mapping
      * @return a NestedPlan for the input link specification
      */
-    public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, AMapping sourceMapping,
+    public NestedPlan plan(LinkSpecification spec, ACache source, ACache target, AMapping sourceMapping,
             AMapping targetMapping) {
         NestedPlan plan = new NestedPlan();
 

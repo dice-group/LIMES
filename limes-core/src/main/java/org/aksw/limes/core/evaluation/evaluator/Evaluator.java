@@ -13,7 +13,7 @@ import org.aksw.limes.core.datastrutures.TaskData;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.IQuantitativeMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -133,15 +133,15 @@ public class Evaluator {
         // select a dataset-pair to evaluate each ML algorithm on
         for (TaskData dataset : datasets) {
 
-            Cache source = dataset.source;
+            ACache source = dataset.source;
             ArrayList<Instance> srcInstances = source.getAllInstances();
             AMapping mapping = dataset.mapping;
             AMapping goldstd = dataset.goldStandard.referenceMappings;
 
             // create source partitions: S into S1, .., Sk
-            Cache[] srcParts = new Cache[folds];
+            ACache[] srcParts = new ACache[folds];
             // create source folds (opposite of partitions)
-            Cache[] srcFolds = new Cache[folds];
+            ACache[] srcFolds = new ACache[folds];
             // create mappings
             AMapping[] srcMap = new AMapping[folds];
             AMapping[] srcGold = new AMapping[folds];
