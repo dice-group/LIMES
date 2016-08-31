@@ -28,6 +28,7 @@ import javafx.scene.layout.Priority;
  *         studserv.uni-leipzig.de{@literal >}
  */
 public class EditEndpointsView implements IEditView {
+    private static final String pageSizeError = "Only numbers are permitted!";
     /**
      * Corresponding Controller
      */
@@ -121,6 +122,22 @@ public class EditEndpointsView implements IEditView {
 
         pane.add(new Label("Page size"), 0, 3);
         TextField pageSize = new TextField();
+        pageSize.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+            if (!newValue) { //when focus lost
+                if(!pageSize.getText().matches("[0-9]+") && !pageSize.getText().equals("-1")){
+                    //set the textField empty
+                    pageSize.setText(pageSizeError);
+                    pageSize.setStyle("-fx-text-inner-color: red;");
+                }
+            }
+
+        });
+        pageSize.setOnMouseClicked(e -> {
+            if(pageSize.getText().equals(pageSizeError)){
+        	pageSize.setStyle("");
+        	pageSize.setText("");
+            }
+        });
         pane.add(pageSize, 1, 3);
 
         TextField[] textFields = new TextField[]{endpointURL, idNamespace,
