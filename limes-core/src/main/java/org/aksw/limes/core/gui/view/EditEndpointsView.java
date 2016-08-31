@@ -1,6 +1,5 @@
 package org.aksw.limes.core.gui.view;
 
-
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 
@@ -25,9 +24,9 @@ import javafx.scene.layout.Priority;
 import org.aksw.limes.core.gui.controller.EditEndpointsController;
 import org.aksw.limes.core.gui.util.SourceOrTarget;
 
-
 /**
- * used for editing endpoints step in {@link org.aksw.limes.core.gui.view.WizardView}
+ * used for editing endpoints step in
+ * {@link org.aksw.limes.core.gui.view.WizardView}
  *
  * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
  *         studserv.uni-leipzig.de{@literal >}
@@ -56,34 +55,34 @@ public class EditEndpointsView implements IEditView {
      * Constructor
      */
     EditEndpointsView() {
-        createRootPane();
+	createRootPane();
     }
 
     /**
      * Sets the Controller of the View
      *
      * @param controller
-     *         Corresponding Controller
+     *            Corresponding Controller
      */
     public void setController(EditEndpointsController controller) {
-        this.controller = controller;
+	this.controller = controller;
     }
 
     /**
      * Creates a new RootPane with Layout
      */
     private void createRootPane() {
-        HBox hbox = new HBox();
-        Node sourcePanelWithTitle = createEndpointPane(SOURCE);
-        HBox.setHgrow(sourcePanelWithTitle, Priority.ALWAYS);
-        hbox.getChildren().add(sourcePanelWithTitle);
-        Node targetPaneWithTitle = createEndpointPane(TARGET);
-        HBox.setHgrow(targetPaneWithTitle, Priority.ALWAYS);
-        hbox.getChildren().add(targetPaneWithTitle);
+	HBox hbox = new HBox();
+	Node sourcePanelWithTitle = createEndpointPane(SOURCE);
+	HBox.setHgrow(sourcePanelWithTitle, Priority.ALWAYS);
+	hbox.getChildren().add(sourcePanelWithTitle);
+	Node targetPaneWithTitle = createEndpointPane(TARGET);
+	HBox.setHgrow(targetPaneWithTitle, Priority.ALWAYS);
+	hbox.getChildren().add(targetPaneWithTitle);
 
-        rootPane = new ScrollPane(hbox);
-        rootPane.setFitToHeight(true);
-        rootPane.setFitToWidth(true);
+	rootPane = new ScrollPane(hbox);
+	rootPane.setFitToHeight(true);
+	rootPane.setFitToWidth(true);
     }
 
     /**
@@ -91,117 +90,118 @@ public class EditEndpointsView implements IEditView {
      */
     @Override
     public Parent getPane() {
-        return rootPane;
+	return rootPane;
     }
 
     /**
      * Creates Pane with Textfields to Edit the EndPoints
      *
      * @param source
-     *         If True sourcePane else targetPane
+     *            If True sourcePane else targetPane
      * @return Created Pane
      */
     private Node createEndpointPane(SourceOrTarget sourceOrTarget) {
-        GridPane pane = new GridPane();
-        pane.setAlignment(Pos.CENTER);
-        pane.setHgap(10);
-        pane.setVgap(10);
-        pane.setPadding(new Insets(25, 25, 25, 25));
-        ColumnConstraints column1 = new ColumnConstraints();
-        column1.setMinWidth(Control.USE_PREF_SIZE);
-        ColumnConstraints column2 = new ColumnConstraints();
-        column2.setMinWidth(300);
-        column2.setHgrow(Priority.ALWAYS);
-        pane.getColumnConstraints().addAll(column1, column2);
+	GridPane pane = new GridPane();
+	pane.setAlignment(Pos.CENTER);
+	pane.setHgap(10);
+	pane.setVgap(10);
+	pane.setPadding(new Insets(25, 25, 25, 25));
+	ColumnConstraints column1 = new ColumnConstraints();
+	column1.setMinWidth(Control.USE_PREF_SIZE);
+	ColumnConstraints column2 = new ColumnConstraints();
+	column2.setMinWidth(300);
+	column2.setHgrow(Priority.ALWAYS);
+	pane.getColumnConstraints().addAll(column1, column2);
 
-        pane.add(new Label("Endpoint URL"), 0, 0);
-        TextField endpointURL = new TextField();
-        endpointURL.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-            if (!newValue) { //when focus lost
-        	//check if it is a file
-        	File f = new File(endpointURL.getText());
-        	if(!(f.exists() && !f.isDirectory())) { 
-        	    //check if it is a valid URL
-        	    try{
-        		new URL(endpointURL.getText());
-        	    }catch(MalformedURLException e){
-                    //set the textField to error msg
-                    endpointURL.setText(endpointURLError);
-                    endpointURL.setStyle("-fx-text-inner-color: red;");
-        	    }
-        	}
-            }
+	pane.add(new Label("Endpoint URL"), 0, 0);
+	TextField endpointURL = new TextField("");
+	endpointURL.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	    if (endpointURL.getText() != null && !endpointURL.getText().equals("")) {
+		if (!newValue) { // when focus lost
+		    // check if it is a file
+		    File f = new File(endpointURL.getText());
+		    if (!(f.exists() && !f.isDirectory())) {
+			// check if it is a valid URL
+			try {
+			    new URL(endpointURL.getText());
+			} catch (MalformedURLException e) {
+			    // set the textField to error msg
+			    endpointURL.setText(endpointURLError);
+			    endpointURL.setStyle("-fx-text-inner-color: red;");
+			}
+		    }
+		}
+	    }
 
-        });
-        endpointURL.setOnMouseClicked(e -> {
-            if(endpointURL.getText().equals(endpointURLError)){
-        	endpointURL.setStyle("");
-        	endpointURL.setText("");
-            }
-        });
-        pane.add(endpointURL, 1, 0);
+	});
+	endpointURL.setOnMouseClicked(e -> {
+	    if (endpointURL.getText() != null && !endpointURL.getText().equals("")) {
+		if (endpointURL.getText().equals(endpointURLError)) {
+		    endpointURL.setStyle("");
+		    endpointURL.setText("");
+		}
+	    }
+	});
+	pane.add(endpointURL, 1, 0);
 
-        pane.add(new Label("ID / Namespace"), 0, 1);
-        TextField idNamespace = new TextField();
-        pane.add(idNamespace, 1, 1);
+	pane.add(new Label("ID / Namespace"), 0, 1);
+	TextField idNamespace = new TextField();
+	pane.add(idNamespace, 1, 1);
 
-        pane.add(new Label("Graph"), 0, 2);
-        TextField graph = new TextField();
-        pane.add(graph, 1, 2);
+	pane.add(new Label("Graph"), 0, 2);
+	TextField graph = new TextField();
+	pane.add(graph, 1, 2);
 
-        pane.add(new Label("Page size"), 0, 3);
-        TextField pageSize = new TextField();
-        pageSize.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-            if (!newValue) { //when focus lost
-                if(!pageSize.getText().matches("[0-9]+") && !pageSize.getText().equals("-1")){
-                    //set the textField to error msg
-                    pageSize.setText(pageSizeError);
-                    pageSize.setStyle("-fx-text-inner-color: red;");
-                }
-            }
+	pane.add(new Label("Page size"), 0, 3);
+	TextField pageSize = new TextField();
+	pageSize.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	    if (!newValue) { // when focus lost
+		    if (!pageSize.getText().matches("[0-9]+") && !pageSize.getText().equals("-1")) {
+			// set the textField to error msg
+			pageSize.setText(pageSizeError);
+			pageSize.setStyle("-fx-text-inner-color: red;");
+		    }
+		}
 
-        });
-        pageSize.setOnMouseClicked(e -> {
-            if(pageSize.getText().equals(pageSizeError)){
-        	pageSize.setStyle("");
-        	pageSize.setText("");
-            }
-        });
-        pane.add(pageSize, 1, 3);
+	    });
+	pageSize.setOnMouseClicked(e -> {
+	    if (pageSize.getText().equals(pageSizeError)) {
+		pageSize.setStyle("");
+		pageSize.setText("");
+	    }
+	});
+	pane.add(pageSize, 1, 3);
 
-        TextField[] textFields = new TextField[]{endpointURL, idNamespace,
-                graph, pageSize};
-        if (sourceOrTarget == SOURCE) {
-            sourceFields = textFields;
-            return new TitledPane("Source endpoint", pane);
-        } else {
-            targetFields = textFields;
-            return new TitledPane("Target endpoint", pane);
-        }
+	TextField[] textFields = new TextField[] { endpointURL, idNamespace, graph, pageSize };
+	if (sourceOrTarget == SOURCE) {
+	    sourceFields = textFields;
+	    return new TitledPane("Source endpoint", pane);
+	} else {
+	    targetFields = textFields;
+	    return new TitledPane("Target endpoint", pane);
+	}
     }
 
     /**
      * Fills the Textfield with the Information
      *
      * @param sourceOrTarget
-     *         if True source else Target
+     *            if True source else Target
      * @param endpoint
-     *         URL of the Endpoint
+     *            URL of the Endpoint
      * @param idNamespace
-     *         Namespace of the Endpoint
+     *            Namespace of the Endpoint
      * @param graph
-     *         Metrik or Graph of the Endpoint
+     *            Metrik or Graph of the Endpoint
      * @param pageSize
-     *         Length of the Limes Query
+     *            Length of the Limes Query
      */
-    public void setFields(SourceOrTarget sourceOrTarget, String endpoint,
-                          String idNamespace, String graph, String pageSize) {
-        TextField[] textFields = sourceOrTarget == SOURCE ? sourceFields
-                : targetFields;
-        textFields[0].setText(endpoint);
-        textFields[1].setText(idNamespace);
-        textFields[2].setText(graph);
-        textFields[3].setText(pageSize);
+    public void setFields(SourceOrTarget sourceOrTarget, String endpoint, String idNamespace, String graph, String pageSize) {
+	TextField[] textFields = sourceOrTarget == SOURCE ? sourceFields : targetFields;
+	textFields[0].setText(endpoint);
+	textFields[1].setText(idNamespace);
+	textFields[2].setText(graph);
+	textFields[3].setText(pageSize);
     }
 
     /**
@@ -209,11 +209,15 @@ public class EditEndpointsView implements IEditView {
      */
     @Override
     public void save() {
-        controller.save(SOURCE, sourceFields[0].getText(),
-                sourceFields[1].getText(), sourceFields[2].getText(),
-                sourceFields[3].getText());
-        controller.save(TARGET, targetFields[0].getText(),
-                targetFields[1].getText(), targetFields[2].getText(),
-                targetFields[3].getText());
+	controller.save(SOURCE, sourceFields[0].getText(), sourceFields[1].getText(), sourceFields[2].getText(), sourceFields[3].getText());
+	controller.save(TARGET, targetFields[0].getText(), targetFields[1].getText(), targetFields[2].getText(), targetFields[3].getText());
+    }
+
+    public TextField[] getSourceFields() {
+        return sourceFields;
+    }
+
+    public TextField[] getTargetFields() {
+        return targetFields;
     }
 }

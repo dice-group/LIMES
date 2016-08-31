@@ -24,6 +24,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -45,6 +46,7 @@ public class EditPropertyMatchingView implements IEditView {
             .observableArrayList();
     private ObservableList<String> targetProperties = FXCollections
             .observableArrayList();
+    private Label missingPropertiesLabel;
 
     /**
      * Constructor creates the root pane and adds listeners
@@ -82,8 +84,11 @@ public class EditPropertyMatchingView implements IEditView {
         targetColumn.getChildren().addAll(targetLabel, targetPropList, addedTargetLabel, addedTargetPropsList);
         addAllButton = new Button("Add all");
         removeAllButton = new Button("Remove all");
+        missingPropertiesLabel = new Label("At least one source and one target property must be chosen!");
+        missingPropertiesLabel.setTextFill(Color.RED);
+        missingPropertiesLabel.setVisible(false);
         HBox buttons = new HBox();
-        buttons.getChildren().addAll(addAllButton, removeAllButton);
+        buttons.getChildren().addAll(missingPropertiesLabel, addAllButton, removeAllButton);
         BorderPane root = new BorderPane();
         HBox hb = new HBox();
         hb.getChildren().addAll(sourceColumn, targetColumn);
@@ -92,6 +97,9 @@ public class EditPropertyMatchingView implements IEditView {
         root.setCenter(hb);
         root.setBottom(buttons);
         rootPane = new ScrollPane(root);
+        rootPane.setOnMouseClicked(e -> {
+            missingPropertiesLabel.setVisible(false);
+        });
         rootPane.setFitToHeight(true);
         rootPane.setFitToWidth(true);
     }
@@ -100,6 +108,7 @@ public class EditPropertyMatchingView implements IEditView {
      * adds listener to properties to display changes after loading them is finished.
      * also adds functionality
      */
+    @SuppressWarnings("all")
     private void addListeners() {
 
         sourceProperties.addListener(new ListChangeListener() {
@@ -227,5 +236,17 @@ public class EditPropertyMatchingView implements IEditView {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    public ListView<String> getAddedSourcePropsList() {
+        return addedSourcePropsList;
+    }
+
+    public ListView<String> getAddedTargetPropsList() {
+        return addedTargetPropsList;
+    }
+
+    public Label getMissingPropertiesLabel() {
+        return missingPropertiesLabel;
     }
 }

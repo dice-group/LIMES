@@ -88,4 +88,14 @@ public class EditPropertyMatchingController implements IEditController {
     public void save(ListView<String> sourceProperties, ListView<String> targetProperties) {
         config.setPropertiesMatching(sourceProperties, targetProperties);
     }
+
+    @Override
+    public boolean validate() {
+	boolean valid = true;
+	if(view.getAddedSourcePropsList().getItems().size() == 0 ||view.getAddedTargetPropsList().getItems().size() == 0 ){
+	    view.getMissingPropertiesLabel().setVisible(true);
+	    valid = false;
+	}
+	return valid;
+    }
 }

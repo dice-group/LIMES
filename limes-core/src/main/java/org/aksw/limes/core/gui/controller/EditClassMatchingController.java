@@ -99,4 +99,14 @@ public class EditClassMatchingController implements IEditController {
     public IEditView getView() {
         return view;
     }
+
+    @Override
+    public boolean validate() {
+	boolean valid = true;
+	if(view.getSourceTreeView().getSelectionModel().getSelectedItem() == null || view.getTargetTreeView().getSelectionModel().getSelectedItem() == null ){
+	   view.getErrorMissingClassMatchingLabel().setVisible(true);
+	   valid = false;
+	}
+	return valid;
+    }
 }

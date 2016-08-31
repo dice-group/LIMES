@@ -26,4 +26,10 @@ public interface IEditController {
      * @return the view
      */
     public IEditView getView();
+    
+    /**
+     * validates the fields
+     * @return true if valid, false else
+     */
+    public boolean validate();
 }

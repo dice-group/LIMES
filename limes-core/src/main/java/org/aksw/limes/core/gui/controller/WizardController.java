@@ -58,7 +58,11 @@ public class WizardController {
             return;
         }
         if (this.currentPage != -1) {
-            editControllers[this.currentPage].save();
+            if(editControllers[this.currentPage].validate()){
+        	editControllers[this.currentPage].save();
+            }else{
+        	return;
+            }
         }
         if (newPage == editControllers.length) {
             this.currentPage = -1;
