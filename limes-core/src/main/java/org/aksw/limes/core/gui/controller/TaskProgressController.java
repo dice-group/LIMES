@@ -6,9 +6,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import org.aksw.limes.core.gui.view.TaskProgressView;
-
 import javafx.concurrent.Task;
+
+import org.aksw.limes.core.controller.Controller;
+import org.aksw.limes.core.gui.view.TaskProgressView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class to show user progress if tasks are being executed in the background
@@ -63,6 +66,7 @@ public class TaskProgressController {
      */
     public <T> void addTask(Task<T> task, Consumer<T> successCallback,
                             Consumer<Throwable> errorCallback) {
+	tasks.add(task);
         task.setOnSucceeded(event -> {
             T result;
             try {
@@ -74,11 +78,13 @@ public class TaskProgressController {
 
             tasks.remove(task);
             if (tasks.isEmpty()) {
+        	view.setFinishedSuccessfully(true);
                 view.close();
             }
         });
 
         task.setOnFailed(event -> {
+            view.setFinishedSuccessfully(false);
             cancel();
             errorCallback.accept(task.getException());
         });
@@ -89,6 +95,9 @@ public class TaskProgressController {
      * cancels all tasks
      */
     public void cancel() {
+	System.err.println("\n\n\n\n\n\n\n\n\n\n ======= CANCEL ====== \n\n\n\n\n\n\n\n\n\n");
+	view.setCancelled(true);
+        view.setFinishedSuccessfully(false);
         for (Task<?> task : tasks) {
             task.cancel();
         }

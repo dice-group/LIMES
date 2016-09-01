@@ -8,6 +8,7 @@ import org.aksw.limes.core.gui.model.Endpoint;
 import org.aksw.limes.core.gui.util.SourceOrTarget;
 import org.aksw.limes.core.gui.view.EditEndpointsView;
 import org.aksw.limes.core.gui.view.IEditView;
+import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.io.config.KBInfo;
 
 /**
@@ -136,5 +137,14 @@ public class EditEndpointsController implements IEditController {
 	    valid = false;
 	}
 	return valid;
+    }
+
+    @Override
+    public TaskProgressView getTaskProgressView() {
+	return null;
+    }
+    @Override
+    public void setTaskProgressView(TaskProgressView tpv) {
+	return;
     }
 }
