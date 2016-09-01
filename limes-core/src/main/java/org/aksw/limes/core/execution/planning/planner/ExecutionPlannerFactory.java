@@ -1,6 +1,6 @@
 package org.aksw.limes.core.execution.planning.planner;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +76,7 @@ public class ExecutionPlannerFactory {
      * @return a specific planner instance
      * 
      */
-    public static Planner getPlanner(ExecutionPlannerType type, Cache source, Cache target) {
+    public static Planner getPlanner(ExecutionPlannerType type, ACache source, ACache target) {
 
         switch (type) {
         case DEFAULT:

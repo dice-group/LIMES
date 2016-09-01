@@ -12,7 +12,7 @@ import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngi
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.ExecutionPlannerType;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -51,10 +51,10 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
      */
     protected AMapping reference;
 //	protected int numberOfExamples = 0;
-    protected Cache sC;
-    protected Cache tC;
-    protected Cache trimmedSourceCache;
-    protected Cache trimmedTargetCache;
+    protected ACache sC;
+    protected ACache tC;
+    protected ACache trimmedSourceCache;
+    protected ACache trimmedTargetCache;
     protected IQualitativeMeasure measure;
     protected double crossProduct;
     /**
@@ -205,7 +205,7 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
      *
      * @return HybridCache of the source endpoint.
      */
-    public Cache getSourceCache() {
+    public ACache getSourceCache() {
         return sC;
     }
 
@@ -214,7 +214,7 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
      *
      * @return HybridCache of the target endpoint.
      */
-    public Cache getTargetCache() {
+    public ACache getTargetCache() {
         return tC;
     }
 
@@ -260,7 +260,7 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
      */
     public void trimKnowledgeBases(AMapping trainingData) {
         this.trainingData = trainingData;
-        Cache[] trimmed = CacheTrimmer.processData(sC, tC, trainingData);
+        ACache[] trimmed = CacheTrimmer.processData(sC, tC, trainingData);
         trimmedSourceCache = trimmed[0];
         trimmedTargetCache = trimmed[1];
         logger.info("Trimming to " + trimmed[0].size() + " and " + trimmed[1].size() + " caches.");
@@ -342,7 +342,7 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
         crossProduct = trimmedSourceCache.size() * trimmedTargetCache.size();
     }
 
-    public void setCaches(Cache sC, Cache tC) {
+    public void setCaches(ACache sC, ACache tC) {
         this.sC = sC;
         this.tC = tC;
     }

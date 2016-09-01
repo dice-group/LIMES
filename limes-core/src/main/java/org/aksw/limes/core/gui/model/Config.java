@@ -16,7 +16,7 @@ import org.aksw.limes.core.gui.model.metric.MetricParser;
 import org.aksw.limes.core.gui.model.metric.Output;
 import org.aksw.limes.core.gui.util.SourceOrTarget;
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
@@ -219,8 +219,8 @@ public class Config extends Configuration {
 	return new Task<Void>() {
 	    @Override
 	    protected Void call() {
-		Cache sourceCache = sourceEndpoint.getCache();
-		Cache targetCache = targetEndpoint.getCache();
+		ACache sourceCache = sourceEndpoint.getCache();
+		ACache targetCache = targetEndpoint.getCache();
 		LinkSpecification ls = new LinkSpecification();
 		ls.readSpec(getMetricExpression(), getAcceptanceThreshold());
 		HeliosPlanner hp = new HeliosPlanner(sourceCache, targetCache);

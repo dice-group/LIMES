@@ -7,7 +7,7 @@ import org.aksw.limes.core.gui.model.ml.BatchLearningModel;
 import org.aksw.limes.core.gui.view.ResultView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -31,7 +31,7 @@ public class BatchLearningController extends MachineLearningController {
      * @param sourceCache source
      * @param targetCache target
      */
-    public BatchLearningController(Config config, Cache sourceCache, Cache targetCache) {
+    public BatchLearningController(Config config, ACache sourceCache, ACache targetCache) {
         this.mlModel = new BatchLearningModel(config, sourceCache, targetCache);
     }
 

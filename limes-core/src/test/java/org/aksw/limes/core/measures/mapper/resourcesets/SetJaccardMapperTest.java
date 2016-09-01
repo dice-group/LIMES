@@ -2,7 +2,7 @@ package org.aksw.limes.core.measures.mapper.resourcesets;
 
 import static org.junit.Assert.assertEquals;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -17,11 +17,11 @@ public class SetJaccardMapperTest {
     @Test
     public void testGetMapping() throws Exception {
         SetJaccardMapper mapper = new SetJaccardMapper();
-        Cache s = new MemoryCache();
+        ACache s = new MemoryCache();
         s.addTriple("spielberg","movies","ET");
         s.addTriple("spielberg","movies","birds");
         s.addTriple("spielberg","movies","snails");
-        Cache t = new MemoryCache();
+        ACache t = new MemoryCache();
         t.addTriple("spilberg","movies","ET");
         t.addTriple("spilberg","movies","birds");
         t.addTriple("spilberg","movies","rats");

@@ -10,7 +10,7 @@ import org.apache.jena.rdf.model.Model;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 8, 2015
  */
-public abstract class Cache implements ICache {
+public abstract class ACache implements ICache {
     public abstract void addInstance(Instance i);
 
     public abstract Instance getNextInstance();
@@ -31,7 +31,7 @@ public abstract class Cache implements ICache {
 
     public abstract int size();
 
-    public abstract Cache getSample(int size);
+    public abstract ACache getSample(int size);
 
     public abstract void replaceInstance(String uri, Instance a);
 
@@ -44,7 +44,7 @@ public abstract class Cache implements ICache {
      *         Map maps propertyNames to preprocessing functions.
      * @return cacheof processed data
      */
-    public abstract Cache processData(Map<String, String> propertyProcess);
+    public abstract ACache processData(Map<String, String> propertyProcess);
 
     /**
      * Method to process data of a property into a new property with specific preprocessing.
@@ -57,7 +57,7 @@ public abstract class Cache implements ICache {
      *         Preprocessing Expression.
      * @return Cache after property add 
      */
-    public abstract Cache addProperty(String sourcePropertyName, String targetPropertyName, String processingChain);
+    public abstract ACache addProperty(String sourcePropertyName, String targetPropertyName, String processingChain);
 
 
     /**

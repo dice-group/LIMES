@@ -8,7 +8,7 @@ import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngi
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.ExecutionPlannerType;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -35,13 +35,13 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
     static Logger logger = LoggerFactory.getLogger("LIMES");
     private static PseudoFMeasureFitnessFunction instance = null;
     public ExecutionEngine engine;
-    Cache sourceCache, targetCache;
+    ACache sourceCache, targetCache;
     LinkSpecGeneticLearnerConfig config;
     double beta = 1.0d;
     
     PseudoFMeasure pfm;
 
-    private PseudoFMeasureFitnessFunction(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasure pfm, Cache c1, Cache c2) {
+    private PseudoFMeasureFitnessFunction(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasure pfm, ACache c1, ACache c2) {
         config = a_config;
         sourceCache = c1;
         targetCache = c2;
@@ -58,7 +58,7 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
      * @param c2 Cache
      * @return instance of PseudoFMeasure Fitness Function
      */
-    public static PseudoFMeasureFitnessFunction getInstance(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasure pfm, Cache c1, Cache c2) {
+    public static PseudoFMeasureFitnessFunction getInstance(LinkSpecGeneticLearnerConfig a_config, PseudoFMeasure pfm, ACache c1, ACache c2) {
         if (instance == null) {
             return instance = new PseudoFMeasureFitnessFunction(a_config, pfm, c1, c2);
         } else {

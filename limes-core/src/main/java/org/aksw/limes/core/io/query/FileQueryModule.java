@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -65,7 +65,7 @@ public class FileQueryModule implements IQueryModule {
      * @param c
      *         Cache to be filled
      */
-    public void fillCache(Cache c) {
+    public void fillCache(ACache c) {
         SparqlQueryModule sqm = new SparqlQueryModule(kb);
         sqm.fillCache(c, false);
 

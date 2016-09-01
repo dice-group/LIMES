@@ -8,7 +8,7 @@ import java.util.List;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -17,8 +17,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class HeliosPlannerTest {
-    public Cache source = new MemoryCache();
-    public Cache target = new MemoryCache();
+    public ACache source = new MemoryCache();
+    public ACache target = new MemoryCache();
 
     @Before
     public void setUp() {

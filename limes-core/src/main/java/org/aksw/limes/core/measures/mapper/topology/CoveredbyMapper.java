@@ -6,7 +6,7 @@ package org.aksw.limes.core.measures.mapper.topology;
 
 import java.util.Set;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
@@ -31,7 +31,7 @@ public class CoveredbyMapper extends AMapper implements ITopologicRelationMapper
     }
 
     @Override
-    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression, double threshold) {
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression, double threshold) {
         return RADON.getMapping(source, target, sourceVar, targetVar, expression, threshold, RADON.COVEREDBY);
     }
 

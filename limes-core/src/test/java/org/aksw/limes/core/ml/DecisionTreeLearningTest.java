@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.Configuration;
@@ -31,8 +31,8 @@ import org.junit.Test;
 //TODO finish
 public class DecisionTreeLearningTest {
 
-    Cache sc = new MemoryCache();
-    Cache tc = new MemoryCache();
+    ACache sc = new MemoryCache();
+    ACache tc = new MemoryCache();
     Configuration config = new Configuration();
 
     AMapping trainingMap, refMap;

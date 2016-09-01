@@ -8,7 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -54,8 +54,8 @@ public class Experiment {
     }
 
 
-    public static Cache readOAEIFile(String file, String token) {
-        Cache c = new MemoryCache();
+    public static ACache readOAEIFile(String file, String token) {
+        ACache c = new MemoryCache();
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));

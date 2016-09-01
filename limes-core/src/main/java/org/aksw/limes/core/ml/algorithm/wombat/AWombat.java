@@ -29,7 +29,7 @@ import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterType;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -253,7 +253,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * @param tCache target Cache
      * @return Mapping from sCache to tCache
      */
-    protected AMapping getPredictions(LinkSpecification ls, Cache sCache, Cache tCache) {
+    protected AMapping getPredictions(LinkSpecification ls, ACache sCache, ACache tCache) {
         AMapping map;
         Rewriter rw = RewriterFactory.getDefaultRewriter();
         LinkSpecification rwLs = rw.rewrite(ls);
@@ -279,7 +279,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     }
     
     @Override
-    protected void init(List<LearningParameter> lp, Cache sourceCache, Cache targetCache) {
+    protected void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
         super.init(lp, sourceCache, targetCache);
         sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, minPropertyCoverage);
         targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetCache, minPropertyCoverage);

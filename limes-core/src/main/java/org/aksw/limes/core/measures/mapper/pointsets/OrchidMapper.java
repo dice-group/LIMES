@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.AMapper;
@@ -95,7 +95,7 @@ public class OrchidMapper extends AMapper {
      * @return A mapping which contains uris whose polygons are such that their
      *         distance is below the set threshold
      */
-    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
         
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
@@ -125,7 +125,7 @@ public class OrchidMapper extends AMapper {
      * @return Set of polygons. Each polygon contains the uri to which it
      *         matches
      */
-    public Set<Polygon> getPolygons(Cache c, String property) {
+    public Set<Polygon> getPolygons(ACache c, String property) {
         Polygon p;
         Set<Polygon> polygons = new HashSet<Polygon>();
         for (Instance instance : c.getAllInstances()) {

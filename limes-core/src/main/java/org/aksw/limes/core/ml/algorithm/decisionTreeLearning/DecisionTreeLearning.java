@@ -24,7 +24,7 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -44,9 +44,7 @@ import org.aksw.limes.core.ml.algorithm.WombatComplete;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.util.ParenthesisMatcher;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.hamcrest.core.IsInstanceOf;
 
 import weka.classifiers.trees.J48;
 import weka.core.Attribute;
@@ -471,7 +469,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     }
 
     @Override
-    public AMapping predict(Cache source, Cache target, MLResults mlModel) {
+    public AMapping predict(ACache source, ACache target, MLResults mlModel) {
 	LinkSpecification ls = mlresult.getLinkSpecification();
 	DynamicPlanner dp = new DynamicPlanner(sourceCache, targetCache);
 	SimpleExecutionEngine ee = new SimpleExecutionEngine(sourceCache, targetCache, this.configuration.getSourceInfo().getVar(), this.configuration
@@ -480,7 +478,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     }
 
     @Override
-    public void init(List<LearningParameter> lp, Cache sourceCache, Cache targetCache) {
+    public void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
 	super.init(lp, sourceCache, targetCache);
 	previouslyPresentedCandidates = new HashSet<SourceTargetValue>();
 	if (lp == null) {

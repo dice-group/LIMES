@@ -2,7 +2,7 @@ package org.aksw.limes.core.measures.mapper.topology;
 
 import static org.junit.Assert.assertTrue;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -17,10 +17,10 @@ public class DisjointMapperTest {
 
     @Test
     public void testGetMapping() throws Exception {
-        Cache s = new MemoryCache();
+        ACache s = new MemoryCache();
         s.addTriple("http://test.com/s/#1", "asWKT", "POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0))");
         s.addTriple("http://test.com/s/#2", "asWKT", "POLYGON ((-10 -10, 0 10, 10 10, 10 0, -10 -10))");
-        Cache t = new MemoryCache();
+        ACache t = new MemoryCache();
         t.addTriple("http://test.com/t/#1", "asWKT", "POLYGON ((-1 -1, -1 11, 11 11, 11 -1, -1 -1))");
         t.addTriple("http://test.com/t/#2", "asWKT", "POLYGON ((-10 -10, -10 -20, -20 -20, -20 -10, -10 -10))");
         AMapping referenceMapping = MappingFactory.createMapping(MappingFactory.MappingType.MEMORY_MAPPING);

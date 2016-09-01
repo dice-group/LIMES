@@ -1,6 +1,6 @@
 package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
@@ -10,8 +10,8 @@ import org.junit.Test;
 
 public class SimpleTemporalMapperTest {
 
-    public Cache source = new MemoryCache();
-    public Cache target = new MemoryCache();
+    public ACache source = new MemoryCache();
+    public ACache target = new MemoryCache();
 
     @Before
     public void setUp() {

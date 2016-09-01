@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -125,13 +125,13 @@ public class CacheTrimmer {
      *         Reference Mapping (e.g. part of the optimal mapping)
      * @return Array holding both resulting Caches, where the Cache for the source is at index 0. Cache for the target knowledge base at index 1.
      */
-    public static Cache[] processData(Cache sC, Cache tC, AMapping m) {
+    public static ACache[] processData(ACache sC, ACache tC, AMapping m) {
         Logger logger = LoggerFactory.getLogger("LIMES");
         if (m.getSize() <= 100)
             logger.info("Scaling Caches down to " + m);
-        Cache[] ret = new Cache[2];
-        Cache h1 = new MemoryCache();
-        Cache h2 = new MemoryCache();
+        ACache[] ret = new ACache[2];
+        ACache h1 = new MemoryCache();
+        ACache h2 = new MemoryCache();
         HashMap<String, HashMap<String, Double>> map = m.getMap();
 
         for (Entry<String, HashMap<String, Double>> e : map.entrySet()) {
@@ -158,11 +158,11 @@ public class CacheTrimmer {
         return ret;
     }
 
-    public Cache[] processDataEqually(Cache hc1, Cache hc2, AMapping m, int numberOfQuestions) {
+    public ACache[] processDataEqually(ACache hc1, ACache hc2, AMapping m, int numberOfQuestions) {
         reference.getMap().clear();
-        Cache[] ret = new Cache[2];
-        Cache h1 = new MemoryCache();
-        Cache h2 = new MemoryCache();
+        ACache[] ret = new ACache[2];
+        ACache h1 = new MemoryCache();
+        ACache h2 = new MemoryCache();
         int countQuestions = 0;
         AMapping alreadyAsked = MappingFactory.createDefaultMapping();
 
@@ -189,7 +189,7 @@ public class CacheTrimmer {
         logger.info("asking random " + numberOfQuestions + " questions got me " + reference.size() + " valid links");
         if (reference.getSize() < numberOfQuestions / 2) {
             AMapping ref2 = trimExamplesRandomly(m, numberOfQuestions / 2);
-            Cache[] adding = processData(hc1, hc2, ref2);
+            ACache[] adding = processData(hc1, hc2, ref2);
 
             HashMap<String, HashMap<String, Double>> map = ref2.getMap();
 

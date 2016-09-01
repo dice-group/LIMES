@@ -1,6 +1,6 @@
 package org.aksw.limes.core.execution.engine.filter;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -74,7 +74,7 @@ public class LinearFilter implements IFilter {
      * @return a filtered mapping that satisfies both the condition and the
      *         threshold
      */
-    public AMapping filter(AMapping map, String condition, double threshold, Cache source, Cache target,
+    public AMapping filter(AMapping map, String condition, double threshold, ACache source, ACache target,
             String sourceVar, String targetVar) {
         double sim = 0.0;
         Instance s, t;
@@ -129,8 +129,8 @@ public class LinearFilter implements IFilter {
      * @return a filtered mapping that satisfies both the condition and the
      *         thresholds
      */
-    public AMapping filter(AMapping map, String condition, double threshold, double mainThreshold, Cache source,
-            Cache target, String sourceVar, String targetVar) {
+    public AMapping filter(AMapping map, String condition, double threshold, double mainThreshold, ACache source,
+            ACache target, String sourceVar, String targetVar) {
         double sim = 0.0;
         Instance s, t;
         AMapping result = MappingFactory.createDefaultMapping();
@@ -189,8 +189,8 @@ public class LinearFilter implements IFilter {
      * @return a filtered mapping that satisfies both the condition and the
      *         thresholds
      */
-    public AMapping reversefilter(AMapping map, String condition, double threshold, double mainThreshold, Cache source,
-            Cache target, String sourceVar, String targetVar) {
+    public AMapping reversefilter(AMapping map, String condition, double threshold, double mainThreshold, ACache source,
+            ACache target, String sourceVar, String targetVar) {
 
         double sim = 0.0;
         Instance s, t;

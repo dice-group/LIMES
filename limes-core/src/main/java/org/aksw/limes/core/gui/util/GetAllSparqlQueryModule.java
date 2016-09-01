@@ -7,7 +7,7 @@ package org.aksw.limes.core.gui.util;
 import java.lang.reflect.Field;
 
 import org.aksw.limes.core.gui.util.sparql.SPARQLHelper;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.query.ModelRegistry;
 import org.aksw.limes.core.io.query.SparqlQueryModule;
@@ -81,7 +81,7 @@ public class GetAllSparqlQueryModule extends SparqlQueryModule {
      * @param paginate
      *         with pagination set to false, no additional offset queries will be generated after the first query
      */
-    public void fillCache(Cache cache, boolean paginate) {
+    public void fillCache(ACache cache, boolean paginate) {
         try {
             fillCache(cache, null, paginate);
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class GetAllSparqlQueryModule extends SparqlQueryModule {
      *         with pagination set to false, no additional offset queries will be generated after the first query
      * @throws Exception thrown if something goes wrong
      */
-    public void fillCache(final Cache cache, final String getOnlyThisProperty, final boolean paginate) throws Exception {
+    public void fillCache(final ACache cache, final String getOnlyThisProperty, final boolean paginate) throws Exception {
         String var = getKB().getVar().replace("?", "");
         long startTime = System.currentTimeMillis();
         String query = "";

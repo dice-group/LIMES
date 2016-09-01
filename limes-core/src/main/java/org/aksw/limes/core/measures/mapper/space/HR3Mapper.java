@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.TreeSet;
 // * Previously call ToralOrderBlockingMapper
 
-import org.aksw.limes.core.exceptions.InvalidThresholdException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
+
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
@@ -57,7 +57,7 @@ public class HR3Mapper extends AMapper {
      * @return A mapping which contains links between the source instances and
      *         the target instances
      */
-    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
 
         

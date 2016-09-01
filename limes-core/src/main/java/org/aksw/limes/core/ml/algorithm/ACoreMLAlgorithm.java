@@ -6,7 +6,7 @@ import java.util.List;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.NoSuchParameterException;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.AMapping;
 
@@ -18,9 +18,9 @@ public abstract class ACoreMLAlgorithm {
 
     protected List<LearningParameter> parameters = new ArrayList<>();
 
-    protected Cache sourceCache;
+    protected ACache sourceCache;
 
-    protected Cache targetCache;
+    protected ACache targetCache;
     
     protected Configuration configuration;
 
@@ -64,7 +64,7 @@ public abstract class ACoreMLAlgorithm {
      * @param sourceCache the source cache
      * @param targetCache the target cache
      */
-    protected void init(List<LearningParameter> lp, Cache sourceCache, Cache targetCache) {
+    protected void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
         if (lp != null) {
             this.parameters.addAll(lp);
         }
@@ -102,7 +102,7 @@ public abstract class ACoreMLAlgorithm {
      * @param mlModel result of training phase
      * @return the mapping from source to target
      */
-    protected abstract AMapping predict(Cache source, Cache target,
+    protected abstract AMapping predict(ACache source, ACache target,
                                         MLResults mlModel);
 
     /**

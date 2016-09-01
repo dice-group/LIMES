@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 
 /**
@@ -33,8 +33,8 @@ public class RandomStringGenerator implements DataGenerator {
      *         Size of the corpus that is to be generated
      * @return Corpus
      */
-    public Cache generateData(int size) {
-        Cache c = new MemoryCache();
+    public ACache generateData(int size) {
+        ACache c = new MemoryCache();
         String s;
         List<Double> lengths = new ArrayList<Double>();
         while (c.size() < size) {

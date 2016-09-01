@@ -1,6 +1,6 @@
 package org.aksw.limes.core.execution.engine.filter;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 
 /**
@@ -45,7 +45,7 @@ public interface IFilter {
      * @return a filtered mapping that satisfies both the condition and the
      *         threshold
      */
-    public AMapping filter(AMapping map, String condition, double threshold, Cache source, Cache target,
+    public AMapping filter(AMapping map, String condition, double threshold, ACache source, ACache target,
             String sourceVar, String targetVar);
 
     /**
@@ -71,8 +71,8 @@ public interface IFilter {
      * @return a filtered mapping that satisfies both the condition and the
      *         thresholds
      */
-    public AMapping filter(AMapping map, String condition, double threshold, double mainThreshold, Cache source,
-            Cache target, String sourceVar, String targetVar);
+    public AMapping filter(AMapping map, String condition, double threshold, double mainThreshold, ACache source,
+            ACache target, String sourceVar, String targetVar);
 
     /**
      * Reverse filter function for mapping using a condition and two thresholds
@@ -97,8 +97,8 @@ public interface IFilter {
      * @return a filtered mapping that satisfies both the condition and the
      *         thresholds
      */
-    public AMapping reversefilter(AMapping map, String condition, double threshold, double mainThreshold, Cache source,
-            Cache target, String sourceVar, String targetVar);
+    public AMapping reversefilter(AMapping map, String condition, double threshold, double mainThreshold, ACache source,
+            ACache target, String sourceVar, String targetVar);
 
     /**
      * Filter for linear combinations when operation is set to "add", given the

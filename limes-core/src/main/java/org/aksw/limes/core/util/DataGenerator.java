@@ -1,6 +1,6 @@
 package org.aksw.limes.core.util;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -8,7 +8,7 @@ import org.aksw.limes.core.io.cache.Cache;
 public interface DataGenerator {
     public static String LABEL = "label";
 
-    public Cache generateData(int size);
+    public ACache generateData(int size);
 
     public String getName();
 

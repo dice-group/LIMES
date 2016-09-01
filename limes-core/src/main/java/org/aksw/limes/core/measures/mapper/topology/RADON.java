@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
@@ -343,7 +343,7 @@ public class RADON {
 
     private static final Logger logger = LoggerFactory.getLogger(RADON.class);
 
-    public static Map<String, Geometry> getGeometryMapFromCache(Cache c, String property) {
+    public static Map<String, Geometry> getGeometryMapFromCache(ACache c, String property) {
         WKTReader wktReader = new WKTReader();
         Map<String, Geometry> gMap = new HashMap<>();
         for (String uri : c.getAllUris()) {
@@ -360,8 +360,15 @@ public class RADON {
         return gMap;
     }
 
-    public static AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression, double threshold, String relation) {
-        
+    public static AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression, double threshold, String relation) {
+        try {
+            if (threshold <= 0) {
+                throw new InvalidThresholdException(threshold);
+            }
+        } catch (InvalidThresholdException e) {
+            System.err.println("Exiting..");
+            System.exit(1);
+        }
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         Map<String, Geometry> sourceMap = getGeometryMapFromCache(source, properties.get(0));
         Map<String, Geometry> targetMap = getGeometryMapFromCache(target, properties.get(1));

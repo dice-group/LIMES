@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
@@ -63,8 +63,8 @@ public class CSVMappingReaderTest {
 	try {
 	    for (String ds : datasetsList) {
 		evalData = DataSetChooser.getData(ds);
-		Cache source = evalData.getSourceCache();
-		Cache target = evalData.getTargetCache();
+		ACache source = evalData.getSourceCache();
+		ACache target = evalData.getTargetCache();
 		AMapping missing = MappingFactory.createDefaultMapping();
 		evalData.getReferenceMapping().getMap().forEach((sourceURI, map2) -> {
 		    map2.forEach((targetURI, value) -> {

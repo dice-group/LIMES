@@ -1,6 +1,6 @@
 package org.aksw.limes.core.execution.engine;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +67,7 @@ public class ExecutionEngineFactory {
      * @return a specific execution engine instance
      * 
      */
-    public static ExecutionEngine getEngine(ExecutionEngineType type, Cache source, Cache target, String sourceVar,
+    public static ExecutionEngine getEngine(ExecutionEngineType type, ACache source, ACache target, String sourceVar,
             String targetVar) {
         switch (type) {
         case DEFAULT:

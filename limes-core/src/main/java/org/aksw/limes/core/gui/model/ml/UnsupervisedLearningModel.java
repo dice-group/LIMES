@@ -2,7 +2,7 @@ package org.aksw.limes.core.gui.model.ml;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 
 import javafx.concurrent.Task;
@@ -22,8 +22,8 @@ public class UnsupervisedLearningModel extends MachineLearningModel {
      * @param sourceCache source
      * @param targetCache target
      */
-    public UnsupervisedLearningModel(Config config, Cache sourceCache,
-                                     Cache targetCache) {
+    public UnsupervisedLearningModel(Config config, ACache sourceCache,
+                                     ACache targetCache) {
         super(config, sourceCache, targetCache);
     }
 

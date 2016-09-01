@@ -4,8 +4,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.aksw.limes.core.exceptions.InvalidThresholdException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -27,7 +26,7 @@ public class SuccessorMapper extends SimpleTemporalMapper {
      * @return a mapping, the resulting mapping
      */
     @Override
-    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
         AMapping m = MappingFactory.createDefaultMapping();
 

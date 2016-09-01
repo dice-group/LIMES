@@ -2,7 +2,7 @@ package org.aksw.limes.core.io.query;
 
 import java.util.Iterator;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.apache.jena.query.Query;
@@ -36,7 +36,7 @@ public class SparqlQueryModule implements IQueryModule {
      *         The cache in which the content on the SPARQL endpoint is to be
      *         written
      */
-    public void fillCache(Cache cache) {
+    public void fillCache(ACache cache) {
         fillCache(cache, true);
     }
 
@@ -50,7 +50,7 @@ public class SparqlQueryModule implements IQueryModule {
      *         True if the endpoint is a remote SPARQL endpoint, else assume
      *         that is is a Jena model
      */
-    public void fillCache(Cache cache, boolean isSparql) {
+    public void fillCache(ACache cache, boolean isSparql) {
         long startTime = System.currentTimeMillis();
         String query = generateQuery();
 

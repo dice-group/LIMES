@@ -10,7 +10,7 @@ import org.aksw.jena_sparql_api.core.FluentQueryExecutionFactory;
 import org.aksw.jena_sparql_api.core.QueryExecutionFactory;
 import org.aksw.jena_sparql_api.core.SparqlServiceReference;
 import org.aksw.jena_sparql_api.pagination.core.QueryExecutionFactoryPaginated;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.apache.jena.query.QueryExecution;
@@ -65,7 +65,7 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
      * @param cache The cache in which the content on the SPARQL endpoint is to be written
      * @param sparql True if the endpoint is a remote SPARQL endpoint, else assume that is is a jena model
      */
-    public void fillCache(Cache cache, boolean sparql) {
+    public void fillCache(ACache cache, boolean sparql) {
         long startTime = System.currentTimeMillis();
         String query = generateQuery();
 
