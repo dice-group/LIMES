@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Parse LS
+ * Parse Link Specifications
  * 
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Aug 23, 2016

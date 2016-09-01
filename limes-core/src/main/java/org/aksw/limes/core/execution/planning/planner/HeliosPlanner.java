@@ -78,7 +78,7 @@ public class HeliosPlanner extends Planner {
             mapper = MapperFactory.createMapper(type);
         } catch (InvalidMeasureException e) {
             e.printStackTrace();
-            System.err.println("Exiting..");
+            logger.error("Exiting..");
             System.exit(1);
         }
         return mapper.getRuntimeApproximation(source.size(), target.size(), threshold, lang);

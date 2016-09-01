@@ -70,13 +70,13 @@ public class ExecutionEngineFactory {
     public static ExecutionEngine getEngine(ExecutionEngineType type, ACache source, ACache target, String sourceVar,
             String targetVar) {
         switch (type) {
-        case DEFAULT:
-        case SIMPLE:
-            return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
-        default:
-            logger.error(
-                    "Sorry, " + type + " is not yet implemented. Returning the default execution engine instead...");
-            return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
+            case DEFAULT:
+            case SIMPLE:
+                return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
+            default:
+                logger.error(
+                        "Sorry, " + type + " is not yet implemented. Returning the default execution engine instead...");
+                return new SimpleExecutionEngine(source, target, sourceVar, targetVar);
         }
     }
 
