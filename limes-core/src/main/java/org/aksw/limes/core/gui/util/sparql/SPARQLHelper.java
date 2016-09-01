@@ -10,6 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+
+import org.aksw.limes.core.gui.model.Config;
+import org.aksw.limes.core.gui.model.Endpoint;
 import org.aksw.limes.core.gui.util.AdvancedKBInfo;
 import org.aksw.limes.core.gui.util.AdvancedMemoryCache;
 import org.aksw.limes.core.gui.util.GetAllSparqlQueryModule;
@@ -26,10 +32,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.vocabulary.OWL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
 
 
 /**
@@ -174,19 +176,30 @@ public class SPARQLHelper {
             classes.remove("http://www.w3.org/2000/01/rdf-schema#Class");
             classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
             classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
-            if (!classes.isEmpty())
-                return classes;
-            else {
-                // very very bad endpoint
-                // using objects of rdf:type property
-                query = "SELECT distinct(?class) WHERE{?x a ?class.}";
-                classes = resultSetToList(querySelect(PrefixHelper.addPrefixes(query), endpoint, graph, model));
-                classes.remove("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property");
-                classes.remove("http://www.w3.org/2000/01/rdf-schema#Class");
-                classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
-                classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
-                return classes;
-            }
+	    if (!classes.isEmpty())
+		return classes;
+	    else {
+		// very very bad endpoint
+		// using objects of rdf:type property
+		System.err.println("very very bad endpoint using objects of rdf:type property");
+		query = "SELECT distinct(?class) WHERE{?x a ?class.}";
+		classes = resultSetToList(querySelect(PrefixHelper.addPrefixes(query), endpoint, graph, model));
+		classes.remove("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property");
+		classes.remove("http://www.w3.org/2000/01/rdf-schema#Class");
+		classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
+		classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
+		if (!classes.isEmpty()) {
+		    return classes;
+		} else {
+		    query = "SELECT distinct ?x WHERE{ ?y <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?x}";
+		    classes = resultSetToList(querySelect(PrefixHelper.addPrefixes(query), endpoint, graph, model));
+		    classes.remove("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property");
+		    classes.remove("http://www.w3.org/2000/01/rdf-schema#Class");
+		    classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
+		    classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
+		    return classes;
+		}
+	    }
         }
 
 
@@ -338,11 +351,13 @@ public class SPARQLHelper {
         while (rs.hasNext()) {
             QuerySolution qs = rs.nextSolution();
             System.out.println("qs: " + qs.toString());
+            if(!qs.toString().equals("")){
             try {
                 list.add(URLDecoder.decode(qs.get(qs.varNames().next()).toString(), "UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 list.add(qs.get(qs.varNames().next()).toString());
                 e.printStackTrace();
+            }
             }
         }
         return list;
@@ -409,6 +424,19 @@ public class SPARQLHelper {
      */
     public static String[] commonProperties(KBInfo kb, double threshold, Integer limit, Integer sampleSize) throws Exception {
         return getSample(kb, sampleSize).getCommonProperties(threshold, limit);
+    }
+    
+    public static void main(String[] args){
+	Config config = new Config();
+	Endpoint sourceEndpoint = config.getSourceEndpoint();
+	KBInfo sinfo = sourceEndpoint.getInfo();
+	sinfo.setEndpoint("/home/ohdorno/git/LIMES-dev2/limes-core/src/main/resources/datasets/PersonsNew/person11.nt");
+//	sinfo.setEndpoint("/home/ohdorno/git/LIMES-dev2/limes-core/src/main/resources/datasets/Abt-Buy/Abt.csv");
+	sinfo.setId("");
+	sinfo.setGraph("");
+	sinfo.setPageSize(-1);
+	sourceEndpoint.update();
+	Set<String> classes = rootClassesUncached(sinfo.getEndpoint(), sinfo.getGraph(), sourceEndpoint.getModel());
     }
 
 }

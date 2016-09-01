@@ -5,6 +5,7 @@ import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.io.cache.Cache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.io.query.IQueryModule;
 import org.aksw.limes.core.io.query.ModelRegistry;
 import org.aksw.limes.core.io.query.QueryModuleFactory;
 import org.apache.jena.rdf.model.Model;
@@ -119,5 +120,13 @@ public class Endpoint {
      */
     public GetPropertiesTask createGetPropertiesTask() {
         return new GetPropertiesTask(info, model, currentClass);
+    }
+
+    public Model getModel() {
+        return model;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
     }
 }
