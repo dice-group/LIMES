@@ -1,6 +1,7 @@
 package org.aksw.limes.core.gui.controller;
 
 import org.aksw.limes.core.gui.view.IEditView;
+import org.aksw.limes.core.gui.view.TaskProgressView;
 
 /**
  * Interface for controllers for step in wizard
@@ -32,4 +33,12 @@ public interface IEditController {
      * @return true if valid, false else
      */
     public boolean validate();
+    
+    /**
+     * 
+     * @return the TaskProgressView of the controller that gets called in the {@link #load} method
+     */
+    public TaskProgressView getTaskProgressView();
+    
+    public void setTaskProgressView(TaskProgressView tpv);
 }

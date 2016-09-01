@@ -31,6 +31,10 @@ public class EditClassMatchingController implements IEditController {
     private EditClassMatchingView view;
 
     /**
+     * the view called in the {@link #load()} method
+     */
+    private TaskProgressView taskProgressView;
+    /**
      * constructor initializes object variables and sets this controller to the corresponding view
      * @param config
      *         Config of Limes Query
@@ -49,7 +53,7 @@ public class EditClassMatchingController implements IEditController {
      */
     @Override
     public void load() {
-        TaskProgressView taskProgressView = new TaskProgressView("Get classes");
+        taskProgressView = new TaskProgressView("Get classes");
         Endpoint sourceEndpoint = config.getSourceEndpoint();
         GetClassesTask getSourceClassesTask = sourceEndpoint
                 .createGetClassesTask(taskProgressView);
@@ -109,4 +113,15 @@ public class EditClassMatchingController implements IEditController {
 	}
 	return valid;
     }
+
+    @Override
+    public TaskProgressView getTaskProgressView() {
+        return taskProgressView;
+    }
+
+    @Override
+    public void setTaskProgressView(TaskProgressView tpv) {
+	this.taskProgressView = tpv;
+    }
+
 }

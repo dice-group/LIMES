@@ -126,7 +126,7 @@ public class Config extends Configuration {
 	}
 	Config outConfig;
 	Configuration tmp = reader.read();
-	if(tmp.getSourceInfo().getEndpoint() == null || tmp.getSourceInfo().getEndpoint() == null){
+	if(tmp.getSourceInfo() == null || tmp.getSourceInfo() == null){
 	    throw new Exception("Invalid configuration file!");
 	}
 	outConfig = new Config(tmp.getSourceInfo(), tmp.getTargetInfo(), tmp.getMetricExpression(), tmp.getAcceptanceRelation(), tmp.getVerificationRelation(),
