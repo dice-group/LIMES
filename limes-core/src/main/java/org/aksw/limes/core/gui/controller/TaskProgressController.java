@@ -95,7 +95,6 @@ public class TaskProgressController {
      * cancels all tasks
      */
     public void cancel() {
-	System.err.println("\n\n\n\n\n\n\n\n\n\n ======= CANCEL ====== \n\n\n\n\n\n\n\n\n\n");
 	view.setCancelled(true);
         view.setFinishedSuccessfully(false);
         for (Task<?> task : tasks) {

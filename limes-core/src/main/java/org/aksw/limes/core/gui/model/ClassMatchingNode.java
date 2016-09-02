@@ -1,7 +1,10 @@
 package org.aksw.limes.core.gui.model;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
+
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * used to display classes in {@link org.aksw.limes.core.gui.view.EditClassMatchingView}
@@ -9,7 +12,8 @@ import java.util.List;
  *         studserv.uni-leipzig.de{@literal >}
  *
  */
-public class ClassMatchingNode {
+public class ClassMatchingNode implements Serializable {
+    private static final long serialVersionUID = -2983091498542870621L;
     /**
      * uri of class
      */
@@ -62,5 +66,13 @@ public class ClassMatchingNode {
      */
     public List<ClassMatchingNode> getChildren() {
         return children;
+    }
+
+    public int hashCode() {
+      return new HashCodeBuilder(19, 37).
+        append(uri).
+        append(name).
+        append(children).
+        toHashCode();
     }
 }

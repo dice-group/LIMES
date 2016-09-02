@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+
+import org.aksw.limes.core.gui.util.TaskResultSerializer;
 import org.aksw.limes.core.gui.util.sparql.SPARQLHelper;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.jena.rdf.model.Model;
-
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 
 /**
  * Task for loading classes in {@link org.aksw.limes.core.gui.view.WizardView}   
@@ -51,7 +53,7 @@ public class GetClassesTask extends Task<List<ClassMatchingNode>> {
      * @param model
      * @param view
      */
-    GetClassesTask(KBInfo info, Model model, TaskProgressView view) {
+    public GetClassesTask(KBInfo info, Model model, TaskProgressView view) {
         this.info = info;
         this.model = model;
         this.view = view;
@@ -61,12 +63,20 @@ public class GetClassesTask extends Task<List<ClassMatchingNode>> {
      * Get classes for matching.
      */
     @Override
+    @SuppressWarnings("unchecked")
     protected List<ClassMatchingNode> call() throws Exception {
-        Set<String> rootClasses = SPARQLHelper.rootClasses(info.getEndpoint(),
+	System.out.println("called");
+	List<ClassMatchingNode> result = (List<ClassMatchingNode>) TaskResultSerializer.getTaskResult(this);
+	System.out.println("got res");
+	if(result != null){
+	    return result;
+	}
+        Set<String> rootClasses = SPARQLHelper.rootClassesUncached(info.getEndpoint(),
                 info.getGraph(), model);
         counter = 0;
         progress = 0;
-        List<ClassMatchingNode> result = getClassMatchingNodes(rootClasses);
+        result = getClassMatchingNodes(rootClasses);
+        TaskResultSerializer.serializeTaskResult(this, result);
         return result;
     }
 
@@ -85,8 +95,9 @@ public class GetClassesTask extends Task<List<ClassMatchingNode>> {
             try {
                 counter++;
                 List<ClassMatchingNode> children = getClassMatchingNodes(SPARQLHelper
-                        .subclassesOf(info.getEndpoint(), info.getGraph(), class_, model));
+                        .subClassesOfUncached(info.getEndpoint(), info.getGraph(), class_, model));
                 result.add(new ClassMatchingNode(new URI(class_), children));
+                System.out.println(class_);
                 double tmpProgress = (double) counter / maxSize;
                 Platform.runLater(new Runnable() {
                     @Override
@@ -104,5 +115,12 @@ public class GetClassesTask extends Task<List<ClassMatchingNode>> {
             }
         }
         return result;
+    }
+
+    public int hashCode() {
+      return new HashCodeBuilder(17, 37).
+        append(info).
+        append(model).
+        toHashCode();
     }
 }
