@@ -26,6 +26,12 @@ import org.slf4j.MarkerFactory;
  */
 public class MeasureProcessor {
 
+    private static final String ADD = "ADD";
+    private static final String XOR = "XOR";
+    private static final String MAX = "MAX";
+    private static final String MIN = "MIN";
+    private static final String AND = "AND";
+    private static final String OR = "OR";
     static Logger logger = LoggerFactory.getLogger(MeasureProcessor.class.getName());
 
     /**
@@ -92,7 +98,7 @@ public class MeasureProcessor {
                 mapper = MapperFactory.createMapper(type);
             } catch (InvalidMeasureException e) {
                 e.printStackTrace();
-                System.err.println("Exiting..");
+                logger.error("Exiting..");
                 System.exit(1);
             }
             ACache source = new HybridCache();
@@ -175,8 +181,8 @@ public class MeasureProcessor {
                     return 0.0d;
             }
         } else {
-            if (p.getOperator().equalsIgnoreCase("MAX") | p.getOperator().equalsIgnoreCase("OR")
-                    | p.getOperator().equalsIgnoreCase("XOR")) {
+            if (p.getOperator().equalsIgnoreCase(MAX) | p.getOperator().equalsIgnoreCase(OR)
+                    | p.getOperator().equalsIgnoreCase(XOR)) {
                 double parentThreshold = p.getThreshold();
                 double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(), p.getThreshold1(),
                         sourceVar, targetVar);
@@ -195,7 +201,7 @@ public class MeasureProcessor {
                         return 0;
                 }
             }
-            if (p.getOperator().equalsIgnoreCase("MIN") | p.getOperator().equalsIgnoreCase("AND")) {
+            if (p.getOperator().equalsIgnoreCase(MIN) | p.getOperator().equalsIgnoreCase(AND)) {
                 double parentThreshold = p.getThreshold();
                 double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(), p.getThreshold1(),
                         sourceVar, targetVar);
@@ -215,7 +221,7 @@ public class MeasureProcessor {
                         return 0;
                 }
             }
-            if (p.getOperator().equalsIgnoreCase("ADD")) {
+            if (p.getOperator().equalsIgnoreCase(ADD)) {
                 double parentThreshold = p.getThreshold();
                 double firstChild = p.getLeftCoefficient() * getSimilarity(sourceInstance, targetInstance,
                         p.getLeftTerm(), p.getThreshold1(), sourceVar, targetVar);
@@ -274,7 +280,7 @@ public class MeasureProcessor {
                 runtime = runtime + MeasureFactory.createMeasure(type).getRuntimeApproximation(mappingSize);
             } catch (InvalidMeasureException e) {
                 e.printStackTrace();
-                System.err.println("Exiting..");
+                logger.error("Exiting..");
                 System.exit(1);
             }
         return runtime;

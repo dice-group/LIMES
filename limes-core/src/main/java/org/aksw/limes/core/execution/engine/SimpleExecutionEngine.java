@@ -169,7 +169,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
                     throw new InvalidThresholdException(threshold);
                 }
             } catch (InvalidThresholdException e) {
-                System.err.println("Exiting..");
+                logger.error("Exiting..");
                 System.exit(1);
             }
             return mapper.getMapping(source, target, sourceVariable, targetVariable, inst.getMeasureExpression(),
