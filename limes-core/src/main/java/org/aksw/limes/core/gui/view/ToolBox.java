@@ -73,7 +73,7 @@ public class ToolBox extends VBox {
     private void generateView(VBox box) {
         toolBoxSourceProperties = new ListView<String>();
         toolBoxTargetProperties = new ListView<String>();
-        toolBoxMetrics = generateListViewFromNodeIdentifiers(Measure.identifiers);
+        toolBoxMetrics = generateListViewFromNodeIdentifiers(new Measure("").identifiers());
         toolBoxOperators = generateListViewFromNodeIdentifiers(Operator.identifiers);
         box.getChildren().add(new Label("Source Properties"));
         box.getChildren().add(toolBoxSourceProperties);

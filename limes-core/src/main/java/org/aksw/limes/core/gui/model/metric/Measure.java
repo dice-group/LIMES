@@ -1,11 +1,11 @@
 package org.aksw.limes.core.gui.model.metric;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.aksw.limes.core.gui.model.metric.Property.Origin;
+import org.aksw.limes.core.measures.measure.MeasureType;
 
 /**
  * data model class to graphically represent measures
@@ -14,17 +14,7 @@ import org.aksw.limes.core.gui.model.metric.Property.Origin;
  *
  */
 public class Measure extends Node {
-    /**
-     * List of the possible Measurements
-     */
-    public static final Set<String> identifiers = Collections
-            .unmodifiableSet(new HashSet<String>(Arrays.asList(new String[]{
-                    "cosine", "euclidean", "jaccard", "levenshtein", "overlap",
-                    "trigrams", "jaro", "hausdorff", "orthodromic", "frchet",
-                    "qgramsimularity", "exactmatch", "symmetrichausdorff",
-                    "frechet", "geosummn", "surjection", "fairsurjection",
-                    "geolink", "geomean", "datesim", "daysim", "yearsim",
-                    "geomn", "geomx", "geoavg"})));
+
     /**
      * Set of valid Child-Classes
      */
@@ -48,6 +38,10 @@ public class Measure extends Node {
      */
     @Override
     public Set<String> identifiers() {
+	Set<String> identifiers = new HashSet<String>();
+	for(int i = 0; i < MeasureType.values().length; i++){
+	    identifiers.add(MeasureType.values()[i].toString().toLowerCase());
+	}
         return identifiers;
     }
 

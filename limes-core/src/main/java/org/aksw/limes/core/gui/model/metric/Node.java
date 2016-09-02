@@ -61,7 +61,7 @@ public abstract class Node {
      */
     public static Node createNode(String id) {
         id = id.toLowerCase();
-        if (Measure.identifiers.contains(id))
+        if (new Measure("").identifiers().contains(id))
             return new Measure(id);
         if (Operator.identifiers.contains(id))
             return new Operator(id);

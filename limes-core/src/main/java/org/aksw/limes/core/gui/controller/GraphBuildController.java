@@ -206,7 +206,7 @@ public class GraphBuildController {
     private ArrayList<NodeView> drawChildRek(NodeView parent, Node node,
                                              ArrayList<NodeView> nodeList) {
         int nodeShape;
-        if (Measure.identifiers.contains(node.id)) {
+        if (new Measure("").identifiers().contains(node.id)) {
             nodeShape = NodeView.METRIC;
         } else if (Operator.identifiers.contains(node.id)) {
             nodeShape = NodeView.OPERATOR;
