@@ -65,7 +65,6 @@ public class ActiveLearningController extends MachineLearningController {
 	    view.getLearnButton().setDisable(false);
 	    ObservableList<ActiveLearningResult> results = FXCollections.observableArrayList();
 	    ((ActiveLearningModel) this.mlModel).getNextExamples().getMap().forEach((sourceURI, map2) -> {
-		System.out.println(sourceURI + " " + map2);
 		map2.forEach((targetURI, value) -> {
 		    results.add(new ActiveLearningResult(sourceURI, targetURI, value));
 		});

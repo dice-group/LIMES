@@ -84,4 +84,8 @@ public class WizardView {
     public void close() {
         stage.close();
     }
+    
+    public Stage getStage(){
+	return this.stage;
+    }
 }

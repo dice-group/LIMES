@@ -124,7 +124,6 @@ public class WizardController {
      * goes to the next page or finishes
      */
     public void nextOrFinish() {
-	System.out.println(currentPage);
 	setPage(currentPage + 1);
     }
 

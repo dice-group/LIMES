@@ -11,15 +11,20 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 
 import org.aksw.limes.core.gui.controller.EditEndpointsController;
 import org.aksw.limes.core.gui.util.SourceOrTarget;
@@ -51,11 +56,13 @@ public class EditEndpointsView implements IEditView {
      */
     private ScrollPane rootPane;
 
+    private WizardView wizardView;
     /**
      * Constructor
      */
-    EditEndpointsView() {
+    EditEndpointsView(WizardView wizardView) {
 	createRootPane();
+	this.wizardView = wizardView;
     }
 
     /**
@@ -132,7 +139,6 @@ public class EditEndpointsView implements IEditView {
 		    }
 		}
 	    }
-
 	});
 	endpointURL.setOnMouseClicked(e -> {
 	    if (endpointURL.getText() != null && !endpointURL.getText().equals("")) {
@@ -142,7 +148,23 @@ public class EditEndpointsView implements IEditView {
 		}
 	    }
 	});
-	pane.add(endpointURL, 1, 0);
+
+	Button fileEndpointButton = new Button();
+	Image fileButtonImage = new Image(getClass().getResourceAsStream("/gui/file.png"), 20, 20, true, false);
+	fileEndpointButton.setGraphic(new ImageView(fileButtonImage));
+	fileEndpointButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Endpoint File (*.xml, *.rdf, *.ttl, *.n3, *.nt)", "*.xml", "*.rdf", "*.ttl", "*.n3", "*.nt");
+            fileChooser.getExtensionFilters().add(extFilter);
+            File file = fileChooser.showOpenDialog(wizardView.getStage());
+            if (file != null) {
+                endpointURL.setText(file.getAbsolutePath());;
+            }
+	});
+	HBox endpointBox = new HBox();
+	HBox.setHgrow(endpointURL, Priority.ALWAYS);
+	endpointBox.getChildren().addAll(endpointURL, fileEndpointButton);
+	pane.add(endpointBox, 1, 0);
 
 	pane.add(new Label("ID / Namespace"), 0, 1);
 	TextField idNamespace = new TextField();

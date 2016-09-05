@@ -194,7 +194,6 @@ public class Config extends Configuration {
     public double getVerificationThreshold() {
 	if (metric == null || metric.param2 == null) {
 	    DecimalFormat twoDForm = new DecimalFormat("#.####");
-	    System.out.println("guessed verfication threshold: " + (getAcceptanceThreshold() - 0.1d));
 	    NumberFormat format = NumberFormat.getInstance();
 	    Number number;
 	    try {

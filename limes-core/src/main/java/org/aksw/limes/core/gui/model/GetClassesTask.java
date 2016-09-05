@@ -65,9 +65,7 @@ public class GetClassesTask extends Task<List<ClassMatchingNode>> {
     @Override
     @SuppressWarnings("unchecked")
     protected List<ClassMatchingNode> call() throws Exception {
-	System.out.println("called");
 	List<ClassMatchingNode> result = (List<ClassMatchingNode>) TaskResultSerializer.getTaskResult(this);
-	System.out.println("got res");
 	if(result != null){
 	    return result;
 	}
@@ -97,7 +95,6 @@ public class GetClassesTask extends Task<List<ClassMatchingNode>> {
                 List<ClassMatchingNode> children = getClassMatchingNodes(SPARQLHelper
                         .subClassesOfUncached(info.getEndpoint(), info.getGraph(), class_, model));
                 result.add(new ClassMatchingNode(new URI(class_), children));
-                System.out.println(class_);
                 double tmpProgress = (double) counter / maxSize;
                 Platform.runLater(new Runnable() {
                     @Override

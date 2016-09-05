@@ -92,7 +92,7 @@ public class EditEndpointsController implements IEditController {
     @Override
     public boolean validate() {
 	boolean valid = true;
-	if (view.getSourceFields()[0].getText() == null || view.getSourceFields()[0].getText().equals("")) {
+	if (view.getSourceFields()[0].getText() == null || view.getSourceFields()[0].getText().equals("") || view.getSourceFields()[0].getText().equals(emptyFieldError)) {
 	    view.getSourceFields()[0].setText(emptyFieldError);
 	    view.getSourceFields()[0].setStyle("-fx-text-inner-color: red;");
 	    view.getSourceFields()[0].setOnMouseClicked(e -> {
@@ -103,7 +103,7 @@ public class EditEndpointsController implements IEditController {
 	    });
 	    valid = false;
 	}
-	if (view.getTargetFields()[0].getText() == null || view.getTargetFields()[0].getText().equals("")) {
+	if (view.getTargetFields()[0].getText() == null || view.getTargetFields()[0].getText().equals("")|| view.getTargetFields()[0].getText().equals(emptyFieldError)) {
 	    view.getTargetFields()[0].setText(emptyFieldError);
 	    view.getTargetFields()[0].setStyle("-fx-text-inner-color: red;");
 	    view.getTargetFields()[0].setOnMouseClicked(e -> {
@@ -114,7 +114,7 @@ public class EditEndpointsController implements IEditController {
 	    });
 	    valid = false;
 	}
-	if (view.getSourceFields()[3].getText() == null || view.getSourceFields()[3].getText().equals("")) {
+	if (view.getSourceFields()[3].getText() == null || view.getSourceFields()[3].getText().equals("")|| view.getSourceFields()[3].getText().equals(emptyFieldError)) {
 	    view.getSourceFields()[3].setText(emptyFieldError);
 	    view.getSourceFields()[3].setStyle("-fx-text-inner-color: red;");
 	    view.getSourceFields()[3].setOnMouseClicked(e -> {
@@ -125,7 +125,7 @@ public class EditEndpointsController implements IEditController {
 	    });
 	    valid = false;
 	}
-	if (view.getTargetFields()[3].getText() == null || view.getTargetFields()[3].getText().equals("")) {
+	if (view.getTargetFields()[3].getText() == null || view.getTargetFields()[3].getText().equals("")|| view.getTargetFields()[3].getText().equals(emptyFieldError)) {
 	    view.getTargetFields()[3].setText(emptyFieldError);
 	    view.getTargetFields()[3].setStyle("-fx-text-inner-color: red;");
 	    view.getTargetFields()[3].setOnMouseClicked(e -> {
