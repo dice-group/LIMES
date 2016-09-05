@@ -22,10 +22,10 @@ public class LimesGUI extends Application {
      * @param args
      *         optional arguments on StartUp, No Options implemented yet
      */
-    public static void main(String[] args) {
+    public static void startGUI(String[] args) {
         launch(args);
     }
-
+    
     /**
      * Opens a new Window for the Application
      * @param primaryStage View to initialize Application

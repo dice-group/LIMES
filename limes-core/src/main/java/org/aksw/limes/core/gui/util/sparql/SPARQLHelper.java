@@ -425,18 +425,5 @@ public class SPARQLHelper {
     public static String[] commonProperties(KBInfo kb, double threshold, Integer limit, Integer sampleSize) throws Exception {
         return getSample(kb, sampleSize).getCommonProperties(threshold, limit);
     }
-    
-    public static void main(String[] args){
-	Config config = new Config();
-	Endpoint sourceEndpoint = config.getSourceEndpoint();
-	KBInfo sinfo = sourceEndpoint.getInfo();
-	sinfo.setEndpoint("/home/ohdorno/git/LIMES-dev2/limes-core/src/main/resources/datasets/PersonsNew/person11.nt");
-//	sinfo.setEndpoint("/home/ohdorno/git/LIMES-dev2/limes-core/src/main/resources/datasets/Abt-Buy/Abt.csv");
-	sinfo.setId("");
-	sinfo.setGraph("");
-	sinfo.setPageSize(-1);
-	sourceEndpoint.update();
-	Set<String> classes = rootClassesUncached(sinfo.getEndpoint(), sinfo.getGraph(), sourceEndpoint.getModel());
-    }
 
 }

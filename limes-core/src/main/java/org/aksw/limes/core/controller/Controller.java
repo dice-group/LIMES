@@ -64,7 +64,7 @@ public class Controller {
             System.exit(0);
         }
         if (cmd.hasOption('g')){
-            LimesGUI.main(new String[0]);
+            LimesGUI.startGUI(new String[0]);
             System.exit(0);
         }
         // I. Has Argument?
