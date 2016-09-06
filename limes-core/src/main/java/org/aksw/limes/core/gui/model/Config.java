@@ -62,15 +62,18 @@ public class Config extends Configuration {
      * Mapping of current MappingTask
      */
     private AMapping mapping;
+    
+    private static final String sourceVar = "?x";
+    private static final String targetVar = "?y";
 
     /**
      * Constructor
      */
     public Config() {
 	this.sourceInfo = new KBInfo();
-	this.sourceInfo.setVar("?source");
+	this.sourceInfo.setVar(sourceVar);
 	this.targetInfo = new KBInfo();
-	this.targetInfo.setVar("?target");
+	this.targetInfo.setVar(targetVar);
 	metric = new Output();
 	this.sourceEndpoint = new Endpoint(this.sourceInfo);
 	this.targetEndpoint = new Endpoint(this.targetInfo);
@@ -301,8 +304,8 @@ public class Config extends Configuration {
     /**
      * Returns the property Label
      *
-     * @param index
-     *            Index of Porperty
+     * @param propString
+     *           name of property 
      * @param sourceOrTarget
      *            is Source or Target
      * @return Property String
