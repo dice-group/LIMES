@@ -77,7 +77,7 @@ public class IsFinishedByMapperTest {
     public void simpleLS() {
         System.out.println("simpleLS");
         LinkSpecification ls = new LinkSpecification(
-                "tmp_isfinishedby(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)",
+                "tmp_is_finished_by(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
@@ -90,7 +90,7 @@ public class IsFinishedByMapperTest {
     public void similarity() {
         System.out.println("simpleLS");
         LinkSpecification ls = new LinkSpecification(
-                "tmp_isfinishedby(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)",
+                "tmp_is_finished_by(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
@@ -113,7 +113,7 @@ public class IsFinishedByMapperTest {
     public void reverse() {
         System.out.println("reverse");
         LinkSpecification ls = new LinkSpecification(
-                "tmp_isfinishedby(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
+                "tmp_is_finished_by(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);

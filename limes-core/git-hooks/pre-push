@@ -6,9 +6,9 @@ if [ -z "$commits" ]; then
     exit 0
 fi
 
-# execute tests
+# execute build and tests
 cd limes-core
-mvn clean test
+mvn clean install
 
 # check if there were any errors
 if [ $? -ne 0 ]; then

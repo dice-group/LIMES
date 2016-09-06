@@ -76,7 +76,7 @@ public class DuringReverseMapperTest {
     public void simpleLS() {
         System.out.println("simpleLS");
         LinkSpecification ls = new LinkSpecification(
-                "tmp_duringreverse(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)",
+                "tmp_during_reverse(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
@@ -89,7 +89,7 @@ public class DuringReverseMapperTest {
     public void similarity() {
         System.out.println("simpleLS");
         LinkSpecification ls = new LinkSpecification(
-                "tmp_duringreverse(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)",
+                "tmp_during_reverse(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
@@ -112,7 +112,7 @@ public class DuringReverseMapperTest {
     public void reverse() {
         System.out.println("reverse");
         LinkSpecification ls = new LinkSpecification(
-                "tmp_duringreverse(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
+                "tmp_during_reverse(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);

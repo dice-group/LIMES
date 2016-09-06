@@ -8,6 +8,7 @@ import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
+import org.aksw.limes.core.measures.measure.pointsets.GeoGreatEllipticMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.GeoOrthodromicMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverageMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechetMeasure;
@@ -24,6 +25,7 @@ import org.aksw.limes.core.measures.measure.pointsets.min.NaiveMinMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.sumofmin.NaiveSumOfMinMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjectionMeasure;
+import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
 import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
@@ -51,6 +53,14 @@ import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.StartsMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
+import org.aksw.limes.core.measures.measure.topology.ContainsMeasure;
+import org.aksw.limes.core.measures.measure.topology.CoveredbyMeasure;
+import org.aksw.limes.core.measures.measure.topology.CoversMeasure;
+import org.aksw.limes.core.measures.measure.topology.CrossesMeasure;
+import org.aksw.limes.core.measures.measure.topology.DisjointMeasure;
+import org.aksw.limes.core.measures.measure.topology.IntersectsMeasure;
+import org.aksw.limes.core.measures.measure.topology.TouchesMeasure;
+import org.aksw.limes.core.measures.measure.topology.WithinMeasure;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -122,7 +132,7 @@ public class MeasureFactoryTest {
         assertTrue(p.getAtomicRuntimeCosts("cosine", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("levenshtein", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("overlap", 0.5) != 0);
-        assertTrue(p.getAtomicRuntimeCosts("trigram", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("Trigrams", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("jaccard", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("exactmatch", 0.5) != 0.0d);
         assertTrue(p.getAtomicRuntimeCosts("soundex", 0.5) != 0);
@@ -130,10 +140,17 @@ public class MeasureFactoryTest {
         assertTrue(p.getAtomicRuntimeCosts("ratcliff", 0.5) != 0);
         
         assertTrue(p.getAtomicRuntimeCosts("euclidean", 0.5) != 0);
-
         assertTrue(p.getAtomicRuntimeCosts("geo_orthodromic", 0.5) != 0);
-        // assertTrue(p.getAtomicRuntimeCosts("geo_elliptic", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("geo_great_elliptic", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("Geo_Fast_Hausdorff", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("Geo_Symmetric_Hausdorff", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("Geo_Centroid_Indexed_Hausdorff", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("Geo_Scan_Indexed_Hausdorff", 0.5) != 0);
+
+        
         assertTrue(p.getAtomicRuntimeCosts("geo_hausdorff", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("geo_naive_hausdorff", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("Geo_Indexed_Hausdorff", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("geo_fairsurjection", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("geo_max", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("geo_mean", 0.5) != 0);
@@ -144,7 +161,7 @@ public class MeasureFactoryTest {
         assertTrue(p.getAtomicRuntimeCosts("geo_sum_of_min", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("geo_surjection", 0.5) != 0);
         // assertTrue(p.getAtomicRuntimeCosts("geo_quinlan", 0.5) != 0);
-        assertTrue(p.getAtomicRuntimeCosts("geo_symmetrichausdorff", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("geo_symmetric_hausdorff", 0.5) != 0);
 
         assertTrue(p.getAtomicRuntimeCosts("tmp_successor", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("tmp_predecessor", 0.5) != 0);
@@ -152,16 +169,18 @@ public class MeasureFactoryTest {
         assertTrue(p.getAtomicRuntimeCosts("tmp_before", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("tmp_after", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("tmp_meets", 0.5) != 0);
-        assertTrue(p.getAtomicRuntimeCosts("tmp_ismetby", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("tmp_is_met_by", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("tmp_finishes", 0.5) != 0);
-        assertTrue(p.getAtomicRuntimeCosts("tmp_isfinishedby", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("tmp_is_finished_by", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("tmp_starts", 0.5) != 0);
-        assertTrue(p.getAtomicRuntimeCosts("tmp_isstartedby", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("tmp_is_started_by", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("tmp_during", 0.5) != 0);
-        assertTrue(p.getAtomicRuntimeCosts("tmp_duringreverse", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("tmp_during_reverse", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("tmp_overlaps", 0.5) != 0);
-        assertTrue(p.getAtomicRuntimeCosts("tmp_isoverlappedby", 0.5) != 0);
+        assertTrue(p.getAtomicRuntimeCosts("tmp_is_overlapped_by", 0.5) != 0);
         assertTrue(p.getAtomicRuntimeCosts("tmp_equals", 0.5) != 0);
+        
+        assertTrue(p.getAtomicRuntimeCosts("Set_Jaccard", 0.5) != 0);
 
     }
 
@@ -184,10 +203,18 @@ public class MeasureFactoryTest {
         
         
         assertTrue(p.getAtomicMappingSizes("euclidean", 0.5) != 0);
-
         assertTrue(p.getAtomicMappingSizes("geo_orthodromic", 0.5) != 0);
-        // assertTrue(p.getAtomicMappingSizes("geo_elliptic", 0.5) != 0);
+        assertTrue(p.getAtomicMappingSizes("geo_great_elliptic", 0.5) != 0);
+
         assertTrue(p.getAtomicMappingSizes("geo_hausdorff", 0.5) != 0);
+        assertTrue(p.getAtomicMappingSizes("geo_naive_hausdorff", 0.5) != 0);
+        assertTrue(p.getAtomicMappingSizes("Geo_Indexed_Hausdorff", 0.5) != 0);
+        assertTrue(p.getAtomicMappingSizes("Geo_Fast_Hausdorff", 0.5) != 0);
+        assertTrue(p.getAtomicMappingSizes("Geo_Symmetric_Hausdorff", 0.5) != 0);
+        assertTrue(p.getAtomicMappingSizes("Geo_Centroid_Indexed_Hausdorff", 0.5) != 0);
+        assertTrue(p.getAtomicMappingSizes("Geo_Scan_Indexed_Hausdorff", 0.5) != 0);
+        
+        
         assertTrue(p.getAtomicMappingSizes("geo_fairsurjection", 0.5) != 0);
         assertTrue(p.getAtomicMappingSizes("geo_max", 0.5) != 0);
         assertTrue(p.getAtomicMappingSizes("geo_mean", 0.5) != 0);
@@ -198,7 +225,7 @@ public class MeasureFactoryTest {
         assertTrue(p.getAtomicMappingSizes("geo_sum_of_min", 0.5) != 0);
         assertTrue(p.getAtomicMappingSizes("geo_surjection", 0.5) != 0);
         // assertTrue(p.getAtomicMappingSizes("geo_quinlan", 0.5) != 0);
-        assertTrue(p.getAtomicMappingSizes("geo_symmetrichausdorff", 0.5) != 0);
+        assertTrue(p.getAtomicMappingSizes("geo_symmetric_hausdorff", 0.5) != 0);
 
         assertTrue(p.getAtomicMappingSizes("tmp_successor", 0.5) != 0);
         assertTrue(p.getAtomicMappingSizes("tmp_predecessor", 0.5) != 0);
@@ -206,16 +233,18 @@ public class MeasureFactoryTest {
         assertTrue(p.getAtomicMappingSizes("tmp_before", 0.5) != 0);
         assertTrue(p.getAtomicMappingSizes("tmp_after", 0.5) != 0);
         assertTrue(p.getAtomicMappingSizes("tmp_meets", 0.5) != 0);
-        assertTrue(p.getAtomicMappingSizes("tmp_ismetby", 0.5) != 0);
+        assertTrue(p.getAtomicMappingSizes("tmp_is_met_by", 0.5) != 0);
         assertTrue(p.getAtomicMappingSizes("tmp_finishes", 0.5) != 0);
-        assertTrue(p.getAtomicMappingSizes("tmp_isfinishedby", 0.5) != 0);
+        assertTrue(p.getAtomicMappingSizes("tmp_is_finished_by", 0.5) != 0);
         assertTrue(p.getAtomicMappingSizes("tmp_starts", 0.5) != 0);
-        assertTrue(p.getAtomicMappingSizes("tmp_isstartedby", 0.5) != 0);
+        assertTrue(p.getAtomicMappingSizes("tmp_is_started_by", 0.5) != 0);
         assertTrue(p.getAtomicMappingSizes("tmp_during", 0.5) != 0);
-        assertTrue(p.getAtomicMappingSizes("tmp_duringreverse", 0.5) != 0);
+        assertTrue(p.getAtomicMappingSizes("tmp_during_reverse", 0.5) != 0);
         assertTrue(p.getAtomicMappingSizes("tmp_overlaps", 0.5) != 0);
-        assertTrue(p.getAtomicMappingSizes("tmp_isoverlappedby", 0.5) != 0);
+        assertTrue(p.getAtomicMappingSizes("tmp_is_overlapped_by", 0.5) != 0);
         assertTrue(p.getAtomicMappingSizes("tmp_equals", 0.5) != 0);
+        
+        assertTrue(p.getAtomicMappingSizes("Set_Jaccard", 0.5) != 0);
 
     }
 
@@ -290,7 +319,7 @@ public class MeasureFactoryTest {
             e.printStackTrace();
         }
         try {
-            assertTrue(MeasureFactory.getMeasureType("geo_symmetrichausdorff") != null);
+            assertTrue(MeasureFactory.getMeasureType("geo_symmetric_hausdorff") != null);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -347,7 +376,7 @@ public class MeasureFactoryTest {
             e.printStackTrace();
         }
 
-        str = "trigrams(x.name,y.name)";
+        str = "Trigrams(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
@@ -412,7 +441,7 @@ public class MeasureFactoryTest {
             e.printStackTrace();
         }
         
-        str = "ratcliff(x.name,y.name)";
+        str = "RatcliffObershelp(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
@@ -434,8 +463,7 @@ public class MeasureFactoryTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        /////////////////////////////////////////////////
-        str = "geo_orthodromic(x.name,y.name)";
+        str = "Geo_Orthodromic(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
@@ -445,8 +473,31 @@ public class MeasureFactoryTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        str = "Geo_Great_Elliptic(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof GeoGreatEllipticMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        /////////////////////////////////////////////////
 
-        str = "geo_hausdorff(x.name,y.name)";
+        str = "Geo_Hausdorff(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof NaiveHausdorffMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        /////////////////////////////////////////////////
+
+        str = "geo_naive_hausdorff(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
@@ -457,18 +508,7 @@ public class MeasureFactoryTest {
             e.printStackTrace();
         }
 
-        str = "geo_naivehausdorff(x.name,y.name)";
-        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
-        try {
-            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
-            measure = MeasureFactory.createMeasure(type);
-            assertTrue(measure instanceof NaiveHausdorffMeasure);
-        } catch (InvalidMeasureException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        str = "geo_indexedhausdorff(x.name,y.name)";
+        str = "geo_indexed_hausdorff(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
@@ -479,7 +519,7 @@ public class MeasureFactoryTest {
             e.printStackTrace();
         }
 
-        str = "geo_fasthausdorff(x.name,y.name)";
+        str = "geo_fast_hausdorff(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
@@ -490,7 +530,7 @@ public class MeasureFactoryTest {
             e.printStackTrace();
         }
 
-        str = "geo_symmetrichausdorff(x.name,y.name)";
+        str = "geo_symmetric_hausdorff(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
@@ -501,7 +541,7 @@ public class MeasureFactoryTest {
             e.printStackTrace();
         }
 
-        str = "geo_centroidindexedhausdorff(x.name,y.name)";
+        str = "geo_centroid_indexed_hausdorff(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
@@ -512,7 +552,7 @@ public class MeasureFactoryTest {
             e.printStackTrace();
         }
 
-        str = "geo_scanindexedhausdorff(x.name,y.name)";
+        str = "geo_scan_indexed_hausdorff(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
@@ -522,7 +562,6 @@ public class MeasureFactoryTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         /////////////////////////////////////////////////
         str = "geo_max(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
@@ -675,7 +714,7 @@ public class MeasureFactoryTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        str = "tmp_ismetby(x.name,y.name)";
+        str = "tmp_is_met_by(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
@@ -696,7 +735,7 @@ public class MeasureFactoryTest {
             e.printStackTrace();
         }
 
-        str = "tmp_isfinishedby(x.name,y.name)";
+        str = "tmp_is_finished_by(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
@@ -716,7 +755,7 @@ public class MeasureFactoryTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        str = "tmp_isstartedby(x.name,y.name)";
+        str = "tmp_is_started_by(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
@@ -738,7 +777,7 @@ public class MeasureFactoryTest {
             e.printStackTrace();
         }
 
-        str = "tmp_duringreverse(x.name,y.name)";
+        str = "tmp_during_reverse(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
@@ -759,7 +798,7 @@ public class MeasureFactoryTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        str = "tmp_isoverlappedby(x.name,y.name)";
+        str = "tmp_is_overlapped_by(x.name,y.name)";
         inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
         try {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
@@ -776,6 +815,125 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof EqualsMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        /////////////////////////////////////////
+        str = "top_contains(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof ContainsMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        str = "top_covered_by(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof CoveredbyMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        str = "top_covers(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof CoversMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        str = "top_crosses(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof CrossesMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        str = "top_disjoint(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof DisjointMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        str = "top_equals(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof org.aksw.limes.core.measures.measure.topology.EqualsMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        str = "top_intersects(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof IntersectsMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        str = "top_overlaps(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof org.aksw.limes.core.measures.measure.topology.OverlapsMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        str = "top_touches(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof TouchesMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        str = "top_within(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof WithinMeasure);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+//        ////////////////////////////////
+        str = "Set_Jaccard(x.name,y.name)";
+        inst = new Instruction(Command.RUN, str, "0.6", -1, -1, 0);
+        try {
+            type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+            measure = MeasureFactory.createMeasure(type);
+            assertTrue(measure instanceof SetJaccardMeasure);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
