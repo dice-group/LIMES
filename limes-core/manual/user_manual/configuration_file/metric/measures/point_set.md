@@ -2,8 +2,8 @@
 
 The similarity between polygons can be measured by using the following point-set distances:
 
-* `Geo_Orthodromic`
-* `Geo_NaiveHausdorff` 
+* `Geo_Hausdorff` 
+* `Geo_Naive_Hausdorff` 
 * `Geo_Indexed_Hausdorff` 
 * `Geo_Fast_Hausdorff` 
 * `Geo_Symmetric_Hausdorff`
