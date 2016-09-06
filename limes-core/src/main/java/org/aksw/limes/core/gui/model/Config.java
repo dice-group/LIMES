@@ -301,7 +301,7 @@ public class Config extends Configuration {
     /**
      * Returns the property Label
      *
-     * @param index
+     * @param propString
      *            Index of Porperty
      * @param sourceOrTarget
      *            is Source or Target
