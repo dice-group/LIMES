@@ -94,7 +94,7 @@ public class IsMetByMapperTest {
     public void simpleLS() {
         System.out.println("simpleLS");
         LinkSpecification ls = new LinkSpecification(
-                "tmp_ismetby(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
+                "tmp_is_met_by(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
@@ -106,7 +106,7 @@ public class IsMetByMapperTest {
     public void similarity() {
         System.out.println("similarity");
         LinkSpecification ls = new LinkSpecification(
-                "tmp_ismetby(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
+                "tmp_is_met_by(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
@@ -129,7 +129,7 @@ public class IsMetByMapperTest {
     public void reverse() {
         System.out.println("reverse");
         LinkSpecification ls = new LinkSpecification(
-                "tmp_ismetby(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
+                "tmp_is_met_by(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
