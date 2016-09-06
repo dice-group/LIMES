@@ -11,6 +11,7 @@ import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 
 import javafx.scene.control.ListView;
+import javafx.scene.paint.Color;
 
 /**
  * Controller class for property matching step in {@link WizardController}
@@ -99,6 +100,7 @@ public class EditPropertyMatchingController implements IEditController {
 	boolean valid = true;
 	if(view.getAddedSourcePropsList().getItems().size() == 0 ||view.getAddedTargetPropsList().getItems().size() == 0 ){
 	    view.getMissingPropertiesLabel().setVisible(true);
+	    view.getMissingPropertiesLabel().setTextFill(Color.RED);
 	    valid = false;
 	}
 	return valid;

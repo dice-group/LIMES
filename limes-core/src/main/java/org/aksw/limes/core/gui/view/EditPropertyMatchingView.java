@@ -134,32 +134,40 @@ public class EditPropertyMatchingView implements IEditView {
         sourcePropList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+        	if(sourcePropList.getSelectionModel().getSelectedItem() != null){
                 addedSourcePropsList.getItems().add(sourcePropList.getSelectionModel().getSelectedItem());
                 sourcePropList.getItems().remove(sourcePropList.getSelectionModel().getSelectedItem());
+        	}
             }
         });
 
         targetPropList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+        	if(targetPropList.getSelectionModel().getSelectedItem() != null){
                 addedTargetPropsList.getItems().add(targetPropList.getSelectionModel().getSelectedItem());
                 targetPropList.getItems().remove(targetPropList.getSelectionModel().getSelectedItem());
+        	}
             }
         });
 
         addedSourcePropsList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+        	if(addedSourcePropsList.getSelectionModel().getSelectedItem() != null){
                 sourcePropList.getItems().add(addedSourcePropsList.getSelectionModel().getSelectedItem());
                 addedSourcePropsList.getItems().remove(addedSourcePropsList.getSelectionModel().getSelectedItem());
+        	}
             }
         });
 
         addedTargetPropsList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+        	if(addedTargetPropsList.getSelectionModel().getSelectedItem() != null){
                 targetPropList.getItems().add(addedTargetPropsList.getSelectionModel().getSelectedItem());
                 addedTargetPropsList.getItems().remove(addedTargetPropsList.getSelectionModel().getSelectedItem());
+        	}
             }
         });
 
