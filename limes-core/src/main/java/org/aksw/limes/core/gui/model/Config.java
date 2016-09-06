@@ -78,22 +78,39 @@ public class Config extends Configuration {
 
     /**
      * Constructor calls super constructor and creates new metric and endpoints
-     * @param sourceInfo sourceInfo
-     * @param targetInfo targetInfo
-     * @param metricExpression metricExpression
-     * @param acceptanceRelation acceptanceRelation
-     * @param verificationRelation verificationRelation
-     * @param acceptanceThreshold acceptanceThreshold
-     * @param acceptanceFile acceptanceFile
-     * @param verificationThreshold verificationThreshold
-     * @param verificationFile verificationFile
-     * @param exemplars exemplars
-     * @param prefixes prefixes
-     * @param outputFormat outputFormat
-     * @param executionPlanner executionPlanner
-     * @param granularity granularity
-     * @param recallRegulator recallRegulator
-     * @param recallThreshold recallThreshold
+     * 
+     * @param sourceInfo
+     *            sourceInfo
+     * @param targetInfo
+     *            targetInfo
+     * @param metricExpression
+     *            metricExpression
+     * @param acceptanceRelation
+     *            acceptanceRelation
+     * @param verificationRelation
+     *            verificationRelation
+     * @param acceptanceThreshold
+     *            acceptanceThreshold
+     * @param acceptanceFile
+     *            acceptanceFile
+     * @param verificationThreshold
+     *            verificationThreshold
+     * @param verificationFile
+     *            verificationFile
+     * @param exemplars
+     *            exemplars
+     * @param prefixes
+     *            prefixes
+     * @param outputFormat
+     *            outputFormat
+     * @param executionPlanner
+     *            executionPlanner
+     * @param granularity
+     *            granularity
+     * @param recallRegulator
+     *            recallRegulator
+     * @param recallThreshold
+     *            recallThreshold
      */
     public Config(KBInfo sourceInfo, KBInfo targetInfo, String metricExpression, String acceptanceRelation, String verificationRelation,
 	    double acceptanceThreshold, String acceptanceFile, double verificationThreshold, String verificationFile, int exemplars,
@@ -126,7 +143,7 @@ public class Config extends Configuration {
 	}
 	Config outConfig;
 	Configuration tmp = reader.read();
-	if(tmp.getSourceInfo() == null || tmp.getSourceInfo() == null){
+	if (tmp.getSourceInfo() == null || tmp.getSourceInfo() == null) {
 	    throw new Exception("Invalid configuration file!");
 	}
 	outConfig = new Config(tmp.getSourceInfo(), tmp.getTargetInfo(), tmp.getMetricExpression(), tmp.getAcceptanceRelation(), tmp.getVerificationRelation(),
@@ -178,7 +195,8 @@ public class Config extends Configuration {
     /**
      * Sets the acceptanceThreshold
      *
-     * @param acceptanceThreshold threshold
+     * @param acceptanceThreshold
+     *            threshold
      */
     public void setAcceptanceThreshold(double acceptanceThreshold) {
 	if (metric == null)
@@ -289,12 +307,12 @@ public class Config extends Configuration {
      *            is Source or Target
      * @return Property String
      */
-    public String getPropertyString(int index, SourceOrTarget sourceOrTarget) {
+    public String getPropertyString(String propString, SourceOrTarget sourceOrTarget) {
 	if (sourceOrTarget == SOURCE) {
-	    return getSourceInfo().getVar().substring(1) + "." + getSourceInfo().getProperties().get(index);
+	    return getSourceInfo().getVar().substring(1) + "." + propString;
 
 	} else {
-	    return getTargetInfo().getVar().substring(1) + "." + getTargetInfo().getProperties().get(index);
+	    return getTargetInfo().getVar().substring(1) + "." + propString;
 	}
     }
 
@@ -313,8 +331,11 @@ public class Config extends Configuration {
 
     /**
      * sets property matching
-     * @param sourcePropertiesToAdd source properties
-     * @param targetPropertiesToAdd target properties
+     * 
+     * @param sourcePropertiesToAdd
+     *            source properties
+     * @param targetPropertiesToAdd
+     *            target properties
      */
     public void setPropertiesMatching(ListView<String> sourcePropertiesToAdd, ListView<String> targetPropertiesToAdd) {
 	List<String> sourceProperties = sourceEndpoint.getInfo().getProperties();
@@ -333,6 +354,7 @@ public class Config extends Configuration {
 
     /**
      * adds a function to endpoint and adds appropriate prefix
+     * 
      * @param endpoint
      * @param property
      */
@@ -350,6 +372,7 @@ public class Config extends Configuration {
 
     /**
      * returns mapping
+     * 
      * @return mapping
      */
     public AMapping getMapping() {
@@ -358,7 +381,9 @@ public class Config extends Configuration {
 
     /**
      * sets mapping
-     * @param mapping mapping
+     * 
+     * @param mapping
+     *            mapping
      */
     public void setMapping(AMapping mapping) {
 	this.mapping = mapping;
