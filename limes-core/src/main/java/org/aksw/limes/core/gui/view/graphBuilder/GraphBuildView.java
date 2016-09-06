@@ -153,8 +153,6 @@ public class GraphBuildView extends Canvas {
         this.addEventHandler(
                 MouseEvent.MOUSE_CLICKED,
                 e -> {
-//					for (NodeView node : this.nodeList) {
-//					}
                     if (isLinking) {
                         for (NodeView node : nodeList) {
                             if (node.contains((int) e.getX(), (int) e.getY())) {
@@ -174,6 +172,10 @@ public class GraphBuildView extends Canvas {
                     }
                 });
         this.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> {
+            if(contextMenuIsShown){
+        	contextMenu.hide();
+        	contextMenuIsShown = false;
+            }
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 if (e.getClickCount() == 2) {
                     int index = 0;
