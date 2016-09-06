@@ -2,9 +2,9 @@
 
 The temporal relations between event resources can be found by using the following relations:
 
-* `Tmp_Successor`
-* `Tmp_Predecessor`
 * `Tmp_Concurrent`
+* `Tmp_Predecessor`
+* `Tmp_Successor`
 * `Tmp_After`
 * `Tmp_Before`
 * `Tmp_During`
