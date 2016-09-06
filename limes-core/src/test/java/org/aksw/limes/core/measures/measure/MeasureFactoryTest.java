@@ -338,6 +338,7 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof JaroMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -349,6 +350,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof QGramSimilarityMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -360,6 +363,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof CosineMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -371,6 +376,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof TrigramMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -382,6 +389,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof TrigramMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -393,6 +402,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof JaccardMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -404,6 +415,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof LevenshteinMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -415,6 +428,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof ExactMatchMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -426,6 +441,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof SoundexMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -436,6 +453,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof MongeElkanMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -447,6 +466,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof RatcliffObershelpMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -459,6 +480,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof EuclideanMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -469,6 +492,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof GeoOrthodromicMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -479,6 +504,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof GeoGreatEllipticMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -491,6 +518,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof NaiveHausdorffMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -503,6 +532,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof NaiveHausdorffMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -514,6 +545,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof IndexedHausdorffMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -525,6 +558,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof FastHausdorffMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -536,6 +571,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof SymmetricHausdorffMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -547,6 +584,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof CentroidIndexedHausdorffMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -558,6 +597,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof ScanIndexedHausdorffMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -569,6 +610,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof NaiveMaxMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -579,6 +622,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof NaiveMeanMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -589,6 +634,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof NaiveMinMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -599,6 +646,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof NaiveAverageMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -609,6 +658,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof NaiveFrechetMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -619,6 +670,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof NaiveLinkMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -629,6 +682,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof NaiveSumOfMinMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -639,6 +694,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof NaiveSurjectionMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -649,6 +706,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof FairSurjectionMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -660,6 +719,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof SuccessorMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -670,6 +731,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof PredecessorMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -680,6 +743,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof ConcurrentMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -690,6 +755,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof AfterMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -700,6 +767,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof BeforeMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -710,6 +779,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof MeetsMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -720,6 +791,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof IsMetByMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -730,6 +803,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof FinishesMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -741,6 +816,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof IsFinishedByMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -751,6 +828,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof StartsMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -761,6 +840,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof IsStartedByMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -772,6 +853,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof DuringMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -783,6 +866,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof DuringReverseMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -794,6 +879,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof OverlapsMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -804,6 +891,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof IsOverlappedByMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -815,6 +904,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof EqualsMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -826,6 +917,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof ContainsMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -836,6 +929,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof CoveredbyMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -847,6 +942,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof CoversMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -858,6 +955,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof CrossesMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -869,6 +968,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof DisjointMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -880,6 +981,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof org.aksw.limes.core.measures.measure.topology.EqualsMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -891,6 +994,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof IntersectsMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -901,6 +1006,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof org.aksw.limes.core.measures.measure.topology.OverlapsMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -912,6 +1019,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof TouchesMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -923,6 +1032,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof WithinMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -934,6 +1045,8 @@ public class MeasureFactoryTest {
             type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             measure = MeasureFactory.createMeasure(type);
             assertTrue(measure instanceof SetJaccardMeasure);
+            assertTrue(measure.getRuntimeApproximation(500)!=0);
+
         } catch (InvalidMeasureException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
