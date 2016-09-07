@@ -65,30 +65,32 @@ public class MeasureFactory {
     static Logger logger = LoggerFactory.getLogger(MeasureFactory.class);
 
     // String measures
-    public static final String JARO = "jaro";
-    public static final String QGRAMS = "qgrams";
     public static final String COSINE = "cosine";
-    public static final String LEVENSHTEIN = "levenshtein";
-    public static final String OVERLAP = "overlap";
-    public static final String TRIGRAMS = "trigram";
-    public static final String JACCARD = "jaccard";
     public static final String EXACTMATCH = "exactmatch";
-    public static final String SOUNDEX = "soundex";
+    public static final String JACCARD = "jaccard";
+    public static final String JARO = "jaro";
     public static final String JAROWINKLER = "jarowinkler";
+    public static final String LEVENSHTEIN = "levenshtein";
     public static final String MONGEELKAN = "mongeelkan";
+    public static final String OVERLAP = "overlap";
+    public static final String QGRAMS = "qgrams";
     public static final String RATCLIFF = "ratcliff";
-    // number measures
+    public static final String SOUNDEX = "soundex";
+    public static final String TRIGRAM = "trigram";
+
+    // vector space measures
     public static final String EUCLIDEAN = "euclidean";
-    // Point-set measures
     public static final String GEO_ORTHODROMIC = "geo_orthodromic";
-    public static final String GEO_GREAT_ELLIPTIC = "geo_greatelliptic";
+    public static final String GEO_GREAT_ELLIPTIC = "geo_great_elliptic";
+
+    // Point-set measures
+    public static final String GEO_CENTROID_INDEXED_HAUSDORFF = "geo_centroid_indexed_hausdorff";
+    public static final String GEO_FAST_HAUSDORFF = "geo_fast_hausdorff";
     public static final String GEO_HAUSDORFF = "geo_hausdorff";
-    public static final String GEO_NAIVE_HAUSDORFF = "geo_naivehausdorff";
-    public static final String GEO_INDEXED_HAUSDORFF = "geo_indexedhausdorff";
-    public static final String GEO_FAST_HAUSDORFF = "geo_fasthausdorff";
-    public static final String GEO_SYMMETRIC_HAUSDORFF = "geo_symmetrichausdorff";
-    public static final String GEO_CENTROID_INDEXED_HAUSDORFF = "geo_centroidindexedhausdorff";
-    public static final String GEO_SCAN_INDEXED_HAUSDORFF = "geo_scanindexedhausdorff";
+    public static final String GEO_INDEXED_HAUSDORFF = "geo_indexed_hausdorff";
+    public static final String GEO_NAIVE_HAUSDORFF = "geo_naive_hausdorff";
+    public static final String GEO_SCAN_INDEXED_HAUSDORFF = "geo_scan_indexed_hausdorff";
+    public static final String GEO_SYMMETRIC_HAUSDORFF = "geo_symmetric_hausdorff";
 
     public static final String GEO_MAX = "geo_max";
     public static final String GEO_MEAN = "geo_mean";
@@ -101,33 +103,36 @@ public class MeasureFactory {
     public static final String GEO_FAIR_SURJECTION = "geo_fairsurjection";
 
     // Temporal measures
-    public static final String TMP_SUCCESSOR = "tmp_successor";
-    public static final String TMP_PREDECESSOR = "tmp_predecessor";
     public static final String TMP_CONCURRENT = "tmp_concurrent";
-    public static final String TMP_BEFORE = "tmp_before";
+    public static final String TMP_PREDECESSOR = "tmp_predecessor";
+    public static final String TMP_SUCCESSOR = "tmp_successor";
+
     public static final String TMP_AFTER = "tmp_after";
-    public static final String TMP_MEETS = "tmp_meets";
-    public static final String TMP_IS_MET_BY = "tmp_ismetby";
-    public static final String TMP_FINISHES = "tmp_finishes";
-    public static final String TMP_IS_FINISHED_BY = "tmp_isfinishedby";
-    public static final String TMP_STARTS = "tmp_starts";
-    public static final String TMP_IS_STARTED_BY = "tmp_isstartedby";
+    public static final String TMP_BEFORE = "tmp_before";
     public static final String TMP_DURING = "tmp_during";
-    public static final String TMP_DURING_REVERSE = "tmp_duringreverse";
-    public static final String TMP_OVERLAPS = "tmp_overlaps";
-    public static final String TMP_IS_OVERLAPPED_BY = "tmp_isoverlappedby";
+    public static final String TMP_DURING_REVERSE = "tmp_during_reverse";
     public static final String TMP_EQUALS = "tmp_equals";
+    public static final String TMP_FINISHES = "tmp_finishes";
+    public static final String TMP_IS_FINISHED_BY = "tmp_is_finished_by";
+    public static final String TMP_IS_MET_BY = "tmp_is_met_by";
+    public static final String TMP_IS_OVERLAPPED_BY = "tmp_is_overlapped_by";
+    public static final String TMP_IS_STARTED_BY = "tmp_is_started_by";
+    public static final String TMP_MEETS = "tmp_meets";
+    public static final String TMP_OVERLAPS = "tmp_overlaps";
+    public static final String TMP_STARTS = "tmp_starts";
+
     // Topological measures
-    public static final String TOP_EQUALS = "top_equals";
+    public static final String TOP_CONTAINS = "top_contains";
+    public static final String TOP_COVERED_BY = "top_covered_by";
+    public static final String TOP_COVERS = "top_covers";
+    public static final String TOP_CROSSES = "top_crosses";
     public static final String TOP_DISJOINT = "top_disjoint";
+    public static final String TOP_EQUALS = "top_equals";
     public static final String TOP_INTERSECTS = "top_intersects";
     public static final String TOP_OVERLAPS = "top_overlaps";
-    public static final String TOP_CROSSES = "top_crosses";
-    public static final String TOP_CONTAINS = "top_contains";
-    public static final String TOP_COVERS = "top_covers";
-    public static final String TOP_WITHIN = "top_within";
-    public static final String TOP_COVEREDBY = "top_coveredby";
     public static final String TOP_TOUCHES = "top_touches";
+    public static final String TOP_WITHIN = "top_within";
+
     // Resource set measures
     public static final String SET_JACCARD = "set_jaccard";
 
@@ -144,45 +149,55 @@ public class MeasureFactory {
     public static MeasureType getMeasureType(String expression) throws InvalidMeasureException {
         String measure = expression.toLowerCase();
 
+        if (measure.startsWith(COSINE)) {
+            return MeasureType.COSINE;
+        }
+        if (measure.startsWith(EXACTMATCH)) {
+            return MeasureType.EXACTMATCH;
+        }
+        if (measure.startsWith(JACCARD)) {
+            return MeasureType.JACCARD;
+        }
+        // DO NOT CHANGE THE ORDER OF THE FOLLOWING TWO
         if (measure.startsWith(JAROWINKLER))
             return MeasureType.JAROWINKLER;
 
         if (measure.startsWith(JARO)) {
             return MeasureType.JARO;
         }
-        if (measure.startsWith(QGRAMS)) {
-            return MeasureType.QGRAMS;
-        }
-        if (measure.startsWith(COSINE)) {
-            return MeasureType.COSINE;
-        }
+
         if (measure.startsWith(LEVENSHTEIN)) {
             return MeasureType.LEVENSHTEIN;
-        }
-        if (measure.startsWith(OVERLAP)) {
-            return MeasureType.OVERLAP;
-        }
-        if (measure.startsWith(TRIGRAMS)) {
-            return MeasureType.TRIGRAMS;
-        }
-        if (measure.startsWith(JACCARD)) {
-            return MeasureType.JACCARD;
-        }
-        if (measure.startsWith(EXACTMATCH)) {
-            return MeasureType.EXACTMATCH;
-        }
-        if (measure.startsWith(SOUNDEX)) {
-            return MeasureType.SOUNDEX;
         }
         if (measure.startsWith(MONGEELKAN)) {
             return MeasureType.MONGEELKAN;
         }
+        if (measure.startsWith(OVERLAP)) {
+            return MeasureType.OVERLAP;
+        }
+
+        if (measure.startsWith(QGRAMS)) {
+            return MeasureType.QGRAMS;
+        }
         if (measure.startsWith(RATCLIFF)) {
             return MeasureType.RATCLIFF;
+        }
+        if (measure.startsWith(SOUNDEX)) {
+            return MeasureType.SOUNDEX;
+        }
+        if (measure.startsWith(TRIGRAM)) {
+            return MeasureType.TRIGRAM;
         }
         ////////////////////////////
         if (measure.startsWith(EUCLIDEAN)) {
             return MeasureType.EUCLIDEAN;
+        }
+        if (measure.startsWith(GEO_ORTHODROMIC)) {
+            return MeasureType.GEO_ORTHODROMIC;
+        }
+
+        if (measure.startsWith(GEO_GREAT_ELLIPTIC)) {
+            return MeasureType.GEO_GREAT_ELLIPTIC;
         }
         /////////////////////////////
         if (measure.startsWith(GEO_CENTROID_INDEXED_HAUSDORFF)) {
@@ -190,6 +205,9 @@ public class MeasureFactory {
         }
         if (measure.startsWith(GEO_FAST_HAUSDORFF)) {
             return MeasureType.GEO_FAST_HAUSDORFF;
+        }
+        if (measure.startsWith(GEO_HAUSDORFF)) {
+            return MeasureType.GEO_HAUSDORFF;
         }
         if (measure.startsWith(GEO_INDEXED_HAUSDORFF)) {
             return MeasureType.GEO_INDEXED_HAUSDORFF;
@@ -203,17 +221,7 @@ public class MeasureFactory {
         if (measure.startsWith(GEO_SYMMETRIC_HAUSDORFF)) {
             return MeasureType.GEO_SYMMETRIC_HAUSDORFF;
         }
-        if (measure.startsWith(GEO_HAUSDORFF)) {
-            return MeasureType.GEO_HAUSDORFF;
-        }
 
-        if (measure.startsWith(GEO_ORTHODROMIC)) {
-            return MeasureType.GEO_ORTHODROMIC;
-        }
-        
-        if (measure.startsWith(GEO_GREAT_ELLIPTIC)) {
-            return MeasureType.GEO_GREAT_ELLIPTIC;
-        }
         //////////////////////////
         if (measure.startsWith(GEO_MAX)) {
             return MeasureType.GEO_MAX;
@@ -247,15 +255,16 @@ public class MeasureFactory {
             return MeasureType.GEO_FAIR_SURJECTION;
         }
         ////////////////////////////////////////////
-        if (measure.startsWith(TMP_SUCCESSOR)) {
-            return MeasureType.TMP_SUCCESSOR;
+        if (measure.startsWith(TMP_CONCURRENT)) {
+            return MeasureType.TMP_CONCURRENT;
         }
         if (measure.startsWith(TMP_PREDECESSOR)) {
             return MeasureType.TMP_PREDECESSOR;
         }
-        if (measure.startsWith(TMP_CONCURRENT)) {
-            return MeasureType.TMP_CONCURRENT;
+        if (measure.startsWith(TMP_SUCCESSOR)) {
+            return MeasureType.TMP_SUCCESSOR;
         }
+
         if (measure.startsWith(TMP_AFTER)) {
             return MeasureType.TMP_AFTER;
         }
@@ -299,6 +308,9 @@ public class MeasureFactory {
         if (measure.startsWith(TOP_CONTAINS)) {
             return MeasureType.TOP_CONTAINS;
         }
+        if (measure.startsWith(TOP_COVERED_BY)) {
+            return MeasureType.TOP_COVERED_BY;
+        }
         if (measure.startsWith(TOP_COVERS)) {
             return MeasureType.TOP_COVERS;
         }
@@ -323,9 +335,7 @@ public class MeasureFactory {
         if (measure.startsWith(TOP_WITHIN)) {
             return MeasureType.TOP_WITHIN;
         }
-        if (measure.startsWith(TOP_COVEREDBY)) {
-            return MeasureType.TOP_COVEREDBY;
-        }
+
         ////////////////////////////////////////////////////
         if (measure.startsWith(SET_JACCARD)) {
             return MeasureType.SET_JACCARD;
@@ -347,38 +357,46 @@ public class MeasureFactory {
     public static AMeasure createMeasure(MeasureType type) throws InvalidMeasureException {
 
         switch (type) {
+        case COSINE:
+            return new CosineMeasure();
+        case EXACTMATCH:
+            return new ExactMatchMeasure();
+        case JACCARD:
+            return new JaccardMeasure();
+        // DO NOT CHANGE THE ORDER OF THE FOLLOWING TWO
         case JAROWINKLER:
             return new JaroWinklerMeasure();
         case JARO:
             return new JaroMeasure();
-        case QGRAMS:
-            return new QGramSimilarityMeasure();
-        case COSINE:
-            return new CosineMeasure();
         case LEVENSHTEIN:
             return new LevenshteinMeasure();
-        case OVERLAP:
-            return new TrigramMeasure();
-        case TRIGRAMS:
-            return new TrigramMeasure();
-        case JACCARD:
-            return new JaccardMeasure();
-        case EXACTMATCH:
-            return new ExactMatchMeasure();
-        case SOUNDEX:
-            return new SoundexMeasure();
         case MONGEELKAN:
             return new MongeElkanMeasure();
+        case OVERLAP:
+            return new TrigramMeasure();
+        case QGRAMS:
+            return new QGramSimilarityMeasure();
         case RATCLIFF:
             return new RatcliffObershelpMeasure();
-        ///////////////////////
+        case SOUNDEX:
+            return new SoundexMeasure();
+        case TRIGRAM:
+            return new TrigramMeasure();
+        ////////////////////////////////////////////
+
         case EUCLIDEAN:
             return new EuclideanMeasure();
+        case GEO_GREAT_ELLIPTIC:
+            return new GeoGreatEllipticMeasure();
+        case GEO_ORTHODROMIC:
+            return new GeoOrthodromicMeasure();
         ///////////////////////
         case GEO_CENTROID_INDEXED_HAUSDORFF:
             return new CentroidIndexedHausdorffMeasure();
         case GEO_FAST_HAUSDORFF:
             return new FastHausdorffMeasure();
+        case GEO_HAUSDORFF:
+            return new NaiveHausdorffMeasure();
         case GEO_INDEXED_HAUSDORFF:
             return new IndexedHausdorffMeasure();
         case GEO_NAIVE_HAUSDORFF:
@@ -387,12 +405,6 @@ public class MeasureFactory {
             return new ScanIndexedHausdorffMeasure();
         case GEO_SYMMETRIC_HAUSDORFF:
             return new SymmetricHausdorffMeasure();
-        case GEO_HAUSDORFF:
-            return new NaiveHausdorffMeasure();
-        case GEO_GREAT_ELLIPTIC:
-            return new GeoGreatEllipticMeasure();
-        case GEO_ORTHODROMIC:
-            return new GeoOrthodromicMeasure();
         ///////////////////////
         case GEO_MAX:
             return new NaiveMaxMeasure();
@@ -413,41 +425,46 @@ public class MeasureFactory {
         case GEO_FAIR_SURJECTION:
             return new FairSurjectionMeasure();
         ///////////////////////
-        case TMP_SUCCESSOR:
-            return new SuccessorMeasure();
-        case TMP_PREDECESSOR:
-            return new PredecessorMeasure();
         case TMP_CONCURRENT:
             return new ConcurrentMeasure();
+        case TMP_PREDECESSOR:
+            return new PredecessorMeasure();
+        case TMP_SUCCESSOR:
+            return new SuccessorMeasure();
+
         case TMP_AFTER:
             return new AfterMeasure();
         case TMP_BEFORE:
             return new BeforeMeasure();
-        case TMP_MEETS:
-            return new MeetsMeasure();
-        case TMP_IS_MET_BY:
-            return new IsMetByMeasure();
+        case TMP_DURING_REVERSE:
+            return new DuringReverseMeasure();
+        case TMP_DURING:
+            return new DuringMeasure();
+        case TMP_EQUALS:
+            return new EqualsMeasure();
         case TMP_FINISHES:
             return new FinishesMeasure();
         case TMP_IS_FINISHED_BY:
             return new IsFinishedByMeasure();
-        case TMP_STARTS:
-            return new StartsMeasure();
-        case TMP_IS_STARTED_BY:
-            return new IsStartedByMeasure();
-        case TMP_DURING:
-            return new DuringMeasure();
-        case TMP_DURING_REVERSE:
-            return new DuringReverseMeasure();
-        case TMP_OVERLAPS:
-            return new OverlapsMeasure();
+        case TMP_IS_MET_BY:
+            return new IsMetByMeasure();
         case TMP_IS_OVERLAPPED_BY:
             return new IsOverlappedByMeasure();
-        case TMP_EQUALS:
-            return new EqualsMeasure();
+        case TMP_IS_STARTED_BY:
+            return new IsStartedByMeasure();
+        case TMP_MEETS:
+            return new MeetsMeasure();
+        case TMP_OVERLAPS:
+            return new OverlapsMeasure();
+        case TMP_STARTS:
+            return new StartsMeasure();
         ///////////////////////
         case TOP_CONTAINS:
             return new ContainsMeasure();
+        case TOP_COVERED_BY:
+            return new CoveredbyMeasure();
+        case TOP_COVERS:
+            return new CoversMeasure();
         case TOP_CROSSES:
             return new CrossesMeasure();
         case TOP_DISJOINT:
@@ -462,10 +479,7 @@ public class MeasureFactory {
             return new TouchesMeasure();
         case TOP_WITHIN:
             return new WithinMeasure();
-        case TOP_COVERS:
-            return new CoversMeasure();
-        case TOP_COVEREDBY:
-            return new CoveredbyMeasure();
+
         ///////////////////////
         case SET_JACCARD:
             return new SetJaccardMeasure();
