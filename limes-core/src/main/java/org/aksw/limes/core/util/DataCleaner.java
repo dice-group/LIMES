@@ -11,16 +11,16 @@ import org.slf4j.LoggerFactory;
  * @version Nov 23, 2015
  */
 public class DataCleaner {
-    static Logger logger = LoggerFactory.getLogger(DataCleaner.class.getName());
+    static Logger logger = LoggerFactory.getLogger(DataCleaner.class);
 
     KBInfo kbInfo;
 
     public static String[] separate(String line, String SEP, int NumberOfProperties) {
         String[] result = new String[NumberOfProperties];
         String[] split = line.split(SEP);
-        //		logger.info(line + " - " + SEP + " - " + NumberOfProperties);
+        logger.trace(line + " - " + SEP + " - " + NumberOfProperties);
         if (split.length == NumberOfProperties) {
-            //			logger.info("returning standard");
+            logger.trace("returning standard");
             for (int i = 0; i < split.length; i++) {
                 split[i] = removeQuotes(split[i]);
             }
@@ -30,7 +30,7 @@ public class DataCleaner {
             for (int i = 0; i < NumberOfProperties; i++) {
                 int sepOc = line.indexOf(SEP);
                 int openApostrophe = line.indexOf("\"");
-                //				logger.info("openApostrophe="+openApostrophe);
+                logger.trace("openApostrophe="+openApostrophe);
                 if (openApostrophe == -1 && sepOc == -1) {
                     result[i] = removeQuotes(line);
                     return result;
@@ -48,17 +48,17 @@ public class DataCleaner {
                     // we found a SEP within an apostrophe
                     int closingApostrophe = line.indexOf("\"", openApostrophe + 1);
                     int nextSep = line.indexOf(SEP, closingApostrophe);
-                    //					logger.info("closingApostrophe:" + closingApostrophe);
-                    //					logger.info("nextSep="+nextSep);
+                    logger.trace("closingApostrophe:" + closingApostrophe);
+                    logger.trace("nextSep="+nextSep);
                     if (openApostrophe < nextSep && openApostrophe > -1) {
                         result[i] = removeQuotes(line.substring(openApostrophe, nextSep));
                     } else
                         result[i] = "";
-                    //					logger.info("closingAp="+closingApostrophe+"  cut out: "+openApostrophe+" - "+nextSep);
+                    logger.trace("closingAp="+closingApostrophe+"  cut out: "+openApostrophe+" - "+nextSep);
                     line = line.substring(nextSep + 1);
                 }
-                //				logger.info("=>"+line);
-                //				logger.info(i + " " + result[i]+"\n\n");
+                logger.trace("=>"+line);
+                logger.trace(i + " " + result[i]+"\n\n");
             }
 
         }

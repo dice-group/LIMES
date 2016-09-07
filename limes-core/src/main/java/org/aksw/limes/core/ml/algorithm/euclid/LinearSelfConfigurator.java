@@ -4,13 +4,13 @@
  */
 package org.aksw.limes.core.ml.algorithm.euclid;
 
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.measures.measure.Measure;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.measures.measure.AMeasure;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -115,7 +115,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
 //	 * @param minCoverage Threshold for coverage
 //	 * @return Map of property to coverage
 //	 */
-    public static Map<String, Double> getPropertyStats(Cache c, double minCoverage) {
+    public static Map<String, Double> getPropertyStats(ACache c, double minCoverage) {
         Map<String, Double> buffer = new HashMap<String, Double>();
         Map<String, Double> result = new HashMap<String, Double>();
 
@@ -143,7 +143,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     }
 
     @Override
-    public void computeMeasure(Cache source, Cache target, String[] parameters) {
+    public void computeMeasure(ACache source, ACache target, String[] parameters) {
         // TODO Auto-generated method stub
 
     }
@@ -155,7 +155,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     }
 
     @Override
-    public void setMeasure(Measure measure) {
+    public void setMeasure(AMeasure measure) {
         // TODO Auto-generated method stub
 
     }

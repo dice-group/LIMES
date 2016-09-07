@@ -1,11 +1,11 @@
 package org.aksw.limes.core.gui.util;
 
-import org.aksw.limes.core.gui.util.sparql.SPARQLHelper;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
+
+import org.aksw.limes.core.gui.util.sparql.SPARQLHelper;
 
 /**
  * A SPARQL restriction which consists of a property and an object, restricting the resulting triples of a query to only

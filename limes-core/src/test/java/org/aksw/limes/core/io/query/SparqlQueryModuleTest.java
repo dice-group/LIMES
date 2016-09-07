@@ -1,16 +1,16 @@
 package org.aksw.limes.core.io.query;
 
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.cache.HybridCache;
-import org.aksw.limes.core.io.config.KBInfo;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
+import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.cache.HybridCache;
+import org.aksw.limes.core.io.config.KBInfo;
+import org.junit.Test;
 
 public class SparqlQueryModuleTest {
 
@@ -41,7 +41,7 @@ public class SparqlQueryModuleTest {
         );
 
         SparqlQueryModule sqm = new SparqlQueryModule(kbInfo);
-        Cache cache = new HybridCache();
+        ACache cache = new HybridCache();
         sqm.fillCache(cache);
 
         assertTrue(cache.size() > 0);

@@ -1,29 +1,29 @@
 package org.aksw.limes.core.execution.planning.planner;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.ExtendedLinkSpecification;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * Implements the Dynamic planner class. It receives a link specification as
@@ -37,11 +37,11 @@ public class DynamicPlanner extends Planner {
     /**
      * Source cache.
      */
-    private Cache source;
+    private ACache source;
     /**
      * Target cache.
      */
-    private Cache target;
+    private ACache target;
     /**
      * Language of the source/target data.
      */
@@ -61,7 +61,7 @@ public class DynamicPlanner extends Planner {
      */
     private Map<String, LinkSpecification> dependencies = new HashMap<String, LinkSpecification>();
 
-    public DynamicPlanner(Cache s, Cache t) {
+    public DynamicPlanner(ACache s, ACache t) {
         source = s;
         target = t;
         lang = Language.EN;
@@ -155,13 +155,13 @@ public class DynamicPlanner extends Planner {
      * 
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
-        Mapper mapper = null;
+        AMapper mapper = null;
         try {
             MeasureType type = MeasureFactory.getMeasureType(measure);
             mapper = MapperFactory.createMapper(type);
         } catch (InvalidMeasureException e) {
             e.printStackTrace();
-            System.err.println("Exiting..");
+            logger.error("Exiting..");
             System.exit(1);
         }
         return mapper.getRuntimeApproximation(source.size(), target.size(), threshold, lang);
@@ -180,13 +180,13 @@ public class DynamicPlanner extends Planner {
      * 
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
-        Mapper mapper = null;
+        AMapper mapper = null;
         try {
             MeasureType type = MeasureFactory.getMeasureType(measure);
             mapper = MapperFactory.createMapper(type);
         } catch (InvalidMeasureException e) {
             e.printStackTrace();
-            System.err.println("Exiting..");
+            logger.error("Exiting..");
             System.exit(1);
         }
         return mapper.getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
@@ -322,7 +322,7 @@ public class DynamicPlanner extends Planner {
      *            Size of target mapping
      * @return a NestedPlan for the input link specification
      */
-    public NestedPlan plan(LinkSpecification spec, Cache source, Cache target, AMapping sourceMapping,
+    public NestedPlan plan(LinkSpecification spec, ACache source, ACache target, AMapping sourceMapping,
             AMapping targetMapping) {
         NestedPlan plan = new NestedPlan();
 

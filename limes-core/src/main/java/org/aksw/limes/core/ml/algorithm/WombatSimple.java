@@ -9,7 +9,7 @@ import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -55,7 +55,7 @@ public class WombatSimple extends AWombat {
     }
 
     @Override
-    protected void init(List<LearningParameter> lp, Cache sourceCache, Cache targetCache) {
+    protected void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
         super.init(lp, sourceCache, targetCache);
         sourceUris = sourceCache.getAllUris();
         targetUris = targetCache.getAllUris();
@@ -95,7 +95,7 @@ public class WombatSimple extends AWombat {
     }
 
     @Override
-    protected AMapping predict(Cache source, Cache target, MLResults mlModel) {
+    protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
         LinkSpecification ls = mlModel.getLinkSpecification();
         return getPredictions(ls, source, target);
     }
@@ -202,7 +202,7 @@ public class WombatSimple extends AWombat {
         classifiers = findInitialClassifiers();
         createRefinementTreeRoot();
         Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, overallPenaltyWeight);
-        logger.info("Most promising node: " + mostPromisingNode.getValue());
+        logger.debug("Most promising node: " + mostPromisingNode.getValue());
         iterationNr++;
         while ((mostPromisingNode.getValue().getFMeasure()) < maxFitnessThreshold
                 && refinementTreeRoot.size() <= maxRefineTreeSize
@@ -213,10 +213,10 @@ public class WombatSimple extends AWombat {
             if (mostPromisingNode.getValue().getFMeasure() == -Double.MAX_VALUE) {
                 break; // no better solution can be found
             }
-            logger.info("Most promising node: " + mostPromisingNode.getValue());
+            logger.debug("Most promising node: " + mostPromisingNode.getValue());
         }
         RefinementNode bestSolution = getMostPromisingNode(refinementTreeRoot, 0).getValue();
-        logger.info("Overall Best Solution: " + bestSolution);
+        logger.debug("Overall Best Solution: " + bestSolution);
         return bestSolution;
     }
 
@@ -225,7 +225,7 @@ public class WombatSimple extends AWombat {
      * @return initial classifiers
      */
     public List<ExtendedClassifier> findInitialClassifiers() {
-        logger.info("Geting all initial classifiers ...");
+        logger.debug("Geting all initial classifiers ...");
         List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
         for (String p : sourcePropertiesCoverageMap.keySet()) {
             for (String q : targetPropertiesCoverageMap.keySet()) {
@@ -236,7 +236,7 @@ public class WombatSimple extends AWombat {
                 }
             }
         }
-        logger.info("Done computing all initial classifiers.");
+        logger.debug("Done computing all initial classifiers.");
         return initialClassifiers;
     }
 
@@ -352,9 +352,9 @@ public class WombatSimple extends AWombat {
      */
     private double computePenalty(Tree<RefinementNode> promesyChild) {
         long childrenCount = promesyChild.size() - 1;
-        double childrenPenalty = (childrenPenaltyWeit * childrenCount) / refinementTreeRoot.size();
+        double childrenPenalty = (childrenPenaltyWeight * childrenCount) / refinementTreeRoot.size();
         long level = promesyChild.level();
-        double complexityPenalty = (complexityPenaltyWeit * level) / refinementTreeRoot.depth();
+        double complexityPenalty = (complexityPenaltyWeight * level) / refinementTreeRoot.depth();
         return childrenPenalty + complexityPenalty;
     }
 

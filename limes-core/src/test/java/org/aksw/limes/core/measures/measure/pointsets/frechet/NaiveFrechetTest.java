@@ -1,14 +1,18 @@
 package org.aksw.limes.core.measures.measure.pointsets.frechet;
 
 
-import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+import org.junit.Test;
+
+/**
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
+ */
 public class NaiveFrechetTest {
 
     @Test
@@ -52,7 +56,7 @@ public class NaiveFrechetTest {
         Set<Polygon> maltaLgd = new HashSet<Polygon>();
         maltaLgd.add(maltaLgdPoly1);
 
-        NaiveFrechet frechet = new NaiveFrechet();
+        NaiveFrechetMeasure frechet = new NaiveFrechetMeasure();
         System.out.println(frechet.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }

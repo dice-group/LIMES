@@ -1,14 +1,18 @@
 package org.aksw.limes.core.measures.measure.pointsets.frechet;
 
 
-import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+import org.junit.Test;
+
+/**
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
+ */
 public class GeOxygeneFrechetTest {
 
     @Test
@@ -53,10 +57,10 @@ public class GeOxygeneFrechetTest {
         Set<Polygon> maltaLgd = new HashSet<Polygon>();
         maltaLgd.add(maltaLgdPoly1);
 
-        NaiveFrechet naiveFrechet = new NaiveFrechet();
+        NaiveFrechetMeasure naiveFrechet = new NaiveFrechetMeasure();
         System.out.println("Normal: " + naiveFrechet.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
-        GeOxygeneFrechet geoxygenFrechet = new GeOxygeneFrechet();
+        GeOxygeneFrechetMeasure geoxygenFrechet = new GeOxygeneFrechetMeasure();
         System.out.println("GeOxyGen:" + geoxygenFrechet.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }

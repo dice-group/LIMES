@@ -1,5 +1,7 @@
 package org.aksw.limes.core.gui.view;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
@@ -12,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
 import org.aksw.limes.core.gui.controller.TaskProgressController;
 
 /**
@@ -28,12 +31,16 @@ public class TaskProgressView {
      */
     private StringProperty informationLabel;
     private ProgressBar progressBar;
+    private BooleanProperty finishedSuccessfully;
+    private BooleanProperty cancelled;
 
     /**
      * Constructor builds the window with the given title
      * @param title title of window
      */
     public TaskProgressView(String title) {
+	finishedSuccessfully = new SimpleBooleanProperty(false);
+	cancelled = new SimpleBooleanProperty(false);
         showWindow(title);
     }
 
@@ -76,7 +83,7 @@ public class TaskProgressView {
         hb2.getChildren().addAll(cancelButton);
         mainPane.setBottom(hb2);
 
-        // cancels the mapping and closes the window
+        // cancels all tasks and closes the window
         cancelButton.setOnAction(event -> {
             controller.cancel();
         });
@@ -112,4 +119,21 @@ public class TaskProgressView {
     public ProgressBar getProgressBar() {
         return progressBar;
     }
+
+    public BooleanProperty getFinishedSuccessfully() {
+        return finishedSuccessfully;
+    }
+
+    public void setFinishedSuccessfully(boolean finishedSuccessfully) {
+        this.finishedSuccessfully.set(finishedSuccessfully);
+    }
+
+    public BooleanProperty getCancelled() {
+        return cancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled.set(cancelled);
+    }
+    
 }

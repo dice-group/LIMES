@@ -4,6 +4,7 @@ import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
+import org.aksw.limes.core.gui.LimesGUI;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
@@ -14,6 +15,7 @@ import org.aksw.limes.core.io.serializer.ISerializer;
 import org.aksw.limes.core.io.serializer.SerializerFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.apache.commons.cli.*;
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +37,7 @@ public class Controller {
      * Take configuration file as argument and run the specified linking task.
      *
      * @param args
-     *            Command line arguments)
+     *            Command line arguments
      */
     public static void main(String[] args) {
         CommandLine cl = parseCommandLine(args);
@@ -62,6 +64,10 @@ public class Controller {
             printHelp();
             System.exit(0);
         }
+        if (cmd.hasOption('g')){
+            LimesGUI.startGUI(new String[0]);
+            System.exit(0);
+        }
         // I. Has Argument?
         if (cmd.getArgs().length < 1) {
             logger.error("Error:\n\t Please specify a configuration file to use!");
@@ -73,24 +79,24 @@ public class Controller {
         // use log4j2 as provider for slf4j.
         // @todo: add verbose/silent options
         // 1. Determine appropriate ConfigurationReader
-        String format;
+        String format = "xml";
+        String fileNameOrUri = cmd.getArgs()[0];
         if (cmd.hasOption('f')) {
             format = cmd.getOptionValue("f").toLowerCase();
-        } else {
-            // for now just assume RDF
-            // @todo implement full proof ConfigurationReaderFactory to handle
-            // format detection.
-            format = "xml";
+        } else if (fileNameOrUri.endsWith(".nt")
+                    || fileNameOrUri.endsWith(".ttl")
+                    || fileNameOrUri.endsWith(".n3")
+                    || fileNameOrUri.endsWith(".rdf")) {
+            format = "rdf";
         }
 
         AConfigurationReader reader = null;
-        String configFileOrUri = cmd.getArgs()[0];
         switch (format) {
             case "xml":
-                reader = new XMLConfigurationReader(configFileOrUri);
+                reader = new XMLConfigurationReader(fileNameOrUri);
                 break;
             case "rdf":
-                reader = new RDFConfigurationReader(configFileOrUri);
+                reader = new RDFConfigurationReader(fileNameOrUri);
                 break;
             default:
                 logger.error("Error:\n\t Not a valid format: \"" + format + "\"!");
@@ -120,6 +126,8 @@ public class Controller {
         HybridCache targetCache = HybridCache.getData(config.getTargetInfo());
 
         // 4. Machine Learning or Planning
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
         boolean isAlgorithm = !config.getMlAlgorithmName().equals("");
         if (isAlgorithm) {
             try {
@@ -136,8 +144,12 @@ public class Controller {
                     ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlanner()),
                     ExecutionEngineFactory.getExecutionEngineType(config.getExecutionEngine()));
         }
+        logger.info("Mapping task finished in " + stopWatch.getTime() + " ms");
+        assert results != null;
         AMapping acceptanceMapping = results.getSubMap(config.getAcceptanceThreshold());
         AMapping verificationMapping = MappingOperations.difference(results, acceptanceMapping);
+        logger.info("Mapping size: " + acceptanceMapping.size() + " (accepted) + " + verificationMapping.size()
+                + " (need verification) = " + results.size() + " (total)");
         return new ResultMappings(verificationMapping, acceptanceMapping);
     }
 
@@ -164,8 +176,10 @@ public class Controller {
      */
     private static Options getOptions() {
         Options options = new Options();
-        options.addOption("f", true, "Format of <config_file_or_uri>, either \"xml\" (default) or \"rdf\"");
-        options.addOption("h", false, "Help");
+        options.addOption("g", false, "Run LIMES GUI");
+        options.addOption("h", false, "Show this help");
+        options.addOption("f", true, "Optionally configure format of <config_file_or_uri>, either \"xml\" (default) or " +
+                "\"rdf\". If not specified, LIMES tries to infer the format from file ending.");
         // options.addOption("s", false, "Silent run");
         // options.addOption("v", false, "Verbose run");
         return options;

@@ -1,5 +1,17 @@
 package org.aksw.limes.core.io.config.reader.xml;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
@@ -14,13 +26,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -229,7 +234,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
                     // System.out.println(systemId);
                     if (systemId.contains("limes.dtd")) {
-                        String dtd = System.getProperty("user.dir") + "/resources/limes.dtd";
+//                        String dtd = System.getProperty("user.dir") + "/resources/limes.dtd";
+                        String dtd = getClass().getResource("/limes.dtd").toString();
                         return new InputSource(dtd);
                     } else {
                         return null;

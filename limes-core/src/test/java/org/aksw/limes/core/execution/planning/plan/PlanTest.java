@@ -1,21 +1,21 @@
 package org.aksw.limes.core.execution.planning.plan;
 
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-
-import static org.junit.Assert.assertTrue;
-
 public class PlanTest {
-    public Cache source = new MemoryCache();
-    public Cache target = new MemoryCache();
+    public ACache source = new MemoryCache();
+    public ACache target = new MemoryCache();
 
     @Before
     public void setUp() {

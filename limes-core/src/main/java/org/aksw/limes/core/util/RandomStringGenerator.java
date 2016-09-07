@@ -1,16 +1,16 @@
 package org.aksw.limes.core.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -33,8 +33,8 @@ public class RandomStringGenerator implements DataGenerator {
      *         Size of the corpus that is to be generated
      * @return Corpus
      */
-    public Cache generateData(int size) {
-        Cache c = new MemoryCache();
+    public ACache generateData(int size) {
+        ACache c = new MemoryCache();
         String s;
         List<Double> lengths = new ArrayList<Double>();
         while (c.size() < size) {

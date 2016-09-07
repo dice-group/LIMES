@@ -1,24 +1,30 @@
 package org.aksw.limes.core.gui.view;
 
+import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
+
+import java.util.List;
+
+import org.aksw.limes.core.gui.controller.EditPropertyMatchingController;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.aksw.limes.core.gui.controller.EditPropertyMatchingController;
-import org.aksw.limes.core.gui.util.SourceOrTarget;
-
-import java.util.List;
-
-import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -40,6 +46,7 @@ public class EditPropertyMatchingView implements IEditView {
             .observableArrayList();
     private ObservableList<String> targetProperties = FXCollections
             .observableArrayList();
+    private Label missingPropertiesLabel;
 
     /**
      * Constructor creates the root pane and adds listeners
@@ -77,8 +84,11 @@ public class EditPropertyMatchingView implements IEditView {
         targetColumn.getChildren().addAll(targetLabel, targetPropList, addedTargetLabel, addedTargetPropsList);
         addAllButton = new Button("Add all");
         removeAllButton = new Button("Remove all");
+        missingPropertiesLabel = new Label("At least one source and one target property must be chosen!");
+        missingPropertiesLabel.setTextFill(Color.RED);
+        missingPropertiesLabel.setVisible(false);
         HBox buttons = new HBox();
-        buttons.getChildren().addAll(addAllButton, removeAllButton);
+        buttons.getChildren().addAll(missingPropertiesLabel, addAllButton, removeAllButton);
         BorderPane root = new BorderPane();
         HBox hb = new HBox();
         hb.getChildren().addAll(sourceColumn, targetColumn);
@@ -87,6 +97,9 @@ public class EditPropertyMatchingView implements IEditView {
         root.setCenter(hb);
         root.setBottom(buttons);
         rootPane = new ScrollPane(root);
+        rootPane.setOnMouseClicked(e -> {
+            missingPropertiesLabel.setVisible(false);
+        });
         rootPane.setFitToHeight(true);
         rootPane.setFitToWidth(true);
     }
@@ -95,6 +108,7 @@ public class EditPropertyMatchingView implements IEditView {
      * adds listener to properties to display changes after loading them is finished.
      * also adds functionality
      */
+    @SuppressWarnings("all")
     private void addListeners() {
 
         sourceProperties.addListener(new ListChangeListener() {
@@ -120,32 +134,40 @@ public class EditPropertyMatchingView implements IEditView {
         sourcePropList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+        	if(sourcePropList.getSelectionModel().getSelectedItem() != null){
                 addedSourcePropsList.getItems().add(sourcePropList.getSelectionModel().getSelectedItem());
                 sourcePropList.getItems().remove(sourcePropList.getSelectionModel().getSelectedItem());
+        	}
             }
         });
 
         targetPropList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+        	if(targetPropList.getSelectionModel().getSelectedItem() != null){
                 addedTargetPropsList.getItems().add(targetPropList.getSelectionModel().getSelectedItem());
                 targetPropList.getItems().remove(targetPropList.getSelectionModel().getSelectedItem());
+        	}
             }
         });
 
         addedSourcePropsList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+        	if(addedSourcePropsList.getSelectionModel().getSelectedItem() != null){
                 sourcePropList.getItems().add(addedSourcePropsList.getSelectionModel().getSelectedItem());
                 addedSourcePropsList.getItems().remove(addedSourcePropsList.getSelectionModel().getSelectedItem());
+        	}
             }
         });
 
         addedTargetPropsList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+        	if(addedTargetPropsList.getSelectionModel().getSelectedItem() != null){
                 targetPropList.getItems().add(addedTargetPropsList.getSelectionModel().getSelectedItem());
                 addedTargetPropsList.getItems().remove(addedTargetPropsList.getSelectionModel().getSelectedItem());
+        	}
             }
         });
 
@@ -222,5 +244,17 @@ public class EditPropertyMatchingView implements IEditView {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    public ListView<String> getAddedSourcePropsList() {
+        return addedSourcePropsList;
+    }
+
+    public ListView<String> getAddedTargetPropsList() {
+        return addedTargetPropsList;
+    }
+
+    public Label getMissingPropertiesLabel() {
+        return missingPropertiesLabel;
     }
 }

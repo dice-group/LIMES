@@ -1,30 +1,37 @@
 package org.aksw.limes.core.measures.measure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class MeasureProcessor {
 
+    private static final String ADD = "ADD";
+    private static final String XOR = "XOR";
+    private static final String MAX = "MAX";
+    private static final String MIN = "MIN";
+    private static final String AND = "AND";
+    private static final String OR = "OR";
     static Logger logger = LoggerFactory.getLogger(MeasureProcessor.class.getName());
 
     /**
@@ -84,18 +91,18 @@ public class MeasureProcessor {
         Parser p = new Parser(expression, threshold);
         if (p.isAtomic()) {
 
-            Mapper mapper = null;
+            AMapper mapper = null;
             try {
 
                 MeasureType type = MeasureFactory.getMeasureType(p.getOperator());
                 mapper = MapperFactory.createMapper(type);
             } catch (InvalidMeasureException e) {
                 e.printStackTrace();
-                System.err.println("Exiting..");
+                logger.error("Exiting..");
                 System.exit(1);
             }
-            Cache source = new HybridCache();
-            Cache target = new HybridCache();
+            ACache source = new HybridCache();
+            ACache target = new HybridCache();
             source.addInstance(sourceInstance);
             target.addInstance(targetInstance);
 
@@ -152,6 +159,14 @@ public class MeasureProcessor {
                 System.exit(1);
             } else {
                 double similarity = 0.0d;
+                try {
+                    if (threshold <= 0) {
+                        throw new InvalidThresholdException(threshold);
+                    }
+                } catch (InvalidThresholdException e) {
+                    System.err.println("Exiting..");
+                    System.exit(1);
+                }
                 AMapping m = mapper.getMapping(source, target, sourceVar, targetVar, expression, threshold);
                 for (String s : m.getMap().keySet()) {
                     for (String t : m.getMap().get(s).keySet()) {
@@ -159,21 +174,21 @@ public class MeasureProcessor {
 
                     }
                 }
-                
+
                 if (similarity >= threshold)
                     return similarity;
                 else
                     return 0.0d;
             }
         } else {
-            if (p.getOperator().equalsIgnoreCase("MAX") | p.getOperator().equalsIgnoreCase("OR")
-                    | p.getOperator().equalsIgnoreCase("XOR")) {
+            if (p.getOperator().equalsIgnoreCase(MAX) | p.getOperator().equalsIgnoreCase(OR)
+                    | p.getOperator().equalsIgnoreCase(XOR)) {
                 double parentThreshold = p.getThreshold();
                 double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(), p.getThreshold1(),
                         sourceVar, targetVar);
                 double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
                         sourceVar, targetVar);
-                
+
                 // parentThreshold is 0 and (s,t) are not part of the union
                 if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
                     return 0;
@@ -186,13 +201,13 @@ public class MeasureProcessor {
                         return 0;
                 }
             }
-            if (p.getOperator().equalsIgnoreCase("MIN") | p.getOperator().equalsIgnoreCase("AND")) {
+            if (p.getOperator().equalsIgnoreCase(MIN) | p.getOperator().equalsIgnoreCase(AND)) {
                 double parentThreshold = p.getThreshold();
                 double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(), p.getThreshold1(),
                         sourceVar, targetVar);
                 double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
                         sourceVar, targetVar);
-                
+
                 // parentThreshold is 0 and (s,t) are not part of the
                 // intersection
                 if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
@@ -206,21 +221,23 @@ public class MeasureProcessor {
                         return 0;
                 }
             }
-            if (p.getOperator().equalsIgnoreCase("ADD")) {
+            if (p.getOperator().equalsIgnoreCase(ADD)) {
                 double parentThreshold = p.getThreshold();
                 double firstChild = p.getLeftCoefficient() * getSimilarity(sourceInstance, targetInstance,
                         p.getLeftTerm(), p.getThreshold1(), sourceVar, targetVar);
                 double secondChild = p.getRightCoefficient() * getSimilarity(sourceInstance, targetInstance,
                         p.getRightTerm(), p.getThreshold2(), sourceVar, targetVar);
 
-                if (firstChild + secondChild >= parentThreshold)
-                    return firstChild + secondChild;
-                else
+                if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
                     return 0;
+                else {
+                    if (firstChild + secondChild >= parentThreshold)
+                        return firstChild + secondChild;
+                    else
+                        return 0;
+                }
 
-            } else {// perform MINUS as usual
-                // logger.warn("Not sure what to do with operator " + p.op + ".
-                // Using MAX.");
+            } else {
                 double parentThreshold = p.getThreshold();
                 double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(), p.getThreshold1(),
                         sourceVar, targetVar);
@@ -232,11 +249,12 @@ public class MeasureProcessor {
                     if (firstChild >= p.getThreshold1()) {
                         if (firstChild >= parentThreshold) {
                             return firstChild;
-                        } else
+                        } else // similarity smaller than the parent threshold
                             return 0;
-                    } else
+                    } else// similarity smaller than the left child threshold
                         return 0;
-                } else
+                } else // current (s,t) are included in the mapping of the right
+                       // child
                     return 0;
             }
         }
@@ -262,7 +280,7 @@ public class MeasureProcessor {
                 runtime = runtime + MeasureFactory.createMeasure(type).getRuntimeApproximation(mappingSize);
             } catch (InvalidMeasureException e) {
                 e.printStackTrace();
-                System.err.println("Exiting..");
+                logger.error("Exiting..");
                 System.exit(1);
             }
         return runtime;

@@ -1,14 +1,21 @@
 package org.aksw.limes.core.io.query;
 
-import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.Model;
-import org.aksw.limes.core.io.cache.Cache;
+import java.util.Iterator;
+
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFormatter;
+import org.apache.jena.query.Syntax;
+import org.apache.jena.rdf.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Iterator;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -29,7 +36,7 @@ public class SparqlQueryModule implements IQueryModule {
      *         The cache in which the content on the SPARQL endpoint is to be
      *         written
      */
-    public void fillCache(Cache cache) {
+    public void fillCache(ACache cache) {
         fillCache(cache, true);
     }
 
@@ -43,7 +50,7 @@ public class SparqlQueryModule implements IQueryModule {
      *         True if the endpoint is a remote SPARQL endpoint, else assume
      *         that is is a Jena model
      */
-    public void fillCache(Cache cache, boolean isSparql) {
+    public void fillCache(ACache cache, boolean isSparql) {
         long startTime = System.currentTimeMillis();
         String query = generateQuery();
 

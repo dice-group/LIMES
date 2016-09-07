@@ -1,5 +1,8 @@
 package org.aksw.limes.core.gui.controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+
 import org.aksw.limes.core.gui.view.WizardView;
 
 /**
@@ -9,7 +12,7 @@ import org.aksw.limes.core.gui.view.WizardView;
  *         studserv.uni-leipzig.de{@literal >}
  */
 public class WizardController {
-    
+
     /**
      * gets run after all steps are completed
      */
@@ -33,71 +36,108 @@ public class WizardController {
 
     /**
      * Constructor
-     * @param finishCallback called on finish
-     * @param cancelCallback called on cancellation
-     * @param view corresponding view
-     * @param editControllers controllers for steps
+     * 
+     * @param finishCallback
+     *            called on finish
+     * @param cancelCallback
+     *            called on cancellation
+     * @param view
+     *            corresponding view
+     * @param editControllers
+     *            controllers for steps
      */
-    public WizardController(Runnable finishCallback, Runnable cancelCallback,
-                            WizardView view, IEditController... editControllers) {
-        this.finishCallback = finishCallback;
-        this.cancelCallback = cancelCallback;
-        view.setController(this);
-        this.view = view;
-        assert editControllers.length != 0;
-        this.editControllers = editControllers;
-        setPage(0);
+    public WizardController(Runnable finishCallback, Runnable cancelCallback, WizardView view, IEditController... editControllers) {
+	this.finishCallback = finishCallback;
+	this.cancelCallback = cancelCallback;
+	view.setController(this);
+	this.view = view;
+	assert editControllers.length != 0;
+	this.editControllers = editControllers;
+	setPage(0);
     }
 
     /**
-     * sets a new page checks if it is valid and loads the appropriate controller
+     * sets a new page checks if it is valid and loads the appropriate
+     * controller
+     * 
      * @param newPage
      */
     private void setPage(int newPage) {
-        if (newPage < 0 || newPage > editControllers.length) {
-            return;
-        }
-        if (this.currentPage != -1) {
-            editControllers[this.currentPage].save();
-        }
-        if (newPage == editControllers.length) {
-            this.currentPage = -1;
-            view.close();
-            finish();
-        } else {
-            this.currentPage = newPage;
-            IEditController editController = editControllers[newPage];
-            editController.load();
-            view.setEditView(editController.getView(), newPage != 0,
-                    newPage < editControllers.length - 1);
-        }
+	if (newPage < 0 || newPage > editControllers.length) {
+	    return;
+	}
+	if (this.currentPage != -1) {
+	    if (editControllers[this.currentPage].validate()) {
+		editControllers[this.currentPage].save();
+	    } else {
+		return;
+	    }
+	}
+	if (newPage == editControllers.length) {
+	    this.currentPage = -1;
+	    view.close();
+	    finish();
+	} else {
+	    this.currentPage = newPage;
+	    IEditController editController = editControllers[newPage];
+	    editController.load();
+	    if (editControllers[currentPage].getTaskProgressView() != null) {
+
+		//if finished successfully
+		editControllers[currentPage].getTaskProgressView().getFinishedSuccessfully().addListener(new ChangeListener<Boolean>() {
+
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+			if (newValue) {
+			    view.setEditView(editController.getView(), newPage != 0, newPage < editControllers.length - 1);
+			    editControllers[currentPage].setTaskProgressView(null);
+			}
+		    }
+		});
+
+		//if cancelled
+		editControllers[currentPage].getTaskProgressView().getCancelled().addListener(new ChangeListener<Boolean>() {
+
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+			if (newValue) {
+			    currentPage--;
+			    editControllers[currentPage].setTaskProgressView(null);
+			}
+		    }
+		});
+	    } else {
+		view.setEditView(editController.getView(), newPage != 0, newPage < editControllers.length - 1);
+
+	    }
+	}
     }
 
     /**
      * goes one page back
      */
     public void back() {
-        setPage(currentPage - 1);
+	setPage(currentPage - 1);
     }
 
     /**
      * goes to the next page or finishes
      */
     public void nextOrFinish() {
-        setPage(currentPage + 1);
+	setPage(currentPage + 1);
     }
 
     /**
      * calls the finishCallback
      */
     private void finish() {
-        finishCallback.run();
+	finishCallback.run();
     }
 
     /**
      * calls the cancelCallback
      */
     public void cancel() {
-        cancelCallback.run();
+	cancelCallback.run();
     }
 }

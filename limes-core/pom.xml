@@ -119,6 +119,46 @@
 					</archive>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<artifactId>exec-maven-plugin</artifactId>
+				<groupId>org.codehaus.mojo</groupId>
+				<executions>
+					<execution><!-- symlink hooks to git -->
+						<id>Git-Hooks-Setup</id>
+						<phase>install</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>${basedir}/git-hooks/setup.sh</executable>
+							<workingDirectory>${basedir}/git-hooks</workingDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				 <groupId>org.apache.maven.plugins</groupId>
+				 <artifactId>maven-checkstyle-plugin</artifactId>
+				 <version>2.17</version>
+				 <executions>
+					 <execution>
+						 <id>validate</id>
+						 <phase>validate</phase>
+						 <configuration>
+							 <configLocation>resources/checkstyle.xml</configLocation>
+							 <encoding>UTF-8</encoding>
+							 <consoleOutput>false</consoleOutput>
+							 <failsOnError>true</failsOnError>
+							 <linkXRef>false</linkXRef>
+						 </configuration>
+						 <goals>
+							 <goal>check</goal>
+						 </goals>
+					 </execution>
+				 </executions>
+			 </plugin>
 		</plugins>
 	</build>
 
@@ -212,6 +252,12 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>log4j-over-slf4j</artifactId>
+			<version>1.7.21</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
 			<version>1.7.21</version>
 		</dependency>
 
@@ -436,6 +482,11 @@
 			<artifactId>ehcache</artifactId>
 			<groupId>net.sf.ehcache</groupId>
 			<version>2.10.0</version>
+		</dependency>
+		<dependency>
+			<groupId>nz.ac.waikato.cms.weka</groupId>
+			<artifactId>weka-dev</artifactId>
+			<version>3.9.0</version>
 		</dependency>
 	</dependencies>
 

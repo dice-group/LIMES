@@ -1,13 +1,16 @@
 package org.aksw.limes.core.execution.engine;
 
+import static org.junit.Assert.assertTrue;
+
 import org.aksw.limes.core.execution.engine.filter.LinearFilter;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
+import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -16,11 +19,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
-
 public class SimpleExecutionEngineTest {
-    public Cache source = new MemoryCache();
-    public Cache target = new MemoryCache();
+    public ACache source = new MemoryCache();
+    public ACache target = new MemoryCache();
 
     @Before
     public void setUp() {
@@ -367,7 +368,55 @@ public class SimpleExecutionEngineTest {
 
         System.out.println("---------------------------------");
     }
+    @Test 
+    public void testMax(){
+        System.out.println("testMax");
+        LinkSpecification ls = new LinkSpecification("OR(qgrams(x.surname,y.surname)|0.2,trigrams(x.name,y.name)|0.8)",
+                0.6);
+        
+        LinkSpecification ls2 = new LinkSpecification("MAX(qgrams(x.surname,y.surname),trigrams(x.name,y.name))",
+                0.6);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        IPlanner cp = new CanonicalPlanner();
+        AMapping m = ee.execute(ls, cp);
+        System.out.println(m);
+        
+        ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        cp = new CanonicalPlanner();
+        AMapping m2 = ee.execute(ls2, cp);
+        System.out.println(m2);
+        
+        assertTrue(m.equals(m2));
+        
 
+    }
+    
+    @Test 
+    public void testMin(){
+        System.out.println("testMin");
+        LinkSpecification ls = new LinkSpecification("AND(qgrams(x.surname,y.surname)|0.2,trigrams(x.name,y.name)|0.8)",
+                0.6);
+        
+        LinkSpecification ls2 = new LinkSpecification("MIN(qgrams(x.surname,y.surname),trigrams(x.name,y.name))",
+                0.6);
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        IPlanner cp = new DynamicPlanner(source, target);
+        AMapping m = ee.execute(ls, cp);
+        System.out.println(m);
+        
+        ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        cp = new DynamicPlanner(source, target);
+        AMapping m2 = ee.execute(ls2, cp);
+        //System.out.println(((DynamicPlanner) cp).getPlans());
+
+        
+        System.out.println(m2);
+        
+        assertTrue(!m.equals(m2));
+
+    }
+    
+   
     @Test
     public void testUnion() {
         System.out.println("testUnion");

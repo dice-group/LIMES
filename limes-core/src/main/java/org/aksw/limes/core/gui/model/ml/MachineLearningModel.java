@@ -2,17 +2,17 @@ package org.aksw.limes.core.gui.model.ml;
 
 import java.util.List;
 
-import javafx.concurrent.Task;
-
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javafx.concurrent.Task;
 
 /**
  * this class is responsible for the data handling according to the MVC Pattern for the machine learning
@@ -39,11 +39,11 @@ public abstract class MachineLearningModel {
     /**
      * sourceCache
      */
-    protected Cache sourceCache;
+    protected ACache sourceCache;
     /**
      * targetCache
      */
-    protected Cache targetCache;
+    protected ACache targetCache;
     /**
      * thread in which the learning is done
      */
@@ -63,7 +63,7 @@ public abstract class MachineLearningModel {
      * @param sourceCache source
      * @param targetCache target
      */
-    public MachineLearningModel(Config config, Cache sourceCache, Cache targetCache) {
+    public MachineLearningModel(Config config, ACache sourceCache, ACache targetCache) {
         this.setConfig(config);
         this.sourceCache = sourceCache;
         this.targetCache = targetCache;

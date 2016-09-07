@@ -1,6 +1,8 @@
 package org.aksw.limes.core.gui.controller.ml;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -12,7 +14,7 @@ import org.aksw.limes.core.gui.model.ml.UnsupervisedLearningModel;
 import org.aksw.limes.core.gui.view.ResultView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 
 /**
  * This class handles the interaction between the {@link MachineLearningView}
@@ -31,8 +33,8 @@ public class UnsupervisedLearningController extends MachineLearningController {
      * @param sourceCache source
      * @param targetCache target
      */
-    public UnsupervisedLearningController(Config config, Cache sourceCache,
-                                          Cache targetCache) {
+    public UnsupervisedLearningController(Config config, ACache sourceCache,
+                                          ACache targetCache) {
         this.mlModel = new UnsupervisedLearningModel(config, sourceCache,
                 targetCache);
     }
@@ -47,6 +49,13 @@ public class UnsupervisedLearningController extends MachineLearningController {
         Task<Void> learnTask = this.mlModel.createLearningTask();
 
         TaskProgressView taskProgressView = new TaskProgressView("Learning");
+	taskProgressView.getCancelled().addListener(new ChangeListener<Boolean>() {
+
+	    @Override
+	    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+		view.getLearnButton().setDisable(false);
+	    }
+	});
         TaskProgressController taskProgressController = new TaskProgressController(
                 taskProgressView);
         taskProgressController.addTask(

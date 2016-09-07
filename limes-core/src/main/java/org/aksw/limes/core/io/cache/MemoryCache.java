@@ -1,10 +1,22 @@
 package org.aksw.limes.core.io.cache;
 
-import org.apache.jena.rdf.model.*;
-import org.apache.jena.vocabulary.RDF;
-import org.aksw.limes.core.io.preprocessing.Preprocessor;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
+import org.aksw.limes.core.io.preprocessing.Preprocessor;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.vocabulary.RDF;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -16,7 +28,9 @@ import java.util.*;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 8, 2015
  */
-public class MemoryCache extends Cache {
+public class MemoryCache extends ACache {
+    private static final Logger logger = LoggerFactory.getLogger(MemoryCache.class);
+    
     // maps uris to instance. A bit redundant as instance contain their URI
     protected HashMap<String, Instance> instanceMap = null;
 
@@ -134,8 +148,8 @@ public class MemoryCache extends Cache {
         return new ArrayList<String>(instanceMap.keySet());
     }
 
-    public Cache getSample(int size) {
-        Cache c = new MemoryCache();
+    public ACache getSample(int size) {
+        ACache c = new MemoryCache();
         ArrayList<String> uris = getAllUris();
         while (c.size() < size) {
             int index = (int) Math.floor(Math.random() * size());
@@ -145,8 +159,8 @@ public class MemoryCache extends Cache {
         return c;
     }
 
-    public Cache processData(Map<String, String> propertyMap) {
-        Cache c = new MemoryCache();
+    public ACache processData(Map<String, String> propertyMap) {
+        ACache c = new MemoryCache();
         for (Instance instance : getAllInstances()) {
             String uri = instance.getUri();
             for (String p : instance.getAllProperties()) {
@@ -162,18 +176,9 @@ public class MemoryCache extends Cache {
         return c;
     }
 
-    public Cache addProperty(String sourcePropertyName, String targetPropertyName, String processingChain) {
-        Cache c = new MemoryCache();
-        // int count = 1;
-        // int max = getAllInstances().size();
-        // System.out.println("Adding Property '"+targetPropertyName+"' based
-        // upon property '"+sourcePropertyName+"' to cache of
-        // size"+size()+"...");
+    public ACache addProperty(String sourcePropertyName, String targetPropertyName, String processingChain) {
+        ACache c = new MemoryCache();
         for (Instance instance : getAllInstances()) {
-            // if(count % 50 == 0 || count >= max) {
-            // logger.info("Adding property to instance nr. "+count+" of max
-            // "+max);
-            // }
             String uri = instance.getUri();
             for (String p : instance.getAllProperties()) {
                 for (String value : instance.getProperty(p)) {
@@ -185,9 +190,8 @@ public class MemoryCache extends Cache {
                     }
                 }
             }
-            // count++;
         }
-        // logger.info("Cache is ready");
+        logger.debug("Cache is ready");
         return c;
     }
 
@@ -197,10 +201,10 @@ public class MemoryCache extends Cache {
      * @return set of all properties
      */
     public Set<String> getAllProperties() {
-        // logger.info("Get all properties...");
+        logger.debug("Get all properties...");
         if (size() > 0) {
             HashSet<String> props = new HashSet<String>();
-            Cache c = this;
+            ACache c = this;
             for (Instance i : c.getAllInstances()) {
                 props.addAll(i.getAllProperties());
             }
@@ -229,7 +233,6 @@ public class MemoryCache extends Cache {
         for (String prop : props) {
             map.put(prop, model.createProperty(baseURI + prop));
         }
-        // resetIterator();
         Instance i = getNextInstance();
         while (i != null) {
 
@@ -238,13 +241,13 @@ public class MemoryCache extends Cache {
             Resource r = model.createResource(uri);
             Statement typeStmt = model.createStatement(r, RDF.type, r_rdfType);
             model.add(typeStmt);
-            // logger.info("Created statement: "+typeStmt);
+            logger.debug("Created statement: " + typeStmt);
             props = i.getAllProperties();
             for (String prop : props) {
                 for (String value : i.getProperty(prop)) {
                     Literal lit = model.createLiteral(value);
                     Statement stmt = model.createStatement(r, map.get(prop), lit);
-                    // logger.info("Created statement: "+stmt);
+                    logger.debug("Created statement: " + stmt);
                     model.add(stmt);
                 }
             }

@@ -1,9 +1,10 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.CommandGene;
 import org.jgap.gp.GPProblem;
@@ -11,9 +12,8 @@ import org.jgap.gp.function.SubProgram;
 import org.jgap.gp.impl.GPConfiguration;
 import org.jgap.gp.impl.GPGenotype;
 import org.jgap.gp.terminal.Terminal;
-
-import java.util.LinkedList;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**

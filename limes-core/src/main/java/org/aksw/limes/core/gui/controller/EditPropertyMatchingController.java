@@ -2,7 +2,6 @@ package org.aksw.limes.core.gui.controller;
 
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
-import javafx.scene.control.ListView;
 
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.GetPropertiesTask;
@@ -10,6 +9,9 @@ import org.aksw.limes.core.gui.view.EditPropertyMatchingView;
 import org.aksw.limes.core.gui.view.IEditView;
 import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
+
+import javafx.scene.control.ListView;
+import javafx.scene.paint.Color;
 
 /**
  * Controller class for property matching step in {@link WizardController}
@@ -28,6 +30,11 @@ public class EditPropertyMatchingController implements IEditController {
      * corresponding view
      */
     private EditPropertyMatchingView view;
+
+    /**
+     * the view called in the {@link #load()} method
+     */
+    private TaskProgressView taskProgressView;
 
     /**
      * constructor initializes object variables and sets this controller to the corresponding view
@@ -53,7 +60,7 @@ public class EditPropertyMatchingController implements IEditController {
                 .createGetPropertiesTask();
         GetPropertiesTask getTargetPropertiesTask = config.getTargetEndpoint()
                 .createGetPropertiesTask();
-        TaskProgressView taskProgressView = new TaskProgressView(
+        taskProgressView = new TaskProgressView(
                 "Get properties");
         TaskProgressController taskProgressController = new TaskProgressController(
                 taskProgressView);
@@ -86,5 +93,26 @@ public class EditPropertyMatchingController implements IEditController {
      */
     public void save(ListView<String> sourceProperties, ListView<String> targetProperties) {
         config.setPropertiesMatching(sourceProperties, targetProperties);
+    }
+
+    @Override
+    public boolean validate() {
+	boolean valid = true;
+	if(view.getAddedSourcePropsList().getItems().size() == 0 ||view.getAddedTargetPropsList().getItems().size() == 0 ){
+	    view.getMissingPropertiesLabel().setVisible(true);
+	    view.getMissingPropertiesLabel().setTextFill(Color.RED);
+	    valid = false;
+	}
+	return valid;
+    }
+
+    @Override
+    public TaskProgressView getTaskProgressView() {
+	return taskProgressView;
+    }
+
+    @Override
+    public void setTaskProgressView(TaskProgressView tpv) {
+	this.taskProgressView = tpv;
     }
 }

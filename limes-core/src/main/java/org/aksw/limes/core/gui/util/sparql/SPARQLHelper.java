@@ -1,25 +1,37 @@
 package org.aksw.limes.core.gui.util.sparql;
 
-import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.vocabulary.OWL;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
+
+import org.aksw.limes.core.gui.model.Config;
+import org.aksw.limes.core.gui.model.Endpoint;
 import org.aksw.limes.core.gui.util.AdvancedKBInfo;
 import org.aksw.limes.core.gui.util.AdvancedMemoryCache;
 import org.aksw.limes.core.gui.util.GetAllSparqlQueryModule;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.query.FileQueryModule;
-import org.aksw.limes.core.io.query.ModelRegistry;
-import org.aksw.limes.core.io.query.QueryModuleFactory;
+import org.apache.jena.query.ARQ;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.Syntax;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.vocabulary.OWL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.*;
 
 
 /**
@@ -164,19 +176,30 @@ public class SPARQLHelper {
             classes.remove("http://www.w3.org/2000/01/rdf-schema#Class");
             classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
             classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
-            if (!classes.isEmpty())
-                return classes;
-            else {
-                // very very bad endpoint
-                // using objects of rdf:type property
-                query = "SELECT distinct(?class) WHERE{?x a ?class.}";
-                classes = resultSetToList(querySelect(PrefixHelper.addPrefixes(query), endpoint, graph, model));
-                classes.remove("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property");
-                classes.remove("http://www.w3.org/2000/01/rdf-schema#Class");
-                classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
-                classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
-                return classes;
-            }
+	    if (!classes.isEmpty())
+		return classes;
+	    else {
+		// very very bad endpoint
+		// using objects of rdf:type property
+		System.err.println("very very bad endpoint using objects of rdf:type property");
+		query = "SELECT distinct(?class) WHERE{?x a ?class.}";
+		classes = resultSetToList(querySelect(PrefixHelper.addPrefixes(query), endpoint, graph, model));
+		classes.remove("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property");
+		classes.remove("http://www.w3.org/2000/01/rdf-schema#Class");
+		classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
+		classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
+		if (!classes.isEmpty()) {
+		    return classes;
+		} else {
+		    query = "SELECT distinct ?x WHERE{ ?y <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?x}";
+		    classes = resultSetToList(querySelect(PrefixHelper.addPrefixes(query), endpoint, graph, model));
+		    classes.remove("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property");
+		    classes.remove("http://www.w3.org/2000/01/rdf-schema#Class");
+		    classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
+		    classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
+		    return classes;
+		}
+	    }
         }
 
 
@@ -328,11 +351,13 @@ public class SPARQLHelper {
         while (rs.hasNext()) {
             QuerySolution qs = rs.nextSolution();
             System.out.println("qs: " + qs.toString());
+            if(!qs.toString().equals("")){
             try {
                 list.add(URLDecoder.decode(qs.get(qs.varNames().next()).toString(), "UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 list.add(qs.get(qs.varNames().next()).toString());
                 e.printStackTrace();
+            }
             }
         }
         return list;

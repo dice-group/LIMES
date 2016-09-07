@@ -1,19 +1,23 @@
 package org.aksw.limes.core.measures.mapper.string;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
-
-import java.util.*;
 
 /**
  * @author Peggy Lucke
  */
-public class MongeElkanMapper extends Mapper {
+public class MongeElkanMapper extends AMapper {
 
     // Tokens are divide by space
     private String split = " ";
@@ -124,7 +128,7 @@ public class MongeElkanMapper extends Mapper {
     }
 
     @Override
-    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
 
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);

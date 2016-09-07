@@ -4,17 +4,22 @@
  */
 package org.aksw.limes.core.measures.mapper.string;
 
-import algorithms.StoppUhr;
-import algorithms.Token;
-import algorithms.ppjoinplus.Record;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.string.IStringMeasure;
@@ -22,7 +27,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 
-import java.util.*;
+import algorithms.StoppUhr;
+import algorithms.Token;
+import algorithms.ppjoinplus.Record;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -97,7 +104,7 @@ class PartitionResult {
  * @author Dawid Kotlarz
  * @version 1.0
  */
-public class PPJoinPlusPlus extends Mapper {
+public class PPJoinPlusPlus extends AMapper {
 
     static Logger logger = LoggerFactory.getLogger(PPJoinPlusPlus.class);
     private static int MAX_DEPTH;
@@ -334,7 +341,7 @@ public class PPJoinPlusPlus extends Mapper {
      * @return A mapping which contains links between the source instances and
      *         the target instances
      */
-    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
         
         try {

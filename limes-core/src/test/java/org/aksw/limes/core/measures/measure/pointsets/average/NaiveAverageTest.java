@@ -1,14 +1,19 @@
 package org.aksw.limes.core.measures.measure.pointsets.average;
 
 
-import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+import org.junit.Test;
+
+
+/**
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
+ */
 public class NaiveAverageTest {
 
     @Test
@@ -52,7 +57,7 @@ public class NaiveAverageTest {
         Set<Polygon> maltaLgd = new HashSet<Polygon>();
         maltaLgd.add(maltaLgdPoly1);
 
-        NaiveAverage avarage = new NaiveAverage();
+        NaiveAverageMeasure avarage = new NaiveAverageMeasure();
         System.out.println(avarage.run(maltaNuts, maltaDbpedia, Double.MAX_VALUE));
 
     }

@@ -1,23 +1,23 @@
 package org.aksw.limes.core.evaluation.evaluationDataLoader;
 
+import static org.junit.Assert.assertTrue;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.aksw.limes.core.evaluation.oracle.IOracle;
 import org.aksw.limes.core.evaluation.oracle.OracleFactory;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.Assert.assertTrue;
 
 /*import de.uni_leipzig.simba.genetics.util.OAEIMappingParser;
 import de.uni_leipzig.simba.genetics.util.PropMapper;
@@ -662,9 +662,9 @@ public class DataSetChooser {
         param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
         param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/dbpedia-linkedmdb/");
         param.put(MapKey.CONFIG_FILE, "dbpedia-linkedmdb.xml");
-        param.put(MapKey.REFERENCE_FILE, "reference2.csv");
-        param.put(MapKey.SOURCE_FILE, "source2.csv");
-        param.put(MapKey.TARGET_FILE, "target2.csv");
+        param.put(MapKey.REFERENCE_FILE, "reference.csv");
+        param.put(MapKey.SOURCE_FILE, "source.csv");
+        param.put(MapKey.TARGET_FILE, "target.csv");
 
         param.put(MapKey.EVALUATION_RESULTS_FOLDER, "resources/results/");
         param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_DBPedia-LinkedMDB.csv");
@@ -682,7 +682,7 @@ public class DataSetChooser {
         param.put(MapKey.REFERENCE_MAPPING,
                 OracleFactory
                         .getOracle((String) /* param.get(MapKey.BASE_FOLDER)+ */param.get(MapKey.DATASET_FOLDER)
-                                + param.get(MapKey.REFERENCE_FILE), "csv", "simple")
+                                + param.get(MapKey.REFERENCE_FILE), "tab", "simple")
                         .getMapping());
 
         param.put(MapKey.SOURCE_CLASS, "dbpedia:film");
@@ -764,7 +764,7 @@ public class DataSetChooser {
      * @return A Mapping holding only those mappings of the original for which
      *         instance where found in the source or target Caches.
      */
-    public static AMapping fixReferenceMap(AMapping original, Cache sC, Cache tC) {
+    public static AMapping fixReferenceMap(AMapping original, ACache sC, ACache tC) {
         int count = 0;
         AMapping fixed = MappingFactory.createMapping(MappingType.MEMORY_MAPPING);
         for (String sk : original.getMap().keySet()) {

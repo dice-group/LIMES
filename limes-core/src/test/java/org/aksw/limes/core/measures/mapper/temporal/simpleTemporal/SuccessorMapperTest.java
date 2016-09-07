@@ -1,11 +1,13 @@
 package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
 
+import static org.junit.Assert.assertTrue;
+
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
 import org.aksw.limes.core.execution.planning.planner.HeliosPlanner;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -13,12 +15,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
-
 public class SuccessorMapperTest {
 
-    public Cache source = new MemoryCache();
-    public Cache target = new MemoryCache();
+    public ACache source = new MemoryCache();
+    public ACache target = new MemoryCache();
 
     @Before
     public void setUp() {

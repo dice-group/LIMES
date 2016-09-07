@@ -1,17 +1,17 @@
 package org.aksw.limes.core.measures.measure;
 
-import org.aksw.limes.core.io.cache.Cache;
+import static org.junit.Assert.assertTrue;
+
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
 
 public class MeasureProcessorTest {
 
     @Test
     public void getMeasures() {
-        Cache source = new MemoryCache();
-        Cache target = new MemoryCache();
+        ACache source = new MemoryCache();
+        ACache target = new MemoryCache();
         source.addTriple("S1", "pub", "test");
         source.addTriple("S1", "conf", "conf one");
         source.addTriple("S2", "pub", "test2");

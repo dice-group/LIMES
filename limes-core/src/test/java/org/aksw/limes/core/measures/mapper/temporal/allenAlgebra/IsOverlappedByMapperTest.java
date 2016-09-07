@@ -1,9 +1,14 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra;
 
+import static org.junit.Assert.assertTrue;
+
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -14,16 +19,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Set;
-import java.util.TreeSet;
-
-import static org.junit.Assert.assertTrue;
-
 public class IsOverlappedByMapperTest {
 
 
-    public Cache source = new MemoryCache();
-    public Cache target = new MemoryCache();
+    public ACache source = new MemoryCache();
+    public ACache target = new MemoryCache();
 
     @Before
     public void setUp() {
@@ -95,7 +95,7 @@ public class IsOverlappedByMapperTest {
     public void simpleLS() {
         System.out.println("simpleLS");
         LinkSpecification ls = new LinkSpecification(
-                "tmp_isoverlappedby(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
+                "tmp_is_overlapped_by(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
@@ -107,7 +107,7 @@ public class IsOverlappedByMapperTest {
     public void similarity() {
         System.out.println("similarity");
         LinkSpecification ls = new LinkSpecification(
-                "tmp_isoverlappedby(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
+                "tmp_is_overlapped_by(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);
@@ -130,7 +130,7 @@ public class IsOverlappedByMapperTest {
     public void reverse() {
         System.out.println("reverse");
         LinkSpecification ls = new LinkSpecification(
-                "tmp_isoverlappedby(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
+                "tmp_is_overlapped_by(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)", 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         AMapping m = e.execute(ls, p);

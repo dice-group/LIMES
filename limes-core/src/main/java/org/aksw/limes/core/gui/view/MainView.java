@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.aksw.limes.core.gui.controller.MainController;
+import org.aksw.limes.core.gui.view.graphBuilder.GraphBuildView;
+
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,9 +29,6 @@ import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-
-import org.aksw.limes.core.gui.controller.MainController;
-import org.aksw.limes.core.gui.view.graphBuilder.GraphBuildView;
 
 /**
  * Main View of the Application
@@ -145,14 +145,18 @@ public class MainView {
     private MenuBar buildMenuBar(Window stage) {
         Menu menuFile = new Menu("File");
         MenuItem itemNew = new MenuItem("New");
-        itemNew.setOnAction(e -> controller.newConfig(new WizardView(),
-                new EditEndpointsView(), new EditClassMatchingView(),
-                new EditPropertyMatchingView()));
+        itemNew.setOnAction(e -> {
+        WizardView wizardView = new WizardView();
+        controller.newConfig(wizardView,new EditEndpointsView(wizardView), new EditClassMatchingView(),
+                new EditPropertyMatchingView());
+        });
         menuFile.getItems().add(itemNew);
         menuFile.getItems().add(new SeparatorMenuItem());
         MenuItem itemLoad = new MenuItem("Load config");
         itemLoad.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LIMES Configuration File (*.xml, *.rdf, *.ttl, *.n3, *.nt)", "*.xml", "*.rdf", "*.ttl", "*.n3", "*.nt");
+            fileChooser.getExtensionFilters().add(extFilter);
             File file = fileChooser.showOpenDialog(stage);
             if (file != null) {
                 controller.loadConfig(file);

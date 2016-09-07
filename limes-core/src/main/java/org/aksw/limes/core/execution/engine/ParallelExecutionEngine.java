@@ -1,7 +1,7 @@
 package org.aksw.limes.core.execution.engine;
 
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 
@@ -28,7 +28,7 @@ public class ParallelExecutionEngine extends ExecutionEngine {
      * @param targetVar
      *            Target variable
      */
-    public ParallelExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
+    public ParallelExecutionEngine(ACache source, ACache target, String sourceVar, String targetVar) {
         super(source, target, sourceVar, targetVar);
     }
 

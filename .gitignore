@@ -20,3 +20,6 @@ hs_err_pid*
 **/.idea/
 *.iml
 .DS_Store
+
+# ignore gitbook builds
+_book

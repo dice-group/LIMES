@@ -1,9 +1,14 @@
 package org.aksw.limes.core.ml.algorithm;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -15,11 +20,6 @@ import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The complete Wombat algorithm (slow implementation)
@@ -57,7 +57,7 @@ public class WombatComplete extends AWombat {
     }
 
     @Override
-    protected void init(List<LearningParameter> lp, Cache sourceCache, Cache targetCache) {
+    protected void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
         super.init(lp, sourceCache, targetCache);
         sourceUris = sourceCache.getAllUris();
         targetUris = targetCache.getAllUris();
@@ -97,7 +97,7 @@ public class WombatComplete extends AWombat {
     }
 
     @Override
-    protected AMapping predict(Cache source, Cache target, MLResults mlModel) {
+    protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
         LinkSpecification ls = mlModel.getLinkSpecification();
         return getPredictions(ls, source, target);
     }
@@ -132,12 +132,12 @@ public class WombatComplete extends AWombat {
         long time = System.currentTimeMillis();
         pruneTree(refinementTreeRoot, mostPromisingNode.getValue().getFMeasure());
         pruningTime += System.currentTimeMillis() - time;
-        logger.info("Most promising node: " + mostPromisingNode.getValue());
+        logger.debug("Most promising node: " + mostPromisingNode.getValue());
         iterationNr++;
         while ((mostPromisingNode.getValue().getFMeasure()) < maxFitnessThreshold
                 && (refinementTreeRoot.size() - pruneNodeCount) <= maxRefineTreeSize
                 && iterationNr <= maxIterationNumber) {
-            System.out.println("Running iteration number " + iterationNr);
+            logger.debug("Running iteration number " + iterationNr);
             iterationNr++;
             mostPromisingNode = expandNode(mostPromisingNode);
             mostPromisingNode = findMostPromisingNode(refinementTreeRoot, false);
@@ -147,10 +147,10 @@ public class WombatComplete extends AWombat {
             if (mostPromisingNode.getValue().getFMeasure() == -Double.MAX_VALUE) {
                 break; // no better solution can be found
             }
-            logger.info("Most promising node: " + mostPromisingNode.getValue());
+            logger.debug("Most promising node: " + mostPromisingNode.getValue());
         }
         RefinementNode bestSolution = findMostPromisingNode(refinementTreeRoot, true).getValue();
-        logger.info("Overall Best Solution: " + bestSolution);
+        logger.debug("Overall Best Solution: " + bestSolution);
         if (!RefinementNode.isSaveMapping()) {
             bestSolution.setMap(getMapingOfMetricExpression(bestSolution.getMetricExpression()));
         }
@@ -280,7 +280,7 @@ public class WombatComplete extends AWombat {
      * @return initial classifiers
      */
     public List<ExtendedClassifier> findInitialClassifiers() {
-        logger.info("Geting all initial classifiers ...");
+        logger.debug("Geting all initial classifiers ...");
         List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
         for (String p : sourcePropertiesCoverageMap.keySet()) {
             for (String q : targetPropertiesCoverageMap.keySet()) {
@@ -291,7 +291,7 @@ public class WombatComplete extends AWombat {
                 }
             }
         }
-        logger.info("Done computing all initial classifiers.");
+        logger.debug("Done computing all initial classifiers.");
         return initialClassifiers;
     }
 
@@ -373,9 +373,9 @@ public class WombatComplete extends AWombat {
      */
     private double computePenalty(Tree<RefinementNode> promesyChild) {
         long childrenCount = promesyChild.size() - 1;
-        double childrenPenalty = (childrenPenaltyWeit * childrenCount) / refinementTreeRoot.size();
+        double childrenPenalty = (childrenPenaltyWeight * childrenCount) / refinementTreeRoot.size();
         long level = promesyChild.level();
-        double complexityPenalty = (complexityPenaltyWeit * level) / refinementTreeRoot.depth();
+        double complexityPenalty = (complexityPenaltyWeight * level) / refinementTreeRoot.depth();
         return childrenPenalty + complexityPenalty;
     }
 
@@ -466,7 +466,7 @@ public class WombatComplete extends AWombat {
         } else if (isDisjunction(nodeMetricExpr)) {
             childMetricExpr = new String();
             List<String> subMetricExpr = getSubMetricExpressions(nodeMetricExpr);
-            //          System.out.println("-------------subMetricExpr: "+ subMetricExpr);
+            logger.debug("subMetricExpr: " + subMetricExpr);
             result.add(createNode(subMetricExpr.get(0)));
             List<String> childSubMetricExpr = new ArrayList<>();
             for (int i = 0; i < subMetricExpr.size(); i++) {

@@ -4,6 +4,13 @@
  */
 package org.aksw.limes.core.ml.algorithm.wombat;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
@@ -22,7 +29,7 @@ import org.aksw.limes.core.execution.planning.planner.IPlanner;
 import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterType;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -32,8 +39,6 @@ import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.*;
 
 
 /**
@@ -52,13 +57,13 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     public static final String PARAMETER_MAX_ITERATION_TIME_IN_MINUTES = "max iteration time in minutes";
     public static final String PARAMETER_EXECUTION_TIME_IN_MINUTES = "max execution time in minutes";
     public static final String PARAMETER_MAX_FITNESS_THRESHOLD = "max fitness threshold";
-    public static final String PARAMETER_MIN_PROPERTY_COVERAGE = "minimum properity coverage";
-    public static final String PARAMETER_PROPERTY_LEARNING_RATE = "properity learning rate";
-    public static final String PARAMETER_OVERALL_PENALTY_WEIT = "overall penalty weit";
-    public static final String PARAMETER_CHILDREN_PENALTY_WEIT = "children penalty weit";
-    public static final String PARAMETER_COMPLEXITY_PENALTY_WEIT = "complexity penalty weit";
+    public static final String PARAMETER_MIN_PROPERTY_COVERAGE = "minimum property coverage";
+    public static final String PARAMETER_PROPERTY_LEARNING_RATE = "property learning rate";
+    public static final String PARAMETER_OVERALL_PENALTY_WEIGHT = "overall penalty weight";
+    public static final String PARAMETER_CHILDREN_PENALTY_WEIGHT = "children penalty weight";
+    public static final String PARAMETER_COMPLEXITY_PENALTY_WEIGHT = "complexity penalty weight";
     public static final String PARAMETER_VERBOSE = "verbose";
-    public static final String PARAMETER_MEASURES = "measures";
+    public static final String PARAMETER_ATOMIC_MEASURES = "atomic measures";
     public static final String PARAMETER_SAVE_MAPPING = "save mapping";
 
     public static List<String> sourceUris;
@@ -69,8 +74,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected int maxIterationTimeInMin = 20;
     protected int maxExecutionTimeInMin = 600;
     protected double maxFitnessThreshold = 1;
-    protected long childrenPenaltyWeit = 1;
-    protected long complexityPenaltyWeit = 1;
+    protected double childrenPenaltyWeight = 1;
+    protected double complexityPenaltyWeight = 1;
     protected boolean saveMapping = true;
     protected double minPropertyCoverage = 0.4;
     protected double propertyLearningRate = 0.9;
@@ -128,7 +133,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * @param measure name
      * @param threshold of the LS
      * @return Mapping from source to target resources after applying
-     * the atomic mapper measure(sourceProperity, targetProperty)
+     * the atomic mapper measure(sourceProperty, targetProperty)
      */
     public AMapping executeAtomicMeasure(String sourceProperty, String targetProperty, String measure, double threshold) {
         String measureExpression = measure + "(x." + sourceProperty + ", y." + targetProperty + ")";
@@ -154,12 +159,12 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         return new FMeasure().calculate(predictions, new GoldStandard(trainingData));
     }
 
-    public long getChildrenPenaltyWeit() {
-        return childrenPenaltyWeit;
+    public double getChildrenPenaltyWeight() {
+        return childrenPenaltyWeight;
     }
 
-    public long getComplexityPenaltyWeit() {
-        return complexityPenaltyWeit;
+    public double getComplexityPenaltyWeight() {
+        return complexityPenaltyWeight;
     }
 
     /**
@@ -248,7 +253,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * @param tCache target Cache
      * @return Mapping from sCache to tCache
      */
-    protected AMapping getPredictions(LinkSpecification ls, Cache sCache, Cache tCache) {
+    protected AMapping getPredictions(LinkSpecification ls, ACache sCache, ACache tCache) {
         AMapping map;
         Rewriter rw = RewriterFactory.getDefaultRewriter();
         LinkSpecification rwLs = rw.rewrite(ls);
@@ -274,7 +279,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     }
     
     @Override
-    protected void init(List<LearningParameter> lp, Cache sourceCache, Cache targetCache) {
+    protected void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
         super.init(lp, sourceCache, targetCache);
         sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, minPropertyCoverage);
         targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetCache, minPropertyCoverage);
@@ -322,29 +327,29 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 
     }
     
-    public void setChildrenPenaltyWeit(long childrenPenaltyWeit) {
-        this.childrenPenaltyWeit = childrenPenaltyWeit;
+    public void setChildrenPenaltyWeight(long childrenPenaltyWeight) {
+        this.childrenPenaltyWeight = childrenPenaltyWeight;
     }
     
-    public void setComplexityPenaltyWeit(long complexityPenaltyWeit) {
-        this.complexityPenaltyWeit = complexityPenaltyWeit;
+    public void setComplexityPenaltyWeight(long complexityPenaltyWeight) {
+        this.complexityPenaltyWeight = complexityPenaltyWeight;
     }
     
     @Override
     public void setDefaultParameters() {
         parameters = new ArrayList<>();
-        parameters.add(new LearningParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize, Integer.class, 10d, Integer.MAX_VALUE, 10d, PARAMETER_MAX_REFINEMENT_TREE_SIZE));
+        parameters.add(new LearningParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize, Long.class, 10d, Long.MAX_VALUE, 10d, PARAMETER_MAX_REFINEMENT_TREE_SIZE));
         parameters.add(new LearningParameter(PARAMETER_MAX_ITERATIONS_NUMBER, maxIterationNumber, Integer.class, 1d, Integer.MAX_VALUE, 10d, PARAMETER_MAX_ITERATIONS_NUMBER));
         parameters.add(new LearningParameter(PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, maxIterationTimeInMin, Integer.class, 1d, Integer.MAX_VALUE,1, PARAMETER_MAX_ITERATION_TIME_IN_MINUTES));
         parameters.add(new LearningParameter(PARAMETER_EXECUTION_TIME_IN_MINUTES, maxExecutionTimeInMin, Integer.class, 1d, Integer.MAX_VALUE,1,PARAMETER_EXECUTION_TIME_IN_MINUTES));
         parameters.add(new LearningParameter(PARAMETER_MAX_FITNESS_THRESHOLD, maxFitnessThreshold, Double.class, 0d, 1d, 0.01d, PARAMETER_MAX_FITNESS_THRESHOLD));
         parameters.add(new LearningParameter(PARAMETER_MIN_PROPERTY_COVERAGE, minPropertyCoverage, Double.class, 0d, 1d, 0.01d, PARAMETER_MIN_PROPERTY_COVERAGE));
         parameters.add(new LearningParameter(PARAMETER_PROPERTY_LEARNING_RATE, propertyLearningRate,Double.class, 0d, 1d, 0.01d, PARAMETER_PROPERTY_LEARNING_RATE));
-        parameters.add(new LearningParameter(PARAMETER_OVERALL_PENALTY_WEIT, overallPenaltyWeight, Double.class, 0d, 1d, 0.01d, PARAMETER_OVERALL_PENALTY_WEIT));
-        parameters.add(new LearningParameter(PARAMETER_CHILDREN_PENALTY_WEIT, childrenPenaltyWeit, Double.class, 0d, 1d, 0.01d, PARAMETER_CHILDREN_PENALTY_WEIT));
-        parameters.add(new LearningParameter(PARAMETER_COMPLEXITY_PENALTY_WEIT, complexityPenaltyWeit, Double.class, 0d, 1d, 0.01d, PARAMETER_COMPLEXITY_PENALTY_WEIT));
+        parameters.add(new LearningParameter(PARAMETER_OVERALL_PENALTY_WEIGHT, overallPenaltyWeight, Double.class, 0d, 1d, 0.01d, PARAMETER_OVERALL_PENALTY_WEIGHT));
+        parameters.add(new LearningParameter(PARAMETER_CHILDREN_PENALTY_WEIGHT, childrenPenaltyWeight, Double.class, 0d, 1d, 0.01d, PARAMETER_CHILDREN_PENALTY_WEIGHT));
+        parameters.add(new LearningParameter(PARAMETER_COMPLEXITY_PENALTY_WEIGHT, complexityPenaltyWeight, Double.class, 0d, 1d, 0.01d, PARAMETER_COMPLEXITY_PENALTY_WEIGHT));
         parameters.add(new LearningParameter(PARAMETER_VERBOSE, verbose, Boolean.class, 0, 1, 0, PARAMETER_VERBOSE));
-        parameters.add(new LearningParameter(PARAMETER_MEASURES, measures, MeasureType.class, 0, 0, 0, PARAMETER_MEASURES));
+        parameters.add(new LearningParameter(PARAMETER_ATOMIC_MEASURES, measures, MeasureType.class, 0, 0, 0, PARAMETER_ATOMIC_MEASURES));
         parameters.add(new LearningParameter(PARAMETER_SAVE_MAPPING, saveMapping, Boolean.class, 0, 1, 0, PARAMETER_SAVE_MAPPING));
     }
 

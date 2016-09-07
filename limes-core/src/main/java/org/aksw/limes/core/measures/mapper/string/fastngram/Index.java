@@ -15,7 +15,7 @@ import java.util.Set;
 public class Index {
 
     private Map<Integer, Map<String, Set<String>>> sizeTokenIndex;
-    private Tokenizer tokenizer;
+    private ITokenizer tokenizer;
     private int q = 3;
 
     public Index() {

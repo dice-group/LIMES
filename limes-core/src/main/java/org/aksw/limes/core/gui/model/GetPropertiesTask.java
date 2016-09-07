@@ -1,13 +1,16 @@
 package org.aksw.limes.core.gui.model;
 
-import org.apache.jena.rdf.model.Model;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.concurrent.Task;
+
+import org.aksw.limes.core.gui.util.TaskResultSerializer;
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.gui.util.sparql.SPARQLHelper;
 import org.aksw.limes.core.io.config.KBInfo;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.jena.rdf.model.Model;
 
 /**
  * Task for loading properties in {@link org.aksw.limes.core.gui.view.WizardView}   
@@ -45,12 +48,26 @@ public class GetPropertiesTask extends Task<List<String>> {
      * calls the task and loads the properties
      */
     @Override
+    @SuppressWarnings("unchecked")
     protected List<String> call() throws Exception {
-        List<String> result = new ArrayList<String>();
-        for (String property : SPARQLHelper.properties(info.getEndpoint(),
+	List<String> result = (List<String>) TaskResultSerializer.getTaskResult(this);
+	if(result != null){
+	    return result;
+	}
+        result = new ArrayList<String>();
+        for (String property : SPARQLHelper.propertiesUncached(info.getEndpoint(),
                 info.getGraph(), class_.getUri().toString(), model)) {
             result.add(PrefixHelper.abbreviate(property));
         }
+        TaskResultSerializer.serializeTaskResult(this, result);
         return result;
+    }
+
+    public int hashCode() {
+      return new HashCodeBuilder(15, 37).
+        append(info).
+        append(model).
+        append(class_).
+        toHashCode();
     }
 }

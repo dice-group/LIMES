@@ -3,15 +3,20 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.frechet;
 
-import com.vividsolutions.jts.geom.*;
-import com.vividsolutions.jts.util.GeometricShapeFactory;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
-import java.awt.geom.Line2D;
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LineSegment;
+import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.util.GeometricShapeFactory;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)

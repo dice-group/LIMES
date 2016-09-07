@@ -1,14 +1,18 @@
 package org.aksw.limes.core.measures.measure.pointsets.hausdorff;
 
 
-import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+import org.junit.Test;
+
+/**
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
+ */
 public class ScanIndexedHausdorffTest {
 
     @Test
@@ -28,7 +32,7 @@ public class ScanIndexedHausdorffTest {
         testSet.add(A);
         testSet.add(B);
 
-        ScanIndexedHausdorff c = new ScanIndexedHausdorff();
+        //ScanIndexedHausdorffMeasure c = new ScanIndexedHausdorffMeasure();
         // System.out.println(c.run(testSet, testSet, 0.1.0));
 
     }

@@ -4,24 +4,28 @@
  */
 package org.aksw.limes.core.measures.mapper.pointsets;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.regex.Pattern;
+
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
 
-import java.util.*;
-import java.util.regex.Pattern;
-
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class OrchidMapper extends Mapper {
+public class OrchidMapper extends AMapper {
 
     IPointsetsMeasure m = null;
 
@@ -91,17 +95,11 @@ public class OrchidMapper extends Mapper {
      * @return A mapping which contains uris whose polygons are such that their
      *         distance is below the set threshold
      */
-    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
+        
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
-        try {
-            if (threshold <= 0) {
-                throw new InvalidThresholdException(threshold);
-            }
-        } catch (InvalidThresholdException e) {
-            System.err.println("Exiting..");
-            System.exit(1);
-        }
+        
         // get sets of polygons from properties
         Set<Polygon> sourcePolygons = getPolygons(source, properties.get(0));
         Set<Polygon> targetPolygons = getPolygons(target, properties.get(1));
@@ -127,7 +125,7 @@ public class OrchidMapper extends Mapper {
      * @return Set of polygons. Each polygon contains the uri to which it
      *         matches
      */
-    public Set<Polygon> getPolygons(Cache c, String property) {
+    public Set<Polygon> getPolygons(ACache c, String property) {
         Polygon p;
         Set<Polygon> polygons = new HashSet<Polygon>();
         for (Instance instance : c.getAllInstances()) {

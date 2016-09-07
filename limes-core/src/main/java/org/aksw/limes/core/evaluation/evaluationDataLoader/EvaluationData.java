@@ -1,15 +1,15 @@
 package org.aksw.limes.core.evaluation.evaluationDataLoader;
 
+import java.io.File;
+import java.util.Map;
+
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser.MapKey;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.util.Map;
 
 //import java.util.Map;
 
@@ -41,8 +41,8 @@ public class EvaluationData {
 
     private AConfigurationReader configReader;
     private PropertyMapping propertyMapping;
-    private Cache sourceCache;
-    private Cache targetCache;
+    private ACache sourceCache;
+    private ACache targetCache;
     private String sourceClass;
     private String targetClass;
     private AMapping referenceMapping;
@@ -68,9 +68,9 @@ public class EvaluationData {
         data.name = (String) map.get(MapKey.NAME);
         data.propertyMapping = (PropertyMapping) map.get(MapKey.PROPERTY_MAPPING);
         data.referenceMapping = (AMapping) map.get(MapKey.REFERENCE_MAPPING);
-        data.sourceCache = (Cache) map.get(MapKey.SOURCE_CACHE);
+        data.sourceCache = (ACache) map.get(MapKey.SOURCE_CACHE);
         data.sourceFileName = (String) map.get(MapKey.SOURCE_FILE);
-        data.targetCache = (Cache) map.get(MapKey.TARGET_CACHE);
+        data.targetCache = (ACache) map.get(MapKey.TARGET_CACHE);
         data.targetFileName = (String) map.get(MapKey.TARGET_FILE);
         data.sourceClass = (String) map.get(MapKey.SOURCE_CLASS);
         data.targetClass = (String) map.get(MapKey.TARGET_CLASS);
@@ -261,7 +261,7 @@ public class EvaluationData {
     /**
      * @return the targetCache
      */
-    public Cache getTargetCache() {
+    public ACache getTargetCache() {
         return targetCache;
     }
 
@@ -269,14 +269,14 @@ public class EvaluationData {
      * @param targetCache
      *         the targetCache to set
      */
-    public void setTargetCache(Cache targetCache) {
+    public void setTargetCache(ACache targetCache) {
         this.targetCache = targetCache;
     }
 
     /**
      * @return the sourceCache
      */
-    public Cache getSourceCache() {
+    public ACache getSourceCache() {
         return sourceCache;
     }
 
@@ -284,7 +284,7 @@ public class EvaluationData {
      * @param sourceCache
      *         the sourceCache to set
      */
-    public void setSourceCache(Cache sourceCache) {
+    public void setSourceCache(ACache sourceCache) {
         this.sourceCache = sourceCache;
     }
 

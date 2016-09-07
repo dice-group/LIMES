@@ -13,7 +13,7 @@ import org.aksw.limes.core.datastrutures.TaskData;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.IQuantitativeMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -24,6 +24,7 @@ import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTreeLearning;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,9 +80,14 @@ public class Evaluator {
                     {
                         logger.info("Implementation type: "+MLImplementationType.SUPERVISED_ACTIVE);
                         ActiveMLAlgorithm sml =(ActiveMLAlgorithm)tAlgorithm.getMlAlgorithm();
+                        sml.getMl().setConfiguration(dataset.evalData.getConfigReader().getConfiguration());
+                        if(tAlgorithm.getMlAlgorithm().getName().equals("Decision Tree Learning")){
+                            ((DecisionTreeLearning)sml.getMl()).setPropertyMapping(dataset.evalData.getPropertyMapping());
+                            ((DecisionTreeLearning)sml.getMl()).setInitialMapping(dataset.training);
+                        }
                         sml.activeLearn();
                         //mlModel = sml.activeLearn(dataset.training);
-                        AMapping nextExamples = sml.getNextExamples((int)0.5*dataset.training.size());
+                        AMapping nextExamples = sml.getNextExamples((int)Math.round(0.5*dataset.training.size()));
                         AMapping oracleFeedback = oracleFeedback(nextExamples,dataset.training);
                         mlModel = sml.activeLearn(oracleFeedback);
                      }
@@ -127,15 +133,15 @@ public class Evaluator {
         // select a dataset-pair to evaluate each ML algorithm on
         for (TaskData dataset : datasets) {
 
-            Cache source = dataset.source;
+            ACache source = dataset.source;
             ArrayList<Instance> srcInstances = source.getAllInstances();
             AMapping mapping = dataset.mapping;
             AMapping goldstd = dataset.goldStandard.referenceMappings;
 
             // create source partitions: S into S1, .., Sk
-            Cache[] srcParts = new Cache[folds];
+            ACache[] srcParts = new ACache[folds];
             // create source folds (opposite of partitions)
-            Cache[] srcFolds = new Cache[folds];
+            ACache[] srcFolds = new ACache[folds];
             // create mappings
             AMapping[] srcMap = new AMapping[folds];
             AMapping[] srcGold = new AMapping[folds];
@@ -230,7 +236,10 @@ public class Evaluator {
         for(String s : predictionMapping.getMap().keySet()){
             for(String t : predictionMapping.getMap().get(s).keySet()){
                 if(referenceMapping.contains(s, t)){
-                    result.add(s, t, predictionMapping.getMap().get(s).get(t));
+//                    result.add(s, t, predictionMapping.getMap().get(s).get(t));
+                    result.add(s, t, 1.0);
+                }else{
+                    result.add(s, t, 0.0);
                 }
             }
         }

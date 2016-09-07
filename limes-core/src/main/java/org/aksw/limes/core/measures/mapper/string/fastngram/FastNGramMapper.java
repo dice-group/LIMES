@@ -5,23 +5,28 @@
 
 package org.aksw.limes.core.measures.mapper.string.fastngram;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.Mapper;
-import org.aksw.limes.core.measures.measure.string.QGramSimilarity;
+import org.aksw.limes.core.measures.mapper.AMapper;
+import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 
-import java.util.*;
-
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class FastNGramMapper extends Mapper {
+public class FastNGramMapper extends AMapper {
 
     static Logger logger = LoggerFactory.getLogger(FastNGramMapper.class);
     static int q = 3;
@@ -29,8 +34,8 @@ public class FastNGramMapper extends Mapper {
     public static AMapping compute(Set<String> source, Set<String> target, int q, double threshold) {
         Index index = new Index(q);
         double kappa = (1 + threshold) / threshold;
-        QGramSimilarity sim = new QGramSimilarity(q);
-        Tokenizer tokenizer = new NGramTokenizer();
+        QGramSimilarityMeasure sim = new QGramSimilarityMeasure(q);
+        ITokenizer tokenizer = new NGramTokenizer();
         Map<String, Set<String>> targetTokens = new HashMap<String, Set<String>>();
         AMapping result = MappingFactory.createDefaultMapping();
         // index target
@@ -110,9 +115,9 @@ public class FastNGramMapper extends Mapper {
      * @return A mapping which contains links between the source instances and
      *         the target instances
      */
-    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-        AMapping mapping = MappingFactory.createDefaultMapping();
+       
         try {
             if (threshold <= 0) {
                 throw new InvalidThresholdException(threshold);

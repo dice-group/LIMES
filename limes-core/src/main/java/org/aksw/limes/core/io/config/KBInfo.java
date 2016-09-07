@@ -4,14 +4,14 @@
  */
 package org.aksw.limes.core.io.config;
 
-import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 
 /**
  * Contains the information necessary to access a knowledge base

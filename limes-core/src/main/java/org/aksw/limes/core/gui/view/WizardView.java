@@ -1,11 +1,12 @@
 package org.aksw.limes.core.gui.view;
 
+import org.aksw.limes.core.gui.controller.WizardController;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import org.aksw.limes.core.gui.controller.WizardController;
 
 /**
  * view used for creating a new configuration in three steps going
@@ -82,5 +83,9 @@ public class WizardView {
      */
     public void close() {
         stage.close();
+    }
+    
+    public Stage getStage(){
+	return this.stage;
     }
 }

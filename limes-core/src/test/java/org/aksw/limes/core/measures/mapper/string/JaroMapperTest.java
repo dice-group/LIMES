@@ -1,17 +1,17 @@
 package org.aksw.limes.core.measures.mapper.string;
 
 
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.measures.measure.string.Jaro;
-import org.aksw.limes.core.util.RandomStringGenerator;
-import org.junit.Test;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.measures.measure.string.JaroMeasure;
+import org.aksw.limes.core.util.RandomStringGenerator;
+import org.junit.Test;
 
 public class JaroMapperTest extends JaroMapper {
 
@@ -36,10 +36,10 @@ public class JaroMapperTest extends JaroMapper {
         }
         return result;
     }
-
+   
     private AMapping bruteForce(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
                                 double threshold) {
-        Jaro j = new Jaro();
+        JaroMeasure j = new JaroMeasure();
         AMapping m = MappingFactory.createDefaultMapping();
         double sim;
         for (String s : sourceMap.keySet()) {
@@ -58,7 +58,7 @@ public class JaroMapperTest extends JaroMapper {
         }
         return m;
     }
-
+    
     public Map<String, Set<String>> generateRandomMap(int size) {
         Map<String, Set<String>> map = new HashMap<String, Set<String>>();
         RandomStringGenerator rsg = new RandomStringGenerator(5, 20);
@@ -71,8 +71,8 @@ public class JaroMapperTest extends JaroMapper {
         return map;
     }
 
-
-    private void test(int sourceSize, int targetSize, double threshold) {
+    
+    /*private void test(int sourceSize, int targetSize, double threshold) {
         Map<String, Set<String>> sourceMap = generateRandomMap(sourceSize);
         Map<String, Set<String>> targetMap = generateRandomMap(targetSize);
 
@@ -88,8 +88,8 @@ public class JaroMapperTest extends JaroMapper {
         System.out.println("Approach: " + (end - begin));
         System.out.println("Mapping size : " + (m2.getNumberofMappings()));
         System.out.println("Mapping size : " + (MappingOperations.difference(m1, m2)));
-    }
-
+    }*/
+    
     private void deduplicationTest(JaroMapper jm, int sourceSize, double threshold) {
         Map<String, Set<String>> sourceMap = generateRandomMap(sourceSize);
 

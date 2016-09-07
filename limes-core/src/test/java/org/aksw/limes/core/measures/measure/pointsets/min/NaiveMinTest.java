@@ -1,14 +1,18 @@
 package org.aksw.limes.core.measures.measure.pointsets.min;
 
 
-import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+import org.junit.Test;
+
+/**
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
+ */
 public class NaiveMinTest {
 
     @Test
@@ -52,7 +56,7 @@ public class NaiveMinTest {
         Set<Polygon> maltaLgd = new HashSet<Polygon>();
         maltaLgd.add(maltaLgdPoly1);
 
-        NaiveMin min = new NaiveMin();
+        NaiveMinMeasure min = new NaiveMinMeasure();
         System.out.println(min.run(maltaNuts, maltaDbpedia, 90));
 
     }

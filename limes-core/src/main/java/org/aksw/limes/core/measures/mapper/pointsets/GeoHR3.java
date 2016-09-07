@@ -4,6 +4,13 @@
  */
 package org.aksw.limes.core.measures.mapper.pointsets;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -11,10 +18,8 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorff;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorff;
-
-import java.util.*;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorffMeasure;
 
 
 /**
@@ -148,11 +153,9 @@ public class GeoHR3 {
 
                 for (int deltaLong = (-1) * localGranularity; deltaLong <= localGranularity; deltaLong++) {
                     realLong = deltaLong + lon;
-                    // idea here is that index on positive side goes from 0 to
-                    // longMax
+                    // idea here is that index on positive side goes from 0 to longMax
                     // thus on negative side it goes from -1 to -(longMax +1)
-                    // crossing the 180° boundary means jumping to -180° and
-                    // vice versa
+                    // crossing the 180° boundary means jumping to -180° and vice versa
                     if (realLong > longMax) {
                         realLong = realLong - 2 * (longMax + 1);
                     } else if (realLong < (-1) * (longMax + 1)) {
@@ -167,9 +170,8 @@ public class GeoHR3 {
             Set<List<Integer>> result = new HashSet<List<Integer>>();
             double lat1, lat2, long1, long2;
             for (List<Integer> candidate : toCompare) {
-                // square is at the north-east of reference square then take
-                // upper corner of reference
-                // and lower left corner of candidate
+                // square is at the north-east of reference square then take 
+                // upper corner of reference and lower left corner of candidate
                 if (latIndex == candidate.get(0) && longIndex == candidate.get(1)) {
                     result.add(candidate);
                 } else if (latIndex == latMin && candidate.get(0) == latMin
@@ -248,12 +250,12 @@ public class GeoHR3 {
         AMapping m = MappingFactory.createDefaultMapping();
 
         double d;
-        if (setMeasure instanceof CentroidIndexedHausdorff) {
-            ((CentroidIndexedHausdorff) setMeasure).computeIndexes(sourceData, targetData);
-        } else if (setMeasure instanceof IndexedHausdorff) {
+        if (setMeasure instanceof CentroidIndexedHausdorffMeasure) {
+            ((CentroidIndexedHausdorffMeasure) setMeasure).computeIndexes(sourceData, targetData);
+        } else if (setMeasure instanceof IndexedHausdorffMeasure) {
             PolygonIndex targetIndex = new PolygonIndex();
             targetIndex.index(targetData);
-            ((IndexedHausdorff) setMeasure).targetIndex = targetIndex;
+            ((IndexedHausdorffMeasure) setMeasure).targetIndex = targetIndex;
         }
         for (Integer latIndex : source.squares.keySet()) {
             for (Integer longIndex : source.squares.get(latIndex).keySet()) {

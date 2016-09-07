@@ -2,7 +2,8 @@ package org.aksw.limes.core.datastrutures;
 
 import java.util.List;
 
-import org.aksw.limes.core.io.cache.Cache;
+
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 
 /**
@@ -27,7 +28,7 @@ public class GoldStandard {
         this.targetUris = targetUris;
     }
     
-    public GoldStandard(AMapping reference, Cache sourceUris, Cache targetUris) {
+    public GoldStandard(AMapping reference, ACache sourceUris, ACache targetUris) {
         super();
         this.referenceMappings = reference;
         this.sourceUris = sourceUris.getAllUris();

@@ -25,10 +25,10 @@ public class Property extends Node {
      */
     public Property(String id, Origin origin) {
         super(id);
-        String regex = "\\w+\\.\\w+:?\\w+";
-        if (!id.matches(regex))
-            throw new MetricFormatException("id \"" + id
-                    + "\" does not confirm to the regex " + regex);
+//        String regex = "\\w+\\.\\w+:?\\w+";
+//        if (!id.matches(regex))
+//            throw new MetricFormatException("id \"" + id
+//                    + "\" does not confirm to the regex " + regex);
         this.origin = origin;
     }
 

@@ -1,13 +1,14 @@
 package org.aksw.limes.core.gui.model;
 
-import org.apache.jena.rdf.model.Model;
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.gui.view.TaskProgressView;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.io.query.IQueryModule;
 import org.aksw.limes.core.io.query.ModelRegistry;
 import org.aksw.limes.core.io.query.QueryModuleFactory;
+import org.apache.jena.rdf.model.Model;
 
 /**
  * Represents an endpoint for graphical representation
@@ -23,7 +24,7 @@ public class Endpoint {
     /**
      * cache
      */
-    private Cache cache;
+    private ACache cache;
     /**
      * model
      */
@@ -67,7 +68,7 @@ public class Endpoint {
      * returns cache
      * @return cache
      */
-    public Cache getCache() {
+    public ACache getCache() {
         if (cache == null) {
             cache = HybridCache.getData(info);
         }
@@ -119,5 +120,13 @@ public class Endpoint {
      */
     public GetPropertiesTask createGetPropertiesTask() {
         return new GetPropertiesTask(info, model, currentClass);
+    }
+
+    public Model getModel() {
+        return model;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
     }
 }

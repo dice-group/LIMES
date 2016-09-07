@@ -1,12 +1,12 @@
 package org.aksw.limes.core.gui.model.ml;
 
-import javafx.concurrent.Task;
-
 import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
 import org.aksw.limes.core.ml.algorithm.MLResults;
+
+import javafx.concurrent.Task;
 
 /**
  * this class is responsible for the data handling according to the MVC Pattern for the supervised batch learning
@@ -23,7 +23,7 @@ public class BatchLearningModel extends MachineLearningModel {
      * @param sourceCache source
      * @param targetCache target
      */
-    public BatchLearningModel(Config config, Cache sourceCache, Cache targetCache) {
+    public BatchLearningModel(Config config, ACache sourceCache, ACache targetCache) {
         super(config, sourceCache, targetCache);
     }
 

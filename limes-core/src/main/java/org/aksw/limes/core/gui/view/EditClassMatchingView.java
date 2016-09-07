@@ -3,29 +3,29 @@ package org.aksw.limes.core.gui.view;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.List;
 import java.util.function.Predicate;
 
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.input.MouseEvent;
 
 import org.aksw.limes.core.gui.controller.EditClassMatchingController;
 import org.aksw.limes.core.gui.model.ClassMatchingNode;
 import org.aksw.limes.core.gui.util.SourceOrTarget;
+
+import com.sun.prism.paint.Paint;
 
 /**
  * used for class matching step in {@link WizardView}
@@ -38,6 +38,7 @@ public class EditClassMatchingView implements IEditView {
     private ScrollPane rootPane;
     private TreeView<ClassMatchingNode> sourceTreeView;
     private TreeView<ClassMatchingNode> targetTreeView;
+    private Label errorMissingClassMatchingLabel = new Label("One source and one target class must be chosen!");
 
     /**
      * Constructor creates the root pane
@@ -65,8 +66,17 @@ public class EditClassMatchingView implements IEditView {
 	Node targetPaneWithTitle = createClassMatchingPane(TARGET);
 	HBox.setHgrow(targetPaneWithTitle, Priority.ALWAYS);
 	hbox.getChildren().add(targetPaneWithTitle);
-
-	rootPane = new ScrollPane(hbox);
+	VBox vbox = new VBox();
+        errorMissingClassMatchingLabel.setTextFill(Color.RED);
+	errorMissingClassMatchingLabel.setVisible(false);
+	vbox.getChildren().addAll(hbox, errorMissingClassMatchingLabel);
+	rootPane = new ScrollPane(vbox);
+	rootPane.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+	    @Override
+	    public void handle(MouseEvent mouseEvent) {
+		errorMissingClassMatchingLabel.setVisible(false);
+	    }
+	});
 	rootPane.setFitToHeight(true);
 	rootPane.setFitToWidth(true);
     }
@@ -137,5 +147,17 @@ public class EditClassMatchingView implements IEditView {
 	TreeItem<ClassMatchingNode> selectedTargetClass = targetTreeView.getSelectionModel().getSelectedItem();
 	controller.save(selectedSourceClass == null ? null : selectedSourceClass.getValue(),
 		selectedTargetClass == null ? null : selectedTargetClass.getValue());
+    }
+
+    public TreeView<ClassMatchingNode> getSourceTreeView() {
+        return sourceTreeView;
+    }
+
+    public TreeView<ClassMatchingNode> getTargetTreeView() {
+        return targetTreeView;
+    }
+
+    public Label getErrorMissingClassMatchingLabel() {
+        return errorMissingClassMatchingLabel;
     }
 }

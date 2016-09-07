@@ -1,12 +1,12 @@
 package org.aksw.limes.core.gui;
 
+import java.util.Locale;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
+
 import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.view.MainView;
-import org.apache.log4j.BasicConfigurator;
-
-import java.util.Locale;
 
 /**
  * Starts the LinkDiscovery Application, with Extra
@@ -22,12 +22,10 @@ public class LimesGUI extends Application {
      * @param args
      *         optional arguments on StartUp, No Options implemented yet
      */
-    public static void main(String[] args) {
-        Locale.setDefault(new Locale("en", "US"));
-        BasicConfigurator.configure();
+    public static void startGUI(String[] args) {
         launch(args);
     }
-
+    
     /**
      * Opens a new Window for the Application
      * @param primaryStage View to initialize Application
@@ -35,6 +33,7 @@ public class LimesGUI extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Locale.setDefault(new Locale("en", "US"));
         MainView mainView = new MainView(primaryStage);
         MainController mainController = new MainController(mainView);
         mainView.setController(mainController);

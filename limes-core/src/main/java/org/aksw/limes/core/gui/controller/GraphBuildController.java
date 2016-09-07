@@ -1,13 +1,18 @@
 package org.aksw.limes.core.gui.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.gui.model.metric.*;
+import org.aksw.limes.core.gui.model.metric.Measure;
+import org.aksw.limes.core.gui.model.metric.MetricParser;
+import org.aksw.limes.core.gui.model.metric.Node;
+import org.aksw.limes.core.gui.model.metric.Operator;
+import org.aksw.limes.core.gui.model.metric.Output;
+import org.aksw.limes.core.gui.model.metric.Property;
 import org.aksw.limes.core.gui.view.ToolBox;
 import org.aksw.limes.core.gui.view.graphBuilder.GraphBuildView;
 import org.aksw.limes.core.gui.view.graphBuilder.NodeView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Controller of GraphBuildView, controls drawing and moving of Node Elements
@@ -201,7 +206,7 @@ public class GraphBuildController {
     private ArrayList<NodeView> drawChildRek(NodeView parent, Node node,
                                              ArrayList<NodeView> nodeList) {
         int nodeShape;
-        if (Measure.identifiers.contains(node.id)) {
+        if (new Measure("").identifiers().contains(node.id)) {
             nodeShape = NodeView.METRIC;
         } else if (Operator.identifiers.contains(node.id)) {
             nodeShape = NodeView.OPERATOR;

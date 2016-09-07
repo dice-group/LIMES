@@ -1,27 +1,31 @@
 package org.aksw.limes.core.measures.mapper.string;
 
-import org.aksw.limes.core.exceptions.InvalidThresholdException;
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.measures.mapper.Mapper;
-import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
-import org.aksw.limes.core.measures.mapper.string.triefilter.LengthQuicksort;
-import org.aksw.limes.core.measures.mapper.string.triefilter.TrieFilter;
-import org.aksw.limes.core.measures.measure.string.JaroWinkler;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.MutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
+import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.measures.mapper.AMapper;
+import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
+import org.aksw.limes.core.measures.mapper.string.triefilter.LengthQuicksort;
+import org.aksw.limes.core.measures.mapper.string.triefilter.TrieFilter;
+import org.aksw.limes.core.measures.measure.string.JaroWinklerMeasure;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * Mapper for bounded Jaro-Winkler distances using an efficient
  * length-partitioning- and trie-pruning-based approach in parallel.
  */
-public class JaroWinklerMapper extends Mapper {
+public class JaroWinklerMapper extends AMapper {
 
     /**
      * Computes a mapping between a source and a target.
@@ -42,7 +46,7 @@ public class JaroWinklerMapper extends Mapper {
      *         the target instances
      */
     @Override
-    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
         try {
             if (threshold <= 0) {
@@ -78,7 +82,7 @@ public class JaroWinklerMapper extends Mapper {
             swapped = true;
         }
         // set up partitioning of lists of strings based on strings lengths
-        JaroWinkler metric = new JaroWinkler();
+        JaroWinklerMeasure metric = new JaroWinklerMeasure();
         List<Pair<List<String>, List<String>>> partitions = new LinkedList<>();
         // only attempt to partition iff it makes sense mathematically, that is,
         // the upper bound is well defined

@@ -1,21 +1,26 @@
 package org.aksw.limes.core.measures.mapper.string;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.mapper.Mapper;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 
-import java.util.*;
-
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class ExactMatchMapper extends Mapper {
+public class ExactMatchMapper extends AMapper {
 
     static Logger logger = LoggerFactory.getLogger(ExactMatchMapper.class);
 
@@ -38,7 +43,7 @@ public class ExactMatchMapper extends Mapper {
      *         the target instances
      */
     @Override
-    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
         try {
             if (threshold <= 0) {
@@ -68,7 +73,7 @@ public class ExactMatchMapper extends Mapper {
         return m;
     }
 
-    public Map<String, Set<String>> index(Cache c, String property) {
+    public Map<String, Set<String>> index(ACache c, String property) {
         Map<String, Set<String>> index = new HashMap<String, Set<String>>();
         for (String uri : c.getAllUris()) {
             TreeSet<String> values = c.getInstance(uri).getProperty(property);

@@ -1,17 +1,32 @@
 package org.aksw.limes.core.measures.mapper.topology;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.DecimalFormat;
-import java.util.*;
-import java.util.concurrent.*;
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.io.WKTReader;
 
 /**
  *
@@ -135,6 +150,7 @@ public class RADON {
         public int lat1, lat2, lon1, lon2;
         public Geometry polygon;
         private String uri;
+        private String origin_uri;
 
         public MBBIndex(int lat1, int lon1, int lat2, int lon2, Geometry polygon, String uri) {
             this.lat1 = lat1;
@@ -143,9 +159,24 @@ public class RADON {
             this.lon2 = lon2;
             this.polygon = polygon;
             this.uri = uri;
+            this.origin_uri = uri;
+        }
+
+        public MBBIndex(int lat1, int lon1, int lat2, int lon2, Geometry polygon, String uri, String origin_uri) {
+            this.lat1 = lat1;
+            this.lat2 = lat2;
+            this.lon1 = lon1;
+            this.lon2 = lon2;
+            this.polygon = polygon;
+            this.uri = uri;
+            this.origin_uri = origin_uri;
         }
 
         public boolean contains(MBBIndex i) {
+            return this.lat1 <= i.lat1 && this.lon1 <= i.lon1 && this.lon2 >= i.lon2 && this.lat2 >= i.lat2;
+        }
+
+        public boolean covers(MBBIndex i) {
             return this.lat1 <= i.lat1 && this.lon1 <= i.lon1 && this.lon2 >= i.lon2 && this.lat2 >= i.lat2;
         }
 
@@ -217,10 +248,10 @@ public class RADON {
                 MBBIndex s = scheduled.get(i);
                 MBBIndex t = scheduled.get(i + 1);
                 if (relate(s.polygon, t.polygon, relation)) {
-                    if (!temp.containsKey(s.uri)) {
-                        temp.put(s.uri, new HashSet<>());
+                    if (!temp.containsKey(s.origin_uri)) {
+                        temp.put(s.origin_uri, new HashSet<>());
                     }
-                    temp.get(s.uri).add(t.uri);
+                    temp.get(s.origin_uri).add(t.origin_uri);
                 }
             }
             synchronized (result) {
@@ -253,6 +284,10 @@ public class RADON {
                 return geometry1.within(geometry2);
             case CONTAINS:
                 return geometry1.contains(geometry2);
+            case COVERS:
+                return geometry1.covers(geometry2);
+            case COVEREDBY:
+                return geometry1.coveredBy(geometry2);
             case OVERLAPS:
                 return geometry1.overlaps(geometry2);
             default:
@@ -301,10 +336,44 @@ public class RADON {
     public static final String WITHIN = "within";
     public static final String CONTAINS = "contains";
     public static final String OVERLAPS = "overlaps";
+    public static final String COVERS= "covers";
+    public static final String COVEREDBY = "coveredby";
     // best measure according to our evaluation in the RADON paper
     public static String heuristicStatMeasure = "avg";
 
     private static final Logger logger = LoggerFactory.getLogger(RADON.class);
+
+    public static Map<String, Geometry> getGeometryMapFromCache(ACache c, String property) {
+        WKTReader wktReader = new WKTReader();
+        Map<String, Geometry> gMap = new HashMap<>();
+        for (String uri : c.getAllUris()) {
+            Set<String> values = c.getInstance(uri).getProperty(property);
+            if (values.size() > 0) {
+                String wkt = values.iterator().next();
+                try {
+                    gMap.put(uri, wktReader.read(wkt));
+                } catch (ParseException e) {
+                    logger.warn("Skipping malformed geometry at " + uri + "...");
+                }
+            }
+        }
+        return gMap;
+    }
+
+    public static AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression, double threshold, String relation) {
+        try {
+            if (threshold <= 0) {
+                throw new InvalidThresholdException(threshold);
+            }
+        } catch (InvalidThresholdException e) {
+            System.err.println("Exiting..");
+            System.exit(1);
+        }
+        List<String> properties = PropertyFetcher.getProperties(expression, threshold);
+        Map<String, Geometry> sourceMap = getGeometryMapFromCache(source, properties.get(0));
+        Map<String, Geometry> targetMap = getGeometryMapFromCache(target, properties.get(1));
+        return getMapping(sourceMap, targetMap, relation);
+    }
 
     public static AMapping getMapping(Set<Polygon> sourceData, Set<Polygon> targetData, String relation) {
         Map<String, Geometry> source, target;
@@ -356,11 +425,20 @@ public class RADON {
             swap = sourceData;
             sourceData = targetData;
             targetData = swap;
-            swap = null;
-            if (rel.equals(WITHIN))
-                rel = CONTAINS;
-            else if (rel.equals(CONTAINS))
-                rel = WITHIN;
+            switch (rel) {
+                case WITHIN:
+                    rel = CONTAINS;
+                    break;
+                case CONTAINS:
+                    rel = WITHIN;
+                    break;
+                case COVERS:
+                    rel = COVEREDBY;
+                    break;
+                case COVEREDBY:
+                    rel = COVERS;
+                    break;
+            }
         }
 
         // set up indexes
@@ -373,7 +451,7 @@ public class RADON {
         AMapping m = MappingFactory.createDefaultMapping();
         List<Map<String, Set<String>>> results = Collections.synchronizedList(new ArrayList<>());
         Map<String, Set<String>> computed = new HashMap<>();
-        Matcher matcher = new Matcher(relation, results);
+        Matcher matcher = new Matcher(rel, results);
 
         for (Integer lat : sourceIndex.map.keySet()) {
             for (Integer lon : sourceIndex.map.get(lat).keySet()) {
@@ -382,27 +460,30 @@ public class RADON {
                 if (target != null && target.size() > 0) {
                     for (MBBIndex a : source) {
                         if (!computed.containsKey(a.uri))
-                            computed.put(a.uri, new HashSet<String>());
+                            computed.put(a.uri, new HashSet<>());
                         for (MBBIndex b : target) {
                             if (!computed.get(a.uri).contains(b.uri)) {
                                 computed.get(a.uri).add(b.uri);
-                                boolean compute = (rel.equals(CONTAINS) && a.contains(b))
-                                        || (rel.equals(WITHIN) && b.contains(a)) || (rel.equals(EQUALS) && a.equals(b))
-                                        || rel.equals(INTERSECTS) || rel.equals(CROSSES) || rel.equals(TOUCHES)
-                                        || rel.equals(OVERLAPS);
+                                boolean compute =  (rel.equals(COVERS) && a.covers(b))
+                                        || (rel.equals(COVEREDBY) && b.covers(a))
+                                        || (rel.equals(CONTAINS) && a.contains(b))
+                                        || (rel.equals(WITHIN) && b.contains(a))
+                                        || (rel.equals(EQUALS) && a.equals(b))
+                                        || rel.equals(INTERSECTS) || rel.equals(CROSSES)
+                                        || rel.equals(TOUCHES) || rel.equals(OVERLAPS);
                                 if (compute) {
                                     if (numThreads == 1) {
                                         if (Matcher.relate(a.polygon, b.polygon, rel)) {
                                             if (swapped)
-                                                m.add(b.uri, a.uri, 1.0);
+                                                m.add(b.origin_uri, a.origin_uri, 1.0);
                                             else
-                                                m.add(a.uri, b.uri, 1.0);
+                                                m.add(a.origin_uri, b.origin_uri, 1.0);
                                         }
                                     } else {
                                         matcher.schedule(a, b);
                                         if (matcher.size() == Matcher.maxSize) {
                                             matchExec.execute(matcher);
-                                            matcher = new Matcher(relation, results);
+                                            matcher = new Matcher(rel, results);
                                             if (results.size() > 0) {
                                                 mergerExec.execute(new Merger(results, m));
                                             }
@@ -448,8 +529,14 @@ public class RADON {
             AMapping disjoint = MappingFactory.createDefaultMapping();
             for (String s : sourceData.keySet()) {
                 for (String t : targetData.keySet()) {
-                    if (!m.contains(s, t)) {
-                        disjoint.add(s, t, 1.0d);
+                    if (swapped) {
+                        if (!m.contains(t, s)) {
+                            disjoint.add(t, s, 1.0d);
+                        }
+                    } else {
+                        if (!m.contains(s, t)) {
+                            disjoint.add(s, t, 1.0d);
+                        }
                     }
                 }
             }
@@ -469,22 +556,38 @@ public class RADON {
             int maxLatIndex = (int) Math.ceil(envelope.getMaxY() * thetaY);
             int minLongIndex = (int) Math.floor(envelope.getMinX() * thetaX);
             int maxLongIndex = (int) Math.ceil(envelope.getMaxX() * thetaX);
-            MBBIndex mbbIndex = new MBBIndex(minLatIndex, minLongIndex, maxLatIndex, maxLongIndex, g, p);
-            if (extIndex == null) {
-                for (int latIndex = minLatIndex; latIndex <= maxLatIndex; latIndex++) {
-                    for (int longIndex = minLongIndex; longIndex <= maxLongIndex; longIndex++) {
-                        result.add(latIndex, longIndex, mbbIndex);
-                    }
-                }
+
+            // Check for passing over 180th meridian. In case its shorter to pass over it, we assume that is what is
+            // meant by the user and we split the geometry into one part east and one part west of 180th meridian.
+
+            if (minLongIndex < (int) Math.floor(-90d * thetaX) && maxLongIndex > (int) Math.ceil(90d * thetaX)) {
+                MBBIndex westernPart = new MBBIndex(minLatIndex, (int) Math.floor(-180d * thetaX), maxLatIndex, minLongIndex, g, p + "<}W", p);
+                addToIndex(westernPart, result, extIndex);
+                MBBIndex easternPart = new MBBIndex(minLatIndex, maxLongIndex, maxLatIndex, (int) Math.ceil(180 * thetaX), g, p + "<}E", p);
+                addToIndex(easternPart, result, extIndex);
             } else {
-                for (int latIndex = minLatIndex; latIndex <= maxLatIndex; latIndex++) {
-                    for (int longIndex = minLongIndex; longIndex <= maxLongIndex; longIndex++) {
-                        if (extIndex.getSquare(latIndex, longIndex) != null)
-                            result.add(latIndex, longIndex, mbbIndex);
-                    }
+                MBBIndex mbbIndex = new MBBIndex(minLatIndex, minLongIndex, maxLatIndex, maxLongIndex, g, p);
+                addToIndex(mbbIndex, result, extIndex);
+            }
+
+        }
+        return result;
+    }
+
+    private static void addToIndex(MBBIndex mbbIndex, SquareIndex result, SquareIndex extIndex) {
+        if (extIndex == null) {
+            for (int latIndex = mbbIndex.lat1; latIndex <= mbbIndex.lat2; latIndex++) {
+                for (int longIndex = mbbIndex.lon1; longIndex <= mbbIndex.lon2; longIndex++) {
+                    result.add(latIndex, longIndex, mbbIndex);
+                }
+            }
+        } else {
+            for (int latIndex = mbbIndex.lat1; latIndex <= mbbIndex.lat2; latIndex++) {
+                for (int longIndex = mbbIndex.lon1; longIndex <= mbbIndex.lon2; longIndex++) {
+                    if (extIndex.getSquare(latIndex, longIndex) != null)
+                        result.add(latIndex, longIndex, mbbIndex);
                 }
             }
         }
-        return result;
     }
 }

@@ -5,15 +5,15 @@
 package org.aksw.limes.core.measures.mapper.space.blocking;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeSet;
+
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeSet;
 
 /**
  * This class implements the HR3 algorithm which can ensure that a certain RRR
@@ -21,7 +21,7 @@ import java.util.TreeSet;
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class HR3Blocker implements BlockingModule {
+public class HR3Blocker implements IBlockingModule {
     static Logger logger = LoggerFactory.getLogger(HR3Blocker.class);
     int dim = 2;
     ArrayList<Double> thresholds;

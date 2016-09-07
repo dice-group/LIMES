@@ -3,17 +3,17 @@
  */
 package org.aksw.limes.core.evaluation.evaluationDataLoader;
 
-import org.aksw.limes.core.io.cache.Cache;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  * The class reads an OAEI from a file
@@ -54,8 +54,8 @@ public class Experiment {
     }
 
 
-    public static Cache readOAEIFile(String file, String token) {
-        Cache c = new MemoryCache();
+    public static ACache readOAEIFile(String file, String token) {
+        ACache c = new MemoryCache();
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));

@@ -1,7 +1,12 @@
 package org.aksw.limes.core.execution.engine;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.execution.engine.filter.LinearFilter;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
@@ -9,7 +14,7 @@ import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
 import org.aksw.limes.core.execution.planning.planner.IPlanner;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -21,10 +26,6 @@ import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Implements the default execution engine class. The idea is that the engine
@@ -56,7 +57,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      * @param targetVar
      *            Target variable
      */
-    public SimpleExecutionEngine(Cache source, Cache target, String sourceVar, String targetVar) {
+    public SimpleExecutionEngine(ACache source, ACache target, String sourceVar, String targetVar) {
         super(source, target, sourceVar, targetVar);
     }
 
@@ -163,6 +164,14 @@ public class SimpleExecutionEngine extends ExecutionEngine {
         try {
             MeasureType type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
             mapper = MapperFactory.createMapper(type);
+            try {
+                if (threshold <= 0) {
+                    throw new InvalidThresholdException(threshold);
+                }
+            } catch (InvalidThresholdException e) {
+                logger.error("Exiting..");
+                System.exit(1);
+            }
             return mapper.getMapping(source, target, sourceVariable, targetVariable, inst.getMeasureExpression(),
                     threshold);
         } catch (InvalidMeasureException e) {

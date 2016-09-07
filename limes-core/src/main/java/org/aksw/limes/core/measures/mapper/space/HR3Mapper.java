@@ -4,28 +4,28 @@
  */
 package org.aksw.limes.core.measures.mapper.space;
 
-import org.aksw.limes.core.exceptions.InvalidThresholdException;
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.Mapper;
-import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
-import org.aksw.limes.core.measures.mapper.space.blocking.BlockingModule;
-import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
-import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 // * Previously call ToralOrderBlockingMapper
+
+import org.aksw.limes.core.io.cache.ACache;
+
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.io.parser.Parser;
+import org.aksw.limes.core.measures.mapper.AMapper;
+import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
+import org.aksw.limes.core.measures.mapper.space.blocking.IBlockingModule;
+import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
+import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 
 /**
  * Uses metric spaces to create blocks.
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class HR3Mapper extends Mapper {
+public class HR3Mapper extends AMapper {
 
     public int granularity = 4;
 
@@ -57,9 +57,11 @@ public class HR3Mapper extends Mapper {
      * @return A mapping which contains links between the source instances and
      *         the target instances
      */
-    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
 
+        
+        
         AMapping mapping = MappingFactory.createDefaultMapping();
 
         // maps each block id to a set of instances. Actually one should
@@ -101,7 +103,7 @@ public class HR3Mapper extends Mapper {
         // distance threshold. Central for finding the right blocks and might
         // differ from blocker
         // to blocker.
-        BlockingModule generator = BlockingFactory.getBlockingModule(property2, p.getOperator(), threshold,
+        IBlockingModule generator = BlockingFactory.getBlockingModule(property2, p.getOperator(), threshold,
                 granularity);
 
         // initialize the measure for similarity computation

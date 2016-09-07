@@ -1,6 +1,6 @@
 package org.aksw.limes.core.measures.mapper;
 
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 
 /**
@@ -29,7 +29,7 @@ public interface IMapper {
      *            threshold of link specification
      * @return a mapping, the resulting mapping
      */
-    AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+    AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold);
 
     ;

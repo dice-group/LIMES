@@ -1,13 +1,17 @@
 package org.aksw.limes.core.measures.mapper.temporal.simpleTemporal;
 
-import org.aksw.limes.core.io.cache.Cache;
-import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.Mapper;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
+import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.io.parser.Parser;
+import org.aksw.limes.core.measures.mapper.AMapper;
 
 /**
  * Abstract class of simple temporal relations mapper.
@@ -15,7 +19,7 @@ import java.util.*;
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
-public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemporalMapper {
+public abstract class SimpleTemporalMapper extends AMapper implements ISimpleTemporalMapper {
 
     /**
      * Extracts first property (beginDate) from metric expression.
@@ -66,7 +70,7 @@ public abstract class SimpleTemporalMapper extends Mapper implements ISimpleTemp
      * @return blocks, a map of sets with unique begin dates as keys and set of
      *         instances as values
      */
-    protected TreeMap<String, Set<Instance>> orderByBeginDate(Cache cache, String expression) {
+    protected TreeMap<String, Set<Instance>> orderByBeginDate(ACache cache, String expression) {
 
         TreeMap<String, Set<Instance>> blocks = new TreeMap<String, Set<Instance>>();
         Parser p = new Parser(expression, 0.0d);

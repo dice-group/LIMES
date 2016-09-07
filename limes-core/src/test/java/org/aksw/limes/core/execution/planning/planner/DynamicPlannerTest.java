@@ -1,11 +1,16 @@
 package org.aksw.limes.core.execution.planning.planner;
 
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -14,15 +19,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertTrue;
-
 public class DynamicPlannerTest {
 
-    public Cache source = new MemoryCache();
-    public Cache target = new MemoryCache();
+    public ACache source = new MemoryCache();
+    public ACache target = new MemoryCache();
 
     @Before
     public void setUp() {
@@ -142,7 +142,7 @@ public class DynamicPlannerTest {
         System.out.println(ls.isAtomic());
         ls = p.normalize(ls);
         ExecutionEngine ee = new SimpleExecutionEngine(source, source, "?x", "?y");
-        AMapping m = ee.execute(ls, p);
+        ee.execute(ls, p);
         
         NestedPlan plan2 = new NestedPlan();
         Instruction run1 = new Instruction(Command.RUN, "cosine(x.name,y.name)", "0.8", -1, -1, 0);

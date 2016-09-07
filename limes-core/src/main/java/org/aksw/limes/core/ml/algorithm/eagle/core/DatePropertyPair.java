@@ -1,14 +1,14 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
 import org.jgap.gp.CommandGene;
 import org.jgap.gp.IMutateable;
 import org.jgap.gp.impl.ProgramChromosome;
 import org.jgap.util.ICloneable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Klaus Lyko

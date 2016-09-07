@@ -5,13 +5,13 @@
 package org.aksw.limes.core.measures.mapper.space.blocking;
 
 
+import java.util.ArrayList;
+
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
 
 /**
  * Not tested yet. Works on the angles by transforming the thresholds into angular
@@ -19,7 +19,7 @@ import java.util.ArrayList;
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class GeoBlockingModule implements BlockingModule {
+public class GeoBlockingModule implements IBlockingModule {
 
     static Logger logger = LoggerFactory.getLogger(GeoBlockingModule.class);
     int dim = 2;

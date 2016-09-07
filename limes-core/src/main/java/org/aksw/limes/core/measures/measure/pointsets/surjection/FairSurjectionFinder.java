@@ -3,14 +3,14 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.surjection;
 
-import org.aksw.limes.core.datastrutures.PairSimilar;
-import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.aksw.limes.core.measures.measure.pointsets.PointsetsMeasure;
-
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+
+import org.aksw.limes.core.datastrutures.PairSimilar;
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
 
 /**
  *         <p>
@@ -70,7 +70,7 @@ public class FairSurjectionFinder extends SurjectionFinder {
     TreeMap<Double, Point> getSortedNearestPoints(Point x, Polygon Y) {
         TreeMap<Double, Point> result = new TreeMap<Double, Point>();
         for (Point y : Y.points) {
-            result.put(PointsetsMeasure.pointToPointDistance(x, y), y);
+            result.put(APointsetsMeasure.pointToPointDistance(x, y), y);
         }
         return result;
     }

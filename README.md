@@ -22,5 +22,8 @@ Then, update the project on Eclipse.
 ## Binaries
 Current releases can be found at https://github.com/AKSW/LIMES.
 
-## About
-Read project description at http://aksw.org/Projects/LIMES.
+## More details
+
+* [Project web site](http://aksw.org/Projects/LIMES)
+* [User manual](http://aksw.github.io/LIMES-dev/user_manual/)
+* [Developer manual](http://aksw.github.io/LIMES-dev/developer_manual/)

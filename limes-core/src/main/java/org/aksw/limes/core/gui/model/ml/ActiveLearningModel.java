@@ -1,12 +1,12 @@
 package org.aksw.limes.core.gui.model.ml;
 
-import javafx.concurrent.Task;
-
 import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.io.cache.Cache;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.MLResults;
+
+import javafx.concurrent.Task;
 
 /**
  * this class is responsible for the data handling according to the MVC Pattern for the supervised active learning
@@ -32,7 +32,7 @@ public class ActiveLearningModel extends MachineLearningModel {
      * @param sourceCache source
      * @param targetCache target
      */
-    public ActiveLearningModel(Config config, Cache sourceCache, Cache targetCache) {
+    public ActiveLearningModel(Config config, ACache sourceCache, ACache targetCache) {
         super(config, sourceCache, targetCache);
     }
 

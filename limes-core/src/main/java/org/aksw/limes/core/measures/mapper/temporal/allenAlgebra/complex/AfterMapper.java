@@ -1,12 +1,15 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex;
 
-import org.aksw.limes.core.io.cache.Cache;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.AllenAlgebraMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.BeginEnd;
-
-import java.util.*;
 
 /**
  * Class for Allen's temporal relation "After".
@@ -18,11 +21,11 @@ public class AfterMapper extends AllenAlgebraMapper {
     /**
      * Source cache.
      */
-    Cache source;
+    ACache source;
     /**
      * Target cache.
      */
-    Cache target;
+    ACache target;
 
     /**
      * Constructor of AfterMapper class.
@@ -91,8 +94,9 @@ public class AfterMapper extends AllenAlgebraMapper {
      * @return a mapping, the resulting mapping
      */
     @Override
-    public AMapping getMapping(Cache source, Cache target, String sourceVar, String targetVar, String expression,
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
+        
         this.source = source;
         this.target = target;
         ArrayList<TreeMap<String, Set<String>>> maps = new ArrayList<TreeMap<String, Set<String>>>();
