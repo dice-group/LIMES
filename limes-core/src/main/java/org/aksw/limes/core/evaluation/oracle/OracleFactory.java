@@ -1,11 +1,10 @@
 package org.aksw.limes.core.evaluation.oracle;
 
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.reader.AMappingReader;
 import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.aksw.limes.core.io.mapping.reader.AMappingReader;
 
 //import de.uni_leipzig.simba.learning.oracle.mappingreader.XMLMappingReader;
 

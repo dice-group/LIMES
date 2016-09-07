@@ -1,10 +1,10 @@
 package org.aksw.limes.core.io.serializer;
 
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
-
 import java.util.HashMap;
 import java.util.Map.Entry;
+
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 
 
 public class CSVSerializerTest {
