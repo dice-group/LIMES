@@ -19,6 +19,7 @@
 	</scm>
 
 	<build>
+		<pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.jacoco</groupId>
@@ -160,6 +161,7 @@
 				 </executions>
 			 </plugin>
 		</plugins>
+		</pluginManagement>
 	</build>
 
 	<reporting>
