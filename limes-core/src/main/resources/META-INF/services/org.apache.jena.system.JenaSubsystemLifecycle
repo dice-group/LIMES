@@ -1,0 +1,2 @@
+org.apache.jena.sparql.system.InitARQ
+org.apache.jena.tdb.sys.InitTDB

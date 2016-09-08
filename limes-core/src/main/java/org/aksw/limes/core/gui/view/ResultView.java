@@ -198,6 +198,8 @@ public class ResultView {
         scene.getStylesheets().add("gui/main.css");
         sourceInstanceTable.setPrefWidth(scene.getWidth() / 2);
         targetInstanceTable.setPrefWidth(scene.getWidth() / 2);
+        stage.setMinHeight(600);
+        stage.setMinWidth(800);
 
         stage.setTitle("LIMES");
         stage.setScene(scene);
