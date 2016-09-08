@@ -260,11 +260,6 @@
 			<url>http://download.java.net/maven/2/</url>
 			<layout>default</layout>
 		</repository>
-		<repository>
-			<id>cogit-releases</id>
-			<name>Cogit Releases Repository</name>
-			<url>https://forge-cogit.ign.fr/nexus/content/repositories/releases/</url>
-		</repository>
 
 		<repository>
 			<id>org-matheclipse-repository</id>
@@ -286,11 +281,7 @@
 			<version>1.7.21</version>
 		</dependency>
 
-		<!--<dependency>-->
-		<!--<groupId>org.slf4j</groupId>-->
-		<!--<artifactId>slf4j-simple</artifactId>-->
-		<!--<version>1.7.21</version>-->
-		<!--</dependency>-->
+
 
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
