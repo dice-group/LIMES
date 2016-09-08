@@ -207,8 +207,9 @@ public class Config extends Configuration {
      *            threshold
      */
     public void setAcceptanceThreshold(double acceptanceThreshold) {
-        if (metric == null)
-            metric = new Output();
+        if (metric == null) {
+	    metric = new Output();
+	}
         metric.param1 = acceptanceThreshold;
     }
 
@@ -229,8 +230,9 @@ public class Config extends Configuration {
                 return 0.8d;
             }
             return number.doubleValue();
-        } else
-            return metric.param2;
+        } else {
+	    return metric.param2;
+	}
     }
 
     /**
@@ -293,15 +295,19 @@ public class Config extends Configuration {
         if (metric != null) {
             double param1 = 2.0d;
             double param2 = 2.0d;
-            if (metric.param1 != null)
-                param1 = metric.param1;
-            if (metric.param2 != null)
-                param2 = metric.param2;
+            if (metric.param1 != null) {
+		param1 = metric.param1;
+	    }
+            if (metric.param2 != null) {
+		param2 = metric.param2;
+	    }
             metric = MetricParser.parse(metricExpression, getSourceInfo().getVar().replaceAll("\\?", ""));
-            if (param1 <= 1)
-                metric.param1 = param1;
-            if (param2 <= 1)
-                metric.param2 = param2;
+            if (param1 <= 1) {
+		metric.param1 = param1;
+	    }
+            if (param2 <= 1) {
+		metric.param2 = param2;
+	    }
         } else {
             metric = MetricParser.parse(metricExpression, getSourceInfo().getVar().replaceAll("\\?", ""));
         }

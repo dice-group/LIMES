@@ -109,9 +109,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
+					<descriptor>src/main/assembly/customassembly.xml</descriptor>
 					<archive>
 						<manifest>
 							<mainClass>org.aksw.limes.core.controller.Controller</mainClass>
