@@ -4,16 +4,19 @@
 
 Development branch for LIMES - Link Discovery Framework for Metric Spaces.
 
-## Known issues
-
-### Could not transfer artifact
-Artifact `fr.ign.cogit:geoxygene-api:pom:1.6` cannot be transferred due to a certificate problem. Please run:
+## Generating Jar File
+installing use:
 ```
-mvn clean install -U -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.test.skip=true
+mvn clean install
+```
+
+Creating the runnable jar file including the dependencies use:
+```
+mvn clean package shade:shade
 ```
 
 ### Importing into Eclipse
-Eclipse does not recognize the project as Java. Please run the following from the `limes-core/` directory:
+In case Eclipse does not recognize the project as Java. Please run the following from the `limes-core/` directory:
 ```
 mvn eclipse:eclipse
 ```
