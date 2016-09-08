@@ -107,14 +107,30 @@
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.4.3</version>
 				<configuration>
-					<descriptor>src/main/assembly/customassembly.xml</descriptor>
-					<archive>
-						<manifest>
+					<!-- filter all the META-INF files of other artifacts -->
+					<filters>
+						<filter>
+							<artifact>*:*</artifact>
+							<excludes>
+								<exclude>META-INF/*.SF</exclude>
+								<exclude>META-INF/*.DSA</exclude>
+								<exclude>META-INF/*.RSA</exclude>
+							</excludes>
+						</filter>
+					</filters>
+					<transformers>
+						<transformer
+							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 							<mainClass>org.aksw.limes.core.controller.Controller</mainClass>
-						</manifest>
-					</archive>
+							<manifestEntries>
+								<X-Compile-Source-JDK>${maven.compile.source}</X-Compile-Source-JDK>
+								<X-Compile-Target-JDK>${maven.compile.target}</X-Compile-Target-JDK>
+							</manifestEntries>
+						</transformer>
+					</transformers>
 				</configuration>
 			</plugin>
 
@@ -383,7 +399,7 @@
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-jdbc-driver-mem</artifactId>
-			<version>3.1.0</version>
+			<version>1.1.2</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>slf4j-api</artifactId>
@@ -402,7 +418,7 @@
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-jdbc-driver-remote</artifactId>
-			<version>3.1.0</version>
+			<version>1.1.2</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>slf4j-api</artifactId>
@@ -421,7 +437,7 @@
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-jdbc-driver-tdb</artifactId>
-			<version>3.1.0</version>
+			<version>1.1.2</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>slf4j-api</artifactId>
