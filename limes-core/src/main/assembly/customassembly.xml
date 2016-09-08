@@ -23,7 +23,7 @@
 	<files>
 		<file>
 			<source>${project.basedir}/src/main/resources/META-INF/services/org.apache.jena.system.JenaSubsystemLifecycle</source>
-			<outputDirectory>META-INF</outputDirectory>
+			<outputDirectory>META-INF/services/</outputDirectory>
 		</file>
 	</files>
 </assembly>
