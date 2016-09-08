@@ -54,9 +54,11 @@ public class WizardView {
         rootPane.setCenter(null);
         rootPane.setBottom(buttonBar);
 
-        Scene scene = new Scene(rootPane, 800, 600);
+        Scene scene = new Scene(rootPane, 1200, 600);
         scene.getStylesheets().add("gui/main.css");
         stage = new Stage();
+        stage.setMinWidth(1200);
+        stage.setMinHeight(600);
         buttonCancel.setOnAction(e -> {
             stage.close();
         });

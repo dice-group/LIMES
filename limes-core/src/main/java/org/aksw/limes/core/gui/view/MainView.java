@@ -126,10 +126,11 @@ public class MainView {
 
         graphBuild.start();
 
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 950, 750);
         scene.getStylesheets().add("gui/main.css");
-        stage.setMinHeight(600);
-        stage.setMinWidth(600);
+        stage.setMinHeight(scene.getHeight());
+        stage.setMinWidth(scene.getWidth());
+        stage.setMaximized(true);
         stage.setTitle("LIMES");
         stage.setScene(scene);
         stage.show();

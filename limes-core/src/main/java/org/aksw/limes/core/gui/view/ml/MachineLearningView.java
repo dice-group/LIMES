@@ -168,7 +168,7 @@ public class MachineLearningView {
 	content.getChildren().add(mlOptionsChooser);
 	border.setTop(content);
 	border.setBottom(buttonWrapper);
-	Scene scene = new Scene(border, 300, 400);
+	Scene scene = new Scene(border, 600, 900);
 	scene.getStylesheets().add("gui/main.css");
 
 	mlOptionsChooser.setOnAction(e -> {
@@ -190,6 +190,8 @@ public class MachineLearningView {
 	});
 
 	Stage stage = new Stage();
+	stage.setMinHeight(scene.getHeight());
+	stage.setMinWidth(scene.getWidth());
 	stage.setTitle("LIMES - Machine Learning");
 	stage.setScene(scene);
 	stage.show();

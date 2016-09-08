@@ -88,9 +88,11 @@ public class TaskProgressView {
             controller.cancel();
         });
 
-        Scene scene = new Scene(mainPane, 250, 60, Color.WHITE);
+        Scene scene = new Scene(mainPane, 250, 100, Color.WHITE);
         scene.getStylesheets().add("gui/main.css");
         stage = new Stage();
+        stage.setMinHeight(scene.getHeight());
+        stage.setMinWidth(scene.getWidth());
         stage.setAlwaysOnTop(true);
         stage.setTitle(title);
         stage.setScene(scene);
