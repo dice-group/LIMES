@@ -138,6 +138,12 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     // public static final String[] numberMeasures = {};
 
     public static final double threshold = 0.01;
+    
+    private static final String baseString = "base";
+    private static final String negPosString = "negPos";
+    private static final String sameSizeString = "sameSize";
+    
+    private String mode = negPosString;
 
     /**
      * Constructor uses superconstructor and initializes TreeParser object
@@ -365,70 +371,16 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    logger.error("empty oracle Mapping! Returning empty MLResults!");
 	    return new MLResults();
 	}
-//	if(base.size() != 0){
-//	    Iterator<SourceTargetValue> it = base.iterator();
-//	    while(it.hasNext()){
-//		SourceTargetValue inst = it.next();
-//		oracleMapping.add(inst.sourceUri, inst.targetUri, inst.value);
-//	    }
-//	}
-//	int lefToAdd = oracleMapping.size();
-	int positive = 0;
-	int negative = 0;
-        for(String s : oracleMapping.getMap().keySet()){
-            for(String t : oracleMapping.getMap().get(s).keySet()){
-        	if(oracleMapping.getMap().get(s).get(t) == 1.0){
-//        	    System.out.println(t + " -> " + s);
-        	    positive++;
-        	}else{
-//        	    System.out.println(t + " -> " + s);
-        	    negative++;
-        	}
-            }
-        }
-//        System.out.println(positive + " + " + negative + " = " + (positive + negative)  + " | " + oracleMapping.size());
-	
-//	//Since J48 is not updateable we add all the training data we used previously
-//	if(previouslyPresentedCandidates.size() != 0){
-//	    Iterator<SourceTargetValue> it = previouslyPresentedCandidates.iterator();
-//	    boolean lastWasPos = false;
-//	    while(lefToAdd != 0 && it.hasNext()){
-//		
-//            SourceTargetValue instance = it.next();
-//            	
-//		if (!lastWasPos && instance.value == 1.0) {
-//		    if (!oracleMapping.contains(instance.sourceUri, instance.targetUri)) {
-//			oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
-//			lastWasPos = true;
-//		    }
-//		}
-//		if (lastWasPos && instance.value != 1.0) {
-//		    if (!oracleMapping.contains(instance.sourceUri, instance.targetUri)) {
-//			oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
-//			lastWasPos = false;
-//		    }
-//		}
-//		//                oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
-//	    }
-//	}
-	if(previouslyPresentedCandidates.size() != 0){
-	    Iterator<SourceTargetValue> it = previouslyPresentedCandidates.iterator();
-            while((positive != negative) && it.hasNext()){ 
-            SourceTargetValue instance = it.next();
-            if((positive < negative) && instance.value == 1.0){
-        	if(!oracleMapping.contains(instance.sourceUri, instance.targetUri)){
-                oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
-                positive++;
-        	}
-            }
-            if((positive > negative) && instance.value != 1.0){
-        	if(!oracleMapping.contains(instance.sourceUri, instance.targetUri)){
-                oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
-                negative++;
-        	}
-            }
-
-            }
+	switch(mode){
+	case baseString:
+	    oracleMapping = addBase(oracleMapping);
+	    break;
+	case negPosString:
+	    oracleMapping = addUntilPositiveNegativeEqual(oracleMapping);
+	    break;
+	case sameSizeString:
+	    oracleMapping = addUntilSameSize(oracleMapping);
+	    break;
 	}
 	// These are the instances labeled by the user so we keep them to not
 	// present the same pairs twice
@@ -454,7 +406,15 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    logger.info("Parsing tree to LinkSpecification...");
             System.err.println(tree.prefix());
             System.err.println(tree.graph());
+            if(tree.prefix().startsWith("[negative ") || tree.prefix().startsWith("[positive ")){
+        	logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
+        	activeLearn(addBase(oracleMapping));
+            }
             LinkSpecification resLS = treeToLinkSpec(tree);
+            if(resLS == null){
+        	logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
+        	activeLearn(addBase(oracleMapping));
+            }
             this.mlresult = new MLResults();
             logger.info("Learned LinkSpecification: " + resLS.toStringOneLine());
             deltaLS = subtractDeltaFromLS(resLS);
@@ -465,7 +425,75 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	}
 	return this.mlresult;
     }
+    
+    private AMapping addBase(AMapping oracleMapping){
+	if(base.size() != 0){
+	    Iterator<SourceTargetValue> it = base.iterator();
+	    while(it.hasNext()){
+		SourceTargetValue inst = it.next();
+		oracleMapping.add(inst.sourceUri, inst.targetUri, inst.value);
+	    }
+	}
+	return oracleMapping;
+    }
+    
+    private AMapping addUntilPositiveNegativeEqual(AMapping oracleMapping){
+	int positive = 0;
+	int negative = 0;
+        for(String s : oracleMapping.getMap().keySet()){
+            for(String t : oracleMapping.getMap().get(s).keySet()){
+        	if(oracleMapping.getMap().get(s).get(t) == 1.0){
+        	    positive++;
+        	}else{
+        	    negative++;
+        	}
+            }
+        }
+	if(previouslyPresentedCandidates.size() != 0){
+	    Iterator<SourceTargetValue> it = previouslyPresentedCandidates.iterator();
+            while((positive != negative) && it.hasNext()){ 
+            SourceTargetValue instance = it.next();
+            if((positive < negative) && instance.value == 1.0){
+        	if(!oracleMapping.contains(instance.sourceUri, instance.targetUri)){
+                oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
+                positive++;
+        	}
+            }
+            if((positive > negative) && instance.value != 1.0){
+        	if(!oracleMapping.contains(instance.sourceUri, instance.targetUri)){
+                oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
+                negative++;
+        	}
+            }
 
+            }
+	}
+	return oracleMapping;
+    }
+    
+    private AMapping addUntilSameSize(AMapping oracleMapping){
+	int lefToAdd = oracleMapping.size();
+	if(previouslyPresentedCandidates.size() != 0){
+	    Iterator<SourceTargetValue> it = previouslyPresentedCandidates.iterator();
+	    boolean lastWasPos = false;
+	    while(lefToAdd != 0 && it.hasNext()){
+            SourceTargetValue instance = it.next();
+		if (!lastWasPos && instance.value == 1.0) {
+		    if (!oracleMapping.contains(instance.sourceUri, instance.targetUri)) {
+			oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
+			lastWasPos = true;
+		    }
+		}
+		if (lastWasPos && instance.value != 1.0) {
+		    if (!oracleMapping.contains(instance.sourceUri, instance.targetUri)) {
+			oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
+			lastWasPos = false;
+		    }
+		}
+	    }
+	}
+	return oracleMapping;
+    }
 
     /**
      * calls wombat because it is designed to handle this case    
