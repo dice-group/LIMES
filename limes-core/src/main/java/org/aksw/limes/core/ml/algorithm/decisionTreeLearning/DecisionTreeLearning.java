@@ -408,12 +408,22 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
             System.err.println(tree.graph());
             if(tree.prefix().startsWith("[negative ") || tree.prefix().startsWith("[positive ")){
         	logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
+        	AMapping oracleMappingNew = addBase(oracleMapping);
+        	if(oracleMappingNew != oracleMapping){
         	activeLearn(addBase(oracleMapping));
+        	}else{
+        	    handleUniformTrainingData(oracleMappingNew);
+        	}
             }
             LinkSpecification resLS = treeToLinkSpec(tree);
             if(resLS == null){
         	logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
+        	AMapping oracleMappingNew = addBase(oracleMapping);
+        	if(oracleMappingNew != oracleMapping){
         	activeLearn(addBase(oracleMapping));
+        	}else{
+        	    handleUniformTrainingData(oracleMappingNew);
+        	}
             }
             this.mlresult = new MLResults();
             logger.info("Learned LinkSpecification: " + resLS.toStringOneLine());
