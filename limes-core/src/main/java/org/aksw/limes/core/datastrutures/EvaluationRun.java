@@ -26,7 +26,7 @@ public class EvaluationRun {
     /** The used dataset for evaluation*/
     private String datasetName="";
     /** The qualitative measures scores e.g. F-MEASURE*/
-    Map<EvaluatorType, Double> qualititativeScores = new HashMap<EvaluatorType, Double>();
+    public Map<EvaluatorType, Double> qualititativeScores = new HashMap<EvaluatorType, Double>();
     /** The quantitative measures record */
     RunRecord quanititativeRecord = new RunRecord();
     

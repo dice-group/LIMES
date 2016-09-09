@@ -83,11 +83,12 @@ public class Evaluator {
                         sml.getMl().setConfiguration(dataset.evalData.getConfigReader().getConfiguration());
                         if(tAlgorithm.getMlAlgorithm().getName().equals("Decision Tree Learning")){
                             ((DecisionTreeLearning)sml.getMl()).setPropertyMapping(dataset.evalData.getPropertyMapping());
-                            ((DecisionTreeLearning)sml.getMl()).setInitialMapping(dataset.training);
+                            ((DecisionTreeLearning)sml.getMl()).setInitialMapping(dataset.initialMapping);
                         }
                         sml.activeLearn();
                         //mlModel = sml.activeLearn(dataset.training);
-                        AMapping nextExamples = sml.getNextExamples((int)Math.round(0.5*dataset.training.size()));
+//                        AMapping nextExamples = sml.getNextExamples((int)Math.round(0.5*dataset.training.size()));
+                        AMapping nextExamples = sml.getNextExamples(10);
                         AMapping oracleFeedback = oracleFeedback(nextExamples,dataset.training);
                         mlModel = sml.activeLearn(oracleFeedback);
                      }

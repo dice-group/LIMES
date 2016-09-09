@@ -15,12 +15,10 @@ public class DataCleaner {
 
     KBInfo kbInfo;
 
-    public static String[] separate(String line, String SEP, int NumberOfProperties) {
+    public static String[] separate(String line, String SEP, int NumberOfProperties){
         String[] result = new String[NumberOfProperties];
         String[] split = line.split(SEP);
-        logger.trace(line + " - " + SEP + " - " + NumberOfProperties);
         if (split.length == NumberOfProperties) {
-            logger.trace("returning standard");
             for (int i = 0; i < split.length; i++) {
                 split[i] = removeQuotes(split[i]);
             }
@@ -30,7 +28,6 @@ public class DataCleaner {
             for (int i = 0; i < NumberOfProperties; i++) {
                 int sepOc = line.indexOf(SEP);
                 int openApostrophe = line.indexOf("\"");
-                logger.trace("openApostrophe="+openApostrophe);
                 if (openApostrophe == -1 && sepOc == -1) {
                     result[i] = removeQuotes(line);
                     return result;
@@ -48,17 +45,12 @@ public class DataCleaner {
                     // we found a SEP within an apostrophe
                     int closingApostrophe = line.indexOf("\"", openApostrophe + 1);
                     int nextSep = line.indexOf(SEP, closingApostrophe);
-                    logger.trace("closingApostrophe:" + closingApostrophe);
-                    logger.trace("nextSep="+nextSep);
                     if (openApostrophe < nextSep && openApostrophe > -1) {
                         result[i] = removeQuotes(line.substring(openApostrophe, nextSep));
                     } else
                         result[i] = "";
-                    logger.trace("closingAp="+closingApostrophe+"  cut out: "+openApostrophe+" - "+nextSep);
                     line = line.substring(nextSep + 1);
                 }
-                logger.trace("=>"+line);
-                logger.trace(i + " " + result[i]+"\n\n");
             }
 
         }

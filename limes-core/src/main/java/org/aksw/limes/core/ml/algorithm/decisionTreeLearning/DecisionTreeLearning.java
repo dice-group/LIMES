@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -21,6 +22,7 @@ import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.evaluator.Evaluator;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
@@ -61,6 +63,9 @@ import weka.core.Instances;
  *
  */
 public class DecisionTreeLearning extends ACoreMLAlgorithm {
+    static final int expRuns = 5;
+    static int initsize=0;
+    private boolean ignoreZeros = false;
 
     static Logger logger = Logger.getLogger(DecisionTreeLearning.class);
     private PropertyMapping propertyMapping;
@@ -71,6 +76,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     private J48 tree;
     private Configuration configuration;
     private HashSet<SourceTargetValue> previouslyPresentedCandidates;
+    private HashSet<SourceTargetValue> base;
     /**
      * true if training data contains positive and negative examples
      */
@@ -282,16 +288,34 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 				String propertyB = measureAndProperties[2];
 				String metricExpression = measureName + "(x." + propertyA + ", y." + propertyB + ")";
 				if(targetCache.getInstance(targetURI) == null || sourceCache.getInstance(sourceURI) == null){
-				    logger.info("sourceURI: " + sourceURI + " targetURI: " + targetURI + " : " + value);
-				    if(targetCache.getInstance(targetURI) == null){
-					logger.info("target null");
+				    if (sourceCache.getInstance("<" + sourceURI + ">") == null || targetCache.getInstance("<" + targetURI + ">") == null) {
+                                        logger.error("URI from training mapping cannot be found in source/target cache.\n sourceURI: " + sourceURI + " targetURI: " + targetURI + " : " + value);
+				    }else{
+					if (!ignoreZeros) {
+					    inst.setValue(
+						    i,
+						    MeasureProcessor.getSimilarity(sourceCache.getInstance("<" + sourceURI + ">"),
+							    targetCache.getInstance("<" + targetURI + ">"), metricExpression, threshold, "?x", "?y"));
+					} else {
+					    double simValue = MeasureProcessor.getSimilarity(sourceCache.getInstance("<" + sourceURI + ">"),
+						    targetCache.getInstance("<" + targetURI + ">"), metricExpression, threshold, "?x", "?y");
+					    if (simValue > 0) {
+						inst.setValue(i, simValue);
+					    }
+					}
 				    }
-				    if(sourceCache.getInstance(sourceURI) == null){
-					logger.info("source null");
+				}else{
+				    if (!ignoreZeros) {
+					inst.setValue(i, MeasureProcessor.getSimilarity(sourceCache.getInstance(sourceURI), targetCache.getInstance(targetURI),
+						metricExpression, threshold, "?x", "?y"));
+				    } else {
+					double simValue = MeasureProcessor.getSimilarity(sourceCache.getInstance(sourceURI),
+						targetCache.getInstance(targetURI), metricExpression, threshold, "?x", "?y");
+					if (simValue > 0) {
+					    inst.setValue(i, simValue);
+					}
 				    }
 				}
-				inst.setValue(i, MeasureProcessor.getSimilarity(sourceCache.getInstance(sourceURI), targetCache.getInstance(targetURI),
-					metricExpression, threshold, "?x", "?y"));
 			    } else {
 				String classValue = "negative";
 				if (value == 1.0) {
@@ -308,10 +332,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
 		    });
 		});
-	diverseTrainingData = negativeExample & positiveExample;
-	logger.info(negativeExample + " & " + positiveExample + " = " + diverseTrainingData);
-	negativeExample = false;
-	positiveExample = false;
 	return instanceMap;
     }
 
@@ -340,9 +360,75 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      */
     @Override
     protected MLResults activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
+	System.out.println("Mapping size" + oracleMapping.size());
 	if(oracleMapping.size() == 0){
 	    logger.error("empty oracle Mapping! Returning empty MLResults!");
 	    return new MLResults();
+	}
+//	if(base.size() != 0){
+//	    Iterator<SourceTargetValue> it = base.iterator();
+//	    while(it.hasNext()){
+//		SourceTargetValue inst = it.next();
+//		oracleMapping.add(inst.sourceUri, inst.targetUri, inst.value);
+//	    }
+//	}
+//	int lefToAdd = oracleMapping.size();
+	int positive = 0;
+	int negative = 0;
+        for(String s : oracleMapping.getMap().keySet()){
+            for(String t : oracleMapping.getMap().get(s).keySet()){
+        	if(oracleMapping.getMap().get(s).get(t) == 1.0){
+//        	    System.out.println(t + " -> " + s);
+        	    positive++;
+        	}else{
+//        	    System.out.println(t + " -> " + s);
+        	    negative++;
+        	}
+            }
+        }
+//        System.out.println(positive + " + " + negative + " = " + (positive + negative)  + " | " + oracleMapping.size());
+	
+//	//Since J48 is not updateable we add all the training data we used previously
+//	if(previouslyPresentedCandidates.size() != 0){
+//	    Iterator<SourceTargetValue> it = previouslyPresentedCandidates.iterator();
+//	    boolean lastWasPos = false;
+//	    while(lefToAdd != 0 && it.hasNext()){
+//		
+//            SourceTargetValue instance = it.next();
+//            	
+//		if (!lastWasPos && instance.value == 1.0) {
+//		    if (!oracleMapping.contains(instance.sourceUri, instance.targetUri)) {
+//			oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
+//			lastWasPos = true;
+//		    }
+//		}
+//		if (lastWasPos && instance.value != 1.0) {
+//		    if (!oracleMapping.contains(instance.sourceUri, instance.targetUri)) {
+//			oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
+//			lastWasPos = false;
+//		    }
+//		}
+//		//                oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
+//	    }
+//	}
+	if(previouslyPresentedCandidates.size() != 0){
+	    Iterator<SourceTargetValue> it = previouslyPresentedCandidates.iterator();
+            while((positive != negative) && it.hasNext()){ 
+            SourceTargetValue instance = it.next();
+            if((positive < negative) && instance.value == 1.0){
+        	if(!oracleMapping.contains(instance.sourceUri, instance.targetUri)){
+                oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
+                positive++;
+        	}
+            }
+            if((positive > negative) && instance.value != 1.0){
+        	if(!oracleMapping.contains(instance.sourceUri, instance.targetUri)){
+                oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
+                negative++;
+        	}
+            }
+
+            }
 	}
 	// These are the instances labeled by the user so we keep them to not
 	// present the same pairs twice
@@ -353,8 +439,10 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	});
 	this.trainingSet = createEmptyTrainingInstances(oracleMapping);
 	fillInstances(trainingSet, oracleMapping);
-	if (!diverseTrainingData) {
-	    diverseTrainingData = true;
+	if (!(negativeExample & positiveExample)) {
+	    logger.info("negative examples: " + negativeExample + " positive examples:" + positiveExample);
+            negativeExample = false;
+            positiveExample = false;
 	    return handleUniformTrainingData(oracleMapping);
 	}
 	String[] options = getOptionsArray();
@@ -364,11 +452,12 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    logger.info("Building classifier....");
 	    tree.buildClassifier(trainingSet);
 	    logger.info("Parsing tree to LinkSpecification...");
+            System.err.println(tree.prefix());
+            System.err.println(tree.graph());
             LinkSpecification resLS = treeToLinkSpec(tree);
             this.mlresult = new MLResults();
             logger.info("Learned LinkSpecification: " + resLS.toStringOneLine());
             deltaLS = subtractDeltaFromLS(resLS);
-            System.err.println(tree.graph());
             this.mlresult.setLinkSpecification(resLS);
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block
@@ -382,8 +471,9 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      * calls wombat because it is designed to handle this case    
      * @param oracleMapping mapping containing user labeled data
      * @return mlResult containing the result
+     * @throws UnsupportedMLImplementationException 
      */
-    public MLResults handleUniformTrainingData(AMapping oracleMapping) {
+    public MLResults handleUniformTrainingData(AMapping oracleMapping) throws UnsupportedMLImplementationException {
 	logger.info("Training Data contains only positive/negative examples. Using Wombat");
 	ActiveMLAlgorithm wombatSimpleA = null;
 	try {
@@ -481,6 +571,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     public void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
 	super.init(lp, sourceCache, targetCache);
 	previouslyPresentedCandidates = new HashSet<SourceTargetValue>();
+	base = new HashSet<SourceTargetValue>();
 	if (lp == null) {
 	    setDefaultParameters();
 	} else {
@@ -636,6 +727,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      */
     @Override
     protected AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
+	logger.info("Getting next examples to present user...");
 	if(size == 0){
 	    logger.error("next example size is 0! Returning empty mapping!);");
 	    return MappingFactory.createDefaultMapping();
@@ -662,6 +754,9 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 		    });
 		});
 	tmpCandidateList.sort((s1, s2) -> s1.compoundMeasureValue.compareTo(s2.compoundMeasureValue));
+//	for(int i = 0; i < 200; i++){
+//	    System.out.println(tmpCandidateList.get(i));
+//	}
 
 	AMapping mostInformativeLinkCandidates = MappingFactory.createDefaultMapping();
 
@@ -669,6 +764,11 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	for (int i = 0; i < size; i++) {
 	    SourceTargetValue candidate = tmpCandidateList.get(i);
 	    mostInformativeLinkCandidates.add(candidate.sourceUri, candidate.targetUri, candidate.value);
+	}
+	for(int i = 1; i < size +1; i++){
+	    SourceTargetValue candidate = tmpCandidateList.get(tmpCandidateList.size() - i);
+	    candidate.value = 1.0;
+	    base.add(candidate);
 	}
 	return mostInformativeLinkCandidates;
     }
@@ -699,10 +799,129 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     }
 
     public static void main(String[] args) {
+	QualitativeMeasuresEvaluator eval = new QualitativeMeasuresEvaluator();
+//    final String[] datasetsList = {DataSetChooser.DataSets.DRUGS.toString()};
+	final String[] datasetsList = {/*DataSetChooser.DataSets.AMAZONGOOGLEPRODUCTS.toString(),*/ DataSetChooser.DataSets.DBPLINKEDMDB.toString(),DataSetChooser.DataSets.PERSON1.toString(), DataSetChooser.DataSets.PERSON2.toString(), DataSetChooser.DataSets.DBLPACM.toString(), DataSetChooser.DataSets.DRUGS.toString()};
+	String[][] resultsMatrix = new String[expRuns + 1][datasetsList.length];
+        Set<TaskData> tasks =new TreeSet<TaskData>();
+        TaskData task = new TaskData();
+        EvaluationData c = null;
+        int dscount = 0;
+        try {
+            for (String ds : datasetsList) {
+                logger.info(ds);
+                c = DataSetChooser.getData(ds);
+                GoldStandard gs = new GoldStandard(c.getReferenceMapping(),c.getSourceCache(),c.getTargetCache());
+                //extract training data
+
+                AMapping reference =  c.getReferenceMapping();
+                
+                AMapping training = extractTrainingData(reference, 0.9);
+                task = new TaskData(gs, c.getSourceCache(), c.getTargetCache(), c);
+                task.initialMapping = extractTrainingData(reference, -1.0);
+                task.dataName = ds;
+                task.training = training;
+                tasks.add(task);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }        Set<EvaluatorType> evaluators=null;
+        try {
+            evaluators=new TreeSet<EvaluatorType>();
+//            evaluators.add(EvaluatorType.PRECISION);
+//            evaluators.add(EvaluatorType.RECALL);
+            evaluators.add(EvaluatorType.F_MEASURE);
+//            evaluators.add(EvaluatorType.P_PRECISION);
+//            evaluators.add(EvaluatorType.P_RECALL);
+            evaluators.add(EvaluatorType.PF_MEASURE);
+//            evaluators.add(EvaluatorType.ACCURACY);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        for(TaskData td : tasks){
+        DecisionTreeLearning dtl = new DecisionTreeLearning(td.evalData.getConfigReader().getConfiguration());
+        dtl.setPropertyMapping(td.evalData.getPropertyMapping());
+        dtl.init(null, td.evalData.getSourceCache(), td.evalData.getTargetCache());
+        dtl.setInitialMapping(td.initialMapping);
+//        AMapping initialMapping = MappingFactory.createDefaultMapping();
+//        initsize = (int)Math.round(0.5*td.training.size());
+//        td.training.getMap().forEach(
+//            (sourceURI, map2) -> {
+//                map2.forEach((targetURI, value) -> {
+//                    if(initsize >= 0){
+//                        initialMapping.add(sourceURI, targetURI, value);
+//                        initsize--;
+//                    }
+//                });
+//            });
+//        dtl.setInitialMapping(initialMapping);
+        try {
+            resultsMatrix[0][dscount] = td.dataName;
+	    MLResults res = dtl.activeLearn();
+            AMapping predictions = dtl.predict(td.source, td.target, res);
+        Map<EvaluatorType, Double> evaluationResults = eval.evaluate(predictions, td.goldStandard, evaluators);
+            EvaluationRun er = new EvaluationRun(dtl.getName().replaceAll("\\s+", ""),"SUPERVISED_ACTIVE".replaceAll("//s", ""),td.dataName.replaceAll("//s", ""),evaluationResults);
+        	    if(er.qualititativeScores.get(EvaluatorType.F_MEASURE)!=0.0){
+        	    resultsMatrix[1][dscount] = String.valueOf(er.qualititativeScores.get(EvaluatorType.F_MEASURE));
+        	    }else{
+        	    resultsMatrix[1][dscount] = String.valueOf(er.qualititativeScores.get(EvaluatorType.PF_MEASURE));
+        	    }
+            er.display();
+            for(int i = 2 ; i <= expRuns; i++){
+                AMapping nextExamples = dtl.getNextExamples((int)Math.round((double)expRuns * 0.1 *td.training.size()));
+                AMapping oracleFeedback = oracleFeedback(nextExamples, td.training);
+//                AMapping oracleFeedback = oracleFeedback(nextExamples, td.evalData.getReferenceMapping());
+                res = dtl.activeLearn(oracleFeedback);
+                predictions = dtl.predict(td.source, td.target, res);
+                evaluationResults = eval.evaluate(predictions, td.goldStandard, evaluators);
+                er = new EvaluationRun(dtl.getName().replaceAll("\\s+", ""),"SUPERVISED_ACTIVE".replaceAll("//s", ""),td.dataName.replaceAll("//s", ""),evaluationResults);
+        	    if(er.qualititativeScores.get(EvaluatorType.F_MEASURE)!=0.0){
+                        resultsMatrix[i][dscount] = String.valueOf(er.qualititativeScores.get(EvaluatorType.F_MEASURE));
+        	    }else{
+                        resultsMatrix[i][dscount] = String.valueOf(er.qualititativeScores.get(EvaluatorType.PF_MEASURE));
+        	    }
+                er.display();
+            }
+
+	} catch (UnsupportedMLImplementationException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+            }
+            dscount++;
+        }
+	for(int i = 0; i <= expRuns; i++){
+        	System.out.println();
+        	for(int j = 0; j < datasetsList.length; j++){
+        	    System.out.print("\t" + resultsMatrix[i][j]);
+        	}
+        }
+
+	
+    } 
+    private static AMapping oracleFeedback(AMapping predictionMapping, AMapping referenceMapping) {
+        AMapping result = MappingFactory.createDefaultMapping();
+
+        for(String s : predictionMapping.getMap().keySet()){
+            for(String t : predictionMapping.getMap().get(s).keySet()){
+                if(referenceMapping.contains(s, t) && referenceMapping.getConfidence(s, t) == 1.0){
+//                    result.add(s, t, predictionMapping.getMap().get(s).get(t));
+                    result.add(s, t, 1.0);
+                }else{
+                    result.add(s, t, 0.0);
+                }
+            }
+        }
+        return result;
+    }
+	
+	public static void testAgainstOthers(){
+	DecisionTreeLearning.ExperimentResult expRes = new DecisionTreeLearning.ExperimentResult();
+	for(int count = 0; count < expRuns; count++){
+	    System.err.println("\n\n ================= " + count + " =============== \n\n");
 //=========================== DATASETS INITIALIZATION ===============================
 
-//    final String[] datasetsList = {DataSetChooser.DataSets.DBLPACM.toString()};
-    final String[] datasetsList = {/*DataSetChooser.DataSets.AMAZONGOOGLEPRODUCTS.toString(),*/ DataSetChooser.DataSets.DBPLINKEDMDB.toString(), DataSetChooser.DataSets.PERSON1.toString(), DataSetChooser.DataSets.PERSON2.toString(), /*DataSetChooser.DataSets.DBLPACM.toString(),*/ DataSetChooser.DataSets.DRUGS.toString(), DataSetChooser.DataSets.PERSON1_CSV.toString(), DataSetChooser.DataSets.PERSON2_CSV.toString(), DataSetChooser.DataSets.RESTAURANTS_CSV.toString()};
+//    final String[] datasetsList = {DataSetChooser.DataSets.DRUGS.toString()};
+    final String[] datasetsList = {/*DataSetChooser.DataSets.AMAZONGOOGLEPRODUCTS.toString(), */DataSetChooser.DataSets.DBPLINKEDMDB.toString(),DataSetChooser.DataSets.PERSON1.toString(), DataSetChooser.DataSets.PERSON2.toString(), DataSetChooser.DataSets.DBLPACM.toString(), DataSetChooser.DataSets.DRUGS.toString()};
         Set<TaskData> tasks =new TreeSet<TaskData>();
         TaskData task = new TaskData();
         EvaluationData c = null;
@@ -714,8 +933,10 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
                 //extract training data
 
                 AMapping reference =  c.getReferenceMapping();
-                AMapping training = extractTrainingData(reference, 0.1);
+                
+                AMapping training = extractTrainingData(reference, 0.9);
                 task = new TaskData(gs, c.getSourceCache(), c.getTargetCache(), c);
+                task.initialMapping = extractTrainingData(reference, -1.0);
                 task.dataName = ds;
                 task.training = training;
                 tasks.add(task);
@@ -724,17 +945,22 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
             System.out.println(e.getMessage());
         }
         
+//        System.out.println(c.getReferenceMapping());
+//        for(org.aksw.limes.core.io.cache.Instance i : c.getSourceCache().getAllInstances()){
+//            System.out.println(i.getUri());
+//        }
+//        System.exit(1);
 //========================== EVALUATORS INITIALIZATION =============================
         Set<EvaluatorType> evaluators=null;
         try {
             evaluators=new TreeSet<EvaluatorType>();
-            evaluators.add(EvaluatorType.PRECISION);
-            evaluators.add(EvaluatorType.RECALL);
+//            evaluators.add(EvaluatorType.PRECISION);
+//            evaluators.add(EvaluatorType.RECALL);
             evaluators.add(EvaluatorType.F_MEASURE);
-            evaluators.add(EvaluatorType.P_PRECISION);
-            evaluators.add(EvaluatorType.P_RECALL);
+//            evaluators.add(EvaluatorType.P_PRECISION);
+//            evaluators.add(EvaluatorType.P_RECALL);
             evaluators.add(EvaluatorType.PF_MEASURE);
-            evaluators.add(EvaluatorType.ACCURACY);
+//            evaluators.add(EvaluatorType.ACCURACY);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -742,7 +968,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 //========================= ALGORITHMS INITIALIZATION ============================
         
         List<TaskAlgorithm> algorithms = null;
-    final String[] algorithmsList = {"SUPERVISED_ACTIVE:DECISIONTREELEARNING"/*, "SUPERVISED_ACTIVE:WOMBATSIMPLE","SUPERVISED_BATCH:WOMBATSIMPLE",*/ };
+    final String[] algorithmsList = {"SUPERVISED_ACTIVE:DECISIONTREELEARNING" , "SUPERVISED_ACTIVE:WOMBATSIMPLE","UNSUPERVISED:WOMBATSIMPLE"};
         try
         {
             algorithms = new ArrayList<TaskAlgorithm>();
@@ -803,16 +1029,177 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
             for (EvaluationRun er : results) {
                 er.display();
             }
+            String[][] resMatrix = new String[4][results.size()];
+            int dtlcount = 0;
+            int wsupcount = 0;
+            int wunsupcount = 0;
             for (EvaluationRun er : results) {
+        	if(er.getAlgorithmName().startsWith("Decision")){
+        	    resMatrix[0][dtlcount] = er.getDatasetName();
+        	    if(er.qualititativeScores.get(EvaluatorType.F_MEASURE)!=0.0){
+        	    resMatrix[1][dtlcount] = String.valueOf(er.qualititativeScores.get(EvaluatorType.F_MEASURE));
+        	    }else{
+        	    resMatrix[1][dtlcount] = String.valueOf(er.qualititativeScores.get(EvaluatorType.PF_MEASURE));
+        	    }
+        	    dtlcount++;
+        	}
+        	if(er.getAlgorithmName().startsWith("Wombat") && er.getImplementationType().startsWith("SUPERVISED")){
+        	    if(er.qualititativeScores.get(EvaluatorType.F_MEASURE)!=0.0){
+        	    resMatrix[2][wsupcount] = String.valueOf(er.qualititativeScores.get(EvaluatorType.F_MEASURE));
+        	    }else{
+        	    resMatrix[2][wsupcount] = String.valueOf(er.qualititativeScores.get(EvaluatorType.PF_MEASURE));
+        	    }
+        	    wsupcount++;
+        	}
+        	if(er.getAlgorithmName().startsWith("Wombat") && er.getImplementationType().startsWith("UNSUP")){
+        	    if(er.qualititativeScores.get(EvaluatorType.F_MEASURE)!=0.0){
+        	    resMatrix[3][wunsupcount] = String.valueOf(er.qualititativeScores.get(EvaluatorType.F_MEASURE));
+        	    }else{
+        	    resMatrix[3][wunsupcount] = String.valueOf(er.qualititativeScores.get(EvaluatorType.PF_MEASURE));
+        	    }
+        	    wunsupcount++;
+        	}
                 System.out.println(er);
             }
+            
+//            System.out.println("\n DTL \t WSUP \t WUNSUP");
+//            PrintWriter writer;
+//	    try {
+//		writer = new PrintWriter("/home/ohdorno/Documents/Uni/BA_Informatik/Experiments/17_08TrainingOracle/" + count + "ResultsDTL_WSUP_WUNSUP.dat", "UTF-8");
+//		writer.println("\n DTL \t WSUP \t WUNSUP");
+            for(int i = 0; i < 5; i++){
+        	System.out.println(resMatrix[0][i] + "\t" + resMatrix[1][i] + "\t" + resMatrix[2][i] + "\t" + resMatrix[3][i]);
+//        	writer.println(resMatrix[0][i] + "\t" + resMatrix[1][i] + "\t" + resMatrix[2][i] + "\t" + resMatrix[3][i]);
+        	expRes.allArrs.get(i)[count] = Double.valueOf(resMatrix[1][i]);
+//        	expRes.allArrs.get(i + 5)[count] = Double.valueOf(resMatrix[2][i]);
+//        	expRes.allArrs.get(i + 10)[count] = Double.valueOf(resMatrix[3][i]);
+            }
+//            writer.close();
+//	    } catch (FileNotFoundException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	    } catch (UnsupportedEncodingException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	    }
+	}
+//	expRes.middle();
+//            PrintWriter writer;
+//	    try {
+//		writer = new PrintWriter("/home/ohdorno/Documents/Uni/BA_Informatik/Experiments/17_08WithZeros/MIDDLEDResultsDTL_WSUP_WUNSUP.dat", "UTF-8");
+//		writer.println("DecisionTreeLearning \t WombatSupervised \t WombatUnsupervised");
+////		writer.println(expRes.dtlDBLPACMmiddled + "\t" + expRes.wsupDBLPACMmiddled + "\t" + expRes.wunsupDBLPACMmiddled);
+////		writer.println(expRes.dtlDBPLINKEDMDBmiddled + "\t" + expRes.wsupDBPLINKEDMDBmiddled + "\t" + expRes.wunsupDBPLINKEDMDBmiddled);
+////		writer.println(expRes.dtlDRUGSmiddled + "\t" + expRes.wsupDRUGSmiddled + "\t" + expRes.wunsupDRUGSmiddled);
+////		writer.println(expRes.dtlPERSON1middled + "\t" + expRes.wsupPERSON1middled + "\t" + expRes.wunsupPERSON1middled);
+////		writer.println(expRes.dtlPERSON2middled + "\t" + expRes.wsupPERSON2middled + "\t" + expRes.wunsupPERSON2middled);
+//		writer.println(expRes.dtlDBLPACMmiddled + "\t0.002972113819037035\t0.26617082241053464");
+//		writer.println(expRes.dtlDBPLINKEDMDBmiddled + "\t0.32646539399545876\t0.9429814517975726");
+//		writer.println(expRes.dtlDRUGSmiddled + "\t0.9719764011799411\t0.9719764011799411");
+//		writer.println(expRes.dtlPERSON1middled + "\t0.0\t0.003992015968063872");
+//		writer.println(expRes.dtlPERSON2middled + "\t0.0\t0.0033277870216306157");
+//            writer.close();
+//	    } catch (FileNotFoundException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	    } catch (UnsupportedEncodingException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	    }
 
+    }
+    
+    public static class ExperimentResult{
+	public ArrayList<double[]> allArrs = new ArrayList<double[]>();
+	public double[] dtlDBLPACM = new double[expRuns];
+	public double[] dtlDBPLINKEDMDB = new double[expRuns];
+	public double[] dtlDRUGS = new double[expRuns];
+	public double[] dtlPERSON1 = new double[expRuns];
+	public double[] dtlPERSON2 = new double[expRuns];
+	public double[] wsupDBLPACM = new double[expRuns];
+	public double[] wsupDBPLINKEDMDB = new double[expRuns];
+	public double[] wsupDRUGS = new double[expRuns];
+	public double[] wsupPERSON1 = new double[expRuns];
+	public double[] wsupPERSON2 = new double[expRuns];
+	public double[] wunsupDBLPACM = new double[expRuns];
+	public double[] wunsupDBPLINKEDMDB = new double[expRuns];
+	public double[] wunsupDRUGS = new double[expRuns];
+	public double[] wunsupPERSON1 = new double[expRuns];
+	public double[] wunsupPERSON2 = new double[expRuns];
+	
+	private ArrayList<Double> all = new ArrayList<Double>();
+	public double dtlDBLPACMmiddled;
+	public double dtlDBPLINKEDMDBmiddled;
+	public double dtlDRUGSmiddled;
+	public double dtlPERSON1middled;
+	public double dtlPERSON2middled;
+	public double wsupDBLPACMmiddled;
+	public double wsupDBPLINKEDMDBmiddled;
+	public double wsupDRUGSmiddled;
+	public double wsupPERSON1middled;
+	public double wsupPERSON2middled;
+	public double wunsupDBLPACMmiddled;
+	public double wunsupDBPLINKEDMDBmiddled;
+	public double wunsupDRUGSmiddled;
+	public double wunsupPERSON1middled;
+	public double wunsupPERSON2middled;
+	
+	public ExperimentResult(){
+	    allArrs.add(dtlDBLPACM);
+	    allArrs.add(dtlDBPLINKEDMDB);
+            allArrs.add(dtlDRUGS);
+            allArrs.add(dtlPERSON1);
+            allArrs.add(dtlPERSON2);
+            allArrs.add(wsupDBLPACM);
+            allArrs.add(wsupDBPLINKEDMDB);
+            allArrs.add(wsupDRUGS);
+            allArrs.add(wsupPERSON1);
+            allArrs.add(wsupPERSON2);
+            allArrs.add(wunsupDBLPACM);
+            allArrs.add(wunsupDBPLINKEDMDB);
+            allArrs.add(wunsupDRUGS);
+            allArrs.add(wunsupPERSON1);
+            allArrs.add(wunsupPERSON2);
+	}
+	
+	public void middle(){
+	    for(double[] currentArr: allArrs){
+		
+		double middle = 0;
+		for(int i = 0; i < expRuns;i++){
+		    middle += currentArr[i];
+		}
+		all.add(middle/expRuns);
+	    }
+             dtlDBLPACMmiddled = all.get(0);
+             dtlDBPLINKEDMDBmiddled = all.get(1);
+             dtlDRUGSmiddled = all.get(2);
+             dtlPERSON1middled = all.get(3);
+             dtlPERSON2middled = all.get(4);
+             wsupDBLPACMmiddled = all.get(5);
+             wsupDBPLINKEDMDBmiddled = all.get(6);
+             wsupDRUGSmiddled = all.get(7);
+             wsupPERSON1middled = all.get(8);
+             wsupPERSON2middled = all.get(9);
+             wunsupDBLPACMmiddled = all.get(10);
+             wunsupDBPLINKEDMDBmiddled = all.get(11);
+             wunsupDRUGSmiddled = all.get(12);
+             wunsupPERSON1middled = all.get(13);
+             wunsupPERSON2middled = all.get(14);
+	    
+	    
+	}
     }
 
     private static AMapping extractTrainingData(AMapping reference, double factor)
     {
         AMapping training = MappingFactory.createDefaultMapping();
-        int trainingSize = (int) Math.ceil(factor*reference.getSize());
+        int trainingSize = 0;
+        if(factor == -1.0){
+            trainingSize = 10;
+        }else{
+        	trainingSize = (int) Math.ceil(factor*reference.getSize());
+        }
         HashMap<String, HashMap<String,Double>> refMap = reference.getMap();
 
         Random       random    = new Random();
@@ -824,16 +1211,21 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
             logger.error("HybridMapping not implemented");
         }
         for(int i=0 ; i< trainingSize ;i++){
+            if(keys.size()> 0){
             if(i%2 != 0){
                 String sourceInstance = keys.get( random.nextInt(keys.size()) );
+//                String sourceInstance = keys.get(i);
                 HashMap<String,Double> targetInstance = refMap.get(sourceInstance);
                 keys.remove(sourceInstance);
                 training.add(sourceInstance, targetInstance);
             }else{
                 String sourceInstance = keys.get( random.nextInt(keys.size()) );
                 String targetInstance = getRandomTargetInstance(values, random, refMap, sourceInstance, -1);
+//                String sourceInstance = keys.get(i);
+//                String targetInstance = values.get(i+3);
                 keys.remove(sourceInstance);
                 training.add(sourceInstance, targetInstance, 0d);
+            }
             }
         }
         return training;

@@ -34,6 +34,8 @@ public class TaskData implements Comparable<TaskData> {
     public GoldStandard goldStandard;
     
     public EvaluationData evalData;
+    
+    public AMapping initialMapping;
 
     public TaskData(){};
     public TaskData(GoldStandard goldStandard, AMapping mapping, ACache source, ACache target) {
