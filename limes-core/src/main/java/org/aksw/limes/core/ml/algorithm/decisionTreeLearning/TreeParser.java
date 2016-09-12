@@ -29,7 +29,7 @@ public class TreeParser {
      * The measures which are used in this LinkSpecification. The Double value
      * is without delta
      */
-    public static HashMap<String, Double> measuresUsed = new HashMap<String, Double>();
+    public HashMap<String, Double> measuresUsed = new HashMap<String, Double>();
 
     private DecisionTreeLearning dtl;
 
@@ -62,11 +62,6 @@ public class TreeParser {
 	if (treeIsAtomic(tree)) {
 	    ls = parseAtomicTree(tree, false);
 	} else {
-	    //Test if both thresholds are 0
-	    String test = tree.substring(tree.indexOf("<"), tree.indexOf("[")).replace("<", "").replace("=", "").replace(">","").replace("\n", "").replace(" ", "").trim();
-	    if(test.equals("0,0")){
-		return null;
-	    }
 	    int endOfRightChild = ParenthesisMatcher.findMatchingParenthesis(tree, tree.indexOf("["));
 	    String leftChild = tree.substring(tree.indexOf("["), endOfRightChild + 1);
 	    String rightChild = tree.substring(endOfRightChild + 1);
@@ -91,7 +86,7 @@ public class TreeParser {
 	    } else if (rightSpec != null) {
 		ls = addRootLSToChild(rootForRight, rightSpec);
 	    } else {
-		logger.error("This should not happen! (Sub-)Tree is not recognized as atomic");
+//		logger.error("This should not happen! (Sub-)Tree is not recognized as atomic");
 		return null;
 	    }
 	}
@@ -128,7 +123,14 @@ public class TreeParser {
      * @return LinkSpecification or null
      */
     private LinkSpecification processSubtree(String leftChild, String rightChild, String tree, boolean left) {
+	boolean irrelevant = false;
+//	    //Test if there is a threshold <= 0  in which case this is an irrelevant subtree/leaf
+	    String test = tree.substring(tree.indexOf("<"), tree.indexOf("[")).replace("<", "").replace("=", "").replace(">","").replace("\n", "").replace(" ", "").trim();
+	    if(test.equals("0,0")){
+		irrelevant = true;
+	    }
 	if (left) {
+	    if(!irrelevant){
 	    if (leftChild.startsWith("[" + classPositive)) {
 		return parseAtomicTree(tree.replace(rightChild, "[" + classPositive + "]").replace(leftChild, "[" + classNegative + "]"), true);
 	    } else if (!(leftChild.startsWith("[" + classPositive) || leftChild.startsWith("[" + classNegative))) { // if
@@ -141,6 +143,7 @@ public class TreeParser {
 														    // a
 														    // leaf
 		return parseTreePrefix(leftChild.substring(1, leftChild.length() - 1));
+	    }
 	    }
 	} else {
 	    if (rightChild.startsWith("[" + classPositive)) {
@@ -289,6 +292,8 @@ public class TreeParser {
     public static void main(String[] args){
 	TreeParser tp = new TreeParser();
 //	tp.parseTreePrefix("[qgrams§http://www.okkam.org/ontology_person1.owl#has_address|http://www.okkam.org/ontology_person2.owl#has_address: <= 0.826087,\n> 0.826087[cosine§http://www.okkam.org/ontology_person1.owl#age|http://www.okkam.org/ontology_person2.owl#age: <= 0,\n> 0[negative (15.0)][negative (5.0/2.0)]][positive (11.0)]]");
-	tp.parseTreePrefix("qgrams§http://www.okkam.org/ontology_person1.owl#date_of_birth|http://www.okkam.org/ontology_person2.owl#date_of_birth: <= 0.2, > 0.2[negative (44.0)][jaro§http://www.okkam.org/ontology_person1.owl#age|http://www.okkam.org/ontology_person2.owl#age: <= 0, > 0[cosine§http://www.okkam.org/ontology_person1.owl#date_of_birth|http://www.okkam.org/ontology_person2.owl#date_of_birth: <= 0, > 0[qgrams§http://www.okkam.org/ontology_person1.owl#has_address|http://www.okkam.org/ontology_person2.owl#has_address: <= 0.826087, > 0.826087[negative (7.0/1.0)][positive (4.0)]][negative (29.0/8.0)]][qgrams§http://www.okkam.org/ontology_person1.owl#phone_numer|http://www.okkam.org/ontology_person2.owl#phone_numer: <= 0.5, > 0.5[qgrams§http://www.okkam.org/ontology_person1.owl#has_address|http://www.okkam.org/ontology_person2.owl#has_address: <= 0.826087, > 0.826087[negative (6.0/1.0)][positive (3.0/1.0)]][cosine§http://www.okkam.org/ontology_person1.owl#given_name|http://www.okkam.org/ontology_person2.owl#given_name: <= 0, > 0[qgrams§http://www.okkam.org/ontology_person1.owl#has_address|http://www.okkam.org/ontology_person2.owl#has_address: <= 0.826087, > 0.826087[positive (6.0/2.0)][jaro§http://www.okkam.org/ontology_person1.owl#has_address|http://www.okkam.org/ontology_person2.owl#has_address: <= 0.954882, > 0.954882[jaro§http://www.okkam.org/ontology_person1.owl#given_name|http://www.okkam.org/ontology_person2.owl#given_name: <= 0.916667, > 0.916667[negative (8.0/2.0)][positive (2.0)]][negative (3.0/1.0)]]][positive (116.0/51.0)]]]]"); }
+	System.out.println(tp.parseTreePrefix("qgrams§http://www.okkam.org/ontology_person1.owl#date_of_birth|http://www.okkam.org/ontology_person2.owl#date_of_birth: <= 0.2, > 0.2[negative (44.0)][jaro§http://www.okkam.org/ontology_person1.owl#age|http://www.okkam.org/ontology_person2.owl#age: <= 0, > 0[cosine§http://www.okkam.org/ontology_person1.owl#date_of_birth|http://www.okkam.org/ontology_person2.owl#date_of_birth: <= 0, > 0[qgrams§http://www.okkam.org/ontology_person1.owl#has_address|http://www.okkam.org/ontology_person2.owl#has_address: <= 0.826087, > 0.826087[negative (7.0/1.0)][positive (4.0)]][negative (29.0/8.0)]][qgrams§http://www.okkam.org/ontology_person1.owl#phone_numer|http://www.okkam.org/ontology_person2.owl#phone_numer: <= 0.5, > 0.5[qgrams§http://www.okkam.org/ontology_person1.owl#has_address|http://www.okkam.org/ontology_person2.owl#has_address: <= 0.826087, > 0.826087[negative (6.0/1.0)][positive (3.0/1.0)]][cosine§http://www.okkam.org/ontology_person1.owl#given_name|http://www.okkam.org/ontology_person2.owl#given_name: <= 0, > 0[qgrams§http://www.okkam.org/ontology_person1.owl#has_address|http://www.okkam.org/ontology_person2.owl#has_address: <= 0.826087, > 0.826087[positive (6.0/2.0)][jaro§http://www.okkam.org/ontology_person1.owl#has_address|http://www.okkam.org/ontology_person2.owl#has_address: <= 0.954882, > 0.954882[jaro§http://www.okkam.org/ontology_person1.owl#given_name|http://www.okkam.org/ontology_person2.owl#given_name: <= 0.916667, > 0.916667[negative (8.0/2.0)][positive (2.0)]][negative (3.0/1.0)]]][positive (116.0/51.0)]]]]")); 
+	}
+
 
 }

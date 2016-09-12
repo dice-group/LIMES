@@ -101,7 +101,7 @@ public class Evaluator {
                     predictions = tAlgorithm.getMlAlgorithm().predict(dataset.source, dataset.target, mlModel);
                     logger.info("Start the evaluation of the results");
                     evaluationResults = eval.evaluate(predictions, dataset.goldStandard, QlMeasures);
-                    EvaluationRun er = new EvaluationRun(tAlgorithm.getMlAlgorithm().getName().replaceAll("\\s+", ""),tAlgorithm.getMlType().name().replaceAll("//s", ""),dataset.dataName.replaceAll("//s", ""),evaluationResults);
+                    EvaluationRun er = new EvaluationRun(tAlgorithm.getMlAlgorithm().getName().replaceAll("\\s+", ""),tAlgorithm.getMlType().name().replaceAll("//s", ""),dataset.dataName.replaceAll("//s", ""),evaluationResults, mlModel.getLinkSpecification());
                     runsList.add(er);
                 }
             }
@@ -231,7 +231,7 @@ public class Evaluator {
      * @param referenceMapping The gold standard to evaluate the prediction
      * @return Mapping - The mappings from the predictions that exist in the gold standard
      */
-    private AMapping oracleFeedback(AMapping predictionMapping, AMapping referenceMapping) {
+    public AMapping oracleFeedback(AMapping predictionMapping, AMapping referenceMapping) {
         AMapping result = MappingFactory.createDefaultMapping();
 
         for(String s : predictionMapping.getMap().keySet()){
