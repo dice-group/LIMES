@@ -130,6 +130,7 @@
 								<X-Compile-Target-JDK>${maven.compile.target}</X-Compile-Target-JDK>
 							</manifestEntries>
 						</transformer>
+						 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 					</transformers>
 				</configuration>
 			</plugin>
