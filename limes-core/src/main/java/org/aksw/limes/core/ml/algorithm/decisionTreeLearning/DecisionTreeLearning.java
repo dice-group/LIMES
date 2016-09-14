@@ -152,7 +152,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	this.configuration = c;
 	this.tp = new TreeParser(this);
     }
-
+    
     /**
      * Generates training set out of config if there is a linkspec, else returns
      * a random mapping

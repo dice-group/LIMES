@@ -29,7 +29,8 @@ public class EvaluatorsTest {
         /*        if(crossValidate)
             testCrossValidate();
         else*/
-        testEvaluator();
+//        testEvaluator();
+	testCrossValidate();
     }
     public void testEvaluator() {
         try {

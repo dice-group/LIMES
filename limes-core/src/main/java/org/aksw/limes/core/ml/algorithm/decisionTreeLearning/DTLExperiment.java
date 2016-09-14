@@ -36,9 +36,10 @@ import org.slf4j.LoggerFactory;
 
 public class DTLExperiment {
     static Logger logger = LoggerFactory.getLogger(DTLExperiment.class);
-//    public static final String[] datasetsList = {DataSetChooser.DataSets.DRUGS.toString()};
+//    public static final String[] datasetsList = {DataSetChooser.DataSets.PERSON2.toString()};
     public static final String[] datasetsList = {/*DataSetChooser.DataSets.AMAZONGOOGLEPRODUCTS.toString(),*/ DataSetChooser.DataSets.DBPLINKEDMDB.toString(), DataSetChooser.DataSets.PERSON1.toString(), DataSetChooser.DataSets.PERSON2.toString(), DataSetChooser.DataSets.DBLPACM.toString(), DataSetChooser.DataSets.DRUGS.toString()};
-    public static final String[] algorithmsListData = {"SUPERVISED_ACTIVE:WOMBATSIMPLE","UNSUPERVISED:WOMBATSIMPLE","SUPERVISED_ACTIVE:DECISIONTREELEARNING"};
+//    public static final String[] algorithmsListData = {"SUPERVISED_BATCH:WOMBATSIMPLE","SUPERVISED_ACTIVE:DECISIONTREELEARNING"};
+    public static final String[] algorithmsListData = {"SUPERVISED_ACTIVE:DECISIONTREELEARNING"};
     private static QualitativeMeasuresEvaluator eval = new QualitativeMeasuresEvaluator();
     static List<EvaluationRun> runsList = new ArrayList<EvaluationRun>();
     private static final int expRuns = 10;

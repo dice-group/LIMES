@@ -95,6 +95,16 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected AWombat() {
         super();
         setDefaultParameters();
+     measures = new HashSet<>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams"));
+
+      sourcePropertiesCoverageMap = null; //coverage map for latter computations
+      targetPropertiesCoverageMap = null; //coverage map for latter computations
+    
+     pseudoFMeasure = null;
+     trainingData = MappingFactory.createDefaultMapping();
+     isUnsupervised = false;
+     wombatParameterNames = new HashSet<>();
+     refinementTreeRoot = null;
     }
 
     /**
