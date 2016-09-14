@@ -167,6 +167,8 @@ public class MainView {
         itemSave = new MenuItem("Save config");
         itemSave.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LIMES Configuration File (*.rdf, *.ttl, *.n3, *.nt)", "*.rdf", "*.ttl", "*.n3", "*.nt");
+            fileChooser.getExtensionFilters().add(extFilter);
             File file = fileChooser.showSaveDialog(stage);
             if (file != null) {
                 controller.saveConfig(file);

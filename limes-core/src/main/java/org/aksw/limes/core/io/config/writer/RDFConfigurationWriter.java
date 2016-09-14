@@ -147,7 +147,6 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
             String pPrefix = p.substring(0, p.indexOf(":"));
             if (!m.getNsPrefixMap().containsKey(pPrefix)) {
                 logger.error("Undefined prefix " + pPrefix);
-                System.exit(1);
             }
             String pPrefixUri = m.getNsPrefixMap().get(pPrefix);
             p = p.replace(":", "").replace(pPrefix, pPrefixUri);

@@ -75,6 +75,9 @@ public class EditEndpointsController implements IEditController {
 	Endpoint endpoint = sourceOrTarget == SOURCE ? config.getSourceEndpoint() : config.getTargetEndpoint();
 	KBInfo info = endpoint.getInfo();
 	info.setEndpoint(endpointURL);
+	if(idNamespace == null){
+	    idNamespace = sourceOrTarget == SOURCE ? "source" : "target"; 
+	}
 	info.setId(idNamespace);
 	info.setGraph(graph);
 	info.setPageSize(Integer.parseInt(pageSize));

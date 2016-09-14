@@ -163,6 +163,12 @@ public class Config extends Configuration {
                 outConfig.getSourceInfo().getVar().replaceAll("\\?", ""));
         outConfig.metric.param1 = outConfig.acceptanceThreshold;
         outConfig.metric.param2 = outConfig.verificationThreshold;
+        for(String s: outConfig.getSourceInfo().getPrefixes().keySet()){
+            PrefixHelper.addPrefix(s, outConfig.getSourceInfo().getPrefixes().get(s));
+        }
+        for(String s: outConfig.getTargetInfo().getPrefixes().keySet()){
+            PrefixHelper.addPrefix(s, outConfig.getTargetInfo().getPrefixes().get(s));
+        }
         return outConfig;
     }
 
@@ -178,14 +184,15 @@ public class Config extends Configuration {
         if (!metric.isComplete()) {
             throw new MetricFormatException();
         }
-        String format = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
-        if (format.equals(".xml")) {
-            XMLConfigurationWriter xmlwriter = new XMLConfigurationWriter();
-            xmlwriter.write(this, file.getAbsolutePath());
-        } else {
+//        String format = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
+        //Not implemented yet
+//        if (format.equals(".xml")) {
+//            XMLConfigurationWriter xmlwriter = new XMLConfigurationWriter();
+//            xmlwriter.write(this, file.getAbsolutePath());
+//        } else {
             RDFConfigurationWriter rdfwriter = new RDFConfigurationWriter();
             rdfwriter.write(this, file.getAbsolutePath());
-        }
+//        }
     }
 
     /**
@@ -383,6 +390,7 @@ public class Config extends Configuration {
         String[] parts = property.split(":");
         String prefixToAdd = parts[0];
         info.getPrefixes().put(prefixToAdd, PrefixHelper.getURI(prefixToAdd));
+        prefixes.put(prefixToAdd, PrefixHelper.getURI(prefixToAdd));
     }
 
     /**

@@ -18,6 +18,7 @@ import org.aksw.limes.core.gui.model.metric.Measure;
 import org.aksw.limes.core.gui.model.metric.Node;
 import org.aksw.limes.core.gui.model.metric.Operator;
 import org.aksw.limes.core.gui.model.metric.Property;
+import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 
 /**
  * Panel in MainView which contains the specific nodes, measures and operators
@@ -200,9 +201,10 @@ public class ToolBox extends VBox {
 	if (config.getSourceInfo().getFunctions() != null) {
 	    List<String> sourceProperties = new ArrayList<String>();
 	    for (String prop : config.getSourceInfo().getProperties()) {
-		if (config.getSourceInfo().getFunctions().get(prop).keySet().toArray().length == 1) {
-		    sourceProperties.add((String) config.getSourceInfo().getFunctions().get(prop).keySet().toArray()[0]);
-		}
+//		if (config.getSourceInfo().getFunctions().get(prop).keySet().toArray().length == 1) {
+//		    sourceProperties.add((String) config.getSourceInfo().getFunctions().get(prop).keySet().toArray()[0]);
+//		}
+		sourceProperties.add(PrefixHelper.abbreviate(prop));
 	    }
 	    setListViewFromList(toolBoxSourceProperties, sourceProperties);
 	} else {
@@ -211,9 +213,10 @@ public class ToolBox extends VBox {
 	if (config.getTargetInfo().getFunctions() != null) {
 	    List<String> targetProperties = new ArrayList<String>();
 	    for (String prop : config.getTargetInfo().getProperties()) {
-		if (config.getTargetInfo().getFunctions().get(prop).keySet().toArray().length == 1) {
-		    targetProperties.add((String) config.getTargetInfo().getFunctions().get(prop).keySet().toArray()[0]);
-		}
+//		if (config.getTargetInfo().getFunctions().get(prop).keySet().toArray().length == 1) {
+//		    targetProperties.add((String) config.getTargetInfo().getFunctions().get(prop).keySet().toArray()[0]);
+//		}
+		targetProperties.add(PrefixHelper.abbreviate(prop));
 	    }
 	    setListViewFromList(toolBoxTargetProperties, targetProperties);
 	} else {
