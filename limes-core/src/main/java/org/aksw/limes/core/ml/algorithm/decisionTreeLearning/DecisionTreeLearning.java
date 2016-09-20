@@ -3,9 +3,12 @@ package org.aksw.limes.core.ml.algorithm.decisionTreeLearning;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.PairSimilar;
@@ -13,6 +16,8 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
+import org.aksw.limes.core.execution.rewriter.Rewriter;
+import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -29,6 +34,7 @@ import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.util.ParenthesisMatcher;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import weka.classifiers.trees.J48;
@@ -49,6 +55,9 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     static final int expRuns = 1;
     static int initsize=0;
     private boolean ignoreZeros = false;
+    private HashMap<String, Double> alreadySeenLS;
+    private HashMap<String, AMapping> alreadyCalculatedMapping;
+    private HashSet<String> alreadyChecked;
 
     static Logger logger = Logger.getLogger(DecisionTreeLearning.class);
     private PropertyMapping propertyMapping;
@@ -184,7 +193,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    logger.error("No initial mapping or linkspecification as parameter given! Returning null!");
 	    mapping = null;
 	}
-	return mapping;
+	return balanceInitialMapping(mapping);
     }
 
     /**
@@ -283,6 +292,10 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 				String metricExpression = measureName + "(x." + propertyA + ", y." + propertyB + ")";
 				if(targetCache.getInstance(targetURI) == null || sourceCache.getInstance(sourceURI) == null){
 				    if (sourceCache.getInstance("<" + sourceURI + ">") == null || targetCache.getInstance("<" + targetURI + ">") == null) {
+					if(sourceCache.getInstance("<" + sourceURI + ">") == null)
+					    logger.error("source null");
+					if(targetCache.getInstance("<" + targetURI + ">") == null)
+					    logger.error("target null");
                                         logger.error("URI from training mapping cannot be found in source/target cache.\n sourceURI: " + sourceURI + " targetURI: " + targetURI + " : " + value);
 				    }else{
 					if (!ignoreZeros) {
@@ -354,7 +367,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      */
     @Override
     protected MLResults activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
-	logger.info("Mapping size before adding" + oracleMapping.size());
+//	logger.info("Mapping size before adding" + oracleMapping.size());
 	if(oracleMapping.size() == 0){
 	    logger.error("empty oracle Mapping! Returning empty MLResults!");
 	    return new MLResults();
@@ -373,7 +386,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    oracleMapping = addAll(oracleMapping);
 	    break;
 	}
-	logger.info("Mapping size after adding" + oracleMapping.size());
+//	logger.info("Mapping size after adding" + oracleMapping.size());
 	AMapping originalOracleMapping = MappingFactory.createDefaultMapping();
 	// These are the instances labeled by the user so we keep them to not
 	// present the same pairs twice
@@ -386,7 +399,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	this.trainingSet = createEmptyTrainingInstances(oracleMapping);
 	fillInstances(trainingSet, oracleMapping);
 	if (!(negativeExample & positiveExample)) {
-	    logger.info("negative examples: " + negativeExample + " positive examples:" + positiveExample);
+	    logger.debug("negative examples: " + negativeExample + " positive examples:" + positiveExample);
             negativeExample = false;
             positiveExample = false;
 	    return handleUniformTrainingData(oracleMapping);
@@ -402,9 +415,9 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    tree.setOptions(options);
 	    logger.info("Building classifier....");
 	    tree.buildClassifier(trainingSet);
-	    boolean sameAgain = handleSameTreeAgain(tree, previousTreePrefix, originalOracleMapping);
-            System.err.println(tree.prefix());
-            System.err.println(tree.graph());
+//	    boolean sameAgain = handleSameTreeAgain(tree, previousTreePrefix, originalOracleMapping);
+//            System.err.println(tree.prefix());
+//            System.err.println(tree.graph());
             if(tree.prefix().startsWith("[negative ") || tree.prefix().startsWith("[positive ")){
         	logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
         	if(addBase(oracleMapping)){
@@ -416,9 +429,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
             logger.info("Parsing tree to LinkSpecification...");
             LinkSpecification resLS = treeToLinkSpec(tree);
             //If we get the same tree again, raise the threshold to get better results faster
-            if(sameAgain){
-        	resLS.setThreshold(resLS.getThreshold() + 0.1);
-            }
             if(resLS == null){
         	logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
         	if(addBase(oracleMapping)){
@@ -426,6 +436,11 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
         	}else{
         	    handleUniformTrainingData(oracleMapping);
         	}
+            }
+        	while(alreadySeenLS.get(resLS.toString()) != null && resLS.getThreshold() != 1.0){
+        	    logger.debug("Already seen " + resLS);
+        	resLS.setThreshold(Math.min(resLS.getThreshold() + 0.1, 1.0));
+        	logger.debug("Setting threshold to: " + resLS.getThreshold());
             }
 	    // If we get the same tree again, raise the threshold to get better
 	    // results faster
@@ -436,9 +451,9 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    }
             this.mlresult = new MLResults();
             if(checkIfThereWasBetterLSBefore(resLS)){
-        	logger.info("Already had better LinkSpecification: " + bestLS);
+        	logger.debug("Already had better LinkSpecification: " + bestLS);
             }else{
-            logger.info("Learned LinkSpecification: " + resLS.toStringOneLine());
+            logger.debug("Learned LinkSpecification: " + resLS.toStringOneLine());
             }
             this.mlresult.setLinkSpecification(bestLS);
             this.mlresult.setMapping(prediction);
@@ -451,34 +466,43 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	return this.mlresult;
     }
     
-    private boolean handleSameTreeAgain(J48 tree, String previousTreePrefix, AMapping oracleMapping) throws Exception{
-	String modifiedTreePrefix = tree.prefix().replaceAll("\\(\\d+.\\d+\\)", "");
-	String modifiedPreviousTreePrefix = previousTreePrefix.replaceAll("\\(\\d+.\\d+\\)", "");
-//	int sizeBefore = oracleMapping.size();
-	if(modifiedTreePrefix.equals(modifiedPreviousTreePrefix)){
-//	    logger.info("Same tree as before. Trying to put more emphasis on user input");
-//	    addUntilSameSize(oracleMapping);
-//	    if(sizeBefore == oracleMapping.size()){
-//	    logger.info("Adding Base");
-//		addBase(oracleMapping);
-//	    }
-//	   activeLearn(oracleMapping); 
-	    return true;
-	}
-	return false;
-    }
+//    private boolean sameTreeAgain(J48 tree, String previousTreePrefix, AMapping oracleMapping) throws Exception{
+//	String modifiedTreePrefix = tree.prefix().replaceAll("\\(\\d+.\\d+\\)", "");
+//	String modifiedPreviousTreePrefix = previousTreePrefix.replaceAll("\\(\\d+.\\d+\\)", "");
+////	int sizeBefore = oracleMapping.size();
+//	if(modifiedTreePrefix.equals(modifiedPreviousTreePrefix)){
+////	    logger.info("Same tree as before. Trying to put more emphasis on user input");
+////	    addUntilSameSize(oracleMapping);
+////	    if(sizeBefore == oracleMapping.size()){
+////	    logger.info("Adding Base");
+////		addBase(oracleMapping);
+////	    }
+////	   activeLearn(oracleMapping); 
+//	    return true;
+//	}
+//	return false;
+//    }
     
-    private boolean checkIfThereWasBetterLSBefore(LinkSpecification ls){
-	MLResults tmp = new MLResults();
-	tmp.setLinkSpecification(ls);
-	AMapping pred = predict(this.sourceCache, this.targetCache, tmp);
-	double pfresult = pfmeasure.calculate(pred, new GoldStandard(null, this.sourceCache.getAllUris(), this.targetCache.getAllUris()));
-	logger.info("best before: " + bestFMeasure + " now: " + pfresult);
-	if(pfresult > bestFMeasure){
+    private boolean checkIfThereWasBetterLSBefore(LinkSpecification ls) {
+	if (alreadySeenLS.get(ls.toString()) == null) {
+	    logger.debug("Checking: " +ls);
+	    MLResults tmp = new MLResults();
+	    tmp.setLinkSpecification(ls);
+	    AMapping pred = predict(this.sourceCache, this.targetCache, tmp);
+	    double pfresult = pfmeasure.calculate(
+		    pred,
+		    new GoldStandard(null, this.sourceCache.getAllUris(), this.targetCache
+			    .getAllUris()));
+	    logger.debug("best before: " + bestFMeasure + " now: " + pfresult);
+	    alreadySeenLS.put(ls.toString(), pfresult);
+	    if (pfresult > bestFMeasure) {
 		this.prediction = pred;
 		this.bestLS = ls;
 		this.bestFMeasure = pfresult;
-	    return false;
+		return false;
+	    }
+	}else{
+	    logger.debug("already checked: " + ls);
 	}
 	return true;
     }
@@ -496,7 +520,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
         	}
             }
         }
-        logger.info("positive: " + positive + " negative: " + negative);
+        logger.debug("positive: " + positive + " negative: " + negative);
 	if(base.size() != 0){
 	    Iterator<SourceTargetValue> it = base.iterator();
 	    while(it.hasNext() && positive != negative){
@@ -512,7 +536,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 		}
 	    }
 	}
-        logger.info("positive: " + positive + " negative: " + negative);
+        logger.debug("positive: " + positive + " negative: " + negative);
 	return changed;
     }
 
@@ -520,42 +544,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	return ((MemoryMapping)oracleMapping).union(previouslyPresentedCandidates);
     }
     
-//    private AMapping addUntilPositiveNegativeEqual(AMapping oracleMapping){
-//	int positive = 0;
-//	int negative = 0;
-//        for(String s : oracleMapping.getMap().keySet()){
-//            for(String t : oracleMapping.getMap().get(s).keySet()){
-//        	if(oracleMapping.getMap().get(s).get(t) == 1.0){
-//        	    positive++;
-//        	}else{
-//        	    negative++;
-//        	}
-//            }
-//        }
-//        logger.info("positive: " + positive + " negative: " + negative);
-//	if(previouslyPresentedCandidates.size() != 0){
-//	    Iterator<SourceTargetValue> it = previouslyPresentedCandidates.iterator();
-//            while((positive != negative) && it.hasNext()){ 
-//            SourceTargetValue instance = it.next();
-//            if((positive < negative) && instance.value == 1.0){
-//        	if(!oracleMapping.contains(instance.sourceUri, instance.targetUri)){
-//                oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
-//                positive++;
-//        	}
-//            }
-//            if((positive > negative) && instance.value != 1.0){
-//        	if(!oracleMapping.contains(instance.sourceUri, instance.targetUri)){
-//                oracleMapping.add(instance.sourceUri, instance.targetUri, instance.value);
-//                negative++;
-//        	}
-//            }
-//
-//            }
-//	}
-//	return oracleMapping;
-//    }
-    
-    private AMapping addUntilSameSize(AMapping oracleMapping){
+    private AMapping balanceInitialMapping(AMapping oracleMapping){
 	int positive = 0;
 	int negative = 0;
         for(String s : oracleMapping.getMap().keySet()){
@@ -567,36 +556,72 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
         	}
             }
         }
-	int leftToAdd = oracleMapping.size();
-	if(previouslyPresentedCandidates.size() != 0){
-	    boolean lastWasPos = false;
-        for(String sourceURI : oracleMapping.getMap().keySet()){
-            for(String targetURI : oracleMapping.getMap().get(sourceURI).keySet()){
-        	double value = oracleMapping.getMap().get(sourceURI).get(targetURI);
-		if (!lastWasPos && value == 1.0 && leftToAdd > 0) {
-		    if (!oracleMapping.contains(sourceURI, targetURI)) {
-			oracleMapping.add(sourceURI, targetURI, value);
-			lastWasPos = true;
-			leftToAdd--;
-			positive++;
-		    }
-		}
-		if (lastWasPos && value != 1.0 && leftToAdd > 0) {
-		    if (!oracleMapping.contains(sourceURI, targetURI)) {
-			oracleMapping.add(sourceURI, targetURI, value);
-			lastWasPos = false;
-			leftToAdd--;
-			negative++;
-		    }
-		}
+        logger.debug("Initial mapping contains  " + positive + " positive and  " + negative + " negative examples");
+        if(positive == negative){
+            return oracleMapping;
+        }else if(positive < negative){
+            Iterator<Entry<String, HashMap<String, Double>>> it = oracleMapping.getMap().entrySet().iterator();
+            while(it.hasNext()){
+        	Entry<String, HashMap<String, Double>> item = it.next();
+        	if(item.getValue().values().contains(0.0) && positive != negative){
+        	    it.remove();
+        	    negative--;
+        	}
             }
-	    }
-	}
-	if(positive < negative){
-	    addBase(oracleMapping);
-	}
+        }else if(positive > negative){
+            Random rand = new Random();
+            while(positive != negative){
+        	oracleMapping.add(sourceCache.getAllInstances().get(rand.nextInt(sourceCache.size())).getUri(), targetCache.getAllInstances().get(rand.nextInt(targetCache.size())).getUri(), 0.0);
+        	negative++;
+            }
+            
+        }
+        logger.debug("Balanced mapping contains  " + positive + " positive and  " + negative + " negative examples");
 	return oracleMapping;
-	}
+    }
+    
+//    private AMapping addUntilSameSize(AMapping oracleMapping){
+//	int positive = 0;
+//	int negative = 0;
+//        for(String s : oracleMapping.getMap().keySet()){
+//            for(String t : oracleMapping.getMap().get(s).keySet()){
+//        	if(oracleMapping.getMap().get(s).get(t) == 1.0){
+//        	    positive++;
+//        	}else{
+//        	    negative++;
+//        	}
+//            }
+//        }
+//	int leftToAdd = oracleMapping.size();
+//	if(previouslyPresentedCandidates.size() != 0){
+//	    boolean lastWasPos = false;
+//        for(String sourceURI : oracleMapping.getMap().keySet()){
+//            for(String targetURI : oracleMapping.getMap().get(sourceURI).keySet()){
+//        	double value = oracleMapping.getMap().get(sourceURI).get(targetURI);
+//		if (!lastWasPos && value == 1.0 && leftToAdd > 0) {
+//		    if (!oracleMapping.contains(sourceURI, targetURI)) {
+//			oracleMapping.add(sourceURI, targetURI, value);
+//			lastWasPos = true;
+//			leftToAdd--;
+//			positive++;
+//		    }
+//		}
+//		if (lastWasPos && value != 1.0 && leftToAdd > 0) {
+//		    if (!oracleMapping.contains(sourceURI, targetURI)) {
+//			oracleMapping.add(sourceURI, targetURI, value);
+//			lastWasPos = false;
+//			leftToAdd--;
+//			negative++;
+//		    }
+//		}
+//            }
+//	    }
+//	}
+//	if(positive < negative){
+//	    addBase(oracleMapping);
+//	}
+//	return oracleMapping;
+//	}
     
     
 
@@ -694,6 +719,8 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     @Override
     public AMapping predict(ACache source, ACache target, MLResults mlModel) {
 	LinkSpecification ls = mlModel.getLinkSpecification();
+        Rewriter rw = RewriterFactory.getDefaultRewriter();
+        ls = rw.rewrite(ls);
 	DynamicPlanner dp = new DynamicPlanner(source, target);
 	SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, this.configuration.getSourceInfo().getVar(), this.configuration
 		.getTargetInfo().getVar());
@@ -703,6 +730,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     @Override
     public void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
+	logger.setLevel(Level.OFF);
 	super.init(lp, sourceCache, targetCache);
 	this.previouslyPresentedCandidates = MappingFactory.createDefaultMapping();
 	this.base = new ArrayList<SourceTargetValue>();
@@ -713,6 +741,9 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	this.bestLS = null;
 	this.bestFMeasure = 0.0;
 	this.prediction = null;
+	alreadySeenLS = new HashMap<String, Double>();
+	alreadyCalculatedMapping = new HashMap<String, AMapping>();
+	alreadyChecked = new HashSet<String>();
 	if (lp == null) {
 	    setDefaultParameters();
 	} else {
@@ -873,10 +904,16 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    logger.error("next example size is 0! Returning empty mapping!);");
 	    return MappingFactory.createDefaultMapping();
 	}
+	AMapping deltaMapping = alreadyCalculatedMapping.get(deltaLS.toString());
+	if(deltaMapping == null){
 	DynamicPlanner dp = new DynamicPlanner(this.sourceCache, this.targetCache);
 	SimpleExecutionEngine ee = new SimpleExecutionEngine(this.sourceCache, this.targetCache, this.configuration.getSourceInfo().getVar(),
 		this.configuration.getTargetInfo().getVar());
-	AMapping deltaMapping = ee.execute(deltaLS, dp);
+	deltaMapping = ee.execute(deltaLS, dp);
+	alreadyCalculatedMapping.put(deltaLS.toString(), deltaMapping);
+	}else{
+	    logger.debug("Skip execution because we already calculated this mapping");
+	}
 	ArrayList<SourceTargetValue> tmpCandidateList = new ArrayList<SourceTargetValue>();
 	deltaMapping.getMap().forEach(
 		(sourceURI, map2) -> {
@@ -894,6 +931,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 			}
 		    });
 		});
+
 	tmpCandidateList.sort((s1, s2) -> s1.compoundMeasureValue.compareTo(s2.compoundMeasureValue));
 //	for(int i = 0; i < 200; i++){
 //	    System.out.println(tmpCandidateList.get(i));
@@ -901,6 +939,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
 	AMapping mostInformativeLinkCandidates = MappingFactory.createDefaultMapping();
 
+	if(tmpCandidateList.size()!= 0){
 	size = (tmpCandidateList.size() < size) ? tmpCandidateList.size() : size;
 	for (int i = 0; i < size; i++) {
 	    SourceTargetValue candidate = tmpCandidateList.get(i);
@@ -911,12 +950,35 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    candidate.value = 1.0;
 	    base.add(candidate);
 	}
+	}else{
+	    logger.info("All Candidates have been presented. Returning most certain candidates");
+	    base.sort((s1, s2) -> s1.compoundMeasureValue.compareTo(s2.compoundMeasureValue));
+	size = (base.size() < size) ? base.size() : size;
+	for (int i = 0; i < size; i++) {
+	    SourceTargetValue candidate = base.get(i);
+	    mostInformativeLinkCandidates.add(candidate.sourceUri, candidate.targetUri, candidate.value);
+	}
+	    
+	}
 	return mostInformativeLinkCandidates;
     }
 
     @Override
     protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
 	throw new UnsupportedMLImplementationException(this.getName());
+    }
+    
+    public ACache getSourceCache(){
+	return this.sourceCache;
+    }
+    public ACache getTargetCache(){
+	return this.targetCache;
+    }
+    public void setSourceCache(ACache sourceCache){
+	this.sourceCache = sourceCache;
+    }
+    public void setTargetCache(ACache targetCache){
+	this.targetCache = targetCache;
     }
 
     public PropertyMapping getPropertyMapping() {
