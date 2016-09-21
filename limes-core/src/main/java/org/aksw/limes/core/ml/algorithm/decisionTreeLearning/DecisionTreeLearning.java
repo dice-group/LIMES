@@ -569,10 +569,12 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
         	}
             }
         }else if(positive > negative){
-            Random rand = new Random();
+            int targetIndex = 1;
+            int sourceIndex = 0;
             while(positive != negative){
-        	oracleMapping.add(sourceCache.getAllInstances().get(rand.nextInt(sourceCache.size())).getUri(), targetCache.getAllInstances().get(rand.nextInt(targetCache.size())).getUri(), 0.0);
+        	oracleMapping.add(sourceCache.getAllInstances().get(sourceIndex).getUri(), targetCache.getAllInstances().get(targetIndex).getUri(), 0.0);
         	negative++;
+        	sourceIndex++;
             }
             
         }
@@ -730,7 +732,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     @Override
     public void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
-	logger.setLevel(Level.OFF);
+	logger.setLevel(Level.ALL);
 	super.init(lp, sourceCache, targetCache);
 	this.previouslyPresentedCandidates = MappingFactory.createDefaultMapping();
 	this.base = new ArrayList<SourceTargetValue>();
