@@ -108,7 +108,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     private int trainingDataSize = 10;
     private boolean unprunedTree = false;
     private boolean collapseTree = true;
-    private double pruningConfidence = 0.25;
+    private double pruningConfidence = 0.1;
     private boolean reducedErrorPruning = false;
     private int foldNumber = 3;
     private boolean subtreeRaising = true;
@@ -173,6 +173,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	AMapping mapping = MappingFactory.createDefaultMapping();
 	if (this.initialMapping.size() > 0) {
 	    mapping = this.initialMapping;
+	    mapping = balanceInitialMapping(mapping);
 	} else if (this.bestLS != null) {
 	    logger.info("...by running given LinkSpecification...");
 	    DynamicPlanner dp = new DynamicPlanner(sourceCache, targetCache);
@@ -193,7 +194,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    logger.error("No initial mapping or linkspecification as parameter given! Returning null!");
 	    mapping = null;
 	}
-	return balanceInitialMapping(mapping);
+	return mapping;
     }
 
     /**
@@ -396,38 +397,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 		originalOracleMapping.add(sourceURI, targetURI, value);
 	    });
 	});
-	this.trainingSet = createEmptyTrainingInstances(oracleMapping);
-	fillInstances(trainingSet, oracleMapping);
-	if (!(negativeExample & positiveExample)) {
-	    logger.debug("negative examples: " + negativeExample + " positive examples:" + positiveExample);
-            negativeExample = false;
-            positiveExample = false;
-	    return handleUniformTrainingData(oracleMapping);
-	}
-	String[] options = getOptionsArray();
-	try {
-	    String previousTreePrefix = "";
-	    if(tree != null){
-		previousTreePrefix = tree.prefix();
-	    }else{
-	    }
-	    tree = new J48();
-	    tree.setOptions(options);
-	    logger.info("Building classifier....");
-	    tree.buildClassifier(trainingSet);
-//	    boolean sameAgain = handleSameTreeAgain(tree, previousTreePrefix, originalOracleMapping);
-//            System.err.println(tree.prefix());
-//            System.err.println(tree.graph());
-            if(tree.prefix().startsWith("[negative ") || tree.prefix().startsWith("[positive ")){
-        	logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
-        	if(addBase(oracleMapping)){
-        	activeLearn(oracleMapping);
-        	}else{
-        	    handleUniformTrainingData(oracleMapping);
-        	}
-            }
-            logger.info("Parsing tree to LinkSpecification...");
-            LinkSpecification resLS = treeToLinkSpec(tree);
+	   LinkSpecification resLS = buildTreeAndParseToLS(oracleMapping); 
             //If we get the same tree again, raise the threshold to get better results faster
             if(resLS == null){
         	logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
@@ -459,13 +429,48 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
             this.mlresult.setMapping(prediction);
             this.mlresult.setQuality(bestFMeasure);
             deltaLS = subtractDeltaFromLS(resLS);
-	} catch (Exception e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
 	return this.mlresult;
     }
-    
+	private LinkSpecification buildTreeAndParseToLS(AMapping oracleMapping) {
+	this.trainingSet = createEmptyTrainingInstances(oracleMapping);
+	fillInstances(trainingSet, oracleMapping);
+	if (!(negativeExample & positiveExample)) {
+	    logger.debug("negative examples: " + negativeExample + " positive examples:" + positiveExample);
+            negativeExample = false;
+            positiveExample = false;
+//	    return handleUniformTrainingData(oracleMapping);
+            return null;
+	}
+	LinkSpecification resLS = null;
+	try{
+	String[] options = getOptionsArray();
+	    String previousTreePrefix = "";
+	    if(tree != null){
+		previousTreePrefix = tree.prefix();
+	    }else{
+	    }
+	    tree = new J48();
+	    tree.setOptions(options);
+	    logger.info("Building classifier....");
+	    tree.buildClassifier(trainingSet);
+//	    boolean sameAgain = handleSameTreeAgain(tree, previousTreePrefix, originalOracleMapping);
+//            System.err.println(tree.prefix());
+//            System.err.println(tree.graph());
+            if(tree.prefix().startsWith("[negative ") || tree.prefix().startsWith("[positive ")){
+        	logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
+        	if(addBase(oracleMapping)){
+        	activeLearn(oracleMapping);
+        	}else{
+        	    handleUniformTrainingData(oracleMapping);
+        	}
+            }
+            logger.info("Parsing tree to LinkSpecification...");
+            resLS = treeToLinkSpec(tree);
+	}catch(Exception e){
+	    e.printStackTrace();
+	}
+            return resLS;
+	}
 //    private boolean sameTreeAgain(J48 tree, String previousTreePrefix, AMapping oracleMapping) throws Exception{
 //	String modifiedTreePrefix = tree.prefix().replaceAll("\\(\\d+.\\d+\\)", "");
 //	String modifiedPreviousTreePrefix = previousTreePrefix.replaceAll("\\(\\d+.\\d+\\)", "");
@@ -544,14 +549,30 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	return ((MemoryMapping)oracleMapping).union(previouslyPresentedCandidates);
     }
     
+    private AMapping cloneMapping(AMapping oracleMapping){
+	AMapping clonedMapping = MappingFactory.createDefaultMapping();
+        for(String s : oracleMapping.getMap().keySet()){
+            for(String t : oracleMapping.getMap().get(s).keySet()){
+        	double v = oracleMapping.getMap().get(s).get(t);
+		clonedMapping.add(s, t, v);
+            }
+        }
+        return clonedMapping;
+	
+    }
+    
     private AMapping balanceInitialMapping(AMapping oracleMapping){
+	AMapping originalOracleMapping = MappingFactory.createDefaultMapping();
 	int positive = 0;
 	int negative = 0;
         for(String s : oracleMapping.getMap().keySet()){
             for(String t : oracleMapping.getMap().get(s).keySet()){
-        	if(oracleMapping.getMap().get(s).get(t) == 1.0){
+        	double v = oracleMapping.getMap().get(s).get(t);
+        	if(v == 1.0){
+		originalOracleMapping.add(s, t, v);
         	    positive++;
         	}else{
+		originalOracleMapping.add(s, t, v);
         	    negative++;
         	}
             }
@@ -568,13 +589,25 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
         	    negative--;
         	}
             }
-        }else if(positive > negative){
+        }else if(negative < (float)oracleMapping.size()/4.0){
+        int tries = 5;
+        AMapping bestMapping = MappingFactory.createDefaultMapping();
+        while(bestFMeasure < 0.8 && tries != 0){
+        int dummynegative = negative;
+            logger.debug("Try: " + tries);
+           AMapping clonedMapping = cloneMapping(originalOracleMapping); 
             Random rand = new Random();
-            while(positive != negative){
-        	oracleMapping.add(sourceCache.getAllInstances().get(rand.nextInt(sourceCache.size())).getUri(), targetCache.getAllInstances().get(rand.nextInt(targetCache.size())).getUri(), 0.0);
-        	negative++;
+            while(positive != dummynegative){
+        	clonedMapping.add(sourceCache.getAllInstances().get(rand.nextInt(sourceCache.size())).getUri(), targetCache.getAllInstances().get(rand.nextInt(targetCache.size())).getUri(), 0.0);
+        	dummynegative++;
             }
-            
+		LinkSpecification ls = buildTreeAndParseToLS(clonedMapping);
+		if(!checkIfThereWasBetterLSBefore(ls)){
+		    bestMapping = clonedMapping;
+		}
+		tries--;
+        }
+         return bestMapping;
         }
         logger.debug("Balanced mapping contains  " + positive + " positive and  " + negative + " negative examples");
 	return oracleMapping;
@@ -730,7 +763,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     @Override
     public void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
-	logger.setLevel(Level.OFF);
+	logger.setLevel(Level.ALL);
 	super.init(lp, sourceCache, targetCache);
 	this.previouslyPresentedCandidates = MappingFactory.createDefaultMapping();
 	this.base = new ArrayList<SourceTargetValue>();
@@ -945,7 +978,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    SourceTargetValue candidate = tmpCandidateList.get(i);
 	    mostInformativeLinkCandidates.add(candidate.sourceUri, candidate.targetUri, candidate.value);
 	}
-	for(int i = 1; i < tmpCandidateList.size(); i++){
+	for(int i = 1; i <= tmpCandidateList.size(); i++){
 	    SourceTargetValue candidate = tmpCandidateList.get(tmpCandidateList.size() - i);
 	    candidate.value = 1.0;
 	    base.add(candidate);
