@@ -326,7 +326,7 @@ public class MachineLearningView {
 	if (this.mlController.getMlModel().getConfig().propertyMapping != null) {
 	    param.setValue(this.mlController.getMlModel().getConfig().propertyMapping);
 	} else {
-	    new MLPropertyMatchingView(this.mlController.getMlModel().getConfig(), param);
+	    new MLPropertyMatchingView(this.mlController.getMlModel().getConfig(), param, mainView.toolBox);
 	}
     }
 

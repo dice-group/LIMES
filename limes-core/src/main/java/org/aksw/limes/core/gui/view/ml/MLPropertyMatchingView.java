@@ -3,10 +3,6 @@ package org.aksw.limes.core.gui.view.ml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.ml.algorithm.LearningParameter;
-import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -24,6 +20,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import org.aksw.limes.core.gui.model.Config;
+import org.aksw.limes.core.gui.view.ToolBox;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 
 /**
  * Class that creates a view to let the user match the properties
@@ -54,14 +55,17 @@ public class MLPropertyMatchingView {
     private HBox unmatchedPropertyBox;
     private Config config;
 
+    private ToolBox mainViewToolBox;
+
     /**
      * Constructor sets the parameters, creates the view and adds listeners
      * @param config
      * @param param
      */
-    public MLPropertyMatchingView(Config config, LearningParameter param) {
+    public MLPropertyMatchingView(Config config, LearningParameter param, ToolBox tb) {
 	this.config = config;
 	this.param = param;
+	this.mainViewToolBox = tb;
 	createRootPane();
 	addListeners();
     }
@@ -72,8 +76,16 @@ public class MLPropertyMatchingView {
     private void createRootPane() {
 	sourcePropList = new ListView<String>();
 	targetPropList = new ListView<String>();
+	if(mainViewToolBox.getToolBoxSourceProperties() != null){
+	sourcePropList.getItems().addAll(mainViewToolBox.getToolBoxSourceProperties().getItems());
+	}else{
 	sourcePropList.getItems().addAll(config.getSourceInfo().getProperties());
+	}
+	if(mainViewToolBox.getToolBoxTargetProperties() != null){
+	targetPropList.getItems().addAll(mainViewToolBox.getToolBoxTargetProperties().getItems());
+	}else{
 	targetPropList.getItems().addAll(config.getTargetInfo().getProperties());
+	}
 	Label sourceLabel = new Label("available Source Properties:");
 	Label targetLabel = new Label("available Target Properties:");
 	VBox sourceColumn = new VBox();

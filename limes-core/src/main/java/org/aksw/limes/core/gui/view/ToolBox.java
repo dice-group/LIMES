@@ -55,7 +55,6 @@ public class ToolBox extends VBox {
     private Config config;
 
     private MainView view;
-
     /**
      * Constructor builds view and adds listeners to elements
      * 
@@ -224,6 +223,14 @@ public class ToolBox extends VBox {
 	} else {
 	    setListViewFromList(toolBoxTargetProperties, config.getTargetInfo().getProperties());
 	}
+    }
+
+    public ListView<String> getToolBoxSourceProperties() {
+        return toolBoxSourceProperties;
+    }
+
+    public ListView<String> getToolBoxTargetProperties() {
+        return toolBoxTargetProperties;
     }
 
 }
