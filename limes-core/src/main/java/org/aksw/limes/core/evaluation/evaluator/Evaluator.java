@@ -24,7 +24,6 @@ import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTreeLearning;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,10 +80,10 @@ public class Evaluator {
                         logger.info("Implementation type: "+MLImplementationType.SUPERVISED_ACTIVE);
                         ActiveMLAlgorithm sml =(ActiveMLAlgorithm)tAlgorithm.getMlAlgorithm();
                         sml.getMl().setConfiguration(dataset.evalData.getConfigReader().getConfiguration());
-                        if(tAlgorithm.getMlAlgorithm().getName().equals("Decision Tree Learning")){
-                            ((DecisionTreeLearning)sml.getMl()).setPropertyMapping(dataset.evalData.getPropertyMapping());
-                            ((DecisionTreeLearning)sml.getMl()).setInitialMapping(dataset.training);
-                        }
+//                        if(tAlgorithm.getMlAlgorithm().getName().equals("Decision Tree Learning")){
+//                            ((DecisionTreeLearning)sml.getMl()).setPropertyMapping(dataset.evalData.getPropertyMapping());
+//                            ((DecisionTreeLearning)sml.getMl()).setInitialMapping(dataset.training);
+//                        }
                         sml.activeLearn();
                         //mlModel = sml.activeLearn(dataset.training);
                         AMapping nextExamples = sml.getNextExamples((int)Math.round(0.5*dataset.training.size()));
