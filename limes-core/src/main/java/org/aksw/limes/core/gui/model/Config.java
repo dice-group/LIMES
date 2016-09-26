@@ -28,6 +28,8 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 
+import com.sun.media.jfxmedia.logging.Logger;
+
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
