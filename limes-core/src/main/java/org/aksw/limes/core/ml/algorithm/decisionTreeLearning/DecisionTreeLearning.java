@@ -34,7 +34,6 @@ import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.util.ParenthesisMatcher;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import weka.classifiers.trees.J48;
@@ -414,11 +413,11 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
             }
 	    // If we get the same tree again, raise the threshold to get better
 	    // results faster
-	    if (bestLS != null) {
-		if (resLS.equals(bestLS)) {
-		    resLS.setThreshold(resLS.getThreshold() + 0.1);
-		}
-	    }
+//	    if (bestLS != null) {
+//		if (resLS.equals(bestLS)) {
+//		    resLS.setThreshold(resLS.getThreshold() + 0.1);
+//		}
+//	    }
             this.mlresult = new MLResults();
             if(checkIfThereWasBetterLSBefore(resLS)){
         	logger.debug("Already had better LinkSpecification: " + bestLS);
@@ -763,7 +762,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     @Override
     public void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
-	logger.setLevel(Level.ALL);
 	super.init(lp, sourceCache, targetCache);
 	this.previouslyPresentedCandidates = MappingFactory.createDefaultMapping();
 	this.base = new ArrayList<SourceTargetValue>();
