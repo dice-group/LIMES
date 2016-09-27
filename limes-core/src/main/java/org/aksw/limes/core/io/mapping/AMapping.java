@@ -26,6 +26,7 @@ public abstract class AMapping implements IMapping {
         this.reversedMap = new HashMap<Double, HashMap<String, TreeSet<String>>>();
         this.size = 0;
         this.predicate = OWL.sameAs.getURI(); //default
+        
     }
 
     public abstract double getConfidence(String key, String value);
