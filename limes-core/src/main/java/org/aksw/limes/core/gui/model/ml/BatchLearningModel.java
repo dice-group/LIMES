@@ -16,6 +16,8 @@ import javafx.concurrent.Task;
  *
  */
 public class BatchLearningModel extends MachineLearningModel {
+    
+    private AMapping trainingMapping;
 
     /**
      * constructor
@@ -38,9 +40,9 @@ public class BatchLearningModel extends MachineLearningModel {
         	MLResults model = null;
                 try {
                     mlalgorithm.init(learningParameters, sourceCache, targetCache);
-                    RDFMappingReader mappingReader = new RDFMappingReader(config.getMlTrainingDataFile());
-                    AMapping trainingData = mappingReader.read(); 
-                    model = mlalgorithm.asSupervised().learn(trainingData);
+//                    RDFMappingReader mappingReader = new RDFMappingReader(config.getMlTrainingDataFile());
+//                    AMapping trainingData = mappingReader.read(); 
+                    model = mlalgorithm.asSupervised().learn(trainingMapping);
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -49,6 +51,14 @@ public class BatchLearningModel extends MachineLearningModel {
                 return null;
             }
         };
+    }
+
+    public AMapping getTrainingMapping() {
+        return trainingMapping;
+    }
+
+    public void setTrainingMapping(AMapping trainingMapping) {
+        this.trainingMapping = trainingMapping;
     }
 
 }

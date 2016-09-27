@@ -2,12 +2,6 @@ package org.aksw.limes.core.gui.view;
 
 import java.io.File;
 
-import org.aksw.limes.core.gui.controller.ResultController;
-import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.gui.model.InstanceProperty;
-import org.aksw.limes.core.gui.model.Result;
-import org.aksw.limes.core.io.mapping.AMapping;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -22,6 +16,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import org.aksw.limes.core.gui.controller.ResultController;
+import org.aksw.limes.core.gui.model.Config;
+import org.aksw.limes.core.gui.model.InstanceProperty;
+import org.aksw.limes.core.gui.model.Result;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * View to show the results of the query, and their instances
@@ -66,6 +69,7 @@ public class ResultView {
      * Mapping of the results
      */
     private AMapping mapping;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Constructor
@@ -98,7 +102,13 @@ public class ResultView {
                     fileChooser.getExtensionFilters().add(extFilterCSV);
                     File file = fileChooser.showSaveDialog(stage);
                     if (file != null) {
-                        controller.saveResults(controller.getCurrentConfig().getMapping(), file);
+                	if(this.mapping != null){
+                            controller.saveResults(this.mapping, file);
+                	}else if(controller.getCurrentConfig().getMapping() != null){
+                            controller.saveResults(controller.getCurrentConfig().getMapping(), file);
+                	}else{
+                	   logger.error("No mapping to save found!"); 
+                	}
                     }
                 });
         menuFile.getItems().add(itemSaveResults);
@@ -212,7 +222,7 @@ public class ResultView {
      * @param results
      *         List of the Limes results following the Model of Results
      */
-    public void showResults(ObservableList<Result> results) {
+    public void showResults(ObservableList<Result> results, AMapping resultMapping) {
         this.results = results;
         table.setItems(results);
     }

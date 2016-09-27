@@ -77,7 +77,7 @@ public class UnsupervisedLearningController extends MachineLearningController {
                         @Override
                         public void run() {
                             ResultView resultView = new ResultView(mlModel.getConfig());
-                            resultView.showResults(results);
+                            resultView.showResults(results, mlModel.getLearnedMapping());
                         }
                     });
                     // });

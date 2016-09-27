@@ -223,7 +223,7 @@ public class ActiveLearningResultView {
 								targetURI, value));
 					});
 				});
-				    resultView.showResults(resultList);
+				    resultView.showResults(resultList, model.getLearnedMapping());
 				});
 
 		stage.setTitle("LIMES");

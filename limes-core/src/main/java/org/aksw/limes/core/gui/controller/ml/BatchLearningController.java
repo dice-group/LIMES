@@ -13,6 +13,7 @@ import org.aksw.limes.core.gui.model.Result;
 import org.aksw.limes.core.gui.model.ml.BatchLearningModel;
 import org.aksw.limes.core.gui.view.ResultView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
+import org.aksw.limes.core.gui.view.ml.BatchLearningInputView;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
 import org.aksw.limes.core.io.cache.ACache;
 
@@ -36,14 +37,8 @@ public class BatchLearningController extends MachineLearningController {
     public BatchLearningController(Config config, ACache sourceCache, ACache targetCache) {
         this.mlModel = new BatchLearningModel(config, sourceCache, targetCache);
     }
-
-    /**
-     * Creates a learning task and launches a {@link TaskProgressView}.
-     * The results are shown in a {@link ResultView}
-     * @param view MachineLearningView to manipulate elements in it
-     */
-    @Override
-    public void learn(MachineLearningView view) {
+    
+    private void startLearning(MachineLearningView view){
         Task<Void> learnTask = this.mlModel.createLearningTask();
 
         TaskProgressView taskProgressView = new TaskProgressView("Learning");
@@ -75,7 +70,7 @@ public class BatchLearningController extends MachineLearningController {
                         @Override
                         public void run() {
                             ResultView resultView = new ResultView(mlModel.getConfig());
-                            resultView.showResults(results);
+                            resultView.showResults(results, mlModel.getLearnedMapping());
                         }
                     });
                     // });
@@ -98,6 +93,29 @@ public class BatchLearningController extends MachineLearningController {
                             error.getMessage());
                 });
 
+	
+    }
+
+    /**
+     * Creates a learning task and launches a {@link TaskProgressView}.
+     * The results are shown in a {@link ResultView}
+     * @param view MachineLearningView to manipulate elements in it
+     */
+    @Override
+    public void learn(MachineLearningView view) {
+	if(((BatchLearningModel)this.mlModel).getTrainingMapping() == null){
+	BatchLearningInputView bliv = new BatchLearningInputView((BatchLearningModel)this.mlModel, this);
+	bliv.finished.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+        	if(newValue){
+        	    startLearning(mlView);
+        	}
+            }
+        });
+	}else{
+	    startLearning(this.mlView);
+	}
 
     }
 

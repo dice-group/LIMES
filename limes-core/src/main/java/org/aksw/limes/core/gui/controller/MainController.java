@@ -159,7 +159,7 @@ public class MainController {
                     mapTask,
                     items -> {
                         ResultView resultView = new ResultView(currentConfig);
-                        resultView.showResults(results);
+                        resultView.showResults(results, currentConfig.getMapping());
                     },
                     error -> {
                         MainView.showErrorWithStacktrace("Error during mapping",
