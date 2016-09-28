@@ -2,6 +2,8 @@ package org.aksw.limes.core.gui.model;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -111,8 +113,22 @@ public class GetClassesTask extends Task<List<ClassMatchingNode>> {
                 e.printStackTrace();
             }
         }
+        Collections.sort(result, new ClassMatchingNodeComparator());
         return result;
     }
+    
+    /**
+     * 
+     * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+     *         studserv.uni-leipzig.de{@literal >}
+     *	Helper class to sort ClassMatchingNodes by name
+     */
+    class ClassMatchingNodeComparator implements Comparator<ClassMatchingNode> {
+	    @Override
+	    public int compare(ClassMatchingNode a, ClassMatchingNode b) {
+	        return a.getName().compareToIgnoreCase(b.getName());
+	    }
+	}
 
     public int hashCode() {
       return new HashCodeBuilder(17, 37).

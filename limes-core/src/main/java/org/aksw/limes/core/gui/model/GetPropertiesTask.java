@@ -1,6 +1,7 @@
 package org.aksw.limes.core.gui.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javafx.concurrent.Task;
@@ -60,6 +61,7 @@ public class GetPropertiesTask extends Task<List<String>> {
             result.add(PrefixHelper.abbreviate(property));
         }
         TaskResultSerializer.serializeTaskResult(this, result);
+        Collections.sort(result);
         return result;
     }
 
