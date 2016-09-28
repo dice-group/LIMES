@@ -58,6 +58,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     private HashMap<String, AMapping> alreadyCalculatedMapping;
     private HashSet<String> alreadyChecked;
 
+    private boolean batch = false;
     static Logger logger = Logger.getLogger(DecisionTreeLearning.class);
     private PropertyMapping propertyMapping;
     private Instances trainingSet;
@@ -488,6 +489,27 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 //    }
     
     private boolean checkIfThereWasBetterLSBefore(LinkSpecification ls) {
+	if(batch){
+	while (alreadySeenLS.get(ls.toString()) == null && ls.getThreshold() != 1.0) {
+	    logger.debug("Checking: " +ls);
+	    MLResults tmp = new MLResults();
+	    tmp.setLinkSpecification(ls);
+	    AMapping pred = predict(this.sourceCache, this.targetCache, tmp);
+	    double pfresult = pfmeasure.calculate(
+		    pred,
+		    new GoldStandard(null, this.sourceCache.getAllUris(), this.targetCache
+			    .getAllUris()));
+	    logger.debug("best before: " + bestFMeasure + " now: " + pfresult);
+	    alreadySeenLS.put(ls.toString(), pfresult);
+	    if (pfresult > bestFMeasure) {
+		this.prediction = pred;
+		this.bestLS = ls;
+		this.bestFMeasure = pfresult;
+	    }
+	    ls = ls.clone();
+	    ls.setThreshold(Math.min(1.0, ls.getThreshold() + 0.05));
+	}
+	}
 	if (alreadySeenLS.get(ls.toString()) == null) {
 	    logger.debug("Checking: " +ls);
 	    MLResults tmp = new MLResults();
@@ -920,7 +942,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     @Override
     protected boolean supports(MLImplementationType mlType) {
-	return mlType == MLImplementationType.SUPERVISED_ACTIVE;
+	return mlType == MLImplementationType.SUPERVISED_ACTIVE || mlType == MLImplementationType.SUPERVISED_BATCH;
     }
 
     /**
@@ -996,7 +1018,8 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     @Override
     protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
-	throw new UnsupportedMLImplementationException(this.getName());
+	batch = true;
+	return activeLearn(trainingData);
     }
     
     public ACache getSourceCache(){
