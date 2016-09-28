@@ -82,7 +82,7 @@ public class ToolBox extends VBox {
 	box.getChildren().add(toolBoxSourceProperties);
 	box.getChildren().add(new Label("Target Properties"));
 	box.getChildren().add(toolBoxTargetProperties);
-	box.getChildren().add(new Label("Metrics"));
+	box.getChildren().add(new Label("Measures"));
 	box.getChildren().add(toolBoxMetrics);
 	box.getChildren().add(new Label("Operators"));
 	box.getChildren().add(toolBoxOperators);
