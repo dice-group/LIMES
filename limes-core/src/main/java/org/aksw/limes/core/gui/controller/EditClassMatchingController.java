@@ -124,4 +124,8 @@ public class EditClassMatchingController implements IEditController {
 	this.taskProgressView = tpv;
     }
 
+    public Config getConfig() {
+        return config;
+    }
+
 }

@@ -69,6 +69,7 @@ public class GetClassesTask extends Task<List<ClassMatchingNode>> {
     protected List<ClassMatchingNode> call() throws Exception {
 	List<ClassMatchingNode> result = (List<ClassMatchingNode>) TaskResultSerializer.getTaskResult(this);
 	if(result != null){
+	    Collections.sort(result, new ClassMatchingNodeComparator());
 	    return result;
 	}
         Set<String> rootClasses = SPARQLHelper.rootClassesUncached(info.getEndpoint(),
@@ -77,6 +78,7 @@ public class GetClassesTask extends Task<List<ClassMatchingNode>> {
         progress = 0;
         result = getClassMatchingNodes(rootClasses);
         TaskResultSerializer.serializeTaskResult(this, result);
+        Collections.sort(result, new ClassMatchingNodeComparator());
         return result;
     }
 
@@ -113,7 +115,6 @@ public class GetClassesTask extends Task<List<ClassMatchingNode>> {
                 e.printStackTrace();
             }
         }
-        Collections.sort(result, new ClassMatchingNodeComparator());
         return result;
     }
     

@@ -53,6 +53,7 @@ public class GetPropertiesTask extends Task<List<String>> {
     protected List<String> call() throws Exception {
 	List<String> result = (List<String>) TaskResultSerializer.getTaskResult(this);
 	if(result != null){
+	    Collections.sort(result);
 	    return result;
 	}
         result = new ArrayList<String>();

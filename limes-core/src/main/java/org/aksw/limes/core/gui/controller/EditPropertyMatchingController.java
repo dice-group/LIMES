@@ -115,4 +115,8 @@ public class EditPropertyMatchingController implements IEditController {
     public void setTaskProgressView(TaskProgressView tpv) {
 	this.taskProgressView = tpv;
     }
+
+    public Config getConfig() {
+        return config;
+    }
 }

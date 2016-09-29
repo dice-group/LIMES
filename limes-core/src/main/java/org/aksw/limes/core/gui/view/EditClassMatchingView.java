@@ -39,6 +39,8 @@ public class EditClassMatchingView implements IEditView {
     private TreeView<ClassMatchingNode> sourceTreeView;
     private TreeView<ClassMatchingNode> targetTreeView;
     private Label errorMissingClassMatchingLabel = new Label("One source and one target class must be chosen!");
+    private TitledPane sourcePanelWithTitle;
+    private TitledPane targetPanelWithTitle;
 
     /**
      * Constructor creates the root pane
@@ -60,12 +62,12 @@ public class EditClassMatchingView implements IEditView {
      */
     private void createRootPane() {
 	HBox hbox = new HBox();
-	Node sourcePanelWithTitle = createClassMatchingPane(SOURCE);
+	sourcePanelWithTitle = createClassMatchingPane(SOURCE);
 	HBox.setHgrow(sourcePanelWithTitle, Priority.ALWAYS);
 	hbox.getChildren().add(sourcePanelWithTitle);
-	Node targetPaneWithTitle = createClassMatchingPane(TARGET);
-	HBox.setHgrow(targetPaneWithTitle, Priority.ALWAYS);
-	hbox.getChildren().add(targetPaneWithTitle);
+	targetPanelWithTitle = createClassMatchingPane(TARGET);
+	HBox.setHgrow(targetPanelWithTitle, Priority.ALWAYS);
+	hbox.getChildren().add(targetPanelWithTitle);
 	VBox vbox = new VBox();
         errorMissingClassMatchingLabel.setTextFill(Color.RED);
 	errorMissingClassMatchingLabel.setVisible(false);
@@ -94,7 +96,7 @@ public class EditClassMatchingView implements IEditView {
      * @param sourceOrTarget
      * @return
      */
-    private Node createClassMatchingPane(SourceOrTarget sourceOrTarget) {
+    private TitledPane createClassMatchingPane(SourceOrTarget sourceOrTarget) {
 	BorderPane pane = new BorderPane();
 
 	TreeView<ClassMatchingNode> treeView = new TreeView<ClassMatchingNode>();
@@ -136,6 +138,11 @@ public class EditClassMatchingView implements IEditView {
 	TreeView<ClassMatchingNode> treeView = sourceOrTarget == SOURCE ? sourceTreeView : targetTreeView;
 	treeView.setShowRoot(false);
 	treeView.setRoot(root);
+	if(sourceOrTarget == SourceOrTarget.SOURCE){
+	    sourcePanelWithTitle.setText(controller.getConfig().getSourceInfo().getId() + " classes");
+	}else{
+	    targetPanelWithTitle.setText(controller.getConfig().getTargetInfo().getId() + " classes");
+	}
     }
 
     /**
