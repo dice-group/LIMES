@@ -67,9 +67,10 @@ public class GetPropertiesTask extends Task<List<String>> {
 
     public int hashCode() {
       return new HashCodeBuilder(15, 37).
-        append(info).
+        append(info.getEndpoint()).
+        append(info.getGraph()).
         append(model).
-        append(class_).
+        append(class_.getUri()).
         toHashCode();
     }
 }

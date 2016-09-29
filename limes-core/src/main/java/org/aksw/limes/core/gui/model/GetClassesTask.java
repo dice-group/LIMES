@@ -132,7 +132,8 @@ public class GetClassesTask extends Task<List<ClassMatchingNode>> {
 
     public int hashCode() {
       return new HashCodeBuilder(17, 37).
-        append(info).
+        append(info.getEndpoint()).
+        append(info.getGraph()).
         append(model).
         toHashCode();
     }

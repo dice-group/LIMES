@@ -46,7 +46,8 @@ public class WizardController {
      * @param editControllers
      *            controllers for steps
      */
-    public WizardController(Runnable finishCallback, Runnable cancelCallback, WizardView view, IEditController... editControllers) {
+    public WizardController(Runnable finishCallback, Runnable cancelCallback, WizardView view,
+	    IEditController... editControllers) {
 	this.finishCallback = finishCallback;
 	this.cancelCallback = cancelCallback;
 	view.setController(this);
@@ -62,17 +63,21 @@ public class WizardController {
      * 
      * @param newPage
      */
-    private void setPage(int newPage) {
+    private void setPage(int newPage){
+	//This should not happen
 	if (newPage < 0 || newPage > editControllers.length) {
 	    return;
 	}
-	if (this.currentPage != -1) {
+	//If we go to the next page, validate and save
+	if (this.currentPage != -1 && newPage > this.currentPage) {
 	    if (editControllers[this.currentPage].validate()) {
 		editControllers[this.currentPage].save();
 	    } else {
+		//if it's not valid return, error will be displayed
 		return;
 	    }
 	}
+	//After last page save and close
 	if (newPage == editControllers.length) {
 	    this.currentPage = -1;
 	    view.close();
@@ -81,33 +86,40 @@ public class WizardController {
 	    this.currentPage = newPage;
 	    IEditController editController = editControllers[newPage];
 	    editController.load();
+	    //if loading screen is showing we have to checked whether the loading was successful or cancelled
 	    if (editControllers[currentPage].getTaskProgressView() != null) {
 
-		//if finished successfully
-		editControllers[currentPage].getTaskProgressView().getFinishedSuccessfully().addListener(new ChangeListener<Boolean>() {
+		// if finished successfully
+		editControllers[currentPage].getTaskProgressView().getFinishedSuccessfully()
+			.addListener(new ChangeListener<Boolean>() {
 
-		    @Override
-		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-			if (newValue) {
-			    view.setEditView(editController.getView(), newPage != 0, newPage < editControllers.length - 1);
-			    editControllers[currentPage].setTaskProgressView(null);
-			}
-		    }
-		});
+			    @Override
+			    public void changed(ObservableValue<? extends Boolean> observable,
+				    Boolean oldValue, Boolean newValue) {
+				if (newValue) {
+				    view.setEditView(editController.getView(), newPage != 0,
+					    newPage < editControllers.length - 1);
+				    editControllers[currentPage].setTaskProgressView(null);
+				}
+			    }
+			});
 
-		//if cancelled
-		editControllers[currentPage].getTaskProgressView().getCancelled().addListener(new ChangeListener<Boolean>() {
+		// if cancelled
+		editControllers[currentPage].getTaskProgressView().getCancelled()
+			.addListener(new ChangeListener<Boolean>() {
 
-		    @Override
-		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-			if (newValue) {
-			    currentPage--;
-			    editControllers[currentPage].setTaskProgressView(null);
-			}
-		    }
-		});
+			    @Override
+			    public void changed(ObservableValue<? extends Boolean> observable,
+				    Boolean oldValue, Boolean newValue) {
+				if (newValue) {
+				    currentPage--;
+				    editControllers[currentPage].setTaskProgressView(null);
+				}
+			    }
+			});
 	    } else {
-		view.setEditView(editController.getView(), newPage != 0, newPage < editControllers.length - 1);
+		view.setEditView(editController.getView(), newPage != 0,
+			newPage < editControllers.length - 1);
 
 	    }
 	}
