@@ -71,13 +71,8 @@ public abstract class ACoreMLAlgorithm {
     protected void init(List<LearningParameter> learningParameters, ACache sourceCache, ACache targetCache) {
         if (learningParameters != null) {
             //only update existing parameters
-            for(LearningParameter lp : learningParameters ){
-                if(this.parameters.contains(lp)){
-                    int lpIndex = this.parameters.indexOf(lp);
-                    this.parameters.get(lpIndex).setValue(lp.getValue());
-                }else{
-                    throw new NoSuchParameterException(lp.toString());
-                }
+            for(LearningParameter lp : learningParameters){ 
+                setParameter(lp.getName(), lp.getValue());
             }
         }
         this.sourceCache = sourceCache;
@@ -168,6 +163,21 @@ public abstract class ACoreMLAlgorithm {
     		if(par.getName().equals(name))
     			return par.getValue();
     	return new NoSuchParameterException(name);
+    }
+    
+    
+    /**
+     * @param par parameter name
+     * @param val parameter value
+     */
+    public void setParameter(String par, Object val) {
+        for(LearningParameter lp : parameters)
+            if(lp.getName().equals(par)) {
+                lp.setValue(val);
+                return;
+            }
+        // if not found
+        throw new NoSuchParameterException(par);
     }
 
 

@@ -16,6 +16,25 @@ public class LearningParameter {
     protected String description;
 
     
+    /**
+     * Constructor
+     */
+    public LearningParameter(){
+        super();
+    }
+    
+    
+    /**
+     * Constructor
+     * 
+     * @param name parameter's name
+     * @param value parameter's value
+     */
+    public LearningParameter(String name, Object value) {
+        this();
+        this.name = name;
+        this.value = value;
+    }
     
     /**
      * Constructor
@@ -30,9 +49,7 @@ public class LearningParameter {
      */
     public LearningParameter(String name, Object value, Class<?> clazz, double rangeStart, double rangeEnd,
             double rangeStep, String description) {
-        super();
-        this.name = name;
-        this.value = value;
+        this(name, value);
         this.clazz = clazz;
         this.rangeStart = rangeStart;
         this.rangeEnd = rangeEnd;
@@ -40,12 +57,7 @@ public class LearningParameter {
         this.description = description;
     }
 
-    /**
-     * Constructor
-     */
-    public LearningParameter(){
-        super();
-    }
+    
     
     /**
      * @return parameter's range step
