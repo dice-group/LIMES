@@ -151,6 +151,7 @@ public class ThresholdModifyView {
         }
         root.setPadding(new Insets(5, 5, 5, 5));
         Scene scene = new Scene(root);
+        scene.getStylesheets().add("gui/main.css");
         stage.setTitle("Modify Thresholds");
         stage.setResizable(false);
         stage.setScene(scene);

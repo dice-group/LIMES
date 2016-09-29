@@ -12,6 +12,7 @@ import java.util.Set;
  *         studserv.uni-leipzig.de{@literal >}
  */
 public class Operator extends Node {
+    private static double defaultThreshold = 0.7;
     /**
      * operators
      */
@@ -35,6 +36,8 @@ public class Operator extends Node {
      */
     public Operator(String id) {
         super(id);
+        this.param1 = defaultThreshold;
+        this.param2 = defaultThreshold;
     }
 
     /**
