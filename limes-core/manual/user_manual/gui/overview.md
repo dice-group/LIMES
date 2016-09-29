@@ -1,5 +1,5 @@
 #Overview of the GUI elements
-![GUIOverview](../../images/LimesOverview.png "Overview")
+<img src="../../images/LimesOverview.png" width="700" alt ="Overview">
 ## Menu Bar 
 The menu bar contains three drop-down menus:
 * *File*
@@ -12,7 +12,6 @@ The file drop-down menu gives the possibility to:
 * *Load Config*: Load a [configuration file](user_manual/configuration_file/index.md)
 * *Save Config*: Save a configuration to a file (only possible, after loading a configuration or creating a new configuration)
 * *Exit*
-
 ### Layout
 Handles the layout of the current [metric](user_manual/configuration_file/metric/index.md) 
 * *Refresh Layout*: Rearranges the nodes of the metric in a tree-like structure
@@ -27,7 +26,7 @@ All the machine learning functionality of the GUI can be accessed through this d
 These features are only available when a configuration is loaded
 
 ### Toolbox
-![ToolBox](../../images/ToolBox.png "Toolbox")
+<img src="../../images/ToolBox.png" height="400" alt ="ToolBox">
 
 On the left you can find the toolbox containing everything you need to build your own metric after you loaded/made a configuration
 * *Source/Target Properties*: The properties you want to link (if you did not load or create a configuration these are empty)
@@ -35,6 +34,6 @@ On the left you can find the toolbox containing everything you need to build you
 * *Operators*: All the operators you can use to combine measures
 
 ### Metric Builder
-![Metric Builder](../../images/MetricBuilder.png "MetricBuilder")
+<img src="../../images/MetricBuilder.png" width="600" alt ="MetricBuilder">
 
 Here you can link the various nodes to create the metric you want
