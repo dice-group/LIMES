@@ -10,7 +10,7 @@ Files can also be entered more easily by pressing the little green button with t
 * *Graph*: **TODO** what does this actually do???
 * *Page size*: How many pages of the endpoint should be fetched? (-1 = all)
 
-Let's use `http://dbpedia.org/sparql` as source and target endpoint URL, leaving everything else as is.
+Let's use `http://linkedgeodata.org/sparql` as source and target endpoint URL and leave everything else as is.
 
 Pressing *Next* gets you to the next step:
 

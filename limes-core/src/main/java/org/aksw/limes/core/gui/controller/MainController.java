@@ -188,7 +188,7 @@ public class MainController {
      */
     public void showBatchLearning() {
         if (currentConfig != null) {
-            new MachineLearningView(view, new BatchLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache()), MLImplementationType.SUPERVISED_BATCH);
+            new MachineLearningView(view, new BatchLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache(), this), MLImplementationType.SUPERVISED_BATCH);
         } else {
             System.err.println("Config is null!");
         }
@@ -199,7 +199,7 @@ public class MainController {
      */
     public void showUnsupervisedLearning() {
         if (currentConfig != null) {
-            new MachineLearningView(view, new UnsupervisedLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache()), MLImplementationType.UNSUPERVISED);
+            new MachineLearningView(view, new UnsupervisedLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache(), this), MLImplementationType.UNSUPERVISED);
         } else {
             System.err.println("Config is null!");
         }
@@ -210,7 +210,7 @@ public class MainController {
      */
     public void showActiveLearning() {
         if (currentConfig != null) {
-            new MachineLearningView(view, new ActiveLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache()), MLImplementationType.SUPERVISED_ACTIVE);
+            new MachineLearningView(view, new ActiveLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache(), this), MLImplementationType.SUPERVISED_ACTIVE);
         } else {
             System.err.println("Config is null!");
         }
@@ -229,7 +229,7 @@ public class MainController {
      * sets a config and updates the view accordingly
      * @param currentConfig
      */
-    private void setCurrentConfig(Config currentConfig) {
+    public void setCurrentConfig(Config currentConfig) {
         this.currentConfig = currentConfig;
         view.showLoadedConfig(currentConfig != null);
         if (currentConfig != null) {

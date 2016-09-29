@@ -2,17 +2,18 @@ package org.aksw.limes.core.gui.model.ml;
 
 import java.util.List;
 
+import javafx.concurrent.Task;
+
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javafx.concurrent.Task;
 
 /**
  * this class is responsible for the data handling according to the MVC Pattern for the machine learning
@@ -56,6 +57,10 @@ public abstract class MachineLearningModel {
      * the resulting mapping of a learning process
      */
     protected AMapping learnedMapping;
+    /**
+     * the learned LinkSpecification
+     */
+    protected LinkSpecification learnedLS;
 
     /**
      * constructor
@@ -187,6 +192,24 @@ public abstract class MachineLearningModel {
      */
     public void setConfig(Config config) {
         this.config = config;
+    }
+
+
+    /**
+     * get learnedLS
+     * @return learnedLS
+     */
+    public LinkSpecification getLearnedLS() {
+        return learnedLS;
+    }
+
+
+    /**
+     * set learnedLS
+     * @param learnedLS learnedLS
+     */
+    public void setLearnedLS(LinkSpecification learnedLS) {
+        this.learnedLS = learnedLS;
     }
 
 }

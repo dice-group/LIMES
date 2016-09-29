@@ -45,6 +45,7 @@ public class UnsupervisedLearningModel extends MachineLearningModel {
                     e.printStackTrace();
                 }
                 setLearnedMapping(mlalgorithm.predict(sourceCache, targetCache, model));
+                learnedLS = model.getLinkSpecification();
                 return null;
             }
         };

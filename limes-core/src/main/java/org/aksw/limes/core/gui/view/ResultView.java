@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -17,10 +18,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.controller.ResultController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.InstanceProperty;
 import org.aksw.limes.core.gui.model.Result;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +67,16 @@ public class ResultView {
      * MenuItem to save Results to File
      */
     private MenuItem itemSaveResults;
+    
+    /**
+     * Used to save learned LinkSpecification. Only visible in machine learning
+     */
+    private Button saveLinkSpecButton;
+    
+    /**
+     * learned LinkSpecification
+     */
+    private LinkSpecification learnedLS;
 
     /**
      * Mapping of the results
@@ -80,6 +93,11 @@ public class ResultView {
         this.controller = new ResultController(this, config);
     }
 
+    public ResultView(Config config, LinkSpecification learnedLS, MainController mainController) {
+        createWindow();
+        this.learnedLS = learnedLS;
+        this.controller = new ResultController(this, config, mainController);
+    }
     /**
      * Creates the Window, with the 3 Tables, which show the matched Instances,
      * and the Properties of clicked Source and Target
@@ -203,6 +221,12 @@ public class ResultView {
 
             }
         });
+        saveLinkSpecButton = new Button("Save Linkspecification");
+        saveLinkSpecButton.setVisible(false);
+        root.getChildren().add(saveLinkSpecButton);
+        saveLinkSpecButton.setOnMouseClicked(e -> {
+            controller.saveLinkSpec(learnedLS);
+        });
 
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().add("gui/main.css");
@@ -217,12 +241,13 @@ public class ResultView {
     }
 
     /**
-     * Puts the Results of a LIMES-query in the Table table
+     * Puts the Results of a LIMES-query in the Table table and makes the {@link #saveLinkSpecButton} visible
      *
      * @param results
      *         List of the Limes results following the Model of Results
      */
     public void showResults(ObservableList<Result> results, AMapping resultMapping) {
+	saveLinkSpecButton.setVisible(true);
         this.results = results;
         table.setItems(results);
     }

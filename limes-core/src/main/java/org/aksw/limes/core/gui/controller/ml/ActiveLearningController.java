@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 
+import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.controller.TaskProgressController;
 import org.aksw.limes.core.gui.model.ActiveLearningResult;
 import org.aksw.limes.core.gui.model.Config;
@@ -27,6 +28,7 @@ import org.aksw.limes.core.io.cache.ACache;
  */
 public class ActiveLearningController extends MachineLearningController {
 
+    private MainController mainController;
     /**
      * Constructor creates the according {@link ActiveLearningModel}
      * 
@@ -36,8 +38,10 @@ public class ActiveLearningController extends MachineLearningController {
      *            source information
      * @param targetCache
      *            target information
+     * @param mainController mainController
      */
-    public ActiveLearningController(Config config, ACache sourceCache, ACache targetCache) {
+    public ActiveLearningController(Config config, ACache sourceCache, ACache targetCache, MainController mainController) {
+	this.mainController = mainController;
 	this.mlModel = new ActiveLearningModel(config, sourceCache, targetCache);
     }
 
@@ -72,7 +76,7 @@ public class ActiveLearningController extends MachineLearningController {
 	    Platform.runLater(new Runnable() {
 		@Override
 		public void run() {
-		    ActiveLearningResultView activeLearningResultView = new ActiveLearningResultView(mlModel.getConfig(), (ActiveLearningModel) mlModel);
+		    ActiveLearningResultView activeLearningResultView = new ActiveLearningResultView(mlModel.getConfig(), (ActiveLearningModel) mlModel, mainController);
 		    activeLearningResultView.showResults(results);
 		}
 		// TODO error handling

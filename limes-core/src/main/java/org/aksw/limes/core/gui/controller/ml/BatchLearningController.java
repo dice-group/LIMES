@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 
+import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.controller.TaskProgressController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Result;
@@ -16,6 +17,7 @@ import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.ml.BatchLearningInputView;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
 import org.aksw.limes.core.io.cache.ACache;
+
 
 /**
  * This class handles the interaction between the {@link MachineLearningView}
@@ -28,13 +30,16 @@ import org.aksw.limes.core.io.cache.ACache;
  */
 public class BatchLearningController extends MachineLearningController {
 
+    private MainController mainController;
     /**
      * Constructor creates the according {@link BatchLearningModel}
      * @param config contains information
      * @param sourceCache source
      * @param targetCache target
+     * @param mainController mainController
      */
-    public BatchLearningController(Config config, ACache sourceCache, ACache targetCache) {
+    public BatchLearningController(Config config, ACache sourceCache, ACache targetCache, MainController mainController) {
+	this.mainController = mainController;
         this.mlModel = new BatchLearningModel(config, sourceCache, targetCache);
     }
     
@@ -69,7 +74,7 @@ public class BatchLearningController extends MachineLearningController {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            ResultView resultView = new ResultView(mlModel.getConfig());
+                            ResultView resultView = new ResultView(mlModel.getConfig(), mlModel.getLearnedLS(), mainController);
                             resultView.showResults(results, mlModel.getLearnedMapping());
                         }
                     });

@@ -1,13 +1,5 @@
 package org.aksw.limes.core.gui.view.ml;
 
-import org.aksw.limes.core.gui.controller.ml.ActiveLearningResultController;
-import org.aksw.limes.core.gui.model.ActiveLearningResult;
-import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.gui.model.InstanceProperty;
-import org.aksw.limes.core.gui.model.Result;
-import org.aksw.limes.core.gui.model.ml.ActiveLearningModel;
-import org.aksw.limes.core.gui.view.ResultView;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -24,6 +16,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+
+import org.aksw.limes.core.gui.controller.MainController;
+import org.aksw.limes.core.gui.controller.ml.ActiveLearningResultController;
+import org.aksw.limes.core.gui.model.ActiveLearningResult;
+import org.aksw.limes.core.gui.model.Config;
+import org.aksw.limes.core.gui.model.InstanceProperty;
+import org.aksw.limes.core.gui.model.Result;
+import org.aksw.limes.core.gui.model.ml.ActiveLearningModel;
+import org.aksw.limes.core.gui.view.ResultView;
 
 
 /**
@@ -65,15 +66,18 @@ public class ActiveLearningResultView {
 	private ActiveLearningModel model;
 
 	public ProgressIndicator learnProgress;
+	
+	private MainController mainController;
 
 	/**
 	 * Default constructor builds the view
 	 * @param c config
 	 * @param m model
+	 * @param mainController mainController
 	 */
-	public ActiveLearningResultView(Config c, ActiveLearningModel m
-			) {
+	public ActiveLearningResultView(Config c, ActiveLearningModel m, MainController mainController) {
 
+	    	this.mainController = mainController;
 		this.model = m;
 		this.config = c;
 		this.controller = new ActiveLearningResultController(this, config,
@@ -214,7 +218,7 @@ public class ActiveLearningResultView {
 		getResultsButton
 				.setOnAction(e -> {
 				    stage.close();
-				    ResultView resultView = new ResultView(config);
+				    ResultView resultView = new ResultView(config, model.getLearnedLS(), mainController);
 		ObservableList<Result> resultList = FXCollections
 				.observableArrayList();
 				model.getLearnedMapping().getMap().forEach((sourceURI, map2) -> {

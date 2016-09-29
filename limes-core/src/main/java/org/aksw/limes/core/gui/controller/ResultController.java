@@ -11,11 +11,10 @@ import org.aksw.limes.core.gui.model.InstanceProperty;
 import org.aksw.limes.core.gui.model.Result;
 import org.aksw.limes.core.gui.view.ResultView;
 import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.writer.CSVMappingWriter;
 import org.aksw.limes.core.io.mapping.writer.RDFMappingWriter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Controller for Resultview
@@ -29,6 +28,8 @@ public class ResultController {
      * ResultView to manipulate
      */
     private ResultView view;
+    
+    private MainController mainController;
 
     /**
      * Config to get instance information
@@ -46,6 +47,12 @@ public class ResultController {
     public ResultController(ResultView view, Config config) {
         this.view = view;
         this.currentConfig = config;
+    }
+
+    public ResultController(ResultView view, Config config, MainController mainController) {
+        this.view = view;
+        this.currentConfig = config;
+        this.mainController = mainController;
     }
 
     /**
@@ -110,6 +117,15 @@ public class ResultController {
             e.printStackTrace();
         }
 
+    }
+    
+    /**
+     * Saves the learned LinkSpecification to the current configuration and updates the graph in the main view
+     * @param ls
+     */
+    public void saveLinkSpec(LinkSpecification ls){
+	currentConfig.setMetricExpression(ls.getFullExpression());
+	mainController.setCurrentConfig(currentConfig);
     }
 
     /**

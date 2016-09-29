@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 
+import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.controller.TaskProgressController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Result;
@@ -27,14 +28,17 @@ import org.aksw.limes.core.io.cache.ACache;
  */
 public class UnsupervisedLearningController extends MachineLearningController {
 
+    private MainController mainController;
     /**
      * Constructor creates the according {@link UnsupervisedLearningModel}
      * @param config contains information
      * @param sourceCache source
      * @param targetCache target
+     * @param mainController mainController
      */
     public UnsupervisedLearningController(Config config, ACache sourceCache,
-                                          ACache targetCache) {
+                                          ACache targetCache, MainController mainController) {
+	this.mainController = mainController;
         this.mlModel = new UnsupervisedLearningModel(config, sourceCache,
                 targetCache);
     }
@@ -76,7 +80,7 @@ public class UnsupervisedLearningController extends MachineLearningController {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            ResultView resultView = new ResultView(mlModel.getConfig());
+                            ResultView resultView = new ResultView(mlModel.getConfig(), mlModel.getLearnedLS(), mainController);
                             resultView.showResults(results, mlModel.getLearnedMapping());
                         }
                     });
