@@ -34,7 +34,7 @@ public class WombatSimple extends AWombat {
 
     protected int activeLearningRate = 3;
 
-    protected static Logger logger = LoggerFactory.getLogger(WombatSimple.class.getName());
+    protected static Logger logger = LoggerFactory.getLogger(WombatSimple.class);
 
     protected RefinementNode bestSolutionNode = null;
     protected List<ExtendedClassifier> classifiers = null;
@@ -75,6 +75,7 @@ public class WombatSimple extends AWombat {
             bestSolutionNode = findBestSolution();
         }
         String bestMetricExpr = bestSolutionNode.getMetricExpression();
+        System.out.println("bestMetricExpr: " + bestMetricExpr);
         double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|") + 1, bestMetricExpr.length()));
         AMapping bestMapping = bestSolutionNode.getMapping();
         LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);

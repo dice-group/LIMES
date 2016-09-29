@@ -9,12 +9,16 @@ import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 15, 2016
  */
 public abstract class ACoreMLAlgorithm {
+    protected static Logger logger = LoggerFactory.getLogger(ACoreMLAlgorithm.class);
+
 
     protected List<LearningParameter> parameters = new ArrayList<>();
 
@@ -60,13 +64,21 @@ public abstract class ACoreMLAlgorithm {
     /**
      * Initialize the core ML algorithm.
      *
-     * @param lp learning parameters
+     * @param learningParameters learning parameters
      * @param sourceCache the source cache
      * @param targetCache the target cache
      */
-    protected void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
-        if (lp != null) {
-            this.parameters.addAll(lp);
+    protected void init(List<LearningParameter> learningParameters, ACache sourceCache, ACache targetCache) {
+        if (learningParameters != null) {
+            //only update existing parameters
+            for(LearningParameter lp : learningParameters ){
+                if(this.parameters.contains(lp)){
+                    int lpIndex = this.parameters.indexOf(lp);
+                    this.parameters.get(lpIndex).setValue(lp.getValue());
+                }else{
+                    throw new NoSuchParameterException(lp.toString());
+                }
+            }
         }
         this.sourceCache = sourceCache;
         this.targetCache = targetCache;

@@ -423,9 +423,9 @@ public class PPJoinPlusPlus extends AMapper {
 
         // 3.1 fill objects from source in entry
         // logger.info("Filling objects from source knowledge base.");
-        sourceMap = new HashMap<Integer, String>();
+        sourceMap = new HashMap<>();
         ArrayList<String> uris = source.getAllUris();
-        ArrayList<String> entries = new ArrayList<String>();
+        ArrayList<String> entries = new ArrayList<>();
         Instance instance;
         int counter = 0;
         for (int i = 0; i < uris.size(); i++) {
