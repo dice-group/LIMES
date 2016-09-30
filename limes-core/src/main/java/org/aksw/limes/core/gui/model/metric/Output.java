@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.aksw.limes.core.gui.model.Config;
+import org.aksw.limes.core.io.config.Configuration;
+
 /**
  * Output of metric
  *
@@ -27,6 +30,8 @@ public class Output extends Node {
      */
     public Output() {
         super("output");
+        param1 = Config.defaultAcceptanceThreshold;
+        param2 = Config.defaultReviewThreshold;
     }
 
     /**

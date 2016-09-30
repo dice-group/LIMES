@@ -19,3 +19,10 @@
     -fx-background: rgba(255, 255, 255, 0.0);
     }
                         
+.table-row-cell:empty {
+    -fx-background-color: -fx-background;
+}
+  
+.table-row-cell:empty .table-cell {
+    -fx-border-width: 0px;
+}

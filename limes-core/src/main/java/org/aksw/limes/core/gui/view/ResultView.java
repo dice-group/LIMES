@@ -247,7 +247,9 @@ public class ResultView {
      *         List of the Limes results following the Model of Results
      */
     public void showResults(ObservableList<Result> results, AMapping resultMapping) {
+	if(learnedLS != null){
 	saveLinkSpecButton.setVisible(true);
+	}
         this.results = results;
         table.setItems(results);
     }

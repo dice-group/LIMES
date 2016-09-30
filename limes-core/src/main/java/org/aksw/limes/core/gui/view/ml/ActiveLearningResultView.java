@@ -174,10 +174,11 @@ public class ActiveLearningResultView {
 
 		// set size
 		columnSource.prefWidthProperty().bind(
-				table.widthProperty().divide(40).multiply(17));
+				table.widthProperty().divide(40).multiply(15));
 		columnTarget.prefWidthProperty().bind(
-				table.widthProperty().divide(40).multiply(17));
-		columnValue.prefWidthProperty().bind(table.widthProperty().divide(10));
+				table.widthProperty().divide(40).multiply(15));
+		columnValue.prefWidthProperty().bind(table.widthProperty().divide(9));
+		columnIsMatch.prefWidthProperty().bind(table.widthProperty().divide(9));
 
 		root.getChildren().add(resultProperties);
 		root.getChildren().add(table);
@@ -211,7 +212,7 @@ public class ActiveLearningResultView {
 
 		root.getChildren().add(buttonBox);
 
-		Scene scene = new Scene(root, 800, 600);
+		Scene scene = new Scene(root, 1000, 600);
 		scene.getStylesheets().add("gui/main.css");
 		sourceInstanceTable.setPrefWidth(scene.getWidth() / 2);
 		targetInstanceTable.setPrefWidth(scene.getWidth() / 2);
@@ -231,6 +232,8 @@ public class ActiveLearningResultView {
 				});
 
 		stage.setTitle("LIMES");
+		stage.setMinHeight(scene.getHeight());
+		stage.setMinWidth(scene.getWidth());
 		stage.setScene(scene);
 		stage.show();
 

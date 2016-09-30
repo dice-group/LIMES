@@ -9,11 +9,13 @@ The menu bar contains three drop-down menus:
 ### File
 The file drop-down menu gives the possibility to:
 * *New*: Create a new configuration 
-* *Load Config*: Load a [configuration file](user_manual/configuration_file/index.md)
+* *Load Config*: Load a [configuration file](../configuration_file/index.md). Since machine learning is implemented seperately 
+in the GUI, only configurations with metric expressions are accepted. If you load a configuration with machine learning 
+instructions, as much information as possible will be saved, but you have to run the machine learning through the GUI.
 * *Save Config*: Save a configuration to a file (only possible, after loading a configuration or creating a new configuration)
 * *Exit*
 ### Layout
-Handles the layout of the current [metric](user_manual/configuration_file/metric/index.md) 
+Handles the layout of the current [metric](../configuration_file/metric/index.md) 
 * *Refresh Layout*: Rearranges the nodes of the metric in a tree-like structure
 * *Delete Graph*: Delete the current metric leaving only an output node
 
@@ -30,7 +32,7 @@ These features are only available when a configuration is loaded
 
 On the left you can find the toolbox containing everything you need to build your own metric after you loaded/made a configuration
 * *Source/Target Properties*: The properties you want to link (if you did not load or create a configuration these are empty)
-* *Measures*: All the [measures](user_manual/configuration_file/metric/measures/index.md) you can use to link properties
+* *Measures*: All the [measures](../configuration_file/metric/measures/index.md) you can use to link properties
 * *Operators*: All the operators you can use to combine measures
 
 ### Metric Builder

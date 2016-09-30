@@ -238,6 +238,8 @@ public class MainController {
             view.graphBuild.graphBuildController.setConfig(currentConfig);
             if (!(currentConfig.getMetricExpression() == null || currentConfig.getMetricExpression().equals(""))) {
                 view.graphBuild.graphBuildController.generateGraphFromConfig();
+            }else{
+        	view.graphBuild.graphBuildController.deleteGraph();
             }
         }
     }
