@@ -48,9 +48,7 @@ public class EditPropertyMatchingView implements IEditView {
             .observableArrayList();
     private Label missingPropertiesLabel;
     private Label sourceID;
-    private Label sourceClass;
     private Label targetID;
-    private Label targetClass;
 
     /**
      * Constructor creates the root pane and adds listeners
@@ -80,16 +78,14 @@ public class EditPropertyMatchingView implements IEditView {
         addedTargetPropsList = new ListView<String>();
         Label sourceLabel = new Label("available Source Properties:");
         sourceID = new Label();
-        sourceClass = new Label();
         Label targetLabel = new Label("available Target Properties:");
         targetID = new Label();
-        targetClass = new Label();
         Label addedSourceLabel = new Label("added Source Properties:");
         Label addedTargetLabel = new Label("added Target Properties:");
         VBox sourceColumn = new VBox();
         VBox targetColumn = new VBox();
-        sourceColumn.getChildren().addAll(sourceID, sourceClass, sourceLabel, sourcePropList, addedSourceLabel, addedSourcePropsList);
-        targetColumn.getChildren().addAll(targetID, targetClass, targetLabel, targetPropList, addedTargetLabel, addedTargetPropsList);
+        sourceColumn.getChildren().addAll(sourceID, sourceLabel, sourcePropList, addedSourceLabel, addedSourcePropsList);
+        targetColumn.getChildren().addAll(targetID, targetLabel, targetPropList, addedTargetLabel, addedTargetPropsList);
         addAllButton = new Button("Add all");
         removeAllButton = new Button("Remove all");
         missingPropertiesLabel = new Label("At least one source and one target property must be chosen!");
@@ -238,10 +234,8 @@ public class EditPropertyMatchingView implements IEditView {
     private void putAllPropertiesToTable() {
         sourcePropList.setItems(sourceProperties);
         targetPropList.setItems(targetProperties);
-        sourceID.setText("ID: " + controller.getConfig().getSourceInfo().getId());
-        sourceClass.setText("Class: " + controller.getConfig().getSourceEndpoint().getCurrentClass().getName());
-        targetID.setText("ID: " + controller.getConfig().getTargetInfo().getId());
-        targetClass.setText("Class: " + controller.getConfig().getTargetEndpoint().getCurrentClass().getName());
+        sourceID.setText("ID: " + controller.getConfig().getSourceInfo().getId() + "\t Class: " + controller.getConfig().getSourceEndpoint().getCurrentClass().getName());
+        targetID.setText("ID: " + controller.getConfig().getTargetInfo().getId() + "\t Class: " + controller.getConfig().getTargetEndpoint().getCurrentClass().getName());
     }
 
 
