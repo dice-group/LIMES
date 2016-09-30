@@ -67,6 +67,8 @@ public class Config extends Configuration {
 
     private static final String sourceVar = "?x";
     private static final String targetVar = "?y";
+    public static final double defaultAcceptanceThreshold = 0.9;
+    public static final double defaultReviewThreshold = 0.7;
 
     /**
      * Constructor
@@ -204,7 +206,7 @@ public class Config extends Configuration {
      */
     public double getAcceptanceThreshold() {
         if (metric == null || metric.param1 == null) {
-            return 1d;
+            return defaultAcceptanceThreshold;
         }
         return metric.param1;
     }
@@ -236,7 +238,7 @@ public class Config extends Configuration {
                 number = format.parse(twoDForm.format(getAcceptanceThreshold() - 0.1d));
             } catch (Exception e) {
                 System.err.println(e);
-                return 0.8d;
+                return defaultReviewThreshold;
             }
             return number.doubleValue();
         } else {
