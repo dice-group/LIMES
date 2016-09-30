@@ -85,40 +85,27 @@ public class Config extends Configuration {
     }
 
     /**
-     * Constructor calls super constructor and creates new metric and endpoints
-     * 
-     * @param sourceInfo
-     *            sourceInfo
-     * @param targetInfo
-     *            targetInfo
-     * @param metricExpression
-     *            metricExpression
-     * @param acceptanceRelation
-     *            acceptanceRelation
-     * @param verificationRelation
-     *            verificationRelation
-     * @param acceptanceThreshold
-     *            acceptanceThreshold
-     * @param acceptanceFile
-     *            acceptanceFile
-     * @param verificationThreshold
-     *            verificationThreshold
-     * @param verificationFile
-     *            verificationFile
-     * @param exemplars
-     *            exemplars
-     * @param prefixes
-     *            prefixes
-     * @param outputFormat
-     *            outputFormat
-     * @param executionPlanner
-     *            executionPlanner
-     * @param granularity
-     *            granularity
-     * @param recallRegulator
-     *            recallRegulator
-     * @param recallThreshold
-     *            recallThreshold
+     * Config of the GUI 
+     * @param sourceInfo sourceInfo
+     * @param targetInfo targetInfo
+     * @param metricExpression metricExpression
+     * @param acceptanceRelation acceptanceRelation
+     * @param verificationRelation verificationRelation  
+     * @param acceptanceThreshold acceptanceThreshold
+     * @param acceptanceFile acceptanceFile
+     * @param verificationThreshold verificationThreshold
+     * @param verificationFile verificationFile
+     * @param prefixes prefixes
+     * @param outputFormat outputFormat
+     * @param executionRewriter executionRewriter
+     * @param executionPlanner executionPlanner
+     * @param executionEngine executionEngine
+     * @param granularity granularity
+     * @param mlAlgorithmName mlAlgorithmName
+     * @param mlParameters mlParameters
+     * @param mlImplementationType mlImplementationType
+     * @param mlTrainingDataFile mlTrainingDataFile
+     * @param mlPseudoFMeasure mlPseudoFMeasure
      */
     public Config(KBInfo sourceInfo, KBInfo targetInfo, String metricExpression, String acceptanceRelation,
             String verificationRelation, double acceptanceThreshold, String acceptanceFile,
