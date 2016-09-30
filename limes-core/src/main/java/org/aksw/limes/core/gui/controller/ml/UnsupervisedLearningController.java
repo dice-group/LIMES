@@ -88,8 +88,8 @@ public class UnsupervisedLearningController extends MachineLearningController {
                     if (this.mlModel.getLearnedMapping() != null && this.mlModel.getLearnedMapping().size() > 0) {
                         // view.mapButton.setDisable(false);
                         logger.info(this.mlModel.getConfig().getMetricExpression());
-                        view.getMainView().graphBuild.graphBuildController
-                                .setConfigFromGraph();
+//                        view.getMainView().graphBuild.graphBuildController
+//                                .setConfigFromGraph();
                     } else {
                         Platform.runLater(new Runnable() {
                             @Override

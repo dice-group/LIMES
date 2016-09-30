@@ -9,7 +9,9 @@ The menu bar contains three drop-down menus:
 ### File
 The file drop-down menu gives the possibility to:
 * *New*: Create a new configuration 
-* *Load Config*: Load a [configuration file](../configuration_file/index.md)
+* *Load Config*: Load a [configuration file](../configuration_file/index.md). Since machine learning is implemented seperately 
+in the GUI, only configurations with metric expressions are accepted. If you load a configuration with machine learning 
+instructions, as much information as possible will be saved, but you have to run the machine learning through the GUI.
 * *Save Config*: Save a configuration to a file (only possible, after loading a configuration or creating a new configuration)
 * *Exit*
 ### Layout

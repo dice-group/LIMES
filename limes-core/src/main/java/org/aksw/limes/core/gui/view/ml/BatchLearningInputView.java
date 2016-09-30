@@ -5,6 +5,8 @@ import java.io.File;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -24,9 +26,8 @@ import org.aksw.limes.core.io.mapping.reader.AMappingReader;
 import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
 
-
 public class BatchLearningInputView {
-    
+
     private Stage stage;
     private ScrollPane rootPane;
     private static final String filePathFieldError = "File not found!";
@@ -34,14 +35,14 @@ public class BatchLearningInputView {
     private BatchLearningController blc;
     private AMapping trainingMapping;
     public BooleanProperty finished = new SimpleBooleanProperty(false);
-    
+
     public BatchLearningInputView(BatchLearningModel blm, BatchLearningController blc) {
 	this.blm = blm;
 	this.blc = blc;
 	createRootPane();
     }
-    
-    private void createRootPane(){
+
+    private void createRootPane() {
 	HBox fileHBox = new HBox();
 	TextField filePathField = new TextField("");
 	Tooltip tip = new Tooltip();
@@ -54,8 +55,8 @@ public class BatchLearningInputView {
 		    File f = new File(filePathField.getText());
 		    if (!(f.exists() && !f.isDirectory())) {
 			// check if it is a valid URL
-			    filePathField.setText(filePathFieldError);
-			    filePathField.setStyle("-fx-text-inner-color: red;");
+			filePathField.setText(filePathFieldError);
+			filePathField.setStyle("-fx-text-inner-color: red;");
 		    }
 		}
 	    }
@@ -69,33 +70,44 @@ public class BatchLearningInputView {
 	    }
 	});
 	Button fileEndpointButton = new Button();
-	Image fileButtonImage = new Image(getClass().getResourceAsStream("/gui/file.png"), 20, 20, true, false);
+	Image fileButtonImage = new Image(getClass().getResourceAsStream("/gui/file.png"), 20, 20,
+		true, false);
 	fileEndpointButton.setGraphic(new ImageView(fileButtonImage));
 	fileEndpointButton.setOnAction(e -> {
-            FileChooser fileChooser = new FileChooser();
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Mapping File (*.csv , *.rdf, *.ttl, *.n3, *.nt)", "*.xml", "*.rdf", "*.ttl", "*.n3", "*.nt");
-            fileChooser.getExtensionFilters().add(extFilter);
-            File file = fileChooser.showOpenDialog(stage);
-            if (file != null) {
-                filePathField.setText(file.getAbsolutePath());;
-            }
+	    FileChooser fileChooser = new FileChooser();
+	    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+		    "Mapping File (*.csv , *.rdf, *.ttl, *.n3, *.nt)", "*.xml", "*.rdf", "*.ttl",
+		    "*.n3", "*.nt");
+	    fileChooser.getExtensionFilters().add(extFilter);
+	    File file = fileChooser.showOpenDialog(stage);
+	    if (file != null) {
+		filePathField.setText(file.getAbsolutePath());
+		;
+	    }
 	});
 	fileHBox.getChildren().addAll(filePathField, fileEndpointButton);
 	HBox buttons = new HBox();
 	Button save = new Button("Save");
 	Button cancel = new Button("Cancel");
-	save.setOnAction(e_->{
-	    if(filePathField.getText() != null && !filePathField.getText().equals("")){
+	save.setOnAction(e_ -> {
+	    if (filePathField.getText() != null && !filePathField.getText().equals("")) {
 		AMappingReader reader = null;
-		if(filePathField.getText().endsWith("csv")){
+		if (filePathField.getText().endsWith("csv")) {
 		    reader = new CSVMappingReader(filePathField.getText());
 		    trainingMapping = reader.read();
 		    blm.setTrainingMapping(trainingMapping);
-		}else if(filePathField.getText().endsWith("rdf") || filePathField.getText().endsWith("ttl") || filePathField.getText().endsWith("nt") || filePathField.getText().endsWith("n3")){
+		} else if (filePathField.getText().endsWith("rdf")
+			|| filePathField.getText().endsWith("ttl")
+			|| filePathField.getText().endsWith("nt")
+			|| filePathField.getText().endsWith("n3")) {
 		    System.err.println(filePathField.getText());
 		    reader = new RDFMappingReader(filePathField.getText());
 		    trainingMapping = reader.read();
 		    blm.setTrainingMapping(trainingMapping);
+		} else {
+		    Alert alert = new Alert(AlertType.INFORMATION);
+		    alert.setContentText("Unknown Mapping filetype!");
+		    alert.showAndWait();
 		}
 	    }
 	    finished.set(true);
