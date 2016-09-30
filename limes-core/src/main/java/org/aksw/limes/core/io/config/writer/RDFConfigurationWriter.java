@@ -54,7 +54,8 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
                 break;
             default:
                 logger.error("Serialization " + format + " is not yet implemented, exit with error!");
-                System.exit(1);
+//                System.exit(1);
+                throw new IOException("Serialization " + format + " is not yet implemented!");
         }
     }
 
