@@ -80,13 +80,14 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
         m.add(source, RDF.type, LIMES.SourceDataset);
         m.add(source, RDFS.label, configuration.getSourceInfo().getId());
         m.add(source, LIMES.endPoint, ResourceFactory.createResource(configuration.getSourceInfo().getEndpoint()));
+        m.add(source, LIMES.type, ResourceFactory.createPlainLiteral(String.valueOf(configuration.getSourceInfo().getType())));
         m.add(source, LIMES.variable, configuration.getSourceInfo().getVar());
-        m.add(source, LIMES.pageSize, ResourceFactory.createTypedLiteral(configuration.getSourceInfo().getPageSize()));
+        m.add(source, LIMES.pageSize, ResourceFactory.createPlainLiteral(String.valueOf(configuration.getSourceInfo().getPageSize())));
         for (String r : configuration.getSourceInfo().getRestrictions()) {
             m.add(source, LIMES.restriction, ResourceFactory.createPlainLiteral(r));
         }
         for (String p : configuration.getSourceInfo().getProperties()) {
-            m.add(source, LIMES.property, createResource(m, p));
+            m.add(source, LIMES.property, ResourceFactory.createPlainLiteral(p));
         }
 
         // 2. Target
@@ -95,13 +96,14 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
         m.add(target, RDF.type, LIMES.TargetDataset);
         m.add(target, RDFS.label, configuration.getTargetInfo().getId());
         m.add(target, LIMES.endPoint, ResourceFactory.createResource(configuration.getTargetInfo().getEndpoint()));
+        m.add(target, LIMES.type, ResourceFactory.createPlainLiteral(String.valueOf(configuration.getTargetInfo().getType())));
         m.add(target, LIMES.variable, configuration.getTargetInfo().getVar() + "");
-        m.add(target, LIMES.pageSize, ResourceFactory.createTypedLiteral(configuration.getTargetInfo().getPageSize()));
+        m.add(target, LIMES.pageSize, ResourceFactory.createPlainLiteral(String.valueOf(configuration.getTargetInfo().getPageSize())));
         for (String r : configuration.getTargetInfo().getRestrictions()) {
             m.add(target, LIMES.restriction, r);
         }
         for (String p : configuration.getTargetInfo().getProperties()) {
-            m.add(target, LIMES.property, createResource(m, p));
+            m.add(target, LIMES.property, ResourceFactory.createPlainLiteral(p));
         }
 
         // 3. Metric
@@ -115,15 +117,15 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
         Resource acceptance = ResourceFactory.createResource(uri + "_acceptance");
         m.add(s, LIMES.hasAcceptance, acceptance);
         m.add(acceptance, RDF.type, LIMES.Acceptance);
-        m.add(acceptance, LIMES.threshold, ResourceFactory.createTypedLiteral(configuration.getAcceptanceThreshold()));
+        m.add(acceptance, LIMES.threshold, ResourceFactory.createPlainLiteral(String.valueOf(configuration.getAcceptanceThreshold())));
         m.add(acceptance, LIMES.file, ResourceFactory.createResource(configuration.getAcceptanceFile()));
         m.add(acceptance, LIMES.relation, createResource(m, configuration.getAcceptanceRelation()));
 
         //5. VERIFICATION file and conditions
         Resource review = ResourceFactory.createResource(uri + "_review");
         m.add(s, LIMES.hasReview, review);
-        m.add(review, RDF.type, LIMES.Review);
-        m.add(review, LIMES.threshold, ResourceFactory.createTypedLiteral(configuration.getVerificationThreshold()));
+        m.add(review, RDF.type, LIMES.Review); 
+        m.add(review, LIMES.threshold, ResourceFactory.createPlainLiteral(String.valueOf(configuration.getVerificationThreshold())));
         m.add(review, LIMES.file, ResourceFactory.createResource(configuration.getVerificationFile()));
         m.add(review, LIMES.relation, createResource(m, configuration.getVerificationRelation()));
 
@@ -133,7 +135,7 @@ public class RDFConfigurationWriter implements IConfigurationWriter {
         m.add(s, LIMES.executionEngine, configuration.getExecutionEngine());
 
         //7. TILING if necessary
-        m.add(s, LIMES.granularity, ResourceFactory.createTypedLiteral(configuration.getGranularity()));
+        m.add(s, LIMES.granularity, ResourceFactory.createPlainLiteral(String.valueOf(configuration.getGranularity())));
 
         //8. OUTPUT format
         if (configuration.getOutputFormat() != null) {

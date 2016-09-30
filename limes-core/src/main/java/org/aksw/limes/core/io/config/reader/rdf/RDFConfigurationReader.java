@@ -250,8 +250,8 @@ public class RDFConfigurationReader extends AConfigurationReader {
             }
             kbinfo.addRestriction(restriction);
         }
-        for (RDFNode properity : getObjects(kb, LIMES.property, true)) {
-            XMLConfigurationReader.processProperty(kbinfo, properity.toString());
+        for (RDFNode property : getObjects(kb, LIMES.property, true)) {
+            XMLConfigurationReader.processProperty(kbinfo, property.toString());
         }
         kbinfo.setPageSize(parseInt(getObject(kb, LIMES.pageSize, true).toString()));
         kbinfo.setVar(getObject(kb, LIMES.variable, true).toString());
