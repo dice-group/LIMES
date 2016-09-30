@@ -16,7 +16,7 @@ the node. If you want to delete a link, just right-click the arrow.
 Let's link our properties with `cosine` and the measure with `output`.
 
 ## Define Thresholds
-If you want you can define a [Acceptance Threshold](user_manual/configuration_file/acceptance.md) and [Verification Threshold](user_manual/configuration_file/review.md) 
+If you want you can define a [Acceptance Threshold](../../configuration_file/acceptance.md) and [Verification Threshold](../../configuration_file/review.md) 
 (specifying files is not yet implemented here). 
 
 ## Running your Linkspecification
