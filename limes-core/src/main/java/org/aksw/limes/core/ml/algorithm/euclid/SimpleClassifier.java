@@ -9,7 +9,7 @@ import java.util.Comparator;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class SimpleClassifier implements Comparator<SimpleClassifier>{
+public class SimpleClassifier implements Comparable<SimpleClassifier> {
     public String measure = null;
     public String sourceProperty = null;
     public String targetProperty = null;
@@ -107,14 +107,13 @@ public class SimpleClassifier implements Comparator<SimpleClassifier>{
     public String toString2() {
         return "" + measure + "(" + sourceProperty + " , " + targetProperty + "):Theta = " + threshold + ", Weight = " + weight;
     }
-    
-    
+
     @Override
-    public int compare(SimpleClassifier o1, SimpleClassifier o2) {
-        if (o1.getfMeasure() > o2.getfMeasure()) {
+    public int compareTo(SimpleClassifier o) {
+        if (this.getfMeasure() > o.getfMeasure()) {
             return 1;
         }
-        if (o1.getfMeasure() < o2.getfMeasure()) {
+        if (this.getfMeasure() < o.getfMeasure()) {
             return -1;
         }
         return 0;
