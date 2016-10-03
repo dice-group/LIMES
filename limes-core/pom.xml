@@ -529,6 +529,11 @@
 			<artifactId>weka-dev</artifactId>
 			<version>3.9.0</version>
 		</dependency>
+        <dependency>
+            <groupId>com.googlecode.lanterna</groupId>
+            <artifactId>lanterna</artifactId>
+            <version>3.0.0-beta3</version>
+        </dependency>
 	</dependencies>
 
 	<distributionManagement>

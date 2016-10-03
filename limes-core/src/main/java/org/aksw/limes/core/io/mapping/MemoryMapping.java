@@ -44,15 +44,15 @@ public class MemoryMapping extends AMapping implements Serializable {
      * uses the similarity scores as key.
      */
     public void initReversedMap() {
-        reversedMap = new HashMap<Double, HashMap<String, TreeSet<String>>>();
+        reversedMap = new HashMap<>();
         for (String s : map.keySet()) {
             for (String t : map.get(s).keySet()) {
                 double sim = map.get(s).get(t);
                 if (!reversedMap.containsKey(sim)) {
-                    reversedMap.put(sim, new HashMap<String, TreeSet<String>>());
+                    reversedMap.put(sim, new HashMap<>());
                 }
                 if (!reversedMap.get(sim).containsKey(s)) {
-                    reversedMap.get(sim).put(s, new TreeSet<String>());
+                    reversedMap.get(sim).put(s, new TreeSet<>());
                 }
                 reversedMap.get(sim).get(s).add(t);
             }

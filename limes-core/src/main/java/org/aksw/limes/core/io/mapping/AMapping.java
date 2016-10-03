@@ -22,8 +22,8 @@ public abstract class AMapping implements IMapping {
 
     
     public AMapping() {
-        this.map = new HashMap<String, HashMap<String, Double>>();
-        this.reversedMap = new HashMap<Double, HashMap<String, TreeSet<String>>>();
+        this.map = new HashMap<>();
+        this.reversedMap = new HashMap<>();
         this.size = 0;
         this.predicate = OWL.sameAs.getURI(); //default
         
