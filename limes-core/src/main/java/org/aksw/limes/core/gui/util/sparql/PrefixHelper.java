@@ -520,7 +520,7 @@ public class PrefixHelper {
             {"sider", "http://www4.wiwiss.fu-berlin.de/sider/resource/sider/"},
             {"diseasome", "http://www4.wiwiss.fu-berlin.de/diseasome/resource/diseasome/"},
             {"bibbaseontology", "http://data.bibbase.org/ontology/#"}};
-
+    
     /**
      * Adds a new prefix to the PrefixHelper (not persistent). Threadsafe.
      *

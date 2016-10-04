@@ -112,6 +112,7 @@ public class SPARQLHelper {
         final int MAX_CHILDREN = 100;
         String query = "SELECT distinct(?class) WHERE { ?class rdfs:subClassOf " + wrapIfNecessary(clazz) + ". } LIMIT " + MAX_CHILDREN;
         query = PrefixHelper.addPrefixes(query); // in case rdfs and owl prefixes are not known
+        	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), query);
         return resultSetToList(querySelect(query, endpoint, graph, model));
     }
 
@@ -130,7 +131,7 @@ public class SPARQLHelper {
         if (cache.isKeyInCache(key)) {
             element = cache.get(key);
         } else {
-            element = new Element(key, rootClassesUncached(endpoint, graph, model));
+            element = new Element(key, rootClassesUncached(endpoint, graph, model, null));
             cache.put(element);
         }
         cache.flush();
@@ -144,11 +145,15 @@ public class SPARQLHelper {
      * @param model model
      * @return rootClasses
      */
-    public static Set<String> rootClassesUncached(String endpoint, String graph, Model model) {
+    public static Set<String> rootClassesUncached(String endpoint, String graph, Model model, Config config) {
         {
             // if owl:Thing exists and has at least one subclass, so use owl:Thing
             String queryForOWLThing = "SELECT ?class WHERE {?class rdfs:subClassOf owl:Thing} limit 1";
             if (!resultSetToList(querySelect(PrefixHelper.addPrefixes(queryForOWLThing), endpoint, graph, model)).isEmpty()) {
+        	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), queryForOWLThing);
+        	for(String key: prefixesToAdd.keySet()){
+        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	}
                 return Collections.singleton(OWL.Thing.toString());
             }
         }
@@ -161,6 +166,10 @@ public class SPARQLHelper {
             Set<String> classes = resultSetToList(querySelect(PrefixHelper.addPrefixes(queryForParentlessClasses), endpoint, graph, model));
 
             if (!classes.isEmpty()) {
+        	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), queryForParentlessClasses);
+        	for(String key: prefixesToAdd.keySet()){
+        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	}
                 return classes;
             }
         }
@@ -176,9 +185,13 @@ public class SPARQLHelper {
             classes.remove("http://www.w3.org/2000/01/rdf-schema#Class");
             classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
             classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
-	    if (!classes.isEmpty())
+	    if (!classes.isEmpty()){
+        	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), query);
+        	for(String key: prefixesToAdd.keySet()){
+        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	}
 		return classes;
-	    else {
+	    }else {
 		// very very bad endpoint
 		// using objects of rdf:type property
 		System.err.println("very very bad endpoint using objects of rdf:type property");
@@ -189,6 +202,10 @@ public class SPARQLHelper {
 		classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
 		classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
 		if (!classes.isEmpty()) {
+        	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), query);
+        	for(String key: prefixesToAdd.keySet()){
+        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	}
 		    return classes;
 		} else {
 		    query = "SELECT distinct ?x WHERE{ ?y <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?x}";
@@ -197,6 +214,10 @@ public class SPARQLHelper {
 		    classes.remove("http://www.w3.org/2000/01/rdf-schema#Class");
 		    classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
 		    classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
+        	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), query);
+        	for(String key: prefixesToAdd.keySet()){
+        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	}
 		    return classes;
 		}
 	    }

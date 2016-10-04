@@ -95,6 +95,8 @@ public class GraphBuildController {
         // Get the output node manually, since it is not guaranteed to be the
         // first in the list
         NodeView output = getOutputNode();
+        currentConfig.setAcceptanceThreshold(output.nodeData.param1);
+        currentConfig.setVerificationThreshold(output.nodeData.param2);
         currentConfig.setMetricExpression(MetricParser.parse(
                 output.nodeData.toString(),
                 currentConfig.getSourceInfo().getVar().replaceAll("\\?", ""))

@@ -70,18 +70,22 @@ public class Config extends Configuration {
     private static final String targetVar = "?y";
     public static final double defaultAcceptanceThreshold = 0.9;
     public static final double defaultReviewThreshold = 0.7;
+    private static final String defaultAcceptanceRelation = "owl:sameAs";
+    private static final String defaultVerificationRelation = "owl:sameAs";
 
     /**
      * Constructor
      */
     public Config() {
+	this.acceptanceRelation = defaultAcceptanceRelation;
+	this.verificationRelation = defaultVerificationRelation;
 	this.sourceInfo = new KBInfo();
 	this.sourceInfo.setVar(sourceVar);
 	this.targetInfo = new KBInfo();
 	this.targetInfo.setVar(targetVar);
 	metric = new Output();
-	this.sourceEndpoint = new Endpoint(this.sourceInfo);
-	this.targetEndpoint = new Endpoint(this.targetInfo);
+	this.sourceEndpoint = new Endpoint(this.sourceInfo, this);
+	this.targetEndpoint = new Endpoint(this.targetInfo, this);
     }
 
     /**
@@ -117,9 +121,15 @@ public class Config extends Configuration {
 		acceptanceThreshold, acceptanceFile, verificationThreshold, verificationFile,
 		prefixes, outputFormat, executionRewriter, executionPlanner, executionEngine, granularity, mlAlgorithmName, mlParameters,
 		mlImplementationType, mlTrainingDataFile, mlPseudoFMeasure);
+	if(this.acceptanceRelation.equals("") || this.acceptanceRelation == null || this.acceptanceRelation.startsWith("file:")){
+	    this.acceptanceRelation = defaultAcceptanceRelation;
+	}
+	if(this.verificationRelation.equals("") || this.verificationRelation == null|| this.verificationRelation.startsWith("file:")){
+	    this.verificationRelation = defaultVerificationRelation;
+	}
 	metric = new Output();
-	this.sourceEndpoint = new Endpoint(this.sourceInfo);
-	this.targetEndpoint = new Endpoint(this.targetInfo);
+	this.sourceEndpoint = new Endpoint(this.sourceInfo, this);
+	this.targetEndpoint = new Endpoint(this.targetInfo, this);
     }
 
     /**
@@ -154,8 +164,8 @@ public class Config extends Configuration {
             tmp.getMlAlgorithmName(), (List<LearningParameter>) tmp.getMlAlgorithmParameters(), tmp.getMlImplementationType(),
             tmp.getMlTrainingDataFile(), tmp.getMlPseudoFMeasure()); 
 	outConfig.setMlTrainingDataFile(tmp.getMlTrainingDataFile());
-	outConfig.sourceEndpoint = new Endpoint(outConfig.getSourceInfo());
-	outConfig.targetEndpoint = new Endpoint(outConfig.getTargetInfo());
+	outConfig.sourceEndpoint = new Endpoint(outConfig.getSourceInfo(), outConfig);
+	outConfig.targetEndpoint = new Endpoint(outConfig.getTargetInfo(), outConfig);
 	for (String s : outConfig.getSourceInfo().getPrefixes().keySet()) {
 	    PrefixHelper.addPrefix(s, outConfig.getSourceInfo().getPrefixes().get(s));
 	}
@@ -196,6 +206,16 @@ public class Config extends Configuration {
 	// XMLConfigurationWriter xmlwriter = new XMLConfigurationWriter();
 	// xmlwriter.write(this, file.getAbsolutePath());
 	// } else {
+	if(this.acceptanceRelation != null){
+	    if(this.acceptanceRelation.startsWith("http:")){
+		this.acceptanceRelation = PrefixHelper.abbreviate(this.acceptanceRelation);
+	    }
+	}
+	if(this.verificationRelation != null){
+	    if(this.verificationRelation.startsWith("http:")){
+		this.verificationRelation = PrefixHelper.abbreviate(this.verificationRelation);
+	    }
+	}
 	RDFConfigurationWriter rdfwriter = new RDFConfigurationWriter();
 	rdfwriter.write(this, file.getAbsolutePath());
 	// }
@@ -421,5 +441,5 @@ public class Config extends Configuration {
     public void setMapping(AMapping mapping) {
 	this.mapping = mapping;
     }
-
+    
 }

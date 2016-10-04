@@ -25,6 +25,10 @@ import org.apache.jena.rdf.model.Model;
  */
 public class GetClassesTask extends Task<List<ClassMatchingNode>> {
     /**
+     * config
+     */
+    private Config config;
+    /**
      * info
      */
     private KBInfo info;
@@ -55,10 +59,11 @@ public class GetClassesTask extends Task<List<ClassMatchingNode>> {
      * @param model
      * @param view
      */
-    public GetClassesTask(KBInfo info, Model model, TaskProgressView view) {
+    public GetClassesTask(KBInfo info, Model model, TaskProgressView view, Config config) {
         this.info = info;
         this.model = model;
         this.view = view;
+        this.config = config;
     }
 
     /**
@@ -73,7 +78,7 @@ public class GetClassesTask extends Task<List<ClassMatchingNode>> {
 	    return result;
 	}
         Set<String> rootClasses = SPARQLHelper.rootClassesUncached(info.getEndpoint(),
-                info.getGraph(), model);
+                info.getGraph(), model, config);
         counter = 0;
         progress = 0;
         result = getClassMatchingNodes(rootClasses);

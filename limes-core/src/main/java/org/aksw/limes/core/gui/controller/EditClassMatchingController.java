@@ -7,6 +7,7 @@ import org.aksw.limes.core.gui.model.ClassMatchingNode;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Endpoint;
 import org.aksw.limes.core.gui.model.GetClassesTask;
+import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.gui.view.EditClassMatchingView;
 import org.aksw.limes.core.gui.view.IEditView;
 import org.aksw.limes.core.gui.view.MainView;
@@ -94,6 +95,10 @@ public class EditClassMatchingController implements IEditController {
                      ClassMatchingNode targetClass) {
         config.getSourceEndpoint().setCurrentClass(sourceClass);
         config.getTargetEndpoint().setCurrentClass(targetClass);
+        String[] abbrSource = PrefixHelper.generatePrefix(sourceClass.getUri().toString());
+        config.getPrefixes().put(abbrSource[0], abbrSource[1]);
+        String[] abbrTarget = PrefixHelper.generatePrefix(targetClass.getUri().toString());
+        config.getPrefixes().put(abbrTarget[0], abbrTarget[1]);
     }
 
     /**
