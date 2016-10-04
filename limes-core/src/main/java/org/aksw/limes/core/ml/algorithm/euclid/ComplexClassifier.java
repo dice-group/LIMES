@@ -5,6 +5,10 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
+ */
 public class ComplexClassifier {
     public List<SimpleClassifier> classifiers;
     public double fMeasure;

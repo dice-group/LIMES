@@ -16,7 +16,7 @@ public class MLResults {
     protected LinkSpecification linkspec;
     protected AMapping mapping;
     protected double quality;
-    protected Map<String, Object> details = new HashMap<String, Object>();
+    protected Map<String, Object> details = new HashMap<>();
 
     /**
      * MLResults constructor.

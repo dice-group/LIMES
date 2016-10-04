@@ -7,7 +7,12 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
+ */
 public class BooleanSelfConfigurator extends LinearSelfConfigurator {
 
     /** Constructor
@@ -19,18 +24,23 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
      *
      */
     public BooleanSelfConfigurator (ACache source, ACache target, double minCoverage, double beta) {
-        this.source = source;
-        this.target = target;
-        this.beta = beta;
-        sourcePropertiesCoverageMap = getPropertyStats(source, minCoverage);
-        targetPropertiesCoverageMap = getPropertyStats(target, minCoverage);
-        measures = new HashMap<String, String>();
-        measures.put("euclidean", "numeric");
-        measures.put("levenshtein", "string");
-        measures.put("jaccard", "string");
-        measures.put("trigrams", "string");
-        setMeasure(this.qMeasureType);
+        super(source, target, minCoverage, beta);
     }
+    
+    /**
+     * Constructor
+     *
+     * @param source Source cache
+     * @param target Target cache
+     * @param minCoverage Minimal coverage for a property to be considered for linking
+     * @param beta Beta value for computing F_beta
+     * @param measures Atomic measures
+     */
+    public BooleanSelfConfigurator(ACache source, ACache target, double minCoverage, double beta, Map<String, String> measures) {
+        super(source, target, minCoverage, beta, measures);
+    }
+
+
 
     /** Aims to improve upon a particular classifier by checking whether adding a delta
      * to its similarity worsens the total classifer

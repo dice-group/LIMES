@@ -10,6 +10,8 @@ import org.aksw.limes.core.measures.measure.AMeasure;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
  */
 public interface ISelfConfigurator {
     public void computeMeasure(ACache source, ACache target, String parameters[]);

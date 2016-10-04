@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 public class WombatComplete extends AWombat {
     protected static final String ALGORITHM_NAME = "Wombat Complete";
 
-    protected static Logger logger = LoggerFactory.getLogger(WombatComplete.class.getName());
+    protected static Logger logger = LoggerFactory.getLogger(WombatComplete.class);
     
     protected static boolean usePruning = false;
 

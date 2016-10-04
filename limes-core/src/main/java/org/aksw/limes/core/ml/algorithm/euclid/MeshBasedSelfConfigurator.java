@@ -12,10 +12,13 @@ import java.util.Map;
 
 /**
  * @author Kevin Dreßler
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
  */
 public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
 
-    static Logger logger = Logger.getLogger("LIMES");
+    static Logger logger = Logger.getLogger(MeshBasedSelfConfigurator.class);
+    
     static String STRATEGY = "MAX";
     /**
      * Constructor
@@ -89,7 +92,7 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
     }
 
     /**
-     * Computes the mappings for a classifer across a dimension of the mesh
+     * Computes the mappings for a classifier across a dimension of the mesh
      *
      * @param min
      * @param max

@@ -4,10 +4,10 @@
  */
 package org.aksw.limes.core.ml.algorithm.euclid;
 
-import java.util.Comparator;
-
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
  */
 public class SimpleClassifier implements Comparable<SimpleClassifier> {
     public String measure = null;
@@ -96,7 +96,12 @@ public class SimpleClassifier implements Comparable<SimpleClassifier> {
 
     @Override
     public String toString() {
-        return "(Source: " + sourceProperty + " Target: " + targetProperty + " Measure: " + measure + " Theta = " + threshold + " FMeasure = " + getfMeasure() + " Weight = " + weight + ")";
+        return "(Source: " + sourceProperty + 
+                " Target: " + targetProperty + 
+                " Measure: " + measure + 
+                " Theta = " + threshold + 
+                " FMeasure = " + getfMeasure() + 
+                " Weight = " + weight + ")";
     }
 
     /**

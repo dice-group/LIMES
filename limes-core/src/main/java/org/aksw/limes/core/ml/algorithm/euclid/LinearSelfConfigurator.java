@@ -18,6 +18,8 @@ import java.util.*;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
  */
 public class LinearSelfConfigurator implements ISelfConfigurator {
 
@@ -28,7 +30,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     public boolean STRICT = true;
     public int ITERATIONS_MAX = 1000;
     public double MIN_THRESHOLD = 0.3;
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger(LinearSelfConfigurator.class);
 
     public enum Strategy {
         FMEASURE, THRESHOLD, PRECISION, RECALL
@@ -48,7 +50,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     Map<String, Double> targetPropertiesCoverageMap;//coverage map for latter computations
     List<SimpleClassifier> buffer; //buffers learning results
     double beta = 1;
-    Map<String, String> measures;
+    Map<String, String> measures = new HashMap<>();;
     public double learningRate = 0.25;
     public double kappa = 0.6;
     /* used to compute qualities for the unsupervised approach*/
@@ -61,11 +63,13 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
 
     }
 
+
+    
     /**
      * Set PFMs based upon name.
      * if name.equals("reference") using ReferencePseudoMeasures.class:  Nikolov/D'Aquin/Motta ESWC 2012.
      */
-    public void setMeasure(QMeasureType qMeasureType) {
+    public void setPFMType(QMeasureType qMeasureType) {
         this.qMeasureType = qMeasureType;
         switch (qMeasureType) {
             case SUPERVISED:
@@ -91,6 +95,25 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      *
      * @param source Source cache
      * @param target Target cache
+     * @param minCoverage Minimal coverage for a property to be considered for linking
+     * @param beta Beta value for computing F_beta
+     * @param measures Atomic measures
+     */
+    public LinearSelfConfigurator(ACache source, ACache target, double minCoverage, double beta, Map<String, String> measures) {
+        this.source = source;
+        this.target = target;
+        this.beta = beta;
+        sourcePropertiesCoverageMap = getPropertyStats(source, minCoverage);
+        targetPropertiesCoverageMap = getPropertyStats(target, minCoverage);
+        setPFMType(this.qMeasureType);
+        this.measures = measures;
+    }
+    
+    /**
+     * Constructor
+     *
+     * @param source Source cache
+     * @param target Target cache
      * @param beta Beta value for computing F_beta
      * @param minCoverage Minimal coverage for a property to be considered for
      * linking
@@ -102,15 +125,20 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         this.beta = beta;
         sourcePropertiesCoverageMap = getPropertyStats(source, minCoverage);
         targetPropertiesCoverageMap = getPropertyStats(target, minCoverage);
-        measures = new HashMap<String, String>();
+        setPFMType(this.qMeasureType);
+        setDefaultMeasures();
+    }
+
+    /**
+     * set default atomic measures  
+     */
+    public void setDefaultMeasures() {
+        measures = new HashMap<>();
         measures.put("euclidean", "numeric");
         measures.put("levenshtein", "string");
         measures.put("jaccard", "string");
         measures.put("trigrams", "string");
-
-        setMeasure(this.qMeasureType);
     }
-
 
     public void computeMeasure(ACache source, ACache target, String[] parameters) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -500,7 +528,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      */
     public void setSupervisedBatch(AMapping reference) {
         this.qMeasureType = QMeasureType.SUPERVISED;
-        setMeasure(this.qMeasureType);
+        setPFMType(this.qMeasureType);
         for(String sUri : reference.getMap().keySet()) {
             for(String tUri : reference.getMap().get(sUri).keySet()) {
                 double sim = reference.getConfidence(sUri, tUri);
