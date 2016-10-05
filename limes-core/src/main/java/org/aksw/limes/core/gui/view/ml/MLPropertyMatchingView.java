@@ -136,7 +136,7 @@ public class MLPropertyMatchingView {
 		for (int i = 0; i < matchedPropertiesBox.getChildren().size() - 1; i++) {
 		    HBox row = (HBox) matchedPropertiesBox.getChildren().get(i);
 		    String sourceProp = ((Label) ((VBox) row.getChildren().get(0)).getChildren().get(0)).getText();
-		    String targetProp = ((Label) ((VBox) row.getChildren().get(0)).getChildren().get(0)).getText();
+		    String targetProp = ((Label) ((VBox) row.getChildren().get(1)).getChildren().get(0)).getText();
 		    String type = ((Spinner<String>) ((HBox) row.getChildren().get(2)).getChildren().get(0)).getValue();
 		    switch (type) {
 		    case "String":
