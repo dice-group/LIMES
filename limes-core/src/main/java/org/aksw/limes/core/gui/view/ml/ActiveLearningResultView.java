@@ -148,7 +148,7 @@ public class ActiveLearningResultView {
 		table.getColumns().add(columnValue);
 
 		TableColumn<ActiveLearningResult, Boolean> columnIsMatch = new TableColumn<ActiveLearningResult, Boolean>(
-				"Is Match?");
+				"Match?");
 		columnIsMatch
 				.setCellValueFactory(new PropertyValueFactory<ActiveLearningResult, Boolean>(
 						"isMatch"));
