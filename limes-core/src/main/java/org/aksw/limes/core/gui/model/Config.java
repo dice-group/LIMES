@@ -221,7 +221,6 @@ public class Config extends Configuration {
 	
 	//If there is renaming, change it in the metric because it is not possible to save in RDF
 	String newME = metricExpression;
-	//Renaming and other functions are not available for RDF configs
 	for(String s: sourceEndpoint.getInfo().getFunctions().keySet()){
 	    for(String t: sourceEndpoint.getInfo().getFunctions().get(s).keySet()){
 		System.out.println(t);
