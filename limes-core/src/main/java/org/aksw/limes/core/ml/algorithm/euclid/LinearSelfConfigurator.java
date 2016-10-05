@@ -249,14 +249,14 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      * @return List of classifiers that each contain the best initial mappings
      */
     public List<SimpleClassifier> getBestInitialClassifiers(Set<String> measureList) {
-        List<SimpleClassifier> initialClassifiers = new ArrayList<SimpleClassifier>();
+        List<SimpleClassifier> initialClassifiers = new ArrayList<>();
         //        logger.info(sourcePropertiesCoverageMap);
         //        logger.info(targetPropertiesCoverageMap);
         for (String p : sourcePropertiesCoverageMap.keySet()) {
             double fMeasure = 0;
             SimpleClassifier bestClassifier = null;
             //String bestProperty = "";
-            Map<String, SimpleClassifier> cp = new HashMap<String, SimpleClassifier>();
+            Map<String, SimpleClassifier> cp = new HashMap<>();
             for (String q : targetPropertiesCoverageMap.keySet()) {
                 for (String measure : measureList) {
                     SimpleClassifier cps = getInitialClassifier(p, q, measure);
