@@ -359,7 +359,6 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         Set<String> atomicMeasures = new HashSet<String>();
         
         String measuresAsString = getParameter(PARAMETER_ATOMIC_MEASURES).toString().replace("[","").replace("]", "");
-        System.out.println(measuresAsString);
         for(String m : measuresAsString.split(",")){
             atomicMeasures.add(m.trim());
         }
