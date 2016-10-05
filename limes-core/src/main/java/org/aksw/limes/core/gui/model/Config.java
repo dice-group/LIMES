@@ -206,6 +206,8 @@ public class Config extends Configuration {
 	// XMLConfigurationWriter xmlwriter = new XMLConfigurationWriter();
 	// xmlwriter.write(this, file.getAbsolutePath());
 	// } else {
+
+	//In case the relation are not abbreaviated this an lead to errors
 	if(this.acceptanceRelation != null){
 	    if(this.acceptanceRelation.startsWith("http:")){
 		this.acceptanceRelation = PrefixHelper.abbreviate(this.acceptanceRelation);
@@ -216,6 +218,24 @@ public class Config extends Configuration {
 		this.verificationRelation = PrefixHelper.abbreviate(this.verificationRelation);
 	    }
 	}
+	
+	//If there is renaming, change it in the metric because it is not possible to save in RDF
+	String newME = metricExpression;
+	//Renaming and other functions are not available for RDF configs
+	for(String s: sourceEndpoint.getInfo().getFunctions().keySet()){
+	    for(String t: sourceEndpoint.getInfo().getFunctions().get(s).keySet()){
+		System.out.println(t);
+		newME = metricExpression.replace(t, s);
+	    }
+	}
+	for(String s: targetEndpoint.getInfo().getFunctions().keySet()){
+	    for(String t: targetEndpoint.getInfo().getFunctions().get(s).keySet()){
+		System.out.println(t);
+		newME = metricExpression.replace(t, s);
+	    }
+	}
+	metricExpression = newME;
+	
 	RDFConfigurationWriter rdfwriter = new RDFConfigurationWriter();
 	rdfwriter.write(this, file.getAbsolutePath());
 	// }
