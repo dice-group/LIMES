@@ -65,20 +65,24 @@ public class WombatSimple extends AWombat {
     }
 
     /**
-     * @return wrap with results
+     * @return wrap with results, null if no result found 
      */
     private MLResults learn() {
         if (bestSolutionNode == null) { // not to do learning twice
             bestSolutionNode = findBestSolution();
         }
         String bestMetricExpr = bestSolutionNode.getMetricExpression();
-        System.out.println("bestMetricExpr: " + bestMetricExpr);
-        double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|") + 1, bestMetricExpr.length()));
-        AMapping bestMapping = bestSolutionNode.getMapping();
-        LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
-        double bestFMeasure = bestSolutionNode.getFMeasure();
-        MLResults result = new MLResults(bestLS, bestMapping, bestFMeasure, null);
-        return result;
+        if(!bestMetricExpr.equals("")){
+            System.out.println("bestMetricExpr: " + bestMetricExpr);
+            double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|") + 1, bestMetricExpr.length()));
+            AMapping bestMapping = bestSolutionNode.getMapping();
+            LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
+            double bestFMeasure = bestSolutionNode.getFMeasure();
+            MLResults result = new MLResults(bestLS, bestMapping, bestFMeasure, null);
+            return result;
+        }
+        // case no mapping found
+        return null;
     }
 
     @Override
@@ -147,7 +151,7 @@ public class WombatSimple extends AWombat {
         }
         return result;
     }
-    
+
     @Override
     protected MLResults activeLearn(){
         return learn(new PseudoFMeasure());
@@ -412,5 +416,5 @@ public class WombatSimple extends AWombat {
     }
 
 
-    
+
 }
