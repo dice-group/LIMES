@@ -12,7 +12,7 @@ mvn clean install
 
 Creating the runnable jar file including the dependencies use:
 ```
-mvn clean package shade:shade
+mvn clean compile assembly:single
 ```
 
 ### Importing into Eclipse
