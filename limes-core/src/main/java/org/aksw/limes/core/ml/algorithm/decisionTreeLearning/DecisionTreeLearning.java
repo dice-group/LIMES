@@ -397,13 +397,11 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	}
 	// Add all previously labeled matches
 	oracleMapping = addAll(oracleMapping);
-	AMapping originalOracleMapping = MappingFactory.createDefaultMapping();
 	// These are the instances labeled by the user so we keep them to not
 	// present the same pairs twice
 	oracleMapping.getMap().forEach((sourceURI, map2) -> {
 	    map2.forEach((targetURI, value) -> {
 		previouslyPresentedCandidates.add(sourceURI, targetURI, value);
-		originalOracleMapping.add(sourceURI, targetURI, value);
 	    });
 	});
 	LinkSpecification resLS = buildTreeAndParseToLS(oracleMapping);
