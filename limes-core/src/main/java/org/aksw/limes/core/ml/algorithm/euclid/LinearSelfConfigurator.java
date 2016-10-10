@@ -520,7 +520,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      * @return
      */
     public Double computeQuality(AMapping map) {
-        return qMeasure.calculate(minimizeToKnow(map), new GoldStandard(reference));
+        return qMeasure.calculate(map, new GoldStandard(reference, source.getAllUris(), target.getAllUris()));
     }
 
     /** Set caches to trimmed caches according to the given reference mapping.

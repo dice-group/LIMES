@@ -107,11 +107,7 @@ class PartitionResult {
 public class PPJoinPlusPlus extends AMapper {
 
     static Logger logger = LoggerFactory.getLogger(PPJoinPlusPlus.class);
-    private static int MAX_DEPTH;
-    private static AMapping mapping = null;
-    private static HashMap<Integer, String> sourceMap;
-    private static HashMap<Integer, String> targetMap;
-    private IStringMeasure measure;
+    private static final int MAX_DEPTH = 2;
 
     /**
      * Berechnet die Überlappung zwischen zwei Datensätzen mithilfe ihrer Tokens
@@ -343,7 +339,13 @@ public class PPJoinPlusPlus extends AMapper {
      */
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-        
+
+
+        AMapping mapping;
+        HashMap<Integer, String> sourceMap;
+        HashMap<Integer, String> targetMap;
+        IStringMeasure measure = null;
+
         try {
             if (threshold <= 0) {
                 throw new InvalidThresholdException(threshold);
@@ -352,7 +354,6 @@ public class PPJoinPlusPlus extends AMapper {
             System.err.println("Exiting..");
             System.exit(1);
         }
-        MAX_DEPTH = 2;
         mapping = MappingFactory.createDefaultMapping();
         // logger.info("Starting PPJoinPlus");
         
@@ -550,7 +551,7 @@ public class PPJoinPlusPlus extends AMapper {
                     }
                 }
             }
-            verification(currentRec, candidates);
+            verification(currentRec, candidates, mapping, sourceMap, targetMap, measure);
         }
         // logger.info("Mapping carried out using " + comparisons + "
         // comparisons.");
@@ -567,7 +568,8 @@ public class PPJoinPlusPlus extends AMapper {
         return mapping;
     }
 
-    private int verification(Record currentRec, HashMap<Record, CandidateInfo> candidates) {
+    private int verification(Record currentRec, HashMap<Record, CandidateInfo> candidates, AMapping mapping,
+                             HashMap<Integer, String> sourceMap, HashMap<Integer, String> targetMap, IStringMeasure measure) {
         int count = 0;
         String id1, id2;
 
