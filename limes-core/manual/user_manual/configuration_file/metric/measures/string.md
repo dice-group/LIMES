@@ -7,6 +7,7 @@ The string measures package consists of the following measures:
 * `Jaccard`  
 * `Jaro`
 * `JaroWinkler` 
+* `Levenshtein`
 * `MongeElkan` 
 * `Overlap`
 * `Qgrams` 
