@@ -101,6 +101,11 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      * are almost classified as links
      */
     private static final double delta = 0.1;
+    
+    /**
+     * if we have already seen a linkspecification we raise the threshold by this amount
+     */
+    private static final double thresholdRaise = 0.05;
 
     // Parameters
     public static final String PARAMETER_TRAINING_DATA_SIZE = "training data size";
@@ -418,7 +423,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	// results faster
 	while (alreadySeenLS.get(resLS.toString()) != null && resLS.getThreshold() != 1.0) {
 	    logger.debug("Already seen " + resLS);
-	    resLS.setThreshold(Math.min(resLS.getThreshold() + 0.1, 1.0));
+	    resLS.setThreshold(Math.min(resLS.getThreshold() + thresholdRaise, 1.0));
 	    logger.debug("Setting threshold to: " + resLS.getThreshold());
 	}
 	this.mlresult = new MLResults();
@@ -498,7 +503,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 		    this.bestFMeasure = pfresult;
 		}
 		ls = ls.clone();
-		ls.setThreshold(Math.min(1.0, ls.getThreshold() + 0.05));
+		ls.setThreshold(Math.min(1.0, ls.getThreshold() + thresholdRaise));
 	    }
 	}
 	if (alreadySeenLS.get(ls.toString()) == null) {
