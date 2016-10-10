@@ -41,11 +41,17 @@ public class ThresholdModifyView {
         String accThreshLabeltext = "";
 
         if (node.nodeShape == NodeView.OPERATOR) {
+            if(node.nodeData.getChilds().size() > 0){
             verThreshLabeltext = node.nodeData.getChilds().get(0).id
                     + " threshold: ";
-            if (node.nodeData.getChilds().size() != 1) {
+            }else{
+        	verThreshLabeltext = "parent 1 threshold: ";
+            }
+            if (node.nodeData.getChilds().size() > 1) {
                 accThreshLabeltext = node.nodeData.getChilds().get(1).id
                         + " threshold: ";
+            }else{
+        	accThreshLabeltext = "parent 2 threshold: ";
             }
         } else {
             verThreshLabeltext = "Verification threshold: ";
