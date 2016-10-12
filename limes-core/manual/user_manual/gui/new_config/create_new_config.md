@@ -7,7 +7,7 @@ After clicking on *File* -> *New* a window pops up in which the source and targe
 * *EndpointURL*: Either a URL of a SPARQL Endpoint is entered here, or the filepath to a local endpoint. 
 Files can also be entered more easily by pressing the little green button with the file symbol which opens a file chooser dialog.
 * *ID/Namespace*: Source/Target Endpoint can be given a name (optional)
-* *Graph*: **TODO** what does this actually do???
+* *Graph*: Specify the graph, if this is left empty, the default graph will be used
 * *Page size*: How many pages of the endpoint should be fetched? (-1 = all)
 
 Let's use `http://dbpedia.org/sparql` as source endpoint and `http://linkedgeodata.org/sparql` as target endpoint URL.

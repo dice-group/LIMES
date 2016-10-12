@@ -10,8 +10,7 @@ or embed it into their own software products; 4) miscellaneous section, featurin
 
 ## What is LIMES?
 
-LIMES is ...
-TODO: completeme
+LIMES is a link discovery framework for the Web of Data. It implements time-efficient approaches for large-scale link discovery based on the characteristics of metric spaces. 
 
 ## Help and Support
 
