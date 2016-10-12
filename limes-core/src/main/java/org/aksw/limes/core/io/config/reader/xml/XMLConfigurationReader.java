@@ -259,7 +259,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                             label = getText(child);
                         }
                     }
-                    configuration.addPrefixes(label, namespace);
+                    configuration.addPrefix(label, namespace);
                 }
 
                 // 1. Source information
@@ -376,6 +376,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
         }
         return configuration;
     }
+
+
 
     public void modifyMetricExpression(LinkSpecification spec) {
         for (LinkSpecification atomicSpec : spec.getAllLeaves()) {

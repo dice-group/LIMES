@@ -29,8 +29,7 @@ import org.slf4j.LoggerFactory;
  * @version Jul 12, 2016
  */
 public class RDFConfigurationReader extends AConfigurationReader {
-    private static final Logger logger = LoggerFactory.getLogger(RDFConfigurationReader.class.getName());
-    Configuration configuration = new Configuration();
+    private static final Logger logger = LoggerFactory.getLogger(RDFConfigurationReader.class);
 
     private Model configModel = ModelFactory.createDefaultModel();
     private Resource specsSubject;

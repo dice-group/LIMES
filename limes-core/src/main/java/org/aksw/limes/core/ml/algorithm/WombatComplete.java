@@ -134,9 +134,9 @@ public class WombatComplete extends AWombat {
         pruningTime += System.currentTimeMillis() - time;
         logger.debug("Most promising node: " + mostPromisingNode.getValue());
         iterationNr++;
-        while ((mostPromisingNode.getValue().getFMeasure()) < maxFitnessThreshold
-                && (refinementTreeRoot.size() - pruneNodeCount) <= maxRefineTreeSize
-                && iterationNr <= maxIterationNumber) {
+        while ((mostPromisingNode.getValue().getFMeasure()) < getMaxFitnessThreshold()
+                && (refinementTreeRoot.size() - pruneNodeCount) <= getMaxRefinmentTreeSize()
+                && iterationNr <= getMaxIterationNumber()) {
             logger.debug("Running iteration number " + iterationNr);
             iterationNr++;
             mostPromisingNode = expandNode(mostPromisingNode);
@@ -284,7 +284,7 @@ public class WombatComplete extends AWombat {
         List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
         for (String p : sourcePropertiesCoverageMap.keySet()) {
             for (String q : targetPropertiesCoverageMap.keySet()) {
-                for (String m : measures) {
+                for (String m : getAtomicMeasures()) {
                     ExtendedClassifier cp = findInitialClassifier(p, q, m);
                     //only add if classifier covers all entries
                     initialClassifiers.add(cp);
@@ -312,7 +312,7 @@ public class WombatComplete extends AWombat {
         double maxOverlap = 0;
         double theta = 1.0;
         AMapping bestMapping = MappingFactory.createDefaultMapping();
-        for (double threshold = 1d; threshold > minPropertyCoverage; threshold = threshold * propertyLearningRate) {
+        for (double threshold = 1d; threshold > getMinPropertyCoverage(); threshold = threshold * getPropertyLearningRate()) {
             AMapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
             double overlap = recall(mapping);
             if (maxOverlap < overlap) { //only interested in largest threshold with recall 1
@@ -373,9 +373,9 @@ public class WombatComplete extends AWombat {
      */
     private double computePenalty(Tree<RefinementNode> promesyChild) {
         long childrenCount = promesyChild.size() - 1;
-        double childrenPenalty = (childrenPenaltyWeight * childrenCount) / refinementTreeRoot.size();
+        double childrenPenalty = (getChildrenPenaltyWeight() * childrenCount) / refinementTreeRoot.size();
         long level = promesyChild.level();
-        double complexityPenalty = (complexityPenaltyWeight * level) / refinementTreeRoot.depth();
+        double complexityPenalty = (getComplexityPenaltyWeight() * level) / refinementTreeRoot.depth();
         return childrenPenalty + complexityPenalty;
     }
 
@@ -402,7 +402,7 @@ public class WombatComplete extends AWombat {
                 }
             }
         }
-        if (verbose) {
+        if (isVerbose()) {
             System.out.println("Tree size:" + refinementTreeRoot.size());
             refinementTreeRoot.print();
         }
@@ -626,7 +626,7 @@ public class WombatComplete extends AWombat {
             RefinementNode n = createNode(diffMapping, diffExpr);
             refinementTreeRoot.addChild(new Tree<RefinementNode>(refinementTreeRoot, n, null));
         }
-        if (verbose) {
+        if (isVerbose()) {
             System.out.println("Tree size:" + refinementTreeRoot.size());
             refinementTreeRoot.print();
         }

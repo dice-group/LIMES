@@ -152,7 +152,7 @@ public class SPARQLHelper {
             if (!resultSetToList(querySelect(PrefixHelper.addPrefixes(queryForOWLThing), endpoint, graph, model)).isEmpty()) {
         	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), queryForOWLThing);
         	for(String key: prefixesToAdd.keySet()){
-        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	    config.addPrefix(key, prefixesToAdd.get(key));
         	}
                 return Collections.singleton(OWL.Thing.toString());
             }
@@ -168,7 +168,7 @@ public class SPARQLHelper {
             if (!classes.isEmpty()) {
         	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), queryForParentlessClasses);
         	for(String key: prefixesToAdd.keySet()){
-        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	    config.addPrefix(key, prefixesToAdd.get(key));
         	}
                 return classes;
             }
@@ -188,7 +188,7 @@ public class SPARQLHelper {
 	    if (!classes.isEmpty()){
         	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), query);
         	for(String key: prefixesToAdd.keySet()){
-        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	    config.addPrefix(key, prefixesToAdd.get(key));
         	}
 		return classes;
 	    }else {
@@ -204,7 +204,7 @@ public class SPARQLHelper {
 		if (!classes.isEmpty()) {
         	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), query);
         	for(String key: prefixesToAdd.keySet()){
-        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	    config.addPrefix(key, prefixesToAdd.get(key));
         	}
 		    return classes;
 		} else {
@@ -216,7 +216,7 @@ public class SPARQLHelper {
 		    classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
         	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), query);
         	for(String key: prefixesToAdd.keySet()){
-        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	    config.addPrefix(key, prefixesToAdd.get(key));
         	}
 		    return classes;
 		}
