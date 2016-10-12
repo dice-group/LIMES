@@ -99,7 +99,7 @@
 				<version>2.17</version>
 				<configuration>
 					<forkMode>pertest</forkMode>
-					<argLine>${argLine} -Xms256m -Xmx4G</argLine>
+					<argLine>${argLine} -Xms256m -Xmx4096m</argLine>
 					<testFailureIgnore>false</testFailureIgnore>
 					<skipTests>false</skipTests>
 				</configuration>
