@@ -30,10 +30,8 @@ force approach while at the same time reducing significantly the number
 of comparisons**. In addition, LIMES supports a **large number of input
 and output formats** and can be extended very easily to fit new
 algorithms , new datatypes, new preprocessing functions and others thank
-to its modular architecture displayed in Figure [fig:architecture].
+to its modular architecture.
 
-![Architecture of LIMES](../images/architecture.png "fig:")
-[fig:architecture]
 
 In general, LIMES can be used to set links between two data sources,
 e.g., a novel data source created by a data publisher and existing data
