@@ -9,7 +9,7 @@ limes:linkedgeodataTOlinkedgeodataTarget
       rdfs:label "linkedgeodata" ;
       limes:endPoint "http://linkedgeodata.org/sparql" ;
       limes:pageSize "2000" ;
-      limes:property "geom:geometry/geos:asWKT" ;
+      limes:property "geom:geometry/geos:asWKT RENAME polygon" ;
       limes:restriction "?y a lgdo:RelayBox" ;
       limes:variable "?y" .
 
@@ -52,6 +52,6 @@ limes:linkedgeodataTOlinkedgeodataSource
       rdfs:label "linkedgeodata" ;
       limes:endPoint "http://linkedgeodata.org/sparql" ;
       limes:pageSize "2000" ;
-      limes:property "geom:geometry/geos:asWKT" ;
+      limes:property "geom:geometry/geos:asWKT RENAME polygon" ;
       limes:restriction "?x a lgdo:RelayBox" ;
       limes:variable "?x" .
