@@ -113,11 +113,71 @@ The following table contains a list of implemented algorithms together with supp
     <td class="tg-yw4l" colspan="3">Same as WOMBAT Simple<br></td>
   </tr>
   <tr>
-    <td class="tg-yw4l">EAGLE</td>
-    <td class="tg-yw4l">supervised batch, supervised active and unsupervised</td>
-    <td class="tg-yw4l">**TODO** Tomasso<br></td>
+    <td class="tg-yw4l" rowspan="13">EAGLE</td>
+    <td class="tg-yw4l" rowspan="13">supervised batch, supervised active and unsupervised</td>
+    <td class="tg-yw4l">generations</td>
+    <td class="tg-yw4l">10</td>
+    <td class="tg-yw4l">Integer</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">preserve_fittest</td>
+    <td class="tg-yw4l">true</td>
     <td class="tg-yw4l"></td>
-    <td class="tg-yw4l"></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">max_duration</td>
+    <td class="tg-yw4l">60</td>
+    <td class="tg-yw4l">[1,Inf)</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">inquiry_size</td>
+    <td class="tg-yw4l">10</td>
+    <td class="tg-yw4l">[1,Inf)</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">max_iterations</td>
+    <td class="tg-yw4l">500</td>
+    <td class="tg-yw4l">[1,Inf)</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">max_quality</td>
+    <td class="tg-yw4l">0.5</td>
+    <td class="tg-yw4l">[0.0,1.0]</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">termination_criteria</td>
+    <td class="tg-yw4l">iteration</td>
+    <td class="tg-yw4l">enum</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">termination_criteria_value</td>
+    <td class="tg-yw4l">0.0</td>
+    <td class="tg-yw4l">[0.0,Inf)</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">beta</td>
+    <td class="tg-yw4l">1.0</td>
+    <td class="tg-yw4l">[0.0,1.0]</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">population</td>
+    <td class="tg-yw4l">20</td>
+    <td class="tg-yw4l">[1,Inf)</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">mutation_rate</td>
+    <td class="tg-yw4l">0.4</td>
+    <td class="tg-yw4l">[0.0,1.0]</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">reproduction_rate</td>
+    <td class="tg-yw4l">0.4</td>
+    <td class="tg-yw4l">[0.0,1.0]</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">crossover_rate</td>
+    <td class="tg-yw4l">0.3</td>
+    <td class="tg-yw4l">[0.0,1.0]</td>
   </tr>
 </table>
     	
