@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 
 import org.aksw.limes.core.gui.model.Config;
@@ -75,9 +76,13 @@ public class ToolBox extends VBox {
      */
     private void generateView(VBox box) {
 	toolBoxSourceProperties = new ListView<String>();
+	toolBoxSourceProperties.setTooltip(new Tooltip("Add source properties to metric builder by clicking"));
 	toolBoxTargetProperties = new ListView<String>();
+	toolBoxTargetProperties.setTooltip(new Tooltip("Add target properties to metric builder by clicking"));
 	toolBoxMetrics = generateListViewFromNodeIdentifiers(new Measure("").identifiers());
+	toolBoxMetrics.setTooltip(new Tooltip("Add measures to metric builder by clicking"));
 	toolBoxOperators = generateListViewFromNodeIdentifiers(Operator.identifiers);
+	toolBoxOperators.setTooltip(new Tooltip("Add operators to metric builder by clicking"));
 	box.getChildren().add(new Label("Source Properties"));
 	box.getChildren().add(toolBoxSourceProperties);
 	box.getChildren().add(new Label("Target Properties"));

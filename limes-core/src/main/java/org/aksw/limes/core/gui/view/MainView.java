@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import org.aksw.limes.core.gui.controller.MainController;
-import org.aksw.limes.core.gui.view.graphBuilder.GraphBuildView;
-
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,6 +16,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -29,6 +27,9 @@ import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+
+import org.aksw.limes.core.gui.controller.MainController;
+import org.aksw.limes.core.gui.view.graphBuilder.GraphBuildView;
 
 /**
  * Main View of the Application
@@ -112,6 +113,7 @@ public class MainView {
         HBox runBox = new HBox(0);
         runBox.setAlignment(Pos.CENTER_RIGHT);
         runButton = new Button("Run");
+        runButton.setTooltip(new Tooltip("Execute this link specification"));
         runButton.setOnAction(e -> {
             controller.map();
         });

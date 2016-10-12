@@ -160,6 +160,7 @@ public class MachineLearningView {
 	mlOptionsChooser.setPromptText("choose algorithm");
 
 	learnButton = new Button("learn");
+	learnButton.setTooltip(new Tooltip("start learning"));
 	learnButton.setDisable(true);
 	HBox buttonWrapper = new HBox();
 	buttonWrapper.setAlignment(Pos.BASELINE_RIGHT);

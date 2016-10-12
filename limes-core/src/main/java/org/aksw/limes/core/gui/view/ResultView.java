@@ -12,6 +12,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -222,6 +223,7 @@ public class ResultView {
             }
         });
         saveLinkSpecButton = new Button("Save Linkspecification");
+        saveLinkSpecButton.setTooltip(new Tooltip("Puts the learned link specification to the metric builder"));
         saveLinkSpecButton.setVisible(false);
         root.getChildren().add(saveLinkSpecButton);
         saveLinkSpecButton.setOnMouseClicked(e -> {
@@ -252,6 +254,7 @@ public class ResultView {
 	}
         this.results = results;
         table.setItems(results);
+        this.mapping = resultMapping;
     }
 
     /**

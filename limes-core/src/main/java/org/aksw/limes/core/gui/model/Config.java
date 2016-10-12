@@ -185,7 +185,7 @@ public class Config extends Configuration {
 	    outConfig.metric.param2 = outConfig.verificationThreshold;
 	} else {
 	    Alert alert = new Alert(AlertType.INFORMATION);
-	    alert.setContentText("Machine Learning in the GUI cannot be run from file. Please use the commandline for this. All the usable information from configuration file has been saved though and you can run machine learning from the GUI now");
+	    alert.setContentText("Running machine learning configurations in the GUI is possible, although using the command line for this most of the time is more preferable. All the usable information has been saved though and you can run any machine learning type from the GUI now");
 	    alert.showAndWait();
 	    outConfig.metric = new Output();
 	}

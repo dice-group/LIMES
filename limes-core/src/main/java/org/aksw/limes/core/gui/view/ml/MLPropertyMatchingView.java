@@ -14,6 +14,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -94,7 +95,9 @@ public class MLPropertyMatchingView {
 	targetColumn.getChildren().addAll(targetLabel, targetPropList);
 	matchedPropertiesBox = new VBox();
 	cancelButton = new Button("cancel");
+	cancelButton.setTooltip(new Tooltip("cancel property matching"));
 	finishButton = new Button("finish");
+	finishButton.setTooltip(new Tooltip("set this property matching"));
 	makeUnmatchedPropertyBox();
 	finishButton.setDisable(true);
 	HBox buttons = new HBox();

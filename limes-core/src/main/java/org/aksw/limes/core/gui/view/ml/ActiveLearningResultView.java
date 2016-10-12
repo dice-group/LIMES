@@ -10,6 +10,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -203,6 +204,8 @@ public class ActiveLearningResultView {
 		learnButton.setOnAction(e -> {
 			controller.learnButtonPressed();
 		});
+		learnButton.setTooltip(new Tooltip("start learning"));
+		getResultsButton.setTooltip(new Tooltip("compute results"));
 		HBox buttonBox = new HBox();
 		buttonBox.getChildren().addAll(learnButton, getResultsButton,
 				learnProgress);
