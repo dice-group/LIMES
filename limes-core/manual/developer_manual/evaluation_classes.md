@@ -25,7 +25,7 @@ The `Evaluation` package provides an environment to test and evaluate the learni
     * `SimpleOracle`
     * `OracleFactory`
 
-- `EvaluationDataLoader`  This package is responsible through its classes to load the datasets used to test the learning algorithms and to support the evaluation process with benchmarks and oracle data. Four classes comprise this package which are:
+- `EvaluationDataLoader`  This package is responsible through its classes to load the data sets used to test the learning algorithms and to support the evaluation process with benchmarks and oracle data. Four classes comprise this package which are:
     * `DataSetChooser`
     * `EvaluationData`
     * `Experiment`
