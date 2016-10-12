@@ -35,7 +35,7 @@ limes:linkedgeodataTOlinkedgeodataReview
       a       limes:Review ;
       limes:file "lgd_relaybox_near.nt" ;
       limes:relation "lgdo:near" ;
-      limes:threshold "0" .
+      limes:threshold "0.5" .
 
 limes:linkedgeodataTOlinkedgeodataMetric
       a       limes:Metric ;
