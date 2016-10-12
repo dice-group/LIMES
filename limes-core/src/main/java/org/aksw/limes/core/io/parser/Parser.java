@@ -1,6 +1,7 @@
 package org.aksw.limes.core.io.parser;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.exceptions.UnsupportedOperator;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.apache.commons.lang.StringUtils;
@@ -213,6 +214,8 @@ public class Parser implements IParser {
     }
 
     public void setThreshold(double threshold) {
+        if(threshold <= 0)
+            throw new InvalidThresholdException(threshold);
         this.threshold = threshold;
     }
 

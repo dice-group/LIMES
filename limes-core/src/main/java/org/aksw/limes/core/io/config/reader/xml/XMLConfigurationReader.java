@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
@@ -71,7 +72,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
     /**
      * Constructor
      * 
-     * @param xmlFile The input XML file
+     * @param xmlFile
+     *            The input XML file
      */
     public XMLConfigurationReader(String xmlFile) {
         super(xmlFile);
@@ -116,7 +118,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
     /**
      * Returns the content of a node
      *
-     * @param  node NODE tag with text
+     * @param node
+     *            NODE tag with text
      * @return The text within the NODE tag
      */
     public static String getText(Node node) {
@@ -216,8 +219,10 @@ public class XMLConfigurationReader extends AConfigurationReader {
      * everything needed. NB: The path to the DTD must be specified in the input
      * file
      *
-     * @param input The input XML file as Stream
-     * @param filePath path of the XML file
+     * @param input
+     *            The input XML file as Stream
+     * @param filePath
+     *            path of the XML file
      * @return true if parsing was successful, else false
      */
     public Configuration validateAndRead(InputStream input, String filePath) {
@@ -234,7 +239,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
                     // System.out.println(systemId);
                     if (systemId.contains("limes.dtd")) {
-//                        String dtd = System.getProperty("user.dir") + "/resources/limes.dtd";
+                        // String dtd = System.getProperty("user.dir") +
+                        // "/resources/limes.dtd";
                         String dtd = getClass().getResource("/limes.dtd").toString();
                         return new InputSource(dtd);
                     } else {
@@ -294,8 +300,10 @@ public class XMLConfigurationReader extends AConfigurationReader {
                                     configuration.setMlTrainingDataFile(getText(child));
                                 } else if (child.getNodeName().equals(PARAMETER)) {
                                     Element e = (Element) child;
-                                    String mlParameterName = getText(e.getElementsByTagName(NAME).item(0).getChildNodes().item(0));
-                                    String mlParameterValue = getText(e.getElementsByTagName(VALUE).item(0).getChildNodes().item(0));
+                                    String mlParameterName = getText(
+                                            e.getElementsByTagName(NAME).item(0).getChildNodes().item(0));
+                                    String mlParameterValue = getText(
+                                            e.getElementsByTagName(VALUE).item(0).getChildNodes().item(0));
                                     configuration.addMlAlgorithmParameter(mlParameterName, mlParameterValue);
                                 }
                             }
@@ -327,6 +335,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
                     Node child = children.item(i);
                     if (child.getNodeName().equals(THRESHOLD)) {
                         configuration.setVerificationThreshold(Double.parseDouble(getText(child)));
+                        if (Double.parseDouble(getText(child)) < 0)
+                            throw new InvalidThresholdException(Double.parseDouble(getText(child)));
                     } else if (child.getNodeName().equals(FILE)) {
                         String file = getText(child);
                         configuration.setVerificationFile(file);
@@ -376,8 +386,6 @@ public class XMLConfigurationReader extends AConfigurationReader {
         }
         return configuration;
     }
-
-
 
     public void modifyMetricExpression(LinkSpecification spec) {
         for (LinkSpecification atomicSpec : spec.getAllLeaves()) {

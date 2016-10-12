@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
+import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
@@ -120,6 +121,9 @@ public class RDFConfigurationReader extends AConfigurationReader {
         //5. ACCEPTANCE file and conditions
         Resource acceptance = (Resource) getObject(specsSubject, LIMES.hasAcceptance, true);
         configuration.setAcceptanceThreshold(parseDouble(getObject(acceptance, LIMES.threshold, true).toString()));
+        if(parseDouble(getObject(acceptance, LIMES.threshold, true).toString()) < 0){
+            throw new InvalidThresholdException(parseDouble(getObject(acceptance, LIMES.threshold, true).toString()));
+        }
         configuration.setAcceptanceFile(getObject(acceptance, LIMES.file, true).toString());
         configuration.setAcceptanceRelation(getObject(acceptance, LIMES.relation, true).toString());
 

@@ -377,7 +377,7 @@ public class EDJoinMapper extends AMapper {
 
         this.comparisons = 0;
         mapping = MappingFactory.createDefaultMapping();
-        if (threshold < 0) {
+        if (threshold <= 0) {
             logger.info("Wrong threshold setting. Returning empty mapping.");
             return mapping;
         }
