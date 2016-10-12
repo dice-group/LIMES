@@ -343,7 +343,6 @@ public class PPJoinPlusPlus extends AMapper {
         HashMap<Integer, String> sourceMap;
         HashMap<Integer, String> targetMap;
         IStringMeasure measure = null;
-
         if (threshold <= 0) {
             throw new InvalidThresholdException(threshold);
         }

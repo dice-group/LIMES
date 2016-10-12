@@ -214,8 +214,6 @@ public class Parser implements IParser {
     }
 
     public void setThreshold(double threshold) {
-        if(threshold <= 0)
-            throw new InvalidThresholdException(threshold);
         this.threshold = threshold;
     }
 
