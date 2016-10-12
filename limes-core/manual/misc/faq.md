@@ -1,5 +1,10 @@
 # FAQ
-## Problems with JavaFX
+
+## What is LIMES?
+
+LIMES is a link discovery framework for the Web of Data. It implements time-efficient approaches for large-scale link discovery based on the characteristics of metric spaces. 
+
+## Problems with JavaFX?
 While Oracle Java 8 should have JavaFX included, with OpenJDK for Java 8 it depends whether the package assembler choose to 
 include JavaFX. And in [some cases](https://github.com/AKSW/LIMES-dev/issues/56) it can happen, that neither works. 
 First thing you should do is check if you can find `jfxrt.jar`, it *should* be in `<JRE_HOME>/lib/ext/jfxrt.jar` (but in this
