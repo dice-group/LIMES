@@ -259,7 +259,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                             label = getText(child);
                         }
                     }
-                    configuration.addPrefixes(label, namespace);
+                    configuration.addPrefix(label, namespace);
                 }
 
                 // 1. Source information
@@ -316,7 +316,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                         String file = getText(child);
                         configuration.setAcceptanceFile(file);
                     } else if (child.getNodeName().equals(RELATION)) {
-                        configuration.setAcceptanceRelation(getURI(getText(child)));
+                        configuration.setAcceptanceRelation(getText(child));
                     }
                 }
 
@@ -331,7 +331,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                         String file = getText(child);
                         configuration.setVerificationFile(file);
                     } else if (child.getNodeName().equals(RELATION)) {
-                        configuration.setVerificationRelation(getURI(getText(child)));
+                        configuration.setVerificationRelation(getText(child));
                     }
                 }
 

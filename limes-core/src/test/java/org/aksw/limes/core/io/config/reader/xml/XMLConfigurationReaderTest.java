@@ -33,7 +33,7 @@ public class XMLConfigurationReaderTest {
         prefixes.put("lgdo", "http://linkedgeodata.org/ontology/");
         prefixes.put("geom", "http://geovocab.org/geometry#");
         prefixes = Collections.unmodifiableMap(prefixes);
-        HashMap<String, String> f = new HashMap<String, String>();
+        HashMap<String, String> f = new HashMap<>();
         f.put("polygon", null);
         functions.put("geom:geometry/geos:asWKT", f);
         functions = Collections.unmodifiableMap(functions);
@@ -72,6 +72,7 @@ public class XMLConfigurationReaderTest {
     public void testXmlReaderMetric() {
 
         Configuration testConf = new Configuration();
+        testConf.setPrefixes(prefixes);
         testConf.setSourceInfo(sourceInfo);
         testConf.setTargetInfo(targetInfo);
         testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
@@ -81,7 +82,6 @@ public class XMLConfigurationReaderTest {
         testConf.setAcceptanceFile("lgd_relaybox_verynear.nt");
         testConf.setVerificationThreshold(0.5);
         testConf.setVerificationFile("lgd_relaybox_near.nt");
-        testConf.setPrefixes(prefixes);
         testConf.setOutputFormat("TAB");
         testConf.setExecutionRewriter("default");
         testConf.setExecutionPlanner("default");
@@ -104,6 +104,7 @@ public class XMLConfigurationReaderTest {
         mlParameters.add(lp);
 
         Configuration testConf = new Configuration();
+        testConf.setPrefixes(prefixes);
         testConf.setSourceInfo(sourceInfo);
         testConf.setTargetInfo(targetInfo);
         testConf.setAcceptanceRelation("lgdo:near");       
@@ -112,7 +113,6 @@ public class XMLConfigurationReaderTest {
         testConf.setAcceptanceFile("lgd_relaybox_verynear.nt");
         testConf.setVerificationThreshold(0.5);
         testConf.setVerificationFile("lgd_relaybox_near.nt");
-        testConf.setPrefixes(prefixes);
         testConf.setOutputFormat("TAB");
         testConf.setMlAlgorithmName("wombat simple");
         testConf.setMlImplementationType(MLImplementationType.SUPERVISED_BATCH);

@@ -44,11 +44,11 @@ public class KBInfo implements Serializable {
         id = null;
         endpoint = null;
         graph = null;
-        restrictions = new ArrayList<String>();
-        properties = new ArrayList<String>();
-        optionalProperties = new ArrayList<String>();
-        prefixes = new HashMap<String, String>();
-        functions = new HashMap<String, Map<String, String>>();
+        restrictions = new ArrayList<>();
+        properties = new ArrayList<>();
+        optionalProperties = new ArrayList<>();
+        prefixes = new HashMap<>();
+        functions = new HashMap<>();
 
         pageSize = -1;      //-1 means query all at once
         type = DEFAULT_QUERY_TYPE;    //default value
