@@ -3,7 +3,9 @@ package org.aksw.limes.core.io.parser;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,5 +43,12 @@ public class ParserTest {
         assertTrue(p.getLeftTerm().equals("trigrams(x.skos:prefLabel,y.rdfs:label)"));
         assertTrue(p.getRightTerm().equals("trigrams(x.osnp:valueLabel,y.rdfs:label)"));
     }
+    
+   /* @Test(expected=InvalidMeasureException.class)
+    public void atomicParcer() throws InvalidMeasureException {
+        Parser p = new Parser("blabala(trigrams(x.skos:prefLabel,y.rdfs:label),trigrams(x.osnp:valueLabel, y.rdfs:label))", 0.5);
+        //p.isAtomic();
+        fail("Should have thrown an exception");
+    }*/
 
 }
