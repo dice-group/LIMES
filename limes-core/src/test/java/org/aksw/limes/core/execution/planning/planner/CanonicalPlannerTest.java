@@ -104,7 +104,6 @@ public class CanonicalPlannerTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        System.out.println(ls.isAtomic());
 
         NestedPlan plan = p.plan(ls);
         assertTrue(plan != null);
