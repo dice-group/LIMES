@@ -124,11 +124,18 @@ public class MainView {
         root.setBottom(runBox);
         graphBuild.widthProperty().bind(
                 root.widthProperty().subtract(toolBox.widthProperty()));
-        graphBuild.heightProperty().bind(toolBox.heightProperty());
+        graphBuild.heightProperty().bind(toolBox.heightProperty().subtract(runBox.heightProperty()));
+        toolBox.prefHeightProperty().bind(root.heightProperty().subtract(runBox.heightProperty()));
+        toolBox.setMinHeight(toolBox.prefHeightProperty().doubleValue());
+        
 
         graphBuild.start();
 
-        Scene scene = new Scene(root, 950, 750);
+        Scene scene = new Scene(root, 950, 650);
+        root.prefHeightProperty().bind(scene.heightProperty());
+        root.prefWidthProperty().bind(scene.widthProperty());
+        root.minHeightProperty().bind(scene.heightProperty());
+        root.minWidthProperty().bind(scene.widthProperty());
         scene.getStylesheets().add("gui/main.css");
         stage.setMinHeight(scene.getHeight());
         stage.setMinWidth(scene.getWidth());

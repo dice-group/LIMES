@@ -16,6 +16,7 @@ import org.aksw.limes.core.io.serializer.SerializerFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.apache.commons.cli.*;
 import org.apache.commons.lang3.time.StopWatch;
+import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +32,7 @@ public class Controller {
 
     private static final int MAX_ITERATIONS_NUMBER = 10;
     private static final Logger logger = LoggerFactory.getLogger(Controller.class.getName());
+    public static final String DEFAULT_LOGGING_PATH = "limes.log";
     private static Options options = getOptions();
 
     /**
@@ -75,9 +77,9 @@ public class Controller {
             System.exit(1);
         }
         // II. Configure Logger
-        // @todo: use slf4j in whole project, remove all references to log4j and
-        // use log4j2 as provider for slf4j.
-        // @todo: add verbose/silent options
+        System.setProperty("logFilename", cmd.hasOption('o') ? cmd.getOptionValue("o") : DEFAULT_LOGGING_PATH);
+        ((org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false)).reconfigure();
+
         // 1. Determine appropriate ConfigurationReader
         String format = "xml";
         String fileNameOrUri = cmd.getArgs()[0];
@@ -178,10 +180,12 @@ public class Controller {
         Options options = new Options();
         options.addOption("g", false, "Run LIMES GUI");
         options.addOption("h", false, "Show this help");
+        options.addOption("o", true, "Set path of log file. Default is 'limes.log'");
         options.addOption("f", true, "Optionally configure format of <config_file_or_uri>, either \"xml\" (default) or " +
                 "\"rdf\". If not specified, LIMES tries to infer the format from file ending.");
         // options.addOption("s", false, "Silent run");
         // options.addOption("v", false, "Verbose run");
         return options;
     }
+
 }
