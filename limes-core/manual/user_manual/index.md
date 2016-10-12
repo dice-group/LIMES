@@ -13,12 +13,10 @@ complexity without loosing a single link.
 
 ![LIMES workflow](../images/uml.png "fig:")
 
-The general workflow implemented by the LIMES framework is depicted in the previous
-figure. To execute LIMES, a configuration file must be given as input to the framework.
-The configuration files includes information about the source S, the target T and the link
-specification (LS) that will be used to link S and T.
-To achieve time and memory efficiency, LIMES serialises every new S and T into caches, in order to avoid re-querying the input datasets in the future. 
-Once the input resource sets are retrieved, the framework will either perform Link Discovery (LD) or Machine Learning (ML). For Link Discovery, LIMES will re-write, plan and execute a LS in order to identify the set of links that satisfy the conditions opposed by the LS. For Machine Learning, LIMES will execute the predefined ML algorithm included in the configuration file to identify an appropriate LS to link S and T. Then it proceeds in executing the LS. For both taks, the resulting set of links will be stored in a file included in the input configuration file.
+The LIMES framework consists of seven main modules of which each can be extended to accommodate new or improved functionality. The central modules of LIMES are the controller module, which coordinates the matching process and the data module, which contains all the classes necessary to store data. The matching process is carried out as follows: First, the controller calls the I/O-module, which reads the configuration file and extracts all the information necessary to carry out the comparison of instances, including the URL of the SPARQL-endpoints of the knowledge bases S (source) and T(target), the restrictions on the instances to map (e.g., their type), the expression of the metric to be used and the threshold to be used. 
+
+Given that the configuration file is valid w.r.t. the LIMES Specification Language (LSL), the query module is called. This module uses the configuration for the target and source knowledge bases to retrieve instances and properties from the SPARQL-endpoints of the source and target knowledge bases that adhere to the restrictions specified in the configuration file. The query module writes its output into a cache, which is a file. Once all instances have been stored in the cache, the controller chooses between performing Link Discovery or Machine Learning. For Link Discovery, LIMES will re-write, plan and execute the Link Specification (LS) included in the configuration file. The main goal of LD is to identify the set of links (mapping) that satisfy the conditions opposed by the input LS. For Machine Learning, LIMES will execute the predefined ML algorithm stated in the configuration file, to identify an appropriate LS to link S and T. Then it proceeds in executing the LS. For both taks, the mapping will be stored in the output file choosen by the user in the configuration file. The results are finally stored into a RDF or a XML file.
+
 
 
 The advantages of LIMES’ approach are manifold. First, it implements
