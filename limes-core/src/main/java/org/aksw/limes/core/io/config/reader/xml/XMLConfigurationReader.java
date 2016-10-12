@@ -316,7 +316,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                         String file = getText(child);
                         configuration.setAcceptanceFile(file);
                     } else if (child.getNodeName().equals(RELATION)) {
-                        configuration.setAcceptanceRelation(getText(child));
+                        configuration.setAcceptanceRelation(getURI(getText(child)));
                     }
                 }
 
@@ -331,7 +331,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                         String file = getText(child);
                         configuration.setVerificationFile(file);
                     } else if (child.getNodeName().equals(RELATION)) {
-                        configuration.setVerificationRelation(getText(child));
+                        configuration.setVerificationRelation(getURI(getText(child)));
                     }
                 }
 
@@ -376,6 +376,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
         }
         return configuration;
     }
+
+
 
     public void modifyMetricExpression(LinkSpecification spec) {
         for (LinkSpecification atomicSpec : spec.getAllLeaves()) {

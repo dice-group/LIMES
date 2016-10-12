@@ -30,5 +30,18 @@ public abstract class AConfigurationReader {
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
     }
+    
+    /**
+     * @param r resource 
+     * @return non-prefixed version of the input resource r
+     */
+    protected String getURI(String r) {
+        if(r.contains(":")){
+            String prefix = r.substring(0,r.indexOf(":"));
+            String prefixURI = configuration.getPrefixes().get(prefix);
+            r = r.replace(prefix + ":", prefixURI);
+        }
+        return r;
+    }
 
 }

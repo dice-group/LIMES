@@ -73,7 +73,6 @@ public class WombatSimple extends AWombat {
         }
         String bestMetricExpr = bestSolutionNode.getMetricExpression();
         if(!bestMetricExpr.equals("")){
-            System.out.println("bestMetricExpr: " + bestMetricExpr);
             double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|") + 1, bestMetricExpr.length()));
             AMapping bestMapping = bestSolutionNode.getMapping();
             LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);

@@ -122,13 +122,13 @@ public class RDFConfigurationReader extends AConfigurationReader {
         Resource acceptance = (Resource) getObject(specsSubject, LIMES.hasAcceptance, true);
         configuration.setAcceptanceThreshold(parseDouble(getObject(acceptance, LIMES.threshold, true).toString()));
         configuration.setAcceptanceFile(getObject(acceptance, LIMES.file, true).toString());
-        configuration.setAcceptanceRelation(getObject(acceptance, LIMES.relation, true).toString());
+        configuration.setAcceptanceRelation(getURI(getObject(acceptance, LIMES.relation, true).toString()));
 
         //6. VERIFICATION file and conditions
         Resource review = (Resource) getObject(specsSubject, LIMES.hasReview, true);
         configuration.setVerificationThreshold(parseDouble(getObject(review, LIMES.threshold, true).toString()));
         configuration.setVerificationFile(getObject(review, LIMES.file, true).toString());
-        configuration.setVerificationRelation(getObject(review, LIMES.relation, true).toString());
+        configuration.setVerificationRelation(getURI(getObject(review, LIMES.relation, true).toString()));
 
         //7. EXECUTION 
         RDFNode exeParamsSubject = getObject(specsSubject, LIMES.hasExecutionParameters, false);
