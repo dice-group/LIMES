@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.PairSimilar;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
@@ -22,8 +24,10 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
@@ -251,7 +255,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	matchClass.add("negative");
 	Attribute match = new Attribute("match", matchClass);
 	attributes.add(match);
-	Instances trainingInstances = new Instances("Rel", attributes, mapping.size());
+	Instances trainingInstances = new Instances("link", attributes, mapping.size());
 	trainingInstances.setClass(match);
 	return trainingInstances;
     }
@@ -346,6 +350,13 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 						    sourceCache.getInstance(sourceURI),
 						    targetCache.getInstance(targetURI),
 						    metricExpression, threshold, "?x", "?y"));
+//					    System.out.println(sourceURI);
+//					    System.out.println(targetURI);
+//					    System.out.println(inst.attribute(i));
+//					    System.err.println(sourceCache.getInstance(sourceURI).getProperty(propertyA));
+//					    System.err.println(targetCache.getInstance(targetURI).getProperty(propertyB));
+//					    System.out.println(inst.value(i));
+//					    System.out.println(inst);
 					}
 				    } else {
 					String classValue = "negative";
@@ -364,6 +375,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
 			    });
 			});
+//	System.out.println(trainingSet);
 	return instanceMap;
     }
 
@@ -462,6 +474,8 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    tree.setOptions(options);
 	    logger.info("Building classifier....");
 	    tree.buildClassifier(trainingSet);
+	    System.out.println(tree.prefix());
+	    System.out.println(tree.graph());
 	    if (tree.prefix().startsWith("[negative ") || tree.prefix().startsWith("[positive ")) {
 		logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
 		if (addBase(oracleMapping)) {
@@ -839,7 +853,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	if (ls.isAtomic()) {
 	    if (!measureIsMinus) {
 		// have to use BigDecimal because of floating numbers magic
-		ls.setThreshold(Math.max(0.01, (BigDecimal.valueOf(ls.getThreshold())
+		ls.setThreshold(Math.max(0.1, (BigDecimal.valueOf(ls.getThreshold())
 			.subtract(BigDecimal.valueOf(delta))).doubleValue()));
 		return ls;
 	    } else {
@@ -978,7 +992,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 			candidate.value);
 	    }
 	    //Add to base
-	    for (int i = 1; i <= tmpCandidateList.size(); i++) {
+	    for (int i = 1; i <= size; i++) {
 		SourceTargetValue candidate = tmpCandidateList.get(tmpCandidateList.size() - i);
 		candidate.value = 1.0;
 		if(!base.contains(candidate)){
@@ -1045,6 +1059,24 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     public void setInitialMapping(AMapping initialMapping) {
 	this.initialMapping = initialMapping;
+    }
+    
+    public static void main(String[] args){
+                EvaluationData c = DataSetChooser.getData("Person1");
+                try {
+		    AMLAlgorithm dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class, MLImplementationType.SUPERVISED_ACTIVE);
+		    dtl.init(null, c.getSourceCache(), c.getTargetCache());
+		    dtl.getMl().setConfiguration(c.getConfigReader().read());
+		    ((DecisionTreeLearning)dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+		    CSVMappingReader reader = new CSVMappingReader("/home/ohdorno/Documents/Uni/BA_Informatik/example.csv",",");
+		    AMapping trainingMapping = reader.read();
+		    MLResults res = dtl.asActive().activeLearn(trainingMapping);
+		    System.out.println(res.getLinkSpecification());
+		} catch (UnsupportedMLImplementationException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+                
     }
 
 }
