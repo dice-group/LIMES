@@ -105,8 +105,8 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
                     logger.warn("Error while processing: " + soln.toString());
                     logger.warn("Following exception occured: " + e.getMessage());
                     e.printStackTrace();
-                    System.exit(1);
-                    logger.info("Processing further ...");
+                    throw new RuntimeException();
+
                 }
             }
             counter++;

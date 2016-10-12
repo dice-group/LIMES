@@ -77,17 +77,39 @@ public class SimpleExecutionEngineTest {
     }
 
     @Test
-    public void EmptyLink() {
-        System.out.println("EmptyLink");
+    public void negativeThreshold() {
+        System.out.println("negativeThreshold");
         SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
-        Instruction run1 = new Instruction(Command.RUN, "", "0.3", -1, -1, 0);
-        AMapping mSource = ee.executeRun(run1);
+        Instruction run1 = new Instruction(Command.RUN, "cosine", "-0.3", -1, -1, 0);
+        AMapping mSource = null;
+        try {
+            mSource = ee.executeRun(run1);
+        } catch (RuntimeException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-        assertTrue(mSource.toString().equals(""));
+        
         System.out.println("---------------------------------");
 
     }
+    @Test
+    public void emptyMeasure() {
+        System.out.println("emptyMeasure");
+        SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+        Instruction run1 = new Instruction(Command.RUN, "", "0.3", -1, -1, 0);
+        AMapping mSource = null;
+        try {
+            mSource = ee.executeRun(run1);
+        } catch (RuntimeException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
+        
+        System.out.println("---------------------------------");
+
+    }
     @Test
     public void bufferTest() {
         System.out.println("bufferTest");

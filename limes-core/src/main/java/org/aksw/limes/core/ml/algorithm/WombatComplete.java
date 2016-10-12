@@ -492,9 +492,8 @@ public class WombatComplete extends AWombat {
             return result;
         } else {
             logger.error("Wrong metric expression: " + nodeMetricExpr);
-            System.exit(1);
+            throw new RuntimeException();
         }
-        return result;
     }
     
     

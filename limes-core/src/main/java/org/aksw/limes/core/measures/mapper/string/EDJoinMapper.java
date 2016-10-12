@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -375,7 +374,7 @@ public class EDJoinMapper extends AMapper {
         }
         // convert similarity in distance threshold
         threshold = (1 - threshold) / threshold;
-        
+
         this.comparisons = 0;
         mapping = MappingFactory.createDefaultMapping();
         if (threshold < 0) {
@@ -392,7 +391,7 @@ public class EDJoinMapper extends AMapper {
             logger.error(MarkerFactory.getMarker("FATAL"),
                     "Property 1 = " + properties.get(0) + ", Property 2 = " + properties.get(1));
             logger.error(MarkerFactory.getMarker("FATAL"), "Property values could not be read. Exiting");
-            System.exit(1);
+            throw new RuntimeException();
         }
 
         // if expression is not atomic terminate
@@ -400,7 +399,6 @@ public class EDJoinMapper extends AMapper {
             logger.error(MarkerFactory.getMarker("FATAL"), "Mappers can only deal with atomic expression");
             logger.error(MarkerFactory.getMarker("FATAL"),
                     "Expression " + expression + " was given to a mapper to process");
-            System.exit(1);
         }
 
         // 3.1 fill objects from source in entry. This is for indexing and

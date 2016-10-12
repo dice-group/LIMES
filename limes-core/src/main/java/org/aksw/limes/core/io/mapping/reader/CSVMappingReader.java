@@ -70,7 +70,7 @@ public class CSVMappingReader extends AMappingReader {
 		    }
 		} else {
 		    logger.error(MarkerFactory.getMarker("FATAL"), "Format not supported");
-		    System.exit(1);
+            throw new RuntimeException();
 		}
 	    }
 	} catch (Exception e) {

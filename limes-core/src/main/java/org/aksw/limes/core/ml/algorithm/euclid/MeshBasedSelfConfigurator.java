@@ -326,16 +326,6 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
             }
         }
         List<SimpleClassifier> scList = new ArrayList<SimpleClassifier>();
-//
-//        if (bestPoint.size() < sc.size()) {
-//            logger.fatal("Size error");
-//            logger.fatal(bestPoint);
-//            logger.fatal(sc);
-//            System.exit(1);
-//        } else {
-//            logger.info(">>" + sc);
-//            logger.info(">>" + bestPoint);
-//        }
         for (int i = 0; i < sc.size(); i++) {
             if (bestPoint.get(i) > 0) {
                 scList.add(sc.get(i).clone());

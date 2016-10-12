@@ -44,10 +44,8 @@ public abstract class SimpleTemporalMapper extends AMapper implements ISimpleTem
      * @param expression,
      *            The metric expression
      * @return second property of metric expression as string
-     * @throws IllegalArgumentException
-     *             if endDate property is not declared
      */
-    protected String getSecondProperty(String expression) throws IllegalArgumentException {
+    protected String getSecondProperty(String expression) {
         expression = expression.substring(expression.indexOf(".") + 1, expression.length());
         int plusIndex = expression.indexOf("|");
         if (expression.indexOf("|") != -1) {

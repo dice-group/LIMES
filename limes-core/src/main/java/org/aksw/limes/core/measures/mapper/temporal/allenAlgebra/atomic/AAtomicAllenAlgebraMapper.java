@@ -134,12 +134,7 @@ public abstract class AAtomicAllenAlgebraMapper {
         TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
         Parser p = new Parser(expression, 0.0d);
         String property = null;
-        try {
-            property = getEndProperty(p.getLeftTerm());
-        } catch (IllegalArgumentException e1) {
-            logger.error("Missing end property in " + p.getLeftTerm() + ". Exiting..");
-            System.exit(1);
-        }
+        property = getEndProperty(p.getLeftTerm());
 
         for (Instance instance : cache.getAllInstances()) {
             TreeSet<String> time = instance.getProperty(property);

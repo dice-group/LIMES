@@ -6,8 +6,6 @@ import java.util.Date;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implements the temporal meets measure class.
@@ -16,7 +14,6 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  */
 public class MeetsMeasure extends TemporalMeasure {
-    private static final Logger logger = LoggerFactory.getLogger(MeetsMeasure.class.getName());
 
     // EB0
     /**
@@ -54,8 +51,8 @@ public class MeetsMeasure extends TemporalMeasure {
 
     /**
      * Returns the similarity between two instances given their begin and end
-     * dates. If the first instance has a end date equal to the begin date of the
-     * second instance, then their similarity is 1, and 0 otherwise.
+     * dates. If the first instance has a end date equal to the begin date of
+     * the second instance, then their similarity is 1, and 0 otherwise.
      * 
      *
      * @return The similarity of the instances
@@ -63,13 +60,7 @@ public class MeetsMeasure extends TemporalMeasure {
     @Override
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         String endDate1 = null;
-        try {
-            endDate1 = this.getSecondProperty(property1);
-        } catch (IllegalArgumentException e) {
-            logger.error(
-                    "Meets measure requires both begin and end date of the event. End date property is missing. Exiting..");
-            System.exit(1);
-        }
+        endDate1 = this.getSecondProperty(property1);
         String beginDate2 = this.getFirstProperty(property2);
 
         String s1 = new String("*" + "|" + instance1.getProperty(endDate1).first());

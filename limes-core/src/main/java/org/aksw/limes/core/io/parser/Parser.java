@@ -1,7 +1,9 @@
 package org.aksw.limes.core.io.parser;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
+import org.aksw.limes.core.exceptions.UnsupportedOperator;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,9 +56,12 @@ public class Parser implements IParser {
                     || copy.startsWith("mult(") || copy.startsWith("diff(")) {
                 return false;
             } else {
-                logger.error("Unknown metric expression: " + expression);
-                e.printStackTrace();
-                System.exit(1);
+                int index = copy.indexOf("(");
+                String wrongOperator = copy.substring(0, index);
+                if (StringUtils.countMatches(copy, ",") == 1) {
+                    throw new InvalidMeasureException(wrongOperator);
+                } else
+                    throw new UnsupportedOperator(wrongOperator);
             }
         }
         return false;

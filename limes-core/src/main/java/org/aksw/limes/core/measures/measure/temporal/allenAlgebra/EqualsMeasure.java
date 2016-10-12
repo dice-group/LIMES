@@ -6,8 +6,6 @@ import java.util.Date;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implements the temporal equals measure class.
@@ -16,7 +14,6 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  */
 public class EqualsMeasure extends TemporalMeasure {
-    private static final Logger logger = LoggerFactory.getLogger(EqualsMeasure.class.getName());
 
     // BB0 & EE0
     /**
@@ -34,13 +31,13 @@ public class EqualsMeasure extends TemporalMeasure {
             date1 = df.parse(split1[0]);
             beginDate1 = date1.getTime();
         } catch (ParseException e) {
-            System.err.println("Exiting..");
+            System.err.println("Problem in parsing date value. Exiting..");
         }
         try {
             date1 = df.parse(split1[1]);
             endDate1 = date1.getTime();
         } catch (ParseException e) {
-            System.err.println("Exiting..");
+            System.err.println("Problem in parsing date value. Exiting..");
         } //////////////////
         try {
             date2 = df.parse(split2[0]);
@@ -77,22 +74,10 @@ public class EqualsMeasure extends TemporalMeasure {
         String beginDate2 = this.getFirstProperty(property2);
 
         String endDate1 = null;
-        try {
-            endDate1 = this.getSecondProperty(property1);
-        } catch (IllegalArgumentException e) {
-            logger.error(
-                    "Equals measure requires both begin and end date of the event. End date property is missing. Exiting..");
-            System.exit(1);
-        }
+        endDate1 = this.getSecondProperty(property1);
 
         String endDate2 = null;
-        try {
-            endDate2 = this.getSecondProperty(property2);
-        } catch (IllegalArgumentException e) {
-            logger.error(
-                    "Equals measure requires both begin and end date of the event. End date property is missing. Exiting..");
-            System.exit(1);
-        }
+        endDate2 = this.getSecondProperty(property2);
         String s1 = new String(
                 instance1.getProperty(beginDate1).first() + "|" + instance1.getProperty(endDate1).first());
         String s2 = new String(

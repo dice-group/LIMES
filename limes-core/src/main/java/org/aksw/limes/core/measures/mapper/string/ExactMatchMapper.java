@@ -45,19 +45,14 @@ public class ExactMatchMapper extends AMapper {
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-        try {
-            if (threshold <= 0) {
-                throw new InvalidThresholdException(threshold);
-            }
-        } catch (InvalidThresholdException e) {
-            System.err.println("Exiting..");
-            System.exit(1);
+        if (threshold <= 0) {
+            throw new InvalidThresholdException(threshold);
         }
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         // if no properties then terminate
         if (properties.get(0) == null || properties.get(1) == null) {
             logger.error(MarkerFactory.getMarker("FATAL"), "Property values could not be read. Exiting");
-            System.exit(1);
+            throw new RuntimeException();
         }
         Map<String, Set<String>> sourceIndex = getValueToUriMap(source, properties.get(0));
         Map<String, Set<String>> targetIndex = getValueToUriMap(target, properties.get(1));

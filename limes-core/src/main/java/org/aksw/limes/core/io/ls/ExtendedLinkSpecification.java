@@ -26,12 +26,14 @@ public class ExtendedLinkSpecification extends LinkSpecification {
     // @Override
 
     /**
-     * Reads a link specification expression into its canonical form Don't forget to optimize
-     * the filters by checking 
-     * (if threshold_left and threshold_right grater than or equals to theta, then theta equals 0)
+     * Reads a link specification expression into its canonical form Don't
+     * forget to optimize the filters by checking (if threshold_left and
+     * threshold_right grater than or equals to theta, then theta equals 0)
      *
-     * @param spec  Spec expression to read
-     * @param theta Global threshold
+     * @param spec
+     *            Spec expression to read
+     * @param theta
+     *            Global threshold
      */
     public void readSpec(String spec, double theta) {
 
@@ -88,11 +90,11 @@ public class ExtendedLinkSpecification extends LinkSpecification {
                         + p.getThreshold2() + ")", theta);
                 rightSpec.readSpec("AND(" + p.getLeftTerm() + "|" + p.getThreshold1() + "," + p.getRightTerm() + "|"
                         + p.getThreshold2() + ")", theta);
-                fullExpression = "MINUS(" + leftSpec.fullExpression + "|" + theta + ","
-                        + rightSpec.fullExpression + "|" + theta + ")";
+                fullExpression = "MINUS(" + leftSpec.fullExpression + "|" + theta + "," + rightSpec.fullExpression + "|"
+                        + theta + ")";
                 filterExpression = null;
                 setThreshold(theta);
-                
+
             } else if (p.getOperator().equalsIgnoreCase(MINUS)) {
                 setOperator(LogicOperator.MINUS);
                 leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());

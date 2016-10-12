@@ -81,7 +81,7 @@ public class LinearFilter implements IFilter {
 
         if (condition == null) {
             logger.error("Null condition in filter function (LinearFilter). Exiting..");
-            System.exit(1);
+            throw new RuntimeException();
         }
 
         AMapping result = MappingFactory.createDefaultMapping();
@@ -135,8 +135,8 @@ public class LinearFilter implements IFilter {
         Instance s, t;
         AMapping result = MappingFactory.createDefaultMapping();
         if (condition == null) {
-            System.err.println("Null condition in extended filter function (LinearFilter). Exiting..");
-            System.exit(1);
+            logger.info("Null condition in extended filter function (LinearFilter). Exiting..");
+            throw new RuntimeException();
         }
 
         for (String key : map.getMap().keySet()) {
@@ -197,7 +197,7 @@ public class LinearFilter implements IFilter {
         AMapping result = MappingFactory.createDefaultMapping();
         if (condition == null) {
             System.err.println("Null condition in extended reverse filter function (LinearFilter). Exiting..");
-            System.exit(1);
+            throw new RuntimeException();
         }
 
         // 2. run on all pairs and remove those

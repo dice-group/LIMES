@@ -92,7 +92,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
             specsSubject = stats.next().getSubject();
         } else {
             logger.error("Missing " + LIMES.LimesSpecs + ", Exit with error.");
-            System.exit(1);
+            throw new RuntimeException();
         }
         configuration = new Configuration();
         configuration.setSourceInfo(new KBInfo());
@@ -115,7 +115,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
                 readMLAlgorithmConfigurations(mlAlgorithmUri);
             } else {
                 logger.error("Neither Metric nor ML Algorithm provided, exit with error ");
-                System.exit(1);
+                throw new RuntimeException();
             }
 
         //5. ACCEPTANCE file and conditions
@@ -234,7 +234,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
             kbinfo = configuration.getTargetInfo();
         } else {
             logger.error("Either " + LIMES.SourceDataset + " or " + LIMES.TargetDataset + " type statement is missing");
-            System.exit(1);
+            throw new RuntimeException();
         }
         kbinfo.setId(getObject(kb, RDFS.label, true).toString());
         ;
@@ -293,7 +293,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
         } else {
             if (isMandatory) {
                 logger.error("Missing mandatory property " + p + ", Exit with error.");
-                System.exit(1);
+                throw new RuntimeException();
             }
         }
         return null;
@@ -316,7 +316,7 @@ public class RDFConfigurationReader extends AConfigurationReader {
         }
         if (isMandatory && result.size() == 0) {
             logger.error("Missing mandatory property: " + p + ", Exit with error.");
-            System.exit(1);
+            throw new RuntimeException();
         } else if (result.size() == 0) {
             return null;
         }

@@ -32,7 +32,6 @@ import com.vividsolutions.jts.io.WKTReader;
  *
  * @author kdressler
  */
-@SuppressWarnings("Duplicates")
 public class RADON {
 
     public static class GridSizeHeuristics {
@@ -336,7 +335,7 @@ public class RADON {
     public static final String WITHIN = "within";
     public static final String CONTAINS = "contains";
     public static final String OVERLAPS = "overlaps";
-    public static final String COVERS= "covers";
+    public static final String COVERS = "covers";
     public static final String COVEREDBY = "coveredby";
     // best measure according to our evaluation in the RADON paper
     public static String heuristicStatMeasure = "avg";
@@ -360,14 +359,10 @@ public class RADON {
         return gMap;
     }
 
-    public static AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression, double threshold, String relation) {
-        try {
-            if (threshold <= 0) {
-                throw new InvalidThresholdException(threshold);
-            }
-        } catch (InvalidThresholdException e) {
-            System.err.println("Exiting..");
-            System.exit(1);
+    public static AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar,
+            String expression, double threshold, String relation) {
+        if (threshold <= 0) {
+            throw new InvalidThresholdException(threshold);
         }
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
         Map<String, Geometry> sourceMap = getGeometryMapFromCache(source, properties.get(0));
@@ -426,18 +421,18 @@ public class RADON {
             sourceData = targetData;
             targetData = swap;
             switch (rel) {
-                case WITHIN:
-                    rel = CONTAINS;
-                    break;
-                case CONTAINS:
-                    rel = WITHIN;
-                    break;
-                case COVERS:
-                    rel = COVEREDBY;
-                    break;
-                case COVEREDBY:
-                    rel = COVERS;
-                    break;
+            case WITHIN:
+                rel = CONTAINS;
+                break;
+            case CONTAINS:
+                rel = WITHIN;
+                break;
+            case COVERS:
+                rel = COVEREDBY;
+                break;
+            case COVEREDBY:
+                rel = COVERS;
+                break;
             }
         }
 
@@ -464,13 +459,12 @@ public class RADON {
                         for (MBBIndex b : target) {
                             if (!computed.get(a.uri).contains(b.uri)) {
                                 computed.get(a.uri).add(b.uri);
-                                boolean compute =  (rel.equals(COVERS) && a.covers(b))
+                                boolean compute = (rel.equals(COVERS) && a.covers(b))
                                         || (rel.equals(COVEREDBY) && b.covers(a))
                                         || (rel.equals(CONTAINS) && a.contains(b))
-                                        || (rel.equals(WITHIN) && b.contains(a))
-                                        || (rel.equals(EQUALS) && a.equals(b))
-                                        || rel.equals(INTERSECTS) || rel.equals(CROSSES)
-                                        || rel.equals(TOUCHES) || rel.equals(OVERLAPS);
+                                        || (rel.equals(WITHIN) && b.contains(a)) || (rel.equals(EQUALS) && a.equals(b))
+                                        || rel.equals(INTERSECTS) || rel.equals(CROSSES) || rel.equals(TOUCHES)
+                                        || rel.equals(OVERLAPS);
                                 if (compute) {
                                     if (numThreads == 1) {
                                         if (Matcher.relate(a.polygon, b.polygon, rel)) {
@@ -557,13 +551,17 @@ public class RADON {
             int minLongIndex = (int) Math.floor(envelope.getMinX() * thetaX);
             int maxLongIndex = (int) Math.ceil(envelope.getMaxX() * thetaX);
 
-            // Check for passing over 180th meridian. In case its shorter to pass over it, we assume that is what is
-            // meant by the user and we split the geometry into one part east and one part west of 180th meridian.
+            // Check for passing over 180th meridian. In case its shorter to
+            // pass over it, we assume that is what is
+            // meant by the user and we split the geometry into one part east
+            // and one part west of 180th meridian.
 
             if (minLongIndex < (int) Math.floor(-90d * thetaX) && maxLongIndex > (int) Math.ceil(90d * thetaX)) {
-                MBBIndex westernPart = new MBBIndex(minLatIndex, (int) Math.floor(-180d * thetaX), maxLatIndex, minLongIndex, g, p + "<}W", p);
+                MBBIndex westernPart = new MBBIndex(minLatIndex, (int) Math.floor(-180d * thetaX), maxLatIndex,
+                        minLongIndex, g, p + "<}W", p);
                 addToIndex(westernPart, result, extIndex);
-                MBBIndex easternPart = new MBBIndex(minLatIndex, maxLongIndex, maxLatIndex, (int) Math.ceil(180 * thetaX), g, p + "<}E", p);
+                MBBIndex easternPart = new MBBIndex(minLatIndex, maxLongIndex, maxLatIndex,
+                        (int) Math.ceil(180 * thetaX), g, p + "<}E", p);
                 addToIndex(easternPart, result, extIndex);
             } else {
                 MBBIndex mbbIndex = new MBBIndex(minLatIndex, minLongIndex, maxLatIndex, maxLongIndex, g, p);

@@ -39,12 +39,7 @@ public class ConcurrentMapper extends SimpleTemporalMapper {
         TreeMap<String, Set<Instance>> sources = this.orderByBeginDate(source, expression);
         TreeMap<String, Set<Instance>> targets = this.orderByBeginDate(target, expression);
         String machineID = null;
-        try {
-            machineID = this.getSecondProperty(p.getLeftTerm());
-        } catch (IllegalArgumentException e) {
-            logger.error("Missing machine id property in " + p.getLeftTerm() + ".Exiting..");
-            System.exit(1);
-        }
+        machineID = this.getSecondProperty(p.getLeftTerm());
 
         for (Map.Entry<String, Set<Instance>> sourceEntry : sources.entrySet()) {
             String epochSource = sourceEntry.getKey();

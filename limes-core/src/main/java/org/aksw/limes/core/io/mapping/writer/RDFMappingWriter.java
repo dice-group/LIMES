@@ -49,7 +49,7 @@ public class RDFMappingWriter implements IMappingWriter {
                 break;
             default:
                 logger.error("Serialization " + format + " is not yet implemented, exit with error!");
-                System.exit(1);
+                throw new RuntimeException();
         }
     }
 

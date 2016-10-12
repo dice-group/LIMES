@@ -178,8 +178,6 @@ public class ALDecider {
             minimalDistance = mapList.size();
         }
         logger.info("Controversy matches: " + tripleList);
-//		if(tripleList.size() == 0)
-//			System.exit(1);
         return tripleList;
     }
 
@@ -238,7 +236,7 @@ public class ALDecider {
                 logger.error(i + ". Mapping size=" + m.size());
             }
 
-            System.exit(1);
+            throw new RuntimeException();
         }
         return tripleList;
     }

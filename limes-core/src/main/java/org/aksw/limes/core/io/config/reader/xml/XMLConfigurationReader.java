@@ -302,7 +302,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                         }
                     } else {
                         logger.error("Niether " + METRIC + " nor " + MLALGORITHM + " is provided, exit with error");
-                        System.exit(1);
+                        throw new RuntimeException();
                     }
                 }
                 // 5. ACCEPTANCE file and conditions

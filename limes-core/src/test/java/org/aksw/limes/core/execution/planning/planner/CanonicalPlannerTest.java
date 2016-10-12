@@ -96,8 +96,14 @@ public class CanonicalPlannerTest {
 
         CanonicalPlanner p = new CanonicalPlanner();
 
-        LinkSpecification ls = new LinkSpecification(
-                "blabla(jaccard(x.surname, y.surname)|0.5,cosine(x.label,y.label)|0.6)", 0.8);
+        LinkSpecification ls = null;
+        try {
+            ls = new LinkSpecification(
+                    "blabla(jaccard(x.surname, y.surname)|0.5,cosine(x.label,y.label)|0.6)", 0.8);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         System.out.println(ls.isAtomic());
 
         NestedPlan plan = p.plan(ls);

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
+import org.aksw.limes.core.exceptions.UnsupportedOperator;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,23 +17,38 @@ public class ParserTest {
 
     public void printParsingTree(String s, double threshold) {
         Parser p = new Parser(s, threshold);
-        if (p.isAtomic()) {
-            logger.debug("-->" + s + " with threshold " + threshold + " will be carried out.");
-        } else {
-            printParsingTree(p.leftTerm, p.getThreshold1());
-            printParsingTree(p.rightTerm, p.getThreshold2());
-            logger.debug("--> <" + p.operator + "> will be carried out on " + p.leftTerm + " and " + p.rightTerm + " with "
-                    + "threshold " + threshold);
+        try {
+            if (p.isAtomic()) {
+                logger.debug("-->" + s + " with threshold " + threshold + " will be carried out.");
+            } else {
+                printParsingTree(p.leftTerm, p.getThreshold1());
+                printParsingTree(p.rightTerm, p.getThreshold2());
+                logger.debug("--> <" + p.operator + "> will be carried out on " + p.leftTerm + " and " + p.rightTerm + " with "
+                        + "threshold " + threshold);
+            }
+        } catch (UnsupportedOperator e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
     @Test
     public void testIsAtomic() {
         Parser p = new Parser("trigrams(x.osnp:valueLabel, y.rdfs:label)", 0.5);
-        assertTrue(p.isAtomic());
+        try {
+            assertTrue(p.isAtomic());
+        } catch (UnsupportedOperator e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         p = new Parser("MAX(trigrams(x.skos:prefLabel,y.rdfs:label),trigrams(x.osnp:valueLabel, y.rdfs:label))", 0.5);
-        assertFalse(p.isAtomic());
+        try {
+            assertFalse(p.isAtomic());
+        } catch (UnsupportedOperator e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
 
@@ -44,11 +60,13 @@ public class ParserTest {
         assertTrue(p.getRightTerm().equals("trigrams(x.osnp:valueLabel,y.rdfs:label)"));
     }
     
-   /* @Test(expected=InvalidMeasureException.class)
-    public void atomicParcer() throws InvalidMeasureException {
-        Parser p = new Parser("blabala(trigrams(x.skos:prefLabel,y.rdfs:label),trigrams(x.osnp:valueLabel, y.rdfs:label))", 0.5);
-        //p.isAtomic();
-        fail("Should have thrown an exception");
-    }*/
+   @Test
+    public void atomicParcer(){
+        Parser p = new Parser("blabala(trigrams(x.skos:prefLabel,y.rdfs:label)|0.5,trigrams(x.osnp:valueLabel, y.rdfs:label)|0.5)", 0.5);
+        try {
+            p.isAtomic();
+        } catch (UnsupportedOperator e) {
+        }
+    }
 
 }

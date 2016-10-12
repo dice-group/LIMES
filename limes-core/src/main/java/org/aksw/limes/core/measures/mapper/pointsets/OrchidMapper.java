@@ -12,8 +12,6 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.exceptions.InvalidMeasureException;
-import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -97,19 +95,15 @@ public class OrchidMapper extends AMapper {
      */
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-        
+
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
-        
+
         // get sets of polygons from properties
         Set<Polygon> sourcePolygons = getPolygons(source, properties.get(0));
         Set<Polygon> targetPolygons = getPolygons(target, properties.get(1));
         float theta = (1 / (float) threshold) - 1;
         MeasureType type = null;
-        try {
-            type = MeasureFactory.getMeasureType(expression);
-        } catch (InvalidMeasureException e) {
-            System.exit(1);
-        }
+        type = MeasureFactory.getMeasureType(expression);
         GeoHR3 orchid = new GeoHR3(theta, GeoHR3.DEFAULT_GRANULARITY, type);
         return orchid.run(sourcePolygons, targetPolygons);
     }

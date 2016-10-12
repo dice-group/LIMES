@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
-import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.execution.engine.filter.LinearFilter;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
@@ -159,26 +158,28 @@ public class SimpleExecutionEngine extends ExecutionEngine {
      */
     public AMapping executeRun(Instruction inst) {
         double threshold = Double.parseDouble(inst.getThreshold());
-        // generate correct mapper
-        IMapper mapper;
-        try {
-            MeasureType type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
-            mapper = MapperFactory.createMapper(type);
-            try {
-                if (threshold <= 0) {
-                    throw new InvalidThresholdException(threshold);
-                }
-            } catch (InvalidThresholdException e) {
-                logger.error("Exiting..");
-                System.exit(1);
-            }
-            return mapper.getMapping(source, target, sourceVariable, targetVariable, inst.getMeasureExpression(),
-                    threshold);
-        } catch (InvalidMeasureException e) {
-            e.printStackTrace();
-        }
+        //try {
+            if (threshold <= 0) {
+                throw new InvalidThresholdException(threshold);
 
-        return MappingFactory.createDefaultMapping();
+            } else {
+                IMapper mapper;
+                //try {
+                    MeasureType type = MeasureFactory.getMeasureType(inst.getMeasureExpression());
+                    mapper = MapperFactory.createMapper(type);
+
+                    return mapper.getMapping(source, target, sourceVariable, targetVariable,
+                            inst.getMeasureExpression(), threshold);
+               /* } catch (InvalidMeasureException e) {
+                    e.printStackTrace();
+                    logger.info("Returning an empty mapping");
+                }*/
+            }
+        /*} catch (InvalidThresholdException e) {
+            e.printStackTrace();
+            logger.info("Returning an empty mapping");
+        }*/
+        
     }
 
     /**
@@ -454,8 +455,8 @@ public class SimpleExecutionEngine extends ExecutionEngine {
             if (dynamicResults.containsKey(spec.toString())) {
                 m = dynamicResults.get(spec.toString());
             } else {
-                logger.info("Result for spec: " + spec + " not stored.Exiting..");
-                System.exit(1);
+                logger.info("Error in spec: " + spec + ". Result not stored.");
+                throw new RuntimeException();
             }
         }
 

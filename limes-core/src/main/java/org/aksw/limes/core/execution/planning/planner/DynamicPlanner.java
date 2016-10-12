@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
-import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.cache.ACache;
@@ -156,14 +155,8 @@ public class DynamicPlanner extends Planner {
      */
     public double getAtomicRuntimeCosts(String measure, double threshold) {
         AMapper mapper = null;
-        try {
-            MeasureType type = MeasureFactory.getMeasureType(measure);
-            mapper = MapperFactory.createMapper(type);
-        } catch (InvalidMeasureException e) {
-            e.printStackTrace();
-            logger.error("Exiting..");
-            System.exit(1);
-        }
+        MeasureType type = MeasureFactory.getMeasureType(measure);
+        mapper = MapperFactory.createMapper(type);
         return mapper.getRuntimeApproximation(source.size(), target.size(), threshold, lang);
     }
 
@@ -181,14 +174,8 @@ public class DynamicPlanner extends Planner {
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
         AMapper mapper = null;
-        try {
-            MeasureType type = MeasureFactory.getMeasureType(measure);
-            mapper = MapperFactory.createMapper(type);
-        } catch (InvalidMeasureException e) {
-            e.printStackTrace();
-            logger.error("Exiting..");
-            System.exit(1);
-        }
+        MeasureType type = MeasureFactory.getMeasureType(measure);
+        mapper = MapperFactory.createMapper(type);
         return mapper.getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
     }
 
@@ -219,14 +206,8 @@ public class DynamicPlanner extends Planner {
         if (measures != null) {
             for (String measure : measures) {
                 double tempCost = 0;
-                try {
-                    MeasureType type = MeasureFactory.getMeasureType(measure);
-                    tempCost = MeasureFactory.createMeasure(type).getRuntimeApproximation(mappingSize);
-                } catch (InvalidMeasureException e) {
-                    e.printStackTrace();
-                    System.err.println("Exiting..");
-                    System.exit(1);
-                }
+                MeasureType type = MeasureFactory.getMeasureType(measure);
+                tempCost = MeasureFactory.createMeasure(type).getRuntimeApproximation(mappingSize);
                 cost += tempCost;
             }
         }
@@ -278,7 +259,7 @@ public class DynamicPlanner extends Planner {
     public void updatePlan(LinkSpecification spec, double rt, double selectivity, double msize) {
         if (!plans.containsKey(spec.toString())) {
             logger.error("Specification: " + spec.getFullExpression() + " was not initialised. Exiting..");
-            System.exit(1);
+            throw new RuntimeException();
         }
         NestedPlan plan = plans.get(spec.toString());
         plan.setRuntimeCost(rt);
@@ -444,10 +425,10 @@ public class DynamicPlanner extends Planner {
             }
         }
         this.plans.put(spec.toString(), plan);
-        //logger.info(spec+"");
-        //logger.info(plan.getRuntimeCost()+"");
-        //logger.info(plan+"");
-        //logger.info("--------------------------------------------------------------------");
+        // logger.info(spec+"");
+        // logger.info(plan.getRuntimeCost()+"");
+        // logger.info(plan+"");
+        // logger.info("--------------------------------------------------------------------");
         return plan;
 
     }
@@ -530,12 +511,12 @@ public class DynamicPlanner extends Planner {
         // OR REVERSEFILTER with right
         // never add the runtime of left if it is already executed
         // first instructionList: run both children and then merge
-        
+
         if (!left.getExecutionStatus())
             runtime1 = left.getRuntimeCost();
-        
+
         runtime1 = runtime1 + right.getRuntimeCost();
-        
+
         result.setFilteringInstruction(new Instruction(Instruction.Command.FILTER, spec.getFilterExpression(),
                 spec.getThreshold() + "", -1, -1, 0));
         if (result.getFilteringInstruction().getMeasureExpression() != null) {
@@ -548,7 +529,7 @@ public class DynamicPlanner extends Planner {
             runtime2 = left.getRuntimeCost();
         runtime2 = runtime2 + getFilterCosts(right.getAllMeasures(),
                 (int) Math.ceil(source.size() * target.size() * right.getSelectivity()));
-        
+
         double min = Math.min(runtime1, runtime2);
         if (min == runtime1) {
             result.setOperator(Instruction.Command.DIFF);

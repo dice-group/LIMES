@@ -53,12 +53,9 @@ public class MapperFactory {
      *            type of the measure
      *
      * @return a specific mapper instance
-     * @throws InvalidMeasureException
-     *             if the type of the measure is invalid
-     *
      */
 
-    public static AMapper createMapper(MeasureType type) throws InvalidMeasureException {
+    public static AMapper createMapper(MeasureType type) {
         switch (type) {
         case JAROWINKLER:
             return new JaroWinklerMapper();

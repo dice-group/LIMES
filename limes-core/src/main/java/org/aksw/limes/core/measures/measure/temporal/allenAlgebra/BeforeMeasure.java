@@ -6,8 +6,6 @@ import java.util.Date;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implements the temporal before measure class.
@@ -16,7 +14,6 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  */
 public class BeforeMeasure extends TemporalMeasure {
-    private static final Logger logger = LoggerFactory.getLogger(BeforeMeasure.class.getName());
 
     // EB1
     /**
@@ -63,13 +60,7 @@ public class BeforeMeasure extends TemporalMeasure {
     @Override
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         String endDate1 = null;
-        try {
             endDate1 = this.getSecondProperty(property1);
-        } catch (IllegalArgumentException e) {
-            logger.error(
-                    "Before measure requires both begin and end date of the event. End date property is missing. Exiting..");
-            System.exit(1);
-        }
         String beginDate2 = this.getFirstProperty(property2);
 
         String s1 = new String("*" + "|" + instance1.getProperty(endDate1).first());

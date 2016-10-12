@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
@@ -20,7 +19,6 @@ import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorffMeasure;
-
 
 /**
  * Still need to add tabu list. Basically checks whether two polygons have
@@ -59,11 +57,7 @@ public class GeoHR3 {
         longMax = (int) Math.floor(180f / delta) - 1;
         longMin = (int) Math.floor(-180f / delta);
 
-        try {
-            setMeasure = (IPointsetsMeasure) MeasureFactory.createMeasure(hd);
-        } catch (InvalidMeasureException e) {
-            System.exit(1);
-        }
+        setMeasure = (IPointsetsMeasure) MeasureFactory.createMeasure(hd);
 
     }
 
@@ -101,9 +95,12 @@ public class GeoHR3 {
      * selecting squares at the poles, one has to take all squares as the cos of
      * 90° is 0.
      *
-     * @param latIndex Latitude index of square for which "neighbors" are required
-     * @param longIndex Longitude index
-     * @param index GeoIndex
+     * @param latIndex
+     *            Latitude index of square for which "neighbors" are required
+     * @param longIndex
+     *            Longitude index
+     * @param index
+     *            GeoIndex
      * @return List of "neighbors"
      */
     public Set<List<Integer>> getSquaresToCompare(int latIndex, int longIndex, GeoIndex index) {
@@ -153,9 +150,11 @@ public class GeoHR3 {
 
                 for (int deltaLong = (-1) * localGranularity; deltaLong <= localGranularity; deltaLong++) {
                     realLong = deltaLong + lon;
-                    // idea here is that index on positive side goes from 0 to longMax
+                    // idea here is that index on positive side goes from 0 to
+                    // longMax
                     // thus on negative side it goes from -1 to -(longMax +1)
-                    // crossing the 180° boundary means jumping to -180° and vice versa
+                    // crossing the 180° boundary means jumping to -180° and
+                    // vice versa
                     if (realLong > longMax) {
                         realLong = realLong - 2 * (longMax + 1);
                     } else if (realLong < (-1) * (longMax + 1)) {
@@ -170,7 +169,7 @@ public class GeoHR3 {
             Set<List<Integer>> result = new HashSet<List<Integer>>();
             double lat1, lat2, long1, long2;
             for (List<Integer> candidate : toCompare) {
-                // square is at the north-east of reference square then take 
+                // square is at the north-east of reference square then take
                 // upper corner of reference and lower left corner of candidate
                 if (latIndex == candidate.get(0) && longIndex == candidate.get(1)) {
                     result.add(candidate);

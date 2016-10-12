@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
@@ -340,23 +339,17 @@ public class PPJoinPlusPlus extends AMapper {
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
 
-
         AMapping mapping;
         HashMap<Integer, String> sourceMap;
         HashMap<Integer, String> targetMap;
         IStringMeasure measure = null;
 
-        try {
-            if (threshold <= 0) {
-                throw new InvalidThresholdException(threshold);
-            }
-        } catch (InvalidThresholdException e) {
-            System.err.println("Exiting..");
-            System.exit(1);
+        if (threshold <= 0) {
+            throw new InvalidThresholdException(threshold);
         }
         mapping = MappingFactory.createDefaultMapping();
         // logger.info("Starting PPJoinPlus");
-        
+
         String property1 = null, property2 = null;
         // get property labels
         Parser p = new Parser(expression, threshold);
@@ -412,14 +405,12 @@ public class PPJoinPlusPlus extends AMapper {
         if (property1 == null || property2 == null) {
             logger.error(MarkerFactory.getMarker("FATAL"), "Property 1 = " + property1 + ", Property 2 = " + property2);
             logger.error(MarkerFactory.getMarker("FATAL"), "Property values could not be read. Exiting");
-            // System.exit(1);
         }
 
         if (!p.isAtomic()) {
             logger.error(MarkerFactory.getMarker("FATAL"), "Mappers can only deal with atomic expression");
             logger.error(MarkerFactory.getMarker("FATAL"),
                     "Expression " + expression + " was given to a mapper to process");
-            // System.exit(1);
         }
 
         // 3.1 fill objects from source in entry
@@ -463,20 +454,14 @@ public class PPJoinPlusPlus extends AMapper {
         } else {
         }
 
-        try {
-            MeasureType type = MeasureFactory.getMeasureType(p.getOperator());
-            measure = (IStringMeasure) MeasureFactory.createMeasure(type);
-        } catch (InvalidMeasureException e) {
-            e.printStackTrace();
-            System.err.println("Exiting..");
-            System.exit(1);
-        }
+        MeasureType type = MeasureFactory.getMeasureType(p.getOperator());
+        measure = (IStringMeasure) MeasureFactory.createMeasure(type);
         // logger.info("Beginninng comparison per se");
         if (measure != null) {
             // logger.info("Using measure " + measure.getName());
         } else {
             logger.error(MarkerFactory.getMarker("FATAL"), "Metric is null. Exiting.");
-            System.exit(1);
+            throw new RuntimeException();
         }
         for (int i = 0; i < records.length; i++) {
             HashMap<Record, CandidateInfo> candidates = new HashMap<Record, CandidateInfo>(); // A
@@ -569,7 +554,7 @@ public class PPJoinPlusPlus extends AMapper {
     }
 
     private int verification(Record currentRec, HashMap<Record, CandidateInfo> candidates, AMapping mapping,
-                             HashMap<Integer, String> sourceMap, HashMap<Integer, String> targetMap, IStringMeasure measure) {
+            HashMap<Integer, String> sourceMap, HashMap<Integer, String> targetMap, IStringMeasure measure) {
         int count = 0;
         String id1, id2;
 

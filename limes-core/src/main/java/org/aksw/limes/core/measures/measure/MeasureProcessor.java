@@ -8,7 +8,6 @@ import java.util.List;
  * and open the template in the editor.
  */
 
-import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
@@ -89,174 +88,172 @@ public class MeasureProcessor {
             double threshold, String sourceVar, String targetVar) {
 
         Parser p = new Parser(expression, threshold);
-        if (p.isAtomic()) {
+        try {
+            if (p.isAtomic()) {
 
-            AMapper mapper = null;
-            try {
+                AMapper mapper = null;
 
                 MeasureType type = MeasureFactory.getMeasureType(p.getOperator());
                 mapper = MapperFactory.createMapper(type);
-            } catch (InvalidMeasureException e) {
-                e.printStackTrace();
-                logger.error("Exiting..");
-                System.exit(1);
-            }
-            ACache source = new HybridCache();
-            ACache target = new HybridCache();
-            source.addInstance(sourceInstance);
-            target.addInstance(targetInstance);
+                ACache source = new HybridCache();
+                ACache target = new HybridCache();
+                source.addInstance(sourceInstance);
+                target.addInstance(targetInstance);
 
-            String property1 = null, property2 = null;
+                String property1 = null, property2 = null;
 
-            String term1 = "?" + p.getLeftTerm();
-            String term2 = "?" + p.getRightTerm();
-            String split[];
-            String var;
+                String term1 = "?" + p.getLeftTerm();
+                String term2 = "?" + p.getRightTerm();
+                String split[];
+                String var;
 
-            String property = "";
-            if (term1.contains(".")) {
-                split = term1.split("\\.");
-                var = split[0];
-                property = split[1];
-                if (split.length >= 2) {
-                    for (int i = 2; i < split.length; i++) {
-                        property = property + "." + split[i];
+                String property = "";
+                if (term1.contains(".")) {
+                    split = term1.split("\\.");
+                    var = split[0];
+                    property = split[1];
+                    if (split.length >= 2) {
+                        for (int i = 2; i < split.length; i++) {
+                            property = property + "." + split[i];
+                        }
                     }
-                }
-                if (var.equals(sourceVar)) {
-                    // property1 = split[1];
-                    property1 = property;
-                } else {
-                    // property2 = split[1];
-                    property2 = property;
-                }
-            } else {
-                property1 = term1;
-            }
-
-            // get second property label
-            if (term2.contains(".")) {
-                split = term2.split("\\.");
-                var = split[0];
-                property = split[1];
-                if (split.length >= 2) {
-                    for (int i = 2; i < split.length; i++) {
-                        property = property + "." + split[i];
+                    if (var.equals(sourceVar)) {
+                        // property1 = split[1];
+                        property1 = property;
+                    } else {
+                        // property2 = split[1];
+                        property2 = property;
                     }
-                }
-                if (var.equals(sourceVar)) {
-                    property1 = property;
                 } else {
-                    property2 = property;
+                    property1 = term1;
                 }
-            } else {
-                property2 = term2;
-            }
 
-            // if no properties then terminate
-            if (property1 == null || property2 == null) {
-                logger.error(MarkerFactory.getMarker("FATAL"), "Property values could not be read. Exiting");
-                System.exit(1);
-            } else {
-                double similarity = 0.0d;
-                try {
+                // get second property label
+                if (term2.contains(".")) {
+                    split = term2.split("\\.");
+                    var = split[0];
+                    property = split[1];
+                    if (split.length >= 2) {
+                        for (int i = 2; i < split.length; i++) {
+                            property = property + "." + split[i];
+                        }
+                    }
+                    if (var.equals(sourceVar)) {
+                        property1 = property;
+                    } else {
+                        property2 = property;
+                    }
+                } else {
+                    property2 = term2;
+                }
+
+                // if no properties then terminate
+                if (property1 == null || property2 == null) {
+                    logger.error(MarkerFactory.getMarker("FATAL"), "Property values could not be read. Exiting");
+                    throw new RuntimeException();
+                } else {
+                    double similarity = 0.0d;
                     if (threshold <= 0) {
                         throw new InvalidThresholdException(threshold);
                     }
-                } catch (InvalidThresholdException e) {
-                    System.err.println("Exiting..");
-                    System.exit(1);
-                }
-                AMapping m = mapper.getMapping(source, target, sourceVar, targetVar, expression, threshold);
-                for (String s : m.getMap().keySet()) {
-                    for (String t : m.getMap().get(s).keySet()) {
-                        similarity = m.getConfidence(s, t);
+                    AMapping m = mapper.getMapping(source, target, sourceVar, targetVar, expression, threshold);
+                    for (String s : m.getMap().keySet()) {
+                        for (String t : m.getMap().get(s).keySet()) {
+                            similarity = m.getConfidence(s, t);
 
+                        }
+                    }
+
+                    if (similarity >= threshold)
+                        return similarity;
+                    else
+                        return 0.0d;
+                }
+            } else {
+                if (p.getOperator().equalsIgnoreCase(MAX) | p.getOperator().equalsIgnoreCase(OR)
+                        | p.getOperator().equalsIgnoreCase(XOR)) {
+                    double parentThreshold = p.getThreshold();
+                    double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(),
+                            p.getThreshold1(), sourceVar, targetVar);
+                    double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(),
+                            p.getThreshold2(), sourceVar, targetVar);
+
+                    // parentThreshold is 0 and (s,t) are not part of the union
+                    if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
+                        return 0;
+                    else {
+                        // find max value between or terms
+                        double maxSimilarity = Math.max(firstChild, secondChild);
+                        if (maxSimilarity >= parentThreshold)
+                            return maxSimilarity;
+                        else
+                            return 0;
                     }
                 }
+                if (p.getOperator().equalsIgnoreCase(MIN) | p.getOperator().equalsIgnoreCase(AND)) {
+                    double parentThreshold = p.getThreshold();
+                    double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(),
+                            p.getThreshold1(), sourceVar, targetVar);
+                    double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(),
+                            p.getThreshold2(), sourceVar, targetVar);
 
-                if (similarity >= threshold)
-                    return similarity;
-                else
-                    return 0.0d;
-            }
-        } else {
-            if (p.getOperator().equalsIgnoreCase(MAX) | p.getOperator().equalsIgnoreCase(OR)
-                    | p.getOperator().equalsIgnoreCase(XOR)) {
-                double parentThreshold = p.getThreshold();
-                double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(), p.getThreshold1(),
-                        sourceVar, targetVar);
-                double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
-                        sourceVar, targetVar);
-
-                // parentThreshold is 0 and (s,t) are not part of the union
-                if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
-                    return 0;
-                else {
-                    // find max value between or terms
-                    double maxSimilarity = Math.max(firstChild, secondChild);
-                    if (maxSimilarity >= parentThreshold)
-                        return maxSimilarity;
-                    else
+                    // parentThreshold is 0 and (s,t) are not part of the
+                    // intersection
+                    if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
                         return 0;
-                }
-            }
-            if (p.getOperator().equalsIgnoreCase(MIN) | p.getOperator().equalsIgnoreCase(AND)) {
-                double parentThreshold = p.getThreshold();
-                double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(), p.getThreshold1(),
-                        sourceVar, targetVar);
-                double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
-                        sourceVar, targetVar);
-
-                // parentThreshold is 0 and (s,t) are not part of the
-                // intersection
-                if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
-                    return 0;
-                else {
-                    // find min value between or terms
-                    double minSimilarity = Math.min(firstChild, secondChild);
-                    if (minSimilarity >= parentThreshold)
-                        return minSimilarity;
-                    else
-                        return 0;
-                }
-            }
-            if (p.getOperator().equalsIgnoreCase(ADD)) {
-                double parentThreshold = p.getThreshold();
-                double firstChild = p.getLeftCoefficient() * getSimilarity(sourceInstance, targetInstance,
-                        p.getLeftTerm(), p.getThreshold1(), sourceVar, targetVar);
-                double secondChild = p.getRightCoefficient() * getSimilarity(sourceInstance, targetInstance,
-                        p.getRightTerm(), p.getThreshold2(), sourceVar, targetVar);
-
-                if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
-                    return 0;
-                else {
-                    if (firstChild + secondChild >= parentThreshold)
-                        return firstChild + secondChild;
-                    else
-                        return 0;
-                }
-
-            } else {
-                double parentThreshold = p.getThreshold();
-                double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(), p.getThreshold1(),
-                        sourceVar, targetVar);
-                double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(), p.getThreshold2(),
-                        sourceVar, targetVar);
-                // the second similarity must be 0 in order for the instance to
-                // have a change to be included at the final result
-                if (secondChild == 0) {
-                    if (firstChild >= p.getThreshold1()) {
-                        if (firstChild >= parentThreshold) {
-                            return firstChild;
-                        } else // similarity smaller than the parent threshold
+                    else {
+                        // find min value between or terms
+                        double minSimilarity = Math.min(firstChild, secondChild);
+                        if (minSimilarity >= parentThreshold)
+                            return minSimilarity;
+                        else
                             return 0;
-                    } else// similarity smaller than the left child threshold
+                    }
+                }
+                if (p.getOperator().equalsIgnoreCase(ADD)) {
+                    double parentThreshold = p.getThreshold();
+                    double firstChild = p.getLeftCoefficient() * getSimilarity(sourceInstance, targetInstance,
+                            p.getLeftTerm(), p.getThreshold1(), sourceVar, targetVar);
+                    double secondChild = p.getRightCoefficient() * getSimilarity(sourceInstance, targetInstance,
+                            p.getRightTerm(), p.getThreshold2(), sourceVar, targetVar);
+
+                    if (firstChild < p.getThreshold1() && secondChild < p.getThreshold2())
                         return 0;
-                } else // current (s,t) are included in the mapping of the right
-                       // child
-                    return 0;
+                    else {
+                        if (firstChild + secondChild >= parentThreshold)
+                            return firstChild + secondChild;
+                        else
+                            return 0;
+                    }
+
+                } else {
+                    double parentThreshold = p.getThreshold();
+                    double firstChild = getSimilarity(sourceInstance, targetInstance, p.getLeftTerm(),
+                            p.getThreshold1(), sourceVar, targetVar);
+                    double secondChild = getSimilarity(sourceInstance, targetInstance, p.getRightTerm(),
+                            p.getThreshold2(), sourceVar, targetVar);
+                    // the second similarity must be 0 in order for the instance
+                    // to
+                    // have a change to be included at the final result
+                    if (secondChild == 0) {
+                        if (firstChild >= p.getThreshold1()) {
+                            if (firstChild >= parentThreshold) {
+                                return firstChild;
+                            } else // similarity smaller than the parent
+                                   // threshold
+                                return 0;
+                        } else// similarity smaller than the left child
+                              // threshold
+                            return 0;
+                    } else // current (s,t) are included in the mapping of the
+                           // right
+                           // child
+                        return 0;
+                }
             }
+        } catch (RuntimeException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         return 0;
 
@@ -274,15 +271,10 @@ public class MeasureProcessor {
     public static double getCosts(String measureExpression, double mappingSize) {
         List<String> measures = getMeasures(measureExpression);
         double runtime = 0;
-        for (int i = 0; i < measures.size(); i++)
-            try {
-                MeasureType type = MeasureFactory.getMeasureType(measures.get(i));
-                runtime = runtime + MeasureFactory.createMeasure(type).getRuntimeApproximation(mappingSize);
-            } catch (InvalidMeasureException e) {
-                e.printStackTrace();
-                logger.error("Exiting..");
-                System.exit(1);
-            }
+        for (int i = 0; i < measures.size(); i++) {
+            MeasureType type = MeasureFactory.getMeasureType(measures.get(i));
+            runtime = runtime + MeasureFactory.createMeasure(type).getRuntimeApproximation(mappingSize);
+        }
         return runtime;
     }
 }

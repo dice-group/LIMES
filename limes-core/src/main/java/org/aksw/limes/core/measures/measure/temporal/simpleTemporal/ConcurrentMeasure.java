@@ -6,8 +6,6 @@ import java.util.Date;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implements the temporal concurrent measure class.
@@ -16,7 +14,6 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  */
 public class ConcurrentMeasure extends TemporalMeasure {
-    private static final Logger logger = LoggerFactory.getLogger(ConcurrentMeasure.class);
 
     /**
      * {@inheritDoc}
@@ -65,19 +62,9 @@ public class ConcurrentMeasure extends TemporalMeasure {
         String beginDate2 = this.getFirstProperty(property2);
 
         String machineID1 = null;
-        try {
-            machineID1 = this.getSecondProperty(property1);
-        } catch (IllegalArgumentException e) {
-            logger.error("Concurrent events require both begin date and machine id.   Exiting..");
-            System.exit(1);
-        }
+        machineID1 = this.getSecondProperty(property1);
         String machineID2 = null;
-        try {
-            machineID2 = this.getSecondProperty(property2);
-        } catch (IllegalArgumentException e) {
-            logger.error("Concurrent events require both begin date and machine id.   Exiting..");
-            System.exit(1);
-        }
+        machineID2 = this.getSecondProperty(property2);
 
         String s1 = new String(
                 instance1.getProperty(beginDate1).first() + "|" + instance1.getProperty(machineID1).first());
