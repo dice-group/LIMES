@@ -132,7 +132,7 @@ public abstract class AAtomicAllenAlgebraMapper {
      */
     protected static TreeMap<Long, Set<String>> orderByEndDate(ACache cache, String expression) {
         TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
-        Parser p = new Parser(expression, 0.0d);
+        Parser p = new Parser(expression, 1.0d);
         String property = null;
         property = getEndProperty(p.getLeftTerm());
 

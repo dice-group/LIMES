@@ -383,7 +383,7 @@ public class WombatSimple extends AWombat {
                     } else if (op.equals(LogicOperator.MINUS)) {
                         map = MappingOperations.difference(node.getValue().getMapping(), c.getMapping());
                     }
-                    String metricExpr = op + "(" + node.getValue().getMetricExpression() + "," + c.getMetricExpression() + ")|1";
+                    String metricExpr = op + "(" + node.getValue().getMetricExpression() + "," + c.getMetricExpression() + ")|0";
                     RefinementNode child = createNode(map, metricExpr);
                     node.addChild(new Tree<RefinementNode>(child));
                 }
