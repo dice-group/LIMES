@@ -52,8 +52,8 @@ public class Configuration implements IConfiguration {
     protected String mlAlgorithmName = new String();
     protected List<LearningParameter> mlAlgorithmParameters = new ArrayList<>();
     protected MLImplementationType mlImplementationType = MLImplementationType.UNSUPERVISED;
-    private String mlTrainingDataFile = null;
-    private EvaluatorType mlPseudoFMeasure = null;
+    protected String mlTrainingDataFile = null;
+    protected EvaluatorType mlPseudoFMeasure = null;
 
     public Configuration() {
     }

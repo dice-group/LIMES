@@ -95,42 +95,85 @@ public class Config extends Configuration {
     }
 
     /**
-     * Config of the GUI 
-     * @param sourceInfo sourceInfo
-     * @param targetInfo targetInfo
-     * @param metricExpression metricExpression
-     * @param acceptanceRelation acceptanceRelation
-     * @param verificationRelation verificationRelation  
-     * @param acceptanceThreshold acceptanceThreshold
-     * @param acceptanceFile acceptanceFile
-     * @param verificationThreshold verificationThreshold
-     * @param verificationFile verificationFile
-     * @param prefixes prefixes
-     * @param outputFormat outputFormat
-     * @param executionRewriter executionRewriter
-     * @param executionPlanner executionPlanner
-     * @param executionEngine executionEngine
-     * @param granularity granularity
-     * @param mlAlgorithmName mlAlgorithmName
-     * @param mlParameters mlParameters
-     * @param mlImplementationType mlImplementationType
-     * @param mlTrainingDataFile mlTrainingDataFile
-     * @param mlPseudoFMeasure mlPseudoFMeasure
+     * Config of the GUI
+     * 
+     * @param sourceInfo
+     *            sourceInfo
+     * @param targetInfo
+     *            targetInfo
+     * @param metricExpression
+     *            metricExpression
+     * @param acceptanceRelation
+     *            acceptanceRelation
+     * @param verificationRelation
+     *            verificationRelation
+     * @param acceptanceThreshold
+     *            acceptanceThreshold
+     * @param acceptanceFile
+     *            acceptanceFile
+     * @param verificationThreshold
+     *            verificationThreshold
+     * @param verificationFile
+     *            verificationFile
+     * @param prefixes
+     *            prefixes
+     * @param outputFormat
+     *            outputFormat
+     * @param executionRewriter
+     *            executionRewriter
+     * @param executionPlanner
+     *            executionPlanner
+     * @param executionEngine
+     *            executionEngine
+     * @param granularity
+     *            granularity
+     * @param mlAlgorithmName
+     *            mlAlgorithmName
+     * @param mlParameters
+     *            mlParameters
+     * @param mlImplementationType
+     *            mlImplementationType
+     * @param mlTrainingDataFile
+     *            mlTrainingDataFile
+     * @param mlPseudoFMeasure
+     *            mlPseudoFMeasure
      */
-    public Config(KBInfo sourceInfo, KBInfo targetInfo, String metricExpression, String acceptanceRelation,
-            String verificationRelation, double acceptanceThreshold, String acceptanceFile,
-            double verificationThreshold, String verificationFile, Map<String, String> prefixes, String outputFormat,
-            String executionRewriter, String executionPlanner, String executionEngine, int granularity,
-            String mlAlgorithmName, List<LearningParameter> mlParameters, MLImplementationType mlImplementationType,
-            String mlTrainingDataFile, EvaluatorType mlPseudoFMeasure) {
-	super(sourceInfo, targetInfo, metricExpression, acceptanceRelation, verificationRelation,
-		acceptanceThreshold, acceptanceFile, verificationThreshold, verificationFile,
-		prefixes, outputFormat, executionRewriter, executionPlanner, executionEngine, granularity, mlAlgorithmName, mlParameters,
-		mlImplementationType, mlTrainingDataFile, mlPseudoFMeasure);
-	if(this.acceptanceRelation.equals("") || this.acceptanceRelation == null || this.acceptanceRelation.startsWith("file:")){
+    public Config(KBInfo sourceInfo, KBInfo targetInfo, String metricExpression,
+	    String acceptanceRelation, String verificationRelation, double acceptanceThreshold,
+	    String acceptanceFile, double verificationThreshold, String verificationFile,
+	    Map<String, String> prefixes, String outputFormat, String executionRewriter,
+	    String executionPlanner, String executionEngine, int granularity,
+	    String mlAlgorithmName, List<LearningParameter> mlParameters,
+	    MLImplementationType mlImplementationType, String mlTrainingDataFile,
+	    EvaluatorType mlPseudoFMeasure) {
+	this.sourceInfo = sourceInfo;
+	this.targetInfo = targetInfo;
+	this.metricExpression = metricExpression;
+	this.acceptanceRelation = acceptanceRelation;
+	this.verificationRelation = verificationRelation;
+
+	this.acceptanceThreshold = acceptanceThreshold;
+	this.acceptanceFile = acceptanceFile;
+	this.verificationThreshold = verificationThreshold;
+	this.verificationFile = verificationFile;
+	this.prefixes = prefixes;
+	this.outputFormat = outputFormat;
+	this.executionRewriter = executionRewriter;
+	this.executionPlanner = executionPlanner;
+	this.executionEngine = executionEngine;
+	this.granularity = granularity;
+	this.mlAlgorithmName = mlAlgorithmName;
+	this.mlAlgorithmParameters = mlParameters;
+	this.mlImplementationType = mlImplementationType;
+	this.mlTrainingDataFile = mlTrainingDataFile;
+	this.mlPseudoFMeasure = mlPseudoFMeasure;
+
+	if (this.acceptanceRelation.equals("") || this.acceptanceRelation == null
+		|| this.acceptanceRelation.startsWith("file:")) {
 	    this.acceptanceRelation = defaultAcceptanceRelation;
 	}
-	if(this.verificationRelation.equals("") || this.verificationRelation == null|| this.verificationRelation.startsWith("file:")){
+	if (this.verificationRelation.equals("") || this.verificationRelation == null
+		|| this.verificationRelation.startsWith("file:")) {
 	    this.verificationRelation = defaultVerificationRelation;
 	}
 	metric = new Output();
@@ -163,12 +206,16 @@ public class Config extends Configuration {
 	if (tmp.getSourceInfo() == null || tmp.getSourceInfo() == null) {
 	    throw new Exception("Invalid configuration file!");
 	}
-	outConfig = new Config(tmp.getSourceInfo(), tmp.getTargetInfo(), tmp.getMetricExpression(), tmp.getAcceptanceRelation(),
-            tmp.getVerificationRelation(), tmp.getAcceptanceThreshold(), tmp.getAcceptanceFile(),
-            tmp.getVerificationThreshold(), tmp.getVerificationFile(), (Map<String, String>) tmp.getPrefixes(), tmp.getOutputFormat(),
-            tmp.getExecutionRewriter(), tmp.getExecutionPlanner(), tmp.getExecutionEngine(), tmp.getGranularity(),
-            tmp.getMlAlgorithmName(), (List<LearningParameter>) tmp.getMlAlgorithmParameters(), tmp.getMlImplementationType(),
-            tmp.getMlTrainingDataFile(), tmp.getMlPseudoFMeasure()); 
+	outConfig = new Config(tmp.getSourceInfo(), tmp.getTargetInfo(), tmp.getMetricExpression(),
+		tmp.getAcceptanceRelation(), tmp.getVerificationRelation(),
+		tmp.getAcceptanceThreshold(), tmp.getAcceptanceFile(),
+		tmp.getVerificationThreshold(), tmp.getVerificationFile(),
+		(Map<String, String>) tmp.getPrefixes(), tmp.getOutputFormat(),
+		tmp.getExecutionRewriter(), tmp.getExecutionPlanner(), tmp.getExecutionEngine(),
+		tmp.getGranularity(), tmp.getMlAlgorithmName(),
+		(List<LearningParameter>) tmp.getMlAlgorithmParameters(),
+		tmp.getMlImplementationType(), tmp.getMlTrainingDataFile(),
+		tmp.getMlPseudoFMeasure());
 	outConfig.setMlTrainingDataFile(tmp.getMlTrainingDataFile());
 	outConfig.sourceEndpoint = new Endpoint(outConfig.getSourceInfo(), outConfig);
 	outConfig.targetEndpoint = new Endpoint(outConfig.getTargetInfo(), outConfig);
@@ -213,34 +260,35 @@ public class Config extends Configuration {
 	// xmlwriter.write(this, file.getAbsolutePath());
 	// } else {
 
-	//In case the relation are not abbreaviated this an lead to errors
-	if(this.acceptanceRelation != null){
-	    if(this.acceptanceRelation.startsWith("http:")){
+	// In case the relation are not abbreaviated this an lead to errors
+	if (this.acceptanceRelation != null) {
+	    if (this.acceptanceRelation.startsWith("http:")) {
 		this.acceptanceRelation = PrefixHelper.abbreviate(this.acceptanceRelation);
 	    }
 	}
-	if(this.verificationRelation != null){
-	    if(this.verificationRelation.startsWith("http:")){
+	if (this.verificationRelation != null) {
+	    if (this.verificationRelation.startsWith("http:")) {
 		this.verificationRelation = PrefixHelper.abbreviate(this.verificationRelation);
 	    }
 	}
-	
-	//If there is renaming, change it in the metric because it is not possible to save in RDF
+
+	// If there is renaming, change it in the metric because it is not
+	// possible to save in RDF
 	String newME = metricExpression;
-	for(String s: sourceEndpoint.getInfo().getFunctions().keySet()){
-	    for(String t: sourceEndpoint.getInfo().getFunctions().get(s).keySet()){
+	for (String s : sourceEndpoint.getInfo().getFunctions().keySet()) {
+	    for (String t : sourceEndpoint.getInfo().getFunctions().get(s).keySet()) {
 		System.out.println(t);
 		newME = metricExpression.replace(t, s);
 	    }
 	}
-	for(String s: targetEndpoint.getInfo().getFunctions().keySet()){
-	    for(String t: targetEndpoint.getInfo().getFunctions().get(s).keySet()){
+	for (String s : targetEndpoint.getInfo().getFunctions().keySet()) {
+	    for (String t : targetEndpoint.getInfo().getFunctions().get(s).keySet()) {
 		System.out.println(t);
 		newME = metricExpression.replace(t, s);
 	    }
 	}
 	metricExpression = newME;
-	
+
 	RDFConfigurationWriter rdfwriter = new RDFConfigurationWriter();
 	rdfwriter.write(this, file.getAbsolutePath());
 	// }
@@ -466,5 +514,5 @@ public class Config extends Configuration {
     public void setMapping(AMapping mapping) {
 	this.mapping = mapping;
     }
-    
+
 }
