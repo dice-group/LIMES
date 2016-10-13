@@ -65,6 +65,7 @@ public class Configuration implements IConfiguration {
             String mlAlgorithmName, List<LearningParameter> mlParameters, MLImplementationType mlImplementationType,
             String mlTrainingDataFile, EvaluatorType mlPseudoFMeasure) {
         super();
+        this.prefixes = prefixes;
         this.sourceInfo = sourceInfo;
         this.targetInfo = targetInfo;
         this.metricExpression = metricExpression;
@@ -74,7 +75,6 @@ public class Configuration implements IConfiguration {
         this.acceptanceFile = acceptanceFile;
         this.verificationThreshold = verificationThreshold;
         this.verificationFile = verificationFile;
-        this.prefixes = prefixes;
         this.outputFormat = outputFormat;
         this.executionRewriter = executionRewriter;
         this.executionPlanner = executionPlanner;
