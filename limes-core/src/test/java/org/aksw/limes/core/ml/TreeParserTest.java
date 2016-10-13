@@ -13,7 +13,7 @@ public class TreeParserTest {
 
 	@Test
 	public void addRootLSToChildTest() throws Exception {
-		TreeParser tp = new TreeParser();
+		TreeParser tp = new TreeParser(null);
 		Method addRootLSToChild = null;    
 		Class[] parameterTypes = {LinkSpecification.class, LinkSpecification.class};
 		addRootLSToChild = tp.getClass().getDeclaredMethod("addRootLSToChild", parameterTypes);
@@ -27,7 +27,7 @@ public class TreeParserTest {
 	
 	@Test
 	public void parseAtomicTreeTest() throws Exception{
-		TreeParser tp = new TreeParser();
+		TreeParser tp = new TreeParser(null);
 		Method parseAtomicTree = null;    
 		Class[] parameterTypes = {String.class, boolean.class};
 		parseAtomicTree = tp.getClass().getDeclaredMethod("parseAtomicTree", parameterTypes);
@@ -42,7 +42,7 @@ public class TreeParserTest {
 	//Root contains 2 subtrees
 	@Test
 	public void parseTreePrefixTestSymmetric() throws Exception{
-	    	TreeParser tp = new TreeParser();
+	    	TreeParser tp = new TreeParser(null);
 		Method parseTreePrefix = null;    
 		Class[] parameterTypes = {String.class};
 		parseTreePrefix = tp.getClass().getDeclaredMethod("parseTreePrefix", parameterTypes);
@@ -55,7 +55,7 @@ public class TreeParserTest {
 	
 	@Test
 	public void parseTreePrefixTestIrrelevant() throws Exception{
-	    	TreeParser tp = new TreeParser();
+	    	TreeParser tp = new TreeParser(null);
 		Method parseTreePrefix = null;    
 		Class[] parameterTypes = {String.class};
 		parseTreePrefix = tp.getClass().getDeclaredMethod("parseTreePrefix", parameterTypes);
@@ -68,7 +68,7 @@ public class TreeParserTest {
 
 	@Test
 	public void parseTreePrefixTestComplexTree() throws Exception{
-	    	TreeParser tp = new TreeParser();
+	    	TreeParser tp = new TreeParser(null);
 		Method parseTreePrefix = null;    
 		Class[] parameterTypes = {String.class};
 		parseTreePrefix = tp.getClass().getDeclaredMethod("parseTreePrefix", parameterTypes);

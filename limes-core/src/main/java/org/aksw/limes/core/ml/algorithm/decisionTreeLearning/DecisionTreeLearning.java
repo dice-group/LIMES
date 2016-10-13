@@ -38,6 +38,8 @@ import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.util.ParenthesisMatcher;
 import org.apache.log4j.Logger;
 
+import com.sun.glass.ui.GestureSupport;
+
 import weka.classifiers.trees.J48;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
@@ -58,7 +60,8 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      */
     private HashMap<String, Double> alreadySeenLS;
     /**
-     * delta Mappings that have already been calculated <deltaLS.toString(), mapping>
+     * delta Mappings that have already been calculated <deltaLS.toString(),
+     * mapping>
      */
     private HashMap<String, AMapping> alreadyCalculatedMapping;
 
@@ -105,9 +108,10 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      * are almost classified as links
      */
     private static final double delta = 0.1;
-    
+
     /**
-     * if we have already seen a linkspecification we raise the threshold by this amount
+     * if we have already seen a linkspecification we raise the threshold by
+     * this amount
      */
     private static final double thresholdRaise = 0.05;
 
@@ -350,13 +354,13 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 						    sourceCache.getInstance(sourceURI),
 						    targetCache.getInstance(targetURI),
 						    metricExpression, threshold, "?x", "?y"));
-//					    System.out.println(sourceURI);
-//					    System.out.println(targetURI);
-//					    System.out.println(inst.attribute(i));
-//					    System.err.println(sourceCache.getInstance(sourceURI).getProperty(propertyA));
-//					    System.err.println(targetCache.getInstance(targetURI).getProperty(propertyB));
-//					    System.out.println(inst.value(i));
-//					    System.out.println(inst);
+					    // System.out.println(sourceURI);
+					    // System.out.println(targetURI);
+					    // System.out.println(inst.attribute(i));
+					    // System.err.println(sourceCache.getInstance(sourceURI).getProperty(propertyA));
+					    // System.err.println(targetCache.getInstance(targetURI).getProperty(propertyB));
+					    // System.out.println(inst.value(i));
+					    // System.out.println(inst);
 					}
 				    } else {
 					String classValue = "negative";
@@ -375,7 +379,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
 			    });
 			});
-//	System.out.println(trainingSet);
+	// System.out.println(trainingSet);
 	return instanceMap;
     }
 
@@ -391,7 +395,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     @Override
     protected MLResults activeLearn() throws UnsupportedMLImplementationException {
 	AMapping trainingData = getTrainingMapping();
-	if(trainingData == null){
+	if (trainingData == null) {
 	    return null;
 	}
 	return activeLearn(trainingData);
@@ -453,13 +457,14 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     /**
      * Builds the J48 tree and calls the parser to get the LinkSpecification
+     * 
      * @param oracleMapping
      * @return
      */
     private LinkSpecification buildTreeAndParseToLS(AMapping oracleMapping) {
 	this.trainingSet = createEmptyTrainingInstances(oracleMapping);
 	fillInstances(trainingSet, oracleMapping);
-	//If we don't have negative and positive examples return null
+	// If we don't have negative and positive examples return null
 	if (!(negativeExample & positiveExample)) {
 	    logger.debug("negative examples: " + negativeExample + " positive examples:"
 		    + positiveExample);
@@ -474,8 +479,8 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    tree.setOptions(options);
 	    logger.info("Building classifier....");
 	    tree.buildClassifier(trainingSet);
-	    System.out.println(tree.prefix());
-	    System.out.println(tree.graph());
+	    // System.out.println(tree.prefix());
+	    // System.out.println(tree.graph());
 	    if (tree.prefix().startsWith("[negative ") || tree.prefix().startsWith("[positive ")) {
 		logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
 		if (addBase(oracleMapping)) {
@@ -493,8 +498,9 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     }
 
     /**
-     * Checks if there was already a better LinkSpecification before
-     * if this is batch learning it checks all thresholds above the learned also
+     * Checks if there was already a better LinkSpecification before if this is
+     * batch learning it checks all thresholds above the learned also
+     * 
      * @param ls
      * @return
      */
@@ -544,7 +550,9 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     }
 
     /**
-     * Adds {@link #base} to the oracle mapping, until positive and negative examples are equal
+     * Adds {@link #base} to the oracle mapping, until positive and negative
+     * examples are equal
+     * 
      * @param oracleMapping
      * @return
      */
@@ -582,7 +590,9 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     }
 
     /**
-     * Adds all {@link #previouslyPresentedCandidates} by calling union on the mappings
+     * Adds all {@link #previouslyPresentedCandidates} by calling union on the
+     * mappings
+     * 
      * @param oracleMapping
      * @return
      */
@@ -590,11 +600,12 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	return ((MemoryMapping) oracleMapping).union(previouslyPresentedCandidates);
     }
 
-    
     /**
-     * Tries to get an equal amount of positive and negative examples. If positive == negative it just returns the mapping
-     * If positive < negative it deletes some negative examples. If negative < mapping.size / 4 it returns null, telling
-     * the user to provide more negative examples
+     * Tries to get an equal amount of positive and negative examples. If
+     * positive == negative it just returns the mapping If positive < negative
+     * it deletes some negative examples. If negative < mapping.size / 4 it
+     * returns null, telling the user to provide more negative examples
+     * 
      * @param oracleMapping
      * @return
      */
@@ -636,7 +647,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 		+ " negative examples");
 	return oracleMapping;
     }
-
 
     /**
      * calls wombat because it is designed to handle this case
@@ -725,7 +735,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	try {
 	    String treeString = tree.prefix().substring(1,
 		    ParenthesisMatcher.findMatchingParenthesis(tree.prefix(), 0));
-	    tp.measuresUsed.clear();
 	    ls = tp.parseTreePrefix(treeString);
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block
@@ -769,6 +778,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     /**
      * Sets the parameters
+     * 
      * @param lp
      */
     private void setLearningParameters(List<LearningParameter> lp) {
@@ -825,8 +835,8 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     }
 
     /**
-     * Adds the delta shifting of the thresholds in the measures, checks if the operator is Minus in which case the threshold
-     * has to be raised
+     * Adds the delta shifting of the thresholds in the measures, checks if the
+     * operator is Minus in which case the threshold has to be raised
      * 
      * @param ls
      *            LinkSpec to be cleaned of the delta shift
@@ -882,6 +892,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     /**
      * returns the {@link #bestLS}
+     * 
      * @return
      */
     public LinkSpecification getDefaultLS() {
@@ -958,11 +969,12 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	    logger.debug("Skip execution because we already calculated this mapping");
 	}
 	ArrayList<SourceTargetValue> tmpCandidateList = new ArrayList<SourceTargetValue>();
+	HashMap<String, Double> usedMeasures = this.getUsedMeasures(bestLS);
 	deltaMapping.getMap().forEach(
 		(sourceURI, map2) -> {
 		    map2.forEach((targetURI, value) -> {
 			double compoundMeasureValue = 0;
-			for (Map.Entry<String, Double> entry : tp.measuresUsed.entrySet()) {
+			for (Map.Entry<String, Double> entry : usedMeasures.entrySet()) {
 			    compoundMeasureValue += Math.pow(
 				    Math.abs(MeasureProcessor.getSimilarity(
 					    sourceCache.getInstance(sourceURI),
@@ -983,19 +995,19 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	AMapping mostInformativeLinkCandidates = MappingFactory.createDefaultMapping();
 
 	if (tmpCandidateList.size() != 0) {
-	    //Prevent IndexOutOfBoundException
+	    // Prevent IndexOutOfBoundException
 	    size = (tmpCandidateList.size() < size) ? tmpCandidateList.size() : size;
-	    //Add to mostInformativeLinkCandidates
+	    // Add to mostInformativeLinkCandidates
 	    for (int i = 0; i < size; i++) {
 		SourceTargetValue candidate = tmpCandidateList.get(i);
 		mostInformativeLinkCandidates.add(candidate.sourceUri, candidate.targetUri,
 			candidate.value);
 	    }
-	    //Add to base
+	    // Add to base
 	    for (int i = 1; i <= size; i++) {
 		SourceTargetValue candidate = tmpCandidateList.get(tmpCandidateList.size() - i);
 		candidate.value = 1.0;
-		if(!base.contains(candidate)){
+		if (!base.contains(candidate)) {
 		    base.add(candidate);
 		}
 	    }
@@ -1013,11 +1025,38 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	return mostInformativeLinkCandidates;
     }
 
+    /**
+     * Returns all used measures in the LinkSpecification with the corresponding
+     * highest threshold
+     * 
+     * @param ls
+     * @return HashMap with measure string as key and highest threshold as value
+     */
+    private HashMap<String, Double> getUsedMeasures(LinkSpecification ls) {
+	HashMap<String, Double> usedMeasures = new HashMap<String, Double>();
+	if (ls.isAtomic()) {
+	    Double thresholdDouble = usedMeasures.get(ls.getAtomicMeasure());
+	    if (thresholdDouble != null) {
+		if (usedMeasures.get(ls.getMeasure()) > thresholdDouble) {
+		    usedMeasures.put(ls.getMeasure(), thresholdDouble);
+		}
+	    } else {
+		thresholdDouble = ls.getThreshold();
+		usedMeasures.put(ls.getMeasure(), thresholdDouble);
+	    }
+	    return usedMeasures;
+	}
+	for (LinkSpecification c : ls.getChildren()) {
+	    usedMeasures.putAll(getUsedMeasures(c));
+	}
+	return usedMeasures;
+    }
+
     @Override
     protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
 	batch = true;
-	//call active learning
-	//only difference is in checkIfThereWasBetterLSBefore method
+	// call active learning
+	// only difference is in checkIfThereWasBetterLSBefore method
 	return activeLearn(trainingData);
     }
 
@@ -1060,23 +1099,30 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     public void setInitialMapping(AMapping initialMapping) {
 	this.initialMapping = initialMapping;
     }
-    
-    public static void main(String[] args){
-                EvaluationData c = DataSetChooser.getData("Person1");
-                try {
-		    AMLAlgorithm dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class, MLImplementationType.SUPERVISED_ACTIVE);
-		    dtl.init(null, c.getSourceCache(), c.getTargetCache());
-		    dtl.getMl().setConfiguration(c.getConfigReader().read());
-		    ((DecisionTreeLearning)dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-		    CSVMappingReader reader = new CSVMappingReader("/home/ohdorno/Documents/Uni/BA_Informatik/example.csv",",");
-		    AMapping trainingMapping = reader.read();
-		    MLResults res = dtl.asActive().activeLearn(trainingMapping);
-		    System.out.println(res.getLinkSpecification());
-		} catch (UnsupportedMLImplementationException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
-                
+
+    public static void main(String[] args) {
+	// EvaluationData c = DataSetChooser.getData("Person1");
+	// try {
+	// AMLAlgorithm dtl =
+	// MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+	// MLImplementationType.SUPERVISED_ACTIVE);
+	// dtl.init(null, c.getSourceCache(), c.getTargetCache());
+	// dtl.getMl().setConfiguration(c.getConfigReader().read());
+	// ((DecisionTreeLearning)dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+	// CSVMappingReader reader = new
+	// CSVMappingReader("/home/ohdorno/Documents/Uni/BA_Informatik/example.csv",",");
+	// AMapping trainingMapping = reader.read();
+	// MLResults res = dtl.asActive().activeLearn(trainingMapping);
+	// System.out.println(res.getLinkSpecification());
+	// } catch (UnsupportedMLImplementationException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	DecisionTreeLearning dtl = new DecisionTreeLearning();
+	LinkSpecification ls = new LinkSpecification(
+		"OR(jaccard(x.surname,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,trigrams(x.surname,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.name,y.name)|0.9728)|0.9807)",
+		0.8);
+	System.out.println(dtl.getUsedMeasures(ls));
     }
 
 }

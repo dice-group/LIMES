@@ -1,6 +1,5 @@
 package org.aksw.limes.core.ml.algorithm.decisionTreeLearning;
 
-import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -24,12 +23,6 @@ public class TreeParser {
     public static final String classPositive = "positive";
     public static final String classNegative = "negative";
     private static final String irrelevant = "irrelevant";
-
-    /**
-     * The measures which are used in this LinkSpecification. The Double value
-     * is without delta
-     */
-    public HashMap<String, Double> measuresUsed = new HashMap<String, Double>();
 
     private DecisionTreeLearning dtl;
 
@@ -171,16 +164,6 @@ public class TreeParser {
 	String metricExpression = measureName + "(x." + propertyA + ", y." + propertyB + ")";
 	String threshold = getPositiveThreshold(tree.substring(tree.indexOf("<"), tree.length()));
 
-	// add to measures hash map
-	double thresholdDouble = Double.valueOf(threshold.replace(">", "").replace("<=", ""));
-	if (measuresUsed.get(metricExpression) != null) {
-	    if (measuresUsed.get(metricExpression) > thresholdDouble) {
-		measuresUsed.put(metricExpression, thresholdDouble);
-	    }
-	} else {
-	    measuresUsed.put(metricExpression, thresholdDouble);
-	}
-
 	if (threshold.startsWith(">")) {
 	    ls = new LinkSpecification(metricExpression, Math.max(0.1, Double.parseDouble(threshold.substring(2))));
 	} else {
@@ -264,8 +247,8 @@ public class TreeParser {
     public static void main(String[] args){
 	TreeParser tp = new TreeParser(null);
 //	tp.parseTreePrefix("[qgrams§http://www.okkam.org/ontology_person1.owl#has_address|http://www.okkam.org/ontology_person2.owl#has_address: <= 0.826087,\n> 0.826087[cosine§http://www.okkam.org/ontology_person1.owl#age|http://www.okkam.org/ontology_person2.owl#age: <= 0,\n> 0[negative (15.0)][negative (5.0/2.0)]][positive (11.0)]]");
-//	System.out.println(tp.parseTreePrefix("qgrams§http://www.okkam.org/ontology_person1.owl#date_of_birth|http://www.okkam.org/ontology_person2.owl#date_of_birth: <= 0.2, > 0.2[negative (44.0)][jaro§http://www.okkam.org/ontology_person1.owl#age|http://www.okkam.org/ontology_person2.owl#age: <= 0, > 0[cosine§http://www.okkam.org/ontology_person1.owl#date_of_birth|http://www.okkam.org/ontology_person2.owl#date_of_birth: <= 0, > 0[qgrams§http://www.okkam.org/ontology_person1.owl#has_address|http://www.okkam.org/ontology_person2.owl#has_address: <= 0.826087, > 0.826087[negative (7.0/1.0)][positive (4.0)]][negative (29.0/8.0)]][qgrams§http://www.okkam.org/ontology_person1.owl#phone_numer|http://www.okkam.org/ontology_person2.owl#phone_numer: <= 0.5, > 0.5[qgrams§http://www.okkam.org/ontology_person1.owl#has_address|http://www.okkam.org/ontology_person2.owl#has_address: <= 0.826087, > 0.826087[negative (6.0/1.0)][positive (3.0/1.0)]][cosine§http://www.okkam.org/ontology_person1.owl#given_name|http://www.okkam.org/ontology_person2.owl#given_name: <= 0, > 0[qgrams§http://www.okkam.org/ontology_person1.owl#has_address|http://www.okkam.org/ontology_person2.owl#has_address: <= 0.826087, > 0.826087[positive (6.0/2.0)][jaro§http://www.okkam.org/ontology_person1.owl#has_address|http://www.okkam.org/ontology_person2.owl#has_address: <= 0.954882, > 0.954882[jaro§http://www.okkam.org/ontology_person1.owl#given_name|http://www.okkam.org/ontology_person2.owl#given_name: <= 0.916667, > 0.916667[negative (8.0/2.0)][positive (2.0)]][negative (3.0/1.0)]]][positive (116.0/51.0)]]]]")); 
-	System.out.println(tp.parseTreePrefix("qgrams§title|name: <= 0.105263, > 0.105263[negative (26.0/2.0)][trigrams§title|name: <= 0.2,> 0.2[jaccard§title|name: <= 0.083333,> 0.083333[negative (6.0/1.0)][positive (26.0/2.0)]][positive (816.0/2.0)]")); 
+	System.out.println(tp.parseTreePrefix("qgrams§date_of_birth|date_of_birth: <= 0.2, > 0.2[negative (44.0)][jaro§age|age: <= 0, > 0[cosine§date_of_birth|date_of_birth: <= 0, > 0[qgrams§has_address|has_address: <= 0.826087, > 0.826087[negative (7.0/1.0)][positive (4.0)]][negative (29.0/8.0)]][qgrams§phone_numer|phone_numer: <= 0.5, > 0.5[qgrams§has_address|has_address: <= 0.826087, > 0.826087[negative (6.0/1.0)][positive (3.0/1.0)]][cosine§given_name|given_name: <= 0, > 0[qgrams§has_address|has_address: <= 0.826087, > 0.826087[positive (6.0/2.0)][jaro§has_address|has_address: <= 0.954882, > 0.954882[jaro§given_name|given_name: <= 0.916667, > 0.916667[negative (8.0/2.0)][positive (2.0)]][negative (3.0/1.0)]]][positive (116.0/51.0)]]]]")); 
+//	System.out.println(tp.parseTreePrefix("qgrams§title|name: <= 0.105263, > 0.105263[negative (26.0/2.0)][trigrams§title|name: <= 0.2,> 0.2[jaccard§title|name: <= 0.083333,> 0.083333[negative (6.0/1.0)][positive (26.0/2.0)]][positive (816.0/2.0)]")); 
 	}
 
 
