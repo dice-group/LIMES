@@ -1,0 +1,7 @@
+rdfs:label	rdfs:label	string
+oaei2014:subject	oaei2014:subject	string
+oaei2014:author	oaei2014:author	string
+oaei2014:literaryGenre	oaei2014:literaryGenre	string
+oaei2014:genre	oaei2014:genre	string
+oaei2014:publisher	oaei2014:publisher	string
+oaei2014:subject	rdfs:label	strings

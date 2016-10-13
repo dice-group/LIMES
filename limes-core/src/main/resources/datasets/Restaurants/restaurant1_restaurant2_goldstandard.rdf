@@ -1,0 +1,917 @@
+<?xml version='1.0' encoding='utf-8' standalone='no'?>
+<rdf:RDF xmlns='http://knowledgeweb.semanticweb.org/heterogeneity/alignment#'
+         xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+         xmlns:xsd='http://www.w3.org/2001/XMLSchema#'
+         xmlns:align='http://knowledgeweb.semanticweb.org/heterogeneity/alignment#'>
+<Alignment>
+  <xml>yes</xml>
+  <level>0</level>
+  <type>**</type>
+  <onto1>
+    <Ontology>
+      <location>null</location>
+    </Ontology>
+  </onto1>
+  <onto2>
+    <Ontology>
+      <location>null</location>
+    </Ontology>
+  </onto2>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant0'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant0'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant1'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant1'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant2'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant2'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant3'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant3'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant4'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant4'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant5'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant5'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant6'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant6'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant7'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant7'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant8'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant8'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant9'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant9'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant10'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant10'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant11'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant11'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant12'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant12'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant13'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant13'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant14'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant14'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant15'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant15'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant16'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant16'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant17'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant17'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant18'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant18'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant19'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant19'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant20'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant20'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant21'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant21'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant22'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant22'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant23'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant23'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant24'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant24'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant25'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant25'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant26'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant26'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant27'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant27'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant28'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant28'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant29'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant29'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant30'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant30'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant31'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant31'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant32'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant32'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant33'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant33'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant34'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant34'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant35'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant35'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant36'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant36'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant37'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant37'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant38'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant38'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant39'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant39'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant40'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant40'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant41'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant41'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant42'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant42'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant43'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant43'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant44'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant44'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant45'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant45'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant46'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant46'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant47'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant47'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant48'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant48'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant49'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant49'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant50'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant50'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant51'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant51'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant52'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant52'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant53'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant53'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant54'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant54'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant55'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant55'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant56'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant56'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant57'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant57'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant58'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant58'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant59'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant59'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant60'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant60'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant61'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant61'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant62'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant62'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant63'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant63'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant64'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant64'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant65'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant65'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant66'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant66'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant67'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant67'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant68'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant68'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant69'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant69'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant70'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant70'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant71'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant71'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant72'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant72'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant73'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant73'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant74'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant74'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant75'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant75'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant76'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant76'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant77'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant77'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant78'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant78'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant79'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant79'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant80'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant80'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant81'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant81'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant82'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant82'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant83'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant83'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant84'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant84'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant85'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant85'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant86'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant86'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant87'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant87'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant88'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant88'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant89'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant89'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant90'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant90'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant91'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant91'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant92'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant92'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant93'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant93'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant94'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant94'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant95'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant95'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant96'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant96'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant97'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant97'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant98'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant98'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant99'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant99'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant100'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant100'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant101'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant101'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant102'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant102'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant103'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant103'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant104'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant104'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant105'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant105'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant106'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant106'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant107'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant107'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant108'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant108'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant109'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant109'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant110'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant110'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+ <map>
+   <Cell>
+      <entity1 rdf:resource='http://www.okkam.org/oaie/restaurant1-Restaurant111'/>
+      <entity2 rdf:resource='http://www.okkam.org/oaie/restaurant2-Restaurant111'/>
+      <relation>=</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+    </Cell>
+ </map>
+</Alignment>
+</rdf:RDF>

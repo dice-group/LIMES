@@ -1,0 +1,7 @@
+http://www.okkam.org/ontology_person1.owl#surname	http://www.okkam.org/ontology_person2.owl#surname	string
+http://www.okkam.org/ontology_person1.owl#has_address	http://www.okkam.org/ontology_person2.owl#has_address	string
+http://www.okkam.org/ontology_person1.owl#given_name	http://www.okkam.org/ontology_person2.owl#given_name	string
+http://www.okkam.org/ontology_person1.owl#phone_numer	http://www.okkam.org/ontology_person2.owl#phone_numer	String
+http://www.okkam.org/ontology_person1.owl#soc_sec_id	http://www.okkam.org/ontology_person2.owl#soc_sec_id	string
+http://www.okkam.org/ontology_person1.owl#age	http://www.okkam.org/ontology_person2.owl#age	string
+http://www.okkam.org/ontology_person1.owl#date_of_birth	http://www.okkam.org/ontology_person2.owl#date_of_birth	string

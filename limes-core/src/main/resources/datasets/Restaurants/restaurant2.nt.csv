@@ -1,0 +1,642 @@
+ID,http://www.okkam.org/ontology_restaurant2.owl#name,http://www.okkam.org/ontology_restaurant2.owl#has_address,http://www.okkam.org/ontology_restaurant2.owl#phone_number,http://www.okkam.org/ontology_restaurant2.owl#has_category
+http://www.okkam.org/oaie/restaurant2-Restaurant668,nicky blair's,http://www.okkam.org/oaie/restaurant2-address668,702-792-9900,http://www.okkam.org/oaie/restaurant2-category668
+http://www.okkam.org/oaie/restaurant2-Restaurant667,morton's of chicago (las vegas),http://www.okkam.org/oaie/restaurant2-address667,702-893-0703,http://www.okkam.org/oaie/restaurant2-category667
+http://www.okkam.org/oaie/restaurant2-Restaurant321,pamir,http://www.okkam.org/oaie/restaurant2-address321,212/644-9258,http://www.okkam.org/oaie/restaurant2-category321
+http://www.okkam.org/oaie/restaurant2-Restaurant669,piero's restaurant,http://www.okkam.org/oaie/restaurant2-address669,702-369-2305,http://www.okkam.org/oaie/restaurant2-category669
+http://www.okkam.org/oaie/restaurant2-Restaurant320,palio,http://www.okkam.org/oaie/restaurant2-address320,212/245-4850,http://www.okkam.org/oaie/restaurant2-category320
+http://www.okkam.org/oaie/restaurant2-Restaurant323,patria,http://www.okkam.org/oaie/restaurant2-address323,212/777-6211,http://www.okkam.org/oaie/restaurant2-category323
+http://www.okkam.org/oaie/restaurant2-Restaurant322,parioli romanissimo,http://www.okkam.org/oaie/restaurant2-address322,212/288-2391,http://www.okkam.org/oaie/restaurant2-category322
+http://www.okkam.org/oaie/restaurant2-Restaurant469,faz,http://www.okkam.org/oaie/restaurant2-address469,415/362-0404,http://www.okkam.org/oaie/restaurant2-category469
+http://www.okkam.org/oaie/restaurant2-Restaurant325,pen & pencil,http://www.okkam.org/oaie/restaurant2-address325,212/682-8660,http://www.okkam.org/oaie/restaurant2-category325
+http://www.okkam.org/oaie/restaurant2-Restaurant324,peacock alley,http://www.okkam.org/oaie/restaurant2-address324,212/872-4895,http://www.okkam.org/oaie/restaurant2-category324
+http://www.okkam.org/oaie/restaurant2-Restaurant660,fiore rotisserie & grille,http://www.okkam.org/oaie/restaurant2-address660,702-252-7702,http://www.okkam.org/oaie/restaurant2-category660
+http://www.okkam.org/oaie/restaurant2-Restaurant327,persepolis,http://www.okkam.org/oaie/restaurant2-address327,212/535-1100,http://www.okkam.org/oaie/restaurant2-category327
+http://www.okkam.org/oaie/restaurant2-Restaurant271,ipanema,http://www.okkam.org/oaie/restaurant2-address271,212/730-5848,http://www.okkam.org/oaie/restaurant2-category271
+http://www.okkam.org/oaie/restaurant2-Restaurant466,chevys,http://www.okkam.org/oaie/restaurant2-address466,415/543-8060,http://www.okkam.org/oaie/restaurant2-category466
+http://www.okkam.org/oaie/restaurant2-Restaurant326,penang soho,http://www.okkam.org/oaie/restaurant2-address326,212/274-8883,http://www.okkam.org/oaie/restaurant2-category326
+http://www.okkam.org/oaie/restaurant2-Restaurant270,internet cafe,http://www.okkam.org/oaie/restaurant2-address270,212/ 614-0747,http://www.okkam.org/oaie/restaurant2-category270
+http://www.okkam.org/oaie/restaurant2-Restaurant465,carta,http://www.okkam.org/oaie/restaurant2-address465,415/863-3516,http://www.okkam.org/oaie/restaurant2-category465
+http://www.okkam.org/oaie/restaurant2-Restaurant662,madame ching's,http://www.okkam.org/oaie/restaurant2-address662,702-894-7111,http://www.okkam.org/oaie/restaurant2-category662
+http://www.okkam.org/oaie/restaurant2-Restaurant329,pomaire,http://www.okkam.org/oaie/restaurant2-address329,212/ 956-3055,http://www.okkam.org/oaie/restaurant2-category329
+http://www.okkam.org/oaie/restaurant2-Restaurant273,jewel of india,http://www.okkam.org/oaie/restaurant2-address273,212/869-5544,http://www.okkam.org/oaie/restaurant2-category273
+http://www.okkam.org/oaie/restaurant2-Restaurant468,des alpes,http://www.okkam.org/oaie/restaurant2-address468,415/788-9900,http://www.okkam.org/oaie/restaurant2-category468
+http://www.okkam.org/oaie/restaurant2-Restaurant661,hugo's cellar,http://www.okkam.org/oaie/restaurant2-address661,702-385-4011,http://www.okkam.org/oaie/restaurant2-category661
+http://www.okkam.org/oaie/restaurant2-Restaurant328,planet hollywood,http://www.okkam.org/oaie/restaurant2-address328,212/333-7827,http://www.okkam.org/oaie/restaurant2-category328
+http://www.okkam.org/oaie/restaurant2-Restaurant272,jean lafitte,http://www.okkam.org/oaie/restaurant2-address272,212/751-2323,http://www.okkam.org/oaie/restaurant2-category272
+http://www.okkam.org/oaie/restaurant2-Restaurant467,cypress club,http://www.okkam.org/oaie/restaurant2-address467,415/296-8555,http://www.okkam.org/oaie/restaurant2-category467
+http://www.okkam.org/oaie/restaurant2-Restaurant664,michael's (las vegas),http://www.okkam.org/oaie/restaurant2-address664,702-737-7111,http://www.okkam.org/oaie/restaurant2-category664
+http://www.okkam.org/oaie/restaurant2-Restaurant462,cafe marimba,http://www.okkam.org/oaie/restaurant2-address462,415/776-1506,http://www.okkam.org/oaie/restaurant2-category462
+http://www.okkam.org/oaie/restaurant2-Restaurant663,mayflower cuisinier,http://www.okkam.org/oaie/restaurant2-address663,702-870-8432,http://www.okkam.org/oaie/restaurant2-category663
+http://www.okkam.org/oaie/restaurant2-Restaurant461,cafe adriano,http://www.okkam.org/oaie/restaurant2-address461,415/474-4180,http://www.okkam.org/oaie/restaurant2-category461
+http://www.okkam.org/oaie/restaurant2-Restaurant666,moongate,http://www.okkam.org/oaie/restaurant2-address666,702-791-7352,http://www.okkam.org/oaie/restaurant2-category666
+http://www.okkam.org/oaie/restaurant2-Restaurant464,capp's corner,http://www.okkam.org/oaie/restaurant2-address464,415/989-2589,http://www.okkam.org/oaie/restaurant2-category464
+http://www.okkam.org/oaie/restaurant2-Restaurant665,monte carlo,http://www.okkam.org/oaie/restaurant2-address665,702-733-4524,http://www.okkam.org/oaie/restaurant2-category665
+http://www.okkam.org/oaie/restaurant2-Restaurant463,california culinary academy,http://www.okkam.org/oaie/restaurant2-address463,415/771-3500,http://www.okkam.org/oaie/restaurant2-category463
+http://www.okkam.org/oaie/restaurant2-Restaurant267,il nido,http://www.okkam.org/oaie/restaurant2-address267,212/753-8450,http://www.okkam.org/oaie/restaurant2-category267
+http://www.okkam.org/oaie/restaurant2-Restaurant268,inca grill,http://www.okkam.org/oaie/restaurant2-address268,212/966-3371,http://www.okkam.org/oaie/restaurant2-category268
+http://www.okkam.org/oaie/restaurant2-Restaurant269,indochine,http://www.okkam.org/oaie/restaurant2-address269,212/505-5111,http://www.okkam.org/oaie/restaurant2-category269
+http://www.okkam.org/oaie/restaurant2-Restaurant470,fog city diner,http://www.okkam.org/oaie/restaurant2-address470,415/982-2000,http://www.okkam.org/oaie/restaurant2-category470
+http://www.okkam.org/oaie/restaurant2-Restaurant471,garden court,http://www.okkam.org/oaie/restaurant2-address471,415/546-5011,http://www.okkam.org/oaie/restaurant2-category471
+http://www.okkam.org/oaie/restaurant2-Restaurant263,home,http://www.okkam.org/oaie/restaurant2-address263,212/243-9579,http://www.okkam.org/oaie/restaurant2-category263
+http://www.okkam.org/oaie/restaurant2-Restaurant264,hudson river club,http://www.okkam.org/oaie/restaurant2-address264,212/786-1500,http://www.okkam.org/oaie/restaurant2-category264
+http://www.okkam.org/oaie/restaurant2-Restaurant265,i trulli,http://www.okkam.org/oaie/restaurant2-address265,212/481-7372,http://www.okkam.org/oaie/restaurant2-category265
+http://www.okkam.org/oaie/restaurant2-Restaurant266,il cortile,http://www.okkam.org/oaie/restaurant2-address266,212/226-6060,http://www.okkam.org/oaie/restaurant2-category266
+http://www.okkam.org/oaie/restaurant2-Restaurant332,rain,http://www.okkam.org/oaie/restaurant2-address332,212/501-0776,http://www.okkam.org/oaie/restaurant2-category332
+http://www.okkam.org/oaie/restaurant2-Restaurant331,post house,http://www.okkam.org/oaie/restaurant2-address331,212/935-2888,http://www.okkam.org/oaie/restaurant2-category331
+http://www.okkam.org/oaie/restaurant2-Restaurant330,popover cafe,http://www.okkam.org/oaie/restaurant2-address330,212/595-8555,http://www.okkam.org/oaie/restaurant2-category330
+http://www.okkam.org/oaie/restaurant2-Restaurant679,bistro  the,http://www.okkam.org/oaie/restaurant2-address679,404-231-5733,http://www.okkam.org/oaie/restaurant2-category679
+http://www.okkam.org/oaie/restaurant2-Restaurant678,barbecue kitchen,http://www.okkam.org/oaie/restaurant2-address678,404-766-9906,http://www.okkam.org/oaie/restaurant2-category678
+http://www.okkam.org/oaie/restaurant2-Restaurant336,roettelle a. g,http://www.okkam.org/oaie/restaurant2-address336,212/674-4140,http://www.okkam.org/oaie/restaurant2-category336
+http://www.okkam.org/oaie/restaurant2-Restaurant335,republic,http://www.okkam.org/oaie/restaurant2-address335,212/627-7172,http://www.okkam.org/oaie/restaurant2-category335
+http://www.okkam.org/oaie/restaurant2-Restaurant334,remi,http://www.okkam.org/oaie/restaurant2-address334,212/581-4242,http://www.okkam.org/oaie/restaurant2-category334
+http://www.okkam.org/oaie/restaurant2-Restaurant333,red tulip,http://www.okkam.org/oaie/restaurant2-address333,212/734-4893,http://www.okkam.org/oaie/restaurant2-category333
+http://www.okkam.org/oaie/restaurant2-Restaurant479,helmand,http://www.okkam.org/oaie/restaurant2-address479,415/362-0641,http://www.okkam.org/oaie/restaurant2-category479
+http://www.okkam.org/oaie/restaurant2-Restaurant673,sterling brunch,http://www.okkam.org/oaie/restaurant2-address673,702-739-4651,http://www.okkam.org/oaie/restaurant2-category673
+http://www.okkam.org/oaie/restaurant2-Restaurant284,layla,http://www.okkam.org/oaie/restaurant2-address284,212/431-0700,http://www.okkam.org/oaie/restaurant2-category284
+http://www.okkam.org/oaie/restaurant2-Restaurant339,s.p.q.r,http://www.okkam.org/oaie/restaurant2-address339,212/925-3120,http://www.okkam.org/oaie/restaurant2-category339
+http://www.okkam.org/oaie/restaurant2-Restaurant478,hayes street grill,http://www.okkam.org/oaie/restaurant2-address478,415/863-5545,http://www.okkam.org/oaie/restaurant2-category478
+http://www.okkam.org/oaie/restaurant2-Restaurant283,lattanzi ristorante,http://www.okkam.org/oaie/restaurant2-address283,212/315-0980,http://www.okkam.org/oaie/restaurant2-category283
+http://www.okkam.org/oaie/restaurant2-Restaurant672,stefano's,http://www.okkam.org/oaie/restaurant2-address672,702-385-7111,http://www.okkam.org/oaie/restaurant2-category672
+http://www.okkam.org/oaie/restaurant2-Restaurant338,ruth's chris,http://www.okkam.org/oaie/restaurant2-address338,212/245-9600,http://www.okkam.org/oaie/restaurant2-category338
+http://www.okkam.org/oaie/restaurant2-Restaurant477,harry denton's,http://www.okkam.org/oaie/restaurant2-address477,415/882-1333,http://www.okkam.org/oaie/restaurant2-category477
+http://www.okkam.org/oaie/restaurant2-Restaurant671,steakhouse  the,http://www.okkam.org/oaie/restaurant2-address671,702-382-1600,http://www.okkam.org/oaie/restaurant2-category671
+http://www.okkam.org/oaie/restaurant2-Restaurant282,lanza restaurant,http://www.okkam.org/oaie/restaurant2-address282,212/674-7014,http://www.okkam.org/oaie/restaurant2-category282
+http://www.okkam.org/oaie/restaurant2-Restaurant337,rosa mexicano,http://www.okkam.org/oaie/restaurant2-address337,212/753-7407,http://www.okkam.org/oaie/restaurant2-category337
+http://www.okkam.org/oaie/restaurant2-Restaurant476,harris',http://www.okkam.org/oaie/restaurant2-address476,415/673-1888,http://www.okkam.org/oaie/restaurant2-category476
+http://www.okkam.org/oaie/restaurant2-Restaurant281,la reserve,http://www.okkam.org/oaie/restaurant2-address281,212/247-2993,http://www.okkam.org/oaie/restaurant2-category281
+http://www.okkam.org/oaie/restaurant2-Restaurant670,spago (las vegas),http://www.okkam.org/oaie/restaurant2-address670,702-369-6300,http://www.okkam.org/oaie/restaurant2-category670
+http://www.okkam.org/oaie/restaurant2-Restaurant475,harbor village,http://www.okkam.org/oaie/restaurant2-address475,415/781-8833,http://www.okkam.org/oaie/restaurant2-category475
+http://www.okkam.org/oaie/restaurant2-Restaurant280,l'udo,http://www.okkam.org/oaie/restaurant2-address280,212/388-0978,http://www.okkam.org/oaie/restaurant2-category280
+http://www.okkam.org/oaie/restaurant2-Restaurant677,baker's cajun cafe,http://www.okkam.org/oaie/restaurant2-address677,404-223-5039,http://www.okkam.org/oaie/restaurant2-category677
+http://www.okkam.org/oaie/restaurant2-Restaurant676,alon's at the terrace,http://www.okkam.org/oaie/restaurant2-address676,404-724-0444,http://www.okkam.org/oaie/restaurant2-category676
+http://www.okkam.org/oaie/restaurant2-Restaurant474,greens,http://www.okkam.org/oaie/restaurant2-address474,415/771-6222,http://www.okkam.org/oaie/restaurant2-category474
+http://www.okkam.org/oaie/restaurant2-Restaurant675,103 west,http://www.okkam.org/oaie/restaurant2-address675,404-233-5993,http://www.okkam.org/oaie/restaurant2-category675
+http://www.okkam.org/oaie/restaurant2-Restaurant473,grand cafe hotel monaco,http://www.okkam.org/oaie/restaurant2-address473,415/292-0101,http://www.okkam.org/oaie/restaurant2-category473
+http://www.okkam.org/oaie/restaurant2-Restaurant674,tre visi,http://www.okkam.org/oaie/restaurant2-address674,702-891-7331,http://www.okkam.org/oaie/restaurant2-category674
+http://www.okkam.org/oaie/restaurant2-Restaurant472,gaylord's,http://www.okkam.org/oaie/restaurant2-address472,415/771-8822,http://www.okkam.org/oaie/restaurant2-category472
+http://www.okkam.org/oaie/restaurant2-Restaurant481,hong kong villa,http://www.okkam.org/oaie/restaurant2-address481,415/752-8833,http://www.okkam.org/oaie/restaurant2-category481
+http://www.okkam.org/oaie/restaurant2-Restaurant482,hyde street bistro,http://www.okkam.org/oaie/restaurant2-address482,415/441-7778,http://www.okkam.org/oaie/restaurant2-category482
+http://www.okkam.org/oaie/restaurant2-Restaurant278,l'auberge,http://www.okkam.org/oaie/restaurant2-address278,212/288-8791,http://www.okkam.org/oaie/restaurant2-category278
+http://www.okkam.org/oaie/restaurant2-Restaurant480,hong kong flower lounge,http://www.okkam.org/oaie/restaurant2-address480,415/668-8998,http://www.okkam.org/oaie/restaurant2-category480
+http://www.okkam.org/oaie/restaurant2-Restaurant279,l'auberge du midi,http://www.okkam.org/oaie/restaurant2-address279,212/242-4705,http://www.okkam.org/oaie/restaurant2-category279
+http://www.okkam.org/oaie/restaurant2-Restaurant276,judson grill,http://www.okkam.org/oaie/restaurant2-address276,212/582-5252,http://www.okkam.org/oaie/restaurant2-category276
+http://www.okkam.org/oaie/restaurant2-Restaurant277,l'absinthe,http://www.okkam.org/oaie/restaurant2-address277,212/794-4950,http://www.okkam.org/oaie/restaurant2-category277
+http://www.okkam.org/oaie/restaurant2-Restaurant680,bobby & june's kountry kitchen,http://www.okkam.org/oaie/restaurant2-address680,404-876-3872,http://www.okkam.org/oaie/restaurant2-category680
+http://www.okkam.org/oaie/restaurant2-Restaurant274,jimmy sung's,http://www.okkam.org/oaie/restaurant2-address274,212/682-5678,http://www.okkam.org/oaie/restaurant2-category274
+http://www.okkam.org/oaie/restaurant2-Restaurant275,joe allen,http://www.okkam.org/oaie/restaurant2-address275,212/581-6464,http://www.okkam.org/oaie/restaurant2-category275
+http://www.okkam.org/oaie/restaurant2-Restaurant448,ralph's diner,http://www.okkam.org/oaie/restaurant2-address448,702/732-6330,http://www.okkam.org/oaie/restaurant2-category448
+http://www.okkam.org/oaie/restaurant2-Restaurant345,sea grill,http://www.okkam.org/oaie/restaurant2-address345,212/332-7610,http://www.okkam.org/oaie/restaurant2-category345
+http://www.okkam.org/oaie/restaurant2-Restaurant447,pamplemousse,http://www.okkam.org/oaie/restaurant2-address447,702/733-2066,http://www.okkam.org/oaie/restaurant2-category447
+http://www.okkam.org/oaie/restaurant2-Restaurant649,thailand restaurant,http://www.okkam.org/oaie/restaurant2-address649,212-349-3132,http://www.okkam.org/oaie/restaurant2-category649
+http://www.okkam.org/oaie/restaurant2-Restaurant344,sarabeth's kitchen,http://www.okkam.org/oaie/restaurant2-address344,212/496-6280,http://www.okkam.org/oaie/restaurant2-category344
+http://www.okkam.org/oaie/restaurant2-Restaurant347,seventh regiment mess and bar,http://www.okkam.org/oaie/restaurant2-address347,212/744-4107,http://www.okkam.org/oaie/restaurant2-category347
+http://www.okkam.org/oaie/restaurant2-Restaurant449,the bacchanal,http://www.okkam.org/oaie/restaurant2-address449,702/731-7525,http://www.okkam.org/oaie/restaurant2-category449
+http://www.okkam.org/oaie/restaurant2-Restaurant346,serendipity,http://www.okkam.org/oaie/restaurant2-address346,212/838-3531,http://www.okkam.org/oaie/restaurant2-category346
+http://www.okkam.org/oaie/restaurant2-Restaurant341,sammy's roumanian steak house,http://www.okkam.org/oaie/restaurant2-address341,212/673-0330,http://www.okkam.org/oaie/restaurant2-category341
+http://www.okkam.org/oaie/restaurant2-Restaurant646,szechuan kitchen,http://www.okkam.org/oaie/restaurant2-address646,212-249-4615,http://www.okkam.org/oaie/restaurant2-category646
+http://www.okkam.org/oaie/restaurant2-Restaurant340,sal anthony's,http://www.okkam.org/oaie/restaurant2-address340,212/982-9030,http://www.okkam.org/oaie/restaurant2-category340
+http://www.okkam.org/oaie/restaurant2-Restaurant645,szechuan hunan cottage,http://www.okkam.org/oaie/restaurant2-address645,212-535-5223,http://www.okkam.org/oaie/restaurant2-category645
+http://www.okkam.org/oaie/restaurant2-Restaurant343,sant ambroeus,http://www.okkam.org/oaie/restaurant2-address343,212/570-2211,http://www.okkam.org/oaie/restaurant2-category343
+http://www.okkam.org/oaie/restaurant2-Restaurant648,thai house cafe,http://www.okkam.org/oaie/restaurant2-address648,212-334-1085,http://www.okkam.org/oaie/restaurant2-category648
+http://www.okkam.org/oaie/restaurant2-Restaurant342,san pietro,http://www.okkam.org/oaie/restaurant2-address342,212/753-9015,http://www.okkam.org/oaie/restaurant2-category342
+http://www.okkam.org/oaie/restaurant2-Restaurant647,teresa's,http://www.okkam.org/oaie/restaurant2-address647,718-520-2910,http://www.okkam.org/oaie/restaurant2-category647
+http://www.okkam.org/oaie/restaurant2-Restaurant440,golden nugget hotel,http://www.okkam.org/oaie/restaurant2-address440,702/385-7111,http://www.okkam.org/oaie/restaurant2-category440
+http://www.okkam.org/oaie/restaurant2-Restaurant642,stick to your ribs,http://www.okkam.org/oaie/restaurant2-address642,718-937-3030,http://www.okkam.org/oaie/restaurant2-category642
+http://www.okkam.org/oaie/restaurant2-Restaurant641,sparks steak house,http://www.okkam.org/oaie/restaurant2-address641,212-687-4855,http://www.okkam.org/oaie/restaurant2-category641
+http://www.okkam.org/oaie/restaurant2-Restaurant442,lillie langtry's,http://www.okkam.org/oaie/restaurant2-address442,702/385-7111,http://www.okkam.org/oaie/restaurant2-category442
+http://www.okkam.org/oaie/restaurant2-Restaurant644,sylvia's,http://www.okkam.org/oaie/restaurant2-address644,212-996-0660,http://www.okkam.org/oaie/restaurant2-category644
+http://www.okkam.org/oaie/restaurant2-Restaurant441,golden steer,http://www.okkam.org/oaie/restaurant2-address441,702/384-4470,http://www.okkam.org/oaie/restaurant2-category441
+http://www.okkam.org/oaie/restaurant2-Restaurant643,sushisay,http://www.okkam.org/oaie/restaurant2-address643,212-755-1780,http://www.okkam.org/oaie/restaurant2-category643
+http://www.okkam.org/oaie/restaurant2-Restaurant444,margarita's mexican cantina,http://www.okkam.org/oaie/restaurant2-address444,702/794-8200,http://www.okkam.org/oaie/restaurant2-category444
+http://www.okkam.org/oaie/restaurant2-Restaurant349,shaan,http://www.okkam.org/oaie/restaurant2-address349,212/ 977-8400,http://www.okkam.org/oaie/restaurant2-category349
+http://www.okkam.org/oaie/restaurant2-Restaurant443,mandarin court,http://www.okkam.org/oaie/restaurant2-address443,702/737-1234,http://www.okkam.org/oaie/restaurant2-category443
+http://www.okkam.org/oaie/restaurant2-Restaurant348,sfuzzi,http://www.okkam.org/oaie/restaurant2-address348,212/873-3700,http://www.okkam.org/oaie/restaurant2-category348
+http://www.okkam.org/oaie/restaurant2-Restaurant446,mikado,http://www.okkam.org/oaie/restaurant2-address446,702/791-7111,http://www.okkam.org/oaie/restaurant2-category446
+http://www.okkam.org/oaie/restaurant2-Restaurant251,frico bar,http://www.okkam.org/oaie/restaurant2-address251,212/564-7272,http://www.okkam.org/oaie/restaurant2-category251
+http://www.okkam.org/oaie/restaurant2-Restaurant640,sarabeth's,http://www.okkam.org/oaie/restaurant2-address640,212-410-7335,http://www.okkam.org/oaie/restaurant2-category640
+http://www.okkam.org/oaie/restaurant2-Restaurant445,mary's diner,http://www.okkam.org/oaie/restaurant2-address445,702/454-8073,http://www.okkam.org/oaie/restaurant2-category445
+http://www.okkam.org/oaie/restaurant2-Restaurant250,french roast cafe,http://www.okkam.org/oaie/restaurant2-address250,212/799-1533,http://www.okkam.org/oaie/restaurant2-category250
+http://www.okkam.org/oaie/restaurant2-Restaurant241,fiorello's roman cafe,http://www.okkam.org/oaie/restaurant2-address241,212/595-5330,http://www.okkam.org/oaie/restaurant2-category241
+http://www.okkam.org/oaie/restaurant2-Restaurant242,firehouse,http://www.okkam.org/oaie/restaurant2-address242,212/595-3139,http://www.okkam.org/oaie/restaurant2-category242
+http://www.okkam.org/oaie/restaurant2-Restaurant243,first,http://www.okkam.org/oaie/restaurant2-address243,212/674-3823,http://www.okkam.org/oaie/restaurant2-category243
+http://www.okkam.org/oaie/restaurant2-Restaurant244,fishin eddie,http://www.okkam.org/oaie/restaurant2-address244,212/874-3474,http://www.okkam.org/oaie/restaurant2-category244
+http://www.okkam.org/oaie/restaurant2-Restaurant245,fleur de jour,http://www.okkam.org/oaie/restaurant2-address245,212/355-2020,http://www.okkam.org/oaie/restaurant2-category245
+http://www.okkam.org/oaie/restaurant2-Restaurant246,flowers,http://www.okkam.org/oaie/restaurant2-address246,212/691-8888,http://www.okkam.org/oaie/restaurant2-category246
+http://www.okkam.org/oaie/restaurant2-Restaurant247,follonico,http://www.okkam.org/oaie/restaurant2-address247,212/691-6359,http://www.okkam.org/oaie/restaurant2-category247
+http://www.okkam.org/oaie/restaurant2-Restaurant248,fraunces tavern,http://www.okkam.org/oaie/restaurant2-address248,212/269-0144,http://www.okkam.org/oaie/restaurant2-category248
+http://www.okkam.org/oaie/restaurant2-Restaurant249,french roast,http://www.okkam.org/oaie/restaurant2-address249,212/533-2233,http://www.okkam.org/oaie/restaurant2-category249
+http://www.okkam.org/oaie/restaurant2-Restaurant350,sofia fabulous pizza,http://www.okkam.org/oaie/restaurant2-address350,212/734-2676,http://www.okkam.org/oaie/restaurant2-category350
+http://www.okkam.org/oaie/restaurant2-Restaurant358,teresa's,http://www.okkam.org/oaie/restaurant2-address358,212/228-0604,http://www.okkam.org/oaie/restaurant2-category358
+http://www.okkam.org/oaie/restaurant2-Restaurant357,tapika,http://www.okkam.org/oaie/restaurant2-address357,212/ 397-3737,http://www.okkam.org/oaie/restaurant2-category357
+http://www.okkam.org/oaie/restaurant2-Restaurant459,bizou,http://www.okkam.org/oaie/restaurant2-address459,415/543-2222,http://www.okkam.org/oaie/restaurant2-category459
+http://www.okkam.org/oaie/restaurant2-Restaurant356,tang pavillion,http://www.okkam.org/oaie/restaurant2-address356,212/956-6888,http://www.okkam.org/oaie/restaurant2-category356
+http://www.okkam.org/oaie/restaurant2-Restaurant458,bix,http://www.okkam.org/oaie/restaurant2-address458,415/433-6300,http://www.okkam.org/oaie/restaurant2-category458
+http://www.okkam.org/oaie/restaurant2-Restaurant355,t salon,http://www.okkam.org/oaie/restaurant2-address355,212/925-3700,http://www.okkam.org/oaie/restaurant2-category355
+http://www.okkam.org/oaie/restaurant2-Restaurant659,emeril's new orleans fish house,http://www.okkam.org/oaie/restaurant2-address659,702-891-7374,http://www.okkam.org/oaie/restaurant2-category659
+http://www.okkam.org/oaie/restaurant2-Restaurant354,sweet'n'tart cafe,http://www.okkam.org/oaie/restaurant2-address354,212/334-8088,http://www.okkam.org/oaie/restaurant2-category354
+http://www.okkam.org/oaie/restaurant2-Restaurant658,buzio's in the rio,http://www.okkam.org/oaie/restaurant2-address658,702-252-7697,http://www.okkam.org/oaie/restaurant2-category658
+http://www.okkam.org/oaie/restaurant2-Restaurant353,stingray,http://www.okkam.org/oaie/restaurant2-address353,212/501-7515,http://www.okkam.org/oaie/restaurant2-category353
+http://www.okkam.org/oaie/restaurant2-Restaurant657,buccaneer bay club,http://www.okkam.org/oaie/restaurant2-address657,702-894-7350,http://www.okkam.org/oaie/restaurant2-category657
+http://www.okkam.org/oaie/restaurant2-Restaurant352,stage deli,http://www.okkam.org/oaie/restaurant2-address352,212/245-7850,http://www.okkam.org/oaie/restaurant2-category352
+http://www.okkam.org/oaie/restaurant2-Restaurant656,andre's french restaurant,http://www.okkam.org/oaie/restaurant2-address656,702-385-5016,http://www.okkam.org/oaie/restaurant2-category656
+http://www.okkam.org/oaie/restaurant2-Restaurant351,spring street natural restaurant & bar,http://www.okkam.org/oaie/restaurant2-address351,212/966-0290,http://www.okkam.org/oaie/restaurant2-category351
+http://www.okkam.org/oaie/restaurant2-Restaurant655,zarela,http://www.okkam.org/oaie/restaurant2-address655,212-644-6740,http://www.okkam.org/oaie/restaurant2-category655
+http://www.okkam.org/oaie/restaurant2-Restaurant453,2223,http://www.okkam.org/oaie/restaurant2-address453,415/431-0692,http://www.okkam.org/oaie/restaurant2-category453
+http://www.okkam.org/oaie/restaurant2-Restaurant654,yama,http://www.okkam.org/oaie/restaurant2-address654,212-475-0969,http://www.okkam.org/oaie/restaurant2-category654
+http://www.okkam.org/oaie/restaurant2-Restaurant452,yolie's,http://www.okkam.org/oaie/restaurant2-address452,702/794-0700,http://www.okkam.org/oaie/restaurant2-category452
+http://www.okkam.org/oaie/restaurant2-Restaurant653,wollensky's grill,http://www.okkam.org/oaie/restaurant2-address653,212-753-0444,http://www.okkam.org/oaie/restaurant2-category653
+http://www.okkam.org/oaie/restaurant2-Restaurant451,viva mercado's,http://www.okkam.org/oaie/restaurant2-address451,702/871-8826,http://www.okkam.org/oaie/restaurant2-category451
+http://www.okkam.org/oaie/restaurant2-Restaurant652,windows on the world,http://www.okkam.org/oaie/restaurant2-address652,212-524-7000,http://www.okkam.org/oaie/restaurant2-category652
+http://www.okkam.org/oaie/restaurant2-Restaurant450,venetian,http://www.okkam.org/oaie/restaurant2-address450,702/876-4190,http://www.okkam.org/oaie/restaurant2-category450
+http://www.okkam.org/oaie/restaurant2-Restaurant262,hi-life restaurant and lounge,http://www.okkam.org/oaie/restaurant2-address262,212/249-3600,http://www.okkam.org/oaie/restaurant2-category262
+http://www.okkam.org/oaie/restaurant2-Restaurant651,westside cottage,http://www.okkam.org/oaie/restaurant2-address651,212-245-0800,http://www.okkam.org/oaie/restaurant2-category651
+http://www.okkam.org/oaie/restaurant2-Restaurant457,bistro roti,http://www.okkam.org/oaie/restaurant2-address457,415/495-6500,http://www.okkam.org/oaie/restaurant2-category457
+http://www.okkam.org/oaie/restaurant2-Restaurant261,hard rock cafe,http://www.okkam.org/oaie/restaurant2-address261,212/489-6565,http://www.okkam.org/oaie/restaurant2-category261
+http://www.okkam.org/oaie/restaurant2-Restaurant650,veselka,http://www.okkam.org/oaie/restaurant2-address650,212-228-9682,http://www.okkam.org/oaie/restaurant2-category650
+http://www.okkam.org/oaie/restaurant2-Restaurant456,betelnut,http://www.okkam.org/oaie/restaurant2-address456,415/929-8855,http://www.okkam.org/oaie/restaurant2-category456
+http://www.okkam.org/oaie/restaurant2-Restaurant260,halcyon,http://www.okkam.org/oaie/restaurant2-address260,212/468-8888,http://www.okkam.org/oaie/restaurant2-category260
+http://www.okkam.org/oaie/restaurant2-Restaurant455,bardelli's,http://www.okkam.org/oaie/restaurant2-address455,415/982-0243,http://www.okkam.org/oaie/restaurant2-category455
+http://www.okkam.org/oaie/restaurant2-Restaurant454,acquarello,http://www.okkam.org/oaie/restaurant2-address454,415/567-5432,http://www.okkam.org/oaie/restaurant2-category454
+http://www.okkam.org/oaie/restaurant2-Restaurant359,terrace,http://www.okkam.org/oaie/restaurant2-address359,212/666-9490,http://www.okkam.org/oaie/restaurant2-category359
+http://www.okkam.org/oaie/restaurant2-Restaurant254,gallagher's,http://www.okkam.org/oaie/restaurant2-address254,212/245-5336,http://www.okkam.org/oaie/restaurant2-category254
+http://www.okkam.org/oaie/restaurant2-Restaurant255,gianni's,http://www.okkam.org/oaie/restaurant2-address255,212/608-7300,http://www.okkam.org/oaie/restaurant2-category255
+http://www.okkam.org/oaie/restaurant2-Restaurant252,fujiyama mama,http://www.okkam.org/oaie/restaurant2-address252,212/769-1144,http://www.okkam.org/oaie/restaurant2-category252
+http://www.okkam.org/oaie/restaurant2-Restaurant253,gabriela's,http://www.okkam.org/oaie/restaurant2-address253,212/961-0574,http://www.okkam.org/oaie/restaurant2-category253
+http://www.okkam.org/oaie/restaurant2-Restaurant258,golden unicorn,http://www.okkam.org/oaie/restaurant2-address258,212/ 941-0911,http://www.okkam.org/oaie/restaurant2-category258
+http://www.okkam.org/oaie/restaurant2-Restaurant259,grand ticino,http://www.okkam.org/oaie/restaurant2-address259,212/777-5922,http://www.okkam.org/oaie/restaurant2-category259
+http://www.okkam.org/oaie/restaurant2-Restaurant460,buca giovanni,http://www.okkam.org/oaie/restaurant2-address460,415/776-7766,http://www.okkam.org/oaie/restaurant2-category460
+http://www.okkam.org/oaie/restaurant2-Restaurant256,girafe,http://www.okkam.org/oaie/restaurant2-address256,212/752-3054,http://www.okkam.org/oaie/restaurant2-category256
+http://www.okkam.org/oaie/restaurant2-Restaurant257,global,http://www.okkam.org/oaie/restaurant2-address257,212/477-8427,http://www.okkam.org/oaie/restaurant2-category257
+http://www.okkam.org/oaie/restaurant2-Restaurant360,the coffee pot,http://www.okkam.org/oaie/restaurant2-address360,212/265-3566,http://www.okkam.org/oaie/restaurant2-category360
+http://www.okkam.org/oaie/restaurant2-Restaurant361,the savannah club,http://www.okkam.org/oaie/restaurant2-address361,212/496-1066,http://www.okkam.org/oaie/restaurant2-category361
+http://www.okkam.org/oaie/restaurant2-Restaurant726,doidge's,http://www.okkam.org/oaie/restaurant2-address726,415-921-2149,http://www.okkam.org/oaie/restaurant2-category726
+http://www.okkam.org/oaie/restaurant2-Restaurant727,dottie's true blue cafe,http://www.okkam.org/oaie/restaurant2-address727,415-885-2767,http://www.okkam.org/oaie/restaurant2-category727
+http://www.okkam.org/oaie/restaurant2-Restaurant728,dusit thai,http://www.okkam.org/oaie/restaurant2-address728,415-826-4639,http://www.okkam.org/oaie/restaurant2-category728
+http://www.okkam.org/oaie/restaurant2-Restaurant729,ebisu,http://www.okkam.org/oaie/restaurant2-address729,415-566-1770,http://www.okkam.org/oaie/restaurant2-category729
+http://www.okkam.org/oaie/restaurant2-Restaurant722,cafe flore,http://www.okkam.org/oaie/restaurant2-address722,415-621-8579,http://www.okkam.org/oaie/restaurant2-category722
+http://www.okkam.org/oaie/restaurant2-Restaurant620,kiev,http://www.okkam.org/oaie/restaurant2-address620,212-674-4040,http://www.okkam.org/oaie/restaurant2-category620
+http://www.okkam.org/oaie/restaurant2-Restaurant723,caffe greco,http://www.okkam.org/oaie/restaurant2-address723,415-397-6261,http://www.okkam.org/oaie/restaurant2-category723
+http://www.okkam.org/oaie/restaurant2-Restaurant621,kuruma zushi,http://www.okkam.org/oaie/restaurant2-address621,212-317-2802,http://www.okkam.org/oaie/restaurant2-category621
+http://www.okkam.org/oaie/restaurant2-Restaurant724,campo santo,http://www.okkam.org/oaie/restaurant2-address724,415-433-9623,http://www.okkam.org/oaie/restaurant2-category724
+http://www.okkam.org/oaie/restaurant2-Restaurant622,la caridad,http://www.okkam.org/oaie/restaurant2-address622,212-874-2780,http://www.okkam.org/oaie/restaurant2-category622
+http://www.okkam.org/oaie/restaurant2-Restaurant725,cha cha cha's,http://www.okkam.org/oaie/restaurant2-address725,415-386-5758,http://www.okkam.org/oaie/restaurant2-category725
+http://www.okkam.org/oaie/restaurant2-Restaurant623,la grenouille,http://www.okkam.org/oaie/restaurant2-address623,212-752-1495,http://www.okkam.org/oaie/restaurant2-category623
+http://www.okkam.org/oaie/restaurant2-Restaurant362,trattoria dell'arte,http://www.okkam.org/oaie/restaurant2-address362,212/245-9800,http://www.okkam.org/oaie/restaurant2-category362
+http://www.okkam.org/oaie/restaurant2-Restaurant624,lemongrass grill,http://www.okkam.org/oaie/restaurant2-address624,718-399-7100,http://www.okkam.org/oaie/restaurant2-category624
+http://www.okkam.org/oaie/restaurant2-Restaurant363,triangolo,http://www.okkam.org/oaie/restaurant2-address363,212/472-4488,http://www.okkam.org/oaie/restaurant2-category363
+http://www.okkam.org/oaie/restaurant2-Restaurant364,tribeca grill,http://www.okkam.org/oaie/restaurant2-address364,212/941-3900,http://www.okkam.org/oaie/restaurant2-category364
+http://www.okkam.org/oaie/restaurant2-Restaurant720,zab-e-lee,http://www.okkam.org/oaie/restaurant2-address720,404-768-2705,http://www.okkam.org/oaie/restaurant2-category720
+http://www.okkam.org/oaie/restaurant2-Restaurant625,lombardi's,http://www.okkam.org/oaie/restaurant2-address625,212-941-7994,http://www.okkam.org/oaie/restaurant2-category625
+http://www.okkam.org/oaie/restaurant2-Restaurant365,trois jean,http://www.okkam.org/oaie/restaurant2-address365,212/988-4858,http://www.okkam.org/oaie/restaurant2-category365
+http://www.okkam.org/oaie/restaurant2-Restaurant721,bill's place,http://www.okkam.org/oaie/restaurant2-address721,415-221-5262,http://www.okkam.org/oaie/restaurant2-category721
+http://www.okkam.org/oaie/restaurant2-Restaurant626,marnie's noodle shop,http://www.okkam.org/oaie/restaurant2-address626,212-741-3214,http://www.okkam.org/oaie/restaurant2-category626
+http://www.okkam.org/oaie/restaurant2-Restaurant366,tse yang,http://www.okkam.org/oaie/restaurant2-address366,212/688-5447,http://www.okkam.org/oaie/restaurant2-category366
+http://www.okkam.org/oaie/restaurant2-Restaurant627,menchanko-tei,http://www.okkam.org/oaie/restaurant2-address627,212-247-1585,http://www.okkam.org/oaie/restaurant2-category627
+http://www.okkam.org/oaie/restaurant2-Restaurant367,turkish kitchen,http://www.okkam.org/oaie/restaurant2-address367,212/679-1810,http://www.okkam.org/oaie/restaurant2-category367
+http://www.okkam.org/oaie/restaurant2-Restaurant628,mitali east-west,http://www.okkam.org/oaie/restaurant2-address628,212-989-1367,http://www.okkam.org/oaie/restaurant2-category628
+http://www.okkam.org/oaie/restaurant2-Restaurant368,two two two,http://www.okkam.org/oaie/restaurant2-address368,212/799-0400,http://www.okkam.org/oaie/restaurant2-category368
+http://www.okkam.org/oaie/restaurant2-Restaurant629,monsoon (ny),http://www.okkam.org/oaie/restaurant2-address629,212-580-8686,http://www.okkam.org/oaie/restaurant2-category629
+http://www.okkam.org/oaie/restaurant2-Restaurant369,veniero's pasticceria,http://www.okkam.org/oaie/restaurant2-address369,212/674-7264,http://www.okkam.org/oaie/restaurant2-category369
+http://www.okkam.org/oaie/restaurant2-Restaurant370,verbena,http://www.okkam.org/oaie/restaurant2-address370,212/260-5454,http://www.okkam.org/oaie/restaurant2-category370
+http://www.okkam.org/oaie/restaurant2-Restaurant228,dix et sept,http://www.okkam.org/oaie/restaurant2-address228,212/645-8023,http://www.okkam.org/oaie/restaurant2-category228
+http://www.okkam.org/oaie/restaurant2-Restaurant227,diva,http://www.okkam.org/oaie/restaurant2-address227,212/941-9024,http://www.okkam.org/oaie/restaurant2-category227
+http://www.okkam.org/oaie/restaurant2-Restaurant372,vince & eddie's,http://www.okkam.org/oaie/restaurant2-address372,212/721-0068,http://www.okkam.org/oaie/restaurant2-category372
+http://www.okkam.org/oaie/restaurant2-Restaurant371,victor's cafe,http://www.okkam.org/oaie/restaurant2-address371,212/586-7714,http://www.okkam.org/oaie/restaurant2-category371
+http://www.okkam.org/oaie/restaurant2-Restaurant229,docks,http://www.okkam.org/oaie/restaurant2-address229,212/ 986-8080,http://www.okkam.org/oaie/restaurant2-category229
+http://www.okkam.org/oaie/restaurant2-Restaurant224,cupcake cafe,http://www.okkam.org/oaie/restaurant2-address224,212/465-1530,http://www.okkam.org/oaie/restaurant2-category224
+http://www.okkam.org/oaie/restaurant2-Restaurant223,corrado cafe,http://www.okkam.org/oaie/restaurant2-address223,212/753-5100,http://www.okkam.org/oaie/restaurant2-category223
+http://www.okkam.org/oaie/restaurant2-Restaurant226,dean & deluca,http://www.okkam.org/oaie/restaurant2-address226,212/254-8776,http://www.okkam.org/oaie/restaurant2-category226
+http://www.okkam.org/oaie/restaurant2-Restaurant225,da nico,http://www.okkam.org/oaie/restaurant2-address225,212/343-1212,http://www.okkam.org/oaie/restaurant2-category225
+http://www.okkam.org/oaie/restaurant2-Restaurant220,cite,http://www.okkam.org/oaie/restaurant2-address220,212/956-7100,http://www.okkam.org/oaie/restaurant2-category220
+http://www.okkam.org/oaie/restaurant2-Restaurant222,columbus bakery,http://www.okkam.org/oaie/restaurant2-address222,212/421-0334,http://www.okkam.org/oaie/restaurant2-category222
+http://www.okkam.org/oaie/restaurant2-Restaurant221,coco pazzo,http://www.okkam.org/oaie/restaurant2-address221,212/794-0205,http://www.okkam.org/oaie/restaurant2-category221
+http://www.okkam.org/oaie/restaurant2-Restaurant739,mel's drive-in,http://www.okkam.org/oaie/restaurant2-address739,415-387-2244,http://www.okkam.org/oaie/restaurant2-category739
+http://www.okkam.org/oaie/restaurant2-Restaurant240,film center cafe,http://www.okkam.org/oaie/restaurant2-address240,212/ 262-2525,http://www.okkam.org/oaie/restaurant2-category240
+http://www.okkam.org/oaie/restaurant2-Restaurant737,mario's bohemian cigar store cafe,http://www.okkam.org/oaie/restaurant2-address737,415-776-8226,http://www.okkam.org/oaie/restaurant2-category737
+http://www.okkam.org/oaie/restaurant2-Restaurant738,marnee thai,http://www.okkam.org/oaie/restaurant2-address738,415-665-9500,http://www.okkam.org/oaie/restaurant2-category738
+http://www.okkam.org/oaie/restaurant2-Restaurant632,one if by land  tibs,http://www.okkam.org/oaie/restaurant2-address632,212-228-0822,http://www.okkam.org/oaie/restaurant2-category632
+http://www.okkam.org/oaie/restaurant2-Restaurant735,la mediterranee,http://www.okkam.org/oaie/restaurant2-address735,415-431-7210,http://www.okkam.org/oaie/restaurant2-category735
+http://www.okkam.org/oaie/restaurant2-Restaurant633,oyster bar,http://www.okkam.org/oaie/restaurant2-address633,212-490-6650,http://www.okkam.org/oaie/restaurant2-category633
+http://www.okkam.org/oaie/restaurant2-Restaurant736,la taqueria,http://www.okkam.org/oaie/restaurant2-address736,415-285-7117,http://www.okkam.org/oaie/restaurant2-category736
+http://www.okkam.org/oaie/restaurant2-Restaurant733,kelly's on trinity,http://www.okkam.org/oaie/restaurant2-address733,415-362-4454,http://www.okkam.org/oaie/restaurant2-category733
+http://www.okkam.org/oaie/restaurant2-Restaurant630,moustache,http://www.okkam.org/oaie/restaurant2-address630,718-852-5555,http://www.okkam.org/oaie/restaurant2-category630
+http://www.okkam.org/oaie/restaurant2-Restaurant631,nobu,http://www.okkam.org/oaie/restaurant2-address631,212-219-0500,http://www.okkam.org/oaie/restaurant2-category631
+http://www.okkam.org/oaie/restaurant2-Restaurant734,la cumbre,http://www.okkam.org/oaie/restaurant2-address734,415-863-8205,http://www.okkam.org/oaie/restaurant2-category734
+http://www.okkam.org/oaie/restaurant2-Restaurant375,west,http://www.okkam.org/oaie/restaurant2-address375,212/246-6363,http://www.okkam.org/oaie/restaurant2-category375
+http://www.okkam.org/oaie/restaurant2-Restaurant731,eric's chinese restaurant,http://www.okkam.org/oaie/restaurant2-address731,415-282-0919,http://www.okkam.org/oaie/restaurant2-category731
+http://www.okkam.org/oaie/restaurant2-Restaurant636,patsy's pizza,http://www.okkam.org/oaie/restaurant2-address636,718-858-4300,http://www.okkam.org/oaie/restaurant2-category636
+http://www.okkam.org/oaie/restaurant2-Restaurant732,hamburger mary's,http://www.okkam.org/oaie/restaurant2-address732,415-626-1985,http://www.okkam.org/oaie/restaurant2-category732
+http://www.okkam.org/oaie/restaurant2-Restaurant376,xunta,http://www.okkam.org/oaie/restaurant2-address376,212/614-0620,http://www.okkam.org/oaie/restaurant2-category376
+http://www.okkam.org/oaie/restaurant2-Restaurant637,peter luger steak house,http://www.okkam.org/oaie/restaurant2-address637,718-387-7400,http://www.okkam.org/oaie/restaurant2-category637
+http://www.okkam.org/oaie/restaurant2-Restaurant373,vong,http://www.okkam.org/oaie/restaurant2-address373,212/486-9592,http://www.okkam.org/oaie/restaurant2-category373
+http://www.okkam.org/oaie/restaurant2-Restaurant634,palm,http://www.okkam.org/oaie/restaurant2-address634,212-687-2953,http://www.okkam.org/oaie/restaurant2-category634
+http://www.okkam.org/oaie/restaurant2-Restaurant374,water club,http://www.okkam.org/oaie/restaurant2-address374,212/683-3333,http://www.okkam.org/oaie/restaurant2-category374
+http://www.okkam.org/oaie/restaurant2-Restaurant730,emerald garden restaurant,http://www.okkam.org/oaie/restaurant2-address730,415-673-1155,http://www.okkam.org/oaie/restaurant2-category730
+http://www.okkam.org/oaie/restaurant2-Restaurant635,palm too,http://www.okkam.org/oaie/restaurant2-address635,212-697-5198,http://www.okkam.org/oaie/restaurant2-category635
+http://www.okkam.org/oaie/restaurant2-Restaurant379,abbey,http://www.okkam.org/oaie/restaurant2-address379,404/876-8532,http://www.okkam.org/oaie/restaurant2-category379
+http://www.okkam.org/oaie/restaurant2-Restaurant377,zen palate,http://www.okkam.org/oaie/restaurant2-address377,212/614-9291,http://www.okkam.org/oaie/restaurant2-category377
+http://www.okkam.org/oaie/restaurant2-Restaurant638,rose of india,http://www.okkam.org/oaie/restaurant2-address638,212-533-5011,http://www.okkam.org/oaie/restaurant2-category638
+http://www.okkam.org/oaie/restaurant2-Restaurant378,zoe,http://www.okkam.org/oaie/restaurant2-address378,212/966-6722,http://www.okkam.org/oaie/restaurant2-category378
+http://www.okkam.org/oaie/restaurant2-Restaurant639,sam's noodle shop,http://www.okkam.org/oaie/restaurant2-address639,212-213-2288,http://www.okkam.org/oaie/restaurant2-category639
+http://www.okkam.org/oaie/restaurant2-Restaurant383,atlanta fish market,http://www.okkam.org/oaie/restaurant2-address383,404/262-3165,http://www.okkam.org/oaie/restaurant2-category383
+http://www.okkam.org/oaie/restaurant2-Restaurant382,anthonys,http://www.okkam.org/oaie/restaurant2-address382,404/262-7379,http://www.okkam.org/oaie/restaurant2-category382
+http://www.okkam.org/oaie/restaurant2-Restaurant381,annie's thai castle,http://www.okkam.org/oaie/restaurant2-address381,404/264-9546,http://www.okkam.org/oaie/restaurant2-category381
+http://www.okkam.org/oaie/restaurant2-Restaurant239,fifty seven fifty seven,http://www.okkam.org/oaie/restaurant2-address239,212/758-5757,http://www.okkam.org/oaie/restaurant2-category239
+http://www.okkam.org/oaie/restaurant2-Restaurant380,aleck's barbecue heaven,http://www.okkam.org/oaie/restaurant2-address380,404/525-2062,http://www.okkam.org/oaie/restaurant2-category380
+http://www.okkam.org/oaie/restaurant2-Restaurant238,ferrier,http://www.okkam.org/oaie/restaurant2-address238,212/772-9000,http://www.okkam.org/oaie/restaurant2-category238
+http://www.okkam.org/oaie/restaurant2-Restaurant237,felix,http://www.okkam.org/oaie/restaurant2-address237,212/431-0021,http://www.okkam.org/oaie/restaurant2-category237
+http://www.okkam.org/oaie/restaurant2-Restaurant236,f. ille ponte ristorante,http://www.okkam.org/oaie/restaurant2-address236,212/226-4621,http://www.okkam.org/oaie/restaurant2-category236
+http://www.okkam.org/oaie/restaurant2-Restaurant235,evergreen cafe,http://www.okkam.org/oaie/restaurant2-address235,212/744-3266,http://www.okkam.org/oaie/restaurant2-category235
+http://www.okkam.org/oaie/restaurant2-Restaurant234,ernie's,http://www.okkam.org/oaie/restaurant2-address234,212/496-1588,http://www.okkam.org/oaie/restaurant2-category234
+http://www.okkam.org/oaie/restaurant2-Restaurant233,empire korea,http://www.okkam.org/oaie/restaurant2-address233,212/725-1333,http://www.okkam.org/oaie/restaurant2-category233
+http://www.okkam.org/oaie/restaurant2-Restaurant232,emily's,http://www.okkam.org/oaie/restaurant2-address232,212/996-1212,http://www.okkam.org/oaie/restaurant2-category232
+http://www.okkam.org/oaie/restaurant2-Restaurant231,el teddy's,http://www.okkam.org/oaie/restaurant2-address231,212/941-7070,http://www.okkam.org/oaie/restaurant2-category231
+http://www.okkam.org/oaie/restaurant2-Restaurant230,duane park cafe,http://www.okkam.org/oaie/restaurant2-address230,212/732-5555,http://www.okkam.org/oaie/restaurant2-category230
+http://www.okkam.org/oaie/restaurant2-Restaurant483,il fornaio levi's plaza,http://www.okkam.org/oaie/restaurant2-address483,415/986-0100,http://www.okkam.org/oaie/restaurant2-category483
+http://www.okkam.org/oaie/restaurant2-Restaurant744,san francisco bbq,http://www.okkam.org/oaie/restaurant2-address744,415-431-8956,http://www.okkam.org/oaie/restaurant2-category744
+http://www.okkam.org/oaie/restaurant2-Restaurant484,izzy's steak & chop house,http://www.okkam.org/oaie/restaurant2-address484,415/563-0487,http://www.okkam.org/oaie/restaurant2-category484
+http://www.okkam.org/oaie/restaurant2-Restaurant745,slanted door,http://www.okkam.org/oaie/restaurant2-address745,415-861-8032,http://www.okkam.org/oaie/restaurant2-category745
+http://www.okkam.org/oaie/restaurant2-Restaurant485,jack's,http://www.okkam.org/oaie/restaurant2-address485,415/986-9854,http://www.okkam.org/oaie/restaurant2-category485
+http://www.okkam.org/oaie/restaurant2-Restaurant746,swan oyster depot,http://www.okkam.org/oaie/restaurant2-address746,415-673-1101,http://www.okkam.org/oaie/restaurant2-category746
+http://www.okkam.org/oaie/restaurant2-Restaurant486,kabuto sushi,http://www.okkam.org/oaie/restaurant2-address486,415/752-5652,http://www.okkam.org/oaie/restaurant2-category486
+http://www.okkam.org/oaie/restaurant2-Restaurant600,water grill,http://www.okkam.org/oaie/restaurant2-address600,213-891-0900,http://www.okkam.org/oaie/restaurant2-category600
+http://www.okkam.org/oaie/restaurant2-Restaurant747,thep phanom,http://www.okkam.org/oaie/restaurant2-address747,415-431-2526,http://www.okkam.org/oaie/restaurant2-category747
+http://www.okkam.org/oaie/restaurant2-Restaurant487,katia's,http://www.okkam.org/oaie/restaurant2-address487,415/668-9292,http://www.okkam.org/oaie/restaurant2-category487
+http://www.okkam.org/oaie/restaurant2-Restaurant748,ti couz,http://www.okkam.org/oaie/restaurant2-address748,415-252-7373,http://www.okkam.org/oaie/restaurant2-category748
+http://www.okkam.org/oaie/restaurant2-Restaurant488,kuleto's,http://www.okkam.org/oaie/restaurant2-address488,415/397-7720,http://www.okkam.org/oaie/restaurant2-category488
+http://www.okkam.org/oaie/restaurant2-Restaurant749,trio cafe,http://www.okkam.org/oaie/restaurant2-address749,415-563-2248,http://www.okkam.org/oaie/restaurant2-category749
+http://www.okkam.org/oaie/restaurant2-Restaurant489,kyo-ya. sheraton palace hotel,http://www.okkam.org/oaie/restaurant2-address489,415/546-5000,http://www.okkam.org/oaie/restaurant2-category489
+http://www.okkam.org/oaie/restaurant2-Restaurant388,camille's,http://www.okkam.org/oaie/restaurant2-address388,404/872-7203,http://www.okkam.org/oaie/restaurant2-category388
+http://www.okkam.org/oaie/restaurant2-Restaurant605,cafe con leche,http://www.okkam.org/oaie/restaurant2-address605,212-595-7000,http://www.okkam.org/oaie/restaurant2-category605
+http://www.okkam.org/oaie/restaurant2-Restaurant389,cassis,http://www.okkam.org/oaie/restaurant2-address389,404/365-8100,http://www.okkam.org/oaie/restaurant2-category389
+http://www.okkam.org/oaie/restaurant2-Restaurant606,corner bistro,http://www.okkam.org/oaie/restaurant2-address606,212-242-9502,http://www.okkam.org/oaie/restaurant2-category606
+http://www.okkam.org/oaie/restaurant2-Restaurant607,cucina della fontana,http://www.okkam.org/oaie/restaurant2-address607,212-242-0636,http://www.okkam.org/oaie/restaurant2-category607
+http://www.okkam.org/oaie/restaurant2-Restaurant608,cucina di pesce,http://www.okkam.org/oaie/restaurant2-address608,212-260-6800,http://www.okkam.org/oaie/restaurant2-category608
+http://www.okkam.org/oaie/restaurant2-Restaurant740,mo's burgers,http://www.okkam.org/oaie/restaurant2-address740,415-788-3779,http://www.okkam.org/oaie/restaurant2-category740
+http://www.okkam.org/oaie/restaurant2-Restaurant384,beesley's of buckhead,http://www.okkam.org/oaie/restaurant2-address384,404/264-1334,http://www.okkam.org/oaie/restaurant2-category384
+http://www.okkam.org/oaie/restaurant2-Restaurant601,zankou chicken,http://www.okkam.org/oaie/restaurant2-address601,818-244-1937,http://www.okkam.org/oaie/restaurant2-category601
+http://www.okkam.org/oaie/restaurant2-Restaurant741,phnom penh cambodian restaurant,http://www.okkam.org/oaie/restaurant2-address741,415-775-5979,http://www.okkam.org/oaie/restaurant2-category741
+http://www.okkam.org/oaie/restaurant2-Restaurant385,bertolini's,http://www.okkam.org/oaie/restaurant2-address385,404/233-2333,http://www.okkam.org/oaie/restaurant2-category385
+http://www.okkam.org/oaie/restaurant2-Restaurant602,afghan kebab house,http://www.okkam.org/oaie/restaurant2-address602,212-307-1612,http://www.okkam.org/oaie/restaurant2-category602
+http://www.okkam.org/oaie/restaurant2-Restaurant386,bistango,http://www.okkam.org/oaie/restaurant2-address386,404/724-0901,http://www.okkam.org/oaie/restaurant2-category386
+http://www.okkam.org/oaie/restaurant2-Restaurant742,roosevelt tamale parlor,http://www.okkam.org/oaie/restaurant2-address742,415-550-9213,http://www.okkam.org/oaie/restaurant2-category742
+http://www.okkam.org/oaie/restaurant2-Restaurant603,arcadia,http://www.okkam.org/oaie/restaurant2-address603,212-223-2900,http://www.okkam.org/oaie/restaurant2-category603
+http://www.okkam.org/oaie/restaurant2-Restaurant387,cafe renaissance,http://www.okkam.org/oaie/restaurant2-address387,770/441--0291,http://www.okkam.org/oaie/restaurant2-category387
+http://www.okkam.org/oaie/restaurant2-Restaurant743,sally's cafe & bakery,http://www.okkam.org/oaie/restaurant2-address743,415-626-6006,http://www.okkam.org/oaie/restaurant2-category743
+http://www.okkam.org/oaie/restaurant2-Restaurant604,benny's burritos,http://www.okkam.org/oaie/restaurant2-address604,212-254-2054,http://www.okkam.org/oaie/restaurant2-category604
+http://www.okkam.org/oaie/restaurant2-Restaurant206,caffe dante,http://www.okkam.org/oaie/restaurant2-address206,212/982-5275,http://www.okkam.org/oaie/restaurant2-category206
+http://www.okkam.org/oaie/restaurant2-Restaurant392,colonnade restaurant,http://www.okkam.org/oaie/restaurant2-address392,404/874-5642,http://www.okkam.org/oaie/restaurant2-category392
+http://www.okkam.org/oaie/restaurant2-Restaurant205,cafe fes,http://www.okkam.org/oaie/restaurant2-address205,212/924-7653,http://www.okkam.org/oaie/restaurant2-category205
+http://www.okkam.org/oaie/restaurant2-Restaurant391,coco loco,http://www.okkam.org/oaie/restaurant2-address391,404/364-0212,http://www.okkam.org/oaie/restaurant2-category391
+http://www.okkam.org/oaie/restaurant2-Restaurant208,caffe lure,http://www.okkam.org/oaie/restaurant2-address208,212/473-2642,http://www.okkam.org/oaie/restaurant2-category208
+http://www.okkam.org/oaie/restaurant2-Restaurant394,dante's down the hatch,http://www.okkam.org/oaie/restaurant2-address394,404/577-1800,http://www.okkam.org/oaie/restaurant2-category394
+http://www.okkam.org/oaie/restaurant2-Restaurant207,caffe dell'artista,http://www.okkam.org/oaie/restaurant2-address207,212/645-4431,http://www.okkam.org/oaie/restaurant2-category207
+http://www.okkam.org/oaie/restaurant2-Restaurant393,dante's down the hatch  buckhead,http://www.okkam.org/oaie/restaurant2-address393,404/266-1600,http://www.okkam.org/oaie/restaurant2-category393
+http://www.okkam.org/oaie/restaurant2-Restaurant609,darbar,http://www.okkam.org/oaie/restaurant2-address609,212-432-7227,http://www.okkam.org/oaie/restaurant2-category609
+http://www.okkam.org/oaie/restaurant2-Restaurant209,caffe reggio,http://www.okkam.org/oaie/restaurant2-address209,212/475-9557,http://www.okkam.org/oaie/restaurant2-category209
+http://www.okkam.org/oaie/restaurant2-Restaurant390,city grill,http://www.okkam.org/oaie/restaurant2-address390,404/524-2489,http://www.okkam.org/oaie/restaurant2-category390
+http://www.okkam.org/oaie/restaurant2-Restaurant200,cafe botanica,http://www.okkam.org/oaie/restaurant2-address200,212/484-5120,http://www.okkam.org/oaie/restaurant2-category200
+http://www.okkam.org/oaie/restaurant2-Restaurant491,le central,http://www.okkam.org/oaie/restaurant2-address491,415/391-2233,http://www.okkam.org/oaie/restaurant2-category491
+http://www.okkam.org/oaie/restaurant2-Restaurant202,cafe luxembourg,http://www.okkam.org/oaie/restaurant2-address202,212/873-7411,http://www.okkam.org/oaie/restaurant2-category202
+http://www.okkam.org/oaie/restaurant2-Restaurant490,l'osteria del forno,http://www.okkam.org/oaie/restaurant2-address490,415/982-1124,http://www.okkam.org/oaie/restaurant2-category490
+http://www.okkam.org/oaie/restaurant2-Restaurant201,cafe la fortuna,http://www.okkam.org/oaie/restaurant2-address201,212/724-5846,http://www.okkam.org/oaie/restaurant2-category201
+http://www.okkam.org/oaie/restaurant2-Restaurant204,cafe centro,http://www.okkam.org/oaie/restaurant2-address204,212/818-1222,http://www.okkam.org/oaie/restaurant2-category204
+http://www.okkam.org/oaie/restaurant2-Restaurant493,macarthur park,http://www.okkam.org/oaie/restaurant2-address493,415/398-5700,http://www.okkam.org/oaie/restaurant2-category493
+http://www.okkam.org/oaie/restaurant2-Restaurant203,cafe pierre,http://www.okkam.org/oaie/restaurant2-address203,212/940-8185,http://www.okkam.org/oaie/restaurant2-category203
+http://www.okkam.org/oaie/restaurant2-Restaurant492,le soleil,http://www.okkam.org/oaie/restaurant2-address492,415/668-4848,http://www.okkam.org/oaie/restaurant2-category492
+http://www.okkam.org/oaie/restaurant2-Restaurant610,ej's luncheonette,http://www.okkam.org/oaie/restaurant2-address610,212-473-5555,http://www.okkam.org/oaie/restaurant2-category610
+http://www.okkam.org/oaie/restaurant2-Restaurant496,mccormick & kuleto's,http://www.okkam.org/oaie/restaurant2-address496,415/929-1730,http://www.okkam.org/oaie/restaurant2-category496
+http://www.okkam.org/oaie/restaurant2-Restaurant611,edison cafe,http://www.okkam.org/oaie/restaurant2-address611,212-840-5000,http://www.okkam.org/oaie/restaurant2-category611
+http://www.okkam.org/oaie/restaurant2-Restaurant497,millennium,http://www.okkam.org/oaie/restaurant2-address497,415/487-9800,http://www.okkam.org/oaie/restaurant2-category497
+http://www.okkam.org/oaie/restaurant2-Restaurant494,manora,http://www.okkam.org/oaie/restaurant2-address494,415/861-6224,http://www.okkam.org/oaie/restaurant2-category494
+http://www.okkam.org/oaie/restaurant2-Restaurant495,maykadeh,http://www.okkam.org/oaie/restaurant2-address495,415/362-8286,http://www.okkam.org/oaie/restaurant2-category495
+http://www.okkam.org/oaie/restaurant2-Restaurant498,moose's,http://www.okkam.org/oaie/restaurant2-address498,415/989-7800,http://www.okkam.org/oaie/restaurant2-category498
+http://www.okkam.org/oaie/restaurant2-Restaurant499,north india,http://www.okkam.org/oaie/restaurant2-address499,415/931-1556,http://www.okkam.org/oaie/restaurant2-category499
+http://www.okkam.org/oaie/restaurant2-Restaurant618,john's pizzeria,http://www.okkam.org/oaie/restaurant2-address618,212-721-7001,http://www.okkam.org/oaie/restaurant2-category618
+http://www.okkam.org/oaie/restaurant2-Restaurant619,kelley & ping,http://www.okkam.org/oaie/restaurant2-address619,212-228-1212,http://www.okkam.org/oaie/restaurant2-category619
+http://www.okkam.org/oaie/restaurant2-Restaurant750,tu lan,http://www.okkam.org/oaie/restaurant2-address750,415-626-0927,http://www.okkam.org/oaie/restaurant2-category750
+http://www.okkam.org/oaie/restaurant2-Restaurant616,jackson diner,http://www.okkam.org/oaie/restaurant2-address616,718-672-1232,http://www.okkam.org/oaie/restaurant2-category616
+http://www.okkam.org/oaie/restaurant2-Restaurant399,hsu's gourmet,http://www.okkam.org/oaie/restaurant2-address399,404/659-2788,http://www.okkam.org/oaie/restaurant2-category399
+http://www.okkam.org/oaie/restaurant2-Restaurant617,joe's shanghai,http://www.okkam.org/oaie/restaurant2-address617,718-539-3838,http://www.okkam.org/oaie/restaurant2-category617
+http://www.okkam.org/oaie/restaurant2-Restaurant614,gray's papaya,http://www.okkam.org/oaie/restaurant2-address614,212-799-0243,http://www.okkam.org/oaie/restaurant2-category614
+http://www.okkam.org/oaie/restaurant2-Restaurant397,holt bros. bar-b-q,http://www.okkam.org/oaie/restaurant2-address397,770/242-3984,http://www.okkam.org/oaie/restaurant2-category397
+http://www.okkam.org/oaie/restaurant2-Restaurant615,il mulino,http://www.okkam.org/oaie/restaurant2-address615,212-673-3783,http://www.okkam.org/oaie/restaurant2-category615
+http://www.okkam.org/oaie/restaurant2-Restaurant398,horseradish grill,http://www.okkam.org/oaie/restaurant2-address398,404/255-7277,http://www.okkam.org/oaie/restaurant2-category398
+http://www.okkam.org/oaie/restaurant2-Restaurant612,elias corner,http://www.okkam.org/oaie/restaurant2-address612,718-932-1510,http://www.okkam.org/oaie/restaurant2-category612
+http://www.okkam.org/oaie/restaurant2-Restaurant751,vicolo pizzeria,http://www.okkam.org/oaie/restaurant2-address751,415-863-2382,http://www.okkam.org/oaie/restaurant2-category751
+http://www.okkam.org/oaie/restaurant2-Restaurant395,fat matt's rib shack,http://www.okkam.org/oaie/restaurant2-address395,404/607-1622,http://www.okkam.org/oaie/restaurant2-category395
+http://www.okkam.org/oaie/restaurant2-Restaurant613,good enough to eat,http://www.okkam.org/oaie/restaurant2-address613,212-496-0163,http://www.okkam.org/oaie/restaurant2-category613
+http://www.okkam.org/oaie/restaurant2-Restaurant752,wa-ha-ka oaxaca mexican grill,http://www.okkam.org/oaie/restaurant2-address752,415-775-1055,http://www.okkam.org/oaie/restaurant2-category752
+http://www.okkam.org/oaie/restaurant2-Restaurant396,french quarter food shop,http://www.okkam.org/oaie/restaurant2-address396,404/875-2489,http://www.okkam.org/oaie/restaurant2-category396
+http://www.okkam.org/oaie/restaurant2-Restaurant219,china grill,http://www.okkam.org/oaie/restaurant2-address219,212/333-7788,http://www.okkam.org/oaie/restaurant2-category219
+http://www.okkam.org/oaie/restaurant2-Restaurant218,chiam,http://www.okkam.org/oaie/restaurant2-address218,212/371-2323,http://www.okkam.org/oaie/restaurant2-category218
+http://www.okkam.org/oaie/restaurant2-Restaurant217,chez jacqueline,http://www.okkam.org/oaie/restaurant2-address217,212/505-0727,http://www.okkam.org/oaie/restaurant2-category217
+http://www.okkam.org/oaie/restaurant2-Restaurant216,cendrillon asian grill & marimba bar,http://www.okkam.org/oaie/restaurant2-address216,212/343-9012,http://www.okkam.org/oaie/restaurant2-category216
+http://www.okkam.org/oaie/restaurant2-Restaurant211,caffe vivaldi,http://www.okkam.org/oaie/restaurant2-address211,212/691-7538,http://www.okkam.org/oaie/restaurant2-category211
+http://www.okkam.org/oaie/restaurant2-Restaurant210,caffe roma,http://www.okkam.org/oaie/restaurant2-address210,212/226-8413,http://www.okkam.org/oaie/restaurant2-category210
+http://www.okkam.org/oaie/restaurant2-Restaurant215,casa la femme,http://www.okkam.org/oaie/restaurant2-address215,212/505-0005,http://www.okkam.org/oaie/restaurant2-category215
+http://www.okkam.org/oaie/restaurant2-Restaurant214,captain's table,http://www.okkam.org/oaie/restaurant2-address214,212/697-9538,http://www.okkam.org/oaie/restaurant2-category214
+http://www.okkam.org/oaie/restaurant2-Restaurant213,capsouto freres,http://www.okkam.org/oaie/restaurant2-address213,212/966-4900,http://www.okkam.org/oaie/restaurant2-category213
+http://www.okkam.org/oaie/restaurant2-Restaurant212,caffe bondi ristorante,http://www.okkam.org/oaie/restaurant2-address212,212/691-8136,http://www.okkam.org/oaie/restaurant2-category212
+http://www.okkam.org/oaie/restaurant2-Restaurant708,original pancake house (at),http://www.okkam.org/oaie/restaurant2-address708,404-237-4116,http://www.okkam.org/oaie/restaurant2-category708
+http://www.okkam.org/oaie/restaurant2-Restaurant709,palm  the (atlanta),http://www.okkam.org/oaie/restaurant2-address709,404-814-1955,http://www.okkam.org/oaie/restaurant2-category709
+http://www.okkam.org/oaie/restaurant2-Restaurant32,dawat,http://www.okkam.org/oaie/restaurant2-address32,212-355-7555,http://www.okkam.org/oaie/restaurant2-category32
+http://www.okkam.org/oaie/restaurant2-Restaurant33,felidia,http://www.okkam.org/oaie/restaurant2-address33,212-758-1479,http://www.okkam.org/oaie/restaurant2-category33
+http://www.okkam.org/oaie/restaurant2-Restaurant30,chanterelle,http://www.okkam.org/oaie/restaurant2-address30,212-966-6960,http://www.okkam.org/oaie/restaurant2-category30
+http://www.okkam.org/oaie/restaurant2-Restaurant31,daniel,http://www.okkam.org/oaie/restaurant2-address31,212-288-0033,http://www.okkam.org/oaie/restaurant2-category31
+http://www.okkam.org/oaie/restaurant2-Restaurant703,majestic,http://www.okkam.org/oaie/restaurant2-address703,404-875-0276,http://www.okkam.org/oaie/restaurant2-category703
+http://www.okkam.org/oaie/restaurant2-Restaurant37,island spice,http://www.okkam.org/oaie/restaurant2-address37,212-765-1737,http://www.okkam.org/oaie/restaurant2-category37
+http://www.okkam.org/oaie/restaurant2-Restaurant36,gramercy tavern,http://www.okkam.org/oaie/restaurant2-address36,212-477-0777,http://www.okkam.org/oaie/restaurant2-category36
+http://www.okkam.org/oaie/restaurant2-Restaurant702,lettuce souprise you (at),http://www.okkam.org/oaie/restaurant2-address702,770-418-9969,http://www.okkam.org/oaie/restaurant2-category702
+http://www.okkam.org/oaie/restaurant2-Restaurant35,gotham bar & grill,http://www.okkam.org/oaie/restaurant2-address35,212-620-4020,http://www.okkam.org/oaie/restaurant2-category35
+http://www.okkam.org/oaie/restaurant2-Restaurant701,la fonda latina,http://www.okkam.org/oaie/restaurant2-address701,404-303-8201,http://www.okkam.org/oaie/restaurant2-category701
+http://www.okkam.org/oaie/restaurant2-Restaurant34,four seasons,http://www.okkam.org/oaie/restaurant2-address34,212-754-9494,http://www.okkam.org/oaie/restaurant2-category34
+http://www.okkam.org/oaie/restaurant2-Restaurant700,kalo's coffee house,http://www.okkam.org/oaie/restaurant2-address700,404-325-3733,http://www.okkam.org/oaie/restaurant2-category700
+http://www.okkam.org/oaie/restaurant2-Restaurant707,nuevo laredo cantina,http://www.okkam.org/oaie/restaurant2-address707,404-352-9009,http://www.okkam.org/oaie/restaurant2-category707
+http://www.okkam.org/oaie/restaurant2-Restaurant706,nava,http://www.okkam.org/oaie/restaurant2-address706,404-240-1984,http://www.okkam.org/oaie/restaurant2-category706
+http://www.okkam.org/oaie/restaurant2-Restaurant705,my thai,http://www.okkam.org/oaie/restaurant2-address705,404-636-4280,http://www.okkam.org/oaie/restaurant2-category705
+http://www.okkam.org/oaie/restaurant2-Restaurant39,la caravelle,http://www.okkam.org/oaie/restaurant2-address39,212-586-4252,http://www.okkam.org/oaie/restaurant2-category39
+http://www.okkam.org/oaie/restaurant2-Restaurant38,jo jo,http://www.okkam.org/oaie/restaurant2-address38,212-223-5656,http://www.okkam.org/oaie/restaurant2-category38
+http://www.okkam.org/oaie/restaurant2-Restaurant704,morton's of chicago (atlanta),http://www.okkam.org/oaie/restaurant2-address704,404-577-4366,http://www.okkam.org/oaie/restaurant2-category704
+http://www.okkam.org/oaie/restaurant2-Restaurant719,white house restaurant,http://www.okkam.org/oaie/restaurant2-address719,404-237-7601,http://www.okkam.org/oaie/restaurant2-category719
+http://www.okkam.org/oaie/restaurant2-Restaurant20,spago (los angeles),http://www.okkam.org/oaie/restaurant2-address20,310-652-4025,http://www.okkam.org/oaie/restaurant2-category20
+http://www.okkam.org/oaie/restaurant2-Restaurant21,valentino,http://www.okkam.org/oaie/restaurant2-address21,310-829-4313,http://www.okkam.org/oaie/restaurant2-category21
+http://www.okkam.org/oaie/restaurant2-Restaurant22,yujean kang's,http://www.okkam.org/oaie/restaurant2-address22,818-585-0855,http://www.okkam.org/oaie/restaurant2-category22
+http://www.okkam.org/oaie/restaurant2-Restaurant710,rainbow restaurant,http://www.okkam.org/oaie/restaurant2-address710,404-633-3538,http://www.okkam.org/oaie/restaurant2-category710
+http://www.okkam.org/oaie/restaurant2-Restaurant712,riviera,http://www.okkam.org/oaie/restaurant2-address712,404-262-7112,http://www.okkam.org/oaie/restaurant2-category712
+http://www.okkam.org/oaie/restaurant2-Restaurant24,aquavit,http://www.okkam.org/oaie/restaurant2-address24,212-307-7311,http://www.okkam.org/oaie/restaurant2-category24
+http://www.okkam.org/oaie/restaurant2-Restaurant711,ritz-carlton cafe (atlanta),http://www.okkam.org/oaie/restaurant2-address711,404-659-0400,http://www.okkam.org/oaie/restaurant2-category711
+http://www.okkam.org/oaie/restaurant2-Restaurant23,21 club,http://www.okkam.org/oaie/restaurant2-address23,212-582-7200,http://www.okkam.org/oaie/restaurant2-category23
+http://www.okkam.org/oaie/restaurant2-Restaurant714,soto,http://www.okkam.org/oaie/restaurant2-address714,404-233-2005,http://www.okkam.org/oaie/restaurant2-category714
+http://www.okkam.org/oaie/restaurant2-Restaurant26,cafe lalo,http://www.okkam.org/oaie/restaurant2-address26,212-496-6031,http://www.okkam.org/oaie/restaurant2-category26
+http://www.okkam.org/oaie/restaurant2-Restaurant713,silver skillet  the,http://www.okkam.org/oaie/restaurant2-address713,404-874-1388,http://www.okkam.org/oaie/restaurant2-category713
+http://www.okkam.org/oaie/restaurant2-Restaurant25,aureole,http://www.okkam.org/oaie/restaurant2-address25,212-319-1660,http://www.okkam.org/oaie/restaurant2-category25
+http://www.okkam.org/oaie/restaurant2-Restaurant716,tortillas,http://www.okkam.org/oaie/restaurant2-address716,404-892-0193,http://www.okkam.org/oaie/restaurant2-category716
+http://www.okkam.org/oaie/restaurant2-Restaurant28,carmine's,http://www.okkam.org/oaie/restaurant2-address28,212-362-2200,http://www.okkam.org/oaie/restaurant2-category28
+http://www.okkam.org/oaie/restaurant2-Restaurant715,thelma's kitchen,http://www.okkam.org/oaie/restaurant2-address715,404-688-5855,http://www.okkam.org/oaie/restaurant2-category715
+http://www.okkam.org/oaie/restaurant2-Restaurant27,cafe des artistes,http://www.okkam.org/oaie/restaurant2-address27,212-877-3500,http://www.okkam.org/oaie/restaurant2-category27
+http://www.okkam.org/oaie/restaurant2-Restaurant718,veggieland,http://www.okkam.org/oaie/restaurant2-address718,404-231-3111,http://www.okkam.org/oaie/restaurant2-category718
+http://www.okkam.org/oaie/restaurant2-Restaurant717,van gogh's restaurant & bar,http://www.okkam.org/oaie/restaurant2-address717,770-993-1156,http://www.okkam.org/oaie/restaurant2-category717
+http://www.okkam.org/oaie/restaurant2-Restaurant29,carnegie deli,http://www.okkam.org/oaie/restaurant2-address29,212-757-2245,http://www.okkam.org/oaie/restaurant2-category29
+http://www.okkam.org/oaie/restaurant2-Restaurant288,le jardin,http://www.okkam.org/oaie/restaurant2-address288,212/343-9599,http://www.okkam.org/oaie/restaurant2-category288
+http://www.okkam.org/oaie/restaurant2-Restaurant287,le gamin,http://www.okkam.org/oaie/restaurant2-address287,212/254-4678,http://www.okkam.org/oaie/restaurant2-category287
+http://www.okkam.org/oaie/restaurant2-Restaurant286,le colonial,http://www.okkam.org/oaie/restaurant2-address286,212/ 752-0808,http://www.okkam.org/oaie/restaurant2-category286
+http://www.okkam.org/oaie/restaurant2-Restaurant285,le chantilly,http://www.okkam.org/oaie/restaurant2-address285,212/751-2931,http://www.okkam.org/oaie/restaurant2-category285
+http://www.okkam.org/oaie/restaurant2-Restaurant289,le madri,http://www.okkam.org/oaie/restaurant2-address289,212/727-8022,http://www.okkam.org/oaie/restaurant2-category289
+http://www.okkam.org/oaie/restaurant2-Restaurant290,le marais,http://www.okkam.org/oaie/restaurant2-address290,212/869-0900,http://www.okkam.org/oaie/restaurant2-category290
+http://www.okkam.org/oaie/restaurant2-Restaurant291,le perigord,http://www.okkam.org/oaie/restaurant2-address291,212/755-6244,http://www.okkam.org/oaie/restaurant2-category291
+http://www.okkam.org/oaie/restaurant2-Restaurant294,lincoln tavern,http://www.okkam.org/oaie/restaurant2-address294,212/721-8271,http://www.okkam.org/oaie/restaurant2-category294
+http://www.okkam.org/oaie/restaurant2-Restaurant295,lola,http://www.okkam.org/oaie/restaurant2-address295,212/675-6700,http://www.okkam.org/oaie/restaurant2-category295
+http://www.okkam.org/oaie/restaurant2-Restaurant292,le select,http://www.okkam.org/oaie/restaurant2-address292,212/875-1993,http://www.okkam.org/oaie/restaurant2-category292
+http://www.okkam.org/oaie/restaurant2-Restaurant293,les halles,http://www.okkam.org/oaie/restaurant2-address293,212/679-4111,http://www.okkam.org/oaie/restaurant2-category293
+http://www.okkam.org/oaie/restaurant2-Restaurant297,mad fish,http://www.okkam.org/oaie/restaurant2-address297,212/787-0202,http://www.okkam.org/oaie/restaurant2-category297
+http://www.okkam.org/oaie/restaurant2-Restaurant296,lucky strike,http://www.okkam.org/oaie/restaurant2-address296,212/941-0479,http://www.okkam.org/oaie/restaurant2-category296
+http://www.okkam.org/oaie/restaurant2-Restaurant299,mangia e bevi,http://www.okkam.org/oaie/restaurant2-address299,212/956-3976,http://www.okkam.org/oaie/restaurant2-category299
+http://www.okkam.org/oaie/restaurant2-Restaurant298,main street,http://www.okkam.org/oaie/restaurant2-address298,212/873-5025,http://www.okkam.org/oaie/restaurant2-category298
+http://www.okkam.org/oaie/restaurant2-Restaurant89,ritz-carlton cafe (buckhead),http://www.okkam.org/oaie/restaurant2-address89,404-237-2700,http://www.okkam.org/oaie/restaurant2-category89
+http://www.okkam.org/oaie/restaurant2-Restaurant83,heera of india,http://www.okkam.org/oaie/restaurant2-address83,404-876-4408,http://www.okkam.org/oaie/restaurant2-category83
+http://www.okkam.org/oaie/restaurant2-Restaurant84,indigo coastal grill,http://www.okkam.org/oaie/restaurant2-address84,404-876-0676,http://www.okkam.org/oaie/restaurant2-category84
+http://www.okkam.org/oaie/restaurant2-Restaurant81,georgia grille,http://www.okkam.org/oaie/restaurant2-address81,404-352-3517,http://www.okkam.org/oaie/restaurant2-category81
+http://www.okkam.org/oaie/restaurant2-Restaurant82,hedgerose heights inn  the,http://www.okkam.org/oaie/restaurant2-address82,404-233-7673,http://www.okkam.org/oaie/restaurant2-category82
+http://www.okkam.org/oaie/restaurant2-Restaurant87,nikolai's roof,http://www.okkam.org/oaie/restaurant2-address87,404-221-6362,http://www.okkam.org/oaie/restaurant2-category87
+http://www.okkam.org/oaie/restaurant2-Restaurant88,pano's & paul's,http://www.okkam.org/oaie/restaurant2-address88,404-261-3662,http://www.okkam.org/oaie/restaurant2-category88
+http://www.okkam.org/oaie/restaurant2-Restaurant85,la grotta,http://www.okkam.org/oaie/restaurant2-address85,404-231-1368,http://www.okkam.org/oaie/restaurant2-category85
+http://www.okkam.org/oaie/restaurant2-Restaurant86,mary mac's tea room,http://www.okkam.org/oaie/restaurant2-address86,404-876-1800,http://www.okkam.org/oaie/restaurant2-category86
+http://www.okkam.org/oaie/restaurant2-Restaurant80,delectables,http://www.okkam.org/oaie/restaurant2-address80,404-681-2909,http://www.okkam.org/oaie/restaurant2-category80
+http://www.okkam.org/oaie/restaurant2-Restaurant92,toulouse,http://www.okkam.org/oaie/restaurant2-address92,404-351-9533,http://www.okkam.org/oaie/restaurant2-category92
+http://www.okkam.org/oaie/restaurant2-Restaurant5,chinois on main,http://www.okkam.org/oaie/restaurant2-address5,310-392-9025,http://www.okkam.org/oaie/restaurant2-category5
+http://www.okkam.org/oaie/restaurant2-Restaurant93,veni vidi vici,http://www.okkam.org/oaie/restaurant2-address93,404-875-8424,http://www.okkam.org/oaie/restaurant2-category93
+http://www.okkam.org/oaie/restaurant2-Restaurant6,citrus,http://www.okkam.org/oaie/restaurant2-address6,213-857-0034,http://www.okkam.org/oaie/restaurant2-category6
+http://www.okkam.org/oaie/restaurant2-Restaurant94,alain rondelli,http://www.okkam.org/oaie/restaurant2-address94,415-387-0408,http://www.okkam.org/oaie/restaurant2-category94
+http://www.okkam.org/oaie/restaurant2-Restaurant3,cafe bizou,http://www.okkam.org/oaie/restaurant2-address3,818-788-3536,http://www.okkam.org/oaie/restaurant2-category3
+http://www.okkam.org/oaie/restaurant2-Restaurant95,aqua,http://www.okkam.org/oaie/restaurant2-address95,415-956-9662,http://www.okkam.org/oaie/restaurant2-category95
+http://www.okkam.org/oaie/restaurant2-Restaurant4,campanile,http://www.okkam.org/oaie/restaurant2-address4,213-938-1447,http://www.okkam.org/oaie/restaurant2-category4
+http://www.okkam.org/oaie/restaurant2-Restaurant96,boulevard,http://www.okkam.org/oaie/restaurant2-address96,415-543-6084,http://www.okkam.org/oaie/restaurant2-category96
+http://www.okkam.org/oaie/restaurant2-Restaurant97,cafe claude,http://www.okkam.org/oaie/restaurant2-address97,415-392-3505,http://www.okkam.org/oaie/restaurant2-category97
+http://www.okkam.org/oaie/restaurant2-Restaurant2,bel-air hotel,http://www.okkam.org/oaie/restaurant2-address2,310-472-1211,http://www.okkam.org/oaie/restaurant2-category2
+http://www.okkam.org/oaie/restaurant2-Restaurant98,campton place,http://www.okkam.org/oaie/restaurant2-address98,415-955-5555,http://www.okkam.org/oaie/restaurant2-category98
+http://www.okkam.org/oaie/restaurant2-Restaurant99,chez michel,http://www.okkam.org/oaie/restaurant2-address99,415-775-7036,http://www.okkam.org/oaie/restaurant2-category99
+http://www.okkam.org/oaie/restaurant2-Restaurant0,arnie morton's of chicago,http://www.okkam.org/oaie/restaurant2-address0,310-246-1501,http://www.okkam.org/oaie/restaurant2-category0
+http://www.okkam.org/oaie/restaurant2-Restaurant9,grill  the,http://www.okkam.org/oaie/restaurant2-address9,310-276-0615,http://www.okkam.org/oaie/restaurant2-category9
+http://www.okkam.org/oaie/restaurant2-Restaurant90,ritz-carlton dining room (buckhead),http://www.okkam.org/oaie/restaurant2-address90,404-237-2700,http://www.okkam.org/oaie/restaurant2-category90
+http://www.okkam.org/oaie/restaurant2-Restaurant7,fenix at the argyle,http://www.okkam.org/oaie/restaurant2-address7,213-848-6677,http://www.okkam.org/oaie/restaurant2-category7
+http://www.okkam.org/oaie/restaurant2-Restaurant91,ritz-carlton restaurant,http://www.okkam.org/oaie/restaurant2-address91,404-659-0400,http://www.okkam.org/oaie/restaurant2-category91
+http://www.okkam.org/oaie/restaurant2-Restaurant8,granita,http://www.okkam.org/oaie/restaurant2-address8,310-456-0488,http://www.okkam.org/oaie/restaurant2-category8
+http://www.okkam.org/oaie/restaurant2-Restaurant47,mesa grill,http://www.okkam.org/oaie/restaurant2-address47,212-807-7400,http://www.okkam.org/oaie/restaurant2-category47
+http://www.okkam.org/oaie/restaurant2-Restaurant48,mi cocina,http://www.okkam.org/oaie/restaurant2-address48,212-627-8273,http://www.okkam.org/oaie/restaurant2-category48
+http://www.okkam.org/oaie/restaurant2-Restaurant45,manhattan ocean club,http://www.okkam.org/oaie/restaurant2-address45,212-371-7777,http://www.okkam.org/oaie/restaurant2-category45
+http://www.okkam.org/oaie/restaurant2-Restaurant46,march,http://www.okkam.org/oaie/restaurant2-address46,212-754-6272,http://www.okkam.org/oaie/restaurant2-category46
+http://www.okkam.org/oaie/restaurant2-Restaurant49,montrachet,http://www.okkam.org/oaie/restaurant2-address49,212-219-2777,http://www.okkam.org/oaie/restaurant2-category49
+http://www.okkam.org/oaie/restaurant2-Restaurant40,la cote basque,http://www.okkam.org/oaie/restaurant2-address40,212-688-6525,http://www.okkam.org/oaie/restaurant2-category40
+http://www.okkam.org/oaie/restaurant2-Restaurant44,lutece,http://www.okkam.org/oaie/restaurant2-address44,212-752-2225,http://www.okkam.org/oaie/restaurant2-category44
+http://www.okkam.org/oaie/restaurant2-Restaurant43,lespinasse (new york city),http://www.okkam.org/oaie/restaurant2-address43,212-339-6719,http://www.okkam.org/oaie/restaurant2-category43
+http://www.okkam.org/oaie/restaurant2-Restaurant42,les celebrites,http://www.okkam.org/oaie/restaurant2-address42,212-484-5113,http://www.okkam.org/oaie/restaurant2-category42
+http://www.okkam.org/oaie/restaurant2-Restaurant41,le bernardin,http://www.okkam.org/oaie/restaurant2-address41,212-489-1515,http://www.okkam.org/oaie/restaurant2-category41
+http://www.okkam.org/oaie/restaurant2-Restaurant56,river cafe,http://www.okkam.org/oaie/restaurant2-address56,718-522-5200,http://www.okkam.org/oaie/restaurant2-category56
+http://www.okkam.org/oaie/restaurant2-Restaurant57,san domenico,http://www.okkam.org/oaie/restaurant2-address57,212-265-5959,http://www.okkam.org/oaie/restaurant2-category57
+http://www.okkam.org/oaie/restaurant2-Restaurant58,second avenue deli,http://www.okkam.org/oaie/restaurant2-address58,212-677-0606,http://www.okkam.org/oaie/restaurant2-category58
+http://www.okkam.org/oaie/restaurant2-Restaurant59,seryna,http://www.okkam.org/oaie/restaurant2-address59,212-980-9393,http://www.okkam.org/oaie/restaurant2-category59
+http://www.okkam.org/oaie/restaurant2-Restaurant51,park avenue cafe (new york city),http://www.okkam.org/oaie/restaurant2-address51,212-644-1900,http://www.okkam.org/oaie/restaurant2-category51
+http://www.okkam.org/oaie/restaurant2-Restaurant50,oceana,http://www.okkam.org/oaie/restaurant2-address50,212-759-5941,http://www.okkam.org/oaie/restaurant2-category50
+http://www.okkam.org/oaie/restaurant2-Restaurant53,picholine,http://www.okkam.org/oaie/restaurant2-address53,212-724-8585,http://www.okkam.org/oaie/restaurant2-category53
+http://www.okkam.org/oaie/restaurant2-Restaurant52,petrossian,http://www.okkam.org/oaie/restaurant2-address52,212-245-2214,http://www.okkam.org/oaie/restaurant2-category52
+http://www.okkam.org/oaie/restaurant2-Restaurant55,rainbow room,http://www.okkam.org/oaie/restaurant2-address55,212-632-5000,http://www.okkam.org/oaie/restaurant2-category55
+http://www.okkam.org/oaie/restaurant2-Restaurant54,pisces,http://www.okkam.org/oaie/restaurant2-address54,212-260-6660,http://www.okkam.org/oaie/restaurant2-category54
+http://www.okkam.org/oaie/restaurant2-Restaurant69,le montrachet bistro,http://www.okkam.org/oaie/restaurant2-address69,702-732-5651,http://www.okkam.org/oaie/restaurant2-category69
+http://www.okkam.org/oaie/restaurant2-Restaurant67,chin's,http://www.okkam.org/oaie/restaurant2-address67,702-733-8899,http://www.okkam.org/oaie/restaurant2-category67
+http://www.okkam.org/oaie/restaurant2-Restaurant68,coyote cafe (las vegas),http://www.okkam.org/oaie/restaurant2-address68,702-891-7349,http://www.okkam.org/oaie/restaurant2-category68
+http://www.okkam.org/oaie/restaurant2-Restaurant66,virgil's real bbq,http://www.okkam.org/oaie/restaurant2-address66,212-921-9494,http://www.okkam.org/oaie/restaurant2-category66
+http://www.okkam.org/oaie/restaurant2-Restaurant65,union square cafe,http://www.okkam.org/oaie/restaurant2-address65,212-243-4020,http://www.okkam.org/oaie/restaurant2-category65
+http://www.okkam.org/oaie/restaurant2-Restaurant64,uncle nick's,http://www.okkam.org/oaie/restaurant2-address64,212-245-7992,http://www.okkam.org/oaie/restaurant2-category64
+http://www.okkam.org/oaie/restaurant2-Restaurant63,tavern on the green,http://www.okkam.org/oaie/restaurant2-address63,212-873-3200,http://www.okkam.org/oaie/restaurant2-category63
+http://www.okkam.org/oaie/restaurant2-Restaurant62,smith & wollensky,http://www.okkam.org/oaie/restaurant2-address62,212-753-1530,http://www.okkam.org/oaie/restaurant2-category62
+http://www.okkam.org/oaie/restaurant2-Restaurant61,sign of the dove,http://www.okkam.org/oaie/restaurant2-address61,212-861-8080,http://www.okkam.org/oaie/restaurant2-category61
+http://www.okkam.org/oaie/restaurant2-Restaurant60,shun lee palace,http://www.okkam.org/oaie/restaurant2-address60,212-371-8844,http://www.okkam.org/oaie/restaurant2-category60
+http://www.okkam.org/oaie/restaurant2-Restaurant78,buckhead diner,http://www.okkam.org/oaie/restaurant2-address78,404-262-3336,http://www.okkam.org/oaie/restaurant2-category78
+http://www.okkam.org/oaie/restaurant2-Restaurant79,ciboulette restaurant,http://www.okkam.org/oaie/restaurant2-address79,404-874-7600,http://www.okkam.org/oaie/restaurant2-category79
+http://www.okkam.org/oaie/restaurant2-Restaurant75,bacchanalia,http://www.okkam.org/oaie/restaurant2-address75,404-365-0410,http://www.okkam.org/oaie/restaurant2-category75
+http://www.okkam.org/oaie/restaurant2-Restaurant74,abruzzi,http://www.okkam.org/oaie/restaurant2-address74,404-261-8186,http://www.okkam.org/oaie/restaurant2-category74
+http://www.okkam.org/oaie/restaurant2-Restaurant77,brasserie le coze,http://www.okkam.org/oaie/restaurant2-address77,404-266-1440,http://www.okkam.org/oaie/restaurant2-category77
+http://www.okkam.org/oaie/restaurant2-Restaurant76,bone's restaurant,http://www.okkam.org/oaie/restaurant2-address76,404-237-2663,http://www.okkam.org/oaie/restaurant2-category76
+http://www.okkam.org/oaie/restaurant2-Restaurant71,second street grill,http://www.okkam.org/oaie/restaurant2-address71,702-385-6277,http://www.okkam.org/oaie/restaurant2-category71
+http://www.okkam.org/oaie/restaurant2-Restaurant70,palace court,http://www.okkam.org/oaie/restaurant2-address70,702-731-7110,http://www.okkam.org/oaie/restaurant2-category70
+http://www.okkam.org/oaie/restaurant2-Restaurant73,tillerman  the,http://www.okkam.org/oaie/restaurant2-address73,702-731-4036,http://www.okkam.org/oaie/restaurant2-category73
+http://www.okkam.org/oaie/restaurant2-Restaurant72,steak house  the,http://www.okkam.org/oaie/restaurant2-address72,702-734-0410,http://www.okkam.org/oaie/restaurant2-category72
+http://www.okkam.org/oaie/restaurant2-Restaurant310,morton's,http://www.okkam.org/oaie/restaurant2-address310,212/972-3315,http://www.okkam.org/oaie/restaurant2-category310
+http://www.okkam.org/oaie/restaurant2-Restaurant311,motown cafe,http://www.okkam.org/oaie/restaurant2-address311,212/581-8030,http://www.okkam.org/oaie/restaurant2-category311
+http://www.okkam.org/oaie/restaurant2-Restaurant312,new york kom tang soot bul house,http://www.okkam.org/oaie/restaurant2-address312,212/ 947-8482,http://www.okkam.org/oaie/restaurant2-category312
+http://www.okkam.org/oaie/restaurant2-Restaurant313,new york noodletown,http://www.okkam.org/oaie/restaurant2-address313,212/349-0923,http://www.okkam.org/oaie/restaurant2-category313
+http://www.okkam.org/oaie/restaurant2-Restaurant314,newsbar,http://www.okkam.org/oaie/restaurant2-address314,212/255-3996,http://www.okkam.org/oaie/restaurant2-category314
+http://www.okkam.org/oaie/restaurant2-Restaurant315,odeon,http://www.okkam.org/oaie/restaurant2-address315,212/233-0507,http://www.okkam.org/oaie/restaurant2-category315
+http://www.okkam.org/oaie/restaurant2-Restaurant316,orso,http://www.okkam.org/oaie/restaurant2-address316,212/489-7212,http://www.okkam.org/oaie/restaurant2-category316
+http://www.okkam.org/oaie/restaurant2-Restaurant317,osteria al droge,http://www.okkam.org/oaie/restaurant2-address317,212/944-3643,http://www.okkam.org/oaie/restaurant2-category317
+http://www.okkam.org/oaie/restaurant2-Restaurant318,otabe,http://www.okkam.org/oaie/restaurant2-address318,212/223-7575,http://www.okkam.org/oaie/restaurant2-category318
+http://www.okkam.org/oaie/restaurant2-Restaurant319,pacifica,http://www.okkam.org/oaie/restaurant2-address319,212/941-4168,http://www.okkam.org/oaie/restaurant2-category319
+http://www.okkam.org/oaie/restaurant2-Restaurant514,stars,http://www.okkam.org/oaie/restaurant2-address514,415/861-7827,http://www.okkam.org/oaie/restaurant2-category514
+http://www.okkam.org/oaie/restaurant2-Restaurant513,splendido embarcadero,http://www.okkam.org/oaie/restaurant2-address513,415/986-3222,http://www.okkam.org/oaie/restaurant2-category513
+http://www.okkam.org/oaie/restaurant2-Restaurant516,stoyanof's cafe,http://www.okkam.org/oaie/restaurant2-address516,415/664-3664,http://www.okkam.org/oaie/restaurant2-category516
+http://www.okkam.org/oaie/restaurant2-Restaurant515,stars cafe,http://www.okkam.org/oaie/restaurant2-address515,415/861-4344,http://www.okkam.org/oaie/restaurant2-category515
+http://www.okkam.org/oaie/restaurant2-Restaurant518,suppenkuche,http://www.okkam.org/oaie/restaurant2-address518,415/252-9289,http://www.okkam.org/oaie/restaurant2-category518
+http://www.okkam.org/oaie/restaurant2-Restaurant517,straits cafe,http://www.okkam.org/oaie/restaurant2-address517,415/668-1783,http://www.okkam.org/oaie/restaurant2-category517
+http://www.okkam.org/oaie/restaurant2-Restaurant519,tadich grill,http://www.okkam.org/oaie/restaurant2-address519,415/391-2373,http://www.okkam.org/oaie/restaurant2-category519
+http://www.okkam.org/oaie/restaurant2-Restaurant510,sanppo,http://www.okkam.org/oaie/restaurant2-address510,415/346-3486,http://www.okkam.org/oaie/restaurant2-category510
+http://www.okkam.org/oaie/restaurant2-Restaurant512,south park cafe,http://www.okkam.org/oaie/restaurant2-address512,415/495-7275,http://www.okkam.org/oaie/restaurant2-category512
+http://www.okkam.org/oaie/restaurant2-Restaurant511,scala's bistro,http://www.okkam.org/oaie/restaurant2-address511,415/395-8555,http://www.okkam.org/oaie/restaurant2-category511
+http://www.okkam.org/oaie/restaurant2-Restaurant302,marichu,http://www.okkam.org/oaie/restaurant2-address302,212/370-1866,http://www.okkam.org/oaie/restaurant2-category302
+http://www.okkam.org/oaie/restaurant2-Restaurant303,marquet patisserie,http://www.okkam.org/oaie/restaurant2-address303,212/229-9313,http://www.okkam.org/oaie/restaurant2-category303
+http://www.okkam.org/oaie/restaurant2-Restaurant300,manhattan cafe,http://www.okkam.org/oaie/restaurant2-address300,212/888-6556,http://www.okkam.org/oaie/restaurant2-category300
+http://www.okkam.org/oaie/restaurant2-Restaurant301,manila garden,http://www.okkam.org/oaie/restaurant2-address301,212/777-6314,http://www.okkam.org/oaie/restaurant2-category301
+http://www.okkam.org/oaie/restaurant2-Restaurant306,mavalli palace,http://www.okkam.org/oaie/restaurant2-address306,212/679-5535,http://www.okkam.org/oaie/restaurant2-category306
+http://www.okkam.org/oaie/restaurant2-Restaurant307,milan cafe and coffee bar,http://www.okkam.org/oaie/restaurant2-address307,212/807-1801,http://www.okkam.org/oaie/restaurant2-category307
+http://www.okkam.org/oaie/restaurant2-Restaurant304,match,http://www.okkam.org/oaie/restaurant2-address304,212/906-9173,http://www.okkam.org/oaie/restaurant2-category304
+http://www.okkam.org/oaie/restaurant2-Restaurant305,matthew's,http://www.okkam.org/oaie/restaurant2-address305,212/838-4343,http://www.okkam.org/oaie/restaurant2-category305
+http://www.okkam.org/oaie/restaurant2-Restaurant308,monkey bar,http://www.okkam.org/oaie/restaurant2-address308,212/838-2600,http://www.okkam.org/oaie/restaurant2-category308
+http://www.okkam.org/oaie/restaurant2-Restaurant309,montien,http://www.okkam.org/oaie/restaurant2-address309,212/421-4433,http://www.okkam.org/oaie/restaurant2-category309
+http://www.okkam.org/oaie/restaurant2-Restaurant505,pastis,http://www.okkam.org/oaie/restaurant2-address505,415/391-2555,http://www.okkam.org/oaie/restaurant2-category505
+http://www.okkam.org/oaie/restaurant2-Restaurant504,pane e vino,http://www.okkam.org/oaie/restaurant2-address504,415/346-2111,http://www.okkam.org/oaie/restaurant2-category504
+http://www.okkam.org/oaie/restaurant2-Restaurant503,palio d'asti,http://www.okkam.org/oaie/restaurant2-address503,415/395-9800,http://www.okkam.org/oaie/restaurant2-category503
+http://www.okkam.org/oaie/restaurant2-Restaurant502,pacific pan pacific hotel,http://www.okkam.org/oaie/restaurant2-address502,415/929-2087,http://www.okkam.org/oaie/restaurant2-category502
+http://www.okkam.org/oaie/restaurant2-Restaurant509,rumpus,http://www.okkam.org/oaie/restaurant2-address509,415/421-2300,http://www.okkam.org/oaie/restaurant2-category509
+http://www.okkam.org/oaie/restaurant2-Restaurant508,rubicon,http://www.okkam.org/oaie/restaurant2-address508,415/434-4100,http://www.okkam.org/oaie/restaurant2-category508
+http://www.okkam.org/oaie/restaurant2-Restaurant507,r&g lounge,http://www.okkam.org/oaie/restaurant2-address507,415/982-7877,http://www.okkam.org/oaie/restaurant2-category507
+http://www.okkam.org/oaie/restaurant2-Restaurant506,perry's,http://www.okkam.org/oaie/restaurant2-address506,415/922-9022,http://www.okkam.org/oaie/restaurant2-category506
+http://www.okkam.org/oaie/restaurant2-Restaurant501,oritalia,http://www.okkam.org/oaie/restaurant2-address501,415/346-1333,http://www.okkam.org/oaie/restaurant2-category501
+http://www.okkam.org/oaie/restaurant2-Restaurant500,one market,http://www.okkam.org/oaie/restaurant2-address500,415/777-5577,http://www.okkam.org/oaie/restaurant2-category500
+http://www.okkam.org/oaie/restaurant2-Restaurant418,south of france,http://www.okkam.org/oaie/restaurant2-address418,404/325-6963,http://www.okkam.org/oaie/restaurant2-category418
+http://www.okkam.org/oaie/restaurant2-Restaurant597,taiko,http://www.okkam.org/oaie/restaurant2-address597,310-207-7782,http://www.okkam.org/oaie/restaurant2-category597
+http://www.okkam.org/oaie/restaurant2-Restaurant419,stringer's fish camp and oyster bar,http://www.okkam.org/oaie/restaurant2-address419,770/458-7145,http://www.okkam.org/oaie/restaurant2-category419
+http://www.okkam.org/oaie/restaurant2-Restaurant598,tommy's,http://www.okkam.org/oaie/restaurant2-address598,213-389-9060,http://www.okkam.org/oaie/restaurant2-category598
+http://www.okkam.org/oaie/restaurant2-Restaurant550,don antonio's,http://www.okkam.org/oaie/restaurant2-address550,310-209-1422,http://www.okkam.org/oaie/restaurant2-category550
+http://www.okkam.org/oaie/restaurant2-Restaurant599,uncle bill's pancake house,http://www.okkam.org/oaie/restaurant2-address599,310-545-5177,http://www.okkam.org/oaie/restaurant2-category599
+http://www.okkam.org/oaie/restaurant2-Restaurant551,duke's,http://www.okkam.org/oaie/restaurant2-address551,310-652-3100,http://www.okkam.org/oaie/restaurant2-category551
+http://www.okkam.org/oaie/restaurant2-Restaurant552,falafel king,http://www.okkam.org/oaie/restaurant2-address552,310-208-4444,http://www.okkam.org/oaie/restaurant2-category552
+http://www.okkam.org/oaie/restaurant2-Restaurant414,rib ranch,http://www.okkam.org/oaie/restaurant2-address414,404/233-7644,http://www.okkam.org/oaie/restaurant2-category414
+http://www.okkam.org/oaie/restaurant2-Restaurant593,ruth's chris steak house (los angeles),http://www.okkam.org/oaie/restaurant2-address593,310-859-8744,http://www.okkam.org/oaie/restaurant2-category593
+http://www.okkam.org/oaie/restaurant2-Restaurant553,feast from the east,http://www.okkam.org/oaie/restaurant2-address553,310-475-0400,http://www.okkam.org/oaie/restaurant2-category553
+http://www.okkam.org/oaie/restaurant2-Restaurant415,sa tsu ki,http://www.okkam.org/oaie/restaurant2-address415,404/325-5285,http://www.okkam.org/oaie/restaurant2-category415
+http://www.okkam.org/oaie/restaurant2-Restaurant594,shiro,http://www.okkam.org/oaie/restaurant2-address594,818-799-4774,http://www.okkam.org/oaie/restaurant2-category594
+http://www.okkam.org/oaie/restaurant2-Restaurant554,gumbo pot  the,http://www.okkam.org/oaie/restaurant2-address554,213-933-0358,http://www.okkam.org/oaie/restaurant2-category554
+http://www.okkam.org/oaie/restaurant2-Restaurant416,sato sushi and thai,http://www.okkam.org/oaie/restaurant2-address416,770/449-0033,http://www.okkam.org/oaie/restaurant2-category416
+http://www.okkam.org/oaie/restaurant2-Restaurant595,sushi nozawa,http://www.okkam.org/oaie/restaurant2-address595,818-508-7017,http://www.okkam.org/oaie/restaurant2-category595
+http://www.okkam.org/oaie/restaurant2-Restaurant555,hollywood hills coffee shop,http://www.okkam.org/oaie/restaurant2-address555,213-467-7678,http://www.okkam.org/oaie/restaurant2-category555
+http://www.okkam.org/oaie/restaurant2-Restaurant417,south city kitchen,http://www.okkam.org/oaie/restaurant2-address417,404/873-7358,http://www.okkam.org/oaie/restaurant2-category417
+http://www.okkam.org/oaie/restaurant2-Restaurant596,sweet lady jane,http://www.okkam.org/oaie/restaurant2-address596,213-653-7145,http://www.okkam.org/oaie/restaurant2-category596
+http://www.okkam.org/oaie/restaurant2-Restaurant556,indo cafe,http://www.okkam.org/oaie/restaurant2-address556,310-815-1290,http://www.okkam.org/oaie/restaurant2-category556
+http://www.okkam.org/oaie/restaurant2-Restaurant410,palisades,http://www.okkam.org/oaie/restaurant2-address410,404/350-6755,http://www.okkam.org/oaie/restaurant2-category410
+http://www.okkam.org/oaie/restaurant2-Restaurant557,jan's family restaurant,http://www.okkam.org/oaie/restaurant2-address557,213-651-2866,http://www.okkam.org/oaie/restaurant2-category557
+http://www.okkam.org/oaie/restaurant2-Restaurant692,frijoleros,http://www.okkam.org/oaie/restaurant2-address692,404-892-8226,http://www.okkam.org/oaie/restaurant2-category692
+http://www.okkam.org/oaie/restaurant2-Restaurant411,pleasant peasant,http://www.okkam.org/oaie/restaurant2-address411,404/874-3223,http://www.okkam.org/oaie/restaurant2-category411
+http://www.okkam.org/oaie/restaurant2-Restaurant558,jiraffe,http://www.okkam.org/oaie/restaurant2-address558,310-917-6671,http://www.okkam.org/oaie/restaurant2-category558
+http://www.okkam.org/oaie/restaurant2-Restaurant693,greenwood's,http://www.okkam.org/oaie/restaurant2-address693,770-992-5383,http://www.okkam.org/oaie/restaurant2-category693
+http://www.okkam.org/oaie/restaurant2-Restaurant412,pricci,http://www.okkam.org/oaie/restaurant2-address412,404/237-2941,http://www.okkam.org/oaie/restaurant2-category412
+http://www.okkam.org/oaie/restaurant2-Restaurant559,jody maroni's sausage kingdom,http://www.okkam.org/oaie/restaurant2-address559,310-306-1995,http://www.okkam.org/oaie/restaurant2-category559
+http://www.okkam.org/oaie/restaurant2-Restaurant694,harold's barbecue,http://www.okkam.org/oaie/restaurant2-address694,404-627-9268,http://www.okkam.org/oaie/restaurant2-category694
+http://www.okkam.org/oaie/restaurant2-Restaurant413,r.j.'s uptown kitchen & wine bar,http://www.okkam.org/oaie/restaurant2-address413,404/875-7775,http://www.okkam.org/oaie/restaurant2-category413
+http://www.okkam.org/oaie/restaurant2-Restaurant695,havana sandwich shop,http://www.okkam.org/oaie/restaurant2-address695,404-636-4094,http://www.okkam.org/oaie/restaurant2-category695
+http://www.okkam.org/oaie/restaurant2-Restaurant696,house of chan,http://www.okkam.org/oaie/restaurant2-address696,770-955-9444,http://www.okkam.org/oaie/restaurant2-category696
+http://www.okkam.org/oaie/restaurant2-Restaurant697,indian delights,http://www.okkam.org/oaie/restaurant2-address697,100-813-8212,http://www.okkam.org/oaie/restaurant2-category697
+http://www.okkam.org/oaie/restaurant2-Restaurant698,java jive,http://www.okkam.org/oaie/restaurant2-address698,404-876-6161,http://www.okkam.org/oaie/restaurant2-category698
+http://www.okkam.org/oaie/restaurant2-Restaurant699,johnny rockets (at),http://www.okkam.org/oaie/restaurant2-address699,770-955-6068,http://www.okkam.org/oaie/restaurant2-category699
+http://www.okkam.org/oaie/restaurant2-Restaurant691,flying biscuit  the,http://www.okkam.org/oaie/restaurant2-address691,404-687-8888,http://www.okkam.org/oaie/restaurant2-category691
+http://www.okkam.org/oaie/restaurant2-Restaurant690,eats,http://www.okkam.org/oaie/restaurant2-address690,404-888-9149,http://www.okkam.org/oaie/restaurant2-category690
+http://www.okkam.org/oaie/restaurant2-Restaurant592,russell's burgers,http://www.okkam.org/oaie/restaurant2-address592,310-596-9556,http://www.okkam.org/oaie/restaurant2-category592
+http://www.okkam.org/oaie/restaurant2-Restaurant591,ruby's (la),http://www.okkam.org/oaie/restaurant2-address591,818-796-7829,http://www.okkam.org/oaie/restaurant2-category591
+http://www.okkam.org/oaie/restaurant2-Restaurant590,rubin's red hots,http://www.okkam.org/oaie/restaurant2-address590,818-905-6515,http://www.okkam.org/oaie/restaurant2-category590
+http://www.okkam.org/oaie/restaurant2-Restaurant409,nickiemoto's: a sushi bar,http://www.okkam.org/oaie/restaurant2-address409,404/842-0334,http://www.okkam.org/oaie/restaurant2-category409
+http://www.okkam.org/oaie/restaurant2-Restaurant588,r-23,http://www.okkam.org/oaie/restaurant2-address588,213-687-7178,http://www.okkam.org/oaie/restaurant2-category588
+http://www.okkam.org/oaie/restaurant2-Restaurant540,bistro 45,http://www.okkam.org/oaie/restaurant2-address540,818-795-2478,http://www.okkam.org/oaie/restaurant2-category540
+http://www.okkam.org/oaie/restaurant2-Restaurant589,rae's,http://www.okkam.org/oaie/restaurant2-address589,310-828-7937,http://www.okkam.org/oaie/restaurant2-category589
+http://www.okkam.org/oaie/restaurant2-Restaurant541,brent's deli,http://www.okkam.org/oaie/restaurant2-address541,818-886-5679,http://www.okkam.org/oaie/restaurant2-category541
+http://www.okkam.org/oaie/restaurant2-Restaurant407,mckinnon's louisiane,http://www.okkam.org/oaie/restaurant2-address407,404/237-1313,http://www.okkam.org/oaie/restaurant2-category407
+http://www.okkam.org/oaie/restaurant2-Restaurant586,pink's famous chili dogs,http://www.okkam.org/oaie/restaurant2-address586,213-931-4223,http://www.okkam.org/oaie/restaurant2-category586
+http://www.okkam.org/oaie/restaurant2-Restaurant689,deacon burton's soulfood restaurant,http://www.okkam.org/oaie/restaurant2-address689,404-523-1929,http://www.okkam.org/oaie/restaurant2-category689
+http://www.okkam.org/oaie/restaurant2-Restaurant408,mi spia dunwoody rd.,http://www.okkam.org/oaie/restaurant2-address408,770/393-1333,http://www.okkam.org/oaie/restaurant2-category408
+http://www.okkam.org/oaie/restaurant2-Restaurant587,poquito mas,http://www.okkam.org/oaie/restaurant2-address587,818-563-2252,http://www.okkam.org/oaie/restaurant2-category587
+http://www.okkam.org/oaie/restaurant2-Restaurant405,luna si,http://www.okkam.org/oaie/restaurant2-address405,404/355-5993,http://www.okkam.org/oaie/restaurant2-category405
+http://www.okkam.org/oaie/restaurant2-Restaurant584,parkway grill,http://www.okkam.org/oaie/restaurant2-address584,818-795-1001,http://www.okkam.org/oaie/restaurant2-category584
+http://www.okkam.org/oaie/restaurant2-Restaurant544,bruno's,http://www.okkam.org/oaie/restaurant2-address544,310-397-5703,http://www.okkam.org/oaie/restaurant2-category544
+http://www.okkam.org/oaie/restaurant2-Restaurant585,pho hoa,http://www.okkam.org/oaie/restaurant2-address585,213-626-5530,http://www.okkam.org/oaie/restaurant2-category585
+http://www.okkam.org/oaie/restaurant2-Restaurant406,mambo restaurante cubano,http://www.okkam.org/oaie/restaurant2-address406,404/874-2626,http://www.okkam.org/oaie/restaurant2-category406
+http://www.okkam.org/oaie/restaurant2-Restaurant545,cafe '50s,http://www.okkam.org/oaie/restaurant2-address545,310-399-1955,http://www.okkam.org/oaie/restaurant2-category545
+http://www.okkam.org/oaie/restaurant2-Restaurant403,little szechuan,http://www.okkam.org/oaie/restaurant2-address403,770/451-0192,http://www.okkam.org/oaie/restaurant2-category403
+http://www.okkam.org/oaie/restaurant2-Restaurant542,brighton coffee shop,http://www.okkam.org/oaie/restaurant2-address542,310-276-7732,http://www.okkam.org/oaie/restaurant2-category542
+http://www.okkam.org/oaie/restaurant2-Restaurant582,ocean star,http://www.okkam.org/oaie/restaurant2-address582,818-308-2128,http://www.okkam.org/oaie/restaurant2-category582
+http://www.okkam.org/oaie/restaurant2-Restaurant404,lowcountry barbecue,http://www.okkam.org/oaie/restaurant2-address404,404/255-5160,http://www.okkam.org/oaie/restaurant2-category404
+http://www.okkam.org/oaie/restaurant2-Restaurant583,original pantry bakery,http://www.okkam.org/oaie/restaurant2-address583,213-627-6879,http://www.okkam.org/oaie/restaurant2-category583
+http://www.okkam.org/oaie/restaurant2-Restaurant543,bristol farms market cafe,http://www.okkam.org/oaie/restaurant2-address543,310-643-5229,http://www.okkam.org/oaie/restaurant2-category543
+http://www.okkam.org/oaie/restaurant2-Restaurant548,chez melange,http://www.okkam.org/oaie/restaurant2-address548,310-540-1222,http://www.okkam.org/oaie/restaurant2-category548
+http://www.okkam.org/oaie/restaurant2-Restaurant401,kamogawa,http://www.okkam.org/oaie/restaurant2-address401,404/841-0314,http://www.okkam.org/oaie/restaurant2-category401
+http://www.okkam.org/oaie/restaurant2-Restaurant683,cafe sunflower,http://www.okkam.org/oaie/restaurant2-address683,404-256-1675,http://www.okkam.org/oaie/restaurant2-category683
+http://www.okkam.org/oaie/restaurant2-Restaurant549,diaghilev,http://www.okkam.org/oaie/restaurant2-address549,310-854-1111,http://www.okkam.org/oaie/restaurant2-category549
+http://www.okkam.org/oaie/restaurant2-Restaurant402,la grotta at ravinia dunwoody rd.,http://www.okkam.org/oaie/restaurant2-address402,770/395-9925,http://www.okkam.org/oaie/restaurant2-category402
+http://www.okkam.org/oaie/restaurant2-Restaurant684,canoe,http://www.okkam.org/oaie/restaurant2-address684,770-432-2663,http://www.okkam.org/oaie/restaurant2-category684
+http://www.okkam.org/oaie/restaurant2-Restaurant546,cafe blanc,http://www.okkam.org/oaie/restaurant2-address546,310-888-0108,http://www.okkam.org/oaie/restaurant2-category546
+http://www.okkam.org/oaie/restaurant2-Restaurant681,bradshaw's restaurant,http://www.okkam.org/oaie/restaurant2-address681,404-261-7015,http://www.okkam.org/oaie/restaurant2-category681
+http://www.okkam.org/oaie/restaurant2-Restaurant547,cassell's,http://www.okkam.org/oaie/restaurant2-address547,213-480-8668,http://www.okkam.org/oaie/restaurant2-category547
+http://www.okkam.org/oaie/restaurant2-Restaurant400,imperial fez,http://www.okkam.org/oaie/restaurant2-address400,404/351-0870,http://www.okkam.org/oaie/restaurant2-category400
+http://www.okkam.org/oaie/restaurant2-Restaurant682,brookhaven cafe,http://www.okkam.org/oaie/restaurant2-address682,404-231-5907,http://www.okkam.org/oaie/restaurant2-category682
+http://www.okkam.org/oaie/restaurant2-Restaurant687,chops,http://www.okkam.org/oaie/restaurant2-address687,404-262-2675,http://www.okkam.org/oaie/restaurant2-category687
+http://www.okkam.org/oaie/restaurant2-Restaurant688,chopstix,http://www.okkam.org/oaie/restaurant2-address688,404-255-4868,http://www.okkam.org/oaie/restaurant2-category688
+http://www.okkam.org/oaie/restaurant2-Restaurant685,carey's,http://www.okkam.org/oaie/restaurant2-address685,770-422-8042,http://www.okkam.org/oaie/restaurant2-category685
+http://www.okkam.org/oaie/restaurant2-Restaurant686,carey's corner,http://www.okkam.org/oaie/restaurant2-address686,770-933-0909,http://www.okkam.org/oaie/restaurant2-category686
+http://www.okkam.org/oaie/restaurant2-Restaurant581,ocean park cafe,http://www.okkam.org/oaie/restaurant2-address581,310-452-5728,http://www.okkam.org/oaie/restaurant2-category581
+http://www.okkam.org/oaie/restaurant2-Restaurant580,mulberry st.,http://www.okkam.org/oaie/restaurant2-address580,818-906-8881,http://www.okkam.org/oaie/restaurant2-category580
+http://www.okkam.org/oaie/restaurant2-Restaurant436,center stage plaza hotel,http://www.okkam.org/oaie/restaurant2-address436,702/386-2512,http://www.okkam.org/oaie/restaurant2-category436
+http://www.okkam.org/oaie/restaurant2-Restaurant531,zarzuela,http://www.okkam.org/oaie/restaurant2-address531,415/346-0800,http://www.okkam.org/oaie/restaurant2-category531
+http://www.okkam.org/oaie/restaurant2-Restaurant571,langer's,http://www.okkam.org/oaie/restaurant2-address571,213-483-8050,http://www.okkam.org/oaie/restaurant2-category571
+http://www.okkam.org/oaie/restaurant2-Restaurant437,circus circus,http://www.okkam.org/oaie/restaurant2-address437,702/734-0410,http://www.okkam.org/oaie/restaurant2-category437
+http://www.okkam.org/oaie/restaurant2-Restaurant572,local nochol,http://www.okkam.org/oaie/restaurant2-address572,818-706-7706,http://www.okkam.org/oaie/restaurant2-category572
+http://www.okkam.org/oaie/restaurant2-Restaurant532,zuni cafe & grill,http://www.okkam.org/oaie/restaurant2-address532,415/552-2522,http://www.okkam.org/oaie/restaurant2-category532
+http://www.okkam.org/oaie/restaurant2-Restaurant438,empress court,http://www.okkam.org/oaie/restaurant2-address438,702/731-7888,http://www.okkam.org/oaie/restaurant2-category438
+http://www.okkam.org/oaie/restaurant2-Restaurant573,main course  the,http://www.okkam.org/oaie/restaurant2-address573,310-475-7564,http://www.okkam.org/oaie/restaurant2-category573
+http://www.okkam.org/oaie/restaurant2-Restaurant439,feast,http://www.okkam.org/oaie/restaurant2-address439,702/367-2411,http://www.okkam.org/oaie/restaurant2-category439
+http://www.okkam.org/oaie/restaurant2-Restaurant534,apple pan  the,http://www.okkam.org/oaie/restaurant2-address534,310-475-3585,http://www.okkam.org/oaie/restaurant2-category534
+http://www.okkam.org/oaie/restaurant2-Restaurant574,mani's bakery & espresso bar,http://www.okkam.org/oaie/restaurant2-address574,213-938-8800,http://www.okkam.org/oaie/restaurant2-category574
+http://www.okkam.org/oaie/restaurant2-Restaurant575,martha's,http://www.okkam.org/oaie/restaurant2-address575,310-376-7786,http://www.okkam.org/oaie/restaurant2-category575
+http://www.okkam.org/oaie/restaurant2-Restaurant576,maxwell's cafe,http://www.okkam.org/oaie/restaurant2-address576,310-306-7829,http://www.okkam.org/oaie/restaurant2-category576
+http://www.okkam.org/oaie/restaurant2-Restaurant577,michael's (los angeles),http://www.okkam.org/oaie/restaurant2-address577,310-451-0843,http://www.okkam.org/oaie/restaurant2-category577
+http://www.okkam.org/oaie/restaurant2-Restaurant530,yoyo tsumami bistro,http://www.okkam.org/oaie/restaurant2-address530,415/922-7788,http://www.okkam.org/oaie/restaurant2-category530
+http://www.okkam.org/oaie/restaurant2-Restaurant578,mishima,http://www.okkam.org/oaie/restaurant2-address578,213-782-0181,http://www.okkam.org/oaie/restaurant2-category578
+http://www.okkam.org/oaie/restaurant2-Restaurant539,bernard's,http://www.okkam.org/oaie/restaurant2-address539,213-612-1580,http://www.okkam.org/oaie/restaurant2-category539
+http://www.okkam.org/oaie/restaurant2-Restaurant579,mo better meatty meat,http://www.okkam.org/oaie/restaurant2-address579,213-935-5280,http://www.okkam.org/oaie/restaurant2-category579
+http://www.okkam.org/oaie/restaurant2-Restaurant430,broiler,http://www.okkam.org/oaie/restaurant2-address430,702/432-7777,http://www.okkam.org/oaie/restaurant2-category430
+http://www.okkam.org/oaie/restaurant2-Restaurant431,bugsy's diner,http://www.okkam.org/oaie/restaurant2-address431,702/733-3111,http://www.okkam.org/oaie/restaurant2-category431
+http://www.okkam.org/oaie/restaurant2-Restaurant432,cafe michelle,http://www.okkam.org/oaie/restaurant2-address432,702/735-8686,http://www.okkam.org/oaie/restaurant2-category432
+http://www.okkam.org/oaie/restaurant2-Restaurant535,asahi ramen,http://www.okkam.org/oaie/restaurant2-address535,310-479-2231,http://www.okkam.org/oaie/restaurant2-category535
+http://www.okkam.org/oaie/restaurant2-Restaurant433,cafe roma,http://www.okkam.org/oaie/restaurant2-address433,702/731-7547,http://www.okkam.org/oaie/restaurant2-category433
+http://www.okkam.org/oaie/restaurant2-Restaurant536,baja fresh,http://www.okkam.org/oaie/restaurant2-address536,805-498-4049,http://www.okkam.org/oaie/restaurant2-category536
+http://www.okkam.org/oaie/restaurant2-Restaurant434,capozzoli's,http://www.okkam.org/oaie/restaurant2-address434,702/731-5311,http://www.okkam.org/oaie/restaurant2-category434
+http://www.okkam.org/oaie/restaurant2-Restaurant537,belvedere  the,http://www.okkam.org/oaie/restaurant2-address537,310-788-2306,http://www.okkam.org/oaie/restaurant2-category537
+http://www.okkam.org/oaie/restaurant2-Restaurant435,carnival world,http://www.okkam.org/oaie/restaurant2-address435,702/252-7777,http://www.okkam.org/oaie/restaurant2-category435
+http://www.okkam.org/oaie/restaurant2-Restaurant538,benita's frites,http://www.okkam.org/oaie/restaurant2-address538,310-458-2889,http://www.okkam.org/oaie/restaurant2-category538
+http://www.okkam.org/oaie/restaurant2-Restaurant570,la serenata de garibaldi,http://www.okkam.org/oaie/restaurant2-address570,213-265-2887,http://www.okkam.org/oaie/restaurant2-category570
+http://www.okkam.org/oaie/restaurant2-Restaurant562,johnnie's pastrami,http://www.okkam.org/oaie/restaurant2-address562,310-397-6654,http://www.okkam.org/oaie/restaurant2-category562
+http://www.okkam.org/oaie/restaurant2-Restaurant522,ton kiang,http://www.okkam.org/oaie/restaurant2-address522,415/752-4440,http://www.okkam.org/oaie/restaurant2-category522
+http://www.okkam.org/oaie/restaurant2-Restaurant427,bertolini's,http://www.okkam.org/oaie/restaurant2-address427,702/735-4663,http://www.okkam.org/oaie/restaurant2-category427
+http://www.okkam.org/oaie/restaurant2-Restaurant563,johnny reb's southern smokehouse,http://www.okkam.org/oaie/restaurant2-address563,310-423-7327,http://www.okkam.org/oaie/restaurant2-category563
+http://www.okkam.org/oaie/restaurant2-Restaurant523,vertigo,http://www.okkam.org/oaie/restaurant2-address523,415/433-7250,http://www.okkam.org/oaie/restaurant2-category523
+http://www.okkam.org/oaie/restaurant2-Restaurant428,binion's coffee shop,http://www.okkam.org/oaie/restaurant2-address428,702/382-1600,http://www.okkam.org/oaie/restaurant2-category428
+http://www.okkam.org/oaie/restaurant2-Restaurant520,the heights,http://www.okkam.org/oaie/restaurant2-address520,415/474-8890,http://www.okkam.org/oaie/restaurant2-category520
+http://www.okkam.org/oaie/restaurant2-Restaurant560,joe's,http://www.okkam.org/oaie/restaurant2-address560,310-399-5811,http://www.okkam.org/oaie/restaurant2-category560
+http://www.okkam.org/oaie/restaurant2-Restaurant425,bamboo garden,http://www.okkam.org/oaie/restaurant2-address425,702/871-3262,http://www.okkam.org/oaie/restaurant2-category425
+http://www.okkam.org/oaie/restaurant2-Restaurant521,thepin,http://www.okkam.org/oaie/restaurant2-address521,415/863-9335,http://www.okkam.org/oaie/restaurant2-category521
+http://www.okkam.org/oaie/restaurant2-Restaurant561,john o'groats,http://www.okkam.org/oaie/restaurant2-address561,310-204-0692,http://www.okkam.org/oaie/restaurant2-category561
+http://www.okkam.org/oaie/restaurant2-Restaurant426,battista's hole in the wall,http://www.okkam.org/oaie/restaurant2-address426,702/732-1424,http://www.okkam.org/oaie/restaurant2-category426
+http://www.okkam.org/oaie/restaurant2-Restaurant566,kokomo cafe,http://www.okkam.org/oaie/restaurant2-address566,213-933-0773,http://www.okkam.org/oaie/restaurant2-category566
+http://www.okkam.org/oaie/restaurant2-Restaurant567,koo koo roo,http://www.okkam.org/oaie/restaurant2-address567,213-655-9045,http://www.okkam.org/oaie/restaurant2-category567
+http://www.okkam.org/oaie/restaurant2-Restaurant564,johnny rockets (la),http://www.okkam.org/oaie/restaurant2-address564,213-651-3361,http://www.okkam.org/oaie/restaurant2-category564
+http://www.okkam.org/oaie/restaurant2-Restaurant429,bistro,http://www.okkam.org/oaie/restaurant2-address429,702/791-7111,http://www.okkam.org/oaie/restaurant2-category429
+http://www.okkam.org/oaie/restaurant2-Restaurant565,killer shrimp,http://www.okkam.org/oaie/restaurant2-address565,818-508-1570,http://www.okkam.org/oaie/restaurant2-category565
+http://www.okkam.org/oaie/restaurant2-Restaurant420,sundown cafe,http://www.okkam.org/oaie/restaurant2-address420,404/321-1118,http://www.okkam.org/oaie/restaurant2-category420
+http://www.okkam.org/oaie/restaurant2-Restaurant568,la cachette,http://www.okkam.org/oaie/restaurant2-address568,310-470-4992,http://www.okkam.org/oaie/restaurant2-category568
+http://www.okkam.org/oaie/restaurant2-Restaurant528,yank sing,http://www.okkam.org/oaie/restaurant2-address528,415/541-4949,http://www.okkam.org/oaie/restaurant2-category528
+http://www.okkam.org/oaie/restaurant2-Restaurant569,la salsa (la),http://www.okkam.org/oaie/restaurant2-address569,310-456-6299,http://www.okkam.org/oaie/restaurant2-category569
+http://www.okkam.org/oaie/restaurant2-Restaurant529,yaya cuisine,http://www.okkam.org/oaie/restaurant2-address529,415/566-6966,http://www.okkam.org/oaie/restaurant2-category529
+http://www.okkam.org/oaie/restaurant2-Restaurant526,world wrapps,http://www.okkam.org/oaie/restaurant2-address526,415/563-9727,http://www.okkam.org/oaie/restaurant2-category526
+http://www.okkam.org/oaie/restaurant2-Restaurant423,antonio's,http://www.okkam.org/oaie/restaurant2-address423,702/252-7737,http://www.okkam.org/oaie/restaurant2-category423
+http://www.okkam.org/oaie/restaurant2-Restaurant527,wu kong,http://www.okkam.org/oaie/restaurant2-address527,415/957-9300,http://www.okkam.org/oaie/restaurant2-category527
+http://www.okkam.org/oaie/restaurant2-Restaurant424,bally's big kitchen,http://www.okkam.org/oaie/restaurant2-address424,702/739-4111,http://www.okkam.org/oaie/restaurant2-category424
+http://www.okkam.org/oaie/restaurant2-Restaurant524,vivande porta via,http://www.okkam.org/oaie/restaurant2-address524,415/346-4430,http://www.okkam.org/oaie/restaurant2-category524
+http://www.okkam.org/oaie/restaurant2-Restaurant421,taste of new orleans,http://www.okkam.org/oaie/restaurant2-address421,404/874-5535,http://www.okkam.org/oaie/restaurant2-category421
+http://www.okkam.org/oaie/restaurant2-Restaurant525,vivande ristorante,http://www.okkam.org/oaie/restaurant2-address525,415/673-9245,http://www.okkam.org/oaie/restaurant2-category525
+http://www.okkam.org/oaie/restaurant2-Restaurant422,tomtom,http://www.okkam.org/oaie/restaurant2-address422,404/264-1163,http://www.okkam.org/oaie/restaurant2-category422

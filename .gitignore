@@ -17,5 +17,9 @@ hs_err_pid*
 .project
 .classpath
 .settings/
-
+**/.idea/
+*.iml
 .DS_Store
+
+# ignore gitbook builds
+_book

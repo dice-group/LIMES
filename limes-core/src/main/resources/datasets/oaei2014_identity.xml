@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE LIMES SYSTEM "limes.dtd">
+<LIMES>
+	<PREFIX>
+		<NAMESPACE>http://www.w3.org/1999/02/22-rdf-syntax-ns#</NAMESPACE>
+		<LABEL>rdf</LABEL>
+	</PREFIX>
+	<PREFIX>
+		<NAMESPACE>http://www.w3.org/2000/01/rdf-schema#</NAMESPACE>
+		<LABEL>rdfs</LABEL>
+	</PREFIX>
+	<PREFIX>
+		<NAMESPACE>http://www.w3.org/2002/07/owl#</NAMESPACE>
+		<LABEL>owl</LABEL>
+	</PREFIX>
+	<PREFIX>
+		<NAMESPACE>http://www.instancematching.org/ontologies/oaei2014#</NAMESPACE>
+		<LABEL>oaei2014</LABEL>
+	</PREFIX>
+<SOURCE>
+		<ID>oaei20141</ID>
+		<ENDPOINT>src/main/resources/datasets/OAEI2014/oaei2014_identity_a.owl</ENDPOINT>
+		<VAR>?x</VAR>
+		<PAGESIZE>1000</PAGESIZE>
+		<RESTRICTION>?x rdf:type oaei2014:Book</RESTRICTION>
+		<PROPERTY>rdfs:label AS lowercase->replace(category,)</PROPERTY>
+		<PROPERTY>oaei2014:subject AS lowercase</PROPERTY>
+		<PROPERTY>oaei2014:author AS lowercase</PROPERTY>
+		<PROPERTY>oaei2014:literaryGenre AS lowercase</PROPERTY>		
+		<PROPERTY>oaei2014:genre AS lowercase</PROPERTY>
+		<PROPERTY>oaei2014:publisher AS lowercase</PROPERTY>
+		<TYPE>RDF/XML</TYPE>
+</SOURCE>
+	
+	<TARGET>
+		<ID>oaei20142</ID>
+		<ENDPOINT>src/main/resources/datasets/OAEI2014/oaei2014_identity_b.owl</ENDPOINT>
+		<VAR>?y</VAR>
+		<PAGESIZE>1000</PAGESIZE>
+		<RESTRICTION>?y rdf:type oaei2014:Book</RESTRICTION>
+		<PROPERTY>rdfs:label AS lowercase->replace(category,)</PROPERTY>
+		<PROPERTY>oaei2014:subject AS uriasstring->lowercase</PROPERTY>
+		<PROPERTY>oaei2014:author AS lowercase</PROPERTY>
+		<PROPERTY>oaei2014:literaryGenre AS lowercase</PROPERTY>		
+		<PROPERTY>oaei2014:genre AS lowercase</PROPERTY>
+		<PROPERTY>oaei2014:publisher AS lowercase</PROPERTY>
+		<TYPE>RDF/XML</TYPE>
+	</TARGET>	
+
+	<METRIC>levenshtein(x.rdfs:label, y.rdfs:label)</METRIC>
+
+	<ACCEPTANCE>
+		<THRESHOLD>0.2</THRESHOLD>
+		<FILE>accepted.txt</FILE>
+		<RELATION>owl:sameAs</RELATION>
+	</ACCEPTANCE>
+	<REVIEW>
+		<THRESHOLD>0.05</THRESHOLD>
+		<FILE>reviewme.txt</FILE>
+		<RELATION>owl:sameAs</RELATION>
+	</REVIEW>
+	
+	<EXECUTION>
+		<REWRITER>default</REWRITER>
+		<PLANNER>default</PLANNER>
+		<ENGINE>default</ENGINE>
+	</EXECUTION>
+	<OUTPUT>N3</OUTPUT>
+</LIMES>

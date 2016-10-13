@@ -1,0 +1,3 @@
+http://www.okkam.org/ontology_restaurant1.owl#has_address	http://www.okkam.org/ontology_restaurant2.owl#has_address	string
+http://www.okkam.org/ontology_restaurant1.owl#phone_number	http://www.okkam.org/ontology_restaurant2.owl#phone_number	string
+http://www.okkam.org/ontology_restaurant1.owl#name	http://www.okkam.org/ontology_restaurant2.owl#name	string

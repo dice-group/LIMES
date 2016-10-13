@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Check if we actually have commits to push
+commits=`git log @{u}..`
+if [ -z "$commits" ]; then
+    exit 0
+fi
+
+# execute build and tests
+cd limes-core
+mvn clean install
+
+# check if there were any errors
+if [ $? -ne 0 ]; then
+    echo "failed $CMD"
+    exit 1
+fi
+
+exit 0

@@ -1,0 +1,3 @@
+name	name	string
+description	description	string
+price	price	number

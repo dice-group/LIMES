@@ -1,0 +1,1130 @@
+<http://www.okkam.org/oaie/restaurant1-Address81> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City81> .
+<http://www.okkam.org/oaie/restaurant1-Address81> <http://www.okkam.org/ontology_restaurant1.owl#street> "2290 peachtree rd.  peachtree square shopping center" .
+<http://www.okkam.org/oaie/restaurant1-Address81> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City55> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City55> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant16> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address16> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant16> <http://www.okkam.org/ontology_restaurant1.owl#category> "californian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant16> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "213/467-1108" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant16> <http://www.okkam.org/ontology_restaurant1.owl#name> "patina" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant16> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address109> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City109> .
+<http://www.okkam.org/oaie/restaurant1-Address109> <http://www.okkam.org/ontology_restaurant1.owl#street> "545 post st." .
+<http://www.okkam.org/oaie/restaurant1-Address109> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address12> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City12> .
+<http://www.okkam.org/oaie/restaurant1-Address12> <http://www.okkam.org/ontology_restaurant1.owl#street> "8284 melrose ave." .
+<http://www.okkam.org/oaie/restaurant1-Address12> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City2> <http://www.okkam.org/ontology_restaurant1.owl#name> "bel air" .
+<http://www.okkam.org/oaie/restaurant1-City2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City41> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City41> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City15> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City15> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address8> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City8> .
+<http://www.okkam.org/oaie/restaurant1-Address8> <http://www.okkam.org/ontology_restaurant1.owl#street> "23725 w. malibu rd." .
+<http://www.okkam.org/oaie/restaurant1-Address8> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City95> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City95> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant95> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address95> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant95> <http://www.okkam.org/ontology_restaurant1.owl#category> "seafood" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant95> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/956-9662" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant95> <http://www.okkam.org/ontology_restaurant1.owl#name> "aqua" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant95> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant56> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address56> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant56> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant56> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "718/522-5200" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant56> <http://www.okkam.org/ontology_restaurant1.owl#name> "river cafe" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant56> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant101> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address101> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant101> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant101> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/543-0573" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant101> <http://www.okkam.org/ontology_restaurant1.owl#name> "fringale" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant101> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant26> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address26> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant26> <http://www.okkam.org/ontology_restaurant1.owl#category> "coffee bar" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant26> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/496-6031" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant26> <http://www.okkam.org/ontology_restaurant1.owl#name> "cafe lalo" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant26> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City81> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City81> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant76> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address76> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant76> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant76> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/237-2663" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant76> <http://www.okkam.org/ontology_restaurant1.owl#name> "bone's" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant76> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City103> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City103> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant66> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address66> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant66> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant66> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/ 921-9494" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant66> <http://www.okkam.org/ontology_restaurant1.owl#name> "virgil's" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant66> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address61> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City61> .
+<http://www.okkam.org/oaie/restaurant1-Address61> <http://www.okkam.org/ontology_restaurant1.owl#street> "1110 3rd ave. at 65th st." .
+<http://www.okkam.org/oaie/restaurant1-Address61> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant36> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address36> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant36> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant36> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/477-0777" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant36> <http://www.okkam.org/ontology_restaurant1.owl#name> "gramercy tavern" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant36> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant46> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address46> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant46> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant46> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/754-6272" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant46> <http://www.okkam.org/ontology_restaurant1.owl#name> "march" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant46> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant81> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address81> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant81> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant81> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/352-3517" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant81> <http://www.okkam.org/ontology_restaurant1.owl#name> "georgia grille" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant81> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant17> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address17> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant17> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant17> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "213/628-3781" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant17> <http://www.okkam.org/ontology_restaurant1.owl#name> "philippe's the original" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant17> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City56> <http://www.okkam.org/ontology_restaurant1.owl#name> "brooklyn" .
+<http://www.okkam.org/oaie/restaurant1-City56> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address80> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City80> .
+<http://www.okkam.org/oaie/restaurant1-Address80> <http://www.okkam.org/ontology_restaurant1.owl#street> "1 margaret mitchell sq." .
+<http://www.okkam.org/oaie/restaurant1-Address80> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City1> <http://www.okkam.org/ontology_restaurant1.owl#name> "studio city" .
+<http://www.okkam.org/oaie/restaurant1-City1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address11> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City11> .
+<http://www.okkam.org/oaie/restaurant1-Address11> <http://www.okkam.org/ontology_restaurant1.owl#street> "903 n. la cienega blvd." .
+<http://www.okkam.org/oaie/restaurant1-Address11> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant67> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address67> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant67> <http://www.okkam.org/ontology_restaurant1.owl#category> "asian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant67> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "702/733-8899" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant67> <http://www.okkam.org/ontology_restaurant1.owl#name> "chin's" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant67> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address108> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City108> .
+<http://www.okkam.org/oaie/restaurant1-Address108> <http://www.okkam.org/ontology_restaurant1.owl#street> "3201 fillmore st." .
+<http://www.okkam.org/oaie/restaurant1-Address108> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City14> <http://www.okkam.org/ontology_restaurant1.owl#name> "beverly hills" .
+<http://www.okkam.org/oaie/restaurant1-City14> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City42> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City42> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address7> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City7> .
+<http://www.okkam.org/oaie/restaurant1-Address7> <http://www.okkam.org/ontology_restaurant1.owl#street> "8358 sunset blvd. west" .
+<http://www.okkam.org/oaie/restaurant1-Address7> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City112> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City112> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City82> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City82> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City96> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City96> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant80> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address80> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant80> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant80> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/681-2909" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant80> <http://www.okkam.org/ontology_restaurant1.owl#name> "delectables" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant80> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant100> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address100> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant100> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant100> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/673-7779" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant100> <http://www.okkam.org/ontology_restaurant1.owl#name> "fleur de lys" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant100> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant57> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address57> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant57> <http://www.okkam.org/ontology_restaurant1.owl#category> "italian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant57> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/265-5959" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant57> <http://www.okkam.org/ontology_restaurant1.owl#name> "san domenico" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant57> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant94> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address94> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant94> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant94> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/387-0408" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant94> <http://www.okkam.org/ontology_restaurant1.owl#name> "alain rondelli" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant94> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City13> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City13> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant27> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address27> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant27> <http://www.okkam.org/ontology_restaurant1.owl#category> "continental" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant27> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/877-3500" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant27> <http://www.okkam.org/ontology_restaurant1.owl#name> "cafe des artistes" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant27> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant77> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address77> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant77> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant77> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/266-1440" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant77> <http://www.okkam.org/ontology_restaurant1.owl#name> "brasserie le coze" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant77> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address29> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City29> .
+<http://www.okkam.org/oaie/restaurant1-Address29> <http://www.okkam.org/ontology_restaurant1.owl#street> "854 7th ave.  between 54th and 55th sts." .
+<http://www.okkam.org/oaie/restaurant1-Address29> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address60> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City60> .
+<http://www.okkam.org/oaie/restaurant1-Address60> <http://www.okkam.org/ontology_restaurant1.owl#street> "43 w. 65th st." .
+<http://www.okkam.org/oaie/restaurant1-Address60> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address39> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City39> .
+<http://www.okkam.org/oaie/restaurant1-Address39> <http://www.okkam.org/ontology_restaurant1.owl#street> "33 w. 55th st." .
+<http://www.okkam.org/oaie/restaurant1-Address39> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address10> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City10> .
+<http://www.okkam.org/oaie/restaurant1-Address10> <http://www.okkam.org/ontology_restaurant1.owl#street> "1972 n. hillhurst ave." .
+<http://www.okkam.org/oaie/restaurant1-Address10> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City102> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City102> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant47> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address47> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant47> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant47> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/807-7400" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant47> <http://www.okkam.org/ontology_restaurant1.owl#name> "mesa grill" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant47> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant37> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address37> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant37> <http://www.okkam.org/ontology_restaurant1.owl#category> "tel caribbean" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant37> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/765-1737" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant37> <http://www.okkam.org/ontology_restaurant1.owl#name> "island spice" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant37> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address14> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City14> .
+<http://www.okkam.org/oaie/restaurant1-Address14> <http://www.okkam.org/ontology_restaurant1.owl#street> "129 n. la cienega blvd." .
+<http://www.okkam.org/oaie/restaurant1-Address14> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City53> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City53> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City0> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City0> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant18> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address18> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant18> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant18> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "818/990-0500" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant18> <http://www.okkam.org/ontology_restaurant1.owl#name> "pinot bistro" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant18> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant44> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address44> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant44> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant44> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/752-2225" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant44> <http://www.okkam.org/ontology_restaurant1.owl#name> "lutece" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant44> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City43> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City43> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant78> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address78> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant78> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant78> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/262-3336" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant78> <http://www.okkam.org/ontology_restaurant1.owl#name> "buckhead diner" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant78> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address107> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City107> .
+<http://www.okkam.org/oaie/restaurant1-Address107> <http://www.okkam.org/ontology_restaurant1.owl#street> "1737 post st." .
+<http://www.okkam.org/oaie/restaurant1-Address107> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City17> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City17> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address28> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City28> .
+<http://www.okkam.org/oaie/restaurant1-Address28> <http://www.okkam.org/ontology_restaurant1.owl#street> "2450 broadway  between 90th and 91st sts." .
+<http://www.okkam.org/oaie/restaurant1-Address28> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant103> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address103> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant103> <http://www.okkam.org/ontology_restaurant1.owl#category> "asian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant103> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/668-6654" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant103> <http://www.okkam.org/ontology_restaurant1.owl#name> "khan toke thai house" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant103> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant58> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address58> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant58> <http://www.okkam.org/ontology_restaurant1.owl#category> "delicatessen" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant58> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/677-0606" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant58> <http://www.okkam.org/ontology_restaurant1.owl#name> "second avenue deli" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant58> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant93> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address93> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant93> <http://www.okkam.org/ontology_restaurant1.owl#category> "italian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant93> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/875-8424" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant93> <http://www.okkam.org/ontology_restaurant1.owl#name> "veni vidi vici" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant93> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant24> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address24> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant24> <http://www.okkam.org/ontology_restaurant1.owl#category> "continental" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant24> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/307-7311" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant24> <http://www.okkam.org/ontology_restaurant1.owl#name> "aquavit" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant24> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City83> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City83> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant83> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address83> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant83> <http://www.okkam.org/ontology_restaurant1.owl#category> "asian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant83> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/876-4408" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant83> <http://www.okkam.org/ontology_restaurant1.owl#name> "heera of india" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant83> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City93> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City93> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City101> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City101> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant64> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address64> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant64> <http://www.okkam.org/ontology_restaurant1.owl#category> "mediterranean" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant64> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/315-1726" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant64> <http://www.okkam.org/ontology_restaurant1.owl#name> "uncle nick's" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant64> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant38> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address38> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant38> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant38> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/223-5656" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant38> <http://www.okkam.org/ontology_restaurant1.owl#name> "jo jo" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant38> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address13> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City13> .
+<http://www.okkam.org/oaie/restaurant1-Address13> <http://www.okkam.org/ontology_restaurant1.owl#street> "3rd st." .
+<http://www.okkam.org/oaie/restaurant1-Address13> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City54> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City54> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant19> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address19> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant19> <http://www.okkam.org/ontology_restaurant1.owl#category> "italian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant19> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "213/627-2300" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant19> <http://www.okkam.org/ontology_restaurant1.owl#name> "rex il ristorante" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant19> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City44> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City44> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address9> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City9> .
+<http://www.okkam.org/oaie/restaurant1-Address9> <http://www.okkam.org/ontology_restaurant1.owl#street> "9560 dayton way" .
+<http://www.okkam.org/oaie/restaurant1-Address9> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City16> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City16> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant79> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address79> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant79> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant79> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/874-7600" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant79> <http://www.okkam.org/ontology_restaurant1.owl#name> "ciboulette" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant79> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address106> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City106> .
+<http://www.okkam.org/oaie/restaurant1-Address106> <http://www.okkam.org/ontology_restaurant1.owl#street> "648 bush st." .
+<http://www.okkam.org/oaie/restaurant1-Address106> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address27> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City27> .
+<http://www.okkam.org/oaie/restaurant1-Address27> <http://www.okkam.org/ontology_restaurant1.owl#street> "1 w. 67th st." .
+<http://www.okkam.org/oaie/restaurant1-Address27> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant59> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address59> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant59> <http://www.okkam.org/ontology_restaurant1.owl#category> "asian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant59> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/980-9393" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant59> <http://www.okkam.org/ontology_restaurant1.owl#name> "seryna" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant59> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant102> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address102> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant102> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant102> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/777-9779" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant102> <http://www.okkam.org/ontology_restaurant1.owl#name> "hawthorne lane" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant102> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant92> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address92> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant92> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant92> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/351-9533" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant92> <http://www.okkam.org/ontology_restaurant1.owl#name> "toulouse" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant92> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant25> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address25> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant25> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant25> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/ 319-1660" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant25> <http://www.okkam.org/ontology_restaurant1.owl#name> "aureole" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant25> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City94> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City94> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant82> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address82> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant82> <http://www.okkam.org/ontology_restaurant1.owl#category> "international" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant82> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/233-7673" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant82> <http://www.okkam.org/ontology_restaurant1.owl#name> "hedgerose heights inn" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant82> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City100> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City100> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant112> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address112> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant112> <http://www.okkam.org/ontology_restaurant1.owl#category> "italian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant112> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "310/475-9807" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant112> <http://www.okkam.org/ontology_restaurant1.owl#name> "adriano's ristorante" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant112> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City84> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City84> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant45> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address45> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant45> <http://www.okkam.org/ontology_restaurant1.owl#category> "seafood" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant45> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/ 371-7777" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant45> <http://www.okkam.org/ontology_restaurant1.owl#name> "manhattan ocean club" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant45> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant65> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address65> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant65> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant65> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/243-4020" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant65> <http://www.okkam.org/ontology_restaurant1.owl#name> "union square cafe" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant65> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant39> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address39> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant39> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant39> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/586-4252" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant39> <http://www.okkam.org/ontology_restaurant1.owl#name> "la caravelle" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant39> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address4> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City4> .
+<http://www.okkam.org/oaie/restaurant1-Address4> <http://www.okkam.org/ontology_restaurant1.owl#street> "624 s. la brea ave." .
+<http://www.okkam.org/oaie/restaurant1-Address4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address47> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City47> .
+<http://www.okkam.org/oaie/restaurant1-Address47> <http://www.okkam.org/ontology_restaurant1.owl#street> "102 5th ave.  between 15th and 16th sts." .
+<http://www.okkam.org/oaie/restaurant1-Address47> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address105> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City105> .
+<http://www.okkam.org/oaie/restaurant1-Address105> <http://www.okkam.org/ontology_restaurant1.owl#street> "816 folsom st." .
+<http://www.okkam.org/oaie/restaurant1-Address105> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City19> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City19> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant52> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address52> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant52> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant52> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/245-2214" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant52> <http://www.okkam.org/ontology_restaurant1.owl#name> "petrossian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant52> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City45> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City45> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address71> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City71> .
+<http://www.okkam.org/oaie/restaurant1-Address71> <http://www.okkam.org/ontology_restaurant1.owl#street> "200 e. fremont st." .
+<http://www.okkam.org/oaie/restaurant1-Address71> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant42> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address42> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant42> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant42> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/484-5113" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant42> <http://www.okkam.org/ontology_restaurant1.owl#name> "les celebrites" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant42> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address16> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City16> .
+<http://www.okkam.org/oaie/restaurant1-Address16> <http://www.okkam.org/ontology_restaurant1.owl#street> "5955 melrose ave." .
+<http://www.okkam.org/oaie/restaurant1-Address16> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address98> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City98> .
+<http://www.okkam.org/oaie/restaurant1-Address98> <http://www.okkam.org/ontology_restaurant1.owl#street> "340 stockton st." .
+<http://www.okkam.org/oaie/restaurant1-Address98> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address85> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City85> .
+<http://www.okkam.org/oaie/restaurant1-Address85> <http://www.okkam.org/ontology_restaurant1.owl#street> "2637 peachtree rd.  peachtree house condominium" .
+<http://www.okkam.org/oaie/restaurant1-Address85> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant12> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address12> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant12> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant12> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "213/655-8880" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant12> <http://www.okkam.org/ontology_restaurant1.owl#name> "le chardonnay" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant12> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City29> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City29> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City79> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City79> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant85> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address85> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant85> <http://www.okkam.org/ontology_restaurant1.owl#category> "italian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant85> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/231-1368" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant85> <http://www.okkam.org/ontology_restaurant1.owl#name> "la grotta" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant85> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address36> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City36> .
+<http://www.okkam.org/oaie/restaurant1-Address36> <http://www.okkam.org/ontology_restaurant1.owl#street> "42 e. 20th st.  between park ave. s and broadway" .
+<http://www.okkam.org/oaie/restaurant1-Address36> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address99> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City99> .
+<http://www.okkam.org/oaie/restaurant1-Address99> <http://www.okkam.org/ontology_restaurant1.owl#street> "804 northpoint" .
+<http://www.okkam.org/oaie/restaurant1-Address99> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City85> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City85> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City39> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City39> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City99> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City99> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant105> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address105> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant105> <http://www.okkam.org/ontology_restaurant1.owl#category> "mediterranean" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant105> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/495-5775" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant105> <http://www.okkam.org/ontology_restaurant1.owl#name> "lulu" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant105> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant99> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address99> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant99> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant99> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/775-7036" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant99> <http://www.okkam.org/ontology_restaurant1.owl#name> "chez michel" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant99> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City65> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City65> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address26> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City26> .
+<http://www.okkam.org/oaie/restaurant1-Address26> <http://www.okkam.org/ontology_restaurant1.owl#street> "201 w. 83rd st." .
+<http://www.okkam.org/oaie/restaurant1-Address26> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address3> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City3> .
+<http://www.okkam.org/oaie/restaurant1-Address3> <http://www.okkam.org/ontology_restaurant1.owl#street> "14016 ventura blvd." .
+<http://www.okkam.org/oaie/restaurant1-Address3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address48> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City48> .
+<http://www.okkam.org/oaie/restaurant1-Address48> <http://www.okkam.org/ontology_restaurant1.owl#street> "57 jane st.  off hudson st." .
+<http://www.okkam.org/oaie/restaurant1-Address48> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address104> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City104> .
+<http://www.okkam.org/oaie/restaurant1-Address104> <http://www.okkam.org/ontology_restaurant1.owl#street> "2316 polk st." .
+<http://www.okkam.org/oaie/restaurant1-Address104> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City46> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City46> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address70> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City70> .
+<http://www.okkam.org/oaie/restaurant1-Address70> <http://www.okkam.org/ontology_restaurant1.owl#street> "3570 las vegas blvd. s" .
+<http://www.okkam.org/oaie/restaurant1-Address70> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant53> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address53> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant53> <http://www.okkam.org/ontology_restaurant1.owl#category> "mediterranean" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant53> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/724-8585" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant53> <http://www.okkam.org/ontology_restaurant1.owl#name> "picholine" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant53> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City18> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City18> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant43> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address43> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant43> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant43> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/339-6719" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant43> <http://www.okkam.org/ontology_restaurant1.owl#name> "lespinasse" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant43> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address15> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City15> .
+<http://www.okkam.org/oaie/restaurant1-Address15> <http://www.okkam.org/ontology_restaurant1.owl#street> "9001 santa monica blvd." .
+<http://www.okkam.org/oaie/restaurant1-Address15> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant13> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address13> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant13> <http://www.okkam.org/ontology_restaurant1.owl#category> "italian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant13> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "310/274-1893" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant13> <http://www.okkam.org/ontology_restaurant1.owl#name> "locanda veneta" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant13> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address84> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City84> .
+<http://www.okkam.org/oaie/restaurant1-Address84> <http://www.okkam.org/ontology_restaurant1.owl#street> "1397 n. highland ave." .
+<http://www.okkam.org/oaie/restaurant1-Address84> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City28> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City28> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City86> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City86> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address35> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City35> .
+<http://www.okkam.org/oaie/restaurant1-Address35> <http://www.okkam.org/ontology_restaurant1.owl#street> "12 e. 12th st." .
+<http://www.okkam.org/oaie/restaurant1-Address35> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant84> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address84> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant84> <http://www.okkam.org/ontology_restaurant1.owl#category> "caribbean" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant84> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/876-0676" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant84> <http://www.okkam.org/ontology_restaurant1.owl#name> "indigo coastal grill" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant84> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City38> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City38> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City47> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City47> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address25> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City25> .
+<http://www.okkam.org/oaie/restaurant1-Address25> <http://www.okkam.org/ontology_restaurant1.owl#street> "34 e. 61st st." .
+<http://www.okkam.org/oaie/restaurant1-Address25> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City66> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City66> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant104> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address104> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant104> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant104> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/776-5577" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant104> <http://www.okkam.org/ontology_restaurant1.owl#name> "la folie" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant104> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant98> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address98> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant98> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant98> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/955-5555" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant98> <http://www.okkam.org/ontology_restaurant1.owl#name> "campton place" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant98> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant54> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address54> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant54> <http://www.okkam.org/ontology_restaurant1.owl#category> "seafood" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant54> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/260-6660" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant54> <http://www.okkam.org/ontology_restaurant1.owl#name> "pisces" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant54> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address6> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City6> .
+<http://www.okkam.org/oaie/restaurant1-Address6> <http://www.okkam.org/ontology_restaurant1.owl#street> "6703 melrose ave." .
+<http://www.okkam.org/oaie/restaurant1-Address6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address49> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City49> .
+<http://www.okkam.org/oaie/restaurant1-Address49> <http://www.okkam.org/ontology_restaurant1.owl#street> "239 w. broadway  between walker and white sts." .
+<http://www.okkam.org/oaie/restaurant1-Address49> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address103> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City103> .
+<http://www.okkam.org/oaie/restaurant1-Address103> <http://www.okkam.org/ontology_restaurant1.owl#street> "5937 geary blvd." .
+<http://www.okkam.org/oaie/restaurant1-Address103> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address73> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City73> .
+<http://www.okkam.org/oaie/restaurant1-Address73> <http://www.okkam.org/ontology_restaurant1.owl#street> "2245 e. flamingo rd." .
+<http://www.okkam.org/oaie/restaurant1-Address73> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant2> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address2> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant2> <http://www.okkam.org/ontology_restaurant1.owl#category> "californian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant2> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "310/472-1211" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant2> <http://www.okkam.org/ontology_restaurant1.owl#name> "hotel bel-air" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant14> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address14> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant14> <http://www.okkam.org/ontology_restaurant1.owl#category> "asian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant14> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "310/659-9639" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant14> <http://www.okkam.org/ontology_restaurant1.owl#name> "matsuhisa" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant14> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant68> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address68> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant68> <http://www.okkam.org/ontology_restaurant1.owl#category> "southwestern" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant68> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "702/891-7349" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant68> <http://www.okkam.org/ontology_restaurant1.owl#name> "coyote cafe" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant68> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant40> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address40> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant40> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant40> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/688-6525" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant40> <http://www.okkam.org/ontology_restaurant1.owl#name> "la cote basque" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant40> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City57> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City57> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address18> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City18> .
+<http://www.okkam.org/oaie/restaurant1-Address18> <http://www.okkam.org/ontology_restaurant1.owl#street> "12969 ventura blvd." .
+<http://www.okkam.org/oaie/restaurant1-Address18> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address59> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City59> .
+<http://www.okkam.org/oaie/restaurant1-Address59> <http://www.okkam.org/ontology_restaurant1.owl#street> "11 e. 53rd st." .
+<http://www.okkam.org/oaie/restaurant1-Address59> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address83> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City83> .
+<http://www.okkam.org/oaie/restaurant1-Address83> <http://www.okkam.org/ontology_restaurant1.owl#street> "595 piedmont ave.  rio shopping mall" .
+<http://www.okkam.org/oaie/restaurant1-Address83> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City58> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City58> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City27> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City27> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City87> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City87> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant87> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address87> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant87> <http://www.okkam.org/ontology_restaurant1.owl#category> "continental" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant87> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/221-6362" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant87> <http://www.okkam.org/ontology_restaurant1.owl#name> "nikolai's roof" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant87> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address38> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City38> .
+<http://www.okkam.org/oaie/restaurant1-Address38> <http://www.okkam.org/ontology_restaurant1.owl#street> "160 e. 64th st." .
+<http://www.okkam.org/oaie/restaurant1-Address38> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City77> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City77> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City67> <http://www.okkam.org/ontology_restaurant1.owl#name> "las vegas" .
+<http://www.okkam.org/oaie/restaurant1-City67> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant28> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address28> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant28> <http://www.okkam.org/ontology_restaurant1.owl#category> "italian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant28> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/362-2200" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant28> <http://www.okkam.org/ontology_restaurant1.owl#name> "carmine's" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant28> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant97> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address97> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant97> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant97> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/392-3505" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant97> <http://www.okkam.org/ontology_restaurant1.owl#name> "cafe claude" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant97> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant107> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address107> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant107> <http://www.okkam.org/ontology_restaurant1.owl#category> "asian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant107> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/922-0337" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant107> <http://www.okkam.org/ontology_restaurant1.owl#name> "mifune japan center  kintetsu building" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant107> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address24> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City24> .
+<http://www.okkam.org/oaie/restaurant1-Address24> <http://www.okkam.org/ontology_restaurant1.owl#street> "13 w. 54th st." .
+<http://www.okkam.org/oaie/restaurant1-Address24> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City111> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City111> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City48> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City48> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City97> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City97> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant55> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address55> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant55> <http://www.okkam.org/ontology_restaurant1.owl#category> "or 212/632-5100 american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant55> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/632-5000" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant55> <http://www.okkam.org/ontology_restaurant1.owl#name> "rainbow room" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant55> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address72> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City72> .
+<http://www.okkam.org/oaie/restaurant1-Address72> <http://www.okkam.org/ontology_restaurant1.owl#street> "2880 las vegas blvd. s" .
+<http://www.okkam.org/oaie/restaurant1-Address72> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address102> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City102> .
+<http://www.okkam.org/oaie/restaurant1-Address102> <http://www.okkam.org/ontology_restaurant1.owl#street> "22 hawthorne st." .
+<http://www.okkam.org/oaie/restaurant1-Address102> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City69> <http://www.okkam.org/ontology_restaurant1.owl#name> "las vegas" .
+<http://www.okkam.org/oaie/restaurant1-City69> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant1> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address1> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant1> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant1> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "818/762-1221" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant1> <http://www.okkam.org/ontology_restaurant1.owl#name> "art's delicatessen" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address5> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City5> .
+<http://www.okkam.org/oaie/restaurant1-Address5> <http://www.okkam.org/ontology_restaurant1.owl#street> "2709 main st." .
+<http://www.okkam.org/oaie/restaurant1-Address5> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant69> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address69> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant69> <http://www.okkam.org/ontology_restaurant1.owl#category> "continental" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant69> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "702/732-5111" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant69> <http://www.okkam.org/ontology_restaurant1.owl#name> "le montrachet" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant69> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant15> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address15> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant15> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant15> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "310/550-8811" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant15> <http://www.okkam.org/ontology_restaurant1.owl#name> "the palm" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant15> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address82> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City82> .
+<http://www.okkam.org/oaie/restaurant1-Address82> <http://www.okkam.org/ontology_restaurant1.owl#street> "490 e. paces ferry rd." .
+<http://www.okkam.org/oaie/restaurant1-Address82> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address17> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City17> .
+<http://www.okkam.org/oaie/restaurant1-Address17> <http://www.okkam.org/ontology_restaurant1.owl#street> "1001 n. alameda st." .
+<http://www.okkam.org/oaie/restaurant1-Address17> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant41> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address41> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant41> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant41> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/489-1515" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant41> <http://www.okkam.org/ontology_restaurant1.owl#name> "le bernardin" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant41> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City59> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City59> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City26> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City26> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant86> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address86> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant86> <http://www.okkam.org/ontology_restaurant1.owl#category> "southern" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant86> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/876-1800" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant86> <http://www.okkam.org/ontology_restaurant1.owl#name> "mary mac's tea room" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant86> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address37> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City37> .
+<http://www.okkam.org/oaie/restaurant1-Address37> <http://www.okkam.org/ontology_restaurant1.owl#street> "402 w. 44th st." .
+<http://www.okkam.org/oaie/restaurant1-Address37> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City78> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City78> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City88> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City88> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant96> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address96> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant96> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant96> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/543-6084" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant96> <http://www.okkam.org/ontology_restaurant1.owl#name> "boulevard" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant96> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant106> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address106> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant106> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant106> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/989-7154" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant106> <http://www.okkam.org/ontology_restaurant1.owl#name> "masa's" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant106> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant0> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address0> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant0> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant0> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "310/246-1501" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant0> <http://www.okkam.org/ontology_restaurant1.owl#name> "arnie morton's of chicago" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant0> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City98> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City98> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant29> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address29> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant29> <http://www.okkam.org/ontology_restaurant1.owl#category> "delicatessen" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant29> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/757-2245" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant29> <http://www.okkam.org/ontology_restaurant1.owl#name> "carnegie deli" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant29> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City68> <http://www.okkam.org/ontology_restaurant1.owl#name> "las vegas" .
+<http://www.okkam.org/oaie/restaurant1-City68> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address23> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City23> .
+<http://www.okkam.org/oaie/restaurant1-Address23> <http://www.okkam.org/ontology_restaurant1.owl#street> "21 w. 52nd st." .
+<http://www.okkam.org/oaie/restaurant1-Address23> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City49> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City49> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City110> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City110> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address100> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City100> .
+<http://www.okkam.org/oaie/restaurant1-Address100> <http://www.okkam.org/ontology_restaurant1.owl#street> "777 sutter st." .
+<http://www.okkam.org/oaie/restaurant1-Address100> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address33> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City33> .
+<http://www.okkam.org/oaie/restaurant1-Address33> <http://www.okkam.org/ontology_restaurant1.owl#street> "243 e. 58th st." .
+<http://www.okkam.org/oaie/restaurant1-Address33> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City62> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City62> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant109> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address109> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant109> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant109> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/776-7825" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant109> <http://www.okkam.org/ontology_restaurant1.owl#name> "postrio" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant109> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address110> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City110> .
+<http://www.okkam.org/oaie/restaurant1-Address110> <http://www.okkam.org/ontology_restaurant1.owl#street> "600 stockton st." .
+<http://www.okkam.org/oaie/restaurant1-Address110> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address1> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City1> .
+<http://www.okkam.org/oaie/restaurant1-Address1> <http://www.okkam.org/ontology_restaurant1.owl#street> "12224 ventura blvd." .
+<http://www.okkam.org/oaie/restaurant1-Address1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City76> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City76> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City108> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City108> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City25> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City25> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City24> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City24> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant89> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address89> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant89> <http://www.okkam.org/ontology_restaurant1.owl#category> "ext 6108 international" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant89> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/237-2700" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant89> <http://www.okkam.org/ontology_restaurant1.owl#name> "cafe  ritz-carlton  buckhead" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant89> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address94> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City94> .
+<http://www.okkam.org/oaie/restaurant1-Address94> <http://www.okkam.org/ontology_restaurant1.owl#street> "126 clement st." .
+<http://www.okkam.org/oaie/restaurant1-Address94> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant5> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address5> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant5> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant5> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "310/392-9025" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant5> <http://www.okkam.org/ontology_restaurant1.owl#name> "chinois on main" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant5> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address42> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City42> .
+<http://www.okkam.org/oaie/restaurant1-Address42> <http://www.okkam.org/ontology_restaurant1.owl#street> "160 central park s" .
+<http://www.okkam.org/oaie/restaurant1-Address42> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address32> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City32> .
+<http://www.okkam.org/oaie/restaurant1-Address32> <http://www.okkam.org/ontology_restaurant1.owl#street> "210 e. 58th st." .
+<http://www.okkam.org/oaie/restaurant1-Address32> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address75> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City75> .
+<http://www.okkam.org/oaie/restaurant1-Address75> <http://www.okkam.org/ontology_restaurant1.owl#street> "3125 piedmont rd.  near peachtree rd." .
+<http://www.okkam.org/oaie/restaurant1-Address75> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City34> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City34> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address56> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City56> .
+<http://www.okkam.org/oaie/restaurant1-Address56> <http://www.okkam.org/ontology_restaurant1.owl#street> "1 water st. at the east river" .
+<http://www.okkam.org/oaie/restaurant1-Address56> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address54> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City54> .
+<http://www.okkam.org/oaie/restaurant1-Address54> <http://www.okkam.org/ontology_restaurant1.owl#street> "95 ave. a at 6th st." .
+<http://www.okkam.org/oaie/restaurant1-Address54> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address34> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City34> .
+<http://www.okkam.org/oaie/restaurant1-Address34> <http://www.okkam.org/ontology_restaurant1.owl#street> "99 e. 52nd st." .
+<http://www.okkam.org/oaie/restaurant1-Address34> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City61> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City61> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address111> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City111> .
+<http://www.okkam.org/oaie/restaurant1-Address111> <http://www.okkam.org/ontology_restaurant1.owl#street> "532 columbus ave." .
+<http://www.okkam.org/oaie/restaurant1-Address111> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address44> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City44> .
+<http://www.okkam.org/oaie/restaurant1-Address44> <http://www.okkam.org/ontology_restaurant1.owl#street> "249 e. 50th st." .
+<http://www.okkam.org/oaie/restaurant1-Address44> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant88> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address88> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant88> <http://www.okkam.org/ontology_restaurant1.owl#category> "international" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant88> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/261-3662" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant88> <http://www.okkam.org/ontology_restaurant1.owl#name> "pano's and paul's" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant88> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address89> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City89> .
+<http://www.okkam.org/oaie/restaurant1-Address89> <http://www.okkam.org/ontology_restaurant1.owl#street> "3434 peachtree rd." .
+<http://www.okkam.org/oaie/restaurant1-Address89> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant108> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address108> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant108> <http://www.okkam.org/ontology_restaurant1.owl#category> "mediterranean" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant108> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/563-4755" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant108> <http://www.okkam.org/ontology_restaurant1.owl#name> "plumpjack cafe" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant108> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City75> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City75> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City109> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City109> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City89> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City89> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address95> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City95> .
+<http://www.okkam.org/oaie/restaurant1-Address95> <http://www.okkam.org/ontology_restaurant1.owl#street> "252 california st." .
+<http://www.okkam.org/oaie/restaurant1-Address95> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address2> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City2> .
+<http://www.okkam.org/oaie/restaurant1-Address2> <http://www.okkam.org/ontology_restaurant1.owl#street> "701 stone canyon rd." .
+<http://www.okkam.org/oaie/restaurant1-Address2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City23> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City23> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address69> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City69> .
+<http://www.okkam.org/oaie/restaurant1-Address69> <http://www.okkam.org/ontology_restaurant1.owl#street> "3000 w. paradise rd." .
+<http://www.okkam.org/oaie/restaurant1-Address69> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address43> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City43> .
+<http://www.okkam.org/oaie/restaurant1-Address43> <http://www.okkam.org/ontology_restaurant1.owl#street> "2 e. 55th st." .
+<http://www.okkam.org/oaie/restaurant1-Address43> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant6> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address6> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant6> <http://www.okkam.org/ontology_restaurant1.owl#category> "californian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant6> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "213/857-0034" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant6> <http://www.okkam.org/ontology_restaurant1.owl#name> "citrus" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address74> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City74> .
+<http://www.okkam.org/oaie/restaurant1-Address74> <http://www.okkam.org/ontology_restaurant1.owl#street> "2355 peachtree rd.  peachtree battle shopping center" .
+<http://www.okkam.org/oaie/restaurant1-Address74> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address101> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City101> .
+<http://www.okkam.org/oaie/restaurant1-Address101> <http://www.okkam.org/ontology_restaurant1.owl#street> "570 4th st." .
+<http://www.okkam.org/oaie/restaurant1-Address101> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City33> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City33> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address55> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City55> .
+<http://www.okkam.org/oaie/restaurant1-Address55> <http://www.okkam.org/ontology_restaurant1.owl#street> "30 rockefeller plaza" .
+<http://www.okkam.org/oaie/restaurant1-Address55> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City9> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City9> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address19> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City19> .
+<http://www.okkam.org/oaie/restaurant1-Address19> <http://www.okkam.org/ontology_restaurant1.owl#street> "617 s. olive st." .
+<http://www.okkam.org/oaie/restaurant1-Address19> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City64> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City64> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address78> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City78> .
+<http://www.okkam.org/oaie/restaurant1-Address78> <http://www.okkam.org/ontology_restaurant1.owl#street> "3073 piedmont road" .
+<http://www.okkam.org/oaie/restaurant1-Address78> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City37> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City37> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant70> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address70> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant70> <http://www.okkam.org/ontology_restaurant1.owl#category> "continental" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant70> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "702/731-7547" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant70> <http://www.okkam.org/ontology_restaurant1.owl#name> "palace court" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant70> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant11> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address11> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant11> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant11> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "310/652-9770" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant11> <http://www.okkam.org/ontology_restaurant1.owl#name> "l'orangerie" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant11> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City74> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City74> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address88> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City88> .
+<http://www.okkam.org/oaie/restaurant1-Address88> <http://www.okkam.org/ontology_restaurant1.owl#street> "1232 w. paces ferry rd." .
+<http://www.okkam.org/oaie/restaurant1-Address88> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address45> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City45> .
+<http://www.okkam.org/oaie/restaurant1-Address45> <http://www.okkam.org/ontology_restaurant1.owl#street> "57 w. 58th st." .
+<http://www.okkam.org/oaie/restaurant1-Address45> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address112> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City112> .
+<http://www.okkam.org/oaie/restaurant1-Address112> <http://www.okkam.org/ontology_restaurant1.owl#street> "2930 beverly glen circle" .
+<http://www.okkam.org/oaie/restaurant1-Address112> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address87> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City87> .
+<http://www.okkam.org/oaie/restaurant1-Address87> <http://www.okkam.org/ontology_restaurant1.owl#street> "255 courtland st.  at harris st." .
+<http://www.okkam.org/oaie/restaurant1-Address87> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant31> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address31> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant31> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant31> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/288-0033" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant31> <http://www.okkam.org/ontology_restaurant1.owl#name> "daniel" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant31> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address68> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City68> .
+<http://www.okkam.org/oaie/restaurant1-Address68> <http://www.okkam.org/ontology_restaurant1.owl#street> "3799 las vegas blvd. s" .
+<http://www.okkam.org/oaie/restaurant1-Address68> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant3> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address3> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant3> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant3> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "818/788-3536" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant3> <http://www.okkam.org/ontology_restaurant1.owl#name> "cafe bizou" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address96> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City96> .
+<http://www.okkam.org/oaie/restaurant1-Address96> <http://www.okkam.org/ontology_restaurant1.owl#street> "1 mission st." .
+<http://www.okkam.org/oaie/restaurant1-Address96> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City22> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City22> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address58> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City58> .
+<http://www.okkam.org/oaie/restaurant1-Address58> <http://www.okkam.org/ontology_restaurant1.owl#street> "156 2nd ave. at 10th st." .
+<http://www.okkam.org/oaie/restaurant1-Address58> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City8> <http://www.okkam.org/ontology_restaurant1.owl#name> "malibu" .
+<http://www.okkam.org/oaie/restaurant1-City8> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant50> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address50> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant50> <http://www.okkam.org/ontology_restaurant1.owl#category> "seafood" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant50> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/759-5941" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant50> <http://www.okkam.org/ontology_restaurant1.owl#name> "oceana" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant50> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address30> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City30> .
+<http://www.okkam.org/oaie/restaurant1-Address30> <http://www.okkam.org/ontology_restaurant1.owl#street> "2 harrison st.  near hudson st." .
+<http://www.okkam.org/oaie/restaurant1-Address30> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address77> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City77> .
+<http://www.okkam.org/oaie/restaurant1-Address77> <http://www.okkam.org/ontology_restaurant1.owl#street> "3393 peachtree rd.  lenox square mall  near neiman marcus" .
+<http://www.okkam.org/oaie/restaurant1-Address77> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City63> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City63> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant71> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address71> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant71> <http://www.okkam.org/ontology_restaurant1.owl#category> "seafood" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant71> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "702/385-3232" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant71> <http://www.okkam.org/ontology_restaurant1.owl#name> "second street grille" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant71> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City36> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City36> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address0> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City0> .
+<http://www.okkam.org/oaie/restaurant1-Address0> <http://www.okkam.org/ontology_restaurant1.owl#street> "435 s. la cienega blv." .
+<http://www.okkam.org/oaie/restaurant1-Address0> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant10> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address10> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant10> <http://www.okkam.org/ontology_restaurant1.owl#category> "asian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant10> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "213/665-1891" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant10> <http://www.okkam.org/ontology_restaurant1.owl#name> "restaurant katsu" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant10> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City73> <http://www.okkam.org/ontology_restaurant1.owl#name> "las vegas" .
+<http://www.okkam.org/oaie/restaurant1-City73> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address46> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City46> .
+<http://www.okkam.org/oaie/restaurant1-Address46> <http://www.okkam.org/ontology_restaurant1.owl#street> "405 e. 58th st." .
+<http://www.okkam.org/oaie/restaurant1-Address46> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant30> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address30> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant30> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant30> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/966-6960" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant30> <http://www.okkam.org/ontology_restaurant1.owl#name> "chanterelle" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant30> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address86> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City86> .
+<http://www.okkam.org/oaie/restaurant1-Address86> <http://www.okkam.org/ontology_restaurant1.owl#street> "224 ponce de leon ave." .
+<http://www.okkam.org/oaie/restaurant1-Address86> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City21> <http://www.okkam.org/ontology_restaurant1.owl#name> "santa monica" .
+<http://www.okkam.org/oaie/restaurant1-City21> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address67> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City67> .
+<http://www.okkam.org/oaie/restaurant1-Address67> <http://www.okkam.org/ontology_restaurant1.owl#street> "3200 las vegas blvd. s" .
+<http://www.okkam.org/oaie/restaurant1-Address67> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant4> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address4> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant4> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant4> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "213/938-1447" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant4> <http://www.okkam.org/ontology_restaurant1.owl#name> "campanile" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address97> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City97> .
+<http://www.okkam.org/oaie/restaurant1-Address97> <http://www.okkam.org/ontology_restaurant1.owl#street> "7 claude la." .
+<http://www.okkam.org/oaie/restaurant1-Address97> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City7> <http://www.okkam.org/ontology_restaurant1.owl#name> "hollywood" .
+<http://www.okkam.org/oaie/restaurant1-City7> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address57> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City57> .
+<http://www.okkam.org/oaie/restaurant1-Address57> <http://www.okkam.org/ontology_restaurant1.owl#street> "240 central park s" .
+<http://www.okkam.org/oaie/restaurant1-Address57> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City35> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City35> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address76> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City76> .
+<http://www.okkam.org/oaie/restaurant1-Address76> <http://www.okkam.org/ontology_restaurant1.owl#street> "3130 piedmont road" .
+<http://www.okkam.org/oaie/restaurant1-Address76> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant51> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address51> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant51> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant51> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/644-1900" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant51> <http://www.okkam.org/ontology_restaurant1.owl#name> "park avenue cafe" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant51> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address31> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City31> .
+<http://www.okkam.org/oaie/restaurant1-Address31> <http://www.okkam.org/ontology_restaurant1.owl#street> "20 e. 76th st." .
+<http://www.okkam.org/oaie/restaurant1-Address31> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City72> <http://www.okkam.org/ontology_restaurant1.owl#name> "las vegas" .
+<http://www.okkam.org/oaie/restaurant1-City72> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address65> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City65> .
+<http://www.okkam.org/oaie/restaurant1-Address65> <http://www.okkam.org/ontology_restaurant1.owl#street> "21 e. 16th st." .
+<http://www.okkam.org/oaie/restaurant1-Address65> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant62> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address62> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant62> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant62> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/753-1530" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant62> <http://www.okkam.org/ontology_restaurant1.owl#name> "smith & wollensky" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant62> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City91> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City91> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant72> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address72> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant72> <http://www.okkam.org/ontology_restaurant1.owl#category> "steak houses" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant72> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "702/734-0410" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant72> <http://www.okkam.org/ontology_restaurant1.owl#name> "steak house" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant72> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City104> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City104> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address51> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City51> .
+<http://www.okkam.org/oaie/restaurant1-Address51> <http://www.okkam.org/ontology_restaurant1.owl#street> "100 e. 63rd st." .
+<http://www.okkam.org/oaie/restaurant1-Address51> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City10> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City10> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant23> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address23> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant23> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant23> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/582-7200" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant23> <http://www.okkam.org/ontology_restaurant1.owl#name> "21 club" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant23> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address90> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City90> .
+<http://www.okkam.org/oaie/restaurant1-Address90> <http://www.okkam.org/ontology_restaurant1.owl#street> "3434 peachtree rd." .
+<http://www.okkam.org/oaie/restaurant1-Address90> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City30> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City30> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant9> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address9> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant9> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant9> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "310/276-0615" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant9> <http://www.okkam.org/ontology_restaurant1.owl#name> "grill on the alley" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant9> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City6> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City52> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City52> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address66> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City66> .
+<http://www.okkam.org/oaie/restaurant1-Address66> <http://www.okkam.org/ontology_restaurant1.owl#street> "152 w. 44th st." .
+<http://www.okkam.org/oaie/restaurant1-Address66> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City20> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City20> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant33> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address33> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant33> <http://www.okkam.org/ontology_restaurant1.owl#category> "italian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant33> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/758-1479" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant33> <http://www.okkam.org/ontology_restaurant1.owl#name> "felidia" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant33> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant63> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address63> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant63> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant63> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/873-3200" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant63> <http://www.okkam.org/ontology_restaurant1.owl#name> "tavern on the green" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant63> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant111> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address111> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant111> <http://www.okkam.org/ontology_restaurant1.owl#category> "italian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant111> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/399-0499" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant111> <http://www.okkam.org/ontology_restaurant1.owl#name> "rose pistola" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant111> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City92> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City92> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address64> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City64> .
+<http://www.okkam.org/oaie/restaurant1-Address64> <http://www.okkam.org/ontology_restaurant1.owl#street> "747 9th ave.  between 50th and 51st sts." .
+<http://www.okkam.org/oaie/restaurant1-Address64> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City105> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City105> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant73> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address73> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant73> <http://www.okkam.org/ontology_restaurant1.owl#category> "seafood" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant73> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "702/731-4036" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant73> <http://www.okkam.org/ontology_restaurant1.owl#name> "tillerman" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant73> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address50> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City50> .
+<http://www.okkam.org/oaie/restaurant1-Address50> <http://www.okkam.org/ontology_restaurant1.owl#street> "55 e. 54th st." .
+<http://www.okkam.org/oaie/restaurant1-Address50> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City71> <http://www.okkam.org/ontology_restaurant1.owl#name> "las vegas" .
+<http://www.okkam.org/oaie/restaurant1-City71> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address79> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City79> .
+<http://www.okkam.org/oaie/restaurant1-Address79> <http://www.okkam.org/ontology_restaurant1.owl#street> "1529 piedmont ave." .
+<http://www.okkam.org/oaie/restaurant1-Address79> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant22> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address22> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant22> <http://www.okkam.org/ontology_restaurant1.owl#category> "asian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant22> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "818/585-0855" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant22> <http://www.okkam.org/ontology_restaurant1.owl#name> "yujean kang's gourmet chinese cuisine" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant22> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City51> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City51> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City5> <http://www.okkam.org/ontology_restaurant1.owl#name> "santa monica" .
+<http://www.okkam.org/oaie/restaurant1-City5> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant110> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address110> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant110> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant110> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "415/296-7465" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant110> <http://www.okkam.org/ontology_restaurant1.owl#name> "ritz-carlton restaurant and dining room" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant110> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address91> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City91> .
+<http://www.okkam.org/oaie/restaurant1-Address91> <http://www.okkam.org/ontology_restaurant1.owl#street> "181 peachtree st." .
+<http://www.okkam.org/oaie/restaurant1-Address91> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant32> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address32> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant32> <http://www.okkam.org/ontology_restaurant1.owl#category> "asian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant32> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/355-7555" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant32> <http://www.okkam.org/ontology_restaurant1.owl#name> "dawat" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant32> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City106> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City106> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant49> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address49> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant49> <http://www.okkam.org/ontology_restaurant1.owl#category> "french" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant49> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/ 219-2777" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant49> <http://www.okkam.org/ontology_restaurant1.owl#name> "montrachet" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant49> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address20> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City20> .
+<http://www.okkam.org/oaie/restaurant1-Address20> <http://www.okkam.org/ontology_restaurant1.owl#street> "1114 horn ave." .
+<http://www.okkam.org/oaie/restaurant1-Address20> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant60> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address60> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant60> <http://www.okkam.org/ontology_restaurant1.owl#category> "asian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant60> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/371-8844" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant60> <http://www.okkam.org/ontology_restaurant1.owl#name> "shun lee west" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant60> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address63> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City63> .
+<http://www.okkam.org/oaie/restaurant1-Address63> <http://www.okkam.org/ontology_restaurant1.owl#street> "in central park at 67th st." .
+<http://www.okkam.org/oaie/restaurant1-Address63> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City60> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City60> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant35> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address35> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant35> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant35> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/620-4020" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant35> <http://www.okkam.org/ontology_restaurant1.owl#name> "gotham bar & grill" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant35> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant90> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address90> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant90> <http://www.okkam.org/ontology_restaurant1.owl#category> "international" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant90> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/237-2700" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant90> <http://www.okkam.org/ontology_restaurant1.owl#name> "dining room  ritz-carlton  buckhead" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant90> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City70> <http://www.okkam.org/ontology_restaurant1.owl#name> "las vegas" .
+<http://www.okkam.org/oaie/restaurant1-City70> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City12> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City12> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant74> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address74> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant74> <http://www.okkam.org/ontology_restaurant1.owl#category> "italian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant74> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/261-8186" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant74> <http://www.okkam.org/ontology_restaurant1.owl#name> "abruzzi" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant74> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address53> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City53> .
+<http://www.okkam.org/oaie/restaurant1-Address53> <http://www.okkam.org/ontology_restaurant1.owl#street> "35 w. 64th st." .
+<http://www.okkam.org/oaie/restaurant1-Address53> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City40> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City40> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City32> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City32> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant21> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address21> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant21> <http://www.okkam.org/ontology_restaurant1.owl#category> "italian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant21> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "310/829-4313" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant21> <http://www.okkam.org/ontology_restaurant1.owl#name> "valentino" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant21> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address40> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City40> .
+<http://www.okkam.org/oaie/restaurant1-Address40> <http://www.okkam.org/ontology_restaurant1.owl#street> "60 w. 55th st.  between 5th and 6th ave." .
+<http://www.okkam.org/oaie/restaurant1-Address40> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant7> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address7> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant7> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant7> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "213/848-6677" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant7> <http://www.okkam.org/ontology_restaurant1.owl#name> "fenix" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant7> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address92> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City92> .
+<http://www.okkam.org/oaie/restaurant1-Address92> <http://www.okkam.org/ontology_restaurant1.owl#street> "b peachtree rd." .
+<http://www.okkam.org/oaie/restaurant1-Address92> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City4> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City50> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City50> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-City90> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City90> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Address62> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City62> .
+<http://www.okkam.org/oaie/restaurant1-Address62> <http://www.okkam.org/ontology_restaurant1.owl#street> "201 e. 49th st." .
+<http://www.okkam.org/oaie/restaurant1-Address62> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address21> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City21> .
+<http://www.okkam.org/oaie/restaurant1-Address21> <http://www.okkam.org/ontology_restaurant1.owl#street> "3115 pico blvd." .
+<http://www.okkam.org/oaie/restaurant1-Address21> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant61> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address61> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant61> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant61> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/861-8080" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant61> <http://www.okkam.org/ontology_restaurant1.owl#name> "sign of the dove" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant61> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City107> <http://www.okkam.org/ontology_restaurant1.owl#name> "san francisco" .
+<http://www.okkam.org/oaie/restaurant1-City107> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant48> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address48> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant48> <http://www.okkam.org/ontology_restaurant1.owl#category> "mexican" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant48> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/627-8273" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant48> <http://www.okkam.org/ontology_restaurant1.owl#name> "mi cocina" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant48> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant34> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address34> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant34> <http://www.okkam.org/ontology_restaurant1.owl#category> "american" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant34> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "212/754-9494" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant34> <http://www.okkam.org/ontology_restaurant1.owl#name> "four seasons grill room" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant34> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant75> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address75> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant75> <http://www.okkam.org/ontology_restaurant1.owl#category> "international" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant75> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/365-0410" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant75> <http://www.okkam.org/ontology_restaurant1.owl#name> "bacchanalia" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant75> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City11> <http://www.okkam.org/ontology_restaurant1.owl#name> "los angeles" .
+<http://www.okkam.org/oaie/restaurant1-City11> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant91> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address91> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant91> <http://www.okkam.org/ontology_restaurant1.owl#category> "continental" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant91> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "404/659-0400" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant91> <http://www.okkam.org/ontology_restaurant1.owl#name> "restaurant  ritz-carlton  atlanta" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant91> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address52> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City52> .
+<http://www.okkam.org/oaie/restaurant1-Address52> <http://www.okkam.org/ontology_restaurant1.owl#street> "182 w. 58th st." .
+<http://www.okkam.org/oaie/restaurant1-Address52> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City80> <http://www.okkam.org/ontology_restaurant1.owl#name> "atlanta" .
+<http://www.okkam.org/oaie/restaurant1-City80> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant20> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address20> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant20> <http://www.okkam.org/ontology_restaurant1.owl#category> "californian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant20> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "310/652-4025" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant20> <http://www.okkam.org/ontology_restaurant1.owl#name> "spago" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant20> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-City31> <http://www.okkam.org/ontology_restaurant1.owl#name> "new york" .
+<http://www.okkam.org/oaie/restaurant1-City31> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant8> <http://www.okkam.org/ontology_restaurant1.owl#has_address> <http://www.okkam.org/oaie/restaurant1-Address8> .
+<http://www.okkam.org/oaie/restaurant1-Restaurant8> <http://www.okkam.org/ontology_restaurant1.owl#category> "californian" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant8> <http://www.okkam.org/ontology_restaurant1.owl#phone_number> "310/456-0488" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant8> <http://www.okkam.org/ontology_restaurant1.owl#name> "granita" .
+<http://www.okkam.org/oaie/restaurant1-Restaurant8> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Restaurant> .
+<http://www.okkam.org/oaie/restaurant1-Address41> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City41> .
+<http://www.okkam.org/oaie/restaurant1-Address41> <http://www.okkam.org/ontology_restaurant1.owl#street> "155 w. 51st st." .
+<http://www.okkam.org/oaie/restaurant1-Address41> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address93> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City93> .
+<http://www.okkam.org/oaie/restaurant1-Address93> <http://www.okkam.org/ontology_restaurant1.owl#street> "41 14th st." .
+<http://www.okkam.org/oaie/restaurant1-Address93> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-Address22> <http://www.okkam.org/ontology_restaurant1.owl#is_in_city> <http://www.okkam.org/oaie/restaurant1-City22> .
+<http://www.okkam.org/oaie/restaurant1-Address22> <http://www.okkam.org/ontology_restaurant1.owl#street> "67 n. raymond ave." .
+<http://www.okkam.org/oaie/restaurant1-Address22> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#Address> .
+<http://www.okkam.org/oaie/restaurant1-City3> <http://www.okkam.org/ontology_restaurant1.owl#name> "sherman oaks" .
+<http://www.okkam.org/oaie/restaurant1-City3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.okkam.org/ontology_restaurant1.owl#City> .
