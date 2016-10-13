@@ -1,5 +1,4 @@
 # LIMES-dev
-<<<<<<< HEAD
 Repository for LIMES - Link Discovery Framework for Metric Spaces.
 =======
 
@@ -24,10 +23,7 @@ In case Eclipse does not recognize the project as Java. Please run the following
 mvn eclipse:eclipse
 ```
 Then, update the project on Eclipse.
->>>>>>> dev
 
-## Binaries
-Current releases can be found at https://github.com/AKSW/LIMES.
 
 ## More details
 
