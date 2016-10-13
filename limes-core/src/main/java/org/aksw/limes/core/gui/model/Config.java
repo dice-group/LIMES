@@ -199,12 +199,12 @@ public class Config extends Configuration {
 		|| file.getAbsolutePath().contains(".n3") || file.getAbsolutePath().contains(".nt")) {
 	    reader = new RDFConfigurationReader(file.getPath());
 	} else {
-	    throw new Exception("Unknown filetype!");
+	    throw new RuntimeException("Unknown filetype!");
 	}
 	Config outConfig;
 	Configuration tmp = reader.read();
-	if (tmp.getSourceInfo() == null || tmp.getSourceInfo() == null) {
-	    throw new Exception("Invalid configuration file!");
+	if (tmp.getSourceInfo() == null || tmp.getTargetInfo() == null) {
+	    throw new RuntimeException("Invalid configuration file!");
 	}
 	outConfig = new Config(tmp.getSourceInfo(), tmp.getTargetInfo(), tmp.getMetricExpression(),
 		tmp.getAcceptanceRelation(), tmp.getVerificationRelation(),

@@ -335,8 +335,6 @@ public class XMLConfigurationReader extends AConfigurationReader {
                     Node child = children.item(i);
                     if (child.getNodeName().equals(THRESHOLD)) {
                         configuration.setVerificationThreshold(Double.parseDouble(getText(child)));
-                        if (Double.parseDouble(getText(child)) < 0)
-                            throw new InvalidThresholdException(Double.parseDouble(getText(child)));
                     } else if (child.getNodeName().equals(FILE)) {
                         String file = getText(child);
                         configuration.setVerificationFile(file);

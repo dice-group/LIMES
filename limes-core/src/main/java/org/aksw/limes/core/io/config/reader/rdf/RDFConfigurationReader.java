@@ -121,9 +121,6 @@ public class RDFConfigurationReader extends AConfigurationReader {
         //5. ACCEPTANCE file and conditions
         Resource acceptance = (Resource) getObject(specsSubject, LIMES.hasAcceptance, true);
         configuration.setAcceptanceThreshold(parseDouble(getObject(acceptance, LIMES.threshold, true).toString()));
-        if(parseDouble(getObject(acceptance, LIMES.threshold, true).toString()) < 0){
-            throw new InvalidThresholdException(parseDouble(getObject(acceptance, LIMES.threshold, true).toString()));
-        }
         configuration.setAcceptanceFile(getObject(acceptance, LIMES.file, true).toString());
         configuration.setAcceptanceRelation(getObject(acceptance, LIMES.relation, true).toString());
 
