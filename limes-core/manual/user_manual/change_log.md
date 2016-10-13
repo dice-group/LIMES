@@ -9,7 +9,7 @@
 -  Supports Allen's algebra relations for event data
 
 
-###The following version can be found here:https://github.com/AKSW/LIMES
+###The following versions can be found here:https://github.com/AKSW/LIMES. 
 ####Version 0.6RC4
 -   Added support for several geo-spatial similarity functions (geomean, surjection, fairsurjection, geosumofmin, frechet, link)
 -   Added support for temporal geo-spatial similarity functions (daysim, datesim, yearsim)
