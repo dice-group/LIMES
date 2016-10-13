@@ -7,7 +7,7 @@
 -  Supports qualitative (Precision, Recall, FMeasure etc.) and quantitative (runtime duration etc.) evaluation metrics for mapping evaluation, in the presence of a gold standard
 -  Updated execution engine to handle dynamic planning
 -  First dynamic planning for efficient link discovery
--  Supports XML and RDF cofiguration files
+-  Supports XML and RDF configuration files
 -  Supports pointsets metrics such as Mean, Hausdorff and Surjection.
 -  Supports MongeElkan, RatcliffObershelp string measures.
 -  Supports Allen's algebra temporal relations for event data
