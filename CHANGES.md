@@ -1,10 +1,21 @@
 #Change log
 
 ###Version 1.0.0
--  Kernel update
--  Machine learning algorithm support
--  Added support for several topological functions (within, intersects, ...)
--  New GUI
+
+-   Kernel update
+-   New Controller that support manual and graphical configuration
+-    New machine learning pipeline: supports supervised, unsupervised and active learning algorithms
+-    Supports qualitative (Precision, Recall, FMeasure etc.) and quantitative (runtime duration etc.) evaluation metrics for mapping evaluation, in the presence of a gold standard
+-    Updated execution engine to handle dynamic planning
+-    First dynamic planning for efficient link discovery
+-    Supports XML and RDF configuration files
+-    Supports pointsets metrics such as Mean, Hausdorff and Surjection.
+-    Supports MongeElkan, RatcliffObershelp string measures.
+-    Supports Allen's algebra temporal relations for event data
+-    Supports all topological relations derived from the DE-9IM model
+-    New LIMES GUI
+-    Migrated the system to Java 8 and Jena 3.0.1
+
 
 ###Version 0.6RC4
 -   Added support for several geo-spatial similarity functions (geomean, surjection, fairsurjection, geosumofmin, frechet, link)
