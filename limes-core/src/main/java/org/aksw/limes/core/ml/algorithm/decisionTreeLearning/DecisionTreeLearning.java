@@ -439,9 +439,13 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	}
 	// If we get the same tree again, raise the threshold to get better
 	// results faster
-	while (alreadySeenLS.get(resLS.toString()) != null && resLS.getThreshold() != 1.0) {
+	while (alreadySeenLS.get(resLS.toString()) != null) {
 	    logger.debug("Already seen " + resLS);
-	    resLS = raiseThreshold(resLS);
+	    LinkSpecification raisedLS = raiseThreshold(resLS);
+	    //they are the same if we reached the maximum threshold
+	    if(raisedLS.equals(resLS)){
+		break;
+	    }
 	    logger.debug("Setting threshold to: " + resLS.getThreshold());
 	}
 	this.mlresult = new MLResults();
@@ -524,7 +528,13 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 		    this.bestLS = ls;
 		    this.bestFMeasure = pfresult;
 		}
-		ls = raiseThreshold(ls);
+	    LinkSpecification raisedLS = raiseThreshold(ls);
+	    //they are the same if we reached the maximum threshold
+	    if(raisedLS.equals(ls)){
+		break;
+	    }else{
+		ls = raisedLS;
+	    }
 	    }
 	}
 	if (alreadySeenLS.get(ls.toString()) == null) {
@@ -734,6 +744,8 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     private LinkSpecification treeToLinkSpec(J48 tree) {
 	LinkSpecification ls = new LinkSpecification();
 	try {
+            logger.debug(tree.prefix());
+            logger.debug(tree.graph());
 	    String treeString = tree.prefix().substring(1,
 		    ParenthesisMatcher.findMatchingParenthesis(tree.prefix(), 0));
 	    ls = tp.pruneLS(tp.parseTreePrefix(treeString), maxTreeHeight);
@@ -856,7 +868,11 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	if (lsClone.getMeasure().startsWith("MINUS")) {
 	    return manipulateThreshold(lsClone, true, thresholdRaise);
 	}
-	return manipulateThreshold(lsClone, false, thresholdRaise);
+	lsClone = manipulateThreshold(lsClone, false, thresholdRaise);
+	if(lsClone.equals(ls)){
+	    logger.info("Can't raise threshold anymore, maximum reached!");
+	}
+	return lsClone;
     }
 
     /**
@@ -874,15 +890,21 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	if (ls.isAtomic()) {
 	    if (!measureIsMinus) {
 		// have to use BigDecimal because of floating numbers magic
-		ls.setThreshold(Math.min(1.0, (BigDecimal.valueOf(ls.getThreshold())
-			.add(BigDecimal.valueOf(threshold))).doubleValue()));
+		double newThreshold = Math.min(1.0, (BigDecimal.valueOf(ls.getThreshold())
+			.add(BigDecimal.valueOf(threshold))).doubleValue());
+	    //minimum threshold is 0.1
+		newThreshold = Math.max(0.1, newThreshold);
+		ls.setThreshold(newThreshold);
 		return ls;
 	    } else {
 		if (ls.getThreshold() == 0.0) {
 		    return ls;
 		}
-		ls.setThreshold(Math.max(0.1, (BigDecimal.valueOf(ls.getThreshold()).subtract(BigDecimal
-			.valueOf(threshold))).doubleValue()));
+		double newThreshold = Math.max(0.1, (BigDecimal.valueOf(ls.getThreshold()).subtract(BigDecimal
+			.valueOf(threshold))).doubleValue());
+	    //minimum threshold is 0.1
+		newThreshold = Math.max(0.1, newThreshold);
+		ls.setThreshold(newThreshold);
 		return ls;
 	    }
 	}
@@ -1112,30 +1134,34 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     }
 
     public static void main(String[] args) {
-	// EvaluationData c = DataSetChooser.getData("Person1");
-	// try {
-	// AMLAlgorithm dtl =
-	// MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-	// MLImplementationType.SUPERVISED_ACTIVE);
-	// dtl.init(null, c.getSourceCache(), c.getTargetCache());
-	// dtl.getMl().setConfiguration(c.getConfigReader().read());
-	// ((DecisionTreeLearning)dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-	// CSVMappingReader reader = new
-	// CSVMappingReader("/home/ohdorno/Documents/Uni/BA_Informatik/example.csv",",");
-	// AMapping trainingMapping = reader.read();
-	// MLResults res = dtl.asActive().activeLearn(trainingMapping);
-	// System.out.println(res.getLinkSpecification());
-	// } catch (UnsupportedMLImplementationException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	DecisionTreeLearning dtl = new DecisionTreeLearning();
-	LinkSpecification ls = new LinkSpecification(
-		"OR(jaccard(x.surname,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,trigrams(x.surname,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.name,y.name)|0.9728)|0.9807)",
-		0.8);
-	System.out.println(ls);
-	System.out.println("\n\n\n");
-	System.out.println(dtl.subtractDeltaFromLS(ls));
+	 EvaluationData c = DataSetChooser.getData("Person1");
+	 try {
+	 AMLAlgorithm dtl =
+	 MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+	 MLImplementationType.SUPERVISED_BATCH);
+	 dtl.init(null, c.getSourceCache(), c.getTargetCache());
+	 dtl.getMl().setConfiguration(c.getConfigReader().read());
+	 ((DecisionTreeLearning)dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+	 CSVMappingReader reader = new
+	 CSVMappingReader("/home/ohdorno/Documents/Uni/BA_Informatik/example.csv",",");
+	 AMapping trainingMapping = reader.read();
+	 MLResults res = dtl.asSupervised().learn(trainingMapping);
+	 System.out.println(res.getLinkSpecification());
+	 ((DecisionTreeLearning)dtl.getMl()).checkIfThereWasBetterLSBefore(new LinkSpecification("AND(cosine(x.http://www.okkam.org/ontology_person1.owl#surname, y.http://www.okkam.org/ontology_person2.owl#given_name)|0.1, cosine(x.http://www.okkam.org/ontology_person1.owl#surname, y.http://www.okkam.org/ontology_person2.owl#given_name)| 0.1)|0.1",0.0));
+	 } catch (UnsupportedMLImplementationException e) {
+	 // TODO Auto-generated catch block
+	 e.printStackTrace();
+	 }
+//	DecisionTreeLearning dtl = new DecisionTreeLearning();
+//	LinkSpecification resLS = new LinkSpecification(
+//		"OR(jaccard(x.surname,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,trigrams(x.surname,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.name,y.name)|0.9728)|0.9807)",
+//		0.8);
+//	System.out.println(ls);
+//	System.out.println("\n\n\n");
+//	System.out.println(dtl.subtractDeltaFromLS(new LinkSpecification("jaccard(x.surname,y.surname)",0.1)));
+
+	 
+	
     }
 
 }
