@@ -107,7 +107,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      * the threshold of the measure so we can also get the instance pairs that
      * are almost classified as links
      */
-    private static final double delta = 0.1;
+    private static final double delta = -0.1;
 
     /**
      * if we have already seen a linkspecification we raise the threshold by
@@ -441,7 +441,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	// results faster
 	while (alreadySeenLS.get(resLS.toString()) != null && resLS.getThreshold() != 1.0) {
 	    logger.debug("Already seen " + resLS);
-	    resLS.setThreshold(Math.min(resLS.getThreshold() + thresholdRaise, 1.0));
+	    resLS = raiseThreshold(resLS);
 	    logger.debug("Setting threshold to: " + resLS.getThreshold());
 	}
 	this.mlresult = new MLResults();
@@ -524,8 +524,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 		    this.bestLS = ls;
 		    this.bestFMeasure = pfresult;
 		}
-		ls = ls.clone();
-		ls.setThreshold(Math.min(1.0, ls.getThreshold() + thresholdRaise));
+		ls = raiseThreshold(ls);
 	    }
 	}
 	if (alreadySeenLS.get(ls.toString()) == null) {
@@ -847,45 +846,55 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     private LinkSpecification subtractDeltaFromLS(LinkSpecification ls) {
 	LinkSpecification lsClone = ls.clone();
 	if (lsClone.getMeasure().startsWith("MINUS")) {
-	    return subtractDeltaFromLS(lsClone, true);
+	    return manipulateThreshold(lsClone, true, delta);
 	}
-	return subtractDeltaFromLS(lsClone, false);
+	return manipulateThreshold(lsClone, false, delta);
+    }
+    
+    private LinkSpecification raiseThreshold(LinkSpecification ls){
+	LinkSpecification lsClone = ls.clone();
+	if (lsClone.getMeasure().startsWith("MINUS")) {
+	    return manipulateThreshold(lsClone, true, thresholdRaise);
+	}
+	return manipulateThreshold(lsClone, false, thresholdRaise);
     }
 
     /**
-     * Adds the delta shifting of the thresholds in the measures
+     * Shifts the thresholds of the atomic measures in the link specification. If the threshold given is negative it gets subtracted, else it gets added
+     * On a MINUS operator its alway the other way round 
      * 
      * @param ls
      *            LinkSpec to be cleaned of the delta shift
      * @param parentIsMinus
      *            true if measure is minus
+     * @param threshold if negative subtracted, if positive added to atomic measures
      * @return cleaned LinkSpec
      */
-    private LinkSpecification subtractDeltaFromLS(LinkSpecification ls, boolean measureIsMinus) {
+    private LinkSpecification manipulateThreshold(LinkSpecification ls, boolean measureIsMinus, double threshold) {
 	if (ls.isAtomic()) {
 	    if (!measureIsMinus) {
 		// have to use BigDecimal because of floating numbers magic
-		ls.setThreshold(Math.max(0.1, (BigDecimal.valueOf(ls.getThreshold())
-			.subtract(BigDecimal.valueOf(delta))).doubleValue()));
+		ls.setThreshold(Math.min(1.0, (BigDecimal.valueOf(ls.getThreshold())
+			.add(BigDecimal.valueOf(threshold))).doubleValue()));
 		return ls;
 	    } else {
 		if (ls.getThreshold() == 0.0) {
 		    return ls;
 		}
-		ls.setThreshold(Math.min(1.0, (BigDecimal.valueOf(ls.getThreshold()).add(BigDecimal
-			.valueOf(delta))).doubleValue()));
+		ls.setThreshold(Math.max(0.1, (BigDecimal.valueOf(ls.getThreshold()).subtract(BigDecimal
+			.valueOf(threshold))).doubleValue()));
 		return ls;
 	    }
 	}
 	ArrayList<LinkSpecification> newChildren = new ArrayList<LinkSpecification>();
 	if (ls.getMeasure().startsWith("MINUS")) {
 	    for (LinkSpecification l : ls.getChildren()) {
-		newChildren.add(subtractDeltaFromLS(l, true));
+		newChildren.add(manipulateThreshold(l, true, threshold));
 	    }
 	    ls.setChildren(newChildren);
 	} else {
 	    for (LinkSpecification l : ls.getChildren()) {
-		newChildren.add(subtractDeltaFromLS(l, false));
+		newChildren.add(manipulateThreshold(l, false, threshold));
 	    }
 	    ls.setChildren(newChildren);
 	}
@@ -1124,7 +1133,9 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	LinkSpecification ls = new LinkSpecification(
 		"OR(jaccard(x.surname,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,trigrams(x.surname,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.name,y.name)|0.9728)|0.9807)",
 		0.8);
-	System.out.println(dtl.getUsedMeasures(ls));
+	System.out.println(ls);
+	System.out.println("\n\n\n");
+	System.out.println(dtl.subtractDeltaFromLS(ls));
     }
 
 }
