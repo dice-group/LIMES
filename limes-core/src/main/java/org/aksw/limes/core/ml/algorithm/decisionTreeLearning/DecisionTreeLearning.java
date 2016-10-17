@@ -437,14 +437,17 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 		handleUniformTrainingData(oracleMapping);
 	    }
 	}
+	LinkSpecification raisedLS = null;
 	// If we get the same tree again, raise the threshold to get better
 	// results faster
 	while (alreadySeenLS.get(resLS.toString()) != null) {
 	    logger.debug("Already seen " + resLS);
-	    LinkSpecification raisedLS = raiseThreshold(resLS);
+	    raisedLS = raiseThreshold(resLS);
 	    //they are the same if we reached the maximum threshold
 	    if(raisedLS.equals(resLS)){
 		break;
+	    }else{
+		resLS = raisedLS;
 	    }
 	    logger.debug("Setting threshold to: " + resLS.getThreshold());
 	}
