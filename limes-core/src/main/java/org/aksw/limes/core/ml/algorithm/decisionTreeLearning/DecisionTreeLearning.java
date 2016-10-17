@@ -130,6 +130,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     public static final String PARAMETER_PROPERTY_MAPPING = "property mapping";
     public static final String PARAMETER_MAPPING = "initial mapping as training data";
     public static final String PARAMETER_LINK_SPECIFICATION = "initial link specification to start training";
+    public static final String PARAMETER_MAX_TREE_HEIGHT = "maximum height of the tree";
 
     // Default parameters
     private int trainingDataSize = 10;
@@ -147,6 +148,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     private LinkSpecification bestLS;
     private PseudoFMeasure pfmeasure;
     private double bestFMeasure = 0.0;
+    private int maxTreeHeight = 3;
     private AMapping prediction;
 
     // TODO check whats wrong with these
@@ -735,7 +737,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	try {
 	    String treeString = tree.prefix().substring(1,
 		    ParenthesisMatcher.findMatchingParenthesis(tree.prefix(), 0));
-	    ls = tp.parseTreePrefix(treeString);
+	    ls = tp.pruneLS(tp.parseTreePrefix(treeString), maxTreeHeight);
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
