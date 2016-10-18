@@ -409,10 +409,11 @@ public class LinkSpecification implements ILinkSpecification {
                     return false;
                 if (this.getChildren() == null && o.getChildren() != null)
                     return false;
-                HashSet<LinkSpecification> hs = new HashSet<LinkSpecification>();
-                if (this.getChildren() != null)
-                    hs.addAll(getChildren());
-                return (!hs.addAll(o.getChildren()));
+//                HashSet<LinkSpecification> hs = new HashSet<LinkSpecification>();
+//                if (this.getChildren() != null)
+//                    hs.addAll(getChildren());
+//                return (!hs.addAll(o.getChildren()));
+                return this.getChildren().equals(o.getChildren());
             } // not equal operators
             return false;
 
