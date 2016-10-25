@@ -157,7 +157,7 @@ public class Controller {
 
     private static void writeResults(ResultMappings mappings, Configuration config) {
         String outputFormat = config.getOutputFormat();
-        ISerializer output = SerializerFactory.getSerializer(outputFormat);
+        ISerializer output = SerializerFactory.createSerializer(outputFormat);
         output.setPrefixes(config.getPrefixes());
         output.writeToFile(mappings.getVerificationMapping(), config.getVerificationRelation(),
                 config.getVerificationFile());

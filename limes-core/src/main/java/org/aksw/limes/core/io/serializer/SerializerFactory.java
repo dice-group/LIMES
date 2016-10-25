@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class SerializerFactory {
     private static Logger logger = LoggerFactory.getLogger(SerializerFactory.class.getName());
 
-    public static ISerializer getSerializer(String name) {
+    public static ISerializer createSerializer(String name) {
         logger.info("Getting serializer with name " + name);
         if (name == null) return new NtSerializer();
         if (name.toLowerCase().trim().startsWith("tab")) return new TabSeparatedSerializer();
@@ -33,6 +33,6 @@ public class SerializerFactory {
      * @return Array of Serializers.
      */
     public static ISerializer[] getAllSerializers() {
-        return new ISerializer[]{getSerializer("nt"), getSerializer("csv"), getSerializer("tab"), getSerializer("ttl")};
+        return new ISerializer[]{createSerializer("nt"), createSerializer("csv"), createSerializer("tab"), createSerializer("ttl")};
     }
 }
