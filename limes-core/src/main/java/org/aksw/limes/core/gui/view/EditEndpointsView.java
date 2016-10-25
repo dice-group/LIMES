@@ -7,6 +7,9 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.aksw.limes.core.gui.controller.EditEndpointsController;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -24,10 +27,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
-import javafx.stage.Window;
-
-import org.aksw.limes.core.gui.controller.EditEndpointsController;
-import org.aksw.limes.core.gui.util.SourceOrTarget;
 
 /**
  * used for editing endpoints step in

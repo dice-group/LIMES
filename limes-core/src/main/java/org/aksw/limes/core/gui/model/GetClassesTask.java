@@ -7,15 +7,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import javafx.application.Platform;
-import javafx.concurrent.Task;
-
 import org.aksw.limes.core.gui.util.TaskResultSerializer;
 import org.aksw.limes.core.gui.util.sparql.SPARQLHelper;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.jena.rdf.model.Model;
+
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 
 /**
  * Task for loading classes in {@link org.aksw.limes.core.gui.view.WizardView}   

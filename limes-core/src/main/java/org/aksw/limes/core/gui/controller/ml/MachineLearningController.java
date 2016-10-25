@@ -2,7 +2,6 @@ package org.aksw.limes.core.gui.controller.ml;
 
 import org.aksw.limes.core.gui.model.ml.MachineLearningModel;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
-import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 /**

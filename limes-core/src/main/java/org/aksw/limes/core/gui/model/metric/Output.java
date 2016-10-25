@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.io.config.Configuration;
 
 /**
  * Output of metric

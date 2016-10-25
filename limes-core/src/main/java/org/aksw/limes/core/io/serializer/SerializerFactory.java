@@ -13,9 +13,12 @@ public class SerializerFactory {
 
     public static ISerializer createSerializer(String name) {
         logger.info("Getting serializer with name " + name);
-        if (name == null) return new NtSerializer();
-        if (name.toLowerCase().trim().startsWith("tab")) return new TabSeparatedSerializer();
-        if (name.toLowerCase().trim().startsWith("csv")) return new CSVSerializer();
+        if (name == null) 
+            return new NtSerializer();
+        if (name.toLowerCase().trim().startsWith("tab")) 
+            return new TabSeparatedSerializer();
+        if (name.toLowerCase().trim().startsWith("csv")) 
+            return new CSVSerializer();
         if (name.toLowerCase().trim().startsWith("ttl") || name.toLowerCase().trim().startsWith("turtle"))
             return new TTLSerializer();
         if (name.toLowerCase().trim().startsWith("nt") || name.toLowerCase().trim().startsWith("turtle"))

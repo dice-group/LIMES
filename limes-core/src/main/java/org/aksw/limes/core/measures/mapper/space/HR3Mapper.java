@@ -10,7 +10,6 @@ import java.util.TreeSet;
 // * Previously call ToralOrderBlockingMapper
 
 import org.aksw.limes.core.io.cache.ACache;
-
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;

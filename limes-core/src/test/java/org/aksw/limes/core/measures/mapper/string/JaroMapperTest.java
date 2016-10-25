@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.string.JaroMeasure;
 import org.aksw.limes.core.util.RandomStringGenerator;
 import org.junit.Test;

@@ -1,7 +1,6 @@
 package org.aksw.limes.core.io.parser;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
-import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.exceptions.UnsupportedOperator;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.apache.commons.lang.StringUtils;

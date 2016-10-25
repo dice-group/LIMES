@@ -10,12 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.gui.model.Endpoint;
 import org.aksw.limes.core.gui.util.AdvancedKBInfo;
 import org.aksw.limes.core.gui.util.AdvancedMemoryCache;
 import org.aksw.limes.core.gui.util.GetAllSparqlQueryModule;
@@ -32,6 +27,10 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.vocabulary.OWL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 
 /**

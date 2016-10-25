@@ -1,9 +1,9 @@
 package org.aksw.limes.core.gui.controller;
 
+import org.aksw.limes.core.gui.view.WizardView;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-
-import org.aksw.limes.core.gui.view.WizardView;
 
 /**
  * Controller class for {@link WizardView}

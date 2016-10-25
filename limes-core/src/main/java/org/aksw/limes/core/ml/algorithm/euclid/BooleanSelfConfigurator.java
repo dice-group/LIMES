@@ -1,12 +1,12 @@
 package org.aksw.limes.core.ml.algorithm.euclid;
 
-import org.aksw.limes.core.io.cache.ACache;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)

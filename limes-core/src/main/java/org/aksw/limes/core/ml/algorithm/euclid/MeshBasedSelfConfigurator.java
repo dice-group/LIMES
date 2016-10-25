@@ -1,14 +1,14 @@
 package org.aksw.limes.core.ml.algorithm.euclid;
 
-import org.aksw.limes.core.io.cache.ACache;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.apache.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.apache.log4j.Logger;
 
 /**
  * @author Kevin Dreßler
