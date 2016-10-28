@@ -289,23 +289,23 @@ public class TreeParser {
 	if (ls.isAtomic() || ls.getOperator() == LogicOperator.MINUS) {
 	    return ls;
 	}
+	if(thresholdDepth == 0){
+	    //return the highest atomic measure
+	    // 1 because since they are connected with OR the highest atomic measure usually is at 1
+	   return eraseAllMinusLeaves(ls).getChildren().get(1).getAllLeaves().get(0);
+	}
 	List<LinkSpecification> newChildren = new java.util.ArrayList<LinkSpecification>();
 	// if we reached the desired depth
 	if (currentDepth == thresholdDepth) {
 	    //make sure we dont take a leaf from MINUS
 	    List<LinkSpecification> tmpChildList = eraseAllMinusLeaves(ls).getChildren();
 	    for (LinkSpecification child : tmpChildList) {
-		// Take the leaf with the highest threshold because they are
-		// likely to perform better
-		double highestThreshold = 0.0;
-		LinkSpecification candidate = null;
-		for (LinkSpecification leaf : child.getAllLeaves()) {
-		    if (leaf.getThreshold() > highestThreshold) {
-			candidate = leaf;
-			highestThreshold = candidate.getThreshold();
-		    }
+		if(child.getAllLeaves() != null && child.getAllLeaves().get(0) != null){
+		    newChildren.add(child.getAllLeaves().get(0));
+		}else{
+		    logger.error("Something went wrong in the pruning process!");
+		    return null;
 		}
-		newChildren.add(candidate);
 	    }
 
 	}
@@ -373,7 +373,10 @@ public class TreeParser {
 			+ "manufacturer|manufacturer: <= 0.288675, \n > 0.288675[negative (20.0/1.0)][cosine"
 			+ TreeParser.delimiter
 			+ "title|name: <= 0.606977, \n > 0.606977[negative (3.0/1.0)][positive (2.0)]]]][positive (168.0)]");
-	 System.out.println(tp.pruneLS(ls, 3));
+//		.parseTreePrefix("jaro§title|title: <= 0.807451, > 0.807451[jaro§authors|authors: <= 0.686054, > 0.686054[negative (235.0/1.0)][cosine§title|title: <= 0.683763, > 0.683763[jaccard§title|title: <= 0.368421, > 0.368421[trigrams§title|title: <= 0.625, > 0.625[jaro§title|title: <= 0.711274, > 0.711274[negative (12.0/2.0)][positive (5.0/1.0)]][positive (3.0)]][negative (34.0/2.0)]][trigrams§authors|authors: <= 0.8, > 0.8[positive (9.0)][negative (2.0)]]]][positive (20.0)]");
+	System.out.println(ls);
+	System.out.println(tp.pruneLS(ls, 4));
+	
 	// System.out.println(tp.pruneLS(new
 	// LinkSpecification("cosine(x.name,y.name)", 0.8),5));
 //	System.out.println(tp.eraseAllMinusLeaves(ls));

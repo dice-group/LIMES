@@ -130,7 +130,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     public static final String PARAMETER_PROPERTY_MAPPING = "property mapping";
     public static final String PARAMETER_MAPPING = "initial mapping as training data";
     public static final String PARAMETER_LINK_SPECIFICATION = "initial link specification to start training";
-    public static final String PARAMETER_MAX_TREE_HEIGHT = "maximum height of the tree";
+    public static final String PARAMETER_MAX_LINK_SPEC_HEIGHT = "maximum height of the link specification";
 
     // Default parameters
     private int trainingDataSize = 10;
@@ -148,7 +148,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     private LinkSpecification bestLS;
     private PseudoFMeasure pfmeasure;
     private double bestFMeasure = 0.0;
-    private int maxTreeHeight = 3;
+    private int maxLinkSpecHeight = 1;
     private AMapping prediction;
 
     // TODO check whats wrong with these
@@ -751,7 +751,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
             logger.debug(tree.graph());
 	    String treeString = tree.prefix().substring(1,
 		    ParenthesisMatcher.findMatchingParenthesis(tree.prefix(), 0));
-	    ls = tp.pruneLS(tp.parseTreePrefix(treeString), maxTreeHeight);
+	    ls = tp.pruneLS(tp.parseTreePrefix(treeString), maxLinkSpecHeight);
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
@@ -1137,7 +1137,16 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     }
 
     public static void main(String[] args) {
-	 EvaluationData c = DataSetChooser.getData("Person1");
+	/**
+	 * check this tree with checkiftherewasbetterlsbefore
+	 * [qgrams§title|title: <= 0.504587,
+ > 0.504587[jaro§authors|authors: <= 0.675724,
+ > 0.675724[negative (304.0)][jaro§title|title: <= 0.677374,
+ > 0.677374[qgrams§authors|authors: <= 0.355556,
+ > 0.355556[positive (4.0)][cosine§authors|authors: <= 0.612372,
+ > 0.612372[negative (4.0)][positive (2.0)]]][negative (7.0)]]][positive (19.0/1.0)]]
+	 */
+	 EvaluationData c = DataSetChooser.getData("dblpscholar");
 	 try {
 	 AMLAlgorithm dtl =
 	 MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
@@ -1145,12 +1154,14 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	 dtl.init(null, c.getSourceCache(), c.getTargetCache());
 	 dtl.getMl().setConfiguration(c.getConfigReader().read());
 	 ((DecisionTreeLearning)dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-	 CSVMappingReader reader = new
-	 CSVMappingReader("/home/ohdorno/Documents/Uni/BA_Informatik/example.csv",",");
-	 AMapping trainingMapping = reader.read();
-	 MLResults res = dtl.asSupervised().learn(trainingMapping);
-	 System.out.println(res.getLinkSpecification());
-	 ((DecisionTreeLearning)dtl.getMl()).checkIfThereWasBetterLSBefore(new LinkSpecification("AND(cosine(x.http://www.okkam.org/ontology_person1.owl#surname, y.http://www.okkam.org/ontology_person2.owl#given_name)|0.1, cosine(x.http://www.okkam.org/ontology_person1.owl#surname, y.http://www.okkam.org/ontology_person2.owl#given_name)| 0.1)|0.1",0.0));
+	 LinkSpecification ls = (((DecisionTreeLearning)dtl.getMl()).tp.parseTreePrefix("qgrams§title|title: <= 0.504587, > 0.504587[jaro§authors|authors: <= 0.675724, > 0.675724[negative (304.0)][jaro§title|title: <= 0.677374, > 0.677374[qgrams§authors|authors: <= 0.355556, > 0.355556[positive (4.0)][cosine§authors|authors: <= 0.612372, > 0.612372[negative (4.0)][positive (2.0)]]][negative (7.0)]]][positive (19.0/1.0)]"));
+	 ((DecisionTreeLearning)dtl.getMl()).checkIfThereWasBetterLSBefore(((DecisionTreeLearning)dtl.getMl()).tp.pruneLS(ls, ((DecisionTreeLearning)dtl.getMl()).maxLinkSpecHeight)) ;
+//	 CSVMappingReader reader = new
+//	 CSVMappingReader("/home/ohdorno/Documents/Uni/BA_Informatik/example.csv",",");
+//	 AMapping trainingMapping = reader.read();
+//	 MLResults res = dtl.asSupervised().learn(trainingMapping);
+//	 System.out.println(res.getLinkSpecification());
+//	 ((DecisionTreeLearning)dtl.getMl()).checkIfThereWasBetterLSBefore(new LinkSpecification("AND(cosine(x.http://www.okkam.org/ontology_person1.owl#surname, y.http://www.okkam.org/ontology_person2.owl#given_name)|0.1, cosine(x.http://www.okkam.org/ontology_person1.owl#surname, y.http://www.okkam.org/ontology_person2.owl#given_name)| 0.1)|0.1",0.0));
 	 } catch (UnsupportedMLImplementationException e) {
 	 // TODO Auto-generated catch block
 	 e.printStackTrace();
