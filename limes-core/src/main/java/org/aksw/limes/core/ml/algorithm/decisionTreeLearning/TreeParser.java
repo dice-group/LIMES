@@ -289,20 +289,23 @@ public class TreeParser {
 	if (ls.isAtomic() || ls.getOperator() == LogicOperator.MINUS) {
 	    return ls;
 	}
-	if(thresholdDepth == 0){
-	    //return the highest atomic measure
-	    // 1 because since they are connected with OR the highest atomic measure usually is at 1
-	   return eraseAllMinusLeaves(ls).getChildren().get(1).getAllLeaves().get(0);
+	if (thresholdDepth == 0) {
+	    // return the highest atomic measure
+	    // 1 because since they are connected with OR the highest atomic
+	    // measure usually is at 1
+	    return eraseAllMinusLeaves(ls).getChildren().get(1).getAllLeaves().get(0);
 	}
 	List<LinkSpecification> newChildren = new java.util.ArrayList<LinkSpecification>();
 	// if we reached the desired depth
 	if (currentDepth == thresholdDepth) {
-	    //make sure we dont take a leaf from MINUS
+	    // make sure we dont take a leaf from MINUS
 	    List<LinkSpecification> tmpChildList = eraseAllMinusLeaves(ls).getChildren();
 	    for (LinkSpecification child : tmpChildList) {
-		if(child.getAllLeaves() != null && child.getAllLeaves().get(0) != null){
-		    newChildren.add(child.getAllLeaves().get(0));
-		}else{
+		if (child.getAllLeaves() != null && child.getAllLeaves().get(0) != null) {
+		    if (child.getAllLeaves().get(0).getFilterExpression() != null) {
+			newChildren.add(child.getAllLeaves().get(0));
+		    }
+		} else {
 		    logger.error("Something went wrong in the pruning process!");
 		    return null;
 		}
@@ -313,22 +316,44 @@ public class TreeParser {
 	if (currentDepth < thresholdDepth) {
 	    for (LinkSpecification child : ls.getChildren()) {
 		LinkSpecification newChild = pruneLS(child, thresholdDepth, currentDepth + 1);
-		if(newChild != null){
+		if (newChild != null) {
 		    newChildren.add(newChild);
 		}
 	    }
 	}
-	ls.setChildren(newChildren);
 
-	if(newChildren.size() == 0){
+	LinkSpecification simplified = checkForRedundantProperties(newChildren);
+	if (simplified == null) {
+	    ls.setChildren(newChildren);
+	} else {
+	    ls = simplified;
+	}
+
+	if (newChildren.size() == 0) {
 	    return null;
 	}
-	//if at the desired depth one child was a MINUS
-	if(newChildren.size() == 1){
-	    //we return the remaining child as ls
-	   ls = newChildren.get(0); 
+	// if at the desired depth one child was a MINUS
+	if (newChildren.size() == 1) {
+	    // we return the remaining child as ls
+	    ls = newChildren.get(0);
 	}
 	return ls;
+    }
+
+    private LinkSpecification checkForRedundantProperties(List<LinkSpecification> children) {
+	if (children.size() == 2) {
+	    LinkSpecification l1 = children.get(0);
+	    LinkSpecification l2 = children.get(1);
+	    String properties1 = l1.getFilterExpression().substring(
+		    l1.getFilterExpression().lastIndexOf("("), l1.getFilterExpression().lastIndexOf(")"));
+	    String properties2 = l2.getFilterExpression().substring(
+		    l2.getFilterExpression().lastIndexOf("("), l2.getFilterExpression().lastIndexOf(")"));
+	    if (properties1.equals(properties2)) {
+		return (l1.getThreshold() > l2.getThreshold()) ? l1 : l2;
+	    }
+	}
+	return null;
+
     }
 
     private LinkSpecification eraseAllMinusLeaves(LinkSpecification ls) {
@@ -337,7 +362,7 @@ public class TreeParser {
 	}
 	List<LinkSpecification> children = ls.getChildren();
 	Iterator<LinkSpecification> it = children.iterator();
-	while(it.hasNext()){
+	while (it.hasNext()) {
 	    LinkSpecification child = it.next();
 	    if (child.getOperator() == LogicOperator.MINUS) {
 		it.remove();
@@ -356,30 +381,35 @@ public class TreeParser {
 	// System.out.println(tp.parseTreePrefix("qgrams§title|name: <= 0.105263, > 0.105263[negative (26.0/2.0)][trigrams§title|name: <= 0.2,> 0.2[jaccard§title|name: <= 0.083333,> 0.083333[negative (6.0/1.0)][positive (26.0/2.0)]][positive (816.0/2.0)]"));
 
 	LinkSpecification ls = tp
-		.parseTreePrefix("trigrams"
-			+ TreeParser.delimiter
-			+ "title|name: <= 0.888889, \n > 0.888889[jaccard"
-			+ TreeParser.delimiter
-			+ "description|description: <= 0.487179, \n > 0.487179[exactmatch"
-			+ TreeParser.delimiter
-			+ "manufacturer|manufacturer: <= 0.4, \n > 0.4[jaccard"
-			+ TreeParser.delimiter
-			+ "title|name: <= 0.230769, \n > 0.230769[jaro"
-			+ TreeParser.delimiter
-			+ "manufacturer|manufacturer: <= 0.5, \n > 0.5[qgrams§date_of_birth|date_of_birth: <= 0.2, > 0.2[negative (44.0)][jaro§age|age: <= 0, > 0[cosine§date_of_birth|date_of_birth: <= 0, > 0[qgrams§has_address|has_address: <= 0.826087, > 0.826087[negative (7.0/1.0)][positive (4.0)]][negative (29.0/8.0)]][qgrams§phone_numer|phone_numer: <= 0.5, > 0.5[qgrams§has_address|has_address: <= 0.826087, > 0.826087[negative (6.0/1.0)][positive (3.0/1.0)]][cosine§given_name|given_name: <= 0, > 0[qgrams§has_address|has_address: <= 0.826087, > 0.826087[positive (6.0/2.0)][jaro§has_address|has_address: <= 0.954882, > 0.954882[jaro§given_name|given_name: <= 0.916667, > 0.916667[negative (8.0/2.0)][positive (2.0)]][negative (3.0/1.0)]]][positive (116.0/51.0)]]]]][cosine"
-			+ TreeParser.delimiter
-			+ "manufacturer|manufacturer: <= 0.5, \n > 0.5[positive (3.0/1.0)][negative (3.0)]]][negative (1369.0/1.0)]][negative (42.0/1.0)]][cosine"
-			+ TreeParser.delimiter
-			+ "manufacturer|manufacturer: <= 0.288675, \n > 0.288675[negative (20.0/1.0)][cosine"
-			+ TreeParser.delimiter
-			+ "title|name: <= 0.606977, \n > 0.606977[negative (3.0/1.0)][positive (2.0)]]]][positive (168.0)]");
-//		.parseTreePrefix("jaro§title|title: <= 0.807451, > 0.807451[jaro§authors|authors: <= 0.686054, > 0.686054[negative (235.0/1.0)][cosine§title|title: <= 0.683763, > 0.683763[jaccard§title|title: <= 0.368421, > 0.368421[trigrams§title|title: <= 0.625, > 0.625[jaro§title|title: <= 0.711274, > 0.711274[negative (12.0/2.0)][positive (5.0/1.0)]][positive (3.0)]][negative (34.0/2.0)]][trigrams§authors|authors: <= 0.8, > 0.8[positive (9.0)][negative (2.0)]]]][positive (20.0)]");
+	 .parseTreePrefix("trigrams"
+	 + TreeParser.delimiter
+	 + "title|name: <= 0.888889, \n > 0.888889[jaccard"
+	 + TreeParser.delimiter
+	 + "description|description: <= 0.487179, \n > 0.487179[exactmatch"
+	 + TreeParser.delimiter
+	 + "manufacturer|manufacturer: <= 0.4, \n > 0.4[jaccard"
+	 + TreeParser.delimiter
+	 + "title|name: <= 0.230769, \n > 0.230769[jaro"
+	 + TreeParser.delimiter
+	 +
+	 "manufacturer|manufacturer: <= 0.5, \n > 0.5[qgrams§date_of_birth|date_of_birth: <= 0.2, > 0.2[negative (44.0)][jaro§age|age: <= 0, > 0[cosine§date_of_birth|date_of_birth: <= 0, > 0[qgrams§has_address|has_address: <= 0.826087, > 0.826087[negative (7.0/1.0)][positive (4.0)]][negative (29.0/8.0)]][qgrams§phone_numer|phone_numer: <= 0.5, > 0.5[qgrams§has_address|has_address: <= 0.826087, > 0.826087[negative (6.0/1.0)][positive (3.0/1.0)]][cosine§given_name|given_name: <= 0, > 0[qgrams§has_address|has_address: <= 0.826087, > 0.826087[positive (6.0/2.0)][jaro§has_address|has_address: <= 0.954882, > 0.954882[jaro§given_name|given_name: <= 0.916667, > 0.916667[negative (8.0/2.0)][positive (2.0)]][negative (3.0/1.0)]]][positive (116.0/51.0)]]]]][cosine"
+	 + TreeParser.delimiter
+	 +
+	 "manufacturer|manufacturer: <= 0.5, \n > 0.5[positive (3.0/1.0)][negative (3.0)]]][negative (1369.0/1.0)]][negative (42.0/1.0)]][cosine"
+	 + TreeParser.delimiter
+	 +
+	 "manufacturer|manufacturer: <= 0.288675, \n > 0.288675[negative (20.0/1.0)][cosine"
+	 + TreeParser.delimiter
+	 +
+	 "title|name: <= 0.606977, \n > 0.606977[negative (3.0/1.0)][positive (2.0)]]]][positive (168.0)]");
+//	 .parseTreePrefix("jaro§title|title: <= 0.807451, > 0.807451[jaro§authors|authors: <= 0.686054, > 0.686054[negative (235.0/1.0)][cosine§title|title: <= 0.683763, > 0.683763[jaccard§title|title: <= 0.368421, > 0.368421[trigrams§title|title: <= 0.625, > 0.625[jaro§title|title: <= 0.711274, > 0.711274[negative (12.0/2.0)][positive (5.0/1.0)]][positive (3.0)]][negative (34.0/2.0)]][trigrams§authors|authors: <= 0.8, > 0.8[positive (9.0)][negative (2.0)]]]][positive (20.0)]");
+//		.parseTreePrefix("cosine§name|name: <= 0.559017, > 0.559017[negative (357.0/31.0)][jaccard§name|name: <= 0.294118, > 0.294118[cosine§description|description: <= 0.071067, > 0.071067[positive (3.0)][negative (10.0/1.0)]][positive (10.0)]]");
 	System.out.println(ls);
-	System.out.println(tp.pruneLS(ls, 4));
-	
+	System.out.println(tp.pruneLS(ls, 1));
+
 	// System.out.println(tp.pruneLS(new
 	// LinkSpecification("cosine(x.name,y.name)", 0.8),5));
-//	System.out.println(tp.eraseAllMinusLeaves(ls));
+	// System.out.println(tp.eraseAllMinusLeaves(ls));
     }
 
 }
