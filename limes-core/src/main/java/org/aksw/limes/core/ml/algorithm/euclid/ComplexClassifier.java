@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)

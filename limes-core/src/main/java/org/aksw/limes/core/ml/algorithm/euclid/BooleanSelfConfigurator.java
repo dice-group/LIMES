@@ -7,6 +7,7 @@ import java.util.Map;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -48,8 +49,8 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
     public ComplexClassifier computeNext(ComplexClassifier classifier, int index) {
         ComplexClassifier cc = classifier.clone();
         ComplexClassifier result = new ComplexClassifier(null, 0.0);
-        if (cc.classifiers.get(index).threshold > learningRate) { //
-            cc.classifiers.get(index).threshold = cc.classifiers.get(index).threshold - learningRate;
+        if (cc.classifiers.get(index).getThreshold() > learningRate) { //
+            cc.classifiers.get(index).setThreshold(cc.classifiers.get(index).getThreshold() - learningRate);
             AMapping m = getMapping(cc.classifiers);
             result.classifiers = cc.classifiers;
             result.fMeasure = computeQuality(m);
@@ -83,7 +84,7 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
     public AMapping getMapping(List<SimpleClassifier> classifiers) {
         List<AMapping> mappings = new ArrayList<AMapping>();
         for (int i = 0; i < classifiers.size(); i++) {
-            AMapping m = executeClassifier(classifiers.get(i), classifiers.get(i).threshold);
+            AMapping m = executeClassifier(classifiers.get(i), classifiers.get(i).getThreshold());
             mappings.add(m);
         }
         AMapping result = getIntersection(mappings);

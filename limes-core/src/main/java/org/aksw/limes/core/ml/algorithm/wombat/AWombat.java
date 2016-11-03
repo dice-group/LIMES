@@ -36,6 +36,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
+import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -276,6 +277,37 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         // get real recall based on training data 
         return new Recall().calculate(predictions, new GoldStandard(trainingData));
 
+    }
+    
+    /**
+     * Computes the atomic classifiers by finding the highest possible F-measure
+     * achievable on a given property pair
+     *
+     * @param sourceProperty Property of source to use
+     * @param targetProperty Property of target to use
+     * @param measure Measure to be used
+     * @return Best simple classifier
+     */
+    protected ExtendedClassifier findInitialClassifier(String sourceProperty, String targetProperty, String measure) {
+        double maxOverlap = 0;
+        double theta = 1.0;
+        AMapping bestMapping = MappingFactory.createDefaultMapping();
+        for (double threshold = 1d; threshold > getMinPropertyCoverage(); threshold = threshold * getPropertyLearningRate()) {
+            AMapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
+            double overlap = recall(mapping);
+            if (maxOverlap < overlap) { //only interested in largest threshold with recall 1
+                bestMapping = mapping;
+                theta = threshold;
+                maxOverlap = overlap;
+                bestMapping = mapping;
+            }
+        }
+        ExtendedClassifier cp = new ExtendedClassifier(measure, theta);
+        cp.setfMeasure(maxOverlap);
+        cp.setSourceProperty(sourceProperty);
+        cp.setTargetProperty(targetProperty);
+        cp.setMapping(bestMapping);
+        return cp;
     }
 
     @Override

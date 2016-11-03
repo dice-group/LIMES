@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.aksw.limes.core.ml.algorithm.euclid;
+package org.aksw.limes.core.ml.algorithm.classifier;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -10,11 +10,11 @@ package org.aksw.limes.core.ml.algorithm.euclid;
  *
  */
 public class SimpleClassifier implements Comparable<SimpleClassifier> {
-    public String measure = null;
-    public String sourceProperty = null;
-    public String targetProperty = null;
-    public double threshold = 1.0;
-    public double weight = 1.0;
+    protected String measure = null;
+    protected String sourceProperty = null;
+    protected String targetProperty = null;
+    protected double threshold = 1.0;
+    protected double weight = 1.0;
     protected double fMeasure = 0.0;
 
     public SimpleClassifier(String measure, double threshold) {

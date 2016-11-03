@@ -8,6 +8,7 @@ import java.util.Map;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 import org.apache.log4j.Logger;
 
 /**
@@ -152,16 +153,16 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
 
             for (int j = 0; j < cc.classifiers.size(); j++) {
                 //fill min
-                if (cc.classifiers.get(j).threshold >= delta) {
-                    min.add(cc.classifiers.get(j).threshold - delta);
+                if (cc.classifiers.get(j).getThreshold() >= delta) {
+                    min.add(cc.classifiers.get(j).getThreshold() - delta);
                 } else {
                     min.add(0.0);
                 }
                 //fill max
-                if (cc.classifiers.get(j).threshold + delta >= 1) {
+                if (cc.classifiers.get(j).getThreshold() + delta >= 1) {
                     max.add(1.0);
                 } else {
-                    max.add(cc.classifiers.get(j).threshold + delta);
+                    max.add(cc.classifiers.get(j).getThreshold() + delta);
                 }
             }
             //get best classifier from the grid
@@ -209,16 +210,16 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
 
             for (int j = 0; j < cc.classifiers.size(); j++) {
                 //fill min
-                if (cc.classifiers.get(j).threshold >= delta) {
-                    min.add(cc.classifiers.get(j).threshold - delta);
+                if (cc.classifiers.get(j).getThreshold() >= delta) {
+                    min.add(cc.classifiers.get(j).getThreshold() - delta);
                 } else {
                     min.add(0.0);
                 }
                 //fill max
-                if (cc.classifiers.get(j).threshold + delta >= 1) {
+                if (cc.classifiers.get(j).getThreshold() + delta >= 1) {
                     max.add(1.0);
                 } else {
-                    max.add(cc.classifiers.get(j).threshold + delta);
+                    max.add(cc.classifiers.get(j).getThreshold() + delta);
                 }
             }
             //get best classifier from the grid
@@ -329,7 +330,7 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
         for (int i = 0; i < sc.size(); i++) {
             if (bestPoint.get(i) > 0) {
                 scList.add(sc.get(i).clone());
-                scList.get(scList.size() - 1).threshold = bestPoint.get(i);
+                scList.get(scList.size() - 1).setThreshold(bestPoint.get(i));
             }
         }
         ComplexClassifier cc = new ComplexClassifier(scList, bestF);
