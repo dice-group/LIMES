@@ -159,17 +159,17 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    
     /**
-     * Extracts all properties from a cache that have a coverage beyond
-     * minCoverage TESTED
+     * Extracts all properties from a cache that have a coverage beyond minCoverage
      *
      * @param c Input cache
      * @param minCoverage Threshold for coverage
      * @return Map of property to coverage
      */
     public static Map<String, Double> getPropertyStats(ACache c, double minCoverage) {
-        Map<String, Double> buffer = new HashMap<String, Double>();
-        Map<String, Double> result = new HashMap<String, Double>();
+        Map<String, Double> buffer = new HashMap<>();
+        Map<String, Double> result = new HashMap<>();
 
         //first count how often properties appear across instances
         for (Instance i : c.getAllInstances()) {

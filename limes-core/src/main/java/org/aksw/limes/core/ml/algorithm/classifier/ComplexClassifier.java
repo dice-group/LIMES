@@ -1,19 +1,19 @@
-package org.aksw.limes.core.ml.algorithm.euclid;
+package org.aksw.limes.core.ml.algorithm.classifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  *
  */
 public class ComplexClassifier {
-    public List<SimpleClassifier> classifiers;
-    public double fMeasure;
-    public AMapping mapping;
+
+    protected List<SimpleClassifier> classifiers;
+    protected double fMeasure;
+    protected AMapping mapping;
 
     public ComplexClassifier(List<SimpleClassifier> classifiers, double fMeasure)
     {
@@ -21,8 +21,7 @@ public class ComplexClassifier {
         this.fMeasure = fMeasure;
     }
 
-    public ComplexClassifier clone()
-    {
+    public ComplexClassifier clone(){
         ComplexClassifier copy = new ComplexClassifier(null, 0);
         copy.fMeasure = fMeasure;
         copy.classifiers = new ArrayList<>();
@@ -30,11 +29,37 @@ public class ComplexClassifier {
             copy.classifiers.add(classifiers.get(i).clone());
         return copy;
     }
+    
+    
+    public List<SimpleClassifier> getClassifiers(){
+        return classifiers;
+    }
+
+    public void setClassifiers(List<SimpleClassifier> classifiers) {
+        this.classifiers = classifiers;
+    }
+
+    public double getfMeasure(){
+        return fMeasure;
+    }
+
+    public void setfMeasure(double fMeasure){
+        this.fMeasure = fMeasure;
+    }
+
+    public AMapping getMapping() {
+        return mapping;
+    }
+
+    public void setMapping(AMapping mapping){
+        this.mapping = mapping;
+    }
+
 
     public String toString() {
         String s = "";
         for(SimpleClassifier sc : classifiers) {
-            s+= "CC{ ("+sc.toString2()+") }";
+            s+= "CC{ ("+sc.toLinkSpecString()+") }";
         }
         return s;
     }

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.ml.algorithm.classifier.ComplexClassifier;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 import org.apache.log4j.Logger;
 
@@ -142,7 +143,7 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
         ComplexClassifier bestCc = cc;
         double delta = 1.0 / ((double) gridPoints - 1.0);
         for (int i = 1; i < iterations; i++) {
-            if (cc.fMeasure == 1) {
+            if (cc.getfMeasure() == 1) {
                 return cc;
             }
 //            logger.info("Current F-score = " + cc.fMeasure);
@@ -151,24 +152,24 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
             List<Double> min = new ArrayList<Double>();
             List<Double> max = new ArrayList<Double>();
 
-            for (int j = 0; j < cc.classifiers.size(); j++) {
+            for (int j = 0; j < cc.getClassifiers().size(); j++) {
                 //fill min
-                if (cc.classifiers.get(j).getThreshold() >= delta) {
-                    min.add(cc.classifiers.get(j).getThreshold() - delta);
+                if (cc.getClassifiers().get(j).getThreshold() >= delta) {
+                    min.add(cc.getClassifiers().get(j).getThreshold() - delta);
                 } else {
                     min.add(0.0);
                 }
                 //fill max
-                if (cc.classifiers.get(j).getThreshold() + delta >= 1) {
+                if (cc.getClassifiers().get(j).getThreshold() + delta >= 1) {
                     max.add(1.0);
                 } else {
-                    max.add(cc.classifiers.get(j).getThreshold() + delta);
+                    max.add(cc.getClassifiers().get(j).getThreshold() + delta);
                 }
             }
             //get best classifier from the grid
-            cc = getHillTop(min, max, gridPoints, cc.classifiers);
+            cc = getHillTop(min, max, gridPoints, cc.getClassifiers());
             // remember the best overall classifier
-            if (bestCc.fMeasure <= cc.fMeasure) {
+            if (bestCc.getfMeasure() <= cc.getfMeasure()) {
                 bestCc = cc;
             } else {
                 cc = bestCc;
@@ -197,7 +198,7 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
         ComplexClassifier bestCc = cc;
         double delta = 1.0 / ((double) gridPoints - 1.0);
         for (int i = 1; i>0; i++) {
-            if (cc.fMeasure == 1) {
+            if (cc.getfMeasure() == 1) {
                 return cc;
             }
 //            logger.info("Current F-score = " + cc.fMeasure);
@@ -208,24 +209,24 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
             List<Double> min = new ArrayList<Double>();
             List<Double> max = new ArrayList<Double>();
 
-            for (int j = 0; j < cc.classifiers.size(); j++) {
+            for (int j = 0; j < cc.getClassifiers().size(); j++) {
                 //fill min
-                if (cc.classifiers.get(j).getThreshold() >= delta) {
-                    min.add(cc.classifiers.get(j).getThreshold() - delta);
+                if (cc.getClassifiers().get(j).getThreshold() >= delta) {
+                    min.add(cc.getClassifiers().get(j).getThreshold() - delta);
                 } else {
                     min.add(0.0);
                 }
                 //fill max
-                if (cc.classifiers.get(j).getThreshold() + delta >= 1) {
+                if (cc.getClassifiers().get(j).getThreshold() + delta >= 1) {
                     max.add(1.0);
                 } else {
-                    max.add(cc.classifiers.get(j).getThreshold() + delta);
+                    max.add(cc.getClassifiers().get(j).getThreshold() + delta);
                 }
             }
             //get best classifier from the grid
-            cc = getHillTop(min, max, gridPoints, cc.classifiers);
+            cc = getHillTop(min, max, gridPoints, cc.getClassifiers());
             // remember the best overall classifier
-            if (bestCc.fMeasure <= cc.fMeasure) {
+            if (bestCc.getfMeasure() <= cc.getfMeasure()) {
                 bestCc = cc;
             } else {
                 cc = bestCc;
@@ -334,8 +335,8 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
             }
         }
         ComplexClassifier cc = new ComplexClassifier(scList, bestF);
-        cc.mapping = bestMapping;
-        System.out.println("Best Classifier: " + cc.classifiers);
+        cc.setMapping(bestMapping);
+        System.out.println("Best Classifier: " + cc.getClassifiers());
         System.out.println("Highest Point: " + bestPoint);
         //System.out.println("Best AMapping: " + cc.mapping);
         System.out.println("FMeasure = " + bestF);

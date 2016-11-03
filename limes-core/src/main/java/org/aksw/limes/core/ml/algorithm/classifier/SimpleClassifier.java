@@ -109,7 +109,7 @@ public class SimpleClassifier implements Comparable<SimpleClassifier> {
      *
      * @return m(p1, p2) theta=t, weight=w.
      */
-    public String toString2() {
+    public String toLinkSpecString() {
         return "" + measure + "(" + sourceProperty + " , " + targetProperty + "):Theta = " + threshold + ", Weight = " + weight;
     }
 
