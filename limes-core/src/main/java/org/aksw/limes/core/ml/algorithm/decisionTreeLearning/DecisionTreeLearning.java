@@ -148,7 +148,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     private LinkSpecification bestLS;
     private PseudoFMeasure pfmeasure;
     private double bestFMeasure = 0.0;
-    private int maxLinkSpecHeight = 1;
+    public int maxLinkSpecHeight = 1;
     private AMapping prediction;
 
     // TODO check whats wrong with these

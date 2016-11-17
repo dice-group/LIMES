@@ -341,7 +341,7 @@ public class TreeParser {
     }
 
     private LinkSpecification checkForRedundantProperties(List<LinkSpecification> children) {
-	if (children.size() == 2) {
+	if (children.size() == 2 && (children.get(0).isAtomic() && children.get(1).isAtomic())) {
 	    LinkSpecification l1 = children.get(0);
 	    LinkSpecification l2 = children.get(1);
 	    String properties1 = l1.getFilterExpression().substring(
@@ -381,31 +381,36 @@ public class TreeParser {
 	// System.out.println(tp.parseTreePrefix("qgrams§title|name: <= 0.105263, > 0.105263[negative (26.0/2.0)][trigrams§title|name: <= 0.2,> 0.2[jaccard§title|name: <= 0.083333,> 0.083333[negative (6.0/1.0)][positive (26.0/2.0)]][positive (816.0/2.0)]"));
 
 	LinkSpecification ls = tp
-	 .parseTreePrefix("trigrams"
-	 + TreeParser.delimiter
-	 + "title|name: <= 0.888889, \n > 0.888889[jaccard"
-	 + TreeParser.delimiter
-	 + "description|description: <= 0.487179, \n > 0.487179[exactmatch"
-	 + TreeParser.delimiter
-	 + "manufacturer|manufacturer: <= 0.4, \n > 0.4[jaccard"
-	 + TreeParser.delimiter
-	 + "title|name: <= 0.230769, \n > 0.230769[jaro"
-	 + TreeParser.delimiter
-	 +
-	 "manufacturer|manufacturer: <= 0.5, \n > 0.5[qgrams§date_of_birth|date_of_birth: <= 0.2, > 0.2[negative (44.0)][jaro§age|age: <= 0, > 0[cosine§date_of_birth|date_of_birth: <= 0, > 0[qgrams§has_address|has_address: <= 0.826087, > 0.826087[negative (7.0/1.0)][positive (4.0)]][negative (29.0/8.0)]][qgrams§phone_numer|phone_numer: <= 0.5, > 0.5[qgrams§has_address|has_address: <= 0.826087, > 0.826087[negative (6.0/1.0)][positive (3.0/1.0)]][cosine§given_name|given_name: <= 0, > 0[qgrams§has_address|has_address: <= 0.826087, > 0.826087[positive (6.0/2.0)][jaro§has_address|has_address: <= 0.954882, > 0.954882[jaro§given_name|given_name: <= 0.916667, > 0.916667[negative (8.0/2.0)][positive (2.0)]][negative (3.0/1.0)]]][positive (116.0/51.0)]]]]][cosine"
-	 + TreeParser.delimiter
-	 +
-	 "manufacturer|manufacturer: <= 0.5, \n > 0.5[positive (3.0/1.0)][negative (3.0)]]][negative (1369.0/1.0)]][negative (42.0/1.0)]][cosine"
-	 + TreeParser.delimiter
-	 +
-	 "manufacturer|manufacturer: <= 0.288675, \n > 0.288675[negative (20.0/1.0)][cosine"
-	 + TreeParser.delimiter
-	 +
-	 "title|name: <= 0.606977, \n > 0.606977[negative (3.0/1.0)][positive (2.0)]]]][positive (168.0)]");
+//	 .parseTreePrefix("trigrams"
+//	 + TreeParser.delimiter
+//	 + "title|name: <= 0.888889, \n > 0.888889[jaccard"
+//	 + TreeParser.delimiter
+//	 + "description|description: <= 0.487179, \n > 0.487179[exactmatch"
+//	 + TreeParser.delimiter
+//	 + "manufacturer|manufacturer: <= 0.4, \n > 0.4[jaccard"
+//	 + TreeParser.delimiter
+//	 + "title|name: <= 0.230769, \n > 0.230769[jaro"
+//	 + TreeParser.delimiter
+//	 +
+//	 "manufacturer|manufacturer: <= 0.5, \n > 0.5[qgrams§date_of_birth|date_of_birth: <= 0.2, > 0.2[negative (44.0)][jaro§age|age: <= 0, > 0[cosine§date_of_birth|date_of_birth: <= 0, > 0[qgrams§has_address|has_address: <= 0.826087, > 0.826087[negative (7.0/1.0)][positive (4.0)]][negative (29.0/8.0)]][qgrams§phone_numer|phone_numer: <= 0.5, > 0.5[qgrams§has_address|has_address: <= 0.826087, > 0.826087[negative (6.0/1.0)][positive (3.0/1.0)]][cosine§given_name|given_name: <= 0, > 0[qgrams§has_address|has_address: <= 0.826087, > 0.826087[positive (6.0/2.0)][jaro§has_address|has_address: <= 0.954882, > 0.954882[jaro§given_name|given_name: <= 0.916667, > 0.916667[negative (8.0/2.0)][positive (2.0)]][negative (3.0/1.0)]]][positive (116.0/51.0)]]]]][cosine"
+//	 + TreeParser.delimiter
+//	 +
+//	 "manufacturer|manufacturer: <= 0.5, \n > 0.5[positive (3.0/1.0)][negative (3.0)]]][negative (1369.0/1.0)]][negative (42.0/1.0)]][cosine"
+//	 + TreeParser.delimiter
+//	 +
+//	 "manufacturer|manufacturer: <= 0.288675, \n > 0.288675[negative (20.0/1.0)][cosine"
+//	 + TreeParser.delimiter
+//	 +
+//	 "title|name: <= 0.606977, \n > 0.606977[negative (3.0/1.0)][positive (2.0)]]]][positive (168.0)]");
 //	 .parseTreePrefix("jaro§title|title: <= 0.807451, > 0.807451[jaro§authors|authors: <= 0.686054, > 0.686054[negative (235.0/1.0)][cosine§title|title: <= 0.683763, > 0.683763[jaccard§title|title: <= 0.368421, > 0.368421[trigrams§title|title: <= 0.625, > 0.625[jaro§title|title: <= 0.711274, > 0.711274[negative (12.0/2.0)][positive (5.0/1.0)]][positive (3.0)]][negative (34.0/2.0)]][trigrams§authors|authors: <= 0.8, > 0.8[positive (9.0)][negative (2.0)]]]][positive (20.0)]");
 //		.parseTreePrefix("cosine§name|name: <= 0.559017, > 0.559017[negative (357.0/31.0)][jaccard§name|name: <= 0.294118, > 0.294118[cosine§description|description: <= 0.071067, > 0.071067[positive (3.0)][negative (10.0/1.0)]][positive (10.0)]]");
+
+		//TODO check these!!!!!!
+//		.parseTreePrefix("qgrams§title|title: <= 0.615385, > 0.615385[negative (350.0/2.0)][qgrams§authors|authors: <= 0.083333, > 0.083333[negative (12.0/1.0)][qgrams§title|title: <= 0.651515, > 0.651515[qgrams§title|title: <= 0.626866, > 0.626866[positive (8.0/1.0)][trigrams§title|title: <= 0.571429, > 0.571429[positive (2.0)][negative (7.0)]]][positive (101.0/10.0)]]]");
+//		.parseTreePrefix("cosine§title|name: <= 0.476731, > 0.476731[negative (159.0/6.0)][qgrams§description|description: <= 0.080097, > 0.080097[qgrams§title|name: <= 0.264151, > 0.264151[negative (10.0)][positive (2.0)]][positive (9.0)]]");
+		.parseTreePrefix("qgrams§name|name: <= 0.394737, > 0.394737[negative (431.0/56.0)][cosine§description|description: <= 0.292509, > 0.292509[qgrams§name|name: <= 0.5, > 0.5[negative (15.0/1.0)][positive (2.0)]][positive (12.0)]");
 	System.out.println(ls);
-	System.out.println(tp.pruneLS(ls, 1));
+	System.out.println(tp.pruneLS(ls, 2));
 
 	// System.out.println(tp.pruneLS(new
 	// LinkSpecification("cosine(x.name,y.name)", 0.8),5));
