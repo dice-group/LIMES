@@ -64,7 +64,41 @@ public class OverlapsMapperTest {
         source.addTriple("S12", "endsAtDateTime", "2015-05-20T08:45:04+02:00");
 
 
-        target = source;
+        target.addTriple("S1", "b", "2015-05-20T08:21:04+02:00");
+        target.addTriple("S1", "e", "2015-05-20T08:22:04+02:00");
+
+        target.addTriple("S2", "b", "2015-05-20T08:21:04+02:00");
+        target.addTriple("S2", "e", "2015-05-20T08:22:04+02:00");
+
+        target.addTriple("S3", "b", "2015-05-20T08:24:04+02:00");
+        target.addTriple("S3", "e", "2015-05-20T08:25:04+02:00");
+
+        target.addTriple("S4", "b", "2015-05-20T08:31:04+02:00");
+        target.addTriple("S4", "e", "2015-05-20T08:32:04+02:00");
+
+        target.addTriple("S5", "b", "2015-05-20T09:21:04+02:00");
+        target.addTriple("S5", "e", "2015-05-20T09:24:04+02:00");
+
+        target.addTriple("S6", "b", "2015-05-20T08:51:04+02:00");
+        target.addTriple("S6", "e", "2015-05-20T09:24:04+02:00");
+
+        target.addTriple("S7", "b", "2015-05-20T08:41:04+02:00");
+        target.addTriple("S7", "e", "2015-05-20T08:51:04+02:00");
+
+        target.addTriple("S8", "b", "2015-05-20T08:41:04+02:00");
+        target.addTriple("S8", "e", "2015-05-20T08:43:04+02:00");
+
+        target.addTriple("S9", "b", "2015-05-20T08:21:04+02:00");
+        target.addTriple("S9", "e", "2015-05-20T08:34:04+02:00");
+
+        target.addTriple("S10", "b", "2015-05-20T09:21:04+02:00");
+        target.addTriple("S10", "e", "2015-05-20T09:22:04+02:00");
+
+        target.addTriple("S11", "b", "2015-05-20T09:21:04+02:00");
+        target.addTriple("S11", "e", "2015-05-20T09:22:04+02:00");
+
+        target.addTriple("S12", "b", "2015-05-20T08:31:04+02:00");
+        target.addTriple("S12", "e", "2015-05-20T08:45:04+02:00");
     }
 
     @After
@@ -77,7 +111,7 @@ public class OverlapsMapperTest {
     public void simpleLS() {
         System.out.println("simpleLS");
         LinkSpecification ls = new LinkSpecification(
-                "tmp_overlaps(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)",
+                "tmp_overlaps(x.beginsAtDateTime|endsAtDateTime,y.b|e)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
@@ -90,7 +124,7 @@ public class OverlapsMapperTest {
     public void similarity() {
         System.out.println("simpleLS");
         LinkSpecification ls = new LinkSpecification(
-                "tmp_overlaps(x.beginsAtDateTime|endsAtDateTime,y.beginsAtDateTime|endsAtDateTime)",
+                "tmp_overlaps(x.beginsAtDateTime|endsAtDateTime,y.b|e)",
                 1.0);
         DynamicPlanner p = new DynamicPlanner(source, target);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
@@ -101,7 +135,7 @@ public class OverlapsMapperTest {
         for (Instance s : source.getAllInstances()) {
             for (Instance t : target.getAllInstances()) {
                 OverlapsMeasure measure = new OverlapsMeasure();
-                double sim = measure.getSimilarity(s, t, "beginsAtDateTime|endsAtDateTime", "beginsAtDateTime|endsAtDateTime");
+                double sim = measure.getSimilarity(s, t, "beginsAtDateTime|endsAtDateTime", "b|e");
                 if (sim != 0)
                     m2.add(s.getUri(), t.getUri(), sim);
             }

@@ -30,8 +30,8 @@ public class EndBegin extends AAtomicAllenAlgebraMapper {
      */
     @Override
     public TreeMap<String, Set<String>> getConcurrentEvents(ACache source, ACache target, String expression) {
-        TreeMap<Long, Set<String>> sources = AAtomicAllenAlgebraMapper.orderByEndDate(source, expression);
-        TreeMap<Long, Set<String>> targets = AAtomicAllenAlgebraMapper.orderByBeginDate(target, expression);
+        TreeMap<Long, Set<String>> sources = AAtomicAllenAlgebraMapper.orderByEndDate(source, expression, "source");
+        TreeMap<Long, Set<String>> targets = AAtomicAllenAlgebraMapper.orderByBeginDate(target, expression, "target");
         TreeMap<String, Set<String>> events = AAtomicAllenAlgebraMapper.mapConcurrent(sources, targets);
         return events;
     }
@@ -41,8 +41,8 @@ public class EndBegin extends AAtomicAllenAlgebraMapper {
      */
     @Override
     public TreeMap<String, Set<String>> getPredecessorEvents(ACache source, ACache target, String expression) {
-        TreeMap<Long, Set<String>> sources = AAtomicAllenAlgebraMapper.orderByEndDate(source, expression);
-        TreeMap<Long, Set<String>> targets = AAtomicAllenAlgebraMapper.orderByBeginDate(target, expression);
+        TreeMap<Long, Set<String>> sources = AAtomicAllenAlgebraMapper.orderByEndDate(source, expression, "source");
+        TreeMap<Long, Set<String>> targets = AAtomicAllenAlgebraMapper.orderByBeginDate(target, expression, "target");
         TreeMap<String, Set<String>> events = AAtomicAllenAlgebraMapper.mapPredecessor(sources, targets);
         return events;
     }
