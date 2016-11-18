@@ -4,6 +4,8 @@
  */
 package org.aksw.limes.core.ml.algorithm.classifier;
 
+import java.util.Locale;
+
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -59,7 +61,7 @@ public class SimpleClassifier implements Comparable<SimpleClassifier> {
      * @author sherif
      */
     public String getMetricExpression() {
-        return measure + "(x." + sourceProperty + ",y." + targetProperty + ")|" + String.format("%.2f", threshold);
+        return measure + "(x." + sourceProperty + ",y." + targetProperty + ")|" + String.format(Locale.ENGLISH, "%.2f", threshold);
     }
 
     public String getSourceProperty() {
