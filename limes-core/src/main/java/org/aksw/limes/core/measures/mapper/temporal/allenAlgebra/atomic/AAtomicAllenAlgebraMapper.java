@@ -85,12 +85,15 @@ public abstract class AAtomicAllenAlgebraMapper {
      * instance, it retrieves its begin date property, converts its value to an
      * epoch (string) using the SimpleDateFormat function and places the
      * instance inside the corresponding set("bucket") of instances.
-     * @param kbType TODO
-     *
+     * 
+     * 
      * @param cache,
      *            The cache of instances
      * @param expression,
      *            The metric expression
+     * @param kbType,
+     *            source or target
+     *            
      * @return blocks, a map of sets with unique begin dates as keys and set of
      *         instances (string representation) as values
      */
@@ -98,11 +101,11 @@ public abstract class AAtomicAllenAlgebraMapper {
         TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
         Parser p = new Parser(expression, 1.0d);
         String property = null;
-        if(kbType.equalsIgnoreCase("source"))
+        if (kbType.equalsIgnoreCase("source"))
             property = getBeginProperty(p.getLeftTerm());
         else
             property = getBeginProperty(p.getRightTerm());
-            
+
         for (Instance instance : cache.getAllInstances()) {
             TreeSet<String> time = instance.getProperty(property);
 
@@ -133,12 +136,17 @@ public abstract class AAtomicAllenAlgebraMapper {
      * instance, it retrieves its end date property, converts its value to an
      * epoch (string) using the SimpleDateFormat function and places the
      * instance inside the corresponding set("bucket") of instances.
-     * @param kbType TODO
+     * 
+     * @param kbType
+     *            TODO
      *
      * @param cache,
      *            The cache of instances
      * @param expression,
      *            The metric expression
+     * @param kbType,
+     *            source or target
+     *            
      * @return blocks, a map of sets with unique end dates as keys and set of
      *         instances (string representation) as values
      */
@@ -146,11 +154,11 @@ public abstract class AAtomicAllenAlgebraMapper {
         TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
         Parser p = new Parser(expression, 1.0d);
         String property = null;
-        if(kbType.equalsIgnoreCase("source"))
+        if (kbType.equalsIgnoreCase("source"))
             property = getEndProperty(p.getLeftTerm());
         else
             property = getEndProperty(p.getRightTerm());
-        
+
         for (Instance instance : cache.getAllInstances()) {
             TreeSet<String> time = instance.getProperty(property);
 

@@ -85,7 +85,66 @@ public class SuccessorMapperTest {
         source.addTriple("S12", "http://myOntology#MachineID", "30");
         source.addTriple("S12", "name", "mattttt");
 
-        target = source;
+        ////////////////////////////////////////////////////////////////////////////////////////
+        target.addTriple("S1", "b", "2015-05-20T08:21:04+02:00");
+        target.addTriple("S1", "e", "2015-05-20T08:22:04+02:00");
+        target.addTriple("S1", "m", "26");
+        target.addTriple("S1", "name", "kleanthi");
+
+        target.addTriple("S2", "b", "2015-05-20T08:21:04+02:00");
+        target.addTriple("S2", "e", "2015-05-20T08:22:04+02:00");
+        target.addTriple("S2", "m", "26");
+        target.addTriple("S2", "name", "abce");
+
+        target.addTriple("S3", "b", "2015-05-20T08:24:04+02:00");
+        target.addTriple("S3", "e", "2015-05-20T08:25:04+02:00");
+        target.addTriple("S3", "m", "26");
+        target.addTriple("S3", "name", "pony");
+
+        target.addTriple("S4", "b", "2015-05-20T08:31:04+02:00");
+        target.addTriple("S4", "e", "2015-05-20T08:32:04+02:00");
+        target.addTriple("S4", "m", "27");
+        target.addTriple("S4", "name", "ping");
+
+        target.addTriple("S5", "b", "2015-05-20T09:21:04+02:00");
+        target.addTriple("S5", "e", "2015-05-20T09:24:04+02:00");
+        target.addTriple("S5", "m", "27");
+        target.addTriple("S5", "name", "kleanthi");
+
+        target.addTriple("S6", "b", "2015-05-20T08:51:04+02:00");
+        target.addTriple("S6", "e", "2015-05-20T09:24:04+02:00");
+        target.addTriple("S6", "m", "27");
+        target.addTriple("S6", "name", "blabla");
+
+        target.addTriple("S7", "b", "2015-05-20T08:41:04+02:00");
+        target.addTriple("S7", "e", "2015-05-20T08:51:04+02:00");
+        target.addTriple("S7", "m", "28");
+        target.addTriple("S7", "name", "blabla");
+
+        target.addTriple("S8", "b", "2015-05-20T08:41:04+02:00");
+        target.addTriple("S8", "e", "2015-05-20T08:43:04+02:00");
+        target.addTriple("S8", "m", "29");
+        target.addTriple("S8", "name", "lolelele");
+
+        target.addTriple("S9", "b", "2015-05-20T08:21:04+02:00");
+        target.addTriple("S9", "e", "2015-05-20T08:34:04+02:00");
+        target.addTriple("S9", "m", "29");
+        target.addTriple("S9", "name", "mattttt");
+
+        target.addTriple("S10", "b", "2015-05-20T09:21:04+02:00");
+        target.addTriple("S10", "e", "2015-05-20T09:22:04+02:00");
+        target.addTriple("S10", "m", "30");
+        target.addTriple("S10", "name", "mattttt");
+
+        target.addTriple("S11", "b", "2015-05-20T09:21:04+02:00");
+        target.addTriple("S11", "e", "2015-05-20T09:22:04+02:00");
+        target.addTriple("S11", "m", "30");
+        target.addTriple("S11", "name", "mattttt");
+
+        target.addTriple("S12", "b", "2015-05-20T08:31:04+02:00");
+        target.addTriple("S12", "e", "2015-05-20T08:45:04+02:00");
+        target.addTriple("S12", "m", "30");
+        target.addTriple("S12", "name", "mattttt");
 
     }
 
@@ -112,7 +171,7 @@ public class SuccessorMapperTest {
     public void complexLS() {
         System.out.println("complexLS");
         LinkSpecification ls = new LinkSpecification(
-                "OR(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)|1.0,trigrams(x.name,y.name)|0.8)",
+                "OR(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|m)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 
@@ -134,7 +193,7 @@ public class SuccessorMapperTest {
     public void complexLS2() {
         System.out.println("complexLS2");
         LinkSpecification ls = new LinkSpecification(
-                "AND(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)|1.0,trigrams(x.name,y.name)|0.3)",
+                "AND(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)|1.0,trigrams(x.name,y.name)|0.3)",
                 1.0);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 
@@ -159,8 +218,7 @@ public class SuccessorMapperTest {
         DynamicPlanner p = new DynamicPlanner(source, target);
 
         LinkSpecification ls1 = new LinkSpecification(
-                "tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)",
-                1.0);
+                "tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)", 1.0);
         LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)", 0.8);
         AMapping m1 = e.execute(ls1, p);
         AMapping m2 = e.execute(ls2, p);
@@ -168,7 +226,7 @@ public class SuccessorMapperTest {
         System.out.println(m2);
 
         LinkSpecification ls = new LinkSpecification(
-                "MINUS(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)|1.0,trigrams(x.name,y.name)|0.8)",
+                "MINUS(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
         AMapping m = e.execute(ls, p);
 
@@ -190,7 +248,7 @@ public class SuccessorMapperTest {
         DynamicPlanner p = new DynamicPlanner(source, target);
 
         LinkSpecification ls = new LinkSpecification(
-                "XOR(trigrams(x.name,y.name)|0.8,tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)|1.0)",
+                "XOR(trigrams(x.name,y.name)|0.8,tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)|1.0)",
                 1.0);
         AMapping m = e.execute(ls, p);
 
