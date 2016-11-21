@@ -193,13 +193,14 @@ public class SuccessorMapperTest {
     public void complexLS2() {
         System.out.println("complexLS2");
         LinkSpecification ls = new LinkSpecification(
-                "AND(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)|1.0,trigrams(x.name,y.name)|0.3)",
+                "AND(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 
         DynamicPlanner p = new DynamicPlanner(source, target);
         AMapping m = e.execute(ls, p);
-
+        System.out.println(p.getPlans().get(ls.toString()));
+        
         CanonicalPlanner p2 = new CanonicalPlanner();
         AMapping mm = e.execute(ls, p2);
 
@@ -217,19 +218,12 @@ public class SuccessorMapperTest {
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         DynamicPlanner p = new DynamicPlanner(source, target);
 
-        LinkSpecification ls1 = new LinkSpecification(
-                "tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)", 1.0);
-        LinkSpecification ls2 = new LinkSpecification("trigrams(x.name,y.name)", 0.8);
-        AMapping m1 = e.execute(ls1, p);
-        AMapping m2 = e.execute(ls2, p);
-        System.out.println(m1);
-        System.out.println(m2);
-
         LinkSpecification ls = new LinkSpecification(
                 "MINUS(tmp_successor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
         AMapping m = e.execute(ls, p);
-
+        System.out.println(p.getPlans().get(ls.toString()));
+        
         CanonicalPlanner p2 = new CanonicalPlanner();
         AMapping mm = e.execute(ls, p2);
 

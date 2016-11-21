@@ -196,7 +196,7 @@ public class PredecessorMapperTest {
     public void complexLS2() {
         System.out.println("complexLS2");
         LinkSpecification ls = new LinkSpecification(
-                "AND(tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime)|1.0,trigrams(x.name,y.name)|0.8)",
+                "AND(tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime,y.b)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
 
@@ -214,9 +214,8 @@ public class PredecessorMapperTest {
 
         System.out.println(mm);
 
-        assertTrue(m.equals(mm));
-        assertTrue(mm.equals(mmm));
-        assertTrue(m.equals(mmm));
+        assertTrue(!m.equals(mm));
+        assertTrue(!mm.equals(mmm));
 
     }
 
@@ -225,7 +224,7 @@ public class PredecessorMapperTest {
         System.out.println("complexLS3");
         ExecutionEngine e = new SimpleExecutionEngine(source, target, "?x", "?y");
         LinkSpecification ls = new LinkSpecification(
-                "MINUS(tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)|1.0,trigrams(x.name,y.name)|0.8)",
+                "MINUS(tmp_predecessor(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.b|m)|1.0,trigrams(x.name,y.name)|0.8)",
                 1.0);
 
         DynamicPlanner p = new DynamicPlanner(source, target);

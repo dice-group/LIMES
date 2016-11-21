@@ -202,6 +202,7 @@ public class ConcurrentMapperTest {
 
         DynamicPlanner p = new DynamicPlanner(source, target);
         AMapping m = e.execute(ls, p);
+        System.out.println(p.getPlans().get(ls.toString()));
 
         CanonicalPlanner p2 = new CanonicalPlanner();
         AMapping mm = e.execute(ls, p2);
