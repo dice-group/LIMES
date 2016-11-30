@@ -42,10 +42,8 @@ public class NtSerializer implements ISerializer {
     /**
      * Expands a string by replacing a prefix by its full value
      *
-     * @param s
-     *         Input string
-     * @param predicate
-     *         Predicate to expand with
+     * @param s Input string
+     * @param predicate Predicate to expand with
      * @return Expanded version of s
      */
     public static String expand(String s, String predicate) {
@@ -77,23 +75,17 @@ public class NtSerializer implements ISerializer {
      * assume that the class already knows all the prefixes used in the uris and
      * expands those.
      *
-     * @param m
-     *         Mapping to serialize
-     * @param predicate
-     *         Predicate to use while serializing
-     * @param file
-     *         File in which the mapping is to be serialized
+     * @param mapping Mapping to serialize
+     * @param predicate Predicate to use while serializing
+     * @param file File in which the mapping is to be serialized
      */
-    public void writeToFile(AMapping m, String predicate, String file) {
+    public void writeToFile(AMapping mapping, String predicate, String file) {
         open(file);
         String predicatePrefix = getPrefix(predicate);
 
-        if (m.size() > 0) {
-            //first get the prefix used in the subjects
-//            String source = m.getMap().keySet().iterator().next();
-//            String target = m.getMap().get(source).keySet().iterator().next();
-            for (String s : m.getMap().keySet()) {
-                for (String t : m.getMap().get(s).keySet()) {
+        if (mapping.size() > 0) {
+            for (String s : mapping.getMap().keySet()) {
+                for (String t : mapping.getMap().get(s).keySet()) {
                     writer.println("<" + s + "> "
                             + "<" + expand(predicate, predicatePrefix) + "> "
                             + "<" + t + "> .");
@@ -106,16 +98,10 @@ public class NtSerializer implements ISerializer {
     /**
      * Writes in the file statement by statement. Rather slow, not to be used
      *
-     * @param subject
-     *         Source object of a mapping, subject of the triple to be
-     *         written
-     * @param predicate
-     *         Predicate to be written
-     * @param object
-     *         Target object of a mapping, object of the triple to be
-     *         written
-     * @param similarity
-     *         Similarity achieved by the subject and object
+     * @param subject Source object of a mapping, subject of the triple to be written
+     * @param predicate Predicate to be written
+     * @param object Target object of a mapping, object of the triple to be written
+     * @param similarity Similarity achieved by the subject and object
      */
     public void printStatement(String subject, String predicate, String object, double similarity) {
         String predicatePrefix = getPrefix(predicate);

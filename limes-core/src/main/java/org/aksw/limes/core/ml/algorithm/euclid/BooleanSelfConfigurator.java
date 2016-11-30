@@ -1,12 +1,14 @@
 package org.aksw.limes.core.ml.algorithm.euclid;
 
-import org.aksw.limes.core.io.cache.ACache;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.ml.algorithm.classifier.ComplexClassifier;
+import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -48,24 +50,24 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
     public ComplexClassifier computeNext(ComplexClassifier classifier, int index) {
         ComplexClassifier cc = classifier.clone();
         ComplexClassifier result = new ComplexClassifier(null, 0.0);
-        if (cc.classifiers.get(index).threshold > learningRate) { //
-            cc.classifiers.get(index).threshold = cc.classifiers.get(index).threshold - learningRate;
-            AMapping m = getMapping(cc.classifiers);
-            result.classifiers = cc.classifiers;
-            result.fMeasure = computeQuality(m);
+        if (cc.getClassifiers().get(index).getThreshold() > learningRate) { //
+            cc.getClassifiers().get(index).setThreshold(cc.getClassifiers().get(index).getThreshold() - learningRate);
+            AMapping m = getMapping(cc.getClassifiers());
+            result.setClassifiers(cc.getClassifiers());
+            result.setfMeasure(computeQuality(m));
 //            result.fMeasure = _measure.getPseudoFMeasure(source.getAllUris(), target.getAllUris(), m, beta);
             return result;
         } else {
-            if (cc.classifiers.size() > index + 1) {
+            if (cc.getClassifiers().size() > index + 1) {
                 List<SimpleClassifier> cp = new ArrayList<SimpleClassifier>();
-                for (int i = 0; i < cc.classifiers.size(); i++) {
+                for (int i = 0; i < cc.getClassifiers().size(); i++) {
                     if (i != index) {
-                        cp.add(cc.classifiers.get(i));
+                        cp.add(cc.getClassifiers().get(i));
                     }
                 }
                 AMapping m = getMapping(cp);
-                result.classifiers = cp;
-                result.fMeasure = computeQuality(m);
+                result.setClassifiers(cp);
+                result.setfMeasure(computeQuality(m));
 //                result.fMeasure = _measure.getPseudoFMeasure(source.getAllUris(), target.getAllUris(), m, beta);
                 return result;
             } else {
@@ -83,7 +85,7 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
     public AMapping getMapping(List<SimpleClassifier> classifiers) {
         List<AMapping> mappings = new ArrayList<AMapping>();
         for (int i = 0; i < classifiers.size(); i++) {
-            AMapping m = executeClassifier(classifiers.get(i), classifiers.get(i).threshold);
+            AMapping m = executeClassifier(classifiers.get(i), classifiers.get(i).getThreshold());
             mappings.add(m);
         }
         AMapping result = getIntersection(mappings);
@@ -143,10 +145,10 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
             int index = -1;
             bestF = 0;
             //evaluate neighbors of current classifier
-            for (int i = 0; i < classifier.classifiers.size(); i++) {
+            for (int i = 0; i < classifier.getClassifiers().size(); i++) {
                 cc = computeNext(classifier, i);
-                if (cc.fMeasure > bestF) {
-                    bestF = cc.fMeasure;
+                if (cc.getfMeasure() > bestF) {
+                    bestF = cc.getfMeasure();
                     index = i;
                     bestClassifier = cc;
                 }
@@ -154,24 +156,24 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
 
             //every neighboring classifier is worse
             if (bestF < globalBestF) {
-                return bestGlobalClassifier.classifiers;
+                return bestGlobalClassifier.getClassifiers();
             } //nothing better found. simply march in the space in direction
             //"direction"
             else if (bestF == globalBestF) {
                 System.out.println(">>>> Walking along direction " + direction);
-                if (direction >= classifier.classifiers.size()) {
+                if (direction >= classifier.getClassifiers().size()) {
                     direction = 0;
                 }
                 bestClassifier = computeNext(classifier, direction);
                 direction++;
-                direction = direction % (classifier.classifiers.size());
+                direction = direction % (classifier.getClassifiers().size());
             } //found a better classifier
             bestGlobalClassifier = bestClassifier.clone();
             globalBestF = bestF;
             //init for next iter
             classifier = bestClassifier;
-            System.out.println(">> Iteration " + iterations + ": " + classifier.classifiers + " F-Measure = " + globalBestF + " AMapping = " + getMapping(classifiers));
+            System.out.println(">> Iteration " + iterations + ": " + classifier.getClassifiers() + " F-Measure = " + globalBestF + " AMapping = " + getMapping(classifiers));
         }
-        return bestGlobalClassifier.classifiers;
+        return bestGlobalClassifier.getClassifiers();
     }
 }

@@ -6,26 +6,23 @@ import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.aksw.limes.core.gui.controller.EditClassMatchingController;
+import org.aksw.limes.core.gui.model.ClassMatchingNode;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
+
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.input.MouseEvent;
-
-import org.aksw.limes.core.gui.controller.EditClassMatchingController;
-import org.aksw.limes.core.gui.model.ClassMatchingNode;
-import org.aksw.limes.core.gui.util.SourceOrTarget;
-
-import com.sun.prism.paint.Paint;
 
 /**
  * used for class matching step in {@link WizardView}

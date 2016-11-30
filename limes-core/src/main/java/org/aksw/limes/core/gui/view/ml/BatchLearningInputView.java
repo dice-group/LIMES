@@ -2,6 +2,13 @@ package org.aksw.limes.core.gui.view.ml;
 
 import java.io.File;
 
+import org.aksw.limes.core.gui.controller.ml.BatchLearningController;
+import org.aksw.limes.core.gui.model.ml.BatchLearningModel;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.reader.AMappingReader;
+import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
+import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Scene;
@@ -18,13 +25,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import org.aksw.limes.core.gui.controller.ml.BatchLearningController;
-import org.aksw.limes.core.gui.model.ml.BatchLearningModel;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.reader.AMappingReader;
-import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
-import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
 
 public class BatchLearningInputView {
 

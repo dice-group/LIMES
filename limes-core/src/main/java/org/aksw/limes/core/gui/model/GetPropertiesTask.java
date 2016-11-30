@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javafx.concurrent.Task;
-
 import org.aksw.limes.core.gui.util.TaskResultSerializer;
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.gui.util.sparql.SPARQLHelper;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.jena.rdf.model.Model;
+
+import javafx.concurrent.Task;
 
 /**
  * Task for loading properties in {@link org.aksw.limes.core.gui.view.WizardView}   

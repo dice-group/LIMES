@@ -5,7 +5,6 @@ import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.query.IQueryModule;
 import org.aksw.limes.core.io.query.ModelRegistry;
 import org.aksw.limes.core.io.query.QueryModuleFactory;
 import org.apache.jena.rdf.model.Model;

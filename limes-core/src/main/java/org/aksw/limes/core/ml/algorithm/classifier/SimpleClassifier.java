@@ -2,7 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.aksw.limes.core.ml.algorithm.euclid;
+package org.aksw.limes.core.ml.algorithm.classifier;
+
+import java.util.Locale;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -10,11 +12,11 @@ package org.aksw.limes.core.ml.algorithm.euclid;
  *
  */
 public class SimpleClassifier implements Comparable<SimpleClassifier> {
-    public String measure = null;
-    public String sourceProperty = null;
-    public String targetProperty = null;
-    public double threshold = 1.0;
-    public double weight = 1.0;
+    protected String measure = null;
+    protected String sourceProperty = null;
+    protected String targetProperty = null;
+    protected double threshold = 1.0;
+    protected double weight = 1.0;
     protected double fMeasure = 0.0;
 
     public SimpleClassifier(String measure, double threshold) {
@@ -59,7 +61,7 @@ public class SimpleClassifier implements Comparable<SimpleClassifier> {
      * @author sherif
      */
     public String getMetricExpression() {
-        return measure + "(x." + sourceProperty + ",y." + targetProperty + ")|" + String.format("%.2f", threshold);
+        return measure + "(x." + sourceProperty + ",y." + targetProperty + ")|" + String.format(Locale.ENGLISH, "%.2f", threshold);
     }
 
     public String getSourceProperty() {
@@ -109,7 +111,7 @@ public class SimpleClassifier implements Comparable<SimpleClassifier> {
      *
      * @return m(p1, p2) theta=t, weight=w.
      */
-    public String toString2() {
+    public String toLinkSpecString() {
         return "" + measure + "(" + sourceProperty + " , " + targetProperty + "):Theta = " + threshold + ", Weight = " + weight;
     }
 

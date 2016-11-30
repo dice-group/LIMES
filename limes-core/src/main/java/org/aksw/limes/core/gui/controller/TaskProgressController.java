@@ -6,12 +6,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import javafx.concurrent.Task;
-
-import org.aksw.limes.core.controller.Controller;
 import org.aksw.limes.core.gui.view.TaskProgressView;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import javafx.concurrent.Task;
 
 /**
  * Class to show user progress if tasks are being executed in the background

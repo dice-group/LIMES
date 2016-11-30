@@ -36,20 +36,21 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
+import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 /**
- * This class uses Least General Generalization (LGG) to learn Link Specifications
+ * This class uses Least General Generalization (LGG) to learn Link Specifications (LS)
  *
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jun 7, 2016
  */
 public abstract class AWombat extends ACoreMLAlgorithm {
 
-    static Logger logger = LoggerFactory.getLogger(AWombat.class.getName());
+    static Logger logger = LoggerFactory.getLogger(AWombat.class);
 
     // Parameters
     public static final String PARAMETER_MAX_REFINEMENT_TREE_SIZE = "max refinement tree size";
@@ -262,6 +263,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         // get real precision based on training data 
         return new Precision().calculate(predictions, new GoldStandard(trainingData));
     }
+    
+
     /**
      * calculate either a real or a pseudo-Recall
      *
@@ -276,6 +279,35 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         // get real recall based on training data 
         return new Recall().calculate(predictions, new GoldStandard(trainingData));
 
+    }
+    
+    /**
+     * Computes the atomic classifiers by finding the highest possible F-measure
+     * achievable on a given property pair
+     *
+     * @param sourceProperty Property of source to use
+     * @param targetProperty Property of target to use
+     * @param measure Measure to be used
+     * @return Best simple classifier
+     */
+    protected ExtendedClassifier findInitialClassifier(String sourceProperty, String targetProperty, String measure) {
+        double maxOverlap = 0;
+        double theta = 1.0;
+        AMapping bestMapping = MappingFactory.createDefaultMapping();
+        for (double threshold = 1d; threshold > getMinPropertyCoverage(); threshold = threshold * getPropertyLearningRate()) {
+            AMapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
+            double overlap = recall(mapping);
+            if (maxOverlap < overlap) { //only interested in largest threshold with recall 1
+                bestMapping = mapping;
+                theta = threshold;
+                maxOverlap = overlap;
+                bestMapping = mapping;
+            }
+        }
+        ExtendedClassifier cp = new ExtendedClassifier(measure, theta, sourceProperty, targetProperty);
+        cp.setfMeasure(maxOverlap);
+        cp.setMapping(bestMapping);
+        return cp;
     }
 
     @Override

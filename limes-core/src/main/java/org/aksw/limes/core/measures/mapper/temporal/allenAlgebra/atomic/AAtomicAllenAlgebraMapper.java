@@ -46,9 +46,12 @@ public abstract class AAtomicAllenAlgebraMapper {
      * @return first property of metric expression as string
      */
     protected static String getBeginProperty(String expression) {
+        // expression = x.beginDate1|endDate1
         expression = expression.substring(expression.indexOf(".") + 1, expression.length());
+        // expression beginDate1|endDate1
         int plusIndex = expression.indexOf("|");
         if (expression.indexOf("|") != -1) {
+            // p1 = beginDate1
             String p1 = expression.substring(0, plusIndex);
             return p1;
         } else
@@ -65,9 +68,12 @@ public abstract class AAtomicAllenAlgebraMapper {
      *             if endDate property is not declared
      */
     protected static String getEndProperty(String expression) throws IllegalArgumentException {
+        // expression = x.beginDate1|endDate1
         expression = expression.substring(expression.indexOf(".") + 1, expression.length());
+        // expression beginDate1|endDate1
         int plusIndex = expression.indexOf("|");
         if (expression.indexOf("|") != -1) {
+            // p1 = endDate1
             String p1 = expression.substring(plusIndex + 1, expression.length());
             return p1;
         } else
@@ -79,18 +85,26 @@ public abstract class AAtomicAllenAlgebraMapper {
      * instance, it retrieves its begin date property, converts its value to an
      * epoch (string) using the SimpleDateFormat function and places the
      * instance inside the corresponding set("bucket") of instances.
-     *
+     * 
+     * 
      * @param cache,
      *            The cache of instances
      * @param expression,
      *            The metric expression
+     * @param kbType,
+     *            source or target
+     *            
      * @return blocks, a map of sets with unique begin dates as keys and set of
      *         instances (string representation) as values
      */
-    protected static TreeMap<Long, Set<String>> orderByBeginDate(ACache cache, String expression) {
+    protected static TreeMap<Long, Set<String>> orderByBeginDate(ACache cache, String expression, String kbType) {
         TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
         Parser p = new Parser(expression, 1.0d);
-        String property = getBeginProperty(p.getLeftTerm());
+        String property = null;
+        if (kbType.equalsIgnoreCase("source"))
+            property = getBeginProperty(p.getLeftTerm());
+        else
+            property = getBeginProperty(p.getRightTerm());
 
         for (Instance instance : cache.getAllInstances()) {
             TreeSet<String> time = instance.getProperty(property);
@@ -122,19 +136,28 @@ public abstract class AAtomicAllenAlgebraMapper {
      * instance, it retrieves its end date property, converts its value to an
      * epoch (string) using the SimpleDateFormat function and places the
      * instance inside the corresponding set("bucket") of instances.
+     * 
+     * @param kbType
+     *            TODO
      *
      * @param cache,
      *            The cache of instances
      * @param expression,
      *            The metric expression
+     * @param kbType,
+     *            source or target
+     *            
      * @return blocks, a map of sets with unique end dates as keys and set of
      *         instances (string representation) as values
      */
-    protected static TreeMap<Long, Set<String>> orderByEndDate(ACache cache, String expression) {
+    protected static TreeMap<Long, Set<String>> orderByEndDate(ACache cache, String expression, String kbType) {
         TreeMap<Long, Set<String>> blocks = new TreeMap<Long, Set<String>>();
         Parser p = new Parser(expression, 1.0d);
         String property = null;
-        property = getEndProperty(p.getLeftTerm());
+        if (kbType.equalsIgnoreCase("source"))
+            property = getEndProperty(p.getLeftTerm());
+        else
+            property = getEndProperty(p.getRightTerm());
 
         for (Instance instance : cache.getAllInstances()) {
             TreeSet<String> time = instance.getProperty(property);

@@ -84,8 +84,6 @@ public class CSVMappingReader extends AMappingReader {
      * Read Mapping from the input 2 column CSV file First column contains
      * source URIs Second column contains Target URIs All similarities is set to 1.0
      *
-     * @param file
-     *            2 columns CSV file to read the mapping from
      * @return AMapping object contains the mapping
      */
     public AMapping readTwoColumnFile() {
@@ -120,8 +118,6 @@ public class CSVMappingReader extends AMappingReader {
      * source URIs Second column contains Target URIs Third column contains
      * similarity
      *
-     * @param file
-     *            3 columns CSV file (third column is the confidence value) to
      *            read the mapping from
      * @return AMapping object contains the mapping
      */
@@ -149,8 +145,6 @@ public class CSVMappingReader extends AMappingReader {
      * source URIs Second column contains linking property Third column contains
      * Target URIs
      *
-     * @param file
-     *            3 columns CSV file to read the mapping from
      * @return AMapping object contains the mapping
      */
     public AMapping readThreeColumnFile() {
