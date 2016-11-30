@@ -234,7 +234,7 @@ public class SetJaccardMapper extends AMapper {
                     }
                     if (nextStartSizeNotFixedYet && targetValues.size() >= nextStartSize) {
                         nextStartSizeNotFixedYet = false;
-                        startBig = j - 1;
+                        startBig = (startBig == 0) ? 0 : j - 1;
                     }
                     tempTarget.add(targetValues);
                 }
