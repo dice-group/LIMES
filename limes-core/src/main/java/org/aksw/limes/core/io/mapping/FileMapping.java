@@ -8,7 +8,11 @@ import java.util.HashMap;
  */
 public class FileMapping extends AMapping {
 
-    public HashMap<String, HashMap<String, Double>> map;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6896787320093743557L;
+	public HashMap<String, HashMap<String, Double>> map;
 
     public int getNumberofMappings() {
         // TODO Auto-generated method stub

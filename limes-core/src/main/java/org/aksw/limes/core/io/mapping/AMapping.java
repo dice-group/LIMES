@@ -14,7 +14,11 @@ import org.apache.jena.vocabulary.OWL;
  */
 public abstract class AMapping implements IMapping {
 
-    protected HashMap<String, HashMap<String, Double>> map;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2139214978237914397L;
+	protected HashMap<String, HashMap<String, Double>> map;
     protected HashMap<Double, HashMap<String, TreeSet<String>>> reversedMap;
     protected int size;
     protected String predicate;
