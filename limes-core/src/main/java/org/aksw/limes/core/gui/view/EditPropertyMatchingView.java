@@ -2,16 +2,21 @@ package org.aksw.limes.core.gui.view;
 
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.gui.controller.EditPropertyMatchingController;
+import org.aksw.limes.core.gui.model.AutomatedPropertyMatchingNode;
 import org.aksw.limes.core.gui.util.SourceOrTarget;
+import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
+import org.aksw.limes.core.io.mapping.AMapping;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -19,6 +24,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -46,9 +54,16 @@ public class EditPropertyMatchingView implements IEditView {
             .observableArrayList();
     private ObservableList<String> targetProperties = FXCollections
             .observableArrayList();
+    private ObservableList<String> automatedProperties = FXCollections
+            .observableArrayList();
+    private TableView<AutomatedPropertyMatchingNode> automatedPropList;
+    private TableView<AutomatedPropertyMatchingNode> addedAutomatedPropsList;
+    private ObservableList<AutomatedPropertyMatchingNode> availableProperties = FXCollections.observableArrayList();
+    private ObservableList<AutomatedPropertyMatchingNode> addedProperties = FXCollections.observableArrayList();
     private Label missingPropertiesLabel;
     private Label sourceID;
     private Label targetID;
+    public boolean automated = true;
 
     /**
      * Constructor creates the root pane and adds listeners
@@ -72,7 +87,75 @@ public class EditPropertyMatchingView implements IEditView {
      * creates the root pane
      */
     private void createRootPane() {
-        sourcePropList = new ListView<String>();
+    	if(automated){
+    		createAutomatedRootPane();
+    	}else{
+    		createManualRootPane();
+    	}
+
+    }
+    
+    @SuppressWarnings("unchecked")
+	private void createAutomatedRootPane(){
+    	automatedPropList = new TableView<AutomatedPropertyMatchingNode>();
+    	TableColumn<AutomatedPropertyMatchingNode, String> sourcePropColumn = new TableColumn<AutomatedPropertyMatchingNode, String>();
+    	TableColumn<AutomatedPropertyMatchingNode, String> targetPropColumn = new TableColumn<AutomatedPropertyMatchingNode, String>();
+    	sourcePropColumn.setCellValueFactory(
+    			new PropertyValueFactory<AutomatedPropertyMatchingNode, String>("sourceProperty")
+    	);
+    	targetPropColumn.setCellValueFactory(
+    			new PropertyValueFactory<AutomatedPropertyMatchingNode, String>("targetProperty")
+    	);
+    	automatedPropList.getColumns().addAll(sourcePropColumn, targetPropColumn);
+    	automatedPropList.setItems(availableProperties);
+    	automatedPropList.setEditable(false);
+    	automatedPropList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        addedAutomatedPropsList = new TableView<AutomatedPropertyMatchingNode>();
+    	TableColumn<AutomatedPropertyMatchingNode, String> addedSourcePropColumn = new TableColumn<AutomatedPropertyMatchingNode, String>();
+    	TableColumn<AutomatedPropertyMatchingNode, String> addedTargetPropColumn = new TableColumn<AutomatedPropertyMatchingNode, String>();
+    	addedSourcePropColumn.setText("source");
+    	addedTargetPropColumn.setText("target");
+    	addedSourcePropColumn.setCellValueFactory(
+    			new PropertyValueFactory<AutomatedPropertyMatchingNode, String>("sourceProperty")
+    	);
+    	addedTargetPropColumn.setCellValueFactory(
+    			new PropertyValueFactory<AutomatedPropertyMatchingNode, String>("targetProperty")
+    	);
+    	addedAutomatedPropsList.getColumns().addAll(addedSourcePropColumn, addedTargetPropColumn);
+    	addedAutomatedPropsList.setItems(addedProperties);
+    	addedAutomatedPropsList.setEditable(false);
+    	addedAutomatedPropsList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        Label propertiesLabel = new Label("recommended properties:");
+        propertiesLabel.setTextFill(Color.DARKSLATEGREY);
+        HBox idsBox = new HBox();
+        sourceID = new Label();
+        targetID = new Label();
+        idsBox.getChildren().addAll(sourceID, targetID);
+        Label addedPropertiesLabel = new Label("added properties:");
+        addedPropertiesLabel.setTextFill(Color.DARKSLATEGREY);
+        VBox propertiesColumn = new VBox();
+        propertiesColumn.getChildren().addAll(idsBox, propertiesLabel, automatedPropList, addedPropertiesLabel, addedAutomatedPropsList);
+        addAllButton = new Button("Add all");
+        removeAllButton = new Button("Remove all");
+        missingPropertiesLabel = new Label("At least one property must be chosen!");
+        missingPropertiesLabel.setTextFill(Color.RED);
+        missingPropertiesLabel.setVisible(false);
+        HBox buttons = new HBox();
+        buttons.getChildren().addAll(missingPropertiesLabel, addAllButton, removeAllButton);
+        BorderPane root = new BorderPane();
+        root.setCenter(propertiesColumn);
+        root.setBottom(buttons);
+        rootPane = new ScrollPane(root);
+        rootPane.setOnMouseClicked(e -> {
+            missingPropertiesLabel.setVisible(false);
+        });
+        rootPane.setFitToHeight(true);
+        rootPane.setFitToWidth(true);
+		rootPane.setPadding(new Insets(5.0));
+    }
+    
+    private void createManualRootPane(){
+    	sourcePropList = new ListView<String>();
         targetPropList = new ListView<String>();
         addedSourcePropsList = new ListView<String>();
         addedTargetPropsList = new ListView<String>();
@@ -106,18 +189,76 @@ public class EditPropertyMatchingView implements IEditView {
         });
         rootPane.setFitToHeight(true);
         rootPane.setFitToWidth(true);
+		rootPane.setPadding(new Insets(5.0));
     }
 
     /**
      * adds listener to properties to display changes after loading them is finished.
      * also adds functionality
      */
-    @SuppressWarnings("all")
     private void addListeners() {
+    	if(automated){
+    		addListenersForAutomated();
+    	}else{
+    		addListenersForManual();
+    	}
+    }
+    
+    @SuppressWarnings({"unchecked","rawtypes"})
+    public void addListenersForAutomated(){
+
+        automatedProperties.addListener(new ListChangeListener() {
+            @Override
+            public void onChanged( ListChangeListener.Change change) {
+                if (automatedProperties.size() != 0)
+                    putAllPropertiesToTable();
+            }
+        });
+
+        automatedPropList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+        	if(automatedPropList.getSelectionModel().getSelectedItem() != null){
+                addedAutomatedPropsList.getItems().add(automatedPropList.getSelectionModel().getSelectedItem());
+                automatedPropList.getItems().remove(automatedPropList.getSelectionModel().getSelectedItem());
+        	}
+            }
+        });
+
+        addedAutomatedPropsList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+        	if(addedAutomatedPropsList.getSelectionModel().getSelectedItem() != null){
+                automatedPropList.getItems().add(addedAutomatedPropsList.getSelectionModel().getSelectedItem());
+                addedAutomatedPropsList.getItems().remove(addedAutomatedPropsList.getSelectionModel().getSelectedItem());
+        	}
+            }
+        });
+
+        addAllButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                addedAutomatedPropsList.getItems().addAll(automatedPropList.getItems());
+                automatedPropList.getItems().clear();
+            }
+        });
+
+        removeAllButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                automatedPropList.getItems().addAll(addedAutomatedPropsList.getItems());
+                addedAutomatedPropsList.getItems().clear();
+            }
+        });
+    	
+    }
+    
+    @SuppressWarnings({"unchecked","rawtypes"})
+	public void addListenersForManual(){
 
         sourceProperties.addListener(new ListChangeListener() {
             @Override
-            public void onChanged(ListChangeListener.Change change) {
+            public void onChanged( ListChangeListener.Change change) {
                 if (sourceProperties.size() != 0
                         && targetProperties.size() != 0) {
                     putAllPropertiesToTable();
@@ -194,6 +335,7 @@ public class EditPropertyMatchingView implements IEditView {
                 addedTargetPropsList.getItems().clear();
             }
         });
+    	
     }
 
     /**
@@ -211,7 +353,35 @@ public class EditPropertyMatchingView implements IEditView {
      */
     @Override
     public void save() {
-        controller.save(this.addedSourcePropsList, this.addedTargetPropsList);
+    	if(automated){
+    		List<String>sourceProperties = new ArrayList<String>();
+    		List<String>targetProperties = new ArrayList<String>();
+    		for(AutomatedPropertyMatchingNode addedPropertyNode: this.addedProperties){
+    			sourceProperties.add(addedPropertyNode.getSourceProperty().get());
+    			targetProperties.add(addedPropertyNode.getTargetProperty().get());
+    		}
+    		controller.save(sourceProperties, targetProperties);
+    	}else{
+    		controller.save(this.addedSourcePropsList.getItems(), this.addedTargetPropsList.getItems());
+    	}
+    }
+    
+    public void showAutomatedProperties(AMapping properties){
+    	//clear the list
+    	availableProperties.removeAll(availableProperties);
+    	//fill the list
+    	for(String sourceProperty : properties.getMap().keySet()){
+    		for(String targetProperty : properties.getMap().get(sourceProperty).keySet()){
+    			availableProperties.add(new AutomatedPropertyMatchingNode(PrefixHelper.abbreviate(sourceProperty), PrefixHelper.abbreviate(targetProperty)));
+    		}
+    	}
+    	System.out.println("availableProperties: ");
+    	for(AutomatedPropertyMatchingNode apmn: availableProperties){
+    		System.out.println(apmn.toString());
+    	}
+    	automatedPropList.setItems(availableProperties);
+    	automatedPropList.getColumns().get(0).setText(controller.getConfig().getSourceEndpoint().getCurrentClass().getName() + "  properties");
+    	automatedPropList.getColumns().get(1).setText(controller.getConfig().getTargetEndpoint().getCurrentClass().getName() + "  properties");
     }
 
     /**
@@ -263,4 +433,10 @@ public class EditPropertyMatchingView implements IEditView {
     public Label getMissingPropertiesLabel() {
         return missingPropertiesLabel;
     }
+
+	public TableView<AutomatedPropertyMatchingNode> getAddedAutomatedPropsList() {
+		return addedAutomatedPropsList;
+	}
+    
+    
 }

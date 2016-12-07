@@ -24,23 +24,23 @@ public class TaskResultSerializer {
      * @return result of the task or null if it was not serialized
      */
     @SuppressWarnings("rawtypes")
-    public static List getTaskResult(Task task){
+    public static Object getTaskResult(Task task){
 	String hash = task.hashCode() + "";
         File serializationFile = new File(folder + "cache/" + hash + ".ser");
         logger.info("Checking for file " + serializationFile.getAbsolutePath());
-        List taskResult = null;
+        Object taskResult = null;
         try {
             if (serializationFile.exists()) {
                 logger.info("Found serialization. Loading data from file " + serializationFile.getAbsolutePath());
                 FileInputStream fileIn = new FileInputStream(serializationFile);
                 ObjectInputStream in = new ObjectInputStream(fileIn);
-                taskResult = (List) in.readObject();
+                taskResult = in.readObject();
                 in.close();
                 fileIn.close();
             }else{
-        	return null;
+            	return null;
             }
-            if (taskResult.size() == 0) {
+            if (taskResult == null) {
                 throw new Exception();
             } else {
                 logger.info("Serialization loaded successfully from file " + serializationFile.getAbsolutePath());
@@ -53,7 +53,7 @@ public class TaskResultSerializer {
     }
     
     @SuppressWarnings("rawtypes")
-    public static void serializeTaskResult(Task task, List result){
+    public static void serializeTaskResult(Task task, Object result){
 	 try{
 	String hash = task.hashCode() + "";
         File serializationFile = new File(folder + "cache/" + hash + ".ser");
@@ -63,8 +63,7 @@ public class TaskResultSerializer {
 	         out.close();
 	         fileOut.close();
 	         logger.info("Serialized data is saved in " + serializationFile.getAbsolutePath());
-	      }catch(IOException i)
-	      {
+	      }catch(IOException i){
 	          i.printStackTrace();
 	      }
     }

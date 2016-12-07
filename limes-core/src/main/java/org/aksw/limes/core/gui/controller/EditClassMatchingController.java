@@ -6,6 +6,7 @@ import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 import org.aksw.limes.core.gui.model.ClassMatchingNode;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Endpoint;
+import org.aksw.limes.core.gui.model.GetAutomatedClassMatchingTask;
 import org.aksw.limes.core.gui.model.GetClassesTask;
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.gui.view.EditClassMatchingView;
@@ -54,6 +55,31 @@ public class EditClassMatchingController implements IEditController {
      */
     @Override
     public void load() {
+    	if(view.automated){
+    		loadAutomated();
+    	}else{
+    		loadManual();
+    	}
+    }
+    
+    private void loadAutomated(){
+        taskProgressView = new TaskProgressView("Get classes");
+
+        GetAutomatedClassMatchingTask getClassesTask = new GetAutomatedClassMatchingTask(config.getSourceInfo(), config.getTargetInfo(), config.getSourceEndpoint().getModel(), config.getTargetEndpoint().getModel(), taskProgressView, config);
+        TaskProgressController taskProgressController = new TaskProgressController(
+                taskProgressView);
+        taskProgressController.addTask(
+                getClassesTask,
+                items -> {
+                    view.showTable(items);
+                },
+                error -> {
+                    MainView.showErrorWithStacktrace("Error while loading source classes",
+                            error.getMessage(), getClassesTask.getException());
+                });
+    }
+    
+    private void loadManual(){
         taskProgressView = new TaskProgressView("Get classes");
         Endpoint sourceEndpoint = config.getSourceEndpoint();
         GetClassesTask getSourceClassesTask = sourceEndpoint
@@ -95,10 +121,11 @@ public class EditClassMatchingController implements IEditController {
                      ClassMatchingNode targetClass) {
         config.getSourceEndpoint().setCurrentClass(sourceClass);
         config.getTargetEndpoint().setCurrentClass(targetClass);
-        String[] abbrSource = PrefixHelper.generatePrefix(sourceClass.getUri().toString());
-        config.getPrefixes().put(abbrSource[0], abbrSource[1]);
-        String[] abbrTarget = PrefixHelper.generatePrefix(targetClass.getUri().toString());
-        config.getPrefixes().put(abbrTarget[0], abbrTarget[1]);
+    }
+    
+    public void save(String sourceClass, String targetClass){
+        config.getSourceEndpoint().setCurrentClassAsString(sourceClass);
+        config.getTargetEndpoint().setCurrentClassAsString(targetClass);
     }
 
     /**
@@ -112,9 +139,16 @@ public class EditClassMatchingController implements IEditController {
     @Override
     public boolean validate() {
 	boolean valid = true;
-	if(view.getSourceTreeView().getSelectionModel().getSelectedItem() == null || view.getTargetTreeView().getSelectionModel().getSelectedItem() == null ){
-	   view.getErrorMissingClassMatchingLabel().setVisible(true);
+	if(view.automated){
+	if(view.getTableView().getSelectionModel().getSelectedItem() == null){
+	   view.getErrorAutomatedMissingClassMatchingLabel().setVisible(true);
 	   valid = false;
+	}
+	}else{
+	if(view.getSourceTreeView().getSelectionModel().getSelectedItem() == null || view.getTargetTreeView().getSelectionModel().getSelectedItem() == null ){
+	   view.getErrorManualMissingClassMatchingLabel().setVisible(true);
+	   valid = false;
+	}
 	}
 	return valid;
     }

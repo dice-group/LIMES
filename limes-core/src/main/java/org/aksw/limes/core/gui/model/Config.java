@@ -455,17 +455,17 @@ public class Config extends Configuration {
      * @param targetPropertiesToAdd
      *            target properties
      */
-    public void setPropertiesMatching(ListView<String> sourcePropertiesToAdd,
-	    ListView<String> targetPropertiesToAdd) {
+    public void setPropertiesMatching(List<String> sourcePropertiesToAdd,
+	    List<String> targetPropertiesToAdd) {
 	List<String> sourceProperties = sourceEndpoint.getInfo().getProperties();
 	List<String> targetProperties = targetEndpoint.getInfo().getProperties();
 	sourceProperties.clear();
 	targetProperties.clear();
-	for (String sourceProp : sourcePropertiesToAdd.getItems()) {
+	for (String sourceProp : sourcePropertiesToAdd) {
 	    sourceProperties.add(sourceProp);
 	    addFunction(sourceEndpoint, sourceProp);
 	}
-	for (String targetProp : targetPropertiesToAdd.getItems()) {
+	for (String targetProp : targetPropertiesToAdd) {
 	    targetProperties.add(targetProp);
 	    addFunction(targetEndpoint, targetProp);
 	}
