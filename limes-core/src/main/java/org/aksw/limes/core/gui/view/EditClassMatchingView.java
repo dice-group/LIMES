@@ -3,8 +3,6 @@ package org.aksw.limes.core.gui.view;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -15,9 +13,11 @@ import org.aksw.limes.core.gui.util.SourceOrTarget;
 
 import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
@@ -42,6 +42,7 @@ import javafx.scene.paint.Color;
 public class EditClassMatchingView implements IEditView {
 	private EditClassMatchingController controller;
 	private ScrollPane rootPane;
+	private WizardView wizardView;
 	private TreeView<ClassMatchingNode> sourceTreeView;
 	private TreeView<ClassMatchingNode> targetTreeView;
 	private TableView<AutomatedClassMatchingNode> tableView;
@@ -55,7 +56,8 @@ public class EditClassMatchingView implements IEditView {
 	/**
 	 * Constructor creates the root pane
 	 */
-	EditClassMatchingView() {
+	EditClassMatchingView(WizardView wizardView) {
+		this.wizardView = wizardView;
 		createRootPane();
 	}
 
@@ -72,7 +74,7 @@ public class EditClassMatchingView implements IEditView {
 	/**
 	 * helper class to create rootPane
 	 */
-	private void createRootPane() {
+	private Parent createRootPane() {
 		if (automated) {
 			rootPane = createAutomatedRootPane();
 			rootPane.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
@@ -92,6 +94,7 @@ public class EditClassMatchingView implements IEditView {
 		}
 		rootPane.setFitToHeight(true);
 		rootPane.setFitToWidth(true);
+		return rootPane;
 	}
 
 	private ScrollPane createManualRootPane() {
@@ -103,10 +106,22 @@ public class EditClassMatchingView implements IEditView {
 		HBox.setHgrow(targetPanelWithTitle, Priority.ALWAYS);
 		hbox.getChildren().add(targetPanelWithTitle);
 		VBox vbox = new VBox();
+		Button switchMode = new Button("Automated Matching");
+			switchMode.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent e) {
+					automated = true;
+					rootPane = null;
+					wizardView.setToRootPane(createRootPane());
+					controller.load();
+				}
+			});
 		errorManualMissingClassMatchingLabel.setTextFill(Color.RED);
 		errorManualMissingClassMatchingLabel.setVisible(false);
-		vbox.getChildren().addAll(hbox, errorManualMissingClassMatchingLabel);
-		return new ScrollPane(vbox);
+		vbox.getChildren().addAll(hbox, errorManualMissingClassMatchingLabel, switchMode);
+		ScrollPane pane = new ScrollPane(vbox);
+		pane.setPadding(new Insets(5.0));
+		return pane;
 	}
 
 	private ScrollPane createAutomatedRootPane() {
@@ -114,7 +129,17 @@ public class EditClassMatchingView implements IEditView {
 		VBox vbox = new VBox();
 		errorAutomatedMissingClassMatchingLabel.setTextFill(Color.RED);
 		errorAutomatedMissingClassMatchingLabel.setVisible(false);
-		vbox.getChildren().addAll(tableView, errorAutomatedMissingClassMatchingLabel);
+		Button switchMode = new Button("Manual Matching");
+			switchMode.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent e) {
+					automated = false;
+					rootPane = null;
+					wizardView.setToRootPane(createRootPane());
+					controller.load();
+				}
+			});
+		vbox.getChildren().addAll(tableView, errorAutomatedMissingClassMatchingLabel, switchMode);
 		ScrollPane pane = new ScrollPane(vbox);
 		pane.setPadding(new Insets(5.0));
 		return pane;
@@ -203,13 +228,16 @@ public class EditClassMatchingView implements IEditView {
 		}
 	}
 
-	public void showTable(ObservableList<AutomatedClassMatchingNode> items){
+	public void showTable(ObservableList<AutomatedClassMatchingNode> items) {
 		tableView.setItems(items);
-		//Use a fixed cell size to eliminate empty rows by binding the height of the tableView to the number of cells
+		// Use a fixed cell size to eliminate empty rows by binding the height
+		// of the tableView to the number of cells
 		double fixedCellSize = 30;
 		tableView.setFixedCellSize(fixedCellSize);
-		//adding of fixedCellSize/9 is necessary to eliminate the ugly scrollbar if it's unnecessary
-		tableView.prefHeightProperty().bind(Bindings.size(tableView.getItems()).multiply(tableView.getFixedCellSize()).add(fixedCellSize).add(fixedCellSize/9));
+		// adding of fixedCellSize/9 is necessary to eliminate the ugly
+		// scrollbar if it's unnecessary
+		tableView.prefHeightProperty().bind(Bindings.size(tableView.getItems()).multiply(tableView.getFixedCellSize())
+				.add(fixedCellSize).add(fixedCellSize / 9));
 	}
 
 	/**

@@ -157,8 +157,8 @@ public class MainView {
         MenuItem itemNew = new MenuItem("New");
         itemNew.setOnAction(e -> {
         WizardView wizardView = new WizardView();
-        controller.newConfig(wizardView,new EditEndpointsView(wizardView), new EditClassMatchingView(),
-                new EditPropertyMatchingView());
+        controller.newConfig(wizardView,new EditEndpointsView(wizardView), new EditClassMatchingView(wizardView),
+                new EditPropertyMatchingView(wizardView));
         });
         menuFile.getItems().add(itemNew);
         menuFile.getItems().add(new SeparatorMenuItem());

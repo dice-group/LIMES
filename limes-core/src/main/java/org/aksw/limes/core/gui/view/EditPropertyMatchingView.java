@@ -44,6 +44,7 @@ import javafx.scene.paint.Color;
 public class EditPropertyMatchingView implements IEditView {
     private EditPropertyMatchingController controller;
     private ScrollPane rootPane;
+    WizardView wizardView;
     private ListView<String> sourcePropList;
     private ListView<String> targetPropList;
     private ListView<String> addedSourcePropsList;
@@ -68,9 +69,9 @@ public class EditPropertyMatchingView implements IEditView {
     /**
      * Constructor creates the root pane and adds listeners
      */
-    EditPropertyMatchingView() {
+    EditPropertyMatchingView(WizardView wizardView) {
+    	this.wizardView = wizardView;
         createRootPane();
-        addListeners();
     }
 
     /**
@@ -86,17 +87,19 @@ public class EditPropertyMatchingView implements IEditView {
     /**
      * creates the root pane
      */
-    private void createRootPane() {
+    private Parent createRootPane() {
+    	ScrollPane pane = null;
     	if(automated){
-    		createAutomatedRootPane();
+    		pane = createAutomatedRootPane();
     	}else{
-    		createManualRootPane();
+    		pane = createManualRootPane();
     	}
-
+        addListeners();
+        return pane;
     }
     
     @SuppressWarnings("unchecked")
-	private void createAutomatedRootPane(){
+	private ScrollPane createAutomatedRootPane(){
     	automatedPropList = new TableView<AutomatedPropertyMatchingNode>();
     	TableColumn<AutomatedPropertyMatchingNode, String> sourcePropColumn = new TableColumn<AutomatedPropertyMatchingNode, String>();
     	TableColumn<AutomatedPropertyMatchingNode, String> targetPropColumn = new TableColumn<AutomatedPropertyMatchingNode, String>();
@@ -141,7 +144,18 @@ public class EditPropertyMatchingView implements IEditView {
         missingPropertiesLabel.setTextFill(Color.RED);
         missingPropertiesLabel.setVisible(false);
         HBox buttons = new HBox();
-        buttons.getChildren().addAll(missingPropertiesLabel, addAllButton, removeAllButton);
+
+		Button switchMode = new Button("Manual Matching");
+			switchMode.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent e) {
+					automated = false;
+					rootPane = null;
+					wizardView.setToRootPane(createRootPane());
+					controller.load();
+				}
+			});
+        buttons.getChildren().addAll(missingPropertiesLabel, switchMode, addAllButton, removeAllButton);
         BorderPane root = new BorderPane();
         root.setCenter(propertiesColumn);
         root.setBottom(buttons);
@@ -152,9 +166,10 @@ public class EditPropertyMatchingView implements IEditView {
         rootPane.setFitToHeight(true);
         rootPane.setFitToWidth(true);
 		rootPane.setPadding(new Insets(5.0));
+		return rootPane;
     }
     
-    private void createManualRootPane(){
+    private ScrollPane createManualRootPane(){
     	sourcePropList = new ListView<String>();
         targetPropList = new ListView<String>();
         addedSourcePropsList = new ListView<String>();
@@ -175,7 +190,18 @@ public class EditPropertyMatchingView implements IEditView {
         missingPropertiesLabel.setTextFill(Color.RED);
         missingPropertiesLabel.setVisible(false);
         HBox buttons = new HBox();
-        buttons.getChildren().addAll(missingPropertiesLabel, addAllButton, removeAllButton);
+
+		Button switchMode = new Button("Automated Matching");
+			switchMode.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent e) {
+					automated = true;
+					rootPane = null;
+					wizardView.setToRootPane(createRootPane());
+					controller.load();
+				}
+			});
+        buttons.getChildren().addAll(missingPropertiesLabel, switchMode, addAllButton, removeAllButton);
         BorderPane root = new BorderPane();
         HBox hb = new HBox();
         hb.getChildren().addAll(sourceColumn, targetColumn);
@@ -190,6 +216,7 @@ public class EditPropertyMatchingView implements IEditView {
         rootPane.setFitToHeight(true);
         rootPane.setFitToWidth(true);
 		rootPane.setPadding(new Insets(5.0));
+		return rootPane;
     }
 
     /**
@@ -396,6 +423,8 @@ public class EditPropertyMatchingView implements IEditView {
         addedTargetPropsList.getItems().clear();
         (sourceOrTarget == SOURCE ? sourceProperties : targetProperties)
                 .setAll(properties);
+        (sourceOrTarget == SOURCE ? sourcePropList : targetPropList).setItems(
+        (sourceOrTarget == SOURCE ? sourceProperties : targetProperties));
     }
 
     /**
