@@ -12,6 +12,10 @@ import org.aksw.limes.core.gui.model.ClassMatchingNode;
 import org.aksw.limes.core.gui.util.SourceOrTarget;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -34,29 +38,60 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 /**
- * used for class matching step in {@link WizardView}
+ * used for class matching step in {@link WizardView} There are two different
+ * modes implemented in this class: automated and manual, depending on the value
+ * of {@link #automated}.
  *
  * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
  *         studserv.uni-leipzig.de{@literal >}
  */
 public class EditClassMatchingView implements IEditView {
+
+	// ========== GENERAL FIELDS ==============================
 	private EditClassMatchingController controller;
 	private ScrollPane rootPane;
 	private WizardView wizardView;
+	/**
+	 * Initializing the button at this point is important to be able to
+	 * manipulate visibility in WizardController if automation is not possible
+	 */
+	private Button switchModeButton = new Button();
+	/**
+	 * mode of matching Through a change listener changing of this value changes
+	 * the rootPane
+	 */
+	private BooleanProperty automated = new SimpleBooleanProperty(true);
+
+	// ========== FIELDS FOR MANUAL MATCHING =================
 	private TreeView<ClassMatchingNode> sourceTreeView;
 	private TreeView<ClassMatchingNode> targetTreeView;
-	private TableView<AutomatedClassMatchingNode> tableView;
-	private Label errorAutomatedMissingClassMatchingLabel = new Label("One class must be chosen!");
 	private Label errorManualMissingClassMatchingLabel = new Label("One source and one target class must be chosen!");
 	private TitledPane sourcePanelWithTitle;
 	private TitledPane targetPanelWithTitle;
 
-	public Boolean automated = true;
+	// ========== FIELDS FOR AUTOMATED MATCHING ===============
+	private TableView<AutomatedClassMatchingNode> tableView;
+	private Label errorAutomatedMissingClassMatchingLabel = new Label("One class must be chosen!");
 
 	/**
 	 * Constructor creates the root pane
+	 * 
+	 * @param wizardView
+	 *            corresponding view where this is embedded
 	 */
 	EditClassMatchingView(WizardView wizardView) {
+		// add Listener so rootPane is always correct
+		automated.addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (oldValue != newValue) {
+					rootPane = null;
+					wizardView.setToRootPane(createRootPane());
+					controller.load();
+				}
+			}
+		});
 		this.wizardView = wizardView;
 		createRootPane();
 	}
@@ -72,10 +107,10 @@ public class EditClassMatchingView implements IEditView {
 	}
 
 	/**
-	 * helper class to create rootPane
+	 * creates rootPane according to {@link #automated}
 	 */
 	private Parent createRootPane() {
-		if (automated) {
+		if (automated.get()) {
 			rootPane = createAutomatedRootPane();
 			rootPane.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
 				@Override
@@ -97,7 +132,13 @@ public class EditClassMatchingView implements IEditView {
 		return rootPane;
 	}
 
+	/**
+	 * creates the manual root pane
+	 * 
+	 * @return pane the finished pane
+	 */
 	private ScrollPane createManualRootPane() {
+		// ========= CREATE TREE VIEWS AND TITLE PANELS ================
 		HBox hbox = new HBox();
 		sourcePanelWithTitle = createClassMatchingPane(SOURCE);
 		HBox.setHgrow(sourcePanelWithTitle, Priority.ALWAYS);
@@ -106,45 +147,59 @@ public class EditClassMatchingView implements IEditView {
 		HBox.setHgrow(targetPanelWithTitle, Priority.ALWAYS);
 		hbox.getChildren().add(targetPanelWithTitle);
 		VBox vbox = new VBox();
-		Button switchMode = new Button("Automated Matching");
-			switchMode.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent e) {
-					automated = true;
-					rootPane = null;
-					wizardView.setToRootPane(createRootPane());
-					controller.load();
-				}
-			});
+
+		// ========= ADD BUTTON AND ERROR LABEL =======================
+		switchModeButton.setText("Automated Matching");
+		switchModeButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				automated.set(true);
+			}
+		});
 		errorManualMissingClassMatchingLabel.setTextFill(Color.RED);
 		errorManualMissingClassMatchingLabel.setVisible(false);
-		vbox.getChildren().addAll(hbox, errorManualMissingClassMatchingLabel, switchMode);
+
+		// ======== PUT TO PANE =======================================
+		vbox.getChildren().addAll(hbox, errorManualMissingClassMatchingLabel, switchModeButton);
 		ScrollPane pane = new ScrollPane(vbox);
 		pane.setPadding(new Insets(5.0));
 		return pane;
 	}
 
+	/**
+	 * creates the automated root pane
+	 * 
+	 * @return pane the finished pane
+	 */
 	private ScrollPane createAutomatedRootPane() {
+		// ========= CREATE TABLE VIEW ================================
 		tableView = createTableView();
 		VBox vbox = new VBox();
 		errorAutomatedMissingClassMatchingLabel.setTextFill(Color.RED);
 		errorAutomatedMissingClassMatchingLabel.setVisible(false);
-		Button switchMode = new Button("Manual Matching");
-			switchMode.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent e) {
-					automated = false;
-					rootPane = null;
-					wizardView.setToRootPane(createRootPane());
-					controller.load();
-				}
-			});
-		vbox.getChildren().addAll(tableView, errorAutomatedMissingClassMatchingLabel, switchMode);
+
+		// ========= ADD BUTTON AND ERROR LABEL =======================
+		switchModeButton.setText("Manual Matching");
+		switchModeButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				automated.set(false);
+			}
+		});
+
+		// ======== PUT TO PANE =======================================
+		vbox.getChildren().addAll(tableView, errorAutomatedMissingClassMatchingLabel, switchModeButton);
 		ScrollPane pane = new ScrollPane(vbox);
 		pane.setPadding(new Insets(5.0));
 		return pane;
 	}
 
+	/**
+	 * creates table view for automated matching
+	 * 
+	 * @return tableView finished TableView
+	 */
+	@SuppressWarnings("unchecked")
 	private TableView<AutomatedClassMatchingNode> createTableView() {
 		tableView = new TableView<AutomatedClassMatchingNode>();
 		TableColumn<AutomatedClassMatchingNode, String> sourceColumn = new TableColumn<AutomatedClassMatchingNode, String>(
@@ -245,7 +300,7 @@ public class EditClassMatchingView implements IEditView {
 	 */
 	@Override
 	public void save() {
-		if (automated) {
+		if (automated.get()) {
 			controller.save(tableView.getSelectionModel().getSelectedItem().getSourceUri().toString(),
 					tableView.getSelectionModel().getSelectedItem().getTargetUri().toString());
 		} else {
@@ -274,6 +329,20 @@ public class EditClassMatchingView implements IEditView {
 
 	public Label getErrorManualMissingClassMatchingLabel() {
 		return errorManualMissingClassMatchingLabel;
+	}
+
+	public Button getSwitchModeButton() {
+		return switchModeButton;
+	}
+
+	@Override
+	public void setAutomated(boolean automated) {
+		this.automated.set(automated);
+	}
+
+	@Override
+	public Boolean isAutomated() {
+		return automated.get();
 	}
 
 }

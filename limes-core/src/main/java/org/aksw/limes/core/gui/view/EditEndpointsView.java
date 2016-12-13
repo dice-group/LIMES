@@ -241,4 +241,16 @@ public class EditEndpointsView implements IEditView {
     public TextField[] getTargetFields() {
         return targetFields;
     }
+
+	@Override
+	public Boolean isAutomated() {
+		return false;
+	}
+
+	@Override
+	public void setAutomated(boolean automated) {
+		//There are no different modes here so this can stay empty
+		// TODO Auto-generated method stub
+		
+	}
 }

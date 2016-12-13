@@ -9,6 +9,18 @@ import javafx.scene.Parent;
  *         studserv.uni-leipzig.de{@literal >}
  */
 public interface IEditView {
+	
+	/**
+	 * sets the value boolean that contains mode
+	 * @param automated
+	 */
+	public void setAutomated(boolean automated);
+	/**
+	 * returns if this view is in automated mode
+	 * @return true if automated mode is active/preferred
+	 */
+	public Boolean isAutomated();
+	
     /**
      * Return the Pane
      *

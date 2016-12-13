@@ -1,6 +1,11 @@
 package org.aksw.limes.core.gui.controller;
 
+import org.aksw.limes.core.gui.view.EditClassMatchingView;
+import org.aksw.limes.core.gui.view.EditEndpointsView;
+import org.aksw.limes.core.gui.view.EditPropertyMatchingView;
 import org.aksw.limes.core.gui.view.WizardView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -33,6 +38,8 @@ public class WizardController {
      * current page
      */
     private int currentPage = -1;
+    
+    Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * Constructor
@@ -85,6 +92,9 @@ public class WizardController {
 	} else {
 	    this.currentPage = newPage;
 	    IEditController editController = editControllers[newPage];
+	    //check if automated mode is possible
+		if(newPage != 0)
+            editController.getView().setAutomated(isAutomationPossible(editControllers[newPage - 1], editController));
 	    editController.load();
 	    //if loading screen is showing we have to checked whether the loading was successful or cancelled
 	    if (editControllers[currentPage].getTaskProgressView() != null) {
@@ -123,6 +133,24 @@ public class WizardController {
 
 	    }
 	}
+    }
+    
+    private boolean isAutomationPossible(IEditController lastController, IEditController nextController){
+    	boolean automated = false;
+    	if(lastController instanceof EditEndpointsController){
+    		//if the endpoints of souce and target are the same automation is NOT possible
+    		automated = !((EditEndpointsView) lastController.getView()).getSourceFields()[0].getText().equals(((EditEndpointsView) lastController.getView()).getTargetFields()[0].getText());
+    		if(!automated)
+    			((EditClassMatchingView) nextController.getView()).getSwitchModeButton().setVisible(false);
+    	}
+    	if(lastController instanceof EditClassMatchingController){
+    		//if the uris of the class are the same automation is useless
+    		automated = ! ((EditClassMatchingController) lastController).getConfig().getSourceEndpoint().getCurrentClass().getUri().equals(((EditClassMatchingController) lastController).getConfig().getTargetEndpoint().getCurrentClass().getUri());
+    		if(!automated)
+                ((EditPropertyMatchingView) nextController.getView()).getSwitchModeButton().setVisible(false);
+    	}
+    	logger.info("automated: " + automated);
+    	return automated;
     }
 
     /**

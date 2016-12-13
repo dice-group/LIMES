@@ -60,7 +60,7 @@ public class EditPropertyMatchingController implements IEditController {
 	 */
 	@Override
 	public void load() {
-		if (view.automated) {
+		if (view.isAutomated()) {
 			loadAutomatedPropertyMatching();
 		} else {
 			loadManualPropertyMatching();
@@ -124,7 +124,7 @@ public class EditPropertyMatchingController implements IEditController {
 	@Override
 	public boolean validate() {
 		boolean valid = true;
-		if (view.automated) {
+		if (view.isAutomated()) {
 			if (view.getAddedAutomatedPropsList().getItems().size() == 0) {
 				view.getMissingPropertiesLabel().setVisible(true);
 				view.getMissingPropertiesLabel().setTextFill(Color.RED);
