@@ -87,7 +87,7 @@ public class GetAutomatedClassMatchingTask extends Task<ObservableList<Automated
 		Object serializedResult = TaskResultSerializer.getTaskResult(this);
 		ObservableList<AutomatedClassMatchingNode> result = null;
 		if (serializedResult instanceof ArrayList && serializedResult != null) {
-			//Creating tmpRes is necessary to guarantee typesafety
+			// Creating tmpRes is necessary to guarantee typesafety
 			ArrayList<AutomatedClassMatchingNode> tmpRes = (ArrayList<AutomatedClassMatchingNode>) serializedResult;
 			result = FXCollections.observableArrayList();
 			result.addAll(tmpRes);
@@ -96,7 +96,8 @@ public class GetAutomatedClassMatchingTask extends Task<ObservableList<Automated
 		counter = 0;
 		progress = 0;
 		result = getAutomatedClassMatchingNodes();
-		//Converting to ArrayList is necessary because ObservableList is not serializable
+		// Converting to ArrayList is necessary because ObservableList is not
+		// serializable
 		TaskResultSerializer.serializeTaskResult(this, new ArrayList<AutomatedClassMatchingNode>(result));
 		// Collections.sort(result, new AutomatedClassMatchingNodeComparator());
 		return result;
@@ -163,7 +164,7 @@ public class GetAutomatedClassMatchingTask extends Task<ObservableList<Automated
 	// }
 
 	public int hashCode() {
-		return new HashCodeBuilder(17, 37).append(sinfo).append(tinfo)
-				.append(sinfo.getGraph()).append(tinfo.getGraph()).append(smodel).append(tmodel).toHashCode();
+		return new HashCodeBuilder(17, 37).append(sinfo.getEndpoint()).append(tinfo.getEndpoint()).append(sinfo.getId())
+				.append(tinfo.getId()).append(smodel).append(tmodel).toHashCode();
 	}
 }

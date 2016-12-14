@@ -91,9 +91,7 @@ public class GetAutomatedPropertiesTask extends Task<AMapping> {
         counter = 0;
         progress = 0;
         result = getAutomatedPropertyMatching();
-        System.out.println("res before serializing: " + result.toString());
         TaskResultSerializer.serializeTaskResult(this, result);
-        System.out.println("res after serializing: " + TaskResultSerializer.getTaskResult(this).getClass());
 //        Collections.sort(result, new AutomatedClassMatchingNodeComparator());
         return result;
     }
@@ -148,8 +146,6 @@ public class GetAutomatedPropertiesTask extends Task<AMapping> {
       return new HashCodeBuilder(13, 37).
         append(sinfo.getEndpoint()).
         append(tinfo.getEndpoint()).
-        append(sinfo.getGraph()).
-        append(tinfo.getGraph()).
         append(smodel).
         append(tmodel).
         append(sourceClass).
