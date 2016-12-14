@@ -271,13 +271,11 @@ public class Config extends Configuration {
 	String newME = metricExpression;
 	for (String s : sourceEndpoint.getInfo().getFunctions().keySet()) {
 	    for (String t : sourceEndpoint.getInfo().getFunctions().get(s).keySet()) {
-		System.out.println(t);
 		newME = metricExpression.replace(t, s);
 	    }
 	}
 	for (String s : targetEndpoint.getInfo().getFunctions().keySet()) {
 	    for (String t : targetEndpoint.getInfo().getFunctions().get(s).keySet()) {
-		System.out.println(t);
 		newME = metricExpression.replace(t, s);
 	    }
 	}

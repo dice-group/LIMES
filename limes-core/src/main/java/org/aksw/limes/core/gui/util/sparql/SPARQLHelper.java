@@ -22,6 +22,7 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.query.Syntax;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.vocabulary.OWL;
@@ -124,7 +125,7 @@ public class SPARQLHelper {
      */
     public static Set<String> rootClasses(String endpoint, String graph, Model model) {
         Cache cache = CacheManager.getInstance().getCache("rootclasses");
-        if (cache == null) System.out.println("cachenull");
+        if (cache == null) logger.info("cachenull");
         List<String> key = Arrays.asList(new String[]{endpoint, graph});
         Element element;
         if (cache.isKeyInCache(key)) {
@@ -370,7 +371,7 @@ public class SPARQLHelper {
         Set<String> list = new HashSet<String>();
         while (rs.hasNext()) {
             QuerySolution qs = rs.nextSolution();
-            System.out.println("qs: " + qs.toString());
+            logger.debug("qs: " + qs.toString());
             if(!qs.toString().equals("")){
             try {
                 list.add(URLDecoder.decode(qs.get(qs.varNames().next()).toString(), "UTF-8"));
@@ -395,7 +396,7 @@ public class SPARQLHelper {
         try {
             //QueryExecution qexec = queryExecutionDirect(query,graph,endpoint);
             ResultSet results = queryExecution(query, graph, endpoint, model).execSelect();
-//			System.out.println("res: " + ResultSetFormatter.asText(results));
+            logger.debug("res: " + ResultSetFormatter.asText(results));
             return results;
         } catch (RuntimeException e) {
             throw new RuntimeException("Error with query \"" + query + "\" at endpoint \"" + endpoint + "\" and graph \"" + graph + "\"", e);

@@ -84,7 +84,6 @@ public class GetAutomatedPropertiesTask extends Task<AMapping> {
     Object serializedResult = TaskResultSerializer.getTaskResult(this);
 	AMapping result = null; 
 	if(serializedResult instanceof AMapping && serializedResult != null){
-	System.out.println("res: " + serializedResult.toString());
 		result = (AMapping) serializedResult;
 	    return result;
 	}
@@ -92,7 +91,6 @@ public class GetAutomatedPropertiesTask extends Task<AMapping> {
         progress = 0;
         result = getAutomatedPropertyMatching();
         TaskResultSerializer.serializeTaskResult(this, result);
-//        Collections.sort(result, new AutomatedClassMatchingNodeComparator());
         return result;
     }
 
@@ -129,19 +127,6 @@ public class GetAutomatedPropertiesTask extends Task<AMapping> {
         return result;
     }
     
-//    /**
-//     * 
-//     * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
-//     *         studserv.uni-leipzig.de{@literal >}
-//     *	Helper class to sort AutomatedClassMatchingNodes by name
-//     */
-//    class AutomatedClassMatchingNodeComparator implements Comparator<AutomatedClassMatchingNode> {
-//	    @Override
-//	    public int compare(AutomatedClassMatchingNode a, AutomatedClassMatchingNode b) {
-//	        return a.getName().compareToIgnoreCase(b.getName());
-//	    }
-//	}
-
     public int hashCode() {
       return new HashCodeBuilder(13, 37).
         append(sinfo.getEndpoint()).

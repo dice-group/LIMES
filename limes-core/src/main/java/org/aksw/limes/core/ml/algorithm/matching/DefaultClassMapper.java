@@ -30,7 +30,7 @@ public class DefaultClassMapper implements OntologyClassMapper {
 
     //number of instances to use for sampling
     public int LIMIT = 300;
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    Logger logger = LoggerFactory.getLogger(getClass());
     String relation = "http://www.w3.org/2002/07/owl#sameAs";
     
     Model sourceModel, targetModel;

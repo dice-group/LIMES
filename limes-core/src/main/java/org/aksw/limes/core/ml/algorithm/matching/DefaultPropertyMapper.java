@@ -4,15 +4,11 @@
  */
 package org.aksw.limes.core.ml.algorithm.matching;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.TreeSet;
 
-import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.measure.MeasureFactory;
-import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.ml.algorithm.matching.stablematching.HospitalResidents;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
@@ -32,7 +28,7 @@ import org.slf4j.LoggerFactory;
 public class DefaultPropertyMapper implements PropertyMapper{
 
     public int LIMIT = 500;
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    Logger logger = LoggerFactory.getLogger(getClass());
     public int MINSIM = 1;
     Model sourceModel, targetModel;
 

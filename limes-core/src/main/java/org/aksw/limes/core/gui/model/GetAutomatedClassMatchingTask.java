@@ -99,7 +99,6 @@ public class GetAutomatedClassMatchingTask extends Task<ObservableList<Automated
 		// Converting to ArrayList is necessary because ObservableList is not
 		// serializable
 		TaskResultSerializer.serializeTaskResult(this, new ArrayList<AutomatedClassMatchingNode>(result));
-		// Collections.sort(result, new AutomatedClassMatchingNodeComparator());
 		return result;
 	}
 
@@ -147,21 +146,6 @@ public class GetAutomatedClassMatchingTask extends Task<ObservableList<Automated
 		// });
 		return result;
 	}
-
-	// /**
-	// *
-	// * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
-	// * studserv.uni-leipzig.de{@literal >}
-	// * Helper class to sort AutomatedClassMatchingNodes by name
-	// */
-	// class AutomatedClassMatchingNodeComparator implements
-	// Comparator<AutomatedClassMatchingNode> {
-	// @Override
-	// public int compare(AutomatedClassMatchingNode a,
-	// AutomatedClassMatchingNode b) {
-	// return a.getName().compareToIgnoreCase(b.getName());
-	// }
-	// }
 
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).append(sinfo.getEndpoint()).append(tinfo.getEndpoint()).append(sinfo.getId())

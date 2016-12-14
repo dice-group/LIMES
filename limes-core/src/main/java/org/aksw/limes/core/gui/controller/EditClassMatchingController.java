@@ -8,11 +8,12 @@ import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Endpoint;
 import org.aksw.limes.core.gui.model.GetAutomatedClassMatchingTask;
 import org.aksw.limes.core.gui.model.GetClassesTask;
-import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.gui.view.EditClassMatchingView;
 import org.aksw.limes.core.gui.view.IEditView;
 import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
+
+import javafx.scene.paint.Color;
 
 /**
  * 
@@ -140,12 +141,14 @@ public class EditClassMatchingController implements IEditController {
 		if (view.isAutomated()) {
 			if (view.getTableView().getSelectionModel().getSelectedItem() == null) {
 				view.getErrorAutomatedMissingClassMatchingLabel().setVisible(true);
+				view.getErrorAutomatedMissingClassMatchingLabel().setTextFill(Color.RED);
 				valid = false;
 			}
 		} else {
 			if (view.getSourceTreeView().getSelectionModel().getSelectedItem() == null
 					|| view.getTargetTreeView().getSelectionModel().getSelectedItem() == null) {
 				view.getErrorManualMissingClassMatchingLabel().setVisible(true);
+				view.getErrorManualMissingClassMatchingLabel().setTextFill(Color.RED);
 				valid = false;
 			}
 		}

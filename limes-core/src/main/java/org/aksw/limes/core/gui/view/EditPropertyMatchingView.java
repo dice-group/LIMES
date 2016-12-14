@@ -455,10 +455,6 @@ public class EditPropertyMatchingView implements IEditView {
 						PrefixHelper.abbreviate(targetProperty)));
 			}
 		}
-		System.out.println("availableProperties: ");
-		for (AutomatedPropertyMatchingNode apmn : availableProperties) {
-			System.out.println(apmn.toString());
-		}
 		automatedPropList.setItems(availableProperties);
 		automatedPropList.getColumns().get(0)
 				.setText(controller.getConfig().getSourceEndpoint().getCurrentClass().getName() + "  properties");
