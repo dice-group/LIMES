@@ -163,7 +163,7 @@ public class GetAutomatedClassMatchingTask extends Task<ObservableList<Automated
 	// }
 
 	public int hashCode() {
-		return new HashCodeBuilder(17, 37).append(sinfo.getEndpoint()).append(tinfo.getEndpoint())
+		return new HashCodeBuilder(17, 37).append(sinfo).append(tinfo)
 				.append(sinfo.getGraph()).append(tinfo.getGraph()).append(smodel).append(tmodel).toHashCode();
 	}
 }

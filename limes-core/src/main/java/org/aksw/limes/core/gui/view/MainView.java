@@ -54,6 +54,11 @@ public class MainView {
      * MenuItem to do a Save Operation
      */
     private MenuItem itemSave;
+    
+    /**
+     * Menu to edit a configuration
+     */
+    private Menu menuEdit;
     /**
      * Button to run mapping
      */
@@ -153,16 +158,36 @@ public class MainView {
      * @return MenuBar of the Application
      */
     private MenuBar buildMenuBar(Window stage) {
-        Menu menuFile = new Menu("File");
+        Menu menuConfiguration = new Menu("Configuration");
+        
+        //============ New Configuration ====================
         MenuItem itemNew = new MenuItem("New");
         itemNew.setOnAction(e -> {
         WizardView wizardView = new WizardView();
         controller.newConfig(wizardView,new EditEndpointsView(wizardView), new EditClassMatchingView(wizardView),
                 new EditPropertyMatchingView(wizardView));
         });
-        menuFile.getItems().add(itemNew);
-        menuFile.getItems().add(new SeparatorMenuItem());
-        MenuItem itemLoad = new MenuItem("Load config");
+        menuConfiguration.getItems().add(itemNew);
+        
+        //=========== Edit Configuration ====================
+        menuEdit = new Menu("Edit");
+        MenuItem itemEditClasses = new MenuItem("Edit Classes");
+        itemEditClasses.setOnAction(e -> {
+        WizardView wizardView = new WizardView();
+        controller.editConfig(wizardView, new EditClassMatchingView(wizardView),
+                new EditPropertyMatchingView(wizardView));
+        });
+        MenuItem itemEditProperties = new MenuItem("Edit Properties");
+        itemEditProperties.setOnAction(e -> {
+        WizardView wizardView = new WizardView();
+        controller.editConfig(wizardView, new EditPropertyMatchingView(wizardView));
+        });
+        menuEdit.getItems().addAll(itemEditClasses, itemEditProperties);
+        menuConfiguration.getItems().add(menuEdit);
+        menuConfiguration.getItems().add(new SeparatorMenuItem());
+        
+        //=========== Load Configuration ===================
+        MenuItem itemLoad = new MenuItem("Load Configuration");
         itemLoad.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LIMES Configuration File (*.xml, *.rdf, *.ttl, *.n3, *.nt)", "*.xml", "*.rdf", "*.ttl", "*.n3", "*.nt");
@@ -172,8 +197,10 @@ public class MainView {
                 controller.loadConfig(file);
             }
         });
-        menuFile.getItems().add(itemLoad);
-        itemSave = new MenuItem("Save config");
+        menuConfiguration.getItems().add(itemLoad);
+        
+        //========== Save Configuration ===================
+        itemSave = new MenuItem("Save Configuration");
         itemSave.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LIMES Configuration File (*.rdf, *.ttl, *.n3, *.nt)", "*.rdf", "*.ttl", "*.n3", "*.nt");
@@ -183,12 +210,15 @@ public class MainView {
                 controller.saveConfig(file);
             }
         });
-        menuFile.getItems().add(itemSave);
-        menuFile.getItems().add(new SeparatorMenuItem());
+        menuConfiguration.getItems().add(itemSave);
+        menuConfiguration.getItems().add(new SeparatorMenuItem());
+        
+        //========== Exit Application =====================
         MenuItem itemExit = new MenuItem("Exit");
         itemExit.setOnAction(e -> controller.exit());
-        menuFile.getItems().add(itemExit);
+        menuConfiguration.getItems().add(itemExit);
 
+        //========== Layout ==============================
         Menu menuLayout = new Menu("Layout");
         MenuItem layoutGraph = new MenuItem("Refresh Layout");
         layoutGraph.setOnAction(e -> {
@@ -200,6 +230,7 @@ public class MainView {
         });
         menuLayout.getItems().addAll(layoutGraph, deleteGraph);
 
+        //============ Learning ========================
         Menu menuLearn = new Menu("Learn");
 
         itemBatchLearning = new MenuItem("Batch Learning");
@@ -220,16 +251,17 @@ public class MainView {
         menuLearn.getItems().add(itemActiveLearning);
         menuLearn.getItems().add(itemBatchLearning);
         menuLearn.getItems().add(itemUnsupervisedLearning);
-        return new MenuBar(menuFile, menuLayout, menuLearn);
+        return new MenuBar(menuConfiguration, menuLayout, menuLearn);
     }
 
     /**
-     * Shows the Loaded Config, if it is Loaded
+     * Enables menu and run buttons, if config is loaded
      *
      * @param isLoaded
      *         True if Config is Loaded
      */
     public void showLoadedConfig(boolean isLoaded) {
+    	menuEdit.setDisable(!isLoaded);
         itemSave.setDisable(!isLoaded);
         runButton.setDisable(!isLoaded);
         itemBatchLearning.setDisable(!isLoaded);
