@@ -52,16 +52,21 @@ public class EditClassMatchingController implements IEditController {
 		view.setController(this);
 	}
 
-	/**
-	 * Creates and starts the tasks to load the classes from this source and
-	 * target endpoint. After finishing the classes are displayed in the view or
-	 * if errors are encountered an error window is shown
-	 */
 	@Override
 	public void load() {
+		checkIfAutomationIsPossible();
 		if (view.isAutomated()) {
 			loadAutomated();
 		} else {
+			loadManual();
+		}
+	}
+	
+	@Override
+	public void load(boolean automated){
+		if(automated){
+			loadAutomated();
+		}else{
 			loadManual();
 		}
 	}
@@ -159,6 +164,13 @@ public class EditClassMatchingController implements IEditController {
 
 	public Config getConfig() {
 		return config;
+	}
+	
+	@Override
+	public void checkIfAutomationIsPossible(){
+		//If the endpoints are the same automation is useless
+		boolean automated = !config.getSourceInfo().getEndpoint().equals(config.getTargetInfo().getEndpoint());
+		view.setAutomated(automated);
 	}
 
 }

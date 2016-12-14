@@ -11,9 +11,18 @@ import org.aksw.limes.core.gui.view.TaskProgressView;
  */
 public interface IEditController {
     /**
-     * Load data entered in this wizard step
+     * Calls {@link #checkIfAutomationIsPossible()} 
+	 * Creates and starts the tasks to load the classes from this source and
+	 * target endpoint. After finishing the classes are displayed in the view or
+	 * if errors are encountered an error window is shown
      */
     public void load();
+    
+    /**
+     * Loads the appropriate mode according to the boolean value
+     * @param automated true if automated mode is wanted false if manual mode is desired
+     */
+    public void load(boolean automated);
 
     /**
      * Save data entered in this wizard step
@@ -41,4 +50,10 @@ public interface IEditController {
     public TaskProgressView getTaskProgressView();
     
     public void setTaskProgressView(TaskProgressView tpv);
+
+    /**
+     * checks if automation is possible calls {@link IEditView#setAutomated(boolean)} with the result
+     * @return
+     */
+	public void checkIfAutomationIsPossible();
 }

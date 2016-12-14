@@ -98,7 +98,7 @@ public class EditPropertyMatchingView implements IEditView {
 				if (oldValue != newValue) {
 					rootPane = null;
 					wizardView.setToRootPane(createRootPane());
-					controller.load();
+					controller.load(newValue);
 				}
 			}
 		});
@@ -532,6 +532,7 @@ public class EditPropertyMatchingView implements IEditView {
 	@Override
 	public void setAutomated(boolean automated) {
 		this.automated.set(automated);
+		this.switchModeButton.setDisable(!automated);
 	}
 
 	@Override

@@ -46,15 +46,20 @@ public class EditEndpointsController implements IEditController {
 	view.setController(this);
     }
 
-    /**
-     * displays the endpoints
-     */
     @Override
     public void load() {
 	KBInfo sourceEndpoint = config.getSourceInfo();
 	view.setFields(SOURCE, sourceEndpoint.getEndpoint(), sourceEndpoint.getId(), sourceEndpoint.getGraph(), Integer.toString(sourceEndpoint.getPageSize()));
 	KBInfo targetEndpoint = config.getTargetInfo();
 	view.setFields(TARGET, targetEndpoint.getEndpoint(), targetEndpoint.getId(), targetEndpoint.getGraph(), Integer.toString(targetEndpoint.getPageSize()));
+    }
+    
+    /**
+     * Since there are no different modes this just calls {@link #load()}
+     */
+    @Override
+    public void load(boolean automated){
+    	load();
     }
 
     /**
@@ -150,4 +155,9 @@ public class EditEndpointsController implements IEditController {
     public void setTaskProgressView(TaskProgressView tpv) {
 	return;
     }
+
+	@Override
+	public void checkIfAutomationIsPossible() {
+		//Automation for this step is not possible
+	}
 }

@@ -53,16 +53,21 @@ public class EditPropertyMatchingController implements IEditController {
 		view.setController(this);
 	}
 
-	/**
-	 * Creates and starts the tasks to load the properties from this source and
-	 * target endpoint. After finishing the properties are displayed in the view
-	 * or if errors are encountered an error window is shown
-	 */
 	@Override
 	public void load() {
+		checkIfAutomationIsPossible();
 		if (view.isAutomated()) {
 			loadAutomatedPropertyMatching();
 		} else {
+			loadManualPropertyMatching();
+		}
+	}
+
+	@Override
+	public void load(boolean automated){
+		if(automated){
+			loadAutomatedPropertyMatching();
+		}else{
 			loadManualPropertyMatching();
 		}
 	}
@@ -153,5 +158,12 @@ public class EditPropertyMatchingController implements IEditController {
 
 	public Config getConfig() {
 		return config;
+	}
+
+	@Override
+	public void checkIfAutomationIsPossible() {
+    	//if the uris of the class are the same automation is useless
+    	boolean automated = ! config.getSourceEndpoint().getCurrentClass().getUri().equals(config.getTargetEndpoint().getCurrentClass().getUri());
+    	view.setAutomated(automated);
 	}
 }
