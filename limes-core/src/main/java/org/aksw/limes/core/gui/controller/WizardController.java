@@ -92,7 +92,6 @@ public class WizardController {
 	} else {
 	    this.currentPage = newPage;
 	    IEditController editController = editControllers[newPage];
-	    //check if automated mode is possible
 	    editController.load();
 	    //if loading screen is showing we have to checked whether the loading was successful or cancelled
 	    if (editControllers[currentPage].getTaskProgressView() != null) {

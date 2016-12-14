@@ -11,7 +11,7 @@ import javafx.scene.Parent;
 public interface IEditView {
 	
 	/**
-	 * sets the value boolean that contains mode and disables the switchModeButton accordingly
+	 * sets the value boolean that contains mode and sets the visibility of the switchModeButton accordingly
 	 * @param automated
 	 */
 	public void setAutomated(boolean automated);

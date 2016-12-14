@@ -165,5 +165,7 @@ public class EditPropertyMatchingController implements IEditController {
     	//if the uris of the class are the same automation is useless
     	boolean automated = ! config.getSourceEndpoint().getCurrentClass().getUri().equals(config.getTargetEndpoint().getCurrentClass().getUri());
     	view.setAutomated(automated);
+    	System.out.println(config.getSourceEndpoint().getCurrentClass().getUri() + "  " + config.getTargetEndpoint().getCurrentClass().getUri());
+		System.out.println("automated: " + automated);
 	}
 }

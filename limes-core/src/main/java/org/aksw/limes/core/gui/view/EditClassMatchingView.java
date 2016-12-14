@@ -80,18 +80,6 @@ public class EditClassMatchingView implements IEditView {
 	 *            corresponding view where this is embedded
 	 */
 	EditClassMatchingView(WizardView wizardView) {
-		// add Listener so rootPane is always correct
-		automated.addListener(new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				if (oldValue != newValue) {
-					rootPane = null;
-					wizardView.setToRootPane(createRootPane());
-					controller.load(newValue);
-				}
-			}
-		});
 		this.wizardView = wizardView;
 		createRootPane();
 	}
@@ -110,6 +98,8 @@ public class EditClassMatchingView implements IEditView {
 	 * creates rootPane according to {@link #automated}
 	 */
 	private Parent createRootPane() {
+		
+		//============= create root pane according to mode ==================
 		if (automated.get()) {
 			rootPane = createAutomatedRootPane();
 			rootPane.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
@@ -127,6 +117,27 @@ public class EditClassMatchingView implements IEditView {
 				}
 			});
 		}
+		
+		//=========== functionality of switch mode button =================
+		switchModeButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+					rootPane = null;
+					wizardView.setToRootPane(createRootPane());
+					automated.set(!automated.get());
+					controller.load(automated.get());
+			}
+		});
+		
+		//========== ensure the correct root pane is always loaded ============
+		automated.addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+            	if(oldValue != newValue)
+            	createRootPane();
+            }
+        });
 		rootPane.setFitToHeight(true);
 		rootPane.setFitToWidth(true);
 		return rootPane;
@@ -150,12 +161,6 @@ public class EditClassMatchingView implements IEditView {
 
 		// ========= ADD BUTTON AND ERROR LABEL =======================
 		switchModeButton.setText("Automated Matching");
-		switchModeButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				automated.set(true);
-			}
-		});
 		errorManualMissingClassMatchingLabel.setTextFill(Color.RED);
 		errorManualMissingClassMatchingLabel.setVisible(false);
 
@@ -180,12 +185,6 @@ public class EditClassMatchingView implements IEditView {
 
 		// ========= ADD BUTTON AND ERROR LABEL =======================
 		switchModeButton.setText("Manual Matching");
-		switchModeButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				automated.set(false);
-			}
-		});
 
 		// ======== PUT TO PANE =======================================
 		vbox.getChildren().addAll(tableView, errorAutomatedMissingClassMatchingLabel, switchModeButton);
@@ -338,7 +337,7 @@ public class EditClassMatchingView implements IEditView {
 	@Override
 	public void setAutomated(boolean automated) {
 		this.automated.set(automated);
-		this.switchModeButton.setDisable(!automated);
+		this.switchModeButton.setVisible(automated);
 	}
 
 	@Override

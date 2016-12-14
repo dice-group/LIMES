@@ -528,7 +528,7 @@ public class EditPropertyMatchingView implements IEditView {
 	@Override
 	public void setAutomated(boolean automated) {
 		this.automated.set(automated);
-		this.switchModeButton.setDisable(!automated);
+		this.switchModeButton.setVisible(automated);
 	}
 
 	@Override

@@ -371,7 +371,7 @@ public class SPARQLHelper {
         Set<String> list = new HashSet<String>();
         while (rs.hasNext()) {
             QuerySolution qs = rs.nextSolution();
-            logger.debug("qs: " + qs.toString());
+            logger.trace("qs: " + qs.toString());
             if(!qs.toString().equals("")){
             try {
                 list.add(URLDecoder.decode(qs.get(qs.varNames().next()).toString(), "UTF-8"));
@@ -394,9 +394,9 @@ public class SPARQLHelper {
      */
     public static ResultSet querySelect(String query, String endpoint, String graph, Model model) {
         try {
+        	logger.trace("Endpoint: " + endpoint + " graph: " + graph + "\n" + query);
             //QueryExecution qexec = queryExecutionDirect(query,graph,endpoint);
             ResultSet results = queryExecution(query, graph, endpoint, model).execSelect();
-            logger.debug("res: " + ResultSetFormatter.asText(results));
             return results;
         } catch (RuntimeException e) {
             throw new RuntimeException("Error with query \"" + query + "\" at endpoint \"" + endpoint + "\" and graph \"" + graph + "\"", e);
