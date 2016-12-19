@@ -174,8 +174,6 @@ public class EditClassMatchingController implements IEditController {
 		//If the endpoints are the same automation is useless
 		boolean automated = !config.getSourceInfo().getEndpoint().equals(config.getTargetInfo().getEndpoint());
 		view.setAutomated(automated);
-		System.out.println(config.getSourceInfo().getEndpoint() + " " + config.getTargetInfo().getEndpoint());
-		System.out.println("automated: " + automated);
 	}
 
 }

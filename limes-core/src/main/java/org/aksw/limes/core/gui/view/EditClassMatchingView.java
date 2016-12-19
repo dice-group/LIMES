@@ -117,14 +117,15 @@ public class EditClassMatchingView implements IEditView {
 				}
 			});
 		}
-		
+
 		//=========== functionality of switch mode button =================
 		switchModeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 					rootPane = null;
-					wizardView.setToRootPane(createRootPane());
+					//this also changes the root pane
 					automated.set(!automated.get());
+					wizardView.setToRootPane(rootPane);
 					controller.load(automated.get());
 			}
 		});
@@ -134,7 +135,7 @@ public class EditClassMatchingView implements IEditView {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-            	if(oldValue != newValue)
+            	if(oldValue != newValue && rootPane == null)
             	createRootPane();
             }
         });

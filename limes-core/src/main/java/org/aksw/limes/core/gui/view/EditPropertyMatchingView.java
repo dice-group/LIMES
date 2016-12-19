@@ -21,6 +21,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -31,6 +32,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -60,7 +63,7 @@ public class EditPropertyMatchingView implements IEditView {
 	 * Initializing the button at this point is important to be able to
 	 * manipulate visibility in WizardController if automation is not possible
 	 */
-	private Button switchModeButton = new Button();
+	private Button switchModeButton = new Button("Default Text");
 	private Label missingPropertiesLabel;
 	/**
 	 * mode of matching
@@ -76,12 +79,18 @@ public class EditPropertyMatchingView implements IEditView {
 	private ObservableList<String> targetProperties = FXCollections.observableArrayList();
 	private Label sourceID;
 	private Label targetID;
+	private ScrollPane manualRootPane;
 
 	// ========== FIELDS FOR AUTOMATED MATCHING ===============
 	private TableView<AutomatedPropertyMatchingNode> automatedPropList;
 	private TableView<AutomatedPropertyMatchingNode> addedAutomatedPropsList;
 	private ObservableList<AutomatedPropertyMatchingNode> availableProperties = FXCollections.observableArrayList();
 	private ObservableList<AutomatedPropertyMatchingNode> addedProperties = FXCollections.observableArrayList();
+	private ScrollPane automatedRootPane;
+	
+	
+	
+	private int test = 0;
 
 	/**
 	 * Constructor creates the root pane and adds listeners
@@ -90,18 +99,6 @@ public class EditPropertyMatchingView implements IEditView {
 	 *            corresponding view where this is embedded
 	 */
 	EditPropertyMatchingView(WizardView wizardView) {
-		// add Listener so rootPane is always correct
-		automated.addListener(new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				if (oldValue != newValue) {
-					rootPane = null;
-					wizardView.setToRootPane(createRootPane());
-					controller.load(newValue);
-				}
-			}
-		});
 		this.wizardView = wizardView;
 		createRootPane();
 	}
@@ -121,14 +118,14 @@ public class EditPropertyMatchingView implements IEditView {
 	 * adds listeners
 	 */
 	private Parent createRootPane() {
-		ScrollPane pane = null;
 		if (automated.get()) {
-			pane = createAutomatedRootPane();
+				rootPane = createAutomatedRootPane();
+				addListeners();
 		} else {
-			pane = createManualRootPane();
+				rootPane = createManualRootPane();
+				addListeners();
 		}
-		addListeners();
-		return pane;
+		return rootPane;
 	}
 
 	/**
@@ -182,12 +179,6 @@ public class EditPropertyMatchingView implements IEditView {
 		// ============ ADD BUTTONS =======================================
 		HBox buttons = new HBox();
 		switchModeButton.setText("Manual Matching");
-		switchModeButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				automated.set(false);
-			}
-		});
 		// Regions are used to put switchModeButton to the left and other
 		// buttons to right
 		Region leftRegion = new Region();
@@ -201,14 +192,16 @@ public class EditPropertyMatchingView implements IEditView {
 		BorderPane root = new BorderPane();
 		root.setCenter(propertiesColumn);
 		root.setBottom(buttons);
-		rootPane = new ScrollPane(root);
-		rootPane.setOnMouseClicked(e -> {
+		ScrollPane pane = new ScrollPane(root);
+		pane.setOnMouseClicked(e -> {
 			missingPropertiesLabel.setVisible(false);
 		});
-		rootPane.setFitToHeight(true);
-		rootPane.setFitToWidth(true);
-		rootPane.setPadding(new Insets(5.0));
-		return rootPane;
+		pane.setFitToHeight(true);
+		pane.setFitToWidth(true);
+		pane.setPadding(new Insets(5.0));
+		automatedRootPane = pane;
+		automatedRootPane.setAccessibleText("Automated Pane");
+		return pane;
 	}
 
 	/**
@@ -243,12 +236,6 @@ public class EditPropertyMatchingView implements IEditView {
 		missingPropertiesLabel.setVisible(false);
 		HBox buttons = new HBox();
 		switchModeButton.setText("Automated Matching");
-		switchModeButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				automated.set(true);
-			}
-		});
 		// Regions are used to put switchModeButton to the left and other
 		// buttons to right
 		Region leftRegion = new Region();
@@ -265,14 +252,16 @@ public class EditPropertyMatchingView implements IEditView {
 		HBox.setHgrow(targetColumn, Priority.ALWAYS);
 		root.setCenter(hb);
 		root.setBottom(buttons);
-		rootPane = new ScrollPane(root);
-		rootPane.setOnMouseClicked(e -> {
+		ScrollPane pane = new ScrollPane(root);
+		pane.setOnMouseClicked(e -> {
 			missingPropertiesLabel.setVisible(false);
 		});
-		rootPane.setFitToHeight(true);
-		rootPane.setFitToWidth(true);
-		rootPane.setPadding(new Insets(5.0));
-		return rootPane;
+		pane.setFitToHeight(true);
+		pane.setFitToWidth(true);
+		pane.setPadding(new Insets(5.0));
+		manualRootPane = pane;
+		manualRootPane.setAccessibleText("Manual Pane");
+		return pane;
 	}
 
 	/**
@@ -285,6 +274,32 @@ public class EditPropertyMatchingView implements IEditView {
 		} else {
 			addListenersForManual();
 		}
+
+		// =========== functionality of switch mode button =================
+		switchModeButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				rootPane = null;
+				// this also changes the root pane
+				automated.set(!automated.get());
+				wizardView.setToRootPane(rootPane);
+				controller.load(automated.get());
+			}
+		});
+
+		
+		// ========== ensure the correct root pane is always loaded ============
+		automated.addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (oldValue != newValue && rootPane == null){
+					test ++;
+					createRootPane();
+				}
+			}
+		});
+		
 	}
 
 	public void addListenersForAutomated() {
