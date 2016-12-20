@@ -29,6 +29,7 @@
     * [Review Condition](user_manual/configuration_file/review.md)
     * [Examples](user_manual/configuration_file/examples.md)
 * [Running LIMES](user_manual/running_limes.md)
+* [Using the Server](user_manual/server/overview.md)
 * [Using the GUI](user_manual/gui/overview.md)
 	* [Creating a new Configuration](user_manual/gui/new_config/create_new_config.md)
 	* [Creating a new Metric](user_manual/gui/new_config/new_metric.md)
