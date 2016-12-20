@@ -25,8 +25,6 @@ import java.util.Map;
  * @author Kevin Dreßler
  */
 
-// @todo: add log messages, comments
-
 public class SimpleServer {
 
     private static final Logger logger = LoggerFactory.getLogger(SimpleServer.class.getName());
@@ -98,6 +96,7 @@ public class SimpleServer {
             } else {
                 // we only accept POST requests here, anything else gets code "405 - Method Not Allowed"
                 t.sendResponseHeaders(405 ,-1);
+                logger.info("Bad request: HTTP VERB must be POST for " + t.getRequestURI());
             }
         }
 
@@ -161,14 +160,17 @@ public class SimpleServer {
                     } else {
                         // 404 - Not Found
                         t.sendResponseHeaders(404, -1);
+                        logger.info("Bad request: " + t.getRequestURI() + "\nResource not found!");
                     }
                 } else {
                     // 400 - Bad Request
                     t.sendResponseHeaders(400 ,-1);
+                    logger.info("Bad request: " + t.getRequestURI() + "\nPlease specify job_id and result_type query parameters!");
                 }
             } else {
                 // we only accept GET requests here, anything else gets code "405 - Method Not Allowed"
                 t.sendResponseHeaders(405 ,-1);
+                logger.info("Bad request: HTTP VERB must be GET for " + t.getRequestURI());
             }
         }
     }
