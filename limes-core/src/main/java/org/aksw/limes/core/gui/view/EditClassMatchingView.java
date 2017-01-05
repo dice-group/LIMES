@@ -135,8 +135,10 @@ public class EditClassMatchingView implements IEditView {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-            	if(oldValue != newValue && rootPane == null)
+            	if(rootPane == null){
+            		System.err.println("Changed: " + automated.get());
             	createRootPane();
+            	}
             }
         });
 		rootPane.setFitToHeight(true);
@@ -337,6 +339,7 @@ public class EditClassMatchingView implements IEditView {
 
 	@Override
 	public void setAutomated(boolean automated) {
+	//	rootPane = null;
 		this.automated.set(automated);
 		this.switchModeButton.setVisible(automated);
 	}

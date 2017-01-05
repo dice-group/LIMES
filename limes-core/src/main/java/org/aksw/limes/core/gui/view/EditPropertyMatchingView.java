@@ -21,7 +21,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -32,8 +31,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -79,18 +76,13 @@ public class EditPropertyMatchingView implements IEditView {
 	private ObservableList<String> targetProperties = FXCollections.observableArrayList();
 	private Label sourceID;
 	private Label targetID;
-	private ScrollPane manualRootPane;
 
 	// ========== FIELDS FOR AUTOMATED MATCHING ===============
 	private TableView<AutomatedPropertyMatchingNode> automatedPropList;
 	private TableView<AutomatedPropertyMatchingNode> addedAutomatedPropsList;
 	private ObservableList<AutomatedPropertyMatchingNode> availableProperties = FXCollections.observableArrayList();
 	private ObservableList<AutomatedPropertyMatchingNode> addedProperties = FXCollections.observableArrayList();
-	private ScrollPane automatedRootPane;
 	
-	
-	
-	private int test = 0;
 
 	/**
 	 * Constructor creates the root pane and adds listeners
@@ -199,8 +191,6 @@ public class EditPropertyMatchingView implements IEditView {
 		pane.setFitToHeight(true);
 		pane.setFitToWidth(true);
 		pane.setPadding(new Insets(5.0));
-		automatedRootPane = pane;
-		automatedRootPane.setAccessibleText("Automated Pane");
 		return pane;
 	}
 
@@ -259,8 +249,6 @@ public class EditPropertyMatchingView implements IEditView {
 		pane.setFitToHeight(true);
 		pane.setFitToWidth(true);
 		pane.setPadding(new Insets(5.0));
-		manualRootPane = pane;
-		manualRootPane.setAccessibleText("Manual Pane");
 		return pane;
 	}
 
@@ -293,8 +281,8 @@ public class EditPropertyMatchingView implements IEditView {
 
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				if (oldValue != newValue && rootPane == null){
-					test ++;
+				if (rootPane == null){
+            		System.err.println("Changed: " + automated.get());
 					createRootPane();
 				}
 			}
