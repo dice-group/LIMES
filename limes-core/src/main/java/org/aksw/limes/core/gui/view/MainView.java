@@ -74,7 +74,15 @@ public class MainView {
     /**
      * MenuItem to start the Active Learning Dialog
      */
-    private MenuItem itemActiveLearning;
+    private MenuItem itemActiveLearning; 
+    /**
+     * root pane
+     */
+    private BorderPane root;
+   /** 
+    * Scene of the main view
+    */
+    private Scene scene;
 
     /**
      * Constructor
@@ -102,7 +110,7 @@ public class MainView {
      * @param stage
      */
     private void showWindow(Stage stage) {
-        BorderPane root = new BorderPane();
+        root = new BorderPane();
 
         MenuBar menuBar = buildMenuBar(stage);
         FlowPane flow = new FlowPane(Orientation.HORIZONTAL);
@@ -118,6 +126,7 @@ public class MainView {
         HBox runBox = new HBox(0);
         runBox.setAlignment(Pos.CENTER_RIGHT);
         runButton = new Button("Run");
+        runButton.setId("runButton");
         runButton.setTooltip(new Tooltip("Execute this link specification"));
         runButton.setOnAction(e -> {
             controller.map();
@@ -136,7 +145,7 @@ public class MainView {
 
         graphBuild.start();
 
-        Scene scene = new Scene(root, 950, 650);
+        scene = new Scene(root, 950, 650);
         root.prefHeightProperty().bind(scene.heightProperty());
         root.prefWidthProperty().bind(scene.widthProperty());
         root.minHeightProperty().bind(scene.heightProperty());
@@ -159,6 +168,7 @@ public class MainView {
      */
     private MenuBar buildMenuBar(Window stage) {
         Menu menuConfiguration = new Menu("Configuration");
+       	menuConfiguration.setId("menuConfiguration"); 
         
         //============ New Configuration ====================
         MenuItem itemNew = new MenuItem("New");
@@ -171,13 +181,16 @@ public class MainView {
         
         //=========== Edit Configuration ====================
         menuEdit = new Menu("Edit");
+        menuEdit.setId("menuEdit");
         MenuItem itemEditClasses = new MenuItem("Edit Classes");
+        itemEditClasses.setId("itemEditClasses");
         itemEditClasses.setOnAction(e -> {
         WizardView wizardView = new WizardView();
         controller.editConfig(wizardView, new EditClassMatchingView(wizardView),
                 new EditPropertyMatchingView(wizardView));
         });
         MenuItem itemEditProperties = new MenuItem("Edit Properties");
+        itemEditProperties.setId("itemEditProperties"); 
         itemEditProperties.setOnAction(e -> {
         WizardView wizardView = new WizardView();
         controller.editConfig(wizardView, new EditPropertyMatchingView(wizardView));
@@ -188,6 +201,7 @@ public class MainView {
         
         //=========== Load Configuration ===================
         MenuItem itemLoad = new MenuItem("Load Configuration");
+        itemLoad.setId("itemLoad");
         itemLoad.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LIMES Configuration File (*.xml, *.rdf, *.ttl, *.n3, *.nt)", "*.xml", "*.rdf", "*.ttl", "*.n3", "*.nt");
@@ -201,6 +215,7 @@ public class MainView {
         
         //========== Save Configuration ===================
         itemSave = new MenuItem("Save Configuration");
+        itemSave.setId("itemSave");
         itemSave.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LIMES Configuration File (*.rdf, *.ttl, *.n3, *.nt)", "*.rdf", "*.ttl", "*.n3", "*.nt");
@@ -215,16 +230,20 @@ public class MainView {
         
         //========== Exit Application =====================
         MenuItem itemExit = new MenuItem("Exit");
+        itemExit.setId("itemExit");
         itemExit.setOnAction(e -> controller.exit());
         menuConfiguration.getItems().add(itemExit);
 
         //========== Layout ==============================
         Menu menuLayout = new Menu("Layout");
+       	menuLayout.setId("menuLayout"); 
         MenuItem layoutGraph = new MenuItem("Refresh Layout");
+       	layoutGraph.setId("layoutGraph"); 
         layoutGraph.setOnAction(e -> {
             graphBuild.graphBuildController.layoutGraph();
         });
         MenuItem deleteGraph = new MenuItem("Delete Graph");
+       	deleteGraph.setId("deleteGraph"); 
         deleteGraph.setOnAction(e -> {
             graphBuild.graphBuildController.deleteGraph();
         });
@@ -232,6 +251,7 @@ public class MainView {
 
         //============ Learning ========================
         Menu menuLearn = new Menu("Learn");
+       	menuLearn.setId("menuLearn"); 
 
         itemBatchLearning = new MenuItem("Batch Learning");
         itemBatchLearning.setOnAction(e -> {
@@ -239,7 +259,7 @@ public class MainView {
         });
 
 
-        itemUnsupervisedLearning = new MenuItem("UnsupervisedLearning");
+        itemUnsupervisedLearning = new MenuItem("Unsupervised Learning");
         itemUnsupervisedLearning.setOnAction(e -> {
             controller.showUnsupervisedLearning();
         });
@@ -251,7 +271,9 @@ public class MainView {
         menuLearn.getItems().add(itemActiveLearning);
         menuLearn.getItems().add(itemBatchLearning);
         menuLearn.getItems().add(itemUnsupervisedLearning);
-        return new MenuBar(menuConfiguration, menuLayout, menuLearn);
+        MenuBar menuBar = new MenuBar(menuConfiguration, menuLayout, menuLearn);
+        menuBar.setId("menuBar");
+        return menuBar;
     }
 
     /**
@@ -308,4 +330,14 @@ public class MainView {
 	alert.getDialogPane().setExpandableContent(expContent);
 	alert.showAndWait();
     }
+
+	public BorderPane getRoot() {
+		return root;
+	}
+
+	public Scene getScene() {
+		return scene;
+	}
+    
+    
 }

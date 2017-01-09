@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.aksw.limes.core</groupId>
 	<artifactId>limes-core</artifactId>
@@ -130,7 +131,8 @@
 								<X-Compile-Target-JDK>${maven.compile.target}</X-Compile-Target-JDK>
 							</manifestEntries>
 						</transformer>
-						 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+						<transformer
+							implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 					</transformers>
 				</configuration>
 			</plugin>
@@ -154,30 +156,31 @@
 			</plugin>
 
 			<plugin>
-				 <groupId>org.apache.maven.plugins</groupId>
-				 <artifactId>maven-checkstyle-plugin</artifactId>
-				 <version>2.17</version>
-				 <executions>
-					 <execution>
-						 <id>validate</id>
-						 <phase>validate</phase>
-						 <configuration>
-							 <configLocation>resources/checkstyle.xml</configLocation>
-							 <encoding>UTF-8</encoding>
-							 <consoleOutput>false</consoleOutput>
-							 <failsOnError>true</failsOnError>
-							 <linkXRef>false</linkXRef>
-						 </configuration>
-						 <goals>
-							 <goal>check</goal>
-						 </goals>
-					 </execution>
-				 </executions>
-			 </plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.17</version>
+				<executions>
+					<execution>
+						<id>validate</id>
+						<phase>validate</phase>
+						<configuration>
+							<configLocation>resources/checkstyle.xml</configLocation>
+							<encoding>UTF-8</encoding>
+							<consoleOutput>false</consoleOutput>
+							<failsOnError>true</failsOnError>
+							<linkXRef>false</linkXRef>
+						</configuration>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -488,6 +491,21 @@
 			<version>4.12</version>
 		</dependency>
 		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>testfx-core</artifactId>
+			<version>4.0.4-alpha</version>
+		</dependency>
+		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>testfx-junit</artifactId>
+			<version>4.0.4-alpha</version>
+		</dependency>
+		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>testfx-legacy</artifactId>
+			<version>4.0.1-alpha</version>
+		</dependency>
+		<dependency>
 			<groupId>fr.ign.cogit</groupId>
 			<artifactId>geoxygene-api</artifactId>
 			<version>1.6</version>
@@ -529,11 +547,11 @@
 			<artifactId>weka-dev</artifactId>
 			<version>3.9.0</version>
 		</dependency>
-        <dependency>
-            <groupId>com.googlecode.lanterna</groupId>
-            <artifactId>lanterna</artifactId>
-            <version>3.0.0-beta3</version>
-        </dependency>
+		<dependency>
+			<groupId>com.googlecode.lanterna</groupId>
+			<artifactId>lanterna</artifactId>
+			<version>3.0.0-beta3</version>
+		</dependency>
 	</dependencies>
 
 	<distributionManagement>

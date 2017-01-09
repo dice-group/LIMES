@@ -16,7 +16,7 @@ import javafx.stage.Stage;
  */
 public class LimesGUI extends Application {
 	
-	
+	MainView mainView;
     /**
      * Main function Entry Point for the Application
      *
@@ -35,7 +35,7 @@ public class LimesGUI extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Locale.setDefault(new Locale("en", "US"));
-        MainView mainView = new MainView(primaryStage);
+        mainView = new MainView(primaryStage);
         MainController mainController = new MainController(mainView);
         mainView.setController(mainController);
     }
