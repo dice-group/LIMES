@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author Kevin Dreßler
@@ -33,6 +35,7 @@ public class SimpleServer {
     private static final String QUERY_PARAM_RESULT_TYPE = "result_type";
     private static final String QUERY_PARAM_JOB_ID = "job_id";
     public static final String CONFIG_FILE_PREFIX = "cfg_";
+    private static ConcurrentMap<Long, Integer> jobs = new ConcurrentHashMap<>();
 
     public static void startServer(int port) {
         HttpServer server = null;
@@ -45,7 +48,8 @@ public class SimpleServer {
         }
         server.createContext("/execute", new ExecuteHandler());
         server.createContext("/get_result", new GetResultHandler());
-        server.setExecutor(null);
+        server.createContext("/get_status", new GetStatusHandler());
+        server.setExecutor(java.util.concurrent.Executors.newCachedThreadPool());
         server.start();
         logger.info("Server has been started! Waiting for requests...");
     }
@@ -65,6 +69,7 @@ public class SimpleServer {
                     }
                 }
                 String id = writeConfigFile(t.getRequestBody(), boundary);
+                jobs.put(Long.getLong(id), 0);
                 String response = id + "\n";
                 t.sendResponseHeaders(200, response.length());
                 logger.info("New Job: " + id);
@@ -73,6 +78,7 @@ public class SimpleServer {
                 os.close();
                 AConfigurationReader reader = new XMLConfigurationReader(STORAGE_DIR_PATH + CONFIG_FILE_PREFIX + id + ".xml");
                 Configuration config = reader.read();
+                jobs.put(Long.getLong(id), 1);
                 ResultMappings mappings = Controller.getMapping(config);
                 String outputFormat = config.getOutputFormat();
                 ISerializer output = SerializerFactory.createSerializer(outputFormat);
@@ -93,6 +99,7 @@ public class SimpleServer {
                 _verificationFile.renameTo(verificationFile);
                 _acceptanceFile.renameTo(acceptanceFile);
                 lockDir.delete();
+                jobs.put(Long.parseLong(id), 2);
             } else {
                 // we only accept POST requests here, anything else gets code "405 - Method Not Allowed"
                 t.sendResponseHeaders(405 ,-1);
@@ -128,39 +135,51 @@ public class SimpleServer {
             if (t.getRequestMethod().equals("GET")) {
                 Map<String, String> params = queryToMap(t.getRequestURI().getRawQuery());
                 if (params.containsKey(QUERY_PARAM_JOB_ID) && params.containsKey(QUERY_PARAM_RESULT_TYPE) &&
-                        Arrays.asList("acceptance", "verification").contains(params.get(QUERY_PARAM_RESULT_TYPE).toLowerCase())) {
+                        Arrays.asList("acceptance", "review").contains(params.get(QUERY_PARAM_RESULT_TYPE).toLowerCase())) {
                     // get data from Config
                     long id = Long.parseLong(params.get(QUERY_PARAM_JOB_ID));
-                    AConfigurationReader reader = new XMLConfigurationReader(STORAGE_DIR_PATH + CONFIG_FILE_PREFIX + id + ".xml");
-                    Configuration config = reader.read();
-                    String requestedFileName = params.get(QUERY_PARAM_RESULT_TYPE).equalsIgnoreCase("acceptance") ?
-                            config.getAcceptanceFile() : config.getVerificationFile();
-                    File requestedFile = new File(STORAGE_DIR_PATH + id + "/" + requestedFileName);
-                    // is the file available yet?
-                    if (requestedFile.exists()) {
-                        // prepare HTTP headers
-                        MimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.MagicMimeMimeDetector");
-                        Collection mimeTypes = MimeUtil.getMimeTypes(requestedFile, new eu.medsea.mimeutil.MimeType("text/plain"));
-                        Headers headers = t.getResponseHeaders();
-                        headers.add("Content-Type", mimeTypes.iterator().next().toString());
-                        headers.add("Content-Disposition", "attachment; filename=" + requestedFileName);
-                        t.sendResponseHeaders(200, requestedFile.length());
-                        // attempt to open the file
-                        // stream the file
-                        OutputStream os = t.getResponseBody();
-                        FileInputStream fs = new FileInputStream(requestedFile);
-                        final byte[] buffer = new byte[1024];
-                        int count;
-                        while ((count = fs.read(buffer)) >= 0) {
-                            os.write(buffer, 0, count);
-                        }
-                        os.flush();
-                        fs.close();
-                        os.close();
-                    } else {
+                    if (!new File(STORAGE_DIR_PATH + CONFIG_FILE_PREFIX + id + ".xml").exists()) {
                         // 404 - Not Found
                         t.sendResponseHeaders(404, -1);
                         logger.info("Bad request: " + t.getRequestURI() + "\nResource not found!");
+                    } else {
+                        AConfigurationReader reader = new XMLConfigurationReader(STORAGE_DIR_PATH + CONFIG_FILE_PREFIX + id + ".xml");
+                        Configuration config = reader.read();
+                        String requestedFileName = params.get(QUERY_PARAM_RESULT_TYPE).equalsIgnoreCase("acceptance") ?
+                                config.getAcceptanceFile() : config.getVerificationFile();
+                        File requestedFile = new File(STORAGE_DIR_PATH + id + "/" + requestedFileName);
+                        File requestedFileLock = new File(STORAGE_DIR_PATH + id + LOCK_DIR_PATH + requestedFileName);
+                        // is the file available yet?
+                        if (requestedFile.exists()) {
+                            // prepare HTTP headers
+                            MimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.MagicMimeMimeDetector");
+                            Collection mimeTypes = MimeUtil.getMimeTypes(requestedFile, new eu.medsea.mimeutil.MimeType("text/plain"));
+                            Headers headers = t.getResponseHeaders();
+                            headers.add("Content-Type", mimeTypes.iterator().next().toString());
+                            headers.add("Content-Disposition", "attachment; filename=" + requestedFileName);
+                            t.sendResponseHeaders(200, requestedFile.length());
+                            // attempt to open the file
+                            // stream the file
+                            OutputStream os = t.getResponseBody();
+                            FileInputStream fs = new FileInputStream(requestedFile);
+                            final byte[] buffer = new byte[1024];
+                            int count;
+                            while ((count = fs.read(buffer)) >= 0) {
+                                os.write(buffer, 0, count);
+                            }
+                            os.flush();
+                            fs.close();
+                            os.close();
+                        } else if (requestedFileLock.exists()) {
+                            // 204 - No Content
+                            // Indicates that Job is being processed and output will soon be available
+                            t.sendResponseHeaders(204, -1);
+                            logger.info("Job not yet finished: " + t.getRequestURI());
+                        } else {
+                            // 404 - Not Found
+                            t.sendResponseHeaders(404, -1);
+                            logger.info("Bad request: " + t.getRequestURI() + "\nResource not found!");
+                        }
                     }
                 } else {
                     // 400 - Bad Request
@@ -175,24 +194,64 @@ public class SimpleServer {
         }
     }
 
-    public static Map<String, String> queryToMap(String query){
-        Map<String, String> result = new HashMap<>();
-        if (query == null)
-            return result;
-        for (String param : query.split("&")) {
-            try {
-                param = java.net.URLDecoder.decode(param, "UTF-8");
-                String pair[] = param.split("=");
-                if (pair.length > 1) {
-                    result.put(pair[0], pair[1]);
+    private static class GetStatusHandler implements HttpHandler {
+
+        @Override
+        public void handle(HttpExchange t) throws IOException {
+            if (t.getRequestMethod().equals("GET")) {
+                Map<String, String> params = queryToMap(t.getRequestURI().getRawQuery());
+                if (params.containsKey(QUERY_PARAM_JOB_ID)) {
+                    // get data from Config
+                    long id = Long.parseLong(params.get(QUERY_PARAM_JOB_ID));
+                    int status = -1;
+                    if (new File(STORAGE_DIR_PATH + CONFIG_FILE_PREFIX + id + ".xml").exists()) {
+                        AConfigurationReader reader = new XMLConfigurationReader(STORAGE_DIR_PATH + CONFIG_FILE_PREFIX + id + ".xml");
+                        Configuration config = reader.read();
+                        String requestedFileName = config.getAcceptanceFile();
+                        File requestedFile = new File(STORAGE_DIR_PATH + id + "/" + requestedFileName);
+                        // is the file available yet?
+                        if (jobs.containsKey(id)) {
+                            status = jobs.get(id);
+                        } else if (requestedFile.exists()) {
+                            status = 2;
+                        }
+                    }
+                    byte[] response = String.valueOf(status).getBytes();
+                    t.sendResponseHeaders(200, response.length);
+                    OutputStream os = t.getResponseBody();
+                    os.write(response);
+                    os.close();
                 } else {
-                    result.put(pair[0], "");
+                    // 400 - Bad Request
+                    t.sendResponseHeaders(400, -1);
+                    logger.info("Bad request: " + t.getRequestURI() + "\nPlease specify job_id query parameters!");
                 }
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            } else {
+                // we only accept GET requests here, anything else gets code "405 - Method Not Allowed"
+                t.sendResponseHeaders(405, -1);
+                logger.info("Bad request: HTTP VERB must be GET for " + t.getRequestURI());
             }
         }
-        return result;
     }
 
-}
+        public static Map<String, String> queryToMap(String query){
+            Map<String, String> result = new HashMap<>();
+            if (query == null)
+                return result;
+            for (String param : query.split("&")) {
+                try {
+                    param = java.net.URLDecoder.decode(param, "UTF-8");
+                    String pair[] = param.split("=");
+                    if (pair.length > 1) {
+                        result.put(pair[0], pair[1]);
+                    } else {
+                        result.put(pair[0], "");
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+            return result;
+        }
+
+    }
