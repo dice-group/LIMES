@@ -12,8 +12,8 @@ The following HTTP endpoints are currently implemented:
   assigned *job_id*.  
   **Accepts XML Configuration file** (See example below) 
 * `./get_result/?job_id=$job_id&result_type=$result_type` **(GET)** ---
-  used to obtain the resulting mapping files for
-  the configuration with *job_id* of `$job_id`.  
+  used to obtain the resulting mapping files (i.e. links) for
+  the configuration with *job_id* of `$job_id`.
   **Query Parameters in Detail**  
   * `$job_id` is an identifier returned from the `./execute` endpoint after submitting a job.  
   * `$result_type` specifies which output file from the configuration should be returned. Possible values: *acceptance*
@@ -32,21 +32,24 @@ The following HTTP endpoints are currently implemented:
 ## Example
 
 ```
-// Get latest LIMES jar from our repository
-$ wget https://github.com/AKSW/LIMES-dev/archive/1.0.0.tar.gz
-$ tar -xvf 1.0.0.tar.gz
-// Run LIMES as HTTP server on port 80
-$ java -jar limes.jar -s -p 80
+// Get latest LIMES, dev branch
+$ git clone https://github.com/AKSW/LIMES-dev && cd LIMES-dev && git checkout dev 
+// Assembly
+$ mvn clean package shade:shade -Dmaven.test.skip=true
+$ cd target
+// Run LIMES as HTTP server on port 8080
+// The example is for version 1.0.0, the filename may differ
+$ java -jar limes-core-1.0.0-SNAPSHOT.jar -s
 // Download example XML mapping
 $ wget https://raw.githubusercontent.com/AKSW/LIMES-dev/master/limes-core/resources/lgd-lgd.xml
 // Run mapping against endpoint
-$ curl --form "fileupload=@lgd-lgd.xml" http://localhost/execute
+$ curl --form "fileupload=@lgd-lgd.xml" http://localhost:8080/execute
 46839272943
 // Observe the status
-$ curl http://localhost/get_status?job_id=46839272943
+$ curl http://localhost:8080/get_status?job_id=46839272943
 1
 // Get result file
-$ curl http://localhost/get_result/?job_id=46839272943&result_type=acceptance
+$ curl http://localhost:8080/get_result/?job_id=46839272943&result_type=acceptance
 <http://linkedgeodata.org/triplify/node2806760713>      <http://linkedgeodata.org/triplify/node2806760713>      1.0
 <http://linkedgeodata.org/triplify/node2806760713>      <http://linkedgeodata.org/triplify/node400957326>       0.9283311463354712
 <http://linkedgeodata.org/triplify/node1319713883>      <http://linkedgeodata.org/triplify/node1319713883>      1.0
