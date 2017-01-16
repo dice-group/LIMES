@@ -34,7 +34,7 @@ public class SimpleServer {
     private static final String LOCK_DIR_PATH = "/lock/";
     private static final String QUERY_PARAM_RESULT_TYPE = "result_type";
     private static final String QUERY_PARAM_JOB_ID = "job_id";
-    public static final String CONFIG_FILE_PREFIX = "cfg_";
+    public static final String CONFIG_FILE_PREFIX = "limes_server_cfg_";
     private static ConcurrentMap<Long, Integer> jobs = new ConcurrentHashMap<>();
 
     public static void startServer(int port) {
@@ -69,7 +69,7 @@ public class SimpleServer {
                     }
                 }
                 String id = writeConfigFile(t.getRequestBody(), boundary);
-                jobs.put(Long.getLong(id), 0);
+                jobs.put(Long.parseLong(id), 0);
                 String response = id + "\n";
                 t.sendResponseHeaders(200, response.length());
                 logger.info("New Job: " + id);
@@ -78,7 +78,7 @@ public class SimpleServer {
                 os.close();
                 AConfigurationReader reader = new XMLConfigurationReader(STORAGE_DIR_PATH + CONFIG_FILE_PREFIX + id + ".xml");
                 Configuration config = reader.read();
-                jobs.put(Long.getLong(id), 1);
+                jobs.put(Long.parseLong(id), 1);
                 ResultMappings mappings = Controller.getMapping(config);
                 String outputFormat = config.getOutputFormat();
                 ISerializer output = SerializerFactory.createSerializer(outputFormat);
