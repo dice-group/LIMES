@@ -39,6 +39,7 @@ $ mvn clean package shade:shade -Dmaven.test.skip=true
 $ cd target
 // Run LIMES as HTTP server on port 8080
 // The example is for version 1.0.0, the filename may differ
+// You can also run it on port 80 for example by adding -p 80 flag
 $ java -jar limes-core-1.0.0-SNAPSHOT.jar -s
 // Download example XML mapping
 $ wget https://raw.githubusercontent.com/AKSW/LIMES-dev/master/limes-core/resources/lgd-lgd.xml
