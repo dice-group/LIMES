@@ -39,11 +39,12 @@ public class DataCleaner {
                     result[i] = removeQuotes(line);
                     return result;
                 }
-
                 if (sepOc < openApostrophe) {
                     result[i] = removeQuotes(line.substring(0, sepOc));
                     line = line.substring(sepOc + 1);
-
+                } else if (openApostrophe == -1) {
+                    result[i] = line.substring(0, sepOc);
+                    line = line.substring(sepOc + 1);
                 } else {
                     // we found a SEP within an apostrophe
                     int closingApostrophe = line.indexOf("\"", openApostrophe + 1);

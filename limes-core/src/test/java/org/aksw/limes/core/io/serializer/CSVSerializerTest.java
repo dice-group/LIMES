@@ -15,7 +15,7 @@ public class CSVSerializerTest {
         m.add("aa", "bb", 1d);
         m.add("foo:aaaa", "foo:bb", 0.8d);
 
-        ISerializer serial = SerializerFactory.getSerializer("csv");
+        ISerializer serial = SerializerFactory.createSerializer("csv");
 
         String fileName = System.getProperty("user.home") + "/";
         fileName += "test";

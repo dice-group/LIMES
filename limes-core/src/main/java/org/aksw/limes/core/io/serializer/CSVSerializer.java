@@ -10,7 +10,8 @@ import org.slf4j.LoggerFactory;
  */
 public class CSVSerializer extends TabSeparatedSerializer {
     private static Logger logger = LoggerFactory.getLogger(CSVSerializer.class.getName());
-    public String SEPARATOR = ",";
+    
+    protected String separator = ",";
 
     public String getName() {
         return "CommaSeparatedSerializer";
@@ -19,7 +20,7 @@ public class CSVSerializer extends TabSeparatedSerializer {
     @Override
     public void printStatement(String subject, String predicate, String object, double similarity) {
         try {
-            writer.println("\"" + subject + "\"" + SEPARATOR + "\"" + object + "\"" + SEPARATOR + similarity);
+            writer.println("\"" + subject + "\"" + separator + "\"" + object + "\"" + separator + similarity);
         } catch (Exception e) {
             logger.warn("Error writing");
         }
@@ -27,6 +28,14 @@ public class CSVSerializer extends TabSeparatedSerializer {
 
     public String getFileExtension() {
         return "csv";
+    }
+
+    public String getSeparator() {
+        return separator;
+    }
+
+    public void setSeparator(String separator) {
+        this.separator = separator;
     }
 
 

@@ -2,8 +2,6 @@ package org.aksw.limes.core.gui.model.ml;
 
 import java.util.List;
 
-import javafx.concurrent.Task;
-
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.io.cache.ACache;
@@ -14,6 +12,8 @@ import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javafx.concurrent.Task;
 
 /**
  * this class is responsible for the data handling according to the MVC Pattern for the machine learning

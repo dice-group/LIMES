@@ -1,8 +1,8 @@
 package org.aksw.limes.core.measures.measure;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
-import org.aksw.limes.core.measures.measure.pointsets.GeoOrthodromicMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.GeoGreatEllipticMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.GeoOrthodromicMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverageMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechetMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
@@ -47,7 +47,14 @@ import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.StartsMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
-import org.aksw.limes.core.measures.measure.topology.*;
+import org.aksw.limes.core.measures.measure.topology.ContainsMeasure;
+import org.aksw.limes.core.measures.measure.topology.CoveredbyMeasure;
+import org.aksw.limes.core.measures.measure.topology.CoversMeasure;
+import org.aksw.limes.core.measures.measure.topology.CrossesMeasure;
+import org.aksw.limes.core.measures.measure.topology.DisjointMeasure;
+import org.aksw.limes.core.measures.measure.topology.IntersectsMeasure;
+import org.aksw.limes.core.measures.measure.topology.TouchesMeasure;
+import org.aksw.limes.core.measures.measure.topology.WithinMeasure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
-import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;

@@ -29,8 +29,8 @@ public class CSVMappingReader extends AMappingReader {
      *            input file for reading
      */
     public CSVMappingReader(String file) {
-	super(file);
-	this.delimiter = COMMA;
+        super(file);
+        this.delimiter = COMMA;
     }
 
     /**
@@ -40,8 +40,8 @@ public class CSVMappingReader extends AMappingReader {
      *            of the file
      */
     public CSVMappingReader(String file, String delimiter) {
-	this(file);
-	this.delimiter = delimiter;
+        this(file);
+        this.delimiter = delimiter;
     }
 
     /*
@@ -51,69 +51,66 @@ public class CSVMappingReader extends AMappingReader {
      */
     @Override
     public AMapping read() {
-	try {
-	    BufferedReader reader = new BufferedReader(new FileReader(file));
-	    String line = reader.readLine();
-	    reader.close();
-	    String col[];
-	    if (line != null) {
-		// split first line
-		col = line.split(delimiter);
-		if (col.length == 2) {
-		    return readTwoColumnFile(file);
-		} else if (col.length == 3) {
-		    try {
-			Double.parseDouble(col[2]);
-			return readThreeColumnFileWithSimilarity(file);
-		    } catch (NumberFormatException e) {
-			return readThreeColumnFile(file);
-		    }
-		} else {
-		    logger.error(MarkerFactory.getMarker("FATAL"), "Format not supported");
-            throw new RuntimeException();
-		}
-	    }
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
-	return null;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line = reader.readLine();
+            reader.close();
+            String col[];
+            if (line != null) {
+                // split first line
+                col = line.split(delimiter);
+                if (col.length == 2) {
+                    return readTwoColumnFile();
+                } else if (col.length == 3) {
+                    try {
+                        Double.parseDouble(col[2]);
+                        return readThreeColumnFileWithSimilarity();
+                    } catch (NumberFormatException e) {
+                        return readThreeColumnFile();
+                    }
+                } else {
+                    logger.error(MarkerFactory.getMarker("FATAL"), "Format not supported");
+                    throw new RuntimeException();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
 
     }
 
     /**
      * Read Mapping from the input 2 column CSV file First column contains
-     * source URIs Second column contains Target URIs All similarities is set to
-     * 1
+     * source URIs Second column contains Target URIs All similarities is set to 1.0
      *
-     * @param file
-     *            2 columns CSV file to read the mapping from
      * @return AMapping object contains the mapping
      */
-    public AMapping readTwoColumnFile(String file) {
-	AMapping m = MappingFactory.createDefaultMapping();
-	try {
-	    BufferedReader reader = new BufferedReader(new FileReader(file));
-	    String line = reader.readLine();
-	    String split[];
-	    while (line != null) {
-		// split first line
-		// split = line.split(delimiter);
-		split = DataCleaner.separate(line, delimiter, 2);
-		// check if it's the line with the properties
-		if (!split[0].startsWith("id")) {
-		    if (!split[0].startsWith("<")) {
-			m.add(split[0], split[1], 1.0);
-		    } else {
-			m.add(split[0].substring(1, split[0].length() - 1), split[1].substring(1, split[1].length() - 1), 1.0);
-		    }
-		}
-		line = reader.readLine();
-	    }
-	    reader.close();
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
-	return m;
+    public AMapping readTwoColumnFile() {
+        AMapping m = MappingFactory.createDefaultMapping();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line = reader.readLine();
+            String split[];
+            while (line != null) {
+                // split first line
+                // split = line.split(delimiter);
+                split = DataCleaner.separate(line, delimiter, 2);
+                // check if it's the line with the properties
+                if (!split[0].startsWith("id")) {
+                    if (!split[0].startsWith("<")) {
+                        m.add(split[0], split[1], 1.0);
+                    } else {
+                        m.add(split[0].substring(1, split[0].length() - 1), split[1].substring(1, split[1].length() - 1), 1.0);
+                    }
+                }
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return m;
     }
 
     /**
@@ -121,28 +118,25 @@ public class CSVMappingReader extends AMappingReader {
      * source URIs Second column contains Target URIs Third column contains
      * similarity
      *
-     * @param file
-     *            3 columns CSV file (third column is the confidence value) to
-     *            read the mapping from
      * @return AMapping object contains the mapping
      */
-    public AMapping readThreeColumnFileWithSimilarity(String file) {
-	AMapping m = MappingFactory.createDefaultMapping();
-	try {
-	    BufferedReader reader = new BufferedReader(new FileReader(file));
-	    String s = reader.readLine();
-	    String split[];
-	    while (s != null) {
-		// split first line
-		split = s.split(delimiter);
-		m.add(split[0].substring(1, split[0].length() - 1), split[1].substring(1, split[1].length() - 1), Double.parseDouble(split[2]));
-		s = reader.readLine();
-	    }
-	    reader.close();
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
-	return m;
+    public AMapping readThreeColumnFileWithSimilarity() {
+        AMapping m = MappingFactory.createDefaultMapping();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String s = reader.readLine();
+            String split[];
+            while (s != null) {
+                // split first line
+                split = s.split(delimiter);
+                m.add(split[0].substring(1, split[0].length() - 1), split[1].substring(1, split[1].length() - 1), Double.parseDouble(split[2]));
+                s = reader.readLine();
+            }
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return m;
     }
 
     /**
@@ -150,47 +144,45 @@ public class CSVMappingReader extends AMappingReader {
      * source URIs Second column contains linking property Third column contains
      * Target URIs
      *
-     * @param file
-     *            3 columns CSV file to read the mapping from
      * @return AMapping object contains the mapping
      */
-    public AMapping readThreeColumnFile(String file) {
-	AMapping m = MappingFactory.createDefaultMapping();
-	try {
-	    BufferedReader reader = new BufferedReader(new FileReader(file));
-	    String s = reader.readLine();
-	    String split[];
-	    while (s != null) {
-		// split first line
-		split = s.split(delimiter);
-		m.add(removeQuotes(split[0]), removeQuotes(split[2]), 1d);
-		if (split[1].startsWith("\"<") && split[1].endsWith(">\"")) {
-		    String tmp = removeQuotes(split[1]);
-		    m.setPredicate(tmp.substring(1, tmp.length() - 1));
-		} else {
-		    m.setPredicate(removeQuotes(split[1]));
-		}
-		s = reader.readLine();
-	    }
-	    reader.close();
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
-	return m;
+    public AMapping readThreeColumnFile() {
+        AMapping m = MappingFactory.createDefaultMapping();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String s = reader.readLine();
+            String split[];
+            while (s != null) {
+                // split first line
+                split = s.split(delimiter);
+                m.add(removeQuotes(split[0]), removeQuotes(split[2]), 1d);
+                if (split[1].startsWith("\"<") && split[1].endsWith(">\"")) {
+                    String tmp = removeQuotes(split[1]);
+                    m.setPredicate(tmp.substring(1, tmp.length() - 1));
+                } else {
+                    m.setPredicate(removeQuotes(split[1]));
+                }
+                s = reader.readLine();
+            }
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return m;
     }
 
     private String removeQuotes(String s) {
-	if ((s.charAt(0) == '\"' && s.charAt(s.length() - 1) == '\"') || (s.charAt(0) == '\'' && s.charAt(s.length() - 1) == '\'')) {
-	    return s.substring(1, s.length() - 1);
-	}
-	return s;
+        if ((s.charAt(0) == '\"' && s.charAt(s.length() - 1) == '\"') || (s.charAt(0) == '\'' && s.charAt(s.length() - 1) == '\'')) {
+            return s.substring(1, s.length() - 1);
+        }
+        return s;
     }
 
     /**
      * @return the delimiter used for reading the mapping
      */
     public String getSDelimiter() {
-	return delimiter;
+        return delimiter;
     }
 
     /**
@@ -200,7 +192,7 @@ public class CSVMappingReader extends AMappingReader {
      *            to be set
      */
     public void setDelimiter(String delimiter) {
-	this.delimiter = delimiter;
+        this.delimiter = delimiter;
     }
 
 }

@@ -101,7 +101,7 @@ public class Instance implements Comparable<Object>, Serializable {
         if (properties.containsKey(propUri)) {
             return properties.get(propUri);
         } else {
-            logger.warn("Failed to access property <" + propUri + "> on " + uri);
+            logger.debug("Failed to access property <" + propUri + "> on " + uri);
             return new TreeSet<String>();
         }
     }

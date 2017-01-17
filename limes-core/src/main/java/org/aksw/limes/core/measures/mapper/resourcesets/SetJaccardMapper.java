@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -233,7 +234,7 @@ public class SetJaccardMapper extends AMapper {
                     }
                     if (nextStartSizeNotFixedYet && targetValues.size() >= nextStartSize) {
                         nextStartSizeNotFixedYet = false;
-                        startBig = j - 1;
+                        startBig = (startBig == 0) ? 0 : j - 1;
                     }
                     tempTarget.add(targetValues);
                 }

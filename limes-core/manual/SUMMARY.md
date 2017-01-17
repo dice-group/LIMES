@@ -29,12 +29,13 @@
     * [Review Condition](user_manual/configuration_file/review.md)
     * [Examples](user_manual/configuration_file/examples.md)
 * [Running LIMES](user_manual/running_limes.md)
+* [Using the Server](user_manual/server/overview.md)
 * [Using the GUI](user_manual/gui/overview.md)
 	* [Creating a new Configuration](user_manual/gui/new_config/create_new_config.md)
 	* [Creating a new Metric](user_manual/gui/new_config/new_metric.md)
 	* [Machine Learning with the GUI](user_manual/gui/machinelearning.md)
 * [Known Issues](user_manual/known_issues.md)
-* [Change Log](user_manual/change_log.md)
+* [Change Log](https://github.com/AKSW/LIMES-dev/blob/master/CHANGES.md)
 * [Example Use Cases](user_manual/usecases.md)
 
 --

@@ -7,19 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tooltip;
-import javafx.scene.layout.VBox;
-
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.metric.Measure;
 import org.aksw.limes.core.gui.model.metric.Node;
 import org.aksw.limes.core.gui.model.metric.Operator;
 import org.aksw.limes.core.gui.model.metric.Property;
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.VBox;
 
 /**
  * Panel in MainView which contains the specific nodes, measures and operators
