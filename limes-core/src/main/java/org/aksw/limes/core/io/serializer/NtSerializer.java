@@ -56,7 +56,7 @@ public class NtSerializer implements ISerializer {
     }
 
     public void addStatement(String subject, String predicate, String object, double similarity) {
-        statements.add("<" + subject + "> " + predicate + " <" + object + "> .");
+        statements.add("<" + subject + "> <" + predicate + "> <" + object + "> .");
     }
 
     public void flush() {
