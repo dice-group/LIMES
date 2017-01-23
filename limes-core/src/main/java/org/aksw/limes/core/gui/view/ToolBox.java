@@ -76,8 +76,10 @@ public class ToolBox extends VBox {
      */
     private void generateView(VBox box) {
 	toolBoxSourceProperties = new ListView<String>();
+	toolBoxSourceProperties.setId("toolBoxSourceProperties");
 	toolBoxSourceProperties.setTooltip(new Tooltip("Add source properties to metric builder by clicking"));
 	toolBoxTargetProperties = new ListView<String>();
+	toolBoxTargetProperties.setId("toolBoxTargetProperties");
 	toolBoxTargetProperties.setTooltip(new Tooltip("Add target properties to metric builder by clicking"));
 	toolBoxMetrics = generateListViewFromNodeIdentifiers(new Measure("").identifiers());
 	toolBoxMetrics.setTooltip(new Tooltip("Add measures to metric builder by clicking"));

@@ -63,7 +63,7 @@ public class WizardView {
         buttonCancel.setOnAction(e -> {
             stage.close();
         });
-        stage.setTitle("LIMES");
+        stage.setTitle("LIMES - New Configuration");
         stage.setScene(scene);
         stage.show();
     }

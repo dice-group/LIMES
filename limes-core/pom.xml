@@ -505,6 +505,14 @@
 			<artifactId>testfx-legacy</artifactId>
 			<version>4.0.1-alpha</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.testfx/openjfx-monocle -->
+		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>openjfx-monocle</artifactId>
+			<version>1.8.0_20</version>
+		</dependency>
+
 		<dependency>
 			<groupId>fr.ign.cogit</groupId>
 			<artifactId>geoxygene-api</artifactId>

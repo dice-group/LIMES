@@ -155,15 +155,18 @@ public class EditClassMatchingView implements IEditView {
 		// ========= CREATE TREE VIEWS AND TITLE PANELS ================
 		HBox hbox = new HBox();
 		sourcePanelWithTitle = createClassMatchingPane(SOURCE);
+		sourcePanelWithTitle.setId("sourcePanel");
 		HBox.setHgrow(sourcePanelWithTitle, Priority.ALWAYS);
 		hbox.getChildren().add(sourcePanelWithTitle);
 		targetPanelWithTitle = createClassMatchingPane(TARGET);
+		targetPanelWithTitle.setId("targetPanel");
 		HBox.setHgrow(targetPanelWithTitle, Priority.ALWAYS);
 		hbox.getChildren().add(targetPanelWithTitle);
 		VBox vbox = new VBox();
 
 		// ========= ADD BUTTON AND ERROR LABEL =======================
 		switchModeButton.setText("Automated Matching");
+		switchModeButton.setId("switchModeButton");
 		errorManualMissingClassMatchingLabel.setTextFill(Color.RED);
 		errorManualMissingClassMatchingLabel.setVisible(false);
 
@@ -188,6 +191,7 @@ public class EditClassMatchingView implements IEditView {
 
 		// ========= ADD BUTTON AND ERROR LABEL =======================
 		switchModeButton.setText("Manual Matching");
+		switchModeButton.setId("switchModeButton");
 
 		// ======== PUT TO PANE =======================================
 		vbox.getChildren().addAll(tableView, errorAutomatedMissingClassMatchingLabel, switchModeButton);
@@ -204,10 +208,13 @@ public class EditClassMatchingView implements IEditView {
 	@SuppressWarnings("unchecked")
 	private TableView<AutomatedClassMatchingNode> createTableView() {
 		tableView = new TableView<AutomatedClassMatchingNode>();
+		tableView.setId("tableView");
 		TableColumn<AutomatedClassMatchingNode, String> sourceColumn = new TableColumn<AutomatedClassMatchingNode, String>(
 				"Source classes");
+		sourceColumn.setId("sourceColumn");
 		TableColumn<AutomatedClassMatchingNode, String> targetColumn = new TableColumn<AutomatedClassMatchingNode, String>(
 				"Target classes");
+		targetColumn.setId("targetColumn");
 		sourceColumn.setCellValueFactory(new PropertyValueFactory<AutomatedClassMatchingNode, String>("sourceName"));
 		targetColumn.setCellValueFactory(new PropertyValueFactory<AutomatedClassMatchingNode, String>("targetName"));
 		tableView.getColumns().addAll(sourceColumn, targetColumn);

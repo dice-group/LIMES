@@ -133,8 +133,10 @@ public class EditPropertyMatchingView implements IEditView {
 		TableColumn<AutomatedPropertyMatchingNode, String> targetPropColumn = new TableColumn<AutomatedPropertyMatchingNode, String>();
 		sourcePropColumn
 				.setCellValueFactory(new PropertyValueFactory<AutomatedPropertyMatchingNode, String>("sourceProperty"));
+		sourcePropColumn.setId("sourcePropColumn");
 		targetPropColumn
 				.setCellValueFactory(new PropertyValueFactory<AutomatedPropertyMatchingNode, String>("targetProperty"));
+		targetPropColumn.setId("targetPropColumn");
 		automatedPropList.getColumns().addAll(sourcePropColumn, targetPropColumn);
 		automatedPropList.setItems(availableProperties);
 		automatedPropList.setEditable(false);
@@ -171,6 +173,7 @@ public class EditPropertyMatchingView implements IEditView {
 		// ============ ADD BUTTONS =======================================
 		HBox buttons = new HBox();
 		switchModeButton.setText("Manual Matching");
+		switchModeButton.setId("switchModeButton");
 		// Regions are used to put switchModeButton to the left and other
 		// buttons to right
 		Region leftRegion = new Region();
@@ -202,9 +205,13 @@ public class EditPropertyMatchingView implements IEditView {
 	private ScrollPane createManualRootPane() {
 		// =============== CREATE SOURCE AND TARGET COLUMNS WITH LISTS
 		sourcePropList = new ListView<String>();
+		sourcePropList.setId("sourcePropList");
 		targetPropList = new ListView<String>();
+		targetPropList.setId("targetPropList");
 		addedSourcePropsList = new ListView<String>();
+		addedSourcePropsList.setId("addedSourcePropsList");
 		addedTargetPropsList = new ListView<String>();
+		addedTargetPropsList.setId("addedTargetPropsList");
 		Label sourceLabel = new Label("available Source Properties:");
 		sourceID = new Label();
 		Label targetLabel = new Label("available Target Properties:");
@@ -226,6 +233,7 @@ public class EditPropertyMatchingView implements IEditView {
 		missingPropertiesLabel.setVisible(false);
 		HBox buttons = new HBox();
 		switchModeButton.setText("Automated Matching");
+		switchModeButton.setId("switchModeButton");
 		// Regions are used to put switchModeButton to the left and other
 		// buttons to right
 		Region leftRegion = new Region();

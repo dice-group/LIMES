@@ -172,6 +172,7 @@ public class MainView {
         
         //============ New Configuration ====================
         MenuItem itemNew = new MenuItem("New");
+        itemNew.setId("#itemNew");
         itemNew.setOnAction(e -> {
         WizardView wizardView = new WizardView();
         controller.newConfig(wizardView,new EditEndpointsView(wizardView), new EditClassMatchingView(wizardView),
