@@ -191,11 +191,11 @@ public class Controller {
         Options options = new Options();
         options.addOption("g", false, "Run LIMES GUI");
         options.addOption("s", false, "Run LIMES Server");
-        options.addOption("p", false, "Optionally configure HTTP server port. Only effective if -s is specified. Default port is 8080.");
         options.addOption("h", false, "Show this help");
         options.addOption("o", true, "Set path of log file. Default is 'limes.log'");
         options.addOption("f", true, "Optionally configure format of <config_file_or_uri>, either \"xml\" (default) or " +
                 "\"rdf\". If not specified, LIMES tries to infer the format from file ending.");
+        options.addOption("p", true, "Optionally configure HTTP server port. Only effective if -s is specified. Default port is 8080.");
         // options.addOption("s", false, "Silent run");
         // options.addOption("v", false, "Verbose run");
         return options;

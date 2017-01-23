@@ -47,7 +47,7 @@ public class TTLSerializer implements ISerializer {
      * @param similarity Similarity of subject and object
      */
     public void addStatement(String subject, String predicate, String object, double similarity) {
-        statements.add("<" + subject + "> " + predicate + " <" + object + "> .");
+        statements.add("<" + subject + "> <" + predicate + "> <" + object + "> .");
     }
 
     /*
@@ -79,7 +79,7 @@ public class TTLSerializer implements ISerializer {
         statements = new TreeSet<String>();
         for (String s : mapping.getMap().keySet()) {
             for (String t : mapping.getMap().get(s).keySet()) {
-                writer.println("<" + s + "> " + predicate + " <" + t + "> .");
+                writer.println("<" + s + "> <" + predicate + "> <" + t + "> .");
             }
         }
         close();
@@ -106,7 +106,7 @@ public class TTLSerializer implements ISerializer {
      */
     public void printStatement(String subject, String predicate, String object, double similarity) {
         try {
-            writer.println("<" + subject + "> " + predicate + " <" + object + "> .");
+            writer.println("<" + subject + "> <" + predicate + "> <" + object + "> .");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e);
