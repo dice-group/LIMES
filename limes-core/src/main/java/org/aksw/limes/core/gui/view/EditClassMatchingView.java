@@ -250,9 +250,11 @@ public class EditClassMatchingView implements IEditView {
 
 		if (sourceOrTarget == SOURCE) {
 			sourceTreeView = treeView;
+			sourceTreeView.setId("sourceTreeView");
 			return new TitledPane("Source class", pane);
 		} else {
 			targetTreeView = treeView;
+			targetTreeView.setId("targetTreeView");
 			return new TitledPane("Target class", pane);
 		}
 	}
