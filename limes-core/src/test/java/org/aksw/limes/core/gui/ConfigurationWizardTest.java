@@ -74,8 +74,7 @@ public class ConfigurationWizardTest extends ApplicationTest{
 		verifyThat("#targetPanel", NodeMatchers.hasText("linkedgeodata classes"));
 		//Continue with automated matching
 		clickOn("#switchModeButton");
-		//FIXME Using the name of a class might not be the best solution
-		clickOn("University");
+		clickOn("#tableView");
 		clickOn("Next");
 	}
 	

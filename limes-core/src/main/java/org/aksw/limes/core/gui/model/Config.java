@@ -8,6 +8,7 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
@@ -30,12 +31,13 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ListView;
 
 /**
  * Contains all important information for the graphical representation
@@ -44,6 +46,13 @@ import javafx.scene.control.ListView;
  *         studserv.uni-leipzig.de{@literal >}
  */
 public class Config extends Configuration {
+	
+    private static final Logger logger = LoggerFactory.getLogger(Config.class);
+    
+    /**
+     * Checks if the restriction has the form "?y a prefix:class" or "?y rdf:type dbpedia:Drug"
+     */
+    private static final String restrictionRegex = "\\?\\w+\\s+\\w+(:\\w+){0,1}\\s+\\w+:\\w+";
 
     /**
      * PropertyMapping of current query
@@ -170,9 +179,27 @@ public class Config extends Configuration {
 		|| this.verificationRelation.startsWith("file:")) {
 	    this.verificationRelation = defaultVerificationRelation;
 	}
+	
 	metric = new Output();
 	this.sourceEndpoint = new Endpoint(this.sourceInfo, this);
 	this.targetEndpoint = new Endpoint(this.targetInfo, this);
+
+	//get Class restriction
+	if(sourceInfo.getRestrictions().size() == 1 && targetInfo.getRestrictions().size() == 1){
+		if(Pattern.matches(restrictionRegex, sourceInfo.getRestrictions().get(0)) && Pattern.matches(restrictionRegex, sourceInfo.getRestrictions().get(0))){
+			String sourceRestriction = sourceInfo.getRestrictions().get(0);
+			String targetRestriction = targetInfo.getRestrictions().get(0);
+			String sourceClass = sourceRestriction.substring(sourceRestriction.lastIndexOf(" ")).trim();
+			String targetClass = targetRestriction.substring(targetRestriction.lastIndexOf(" ")).trim();
+			this.sourceEndpoint.setCurrentClassAsString(PrefixHelper.expand(sourceClass));
+			this.targetEndpoint.setCurrentClassAsString(PrefixHelper.expand(targetClass));
+			System.err.println(this.sourceEndpoint.getCurrentClass().getUri() + " " + this.targetEndpoint.getCurrentClass().getUri());
+		}else{
+			logger.error("Restrictions that are more complex than \" ?y a prefix:class \" are not yet implemented in the GUI");
+		}
+	}else{
+		logger.error("Restrictions that are more complex than \" ?y a prefix:class \" are not yet implemented in the GUI");
+	}
     }
 
     /**
@@ -211,8 +238,6 @@ public class Config extends Configuration {
 		tmp.getMlImplementationType(), tmp.getMlTrainingDataFile(),
 		tmp.getMlPseudoFMeasure());
 	outConfig.setMlTrainingDataFile(tmp.getMlTrainingDataFile());
-	outConfig.sourceEndpoint = new Endpoint(outConfig.getSourceInfo(), outConfig);
-	outConfig.targetEndpoint = new Endpoint(outConfig.getTargetInfo(), outConfig);
 	for (String s : outConfig.getSourceInfo().getPrefixes().keySet()) {
 	    PrefixHelper.addPrefix(s, outConfig.getSourceInfo().getPrefixes().get(s));
 	}

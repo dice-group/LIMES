@@ -117,6 +117,7 @@ public class EditPropertyMatchingView implements IEditView {
 				rootPane = createManualRootPane();
 				addListeners();
 		}
+		rootPane.setId("editPropertyMatchingRootPane");
 		return rootPane;
 	}
 
@@ -293,6 +294,10 @@ public class EditPropertyMatchingView implements IEditView {
             		System.err.println("Changed: " + automated.get());
 					createRootPane();
 				}
+                //If automated is false and manual root pane has not been created yet
+                if(!automated.get() && addedSourcePropsList == null){
+                    createRootPane();
+                }
 			}
 		});
 		
@@ -482,8 +487,12 @@ public class EditPropertyMatchingView implements IEditView {
 	 *            list of properties to show
 	 */
 	public void showAvailableProperties(SourceOrTarget sourceOrTarget, List<String> properties) {
-		addedSourcePropsList.getItems().clear();
-		addedTargetPropsList.getItems().clear();
+		if(!automated.get()){
+            addedSourcePropsList.getItems().clear();
+            addedTargetPropsList.getItems().clear();
+		}else{
+			addedAutomatedPropsList.getItems().clear();
+		}
 		(sourceOrTarget == SOURCE ? sourceProperties : targetProperties).setAll(properties);
 		(sourceOrTarget == SOURCE ? sourcePropList : targetPropList)
 				.setItems((sourceOrTarget == SOURCE ? sourceProperties : targetProperties));

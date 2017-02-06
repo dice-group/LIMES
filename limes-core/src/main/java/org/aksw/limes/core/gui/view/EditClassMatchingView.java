@@ -139,6 +139,10 @@ public class EditClassMatchingView implements IEditView {
             		System.err.println("Changed: " + automated.get());
             	createRootPane();
             	}
+                //If automated is false and manual root pane has not been created yet
+                if(!automated.get() && sourceTreeView == null){
+                    createRootPane();
+                }
             }
         });
 		rootPane.setFitToHeight(true);
