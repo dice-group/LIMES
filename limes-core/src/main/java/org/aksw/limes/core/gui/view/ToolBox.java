@@ -14,6 +14,7 @@ import org.aksw.limes.core.gui.model.metric.Operator;
 import org.aksw.limes.core.gui.model.metric.Property;
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
@@ -248,8 +249,14 @@ public class ToolBox extends VBox {
 		} else {
 			setListViewFromList(toolBoxTargetProperties, config.getTargetInfo().getProperties());
 		}
-		sourcePropertiesLabel.setText(config.getSourceEndpoint().getCurrentClass().getName() + " properties");
-		targetPropertiesLabel.setText(config.getTargetEndpoint().getCurrentClass().getName() + " properties");
+		//Avoid not on FX application thread problem
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				sourcePropertiesLabel.setText(config.getSourceEndpoint().getCurrentClass().getName() + " properties");
+				targetPropertiesLabel.setText(config.getTargetEndpoint().getCurrentClass().getName() + " properties");
+			}
+		});
 	}
 
 	public ListView<String> getToolBoxSourceProperties() {
