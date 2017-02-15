@@ -103,6 +103,7 @@
 					<argLine>${argLine} -Xms256m -Xmx512m</argLine>
 					<testFailureIgnore>false</testFailureIgnore>
 					<skipTests>false</skipTests>
+					<useManifestOnlyJar>false</useManifestOnlyJar>  
 				</configuration>
 			</plugin>
 
@@ -505,13 +506,19 @@
 			<artifactId>testfx-legacy</artifactId>
 			<version>4.0.1-alpha</version>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.testfx/openjfx-monocle -->
 		<dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>openjfx-monocle</artifactId>
 			<version>1.8.0_20</version>
 		</dependency>
+
+    <dependency>
+      <groupId>com.oracle</groupId>
+      <artifactId>javafx</artifactId>
+      <version>2.2.3</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/jfxrt.jar</systemPath>
+    </dependency>
 
 		<dependency>
 			<groupId>fr.ign.cogit</groupId>
