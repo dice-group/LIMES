@@ -186,7 +186,7 @@ public class Config extends Configuration {
 
 	//get Class restriction
 	if(sourceInfo.getRestrictions().size() == 1 && targetInfo.getRestrictions().size() == 1){
-		if(Pattern.matches(restrictionRegex, sourceInfo.getRestrictions().get(0)) && Pattern.matches(restrictionRegex, sourceInfo.getRestrictions().get(0))){
+		if(Pattern.matches(restrictionRegex, sourceInfo.getRestrictions().get(0)) && Pattern.matches(restrictionRegex, targetInfo.getRestrictions().get(0))){
 			String sourceRestriction = sourceInfo.getRestrictions().get(0);
 			String targetRestriction = targetInfo.getRestrictions().get(0);
 			String sourceClass = sourceRestriction.substring(sourceRestriction.lastIndexOf(" ")).trim();
