@@ -11,6 +11,7 @@ import java.util.Set;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -179,6 +180,10 @@ public class Configuration implements IConfiguration {
     }
 
     public void setAcceptanceRelation(String acceptanceRelation) {
+    	if(new UrlValidator().isValid(acceptanceRelation)){
+    		this.acceptanceRelation = acceptanceRelation;
+    		return;
+    	}
         if(acceptanceRelation.contains(":")){
             String prefix = acceptanceRelation.substring(0,acceptanceRelation.indexOf(":"));
             if(prefixes.containsKey(prefix)){
@@ -237,6 +242,10 @@ public class Configuration implements IConfiguration {
     }
 
     public void setVerificationRelation(String verificationRelation) {
+    	if(new UrlValidator().isValid(verificationRelation)){
+    		this.verificationRelation = verificationRelation;
+    		return;
+    	}
         if(verificationRelation.contains(":")){
             String prefix = verificationRelation.substring(0,verificationRelation.indexOf(":"));
             if(prefixes.containsKey(prefix)){
@@ -249,7 +258,7 @@ public class Configuration implements IConfiguration {
         }
         this.verificationRelation = verificationRelation;
     }
-
+    
     public void setVerificationThreshold(double verificationThreshold) {
         this.verificationThreshold = verificationThreshold;
     }
