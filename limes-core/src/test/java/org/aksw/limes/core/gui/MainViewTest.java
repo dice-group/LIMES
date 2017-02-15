@@ -10,6 +10,7 @@ import java.util.Locale;
 import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.view.MainView;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
@@ -47,6 +48,16 @@ public class MainViewTest extends ApplicationTest {
 		mainView = new MainView(stage);
 		mainController = new MainController(mainView);
 		mainView.setController(mainController);
+	}
+	
+	
+	@BeforeClass
+	public static void setup(){
+        System.setProperty("testfx.robot", "glass");
+        System.setProperty("testfx.headless", "true");
+        System.setProperty("prism.order", "sw");
+        System.setProperty("prism.text", "t2k");
+        System.setProperty("java.awt.headless", "true");
 	}
 	
 	@Before
