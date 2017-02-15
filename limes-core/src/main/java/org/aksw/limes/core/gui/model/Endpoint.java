@@ -2,7 +2,6 @@ package org.aksw.limes.core.gui.model;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.regex.Pattern;
 
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.gui.view.TaskProgressView;
@@ -20,11 +19,6 @@ import org.apache.jena.rdf.model.Model;
  *         studserv.uni-leipzig.de{@literal >}
  */
 public class Endpoint {
-	
-	/**
-	 * matches properties of the form " prefix:property "
-	 */
-	public static final String propertyRegex = "\\s+\\w+:\\w+\\s+";
 	/**
 	 * info about knowledgebase
 	 */
@@ -148,16 +142,7 @@ public class Endpoint {
 		// info.getPrefixes().put("rdf", PrefixHelper.getURI("rdf"));
 		String classAbbr = PrefixHelper.abbreviate(currentClass);
 		// info.getRestrictions().add(info.getVar() + " rdf:type " + classAbbr);
-
-		//Else an unneccessary second more abstract restriction gets added
-		boolean alreadyContains = false;
-		for(String restr: info.getRestrictions()){
-			if(restr.matches(Pattern.quote(info.getVar()) + propertyRegex + classAbbr) || restr.contains("<http:"))
-				alreadyContains = true;
-		}
-		//This usually only gets called when the ConfigurationWizard is used
-		if(!alreadyContains)
-			info.getRestrictions().add(info.getVar() + " a " + classAbbr);
+		info.getRestrictions().add(info.getVar() + " a " + classAbbr);
 		String[] abbrSource = PrefixHelper.generatePrefix(currentClass);
 		config.getPrefixes().put(abbrSource[0], abbrSource[1]);
 	}

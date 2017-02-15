@@ -26,8 +26,3 @@
 .table-row-cell:empty .table-cell {
     -fx-border-width: 0px;
 }
-
-.tooltip{
-	-fx-background: rgba(40,40,40);
-	-fx-background-color: rgba(2,17,1,0.8);
-}

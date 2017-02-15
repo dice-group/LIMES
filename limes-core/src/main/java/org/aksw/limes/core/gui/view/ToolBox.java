@@ -144,6 +144,7 @@ public class ToolBox extends VBox {
 			listItems.add(itemString);
 		});
 		
+		//Avoid not on FX application thread problem
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
