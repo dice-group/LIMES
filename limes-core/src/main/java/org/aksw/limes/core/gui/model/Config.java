@@ -193,7 +193,7 @@ public class Config extends Configuration {
 			String targetClass = targetRestriction.substring(targetRestriction.lastIndexOf(" ")).trim();
 			this.sourceEndpoint.setCurrentClassAsString(PrefixHelper.expand(sourceClass));
 			this.targetEndpoint.setCurrentClassAsString(PrefixHelper.expand(targetClass));
-			System.err.println(this.sourceEndpoint.getCurrentClass().getUri() + " " + this.targetEndpoint.getCurrentClass().getUri());
+			logger.debug("Current classes in Endpoints: source class: " + this.sourceEndpoint.getCurrentClass().getUri() + " target class: " + this.targetEndpoint.getCurrentClass().getUri());
 		}else{
 			logger.error("Restrictions that are more complex than \" ?y a prefix:class \" are not yet implemented in the GUI");
 		}

@@ -143,7 +143,13 @@ public class ToolBox extends VBox {
 		items.forEach(itemString -> {
 			listItems.add(itemString);
 		});
-		view.setItems(listItems);
+		
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				view.setItems(listItems);
+			}
+		});
 
 	}
 
