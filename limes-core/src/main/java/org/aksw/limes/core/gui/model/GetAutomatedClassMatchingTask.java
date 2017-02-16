@@ -25,10 +25,6 @@ import javafx.concurrent.Task;
  */
 public class GetAutomatedClassMatchingTask extends Task<ObservableList<AutomatedClassMatchingNode>> {
 	/**
-	 * config
-	 */
-	private Config config;
-	/**
 	 * source info
 	 */
 	private KBInfo sinfo;
@@ -45,37 +41,17 @@ public class GetAutomatedClassMatchingTask extends Task<ObservableList<Automated
 	 */
 	private Model tmodel;
 	/**
-	 * view for displaying progress of task
+	 * constructor
+	 * @param sinfo
+	 * @param tinfo
+	 * @param smodel
+	 * @param tmodel
 	 */
-	private TaskProgressView view;
-	/**
-	 * used for progress
-	 */
-	private int counter;
-	/**
-	 * used for progress
-	 */
-	private int maxSize;
-	/**
-	 * progress
-	 */
-	private double progress;
-
-	/**
-	 * Constructor
-	 * 
-	 * @param info
-	 * @param model
-	 * @param view
-	 */
-	public GetAutomatedClassMatchingTask(KBInfo sinfo, KBInfo tinfo, Model smodel, Model tmodel, TaskProgressView view,
-			Config config) {
+	public GetAutomatedClassMatchingTask(KBInfo sinfo, KBInfo tinfo, Model smodel, Model tmodel) {
 		this.sinfo = sinfo;
 		this.tinfo = tinfo;
 		this.smodel = smodel;
 		this.tmodel = tmodel;
-		this.view = view;
-		this.config = config;
 	}
 
 	/**
@@ -93,8 +69,6 @@ public class GetAutomatedClassMatchingTask extends Task<ObservableList<Automated
 			result.addAll(tmpRes);
 			return result;
 		}
-		counter = 0;
-		progress = 0;
 		result = getAutomatedClassMatchingNodes();
 		// Converting to ArrayList is necessary because ObservableList is not
 		// serializable
@@ -132,18 +106,6 @@ public class GetAutomatedClassMatchingTask extends Task<ObservableList<Automated
 				}
 			}
 		}
-		// counter++;
-		// double tmpProgress = (double) counter / maxSize;
-		// Platform.runLater(new Runnable() {
-		// @Override
-		// public void run() {
-		// view.getInformationLabel().set("Getting: " + class_);
-		// if (tmpProgress > progress) {
-		// progress = tmpProgress;
-		// view.getProgressBar().setProgress(progress);
-		// }
-		// }
-		// });
 		return result;
 	}
 

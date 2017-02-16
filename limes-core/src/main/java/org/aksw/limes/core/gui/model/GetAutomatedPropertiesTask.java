@@ -1,16 +1,9 @@
 package org.aksw.limes.core.gui.model;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
 import org.aksw.limes.core.gui.util.TaskResultSerializer;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.matching.DefaultPropertyMapper;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.jena.rdf.model.Model;
@@ -18,10 +11,6 @@ import org.apache.jena.rdf.model.Model;
 import javafx.concurrent.Task;
 
 public class GetAutomatedPropertiesTask extends Task<AMapping> {
-    /**
-     * config
-     */
-    private Config config;
     /**
      * source info
      */
@@ -42,38 +31,23 @@ public class GetAutomatedPropertiesTask extends Task<AMapping> {
     private String sourceClass;
     
     private String targetClass;
-    /**
-     * view for displaying progress of task
-     */
-    private TaskProgressView view;
-    /**
-     * used for progress
-     */
-    private int counter;
-    /**
-     * used for progress
-     */
-    private int maxSize;
-    /**
-     * progress
-     */
-    private double progress;
 
     /**
-     * Constructor
-     * @param info
-     * @param model
-     * @param view
+     * constructor
+     * @param sinfo
+     * @param tinfo
+     * @param smodel
+     * @param tmodel
+     * @param sourceClass
+     * @param targetClass
      */
-    public GetAutomatedPropertiesTask(KBInfo sinfo, KBInfo tinfo, Model smodel, Model tmodel, String sourceClass, String targetClass, TaskProgressView view, Config config) {
+    public GetAutomatedPropertiesTask(KBInfo sinfo, KBInfo tinfo, Model smodel, Model tmodel, String sourceClass, String targetClass) {
         this.sinfo = sinfo;
         this.tinfo = tinfo;
         this.smodel = smodel;
         this.tmodel = tmodel;
         this.sourceClass = sourceClass;
         this.targetClass = targetClass;
-        this.view = view;
-        this.config = config;
     }
 
     /**
@@ -87,8 +61,6 @@ public class GetAutomatedPropertiesTask extends Task<AMapping> {
 		result = (AMapping) serializedResult;
 	    return result;
 	}
-        counter = 0;
-        progress = 0;
         result = getAutomatedPropertyMatching();
         TaskResultSerializer.serializeTaskResult(this, result);
         return result;
@@ -100,7 +72,6 @@ public class GetAutomatedPropertiesTask extends Task<AMapping> {
      * @return
      */
     private AMapping getAutomatedPropertyMatching() {
-//        maxSize += classes.size(); 
         if (isCancelled()) {
             return null;
         }
@@ -111,18 +82,6 @@ public class GetAutomatedPropertiesTask extends Task<AMapping> {
         	mapper = new DefaultPropertyMapper();
         }
         AMapping result = mapper.getPropertyMapping(sinfo.getEndpoint(), tinfo.getEndpoint(), sourceClass, targetClass);
-//                counter++;
-//                double tmpProgress = (double) counter / maxSize;
-//                Platform.runLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        view.getInformationLabel().set("Getting: " + class_);
-//                        if (tmpProgress > progress) {
-//                            progress = tmpProgress;
-//                            view.getProgressBar().setProgress(progress);
-//                        }
-//                    }
-//                });
 
         return result;
     }

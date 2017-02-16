@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
- * used to display classes in {@link org.aksw.limes.core.gui.view.EditAutomatedClassMatchingView}
+ * used to display classes in org.aksw.limes.core.gui.view.EditAutomatedClassMatchingView
  * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
  *         studserv.uni-leipzig.de{@literal >}
  *
@@ -35,7 +35,6 @@ public class AutomatedClassMatchingNode implements Serializable {
      * constructor
      * @param sourceUri source uri of class
      * @param targetUri target uri of class
-     * @param children children of class
      */
     public AutomatedClassMatchingNode(URI sourceUri, URI targetUri) {
         this.sourceUri = sourceUri;

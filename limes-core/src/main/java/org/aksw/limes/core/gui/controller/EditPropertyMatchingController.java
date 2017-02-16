@@ -77,7 +77,7 @@ public class EditPropertyMatchingController implements IEditController {
 		GetAutomatedPropertiesTask getPropertiesTask = new GetAutomatedPropertiesTask(config.getSourceInfo(),
 				config.getTargetInfo(), config.getSourceEndpoint().getModel(), config.getTargetEndpoint().getModel(),
 				config.getSourceEndpoint().getCurrentClass().getUri().toString(),
-				config.getTargetEndpoint().getCurrentClass().getUri().toString(), taskProgressView, config);
+				config.getTargetEndpoint().getCurrentClass().getUri().toString());
 		taskProgressView = new TaskProgressView("Getting properties");
 		TaskProgressController taskProgressController = new TaskProgressController(taskProgressView);
 		taskProgressController.addTask(getPropertiesTask, properties -> {

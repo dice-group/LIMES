@@ -76,8 +76,7 @@ public class EditClassMatchingController implements IEditController {
 		taskProgressView = new TaskProgressView("Get classes");
 
 		GetAutomatedClassMatchingTask getClassesTask = new GetAutomatedClassMatchingTask(config.getSourceInfo(),
-				config.getTargetInfo(), config.getSourceEndpoint().getModel(), config.getTargetEndpoint().getModel(),
-				taskProgressView, config);
+				config.getTargetInfo(), config.getSourceEndpoint().getModel(), config.getTargetEndpoint().getModel());
 		TaskProgressController taskProgressController = new TaskProgressController(taskProgressView);
 		taskProgressController.addTask(getClassesTask, items -> {
 			view.showTable(items);

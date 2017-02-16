@@ -53,7 +53,6 @@ public interface IEditController {
 
     /**
      * checks if automation is possible calls {@link IEditView#setAutomated(boolean)} with the result
-     * @return
      */
 	public void checkIfAutomationIsPossible();
 }
