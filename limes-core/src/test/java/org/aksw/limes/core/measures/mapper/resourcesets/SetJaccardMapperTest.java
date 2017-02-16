@@ -28,6 +28,6 @@ public class SetJaccardMapperTest {
         AMapping mapping1 = mapper.getMapping(s, t, "?x", "?y", "set_jaccard(x.movies, y.movies)", 0.4d);
         AMapping mapping2 = MappingFactory.createDefaultMapping();
         mapping2.add("spielberg", "spilberg", 0.5d);
-        assertEquals(mapping1, mapping2);
+        assertEquals(mapping2, mapping1);
     }
 }

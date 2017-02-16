@@ -11,6 +11,8 @@ The following optional command line flags and options are available:
 
 * `-f $format` sets the format of configuration file. Possible values for `$format` are`"XML"` (default) or `"RDF"`
 * `-g` runs the GUI version
+* `-s` runs the LIMES server
+* `-p $port` used to specify port of LIMES server, defaults to port 8080
 * `-h` prints out a help message
 * `-o $file_path` sets the path of the logging file
 

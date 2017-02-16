@@ -35,9 +35,10 @@ import org.slf4j.LoggerFactory;
  */
 public class Controller {
 
+    public static final String DEFAULT_LOGGING_PATH = "limes.log";
     private static final int MAX_ITERATIONS_NUMBER = 10;
     private static final Logger logger = LoggerFactory.getLogger(Controller.class.getName());
-    public static final String DEFAULT_LOGGING_PATH = "limes.log";
+    private static int serverPort = 8080;
     private static Options options = getOptions();
 
     /**
@@ -47,10 +48,33 @@ public class Controller {
      *            Command line arguments
      */
     public static void main(String[] args) {
-        CommandLine cl = parseCommandLine(args);
-        Configuration config = getConfig(cl);
-        ResultMappings mappings = getMapping(config);
-        writeResults(mappings, config);
+        // I. Configure Logger
+        CommandLine cmd = parseCommandLine(args);
+        System.setProperty("logFilename", cmd.hasOption('o') ? cmd.getOptionValue("o") : DEFAULT_LOGGING_PATH);
+        ((org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false)).reconfigure();
+        // II. Digest Options
+        if (cmd.hasOption('h')) {
+            printHelp();
+            System.exit(0);
+        } else if (cmd.hasOption('g')){
+            LimesGUI.startGUI(new String[0]);
+            System.exit(0);
+        } else if (cmd.hasOption('s')){
+            int port = serverPort;
+            if (cmd.hasOption('p')) port = Integer.parseInt(cmd.getOptionValue('p'));
+            SimpleServer.startServer(port);
+        } else {
+            // III. Has Arguments?
+            if (cmd.getArgs().length < 1) {
+                logger.error("Error:\n\t Please specify a configuration file to use!");
+                printHelp();
+                System.exit(1);
+            }
+
+            Configuration config = getConfig(cmd);
+            ResultMappings mappings = getMapping(config);
+            writeResults(mappings, config);
+        }
     }
 
     public static CommandLine parseCommandLine(String[] args) {
@@ -67,24 +91,6 @@ public class Controller {
     }
 
     public static Configuration getConfig(CommandLine cmd) {
-        if (cmd.hasOption('h')) {
-            printHelp();
-            System.exit(0);
-        }
-        if (cmd.hasOption('g')){
-            LimesGUI.startGUI(new String[0]);
-            System.exit(0);
-        }
-        // I. Has Argument?
-        if (cmd.getArgs().length < 1) {
-            logger.error("Error:\n\t Please specify a configuration file to use!");
-            printHelp();
-            System.exit(1);
-        }
-        // II. Configure Logger
-        System.setProperty("logFilename", cmd.hasOption('o') ? cmd.getOptionValue("o") : DEFAULT_LOGGING_PATH);
-        ((org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false)).reconfigure();
-
         // 1. Determine appropriate ConfigurationReader
         String format = "xml";
         String fileNameOrUri = cmd.getArgs()[0];
@@ -184,10 +190,12 @@ public class Controller {
     private static Options getOptions() {
         Options options = new Options();
         options.addOption("g", false, "Run LIMES GUI");
+        options.addOption("s", false, "Run LIMES Server");
         options.addOption("h", false, "Show this help");
         options.addOption("o", true, "Set path of log file. Default is 'limes.log'");
         options.addOption("f", true, "Optionally configure format of <config_file_or_uri>, either \"xml\" (default) or " +
                 "\"rdf\". If not specified, LIMES tries to infer the format from file ending.");
+        options.addOption("p", true, "Optionally configure HTTP server port. Only effective if -s is specified. Default port is 8080.");
         // options.addOption("s", false, "Silent run");
         // options.addOption("v", false, "Verbose run");
         return options;

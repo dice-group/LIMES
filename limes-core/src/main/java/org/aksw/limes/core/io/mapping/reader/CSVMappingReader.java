@@ -118,7 +118,6 @@ public class CSVMappingReader extends AMappingReader {
      * source URIs Second column contains Target URIs Third column contains
      * similarity
      *
-     *            read the mapping from
      * @return AMapping object contains the mapping
      */
     public AMapping readThreeColumnFileWithSimilarity() {
