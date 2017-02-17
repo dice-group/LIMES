@@ -491,6 +491,7 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 		</dependency>
+<!-- removed until fix for headless gui tests and travis is found
 		<dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>testfx-core</artifactId>
@@ -511,14 +512,14 @@
 			<artifactId>openjfx-monocle</artifactId>
 			<version>1.8.0_20</version>
 		</dependency>
-
-    <dependency>
-      <groupId>com.oracle</groupId>
-      <artifactId>javafx</artifactId>
-      <version>2.2.3</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/jfxrt.jar</systemPath>
-    </dependency>
+-->
+	    <dependency>
+	      <groupId>com.oracle</groupId>
+	      <artifactId>javafx</artifactId>
+	      <version>2.2.3</version>
+	      <scope>system</scope>
+	      <systemPath>${project.basedir}/lib/jfxrt.jar</systemPath>
+	    </dependency>
 
 		<dependency>
 			<groupId>fr.ign.cogit</groupId>
