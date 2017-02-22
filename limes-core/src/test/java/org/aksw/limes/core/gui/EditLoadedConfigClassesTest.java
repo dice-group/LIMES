@@ -2,20 +2,22 @@ package org.aksw.limes.core.gui;
 
 import java.io.File;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import org.aksw.limes.core.gui.controller.MainController;
+import org.aksw.limes.core.gui.model.ClassMatchingNode;
 import org.aksw.limes.core.gui.view.MainView;
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.loadui.testfx.GuiTest;
+import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
-import org.testfx.matcher.base.NodeMatchers;
-import static org.loadui.testfx.controls.Commons.hasText;
+
+import javafx.scene.control.TreeView;
 import javafx.stage.Stage;
+
+import static org.junit.Assert.assertNotNull;
 
 public class EditLoadedConfigClassesTest extends ApplicationTest{
 
@@ -44,9 +46,9 @@ public class EditLoadedConfigClassesTest extends ApplicationTest{
         System.setProperty("java.awt.headless", "true");
 
         //Verbose options
-        System.setProperty("prism.verbose", "true");
-        System.setProperty("quantum.verbose", "true");
-        System.setProperty("javafx.verbose", "true");
+//        System.setProperty("prism.verbose", "true");
+//        System.setProperty("quantum.verbose", "true");
+//        System.setProperty("javafx.verbose", "true");
 	}
 	
 	
@@ -55,9 +57,10 @@ public class EditLoadedConfigClassesTest extends ApplicationTest{
 		clickOn("Configuration");
 		clickOn("Edit");
 		clickOn("Edit Classes");
-		//Ensure loading is finished
-		//FIXME not the best method to do this
-		sleep(1, TimeUnit.SECONDS);
+		GuiTest.waitUntil("#sourceTreeView", Matchers.notNullValue());
+		TreeView<ClassMatchingNode> tv = new FxRobot().lookup("#sourceTreeView").query();
+		assertNotNull(tv);
+		GuiTest.waitUntil(tv, t -> t.isVisible());
 		clickOn("#sourceTreeView");
 		clickOn("#targetTreeView");
 		clickOn("Next");

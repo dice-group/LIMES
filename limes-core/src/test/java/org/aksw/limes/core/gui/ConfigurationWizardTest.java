@@ -45,9 +45,9 @@ public class ConfigurationWizardTest extends ApplicationTest{
         System.setProperty("java.awt.headless", "true");
 
         //Verbose options
-        System.setProperty("prism.verbose", "true");
-        System.setProperty("quantum.verbose", "true");
-        System.setProperty("javafx.verbose", "true");
+//        System.setProperty("prism.verbose", "true");
+//        System.setProperty("quantum.verbose", "true");
+//        System.setProperty("javafx.verbose", "true");
 	}
 	
 	@Test

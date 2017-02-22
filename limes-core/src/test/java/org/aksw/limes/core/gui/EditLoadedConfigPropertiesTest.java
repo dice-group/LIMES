@@ -5,12 +5,18 @@ import java.util.Locale;
 
 import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.view.MainView;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.loadui.testfx.GuiTest;
+import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+
+import static org.junit.Assert.assertNotNull;
 
 public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 
@@ -37,11 +43,6 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest{
         System.setProperty("prism.order", "sw");
         System.setProperty("prism.text", "t2k");
         System.setProperty("java.awt.headless", "true");
-
-        //Verbose options
-        System.setProperty("prism.verbose", "true");
-        System.setProperty("quantum.verbose", "true");
-        System.setProperty("javafx.verbose", "true");
 	}
 	
 	@Test
@@ -51,6 +52,10 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 		//Necessary because otherwise the sub-menu vanishes
 		moveTo("Edit Classes");
 		clickOn("Edit Properties");
+		GuiTest.waitUntil("#sourcePropList", Matchers.notNullValue());
+		ListView<String> tv = new FxRobot().lookup("#sourcePropList").query();
+		assertNotNull(tv);
+		GuiTest.waitUntil(tv, t -> t.isVisible());
 		clickOn("#sourcePropList");
 		clickOn("#targetPropList");
 		clickOn("Finish");

@@ -4,13 +4,15 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import org.aksw.limes.core.gui.controller.MainController;
+import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.view.MainView;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.loadui.testfx.GuiTest;
 import org.testfx.framework.junit.ApplicationTest;
 
 import javafx.stage.Stage;
@@ -25,6 +27,8 @@ public class SaveAndLoadConfigTest extends ApplicationTest{
 	 * There is a rename operation in the xml config that cannot be represented in ttl therefore this has to have rdfs:label instead of name
 	 */
 	private static final String testMetricExpression = "or(jaccard(x.rdfs:label,y.rdfs:label)|0.8,cosine(x.rdfs:label,y.rdfs:label)|0.9)";
+	
+	private static final File changedTestConfig = new File("src/test/resources/gui/changedTestConfig.ttl");
 	
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -46,18 +50,11 @@ public class SaveAndLoadConfigTest extends ApplicationTest{
         System.setProperty("prism.order", "sw");
         System.setProperty("prism.text", "t2k");
         System.setProperty("java.awt.headless", "true");
-        
-        //Verbose options
-        System.setProperty("prism.verbose", "true");
-        System.setProperty("quantum.verbose", "true");
-        System.setProperty("javafx.verbose", "true");
 	}
 	
 	@Test
 	public void changeSaveAndLoadConfig(){
 		changeAndSaveConfig();
-		//FIXME maybe not the ideal way to wait until everything is finished
-		sleep(1, TimeUnit.SECONDS);
 		loadNewConfig();
 	}
 	
@@ -65,13 +62,26 @@ public class SaveAndLoadConfigTest extends ApplicationTest{
 	public void changeAndSaveConfig(){
 		mainController.getCurrentConfig().setMetricExpression(newMetricExpression);
 		mainView.graphBuild.graphBuildController.generateGraphFromConfig();
-		//FIXME maybe not the ideal way to wait until everything is finished
-		sleep(1, TimeUnit.SECONDS);
-		mainController.saveConfig(new File("src/test/resources/gui/changedTestConfig.ttl"));
+		GuiTest.waitUntil("Drug properties", Matchers.notNullValue());
+		mainController.saveConfig(changedTestConfig);
 	}
 	
 	public void loadNewConfig(){
-		mainController.loadConfig(new File(Thread.currentThread().getContextClassLoader().getResource("gui/changedTestConfig.ttl").getFile()));
+		int timeoutCounter = 15;
+		mainController.loadConfig(changedTestConfig);
+		Config c = mainController.getCurrentConfig();
+		while(c == null && timeoutCounter != 0)
+		{
+		  try {
+			  mainController.loadConfig(changedTestConfig);
+			  c = mainController.getCurrentConfig();
+			  timeoutCounter --;
+			  Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
 		assertEquals(testMetricExpression, mainController.getCurrentConfig().getMetricExpression());
 	}
 }
