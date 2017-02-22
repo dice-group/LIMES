@@ -57,10 +57,20 @@ public class EditLoadedConfigClassesTest extends ApplicationTest{
 		clickOn("Configuration");
 		clickOn("Edit");
 		clickOn("Edit Classes");
-		GuiTest.waitUntil("#sourceTreeView", Matchers.notNullValue());
+
+		int timeoutCounter = 15;
 		TreeView<ClassMatchingNode> tv = new FxRobot().lookup("#sourceTreeView").query();
-		assertNotNull(tv);
-		GuiTest.waitUntil(tv, t -> t.isVisible());
+		while(tv == null && timeoutCounter != 0)
+		{
+		  try {
+			  tv = new FxRobot().lookup("#sourceTreeView").query();
+			  timeoutCounter --;
+			  Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
 		clickOn("#sourceTreeView");
 		clickOn("#targetTreeView");
 		clickOn("Next");

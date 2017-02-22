@@ -52,10 +52,19 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 		//Necessary because otherwise the sub-menu vanishes
 		moveTo("Edit Classes");
 		clickOn("Edit Properties");
-		GuiTest.waitUntil("#sourcePropList", Matchers.notNullValue());
+		int timeoutCounter = 15;
 		ListView<String> tv = new FxRobot().lookup("#sourcePropList").query();
-		assertNotNull(tv);
-		GuiTest.waitUntil(tv, t -> t.isVisible());
+		while(tv == null && timeoutCounter != 0)
+		{
+		  try {
+			  tv = new FxRobot().lookup("#sourcePropList").query();
+			  timeoutCounter --;
+			  Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
 		clickOn("#sourcePropList");
 		clickOn("#targetPropList");
 		clickOn("Finish");
