@@ -37,6 +37,11 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest{
         System.setProperty("prism.order", "sw");
         System.setProperty("prism.text", "t2k");
         System.setProperty("java.awt.headless", "true");
+
+        //Verbose options
+        System.setProperty("prism.verbose", "true");
+        System.setProperty("quantum.verbose", "true");
+        System.setProperty("javafx.verbose", "true");
 	}
 	
 	@Test
