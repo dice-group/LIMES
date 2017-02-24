@@ -37,7 +37,7 @@ public class Controller {
 
     public static final String DEFAULT_LOGGING_PATH = "limes.log";
     private static final int MAX_ITERATIONS_NUMBER = 10;
-    private static final Logger logger = LoggerFactory.getLogger(Controller.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
     private static int serverPort = 8080;
     private static Options options = getOptions();
 
