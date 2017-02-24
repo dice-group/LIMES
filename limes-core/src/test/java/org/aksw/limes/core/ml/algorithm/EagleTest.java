@@ -108,8 +108,8 @@ public class EagleTest {
         AMapping resultMap = eagleSup.predict(sc, tc, mlModel);
         logger.info(resultMap.toString());
         
-        assert (resultMap.toString().equals("[ex:i3 -> (ex:i3|1.0)]\n[ex:i3 -> (ex:i1|0.5)]\n"
-        		+ "[ex:i1 -> (ex:i3|0.5)]\n[ex:i1 -> (ex:i1|1.0)]"));   
+        assert (resultMap.equals(refMap));
+        
     }
 
     @Test
@@ -133,7 +133,8 @@ public class EagleTest {
         AMapping resultMap = eagleUnsup.predict(sc, tc, mlModel);
         logger.info(resultMap.toString());
         
-        assert (resultMap.toString().equals("[ex:i3 -> (ex:i3|1.0)]\n[ex:i1 -> (ex:i1|1.0)]"));     
+        assert (resultMap.equals(refMap));
+
     }
 
 }
