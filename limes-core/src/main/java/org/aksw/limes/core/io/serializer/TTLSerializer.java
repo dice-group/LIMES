@@ -41,17 +41,13 @@ public class TTLSerializer implements ISerializer {
     /**
      * Adds a statement to the list of statements to be printed
      *
-     * @param subject
-     *         Subject of the triple
-     * @param predicate
-     *         Predicate of the triple
-     * @param object
-     *         Object of the triple
-     * @param similarity
-     *         Similarity of subject and object
+     * @param subject Subject of the triple
+     * @param predicate Predicate of the triple
+     * @param object Object of the triple
+     * @param similarity Similarity of subject and object
      */
     public void addStatement(String subject, String predicate, String object, double similarity) {
-        statements.add("<" + subject + "> " + predicate + " <" + object + "> .");
+        statements.add("<" + subject + "> <" + predicate + "> <" + object + "> .");
     }
 
     /*
@@ -73,22 +69,25 @@ public class TTLSerializer implements ISerializer {
      * Write the content of the mapping including the expansion of the prefixes
      * to a file
      *
-     * @param m Mapping to be written
+     * @param mapping Mapping to be written
      * @param predicate mapping predicate used to connect subjects and objects
      * @param file Output file
      */
-    public void writeToFile(AMapping m, String predicate, String file) {
+    public void writeToFile(AMapping mapping, String predicate, String file) {
         open(file);
         printPrefixes();
         statements = new TreeSet<String>();
-        for (String s : m.getMap().keySet()) {
-            for (String t : m.getMap().get(s).keySet()) {
-                writer.println("<" + s + "> " + predicate + " <" + t + "> .");
+        for (String s : mapping.getMap().keySet()) {
+            for (String t : mapping.getMap().get(s).keySet()) {
+                writer.println("<" + s + "> <" + predicate + "> <" + t + "> .");
             }
         }
         close();
     }
 
+    /**
+     * Print prefixes
+     */
     public void printPrefixes() {
         try {
             Iterator<String> iter = prefixList.keySet().iterator();
@@ -102,9 +101,12 @@ public class TTLSerializer implements ISerializer {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.aksw.limes.core.io.serializer.ISerializer#printStatement(java.lang.String, java.lang.String, java.lang.String, double)
+     */
     public void printStatement(String subject, String predicate, String object, double similarity) {
         try {
-            writer.println("<" + subject + "> " + predicate + " <" + object + "> .");
+            writer.println("<" + subject + "> <" + predicate + "> <" + object + "> .");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e);
@@ -112,6 +114,9 @@ public class TTLSerializer implements ISerializer {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.aksw.limes.core.io.serializer.ISerializer#close()
+     */
     public boolean close() {
         try {
             if (statements.size() > 0) {
@@ -128,6 +133,9 @@ public class TTLSerializer implements ISerializer {
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see org.aksw.limes.core.io.serializer.ISerializer#open(java.lang.String)
+     */
     public boolean open(String file) {
         try {
             // if no parent folder is given, then take that of the config that was set by the controller
@@ -150,6 +158,9 @@ public class TTLSerializer implements ISerializer {
         return "TtlSerializer";
     }
 
+    /* (non-Javadoc)
+     * @see org.aksw.limes.core.io.serializer.ISerializer#setPrefixes(java.util.Map)
+     */
     public void setPrefixes(Map<String, String> prefixes) {
         prefixList = prefixes;
     }

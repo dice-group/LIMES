@@ -1,5 +1,9 @@
 package org.aksw.limes.core.io.parser;
 
+import org.aksw.limes.core.exceptions.InvalidMeasureException;
+import org.aksw.limes.core.exceptions.UnsupportedOperator;
+import org.aksw.limes.core.measures.measure.MeasureFactory;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,14 +30,12 @@ public class Parser implements IParser {
     private double threshold1;
     private double threshold2;
 
-
     public Parser(String input, double theta) {
         expression = input.replaceAll(" ", "");
-        //expression = expression.toLowerCase();
+        // expression = expression.toLowerCase();
         setThreshold(theta);
         getTerms();
     }
-
 
     /**
      * Tests whether an expression is atomic or not
@@ -42,20 +44,28 @@ public class Parser implements IParser {
      */
     @Override
     public boolean isAtomic() {
-        //tests for operation labels. If they can be found, then our expression
-        //is not atomic
+        // tests for operation labels. If they can be found, then our expression
+        // is not atomic
         String copy = expression.toLowerCase();
-        if (!copy.startsWith("max(") && !copy.startsWith("min(")
-                && !copy.startsWith("and(") && !copy.startsWith("or(")
-                && !copy.startsWith("add(") && !copy.startsWith("xor(")
-                && !copy.startsWith("minus(") && !copy.startsWith("mult(")
-                && !copy.startsWith("diff(")) {
-            return true;
-        } else {
-            return false;
+        try {
+            if (MeasureFactory.getMeasureType(copy) != null)
+                return true;
+        } catch (InvalidMeasureException e) {
+            if (copy.startsWith("max(") || copy.startsWith("min(") || copy.startsWith("and(") || copy.startsWith("or(")
+                    || copy.startsWith("add(") || copy.startsWith("xor(") || copy.startsWith("minus(")
+                    || copy.startsWith("mult(") || copy.startsWith("diff(")) {
+                return false;
+            } else {
+                int index = copy.indexOf("(");
+                String wrongOperator = copy.substring(0, index);
+                if (StringUtils.countMatches(copy, ",") == 1) {
+                    throw new InvalidMeasureException(wrongOperator);
+                } else
+                    throw new UnsupportedOperator(wrongOperator);
+            }
         }
+        return false;
     }
-
 
     public String getLeftTerm() {
         return leftTerm;
@@ -79,8 +89,8 @@ public class Parser implements IParser {
             } catch (Exception e) {
                 logger.warn("Error parsing " + leftTerm + " for coefficient <" + leftCoefficient + ">");
                 leftCoefficient = 1;
-                //e.printStackTrace();
-                //logger.warn(e.getStackTrace()[0].toString());
+                // e.printStackTrace();
+                // logger.warn(e.getStackTrace()[0].toString());
             }
         }
         return leftCoefficient;
@@ -115,7 +125,7 @@ public class Parser implements IParser {
             boolean found = false;
             operator = expression.substring(0, expression.indexOf("("));
             String noOpExpression = expression.substring(expression.indexOf("(") + 1, expression.lastIndexOf(")"));
-            //get terms
+            // get terms
             logger.debug("Expression stripped from operator = " + noOpExpression);
             for (int i = 0; i < noOpExpression.length(); i++) {
                 if (noOpExpression.charAt(i) == '(') {
@@ -132,8 +142,8 @@ public class Parser implements IParser {
 
             getLeftCoefficient();
             getRightCoefficient();
-            //now compute thresholds based on operations
-            //first numeric operations
+            // now compute thresholds based on operations
+            // first numeric operations
             if (operator.equalsIgnoreCase(MIN) || operator.equalsIgnoreCase(MAX)) {
                 setThreshold1(getThreshold());
                 setThreshold2(getThreshold());
@@ -145,17 +155,17 @@ public class Parser implements IParser {
                 operator = MULT;
                 setThreshold1(getThreshold() / (rightCoefficient * leftCoefficient));
                 setThreshold2(getThreshold1());
-            } //now set constraints. separator for sets and thresholds is |
-            //thus one can write
-            // AND(sim(a,b)|0.5,sim(b,d)|0.7)
-            // and then set global threshold to the minimal value wanted
+            } // now set constraints. separator for sets and thresholds is |
+              // thus one can write
+              // AND(sim(a,b)|0.5,sim(b,d)|0.7)
+              // and then set global threshold to the minimal value wanted
             else {
                 int index = leftTerm.lastIndexOf("|");
                 String t;
                 String set1 = leftTerm.substring(0, index);
                 logger.debug("LeftTerm filtered = " + set1);
                 t = leftTerm.substring(index + 1, leftTerm.length());
-                logger.debug("Term = " + set1 + ", filter = "+ t);
+                logger.debug("Term = " + set1 + ", filter = " + t);
                 setThreshold1(Double.parseDouble(t));
                 leftTerm = set1;
                 index = rightTerm.lastIndexOf("|");
@@ -166,7 +176,7 @@ public class Parser implements IParser {
                 setThreshold2(Double.parseDouble(t));
                 rightTerm = set2;
             }
-        }//atomic
+        } // atomic
         else {
             operator = expression.substring(0, expression.indexOf("("));
             String noOpExpression = expression.substring(expression.indexOf("(") + 1, expression.lastIndexOf(")"));
@@ -176,14 +186,12 @@ public class Parser implements IParser {
         }
     }
 
-
     /**
      * @return threshold2
      */
     public double getThreshold2() {
         return threshold2;
     }
-
 
     /**
      * @param threshold2
@@ -192,21 +200,17 @@ public class Parser implements IParser {
         this.threshold2 = threshold2;
     }
 
-
     public double getThreshold1() {
         return threshold1;
     }
-
 
     public void setThreshold1(double threshold1) {
         this.threshold1 = threshold1;
     }
 
-
     public double getThreshold() {
         return threshold;
     }
-
 
     public void setThreshold(double threshold) {
         this.threshold = threshold;

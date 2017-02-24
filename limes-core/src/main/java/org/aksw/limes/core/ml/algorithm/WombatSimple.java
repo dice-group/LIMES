@@ -15,8 +15,8 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
-import org.aksw.limes.core.ml.algorithm.wombat.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.wombat.LinkEntropy;
 import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;
 import org.slf4j.Logger;
@@ -30,12 +30,9 @@ import org.slf4j.LoggerFactory;
  * @version Jun 7, 2016
  */
 public class WombatSimple extends AWombat {
-    protected static final String ALGORITHM_NAME = "Wombat Simple";
-
-    protected int activeLearningRate = 3;
-
     protected static Logger logger = LoggerFactory.getLogger(WombatSimple.class);
-
+    protected static final String ALGORITHM_NAME = "Wombat Simple";
+    protected int activeLearningRate = 3;
     protected RefinementNode bestSolutionNode = null;
     protected List<ExtendedClassifier> classifiers = null;
     protected int iterationNr = 0;
@@ -68,20 +65,23 @@ public class WombatSimple extends AWombat {
     }
 
     /**
-     * @return wrap with results
+     * @return wrap with results, null if no result found 
      */
     private MLResults learn() {
         if (bestSolutionNode == null) { // not to do learning twice
             bestSolutionNode = findBestSolution();
         }
         String bestMetricExpr = bestSolutionNode.getMetricExpression();
-        System.out.println("bestMetricExpr: " + bestMetricExpr);
-        double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|") + 1, bestMetricExpr.length()));
-        AMapping bestMapping = bestSolutionNode.getMapping();
-        LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
-        double bestFMeasure = bestSolutionNode.getFMeasure();
-        MLResults result = new MLResults(bestLS, bestMapping, bestFMeasure, null);
-        return result;
+        if(!bestMetricExpr.equals("")){
+            double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|") + 1, bestMetricExpr.length()));
+            AMapping bestMapping = bestSolutionNode.getMapping();
+            LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
+            double bestFMeasure = bestSolutionNode.getFMeasure();
+            MLResults result = new MLResults(bestLS, bestMapping, bestFMeasure, null);
+            return result;
+        }
+        // case no mapping found
+        return null;
     }
 
     @Override
@@ -150,7 +150,7 @@ public class WombatSimple extends AWombat {
         }
         return result;
     }
-    
+
     @Override
     protected MLResults activeLearn(){
         return learn(new PseudoFMeasure());
@@ -202,15 +202,15 @@ public class WombatSimple extends AWombat {
     public RefinementNode findBestSolution() {
         classifiers = findInitialClassifiers();
         createRefinementTreeRoot();
-        Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, overallPenaltyWeight);
+        Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, getOverAllPenaltyWeight() );
         logger.debug("Most promising node: " + mostPromisingNode.getValue());
         iterationNr++;
-        while ((mostPromisingNode.getValue().getFMeasure()) < maxFitnessThreshold
-                && refinementTreeRoot.size() <= maxRefineTreeSize
-                && iterationNr <= maxIterationNumber) {
+        while ((mostPromisingNode.getValue().getFMeasure()) < getMaxFitnessThreshold()
+                && refinementTreeRoot.size() <= getMaxRefinmentTreeSize()
+                && iterationNr <= getMaxIterationNumber()) {
             iterationNr++;
             mostPromisingNode = expandNode(mostPromisingNode);
-            mostPromisingNode = getMostPromisingNode(refinementTreeRoot, overallPenaltyWeight);
+            mostPromisingNode = getMostPromisingNode(refinementTreeRoot, getOverAllPenaltyWeight());
             if (mostPromisingNode.getValue().getFMeasure() == -Double.MAX_VALUE) {
                 break; // no better solution can be found
             }
@@ -222,6 +222,8 @@ public class WombatSimple extends AWombat {
     }
 
 
+
+
     /**
      * @return initial classifiers
      */
@@ -230,7 +232,7 @@ public class WombatSimple extends AWombat {
         List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
         for (String p : sourcePropertiesCoverageMap.keySet()) {
             for (String q : targetPropertiesCoverageMap.keySet()) {
-                for (String m : measures) {
+                for (String m : getAtomicMeasures()) {
                     ExtendedClassifier cp = findInitialClassifier(p, q, m);
                     //only add if classifier covers all entries
                     initialClassifiers.add(cp);
@@ -239,38 +241,6 @@ public class WombatSimple extends AWombat {
         }
         logger.debug("Done computing all initial classifiers.");
         return initialClassifiers;
-    }
-
-
-    /**
-     * Computes the atomic classifiers by finding the highest possible F-measure
-     * achievable on a given property pair
-     *
-     * @param sourceProperty Property of source to use
-     * @param targetProperty Property of target to use
-     * @param measure Measure to be used
-     * @return Best simple classifier
-     */
-    private ExtendedClassifier findInitialClassifier(String sourceProperty, String targetProperty, String measure) {
-        double maxOverlap = 0;
-        double theta = 1.0;
-        AMapping bestMapping = MappingFactory.createDefaultMapping();
-        for (double threshold = 1d; threshold > minPropertyCoverage; threshold = threshold * propertyLearningRate) {
-            AMapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
-            double overlap = recall(mapping);
-            if (maxOverlap < overlap) { //only interested in largest threshold with recall 1
-                bestMapping = mapping;
-                theta = threshold;
-                maxOverlap = overlap;
-                bestMapping = mapping;
-            }
-        }
-        ExtendedClassifier cp = new ExtendedClassifier(measure, theta);
-        cp.setfMeasure(maxOverlap);
-        cp.sourceProperty = sourceProperty;
-        cp.targetProperty = targetProperty;
-        cp.setMapping(bestMapping);
-        return cp;
     }
 
 
@@ -316,7 +286,7 @@ public class WombatSimple extends AWombat {
      */
     protected List<RefinementNode> getBestKNodes(Tree<RefinementNode> r, int k) {
         TreeSet<RefinementNode> ts = new TreeSet<>();
-        TreeSet<RefinementNode> sortedNodes = getSortedNodes(r, overallPenaltyWeight, ts);
+        TreeSet<RefinementNode> sortedNodes = getSortedNodes(r, getOverAllPenaltyWeight(), ts);
         List<RefinementNode> resultList = new ArrayList<>();
         int i = 0;
         Iterator<RefinementNode> itr = sortedNodes.descendingIterator();
@@ -353,9 +323,9 @@ public class WombatSimple extends AWombat {
      */
     private double computePenalty(Tree<RefinementNode> promesyChild) {
         long childrenCount = promesyChild.size() - 1;
-        double childrenPenalty = (childrenPenaltyWeight * childrenCount) / refinementTreeRoot.size();
+        double childrenPenalty = (getChildrenPenaltyWeight() * childrenCount) / refinementTreeRoot.size();
         long level = promesyChild.level();
-        double complexityPenalty = (complexityPenaltyWeight * level) / refinementTreeRoot.depth();
+        double complexityPenalty = (getComplexityPenaltyWeight() * level) / refinementTreeRoot.depth();
         return childrenPenalty + complexityPenalty;
     }
 
@@ -387,7 +357,7 @@ public class WombatSimple extends AWombat {
                 }
             }
         }
-        if (verbose) {
+        if (isVerbose()) {
             refinementTreeRoot.print();
         }
         return node;
@@ -407,9 +377,11 @@ public class WombatSimple extends AWombat {
             RefinementNode n = new RefinementNode(c.getfMeasure(), c.getMapping(), c.getMetricExpression());
             refinementTreeRoot.addChild(new Tree<RefinementNode>(refinementTreeRoot, n, null));
         }
-        if (verbose) {
+        if (isVerbose()) {
             refinementTreeRoot.print();
         }
     }
+
+
 
 }

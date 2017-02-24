@@ -71,7 +71,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
     /**
      * Constructor
      * 
-     * @param xmlFile The input XML file
+     * @param xmlFile
+     *            The input XML file
      */
     public XMLConfigurationReader(String xmlFile) {
         super(xmlFile);
@@ -116,7 +117,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
     /**
      * Returns the content of a node
      *
-     * @param  node NODE tag with text
+     * @param node
+     *            NODE tag with text
      * @return The text within the NODE tag
      */
     public static String getText(Node node) {
@@ -216,8 +218,10 @@ public class XMLConfigurationReader extends AConfigurationReader {
      * everything needed. NB: The path to the DTD must be specified in the input
      * file
      *
-     * @param input The input XML file as Stream
-     * @param filePath path of the XML file
+     * @param input
+     *            The input XML file as Stream
+     * @param filePath
+     *            path of the XML file
      * @return true if parsing was successful, else false
      */
     public Configuration validateAndRead(InputStream input, String filePath) {
@@ -234,7 +238,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
                     // System.out.println(systemId);
                     if (systemId.contains("limes.dtd")) {
-//                        String dtd = System.getProperty("user.dir") + "/resources/limes.dtd";
+                        // String dtd = System.getProperty("user.dir") +
+                        // "/resources/limes.dtd";
                         String dtd = getClass().getResource("/limes.dtd").toString();
                         return new InputSource(dtd);
                     } else {
@@ -259,7 +264,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                             label = getText(child);
                         }
                     }
-                    configuration.addPrefixes(label, namespace);
+                    configuration.addPrefix(label, namespace);
                 }
 
                 // 1. Source information
@@ -294,15 +299,17 @@ public class XMLConfigurationReader extends AConfigurationReader {
                                     configuration.setMlTrainingDataFile(getText(child));
                                 } else if (child.getNodeName().equals(PARAMETER)) {
                                     Element e = (Element) child;
-                                    String mlParameterName = getText(e.getElementsByTagName(NAME).item(0).getChildNodes().item(0));
-                                    String mlParameterValue = getText(e.getElementsByTagName(VALUE).item(0).getChildNodes().item(0));
+                                    String mlParameterName = getText(
+                                            e.getElementsByTagName(NAME).item(0).getChildNodes().item(0));
+                                    String mlParameterValue = getText(
+                                            e.getElementsByTagName(VALUE).item(0).getChildNodes().item(0));
                                     configuration.addMlAlgorithmParameter(mlParameterName, mlParameterValue);
                                 }
                             }
                         }
                     } else {
                         logger.error("Niether " + METRIC + " nor " + MLALGORITHM + " is provided, exit with error");
-                        System.exit(1);
+                        throw new RuntimeException();
                     }
                 }
                 // 5. ACCEPTANCE file and conditions

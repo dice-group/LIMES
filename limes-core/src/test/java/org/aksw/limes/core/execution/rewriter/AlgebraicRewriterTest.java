@@ -17,7 +17,7 @@ public class AlgebraicRewriterTest {
         AlgebraicRewriter ar = new AlgebraicRewriter();
         LinkSpecification spec = new LinkSpecification();
         // LinkSpecification spec2 = new LinkSpecification();
-        spec.readSpec("AND(trigrams(x.p, y.p)|0.6, AND(euclidean(x.q, y.q)|0.7, linear(x.s, y.s)|0.7)|0.6)", 0.5);
+        spec.readSpec("AND(trigrams(x.p, y.p)|0.6, AND(euclidean(x.q, y.q)|0.7, cosine(x.s, y.s)|0.7)|0.6)", 0.5);
         // spec2.readSpec("AND(euclidean(x.q, y.q)|0.7, linear(x.s, y.s)|0.7)",
         // 0.7);
         // System.out.println(spec + "\n" + spec2);
@@ -39,7 +39,7 @@ public class AlgebraicRewriterTest {
         specUpdated = ar.updateThresholds(l);
         assertTrue(specUpdated.equals(l));
 
-        spec.readSpec("AND(trigrams(x.p, y.p)|0.3, AND(euclidean(x.q, y.q)|0.3, linear(x.s, y.s)|0.7)|0.6)", 0.5);
+        spec.readSpec("AND(trigrams(x.p, y.p)|0.3, AND(euclidean(x.q, y.q)|0.3, cosine(x.s, y.s)|0.7)|0.6)", 0.5);
         specUpdated = ar.updateThresholds(spec);
         assertTrue(specUpdated.getThreshold() != 0.0d);
         assertTrue(specUpdated.getChildren().get(1).getThreshold() != 0.0d);

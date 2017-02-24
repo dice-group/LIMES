@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.aksw.limes.core.gui.model.metric.Property.Origin;
 
-import com.sun.media.jfxmedia.logging.Logger;
-
 /**
  * Parses Metric to Expression for the Config Reader
  * 
@@ -176,5 +174,9 @@ public class MetricParser {
                     "Error parsing metric expression \"" + s + "\".", e);
         }
         return output;
+    }
+    
+    public static void main(String[]args){
+    	System.out.println();
     }
 }

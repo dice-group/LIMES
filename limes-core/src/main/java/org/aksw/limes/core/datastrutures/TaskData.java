@@ -2,12 +2,10 @@ package org.aksw.limes.core.datastrutures;
 
 import java.util.List;
 
-
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import java.util.*;
 
 /**
  * This class contains all information regarding a dataset used for evaluating an algorithm.<br>

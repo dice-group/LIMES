@@ -11,15 +11,20 @@ import java.util.Set;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.apache.commons.validator.routines.UrlValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jun 3, 2016
  */
 public class Configuration implements IConfiguration {
+    private static final Logger logger = LoggerFactory.getLogger(Configuration.class);
+
 
     private static final String DEFAULT = "default";
-    
+
     protected KBInfo sourceInfo = new KBInfo();
     protected KBInfo targetInfo = new KBInfo();
 
@@ -48,8 +53,8 @@ public class Configuration implements IConfiguration {
     protected String mlAlgorithmName = new String();
     protected List<LearningParameter> mlAlgorithmParameters = new ArrayList<>();
     protected MLImplementationType mlImplementationType = MLImplementationType.UNSUPERVISED;
-    private String mlTrainingDataFile = null;
-    private EvaluatorType mlPseudoFMeasure = null;
+    protected String mlTrainingDataFile = null;
+    protected EvaluatorType mlPseudoFMeasure = null;
 
     public Configuration() {
     }
@@ -61,16 +66,16 @@ public class Configuration implements IConfiguration {
             String mlAlgorithmName, List<LearningParameter> mlParameters, MLImplementationType mlImplementationType,
             String mlTrainingDataFile, EvaluatorType mlPseudoFMeasure) {
         super();
+        this.prefixes = prefixes;
         this.sourceInfo = sourceInfo;
         this.targetInfo = targetInfo;
         this.metricExpression = metricExpression;
-        this.acceptanceRelation = acceptanceRelation;
-        this.verificationRelation = verificationRelation;
+        setAcceptanceRelation(acceptanceRelation);
+        setVerificationRelation(verificationRelation);
         this.acceptanceThreshold = acceptanceThreshold;
         this.acceptanceFile = acceptanceFile;
         this.verificationThreshold = verificationThreshold;
         this.verificationFile = verificationFile;
-        this.prefixes = prefixes;
         this.outputFormat = outputFormat;
         this.executionRewriter = executionRewriter;
         this.executionPlanner = executionPlanner;
@@ -90,7 +95,7 @@ public class Configuration implements IConfiguration {
         this.mlAlgorithmParameters.add(lp);
     }
 
-    public void addPrefixes(String label, String namespace) {
+    public void addPrefix(String label, String namespace) {
         this.prefixes.put(label, namespace);
     }
 
@@ -175,6 +180,20 @@ public class Configuration implements IConfiguration {
     }
 
     public void setAcceptanceRelation(String acceptanceRelation) {
+    	if(new UrlValidator().isValid(acceptanceRelation)){
+    		this.acceptanceRelation = acceptanceRelation;
+    		return;
+    	}
+        if(acceptanceRelation.contains(":")){
+            String prefix = acceptanceRelation.substring(0,acceptanceRelation.indexOf(":"));
+            if(prefixes.containsKey(prefix)){
+                String prefixURI = prefixes.get(prefix);
+                acceptanceRelation = acceptanceRelation.replace(prefix + ":", prefixURI);
+            }else{
+                logger.error("Undefined prefix: " + prefix);
+                throw new RuntimeException();
+            }
+        }
         this.acceptanceRelation = acceptanceRelation;
     }
 
@@ -223,9 +242,23 @@ public class Configuration implements IConfiguration {
     }
 
     public void setVerificationRelation(String verificationRelation) {
+    	if(new UrlValidator().isValid(verificationRelation)){
+    		this.verificationRelation = verificationRelation;
+    		return;
+    	}
+        if(verificationRelation.contains(":")){
+            String prefix = verificationRelation.substring(0,verificationRelation.indexOf(":"));
+            if(prefixes.containsKey(prefix)){
+                String prefixURI = prefixes.get(prefix);
+                verificationRelation = verificationRelation.replace(prefix + ":", prefixURI);
+            }else{
+                logger.error("Undefined prefix: " + prefix);
+                throw new RuntimeException();
+            }
+        }
         this.verificationRelation = verificationRelation;
     }
-
+    
     public void setVerificationThreshold(double verificationThreshold) {
         this.verificationThreshold = verificationThreshold;
     }

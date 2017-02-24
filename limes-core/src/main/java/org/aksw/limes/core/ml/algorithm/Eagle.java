@@ -129,7 +129,7 @@ public class Eagle extends ACoreMLAlgorithm {
     @Override
     protected MLResults learn(PseudoFMeasure pfm) {
 
-    	parameters.add(new LearningParameter(PSEUDO_FMEASURE, pfm, PseudoFMeasure.class, 
+    	learningParameters.add(new LearningParameter(PSEUDO_FMEASURE, pfm, PseudoFMeasure.class, 
     			Double.NaN, Double.NaN, Double.NaN, PSEUDO_FMEASURE));
     	
 		try {
@@ -182,22 +182,22 @@ public class Eagle extends ACoreMLAlgorithm {
     @Override
     public void setDefaultParameters() {
         
-        parameters = new ArrayList<>();
-    	parameters.add(new LearningParameter(GENERATIONS, 10, Integer.class, 1, Integer.MAX_VALUE, 1, GENERATIONS));
-    	parameters.add(new LearningParameter(PRESERVE_FITTEST, true, Boolean.class, Double.NaN, Double.NaN, Double.NaN, PRESERVE_FITTEST));
-    	parameters.add(new LearningParameter(MAX_DURATION, 60, Long.class, 0, Long.MAX_VALUE, 1, MAX_DURATION));
-    	parameters.add(new LearningParameter(INQUIRY_SIZE, 10, Integer.class, 1, Integer.MAX_VALUE, 1, INQUIRY_SIZE));
-    	parameters.add(new LearningParameter(MAX_ITERATIONS, 500, Integer.class, 1, Integer.MAX_VALUE, 1, MAX_ITERATIONS));
-    	parameters.add(new LearningParameter(MAX_QUALITY, 0.5, Double.class, 0d, 1d, Double.NaN, MAX_QUALITY));
-    	parameters.add(new LearningParameter(TERMINATION_CRITERIA, TerminationCriteria.iteration, TerminationCriteria.class, Double.NaN, Double.NaN, Double.NaN, TERMINATION_CRITERIA));
-    	parameters.add(new LearningParameter(TERMINATION_CRITERIA_VALUE, 0.0, Double.class, 0d, Double.MAX_VALUE, Double.NaN, TERMINATION_CRITERIA_VALUE));
-    	parameters.add(new LearningParameter(BETA, 1.0, Double.class, 0d, 1d, Double.NaN, BETA));
-    	parameters.add(new LearningParameter(POPULATION, 20, Integer.class, 1, Integer.MAX_VALUE, 1, POPULATION));
-    	parameters.add(new LearningParameter(MUTATION_RATE, 0.4f, Float.class, 0f, 1f, Double.NaN, MUTATION_RATE));
-    	parameters.add(new LearningParameter(REPRODUCTION_RATE, 0.4f, Float.class, 0f, 1f, Double.NaN, REPRODUCTION_RATE));
-    	parameters.add(new LearningParameter(CROSSOVER_RATE, 0.3f, Float.class, 0f, 1f, Double.NaN, CROSSOVER_RATE));
-    	parameters.add(new LearningParameter(MEASURE, new FMeasure(), IQualitativeMeasure.class, Double.NaN, Double.NaN, Double.NaN, MEASURE));
-    	parameters.add(new LearningParameter(PROPERTY_MAPPING, new PropertyMapping(), PropertyMapping.class, Double.NaN, Double.NaN, Double.NaN, PROPERTY_MAPPING));
+        learningParameters = new ArrayList<>();
+    	learningParameters.add(new LearningParameter(GENERATIONS, 10, Integer.class, 1, Integer.MAX_VALUE, 1, GENERATIONS));
+    	learningParameters.add(new LearningParameter(PRESERVE_FITTEST, true, Boolean.class, Double.NaN, Double.NaN, Double.NaN, PRESERVE_FITTEST));
+    	learningParameters.add(new LearningParameter(MAX_DURATION, 60, Long.class, 0, Long.MAX_VALUE, 1, MAX_DURATION));
+    	learningParameters.add(new LearningParameter(INQUIRY_SIZE, 10, Integer.class, 1, Integer.MAX_VALUE, 1, INQUIRY_SIZE));
+    	learningParameters.add(new LearningParameter(MAX_ITERATIONS, 500, Integer.class, 1, Integer.MAX_VALUE, 1, MAX_ITERATIONS));
+    	learningParameters.add(new LearningParameter(MAX_QUALITY, 0.5, Double.class, 0d, 1d, Double.NaN, MAX_QUALITY));
+    	learningParameters.add(new LearningParameter(TERMINATION_CRITERIA, TerminationCriteria.iteration, TerminationCriteria.class, Double.NaN, Double.NaN, Double.NaN, TERMINATION_CRITERIA));
+    	learningParameters.add(new LearningParameter(TERMINATION_CRITERIA_VALUE, 0.0, Double.class, 0d, Double.MAX_VALUE, Double.NaN, TERMINATION_CRITERIA_VALUE));
+    	learningParameters.add(new LearningParameter(BETA, 1.0, Double.class, 0d, 1d, Double.NaN, BETA));
+    	learningParameters.add(new LearningParameter(POPULATION, 20, Integer.class, 1, Integer.MAX_VALUE, 1, POPULATION));
+    	learningParameters.add(new LearningParameter(MUTATION_RATE, 0.4f, Float.class, 0f, 1f, Double.NaN, MUTATION_RATE));
+    	learningParameters.add(new LearningParameter(REPRODUCTION_RATE, 0.4f, Float.class, 0f, 1f, Double.NaN, REPRODUCTION_RATE));
+    	learningParameters.add(new LearningParameter(CROSSOVER_RATE, 0.3f, Float.class, 0f, 1f, Double.NaN, CROSSOVER_RATE));
+    	learningParameters.add(new LearningParameter(MEASURE, new FMeasure(), IQualitativeMeasure.class, Double.NaN, Double.NaN, Double.NaN, MEASURE));
+    	learningParameters.add(new LearningParameter(PROPERTY_MAPPING, new PropertyMapping(), PropertyMapping.class, Double.NaN, Double.NaN, Double.NaN, PROPERTY_MAPPING));
     	
         
     }

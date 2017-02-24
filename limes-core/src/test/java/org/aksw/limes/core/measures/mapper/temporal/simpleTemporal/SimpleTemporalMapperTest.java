@@ -69,55 +69,66 @@ public class SimpleTemporalMapperTest {
         source.addTriple("S10", "name", "mattttt");
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        target.addTriple("T1", "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime", "2015-05-20T08:21:04+02:00");
-        target.addTriple("T1", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-05-20T08:21:04+02:00");
-        target.addTriple("T1", "http://myOntology#MachineID", "26");
-        target.addTriple("T1", "name", "kleanthi");
+////////////////////////////////////////////////////////////////////////////////////////
+target.addTriple("S1", "b", "2015-05-20T08:21:04+02:00");
+target.addTriple("S1", "e", "2015-05-20T08:22:04+02:00");
+target.addTriple("S1", "m", "26");
+target.addTriple("S1", "name", "kleanthi");
 
-        target.addTriple("T2", "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime", "2015-05-20T08:21:04+02:00");
-        target.addTriple("T2", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-05-20T08:21:04+02:00");
-        target.addTriple("T2", "http://myOntology#MachineID", "26");
-        target.addTriple("T2", "name", "abce");
+target.addTriple("S2", "b", "2015-05-20T08:21:04+02:00");
+target.addTriple("S2", "e", "2015-05-20T08:22:04+02:00");
+target.addTriple("S2", "m", "26");
+target.addTriple("S2", "name", "abce");
 
-        target.addTriple("T3", "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime", "2015-05-20T08:24:04+02:00");
-        target.addTriple("T3", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-05-20T08:24:04+02:00");
-        target.addTriple("T3", "http://myOntology#MachineID", "26");
-        target.addTriple("T3", "name", "pony");
+target.addTriple("S3", "b", "2015-05-20T08:24:04+02:00");
+target.addTriple("S3", "e", "2015-05-20T08:25:04+02:00");
+target.addTriple("S3", "m", "26");
+target.addTriple("S3", "name", "pony");
 
-        target.addTriple("T4", "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime", "2015-05-20T08:31:04+02:00");
-        target.addTriple("T4", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-05-20T08:31:04+02:00");
-        target.addTriple("T4", "http://myOntology#MachineID", "27");
-        target.addTriple("T4", "name", "ping");
+target.addTriple("S4", "b", "2015-05-20T08:31:04+02:00");
+target.addTriple("S4", "e", "2015-05-20T08:32:04+02:00");
+target.addTriple("S4", "m", "27");
+target.addTriple("S4", "name", "ping");
 
-        target.addTriple("T5", "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime", "2015-05-20T08:21:04+02:00");
-        target.addTriple("T5", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-05-20T08:21:04+02:00");
-        target.addTriple("T5", "http://myOntology#MachineID", "27");
-        target.addTriple("T5", "name", "kleanthi");
+target.addTriple("S5", "b", "2015-05-20T09:21:04+02:00");
+target.addTriple("S5", "e", "2015-05-20T09:24:04+02:00");
+target.addTriple("S5", "m", "27");
+target.addTriple("S5", "name", "kleanthi");
 
-        target.addTriple("T6", "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime", "2015-06-20T08:21:04+02:00");
-        target.addTriple("T6", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-06-20T08:21:04+02:00");
-        target.addTriple("T6", "http://myOntology#MachineID", "27");
-        target.addTriple("T6", "name", "blabla");
+target.addTriple("S6", "b", "2015-05-20T08:51:04+02:00");
+target.addTriple("S6", "e", "2015-05-20T09:24:04+02:00");
+target.addTriple("S6", "m", "27");
+target.addTriple("S6", "name", "blabla");
 
-        target.addTriple("T7", "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime", "2015-06-20T08:21:04+02:00");
-        target.addTriple("T7", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-06-20T08:21:04+02:00");
-        target.addTriple("T7", "http://myOntology#MachineID", "28");
-        target.addTriple("T7", "name", "blabla");
+target.addTriple("S7", "b", "2015-05-20T08:41:04+02:00");
+target.addTriple("S7", "e", "2015-05-20T08:51:04+02:00");
+target.addTriple("S7", "m", "28");
+target.addTriple("S7", "name", "blabla");
 
-        target.addTriple("T8", "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime", "2015-06-20T08:21:04+02:00");
-        target.addTriple("T8", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-06-20T08:21:04+02:00");
-        target.addTriple("T8", "http://myOntology#MachineID", "29");
-        target.addTriple("T8", "name", "lolelele");
+target.addTriple("S8", "b", "2015-05-20T08:41:04+02:00");
+target.addTriple("S8", "e", "2015-05-20T08:43:04+02:00");
+target.addTriple("S8", "m", "29");
+target.addTriple("S8", "name", "lolelele");
 
-        target.addTriple("T9", "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime", "2015-05-20T09:21:04+02:00");
-        target.addTriple("T9", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-05-20T09:21:04+02:00");
-        target.addTriple("T9", "http://myOntology#MachineID", "29");
-        target.addTriple("T9", "name", "mattttt");
+target.addTriple("S9", "b", "2015-05-20T08:21:04+02:00");
+target.addTriple("S9", "e", "2015-05-20T08:34:04+02:00");
+target.addTriple("S9", "m", "29");
+target.addTriple("S9", "name", "mattttt");
 
-        target.addTriple("T10", "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime", "2015-05-20T09:21:04+02:00");
-        target.addTriple("T10", "http://purl.org/NET/c4dm/timeline.owl#endsAtDateTime", "2015-05-20T09:21:04+02:00");
-        target.addTriple("T10", "http://myOntology#MachineID", "30");
-        target.addTriple("T10", "name", "mattttt");
+target.addTriple("S10", "b", "2015-05-20T09:21:04+02:00");
+target.addTriple("S10", "e", "2015-05-20T09:22:04+02:00");
+target.addTriple("S10", "m", "30");
+target.addTriple("S10", "name", "mattttt");
+
+target.addTriple("S11", "b", "2015-05-20T09:21:04+02:00");
+target.addTriple("S11", "e", "2015-05-20T09:22:04+02:00");
+target.addTriple("S11", "m", "30");
+target.addTriple("S11", "name", "mattttt");
+
+target.addTriple("S12", "b", "2015-05-20T08:31:04+02:00");
+target.addTriple("S12", "e", "2015-05-20T08:45:04+02:00");
+target.addTriple("S12", "m", "30");
+target.addTriple("S12", "name", "mattttt");
 
     }
 
@@ -134,9 +145,9 @@ public class SimpleTemporalMapperTest {
         //        "tmp_concurrent(x.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID,y.http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID)",
         //        0.5);
         Instance s1 = source.getInstance("S1");
-        Instance t1 = target.getInstance("T1");
+        Instance t1 = target.getInstance("S1");
         String property1 = "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID";
-        String property2 = "http://purl.org/NET/c4dm/timeline.owl#beginsAtDateTime|http://myOntology#MachineID";
+        String property2 = "b|m";
         ConcurrentMeasure c = new ConcurrentMeasure();
         double sim = c.getSimilarity(s1, t1, property1, property2);
         System.out.println(sim);

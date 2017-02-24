@@ -8,8 +8,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.measures.mapper.string.fastngram.NGramTokenizer;
 import org.aksw.limes.core.measures.mapper.string.fastngram.ITokenizer;
+import org.aksw.limes.core.measures.mapper.string.fastngram.NGramTokenizer;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)

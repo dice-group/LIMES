@@ -10,12 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.gui.model.Endpoint;
 import org.aksw.limes.core.gui.util.AdvancedKBInfo;
 import org.aksw.limes.core.gui.util.AdvancedMemoryCache;
 import org.aksw.limes.core.gui.util.GetAllSparqlQueryModule;
@@ -27,11 +22,16 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.query.Syntax;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.vocabulary.OWL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 
 /**
@@ -125,7 +125,7 @@ public class SPARQLHelper {
      */
     public static Set<String> rootClasses(String endpoint, String graph, Model model) {
         Cache cache = CacheManager.getInstance().getCache("rootclasses");
-        if (cache == null) System.out.println("cachenull");
+        if (cache == null) logger.info("cachenull");
         List<String> key = Arrays.asList(new String[]{endpoint, graph});
         Element element;
         if (cache.isKeyInCache(key)) {
@@ -152,7 +152,7 @@ public class SPARQLHelper {
             if (!resultSetToList(querySelect(PrefixHelper.addPrefixes(queryForOWLThing), endpoint, graph, model)).isEmpty()) {
         	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), queryForOWLThing);
         	for(String key: prefixesToAdd.keySet()){
-        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	    config.addPrefix(key, prefixesToAdd.get(key));
         	}
                 return Collections.singleton(OWL.Thing.toString());
             }
@@ -168,7 +168,7 @@ public class SPARQLHelper {
             if (!classes.isEmpty()) {
         	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), queryForParentlessClasses);
         	for(String key: prefixesToAdd.keySet()){
-        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	    config.addPrefix(key, prefixesToAdd.get(key));
         	}
                 return classes;
             }
@@ -188,7 +188,7 @@ public class SPARQLHelper {
 	    if (!classes.isEmpty()){
         	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), query);
         	for(String key: prefixesToAdd.keySet()){
-        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	    config.addPrefix(key, prefixesToAdd.get(key));
         	}
 		return classes;
 	    }else {
@@ -204,7 +204,7 @@ public class SPARQLHelper {
 		if (!classes.isEmpty()) {
         	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), query);
         	for(String key: prefixesToAdd.keySet()){
-        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	    config.addPrefix(key, prefixesToAdd.get(key));
         	}
 		    return classes;
 		} else {
@@ -216,7 +216,7 @@ public class SPARQLHelper {
 		    classes.remove("http://www.w3.org/2002/07/owl#DatatypeProperty");
         	Map<String, String> prefixesToAdd = PrefixHelper.restrictPrefixes(PrefixHelper.getPrefixes(), query);
         	for(String key: prefixesToAdd.keySet()){
-        	    config.addPrefixes(key, prefixesToAdd.get(key));
+        	    config.addPrefix(key, prefixesToAdd.get(key));
         	}
 		    return classes;
 		}
@@ -371,7 +371,7 @@ public class SPARQLHelper {
         Set<String> list = new HashSet<String>();
         while (rs.hasNext()) {
             QuerySolution qs = rs.nextSolution();
-            System.out.println("qs: " + qs.toString());
+            logger.trace("qs: " + qs.toString());
             if(!qs.toString().equals("")){
             try {
                 list.add(URLDecoder.decode(qs.get(qs.varNames().next()).toString(), "UTF-8"));
@@ -394,9 +394,9 @@ public class SPARQLHelper {
      */
     public static ResultSet querySelect(String query, String endpoint, String graph, Model model) {
         try {
+        	logger.trace("Endpoint: " + endpoint + " graph: " + graph + "\n" + query);
             //QueryExecution qexec = queryExecutionDirect(query,graph,endpoint);
             ResultSet results = queryExecution(query, graph, endpoint, model).execSelect();
-//			System.out.println("res: " + ResultSetFormatter.asText(results));
             return results;
         } catch (RuntimeException e) {
             throw new RuntimeException("Error with query \"" + query + "\" at endpoint \"" + endpoint + "\" and graph \"" + graph + "\"", e);

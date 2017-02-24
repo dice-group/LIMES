@@ -30,8 +30,8 @@ public class PredecessorMapper extends SimpleTemporalMapper {
             double threshold) {
         AMapping m = MappingFactory.createDefaultMapping();
 
-        TreeMap<String, Set<Instance>> sources = this.orderByBeginDate(source, expression);
-        TreeMap<String, Set<Instance>> targets = this.orderByBeginDate(target, expression);
+        TreeMap<String, Set<Instance>> sources = this.orderByBeginDate(source, expression, "source");
+        TreeMap<String, Set<Instance>> targets = this.orderByBeginDate(target, expression, "target");
 
         for (Map.Entry<String, Set<Instance>> sourceEntry : sources.entrySet()) {
             String epochSource = sourceEntry.getKey();

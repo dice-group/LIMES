@@ -2,7 +2,6 @@ package org.aksw.limes.core.datastrutures;
 
 import java.util.List;
 
-
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 

@@ -6,7 +6,7 @@ package org.aksw.limes.core.exceptions;
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
-public class InvalidThresholdException extends Exception {
+public class InvalidThresholdException extends RuntimeException {
 
     /**
      * 

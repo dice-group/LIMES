@@ -1,5 +1,12 @@
 package org.aksw.limes.core.ml.algorithm.euclid;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.aksw.limes.core.controller.LSPipeline;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorFactory;
@@ -11,10 +18,9 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.AMeasure;
+import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.*;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -153,17 +159,17 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    
     /**
-     * Extracts all properties from a cache that have a coverage beyond
-     * minCoverage TESTED
+     * Extracts all properties from a cache that have a coverage beyond minCoverage
      *
      * @param c Input cache
      * @param minCoverage Threshold for coverage
      * @return Map of property to coverage
      */
     public static Map<String, Double> getPropertyStats(ACache c, double minCoverage) {
-        Map<String, Double> buffer = new HashMap<String, Double>();
-        Map<String, Double> result = new HashMap<String, Double>();
+        Map<String, Double> buffer = new HashMap<>();
+        Map<String, Double> result = new HashMap<>();
 
         //first count how often properties appear across instances
         for (Instance i : c.getAllInstances()) {
@@ -249,21 +255,21 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      * @return List of classifiers that each contain the best initial mappings
      */
     public List<SimpleClassifier> getBestInitialClassifiers(Set<String> measureList) {
-        List<SimpleClassifier> initialClassifiers = new ArrayList<SimpleClassifier>();
+        List<SimpleClassifier> initialClassifiers = new ArrayList<>();
         //        logger.info(sourcePropertiesCoverageMap);
         //        logger.info(targetPropertiesCoverageMap);
         for (String p : sourcePropertiesCoverageMap.keySet()) {
             double fMeasure = 0;
             SimpleClassifier bestClassifier = null;
             //String bestProperty = "";
-            Map<String, SimpleClassifier> cp = new HashMap<String, SimpleClassifier>();
+            Map<String, SimpleClassifier> cp = new HashMap<>();
             for (String q : targetPropertiesCoverageMap.keySet()) {
                 for (String measure : measureList) {
                     SimpleClassifier cps = getInitialClassifier(p, q, measure);
-                    if (cps.fMeasure > fMeasure) {
+                    if (cps.getfMeasure() > fMeasure) {
                         bestClassifier = cps.clone();
                         //bestProperty = q;
-                        fMeasure = cps.fMeasure;
+                        fMeasure = cps.getfMeasure();
                     }
                 }
             }
@@ -311,9 +317,9 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         }
 
         SimpleClassifier cp = new SimpleClassifier(measure, theta);
-        cp.fMeasure = fMax;
-        cp.sourceProperty = sourceProperty;
-        cp.targetProperty = targetProperty;
+        cp.setfMeasure(fMax);
+        cp.setSourceProperty(sourceProperty);
+        cp.setTargetProperty(targetProperty);
         return cp;
     }
 
@@ -327,7 +333,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         classifiers = normalizeClassifiers(classifiers);
         Map<SimpleClassifier, AMapping> mappings = new HashMap<SimpleClassifier, AMapping>();
         for (int i = 0; i < classifiers.size(); i++) {
-            double threshold = 1 + classifiers.get(i).weight - (1 / kappa);
+            double threshold = 1 + classifiers.get(i).getWeight() - (1 / kappa);
             if (threshold > 0) {
                 AMapping m = executeClassifier(classifiers.get(i), threshold);
                 mappings.put(classifiers.get(i), m);
@@ -355,7 +361,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
             for (String t : reference.getMap().get(s).keySet()) {
                 double score = 0;
                 for (SimpleClassifier cp : mappings.keySet()) {
-                    score = score + cp.weight * mappings.get(cp).getConfidence(s, t);
+                    score = score + cp.getWeight() * mappings.get(cp).getConfidence(s, t);
                 }
                 if (score >= threshold) {
                     result.add(s, t, score);
@@ -369,10 +375,10 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     {
         double total = 0;
         for (SimpleClassifier cp : classifiers) {
-            total = total + cp.weight;
+            total = total + cp.getWeight();
         }
         for (SimpleClassifier cp : classifiers) {
-            cp.weight = cp.weight / (total * kappa);
+            cp.setWeight( cp.getWeight() / (total * kappa));
         }
         return classifiers;
     }
@@ -389,14 +395,13 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         if (strategy.equals(Strategy.FMEASURE)) {
             double total = 0;
             for (SimpleClassifier cp : classifiers) {
-                total = total + cp.fMeasure;
+                total = total + cp.getfMeasure();
             }
             for (SimpleClassifier cp : classifiers) {
-                cp.weight = cp.fMeasure / (total * kappa);
+                cp.setWeight( cp.getfMeasure() / (total * kappa));
             }
         }
-        return classifiers;
-    }
+        return classifiers;    }
 
     /**
      * Aims to improve upon a particular classifier by checking whether adding a
@@ -405,7 +410,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      **/
 
     public double computeNext(List<SimpleClassifier> classifiers, int index) {
-        classifiers.get(index).weight = classifiers.get(index).weight - learningRate;
+        classifiers.get(index).setWeight(classifiers.get(index).getWeight() - learningRate);
         classifiers = normalizeClassifiers(classifiers);
         AMapping m = getMapping(classifiers);
         buffer = classifiers;
@@ -468,7 +473,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      * @return Corresponding mapping
      */
     public AMapping executeClassifier(SimpleClassifier c, double threshold) {
-        return execute(c.sourceProperty, c.targetProperty, c.measure, threshold);
+        return execute(c.getSourceProperty(), c.getTargetProperty(), c.getMeasure(), threshold);
     }
 
     /**

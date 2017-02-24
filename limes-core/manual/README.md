@@ -15,8 +15,8 @@ LIMES is a link discovery framework for the Web of Data. It implements time-effi
 ## Help and Support
 
 We're always happy to help out with your configs or any other questions you might have.
-You can ask a question using an issue on GitHub.
-TODO: completeme
+You can ask a question using the issue tab on GitHub.
+
 
 ## FAQ
 

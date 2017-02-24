@@ -1,5 +1,7 @@
 package org.aksw.limes.core.gui.view;
 
+import org.aksw.limes.core.gui.controller.TaskProgressController;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -14,8 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import org.aksw.limes.core.gui.controller.TaskProgressController;
 
 /**
  * popup window to show progress to the user

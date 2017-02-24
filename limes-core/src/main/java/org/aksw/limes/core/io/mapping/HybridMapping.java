@@ -8,7 +8,13 @@ import java.util.HashMap;
  */
 public class HybridMapping extends AMapping {
 
-    public HybridMapping reverseSourceTarget() {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4230353331396453801L;
+
+	public HybridMapping reverseSourceTarget() {
         // TODO Auto-generated method stub
         return null;
     }

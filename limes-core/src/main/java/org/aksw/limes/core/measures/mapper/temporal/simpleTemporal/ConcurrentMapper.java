@@ -36,16 +36,13 @@ public class ConcurrentMapper extends SimpleTemporalMapper {
         AMapping m = MappingFactory.createDefaultMapping();
         Parser p = new Parser(expression, threshold);
 
-        TreeMap<String, Set<Instance>> sources = this.orderByBeginDate(source, expression);
-        TreeMap<String, Set<Instance>> targets = this.orderByBeginDate(target, expression);
-        String machineID = null;
-        try {
-            machineID = this.getSecondProperty(p.getLeftTerm());
-        } catch (IllegalArgumentException e) {
-            logger.error("Missing machine id property in " + p.getLeftTerm() + ".Exiting..");
-            System.exit(1);
-        }
+        TreeMap<String, Set<Instance>> sources = this.orderByBeginDate(source, expression, "source");
+        TreeMap<String, Set<Instance>> targets = this.orderByBeginDate(target, expression, "target");
+        String machineIDSource = this.getSecondProperty(p.getLeftTerm());
+        String machineIDTarget = this.getSecondProperty(p.getRightTerm());
 
+        
+        
         for (Map.Entry<String, Set<Instance>> sourceEntry : sources.entrySet()) {
             String epochSource = sourceEntry.getKey();
 
@@ -54,7 +51,7 @@ public class ConcurrentMapper extends SimpleTemporalMapper {
                 Set<Instance> sourceInstances = sourceEntry.getValue();
                 for (Instance i : sourceInstances) {
                     for (Instance j : targetInstances) {
-                        if (i.getProperty(machineID).equals(j.getProperty(machineID)))
+                        if (i.getProperty(machineIDSource).equals(j.getProperty(machineIDTarget)))
                             m.add(i.getUri(), j.getUri(), 1);
                     }
                 }

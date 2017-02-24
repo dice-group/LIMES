@@ -44,10 +44,8 @@ public abstract class SimpleTemporalMapper extends AMapper implements ISimpleTem
      * @param expression,
      *            The metric expression
      * @return second property of metric expression as string
-     * @throws IllegalArgumentException
-     *             if endDate property is not declared
      */
-    protected String getSecondProperty(String expression) throws IllegalArgumentException {
+    protected String getSecondProperty(String expression) {
         expression = expression.substring(expression.indexOf(".") + 1, expression.length());
         int plusIndex = expression.indexOf("|");
         if (expression.indexOf("|") != -1) {
@@ -62,19 +60,26 @@ public abstract class SimpleTemporalMapper extends AMapper implements ISimpleTem
      * instance, it retrieves its begin date property, converts its value to an
      * epoch (string) using the SimpleDateFormat function and places the
      * instance inside the corresponding set("bucket") of instances.
-     *
+     * 
      * @param cache,
      *            the cache of instances
      * @param expression,
      *            the metric expression
+     * @param kbType,
+     *            source or target
+     *            
      * @return blocks, a map of sets with unique begin dates as keys and set of
      *         instances as values
      */
-    protected TreeMap<String, Set<Instance>> orderByBeginDate(ACache cache, String expression) {
+    protected TreeMap<String, Set<Instance>> orderByBeginDate(ACache cache, String expression, String kbType) {
 
         TreeMap<String, Set<Instance>> blocks = new TreeMap<String, Set<Instance>>();
         Parser p = new Parser(expression, 0.0d);
-        String property = getFirstProperty(p.getLeftTerm());
+        String property = null;
+        if (kbType.equalsIgnoreCase("source"))
+            property = getFirstProperty(p.getLeftTerm());
+        else
+            property = getFirstProperty(p.getRightTerm());
         for (Instance instance : cache.getAllInstances()) {
             TreeSet<String> time = instance.getProperty(property);
             for (String value : time) {

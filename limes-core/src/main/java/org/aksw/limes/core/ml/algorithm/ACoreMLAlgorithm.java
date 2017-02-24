@@ -20,7 +20,7 @@ public abstract class ACoreMLAlgorithm {
     protected static Logger logger = LoggerFactory.getLogger(ACoreMLAlgorithm.class);
 
 
-    protected List<LearningParameter> parameters = new ArrayList<>();
+    protected List<LearningParameter> learningParameters = new ArrayList<>();
 
     protected ACache sourceCache;
 
@@ -53,7 +53,7 @@ public abstract class ACoreMLAlgorithm {
      * @return current core ML algorithm parameters and their default values
      */
     protected List<LearningParameter> getParameters() {
-        return parameters;
+        return learningParameters;
     }
     
     /**
@@ -159,7 +159,7 @@ public abstract class ACoreMLAlgorithm {
      * @throws NoSuchParameterException if parameter is not exists
      */
     protected Object getParameter(String name) {
-    	for(LearningParameter par : parameters)
+    	for(LearningParameter par : learningParameters)
     		if(par.getName().equals(name))
     			return par.getValue();
     	return new NoSuchParameterException(name);
@@ -171,7 +171,7 @@ public abstract class ACoreMLAlgorithm {
      * @param val parameter value
      */
     public void setParameter(String par, Object val) {
-        for(LearningParameter lp : parameters)
+        for(LearningParameter lp : learningParameters)
             if(lp.getName().equals(par)) {
                 lp.setValue(val);
                 return;

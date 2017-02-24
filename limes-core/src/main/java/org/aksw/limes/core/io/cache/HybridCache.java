@@ -122,7 +122,7 @@ public class HybridCache extends MemoryCache implements Serializable {
             }
         } //2. If it does not work, then get it from data sourceInfo as specified
         catch (Exception e) {
-            e.printStackTrace();
+            
             // need to add a QueryModuleFactory
             logger.info("No cached data found for " + kb.getId());
             IQueryModule module = QueryModuleFactory.getQueryModule(kb.getType(), kb);

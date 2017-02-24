@@ -113,7 +113,7 @@ public class GetAllSparqlQueryModule extends SparqlQueryModule {
         long startTime = System.currentTimeMillis();
         String query = "";
         //write prefixes
-        System.out.println(getKB().getPrefixes());
+        LOGGER.debug(getKB().getPrefixes().toString());
         // ***** begin workaround TODO: change back when error is resolved with the drugbank sparql endpoint
         for (String key : getKB().getPrefixes().keySet()) {
             query = query + "PREFIX " + key + ": <" + getKB().getPrefixes().get(key) + ">\n";

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
-import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.io.cache.ACache;
@@ -13,8 +12,8 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.AMapper;
+import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
@@ -73,14 +72,8 @@ public class HeliosPlanner extends Planner {
     public double getAtomicRuntimeCosts(String measure, double threshold) {
 
         AMapper mapper = null;
-        try {
-            MeasureType type = MeasureFactory.getMeasureType(measure);
-            mapper = MapperFactory.createMapper(type);
-        } catch (InvalidMeasureException e) {
-            e.printStackTrace();
-            logger.error("Exiting..");
-            System.exit(1);
-        }
+        MeasureType type = MeasureFactory.getMeasureType(measure);
+        mapper = MapperFactory.createMapper(type);
         return mapper.getRuntimeApproximation(source.size(), target.size(), threshold, lang);
 
     }
@@ -98,14 +91,8 @@ public class HeliosPlanner extends Planner {
      */
     public double getAtomicMappingSizes(String measure, double threshold) {
         AMapper mapper = null;
-        try {
-            MeasureType type = MeasureFactory.getMeasureType(measure);
-            mapper = MapperFactory.createMapper(type);
-        } catch (InvalidMeasureException e) {
-            e.printStackTrace();
-            System.err.println("Exiting..");
-            System.exit(1);
-        }
+        MeasureType type = MeasureFactory.getMeasureType(measure);
+        mapper = MapperFactory.createMapper(type);
         return mapper.getMappingSizeApproximation(source.size(), target.size(), threshold, lang);
     }
 
@@ -125,14 +112,8 @@ public class HeliosPlanner extends Planner {
         if (measures != null) {
             for (String measure : measures) {
                 double tempCost = 0;
-                try {
-                    MeasureType type = MeasureFactory.getMeasureType(measure);
-                    tempCost = MeasureFactory.createMeasure(type).getRuntimeApproximation(mappingSize);
-                } catch (InvalidMeasureException e) {
-                    e.printStackTrace();
-                    System.err.println("Exiting..");
-                    System.exit(1);
-                }
+                MeasureType type = MeasureFactory.getMeasureType(measure);
+                tempCost = MeasureFactory.createMeasure(type).getRuntimeApproximation(mappingSize);
                 cost += tempCost;
             }
         }

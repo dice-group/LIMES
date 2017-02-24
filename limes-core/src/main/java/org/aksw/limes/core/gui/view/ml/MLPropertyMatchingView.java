@@ -3,6 +3,11 @@ package org.aksw.limes.core.gui.view.ml;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.aksw.limes.core.gui.model.Config;
+import org.aksw.limes.core.gui.view.ToolBox;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -14,17 +19,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import org.aksw.limes.core.gui.model.Config;
-import org.aksw.limes.core.gui.view.ToolBox;
-import org.aksw.limes.core.ml.algorithm.LearningParameter;
-import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 
 /**
  * Class that creates a view to let the user match the properties
@@ -94,7 +95,9 @@ public class MLPropertyMatchingView {
 	targetColumn.getChildren().addAll(targetLabel, targetPropList);
 	matchedPropertiesBox = new VBox();
 	cancelButton = new Button("cancel");
+	cancelButton.setTooltip(new Tooltip("cancel property matching"));
 	finishButton = new Button("finish");
+	finishButton.setTooltip(new Tooltip("set this property matching"));
 	makeUnmatchedPropertyBox();
 	finishButton.setDisable(true);
 	HBox buttons = new HBox();

@@ -117,14 +117,9 @@ public class FastNGramMapper extends AMapper {
      */
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-       
-        try {
-            if (threshold <= 0) {
-                throw new InvalidThresholdException(threshold);
-            }
-        } catch (InvalidThresholdException e) {
-            System.err.println("Exiting..");
-            System.exit(1);
+
+        if (threshold <= 0) {
+            throw new InvalidThresholdException(threshold);
         }
         String property1 = null, property2 = null;
         // get property labels
@@ -179,15 +174,16 @@ public class FastNGramMapper extends AMapper {
         }
         // if no properties then terminate
         if (property1 == null || property2 == null) {
-            logger.error(MarkerFactory.getMarker("FATAL"),"Property 1 = " + property1 + ", Property 2 = " + property2);
-            logger.error(MarkerFactory.getMarker("FATAL"),"Property values could not be read. Exiting");
-            System.exit(1);
+            logger.error(MarkerFactory.getMarker("FATAL"), "Property 1 = " + property1 + ", Property 2 = " + property2);
+            logger.error(MarkerFactory.getMarker("FATAL"), "Property values could not be read. Exiting");
+            throw new RuntimeException();
         }
 
         if (!p.isAtomic()) {
-            logger.error(MarkerFactory.getMarker("FATAL"),"Mappers can only deal with atomic expression");
-            logger.error(MarkerFactory.getMarker("FATAL"),"Expression " + expression + " was given to a mapper to process");
-            System.exit(1);
+            logger.error(MarkerFactory.getMarker("FATAL"), "Mappers can only deal with atomic expression");
+            logger.error(MarkerFactory.getMarker("FATAL"),
+                    "Expression " + expression + " was given to a mapper to process");
+            throw new RuntimeException();
         }
 
         /////////////////// This actually runs the algorithm

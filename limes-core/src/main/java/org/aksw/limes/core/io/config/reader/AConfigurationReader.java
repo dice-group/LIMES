@@ -30,5 +30,7 @@ public abstract class AConfigurationReader {
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
     }
+    
+
 
 }

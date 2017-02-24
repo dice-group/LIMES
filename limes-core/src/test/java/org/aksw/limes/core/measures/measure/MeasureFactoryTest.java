@@ -324,6 +324,12 @@ public class MeasureFactoryTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        try {
+            assertTrue(MeasureFactory.getMeasureType("blabls") != null);
+        } catch (InvalidMeasureException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 

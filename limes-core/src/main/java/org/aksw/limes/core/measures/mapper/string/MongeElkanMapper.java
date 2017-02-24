@@ -41,13 +41,8 @@ public class MongeElkanMapper extends AMapper {
      */
     public AMapping getMapping(Map<String, Set<String>> sourceMap, Map<String, Set<String>> targetMap,
             double threshold) {
-        try {
-            if (threshold <= 0) {
-                throw new InvalidThresholdException(threshold);
-            }
-        } catch (InvalidThresholdException e) {
-            System.err.println("Exiting..");
-            System.exit(1);
+        if (threshold <= 0) {
+            throw new InvalidThresholdException(threshold);
         }
         Iterator<String> sit = sourceMap.keySet().iterator();
         double resultDouble;

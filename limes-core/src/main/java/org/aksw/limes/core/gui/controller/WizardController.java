@@ -1,9 +1,14 @@
 package org.aksw.limes.core.gui.controller;
 
+import org.aksw.limes.core.gui.view.EditClassMatchingView;
+import org.aksw.limes.core.gui.view.EditEndpointsView;
+import org.aksw.limes.core.gui.view.EditPropertyMatchingView;
+import org.aksw.limes.core.gui.view.WizardView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-
-import org.aksw.limes.core.gui.view.WizardView;
 
 /**
  * Controller class for {@link WizardView}
@@ -33,6 +38,8 @@ public class WizardController {
      * current page
      */
     private int currentPage = -1;
+    
+    Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * Constructor
@@ -124,7 +131,7 @@ public class WizardController {
 	    }
 	}
     }
-
+    
     /**
      * goes one page back
      */

@@ -32,8 +32,7 @@ public class MLAlgorithmFactory {
             return WombatSimple.class;
         }
         if (name.equalsIgnoreCase(WOMBAT_COMPLETE)) {
-            //@todo: fix this
-            return null;
+            return WombatComplete.class;
         }
         if (name.equalsIgnoreCase(LION)) {
             //@todo: fix this

@@ -2,6 +2,7 @@ package org.aksw.limes.core.gui.view;
 
 import org.aksw.limes.core.gui.controller.WizardController;
 
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -62,7 +63,7 @@ public class WizardView {
         buttonCancel.setOnAction(e -> {
             stage.close();
         });
-        stage.setTitle("LIMES");
+        stage.setTitle("LIMES - New Configuration");
         stage.setScene(scene);
         stage.show();
     }
@@ -89,5 +90,9 @@ public class WizardView {
     
     public Stage getStage(){
 	return this.stage;
+    }
+    
+    public void setToRootPane(Parent pane){
+    	rootPane.setCenter(pane);
     }
 }

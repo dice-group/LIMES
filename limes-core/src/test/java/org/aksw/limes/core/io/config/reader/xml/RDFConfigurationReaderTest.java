@@ -80,6 +80,7 @@ public class RDFConfigurationReaderTest {
         mlParameters.add(lp);
 
         Configuration testConf = new Configuration();
+        testConf.setPrefixes(prefixes);
         testConf.setSourceInfo(sourceInfo);
         testConf.setTargetInfo(targetInfo);
         testConf.setAcceptanceRelation("lgdo:near");       
@@ -88,7 +89,6 @@ public class RDFConfigurationReaderTest {
         testConf.setAcceptanceFile("lgd_relaybox_verynear.nt");
         testConf.setVerificationThreshold(0.5);
         testConf.setVerificationFile("lgd_relaybox_near.nt");
-        testConf.setPrefixes(prefixes);
         testConf.setOutputFormat("TAB");
         testConf.setMlAlgorithmName("wombat simple");
         testConf.setMlAlgorithmParameters(mlParameters);
@@ -103,6 +103,7 @@ public class RDFConfigurationReaderTest {
     public void testRDFReaderForMetric() {
         
         Configuration testConf = new Configuration();
+        testConf.setPrefixes(prefixes);
         testConf.setSourceInfo(sourceInfo);
         testConf.setTargetInfo(targetInfo);
         testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
@@ -112,7 +113,6 @@ public class RDFConfigurationReaderTest {
         testConf.setAcceptanceFile("lgd_relaybox_verynear.nt");
         testConf.setVerificationThreshold(0.5);
         testConf.setVerificationFile("lgd_relaybox_near.nt");
-        testConf.setPrefixes(prefixes);
         testConf.setOutputFormat("TAB");
 
         String file = System.getProperty("user.dir") + "/resources/lgd-lgd.ttl";

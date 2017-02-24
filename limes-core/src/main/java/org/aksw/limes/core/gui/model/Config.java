@@ -8,16 +8,9 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ListView;
+import java.util.regex.Pattern;
 
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
-import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.NestedPlan;
 import org.aksw.limes.core.execution.planning.planner.HeliosPlanner;
@@ -27,7 +20,6 @@ import org.aksw.limes.core.gui.model.metric.Output;
 import org.aksw.limes.core.gui.util.SourceOrTarget;
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.io.cache.ACache;
-import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
@@ -36,12 +28,16 @@ import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.config.writer.RDFConfigurationWriter;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.Eagle;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 /**
  * Contains all important information for the graphical representation
@@ -50,6 +46,13 @@ import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
  *         studserv.uni-leipzig.de{@literal >}
  */
 public class Config extends Configuration {
+	
+    private static final Logger logger = LoggerFactory.getLogger(Config.class);
+    
+    /**
+     * Checks if the restriction has the form "?y a prefix:class" or "?y rdf:type dbpedia:Drug"
+     */
+    private static final String restrictionRegex = "\\?\\w+\\s+\\w+(:\\w+){0,1}\\s+\\w+:\\w+";
 
     /**
      * PropertyMapping of current query
@@ -95,47 +98,108 @@ public class Config extends Configuration {
     }
 
     /**
-     * Config of the GUI 
-     * @param sourceInfo sourceInfo
-     * @param targetInfo targetInfo
-     * @param metricExpression metricExpression
-     * @param acceptanceRelation acceptanceRelation
-     * @param verificationRelation verificationRelation  
-     * @param acceptanceThreshold acceptanceThreshold
-     * @param acceptanceFile acceptanceFile
-     * @param verificationThreshold verificationThreshold
-     * @param verificationFile verificationFile
-     * @param prefixes prefixes
-     * @param outputFormat outputFormat
-     * @param executionRewriter executionRewriter
-     * @param executionPlanner executionPlanner
-     * @param executionEngine executionEngine
-     * @param granularity granularity
-     * @param mlAlgorithmName mlAlgorithmName
-     * @param mlParameters mlParameters
-     * @param mlImplementationType mlImplementationType
-     * @param mlTrainingDataFile mlTrainingDataFile
-     * @param mlPseudoFMeasure mlPseudoFMeasure
+     * Config of the GUI
+     * 
+     * @param sourceInfo
+     *            sourceInfo
+     * @param targetInfo
+     *            targetInfo
+     * @param metricExpression
+     *            metricExpression
+     * @param acceptanceRelation
+     *            acceptanceRelation
+     * @param verificationRelation
+     *            verificationRelation
+     * @param acceptanceThreshold
+     *            acceptanceThreshold
+     * @param acceptanceFile
+     *            acceptanceFile
+     * @param verificationThreshold
+     *            verificationThreshold
+     * @param verificationFile
+     *            verificationFile
+     * @param prefixes
+     *            prefixes
+     * @param outputFormat
+     *            outputFormat
+     * @param executionRewriter
+     *            executionRewriter
+     * @param executionPlanner
+     *            executionPlanner
+     * @param executionEngine
+     *            executionEngine
+     * @param granularity
+     *            granularity
+     * @param mlAlgorithmName
+     *            mlAlgorithmName
+     * @param mlParameters
+     *            mlParameters
+     * @param mlImplementationType
+     *            mlImplementationType
+     * @param mlTrainingDataFile
+     *            mlTrainingDataFile
+     * @param mlPseudoFMeasure
+     *            mlPseudoFMeasure
      */
-    public Config(KBInfo sourceInfo, KBInfo targetInfo, String metricExpression, String acceptanceRelation,
-            String verificationRelation, double acceptanceThreshold, String acceptanceFile,
-            double verificationThreshold, String verificationFile, Map<String, String> prefixes, String outputFormat,
-            String executionRewriter, String executionPlanner, String executionEngine, int granularity,
-            String mlAlgorithmName, List<LearningParameter> mlParameters, MLImplementationType mlImplementationType,
-            String mlTrainingDataFile, EvaluatorType mlPseudoFMeasure) {
-	super(sourceInfo, targetInfo, metricExpression, acceptanceRelation, verificationRelation,
-		acceptanceThreshold, acceptanceFile, verificationThreshold, verificationFile,
-		prefixes, outputFormat, executionRewriter, executionPlanner, executionEngine, granularity, mlAlgorithmName, mlParameters,
-		mlImplementationType, mlTrainingDataFile, mlPseudoFMeasure);
-	if(this.acceptanceRelation.equals("") || this.acceptanceRelation == null || this.acceptanceRelation.startsWith("file:")){
+    public Config(KBInfo sourceInfo, KBInfo targetInfo, String metricExpression,
+	    String acceptanceRelation, String verificationRelation, double acceptanceThreshold,
+	    String acceptanceFile, double verificationThreshold, String verificationFile,
+	    Map<String, String> prefixes, String outputFormat, String executionRewriter,
+	    String executionPlanner, String executionEngine, int granularity,
+	    String mlAlgorithmName, List<LearningParameter> mlParameters,
+	    MLImplementationType mlImplementationType, String mlTrainingDataFile,
+	    EvaluatorType mlPseudoFMeasure) {
+	this.sourceInfo = sourceInfo;
+	this.targetInfo = targetInfo;
+	this.metricExpression = metricExpression;
+	this.acceptanceRelation = acceptanceRelation;
+	this.verificationRelation = verificationRelation;
+
+	this.acceptanceThreshold = acceptanceThreshold;
+	this.acceptanceFile = acceptanceFile;
+	this.verificationThreshold = verificationThreshold;
+	this.verificationFile = verificationFile;
+	this.prefixes = prefixes;
+	this.outputFormat = outputFormat;
+	this.executionRewriter = executionRewriter;
+	this.executionPlanner = executionPlanner;
+	this.executionEngine = executionEngine;
+	this.granularity = granularity;
+	this.mlAlgorithmName = mlAlgorithmName;
+	this.mlAlgorithmParameters = mlParameters;
+	this.mlImplementationType = mlImplementationType;
+	this.mlTrainingDataFile = mlTrainingDataFile;
+	this.mlPseudoFMeasure = mlPseudoFMeasure;
+
+	if (this.acceptanceRelation.equals("") || this.acceptanceRelation == null
+		|| this.acceptanceRelation.startsWith("file:")) {
 	    this.acceptanceRelation = defaultAcceptanceRelation;
 	}
-	if(this.verificationRelation.equals("") || this.verificationRelation == null|| this.verificationRelation.startsWith("file:")){
+	if (this.verificationRelation.equals("") || this.verificationRelation == null
+		|| this.verificationRelation.startsWith("file:")) {
 	    this.verificationRelation = defaultVerificationRelation;
 	}
+	
 	metric = new Output();
 	this.sourceEndpoint = new Endpoint(this.sourceInfo, this);
 	this.targetEndpoint = new Endpoint(this.targetInfo, this);
+
+	//get Class restriction
+	if(sourceInfo.getRestrictions().size() == 1 && targetInfo.getRestrictions().size() == 1){
+		if(Pattern.matches(restrictionRegex, sourceInfo.getRestrictions().get(0)) && Pattern.matches(restrictionRegex, targetInfo.getRestrictions().get(0))){
+			String sourceRestriction = sourceInfo.getRestrictions().get(0);
+			String targetRestriction = targetInfo.getRestrictions().get(0);
+			String sourceClass = sourceRestriction.substring(sourceRestriction.lastIndexOf(" ")).trim();
+			String targetClass = targetRestriction.substring(targetRestriction.lastIndexOf(" ")).trim();
+			this.sourceEndpoint.setCurrentClassAsString(PrefixHelper.expand(sourceClass));
+			this.targetEndpoint.setCurrentClassAsString(PrefixHelper.expand(targetClass));
+			System.err.println(this.sourceEndpoint.getCurrentClass().getUri() + " " + this.targetEndpoint.getCurrentClass().getUri());
+		}else{
+			logger.error("Restrictions that are more complex than \" ?y a prefix:class \" are not yet implemented in the GUI");
+		}
+	}else{
+		logger.error("Restrictions that are more complex than \" ?y a prefix:class \" are not yet implemented in the GUI");
+	}
     }
 
     /**
@@ -156,22 +220,24 @@ public class Config extends Configuration {
 		|| file.getAbsolutePath().contains(".n3") || file.getAbsolutePath().contains(".nt")) {
 	    reader = new RDFConfigurationReader(file.getPath());
 	} else {
-	    throw new Exception("Unknown filetype!");
+	    throw new RuntimeException("Unknown filetype!");
 	}
 	Config outConfig;
 	Configuration tmp = reader.read();
-	if (tmp.getSourceInfo() == null || tmp.getSourceInfo() == null) {
-	    throw new Exception("Invalid configuration file!");
+	if (tmp.getSourceInfo() == null || tmp.getTargetInfo() == null) {
+	    throw new RuntimeException("Invalid configuration file!");
 	}
-	outConfig = new Config(tmp.getSourceInfo(), tmp.getTargetInfo(), tmp.getMetricExpression(), tmp.getAcceptanceRelation(),
-            tmp.getVerificationRelation(), tmp.getAcceptanceThreshold(), tmp.getAcceptanceFile(),
-            tmp.getVerificationThreshold(), tmp.getVerificationFile(), (Map<String, String>) tmp.getPrefixes(), tmp.getOutputFormat(),
-            tmp.getExecutionRewriter(), tmp.getExecutionPlanner(), tmp.getExecutionEngine(), tmp.getGranularity(),
-            tmp.getMlAlgorithmName(), (List<LearningParameter>) tmp.getMlAlgorithmParameters(), tmp.getMlImplementationType(),
-            tmp.getMlTrainingDataFile(), tmp.getMlPseudoFMeasure()); 
+	outConfig = new Config(tmp.getSourceInfo(), tmp.getTargetInfo(), tmp.getMetricExpression(),
+		tmp.getAcceptanceRelation(), tmp.getVerificationRelation(),
+		tmp.getAcceptanceThreshold(), tmp.getAcceptanceFile(),
+		tmp.getVerificationThreshold(), tmp.getVerificationFile(),
+		(Map<String, String>) tmp.getPrefixes(), tmp.getOutputFormat(),
+		tmp.getExecutionRewriter(), tmp.getExecutionPlanner(), tmp.getExecutionEngine(),
+		tmp.getGranularity(), tmp.getMlAlgorithmName(),
+		(List<LearningParameter>) tmp.getMlAlgorithmParameters(),
+		tmp.getMlImplementationType(), tmp.getMlTrainingDataFile(),
+		tmp.getMlPseudoFMeasure());
 	outConfig.setMlTrainingDataFile(tmp.getMlTrainingDataFile());
-	outConfig.sourceEndpoint = new Endpoint(outConfig.getSourceInfo(), outConfig);
-	outConfig.targetEndpoint = new Endpoint(outConfig.getTargetInfo(), outConfig);
 	for (String s : outConfig.getSourceInfo().getPrefixes().keySet()) {
 	    PrefixHelper.addPrefix(s, outConfig.getSourceInfo().getPrefixes().get(s));
 	}
@@ -185,7 +251,7 @@ public class Config extends Configuration {
 	    outConfig.metric.param2 = outConfig.verificationThreshold;
 	} else {
 	    Alert alert = new Alert(AlertType.INFORMATION);
-	    alert.setContentText("Machine Learning in the GUI cannot be run from file. Please use the commandline for this. All the usable information from configuration file has been saved though and you can run machine learning from the GUI now");
+	    alert.setContentText("Running machine learning configurations in the GUI is possible, although using the command line for this most of the time is more preferable. All the usable information has been saved though and you can run any machine learning type from the GUI now");
 	    alert.showAndWait();
 	    outConfig.metric = new Output();
 	}
@@ -213,34 +279,33 @@ public class Config extends Configuration {
 	// xmlwriter.write(this, file.getAbsolutePath());
 	// } else {
 
-	//In case the relation are not abbreaviated this an lead to errors
-	if(this.acceptanceRelation != null){
-	    if(this.acceptanceRelation.startsWith("http:")){
+	// In case the relation are not abbreaviated this an lead to errors
+	if (this.acceptanceRelation != null) {
+	    if (this.acceptanceRelation.startsWith("http:")) {
 		this.acceptanceRelation = PrefixHelper.abbreviate(this.acceptanceRelation);
 	    }
 	}
-	if(this.verificationRelation != null){
-	    if(this.verificationRelation.startsWith("http:")){
+	if (this.verificationRelation != null) {
+	    if (this.verificationRelation.startsWith("http:")) {
 		this.verificationRelation = PrefixHelper.abbreviate(this.verificationRelation);
 	    }
 	}
-	
-	//If there is renaming, change it in the metric because it is not possible to save in RDF
+
+	// If there is renaming, change it in the metric because it is not
+	// possible to save in RDF
 	String newME = metricExpression;
-	for(String s: sourceEndpoint.getInfo().getFunctions().keySet()){
-	    for(String t: sourceEndpoint.getInfo().getFunctions().get(s).keySet()){
-		System.out.println(t);
+	for (String s : sourceEndpoint.getInfo().getFunctions().keySet()) {
+	    for (String t : sourceEndpoint.getInfo().getFunctions().get(s).keySet()) {
 		newME = metricExpression.replace(t, s);
 	    }
 	}
-	for(String s: targetEndpoint.getInfo().getFunctions().keySet()){
-	    for(String t: targetEndpoint.getInfo().getFunctions().get(s).keySet()){
-		System.out.println(t);
+	for (String s : targetEndpoint.getInfo().getFunctions().keySet()) {
+	    for (String t : targetEndpoint.getInfo().getFunctions().get(s).keySet()) {
 		newME = metricExpression.replace(t, s);
 	    }
 	}
 	metricExpression = newME;
-	
+
 	RDFConfigurationWriter rdfwriter = new RDFConfigurationWriter();
 	rdfwriter.write(this, file.getAbsolutePath());
 	// }
@@ -413,17 +478,17 @@ public class Config extends Configuration {
      * @param targetPropertiesToAdd
      *            target properties
      */
-    public void setPropertiesMatching(ListView<String> sourcePropertiesToAdd,
-	    ListView<String> targetPropertiesToAdd) {
+    public void setPropertiesMatching(List<String> sourcePropertiesToAdd,
+	    List<String> targetPropertiesToAdd) {
 	List<String> sourceProperties = sourceEndpoint.getInfo().getProperties();
 	List<String> targetProperties = targetEndpoint.getInfo().getProperties();
 	sourceProperties.clear();
 	targetProperties.clear();
-	for (String sourceProp : sourcePropertiesToAdd.getItems()) {
+	for (String sourceProp : sourcePropertiesToAdd) {
 	    sourceProperties.add(sourceProp);
 	    addFunction(sourceEndpoint, sourceProp);
 	}
-	for (String targetProp : targetPropertiesToAdd.getItems()) {
+	for (String targetProp : targetPropertiesToAdd) {
 	    targetProperties.add(targetProp);
 	    addFunction(targetEndpoint, targetProp);
 	}
@@ -466,5 +531,5 @@ public class Config extends Configuration {
     public void setMapping(AMapping mapping) {
 	this.mapping = mapping;
     }
-    
+
 }

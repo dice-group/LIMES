@@ -366,7 +366,7 @@ public class NestedPlanTest {
         plan.setInstructionList(list);
 
         NestedPlan subPlan = new NestedPlan();
-        Instruction subrun1 = new Instruction(Command.RUN, "leven(x.surname, y.surname)", "0.3", -1, -1, 0);
+        Instruction subrun1 = new Instruction(Command.RUN, "cosine(x.surname, y.surname)", "0.3", -1, -1, 0);
         subPlan.addInstruction(subrun1);
         plan.addSubplan(subPlan);
         plan.addSubplan(null);

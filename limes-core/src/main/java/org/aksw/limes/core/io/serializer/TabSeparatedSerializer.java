@@ -48,23 +48,17 @@ public class TabSeparatedSerializer extends NtSerializer {
      * assume that the class already knows all the prefixes used in the uris and
      * expands those.
      *
-     * @param m
-     *         Mapping to serialize
-     * @param predicate
-     *         Predicate to use while serializing
-     * @param file
-     *         File in which the mapping is to be serialized
+     * @param mapping Mapping to serialize
+     * @param predicate Predicate to use while serializing
+     * @param file File in which the mapping is to be serialized
      */
-    public void writeToFile(AMapping m, String predicate, String file) {
+    public void writeToFile(AMapping mapping, String predicate, String file) {
         open(file);
 
-        if (m.size() > 0) {
-            //first get the prefix used in the subjects
-            //            String source = m.getMap().keySet().iterator().next();
-            //            String target = m.getMap().get(source).keySet().iterator().next();
-            for (String s : m.getMap().keySet()) {
-                for (String t : m.getMap().get(s).keySet()) {
-                    writer.println("<" + s + ">\t<" + t + ">\t" + m.getConfidence(s, t));
+        if (mapping.size() > 0) {
+            for (String s : mapping.getMap().keySet()) {
+                for (String t : mapping.getMap().get(s).keySet()) {
+                    writer.println("<" + s + ">\t<" + t + ">\t" + mapping.getConfidence(s, t));
                 }
             }
         }

@@ -79,6 +79,30 @@ public class MainController {
                 editClassMatchingView), new EditPropertyMatchingController(
                 newConfig, editPropertyMatchingView));
     }
+    
+    public void editConfig(WizardView wizardView, 
+    					   EditClassMatchingView editClassMatchingView, 
+    					   EditPropertyMatchingView editPropertyMatchingView){
+    	confirmPotentialDataLoss();
+        new WizardController(() -> {
+        	setCurrentConfig(currentConfig);
+            view.graphBuild.graphBuildController.deleteGraph();
+        }, () -> {
+        }, wizardView, new EditClassMatchingController(currentConfig,
+                editClassMatchingView), new EditPropertyMatchingController(
+                currentConfig, editPropertyMatchingView));
+    }
+    
+    public void editConfig(WizardView wizardView, 
+    					   EditPropertyMatchingView editPropertyMatchingView){
+    	confirmPotentialDataLoss();
+        new WizardController(() -> {
+        	setCurrentConfig(currentConfig);
+            view.graphBuild.graphBuildController.deleteGraph();
+        }, () -> {
+        }, wizardView, new EditPropertyMatchingController(
+                currentConfig, editPropertyMatchingView));
+    }
 
     /**
      * Reads config from file, drops current config
