@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml;
+package org.aksw.limes.core.ml.algorithm;
 
 import static org.junit.Assert.fail;
 

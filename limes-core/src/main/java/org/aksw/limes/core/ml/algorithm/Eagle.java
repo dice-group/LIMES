@@ -11,6 +11,7 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.NotYetImplementedException;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -104,6 +105,7 @@ public class Eagle extends ACoreMLAlgorithm {
 		try {
 			setUp(trainingData);
 		} catch (InvalidConfigurationException e) {
+			e.printStackTrace();
 			logger.error(e.getMessage());
 			return null;
 		}

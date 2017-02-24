@@ -9,6 +9,7 @@ import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
@@ -36,6 +37,7 @@ public class MLPipeline {
     public static AMapping execute(
             ACache source,
             ACache target,
+            Configuration configuration,
             String mlAlgrorithmName,
             MLImplementationType mlImplementationType,
             List<LearningParameter> learningParameters,
@@ -57,6 +59,7 @@ public class MLPipeline {
             case SUPERVISED_BATCH:
                 SupervisedMLAlgorithm mls = new SupervisedMLAlgorithm(clazz);
                 mls.init(learningParameters, source, target);
+                mls.getMl().setConfiguration(configuration);
                 mlm = mls.learn(trainingDataMap);
                 return mls.predict(source, target, mlm);
             case SUPERVISED_ACTIVE:
@@ -64,6 +67,7 @@ public class MLPipeline {
                 //            boolean stopLearning = false;
                 ActiveMLAlgorithm mla = new ActiveMLAlgorithm(clazz);
                 mla.init(learningParameters, source, target);
+                mla.getMl().setConfiguration(configuration);
                 mlm = mla.activeLearn();
                 Scanner scan = new Scanner(System.in);
                 double rating;
@@ -108,6 +112,7 @@ public class MLPipeline {
             case UNSUPERVISED:
                 UnsupervisedMLAlgorithm mlu = new UnsupervisedMLAlgorithm(clazz);
                 mlu.init(learningParameters, source, target);
+                mlu.getMl().setConfiguration(configuration);
                 PseudoFMeasure pfm = null;
                 if(pfmType != null){
                     pfm = (PseudoFMeasure) EvaluatorFactory.create(pfmType);

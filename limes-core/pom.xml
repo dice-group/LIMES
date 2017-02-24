@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.aksw.limes.core</groupId>
 	<artifactId>limes-core</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.1.2-SNAPSHOT</version>
 	<name>LIMES</name>
 	<description>LIMES – Link Discovery Framework for Metric Spaces.</description>
 	<url>http://aksw.org/Projects/LIMES</url>

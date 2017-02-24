@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml;
+package org.aksw.limes.core.ml.algorithm;
 
 import static org.junit.Assert.fail;
 
@@ -23,6 +23,8 @@ import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
@@ -30,6 +32,8 @@ import org.junit.Test;
  */
 public class EagleTest {
 
+	static Logger logger = LoggerFactory.getLogger(EagleTest.class);
+	
     ACache sc = new MemoryCache();
     ACache tc = new MemoryCache();
 
@@ -100,8 +104,12 @@ public class EagleTest {
         eagleSup.setParameter(Eagle.PROPERTY_MAPPING, pm);
 
         MLResults mlModel = eagleSup.learn(trainingMap);
+        
         AMapping resultMap = eagleSup.predict(sc, tc, mlModel);
-//        assert (resultMap.getSize() > 0);  
+        logger.info(resultMap.toString());
+        
+        assert (resultMap.toString().equals("[ex:i3 -> (ex:i3|1.0)]\n[ex:i3 -> (ex:i1|0.5)]\n"
+        		+ "[ex:i1 -> (ex:i3|0.5)]\n[ex:i1 -> (ex:i1|1.0)]"));   
     }
 
     @Test
@@ -121,9 +129,11 @@ public class EagleTest {
         eagleUnsup.setParameter(Eagle.PROPERTY_MAPPING, pm);
 
         MLResults mlModel = eagleUnsup.learn(new PseudoFMeasure());
+        
         AMapping resultMap = eagleUnsup.predict(sc, tc, mlModel);
-
-//        assert (resultMap.getSize() > 0);     
+        logger.info(resultMap.toString());
+        
+        assert (resultMap.toString().equals("[ex:i3 -> (ex:i3|1.0)]\n[ex:i1 -> (ex:i1|1.0)]"));     
     }
 
 }
