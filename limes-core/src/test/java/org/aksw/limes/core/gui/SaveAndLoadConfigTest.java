@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.model.Config;
+import org.aksw.limes.core.gui.util.CustomGuiTest;
 import org.aksw.limes.core.gui.view.MainView;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -62,26 +63,14 @@ public class SaveAndLoadConfigTest extends ApplicationTest{
 	public void changeAndSaveConfig(){
 		mainController.getCurrentConfig().setMetricExpression(newMetricExpression);
 		mainView.graphBuild.graphBuildController.generateGraphFromConfig();
-		GuiTest.waitUntil("Drug properties", Matchers.notNullValue());
+		CustomGuiTest.waitUntilNodeIsVisible("Drug properties", 15);
+//		GuiTest.waitUntil("Drug properties", Matchers.notNullValue()); 
+
 		mainController.saveConfig(changedTestConfig);
 	}
 	
 	public void loadNewConfig(){
-		int timeoutCounter = 15;
 		mainController.loadConfig(changedTestConfig);
-		Config c = mainController.getCurrentConfig();
-		while(c == null && timeoutCounter != 0)
-		{
-		  try {
-			  mainController.loadConfig(changedTestConfig);
-			  c = mainController.getCurrentConfig();
-			  timeoutCounter --;
-			  Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		}
 		assertEquals(testMetricExpression, mainController.getCurrentConfig().getMetricExpression());
 	}
 }

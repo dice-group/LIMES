@@ -4,20 +4,14 @@ import java.io.File;
 import java.util.Locale;
 
 import org.aksw.limes.core.gui.controller.MainController;
-import org.aksw.limes.core.gui.model.ClassMatchingNode;
+import org.aksw.limes.core.gui.util.CustomGuiTest;
 import org.aksw.limes.core.gui.view.MainView;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.loadui.testfx.GuiTest;
-import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 
-import javafx.scene.control.TreeView;
 import javafx.stage.Stage;
-
-import static org.junit.Assert.assertNotNull;
 
 public class EditLoadedConfigClassesTest extends ApplicationTest{
 
@@ -58,19 +52,7 @@ public class EditLoadedConfigClassesTest extends ApplicationTest{
 		clickOn("Edit");
 		clickOn("Edit Classes");
 
-		int timeoutCounter = 15;
-		TreeView<ClassMatchingNode> tv = new FxRobot().lookup("#sourceTreeView").query();
-		while(tv == null && timeoutCounter != 0)
-		{
-		  try {
-			  tv = new FxRobot().lookup("#sourceTreeView").query();
-			  timeoutCounter --;
-			  Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		}
+		CustomGuiTest.waitUntilNodeIsVisible("#sourceTreeView", 15);
 		clickOn("#sourceTreeView");
 		clickOn("#targetTreeView");
 		clickOn("Next");

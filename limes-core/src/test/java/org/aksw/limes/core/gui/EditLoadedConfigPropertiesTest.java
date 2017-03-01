@@ -4,19 +4,14 @@ import java.io.File;
 import java.util.Locale;
 
 import org.aksw.limes.core.gui.controller.MainController;
+import org.aksw.limes.core.gui.util.CustomGuiTest;
 import org.aksw.limes.core.gui.view.MainView;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.loadui.testfx.GuiTest;
-import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 
-import javafx.scene.control.ListView;
 import javafx.stage.Stage;
-
-import static org.junit.Assert.assertNotNull;
 
 public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 
@@ -52,19 +47,8 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 		//Necessary because otherwise the sub-menu vanishes
 		moveTo("Edit Classes");
 		clickOn("Edit Properties");
-		int timeoutCounter = 15;
-		ListView<String> tv = new FxRobot().lookup("#sourcePropList").query();
-		while(tv == null && timeoutCounter != 0)
-		{
-		  try {
-			  tv = new FxRobot().lookup("#sourcePropList").query();
-			  timeoutCounter --;
-			  Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		}
+
+		CustomGuiTest.waitUntilNodeIsVisible("#sourcePropList", 15);
 		clickOn("#sourcePropList");
 		clickOn("#targetPropList");
 		clickOn("Finish");
