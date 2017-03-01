@@ -28,7 +28,7 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 	
 	@Before
 	public void loadConfig(){
-		mainController.loadConfig(new File(System.getProperty("user.dir") + "/resources/lgd-lgd.ttl"));
+		mainController.loadConfig(new File(Thread.currentThread().getContextClassLoader().getResource("gui/testConfig.xml").getFile()));
 	}
 	
 	@BeforeClass

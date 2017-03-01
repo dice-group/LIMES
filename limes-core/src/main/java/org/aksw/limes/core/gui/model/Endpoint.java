@@ -69,10 +69,15 @@ public class Endpoint {
 		String fileType = info.getEndpoint().substring(info.getEndpoint().lastIndexOf(".") + 1);
 		// Sometimes local endpoints start with "file://" which can lead to
 		// errors
-		if (info.getEndpoint().startsWith("file:")) {
+		if (info.getEndpoint().startsWith("file://")) {
 			// 6 because "file://" is characters long
 			info.setEndpoint(info.getEndpoint().substring(6));
 		}
+		else if (info.getEndpoint().startsWith("file:")) {
+			// 5 because "file:" is characters long
+			info.setEndpoint(info.getEndpoint().substring(5));
+		}
+		System.err.println("Endpoint: " + info.getEndpoint());
 		QueryModuleFactory.getQueryModule(fileType, info);
 		model = ModelRegistry.getInstance().getMap().get(info.getEndpoint());
 	}

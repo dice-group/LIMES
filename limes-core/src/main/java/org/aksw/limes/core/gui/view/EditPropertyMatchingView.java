@@ -130,6 +130,7 @@ public class EditPropertyMatchingView implements IEditView {
 	private ScrollPane createAutomatedRootPane() {
 		// =========== CREATE TABLES FOR PROPERTIES =========================
 		automatedPropList = new TableView<AutomatedPropertyMatchingNode>();
+		automatedPropList.setId("automatedPropList");
 		TableColumn<AutomatedPropertyMatchingNode, String> sourcePropColumn = new TableColumn<AutomatedPropertyMatchingNode, String>();
 		TableColumn<AutomatedPropertyMatchingNode, String> targetPropColumn = new TableColumn<AutomatedPropertyMatchingNode, String>();
 		sourcePropColumn

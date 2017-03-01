@@ -28,7 +28,7 @@ public class EditLoadedConfigClassesTest extends ApplicationTest{
 	
 	@Before
 	public void loadConfig(){
-		mainController.loadConfig(new File(System.getProperty("user.dir") + "/resources/lgd-lgd.ttl"));
+		mainController.loadConfig(new File(Thread.currentThread().getContextClassLoader().getResource("gui/testConfig.xml").getFile()));
 	}
 	
 	@BeforeClass
@@ -38,11 +38,6 @@ public class EditLoadedConfigClassesTest extends ApplicationTest{
         System.setProperty("prism.order", "sw");
         System.setProperty("prism.text", "t2k");
         System.setProperty("java.awt.headless", "true");
-
-        //Verbose options
-//        System.setProperty("prism.verbose", "true");
-//        System.setProperty("quantum.verbose", "true");
-//        System.setProperty("javafx.verbose", "true");
 	}
 	
 	

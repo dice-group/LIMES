@@ -15,8 +15,9 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
 
-import javafx.scene.control.Button;
+import javafx.scene.Node;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
 public class ConfigurationWizardTest extends ApplicationTest{
@@ -46,11 +47,6 @@ public class ConfigurationWizardTest extends ApplicationTest{
         System.setProperty("prism.order", "sw");
         System.setProperty("prism.text", "t2k");
         System.setProperty("java.awt.headless", "true");
-
-        //Verbose options
-//        System.setProperty("prism.verbose", "true");
-//        System.setProperty("quantum.verbose", "true");
-//        System.setProperty("javafx.verbose", "true");
 	}
 	
 	@Test
@@ -68,10 +64,10 @@ public class ConfigurationWizardTest extends ApplicationTest{
 	
 	
 	public void testEditEndpoint(){
-		clickOn("#SOURCEendpointURLTextField").write("http://dbpedia.org/sparql");
-		clickOn("#SOURCEidNamespaceTextField").write("dbpedia");
-		clickOn("#TARGETendpointURLTextField").write("http://linkedgeodata.org/sparql");
-		clickOn("#TARGETidNamespaceTextField").write("linkedgeodata");
+		clickOn("#SOURCEendpointURLTextField").write(Thread.currentThread().getContextClassLoader().getResource("datasets/Restaurants/restaurant1.nt").toString());
+		clickOn("#SOURCEidNamespaceTextField").write("Restaurant");
+		clickOn("#TARGETendpointURLTextField").write(Thread.currentThread().getContextClassLoader().getResource("datasets/Persons2/person21.nt").toString());
+		clickOn("#TARGETidNamespaceTextField").write("Person");
 		clickOn("Next");
 	}
 	
@@ -80,8 +76,8 @@ public class ConfigurationWizardTest extends ApplicationTest{
 		//Test if manual matching gets loaded
 		clickOn("#switchModeButton");
 		CustomGuiTest.waitUntilNodeIsVisible("#sourcePanel", timeout);
-		verifyThat("#sourcePanel", NodeMatchers.hasText("dbpedia classes"));
-		verifyThat("#targetPanel", NodeMatchers.hasText("linkedgeodata classes"));
+		verifyThat("#sourcePanel", NodeMatchers.isVisible());
+		verifyThat("#targetPanel", NodeMatchers.isVisible());
 		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", timeout);
 		//Continue with automated matching
 		clickOn("#switchModeButton");
@@ -103,7 +99,8 @@ public class ConfigurationWizardTest extends ApplicationTest{
 		verifyThat("#addedTargetPropsList", NodeMatchers.isVisible());
 		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", timeout);
 		clickOn("#switchModeButton");
-		clickOn("rdfs:label");
+		CustomGuiTest.waitUntilNodeIsVisible("#automatedPropList", timeout);
+		clickOn(CustomGuiTest.getFirstRowOfTableView("#automatedPropList"));
 		clickOn("Finish");
 	}
 

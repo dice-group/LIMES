@@ -1,8 +1,13 @@
 package org.aksw.limes.core.gui.util;
 
+import java.util.List;
+
 import org.testfx.api.FxRobot;
 
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
 
 public class CustomGuiTest {
 	
@@ -43,6 +48,27 @@ public class CustomGuiTest {
 		}
 		}
 		
+	}
+	
+	public static TableRow<?> getFirstRowOfTableView(String tableSelector) {
+		TableView<?> tableView = new FxRobot().lookup(tableSelector).query();
+
+	    List<Node> current = tableView.getChildrenUnmodifiable();
+	    while (current.size() == 1) {
+	        current = ((Parent) current.get(0)).getChildrenUnmodifiable();
+	    }
+
+	    current = ((Parent) current.get(1)).getChildrenUnmodifiable();
+	    while (!(current.get(0) instanceof TableRow)) {
+	        current = ((Parent) current.get(0)).getChildrenUnmodifiable();
+	    }
+
+	    Node node = current.get(0);
+	    if (node instanceof TableRow) {
+	        return (TableRow<?>) node;
+	    } else {
+	        throw new RuntimeException("Expected Group with only TableRows as children");
+	    }
 	}
 
 }
