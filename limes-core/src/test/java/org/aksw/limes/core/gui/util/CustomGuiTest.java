@@ -2,6 +2,8 @@ package org.aksw.limes.core.gui.util;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testfx.api.FxRobot;
 
 import javafx.scene.Node;
@@ -10,8 +12,10 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 
 public class CustomGuiTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(CustomGuiTest.class);
 	
-	public static void waitUntilNodeIsNotNull(String nodeId, int timeout){
+	public static boolean waitUntilNodeIsNotNull(String nodeId, int timeout){
 		Node node = new FxRobot().lookup(nodeId).query();
 		while(node == null && timeout != 0)
 		{
@@ -20,10 +24,17 @@ public class CustomGuiTest {
 			  timeout --;
 			  Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			logger.error("Interrupted while waiting for Node to be not null!");
+			e.printStackTrace();
+		} catch(NullPointerException e){
+			logger.error("Maximum timeout reached, while waiting for Node to be not null!");
 			e.printStackTrace();
 		}
 		}
+		if(node != null){
+			return false;
+		}
+		return false;
 	}
 	
 	/**
@@ -33,9 +44,12 @@ public class CustomGuiTest {
 	 */
 	public static void waitUntilNodeIsVisible(String nodeId, int timeout){
 		Node node = new FxRobot().lookup(nodeId).query();
+		boolean found = false;
 		if(node == null){
-			waitUntilNodeIsNotNull(nodeId, timeout);
+			found = waitUntilNodeIsNotNull(nodeId, timeout);
 		}
+		if(!found)
+			return;
 		node = new FxRobot().lookup(nodeId).query();
 		while(!node.isVisible() && timeout != 0)
 		{
@@ -43,7 +57,10 @@ public class CustomGuiTest {
 			  timeout --;
 			  Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			logger.error("Interrupted while waiting for Node to be visible!");
+			e.printStackTrace();
+		} catch(NullPointerException e){
+			logger.error("Maximum timeout reached, while waiting for Node to be visible!");
 			e.printStackTrace();
 		}
 		}
