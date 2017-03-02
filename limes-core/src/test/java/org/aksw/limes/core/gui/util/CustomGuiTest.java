@@ -26,16 +26,13 @@ public class CustomGuiTest {
 			} catch (InterruptedException e) {
 				logger.error("Interrupted while waiting for Node " + nodeId + " to be not null!");
 				e.printStackTrace();
-			} catch (NullPointerException e) {
-				logger.error("Maximum timeout reached, while waiting for Node " + nodeId + " to be not null!");
-				e.printStackTrace();
 			}
 		}
 		if (node != null) {
 			logger.info(nodeId + " not null");
 			return true;
 		}
-		logger.error("Maximum timeout reached, while waiting for Node to be not null!");
+		logger.error("Maximum timeout reached, while waiting for Node " + nodeId + " to be not null!");
 		return false;
 	}
 
