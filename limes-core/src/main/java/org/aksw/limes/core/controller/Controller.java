@@ -37,7 +37,7 @@ public class Controller {
 
     public static final String DEFAULT_LOGGING_PATH = "limes.log";
     private static final int MAX_ITERATIONS_NUMBER = 10;
-    private static final Logger logger = LoggerFactory.getLogger(Controller.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
     private static int serverPort = 8080;
     private static Options options = getOptions();
 
@@ -144,7 +144,8 @@ public class Controller {
         boolean isAlgorithm = !config.getMlAlgorithmName().equals("");
         if (isAlgorithm) {
             try {
-                results = MLPipeline.execute(config, sourceCache, targetCache, config.getMlAlgorithmName(),
+                results = MLPipeline.execute(sourceCache, targetCache, config, config.getMlAlgorithmName(),
+
                         config.getMlImplementationType(), config.getMlAlgorithmParameters(),
                         config.getTrainingDataFile(), config.getMlPseudoFMeasure(), MAX_ITERATIONS_NUMBER);
             } catch (UnsupportedMLImplementationException e) {

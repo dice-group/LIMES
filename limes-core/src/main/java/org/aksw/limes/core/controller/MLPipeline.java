@@ -34,9 +34,10 @@ public class MLPipeline {
 
     public static final Logger logger = LoggerFactory.getLogger(MLPipeline.class);
 
-    public static AMapping execute(Configuration config,
+    public static AMapping execute(
             ACache source,
             ACache target,
+            Configuration configuration,
             String mlAlgrorithmName,
             MLImplementationType mlImplementationType,
             List<LearningParameter> learningParameters,
@@ -58,15 +59,15 @@ public class MLPipeline {
             case SUPERVISED_BATCH:
                 SupervisedMLAlgorithm mls = new SupervisedMLAlgorithm(clazz);
                 mls.init(learningParameters, source, target);
-                mls.getMl().setConfiguration(config);
-                mlm = mls.learn(trainingDataMap);
+                mls.getMl().setConfiguration(configuration);
+               mlm = mls.learn(trainingDataMap);
                 return mls.predict(source, target, mlm);
             case SUPERVISED_ACTIVE:
                 // for active learning, need to reiterate and prompt the user for evaluation of examples:
                 //            boolean stopLearning = false;
                 ActiveMLAlgorithm mla = new ActiveMLAlgorithm(clazz);
                 mla.init(learningParameters, source, target);
-                mla.getMl().setConfiguration(config);
+                mla.getMl().setConfiguration(configuration);
                 mlm = mla.activeLearn();
                 Scanner scan = new Scanner(System.in);
                 double rating;
@@ -111,7 +112,7 @@ public class MLPipeline {
             case UNSUPERVISED:
                 UnsupervisedMLAlgorithm mlu = new UnsupervisedMLAlgorithm(clazz);
                 mlu.init(learningParameters, source, target);
-                mlu.getMl().setConfiguration(config);
+                mlu.getMl().setConfiguration(configuration);
                 PseudoFMeasure pfm = null;
                 if(pfmType != null){
                     pfm = (PseudoFMeasure) EvaluatorFactory.create(pfmType);

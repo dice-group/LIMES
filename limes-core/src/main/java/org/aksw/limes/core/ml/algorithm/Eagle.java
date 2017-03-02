@@ -106,6 +106,7 @@ public class Eagle extends ACoreMLAlgorithm {
 		try {
 			setUp(trainingData);
 		} catch (InvalidConfigurationException e) {
+			e.printStackTrace();
 			logger.error(e.getMessage());
 			return null;
 		}

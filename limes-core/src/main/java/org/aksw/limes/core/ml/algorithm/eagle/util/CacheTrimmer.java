@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
  * @author Klaus Lyko
  */
 public class CacheTrimmer {
+	
+	private static Logger logger = LoggerFactory.getLogger(CacheTrimmer.class);
 
     AMapping reference = MappingFactory.createDefaultMapping();
 
@@ -126,7 +128,7 @@ public class CacheTrimmer {
      * @return Array holding both resulting Caches, where the Cache for the source is at index 0. Cache for the target knowledge base at index 1.
      */
     public static ACache[] processData(ACache sC, ACache tC, AMapping m) {
-        Logger logger = LoggerFactory.getLogger("LIMES");
+        
         if (m.getSize() <= 100)
             logger.info("Scaling Caches down to " + m);
         ACache[] ret = new ACache[2];
@@ -185,7 +187,7 @@ public class CacheTrimmer {
         }
         ret[0] = h1;
         ret[1] = h2;
-        Logger logger = LoggerFactory.getLogger("LIMES");
+
         logger.info("asking random " + numberOfQuestions + " questions got me " + reference.size() + " valid links");
         if (reference.getSize() < numberOfQuestions / 2) {
             AMapping ref2 = trimExamplesRandomly(m, numberOfQuestions / 2);

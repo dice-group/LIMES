@@ -169,7 +169,7 @@ public class MachineLearningView {
 	content.getChildren().add(mlOptionsChooser);
 	border.setTop(content);
 	border.setBottom(buttonWrapper);
-	Scene scene = new Scene(border, 600, 900);
+	Scene scene = new Scene(border, 600, 600);
 	scene.getStylesheets().add("gui/main.css");
 
 	mlOptionsChooser.setOnAction(e -> {

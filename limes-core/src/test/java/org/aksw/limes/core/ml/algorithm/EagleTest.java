@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml;
+package org.aksw.limes.core.ml.algorithm;
 
 import static org.junit.Assert.fail;
 
@@ -37,7 +37,7 @@ import com.fasterxml.jackson.databind.MappingJsonFactory;
  */
 public class EagleTest {
 
-	protected static Logger logger = Logger.getLogger(EagleTest.class);
+	static Logger logger = Logger.getLogger(EagleTest.class);
     ACache sc = new MemoryCache();
     ACache tc = new MemoryCache();
 
