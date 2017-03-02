@@ -1,5 +1,7 @@
 package org.aksw.limes.core.gui;
 
+import static org.testfx.api.FxAssert.verifyThat;
+
 import java.io.File;
 import java.util.Locale;
 
@@ -9,14 +11,16 @@ import org.aksw.limes.core.gui.view.MainView;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
 
 import javafx.stage.Stage;
-import static org.testfx.api.FxAssert.verifyThat;
 
 public class EditLoadedConfigClassesTest extends ApplicationTest{
 
+	private static final Logger logger = LoggerFactory.getLogger(EditLoadedConfigClassesTest.class);
 	MainView mainView;
 	MainController mainController;
 
@@ -45,12 +49,16 @@ public class EditLoadedConfigClassesTest extends ApplicationTest{
 	
 	@Test
 	public void testEditClassMatching(){
+		logger.info("Clicking on Configuration");
 		clickOn("Configuration");
+		logger.info("Clicking on Edit");
 		clickOn("Edit");
+		logger.info("Clicking on Classes");
 		clickOn("Edit Classes");
 
-		CustomGuiTest.waitUntilNodeIsVisible("Thing", 15);
+		logger.info("Waiting for dbpedia classes to be visible");
+		CustomGuiTest.waitUntilNodeIsVisible("dbpedia classes", 15);
 
-		verifyThat("Thing", NodeMatchers.isVisible());
+		verifyThat("dbpedia classes", NodeMatchers.isVisible());
 	}
 }

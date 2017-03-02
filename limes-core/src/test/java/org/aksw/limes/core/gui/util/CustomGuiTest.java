@@ -21,16 +21,18 @@ public class CustomGuiTest {
 			try {
 				node = new FxRobot().lookup(nodeId).query();
 				timeout--;
+				logger.info("Timeoutremaining for "+ nodeId + " : " + timeout);
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				logger.error("Interrupted while waiting for Node to be not null!");
+				logger.error("Interrupted while waiting for Node " + nodeId + " to be not null!");
 				e.printStackTrace();
 			} catch (NullPointerException e) {
-				logger.error("Maximum timeout reached, while waiting for Node to be not null!");
+				logger.error("Maximum timeout reached, while waiting for Node " + nodeId + " to be not null!");
 				e.printStackTrace();
 			}
 		}
 		if (node != null) {
+			logger.info(nodeId + " not null");
 			return true;
 		}
 		logger.error("Maximum timeout reached, while waiting for Node to be not null!");
@@ -47,23 +49,31 @@ public class CustomGuiTest {
 	 */
 	public static void waitUntilNodeIsVisible(String nodeId, int timeout) {
 		Node node = new FxRobot().lookup(nodeId).query();
-		boolean found = false;
+		boolean found;
 		if (node == null) {
 			found = waitUntilNodeIsNotNull(nodeId, timeout);
+		}else{
+			found = true;
 		}
 		if (!found) {
-			logger.error("Maximum timeout reached, while waiting for Node to be visible!");
+			logger.error("Maximum timeout reached, while waiting for Node " + nodeId + " to be visible!");
 			return;
 		}
 		node = new FxRobot().lookup(nodeId).query();
 		while (!node.isVisible() && timeout != 0) {
 			try {
 				timeout--;
+				logger.info("Timeoutremaining for "+ nodeId + " : " + timeout);
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				logger.error("Interrupted while waiting for Node to be visible!");
+				logger.error("Interrupted while waiting for Node " + nodeId + " to be visible!");
 				e.printStackTrace();
 			}
+		}
+		if(node.isVisible()){
+			logger.info(nodeId +  " is visible"); 
+		}else{
+			logger.info(nodeId +  " is NOT visible"); 
 		}
 
 	}

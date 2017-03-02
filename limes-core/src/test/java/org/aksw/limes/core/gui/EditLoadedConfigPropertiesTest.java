@@ -9,12 +9,15 @@ import org.aksw.limes.core.gui.view.MainView;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testfx.framework.junit.ApplicationTest;
 
 import javafx.stage.Stage;
 
 public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 
+	private static final Logger logger = LoggerFactory.getLogger(EditLoadedConfigPropertiesTest.class);
 	MainView mainView;
 	MainController mainController;
 
@@ -42,12 +45,17 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 	
 	@Test
 	public void testEditProperties(){
+		logger.info("Clicking on Configuration");
 		clickOn("Configuration");
+		logger.info("Clicking on Edit");
 		clickOn("Edit");
 		//Necessary because otherwise the sub-menu vanishes
+		logger.info("Moving to Edit Classes");
 		moveTo("Edit Classes");
+		logger.info("Clicking on Edit Properties");
 		clickOn("Edit Properties");
 
+		logger.info("Waiting for #sourcePropList");
 		CustomGuiTest.waitUntilNodeIsVisible("#sourcePropList", 15);
 		clickOn("#sourcePropList");
 		clickOn("#targetPropList");
