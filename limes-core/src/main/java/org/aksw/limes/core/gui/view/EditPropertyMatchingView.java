@@ -130,6 +130,7 @@ public class EditPropertyMatchingView implements IEditView {
 	private ScrollPane createAutomatedRootPane() {
 		// =========== CREATE TABLES FOR PROPERTIES =========================
 		automatedPropList = new TableView<AutomatedPropertyMatchingNode>();
+		automatedPropList.setId("automatedPropList");
 		TableColumn<AutomatedPropertyMatchingNode, String> sourcePropColumn = new TableColumn<AutomatedPropertyMatchingNode, String>();
 		TableColumn<AutomatedPropertyMatchingNode, String> targetPropColumn = new TableColumn<AutomatedPropertyMatchingNode, String>();
 		sourcePropColumn
@@ -291,7 +292,6 @@ public class EditPropertyMatchingView implements IEditView {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				if (rootPane == null){
-            		System.err.println("Changed: " + automated.get());
 					createRootPane();
 				}
                 //If automated is false and manual root pane has not been created yet
