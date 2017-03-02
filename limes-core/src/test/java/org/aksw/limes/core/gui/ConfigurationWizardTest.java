@@ -60,70 +60,70 @@ public class ConfigurationWizardTest extends ApplicationTest{
 		//Verify that properties were loaded
 		ListView<String> tbsp = robo.lookup("#toolBoxSourceProperties").query();
 		ListView<String> tbtp = robo.lookup("#toolBoxTargetProperties").query();
-		logger.debug("Verifying that properties got loaded");
+		logger.info("Verifying that properties got loaded");
 		assertTrue(tbsp.getItems().size() > 0);
 		assertTrue(tbtp.getItems().size() > 0);
 	}
 	
 	
 	public void testEditEndpoint(){
-		logger.debug("testEditEndpoint started");
+		logger.info("testEditEndpoint started");
 		clickOn("#SOURCEendpointURLTextField").write(Thread.currentThread().getContextClassLoader().getResource("datasets/Restaurants/restaurant1.nt").toString());
 		clickOn("#SOURCEidNamespaceTextField").write("Restaurant");
 		clickOn("#TARGETendpointURLTextField").write(Thread.currentThread().getContextClassLoader().getResource("datasets/Persons2/person21.nt").toString());
 		clickOn("#TARGETidNamespaceTextField").write("Person");
-		logger.debug("Edited Endpoint clicking NEXT");
+		logger.info("Edited Endpoint clicking NEXT");
 		clickOn("Next");
 	}
 	
 	public void testEditClassMatching(){
-		logger.debug("testEditClassMatching started");
+		logger.info("testEditClassMatching started");
 		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", timeout);
 		//Test if manual matching gets loaded
-		logger.debug("Clicking on Button to get Manual Matching");
+		logger.info("Clicking on Button to get Manual Matching");
 		clickOn("#switchModeButton");
-		logger.debug("Waiting for #sourcePabel to be visible");
+		logger.info("Waiting for #sourcePabel to be visible");
 		CustomGuiTest.waitUntilNodeIsVisible("#sourcePanel", timeout);
 		verifyThat("#sourcePanel", NodeMatchers.isVisible());
 		verifyThat("#targetPanel", NodeMatchers.isVisible());
-		logger.debug("Waiting for #switchModeButton to be visible");
+		logger.info("Waiting for #switchModeButton to be visible");
 		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", timeout);
-		logger.debug("Clicking on Button to get automated Matching");
+		logger.info("Clicking on Button to get automated Matching");
 		//Continue with automated matching
 		clickOn("#switchModeButton");
-		logger.debug("Waiting for #tableView to be visible");
+		logger.info("Waiting for #tableView to be visible");
 		CustomGuiTest.waitUntilNodeIsVisible("#tableView", timeout);
-		logger.debug("Clicking on tableView");
+		logger.info("Clicking on tableView");
 		clickOn("#tableView");
-		logger.debug("Clicking on NEXT");
+		logger.info("Clicking on NEXT");
 		clickOn("Next");
 	}
 	
 	public void testEditPropertyMatching(){
-		logger.debug("testEditPropertyMatching started");
-		logger.debug("Waiting for #sourcePropColumn to be visible");
+		logger.info("testEditPropertyMatching started");
+		logger.info("Waiting for #sourcePropColumn to be visible");
 		CustomGuiTest.waitUntilNodeIsVisible("#sourcePropColumn", timeout);
 		verifyThat("#sourcePropColumn", NodeMatchers.isVisible());
 		verifyThat("#targetPropColumn", NodeMatchers.isVisible());
-		logger.debug("Waiting for #switchModeButton to be visible");
+		logger.info("Waiting for #switchModeButton to be visible");
 		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", timeout);
-		logger.debug("Clicking on Button to get Manual Matching");
+		logger.info("Clicking on Button to get Manual Matching");
 		clickOn("#switchModeButton");
-		logger.debug("Waiting for #sourcePropList to be visible");
+		logger.info("Waiting for #sourcePropList to be visible");
 		CustomGuiTest.waitUntilNodeIsVisible("#sourcePropList", timeout);
 		verifyThat("#sourcePropList", NodeMatchers.isVisible());
 		verifyThat("#targetPropList", NodeMatchers.isVisible());
 		verifyThat("#addedSourcePropsList", NodeMatchers.isVisible());
 		verifyThat("#addedTargetPropsList", NodeMatchers.isVisible());
-		logger.debug("Waiting for #switchModeButton to be visible");
+		logger.info("Waiting for #switchModeButton to be visible");
 		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", timeout);
-		logger.debug("Clicking on Button to get automated Matching");
+		logger.info("Clicking on Button to get automated Matching");
 		clickOn("#switchModeButton");
-		logger.debug("Waiting for #automatedPropList to be visible");
+		logger.info("Waiting for #automatedPropList to be visible");
 		CustomGuiTest.waitUntilNodeIsVisible("#automatedPropList", timeout);
-		logger.debug("Clicking on first automatedPropList element");
+		logger.info("Clicking on first automatedPropList element");
 		clickOn(CustomGuiTest.getFirstRowOfTableView("#automatedPropList"));
-		logger.debug("Clicking on FINISH");
+		logger.info("Clicking on FINISH");
 		clickOn("Finish");
 	}
 
