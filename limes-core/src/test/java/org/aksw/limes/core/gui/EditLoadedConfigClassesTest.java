@@ -10,8 +10,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.matcher.base.NodeMatchers;
 
 import javafx.stage.Stage;
+import static org.testfx.api.FxAssert.verifyThat;
 
 public class EditLoadedConfigClassesTest extends ApplicationTest{
 
@@ -33,11 +35,11 @@ public class EditLoadedConfigClassesTest extends ApplicationTest{
 	
 	@BeforeClass
 	public static void setup(){
-        System.setProperty("testfx.robot", "glass");
-        System.setProperty("testfx.headless", "true");
-        System.setProperty("prism.order", "sw");
-        System.setProperty("prism.text", "t2k");
-        System.setProperty("java.awt.headless", "true");
+//        System.setProperty("testfx.robot", "glass");
+//        System.setProperty("testfx.headless", "true");
+//        System.setProperty("prism.order", "sw");
+//        System.setProperty("prism.text", "t2k");
+//        System.setProperty("java.awt.headless", "true");
 	}
 	
 	
@@ -47,9 +49,8 @@ public class EditLoadedConfigClassesTest extends ApplicationTest{
 		clickOn("Edit");
 		clickOn("Edit Classes");
 
-		CustomGuiTest.waitUntilNodeIsVisible("#sourceTreeView", 15);
-		clickOn("#sourceTreeView");
-		clickOn("#targetTreeView");
-		clickOn("Next");
+		CustomGuiTest.waitUntilNodeIsVisible("Thing", 15);
+
+		verifyThat("Thing", NodeMatchers.isVisible());
 	}
 }
