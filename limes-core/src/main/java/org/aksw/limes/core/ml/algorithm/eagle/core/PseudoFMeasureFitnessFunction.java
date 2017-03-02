@@ -104,12 +104,11 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
         AMapping actualMapping = MappingFactory.createDefaultMapping();
         LinkSpecification spec = (LinkSpecification) pc.getNode(0).execute_object(pc, 0, args);
         // get Mapping
-        logger.info("ls = " + spec);
         try {
             actualMapping = getMapping(spec);
         } catch (java.lang.OutOfMemoryError e) {
             e.printStackTrace(); // should not happen
-            System.err.println(e.getMessage());
+            
             return MappingFactory.createDefaultMapping();
         }
         return actualMapping;

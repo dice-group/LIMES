@@ -40,6 +40,7 @@ public abstract class ACoreMLAlgorithm {
 	 */
 	public void setConfiguration(Configuration configuration) {
 		this.configuration = configuration;
+		
 	}
 
 	/**

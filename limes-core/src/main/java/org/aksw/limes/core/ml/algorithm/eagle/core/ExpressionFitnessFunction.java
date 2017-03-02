@@ -41,7 +41,7 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
     private static final long serialVersionUID = 1L;
     /** Complete optimal Mapping. Note that it should only hold matches! */
 //	protected Mapping optimalMapping;
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger(ExpressionFitnessFunction.class.getName());
     private static ExpressionFitnessFunction instance = null;
     public ExecutionEngine engine;
     public ExecutionEngine fullEngine;
@@ -329,11 +329,13 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
             for (String tUri : matches.getMap().get(sUri).keySet()) {
                 if (!trimmedSourceCache.containsUri(sUri)) {
                     logger.info("Adding instance " + sUri + " to sC");
-                    trimmedSourceCache.addInstance(sC.getInstance(sUri));
+                    if(sC.containsUri(sUri))
+                    	trimmedSourceCache.addInstance(sC.getInstance(sUri));
                 }
                 if (!trimmedTargetCache.containsUri(tUri)) {
                     logger.info("Adding instance " + tUri + " to tC");
-                    trimmedTargetCache.addInstance(tC.getInstance(tUri));
+                    if(tC.containsUri(tUri))
+                    	trimmedTargetCache.addInstance(tC.getInstance(tUri));
                 }
             }
         engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT,

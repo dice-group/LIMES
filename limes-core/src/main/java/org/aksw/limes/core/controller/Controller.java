@@ -144,7 +144,7 @@ public class Controller {
         boolean isAlgorithm = !config.getMlAlgorithmName().equals("");
         if (isAlgorithm) {
             try {
-                results = MLPipeline.execute(sourceCache, targetCache, config.getMlAlgorithmName(),
+                results = MLPipeline.execute(config, sourceCache, targetCache, config.getMlAlgorithmName(),
                         config.getMlImplementationType(), config.getMlAlgorithmParameters(),
                         config.getTrainingDataFile(), config.getMlPseudoFMeasure(), MAX_ITERATIONS_NUMBER);
             } catch (UnsupportedMLImplementationException e) {

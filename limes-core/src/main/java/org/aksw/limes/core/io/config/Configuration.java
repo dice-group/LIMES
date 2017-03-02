@@ -11,6 +11,7 @@ import java.util.Set;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.aksw.limes.core.ml.algorithm.eagle.core.AddMetric;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +89,7 @@ public class Configuration implements IConfiguration {
         this.mlPseudoFMeasure = mlPseudoFMeasure;
     }
 
-    public void addMlAlgorithmParameter(String mlParameterName, String mlParameterValue) {
+    public void addMlAlgorithmParameter(String mlParameterName, Object mlParameterValue) {
         LearningParameter lp = new LearningParameter();
         lp.setName(mlParameterName);
         lp.setValue(mlParameterValue);

@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ExpressionProblem extends GPProblem {
     public static CommandGene SUBPROGRAM;
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger(ExpressionProblem.class.getName());
     private boolean learnPreProcessing = false;
 
     /**
@@ -67,6 +67,10 @@ public class ExpressionProblem extends GPProblem {
         };
         SUBPROGRAM = new SubProgram(config, new Class[]{String.class, String.class, CommandGene.DoubleClass}, true);
         List<CommandGene> nodes;
+        /* We differentiate learning basic link specifications with EAGLE and such which will
+         * also predict chains of preprocessing steps 'on the fly'. We have to do this because
+         * not only the layout of the chromosomes but also processing them is different.
+         */
         if (!this.learnPreProcessing) {
             logger.info("Creating basic commands ");
             nodes = getNormalSetup(config);
