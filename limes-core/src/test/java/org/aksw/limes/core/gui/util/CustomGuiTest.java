@@ -21,7 +21,7 @@ public class CustomGuiTest {
 			try {
 				node = new FxRobot().lookup(nodeId).query();
 				timeout--;
-				logger.info("Timeoutremaining for "+ nodeId + " : " + timeout);
+				logger.debug("Timeoutremaining for "+ nodeId + " : " + timeout);
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				logger.error("Interrupted while waiting for Node " + nodeId + " to be not null!");
@@ -29,7 +29,7 @@ public class CustomGuiTest {
 			}
 		}
 		if (node != null) {
-			logger.info(nodeId + " not null");
+			logger.debug(nodeId + " not null");
 			return true;
 		}
 		logger.error("Maximum timeout reached, while waiting for Node " + nodeId + " to be not null!");
@@ -60,7 +60,7 @@ public class CustomGuiTest {
 		while (!node.isVisible() && timeout != 0) {
 			try {
 				timeout--;
-				logger.info("Timeoutremaining for "+ nodeId + " : " + timeout);
+				logger.debug("Timeoutremaining for "+ nodeId + " : " + timeout);
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				logger.error("Interrupted while waiting for Node " + nodeId + " to be visible!");
@@ -68,9 +68,9 @@ public class CustomGuiTest {
 			}
 		}
 		if(node.isVisible()){
-			logger.info(nodeId +  " is visible"); 
+			logger.debug(nodeId +  " is visible"); 
 		}else{
-			logger.info(nodeId +  " is NOT visible"); 
+			logger.debug(nodeId +  " is NOT visible"); 
 		}
 
 	}

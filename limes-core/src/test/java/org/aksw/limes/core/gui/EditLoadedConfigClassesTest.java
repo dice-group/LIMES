@@ -36,6 +36,10 @@ public class EditLoadedConfigClassesTest extends ApplicationTest {
 		mainView.setController(mainController);
 	}
 
+	/**
+	 * Since loading classes might take long we load the testConfig but change the endpoints to local ones
+	 * We cannot do this in the config because relative paths for endpoints are not implemented
+	 */
 	@Before
 	public void loadConfig() {
 		mainController.loadConfig(
@@ -69,16 +73,19 @@ public class EditLoadedConfigClassesTest extends ApplicationTest {
 		System.setProperty("java.awt.headless", "true");
 	}
 
+	/**
+	 * This checks if editing of classes works on a previously loaded config
+	 */
 	@Test
 	public void testEditClassMatching() {
-		logger.info("Clicking on Configuration");
+		logger.debug("Clicking on Configuration");
 		clickOn("Configuration");
-		logger.info("Clicking on Edit");
+		logger.debug("Clicking on Edit");
 		clickOn("Edit");
-		logger.info("Clicking on Classes");
+		logger.debug("Clicking on Classes");
 		clickOn("Edit Classes");
 
-		logger.info("Waiting for classes to be visible");
+		logger.debug("Waiting for classes to be visible");
 		CustomGuiTest.waitUntilNodeIsVisible("Restaurant", 15);
 		CustomGuiTest.waitUntilNodeIsVisible("Person", 15);
 		verifyThat("Restaurant", NodeMatchers.isVisible());

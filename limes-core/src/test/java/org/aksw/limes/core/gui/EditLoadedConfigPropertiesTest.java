@@ -45,17 +45,17 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 	
 	@Test
 	public void testEditProperties(){
-		logger.info("Clicking on Configuration");
+		logger.debug("Clicking on Configuration");
 		clickOn("Configuration");
-		logger.info("Clicking on Edit");
+		logger.debug("Clicking on Edit");
 		clickOn("Edit");
 		//Necessary because otherwise the sub-menu vanishes
-		logger.info("Moving to Edit Classes");
+		logger.debug("Moving to Edit Classes");
 		moveTo("Edit Classes");
-		logger.info("Clicking on Edit Properties");
+		logger.debug("Clicking on Edit Properties");
 		clickOn("Edit Properties");
 
-		logger.info("Waiting for #sourcePropList");
+		logger.debug("Waiting for #sourcePropList");
 		CustomGuiTest.waitUntilNodeIsVisible("#sourcePropList", 15);
 		clickOn("#sourcePropList");
 		clickOn("#targetPropList");
