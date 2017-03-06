@@ -16,7 +16,7 @@ before_install:
 
 # build limes
 install:
-  - cd limes-core && mvn install -U -Dmaven.test.skip=true
+  - mvn install -U -Dmaven.test.skip=true
 
 # execute tests
 script:
