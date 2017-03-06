@@ -1,0 +1,59 @@
+@prefix drugbank: <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix diseasome: <http://www4.wiwiss.fu-berlin.de/diseasome/resource/diseasome/> .
+@prefix dbpedia-p: <http://dbpedia.org/property/> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix limes: <http://limes.sf.net/ontology/> .
+@prefix sider: <http://www4.wiwiss.fu-berlin.de/sider/resource/sider/> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+
+limes:1488796275608_source
+        a                  limes:SourceDataset ;
+        rdfs:label         "dbpedia" ;
+        limes:endPoint     <http://dbpedia.org/sparql> ;
+        limes:pageSize     "1000" ;
+        limes:property     "rdfs:label" ;
+        limes:restriction  "?x rdf:type dbpedia:Drug" ;
+        limes:type         "sparql" ;
+        limes:variable     "?x" .
+
+limes:1488796275608_target
+        a                  limes:TargetDataset ;
+        rdfs:label         "dbpedia" ;
+        limes:endPoint     <http://dbpedia.org/sparql> ;
+        limes:pageSize     "1000" ;
+        limes:property     "rdfs:label" ;
+        limes:restriction  "?y rdf:type dbpedia:Drug" ;
+        limes:type         "sparql" ;
+        limes:variable     "?y" .
+
+limes:1488796275608_acceptance
+        a                limes:Acceptance ;
+        limes:file       <dbpedia_dbpedia_duplicates.nt> ;
+        limes:relation   owl:sameAs ;
+        limes:threshold  "0.8" .
+
+limes:1488796275608_metric
+        a                 limes:Metric ;
+        limes:expression  "or(jaccard(x.rdfs:label,y.rdfs:label)|0.8,cosine(x.rdfs:label,y.rdfs:label)|0.9)" .
+
+limes:1488796275608  a           limes:LimesSpecs ;
+        limes:executionEngine    "default" ;
+        limes:executionPlanner   "default" ;
+        limes:executionRewriter  "default" ;
+        limes:granularity        "2" ;
+        limes:hasAcceptance      limes:1488796275608_acceptance ;
+        limes:hasMetric          limes:1488796275608_metric ;
+        limes:hasReview          limes:1488796275608_review ;
+        limes:hasSource          limes:1488796275608_source ;
+        limes:hasTarget          limes:1488796275608_target ;
+        limes:outputFormat       "TTL" .
+
+limes:1488796275608_review
+        a                limes:Review ;
+        limes:file       <dbpedia_dbpedia_reviewme.nt> ;
+        limes:relation   owl:sameAs ;
+        limes:threshold  "0.5" .

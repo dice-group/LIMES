@@ -6,14 +6,11 @@ import java.io.File;
 import java.util.Locale;
 
 import org.aksw.limes.core.gui.controller.MainController;
-import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.util.CustomGuiTest;
 import org.aksw.limes.core.gui.view.MainView;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.loadui.testfx.GuiTest;
 import org.testfx.framework.junit.ApplicationTest;
 
 import javafx.stage.Stage;

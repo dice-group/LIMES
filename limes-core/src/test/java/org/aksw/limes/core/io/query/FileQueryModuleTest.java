@@ -27,7 +27,8 @@ public class FileQueryModuleTest {
 
         KBInfo kbinfo = new KBInfo(
                 "DBpedia",                                                            //String id
-                "resources/ibuprofen.nt",                                            //String endpoint
+//                "resources/ibuprofen.nt",                                            //String endpoint
+                Thread.currentThread().getContextClassLoader().getResource("ibuprofen.nt").getPath(),
                 null,                                                                //String graph
                 "?x",                                                                //String var
                 new ArrayList<String>(Arrays.asList("rdfs:label")),                    //List<String> properties

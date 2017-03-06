@@ -26,6 +26,10 @@ public class LimesGUI extends Application {
     public static void startGUI(String[] args) {
         launch(args);
     }
+
+    public static void main(String[] args){
+	    startGUI(args);
+    }
     
     /**
      * Opens a new Window for the Application

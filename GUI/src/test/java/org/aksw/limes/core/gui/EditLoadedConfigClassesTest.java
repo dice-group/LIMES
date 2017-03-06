@@ -4,12 +4,12 @@ import static org.testfx.api.FxAssert.verifyThat;
 
 import java.io.File;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.Endpoint;
 import org.aksw.limes.core.gui.util.CustomGuiTest;
+import org.aksw.limes.core.gui.util.ProjectPropertiesGetter;
 import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.junit.Before;
@@ -27,6 +27,7 @@ public class EditLoadedConfigClassesTest extends ApplicationTest {
 	private static final Logger logger = LoggerFactory.getLogger(EditLoadedConfigClassesTest.class);
 	MainView mainView;
 	MainController mainController;
+	private String resourcesPath;
 
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -34,6 +35,7 @@ public class EditLoadedConfigClassesTest extends ApplicationTest {
 		mainView = new MainView(stage);
 		mainController = new MainController(mainView);
 		mainView.setController(mainController);
+		resourcesPath = ProjectPropertiesGetter.getProperty(Thread.currentThread().getContextClassLoader().getResource("project.properties").getPath(), "limes-core.resources");
 	}
 
 	@Before
@@ -43,10 +45,8 @@ public class EditLoadedConfigClassesTest extends ApplicationTest {
 		Config c = mainController.getCurrentConfig();
 		KBInfo sinfo = new KBInfo();
 		KBInfo tinfo = new KBInfo();
-		String restaurantsEndpoint = Thread.currentThread().getContextClassLoader()
-				.getResource("datasets/Restaurants/restaurant1.nt").toString();
-		String personsEndpoint = Thread.currentThread().getContextClassLoader()
-				.getResource("datasets/Persons2/person21.nt").toString();
+		String restaurantsEndpoint = resourcesPath + "datasets/Restaurants/restaurant1.nt";
+		String personsEndpoint = resourcesPath + "datasets/Persons2/person21.nt";
 		sinfo.setEndpoint(restaurantsEndpoint);
 		sinfo.setId("Restaurants");
 		Endpoint sendpoint = new Endpoint(sinfo, c);

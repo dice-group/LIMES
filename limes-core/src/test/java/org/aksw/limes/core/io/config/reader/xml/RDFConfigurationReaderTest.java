@@ -93,7 +93,9 @@ public class RDFConfigurationReaderTest {
         testConf.setMlAlgorithmName("wombat simple");
         testConf.setMlAlgorithmParameters(mlParameters);
 
-        String file = System.getProperty("user.dir") + "/resources/lgd-lgd-ml.ttl";
+//        String file = System.getProperty("user.dir") + "/resources/lgd-lgd-ml.ttl";
+
+        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd-ml.ttl").getPath();
         RDFConfigurationReader c = new RDFConfigurationReader(file);
         Configuration fileConf = c.read();
         assertTrue(testConf.equals(fileConf));
@@ -115,7 +117,9 @@ public class RDFConfigurationReaderTest {
         testConf.setVerificationFile("lgd_relaybox_near.nt");
         testConf.setOutputFormat("TAB");
 
-        String file = System.getProperty("user.dir") + "/resources/lgd-lgd.ttl";
+//        String file = System.getProperty("user.dir") + "/resources/lgd-lgd.ttl";
+        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.ttl").getPath();
+
         RDFConfigurationReader c = new RDFConfigurationReader(file);
         Configuration fileConf = c.read();
         assertTrue(testConf.equals(fileConf));

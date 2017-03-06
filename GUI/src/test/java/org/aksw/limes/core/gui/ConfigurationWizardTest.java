@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.util.CustomGuiTest;
+import org.aksw.limes.core.gui.util.ProjectPropertiesGetter;
 import org.aksw.limes.core.gui.view.MainView;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -26,6 +27,7 @@ public class ConfigurationWizardTest extends ApplicationTest{
 	MainController mainController;
 	private static final int timeout = 15;
 	private static final Logger logger = LoggerFactory.getLogger(ConfigurationWizardTest.class);
+	private String resourcesPath;
 	
 
 	@Override
@@ -34,6 +36,7 @@ public class ConfigurationWizardTest extends ApplicationTest{
 		mainView = new MainView(stage);
 		mainController = new MainController(mainView);
 		mainView.setController(mainController);
+		resourcesPath = ProjectPropertiesGetter.getProperty(Thread.currentThread().getContextClassLoader().getResource("project.properties").getPath(), "limes-core.resources");
 	}
 	
 	@Before
@@ -68,9 +71,9 @@ public class ConfigurationWizardTest extends ApplicationTest{
 	
 	public void testEditEndpoint(){
 		logger.info("testEditEndpoint started");
-		clickOn("#SOURCEendpointURLTextField").write(Thread.currentThread().getContextClassLoader().getResource("datasets/Restaurants/restaurant1.nt").toString());
+		clickOn("#SOURCEendpointURLTextField").write(resourcesPath + "datasets/Restaurants/restaurant1.nt");
 		clickOn("#SOURCEidNamespaceTextField").write("Restaurant");
-		clickOn("#TARGETendpointURLTextField").write(Thread.currentThread().getContextClassLoader().getResource("datasets/Persons2/person21.nt").toString());
+		clickOn("#TARGETendpointURLTextField").write(resourcesPath + "datasets/Persons2/person21.nt");
 		clickOn("#TARGETidNamespaceTextField").write("Person");
 		logger.info("Edited Endpoint clicking NEXT");
 		clickOn("Next");
