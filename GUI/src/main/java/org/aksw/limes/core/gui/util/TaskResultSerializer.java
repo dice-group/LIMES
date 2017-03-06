@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,7 @@ import javafx.concurrent.Task;
 
 public class TaskResultSerializer {
 
-    public static File folder = new File("");
+    public static File folder = new File(System.getProperty("user.dir") + "/cache/");
     static Logger logger = LoggerFactory.getLogger(TaskResultSerializer.class.getName());
     
     /** 
@@ -26,7 +25,7 @@ public class TaskResultSerializer {
     @SuppressWarnings("rawtypes")
     public static Object getTaskResult(Task task){
 	String hash = task.hashCode() + "";
-        File serializationFile = new File(folder + "cache/" + hash + ".ser");
+        File serializationFile = new File(folder + hash + ".ser");
         logger.info("Checking for file " + serializationFile.getAbsolutePath());
         Object taskResult = null;
         try {
@@ -56,7 +55,7 @@ public class TaskResultSerializer {
     public static void serializeTaskResult(Task task, Object result){
 	 try{
 	String hash = task.hashCode() + "";
-        File serializationFile = new File(folder + "cache/" + hash + ".ser");
+        File serializationFile = new File(folder + hash + ".ser");
 	         FileOutputStream fileOut = new FileOutputStream(serializationFile);
 	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
 	         out.writeObject(result);
