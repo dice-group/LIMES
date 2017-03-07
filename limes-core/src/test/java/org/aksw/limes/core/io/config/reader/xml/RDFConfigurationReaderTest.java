@@ -124,10 +124,7 @@ public class RDFConfigurationReaderTest {
 
         String file = SYSTEM_DIR + "/resources/lgd-lgd-optional-properties.ttl";
         RDFConfigurationReader c = new RDFConfigurationReader(file);
-        Configuration fileConf = c.read();
-        
-        System.out.println("testConf:\n" + testConf);
-        System.out.println("\n\nfileConf:\n" + fileConf);
+        Configuration fileConf = c.read();       
         
         assertTrue(testConf.equals(fileConf));
     }

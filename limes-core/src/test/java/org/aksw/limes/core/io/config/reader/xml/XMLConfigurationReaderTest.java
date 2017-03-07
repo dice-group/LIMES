@@ -108,8 +108,6 @@ public class XMLConfigurationReaderTest {
         String file= System.getProperty("user.dir") + "/resources/lgd-lgd-optional-properties.xml";
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
-        System.out.println("testConf:\n" + testConf);
-        System.out.println("\n\nfileConf:\n" + fileConf);
         assertTrue(testConf.equals(fileConf));
     }
     
