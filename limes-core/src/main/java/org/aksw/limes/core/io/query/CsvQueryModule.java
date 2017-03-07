@@ -49,7 +49,7 @@ public class CsvQueryModule implements IQueryModule {
             String split[];
             //first read name of properties. URI = first column
             if (s != null) {
-                ArrayList<String> properties = new ArrayList<String>();
+                ArrayList<String> properties = new ArrayList<>();
                 //split first line
                 split = s.split(SEP);
                 properties.addAll(Arrays.asList(split));

@@ -20,7 +20,7 @@ import org.xml.sax.SAXParseException;
 public class DtdChecker implements org.xml.sax.ErrorHandler {
 
     protected boolean valid = true;
-    private Logger logger = LoggerFactory.getLogger(DtdChecker.class.getName());
+    private Logger logger = LoggerFactory.getLogger(DtdChecker.class);
 
     /**
      * Carries out the validation in case a fatal parsing error occur.

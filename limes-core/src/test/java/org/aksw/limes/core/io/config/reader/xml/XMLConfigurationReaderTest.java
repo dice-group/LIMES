@@ -26,6 +26,7 @@ public class XMLConfigurationReaderTest {
     Map<String, String> prefixes = new HashMap<>();
     Map<String, Map<String, String>> functions = new HashMap<>();
     KBInfo sourceInfo, targetInfo;
+    Configuration testConf;
 
     @Before
     public void init() {
@@ -65,17 +66,11 @@ public class XMLConfigurationReaderTest {
                 2000,                                                             //int pageSize
                 "sparql"                                                          //String type
         );
-    }
-    
-    
-    @Test
-    public void testXmlReaderMetric() {
-
-        Configuration testConf = new Configuration();
+        
+        testConf = new Configuration();
         testConf.setPrefixes(prefixes);
         testConf.setSourceInfo(sourceInfo);
         testConf.setTargetInfo(targetInfo);
-        testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
         testConf.setAcceptanceRelation("lgdo:near");       
         testConf.setVerificationRelation("lgdo:near");
         testConf.setAcceptanceThreshold(0.9); 
@@ -83,6 +78,12 @@ public class XMLConfigurationReaderTest {
         testConf.setVerificationThreshold(0.5);
         testConf.setVerificationFile("lgd_relaybox_near.nt");
         testConf.setOutputFormat("TAB");
+    }
+    
+    
+    @Test
+    public void testXmlReaderForMetric() {
+        testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
         testConf.setExecutionRewriter("default");
         testConf.setExecutionPlanner("default");
         testConf.setExecutionEngine("default");
@@ -95,6 +96,24 @@ public class XMLConfigurationReaderTest {
     }
     
     @Test
+    public void testXmlReaderForOptionalProperties() {
+        testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
+        testConf.setExecutionRewriter("default");
+        testConf.setExecutionPlanner("default");
+        testConf.setExecutionEngine("default");
+        
+        sourceInfo.setOptionalProperties(Arrays.asList("rdfs:label"));
+        targetInfo.setOptionalProperties(Arrays.asList("rdfs:label"));
+
+        String file= System.getProperty("user.dir") + "/resources/lgd-lgd-optional-properties.xml";
+        XMLConfigurationReader c = new XMLConfigurationReader(file);
+        Configuration fileConf = c.read();
+        System.out.println("testConf:\n" + testConf);
+        System.out.println("\n\nfileConf:\n" + fileConf);
+        assertTrue(testConf.equals(fileConf));
+    }
+    
+    @Test
     public void testXmlReaderMLAlgorithm() {
 
         List<LearningParameter> mlParameters = new ArrayList<>();
@@ -103,17 +122,6 @@ public class XMLConfigurationReaderTest {
         lp.setValue(60);
         mlParameters.add(lp);
 
-        Configuration testConf = new Configuration();
-        testConf.setPrefixes(prefixes);
-        testConf.setSourceInfo(sourceInfo);
-        testConf.setTargetInfo(targetInfo);
-        testConf.setAcceptanceRelation("lgdo:near");       
-        testConf.setVerificationRelation("lgdo:near");
-        testConf.setAcceptanceThreshold(0.9); 
-        testConf.setAcceptanceFile("lgd_relaybox_verynear.nt");
-        testConf.setVerificationThreshold(0.5);
-        testConf.setVerificationFile("lgd_relaybox_near.nt");
-        testConf.setOutputFormat("TAB");
         testConf.setMlAlgorithmName("wombat simple");
         testConf.setMlImplementationType(MLImplementationType.SUPERVISED_BATCH);
         testConf.setTrainingDataFile("trainingData.nt");

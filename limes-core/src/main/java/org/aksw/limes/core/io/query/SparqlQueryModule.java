@@ -192,7 +192,7 @@ public class SparqlQueryModule implements IQueryModule {
             // close optional
             query = query + propertiesStr;
         }
-        // properties
+        // optional properties
         String optionalPropertiesStr;
         if (kb.getOptionalProperties() != null && kb.getOptionalProperties().size() > 0) {
             logger.info("Optipnal properties are " + kb.getOptionalProperties());
@@ -208,7 +208,7 @@ public class SparqlQueryModule implements IQueryModule {
                 varCount++;
             }
             // close optional
-            query = query + optionalPropertiesStr;
+            query = query + optionalPropertiesStr + "}";
         }
         // finally replace variables in inverse properties
         String q[] = query.split("\n");

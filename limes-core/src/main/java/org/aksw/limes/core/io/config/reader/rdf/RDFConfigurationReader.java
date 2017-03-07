@@ -220,44 +220,71 @@ public class RDFConfigurationReader extends AConfigurationReader {
     }
 
     /**
-     * Read either the source or the dataset description
+     * Read either the source or target dataset description
      *
      * @param kb knowledge base resource URI
      */
     public void readKBDescription(Resource kb) {
         KBInfo kbinfo = null;
 
+        // Type
         if (configModel.contains(kb, RDF.type, LIMES.SourceDataset)) {
             kbinfo = configuration.getSourceInfo();
         } else if (configModel.contains(kb, RDF.type, LIMES.TargetDataset)) {
             kbinfo = configuration.getTargetInfo();
         } else {
-            logger.error("Either " + LIMES.SourceDataset + " or " + LIMES.TargetDataset + " type statement is missing");
+            logger.error("Dataset type missing, "
+                    + "either " + LIMES.SourceDataset + " or " + LIMES.TargetDataset + " is required.");
             throw new RuntimeException();
         }
+        // Label
         kbinfo.setId(getObject(kb, RDFS.label, true).toString());
-        ;
+
+        // End-point & graph
         kbinfo.setEndpoint(getObject(kb, LIMES.endPoint, true).toString());
         RDFNode graph = getObject(kb, LIMES.graph, false);
         if (graph != null) {
             kbinfo.setGraph(graph.toString());
         }
-        for (RDFNode r : getObjects(kb, LIMES.restriction, false)) {
-            String restriction = r.toString();
-            if (restriction.endsWith(".")) {
-                restriction = restriction.substring(0, restriction.length() - 1);
+
+        // Restrictions  
+        Set<RDFNode> restriction = getObjects(kb, LIMES.restriction, false);
+        if(restriction != null){
+            for (RDFNode r : restriction) {
+                String restrictionStr = r.toString();
+                if (restrictionStr.endsWith(".")) {
+                    restrictionStr = restrictionStr.substring(0, restrictionStr.length() - 1);
+                }
+                kbinfo.addRestriction(restrictionStr);
             }
-            kbinfo.addRestriction(restriction);
         }
+
+        // properties
         for (RDFNode property : getObjects(kb, LIMES.property, true)) {
             XMLConfigurationReader.processProperty(kbinfo, property.toString());
         }
+
+        // optional properties
+        Set<RDFNode> optionalProperties = getObjects(kb, LIMES.optionalProperty, false);
+        if(optionalProperties != null){
+            for (RDFNode optionalProperty : optionalProperties) {
+                XMLConfigurationReader.processOptionalProperty(kbinfo, optionalProperty.toString());
+            }
+        }
+
+        // Page size
         kbinfo.setPageSize(parseInt(getObject(kb, LIMES.pageSize, true).toString()));
+
+        // KB variable
         kbinfo.setVar(getObject(kb, LIMES.variable, true).toString());
+
+        // KB type
         RDFNode type = getObject(kb, LIMES.type, false);
         if (type != null) {
             kbinfo.setType(type.toString().toLowerCase());
         }
+
+        // Prefixes
         kbinfo.setPrefixes(configuration.getPrefixes());
     }
 
