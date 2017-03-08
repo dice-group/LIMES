@@ -1,0 +1,61 @@
+@prefix geos:    <http://www.opengis.net/ont/geosparql#> .
+@prefix lgdo:    <http://linkedgeodata.org/ontology/> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix geom:    <http://geovocab.org/geometry#> .
+@prefix limes:   <http://limes.sf.net/ontology/> .
+
+limes:linkedgeodataTOlinkedgeodata
+      a       limes:LimesSpecs ;
+      limes:hasExecutionParameters limes:executionParameters ;
+      limes:granularity "2" ;
+      limes:hasAcceptance limes:linkedgeodataTOlinkedgeodataAcceptance ;
+      limes:hasMetric limes:linkedgeodataTOlinkedgeodataMetric ;
+      limes:hasReview limes:linkedgeodataTOlinkedgeodataReview ;
+      limes:hasSource limes:linkedgeodataTOlinkedgeodataSource ;
+      limes:hasTarget limes:linkedgeodataTOlinkedgeodataTarget ;
+      limes:outputFormat "TAB" .
+
+limes:linkedgeodataTOlinkedgeodataSource
+      a       limes:SourceDataset ;
+      rdfs:label "linkedgeodata" ;
+      limes:endPoint "http://linkedgeodata.org/sparql" ;
+      limes:pageSize "2000" ;
+      limes:property "geom:geometry/geos:asWKT RENAME polygon" ;
+      limes:optionalProperty "rdfs:label" ;
+      limes:restriction "?x a lgdo:RelayBox" ;
+      limes:variable "?x" .
+
+limes:linkedgeodataTOlinkedgeodataTarget
+      a       limes:TargetDataset ;
+      rdfs:label "linkedgeodata" ;
+      limes:endPoint "http://linkedgeodata.org/sparql" ;
+      limes:pageSize "2000" ;
+      limes:property "geom:geometry/geos:asWKT RENAME polygon" ;
+      limes:optionalProperty "rdfs:label" ;
+      limes:restriction "?y a lgdo:RelayBox" ;
+      limes:variable "?y" .
+
+limes:executionParameters
+	  a limes:ExecutionParameters ;
+	  limes:executionPlanner "default" ;
+	  limes:executionRewriter "default" ;
+	  limes:executionEngine "default" .
+	  
+      
+limes:linkedgeodataTOlinkedgeodataReview
+      a       limes:Review ;
+      limes:file "lgd_relaybox_near.nt" ;
+      limes:relation "lgdo:near" ;
+      limes:threshold "0.5" .
+
+limes:linkedgeodataTOlinkedgeodataMetric
+      a       limes:Metric ;
+      limes:expression "geo_hausdorff(x.polygon, y.polygon)" .
+
+limes:linkedgeodataTOlinkedgeodataAcceptance
+      a       limes:Acceptance ;
+      limes:file "lgd_relaybox_verynear.nt" ;
+      limes:relation "lgdo:near" ;
+      limes:threshold "0.9" .
+
+

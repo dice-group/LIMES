@@ -23,19 +23,24 @@ import org.junit.Test;
  */
 public class RDFConfigurationReaderTest {
     
-    Map<String, String> prefixes = new HashMap<>();
-    Map<String, Map<String, String>> functions = new HashMap<>();
+    private static final String SYSTEM_DIR = System.getProperty("user.dir");
+    Map<String, String> prefixes;
+    Map<String, Map<String, String>> functions;
     KBInfo sourceInfo, targetInfo;
+    Configuration testConf;
 
     @Before
     public void init() {
+        prefixes = new HashMap<>();
         prefixes.put("geos", "http://www.opengis.net/ont/geosparql#");
         prefixes.put("lgdo", "http://linkedgeodata.org/ontology/");
         prefixes.put("geom", "http://geovocab.org/geometry#");
         prefixes.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
         prefixes.put("limes", "http://limes.sf.net/ontology/");
         prefixes = Collections.unmodifiableMap(prefixes);
-        HashMap<String, String> f = new HashMap<String, String>();
+        
+        functions = new HashMap<>();
+        HashMap<String, String> f = new HashMap<>();
         f.put("polygon", null);
         functions.put("geom:geometry/geos:asWKT", f);
         functions = Collections.unmodifiableMap(functions);
@@ -67,33 +72,34 @@ public class RDFConfigurationReaderTest {
                 2000,                                                             //int pageSize
                 "sparql"                                                          //String type
         );
+        
+        testConf = new Configuration();
+        testConf.setPrefixes(prefixes);
+        testConf.setSourceInfo(sourceInfo);
+        testConf.setTargetInfo(targetInfo);
+        testConf.setAcceptanceRelation("lgdo:near");       
+        testConf.setVerificationRelation("lgdo:near");
+        testConf.setAcceptanceFile("lgd_relaybox_verynear.nt");
+        testConf.setVerificationThreshold(0.5);
+        testConf.setVerificationFile("lgd_relaybox_near.nt");
+        testConf.setOutputFormat("TAB");
+        testConf.setAcceptanceThreshold(0.9); 
+
     }
 
 
     @Test
     public void testRDFReaderForMLAgorithm() {
-        
         List<LearningParameter> mlParameters = new ArrayList<>();
         LearningParameter lp = new LearningParameter();
         lp.setName("max execution time in minutes");
         lp.setValue(60);
         mlParameters.add(lp);
 
-        Configuration testConf = new Configuration();
-        testConf.setPrefixes(prefixes);
-        testConf.setSourceInfo(sourceInfo);
-        testConf.setTargetInfo(targetInfo);
-        testConf.setAcceptanceRelation("lgdo:near");       
-        testConf.setVerificationRelation("lgdo:near");
-        testConf.setAcceptanceThreshold(0.9); 
-        testConf.setAcceptanceFile("lgd_relaybox_verynear.nt");
-        testConf.setVerificationThreshold(0.5);
-        testConf.setVerificationFile("lgd_relaybox_near.nt");
-        testConf.setOutputFormat("TAB");
         testConf.setMlAlgorithmName("wombat simple");
         testConf.setMlAlgorithmParameters(mlParameters);
 
-        String file = System.getProperty("user.dir") + "/resources/lgd-lgd-ml.ttl";
+        String file = SYSTEM_DIR + "/resources/lgd-lgd-ml.ttl";
         RDFConfigurationReader c = new RDFConfigurationReader(file);
         Configuration fileConf = c.read();
         assertTrue(testConf.equals(fileConf));
@@ -101,25 +107,28 @@ public class RDFConfigurationReaderTest {
 
     @Test
     public void testRDFReaderForMetric() {
-        
-        Configuration testConf = new Configuration();
-        testConf.setPrefixes(prefixes);
-        testConf.setSourceInfo(sourceInfo);
-        testConf.setTargetInfo(targetInfo);
         testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
-        testConf.setAcceptanceRelation("lgdo:near");       
-        testConf.setVerificationRelation("lgdo:near");
-        testConf.setAcceptanceThreshold(0.9); 
-        testConf.setAcceptanceFile("lgd_relaybox_verynear.nt");
-        testConf.setVerificationThreshold(0.5);
-        testConf.setVerificationFile("lgd_relaybox_near.nt");
-        testConf.setOutputFormat("TAB");
-
-        String file = System.getProperty("user.dir") + "/resources/lgd-lgd.ttl";
+        
+        String file = SYSTEM_DIR + "/resources/lgd-lgd.ttl";
         RDFConfigurationReader c = new RDFConfigurationReader(file);
         Configuration fileConf = c.read();
         assertTrue(testConf.equals(fileConf));
     }
+    
+    @Test
+    public void testRDFReaderForOptionalProperties() {
+        testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
+        
+        sourceInfo.setOptionalProperties(Arrays.asList("rdfs:label"));
+        targetInfo.setOptionalProperties(Arrays.asList("rdfs:label"));
 
-
+        String file = SYSTEM_DIR + "/resources/lgd-lgd-optional-properties.ttl";
+        RDFConfigurationReader c = new RDFConfigurationReader(file);
+        Configuration fileConf = c.read();
+        
+        System.out.println("testConf:\n" + testConf);
+        System.out.println("\n\nfileConf:\n" + fileConf);
+        
+        assertTrue(testConf.equals(fileConf));
+    }
 }

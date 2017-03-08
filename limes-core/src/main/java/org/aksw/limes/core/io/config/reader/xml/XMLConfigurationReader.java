@@ -55,6 +55,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
     protected static final String GRAPH = "GRAPH";
     protected static final String RESTRICTION = "RESTRICTION";
     protected static final String PROPERTY = "PROPERTY";
+    protected static final String OPTIONAL_PROPERTY = "OPTIONAL_PROPERTY";
     protected static final String AS = " AS ";
     protected static final String RENAME = " RENAME ";
     protected static final String METRIC = "METRIC";
@@ -102,7 +103,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
 
         // now ensure that we have a map for the given label
         if (!kbinfo.getFunctions().containsKey(propertyLabel)) {
-            kbinfo.getFunctions().put(propertyLabel, new HashMap<String, String>());
+            kbinfo.getFunctions().put(propertyLabel, new HashMap<>());
         }
 
         kbinfo.getFunctions().get(propertyLabel).put(propertyRename, function);
@@ -111,7 +112,42 @@ public class XMLConfigurationReader extends AConfigurationReader {
         if (!kbinfo.getProperties().contains(propertyLabel)) {
             kbinfo.getProperties().add(propertyLabel);
         }
+    }
+    
+    
+    public static void processOptionalProperty(KBInfo kbinfo, String property) {
+        String function = "", propertyLabel = "", propertyRename = "";
+        // no preprocessing nor renaming
 
+        if (!property.contains(RENAME) && !property.contains(AS)) {
+            propertyLabel = property;
+            propertyRename = property;
+        } else if (!property.contains(RENAME) && property.contains(AS)) {
+            propertyLabel = property.substring(0, property.indexOf(AS));
+            propertyRename = propertyLabel;
+            function = property.substring(property.indexOf(AS) + AS.length(), property.length());
+        } else if (!property.contains(AS) && property.contains(RENAME)) {
+            propertyLabel = property.substring(0, property.indexOf(RENAME));
+            propertyRename = property.substring(property.indexOf(RENAME) + RENAME.length(), property.length());
+            function = null;
+        } // property contains both AS and RENAME, in that order
+        else {
+            propertyLabel = property.substring(0, property.indexOf(AS));
+            function = property.substring(property.indexOf(AS) + AS.length(), property.indexOf(RENAME));
+            propertyRename = property.substring(property.indexOf(RENAME) + RENAME.length(), property.length());
+        }
+
+        // now ensure that we have a map for the given label
+        if (!kbinfo.getFunctions().containsKey(propertyLabel)) {
+            kbinfo.getFunctions().put(propertyLabel, new HashMap<>());
+        }
+
+        kbinfo.getFunctions().get(propertyLabel).put(propertyRename, function);
+
+        // might be that the same label leads to two different propertydubs
+        if (!kbinfo.getOptionalProperties().contains(propertyLabel)) {
+            kbinfo.getOptionalProperties().add(propertyLabel);
+        }
     }
 
     /**
@@ -122,7 +158,6 @@ public class XMLConfigurationReader extends AConfigurationReader {
      * @return The text within the NODE tag
      */
     public static String getText(Node node) {
-
         // We need to retrieve the text from elements, entity
         // references, CDATA sections, and text nodes; but not
         // comments or processing instructions
@@ -202,6 +237,9 @@ public class XMLConfigurationReader extends AConfigurationReader {
             } else if (child.getNodeName().equals(PROPERTY)) {
                 property = getText(child);
                 processProperty(kbinfo, property);
+            } else if (child.getNodeName().equals(OPTIONAL_PROPERTY)) {
+                property = getText(child);
+                processOptionalProperty(kbinfo, property);
             } else if (child.getNodeName().equals(PAGESIZE)) {
                 kbinfo.setPageSize(Integer.parseInt(getText(child)));
             } else if (child.getNodeName().equals(VAR)) {
