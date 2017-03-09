@@ -34,7 +34,7 @@ public class LinearEuclid extends ACoreMLAlgorithm{
 	
 	
     /**The EUCLID implementation*/
-    private LinearSelfConfigurator lsc = null;
+    protected LinearSelfConfigurator lsc = null;
     
     
     @Override
@@ -118,9 +118,9 @@ public class LinearEuclid extends ACoreMLAlgorithm{
 	}
 
 	/**
-	 * To configure EUCLID implementation. Checks for new parameters and sets up EUCLID agordingly.
+	 * To configure EUCLID implementation. Checks for new parameters and sets up EUCLID accordingly.
 	 */
-	private void configureEuclid() {
+	protected void configureEuclid() {
 		if(lsc == null)
 			lsc = new LinearSelfConfigurator(sourceCache, targetCache);
 		double min_cov = (double) getParameter(MIN_COVERAGE);

@@ -340,7 +340,6 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
                 mappings.put(classifiers.get(i), m);
             }
         }
-        System.out.println(mappings);
         return getOverallMapping(mappings, 1.0);
     }
 
@@ -411,11 +410,17 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      **/
 
     public double computeNext(List<SimpleClassifier> classifiers, int index) {
-        classifiers.get(index).setWeight(classifiers.get(index).getWeight() - learningRate);
-        classifiers = normalizeClassifiers(classifiers);
+    	// FIXME simply subtracting learning rate?
+    	double newWeight = Math.max(0, classifiers.get(index).getWeight() - learningRate);
+    	if(newWeight == classifiers.get(index).getWeight()) {
+    		logger.info("Computed weight under zero.");
+    	} else {
+            classifiers.get(index).setWeight(newWeight);
+            classifiers = normalizeClassifiers(classifiers);
+    	}
         AMapping m = getMapping(classifiers);
         buffer = classifiers;
-        //        return qMeasure.getPseudoFMeasure(source.getAllUris(), target.getAllUris(), m, beta);
+
         return	computeQuality(m);
     }
 
@@ -450,7 +455,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
             //nothing better found. simply march in the space in direction
             //"direction"
             if (bestF == f) {
-                System.out.println(">>>> Walking along direction " + direction);
+                logger.info(">>>> Walking along direction " + direction);
                 computeNext(classifiers, direction);
                 bestClassifiers = buffer;
                 direction++;
@@ -460,7 +465,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
                 return bestClassifiers;
             } //found a better classifier
             classifiers = bestClassifiers;
-            System.out.println(">> Iteration " + iterations + ": " + classifiers + " F-Measure = " + bestF);
+            logger.info(">> Iteration " + iterations + ": " + classifiers + " F-Measure = " + bestF);
         }
         return classifiers;
     }
@@ -526,8 +531,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      * @return
      */
     public Double computeQuality(AMapping map) {
-    	logger.warn("qumeasure: "+qMeasure);
-        return qMeasure.calculate(map, new GoldStandard(reference, source.getAllUris(), target.getAllUris()));
+    	return qMeasure.calculate(map, new GoldStandard(reference, source.getAllUris(), target.getAllUris()));
     }
 
     /** Set caches to trimmed caches according to the given reference mapping.

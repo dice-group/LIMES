@@ -1,84 +1,61 @@
 package org.aksw.limes.core.ml.algorithm.euclid;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.Eagle;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
+import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator.QMeasureType;
 import org.apache.log4j.Logger;
 
-public class BooleanEuclid extends ACoreMLAlgorithm{
+public class BooleanEuclid extends LinearEuclid{
 
 	protected static Logger logger = Logger.getLogger(BooleanEuclid.class);
 	
-	static final String ALGORITHM_NAME = "Euclid";
-    // execution mode. STRICT = true leads to a strong bias towards precision by
-    // ensuring that the initial classifiers are classifiers that have the
-    // maximal threshold that leads to the best pseudo-f-measure. False leads to the
-    // best classifier with the smallest threshold
-    public boolean STRICT = true;
-    public int ITERATIONS_MAX = 1000;
-    public double MIN_THRESHOLD = 0.3;
-    public double MAX_THRESHOLD = 1.0;
+	static final String ALGORITHM_NAME = "Euclid boolean";
+	public static final String MAX_THRESHOLD = "max_threshold";
 
+	 @Override
+	 protected void init(List<LearningParameter> learningParameters, ACache sourceCache, ACache targetCache) {
+	  	setDefaultParameters();
+	   	super.init(learningParameters, sourceCache, targetCache);
+	   	lsc = new BooleanSelfConfigurator(sourceCache, targetCache);
+	 }
+	
 	@Override
-	protected String getName() {
-		return ALGORITHM_NAME;
-	}
+	public void setDefaultParameters() {    // execution mode. STRICT = true leads to a strong bias towards precision by
+	    double max_thres = 1.0;
+		super.setDefaultParameters();
+		learningParameters.add(new LearningParameter(MAX_THRESHOLD, max_thres, Double.class, 0d, 1d, Double.NaN, MAX_THRESHOLD));
+    	}
 
-	@Override
-	public void setDefaultParameters() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	protected MLResults learn(PseudoFMeasure pfm) throws UnsupportedMLImplementationException {
-		// TODO Auto-generated method stub
-		return null;
+		// first setup EUCLID
+		configureEuclid();
+		lsc.setPFMType(QMeasureType.UNSUPERVISED);
+		// get initial classifiers
+		List<SimpleClassifier> init_classifiers = lsc.getBestInitialClassifiers();
+		List<SimpleClassifier> result_classifiers  = lsc.learnClassifer(init_classifiers);
+		// compute results
+		MLResults result = new MLResults();
+		AMapping mapping = lsc.getMapping(result_classifiers);
+		result.setMapping(mapping);
+		result.setQuality(lsc.computeQuality(mapping));
+		result.setLinkSpecification(lsc.getLinkSpecification(result_classifiers));
+		for(int i = 0; i<result_classifiers.size(); i++) {
+			result.addDetail(i+". Classifier ", result_classifiers.get(i));
+			AMapping map = lsc.executeClassifier(result_classifiers.get(i), result_classifiers.get(i).getThreshold());
+			result.addDetail(i+". Mapping.size= ", map.size());
+		}	
+		return result;
 	}
-
-	@Override
-	protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
-		BooleanSelfConfigurator bsc = new BooleanSelfConfigurator(target, target, MIN_THRESHOLD, MIN_THRESHOLD);
-		List<SimpleClassifier> simpleList = bsc.getBestInitialClassifiers();
-//		bsc.
-		return null;
-	}
-
-	@Override
-	protected boolean supports(MLImplementationType mlType) {
-		return MLImplementationType.UNSUPERVISED == mlType;
-	}
-
-	@Override
-	protected AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
-		throw new UnsupportedMLImplementationException("EUCLID active learning not implemented yet.");
-	}
-
-	@Override
-	protected MLResults activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
-		throw new UnsupportedMLImplementationException("EUCLID active learning not implemented yet.");
-	}
-
-	@Override
-	protected MLResults activeLearn() throws UnsupportedMLImplementationException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

@@ -12,7 +12,7 @@ import org.aksw.limes.core.io.parser.Parser;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @author Klaus Lyko
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  * @version Nov 12, 2015
  */
 public class LinkSpecification implements ILinkSpecification {
