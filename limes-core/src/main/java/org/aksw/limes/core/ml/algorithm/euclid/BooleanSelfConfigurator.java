@@ -17,6 +17,14 @@ import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 public class BooleanSelfConfigurator extends LinearSelfConfigurator {
 
     /** Constructor
+     * @param source Source cache
+     * @param target Target cache
+     */
+	public BooleanSelfConfigurator (ACache source, ACache target) {
+        super(source, target);
+    }
+
+    /** Constructor
      *
      * @param source Source cache
      * @param target Target cache
@@ -160,7 +168,7 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
             } //nothing better found. simply march in the space in direction
             //"direction"
             else if (bestF == globalBestF) {
-                System.out.println(">>>> Walking along direction " + direction);
+//                logger.info(">>>> Walking along direction " + direction);
                 if (direction >= classifier.getClassifiers().size()) {
                     direction = 0;
                 }
@@ -172,7 +180,7 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
             globalBestF = bestF;
             //init for next iter
             classifier = bestClassifier;
-            System.out.println(">> Iteration " + iterations + ": " + classifier.getClassifiers() + " F-Measure = " + globalBestF + " AMapping = " + getMapping(classifiers));
+//            logger.info(">> Iteration " + iterations + ": " + classifier.getClassifiers() + " F-Measure = " + globalBestF + " AMapping = " + getMapping(classifiers));
         }
         return bestGlobalClassifier.getClassifiers();
     }
