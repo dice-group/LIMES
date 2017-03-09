@@ -45,7 +45,7 @@ public class MainView {
     /**
      * GraphBuildView to Model and View the Metric
      */
-    public GraphBuildView graphBuild;
+    private GraphBuildView graphBuild;
     /**
      * Corresponding Controller
      */
@@ -338,6 +338,10 @@ public class MainView {
 
 	public Scene getScene() {
 		return scene;
+	}
+
+	public GraphBuildView getGraphBuild() {
+		return graphBuild;
 	}
     
     

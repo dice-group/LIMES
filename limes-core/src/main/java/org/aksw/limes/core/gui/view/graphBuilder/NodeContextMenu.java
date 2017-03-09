@@ -31,6 +31,8 @@ public class NodeContextMenu extends ContextMenu {
      * MenutItem to delete Node
      */
     private MenuItem delete;
+    
+    private MenuItem optional;
 
     /**
      * Clicked NodeView
@@ -60,7 +62,6 @@ public class NodeContextMenu extends ContextMenu {
      * Add Listeners to the MenuItems
      */
     private void addListeners() {
-
         this.delete.setOnAction(e -> {
             graphBuildView.removeNodeView(node);
             this.graphBuildView.contextMenuIsShown = false;

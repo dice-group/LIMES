@@ -1,8 +1,5 @@
 package org.aksw.limes.core.gui.view;
 
-import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
-import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -12,12 +9,13 @@ import org.aksw.limes.core.gui.model.metric.Measure;
 import org.aksw.limes.core.gui.model.metric.Node;
 import org.aksw.limes.core.gui.model.metric.Operator;
 import org.aksw.limes.core.gui.model.metric.Property;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
 import org.aksw.limes.core.gui.view.graphBuilder.NodeView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -40,6 +38,7 @@ import javafx.scene.layout.VBox;
  *         studserv.uni-leipzig.de{@literal >}
  */
 public class ToolBox extends VBox {
+    private static final Logger logger = LoggerFactory.getLogger(ToolBox.class);
 
 	/**
 	 * List of the SourceProperties
@@ -151,21 +150,20 @@ public class ToolBox extends VBox {
 	private void switchPropertyOptional(ListView<PropertyItem> view, int shape) {
 		if (view.getSelectionModel().getSelectedItem() != null) {
 			if (shape == NodeView.SOURCE) {
-			System.out.println("switch source");
+			logger.debug("switch source");
 				config.switchPropertyOptional(
-						config.getPropertyString(view.getSelectionModel().getSelectedItem().getName(), SOURCE), SOURCE);
+						config.getPropertyString(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.SOURCE), SourceOrTarget.SOURCE);
 			} else {
-			System.out.println("switch target");
+			logger.debug("switch target");
 				config.switchPropertyOptional(
-						config.getPropertyString(view.getSelectionModel().getSelectedItem().getName(), TARGET), TARGET);
+						config.getPropertyString(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.TARGET), SourceOrTarget.TARGET);
 			}
 			view.getSelectionModel().getSelectedItem()
 					.setOptional(!view.getSelectionModel().getSelectedItem().isOptional());
 			ObservableList<PropertyItem> listItems = view.getItems();
 			view.setItems(null);
-			System.out.println("null");
 			view.setItems(listItems);
-			System.out.println("set");
+			this.view.getGraphBuild().draw();
 		}
 	}
 
@@ -234,13 +232,13 @@ public class ToolBox extends VBox {
 		if (view.getSelectionModel().getSelectedItem() != null) {
 			Property gen = null;
 			if (shape == NodeView.SOURCE) {
-				gen = new Property(
-						config.getPropertyString(view.getSelectionModel().getSelectedItem().getName(), SOURCE),
-						Property.Origin.SOURCE);
+				String propString = config.getPropertyString(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.SOURCE);
+				boolean optional = config.getSourceInfo().getOptionalProperties().contains(propString);
+				gen = new Property(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.SOURCE, optional);
 			} else {
-				gen = new Property(
-						config.getPropertyString(view.getSelectionModel().getSelectedItem().getName(), TARGET),
-						Property.Origin.TARGET);
+				String propString = config.getPropertyString(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.TARGET);
+				boolean optional = config.getTargetInfo().getOptionalProperties().contains(propString);
+				gen = new Property(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.TARGET, optional);
 			}
 			setNodeToGraph(gen, shape);
 		}
@@ -253,7 +251,7 @@ public class ToolBox extends VBox {
 	 *            Node to be added
 	 */
 	private void setNodeToGraph(Node e, int shape) {
-		view.graphBuild.addNode(200, 200, shape, e);
+		view.getGraphBuild().addNode(200, 200, shape, e);
 	}
 
 	/**

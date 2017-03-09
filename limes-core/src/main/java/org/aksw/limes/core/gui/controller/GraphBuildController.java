@@ -10,9 +10,12 @@ import org.aksw.limes.core.gui.model.metric.Node;
 import org.aksw.limes.core.gui.model.metric.Operator;
 import org.aksw.limes.core.gui.model.metric.Output;
 import org.aksw.limes.core.gui.model.metric.Property;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
 import org.aksw.limes.core.gui.view.ToolBox;
 import org.aksw.limes.core.gui.view.graphBuilder.GraphBuildView;
 import org.aksw.limes.core.gui.view.graphBuilder.NodeView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Controller of GraphBuildView, controls drawing and moving of Node Elements
@@ -21,6 +24,8 @@ import org.aksw.limes.core.gui.view.graphBuilder.NodeView;
  *         studserv.uni-leipzig.de{@literal >}
  */
 public class GraphBuildController {
+
+    private static final Logger logger = LoggerFactory.getLogger(GraphBuildController.class);
 
     /**
      * CurrentConfig of the Limes query
@@ -99,7 +104,7 @@ public class GraphBuildController {
         currentConfig.setVerificationThreshold(output.nodeData.param2);
         currentConfig.setMetricExpression(MetricParser.parse(
                 output.nodeData.toString(),
-                currentConfig.getSourceInfo().getVar().replaceAll("\\?", ""))
+                currentConfig.getSourceInfo().getVar().replaceAll("\\?", ""),currentConfig)
                 .toString());
     }
 
@@ -113,7 +118,7 @@ public class GraphBuildController {
                 return graphBuildView.nodeList.get(i);
             }
         }
-        System.err.println("Could not find output node!");
+        logger.error("Could not find output node!");
         return null;
     }
 
@@ -214,7 +219,7 @@ public class GraphBuildController {
             nodeShape = NodeView.OPERATOR;
         } else {
             Property castedNode = (Property) node;
-            if (castedNode.getOrigin() == Property.Origin.SOURCE) {
+            if (castedNode.getOrigin() == SourceOrTarget.SOURCE) {
                 nodeShape = NodeView.SOURCE;
             } else {
                 nodeShape = NodeView.TARGET;
@@ -233,5 +238,10 @@ public class GraphBuildController {
             return nodeList;
         }
     }
+
+	public Config getConfig() {
+		return currentConfig;
+	}
+    
 
 }

@@ -18,6 +18,8 @@ import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.gui.view.WizardView;
 import org.aksw.limes.core.gui.view.ml.MachineLearningView;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -32,6 +34,8 @@ import javafx.scene.control.Alert.AlertType;
  *         studserv.uni-leipzig.de{@literal >}
  */
 public class MainController {
+
+    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
     /**
      * Corresponding view to the controller
      */
@@ -72,7 +76,7 @@ public class MainController {
         Config newConfig = new Config();
         new WizardController(() -> {
             setCurrentConfig(newConfig);
-            view.graphBuild.graphBuildController.deleteGraph();
+            view.getGraphBuild().graphBuildController.deleteGraph();
         }, () -> {
         }, createWizardView, new EditEndpointsController(newConfig,
                 editEndpointsView), new EditClassMatchingController(newConfig,
@@ -86,7 +90,7 @@ public class MainController {
     	confirmPotentialDataLoss();
         new WizardController(() -> {
         	setCurrentConfig(currentConfig);
-            view.graphBuild.graphBuildController.deleteGraph();
+            view.getGraphBuild().graphBuildController.deleteGraph();
         }, () -> {
         }, wizardView, new EditClassMatchingController(currentConfig,
                 editClassMatchingView), new EditPropertyMatchingController(
@@ -98,7 +102,7 @@ public class MainController {
     	confirmPotentialDataLoss();
         new WizardController(() -> {
         	setCurrentConfig(currentConfig);
-            view.graphBuild.graphBuildController.deleteGraph();
+            view.getGraphBuild().graphBuildController.deleteGraph();
         }, () -> {
         }, wizardView, new EditPropertyMatchingController(
                 currentConfig, editPropertyMatchingView));
@@ -196,14 +200,14 @@ public class MainController {
      * Check if metric is complete
      */
     private boolean checkAndUpdateMetric() {
-        if (view.graphBuild.edited
-                && !view.graphBuild.graphBuildController.getOutputNode().nodeData.isComplete()) {
+        if (view.getGraphBuild().edited
+                && !view.getGraphBuild().graphBuildController.getOutputNode().nodeData.isComplete()) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setContentText("Metric is not complete!");
             alert.showAndWait();
             return false;
         }
-        view.graphBuild.graphBuildController.setConfigFromGraph();
+        view.getGraphBuild().graphBuildController.setConfigFromGraph();
         return true;
     }
 
@@ -214,7 +218,7 @@ public class MainController {
         if (currentConfig != null) {
             new MachineLearningView(view, new BatchLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache(), this), MLImplementationType.SUPERVISED_BATCH);
         } else {
-            System.err.println("Config is null!");
+            logger.error("Config is null!");
         }
     }
 
@@ -225,7 +229,7 @@ public class MainController {
         if (currentConfig != null) {
             new MachineLearningView(view, new UnsupervisedLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache(), this), MLImplementationType.UNSUPERVISED);
         } else {
-            System.err.println("Config is null!");
+            logger.error("Config is null!");
         }
     }
 
@@ -236,7 +240,7 @@ public class MainController {
         if (currentConfig != null) {
             new MachineLearningView(view, new ActiveLearningController(currentConfig, currentConfig.getSourceEndpoint().getCache(), currentConfig.getTargetEndpoint().getCache(), this), MLImplementationType.SUPERVISED_ACTIVE);
         } else {
-            System.err.println("Config is null!");
+            logger.error("Config is null!");
         }
     }
 
@@ -259,11 +263,11 @@ public class MainController {
         if (currentConfig != null) {
             view.showLoadedConfig(true);
             view.toolBox.showLoadedConfig(currentConfig);
-            view.graphBuild.graphBuildController.setConfig(currentConfig);
+            view.getGraphBuild().graphBuildController.setConfig(currentConfig);
             if (!(currentConfig.getMetricExpression() == null || currentConfig.getMetricExpression().equals(""))) {
-                view.graphBuild.graphBuildController.generateGraphFromConfig();
+                view.getGraphBuild().graphBuildController.generateGraphFromConfig();
             }else{
-        	view.graphBuild.graphBuildController.deleteGraph();
+        	view.getGraphBuild().graphBuildController.deleteGraph();
             }
         }
     }

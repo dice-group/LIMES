@@ -136,8 +136,7 @@ public class EditClassMatchingView implements IEditView {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
             	if(rootPane == null){
-            		System.err.println("Changed: " + automated.get());
-            	createRootPane();
+            		createRootPane();
             	}
                 //If automated is false and manual root pane has not been created yet
                 if(!automated.get() && sourceTreeView == null){
