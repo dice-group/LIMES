@@ -100,10 +100,10 @@ public class ToolBox extends VBox {
 	private void generateView(VBox box) {
 		toolBoxSourceProperties = new ListView<PropertyItem>();
 		toolBoxSourceProperties.setId("toolBoxSourceProperties");
-		toolBoxSourceProperties.setTooltip(new Tooltip("Add source properties to metric builder by clicking"));
+		toolBoxSourceProperties.setTooltip(new Tooltip("Add source properties to metric builder by clicking.\n Optional properties are grey. You can make properties optional by right-clicking on them"));
 		toolBoxTargetProperties = new ListView<PropertyItem>();
 		toolBoxTargetProperties.setId("toolBoxTargetProperties");
-		toolBoxTargetProperties.setTooltip(new Tooltip("Add target properties to metric builder by clicking"));
+		toolBoxTargetProperties.setTooltip(new Tooltip("Add target properties to metric builder by clicking.\n Optional properties are grey. You can make properties optional by right-clicking on them"));
 		toolBoxMetrics = generateListViewFromNodeIdentifiers(new Measure("").identifiers());
 		toolBoxMetrics.setTooltip(new Tooltip("Add measures to metric builder by clicking"));
 		toolBoxOperators = generateListViewFromNodeIdentifiers(Operator.identifiers);
