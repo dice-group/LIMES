@@ -440,11 +440,11 @@ public class Config extends Configuration {
     }
 
     /**
-     * Returns the property Label
+     * Returns the property without the source or target variable
      *
-     * @param propString
+     * @param property
      *            name of property
-     * @param sourceOrTarget
+     * @param sot
      *            is Source or Target
      * @return Property String
      */

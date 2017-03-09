@@ -51,6 +51,8 @@ public class Endpoint {
 	 * 
 	 * @param info
 	 *            info
+	 * @param config
+	 * 			  config
 	 */
 	public Endpoint(KBInfo info, Config config) {
 		this.info = info;
