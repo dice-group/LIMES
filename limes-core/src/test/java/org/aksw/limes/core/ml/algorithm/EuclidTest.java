@@ -7,11 +7,13 @@ import java.util.List;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.euclid.BooleanEuclid;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearEuclid;
 import org.junit.Test;
 
 public class EuclidTest extends MLAlgorithmTest{
+	
 	@Test
 	public void testUnsupervised() {
         UnsupervisedMLAlgorithm unsupEuclid = null;
@@ -47,12 +49,22 @@ public class EuclidTest extends MLAlgorithmTest{
     			logger.info("Quality:" + result.quality);
     			
     			for(String key : result.getDetails().keySet()) {
-    				logger.info(key+" : "+result.getDetails().get(key));
-    				
+    				logger.info(key+" : "+result.getDetails().get(key));    				
     			}
     			
     			assert(result.getLinkSpecification().size()>0);
     			assert(result.getMapping().size()>0);
+    			
+    			AMapping mapping = unsupEuclid.predict(sc, tc, result);
+    			logger.info(mapping);
+    			
+    			assert(result.getMapping().size() == mapping.size());
+    			for(String s : mapping.getMap().keySet()) {
+    				for(String t : mapping.getMap().get(s).keySet()) {
+    					assert(result.getMapping().contains(s, t));
+    				}
+    			}
+    			
     		} catch (UnsupportedMLImplementationException e) {
     			// TODO Auto-generated catch block
     			e.printStackTrace();

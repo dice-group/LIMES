@@ -2,18 +2,8 @@ package org.aksw.limes.core.ml.algorithm;
 
 import static org.junit.Assert.fail;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
-
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.io.cache.ACache;
-import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.cache.MemoryCache;
-import org.aksw.limes.core.io.config.Configuration;
-import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
@@ -23,9 +13,6 @@ import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.apache.log4j.Logger;
-import org.junit.Before;
 import org.junit.Test;
 
 
@@ -158,7 +145,7 @@ public class EagleTest extends MLAlgorithmTest{
         MLResults mlModel = eagleUnsup.learn(new PseudoFMeasure());
         AMapping resultMap = eagleUnsup.predict(sc, tc, mlModel);
 
-//        assert (resultMap.getSize() > 0);     
+        assert (resultMap.getSize() > 0);     
     }
     
     @Test

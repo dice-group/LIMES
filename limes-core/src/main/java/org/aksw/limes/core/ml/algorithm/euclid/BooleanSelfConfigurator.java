@@ -149,15 +149,15 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
         ComplexClassifier cc;
         while (iterations <= ITERATIONS_MAX) {
             iterations++;
-            double fMeasure;
-            int index = -1;
+//            double fMeasure;
+//            int index = -1;
             bestF = 0;
             //evaluate neighbors of current classifier
             for (int i = 0; i < classifier.getClassifiers().size(); i++) {
                 cc = computeNext(classifier, i);
                 if (cc.getfMeasure() > bestF) {
                     bestF = cc.getfMeasure();
-                    index = i;
+//                    index = i;
                     bestClassifier = cc;
                 }
             }

@@ -31,8 +31,7 @@ public class LinearEuclid extends ACoreMLAlgorithm{
 	public static final String BETA = "beta";
 	public static final String LEARNING_RATE = "learning_rate";
     public static final String MIN_COVERAGE = "min_coverage";
-	
-	
+    
     /**The EUCLID implementation*/
     protected LinearSelfConfigurator lsc = null;
     
@@ -61,17 +60,12 @@ public class LinearEuclid extends ACoreMLAlgorithm{
     	learningParameters.add(new LearningParameter(MIN_COVERAGE, 0.9, Double.class, 0d, 1d, Double.NaN, "Coverage percentage of a property over all instances"));
 	}
 
-	@Override
-	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
-		configureEuclid();
-		throw new UnsupportedMLImplementationException("Supervised Learning for Euclid is not implemented yet.");
-	}
-
-	@Override
-	protected MLResults learn(PseudoFMeasure pfm) throws UnsupportedMLImplementationException {
-		// first setup EUCLID
-		configureEuclid();
-		lsc.setPFMType(QMeasureType.UNSUPERVISED);
+	/**
+	 * Common learning method for both supervised and unsupervised Euclids.
+	 * @return MLResults object containing a (equivalent) LS to the Euclids optimization method,
+	 * 	a mapping, and eventually further detailed results.
+	 */
+	protected MLResults learn() {
 		// get initial classifiers
 		List<SimpleClassifier> init_classifiers = lsc.getBestInitialClassifiers();
 		List<SimpleClassifier> result_classifiers  = lsc.learnClassifer(init_classifiers);
@@ -81,6 +75,7 @@ public class LinearEuclid extends ACoreMLAlgorithm{
 		result.setMapping(mapping);
 		result.setQuality(lsc.computeQuality(mapping));
 		result.setLinkSpecification(lsc.getLinkSpecification(result_classifiers));
+		result.setClassifiers(result_classifiers);
 		for(int i = 0; i<result_classifiers.size(); i++) {
 			result.addDetail(i+". Classifier ", result_classifiers.get(i));
 			AMapping map = lsc.executeClassifier(result_classifiers.get(i), result_classifiers.get(i).getThreshold());
@@ -88,11 +83,33 @@ public class LinearEuclid extends ACoreMLAlgorithm{
 		}	
 		return result;
 	}
+	
+	@Override
+	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
+		configureEuclid(lsc);
+		lsc.setPFMType(QMeasureType.SUPERVISED);
+		lsc.setSupervisedBatch(trainingData);
+		return learn();
+	}
+
+	@Override
+	protected MLResults learn(PseudoFMeasure pfm) throws UnsupportedMLImplementationException {
+		// first setup EUCLID
+		configureEuclid(lsc);
+		lsc.setPFMType(QMeasureType.UNSUPERVISED);
+		return learn();
+	}
 
 	@Override
 	protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
-		// TODO Auto-generated method stub
-		return null;
+		assert (mlModel.classifiersSet());
+		List<SimpleClassifier> classifiers = mlModel.getClassifiers();
+		assert(classifiers.size()>0);
+		LinearSelfConfigurator le = new LinearSelfConfigurator(source, target);
+		configureEuclid(le);
+		AMapping map = le.getMapping(classifiers);
+		logger.info("Should predict with mlModel on Caches +"+source.size()+","+target.size()+"+ resulted in "+map.size()+" map.");
+		return map;
 	}
 
 	@Override
@@ -120,7 +137,7 @@ public class LinearEuclid extends ACoreMLAlgorithm{
 	/**
 	 * To configure EUCLID implementation. Checks for new parameters and sets up EUCLID accordingly.
 	 */
-	protected void configureEuclid() {
+	protected void configureEuclid(LinearSelfConfigurator lsc) {
 		if(lsc == null)
 			lsc = new LinearSelfConfigurator(sourceCache, targetCache);
 		double min_cov = (double) getParameter(MIN_COVERAGE);
@@ -134,10 +151,6 @@ public class LinearEuclid extends ACoreMLAlgorithm{
 		lsc.learningRate = (double) getParameter(LEARNING_RATE);
 		boolean strict = (boolean) getParameter(STRICT);
 		lsc.STRICT = strict;
-		//		if(strictInt > 0)
-//			lsc.STRICT = true;
-//		else
-//			lsc.STRICT = false;
 		
 	}
 	

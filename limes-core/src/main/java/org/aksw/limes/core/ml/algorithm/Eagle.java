@@ -159,11 +159,12 @@ public class Eagle extends ACoreMLAlgorithm {
 
     @Override
     protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
-        // FIXME This differentiation makes hardly any sense if we submit a LS with the mlModel
     	if (allBest != null) {
             return fitness.getMapping(mlModel.getLinkSpecification(), true);
-        }
-        logger.error("No link specification calculated so far.");
+        } else {
+            logger.error("No link specification calculated so far.");
+        	assert (allBest != null);
+        }    	
         return MappingFactory.createDefaultMapping();
     }
 

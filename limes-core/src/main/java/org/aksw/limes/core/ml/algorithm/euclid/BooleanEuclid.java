@@ -1,15 +1,12 @@
 package org.aksw.limes.core.ml.algorithm.euclid;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
-import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator.QMeasureType;
@@ -40,7 +37,7 @@ public class BooleanEuclid extends LinearEuclid{
 	@Override
 	protected MLResults learn(PseudoFMeasure pfm) throws UnsupportedMLImplementationException {
 		// first setup EUCLID
-		configureEuclid();
+		configureEuclid(lsc);
 		lsc.setPFMType(QMeasureType.UNSUPERVISED);
 		// get initial classifiers
 		List<SimpleClassifier> init_classifiers = lsc.getBestInitialClassifiers();
@@ -51,6 +48,7 @@ public class BooleanEuclid extends LinearEuclid{
 		result.setMapping(mapping);
 		result.setQuality(lsc.computeQuality(mapping));
 		result.setLinkSpecification(lsc.getLinkSpecification(result_classifiers));
+		result.setClassifiers(result_classifiers);
 		for(int i = 0; i<result_classifiers.size(); i++) {
 			result.addDetail(i+". Classifier ", result_classifiers.get(i));
 			AMapping map = lsc.executeClassifier(result_classifiers.get(i), result_classifiers.get(i).getThreshold());
@@ -58,4 +56,17 @@ public class BooleanEuclid extends LinearEuclid{
 		}	
 		return result;
 	}
+	
+	@Override
+	protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
+		assert (mlModel.classifiersSet());
+		List<SimpleClassifier> classifiers = mlModel.getClassifiers();
+		assert(classifiers.size()>0);
+		BooleanSelfConfigurator le = new BooleanSelfConfigurator(source, target);
+		configureEuclid(le);
+		AMapping map = le.getMapping(classifiers);
+		logger.info("Should predict with mlModel on Caches +"+source.size()+","+target.size()+"+ resulted in "+map.size()+" map.");
+		return map;
+	}
+
 }
