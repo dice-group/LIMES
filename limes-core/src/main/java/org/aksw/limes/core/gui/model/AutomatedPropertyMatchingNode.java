@@ -1,6 +1,7 @@
 package org.aksw.limes.core.gui.model;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 import javafx.beans.property.SimpleStringProperty;
 
@@ -46,5 +47,14 @@ public class AutomatedPropertyMatchingNode implements Serializable{
     public String toString(){
     	return sourceProperty + " | " + targetProperty;
     }
+    
+    
+    public final static Comparator<AutomatedPropertyMatchingNode> 
+    	AUTOMATED_PROPERTY_MATCHING_NODE_COMPARATOR = new Comparator<AutomatedPropertyMatchingNode>(){
+    	
+    	@Override public int compare( AutomatedPropertyMatchingNode c1, AutomatedPropertyMatchingNode c2 ) {
+            return c1.sourceProperty.toString().compareTo( c2.sourceProperty.toString() );
+          }
+    };
 
 }

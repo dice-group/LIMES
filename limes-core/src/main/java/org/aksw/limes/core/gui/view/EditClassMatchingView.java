@@ -3,6 +3,7 @@ package org.aksw.limes.core.gui.view;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -267,6 +268,7 @@ public class EditClassMatchingView implements IEditView {
 	 */
 	private void addTreeChildren(TreeItem<ClassMatchingNode> parent, List<ClassMatchingNode> childNodes,
 			Predicate<ClassMatchingNode> shouldSelect) {
+		Collections.sort(childNodes, ClassMatchingNode.CLASS_MATCHING_NODE_COMPARATOR);
 		for (ClassMatchingNode childNode : childNodes) {
 			TreeItem<ClassMatchingNode> child = new TreeItem<ClassMatchingNode>(childNode);
 			parent.getChildren().add(child);
@@ -298,6 +300,7 @@ public class EditClassMatchingView implements IEditView {
 	}
 
 	public void showTable(ObservableList<AutomatedClassMatchingNode> items) {
+		Collections.sort(items, AutomatedClassMatchingNode.AUTOMATED_CLASS_MATCHING_NODE_COMPARATOR);
 		tableView.setItems(items);
 		// Use a fixed cell size to eliminate empty rows by binding the height
 		// of the tableView to the number of cells
