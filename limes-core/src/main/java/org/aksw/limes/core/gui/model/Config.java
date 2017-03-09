@@ -512,6 +512,35 @@ public class Config extends Configuration {
 	info.getPrefixes().put(prefixToAdd, PrefixHelper.getURI(prefixToAdd));
 	prefixes.put(prefixToAdd, PrefixHelper.getURI(prefixToAdd));
     }
+    
+    public void switchPropertyOptional(String property, SourceOrTarget sot){
+    	property = removeVar(property, sot);
+    	KBInfo info = sot == SourceOrTarget.SOURCE ? sourceInfo : targetInfo;
+    	List<String> properties = info.getProperties();
+    	List<String> optProperties = info.getOptionalProperties();
+    	if(properties.contains(property)){
+    		properties.remove(property);
+    		info.setProperties(properties);
+    		info.addOptionalProperty(property);
+    	}else if(optProperties.contains(property)){
+    		optProperties.remove(property);
+    		info.setOptionalProperties(optProperties);
+    		info.addProperty(property);
+    	}else{
+    		logger.error("Did not find property: " + property);
+    	}
+    	System.out.println("props: " + info.getProperties());
+    	System.out.println("optprops: " + info.getOptionalProperties());
+    }
+    
+	private String removeVar(String property, SourceOrTarget sot){
+		String result = property;
+		String var = sot == SourceOrTarget.SOURCE ? sourceInfo.getVar().substring(1) + "." : targetInfo.getVar().substring(1) + ".";
+		if(property.startsWith(var)){
+			result = result.substring(var.length());
+		}
+		return result;
+	}
 
     /**
      * returns mapping
