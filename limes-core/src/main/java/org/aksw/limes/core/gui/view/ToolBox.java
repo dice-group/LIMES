@@ -1,8 +1,5 @@
 package org.aksw.limes.core.gui.view;
 
-import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
-import static org.aksw.limes.core.gui.util.SourceOrTarget.TARGET;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -12,14 +9,25 @@ import org.aksw.limes.core.gui.model.metric.Measure;
 import org.aksw.limes.core.gui.model.metric.Node;
 import org.aksw.limes.core.gui.model.metric.Operator;
 import org.aksw.limes.core.gui.model.metric.Property;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
 import org.aksw.limes.core.gui.util.sparql.PrefixHelper;
+import org.aksw.limes.core.gui.view.graphBuilder.NodeView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 /**
@@ -30,16 +38,17 @@ import javafx.scene.layout.VBox;
  *         studserv.uni-leipzig.de{@literal >}
  */
 public class ToolBox extends VBox {
+    private static final Logger logger = LoggerFactory.getLogger(ToolBox.class);
 
 	/**
 	 * List of the SourceProperties
 	 */
-	private ListView<String> toolBoxSourceProperties;
+	private ListView<PropertyItem> toolBoxSourceProperties;
 
 	/**
 	 * List of the Target Properties
 	 */
-	private ListView<String> toolBoxTargetProperties;
+	private ListView<PropertyItem> toolBoxTargetProperties;
 
 	/**
 	 * List of the available Operators
@@ -89,12 +98,12 @@ public class ToolBox extends VBox {
 	 * @param box
 	 */
 	private void generateView(VBox box) {
-		toolBoxSourceProperties = new ListView<String>();
+		toolBoxSourceProperties = new ListView<PropertyItem>();
 		toolBoxSourceProperties.setId("toolBoxSourceProperties");
-		toolBoxSourceProperties.setTooltip(new Tooltip("Add source properties to metric builder by clicking"));
-		toolBoxTargetProperties = new ListView<String>();
+		toolBoxSourceProperties.setTooltip(new Tooltip("Add source properties to metric builder by clicking.\n Optional properties are grey. You can make properties optional by right-clicking on them"));
+		toolBoxTargetProperties = new ListView<PropertyItem>();
 		toolBoxTargetProperties.setId("toolBoxTargetProperties");
-		toolBoxTargetProperties.setTooltip(new Tooltip("Add target properties to metric builder by clicking"));
+		toolBoxTargetProperties.setTooltip(new Tooltip("Add target properties to metric builder by clicking.\n Optional properties are grey. You can make properties optional by right-clicking on them"));
 		toolBoxMetrics = generateListViewFromNodeIdentifiers(new Measure("").identifiers());
 		toolBoxMetrics.setTooltip(new Tooltip("Add measures to metric builder by clicking"));
 		toolBoxOperators = generateListViewFromNodeIdentifiers(Operator.identifiers);
@@ -117,17 +126,45 @@ public class ToolBox extends VBox {
 	 */
 	private void setListeners() {
 		toolBoxSourceProperties.setOnMouseClicked(e -> {
-			generateProperty(toolBoxSourceProperties, 4, true);
+			if (((MouseEvent) e).getButton().equals(MouseButton.SECONDARY)) {
+				switchPropertyOptional(toolBoxSourceProperties, NodeView.SOURCE);
+			} else {
+				generateProperty(toolBoxSourceProperties, NodeView.SOURCE);
+			}
 		});
 		toolBoxTargetProperties.setOnMouseClicked(e -> {
-			generateProperty(toolBoxTargetProperties, 5, false);
+			if (((MouseEvent) e).getButton().equals(MouseButton.SECONDARY)) {
+				switchPropertyOptional(toolBoxTargetProperties, NodeView.TARGET);
+			} else {
+				generateProperty(toolBoxTargetProperties, NodeView.TARGET);
+			}
 		});
 		toolBoxMetrics.setOnMouseClicked(e -> {
-			generateNode(toolBoxMetrics, 1);
+			generateNode(toolBoxMetrics, NodeView.METRIC);
 		});
 		toolBoxOperators.setOnMouseClicked(e -> {
-			generateNode(toolBoxOperators, 3);
+			generateNode(toolBoxOperators, NodeView.OPERATOR);
 		});
+	}
+
+	private void switchPropertyOptional(ListView<PropertyItem> view, int shape) {
+		if (view.getSelectionModel().getSelectedItem() != null) {
+			if (shape == NodeView.SOURCE) {
+			logger.debug("switch source");
+				config.switchPropertyOptional(
+						config.getPropertyString(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.SOURCE), SourceOrTarget.SOURCE);
+			} else {
+			logger.debug("switch target");
+				config.switchPropertyOptional(
+						config.getPropertyString(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.TARGET), SourceOrTarget.TARGET);
+			}
+			view.getSelectionModel().getSelectedItem()
+					.setOptional(!view.getSelectionModel().getSelectedItem().isOptional());
+			ObservableList<PropertyItem> listItems = view.getItems();
+			view.setItems(null);
+			view.setItems(listItems);
+			this.view.getGraphBuild().draw();
+		}
 	}
 
 	/**
@@ -138,32 +175,43 @@ public class ToolBox extends VBox {
 	 * @param items
 	 *            list of the items for the listview
 	 */
-	private void setListViewFromList(ListView<String> view, List<String> items) {
-		ObservableList<String> listItems = FXCollections.observableArrayList();
-		items.forEach(itemString -> {
-			listItems.add(itemString);
+	private void setListViewFromList(ListView<PropertyItem> view, List<PropertyItem> items) {
+		ObservableList<PropertyItem> listItems = FXCollections.observableArrayList();
+		items.forEach(item -> {
+			listItems.add(item);
 		});
-		
-		//Avoid not on FX application thread problem
+
+		// Avoid not on FX application thread problem
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				view.setItems(listItems);
+				view.setCellFactory(list -> new ListCell<PropertyItem>() {
+					@Override
+					protected void updateItem(PropertyItem item, boolean empty) {
+						super.updateItem(item, empty);
+						setText(empty ? null : item.getName());
+						if(!empty && item.isOptional()){
+							setStyle("-fx-text-fill:grey;");
+						}else if(!empty && !item.isOptional()){
+							setStyle("");
+						}
+					}
+				});
 			}
 		});
-
 	}
+	
 
 	/**
 	 * Generates a List View from the Static Measure and Operator identifiers
 	 *
 	 * @param nodeIdentifiers
 	 *            identifiers for the List
-	 * @return ListView containing the indentifiers as items
+	 * @return ListView containing the identifiers as items
 	 */
 	private ListView<String> generateListViewFromNodeIdentifiers(Set<String> nodeIdentifiers) {
 		ObservableList<String> listItems = FXCollections.observableArrayList();
-
 		nodeIdentifiers.forEach((identifier) -> {
 			listItems.add(identifier);
 		});
@@ -173,25 +221,25 @@ public class ToolBox extends VBox {
 	}
 
 	/**
-	 * Generates a new Porperty-Node from the seledted item in the List
+	 * Generates a new Property-Node from the selected item in the List
 	 *
 	 * @param view
 	 *            ListView of the selected Property
 	 * @param origin
 	 *            True if source
 	 */
-	private void generateProperty(ListView<String> view, int shape, boolean origin) {
+	private void generateProperty(ListView<PropertyItem> view, int shape) {
 		if (view.getSelectionModel().getSelectedItem() != null) {
 			Property gen = null;
-			if (origin) {
-				gen = new Property(config.getPropertyString(view.getSelectionModel().getSelectedItem(), SOURCE),
-						Property.Origin.SOURCE);
+			if (shape == NodeView.SOURCE) {
+				String propString = config.getPropertyString(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.SOURCE);
+				boolean optional = config.getSourceInfo().getOptionalProperties().contains(propString);
+				gen = new Property(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.SOURCE, optional);
 			} else {
-				gen = new Property(config.getPropertyString(view.getSelectionModel().getSelectedItem(), TARGET),
-						Property.Origin.TARGET);
-
+				String propString = config.getPropertyString(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.TARGET);
+				boolean optional = config.getTargetInfo().getOptionalProperties().contains(propString);
+				gen = new Property(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.TARGET, optional);
 			}
-
 			setNodeToGraph(gen, shape);
 		}
 	}
@@ -203,7 +251,7 @@ public class ToolBox extends VBox {
 	 *            Node to be added
 	 */
 	private void setNodeToGraph(Node e, int shape) {
-		view.graphBuild.addNode(200, 200, shape, e);
+		view.getGraphBuild().addNode(200, 200, shape, e);
 	}
 
 	/**
@@ -229,34 +277,64 @@ public class ToolBox extends VBox {
 	public void showLoadedConfig(Config config) {
 		this.config = config;
 		if (config.getSourceInfo().getFunctions() != null) {
-			List<String> sourceProperties = new ArrayList<String>();
+			List<PropertyItem> sourceProperties = new ArrayList<PropertyItem>();
 			for (String prop : config.getSourceInfo().getProperties()) {
 				if (config.getSourceInfo().getFunctions().get(prop).keySet().toArray().length == 1) {
-					sourceProperties
-							.add((String) config.getSourceInfo().getFunctions().get(prop).keySet().toArray()[0]);
+					sourceProperties.add(new PropertyItem(
+							(String) config.getSourceInfo().getFunctions().get(prop).keySet().toArray()[0]));
 				} else {
-					sourceProperties.add(PrefixHelper.abbreviate(prop));
+					sourceProperties.add(new PropertyItem(PrefixHelper.abbreviate(prop)));
+				}
+			}
+			for (String prop : config.getSourceInfo().getOptionalProperties()) {
+				if (config.getSourceInfo().getFunctions().get(prop).keySet().toArray().length == 1) {
+					sourceProperties.add(new PropertyItem(
+							(String) config.getSourceInfo().getFunctions().get(prop).keySet().toArray()[0], true));
+				} else {
+					sourceProperties.add(new PropertyItem(PrefixHelper.abbreviate(prop), true));
 				}
 			}
 			setListViewFromList(toolBoxSourceProperties, sourceProperties);
 		} else {
-			setListViewFromList(toolBoxSourceProperties, config.getSourceInfo().getProperties());
+			List<PropertyItem> sourceProperties = new ArrayList<PropertyItem>();
+			for (String prop : config.getSourceInfo().getProperties()) {
+				sourceProperties.add(new PropertyItem(prop));
+			}
+			for (String prop : config.getSourceInfo().getOptionalProperties()) {
+				sourceProperties.add(new PropertyItem(prop));
+			}
+			setListViewFromList(toolBoxSourceProperties, sourceProperties);
 		}
 		if (config.getTargetInfo().getFunctions() != null) {
-			List<String> targetProperties = new ArrayList<String>();
+			List<PropertyItem> targetProperties = new ArrayList<PropertyItem>();
 			for (String prop : config.getTargetInfo().getProperties()) {
 				if (config.getTargetInfo().getFunctions().get(prop).keySet().toArray().length == 1) {
-					targetProperties
-							.add((String) config.getTargetInfo().getFunctions().get(prop).keySet().toArray()[0]);
+					targetProperties.add(new PropertyItem(
+							(String) config.getTargetInfo().getFunctions().get(prop).keySet().toArray()[0]));
 				} else {
-					targetProperties.add(PrefixHelper.abbreviate(prop));
+					targetProperties.add(new PropertyItem(PrefixHelper.abbreviate(prop)));
+				}
+			}
+			for (String prop : config.getTargetInfo().getOptionalProperties()) {
+				if (config.getTargetInfo().getFunctions().get(prop).keySet().toArray().length == 1) {
+					targetProperties.add(new PropertyItem(
+							(String) config.getTargetInfo().getFunctions().get(prop).keySet().toArray()[0], true));
+				} else {
+					targetProperties.add(new PropertyItem(PrefixHelper.abbreviate(prop), true));
 				}
 			}
 			setListViewFromList(toolBoxTargetProperties, targetProperties);
 		} else {
-			setListViewFromList(toolBoxTargetProperties, config.getTargetInfo().getProperties());
+			List<PropertyItem> targetProperties = new ArrayList<PropertyItem>();
+			for (String prop : config.getTargetInfo().getProperties()) {
+				targetProperties.add(new PropertyItem(prop));
+			}
+			for (String prop : config.getTargetInfo().getOptionalProperties()) {
+				targetProperties.add(new PropertyItem(prop));
+			}
+			setListViewFromList(toolBoxTargetProperties, targetProperties);
 		}
-		//Avoid not on FX application thread problem
+		// Avoid not on FX application thread problem
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -266,11 +344,56 @@ public class ToolBox extends VBox {
 		});
 	}
 
-	public ListView<String> getToolBoxSourceProperties() {
+	public static class PropertyItem {
+		private final StringProperty name = new SimpleStringProperty();
+		private final BooleanProperty optional = new SimpleBooleanProperty();
+
+		public PropertyItem(String name) {
+			this(name, false);
+		}
+
+		public PropertyItem(String name, boolean optional) {
+			setName(name);
+			setOptional(optional);
+			
+		}
+		
+		public final StringProperty nameProperty() {
+			return this.name;
+		}
+
+		public final String getName() {
+			return this.nameProperty().get();
+		}
+
+		public final void setName(final String name) {
+			this.nameProperty().set(name);
+		}
+
+		public final BooleanProperty optionalProperty() {
+			return this.optional;
+		}
+
+		public final boolean isOptional() {
+			return this.optionalProperty().get();
+		}
+
+		public final void setOptional(final boolean optional) {
+			this.optionalProperty().set(optional);
+		}
+
+		@Override
+		public String toString() {
+			return getName();
+		}
+
+	}
+
+	public ListView<PropertyItem> getToolBoxSourceProperties() {
 		return toolBoxSourceProperties;
 	}
 
-	public ListView<String> getToolBoxTargetProperties() {
+	public ListView<PropertyItem> getToolBoxTargetProperties() {
 		return toolBoxTargetProperties;
 	}
 

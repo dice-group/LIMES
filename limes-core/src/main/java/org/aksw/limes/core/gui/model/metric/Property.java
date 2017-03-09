@@ -3,6 +3,8 @@ package org.aksw.limes.core.gui.model.metric;
 import java.util.Collections;
 import java.util.Set;
 
+import org.aksw.limes.core.gui.util.SourceOrTarget;
+
 /**
  * Property of metric
  *
@@ -13,7 +15,9 @@ public class Property extends Node {
     /**
      * Origin
      */
-    protected final Origin origin;
+    protected final SourceOrTarget origin;
+    
+    private boolean optional;
 
     /**
      * Constructor
@@ -23,13 +27,14 @@ public class Property extends Node {
      * @param origin
      *         of property
      */
-    public Property(String id, Origin origin) {
+    public Property(String id, SourceOrTarget origin, boolean optional) {
         super(id);
 //        String regex = "\\w+\\.\\w+:?\\w+";
 //        if (!id.matches(regex))
 //            throw new MetricFormatException("id \"" + id
 //                    + "\" does not confirm to the regex " + regex);
         this.origin = origin;
+        this.optional = optional;
     }
 
     /**
@@ -72,14 +77,18 @@ public class Property extends Node {
      *
      * @return This Origin
      */
-    public Origin getOrigin() {
+    public SourceOrTarget getOrigin() {
         return this.origin;
     }
 
-    /**
-     * Origin
-     */
-    public enum Origin {
-        SOURCE, TARGET
-    }
+
+	public boolean isOptional() {
+		return optional;
+	}
+
+	public void setOptional(boolean optional) {
+		this.optional = optional;
+	}
+    
+    
 }

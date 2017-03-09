@@ -100,7 +100,6 @@ public class BatchLearningInputView {
 			|| filePathField.getText().endsWith("ttl")
 			|| filePathField.getText().endsWith("nt")
 			|| filePathField.getText().endsWith("n3")) {
-		    System.err.println(filePathField.getText());
 		    reader = new RDFMappingReader(filePathField.getText());
 		    trainingMapping = reader.read();
 		    blm.setTrainingMapping(trainingMapping);

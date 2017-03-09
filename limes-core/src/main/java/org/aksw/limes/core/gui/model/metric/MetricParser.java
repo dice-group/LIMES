@@ -4,7 +4,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.aksw.limes.core.gui.model.metric.Property.Origin;
+import org.aksw.limes.core.gui.model.Config;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
 
 /**
  * Parses Metric to Expression for the Config Reader
@@ -118,7 +119,7 @@ public class MetricParser {
      * @throws MetricFormatException
      */
     protected static Node parsePart(Node parent, String s, String sourceVar,
-                                    int pos) throws MetricFormatException {
+                                    int pos, Config c) throws MetricFormatException {
         String[] tokens = splitFunc(s);
         String id = tokens[0].trim();
         if (id.contains("*")) {
@@ -131,16 +132,20 @@ public class MetricParser {
             }
             id = parts[1];
         }
-        if (tokens.length == 1)
-            return new Property(id, id.startsWith(sourceVar) ? Origin.SOURCE
-                    : Origin.TARGET);
+        if (tokens.length == 1){
+        	SourceOrTarget origin = id.startsWith(sourceVar) ? SourceOrTarget.SOURCE: SourceOrTarget.TARGET;
+        	if(c.getSourceInfo().getOptionalProperties().contains(c.removeVar(id,origin)) || c.getTargetInfo().getOptionalProperties().contains(c.removeVar(id,origin))){
+        		return new Property(id, origin, true);
+        	}
+            return new Property(id, origin, false);
+        }
 
         Node node = Node.createNode(id);
         s = setParametersFromString(parent, s, pos);
         tokens = splitFunc(s);
         int i = 0;
         for (String argument : Arrays.copyOfRange(tokens, 1, tokens.length)) {
-            if (!node.addChild(parsePart(node, argument, sourceVar, i))) {
+            if (!node.addChild(parsePart(node, argument, sourceVar, i, c))) {
                 throw new MetricFormatException("Could not add child \""
                         + argument + '"');
             }
@@ -159,7 +164,7 @@ public class MetricParser {
      * @return Metric as Output
      * @throws MetricFormatException thrown if there is something wrong
      */
-    public static Output parse(String s, String sourceVar)
+    public static Output parse(String s, String sourceVar, Config c)
             throws MetricFormatException {
         if (s.isEmpty())
             throw new MetricFormatException();
@@ -168,7 +173,7 @@ public class MetricParser {
         output.param1 = null;
         output.param2 = null;
         try {
-            output.addChild(parsePart(output, s, sourceVar, 0));
+            output.addChild(parsePart(output, s, sourceVar, 0, c));
         } catch (MetricFormatException e) {
             throw new MetricFormatException(
                     "Error parsing metric expression \"" + s + "\".", e);
@@ -176,7 +181,4 @@ public class MetricParser {
         return output;
     }
     
-    public static void main(String[]args){
-    	System.out.println();
-    }
 }

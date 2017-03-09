@@ -7,11 +7,13 @@ import org.aksw.limes.core.gui.controller.GraphBuildController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.metric.Node;
 import org.aksw.limes.core.gui.model.metric.Output;
+import org.aksw.limes.core.gui.model.metric.Property;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
 import org.aksw.limes.core.gui.view.ToolBox;
+import org.aksw.limes.core.io.config.KBInfo;
 
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -356,11 +358,21 @@ public class GraphBuildView extends Canvas {
 			gc.strokeLine(linkNode.x + linkNode.getWidth() / 2, linkNode.y + linkNode.getHeight() / 2,
 					mouseCanvasPosition[0], mouseCanvasPosition[1]);
 		}
-
 		nodeList.forEach(e -> {
 			e.drawLink();
 		});
 		nodeList.forEach(e -> {
+			if(e.nodeShape == NodeView.SOURCE || e.nodeShape == NodeView.TARGET ){
+				Config c = graphBuildController.getConfig();
+				String propString = c.removeVar(e.nodeData.id, ((Property)e.nodeData).getOrigin());
+				SourceOrTarget sot = ((Property)e.nodeData).getOrigin();
+				KBInfo info = sot == SourceOrTarget.SOURCE ? c.getSourceInfo() : c.getTargetInfo();
+				if(info.getOptionalProperties().contains(propString) || info.getOptionalProperties().contains(c.reverseRename(propString, sot))){
+					((Property)e.nodeData).setOptional(true);
+				}else{
+					((Property)e.nodeData).setOptional(false);
+				}
+			}
 			e.displayNode();
 		});
 
