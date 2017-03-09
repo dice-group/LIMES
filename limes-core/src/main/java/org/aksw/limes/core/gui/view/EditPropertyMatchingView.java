@@ -3,6 +3,7 @@ package org.aksw.limes.core.gui.view;
 import static org.aksw.limes.core.gui.util.SourceOrTarget.SOURCE;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.aksw.limes.core.gui.controller.EditPropertyMatchingController;
@@ -18,6 +19,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -291,7 +293,6 @@ public class EditPropertyMatchingView implements IEditView {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				if (rootPane == null){
-            		System.err.println("Changed: " + automated.get());
 					createRootPane();
 				}
                 //If automated is false and manual root pane has not been created yet
@@ -408,8 +409,8 @@ public class EditPropertyMatchingView implements IEditView {
 		addAllButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				addedSourcePropsList.getItems().addAll(sourcePropList.getItems());
-				addedTargetPropsList.getItems().addAll(targetPropList.getItems());
+				addedSourcePropsList.getItems().addAll(new SortedList(sourcePropList.getItems()));
+				addedTargetPropsList.getItems().addAll(new SortedList(targetPropList.getItems()));
 				sourcePropList.getItems().clear();
 				targetPropList.getItems().clear();
 			}
@@ -418,13 +419,12 @@ public class EditPropertyMatchingView implements IEditView {
 		removeAllButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				sourcePropList.getItems().addAll(addedSourcePropsList.getItems());
-				targetPropList.getItems().addAll(addedTargetPropsList.getItems());
+				sourcePropList.getItems().addAll(new SortedList(addedSourcePropsList.getItems()));
+				targetPropList.getItems().addAll(new SortedList(addedTargetPropsList.getItems()));
 				addedSourcePropsList.getItems().clear();
 				addedTargetPropsList.getItems().clear();
 			}
 		});
-
 	}
 
 	/**
@@ -471,6 +471,7 @@ public class EditPropertyMatchingView implements IEditView {
 						PrefixHelper.abbreviate(targetProperty)));
 			}
 		}
+		Collections.sort(availableProperties, AutomatedPropertyMatchingNode.AUTOMATED_PROPERTY_MATCHING_NODE_COMPARATOR);
 		automatedPropList.setItems(availableProperties);
 		automatedPropList.getColumns().get(0)
 				.setText(controller.getConfig().getSourceEndpoint().getCurrentClass().getName() + "  properties");
@@ -493,6 +494,7 @@ public class EditPropertyMatchingView implements IEditView {
 		}else{
 			addedAutomatedPropsList.getItems().clear();
 		}
+		Collections.sort(properties);
 		(sourceOrTarget == SOURCE ? sourceProperties : targetProperties).setAll(properties);
 		(sourceOrTarget == SOURCE ? sourcePropList : targetPropList)
 				.setItems((sourceOrTarget == SOURCE ? sourceProperties : targetProperties));

@@ -193,7 +193,7 @@ public class Config extends Configuration {
 			String targetClass = targetRestriction.substring(targetRestriction.lastIndexOf(" ")).trim();
 			this.sourceEndpoint.setCurrentClassAsString(PrefixHelper.expand(sourceClass));
 			this.targetEndpoint.setCurrentClassAsString(PrefixHelper.expand(targetClass));
-			System.err.println(this.sourceEndpoint.getCurrentClass().getUri() + " " + this.targetEndpoint.getCurrentClass().getUri());
+			logger.debug(this.sourceEndpoint.getCurrentClass().getUri() + " " + this.targetEndpoint.getCurrentClass().getUri());
 		}else{
 			logger.error("Restrictions that are more complex than \" ?y a prefix:class \" are not yet implemented in the GUI");
 		}
@@ -246,7 +246,7 @@ public class Config extends Configuration {
 	}
 	if (tmp.getMlAlgorithmName() == null || tmp.getMlAlgorithmName().equals("")) {
 	    outConfig.metric = MetricParser.parse(outConfig.metricExpression, outConfig
-		    .getSourceInfo().getVar().replaceAll("\\?", ""));
+		    .getSourceInfo().getVar().replaceAll("\\?", ""),outConfig);
 	    outConfig.metric.param1 = outConfig.acceptanceThreshold;
 	    outConfig.metric.param2 = outConfig.verificationThreshold;
 	} else {
@@ -349,7 +349,7 @@ public class Config extends Configuration {
 	    try {
 		number = format.parse(twoDForm.format(getAcceptanceThreshold() - 0.1d));
 	    } catch (Exception e) {
-		System.err.println(e);
+		logger.debug(e.toString());
 		return defaultReviewThreshold;
 	    }
 	    return number.doubleValue();
@@ -426,7 +426,7 @@ public class Config extends Configuration {
 		param2 = metric.param2;
 	    }
 	    metric = MetricParser.parse(metricExpression,
-		    getSourceInfo().getVar().replaceAll("\\?", ""));
+		    getSourceInfo().getVar().replaceAll("\\?", ""),this);
 	    if (param1 <= 1) {
 		metric.param1 = param1;
 	    }
@@ -435,7 +435,7 @@ public class Config extends Configuration {
 	    }
 	} else {
 	    metric = MetricParser.parse(metricExpression,
-		    getSourceInfo().getVar().replaceAll("\\?", ""));
+		    getSourceInfo().getVar().replaceAll("\\?", ""),this);
 	}
     }
 
@@ -448,14 +448,32 @@ public class Config extends Configuration {
      *            is Source or Target
      * @return Property String
      */
-    public String getPropertyString(String propString, SourceOrTarget sourceOrTarget) {
-	if (sourceOrTarget == SOURCE) {
-	    return getSourceInfo().getVar().substring(1) + "." + propString;
-
-	} else {
-	    return getTargetInfo().getVar().substring(1) + "." + propString;
-	}
+    public String removeVar(String property, SourceOrTarget sot) {
+		String result = property;
+		String var = sot == SourceOrTarget.SOURCE ? sourceInfo.getVar().substring(1) + "." : targetInfo.getVar().substring(1) + ".";
+		if(property.startsWith(var)){
+			result = result.substring(var.length());
+		}
+		return result;
     }
+    
+    /**
+     * Returns the property Label
+     *
+     * @param propString
+     *            name of property
+     * @param sourceOrTarget
+     *            is Source or Target
+     * @return Property String
+     */
+	public String getPropertyString(String propString, SourceOrTarget sourceOrTarget) {
+		if (sourceOrTarget == SOURCE) {
+			return getSourceInfo().getVar().substring(1) + "." + propString;
+
+		} else {
+			return getTargetInfo().getVar().substring(1) + "." + propString;
+		}
+	}
 
     /**
      * Getter Metric as Output
@@ -501,17 +519,66 @@ public class Config extends Configuration {
      * @param property
      */
     private void addFunction(Endpoint endpoint, String property) {
-	KBInfo info = endpoint.getInfo();
-	String abbr = PrefixHelper.abbreviate(property);
-	HashMap<String, String> map = new HashMap<String, String>();
-	map.put(abbr, "nolang->lowercase");
-	info.getFunctions().put(abbr, map);
+        KBInfo info = endpoint.getInfo();
+        String abbr = PrefixHelper.abbreviate(property);
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put(abbr, "nolang->lowercase");
+        info.getFunctions().put(abbr, map);
 
-	String[] parts = property.split(":");
-	String prefixToAdd = parts[0];
-	info.getPrefixes().put(prefixToAdd, PrefixHelper.getURI(prefixToAdd));
-	prefixes.put(prefixToAdd, PrefixHelper.getURI(prefixToAdd));
+        String[] parts = property.split(":");
+        String prefixToAdd = parts[0];
+        info.getPrefixes().put(prefixToAdd, PrefixHelper.getURI(prefixToAdd));
+        prefixes.put(prefixToAdd, PrefixHelper.getURI(prefixToAdd));
     }
+    
+    
+    public void switchPropertyOptional(String property, SourceOrTarget sot){
+    	property = removeVar(property, sot);
+    	KBInfo info = sot == SourceOrTarget.SOURCE ? sourceInfo : targetInfo;
+    	String renamedProp = reverseRename(property, sot);
+    	List<String> properties = info.getProperties();
+    	List<String> optProperties = info.getOptionalProperties();
+    	if(properties.contains(property)){
+    		properties.remove(property);
+    		info.setProperties(properties);
+    		info.addOptionalProperty(property);
+    	}else if(optProperties.contains(property)){
+    		optProperties.remove(property);
+    		info.setOptionalProperties(optProperties);
+    		info.addProperty(property);
+    	}else if(properties.contains(renamedProp)){
+    		properties.remove(renamedProp);
+    		info.setProperties(properties);
+    		info.addOptionalProperty(renamedProp);
+    	}else if(optProperties.contains(renamedProp)){
+    		optProperties.remove(renamedProp);
+    		info.setOptionalProperties(optProperties);
+    		info.addProperty(renamedProp);
+    	}else{
+    		logger.error("Did not find property: " + property);
+    	}
+    	logger.debug("props: " + info.getProperties());
+    	logger.debug("optprops: " + info.getOptionalProperties());
+    }
+    
+    public String reverseRename(String property, SourceOrTarget sot){
+    	String rev = "";
+    	KBInfo info = sot == SOURCE ? sourceInfo : targetInfo;
+    	for(String key: info.getFunctions().keySet()){
+    		for(String value : info.getFunctions().get(key).keySet()){
+                if(value.equals(property)){
+                    rev = key;
+                }
+    		}
+    	}
+    	if(rev.equals("")||rev == null){
+    		logger.debug("Return prop: " + property);
+    		return property;
+    	}
+   		logger.debug("Return rev: " + rev);
+    	return rev;
+    }
+    
 
     /**
      * returns mapping
