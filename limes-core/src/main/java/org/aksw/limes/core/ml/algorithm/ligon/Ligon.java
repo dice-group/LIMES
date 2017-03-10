@@ -3,56 +3,98 @@ package org.aksw.limes.core.ml.algorithm.ligon;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Ligon {
     static Logger logger = LoggerFactory.getLogger(Ligon.class);
+
+    double TAU = 1.0;
+    AMapping posMap, negMap, unknownMap; 
     
     List<NoisyOracle> noisyOracles;
     List<Double> oraclesTrust;
-    
-    Ligon(int nrOfOracles){
+
+    public Ligon(int nrOfOracles){
+        super();
+        posMap = MappingFactory.createDefaultMapping();
+        negMap = MappingFactory.createDefaultMapping();
+        unknownMap = MappingFactory.createDefaultMapping();
         noisyOracles = new ArrayList<>();
         oraclesTrust = new ArrayList<>();
-        for(int i = 0 ; i < nrOfOracles ; i++){
-            oraclesTrust.set(i, 0.5d);
-        }
     }
     
-    boolean predict(String subject, String object){
-        double unionProp = noisyOracles.get(0).predict(subject, object)? 1.0d : 0.0d ;
-        for(int i = 1 ; i<noisyOracles.size() ; i++){
-            double oraclePredict = noisyOracles.get(i).predict(subject, object)? 1.0d : 0.0d ;
-            unionProp += oraclePredict - unionProp * oraclePredict; 
-        }
-        return (unionProp == 1) ? true : false;
-    }
+
     
-    void updateOracles(String subject, String object){
-        boolean unionProp = predict(subject, object);
+   public Ligon(double tAU, AMapping posMap, AMapping negMap,
+            AMapping unknownMap, List<NoisyOracle> noisyOracles,
+            List<Double> oraclesTrust) {
+        super();
+        TAU = tAU;
+        this.posMap = posMap;
+        this.negMap = negMap;
+        this.unknownMap = unknownMap;
+        this.noisyOracles = noisyOracles;
+        EstimateOraclesTrust(posMap, negMap);
+    }
+
+
+void EstimateOraclesTrust(AMapping posMap, AMapping negMap){
+
+        // Positive training data
         for(NoisyOracle noisyOracle: noisyOracles){
-            boolean oraclePredict = noisyOracle.predict(subject, object);
-            if(oraclePredict == unionProp){
-                increaseOracleTrust();
-            }else{
-                decreaseOracleTrust();
+            int tp = 0;
+            for (String s : posMap.getMap().keySet()) {
+                for (String t : posMap.getMap().get(s).keySet()) {
+                    tp += (noisyOracle.predict(s, t)) ? 1 : 0 ;
+                    noisyOracle.estimatedTp = tp / posMap.size();
+                }
+            }
+        }
+        
+        // Negative training data
+        for(NoisyOracle noisyOracle: noisyOracles){
+            int tn = 0;
+            for (String s : negMap.getMap().keySet()) {
+                for (String t : posMap.getMap().get(s).keySet()) {
+                    tn += (!noisyOracle.predict(s, t)) ? 1 : 0 ;
+                    noisyOracle.estimatedTp = tn / negMap.size();
+                }
             }
         }
     }
     
+   
+   void updateTrainingData(AMapping unlabeledMap){
+       for (String s : unlabeledMap.getMap().keySet()) {
+           for (String t : unlabeledMap.getMap().get(s).keySet()) {
+               double pTrue = estimateTrue(s,t);
+               double pFalse = estimateFalse(s,t);
+               if(pTrue >= TAU * pFalse){
+                    
+               }
+           }
+       }
+   }
+    double estimateTrue(String subject, String object){
+        double result = 1; 
+        for(NoisyOracle noisyOracle: noisyOracles){
+            result *= 1 - noisyOracle.predictTrue(subject, object);
+        }
+        return 1- result;
+    }
     
-    void decreaseOracleTrust() {
-        // TODO Auto-generated method stub
-        
+    double estimateFalse(String subject, String object){
+        double result = 1; 
+        for(NoisyOracle noisyOracle: noisyOracles){
+            result *= 1 - noisyOracle.predictFalse(subject, object);
+        }
+        return 1- result;
     }
 
-    void increaseOracleTrust() {
-        // TODO Auto-generated method stub
-        
-    }
+        public static void main(String args[]){
 
-    public static void main(String args[]){
-        
     }
 }

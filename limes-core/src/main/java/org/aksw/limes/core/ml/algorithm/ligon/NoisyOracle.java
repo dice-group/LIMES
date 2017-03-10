@@ -8,21 +8,21 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 public class NoisyOracle {
 
     AMapping oracleMap;
-    double positiveTrustability;
-    double negativeTrustability;
-
+    double tp, tn;
+    double estimatedTp, estimatedTn;
+    
     NoisyOracle(){
         oracleMap = MappingFactory.createDefaultMapping();
-        positiveTrustability = 0.5d;
-        negativeTrustability = 0.5d;
+        tp = 0.5d;
+        tn = 0.5d;
     }
 
     
     public NoisyOracle(AMapping oracleMap, double positiveTrustability, double negativeTrustability) {
         super();
         this.oracleMap = oracleMap;
-        this.positiveTrustability = positiveTrustability;
-        this.negativeTrustability = negativeTrustability;
+        this.tp = positiveTrustability;
+        this.tn = negativeTrustability;
     }
 
 
@@ -31,17 +31,20 @@ public class NoisyOracle {
         boolean inOracle = oracleMap.contains(subject, object);
         Random random = new Random();
         if(inOracle){
-            if(random.nextDouble() >= positiveTrustability){
-                return inOracle;
-            }else{
-                return !inOracle;
-            }
+            return (random.nextDouble() >= tp) ? true : false;
         }else{
-            if(random.nextDouble() >= negativeTrustability){
-                return inOracle;
-            }else{
-                return !inOracle;
-            }
+            return (random.nextDouble() >= tn) ? false: true ;
         }
+    }
+
+
+    public double predictTrue(String subject, String object) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+    
+    public double predictFalse(String subject, String object) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 }
