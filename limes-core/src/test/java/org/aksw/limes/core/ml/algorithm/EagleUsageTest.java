@@ -59,18 +59,6 @@ public class EagleUsageTest {
 
     }
 
-    @Test
-    public void testFailure() {
 
-        boolean itFails = false;
-        try {
-            MLAlgorithmFactory.createMLAlgorithm(Eagle.class,
-                    MLImplementationType.SUPERVISED_ACTIVE);
-        } catch (UnsupportedMLImplementationException e) {
-            itFails = true;
-        }
-        assert (itFails);
-
-    }
 
 }
