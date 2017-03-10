@@ -12,9 +12,12 @@ public class Ligon {
     List<NoisyOracle> noisyOracles;
     List<Double> oraclesTrust;
     
-    Ligon(){
+    Ligon(int nrOfOracles){
         noisyOracles = new ArrayList<>();
         oraclesTrust = new ArrayList<>();
+        for(int i = 0 ; i < nrOfOracles ; i++){
+            oraclesTrust.set(i, 0.5d);
+        }
     }
     
     boolean predict(String subject, String object){
@@ -26,11 +29,29 @@ public class Ligon {
         return (unionProp == 1) ? true : false;
     }
     
-    void updateOracles(){
-        
+    void updateOracles(String subject, String object){
+        boolean unionProp = predict(subject, object);
+        for(NoisyOracle noisyOracle: noisyOracles){
+            boolean oraclePredict = noisyOracle.predict(subject, object);
+            if(oraclePredict == unionProp){
+                increaseOracleTrust();
+            }else{
+                decreaseOracleTrust();
+            }
+        }
     }
     
     
+    void decreaseOracleTrust() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    void increaseOracleTrust() {
+        // TODO Auto-generated method stub
+        
+    }
+
     public static void main(String args[]){
         
     }
