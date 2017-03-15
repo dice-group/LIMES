@@ -70,7 +70,7 @@ public class BooleanEuclid extends LinearEuclid{
 		BooleanSelfConfigurator le = new BooleanSelfConfigurator(source, target);
 		configureEuclid(le);
 		AMapping map = le.getMapping(classifiers);
-		logger.info("Should predict with mlModel on Caches +"+source.size()+","+target.size()+"+ resulted in "+map.size()+" map.");
+//		logger.info("Predict  with mlModel on Caches +"+source.size()+","+target.size()+"+ resulted in "+map.size()+" map.");
 		return map;
 	}
 

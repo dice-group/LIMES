@@ -159,13 +159,13 @@ public class Eagle extends ACoreMLAlgorithm {
 
     @Override
     protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
-    	if (allBest != null) {
-            return fitness.getMapping(mlModel.getLinkSpecification(), true);
-        } else {
-            logger.error("No link specification calculated so far.");
-        	assert (allBest != null);
-        }    	
-        return MappingFactory.createDefaultMapping();
+//    	if (allBest != null) {
+    		return fitness.getMapping(source, target, mlModel.getLinkSpecification());
+//        } else {
+//            logger.error("No link specification calculated so far.");
+//        	assert (allBest != null);
+//        }    	
+//        return MappingFactory.createDefaultMapping();
     }
 
     @Override
@@ -351,7 +351,7 @@ public class Eagle extends ACoreMLAlgorithm {
      */
     private MLResults createSupervisedResult() {
         MLResults result = new MLResults();
-        result.setMapping(fitness.getMapping(getLinkSpecification(allBest), true));
+        result.setMapping(fitness.getMapping(sourceCache, targetCache, getLinkSpecification(allBest)));
         result.setLinkSpecification(getLinkSpecification(allBest));
         result.setQuality(allBest.getFitnessValue());
         result.addDetail("specifiactions", bestSolutions);
@@ -365,7 +365,7 @@ public class Eagle extends ACoreMLAlgorithm {
      */
     private MLResults createUnsupervisedResult() {
         MLResults result = new MLResults();
-        result.setMapping(fitness.getMapping(getLinkSpecification(allBest), true));
+        result.setMapping(fitness.getMapping(sourceCache, targetCache, getLinkSpecification(allBest)));
         result.setLinkSpecification(getLinkSpecification(allBest));
         result.setQuality(allBest.getFitnessValue());
         result.addDetail("specifiactions", specifications);
@@ -404,7 +404,7 @@ public class Eagle extends ACoreMLAlgorithm {
         // get mappings for all distinct metrics
         logger.info("Getting " + metrics.size() + " full mappings to determine controversy matches...");
         for (LinkSpecification m : metrics) {
-            candidateMaps.add(fitness.getMapping(m, true));
+            candidateMaps.add(fitness.getMapping(sourceCache, targetCache, m));
         }
         // get most controversy matches
         logger.info("Getting " + size + " controversy match candidates from " + candidateMaps.size() + " maps...");

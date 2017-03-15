@@ -18,6 +18,26 @@ import org.junit.Test;
  */
 public class EuclidTest extends MLAlgorithmTest{
 	
+
+	@Test
+	public void testAlgorithms() {
+        Class[] algorithms = {
+        		LinearEuclid.class, 
+        		BooleanEuclid.class,
+        		MeshEuclid.class,
+        };
+        // for each Euclid sub type
+        for(Class<? extends ACoreMLAlgorithm> algorithm : algorithms) {
+        	logger.info("Testing unsupervised "+algorithm.getSimpleName());
+        	testUnsupervised(algorithm);
+        	
+        	logger.info("Testing supervised "+algorithm.getSimpleName());
+        	testSupervisedBatch(algorithm);
+        }        
+	}
+	
+/*-------------------------- unsupervised tests ----------------------------------*/	
+	
 	/**
 	 * Test a certain Euclid implementation. Is unsupervised learning implemented, is it producing actual results?
 	 * @param algorithm
@@ -73,25 +93,11 @@ public class EuclidTest extends MLAlgorithmTest{
 
 	}
 	
-	@Test
-	public void testAlgorithms() {
-        Class[] algorithms = {
-        		LinearEuclid.class, 
-        		BooleanEuclid.class,
-        		MeshEuclid.class,
-        };
-        // for each Euclid sub type
-        for(Class<? extends ACoreMLAlgorithm> algorithm : algorithms) {
-        	logger.info("Testing unsupervised "+algorithm.getSimpleName());
-        	testUnsupervised(algorithm);
-        	
-        	logger.info("Testing supervised "+algorithm.getSimpleName());
-        	testSupervisedBatch(algorithm);
-        }        
-	}
-	
 /*------------------------------ supervised tests --------------------------------*/
-
+	/**
+	 * Tests supervised (batch) variants.
+	 * @param algorithm
+	 */
     public void testSupervisedBatch(Class<? extends ACoreMLAlgorithm> algorithm) {
         SupervisedMLAlgorithm euclid = null;
         try {
@@ -115,6 +121,7 @@ public class EuclidTest extends MLAlgorithmTest{
         
         MLResults mlModel = null;
 		try {
+			/* Test learning function */
 			mlModel = euclid.learn(trainingMap);
 			
 			logger.info("Test (" + euclid.getName()+") supervised (batch) results:");
@@ -125,9 +132,20 @@ public class EuclidTest extends MLAlgorithmTest{
 				logger.info(key+" : "+mlModel.getDetails().get(key));    				
 			}
 			
-			
+			/* TEST predict() method on different caches*/
 	        AMapping resultMap = euclid.predict(sc, tc, mlModel);
-	        logger.info("Predicted links:"+resultMap);
+	        logger.info("Predicted links:"+resultMap.getSize());	        
+	        AMapping extendedResultMap = euclid.predict(extendedSourceCache, extendedTargetCache, mlModel);
+	        logger.info("Predict on extended maps: "+extendedResultMap.size());
+	        
+	        boolean containAll = true;
+	        for(String sUri : resultMap.getMap().keySet())
+	        	for(String tUri : resultMap.getMap().get(sUri).keySet())
+	        		containAll &= extendedResultMap.contains(sUri, tUri);	    
+	        
+	        assert(resultMap.size()<extendedResultMap.size());
+	        assert(containAll);
+	        
 		} catch (UnsupportedMLImplementationException e) {
 			e.printStackTrace();
 		}

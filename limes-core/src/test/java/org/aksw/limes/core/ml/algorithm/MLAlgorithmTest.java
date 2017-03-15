@@ -26,6 +26,9 @@ public class MLAlgorithmTest {
     ACache sc = new MemoryCache();
     ACache tc = new MemoryCache();
 
+    ACache extendedSourceCache = new MemoryCache();
+    ACache extendedTargetCache = new MemoryCache();
+    
     AMapping trainingMap, extendedTrainingMap, refMap;
     
     Configuration config = new Configuration();
@@ -70,6 +73,21 @@ public class MLAlgorithmTest {
         tc.addInstance(i5);
         tc.addInstance(i6);
         
+        
+        //extra Instances
+        Instance ia = new Instance("ex:ia");
+        ia.addProperty("name", "Phill");
+        ia.addProperty("surname", "Zlaus");
+        Instance ib = new Instance("ex:ib");
+        ib.addProperty("name", "Al");
+        ib.addProperty("surname", "Lektro");
+
+        for(Instance ii : sc.getAllInstances())
+        	extendedSourceCache.addInstance(ii);
+        for(Instance ii : tc.getAllInstances())
+        	extendedTargetCache.addInstance(ii);
+        extendedSourceCache.addInstance(ia);
+        extendedTargetCache.addInstance(ia);
         
         trainingMap = MappingFactory.createDefaultMapping();
         trainingMap.add("ex:i1", "ex:i1", 1d);

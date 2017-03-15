@@ -61,11 +61,23 @@ public class EagleTest extends MLAlgorithmTest{
         eagleSup.getMl().setConfiguration(config);
         eagleSup.setParameter(Eagle.INQUIRY_SIZE, 2);
         eagleSup.setParameter(Eagle.PROPERTY_MAPPING, pm);
-
+        /* ------ test predict ------ */
         MLResults mlModel = eagleSup.learn(trainingMap);
         AMapping resultMap = eagleSup.predict(sc, tc, mlModel);
-        logger.info("Predicted links:"+resultMap);
-//        assert (resultMap.getSize() > 0);  
+        logger.info("Predicted links:"+resultMap.size());
+        assert (resultMap.getSize() > 0);  
+        
+        AMapping extendedResultMap = eagleSup.predict(extendedSourceCache, extendedTargetCache, mlModel);
+        logger.info("Predicted extended links:"+extendedResultMap.size());
+        
+        assert(extendedResultMap.size()>resultMap.size());
+        boolean containAll = true;
+        for(String sUri : resultMap.getMap().keySet())
+        	for(String tUri : resultMap.getMap().get(sUri).keySet())
+        		containAll &= extendedResultMap.contains(sUri, tUri);	        
+        assert(resultMap.size()<extendedResultMap.size());
+        assert(containAll);
+        
     }
     
     @Test
