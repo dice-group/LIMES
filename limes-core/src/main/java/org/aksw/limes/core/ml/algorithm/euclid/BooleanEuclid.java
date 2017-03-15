@@ -12,18 +12,23 @@ import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator.QMeasureType;
 import org.apache.log4j.Logger;
 
+/**
+ * Class wraps around EUCLIDs boolean classifier to abide LIMES ml interface
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
+ */
 public class BooleanEuclid extends LinearEuclid{
 
 	protected static Logger logger = Logger.getLogger(BooleanEuclid.class);
 	
 	static final String ALGORITHM_NAME = "Euclid boolean";
 	public static final String MAX_THRESHOLD = "max_threshold";
-
+	
 	 @Override
 	 protected void init(List<LearningParameter> learningParameters, ACache sourceCache, ACache targetCache) {
 	  	setDefaultParameters();
 	   	super.init(learningParameters, sourceCache, targetCache);
 	   	lsc = new BooleanSelfConfigurator(sourceCache, targetCache);
+	   	name = ALGORITHM_NAME;
 	 }
 	
 	@Override
@@ -31,7 +36,7 @@ public class BooleanEuclid extends LinearEuclid{
 	    double max_thres = 1.0;
 		super.setDefaultParameters();
 		learningParameters.add(new LearningParameter(MAX_THRESHOLD, max_thres, Double.class, 0d, 1d, Double.NaN, MAX_THRESHOLD));
-    	}
+    }
 
 	
 	@Override

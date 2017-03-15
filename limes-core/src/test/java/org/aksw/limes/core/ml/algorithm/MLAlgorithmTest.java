@@ -22,7 +22,7 @@ import org.junit.Before;
  *
  */
 public class MLAlgorithmTest {
-	static Logger logger = Logger.getLogger(EagleTest.class);
+	static Logger logger = Logger.getLogger(MLAlgorithmTest.class);
     ACache sc = new MemoryCache();
     ACache tc = new MemoryCache();
 

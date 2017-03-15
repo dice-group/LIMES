@@ -11,8 +11,11 @@ import org.aksw.limes.core.ml.algorithm.classifier.ComplexClassifier;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 
 /**
+ * Boolean implementation of a self-configurator (Euclid) to (unsupervised) learn LS based upon 
+ * a boolean combination of arbitrary simple classifiers, each representing an atomic LS. 
+ * 
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- *
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  */
 public class BooleanSelfConfigurator extends LinearSelfConfigurator {
 
@@ -28,9 +31,8 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
      *
      * @param source Source cache
      * @param target Target cache
-     * @param beta Beta value for computing F_beta
      * @param minCoverage Minimal coverage for a property to be considered for linking
-     *
+     * @param beta Beta value for computing F_beta     *
      */
     public BooleanSelfConfigurator (ACache source, ACache target, double minCoverage, double beta) {
         super(source, target, minCoverage, beta);

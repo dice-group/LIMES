@@ -22,6 +22,8 @@ import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator.QMeasureTy
 public class LinearEuclid extends ACoreMLAlgorithm{
 
 	protected static final String ALGORITHM_NAME = "Euclid linear";
+	/**To set name on run-time */
+	protected String name = ALGORITHM_NAME;
 	
 	/* EUCLIDs parameter */
 	public static final String STRICT = "strict";
@@ -45,7 +47,7 @@ public class LinearEuclid extends ACoreMLAlgorithm{
 	
 	@Override
 	protected String getName() {
-		return ALGORITHM_NAME;
+		return name;
 	}
 
 	@Override
