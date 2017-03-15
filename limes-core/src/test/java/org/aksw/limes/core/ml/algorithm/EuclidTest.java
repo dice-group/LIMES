@@ -74,7 +74,7 @@ public class EuclidTest extends MLAlgorithmTest{
 	}
 	
 	@Test
-	public void testUnsupervised() {
+	public void testAlgorithms() {
         Class[] algorithms = {
         		LinearEuclid.class, 
         		BooleanEuclid.class,
@@ -82,8 +82,58 @@ public class EuclidTest extends MLAlgorithmTest{
         };
         // for each Euclid sub type
         for(Class<? extends ACoreMLAlgorithm> algorithm : algorithms) {
-        	logger.info("Testing "+algorithm.getSimpleName());
+        	logger.info("Testing unsupervised "+algorithm.getSimpleName());
         	testUnsupervised(algorithm);
+        	
+        	logger.info("Testing supervised "+algorithm.getSimpleName());
+        	testSupervisedBatch(algorithm);
         }        
 	}
+	
+/*------------------------------ supervised tests --------------------------------*/
+
+    public void testSupervisedBatch(Class<? extends ACoreMLAlgorithm> algorithm) {
+        SupervisedMLAlgorithm euclid = null;
+        try {
+        	euclid = MLAlgorithmFactory.createMLAlgorithm(algorithm,
+                    MLImplementationType.SUPERVISED_BATCH).asSupervised();
+        } catch (UnsupportedMLImplementationException e) {
+            e.printStackTrace();
+            fail();
+        }
+        assert (euclid.getClass().equals(SupervisedMLAlgorithm.class));
+       
+        euclid.getMl().setDefaultParameters();
+        
+        List<LearningParameter> params = new ArrayList<LearningParameter>(5);
+        params.add(new LearningParameter(LinearEuclid.ITERATIONS_MAX, 30));
+        params.add(new LearningParameter(LinearEuclid.KAPPA, 0.8));
+        params.add(new LearningParameter(LinearEuclid.LEARNING_RATE, 0.25));
+        euclid.init(params, sc, tc);
+        euclid.getMl().setConfiguration(config);
+        assert(euclid.getMl().supports(MLImplementationType.SUPERVISED_BATCH));
+        
+        MLResults mlModel = null;
+		try {
+			mlModel = euclid.learn(trainingMap);
+			
+			logger.info("Test (" + euclid.getName()+") supervised (batch) results:");
+			logger.info("Mapping size= "  +mlModel.getMapping().size());
+			logger.info("Quality:" + mlModel.quality);
+			
+			for(String key : mlModel.getDetails().keySet()) {
+				logger.info(key+" : "+mlModel.getDetails().get(key));    				
+			}
+			
+			
+	        AMapping resultMap = euclid.predict(sc, tc, mlModel);
+	        logger.info("Predicted links:"+resultMap);
+		} catch (UnsupportedMLImplementationException e) {
+			e.printStackTrace();
+		}
+		
+		assert(mlModel != null);
+    }
+	
+	
 }

@@ -538,6 +538,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      * @param reference
      */
     public void setSupervisedBatch(AMapping reference) {
+    	logger.info("Setting training data to "+reference.size()+" links");
         this.qMeasureType = QMeasureType.SUPERVISED;
         setPFMType(this.qMeasureType);
         for(String sUri : reference.getMap().keySet()) {

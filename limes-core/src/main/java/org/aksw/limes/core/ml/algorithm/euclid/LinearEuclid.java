@@ -116,7 +116,7 @@ public class LinearEuclid extends ACoreMLAlgorithm{
 
 	@Override
 	protected boolean supports(MLImplementationType mlType) {
-		if(mlType.equals(MLImplementationType.UNSUPERVISED))
+		if(mlType.equals(MLImplementationType.UNSUPERVISED) || mlType.equals(MLImplementationType.SUPERVISED_BATCH))
 			return true;
 		return false;
 	}
