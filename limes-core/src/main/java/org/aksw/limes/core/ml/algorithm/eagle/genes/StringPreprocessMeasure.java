@@ -1,10 +1,11 @@
-package org.aksw.limes.core.ml.algorithm.eagle.core;
+package org.aksw.limes.core.ml.algorithm.eagle.genes;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
+import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
@@ -24,17 +25,18 @@ import org.slf4j.LoggerFactory;
  * They all build a expression like <i>similarityMeasure(resource1, resource2)|threshold</i>.
  * Whereas the threshold is ignored if the expression is atomic, i.e. the similarity measure
  * isn't part (argument) of another metric, such as <i>AND</i>).
- * We now expect atleast two parameters: 2 Terminals. Whereas the first is of sub return type
+ * We now expect at least two parameters: 2 Terminals. Whereas the first is of sub return type
  * ResourceTerminalType.SOURCE, the second of ResourceTerminalType.TARGET. This allows us to differentiate the
  * different resources of the two endpoints and avoid silly measures comparing the same resources of the same endpoint.
- * If mutation is turned on, the similarity command might be changed during the evolution process to another one of
+ * If mutation is turned on, the similarity command might be changed during the evolution process to one of
  * the allowed measures.
  *
  * @author Klaus Lyko
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 21, 2016
  */
-public class StringMeasure extends CommandGene implements IMutateable, ICloneable {
+public class StringPreprocessMeasure
+        extends CommandGene implements IMutateable, ICloneable {
     /**
      *
      */
@@ -44,39 +46,10 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
     private String operationName = "sim";
     // Set of all allowed similarity measures. Needed for mutation.
     private Set<String> allowedOperations = new HashSet<String>();
-    // mutation coefficient
-    //	private float mutationCoefficient;
+    // mutation coeeficient
+//	private float mutationCoefficient;
     // per default not mutable
     private boolean m_mutateable;
-
-    /**
-     * Constructor for similarity measures bound by a threshold.
-     *
-     * @param opName
-     *         Name of the LIMES similarity measure operation (e.g. "trigram").
-     * @param a_conf
-     *         JGAP GPConfiguration.
-     * @param a_returnType
-     *         The return type of this command.
-     * @param a_subReturnType
-     *         Specifies the SubReturnType.
-     * @param a_mutateable
-     *         true: this Commandgene is mutateable, viz. the LIMES similarity measure might be changed to another one out of the allowed operations.
-     * @throws InvalidConfigurationException
-     */
-    public StringMeasure(String opName, final GPConfiguration a_conf, Class<?> a_returnType,
-            int a_subReturnType, boolean a_mutateable) throws InvalidConfigurationException {
-        super(a_conf, 2, a_returnType,
-                a_subReturnType,
-                new int[]{
-                        ResourceTerminalType.STRINGPROPPAIR.intValue(),
-                        ResourceTerminalType.THRESHOLD.intValue(),}
-                );
-        fillOperationSet();
-        setOperationName(opName);
-        m_mutateable = a_mutateable;
-        setNoValidation(false);
-    }
 
     /**
      * Constructor for atomic similarity measures. @FIXME antiquated and not actually used.
@@ -92,33 +65,21 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
      *         to another one out of the allowed operations.
      * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
-    public StringMeasure(String opName, final GPConfiguration a_conf,
-            final Class<?> a_returnType, boolean a_mutateable)
-                    throws InvalidConfigurationException {
-        super(a_conf, 2, a_returnType, 1,
+    public StringPreprocessMeasure(String opName, final GPConfiguration a_conf,
+                                   final Class<?> a_returnType, boolean a_mutateable)
+            throws InvalidConfigurationException {
+        super(a_conf, 4, a_returnType, 1,
                 new int[]{
                         ResourceTerminalType.STRINGPROPPAIR.intValue(),
-                        ResourceTerminalType.THRESHOLD.intValue(),}
-                );
+                        ResourceTerminalType.THRESHOLD.intValue(),
+                        ResourceTerminalType.PREPROCESS.intValue(),
+                        ResourceTerminalType.PREPROCESS.intValue(),
+                }
+        );
         fillOperationSet();
         setOperationName(opName);
         m_mutateable = a_mutateable;
         setNoValidation(false);
-    }
-
-    /**
-     * Basic constructor for an atomic similarity measure. Return Type will be set to String.class and this gene
-     * more precisely the similarity measure command will not be mutateable. @FIXME antiquated and not actually used
-     *
-     * @param opName
-     *         name of the LIMES similarity measure operation (e.g. "trigram").
-     * @param a_conf
-     *         JGAP GPConfiguration.
-     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
-     */
-    public StringMeasure(String opName, final GPConfiguration a_conf)
-            throws InvalidConfigurationException {
-        this(opName, a_conf, String.class, false);
     }
 
     @Override
@@ -134,14 +95,15 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
      *         A GPProgram
      * @param a_chromNum
      *         The number of the chromosome.
-     * @return Class type of the child.
+     * @return type of the child.
      */
     public Class<?> getChildType(IGPProgram a_ind, int a_chromNum) {
         if (a_chromNum == 0)
             return PairSimilar.class;
+        else if (a_chromNum == 2 || a_chromNum == 3)
+            return String.class;
         else
             return CommandGene.DoubleClass;
-
     }
 
     public String getName() {
@@ -173,13 +135,16 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
         @SuppressWarnings("unchecked")
         PairSimilar<String> propPair = (PairSimilar<String>) a_chrom.execute_object(a_n, 0, args);
         threshold = a_chrom.execute_double(a_n, 1, args);
-
+        String preprocess1 = (String) a_chrom.execute_object(a_n, 2, args);
+        String preprocess2 = (String) a_chrom.execute_object(a_n, 3, args);
         LinkSpecGeneticLearnerConfig ExpConfig = (LinkSpecGeneticLearnerConfig) getGPConfiguration();
         StringBuffer value = new StringBuffer(getOperationName());
         value.append("(");
         value.append(ExpConfig.getExpressionProperty("source", propPair.a));
+        value.append("[" + preprocess1 + "]");
         value.append(",");
         value.append(ExpConfig.getExpressionProperty("target", propPair.b));
+        value.append("[" + preprocess2 + "]");
         value.append(")");
         value.append("|");
         value.append(new BigDecimal(threshold).setScale(4, BigDecimal.ROUND_HALF_EVEN));
@@ -199,7 +164,7 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
         allowedOperations.add("cosine");
         allowedOperations.add("jaccard");
         allowedOperations.add("levenshtein");
-        //		allowedOperations.add("overlap");
+        allowedOperations.add("overlap");
     }
 
     public CommandGene applyMutation(int a_index, double a_percentage)
@@ -219,7 +184,7 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
     /**
      * Mutates this CommandGene. A random command out of the set of allowed similarity measures is picked.
      *
-     * @return A random command out of the set of the allowed similarity measures
+     * @return A random command out of the set of allowed similarity measures
      * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public CommandGene applyMutation() throws InvalidConfigurationException {
@@ -227,7 +192,7 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
         aO = allowedOperations.toArray(aO);
         RandomGenerator randomGen = getGPConfiguration().getRandomGenerator();
         String newOp = aO[randomGen.nextInt(aO.length)];
-        StringMeasure result = new StringMeasure(newOp, getGPConfiguration(), getReturnType(), getSubReturnType(), m_mutateable);
+        StringPreprocessMeasure result = new StringPreprocessMeasure(newOp, getGPConfiguration(), getReturnType(), m_mutateable);
         return result;
     }
 
@@ -239,7 +204,7 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
     @Override
     public Object clone() {
         try {
-            StringMeasure result = new StringMeasure(operationName, getGPConfiguration(), getReturnType(), getSubReturnType(), m_mutateable);
+            StringPreprocessMeasure result = new StringPreprocessMeasure(operationName, getGPConfiguration(), getReturnType(), m_mutateable);
             return result;
         } catch (Throwable t) {
             throw new CloneException(t);

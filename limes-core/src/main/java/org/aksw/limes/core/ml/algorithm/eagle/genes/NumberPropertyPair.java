@@ -1,6 +1,7 @@
-package org.aksw.limes.core.ml.algorithm.eagle.core;
+package org.aksw.limes.core.ml.algorithm.eagle.genes;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
+import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
 import org.jgap.gp.CommandGene;

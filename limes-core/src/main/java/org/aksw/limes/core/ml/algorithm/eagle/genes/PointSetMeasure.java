@@ -1,10 +1,13 @@
-package org.aksw.limes.core.ml.algorithm.eagle.core;
+package org.aksw.limes.core.ml.algorithm.eagle.genes;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
+import org.aksw.limes.core.measures.measure.MeasureFactory;
+import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
@@ -25,27 +28,22 @@ import org.slf4j.LoggerFactory;
  * @version Jul 21, 2016
  */
 public class PointSetMeasure extends CommandGene implements IMutateable, ICloneable {
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -4901752495126327127L;
     static Logger logger = LoggerFactory.getLogger(PointSetMeasure.class);
     
     // Holds the name of this similarity Measure.
-    private String operationName = "sim";
+    private String operationName = "geo_hausdorff";
     // Set of all allowed similarity measures. Needed for mutation.
     private Set<String> allowedOperations = new HashSet<String>();
-    // mutation coefficient
-    // private float mutationCoefficient;
-    // per default not mutable
+    // mutation setter
     private boolean m_mutateable;
 
     /**
      * Constructor for similarity measures bound by a threshold.
      *
      * @param opName
-     *         Name of the LIMES similarity measure operation (e.g.
-     *         "trigram").
+     *         Name of the LIMES similarity measure operation (e.g. "hausdorff").
      * @param a_conf
      *         JGAP GPConfiguration.
      * @param a_returnType
@@ -193,8 +191,25 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
      * String similarity measures.
      */
     private void fillOperationSet() {
-        allowedOperations.add("hausdorff");
-        allowedOperations.add("geomean");
+    	ArrayList<String> ops = new ArrayList<String>();
+    	ops.add(MeasureFactory.GEO_CENTROID_INDEXED_HAUSDORFF);
+    	ops.add(MeasureFactory.GEO_FAST_HAUSDORFF);
+    	ops.add(MeasureFactory.GEO_FAIR_SURJECTION);
+    	ops.add(MeasureFactory.GEO_FRECHET);
+    	ops.add(MeasureFactory.GEO_GREAT_ELLIPTIC);
+    	ops.add(MeasureFactory.GEO_HAUSDORFF);
+    	ops.add(MeasureFactory.GEO_INDEXED_HAUSDORFF);
+    	ops.add(MeasureFactory.GEO_LINK);
+    	ops.add(MeasureFactory.GEO_MAX);
+    	ops.add(MeasureFactory.GEO_MEAN);
+    	ops.add(MeasureFactory.GEO_MIN);
+    	ops.add(MeasureFactory.GEO_NAIVE_HAUSDORFF);
+    	ops.add(MeasureFactory.GEO_NAIVE_SURJECTION);
+    	ops.add(MeasureFactory.GEO_ORTHODROMIC);
+    	ops.add(MeasureFactory.GEO_SCAN_INDEXED_HAUSDORFF);
+    	ops.add(MeasureFactory.GEO_SUM_OF_MIN);
+    	ops.add(MeasureFactory.GEO_SYMMETRIC_HAUSDORFF);    	
+    	allowedOperations.addAll(ops);
     }
 
     public CommandGene applyMutation(int a_index, double a_percentage) throws InvalidConfigurationException {
@@ -254,5 +269,12 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
 
     public boolean isValid(ProgramChromosome a_program) {
         return isValid(a_program, 0);
+    }
+    /**
+     * Set possible operations, used while mutating.
+     * @param operationSet
+     */
+    public void setAllowedOperations(Set<String> operationSet) {
+    	this.allowedOperations = operationSet;
     }
 }

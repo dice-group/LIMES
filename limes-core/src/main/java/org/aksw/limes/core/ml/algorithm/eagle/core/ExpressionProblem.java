@@ -5,6 +5,13 @@ import java.util.List;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.io.ls.LinkSpecification;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.AtomicPreprocessingCommand;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.ChainedPreprocessingCommand;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.MetricCommand;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.NestedBoolean;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.StringMeasure;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.StringPreprocessMeasure;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.StringPropertyPair;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.CommandGene;
 import org.jgap.gp.GPProblem;
@@ -266,13 +273,13 @@ public class ExpressionProblem extends GPProblem {
      * @author Klaus Lyko
      */
     public enum ResourceTerminalType {
-        THRESHOLD(3),
-        NUMBERTHRESHOLD(6),
-        GOBALTHRESHOLD(7),
         STRINGPROPPAIR(1),
         NUMBERPROPPAIR(2),
-        POINTSETPROPPAIR(5),
+        THRESHOLD(3),
         DATEPROPPAIR(4),
+        POINTSETPROPPAIR(5),
+        NUMBERTHRESHOLD(6),
+        GOBALTHRESHOLD(7),      
         PREPROCESS(10);
         private int m_value;
 
