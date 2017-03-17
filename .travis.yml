@@ -33,3 +33,9 @@ env:
   global:
   - ENCRYPTION_LABEL: "eec107ffaeb8"
   - COMMIT_AUTHOR_EMAIL: "yamalight+travis@gmail.com"
+
+# safelist
+branches:
+  only:
+  - master
+  - dev
