@@ -38,13 +38,5 @@ public class NoisyOracle {
     }
 
 
-    public double predictTrue(String subject, String object) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-    
-    public double predictFalse(String subject, String object) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
+
 }

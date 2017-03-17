@@ -13,7 +13,7 @@ public class Ligon {
 
     double TAU = 1.0;
     AMapping posMap, negMap, unknownMap; 
-    
+
     List<NoisyOracle> noisyOracles;
     List<Double> oraclesTrust;
 
@@ -25,10 +25,10 @@ public class Ligon {
         noisyOracles = new ArrayList<>();
         oraclesTrust = new ArrayList<>();
     }
-    
 
-    
-   public Ligon(double tAU, AMapping posMap, AMapping negMap,
+
+
+    public Ligon(double tAU, AMapping posMap, AMapping negMap,
             AMapping unknownMap, List<NoisyOracle> noisyOracles,
             List<Double> oraclesTrust) {
         super();
@@ -41,7 +41,7 @@ public class Ligon {
     }
 
 
-void EstimateOraclesTrust(AMapping posMap, AMapping negMap){
+    void EstimateOraclesTrust(AMapping posMap, AMapping negMap){
 
         // Positive training data
         for(NoisyOracle noisyOracle: noisyOracles){
@@ -53,7 +53,7 @@ void EstimateOraclesTrust(AMapping posMap, AMapping negMap){
                 }
             }
         }
-        
+
         // Negative training data
         for(NoisyOracle noisyOracle: noisyOracles){
             int tn = 0;
@@ -65,27 +65,30 @@ void EstimateOraclesTrust(AMapping posMap, AMapping negMap){
             }
         }
     }
-    
-   
-   void updateTrainingData(AMapping unlabeledMap){
-       for (String s : unlabeledMap.getMap().keySet()) {
-           for (String t : unlabeledMap.getMap().get(s).keySet()) {
-               double pTrue = estimateTrue(s,t);
-               double pFalse = estimateFalse(s,t);
-               if(pTrue >= TAU * pFalse){
-                    
-               }
-           }
-       }
-   }
+
+
+    void updateTrainingData(AMapping unlabeledMap){
+        for (String s : unlabeledMap.getMap().keySet()) {
+            for (String t : unlabeledMap.getMap().get(s).keySet()) {
+                double pTrue = estimateTrue(s,t);
+                double pFalse = estimateFalse(s,t);
+                if(pTrue >= TAU * pFalse){
+                    posMap.add(s, t, 1.0);
+                }else{
+                    negMap.add(s, t, 1.0);
+                }
+            }
+        }
+    }
     double estimateTrue(String subject, String object){
         double result = 1; 
         for(NoisyOracle noisyOracle: noisyOracles){
-            result *= 1 - noisyOracle.predictTrue(subject, object);
+            if(noisyOracle.predict(subject, object)){
+            result *= 1 - ((noisyOracle.predict(subject, object))? noisyOracle.estimatedTn: (1 - noisyOracle.estimatedTn));
         }
-        return 1- result;
+        return 1 - result;
     }
-    
+
     double estimateFalse(String subject, String object){
         double result = 1; 
         for(NoisyOracle noisyOracle: noisyOracles){
@@ -94,7 +97,7 @@ void EstimateOraclesTrust(AMapping posMap, AMapping negMap){
         return 1- result;
     }
 
-        public static void main(String args[]){
+    public static void main(String args[]){
 
     }
 }
