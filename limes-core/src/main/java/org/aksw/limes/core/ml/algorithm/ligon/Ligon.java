@@ -80,21 +80,27 @@ public class Ligon {
             }
         }
     }
+    
+    
     double estimateTrue(String subject, String object){
         double result = 1; 
         for(NoisyOracle noisyOracle: noisyOracles){
             if(noisyOracle.predict(subject, object)){
-            result *= 1 - ((noisyOracle.predict(subject, object))? noisyOracle.estimatedTn: (1 - noisyOracle.estimatedTn));
+                result *= 1 - ((noisyOracle.predict(subject, object))? noisyOracle.estimatedTp: (1 - noisyOracle.estimatedTp));
+            }
         }
         return 1 - result;
     }
 
+    
     double estimateFalse(String subject, String object){
         double result = 1; 
         for(NoisyOracle noisyOracle: noisyOracles){
-            result *= 1 - noisyOracle.predictFalse(subject, object);
+            if(noisyOracle.predict(subject, object)){
+                result *= 1 - ((noisyOracle.predict(subject, object))? noisyOracle.estimatedTn: (1 - noisyOracle.estimatedTn));
+            }
         }
-        return 1- result;
+        return 1 - result;
     }
 
     public static void main(String args[]){
