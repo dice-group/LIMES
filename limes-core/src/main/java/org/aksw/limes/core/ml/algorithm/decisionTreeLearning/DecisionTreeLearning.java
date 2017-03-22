@@ -105,22 +105,24 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
     public static final String PARAMETER_LINK_SPECIFICATION = "initial link specification to start training";
 
     // Default parameters
-    private int trainingDataSize = 10;
-    private boolean unprunedTree = false;
-    private boolean collapseTree = true;
-    private double pruningConfidence = 0.25;
-    private boolean reducedErrorPruning = false;
-    private int foldNumber = 3;
-    private boolean subtreeRaising = true;
-    private boolean cleanUp = true;
-    private boolean laplaceSmoothing = false;
-    private boolean mdlCorrection = true;
-    private int seed = 1;
+    private static final int trainingDataSize = 10;
+    private static final boolean unprunedTree = false;
+    private static final boolean collapseTree = true;
+    private static final double pruningConfidence = 0.25;
+    private static final boolean reducedErrorPruning = false;
+    private static final int foldNumber = 3;
+    private static final boolean subtreeRaising = true;
+    private static final boolean cleanUp = true;
+    private static final boolean laplaceSmoothing = false;
+    private static final boolean mdlCorrection = true;
+    private static final int seed = 1;
+
     private AMapping initialMapping = MappingFactory.createDefaultMapping();
     private LinkSpecification bestLS;
     private PseudoFMeasure pfmeasure;
     private double bestFMeasure = 0.0;
     private AMapping prediction;
+    
 
     // TODO check whats wrong with these
     public static final String[] stringMeasures = { "cosine",
@@ -658,41 +660,41 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
      */
     private String[] getOptionsArray() {
 	ArrayList<String> tmpOptions = new ArrayList<>();
-	if (unprunedTree) {
+	if ((boolean)getParameter(PARAMETER_UNPRUNED_TREE)) {
 	    tmpOptions.add("-U");
 	}
-	if (!collapseTree) {
+	if (!((boolean)getParameter(PARAMETER_COLLAPSE_TREE))) {
 	    tmpOptions.add("-O");
 	}
 	// default value in J48 is 0.25
-	if (pruningConfidence != 0.25) {
+	if (((double)getParameter(PARAMETER_PRUNING_CONFIDENCE)) != 0.25) {
 	    tmpOptions.add("-C");
-	    tmpOptions.add(String.valueOf(pruningConfidence));
+	    tmpOptions.add(String.valueOf((double)getParameter(PARAMETER_PRUNING_CONFIDENCE)));
 	}
-	if (reducedErrorPruning) {
+	if ((boolean)getParameter(PARAMETER_REDUCED_ERROR_PRUNING)) {
 	    tmpOptions.add("-R");
 	}
 	// default value in J48 is 3
-	if (foldNumber != 3) {
+	if (((int)getParameter(PARAMETER_FOLD_NUMBER)) != 3) {
 	    tmpOptions.add("-N");
-	    tmpOptions.add(String.valueOf(foldNumber));
+	    tmpOptions.add(String.valueOf(((int)getParameter(PARAMETER_FOLD_NUMBER))));
 	}
-	if (!subtreeRaising) {
+	if (!((boolean)getParameter(PARAMETER_SUBTREE_RAISING))) {
 	    tmpOptions.add("-S");
 	}
-	if (!cleanUp) {
+	if (!((boolean)getParameter(PARAMETER_CLEAN_UP))) {
 	    tmpOptions.add("-L");
 	}
-	if (laplaceSmoothing) {
+	if (((boolean)getParameter(PARAMETER_LAPLACE_SMOOTHING))) {
 	    tmpOptions.add("-A");
 	}
-	if (!mdlCorrection) {
+	if (!((boolean)getParameter(PARAMETER_MDL_CORRECTION))) {
 	    tmpOptions.add("-J");
 	}
 	// default value in J48 is 1
-	if (seed != 1) {
+	if (((int)getParameter(PARAMETER_SEED)) != 1) {
 	    tmpOptions.add("-Q");
-	    tmpOptions.add(String.valueOf(seed));
+	    tmpOptions.add(String.valueOf(((int)getParameter(PARAMETER_SEED))));
 	}
 	String[] options = new String[tmpOptions.size()];
 	return tmpOptions.toArray(options);
@@ -748,63 +750,63 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	alreadyChecked = new HashSet<String>();
 	if (lp == null) {
 	    setDefaultParameters();
-	} else {
-	    setLearningParameters(lp);
+//	} else {
+//	    setLearningParameters(lp);
 	}
     }
 
-    private void setLearningParameters(List<LearningParameter> lp) {
-	for (LearningParameter l : lp) {
-	    switch (l.getName()) {
-	    case PARAMETER_TRAINING_DATA_SIZE:
-		this.trainingDataSize = (Integer) l.getValue();
-		break;
-	    case PARAMETER_UNPRUNED_TREE:
-		this.unprunedTree = (Boolean) l.getValue();
-		break;
-	    case PARAMETER_COLLAPSE_TREE:
-		this.collapseTree = (Boolean) l.getValue();
-		break;
-	    case PARAMETER_PRUNING_CONFIDENCE:
-		this.pruningConfidence = (Double) l.getValue();
-		break;
-	    case PARAMETER_REDUCED_ERROR_PRUNING:
-		this.reducedErrorPruning = (Boolean) l.getValue();
-		break;
-	    case PARAMETER_FOLD_NUMBER:
-		this.foldNumber = (Integer) l.getValue();
-		break;
-	    case PARAMETER_SUBTREE_RAISING:
-		this.subtreeRaising = (Boolean) l.getValue();
-		break;
-	    case PARAMETER_CLEAN_UP:
-		this.cleanUp = (Boolean) l.getValue();
-		break;
-	    case PARAMETER_LAPLACE_SMOOTHING:
-		this.laplaceSmoothing = (Boolean) l.getValue();
-		break;
-	    case PARAMETER_MDL_CORRECTION:
-		this.mdlCorrection = (Boolean) l.getValue();
-		break;
-	    case PARAMETER_SEED:
-		this.seed = (Integer) l.getValue();
-		break;
-	    case PARAMETER_PROPERTY_MAPPING:
-		this.propertyMapping = (PropertyMapping) l.getValue();
-		break;
-	    case PARAMETER_MAPPING:
-		this.initialMapping = (AMapping) l.getValue();
-		break;
-	    case PARAMETER_LINK_SPECIFICATION:
-		this.bestLS = (LinkSpecification) l.getValue();
-		break;
-	    default:
-		logger.error("Unknown parameter name. Setting defaults!");
-		setDefaultParameters();
-		break;
-	    }
-	}
-    }
+//    private void setLearningParameters(List<LearningParameter> lp) {
+//	for (LearningParameter l : lp) {
+//	    switch (l.getName()) {
+//	    case PARAMETER_TRAINING_DATA_SIZE:
+//		this.trainingDataSize = (Integer) l.getValue();
+//		break;
+//	    case PARAMETER_UNPRUNED_TREE:
+//		this.unprunedTree = (Boolean) l.getValue();
+//		break;
+//	    case PARAMETER_COLLAPSE_TREE:
+//		this.collapseTree = (Boolean) l.getValue();
+//		break;
+//	    case PARAMETER_PRUNING_CONFIDENCE:
+//		this.pruningConfidence = (Double) l.getValue();
+//		break;
+//	    case PARAMETER_REDUCED_ERROR_PRUNING:
+//		this.reducedErrorPruning = (Boolean) l.getValue();
+//		break;
+//	    case PARAMETER_FOLD_NUMBER:
+//		this.foldNumber = (Integer) l.getValue();
+//		break;
+//	    case PARAMETER_SUBTREE_RAISING:
+//		this.subtreeRaising = (Boolean) l.getValue();
+//		break;
+//	    case PARAMETER_CLEAN_UP:
+//		this.cleanUp = (Boolean) l.getValue();
+//		break;
+//	    case PARAMETER_LAPLACE_SMOOTHING:
+//		this.laplaceSmoothing = (Boolean) l.getValue();
+//		break;
+//	    case PARAMETER_MDL_CORRECTION:
+//		this.mdlCorrection = (Boolean) l.getValue();
+//		break;
+//	    case PARAMETER_SEED:
+//		this.seed = (Integer) l.getValue();
+//		break;
+//	    case PARAMETER_PROPERTY_MAPPING:
+//		this.propertyMapping = (PropertyMapping) l.getValue();
+//		break;
+//	    case PARAMETER_MAPPING:
+//		this.initialMapping = (AMapping) l.getValue();
+//		break;
+//	    case PARAMETER_LINK_SPECIFICATION:
+//		this.bestLS = (LinkSpecification) l.getValue();
+//		break;
+//	    default:
+//		logger.error("Unknown parameter name. Setting defaults!");
+//		setDefaultParameters();
+//		break;
+//	    }
+//	}
+//    }
 
     /**
      * Adds the delta shifting of the thresholds in the measures
@@ -865,22 +867,21 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
     @Override
     public void setDefaultParameters() {
-	parameters = new ArrayList<>();
-	parameters.add(new LearningParameter(PARAMETER_TRAINING_DATA_SIZE, trainingDataSize, Integer.class, 1, 100000, 1, PARAMETER_TRAINING_DATA_SIZE));
-	parameters.add(new LearningParameter(PARAMETER_UNPRUNED_TREE, unprunedTree, Boolean.class, 0, 1, 0, PARAMETER_UNPRUNED_TREE));
-	parameters.add(new LearningParameter(PARAMETER_COLLAPSE_TREE, collapseTree, Boolean.class, 0, 1, 1, PARAMETER_COLLAPSE_TREE));
-	parameters.add(new LearningParameter(PARAMETER_PRUNING_CONFIDENCE, pruningConfidence, Double.class, 0d, 1d, 0.01d, PARAMETER_PRUNING_CONFIDENCE));
-	parameters.add(new LearningParameter(PARAMETER_REDUCED_ERROR_PRUNING, reducedErrorPruning, Boolean.class, 0, 1, 0, PARAMETER_REDUCED_ERROR_PRUNING));
-	parameters.add(new LearningParameter(PARAMETER_FOLD_NUMBER, foldNumber, Integer.class, 0, 10, 1, PARAMETER_FOLD_NUMBER));
-	parameters.add(new LearningParameter(PARAMETER_SUBTREE_RAISING, subtreeRaising, Boolean.class, 0, 1, 0, PARAMETER_SUBTREE_RAISING));
-	parameters.add(new LearningParameter(PARAMETER_CLEAN_UP, cleanUp, Boolean.class, 0, 1, 0, PARAMETER_CLEAN_UP));
-	parameters.add(new LearningParameter(PARAMETER_LAPLACE_SMOOTHING, laplaceSmoothing, Boolean.class, 0, 1, 0, PARAMETER_LAPLACE_SMOOTHING));
-	parameters.add(new LearningParameter(PARAMETER_MDL_CORRECTION, mdlCorrection, Boolean.class, 0, 1, 0, PARAMETER_MDL_CORRECTION));
-	parameters.add(new LearningParameter(PARAMETER_SEED, seed, Integer.class, 0, 100, 1, PARAMETER_SEED));
-	parameters.add(new LearningParameter(PARAMETER_PROPERTY_MAPPING, propertyMapping, PropertyMapping.class, Double.NaN, Double.NaN, Double.NaN,
-		PARAMETER_PROPERTY_MAPPING));
-	parameters.add(new LearningParameter(PARAMETER_MAPPING, initialMapping, AMapping.class, Double.NaN, Double.NaN, Double.NaN, PARAMETER_MAPPING));
-	parameters.add(new LearningParameter(PARAMETER_LINK_SPECIFICATION, bestLS, LinkSpecification.class, Double.NaN, Double.NaN, Double.NaN,
+	learningParameters = new ArrayList<>();
+	learningParameters.add(new LearningParameter(PARAMETER_TRAINING_DATA_SIZE, trainingDataSize, Integer.class, 1, 100000, 1, PARAMETER_TRAINING_DATA_SIZE));
+	learningParameters.add(new LearningParameter(PARAMETER_UNPRUNED_TREE, unprunedTree, Boolean.class, 0, 1, 0, PARAMETER_UNPRUNED_TREE));
+	learningParameters.add(new LearningParameter(PARAMETER_COLLAPSE_TREE, collapseTree, Boolean.class, 0, 1, 1, PARAMETER_COLLAPSE_TREE));
+	learningParameters.add(new LearningParameter(PARAMETER_PRUNING_CONFIDENCE, pruningConfidence, Double.class, 0d, 1d, 0.01d, PARAMETER_PRUNING_CONFIDENCE));
+	learningParameters.add(new LearningParameter(PARAMETER_REDUCED_ERROR_PRUNING, reducedErrorPruning, Boolean.class, 0, 1, 0, PARAMETER_REDUCED_ERROR_PRUNING));
+	learningParameters.add(new LearningParameter(PARAMETER_FOLD_NUMBER, foldNumber, Integer.class, 0, 10, 1, PARAMETER_FOLD_NUMBER));
+	learningParameters.add(new LearningParameter(PARAMETER_SUBTREE_RAISING, subtreeRaising, Boolean.class, 0, 1, 0, PARAMETER_SUBTREE_RAISING));
+	learningParameters.add(new LearningParameter(PARAMETER_CLEAN_UP, cleanUp, Boolean.class, 0, 1, 0, PARAMETER_CLEAN_UP));
+	learningParameters.add(new LearningParameter(PARAMETER_LAPLACE_SMOOTHING, laplaceSmoothing, Boolean.class, 0, 1, 0, PARAMETER_LAPLACE_SMOOTHING));
+	learningParameters.add(new LearningParameter(PARAMETER_MDL_CORRECTION, mdlCorrection, Boolean.class, 0, 1, 0, PARAMETER_MDL_CORRECTION));
+	learningParameters.add(new LearningParameter(PARAMETER_SEED, seed, Integer.class, 0, 100, 1, PARAMETER_SEED));
+	learningParameters.add(new LearningParameter(PARAMETER_PROPERTY_MAPPING, propertyMapping, PropertyMapping.class, Double.NaN, Double.NaN, Double.NaN,PARAMETER_PROPERTY_MAPPING));
+	learningParameters.add(new LearningParameter(PARAMETER_MAPPING, initialMapping, AMapping.class, Double.NaN, Double.NaN, Double.NaN, PARAMETER_MAPPING));
+	learningParameters.add(new LearningParameter(PARAMETER_LINK_SPECIFICATION, bestLS, LinkSpecification.class, Double.NaN, Double.NaN, Double.NaN,
 		PARAMETER_LINK_SPECIFICATION));
     }
 
