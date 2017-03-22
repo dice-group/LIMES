@@ -56,6 +56,9 @@ public class WombatSimple extends AWombat {
         super.init(lp, sourceCache, targetCache);
         sourceUris = sourceCache.getAllUris();
         targetUris = targetCache.getAllUris();
+        bestSolutionNode = null;
+        classifiers = null;
+        iterationNr = 0;
     }
 
     @Override
