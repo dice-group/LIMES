@@ -25,11 +25,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * JGAP GPProblem implementation for EAGLE and all derivates.
- *
- * @author Klaus Lyko
- * @version 1.2
- * @since 1.2 Learning Preprocessing enhanced.
- * 
+ * Creates a population of individuals for the given linking task. 
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de) 
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 21, 2016
  */
@@ -50,7 +47,7 @@ public class ExpressionProblem extends GPProblem {
     }
 
     /**
-     * Constrcutor to decide whether Preprocessing is part of evolution.
+     * Constructor to decide whether Preprocessing is part of evolution.
      *
      * @param a_conf
      * @param learnPreprocessing
@@ -66,7 +63,6 @@ public class ExpressionProblem extends GPProblem {
     public GPGenotype create() throws InvalidConfigurationException {
 
         LinkSpecGeneticLearnerConfig config = (LinkSpecGeneticLearnerConfig) getGPConfiguration();
-        //	ExpressionApplicationData applData = new ExpressionApplicationData("PublicationData.xml");
         // a program has two chromosomes: first an expression, second a acceptance threshold
         Class<?>[] types = {LinkSpecification.class};
         Class<?>[][] argTypes = {{
@@ -98,7 +94,7 @@ public class ExpressionProblem extends GPProblem {
         maxDepths[0] = 6;
         boolean[] fullModeAllowed = {true};
         int maxNodes = 100;
-//				System.out.println("Nodes..."+nodes);
+        
         return GPGenotype.randomInitialGenotype(config,
                 types, argTypes, nodeSets,
                 minDepths, maxDepths, maxNodes, fullModeAllowed,
@@ -106,8 +102,8 @@ public class ExpressionProblem extends GPProblem {
     }
 
     /**
-     * Constructs CommandGene setup for the basic EAGLE approach, i. e. without
-     * Learning Preprocessing.
+     * Constructs CommandGene setup for the basic EAGLE approach. That is all Genes covering
+     * String similarity measures, i. e. without Preprocessing, or pointsets.
      *
      * @param config LinkSpecGeneticLearnerConfig
      * @return CommandGene setup for the basic EAGLE approach

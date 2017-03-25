@@ -23,7 +23,8 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * @author Klaus Lyko
+ * JGAPs Gene implementation of an Pointset Measure for LIMES.
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 21, 2016
  */
@@ -131,8 +132,6 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
     public Class<?> getChildType(IGPProgram a_ind, int a_chromNum) {
         if (a_chromNum == 0)
             return PairSimilar.class;
-            // else if (a_chromNum == 1)
-            // return CommandGene.IntegerClass;
         else
             return CommandGene.DoubleClass;
 
@@ -147,10 +146,8 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
     }
 
     /**
-     * Setter for the operation of this String similarity measure.
-     *
-     * @param opName
-     *         Name of the measure, e.g. "trigram"
+     * Setter for the operation of this similarity measure.
+     * @param opName Name of the measure, e.g. "hausdorff"
      */
     private void setOperationName(String opName) {
         operationName = opName;
@@ -158,7 +155,7 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
     }
 
     /**
-     * Executes this CommandGene as object. Is called if the return type is set
+     * Executes this CommandGene as an object. It's called if the return type is set
      * to String.class. Thereby returning the atomic LIMES expression
      * <code>"sim(a.resource, b.resource)|threshold"</code>.
      */
@@ -212,6 +209,7 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
     	allowedOperations.addAll(ops);
     }
 
+    @Override
     public CommandGene applyMutation(int a_index, double a_percentage) throws InvalidConfigurationException {
         // we will change the measure to a random one out of the Set of allowed
         // operations
@@ -243,11 +241,6 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
         return result;
     }
 
-    /**
-     * Clones the object.
-     *
-     * @return cloned instance of this object
-     */
     @Override
     public Object clone() {
         try {
@@ -266,7 +259,8 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
         PairSimilar<?> propPair = (PairSimilar<?>) a_program.execute_object(a_index, 0, o);
         return expConfig.getPropertyMapping().isMatch(propPair.a.toString(), propPair.b.toString());
     }
-
+    
+    @Override
     public boolean isValid(ProgramChromosome a_program) {
         return isValid(a_program, 0);
     }

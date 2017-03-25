@@ -141,7 +141,7 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
             return CommandGene.DoubleClass;
 
     }
-
+    @Override
     public String getName() {
         return getOperationName();
     }
@@ -151,10 +151,8 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
     }
 
     /**
-     * Setter for the operation of this String similarity measure.
-     *
-     * @param opName
-     *         Name of the measure, e.g. "trigram"
+     * Setter for the similarity measure.
+     * @param opName Name of the measure, e.g. "trigrams"
      */
     private void setOperationName(String opName) {
         operationName = opName;
@@ -209,7 +207,8 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
     public Set<String> getMeasures() {
     	return allowedOperations;
     }
-
+    
+    @Override
     public CommandGene applyMutation(int a_index, double a_percentage)
             throws InvalidConfigurationException {
         // we will change the measure to a random one out of the Set of allowed operations
@@ -241,7 +240,6 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
 
     /**
      * Clones the object.
-     *
      * @return cloned instance of this object
      */
     @Override
@@ -261,11 +259,14 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
         PairSimilar<?> propPair = (PairSimilar<?>) a_program.execute_object(a_index, 0, o);
         return expConfig.getPropertyMapping().isMatch(propPair.a.toString(), propPair.b.toString());
     }
-
+    @Override
     public boolean isValid(ProgramChromosome a_program) {
         return isValid(a_program, 0);
     }
-    
+    /**
+     * Setter for a specific set of LIMES Measures.
+     * @param operationSet
+     */
     public void setAllowedOperations(Set<String> operationSet) {
     	this.allowedOperations = operationSet;
     }
