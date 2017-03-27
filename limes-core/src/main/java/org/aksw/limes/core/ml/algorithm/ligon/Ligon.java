@@ -15,7 +15,6 @@ public class Ligon {
     AMapping posMap, negMap, unknownMap; 
 
     List<NoisyOracle> noisyOracles;
-    List<Double> oraclesTrust;
 
     public Ligon(int nrOfOracles){
         super();
@@ -23,7 +22,6 @@ public class Ligon {
         negMap = MappingFactory.createDefaultMapping();
         unknownMap = MappingFactory.createDefaultMapping();
         noisyOracles = new ArrayList<>();
-        oraclesTrust = new ArrayList<>();
     }
 
 
@@ -45,31 +43,31 @@ public class Ligon {
 
         // Positive training data
         for(NoisyOracle noisyOracle: noisyOracles){
-            int tp = 0;
+            int etp = 0;
             for (String s : posMap.getMap().keySet()) {
                 for (String t : posMap.getMap().get(s).keySet()) {
-                    tp += (noisyOracle.predict(s, t)) ? 1 : 0 ;
-                    noisyOracle.estimatedTp = tp / posMap.size();
+                    etp += (noisyOracle.predict(s, t)) ? 1 : 0 ;
                 }
             }
+            noisyOracle.estimatedTp = etp / posMap.size();
         }
 
         // Negative training data
         for(NoisyOracle noisyOracle: noisyOracles){
-            int tn = 0;
+            int etn = 0;
             for (String s : negMap.getMap().keySet()) {
                 for (String t : posMap.getMap().get(s).keySet()) {
-                    tn += (!noisyOracle.predict(s, t)) ? 1 : 0 ;
-                    noisyOracle.estimatedTp = tn / negMap.size();
+                    etn += (!noisyOracle.predict(s, t)) ? 1 : 0 ;
                 }
             }
+            noisyOracle.estimatedTp = etn / negMap.size();
         }
     }
 
 
-    void updateTrainingData(AMapping unlabeledMap){
-        for (String s : unlabeledMap.getMap().keySet()) {
-            for (String t : unlabeledMap.getMap().get(s).keySet()) {
+    void updateTrainingData(AMapping nonlabeledMap){
+        for (String s : nonlabeledMap.getMap().keySet()) {
+            for (String t : nonlabeledMap.getMap().get(s).keySet()) {
                 double pTrue = estimateTrue(s,t);
                 double pFalse = estimateFalse(s,t);
                 if(pTrue >= TAU * pFalse){
@@ -86,7 +84,7 @@ public class Ligon {
         double result = 1; 
         for(NoisyOracle noisyOracle: noisyOracles){
             if(noisyOracle.predict(subject, object)){
-                result *= 1 - ((noisyOracle.predict(subject, object))? noisyOracle.estimatedTp: (1 - noisyOracle.estimatedTp));
+                result *= 1 - (noisyOracle.predict(subject, object)? noisyOracle.estimatedTp: (1 - noisyOracle.estimatedTp));
             }
         }
         return 1 - result;
@@ -97,7 +95,7 @@ public class Ligon {
         double result = 1; 
         for(NoisyOracle noisyOracle: noisyOracles){
             if(noisyOracle.predict(subject, object)){
-                result *= 1 - ((noisyOracle.predict(subject, object))? noisyOracle.estimatedTn: (1 - noisyOracle.estimatedTn));
+                result *= 1 - (!noisyOracle.predict(subject, object)? noisyOracle.estimatedTn: (1 - noisyOracle.estimatedTn));
             }
         }
         return 1 - result;
