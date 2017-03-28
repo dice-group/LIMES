@@ -38,5 +38,13 @@ public class NoisyOracle {
     }
 
 
+    @Override
+    public String toString() {
+        return "NoisyOracle [oracleMap=" + oracleMap + ", tp=" + tp + ", tn="
+                + tn + ", estimatedTp=" + estimatedTp + ", estimatedTn="
+                + estimatedTn + "]";
+    }
+
+
 
 }
