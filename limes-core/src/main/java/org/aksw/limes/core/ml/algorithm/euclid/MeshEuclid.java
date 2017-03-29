@@ -7,6 +7,7 @@ import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.classifier.ComplexClassifier;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
@@ -19,7 +20,7 @@ import org.apache.log4j.Logger;
 public class MeshEuclid extends BooleanEuclid {
 	protected static Logger logger = Logger.getLogger(MeshEuclid.class);
 	
-	static final String ALGORITHM_NAME = "Euclid mesh based";
+	static final String ALGORITHM_NAME = MLAlgorithmFactory.EUCLID_MESH;
 	
 	public static final String GRID_POINTS = "grid_points";
 
@@ -28,7 +29,6 @@ public class MeshEuclid extends BooleanEuclid {
 	  	setDefaultParameters();
 	   	super.init(learningParameters, sourceCache, targetCache);
 	   	lsc = new MeshBasedSelfConfigurator(sourceCache, targetCache);
-	   	name = ALGORITHM_NAME;
 	 }
 	@Override
 	public void setDefaultParameters() {   
@@ -61,5 +61,10 @@ public class MeshEuclid extends BooleanEuclid {
 			result.addDetail(i+". Mapping.size= ", map.size());
 		}	
 		return result;
+	}
+	
+	@Override
+	protected String getName() {
+		return ALGORITHM_NAME;
 	}
 }

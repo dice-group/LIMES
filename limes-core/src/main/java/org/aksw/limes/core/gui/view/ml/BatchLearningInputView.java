@@ -77,7 +77,7 @@ public class BatchLearningInputView {
 	    FileChooser fileChooser = new FileChooser();
 	    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
 		    "Mapping File (*.csv , *.rdf, *.ttl, *.n3, *.nt)", "*.xml", "*.rdf", "*.ttl",
-		    "*.n3", "*.nt");
+		    "*.n3", "*.nt", "*.csv");
 	    fileChooser.getExtensionFilters().add(extFilter);
 	    File file = fileChooser.showOpenDialog(stage);
 	    if (file != null) {
