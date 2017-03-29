@@ -197,7 +197,7 @@ public class LinkSpecGeneticLearnerConfig extends GPConfiguration {
             return true;
         return false;
     }
-
+    
     /**
      * Do we have to consider date properties?
      *

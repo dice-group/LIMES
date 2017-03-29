@@ -5,10 +5,13 @@ import java.util.List;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.io.ls.LinkSpecification;
+import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.ml.algorithm.eagle.genes.AtomicPreprocessingCommand;
 import org.aksw.limes.core.ml.algorithm.eagle.genes.ChainedPreprocessingCommand;
 import org.aksw.limes.core.ml.algorithm.eagle.genes.MetricCommand;
 import org.aksw.limes.core.ml.algorithm.eagle.genes.NestedBoolean;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.PointSetMeasure;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.PointSetPropertyPair;
 import org.aksw.limes.core.ml.algorithm.eagle.genes.StringMeasure;
 import org.aksw.limes.core.ml.algorithm.eagle.genes.StringPreprocessMeasure;
 import org.aksw.limes.core.ml.algorithm.eagle.genes.StringPropertyPair;
@@ -160,20 +163,20 @@ public class ExpressionProblem extends GPProblem {
 //			nodes.add(new AddMetric(config));
         nodes.add(new MetricCommand(config, LinkSpecification.class));
 
-//			if(config.hasPointSetProperties()) {					
-//				nodes.add(new PointSetMeasure("hausdorff", config, String.class, 1, true));
-//				nodes.add(new PointSetMeasure("geomean", config, String.class, 1, true));
-//				for(int i=0; i<config.getPropertyMapping().pointsetPropPairs.size(); i++) {
-//					nodes.add( new PointSetPropertyPair(config, Pair.class, ResourceTerminalType.POINTSETPROPPAIR.intValue(), true, i));
-//				}
-//			}	
+        
+        /*#################### pointset measures ####################*/
+		if(config.hasPointSetProperties()) {					
+			nodes.add(new PointSetMeasure("hausdorff", config, String.class, 1, true));
+		for(int i=0; i<config.getPropertyMapping().pointsetPropPairs.size(); i++) {
+				nodes.add( new PointSetPropertyPair(config, PairSimilar.class, ResourceTerminalType.POINTSETPROPPAIR.intValue(), true, i));
+			}
+		}	
 
 
 //		if(config.hasNumericProperties()) {					
 //			nodes.add(new NumberMeasure(config));
 //			for(int i=0; i<config.getPropertyMapping().numberPropPairs.size(); i++) {
 //				nodes.add( new NumberPropertyPair(config, Pair.class, ResourceTerminalType.NUMBERPROPPAIR.intValue(), true, i));
-////				nodes.add( new StringPropertyPair(config, Pair.class, ResourceTerminalType.STRINGPROPPAIR.intValue(), true, i));
 //			}
 //			// threshold for numeric properties - more restrictive due to possible memory lacks		
 //		    nodes.add(new Terminal(config, CommandGene.DoubleClass, 0.8d, 1.0d, false, 
@@ -212,13 +215,13 @@ public class ExpressionProblem extends GPProblem {
      */
     private List<CommandGene> getStringMeasures(LinkSpecGeneticLearnerConfig config) throws InvalidConfigurationException {
         List<CommandGene> nodes = new LinkedList<CommandGene>();
-        nodes.add(new StringMeasure("trigrams", config, String.class, 1, true));
-        nodes.add(new StringMeasure("jaccard", config, String.class, 1, true));
-        nodes.add(new StringMeasure("cosine", config, String.class, 1, true));
-        nodes.add(new StringMeasure("levenshtein", config, String.class, 1, true));
-        nodes.add(new StringMeasure("overlap", config, String.class, 1, true));
-        nodes.add(new StringMeasure("qgrams", config, String.class, 1, true));
-        //nodes.add(new NumberMeasure(config, String.class, 1, true));
+        nodes.add(new StringMeasure(MeasureFactory.COSINE, config, String.class, 1, true));
+        nodes.add(new StringMeasure(MeasureFactory.JACCARD, config, String.class, 1, true));
+        nodes.add(new StringMeasure(MeasureFactory.TRIGRAM, config, String.class, 1, true));
+        nodes.add(new StringMeasure(MeasureFactory.LEVENSHTEIN, config, String.class, 1, true));
+        nodes.add(new StringMeasure(MeasureFactory.OVERLAP, config, String.class, 1, true));
+        nodes.add(new StringMeasure(MeasureFactory.QGRAMS, config, String.class, 1, true));
+        nodes.add(new StringMeasure(MeasureFactory.EXACTMATCH, config, String.class, 1, true));
         return nodes;
     }
 

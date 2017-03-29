@@ -94,7 +94,7 @@ public class StringMeasure extends CommandGene implements IMutateable, ICloneabl
             final Class<?> a_returnType, boolean a_mutateable)
                     throws InvalidConfigurationException {
         super(a_conf, 2, a_returnType, 1,
-                new int[]{
+                new int[]{ // specify child subtyps
                         ResourceTerminalType.STRINGPROPPAIR.intValue(),
                         ResourceTerminalType.THRESHOLD.intValue(),}
                 );
