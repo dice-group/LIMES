@@ -23,7 +23,7 @@
 		<TYPE>CSV</TYPE>
 	</TARGET>
 	
-	<METRIC>OR(AND(AND(cosine(x.director,y.director)|0.55,jaccard(x.title,y.title)|0.62)|0.54,AND(cosine(x.director,y.director)|0.54,trigrams(x.director,y.director)|0.54)|0.37)|0.69,jaccard(x.title,y.title)|0.62)</METRIC>
+	<METRIC>OR(AND(AND(cosine(x.director,y.director)|0.55,jaccard(x.title,y.title)|0.62)|0.54,AND(cosine(x.director,y.director)|0.54,trigram(x.director,y.director)|0.54)|0.37)|0.69,jaccard(x.title,y.title)|0.62)</METRIC>
 	<ACCEPTANCE>
 		<THRESHOLD>0.91</THRESHOLD>
 		<FILE>dbpedia-linkedmdb_accepted.txt</FILE>
