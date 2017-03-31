@@ -5,10 +5,11 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 /**
- * Implements a quality measure for unsupervised ML algorihtms, dubbed pseudo Reference Precision.<br>
- * Thereby, not relying on any gold standard. The basic idea is to measure the quality of the
- * given Mapping by calculating how close it is to an assumed 1-to-1 Mapping between source and
- * target.
+ * Implements a quality measure for unsupervised ML algorithms, 
+ * dubbed pseudo Reference Precision.<br> Thereby, not relying 
+ * on any gold standard. The basic idea is to measure the quality 
+ * of the given Mapping by calculating how close it is to an assumed 
+ * 1-to-1 Mapping between source and target.
  *
  * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -20,9 +21,12 @@ public class PseudoRefPrecision extends PseudoPrecision {
     static Logger logger = LoggerFactory.getLogger(PseudoRefPrecision.class);
 
     /** 
-     * The method calculates the pseudo reference Precision of the machine learning predictions compared to a gold standard for beta = 1 .
+     * The method calculates the pseudo reference Precision of the machine 
+     * learning predictions compared to a gold standard for beta = 1 .
+     * 
      * @param predictions The predictions provided by a machine learning algorithm.
-     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs.
+     * @param goldStandard It contains the gold standard (reference mapping) 
+     *          combined with the source and target URIs.
      * @return double - This returns the calculated pseudo reference Precision.
      */
     @Override

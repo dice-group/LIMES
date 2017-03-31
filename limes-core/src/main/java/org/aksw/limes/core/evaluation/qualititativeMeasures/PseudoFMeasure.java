@@ -6,10 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implements a quality measure for unsupervised ML algorihtms, dubbed pseudo F-Measure.<br>
- * Thereby, not relying on any gold standard. The basic idea is to measure the quality of the
- * given Mapping by calculating how close it is to an assumed 1-to-1 Mapping between source and
- * target.
+ * Implements a quality measure for unsupervised ML algorithms, 
+ * dubbed pseudo F-Measure.<br> Thereby, not relying on any gold 
+ * standard. The basic idea is to measure the quality of the given 
+ * Mapping by calculating how close it is to an assumed 1-to-1 
+ * Mapping between source and target.
  *
  * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
@@ -23,8 +24,8 @@ public class PseudoFMeasure extends APseudoPRF {
     }
 
     /**
-     * Use this constructor to toggle between symmetric precision (true) and the older asymmetric
-     * Pseudo-Precision (false)
+     * Use this constructor to toggle between symmetric precision 
+     * (true) and the older asymmetric Pseudo-Precision (false)
      *
      * @param symmetricPrecision sets/resets the symmetric precision flag
      */
@@ -34,9 +35,12 @@ public class PseudoFMeasure extends APseudoPRF {
     }
 
     /** 
-     * The method calculates the pseudo F-Measure of the machine learning predictions compared to a gold standard for beta = 1 .
+     * The method calculates the pseudo F-Measure of the machine learning 
+     * predictions compared to a gold standard for beta = 1 .
+     * 
      * @param predictions The predictions provided by a machine learning algorithm.
-     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs.
+     * @param goldStandard It contains the gold standard (reference mapping) 
+     *          combined with the source and target URIs.
      * @return double - This returns the calculated pseudo F-Measure.
      */
     @Override
@@ -44,9 +48,12 @@ public class PseudoFMeasure extends APseudoPRF {
         return getPseudoFMeasure(predictions, goldStandard, 1);
     }
     /** 
-     * The method calculates the pseudo F-Measure of the machine learning predictions compared to a gold standard for different beta values
+     * The method calculates the pseudo F-Measure of the machine learning predictions 
+     * compared to a gold standard for different beta values
+     * 
      * @param predictions The predictions provided by a machine learning algorithm
-     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
+     * @param goldStandard It contains the gold standard (reference mapping) 
+     *          combined with the source and target URIs
      * @param beta   Beta for F-beta
      * @return double - This returns the calculated pseudo F-Measure
      */
@@ -61,9 +68,12 @@ public class PseudoFMeasure extends APseudoPRF {
     }
 
     /** 
-     * The method calculates the pseudo recall of the machine learning predictions compared to a gold standard
+     * The method calculates the pseudo recall of the machine learning predictions 
+     * compared to a gold standard
+     * 
      * @param predictions The predictions provided by a machine learning algorithm
-     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
+     * @param goldStandard It contains the gold standard (reference mapping) 
+     *          combined with the source and target URIs
      * @return double - This returns the calculated pseudo recall
      */
     public double recall(AMapping predictions, GoldStandard goldStandard) {
@@ -71,9 +81,12 @@ public class PseudoFMeasure extends APseudoPRF {
     }
 
     /** 
-     * The method calculates the pseudo precision of the machine learning predictions compared to a gold standard
+     * The method calculates the pseudo precision of the machine learning predictions 
+     * compared to a gold standard
+     * 
      * @param predictions The predictions provided by a machine learning algorithm
-     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
+     * @param goldStandard It contains the gold standard (reference mapping) 
+     *          combined with the source and target URIs
      * @return double - This returns the calculated pseudo precision
      */
     public double precision(AMapping predictions, GoldStandard goldStandard) {

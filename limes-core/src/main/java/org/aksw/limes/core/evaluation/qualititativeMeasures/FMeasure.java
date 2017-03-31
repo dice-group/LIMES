@@ -16,9 +16,12 @@ public class FMeasure extends APRF implements IQualitativeMeasure {
     static Logger logger = LoggerFactory.getLogger(FMeasure.class);
 
     /** 
-     * The method calculates the F-Measure of the machine learning predictions compared to a gold standard
+     * The method calculates the F-Measure of the machine learning predictions 
+     * compared to a gold standard.
+     * 
      * @param predictions The predictions provided by a machine learning algorithm
-     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
+     * @param goldStandard It contains the gold standard (reference mapping) 
+     *          combined with the source and target URIs
      * @return double - This returns the calculated F-Measure
      */
     @Override
@@ -35,9 +38,12 @@ public class FMeasure extends APRF implements IQualitativeMeasure {
     }
 
     /** 
-     * The method calculates the recall of the machine learning predictions compared to a gold standard
+     * The method calculates the recall of the machine learning 
+     * predictions compared to a gold standard.
+     * 
      * @param predictions The predictions provided by a machine learning algorithm
-     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
+     * @param goldStandard It contains the gold standard (reference mapping) 
+     *          combined with the source and target URIs
      * @return double - This returns the calculated recall
      */
     public double recall(AMapping predictions, GoldStandard goldStandard) {
@@ -45,9 +51,12 @@ public class FMeasure extends APRF implements IQualitativeMeasure {
     }
 
     /** 
-     * The method calculates the precision of the machine learning predictions compared to a gold standard
+     * The method calculates the precision of the machine learning
+     * predictions compared to a gold standard.
+     * 
      * @param predictions The predictions provided by a machine learning algorithm
-     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
+     * @param goldStandard It contains the gold standard (reference mapping) 
+     *             combined with the source and target URIs
      * @return double - This returns the calculated precision
      */
     public double precision(AMapping predictions, GoldStandard goldStandard) {

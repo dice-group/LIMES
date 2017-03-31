@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implements a quality measure for unsupervised ML algorihtms, dubbed pseudo F-Measure.
+ * Implements a quality measure for unsupervised ML algorithms, dubbed pseudo F-Measure.
  * Thereby, not relying on any gold standard. The basic idea is to measure the quality of the
  * a given Mapping by calc. how close it is to an assumed 1-to-1 Mapping between source and
  * target.
@@ -24,7 +24,8 @@ public class PseudoPrecision extends APseudoPRF {
     }
 
     /**
-     * Use this constructor to toggle between symmetric precision (true) and the older asymmetric Pseudo-Precision (false)
+     * Use this constructor to toggle between symmetric precision (true) 
+     * and the older asymmetric Pseudo-Precision (false)
      *
      * @param symmetricPrecision sets/resets the symmetric precision flag
      */
@@ -34,10 +35,13 @@ public class PseudoPrecision extends APseudoPRF {
     }
 
     /** 
-     * The method calculates the pseudo precision of the machine learning predictions compared to a gold standard , which is basically how well the mapping
-     * maps one single s to one single t.
+     * The method calculates the pseudo precision of the machine learning 
+     * predictions compared to a gold standard , which is basically how 
+     * well the mapping maps one single s to one single t
+     * 
      * @param predictions The predictions provided by a machine learning algorithm.
-     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs.
+     * @param goldStandard It contains the gold standard (reference mapping) 
+     *          combined with the source and target URIs.
      * @return double - This returns the calculated pseudo precision.
      */
     @Override
