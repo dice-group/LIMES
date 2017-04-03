@@ -99,18 +99,22 @@ public class UnsupervisedDecisionTreeTest {
 				dtl2.getMl().getConfiguration().getSourceInfo().getVar(), dtl2.getMl().getConfiguration().getTargetInfo().getVar());
 //		AMapping parsedMapping = ee.execute(ls, dp);
 		AMapping pathMapping = UnsupervisedDecisionTree.getTotalMapping(((DecisionTreeLearning)dtl2.getMl()).root);
-		AMapping path2Mapping = ee.execute(lsPath2, dp);
-		AMapping getpath2Mapping = UnsupervisedDecisionTree.getpath2MAPPING();
-		AMapping path1Mapping = ee.execute(lsPath1, dp);
-		AMapping getpath1Mapping = UnsupervisedDecisionTree.getpath1MAPPING();
-		AMapping path3Mapping = ee.execute(lsPath3, dp);
-		AMapping getpath3Mapping = UnsupervisedDecisionTree.getpath3MAPPING();
-		assertEquals(path1Mapping,getpath1Mapping);
-		assertEquals(path2Mapping,getpath2Mapping);
-		assertEquals(path3Mapping,getpath3Mapping);
-		AMapping totalM = MappingOperations.union(getpath1Mapping, MappingOperations.union(getpath2Mapping, getpath3Mapping));
-		assertEquals(ls, tp.parseTreePrefix(((DecisionTreeLearning)dtl2.getMl()).root.toString()));
-		assertEquals(totalM,pathMapping);
+//		AMapping path2Mapping = ee.execute(lsPath2, dp);
+//		AMapping getpath2Mapping = UnsupervisedDecisionTree.getpath2MAPPING();
+//		AMapping path1Mapping = ee.execute(lsPath1, dp);
+//		AMapping getpath1Mapping = UnsupervisedDecisionTree.getpath1MAPPING();
+//		AMapping path3Mapping = ee.execute(lsPath3, dp);
+//		AMapping getpath3Mapping = UnsupervisedDecisionTree.getpath3MAPPING();
+//		assertEquals(path1Mapping,getpath1Mapping);
+//		assertEquals(path2Mapping,getpath2Mapping);
+//		assertEquals(path3Mapping,getpath3Mapping);
+//		AMapping totalM = MappingOperations.union(getpath1Mapping, MappingOperations.union(getpath2Mapping, getpath3Mapping));
+//		assertEquals(ls, tp.parseTreePrefix(((DecisionTreeLearning)dtl2.getMl()).root.toString()));
+		AMapping lsMapping = ee.execute(tp.parseTreePrefix(((DecisionTreeLearning)dtl2.getMl()).root.toString()),dp);
+		AMapping intersection = MappingOperations.intersection(lsMapping, pathMapping);
+		assertEquals(intersection.size(),pathMapping.size());
+		assertEquals(intersection.size(),lsMapping.size());
+//		assertEquals(totalM,pathMapping);
 	}
 	
 	

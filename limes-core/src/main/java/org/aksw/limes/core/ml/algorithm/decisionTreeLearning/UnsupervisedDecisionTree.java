@@ -40,7 +40,7 @@ public class UnsupervisedDecisionTree {
 	protected static Logger logger = LoggerFactory.getLogger(UnsupervisedDecisionTree.class);
 
 	private DecisionTreeLearning dtl;
-	private static List<String> usedMetrics = new ArrayList<String>();
+//	private static List<String> usedMetrics = new ArrayList<String>();
 	private static HashMap<String, AMapping> calculatedMappings = new HashMap<String, AMapping>();
 	private static HashMap<String, AMapping> pathMappings = new HashMap<String, AMapping>();
 	private static HashMap<String, AMapping> nodeMappings = new HashMap<String, AMapping>();
@@ -72,7 +72,7 @@ public class UnsupervisedDecisionTree {
 
 	public UnsupervisedDecisionTree(DecisionTreeLearning dtl, ACache originalSourceCache, ACache originalTargetCache,
 			PseudoFMeasure pseudoFMeasure, double minPropertyCoverage, double propertyLearningRate) {
-		usedMetrics = new ArrayList<String>();
+//		usedMetrics = new ArrayList<String>();
 		calculatedMappings = new HashMap<String, AMapping>();
 		pathMappings = new HashMap<String, AMapping>();
 		totalFMeasure = 0.0;
@@ -135,9 +135,9 @@ public class UnsupervisedDecisionTree {
 				return null;
 			}
 		}
-			String measureExpression = classifier.getMeasure() + "(x." + classifier.getSourceProperty() + ", y."
-					+ classifier.getTargetProperty() + ")";
-			usedMetrics.add(measureExpression);
+//			String measureExpression = classifier.getMeasure() + "(x." + classifier.getSourceProperty() + ", y."
+//					+ classifier.getTargetProperty() + ")";
+//			usedMetrics.add(measureExpression);
 		if (maxDepth != this.depth) {
 			// createCachesFromMapping(classifier.getMapping());
 			rightChild = new UnsupervisedDecisionTree(dtl, originalSourceCache, originalTargetCache,
@@ -317,9 +317,11 @@ public class UnsupervisedDecisionTree {
 
 	public static double getTotalPseudoFMeasure(UnsupervisedDecisionTree root) {
 		PseudoRefFMeasure prfm = new PseudoRefFMeasure();
-		return prfm.calculate(getTotalMapping(root),
+		double pf = prfm.calculate(getTotalMapping(root),
 				new GoldStandard(null, root.originalSourceCache.getAllUris(), root.originalTargetCache.getAllUris()),
 				0.1);
+		pathMappings = new HashMap<String,AMapping>();
+		return pf;
 	}
 
 	public static AMapping getpath1MAPPING(){
@@ -488,10 +490,17 @@ public class UnsupervisedDecisionTree {
 
 	private ExtendedClassifier findClassifier(String sourceProperty, String targetProperty, String measure) {
 		String measureExpression = measure + "(x." + sourceProperty + ",y." + targetProperty + ")";
+		String properties = "(x." + sourceProperty + ",y." + targetProperty + ")";
 		ExtendedClassifier cp = new ExtendedClassifier(measure, 0.0, sourceProperty, targetProperty);
-		if (usedMetrics.contains(measureExpression)) {
-			// logger.info("Skipping: " + measureExpression);
+//		if (usedMetrics.contains(measureExpression)) {
+//			// logger.info("Skipping: " + measureExpression);
+//			return null;
+//		}
+		if(this.parent != null){
+		if (this.parent.getPathString().contains(properties)) {
+//			logger.info("Skipping: " + properties);
 			return null;
+		}
 		}
 		double maxFM = 0.0;
 		double theta = 1.0;
@@ -673,7 +682,7 @@ public class UnsupervisedDecisionTree {
 			dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
 			MLResults res = dtl.asUnsupervised().learn(new PseudoFMeasure());
 			end = System.currentTimeMillis();
-			// System.out.println(res.getLinkSpecification());
+			System.out.println(res.getLinkSpecification());
 			System.out.println(
 					"FMeasure: " + new FMeasure().calculate(dtl.predict(c.getSourceCache(), c.getTargetCache(), res),
 							new GoldStandard(c.getReferenceMapping(), c.getSourceCache(), c.getTargetCache())));
