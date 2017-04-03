@@ -172,10 +172,6 @@ public class TreeParser {
 	    return null;
 	}
 	LinkSpecification ls = null;
-	if (tree.length() - tree.replace("<", "").length() > 1) {
-	    logger.info("atomic tree contains illegal symbol '<' in attribute name. Returning null)");
-	    return null;
-	}
 	// attributeName begins 2 characters before <
 	String attributeName = tree.substring(0, tree.indexOf("<") - 2);
 	String[] measureAndProperties = getMeasureAndProperties(attributeName);

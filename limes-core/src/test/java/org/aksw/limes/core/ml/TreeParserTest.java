@@ -80,4 +80,18 @@ public class TreeParserTest {
 		assertEquals("(null, 0.0, OR, null,){(null, 0.0, AND, null,){(null, 0.0, MINUS, null,){(trigrams(x.title,y.name)|0.01, 0.01, null, null),(trigrams(x.title,y.name)|0.89, 0.888889, null, null),},(null, 0.0, AND, null,){(jaccard(x.description,y.description)|0.49, 0.487179, null, null),(null, 0.0, AND, null,){(cosine(x.manufacturer,y.manufacturer)|0.29, 0.288675, null, null),(cosine(x.title,y.name)|0.61, 0.606977, null, null),},},},(trigrams(x.title,y.name)|0.89, 0.888889, null, null),}", ls3.toStringOneLine());
 
 	}
+	
+	@Test
+	public void parseUnsupervisedDecisionTree() throws Exception{
+	    	TreeParser tp = new TreeParser(null);
+		Method parseTreePrefix = null;    
+		Class[] parameterTypes = {String.class};
+		parseTreePrefix = tp.getClass().getDeclaredMethod("parseTreePrefix", parameterTypes);
+		parseTreePrefix.setAccessible(true);
+		String tree = "jaccard"+TreeParser.delimiter+"surname|surname: <= 1.0, > 1.0[jaccard"+TreeParser.delimiter+"date_of_birth|date_of_birth: <= 1.0, > 1.0[negative (0)][positive (0)]][qgrams"+TreeParser.delimiter+"date_of_birth|date_of_birth: <= 0.47829690000000014, > 0.47829690000000014[jaccard"+TreeParser.delimiter+"surname|surname: <= 1.0, > 1.0[negative (0)][jaccard"+TreeParser.delimiter+"given_name|given_name: <= 1.0, > 1.0[negative (0)][positive (0)]]][positive (0)]]";
+		Object[] parameters = {tree};
+		LinkSpecification ls4 = (LinkSpecification) parseTreePrefix.invoke(tp, parameters);
+		assertEquals("(null, 0.0, OR, null,){(null, 0.0, AND, null,){(null, 0.0, MINUS, null,){(jaccard(x.surname,y.surname)|0.01, 0.01, null, null),(jaccard(x.surname,y.surname)|1.00, 1.0, null, null),},(jaccard(x.date_of_birth,y.date_of_birth)|1.00, 1.0, null, null),},(null, 0.0, AND, null,){(jaccard(x.surname,y.surname)|1.00, 1.0, null, null),(null, 0.0, OR, null,){(null, 0.0, AND, null,){(null, 0.0, MINUS, null,){(qgrams(x.date_of_birth,y.date_of_birth)|0.01, 0.01, null, null),(qgrams(x.date_of_birth,y.date_of_birth)|0.48, 0.47829690000000014, null, null),},(null, 0.0, AND, null,){(jaccard(x.surname,y.surname)|1.00, 1.0, null, null),(jaccard(x.given_name,y.given_name)|1.00, 1.0, null, null),},},(qgrams(x.date_of_birth,y.date_of_birth)|0.48, 0.47829690000000014, null, null),},},}", ls4.toStringOneLine());
+
+	}
 }

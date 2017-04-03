@@ -147,6 +147,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	private double bestFMeasure = 0.0;
 	private AMapping prediction;
 	private AMapping trainingData;
+public UnsupervisedDecisionTree root;
 
 	// TODO check whats wrong with these
 	public static final String[] stringMeasures = { "cosine",
@@ -861,7 +862,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
 	@Override
 	protected MLResults learn(PseudoFMeasure pfm) throws UnsupportedMLImplementationException {
-		UnsupervisedDecisionTree root = new UnsupervisedDecisionTree(this, sourceCache, targetCache, pfm, (double)getParameter(PARAMETER_MIN_PROPERTY_COVERAGE), (double)getParameter(PARAMETER_PROPERTY_LEARNING_RATE));
+		root = new UnsupervisedDecisionTree(this, sourceCache, targetCache, pfm, (double)getParameter(PARAMETER_MIN_PROPERTY_COVERAGE), (double)getParameter(PARAMETER_PROPERTY_LEARNING_RATE));
 		UnsupervisedDecisionTree.maxDepth = (int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
 		root.buildTree((int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
 		System.out.println(root.toString());
