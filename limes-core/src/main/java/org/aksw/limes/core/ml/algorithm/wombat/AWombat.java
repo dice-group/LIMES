@@ -75,10 +75,12 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 
     protected PseudoFMeasure pseudoFMeasure = null;
     protected AMapping trainingData = MappingFactory.createDefaultMapping();
-    protected boolean isUnsupervised = false;
+    
     protected Set<String> wombatParameterNames = new HashSet<>();
     protected Tree<RefinementNode> refinementTreeRoot = null;
 
+    protected boolean isUnsupervised = false;
+    protected boolean isFuzzy = false;
 
 
     protected AWombat() {
@@ -144,6 +146,9 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * @return F-measure
      */
     protected double fMeasure(AMapping predictions) {
+        if(isFuzzy){
+            return new FuzzyFMeasure().
+        }
         if (isUnsupervised) {
             // compute pseudo-F-Measure
             return pseudoFMeasure.calculate(predictions, new GoldStandard(null, sourceUris, targetUris));            
@@ -291,21 +296,21 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * @return Best simple classifier
      */
     protected ExtendedClassifier findInitialClassifier(String sourceProperty, String targetProperty, String measure) {
-        double maxOverlap = 0;
+        double maxFMeasure = 0;
         double theta = 1.0;
         AMapping bestMapping = MappingFactory.createDefaultMapping();
         for (double threshold = 1d; threshold > getMinPropertyCoverage(); threshold = threshold * getPropertyLearningRate()) {
             AMapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
-            double overlap = recall(mapping);
-            if (maxOverlap < overlap) { //only interested in largest threshold with recall 1
+            double fMeasure = fMeasure(mapping);
+            if (maxFMeasure < fMeasure) { //only interested in largest threshold with recall 1
                 bestMapping = mapping;
                 theta = threshold;
-                maxOverlap = overlap;
+                maxFMeasure = fMeasure;
                 bestMapping = mapping;
             }
         }
         ExtendedClassifier cp = new ExtendedClassifier(measure, theta, sourceProperty, targetProperty);
-        cp.setfMeasure(maxOverlap);
+        cp.setfMeasure(maxFMeasure);
         cp.setMapping(bestMapping);
         return cp;
     }
