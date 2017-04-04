@@ -862,14 +862,14 @@ public UnsupervisedDecisionTree root;
 
 	@Override
 	protected MLResults learn(PseudoFMeasure pfm) throws UnsupportedMLImplementationException {
-		root = new UnsupervisedDecisionTree(this, sourceCache, targetCache, pfm, (double)getParameter(PARAMETER_MIN_PROPERTY_COVERAGE), (double)getParameter(PARAMETER_PROPERTY_LEARNING_RATE));
+		root = new UnsupervisedDecisionTree(this, sourceCache, targetCache, pfm,(double)getParameter(PARAMETER_MIN_PROPERTY_COVERAGE), (double)getParameter(PARAMETER_PROPERTY_LEARNING_RATE));
 		UnsupervisedDecisionTree.maxDepth = (int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
 		root.buildTree((int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
 		System.out.println(root.toString());
 		root.prune();
 		System.out.println(root.toString());
 		LinkSpecification ls = tp.parseTreePrefix(root.toString());
-		MLResults res = new MLResults(ls, null, -1.0, null);
+		MLResults res = new MLResults(ls, UnsupervisedDecisionTree.getTotalMapping(root), -1.0, null);
 		return res;
 	}
 
