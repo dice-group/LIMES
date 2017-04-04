@@ -1,6 +1,7 @@
 package org.aksw.limes.core.ml.algorithm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
@@ -65,7 +66,7 @@ public class FuzzyWombatSimple extends AWombat {
         this.trainingData = trainingData;
         return learn();
     }
-    
+
     /**
      * @param metricExpr learning specifications
      * @return new RefinementNode
@@ -183,7 +184,7 @@ public class FuzzyWombatSimple extends AWombat {
         double bestFMeasure = bestSolutionNode.getFMeasure();
         return new MLResults(bestLS, bestMapping, bestFMeasure, null);
     }
-    
+
     /**
      * Create new RefinementNode using either real or pseudo-F-Measure
      *
@@ -327,7 +328,7 @@ public class FuzzyWombatSimple extends AWombat {
     /**
      * @param r the root of the refinement tree
      * @param penaltyWeight from 0 to 1
-     * @param result refinment tree
+     * @param result refinement tree
      * @return sorted list of tree nodes
      */
     protected TreeSet<RefinementNode> getSortedNodes(Tree<RefinementNode> r, double penaltyWeight, TreeSet<RefinementNode> result) {
@@ -405,6 +406,34 @@ public class FuzzyWombatSimple extends AWombat {
         if (isVerbose()) {
             refinementTreeRoot.print();
         }
+    }
+
+
+    public AMapping FindInformativeExamples(int n){
+        AMapping exampleMap = MappingFactory.createDefaultMapping();
+        double sumLeafWeight = 0d;
+        for(Tree<RefinementNode> leaf : refinementTreeRoot.getLeaves()){
+            double leafWeight = leaf.getValue().getFMeasure();
+            sumLeafWeight += leafWeight;  
+            HashMap<String, HashMap<String, Double>> leafMap = leaf.getValue().getMapping().getMap();
+            for(String s : leafMap.keySet()){
+                for(String t : leafMap.get(s).keySet()){
+                    if (exampleMap.contains(s, t)) {
+                        exampleMap.getMap().get(s).put(t, exampleMap.getConfidence(s, t) + leafWeight);
+                    }else{
+                        exampleMap.add(s, t,  leafWeight);
+                    }
+                }
+            }
+
+        }
+        AMapping result = MappingFactory.createDefaultMapping();
+        for(String s : result.getMap().keySet()){
+            for(String t : result.getMap().get(s).keySet()){
+                result.add(s, t, result.getMap().get(s).get(t)/sumLeafWeight);
+            }
+        }
+        return result;
     }
 
 
