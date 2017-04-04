@@ -1,4 +1,6 @@
 # LIMES-dev
+Repository for LIMES - Link Discovery Framework for Metric Spaces.
+=======
 
 [![Build Status](https://travis-ci.org/AKSW/LIMES-dev.svg?branch=dev)](https://travis-ci.org/AKSW/LIMES-dev)
 
@@ -22,8 +24,6 @@ mvn eclipse:eclipse
 ```
 Then, update the project on Eclipse.
 
-## Binaries
-Current releases can be found at https://github.com/AKSW/LIMES.
 
 ## More details
 

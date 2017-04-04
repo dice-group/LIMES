@@ -296,7 +296,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         AMapping bestMapping = MappingFactory.createDefaultMapping();
         for (double threshold = 1d; threshold > getMinPropertyCoverage(); threshold = threshold * getPropertyLearningRate()) {
             AMapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
-            double overlap = recall(mapping);
+            double overlap = fMeasure(mapping);
             if (maxOverlap < overlap) { //only interested in largest threshold with recall 1
                 bestMapping = mapping;
                 theta = threshold;
