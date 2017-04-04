@@ -17,6 +17,9 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.fuzzy.FuzzyFMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.fuzzy.FuzzyPrecision;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.fuzzy.FuzzyRecall;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
@@ -147,7 +150,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      */
     protected double fMeasure(AMapping predictions) {
         if(isFuzzy){
-            return new FuzzyFMeasure().
+            return new FuzzyFMeasure().calculate(predictions, new GoldStandard(trainingData));
         }
         if (isUnsupervised) {
             // compute pseudo-F-Measure
@@ -261,6 +264,9 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * @return precision
      */
     protected double precision(AMapping predictions) {
+        if(isFuzzy){
+            return new FuzzyPrecision().calculate(predictions, new GoldStandard(trainingData));
+        }
         if (isUnsupervised) {
             // compute pseudo-precision
             return pseudoFMeasure.precision(predictions, new GoldStandard(null, sourceUris, targetUris));
@@ -277,6 +283,9 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * @return recall
      */
     protected double recall(AMapping predictions) {
+        if(isFuzzy){
+            return new FuzzyRecall().calculate(predictions, new GoldStandard(trainingData));
+        }
         if (isUnsupervised) {
             // compute pseudo-recall
             return pseudoFMeasure.recall(predictions, new GoldStandard(null, sourceUris, targetUris));
