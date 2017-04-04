@@ -36,6 +36,7 @@ import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
@@ -78,7 +79,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 
     protected PseudoFMeasure pseudoFMeasure = null;
     protected AMapping trainingData = MappingFactory.createDefaultMapping();
-    
+
     protected Set<String> wombatParameterNames = new HashSet<>();
     protected Tree<RefinementNode> refinementTreeRoot = null;
 
@@ -91,38 +92,49 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         setDefaultParameters();
     }
 
-    /**
-     * Create new RefinementNode using either real or pseudo-F-Measure
-     *
-     * @param mapping of the node 
-     * @param metricExpr learning specifications
-     * @return new RefinementNode
-     */
-    protected RefinementNode createNode(AMapping mapping, String metricExpr) {
-        if(!saveMapping()){
-            mapping = null;
-        }
-        if (isUnsupervised) {
-            double pfm = pseudoFMeasure.calculate(mapping, new GoldStandard(null, sourceUris, targetUris));
-            return new RefinementNode(pfm, mapping, metricExpr);
-        }
-        return new RefinementNode(mapping, metricExpr, trainingData);        
-    }
+//    /**
+//     * Create new RefinementNode using either real or pseudo-F-Measure
+//     *
+//     * @param mapping of the node 
+//     * @param metricExpr learning specifications
+//     * @return new RefinementNode
+//     */
+//    protected RefinementNode createNode(AMapping mapping, String metricExpr) {
+//        double f = fMeasure(mapping);
+//        if(!isFuzzy && !isUnsupervised){
+//            return new RefinementNode(mapping, metricExpr, f);
+//        }
+//        double p = precision(mapping);
+//        double r = recall(mapping);
+//        double MaxF = computeMaxFMeasure(mapping, trainingData);
+//        return new RefinementNode(mapping, metricExpr, f, p, r, MaxF);        
+//    }
+//    
+//    
+//    
+//
+//    protected double computeMaxFMeasure(AMapping map, AMapping refMap){
+//        double pMax = computeMaxPrecision(map, refMap);
+//        double rMax = RefinementNode.getMaxRecall();
+//        return 2 * pMax * rMax / (pMax + rMax);
+//    }
+//    
+//    protected double computeMaxPrecision(AMapping mapping, AMapping trainingData) {
+//        AMapping falsePos = MappingFactory.createDefaultMapping();
+//        for (String key : mapping.getMap().keySet()) {
+//            for (String value : mapping.getMap().get(key).keySet()) {
+//                if (trainingData.getMap().containsKey(key) || trainingData.getReversedMap().containsKey(value)) {
+//                    falsePos.add(key, value, mapping.getMap().get(key).get(value));
+//                }
+//            }
+//        }
+//        AMapping m = MappingOperations.difference(falsePos, trainingData);
+//        return (double) trainingData.size() / (double) (trainingData.size() + m.size());
+//    }
+//    
 
 
 
-    /**
-     * @param metricExpr learning specifications
-     * @return new RefinementNode
-     */
-    protected RefinementNode createNode(String metricExpr) {
-        AMapping map = null;
-        if(saveMapping()){
-            map = getMapingOfMetricExpression(metricExpr);
-        }
-        return createNode(map, metricExpr);
-    }
-    
 
 
     /**
@@ -150,6 +162,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      */
     protected double fMeasure(AMapping predictions) {
         if(isFuzzy){
+            // compute fuzzy-F-Measure
             return new FuzzyFMeasure().calculate(predictions, new GoldStandard(trainingData));
         }
         if (isUnsupervised) {
@@ -265,16 +278,17 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      */
     protected double precision(AMapping predictions) {
         if(isFuzzy){
+            // compute fuzzy-precision
             return new FuzzyPrecision().calculate(predictions, new GoldStandard(trainingData));
         }
         if (isUnsupervised) {
             // compute pseudo-precision
             return pseudoFMeasure.precision(predictions, new GoldStandard(null, sourceUris, targetUris));
         }
-        // get real precision based on training data 
+        // compute real precision based on training data 
         return new Precision().calculate(predictions, new GoldStandard(trainingData));
     }
-    
+
 
     /**
      * calculate either a real or a pseudo-Recall
@@ -284,17 +298,18 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      */
     protected double recall(AMapping predictions) {
         if(isFuzzy){
+            // compute fuzzy-recall
             return new FuzzyRecall().calculate(predictions, new GoldStandard(trainingData));
         }
         if (isUnsupervised) {
             // compute pseudo-recall
             return pseudoFMeasure.recall(predictions, new GoldStandard(null, sourceUris, targetUris));
         }
-        // get real recall based on training data 
+        // compute real recall based on training data 
         return new Recall().calculate(predictions, new GoldStandard(trainingData));
 
     }
-    
+
     /**
      * Computes the atomic classifiers by finding the highest possible F-measure
      * achievable on a given property pair
@@ -340,7 +355,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         double overallPenaltyWeight = 0.5d;
         boolean verbose = false;
         Set<String> measures = new HashSet<>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams"));
-        
+
         learningParameters = new ArrayList<>();
         learningParameters.add(new LearningParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize, Long.class, 10d, Long.MAX_VALUE, 10d, PARAMETER_MAX_REFINEMENT_TREE_SIZE));
         learningParameters.add(new LearningParameter(PARAMETER_MAX_ITERATIONS_NUMBER, maxIterationNumber, Integer.class, 1d, Integer.MAX_VALUE, 10d, PARAMETER_MAX_ITERATIONS_NUMBER));
@@ -360,59 +375,59 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected boolean isVerbose() {
         return Boolean.parseBoolean((String) getParameter(PARAMETER_VERBOSE).toString());
     }
-    
+
     protected double getOverAllPenaltyWeight() {
         return Double.parseDouble(getParameter(PARAMETER_OVERALL_PENALTY_WEIGHT).toString());
     }
-    
+
     protected double getChildrenPenaltyWeight() {
         return Double.parseDouble(getParameter(PARAMETER_CHILDREN_PENALTY_WEIGHT).toString());
     }
-    
+
     protected double getComplexityPenaltyWeight() {
         return Double.parseDouble(getParameter(PARAMETER_COMPLEXITY_PENALTY_WEIGHT).toString());
     }
-    
+
     protected double getMinPropertyCoverage() {
         return Double.parseDouble(getParameter(PARAMETER_MIN_PROPERTY_COVERAGE).toString());
     }
-    
+
     protected double getPropertyLearningRate() {
         return Double.parseDouble(getParameter(PARAMETER_PROPERTY_LEARNING_RATE).toString());
     }
-    
+
     protected int getIterationTimeInMinutes() {
         return Integer.parseInt(getParameter(PARAMETER_MAX_ITERATION_TIME_IN_MINUTES).toString());
     }
-    
+
     protected int getExcutionTimeInMinutes() {
         return Integer.parseInt(getParameter(PARAMETER_EXECUTION_TIME_IN_MINUTES).toString());
     }
-    
+
     protected double getMaxFitnessThreshold() {
         return Double.parseDouble(getParameter(PARAMETER_MAX_FITNESS_THRESHOLD).toString());
     }
-    
+
     protected int getMaxIterationNumber() {
         return Integer.parseInt(getParameter(PARAMETER_MAX_ITERATIONS_NUMBER).toString());
     }
-    
+
     protected int getMaxRefinmentTreeSize() {
         return Integer.parseInt(getParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE).toString());
     }
-    
+
     protected Set<String> getAtomicMeasures() {
         Set<String> atomicMeasures = new HashSet<String>();
-        
+
         String measuresAsString = getParameter(PARAMETER_ATOMIC_MEASURES).toString().replace("[","").replace("]", "");
         for(String m : measuresAsString.split(",")){
             atomicMeasures.add(m.trim());
         }
         return atomicMeasures;
     }
-    
-    private boolean saveMapping() {
+
+    protected boolean saveMapping() {
         return Boolean.parseBoolean(getParameter(PARAMETER_SAVE_MAPPING).toString());
     }
-    
+
 }

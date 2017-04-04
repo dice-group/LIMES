@@ -17,7 +17,7 @@ import org.aksw.limes.core.measures.mapper.MappingOperations;
  */
 public class RefinementNode implements Comparable<RefinementNode> {
 
-    protected static double rMax = -Double.MAX_VALUE;
+    protected static double maxRecall = -Double.MAX_VALUE;
     protected static boolean saveMapping = true;
     protected double precision = -Double.MAX_VALUE;
     protected double recall = -Double.MAX_VALUE;
@@ -37,62 +37,37 @@ public class RefinementNode implements Comparable<RefinementNode> {
 
     /**
      * Constructor
-     *
-     * @param fMeasure
      * @param map
      * @param metricExpression
+     * @param fMeasure
+     *
      * @author sherif
      */
-    public RefinementNode(double fMeasure, AMapping map, String metricExpression) {
+    public RefinementNode(AMapping map, String metricExpression, double fMeasure) {
         super();
         this.setfMeasure(fMeasure);
         this.setMap(map);
         this.setMetricExpression(metricExpression);
     }
-
-
-    /**
-     * Note: basically used for unsupervised version of WOMBAT
-     *
-     * @param map
-     * @param metricExpression
-     * @param fMeasure
-     */
-    public RefinementNode(AMapping map, String metricExpression, double fMeasure) {
-        super();
+    
+    public RefinementNode(AMapping map, String metricExpression, double fMeasure, 
+            double precesion, double recall, double maxFMeasure) {
+        this(map, metricExpression, fMeasure);
         this.setfMeasure(fMeasure);
-        this.setMap(saveMapping ? map : null);
-        this.setMetricExpression(metricExpression);
-
+        this.setPrecision(precesion);
+        this.setRecall(recall);
+        this.setMaxFMeasure(maxFMeasure);
     }
 
 
-    /**
-     * Constructor
-     *
-     * @param map
-     * @param metricExpression
-     * @param refMap
-     * @author sherif
-     */
-    public RefinementNode(AMapping map, String metricExpression, AMapping refMap) {
-        super();
-        this.setPrecision(new Precision().calculate(map, new GoldStandard(refMap)));
-        this.setRecall(new Recall().calculate(map, new GoldStandard(refMap)));
-        this.setfMeasure((precision == 0 && recall == 0) ? 0 : 2 * precision * recall / (precision + recall));
-        double pMax = computeMaxPrecision(map, refMap);
-        this.setMaxFMeasure(2 * pMax * rMax / (pMax + rMax));
-        this.setMap(saveMapping ? map : null);
-        this.setMetricExpression(metricExpression);
+    public static double getMaxRecall() {
+        return maxRecall;
+    }
+    
+    public static void setMaxRecall(double maxRecall) {
+        RefinementNode.maxRecall = maxRecall;
     }
 
-    public static double getrMax() {
-        return rMax;
-    }
-
-    public static void setrMax(double rMax) {
-        RefinementNode.rMax = rMax;
-    }
 
     public static boolean isSaveMapping() {
         return saveMapping;
@@ -112,19 +87,6 @@ public class RefinementNode implements Comparable<RefinementNode> {
 
     }
 
-    private double computeMaxPrecision(AMapping map, AMapping refMap) {
-        AMapping falsePos = MappingFactory.createDefaultMapping();
-        for (String key : map.getMap().keySet()) {
-            for (String value : map.getMap().get(key).keySet()) {
-                if (refMap.getMap().containsKey(key) || refMap.getReversedMap().containsKey(value)) {
-                    falsePos.add(key, value, map.getMap().get(key).get(value));
-                }
-            }
-        }
-        AMapping m = MappingOperations.difference(falsePos, refMap);
-        return (double) refMap.size() / (double) (refMap.size() + m.size());
-    }
-
     public double getFMeasure() {
         return fMeasure;
     }
@@ -138,7 +100,7 @@ public class RefinementNode implements Comparable<RefinementNode> {
      * @author sherif
      */
     public double getMaxFMeasure() {
-        return 0;
+        return maxFMeasure;
     }
 
     public void setMaxFMeasure(double maxFMeasure) {
@@ -174,7 +136,7 @@ public class RefinementNode implements Comparable<RefinementNode> {
     }
 
     public void setMap(AMapping map) {
-        this.map = map;
+        this.map = saveMapping ? map : null;
     }
 
     /* (non-Javadoc)

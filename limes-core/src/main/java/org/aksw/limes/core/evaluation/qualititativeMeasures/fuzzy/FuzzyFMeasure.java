@@ -1,16 +1,13 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures.fuzzy;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.APRF;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * F-Measure is the weighted average of the precision and recall
+ * Fuzzy F-Measure is the weighted average of the fuzzy precision and fuzzy recall
  *
  * @author Mohamed Sherif(sherif@informatik.uni-leipzig.de)
  * @version 1.1.2
@@ -20,7 +17,7 @@ public class FuzzyFMeasure extends AFuzzeyMeasures implements IQualitativeMeasur
     static Logger logger = LoggerFactory.getLogger(FuzzyFMeasure.class);
 
     /** 
-     * The method calculates the F-Measure of the machine learning predictions 
+     * The method calculates the fuzzy F-Measure of the machine learning predictions 
      * compared to a gold standard.
      * 
      * @param predictions The predictions provided by a machine learning algorithm

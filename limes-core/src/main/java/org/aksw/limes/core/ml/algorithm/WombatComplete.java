@@ -117,7 +117,52 @@ public class WombatComplete extends AWombat {
         throw new UnsupportedMLImplementationException(this.getName());
     }
 
+    /**
+     * @param metricExpr learning specifications
+     * @return new RefinementNode
+     */
+    protected RefinementNode createNode(String metricExpr) {
+        AMapping map = null;
+        if(saveMapping()){
+            map = getMapingOfMetricExpression(metricExpr);
+        }
+        return createNode(map, metricExpr);
+    }
 
+    /**
+     * Create new RefinementNode using either real or pseudo-F-Measure
+     *
+     * @param mapping of the node 
+     * @param metricExpr learning specifications
+     * @return new RefinementNode
+     */
+    protected RefinementNode createNode(AMapping mapping, String metricExpr) {
+        double f = fMeasure(mapping);
+        double p = precision(mapping);
+        double r = recall(mapping);
+        double MaxF = computeMaxFMeasure(mapping, trainingData);
+        return new RefinementNode(mapping, metricExpr, f, p, r, MaxF);        
+    }
+
+    protected double computeMaxFMeasure(AMapping map, AMapping refMap){
+        double pMax = computeMaxPrecision(map, refMap);
+        double rMax = RefinementNode.getMaxRecall();
+        return 2 * pMax * rMax / (pMax + rMax);
+    }
+    
+    protected double computeMaxPrecision(AMapping mapping, AMapping trainingData) {
+        AMapping falsePos = MappingFactory.createDefaultMapping();
+        for (String key : mapping.getMap().keySet()) {
+            for (String value : mapping.getMap().get(key).keySet()) {
+                if (trainingData.getMap().containsKey(key) || trainingData.getReversedMap().containsKey(value)) {
+                    falsePos.add(key, value, mapping.getMap().get(key).get(value));
+                }
+            }
+        }
+        AMapping m = MappingOperations.difference(falsePos, trainingData);
+        return (double) trainingData.size() / (double) (trainingData.size() + m.size());
+    }
+    
     
     /**
      * @return RefinementNode containing the best over all solution
@@ -127,7 +172,7 @@ public class WombatComplete extends AWombat {
         List<ExtendedClassifier> classifiers = findInitialClassifiers();
         diffs = computeClassifiersDiffPermutations(classifiers);
         createRefinementTreeRoot();
-        RefinementNode.setrMax(computeMaxRecall(classifiers));
+        RefinementNode.setMaxRecall(computeMaxRecall(classifiers));
         Tree<RefinementNode> mostPromisingNode = findMostPromisingNode(refinementTreeRoot, false);
         long time = System.currentTimeMillis();
         pruneTree(refinementTreeRoot, mostPromisingNode.getValue().getFMeasure());
@@ -584,7 +629,7 @@ public class WombatComplete extends AWombat {
      * @author sherif
      */
     private void createRefinementTreeRoot() {
-        RefinementNode initialNode = new RefinementNode(-Double.MAX_VALUE, MappingFactory.createDefaultMapping(), "");
+        RefinementNode initialNode = new RefinementNode(MappingFactory.createDefaultMapping(), "", -Double.MAX_VALUE);
         refinementTreeRoot = new Tree<RefinementNode>(null, initialNode, null);
         for (String diffExpr : diffs.keySet()) {
             AMapping diffMapping = diffs.get(diffExpr);

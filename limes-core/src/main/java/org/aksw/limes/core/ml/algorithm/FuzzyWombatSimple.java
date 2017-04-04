@@ -27,11 +27,11 @@ import org.slf4j.LoggerFactory;
  * Fast implementation, that is not complete
  * 
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @version Jun 7, 2016
+ * @version Apr 3, 2017
  */
-public class WombatSimple extends AWombat {
-    protected static Logger logger = LoggerFactory.getLogger(WombatSimple.class);
-    protected static final String ALGORITHM_NAME = "Wombat Simple";
+public class FuzzyWombatSimple extends AWombat {
+    protected static Logger logger = LoggerFactory.getLogger(FuzzyWombatSimple.class);
+    protected static final String ALGORITHM_NAME = "Fuzzy Wombat Simple";
     protected int activeLearningRate = 3;
     protected RefinementNode bestSolutionNode = null;
     protected List<ExtendedClassifier> classifiers = null;
@@ -42,8 +42,9 @@ public class WombatSimple extends AWombat {
     /**
      * WombatSimple constructor.
      */
-    protected WombatSimple() {
+    protected FuzzyWombatSimple() {
         super();
+        isFuzzy = true;
     }
 
     @Override
@@ -53,6 +54,7 @@ public class WombatSimple extends AWombat {
 
     @Override
     protected void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
+        isFuzzy = true;
         super.init(lp, sourceCache, targetCache);
         sourceUris = sourceCache.getAllUris();
         targetUris = targetCache.getAllUris();
@@ -62,6 +64,18 @@ public class WombatSimple extends AWombat {
     protected MLResults learn(AMapping trainingData) {
         this.trainingData = trainingData;
         return learn();
+    }
+    
+    /**
+     * @param metricExpr learning specifications
+     * @return new RefinementNode
+     */
+    protected RefinementNode createNode(String metricExpr) {
+        AMapping map = null;
+        if(saveMapping()){
+            map = getMapingOfMetricExpression(metricExpr);
+        }
+        return createNode(map, metricExpr);
     }
 
     /**
@@ -169,8 +183,7 @@ public class WombatSimple extends AWombat {
         double bestFMeasure = bestSolutionNode.getFMeasure();
         return new MLResults(bestLS, bestMapping, bestFMeasure, null);
     }
-
-
+    
     /**
      * Create new RefinementNode using either real or pseudo-F-Measure
      *
@@ -347,8 +360,7 @@ public class WombatSimple extends AWombat {
      * all available operators to the input refinement
      * node's mapping with all other classifiers' mappings
      *
-     * @param node
-     *         Refinement node to be expanded
+     * @param node Refinement node to be expanded
      * @return The input tree node after expansion
      * @author sherif
      */
@@ -384,7 +396,7 @@ public class WombatSimple extends AWombat {
      *
      */
     protected void createRefinementTreeRoot() {
-        RefinementNode initialNode = new RefinementNode(MappingFactory.createMapping(MappingType.DEFAULT), "", -Double.MAX_VALUE);
+        RefinementNode initialNode = new RefinementNode(MappingFactory.createDefaultMapping(), "", -Double.MAX_VALUE);
         refinementTreeRoot = new Tree<RefinementNode>(null, initialNode, null);
         for (ExtendedClassifier c : classifiers) {
             RefinementNode n = new RefinementNode(c.getMapping(), c.getMetricExpression(), c.getfMeasure());
