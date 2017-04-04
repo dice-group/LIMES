@@ -5,6 +5,16 @@ import java.util.List;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.io.ls.LinkSpecification;
+import org.aksw.limes.core.measures.measure.MeasureFactory;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.AtomicPreprocessingCommand;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.ChainedPreprocessingCommand;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.MetricCommand;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.NestedBoolean;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.PointSetMeasure;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.PointSetPropertyPair;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.StringMeasure;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.StringPreprocessMeasure;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.StringPropertyPair;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.CommandGene;
 import org.jgap.gp.GPProblem;
@@ -18,11 +28,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * JGAP GPProblem implementation for EAGLE and all derivates.
- *
- * @author Klaus Lyko
- * @version 1.2
- * @since 1.2 Learning Preprocessing enhanced.
- * 
+ * Creates a population of individuals for the given linking task. 
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de) 
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 21, 2016
  */
@@ -43,7 +50,7 @@ public class ExpressionProblem extends GPProblem {
     }
 
     /**
-     * Constrcutor to decide whether Preprocessing is part of evolution.
+     * Constructor to decide whether Preprocessing is part of evolution.
      *
      * @param a_conf
      * @param learnPreprocessing
@@ -59,7 +66,6 @@ public class ExpressionProblem extends GPProblem {
     public GPGenotype create() throws InvalidConfigurationException {
 
         LinkSpecGeneticLearnerConfig config = (LinkSpecGeneticLearnerConfig) getGPConfiguration();
-        //	ExpressionApplicationData applData = new ExpressionApplicationData("PublicationData.xml");
         // a program has two chromosomes: first an expression, second a acceptance threshold
         Class<?>[] types = {LinkSpecification.class};
         Class<?>[][] argTypes = {{
@@ -91,7 +97,7 @@ public class ExpressionProblem extends GPProblem {
         maxDepths[0] = 6;
         boolean[] fullModeAllowed = {true};
         int maxNodes = 100;
-//				System.out.println("Nodes..."+nodes);
+        
         return GPGenotype.randomInitialGenotype(config,
                 types, argTypes, nodeSets,
                 minDepths, maxDepths, maxNodes, fullModeAllowed,
@@ -99,8 +105,8 @@ public class ExpressionProblem extends GPProblem {
     }
 
     /**
-     * Constructs CommandGene setup for the basic EAGLE approach, i. e. without
-     * Learning Preprocessing.
+     * Constructs CommandGene setup for the basic EAGLE approach. That is all Genes covering
+     * String similarity measures, i. e. without Preprocessing, or pointsets.
      *
      * @param config LinkSpecGeneticLearnerConfig
      * @return CommandGene setup for the basic EAGLE approach
@@ -157,20 +163,20 @@ public class ExpressionProblem extends GPProblem {
 //			nodes.add(new AddMetric(config));
         nodes.add(new MetricCommand(config, LinkSpecification.class));
 
-//			if(config.hasPointSetProperties()) {					
-//				nodes.add(new PointSetMeasure("hausdorff", config, String.class, 1, true));
-//				nodes.add(new PointSetMeasure("geomean", config, String.class, 1, true));
-//				for(int i=0; i<config.getPropertyMapping().pointsetPropPairs.size(); i++) {
-//					nodes.add( new PointSetPropertyPair(config, Pair.class, ResourceTerminalType.POINTSETPROPPAIR.intValue(), true, i));
-//				}
-//			}	
+        
+        /*#################### pointset measures ####################*/
+		if(config.hasPointSetProperties()) {					
+			nodes.add(new PointSetMeasure("hausdorff", config, String.class, 1, true));
+		for(int i=0; i<config.getPropertyMapping().pointsetPropPairs.size(); i++) {
+				nodes.add( new PointSetPropertyPair(config, PairSimilar.class, ResourceTerminalType.POINTSETPROPPAIR.intValue(), true, i));
+			}
+		}	
 
 
 //		if(config.hasNumericProperties()) {					
 //			nodes.add(new NumberMeasure(config));
 //			for(int i=0; i<config.getPropertyMapping().numberPropPairs.size(); i++) {
 //				nodes.add( new NumberPropertyPair(config, Pair.class, ResourceTerminalType.NUMBERPROPPAIR.intValue(), true, i));
-////				nodes.add( new StringPropertyPair(config, Pair.class, ResourceTerminalType.STRINGPROPPAIR.intValue(), true, i));
 //			}
 //			// threshold for numeric properties - more restrictive due to possible memory lacks		
 //		    nodes.add(new Terminal(config, CommandGene.DoubleClass, 0.8d, 1.0d, false, 
@@ -209,13 +215,13 @@ public class ExpressionProblem extends GPProblem {
      */
     private List<CommandGene> getStringMeasures(LinkSpecGeneticLearnerConfig config) throws InvalidConfigurationException {
         List<CommandGene> nodes = new LinkedList<CommandGene>();
-        nodes.add(new StringMeasure("trigrams", config, String.class, 1, true));
-        nodes.add(new StringMeasure("jaccard", config, String.class, 1, true));
-        nodes.add(new StringMeasure("cosine", config, String.class, 1, true));
-        nodes.add(new StringMeasure("levenshtein", config, String.class, 1, true));
-        nodes.add(new StringMeasure("overlap", config, String.class, 1, true));
-        nodes.add(new StringMeasure("qgrams", config, String.class, 1, true));
-        //nodes.add(new NumberMeasure(config, String.class, 1, true));
+        nodes.add(new StringMeasure(MeasureFactory.COSINE, config, String.class, 1, true));
+        nodes.add(new StringMeasure(MeasureFactory.JACCARD, config, String.class, 1, true));
+        nodes.add(new StringMeasure(MeasureFactory.TRIGRAM, config, String.class, 1, true));
+        nodes.add(new StringMeasure(MeasureFactory.LEVENSHTEIN, config, String.class, 1, true));
+        nodes.add(new StringMeasure(MeasureFactory.OVERLAP, config, String.class, 1, true));
+        nodes.add(new StringMeasure(MeasureFactory.QGRAMS, config, String.class, 1, true));
+        nodes.add(new StringMeasure(MeasureFactory.EXACTMATCH, config, String.class, 1, true));
         return nodes;
     }
 
@@ -266,13 +272,13 @@ public class ExpressionProblem extends GPProblem {
      * @author Klaus Lyko
      */
     public enum ResourceTerminalType {
-        THRESHOLD(3),
-        NUMBERTHRESHOLD(6),
-        GOBALTHRESHOLD(7),
         STRINGPROPPAIR(1),
         NUMBERPROPPAIR(2),
-        POINTSETPROPPAIR(5),
+        THRESHOLD(3),
         DATEPROPPAIR(4),
+        POINTSETPROPPAIR(5),
+        NUMBERTHRESHOLD(6),
+        GOBALTHRESHOLD(7),      
         PREPROCESS(10);
         private int m_value;
 

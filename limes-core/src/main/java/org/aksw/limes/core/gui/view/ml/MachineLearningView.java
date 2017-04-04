@@ -74,7 +74,7 @@ public class MachineLearningView {
     /**
      * array containing all implemented algorithms
      */
-    private static final String[] algorithms = { MLAlgorithmFactory.EAGLE, MLAlgorithmFactory.WOMBAT_COMPLETE,
+    private static final String[] algorithms = {MLAlgorithmFactory.EUCLID_LINEAR, MLAlgorithmFactory.EUCLID_BOOLEAN, MLAlgorithmFactory.EUCLID_MESH, MLAlgorithmFactory.EAGLE, MLAlgorithmFactory.WOMBAT_COMPLETE,
 	    MLAlgorithmFactory.WOMBAT_SIMPLE };
 
     /**

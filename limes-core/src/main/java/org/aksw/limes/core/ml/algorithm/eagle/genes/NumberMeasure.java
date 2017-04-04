@@ -1,9 +1,10 @@
-package org.aksw.limes.core.ml.algorithm.eagle.core;
+package org.aksw.limes.core.ml.algorithm.eagle.genes;
 
 
 import java.math.BigDecimal;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
+import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.CommandGene;

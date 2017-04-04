@@ -9,6 +9,7 @@ import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
@@ -21,9 +22,7 @@ import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator.QMeasureTy
  */
 public class LinearEuclid extends ACoreMLAlgorithm{
 
-	protected static final String ALGORITHM_NAME = "Euclid linear";
-	/**To set name on run-time */
-	protected String name = ALGORITHM_NAME;
+	protected static final String ALGORITHM_NAME = MLAlgorithmFactory.EUCLID_LINEAR;
 	
 	/* EUCLIDs parameter */
 	public static final String STRICT = "strict";
@@ -47,15 +46,15 @@ public class LinearEuclid extends ACoreMLAlgorithm{
 	
 	@Override
 	protected String getName() {
-		return name;
+		return ALGORITHM_NAME;
 	}
 
 	@Override
 	public void setDefaultParameters() {
         learningParameters = new ArrayList<>();
-        learningParameters.add(new LearningParameter(ITERATIONS_MAX, 100, Integer.class, 1, Integer.MAX_VALUE, 1, "Maximal number of iterations EUCLID tries to refine its results."));
+        learningParameters.add(new LearningParameter(ITERATIONS_MAX, 5, Integer.class, 1, Integer.MAX_VALUE, 1, "Maximal number of iterations EUCLID tries to refine its results."));
     	learningParameters.add(new LearningParameter(BETA, 1.0, Double.class, 0d, 1d, Double.NaN, "Shifts F-Measures towards precision or recall"));
-    	learningParameters.add(new LearningParameter(STRICT, true, Integer.class, -1, 1, 2,  STRICT));
+    	learningParameters.add(new LearningParameter(STRICT, true, Boolean.class, -1, 1, 2,  STRICT));
     	learningParameters.add(new LearningParameter(MIN_THRESHOLD, 0.1, Double.class, 0d, 1d, Double.NaN, MIN_THRESHOLD));
     	learningParameters.add(new LearningParameter(KAPPA, 0.8, Double.class, 0d, 1d, Double.NaN, KAPPA));
     	learningParameters.add(new LearningParameter(LEARNING_RATE, 0.125, Double.class, 0d, 1d, Double.NaN, "Step range of each LSs treshold"));

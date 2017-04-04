@@ -7,6 +7,7 @@ import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator.QMeasureType;
@@ -20,7 +21,7 @@ public class BooleanEuclid extends LinearEuclid{
 
 	protected static Logger logger = Logger.getLogger(BooleanEuclid.class);
 	
-	static final String ALGORITHM_NAME = "Euclid boolean";
+	static final String ALGORITHM_NAME = MLAlgorithmFactory.EUCLID_BOOLEAN;
 	public static final String MAX_THRESHOLD = "max_threshold";
 	
 	 @Override
@@ -28,7 +29,6 @@ public class BooleanEuclid extends LinearEuclid{
 	  	setDefaultParameters();
 	   	super.init(learningParameters, sourceCache, targetCache);
 	   	lsc = new BooleanSelfConfigurator(sourceCache, targetCache);
-	   	name = ALGORITHM_NAME;
 	 }
 	
 	@Override
@@ -74,4 +74,8 @@ public class BooleanEuclid extends LinearEuclid{
 		return map;
 	}
 
+	@Override
+	protected String getName() {
+		return ALGORITHM_NAME;
+	}
 }

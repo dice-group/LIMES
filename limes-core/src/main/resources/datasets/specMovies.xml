@@ -56,7 +56,7 @@
       <PROPERTY>linkedmdb:director/rdfs:label AS lowercase</PROPERTY>
       <PROPERTY>linkedmdb:initial_release_date</PROPERTY>  
    </TARGET>
-   <METRIC>trigrams(a.dbpedia-owl:director/rdfs:label, b.linkedmdb:director/rdfs:label)</METRIC>
+   <METRIC>cosine(a.dbpedia-owl:director/rdfs:label, b.linkedmdb:director/rdfs:label)</METRIC>
    <ACCEPTANCE>
       <THRESHOLD>0.3</THRESHOLD>
       <FILE>acceptSS.nt</FILE>

@@ -31,7 +31,7 @@
 		<TYPE>CSV</TYPE>
 	</TARGET>
 	
-	<METRIC>AND(trigrams(x.title,y.title)|0.11,euclidean(x.year,y.year)|0.83)</METRIC>
+	<METRIC>AND(cosine(x.title,y.title)|0.11,euclidean(x.year,y.year)|0.83)</METRIC>
 	<ACCEPTANCE>
 		<THRESHOLD>0.62</THRESHOLD>
 		<FILE>pub_accepted.txt</FILE>

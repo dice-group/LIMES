@@ -18,6 +18,7 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.AMeasure;
+import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,13 +30,13 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class LinearSelfConfigurator implements ISelfConfigurator {
-		// execution mode. STRICT = true leads to a strong bias towards precision by
-		// ensuring that the initial classifiers are classifiers that have the
-	    // maximal threshold that leads to the best pseudo-f-measure. False leads to the
-	    // best classifier with the smallest threshold
-	    public boolean STRICT = true;
-	    public int ITERATIONS_MAX = 1000;
-	    public double MIN_THRESHOLD = 0.3;
+	// execution mode. STRICT = true leads to a strong bias towards precision by
+	// ensuring that the initial classifiers are classifiers that have the
+	// maximal threshold that leads to the best pseudo-f-measure. False leads to the
+	// best classifier with the smallest threshold
+	public boolean STRICT = true;
+	public int ITERATIONS_MAX = 1000;
+	public double MIN_THRESHOLD = 0.3;
 	
     static Logger logger = LoggerFactory.getLogger(LinearSelfConfigurator.class);
 
@@ -244,9 +245,9 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      */
     public List<SimpleClassifier> getBestInitialClassifiers() {
         Set<String> measureList = new HashSet<String>();
-        measureList.add("jaccard");
-   		measureList.add("levenshtein");
-        measureList.add("trigrams");
+        measureList.add(MeasureFactory.COSINE);
+   		measureList.add(MeasureFactory.LEVENSHTEIN);
+        measureList.add(MeasureFactory.TRIGRAM);
         return getBestInitialClassifiers(measureList);
     }
 
