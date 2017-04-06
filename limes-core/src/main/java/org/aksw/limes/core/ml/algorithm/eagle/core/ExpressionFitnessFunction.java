@@ -255,10 +255,21 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
      *         Mapping holding data instances a user has evaluated. That may include non-matches.
      */
     public void trimKnowledgeBases(AMapping trainingData) {
+    	if(trainingData.size()<0) {
+    		logger.info("Trying to scale down caches to "+trainingData.size()+" reference mapping. Using full caches instead");
+    		trimmedSourceCache = sC;
+    		trimmedTargetCache = tC;
+    	}
         this.trainingData = trainingData;
         ACache[] trimmed = CacheTrimmer.processData(sC, tC, trainingData);
-        trimmedSourceCache = trimmed[0];
-        trimmedTargetCache = trimmed[1];
+        if(trimmed[0].size()>0)
+        	trimmedSourceCache = trimmed[0];
+        else
+        	logger.info("Scaling down source cache returned empty cache. Wrong training data was set. Using full Cache instead");
+        if(trimmed[1].size()>0)
+        	trimmedTargetCache = trimmed[1];
+        else
+        	logger.info("Scaling down target cache returned empty cache. Wrong training data was set. Using full Cache instead");
         logger.info("Trimming to " + trimmed[0].size() + " and " + trimmed[1].size() + " caches.");
         crossProduct = trimmedSourceCache.size() * trimmedTargetCache.size();
     }

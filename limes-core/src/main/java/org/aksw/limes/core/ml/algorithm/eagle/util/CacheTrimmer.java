@@ -148,7 +148,6 @@ public class CacheTrimmer {
             HashMap<String, Double> value = e.getValue();
             for (Entry<String, Double> e2 : value.entrySet()) {
                 Instance j = tC.getInstance(e2.getKey());
-                //System.out.println(e2.getKey());
                 if (j != null)
                     h2.addInstance(j);
                 else
