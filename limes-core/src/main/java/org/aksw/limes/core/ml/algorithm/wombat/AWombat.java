@@ -36,7 +36,6 @@ import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;

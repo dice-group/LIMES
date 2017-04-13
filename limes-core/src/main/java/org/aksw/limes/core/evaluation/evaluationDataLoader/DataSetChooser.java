@@ -46,7 +46,7 @@ public class DataSetChooser {
      */
     public static EvaluationData getData(String dataSetName) {
         String d = dataSetName.replaceAll("-", "").toUpperCase();
-        HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+        HashMap<MapKey, Object> param = new HashMap<>();
         switch (d) {
         case "PERSONNew":
             param = getPersonNew();

@@ -8,6 +8,7 @@ public class MLAlgorithmFactory {
 
     
     public static final String EAGLE = "eagle";
+    public static final String FUZZY_WOMBAT_SIMPLE = "fuzzy wombat simple";
     public static final String WOMBAT_SIMPLE = "wombat simple";
     public static final String WOMBAT_COMPLETE = "wombat complete";
     public static final String LION = "lion";
@@ -33,6 +34,9 @@ public class MLAlgorithmFactory {
         }
         if (name.equalsIgnoreCase(WOMBAT_COMPLETE)) {
             return WombatComplete.class;
+        }
+        if (name.equalsIgnoreCase(FUZZY_WOMBAT_SIMPLE)) {
+            return FuzzyWombatSimple.class;
         }
         if (name.equalsIgnoreCase(LION)) {
             //@todo: fix this

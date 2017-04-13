@@ -8,6 +8,9 @@ import java.util.TreeSet;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.datastrutures.Tree;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser.DataSets;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
@@ -31,6 +34,7 @@ import org.slf4j.LoggerFactory;
  * @version Apr 3, 2017
  */
 public class FuzzyWombatSimple extends AWombat {
+    private static final double TRAINING_RATIO = 0.3;
     protected static Logger logger = LoggerFactory.getLogger(FuzzyWombatSimple.class);
     protected static final String ALGORITHM_NAME = "Fuzzy Wombat Simple";
     protected int activeLearningRate = 3;
@@ -409,7 +413,7 @@ public class FuzzyWombatSimple extends AWombat {
     }
 
 
-    public AMapping FindInformativeExamples(int n){
+    public AMapping FindInformativeExamples(){
         AMapping exampleMap = MappingFactory.createDefaultMapping();
         double sumLeafWeight = 0d;
         for(Tree<RefinementNode> leaf : refinementTreeRoot.getLeaves()){
@@ -425,7 +429,6 @@ public class FuzzyWombatSimple extends AWombat {
                     }
                 }
             }
-
         }
         AMapping result = MappingFactory.createDefaultMapping();
         for(String s : result.getMap().keySet()){
@@ -435,7 +438,71 @@ public class FuzzyWombatSimple extends AWombat {
         }
         return result;
     }
+    
+    public AMapping findMostInformativeExamples(AMapping infExMap){
+        AMapping result = MappingFactory.createDefaultMapping();
+        for(String s : infExMap.getMap().keySet()){
+            for(String t : infExMap.getMap().get(s).keySet()){
+                double c = infExMap.getConfidence(s, t);
+                if(c > 0.5d){
+                  result.add(s, t, c);
+                }
+                
+            }
+        }
+        return result;
+    }
+    
+    public AMapping findLeastInformativeExamples(AMapping infExMap){
+        AMapping result = MappingFactory.createDefaultMapping();
+        for(String s : infExMap.getMap().keySet()){
+            for(String t : infExMap.getMap().get(s).keySet()){
+                double c = infExMap.getConfidence(s, t);
+                if(c < 0.5d){
+                  result.add(s, t, c);
+                }
+                
+            }
+        }
+        return result;
+    }
 
+    public static void main(String []args){
+        int epoch= 0;
+        
+        EvaluationData evalData = DataSetChooser.getData(DataSets.PERSON1);
+        ACache sourceCache = evalData.getSourceCache();
+        ACache targetCache = evalData.getTargetCache();
+        
+        AMapping referenceMapping = evalData.getReferenceMapping();
+        AMapping trainingMapping = MappingFactory.createDefaultMapping();
+        AMapping testMapping = MappingFactory.createDefaultMapping();
+        int trainingMappingSize = (int) (referenceMapping.getSize() * TRAINING_RATIO);
+        
+        
 
+        
+
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

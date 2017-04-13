@@ -101,7 +101,7 @@ public class LigonTest {
         SupervisedMLAlgorithm wombatSimple = null;
         try {
             wombatSimple = MLAlgorithmFactory
-                    .createMLAlgorithm(WombatSimple.class,
+                    .createMLAlgorithm(FuzzyWombatSimple.class,
                             MLImplementationType.SUPERVISED_BATCH)
                     .asSupervised();
         } catch (UnsupportedMLImplementationException e) {
@@ -114,10 +114,16 @@ public class LigonTest {
         AMapping resultMap = wombatSimple.predict(sc, tc, mlModel);
 //        assert (resultMap.equals(refMap));
 
-        NoisyOracle no1 = new NoisyOracle(refMap, 1.0, 1.0);
-        NoisyOracle no2 = new NoisyOracle(refMap, 0.5, 0.5);
-        NoisyOracle no3 = new NoisyOracle(refMap, 0.0, 0.0);
-        List<NoisyOracle> noisyOracles = new ArrayList<>(Arrays.asList(no1, no2, no3));
+        NoisyOracle no1a = new NoisyOracle(refMap, 1.0, 1.0);
+        NoisyOracle no1b = new NoisyOracle(refMap, 1.0, 1.0);
+        NoisyOracle no1c = new NoisyOracle(refMap, 1.0, 1.0);
+        NoisyOracle no2a = new NoisyOracle(refMap, 0.5, 0.5);
+        NoisyOracle no2b = new NoisyOracle(refMap, 0.5, 0.5);
+        NoisyOracle no2c = new NoisyOracle(refMap, 0.5, 0.5);
+        NoisyOracle no3a = new NoisyOracle(refMap, 0.0, 0.0);
+        NoisyOracle no3b = new NoisyOracle(refMap, 0.0, 0.0);
+        NoisyOracle no3c = new NoisyOracle(refMap, 0.0, 0.0);
+        List<NoisyOracle> noisyOracles = new ArrayList<>(Arrays.asList(no1a, no2a, no3a, no1b, no2b, no3b, no1c, no2c, no3c));
         
         Ligon l = new Ligon(posTrainingMap, negTrainingMap, unkownTrainingMap, noisyOracles);
         System.out.println(l.getNoisyOracles());
