@@ -98,9 +98,9 @@ public class LigonTest {
     @Test
     public void testLigon()
             throws UnsupportedMLImplementationException {
-        SupervisedMLAlgorithm wombatSimple = null;
+        SupervisedMLAlgorithm fuzzyWombat = null;
         try {
-            wombatSimple = MLAlgorithmFactory
+            fuzzyWombat = MLAlgorithmFactory
                     .createMLAlgorithm(FuzzyWombatSimple.class,
                             MLImplementationType.SUPERVISED_BATCH)
                     .asSupervised();
@@ -108,10 +108,10 @@ public class LigonTest {
             e.printStackTrace();
             fail();
         }
-        assert (wombatSimple.getClass().equals(SupervisedMLAlgorithm.class));
-        wombatSimple.init(null, sc, tc);
-        MLResults mlModel = wombatSimple.learn(posTrainingMap);
-        AMapping resultMap = wombatSimple.predict(sc, tc, mlModel);
+        assert (fuzzyWombat.getClass().equals(SupervisedMLAlgorithm.class));
+        fuzzyWombat.init(null, sc, tc);
+        MLResults mlModel = fuzzyWombat.learn(posTrainingMap);
+        AMapping resultMap = fuzzyWombat.predict(sc, tc, mlModel);
 //        assert (resultMap.equals(refMap));
 
         NoisyOracle no1a = new NoisyOracle(refMap, 1.0, 1.0);

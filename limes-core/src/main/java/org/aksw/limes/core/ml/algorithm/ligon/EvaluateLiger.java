@@ -5,7 +5,10 @@ package org.aksw.limes.core.ml.algorithm.ligon;
 
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
@@ -28,13 +31,16 @@ import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingMath;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.FuzzyWombatSimple;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.apache.log4j.Logger;
+
 
 
 
@@ -224,40 +230,54 @@ public class EvaluateLiger extends FuzzyWombatSimple{
         logger.info("Number of removed error mappings = " + (refMapSize - reference.size()));
         //		System.out.println(reference.size());System.exit(1);
         if(posExFrac <= 0){ // learn using 10%, 20%, ... , 100%
-            for(int s = 1 ; s <= 10 ; s +=1){
-                logger.info("Running " + " Fuzzy Wombat for the " + d + " dataset with positive example size = " +  s*10 + "%");
-                AMapping trainingSample = sampleReferenceMap(reference, s/10f);
-                fillTrainingCaches(trainingSample);
-                trainingSample.getReversedMap();
-
-                // 1. Learning phase
-                MLResults mlResult = trainForSample(trainingSample);
-
-                // 2. Apply for the whole KB
-                learnForKB(d, mlResult.getLinkSpecification());
-            }
+            crossValidation10Fold(d);
         }else{ 
-            // learn using provided leaningRat
-            logger.info("Running Fuzzy Wombat for the " + d + " dataset with positive example size = " +  posExFrac + "%");
-
-            AMapping trainingSample = sampleReferenceMap(reference, posExFrac/100f);
-            fillTrainingCaches(trainingSample);
-            logger.info("Learning using " + trainingSample.size() + " examples.");
-
-            trainingSample.getReversedMap();
-
-            // 1. Learning phase
-            MLResults mlResult = trainForSample(trainingSample);
-
-            // 2. Apply for the whole KB
-            learnForKB(d, mlResult.getLinkSpecification());
+            percentageValidation(d, posExFrac);
 
         }
         System.out.println(d + " Final rasults:\n" + resultStr);
         return resultStr;
+    }
+
+    private static void percentageValidation(DataSets d, int posExFrac)
+            throws UnsupportedMLImplementationException {
+        // learn using provided leaningRat
+        logger.info("Running Fuzzy Wombat for the " + d + " dataset with positive example size = " +  posExFrac + "%");
+
+        AMapping trainingMap = sampleReferenceMap(reference, posExFrac/100f);
+        AMapping testMap  = MappingMath.removeSubMap(reference, trainingMap);               
+        fillTrainingCaches(trainingMap);
+        fillTestingCaches(testMap);
+        trainingMap.getReversedMap();
+        
+        // 1. Learning phase
+        logger.info("Learning using " + trainingMap.size() + " examples.");
+        resultStr += posExFrac + "%\t" ;
+        MLResults mlResult = trainFromSampleMapping(trainingMap);
+
+        // 2. Apply for the whole KB
+        executeLinkSpecsForDataSet(d, mlResult.getLinkSpecification());
+    }
+
+    private static void crossValidation10Fold(DataSets d)
+            throws UnsupportedMLImplementationException {
+        for(int s = 1 ; s <= 10 ; s +=1){
+            logger.info("Running " + " Fuzzy Wombat for the " + d + " dataset with positive example size = " +  s*10 + "%");
+            AMapping trainingMap = sampleReferenceMap(reference, s/10f);
+            AMapping testMap  = MappingMath.removeSubMap(reference, trainingMap);               
+            fillTrainingCaches(trainingMap);
+            fillTestingCaches(testMap);
+            trainingMap.getReversedMap();
+
+            // 1. Learning phase
+            MLResults mlResult = trainFromSampleMapping(trainingMap);
+
+            // 2. Apply for the whole KB
+            executeLinkSpecsForDataSet(d, mlResult.getLinkSpecification());
+        }
     }	
 
-    static MLResults trainForSample(AMapping trainingSample) throws UnsupportedMLImplementationException{
+    static MLResults trainFromSampleMapping(AMapping trainingSample) throws UnsupportedMLImplementationException{
         long start = System.currentTimeMillis();
         SupervisedMLAlgorithm fuzzyWombat = null;
         try {
@@ -271,19 +291,23 @@ public class EvaluateLiger extends FuzzyWombatSimple{
         }
         fuzzyWombat.init(null, sourceTrainCache, targetTrainCache);
         MLResults mlModel = fuzzyWombat.learn(trainingSample);
-        AMapping mapSample = fuzzyWombat.predict(sourceTrainCache, targetTrainCache, mlModel);
+        AMapping learnedMap = fuzzyWombat.predict(sourceTrainCache, targetTrainCache, mlModel);
+        learnedMap = AMapping.getBestOneToOneMappings(learnedMap);
         LinkSpecification linkSpecification = mlModel.getLinkSpecification();
         resultStr +=  
-                //                  posExFrac + "%"                         + "\t" + 
-                precision(mapSample, trainingSample)+ "\t" + 
-                recall(mapSample, trainingSample)   + "\t" + 
-                fScore(mapSample, trainingSample)   + "\t" +
+                //                posExFrac + "%"                         + "\t" + 
+                precision(learnedMap, trainingSample)+ "\t" + 
+                recall(learnedMap, trainingSample)   + "\t" + 
+                fScore(learnedMap, trainingSample)   + "\t" +
                 (System.currentTimeMillis() - start)            + "\t" +
-                linkSpecification                   + "\t" ;
+                linkSpecification.toStringOneLine()                   + "\t" ;
+        System.out.println("Training Mapping result: \n" + learnedMap);
+        System.out.println("trainingSample: \n" + trainingSample);
         return mlModel;
     }
 
-    static String learnForKB(DataSets d, LinkSpecification linkSpecification){
+
+    static String executeLinkSpecsForDataSet(DataSets d, LinkSpecification linkSpecification){
         long start = System.currentTimeMillis();
         AMapping kbMap;
         Rewriter rw = RewriterFactory.getDefaultRewriter();
@@ -348,6 +372,8 @@ public class EvaluateLiger extends FuzzyWombatSimple{
         //        System.out.println(overAllResults);
 
     }
+    
+
 
 
 
@@ -378,15 +404,5 @@ public class EvaluateLiger extends FuzzyWombatSimple{
         }
         return null;
     }
-
-    public static void printGoldStandardSizes(){
-        for(DataSets d : DataSets.values()){
-            EvaluationData data = DataSetChooser.getData(d);
-            System.out.println("---------> " + d.name() + "\t" + data.getReferenceMapping().getSize());
-        }
-    }
-
-
-
 
 }

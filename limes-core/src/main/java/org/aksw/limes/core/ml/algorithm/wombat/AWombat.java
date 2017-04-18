@@ -53,6 +53,8 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AWombat extends ACoreMLAlgorithm {
 
+    private static final double MIN_INIT_CLASSIFIER_F_MEASURE = 0.1;
+
     static Logger logger = LoggerFactory.getLogger(AWombat.class);
 
     // Parameters
@@ -91,46 +93,46 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         setDefaultParameters();
     }
 
-//    /**
-//     * Create new RefinementNode using either real or pseudo-F-Measure
-//     *
-//     * @param mapping of the node 
-//     * @param metricExpr learning specifications
-//     * @return new RefinementNode
-//     */
-//    protected RefinementNode createNode(AMapping mapping, String metricExpr) {
-//        double f = fMeasure(mapping);
-//        if(!isFuzzy && !isUnsupervised){
-//            return new RefinementNode(mapping, metricExpr, f);
-//        }
-//        double p = precision(mapping);
-//        double r = recall(mapping);
-//        double MaxF = computeMaxFMeasure(mapping, trainingData);
-//        return new RefinementNode(mapping, metricExpr, f, p, r, MaxF);        
-//    }
-//    
-//    
-//    
-//
-//    protected double computeMaxFMeasure(AMapping map, AMapping refMap){
-//        double pMax = computeMaxPrecision(map, refMap);
-//        double rMax = RefinementNode.getMaxRecall();
-//        return 2 * pMax * rMax / (pMax + rMax);
-//    }
-//    
-//    protected double computeMaxPrecision(AMapping mapping, AMapping trainingData) {
-//        AMapping falsePos = MappingFactory.createDefaultMapping();
-//        for (String key : mapping.getMap().keySet()) {
-//            for (String value : mapping.getMap().get(key).keySet()) {
-//                if (trainingData.getMap().containsKey(key) || trainingData.getReversedMap().containsKey(value)) {
-//                    falsePos.add(key, value, mapping.getMap().get(key).get(value));
-//                }
-//            }
-//        }
-//        AMapping m = MappingOperations.difference(falsePos, trainingData);
-//        return (double) trainingData.size() / (double) (trainingData.size() + m.size());
-//    }
-//    
+    //    /**
+    //     * Create new RefinementNode using either real or pseudo-F-Measure
+    //     *
+    //     * @param mapping of the node 
+    //     * @param metricExpr learning specifications
+    //     * @return new RefinementNode
+    //     */
+    //    protected RefinementNode createNode(AMapping mapping, String metricExpr) {
+    //        double f = fMeasure(mapping);
+    //        if(!isFuzzy && !isUnsupervised){
+    //            return new RefinementNode(mapping, metricExpr, f);
+    //        }
+    //        double p = precision(mapping);
+    //        double r = recall(mapping);
+    //        double MaxF = computeMaxFMeasure(mapping, trainingData);
+    //        return new RefinementNode(mapping, metricExpr, f, p, r, MaxF);        
+    //    }
+    //    
+    //    
+    //    
+    //
+    //    protected double computeMaxFMeasure(AMapping map, AMapping refMap){
+    //        double pMax = computeMaxPrecision(map, refMap);
+    //        double rMax = RefinementNode.getMaxRecall();
+    //        return 2 * pMax * rMax / (pMax + rMax);
+    //    }
+    //    
+    //    protected double computeMaxPrecision(AMapping mapping, AMapping trainingData) {
+    //        AMapping falsePos = MappingFactory.createDefaultMapping();
+    //        for (String key : mapping.getMap().keySet()) {
+    //            for (String value : mapping.getMap().get(key).keySet()) {
+    //                if (trainingData.getMap().containsKey(key) || trainingData.getReversedMap().containsKey(value)) {
+    //                    falsePos.add(key, value, mapping.getMap().get(key).get(value));
+    //                }
+    //            }
+    //        }
+    //        AMapping m = MappingOperations.difference(falsePos, trainingData);
+    //        return (double) trainingData.size() / (double) (trainingData.size() + m.size());
+    //    }
+    //    
 
 
 
@@ -307,6 +309,28 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         // compute real recall based on training data 
         return new Recall().calculate(predictions, new GoldStandard(trainingData));
 
+    }
+
+    /**
+     * @return initial classifiers
+     */
+    public List<ExtendedClassifier> findInitialClassifiers() {
+        logger.debug("Geting all initial classifiers ...");
+        List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
+        for (String p : sourcePropertiesCoverageMap.keySet()) {
+            for (String q : targetPropertiesCoverageMap.keySet()) {
+                for (String m : getAtomicMeasures()) {
+                    ExtendedClassifier cp = findInitialClassifier(p, q, m);
+                    //only add if classifier covers all entries
+                    if(cp.getfMeasure() > MIN_INIT_CLASSIFIER_F_MEASURE){
+                        initialClassifiers.add(cp);
+                    }
+                }
+            }
+        }
+        logger.debug("Done computing all initial classifiers.");
+        System.out.println(initialClassifiers);
+        return initialClassifiers;
     }
 
     /**

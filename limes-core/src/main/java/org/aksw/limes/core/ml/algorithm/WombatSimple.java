@@ -237,24 +237,7 @@ public class WombatSimple extends AWombat {
 
 
 
-    /**
-     * @return initial classifiers
-     */
-    public List<ExtendedClassifier> findInitialClassifiers() {
-        logger.debug("Geting all initial classifiers ...");
-        List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
-        for (String p : sourcePropertiesCoverageMap.keySet()) {
-            for (String q : targetPropertiesCoverageMap.keySet()) {
-                for (String m : getAtomicMeasures()) {
-                    ExtendedClassifier cp = findInitialClassifier(p, q, m);
-                    //only add if classifier covers all entries
-                    initialClassifiers.add(cp);
-                }
-            }
-        }
-        logger.debug("Done computing all initial classifiers.");
-        return initialClassifiers;
-    }
+
 
 
     /**

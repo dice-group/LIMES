@@ -23,14 +23,14 @@ public class FuzzyPrecision extends AFuzzeyMeasures implements IQualitativeMeasu
     @Override
     public double calculate(AMapping predictions, GoldStandard goldStandard) {
 
-        double num = 0.0d;
-        double denum   = 0.0d;
+        double num = 0d;
+        double denum   = 0d;
 
         for (String sUri : predictions.getMap().keySet()){
             for (String tUri : predictions.getMap().get(sUri).keySet()){
                 if(goldStandard.referenceMappings.contains(sUri, tUri)){
-                    double goldStandardMu = goldStandard.referenceMappings.getMap().get(sUri).get(tUri);
-                    double predictionMu = predictions.getMap().get(sUri).get(tUri);
+                    double goldStandardMu = goldStandard.referenceMappings.getConfidence(sUri, tUri);
+                    double predictionMu = predictions.getConfidence(sUri, tUri);
                     double minMu = (predictionMu < goldStandardMu)? predictionMu : goldStandardMu;
                     num += (minMu > 0) ? goldStandardMu : 0;
                     denum += goldStandardMu;

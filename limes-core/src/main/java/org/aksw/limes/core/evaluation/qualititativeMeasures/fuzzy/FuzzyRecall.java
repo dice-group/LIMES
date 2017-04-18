@@ -30,8 +30,8 @@ public class FuzzyRecall extends AFuzzeyMeasures implements IQualitativeMeasure 
         for (String sUri : predictions.getMap().keySet()){
             for (String tUri : predictions.getMap().get(sUri).keySet()){
                 if(goldStandard.referenceMappings.contains(sUri, tUri)){
-                    double goldStandardMu = goldStandard.referenceMappings.getMap().get(sUri).get(tUri);
-                    double predictionMu = predictions.getMap().get(sUri).get(tUri);
+                    double goldStandardMu = goldStandard.referenceMappings.getConfidence(sUri, tUri);
+                    double predictionMu = predictions.getConfidence(sUri, tUri);
                     double minMu = (predictionMu < goldStandardMu)? predictionMu : goldStandardMu;
                     num += (minMu > 0) ? predictionMu : 0;
                     denum += predictionMu;

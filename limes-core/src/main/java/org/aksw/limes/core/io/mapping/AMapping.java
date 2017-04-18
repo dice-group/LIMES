@@ -58,7 +58,7 @@ public abstract class AMapping implements IMapping {
      * @param m, the input mapping
      * @return the best one-to-one mapping of m
      */
-    public AMapping getBestOneToOneMappings(AMapping m) {
+    public static AMapping getBestOneToOneMappings(AMapping m) {
         AMapping m2 = m.getBestOneToNMapping();
         m2 = m2.reverseSourceTarget();
         m2 = m2.getBestOneToNMapping();
