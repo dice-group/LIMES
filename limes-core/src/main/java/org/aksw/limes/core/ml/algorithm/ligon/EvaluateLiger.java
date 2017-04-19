@@ -52,6 +52,14 @@ import org.apache.log4j.Logger;
  * @author sherif
  * 
  */
+/**
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
+ */
+/**
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
+ */
 public class EvaluateLiger extends FuzzyWombatSimple{
     /**
      * 
@@ -70,6 +78,9 @@ public class EvaluateLiger extends FuzzyWombatSimple{
 
     /**
      * Computes a sample of the reference dataset for experiments
+     * @param reference dataset
+     * @param fraction of the reference dataset (sample size) 
+     * @return
      */
     public static AMapping sampleReferenceMap(AMapping reference, double fraction) {
         if(fraction == 1){
@@ -134,9 +145,8 @@ public class EvaluateLiger extends FuzzyWombatSimple{
     }
 
     /**
-     * Extract the source and target instances based on the input sample
-     * @param learnMap
-     * @return
+     * Extract the source and target training cache instances based on the input learnMap
+     * @param learnMap to be used for training caches filling
      * @author sherif
      */
     protected static void fillTrainingCaches(AMapping learnMap) {
@@ -163,10 +173,10 @@ public class EvaluateLiger extends FuzzyWombatSimple{
         }
     }
 
+    
     /**
-     * Extract the source and target instances based on the input sample
-     * @param trainMap
-     * @return
+     * Extract the source and target testing cache instances based on the input trainMap
+     * @param trainMap to be used for testing caches filling
      * @author sherif
      */
     protected static void fillTestingCaches(AMapping trainMap) {
@@ -196,9 +206,8 @@ public class EvaluateLiger extends FuzzyWombatSimple{
 
 
     /**
-     * Remove AAMapping entries with missing source or target instances
-     * @param map
-     * @return
+     * Remove AMapping entries with missing source or target instances
+     * @param map input map
      * @author sherif
      */
     protected static AMapping removeLinksWithNoInstances(AMapping map) {
@@ -214,6 +223,11 @@ public class EvaluateLiger extends FuzzyWombatSimple{
     }
 
 
+    /**
+     * @param d dataset used in evaluation
+     * @param posExFrac fraction of training data
+     * @throws UnsupportedMLImplementationException
+     */
     private static String evaluateFuzzyWombat(DataSets d, int posExFrac) throws UnsupportedMLImplementationException {
 
         resultStr +=  d +"\n" +
@@ -259,6 +273,10 @@ public class EvaluateLiger extends FuzzyWombatSimple{
         executeLinkSpecsForDataSet(d, mlResult.getLinkSpecification());
     }
 
+    /**
+     * @param d Dataset for cross validation
+     * @throws UnsupportedMLImplementationException
+     */
     private static void crossValidation10Fold(DataSets d)
             throws UnsupportedMLImplementationException {
         for(int s = 1 ; s <= 10 ; s +=1){
@@ -277,6 +295,10 @@ public class EvaluateLiger extends FuzzyWombatSimple{
         }
     }	
 
+    /**
+     * @param trainingSample mapping for training
+     * @throws UnsupportedMLImplementationException
+     */
     static MLResults trainFromSampleMapping(AMapping trainingSample) throws UnsupportedMLImplementationException{
         long start = System.currentTimeMillis();
         SupervisedMLAlgorithm fuzzyWombat = null;
@@ -307,6 +329,11 @@ public class EvaluateLiger extends FuzzyWombatSimple{
     }
 
 
+    /**
+     * @param d dataset 
+     * @param linkSpecification to be applied to the whole dataset d 
+     * @return
+     */
     static String executeLinkSpecsForDataSet(DataSets d, LinkSpecification linkSpecification){
         long start = System.currentTimeMillis();
         AMapping kbMap;
@@ -326,14 +353,29 @@ public class EvaluateLiger extends FuzzyWombatSimple{
         return resultStr;
     }
 
+    /**
+     * @param map result mapping
+     * @param ref reference mapping
+     * @return
+     */
     protected static double recall(AMapping map, AMapping ref){
         return new Recall().calculate(map, new GoldStandard(ref));
     }
 
+    /**
+     * @param map result mapping
+     * @param ref reference mapping
+     * @return
+     */
     protected static double fScore(AMapping map, AMapping ref){
         return new FMeasure().calculate(map, new GoldStandard(ref));
     }
 
+    /**
+     * @param map result mapping
+     * @param ref reference mapping
+     * @return
+     */
     protected static double precision(AMapping map, AMapping ref){
         return new Precision().calculate(map, new GoldStandard(ref));
     }
