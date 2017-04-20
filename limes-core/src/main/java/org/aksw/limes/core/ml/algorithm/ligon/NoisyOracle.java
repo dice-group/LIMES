@@ -7,10 +7,13 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 
 public class NoisyOracle {
 
-    AMapping oracleMap;
-    double tp, tn;
-    double estimatedTp, estimatedTn;
+    protected AMapping oracleMap;
+    protected double tp, tn;
+    protected double estimatedTp, estimatedTn;
     
+    
+
+
     NoisyOracle(){
         oracleMap = MappingFactory.createDefaultMapping();
         tp = 0.5d;
@@ -45,6 +48,53 @@ public class NoisyOracle {
                 + estimatedTn + "]";
     }
 
+    public AMapping getOracleMap() {
+        return oracleMap;
+    }
 
+
+    public void setOracleMap(AMapping oracleMap) {
+        this.oracleMap = oracleMap;
+    }
+
+
+    public double getTp() {
+        return tp;
+    }
+
+
+    public void setTp(double tp) {
+        this.tp = tp;
+    }
+
+
+    public double getTn() {
+        return tn;
+    }
+
+
+    public void setTn(double tn) {
+        this.tn = tn;
+    }
+
+
+    public double getEstimatedTp() {
+        return estimatedTp;
+    }
+
+
+    public void setEstimatedTp(double estimatedTp) {
+        this.estimatedTp = estimatedTp;
+    }
+
+
+    public double getEstimatedTn() {
+        return estimatedTn;
+    }
+
+
+    public void setEstimatedTn(double estimatedTn) {
+        this.estimatedTn = estimatedTn;
+    }
 
 }

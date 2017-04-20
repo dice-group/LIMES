@@ -125,7 +125,7 @@ public class LigonTest {
         NoisyOracle no3c = new NoisyOracle(refMap, 0.0, 0.0);
         List<NoisyOracle> noisyOracles = new ArrayList<>(Arrays.asList(no1a, no2a, no3a, no1b, no2b, no3b, no1c, no2c, no3c));
         
-        Ligon l = new Ligon(posTrainingMap, negTrainingMap, unkownTrainingMap, noisyOracles);
+        Ligon l = new Ligon(posTrainingMap, sc, tc, noisyOracles);
         System.out.println(l.getNoisyOracles());
 
     }

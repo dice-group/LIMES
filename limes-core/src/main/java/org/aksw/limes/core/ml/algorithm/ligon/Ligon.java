@@ -1,85 +1,117 @@
 package org.aksw.limes.core.ml.algorithm.ligon;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
+import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
+import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
+import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.ml.algorithm.FuzzyWombatSimple;
+import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Ligon {
+    private static double TAU = 0.0;
+
     static Logger logger = LoggerFactory.getLogger(Ligon.class);
 
-    double TAU = 1.0;
-    protected AMapping posMap, negMap, unknownMap; 
+    protected AMapping trainigExamplesMap; // with probabilities
+    protected AMapping posMap = MappingFactory.createDefaultMapping();     // with membership
+    protected AMapping negMap = MappingFactory.createDefaultMapping();     // with membership
+    
+
+    ACache sourceTrainCache;
+    ACache targetTrainCache;
 
     List<NoisyOracle> noisyOracles;
 
-    public Ligon(int nrOfOracles){
+
+    public Ligon(AMapping trainigExamplesMap, ACache sourceTrainCache, ACache targetTrainCache, List<NoisyOracle> noisyOracles) {
         super();
-        posMap = MappingFactory.createDefaultMapping();
-        negMap = MappingFactory.createDefaultMapping();
-        unknownMap = MappingFactory.createDefaultMapping();
-        noisyOracles = new ArrayList<>();
-    }
-
-
-
-    public Ligon(AMapping posMap, AMapping negMap,
-            AMapping unknownMap, List<NoisyOracle> noisyOracles) {
-        super();
-        this.posMap = posMap;
-        this.negMap = negMap;
-        this.unknownMap = unknownMap;
+        this.trainigExamplesMap = trainigExamplesMap;
+        this.sourceTrainCache = sourceTrainCache;
+        this.targetTrainCache = targetTrainCache;
         this.noisyOracles = noisyOracles;
-        EstimateOraclesTrust();
+        initPosNegTrainingExamples(trainigExamplesMap);
+        updateNoisyOraclesTrust(trainigExamplesMap);
     }
 
-
-    public void EstimateOraclesTrust(){
-        // Positive training data
-        for(NoisyOracle noisyOracle: noisyOracles){
-            int etp = 0;
-            for (String s : posMap.getMap().keySet()) {
-                for (String t : posMap.getMap().get(s).keySet()) {
-                    etp += (noisyOracle.predict(s, t)) ? 1 : 0 ;
-                }
-            }
-            noisyOracle.estimatedTp = etp / posMap.size();
-        }
-        // Negative training data
-        for(NoisyOracle noisyOracle: noisyOracles){
-            int etn = 0;
-            for (String s : negMap.getMap().keySet()) {
-                for (String t : negMap.getMap().get(s).keySet()) {
-                    etn += (!noisyOracle.predict(s, t)) ? 1 : 0 ;
-                }
-            }
-            noisyOracle.estimatedTp = etn / negMap.size();
+    private void updateNoisyOraclesTrust(AMapping trainigExamplesMap) {
+        for(NoisyOracle noisyOracle : noisyOracles){
+            noisyOracle.setEstimatedTp(estimateTp(noisyOracle, trainigExamplesMap));
+            noisyOracle.setEstimatedTn(estimateTn(noisyOracle, trainigExamplesMap));
         }
     }
 
-    public double estimateTp(AMapping map,NoisyOracle noisyOracle){
+    /**
+     * Initialize positive and negative training example
+     * Note that positive and negative training example mapping contain membership values not probability values
+     * 
+     * @param examplesMap (with probability values)
+     */
+    public void initPosNegTrainingExamples(AMapping examplesMap){
+        for (String s : examplesMap.getMap().keySet()) {
+            for (String t : examplesMap.getMap().get(s).keySet()) {
+                double p = examplesMap.getConfidence(s,t);
+                // convert probabilities to membership functions
+                if(p >= 0.5){
+                    posMap.add(s, t, 2.0 * p - 1.0);
+                }else{
+                    negMap.add(s, t, 1.0 - 2.0 * p);
+                }
+            }
+        }
+    }
+
+
+  
+
+    /**
+     * Estimate the TP of a given noisy oracle
+     * 
+     * @param noisyOracle
+     * @param map
+     * @return
+     */
+    public double estimateTp(NoisyOracle noisyOracle, AMapping map){
         double num =0.0d, denum =0.0d;
         for (String s : map.getMap().keySet()) {
             for (String t : map.getMap().get(s).keySet()) {
                 if(posMap.contains(s, t)){
-                    num += (noisyOracle.predict(s, t)) ? 1 : 0 ;
-                    denum += 2 * posMap.getConfidence(s, t) -1;
+                    double mu = posMap.getConfidence(s, t);
+                    num += (noisyOracle.predict(s, t)) ? mu : 0 ;
+                    denum +=  mu;
                 }
             }
         }
         return num/denum;
     }
-    
-    public double estimateTn(AMapping map,NoisyOracle noisyOracle){
+
+    /**
+     * Estimate the TN of a given noisy oracle
+     * 
+     * @param noisyOracle
+     * @param map
+     * @return
+     */
+    public double estimateTn(NoisyOracle noisyOracle, AMapping map){
         double num =0.0d, denum =0.0d;
         for (String s : map.getMap().keySet()) {
             for (String t : map.getMap().get(s).keySet()) {
                 if(negMap.contains(s, t)){
-                    num += (!noisyOracle.predict(s, t)) ? 1 : 0 ;
-                    denum += 1 - 2 * posMap.getConfidence(s, t);
+                    double mu = posMap.getConfidence(s, t);
+                    num += (!noisyOracle.predict(s, t)) ? mu : 0 ;
+                    denum += mu;
                 }
             }
         }
@@ -87,46 +119,64 @@ public class Ligon {
     }
 
 
-    public void updateTrainingData(AMapping nonlabeledMap){
-        for (String s : nonlabeledMap.getMap().keySet()) {
-            for (String t : nonlabeledMap.getMap().get(s).keySet()) {
+
+    /**
+     * Update positive and negative training example
+     * Note that positive and negative training example mapping contain membership values not probability values
+     * 
+     * @param examplesMap (with probability values)
+     */
+    public void updatePosNegTrainingExamples(AMapping examplesMap){
+        for (String s : examplesMap.getMap().keySet()) {
+            for (String t : examplesMap.getMap().get(s).keySet()) {
                 double pTrue = estimateTrue(s,t);
                 double pFalse = estimateFalse(s,t);
                 if(pTrue >= TAU * pFalse){
-                    posMap.add(s, t, 1.0);
+                    posMap.add(s, t, pTrue);
                 }else{
-                    negMap.add(s, t, 1.0);
+                    negMap.add(s, t, pFalse);
                 }
             }
         }
     }
 
 
+    /**
+     * Based on the noisy oracles answers, estimates the probability that the given (subject, object) pair being true  
+     * 
+     * @param subject
+     * @param object
+     * @return
+     */
     protected double estimateTrue(String subject, String object){
         double result = 1; 
         for(NoisyOracle noisyOracle: noisyOracles){
             if(noisyOracle.predict(subject, object)){
-                result *= 1 - (noisyOracle.predict(subject, object)? noisyOracle.estimatedTp: (1 - noisyOracle.estimatedTp));
+                result *= 1.0 - (noisyOracle.predict(subject, object)? noisyOracle.estimatedTp: (1.0 - noisyOracle.getEstimatedTp()));
             }
         }
         return 1 - result;
     }
 
 
+    /**
+     * Based on the noisy oracles answers, estimates the probability that the given (subject, object) pair being false
+     * 
+     * @param subject
+     * @param object
+     * @return
+     */
     protected double estimateFalse(String subject, String object){
         double result = 1; 
         for(NoisyOracle noisyOracle: noisyOracles){
             if(noisyOracle.predict(subject, object)){
-                result *= 1 - (!noisyOracle.predict(subject, object)? noisyOracle.estimatedTn: (1 - noisyOracle.estimatedTn));
+                result *= 1 - (!noisyOracle.predict(subject, object)? noisyOracle.estimatedTn: (1.0 - noisyOracle.getEstimatedTn()));
             }
         }
         return 1 - result;
     }
 
 
-    public double getTAU() {
-        return TAU;
-    }
 
 
 
@@ -161,13 +211,13 @@ public class Ligon {
 
 
     public AMapping getUnknownMap() {
-        return unknownMap;
+        return trainigExamplesMap;
     }
 
 
 
     public void setUnknownMap(AMapping unknownMap) {
-        this.unknownMap = unknownMap;
+        this.trainigExamplesMap = unknownMap;
     }
 
 
@@ -182,7 +232,57 @@ public class Ligon {
         this.noisyOracles = noisyOracles;
     }
 
-    public static void main(String args[]){
+    public void learn() {
+        String resultStr =  "itr\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
+        String resultStr2 =  "";
+        AMapping examples = trainigExamplesMap;
+        int intrCount = 10;
+        long start = System.currentTimeMillis();
+        
+        for(int i = 0; i < intrCount  ; i++){
+        
+            // 1. Train fuzzy WOMBAT 
+            FuzzyWombatSimple fuzzyWombat = new FuzzyWombatSimple(); 
+            fuzzyWombat.init(null, sourceTrainCache, targetTrainCache);
+            MLResults mlModel = fuzzyWombat.learn(examples);
+            AMapping learnedMap = fuzzyWombat.predict(sourceTrainCache, targetTrainCache, mlModel);
+//            learnedMap = AMapping.getBestOneToOneMappings(learnedMap);
+            LinkSpecification linkSpecification = mlModel.getLinkSpecification();
+            resultStr +=  (i + 1) + "\t" +
+                    new Precision().calculate(learnedMap, new GoldStandard(examples))+ "\t" + 
+                    new Recall().calculate(learnedMap, new GoldStandard(examples))   + "\t" + 
+                    new FMeasure().calculate(learnedMap, new GoldStandard(examples))   + "\t" +
+                    (System.currentTimeMillis() - start)            + "\t" +
+                    linkSpecification.toStringOneLine()                   + "\n" ;
+            for(NoisyOracle o : noisyOracles){
+                resultStr2 += "(" + o.tp + "-" + o.estimatedTp + ")(" + o.tn + "-" + o.estimatedTn + ")\t";
+            }
+            resultStr2 += "\n";
+
+            // 2. get most informative examples
+            AMapping mostInfPosMap = fuzzyWombat.findMostInformativePositiveExamples();
+            AMapping mostInfNegMap = fuzzyWombat.findMostInformativeNegativeExamples();
+
+            // 3. update training examples
+            examples = MappingOperations.union(examples,mostInfPosMap);
+            examples = MappingOperations.union(examples, mostInfNegMap);
+            updatePosNegTrainingExamples(examples);
+
+            // 4. update noisy oracle trust values
+            updateNoisyOraclesTrust(examples);
+        }
+        System.out.println("-------------- Fuzzy Wombat Results --------------" );
+        System.out.println(resultStr);
+        System.out.println("-------------- Noisy Oracle Trust --------------" );
+        System.out.println(resultStr2);
 
     }
+
+
+    void printNoisyOracles(){
+    
+    }
+
+
+
 }

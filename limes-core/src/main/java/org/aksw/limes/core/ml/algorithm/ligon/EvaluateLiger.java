@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
@@ -75,6 +76,7 @@ public class EvaluateLiger extends FuzzyWombatSimple{
     public static ACache targetTestCache = new HybridCache();
     public static AMapping reference = MappingFactory.createDefaultMapping();
     public static String resultStr = new String();
+
 
     /**
      * Computes a sample of the reference dataset for experiments
@@ -173,7 +175,7 @@ public class EvaluateLiger extends FuzzyWombatSimple{
         }
     }
 
-    
+
     /**
      * Extract the source and target testing cache instances based on the input trainMap
      * @param trainMap to be used for testing caches filling
@@ -263,7 +265,7 @@ public class EvaluateLiger extends FuzzyWombatSimple{
         fillTrainingCaches(trainingMap);
         fillTestingCaches(testMap);
         trainingMap.getReversedMap();
-        
+
         // 1. Learning phase
         logger.info("Learning using " + trainingMap.size() + " examples.");
         resultStr += posExFrac + "%\t" ;
@@ -389,32 +391,47 @@ public class EvaluateLiger extends FuzzyWombatSimple{
      * @author sherif
      */
     public static void main(String[] args) {
-        //
-        //        String overAllResults = new String();
-        //        int repeatNr = Integer.parseInt(args[3]);
-        //        for(int repeat = 0 ; repeat < repeatNr ; repeat++ ){
-        //            
-        //            String bestResult = new String();
-        //            resultStr = new String();
-        try{
-            //            evaluateFuzzyWombat(toDataset(args[0]), Integer.parseInt(args[2]));
-            evaluateFuzzyWombat(toDataset("Person1"), 30);
-        }catch(Exception e){
-            System.err.println(e);
-            //            repeat--;
+        // evaluation parameters
+        String d = "PERSON1";
+        double posExFrac = 0.30;
+
+        // get training data
+        resultStr +=  d +"\nSample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
+        EvaluationData data = DataSetChooser.getData(d);
+        source = data.getSourceCache();
+        target = data.getTargetCache();
+        reference = data.getReferenceMapping();
+
+        // remove error mappings (if any)
+        int refMapSize = reference.size();
+        reference = removeLinksWithNoInstances(reference);
+
+        logger.info("Number of removed error mappings = " + (refMapSize - reference.size()));
+        AMapping trainingMap = sampleReferenceMap(reference, posExFrac);
+        fillTrainingCaches(trainingMap);
+        trainingMap.getReversedMap();
+
+        // create noisy oracles with normal distribution
+        int noisyOracleCount = 10 ;
+        List<NoisyOracle> noisyOracles = new ArrayList<>();
+        Random pR = new Random();
+        Random nR = new Random();
+        double pG,nG;
+        for(int i = 0 ; i < noisyOracleCount ; i++ ){
+            do{
+                pG = pR.nextGaussian() * 0.33 + 1.0;
+                nG = nR.nextGaussian() * 0.33 + 1.0;
+            }while(pG <0  || pG > 1 || nG <0  || nG > 1);
+            noisyOracles.add(new NoisyOracle(trainingMap, pG, nG));
         }
-        //            bestResult = resultStr;
-        //            System.out.println("----- BEST RESULT SO FAR-----");
-        //            System.out.println(bestResult);
-        //            overAllResults += bestResult;
-        //            System.out.println("----- RESULT SO FAR (" + repeat +") -----");
-        //            System.out.println(overAllResults);
-        //        }
-        //        System.out.println("----- OVERALL RESULT -----");
-        //        System.out.println(overAllResults);
+
+        // initialize ligon
+        Ligon ligon = new Ligon(trainingMap, sourceTrainCache, targetTrainCache, noisyOracles);
+        ligon.learn();
+
 
     }
-    
+
 
 
 

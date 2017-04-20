@@ -17,7 +17,6 @@ import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
@@ -42,23 +41,25 @@ public class FuzzyWombatSimple extends AWombat {
     protected List<ExtendedClassifier> classifiers = null;
     protected int iterationNr = 0;
 
+    AMapping informativeExamples = MappingFactory.createDefaultMapping();
+
 
 
     /**
      * WombatSimple constructor.
      */
-    protected FuzzyWombatSimple() {
+    public FuzzyWombatSimple() {
         super();
         isFuzzy = true;
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return ALGORITHM_NAME;
     }
 
     @Override
-    protected void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
+    public void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
         isFuzzy = true;
         super.init(lp, sourceCache, targetCache);
         sourceUris = sourceCache.getAllUris();
@@ -66,7 +67,7 @@ public class FuzzyWombatSimple extends AWombat {
     }
 
     @Override
-    protected MLResults learn(AMapping trainingData) {
+    public MLResults learn(AMapping trainingData) {
         this.trainingData = trainingData;
         return learn();
     }
@@ -115,7 +116,7 @@ public class FuzzyWombatSimple extends AWombat {
     }
 
     @Override
-    protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
+    public AMapping predict(ACache source, ACache target, MLResults mlModel) {
         LinkSpecification ls = mlModel.getLinkSpecification();
         return getPredictions(ls, source, target);
     }
@@ -397,54 +398,60 @@ public class FuzzyWombatSimple extends AWombat {
 
 
     public AMapping FindInformativeExamples(){
-        AMapping exampleMap = MappingFactory.createDefaultMapping();
-        double sumLeafWeight = 0d;
-        for(Tree<RefinementNode> leaf : refinementTreeRoot.getLeaves()){
-            double leafWeight = leaf.getValue().getFMeasure();
-            sumLeafWeight += leafWeight;  
-            HashMap<String, HashMap<String, Double>> leafMap = leaf.getValue().getMapping().getMap();
-            for(String s : leafMap.keySet()){
-                for(String t : leafMap.get(s).keySet()){
-                    if (exampleMap.contains(s, t)) {
-                        exampleMap.getMap().get(s).put(t, exampleMap.getConfidence(s, t) + leafWeight);
-                    }else{
-                        exampleMap.add(s, t,  leafWeight);
+        if(informativeExamples.size() > 0){
+            return informativeExamples;
+        }else{
+            AMapping exampleMap = MappingFactory.createDefaultMapping();
+            double sumLeafWeight = 0d;
+            for(Tree<RefinementNode> leaf : refinementTreeRoot.getLeaves()){
+                double leafWeight = leaf.getValue().getFMeasure();
+                sumLeafWeight += leafWeight;  
+                HashMap<String, HashMap<String, Double>> leafMap = leaf.getValue().getMapping().getMap();
+                for(String s : leafMap.keySet()){
+                    for(String t : leafMap.get(s).keySet()){
+                        if (exampleMap.contains(s, t)) {
+                            exampleMap.getMap().get(s).put(t, exampleMap.getConfidence(s, t) + leafWeight);
+                        }else{
+                            exampleMap.add(s, t,  leafWeight);
+                        }
                     }
                 }
             }
-        }
-        AMapping result = MappingFactory.createDefaultMapping();
-        for(String s : result.getMap().keySet()){
-            for(String t : result.getMap().get(s).keySet()){
-                result.add(s, t, result.getMap().get(s).get(t)/sumLeafWeight);
+            AMapping informativeExamples = MappingFactory.createDefaultMapping();
+            for(String s : exampleMap.getMap().keySet()){
+                for(String t : exampleMap.getMap().get(s).keySet()){
+                    informativeExamples.add(s, t, exampleMap.getMap().get(s).get(t)/sumLeafWeight);
+                }
             }
+            return informativeExamples;
         }
-        return result;
     }
-    
-    public AMapping findMostInformativeExamples(AMapping infExMap){
+
+    public AMapping findMostInformativePositiveExamples(){
+        AMapping infExMap = FindInformativeExamples();
         AMapping result = MappingFactory.createDefaultMapping();
         for(String s : infExMap.getMap().keySet()){
             for(String t : infExMap.getMap().get(s).keySet()){
                 double c = infExMap.getConfidence(s, t);
                 if(c > 0.5d){
-                  result.add(s, t, c);
+                    result.add(s, t, c);
                 }
-                
+
             }
         }
         return result;
     }
-    
-    public AMapping findLeastInformativeExamples(AMapping infExMap){
+
+    public AMapping findMostInformativeNegativeExamples(){
+        AMapping infExMap = FindInformativeExamples();
         AMapping result = MappingFactory.createDefaultMapping();
         for(String s : infExMap.getMap().keySet()){
             for(String t : infExMap.getMap().get(s).keySet()){
                 double c = infExMap.getConfidence(s, t);
                 if(c < 0.5d){
-                  result.add(s, t, c);
+                    result.add(s, t, c); 
                 }
-                
+
             }
         }
         return result;
@@ -452,19 +459,19 @@ public class FuzzyWombatSimple extends AWombat {
 
     public static void main(String []args){
         int epoch= 0;
-        
+
         EvaluationData evalData = DataSetChooser.getData(DataSets.PERSON1);
         ACache sourceCache = evalData.getSourceCache();
         ACache targetCache = evalData.getTargetCache();
-        
+
         AMapping referenceMapping = evalData.getReferenceMapping();
         AMapping trainingMapping = MappingFactory.createDefaultMapping();
         AMapping testMapping = MappingFactory.createDefaultMapping();
         int trainingMappingSize = (int) (referenceMapping.getSize() * TRAINING_RATIO);
-        
-        
 
-        
+
+
+
 
     }
 

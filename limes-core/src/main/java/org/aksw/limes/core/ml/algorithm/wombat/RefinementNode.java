@@ -37,9 +37,9 @@ public class RefinementNode implements Comparable<RefinementNode> {
 
     /**
      * Constructor
-     * @param map
-     * @param metricExpression
-     * @param fMeasure
+     * @param map to include in the RefinementNode
+     * @param metricExpression to include in the RefinementNode
+     * @param fMeasure to include in the RefinementNode
      *
      * @author sherif
      */

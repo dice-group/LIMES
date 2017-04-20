@@ -3,6 +3,8 @@ package org.aksw.limes.core.measures.mapper;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 /**
+ * TODO: move to the mapping package
+ *  
  * Implements the mapping operations abstract class.
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)

@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * TODO FIXXXX
  *
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version 1.1.2
@@ -24,21 +23,19 @@ public class FuzzyRecall extends AFuzzeyMeasures implements IQualitativeMeasure 
     @Override
     public double calculate(AMapping predictions, GoldStandard goldStandard) {
 
-        double num = 0.0d;
-        double denum   = 0.0d;
+        double num = 0d;
+        double denum   = 0d;
 
         for (String sUri : predictions.getMap().keySet()){
             for (String tUri : predictions.getMap().get(sUri).keySet()){
-                if(goldStandard.referenceMappings.contains(sUri, tUri)){
-                    double goldStandardMu = goldStandard.referenceMappings.getConfidence(sUri, tUri);
-                    double predictionMu = predictions.getConfidence(sUri, tUri);
-                    double minMu = (predictionMu < goldStandardMu)? predictionMu : goldStandardMu;
-                    num += (minMu > 0) ? predictionMu : 0;
-                    denum += predictionMu;
-                }
+                    double xInYMu = goldStandard.referenceMappings.getConfidence(sUri, tUri);
+                    double xInXMu = predictions.getConfidence(sUri, tUri);
+                    double minMu = (xInXMu < xInYMu)? xInXMu : xInYMu;
+                    num += (minMu > 0) ? xInXMu : 0;
+                    denum += xInXMu;
             }
         }
-        return num / denum;
+        return (num == 0 && denum == 0) ? 0 : (num / denum);
     }
 
 }
