@@ -33,6 +33,7 @@ import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingMath;
+import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.FuzzyWombatSimple;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
@@ -261,7 +262,7 @@ public class EvaluateLiger extends FuzzyWombatSimple{
         logger.info("Running Fuzzy Wombat for the " + d + " dataset with positive example size = " +  posExFrac + "%");
 
         AMapping trainingMap = sampleReferenceMap(reference, posExFrac/100f);
-        AMapping testMap  = MappingMath.removeSubMap(reference, trainingMap);               
+        AMapping testMap  = MappingOperations.difference(reference, trainingMap);               
         fillTrainingCaches(trainingMap);
         fillTestingCaches(testMap);
         trainingMap.getReversedMap();
@@ -284,7 +285,7 @@ public class EvaluateLiger extends FuzzyWombatSimple{
         for(int s = 1 ; s <= 10 ; s +=1){
             logger.info("Running " + " Fuzzy Wombat for the " + d + " dataset with positive example size = " +  s*10 + "%");
             AMapping trainingMap = sampleReferenceMap(reference, s/10f);
-            AMapping testMap  = MappingMath.removeSubMap(reference, trainingMap);               
+            AMapping testMap  = MappingOperations.difference(reference, trainingMap);               
             fillTrainingCaches(trainingMap);
             fillTestingCaches(testMap);
             trainingMap.getReversedMap();
