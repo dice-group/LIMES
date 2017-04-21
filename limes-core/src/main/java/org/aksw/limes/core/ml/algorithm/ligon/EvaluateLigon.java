@@ -60,11 +60,11 @@ import org.apache.log4j.Logger;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  *
  */
-public class EvaluateLiger extends FuzzyWombatSimple{
+public class EvaluateLigon extends FuzzyWombatSimple{
     /**
      * 
      */
-    private static final Logger logger = Logger.getLogger(EvaluateLiger.class);
+    private static final Logger logger = Logger.getLogger(EvaluateLigon.class);
     protected static final double MIN_COVERAGE = 0.6;
 
     public static ACache source;
@@ -418,8 +418,8 @@ public class EvaluateLiger extends FuzzyWombatSimple{
         double pG,nG;
         for(int i = 0 ; i < noisyOracleCount ; i++ ){
             do{
-                pG = pR.nextGaussian() * 0.33 + 1.0;
-                nG = nR.nextGaussian() * 0.33 + 1.0;
+                pG = 0.75+(pR.nextGaussian() + 1.0)/2.0;
+                nG = 0.75+(nR.nextGaussian() + 1.0)/2.0;
             }while(pG <0  || pG > 1 || nG <0  || nG > 1);
             noisyOracles.add(new NoisyOracle(trainingMap, pG, nG));
         }

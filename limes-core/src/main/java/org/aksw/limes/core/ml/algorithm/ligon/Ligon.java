@@ -94,7 +94,7 @@ public class Ligon {
                 }
             }
         }
-        return num/denum;
+        return (num == 0.0 && denum == 0.0) ? 0.0 : num / denum;
     }
 
     /**
@@ -115,7 +115,7 @@ public class Ligon {
                 }
             }
         }
-        return num/denum;
+        return (num == 0.0 && denum == 0.0) ? 0.0 : num / denum;
     }
 
 
@@ -235,8 +235,10 @@ public class Ligon {
     public void learn() {
         String resultStr =  "itr\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
         String resultStr2 =  "";
+        String resultStr3 =  "";
+        
         AMapping examples = trainigExamplesMap;
-        int intrCount = 10;
+        int intrCount = 50;
         long start = System.currentTimeMillis();
         
         for(int i = 0; i < intrCount  ; i++){
@@ -249,15 +251,22 @@ public class Ligon {
 //            learnedMap = AMapping.getBestOneToOneMappings(learnedMap);
             LinkSpecification linkSpecification = mlModel.getLinkSpecification();
             resultStr +=  (i + 1) + "\t" +
-                    new Precision().calculate(learnedMap, new GoldStandard(examples))+ "\t" + 
-                    new Recall().calculate(learnedMap, new GoldStandard(examples))   + "\t" + 
-                    new FMeasure().calculate(learnedMap, new GoldStandard(examples))   + "\t" +
+                    String.format("%.2f", new Precision().calculate(learnedMap, new GoldStandard(examples)))+ "\t" + 
+                    String.format("%.2f",new Recall().calculate(learnedMap, new GoldStandard(examples)))   + "\t" + 
+                    String.format("%.2f",new FMeasure().calculate(learnedMap, new GoldStandard(examples)))   + "\t" +
                     (System.currentTimeMillis() - start)            + "\t" +
                     linkSpecification.toStringOneLine()                   + "\n" ;
+            
+            resultStr3 += (i + 1) + "\t(" + 
+                    String.format("%.2f", computeTpMSE()) + "|" + 
+                    String.format("%.2f", computeTnMSE()) +")\n";
+            
             for(NoisyOracle o : noisyOracles){
-                resultStr2 += "(" + o.tp + "-" + o.estimatedTp + ")(" + o.tn + "-" + o.estimatedTn + ")\t";
+                resultStr2 += "(" + String.format("%.2f",o.tp) + "-" + String.format("%.2f",o.estimatedTp) + ")(" 
+                        + String.format("%.2f",o.tn) + "-" + String.format("%.2f",o.estimatedTn) + ")\t";
             }
             resultStr2 += "\n";
+            
 
             // 2. get most informative examples
             AMapping mostInfPosMap = fuzzyWombat.findMostInformativePositiveExamples();
@@ -275,9 +284,38 @@ public class Ligon {
         System.out.println(resultStr);
         System.out.println("-------------- Noisy Oracle Trust --------------" );
         System.out.println(resultStr2);
+        System.out.println("-------------- MSE (TP|TN) --------------" );
+        System.out.println(resultStr3);
 
     }
 
+    public double computeTnMSE(){
+        double mse = 0.0;
+        double mean = 0.0;
+        for(NoisyOracle o : noisyOracles){
+            mean += Math.abs(o.tn - o.estimatedTn);
+        }
+        mean /= (double) noisyOracles.size();
+        for(NoisyOracle o : noisyOracles){
+            double tnDiff = mean - (o.tn - o.estimatedTn);
+            mse += tnDiff * tnDiff;
+        }
+        return mse / (double) noisyOracles.size();
+    }
+    
+    public double computeTpMSE(){
+        double mse = 0.0;
+        double mean = 0.0;
+        for(NoisyOracle o : noisyOracles){
+            mean += Math.abs(o.tp - o.estimatedTp);
+        }
+        mean /= (double) noisyOracles.size();
+        for(NoisyOracle o : noisyOracles){
+            double tpDiff = mean - (o.tp - o.estimatedTp);
+            mse += tpDiff * tpDiff;
+        }
+        return mse / (double) noisyOracles.size();
+    }
 
     void printNoisyOracles(){
     
