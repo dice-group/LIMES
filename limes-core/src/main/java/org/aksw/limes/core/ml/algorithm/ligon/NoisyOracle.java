@@ -34,9 +34,9 @@ public class NoisyOracle {
         boolean inOracle = oracleMap.contains(subject, object);
         Random random = new Random();
         if(inOracle){
-            return (random.nextDouble() >= tp) ? true : false;
+            return (random.nextDouble() <= tp) ? true : false;
         }else{
-            return (random.nextDouble() >= tn) ? false: true ;
+            return (random.nextDouble() <= tn) ? false: true ;
         }
     }
 

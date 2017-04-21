@@ -80,13 +80,13 @@ public class Ligon {
      * Estimate the TP of a given noisy oracle
      * 
      * @param noisyOracle
-     * @param map
+     * @param examplesMap
      * @return
      */
-    public double estimateTp(NoisyOracle noisyOracle, AMapping map){
+    public double estimateTp(NoisyOracle noisyOracle, AMapping examplesMap){
         double num =0.0d, denum =0.0d;
-        for (String s : map.getMap().keySet()) {
-            for (String t : map.getMap().get(s).keySet()) {
+        for (String s : examplesMap.getMap().keySet()) {
+            for (String t : examplesMap.getMap().get(s).keySet()) {
                 if(posMap.contains(s, t)){
                     double mu = posMap.getConfidence(s, t);
                     num += (noisyOracle.predict(s, t)) ? mu : 0 ;
@@ -101,13 +101,13 @@ public class Ligon {
      * Estimate the TN of a given noisy oracle
      * 
      * @param noisyOracle
-     * @param map
+     * @param examplesMap
      * @return
      */
-    public double estimateTn(NoisyOracle noisyOracle, AMapping map){
+    public double estimateTn(NoisyOracle noisyOracle, AMapping examplesMap){
         double num =0.0d, denum =0.0d;
-        for (String s : map.getMap().keySet()) {
-            for (String t : map.getMap().get(s).keySet()) {
+        for (String s : examplesMap.getMap().keySet()) {
+            for (String t : examplesMap.getMap().get(s).keySet()) {
                 if(negMap.contains(s, t)){
                     double mu = posMap.getConfidence(s, t);
                     num += (!noisyOracle.predict(s, t)) ? mu : 0 ;
@@ -238,7 +238,7 @@ public class Ligon {
         String resultStr3 =  "";
         
         AMapping examples = trainigExamplesMap;
-        int intrCount = 50;
+        int intrCount = 10;
         long start = System.currentTimeMillis();
         
         for(int i = 0; i < intrCount  ; i++){

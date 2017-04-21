@@ -392,7 +392,7 @@ public class EvaluateLigon extends FuzzyWombatSimple{
     public static void main(String[] args) {
         // evaluation parameters
         String d = "PERSON1";
-        double posExFrac = 0.30;
+        double posExFrac = 0.01;
 
         // get training data
         resultStr +=  d +"\nSample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
@@ -400,6 +400,7 @@ public class EvaluateLigon extends FuzzyWombatSimple{
         source = data.getSourceCache();
         target = data.getTargetCache();
         reference = data.getReferenceMapping();
+       
 
         // remove error mappings (if any)
         int refMapSize = reference.size();
@@ -407,6 +408,7 @@ public class EvaluateLigon extends FuzzyWombatSimple{
 
         logger.info("Number of removed error mappings = " + (refMapSize - reference.size()));
         AMapping trainingMap = sampleReferenceMap(reference, posExFrac);
+        System.out.println("trainingMap size: " + trainingMap.size());
         fillTrainingCaches(trainingMap);
         trainingMap.getReversedMap();
 
