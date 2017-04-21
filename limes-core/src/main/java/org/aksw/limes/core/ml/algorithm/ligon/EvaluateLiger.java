@@ -6,7 +6,6 @@ package org.aksw.limes.core.ml.algorithm.ligon;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -32,7 +31,6 @@ import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingMath;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.FuzzyWombatSimple;
