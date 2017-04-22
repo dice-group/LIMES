@@ -221,7 +221,7 @@ public class ExpressionProblem extends GPProblem {
         nodes.add(new StringMeasure(MeasureFactory.LEVENSHTEIN, config, String.class, 1, true));
         nodes.add(new StringMeasure(MeasureFactory.OVERLAP, config, String.class, 1, true));
         nodes.add(new StringMeasure(MeasureFactory.QGRAMS, config, String.class, 1, true));
-        nodes.add(new StringMeasure(MeasureFactory.EXACTMATCH, config, String.class, 1, true));
+//        nodes.add(new StringMeasure(MeasureFactory.EXACTMATCH, config, String.class, 1, true));
         return nodes;
     }
 
