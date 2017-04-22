@@ -79,7 +79,11 @@ public class EuclidTest extends MLAlgorithmTest{
 			AMapping mapping = unsupEuclid.predict(sc, tc, result);
 			logger.info(mapping);
 			logger.info("result:"+result.getMapping().size()+" predict: "+mapping.size());
-//			assert(result.getMapping().size() == mapping.size());
+			if(unsupEuclid.getName().equals(MeshEuclid.ALGORITHM_NAME)) {
+				logger.error("Mesh Euclids predict() method doesn't work properly! Skipping test.");
+			}
+			else
+				assert(result.getMapping().size() == mapping.size());
 			for(String s : mapping.getMap().keySet()) {
 				for(String t : mapping.getMap().get(s).keySet()) {
 					assert(result.getMapping().contains(s, t));
