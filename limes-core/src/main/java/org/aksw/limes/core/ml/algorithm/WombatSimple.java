@@ -111,22 +111,24 @@ public class WombatSimple extends AWombat {
     @Override
     protected AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
         List<RefinementNode> bestNodes = getBestKNodes(refinementTreeRoot, activeLearningRate);
-        AMapping intersectionMapping = MappingFactory.createDefaultMapping();
-        AMapping unionMapping = MappingFactory.createDefaultMapping();
+        AMapping intersectionMapping = bestNodes.get(0).getMapping();
+        AMapping unionMapping = bestNodes.get(0).getMapping();
 
-        for(RefinementNode sn : bestNodes){
-            intersectionMapping = MappingOperations.intersection(intersectionMapping, sn.getMapping());
-            unionMapping = MappingOperations.union(unionMapping, sn.getMapping());
+        for(int index = 1 ; index < bestNodes.size() ; index++){
+            AMapping bestNodeMapping = bestNodes.get(index).getMapping();
+            intersectionMapping = MappingOperations.intersection(intersectionMapping, bestNodeMapping);
+            unionMapping = MappingOperations.union(unionMapping, bestNodeMapping);
         }
         AMapping posEntropyMapping = MappingOperations.difference(unionMapping, intersectionMapping);
 
         TreeSet<LinkEntropy> linkEntropy = new TreeSet<>();
-        int entropyPos = 0, entropyNeg = 0;
+        
         for(String s : posEntropyMapping.getMap().keySet()){
+            int entropyPos = 0, entropyNeg = 0;
             for(String t : posEntropyMapping.getMap().get(s).keySet()){
                 // compute Entropy(s,t)
-                for(RefinementNode sn : bestNodes){
-                    if(sn.getMapping().contains(s, t)){
+                for(RefinementNode bestNode : bestNodes){
+                    if(bestNode.getMapping().contains(s, t)){
                         entropyPos++;
                     }else{
                         entropyNeg++;

@@ -9,6 +9,9 @@ import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.fuzzy.FuzzyFMeasure;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.fuzzy.FuzzyPrecision;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.fuzzy.FuzzyRecall;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -232,8 +235,9 @@ public class Ligon {
         this.noisyOracles = noisyOracles;
     }
 
-    public void learn() {
-        String resultStr =  "itr\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
+    public MLResults learn() {
+        MLResults mlModel = null;
+        String resultStr =  "itr\tfP\tfR\tfF\tT\tMetricExpr\tP\tR\tF\n";
         String resultStr2 =  "";
         String resultStr3 =  "";
         
@@ -246,16 +250,19 @@ public class Ligon {
             // 1. Train fuzzy WOMBAT 
             FuzzyWombatSimple fuzzyWombat = new FuzzyWombatSimple(); 
             fuzzyWombat.init(null, sourceTrainCache, targetTrainCache);
-            MLResults mlModel = fuzzyWombat.learn(examples);
+            mlModel = fuzzyWombat.learn(examples);
             AMapping learnedMap = fuzzyWombat.predict(sourceTrainCache, targetTrainCache, mlModel);
 //            learnedMap = AMapping.getBestOneToOneMappings(learnedMap);
             LinkSpecification linkSpecification = mlModel.getLinkSpecification();
             resultStr +=  (i + 1) + "\t" +
+                    String.format("%.2f", new FuzzyPrecision().calculate(learnedMap, new GoldStandard(examples)))+ "\t" + 
+                    String.format("%.2f",new FuzzyRecall().calculate(learnedMap, new GoldStandard(examples)))   + "\t" + 
+                    String.format("%.2f",new FuzzyFMeasure().calculate(learnedMap, new GoldStandard(examples)))   + "\t" +
+                    (System.currentTimeMillis() - start)            + "\t" +
+                    linkSpecification.toStringOneLine()                   + "\t" +
                     String.format("%.2f", new Precision().calculate(learnedMap, new GoldStandard(examples)))+ "\t" + 
                     String.format("%.2f",new Recall().calculate(learnedMap, new GoldStandard(examples)))   + "\t" + 
-                    String.format("%.2f",new FMeasure().calculate(learnedMap, new GoldStandard(examples)))   + "\t" +
-                    (System.currentTimeMillis() - start)            + "\t" +
-                    linkSpecification.toStringOneLine()                   + "\n" ;
+                    String.format("%.2f",new FMeasure().calculate(learnedMap, new GoldStandard(examples)))   + "\n" ;
             
             resultStr3 += (i + 1) + "\t(" + 
                     String.format("%.2f", computeTpMSE()) + "|" + 
@@ -286,7 +293,8 @@ public class Ligon {
         System.out.println(resultStr2);
         System.out.println("-------------- MSE (TP|TN) --------------" );
         System.out.println(resultStr3);
-
+        
+        return mlModel;
     }
 
     public double computeTnMSE(){

@@ -78,7 +78,7 @@ public class EvaluateLigon extends FuzzyWombatSimple{
 
 
     /**
-     * Computes a sample of the reference dataset for experiments
+     * Computes a sample of the reference dataset with size equal to the the given fraction of the reference dataset
      * @param reference dataset
      * @param fraction of the reference dataset (sample size) 
      * @return
@@ -87,18 +87,27 @@ public class EvaluateLigon extends FuzzyWombatSimple{
         if(fraction == 1){
             return reference;
         }
-        int mapSize = reference.getMap().keySet().size();
         //		int mapSize = reference.size();
         if (fraction > 1) {
             fraction = 1 / fraction;
         }
-        int size = (int) (mapSize * fraction);
+        int size = (int) (reference.getMap().keySet().size() * fraction);
+        return sampleReferenceMap(reference, size);
+    }
+
+    /**
+     * Computes a sample of the reference dataset with the given size
+     * @param reference
+     * @param size
+     * @return
+     */
+    public static AMapping sampleReferenceMap(AMapping reference, int size) {
         Set<Integer> index = new HashSet<>();
         //get random indexes
         for (int i = 0; i < size; i++) {
             int number;
             do {
-                number = (int) (mapSize * Math.random());
+                number = (int) (reference.getMap().keySet().size() * Math.random());
             } while (index.contains(number));
             index.add(number);
         } 
@@ -391,8 +400,8 @@ public class EvaluateLigon extends FuzzyWombatSimple{
      */
     public static void main(String[] args) {
         // evaluation parameters
-        String d = "PERSON1";
-        double posExFrac = 0.01;
+        String d = "Person1";
+        //        double posExFrac = 0.01;
 
         // get training data
         resultStr +=  d +"\nSample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
@@ -400,14 +409,30 @@ public class EvaluateLigon extends FuzzyWombatSimple{
         source = data.getSourceCache();
         target = data.getTargetCache();
         reference = data.getReferenceMapping();
-       
+
 
         // remove error mappings (if any)
         int refMapSize = reference.size();
         reference = removeLinksWithNoInstances(reference);
 
         logger.info("Number of removed error mappings = " + (refMapSize - reference.size()));
-        AMapping trainingMap = sampleReferenceMap(reference, posExFrac);
+
+        // training examples
+        //        for(int posNegExSize = 10; posNegExSize < 100 ; posNegExSize += 10){
+        int posNegExSize = 100;
+        System.out.println();
+        AMapping posTrainingMap = sampleReferenceMap(reference, posNegExSize);
+        AMapping negTrainingMap = generateNegativeExamples(posTrainingMap, posNegExSize);
+        AMapping trainingMap = MappingOperations.union(posTrainingMap, negTrainingMap);
+        //        AMapping trainingMap = posTrainingMap;
+        //        for (String key : negTrainingMap.getMap().keySet()) {
+        //            for (String value : negTrainingMap.getMap().get(key).keySet()) {
+        //                trainingMap.add(key, value, 0.0);
+        //            }
+        //        }
+
+
+
         System.out.println("trainingMap size: " + trainingMap.size());
         fillTrainingCaches(trainingMap);
         trainingMap.getReversedMap();
@@ -420,20 +445,42 @@ public class EvaluateLigon extends FuzzyWombatSimple{
         double pG,nG;
         for(int i = 0 ; i < noisyOracleCount ; i++ ){
             do{
-                pG = 0.75+(pR.nextGaussian() + 1.0)/2.0;
-                nG = 0.75+(nR.nextGaussian() + 1.0)/2.0;
+                pG = 0.75 + (pR.nextGaussian() + 1.0) / 2.0;
+                nG = 0.75 + (nR.nextGaussian() + 1.0) / 2.0;
             }while(pG <0  || pG > 1 || nG <0  || nG > 1);
             noisyOracles.add(new NoisyOracle(trainingMap, pG, nG));
         }
 
         // initialize ligon
         Ligon ligon = new Ligon(trainingMap, sourceTrainCache, targetTrainCache, noisyOracles);
-        ligon.learn();
-
-
+        MLResults mlResult = ligon.learn();
+        System.out.println("-------------- F-measure for the whole dataset --------------" );
+        System.out.println(executeLinkSpecsForDataSet(toDataset(d), mlResult.getLinkSpecification()));
+        
+        //        }
     }
 
+    public static AMapping generateNegativeExamples(AMapping posExamplesMapping, int size){
+        AMapping negativeExampleMapping = MappingFactory.createDefaultMapping();
+        int i = 0;
+        List<String> sourceUris = new ArrayList<>(posExamplesMapping.getMap().keySet());
+        List<String> targetUris = new ArrayList<>();
+        for(String s : posExamplesMapping.getMap().keySet()){
+            targetUris.addAll(posExamplesMapping.getMap().get(s).keySet());
+        }
+        Random random = new Random();
+        do{
+            String randomSourceUri, randomTargetUri;
 
+            do{
+                randomSourceUri = sourceUris.get(random.nextInt(sourceUris.size()));
+                randomTargetUri = targetUris.get(random.nextInt(targetUris.size()));
+            }while(posExamplesMapping.contains(randomSourceUri, randomTargetUri));
+            negativeExampleMapping.add(randomSourceUri, randomTargetUri, 0.0);
+            i++;
+        }while(i < size);
+        return negativeExampleMapping;
+    }
 
 
 

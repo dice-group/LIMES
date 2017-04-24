@@ -31,10 +31,10 @@ public class FuzzyFMeasure extends AFuzzeyMeasures implements IQualitativeMeasur
         double p = precision(predictions, goldStandard);
         double r = recall(predictions, goldStandard);
 
-        if (p + r > 0d)
-            return 2 * p * r / (p + r);
+        if (p + r > 0.0)
+            return 2.0 * p * r / (p + r);
         else
-            return 0d;
+            return 0.0;
 
     }
 
