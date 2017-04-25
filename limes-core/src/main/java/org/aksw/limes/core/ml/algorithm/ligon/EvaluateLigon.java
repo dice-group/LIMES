@@ -355,11 +355,10 @@ public class EvaluateLigon extends FuzzyWombatSimple{
         assert engine != null;
         AMapping resultMap = engine.execute(rwLs, planner);
         kbMap = resultMap.getSubMap(linkSpecification.getThreshold());
-        resultStr += precision(kbMap, reference)    + "\t" + 
+        resultStr = precision(kbMap, reference)    + "\t" + 
                 recall(kbMap, reference)        + "\t" + 
                 fScore(kbMap, reference)        + "\t" +
                 (System.currentTimeMillis() - start)        + "\n" ;
-        System.out.println(d + " Results so far:\n" + resultStr);
         return resultStr;
     }
 
@@ -400,8 +399,7 @@ public class EvaluateLigon extends FuzzyWombatSimple{
      */
     public static void main(String[] args) {
         // evaluation parameters
-        String d = "Person1";
-        //        double posExFrac = 0.01;
+        String d = "person1";
 
         // get training data
         resultStr +=  d +"\nSample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
@@ -419,7 +417,7 @@ public class EvaluateLigon extends FuzzyWombatSimple{
 
         // training examples
         //        for(int posNegExSize = 10; posNegExSize < 100 ; posNegExSize += 10){
-        int posNegExSize = 100;
+        int posNegExSize = 10;
         System.out.println();
         AMapping posTrainingMap = sampleReferenceMap(reference, posNegExSize);
         AMapping negTrainingMap = generateNegativeExamples(posTrainingMap, posNegExSize);
@@ -454,7 +452,11 @@ public class EvaluateLigon extends FuzzyWombatSimple{
         // initialize ligon
         Ligon ligon = new Ligon(trainingMap, sourceTrainCache, targetTrainCache, noisyOracles);
         MLResults mlResult = ligon.learn();
-        System.out.println("-------------- F-measure for the whole dataset --------------" );
+        
+        // test for the whole dataset
+        sourceTestCache = source;
+        targetTestCache = target;
+        System.out.println("-------------- Results for the whole dataset --------------\nP\tR\tF\tT" );
         System.out.println(executeLinkSpecsForDataSet(toDataset(d), mlResult.getLinkSpecification()));
         
         //        }

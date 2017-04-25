@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 public class WombatSimple extends AWombat {
     protected static Logger logger = LoggerFactory.getLogger(WombatSimple.class);
     protected static final String ALGORITHM_NAME = "Wombat Simple";
-    protected int activeLearningRate = 3;
+//    protected int activeLearningRate = 3;
     protected RefinementNode bestSolutionNode = null;
     protected List<ExtendedClassifier> classifiers = null;
     protected int iterationNr = 0;
@@ -109,7 +109,7 @@ public class WombatSimple extends AWombat {
     }
 
     @Override
-    protected AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
+    protected AMapping getNextExamples(int activeLearningRate) throws UnsupportedMLImplementationException {
         List<RefinementNode> bestNodes = getBestKNodes(refinementTreeRoot, activeLearningRate);
         AMapping intersectionMapping = bestNodes.get(0).getMapping();
         AMapping unionMapping = bestNodes.get(0).getMapping();
@@ -120,9 +120,14 @@ public class WombatSimple extends AWombat {
             unionMapping = MappingOperations.union(unionMapping, bestNodeMapping);
         }
         AMapping posEntropyMapping = MappingOperations.difference(unionMapping, intersectionMapping);
+        
+        // special case where the same mapping in each leaf
+        if(posEntropyMapping.size() == 0){
+            return intersectionMapping;
+        }
 
         TreeSet<LinkEntropy> linkEntropy = new TreeSet<>();
-        
+
         for(String s : posEntropyMapping.getMap().keySet()){
             int entropyPos = 0, entropyNeg = 0;
             for(String t : posEntropyMapping.getMap().get(s).keySet()){
@@ -134,7 +139,7 @@ public class WombatSimple extends AWombat {
                         entropyNeg++;
                     }
                 }
-                int entropy = entropyPos * entropyNeg;
+                int entropy = (activeLearningRate - entropyPos) * (activeLearningRate - entropyNeg);
                 linkEntropy.add(new LinkEntropy(s, t, entropy));
             }
         }
@@ -142,7 +147,7 @@ public class WombatSimple extends AWombat {
         List<LinkEntropy> highestEntropyLinks = new ArrayList<>();
         int i = 0;
         Iterator<LinkEntropy> itr = linkEntropy.descendingIterator();
-        while(itr.hasNext() && i < size) {
+        while(itr.hasNext() && i < activeLearningRate) {
             highestEntropyLinks.add(itr.next());
             i++;
         }
@@ -289,8 +294,11 @@ public class WombatSimple extends AWombat {
         int i = 0;
         Iterator<RefinementNode> itr = sortedNodes.descendingIterator();
         while(itr.hasNext() && i < k) {
-            resultList.add(itr.next());
-            i++;
+            RefinementNode nextNode = itr.next();
+            if(nextNode.getFMeasure() > 0){
+                resultList.add(nextNode);
+                i++;
+            }
         }
         return resultList;
     }
@@ -299,21 +307,25 @@ public class WombatSimple extends AWombat {
     /**
      * @param r the root of the refinement tree
      * @param penaltyWeight from 0 to 1
-     * @param result refinment tree
+     * @param result refinement tree
      * @return sorted list of tree nodes
      */
     protected TreeSet<RefinementNode> getSortedNodes(Tree<RefinementNode> r, double penaltyWeight, TreeSet<RefinementNode> result) {
-        if (r.getchildren() == null || r.getchildren().size() == 0) {
+        // add current node
+        if (r.getValue().getFMeasure() >= 0) {
             result.add(r.getValue());
-            return result;
         }
-        for (Tree<RefinementNode> child : r.getchildren()) {
-            if (child.getValue().getFMeasure() >= 0) {
-                result.add(r.getValue());
-                return getSortedNodes(child, penaltyWeight, result);
+
+        // case leaf node
+        if (r.getchildren() == null || r.getchildren().size() == 0) {
+            return result;
+        }else{ 
+            // otherwise
+            for (Tree<RefinementNode> child : r.getchildren()) {
+                result.addAll(getSortedNodes(child, penaltyWeight, result));
             }
         }
-        return null;
+        return result;
     }
 
     /**
