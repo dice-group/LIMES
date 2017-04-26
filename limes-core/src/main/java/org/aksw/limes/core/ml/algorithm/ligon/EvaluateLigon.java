@@ -67,13 +67,13 @@ public class EvaluateLigon extends FuzzyWombatSimple{
     private static final Logger logger = Logger.getLogger(EvaluateLigon.class);
     protected static final double MIN_COVERAGE = 0.6;
 
-    public static ACache source;
+    public static ACache fullSourceCache;
     public static ACache sourceTrainCache = new HybridCache();
     public static ACache sourceTestCache = new HybridCache();
-    public static ACache target;
+    public static ACache fullTargetCache;
     public static ACache targetTrainCache = new HybridCache();
     public static ACache targetTestCache = new HybridCache();
-    public static AMapping reference = MappingFactory.createDefaultMapping();
+    public static AMapping fullReferenceMapping = MappingFactory.createDefaultMapping();
     public static String resultStr = new String();
 
 
@@ -160,18 +160,18 @@ public class EvaluateLigon extends FuzzyWombatSimple{
      * @author sherif
      */
     protected static void fillTrainingCaches(AMapping learnMap) {
-        if (learnMap.size() == reference.size()){
-            sourceTrainCache = source;
-            targetTrainCache = target;
+        if (learnMap.size() == fullReferenceMapping.size()){
+            sourceTrainCache = fullSourceCache;
+            targetTrainCache = fullTargetCache;
         }else{
             sourceTrainCache = new HybridCache();
             targetTrainCache = new HybridCache();
             for (String s : learnMap.getMap().keySet()) {
-                if(source.containsUri(s)){
-                    sourceTrainCache.addInstance(source.getInstance(s));
+                if(fullSourceCache.containsUri(s)){
+                    sourceTrainCache.addInstance(fullSourceCache.getInstance(s));
                     for (String t : learnMap.getMap().get(s).keySet()) {
-                        if(target.containsUri(t)){
-                            targetTrainCache.addInstance(target.getInstance(t));
+                        if(fullTargetCache.containsUri(t)){
+                            targetTrainCache.addInstance(fullTargetCache.getInstance(t));
                         }else{
                             logger.warn("Instance " + t + " not exist in the target dataset");
                         }
@@ -190,18 +190,18 @@ public class EvaluateLigon extends FuzzyWombatSimple{
      * @author sherif
      */
     protected static void fillTestingCaches(AMapping trainMap) {
-        if (trainMap.size() == reference.size()){
-            sourceTestCache = source;
-            targetTestCache = target;
+        if (trainMap.size() == fullReferenceMapping.size()){
+            sourceTestCache = fullSourceCache;
+            targetTestCache = fullTargetCache;
         }else{
             sourceTestCache = new HybridCache();
             targetTestCache = new HybridCache();
             for (String s : trainMap.getMap().keySet()) {
-                if(source.containsUri(s)){
-                    sourceTestCache.addInstance(source.getInstance(s));
+                if(fullSourceCache.containsUri(s)){
+                    sourceTestCache.addInstance(fullSourceCache.getInstance(s));
                     for (String t : trainMap.getMap().get(s).keySet()) {
-                        if(target.containsUri(t)){
-                            targetTestCache.addInstance(target.getInstance(t));
+                        if(fullTargetCache.containsUri(t)){
+                            targetTestCache.addInstance(fullTargetCache.getInstance(t));
                         }else{
                             logger.warn("Instance " + t + " not exist in the target dataset");
                         }
@@ -224,7 +224,7 @@ public class EvaluateLigon extends FuzzyWombatSimple{
         AMapping result = MappingFactory.createDefaultMapping();
         for (String s : map.getMap().keySet()) {
             for (String t : map.getMap().get(s).keySet()) {
-                if(source.containsUri(s) && target.containsUri(t)){
+                if(fullSourceCache.containsUri(s) && fullTargetCache.containsUri(t)){
                     result.add(s,t, map.getMap().get(s).get(t));
                 }
             }
@@ -243,15 +243,15 @@ public class EvaluateLigon extends FuzzyWombatSimple{
         resultStr +=  d +"\n" +
                 "Sample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
         EvaluationData data = DataSetChooser.getData(d);
-        source = data.getSourceCache();
-        target = data.getTargetCache();
-        reference = data.getReferenceMapping();
+        fullSourceCache = data.getSourceCache();
+        fullTargetCache = data.getTargetCache();
+        fullReferenceMapping = data.getReferenceMapping();
 
         // remove error mappings (if any)
-        int refMapSize = reference.size();
-        reference = removeLinksWithNoInstances(reference);
+        int refMapSize = fullReferenceMapping.size();
+        fullReferenceMapping = removeLinksWithNoInstances(fullReferenceMapping);
 
-        logger.info("Number of removed error mappings = " + (refMapSize - reference.size()));
+        logger.info("Number of removed error mappings = " + (refMapSize - fullReferenceMapping.size()));
         //		System.out.println(reference.size());System.exit(1);
         if(posExFrac <= 0){ // learn using 10%, 20%, ... , 100%
             crossValidation10Fold(d);
@@ -268,8 +268,8 @@ public class EvaluateLigon extends FuzzyWombatSimple{
         // learn using provided leaningRat
         logger.info("Running Fuzzy Wombat for the " + d + " dataset with positive example size = " +  posExFrac + "%");
 
-        AMapping trainingMap = sampleReferenceMap(reference, posExFrac/100f);
-        AMapping testMap  = MappingOperations.difference(reference, trainingMap);               
+        AMapping trainingMap = sampleReferenceMap(fullReferenceMapping, posExFrac/100f);
+        AMapping testMap  = MappingOperations.difference(fullReferenceMapping, trainingMap);               
         fillTrainingCaches(trainingMap);
         fillTestingCaches(testMap);
         trainingMap.getReversedMap();
@@ -280,7 +280,7 @@ public class EvaluateLigon extends FuzzyWombatSimple{
         MLResults mlResult = trainFromSampleMapping(trainingMap);
 
         // 2. Apply for the whole KB
-        executeLinkSpecsForDataSet(d, mlResult.getLinkSpecification());
+        executeLinkSpecs(mlResult.getLinkSpecification(), sourceTestCache, targetTestCache);
     }
 
     /**
@@ -291,8 +291,8 @@ public class EvaluateLigon extends FuzzyWombatSimple{
             throws UnsupportedMLImplementationException {
         for(int s = 1 ; s <= 10 ; s +=1){
             logger.info("Running " + " Fuzzy Wombat for the " + d + " dataset with positive example size = " +  s*10 + "%");
-            AMapping trainingMap = sampleReferenceMap(reference, s/10f);
-            AMapping testMap  = MappingOperations.difference(reference, trainingMap);               
+            AMapping trainingMap = sampleReferenceMap(fullReferenceMapping, s/10f);
+            AMapping testMap  = MappingOperations.difference(fullReferenceMapping, trainingMap);               
             fillTrainingCaches(trainingMap);
             fillTestingCaches(testMap);
             trainingMap.getReversedMap();
@@ -301,7 +301,7 @@ public class EvaluateLigon extends FuzzyWombatSimple{
             MLResults mlResult = trainFromSampleMapping(trainingMap);
 
             // 2. Apply for the whole KB
-            executeLinkSpecsForDataSet(d, mlResult.getLinkSpecification());
+            executeLinkSpecs(mlResult.getLinkSpecification(), sourceTestCache, targetTestCache);
         }
     }	
 
@@ -344,20 +344,20 @@ public class EvaluateLigon extends FuzzyWombatSimple{
      * @param linkSpecification to be applied to the whole dataset d 
      * @return
      */
-    static String executeLinkSpecsForDataSet(DataSets d, LinkSpecification linkSpecification){
+    static String executeLinkSpecs(LinkSpecification linkSpecification, ACache sourceCache, ACache targetCache){
         long start = System.currentTimeMillis();
         AMapping kbMap;
         Rewriter rw = RewriterFactory.getDefaultRewriter();
         LinkSpecification rwLs = rw.rewrite(linkSpecification);
-        IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceTestCache, targetTestCache);
+        IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceCache, targetCache);
         assert planner != null;
-        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceTestCache, targetTestCache, "?x", "?y");
+        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache, "?x", "?y");
         assert engine != null;
         AMapping resultMap = engine.execute(rwLs, planner);
         kbMap = resultMap.getSubMap(linkSpecification.getThreshold());
-        resultStr = precision(kbMap, reference)    + "\t" + 
-                recall(kbMap, reference)        + "\t" + 
-                fScore(kbMap, reference)        + "\t" +
+        resultStr = precision(kbMap, fullReferenceMapping)    + "\t" + 
+                recall(kbMap, fullReferenceMapping)        + "\t" + 
+                fScore(kbMap, fullReferenceMapping)        + "\t" +
                 (System.currentTimeMillis() - start)        + "\n" ;
         return resultStr;
     }
@@ -400,43 +400,34 @@ public class EvaluateLigon extends FuzzyWombatSimple{
     public static void main(String[] args) {
         // evaluation parameters
         String d = "person1";
+        int noisyOracleCount = 10 ;
 
         // get training data
         resultStr +=  d +"\nSample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
         EvaluationData data = DataSetChooser.getData(d);
-        source = data.getSourceCache();
-        target = data.getTargetCache();
-        reference = data.getReferenceMapping();
+        fullSourceCache = data.getSourceCache();
+        fullTargetCache = data.getTargetCache();
+        fullReferenceMapping = data.getReferenceMapping();
 
 
         // remove error mappings (if any)
-        int refMapSize = reference.size();
-        reference = removeLinksWithNoInstances(reference);
-
-        logger.info("Number of removed error mappings = " + (refMapSize - reference.size()));
+        int refMapSize = fullReferenceMapping.size();
+        fullReferenceMapping = removeLinksWithNoInstances(fullReferenceMapping);
 
         // training examples
         //        for(int posNegExSize = 10; posNegExSize < 100 ; posNegExSize += 10){
         int posNegExSize = 10;
         System.out.println();
-        AMapping posTrainingMap = sampleReferenceMap(reference, posNegExSize);
+        AMapping posTrainingMap = sampleReferenceMap(fullReferenceMapping, posNegExSize);
         AMapping negTrainingMap = generateNegativeExamples(posTrainingMap, posNegExSize);
         AMapping trainingMap = MappingOperations.union(posTrainingMap, negTrainingMap);
-        //        AMapping trainingMap = posTrainingMap;
-        //        for (String key : negTrainingMap.getMap().keySet()) {
-        //            for (String value : negTrainingMap.getMap().get(key).keySet()) {
-        //                trainingMap.add(key, value, 0.0);
-        //            }
-        //        }
-
-
 
         System.out.println("trainingMap size: " + trainingMap.size());
         fillTrainingCaches(trainingMap);
         trainingMap.getReversedMap();
 
         // create noisy oracles with normal distribution
-        int noisyOracleCount = 10 ;
+        
         List<NoisyOracle> noisyOracles = new ArrayList<>();
         Random pR = new Random();
         Random nR = new Random();
@@ -446,18 +437,18 @@ public class EvaluateLigon extends FuzzyWombatSimple{
                 pG = 0.75 + (pR.nextGaussian() + 1.0) / 2.0;
                 nG = 0.75 + (nR.nextGaussian() + 1.0) / 2.0;
             }while(pG <0  || pG > 1 || nG <0  || nG > 1);
-            noisyOracles.add(new NoisyOracle(trainingMap, pG, nG));
+            noisyOracles.add(new NoisyOracle(fullReferenceMapping, pG, nG));
         }
 
         // initialize ligon
         Ligon ligon = new Ligon(trainingMap, sourceTrainCache, targetTrainCache, noisyOracles);
-        MLResults mlResult = ligon.learn();
+        MLResults mlResult = ligon.learn(fullSourceCache, fullTargetCache, fullReferenceMapping);
         
-        // test for the whole dataset
-        sourceTestCache = source;
-        targetTestCache = target;
-        System.out.println("-------------- Results for the whole dataset --------------\nP\tR\tF\tT" );
-        System.out.println(executeLinkSpecsForDataSet(toDataset(d), mlResult.getLinkSpecification()));
+//        // test for the whole dataset
+//        sourceTestCache = fullSourceCache;
+//        targetTestCache = fullTargetCache;
+//        System.out.println("-------------- Results for the whole dataset --------------\nP\tR\tF\tT" );
+//        System.out.println(executeLinkSpecs(mlResult.getLinkSpecification(), sourceTestCache, targetTestCache));
         
         //        }
     }

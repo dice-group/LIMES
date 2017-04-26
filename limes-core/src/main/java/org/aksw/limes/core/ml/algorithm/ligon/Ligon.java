@@ -13,6 +13,14 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.fuzzy.FuzzyFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.fuzzy.FuzzyPrecision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.fuzzy.FuzzyRecall;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
+import org.aksw.limes.core.execution.engine.ExecutionEngine;
+import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
+import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
+import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
+import org.aksw.limes.core.execution.planning.planner.IPlanner;
+import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.ExecutionPlannerType;
+import org.aksw.limes.core.execution.rewriter.Rewriter;
+import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -31,7 +39,7 @@ public class Ligon {
     protected AMapping trainigExamplesMap; // with probabilities
     protected AMapping posMap = MappingFactory.createDefaultMapping();     // with membership
     protected AMapping negMap = MappingFactory.createDefaultMapping();     // with membership
-    
+
 
     ACache sourceTrainCache;
     ACache targetTrainCache;
@@ -75,9 +83,28 @@ public class Ligon {
             }
         }
     }
+    
+    
+    /**
+     * convert input mapping with membership values to the same mapping with probabilities
+     * @param map
+     * @return
+     */
+    public static AMapping mu2p(AMapping inputMapping){
+        AMapping result = MappingFactory.createDefaultMapping();
+        for (String s : inputMapping.getMap().keySet()) {
+            for (String t : inputMapping.getMap().get(s).keySet()) {
+                double mu = inputMapping.getConfidence(s,t);
+                if(mu >= 0.5){
+                    result.add(s, t, 1.0);
+                }
+            }
+        }
+        return result;
+    }
 
 
-  
+
 
     /**
      * Estimate the TP of a given noisy oracle
@@ -235,24 +262,25 @@ public class Ligon {
         this.noisyOracles = noisyOracles;
     }
 
-    public MLResults learn() {
+    public MLResults learn(ACache sourceTestCache, ACache targetTestCache, AMapping fullReferenceMapping) {
         MLResults mlModel = null;
         String resultStr =  "itr\tfP\tfR\tfF\tT\tMetricExpr\tP\tR\tF\n";
         String resultStr2 =  "";
         String resultStr3 =  "";
-        
+
         AMapping examples = trainigExamplesMap;
         int intrCount = 10;
         long start = System.currentTimeMillis();
-        
+
         for(int i = 0; i < intrCount  ; i++){
-        
+
             // 1. Train fuzzy WOMBAT 
             FuzzyWombatSimple fuzzyWombat = new FuzzyWombatSimple(); 
-            fuzzyWombat.init(null, sourceTrainCache, targetTrainCache);
+//            fuzzyWombat.init(null, sourceTrainCache, targetTrainCache);
+            fuzzyWombat.init(null, sourceTestCache, targetTestCache);
             mlModel = fuzzyWombat.learn(examples);
             AMapping learnedMap = fuzzyWombat.predict(sourceTrainCache, targetTrainCache, mlModel);
-//            learnedMap = AMapping.getBestOneToOneMappings(learnedMap);
+            //            learnedMap = AMapping.getBestOneToOneMappings(learnedMap);
             LinkSpecification linkSpecification = mlModel.getLinkSpecification();
             resultStr +=  (i + 1) + "\t" +
                     String.format("%.2f", new FuzzyPrecision().calculate(learnedMap, new GoldStandard(examples)))+ "\t" + 
@@ -260,29 +288,46 @@ public class Ligon {
                     String.format("%.2f",new FuzzyFMeasure().calculate(learnedMap, new GoldStandard(examples)))   + "\t" +
                     (System.currentTimeMillis() - start)            + "\t" +
                     linkSpecification.toStringOneLine()                   + "\t" +
-                    String.format("%.2f", new Precision().calculate(learnedMap, new GoldStandard(examples)))+ "\t" + 
-                    String.format("%.2f",new Recall().calculate(learnedMap, new GoldStandard(examples)))   + "\t" + 
-                    String.format("%.2f",new FMeasure().calculate(learnedMap, new GoldStandard(examples)))   + "\n" ;
-            
+                    executeLinkSpecs(mlModel.getLinkSpecification(), sourceTestCache, targetTestCache, fullReferenceMapping);
+            //                    String.format("%.2f", new Precision().calculate(learnedMap, new GoldStandard(examples)))+ "\t" + 
+            //                    String.format("%.2f",new Recall().calculate(learnedMap, new GoldStandard(examples)))   + "\t" + 
+            //                    String.format("%.2f",new FMeasure().calculate(learnedMap, new GoldStandard(examples)))   + "\n" ;
+
             resultStr3 += (i + 1) + "\t(" + 
                     String.format("%.2f", computeTpMSE()) + "|" + 
                     String.format("%.2f", computeTnMSE()) +")\n";
-            
+
             for(NoisyOracle o : noisyOracles){
                 resultStr2 += "(" + String.format("%.2f",o.tp) + "-" + String.format("%.2f",o.estimatedTp) + ")(" 
                         + String.format("%.2f",o.tn) + "-" + String.format("%.2f",o.estimatedTn) + ")\t";
             }
             resultStr2 += "\n";
-            
+
 
             // 2. get most informative examples
-            AMapping mostInfPosMap = fuzzyWombat.findMostInformativePositiveExamples();
-            AMapping mostInfNegMap = fuzzyWombat.findMostInformativeNegativeExamples();
+            int activeLearningRate = 3;
+            AMapping mostInfPosMap = fuzzyWombat.findMostInformativePositiveExamples(activeLearningRate, examples);
+            AMapping mostInfNegMap = fuzzyWombat.findMostInformativeNegativeExamples(activeLearningRate, examples);
+            System.out.println("mostInfPosMap size: " + mostInfPosMap.size());
+            System.out.println("mostInfNegMap size: " + mostInfNegMap.size());
 
             // 3. update training examples
             examples = MappingOperations.union(examples,mostInfPosMap);
             examples = MappingOperations.union(examples, mostInfNegMap);
             updatePosNegTrainingExamples(examples);
+            System.out.println("Current example size: " + examples.size());
+
+            //            AMapping nextExamples = null;
+            //            try {
+            //                int activeLearningRate = 10;
+            //                nextExamples = fuzzyWombat.getNextExamples(activeLearningRate);
+            //            } catch (Exception e) {
+            //                // TODO Auto-generated catch block
+            //                e.printStackTrace();
+            //            }
+            //            examples = MappingOperations.union(examples, nextExamples);
+            //            System.out.println("Current example size: " + examples.size());
+            //            updatePosNegTrainingExamples(examples);
 
             // 4. update noisy oracle trust values
             updateNoisyOraclesTrust(examples);
@@ -293,8 +338,36 @@ public class Ligon {
         System.out.println(resultStr2);
         System.out.println("-------------- MSE (TP|TN) --------------" );
         System.out.println(resultStr3);
-        
+
         return mlModel;
+    }
+
+    /**
+     * @param d dataset 
+     * @param linkSpecification to be applied to the whole dataset d 
+     * @param reference 
+     * @return
+     */
+    static String executeLinkSpecs(LinkSpecification linkSpecification, ACache sourceCache, ACache targetCache, AMapping reference){
+        long start = System.currentTimeMillis();
+        AMapping kbMap;
+        Rewriter rw = RewriterFactory.getDefaultRewriter();
+        LinkSpecification rwLs = rw.rewrite(linkSpecification);
+        IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceCache, targetCache);
+        assert planner != null;
+        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache, "?x", "?y");
+        assert engine != null;
+        AMapping resultMap = engine.execute(rwLs, planner);
+        kbMap = resultMap.getSubMap(linkSpecification.getThreshold());
+        AMapping learnedMapWithProp = mu2p(kbMap);
+        GoldStandard goldStandardWithProp = new GoldStandard(mu2p(reference));
+        String resultStr = 
+                String.format("%.2f", new Precision().calculate(learnedMapWithProp, goldStandardWithProp))+ "\t" + 
+                        String.format("%.2f",new Recall().calculate(learnedMapWithProp, goldStandardWithProp))   + "\t" + 
+                        String.format("%.2f",new FMeasure().calculate(learnedMapWithProp, goldStandardWithProp))   + "\t" +
+                        (System.currentTimeMillis() - start)        + "\n" ;
+        
+        return resultStr;
     }
 
     public double computeTnMSE(){
@@ -310,7 +383,7 @@ public class Ligon {
         }
         return mse / (double) noisyOracles.size();
     }
-    
+
     public double computeTpMSE(){
         double mse = 0.0;
         double mean = 0.0;
@@ -326,7 +399,7 @@ public class Ligon {
     }
 
     void printNoisyOracles(){
-    
+
     }
 
 

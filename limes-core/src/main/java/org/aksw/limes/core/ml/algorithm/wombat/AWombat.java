@@ -7,9 +7,11 @@ package org.aksw.limes.core.ml.algorithm.wombat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.Tree;
@@ -20,6 +22,7 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.fuzzy.FuzzyFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.fuzzy.FuzzyPrecision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.fuzzy.FuzzyRecall;
+import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
@@ -36,6 +39,7 @@ import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
@@ -93,48 +97,113 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         setDefaultParameters();
     }
 
-    //    /**
-    //     * Create new RefinementNode using either real or pseudo-F-Measure
-    //     *
-    //     * @param mapping of the node 
-    //     * @param metricExpr learning specifications
-    //     * @return new RefinementNode
-    //     */
-    //    protected RefinementNode createNode(AMapping mapping, String metricExpr) {
-    //        double f = fMeasure(mapping);
-    //        if(!isFuzzy && !isUnsupervised){
-    //            return new RefinementNode(mapping, metricExpr, f);
-    //        }
-    //        double p = precision(mapping);
-    //        double r = recall(mapping);
-    //        double MaxF = computeMaxFMeasure(mapping, trainingData);
-    //        return new RefinementNode(mapping, metricExpr, f, p, r, MaxF);        
-    //    }
-    //    
-    //    
-    //    
-    //
-    //    protected double computeMaxFMeasure(AMapping map, AMapping refMap){
-    //        double pMax = computeMaxPrecision(map, refMap);
-    //        double rMax = RefinementNode.getMaxRecall();
-    //        return 2 * pMax * rMax / (pMax + rMax);
-    //    }
-    //    
-    //    protected double computeMaxPrecision(AMapping mapping, AMapping trainingData) {
-    //        AMapping falsePos = MappingFactory.createDefaultMapping();
-    //        for (String key : mapping.getMap().keySet()) {
-    //            for (String value : mapping.getMap().get(key).keySet()) {
-    //                if (trainingData.getMap().containsKey(key) || trainingData.getReversedMap().containsKey(value)) {
-    //                    falsePos.add(key, value, mapping.getMap().get(key).get(value));
-    //                }
-    //            }
-    //        }
-    //        AMapping m = MappingOperations.difference(falsePos, trainingData);
-    //        return (double) trainingData.size() / (double) (trainingData.size() + m.size());
-    //    }
-    //    
 
+    /* 
+     * Get a set of examples to be added to the mapping.
+     *
+     * @param size of the examples
+     * @return the mapping
+     * @throws UnsupportedMLImplementationException Exception
+     * 
+     * (non-Javadoc)
+     * @see org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm#getNextExamples(int)
+     */
+    @Override
+    protected AMapping getNextExamples(int activeLearningRate) throws UnsupportedMLImplementationException {
+        List<RefinementNode> bestNodes = getBestKNodes(refinementTreeRoot, activeLearningRate);
+        AMapping intersectionMapping = bestNodes.get(0).getMapping();
+        AMapping unionMapping = bestNodes.get(0).getMapping();
 
+        for(int index = 1 ; index < bestNodes.size() ; index++){
+            AMapping bestNodeMapping = bestNodes.get(index).getMapping();
+            intersectionMapping = MappingOperations.intersection(intersectionMapping, bestNodeMapping);
+            unionMapping = MappingOperations.union(unionMapping, bestNodeMapping);
+        }
+        AMapping posEntropyMapping = MappingOperations.difference(unionMapping, intersectionMapping);
+        
+        // special case where the same mapping in each leaf
+        if(posEntropyMapping.size() == 0){
+            return intersectionMapping;
+        }
+
+        TreeSet<LinkEntropy> linkEntropy = new TreeSet<>();
+
+        for(String s : posEntropyMapping.getMap().keySet()){
+            int entropyPos = 0, entropyNeg = 0;
+            for(String t : posEntropyMapping.getMap().get(s).keySet()){
+                // compute Entropy(s,t)
+                for(RefinementNode bestNode : bestNodes){
+                    if(bestNode.getMapping().contains(s, t)){
+                        entropyPos++;
+                    }else{
+                        entropyNeg++;
+                    }
+                }
+                int entropy = (activeLearningRate - entropyPos) * (activeLearningRate - entropyNeg);
+                linkEntropy.add(new LinkEntropy(s, t, entropy));
+            }
+        }
+        // get highestEntropyLinks
+        List<LinkEntropy> highestEntropyLinks = new ArrayList<>();
+        int i = 0;
+        Iterator<LinkEntropy> itr = linkEntropy.descendingIterator();
+        while(itr.hasNext() && i < activeLearningRate) {
+            highestEntropyLinks.add(itr.next());
+            i++;
+        }
+        AMapping result = MappingFactory.createDefaultMapping();
+        for(LinkEntropy l: highestEntropyLinks){
+            result.add(l.getSourceUri(), l.getTargetUri(), l.getEntropy());
+        }
+        return result;
+    }   
+    
+    
+    /**
+     * @param r the root of the refinement tree
+     * @param k number of best nodes
+     * @return sorted list of best k tree nodes
+     */
+    protected List<RefinementNode> getBestKNodes(Tree<RefinementNode> r, int k) {
+        TreeSet<RefinementNode> ts = new TreeSet<>();
+        TreeSet<RefinementNode> sortedNodes = getSortedNodes(r, getOverAllPenaltyWeight(), ts);
+        List<RefinementNode> resultList = new ArrayList<>();
+        int i = 0;
+        Iterator<RefinementNode> itr = sortedNodes.descendingIterator();
+        while(itr.hasNext() && i < k) {
+            RefinementNode nextNode = itr.next();
+            if(nextNode.getFMeasure() > 0){
+                resultList.add(nextNode);
+                i++;
+            }
+        }
+        return resultList;
+    }
+    
+    
+    /**
+     * @param r the root of the refinement tree
+     * @param penaltyWeight from 0 to 1
+     * @param result refinement tree
+     * @return sorted list of tree nodes
+     */
+    protected TreeSet<RefinementNode> getSortedNodes(Tree<RefinementNode> r, double penaltyWeight, TreeSet<RefinementNode> result) {
+        // add current node
+        if (r.getValue().getFMeasure() >= 0) {
+            result.add(r.getValue());
+        }
+
+        // case leaf node
+        if (r.getchildren() == null || r.getchildren().size() == 0) {
+            return result;
+        }else{ 
+            // otherwise
+            for (Tree<RefinementNode> child : r.getchildren()) {
+                result.addAll(getSortedNodes(child, penaltyWeight, result));
+            }
+        }
+        return result;
+    }
 
 
 

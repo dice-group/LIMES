@@ -218,14 +218,14 @@ public class MappingOperations {
      */
     
     public static AMapping scalarMultiply(AMapping mapping, double scalar) {
-        for (String uri1 : mapping.getMap().keySet()) {
-            for (String uri2 : mapping.getMap().get(uri1).keySet()) {
-                double val = mapping.getConfidence(uri1, uri2);
-                mapping.getMap().get(uri1).remove(uri2);
-                mapping.add(uri1, uri2, val / scalar);
+        AMapping result = MappingFactory.createDefaultMapping();
+        for (String sourceUri : mapping.getMap().keySet()) {
+            for (String targetUri : mapping.getMap().get(sourceUri).keySet()) {
+                double val = mapping.getConfidence(sourceUri, targetUri);
+                result.add(sourceUri, targetUri, val / scalar);
             }
         }
-        return mapping;
+        return result;
     }
 
 }

@@ -129,7 +129,7 @@ public class FuzzyWombatSimple extends AWombat {
     }
 
     @Override
-    protected AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
+    public AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
         List<RefinementNode> bestNodes = getBestKNodes(refinementTreeRoot, activeLearningRate);
         AMapping intersectionMapping = MappingFactory.createDefaultMapping();
         AMapping unionMapping = MappingFactory.createDefaultMapping();
@@ -397,44 +397,41 @@ public class FuzzyWombatSimple extends AWombat {
     }
 
 
-    public AMapping FindInformativeExamples(){
-        if(informativeExamples.size() > 0){
-            return informativeExamples;
-        }else{
-            AMapping exampleMap = MappingFactory.createDefaultMapping();
-            double sumLeafWeight = 0d;
-            for(Tree<RefinementNode> leaf : refinementTreeRoot.getLeaves()){
-                double leafWeight = leaf.getValue().getFMeasure();
-                sumLeafWeight += leafWeight;  
-                HashMap<String, HashMap<String, Double>> leafMap = leaf.getValue().getMapping().getMap();
-                for(String s : leafMap.keySet()){
-                    for(String t : leafMap.get(s).keySet()){
-                        if (exampleMap.contains(s, t)) {
-                            exampleMap.getMap().get(s).put(t, exampleMap.getConfidence(s, t) + leafWeight);
-                        }else{
-                            exampleMap.add(s, t,  leafWeight);
-                        }
+    public AMapping findInformativeExamples(){
+
+        AMapping infExampleMap = MappingFactory.createDefaultMapping();
+        double sumLeafWeight = 0.0;
+        for(Tree<RefinementNode> leaf : refinementTreeRoot.getLeaves()){
+            double leafWeight = leaf.getValue().getFMeasure();
+            sumLeafWeight += leafWeight;  
+            HashMap<String, HashMap<String, Double>> leafMap = leaf.getValue().getMapping().getMap();
+            for(String s : leafMap.keySet()){
+                for(String t : leafMap.get(s).keySet()){
+                    if (infExampleMap.contains(s, t)) {
+                        infExampleMap.getMap().get(s).put(t, infExampleMap.getConfidence(s, t) + leafWeight);
+                    }else{
+                        infExampleMap.add(s, t,  leafWeight);
                     }
                 }
             }
-            AMapping informativeExamples = MappingFactory.createDefaultMapping();
-            for(String s : exampleMap.getMap().keySet()){
-                for(String t : exampleMap.getMap().get(s).keySet()){
-                    informativeExamples.add(s, t, exampleMap.getMap().get(s).get(t)/sumLeafWeight);
-                }
-            }
-            return informativeExamples;
         }
+        infExampleMap = MappingOperations.scalarMultiply(infExampleMap, sumLeafWeight);
+        return infExampleMap;
     }
 
-    public AMapping findMostInformativePositiveExamples(){
-        AMapping infExMap = FindInformativeExamples();
+    public AMapping findMostInformativePositiveExamples(int size, AMapping examplesMap){
+        AMapping infExMap = findInformativeExamples();
+        int i = 0;
         AMapping result = MappingFactory.createDefaultMapping();
         for(String s : infExMap.getMap().keySet()){
             for(String t : infExMap.getMap().get(s).keySet()){
                 double c = infExMap.getConfidence(s, t);
-                if(c > 0.5d){
+                if(c > 0.5d && c < 0.75 && !examplesMap.contains(s, t)){
                     result.add(s, t, c);
+                    i++;
+                }
+                if(i == size){
+                    break;
                 }
 
             }
@@ -442,14 +439,19 @@ public class FuzzyWombatSimple extends AWombat {
         return result;
     }
 
-    public AMapping findMostInformativeNegativeExamples(){
-        AMapping infExMap = FindInformativeExamples();
+    public AMapping findMostInformativeNegativeExamples(int size, AMapping examplesMap){
+        AMapping infExMap = findInformativeExamples();
+        int i = 0;
         AMapping result = MappingFactory.createDefaultMapping();
         for(String s : infExMap.getMap().keySet()){
             for(String t : infExMap.getMap().get(s).keySet()){
                 double c = infExMap.getConfidence(s, t);
-                if(c < 0.5d){
+                if(c < 0.5d && c > 0.25 && !examplesMap.contains(s, t)){
                     result.add(s, t, c); 
+                    i++;
+                }
+                if(i == size){
+                    break;
                 }
 
             }
@@ -457,23 +459,6 @@ public class FuzzyWombatSimple extends AWombat {
         return result;
     }
 
-    public static void main(String []args){
-        int epoch= 0;
-
-        EvaluationData evalData = DataSetChooser.getData(DataSets.PERSON1);
-        ACache sourceCache = evalData.getSourceCache();
-        ACache targetCache = evalData.getTargetCache();
-
-        AMapping referenceMapping = evalData.getReferenceMapping();
-        AMapping trainingMapping = MappingFactory.createDefaultMapping();
-        AMapping testMapping = MappingFactory.createDefaultMapping();
-        int trainingMappingSize = (int) (referenceMapping.getSize() * TRAINING_RATIO);
-
-
-
-
-
-    }
 
 }
 
