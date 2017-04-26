@@ -397,6 +397,9 @@ public class FuzzyWombatSimple extends AWombat {
     }
 
 
+    /**
+     * @return
+     */
     public AMapping findInformativeExamples(){
 
         AMapping infExampleMap = MappingFactory.createDefaultMapping();
@@ -419,6 +422,11 @@ public class FuzzyWombatSimple extends AWombat {
         return infExampleMap;
     }
 
+    /**
+     * @param size
+     * @param examplesMap
+     * @return
+     */
     public AMapping findMostInformativePositiveExamples(int size, AMapping examplesMap){
         AMapping infExMap = findInformativeExamples();
         int i = 0;
@@ -431,7 +439,7 @@ public class FuzzyWombatSimple extends AWombat {
                     i++;
                 }
                 if(i == size){
-                    break;
+                    return result;
                 }
 
             }
@@ -439,6 +447,11 @@ public class FuzzyWombatSimple extends AWombat {
         return result;
     }
 
+    /**
+     * @param size
+     * @param examplesMap
+     * @return
+     */
     public AMapping findMostInformativeNegativeExamples(int size, AMapping examplesMap){
         AMapping infExMap = findInformativeExamples();
         int i = 0;
@@ -451,9 +464,8 @@ public class FuzzyWombatSimple extends AWombat {
                     i++;
                 }
                 if(i == size){
-                    break;
+                    return result;
                 }
-
             }
         }
         return result;
