@@ -103,6 +103,13 @@ public class TreeParser {
 	if (root.equals(child)) {
 	    return root;
 	}
+	if(!root.isAtomic()){
+        if(root.getOperator().equals(LogicOperator.MINUS)){
+            LinkSpecification minusMeasure = root.getChildren().get(0);
+            return new LinkSpecification("MINUS(" + child.getFullExpression() + "|" + child.getThreshold() +"," + minusMeasure.getFullExpression() + "|" + minusMeasure.getThreshold() + ")", 0.0);
+ 
+        }
+	}
 	return new LinkSpecification("AND(" + root.getFullExpression() + "|" + root.getThreshold()
 		+ "," + child.getFullExpression() + "|" + child.getThreshold() + ")", 0.0);
     }
@@ -157,7 +164,8 @@ public class TreeParser {
      *            to be parsed
      * @return parsed LinkSpecification
      */
-    private LinkSpecification parseAtomicTree(String tree, boolean root) {
+    private LinkSpecification parseAtomicTree(String tree, boolean rootFor) {
+    String posThreshold = getPositiveThreshold(tree.substring(tree.indexOf("<"), tree.length()));
 	if (tree.startsWith("positive")) {
 	    return (dtl.getMlresult() != null) ? dtl.getMlresult().getLinkSpecification() : dtl
 		    .getDefaultLS();
@@ -166,10 +174,13 @@ public class TreeParser {
 		    .getLinkSpecification() : dtl.getDefaultLS();
 	    return createLessThanLinkSpec(resLS.getFullExpression(),
 		    String.valueOf(">= " + resLS.getThreshold()));
-	} else if (!root
-		&& getPositiveThreshold(tree.substring(tree.indexOf("<"), tree.length())).equals(
-			irrelevant)) {
+	} else if (!rootFor
+		&& posThreshold.equals( irrelevant)) {
 	    return null;
+	} else if (!rootFor && posThreshold.startsWith("<=")){
+		//If we have a leaf that is basically it's own negation we return null because it is more or less garbage
+		return null;
+		
 	}
 	LinkSpecification ls = null;
 	// attributeName begins 2 characters before <
@@ -203,8 +214,7 @@ public class TreeParser {
 	Double threshClean = Double.parseDouble(threshold.substring(3));
 	if (threshClean.equals(0.0))
 	    return null;
-	return new LinkSpecification("MINUS(" + metricExpression + "|0.01," + metricExpression
-		+ "|" + threshClean + ")", 0.0);
+	return new LinkSpecification("MINUS(" + metricExpression+ "|" + threshClean + ", cosine(x.placeholder, y.placeholder)|0.01)", 0.0);
 
     }
 
