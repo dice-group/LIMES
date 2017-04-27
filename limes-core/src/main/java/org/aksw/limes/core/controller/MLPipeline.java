@@ -38,14 +38,14 @@ public class MLPipeline {
             ACache source,
             ACache target,
             Configuration configuration,
-            String mlAlgrorithmName,
+            String mlAlgorithmName,
             MLImplementationType mlImplementationType,
             List<LearningParameter> learningParameters,
             String trainingDataFile,
             EvaluatorType pfmType,
             int maxIt
     ) throws UnsupportedMLImplementationException {
-        Class<? extends ACoreMLAlgorithm> clazz = MLAlgorithmFactory.getAlgorithmType(mlAlgrorithmName);
+        Class<? extends ACoreMLAlgorithm> clazz = MLAlgorithmFactory.getAlgorithmType(mlAlgorithmName);
         MLResults mlm;
         AMapping trainingDataMap = MappingFactory.createDefaultMapping();
         if (
@@ -60,7 +60,8 @@ public class MLPipeline {
                 SupervisedMLAlgorithm mls = new SupervisedMLAlgorithm(clazz);
                 mls.init(learningParameters, source, target);
                 mls.getMl().setConfiguration(configuration);
-               mlm = mls.learn(trainingDataMap);
+                mlm = mls.learn(trainingDataMap);
+                logger.info(mlm.getLinkSpecification().toStringOneLine());
                 return mls.predict(source, target, mlm);
             case SUPERVISED_ACTIVE:
                 // for active learning, need to reiterate and prompt the user for evaluation of examples:
