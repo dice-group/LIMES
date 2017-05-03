@@ -2,7 +2,7 @@
 Repository for LIMES - Link Discovery Framework for Metric Spaces.
 =======
 
-[![Build Status](https://travis-ci.org/AKSW/LIMES-dev.svg?branch=dev)](https://travis-ci.org/AKSW/LIMES-dev)
+[![Build Status](https://travis-ci.org/AKSW/LIMES-dev.svg?branch=master)](https://travis-ci.org/AKSW/LIMES-dev)
 
 Development branch for LIMES - Link Discovery Framework for Metric Spaces.
 
