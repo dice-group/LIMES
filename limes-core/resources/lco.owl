@@ -1,0 +1,310 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix lco: <http://limes.sf.net/ontology/> .
+
+<http://limes.sf.net/ontology/>
+    dc:title "The LIMES configuration ontology"@en  ;
+    a owl:Ontology ;
+    rdfs:comment "This ontology describes classes and  properties that together form the basis of the LIMES configuration ontology."@en .
+
+lco:LimesSpecs
+    a rdfs:Class ;
+    rdfs:comment "The class of LIMES specification."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "LimesSpecs"@en  ;
+    rdfs:subClassOf rdfs:Resource .
+
+lco:SourceDataset
+    a rdfs:Class ;
+    rdfs:comment "The class of LIMES source data set."@en;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "SourceDataset"@en  ;
+    rdfs:subClassOf rdfs:Resource .
+
+lco:TargetDataset
+    a rdfs:Class ;
+    rdfs:comment "The class of LIMES target data set."@en;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "TargetDataset"@en  ;
+    rdfs:subClassOf rdfs:Resource .
+
+lco:Metric
+    a rdfs:Class ;
+    rdfs:comment "The class of LILES metric."@en ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "Metric"@en ;
+    rdfs:subClassOf rdfs:Resource.
+
+lco:ExecutionParameters
+    a rdfs:Class ;
+    rdfs:comment "The class of LIMES execution parameters."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "ExecutionParameters"@en  ;
+    rdfs:subClassOf rdfs:Resource .
+
+lco:Acceptance
+    a rdfs:Class ;
+    rdfs:comment "The class of LIMES acceptance."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "Acceptance"@en  ;
+    rdfs:subClassOf rdfs:Resource .
+
+lco:Review
+    a rdfs:Class ;
+    rdfs:comment "The class of LIMES review."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "Review"@en  ;
+    rdfs:subClassOf rdfs:Resource .
+
+lco:MLParameter
+    a rdfs:Class ;
+    rdfs:comment "The class of LIMES machine learning parameters."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "MLParameter"@en  ;
+    rdfs:subClassOf rdfs:Resource .
+
+lco:SupervisedMLAlgorithm
+    a rdfs:Class ;
+    rdfs:comment "The class of LIMES supervised machine learning algorithm."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "SupervisedMLAlgorithm"@en  ;
+    rdfs:subClassOf rdfs:Resource .
+
+lco:UnsupervisedMLAlgorithm
+    a rdfs:Class ;
+    rdfs:comment "The class of LIMES unsupervised machine learning algorithm."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "UnsupervisedMLAlgorithm"@en  ;
+    rdfs:subClassOf rdfs:Resource .
+
+lco:ActiveMLAlgorithm
+    a rdfs:Class ;
+    rdfs:comment "The class of LIMES active learning machine learning algorithm."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "ActiveMLAlgorithm"@en  ;
+    rdfs:subClassOf rdfs:Resource .
+
+lco:ExecutionParameters
+    a rdfs:Class ;
+    rdfs:comment "The class of LIMES execution parameters."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "ExecutionParameters"@en  ;
+    rdfs:subClassOf rdfs:Resource .
+
+
+
+
+lco:hasSource
+    a rdf:Property ;
+    rdfs:comment "The property that determines the source data set."@en  ;
+    rdfs:domain lco:SourceDataset  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "hasSource"@en  ;
+    rdfs:range rdfs:Resource .
+
+lco:hasTarget
+    a rdf:Property ;
+    rdfs:comment "The property that determines the target data set."@en  ;
+    rdfs:domain lco:TargetDataset  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "hasTarget"@en  ;
+    rdfs:range rdfs:Resource .
+
+lco:hasMetric
+    a rdf:Property ;
+    rdfs:comment "The property that determines the LIMES metric."@en  ;
+    rdfs:domain lco:Metric  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "hasMetric"@en  ;
+    rdfs:range rdfs:Resource .
+
+lco:hasAcceptance
+    a rdf:Property ;
+    rdfs:comment "The property that determines the LIMES acceptance."@en  ;
+    rdfs:domain lco:Acceptance  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "hasAcceptance"@en  ;
+    rdfs:range rdfs:Resource .
+
+lco:hasExecutionParameters
+    a rdf:Property ;
+    rdfs:comment "The property that determines the LIMES execution parameters."@en  ;
+    rdfs:domain lco:ExecutionParameters  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "hasExecutionParameters"@en  ;
+    rdfs:range rdfs:Resource .
+
+lco:endPoint
+    a rdf:Property ;
+    rdfs:comment "The property that determines the LIMES review."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "hasReview"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:variable
+    a rdf:Property ;
+    rdfs:comment "The property that determines the dataset variable."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "variable"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:pageSize
+    a rdf:Property ;
+    rdfs:comment "The property that determines the dataset page size."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "pageSize"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:restriction
+    a rdf:Property ;
+    rdfs:comment "The property that determines a dataset restriction."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "restriction"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:property
+    a rdf:Property ;
+    rdfs:comment "The property that determines a dataset property."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "property"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:optionalProperty
+    a rdf:Property ;
+    rdfs:comment "The property that determines a dataset optional property."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "optionalProperty"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:expression
+    a rdf:Property ;
+    rdfs:comment "The property that determines the metruc expression."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "expression"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:threshold
+    a rdf:Property ;
+    rdfs:comment "The property that determines the acceptance/review threshold."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "threshold"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:file
+    a rdf:Property ;
+    rdfs:comment "The property that determines the acceptance/review file."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "file"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:relation
+    a rdf:Property ;
+    rdfs:comment "The property that determines the acceptance/review relation."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "relation"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:graph
+    a rdf:Property ;
+    rdfs:comment "The property that determines the data set graph."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "graph"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:type
+    a rdf:Property ;
+    rdfs:comment "The property that determines the data set type."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "type"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:executionPlanner
+    a rdf:Property ;
+    rdfs:comment "The property that determines the execution planner."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "executionPlanner"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:executionRewriter
+    a rdf:Property ;
+    rdfs:comment "The property that determines the execution rewriter."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "executionRewriter"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:executionEngine
+    a rdf:Property ;
+    rdfs:comment "The property that determines the execution engine."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "executionEngine"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:granularity
+    a rdf:Property ;
+    rdfs:comment "The property that determines the LIMES granularity."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "threshold"@en  ;
+    rdfs:range rdfs:xsd:nonNegativeInteger .
+
+lco:outputFormat
+    a rdf:Property ;
+    rdfs:comment "The property that determines the output format."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "outputFormat"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:mlParameterName
+    a rdf:Property ;
+    rdfs:comment "The property that determines the machine learning parameter name."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "mlParameterName"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:mlParameterValue
+    a rdf:Property ;
+    rdfs:comment "The property that determines the machine learning parameter value."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "mlParameterValue"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:hasMLAlgorithm
+    a rdf:Property ;
+    rdfs:comment "The property that determines the execution engine."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "executionEngine"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:executionEngine
+    a rdf:Property ;
+    rdfs:comment "The property that determines the machine learning algorithm."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "hasMLAlgorithm"@en  ;
+    rdfs:domain lco:MLAlgorithm  ;
+    rdfs:range rdfs:Literal .
+
+lco:mlAlgorithmName
+    a rdf:Property ;
+    rdfs:comment "The property that determines the machine learning algorithm name."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "mlAlgorithmName"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:hasTrainingDataFile
+    a rdf:Property ;
+    rdfs:comment "The property that determines the training data file for the machine learning algorithm."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "hasTrainingDataFile"@en  ;
+    rdfs:range rdfs:Literal .
+
+lco:pseudoFMeasure
+    a rdf:Property ;
+    rdfs:comment "The property that determines the pseudo F-Measure the machine learning algorithm."@en  ;
+    rdfs:isDefinedBy <http://limes.sf.net/ontology/> ;
+    rdfs:label "pseudoFMeasure"@en  ;
+    rdfs:range rdfs:Literal .
+
