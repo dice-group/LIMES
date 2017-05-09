@@ -350,6 +350,26 @@ public class LinkSpecification implements ILinkSpecification {
             return "(" + filterExpression + ", " + getThreshold() + ", " + getOperator() + ", null)";
         // }
     }
+    
+    private int getDepth(){
+    	if(parent == null){
+    		return 0;
+    	}
+    	return parent.getDepth() +1;
+    }
+
+    public String toStringPretty() {
+        if (getChildren() != null) {
+            String str = "(" + filterExpression + ", " + getThreshold() + ", " + getOperator() + ", null,)";
+            String indent = new String(new char[getDepth()]).replace("\0", "\t");
+            for (LinkSpecification child : getChildren()) {
+                str += "\n  " + indent + " ->" + child.toStringPretty();
+            }
+            return str;
+        } else
+            return "(" + filterExpression + ", " + getThreshold() + ", " + getOperator() + ", null)";
+        // }
+    }
 
     /**
      * @return A string representation of the spec in a single line

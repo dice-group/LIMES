@@ -36,6 +36,7 @@ import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.util.ParenthesisMatcher;
+import org.apache.jena.sparql.function.library.leviathan.root;
 import org.apache.log4j.Logger;
 
 import weka.classifiers.trees.J48;
@@ -147,7 +148,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	private double bestFMeasure = 0.0;
 	private AMapping prediction;
 	private AMapping trainingData;
-public UnsupervisedDecisionTree root;
+public DecisionTree root;
 
 	// TODO check whats wrong with these
 	public static final String[] stringMeasures = { "cosine",
@@ -862,15 +863,17 @@ public UnsupervisedDecisionTree root;
 
 	@Override
 	protected MLResults learn(PseudoFMeasure pfm) throws UnsupportedMLImplementationException {
-		root = new UnsupervisedDecisionTree(this, sourceCache, targetCache, pfm,(double)getParameter(PARAMETER_MIN_PROPERTY_COVERAGE), (double)getParameter(PARAMETER_PROPERTY_LEARNING_RATE));
-		UnsupervisedDecisionTree.maxDepth = (int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
-		root.buildTree((int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
-		System.out.println(root.toString());
-		root.prune();
-		System.out.println(root.toString());
-		LinkSpecification ls = tp.parseTreePrefix(root.toString());
-		MLResults res = new MLResults(ls, UnsupervisedDecisionTree.getTotalMapping(root), -1.0, null);
-		return res;
+//		root = new UnsupervisedDecisionTree(this, sourceCache, targetCache, pfm,(double)getParameter(PARAMETER_MIN_PROPERTY_COVERAGE), (double)getParameter(PARAMETER_PROPERTY_LEARNING_RATE));
+//		UnsupervisedDecisionTree.maxDepth = (int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
+//		root.buildTree((int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
+//		System.out.println(root.toString());
+//		root.prune();
+//		System.out.println(root.toString());
+//		LinkSpecification ls = tp.parseTreePrefix(root.toString());
+//		MLResults res = new MLResults(ls, UnsupervisedDecisionTree.getTotalMapping(root), -1.0, null);
+//		return res;
+		logger.error("FIX THIS!");
+		return null;
 	}
 
 	@Override
@@ -980,7 +983,18 @@ public UnsupervisedDecisionTree root;
 
 	@Override
 	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
-		return activeLearn(trainingData);
+		DecisionTree.isSupervised = true;
+		root = new DecisionTree(this, sourceCache, targetCache, null,(double)getParameter(PARAMETER_MIN_PROPERTY_COVERAGE), (double)getParameter(PARAMETER_PROPERTY_LEARNING_RATE), trainingData);
+		DecisionTree.maxDepth = (int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
+		root.buildTree((int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
+		System.out.println(root.toString());
+		root.prune();
+		System.out.println(root.toString());
+//		LinkSpecification ls = tp.parseTreePrefix(root.toString());
+		LinkSpecification ls = root.getTotalLS();
+		MLResults res = new MLResults(ls, null, -1.0, null);
+		return res;
+//		return activeLearn(trainingData);
 	}
 
 	public ACache getSourceCache() {
