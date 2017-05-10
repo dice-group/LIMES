@@ -140,8 +140,8 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	private static final boolean mdlCorrection = true;
 	private static final int seed = 1;
 	private static final int maxLinkSpecHeight = 1;
-	private static final double minPropertyCoverage = 0.4; 
-	private static final double propertyLearningRate = 0.9;
+	private static final double minPropertyCoverage = 0.6; 
+	private static final double propertyLearningRate = 0.95;
 	private AMapping initialMapping = MappingFactory.createDefaultMapping();
 	private LinkSpecification bestLS;
 	private FMeasure fmeasure;

@@ -3,6 +3,7 @@ package org.aksw.limes.core.ml.algorithm.decisionTreeLearning;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
@@ -19,9 +20,6 @@ import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngi
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Plan;
-import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
-import org.aksw.limes.core.execution.rewriter.Rewriter;
-import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.Configuration;
@@ -51,14 +49,12 @@ public class DecisionTree {
 	private ACache targetCache;
 	private ACache testSourceCache;
 	private ACache testTargetCache;
-	private AMapping parentMapping;
 	private ExtendedClassifier classifier;
 	private DecisionTree parent;
 	private DecisionTree leftChild;
 	private DecisionTree rightChild;
 	private boolean root = false;
 	private boolean isLeftNode = false;
-	private boolean checked = false;
 	private PseudoFMeasure pseudoFMeasure;
 	private int depth;
 
@@ -67,8 +63,6 @@ public class DecisionTree {
 
 	public static boolean isSupervised = false;
 	private AMapping refMapping;
-
-	public static AMapping actualRefMapping;
 
 	public DecisionTree(DecisionTreeLearning dtl, ACache sourceCache, ACache targetCache, PseudoFMeasure pseudoFMeasure,
 			double minPropertyCoverage, double propertyLearningRate, AMapping refMapping) {
@@ -87,13 +81,14 @@ public class DecisionTree {
 		buildTestCaches();
 	}
 
-	private DecisionTree(DecisionTreeLearning dtl, ACache originalSourceCache, ACache originalTargetCache,
-			AMapping parentMapping, PseudoFMeasure pseudoFMeasure, double minPropertyCoverage,
+	private DecisionTree(DecisionTreeLearning dtl, ACache originalSourceCache, ACache originalTargetCache, ACache testSourceCache, ACache testTargetCache,
+			 PseudoFMeasure pseudoFMeasure, double minPropertyCoverage,
 			double propertyLearningRate, DecisionTree parent, boolean isLeftNode, AMapping refMapping) {
 		this.dtl = dtl;
 		this.sourceCache = originalSourceCache;
 		this.targetCache = originalTargetCache;
-		this.parentMapping = parentMapping;
+		this.testSourceCache = testSourceCache;
+		this.testTargetCache = testTargetCache;
 		this.pseudoFMeasure = pseudoFMeasure;
 		this.minPropertyCoverage = minPropertyCoverage;
 		this.propertyLearningRate = propertyLearningRate;
@@ -135,26 +130,15 @@ public class DecisionTree {
 			}
 		}
 		if (maxDepth != this.depth) {
-			rightChild = new DecisionTree(dtl, sourceCache, targetCache, classifier.getMapping(), pseudoFMeasure,
+			rightChild = new DecisionTree(dtl, sourceCache, targetCache, testSourceCache, testTargetCache, pseudoFMeasure,
 					minPropertyCoverage, propertyLearningRate, this, false, refMapping);
 			rightChild = rightChild.buildTree(maxDepth);
-			leftChild = new DecisionTree(dtl, sourceCache, targetCache, classifier.getMapping(), pseudoFMeasure,
+			leftChild = new DecisionTree(dtl, sourceCache, targetCache, testSourceCache, testTargetCache, pseudoFMeasure,
 					minPropertyCoverage, propertyLearningRate, this, true, refMapping);
 			leftChild = leftChild.buildTree(maxDepth);
 		}
 		return this;
 	}
-
-	// private AMapping getNewRefMapping(AMapping classifierMapping, AMapping
-	// refMapping, boolean left) {
-	// AMapping res = MappingFactory.createDefaultMapping();
-	// if (left) {
-	// res = MappingOperations.difference(refMapping, classifierMapping);
-	// } else {
-	// res = MappingOperations.intersection(classifierMapping, refMapping);
-	// }
-	// return res;
-	// }
 
 	public DecisionTree prune() {
 		int currentDepth = maxDepth;
@@ -170,10 +154,10 @@ public class DecisionTree {
 			return this;
 		}
 		// Go to the leaves
-		if (rightChild != null && !rightChild.checked) {
+		if (rightChild != null) {
 			rightChild.prune(depth);
 		}
-		if (leftChild != null && !leftChild.checked) {
+		if (leftChild != null) {
 			leftChild.prune(depth);
 		}
 		if (this.depth != depth) {
@@ -187,13 +171,13 @@ public class DecisionTree {
 		DecisionTree tmpLeftChild = leftChild;
 		this.rightChild = null;
 		double tmp = 0.0;
-		tmp = getTotalPseudoFMeasure();
+		tmp = calculateFMeasure(getTotalMapping(),refMapping);
 		if (tmp >= totalFMeasure) {
 			deleteRight = true;
 		}
 		this.rightChild = tmpRightChild;
 		this.leftChild = null;
-		tmp = getTotalPseudoFMeasure();
+		tmp = calculateFMeasure(getTotalMapping(),refMapping);
 		if (tmp >= totalFMeasure) {
 			totalFMeasure = tmp;
 			deleteLeft = true;
@@ -201,7 +185,7 @@ public class DecisionTree {
 		}
 		this.rightChild = null;
 		this.leftChild = null;
-		tmp = getTotalPseudoFMeasure();
+		tmp = calculateFMeasure(getTotalMapping(),refMapping);
 		if (tmp >= totalFMeasure) {
 			totalFMeasure = tmp;
 			deleteLeft = true;
@@ -216,42 +200,6 @@ public class DecisionTree {
 		return this;
 	}
 
-	public double getTotalPseudoFMeasure() {
-		DecisionTree rootNode = getRootNode();
-//		LinkSpecification ls = getTotalLS();
-//		AMapping prediction = rootNode.dtl.predict(rootNode.testSourceCache, rootNode.testTargetCache,
-//				new MLResults(ls, null, -1.0, null));
-//		double pres = rootNode.calculateFMeasure(prediction, rootNode.refMapping);
-		AMapping pathMapping = getTotalMapping();
-//		System.out.println("PRed size: " + prediction.size() + "path size: " + pathMapping.size());
-//		boolean same = prediction.size() == pathMapping.size();
-//		if(!same){
-//			System.err.println("\n DIFF \n");
-//			System.out.println(getRootNode().toStringPretty());
-//			System.out.println(ls.toStringPretty());
-//			for(String s: pathMappings.keySet()){
-//				System.out.println(s);
-//			}
-//		}
-//		System.out.println("Mappings equals: " + same);
-		double res = rootNode.calculateFMeasure(pathMapping, rootNode.refMapping);
-		// double resT = -1.0;
-		// if(actualRefMapping != null){
-		// resT = rootNode.calculateFMeasure(
-		// rootNode.dtl.predict(rootNode.sourceCache, rootNode.targetCache,
-		// new MLResults(rootNode.dtl.tp.parseTreePrefix(rootNode.toString()),
-		// null, -1.0, null)),
-		// actualRefMapping);
-		// }
-		// System.out.println("test: " +res + " actual: " +resT);
-//		System.out.println("predict: " + pres + " path: " + res);
-		return res;
-		// AMapping totalMapping = getTotalMapping(root);
-		// double pf = root.calculateFMeasure(totalMapping, root.refMapping);
-		// pathMappings = new HashMap<String, AMapping>();
-		// return pf;
-	}
-
 	private DecisionTree getRootNode() {
 		if (!root) {
 			if (parent == null) {
@@ -264,40 +212,57 @@ public class DecisionTree {
 	}
 
 	public AMapping getTotalMapping() {
-		pathMappings = new HashMap<String, AMapping>();
+//		pathMappings = new HashMap<String, AMapping>();
 		DecisionTree rootNode = getRootNode();
-		calculatePathMappings(rootNode);
+		List<String> pathStrings = calculatePathMappings(rootNode);
 		AMapping res = MappingFactory.createDefaultMapping();
-		for (String s : pathMappings.keySet()) {
-			res = MappingOperations.union(pathMappings.get(s), res);
+		Iterator<String> it = pathMappings.keySet().iterator();
+		while(it.hasNext()){
+			String s = it.next();
+			if(!pathStrings.contains(s)){
+				it.remove();
+			}else{
+				res = MappingOperations.union(pathMappings.get(s), res);
+			}
 		}
 		return res;
 	}
 
-	private void calculatePathMappings(DecisionTree node) {
+	private List<String> calculatePathMappings(DecisionTree node) {
+		List<String> pathStrings = new ArrayList<String>();
 		if (node.rightChild == null && node.leftChild == null) {
 			if (node.root) {
 				AMapping res = node.classifier.getMapping();
-				pathMappings.put(node.getPathString(), res);
+				String path = node.getPathString();
+				if(!pathMappings.keySet().contains(path)){
+                    pathMappings.put(path, res);
+                    pathStrings.add(path);
+				}
 			} else {
-				putPathMappingsLeaf(node);
+				String path = node.getPathString();
+				if(!pathMappings.keySet().contains(path)){
+                    pathMappings.put(path, node.getPathMapping());
+                    pathStrings.add(path);
+				}
 			}
 		} else if (node.rightChild != null && node.leftChild == null) {
 			calculatePathMappings(node.rightChild);
 		} else if (node.leftChild != null && node.rightChild == null) {
 			if (!root) {
-				putPathMappingsLeaf(node);
+				String path = node.getPathString();
+				if(!pathMappings.keySet().contains(path)){
+                    pathMappings.put(path, node.getPathMapping());
+                    pathStrings.add(path);
+				}
 			}
 			calculatePathMappings(node.leftChild);
 		} else {
 			calculatePathMappings(node.rightChild);
 			calculatePathMappings(node.leftChild);
 		}
+		return pathStrings;
 	}
 
-	private void putPathMappingsLeaf(DecisionTree node) {
-			pathMappings.put(node.getPathString(), node.getPathMapping());
-	}
 	
 	private AMapping getPathMapping(){
 		if(root){
@@ -423,7 +388,6 @@ public class DecisionTree {
 					propertyLearningRate, refMapping);
 			cloned.classifier = new ExtendedClassifier(classifier.getMeasure(), classifier.getThreshold(),
 					classifier.getSourceProperty(), classifier.getTargetProperty());
-			cloned.checked = checked;
 			cloned.depth = depth;
 			if (rightChild != null) {
 				cloned.rightChild = this.rightChild.cloneWithoutParent();
@@ -451,12 +415,11 @@ public class DecisionTree {
 			cloned = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure, minPropertyCoverage,
 					propertyLearningRate, refMapping);
 		} else {
-			cloned = new DecisionTree(dtl, sourceCache, targetCache, parentMapping, pseudoFMeasure, minPropertyCoverage,
+			cloned = new DecisionTree(dtl, sourceCache, targetCache, testSourceCache, testTargetCache, pseudoFMeasure, minPropertyCoverage,
 					propertyLearningRate, null, isLeftNode, refMapping);
 		}
 		cloned.classifier = new ExtendedClassifier(classifier.getMeasure(), classifier.getThreshold(),
 				classifier.getSourceProperty(), classifier.getTargetProperty());
-		cloned.checked = checked;
 		cloned.depth = depth;
 		if (leftChild != null) {
 			DecisionTree leftClone = leftChild.cloneWithoutParent();
@@ -481,11 +444,10 @@ public class DecisionTree {
 			cloned = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure, minPropertyCoverage,
 					propertyLearningRate, refMapping);
 		} else {
-			cloned = new DecisionTree(dtl, sourceCache, targetCache, parentMapping, pseudoFMeasure, minPropertyCoverage,
+			cloned = new DecisionTree(dtl, sourceCache, targetCache,testSourceCache, testTargetCache, pseudoFMeasure, minPropertyCoverage,
 					propertyLearningRate, parentClone, isLeftNode, refMapping);
 		}
 		cloned.classifier = new ExtendedClassifier(classifier.getMeasure(), classifier.getThreshold());
-		cloned.checked = checked;
 		cloned.depth = depth;
 		if (parentClone != null) {
 			if (this.isLeftNode) {
@@ -553,12 +515,6 @@ public class DecisionTree {
 	}
 
 	private double calculateFMeasure(AMapping mapping, AMapping refMap) {
-		// if(mapping.toString().contains("<") &&
-		// !refMap.toString().contains("<") || !mapping.toString().contains("<")
-		// && refMap.toString().contains("<")){
-		// System.err.println("\n\n\n ====!=!=!=!=!= BRACKET PROBLEM
-		// ===!=!=!==!=!= \n\n\n");
-		// }
 		double res = 0.0;
 		if (isSupervised) {
 			GoldStandard gs = new GoldStandard(refMap, testSourceCache.getAllUris(), testTargetCache.getAllUris());
@@ -782,7 +738,6 @@ public class DecisionTree {
 				long start = System.currentTimeMillis();
 				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
 				isSupervised = true;
-				DecisionTree.actualRefMapping = c.getReferenceMapping();
 				MLResults res = dtl.asSupervised().learn(getTrainingData(c.getReferenceMapping()));
 				long end = System.currentTimeMillis();
 				System.out.println(res.getLinkSpecification().toStringPretty());
