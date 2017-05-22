@@ -34,9 +34,10 @@ import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.FitnessFunctionDTL;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GlobalFMeasure;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.util.ParenthesisMatcher;
-import org.apache.jena.sparql.function.library.leviathan.root;
 import org.apache.log4j.Logger;
 
 import weka.classifiers.trees.J48;
@@ -127,6 +128,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	public static final String PARAMETER_MAX_LINK_SPEC_HEIGHT = "maximum height of the link specification";
     public static final String PARAMETER_MIN_PROPERTY_COVERAGE = "minimum property coverage";
     public static final String PARAMETER_PROPERTY_LEARNING_RATE = "property learning rate";
+    public static final String PARAMETER_FITNESS_FUNCTION = "fitness function";
 
 	// Default parameters
 	private static final boolean unprunedTree = false;
@@ -142,6 +144,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	private static final int maxLinkSpecHeight = 1;
 	private static final double minPropertyCoverage = 0.6; 
 	private static final double propertyLearningRate = 0.95;
+	private static final FitnessFunctionDTL fitnessFunction = new GlobalFMeasure();
 	private AMapping initialMapping = MappingFactory.createDefaultMapping();
 	private LinkSpecification bestLS;
 	private FMeasure fmeasure;
@@ -859,6 +862,7 @@ public DecisionTree root;
 				1, 100000, 1, PARAMETER_MAX_LINK_SPEC_HEIGHT));
         learningParameters.add(new LearningParameter(PARAMETER_MIN_PROPERTY_COVERAGE, minPropertyCoverage, Double.class, 0d, 1d, 0.01d, PARAMETER_MIN_PROPERTY_COVERAGE));
         learningParameters.add(new LearningParameter(PARAMETER_PROPERTY_LEARNING_RATE, propertyLearningRate,Double.class, 0d, 1d, 0.01d, PARAMETER_PROPERTY_LEARNING_RATE));
+        learningParameters.add(new LearningParameter(PARAMETER_FITNESS_FUNCTION, fitnessFunction, FitnessFunctionDTL.class, Double.NaN, Double.NaN, Double.NaN, PARAMETER_FITNESS_FUNCTION));
 	}
 
 	@Override
@@ -985,6 +989,9 @@ public DecisionTree root;
 	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
 		DecisionTree.isSupervised = true;
 		root = new DecisionTree(this, sourceCache, targetCache, null,(double)getParameter(PARAMETER_MIN_PROPERTY_COVERAGE), (double)getParameter(PARAMETER_PROPERTY_LEARNING_RATE), trainingData);
+		DecisionTree.fitnessFunction = (FitnessFunctionDTL)getParameter(PARAMETER_FITNESS_FUNCTION);
+		System.out.println("FITNESS FUNTION " + DecisionTree.fitnessFunction);
+		DecisionTree.fitnessFunction.setDt(root);
 		DecisionTree.maxDepth = (int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
 		root.buildTree((int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
 		System.out.println(root.toString());

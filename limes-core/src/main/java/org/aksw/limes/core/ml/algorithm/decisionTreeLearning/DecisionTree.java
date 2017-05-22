@@ -32,6 +32,9 @@ import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.FitnessFunctionDTL;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GlobalFMeasure;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.InformationGain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +66,7 @@ public class DecisionTree {
 
 	public static boolean isSupervised = false;
 	private AMapping refMapping;
+	public static FitnessFunctionDTL fitnessFunction;
 
 	public DecisionTree(DecisionTreeLearning dtl, ACache sourceCache, ACache targetCache, PseudoFMeasure pseudoFMeasure,
 			double minPropertyCoverage, double propertyLearningRate, AMapping refMapping) {
@@ -115,21 +119,18 @@ public class DecisionTree {
 	}
 
 	public DecisionTree buildTree(int maxDepth) {
-		List<ExtendedClassifier> classifiers = findClassifiers();
-		if (classifiers.size() == 0) {
+		classifier = fitnessFunction.getBestClassifier(this);
+		if(classifier == null)
 			return null;
-		}
-		Collections.sort(classifiers, Collections.reverseOrder());
-		classifier = classifiers.get(0);
-
 		if (root) {
 			totalFMeasure = classifier.getfMeasure();
 		} else {
-			if (classifier.getfMeasure() <= 0.1) {
+			if (fitnessFunction.stopCondition(this)) {
 				return null;
 			}
 		}
-		if (maxDepth != this.depth) {
+		System.out.println("Fitness Value: " + classifier.getfMeasure());
+		if (maxDepth != this.depth && this.depth < (dtl.getPropertyMapping().getCompletePropMapping().size())) {
 			rightChild = new DecisionTree(dtl, sourceCache, targetCache, testSourceCache, testTargetCache, pseudoFMeasure,
 					minPropertyCoverage, propertyLearningRate, this, false, refMapping);
 			rightChild = rightChild.buildTree(maxDepth);
@@ -139,7 +140,8 @@ public class DecisionTree {
 		}
 		return this;
 	}
-
+	
+	
 	public DecisionTree prune() {
 		int currentDepth = maxDepth;
 		while (currentDepth >= 0) {
@@ -171,13 +173,13 @@ public class DecisionTree {
 		DecisionTree tmpLeftChild = leftChild;
 		this.rightChild = null;
 		double tmp = 0.0;
-		tmp = calculateFMeasure(getTotalMapping(),refMapping);
+		tmp = pruneFitnessValue();
 		if (tmp >= totalFMeasure) {
 			deleteRight = true;
 		}
 		this.rightChild = tmpRightChild;
 		this.leftChild = null;
-		tmp = calculateFMeasure(getTotalMapping(),refMapping);
+		tmp = pruneFitnessValue();
 		if (tmp >= totalFMeasure) {
 			totalFMeasure = tmp;
 			deleteLeft = true;
@@ -185,7 +187,7 @@ public class DecisionTree {
 		}
 		this.rightChild = null;
 		this.leftChild = null;
-		tmp = calculateFMeasure(getTotalMapping(),refMapping);
+		tmp = pruneFitnessValue();
 		if (tmp >= totalFMeasure) {
 			totalFMeasure = tmp;
 			deleteLeft = true;
@@ -198,6 +200,10 @@ public class DecisionTree {
 			this.rightChild = tmpRightChild;
 		}
 		return this;
+	}
+	
+	private double pruneFitnessValue(){
+			return calculateFMeasure(getTotalMapping(),refMapping);
 	}
 
 	private DecisionTree getRootNode() {
@@ -248,13 +254,13 @@ public class DecisionTree {
 		} else if (node.rightChild != null && node.leftChild == null) {
 			calculatePathMappings(node.rightChild);
 		} else if (node.leftChild != null && node.rightChild == null) {
-			if (!root) {
+//			if (!root) {
 				String path = node.getPathString();
 				if(!pathMappings.keySet().contains(path)){
                     pathMappings.put(path, node.getPathMapping());
                     pathStrings.add(path);
 				}
-			}
+//			}
 			calculatePathMappings(node.leftChild);
 		} else {
 			calculatePathMappings(node.rightChild);
@@ -279,7 +285,7 @@ public class DecisionTree {
 		return res;
 	}
 
-	private String getPathString() {
+	public String getPathString() {
 		String str = "" + depth;
 		if (root) {
 			if (this.classifier.getMetricExpression() != null && !this.classifier.getMetricExpression().equals("")) {
@@ -309,20 +315,10 @@ public class DecisionTree {
 			String lsString = "";
 			for (int i = 1; i < path.length; i++) {
 				if (path[i].startsWith(left)) {
-//					if(lsString.equals("")){
-//                        lsString = "MINUS(" + path[i] + "," + path[i - 1] + ")";
-//                        i--;
-//					}else{
 						lsString = "MINUS(" + path[i] + "," + lsString +")";
-//					}
 					lsString += "|0.0";
 				} else if (path[i].startsWith(right)) {
-//					if(lsString.equals("")){
-//                        lsString = "AND(" + path[i - 1] + "," + path[i] + ")";
-//                        i--;
-//					}else{
 						lsString = "AND(" + path[i] + "," + lsString +")";
-//					}
 					lsString += "|0.0";
 				} else {
 					if(lsString.equals("")){
@@ -348,7 +344,7 @@ public class DecisionTree {
 			LinkSpecification ls = new LinkSpecification(lsString, outerThreshold);
 			AMapping predMapping = dtl.predict(testSourceCache, testTargetCache, new MLResults(ls,null, 0, null));
 			AMapping pathMapping = pathMappings.get(s);
-			boolean same = predMapping.equals(pathMapping);
+			boolean same = predMapping.size() == pathMapping.size();
 			if(!same){
 				System.err.println("\n\n ====== ! ! ! ! ! DIFFERENT !!!!!! ====== \n\n");
 			}
@@ -461,58 +457,6 @@ public class DecisionTree {
 		return cloned;
 	}
 
-	/**
-	 * @return initial classifiers
-	 */
-	private List<ExtendedClassifier> findClassifiers() {
-		// logger.info("Getting all classifiers ...");
-		List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
-		for (PairSimilar<String> propPair : dtl.getPropertyMapping().stringPropPairs) {
-			for (String measure : DecisionTreeLearning.defaultMeasures) {
-				ExtendedClassifier cp = findClassifier(propPair.a, propPair.b, measure);
-				if (cp != null)
-					initialClassifiers.add(cp);
-			}
-		}
-
-		// logger.info("Done computing all classifiers.");
-		return initialClassifiers;
-	}
-
-	private ExtendedClassifier findClassifier(String sourceProperty, String targetProperty, String measure) {
-		String measureExpression = measure + "(x." + sourceProperty + ",y." + targetProperty + ")";
-		String properties = "(x." + sourceProperty + ",y." + targetProperty + ")";
-		ExtendedClassifier cp = new ExtendedClassifier(measure, 0.0, sourceProperty, targetProperty);
-		if (this.parent != null) {
-			if (this.parent.getPathString().contains(properties)) {
-				return null;
-			}
-		}
-		double maxFM = 0.0;
-		double theta = 1.0;
-		AMapping bestMapping = MappingFactory.createDefaultMapping();
-		// PseudoRefFMeasure prfm = new PseudoRefFMeasure();
-		// GoldStandard gs = new GoldStandard(null, sourceCache.getAllUris(),
-		// targetCache.getAllUris());
-		for (double threshold = 1d; threshold > minPropertyCoverage; threshold = threshold * propertyLearningRate) {
-			cp = new ExtendedClassifier(measure, threshold, sourceProperty, targetProperty);
-			AMapping mapping = getMeasureMapping(measureExpression, cp);
-			// double pfm = prfm.calculate(mapping, gs, 0.1);
-			double pfm = calculateFMeasure(mapping, refMapping);
-			// System.out.println(measureExpression + "|" +threshold+ " " +
-			// pfm);
-			if (maxFM < pfm) { // only interested in largest threshold with
-								// highest F-Measure
-				bestMapping = mapping;
-				theta = threshold;
-				maxFM = pfm;
-			}
-		}
-		cp = new ExtendedClassifier(measure, theta, sourceProperty, targetProperty);
-		cp.setfMeasure(maxFM);
-		cp.setMapping(executeAtomicMeasure(measureExpression, theta));
-		return cp;
-	}
 
 	private double calculateFMeasure(AMapping mapping, AMapping refMap) {
 		double res = 0.0;
@@ -527,30 +471,16 @@ public class DecisionTree {
 		}
 		return res;
 	}
-
-	private AMapping getMeasureMapping(String measureExpression, ExtendedClassifier cp) {
+	
+	public AMapping getMeasureMapping(String measureExpression, ExtendedClassifier cp) {
 		 if (this.root) {
              AMapping mapping = executeAtomicMeasure(measureExpression,
              cp.getThreshold());
              calculatedMappings.put(cp.getMetricExpression(), mapping);
              return mapping;
 		 }
-		// AMapping currentClassifierMapping =
-		// calculatedMappings.get(cp.getMetricExpression());
-		// if (this.isLeftNode) {
-		// AMapping differenceMapping =
-		// MappingOperations.difference(currentClassifierMapping,
-		// parentMapping);
-		// return differenceMapping;
-		// }
-		// AMapping joinedMapping =
-		// MappingOperations.intersection(currentClassifierMapping,
-		// parentMapping);
-		// return joinedMapping;
 		classifier = cp;
 		classifier.setMapping(calculatedMappings.get(cp.getMetricExpression()));
-//		return dtl.predict(testSourceCache, testTargetCache,
-//				new MLResults(getTotalLS(), null, -1.0, null));
 		return getTotalMapping();
 	}
 
@@ -563,8 +493,7 @@ public class DecisionTree {
 		return ((SimpleExecutionEngine) ee).executeInstructions(plan);
 	}
 
-	@Override
-	public String toString() {
+	public String toStringOneLine() {
 		String res = "";
 		if (classifier != null) {
 			res += classifier.getMeasure() + TreeParser.delimiter + classifier.getSourceProperty() + "|"
@@ -588,7 +517,8 @@ public class DecisionTree {
 		return res;
 	}
 
-	public String toStringPretty() {
+	@Override
+	public String toString() {
 		String res = "\n";
 		res += new String(new char[depth]).replace("\0", "\t");
 		if (classifier != null) {
@@ -596,13 +526,13 @@ public class DecisionTree {
 					+ classifier.getTargetProperty() + ": <= " + classifier.getThreshold() + ", > "
 					+ classifier.getThreshold() + "[";
 			if (leftChild != null) {
-				res += leftChild.toStringPretty();
+				res += leftChild.toString();
 			} else {
 				res += "negative (0)";
 			}
 			res += "][";
 			if (rightChild != null) {
-				res += rightChild.toStringPretty();
+				res += rightChild.toString();
 			} else {
 				res += "positive (0)";
 			}
@@ -618,7 +548,7 @@ public class DecisionTree {
 
 		final int EUCLID_ITERATIONS = 20;
 		final double MIN_COVERAGE = 0.6d;
-		String[] datasets = { /* "dbplinkedmdb",*/ "person1", "person2",  "drugs", "restaurantsfixed" };
+		String[] datasets = {"dbplinkedmdb", "person1", "person2",  "drugs", "restaurantsfixed"};
 		// String data = "person2";
 		for (String data : datasets) {
 			EvaluationData c = DataSetChooser.getData(data);
@@ -731,13 +661,15 @@ public class DecisionTree {
 				System.out.println("========DTL==========");
 				AMLAlgorithm dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
 						MLImplementationType.SUPERVISED_BATCH);
+				System.out.println("source size: " + c.getSourceCache().size());
+				System.out.println("target size: " + c.getTargetCache().size());
 				dtl.init(null, c.getSourceCache(), c.getTargetCache());
 				Configuration config = c.getConfigReader().read();
 				dtl.getMl().setConfiguration(config);
 				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 				long start = System.currentTimeMillis();
 				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				isSupervised = true;
+				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new InformationGain());
 				MLResults res = dtl.asSupervised().learn(getTrainingData(c.getReferenceMapping()));
 				long end = System.currentTimeMillis();
 				System.out.println(res.getLinkSpecification().toStringPretty());
@@ -768,6 +700,7 @@ public class DecisionTree {
 		Object[] keyArr = full.getMap().keySet().toArray();
 		int c = 5;
 		int i = 2;
+		boolean pos = true;
 		while (slice.size() <= sliceSizeWanted) {
 			// String key = (String)keyArr[(int)(Math.random() *
 			// keyArr.length)];
@@ -778,7 +711,23 @@ public class DecisionTree {
 				i++;
 			}
 			if (!slice.getMap().keySet().contains(key)) {
-				slice.add(key, full.getMap().get(key));
+				if(pos){
+                    slice.add(key, full.getMap().get(key));
+                    pos = false;
+				}else{
+					int falsec = 0;
+					while(c == falsec){
+					 double random = Math.random();
+					 falsec = (int)(random * keyArr.length);
+					}
+					HashMap<String,Double> tmpMap = full.getMap().get((String)keyArr[falsec]);
+					HashMap<String,Double> falseMap = new HashMap<String,Double>();
+					for(String t: tmpMap.keySet()){
+						falseMap.put(t,0.0);
+					}
+					slice.add(key, falseMap);
+					pos = true;
+				}
 			}
 		}
 		System.out.println("got: " + MappingOperations.intersection(slice, full).size() + " wanted: " + sliceSizeWanted
@@ -788,6 +737,58 @@ public class DecisionTree {
 
 	public void setRefMapping(AMapping refMapping) {
 		this.refMapping = refMapping;
+	}
+
+	public AMapping getRefMapping() {
+		return refMapping;
+	}
+
+	public double getMinPropertyCoverage() {
+		return minPropertyCoverage;
+	}
+
+	public double getPropertyLearningRate() {
+		return propertyLearningRate;
+	}
+
+	public ACache getSourceCache() {
+		return sourceCache;
+	}
+
+	public ACache getTargetCache() {
+		return targetCache;
+	}
+
+	public ACache getTestSourceCache() {
+		return testSourceCache;
+	}
+
+	public ACache getTestTargetCache() {
+		return testTargetCache;
+	}
+
+	public ExtendedClassifier getClassifier() {
+		return classifier;
+	}
+
+	public void setClassifier(ExtendedClassifier classifier) {
+		this.classifier = classifier;
+	}
+
+	public DecisionTree getParent() {
+		return parent;
+	}
+
+	public DecisionTreeLearning getDtl() {
+		return dtl;
+	}
+
+	public boolean isLeftNode() {
+		return isLeftNode;
+	}
+
+	public boolean isRoot() {
+		return root;
 	}
 
 }
