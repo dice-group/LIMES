@@ -197,7 +197,7 @@ public class Evaluator {
             for (int i = 0; i < folds; i++) {
 
                 // algorithm .setSourceCache(srcFolds[i]); 
-                algorithm.init(null, srcFolds[i], null);
+                algorithm.init(null, srcFolds[i], dataset.target);
                 // target cache is invariant
                 MLResults model =null;
                 //algorithm.learn(srcMap[i]);
@@ -210,7 +210,7 @@ public class Evaluator {
                 } catch (UnsupportedMLImplementationException e) {
                     e.printStackTrace();
                 }
-
+                
 
                 goldStandard.referenceMappings = srcGold[i];
                 EvaluationRun er = new EvaluationRun(algorithm.getName() + " - fold " + i,dataset.dataName, eval.evaluate(algorithm.predict(srcFolds[i], srcFolds[i], model), goldStandard, qlMeasures));
