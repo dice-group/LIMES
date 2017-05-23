@@ -301,17 +301,11 @@ public class UnsupervisedDecisionTree {
 		return joinedMapping;
 	}
 
+
 	/**
-	 * @param sourceProperty
-	 *            URI
-	 * @param targetProperty
-	 *            URI
-	 * @param measure
-	 *            name
-	 * @param threshold
-	 *            of the LS
-	 * @return Mapping from source to target resources after applying the atomic
-	 *         mapper measure(sourceProperty, targetProperty)
+	 * @param measureExpression
+	 * @param threshold of the LS
+	 * @return
 	 */
 	public AMapping executeAtomicMeasure(String measureExpression, double threshold) {
 		Instruction inst = new Instruction(Instruction.Command.RUN, measureExpression, threshold + "", -1, -1, -1);
@@ -322,6 +316,13 @@ public class UnsupervisedDecisionTree {
 		return ((SimpleExecutionEngine) ee).executeInstructions(plan);
 	}
 
+	/**
+	 * @param measureExpression
+	 * @param threshold
+	 * @param sC source cache
+	 * @param tC target cache
+	 * @return
+	 */
 	public static AMapping execute(String measureExpression, double threshold, ACache sC, ACache tC) {
 		Instruction inst = new Instruction(Instruction.Command.RUN, measureExpression, threshold + "", -1, -1, -1);
 		ExecutionEngine ee = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sC, tC, "?x", "?y");
