@@ -262,7 +262,7 @@ public class Ligon {
         this.noisyOracles = noisyOracles;
     }
 
-    public MLResults learn(ACache sourceTestCache, ACache targetTestCache, AMapping fullReferenceMapping) {
+    public MLResults learn(ACache sourceTestCache, ACache targetTestCache, AMapping fullReferenceMapping, int activeLearningRate) {
         MLResults mlModel = null;
         String resultStr =  "itr\tfP\tfR\tfF\tT\tMetricExpr\tP\tR\tF\n";
         String resultStr2 =  "";
@@ -305,17 +305,19 @@ public class Ligon {
 
 
             // 2. get most informative examples
-            int activeLearningRate = 3;
-            AMapping mostInfPosMap = fuzzyWombat.findMostInformativePositiveExamples(activeLearningRate, examples);
-            AMapping mostInfNegMap = fuzzyWombat.findMostInformativeNegativeExamples(activeLearningRate, examples);
-            System.out.println("mostInfPosMap size: " + mostInfPosMap.size());
-            System.out.println("mostInfNegMap size: " + mostInfNegMap.size());
+            AMapping mostInfMap = fuzzyWombat.findMostInformativeExamples(activeLearningRate, examples);
+           
+//            AMapping mostInfPosMap = fuzzyWombat.findMostInformativePositiveExamples(activeLearningRate, examples);
+//            AMapping mostInfNegMap = fuzzyWombat.findMostInformativeNegativeExamples(activeLearningRate, examples);
+            System.out.println("mostInfMap size: " + mostInfMap.size());
+//            System.out.println("mostInfNegMap size: " + mostInfNegMap.size());
 
             // 3. update training examples
-            examples = MappingOperations.union(examples,mostInfPosMap);
-            examples = MappingOperations.union(examples, mostInfNegMap);
+            examples = MappingOperations.union(examples, mostInfMap);
+//            examples = MappingOperations.union(examples,mostInfPosMap);
+//            examples = MappingOperations.union(examples, mostInfNegMap);
             updatePosNegTrainingExamples(examples);
-            System.out.println("Current example size: " + examples.size());
+//            System.out.println("Current example size: " + examples.size());
 
             //            AMapping nextExamples = null;
             //            try {

@@ -40,6 +40,8 @@ public class FuzzyWombatSimple extends AWombat {
     protected RefinementNode bestSolutionNode = null;
     protected List<ExtendedClassifier> classifiers = null;
     protected int iterationNr = 0;
+    
+    public double epsilon = 0.25;
 
     AMapping informativeExamples = MappingFactory.createDefaultMapping();
 
@@ -396,13 +398,9 @@ public class FuzzyWombatSimple extends AWombat {
         }
     }
 
-
-    /**
-     * @return
-     */
-    public AMapping findInformativeExamples(){
-
-        AMapping infExampleMap = MappingFactory.createDefaultMapping();
+    public AMapping findMostInformativeExamples(int nrOfEx, AMapping examplesMap){
+        // compute average confidence links
+        AMapping avgExampleMap = MappingFactory.createDefaultMapping();
         double sumLeafWeight = 0.0;
         for(Tree<RefinementNode> leaf : refinementTreeRoot.getLeaves()){
             double leafWeight = leaf.getValue().getFMeasure();
@@ -410,66 +408,120 @@ public class FuzzyWombatSimple extends AWombat {
             HashMap<String, HashMap<String, Double>> leafMap = leaf.getValue().getMapping().getMap();
             for(String s : leafMap.keySet()){
                 for(String t : leafMap.get(s).keySet()){
-                    if (infExampleMap.contains(s, t)) {
-                        infExampleMap.getMap().get(s).put(t, infExampleMap.getConfidence(s, t) + leafWeight);
+                    if (avgExampleMap.contains(s, t)) {
+                        avgExampleMap.getMap().get(s).put(t, avgExampleMap.getConfidence(s, t) + leafWeight);
                     }else{
-                        infExampleMap.add(s, t,  leafWeight);
+                        avgExampleMap.add(s, t,  leafWeight);
                     }
                 }
             }
         }
-        infExampleMap = MappingOperations.scalarMultiply(infExampleMap, sumLeafWeight);
+        avgExampleMap = MappingOperations.scalarMultiply(avgExampleMap, sumLeafWeight);
+        
+        // compute entropy
+        TreeSet<LinkEntropy> linkEntropy = new TreeSet<>();
+        for(String s : avgExampleMap.getMap().keySet()){
+            for(String t : avgExampleMap.getMap().get(s).keySet()){
+                double confidence = avgExampleMap.getMap().get(s).get(t);
+                if(confidence > (0.5 - epsilon) && confidence < (0.5 + epsilon)){
+                    linkEntropy.add( new LinkEntropy(s, t, confidence));
+                }
+            }
+        }
+        
+        // get highestEntropyLinks
+        List<LinkEntropy> highestEntropyLinks = new ArrayList<>();
+        int i = 0;
+        Iterator<LinkEntropy> itr = linkEntropy.descendingIterator();
+        while(itr.hasNext() && i < nrOfEx) {
+            LinkEntropy next = itr.next();
+            if(!examplesMap.contains(next.getSourceUri(), next.getTargetUri())){
+                highestEntropyLinks.add(next);
+                i++;
+            }
+        }
+        AMapping infExampleMap = MappingFactory.createDefaultMapping();
+        for(LinkEntropy l: highestEntropyLinks){
+            infExampleMap.add(l.getSourceUri(), l.getTargetUri(), l.getEntropy());
+        }
         return infExampleMap;
+        
     }
+    
 
-    /**
-     * @param size
-     * @param examplesMap
-     * @return
-     */
-    public AMapping findMostInformativePositiveExamples(int size, AMapping examplesMap){
-        AMapping infExMap = findInformativeExamples();
-        int i = 0;
-        AMapping result = MappingFactory.createDefaultMapping();
-        for(String s : infExMap.getMap().keySet()){
-            for(String t : infExMap.getMap().get(s).keySet()){
-                double c = infExMap.getConfidence(s, t);
-                if(c > 0.5d && c < 0.75 && !examplesMap.contains(s, t)){
-                    result.add(s, t, c);
-                    i++;
-                }
-                if(i == size){
-                    return result;
-                }
-
-            }
-        }
-        return result;
-    }
-
-    /**
-     * @param size
-     * @param examplesMap
-     * @return
-     */
-    public AMapping findMostInformativeNegativeExamples(int size, AMapping examplesMap){
-        AMapping infExMap = findInformativeExamples();
-        int i = 0;
-        AMapping result = MappingFactory.createDefaultMapping();
-        for(String s : infExMap.getMap().keySet()){
-            for(String t : infExMap.getMap().get(s).keySet()){
-                double c = infExMap.getConfidence(s, t);
-                if(c < 0.5d && c > 0.25 && !examplesMap.contains(s, t)){
-                    result.add(s, t, c); 
-                    i++;
-                }
-                if(i == size){
-                    return result;
-                }
-            }
-        }
-        return result;
-    }
+//    /**
+//     * @return
+//     */
+//    public AMapping findInformativeExamples(){
+//
+//        AMapping infExampleMap = MappingFactory.createDefaultMapping();
+//        double sumLeafWeight = 0.0;
+//        for(Tree<RefinementNode> leaf : refinementTreeRoot.getLeaves()){
+//            double leafWeight = leaf.getValue().getFMeasure();
+//            sumLeafWeight += leafWeight;  
+//            HashMap<String, HashMap<String, Double>> leafMap = leaf.getValue().getMapping().getMap();
+//            for(String s : leafMap.keySet()){
+//                for(String t : leafMap.get(s).keySet()){
+//                    if (infExampleMap.contains(s, t)) {
+//                        infExampleMap.getMap().get(s).put(t, infExampleMap.getConfidence(s, t) + leafWeight);
+//                    }else{
+//                        infExampleMap.add(s, t,  leafWeight);
+//                    }
+//                }
+//            }
+//        }
+//        infExampleMap = MappingOperations.scalarMultiply(infExampleMap, sumLeafWeight);
+//        return infExampleMap;
+//    }
+//
+//    /**
+//     * @param size
+//     * @param examplesMap
+//     * @return
+//     */
+//    public AMapping findMostInformativePositiveExamples(int size, AMapping examplesMap){
+//        AMapping infExMap = findInformativeExamples();
+//        int i = 0;
+//        AMapping result = MappingFactory.createDefaultMapping();
+//        for(String s : infExMap.getMap().keySet()){
+//            for(String t : infExMap.getMap().get(s).keySet()){
+//                double c = infExMap.getConfidence(s, t);
+//                if(c > 0.5d && c < 0.75 && !examplesMap.contains(s, t)){
+//                    result.add(s, t, c);
+//                    i++;
+//                }
+//                if(i == size){
+//                    return result;
+//                }
+//
+//            }
+//        }
+//        return result;
+//    }
+//
+//    /**
+//     * @param size
+//     * @param examplesMap
+//     * @return
+//     */
+//    public AMapping findMostInformativeNegativeExamples(int size, AMapping examplesMap){
+//        AMapping infExMap = findInformativeExamples();
+//        int i = 0;
+//        AMapping result = MappingFactory.createDefaultMapping();
+//        for(String s : infExMap.getMap().keySet()){
+//            for(String t : infExMap.getMap().get(s).keySet()){
+//                double c = infExMap.getConfidence(s, t);
+//                if(c < 0.5d && c > 0.25 && !examplesMap.contains(s, t)){
+//                    result.add(s, t, c); 
+//                    i++;
+//                }
+//                if(i == size){
+//                    return result;
+//                }
+//            }
+//        }
+//        return result;
+//    }
 
 
 }

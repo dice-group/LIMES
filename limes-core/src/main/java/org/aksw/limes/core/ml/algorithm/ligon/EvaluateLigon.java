@@ -399,8 +399,10 @@ public class EvaluateLigon extends FuzzyWombatSimple{
      */
     public static void main(String[] args) {
         // evaluation parameters
-        String d = "person1";
+        String d = "Amazon-GoogleProducts";
         int noisyOracleCount = 10 ;
+        int activeLearningRate = 1;
+        int posNegExSize = 10;
 
         // get training data
         resultStr +=  d +"\nSample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
@@ -416,7 +418,7 @@ public class EvaluateLigon extends FuzzyWombatSimple{
 
         // training examples
         //        for(int posNegExSize = 10; posNegExSize < 100 ; posNegExSize += 10){
-        int posNegExSize = 10;
+        
         System.out.println();
         AMapping posTrainingMap = sampleReferenceMap(fullReferenceMapping, posNegExSize);
         AMapping negTrainingMap = generateNegativeExamples(posTrainingMap, posNegExSize);
@@ -442,7 +444,7 @@ public class EvaluateLigon extends FuzzyWombatSimple{
 
         // initialize ligon
         Ligon ligon = new Ligon(trainingMap, sourceTrainCache, targetTrainCache, noisyOracles);
-        MLResults mlResult = ligon.learn(fullSourceCache, fullTargetCache, fullReferenceMapping);
+        MLResults mlResult = ligon.learn(fullSourceCache, fullTargetCache, fullReferenceMapping, activeLearningRate);
         
 //        // test for the whole dataset
 //        sourceTestCache = fullSourceCache;

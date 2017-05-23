@@ -4,14 +4,14 @@ public class LinkEntropy implements Comparable<LinkEntropy>{
     
     protected String sourceUri;
     protected String targetUri;
-    protected int entropy;
+    protected double entropy;
     
     
-    public LinkEntropy(String sourceUri, String targetUri, int entropy) {
+    public LinkEntropy(String sourceUri, String targetUri, double confidence) {
         super();
         this.sourceUri = sourceUri;
         this.targetUri = targetUri;
-        this.entropy = entropy;
+        this.entropy = confidence;
     }
     
     public String getSourceUri() {
@@ -26,7 +26,7 @@ public class LinkEntropy implements Comparable<LinkEntropy>{
     public void setTargetUri(String targetUri) {
         this.targetUri = targetUri;
     }
-    public int getEntropy() {
+    public double getEntropy() {
         return entropy;
     }
     public void setEntropy(int entropy) {
