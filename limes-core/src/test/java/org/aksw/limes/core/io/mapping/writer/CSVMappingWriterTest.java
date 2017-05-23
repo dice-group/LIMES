@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class CSVMappingTest {
+public class CSVMappingWriterTest {
 
     AMapping mapping = MappingFactory.createDefaultMapping();
 
