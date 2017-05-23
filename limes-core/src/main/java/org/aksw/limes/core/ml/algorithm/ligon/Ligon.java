@@ -87,7 +87,7 @@ public class Ligon {
     
     /**
      * convert input mapping with membership values to the same mapping with probabilities
-     * @param map
+     * @param inputMapping
      * @return
      */
     public static AMapping mu2p(AMapping inputMapping){
