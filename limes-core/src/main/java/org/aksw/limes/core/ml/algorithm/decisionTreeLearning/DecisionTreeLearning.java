@@ -434,7 +434,7 @@ public DecisionTree root;
 			logger.debug("Setting threshold to: " + resLS.getThreshold());
 		}
 		this.mlresult = new MLResults();
-		if (checkIfThereWasBetterLSBefore(resLS)) {
+		if (checkIfThereWasBetterLSBefore(resLS, null, null)) {
 			logger.debug("Already had better LinkSpecification: " + bestLS);
 		} else {
 			logger.debug("Learned LinkSpecification: " + resLS.toStringOneLine());
@@ -468,7 +468,7 @@ public DecisionTree root;
 			tree.setOptions(options);
 			logger.info("Building classifier....");
 			tree.buildClassifier(trainingSet);
-			// System.out.println(tree.prefix());
+			 System.out.println(tree.prefix());
 			// System.out.println(tree.graph());
 			if (tree.prefix().startsWith("[negative ") || tree.prefix().startsWith("[positive ")) {
 				logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
@@ -493,14 +493,18 @@ public DecisionTree root;
 	 * @param ls
 	 * @return
 	 */
-	private boolean checkIfThereWasBetterLSBefore(LinkSpecification ls) {
+	private boolean checkIfThereWasBetterLSBefore(LinkSpecification ls, ACache source, ACache target) {
+		if(source == null || target == null){
+			source = this.sourceCache;
+			target = this.targetCache;
+		}
 		while (alreadySeenLS.get(ls.toString()) == null && ls.getThreshold() != 1.0) {
 			logger.debug("Checking: " + ls);
 			MLResults tmp = new MLResults();
 			tmp.setLinkSpecification(ls);
-			AMapping pred = predict(this.sourceCache, this.targetCache, tmp);
+			AMapping pred = predict(source, target, tmp);
 			double pfresult = fmeasure.calculate(pred,
-					new GoldStandard(trainingData, this.sourceCache.getAllUris(), this.targetCache.getAllUris()));
+					new GoldStandard(trainingData, source.getAllUris(), target.getAllUris()));
 			logger.debug("best before: " + bestFMeasure + " now: " + pfresult);
 			alreadySeenLS.put(ls.toString(), pfresult);
 			if (pfresult > bestFMeasure) {
@@ -766,7 +770,7 @@ public DecisionTree root;
 		}
 		lsClone = manipulateThreshold(lsClone, false, thresholdRaise);
 		if (lsClone.equals(ls)) {
-			logger.info("Can't raise threshold anymore, maximum reached!");
+			logger.debug("Can't raise threshold anymore, maximum reached!");
 		}
 		return lsClone;
 	}
@@ -987,10 +991,11 @@ public DecisionTree root;
 
 	@Override
 	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
+		
+		this.trainingData = trainingData;
 		DecisionTree.isSupervised = true;
 		root = new DecisionTree(this, sourceCache, targetCache, null,(double)getParameter(PARAMETER_MIN_PROPERTY_COVERAGE), (double)getParameter(PARAMETER_PROPERTY_LEARNING_RATE), trainingData);
 		DecisionTree.fitnessFunction = (FitnessFunctionDTL)getParameter(PARAMETER_FITNESS_FUNCTION);
-		System.out.println("FITNESS FUNTION " + DecisionTree.fitnessFunction);
 		DecisionTree.fitnessFunction.setDt(root);
 		DecisionTree.maxDepth = (int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
 		root.buildTree((int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
@@ -998,8 +1003,16 @@ public DecisionTree root;
 		root.prune();
 		System.out.println(root.toString());
 //		LinkSpecification ls = tp.parseTreePrefix(root.toString());
+
 		LinkSpecification ls = root.getTotalLS();
-		MLResults res = new MLResults(ls, null, -1.0, null);
+//		if (checkIfThereWasBetterLSBefore(ls, root.getTestSourceCache(), root.getTestTargetCache())) {
+//			logger.debug("Already had better LinkSpecification: " + bestLS);
+//		} else {
+//			logger.debug("Learned LinkSpecification: " + ls.toStringOneLine());
+//		}
+		if(bestLS == null)
+			bestLS = ls;
+		MLResults res = new MLResults(bestLS, null, -1.0, null);
 		return res;
 //		return activeLearn(trainingData);
 	}
@@ -1065,7 +1078,7 @@ public DecisionTree root;
 			LinkSpecification ls = (((DecisionTreeLearning) dtl.getMl()).tp.parseTreePrefix(
 					"qgrams§title|title: <= 0.504587, > 0.504587[jaro§authors|authors: <= 0.675724, > 0.675724[negative (304.0)][jaro§title|title: <= 0.677374, > 0.677374[qgrams§authors|authors: <= 0.355556, > 0.355556[positive (4.0)][cosine§authors|authors: <= 0.612372, > 0.612372[negative (4.0)][positive (2.0)]]][negative (7.0)]]][positive (19.0/1.0)]"));
 			((DecisionTreeLearning) dtl.getMl()).checkIfThereWasBetterLSBefore(((DecisionTreeLearning) dtl.getMl()).tp
-					.pruneLS(ls, DecisionTreeLearning.maxLinkSpecHeight));
+					.pruneLS(ls, DecisionTreeLearning.maxLinkSpecHeight),null,null);
 			// CSVMappingReader reader = new
 			// CSVMappingReader("/home/ohdorno/Documents/Uni/BA_Informatik/example.csv",",");
 			// AMapping trainingMapping = reader.read();

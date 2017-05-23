@@ -1,13 +1,11 @@
 package org.aksw.limes.core.ml.algorithm.decisionTreeLearning;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
-import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
@@ -21,20 +19,21 @@ import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Plan;
 import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.FitnessFunctionDTL;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GlobalFMeasure;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.InformationGain;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GiniIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -347,6 +346,8 @@ public class DecisionTree {
 			boolean same = predMapping.size() == pathMapping.size();
 			if(!same){
 				System.err.println("\n\n ====== ! ! ! ! ! DIFFERENT !!!!!! ====== \n\n");
+				System.err.println("PredMapping: " + predMapping.size());
+				System.err.println("PathMapping: " + pathMapping.size());
 			}
 			lsString += "|" + outerThreshold;
 			pathLS[countPathLS] = lsString;
@@ -474,13 +475,17 @@ public class DecisionTree {
 	
 	public AMapping getMeasureMapping(String measureExpression, ExtendedClassifier cp) {
 		 if (this.root) {
-             AMapping mapping = executeAtomicMeasure(measureExpression,
-             cp.getThreshold());
+             AMapping mapping = executeAtomicMeasure(measureExpression, cp.getThreshold());
              calculatedMappings.put(cp.getMetricExpression(), mapping);
              return mapping;
 		 }
 		classifier = cp;
-		classifier.setMapping(calculatedMappings.get(cp.getMetricExpression()));
+		AMapping classifierMapping = calculatedMappings.get(cp.getMetricExpression());
+		if(classifierMapping == null){
+             classifierMapping = executeAtomicMeasure(measureExpression, cp.getThreshold());
+             calculatedMappings.put(cp.getMetricExpression(), classifierMapping);
+		}
+		classifier.setMapping(classifierMapping);
 		return getTotalMapping();
 	}
 
@@ -548,7 +553,7 @@ public class DecisionTree {
 
 		final int EUCLID_ITERATIONS = 20;
 		final double MIN_COVERAGE = 0.6d;
-		String[] datasets = {"dbplinkedmdb", "person1", "person2",  "drugs", "restaurantsfixed"};
+		String[] datasets = {/*"dbplinkedmdb", "person1",*/ "person2"/*,"drugs", "restaurantsfixed"*/};
 		// String data = "person2";
 		for (String data : datasets) {
 			EvaluationData c = DataSetChooser.getData(data);
@@ -669,8 +674,9 @@ public class DecisionTree {
 				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 				long start = System.currentTimeMillis();
 				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new InformationGain());
-				MLResults res = dtl.asSupervised().learn(getTrainingData(c.getReferenceMapping()));
+				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+				AMapping trainingData = getTrainingData(c.getReferenceMapping());
+				MLResults res = dtl.asSupervised().learn(trainingData);
 				long end = System.currentTimeMillis();
 				System.out.println(res.getLinkSpecification().toStringPretty());
 				System.out.println("FMeasure: "
@@ -678,7 +684,25 @@ public class DecisionTree {
 								new GoldStandard(c.getReferenceMapping(), c.getSourceCache().getAllUris(),
 										c.getTargetCache().getAllUris())));
 				System.out.println("Time: " + (end - start));
-
+				
+				/*
+				LinkSpecification ls = res.getLinkSpecification();
+				double threshold = 0.1;
+				double bestfm = 0.0;
+				double bestThreshold = 0.0;
+				while (threshold <= 1.0){
+					ls.setThreshold(threshold);
+					double fm = new FMeasure().calculate(dtl.predict(c.getSourceCache(), c.getTargetCache(), res),new GoldStandard(c.getReferenceMapping(), c.getSourceCache().getAllUris(),
+										c.getTargetCache().getAllUris()));
+					if(fm > bestfm){
+						bestfm = fm;
+						bestThreshold = threshold;
+					}
+				System.out.println("FMeasure: " + fm + "\t threshold: " +threshold);
+				threshold = threshold + 0.01;
+				}
+				System.out.println("BEST FMeasure: " + bestfm + "\t threshold: " + bestThreshold);
+				 */
 				// AMapping pathMapping =
 				// DecisionTree.getTotalMapping(((DecisionTreeLearning)
 				// dtl.getMl()).root);
@@ -716,6 +740,7 @@ public class DecisionTree {
                     pos = false;
 				}else{
 					int falsec = 0;
+					boolean falseNeg = false;
 					while(c == falsec){
 					 double random = Math.random();
 					 falsec = (int)(random * keyArr.length);
@@ -723,12 +748,24 @@ public class DecisionTree {
 					HashMap<String,Double> tmpMap = full.getMap().get((String)keyArr[falsec]);
 					HashMap<String,Double> falseMap = new HashMap<String,Double>();
 					for(String t: tmpMap.keySet()){
-						falseMap.put(t,0.0);
+						if(full.contains(key, t)){
+							falseNeg = true;
+						}
+							falseMap.put(t,0.0);
 					}
-					slice.add(key, falseMap);
-					pos = true;
+					if(!falseNeg){
+						slice.add(key, falseMap);
+						pos = true;
+					}
 				}
 			}
+//			for(String s: slice.getMap().keySet()){
+//				for(String t: slice.getMap().get(s).keySet()){
+//					if(full.getMap().get(s).get(t) != null && full.getMap().get(s).get(t) != slice.getMap().get(s).get(t)){
+//						System.err.println("WRONG!!!");
+//					}
+//				}
+//			}
 		}
 		System.out.println("got: " + MappingOperations.intersection(slice, full).size() + " wanted: " + sliceSizeWanted
 				+ " full: " + full.size());

@@ -20,14 +20,14 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class InformationGain extends FitnessFunctionDTL {
+public class GiniIndex extends FitnessFunctionDTL {
 	protected static Logger logger = LoggerFactory.getLogger(InformationGain.class);
 	private static ArrayList<TrainingInstance> fullInstances;
 	private static ArrayList<TrainingInstance> currentInstances;
 	private static HashSet<Metric> metricExpressions;
 	private AMapping currentMapping;
 
-	public InformationGain(){
+	public GiniIndex(){
 		fullInstances = null;
 		currentInstances = null;
 		metricExpressions = null;
@@ -168,92 +168,69 @@ public class InformationGain extends FitnessFunctionDTL {
 		}
 
 	}
-
+	
 	/**
-	 * Sum of -p_i log p_i from 0 to n
-	 * 
-	 * @param pn
+	 * 1 - sum of pi²
+	 * @param pn 
 	 * @return
 	 */
-	private double entropy(double... pn) {
+	private double gini(double ... pn){
 		double res = 0.0;
 		for (double pi : pn) {
 			// if all instances belong to one class return 0
 			if (pi == 0.0 && pn.length == 2)
 				return 0;
-			// Change of base rule to get log2
-			res += -pi * (Math.log10(pi) / Math.log10(2.0));
+			res += Math.pow(pi, 2.0);
 		}
-		return res;
+		return 1 - res;
 	}
+	
+	/*
+	public static void main(String[] args){
+		GiniGain gg = new GiniGain();
+		AMapping refMapping = MappingFactory.createDefaultMapping();
+		refMapping.add("m1", "m1",1.0);
+		refMapping.add("m2", "m2",1.0);
+		refMapping.add("m3", "m3",0.0);
+		refMapping.add("m4", "m4",1.0);
+		refMapping.add("m5", "m5",0.0);
+		refMapping.add("m6", "m6",0.0);
+		refMapping.add("m7", "m7",0.0);
+		refMapping.add("m8", "m8",1.0);
+		refMapping.add("m9", "m9",0.0);
+		DecisionTree t = new DecisionTree(null, null, null, null, 0, 0, refMapping);
+		ArrayList<TrainingInstance> left = new ArrayList<TrainingInstance>();
+		ArrayList<TrainingInstance> right = new ArrayList<TrainingInstance>();
+		left.add(new TrainingInstance(null, null, 0.0));
+		left.add(new TrainingInstance(null, null, 1.0));
 
-	/**
-	 * 
-	 * @param posNeg
-	 *            = {positive, negative}
-	 * @return entropy(positive/all, negative/all)
-	 */
-	private double info(double[] posNeg) {
-		double all = posNeg[0] + posNeg[1];
-		double entropy = entropy(posNeg[0] / all, posNeg[1] / all);
-		// System.out.println("entropy(" + posNeg[0] + "/" + all + "," +
-		// posNeg[1] + "/" + all+")="+entropy);
-		return entropy;
+		right.add(new TrainingInstance(null, null, 1.0));
+		right.add(new TrainingInstance(null, null, 1.0));
+		right.add(new TrainingInstance(null, null, 1.0));
+		right.add(new TrainingInstance(null, null, 0.0));
+		right.add(new TrainingInstance(null, null, 0.0));
+		right.add(new TrainingInstance(null, null, 0.0));
+		right.add(new TrainingInstance(null, null, 0.0));
+		System.out.println(gg.gain(t,left,right));
 	}
-
-	private double infox(double rootNumber, double[]... childNodes) {
-		double res = 0.0;
-		for (double[] ti : childNodes) {
-			double allChild = ti[0] + ti[1];
-			res += ((allChild) / rootNumber) * info(ti);
-		}
-		return res;
-	}
+	*/
 
 	private double gain(DecisionTree currentNode, List<TrainingInstance> left, List<TrainingInstance> right) {
 		if (currentNode.getParent() == null) {
 			currentMapping = currentNode.getRefMapping();
 		}
-		double gain = info(getNumberOfPositiveNegativeInstances(currentMapping)) - infox(currentMapping.size(),
-				getNumberOfPositiveNegativeInstances(left), getNumberOfPositiveNegativeInstances(right));
+		double[] leftFraction = getNumberOfPositiveNegativeInstances(left);
+		double[] rightFraction = getNumberOfPositiveNegativeInstances(right);
+		double[] allFraction = getNumberOfPositiveNegativeInstances(currentMapping);
+		double leftAll = leftFraction[0] + leftFraction[1];
+		double rightAll = rightFraction[0] + rightFraction[1];
+		double leftWeight = (leftAll) / currentMapping.size();
+		double rightWeight = (rightAll) / currentMapping.size();
+//		double gain = gini(allFraction[0]/currentMapping.size(),allFraction[1]/currentMapping.size()) - (leftWeight * gini(leftFraction[0]/leftAll, leftFraction[1]/leftAll) + rightWeight * gini(rightFraction[0]/rightAll,rightFraction[1]/rightAll));
+		double gain = leftWeight * gini(leftFraction[0]/leftAll, leftFraction[1]/leftAll) + rightWeight * gini(rightFraction[0]/rightAll,rightFraction[1]/rightAll);
 		return gain;
 	}
 
-	/*
-	 * public static void main(String[] args) { // double[] posNeg = {9.0,5.0};
-	 * // double info = gr.info(posNeg); //
-	 * System.out.println("info[9,5]="+info); // double[] posNeg2 = {2.0,3.0};
-	 * // double[] posNeg3 = {4.0,0.0}; // double[] posNeg4 = {3.0,2.0}; //
-	 * double infox = gr.infox(14.0,posNeg2, posNeg3,posNeg4); //
-	 * System.out.println("infox(..)="+infox); // System.out.println("gain="
-	 * +(info -infox));
-	 * 
-	 * // AMapping parentMapping = MappingFactory.createDefaultMapping(); //
-	 * parentMapping.add("ex1", "ex1",1.0); // parentMapping.add("ex2",
-	 * "ex2",1.0); // parentMapping.add("ex3", "ex3",1.0); //
-	 * parentMapping.add("ex4", "ex4",1.0); // parentMapping.add("ex5",
-	 * "ex5",1.0); // parentMapping.add("ex6", "ex6",1.0); //
-	 * parentMapping.add("ex7", "ex7",1.0); // parentMapping.add("ex8",
-	 * "ex8",1.0); // parentMapping.add("ex9", "ex9",1.0); //
-	 * parentMapping.add("ex10", "ex10",0.0); // parentMapping.add("ex11",
-	 * "ex11",0.0); // parentMapping.add("ex12", "ex12",0.0); //
-	 * parentMapping.add("ex13", "ex13",0.0); // parentMapping.add("ex14",
-	 * "ex14",0.0); // DecisionTree node = new DecisionTree(null, null, null,
-	 * null, 0.0, // 0.0, parentMapping); // InformationGain gr = new
-	 * InformationGain(node); // List<TrainingInstance> left = new
-	 * ArrayList<TrainingInstance>(); // List<TrainingInstance> right = new
-	 * ArrayList<TrainingInstance>(); // left.add(new TrainingInstance("", "",
-	 * 1.0)); // left.add(new TrainingInstance("", "", 1.0)); // left.add(new
-	 * TrainingInstance("", "", 1.0)); // left.add(new TrainingInstance("", "",
-	 * 0.0)); // left.add(new TrainingInstance("", "", 0.0)); // left.add(new
-	 * TrainingInstance("", "", 0.0)); // left.add(new TrainingInstance("", "",
-	 * 0.0)); // // right.add(new TrainingInstance("", "", 1.0)); //
-	 * right.add(new TrainingInstance("", "", 1.0)); // right.add(new
-	 * TrainingInstance("", "", 1.0)); // right.add(new TrainingInstance("", "",
-	 * 1.0)); // right.add(new TrainingInstance("", "", 1.0)); // right.add(new
-	 * TrainingInstance("", "", 1.0)); // right.add(new TrainingInstance("", "",
-	 * 0.0)); // System.out.println(gr.gain(node,left,right)); }
-	 */
 
 	private double[] getNumberOfPositiveNegativeInstances(List<TrainingInstance> instanceList) {
 		double[] posNegNumber = { 0.0, 0.0 };
@@ -310,7 +287,7 @@ public class InformationGain extends FitnessFunctionDTL {
 		}
 		// get Metric with highest info gain
 		Metric bestMetric = null;
-		double bestGain = 0.0;
+		double bestGain = 1.0;
 		double bestSplitpoint = 0.0;
 		for (Metric mE : metricExpressions) {
 			if (currentNode.getParent() == null
@@ -330,7 +307,7 @@ public class InformationGain extends FitnessFunctionDTL {
 					if (splitpoint != oldSplitpoint) {
 						oldSplitpoint = splitpoint;
 						double gain = gain(currentNode, lessThanEqualsI, moreThanI);
-						if (gain > bestGain) {
+						if (gain < bestGain) {
 							bestMetric = mE;
 							bestGain = gain;
 							bestSplitpoint = splitpoint;
@@ -383,5 +360,4 @@ public class InformationGain extends FitnessFunctionDTL {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }
