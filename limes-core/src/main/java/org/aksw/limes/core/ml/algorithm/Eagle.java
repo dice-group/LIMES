@@ -159,10 +159,13 @@ public class Eagle extends ACoreMLAlgorithm {
 
     @Override
     protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
-        if (allBest != null)
-            return fitness.getMapping(mlModel.getLinkSpecification(), true);
-        logger.error("No link specification calculated so far.");
-        return MappingFactory.createDefaultMapping();
+//    	if (allBest != null) {
+    		return fitness.getMapping(source, target, mlModel.getLinkSpecification());
+//        } else {
+//            logger.error("No link specification calculated so far.");
+//        	assert (allBest != null);
+//        }    	
+//        return MappingFactory.createDefaultMapping();
     }
 
     @Override
@@ -190,8 +193,7 @@ public class Eagle extends ACoreMLAlgorithm {
     }
 
     @Override
-    public void setDefaultParameters() {
-        
+    public void setDefaultParameters() {        
         learningParameters = new ArrayList<>();
     	learningParameters.add(new LearningParameter(GENERATIONS, 20, Integer.class, 1, Integer.MAX_VALUE, 1, GENERATIONS));
     	learningParameters.add(new LearningParameter(PRESERVE_FITTEST, true, Boolean.class, Double.NaN, Double.NaN, Double.NaN, PRESERVE_FITTEST));
@@ -207,9 +209,7 @@ public class Eagle extends ACoreMLAlgorithm {
     	learningParameters.add(new LearningParameter(REPRODUCTION_RATE, 0.4f, Float.class, 0f, 1f, Double.NaN, REPRODUCTION_RATE));
     	learningParameters.add(new LearningParameter(CROSSOVER_RATE, 0.3f, Float.class, 0f, 1f, Double.NaN, CROSSOVER_RATE));
     	learningParameters.add(new LearningParameter(MEASURE, new FMeasure(), IQualitativeMeasure.class, Double.NaN, Double.NaN, Double.NaN, MEASURE));
-    	learningParameters.add(new LearningParameter(PROPERTY_MAPPING, new PropertyMapping(), PropertyMapping.class, Double.NaN, Double.NaN, Double.NaN, PROPERTY_MAPPING));
-    	
-        
+    	learningParameters.add(new LearningParameter(PROPERTY_MAPPING, new PropertyMapping(), PropertyMapping.class, Double.NaN, Double.NaN, Double.NaN, PROPERTY_MAPPING));  	    
     }
 
 
@@ -348,7 +348,7 @@ public class Eagle extends ACoreMLAlgorithm {
      */
     private MLResults createSupervisedResult() {
         MLResults result = new MLResults();
-        result.setMapping(fitness.getMapping(getLinkSpecification(allBest), true));
+        result.setMapping(fitness.getMapping(sourceCache, targetCache, getLinkSpecification(allBest)));
         result.setLinkSpecification(getLinkSpecification(allBest));
         result.setQuality(allBest.getFitnessValue());
         result.addDetail("specifiactions", bestSolutions);
@@ -362,7 +362,7 @@ public class Eagle extends ACoreMLAlgorithm {
      */
     private MLResults createUnsupervisedResult() {
         MLResults result = new MLResults();
-        result.setMapping(fitness.getMapping(getLinkSpecification(allBest), true));
+        result.setMapping(fitness.getMapping(sourceCache, targetCache, getLinkSpecification(allBest)));
         result.setLinkSpecification(getLinkSpecification(allBest));
         result.setQuality(allBest.getFitnessValue());
         result.addDetail("specifiactions", specifications);
@@ -401,7 +401,7 @@ public class Eagle extends ACoreMLAlgorithm {
         // get mappings for all distinct metrics
         logger.info("Getting " + metrics.size() + " full mappings to determine controversy matches...");
         for (LinkSpecification m : metrics) {
-            candidateMaps.add(fitness.getMapping(m, true));
+            candidateMaps.add(fitness.getMapping(sourceCache, targetCache, m));
         }
         // get most controversy matches
         logger.info("Getting " + size + " controversy match candidates from " + candidateMaps.size() + " maps...");

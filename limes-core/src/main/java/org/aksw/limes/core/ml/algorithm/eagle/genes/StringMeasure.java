@@ -1,10 +1,12 @@
-package org.aksw.limes.core.ml.algorithm.eagle.core;
+package org.aksw.limes.core.ml.algorithm.eagle.genes;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
+import org.aksw.limes.core.measures.measure.MeasureFactory;
+import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
@@ -20,27 +22,28 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * This is a enhancement of the plain <code>StringMeasure</code> to support evolution of preprocessing functions.
- * The basic structure is that it has now two children of the return type of both <code>PreprocessingChain</code>
- * and <code>PreprocessingCommand</code>
+ * Wraps around LIMES string similarity commands for the JGAP library, e.g. trigram or levensthein.
+ * They all build a expression like <i>similarityMeasure(resource1, resource2)|threshold</i>.
+ * Whereas the threshold is ignored if the expression is atomic, i.e. the similarity measure
+ * isn't part (argument) of another metric, such as <i>AND</i>).
+ * We now expect atleast two parameters: 2 Terminals. Whereas the first is of sub return type
+ * ResourceTerminalType.SOURCE, the second of ResourceTerminalType.TARGET. This allows us to differentiate the
+ * different resources of the two endpoints and avoid silly measures comparing the same resources of the same endpoint.
+ * If mutation is turned on, the similarity command might be changed during the evolution process to another one of
+ * the allowed measures.
  *
- * @author Klaus Lyko
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 21, 2016
  */
-public class StringPreprocessingMeasure
-        extends CommandGene implements IMutateable, ICloneable {
-    /**
-     *
-     */
+public class StringMeasure extends CommandGene implements IMutateable, ICloneable {
+    /**  */
     private static final long serialVersionUID = -4901752495126327127L;
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger(StringMeasure.class);
     // Holds the name of this similarity Measure.
     private String operationName = "sim";
     // Set of all allowed similarity measures. Needed for mutation.
     private Set<String> allowedOperations = new HashSet<String>();
-    // mutation coefficient
-//	private float mutationCoefficient;
     // per default not mutable
     private boolean m_mutateable;
 
@@ -48,7 +51,7 @@ public class StringPreprocessingMeasure
      * Constructor for similarity measures bound by a threshold.
      *
      * @param opName
-     *         Name of the LIMES similarity measure operation (e.g. "trigram").
+     *         Name of the LIMES similarity measure operation (e.g. "trigrams").
      * @param a_conf
      *         JGAP GPConfiguration.
      * @param a_returnType
@@ -57,16 +60,16 @@ public class StringPreprocessingMeasure
      *         Specifies the SubReturnType.
      * @param a_mutateable
      *         true: this Commandgene is mutateable, viz. the LIMES similarity measure might be changed to another one out of the allowed operations.
-     * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
+     * @throws InvalidConfigurationException
      */
-    public StringPreprocessingMeasure(String opName, final GPConfiguration a_conf, Class<?> a_returnType,
-                                      int a_subReturnType, boolean a_mutateable) throws InvalidConfigurationException {
+    public StringMeasure(String opName, final GPConfiguration a_conf, Class<?> a_returnType,
+            int a_subReturnType, boolean a_mutateable) throws InvalidConfigurationException {
         super(a_conf, 2, a_returnType,
                 a_subReturnType,
                 new int[]{
                         ResourceTerminalType.STRINGPROPPAIR.intValue(),
                         ResourceTerminalType.THRESHOLD.intValue(),}
-        );
+                );
         fillOperationSet();
         setOperationName(opName);
         m_mutateable = a_mutateable;
@@ -87,16 +90,14 @@ public class StringPreprocessingMeasure
      *         to another one out of the allowed operations.
      * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
-    public StringPreprocessingMeasure(String opName, final GPConfiguration a_conf,
-                                      final Class<?> a_returnType, boolean a_mutateable)
-            throws InvalidConfigurationException {
+    public StringMeasure(String opName, final GPConfiguration a_conf,
+            final Class<?> a_returnType, boolean a_mutateable)
+                    throws InvalidConfigurationException {
         super(a_conf, 2, a_returnType, 1,
-                new int[]{
+                new int[]{ // specify child subtyps
                         ResourceTerminalType.STRINGPROPPAIR.intValue(),
-//				ResourceTerminalType.SOURCE.intValue(),
-//				ResourceTerminalType.TARGET.intValue(),
                         ResourceTerminalType.THRESHOLD.intValue(),}
-        );
+                );
         fillOperationSet();
         setOperationName(opName);
         m_mutateable = a_mutateable;
@@ -113,14 +114,14 @@ public class StringPreprocessingMeasure
      *         JGAP GPConfiguration.
      * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
-    public StringPreprocessingMeasure(String opName, final GPConfiguration a_conf)
+    public StringMeasure(String opName, final GPConfiguration a_conf)
             throws InvalidConfigurationException {
         this(opName, a_conf, String.class, false);
     }
 
     @Override
     public String toString() {
-        return operationName + "(&1)|&2";
+        return operationName + "(&1|&2)";
     }
 
     /**
@@ -140,7 +141,7 @@ public class StringPreprocessingMeasure
             return CommandGene.DoubleClass;
 
     }
-
+    @Override
     public String getName() {
         return getOperationName();
     }
@@ -150,10 +151,8 @@ public class StringPreprocessingMeasure
     }
 
     /**
-     * Setter for the operation of this String similarity measure.
-     *
-     * @param opName
-     *         Name of the measure, e.g. "trigram"
+     * Setter for the similarity measure.
+     * @param opName Name of the measure, e.g. "trigrams"
      */
     private void setOperationName(String opName) {
         operationName = opName;
@@ -189,16 +188,27 @@ public class StringPreprocessingMeasure
     }
 
     /**
-     * Fill Set of allowed operations with default values. Which are all LIMES String similarity measures.
+     * Fill Set of allowed operations with default values.
+     * Which are all LIMES String similarity measures.
      */
     private void fillOperationSet() {
-        allowedOperations.add("trigrams");
-        allowedOperations.add("cosine");
-        allowedOperations.add("jaccard");
-        allowedOperations.add("levenshtein");
-        allowedOperations.add("overlap");
+        allowedOperations.add(MeasureFactory.COSINE);
+        allowedOperations.add(MeasureFactory.EXACTMATCH);
+        allowedOperations.add(MeasureFactory.OVERLAP);
+        allowedOperations.add(MeasureFactory.QGRAMS);
+        allowedOperations.add(MeasureFactory.JACCARD);
+        allowedOperations.add(MeasureFactory.JAROWINKLER);
+        allowedOperations.add(MeasureFactory.LEVENSHTEIN);
     }
-
+    /**
+     * Returns all (standard) String Measures.
+     * @return A Set of all standard String Measures.
+     */
+    public Set<String> getMeasures() {
+    	return allowedOperations;
+    }
+    
+    @Override
     public CommandGene applyMutation(int a_index, double a_percentage)
             throws InvalidConfigurationException {
         // we will change the measure to a random one out of the Set of allowed operations
@@ -216,7 +226,7 @@ public class StringPreprocessingMeasure
     /**
      * Mutates this CommandGene. A random command out of the set of allowed similarity measures is picked.
      *
-     * @return A random command out of the set of allowed similarity measures
+     * @return A random command out of the set of the allowed similarity measures
      * @throws InvalidConfigurationException when an invalid value has been passed to a Configuration object
      */
     public CommandGene applyMutation() throws InvalidConfigurationException {
@@ -230,7 +240,6 @@ public class StringPreprocessingMeasure
 
     /**
      * Clones the object.
-     *
      * @return cloned instance of this object
      */
     @Override
@@ -250,8 +259,16 @@ public class StringPreprocessingMeasure
         PairSimilar<?> propPair = (PairSimilar<?>) a_program.execute_object(a_index, 0, o);
         return expConfig.getPropertyMapping().isMatch(propPair.a.toString(), propPair.b.toString());
     }
-
+    @Override
     public boolean isValid(ProgramChromosome a_program) {
         return isValid(a_program, 0);
     }
+    /**
+     * Setter for a specific set of LIMES Measures.
+     * @param operationSet
+     */
+    public void setAllowedOperations(Set<String> operationSet) {
+    	this.allowedOperations = operationSet;
+    }
+    
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.RunRecord;
+import org.aksw.limes.core.io.ls.LinkSpecification;
 
 /**
  * This class represents a single run for an algorithm with specific implementation using specific datasets with its qualitative scores and quantitative records
@@ -26,9 +27,10 @@ public class EvaluationRun {
     /** The used dataset for evaluation*/
     private String datasetName="";
     /** The qualitative measures scores e.g. F-MEASURE*/
-    Map<EvaluatorType, Double> qualititativeScores = new HashMap<EvaluatorType, Double>();
+    public Map<EvaluatorType, Double> qualititativeScores = new HashMap<EvaluatorType, Double>();
     /** The quantitative measures record */
     RunRecord quanititativeRecord = new RunRecord();
+    private LinkSpecification learnedLS;
     
     public EvaluationRun(){};
     /** 
@@ -58,6 +60,22 @@ public class EvaluationRun {
         for (EvaluatorType evaluator : evaluatorsScores.keySet()) {
             this.qualititativeScores.put(evaluator, evaluatorsScores.get(evaluator));
         }
+    }
+    /** 
+     * @param  algorithmName The name of the evaluated algorithm
+     * @param  implementation The implementation type of the evaluated algorithm
+     * @param  datasetName The name of used dataset for evaluation
+     * @param  evaluatorsScores A map of pairs (evaluator,score), e.g (F-MEASURE,0.9)
+     * */
+    public EvaluationRun(String algorithmName,String implementation, String datasetName,Map<EvaluatorType, Double> evaluatorsScores, LinkSpecification learnedLS)
+    {
+        this.algorithmName = algorithmName;
+        this.datasetName=datasetName;
+        this.implementationType=implementation;
+        for (EvaluatorType evaluator : evaluatorsScores.keySet()) {
+            this.qualititativeScores.put(evaluator, evaluatorsScores.get(evaluator));
+        }
+        this.learnedLS = learnedLS;
     }
     /** 
      * @param  algorithmName The name of the evaluated algorithm
@@ -93,6 +111,10 @@ public class EvaluationRun {
         System.out.println("------------------------------------------------------------------------------------------------------------------");
         for (EvaluatorType evaluator : qualititativeScores.keySet()) {
             System.out.println(evaluator+"\t"+qualititativeScores.get(evaluator));
+        }
+        if(learnedLS != null){
+            System.out.println("------------------------------------------------------------------------------------------------------------------");
+            System.out.println(learnedLS);
         }
         System.out.println("==================================================================================================================");
 

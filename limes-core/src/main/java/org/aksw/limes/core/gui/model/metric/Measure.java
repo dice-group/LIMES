@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.aksw.limes.core.gui.model.metric.Property.Origin;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
 import org.aksw.limes.core.measures.measure.MeasureType;
 
 /**
@@ -95,7 +95,7 @@ public class Measure extends Node {
                     return acceptance;
                 }
                 if (!acceptsChild(node)) {
-                    if ((((Property) getChilds().iterator().next()).origin == Origin.SOURCE)) {
+                    if ((((Property) getChilds().iterator().next()).origin == SourceOrTarget.SOURCE)) {
                         return Acceptance.TARGET_PROPERTY_EXPECTED;
                     }
                     return Acceptance.SOURCE_PROPERTY_EXPECTED;

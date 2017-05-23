@@ -77,7 +77,7 @@ public class BatchLearningInputView {
 	    FileChooser fileChooser = new FileChooser();
 	    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
 		    "Mapping File (*.csv , *.rdf, *.ttl, *.n3, *.nt)", "*.xml", "*.rdf", "*.ttl",
-		    "*.n3", "*.nt");
+		    "*.n3", "*.nt", "*.csv");
 	    fileChooser.getExtensionFilters().add(extFilter);
 	    File file = fileChooser.showOpenDialog(stage);
 	    if (file != null) {
@@ -100,7 +100,6 @@ public class BatchLearningInputView {
 			|| filePathField.getText().endsWith("ttl")
 			|| filePathField.getText().endsWith("nt")
 			|| filePathField.getText().endsWith("n3")) {
-		    System.err.println(filePathField.getText());
 		    reader = new RDFMappingReader(filePathField.getText());
 		    trainingMapping = reader.read();
 		    blm.setTrainingMapping(trainingMapping);

@@ -2,7 +2,7 @@ package org.aksw.limes.core.gui.model;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.List;
+import java.util.Comparator;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -92,4 +92,11 @@ public class AutomatedClassMatchingNode implements Serializable {
         append(targetName).
         toHashCode();
     }
+
+    public final static Comparator<AutomatedClassMatchingNode> 
+    	AUTOMATED_CLASS_MATCHING_NODE_COMPARATOR = new Comparator<AutomatedClassMatchingNode>(){
+    	@Override public int compare( AutomatedClassMatchingNode c1, AutomatedClassMatchingNode c2 ) {
+            return c1.sourceName.compareTo( c2.sourceName );
+          }
+    };
 }

@@ -18,6 +18,7 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.measure.AMeasure;
+import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,17 +26,18 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  *
  */
 public class LinearSelfConfigurator implements ISelfConfigurator {
-
-    // execution mode. STRICT = true leads to a strong bias towards precision by
-    // ensuring that the initial classifiers are classifiers that have the
-    // maximal threshold that leads to the best pseudo-f-measure. False leads to the
-    // best classifier with the smallest threshold
-    public boolean STRICT = true;
-    public int ITERATIONS_MAX = 1000;
-    public double MIN_THRESHOLD = 0.3;
+	// execution mode. STRICT = true leads to a strong bias towards precision by
+	// ensuring that the initial classifiers are classifiers that have the
+	// maximal threshold that leads to the best pseudo-f-measure. False leads to the
+	// best classifier with the smallest threshold
+	public boolean STRICT = true;
+	public int ITERATIONS_MAX = 1000;
+	public double MIN_THRESHOLD = 0.3;
+	
     static Logger logger = LoggerFactory.getLogger(LinearSelfConfigurator.class);
 
     public enum Strategy {
@@ -47,7 +49,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     }
 
 
-
+    
     Strategy strategy = Strategy.FMEASURE;
     QMeasureType qMeasureType = QMeasureType.UNSUPERVISED;
     public ACache source; //source cache
@@ -59,17 +61,12 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     Map<String, String> measures = new HashMap<>();;
     public double learningRate = 0.25;
     public double kappa = 0.6;
+    public double min_coverage = 0.9;
     /* used to compute qualities for the unsupervised approach*/
     private IQualitativeMeasure qMeasure = null;
-    /* usupervised approaches need a reference mapping to compute qualities*/
+    /* supervised approaches need a reference mapping to compute qualities*/
     AMapping reference = MappingFactory.createDefaultMapping(); // all true instance pairs.
     public AMapping asked = MappingFactory.createDefaultMapping();// all known instance pairs.
-
-    public LinearSelfConfigurator() {
-
-    }
-
-
     
     /**
      * Set PFMs based upon name.
@@ -79,10 +76,10 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         this.qMeasureType = qMeasureType;
         switch (qMeasureType) {
             case SUPERVISED:
-                EvaluatorFactory.create(EvaluatorType.F_MEASURE);
+                qMeasure = EvaluatorFactory.create(EvaluatorType.F_MEASURE);
                 break;
             case UNSUPERVISED:
-                EvaluatorFactory.create(EvaluatorType.PF_MEASURE);
+            	qMeasure = EvaluatorFactory.create(EvaluatorType.PF_MEASURE);
                 break;
         }
     }
@@ -95,6 +92,16 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         this.qMeasureType = QMeasureType.UNSUPERVISED;
         this.qMeasure = pfm;
     }
+    
+    /**
+     * Constructor
+     *
+     * @param source Source cache
+     * @param target Target cache
+     */
+    public LinearSelfConfigurator(ACache source, ACache target) {
+    	this(source, target, 0.9, 1);
+    }
 
     /**
      * Constructor
@@ -106,12 +113,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      * @param measures Atomic measures
      */
     public LinearSelfConfigurator(ACache source, ACache target, double minCoverage, double beta, Map<String, String> measures) {
-        this.source = source;
-        this.target = target;
-        this.beta = beta;
-        sourcePropertiesCoverageMap = getPropertyStats(source, minCoverage);
-        targetPropertiesCoverageMap = getPropertyStats(target, minCoverage);
-        setPFMType(this.qMeasureType);
+    	this(source, target, minCoverage, beta);
         this.measures = measures;
     }
     
@@ -126,8 +128,8 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      *
      */
     public LinearSelfConfigurator(ACache source, ACache target, double minCoverage, double beta) {
-        this.source = source;
-        this.target = target;
+    	this.source = source;
+    	this.target = target;
         this.beta = beta;
         sourcePropertiesCoverageMap = getPropertyStats(source, minCoverage);
         targetPropertiesCoverageMap = getPropertyStats(target, minCoverage);
@@ -243,9 +245,9 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      */
     public List<SimpleClassifier> getBestInitialClassifiers() {
         Set<String> measureList = new HashSet<String>();
-        measureList.add("jaccard");
-        //		measureList.add("levenshtein");
-        measureList.add("trigrams");
+        measureList.add(MeasureFactory.COSINE);
+   		measureList.add(MeasureFactory.LEVENSHTEIN);
+        measureList.add(MeasureFactory.TRIGRAM);
         return getBestInitialClassifiers(measureList);
     }
 
@@ -262,7 +264,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
             double fMeasure = 0;
             SimpleClassifier bestClassifier = null;
             //String bestProperty = "";
-            Map<String, SimpleClassifier> cp = new HashMap<>();
+//            Map<String, SimpleClassifier> cp = new HashMap<>();
             for (String q : targetPropertiesCoverageMap.keySet()) {
                 for (String measure : measureList) {
                     SimpleClassifier cps = getInitialClassifier(p, q, measure);
@@ -339,7 +341,6 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
                 mappings.put(classifiers.get(i), m);
             }
         }
-        System.out.println(mappings);
         return getOverallMapping(mappings, 1.0);
     }
 
@@ -410,11 +411,17 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      **/
 
     public double computeNext(List<SimpleClassifier> classifiers, int index) {
-        classifiers.get(index).setWeight(classifiers.get(index).getWeight() - learningRate);
-        classifiers = normalizeClassifiers(classifiers);
+    	// FIXME simply subtracting learning rate?
+    	double newWeight = Math.max(0, classifiers.get(index).getWeight() - learningRate);
+    	if(newWeight == classifiers.get(index).getWeight()) {
+    		logger.info("Computed weight under zero.");
+    	} else {
+            classifiers.get(index).setWeight(newWeight);
+            classifiers = normalizeClassifiers(classifiers);
+    	}
         AMapping m = getMapping(classifiers);
         buffer = classifiers;
-        //        return qMeasure.getPseudoFMeasure(source.getAllUris(), target.getAllUris(), m, beta);
+
         return	computeQuality(m);
     }
 
@@ -436,20 +443,20 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         while (iterations <= ITERATIONS_MAX) {
             iterations++;
             double fMeasure;
-            double index = -1;
+//            double index = -1;
             //evaluate neighbors of current classifier
             for (int i = 0; i < dimensions; i++) {
                 fMeasure = computeNext(classifiers, i);
                 if (fMeasure > bestF) {
                     bestF = fMeasure;
-                    index = i;
+//                    index = i;
                     bestClassifiers = buffer;
                 }
             }
             //nothing better found. simply march in the space in direction
             //"direction"
             if (bestF == f) {
-                System.out.println(">>>> Walking along direction " + direction);
+                logger.info(">>>> Walking along direction " + direction);
                 computeNext(classifiers, direction);
                 bestClassifiers = buffer;
                 direction++;
@@ -459,7 +466,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
                 return bestClassifiers;
             } //found a better classifier
             classifiers = bestClassifiers;
-            System.out.println(">> Iteration " + iterations + ": " + classifiers + " F-Measure = " + bestF);
+            logger.info(">> Iteration " + iterations + ": " + classifiers + " F-Measure = " + bestF);
         }
         return classifiers;
     }
@@ -525,13 +532,14 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
      * @return
      */
     public Double computeQuality(AMapping map) {
-        return qMeasure.calculate(map, new GoldStandard(reference, source.getAllUris(), target.getAllUris()));
+    	return qMeasure.calculate(map, new GoldStandard(reference, source.getAllUris(), target.getAllUris()));
     }
 
     /** Set caches to trimmed caches according to the given reference mapping.
      * @param reference
      */
     public void setSupervisedBatch(AMapping reference) {
+    	logger.info("Setting training data to "+reference.size()+" links");
         this.qMeasureType = QMeasureType.SUPERVISED;
         setPFMType(this.qMeasureType);
         for(String sUri : reference.getMap().keySet()) {
@@ -573,6 +581,23 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
 
     public void setTarget(ACache target) {
         this.target = target;
+    }
+    
+    /**
+     * TODO FIXME this is only a basic implementation
+     * @param list
+     * @return
+     */
+    public LinkSpecification getLinkSpecification(List<SimpleClassifier> list) {
+    	LinkSpecification parent = new LinkSpecification();
+    	// TODO apply linear weights
+    	for(SimpleClassifier sc : list) {
+    		LinkSpecification child = new LinkSpecification();
+    		child.readSpec(sc.getMetricExpression(), sc.getThreshold());
+    		child.setParent(parent);
+    		parent.addChild(child);
+    	}
+    	return parent;
     }
 
 

@@ -1,15 +1,17 @@
 package org.aksw.limes.core.ml.algorithm;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 
 /**
  * Wraps around results of a ML algorithm.
  *
- * @author Klaus Lyko
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  */
 
 public class MLResults {
@@ -17,7 +19,8 @@ public class MLResults {
     protected AMapping mapping;
     protected double quality;
     protected Map<String, Object> details = new HashMap<>();
-
+    protected List<SimpleClassifier> classifiers = null;
+    
     /**
      * MLResults constructor.
      */
@@ -110,5 +113,22 @@ public class MLResults {
     public Map<String, Object> getDetails() {
         return details;
     }
+
+	public List<SimpleClassifier> getClassifiers() {
+		return classifiers;
+	}
+
+	public void setClassifiers(List<SimpleClassifier> classifiers) {
+		this.classifiers = classifiers;
+	}
+	
+	/**
+	 * Some ML algorithms such as Euclid don't produce LS but Mapping build by so called
+	 * classifiers. This method checks whether this (also) holds those.
+	 * @return
+	 */
+	public boolean classifiersSet() {
+		return classifiers != null && classifiers.size()>0;
+	}
 
 }

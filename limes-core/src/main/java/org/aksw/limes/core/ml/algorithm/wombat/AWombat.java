@@ -30,6 +30,7 @@ import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory.RewriterType;
 import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -38,6 +39,7 @@ import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
+import org.apache.jena.atlas.lib.CacheFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,7 +80,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected boolean isUnsupervised = false;
     protected Set<String> wombatParameterNames = new HashSet<>();
     protected Tree<RefinementNode> refinementTreeRoot = null;
-
+    protected ACache sourceSample = new HybridCache();
+    protected ACache targetSample = new HybridCache();
 
 
     protected AWombat() {
@@ -101,7 +104,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
             double pfm = pseudoFMeasure.calculate(mapping, new GoldStandard(null, sourceUris, targetUris));
             return new RefinementNode(pfm, mapping, metricExpr);
         }
-        return new RefinementNode(mapping, metricExpr, trainingData);        
+        return new RefinementNode(mapping, metricExpr, trainingData);
     }
 
 
@@ -117,7 +120,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         }
         return createNode(map, metricExpr);
     }
-    
+
 
 
     /**
@@ -146,7 +149,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected double fMeasure(AMapping predictions) {
         if (isUnsupervised) {
             // compute pseudo-F-Measure
-            return pseudoFMeasure.calculate(predictions, new GoldStandard(null, sourceUris, targetUris));            
+            return pseudoFMeasure.calculate(predictions, new GoldStandard(null, sourceUris, targetUris));
         }
         // get real F-Measure based on training data 
         return new FMeasure().calculate(predictions, new GoldStandard(trainingData));
@@ -263,7 +266,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         // get real precision based on training data 
         return new Precision().calculate(predictions, new GoldStandard(trainingData));
     }
-    
+
 
     /**
      * calculate either a real or a pseudo-Recall
@@ -280,7 +283,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         return new Recall().calculate(predictions, new GoldStandard(trainingData));
 
     }
-    
+
     /**
      * Computes the atomic classifiers by finding the highest possible F-measure
      * achievable on a given property pair
@@ -294,9 +297,9 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         double maxOverlap = 0;
         double theta = 1.0;
         AMapping bestMapping = MappingFactory.createDefaultMapping();
-        for (double threshold = 1d; threshold > getMinPropertyCoverage(); threshold = threshold * getPropertyLearningRate()) {
+        for (double threshold = 1d; threshold > 0.4d; threshold = threshold * getPropertyLearningRate()) {
             AMapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
-            double overlap = recall(mapping);
+            double overlap = fMeasure(mapping);
             if (maxOverlap < overlap) { //only interested in largest threshold with recall 1
                 bestMapping = mapping;
                 theta = threshold;
@@ -326,7 +329,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         double overallPenaltyWeight = 0.5d;
         boolean verbose = false;
         Set<String> measures = new HashSet<>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams"));
-        
+
         learningParameters = new ArrayList<>();
         learningParameters.add(new LearningParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize, Long.class, 10d, Long.MAX_VALUE, 10d, PARAMETER_MAX_REFINEMENT_TREE_SIZE));
         learningParameters.add(new LearningParameter(PARAMETER_MAX_ITERATIONS_NUMBER, maxIterationNumber, Integer.class, 1d, Integer.MAX_VALUE, 10d, PARAMETER_MAX_ITERATIONS_NUMBER));
@@ -346,59 +349,140 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected boolean isVerbose() {
         return Boolean.parseBoolean((String) getParameter(PARAMETER_VERBOSE).toString());
     }
-    
+
     protected double getOverAllPenaltyWeight() {
         return Double.parseDouble(getParameter(PARAMETER_OVERALL_PENALTY_WEIGHT).toString());
     }
-    
+
     protected double getChildrenPenaltyWeight() {
         return Double.parseDouble(getParameter(PARAMETER_CHILDREN_PENALTY_WEIGHT).toString());
     }
-    
+
     protected double getComplexityPenaltyWeight() {
         return Double.parseDouble(getParameter(PARAMETER_COMPLEXITY_PENALTY_WEIGHT).toString());
     }
-    
+
     protected double getMinPropertyCoverage() {
         return Double.parseDouble(getParameter(PARAMETER_MIN_PROPERTY_COVERAGE).toString());
     }
-    
+
     protected double getPropertyLearningRate() {
         return Double.parseDouble(getParameter(PARAMETER_PROPERTY_LEARNING_RATE).toString());
     }
-    
+
     protected int getIterationTimeInMinutes() {
         return Integer.parseInt(getParameter(PARAMETER_MAX_ITERATION_TIME_IN_MINUTES).toString());
     }
-    
+
     protected int getExcutionTimeInMinutes() {
         return Integer.parseInt(getParameter(PARAMETER_EXECUTION_TIME_IN_MINUTES).toString());
     }
-    
+
     protected double getMaxFitnessThreshold() {
         return Double.parseDouble(getParameter(PARAMETER_MAX_FITNESS_THRESHOLD).toString());
     }
-    
+
     protected int getMaxIterationNumber() {
         return Integer.parseInt(getParameter(PARAMETER_MAX_ITERATIONS_NUMBER).toString());
     }
-    
+
     protected int getMaxRefinmentTreeSize() {
         return Integer.parseInt(getParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE).toString());
     }
-    
+
     protected Set<String> getAtomicMeasures() {
         Set<String> atomicMeasures = new HashSet<String>();
-        
+
         String measuresAsString = getParameter(PARAMETER_ATOMIC_MEASURES).toString().replace("[","").replace("]", "");
         for(String m : measuresAsString.split(",")){
             atomicMeasures.add(m.trim());
         }
         return atomicMeasures;
     }
-    
+
+    protected void fillSampleSourceTargetCaches(AMapping sample) {
+        for (String s : sample.getMap().keySet()) {
+            if (this.sourceCache.containsUri(s)){
+                sourceSample.addInstance(this.sourceCache.getInstance(s));
+                for (String t : sample.getMap().get(s).keySet())
+                    if (targetCache.containsUri(t))
+                        targetSample.addInstance(targetCache.getInstance(t));
+                    else
+                        logger.warn("Instance " + t + " does not exist in the target dataset");
+            } else {
+                logger.warn("Instance " + s + " does not exist in the source dataset");
+            }
+        }
+    }
+
+    /**
+     * Get the most promising node as the node with the best F-score
+     *
+     * @param r  The whole refinement tree
+     * @param penaltyWeight penalty weight
+     * @return most promising node from the input tree r
+     * @author sherif
+     */
+    protected Tree<RefinementNode> getMostPromisingNode(Tree<RefinementNode> r, double penaltyWeight) {
+        // trivial case
+        if (r.getchildren() == null || r.getchildren().size() == 0) {
+            return r;
+        }
+        // get mostPromesyChild of children
+        Tree<RefinementNode> mostPromesyChild = new Tree<RefinementNode>(new RefinementNode());
+        for (Tree<RefinementNode> child : r.getchildren()) {
+            if (child.getValue().getFMeasure() >= 0) {
+                Tree<RefinementNode> promesyChild = getMostPromisingNode(child, penaltyWeight);
+                double newFitness = promesyChild.getValue().getFMeasure() - penaltyWeight * computePenalty(promesyChild);
+                if (newFitness > mostPromesyChild.getValue().getFMeasure()) {
+                    mostPromesyChild = promesyChild;
+                }
+            }
+        }
+        // return the argmax{root, mostPromesyChild}
+        if (penaltyWeight > 0) {
+            return mostPromesyChild;
+        } else if (r.getValue().getFMeasure() >= mostPromesyChild.getValue().getFMeasure()) {
+            return r;
+        } else {
+            return mostPromesyChild;
+        }
+    }
+
+    /**
+     * @return initial classifiers
+     */
+    protected List<ExtendedClassifier> findInitialClassifiers() {
+        logger.debug("Geting all initial classifiers ...");
+        List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
+        for (String p : sourcePropertiesCoverageMap.keySet()) {
+            for (String q : targetPropertiesCoverageMap.keySet()) {
+                for (String m : getAtomicMeasures()) {
+                    ExtendedClassifier cp = findInitialClassifier(p, q, m);
+                    // only add if classifier covers all entries
+                    initialClassifiers.add(cp);
+                }
+            }
+        }
+        logger.debug("Done computing all initial classifiers.");
+        return initialClassifiers;
+    }
+
+    /**
+     * @param promesyChild promesy child
+     * @return children penalty + complexity penalty
+     * @author sherif
+     */
+    protected double computePenalty(Tree<RefinementNode> promesyChild) {
+        long childrenCount = promesyChild.size() - 1;
+        double childrenPenalty = (getChildrenPenaltyWeight() * childrenCount) / refinementTreeRoot.size();
+        long level = promesyChild.level();
+        double complexityPenalty = (getComplexityPenaltyWeight() * level) / refinementTreeRoot.depth();
+        return childrenPenalty + complexityPenalty;
+    }
+
     private boolean saveMapping() {
         return Boolean.parseBoolean(getParameter(PARAMETER_SAVE_MAPPING).toString());
     }
-    
+
 }

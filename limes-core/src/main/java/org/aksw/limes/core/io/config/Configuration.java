@@ -11,7 +11,7 @@ import java.util.Set;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.algorithm.eagle.core.AddMetric;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.AddMetric;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

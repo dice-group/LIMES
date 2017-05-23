@@ -56,16 +56,22 @@ public class WombatSimple extends AWombat {
         super.init(lp, sourceCache, targetCache);
         sourceUris = sourceCache.getAllUris();
         targetUris = targetCache.getAllUris();
+        bestSolutionNode = null;
+        classifiers = null;
+        iterationNr = 0;
     }
 
     @Override
     protected MLResults learn(AMapping trainingData) {
         this.trainingData = trainingData;
+        fillSampleSourceTargetCaches(trainingData);
+        this.sourceCache = sourceSample;
+        this.targetCache = targetSample;
         return learn();
     }
 
     /**
-     * @return wrap with results, null if no result found 
+     * @return wrap with results, null if no result found
      */
     private MLResults learn() {
         if (bestSolutionNode == null) { // not to do learning twice
@@ -77,8 +83,7 @@ public class WombatSimple extends AWombat {
             AMapping bestMapping = bestSolutionNode.getMapping();
             LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
             double bestFMeasure = bestSolutionNode.getFMeasure();
-            MLResults result = new MLResults(bestLS, bestMapping, bestFMeasure, null);
-            return result;
+            return new MLResults(bestLS, bestMapping, bestFMeasure, null);
         }
         // case no mapping found
         return null;
@@ -224,59 +229,7 @@ public class WombatSimple extends AWombat {
 
 
 
-    /**
-     * @return initial classifiers
-     */
-    public List<ExtendedClassifier> findInitialClassifiers() {
-        logger.debug("Geting all initial classifiers ...");
-        List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
-        for (String p : sourcePropertiesCoverageMap.keySet()) {
-            for (String q : targetPropertiesCoverageMap.keySet()) {
-                for (String m : getAtomicMeasures()) {
-                    ExtendedClassifier cp = findInitialClassifier(p, q, m);
-                    //only add if classifier covers all entries
-                    initialClassifiers.add(cp);
-                }
-            }
-        }
-        logger.debug("Done computing all initial classifiers.");
-        return initialClassifiers;
-    }
 
-
-    /**
-     * Get the most promising node as the node with the best F-score
-     *
-     * @param r  The whole refinement tree
-     * @param penaltyWeight from 0 to 1
-     * @return most promising node from the input tree r
-     */
-    protected Tree<RefinementNode> getMostPromisingNode(Tree<RefinementNode> r, double penaltyWeight) {
-        // trivial case
-        if (r.getchildren() == null || r.getchildren().size() == 0) {
-            return r;
-        }
-        // get mostPromesyChild of children
-        Tree<RefinementNode> mostPromisingChild = new Tree<RefinementNode>(new RefinementNode());
-        for (Tree<RefinementNode> child : r.getchildren()) {
-            if (child.getValue().getFMeasure() >= 0) {
-                Tree<RefinementNode> promisingChild = getMostPromisingNode(child, penaltyWeight);
-                double newFitness;
-                newFitness = promisingChild.getValue().getFMeasure() - penaltyWeight * computePenalty(promisingChild);
-                if (newFitness > mostPromisingChild.getValue().getFMeasure()) {
-                    mostPromisingChild = promisingChild;
-                }
-            }
-        }
-        // return the argmax{root, mostPromesyChild}
-        if (penaltyWeight > 0) {
-            return mostPromisingChild;
-        } else if (r.getValue().getFMeasure() >= mostPromisingChild.getValue().getFMeasure()) {
-            return r;
-        } else {
-            return mostPromisingChild;
-        }
-    }
 
 
     /**
@@ -316,17 +269,6 @@ public class WombatSimple extends AWombat {
             }
         }
         return null;
-    }
-
-    /**
-     * @return children penalty + complexity penalty
-     */
-    private double computePenalty(Tree<RefinementNode> promesyChild) {
-        long childrenCount = promesyChild.size() - 1;
-        double childrenPenalty = (getChildrenPenaltyWeight() * childrenCount) / refinementTreeRoot.size();
-        long level = promesyChild.level();
-        double complexityPenalty = (getComplexityPenaltyWeight() * level) / refinementTreeRoot.depth();
-        return childrenPenalty + complexityPenalty;
     }
 
     /**

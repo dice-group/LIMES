@@ -3,7 +3,12 @@ package org.aksw.limes.core.gui.view.graphBuilder;
 import java.util.List;
 import java.util.Vector;
 
+import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.metric.Node;
+import org.aksw.limes.core.gui.model.metric.Property;
+import org.aksw.limes.core.gui.util.SourceOrTarget;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -19,6 +24,7 @@ import javafx.scene.transform.Rotate;
  *
  */
 public class NodeView {
+    private static final Logger logger = LoggerFactory.getLogger(NodeView.class);
 
 	/**
 	 * Node-Shape Integer Metric
@@ -94,6 +100,7 @@ public class NodeView {
 	 */
 	private int midLinkY;
 
+	private NodeViewRectangle nvr;
 	/**
 	 * Constructor
 	 *
@@ -133,7 +140,7 @@ public class NodeView {
 	 */
 	public void displayNode() {
 		GraphicsContext gc = gbv.getGraphicsContext2D();
-		NodeViewRectangle nvr = new NodeViewRectangle(this.x, this.y, this.nodeShape, this, this.nodeData);
+		nvr = new NodeViewRectangle(this.x, this.y, this.nodeShape, this, this.nodeData);
 		nvr.drawNodeViewRectangle(gc);
 	}
 
@@ -281,6 +288,7 @@ public class NodeView {
 		this.parent = null;
 		this.nodeData.removeParent();
 	}
+	
 
 	public String toString() {
 		String str = nodeData.id + "\n";

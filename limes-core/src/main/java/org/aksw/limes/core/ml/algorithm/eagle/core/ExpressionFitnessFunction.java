@@ -43,8 +43,8 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
 //	protected Mapping optimalMapping;
     static Logger logger = LoggerFactory.getLogger(ExpressionFitnessFunction.class.getName());
     private static ExpressionFitnessFunction instance = null;
-    public ExecutionEngine engine;
-    public ExecutionEngine fullEngine;
+//    public ExecutionEngine engine;
+//    public ExecutionEngine fullEngine;
     protected LinkSpecGeneticLearnerConfig m_config;
     /**
      * Fragment of optimal Mapping used during evolution. Note that it should only hold matches!
@@ -63,6 +63,8 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
     @SuppressWarnings("unused")
     private AMapping trainingData;
 
+    private boolean useFullCaches = false;
+    
     /**
      * Needed for subclasses.
      */
@@ -89,7 +91,7 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
         // get Engines
         trimKnowledgeBases(reference);
 
-        fullEngine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sC, tC, a_config.source.getVar(), a_config.target.getVar());
+//        fullEngine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sC, tC, a_config.source.getVar(), a_config.target.getVar());
 
         this.measure = measure;
         crossProduct = trimmedSourceCache.size() * trimmedTargetCache.size();
@@ -138,7 +140,10 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
             return 8d;
         }
         try {
-            actualMapping = getMapping(spec, false);
+        	if(!useFullCaches)
+        		actualMapping = getMapping(trimmedSourceCache, trimmedTargetCache, spec);
+        	else
+        		actualMapping = getMapping(sC, tC, spec);
         } catch (java.lang.OutOfMemoryError e) {
             e.printStackTrace();
             return 8d;
@@ -173,7 +178,10 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
             return 0d;
         }
         try {
-            actualMapping = getMapping(spec, false);
+        	if(!useFullCaches)
+        		actualMapping = getMapping(trimmedSourceCache, trimmedTargetCache, spec);
+        	else
+        		actualMapping = getMapping(sC, tC, spec);
         } catch (java.lang.OutOfMemoryError e) {
             e.printStackTrace();
             return 0d;
@@ -221,30 +229,18 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
     public void destroy() {
         instance = null;
     }
-
-    /**
-     * Method to create the mapping based on the specified expression and acceptance threshold.
-     * As of now this just wraps around the the SetConstraintsMapper getLinks() function.
-     *
-     * @param spec
-     *         LIMES link specification used to compare instances of the source and target knowledgebases.
-     * @param full
-     *         if set use full otherwise trimmed caches.
-     * @return
-     */
-    public AMapping getMapping(LinkSpecification spec, boolean full) {
+    @Override
+    public AMapping getMapping(ACache sourceCache, ACache targetCache, LinkSpecification spec) {
         try {
-            if (full) {
-                IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT,
-                        sC, tC);
-                return fullEngine.execute(spec, planner);
-            } else {
-                IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT,
-                        trimmedSourceCache, trimmedTargetCache);
-                return engine.execute(spec, planner);
-            }
+        	
+        	ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT,
+        			 sourceCache, targetCache,
+                     this.m_config.source.getVar(), this.m_config.target.getVar());
+        	IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT,
+                  sC, tC);
+        	return engine.execute(spec, planner);
         } catch (Exception e) {
-            logger.error("Exception execution expression " + spec + " : full? " + full);
+            logger.error("Exception execution expression " + spec+" on Caches "+sourceCache.size()+", "+targetCache.size());
             return MappingFactory.createDefaultMapping();
         } catch (java.lang.OutOfMemoryError e) {
             logger.warn("Out of memory trying to get Map for expression\"" + spec + "\".");
@@ -259,16 +255,23 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
      *         Mapping holding data instances a user has evaluated. That may include non-matches.
      */
     public void trimKnowledgeBases(AMapping trainingData) {
+    	if(trainingData.size()<0) {
+    		logger.info("Trying to scale down caches to "+trainingData.size()+" reference mapping. Using full caches instead");
+    		trimmedSourceCache = sC;
+    		trimmedTargetCache = tC;
+    	}
         this.trainingData = trainingData;
         ACache[] trimmed = CacheTrimmer.processData(sC, tC, trainingData);
-        trimmedSourceCache = trimmed[0];
-        trimmedTargetCache = trimmed[1];
+        if(trimmed[0].size()>0)
+        	trimmedSourceCache = trimmed[0];
+        else
+        	logger.info("Scaling down source cache returned empty cache. Wrong training data was set. Using full Cache instead");
+        if(trimmed[1].size()>0)
+        	trimmedTargetCache = trimmed[1];
+        else
+        	logger.info("Scaling down target cache returned empty cache. Wrong training data was set. Using full Cache instead");
         logger.info("Trimming to " + trimmed[0].size() + " and " + trimmed[1].size() + " caches.");
         crossProduct = trimmedSourceCache.size() * trimmedTargetCache.size();
-        engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT,
-                trimmedSourceCache, trimmedTargetCache,
-                this.m_config.source.getVar(), this.m_config.target.getVar());
-
     }
 
     /**
@@ -276,16 +279,8 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
      *
      * @param value
      */
-    public void useFullCaches(boolean value) {
-        if (value) {
-            engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT,
-                    trimmedSourceCache, trimmedTargetCache,
-                    this.m_config.source.getVar(), this.m_config.target.getVar());
-        } else {
-            engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT,
-                    sC, tC,
-                    this.m_config.source.getVar(), this.m_config.target.getVar());
-        }
+    public void setUseFullCaches(boolean value) {
+    	this.useFullCaches = value;
     }
 
     public LinkSpecification getMetric(IGPProgram p) {
@@ -338,9 +333,9 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
                     	trimmedTargetCache.addInstance(tC.getInstance(tUri));
                 }
             }
-        engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT,
-                trimmedSourceCache, trimmedTargetCache,
-                this.m_config.source.getVar(), this.m_config.target.getVar());
+//        engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT,
+//                trimmedSourceCache, trimmedTargetCache,
+//                this.m_config.source.getVar(), this.m_config.target.getVar());
         crossProduct = trimmedSourceCache.size() * trimmedTargetCache.size();
     }
 

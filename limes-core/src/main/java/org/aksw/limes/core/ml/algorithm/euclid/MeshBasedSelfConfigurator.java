@@ -15,13 +15,26 @@ import org.apache.log4j.Logger;
 /**
  * @author Kevin Dreßler
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- *
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  */
 public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
 
     static Logger logger = Logger.getLogger(MeshBasedSelfConfigurator.class);
     
-    static String STRATEGY = "MAX";
+    public static String MAX_STRATEGY = "max";
+    public static String MIN_STRATEFY = "min";
+    
+    String strategy = MAX_STRATEGY;
+    
+    /**
+     * Basic constructor uses default values for minCoverage and beta.
+     * @param source
+     * @param target
+     */
+    public MeshBasedSelfConfigurator(ACache source, ACache target) {
+        super(source, target);
+    }
+    
     /**
      * Constructor
      *
@@ -66,7 +79,7 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
             entry.add(min.get(0) + i * delta);
             result.add(entry);
         }
-        int count = 0;
+//        int count = 0;
         List<List<Double>> buffer;
         List<List<Double>> clones;
         for (int dim = 1; dim < dimensions; dim++) {
@@ -82,7 +95,7 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
                 delta = (max.get(dim) - min.get(dim)) / (double) (n - 1);
                 for (int j = 0; j < n; j++) {
                     clones.get(j).add(min.get(dim) + j * delta);
-                    count++;
+//                    count++;
 //                   logger.error("clones nr "+count+": "+clones.get(j));
                     buffer.add(clones.get(j));
                 }
@@ -123,7 +136,7 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
         }
         return result;
     }
-
+    
     /**
      * Generates the grids iteratively to find the best possible solution
      *
@@ -228,6 +241,7 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
             // remember the best overall classifier
             if (bestCc.getfMeasure() <= cc.getfMeasure()) {
                 bestCc = cc;
+//                globalBestMapping = bestMapping;
             } else {
                 cc = bestCc;
             }
@@ -247,6 +261,14 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
         return getHillTop(min, max, n, sc);
     }
 
+    /**    
+     * 
+     * @param min
+     * @param max
+     * @param n
+     * @param sc
+     * @return
+     */
     public ComplexClassifier getHillTop(List<Double> min, List<Double> max, int n, List<SimpleClassifier> sc) {
 //        logger.info("Getting hill top for dimensions described in " + sc);
         //first generate coordinates of points in the mesh
@@ -300,7 +322,7 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
         } //else return solution with highest sum of thresholds. Reason is simply
         //that we want to be biased towards precision
         else {
-            if (STRATEGY.toLowerCase().startsWith("max")) {
+            if (strategy.toLowerCase().startsWith(MAX_STRATEGY)) {
                 for (int i = 0; i < highestPoints.size(); i++) {
                     List<Double> point = highestPoints.get(i);
                     double sum = 0;
@@ -336,11 +358,15 @@ public class MeshBasedSelfConfigurator extends BooleanSelfConfigurator {
         }
         ComplexClassifier cc = new ComplexClassifier(scList, bestF);
         cc.setMapping(bestMapping);
-        System.out.println("Best Classifier: " + cc.getClassifiers());
-        System.out.println("Highest Point: " + bestPoint);
-        //System.out.println("Best AMapping: " + cc.mapping);
-        System.out.println("FMeasure = " + bestF);
+//        System.out.println("Best Classifier: " + cc.getClassifiers());
+//        System.out.println("Highest Point: " + bestPoint);
+//        System.out.println("Best AMapping: " + cc.mapping);
+//        System.out.println("FMeasure = " + bestF);
         return cc;
     }
 
+    
+    public void setStrategy(String strategy) {
+    	this.strategy = strategy;
+    }
 }

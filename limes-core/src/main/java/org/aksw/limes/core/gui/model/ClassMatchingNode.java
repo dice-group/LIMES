@@ -2,6 +2,7 @@ package org.aksw.limes.core.gui.model;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -75,4 +76,13 @@ public class ClassMatchingNode implements Serializable {
         append(children).
         toHashCode();
     }
+    
+    public final static Comparator<ClassMatchingNode> 
+    	CLASS_MATCHING_NODE_COMPARATOR = new Comparator<ClassMatchingNode>(){
+    	
+    	@Override public int compare( ClassMatchingNode c1, ClassMatchingNode c2 ) {
+            return c1.name.compareTo( c2.name );
+          }
+    };
+    	
 }

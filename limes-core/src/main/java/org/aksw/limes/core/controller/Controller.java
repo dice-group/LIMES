@@ -37,7 +37,7 @@ public class Controller {
 
     public static final String DEFAULT_LOGGING_PATH = "limes.log";
     private static final int MAX_ITERATIONS_NUMBER = 10;
-    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
+    private static Logger logger = null;
     private static int serverPort = 8080;
     private static Options options = getOptions();
 
@@ -52,6 +52,7 @@ public class Controller {
         CommandLine cmd = parseCommandLine(args);
         System.setProperty("logFilename", cmd.hasOption('o') ? cmd.getOptionValue("o") : DEFAULT_LOGGING_PATH);
         ((org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false)).reconfigure();
+        logger = LoggerFactory.getLogger(Controller.class);
         // II. Digest Options
         if (cmd.hasOption('h')) {
             printHelp();
@@ -91,6 +92,8 @@ public class Controller {
     }
 
     public static Configuration getConfig(CommandLine cmd) {
+        if (logger == null)
+            logger = LoggerFactory.getLogger(Controller.class);
         // 1. Determine appropriate ConfigurationReader
         String format = "xml";
         String fileNameOrUri = cmd.getArgs()[0];
@@ -132,6 +135,8 @@ public class Controller {
      *
      */
     public static ResultMappings getMapping(Configuration config) {
+        if (logger == null)
+            logger = LoggerFactory.getLogger(Controller.class);
         AMapping results = null;
 
         // 3. Fill Caches

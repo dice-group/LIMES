@@ -11,18 +11,28 @@ import org.aksw.limes.core.ml.algorithm.classifier.ComplexClassifier;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 
 /**
+ * Boolean implementation of a self-configurator (Euclid) to (unsupervised) learn LS based upon 
+ * a boolean combination of arbitrary simple classifiers, each representing an atomic LS. 
+ * 
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- *
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  */
 public class BooleanSelfConfigurator extends LinearSelfConfigurator {
+
+    /** Constructor
+     * @param source Source cache
+     * @param target Target cache
+     */
+	public BooleanSelfConfigurator (ACache source, ACache target) {
+        super(source, target);
+    }
 
     /** Constructor
      *
      * @param source Source cache
      * @param target Target cache
-     * @param beta Beta value for computing F_beta
      * @param minCoverage Minimal coverage for a property to be considered for linking
-     *
+     * @param beta Beta value for computing F_beta     *
      */
     public BooleanSelfConfigurator (ACache source, ACache target, double minCoverage, double beta) {
         super(source, target, minCoverage, beta);
@@ -141,15 +151,15 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
         ComplexClassifier cc;
         while (iterations <= ITERATIONS_MAX) {
             iterations++;
-            double fMeasure;
-            int index = -1;
+//            double fMeasure;
+//            int index = -1;
             bestF = 0;
             //evaluate neighbors of current classifier
             for (int i = 0; i < classifier.getClassifiers().size(); i++) {
                 cc = computeNext(classifier, i);
                 if (cc.getfMeasure() > bestF) {
                     bestF = cc.getfMeasure();
-                    index = i;
+//                    index = i;
                     bestClassifier = cc;
                 }
             }
@@ -160,7 +170,7 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
             } //nothing better found. simply march in the space in direction
             //"direction"
             else if (bestF == globalBestF) {
-                System.out.println(">>>> Walking along direction " + direction);
+//                logger.info(">>>> Walking along direction " + direction);
                 if (direction >= classifier.getClassifiers().size()) {
                     direction = 0;
                 }
@@ -172,7 +182,7 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
             globalBestF = bestF;
             //init for next iter
             classifier = bestClassifier;
-            System.out.println(">> Iteration " + iterations + ": " + classifier.getClassifiers() + " F-Measure = " + globalBestF + " AMapping = " + getMapping(classifiers));
+//            logger.info(">> Iteration " + iterations + ": " + classifier.getClassifiers() + " F-Measure = " + globalBestF + " AMapping = " + getMapping(classifiers));
         }
         return bestGlobalClassifier.getClassifiers();
     }

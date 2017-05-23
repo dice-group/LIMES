@@ -1,6 +1,7 @@
 package org.aksw.limes.core.gui.view.graphBuilder;
 
 import org.aksw.limes.core.gui.model.metric.Node;
+import org.aksw.limes.core.gui.model.metric.Property;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -17,7 +18,9 @@ import javafx.scene.text.Text;
  */
 public class NodeViewRectangle {
 	public static final Color targetCol = Color.rgb(23, 104, 19);
+	public static final Color targetOptionalCol = Color.rgb(23, 104, 19, 0.6);
 	public static final Color sourceCol = Color.rgb(128, 23, 26);
+	public static final Color sourceOptionalCol = Color.rgb(128, 23, 26 ,0.6);
 	public static final Color metricCol = Color.rgb(129, 70, 23);
 	public static final Color operatorCol = Color.rgb(14, 78, 76);
 	public static final Color outputCol = Color.rgb(1, 30, 0);
@@ -66,12 +69,20 @@ public class NodeViewRectangle {
 			this.HeadTextCol = operatorHeadtextCol;
 			break;
 		case NodeView.SOURCE:
-			this.color = sourceCol;
 			this.HeadTextCol = sourceHeadTextCol;
+			if(((Property)nodeData).isOptional()){
+				this.color = sourceOptionalCol;
+			}else{
+				this.color = sourceCol;
+			}
 			break;
 		case NodeView.TARGET:
-			this.color = targetCol;
 			this.HeadTextCol = targetHeadTextCol;
+			if(((Property)nodeData).isOptional()){
+				this.color = targetOptionalCol;
+			}else{
+				this.color = targetCol;
+			}
 			break;
 		}
 		this.node = node;
@@ -104,7 +115,7 @@ public class NodeViewRectangle {
 			gc.fillRoundRect(this.x, this.y, this.node.getWidth(), this.node.getHeight(), NodeViewRectangle.arch,
 					NodeViewRectangle.arch);
 		}
-		if (this.color != sourceCol && this.color != targetCol) {
+		if (this.color != sourceCol  && this.color != sourceOptionalCol && this.color != targetCol && this.color != targetOptionalCol) {
 			gc.setFill(this.HeadTextCol);
 			fillText(gc, nodeData.id, node.getWidth(), 0, arch / 4, false);
 
@@ -128,20 +139,19 @@ public class NodeViewRectangle {
 							node.getWidth(), 4.0, arch * 1.25, true);
 				}
 			}
-		} else if (this.color == sourceCol) {
+		} else if (this.color == sourceCol || this.color == sourceOptionalCol) {
 			gc.setFill(this.HeadTextCol);
 			fillText(gc, "source", node.getWidth(), 0.0, arch / 4, false);
 			gc.setFill(operatorCol);
 			fillText(gc, this.nodeData.id, node.getWidth(), 4, arch * 0.75, true);
-		} else if (this.color == targetCol) {
+		} else if (this.color == targetCol || this.color == targetOptionalCol) {
 			gc.setFill(this.HeadTextCol);
 			fillText(gc, "target", node.getWidth(), 0.0, arch / 4, false);
 			gc.setFill(operatorCol);
 			fillText(gc, this.nodeData.id, node.getWidth(), 4, arch * 0.75, true);
-
 		}
 	}
-
+	
 	private void fillText(GraphicsContext gc, String text, int nodeWidth, double xoffset, double yoffset,
 			boolean leftAligned) {
 		fillText(gc, text, -1, nodeWidth, xoffset, yoffset, leftAligned);
