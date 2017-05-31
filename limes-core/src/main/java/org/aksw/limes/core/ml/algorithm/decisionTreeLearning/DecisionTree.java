@@ -34,6 +34,7 @@ import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.FitnessFunctionDTL;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GiniIndex;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GlobalFMeasure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -269,7 +270,7 @@ public class DecisionTree {
 	}
 
 	
-	private AMapping getPathMapping(){
+	public AMapping getPathMapping(){
 		if(root){
 			return classifier.getMapping();
 		}
@@ -553,8 +554,9 @@ public class DecisionTree {
 
 		final int EUCLID_ITERATIONS = 20;
 		final double MIN_COVERAGE = 0.6d;
-		String[] datasets = {/*"dbplinkedmdb", "person1",*/ "person2"/*,"drugs", "restaurantsfixed"*/};
+		String[] datasets = {/*"dbplinkedmdb",*/ "person1full"/*, "person2","drugs", "restaurantsfixed"*/};
 		// String data = "person2";
+//		for(int k = 0; k < 5; k++){
 		for (String data : datasets) {
 			EvaluationData c = DataSetChooser.getData(data);
 
@@ -679,12 +681,42 @@ public class DecisionTree {
 				MLResults res = dtl.asSupervised().learn(trainingData);
 				long end = System.currentTimeMillis();
 				System.out.println(res.getLinkSpecification().toStringPretty());
+				AMapping mapping = dtl.predict(c.getSourceCache(), c.getTargetCache(), res);
+				AMapping refMapping = c.getReferenceMapping();
 				System.out.println("FMeasure: "
-						+ new FMeasure().calculate(dtl.predict(c.getSourceCache(), c.getTargetCache(), res),
+						+ new FMeasure().calculate(mapping,
 								new GoldStandard(c.getReferenceMapping(), c.getSourceCache().getAllUris(),
 										c.getTargetCache().getAllUris())));
 				System.out.println("Time: " + (end - start));
 				
+//				Nach dem Prunen sollte bei Bäumen öfter sowas rauskommen bei person1
+//				LinkSpecification ls = new LinkSpecification("AND(jaccard(x.http://www.okkam.org/ontology_person1.owl#soc_sec_id,y.http://www.okkam.org/ontology_person2.owl#soc_sec_id)|1.0, qgrams(x.http://www.okkam.org/ontology_person1.owl#has_address,y.http://www.okkam.org/ontology_person2.owl#has_address)|0.8222222222222222)",0.0);
+//				AMapping testMapping = dtl.predict(c.getSourceCache(), c.getTargetCache(), new MLResults(ls, null, 0.0, null));
+//				System.out.println("FMeasure: "
+//						+ new FMeasure().calculate(testMapping,
+//								new GoldStandard(c.getReferenceMapping(), c.getSourceCache().getAllUris(),
+//										c.getTargetCache().getAllUris())));
+			/*
+             System.out.println(" ====== Not in ref mapping ====== ");
+             for(String s: mapping.getMap().keySet()){
+            	 for(String t: mapping.getMap().get(s).keySet()){
+            		 if(!refMapping.contains(s, t)){
+            			 System.out.println(c.getSourceCache().getInstance(s).getProperty("http://www.okkam.org/ontology_person1.owl#has_address") + " = " + c.getTargetCache().getInstance(t).getProperty("http://www.okkam.org/ontology_person2.owl#has_address") + " : " + MeasureProcessor.getSimilarity(c.getSourceCache().getInstance(s), c.getTargetCache().getInstance(t), "qgrams(x.http://www.okkam.org/ontology_person1.owl#has_address,y.http://www.okkam.org/ontology_person2.owl#has_address)", 0.01, "?x", "?y"));
+            		 }
+            	 }
+             }
+
+             System.out.println("\n\n\n ====== Not in mapping ====== ");
+             for(String s: refMapping.getMap().keySet()){
+            	 for(String t: refMapping.getMap().get(s).keySet()){
+            		 if(!mapping.contains(s, t)){
+            			 System.out.println(c.getSourceCache().getInstance(s).getProperty("http://www.okkam.org/ontology_person1.owl#has_address") + " = " + c.getTargetCache().getInstance(t).getProperty("http://www.okkam.org/ontology_person2.owl#has_address") + " : " + MeasureProcessor.getSimilarity(c.getSourceCache().getInstance(s), c.getTargetCache().getInstance(t), "qgrams(x.http://www.okkam.org/ontology_person1.owl#has_address,y.http://www.okkam.org/ontology_person2.owl#has_address)",
+												0.01, "?x", "?y"));
+            		 }
+            	 }
+             }
+             */
+             
 				/*
 				LinkSpecification ls = res.getLinkSpecification();
 				double threshold = 0.1;
@@ -716,6 +748,7 @@ public class DecisionTree {
 				e.printStackTrace();
 			}
 		}
+//		}
 	}
 
 	public static AMapping getTrainingData(AMapping full) {
@@ -723,16 +756,16 @@ public class DecisionTree {
 		AMapping slice = MappingFactory.createDefaultMapping();
 		Object[] keyArr = full.getMap().keySet().toArray();
 		int c = 5;
-		int i = 2;
+//		int i = 2;
 		boolean pos = true;
 		while (slice.size() <= sliceSizeWanted) {
 			// String key = (String)keyArr[(int)(Math.random() *
 			// keyArr.length)];
 			String key = (String) keyArr[c];
-			c = c + i;
+			c = (int)(Math.random() * Double.valueOf(keyArr.length)) ;
 			if (c >= keyArr.length) {
 				c = 0;
-				i++;
+//				i++;
 			}
 			if (!slice.getMap().keySet().contains(key)) {
 				if(pos){

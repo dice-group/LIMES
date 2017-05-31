@@ -14,6 +14,11 @@ public class TrainingInstance {
 		this.classLabel = classLabel;
 		this.measureValues = new HashMap<String,Double>();
 	}
+	
+	@Override
+	public String toString(){
+		return this.sourceUri + " -> " + this.targetUri + " : " + this.classLabel;
+	}
 
 	public String getSourceUri() {
 		return sourceUri;

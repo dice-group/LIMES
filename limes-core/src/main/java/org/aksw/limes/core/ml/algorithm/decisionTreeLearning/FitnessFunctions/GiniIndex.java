@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
 
 public class GiniIndex extends FitnessFunctionDTL {
 	protected static Logger logger = LoggerFactory.getLogger(InformationGain.class);
-	private static ArrayList<TrainingInstance> fullInstances;
-	private static ArrayList<TrainingInstance> currentInstances;
+	private static List<TrainingInstance> fullInstances;
+	private static List<TrainingInstance> currentInstances;
 	private static HashSet<Metric> metricExpressions;
 	private AMapping currentMapping;
 
@@ -62,6 +62,7 @@ public class GiniIndex extends FitnessFunctionDTL {
 	}
 
 	private void updateInstances(DecisionTree currentNode) {
+		/*
 		ArrayList<TrainingInstance> updatedInstances = new ArrayList<TrainingInstance>();
 		String splitExpression = currentNode.getParent().getClassifier().getMetricExpression().split("\\|")[0];
 		double splitpoint = currentNode.getParent().getClassifier().getThreshold();
@@ -78,8 +79,8 @@ public class GiniIndex extends FitnessFunctionDTL {
 			parentMapping = currentNode.getParent().getClassifier().getMapping();
 		}
 		for (TrainingInstance t : fullInstances) {
-			if ((currentNode.isLeftNode() && t.getMeasureValues().get(splitExpression) <= splitpoint)
-					|| (!currentNode.isLeftNode() && t.getMeasureValues().get(splitExpression) > splitpoint)) {
+			if ((currentNode.isLeftNode() && t.getMeasureValues().get(splitExpression) < splitpoint)
+					|| (!currentNode.isLeftNode() && t.getMeasureValues().get(splitExpression) >= splitpoint)) {
 				if (parentMapping.getMap().get(t.getSourceUri()) != null) {
 					if (parentMapping.getMap().get(t.getSourceUri()).get(t.getTargetUri()) != null) {
 						updatedInstances.add(t);
@@ -90,6 +91,16 @@ public class GiniIndex extends FitnessFunctionDTL {
 		currentInstances = updatedInstances;
 		AMapping newMapping = trainingInstancesToMapping(currentInstances);
 		currentMapping = newMapping;
+		*/
+		currentMapping = null;
+		if(currentNode.isLeftNode()){
+			AMapping base = null;
+			base = currentNode.getRefMapping();
+			currentMapping = MappingOperations.difference(base, currentNode.getParent().getPathMapping());
+		}else{
+			currentMapping = currentNode.getParent().getPathMapping();
+		}
+		currentInstances = mappingToTrainingInstance(currentMapping);
 	}
 
 //	private void updateInstances(DecisionTree currentNode) {
@@ -280,7 +291,7 @@ public class GiniIndex extends FitnessFunctionDTL {
 			updateInstances(currentNode);
 			if(currentInstances.size() == 0)
 				return null;
-			double[] posNeg = getNumberOfPositiveNegativeInstances(currentMapping);
+			double[] posNeg = getNumberOfPositiveNegativeInstances(currentInstances);
 			if(posNeg[0] == 0.0 || posNeg[1] == 0.0){
 				return null;
 			}
@@ -293,31 +304,36 @@ public class GiniIndex extends FitnessFunctionDTL {
 			if (currentNode.getParent() == null
 					|| !currentNode.getParent().getPathString().contains(mE.metricExpression.replace(mE.measure, ""))) {
 				Collections.sort(currentInstances, new MetricValueComparator(mE.metricExpression));
-				ArrayList<TrainingInstance> lessThanEqualsI = new ArrayList<TrainingInstance>();
-				ArrayList<TrainingInstance> moreThanI = new ArrayList<TrainingInstance>();
-				moreThanI.addAll(currentInstances);
+				ArrayList<TrainingInstance> lessThanI = new ArrayList<TrainingInstance>();
+				ArrayList<TrainingInstance> moreThanEqualsI = new ArrayList<TrainingInstance>();
+				moreThanEqualsI.addAll(currentInstances);
 				double oldSplitpoint = 0.0;
 				for (int i = 0; i < currentInstances.size() - 1; i++) {
-					moreThanI.remove(currentInstances.get(i));
-					lessThanEqualsI.add(currentInstances.get(i));
+					moreThanEqualsI.remove(currentInstances.get(i));
+					lessThanI.add(currentInstances.get(i));
 					// splitpoint is between the two values
 //					double splitpoint = (currentInstances.get(i).getMeasureValues().get(mE.metricExpression)
 //							+ currentInstances.get(i + 1).getMeasureValues().get(mE.metricExpression)) / 2.0;
-					double splitpoint = currentInstances.get(i).getMeasureValues().get(mE.metricExpression);
+					double splitpoint = currentInstances.get(i + 1).getMeasureValues().get(mE.metricExpression);
 					if (splitpoint != oldSplitpoint) {
 						oldSplitpoint = splitpoint;
-						double gain = gain(currentNode, lessThanEqualsI, moreThanI);
+						double gain = gain(currentNode, lessThanI, moreThanEqualsI);
 						if (gain < bestGain) {
 							bestMetric = mE;
 							bestGain = gain;
 							bestSplitpoint = splitpoint;
 						}
 					}
+					if(bestGain == 0.0){
+						double p[] = getNumberOfPositiveNegativeInstances(lessThanI);
+						double pp[] = getNumberOfPositiveNegativeInstances(moreThanEqualsI);
+						System.out.print("");
+					}
 					if (splitpoint == 1.0)
 						break;
 				}
 			} else {
-				System.out.println("Ommitting: " + mE);
+//				System.out.println("Ommitting: " + mE);
 			}
 		}
 		if (bestMetric == null)
@@ -327,9 +343,10 @@ public class GiniIndex extends FitnessFunctionDTL {
 		ec.setfMeasure(bestGain);
 //		ec.setMapping(getNodeMapping(currentNode,ec));
 		String measureExpression = bestMetric.measure + "(x." + bestMetric.sourceProperty + ",y." + bestMetric.targetProperty + ")";
-		ec.setMapping(currentNode.getMeasureMapping(measureExpression, ec));
+		ec.setMapping(currentNode.executeAtomicMeasure(measureExpression, bestSplitpoint));
 		return ec;
 	}
+
 
 	private AMapping getNodeMapping(DecisionTree currentNode, ExtendedClassifier ec) {
 		ArrayList<TrainingInstance> newInstances = new ArrayList<TrainingInstance>();
@@ -353,6 +370,18 @@ public class GiniIndex extends FitnessFunctionDTL {
 			resMap.add(t.getSourceUri(), t.getTargetUri(), t.getClassLabel());
 		}
 		return resMap;
+	}
+	
+	private List<TrainingInstance> mappingToTrainingInstance(AMapping mapping){
+		List<TrainingInstance> instances = new ArrayList<TrainingInstance>();
+		for(TrainingInstance t: fullInstances){
+			if(mapping.getMap().containsKey(t.getSourceUri())){
+				if(mapping.getMap().get(t.getSourceUri()).containsKey(t.getTargetUri())){
+					instances.add(t);
+				}
+			}
+		}
+		return instances;
 	}
 
 	@Override

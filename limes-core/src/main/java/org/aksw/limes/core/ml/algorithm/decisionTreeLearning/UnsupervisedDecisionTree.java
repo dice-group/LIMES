@@ -383,10 +383,10 @@ public class UnsupervisedDecisionTree {
 					"FMeasure: " + new FMeasure().calculate(dtl.predict(c.getSourceCache(), c.getTargetCache(), res),
 							new GoldStandard(c.getReferenceMapping(), c.getSourceCache(), c.getTargetCache())));
 			System.out.println("Time: " + (end - start));
-		AMapping pathMapping = UnsupervisedDecisionTree.getTotalMapping(((DecisionTreeLearning)dtl.getMl()).root);
-			System.out.println(
-					"Path FMeasure: " + new FMeasure().calculate(pathMapping,
-							new GoldStandard(c.getReferenceMapping(), c.getSourceCache(), c.getTargetCache())));
+//		AMapping pathMapping = UnsupervisedDecisionTree.getTotalMapping(((DecisionTreeLearning)dtl.getMl()).root);
+//			System.out.println(
+//					"Path FMeasure: " + new FMeasure().calculate(pathMapping,
+//							new GoldStandard(c.getReferenceMapping(), c.getSourceCache(), c.getTargetCache())));
 			
 
 		} catch (UnsupportedMLImplementationException e) {

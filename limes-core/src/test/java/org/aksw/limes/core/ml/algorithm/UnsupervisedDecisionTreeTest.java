@@ -98,7 +98,7 @@ public class UnsupervisedDecisionTreeTest {
 		SimpleExecutionEngine ee = new SimpleExecutionEngine(sourceCache2, targetCache2,
 				dtl2.getMl().getConfiguration().getSourceInfo().getVar(), dtl2.getMl().getConfiguration().getTargetInfo().getVar());
 //		AMapping parsedMapping = ee.execute(ls, dp);
-		AMapping pathMapping = UnsupervisedDecisionTree.getTotalMapping(((DecisionTreeLearning)dtl2.getMl()).root);
+		AMapping pathMapping = null; /*UnsupervisedDecisionTree.getTotalMapping(((DecisionTreeLearning)dtl2.getMl()).root);*/
 //		AMapping path2Mapping = ee.execute(lsPath2, dp);
 //		AMapping getpath2Mapping = UnsupervisedDecisionTree.getpath2MAPPING();
 //		AMapping path1Mapping = ee.execute(lsPath1, dp);

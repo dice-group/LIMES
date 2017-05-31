@@ -54,6 +54,9 @@ public class DataSetChooser {
         case "PERSON1":
             param = getPerson1();
             break;
+        case "PERSON1FULL":
+        	param = getPerson1Full();
+        	break;
         case "PERSON2":
             param = getPerson2();
             break;
@@ -263,6 +266,40 @@ public class DataSetChooser {
         return param;
     }
 
+    private static HashMap<MapKey, Object> getPerson1Full() {
+        HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+        // folders & files
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Persons1/");
+        param.put(MapKey.CONFIG_FILE, "persons1.xml");
+        param.put(MapKey.REFERENCE_FILE, "dataset11_dataset12_goldstandard_person.xml");
+        param.put(MapKey.SOURCE_FILE, "person11.nt");
+        param.put(MapKey.TARGET_FILE, "person12.nt");
+        String type = "-Person";
+        param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
+        param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Persons1.csv");
+        param.put(MapKey.NAME, "Persons1");
+        // data
+        AConfigurationReader cR = new XMLConfigurationReader(
+                "" + param.get(MapKey.BASE_FOLDER) + param.get(MapKey.CONFIG_FILE));
+        cR.read();
+        param.put(MapKey.CONFIG_READER, cR);
+
+        param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
+                "full" + (String) param.get(MapKey.CONFIG_FILE)));
+        param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFileFull(
+                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
+        param.put(MapKey.TARGET_CACHE, Experiment.readOAEIFileFull(
+                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.TARGET_FILE), type));
+        param.put(MapKey.REFERENCE_MAPPING, Experiment.readOAEIMapping(
+                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.REFERENCE_FILE)));
+
+        param.put(MapKey.SOURCE_CLASS, "http://www.okkam.org/ontology_person1.owl#Person");
+        param.put(MapKey.TARGET_CLASS, "okkamperson2:Person");
+
+        return param;
+    }
+
     private static HashMap<MapKey, Object> getPerson1() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
@@ -286,9 +323,6 @@ public class DataSetChooser {
                 (String) param.get(MapKey.CONFIG_FILE)));
         param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFile(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
-        param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFile(
-                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
-
         param.put(MapKey.TARGET_CACHE, Experiment.readOAEIFile(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.TARGET_FILE), type));
         param.put(MapKey.REFERENCE_MAPPING, Experiment.readOAEIMapping(
