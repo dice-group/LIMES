@@ -105,9 +105,7 @@
 					<skipTests>false</skipTests>
 					<useManifestOnlyJar>false</useManifestOnlyJar>
 					<!-- used to debug one only package via CLI (mvn test -DtestGroup=org/aksw/limes/...) -->
-					<!-- <includes>
-						<include>**/${testGroup}/*Test.java</include>
-					</includes> -->
+					<!-- <includes> <include>**/${testGroup}/*Test.java</include> </includes> -->
 				</configuration>
 			</plugin>
 
@@ -361,7 +359,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.6.1</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-core</artifactId>
@@ -515,13 +518,13 @@
 			<artifactId>openjfx-monocle</artifactId>
 			<version>1.8.0_20</version>
 		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>com.oracle</groupId>-->
-			<!--<artifactId>javafx</artifactId>-->
-			<!--<version>2.2.3</version>-->
-			<!--<scope>system</scope>-->
-			<!--<systemPath>${project.basedir}/lib/jfxrt.jar</systemPath>-->
-		<!--</dependency>-->
+		<!--<dependency> -->
+		<!--<groupId>com.oracle</groupId> -->
+		<!--<artifactId>javafx</artifactId> -->
+		<!--<version>2.2.3</version> -->
+		<!--<scope>system</scope> -->
+		<!--<systemPath>${project.basedir}/lib/jfxrt.jar</systemPath> -->
+		<!--</dependency> -->
 
 		<dependency>
 			<groupId>fr.ign.cogit</groupId>

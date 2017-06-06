@@ -15,6 +15,7 @@ import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTree;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTreeLearning;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.TrainingInstance;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Utils.InstanceCalculator;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
@@ -230,9 +231,8 @@ public class GiniIndex extends FitnessFunctionDTL {
 		if (currentNode.getParent() == null) {
 			currentMapping = currentNode.getRefMapping();
 		}
-		double[] leftFraction = getNumberOfPositiveNegativeInstances(left);
-		double[] rightFraction = getNumberOfPositiveNegativeInstances(right);
-		double[] allFraction = getNumberOfPositiveNegativeInstances(currentMapping);
+		double[] leftFraction = InstanceCalculator.getNumberOfPositiveNegativeInstances(left);
+		double[] rightFraction = InstanceCalculator.getNumberOfPositiveNegativeInstances(right);
 		double leftAll = leftFraction[0] + leftFraction[1];
 		double rightAll = rightFraction[0] + rightFraction[1];
 		double leftWeight = (leftAll) / currentMapping.size();
@@ -243,37 +243,6 @@ public class GiniIndex extends FitnessFunctionDTL {
 	}
 
 
-	private double[] getNumberOfPositiveNegativeInstances(List<TrainingInstance> instanceList) {
-		double[] posNegNumber = { 0.0, 0.0 };
-		for (TrainingInstance t : instanceList) {
-			if (t.getClassLabel() > 0.9) {
-				posNegNumber[0]++;
-			} else {
-				posNegNumber[1]++;
-			}
-		}
-		return posNegNumber;
-	}
-
-	/**
-	 * 
-	 * @param m
-	 * @return [positive][negative]
-	 */
-	private double[] getNumberOfPositiveNegativeInstances(AMapping m) {
-		double[] posNegNumber = { 0.0, 0.0 };
-		for (String s : m.getMap().keySet()) {
-			for (String t : m.getMap().get(s).keySet()) {
-				double value = m.getMap().get(s).get(t);
-				if (value > 0.9) {
-					posNegNumber[0]++;
-				} else {
-					posNegNumber[1]++;
-				}
-			}
-		}
-		return posNegNumber;
-	}
 
 	// nach sortieren alle splitpunkte durchnehmen und gain ratio berechnen
 	// dafür gain ratio implementieren
@@ -291,7 +260,7 @@ public class GiniIndex extends FitnessFunctionDTL {
 			updateInstances(currentNode);
 			if(currentInstances.size() == 0)
 				return null;
-			double[] posNeg = getNumberOfPositiveNegativeInstances(currentInstances);
+			double[] posNeg = InstanceCalculator.getNumberOfPositiveNegativeInstances(currentInstances);
 			if(posNeg[0] == 0.0 || posNeg[1] == 0.0){
 				return null;
 			}
@@ -323,11 +292,6 @@ public class GiniIndex extends FitnessFunctionDTL {
 							bestGain = gain;
 							bestSplitpoint = splitpoint;
 						}
-					}
-					if(bestGain == 0.0){
-						double p[] = getNumberOfPositiveNegativeInstances(lessThanI);
-						double pp[] = getNumberOfPositiveNegativeInstances(moreThanEqualsI);
-						System.out.print("");
 					}
 					if (splitpoint == 1.0)
 						break;

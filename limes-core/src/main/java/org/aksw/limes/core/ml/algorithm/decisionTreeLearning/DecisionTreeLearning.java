@@ -35,7 +35,9 @@ import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.FitnessFunctionDTL;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GlobalFMeasure;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GiniIndex;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning.ErrorEstimatePruning;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning.PruningFunctionDTL;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.util.ParenthesisMatcher;
 import org.apache.log4j.Logger;
@@ -126,9 +128,10 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	public static final String PARAMETER_MAPPING = "initial mapping as training data";
 	public static final String PARAMETER_LINK_SPECIFICATION = "initial link specification to start training";
 	public static final String PARAMETER_MAX_LINK_SPEC_HEIGHT = "maximum height of the link specification";
-    public static final String PARAMETER_MIN_PROPERTY_COVERAGE = "minimum property coverage";
-    public static final String PARAMETER_PROPERTY_LEARNING_RATE = "property learning rate";
-    public static final String PARAMETER_FITNESS_FUNCTION = "fitness function";
+	public static final String PARAMETER_MIN_PROPERTY_COVERAGE = "minimum property coverage";
+	public static final String PARAMETER_PROPERTY_LEARNING_RATE = "property learning rate";
+	public static final String PARAMETER_FITNESS_FUNCTION = "fitness function";
+	public static final String PARAMETER_PRUNING_FUNCTION = "pruning function";
 
 	// Default parameters
 	private static final boolean unprunedTree = false;
@@ -142,16 +145,20 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	private static final boolean mdlCorrection = true;
 	private static final int seed = 1;
 	private static final int maxLinkSpecHeight = 1;
-	private static final double minPropertyCoverage = 0.6; 
+	private static final double minPropertyCoverage = 0.6;
 	private static final double propertyLearningRate = 0.95;
-	private static final FitnessFunctionDTL fitnessFunction = new GlobalFMeasure();
+	private static final FitnessFunctionDTL fitnessFunction = new GiniIndex();
+	private static final PruningFunctionDTL pruningFunction = new ErrorEstimatePruning();
 	private AMapping initialMapping = MappingFactory.createDefaultMapping();
 	private LinkSpecification bestLS;
 	private FMeasure fmeasure;
 	private double bestFMeasure = 0.0;
 	private AMapping prediction;
 	private AMapping trainingData;
-public DecisionTree root;
+	public DecisionTree root;
+
+	public static boolean useJ48 = false;
+	public static boolean useJ48optimized = false;
 
 	// TODO check whats wrong with these
 	public static final String[] stringMeasures = { "cosine",
@@ -162,8 +169,8 @@ public DecisionTree root;
 	public static final String[] dateMeasures = { "datesim", "daysim", "yearsim" };
 	public static final String[] pointsetMeasures = { "symmetrichausdorff", "frechet", "hausdorff", "geolink",
 			"geomean", "geolink", "surjection", "fairsurjection" };
-	
-	public static final String[] defaultMeasures = {"jaccard", "trigrams", "cosine", "qgrams"};
+
+	public static final String[] defaultMeasures = { "jaccard", "trigrams", "cosine", "qgrams" };
 	// public static final String[] numberMeasures = {};
 
 	public static final double threshold = 0.01;
@@ -419,27 +426,33 @@ public DecisionTree root;
 				handleUniformTrainingData(oracleMapping);
 			}
 		}
-		LinkSpecification raisedLS = null;
-		// If we get the same tree again, raise the threshold to get better
-		// results faster
-		while (alreadySeenLS.get(resLS.toString()) != null) {
-			logger.debug("Already seen " + resLS);
-			raisedLS = raiseThreshold(resLS);
-			// they are the same if we reached the maximum threshold
-			if (raisedLS.equals(resLS)) {
-				break;
-			} else {
-				resLS = raisedLS;
-			}
-			logger.debug("Setting threshold to: " + resLS.getThreshold());
-		}
 		this.mlresult = new MLResults();
-		if (checkIfThereWasBetterLSBefore(resLS, null, null)) {
-			logger.debug("Already had better LinkSpecification: " + bestLS);
+		if (useJ48optimized) {
+			trainingData = oracleMapping;
+			LinkSpecification raisedLS = null;
+			// If we get the same tree again, raise the threshold to get better
+			// results faster
+			while (alreadySeenLS.get(resLS.toString()) != null) {
+				logger.debug("Already seen " + resLS);
+				raisedLS = raiseThreshold(resLS);
+				// they are the same if we reached the maximum threshold
+				if (raisedLS.equals(resLS)) {
+					break;
+				} else {
+					resLS = raisedLS;
+				}
+				logger.debug("Setting threshold to: " + resLS.getThreshold());
+			}
+			if (checkIfThereWasBetterLSBefore(resLS, null, null)) {
+				logger.debug("Already had better LinkSpecification: " + bestLS);
+			} else {
+				logger.debug("Learned LinkSpecification: " + resLS.toStringOneLine());
+			}
+			this.mlresult.setLinkSpecification(bestLS);
+
 		} else {
-			logger.debug("Learned LinkSpecification: " + resLS.toStringOneLine());
+			this.mlresult.setLinkSpecification(resLS);
 		}
-		this.mlresult.setLinkSpecification(bestLS);
 		this.mlresult.setMapping(prediction);
 		this.mlresult.setQuality(bestFMeasure);
 		deltaLS = subtractDeltaFromLS(resLS);
@@ -468,7 +481,7 @@ public DecisionTree root;
 			tree.setOptions(options);
 			logger.info("Building classifier....");
 			tree.buildClassifier(trainingSet);
-			 System.out.println(tree.prefix());
+			System.out.println(tree.prefix());
 			// System.out.println(tree.graph());
 			if (tree.prefix().startsWith("[negative ") || tree.prefix().startsWith("[positive ")) {
 				logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
@@ -494,7 +507,7 @@ public DecisionTree root;
 	 * @return
 	 */
 	private boolean checkIfThereWasBetterLSBefore(LinkSpecification ls, ACache source, ACache target) {
-		if(source == null || target == null){
+		if (source == null || target == null) {
 			source = this.sourceCache;
 			target = this.targetCache;
 		}
@@ -864,29 +877,39 @@ public DecisionTree root;
 				Double.NaN, Double.NaN, Double.NaN, PARAMETER_LINK_SPECIFICATION));
 		learningParameters.add(new LearningParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT, maxLinkSpecHeight, Integer.class,
 				1, 100000, 1, PARAMETER_MAX_LINK_SPEC_HEIGHT));
-        learningParameters.add(new LearningParameter(PARAMETER_MIN_PROPERTY_COVERAGE, minPropertyCoverage, Double.class, 0d, 1d, 0.01d, PARAMETER_MIN_PROPERTY_COVERAGE));
-        learningParameters.add(new LearningParameter(PARAMETER_PROPERTY_LEARNING_RATE, propertyLearningRate,Double.class, 0d, 1d, 0.01d, PARAMETER_PROPERTY_LEARNING_RATE));
-        learningParameters.add(new LearningParameter(PARAMETER_FITNESS_FUNCTION, fitnessFunction, FitnessFunctionDTL.class, Double.NaN, Double.NaN, Double.NaN, PARAMETER_FITNESS_FUNCTION));
+		learningParameters.add(new LearningParameter(PARAMETER_MIN_PROPERTY_COVERAGE, minPropertyCoverage, Double.class,
+				0d, 1d, 0.01d, PARAMETER_MIN_PROPERTY_COVERAGE));
+		learningParameters.add(new LearningParameter(PARAMETER_PROPERTY_LEARNING_RATE, propertyLearningRate,
+				Double.class, 0d, 1d, 0.01d, PARAMETER_PROPERTY_LEARNING_RATE));
+		learningParameters.add(new LearningParameter(PARAMETER_FITNESS_FUNCTION, fitnessFunction,
+				FitnessFunctionDTL.class, Double.NaN, Double.NaN, Double.NaN, PARAMETER_FITNESS_FUNCTION));
+		learningParameters.add(new LearningParameter(PARAMETER_PRUNING_FUNCTION, pruningFunction,
+				PruningFunctionDTL.class, Double.NaN, Double.NaN, Double.NaN, PARAMETER_PRUNING_FUNCTION));
 	}
 
 	@Override
 	protected MLResults learn(PseudoFMeasure pfm) throws UnsupportedMLImplementationException {
-//		root = new UnsupervisedDecisionTree(this, sourceCache, targetCache, pfm,(double)getParameter(PARAMETER_MIN_PROPERTY_COVERAGE), (double)getParameter(PARAMETER_PROPERTY_LEARNING_RATE));
-//		UnsupervisedDecisionTree.maxDepth = (int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
-//		root.buildTree((int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
-//		System.out.println(root.toString());
-//		root.prune();
-//		System.out.println(root.toString());
-//		LinkSpecification ls = tp.parseTreePrefix(root.toString());
-//		MLResults res = new MLResults(ls, UnsupervisedDecisionTree.getTotalMapping(root), -1.0, null);
-//		return res;
+		// root = new UnsupervisedDecisionTree(this, sourceCache, targetCache,
+		// pfm,(double)getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
+		// (double)getParameter(PARAMETER_PROPERTY_LEARNING_RATE));
+		// UnsupervisedDecisionTree.maxDepth =
+		// (int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
+		// root.buildTree((int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
+		// System.out.println(root.toString());
+		// root.prune();
+		// System.out.println(root.toString());
+		// LinkSpecification ls = tp.parseTreePrefix(root.toString());
+		// MLResults res = new MLResults(ls,
+		// UnsupervisedDecisionTree.getTotalMapping(root), -1.0, null);
+		// return res;
 		logger.error("FIX THIS!");
 		return null;
 	}
 
 	@Override
 	protected boolean supports(MLImplementationType mlType) {
-		return mlType == MLImplementationType.SUPERVISED_ACTIVE || mlType == MLImplementationType.SUPERVISED_BATCH || mlType == MLImplementationType.UNSUPERVISED;
+		return mlType == MLImplementationType.SUPERVISED_ACTIVE || mlType == MLImplementationType.SUPERVISED_BATCH
+				|| mlType == MLImplementationType.UNSUPERVISED;
 	}
 
 	/**
@@ -991,30 +1014,38 @@ public DecisionTree root;
 
 	@Override
 	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
-		
-		this.trainingData = trainingData;
-		DecisionTree.isSupervised = true;
-		root = new DecisionTree(this, sourceCache, targetCache, null,(double)getParameter(PARAMETER_MIN_PROPERTY_COVERAGE), (double)getParameter(PARAMETER_PROPERTY_LEARNING_RATE), trainingData);
-		DecisionTree.fitnessFunction = (FitnessFunctionDTL)getParameter(PARAMETER_FITNESS_FUNCTION);
-		DecisionTree.fitnessFunction.setDt(root);
-		DecisionTree.maxDepth = (int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
-		root.buildTree((int)getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
-		System.out.println(root.toString());
-		root.prune();
-		System.out.println(root.toString());
-//		LinkSpecification ls = tp.parseTreePrefix(root.toString());
+		if (!useJ48) {
+			this.trainingData = trainingData;
+			DecisionTree.isSupervised = true;
+			root = new DecisionTree(this, sourceCache, targetCache, null,
+					(double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
+					(double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
+					(double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData);
+			DecisionTree.fitnessFunction = (FitnessFunctionDTL) getParameter(PARAMETER_FITNESS_FUNCTION);
+			DecisionTree.pruningFunction = (PruningFunctionDTL) getParameter(PARAMETER_PRUNING_FUNCTION);
+			DecisionTree.fitnessFunction.setDt(root);
+			DecisionTree.maxDepth = (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
+			root.buildTree((int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
+			// System.out.println(root.toString());
+			root.prune();
+			// System.out.println(root.toString());
+			// LinkSpecification ls = tp.parseTreePrefix(root.toString());
 
-		LinkSpecification ls = root.getTotalLS();
-//		if (checkIfThereWasBetterLSBefore(ls, root.getTestSourceCache(), root.getTestTargetCache())) {
-//			logger.debug("Already had better LinkSpecification: " + bestLS);
-//		} else {
-//			logger.debug("Learned LinkSpecification: " + ls.toStringOneLine());
-//		}
-		if(bestLS == null)
-			bestLS = ls;
-		MLResults res = new MLResults(bestLS, null, -1.0, null);
-		return res;
-//		return activeLearn(trainingData);
+			LinkSpecification ls = root.getTotalLS();
+			// if (checkIfThereWasBetterLSBefore(ls, root.getTestSourceCache(),
+			// root.getTestTargetCache())) {
+			// logger.debug("Already had better LinkSpecification: " + bestLS);
+			// } else {
+			// logger.debug("Learned LinkSpecification: " +
+			// ls.toStringOneLine());
+			// }
+			if (bestLS == null)
+				bestLS = ls;
+			MLResults res = new MLResults(bestLS, null, -1.0, null);
+			return res;
+		} else {
+			return activeLearn(trainingData);
+		}
 	}
 
 	public ACache getSourceCache() {
@@ -1077,8 +1108,9 @@ public DecisionTree root;
 			((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 			LinkSpecification ls = (((DecisionTreeLearning) dtl.getMl()).tp.parseTreePrefix(
 					"qgrams§title|title: <= 0.504587, > 0.504587[jaro§authors|authors: <= 0.675724, > 0.675724[negative (304.0)][jaro§title|title: <= 0.677374, > 0.677374[qgrams§authors|authors: <= 0.355556, > 0.355556[positive (4.0)][cosine§authors|authors: <= 0.612372, > 0.612372[negative (4.0)][positive (2.0)]]][negative (7.0)]]][positive (19.0/1.0)]"));
-			((DecisionTreeLearning) dtl.getMl()).checkIfThereWasBetterLSBefore(((DecisionTreeLearning) dtl.getMl()).tp
-					.pruneLS(ls, DecisionTreeLearning.maxLinkSpecHeight),null,null);
+			((DecisionTreeLearning) dtl.getMl()).checkIfThereWasBetterLSBefore(
+					((DecisionTreeLearning) dtl.getMl()).tp.pruneLS(ls, DecisionTreeLearning.maxLinkSpecHeight), null,
+					null);
 			// CSVMappingReader reader = new
 			// CSVMappingReader("/home/ohdorno/Documents/Uni/BA_Informatik/example.csv",",");
 			// AMapping trainingMapping = reader.read();
