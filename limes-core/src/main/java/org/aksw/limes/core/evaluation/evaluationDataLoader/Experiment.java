@@ -173,6 +173,7 @@ public class Experiment {
     		for(String subProp: subInst.getAllProperties()){
     			addProperties(newI, prop + "/" + subProp, instMap.get(propValue).getProperty(subProp).first(), instMap);
     		}
+    		newI.addProperty(prop, propValue);
     	}else{
     		newI.addProperty(prop, propValue);
     	}
