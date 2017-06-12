@@ -6,8 +6,10 @@ import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTree;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Utils.InstanceCalculator;
+import org.apache.commons.math3.distribution.NormalDistribution;
 
 public class ErrorEstimatePruning extends PruningFunctionDTL{
+	public static double defaultConfidence = 0.25;
 	
 	/**
 	 * Calculates the pessimistic error rate e using the formula
@@ -26,8 +28,10 @@ public class ErrorEstimatePruning extends PruningFunctionDTL{
 		return error;
 	}
 	
-	/*
 	public static void main(String[] args){
+
+		System.out.println();
+		/*
 		ErrorEstimatePruning eep = new ErrorEstimatePruning();
 		double pC = 0.69;
 		AMapping parentMapping = MappingFactory.createDefaultMapping();
@@ -68,8 +72,8 @@ public class ErrorEstimatePruning extends PruningFunctionDTL{
 		DecisionTree t = new DecisionTree(null, null, null, null, 0, 0, pC, null);
 		t.setClassifier(ec);
 		eep.pruneChild(t,parentMapping);
+		*/
 	}
-	*/
 
 	@Override
 	public DecisionTree pruneChildNodesIfNecessary(DecisionTree node) {
@@ -106,9 +110,12 @@ public class ErrorEstimatePruning extends PruningFunctionDTL{
 	}
 	
 	private double getErrorRate(double[] posNeg, double confidence){
-//		find out how to get the upper limit of a binomial distribution for a given confidence
-		if(confidence == 0.25)
-			confidence = 0.69;
+		double z = 0.0;
+		if(confidence == defaultConfidence){
+			z = 0.69;
+		}else{
+			z = new NormalDistribution(0, 1).inverseCumulativeProbability(1 - confidence);
+		}
 		double f = -1.0;
 		double N = posNeg[0] + posNeg[1];
 		if(posNeg[0] > posNeg[1]){
@@ -116,7 +123,7 @@ public class ErrorEstimatePruning extends PruningFunctionDTL{
 		}else{
 			f = posNeg[0]/N;
 		}
-		double nodeErrorRate = errorRate(f, N, confidence);
+		double nodeErrorRate = errorRate(f, N, z);
 		return nodeErrorRate;
 	}
 
