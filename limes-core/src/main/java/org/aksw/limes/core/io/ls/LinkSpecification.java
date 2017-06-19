@@ -274,30 +274,61 @@ public class LinkSpecification implements ILinkSpecification {
 		}
 		return allLeaves;
 	}
+	
+	public LinkSpecification setLeaf(LinkSpecification leaf, int n){
+		LinkSpecification clone = this.clone();
+		clone.setLeaf(leaf, null, n);
+		return clone;
+	}
+	
 
-	public void setLeaf(LinkSpecification leaf, int n) {
-		if (leaf == null || isAtomic()) {
-			return;
+//	private void setLeaf(LinkSpecification leaf, LinkSpecification parent, int n) {
+//		if (leaf == null || isAtomic()) {
+//			return;
+//		}
+//		if(n <= 1){
+//			List<LinkSpecification> children = getChildren();
+//			if(children.get(n).isAtomic()){
+//				children.get(0).setLeaf(leaf, this, n);
+//				return;
+//			}
+//			leaf.setParent(this);
+//			children.set(n, leaf);
+//			setChildren(children);
+//			return;
+//		}
+//		int offset = 0;
+//		for(LinkSpecification child : getChildren()){
+//			int childLeavesSize = child.getAllLeaves().size();
+//			if(n - offset <= childLeavesSize){
+//				child.setLeaf(leaf, this, n - offset - 1);
+//				return;
+//			}
+//			offset += childLeavesSize - 1;
+//		}
+//	}
+	
+	private void setLeaf(LinkSpecification leaf, LinkSpecification parent, int n) {
+		List<LinkSpecification> children = getChildren();
+		int leftSize = children.get(0).getAllLeaves().size();
+		if(n < leftSize){
+            if(children.get(0).isAtomic()){
+                leaf.setParent(this);
+                children.set(0, leaf);
+                setChildren(children);
+                return;
+            }
+			children.get(0).setLeaf(leaf, this, n);
+		}else{
+            if(children.get(1).isAtomic()){
+                leaf.setParent(this);
+                children.set(1, leaf);
+                setChildren(children);
+                return;
+            }
+			children.get(1).setLeaf(leaf, this, n - leftSize);
 		}
-		if(n <= 1){
-			List<LinkSpecification> children = getChildren();
-			if(!children.get(n).isAtomic()){
-				children.get(n).setLeaf(leaf, 0);
-				return;
-			}
-			children.set(n, leaf);
-			setChildren(children);
-			return;
-		}
-		int offset = 0;
-		for(LinkSpecification child : getChildren()){
-			int childLeavesSize = child.getAllLeaves().size();
-			if(n - offset < childLeavesSize){
-				child.setLeaf(leaf, n - offset - 1);
-				return;
-			}
-			offset += childLeavesSize - 1;
-		}
+
 	}
 
 	/**
@@ -376,7 +407,7 @@ public class LinkSpecification implements ILinkSpecification {
 		// }
 	}
 
-	private int getDepth() {
+	public int getDepth() {
 		if (parent == null) {
 			return 0;
 		}
