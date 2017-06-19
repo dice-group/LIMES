@@ -203,7 +203,7 @@ public class DecisionTreeTest {
 
 
 	private DecisionTree createRoot(DecisionTreeLearning decisionTreeLearning, String measure, String sourceProperty, String targetProperty, double threshold) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
-		DecisionTree tree = new DecisionTree(decisionTreeLearning, sourceCache, targetCache, pfm, (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE), (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_PROPERTY_LEARNING_RATE), MappingFactory.createDefaultMapping());
+		DecisionTree tree = new DecisionTree(decisionTreeLearning, sourceCache, targetCache, null, null, pfm, (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE), (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_PROPERTY_LEARNING_RATE), threshold, MappingFactory.createDefaultMapping());
 		
 		ExtendedClassifier ec = new ExtendedClassifier(measure, threshold, sourceProperty, targetProperty);
 		
@@ -218,10 +218,10 @@ public class DecisionTreeTest {
 
 	private DecisionTree createNode(DecisionTreeLearning decisionTreeLearning, String measure, String sourceProperty, String targetProperty, double threshold, DecisionTree parent, boolean isLeftNode) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException{
 		Constructor <DecisionTree> constructor;
-		Class<?>[] parameterTypes = {DecisionTreeLearning.class, ACache.class, ACache.class, AMapping.class, PseudoFMeasure.class, double.class, double.class, DecisionTree.class, boolean.class, AMapping.class};
+		Class<?>[] parameterTypes = {DecisionTreeLearning.class, ACache.class, ACache.class, ACache.class, ACache.class, PseudoFMeasure.class, double.class, double.class, double.class, DecisionTree.class, boolean.class, AMapping.class};
 		constructor = DecisionTree.class.getDeclaredConstructor(parameterTypes);
 		constructor.setAccessible(true);
-		DecisionTree tree = constructor.newInstance(decisionTreeLearning, sourceCache, targetCache, MappingFactory.createDefaultMapping(), pfm, (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE), (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_PROPERTY_LEARNING_RATE), parent, isLeftNode, MappingFactory.createDefaultMapping());
+		DecisionTree tree = constructor.newInstance(decisionTreeLearning, sourceCache, targetCache, null, null, pfm, (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE),(double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_PRUNING_CONFIDENCE), (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_PROPERTY_LEARNING_RATE), parent, isLeftNode, MappingFactory.createDefaultMapping());
 		ExtendedClassifier ec = new ExtendedClassifier(measure, threshold, sourceProperty, targetProperty);
 		
 		Field classifierField;

@@ -287,6 +287,7 @@ public class GiniIndex extends FitnessFunctionDTL {
 					if (splitpoint != oldSplitpoint) {
 						oldSplitpoint = splitpoint;
 						double gain = gain(currentNode, lessThanI, moreThanEqualsI);
+						logger.debug("Gain: " + gain + " for " + mE.metricExpression + "|" + splitpoint);
 						if (gain < bestGain) {
 							bestMetric = mE;
 							bestGain = gain;

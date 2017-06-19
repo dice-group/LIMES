@@ -10,8 +10,6 @@ import java.util.Map.Entry;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.PairSimilar;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
@@ -20,6 +18,7 @@ import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
 import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -27,7 +26,6 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
@@ -38,6 +36,7 @@ import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.Fi
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GiniIndex;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning.ErrorEstimatePruning;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning.PruningFunctionDTL;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Utils.TestCacheBuilder;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.util.ParenthesisMatcher;
 import org.apache.log4j.Logger;
@@ -156,8 +155,13 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	private AMapping prediction;
 	private AMapping trainingData;
 	public DecisionTree root;
+	
+	private ACache testSourceCache = new MemoryCache();
+	private ACache testTargetCache = new MemoryCache();
+	
 
 	public static boolean useJ48 = false;
+	public static boolean useMergeAndConquer = false;
 	public static boolean useJ48optimized = false;
 
 	// TODO check whats wrong with these
@@ -446,7 +450,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 			if (checkIfThereWasBetterLSBefore(resLS, null, null)) {
 				logger.debug("Already had better LinkSpecification: " + bestLS);
 			} else {
-				logger.debug("Learned LinkSpecification: " + resLS.toStringOneLine());
+				logger.info("Learned LinkSpecification: " + resLS.toStringOneLine());
 			}
 			this.mlresult.setLinkSpecification(bestLS);
 
@@ -508,8 +512,8 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	 */
 	private boolean checkIfThereWasBetterLSBefore(LinkSpecification ls, ACache source, ACache target) {
 		if (source == null || target == null) {
-			source = this.sourceCache;
-			target = this.targetCache;
+			source = this.testSourceCache;
+			target = this.testTargetCache;
 		}
 		while (alreadySeenLS.get(ls.toString()) == null && ls.getThreshold() != 1.0) {
 			logger.debug("Checking: " + ls);
@@ -1014,10 +1018,17 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
 	@Override
 	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
-		if (!useJ48) {
+		TestCacheBuilder.buildFromMapping(trainingData, sourceCache, targetCache, testSourceCache, testTargetCache);
+		if(useJ48){
+			return activeLearn(trainingData);
+		}else if(useMergeAndConquer){
+			MergeAndConquer mac = new MergeAndConquer(this,(double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE), (double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE), (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT), testSourceCache, testTargetCache, trainingData);
+			LinkSpecification ls = mac.learn(null);
+			return new MLResults(ls, null, ls.getQuality(), null);
+		}else{
 			this.trainingData = trainingData;
 			DecisionTree.isSupervised = true;
-			root = new DecisionTree(this, sourceCache, targetCache, null,
+			root = new DecisionTree(this, sourceCache, targetCache, testSourceCache, testTargetCache, null,
 					(double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
 					(double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
 					(double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData);
@@ -1026,7 +1037,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 			DecisionTree.fitnessFunction.setDt(root);
 			DecisionTree.maxDepth = (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
 			root.buildTree((int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
-			// System.out.println(root.toString());
+//			 System.out.println(root.toString());
 			root.prune();
 			// System.out.println(root.toString());
 			// LinkSpecification ls = tp.parseTreePrefix(root.toString());
@@ -1043,8 +1054,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 				bestLS = ls;
 			MLResults res = new MLResults(bestLS, null, -1.0, null);
 			return res;
-		} else {
-			return activeLearn(trainingData);
 		}
 	}
 
@@ -1089,16 +1098,16 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	public void setInitialMapping(AMapping initialMapping) {
 		this.initialMapping = initialMapping;
 	}
-
+/*
 	public static void main(String[] args) {
-		/**
-		 * check this tree with checkiftherewasbetterlsbefore
-		 * [qgrams§title|title: <= 0.504587, > 0.504587[jaro§authors|authors: <=
-		 * 0.675724, > 0.675724[negative (304.0)][jaro§title|title: <= 0.677374,
-		 * > 0.677374[qgrams§authors|authors: <= 0.355556, > 0.355556[positive
-		 * (4.0)][cosine§authors|authors: <= 0.612372, > 0.612372[negative
-		 * (4.0)][positive (2.0)]]][negative (7.0)]]][positive (19.0/1.0)]]
-		 */
+		
+//		check this tree with checkiftherewasbetterlsbefore
+//		[qgrams§title|title: <= 0.504587, > 0.504587[jaro§authors|authors: <=
+//		0.675724, > 0.675724[negative (304.0)][jaro§title|title: <= 0.677374,
+//		> 0.677374[qgrams§authors|authors: <= 0.355556, > 0.355556[positive
+//		(4.0)][cosine§authors|authors: <= 0.612372, > 0.612372[negative
+//		(4.0)][positive (2.0)]]][negative (7.0)]]][positive (19.0/1.0)]]
+		
 		EvaluationData c = DataSetChooser.getData("dblpscholar");
 		try {
 			AMLAlgorithm dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
@@ -1136,5 +1145,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 		// LinkSpecification("jaccard(x.surname,y.surname)",0.1)));
 
 	}
+*/
 
 }
