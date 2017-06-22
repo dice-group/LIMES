@@ -60,7 +60,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     double beta = 1;
     Map<String, String> measures = new HashMap<>();;
     public double learningRate = 0.25;
-    public double kappa = 0.6;
+    public double kappa = 0.9;
     public double min_coverage = 0.9;
     /* used to compute qualities for the unsupervised approach*/
     private IQualitativeMeasure qMeasure = null;
@@ -296,6 +296,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         double fMax = 0;
         double theta = 1.0;
         for (double threshold = 1; threshold > MIN_THRESHOLD; threshold = threshold - learningRate) {
+//        	logger.info("execute("+sourceProperty+", "+targetProperty+ ", "+measure+", "+threshold+");");
             AMapping mapping = execute(sourceProperty, targetProperty, measure, threshold);
             //            double fMeasure = qMeasure.getPseudoFMeasure(source.getAllUris(), target.getAllUris(), mapping, beta);
             double fMeasure = computeQuality(mapping);
@@ -414,7 +415,7 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
     	// FIXME simply subtracting learning rate?
     	double newWeight = Math.max(0, classifiers.get(index).getWeight() - learningRate);
     	if(newWeight == classifiers.get(index).getWeight()) {
-    		logger.info("Computed weight under zero.");
+    		logger.info("Computed weight under zero. Skipping.");
     	} else {
             classifiers.get(index).setWeight(newWeight);
             classifiers = normalizeClassifiers(classifiers);

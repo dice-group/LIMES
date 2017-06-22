@@ -255,7 +255,9 @@ public class ExpressionFitnessFunction extends IGPFitnessFunction {
      *         Mapping holding data instances a user has evaluated. That may include non-matches.
      */
     public void trimKnowledgeBases(AMapping trainingData) {
-    	if(trainingData.size()<0) {
+    	trimmedSourceCache = sC;
+		trimmedTargetCache = tC;
+    	if(trainingData.size()<=0) {
     		logger.info("Trying to scale down caches to "+trainingData.size()+" reference mapping. Using full caches instead");
     		trimmedSourceCache = sC;
     		trimmedTargetCache = tC;
