@@ -163,6 +163,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	public static boolean useJ48 = false;
 	public static boolean useMergeAndConquer = false;
 	public static boolean useJ48optimized = false;
+	public static boolean buildTestCaches = false;
 
 	// TODO check whats wrong with these
 	public static final String[] stringMeasures = { "cosine",
@@ -1018,7 +1019,12 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
 	@Override
 	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
-		TestCacheBuilder.buildFromMapping(trainingData, sourceCache, targetCache, testSourceCache, testTargetCache);
+		if(buildTestCaches){
+			TestCacheBuilder.buildFromMapping(trainingData, sourceCache, targetCache, testSourceCache, testTargetCache);
+		}else{
+			testSourceCache = sourceCache;
+			testTargetCache = targetCache;
+		}
 		if(useJ48){
 			return activeLearn(trainingData);
 		}else if(useMergeAndConquer){

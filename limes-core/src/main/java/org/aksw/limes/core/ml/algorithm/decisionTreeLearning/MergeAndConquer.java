@@ -10,9 +10,11 @@ import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
+import org.aksw.limes.core.execution.engine.filter.LinearFilter;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
@@ -40,7 +42,12 @@ public class MergeAndConquer {
 		this.maxLinkSpecHeight = maxLinkSpecHeight;
 		this.testSourceCache = testSourceCache;
 		this.testTargetCache = testTargetCache;
-		this.refMapping = refMapping;
+		this.refMapping = removeNegativeExamplesFromMapping(refMapping);
+	}
+	
+	private AMapping removeNegativeExamplesFromMapping(AMapping m){
+		LinearFilter lf = new LinearFilter();
+		return lf.filter(m, 1.0);
 	}
 
 	private LinkSpecification getBestAtomicLinkSpecification() {
@@ -94,7 +101,7 @@ public class MergeAndConquer {
 		bestLS.setQuality(maxFM);
 		return bestLS;
 	}
-
+	
 	private double calculateFMeasure(AMapping mapping, AMapping refMap) {
 		comparisons++;
 		double res = 0.0;
@@ -184,8 +191,8 @@ public class MergeAndConquer {
 		} else {
 			List<LinkSpecification> leaves = ls.getAllLeaves();
 			for (int i = 0; i < leaves.size(); i++) {
-				System.out.println("i " + i);
-				System.out.println("Leaves depth: " + leaves.get(i).getDepth());
+//				System.out.println("i " + i);
+//				System.out.println("Leaves depth: " + leaves.get(i).getDepth());
 				if (leaves.get(i).getDepth() < maxLinkSpecHeight) {
 					for (String key : calculatedMappings.keySet()) {
 						LinkSpecification newLeaf = null;
@@ -195,8 +202,8 @@ public class MergeAndConquer {
 							newLeaf = new LinkSpecification("OR(" + leaves.get(i).getFullExpression() + "|"
 									+ leaves.get(i).getThreshold() + "," + key + ")", 0.0);
 							tmpLS = ls.setLeaf(newLeaf, i);
-							if(getMaxDepthFromLS(tmpLS) > maxLinkSpecHeight)
-								System.out.println(tmpLS.toStringPretty());
+//							if(getMaxDepthFromLS(tmpLS) > maxLinkSpecHeight)
+//								System.out.println(tmpLS.toStringPretty());
 							AMapping tmpMapping = getMappingFromLinkSpec(tmpLS);
 							tmpFM = calculateFMeasure(tmpMapping, refMapping);
 							if (tmpFM > maxFM) {
@@ -206,8 +213,8 @@ public class MergeAndConquer {
 							newLeaf = new LinkSpecification("AND(" + leaves.get(i).getFullExpression() + "|"
 									+ leaves.get(i).getThreshold() + "," + key + ")", 0.0);
 							tmpLS = ls.setLeaf(newLeaf, i);
-							if(getMaxDepthFromLS(tmpLS) > maxLinkSpecHeight)
-								System.out.println(tmpLS.toStringPretty());
+//							if(getMaxDepthFromLS(tmpLS) > maxLinkSpecHeight)
+//								System.out.println(tmpLS.toStringPretty());
 							tmpMapping = getMappingFromLinkSpec(tmpLS);
 							tmpFM = calculateFMeasure(tmpMapping, refMapping);
 							if (tmpFM > maxFM) {
@@ -217,8 +224,8 @@ public class MergeAndConquer {
 							newLeaf = new LinkSpecification("MINUS(" + leaves.get(i).getFullExpression() + "|"
 									+ leaves.get(i).getThreshold() + "," + key + ")", 0.0);
 							tmpLS = ls.setLeaf(newLeaf, i);
-							if(getMaxDepthFromLS(tmpLS) > maxLinkSpecHeight)
-								System.out.println(tmpLS.toStringPretty());
+//							if(getMaxDepthFromLS(tmpLS) > maxLinkSpecHeight)
+//								System.out.println(tmpLS.toStringPretty());
 							tmpMapping = getMappingFromLinkSpec(tmpLS);
 							tmpFM = calculateFMeasure(tmpMapping, refMapping);
 							if (tmpFM > maxFM) {
@@ -228,8 +235,8 @@ public class MergeAndConquer {
 							newLeaf = new LinkSpecification("MINUS(" + key + "," + leaves.get(i).getFullExpression()
 									+ "|" + leaves.get(i).getThreshold() + ")", 0.0);
 							tmpLS = ls.setLeaf(newLeaf, i);
-							if(getMaxDepthFromLS(tmpLS) > maxLinkSpecHeight)
-								System.out.println(tmpLS.toStringPretty());
+//							if(getMaxDepthFromLS(tmpLS) > maxLinkSpecHeight)
+//								System.out.println(tmpLS.toStringPretty());
 							tmpMapping = getMappingFromLinkSpec(tmpLS);
 							tmpFM = calculateFMeasure(tmpMapping, refMapping);
 							if (tmpFM > maxFM) {

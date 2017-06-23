@@ -104,12 +104,18 @@ public class GlobalFMeasure extends FitnessFunctionDTL{
 		cp.setMapping(currentNode.executeAtomicMeasure(measureExpression, theta));
 		return cp;
 	}
+
+	private AMapping removeNegativeExamplesFromMapping(AMapping m){
+		LinearFilter lf = new LinearFilter();
+		return lf.filter(m, 1.0);
+	}
 	
 
 	private double calculateFMeasure(AMapping mapping, AMapping refMap, DecisionTree currentNode) {
+		AMapping updatedRefMapping = removeNegativeExamplesFromMapping(refMap);
 		double res = 0.0;
 		if (DecisionTree.isSupervised) {
-			GoldStandard gs = new GoldStandard(refMap, currentNode.getTestSourceCache().getAllUris(), currentNode.getTestTargetCache().getAllUris());
+			GoldStandard gs = new GoldStandard(updatedRefMapping, currentNode.getTestSourceCache().getAllUris(), currentNode.getTestTargetCache().getAllUris());
 			FMeasure fm = new FMeasure();
 			res = fm.calculate(mapping, gs);
 		} else {

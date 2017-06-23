@@ -514,7 +514,7 @@ public class DecisionTree {
 		final int EUCLID_ITERATIONS = 20;
 		final double MIN_COVERAGE = 0.6d;
 		String[] datasets = {
-				"dbplinkedmdb"/*, "person1full", "person2full","drugs", "restaurantsfull" */};
+				"dbplinkedmdb", "person1full", "person2full","drugs", "restaurantsfull" };
 		// String data = "person2";
 
 //	 for(int k = 0; k < 10; k++){
@@ -627,6 +627,7 @@ public class DecisionTree {
 				Configuration config = null;
 				MLResults res = null;
 				AMapping mapping = null;
+/*
 				System.out.println("\n========WOMBAT==========");
 				AMLAlgorithm wombat = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
 						MLImplementationType.SUPERVISED_BATCH);
@@ -642,7 +643,6 @@ public class DecisionTree {
 				System.out.println("FMeasure: " + womFM);
 				long womTime = (end - start);
 				System.out.println("Time: " + womTime);
-
 				System.out.println("========DTL==========");
 				
 				dtl  = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
@@ -665,7 +665,7 @@ public class DecisionTree {
 				long MaCTime = (end - start);
 				System.out.println("Time: " + MaCTime);
 				DecisionTreeLearning.useMergeAndConquer = false;
-/*
+				*/
 //==================================
 				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
 						MLImplementationType.SUPERVISED_BATCH);
@@ -799,7 +799,6 @@ public class DecisionTree {
 				System.out.println("Time: " + j48optTime);
 				DecisionTreeLearning.useJ48 = false;
 				DecisionTreeLearning.useJ48optimized = false;
-*/
 //				dataline += data + "\t"+ womFM + "\t" +MaCFM + "\t" + GErFM + "\t" + GGFM + "\t" + giGFM + "\t" + giErFM +"\t" + j48FM + "\t" + j48optFM + "\n";
 //				writer.write(dataline);
 //				dataline = "";
