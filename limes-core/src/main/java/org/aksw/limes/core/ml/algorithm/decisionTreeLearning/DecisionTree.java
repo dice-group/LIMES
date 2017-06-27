@@ -126,7 +126,7 @@ public class DecisionTree {
 				return null;
 			}
 		}
-		System.out.println("Fitness Value: " + classifier.getfMeasure());
+//		System.out.println("Fitness Value: " + classifier.getfMeasure());
 		if (maxDepth != this.depth && this.depth < (dtl.getPropertyMapping().getCompletePropMapping().size())) {
 			rightChild = new DecisionTree(dtl, sourceCache, targetCache, testSourceCache, testTargetCache,
 					pseudoFMeasure, minPropertyCoverage, pruningConfidence, propertyLearningRate, this, false, refMapping);

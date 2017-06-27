@@ -486,7 +486,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 			tree.setOptions(options);
 			logger.info("Building classifier....");
 			tree.buildClassifier(trainingSet);
-			System.out.println(tree.prefix());
+//			System.out.println(tree.prefix());
 			// System.out.println(tree.graph());
 			if (tree.prefix().startsWith("[negative ") || tree.prefix().startsWith("[positive ")) {
 				logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
