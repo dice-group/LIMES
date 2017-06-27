@@ -140,7 +140,7 @@ public class DTLEvaluation {
 		String timeBase = baseFolder + "Time/";
 		createDirectoriesIfNecessarry(baseFolder, fMeasureBase, precisionBase, recallBase, timeBase);
 		
-		String[] datasets = {"dbplinkedmdb", "person1full", "person2full","drugs", "restaurantsfull", "dblpacm", "abtbuy", "dblpscholar", "amazongoogleproducts", "dbplinkedmdb"};
+		String[] datasets = {"dbplinkedmdb", "person1full", "person2full","drugs", "restaurantsfull", "dblpacm", "abtbuy", "dblpscholar", "amazongoogleproducts"};
 		String header = "Data\tWombat\tMergeAndConquer\tGlobal+ErrorEstimate\tGlobal+Global\tGini+Global\tGini+ErrorEstimate\tj48\tj48opt\n";
 		
 		
@@ -473,18 +473,6 @@ public class DTLEvaluation {
         return result;
     }
 
-	/**
-	 * Helps to create random mappings that are balanced
-	 * 
-	 * @param source
-	 * @param target
-	 * @param values
-	 * @param random
-	 * @param refMap
-	 * @param sourceInstance
-	 * @param previousRandom
-	 * @return
-	 */
 	public static String getRandomTargetInstance(ACache source, ACache target, List<String> values, Random random,
 			HashMap<String, HashMap<String, Double>> refMap, String sourceInstance, int previousRandom) {
 		int randomInt;
@@ -499,14 +487,7 @@ public class DTLEvaluation {
 		return getRandomTargetInstance(source, target, values, random, refMap, sourceInstance, randomInt);
 	}
 
-	/**
-	 * divide the input refMap to foldCount foldMaps Note: refMap will be empty
-	 * at the end
-	 * 
-	 * @param refMap
-	 * @param foldCount
-	 * @return
-	 */
+
 	public static List<AMapping> generateMappingFolds(AMapping refMap, ACache source, ACache target) {
 		Random rand = new Random();
 		List<AMapping> foldMaps = new ArrayList<>();
@@ -593,15 +574,6 @@ public class DTLEvaluation {
 		return foldMaps;
 	}
 
-	/**
-	 * Removes subMap from mainMap
-	 * 
-	 * @param mainMap
-	 * @param subMap
-	 * @param useScores
-	 * @return subMap = mainMap / subMap
-	 * @author sherif
-	 */
 	public static AMapping removeSubMap(AMapping mainMap, AMapping subMap) {
 		AMapping result = MappingFactory.createDefaultMapping();
 		double value = 0;
