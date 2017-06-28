@@ -110,7 +110,7 @@ public class DTLEvaluation {
 	
 	public static void main(String[] args){
 		try {
-			performCrossvalidation();
+			performCrossvalidation(args[0]);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -121,19 +121,25 @@ public class DTLEvaluation {
 		for(String folder: folders){
 			File f = new File(folder);
 			if(!f.exists()){
-				f.mkdir();
+				boolean success = f.mkdir();
+				if(success){
+					logger.info("Successfully created directory: " + f.getPath());
+				}else{
+					logger.error("Error while trying to create: " + f.getPath());
+				}
+			}else{
+				logger.info(f.getPath() + " already exists");
 			}
 		}
 	}
 	
-	public static void performCrossvalidation() throws FileNotFoundException{
+	public static void performCrossvalidation(String baseFolder) throws FileNotFoundException{
 
 //================================================================================================================
 //			Set up output
 //================================================================================================================
 		long start;
 		long end;
-		String baseFolder = "/tmp/";
 		String fMeasureBase = baseFolder + "FMeasure/";
 		String precisionBase = baseFolder + "Precision/";
 		String recallBase = baseFolder + "Recall/";

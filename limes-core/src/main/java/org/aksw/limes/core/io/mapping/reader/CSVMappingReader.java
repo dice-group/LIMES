@@ -2,6 +2,7 @@ package org.aksw.limes.core.io.mapping.reader;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -52,7 +53,7 @@ public class CSVMappingReader extends AMappingReader {
     @Override
     public AMapping read() {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(file)));
             String line = reader.readLine();
             reader.close();
             String col[];
@@ -89,7 +90,7 @@ public class CSVMappingReader extends AMappingReader {
     public AMapping readTwoColumnFile() {
         AMapping m = MappingFactory.createDefaultMapping();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(file)));
             String line = reader.readLine();
             String split[];
             while (line != null) {

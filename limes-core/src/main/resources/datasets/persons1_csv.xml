@@ -23,7 +23,7 @@
 	</PREFIX>
 <SOURCE>
 		<ID>person11</ID>
-		<ENDPOINT>src/main/resources/datasets/Persons1/person11.nt.csv</ENDPOINT>
+		<ENDPOINT>datasets/Persons1/person11.nt.csv</ENDPOINT>
 		<VAR>?x</VAR>
 		<PAGESIZE>1000</PAGESIZE>
 		<RESTRICTION>?x rdf:type http://www.okkam.org/ontology_person1.owl#Person</RESTRICTION>
@@ -39,7 +39,7 @@
 	
 	<TARGET>
 		<ID>person12</ID>
-		<ENDPOINT>src/main/resources/datasets/Persons1/person12.nt.csv</ENDPOINT>
+		<ENDPOINT>datasets/Persons1/person12.nt.csv</ENDPOINT>
 		<VAR>?y</VAR>
 		<PAGESIZE>1000</PAGESIZE>
 		<RESTRICTION>?y rdf:type okkamperson2:Person</RESTRICTION>
