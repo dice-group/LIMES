@@ -1,6 +1,5 @@
 package org.aksw.limes.core.ml.algorithm.eagle.coala;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,9 +20,12 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.measure.AMeasure;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
+import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.string.StringMeasure;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ALDecider.Triple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+import org.apache.log4j.Logger;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmTest;
 import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 
 import weka.clusterers.ClusterEvaluation;
@@ -37,20 +39,31 @@ import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
 /**
  * 
- * @author Lyko
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  *
  */
 public class Clustering {
+
+	static Logger logger = Logger.getLogger(Clustering.class);
 	
 	ACache sourceCache;
 	ACache targetCache;
-	LinkSpecGeneticLearnerConfig m_config;
+//	LinkSpecGeneticLearnerConfig m_config;
     PropertyMapping propMap;
     AMapping reference;
     
-    StringMeasure measure = new CosineMeasure(); 
+    StringMeasure measure = new SoundexMeasure(); 
+    
     double threshold = 0.6;
-	
+	public Clustering(ACache sourceCache, ACache targetCache, PropertyMapping propMap) {
+		this.sourceCache = sourceCache;
+		this.targetCache = targetCache;
+//		this.m_config = m_config;
+		this.propMap = propMap;
+	}
+ 
+    
+    
 	/**
 	 * We first have to compute a similarity space for each candidate. That is, we 
 	 * compute a out of a list of most controversy candidate links (Triples, value close to 0.5).
@@ -65,21 +78,27 @@ public class Clustering {
 		for(PairSimilar<String> pair : propMap.stringPropPairs) {
 			attributes.add(new Attribute(""+pair.a+"-"+pair.b));
 		}
-		Instances data =  new Instances("dataset", attributes, 0);
+		Instances data =  new Instances("dataset", attributes, candidates.size()*propMap.stringPropPairs.size());
 		
-		double values[] = new double[attributes.size()];
+	
 		// for each source URI - target URI
 		for(Triple t : candidates) {
+			double values[] = new double[attributes.size()];
+			String debug = "Triple ("+t.toString()+")";
 			values[0] = t.getSimilarity(); // regarded as match by committee?
+			debug+="\t"+values[0];
 			int i=1;
 			// for each Property pair between source and target (eg. name - fullname) 
 			for(PairSimilar<String> pair : propMap.stringPropPairs) {
 				// compute a similarity score for the similarity vector
 				values[i] = getSimilarity(measure, pair, t);
+				debug+="\t"+values[i];
 				i++;
 			}
 			Instance inst = new DenseInstance(1.0, values);
-			data.add(inst);
+			
+			boolean added = data.add(inst);
+			logger.debug("new Inst:"+debug+" added?"+added);
 		}
 		return data;
 	}
@@ -222,30 +241,35 @@ public class Clustering {
 		    
 	}
 	
-	
-	private double computeQuality(PairSimilar<String> pair, Triple t) {
-		ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT,
-				sourceCache, targetCache, this.m_config.source.getVar(), this.m_config.target.getVar());
-		IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT,
-				sourceCache, targetCache);
-		StringBuffer expr = new StringBuffer("cosine");
-        expr.append("(");
-        expr.append(m_config.getExpressionProperty("source", pair.a));
-        expr.append(",");
-        expr.append(m_config.getExpressionProperty("target", pair.b));
-        expr.append(")");
-        expr.append("|");
-        expr.append(new BigDecimal(threshold).setScale(4, BigDecimal.ROUND_HALF_EVEN));
-		
-		LinkSpecification spec = new LinkSpecification(expr.toString(), threshold);
-		
-		AMapping map = engine.execute(spec, planner);
-		
-		GoldStandard goldStandard = new GoldStandard(reference);
-		IQualitativeMeasure measure = new FMeasure();
-	    double quality = measure.calculate(map, goldStandard);
-	    return quality;
-	}
+//	/**
+//	 * 
+//	 * @param pair
+//	 * @param t
+//	 * @return
+//	 */
+//	private double similarity(PairSimilar<String> pair, Triple t) {
+//		ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT,
+//				sourceCache, targetCache, this.m_config.source.getVar(), this.m_config.target.getVar());
+//		IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT,
+//				sourceCache, targetCache);
+//		StringBuffer expr = new StringBuffer("cosine");
+//        expr.append("(");
+//        expr.append(m_config.getExpressionProperty("source", pair.a));
+//        expr.append(",");
+//        expr.append(m_config.getExpressionProperty("target", pair.b));
+//        expr.append(")");
+//        expr.append("|");
+//        expr.append(new BigDecimal(threshold).setScale(4, BigDecimal.ROUND_HALF_EVEN));
+//		
+//		LinkSpecification spec = new LinkSpecification(expr.toString(), threshold);
+//		
+//		AMapping map = engine.execute(spec, planner);
+//		
+//		GoldStandard goldStandard = new GoldStandard(reference);
+//		IQualitativeMeasure measure = new FMeasure();
+//	    double quality = measure.calculate(map, goldStandard);
+//	    return quality;
+//	}
 	
 	/**
 	 * Method to compute an atomic similarity of a given source and target instance (Triple t)
@@ -265,6 +289,15 @@ public class Clustering {
 	
 	public static void main(String args[]) throws Exception {
 		wekaTest();
+//		
+//		Clustering cluster = new Clustering();
+//		List<Triple> cand = new ArrayList<Triple>();
+//		
+//		Triple t = new Triple(null, null, threshold);
+//		
+//		
+//		cluster.computeSimilaritySpace(candidates)
+//		
 	}
 	
 	
