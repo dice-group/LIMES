@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.aksw.limes.core.ml.algorithm.ligon;
+package org.aksw.limes.core.ml.algorithm.ligon_old;
 
 import static org.junit.Assert.fail;
 

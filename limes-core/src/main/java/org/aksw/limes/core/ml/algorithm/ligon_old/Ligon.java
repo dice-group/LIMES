@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.ligon;
+package org.aksw.limes.core.ml.algorithm.ligon_old;
 
 import java.util.ArrayList;
 import java.util.Arrays;
