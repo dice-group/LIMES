@@ -35,7 +35,7 @@
 	* [Creating a new Metric](user_manual/gui/new_config/new_metric.md)
 	* [Machine Learning with the GUI](user_manual/gui/machinelearning.md)
 * [Known Issues](user_manual/known_issues.md)
-* [Change Log](https://github.com/AKSW/LIMES-dev/blob/master/CHANGES.md)
+* [Change Log](https://github.com/dice-group/LIMES/blob/master/CHANGES.md)
 * [Example Use Cases](user_manual/usecases.md)
 
 --
@@ -54,4 +54,4 @@
 ### Miscellaneous
 
 * [FAQ](misc/faq.md)
-* [Release notes](https://github.com/AKSW/LIMES-dev/blob/master/CHANGES.md)
+* [Release notes](https://github.com/dice-group/LIMES/blob/master/CHANGES.md)
