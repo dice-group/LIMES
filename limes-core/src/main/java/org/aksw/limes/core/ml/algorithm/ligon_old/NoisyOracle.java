@@ -30,7 +30,7 @@ public class NoisyOracle {
 
 
 
-    boolean predict(String subject, String object){
+    public boolean predict(String subject, String object){
         boolean inOracle = oracleMap.contains(subject, object);
         Random random = new Random();
         if(inOracle){

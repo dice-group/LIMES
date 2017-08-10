@@ -22,8 +22,8 @@ import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.aksw.limes.core.ml.algorithm.ligon.Ligon;
-import org.aksw.limes.core.ml.algorithm.ligon.NoisyOracle;
+import org.aksw.limes.core.ml.algorithm.ligon_old.Ligon;
+import org.aksw.limes.core.ml.algorithm.ligon_old.NoisyOracle;
 import org.junit.Before;
 import org.junit.Test;
 

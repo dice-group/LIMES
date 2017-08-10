@@ -1,14 +1,19 @@
 package org.aksw.limes.core.ml.algorithm.ligon;
 
-public class ConfusionMatricex {
+public class ConfusionMatrix {
     
     protected double [][] c = new double[2][2];
     
-    ConfusionMatricex(){
+    public ConfusionMatrix(double[][] c) {
+        super();
+        this.c = c;
+    }
+
+    ConfusionMatrix(){
         this(0.5);
     }
     
-    ConfusionMatricex(double x){
+    ConfusionMatrix(double x){
         for(int i = 0 ; i < 2 ; i++){
             for(int j = 0 ; j < 2 ; j++){
                 c[i][j] = x;
@@ -18,6 +23,10 @@ public class ConfusionMatricex {
     
     public void setCountOfRightClassifiedPositiveExamples(int x){
         c[0][0] = x;
+    }
+    
+    public void incrementCountOfRightClassifiedPositiveExamples(){
+        c[0][0]++;
     }
     
     public double getProbabilityOfRightClassifiedPositiveExamples(){
@@ -30,6 +39,10 @@ public class ConfusionMatricex {
     
     public void setCountOfRightClassifiedNegativeExamples(int x){
         c[0][1] = x;
+    }
+    
+    public void incrementCountOfRightClassifiedNegativeExamples(){
+        c[0][1]++;
     }
 
     public double getCountOfRightClassifiedNegativeExamples(){
@@ -44,6 +57,10 @@ public class ConfusionMatricex {
         c[1][0] = x;
     }
     
+    public void incrementCountOfWrongClassifiedPositiveExamples(){
+        c[1][0]++;
+    }
+    
     public double getCountOfWrongClassifiedPositiveExamples(){
         return c[1][0];
     }
@@ -56,11 +73,15 @@ public class ConfusionMatricex {
         c[1][1] = x;
     }
     
+    public void incrementCountOfWrongClassifiedNegativeExamples(){
+        c[1][1]++;
+    }
+    
     public double getCountOfWrongClassifiednegativeExamples(){
         return c[1][1];
     }
     
-    public double getProbabilityOfWrongClassifiednegativeExamples(){
+    public double getProbabilityOfWrongClassifiedNegativeExamples(){
         return c[1][1] / sumConfusionMatriceEntries();
     }
     

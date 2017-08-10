@@ -8,10 +8,14 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 public class NoisyOracle {
 
     protected AMapping oracleMap;
-    ConfusionMatricex confusionMatrix = new ConfusionMatricex();
+    ConfusionMatrix confusionMatrix = new ConfusionMatrix();
 
 
-
+    public NoisyOracle(AMapping oracleMap, ConfusionMatrix confusionMatrix) {
+        super();
+        this.oracleMap = oracleMap;
+        this.confusionMatrix = confusionMatrix;
+    }
 
     boolean predict(String subject, String object){
         boolean inOracle = oracleMap.contains(subject, object);
@@ -25,17 +29,17 @@ public class NoisyOracle {
             if(r < minProb ){
                 return (probRightPos < probWrongPos)? true : false;
             }else{
-                return (probRightPos < probWrongPos)? false:true;
+                return (probRightPos < probWrongPos)? false: true;
             }
         }else{
             double probRightNeg =  confusionMatrix.getProbabilityOfRightClassifiedNegativeExamples();
-            double probWrongNeg =  confusionMatrix.getProbabilityOfWrongClassifiednegativeExamples();
+            double probWrongNeg =  confusionMatrix.getProbabilityOfWrongClassifiedNegativeExamples();
             double minProb = (probRightNeg < probWrongNeg)? probRightNeg : probWrongNeg;
             double r = (probRightNeg + probWrongNeg) * random.nextDouble();
             if(r < minProb ){
                 return (probRightNeg < probWrongNeg)? true : false;
             }else{
-                return (probRightNeg < probWrongNeg)? false:true;
+                return (probRightNeg < probWrongNeg)? false: true;
             }
         }
     }
