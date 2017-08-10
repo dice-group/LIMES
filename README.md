@@ -1,8 +1,8 @@
-# LIMES-dev
+# LIMES
 Repository for LIMES - Link Discovery Framework for Metric Spaces.
 =======
 
-[![Build Status](https://travis-ci.org/AKSW/LIMES-dev.svg?branch=master)](https://travis-ci.org/AKSW/LIMES-dev)
+[![Build Status](https://travis-ci.org/dice-group/LIMES.svg?branch=master)](https://travis-ci.org/dice-group/LIMES)
 
 Development branch for LIMES - Link Discovery Framework for Metric Spaces.
 
@@ -27,6 +27,6 @@ Then, update the project on Eclipse.
 
 ## More details
 
-* [Project web site](http://aksw.org/Projects/LIMES)
-* [User manual](http://aksw.github.io/LIMES-dev/user_manual/)
-* [Developer manual](http://aksw.github.io/LIMES-dev/developer_manual/)
+* [Project web site](http://cs.uni-paderborn.de/ds/research/research-projects/active-projects/limes/)
+* [User manual](http://dice-group.github.io/LIMES/user_manual/)
+* [Developer manual](http://dice-group.github.io/LIMES/developer_manual/)
