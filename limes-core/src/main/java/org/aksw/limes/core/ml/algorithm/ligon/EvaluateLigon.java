@@ -288,7 +288,7 @@ public class EvaluateLigon{
      */
     public static void main(String[] args) throws UnsupportedMLImplementationException {
         // evaluation parameters
-        String d = "Person1";
+        String d = "Abt-Buy";
         int noisyOracleCount = 10 ;
         int mostInformativeExaplesCount = 10;
         int posNegExSize = 10;
@@ -312,7 +312,7 @@ public class EvaluateLigon{
         
         System.out.println();
         AMapping posTrainingMap = sampleReferenceMap(fullReferenceMapping, posNegExSize);
-        AMapping negTrainingMap = generateNegativeExamples(posTrainingMap, posNegExSize);
+        AMapping negTrainingMap = MappingFactory.createDefaultMapping(); //generateNegativeExamples(posTrainingMap, posNegExSize); TODO{add later}
         AMapping trainingMap = MappingOperations.union(posTrainingMap, negTrainingMap);
 
         System.out.println("trainingMap size: " + trainingMap.size());
@@ -339,7 +339,8 @@ public class EvaluateLigon{
         }
 
         // initialize ligon
-        Ligon ligon = new Ligon(trainingMap, sourceTrainCache, targetTrainCache, noisyOracles);
+        Ligon ligon = new Ligon(trainingMap, sourceTrainCache, targetTrainCache, noisyOracles, 
+                fullSourceCache, fullTargetCache, fullReferenceMapping);
     
         AMapping labeledExaples = ligon.learn(trainingMap, k, odds, mostInformativeExaplesCount);
         
