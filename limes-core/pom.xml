@@ -495,26 +495,6 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 		</dependency>
-		<dependency>
-			<groupId>org.testfx</groupId>
-			<artifactId>testfx-core</artifactId>
-			<version>4.0.4-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>org.testfx</groupId>
-			<artifactId>testfx-junit</artifactId>
-			<version>4.0.4-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>org.testfx</groupId>
-			<artifactId>testfx-legacy</artifactId>
-			<version>4.0.1-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>org.testfx</groupId>
-			<artifactId>openjfx-monocle</artifactId>
-			<version>1.8.0_20</version>
-		</dependency>
 		<!--<dependency>-->
 			<!--<groupId>com.oracle</groupId>-->
 			<!--<artifactId>javafx</artifactId>-->

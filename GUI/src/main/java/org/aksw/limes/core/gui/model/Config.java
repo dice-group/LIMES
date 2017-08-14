@@ -599,4 +599,12 @@ public class Config extends Configuration {
 	this.mapping = mapping;
     }
 
+	public void setSourceEndpoint(Endpoint sourceEndpoint) {
+		this.sourceEndpoint = sourceEndpoint;
+	}
+
+	public void setTargetEndpoint(Endpoint targetEndpoint) {
+		this.targetEndpoint = targetEndpoint;
+	}
+
 }

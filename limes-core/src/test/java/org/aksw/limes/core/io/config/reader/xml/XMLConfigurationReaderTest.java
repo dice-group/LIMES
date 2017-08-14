@@ -88,7 +88,8 @@ public class XMLConfigurationReaderTest {
         testConf.setExecutionPlanner("default");
         testConf.setExecutionEngine("default");
 
-        String file= System.getProperty("user.dir") + "/resources/lgd-lgd.xml";
+//        String file= System.getProperty("user.dir") + "/resources/lgd-lgd.xml";
+        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.xml").getPath();
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
 
@@ -125,7 +126,8 @@ public class XMLConfigurationReaderTest {
         testConf.setTrainingDataFile("trainingData.nt");
         testConf.setMlAlgorithmParameters(mlParameters);
 
-        String file = System.getProperty("user.dir") +"/resources/lgd-lgd-ml.xml";
+//        String file = System.getProperty("user.dir") +"/resources/lgd-lgd-ml.xml";
+        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd-ml.xml").getPath();
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
         

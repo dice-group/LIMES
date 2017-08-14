@@ -7,7 +7,7 @@ import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
-import org.aksw.limes.core.gui.LimesGUI;
+//import org.aksw.limes.core.gui.LimesGUI;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
@@ -57,9 +57,9 @@ public class Controller {
         if (cmd.hasOption('h')) {
             printHelp();
             System.exit(0);
-        } else if (cmd.hasOption('g')){
-            LimesGUI.startGUI(new String[0]);
-            System.exit(0);
+//        } else if (cmd.hasOption('g')){
+//            LimesGUI.startGUI(new String[0]);
+//            System.exit(0);
         } else if (cmd.hasOption('s')){
             int port = serverPort;
             if (cmd.hasOption('p')) port = Integer.parseInt(cmd.getOptionValue('p'));
