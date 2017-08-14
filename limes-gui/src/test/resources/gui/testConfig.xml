@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE LIMES SYSTEM "limes.dtd">
+<LIMES>
+	<PREFIX>
+		<NAMESPACE>http://www.w3.org/1999/02/22-rdf-syntax-ns#</NAMESPACE>
+		<LABEL>rdf</LABEL>
+	</PREFIX>
+	<PREFIX>
+		<NAMESPACE>http://www.w3.org/2000/01/rdf-schema#</NAMESPACE>
+		<LABEL>rdfs</LABEL>
+	</PREFIX>
+	<PREFIX>
+		<NAMESPACE>http://xmlns.com/foaf/0.1/</NAMESPACE>
+		<LABEL>foaf</LABEL>
+	</PREFIX>
+	<PREFIX>
+		<NAMESPACE>http://www.w3.org/2002/07/owl#</NAMESPACE>
+		<LABEL>owl</LABEL>
+	</PREFIX>
+	<PREFIX>
+		<NAMESPACE>http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/</NAMESPACE>
+		<LABEL>drugbank</LABEL>
+	</PREFIX>
+	<PREFIX>
+		<NAMESPACE>http://www4.wiwiss.fu-berlin.de/sider/resource/sider/</NAMESPACE>
+		<LABEL>sider</LABEL>
+	</PREFIX>
+	<PREFIX>
+		<NAMESPACE>http://dbpedia.org/ontology/</NAMESPACE>
+		<LABEL>dbpedia</LABEL>
+	</PREFIX>
+	<PREFIX>
+		<NAMESPACE>http://dbpedia.org/property/</NAMESPACE>
+		<LABEL>dbpedia-p</LABEL>
+	</PREFIX>
+	<PREFIX>
+		<NAMESPACE>http://purl.org/dc/terms/</NAMESPACE>
+		<LABEL>dc</LABEL>
+	</PREFIX>
+	<PREFIX>
+		<NAMESPACE>http://www4.wiwiss.fu-berlin.de/diseasome/resource/diseasome/</NAMESPACE>
+		<LABEL>diseasome</LABEL>
+	</PREFIX>
+	<SOURCE>
+		<ID>dbpedia</ID>
+		<ENDPOINT>http://dbpedia.org/sparql</ENDPOINT>
+		<VAR>?x</VAR>
+		<PAGESIZE>1000</PAGESIZE>
+		<RESTRICTION>?x rdf:type dbpedia:Drug</RESTRICTION>
+		<PROPERTY>rdfs:label AS nolang->lowercase</PROPERTY>
+	</SOURCE>
+	<TARGET>
+		<ID>dbpedia</ID>
+		<ENDPOINT>http://dbpedia.org/sparql</ENDPOINT>
+		<VAR>?y</VAR>
+		<PAGESIZE>1000</PAGESIZE>
+		<RESTRICTION>?y rdf:type dbpedia:Drug</RESTRICTION>
+		<PROPERTY>rdfs:label AS nolang->lowercase RENAME name</PROPERTY>
+	</TARGET>
+	<METRIC>AND(jaccard(x.rdfs:label,y.name)|0.5, trigram(x.rdfs:label,y.name)|0.7)</METRIC>
+	<ACCEPTANCE>
+		<THRESHOLD>0.8</THRESHOLD>
+		<FILE>dbpedia_dbpedia_duplicates.nt</FILE>
+		<RELATION>owl:sameAs</RELATION>
+	</ACCEPTANCE>
+	<REVIEW>
+		<THRESHOLD>0.5</THRESHOLD>
+		<FILE>dbpedia_dbpedia_reviewme.nt</FILE>
+		<RELATION>owl:sameAs</RELATION>
+	</REVIEW>
+  	 <EXECUTION>
+	      <REWRITER>default</REWRITER>
+	      <PLANNER>default</PLANNER>
+	      <ENGINE>default</ENGINE>
+         </EXECUTION>
+	<OUTPUT>TTL</OUTPUT>
+</LIMES>

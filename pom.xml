@@ -10,7 +10,7 @@
 
 	<packaging>pom</packaging>
 	<modules>
-		<module>GUI</module>
+		<module>limes-gui</module>
 		<module>limes-core</module>
 	</modules>
 
