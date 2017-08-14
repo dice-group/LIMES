@@ -1,9 +1,6 @@
 package org.aksw.limes.core.ml.algorithm.decisionTreeLearning;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,17 +26,17 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.Eagle;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
-import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.FitnessFunctionDTL;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GiniIndex;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GlobalFMeasure;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning.ErrorEstimatePruning;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning.GlobalFMeasurePruning;
 import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning.PruningFunctionDTL;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.evaluation.DTLEvaluation;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.evaluation.FoldData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -192,6 +189,37 @@ public class DecisionTree {
 		return res;
 	}
 
+	private List<String> calculatePathKeys(DecisionTree node, List<String> pathStrings) {
+		if(pathStrings == null)
+			pathStrings = new ArrayList<String>();
+		if (node.rightChild == null && node.leftChild == null) {
+			if (node.root) {
+				String path = node.getPathString();
+				if (!pathStrings.contains(path)) {
+					pathStrings.add(path);
+				}
+			} else {
+				String path = node.getPathString();
+				if (!pathStrings.contains(path)) {
+					pathStrings.add(path);
+				}
+			}
+		} else if (node.rightChild != null && node.leftChild == null) {
+			calculatePathKeys(node.rightChild, pathStrings);
+		} else if (node.leftChild != null && node.rightChild == null) {
+			// if (!root) {
+			String path = node.getPathString();
+			if (!pathStrings.contains(path)) {
+				pathStrings.add(path);
+			}
+			// }
+			calculatePathKeys(node.leftChild, pathStrings);
+		} else {
+			calculatePathKeys(node.rightChild, pathStrings);
+			calculatePathKeys(node.leftChild, pathStrings);
+		}
+		return pathStrings;
+	}
 	private List<String> calculatePathMappings(DecisionTree node) {
 		List<String> pathStrings = new ArrayList<String>();
 		if (node.rightChild == null && node.leftChild == null) {
@@ -258,15 +286,14 @@ public class DecisionTree {
 		}
 		return str;
 	}
-
+	
 	public LinkSpecification getTotalLS() {
-		pathMappings = new HashMap<String, AMapping>();
-		calculatePathMappings(getRootNode());
+		List<String> paths = calculatePathKeys(getRootNode(), null);
 		final String left = "³true³";
 		final String right = "³false³";
-		String[] pathLS = new String[pathMappings.keySet().size()];
+		String[] pathLS = new String[paths.size()];
 		int countPathLS = 0;
-		for (String s : pathMappings.keySet()) {
+		for (String s : paths) {
 			double outerThreshold = 0.0;
 			String[] path = s.split(spaceChar);
 			String lsString = "";
@@ -300,15 +327,6 @@ public class DecisionTree {
 			}
 			lsString = lsString.replaceAll(left, "");
 			lsString = lsString.replaceAll(right, "");
-			LinkSpecification ls = new LinkSpecification(lsString, outerThreshold);
-			AMapping predMapping = dtl.predict(testSourceCache, testTargetCache, new MLResults(ls, null, 0, null));
-			AMapping pathMapping = pathMappings.get(s);
-			boolean same = predMapping.size() == pathMapping.size();
-			if (!same) {
-				System.err.println("\n\n ====== ! ! ! ! ! DIFFERENT !!!!!! ====== \n\n");
-				System.err.println("PredMapping: " + predMapping.size());
-				System.err.println("PathMapping: " + pathMapping.size());
-			}
 			lsString += "|" + outerThreshold;
 			pathLS[countPathLS] = lsString;
 			countPathLS++;
@@ -507,259 +525,90 @@ public class DecisionTree {
 		return res;
 	}
 
-	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
+	public static void main(String[] args) throws IOException {
 		String resultStr = "";
 		long start;
 		long end;
-		final int EUCLID_ITERATIONS = 20;
-		final double MIN_COVERAGE = 0.6d;
-		String[] datasets = {
-				"dbplinkedmdb", "person1full", "person2full","drugs", "restaurantsfull" };
-		// String data = "person2";
+		int FOLDS_COUNT = 10;
+		String[] datasets = { "drugs"};
+//				"amazongoogleproducts", "dblpscholar", "abtbuy",
+//				"dbplinkedmdb", "person1full", "person2full","drugs", "restaurantsfull" };
 
-//	 for(int k = 0; k < 10; k++){
-//		PrintWriter writer = new PrintWriter(new FileOutputStream("/home/ohdorno/Documents/Arbeit/DecisionTrees/smallexperiments/smallresults"+k+".csv",false));
-//		String header = "Data\tWombat\tMandC\tGlobE\tGlobGl\tGiniGl\tGiniE\tj48\tj48opt\n";
-//		writer.write(header);
-//		String dataline = "";
-//		PrintWriter writerTime = new PrintWriter(new FileOutputStream("/home/ohdorno/Documents/Arbeit/DecisionTrees/smallexperiments/smallresultstime"+k+".csv",false));
-//		String headerTime = "Data\tWombat\tMandC\tGlobE\tGlobGl\tGiniGl\tGiniE\tj48\tj48opt\n";
-//		writerTime.write(headerTime);
-//		String datalineTime = "";
 		for (String data : datasets) {
-			DecisionTreeLearning.useJ48optimized = false;
-			DecisionTreeLearning.useJ48 = false;
-			EvaluationData c = DataSetChooser.getData(data);
+			logger.info("\n\n >>>>>>>>>>>>> " + data.toUpperCase() + "<<<<<<<<<<<<<<<<<\n\n");
+//			DecisionTreeLearning.useJ48optimized = false;
+//			DecisionTreeLearning.useJ48 = false;
+        EvaluationData c = DataSetChooser.getData(data);
+        List<FoldData>folds = DTLEvaluation.generateFolds(c); 
 
-			System.out.println("\n\n >>>>>>>>>>>>> " + data.toUpperCase() + "<<<<<<<<<<<<<<<<<\n\n");
-			AMapping trainingData = getTrainingData(c.getReferenceMapping());
-//			dataline += data.replace("full", "");
-			// Training phase
-			// System.out.println("\n========EUCLID==========");
-			//
-			// LinearMeshSelfConfigurator lsc = null;
-			// Cache sourceCache = new HybridCache();
-			// Cache targetCache = new HybridCache();
-			// for(Instance i : c.getSourceCache().getAllInstances()){
-			// de.uni_leipzig.simba.data.Instance newI = new
-			// de.uni_leipzig.simba.data.Instance(i.getUri());
-			// for (String property : i.getAllProperties()) {
-			// newI.addProperty(property, i.getProperty(property));
-			// }
-			// sourceCache.addInstance(newI);
-			// }
-			// for(Instance i : c.getTargetCache().getAllInstances()){
-			// de.uni_leipzig.simba.data.Instance newI = new
-			// de.uni_leipzig.simba.data.Instance(i.getUri());
-			// for (String property : i.getAllProperties()) {
-			// newI.addProperty(property, i.getProperty(property));
-			// }
-			// targetCache.addInstance(newI);
-			// }
-			// lsc = new LinearMeshSelfConfigurator(sourceCache, targetCache,
-			// MIN_COVERAGE, 1d);
-			// // logger.info("Running " + euclideType);
-			// lsc.setMeasure(new PseudoMeasures());
-			// long begin = System.currentTimeMillis();
-			// // logger.info("Computing simple classifiers...");
-			// List<SimpleClassifier> cp = lsc.getBestInitialClassifiers();
-			// ComplexClassifier cc = lsc.getZoomedHillTop(5, EUCLID_ITERATIONS,
-			// cp);
-			// long durationMS = System.currentTimeMillis() - begin;
-			// Mapping learnedMap = cc.mapping;
-			// learnedMap.initReversedMap();
-			// String metricExpr = cc.toString();
-			// System.out.println("Learned: " + metricExpr);
-			//
-			// resultStr +=
-			// // PRFCalculator.precision(learnedMap, trainData.map) + "\t" +
-			// // PRFCalculator.recall(learnedMap, trainData.map) + "\t" +
-			// // PRFCalculator.fScore(learnedMap, trainData.map) + "\t" +
-			// durationMS + "\t";
-			// // +
-			// // metricExpr + "\t" ;
-			//
-			// // Test phase
-			// lsc.setSource(sourceCache);
-			// lsc.setTarget(targetCache);
-			// begin = System.currentTimeMillis();
-			// Mapping oldlearnedTestMap = lsc.getMapping(cc.classifiers);
-			// AMapping learnedTestMap = MappingFactory.createDefaultMapping();
-			// for(String s: oldlearnedTestMap.map.keySet()){
-			// learnedTestMap.add(s, oldlearnedTestMap.map.get(s));
-			// }
-			// GoldStandard gs = new GoldStandard(c.getReferenceMapping(),
-			// c.getSourceCache().getAllUris(),
-			// c.getTargetCache().getAllUris());
-			// resultStr += new Precision().calculate(learnedTestMap, gs) + "\t"
-			// + new Recall().calculate(learnedTestMap, gs) + "\t"
-			// + new FMeasure().calculate(learnedTestMap, gs) + "\n";
-			// // + "\t" +
-			// // durationMS + "\n" ;
-			// System.out.println(resultStr);
-			// for(int i = 0; i < 10; i++){
-			// System.out.println("\n========EAGLE==========");
-			// AMLAlgorithm eagle =
-			// MLAlgorithmFactory.createMLAlgorithm(Eagle.class,
-			// MLImplementationType.UNSUPERVISED);
-			// eagle.init(null, c.getSourceCache(), c.getTargetCache());
-			// eagle.getMl().setConfiguration(c.getConfigReader().read());
-			// eagle.getMl().setParameter(Eagle.PROPERTY_MAPPING,
-			// c.getPropertyMapping());
-			// long start = System.currentTimeMillis();
-			// MLResults resEagle = eagle.asUnsupervised().learn(new
-			// PseudoFMeasure());
-			// long end = System.currentTimeMillis();
-			// System.out.println(resEagle.getLinkSpecification());
-			// System.out.println("Learned size: " +
-			// eagle.predict(c.getSourceCache(), c.getTargetCache(),
-			// resEagle).size());
-			// System.out.println("FMeasure: "
-			// + new FMeasure().calculate(eagle.predict(c.getSourceCache(),
-			// c.getTargetCache(), resEagle),
-			// new GoldStandard(c.getReferenceMapping(), c.getSourceCache(),
-			// c.getTargetCache())));
-			// System.out.println("Time: " + (end - start));
-			// }
+        FoldData trainData = new FoldData();
+        FoldData testData = folds.get(FOLDS_COUNT - 1);
+        // perform union on test folds
+        for (int i = 0; i < FOLDS_COUNT; i++) {
+            if (i != 9) {
+                trainData.map = MappingOperations.union(trainData.map,folds.get(i).map);
+                trainData.sourceCache = DTLEvaluation.cacheUnion(trainData.sourceCache,folds.get(i).sourceCache);
+                trainData.targetCache = DTLEvaluation.cacheUnion(trainData.targetCache,folds.get(i).targetCache);
+            }
+        }
+        // fix caches if necessary
+        for (String s : trainData.map.getMap().keySet()) {
+            for (String t : trainData.map.getMap().get(s).keySet()) {
+                if (!trainData.targetCache.containsUri(t)) {
+                    // logger.info("target: " + t);
+                    trainData.targetCache.addInstance(c.getTargetCache().getInstance(t));
+                }
+            }
+            if (!trainData.sourceCache.containsUri(s)) {
+                // logger.info("source: " + s);
+                trainData.sourceCache.addInstance(c.getSourceCache().getInstance(s));
+            }
+        }
+        
+
+        AMapping trainingData = trainData.map;
+        ACache trainSourceCache = trainData.sourceCache;
+        ACache trainTargetCache = trainData.targetCache;
+        ACache testSourceCache = testData.sourceCache;
+        ACache testTargetCache = testData.targetCache;
 
 			try {
 				AMLAlgorithm dtl = null;
 				Configuration config = null;
 				MLResults res = null;
 				AMapping mapping = null;
-/*
-				System.out.println("\n========WOMBAT==========");
-				AMLAlgorithm wombat = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
-						MLImplementationType.SUPERVISED_BATCH);
-				wombat.init(null, c.getSourceCache(), c.getTargetCache());
-				wombat.getMl().setConfiguration(c.getConfigReader().read());
-				start = System.currentTimeMillis();
-				MLResults resWom = wombat.asSupervised().learn(trainingData);
-				end = System.currentTimeMillis();
-
-				double womFM = new FMeasure().calculate(wombat.predict(c.getSourceCache(), c.getTargetCache(), resWom),
-								new GoldStandard(c.getReferenceMapping(), c.getSourceCache(), c.getTargetCache()));
-				System.out.println(resWom.getLinkSpecification());
-				System.out.println("FMeasure: " + womFM);
-				long womTime = (end - start);
-				System.out.println("Time: " + womTime);
-				System.out.println("========DTL==========");
-				
-				dtl  = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-						MLImplementationType.SUPERVISED_BATCH);
-				System.out.println("source size: " + c.getSourceCache().size());
-				System.out.println("target size: " + c.getTargetCache().size());
-				dtl.init(null, c.getSourceCache(), c.getTargetCache());
-				config = c.getConfigReader().read();
-				dtl.getMl().setConfiguration(config);
-				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-				start = System.currentTimeMillis();
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				DecisionTreeLearning.useMergeAndConquer = true;
-				res = dtl.asSupervised().learn(trainingData);
-				end = System.currentTimeMillis();
-				System.out.println(res.getLinkSpecification().toStringPretty());
-				mapping = dtl.predict(c.getSourceCache(), c.getTargetCache(), res);
-				double MaCFM = new FMeasure().calculate(mapping, new GoldStandard(c.getReferenceMapping(), c.getSourceCache().getAllUris(), c.getTargetCache().getAllUris()));
-				System.out.println( "\n\n==Merge and Conquer ==\nFMeasure: " + MaCFM);
-				long MaCTime = (end - start);
-				System.out.println("Time: " + MaCTime);
-				DecisionTreeLearning.useMergeAndConquer = false;
-				*/
-//==================================
-				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-						MLImplementationType.SUPERVISED_BATCH);
-				System.out.println("source size: " + c.getSourceCache().size());
-				System.out.println("target size: " + c.getTargetCache().size());
-				dtl.init(null, c.getSourceCache(), c.getTargetCache());
-				config = c.getConfigReader().read();
-				dtl.getMl().setConfiguration(config);
-				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-				start = System.currentTimeMillis();
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION, new ErrorEstimatePruning());
-				res = dtl.asSupervised().learn(trainingData);
-				end = System.currentTimeMillis();
-				System.out.println(res.getLinkSpecification().toStringPretty());
-				mapping = dtl.predict(c.getSourceCache(), c.getTargetCache(), res);
-				double GErFM = new FMeasure().calculate(mapping, new GoldStandard(c.getReferenceMapping(), c.getSourceCache().getAllUris(), c.getTargetCache().getAllUris()));
-				System.out.println( "\n\n==Global + ErrorEstimate==\nFMeasure: " + GErFM);
-				long GErTime = (end - start);
-				System.out.println("Time: " + GErTime);
-// ========================================
-				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-						MLImplementationType.SUPERVISED_BATCH);
-				System.out.println("source size: " + c.getSourceCache().size());
-				System.out.println("target size: " + c.getTargetCache().size());
-				dtl.init(null, c.getSourceCache(), c.getTargetCache());
-				config = c.getConfigReader().read();
-				dtl.getMl().setConfiguration(config);
-				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-				start = System.currentTimeMillis();
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION, new GlobalFMeasurePruning());
-				res = dtl.asSupervised().learn(trainingData);
-				end = System.currentTimeMillis();
-				System.out.println(res.getLinkSpecification().toStringPretty());
-				mapping = dtl.predict(c.getSourceCache(), c.getTargetCache(), res);
-				double GGFM = new FMeasure().calculate(mapping, new GoldStandard(c.getReferenceMapping(), c.getSourceCache().getAllUris(), c.getTargetCache().getAllUris()));
-				System.out.println(
-						"\n\n==Global + Global==\nFMeasure: " + GGFM);
-				long GGTime = (end - start);
-				System.out.println("Time: " + GGTime);
-
-// ========================================
-				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-						MLImplementationType.SUPERVISED_BATCH);
-				System.out.println("source size: " + c.getSourceCache().size());
-				System.out.println("target size: " + c.getTargetCache().size());
-				dtl.init(null, c.getSourceCache(), c.getTargetCache());
-				config = c.getConfigReader().read();
-				dtl.getMl().setConfiguration(config);
-				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-				start = System.currentTimeMillis();
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION, new GlobalFMeasurePruning());
-				res = dtl.asSupervised().learn(trainingData);
-				end = System.currentTimeMillis();
-				System.out.println(res.getLinkSpecification().toStringPretty());
-				mapping = dtl.predict(c.getSourceCache(), c.getTargetCache(), res);
-				double giGFM = new FMeasure().calculate(mapping, new GoldStandard(c.getReferenceMapping(), c.getSourceCache().getAllUris(), c.getTargetCache().getAllUris()));
-				System.out.println( "\n\n==Gini + Global==\nFMeasure: " + giGFM);
-				long giGTime = (end - start);
-				System.out.println("Time: " + giGTime);
 				
 // ========================================
-				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+				DecisionTreeLearning.useJ48 = false;
+				logger.info("====NORMAL===");
+				dtl = MLAlgorithmFactory.createMLAlgorithm(Eagle.class,
 						MLImplementationType.SUPERVISED_BATCH);
 				System.out.println("source size: " + c.getSourceCache().size());
 				System.out.println("target size: " + c.getTargetCache().size());
-				dtl.init(null, c.getSourceCache(), c.getTargetCache());
+				dtl.init(null, trainSourceCache, trainTargetCache);
 				config = c.getConfigReader().read();
 				dtl.getMl().setConfiguration(config);
-				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+				dtl.getMl().setParameter(Eagle.PROPERTY_MAPPING, c.getPropertyMapping());
 				start = System.currentTimeMillis();
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION, new ErrorEstimatePruning());
+//				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+//				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+//				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION, new ErrorEstimatePruning());
 				res = dtl.asSupervised().learn(trainingData);
 				end = System.currentTimeMillis();
-				System.out.println(res.getLinkSpecification().toStringPretty());
-				mapping = dtl.predict(c.getSourceCache(), c.getTargetCache(), res);
-				double giErFM = new FMeasure().calculate(mapping, new GoldStandard(c.getReferenceMapping(),
-								c.getSourceCache().getAllUris(), c.getTargetCache().getAllUris()));
-				System.out.println( "\n\n==Gini + ErrorEstimate==\nFMeasure: " + giErFM);
+//				System.out.println(res.getLinkSpecification().toStringPretty());
+				mapping = dtl.predict(testSourceCache, testTargetCache, res);
+				double giErFM = new FMeasure().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+				System.out.println( "\n\n==Normal FMeasure: " + giErFM);
 				long giErTime = (end - start);
 				System.out.println("Time: " + giErTime);
-// ========================================
+				
+				/*
+				logger.info("====j48===");
 				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
 						MLImplementationType.SUPERVISED_BATCH);
 				System.out.println("source size: " + c.getSourceCache().size());
 				System.out.println("target size: " + c.getTargetCache().size());
-				dtl.init(null, c.getSourceCache(), c.getTargetCache());
+				dtl.init(null, trainSourceCache, trainTargetCache);
 				config = c.getConfigReader().read();
 				dtl.getMl().setConfiguration(config);
 				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
@@ -768,117 +617,50 @@ public class DecisionTree {
 				DecisionTreeLearning.useJ48 = true;
 				res = dtl.asSupervised().learn(trainingData);
 				end = System.currentTimeMillis();
-				System.out.println(res.getLinkSpecification().toStringPretty());
-				mapping = dtl.predict(c.getSourceCache(), c.getTargetCache(), res);
-				double j48FM = new FMeasure().calculate(mapping, new GoldStandard(c.getReferenceMapping(),
-								c.getSourceCache().getAllUris(), c.getTargetCache().getAllUris()));
-				System.out.println( "\n\n==J48==\nFMeasure: " + j48FM);
-				long j48Time = (end - start);
-				System.out.println("Time: " + j48Time);
-// ========================================
-				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-						MLImplementationType.SUPERVISED_BATCH);
-				System.out.println("source size: " + c.getSourceCache().size());
-				System.out.println("target size: " + c.getTargetCache().size());
-				dtl.init(null, c.getSourceCache(), c.getTargetCache());
-				config = c.getConfigReader().read();
-				dtl.getMl().setConfiguration(config);
-				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-				start = System.currentTimeMillis();
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				DecisionTreeLearning.useJ48 = true;
-				DecisionTreeLearning.useJ48optimized = true;
-				res = dtl.asSupervised().learn(trainingData);
-				end = System.currentTimeMillis();
-				System.out.println(res.getLinkSpecification().toStringPretty());
-				mapping = dtl.predict(c.getSourceCache(), c.getTargetCache(), res);
-				double j48optFM = new FMeasure().calculate(mapping, new GoldStandard(c.getReferenceMapping(),
-								c.getSourceCache().getAllUris(), c.getTargetCache().getAllUris()));
-				System.out.println( "\n\n==j48optimized==\nFMeasure: " + j48optFM);
-				long j48optTime = (end - start);
-				System.out.println("Time: " + j48optTime);
-				DecisionTreeLearning.useJ48 = false;
-				DecisionTreeLearning.useJ48optimized = false;
-//				dataline += data + "\t"+ womFM + "\t" +MaCFM + "\t" + GErFM + "\t" + GGFM + "\t" + giGFM + "\t" + giErFM +"\t" + j48FM + "\t" + j48optFM + "\n";
-//				writer.write(dataline);
-//				dataline = "";
-//
-//				datalineTime += data + "\t"+ womTime + "\t" +MaCTime + "\t" + GErTime + "\t" + GGTime + "\t" + giGTime + "\t" + giErTime +"\t" + j48Time + "\t" + j48optTime + "\n";
-//				writerTime.write(datalineTime);
-//				datalineTime = "";
-				// Nach dem Prunen sollte bei Bäumen öfter sowas rauskommen bei
-				// person1
-				// LinkSpecification ls = new
-				// LinkSpecification("AND(jaccard(x.http://www.okkam.org/ontology_person1.owl#soc_sec_id,y.http://www.okkam.org/ontology_person2.owl#soc_sec_id)|1.0,
-				// qgrams(x.http://www.okkam.org/ontology_person1.owl#has_address,y.http://www.okkam.org/ontology_person2.owl#has_address)|0.8222222222222222)",0.0);
-				// AMapping testMapping = dtl.predict(c.getSourceCache(),
-				// c.getTargetCache(), new MLResults(ls, null, 0.0, null));
-				// System.out.println("FMeasure: "
-				// + new FMeasure().calculate(testMapping,
-				// new GoldStandard(c.getReferenceMapping(),
-				// c.getSourceCache().getAllUris(),
-				// c.getTargetCache().getAllUris())));
-				/*
-				 * System.out.println(" ====== Not in ref mapping ====== ");
-				 * for(String s: mapping.getMap().keySet()){ for(String t:
-				 * mapping.getMap().get(s).keySet()){ if(!refMapping.contains(s,
-				 * t)){ System.out.println(c.getSourceCache().getInstance(s).
-				 * getProperty(
-				 * "http://www.okkam.org/ontology_person1.owl#has_address") +
-				 * " = " + c.getTargetCache().getInstance(t).getProperty(
-				 * "http://www.okkam.org/ontology_person2.owl#has_address") +
-				 * " : " +
-				 * MeasureProcessor.getSimilarity(c.getSourceCache().getInstance
-				 * (s), c.getTargetCache().getInstance(t),
-				 * "qgrams(x.http://www.okkam.org/ontology_person1.owl#has_address,y.http://www.okkam.org/ontology_person2.owl#has_address)",
-				 * 0.01, "?x", "?y")); } } }
-				 * 
-				 * System.out.println("\n\n\n ====== Not in mapping ====== ");
-				 * for(String s: refMapping.getMap().keySet()){ for(String t:
-				 * refMapping.getMap().get(s).keySet()){ if(!mapping.contains(s,
-				 * t)){ System.out.println(c.getSourceCache().getInstance(s).
-				 * getProperty(
-				 * "http://www.okkam.org/ontology_person1.owl#has_address") +
-				 * " = " + c.getTargetCache().getInstance(t).getProperty(
-				 * "http://www.okkam.org/ontology_person2.owl#has_address") +
-				 * " : " +
-				 * MeasureProcessor.getSimilarity(c.getSourceCache().getInstance
-				 * (s), c.getTargetCache().getInstance(t),
-				 * "qgrams(x.http://www.okkam.org/ontology_person1.owl#has_address,y.http://www.okkam.org/ontology_person2.owl#has_address)",
-				 * 0.01, "?x", "?y")); } } }
-				 */
-
-				/*
-				 * LinkSpecification ls = res.getLinkSpecification(); double
-				 * threshold = 0.1; double bestfm = 0.0; double bestThreshold =
-				 * 0.0; while (threshold <= 1.0){ ls.setThreshold(threshold);
-				 * double fm = new
-				 * FMeasure().calculate(dtl.predict(c.getSourceCache(),
-				 * c.getTargetCache(), res),new
-				 * GoldStandard(c.getReferenceMapping(),
-				 * c.getSourceCache().getAllUris(),
-				 * c.getTargetCache().getAllUris())); if(fm > bestfm){ bestfm =
-				 * fm; bestThreshold = threshold; }
-				 * System.out.println("FMeasure: " + fm + "\t threshold: "
-				 * +threshold); threshold = threshold + 0.01; }
-				 * System.out.println("BEST FMeasure: " + bestfm +
-				 * "\t threshold: " + bestThreshold);
-				 */
-				// AMapping pathMapping =
-				// DecisionTree.getTotalMapping(((DecisionTreeLearning)
-				// dtl.getMl()).root);
-				// System.out.println("Path FMeasure: " + new
-				// FMeasure().calculate(pathMapping,
-				// new GoldStandard(c.getReferenceMapping(), c.getSourceCache(),
-				// c.getTargetCache())));
-
+//				System.out.println(res.getLinkSpecification().toStringPretty());
+				mapping = dtl.predict(testSourceCache, testTargetCache, res);
+				giErFM = new FMeasure().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+				System.out.println( "\n\n==j48 FMeasure: " + giErFM);
+				giErTime = (end - start);
+				System.out.println("Time: " + giErTime);
+				*/
 			} catch (UnsupportedMLImplementationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-//		writer.close();
-//		writerTime.close();
+
+//			try {
+//				AMLAlgorithm dtl = null;
+//				Configuration config = null;
+//				MLResults res = null;
+//				AMapping mapping = null;
+//				
+//// ========================================
+//				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+//						MLImplementationType.SUPERVISED_BATCH);
+//				System.out.println("source size: " + c.getSourceCache().size());
+//				System.out.println("target size: " + c.getTargetCache().size());
+//				dtl.init(null, c.getSourceCache(), c.getTargetCache());
+//				config = c.getConfigReader().read();
+//				dtl.getMl().setConfiguration(config);
+//				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+//				start = System.currentTimeMillis();
+//				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+//				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+//				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION, new ErrorEstimatePruning());
+//				res = dtl.asSupervised().learn(getTrainingData(c.getReferenceMapping()));
+//				end = System.currentTimeMillis();
+//				System.out.println(res.getLinkSpecification().toStringPretty());
+//				mapping = dtl.predict(c.getSourceCache(), c.getTargetCache(), res);
+//				double giErFM = new FMeasure().calculate(mapping, new GoldStandard(c.getReferenceMapping()));
+//				System.out.println( "\n\n==FMeasure: " + giErFM);
+//				long giErTime = (end - start);
+//				System.out.println("Time: " + giErTime);
+//			} catch (UnsupportedMLImplementationException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 //		}
 	}
 
@@ -887,16 +669,17 @@ public class DecisionTree {
 		AMapping slice = MappingFactory.createDefaultMapping();
 		Object[] keyArr = full.getMap().keySet().toArray();
 		int c = 5;
-		// int i = 2;
+		int i = 2;
 		boolean pos = true;
 		while (slice.size() <= sliceSizeWanted) {
 			// String key = (String)keyArr[(int)(Math.random() *
 			// keyArr.length)];
 			String key = (String) keyArr[c];
-			c = (int) (Math.random() * Double.valueOf(keyArr.length));
+			c += i;
+//			c = (int) (Math.random() * Double.valueOf(keyArr.length));
 			if (c >= keyArr.length) {
 				c = 0;
-				// i++;
+				 i++;
 			}
 			if (!slice.getMap().keySet().contains(key)) {
 				if (pos) {
@@ -906,8 +689,9 @@ public class DecisionTree {
 					int falsec = 0;
 					boolean falseNeg = false;
 					while (c == falsec) {
-						double random = Math.random();
-						falsec = (int) (random * keyArr.length);
+//						double random = Math.random();
+//						falsec = (int) (random * keyArr.length);
+						falsec = Math.max(0, c - 4);
 					}
 					HashMap<String, Double> tmpMap = full.getMap().get((String) keyArr[falsec]);
 					HashMap<String, Double> falseMap = new HashMap<String, Double>();

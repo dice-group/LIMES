@@ -486,7 +486,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 			tree.setOptions(options);
 			logger.info("Building classifier....");
 			tree.buildClassifier(trainingSet);
-//			System.out.println(tree.prefix());
+			System.out.println("J48 tree: \n" + tree.prefix());
 			// System.out.println(tree.graph());
 			if (tree.prefix().startsWith("[negative ") || tree.prefix().startsWith("[positive ")) {
 				logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
@@ -1043,12 +1043,14 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 			DecisionTree.fitnessFunction.setDt(root);
 			DecisionTree.maxDepth = (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
 			root.buildTree((int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
-//			 System.out.println(root.toString());
+			logger.info("FULL:\n" + root.toString());
+			
 			root.prune();
-			// System.out.println(root.toString());
+			logger.info("PRUNED:\n" + root.toString());
 			// LinkSpecification ls = tp.parseTreePrefix(root.toString());
 
 			LinkSpecification ls = root.getTotalLS();
+//			System.out.println("Size: " + ls.size());
 			// if (checkIfThereWasBetterLSBefore(ls, root.getTestSourceCache(),
 			// root.getTestTargetCache())) {
 			// logger.debug("Already had better LinkSpecification: " + bestLS);

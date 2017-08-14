@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
+import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
@@ -16,6 +17,8 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
+import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTreeLearning;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.aksw.limes.core.ml.algorithm.wombat.LinkEntropy;
 import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;
@@ -36,6 +39,7 @@ public class WombatSimple extends AWombat {
     protected RefinementNode bestSolutionNode = null;
     protected List<ExtendedClassifier> classifiers = null;
     protected int iterationNr = 0;
+    public PropertyMapping propMap;
 
 
 
@@ -233,12 +237,22 @@ public class WombatSimple extends AWombat {
     public List<ExtendedClassifier> findInitialClassifiers() {
         logger.debug("Geting all initial classifiers ...");
         List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
-        for (String p : sourcePropertiesCoverageMap.keySet()) {
-            for (String q : targetPropertiesCoverageMap.keySet()) {
+        if(propMap != null){
+            for (PairSimilar<String> propPair : propMap.stringPropPairs) {
                 for (String m : getAtomicMeasures()) {
-                    ExtendedClassifier cp = findInitialClassifier(p, q, m);
+                    ExtendedClassifier cp = findInitialClassifier(propPair.a, propPair.b, m);
                     //only add if classifier covers all entries
                     initialClassifiers.add(cp);
+                }
+            }
+        }else{
+            for (String p : sourcePropertiesCoverageMap.keySet()) {
+                for (String q : targetPropertiesCoverageMap.keySet()) {
+                    for (String m : getAtomicMeasures()) {
+                        ExtendedClassifier cp = findInitialClassifier(p, q, m);
+                        //only add if classifier covers all entries
+                        initialClassifiers.add(cp);
+                    }
                 }
             }
         }

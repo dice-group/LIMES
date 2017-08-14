@@ -27,6 +27,7 @@ public class GiniIndex extends FitnessFunctionDTL {
 	private static List<TrainingInstance> currentInstances;
 	private static HashSet<Metric> metricExpressions;
 	private AMapping currentMapping;
+	public static boolean middlePoints = false;
 
 	public GiniIndex(){
 		fullInstances = null;
@@ -63,36 +64,6 @@ public class GiniIndex extends FitnessFunctionDTL {
 	}
 
 	private void updateInstances(DecisionTree currentNode) {
-		/*
-		ArrayList<TrainingInstance> updatedInstances = new ArrayList<TrainingInstance>();
-		String splitExpression = currentNode.getParent().getClassifier().getMetricExpression().split("\\|")[0];
-		double splitpoint = currentNode.getParent().getClassifier().getThreshold();
-		AMapping parentMapping = null;
-		if(currentNode.isLeftNode()){
-			AMapping base = null;
-			if(currentNode.getParent().isRoot()){
-				base = currentNode.getRefMapping();
-			}else{
-				base = currentNode.getParent().getParent().getClassifier().getMapping();
-			}
-			parentMapping = MappingOperations.difference(base, currentNode.getParent().getClassifier().getMapping());
-		}else{
-			parentMapping = currentNode.getParent().getClassifier().getMapping();
-		}
-		for (TrainingInstance t : fullInstances) {
-			if ((currentNode.isLeftNode() && t.getMeasureValues().get(splitExpression) < splitpoint)
-					|| (!currentNode.isLeftNode() && t.getMeasureValues().get(splitExpression) >= splitpoint)) {
-				if (parentMapping.getMap().get(t.getSourceUri()) != null) {
-					if (parentMapping.getMap().get(t.getSourceUri()).get(t.getTargetUri()) != null) {
-						updatedInstances.add(t);
-					}
-				}
-			}
-		}
-		currentInstances = updatedInstances;
-		AMapping newMapping = trainingInstancesToMapping(currentInstances);
-		currentMapping = newMapping;
-		*/
 		currentMapping = null;
 		if(currentNode.isLeftNode()){
 			AMapping base = null;
@@ -104,25 +75,6 @@ public class GiniIndex extends FitnessFunctionDTL {
 		currentInstances = mappingToTrainingInstance(currentMapping);
 	}
 
-//	private void updateInstances(DecisionTree currentNode) {
-//		ArrayList<TrainingInstance> updatedInstances = new ArrayList<TrainingInstance>();
-//		String splitExpression = currentNode.getParent().getClassifier().getMetricExpression().split("\\|")[0];
-//		double splitpoint = currentNode.getParent().getClassifier().getThreshold();
-//		for (TrainingInstance t : fullInstances) {
-//			if ((currentNode.isLeftNode() && t.getMeasureValues().get(splitExpression) <= splitpoint)
-//					|| (!currentNode.isLeftNode() && t.getMeasureValues().get(splitExpression) > splitpoint)) {
-//				if (currentNode.getParent().getClassifier().getMapping().getMap().get(t.getSourceUri()) != null) {
-//					if (currentNode.getParent().getClassifier().getMapping().getMap().get(t.getSourceUri())
-//							.get(t.getTargetUri()) != null) {
-//						updatedInstances.add(t);
-//					}
-//				}
-//			}
-//		}
-//		currentInstances = updatedInstances;
-//		AMapping newMapping = trainingInstancesToMapping(currentInstances);
-//		currentMapping = newMapping;
-//	}
 
 	private class Metric {
 		String sourceProperty;
@@ -227,7 +179,7 @@ public class GiniIndex extends FitnessFunctionDTL {
 	}
 	*/
 
-	private double gain(DecisionTree currentNode, List<TrainingInstance> left, List<TrainingInstance> right) {
+	private double avgGini(DecisionTree currentNode, List<TrainingInstance> left, List<TrainingInstance> right) {
 		if (currentNode.getParent() == null) {
 			currentMapping = currentNode.getRefMapping();
 		}
@@ -237,9 +189,8 @@ public class GiniIndex extends FitnessFunctionDTL {
 		double rightAll = rightFraction[0] + rightFraction[1];
 		double leftWeight = (leftAll) / currentMapping.size();
 		double rightWeight = (rightAll) / currentMapping.size();
-//		double gain = gini(allFraction[0]/currentMapping.size(),allFraction[1]/currentMapping.size()) - (leftWeight * gini(leftFraction[0]/leftAll, leftFraction[1]/leftAll) + rightWeight * gini(rightFraction[0]/rightAll,rightFraction[1]/rightAll));
-		double gain = leftWeight * gini(leftFraction[0]/leftAll, leftFraction[1]/leftAll) + rightWeight * gini(rightFraction[0]/rightAll,rightFraction[1]/rightAll);
-		return gain;
+		double avgGini = leftWeight * gini(leftFraction[0]/leftAll, leftFraction[1]/leftAll) + rightWeight * gini(rightFraction[0]/rightAll,rightFraction[1]/rightAll);
+		return avgGini;
 	}
 
 
@@ -271,7 +222,7 @@ public class GiniIndex extends FitnessFunctionDTL {
 		double bestSplitpoint = 0.0;
 		for (Metric mE : metricExpressions) {
 			if (currentNode.getParent() == null
-					|| !currentNode.getParent().getPathString().contains(mE.metricExpression.replace(mE.measure, ""))) {
+					|| !currentNode.getParent().getPathString().contains(mE.metricExpression)) {
 				Collections.sort(currentInstances, new MetricValueComparator(mE.metricExpression));
 				ArrayList<TrainingInstance> lessThanI = new ArrayList<TrainingInstance>();
 				ArrayList<TrainingInstance> moreThanEqualsI = new ArrayList<TrainingInstance>();
@@ -281,12 +232,16 @@ public class GiniIndex extends FitnessFunctionDTL {
 					moreThanEqualsI.remove(currentInstances.get(i));
 					lessThanI.add(currentInstances.get(i));
 					// splitpoint is between the two values
-//					double splitpoint = (currentInstances.get(i).getMeasureValues().get(mE.metricExpression)
-//							+ currentInstances.get(i + 1).getMeasureValues().get(mE.metricExpression)) / 2.0;
-					double splitpoint = currentInstances.get(i + 1).getMeasureValues().get(mE.metricExpression);
+					double splitpoint = 0.0;
+					if(middlePoints){
+						splitpoint = (currentInstances.get(i).getMeasureValues().get(mE.metricExpression)
+							+ currentInstances.get(i + 1).getMeasureValues().get(mE.metricExpression)) / 2.0;
+					}else{
+						splitpoint = currentInstances.get(i + 1).getMeasureValues().get(mE.metricExpression);
+					}
 					if (splitpoint != oldSplitpoint) {
 						oldSplitpoint = splitpoint;
-						double gain = gain(currentNode, lessThanI, moreThanEqualsI);
+						double gain = avgGini(currentNode, lessThanI, moreThanEqualsI);
 						logger.debug("Gain: " + gain + " for " + mE.metricExpression + "|" + splitpoint);
 						if (gain < bestGain) {
 							bestMetric = mE;

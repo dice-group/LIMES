@@ -314,7 +314,7 @@ public class InformationGain extends FitnessFunctionDTL {
 		double bestSplitpoint = 0.0;
 		for (Metric mE : metricExpressions) {
 			if (currentNode.getParent() == null
-					|| !currentNode.getParent().getPathString().contains(mE.metricExpression.replace(mE.measure, ""))) {
+					|| !currentNode.getParent().getPathString().contains(mE.metricExpression)) {
 				Collections.sort(currentInstances, new MetricValueComparator(mE.metricExpression));
 				ArrayList<TrainingInstance> lessThanEqualsI = new ArrayList<TrainingInstance>();
 				ArrayList<TrainingInstance> moreThanI = new ArrayList<TrainingInstance>();

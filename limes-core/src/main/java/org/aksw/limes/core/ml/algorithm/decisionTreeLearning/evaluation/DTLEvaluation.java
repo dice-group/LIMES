@@ -107,377 +107,1103 @@ public class DTLEvaluation {
 		}
 		return result;
 	}
-	
-	public static void main(String[] args){
+
+	public static void main(String[] args) {
 		try {
-			performCrossvalidation(args[0]);
+			performCrossValidationLowerMinPropertyCoverageMiddlePoints(args[0]);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	private static void createDirectoriesIfNecessarry(String ... folders){
-		for(String folder: folders){
+
+	private static void createDirectoriesIfNecessarry(String... folders) {
+		for (String folder : folders) {
 			File f = new File(folder);
-			if(!f.exists()){
+			if (!f.exists()) {
 				boolean success = f.mkdir();
-				if(success){
+				if (success) {
 					logger.info("Successfully created directory: " + f.getPath());
-				}else{
+				} else {
 					logger.error("Error while trying to create: " + f.getPath());
 				}
-			}else{
+			} else {
 				logger.info(f.getPath() + " already exists");
 			}
 		}
 	}
-	
-	public static void performCrossvalidation(String baseFolder) throws FileNotFoundException{
 
-//================================================================================================================
-//			Set up output
-//================================================================================================================
+	public static void performCrossvalidation(String baseFolder) throws FileNotFoundException {
+
+		// ================================================================================================================
+		// Set up output
+		// ================================================================================================================
 		long start;
 		long end;
 		String fMeasureBase = baseFolder + "FMeasure/";
 		String precisionBase = baseFolder + "Precision/";
 		String recallBase = baseFolder + "Recall/";
 		String timeBase = baseFolder + "Time/";
-		createDirectoriesIfNecessarry(baseFolder, fMeasureBase, precisionBase, recallBase, timeBase);
-		
-		String[] datasets = {"dbplinkedmdb", "person1full", "person2full","drugs", "restaurantsfull", "dblpacm", "abtbuy", "dblpscholar", "amazongoogleproducts"};
-		String header = "Data\tWombat\tMergeAndConquer\tGlobal+ErrorEstimate\tGlobal+Global\tGini+Global\tGini+ErrorEstimate\tj48\tj48opt\n";
-		
-		
+		String sizeBase = baseFolder + "Size/";
+		createDirectoriesIfNecessarry(baseFolder, fMeasureBase, precisionBase, recallBase, timeBase, sizeBase);
 
-	 for(int k = 0; k < 10; k++){
+		String[] datasets = { "dbplinkedmdb", "person1full", "person2full", "drugs", "restaurantsfull", "dblpacm",
+				"abtbuy", "dblpscholar", "amazongoogleproducts" };
+		String header = "Data\tWombat\tMAndC\tGloE\tGloG\tGinG\tGinE\tj48\tj48opt\n";
 
-		PrintWriter writerFMeasure = new PrintWriter(new FileOutputStream(fMeasureBase +k+ ".csv",false));
-		writerFMeasure.write(header);
-		String datalineFMeasure = "";
-		PrintWriter writerPrecision = new PrintWriter(new FileOutputStream(precisionBase +k+ ".csv",false));
-		writerPrecision.write(header);
-		String datalinePrecision = "";
-		PrintWriter writerRecall = new PrintWriter(new FileOutputStream(recallBase +k+ ".csv",false));
-		writerRecall.write(header);
-		String datalineRecall = "";
-		PrintWriter writerTime = new PrintWriter(new FileOutputStream(timeBase +k+ ".csv",false));
-		writerTime.write(header);
-		String datalineTime = "";
+		for (int k = 0; k < 10; k++) {
 
+			PrintWriter writerFMeasure = new PrintWriter(new FileOutputStream(fMeasureBase + k + ".csv", false));
+			writerFMeasure.write(header);
+			String datalineFMeasure = "";
+			PrintWriter writerPrecision = new PrintWriter(new FileOutputStream(precisionBase + k + ".csv", false));
+			writerPrecision.write(header);
+			String datalinePrecision = "";
+			PrintWriter writerRecall = new PrintWriter(new FileOutputStream(recallBase + k + ".csv", false));
+			writerRecall.write(header);
+			String datalineRecall = "";
+			PrintWriter writerTime = new PrintWriter(new FileOutputStream(timeBase + k + ".csv", false));
+			writerTime.write(header);
+			String datalineTime = "";
+			PrintWriter writerSize = new PrintWriter(new FileOutputStream(sizeBase + k + ".csv", false));
+			writerSize.write(header);
+			String datalineSize = "";
 
-//================================================================================================================
-//			Set up training data folds and caches
-//================================================================================================================
+			// ================================================================================================================
+			// Set up training data folds and caches
+			// ================================================================================================================
 
-		for (String dataName : datasets) {
-			logger.info("\n\n >>>>>>>>>>>>> " + dataName.toUpperCase() + "<<<<<<<<<<<<<<<<<\n\n");
-			DecisionTreeLearning.useJ48optimized = false;
-			DecisionTreeLearning.useJ48 = false;
-			EvaluationData c = DataSetChooser.getData(dataName);
-			folds = generateFolds(c); 
+			for (String dataName : datasets) {
+				logger.info("\n\n >>>>>>>>>>>>> " + dataName.toUpperCase() + "<<<<<<<<<<<<<<<<<\n\n");
+				DecisionTreeLearning.useJ48optimized = false;
+				DecisionTreeLearning.useJ48 = false;
+				EvaluationData c = DataSetChooser.getData(dataName);
+				folds = generateFolds(c);
 
-			FoldData trainData = new FoldData();
-			FoldData testData = folds.get(FOLDS_COUNT - 1);
-			// perform union on test folds
-			for (int i = 0; i < FOLDS_COUNT; i++) {
-				if (i != 9) {
-					trainData.map = MappingOperations.union(trainData.map,folds.get(i).map);
-					trainData.sourceCache = cacheUnion(trainData.sourceCache,folds.get(i).sourceCache);
-					trainData.targetCache = cacheUnion(trainData.targetCache,folds.get(i).targetCache);
-				}
-			}
-			// fix caches if necessary
-			for (String s : trainData.map.getMap().keySet()) {
-				for (String t : trainData.map.getMap().get(s).keySet()) {
-					if (!trainData.targetCache.containsUri(t)) {
-						// logger.info("target: " + t);
-						trainData.targetCache.addInstance(c.getTargetCache().getInstance(t));
+				FoldData trainData = new FoldData();
+				FoldData testData = folds.get(FOLDS_COUNT - 1);
+				// perform union on test folds
+				for (int i = 0; i < FOLDS_COUNT; i++) {
+					if (i != 9) {
+						trainData.map = MappingOperations.union(trainData.map, folds.get(i).map);
+						trainData.sourceCache = cacheUnion(trainData.sourceCache, folds.get(i).sourceCache);
+						trainData.targetCache = cacheUnion(trainData.targetCache, folds.get(i).targetCache);
 					}
 				}
-				if (!trainData.sourceCache.containsUri(s)) {
-					// logger.info("source: " + s);
-					trainData.sourceCache.addInstance(c.getSourceCache().getInstance(s));
+				// fix caches if necessary
+				for (String s : trainData.map.getMap().keySet()) {
+					for (String t : trainData.map.getMap().get(s).keySet()) {
+						if (!trainData.targetCache.containsUri(t)) {
+							// logger.info("target: " + t);
+							trainData.targetCache.addInstance(c.getTargetCache().getInstance(t));
+						}
+					}
+					if (!trainData.sourceCache.containsUri(s)) {
+						// logger.info("source: " + s);
+						trainData.sourceCache.addInstance(c.getSourceCache().getInstance(s));
+					}
+				}
+
+				AMapping trainingData = trainData.map;
+				ACache trainSourceCache = trainData.sourceCache;
+				ACache trainTargetCache = trainData.targetCache;
+				ACache testSourceCache = testData.sourceCache;
+				ACache testTargetCache = testData.targetCache;
+
+				// ================================================================================================================
+				// Learning Phase
+				// ================================================================================================================
+				try {
+					AMLAlgorithm dtl = null;
+					Configuration config = null;
+					MLResults res = null;
+					AMapping mapping = null;
+
+					logger.info("\n========WOMBAT==========");
+					AMLAlgorithm wombat = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					wombat.init(null, trainSourceCache, trainTargetCache);
+					wombat.getMl().setConfiguration(c.getConfigReader().read());
+					((WombatSimple) wombat.getMl()).propMap = c.getPropertyMapping();
+					start = System.currentTimeMillis();
+					res = wombat.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = wombat.predict(testSourceCache, testTargetCache, res);
+					double womFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache, testTargetCache));
+					double womPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache, testTargetCache));
+					double womRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache, testTargetCache));
+					int womSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + womFM);
+					logger.info("Precision: " + womPrecision);
+					logger.info("Recall: " + womRecall);
+					long womTime = (end - start);
+					logger.info("Time: " + womTime);
+					logger.info("Size: " + womSize);
+
+					logger.info("========Merge and Conquer==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + trainSourceCache.size());
+					logger.info("target size: " + trainTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					DecisionTreeLearning.useMergeAndConquer = true;
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double MaCFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double MaCPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double MaCRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int MaCSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + MaCFM);
+					logger.info("Precision: " + MaCPrecision);
+					logger.info("Recall: " + MaCRecall);
+					long MaCTime = (end - start);
+					logger.info("Time: " + MaCTime);
+					logger.info("Size: " + MaCSize);
+					DecisionTreeLearning.useMergeAndConquer = false;
+					// ==================================
+
+					logger.info("========Global + ErrorEstimate==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+							new ErrorEstimatePruning());
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double GErFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double GErPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double GErRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int GErSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + GErFM);
+					logger.info("Precision: " + GErPrecision);
+					logger.info("Recall: " + GErRecall);
+					long GErTime = (end - start);
+					logger.info("Time: " + GErTime);
+					logger.info("Size: " + GErSize);
+					// ========================================
+
+					logger.info("========Global + Global==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+							new GlobalFMeasurePruning());
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double GGFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double GGPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double GGRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int GGSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + GGFM);
+					logger.info("Precision: " + GGPrecision);
+					logger.info("Recall: " + GGRecall);
+					long GGTime = (end - start);
+					logger.info("Time: " + GGTime);
+					logger.info("Size: " + GGSize);
+
+					// ========================================
+					logger.info("========Gini + Global==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION, new GlobalFMeasurePruning());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.4);
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giGFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giGSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giGFM);
+					logger.info("Precision: " + giGPrecision);
+					logger.info("Recall: " + giGRecall);
+					long giGTime = (end - start);
+					logger.info("Time: " + giGTime);
+					logger.info("Size: " + giGSize);
+
+					// ========================================
+
+					logger.info("========Gini + ErrorEstimate==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION, new ErrorEstimatePruning());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.4);
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giErFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giErPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giErRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giErSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giErFM);
+					logger.info("Precision: " + giErPrecision);
+					logger.info("Recall: " + giErRecall);
+					long giErTime = (end - start);
+					logger.info("Time: " + giErTime);
+					logger.info("Size: " + giErSize);
+					// ========================================
+
+					logger.info("========J48==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					DecisionTreeLearning.useJ48 = true;
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double j48FM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double j48Precision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double j48Recall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int j48Size = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + j48FM);
+					logger.info("Precision: " + j48Precision);
+					logger.info("Recall: " + j48Recall);
+					long j48Time = (end - start);
+					logger.info("Time: " + j48Time);
+					logger.info("Size: " + j48Size);
+					// ========================================
+
+					logger.info("========J48 optimized==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					DecisionTreeLearning.useJ48 = true;
+					DecisionTreeLearning.useJ48optimized = true;
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double j48optFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double j48optPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double j48optRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int j48optSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + j48optFM);
+					logger.info("Precision: " + j48optPrecision);
+					logger.info("Recall: " + j48optRecall);
+					long j48optTime = (end - start);
+					logger.info("Time: " + j48optTime);
+					logger.info("Size: " + j48optSize);
+					DecisionTreeLearning.useJ48 = false;
+					DecisionTreeLearning.useJ48optimized = false;
+
+					// ================================================================================================================
+					// Print results for iteration
+					// ================================================================================================================
+
+					datalineFMeasure += dataName + "\t" + womFM + "\t" + MaCFM + "\t" + GErFM + "\t" + GGFM + "\t"
+							+ giGFM + "\t" + giErFM + "\t" + j48FM + "\t" + j48optFM + "\n";
+					writerFMeasure.write(datalineFMeasure);
+					datalineFMeasure = "";
+
+					datalinePrecision += dataName + "\t" + womPrecision + "\t" + MaCPrecision + "\t" + GErPrecision
+							+ "\t" + GGPrecision + "\t" + giGPrecision + "\t" + giErPrecision + "\t" + j48Precision
+							+ "\t" + j48optPrecision + "\n";
+					writerPrecision.write(datalinePrecision);
+					datalinePrecision = "";
+
+					datalineRecall += dataName + "\t" + womRecall + "\t" + MaCRecall + "\t" + GErRecall + "\t"
+							+ GGRecall + "\t" + giGRecall + "\t" + giErRecall + "\t" + j48Recall + "\t" + j48optRecall
+							+ "\n";
+					writerRecall.write(datalineRecall);
+					datalineRecall = "";
+
+					datalineTime += dataName + "\t" + womTime + "\t" + MaCTime + "\t" + GErTime + "\t" + GGTime + "\t"
+							+ giGTime + "\t" + giErTime + "\t" + j48Time + "\t" + j48optTime + "\n";
+					writerTime.write(datalineTime);
+					datalineTime = "";
+
+					datalineSize += dataName + "\t" + womSize + "\t" + MaCSize + "\t" + GErSize + "\t" + GGSize + "\t"
+							+ giGSize + "\t" + giErSize + "\t" + j48Size + "\t" + j48optSize + "\n";
+					writerSize.write(datalineSize);
+					datalineSize = "";
+				} catch (UnsupportedMLImplementationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
-			
-
-			AMapping trainingData = trainData.map;
-			ACache trainSourceCache = trainData.sourceCache;
-			ACache trainTargetCache = trainData.targetCache;
-			ACache testSourceCache = testData.sourceCache;
-			ACache testTargetCache = testData.targetCache;
-
-//================================================================================================================
-//			Learning Phase
-//================================================================================================================
-			try {
-				AMLAlgorithm dtl = null;
-				Configuration config = null;
-				MLResults res = null;
-				AMapping mapping = null;
-
-				logger.info("\n========WOMBAT==========");
-				AMLAlgorithm wombat = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
-						MLImplementationType.SUPERVISED_BATCH);
-				wombat.init(null, trainSourceCache, trainTargetCache);
-				wombat.getMl().setConfiguration(c.getConfigReader().read());
-				start = System.currentTimeMillis();
-				res = wombat.asSupervised().learn(trainingData);
-				end = System.currentTimeMillis();
-
-				logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
-				mapping = wombat.predict(testSourceCache, testTargetCache, res);
-				double womFM = new FMeasure().calculate(mapping, new GoldStandard(testData.map, testSourceCache, testTargetCache));
-				double womPrecision = new Precision().calculate(mapping, new GoldStandard(testData.map, testSourceCache, testTargetCache));
-				double womRecall = new Recall().calculate(mapping, new GoldStandard(testData.map, testSourceCache, testTargetCache));
-				logger.info("FMeasure: " + womFM);
-				logger.info("Precision: " + womPrecision);
-				logger.info("Recall: " + womRecall);
-				long womTime = (end - start);
-				logger.info("Time: " + womTime);
-
-				logger.info("========Merge and Conquer==========");
-				
-				dtl  = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-						MLImplementationType.SUPERVISED_BATCH);
-				logger.info("source size: " + trainSourceCache.size());
-				logger.info("target size: " + trainTargetCache.size());
-				dtl.init(null, trainSourceCache, trainTargetCache);
-				config = c.getConfigReader().read();
-				dtl.getMl().setConfiguration(config);
-				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-				start = System.currentTimeMillis();
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				DecisionTreeLearning.useMergeAndConquer = true;
-				res = dtl.asSupervised().learn(trainingData);
-				end = System.currentTimeMillis();
-				logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
-				mapping = dtl.predict(testSourceCache, testTargetCache, res);
-				double MaCFM = new FMeasure().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				double MaCPrecision = new Precision().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				double MaCRecall = new Recall().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				logger.info("FMeasure: " + MaCFM);
-				logger.info("Precision: " + MaCPrecision);
-				logger.info("Recall: " + MaCRecall);
-				long MaCTime = (end - start);
-				logger.info("Time: " + MaCTime);
-				DecisionTreeLearning.useMergeAndConquer = false;
-//==================================
-				
-				logger.info("========Global + ErrorEstimate==========");
-
-				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-						MLImplementationType.SUPERVISED_BATCH);
-				logger.info("source size: " + testSourceCache.size());
-				logger.info("target size: " + testTargetCache.size());
-				dtl.init(null, trainSourceCache, trainTargetCache);
-				config = c.getConfigReader().read();
-				dtl.getMl().setConfiguration(config);
-				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-				start = System.currentTimeMillis();
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION, new ErrorEstimatePruning());
-				res = dtl.asSupervised().learn(trainingData);
-				end = System.currentTimeMillis();
-				logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
-				mapping = dtl.predict(testSourceCache, testTargetCache, res);
-				double GErFM = new FMeasure().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				double GErPrecision = new Precision().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				double GErRecall = new Recall().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				logger.info("FMeasure: " + GErFM);
-				logger.info("Precision: " + GErPrecision);
-				logger.info("Recall: " + GErRecall);
-				long GErTime = (end - start);
-				logger.info("Time: " + GErTime);
-// ========================================
-
-				logger.info("========Global + Global==========");
-
-				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-						MLImplementationType.SUPERVISED_BATCH);
-				logger.info("source size: " + testSourceCache.size());
-				logger.info("target size: " + testTargetCache.size());
-				dtl.init(null, trainSourceCache, trainTargetCache);
-				config = c.getConfigReader().read();
-				dtl.getMl().setConfiguration(config);
-				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-				start = System.currentTimeMillis();
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION, new GlobalFMeasurePruning());
-				res = dtl.asSupervised().learn(trainingData);
-				end = System.currentTimeMillis();
-				logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
-				mapping = dtl.predict(testSourceCache, testTargetCache, res);
-				double GGFM = new FMeasure().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				double GGPrecision = new Precision().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				double GGRecall = new Recall().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				logger.info("FMeasure: " + GGFM);
-				logger.info("Precision: " + GGPrecision);
-				logger.info("Recall: " + GGRecall);
-				long GGTime = (end - start);
-				logger.info("Time: " + GGTime);
-
-// ========================================
-				logger.info("========Global + Gini==========");
-
-				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-						MLImplementationType.SUPERVISED_BATCH);
-				logger.info("source size: " + testSourceCache.size());
-				logger.info("target size: " + testTargetCache.size());
-				dtl.init(null, trainSourceCache, trainTargetCache);
-				config = c.getConfigReader().read();
-				dtl.getMl().setConfiguration(config);
-				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-				start = System.currentTimeMillis();
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION, new GlobalFMeasurePruning());
-				res = dtl.asSupervised().learn(trainingData);
-				end = System.currentTimeMillis();
-				logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
-				mapping = dtl.predict(testSourceCache, testTargetCache, res);
-				double giGFM = new FMeasure().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				double giGPrecision = new Precision().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				double giGRecall = new Recall().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				logger.info("FMeasure: " + giGFM);
-				logger.info("Precision: " + giGPrecision);
-				logger.info("Recall: " + giGRecall);
-				long giGTime = (end - start);
-				logger.info("Time: " + giGTime);
-				
-// ========================================
-
-				logger.info("========Gini + ErrorEstimate==========");
-
-				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-						MLImplementationType.SUPERVISED_BATCH);
-				logger.info("source size: " + testSourceCache.size());
-				logger.info("target size: " + testTargetCache.size());
-				dtl.init(null, trainSourceCache, trainTargetCache);
-				config = c.getConfigReader().read();
-				dtl.getMl().setConfiguration(config);
-				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-				start = System.currentTimeMillis();
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION, new ErrorEstimatePruning());
-				res = dtl.asSupervised().learn(trainingData);
-				end = System.currentTimeMillis();
-				logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
-				mapping = dtl.predict(testSourceCache, testTargetCache, res);
-				double giErFM = new FMeasure().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				double giErPrecision = new Precision().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				double giErRecall = new Recall().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				logger.info("FMeasure: " + giErFM);
-				logger.info("Precision: " + giErPrecision);
-				logger.info("Recall: " + giErRecall);
-				long giErTime = (end - start);
-				logger.info("Time: " + giErTime);
-// ========================================
-
-				logger.info("========J48==========");
-
-				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-						MLImplementationType.SUPERVISED_BATCH);
-				logger.info("source size: " + testSourceCache.size());
-				logger.info("target size: " + testTargetCache.size());
-				dtl.init(null, trainSourceCache, trainTargetCache);
-				config = c.getConfigReader().read();
-				dtl.getMl().setConfiguration(config);
-				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-				start = System.currentTimeMillis();
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				DecisionTreeLearning.useJ48 = true;
-				res = dtl.asSupervised().learn(trainingData);
-				end = System.currentTimeMillis();
-				logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
-				mapping = dtl.predict(testSourceCache, testTargetCache, res);
-				double j48FM = new FMeasure().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				double j48Precision = new Precision().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				double j48Recall = new Recall().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				logger.info("FMeasure: " + j48FM);
-				logger.info("Precision: " + j48Precision);
-				logger.info("Recall: " + j48Recall);
-				long j48Time = (end - start);
-				logger.info("Time: " + j48Time);
-// ========================================
-
-				logger.info("========J48 optimized==========");
-
-				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-						MLImplementationType.SUPERVISED_BATCH);
-				logger.info("source size: " + testSourceCache.size());
-				logger.info("target size: " + testTargetCache.size());
-				dtl.init(null, trainSourceCache, trainTargetCache);
-				config = c.getConfigReader().read();
-				dtl.getMl().setConfiguration(config);
-				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-				start = System.currentTimeMillis();
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				DecisionTreeLearning.useJ48 = true;
-				DecisionTreeLearning.useJ48optimized = true;
-				res = dtl.asSupervised().learn(trainingData);
-				end = System.currentTimeMillis();
-				logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
-				mapping = dtl.predict(testSourceCache, testTargetCache, res);
-				double j48optFM = new FMeasure().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				double j48optPrecision = new Precision().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				double j48optRecall = new Recall().calculate(mapping, new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
-				logger.info("FMeasure: " + j48optFM);
-				logger.info("Precision: " + j48optPrecision);
-				logger.info("Recall: " + j48optRecall);
-				long j48optTime = (end - start);
-				logger.info("Time: " + j48optTime);
-				DecisionTreeLearning.useJ48 = false;
-				DecisionTreeLearning.useJ48optimized = false;
-				
-				
-//================================================================================================================
-//		Print results for iteration	
-//================================================================================================================
-				
-				datalineFMeasure += dataName + "\t"+ womFM + "\t" +MaCFM + "\t" + GErFM + "\t" + GGFM + "\t" + giGFM + "\t" + giErFM +"\t" + j48FM + "\t" + j48optFM + "\n";
-				writerFMeasure.write(datalineFMeasure);
-				datalineFMeasure = "";
-
-				datalinePrecision += dataName + "\t"+ womPrecision + "\t" +MaCPrecision + "\t" + GErPrecision + "\t" + GGPrecision + "\t" + giGPrecision + "\t" + giErPrecision +"\t" + j48Precision + "\t" + j48optPrecision + "\n";
-				writerPrecision.write(datalinePrecision);
-				datalinePrecision = "";
-
-				datalineRecall += dataName + "\t"+ womRecall + "\t" +MaCRecall + "\t" + GErRecall + "\t" + GGRecall + "\t" + giGRecall + "\t" + giErRecall +"\t" + j48Recall + "\t" + j48optRecall + "\n";
-				writerRecall.write(datalineRecall);
-				datalineRecall = "";
-
-				datalineTime += dataName + "\t"+ womTime + "\t" +MaCTime + "\t" + GErTime + "\t" + GGTime + "\t" + giGTime + "\t" + giErTime +"\t" + j48Time + "\t" + j48optTime + "\n";
-				writerTime.write(datalineTime);
-				datalineTime = "";
-			} catch (UnsupportedMLImplementationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		writerFMeasure.close();
-		writerPrecision.close();
-		writerRecall.close();
-		writerTime.close();
+			writerFMeasure.close();
+			writerPrecision.close();
+			writerRecall.close();
+			writerTime.close();
+			writerSize.close();
 		}
 	}
-	
-	
-    private static ACache cacheUnion(ACache a, ACache b) {
-    	ACache result = new HybridCache(); 
-        for(Instance i : a.getAllInstances()){
-        	result.addInstance(i);
-        }
-        for(Instance i : b.getAllInstances()){
-        	result.addInstance(i);
-        }
-        return result;
-    }
+
+	public static void performCrossValidationMiddlePoints(String baseFolder) throws FileNotFoundException {
+		// ================================================================================================================
+		// Set up output
+		// ================================================================================================================
+		long start;
+		long end;
+		String fMeasureBase = baseFolder + "FMeasure/";
+		String precisionBase = baseFolder + "Precision/";
+		String recallBase = baseFolder + "Recall/";
+		String timeBase = baseFolder + "Time/";
+		String sizeBase = baseFolder + "Size/";
+		createDirectoriesIfNecessarry(baseFolder, fMeasureBase, precisionBase, recallBase, timeBase, sizeBase);
+
+		String[] datasets = { "dbplinkedmdb", "person1full", "person2full", "drugs", "restaurantsfull", "dblpacm",
+				"abtbuy", "dblpscholar", "amazongoogleproducts" };
+		String header = "Data\tGinG\tGinE\tGinGlow\tGinElow\n";
+
+		for (int k = 0; k < 10; k++) {
+
+			PrintWriter writerFMeasure = new PrintWriter(new FileOutputStream(fMeasureBase + k + ".csv", false));
+			writerFMeasure.write(header);
+			String datalineFMeasure = "";
+			PrintWriter writerPrecision = new PrintWriter(new FileOutputStream(precisionBase + k + ".csv", false));
+			writerPrecision.write(header);
+			String datalinePrecision = "";
+			PrintWriter writerRecall = new PrintWriter(new FileOutputStream(recallBase + k + ".csv", false));
+			writerRecall.write(header);
+			String datalineRecall = "";
+			PrintWriter writerTime = new PrintWriter(new FileOutputStream(timeBase + k + ".csv", false));
+			writerTime.write(header);
+			String datalineTime = "";
+			PrintWriter writerSize = new PrintWriter(new FileOutputStream(sizeBase + k + ".csv", false));
+			writerSize.write(header);
+			String datalineSize = "";
+
+			// ================================================================================================================
+			// Set up training data folds and caches
+			// ================================================================================================================
+
+			for (String dataName : datasets) {
+				logger.info("\n\n >>>>>>>>>>>>> " + dataName.toUpperCase() + "<<<<<<<<<<<<<<<<<\n\n");
+				DecisionTreeLearning.useJ48optimized = false;
+				DecisionTreeLearning.useJ48 = false;
+				EvaluationData c = DataSetChooser.getData(dataName);
+				folds = generateFolds(c);
+
+				FoldData trainData = new FoldData();
+				FoldData testData = folds.get(FOLDS_COUNT - 1);
+				// perform union on test folds
+				for (int i = 0; i < FOLDS_COUNT; i++) {
+					if (i != 9) {
+						trainData.map = MappingOperations.union(trainData.map, folds.get(i).map);
+						trainData.sourceCache = cacheUnion(trainData.sourceCache, folds.get(i).sourceCache);
+						trainData.targetCache = cacheUnion(trainData.targetCache, folds.get(i).targetCache);
+					}
+				}
+				// fix caches if necessary
+				for (String s : trainData.map.getMap().keySet()) {
+					for (String t : trainData.map.getMap().get(s).keySet()) {
+						if (!trainData.targetCache.containsUri(t)) {
+							// logger.info("target: " + t);
+							trainData.targetCache.addInstance(c.getTargetCache().getInstance(t));
+						}
+					}
+					if (!trainData.sourceCache.containsUri(s)) {
+						// logger.info("source: " + s);
+						trainData.sourceCache.addInstance(c.getSourceCache().getInstance(s));
+					}
+				}
+
+				AMapping trainingData = trainData.map;
+				ACache trainSourceCache = trainData.sourceCache;
+				ACache trainTargetCache = trainData.targetCache;
+				ACache testSourceCache = testData.sourceCache;
+				ACache testTargetCache = testData.targetCache;
+
+				// ================================================================================================================
+				// Learning Phase
+				// ================================================================================================================
+				try {
+					AMLAlgorithm dtl = null;
+					Configuration config = null;
+					MLResults res = null;
+					AMapping mapping = null;
+
+					GiniIndex.middlePoints = true;
+					// ========================================
+					logger.info("========Global + Gini==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+							new GlobalFMeasurePruning());
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giGFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giGSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giGFM);
+					logger.info("Precision: " + giGPrecision);
+					logger.info("Recall: " + giGRecall);
+					long giGTime = (end - start);
+					logger.info("Time: " + giGTime);
+					logger.info("Size: " + giGSize);
+
+					// ========================================
+
+					logger.info("========Gini + ErrorEstimate==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+							new ErrorEstimatePruning());
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giErFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giErPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giErRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giErSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giErFM);
+					logger.info("Precision: " + giErPrecision);
+					logger.info("Recall: " + giErRecall);
+					long giErTime = (end - start);
+					logger.info("Time: " + giErTime);
+					logger.info("Size: " + giErSize);
+
+
+					// ========================================
+					logger.info("========Global + Gini==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+							new GlobalFMeasurePruning());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.01);
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giGlowFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGlowPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGlowRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giGlowSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giGlowFM);
+					logger.info("Precision: " + giGlowPrecision);
+					logger.info("Recall: " + giGlowRecall);
+					long giGlowTime = (end - start);
+					logger.info("Time: " + giGlowTime);
+					logger.info("Size: " + giGlowSize);
+
+					// ========================================
+
+					logger.info("========Gini + ErrorEstimate==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+							new ErrorEstimatePruning());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.01);
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giErlowFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giErlowPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giErlowRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giErlowSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giErlowFM);
+					logger.info("Precision: " + giErlowPrecision);
+					logger.info("Recall: " + giErlowRecall);
+					long giErlowTime = (end - start);
+					logger.info("Time: " + giErlowTime);
+					logger.info("Size: " + giErlowSize);
+					// ========================================
+
+					// ================================================================================================================
+					// Print results for iteration
+					// ================================================================================================================
+
+					datalineFMeasure += dataName + "\t" + giGFM + "\t" + giErFM + "\t" + giGlowFM + "\t" + giErlowFM +"\n";
+					writerFMeasure.write(datalineFMeasure);
+					datalineFMeasure = "";
+
+					datalinePrecision += dataName + "\t" + giGPrecision + "\t" + giErPrecision + "\t" + giGlowPrecision + "\t" + giErlowPrecision +"\n";
+					writerPrecision.write(datalinePrecision);
+					datalinePrecision = "";
+
+					datalineRecall += dataName + "\t" + giGRecall + "\t" + giErRecall + "\t" + giGlowRecall + "\t" + giErlowRecall +"\n";
+					writerRecall.write(datalineRecall);
+					datalineRecall = "";
+
+					datalineTime += dataName + "\t" + giGTime + "\t" + giErTime + "\t" + giGlowTime + "\t" + giErlowTime +"\n";
+					writerTime.write(datalineTime);
+					datalineTime = "";
+
+					datalineSize += dataName + "\t" + giGSize + "\t" + giErSize + "\t" + giGlowSize + "\t" + giErlowSize +"\n";
+					writerSize.write(datalineSize);
+					datalineSize = "";
+
+				} catch (UnsupportedMLImplementationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			writerFMeasure.close();
+			writerPrecision.close();
+			writerRecall.close();
+			writerTime.close();
+			writerSize.close();
+		}
+	}
+
+	public static void performCrossValidationLowerMinPropertyCoverageMiddlePoints(String baseFolder) throws FileNotFoundException {
+		// ================================================================================================================
+		// Set up output
+		// ================================================================================================================
+		long start;
+		long end;
+		String fMeasureBase = baseFolder + "FMeasure/";
+		String precisionBase = baseFolder + "Precision/";
+		String recallBase = baseFolder + "Recall/";
+		String timeBase = baseFolder + "Time/";
+		String sizeBase = baseFolder + "Size/";
+		createDirectoriesIfNecessarry(baseFolder, fMeasureBase, precisionBase, recallBase, timeBase, sizeBase);
+
+		String[] datasets = { "dbplinkedmdb", "person1full", "person2full", "drugs", "restaurantsfull", "dblpacm",
+				"abtbuy", "dblpscholar", "amazongoogleproducts" };
+		String header = "Data\tGinG\tGinE\tGinGlow\tGinElow\tGinGmiddle\tGinEmiddle\tGinGmiddlelow\tGinEmiddlelow\n";
+
+		for (int k = 0; k < 10; k++) {
+
+			PrintWriter writerFMeasure = new PrintWriter(new FileOutputStream(fMeasureBase + k + ".csv", false));
+			writerFMeasure.write(header);
+			String datalineFMeasure = "";
+			PrintWriter writerPrecision = new PrintWriter(new FileOutputStream(precisionBase + k + ".csv", false));
+			writerPrecision.write(header);
+			String datalinePrecision = "";
+			PrintWriter writerRecall = new PrintWriter(new FileOutputStream(recallBase + k + ".csv", false));
+			writerRecall.write(header);
+			String datalineRecall = "";
+			PrintWriter writerTime = new PrintWriter(new FileOutputStream(timeBase + k + ".csv", false));
+			writerTime.write(header);
+			String datalineTime = "";
+			PrintWriter writerSize = new PrintWriter(new FileOutputStream(sizeBase + k + ".csv", false));
+			writerSize.write(header);
+			String datalineSize = "";
+
+			// ================================================================================================================
+			// Set up training data folds and caches
+			// ================================================================================================================
+
+			for (String dataName : datasets) {
+				logger.info("\n\n >>>>>>>>>>>>> " + dataName.toUpperCase() + "<<<<<<<<<<<<<<<<<\n\n");
+				DecisionTreeLearning.useJ48optimized = false;
+				DecisionTreeLearning.useJ48 = false;
+				EvaluationData c = DataSetChooser.getData(dataName);
+				folds = generateFolds(c);
+
+				FoldData trainData = new FoldData();
+				FoldData testData = folds.get(FOLDS_COUNT - 1);
+				// perform union on test folds
+				for (int i = 0; i < FOLDS_COUNT; i++) {
+					if (i != 9) {
+						trainData.map = MappingOperations.union(trainData.map, folds.get(i).map);
+						trainData.sourceCache = cacheUnion(trainData.sourceCache, folds.get(i).sourceCache);
+						trainData.targetCache = cacheUnion(trainData.targetCache, folds.get(i).targetCache);
+					}
+				}
+				// fix caches if necessary
+				for (String s : trainData.map.getMap().keySet()) {
+					for (String t : trainData.map.getMap().get(s).keySet()) {
+						if (!trainData.targetCache.containsUri(t)) {
+							// logger.info("target: " + t);
+							trainData.targetCache.addInstance(c.getTargetCache().getInstance(t));
+						}
+					}
+					if (!trainData.sourceCache.containsUri(s)) {
+						// logger.info("source: " + s);
+						trainData.sourceCache.addInstance(c.getSourceCache().getInstance(s));
+					}
+				}
+
+				AMapping trainingData = trainData.map;
+				ACache trainSourceCache = trainData.sourceCache;
+				ACache trainTargetCache = trainData.targetCache;
+				ACache testSourceCache = testData.sourceCache;
+				ACache testTargetCache = testData.targetCache;
+
+				// ================================================================================================================
+				// Learning Phase
+				// ================================================================================================================
+				try {
+					AMLAlgorithm dtl = null;
+					Configuration config = null;
+					MLResults res = null;
+					AMapping mapping = null;
+
+					GiniIndex.middlePoints = false;
+					// ==================================
+
+					// ========================================
+					logger.info("========Global + Gini==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+							new GlobalFMeasurePruning());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.4);
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giGFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giGSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giGFM);
+					logger.info("Precision: " + giGPrecision);
+					logger.info("Recall: " + giGRecall);
+					long giGTime = (end - start);
+					logger.info("Time: " + giGTime);
+					logger.info("Size: " + giGSize);
+
+					// ========================================
+
+					logger.info("========Gini + ErrorEstimate  ==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+							new ErrorEstimatePruning());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.4);
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giErFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giErPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giErRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giErSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giErFM);
+					logger.info("Precision: " + giErPrecision);
+					logger.info("Recall: " + giErRecall);
+					long giErTime = (end - start);
+					logger.info("Time: " + giErTime);
+					logger.info("Size: " + giErSize);
+
+					// ========================================
+					logger.info("========Global + Gini low==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+							new GlobalFMeasurePruning());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.05);
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giGlowFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGlowPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGlowRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giGlowSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giGlowFM);
+					logger.info("Precision: " + giGlowPrecision);
+					logger.info("Recall: " + giGlowRecall);
+					long giGlowTime = (end - start);
+					logger.info("Time: " + giGlowTime);
+					logger.info("Size: " + giGlowSize);
+
+					// ========================================
+
+					logger.info("========Gini + ErrorEstimate low ==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+							new ErrorEstimatePruning());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.05);
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giErlowFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giErlowPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giErlowRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giErlowSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giErlowFM);
+					logger.info("Precision: " + giErlowPrecision);
+					logger.info("Recall: " + giErlowRecall);
+					long giErlowTime = (end - start);
+					logger.info("Time: " + giErlowTime);
+					logger.info("Size: " + giErlowSize);
+					// ========================================
+					GiniIndex.middlePoints = true;
+					logger.info("========Global + Gini middle==========");
+					GiniIndex.middlePoints = true;
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+							new GlobalFMeasurePruning());
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giGMiddleFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGMiddlePrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGMiddleRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giGMiddleSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giGMiddleFM);
+					logger.info("Precision: " + giGMiddlePrecision);
+					logger.info("Recall: " + giGMiddleRecall);
+					long giGMiddleTime = (end - start);
+					logger.info("Time: " + giGMiddleTime);
+					logger.info("Size: " + giGMiddleSize);
+
+					// ========================================
+
+					logger.info("========Gini + ErrorEstimate middle==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+							new ErrorEstimatePruning());
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giErMiddleFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giErMiddlePrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giErMiddleRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giErMiddleSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giErMiddleFM);
+					logger.info("Precision: " + giErMiddlePrecision);
+					logger.info("Recall: " + giErMiddleRecall);
+					long giErMiddleTime = (end - start);
+					logger.info("Time: " + giErMiddleTime);
+					logger.info("Size: " + giErMiddleSize);
+					// ========================================
+					logger.info("========Global + Gini low middle==========");
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+							new GlobalFMeasurePruning());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.05);
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giGlowMiddleFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGlowMiddlePrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGlowMiddleRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giGlowMiddleSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giGlowMiddleFM);
+					logger.info("Precision: " + giGlowMiddlePrecision);
+					logger.info("Recall: " + giGlowMiddleRecall);
+					long giGlowMiddleTime = (end - start);
+					logger.info("Time: " + giGlowMiddleTime);
+					logger.info("Size: " + giGlowMiddleSize);
+
+					// ========================================
+
+					logger.info("========Gini + ErrorEstimate low middle==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+							new ErrorEstimatePruning());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.05);
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giErlowMiddleFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giErlowMiddlePrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giErlowMiddleRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giErlowMiddleSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giErlowMiddleFM);
+					logger.info("Precision: " + giErlowMiddlePrecision);
+					logger.info("Recall: " + giErlowMiddleRecall);
+					long giErlowMiddleTime = (end - start);
+					logger.info("Time: " + giErlowMiddleTime);
+					logger.info("Size: " + giErlowMiddleSize);
+
+					// ================================================================================================================
+					// Print results for iteration
+					// ================================================================================================================
+
+					datalineFMeasure += dataName.replace("full","").replace("products","") + "\t" + giGFM + "\t" + giErFM + "\t" + giGlowFM + "\t" + giErlowFM +"\t" + giGMiddleFM + "\t" + giErMiddleFM +"\t" + giGlowMiddleFM + "\t" + giErlowMiddleFM +"\n";
+					writerFMeasure.write(datalineFMeasure);
+					datalineFMeasure = "";
+
+					datalinePrecision += dataName.replace("full","").replace("products","") + "\t" + giGPrecision + "\t" + giErPrecision + "\t" + giGlowPrecision + "\t" + giErlowPrecision +"\t" + giGMiddlePrecision + "\t" + giErMiddlePrecision +"\t" + giGlowMiddlePrecision + "\t" + giErlowMiddlePrecision +"\n";
+					writerPrecision.write(datalinePrecision);
+					datalinePrecision = "";
+
+					datalineRecall += dataName.replace("full","").replace("products","") + "\t" + giGRecall + "\t" + giErRecall + "\t" + giGlowRecall + "\t" + giErlowRecall +"\t" + giGMiddleRecall + "\t" + giErMiddleRecall +"\t" + giGlowMiddleRecall + "\t" + giErlowMiddleRecall +"\n";
+					writerRecall.write(datalineRecall);
+					datalineRecall = "";
+
+					datalineTime += dataName.replace("full","").replace("products","") + "\t" + giGTime + "\t" + giErTime + "\t" + giGlowTime + "\t" + giErlowTime +"\t" + giGMiddleTime + "\t" + giErMiddleTime +"\t" + giGlowMiddleTime + "\t" + giErlowMiddleTime +"\n";
+					writerTime.write(datalineTime);
+					datalineTime = "";
+
+					datalineSize += dataName.replace("full","").replace("products","") + "\t" + giGSize + "\t" + giErSize + "\t" + giGlowSize + "\t" + giErlowSize +"\t" + giGMiddleSize + "\t" + giErMiddleSize +"\t" + giGlowMiddleSize + "\t" + giErlowMiddleSize +"\n";
+					writerSize.write(datalineSize);
+					datalineSize = "";
+
+				} catch (UnsupportedMLImplementationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			writerFMeasure.close();
+			writerPrecision.close();
+			writerRecall.close();
+			writerTime.close();
+			writerSize.close();
+		}
+	}
+
+	public static ACache cacheUnion(ACache a, ACache b) {
+		ACache result = new HybridCache();
+		for (Instance i : a.getAllInstances()) {
+			result.addInstance(i);
+		}
+		for (Instance i : b.getAllInstances()) {
+			result.addInstance(i);
+		}
+		return result;
+	}
 
 	public static String getRandomTargetInstance(ACache source, ACache target, List<String> values, Random random,
 			HashMap<String, HashMap<String, Double>> refMap, String sourceInstance, int previousRandom) {
@@ -492,7 +1218,6 @@ public class DTLEvaluation {
 		}
 		return getRandomTargetInstance(source, target, values, random, refMap, sourceInstance, randomInt);
 	}
-
 
 	public static List<AMapping> generateMappingFolds(AMapping refMap, ACache source, ACache target) {
 		Random rand = new Random();

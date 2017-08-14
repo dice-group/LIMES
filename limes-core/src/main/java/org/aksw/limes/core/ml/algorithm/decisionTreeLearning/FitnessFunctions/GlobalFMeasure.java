@@ -22,7 +22,7 @@ public class GlobalFMeasure extends FitnessFunctionDTL{
 		String properties = "(x." + sourceProperty + ",y." + targetProperty + ")";
 		ExtendedClassifier cp = new ExtendedClassifier(measure, 0.0, sourceProperty, targetProperty);
 		if (currentNode.getParent() != null) {
-			if (currentNode.getParent().getPathString().contains(properties)) {
+			if (currentNode.getParent().getPathString().contains(measureExpression)) {
 				return null;
 			}
 		}
