@@ -49,7 +49,7 @@ public class RefinementNode implements Comparable<RefinementNode> {
         this.setMap(map);
         this.setMetricExpression(metricExpression);
     }
-    
+
     public RefinementNode(AMapping map, String metricExpression, double fMeasure, 
             double precesion, double recall, double maxFMeasure) {
         this(map, metricExpression, fMeasure);
@@ -63,7 +63,7 @@ public class RefinementNode implements Comparable<RefinementNode> {
     public static double getMaxRecall() {
         return maxRecall;
     }
-    
+
     public static void setMaxRecall(double maxRecall) {
         RefinementNode.maxRecall = maxRecall;
     }
@@ -79,11 +79,17 @@ public class RefinementNode implements Comparable<RefinementNode> {
 
     /* (non-Javadoc)
      * Compare RefinementNodes based on fitness
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
     @Override
     public int compareTo(RefinementNode o) {
-        return (int) (fMeasure - o.getFMeasure());
+        double diff = fMeasure - o.getFMeasure();
+        if(diff < 0) {
+            return -1;
+        } else if (diff > 0) {
+            return 1;
+        }
+        return 0;
 
     }
 
@@ -140,14 +146,14 @@ public class RefinementNode implements Comparable<RefinementNode> {
     }
 
     /* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
         return
                 getMetricExpression() +
-                        //				this.hashCode()+
-                        //				" (P = " + precision + ", " + "R = " + recall + ", " + "F = " + fMeasure + ")";
-                        " (F = " + getFMeasure() + ")";
+                //				this.hashCode()+
+                //				" (P = " + precision + ", " + "R = " + recall + ", " + "F = " + fMeasure + ")";
+                " (F = " + getFMeasure() + ")";
     }
 }

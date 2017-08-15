@@ -35,7 +35,13 @@ public class LinkEntropy implements Comparable<LinkEntropy>{
 
     @Override
     public int compareTo(LinkEntropy o) {
-        return (int) (entropy - o.entropy);
+        double diff = entropy - o.entropy;
+        if(diff < 0){
+            return -1;
+        }else if(diff > 0){
+            return 1;
+        }
+        return 0;
     }
     
     

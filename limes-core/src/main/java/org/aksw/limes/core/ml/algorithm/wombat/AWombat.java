@@ -109,46 +109,97 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * @see org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm#getNextExamples(int)
      */
     @Override
+    //    protected AMapping getNextExamples(int activeLearningRate) throws UnsupportedMLImplementationException {
+    //        List<RefinementNode> bestNodes = getBestKNodes(refinementTreeRoot, activeLearningRate);
+    //        AMapping intersectionMapping = bestNodes.get(0).getMapping();
+    //        AMapping unionMapping = bestNodes.get(0).getMapping();
+    //
+    //        for(int index = 1 ; index < bestNodes.size() ; index++){
+    //            AMapping bestNodeMapping = bestNodes.get(index).getMapping();
+    //            intersectionMapping = MappingOperations.intersection(intersectionMapping, bestNodeMapping);
+    //            unionMapping = MappingOperations.union(unionMapping, bestNodeMapping);
+    //        }
+    //        AMapping posEntropyMapping = MappingOperations.difference(unionMapping, intersectionMapping);
+    //        
+    //        // special case where the same mapping in each leaf
+    //        if(posEntropyMapping.size() == 0){
+    //            return intersectionMapping;
+    //        }
+    //
+    //        TreeSet<LinkEntropy> linkEntropy = new TreeSet<>();
+    //
+    //        for(String s : posEntropyMapping.getMap().keySet()){
+    //            int entropyPos = 0, entropyNeg = 0;
+    //            for(String t : posEntropyMapping.getMap().get(s).keySet()){
+    //                // compute Entropy(s,t)
+    //                for(RefinementNode bestNode : bestNodes){
+    //                    if(bestNode.getMapping().contains(s, t)){
+    //                        entropyPos++;
+    //                    }else{
+    //                        entropyNeg++;
+    //                    }
+    //                }
+    //                int entropy = (activeLearningRate - entropyPos) * (activeLearningRate - entropyNeg);
+    //                linkEntropy.add(new LinkEntropy(s, t, entropy));
+    //            }
+    //        }
+    //        // get highestEntropyLinks
+    //        List<LinkEntropy> highestEntropyLinks = new ArrayList<>();
+    //        int i = 0;
+    //        Iterator<LinkEntropy> itr = linkEntropy.descendingIterator();
+    //        while(itr.hasNext() && i < activeLearningRate) {
+    //            highestEntropyLinks.add(itr.next());
+    //            i++;
+    //        }
+    //        AMapping result = MappingFactory.createDefaultMapping();
+    //        for(LinkEntropy l: highestEntropyLinks){
+    //            result.add(l.getSourceUri(), l.getTargetUri(), l.getEntropy());
+    //        }
+    //        return result;
+    //    }   
+
     protected AMapping getNextExamples(int activeLearningRate) throws UnsupportedMLImplementationException {
+        refinementTreeRoot.print();
         List<RefinementNode> bestNodes = getBestKNodes(refinementTreeRoot, activeLearningRate);
         AMapping intersectionMapping = bestNodes.get(0).getMapping();
         AMapping unionMapping = bestNodes.get(0).getMapping();
-
         for(int index = 1 ; index < bestNodes.size() ; index++){
             AMapping bestNodeMapping = bestNodes.get(index).getMapping();
             intersectionMapping = MappingOperations.intersection(intersectionMapping, bestNodeMapping);
             unionMapping = MappingOperations.union(unionMapping, bestNodeMapping);
         }
-        AMapping posEntropyMapping = MappingOperations.difference(unionMapping, intersectionMapping);
-        
+        AMapping distinctMapping = MappingOperations.difference(unionMapping, intersectionMapping);
+
         // special case where the same mapping in each leaf
-        if(posEntropyMapping.size() == 0){
-            return intersectionMapping;
+        if(distinctMapping.size() == 0){
+            distinctMapping = intersectionMapping;
         }
 
         TreeSet<LinkEntropy> linkEntropy = new TreeSet<>();
 
-        for(String s : posEntropyMapping.getMap().keySet()){
-            int entropyPos = 0, entropyNeg = 0;
-            for(String t : posEntropyMapping.getMap().get(s).keySet()){
-                // compute Entropy(s,t)
-                for(RefinementNode bestNode : bestNodes){
-                    if(bestNode.getMapping().contains(s, t)){
-                        entropyPos++;
-                    }else{
-                        entropyNeg++;
+        for(String s : distinctMapping.getMap().keySet()){
+            for(String t : distinctMapping.getMap().get(s).keySet()){
+                if(!trainingData.contains(s, t)){
+                    int mappingEntryCount = 0;
+                    for(RefinementNode bestNode : bestNodes){
+                        if(bestNode.getMapping().contains(s, t)){
+                            mappingEntryCount++;
+                        }
                     }
+                    double mappingEntryProbability = (double) mappingEntryCount / (double) bestNodes.size();
+                    double entropy = - mappingEntryProbability * Math.log(mappingEntryProbability);
+                    linkEntropy.add(new LinkEntropy(s, t, entropy));
                 }
-                int entropy = (activeLearningRate - entropyPos) * (activeLearningRate - entropyNeg);
-                linkEntropy.add(new LinkEntropy(s, t, entropy));
             }
         }
         // get highestEntropyLinks
         List<LinkEntropy> highestEntropyLinks = new ArrayList<>();
+        System.out.println(linkEntropy);
         int i = 0;
         Iterator<LinkEntropy> itr = linkEntropy.descendingIterator();
         while(itr.hasNext() && i < activeLearningRate) {
-            highestEntropyLinks.add(itr.next());
+            LinkEntropy l = itr.next();
+            highestEntropyLinks.add(l);
             i++;
         }
         AMapping result = MappingFactory.createDefaultMapping();
@@ -156,9 +207,9 @@ public abstract class AWombat extends ACoreMLAlgorithm {
             result.add(l.getSourceUri(), l.getTargetUri(), l.getEntropy());
         }
         return result;
-    }   
-    
-    
+    }
+
+
     /**
      * @param r the root of the refinement tree
      * @param k number of best nodes
@@ -179,8 +230,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         }
         return resultList;
     }
-    
-    
+
+
     /**
      * @param r the root of the refinement tree
      * @param penaltyWeight from 0 to 1

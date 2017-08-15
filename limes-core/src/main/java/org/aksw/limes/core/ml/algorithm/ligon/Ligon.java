@@ -58,7 +58,8 @@ public class Ligon {
     ACache fullSourceCache = null;
     ACache fullTargetCache = null;
     AMapping fullReferenceMap = null;
-
+    
+    protected ActiveMLAlgorithm activeWombat = null;
     protected double wombatBestFmeasure = 1.0;
 
 
@@ -177,6 +178,16 @@ public class Ligon {
         return result + Math.log(oddsL);
     }
 
+    /**
+     * Classify unlabeled examples to be positive or negative ones
+     * 
+     * @param unlabeledexamples
+     * @param k
+     * @param odds
+     * @return mapping of positive and negative examples, where
+     *         positive examples have confidence score of 1d and
+     *         negative examples have a confidence score of 0d 
+     */
     protected AMapping classifyUnlabeledExamples(AMapping unlabeledexamples, double k, ODDS odds){
         AMapping labeledExamples = MappingFactory.createDefaultMapping(); 
         for (String subject : unlabeledexamples.getMap().keySet()) {
@@ -195,12 +206,13 @@ public class Ligon {
 
     public AMapping learn(AMapping labeledExamples,double k, ODDS odds,
             int mostInformativeExamplesCount) throws UnsupportedMLImplementationException{
-
+        initActiveWombat();
         int i = 0;
         do{
             System.out.println("labeledExamples.size():" + labeledExamples.size());
             updateOraclesConfusionMatrices(labeledExamples);
-            AMapping mostInformativeExamples = getMostInformativeExamples(labeledExamples, mostInformativeExamplesCount);
+            AMapping mostInformativeExamples = getWombatMostInformativeExamples(labeledExamples, mostInformativeExamplesCount);
+            System.out.println(i + ". mostInformativeExamples: " + mostInformativeExamples);
             AMapping newLabeledExamples = classifyUnlabeledExamples(mostInformativeExamples, k, odds);
             System.out.println("newLabeledExamples.size():" + newLabeledExamples.size());
             labeledExamples = MappingOperations.union(labeledExamples, newLabeledExamples);
@@ -209,6 +221,26 @@ public class Ligon {
         System.out.println(resultStr);
         return labeledExamples;
     }
+    
+    /**
+     * Initializes active Wombat
+     * 
+     * @return MLResults
+     * @throws UnsupportedMLImplementationException
+     */
+    protected MLResults initActiveWombat() throws UnsupportedMLImplementationException {
+        
+        try {
+            activeWombat = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
+                    MLImplementationType.SUPERVISED_ACTIVE).asActive();
+        } catch (UnsupportedMLImplementationException e) {
+            e.printStackTrace();
+            fail();
+        }
+        assert (activeWombat.getClass().equals(ActiveMLAlgorithm.class));
+        activeWombat.init(null, fullSourceCache, fullTargetCache);
+        return activeWombat.activeLearn();
+    }
 
     /**
      * @param labeledExamples
@@ -216,26 +248,26 @@ public class Ligon {
      * @return
      * @throws UnsupportedMLImplementationException
      */
-    protected AMapping getMostInformativeExamples(AMapping labeledExamples, int mostInformativeExamplesCount) throws UnsupportedMLImplementationException {
-        ActiveMLAlgorithm wombatSimpleActive = null;
-        try {
-            wombatSimpleActive = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
-                    MLImplementationType.SUPERVISED_ACTIVE).asActive();
-        } catch (UnsupportedMLImplementationException e) {
-            e.printStackTrace();
-            fail();
-        }
-        assert (wombatSimpleActive.getClass().equals(ActiveMLAlgorithm.class));
-        wombatSimpleActive.init(null, sourceTrainCache, targetTrainCache);
-        wombatSimpleActive.activeLearn();
-        MLResults mlModel = wombatSimpleActive.activeLearn(labeledExamples);
-        AMapping learnedMap = wombatSimpleActive.predict(sourceTrainCache, targetTrainCache, mlModel);
-
+    protected AMapping getWombatMostInformativeExamples(AMapping labeledExamples, int mostInformativeExamplesCount) throws UnsupportedMLImplementationException {
+        MLResults mlModel = activeWombat.activeLearn(labeledExamples);
+        AMapping learnedMap = activeWombat.predict(sourceTrainCache, targetTrainCache, mlModel);
         computePerformanceIndicatorsWombat(labeledExamples, learnedMap, mlModel);
-
-        return wombatSimpleActive.getNextExamples(mostInformativeExamplesCount);
+        return activeWombat.getNextExamples(mostInformativeExamplesCount);
     }
+    
 
+
+
+    /**
+     * Computes performance indicators for Active Wombat
+     * i.e. compute precision, recall and F-measure for training and testing phases
+     * NOTE: for evaluation purpose only
+     * 
+     * @param labeledExamples
+     * @param learnedMap
+     * @param mlModel
+     * @return result String
+     */
     private String computePerformanceIndicatorsWombat(AMapping labeledExamples, AMapping learnedMap, MLResults mlModel) {
 
         //PIs for training data
