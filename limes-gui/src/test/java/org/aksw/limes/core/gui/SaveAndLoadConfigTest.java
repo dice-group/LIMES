@@ -60,7 +60,7 @@ public class SaveAndLoadConfigTest extends ApplicationTest{
 	public void changeAndSaveConfig(){
 		mainController.getCurrentConfig().setMetricExpression(newMetricExpression);
 		mainView.getGraphBuild().graphBuildController.generateGraphFromConfig();
-		CustomGuiTest.waitUntilNodeIsVisible("Drug properties", 15);
+		CustomGuiTest.waitUntilNodeIsVisible("Drug properties", 180);
 //		GuiTest.waitUntil("Drug properties", Matchers.notNullValue()); 
 
 		mainController.saveConfig(changedTestConfig);
