@@ -46,18 +46,18 @@
 		<ENDPOINT>http://dbpedia.org/sparql</ENDPOINT>
 		<VAR>?x</VAR>
 		<PAGESIZE>1000</PAGESIZE>
-		<RESTRICTION>?x rdf:type dbpedia:Drug</RESTRICTION>
-		<PROPERTY>rdfs:label AS nolang->lowercase</PROPERTY>
+		<RESTRICTION>?x a dbo:Agent</RESTRICTION>
+		<PROPERTY>rdfs:label</PROPERTY>
 	</SOURCE>
 	<TARGET>
 		<ID>dbpedia</ID>
 		<ENDPOINT>http://dbpedia.org/sparql</ENDPOINT>
 		<VAR>?y</VAR>
 		<PAGESIZE>1000</PAGESIZE>
-		<RESTRICTION>?y rdf:type dbpedia:Drug</RESTRICTION>
-		<PROPERTY>rdfs:label AS nolang->lowercase RENAME name</PROPERTY>
+		<RESTRICTION>?y a dbo:Activity</RESTRICTION>
+		<PROPERTY>rdfs:label</PROPERTY>
 	</TARGET>
-	<METRIC>AND(jaccard(x.rdfs:label,y.name)|0.5, trigram(x.rdfs:label,y.name)|0.7)</METRIC>
+	<METRIC>AND(jaccard(x.rdfs:label,y.rdfs:label)|0.5, trigram(x.rdfs:label,y.rdfs:label)|0.7)</METRIC>
 	<ACCEPTANCE>
 		<THRESHOLD>0.8</THRESHOLD>
 		<FILE>dbpedia_dbpedia_duplicates.nt</FILE>

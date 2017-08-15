@@ -234,11 +234,11 @@ public class ToolBox extends VBox {
 			if (shape == NodeView.SOURCE) {
 				String propString = config.getPropertyString(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.SOURCE);
 				boolean optional = config.getSourceInfo().getOptionalProperties().contains(propString);
-				gen = new Property(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.SOURCE, optional);
+				gen = new Property(propString, SourceOrTarget.SOURCE, optional);
 			} else {
 				String propString = config.getPropertyString(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.TARGET);
 				boolean optional = config.getTargetInfo().getOptionalProperties().contains(propString);
-				gen = new Property(view.getSelectionModel().getSelectedItem().getName(), SourceOrTarget.TARGET, optional);
+				gen = new Property(propString, SourceOrTarget.TARGET, optional);
 			}
 			setNodeToGraph(gen, shape);
 		}
