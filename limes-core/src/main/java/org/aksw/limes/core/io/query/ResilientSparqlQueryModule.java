@@ -38,7 +38,6 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
     protected String cacheDirectory = System.getProperty("user.dir") + "/cache";
 
     
-    
     public ResilientSparqlQueryModule(KBInfo kbInfo) {
         super(kbInfo);
     }

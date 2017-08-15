@@ -52,6 +52,7 @@ public class DatasetsInitTest {
                 task = new TaskData(gs, c.getSourceCache(), c.getTargetCache());
                 task.dataName = ds;
                 task.training = training;
+                task.evalData = c;
                 tasks.add(task);
             }
         } catch (Exception e) {

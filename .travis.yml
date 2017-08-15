@@ -11,10 +11,12 @@ addons:
 # install node and gitbook globally
 before_install:
   - npm install -g gitbook-cli
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 
 # build limes
 install:
-  - cd limes-core && mvn install -U -Dmaven.test.skip=true
+  - mvn install -U -Dmaven.test.skip=true
 
 # execute tests
 script:

@@ -26,7 +26,8 @@ public class CSVMappingReaderTest {
 
     @Test
     public void csvMappingThreeColTester() {
-	String file = System.getProperty("user.dir") + "/resources/mapping-3col-test.csv";
+//	String file = System.getProperty("user.dir") + "/resources/mapping-3col-test.csv";
+    String file = Thread.currentThread().getContextClassLoader().getResource("mapping-3col-test.csv").getPath();
 	CSVMappingReader r = new CSVMappingReader(file, ",");
 	AMapping readMap = r.read();
 	assertTrue(readMap.equals(testMap));
@@ -34,7 +35,8 @@ public class CSVMappingReaderTest {
 
     @Test
     public void csvMappingTwoColTester() {
-	String file = System.getProperty("user.dir") + "/resources/mapping-2col-test.csv";
+//	String file = System.getProperty("user.dir") + "/resources/mapping-2col-test.csv";
+    String file = Thread.currentThread().getContextClassLoader().getResource("mapping-2col-test.csv").getPath();
 	CSVMappingReader r = new CSVMappingReader(file, ",");
 	AMapping readMap = r.read();
 	readMap.setPredicate("http://linkedgeodata.org/ontology/near");
@@ -46,7 +48,8 @@ public class CSVMappingReaderTest {
 	AMapping refMap = MappingFactory.createDefaultMapping();
 	refMap.add("http://dbpedia.org/resource/Berlin", "http://linkedgeodata.org/triplify/node240109189", 0.999d);
 
-	String file = System.getProperty("user.dir") + "/resources/mapping-3col-sim-test.csv";
+//	String file = System.getProperty("user.dir") + "/resources/mapping-3col-sim-test.csv";
+    String file = Thread.currentThread().getContextClassLoader().getResource("mapping-3col-sim-test.csv").getPath();
 	CSVMappingReader r = new CSVMappingReader(file, ",");
 	AMapping readMap = r.read();
 
