@@ -195,7 +195,7 @@ public class Controller {
      */
     private static Options getOptions() {
         Options options = new Options();
-        options.addOption("g", false, "Run LIMES GUI");
+//        options.addOption("g", false, "Run LIMES GUI");
         options.addOption("s", false, "Run LIMES Server");
         options.addOption("h", false, "Show this help");
         options.addOption("o", true, "Set path of log file. Default is 'limes.log'");
