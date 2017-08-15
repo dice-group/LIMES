@@ -56,7 +56,7 @@
 		<TYPE>N3</TYPE>
 	</TARGET>	
 
-	<METRIC>levenshtein(x.>http://www.okkam.org/ontology_restaurant1.owl#name, y.>http://www.okkam.org/ontology_restaurant2.owl#name)</METRIC>
+	<METRIC>levenshtein(x.http://www.okkam.org/ontology_restaurant1.owl#name, y.http://www.okkam.org/ontology_restaurant2.owl#name)</METRIC>
 
 	<ACCEPTANCE>
 		<THRESHOLD>0.98</THRESHOLD>

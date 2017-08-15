@@ -40,6 +40,7 @@ public abstract class ACoreMLAlgorithm {
 	 */
 	public void setConfiguration(Configuration configuration) {
 		this.configuration = configuration;
+		
 	}
 
 	/**
@@ -178,6 +179,20 @@ public abstract class ACoreMLAlgorithm {
             }
         // if not found
         throw new NoSuchParameterException(par);
+    }
+
+    /**
+     * @return the source cache
+     */
+    public ACache getSourceCache() {
+        return sourceCache;
+    }
+
+    /**
+     * @return the target cache
+     */
+    public ACache getTargetCache() {
+        return targetCache;
     }
 
 

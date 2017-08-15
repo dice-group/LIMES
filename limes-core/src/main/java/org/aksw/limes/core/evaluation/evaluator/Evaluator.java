@@ -2,24 +2,31 @@ package org.aksw.limes.core.evaluation.evaluator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.EvaluationRun;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.TaskAlgorithm;
 import org.aksw.limes.core.datastrutures.TaskData;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.IQuantitativeMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.cache.MemoryCache;
+import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
@@ -31,6 +38,7 @@ import org.slf4j.LoggerFactory;
  * This evaluator is responsible for evaluating set of datasets that have source, target, gold standard and mappings against set of measures
  *
  * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
+ * @author Daniel Obraczka (obraczka@studserv.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */
@@ -115,7 +123,8 @@ public class Evaluator {
     /**
      * @param algorithm  the algorithm used to generate the predicted mappings
      * @param datasets    the set of the datasets to apply the algorithms on them. The should include source Cache, target Cache, goldstandard and predicted mapping
-     * @param folds the number of subsamples to divide the data (k)
+     * @param parameter the parameters of the algorithm (will be set to default if this is null)
+     * @param foldNumber the number of subsamples to divide the data (k)
      * @param qlMeasures  the set of qualitative measures
      * @param qnMeasures  the set of quantitative measures
      * @return List -  contains list of multiple runs evaluation results corresponding to the algorithms, its implementation and used dataset
@@ -124,104 +133,333 @@ public class Evaluator {
      * @version 2016-02-26
      */
     /*Table<String, String, Map<EvaluatorType, Double>>*/
-    public List<EvaluationRun>  crossValidate(AMLAlgorithm algorithm, Set<TaskData> datasets,
-            int folds, Set<EvaluatorType> qlMeasures, Set<IQuantitativeMeasure> qnMeasures) {
-
-        //      Table<String, String, Map<EvaluatorType, Double>> evalTable = HashBasedTable.create();// multimap stores aglortihmName:datasetname:List of evaluations
+    public List<EvaluationRun>  crossValidate(AMLAlgorithm algorithm, List<LearningParameter> parameter, Set<TaskData> datasets,
+            int foldNumber, Set<EvaluatorType> qlMeasures, Set<IQuantitativeMeasure> qnMeasures) {
 
         // select a dataset-pair to evaluate each ML algorithm on
         for (TaskData dataset : datasets) {
+        	List<FoldData> folds = generateFolds(dataset.evalData, foldNumber);
 
-            ACache source = dataset.source;
-            ArrayList<Instance> srcInstances = source.getAllInstances();
-            AMapping mapping = dataset.mapping;
-            AMapping goldstd = dataset.goldStandard.referenceMappings;
+			FoldData trainData = new FoldData();
+			FoldData testData = folds.get(foldNumber - 1);
+			// perform union on test folds
+			for (int i = 0; i < foldNumber; i++) {
+				if (i != 9) {
+					trainData.map = MappingOperations.union(trainData.map, folds.get(i).map);
+					trainData.sourceCache = cacheUnion(trainData.sourceCache, folds.get(i).sourceCache);
+					trainData.targetCache = cacheUnion(trainData.targetCache, folds.get(i).targetCache);
+				}
+			}
+			// fix caches if necessary
+			for (String s : trainData.map.getMap().keySet()) {
+				for (String t : trainData.map.getMap().get(s).keySet()) {
+					if (!trainData.targetCache.containsUri(t)) {
+						// logger.info("target: " + t);
+						trainData.targetCache.addInstance(dataset.target.getInstance(t));
+					}
+				}
+				if (!trainData.sourceCache.containsUri(s)) {
+					// logger.info("source: " + s);
+					trainData.sourceCache.addInstance(dataset.source.getInstance(s));
+				}
+			}  
+			AMapping trainingData = trainData.map;
+			ACache trainSourceCache = trainData.sourceCache;
+			ACache trainTargetCache = trainData.targetCache;
+			ACache testSourceCache = testData.sourceCache;
+			ACache testTargetCache = testData.targetCache;
+			GoldStandard goldStandard = new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()); 
 
-            // create source partitions: S into S1, .., Sk
-            ACache[] srcParts = new ACache[folds];
-            // create source folds (opposite of partitions)
-            ACache[] srcFolds = new ACache[folds];
-            // create mappings
-            AMapping[] srcMap = new AMapping[folds];
-            AMapping[] srcGold = new AMapping[folds];
-            for (int i = 0; i < folds; i++) {
-                srcParts[i] = new MemoryCache();
-                srcFolds[i] = new MemoryCache();
-                // AN: Changed the type of mapping as the input is a type, not the name
-                // srcMap[i] = MappingFactory.createMapping(dataset.pairName + "_mapping_" + i);
-                //srcGold[i] = MappingFactory.createMapping(dataset.pairName + "_goldstd_" + i);
-                srcMap[i] = MappingFactory.createDefaultMapping();
-                srcGold[i] = MappingFactory.createDefaultMapping();
-            }
-
-            // randomly distribute instances into #folds partitions
-            for (Instance inst : srcInstances) {
-                int destination;
-                do {
-                    destination = (int) (Math.random() * folds);
-                } while (srcParts[destination].size() > source.size() / folds);
-                srcParts[destination].addInstance(inst);
-
-                // build folds
-                for (int i = 0; i < folds; i++)
-                    if (i != destination)
-                        srcFolds[i].addInstance(inst);
-            }
-
-            // copy mapping entries into the one of the respective fold
-            HashMap<String, HashMap<String, Double>> map = mapping.getMap();
-            for (int i = 0; i < folds; i++) {
-                for (Instance inst : srcParts[i].getAllInstances()) {
-                    String uri = inst.getUri();
-                    // look for (s, t) belonging to mapping and create G1, ..., G10
-                    if (map.containsKey(uri))
-                        srcMap[i].add(uri, map.get(uri));
-                }
-            }
-
-            // copy gold standard entries into the one of the respective fold
-            HashMap<String, HashMap<String, Double>> gst = goldstd.getMap();
-            for (int i = 0; i < folds; i++) {
-                for (Instance inst : srcParts[i].getAllInstances()) {
-                    String uri = inst.getUri();
-                    // look for (s, t) belonging to gold standard and create G1, ..., G10
-                    if (gst.containsKey(uri))
-                        srcGold[i].add(uri, gst.get(uri));
-                }
-            }
-
-            //////////////
-            GoldStandard goldStandard = new GoldStandard(null, dataset.source.getAllUris(), dataset.target.getAllUris());
-
-            // train and test folds
-            for (int i = 0; i < folds; i++) {
-
-                // algorithm .setSourceCache(srcFolds[i]); 
-                algorithm.init(null, srcFolds[i], null);
-                // target cache is invariant
-                MLResults model =null;
-                //algorithm.learn(srcMap[i]);
-
-                try {
-                    if(algorithm instanceof SupervisedMLAlgorithm)
-                        model = algorithm.asSupervised().learn(srcMap[i]);
-                    else if(algorithm instanceof ActiveMLAlgorithm)
-                        model = algorithm.asActive().activeLearn(srcMap[i]);
-                } catch (UnsupportedMLImplementationException e) {
-                    e.printStackTrace();
-                }
-
-
-                goldStandard.referenceMappings = srcGold[i];
-                EvaluationRun er = new EvaluationRun(algorithm.getName() + " - fold " + i,dataset.dataName, eval.evaluate(algorithm.predict(srcFolds[i], srcFolds[i], model), goldStandard, qlMeasures));
-                runsList.add(er);
-                //               evalTable.put(algorithm.getName() + " - fold " + i, dataset.dataName, eval.evaluate(algorithm.predict(srcFolds[i], srcFolds[i], model), goldStandard, qlMeasures));
-            }
+			//train
+		    algorithm.init(parameter, trainSourceCache, trainTargetCache);
+		    Configuration config = dataset.evalData.getConfigReader().read();
+		    algorithm.getMl().setConfiguration(config);
+            MLResults model =null;
+            try {
+                if(algorithm instanceof SupervisedMLAlgorithm)
+                    model = algorithm.asSupervised().learn(trainingData);
+                else if(algorithm instanceof ActiveMLAlgorithm)
+                    model = algorithm.asActive().activeLearn(trainingData);
+            } catch (UnsupportedMLImplementationException e) {
+                e.printStackTrace();
+            }	    
+            EvaluationRun er = new EvaluationRun(algorithm.getName() ,dataset.dataName, eval.evaluate(algorithm.predict(testSourceCache, testTargetCache, model), goldStandard, qlMeasures));
+            er.display();
+            runsList.add(er);
         }
         return runsList;
-        //        return evalTable;
+// =========== OLD =======================0
+//
+//        //      Table<String, String, Map<EvaluatorType, Double>> evalTable = HashBasedTable.create();// multimap stores aglortihmName:datasetname:List of evaluations
+//
+//        // select a dataset-pair to evaluate each ML algorithm on
+//        for (TaskData dataset : datasets) {
+//
+//            ACache source = dataset.source;
+//            ArrayList<Instance> srcInstances = source.getAllInstances();
+//            AMapping mapping = dataset.mapping;
+//            AMapping goldstd = dataset.goldStandard.referenceMappings;
+//
+//            // create source partitions: S into S1, .., Sk
+//            ACache[] srcParts = new ACache[folds];
+//            // create source folds (opposite of partitions)
+//            ACache[] srcFolds = new ACache[folds];
+//            // create mappings
+//            AMapping[] srcMap = new AMapping[folds];
+//            AMapping[] srcGold = new AMapping[folds];
+//            for (int i = 0; i < folds; i++) {
+//                srcParts[i] = new MemoryCache();
+//                srcFolds[i] = new MemoryCache();
+//                // AN: Changed the type of mapping as the input is a type, not the name
+//                // srcMap[i] = MappingFactory.createMapping(dataset.pairName + "_mapping_" + i);
+//                //srcGold[i] = MappingFactory.createMapping(dataset.pairName + "_goldstd_" + i);
+//                srcMap[i] = MappingFactory.createDefaultMapping();
+//                srcGold[i] = MappingFactory.createDefaultMapping();
+//            }
+//
+//            // randomly distribute instances into #folds partitions
+//            for (Instance inst : srcInstances) {
+//                int destination;
+//                do {
+//                    destination = (int) (Math.random() * folds);
+//                } while (srcParts[destination].size() > source.size() / folds);
+//                srcParts[destination].addInstance(inst);
+//
+//                // build folds
+//                for (int i = 0; i < folds; i++)
+//                    if (i != destination)
+//                        srcFolds[i].addInstance(inst);
+//            }
+//
+//            // copy mapping entries into the one of the respective fold
+//            HashMap<String, HashMap<String, Double>> map = mapping.getMap();
+//            for (int i = 0; i < folds; i++) {
+//                for (Instance inst : srcParts[i].getAllInstances()) {
+//                    String uri = inst.getUri();
+//                    // look for (s, t) belonging to mapping and create G1, ..., G10
+//                    if (map.containsKey(uri))
+//                        srcMap[i].add(uri, map.get(uri));
+//                }
+//            }
+//
+//            // copy gold standard entries into the one of the respective fold
+//            HashMap<String, HashMap<String, Double>> gst = goldstd.getMap();
+//            for (int i = 0; i < folds; i++) {
+//                for (Instance inst : srcParts[i].getAllInstances()) {
+//                    String uri = inst.getUri();
+//                    // look for (s, t) belonging to gold standard and create G1, ..., G10
+//                    if (gst.containsKey(uri))
+//                        srcGold[i].add(uri, gst.get(uri));
+//                }
+//            }
+//
+//            //////////////
+//            GoldStandard goldStandard = new GoldStandard(null, dataset.source.getAllUris(), dataset.target.getAllUris());
+//
+//            // train and test folds
+//            for (int i = 0; i < folds; i++) {
+//
+//                // algorithm .setSourceCache(srcFolds[i]); 
+//                algorithm.init(null, srcFolds[i], dataset.target);
+//                // target cache is invariant
+//                MLResults model =null;
+//                //algorithm.learn(srcMap[i]);
+//
+//                try {
+//                    if(algorithm instanceof SupervisedMLAlgorithm)
+//                        model = algorithm.asSupervised().learn(srcMap[i]);
+//                    else if(algorithm instanceof ActiveMLAlgorithm)
+//                        model = algorithm.asActive().activeLearn(srcMap[i]);
+//                } catch (UnsupportedMLImplementationException e) {
+//                    e.printStackTrace();
+//                }
+//                
+//
+//                goldStandard.referenceMappings = srcGold[i];
+//                EvaluationRun er = new EvaluationRun(algorithm.getName() + " - fold " + i,dataset.dataName, eval.evaluate(algorithm.predict(srcFolds[i], srcFolds[i], model), goldStandard, qlMeasures));
+//                runsList.add(er);
+//                //               evalTable.put(algorithm.getName() + " - fold " + i, dataset.dataName, eval.evaluate(algorithm.predict(srcFolds[i], srcFolds[i], model), goldStandard, qlMeasures));
+//            }
+//        }
+//        return runsList;
+//        //        return evalTable;
 
     }
+    
+	public ACache cacheUnion(ACache a, ACache b) {
+		ACache result = new HybridCache();
+		for (Instance i : a.getAllInstances()) {
+			result.addInstance(i);
+		}
+		for (Instance i : b.getAllInstances()) {
+			result.addInstance(i);
+		}
+		return result;
+	}
+    
+    public List<FoldData> generateFolds(EvaluationData data, int foldNumber) {
+		List<FoldData> folds = new ArrayList<>();
+
+		// Fill caches
+		ACache source = data.getSourceCache();
+		ACache target = data.getTargetCache();
+		AMapping refMap = data.getReferenceMapping();
+
+		// remove error mappings (if any)
+		refMap = removeLinksWithNoInstances(refMap, source, target);
+
+		// generate AMapping folds
+		List<AMapping> foldMaps = generateMappingFolds(refMap, source, target, foldNumber);
+
+		// fill fold caches
+		for (AMapping foldMap : foldMaps) {
+			ACache sourceFoldCache = new HybridCache();
+			ACache targetFoldCache = new HybridCache();
+			for (String s : foldMap.getMap().keySet()) {
+				if (source.containsUri(s)) {
+					sourceFoldCache.addInstance(source.getInstance(s));
+					for (String t : foldMap.getMap().get(s).keySet()) {
+						if (target.containsUri(t)) {
+							targetFoldCache.addInstance(target.getInstance(t));
+						} else {
+							// logger.warn("Instance " + t +
+							// " not exist in the target dataset");
+						}
+					}
+				} else {
+					// logger.warn("Instance " + s +
+					// " not exist in the source dataset");
+				}
+			}
+			folds.add(new FoldData(foldMap, sourceFoldCache, targetFoldCache));
+		}
+		return folds;
+	}
+    
+    public List<AMapping> generateMappingFolds(AMapping refMap, ACache source, ACache target, int foldNumber) {
+		Random rand = new Random();
+		List<AMapping> foldMaps = new ArrayList<>();
+		int mapSize = refMap.getMap().keySet().size();
+		int foldSize = (int) (mapSize / foldNumber);
+
+		Iterator<HashMap<String, Double>> it = refMap.getMap().values().iterator();
+		ArrayList<String> values = new ArrayList<String>();
+		while (it.hasNext()) {
+			for (String t : it.next().keySet()) {
+				values.add(t);
+			}
+		}
+		for (int foldIndex = 0; foldIndex < foldNumber; foldIndex++) {
+			Set<Integer> index = new HashSet<>();
+			// get random indexes
+			while (index.size() < foldSize) {
+				int number;
+				do {
+					number = (int) (mapSize * Math.random());
+				} while (index.contains(number));
+				index.add(number);
+			}
+			// get data
+			AMapping foldMap = MappingFactory.createDefaultMapping();
+			int count = 0;
+			for (String key : refMap.getMap().keySet()) {
+				if (foldIndex != foldNumber - 1) {
+					if (index.contains(count) && count % 2 == 0) {
+						HashMap<String, Double> help = new HashMap<String, Double>();
+						for (String k : refMap.getMap().get(key).keySet()) {
+							help.put(k, 1.0);
+						}
+						foldMap.getMap().put(key, help);
+					} else if (index.contains(count)) {
+						HashMap<String, Double> help = new HashMap<String, Double>();
+						help.put(getRandomTargetInstance(source, target, values, rand, refMap.getMap(), key, -1), 0.0);
+						foldMap.getMap().put(key, help);
+					}
+				} else {
+					if (index.contains(count)) {
+						HashMap<String, Double> help = new HashMap<String, Double>();
+						for (String k : refMap.getMap().get(key).keySet()) {
+							help.put(k, 1.0);
+						}
+						foldMap.getMap().put(key, help);
+					}
+				}
+				count++;
+			}
+
+			foldMaps.add(foldMap);
+			refMap = removeSubMap(refMap, foldMap);
+		}
+		int i = 0;
+		int odd = 0;
+		// if any remaining links in the refMap, then distribute them to all
+		// folds
+		for (String key : refMap.getMap().keySet()) {
+			if (i != foldNumber - 1) {
+				if (odd % 2 == 0) {
+					HashMap<String, Double> help = new HashMap<String, Double>();
+					for (String k : refMap.getMap().get(key).keySet()) {
+						help.put(k, 1.0);
+					}
+					foldMaps.get(i).add(key, help);
+				} else {
+
+					HashMap<String, Double> help = new HashMap<String, Double>();
+					help.put(getRandomTargetInstance(source, target, values, rand, refMap.getMap(), key, -1), 0.0);
+					foldMaps.get(i).add(key, help);
+				}
+			} else {
+				HashMap<String, Double> help = new HashMap<String, Double>();
+				for (String k : refMap.getMap().get(key).keySet()) {
+					help.put(k, 1.0);
+				}
+				foldMaps.get(i).add(key, help);
+
+			}
+			odd++;
+			i = (i + 1) % foldNumber;
+		}
+		return foldMaps;
+	}
+    
+    public static String getRandomTargetInstance(ACache source, ACache target, List<String> values, Random random,
+			HashMap<String, HashMap<String, Double>> refMap, String sourceInstance, int previousRandom) {
+		int randomInt;
+		do {
+			randomInt = random.nextInt(values.size());
+		} while (randomInt == previousRandom);
+
+		String tmpTarget = values.get(randomInt);
+		if (refMap.get(sourceInstance).get(tmpTarget) == null && target.getInstance(tmpTarget) != null) {
+			return tmpTarget;
+		}
+		return getRandomTargetInstance(source, target, values, random, refMap, sourceInstance, randomInt);
+	}
+    
+    public AMapping removeSubMap(AMapping mainMap, AMapping subMap) {
+		AMapping result = MappingFactory.createDefaultMapping();
+		double value = 0;
+		for (String mainMapSourceUri : mainMap.getMap().keySet()) {
+			for (String mainMapTargetUri : mainMap.getMap().get(mainMapSourceUri).keySet()) {
+				if (!subMap.contains(mainMapSourceUri, mainMapTargetUri)) {
+					result.add(mainMapSourceUri, mainMapTargetUri, value);
+				}
+			}
+		}
+		return result;
+	}
+    
+    private AMapping removeLinksWithNoInstances(AMapping map, ACache source, ACache target) {
+		AMapping result = MappingFactory.createDefaultMapping();
+		for (String s : map.getMap().keySet()) {
+			for (String t : map.getMap().get(s).keySet()) {
+				if (source.containsUri(s) && target.containsUri(t)) {
+					result.add(s, t, map.getMap().get(s).get(t));
+				}
+			}
+		}
+		return result;
+	}
 
     /**
      * It provides the feedback of the oracle by comparing the prediction to the reference mapping.It is used by evaluator in the Supervised_Active.

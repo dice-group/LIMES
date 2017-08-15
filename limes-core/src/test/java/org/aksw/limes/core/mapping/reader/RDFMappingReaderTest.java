@@ -18,7 +18,9 @@ public class RDFMappingReaderTest {
         testMap.add("http://linkedgeodata.org/triplify/node2806760713","http://linkedgeodata.org/triplify/node2406512815",1.0d);
         testMap.setPredicate("http://linkedgeodata.org/ontology/near");
 
-        String file = System.getProperty("user.dir") + "/resources/mapping-test.nt";
+//        String file = System.getProperty("user.dir") + "/resources/mapping-test.nt";
+        String file = Thread.currentThread().getContextClassLoader().getResource("mapping-test.nt").getPath();
+
         RDFMappingReader r = new RDFMappingReader(file);
         AMapping readMap = r.read();
 

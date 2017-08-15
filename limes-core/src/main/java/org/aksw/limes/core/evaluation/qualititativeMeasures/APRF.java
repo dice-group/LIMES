@@ -69,7 +69,12 @@ public abstract class APRF implements IQualitativeMeasure {
     public static double trueNegative(final long goldStandardSize, final long sourceDatasetSize, final long targetDatasetSize) {
         return (sourceDatasetSize * targetDatasetSize) - goldStandardSize;
     }
-
+    
+    public static double trueNegative(AMapping predictions, GoldStandard goldStandard) {
+    	//These is the size of the actual negatives
+        double negativesSize = (goldStandard.sourceUris.size() * goldStandard.targetUris.size()) - predictions.size();
+        return negativesSize - falseNegative(predictions, goldStandard.referenceMappings); 
+    }
     /** 
      * The Abstract method to be implemented for calculating the accuracy of the machine learning predictions compared to a gold standard
      * @param predictions The predictions provided by a machine learning algorithm

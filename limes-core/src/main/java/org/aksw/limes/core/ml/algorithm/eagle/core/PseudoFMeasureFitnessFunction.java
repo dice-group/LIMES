@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Fitness function to evolve metric expression using a PseudoMeasue
  *
- * @author Klaus Lyko
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jul 21, 2016
@@ -104,12 +104,11 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
         AMapping actualMapping = MappingFactory.createDefaultMapping();
         LinkSpecification spec = (LinkSpecification) pc.getNode(0).execute_object(pc, 0, args);
         // get Mapping
-        logger.info("ls = " + spec);
         try {
-            actualMapping = getMapping(spec);
+            actualMapping = getMapping(sourceCache, targetCache, spec);
         } catch (java.lang.OutOfMemoryError e) {
             e.printStackTrace(); // should not happen
-            System.err.println(e.getMessage());
+            
             return MappingFactory.createDefaultMapping();
         }
         return actualMapping;
@@ -136,10 +135,10 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
      * @param spec the link specification
      * @return Mapping m={sURI, tURI} of all pairs who satisfy the metric.
      */
-    public AMapping getMapping(LinkSpecification spec) {
+    public AMapping getMapping(ACache sC, ACache tC, LinkSpecification spec) {
         try {
             IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT,
-                    sourceCache, targetCache);
+                    sC, tC);
             return engine.execute(spec, planner);
         } catch (Exception e) {
             e.printStackTrace();
@@ -174,10 +173,6 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
         this.beta = beta;
     }
 
-    @Override
-    public AMapping getMapping(LinkSpecification spec, boolean full) {
-        return getMapping(spec);
-    }
 
     public double calculateRawMeasure(IGPProgram p) {
         return calculatePseudoMeasure(p);

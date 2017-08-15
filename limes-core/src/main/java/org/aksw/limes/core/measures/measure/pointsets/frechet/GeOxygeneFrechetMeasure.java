@@ -63,7 +63,8 @@ public class GeOxygeneFrechetMeasure extends APointsetsMeasure {
     public double computeDistance(Polygon X, Polygon Y, double threshold) {
         // PrintStream originalStream = System.out;
         System.setOut(null);
-        double f = Frechet.discreteFrechet(toLineSegment(X), toLineSegment(Y));
+        double f = OrthodromicFrechetDistance.discreteFrechet(toLineSegment(X), toLineSegment(Y));
+        
         // System.setOut(originalStream);
         return f;
     }

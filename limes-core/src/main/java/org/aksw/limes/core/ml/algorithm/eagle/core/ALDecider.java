@@ -35,12 +35,12 @@ import org.slf4j.LoggerFactory;
  */
 public class ALDecider {
 
-    static Logger logger = LoggerFactory.getLogger("LIMES");
+    static Logger logger = LoggerFactory.getLogger("ALDecider.class");
 
     /* Remember already retrieved Triples, to avoid asking about them twice. */
-    public HashSet<Triple> retrieved = new HashSet<Triple>();
+    private HashSet<Triple> retrieved = new HashSet<Triple>();
     /* limit number of instances in maps to get counter for */
-    public int maxCount = 5000;
+    private int maxCount = 5000;
 
     public static void main(String[] args) {
         AMapping a = MappingFactory.createDefaultMapping();
@@ -111,7 +111,6 @@ public class ALDecider {
                             }
                         counter++;
                     }
-
             }
         }
         return answer;
@@ -137,7 +136,8 @@ public class ALDecider {
         for (Entry<Triple, Integer> e : sub.entrySet()) {
             answer.get(e.getValue()).add(e.getKey());
         }
-        logger.info("numbered controversy Matches with " + sub.size() + " triples. Putting them to " + answer.size() + " indices.");
+        logger.info("numbered controversy Matches with "
+        		+ "" + sub.size() + " triples. Putting them to " + answer.size() + " indices.");
         List<Triple> tripleList = new LinkedList<Triple>();
         int center = mapList.size() / 2;
         int minDist = mapList.size(); // at most all maps contain a match
@@ -146,7 +146,6 @@ public class ALDecider {
             // we look for those as close to center as possible
             boolean found = false;
             int MapsForFound = 0;
-//			System.out.println(answer);
             for (int d : answer.keySet()) {
                 if (Math.abs(d - center) <= minimalDistance) {
                     minDist = d;
@@ -163,7 +162,7 @@ public class ALDecider {
                         if (!retrievedIDs.contains(t.getSourceUri())) {
                             t.setSimilarity((float) MapsForFound / (float) mapList.size());
                             tripleList.add(t);
-                            retrieved.add(t); // remember the triple, to don't ask about it twice
+//                            retrieved.add(t); // remember the triple, to don't ask about it twice
                             retrievedIDs.add(t.getSourceUri());
                         }
                     } else {
@@ -212,7 +211,6 @@ public class ALDecider {
             if (found && answer.containsKey(minDist)) {
                 for (Triple t : answer.get(minDist)) {
                     if (tripleList.size() < sub.size()) {
-                        System.out.println("Adding candidate: " + t + " " + MapsForFound + "/" + mapList.size());
                         t.setSimilarity((float) MapsForFound / (float) mapList.size());
                         tripleList.add(t);
                         //retrieved.add(t); // I want all triples the

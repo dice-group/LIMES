@@ -33,11 +33,16 @@ public class GeoOrthodromicMeasure extends ASpaceMeasure {
         double lat2 = Double.parseDouble(p1[0]);
         double lon2 = Double.parseDouble(p2[1]);
 
-        double value1 = Math.pow(Math.sin((lat1 - lat2) / 2.0), 2)
-                + Math.cos(lat1 * D2R) * Math.cos(lat2 * D2R) * Math.pow(Math.sin((lon1 - lon2) / 2.0), 2);
+        double d = distance(lat1, lon1, lat2, lon2);
+        return 1 / (1 + d);
+    }
+
+    public static double distance(double lat1, double lon1, double lat2, double lon2) {
+        double value1 = Math.pow(Math.sin((lat1 - lat2) / 2.0)* D2R, 2)
+                + Math.cos(lat1 * D2R) * Math.cos(lat2 * D2R) * Math.pow(Math.sin((lon1 - lon2) / 2.0)* D2R, 2);
         double c = 2 * Math.atan2(Math.sqrt(value1), Math.sqrt(1 - value1));
         double d = radius * c;
-        return 1 / (1 + d);
+        return d;
     }
 
     public String getType() {
@@ -65,10 +70,7 @@ public class GeoOrthodromicMeasure extends ASpaceMeasure {
             lon2 = Double.parseDouble(instance1.getProperty(p2[1]).first());
         }
 
-        double value1 = Math.pow(Math.sin((lat1 - lat2) / 2.0), 2)
-                + Math.cos(lat1 * D2R) * Math.cos(lat2 * D2R) * Math.pow(Math.sin((lon1 - lon2) / 2.0), 2);
-        double c = 2 * Math.atan2(Math.sqrt(value1), Math.sqrt(1 - value1));
-        double d = radius * c;
+        double d = distance(lat1, lon1, lat2, lon2);
         return 1 / (1 + d);
     }
 

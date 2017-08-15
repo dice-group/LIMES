@@ -30,6 +30,7 @@ public class RDFMappingWriter implements IMappingWriter {
         logger.info("Saving file done in " + (System.currentTimeMillis() - starTime) + "ms.");
     }
 
+    
     @Override
     public void write(AMapping mapping, String outputFile) throws IOException {
         String format = outputFile.substring(outputFile.indexOf(".") + 1).trim().toLowerCase();
@@ -42,7 +43,7 @@ public class RDFMappingWriter implements IMappingWriter {
                 write(mapping, outputFile, "TTL");
                 break;
             case "rdf":
-                write(mapping, outputFile, null);
+                write(mapping, outputFile, "RDF/XML");
                 break;
             case "jsonld":
                 write(mapping, outputFile, "JSON-LD");

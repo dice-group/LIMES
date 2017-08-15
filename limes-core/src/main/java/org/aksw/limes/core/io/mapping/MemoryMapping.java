@@ -1,6 +1,5 @@
 package org.aksw.limes.core.io.mapping;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -21,11 +20,14 @@ import org.aksw.limes.core.util.RandomStringGenerator;
  * @author Mohamed Sherif {@literal <}sherif {@literal @} informatik.uni-leipzig.de{@literal >}
  * @version Nov 24, 2015
  */
-public class MemoryMapping extends AMapping implements Serializable {
+public class MemoryMapping extends AMapping{
 
-    private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2763300329497546833L;
 
-    protected MemoryMapping() {
+	protected MemoryMapping() {
         super();
 
     }

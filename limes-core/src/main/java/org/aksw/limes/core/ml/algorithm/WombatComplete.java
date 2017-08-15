@@ -81,8 +81,7 @@ public class WombatComplete extends AWombat {
         AMapping bestMapping = bestSolutionNode.getMapping();
         LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
         double bestFMeasure = bestSolutionNode.getFMeasure();
-        MLResults result = new MLResults(bestLS, bestMapping, bestFMeasure, null);
-        return result;
+        return new MLResults(bestLS, bestMapping, bestFMeasure, null);
     }
 
     @Override
@@ -277,74 +276,6 @@ public class WombatComplete extends AWombat {
 
 
     /**
-     * @return initial classifiers
-     */
-    public List<ExtendedClassifier> findInitialClassifiers() {
-        logger.debug("Geting all initial classifiers ...");
-        List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
-        for (String p : sourcePropertiesCoverageMap.keySet()) {
-            for (String q : targetPropertiesCoverageMap.keySet()) {
-                for (String m : getAtomicMeasures()) {
-                    ExtendedClassifier cp = findInitialClassifier(p, q, m);
-                    //only add if classifier covers all entries
-                    initialClassifiers.add(cp);
-                }
-            }
-        }
-        logger.debug("Done computing all initial classifiers.");
-        return initialClassifiers;
-    }
-
-
-    /**
-     * Get the most promising node as the node with the best F-score
-     *
-     * @param r  The whole refinement tree
-     * @param penaltyWeight penalty weight
-     * @return most promising node from the input tree r
-     * @author sherif
-     */
-    protected Tree<RefinementNode> getMostPromisingNode(Tree<RefinementNode> r, double penaltyWeight) {
-        // trivial case
-        if (r.getchildren() == null || r.getchildren().size() == 0) {
-            return r;
-        }
-        // get mostPromesyChild of children
-        Tree<RefinementNode> mostPromesyChild = new Tree<RefinementNode>(new RefinementNode());
-        for (Tree<RefinementNode> child : r.getchildren()) {
-            if (child.getValue().getFMeasure() >= 0) {
-                Tree<RefinementNode> promesyChild = getMostPromisingNode(child, penaltyWeight);
-                double newFitness;
-                newFitness = promesyChild.getValue().getFMeasure() - penaltyWeight * computePenalty(promesyChild);
-                if (newFitness > mostPromesyChild.getValue().getFMeasure()) {
-                    mostPromesyChild = promesyChild;
-                }
-            }
-        }
-        // return the argmax{root, mostPromesyChild}
-        if (penaltyWeight > 0) {
-            return mostPromesyChild;
-        } else if (r.getValue().getFMeasure() >= mostPromesyChild.getValue().getFMeasure()) {
-            return r;
-        } else {
-            return mostPromesyChild;
-        }
-    }
-
-    /**
-     * @param promesyChild promesy child
-     * @return children penalty + complexity penalty
-     * @author sherif
-     */
-    private double computePenalty(Tree<RefinementNode> promesyChild) {
-        long childrenCount = promesyChild.size() - 1;
-        double childrenPenalty = (getChildrenPenaltyWeight() * childrenCount) / refinementTreeRoot.size();
-        long level = promesyChild.level();
-        double complexityPenalty = (getComplexityPenaltyWeight() * level) / refinementTreeRoot.depth();
-        return childrenPenalty + complexityPenalty;
-    }
-
-    /**
      * @param node
      *         Refinement node to be expanded
      * @return The input tree node after expansion
@@ -384,11 +315,9 @@ public class WombatComplete extends AWombat {
      */
     private List<RefinementNode> refine(final Tree<RefinementNode> node) {
         List<RefinementNode> result = new ArrayList<>();
-        String childMetricExpr = new String();
-        AMapping childMap = MappingFactory.createDefaultMapping();
         String nodeMetricExpr = node.getValue().getMetricExpression();
-
-        if (isRoot(nodeMetricExpr)) {
+        // is it the root of the tree?
+        if (node.getParent() == null) {
             for (String diffExpr : diffs.keySet()) {
                 AMapping diffMapping = diffs.get(diffExpr);
                 result.add(createNode(diffMapping, diffExpr));
@@ -403,70 +332,60 @@ public class WombatComplete extends AWombat {
             result.addAll(createDisjunctionsWithDiffNodes(node));
             return result;
         } else if (isConjunction(nodeMetricExpr)) {
-            childMetricExpr = new String();
-            List<String> subMetricExpr = getSubMetricExpressions(nodeMetricExpr);
-            result.add(createNode(subMetricExpr.get(0)));
-            List<String> childSubMetricExpr = new ArrayList<>();
-            for (int i = 0; i < subMetricExpr.size(); i++) {
-                for (int j = 0; j < subMetricExpr.size(); j++) {
-                    if (i == j) {
-                        for (RefinementNode n : refine(new Tree<RefinementNode>(createNode(subMetricExpr.get(i))))) {
-                            childSubMetricExpr.add(n.getMetricExpression());
-                        }
-                    } else {
-                        childSubMetricExpr.add(subMetricExpr.get(i));
-                    }
-                }
-                childMetricExpr += "AND(" + childSubMetricExpr.get(0) + "," + childSubMetricExpr.get(1) + ")|0.0";
-                childMap = MappingOperations.intersection(getMapingOfMetricExpression(childSubMetricExpr.get(0)), getMapingOfMetricExpression(childSubMetricExpr.get(1)));
-                for (int k = 2; k < childSubMetricExpr.size(); k++) {
-                    childMetricExpr = "AND(" + childMetricExpr + "," + childSubMetricExpr.get(k) + ")|0.0";
-                    childMap = MappingOperations.intersection(childMap, getMapingOfMetricExpression(childSubMetricExpr.get(k)));
-                }
-                result.add(createNode(childMap, childMetricExpr));
-                childMetricExpr = new String();
-            }
-            result.addAll(createDisjunctionsWithDiffNodes(node));
-            return result;
+            return applyConOrDisjunction(node);
         } else if (isDisjunction(nodeMetricExpr)) {
-            childMetricExpr = new String();
-            List<String> subMetricExpr = getSubMetricExpressions(nodeMetricExpr);
-            logger.debug("subMetricExpr: " + subMetricExpr);
-            result.add(createNode(subMetricExpr.get(0)));
-            List<String> childSubMetricExpr = new ArrayList<>();
-            for (int i = 0; i < subMetricExpr.size(); i++) {
-                for (int j = 0; j < subMetricExpr.size(); j++) {
-                    if (i == j) {
-                        for (RefinementNode n : refine(new Tree<RefinementNode>(createNode(subMetricExpr.get(i))))) {
-                            childSubMetricExpr.add(n.getMetricExpression());
-                        }
-                    } else {
-                        childSubMetricExpr.add(subMetricExpr.get(i));
-                    }
-                }
-                childMetricExpr += "OR(" + childSubMetricExpr.get(0) + "," + childSubMetricExpr.get(1) + ")|0.0";
-                childMap = MappingOperations.union(getMapingOfMetricExpression(childSubMetricExpr.get(0)), getMapingOfMetricExpression(childSubMetricExpr.get(1)));
-                for (int k = 2; k < childSubMetricExpr.size(); k++) {
-                    childMetricExpr = "OR(" + childMetricExpr + "," + childSubMetricExpr.get(k) + ")|0.0";
-                    childMap = MappingOperations.union(childMap, getMapingOfMetricExpression(childSubMetricExpr.get(k)));
-                }
-                result.add(createNode(childMap, childMetricExpr));
-                childMetricExpr = new String();
-            }
-            result.addAll(createDisjunctionsWithDiffNodes(node));
-            return result;
+            return applyConOrDisjunction(node, true);
         } else {
             logger.error("Wrong metric expression: " + nodeMetricExpr);
             throw new RuntimeException();
         }
     }
+
+    private List<RefinementNode> applyConOrDisjunction (Tree<RefinementNode> node) {
+        return applyConOrDisjunction(node, false);
+    }
+
+    private List<RefinementNode> applyConOrDisjunction (Tree<RefinementNode> node, boolean useDisjunction) {
+        List<RefinementNode> result = new ArrayList<>();
+        AMapping childMap;
+        String childMetricExpr = "";
+        String nodeMetricExpr = node.getValue().getMetricExpression();
+        List<String> subMetricExpr = getSubMetricExpressions(nodeMetricExpr);
+        result.add(createNode(subMetricExpr.get(0)));
+        List<String> childSubMetricExpr = new ArrayList<>();
+        String operator = useDisjunction ? "OR" : "AND";
+        for (int i = 0; i < subMetricExpr.size(); i++) {
+            for (int j = 0; j < subMetricExpr.size(); j++) {
+                if (i == j) {
+                    for (RefinementNode n : refine(new Tree<>(createNode(subMetricExpr.get(i))))) {
+                        childSubMetricExpr.add(n.getMetricExpression());
+                    }
+                } else {
+                    childSubMetricExpr.add(subMetricExpr.get(i));
+                }
+            }
+            childMetricExpr += operator + "(" + childSubMetricExpr.get(0) + "," + childSubMetricExpr.get(1) + ")|0.0";
+            if (useDisjunction) {
+                childMap = MappingOperations.intersection(getMapingOfMetricExpression(childSubMetricExpr.get(0)), getMapingOfMetricExpression(childSubMetricExpr.get(1)));
+            } else {
+                childMap = MappingOperations.union(getMapingOfMetricExpression(childSubMetricExpr.get(0)), getMapingOfMetricExpression(childSubMetricExpr.get(1)));
+            }
+
+            for (int k = 2; k < childSubMetricExpr.size(); k++) {
+                childMetricExpr = operator + "(" + childMetricExpr + "," + childSubMetricExpr.get(k) + ")|0.0";
+                childMap = MappingOperations.intersection(childMap, getMapingOfMetricExpression(childSubMetricExpr.get(k)));
+            }
+            result.add(createNode(childMap, childMetricExpr));
+            childMetricExpr = "";
+        }
+        result.addAll(createDisjunctionsWithDiffNodes(node));
+        return result;
+    }
     
     
     /**
-     * @param nodeMetricExpr
-     * @param nodeMapping
+     * @param node
      * @return list of nodes L \cup A_i \ A_j | A_i \in P, A_j \in P, where P is the set if initial classifiers
-     * @author sherif
      */
     private List<RefinementNode> createDisjunctionsWithDiffNodes(Tree<RefinementNode> node) {
         List<RefinementNode> result = new ArrayList<>();
@@ -498,9 +417,7 @@ public class WombatComplete extends AWombat {
     }
     
     /**
-     * @param nodeMetricExpr
-     * @return
-     * @author sherif
+     * @param metricExpr
      */
     private List<String> getSubMetricExpressions(String metricExpr) {
         List<String> result = new ArrayList<>();
@@ -515,10 +432,8 @@ public class WombatComplete extends AWombat {
     
     
     /**
-     * @param nodeMetricExpr
-     * @param nodeMapping
+     * @param node
      * @return list of nodes L \cup A_i \ A_j | A_i \in P, A_j \in P, where P is the set if initial classifiers
-     * @author sherif
      */
     private List<RefinementNode> createConjunctionsWithDiffNodes(Tree<RefinementNode> node) {
         List<RefinementNode> result = new ArrayList<>();

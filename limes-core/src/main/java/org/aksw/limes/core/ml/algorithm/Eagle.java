@@ -1,5 +1,6 @@
 package org.aksw.limes.core.ml.algorithm;
 
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -11,6 +12,7 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.NotYetImplementedException;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -32,7 +34,7 @@ import org.jgap.gp.impl.ProgramChromosome;
 
 /**
  * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
- * @author Klaus Lyko
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  *
  */
 public class Eagle extends ACoreMLAlgorithm {
@@ -104,6 +106,7 @@ public class Eagle extends ACoreMLAlgorithm {
 		try {
 			setUp(trainingData);
 		} catch (InvalidConfigurationException e) {
+			e.printStackTrace();
 			logger.error(e.getMessage());
 			return null;
 		}
@@ -156,32 +159,43 @@ public class Eagle extends ACoreMLAlgorithm {
 
     @Override
     protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
-        if (allBest != null)
-            return fitness.getMapping(mlModel.getLinkSpecification(), true);
-        logger.error("No link specification calculated so far.");
-        return MappingFactory.createDefaultMapping();
+//    	if (allBest != null) {
+    		return fitness.getMapping(source, target, mlModel.getLinkSpecification());
+//        } else {
+//            logger.error("No link specification calculated so far.");
+//        	assert (allBest != null);
+//        }    	
+//        return MappingFactory.createDefaultMapping();
     }
 
     @Override
     protected boolean supports(MLImplementationType mlType) {
-        return mlType == MLImplementationType.SUPERVISED_BATCH || mlType == MLImplementationType.UNSUPERVISED;
+        return mlType == MLImplementationType.SUPERVISED_BATCH || mlType == MLImplementationType.UNSUPERVISED || mlType == MLImplementationType.SUPERVISED_ACTIVE;
     }
-
+    //*************** active learning implementation *****************************************
     @Override
     protected AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
-        throw new UnsupportedMLImplementationException(this.getName());
+//        throw new UnsupportedMLImplementationException(this.getName());
+    	return calculateOracleQuestions(size);
+    	
     }
 
     @Override
     protected MLResults activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
-        throw new UnsupportedMLImplementationException(this.getName());
+    	logger.info("EAGLE active learning started with "+oracleMapping.size()+" examples");
+    	return learn(oracleMapping);
+    }
+    
+    @Override
+    protected MLResults activeLearn() throws UnsupportedMLImplementationException {
+    	logger.info("Supposed to run an active EAGLE, but provided no oracle data. Running default unsupervised approach instead.");
+    	return learn(new PseudoFMeasure());    	
     }
 
     @Override
-    public void setDefaultParameters() {
-        
+    public void setDefaultParameters() {        
         learningParameters = new ArrayList<>();
-    	learningParameters.add(new LearningParameter(GENERATIONS, 10, Integer.class, 1, Integer.MAX_VALUE, 1, GENERATIONS));
+    	learningParameters.add(new LearningParameter(GENERATIONS, 20, Integer.class, 1, Integer.MAX_VALUE, 1, GENERATIONS));
     	learningParameters.add(new LearningParameter(PRESERVE_FITTEST, true, Boolean.class, Double.NaN, Double.NaN, Double.NaN, PRESERVE_FITTEST));
     	learningParameters.add(new LearningParameter(MAX_DURATION, 60, Long.class, 0, Long.MAX_VALUE, 1, MAX_DURATION));
     	learningParameters.add(new LearningParameter(INQUIRY_SIZE, 10, Integer.class, 1, Integer.MAX_VALUE, 1, INQUIRY_SIZE));
@@ -195,15 +209,10 @@ public class Eagle extends ACoreMLAlgorithm {
     	learningParameters.add(new LearningParameter(REPRODUCTION_RATE, 0.4f, Float.class, 0f, 1f, Double.NaN, REPRODUCTION_RATE));
     	learningParameters.add(new LearningParameter(CROSSOVER_RATE, 0.3f, Float.class, 0f, 1f, Double.NaN, CROSSOVER_RATE));
     	learningParameters.add(new LearningParameter(MEASURE, new FMeasure(), IQualitativeMeasure.class, Double.NaN, Double.NaN, Double.NaN, MEASURE));
-    	learningParameters.add(new LearningParameter(PROPERTY_MAPPING, new PropertyMapping(), PropertyMapping.class, Double.NaN, Double.NaN, Double.NaN, PROPERTY_MAPPING));
-    	
-        
+    	learningParameters.add(new LearningParameter(PROPERTY_MAPPING, new PropertyMapping(), PropertyMapping.class, Double.NaN, Double.NaN, Double.NaN, PROPERTY_MAPPING));  	    
     }
 
-    @Override
-    protected MLResults activeLearn() throws UnsupportedMLImplementationException {
-        throw new UnsupportedMLImplementationException(this.getName());
-    }
+
     
     //====================== SPECIFIC METHODS =======================
     
@@ -214,11 +223,11 @@ public class Eagle extends ACoreMLAlgorithm {
      * @throws InvalidConfigurationException
      */
     private void setUp(AMapping trainingData) throws InvalidConfigurationException {
-    	
-    	logger.info("Setting up EAGLE...");
-    	
     	PropertyMapping pm = (PropertyMapping) getParameter(PROPERTY_MAPPING);
-        LinkSpecGeneticLearnerConfig jgapConfig = new LinkSpecGeneticLearnerConfig(getConfiguration().getSourceInfo(), getConfiguration().getTargetInfo(), pm);
+    	if(!pm.wasSet()) {
+    		pm.setDefault(configuration.getSourceInfo(), configuration.getTargetInfo());
+    	}
+        LinkSpecGeneticLearnerConfig jgapConfig = new LinkSpecGeneticLearnerConfig(configuration.getSourceInfo(), configuration.getTargetInfo(), pm);
 
         jgapConfig.sC = sourceCache;
         jgapConfig.tC = targetCache;
@@ -301,7 +310,6 @@ public class Eagle extends ACoreMLAlgorithm {
         /* consider population if necessary */
         if (bestHere == null) {
             logger.debug("Determining best program failed, consider the whole population");
-            System.err.println("Determining best program failed, consider the whole population");
             for (IGPProgram p : pop.getGPPrograms()) {
                 if (p != null) {
                     double fitM = fitness.calculateRawFitness(p);
@@ -312,7 +320,7 @@ public class Eagle extends ACoreMLAlgorithm {
                 }
             }
         }
-
+        // remember the best
         if ((Boolean) getParameter(PRESERVE_FITTEST)) {
             if (allBest == null || fitness.calculateRawFitness(allBest) > fittest) {
                 allBest = bestHere;
@@ -340,10 +348,10 @@ public class Eagle extends ACoreMLAlgorithm {
      */
     private MLResults createSupervisedResult() {
         MLResults result = new MLResults();
+        result.setMapping(fitness.getMapping(sourceCache, targetCache, getLinkSpecification(allBest)));
         result.setLinkSpecification(getLinkSpecification(allBest));
         result.setQuality(allBest.getFitnessValue());
         result.addDetail("specifiactions", bestSolutions);
-        result.addDetail("controversyMatches", calculateOracleQuestions((Integer) getParameter(INQUIRY_SIZE)));
         return result;
     }
     
@@ -354,6 +362,7 @@ public class Eagle extends ACoreMLAlgorithm {
      */
     private MLResults createUnsupervisedResult() {
         MLResults result = new MLResults();
+        result.setMapping(fitness.getMapping(sourceCache, targetCache, getLinkSpecification(allBest)));
         result.setLinkSpecification(getLinkSpecification(allBest));
         result.setQuality(allBest.getFitnessValue());
         result.addDetail("specifiactions", specifications);
@@ -392,7 +401,7 @@ public class Eagle extends ACoreMLAlgorithm {
         // get mappings for all distinct metrics
         logger.info("Getting " + metrics.size() + " full mappings to determine controversy matches...");
         for (LinkSpecification m : metrics) {
-            candidateMaps.add(fitness.getMapping(m, true));
+            candidateMaps.add(fitness.getMapping(sourceCache, targetCache, m));
         }
         // get most controversy matches
         logger.info("Getting " + size + " controversy match candidates from " + candidateMaps.size() + " maps...");
@@ -464,7 +473,5 @@ public class Eagle extends ACoreMLAlgorithm {
 	public int getTurn() {
 		return turn;
 	}
-
-
 
 }

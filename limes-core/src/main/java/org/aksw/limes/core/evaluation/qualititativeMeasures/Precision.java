@@ -2,6 +2,7 @@ package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MemoryMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +27,8 @@ public class Precision extends APRF implements IQualitativeMeasure {
     public double calculate(AMapping predictions, GoldStandard goldStandard) {
         if (predictions.size() == 0)
             return 0;
-        return trueFalsePositive(predictions, goldStandard.referenceMappings, true) / (double) predictions.size();
+        return trueFalsePositive(predictions, goldStandard.referenceMappings, true) / (double) ((MemoryMapping)predictions).getNumberofMappings();
+
     }
 
 }

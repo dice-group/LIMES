@@ -12,7 +12,7 @@ import org.aksw.limes.core.io.parser.Parser;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
- * @author Klaus Lyko
+ * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  * @version Nov 12, 2015
  */
 public class LinkSpecification implements ILinkSpecification {
@@ -416,10 +416,11 @@ public class LinkSpecification implements ILinkSpecification {
                     return false;
                 if (this.getChildren() == null && o.getChildren() != null)
                     return false;
-                HashSet<LinkSpecification> hs = new HashSet<LinkSpecification>();
-                if (this.getChildren() != null)
-                    hs.addAll(getChildren());
-                return (!hs.addAll(o.getChildren()));
+//                HashSet<LinkSpecification> hs = new HashSet<LinkSpecification>();
+//                if (this.getChildren() != null)
+//                    hs.addAll(getChildren());
+//                return (!hs.addAll(o.getChildren()));
+                return this.getChildren().equals(o.getChildren());
             } // not equal operators
             return false;
 

@@ -49,7 +49,6 @@ public class KBInfo implements Serializable {
         optionalProperties = new ArrayList<>();
         prefixes = new HashMap<>();
         functions = new HashMap<>();
-
         pageSize = -1;      //-1 means query all at once
         type = DEFAULT_QUERY_TYPE;    //default value
     }
@@ -140,6 +139,14 @@ public class KBInfo implements Serializable {
         this.restrictions.add(restriction);
     }
 
+    public void addProperty(String property) {
+        this.properties.add(property);
+    }
+    
+    public void addOptionalProperty(String optionalProperty) {
+        this.optionalProperties.add(optionalProperty);
+    }
+    
     public Map<String, Map<String, String>> getFunctions() {
         return functions;
     }
@@ -184,6 +191,7 @@ public class KBInfo implements Serializable {
         s = s + "Graph: " + graph + "\n";
         s = s + "Restrictions: " + restrictions + "\n";
         s = s + "Properties: " + properties + "\n";
+        s = s + "OptionalProperties: " + optionalProperties + "\n";
         s = s + "Functions: " + functions + "\n";
         s = s + "Page size: " + pageSize + "\n";
         s = s + "Type: " + type + "\n";
