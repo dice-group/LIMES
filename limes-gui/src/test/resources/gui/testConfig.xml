@@ -27,11 +27,11 @@
 	</PREFIX>
 	<PREFIX>
 		<NAMESPACE>http://dbpedia.org/ontology/</NAMESPACE>
-		<LABEL>dbpedia</LABEL>
+		<LABEL>dbo</LABEL>
 	</PREFIX>
 	<PREFIX>
 		<NAMESPACE>http://dbpedia.org/property/</NAMESPACE>
-		<LABEL>dbpedia-p</LABEL>
+		<LABEL>dbp</LABEL>
 	</PREFIX>
 	<PREFIX>
 		<NAMESPACE>http://purl.org/dc/terms/</NAMESPACE>

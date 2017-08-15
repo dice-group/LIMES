@@ -36,11 +36,11 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 	
 	@BeforeClass
 	public static void setup(){
-//        System.setProperty("testfx.robot", "glass");
-//        System.setProperty("testfx.headless", "true");
-//        System.setProperty("prism.order", "sw");
-//        System.setProperty("prism.text", "t2k");
-//        System.setProperty("java.awt.headless", "true");
+        System.setProperty("testfx.robot", "glass");
+        System.setProperty("testfx.headless", "true");
+        System.setProperty("prism.order", "sw");
+        System.setProperty("prism.text", "t2k");
+        System.setProperty("java.awt.headless", "true");
 	}
 	
 	@Test
@@ -58,8 +58,8 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 		logger.info("Waiting for #automatedPropList");
 		CustomGuiTest.waitUntilNodeIsVisible("#automatedPropList", 180);
 		clickOn("#switchModeButton");
-		logger.info("Waiting for #sourcePropList");
-		CustomGuiTest.waitUntilNodeIsVisible("#sourcePropList", 180);
+		logger.info("Waiting for dbo:abbreviation");
+		CustomGuiTest.waitUntilNodeIsVisible("dbo:abbreviation", 180);
 		clickOn("dbo:abbreviation");
 		clickOn("dbo:birthDate");
 		clickOn("Finish");
