@@ -10,7 +10,6 @@ import org.aksw.limes.core.datastrutures.TaskAlgorithm;
 import org.aksw.limes.core.datastrutures.TaskData;
 import org.aksw.limes.core.evaluation.evaluator.Evaluator;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
-import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -77,7 +76,7 @@ public class EvaluatorsTest {
         for (TaskAlgorithm tAlgorithm : algorithms) {
             System.out.println("testing "+tAlgorithm.getMlAlgorithm().toString());
             if(tAlgorithm.getMlAlgorithm() instanceof SupervisedMLAlgorithm)
-                results = evaluator.crossValidate(tAlgorithm.getMlAlgorithm(), tasks,folds, evaluators, null);
+                results = evaluator.crossValidate(tAlgorithm.getMlAlgorithm(), null, tasks,folds, evaluators, null);
             System.out.println(results);
         }
         assertTrue(true);

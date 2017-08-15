@@ -1,31 +1,18 @@
-/**
- *
- */
 package org.aksw.limes.core.evaluation;
 
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
-import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.APRF;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- * @author mofeed
- * @author Klaus Lyko
- */
-public class QualitativeMeasuresTest {
-	public static final double epsilon = 0.00001;
-
+public class APRFTest {
 	GoldStandard gold1to1;
 	GoldStandard gold1toN;
 	
@@ -40,73 +27,31 @@ public class QualitativeMeasuresTest {
 		pred = initPredictionsList();
 	}
 
-    @Test
-    public void test1to1() {
-        Set<EvaluatorType> measure = initEvalMeasures();
+	@Test
+	public void test1to1(){
+		double truePositive = APRF.trueFalsePositive(pred, gold1to1.referenceMappings, true);
+		assertEquals(7.0, truePositive, 0.0);
+		double trueNegative = APRF.trueNegative(pred, gold1to1);
+		assertEquals(87.0, trueNegative, 0.0);
+		double falsePositive = APRF.trueFalsePositive(pred, gold1to1.referenceMappings, false);
+		assertEquals(3.0, falsePositive, 0.0);
+		double falseNegative = APRF.falseNegative(pred, gold1to1.referenceMappings);
+		assertEquals(3.0, falseNegative, 0.0);
+	}
 
-        Map<EvaluatorType, Double> calculations = testQualitativeEvaluator(pred, gold1to1, measure);
-
-        double precision = calculations.get(EvaluatorType.PRECISION);
-        assertEquals(0.7,precision,epsilon);
-
-        double recall = calculations.get(EvaluatorType.RECALL);
-        assertEquals(0.7,recall,epsilon);
-
-        double fmeasure = calculations.get(EvaluatorType.F_MEASURE);
-        assertEquals(0.7,fmeasure,epsilon);
-
-        double accuracy = calculations.get(EvaluatorType.ACCURACY);
-        assertEquals(0.94,accuracy,epsilon);
-
-        double pprecision = calculations.get(EvaluatorType.P_PRECISION);
-        assertEquals(0.8,pprecision,epsilon);
-
-        double precall = calculations.get(EvaluatorType.P_RECALL);
-        assertEquals(0.8,precall,epsilon);
-
-
-        double pfmeasure = calculations.get(EvaluatorType.PF_MEASURE);
-        assertTrue(pfmeasure > 0.7 && pfmeasure < 0.9);
-    }
-
-    @Test
-    public void test1toN() {
-        Set<EvaluatorType> measure = initEvalMeasures();
-
-        Map<EvaluatorType, Double> calculations = testQualitativeEvaluator(pred, gold1toN, measure);
-        double expectedPrecision = 0.8;
-        double expectedRecall = 8.0/11.0;
-        double expectedFMeasure = 2.0*((expectedPrecision*expectedRecall)/(expectedPrecision + expectedRecall));
-        
-
-        double precision = calculations.get(EvaluatorType.PRECISION);
-        assertEquals(expectedPrecision,precision,epsilon);
-
-        double recall = calculations.get(EvaluatorType.RECALL);
-        assertEquals(expectedRecall,recall,epsilon);
-
-        double fmeasure = calculations.get(EvaluatorType.F_MEASURE);
-        assertEquals(expectedFMeasure,fmeasure,epsilon);
-
-        double accuracy = calculations.get(EvaluatorType.ACCURACY);
-        assertEquals(0.95,accuracy,epsilon);
-
-        double pprecision = calculations.get(EvaluatorType.P_PRECISION);
-        assertEquals(0.8,pprecision,epsilon);
-
-        double precall = calculations.get(EvaluatorType.P_RECALL);
-        assertEquals(0.8,precall,epsilon);
-
-
-        double pfmeasure = calculations.get(EvaluatorType.PF_MEASURE);
-        assertTrue(pfmeasure > 0.7 && pfmeasure < 0.9);
-
-
-    }
-
-    private Map<EvaluatorType, Double> testQualitativeEvaluator(AMapping predictions, GoldStandard gs, Set<EvaluatorType> evaluationMeasure) {
-        return new QualitativeMeasuresEvaluator().evaluate(predictions, gs, evaluationMeasure);
-    }
+	@Test
+	public void test1toN(){
+		//11 positive 89 negative in goldstandard
+		//10 positives 90 negative in pred
+		double truePositive = APRF.trueFalsePositive(pred, gold1toN.referenceMappings, true);
+		assertEquals(8.0, truePositive, 0.0);
+		double trueNegative = APRF.trueNegative(pred, gold1toN);
+		assertEquals(87.0, trueNegative, 0.0);
+		double falsePositive = APRF.trueFalsePositive(pred, gold1toN.referenceMappings, false);
+		assertEquals(2.0, falsePositive, 0.0);
+		double falseNegative = APRF.falseNegative(pred, gold1toN.referenceMappings);
+		assertEquals(3.0, falseNegative, 0.0);
+	}
 
     private GoldStandard initGoldStandard1to1List() {
 
@@ -174,21 +119,4 @@ public class QualitativeMeasuresTest {
         return dataSet;
 
     }
-
-    private Set<EvaluatorType> initEvalMeasures() {
-        Set<EvaluatorType> measure = new HashSet<EvaluatorType>();
-
-        measure.add(EvaluatorType.PRECISION);
-        measure.add(EvaluatorType.RECALL);
-        measure.add(EvaluatorType.F_MEASURE);
-        measure.add(EvaluatorType.ACCURACY);
-        measure.add(EvaluatorType.P_PRECISION);
-        measure.add(EvaluatorType.P_RECALL);
-        measure.add(EvaluatorType.PF_MEASURE);
-
-
-        return measure;
-
-    }
-
 }

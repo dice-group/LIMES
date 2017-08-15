@@ -10,13 +10,7 @@
 @prefix foaf:  <http://xmlns.com/foaf/0.1/> .
 @prefix dc:    <http://purl.org/dc/terms/> .
 
-limes:1502712632589_review
-        a                limes:Review ;
-        limes:file       <dbpedia_dbpedia_reviewme.nt> ;
-        limes:relation   owl:sameAs ;
-        limes:threshold  "0.5" .
-
-limes:1502712632589_target
+limes:1502787064629_target
         a                  limes:TargetDataset ;
         rdfs:label         "dbpedia" ;
         limes:endPoint     <http://dbpedia.org/sparql> ;
@@ -26,19 +20,35 @@ limes:1502712632589_target
         limes:type         "sparql" ;
         limes:variable     "?y" .
 
-limes:1502712632589  a           limes:LimesSpecs ;
+limes:1502787064629_metric
+        a                 limes:Metric ;
+        limes:expression  "or(jaccard(x.rdfs:label,y.rdfs:label)|0.8,cosine(x.rdfs:label,y.rdfs:label)|0.9)" .
+
+limes:1502787064629_acceptance
+        a                limes:Acceptance ;
+        limes:file       <dbpedia_dbpedia_duplicates.nt> ;
+        limes:relation   owl:sameAs ;
+        limes:threshold  "0.8" .
+
+limes:1502787064629  a           limes:LimesSpecs ;
         limes:executionEngine    "default" ;
         limes:executionPlanner   "default" ;
         limes:executionRewriter  "default" ;
         limes:granularity        "2" ;
-        limes:hasAcceptance      limes:1502712632589_acceptance ;
-        limes:hasMetric          limes:1502712632589_metric ;
-        limes:hasReview          limes:1502712632589_review ;
-        limes:hasSource          limes:1502712632589_source ;
-        limes:hasTarget          limes:1502712632589_target ;
+        limes:hasAcceptance      limes:1502787064629_acceptance ;
+        limes:hasMetric          limes:1502787064629_metric ;
+        limes:hasReview          limes:1502787064629_review ;
+        limes:hasSource          limes:1502787064629_source ;
+        limes:hasTarget          limes:1502787064629_target ;
         limes:outputFormat       "TTL" .
 
-limes:1502712632589_source
+limes:1502787064629_review
+        a                limes:Review ;
+        limes:file       <dbpedia_dbpedia_reviewme.nt> ;
+        limes:relation   owl:sameAs ;
+        limes:threshold  "0.5" .
+
+limes:1502787064629_source
         a                  limes:SourceDataset ;
         rdfs:label         "dbpedia" ;
         limes:endPoint     <http://dbpedia.org/sparql> ;
@@ -47,13 +57,3 @@ limes:1502712632589_source
         limes:restriction  "?x rdf:type dbpedia:Drug" ;
         limes:type         "sparql" ;
         limes:variable     "?x" .
-
-limes:1502712632589_metric
-        a                 limes:Metric ;
-        limes:expression  "or(jaccard(x.rdfs:label,y.rdfs:label)|0.8,cosine(x.rdfs:label,y.rdfs:label)|0.9)" .
-
-limes:1502712632589_acceptance
-        a                limes:Acceptance ;
-        limes:file       <dbpedia_dbpedia_duplicates.nt> ;
-        limes:relation   owl:sameAs ;
-        limes:threshold  "0.8" .
