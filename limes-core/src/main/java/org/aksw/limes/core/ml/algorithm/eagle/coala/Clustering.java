@@ -5,28 +5,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.PairSimilar;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
-import org.aksw.limes.core.execution.engine.ExecutionEngine;
-import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
-import org.aksw.limes.core.execution.engine.ExecutionEngineFactory.ExecutionEngineType;
-import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
-import org.aksw.limes.core.execution.planning.planner.IPlanner;
-import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory.ExecutionPlannerType;
 import org.aksw.limes.core.io.cache.ACache;
-import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.measure.AMeasure;
-import org.aksw.limes.core.measures.measure.string.CosineMeasure;
 import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.string.StringMeasure;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ALDecider.Triple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.apache.log4j.Logger;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithmTest;
-import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 
 import weka.clusterers.ClusterEvaluation;
 import weka.clusterers.EM;
