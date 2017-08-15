@@ -123,7 +123,8 @@ public class Evaluator {
     /**
      * @param algorithm  the algorithm used to generate the predicted mappings
      * @param datasets    the set of the datasets to apply the algorithms on them. The should include source Cache, target Cache, goldstandard and predicted mapping
-     * @param folds the number of subsamples to divide the data (k)
+     * @param parameter the parameters of the algorithm (will be set to default if this is null)
+     * @param foldNumber the number of subsamples to divide the data (k)
      * @param qlMeasures  the set of qualitative measures
      * @param qnMeasures  the set of quantitative measures
      * @return List -  contains list of multiple runs evaluation results corresponding to the algorithms, its implementation and used dataset
