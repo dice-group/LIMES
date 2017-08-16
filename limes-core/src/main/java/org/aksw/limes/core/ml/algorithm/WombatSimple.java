@@ -121,7 +121,8 @@ public class WombatSimple extends AWombat {
         trainingData = MappingOperations.union(trainingData, oracleMapping);
         updateScores(refinementTreeRoot);
         bestSolutionNode = findBestSolution();
-        System.out.println("bestSolutionNode.getMetricExpression():" + bestSolutionNode.getMetricExpression());
+        System.out.println("bestSolutionNode.getMetricExpression():");
+        System.out.println(bestSolutionNode.getMetricExpression());
         String bestMetricExpr = bestSolutionNode.getMetricExpression();
         double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|") + 1, bestMetricExpr.length()));
         AMapping bestMapping = bestSolutionNode.getMapping();

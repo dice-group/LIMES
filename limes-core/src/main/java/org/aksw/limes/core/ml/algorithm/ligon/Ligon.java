@@ -112,7 +112,7 @@ public class Ligon {
      * Process 1 link by all black box oracles
      * 
      * @param subject
-     * @param Object
+     * @param object
      * @return vector of all black box oracles results
      */
     protected  List<Boolean> getOracleFeedback(String subject, String object){
