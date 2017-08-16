@@ -90,6 +90,11 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 
     protected boolean isUnsupervised = false;
     protected boolean isFuzzy = false;
+    
+    public enum WombatLogicOperator {
+        AND, OR, MINUS
+    }
+
 
 
     protected AWombat() {

@@ -1,11 +1,7 @@
 package org.aksw.limes.core.ml.algorithm;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.TreeSet;
 
-import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.datastrutures.Tree;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
@@ -17,7 +13,6 @@ import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
-import org.aksw.limes.core.ml.algorithm.wombat.LinkEntropy;
 import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -192,6 +187,11 @@ public class WombatSimple extends AWombat {
         }
         RefinementNode bestSolution = getMostPromisingNode(refinementTreeRoot, 0).getValue();
         logger.debug("Overall Best Solution: " + bestSolution);
+        
+        
+//        refinementTreeRoot.print(); // TODO remove later  
+        
+        
         return bestSolution;
     }
 
@@ -260,13 +260,13 @@ public class WombatSimple extends AWombat {
     private Tree<RefinementNode> expandNode(Tree<RefinementNode> node) {
         AMapping map = MappingFactory.createDefaultMapping();
         for (ExtendedClassifier c : classifiers) {
-            for (LogicOperator op : LogicOperator.values()) {
+            for (WombatLogicOperator op : WombatLogicOperator.values()) {
                 if (node.getValue().getMetricExpression() != c.getMetricExpression()) { // do not create the same metricExpression again
-                    if (op.equals(LogicOperator.AND)) {
+                    if (op.equals(WombatLogicOperator.AND)) {
                         map = MappingOperations.intersection(node.getValue().getMapping(), c.getMapping());
-                    } else if (op.equals(LogicOperator.OR)) {
+                    } else if (op.equals(WombatLogicOperator.OR)) {
                         map = MappingOperations.union(node.getValue().getMapping(), c.getMapping());
-                    } else if (op.equals(LogicOperator.MINUS)) {
+                    } else if (op.equals(WombatLogicOperator.MINUS)) {
                         map = MappingOperations.difference(node.getValue().getMapping(), c.getMapping());
                     }
                     String metricExpr = op + "(" + node.getValue().getMetricExpression() + "," + c.getMetricExpression() + ")|0";

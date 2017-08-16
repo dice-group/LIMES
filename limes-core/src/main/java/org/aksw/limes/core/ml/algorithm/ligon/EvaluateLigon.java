@@ -106,45 +106,18 @@ public class EvaluateLigon{
         } 
 
         //get data
-        AMapping sample = MappingFactory.createDefaultMapping();		
-        int count = 0;
-        for (String key : reference.getMap().keySet()) {
-            if (index.contains(count)) {
-                sample.getMap().put(key, reference.getMap().get(key));
-            }
-            count++;
-        }
-
-        // compute sample size
-        for (String key : sample.getMap().keySet()) {
-            for (String value : sample.getMap().get(key).keySet()) {
-                sample.setSize(size++);
-            }
-        }
-        return sample;
-    }
-
-    public static AMapping sampleReference(AMapping reference, float start, float end) {
-        if(start == 0 && end == reference.size()){
-            return reference;
-        }
-        int count = 0;
         AMapping sample = MappingFactory.createDefaultMapping();
+        
+        int count = 0;
         for (String key : reference.getMap().keySet()) {
             for (String value : reference.getMap().get(key).keySet()) {
-                if(count < start*reference.size()){
-                    count++;
-                }else{
-                    sample.add(key, value, 1.0d);
-                    sample.setSize(sample.getSize() + 1);
-                    count++;
-                }
-                if(count >= end*reference.size()){
-                    return sample;
-                }
+                if (index.contains(count++)) {
+                  sample.add(key, value, reference.getConfidence(key, value));
+              } 
             }
         }
-        return null;
+        
+        return sample;
     }
 
     /**
@@ -288,7 +261,7 @@ public class EvaluateLigon{
      */
     public static void main(String[] args) throws UnsupportedMLImplementationException {
         // evaluation parameters
-        String d = "DBLP-Scholar";
+        String d = "Person2";
         int noisyOracleCount = 10 ;
         int mostInformativeExaplesCount = 10;
         int posNegExSize = 10;
@@ -335,7 +308,9 @@ public class EvaluateLigon{
                 rPFF = 0.75 + (pFF.nextGaussian() + 1.0) / 2.0;
                 
             }while(rPTT <0  || rPTT > 1 || rPTF <0  || rPTF > 1 || rPFT <0  || rPFT > 1 || rPFF <0  || rPFF > 1);
-            noisyOracles.add(new NoisyOracle(fullReferenceMapping, new ConfusionMatrix(new double[][]{{rPTT,rPTF},{rPFT,rPFF}})));
+            double sumR = rPTT + rPTF + rPFT + rPFF;
+            noisyOracles.add(new NoisyOracle(fullReferenceMapping, 
+                    new ConfusionMatrix(new double[][]{{rPTT/sumR,rPTF/sumR},{rPFT/sumR,rPFF/sumR}})));
         }
 
         // initialize ligon
