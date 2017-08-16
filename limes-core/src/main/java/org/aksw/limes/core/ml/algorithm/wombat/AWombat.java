@@ -186,9 +186,10 @@ public abstract class AWombat extends ACoreMLAlgorithm {
                             mappingEntryCount++;
                         }
                     }
-                    double mappingEntryProbability = (double) mappingEntryCount / (double) bestNodes.size();
-                    double entropy = - mappingEntryProbability * Math.log(mappingEntryProbability);
-                    linkEntropy.add(new LinkEntropy(s, t, entropy));
+                    double linkProbability = (double) mappingEntryCount / (double) bestNodes.size();
+                    double entropy = - linkProbability * Math.log(linkProbability);
+                    entropy = (entropy == -0.0d)? 0.0d : entropy; // remove negative zero
+                    linkEntropy.add(new LinkEntropy(s, t, entropy, linkProbability));
                 }
             }
         }
@@ -204,7 +205,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         }
         AMapping result = MappingFactory.createDefaultMapping();
         for(LinkEntropy l: highestEntropyLinks){
-            result.add(l.getSourceUri(), l.getTargetUri(), l.getEntropy());
+            result.add(l.getSourceUri(), l.getTargetUri(), l.getProbability());
         }
         return result;
     }

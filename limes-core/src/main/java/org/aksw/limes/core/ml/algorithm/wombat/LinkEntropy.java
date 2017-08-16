@@ -5,13 +5,17 @@ public class LinkEntropy implements Comparable<LinkEntropy>{
     protected String sourceUri;
     protected String targetUri;
     protected double entropy;
+    protected double probability;
     
     
-    public LinkEntropy(String sourceUri, String targetUri, double confidence) {
+
+
+    public LinkEntropy(String sourceUri, String targetUri, double entropy, double probability) {
         super();
         this.sourceUri = sourceUri;
         this.targetUri = targetUri;
-        this.entropy = confidence;
+        this.entropy = entropy;
+        this.probability = probability;
     }
     
     public String getSourceUri() {
@@ -31,6 +35,14 @@ public class LinkEntropy implements Comparable<LinkEntropy>{
     }
     public void setEntropy(int entropy) {
         this.entropy = entropy;
+    }
+    
+    public double getProbability() {
+        return probability;
+    }
+
+    public void setProbability(double probability) {
+        this.probability = probability;
     }
 
     @Override

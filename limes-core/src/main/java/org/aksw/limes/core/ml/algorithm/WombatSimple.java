@@ -68,9 +68,9 @@ public class WombatSimple extends AWombat {
      * @return wrap with results, null if no result found 
      */
     private MLResults learn() {
-        if (bestSolutionNode == null) { // not to do learning twice
+//        if (bestSolutionNode == null) { // not to do learning twice
             bestSolutionNode = findBestSolution();
-        }
+//        }
         String bestMetricExpr = bestSolutionNode.getMetricExpression();
         if(!bestMetricExpr.equals("")){
             double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|") + 1, bestMetricExpr.length()));
@@ -121,6 +121,7 @@ public class WombatSimple extends AWombat {
         trainingData = MappingOperations.union(trainingData, oracleMapping);
         updateScores(refinementTreeRoot);
         bestSolutionNode = findBestSolution();
+        System.out.println("bestSolutionNode.getMetricExpression():" + bestSolutionNode.getMetricExpression());
         String bestMetricExpr = bestSolutionNode.getMetricExpression();
         double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|") + 1, bestMetricExpr.length()));
         AMapping bestMapping = bestSolutionNode.getMapping();

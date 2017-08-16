@@ -155,7 +155,7 @@ public class FuzzyWombatSimple extends AWombat {
                     }
                 }
                 int entropy = entropyPos * entropyNeg;
-                linkEntropy.add(new LinkEntropy(s, t, entropy));
+                linkEntropy.add(new LinkEntropy(s, t, entropy, 1.0d));
             }
         }
         // get highestEntropyLinks
@@ -424,7 +424,7 @@ public class FuzzyWombatSimple extends AWombat {
             for(String t : avgExampleMap.getMap().get(s).keySet()){
                 double confidence = avgExampleMap.getMap().get(s).get(t);
                 if(confidence > (0.5 - epsilon) && confidence < (0.5 + epsilon)){
-                    linkEntropy.add( new LinkEntropy(s, t, confidence));
+                    linkEntropy.add( new LinkEntropy(s, t, confidence, 1.0d));
                 }
             }
         }

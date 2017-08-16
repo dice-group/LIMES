@@ -288,7 +288,7 @@ public class EvaluateLigon{
      */
     public static void main(String[] args) throws UnsupportedMLImplementationException {
         // evaluation parameters
-        String d = "Abt-Buy";
+        String d = "Person1";
         int noisyOracleCount = 10 ;
         int mostInformativeExaplesCount = 10;
         int posNegExSize = 10;

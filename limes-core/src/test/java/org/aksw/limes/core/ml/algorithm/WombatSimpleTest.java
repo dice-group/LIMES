@@ -115,7 +115,7 @@ public class WombatSimpleTest {
         wombatSimpleA.init(null, sc, tc);
         wombatSimpleA.activeLearn();
         AMapping nextExamples = wombatSimpleA.getNextExamples(1);
-        AMapping oracleFeedback = oracleFeedback(nextExamples,trainingMap);
+        AMapping oracleFeedback = oracleFeedback(nextExamples,refMap);
         MLResults mlModel = wombatSimpleA.activeLearn(oracleFeedback);
         AMapping resultMap = wombatSimpleA.predict(sc, tc, mlModel);
         System.out.println(resultMap);
