@@ -44,7 +44,7 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 	}
 	
 	@Test
-	public void testEditProperties(){
+	public void testEditProperties() throws InterruptedException{
 		logger.info("Clicking on Configuration");
 		clickOn("Configuration");
 		logger.info("Clicking on Edit");
@@ -55,11 +55,18 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 		logger.info("Clicking on Edit Properties");
 		clickOn("Edit Properties");
 
-		logger.info("Waiting for #sourcePropList");
-		CustomGuiTest.waitUntilNodeIsVisible("#sourcePropList", 15);
-		clickOn("#sourcePropList");
-		clickOn("#targetPropList");
+		logger.info("Waiting for #automatedPropList");
+		CustomGuiTest.waitUntilNodeIsVisible("#automatedPropList", 180);
+		clickOn("#switchModeButton");
+		logger.info("Waiting for dbo:abbreviation");
+		CustomGuiTest.waitUntilNodeIsVisible("dbo:abbreviation", 180);
+		clickOn("dbo:abbreviation");
+		clickOn("dbo:birthDate");
 		clickOn("Finish");
+		
+		clickOn("dbo:abbreviation");
+		clickOn("dbo:birthDate");
+		
 	}
 	
 }

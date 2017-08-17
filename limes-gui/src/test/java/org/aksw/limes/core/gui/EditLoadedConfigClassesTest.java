@@ -79,7 +79,7 @@ public class EditLoadedConfigClassesTest extends ApplicationTest {
 		clickOn("Edit Classes");
 
 		logger.info("Waiting for classes to be visible");
-		CustomGuiTest.waitUntilNodeIsVisible("Restaurant", 15);
+		CustomGuiTest.waitUntilNodeIsVisible("Restaurant", 150);
 		CustomGuiTest.waitUntilNodeIsVisible("Person", 15);
 		verifyThat("Restaurant", NodeMatchers.isVisible());
 		verifyThat("Person", NodeMatchers.isVisible());
