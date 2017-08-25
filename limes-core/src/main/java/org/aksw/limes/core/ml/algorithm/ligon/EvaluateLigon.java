@@ -261,7 +261,7 @@ public class EvaluateLigon{
      */
     public static void main(String[] args) throws UnsupportedMLImplementationException {
         // evaluation parameters
-        String d = "Person2";
+        String d = "DBLP-Scholar";
         int noisyOracleCount = 10 ;
         int mostInformativeExaplesCount = 10;
         int posNegExSize = 10;
@@ -283,7 +283,6 @@ public class EvaluateLigon{
         // training examples
         //        for(int posNegExSize = 10; posNegExSize < 100 ; posNegExSize += 10){
         
-        System.out.println();
         AMapping posTrainingMap = sampleReferenceMap(fullReferenceMapping, posNegExSize);
         AMapping negTrainingMap = MappingFactory.createDefaultMapping(); //generateNegativeExamples(posTrainingMap, posNegExSize); TODO{add later}
         AMapping trainingMap = MappingOperations.union(posTrainingMap, negTrainingMap);
@@ -293,7 +292,6 @@ public class EvaluateLigon{
         trainingMap.getReversedMap();
 
         // create noisy oracles with normal distribution
-        
         List<NoisyOracle> noisyOracles = new ArrayList<>();
         Random pTT = new Random();
         Random pTF = new Random();
@@ -312,6 +310,7 @@ public class EvaluateLigon{
             noisyOracles.add(new NoisyOracle(fullReferenceMapping, 
                     new ConfusionMatrix(new double[][]{{rPTT/sumR,rPTF/sumR},{rPFT/sumR,rPFF/sumR}})));
         }
+        System.out.println("\n\n ---- noisyOracles ----\n" + noisyOracles);
 
         // initialize ligon
         Ligon ligon = new Ligon(trainingMap, sourceTrainCache, targetTrainCache, noisyOracles, 

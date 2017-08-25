@@ -112,18 +112,23 @@ public class WombatSimple extends AWombat {
 
     @Override
     protected MLResults activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
-        this.isUnsupervised = false;
+//        if(refinementTreeRoot == null){//only for the 1st call
+//            trainingData = oracleMapping;
+//            classifiers = findInitialClassifiers();
+//            createRefinementTreeRoot();
+//        }
+//        this.isUnsupervised = false;
+//        trainingData = MappingOperations.union(trainingData, oracleMapping);
+//        updateScores(refinementTreeRoot);
+//        bestSolutionNode = findBestSolution();
+//        String bestMetricExpr = bestSolutionNode.getMetricExpression();
+//        double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|") + 1, bestMetricExpr.length()));
+//        AMapping bestMapping = bestSolutionNode.getMapping();
+//        LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
+//        double bestFMeasure = bestSolutionNode.getFMeasure();
+//        return new MLResults(bestLS, bestMapping, bestFMeasure, null);
         trainingData = MappingOperations.union(trainingData, oracleMapping);
-        updateScores(refinementTreeRoot);
-        bestSolutionNode = findBestSolution();
-        System.out.println("bestSolutionNode.getMetricExpression():");
-        System.out.println(bestSolutionNode.getMetricExpression());
-        String bestMetricExpr = bestSolutionNode.getMetricExpression();
-        double threshold = Double.parseDouble(bestMetricExpr.substring(bestMetricExpr.lastIndexOf("|") + 1, bestMetricExpr.length()));
-        AMapping bestMapping = bestSolutionNode.getMapping();
-        LinkSpecification bestLS = new LinkSpecification(bestMetricExpr, threshold);
-        double bestFMeasure = bestSolutionNode.getFMeasure();
-        return new MLResults(bestLS, bestMapping, bestFMeasure, null);
+        return learn(trainingData);
     }
 
 

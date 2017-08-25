@@ -22,8 +22,8 @@ public class NoisyOracle {
 
         Random random = new Random();
         if(inOracle){
-            double probRightPos =  confusionMatrix.getProbabilityOfRightClassifiedPositiveExamples();
-            double probWrongPos =  confusionMatrix.getProbabilityOfRightClassifiedPositiveExamples();
+            double probRightPos =  confusionMatrix.getRightClassifiedPositiveExamplesProbability();
+            double probWrongPos =  confusionMatrix.getRightClassifiedPositiveExamplesProbability();
             double minProb = (probRightPos < probWrongPos)? probRightPos : probWrongPos;
             double r = (probRightPos + probWrongPos) * random.nextDouble();
             if(r < minProb ){
@@ -32,8 +32,8 @@ public class NoisyOracle {
                 return (probRightPos < probWrongPos)? false: true;
             }
         }else{
-            double probRightNeg =  confusionMatrix.getProbabilityOfRightClassifiedNegativeExamples();
-            double probWrongNeg =  confusionMatrix.getProbabilityOfWrongClassifiedNegativeExamples();
+            double probRightNeg =  confusionMatrix.getRightClassifiedNegativeExamplesProbability();
+            double probWrongNeg =  confusionMatrix.getWrongClassifiedNegativeExamplesProbability();
             double minProb = (probRightNeg < probWrongNeg)? probRightNeg : probWrongNeg;
             double r = (probRightNeg + probWrongNeg) * random.nextDouble();
             if(r < minProb ){
@@ -52,5 +52,17 @@ public class NoisyOracle {
     public void setOracleMap(AMapping oracleMap) {
         this.oracleMap = oracleMap;
     }
-    
+
+    @Override
+    public String toString() {
+        return "\nNoisyOracle ["+ 
+                confusionMatrix.getRightClassifiedPositiveExamplesProbability() + ", " +
+                confusionMatrix.getRightClassifiedNegativeExamplesProbability() + ", " +
+                confusionMatrix.getWrongClassifiedPositiveExamplesProbability() + ", " +
+                confusionMatrix.getWrongClassifiedNegativeExamplesProbability() +
+                "]";
+    }
+
+
+
 }

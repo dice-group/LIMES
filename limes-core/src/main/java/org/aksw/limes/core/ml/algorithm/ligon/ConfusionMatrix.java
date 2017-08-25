@@ -21,67 +21,67 @@ public class ConfusionMatrix {
         }
     }
     
-    public void setCountOfRightClassifiedPositiveExamples(int x){
+    public void setRightClassifiedPositiveExamplesCount(int x){
         c[0][0] = x;
     }
     
-    public void incrementCountOfRightClassifiedPositiveExamples(){
+    public void incrementRightClassifiedPositiveExamplesCount(){
         c[0][0]++;
     }
     
-    public double getProbabilityOfRightClassifiedPositiveExamples(){
+    public double getRightClassifiedPositiveExamplesProbability(){
         return c[0][0] / sumConfusionMatriceEntries();
     }
     
-    public double getCountOfRightClassifiedPositiveExamples(){
+    public double getRightClassifiedPositiveExamplesCount(){
         return c[0][0];
     }
     
-    public void setCountOfRightClassifiedNegativeExamples(int x){
+    public void setRightClassifiedNegativeExamplesCount(int x){
         c[0][1] = x;
     }
     
-    public void incrementCountOfRightClassifiedNegativeExamples(){
+    public void incrementRightClassifiedNegativeExamplesCount(){
         c[0][1]++;
     }
 
-    public double getCountOfRightClassifiedNegativeExamples(){
+    public double getRightClassifiedNegativeExamplesCount(){
         return c[0][1];
     }
     
-    public double getProbabilityOfRightClassifiedNegativeExamples(){
+    public double getRightClassifiedNegativeExamplesProbability(){
         return c[0][1] / sumConfusionMatriceEntries();
     }
 
-    public void setCountOfWrongClassifiedPositiveExamples(int x){
+    public void setWrongClassifiedPositiveExamplesCount(int x){
         c[1][0] = x;
     }
     
-    public void incrementCountOfWrongClassifiedPositiveExamples(){
+    public void incrementWrongClassifiedPositiveExamplesCount(){
         c[1][0]++;
     }
     
-    public double getCountOfWrongClassifiedPositiveExamples(){
+    public double getWrongClassifiedPositiveExamplesCount(){
         return c[1][0];
     }
     
-    public double getProbabilityOfWrongClassifiedPositiveExamples(){
+    public double getWrongClassifiedPositiveExamplesProbability(){
         return c[1][0] / sumConfusionMatriceEntries();
     }
     
-    public void setCountOfWrongClassifiednegativeExamples(int x){
+    public void setWrongClassifiednegativeExamplesCount(int x){
         c[1][1] = x;
     }
     
-    public void incrementCountOfWrongClassifiedNegativeExamples(){
+    public void incrementWrongClassifiedNegativeExamplesCount(){
         c[1][1]++;
     }
     
-    public double getCountOfWrongClassifiednegativeExamples(){
+    public double getWrongClassifiednegativeExamplesCount(){
         return c[1][1];
     }
     
-    public double getProbabilityOfWrongClassifiedNegativeExamples(){
+    public double getWrongClassifiedNegativeExamplesProbability(){
         return c[1][1] / sumConfusionMatriceEntries();
     }
     
