@@ -4,6 +4,10 @@
  */
 package org.aksw.limes.core.measures.mapper.space;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
@@ -14,8 +18,6 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.AMapper;
-import org.aksw.limes.core.measures.mapper.HR3FlinkTest;
-import org.aksw.limes.core.measures.mapper.space.Flink.ListToTupleConverter;
 import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
 import org.aksw.limes.core.measures.mapper.space.blocking.IBlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
@@ -147,11 +149,17 @@ public class HR3Mapper extends AMapper {
                 blocksToCompare = generator.getBlocksToCompare(blockIds.get(ids));
 
                 for (int index = 0; index < blocksToCompare.size(); index++) {
-                	HR3FlinkTest.HR3sourceToCompare.add(sourceInstanceUri+ " -> " +blocksToCompare.get(index));
+//                	HR3FlinkTest.HR3sourceToCompare.add(sourceInstanceUri+ " -> " +blocksToCompare.get(index));
                     if (targetBlocks.containsKey(blocksToCompare.get(index))) {
                         uris = targetBlocks.get(blocksToCompare.get(index));
                         for (String targetInstanceUri : uris) {
-                        	HR3FlinkTest.HR3Comparisons.add(sourceInstanceUri + "->"+ targetInstanceUri);
+//                        	HR3FlinkTest.HR3Comparisons.add(sourceInstanceUri + "->"+ targetInstanceUri);
+                try {
+                	Files.write(Paths.get("/tmp/Reg"),(sourceInstanceUri + "->"+ targetInstanceUri+ "\n").getBytes(), StandardOpenOption.APPEND);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                         	comparisons++;
 //                        	System.out.println(sourceInstanceUri + " - > " + targetInstanceUri + " # " + comparisons);
                             sim = measure.getSimilarity(source.getInstance(sourceInstanceUri),

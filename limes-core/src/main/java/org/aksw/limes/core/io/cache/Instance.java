@@ -36,6 +36,7 @@ public class Instance implements Comparable<Object>, Serializable {
     private Blocks blocksToCompare;
 
 
+    public Instance(){}
 
     /**
      * Constructor
@@ -193,103 +194,87 @@ public class Instance implements Comparable<Object>, Serializable {
      * @author Daniel Obraczka
      *
      */
-	public static class Blocks implements Comparable<Blocks>{
-			public Set<Tuple> ids;
-
-			public Blocks(Set<Tuple> _ids) {
-				ids = _ids;
-			}
-
-			public <T> Set<T> intersection(Set<T> setA, Set<T> setB) {
-				Set<T> tmp = new HashSet<T>();
-				for (T x : setA)
-					if (setB.contains(x))
-						tmp.add(x);
-				return tmp;
-			}
-
-			//If at least one block is shared this returns true
-			@Override
-			public boolean equals(Object obj) {
-				if (obj instanceof Blocks) {
-					if (intersection(((Blocks) obj).ids, this.ids).size() > 0) {
-						return true;
-					}
-				}
-				return false;
-			}
-			
-			//Returns 1 on all objects to force the evaluation of equals/compareTo in a join operation
-			@Override
-			public int hashCode() {
-			return 1;
-			}
-
-			//If at least one block is shared this returns true
-			@Override
-			public int compareTo(Blocks o) {
-				if (intersection(o.ids, this.ids).size() != 0) {
-						return 0;
-				}
-				if(o.ids.size() < this.ids.size()){
-					return 1;
-				}
-				return -1;
-			}
-
-
-		}
-
-//    public static void main(String[] args){
-//    	HashSet<Tuple> s = new HashSet<>();
-//    	s.add(new Tuple2<Integer, Integer>(0,1));
-//    	s.add(new Tuple2<Integer, Integer>(76,3));
-//    	s.add(new Tuple2<Integer, Integer>(54,1200));
-//    	Blocks b = new Blocks(s);
-//
-//    	HashSet<Tuple> s2 = new HashSet<>();
-//    	s2.add(new Tuple2<Integer, Integer>(0,1));
-//    	s2.add(new Tuple2<Integer, Integer>(75,3));
-//    	s2.add(new Tuple2<Integer, Integer>(54,1200));
-//    	Blocks b2 = new Blocks(s2);
-//    	System.out.println(b.intersectNotEmpty(b2));
-//    }
-//
-//	public static class Blocks{
+//	public static class Blocks implements Comparable<Blocks>{
 //			public Set<Tuple> ids;
 //
 //			public Blocks(Set<Tuple> _ids) {
 //				ids = _ids;
 //			}
-//			
-//			public long getId(){
-//				long id = 1;
-//				for(Tuple t : ids){
-//					StringBuilder tupleId = new StringBuilder();
-//					for(int i = 0; i < t.getArity(); i++){
-//						tupleId.append(t.getField(i).toString());
-//					}
-//					System.out.println(Integer.valueOf(tupleId.toString()) + 1);
-//					id = id * (Integer.valueOf(tupleId.toString()) + 1);
-//				}
-//				return id;
+//
+//			public <T> Set<T> intersection(Set<T> setA, Set<T> setB) {
+//				Set<T> tmp = new HashSet<T>();
+//				for (T x : setA)
+//					if (setB.contains(x))
+//						tmp.add(x);
+//				return tmp;
 //			}
-//			
-//			public boolean intersectNotEmpty(Blocks o){
-//				long id = getId();
-//				for(Tuple t : o.ids){
-//					StringBuilder tupleId = new StringBuilder();
-//					for(int i = 0; i < t.getArity(); i++){
-//						tupleId.append(t.getField(i).toString());
-//					}
-//					if(id % (Integer.valueOf(tupleId.toString()) + 1) == 0){
+//
+//			//If at least one block is shared this returns true
+//			@Override
+//			public boolean equals(Object obj) {
+//				if (obj instanceof Blocks) {
+//					if (intersection(((Blocks) obj).ids, this.ids).size() > 0) {
 //						return true;
 //					}
 //				}
 //				return false;
 //			}
+//			
+//			//Returns 1 on all objects to force the evaluation of equals/compareTo in a join operation
+//			@Override
+//			public int hashCode() {
+//			return 1;
+//			}
+//
+//			//If at least one block is shared this returns true
+//			@Override
+//			public int compareTo(Blocks o) {
+//				if (intersection(o.ids, this.ids).size() != 0) {
+//						return 0;
+//				}
+//				if(o.ids.size() < this.ids.size()){
+//					return 1;
+//				}
+//				return -1;
+//			}
+//
 //
 //		}
+
+    public static void main(String[] args){
+    	HashSet<Tuple> s = new HashSet<>();
+    	s.add(new Tuple2<Integer, Integer>(0,1));
+    	s.add(new Tuple2<Integer, Integer>(76,3));
+    	s.add(new Tuple2<Integer, Integer>(54,1200));
+    	Blocks b = new Blocks(s);
+
+    	HashSet<Tuple> s2 = new HashSet<>();
+    	s2.add(new Tuple2<Integer, Integer>(0,2));
+    	s2.add(new Tuple2<Integer, Integer>(75,3));
+    	s2.add(new Tuple2<Integer, Integer>(54,1201));
+    	Blocks b2 = new Blocks(s2);
+    	System.out.println(b.intersectNotEmpty(b2));
+    }
+
+	public static class Blocks{
+			public Set<Tuple> ids;
+
+			public Blocks(){}
+			
+			public Blocks(Set<Tuple> _ids) {
+				ids = _ids;
+			}
+			
+			public boolean intersectNotEmpty(Blocks o){
+				for(Tuple t : o.ids){
+					if(ids.contains(t)){
+						return true;
+					}
+				}
+				return false;
+			}
+
+		}
 
 		public Blocks getBlockIds() {
 			return blockIds;

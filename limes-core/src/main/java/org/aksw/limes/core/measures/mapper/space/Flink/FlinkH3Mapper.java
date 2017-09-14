@@ -1,5 +1,8 @@
 package org.aksw.limes.core.measures.mapper.space.Flink;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -9,14 +12,16 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
-import org.aksw.limes.core.measures.mapper.HR3FlinkTest;
 import org.aksw.limes.core.measures.mapper.space.blocking.HR3Blocker;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
-import org.apache.flink.api.common.functions.JoinFunction;
+import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.tuple.Tuple;
+import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.util.Collector;
 
 public class FlinkH3Mapper {
     public static int comparisons = 0;
@@ -74,19 +79,53 @@ public class FlinkH3Mapper {
         target = target.map(new SetAllBlockIds());
         
         //comparison
-        DataSet<MappingObject> result = source.join(target)
-              .where(s -> s.getBlocksToCompare())
-              .equalTo(t -> t.getBlockIds())
-              .with(new CompareInstances(measure, property1, property2, threshold));
+//        DataSet<MappingObject> result = source.join(target)
+//              .where(s -> s.getBlocksToCompare())
+//              .equalTo(t -> t.getBlockIds())
+//              .with(new CompareInstances(measure, property1, property2, threshold));
+
+        DataSet<MappingObject> result = source
+        		.cross(target)
+        		.with((i1,i2) -> new Tuple2<Instance,Instance>(i1,i2))
+        		.returns(new TypeHint<Tuple2<Instance,Instance>>(){}.getTypeInfo())
+        		.flatMap(new CompareInstances(measure, property1, property2, threshold));
+
        List<MappingObject> tmpRes = result.collect(); 
        for(MappingObject m : tmpRes){
-    	   if(m != null)
-               mapping.add(m.sid, m.tid, m.sim);
+           mapping.add(m.sid, m.tid, m.sim);
        }
        return mapping;
 	}
 	
-	private static class CompareInstances implements JoinFunction<Instance, Instance, MappingObject>{
+//	private static class CompareInstances implements JoinFunction<Instance, Instance, MappingObject>{
+//	
+//		public ISpaceMeasure measure;
+//		public String property1;
+//		public String property2;
+//		public double threshold;
+//
+//
+//		public CompareInstances(ISpaceMeasure measure, String property1, String property2, double threshold) {
+//			this.measure = measure;
+//			this.property1 = property1;
+//			this.property2 = property2;
+//			this.threshold = threshold;
+//		}
+//
+//
+//		@Override
+//		public MappingObject join(Instance first, Instance second) throws Exception {
+//            HR3FlinkTest.FlinkHR3Comparisons.add(first.getUri() + "->"+ second.getUri());
+//			comparisons++;
+////			System.out.println(first.getUri() + " - > " + second.getUri() + " # " + comparisons);
+//            double sim = measure.getSimilarity(first, second, property1, property2);
+//            if (sim >= threshold) {
+//              	return new MappingObject(first.getUri(), second.getUri(),sim);
+//            }
+//            return null;
+//		}
+//	}
+	private static class CompareInstances implements FlatMapFunction<Tuple2<Instance, Instance>, MappingObject>{
 	
 		public ISpaceMeasure measure;
 		public String property1;
@@ -103,15 +142,17 @@ public class FlinkH3Mapper {
 
 
 		@Override
-		public MappingObject join(Instance first, Instance second) throws Exception {
-            HR3FlinkTest.FlinkHR3Comparisons.add(first.getUri() + "->"+ second.getUri());
-			comparisons++;
-//			System.out.println(first.getUri() + " - > " + second.getUri() + " # " + comparisons);
-            double sim = measure.getSimilarity(first, second, property1, property2);
-            if (sim >= threshold) {
-              	return new MappingObject(first.getUri(), second.getUri(),sim);
-            }
-            return null;
+		public void flatMap(Tuple2<Instance, Instance> st, Collector<MappingObject> out) throws Exception {
+			if(st.f0.getBlocksToCompare().intersectNotEmpty(st.f1.getBlockIds())){
+//                HR3FlinkTest.FlinkHR3Comparisons.add(st.f0.getUri() + "->"+ st.f1.getUri());
+                Files.write(Paths.get("/tmp/Flink"),(st.f0.getUri() + "->"+ st.f1.getUri() + "\n").getBytes(), StandardOpenOption.APPEND);
+                comparisons++;
+    //			System.out.println(first.getUri() + " - > " + second.getUri() + " # " + comparisons);
+                double sim = measure.getSimilarity(st.f0, st.f1, property1, property2);
+                if (sim >= threshold) {
+                      out.collect(new MappingObject(st.f0.getUri(), st.f1.getUri(),sim));
+                }
+			}
 		}
 	}
 	
@@ -144,7 +185,7 @@ public class FlinkH3Mapper {
 				ArrayList<ArrayList<Integer>> tmp = getBlocksToCompare(convertedBlockId);
 				for(ArrayList<Integer> bid : tmp){
 					blocksToCompare.add(ListToTupleConverter.convertToTuple(bid));
-                	HR3FlinkTest.FlinkHR3sourceToCompare.add(a.getUri() + " -> " + bid);
+//                	HR3FlinkTest.FlinkHR3sourceToCompare.add(a.getUri() + " -> " + bid);
 				}
 			}
 			a.setBlocksToCompare(blocksToCompare);
