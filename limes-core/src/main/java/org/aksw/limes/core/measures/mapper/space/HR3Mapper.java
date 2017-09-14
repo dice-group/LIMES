@@ -14,6 +14,8 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.AMapper;
+import org.aksw.limes.core.measures.mapper.HR3FlinkTest;
+import org.aksw.limes.core.measures.mapper.space.Flink.ListToTupleConverter;
 import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
 import org.aksw.limes.core.measures.mapper.space.blocking.IBlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
@@ -27,6 +29,7 @@ import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 public class HR3Mapper extends AMapper {
 
     public int granularity = 4;
+    public static int comparisons = 0;
 
     // this might only work for substraction. Need to create something that
     // transforms
@@ -120,7 +123,7 @@ public class HR3Mapper extends AMapper {
                 targetBlocks.get(blockIds.get(ids)).add(key);
             }
         }
-
+        //System.out.println("TargetBlocks: " + targetBlocks);
         ArrayList<ArrayList<Integer>> blocksToCompare;
         // comparison
         TreeSet<String> uris;
@@ -137,18 +140,20 @@ public class HR3Mapper extends AMapper {
             }
             // logger.info("Getting "+property1+" from "+sourceInstanceUri);
             blockIds = generator.getAllSourceIds(source.getInstance(sourceInstanceUri), property1);
-            // logger.info("BlockId for "+sourceInstanceUri+" is "+blockId);
+//             System.out.println("BlockId for "+sourceInstanceUri+" is "+blockIds);
             // for all blocks in [-1, +1] in each dimension compute similarities
             // and store them
             for (int ids = 0; ids < blockIds.size(); ids++) {
                 blocksToCompare = generator.getBlocksToCompare(blockIds.get(ids));
 
-                // logger.info(sourceInstanceUri+" is to compare with blocks
-                // "+blocksToCompare);
                 for (int index = 0; index < blocksToCompare.size(); index++) {
+                	HR3FlinkTest.HR3sourceToCompare.add(sourceInstanceUri+ " -> " +blocksToCompare.get(index));
                     if (targetBlocks.containsKey(blocksToCompare.get(index))) {
                         uris = targetBlocks.get(blocksToCompare.get(index));
                         for (String targetInstanceUri : uris) {
+                        	HR3FlinkTest.HR3Comparisons.add(sourceInstanceUri + "->"+ targetInstanceUri);
+                        	comparisons++;
+//                        	System.out.println(sourceInstanceUri + " - > " + targetInstanceUri + " # " + comparisons);
                             sim = measure.getSimilarity(source.getInstance(sourceInstanceUri),
                                     target.getInstance(targetInstanceUri), property1, property2);
                             if (sim >= threshold) {

@@ -1,5 +1,7 @@
 package org.aksw.limes.core.measures.measure;
 
+import java.io.Serializable;
+
 import org.aksw.limes.core.io.cache.Instance;
 
 /**
@@ -9,7 +11,7 @@ import org.aksw.limes.core.io.cache.Instance;
  * @author Kleanthi Georgala (georgala@informatik.uni-leipzig.de)
  * @version 1.0
  */
-public interface IMeasure {
+public interface IMeasure extends Serializable{
     /**
      * Returns the similarity between two objects.
      *
