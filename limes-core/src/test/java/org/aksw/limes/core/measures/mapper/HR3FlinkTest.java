@@ -1,7 +1,8 @@
 package org.aksw.limes.core.measures.mapper;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,6 +10,7 @@ import java.nio.file.Paths;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -94,10 +96,22 @@ public class HR3FlinkTest {
 //        sourceDS = env.fromElements(s1, s2, s3, s4);
 //        targetDS = env.fromElements(t1, t2, t3, t4);
 
-    	RDFConfigurationReader rdfcr = new RDFConfigurationReader("/home/ohdorno/gitrepo/swp15-ld-docs/Benchmarks/lgd-dbp-geo_long_lat.ttl");
-    	Configuration c = rdfcr.read();
-        source = HybridCache.getData(c.getSourceInfo()).getSample(3000);
-        target = HybridCache.getData(c.getTargetInfo()).getSample(1000);
+//    	RDFConfigurationReader rdfcr = new RDFConfigurationReader("/home/ohdorno/gitrepo/swp15-ld-docs/Benchmarks/lgd-dbp-geo_long_lat.ttl");
+//    	Configuration c = rdfcr.read();
+//        ACache s = HybridCache.getData(c.getSourceInfo()).getSample(3000);
+//        ACache t = HybridCache.getData(c.getTargetInfo()).getSample(1000);
+//        source = new HybridCache();
+//        target = new HybridCache();
+//        for(Instance i : s.getAllInstances()){
+//        	source.addInstance(i);
+//        }
+//        for(Instance i : s.getAllInstances()){
+//        	target.addInstance(i);
+//        }
+//        ((HybridCache)source).saveToFile(new File("/home/ohdorno/git/LIMES-dev2/limes-core/cache/-1605365096.ser"));
+//        ((HybridCache)source).saveToFile(new File("/home/ohdorno/git/LIMES-dev2/limes-core/cache/1412794763.ser"));
+    	source = HybridCache.loadFromFile(new File("/home/ohdorno/git/LIMES-dev2/limes-core/cache/-1605365096.ser"));
+    	target = HybridCache.loadFromFile(new File("/home/ohdorno/git/LIMES-dev2/limes-core/cache/1412794763.ser"));
         sourceDS = cacheToDS(source); 
         targetDS = cacheToDS(target);
         Files.write(Paths.get("/tmp/Flink"),"".getBytes());
@@ -111,7 +125,7 @@ public class HR3FlinkTest {
     @Test
     public void testi() throws Exception {
 //    	String measureExpr = "euclidean(x.derp|age|florp, y.derp|age|florp)";
-    	String measureExpr = "euclidean(x.geo:lat, y.geo:lat)";
+    	String measureExpr = "euclidean(x.geo:lat|geo:long, y.geo:lat|geo:long)";
     	HR3Mapper hr3m = new HR3Mapper();
     	long regStart = System.currentTimeMillis();
     	AMapping regM = hr3m.getMapping(source, target, "?x", "?y", measureExpr, 0.9);
