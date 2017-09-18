@@ -140,8 +140,8 @@ public class Test {
         sourceDS = cacheToDS(source); 
         targetDS = cacheToDS(target);
 
-        Path path = Paths.get("/tmp/CrossTest.csv");
-        Files.write(path, "Cross\n".getBytes());
+        Path path = Paths.get("/tmp/TuplesTest.csv");
+        Files.write(path, "Tuples\n".getBytes());
     	String measureExpr = "euclidean(x.geo:lat|geo:long, y.geo:lat|geo:long)";
     	for(int i = 0; i < 10; i++){
             FlinkH3Mapper flinkhr3m = new FlinkH3Mapper();
