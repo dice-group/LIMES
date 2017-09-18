@@ -145,7 +145,7 @@ public class FlinkH3Mapper {
 		public void flatMap(Tuple2<Instance, Instance> st, Collector<MappingObject> out) throws Exception {
 			if(st.f0.getBlocksToCompare().intersectNotEmpty(st.f1.getBlockIds())){
 //                HR3FlinkTest.FlinkHR3Comparisons.add(st.f0.getUri() + "->"+ st.f1.getUri());
-                Files.write(Paths.get("/tmp/Flink"),(st.f0.getUri() + "->"+ st.f1.getUri() + "\n").getBytes(), StandardOpenOption.APPEND);
+//                Files.write(Paths.get("/tmp/Flink"),(st.f0.getUri() + "->"+ st.f1.getUri() + "\n").getBytes(), StandardOpenOption.APPEND);
                 comparisons++;
     //			System.out.println(first.getUri() + " - > " + second.getUri() + " # " + comparisons);
                 double sim = measure.getSimilarity(st.f0, st.f1, property1, property2);
