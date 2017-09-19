@@ -153,15 +153,19 @@ public class HR3Mapper extends AMapper {
                     if (targetBlocks.containsKey(blocksToCompare.get(index))) {
                         uris = targetBlocks.get(blocksToCompare.get(index));
                         for (String targetInstanceUri : uris) {
+
+                        	// ====== TEST OUTPUTS FOR COMPARISON WITH FLINK
 //                        	HR3FlinkTest.HR3Comparisons.add(sourceInstanceUri + "->"+ targetInstanceUri);
-                try {
-                	Files.write(Paths.get("/tmp/Reg"),(sourceInstanceUri + "->"+ targetInstanceUri+ "\n").getBytes(), StandardOpenOption.APPEND);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//                try {
+//                	Files.write(Paths.get("/tmp/Reg"),(sourceInstanceUri + "->"+ targetInstanceUri+ "\n").getBytes(), StandardOpenOption.APPEND);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
                         	comparisons++;
 //                        	System.out.println(sourceInstanceUri + " - > " + targetInstanceUri + " # " + comparisons);
+                        	//=========== END TEST OUTPUTS
+
                             sim = measure.getSimilarity(source.getInstance(sourceInstanceUri),
                                     target.getInstance(targetInstanceUri), property1, property2);
                             if (sim >= threshold) {
