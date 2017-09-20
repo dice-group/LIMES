@@ -26,174 +26,172 @@ import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 import org.apache.flink.util.Collector;
 
 public class FlinkH3Mapper {
-    public static int comparisons = 0;
+	public static int comparisons = 0;
 
-    public static int granularity = 4;
-    public static int dim;    
-    public static ArrayList<Double> thresholds = new ArrayList<Double>();
-    public static ArrayList<String> properties = new ArrayList<String>();
+	public static int granularity = 4;
+	public static int dim;
+	public static ArrayList<Double> thresholds = new ArrayList<Double>();
+	public static ArrayList<String> properties = new ArrayList<String>();
 
-	public AMapping getMapping(DataSet<Instance> source, DataSet<Instance> target, String sourceVar, String targetVar, String expression,
-			double threshold) throws Exception {
-        AMapping mapping = MappingFactory.createDefaultMapping();
+	public AMapping getMapping(DataSet<Instance> source, DataSet<Instance> target, String sourceVar, String targetVar,
+			String expression, double threshold) throws Exception {
+		AMapping mapping = MappingFactory.createDefaultMapping();
 
-        // 0. get properties
-        String property1, property2;
-        // get property labels
-        Parser p = new Parser(expression, threshold);
-        // get first property label
-        String term1 = p.getLeftTerm();
-        if (term1.contains(".")) {
-            String split[] = term1.split("\\.");
-            property1 = split[1];
-            if (split.length >= 2)
-                for (int part = 2; part < split.length; part++)
-                    property1 += "." + split[part];
-        } else {
-            property1 = term1;
-        }
+		// 0. get properties
+		String property1, property2;
+		// get property labels
+		Parser p = new Parser(expression, threshold);
+		// get first property label
+		String term1 = p.getLeftTerm();
+		if (term1.contains(".")) {
+			String split[] = term1.split("\\.");
+			property1 = split[1];
+			if (split.length >= 2)
+				for (int part = 2; part < split.length; part++)
+					property1 += "." + split[part];
+		} else {
+			property1 = term1;
+		}
 
-        // get second property label
-        String term2 = p.getRightTerm();
-        if (term2.contains(".")) {
-            String split[] = term2.split("\\.");
-            property2 = split[1];
-            if (split.length >= 2)
-                for (int part = 2; part < split.length; part++)
-                    property2 += "." + split[part];
-        } else {
-            property2 = term2;
-        }
-        // get number of dimensions we are dealing with
-        String[] split = property2.split("\\|");
-        dim = split.length;
+		// get second property label
+		String term2 = p.getRightTerm();
+		if (term2.contains(".")) {
+			String split[] = term2.split("\\.");
+			property2 = split[1];
+			if (split.length >= 2)
+				for (int part = 2; part < split.length; part++)
+					property2 += "." + split[part];
+		} else {
+			property2 = term2;
+		}
+		// get number of dimensions we are dealing with
+		String[] split = property2.split("\\|");
+		dim = split.length;
 
-        // initialize the measure for similarity computation
-        ISpaceMeasure measure = SpaceMeasureFactory.getMeasure(p.getOperator(), dim);
-        for (int i = 0; i < dim; i++) {
-            thresholds.add(measure.getThreshold(i, threshold));
-            properties.add(split[i]);
-        }
-        
-        //set appropriate blocks
-        source = source.map(new SetAllBlockIds());
-        source = source.map(new SetAllBlocksToCompare());
-        target = target.map(new SetAllBlockIds());
-        
-        //Map blockids to instances
-        DataSet<Tuple2<Tuple,Instance>> sourceBid = source.flatMap(new BlocksToCompareIdToInstanceMapper());
-        DataSet<Tuple2<Tuple,Instance>> targetBid = target.flatMap(new BlockIdToInstanceMapper());
+		// initialize the measure for similarity computation
+		ISpaceMeasure measure = SpaceMeasureFactory.getMeasure(p.getOperator(), dim);
+		for (int i = 0; i < dim; i++) {
+			thresholds.add(measure.getThreshold(i, threshold));
+			properties.add(split[i]);
+		}
 
-        //comparison
-        DataSet<MappingObject> result = 
-        		//join compareto blocks from source and blocks from target
-        		sourceBid.join(targetBid)
-        		 .where("f0")
-        		 .equalTo("f0")
-        		 //compare the instances
-        		 .with(new Joiner(measure, property1, property2, threshold)).returns(new TypeHint<MappingObject>(){}.getTypeInfo());
+		// set appropriate blocks
+		source = source.map(new SetAllBlockIds());
+		source = source.map(new SetAllBlocksToCompare());
+		target = target.map(new SetAllBlockIds());
 
-       List<MappingObject> tmpRes = result.collect(); 
-       for(MappingObject m : tmpRes){
-           mapping.add(m.sid, m.tid, m.sim);
-       }
-       return mapping;
+		// Map blockids to instances
+		DataSet<Tuple2<Tuple, Instance>> sourceBid = source.flatMap(new BlocksToCompareIdToInstanceMapper());
+		DataSet<Tuple2<Tuple, Instance>> targetBid = target.flatMap(new BlockIdToInstanceMapper());
+
+		// comparison
+		DataSet<MappingObject> result =
+				// join compareto blocks from source and blocks from target
+				sourceBid.join(targetBid)
+						 .where("f0")
+						 .equalTo("f0")
+						// compare the instances
+						.with(new Joiner(measure, property1, property2, threshold))
+						.returns(new TypeHint<MappingObject>() {}.getTypeInfo());
+
+		List<MappingObject> tmpRes = result.collect();
+		for (MappingObject m : tmpRes) {
+			mapping.add(m.sid, m.tid, m.sim);
+		}
+		return mapping;
 	}
-	
+
 	/**
 	 * @return TypeInfo depending on the number of {@link #dim}
 	 */
-	private static TypeInformation getBlockInstanceMapperTypeInfo(){
-            TypeInformation<Integer> tinteger = TypeInformation.of(new TypeHint<Integer>(){});
-            TypeInformation<Instance> tinstance = TypeInformation.of(new TypeHint<Instance>(){});
-            TypeInformation[] dimTypes = new TypeInformation[dim];
-            for(int i = 0;i < dim;i++){
-            	dimTypes[i] = tinteger;
-            }
-            return new TupleTypeInfo<>( new TupleTypeInfo<>(dimTypes),tinstance);
+	private static TypeInformation getBlockInstanceMapperTypeInfo() {
+		TypeInformation<Integer> tinteger = TypeInformation.of(new TypeHint<Integer>() { });
+		TypeInformation<Instance> tinstance = TypeInformation.of(new TypeHint<Instance>() { });
+		TypeInformation[] dimTypes = new TypeInformation[dim];
+		for (int i = 0; i < dim; i++) {
+			dimTypes[i] = tinteger;
+		}
+		return new TupleTypeInfo<>(new TupleTypeInfo<>(dimTypes), tinstance);
 	}
-	
-	private static class BlocksToCompareIdToInstanceMapper implements FlatMapFunction<Instance,Tuple2<Tuple,Instance>>, ResultTypeQueryable<Tuple2<Tuple,Instance>>{
 
+	private static class BlocksToCompareIdToInstanceMapper implements FlatMapFunction<Instance, Tuple2<Tuple, Instance>>,
+			ResultTypeQueryable<Tuple2<Tuple, Instance>> {
 
 		private transient TypeInformation typeInformation;
-		
+
 		public BlocksToCompareIdToInstanceMapper() {
-            typeInformation = getBlockInstanceMapperTypeInfo();
+			typeInformation = getBlockInstanceMapperTypeInfo();
 		}
-			@Override
-			public void flatMap(Instance i, Collector<Tuple2<Tuple, Instance>> out)
-					throws Exception {
-				for(Tuple bid : i.getBlocksToCompare().ids){
-					out.collect(new Tuple2<Tuple, Instance>(bid,i));
-				}
-			}
 
-			@Override
-			public TypeInformation<Tuple2<Tuple, Instance>> getProducedType() {
-				return typeInformation;
+		@Override
+		public void flatMap(Instance i, Collector<Tuple2<Tuple, Instance>> out) throws Exception {
+			for (Tuple bid : i.getBlocksToCompare().ids) {
+				out.collect(new Tuple2<Tuple, Instance>(bid, i));
 			}
+		}
+
+		@Override
+		public TypeInformation<Tuple2<Tuple, Instance>> getProducedType() {
+			return typeInformation;
+		}
 	}
-	
 
-	private static class BlockIdToInstanceMapper implements FlatMapFunction<Instance,Tuple2<Tuple,Instance>>, ResultTypeQueryable<Tuple2<Tuple,Instance>>{
+	private static class BlockIdToInstanceMapper implements FlatMapFunction<Instance, Tuple2<Tuple, Instance>>,
+			ResultTypeQueryable<Tuple2<Tuple, Instance>> {
 
 		private transient TypeInformation typeInformation;
 
 		public BlockIdToInstanceMapper() {
-            typeInformation = getBlockInstanceMapperTypeInfo();
+			typeInformation = getBlockInstanceMapperTypeInfo();
 		}
 
-			@Override
-			public void flatMap(Instance i, Collector<Tuple2<Tuple, Instance>> out)
-					throws Exception {
-				for(Tuple bid : i.getBlockIds().ids){
-					out.collect(new Tuple2<Tuple, Instance>(bid,i));
-				}
+		@Override
+		public void flatMap(Instance i, Collector<Tuple2<Tuple, Instance>> out) throws Exception {
+			for (Tuple bid : i.getBlockIds().ids) {
+				out.collect(new Tuple2<Tuple, Instance>(bid, i));
 			}
+		}
 
-			@Override
-			public TypeInformation<Tuple2<Tuple, Instance>> getProducedType() {
-				return typeInformation;
-			}
+		@Override
+		public TypeInformation<Tuple2<Tuple, Instance>> getProducedType() {
+			return typeInformation;
+		}
 	}
 
-       private static class Joiner implements FlatJoinFunction<Tuple2<Tuple,Instance>,Tuple2<Tuple,Instance>,MappingObject>, ResultTypeQueryable<MappingObject> {
-            public ISpaceMeasure measure;
-            public String property1;
-            public String property2;
-            public double threshold;
-            private transient TypeInformation<MappingObject> typeInformation;
-            
+	private static class Joiner implements FlatJoinFunction<Tuple2<Tuple, Instance>, Tuple2<Tuple, Instance>, MappingObject>,
+			ResultTypeQueryable<MappingObject> {
+		public ISpaceMeasure measure;
+		public String property1;
+		public String property2;
+		public double threshold;
+		private transient TypeInformation<MappingObject> typeInformation;
 
-					public Joiner(ISpaceMeasure measure, String property1, String property2, double threshold) {
-				this.measure = measure;
-				this.property1 = property1;
-				this.property2 = property2;
-				this.threshold = threshold;
-				typeInformation = TypeInformation.of(new TypeHint<MappingObject>(){});
-			}
-
-
-					@Override
-					public void join(Tuple2<Tuple, Instance> first, Tuple2<Tuple, Instance> second,
-							Collector<MappingObject> out) throws Exception {
-						comparisons++;
-//                Files.write(Paths.get("/tmp/Flink"),(first.f1.getUri() + "->"+ second.f1.getUri() + "\n").getBytes(), StandardOpenOption.APPEND);
-                        double sim = measure.getSimilarity(first.f1, second.f1, property1, property2);
-                        if (sim >= threshold) {
-                              out.collect(new MappingObject(first.f1.getUri(), second.f1.getUri(),sim));
-                        }
-					}
-
-
-					@Override
-					public TypeInformation<MappingObject> getProducedType() {
-						return typeInformation;
-					}
+		public Joiner(ISpaceMeasure measure, String property1, String property2, double threshold) {
+			this.measure = measure;
+			this.property1 = property1;
+			this.property2 = property2;
+			this.threshold = threshold;
+			typeInformation = TypeInformation.of(new TypeHint<MappingObject>() {
+			});
 		}
-	
-	private static class MappingObject{
+
+		@Override
+		public void join(Tuple2<Tuple, Instance> first, Tuple2<Tuple, Instance> second, Collector<MappingObject> out)
+				throws Exception {
+			comparisons++;
+			double sim = measure.getSimilarity(first.f1, second.f1, property1, property2);
+			if (sim >= threshold) {
+				out.collect(new MappingObject(first.f1.getUri(), second.f1.getUri(), sim));
+			}
+		}
+
+		@Override
+		public TypeInformation<MappingObject> getProducedType() {
+			return typeInformation;
+		}
+	}
+
+	private static class MappingObject {
 		String sid;
 		String tid;
 		double sim;
@@ -203,132 +201,126 @@ public class FlinkH3Mapper {
 			this.tid = tid;
 			this.sim = sim;
 		}
-		
-		
+
 	}
 
-	private static class SetAllBlocksToCompare implements MapFunction<Instance,Instance> {
+	private static class SetAllBlocksToCompare implements MapFunction<Instance, Instance> {
 
 		@Override
 		public Instance map(Instance a) throws Exception {
 			Set<Tuple> blocksToCompare = new HashSet<>();
-			for(Tuple blockId : a.getBlockIds().ids){
-				int arity = blockId.getArity();
-				ArrayList<Integer> convertedBlockId = new ArrayList<>();
-				for(int i = 0; i < arity; i++){
-					convertedBlockId.add(blockId.getField(i));
-				}
-				ArrayList<ArrayList<Integer>> tmp = getBlocksToCompare(convertedBlockId);
-				for(ArrayList<Integer> bid : tmp){
-					blocksToCompare.add(ListToTupleConverter.convertToTuple(bid));
-//                	HR3FlinkTest.FlinkHR3sourceToCompare.add(a.getUri() + " -> " + bid);
-				}
+			for (Tuple blockId : a.getBlockIds().ids) {
+//				int arity = blockId.getArity();
+//				ArrayList<Integer> convertedBlockId = new ArrayList<>();
+//				for (int i = 0; i < arity; i++) {
+//					convertedBlockId.add(blockId.getField(i));
+//				}
+				blocksToCompare.addAll(getBlocksToCompare(blockId));
+//				ArrayList<Tuple> tmp = getBlocksToCompare(blockId);
+//				for (ArrayList<Integer> bid : tmp) {
+//					blocksToCompare.add(ListToTupleConverter.convertToTuple(bid));
+//				}
 			}
 			a.setBlocksToCompare(blocksToCompare);
 			return a;
 		}
 	}
 
-    /**
-     * Computes the blocks that are to be compared with a given block
-     *
-     * @param blockId
-     *         ID of the block for which comparisons are needed
-     * @return List of IDs that are to be compared
-     */
-    public static ArrayList<ArrayList<Integer>> getBlocksToCompare(ArrayList<Integer> blockId) {
-        int dim = blockId.size();
-        if (dim == 0) {
-            return new ArrayList<ArrayList<Integer>>();
-        }
-//        if(cache.containsKey(blockId))
-//        {
-//            return cache.get(blockId);
-//        }
-        ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
-        ArrayList<ArrayList<Integer>> hr3result = new ArrayList<ArrayList<Integer>>();
-        result.add(blockId);
+	/**
+	 * Computes the blocks that are to be compared with a given block
+	 *
+	 * @param blockId
+	 *            ID of the block for which comparisons are needed
+	 * @return List of IDs that are to be compared
+	 */
+	private static ArrayList<Tuple> getBlocksToCompare(Tuple blockId) {
+		if (dim == 0) {
+			return new ArrayList<Tuple>();
+		}
+		ArrayList<Tuple> result = new ArrayList<Tuple>();
+		ArrayList<Tuple> hr3result = new ArrayList<Tuple>();
+		result.add(blockId);
 
-        ArrayList<ArrayList<Integer>> toAdd;
-        ArrayList<Integer> id;
+		ArrayList<Tuple> toAdd;
+		Tuple id;
 
-        for (int i = 0; i < dim; i++) {
-            for (int j = 0; j < Math.pow(2 * granularity + 1, i); j++) {
-                //System.out.println("Result"+result);
-                id = result.get(j);
-                //System.out.println(j+" -> "+id);
-                toAdd = new ArrayList<ArrayList<Integer>>();
-                for (int k = 0; k < 2 * granularity; k++) {
-                    toAdd.add(new ArrayList<Integer>());
-                }
-                //System.out.println(toAdd.size());
-                for (int k = 0; k < dim; k++) {
-                    if (k != i) {
-                        for (int l = 0; l < 2 * granularity; l++) {
-                            toAdd.get(l).add(id.get(k));
-                        }
-                    } else {
-                        for (int l = 0; l < granularity; l++) {
-                            toAdd.get(l).add(id.get(k) - (l + 1));
-                        }
-                        for (int l = 0; l < granularity; l++) {
-                            toAdd.get(l + granularity).add(id.get(k) + l + 1);
-                        }
-                    }
-                    //System.out.println(i+". "+(k+1)+". "+toAdd);
-                }
-                //Merge results
-                for (int l = 0; l < 2 * granularity; l++) {
-                    result.add(toAdd.get(l));
-                }
-            }
-        }
+		for (int i = 0; i < dim; i++) {
+			for (int j = 0; j < Math.pow(2 * granularity + 1, i); j++) {
+				id = result.get(j);
+				toAdd = new ArrayList<Tuple>();
+				for (int k = 0; k < 2 * granularity; k++) {
+					toAdd.add(ListToTupleConverter.createEmptyNTuple(dim));
+				}
+				for (int k = 0; k < dim; k++) {
+					if (k != i) {
+						for (int l = 0; l < 2 * granularity; l++) {
+							toAdd.get(l).setField(id.getField(k),k);
+//							assert(toAdd.get(l).get(k) == id.get(k));
+						}
+					} else {
+						for (int l = 0; l < granularity; l++) {
+							toAdd.get(l).setField((((Integer)id.getField(k)) - (l + 1)), k);
+//							assert(toAdd.get(l).get(k) == (id.get(k) - (l+1)));
+						}
+						for (int l = 0; l < granularity; l++) {
+							toAdd.get(l + granularity).setField(((Integer)id.getField(k)) + l + 1,k);
+//							assert(toAdd.get(l + granularity).get(k) == (id.get(k) + l + 1));
+						}
+					}
+				}
+				// Merge results
+				for (int l = 0; l < 2 * granularity; l++) {
+					result.add(toAdd.get(l));
+				}
+			}
+		}
 
-        //now run hr3 check
-        int alphaPowered = (int) Math.pow(granularity, dim);
-        ArrayList<Integer> block;
-        int hr3Index;
-        int index;
-        for (int i = 0; i < result.size(); i++) {
-            hr3Index = 0;
-            block = result.get(i);
-            for (int j = 0; j < dim; j++) {
-                if (block.get(j) == blockId.get(j)) {
-                    hr3Index = 0;
-                    break;
-                } else {
-                    index = (Math.abs(blockId.get(j) - block.get(j)) - 1);
-                    hr3Index = hr3Index + (int) Math.pow(index, dim);
-                }
-            }
-            if (hr3Index < alphaPowered) hr3result.add(block);
-        }
+		// now run hr3 check
+		int alphaPowered = (int) Math.pow(granularity, dim);
+		Tuple block;
+		int hr3Index;
+		int index;
+		for (int i = 0; i < result.size(); i++) {
+			hr3Index = 0;
+			block = result.get(i);
+			for (int j = 0; j < dim; j++) {
+				if (block.getField(j) == blockId.getField(j)) {
+					hr3Index = 0;
+					break;
+				} else {
+					index = (Math.abs(((Integer)blockId.getField(j)) - ((Integer)block.getField(j))) - 1);
+					hr3Index = hr3Index + (int) Math.pow(index, dim);
+				}
+			}
+			if (hr3Index < alphaPowered)
+				hr3result.add(block);
+		}
 
-        return hr3result;
-    }
-	
-	private static class SetAllBlockIds implements MapFunction<Instance,Instance> {
-        @Override
-        public Instance map(Instance a) throws Exception {
-            int blockId;
-            Set<Tuple> blockIds = new HashSet<>();
-            ArrayList<ArrayList<Double>> combinations = new ArrayList<ArrayList<Double>>();
-            //get all property combinations
-            for (int i = 0; i < dim; i++) {
-                combinations = HR3Blocker.addIdsToList(combinations, a.getProperty(properties.get(i)));
-            }
-            for (int i = 0; i < combinations.size(); i++) {
-                ArrayList<Double> combination = combinations.get(i);
-                Tuple block = ListToTupleConverter.createEmptyNTuple(dim);
-                for (int j = 0; j < combination.size(); j++) {
-                    blockId = (int) java.lang.Math.floor((granularity * combination.get(j)) / thresholds.get(j));
-                    block.setField(blockId, j);
-                }
-                blockIds.add(block);
-            }
-            a.setBlockIds(blockIds);
-            return a;
-        }
+		return hr3result;
+	}
+
+	private static class SetAllBlockIds implements MapFunction<Instance, Instance> {
+		@Override
+		public Instance map(Instance a) throws Exception {
+			int blockId;
+			Set<Tuple> blockIds = new HashSet<>();
+			ArrayList<ArrayList<Double>> combinations = new ArrayList<ArrayList<Double>>();
+			// get all property combinations
+			for (int i = 0; i < dim; i++) {
+				combinations = HR3Blocker.addIdsToList(combinations, a.getProperty(properties.get(i)));
+			}
+			for (int i = 0; i < combinations.size(); i++) {
+				ArrayList<Double> combination = combinations.get(i);
+				Tuple block = ListToTupleConverter.createEmptyNTuple(dim);
+				for (int j = 0; j < combination.size(); j++) {
+					blockId = (int) java.lang.Math.floor((granularity * combination.get(j)) / thresholds.get(j));
+					block.setField(blockId, j);
+				}
+				blockIds.add(block);
+			}
+			a.setBlockIds(blockIds);
+			return a;
+		}
 	}
 
 }
