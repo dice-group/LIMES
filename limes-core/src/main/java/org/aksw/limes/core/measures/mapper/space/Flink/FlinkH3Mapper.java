@@ -26,12 +26,15 @@ import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 import org.apache.flink.util.Collector;
 
 public class FlinkH3Mapper {
+	/*
+	 * Used for debugging
+	 */
 	public static int comparisons = 0;
-
 	public static int granularity = 4;
 	public static int dim;
 	public static ArrayList<Double> thresholds = new ArrayList<Double>();
 	public static ArrayList<String> properties = new ArrayList<String>();
+
 
 	public AMapping getMapping(DataSet<Instance> source, DataSet<Instance> target, String sourceVar, String targetVar,
 			String expression, double threshold) throws Exception {
@@ -114,6 +117,11 @@ public class FlinkH3Mapper {
 		return new TupleTypeInfo<>(new TupleTypeInfo<>(dimTypes), tinstance);
 	}
 
+	/**
+	 * Used to map the {@link Instance#getBlocksToCompare()} to {@link Instance} 
+	 * @author Daniel Obraczka
+	 *
+	 */
 	private static class BlocksToCompareIdToInstanceMapper implements FlatMapFunction<Instance, Tuple2<Tuple, Instance>>,
 			ResultTypeQueryable<Tuple2<Tuple, Instance>> {
 
@@ -136,6 +144,11 @@ public class FlinkH3Mapper {
 		}
 	}
 
+	/**
+	 * Used to map the {@link Instance#getBlockIds()} to {@link Instance} 
+	 * @author Daniel Obraczka
+	 *
+	 */
 	private static class BlockIdToInstanceMapper implements FlatMapFunction<Instance, Tuple2<Tuple, Instance>>,
 			ResultTypeQueryable<Tuple2<Tuple, Instance>> {
 
@@ -158,6 +171,13 @@ public class FlinkH3Mapper {
 		}
 	}
 
+	/**
+	 * Used to "join" (actually compare) Instances where a {@link Instance#getBlocksToCompare()} block of a source Instance and the {@link Instance#getBlockIds()}
+	 * block of a target Instance are equal.
+	 * The instances are compare with the given similarity measure and a MappingObject is returned if the similarity is over the threshold
+	 * @author Daniel Obraczka
+	 *
+	 */
 	private static class Joiner implements FlatJoinFunction<Tuple2<Tuple, Instance>, Tuple2<Tuple, Instance>, MappingObject>,
 			ResultTypeQueryable<MappingObject> {
 		public ISpaceMeasure measure;
@@ -191,6 +211,11 @@ public class FlinkH3Mapper {
 		}
 	}
 
+	/**
+	 * Helper class to store mappings
+	 * @author Daniel Obraczka
+	 *
+	 */
 	private static class MappingObject {
 		String sid;
 		String tid;
@@ -210,16 +235,7 @@ public class FlinkH3Mapper {
 		public Instance map(Instance a) throws Exception {
 			Set<Tuple> blocksToCompare = new HashSet<>();
 			for (Tuple blockId : a.getBlockIds().ids) {
-//				int arity = blockId.getArity();
-//				ArrayList<Integer> convertedBlockId = new ArrayList<>();
-//				for (int i = 0; i < arity; i++) {
-//					convertedBlockId.add(blockId.getField(i));
-//				}
 				blocksToCompare.addAll(getBlocksToCompare(blockId));
-//				ArrayList<Tuple> tmp = getBlocksToCompare(blockId);
-//				for (ArrayList<Integer> bid : tmp) {
-//					blocksToCompare.add(ListToTupleConverter.convertToTuple(bid));
-//				}
 			}
 			a.setBlocksToCompare(blocksToCompare);
 			return a;

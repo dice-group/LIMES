@@ -18,11 +18,6 @@ import org.junit.Test;
 
 public class HR3FlinkTest {
 	
-//	public static HashSet<String> HR3sourceToCompare = new HashSet<>();
-//	public static HashSet<String> FlinkHR3sourceToCompare = new HashSet<>();
-//	public static HashSet<String> HR3Comparisons = new HashSet<>();
-//	public static HashSet<String> FlinkHR3Comparisons = new HashSet<>();
-	
     public ACache source;
     public ACache target;
     
@@ -91,22 +86,6 @@ public class HR3FlinkTest {
         sourceDS = env.fromElements(s1, s2, s3, s4);
         targetDS = env.fromElements(t1, t2, t3, t4);
 
-//    	RDFConfigurationReader rdfcr = new RDFConfigurationReader("/home/ohdorno/gitrepo/swp15-ld-docs/Benchmarks/lgd-dbp-geo_long_lat.ttl");
-//    	Configuration c = rdfcr.read();
-//        ACache s = HybridCache.getData(c.getSourceInfo()).getSample(3000);
-//        ACache t = HybridCache.getData(c.getTargetInfo()).getSample(1000);
-//        source = new HybridCache();
-//        target = new HybridCache();
-//        for(Instance i : s.getAllInstances()){
-//        	source.addInstance(i);
-//        }
-//        for(Instance i : s.getAllInstances()){
-//        	target.addInstance(i);
-//        }
-//        ((HybridCache)source).saveToFile(new File("/home/ohdorno/git/LIMES-dev2/limes-core/cache/-1605365096.ser"));
-//        ((HybridCache)source).saveToFile(new File("/home/ohdorno/git/LIMES-dev2/limes-core/cache/1412794763.ser"));
-//    	source = HybridCache.loadFromFile(new File("/home/ohdorno/git/LIMES-dev2/limes-core/cache/-1605365096.ser"));
-//    	target = HybridCache.loadFromFile(new File("/home/ohdorno/git/LIMES-dev2/limes-core/cache/1412794763.ser"));
         sourceDS = cacheToDS(source); 
         targetDS = cacheToDS(target);
     }
@@ -118,29 +97,15 @@ public class HR3FlinkTest {
     @Test
     public void testi() throws Exception {
     	String measureExpr = "euclidean(x.derp|age|florp, y.derp|age|florp)";
-//    	String measureExpr = "euclidean(x.geo:lat|geo:long, y.geo:lat|geo:long)";
     	HR3Mapper hr3m = new HR3Mapper();
-//    	long regStart = System.currentTimeMillis();
     	AMapping regM = hr3m.getMapping(source, target, "?x", "?y", measureExpr, 0.9);
-//    	long regStop = System.currentTimeMillis();
-//
-//
+
+
     	FlinkH3Mapper flinkhr3m = new FlinkH3Mapper();
-//    	long flinkStart = System.currentTimeMillis();
     	AMapping flinkM = flinkhr3m.getMapping(sourceDS, targetDS, "?x", "?y", measureExpr, 0.9);
-//    	long flinkStop = System.currentTimeMillis();
     	System.out.println("Regular comparisons: " + HR3Mapper.comparisons);
     	System.out.println("Flink comparisons: " + FlinkH3Mapper.comparisons);
-//    	
-//    	System.out.println(regM.size());
-//    	System.out.println("=====");
-//    	System.out.println(flinkM.size());
-//    	System.out.println("RegTime: " + (regStop - regStart) + " RegStart: " + regStart + " Stop: " + regStop);
-//    	System.out.println("flinkTime: " + (flinkStop - flinkStart) + " flinkStart: " + flinkStart + " Stop: " + flinkStop);
     	assertEquals(regM,flinkM);
-//    	assertEquals(HR3sourceToCompare, FlinkHR3sourceToCompare);
-    	
-//    	assertEquals(HR3Comparisons, FlinkHR3Comparisons);
     }
 
 }
