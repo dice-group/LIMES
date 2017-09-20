@@ -25,7 +25,7 @@ public class ConfigurationWizardTest extends ApplicationTest{
 
 	MainView mainView;
 	MainController mainController;
-	private static final int timeout = 15;
+	private static final int timeout = 180;
 	private static final Logger logger = LoggerFactory.getLogger(ConfigurationWizardTest.class);
 	private String resourcesPath;
 	

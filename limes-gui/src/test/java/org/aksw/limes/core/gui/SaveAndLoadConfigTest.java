@@ -20,11 +20,7 @@ public class SaveAndLoadConfigTest extends ApplicationTest{
 	
 	MainView mainView;
 	MainController mainController;
-	private static final String newMetricExpression = "or(jaccard(x.rdfs:label,y.name)|0.8,cosine(x.rdfs:label,y.name)|0.9)";
-	/**
-	 * There is a rename operation in the xml config that cannot be represented in ttl therefore this has to have rdfs:label instead of name
-	 */
-	private static final String testMetricExpression = "or(jaccard(x.rdfs:label,y.rdfs:label)|0.8,cosine(x.rdfs:label,y.rdfs:label)|0.9)";
+	private static final String metricExpression = "or(jaccard(x.rdfs:label,y.rdfs:label)|0.8,cosine(x.rdfs:label,y.rdfs:label)|0.9)";
 	
 	private static final File changedTestConfig = new File("src/test/resources/gui/changedTestConfig.ttl");
 	
@@ -58,9 +54,9 @@ public class SaveAndLoadConfigTest extends ApplicationTest{
 	
 	
 	public void changeAndSaveConfig(){
-		mainController.getCurrentConfig().setMetricExpression(newMetricExpression);
+		mainController.getCurrentConfig().setMetricExpression(metricExpression);
 		mainView.getGraphBuild().graphBuildController.generateGraphFromConfig();
-		CustomGuiTest.waitUntilNodeIsVisible("Drug properties", 15);
+		CustomGuiTest.waitUntilNodeIsVisible("Agent properties", 180);
 //		GuiTest.waitUntil("Drug properties", Matchers.notNullValue()); 
 
 		mainController.saveConfig(changedTestConfig);
@@ -68,6 +64,6 @@ public class SaveAndLoadConfigTest extends ApplicationTest{
 	
 	public void loadNewConfig(){
 		mainController.loadConfig(changedTestConfig);
-		assertEquals(testMetricExpression, mainController.getCurrentConfig().getMetricExpression());
+		assertEquals(metricExpression, mainController.getCurrentConfig().getMetricExpression());
 	}
 }

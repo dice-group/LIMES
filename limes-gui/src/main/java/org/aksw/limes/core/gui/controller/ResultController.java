@@ -105,7 +105,14 @@ public class ResultController {
      */
     public void saveResults(AMapping mapping, File file) {
         try {
-            String format = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
+        	String format = "";
+        	if(!file.getName().contains(".")){
+        		format = ".ttl";
+        		file = new File(file.toString() + format);
+        		System.out.println(file);
+        	}else{
+        		format = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
+        	}
             if (format.equals(".csv")) {
                 CSVMappingWriter csvwriter = new CSVMappingWriter();
                 csvwriter.write(mapping, file.getAbsolutePath());

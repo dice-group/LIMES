@@ -4,7 +4,7 @@
 
 .root{
     -fx-font-size: 12pt;
-    -fx-font-family: "Roboto";
+	-fx-font-family: sans-serif;
     -fx-base: rgb(52, 138, 47);
     -fx-background: rgb(235, 235, 235);
     -fx-focus-color: rgb(104, 155, 153);
