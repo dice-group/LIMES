@@ -257,7 +257,10 @@ public class XMLConfigurationReader extends AConfigurationReader {
 
         KBInfo targetInfo = configuration.getTargetInfo();
         KBInfo sourceInfo = configuration.getSourceInfo();
-        if(targetInfo.getMinOffset() > 0 && sourceInfo.getMinOffset() > 0) {
+        boolean partialTarget = (targetInfo.getMinOffset() > 0 || targetInfo.getMaxOffset() > 0);
+        boolean partialSource = (sourceInfo.getMinOffset() > 0 || sourceInfo.getMaxOffset() > 0);
+
+        if(partialTarget && partialSource) {
              logger.warn("Looks like you requested only subsets from BOTH endpoints!");
         }
 
