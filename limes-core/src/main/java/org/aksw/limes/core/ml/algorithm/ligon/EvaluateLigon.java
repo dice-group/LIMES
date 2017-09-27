@@ -107,16 +107,16 @@ public class EvaluateLigon{
 
         //get data
         AMapping sample = MappingFactory.createDefaultMapping();
-        
+
         int count = 0;
         for (String key : reference.getMap().keySet()) {
             for (String value : reference.getMap().get(key).keySet()) {
                 if (index.contains(count++)) {
-                  sample.add(key, value, reference.getConfidence(key, value));
-              } 
+                    sample.add(key, value, reference.getConfidence(key, value));
+                } 
             }
         }
-        
+
         return sample;
     }
 
@@ -260,17 +260,19 @@ public class EvaluateLigon{
      * @throws UnsupportedMLImplementationException 
      */
     public static void main(String[] args) throws UnsupportedMLImplementationException {
+        evaluateLigonWithReliableOracleForDataset("Abt-Buy");
+        
+        System.out.println("----- final results -----\n" + resultStr);
+    }
+
+    public static void evaluateLigonWithReliableOracleForDataset(String datasetName) throws UnsupportedMLImplementationException{
         // evaluation parameters
-        String d = "DBLP-Scholar";
-        int noisyOracleCount = 10 ;
         int mostInformativeExaplesCount = 10;
         int posNegExSize = 10;
-        double k = 2;
-        ODDS odds = ODDS.HARD;
 
         // get training data
-        resultStr +=  d +"\nSample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
-        EvaluationData data = DataSetChooser.getData(d);
+        resultStr +=  datasetName +"\nSample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
+        EvaluationData data = DataSetChooser.getData(datasetName);
         fullSourceCache = data.getSourceCache();
         fullTargetCache = data.getTargetCache();
         fullReferenceMapping = data.getReferenceMapping();
@@ -281,44 +283,86 @@ public class EvaluateLigon{
         fullReferenceMapping = removeLinksWithNoInstances(fullReferenceMapping);
 
         // training examples
-        //        for(int posNegExSize = 10; posNegExSize < 100 ; posNegExSize += 10){
-        
+
         AMapping posTrainingMap = sampleReferenceMap(fullReferenceMapping, posNegExSize);
         AMapping negTrainingMap = MappingFactory.createDefaultMapping(); //generateNegativeExamples(posTrainingMap, posNegExSize); TODO{add later}
         AMapping trainingMap = MappingOperations.union(posTrainingMap, negTrainingMap);
 
-        System.out.println("trainingMap size: " + trainingMap.size());
         fillTrainingCaches(trainingMap);
         trainingMap.getReversedMap();
 
-        // create noisy oracles with normal distribution
-        List<NoisyOracle> noisyOracles = new ArrayList<>();
-        Random pTT = new Random();
-        Random pTF = new Random();
-        Random pFT = new Random();
-        Random pFF = new Random();
-        double rPTT, rPTF, rPFT, rPFF;
-        for(int i = 0 ; i < noisyOracleCount ; i++ ){
-            do{
-                rPTT = 0.75 + (pTT.nextGaussian() + 1.0) / 2.0;
-                rPTF = 0.75 + (pTF.nextGaussian() + 1.0) / 2.0;
-                rPFT = 0.75 + (pFT.nextGaussian() + 1.0) / 2.0;
-                rPFF = 0.75 + (pFF.nextGaussian() + 1.0) / 2.0;
-                
-            }while(rPTT <0  || rPTT > 1 || rPTF <0  || rPTF > 1 || rPFT <0  || rPFT > 1 || rPFF <0  || rPFF > 1);
-            double sumR = rPTT + rPTF + rPFT + rPFF;
-            noisyOracles.add(new NoisyOracle(fullReferenceMapping, 
-                    new ConfusionMatrix(new double[][]{{rPTT/sumR,rPTF/sumR},{rPFT/sumR,rPFF/sumR}})));
-        }
-        System.out.println("\n\n ---- noisyOracles ----\n" + noisyOracles);
+        ReliableOracle oracle = new ReliableOracle(fullReferenceMapping);
 
         // initialize ligon
-        Ligon ligon = new Ligon(trainingMap, sourceTrainCache, targetTrainCache, noisyOracles, 
+        TrustedLigon ligon = new TrustedLigon(trainingMap, sourceTrainCache, targetTrainCache, oracle, 
                 fullSourceCache, fullTargetCache, fullReferenceMapping);
-    
-        AMapping labeledExaples = ligon.learn(trainingMap, k, odds, mostInformativeExaplesCount);
-        
 
+        //            AMapping labeledExaples = ligon.learn(trainingMap, k, odds, mostInformativeExaplesCount);
+        resultStr += ligon.learn(trainingMap, mostInformativeExaplesCount);
+    }
+
+    public static void evaluateLigonForDataset(String datasetName) throws UnsupportedMLImplementationException{
+        // evaluation parameters
+
+        int noisyOracleCount = 10 ;
+        int mostInformativeExaplesCount = 10;
+        int posNegExSize = 10;
+        String resultStr = "";
+        for(int k = 2 ; k <= 16 ; k +=2){
+            //        double k = 2;
+            ODDS odds = ODDS.HARD;
+
+            // get training data
+            resultStr +=  datasetName +"\nSample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
+            EvaluationData data = DataSetChooser.getData(datasetName);
+            fullSourceCache = data.getSourceCache();
+            fullTargetCache = data.getTargetCache();
+            fullReferenceMapping = data.getReferenceMapping();
+
+
+            // remove error mappings (if any)
+            int refMapSize = fullReferenceMapping.size();
+            fullReferenceMapping = removeLinksWithNoInstances(fullReferenceMapping);
+
+            // training examples
+            //        for(int posNegExSize = 10; posNegExSize < 100 ; posNegExSize += 10){
+
+            AMapping posTrainingMap = sampleReferenceMap(fullReferenceMapping, posNegExSize);
+            AMapping negTrainingMap = MappingFactory.createDefaultMapping(); //generateNegativeExamples(posTrainingMap, posNegExSize); TODO{add later}
+            AMapping trainingMap = MappingOperations.union(posTrainingMap, negTrainingMap);
+
+            fillTrainingCaches(trainingMap);
+            trainingMap.getReversedMap();
+
+            // create noisy oracles with normal distribution
+            List<NoisyOracle> noisyOracles = new ArrayList<>();
+            Random pTT = new Random();
+            Random pTF = new Random();
+            Random pFT = new Random();
+            Random pFF = new Random();
+            double rPTT, rPTF, rPFT, rPFF;
+            for(int i = 0 ; i < noisyOracleCount ; i++ ){
+                do{
+                    rPTT = 0.75 + (pTT.nextGaussian() + 1.0) / 2.0;
+                    rPTF = 0.75 + (pTF.nextGaussian() + 1.0) / 2.0;
+                    rPFT = 0.75 + (pFT.nextGaussian() + 1.0) / 2.0;
+                    rPFF = 0.75 + (pFF.nextGaussian() + 1.0) / 2.0;
+
+                }while(rPTT < 0  || rPTT > 1 || rPTF <0  || rPTF > 1 || rPFT < 0  || rPFT > 1 || rPFF < 0  || rPFF > 1);
+                double sumR = rPTT + rPTF + rPFT + rPFF;
+                noisyOracles.add(new NoisyOracle(fullReferenceMapping, 
+                        new ConfusionMatrix(new double[][]{{rPTT/sumR,rPTF/sumR},{rPFT/sumR,rPFF/sumR}})));
+            }
+            System.out.println("\n\n ---- noisyOracles ----\n" + noisyOracles);
+
+            // initialize ligon
+            Ligon ligon = new Ligon(trainingMap, sourceTrainCache, targetTrainCache, noisyOracles, 
+                    fullSourceCache, fullTargetCache, fullReferenceMapping);
+
+            //            AMapping labeledExaples = ligon.learn(trainingMap, k, odds, mostInformativeExaplesCount);
+            resultStr += "K=" + k +"\n" +ligon.learn(trainingMap, k, odds, mostInformativeExaplesCount);
+
+        }
     }
 
     public static AMapping generateNegativeExamples(AMapping posExamplesMapping, int size){

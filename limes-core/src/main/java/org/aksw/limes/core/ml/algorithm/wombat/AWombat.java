@@ -150,7 +150,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         for(LinkEntropy l: highestEntropyLinks){
             result.add(l.getSourceUri(), l.getTargetUri(), l.getProbability());
         }
-        System.out.println("result:\n" + result);
+//        System.out.println("result:\n" + result);
         return result;
     }
 

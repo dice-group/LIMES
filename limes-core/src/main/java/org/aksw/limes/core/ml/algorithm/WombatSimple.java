@@ -189,6 +189,7 @@ public class WombatSimple extends AWombat {
                 break; // no better solution can be found
             }
             logger.debug("Most promising node: " + mostPromisingNode.getValue());
+            System.out.println("Most promising node: " + mostPromisingNode.getValue());
         }
         RefinementNode bestSolution = getMostPromisingNode(refinementTreeRoot, 0).getValue();
         logger.debug("Overall Best Solution: " + bestSolution);

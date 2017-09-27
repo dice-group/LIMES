@@ -32,13 +32,19 @@ import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Ligon {
-    static Logger logger = LoggerFactory.getLogger(Ligon.class);
+/**
+ * Implement the idea of active learning with a trusted oracle
+ * Just for evaluation purposes 
+ * 
+ * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
+ *
+ */
+public class TrustedLigon {
+    static Logger logger = LoggerFactory.getLogger(TrustedLigon.class);
 
     String resultStr =  "tP\ttR\ttF\tMetricExpr\tP\tR\tF\n" ;
 
-    protected List<NoisyOracle> blackBoxOracles;
-    protected List<NoisyOracle> estimatedOracles;
+    protected ReliableOracle oracle;
 
     protected AMapping posExamplesMap = MappingFactory.createDefaultMapping();   
     protected AMapping negExamplesMap = MappingFactory.createDefaultMapping();
@@ -47,7 +53,6 @@ public class Ligon {
         HARD, RANDOM, EQUIVALENCE, APPROXIMATE
     }
 
-    double  randomOddL = 0.5;
 
     ACache sourceTrainCache = null;
     ACache targetTrainCache = null;
@@ -69,19 +74,15 @@ public class Ligon {
      * @param targetTrainCache
      * @param blackBoxOracles
      */
-    public Ligon(AMapping trainigExamplesMap, 
+    public TrustedLigon(AMapping trainigExamplesMap, 
             ACache sourceTrainCache, 
             ACache targetTrainCache, 
-            List<NoisyOracle> blackBoxOracles) {
+            ReliableOracle oracle) {
         super();
-        this.blackBoxOracles = blackBoxOracles;
+        this.oracle = oracle;
         //        this.estimatedOracles = FixedSizeList.decorate(Arrays.asList(new NoisyOracle[blackBoxOracles.size()]));
         this.sourceTrainCache = sourceTrainCache;
         this.targetTrainCache = targetTrainCache;
-        this.estimatedOracles = new ArrayList<>();
-        for(NoisyOracle o :blackBoxOracles){
-            this.estimatedOracles.add(new NoisyOracle(null, new ConfusionMatrix(0.5d)));
-        }
     }
 
     /**
@@ -92,89 +93,20 @@ public class Ligon {
      * @param targetTrainCache
      * @param blackBoxOracles
      */
-    public Ligon(AMapping trainigExamplesMap, 
+    public TrustedLigon(AMapping trainigExamplesMap, 
             ACache sourceTrainCache, 
             ACache targetTrainCache, 
-            List<NoisyOracle> blackBoxOracles,
+            ReliableOracle oracle,
             ACache fullSourceCache, 
             ACache fullTargetCache, 
             AMapping fullReferenceMapping) {
-        this(trainigExamplesMap, sourceTrainCache, targetTrainCache, blackBoxOracles);
+        this(trainigExamplesMap, sourceTrainCache, targetTrainCache, oracle);
         this.fullSourceCache = fullSourceCache;
         this.fullTargetCache = fullTargetCache;
         this.fullReferenceMap = fullReferenceMapping;
     }
 
 
-    /**
-     * Process 1 link by all black box oracles
-     * 
-     * @param subject
-     * @param object
-     * @return vector of all black box oracles results
-     */
-    protected  List<Boolean> getOracleFeedback(String subject, String object){
-        List<Boolean> result = new ArrayList<>();
-        for(int i = 0 ; i < blackBoxOracles.size() ; i++){
-            result.set(i, blackBoxOracles.get(i).predict(subject, object));
-        }
-        return result;
-    }
-
-
-    public void updateOraclesConfusionMatrices(AMapping labeledExamples){
-        for (String subject : labeledExamples.getMap().keySet()) {
-            for (String object : labeledExamples.getMap().get(subject).keySet()) {
-                double confidence = labeledExamples.getConfidence(subject, object);
-                for(int i = 0 ; i < blackBoxOracles.size() ; i++){
-                    if(confidence == 1.0d){ //positive example
-                        if(blackBoxOracles.get(i).predict(subject, object)){ //true prediction 
-                            estimatedOracles.get(i).confusionMatrix.incrementRightClassifiedPositiveExamplesCount();
-                        }else{ //false prediction
-                            estimatedOracles.get(i).confusionMatrix.incrementWrongClassifiedPositiveExamplesCount();
-                        }
-                    }
-                    else 
-                        if(confidence == 0.0d){ //negative example
-                            if(blackBoxOracles.get(i).predict(subject, object)){ //true prediction
-                                estimatedOracles.get(i).confusionMatrix.incrementWrongClassifiedNegativeExamplesCount();
-                            }else{ //false prediction
-                                estimatedOracles.get(i).confusionMatrix.incrementRightClassifiedNegativeExamplesCount();
-                            }
-                        }
-                }
-            }
-        }
-    }
-
-    public double computeOdds(String subject, String object, ODDS odds){
-        double result = 0.0d;
-        for(int i = 0 ; i < estimatedOracles.size() ; i++){
-            result += 
-                    Math.log(estimatedOracles.get(i).confusionMatrix.getRightClassifiedPositiveExamplesProbability()) +
-                    Math.log(estimatedOracles.get(i).confusionMatrix.getWrongClassifiedPositiveExamplesProbability()) -
-                    Math.log(estimatedOracles.get(i).confusionMatrix.getRightClassifiedNegativeExamplesProbability()) -
-                    Math.log(estimatedOracles.get(i).confusionMatrix.getWrongClassifiedNegativeExamplesProbability());
-        }
-        double oddsL = 1.0d;
-        switch (odds) {
-            case APPROXIMATE :
-                oddsL = wombatBestFmeasure;
-                break;
-            case EQUIVALENCE :
-                double minKbSize = (sourceTrainCache.size() < targetTrainCache.size()) ? sourceTrainCache.size() : targetTrainCache.size();
-                oddsL = minKbSize / (double)(sourceTrainCache.size() * targetTrainCache.size() - minKbSize);
-                break;
-            case RANDOM :
-                oddsL = randomOddL;
-                break;
-            case HARD :
-            default :
-                oddsL = 1.0d;
-                break;
-        }
-        return result + Math.log(oddsL);
-    }
 
     /**
      * Classify unlabeled examples to be positive or negative ones
@@ -186,14 +118,13 @@ public class Ligon {
      *         positive examples have confidence score of 1d and
      *         negative examples have a confidence score of 0d 
      */
-    protected AMapping classifyUnlabeledExamples(AMapping unlabeledexamples, double k, ODDS odds){
+    protected AMapping classifyUnlabeledExamples(AMapping unlabeledexamples){
         AMapping labeledExamples = MappingFactory.createDefaultMapping(); 
         for (String subject : unlabeledexamples.getMap().keySet()) {
             for (String object : unlabeledexamples.getMap().get(subject).keySet()) {
-                double OddsValue = computeOdds(subject, object, odds);
-                if(OddsValue > k){
+                if(oracle.predict(subject, object)){
                     labeledExamples.add(subject, object, 1.0d);
-                }else if(OddsValue < (1/k)){
+                }else {
                     //                    labeledExamples.add(subject, object, 0.0d); //TODO add later
                 }
             }
@@ -204,14 +135,13 @@ public class Ligon {
 
     //    public AMapping learn(AMapping labeledExamples,double k, ODDS odds,
     //            int mostInformativeExamplesCount) throws UnsupportedMLImplementationException{
-    public String learn(AMapping labeledExamples,double k, ODDS odds,
-            int mostInformativeExamplesCount) throws UnsupportedMLImplementationException{
+    public String learn(AMapping labeledExamples, int mostInformativeExamplesCount) throws UnsupportedMLImplementationException{
         initActiveWombat(fullSourceCache, fullTargetCache);
         int i = 0;
         do{
-            updateOraclesConfusionMatrices(labeledExamples);
             AMapping mostInformativeExamples = getWombatMostInformativeExamples(labeledExamples, mostInformativeExamplesCount);
-            AMapping newLabeledExamples = classifyUnlabeledExamples(mostInformativeExamples, k, odds);
+            System.out.println("mostInformativeExamples: " + mostInformativeExamples);
+            AMapping newLabeledExamples = classifyUnlabeledExamples(mostInformativeExamples);
             labeledExamples = MappingOperations.union(labeledExamples, newLabeledExamples);
             fillTrainingCaches(labeledExamples);
             i++;
@@ -296,7 +226,7 @@ public class Ligon {
                 String.format("%.2f",new FMeasure().calculate(fullResultMap, fullRefgoldStandard))   + "\t" +
                 //                (System.currentTimeMillis() - start)        + 
                 "\n" ;
-
+        System.out.println(resultStr);
         return resultStr;
     }
 
