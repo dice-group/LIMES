@@ -36,6 +36,8 @@ public class KBInfo implements Serializable {
     protected Map<String, String> prefixes;
     protected int pageSize;
     protected String type;
+    protected int maxoffset;
+    protected int minoffset;
 
     /**
      * Constructor
@@ -51,6 +53,8 @@ public class KBInfo implements Serializable {
         functions = new HashMap<>();
         pageSize = -1;      //-1 means query all at once
         type = DEFAULT_QUERY_TYPE;    //default value
+        maxoffset  = -1;
+        minoffset = -1;
     }
 
     /**
@@ -64,7 +68,7 @@ public class KBInfo implements Serializable {
     public KBInfo(String id, String endpoint, String graph, String var,
             List<String> properties, List<String> optionalProperties,
             ArrayList<String> restrictions, Map<String, Map<String, String>> functions,
-            Map<String, String> prefixes, int pageSize, String type) {
+            Map<String, String> prefixes, int pageSize, String type, int minoffset, int maxoffset) {
         super();
         this.id = id;
         this.endpoint = endpoint;
@@ -77,6 +81,8 @@ public class KBInfo implements Serializable {
         this.prefixes = prefixes;
         this.pageSize = pageSize;
         this.type = type;
+        this.maxoffset = maxoffset;
+        this.minoffset = minoffset;
     }
 
     public String getId() {
@@ -178,6 +184,22 @@ public class KBInfo implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
+    
+    public void setMaxOffset(int maxoffset) {
+        this.maxoffset = maxoffset;
+    }
+    
+    public int getMaxOffset() {
+        return maxoffset;
+    }
+    
+    public void setMinOffset(int minoffset) {
+        this.minoffset = minoffset;
+    }
+    
+    public int getMinOffset() {
+        return minoffset;
+    }
 
     /**
      * @return String representation of knowledge base info
@@ -195,6 +217,8 @@ public class KBInfo implements Serializable {
         s = s + "Functions: " + functions + "\n";
         s = s + "Page size: " + pageSize + "\n";
         s = s + "Type: " + type + "\n";
+        s = s + "MinOffset: " + minoffset + "\n";
+        s = s + "MaxOffset: " + maxoffset + "\n";
         return s;
     }
 
@@ -222,6 +246,8 @@ public class KBInfo implements Serializable {
                 + ((restrictions == null) ? 0 : restrictions.hashCode());
         //result = prime * result + ((var == null) ? 0 : var.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
+        result = prime * result + maxoffset;
+        result = prime * result + minoffset;
         return result;
     }
 
@@ -259,6 +285,12 @@ public class KBInfo implements Serializable {
             return false;
         }
         if (pageSize != other.pageSize) {
+            return false;
+        }
+        if(maxoffset != other.maxoffset) {
+            return false;
+        }
+        if(minoffset != other.minoffset) {
             return false;
         }
         if (prefixes == null) {
