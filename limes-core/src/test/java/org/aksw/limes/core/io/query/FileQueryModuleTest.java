@@ -37,7 +37,9 @@ public class FileQueryModuleTest {
                 functions,                                                        //Map<String, Map<String, String>> functions
                 prefixes,                                                            //Map<String, String> prefixes
                 1000,                                                                //int pageSize
-                "N3"                                                                //String type
+                "N3",                                                                //String type
+                -1,                                                               //int minOffset
+                -1                                                                //int maxoffset
         );
         FileQueryModule fqm = new FileQueryModule(kbinfo);
         HybridCache cache = new HybridCache();

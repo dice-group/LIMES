@@ -31,6 +31,11 @@ Six properties need to be set.
 * The restrictions on the queried data can be set via the `RESTRICTION` tag. This tag allows to constrain the entries that are retrieved the LIMES' query module. In this particular example, we only instances of MESH concepts. 
 * The `PROPERTY` tag allows to specify the properties that will be used during the linking. It is important to note that the property tag can also be used to specify the preprocessing on the input data. For example, setting `rdfs:label AS nolang`, one can ensure that the language tags get removed from each `rdfs:label` before it is written in the cache. Pre-processing functions can be piped into one another by using `->`. For example, `rdfs:label AS nolang->lowercase` will compute `lowercase(nolang(rdfs:label))`.
 
+Optional properties can be set to segment the requested dataset.
+
+* The graph of the endpoint can be specified directly ofter the `ENDPOINT` tag using the `GRAPH` tag.
+* The limits of the query can be set with the `MINOFFSET` and `MAXOFFSET` tags directly after the `PAGESIZE` tag. The resulting query will ask about the statements in the interval [`MINOFFSET`, `MAXOFFSET`]. Note that `MINOFFSET` must be smaller than `MAXOFFSET`! If both `SOURCE` and `TARGET` are restricted, a warning is generated.
+
 ## Pre-processing Functions
 
 Currently, LIMES supports the following set of pre-processing functions:
