@@ -8,6 +8,7 @@ import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.view.graphBuilder.GraphBuildView;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -66,9 +67,14 @@ public class MainView {
     /**
      * Button to run mapping
      */
-    private Button runButton;
-    /**
-     * MenuItem to start the BatchLearning Dialog
+//    private Button runButton;
+
+    private Button toolBarNewConfigButton;
+    private Button toolBarLoadConfigButton;
+    private Button toolBarSaveConfigButton;
+    private Button toolBarRunButton;  
+
+    /** MenuItem to start the BatchLearning Dialog
      */
     private MenuItem itemBatchLearning;
     /**
@@ -130,26 +136,16 @@ public class MainView {
         HBox.setHgrow(flow, Priority.ALWAYS);
         menuBox.getChildren().addAll(menuBar, flow);
         VBox menuAndToolbarBox = new VBox();
-        menuAndToolbarBox.getChildren().addAll(menuBox, buildToolbar());
+        menuAndToolbarBox.getChildren().addAll(menuBox, buildToolbar(stage));
         toolBox = new ToolBox(this);
         graphBuild = new GraphBuildView(toolBox);
-        HBox runBox = new HBox(0);
-        runBox.setAlignment(Pos.CENTER_RIGHT);
-        runButton = new Button("Run");
-        runButton.setId("runButton");
-        runButton.setTooltip(new Tooltip("Execute this link specification"));
-        runButton.setOnAction(e -> {
-            controller.map();
-        });
-        runBox.getChildren().add(runButton);
         root.setTop(menuAndToolbarBox);
         root.setLeft(toolBox);
         root.setRight(graphBuild);
-        root.setBottom(runBox);
         graphBuild.widthProperty().bind(
                 root.widthProperty().subtract(toolBox.widthProperty()));
-        graphBuild.heightProperty().bind(toolBox.heightProperty().subtract(runBox.heightProperty()));
-        toolBox.prefHeightProperty().bind(root.heightProperty().subtract(runBox.heightProperty()));
+        graphBuild.heightProperty().bind(toolBox.heightProperty());
+        toolBox.prefHeightProperty().bind(root.heightProperty());
         toolBox.setMinHeight(toolBox.prefHeightProperty().doubleValue());
         
 
@@ -169,27 +165,35 @@ public class MainView {
         stage.show();
     }
     
-    private HBox buildToolbar(){
+    private HBox buildToolbar(Window stage){
     	double imageSize = 20.0;
     	Image imageNewConfig = new Image(toolbarPath + "new_file.png",imageSize,imageSize,true, true);
     	Image imageSaveConfig = new Image(toolbarPath + "save_file.png",imageSize,imageSize,true, true);
     	Image imageLoadConfig = new Image(toolbarPath + "load_file.png",imageSize,imageSize,true, true);
     	Image imageRun = new Image(toolbarPath + "run.png",imageSize,imageSize,true, true);
-//    	String buttonStyle = "-fx-background-color: transparent";
-    	Button newConfigButton = new Button("", new ImageView(imageNewConfig));
-    	Button loadConfigButton = new Button("", new ImageView(imageLoadConfig));
-    	Button saveConfigButton = new Button("", new ImageView(imageSaveConfig));
-    	Button runButton = new Button("", new ImageView(imageRun));
-//    	newConfigButton.setStyle(buttonStyle);
-//    	loadConfigButton.setStyle(buttonStyle);
-//    	saveConfigButton.setStyle(buttonStyle);
-//    	runButton.setStyle(buttonStyle);
-    	newConfigButton.getStyleClass().add("toolBarButton");
-    	loadConfigButton.getStyleClass().add("toolBarButton");
-    	saveConfigButton.getStyleClass().add("toolBarButton");
-    	runButton.getStyleClass().add("toolBarButton");
+    	toolBarNewConfigButton = new Button("", new ImageView(imageNewConfig));
+    	toolBarLoadConfigButton = new Button("", new ImageView(imageLoadConfig));
+    	toolBarSaveConfigButton = new Button("", new ImageView(imageSaveConfig));
+    	toolBarRunButton = new Button("", new ImageView(imageRun));
+    	toolBarNewConfigButton.getStyleClass().add("toolBarButton");
+    	toolBarLoadConfigButton.getStyleClass().add("toolBarButton");
+    	toolBarSaveConfigButton.getStyleClass().add("toolBarButton");
+    	toolBarRunButton.getStyleClass().add("toolBarButton");
+    	
+    	toolBarNewConfigButton.setOnMouseClicked(e -> {
+        WizardView wizardView = new WizardView();
+        controller.newConfig(wizardView,new EditEndpointsView(wizardView), new EditClassMatchingView(wizardView),
+                new EditPropertyMatchingView(wizardView));
+        });
+    	
+    	toolBarLoadConfigButton.setOnMouseClicked(new LoadConfigEventHandler(stage));
+    	toolBarSaveConfigButton.setOnMouseClicked(new SaveConfigEventHandler(stage));
+    	toolBarRunButton.setOnMouseClicked(e -> {
+            controller.map();
+        });
+    	
     	HBox toolBarBox = new HBox();
-    	toolBarBox.getChildren().addAll(newConfigButton, loadConfigButton, saveConfigButton, runButton);
+    	toolBarBox.getChildren().addAll(toolBarNewConfigButton, toolBarLoadConfigButton, toolBarSaveConfigButton, toolBarRunButton);
         toolBarBox.setStyle("-fx-background-color: linear-gradient(to bottom, derive(-fx-base,30%), derive(-fx-base,60%));");
         toolBarBox.setSpacing(5.0);
         toolBarBox.setPadding(new Insets(0.0,0.0,1.0,15.0));
@@ -240,7 +244,7 @@ public class MainView {
         //=========== Load Configuration ===================
         MenuItem itemLoad = new MenuItem("Load Configuration");
         itemLoad.setId("itemLoad");
-        itemLoad.setOnAction(new NewConfigEventHandler(stage));
+        itemLoad.setOnAction(new LoadConfigEventHandler(stage));
         menuConfiguration.getItems().add(itemLoad);
         
         //========== Save Configuration ===================
@@ -298,15 +302,15 @@ public class MainView {
         return menuBar;
     }
     
-    private class NewConfigEventHandler implements EventHandler<ActionEvent>{
+    private class LoadConfigEventHandler implements EventHandler{
     	private Window stage;
 
-		public NewConfigEventHandler(Window stage) {
+		public LoadConfigEventHandler(Window stage) {
 			this.stage = stage;
 		}
 
 		@Override
-		public void handle(ActionEvent event) {
+		public void handle(Event event) {
             FileChooser fileChooser = new FileChooser();
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LIMES Configuration File (*.xml, *.rdf, *.ttl, *.n3, *.nt)", "*.xml", "*.rdf", "*.ttl", "*.n3", "*.nt");
             fileChooser.getExtensionFilters().add(extFilter);
@@ -317,7 +321,7 @@ public class MainView {
 		}
     }
 
-    private class SaveConfigEventHandler implements EventHandler<ActionEvent>{
+    private class SaveConfigEventHandler implements EventHandler{
     	private Window stage;
 
 		public SaveConfigEventHandler(Window stage) {
@@ -325,7 +329,7 @@ public class MainView {
 		}
 
 		@Override
-		public void handle(ActionEvent event) {
+		public void handle(Event event) {
             FileChooser fileChooser = new FileChooser();
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LIMES Configuration File (*.rdf, *.ttl, *.n3, *.nt)", "*.rdf", "*.ttl", "*.n3", "*.nt");
             fileChooser.getExtensionFilters().add(extFilter);
@@ -345,7 +349,8 @@ public class MainView {
     public void showLoadedConfig(boolean isLoaded) {
     	menuEdit.setDisable(!isLoaded);
         itemSave.setDisable(!isLoaded);
-        runButton.setDisable(!isLoaded);
+        toolBarSaveConfigButton.setDisable(!isLoaded);
+        toolBarRunButton.setDisable(!isLoaded);
         itemBatchLearning.setDisable(!isLoaded);
         itemUnsupervisedLearning.setDisable(!isLoaded);
         itemActiveLearning.setDisable(!isLoaded);
