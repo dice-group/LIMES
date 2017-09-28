@@ -175,6 +175,10 @@ public class MainView {
     	toolBarLoadConfigButton = new Button("", new ImageView(imageLoadConfig));
     	toolBarSaveConfigButton = new Button("", new ImageView(imageSaveConfig));
     	toolBarRunButton = new Button("", new ImageView(imageRun));
+    	toolBarNewConfigButton.setId("toolBarNewConfigButton");
+    	toolBarLoadConfigButton.setId("toolBarLoadConfigButton");
+    	toolBarSaveConfigButton.setId("toolBarSaveConfigButton");
+    	toolBarRunButton.setId("toolBarRunButton");
     	toolBarNewConfigButton.getStyleClass().add("toolBarButton");
     	toolBarLoadConfigButton.getStyleClass().add("toolBarButton");
     	toolBarSaveConfigButton.getStyleClass().add("toolBarButton");

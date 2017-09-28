@@ -148,7 +148,11 @@ public class MainViewTest extends ApplicationTest {
 	public void testVisibility() {
 		assertNotNull(mainView.getGraphBuild());
 		assertNotNull(mainView.toolBox);
-		verifyThat("#runButton", NodeMatchers.isDisabled());
+
+		verifyThat("#toolBarRunButton", NodeMatchers.isDisabled());
+		verifyThat("#toolBarNewConfigButton", NodeMatchers.isEnabled());
+		verifyThat("#toolBarLoadConfigButton", NodeMatchers.isEnabled());
+		verifyThat("#toolBarSaveConfigButton", NodeMatchers.isDisabled());
 
 		assertFalse(itemNew.isDisable());
 		assertFalse(itemLoad.isDisable());
