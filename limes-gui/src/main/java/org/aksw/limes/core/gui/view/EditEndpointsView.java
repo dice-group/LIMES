@@ -134,7 +134,6 @@ public class EditEndpointsView implements IEditView {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 			if (endpointURL.getValue() != null && !endpointURL.getValue().equals("")) {
-//				if (!newValue) { // when focus lost
 					// check if it is a file
 					File f = new File(endpointURL.getValue());
 					if (!(f.exists() && !f.isDirectory())) {
@@ -148,7 +147,6 @@ public class EditEndpointsView implements IEditView {
 						}
 					}
 				}
-//			}
 			}
 		});
 
