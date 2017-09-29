@@ -167,35 +167,45 @@ public class MainView {
     
     private HBox buildToolbar(Window stage){
     	double imageSize = 20.0;
+    	//Load icons
     	Image imageNewConfig = new Image(toolbarPath + "new_file.png",imageSize,imageSize,true, true);
     	Image imageSaveConfig = new Image(toolbarPath + "save_file.png",imageSize,imageSize,true, true);
     	Image imageLoadConfig = new Image(toolbarPath + "load_file.png",imageSize,imageSize,true, true);
     	Image imageRun = new Image(toolbarPath + "run.png",imageSize,imageSize,true, true);
+    	//Create Buttons
     	toolBarNewConfigButton = new Button("", new ImageView(imageNewConfig));
     	toolBarLoadConfigButton = new Button("", new ImageView(imageLoadConfig));
     	toolBarSaveConfigButton = new Button("", new ImageView(imageSaveConfig));
     	toolBarRunButton = new Button("", new ImageView(imageRun));
+    	//Add tooltips
+    	toolBarNewConfigButton.setTooltip(new Tooltip("Create a new configuration"));
+    	toolBarLoadConfigButton.setTooltip(new Tooltip("Load a new configuration file"));
+    	toolBarSaveConfigButton.setTooltip(new Tooltip("Save this configuration to a file"));
+    	toolBarRunButton.setTooltip(new Tooltip("Execute this link specification"));
+    	//Set ids
     	toolBarNewConfigButton.setId("toolBarNewConfigButton");
     	toolBarLoadConfigButton.setId("toolBarLoadConfigButton");
     	toolBarSaveConfigButton.setId("toolBarSaveConfigButton");
     	toolBarRunButton.setId("toolBarRunButton");
+    	//Custom style class
     	toolBarNewConfigButton.getStyleClass().add("toolBarButton");
     	toolBarLoadConfigButton.getStyleClass().add("toolBarButton");
     	toolBarSaveConfigButton.getStyleClass().add("toolBarButton");
     	toolBarRunButton.getStyleClass().add("toolBarButton");
     	
+    	//Functionality
     	toolBarNewConfigButton.setOnMouseClicked(e -> {
         WizardView wizardView = new WizardView();
         controller.newConfig(wizardView,new EditEndpointsView(wizardView), new EditClassMatchingView(wizardView),
                 new EditPropertyMatchingView(wizardView));
         });
-    	
     	toolBarLoadConfigButton.setOnMouseClicked(new LoadConfigEventHandler(stage));
     	toolBarSaveConfigButton.setOnMouseClicked(new SaveConfigEventHandler(stage));
     	toolBarRunButton.setOnMouseClicked(e -> {
             controller.map();
         });
     	
+    	//put in hbox and style it
     	HBox toolBarBox = new HBox();
     	toolBarBox.getChildren().addAll(toolBarNewConfigButton, toolBarLoadConfigButton, toolBarSaveConfigButton, toolBarRunButton);
         toolBarBox.setStyle("-fx-background-color: linear-gradient(to bottom, derive(-fx-base,30%), derive(-fx-base,60%));");
