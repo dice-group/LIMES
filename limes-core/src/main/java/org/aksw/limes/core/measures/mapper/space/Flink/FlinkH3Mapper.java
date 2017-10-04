@@ -78,14 +78,8 @@ public class FlinkH3Mapper {
 			properties.add(split[i]);
 		}
 
-		// set appropriate blocks
-		source = source.map(new SetAllBlockIds());
-		source = source.map(new SetAllBlocksToCompare());
-		target = target.map(new SetAllBlockIds());
-
-		// Map blockids to instances
-		DataSet<Tuple2<Tuple, Instance>> sourceBid = source.flatMap(new BlocksToCompareIdToInstanceMapper());
-		DataSet<Tuple2<Tuple, Instance>> targetBid = target.flatMap(new BlockIdToInstanceMapper());
+		DataSet<Tuple2<Tuple, Instance>> sourceBid = source.flatMap(new GetSourceInstanceBlocksToCompare());
+		DataSet<Tuple2<Tuple, Instance>> targetBid = target.flatMap(new GetTargetBlocks());
 
 		// comparison
 		DataSet<MappingObject> result =
@@ -117,62 +111,9 @@ public class FlinkH3Mapper {
 		return new TupleTypeInfo<>(new TupleTypeInfo<>(dimTypes), tinstance);
 	}
 
-	/**
-	 * Used to map the {@link Instance#getBlocksToCompare()} to {@link Instance} 
-	 * @author Daniel Obraczka
-	 *
-	 */
-	private static class BlocksToCompareIdToInstanceMapper implements FlatMapFunction<Instance, Tuple2<Tuple, Instance>>,
-			ResultTypeQueryable<Tuple2<Tuple, Instance>> {
-
-		private transient TypeInformation typeInformation;
-
-		public BlocksToCompareIdToInstanceMapper() {
-			typeInformation = getBlockInstanceMapperTypeInfo();
-		}
-
-		@Override
-		public void flatMap(Instance i, Collector<Tuple2<Tuple, Instance>> out) throws Exception {
-			for (Tuple bid : i.getBlocksToCompare().ids) {
-				out.collect(new Tuple2<Tuple, Instance>(bid, i));
-			}
-		}
-
-		@Override
-		public TypeInformation<Tuple2<Tuple, Instance>> getProducedType() {
-			return typeInformation;
-		}
-	}
 
 	/**
-	 * Used to map the {@link Instance#getBlockIds()} to {@link Instance} 
-	 * @author Daniel Obraczka
-	 *
-	 */
-	private static class BlockIdToInstanceMapper implements FlatMapFunction<Instance, Tuple2<Tuple, Instance>>,
-			ResultTypeQueryable<Tuple2<Tuple, Instance>> {
-
-		private transient TypeInformation typeInformation;
-
-		public BlockIdToInstanceMapper() {
-			typeInformation = getBlockInstanceMapperTypeInfo();
-		}
-
-		@Override
-		public void flatMap(Instance i, Collector<Tuple2<Tuple, Instance>> out) throws Exception {
-			for (Tuple bid : i.getBlockIds().ids) {
-				out.collect(new Tuple2<Tuple, Instance>(bid, i));
-			}
-		}
-
-		@Override
-		public TypeInformation<Tuple2<Tuple, Instance>> getProducedType() {
-			return typeInformation;
-		}
-	}
-
-	/**
-	 * Used to "join" (actually compare) Instances where a {@link Instance#getBlocksToCompare()} block of a source Instance and the {@link Instance#getBlockIds()}
+	 * Used to "join" (actually compare) Instances where a compareToBlock of a source Instance and the 
 	 * block of a target Instance are equal.
 	 * The instances are compare with the given similarity measure and a MappingObject is returned if the similarity is over the threshold
 	 * @author Daniel Obraczka
@@ -228,96 +169,22 @@ public class FlinkH3Mapper {
 		}
 
 	}
-
-	private static class SetAllBlocksToCompare implements MapFunction<Instance, Instance> {
-
-		@Override
-		public Instance map(Instance a) throws Exception {
-			Set<Tuple> blocksToCompare = new HashSet<>();
-			for (Tuple blockId : a.getBlockIds().ids) {
-				blocksToCompare.addAll(getBlocksToCompare(blockId));
-			}
-			a.setBlocksToCompare(blocksToCompare);
-			return a;
-		}
-	}
-
+	
 	/**
-	 * Computes the blocks that are to be compared with a given block
+	 * Calculates the blocks for an instance as TupleN where N = number of dimensions.
+	 * Returns Tuple2 of block and this instance
+	 * @author Daniel Obraczka
 	 *
-	 * @param blockId
-	 *            ID of the block for which comparisons are needed
-	 * @return List of IDs that are to be compared
 	 */
-	private static ArrayList<Tuple> getBlocksToCompare(Tuple blockId) {
-		if (dim == 0) {
-			return new ArrayList<Tuple>();
-		}
-		ArrayList<Tuple> result = new ArrayList<Tuple>();
-		ArrayList<Tuple> hr3result = new ArrayList<Tuple>();
-		result.add(blockId);
+	private static class GetTargetBlocks implements FlatMapFunction<Instance, Tuple2<Tuple,Instance>> ,ResultTypeQueryable<Tuple2<Tuple, Instance>> {
+		private transient TypeInformation typeInformation;
 
-		ArrayList<Tuple> toAdd;
-		Tuple id;
-
-		for (int i = 0; i < dim; i++) {
-			for (int j = 0; j < Math.pow(2 * granularity + 1, i); j++) {
-				id = result.get(j);
-				toAdd = new ArrayList<Tuple>();
-				for (int k = 0; k < 2 * granularity; k++) {
-					toAdd.add(ListToTupleConverter.createEmptyNTuple(dim));
-				}
-				for (int k = 0; k < dim; k++) {
-					if (k != i) {
-						for (int l = 0; l < 2 * granularity; l++) {
-							toAdd.get(l).setField(id.getField(k),k);
-//							assert(toAdd.get(l).get(k) == id.get(k));
-						}
-					} else {
-						for (int l = 0; l < granularity; l++) {
-							toAdd.get(l).setField((((Integer)id.getField(k)) - (l + 1)), k);
-//							assert(toAdd.get(l).get(k) == (id.get(k) - (l+1)));
-						}
-						for (int l = 0; l < granularity; l++) {
-							toAdd.get(l + granularity).setField(((Integer)id.getField(k)) + l + 1,k);
-//							assert(toAdd.get(l + granularity).get(k) == (id.get(k) + l + 1));
-						}
-					}
-				}
-				// Merge results
-				for (int l = 0; l < 2 * granularity; l++) {
-					result.add(toAdd.get(l));
-				}
-			}
+		public GetTargetBlocks() {
+			typeInformation = getBlockInstanceMapperTypeInfo();
 		}
 
-		// now run hr3 check
-		int alphaPowered = (int) Math.pow(granularity, dim);
-		Tuple block;
-		int hr3Index;
-		int index;
-		for (int i = 0; i < result.size(); i++) {
-			hr3Index = 0;
-			block = result.get(i);
-			for (int j = 0; j < dim; j++) {
-				if (block.getField(j) == blockId.getField(j)) {
-					hr3Index = 0;
-					break;
-				} else {
-					index = (Math.abs(((Integer)blockId.getField(j)) - ((Integer)block.getField(j))) - 1);
-					hr3Index = hr3Index + (int) Math.pow(index, dim);
-				}
-			}
-			if (hr3Index < alphaPowered)
-				hr3result.add(block);
-		}
-
-		return hr3result;
-	}
-
-	private static class SetAllBlockIds implements MapFunction<Instance, Instance> {
 		@Override
-		public Instance map(Instance a) throws Exception {
+		public void flatMap(Instance a, Collector<Tuple2<Tuple, Instance>> out) throws Exception {
 			int blockId;
 			Set<Tuple> blockIds = new HashSet<>();
 			ArrayList<ArrayList<Double>> combinations = new ArrayList<ArrayList<Double>>();
@@ -332,10 +199,111 @@ public class FlinkH3Mapper {
 					blockId = (int) java.lang.Math.floor((granularity * combination.get(j)) / thresholds.get(j));
 					block.setField(blockId, j);
 				}
-				blockIds.add(block);
+				out.collect(new Tuple2<Tuple,Instance>(block,a));
 			}
-			a.setBlockIds(blockIds);
-			return a;
+		}
+
+		@Override
+		public TypeInformation<Tuple2<Tuple, Instance>> getProducedType() {
+			return typeInformation;
+		}
+	}
+
+	/**
+	 * Calculates the blocks for an instance as TupleN where N = number of dimensions.
+	 * Uses these blocks to calculate the blocks that have to be compared for this block.
+	 * Returns Tuple2 of block to compare and this instance
+	 * @author Daniel Obraczka
+	 *
+	 */
+	private static class GetSourceInstanceBlocksToCompare implements FlatMapFunction<Instance, Tuple2<Tuple, Instance>> ,ResultTypeQueryable<Tuple2<Tuple, Instance>> {
+
+		private transient TypeInformation typeInformation;
+
+		public GetSourceInstanceBlocksToCompare() {
+			typeInformation = getBlockInstanceMapperTypeInfo();
+		}
+
+		@Override
+		public void flatMap(Instance a, Collector<Tuple2<Tuple, Instance>> out) throws Exception {
+			int blockId;
+			ArrayList<ArrayList<Double>> combinations = new ArrayList<ArrayList<Double>>();
+			// get all property combinations
+			for (int i = 0; i < dim; i++) {
+				combinations = HR3Blocker.addIdsToList(combinations, a.getProperty(properties.get(i)));
+			}
+			//GET BLOCKS
+			for (int i = 0; i < combinations.size(); i++) {
+				ArrayList<Double> combination = combinations.get(i);
+				Tuple block = ListToTupleConverter.createEmptyNTuple(dim);
+				for (int j = 0; j < combination.size(); j++) {
+					blockId = (int) java.lang.Math.floor((granularity * combination.get(j)) / thresholds.get(j));
+					block.setField(blockId, j);
+				}
+
+				//==============================================
+				//=== GET BLOCKS TO COMPARE ====================
+				//==============================================
+                ArrayList<Tuple> result = new ArrayList<Tuple>();
+                result.add(block);
+
+                ArrayList<Tuple> toAdd;
+                Tuple id;
+
+                for (int k = 0; k < dim; k++) {
+                    for (int j = 0; j < Math.pow(2 * granularity + 1, k); j++) {
+                        id = result.get(j);
+                        toAdd = new ArrayList<Tuple>();
+                        for (int m = 0; m < 2 * granularity; m++) {
+                            toAdd.add(ListToTupleConverter.createEmptyNTuple(dim));
+                        }
+                        for (int m = 0; m < dim; m++) {
+                            if (m != k) {
+                                for (int l = 0; l < 2 * granularity; l++) {
+                                    toAdd.get(l).setField(id.getField(m),m);
+                                }
+                            } else {
+                                for (int l = 0; l < granularity; l++) {
+                                    toAdd.get(l).setField((((Integer)id.getField(m)) - (l + 1)), m);
+                                }
+                                for (int l = 0; l < granularity; l++) {
+                                    toAdd.get(l + granularity).setField(((Integer)id.getField(m)) + l + 1,m);
+                                }
+                            }
+                        }
+                        // Merge results
+                        for (int l = 0; l < 2 * granularity; l++) {
+                            result.add(toAdd.get(l));
+                        }
+                    }
+                }
+
+                // now run hr3 check
+                int alphaPowered = (int) Math.pow(granularity, dim);
+                Tuple blockToCompare;
+                int hr3Index;
+                int index;
+                for (int l = 0; l < result.size(); l++) {
+                    hr3Index = 0;
+                    blockToCompare = result.get(l);
+                    for (int j = 0; j < dim; j++) {
+                        if (blockToCompare.getField(j) == block.getField(j)) {
+                            hr3Index = 0;
+                            break;
+                        } else {
+                            index = (Math.abs(((Integer)block.getField(j)) - ((Integer)blockToCompare.getField(j))) - 1);
+                            hr3Index = hr3Index + (int) Math.pow(index, dim);
+                        }
+                    }
+                    if (hr3Index < alphaPowered)
+                    	out.collect(new Tuple2<Tuple,Instance>(blockToCompare,a));
+                }
+			}
+		}
+
+		@Override
+		public TypeInformation<Tuple2<Tuple, Instance>> getProducedType() {
+			return typeInformation;
 		}
 	}
 

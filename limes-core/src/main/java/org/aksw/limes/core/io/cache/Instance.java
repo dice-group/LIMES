@@ -32,10 +32,6 @@ public class Instance implements Comparable<Object>, Serializable {
     private String uri;
     private HashMap<String, TreeSet<String>> properties;
     
-    private Blocks blockIds;
-    private Blocks blocksToCompare;
-
-
     public Instance(){}
 
     /**
@@ -276,22 +272,6 @@ public class Instance implements Comparable<Object>, Serializable {
 
 		}
 
-		public Blocks getBlockIds() {
-			return blockIds;
-		}
-
-		public void setBlockIds(Set<Tuple> id) {
-			this.blockIds = new Blocks(id);
-		}
-
-		public Blocks getBlocksToCompare() {
-			return blocksToCompare;
-		}
-
-		public void setBlocksToCompare(Set<Tuple> id) {
-			this.blocksToCompare = new Blocks(id);
-		}
-
 		public double getDistance() {
 			return distance;
 		}
@@ -319,14 +299,5 @@ public class Instance implements Comparable<Object>, Serializable {
 		public void setUri(String uri) {
 			this.uri = uri;
 		}
-
-		public void setBlockIds(Blocks blockIds) {
-			this.blockIds = blockIds;
-		}
-
-		public void setBlocksToCompare(Blocks blocksToCompare) {
-			this.blocksToCompare = blocksToCompare;
-		}
-    
 }
 
