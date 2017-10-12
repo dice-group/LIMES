@@ -9,7 +9,7 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
-import org.aksw.limes.core.measures.mapper.space.Flink.FlinkH3Mapper;
+import org.aksw.limes.core.measures.mapper.space.Flink.FlinkHR3Mapper;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.junit.Before;
@@ -101,10 +101,10 @@ public class HR3FlinkTest {
     	AMapping regM = hr3m.getMapping(source, target, "?x", "?y", measureExpr, 0.9);
 
 
-    	FlinkH3Mapper flinkhr3m = new FlinkH3Mapper();
+    	FlinkHR3Mapper flinkhr3m = new FlinkHR3Mapper();
     	AMapping flinkM = flinkhr3m.getMapping(sourceDS, targetDS, "?x", "?y", measureExpr, 0.9);
     	System.out.println("Regular comparisons: " + HR3Mapper.comparisons);
-    	System.out.println("Flink comparisons: " + FlinkH3Mapper.comparisons);
+    	System.out.println("Flink comparisons: " + FlinkHR3Mapper.comparisons);
     	assertEquals(regM,flinkM);
     }
 

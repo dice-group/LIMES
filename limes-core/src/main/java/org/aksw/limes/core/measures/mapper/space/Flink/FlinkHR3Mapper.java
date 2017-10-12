@@ -14,18 +14,22 @@ import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
-import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.tuple.Tuple;
-import org.apache.flink.api.java.tuple.Tuple0;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.typeutils.ResultTypeQueryable;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
+import org.apache.flink.configuration.ConfigConstants;
+import org.apache.flink.configuration.ConfigOptions;
+import org.apache.flink.configuration.Configuration;
+import org.apache.flink.configuration.GlobalConfiguration;
+import org.apache.flink.runtime.minicluster.FlinkMiniCluster;
+import org.apache.flink.runtime.minicluster.LocalFlinkMiniCluster;
 import org.apache.flink.util.Collector;
 
-public class FlinkH3Mapper {
+public class FlinkHR3Mapper {
 	/*
 	 * Used for debugging
 	 */
@@ -34,6 +38,19 @@ public class FlinkH3Mapper {
 	public static int dim;
 	public static ArrayList<Double> thresholds = new ArrayList<Double>();
 	public static ArrayList<String> properties = new ArrayList<String>();
+
+	public FlinkHR3Mapper(){
+		
+	}
+	
+	public FlinkHR3Mapper(String configDir){
+		Configuration config = GlobalConfiguration.loadConfiguration(configDir);
+		System.out.println("Akka client timeout: " + config.getString(ConfigConstants.AKKA_CLIENT_TIMEOUT,null));
+		System.out.println("Default parallelism: " + config.getString(ConfigConstants.DEFAULT_PARALLELISM_KEY,null));
+		System.out.println("# slots: " + config.getString(ConfigConstants.TASK_MANAGER_NUM_TASK_SLOTS,null));
+		FlinkMiniCluster cluster = new LocalFlinkMiniCluster(config);
+		cluster.start();
+	}
 
 
 	public AMapping getMapping(DataSet<Instance> source, DataSet<Instance> target, String sourceVar, String targetVar,
@@ -140,6 +157,7 @@ public class FlinkH3Mapper {
 		public void join(Tuple2<Tuple, Instance> first, Tuple2<Tuple, Instance> second, Collector<MappingObject> out)
 				throws Exception {
 			comparisons++;
+			System.out.println(first.f0 + " : " + first.f1 + " - > " + second.f0 + " : " + second.f1);
 			double sim = measure.getSimilarity(first.f1, second.f1, property1, property2);
 			if (sim >= threshold) {
 				out.collect(new MappingObject(first.f1.getUri(), second.f1.getUri(), sim));

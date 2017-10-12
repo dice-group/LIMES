@@ -135,6 +135,7 @@ public class SparqlQueryModule implements IQueryModule {
             }
             offset = offset + kb.getPageSize();
 
+            logger.info("Retrieved " + counter);
         } while (moreResults && kb.getPageSize() > 0);
         logger.info("Retrieved " + counter + " triples and " + cache.size() + " entities.");
         logger.info("Retrieving statements took " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds.");
@@ -148,6 +149,7 @@ public class SparqlQueryModule implements IQueryModule {
             key = iter.next();
             query = query + "PREFIX " + key + ": <" + kb.getPrefixes().get(key) + ">\n";
         }
+        query = query + "SELECT " + kb.getVar() + " WHERE {";
         // fill in variable for the different properties to be retrieved
         query = query + "SELECT DISTINCT " + kb.getVar();
         for (int i = 0; i < kb.getProperties().size(); i++) {
@@ -228,6 +230,7 @@ public class SparqlQueryModule implements IQueryModule {
         if (kb.getRestrictions().size() > 0) {
             query = query + "}";
         }
+        query = query + " ORDER BY ?v0 }";
         logger.info("Query issued is \n" + query);
         return query;
     }

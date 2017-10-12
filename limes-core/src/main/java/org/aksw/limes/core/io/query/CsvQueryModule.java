@@ -43,8 +43,14 @@ public class CsvQueryModule implements IQueryModule {
      */
     public void fillCache(ACache c) {
         try {
+        	String fileString = "";
+        	if(kb.getEndpoint().startsWith("file://")){
+        		fileString = kb.getEndpoint().replace("file://","");
+        	}else{
+        		fileString = kb.getEndpoint();
+        	}
             // in case a CSV is use, endpoint is the file to read
-            BufferedReader reader = new BufferedReader(new FileReader(kb.getEndpoint()));
+            BufferedReader reader = new BufferedReader(new FileReader(fileString));
             String s = reader.readLine();
             String split[];
             //first read name of properties. URI = first column
