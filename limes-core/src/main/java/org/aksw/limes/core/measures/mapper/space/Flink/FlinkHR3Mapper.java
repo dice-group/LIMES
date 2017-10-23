@@ -157,7 +157,7 @@ public class FlinkHR3Mapper {
 		public void join(Tuple2<Tuple, Instance> first, Tuple2<Tuple, Instance> second, Collector<MappingObject> out)
 				throws Exception {
 			comparisons++;
-			System.out.println(first.f0 + " : " + first.f1 + " - > " + second.f0 + " : " + second.f1);
+//			System.out.println(first.f0 + " : " + first.f1 + " - > " + second.f0 + " : " + second.f1);
 			double sim = measure.getSimilarity(first.f1, second.f1, property1, property2);
 			if (sim >= threshold) {
 				out.collect(new MappingObject(first.f1.getUri(), second.f1.getUri(), sim));

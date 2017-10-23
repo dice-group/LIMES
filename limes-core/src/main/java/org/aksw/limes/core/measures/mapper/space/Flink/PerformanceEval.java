@@ -13,6 +13,8 @@ import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PerformanceEval {
 
@@ -22,6 +24,7 @@ public class PerformanceEval {
     public static DataSet<Instance> targetDS;
     public static String measureExpr = "";
 	final static ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+    static Logger logger = LoggerFactory.getLogger(PerformanceEval.class);
 	
 	private static void prepareData(String configPath){
 		RDFConfigurationReader reader = new RDFConfigurationReader(configPath);
@@ -75,6 +78,7 @@ public class PerformanceEval {
             long flinkhr3res = finish - start;
             resWriter.write(i + "\t" + flinkhr3res + "\n");
     		resWriter.close();
+    		logger.info("\n\n ====Comparisons: " + FlinkHR3Mapper.comparisons + "\n\n");
 		}
 	}
 }
