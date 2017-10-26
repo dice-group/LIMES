@@ -60,7 +60,7 @@ public abstract class Node {
      * @return New Node
      */
     public static Node createNode(String id) {
-        id = id.toLowerCase();
+        id = id.toLowerCase().trim();
         if (new Measure("").identifiers().contains(id))
             return new Measure(id);
         if (Operator.identifiers.contains(id))
