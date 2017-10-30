@@ -5,7 +5,7 @@ import java.util.Random;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 
-public class NoisyOracle {
+public class NoisyOracle implements Oracle {
 
     protected AMapping oracleMap;
     ConfusionMatrix confusionMatrix = new ConfusionMatrix();
@@ -17,7 +17,7 @@ public class NoisyOracle {
         this.confusionMatrix = confusionMatrix;
     }
 
-    boolean predict(String subject, String object){
+    public boolean predict(String subject, String object){
         boolean inOracle = oracleMap.contains(subject, object);
 
         Random random = new Random();

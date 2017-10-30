@@ -113,17 +113,17 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * (non-Javadoc)
      * @see org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm#getNextExamples(int)
      */
-    @Override 
+    @Override
     protected AMapping getNextExamples(int activeLearningRate) throws UnsupportedMLImplementationException {
         List<RefinementNode> bestNodes = getBestKNodes(refinementTreeRoot, activeLearningRate);
 
         AMapping overallMapping = MappingFactory.createDefaultMapping();
         for(RefinementNode bestNode : bestNodes){
-            String metricExpr = bestNode.getMetricExpression(); 
+            String metricExpr = bestNode.getMetricExpression();
             AMapping metricExprMapping = executeMetricExpression(metricExpr);
             overallMapping = MappingOperations.add(overallMapping, metricExprMapping, false); // count for multiple links
         }
-        
+
         overallMapping = MappingOperations.difference(overallMapping, trainingData);
         TreeSet<LinkEntropy> linkEntropy = new TreeSet<>();
         for(String s : overallMapping.getMap().keySet()){
@@ -179,7 +179,6 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 
     /**
      * @param r the root of the refinement tree
-     * @param penaltyWeight from 0 to 1
      * @param result refinement tree
      * @return sorted list of tree nodes
      */
@@ -192,7 +191,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         // case leaf node
         if (r.getchildren() == null || r.getchildren().size() == 0) {
             return result;
-        }else{ 
+        }else{
             // otherwise
             for (Tree<RefinementNode> child : r.getchildren()) {
                 result.addAll(getSortedNodes(child, result));
@@ -233,7 +232,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         }
         if (isUnsupervised) {
             // compute pseudo-F-Measure
-            return pseudoFMeasure.calculate(predictions, new GoldStandard(null, sourceUris, targetUris));            
+            return pseudoFMeasure.calculate(predictions, new GoldStandard(null, sourceUris, targetUris));
         }
         // get real F-Measure based on training data 
         return new FMeasure().calculate(predictions, new GoldStandard(trainingData));
@@ -245,7 +244,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * if found the corresponding mapping is returned.
      * Otherwise, the SetConstraintsMapper generate the mapping from the metricExpression.
      *
-     * @param metricExpression learning specifications 
+     * @param metricExpression learning specifications
      * @return Mapping corresponding to the input metric expression
      */
     protected AMapping getMapingOfMetricExpression(String metricExpression) {
@@ -276,10 +275,10 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     }
 
     /**
-     * Looks for the metricExpression in each node in the tree, 
-     * if found, the corresponding mapping is returned 
+     * Looks for the metricExpression in each node in the tree,
+     * if found, the corresponding mapping is returned
      * otherwise, it returns a null mapping
-     * 
+     *
      * @param metricExpression learning specifications
      * @param r refinement tree
      * @return return mapping of the input metricExpression from the search tree

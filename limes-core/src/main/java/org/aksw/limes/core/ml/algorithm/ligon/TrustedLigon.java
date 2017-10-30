@@ -72,7 +72,6 @@ public class TrustedLigon {
      * @param trainigExamplesMap
      * @param sourceTrainCache
      * @param targetTrainCache
-     * @param blackBoxOracles
      */
     public TrustedLigon(AMapping trainigExamplesMap, 
             ACache sourceTrainCache, 
@@ -91,7 +90,6 @@ public class TrustedLigon {
      * @param trainigExamplesMap
      * @param sourceTrainCache
      * @param targetTrainCache
-     * @param blackBoxOracles
      */
     public TrustedLigon(AMapping trainigExamplesMap, 
             ACache sourceTrainCache, 
@@ -112,8 +110,6 @@ public class TrustedLigon {
      * Classify unlabeled examples to be positive or negative ones
      * 
      * @param unlabeledexamples
-     * @param k
-     * @param odds
      * @return mapping of positive and negative examples, where
      *         positive examples have confidence score of 1d and
      *         negative examples have a confidence score of 0d 

@@ -1,11 +1,8 @@
 package org.aksw.limes.core.ml.algorithm.ligon;
 
-import java.util.Random;
-
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
 
-public class ReliableOracle {
+public class ReliableOracle implements Oracle {
 
     protected AMapping oracleMap;
 
@@ -15,7 +12,7 @@ public class ReliableOracle {
         this.oracleMap = oracleMap;
     }
 
-    boolean predict(String subject, String object){
+    public boolean predict(String subject, String object) {
         return oracleMap.contains(subject, object);
     }
 
