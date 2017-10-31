@@ -469,9 +469,9 @@ public abstract class AWombat extends ACoreMLAlgorithm {
             }
         }
         // return the argmax{root, mostPromesyChild}
-//        if (penaltyWeight > 0) {
-//            return mostPromisingChild;
-//        } else
+        if (penaltyWeight > 0) {
+            return mostPromisingChild;
+        } else
         if (r.getValue().getFMeasure() >= mostPromisingChild.getValue().getFMeasure()) {
             return r;
         } else {
@@ -489,7 +489,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         double childrenPenalty = (getChildrenPenaltyWeight() * childrenCount) / refinementTreeRoot.size();
         long level = promesyChild.level();
         double complexityPenalty = (getComplexityPenaltyWeight() * level) / refinementTreeRoot.depth();
-        return childrenPenalty + complexityPenalty;
+        return complexityPenalty;
     }
 
     @Override

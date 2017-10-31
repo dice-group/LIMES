@@ -175,6 +175,7 @@ public class WombatSimple extends AWombat {
         }
         RefinementNode bestSolution = getMostPromisingNode(refinementTreeRoot, 0).getValue();
         logger.debug("Overall Best Solution: " + bestSolution);
+        System.out.println("Overall Best Solution: " + bestSolution);
 
         return bestSolution;
     }

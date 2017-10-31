@@ -1,5 +1,6 @@
 package org.aksw.limes.core.ml.algorithm.ligon;
 
+import com.google.common.io.Files;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser.DataSets;
@@ -25,6 +26,9 @@ import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.ligon.Ligon.ODDS;
 import org.apache.log4j.Logger;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -61,12 +65,23 @@ public class EvaluateLigon {
      */
     public static void main(String[] args) throws UnsupportedMLImplementationException {
         List<ODDS> oddsList = Arrays.asList(ODDS.HARD, ODDS.EQUIVALENCE, ODDS.APPROXIMATE);
+        // get training data
+        String datasetName = args[1];
+        resultStr += datasetName + "\nSample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
+        EvaluationData data = DataSetChooser.getData(datasetName);
+        fullSourceCache = data.getSourceCache();
+        fullTargetCache = data.getTargetCache();
+        fullReferenceMapping = data.getReferenceMapping();
+
+        // remove error mappings (if any)
+        int refMapSize = fullReferenceMapping.size();
+        fullReferenceMapping = removeLinksWithNoInstances(fullReferenceMapping);
         switch (Integer.valueOf(args[0])) {
             case 1:
                 // 1. series of experiments: find best k
                 for (int k = 2; k <= 16; k *= 2) {
                     for (int oracles = 2; oracles <= 16; oracles *= 2) {
-                        evaluateLigonForDataset(args[1], k, getNoisyOracles(oracles, 0.75d, 1.0d), ODDS.EQUIVALENCE);
+                        evaluateLigonForDataset(datasetName, k, getNoisyOracles(oracles, 0.75d, 1.0d), ODDS.EQUIVALENCE);
                     }
                 }
                 break;
@@ -74,14 +89,14 @@ public class EvaluateLigon {
                 // 2. series of experiments: find best model
                 for (ODDS odds : oddsList) {
                     for (int oracles = 2; oracles <= 16; oracles *= 2) {
-                        evaluateLigonForDataset(args[1], Integer.valueOf(args[2]), getNoisyOracles(oracles, 0.75d, 1.0d), odds);
+                        evaluateLigonForDataset(datasetName, Integer.valueOf(args[2]), getNoisyOracles(oracles, 0.75d, 1.0d), odds);
                     }
                 }
                 break;
             case 3:
                 // 3. series of experiment: measure robustness
                 // baseline:
-                evaluateLigonWithReliableOracleForDataset(args[1]);
+                evaluateLigonWithReliableOracleForDataset(datasetName);
                 int k = Integer.valueOf(args[2]);
                 ODDS odds = oddsList.get(Integer.valueOf(args[3]));
                 List<Double> meanList = Arrays.asList(0.75d, 0.5d, 0.25d);
@@ -89,32 +104,29 @@ public class EvaluateLigon {
                 for (Double mean : meanList) {
                     for (Double stddev : stddevList) {
                         for (int oracles = 2; oracles <= 16; oracles *= 2) {
-                            evaluateLigonForDataset(args[1], k, getNoisyOracles(oracles, mean, stddev), odds);
+                            evaluateLigonForDataset(datasetName, k, getNoisyOracles(oracles, mean, stddev), odds);
                         }
                     }
                 }
                 break;
+            case 4:
+//                evaluateLigonWithReliableOracleForDataset(datasetName);
+                List<NoisyOracle> oracles =new ArrayList<>(1);
+                oracles.add(new NoisyOracle(fullReferenceMapping, new ConfusionMatrix(new double[][]{new double[]{0.4,0.4},new double[]{0.1,0.1}})));
+                evaluateLigonForDataset(datasetName, Integer.valueOf(args[2]), oracles, ODDS.EQUIVALENCE);
         }
         System.out.println("----- final results -----\n" + resultStr);
+        try {
+            Files.write(resultStr, new File("./"+datasetName+"_"+args[0]+"_result.txt"), Charset.defaultCharset());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void evaluateLigonWithReliableOracleForDataset(String datasetName) throws UnsupportedMLImplementationException {
         // evaluation parameters
         int mostInformativeExaplesCount = 10;
         int posNegExSize = 10;
-
-        // get training data
-        resultStr += datasetName + "\nSample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
-        EvaluationData data = DataSetChooser.getData(datasetName);
-        fullSourceCache = data.getSourceCache();
-        fullTargetCache = data.getTargetCache();
-        fullReferenceMapping = data.getReferenceMapping();
-
-
-        // remove error mappings (if any)
-        int refMapSize = fullReferenceMapping.size();
-        fullReferenceMapping = removeLinksWithNoInstances(fullReferenceMapping);
-
         // training examples
 
         AMapping posTrainingMap = sampleReferenceMap(fullReferenceMapping, posNegExSize);
@@ -138,18 +150,6 @@ public class EvaluateLigon {
 
         int mostInformativeExaplesCount = 10;
         int posNegExSize = 10;
-
-        // get training data
-        resultStr += datasetName + "\nSample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
-        EvaluationData data = DataSetChooser.getData(datasetName);
-        fullSourceCache = data.getSourceCache();
-        fullTargetCache = data.getTargetCache();
-        fullReferenceMapping = data.getReferenceMapping();
-
-
-        // remove error mappings (if any)
-        int refMapSize = fullReferenceMapping.size();
-        fullReferenceMapping = removeLinksWithNoInstances(fullReferenceMapping);
 
         // training examples
 
