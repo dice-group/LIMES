@@ -8,9 +8,6 @@ import java.util.TreeSet;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.datastrutures.Tree;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser.DataSets;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
@@ -81,7 +78,7 @@ public class FuzzyWombatSimple extends AWombat {
     protected RefinementNode createNode(String metricExpr) {
         AMapping map = null;
         if(saveMapping()){
-            map = getMapingOfMetricExpression(metricExpr);
+            map = getMappingOfMetricExpression(metricExpr);
         }
         return createNode(map, metricExpr);
     }
@@ -256,46 +253,6 @@ public class FuzzyWombatSimple extends AWombat {
     }
 
 
-
-
-
-
-
-    /**
-     * Get the most promising node as the node with the best F-score
-     *
-     * @param r  The whole refinement tree
-     * @param penaltyWeight from 0 to 1
-     * @return most promising node from the input tree r
-     */
-    protected Tree<RefinementNode> getMostPromisingNode(Tree<RefinementNode> r, double penaltyWeight) {
-        // trivial case
-        if (r.getchildren() == null || r.getchildren().size() == 0) {
-            return r;
-        }
-        // get mostPromesyChild of children
-        Tree<RefinementNode> mostPromisingChild = new Tree<RefinementNode>(new RefinementNode());
-        for (Tree<RefinementNode> child : r.getchildren()) {
-            if (child.getValue().getFMeasure() >= 0) {
-                Tree<RefinementNode> promisingChild = getMostPromisingNode(child, penaltyWeight);
-                double newFitness;
-                newFitness = promisingChild.getValue().getFMeasure() - penaltyWeight * computePenalty(promisingChild);
-                if (newFitness > mostPromisingChild.getValue().getFMeasure()) {
-                    mostPromisingChild = promisingChild;
-                }
-            }
-        }
-        // return the argmax{root, mostPromesyChild}
-        if (penaltyWeight > 0) {
-            return mostPromisingChild;
-        } else if (r.getValue().getFMeasure() >= mostPromisingChild.getValue().getFMeasure()) {
-            return r;
-        } else {
-            return mostPromisingChild;
-        }
-    }
-
-
     /**
      * @param r the root of the refinement tree
      * @param k number of best nodes
@@ -333,17 +290,6 @@ public class FuzzyWombatSimple extends AWombat {
             }
         }
         return null;
-    }
-
-    /**
-     * @return children penalty + complexity penalty
-     */
-    private double computePenalty(Tree<RefinementNode> promesyChild) {
-        long childrenCount = promesyChild.size() - 1;
-        double childrenPenalty = (getChildrenPenaltyWeight() * childrenCount) / refinementTreeRoot.size();
-        long level = promesyChild.level();
-        double complexityPenalty = (getComplexityPenaltyWeight() * level) / refinementTreeRoot.depth();
-        return childrenPenalty + complexityPenalty;
     }
 
     /**

@@ -51,7 +51,7 @@ public class EvaluateLigon {
     public static ACache targetTrainCache = new HybridCache();
     public static ACache targetTestCache = new HybridCache();
     public static AMapping fullReferenceMapping = MappingFactory.createDefaultMapping();
-    public static String resultStr = new String();
+    public static String resultStr = "";
 
 
     /**
@@ -138,7 +138,6 @@ public class EvaluateLigon {
 
         int mostInformativeExaplesCount = 10;
         int posNegExSize = 10;
-        String resultStr = "";
 
         // get training data
         resultStr += datasetName + "\nSample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";

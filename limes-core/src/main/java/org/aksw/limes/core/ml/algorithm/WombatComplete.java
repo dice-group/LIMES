@@ -124,7 +124,7 @@ public class WombatComplete extends AWombat {
     protected RefinementNode createNode(String metricExpr) {
         AMapping map = null;
         if(saveMapping()){
-            map = getMapingOfMetricExpression(metricExpr);
+            map = getMappingOfMetricExpression(metricExpr);
         }
         return createNode(map, metricExpr);
     }
@@ -197,7 +197,7 @@ public class WombatComplete extends AWombat {
         RefinementNode bestSolution = findMostPromisingNode(refinementTreeRoot, true).getValue();
         logger.debug("Overall Best Solution: " + bestSolution);
         if (!RefinementNode.isSaveMapping()) {
-            bestSolution.setMap(getMapingOfMetricExpression(bestSolution.getMetricExpression()));
+            bestSolution.setMap(getMappingOfMetricExpression(bestSolution.getMetricExpression()));
         }
         return bestSolution;
     }
@@ -320,57 +320,6 @@ public class WombatComplete extends AWombat {
         }
     }
 
-
-
-
-    /**
-     * Get the most promising node as the node with the best F-score
-     *
-     * @param r  The whole refinement tree
-     * @param penaltyWeight penalty weight
-     * @return most promising node from the input tree r
-     * @author sherif
-     */
-    protected Tree<RefinementNode> getMostPromisingNode(Tree<RefinementNode> r, double penaltyWeight) {
-        // trivial case
-        if (r.getchildren() == null || r.getchildren().size() == 0) {
-            return r;
-        }
-        // get mostPromesyChild of children
-        Tree<RefinementNode> mostPromesyChild = new Tree<RefinementNode>(new RefinementNode());
-        for (Tree<RefinementNode> child : r.getchildren()) {
-            if (child.getValue().getFMeasure() >= 0) {
-                Tree<RefinementNode> promesyChild = getMostPromisingNode(child, penaltyWeight);
-                double newFitness;
-                newFitness = promesyChild.getValue().getFMeasure() - penaltyWeight * computePenalty(promesyChild);
-                if (newFitness > mostPromesyChild.getValue().getFMeasure()) {
-                    mostPromesyChild = promesyChild;
-                }
-            }
-        }
-        // return the argmax{root, mostPromesyChild}
-        if (penaltyWeight > 0) {
-            return mostPromesyChild;
-        } else if (r.getValue().getFMeasure() >= mostPromesyChild.getValue().getFMeasure()) {
-            return r;
-        } else {
-            return mostPromesyChild;
-        }
-    }
-
-    /**
-     * @param promesyChild promesy child
-     * @return children penalty + complexity penalty
-     * @author sherif
-     */
-    private double computePenalty(Tree<RefinementNode> promesyChild) {
-        long childrenCount = promesyChild.size() - 1;
-        double childrenPenalty = (getChildrenPenaltyWeight() * childrenCount) / refinementTreeRoot.size();
-        long level = promesyChild.level();
-        double complexityPenalty = (getComplexityPenaltyWeight() * level) / refinementTreeRoot.depth();
-        return childrenPenalty + complexityPenalty;
-    }
-
     /**
      * @param node
      *         Refinement node to be expanded
@@ -425,7 +374,7 @@ public class WombatComplete extends AWombat {
             return createDisjunctionsWithDiffNodes(node);
         } else if (isDifference(nodeMetricExpr)) {
             String firstMetricExpr = getSubMetricExpressions(nodeMetricExpr).get(0);
-            AMapping firstMetricExprMapping = getMapingOfMetricExpression(firstMetricExpr);
+            AMapping firstMetricExprMapping = getMappingOfMetricExpression(firstMetricExpr);
             result.add(createNode(firstMetricExprMapping, firstMetricExpr));
             result.addAll(createDisjunctionsWithDiffNodes(node));
             return result;
@@ -445,10 +394,10 @@ public class WombatComplete extends AWombat {
                     }
                 }
                 childMetricExpr += "AND(" + childSubMetricExpr.get(0) + "," + childSubMetricExpr.get(1) + ")|0.0";
-                childMap = MappingOperations.intersection(getMapingOfMetricExpression(childSubMetricExpr.get(0)), getMapingOfMetricExpression(childSubMetricExpr.get(1)));
+                childMap = MappingOperations.intersection(getMappingOfMetricExpression(childSubMetricExpr.get(0)), getMappingOfMetricExpression(childSubMetricExpr.get(1)));
                 for (int k = 2; k < childSubMetricExpr.size(); k++) {
                     childMetricExpr = "AND(" + childMetricExpr + "," + childSubMetricExpr.get(k) + ")|0.0";
-                    childMap = MappingOperations.intersection(childMap, getMapingOfMetricExpression(childSubMetricExpr.get(k)));
+                    childMap = MappingOperations.intersection(childMap, getMappingOfMetricExpression(childSubMetricExpr.get(k)));
                 }
                 result.add(createNode(childMap, childMetricExpr));
                 childMetricExpr = new String();
@@ -472,10 +421,10 @@ public class WombatComplete extends AWombat {
                     }
                 }
                 childMetricExpr += "OR(" + childSubMetricExpr.get(0) + "," + childSubMetricExpr.get(1) + ")|0.0";
-                childMap = MappingOperations.union(getMapingOfMetricExpression(childSubMetricExpr.get(0)), getMapingOfMetricExpression(childSubMetricExpr.get(1)));
+                childMap = MappingOperations.union(getMappingOfMetricExpression(childSubMetricExpr.get(0)), getMappingOfMetricExpression(childSubMetricExpr.get(1)));
                 for (int k = 2; k < childSubMetricExpr.size(); k++) {
                     childMetricExpr = "OR(" + childMetricExpr + "," + childSubMetricExpr.get(k) + ")|0.0";
-                    childMap = MappingOperations.union(childMap, getMapingOfMetricExpression(childSubMetricExpr.get(k)));
+                    childMap = MappingOperations.union(childMap, getMappingOfMetricExpression(childSubMetricExpr.get(k)));
                 }
                 result.add(createNode(childMap, childMetricExpr));
                 childMetricExpr = new String();
@@ -504,7 +453,7 @@ public class WombatComplete extends AWombat {
             if (RefinementNode.isSaveMapping()) {
                 nodeMaping = node.getValue().getMapping();
             } else {
-                nodeMaping = getMapingOfMetricExpression(node.getValue().getMetricExpression());
+                nodeMaping = getMappingOfMetricExpression(node.getValue().getMetricExpression());
             }
             AMapping childMap = MappingOperations.union(nodeMaping, diffMapping);
             result.add(createNode(childMap, childMetricExpr));
@@ -555,7 +504,7 @@ public class WombatComplete extends AWombat {
             if (RefinementNode.isSaveMapping()) {
                 nodeMaping = node.getValue().getMapping();
             } else {
-                nodeMaping = getMapingOfMetricExpression(node.getValue().getMetricExpression());
+                nodeMaping = getMappingOfMetricExpression(node.getValue().getMetricExpression());
             }
             String childMetricExpr = "AND(" + node.getValue().getMetricExpression() + "," + diffExpr + ")|0.0";
             AMapping childMap = MappingOperations.intersection(nodeMaping, diffMapping);
