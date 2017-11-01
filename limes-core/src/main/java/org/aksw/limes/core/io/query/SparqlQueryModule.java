@@ -197,14 +197,14 @@ public class SparqlQueryModule implements IQueryModule {
         if (kb.getOptionalProperties() != null && kb.getOptionalProperties().size() > 0) {
             logger.info("Optipnal properties are " + kb.getOptionalProperties());
             optionalPropertiesStr = "OPTIONAL {\n";
-            for (int i = 0; i < kb.getProperties().size(); i++) {
+            for (int i = 0; i < kb.getOptionalProperties().size(); i++) {
                 optionalPropertiesStr += kb.getVar() + " " + kb.getOptionalProperties().get(i) + " ?v" + i + " .\n";
             }
             // some endpoints and parsers do not support property paths. We
             // replace them here with variables
             int varCount = 1;
             while (optionalPropertiesStr.contains("/")) {
-                propertiesStr = optionalPropertiesStr.replaceFirst("/", " ?w" + varCount + " .\n?w" + varCount + " ");
+                optionalPropertiesStr = optionalPropertiesStr.replaceFirst("/", " ?w" + varCount + " .\n?w" + varCount + " ");
                 varCount++;
             }
             // close optional
