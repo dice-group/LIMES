@@ -131,8 +131,10 @@ public class ResultController {
      * @param ls
      */
     public void saveLinkSpec(LinkSpecification ls){
-	currentConfig.setMetricExpression(ls.getFullExpression());
-	mainController.setCurrentConfig(currentConfig);
+        currentConfig.setMetricExpression(ls.getFullExpression());
+        currentConfig.setAcceptanceThreshold(ls.getThreshold());
+        currentConfig.setVerificationThreshold(ls.getThreshold());
+        mainController.setCurrentConfig(currentConfig);
     }
 
     /**
