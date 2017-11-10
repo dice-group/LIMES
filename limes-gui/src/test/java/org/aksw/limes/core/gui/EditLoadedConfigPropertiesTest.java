@@ -55,8 +55,8 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 		logger.info("Clicking on Edit Properties");
 		clickOn("Edit Properties");
 
-		logger.info("Waiting for #automatedPropList");
-		CustomGuiTest.waitUntilNodeIsVisible("#automatedPropList", 180);
+		logger.info("Waiting for #switchModeButton");
+		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", 180);
 		clickOn("#switchModeButton");
 		logger.info("Waiting for dbo:abbreviation");
 		CustomGuiTest.waitUntilNodeIsVisible("dbo:abbreviation", 180);
