@@ -12,6 +12,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.util.WaitForAsyncUtils;
+
+import com.sun.javafx.robot.FXRobot;
 
 import javafx.scene.Node;
 import javafx.scene.control.ScrollBar;
@@ -64,42 +67,17 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest {
 		logger.info("Clicking on Edit Properties");
 		clickOn("Edit Properties");
 
-		logger.info("Waiting for #switchModeButton");
-		for (Window w : listWindows()) {
-			System.out.println("window: " + ((Stage)w).getTitle());
-			for (Node n : w.getScene().getRoot().getChildrenUnmodifiable()) {
-				if (n instanceof ScrollPane) {
-					System.out.println("line 71 " + n +  " -> " + n.getId());
-					for (Node cN : ((ScrollPane) n).getChildrenUnmodifiable()) {
-						if (cN instanceof StackPane) {
-							System.out.println("line 74 " + cN +  " -> " + cN.getId());
-							for (Node cN2 : ((StackPane) cN).getChildrenUnmodifiable()) {
-								if (cN2 instanceof StackPane) {
-									System.out.println("line 77 " + cN2 +  " -> " + cN2.getId());
-									for (Node cN3 : ((StackPane) cN2).getChildrenUnmodifiable()) {
-										if(cN3 instanceof BorderPane){
-											System.out.println("line 80 " + cN3 +  " -> " + cN3.getId());
-                                            for(Node cN4: ((BorderPane) cN3).getChildrenUnmodifiable()){
-                                            	if(cN4 instanceof VBox){
-                                                    System.out.println("line 83 " + cN4 +  " -> " + cN4.getId());
-                                            		for(Node cN5: ((VBox)cN4).getChildrenUnmodifiable()){
-                                            			System.out.println(cN5 + " -> " + cN5.getId());
-                                            		}
-                                            	}
-                                            	if(cN4 instanceof HBox){
-                                                    System.out.println("line 89 " + cN4 +  " -> " + cN4.getId());
-                                            		for(Node cN5: ((HBox)cN4).getChildrenUnmodifiable()){
-                                            			System.out.println(cN5 + " -> " + cN5.getId());
-                                            		}
-                                            	}
-                                            }
-										}
-									}
-								}
-							}
-						}
-					}
-				}
+		logger.info("Waiting for properties to finish loading");
+		int sec = 0;
+		while(listWindows().size() == 1){
+			sleep(1000);
+			sec++;
+			if(sec % 100 == 0){
+				logger.info("Waited: " + sec + " seconds");
+			}
+			//avoid infinite loop
+			if(sec > 1000){
+				break;
 			}
 		}
 		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", 180);
