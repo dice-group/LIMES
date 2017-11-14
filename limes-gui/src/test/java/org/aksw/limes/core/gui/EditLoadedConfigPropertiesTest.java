@@ -112,7 +112,6 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest {
 
 		clickOn("dbo:abbreviation");
 		clickOn("dbo:birthDate");
-
 	}
 
 }

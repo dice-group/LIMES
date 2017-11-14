@@ -337,19 +337,6 @@ public class Config extends Configuration {
     }
 
     /**
-     * Sets the verificationThreshold
-     *
-     * @param verificationThreshold
-     *            threshold
-     */
-    public void setVerificationThreshold(double verificationThreshold) {
-	if (metric == null) {
-	    metric = new Output();
-	}
-	metric.param2 = verificationThreshold;
-    }
-    
-    /**
      * Returns the Verification Threshold
      *
      * @return Verification Threshold
