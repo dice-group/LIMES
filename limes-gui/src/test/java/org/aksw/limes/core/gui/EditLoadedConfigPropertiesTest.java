@@ -66,6 +66,7 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest {
 
 		logger.info("Waiting for #switchModeButton");
 		for (Window w : listWindows()) {
+			System.out.println("window: " + ((Stage)w).getTitle());
 			for (Node n : w.getScene().getRoot().getChildrenUnmodifiable()) {
 				if (n instanceof ScrollPane) {
 					System.out.println("line 71 " + n +  " -> " + n.getId());
