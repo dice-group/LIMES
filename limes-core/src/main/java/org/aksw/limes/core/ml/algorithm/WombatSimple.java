@@ -154,9 +154,9 @@ public class WombatSimple extends AWombat {
      */
     public RefinementNode findBestSolution() {
 
+        iterationNr = 0;
         classifiers = findInitialClassifiers();
         createRefinementTreeRoot();
-        iterationNr = 0;
         Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, getOverAllPenaltyWeight());
         logger.debug("Most promising node: " + mostPromisingNode.getValue());
         System.out.println("Most promising node: " + mostPromisingNode.getValue());

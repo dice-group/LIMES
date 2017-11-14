@@ -1,10 +1,5 @@
 package org.aksw.limes.core.ml.algorithm.ligon;
 
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
@@ -24,30 +19,33 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
-import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.algorithm.MLResults;
-import org.aksw.limes.core.ml.algorithm.WombatSimple;
+import org.aksw.limes.core.ml.algorithm.*;
+import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.fail;
+
+@SuppressWarnings("Duplicates")
 public class Ligon {
     static Logger logger = LoggerFactory.getLogger(Ligon.class);
 
-    String resultStr =  "tP\ttR\ttF\tMetricExpr\tP\tR\tF\n" ;
+    String resultStr = "";
 
     protected List<NoisyOracle> blackBoxOracles;
     protected List<NoisyOracle> estimatedOracles;
 
-    protected AMapping posExamplesMap = MappingFactory.createDefaultMapping();   
+    protected AMapping posExamplesMap = MappingFactory.createDefaultMapping();
     protected AMapping negExamplesMap = MappingFactory.createDefaultMapping();
 
     public enum ODDS {
         HARD, RANDOM, EQUIVALENCE, APPROXIMATE
     }
 
-    double  randomOddL = 0.5;
+    double randomOddL = 0.5;
 
     ACache sourceTrainCache = null;
     ACache targetTrainCache = null;
@@ -55,6 +53,11 @@ public class Ligon {
     // Olny for evaluation
     ACache fullSourceCache = null;
     ACache fullTargetCache = null;
+
+    ACache sourceTestingCache = null;
+    ACache targetTestingCache = null;
+
+    AMapping testReferenceMap = null;
     AMapping fullReferenceMap = null;
 
     protected ActiveMLAlgorithm activeWombat = null;
@@ -63,42 +66,42 @@ public class Ligon {
 
     /**
      * Simplest contractor
-     * 
+     *
      * @param trainigExamplesMap
      * @param sourceTrainCache
      * @param targetTrainCache
      * @param blackBoxOracles
      */
-    public Ligon(AMapping trainigExamplesMap, 
-            ACache sourceTrainCache, 
-            ACache targetTrainCache, 
-            List<NoisyOracle> blackBoxOracles) {
+    public Ligon(AMapping trainigExamplesMap,
+                 ACache sourceTrainCache,
+                 ACache targetTrainCache,
+                 List<NoisyOracle> blackBoxOracles) {
         super();
         this.blackBoxOracles = blackBoxOracles;
         //        this.estimatedOracles = FixedSizeList.decorate(Arrays.asList(new NoisyOracle[blackBoxOracles.size()]));
         this.sourceTrainCache = sourceTrainCache;
         this.targetTrainCache = targetTrainCache;
         this.estimatedOracles = new ArrayList<>();
-        for(NoisyOracle o :blackBoxOracles){
+        for (NoisyOracle o : blackBoxOracles) {
             this.estimatedOracles.add(new NoisyOracle(null, new ConfusionMatrix(0.5d)));
         }
     }
 
     /**
      * Complex constructor for evaluation
-     * 
+     *
      * @param trainigExamplesMap
      * @param sourceTrainCache
      * @param targetTrainCache
      * @param blackBoxOracles
      */
-    public Ligon(AMapping trainigExamplesMap, 
-            ACache sourceTrainCache, 
-            ACache targetTrainCache, 
-            List<NoisyOracle> blackBoxOracles,
-            ACache fullSourceCache, 
-            ACache fullTargetCache, 
-            AMapping fullReferenceMapping) {
+    public Ligon(AMapping trainigExamplesMap,
+                 ACache sourceTrainCache,
+                 ACache targetTrainCache,
+                 List<NoisyOracle> blackBoxOracles,
+                 ACache fullSourceCache,
+                 ACache fullTargetCache,
+                 AMapping fullReferenceMapping) {
         this(trainigExamplesMap, sourceTrainCache, targetTrainCache, blackBoxOracles);
         this.fullSourceCache = fullSourceCache;
         this.fullTargetCache = fullTargetCache;
@@ -106,70 +109,85 @@ public class Ligon {
     }
 
 
+    public Ligon(AMapping trainigExamplesMap,
+                 ACache sourceTrainCache,
+                 ACache targetTrainCache,
+                 List<NoisyOracle> blackBoxOracles,
+                 ACache fullSourceCache,
+                 ACache fullTargetCache,
+                 AMapping fullReferenceMapping,
+                 ACache sourceTestingCache,
+                 ACache targetTestingCache,
+                 AMapping testReferenceMap) {
+        this(trainigExamplesMap, sourceTrainCache, targetTrainCache, blackBoxOracles, fullSourceCache, fullTargetCache, fullReferenceMapping);
+        this.sourceTestingCache = sourceTestingCache;
+        this.targetTestingCache = targetTestingCache;
+        this.testReferenceMap = testReferenceMap;
+    }
+
+
     /**
      * Process 1 link by all black box oracles
-     * 
+     *
      * @param subject
      * @param object
      * @return vector of all black box oracles results
      */
-    protected  List<Boolean> getOracleFeedback(String subject, String object){
+    protected List<Boolean> getOracleFeedback(String subject, String object) {
         List<Boolean> result = new ArrayList<>();
-        for(int i = 0 ; i < blackBoxOracles.size() ; i++){
+        for (int i = 0; i < blackBoxOracles.size(); i++) {
             result.set(i, blackBoxOracles.get(i).predict(subject, object));
         }
         return result;
     }
 
 
-    public void updateOraclesConfusionMatrices(AMapping labeledExamples){
+    public void updateOraclesConfusionMatrices(AMapping labeledExamples) {
         for (String subject : labeledExamples.getMap().keySet()) {
             for (String object : labeledExamples.getMap().get(subject).keySet()) {
                 double confidence = labeledExamples.getConfidence(subject, object);
-                for(int i = 0 ; i < blackBoxOracles.size() ; i++){
-                    if(confidence == 1.0d){ //positive example
-                        if(blackBoxOracles.get(i).predict(subject, object)){ //true prediction 
+                for (int i = 0; i < blackBoxOracles.size(); i++) {
+                    if (confidence == 1.0d) { //positive example
+                        if (blackBoxOracles.get(i).predict(subject, object)) { //true prediction
                             estimatedOracles.get(i).confusionMatrix.incrementRightClassifiedPositiveExamplesCount();
-                        }else{ //false prediction
+                        } else { //false prediction
                             estimatedOracles.get(i).confusionMatrix.incrementWrongClassifiedPositiveExamplesCount();
                         }
-                    }
-                    else 
-                        if(confidence == 0.0d){ //negative example
-                            if(blackBoxOracles.get(i).predict(subject, object)){ //true prediction
-                                estimatedOracles.get(i).confusionMatrix.incrementWrongClassifiedNegativeExamplesCount();
-                            }else{ //false prediction
-                                estimatedOracles.get(i).confusionMatrix.incrementRightClassifiedNegativeExamplesCount();
-                            }
+                    } else if (confidence == 0.0d) { //negative example
+                        if (blackBoxOracles.get(i).predict(subject, object)) { //true prediction
+                            estimatedOracles.get(i).confusionMatrix.incrementWrongClassifiedNegativeExamplesCount();
+                        } else { //false prediction
+                            estimatedOracles.get(i).confusionMatrix.incrementRightClassifiedNegativeExamplesCount();
                         }
+                    }
                 }
             }
         }
     }
 
-    public double computeOdds(String subject, String object, ODDS odds){
+    public double computeOdds(String subject, String object, ODDS odds) {
         double result = 0.0d;
-        for(int i = 0 ; i < estimatedOracles.size() ; i++){
-            result += 
+        for (int i = 0; i < estimatedOracles.size(); i++) {
+            result +=
                     Math.log(estimatedOracles.get(i).confusionMatrix.getRightClassifiedPositiveExamplesProbability()) +
-                    Math.log(estimatedOracles.get(i).confusionMatrix.getWrongClassifiedPositiveExamplesProbability()) -
-                    Math.log(estimatedOracles.get(i).confusionMatrix.getRightClassifiedNegativeExamplesProbability()) -
-                    Math.log(estimatedOracles.get(i).confusionMatrix.getWrongClassifiedNegativeExamplesProbability());
+                            Math.log(estimatedOracles.get(i).confusionMatrix.getWrongClassifiedPositiveExamplesProbability()) -
+                            Math.log(estimatedOracles.get(i).confusionMatrix.getRightClassifiedNegativeExamplesProbability()) -
+                            Math.log(estimatedOracles.get(i).confusionMatrix.getWrongClassifiedNegativeExamplesProbability());
         }
         double oddsL = 1.0d;
         switch (odds) {
-            case APPROXIMATE :
+            case APPROXIMATE:
                 oddsL = wombatBestFmeasure;
                 break;
-            case EQUIVALENCE :
+            case EQUIVALENCE:
                 double minKbSize = (sourceTrainCache.size() < targetTrainCache.size()) ? sourceTrainCache.size() : targetTrainCache.size();
-                oddsL = minKbSize / (double)(sourceTrainCache.size() * targetTrainCache.size() - minKbSize);
+                oddsL = minKbSize / (double) (sourceTrainCache.size() * targetTrainCache.size() - minKbSize);
                 break;
-            case RANDOM :
+            case RANDOM:
                 oddsL = randomOddL;
                 break;
-            case HARD :
-            default :
+            case HARD:
+            default:
                 oddsL = 1.0d;
                 break;
         }
@@ -178,22 +196,22 @@ public class Ligon {
 
     /**
      * Classify unlabeled examples to be positive or negative ones
-     * 
+     *
      * @param unlabeledexamples
      * @param k
      * @param odds
      * @return mapping of positive and negative examples, where
-     *         positive examples have confidence score of 1d and
-     *         negative examples have a confidence score of 0d 
+     * positive examples have confidence score of 1d and
+     * negative examples have a confidence score of 0d
      */
-    protected AMapping classifyUnlabeledExamples(AMapping unlabeledexamples, double k, ODDS odds){
-        AMapping labeledExamples = MappingFactory.createDefaultMapping(); 
+    protected AMapping classifyUnlabeledExamples(AMapping unlabeledexamples, double k, ODDS odds) {
+        AMapping labeledExamples = MappingFactory.createDefaultMapping();
         for (String subject : unlabeledexamples.getMap().keySet()) {
             for (String object : unlabeledexamples.getMap().get(subject).keySet()) {
                 double OddsValue = computeOdds(subject, object, odds);
-                if(OddsValue > k){
+                if (OddsValue > k) {
                     labeledExamples.add(subject, object, 1.0d);
-                }else if(OddsValue < (1/k)){
+                } else if (OddsValue < (1 / k)) {
                     //                    labeledExamples.add(subject, object, 0.0d); //TODO add later
                 }
             }
@@ -204,18 +222,19 @@ public class Ligon {
 
     //    public AMapping learn(AMapping labeledExamples,double k, ODDS odds,
     //            int mostInformativeExamplesCount) throws UnsupportedMLImplementationException{
-    public String learn(AMapping labeledExamples,double k, ODDS odds,
-            int mostInformativeExamplesCount) throws UnsupportedMLImplementationException{
-        initActiveWombat(fullSourceCache, fullTargetCache);
+    public String learn(AMapping labeledExamples, double k, ODDS odds,
+                        int mostInformativeExamplesCount) throws UnsupportedMLImplementationException {
+        fillTrainingCaches(labeledExamples);
+        initActiveWombat(sourceTrainCache, targetTrainCache);
         int i = 0;
-        do{
+        do {
             updateOraclesConfusionMatrices(labeledExamples);
             AMapping mostInformativeExamples = getWombatMostInformativeExamples(labeledExamples, mostInformativeExamplesCount);
             AMapping newLabeledExamples = classifyUnlabeledExamples(mostInformativeExamples, k, odds);
             labeledExamples = MappingOperations.union(labeledExamples, newLabeledExamples);
             fillTrainingCaches(labeledExamples);
             i++;
-        }while(i < 10);
+        } while (i < 10);
         //        System.out.println(resultStr);
         return resultStr;
         //        return labeledExamples;
@@ -223,11 +242,11 @@ public class Ligon {
 
     /**
      * Initializes active Wombat
-     * 
+     *
      * @return MLResults
      * @throws UnsupportedMLImplementationException
      */
-    protected MLResults initActiveWombat(ACache sourceCache , ACache  targetCache) throws UnsupportedMLImplementationException {
+    protected MLResults initActiveWombat(ACache sourceCache, ACache targetCache) throws UnsupportedMLImplementationException {
 
         try {
             activeWombat = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
@@ -238,7 +257,7 @@ public class Ligon {
         }
         assert (activeWombat.getClass().equals(ActiveMLAlgorithm.class));
         activeWombat.init(null, sourceCache, targetCache);
-        //        activeWombat.init(null, sourceTrainCache, targetTrainCache);
+        //        activeWombat.init(null, sourcePredictionCache, targetPredictionCache);
         return null;
         //                activeWombat.activeLearn();
     }
@@ -251,19 +270,18 @@ public class Ligon {
      */
     protected AMapping getWombatMostInformativeExamples(AMapping labeledExamples, int mostInformativeExamplesCount) throws UnsupportedMLImplementationException {
         MLResults mlModel = activeWombat.activeLearn(labeledExamples);
-        AMapping learnedMap = activeWombat.predict(fullSourceCache, fullTargetCache, mlModel);
+        AMapping learnedMap = activeWombat.predict(sourceTrainCache, targetTrainCache, mlModel);
         computePerformanceIndicatorsWombat(labeledExamples, learnedMap, mlModel);
+        ((AWombat) activeWombat.getMl()).updateActiveLearningCaches(sourceTrainCache, targetTrainCache, fullSourceCache, fullTargetCache);
         return activeWombat.getNextExamples(mostInformativeExamplesCount);
     }
-
-
 
 
     /**
      * Computes performance indicators for Active Wombat
      * i.e. compute precision, recall and F-measure for training and testing phases
      * NOTE: for evaluation purpose only
-     * 
+     *
      * @param labeledExamples
      * @param learnedMap
      * @param mlModel
@@ -272,9 +290,9 @@ public class Ligon {
     private String computePerformanceIndicatorsWombat(AMapping labeledExamples, AMapping learnedMap, MLResults mlModel) {
 
         //PIs for training data
-        resultStr += String.format("%.2f", new Precision().calculate(learnedMap, new GoldStandard(labeledExamples)))+ "\t" + 
-                String.format("%.2f",new Recall().calculate(learnedMap, new GoldStandard(labeledExamples)))   + "\t" + 
-                String.format("%.2f",new FMeasure().calculate(learnedMap, new GoldStandard(labeledExamples)))   + "\t" ;
+        resultStr += String.format("%.2f", new Precision().calculate(learnedMap, new GoldStandard(labeledExamples))) + "\t" +
+                String.format("%.2f", new Recall().calculate(learnedMap, new GoldStandard(labeledExamples))) + "\t" +
+                String.format("%.2f", new FMeasure().calculate(learnedMap, new GoldStandard(labeledExamples))) + "\t";
 
         //PIs for whole KB
         long start = System.currentTimeMillis();
@@ -284,48 +302,77 @@ public class Ligon {
         Rewriter rw = RewriterFactory.getDefaultRewriter();
         LinkSpecification rwLs = rw.rewrite(linkSpecification);
         IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, fullSourceCache, fullTargetCache);
-        assert planner != null;
         ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, fullSourceCache, fullTargetCache, "?x", "?y");
-        assert engine != null;
         AMapping fullResultMap = engine.execute(rwLs, planner);
         kbMap = fullResultMap.getSubMap(linkSpecification.getThreshold());
         GoldStandard fullRefgoldStandard = new GoldStandard(fullReferenceMap);
-        resultStr += linkSpecification.toStringOneLine() + "\t" +
-                String.format("%.2f", new Precision().calculate(fullResultMap, fullRefgoldStandard))+ "\t" + 
-                String.format("%.2f",new Recall().calculate(fullResultMap, fullRefgoldStandard))   + "\t" + 
-                String.format("%.2f",new FMeasure().calculate(fullResultMap, fullRefgoldStandard))   + "\t" +
-                //                (System.currentTimeMillis() - start)        + 
-                "\n" ;
+        resultStr +=
+                String.format("%.2f", new Precision().calculate(kbMap, fullRefgoldStandard)) + "\t" +
+                        String.format("%.2f", new Recall().calculate(kbMap, fullRefgoldStandard)) + "\t" +
+                        String.format("%.2f", new FMeasure().calculate(kbMap, fullRefgoldStandard)) + "\t";
+        planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceTestingCache, targetTestingCache);
+        engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceTestingCache, targetTestingCache, "?x", "?y");
+        fullResultMap = engine.execute(rwLs, planner);
+        kbMap = fullResultMap.getSubMap(linkSpecification.getThreshold());
+        fullRefgoldStandard = new GoldStandard(testReferenceMap);
+        resultStr += String.format("%.2f", new Precision().calculate(kbMap, fullRefgoldStandard)) + "\t" +
+                String.format("%.2f", new Recall().calculate(kbMap, fullRefgoldStandard)) + "\t" +
+                String.format("%.2f", new FMeasure().calculate(kbMap, fullRefgoldStandard)) + "\t" + computeMSE() + "\t" +
+                linkSpecification.toStringOneLine() +
+                "\n";
 
         return resultStr;
+    }
+
+    private String computeMSE() {
+        double tt=0, tf=0, ft=0, ff=0;
+        double x;
+        ConfusionMatrix a,b;
+        double size = estimatedOracles.size();
+        for (int i=0; i<estimatedOracles.size(); i++) {
+            a = estimatedOracles.get(i).confusionMatrix;
+            b = blackBoxOracles.get(i).confusionMatrix;
+            x = a.getRightClassifiedPositiveExamplesProbability() - b.getRightClassifiedPositiveExamplesProbability();
+            tt += x*x;
+            x = a.getWrongClassifiedPositiveExamplesProbability() - b.getWrongClassifiedPositiveExamplesProbability();
+            ft += x*x;
+            x = a.getRightClassifiedNegativeExamplesProbability() - b.getRightClassifiedNegativeExamplesProbability();
+            tf += x*x;
+            x = a.getWrongClassifiedNegativeExamplesProbability() - b.getWrongClassifiedNegativeExamplesProbability();
+            ff += x*x;
+        }
+        return String.format("%.4f", tt/size) + "\t" +
+                String.format("%.4f", tf/size) + "\t" +
+                String.format("%.4f", ft/size) + "\t" +
+                String.format("%.4f", ff/size);
     }
 
 
     /**
      * Extract the source and target training cache instances based on the input learnMap
-     * @param trainMap to be used for training caches filling
+     *
+     * @param trainMap
+     *         to be used for training caches filling
      * @author sherif
      */
     protected void fillTrainingCaches(AMapping trainMap) {
         sourceTrainCache = new HybridCache();
         targetTrainCache = new HybridCache();
         for (String s : trainMap.getMap().keySet()) {
-            if(fullSourceCache.containsUri(s)){
+            if (fullSourceCache.containsUri(s)) {
                 sourceTrainCache.addInstance(fullSourceCache.getInstance(s));
                 for (String t : trainMap.getMap().get(s).keySet()) {
-                    if(fullTargetCache.containsUri(t)){
+                    if (fullTargetCache.containsUri(t)) {
                         targetTrainCache.addInstance(fullTargetCache.getInstance(t));
-                    }else{
+                    } else {
                         logger.warn("Instance " + t + " not exist in the target dataset");
                     }
                 }
-            }else{
+            } else {
                 logger.warn("Instance " + s + " not exist in the source dataset");
             }
         }
     }
-
-
 
 
 }

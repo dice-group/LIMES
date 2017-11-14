@@ -1,5 +1,6 @@
 package org.aksw.limes.core.ml.algorithm.ligon;
 
+import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
@@ -46,16 +47,11 @@ public class EvaluateLigon {
      *
      */
     private static final Logger logger = Logger.getLogger(EvaluateLigon.class);
-    protected static final double MIN_COVERAGE = 0.6;
 
-    public static ACache fullSourceCache;
-    public static ACache sourceTrainCache = new HybridCache();
-    public static ACache sourceTestCache = new HybridCache();
-    public static ACache fullTargetCache;
-    public static ACache targetTrainCache = new HybridCache();
-    public static ACache targetTestCache = new HybridCache();
-    public static AMapping fullReferenceMapping = MappingFactory.createDefaultMapping();
-    public static String resultStr = "";
+    public static AMapping fullReferenceMapping;
+    public static String resultStr = "fold\tk\toracles\todds\titNr\tpTr\trTr\tfTr\tpF\trF\tfF\tpTe\trTe\tfTe\tTT_MSE\tTF_MSE\tFT_MSE\tFF_MSE\tls";
+    public static String reliableResultStr = "fold\titNr\tpTr\trTr\tfTr\tpF\trF\tfF\tpTe\trTe\tfTe\tls";
+    public static int fold = 1;
 
 
     /**
@@ -65,108 +61,119 @@ public class EvaluateLigon {
      */
     public static void main(String[] args) throws UnsupportedMLImplementationException {
         List<ODDS> oddsList = Arrays.asList(ODDS.HARD, ODDS.EQUIVALENCE, ODDS.APPROXIMATE);
+        int mostInformativeExaplesCount = 10;
         // get training data
         String datasetName = args[1];
-        resultStr += datasetName + "\nSample\tlP\tlR\tlF\tlTime\tMetricExpr\tP\tR\tF\tTime\n";
         EvaluationData data = DataSetChooser.getData(datasetName);
-        fullSourceCache = data.getSourceCache();
-        fullTargetCache = data.getTargetCache();
-        fullReferenceMapping = data.getReferenceMapping();
+        ACache fullSourceCache = data.getSourceCache();
+        ACache fullTargetCache = data.getTargetCache();
+        fullReferenceMapping = removeLinksWithNoInstances(data.getReferenceMapping(), fullSourceCache, fullTargetCache);
+        List<AMapping> subSets = generateEvaluationSets(fullReferenceMapping);
+        for (int i = 0; i < 10; i++) {
+            fold = i+1;
+            AMapping testSet = subSets.get(i);
+            testSet.getReversedMap();
+            AMapping learningPool = getLearningPool(subSets, i);
+            learningPool.getReversedMap();
+            fullReferenceMapping = learningPool;
+            List<ACache> learning = reduceCaches(learningPool, fullSourceCache, fullTargetCache);
+            List<ACache> testing = reduceCaches(testSet, fullSourceCache, fullTargetCache);
+            AMapping trainingMap = sampleReferenceMap(learningPool, 10);
 
-        // remove error mappings (if any)
-        int refMapSize = fullReferenceMapping.size();
-        fullReferenceMapping = removeLinksWithNoInstances(fullReferenceMapping);
-        switch (Integer.valueOf(args[0])) {
-            case 1:
-                // 1. series of experiments: find best k
-                for (int k = 2; k <= 16; k *= 2) {
+            switch (Integer.valueOf(args[0])) {
+                case 1:
+                    // 1. series of experiments: find best k
+                    evaluateLigonWithReliableOracleForDataset(trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
                     for (int oracles = 2; oracles <= 16; oracles *= 2) {
-                        evaluateLigonForDataset(datasetName, k, getNoisyOracles(oracles, 0.75d, 1.0d), ODDS.EQUIVALENCE);
-                    }
-                }
-                break;
-            case 2:
-                // 2. series of experiments: find best model
-                for (ODDS odds : oddsList) {
-                    for (int oracles = 2; oracles <= 16; oracles *= 2) {
-                        evaluateLigonForDataset(datasetName, Integer.valueOf(args[2]), getNoisyOracles(oracles, 0.75d, 1.0d), odds);
-                    }
-                }
-                break;
-            case 3:
-                // 3. series of experiment: measure robustness
-                // baseline:
-                evaluateLigonWithReliableOracleForDataset(datasetName);
-                int k = Integer.valueOf(args[2]);
-                ODDS odds = oddsList.get(Integer.valueOf(args[3]));
-                List<Double> meanList = Arrays.asList(0.75d, 0.5d, 0.25d);
-                List<Double> stddevList = Arrays.asList(0.5d, 1.0d);
-                for (Double mean : meanList) {
-                    for (Double stddev : stddevList) {
-                        for (int oracles = 2; oracles <= 16; oracles *= 2) {
-                            evaluateLigonForDataset(datasetName, k, getNoisyOracles(oracles, mean, stddev), odds);
+                        for (int k = 2; k <= 16; k *= 2) {
+                            evaluateLigonForDataset(k, getNoisyOracles(oracles, 0.75d, 1.0d), ODDS.EQUIVALENCE, trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
                         }
                     }
-                }
-                break;
-            case 4:
-//                evaluateLigonWithReliableOracleForDataset(datasetName);
-                List<NoisyOracle> oracles =new ArrayList<>(1);
-                oracles.add(new NoisyOracle(fullReferenceMapping, new ConfusionMatrix(new double[][]{new double[]{0.4,0.4},new double[]{0.1,0.1}})));
-                evaluateLigonForDataset(datasetName, Integer.valueOf(args[2]), oracles, ODDS.EQUIVALENCE);
+                    break;
+                case 2:
+                    // 2. series of experiments: find best model
+                    evaluateLigonWithReliableOracleForDataset(trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
+                    for (ODDS odds : oddsList) {
+                        for (int oracles = 2; oracles <= 16; oracles *= 2) {
+                            evaluateLigonForDataset(Integer.valueOf(args[2]), getNoisyOracles(oracles, 0.75d, 1.0d), odds, trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
+                        }
+                    }
+                    break;
+                case 3:
+                    // 3. series of experiment: measure robustness
+                    // baseline:
+                    evaluateLigonWithReliableOracleForDataset(trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
+                    int k = Integer.valueOf(args[2]);
+                    ODDS odds = oddsList.get(Integer.valueOf(args[3]));
+                    List<Double> meanList = Arrays.asList(0.75d, 0.5d, 0.25d);
+                    List<Double> stddevList = Arrays.asList(0.5d, 1.0d);
+                    for (Double mean : meanList) {
+                        for (Double stddev : stddevList) {
+                            for (int oracles = 2; oracles <= 16; oracles *= 2) {
+                                evaluateLigonForDataset(k, getNoisyOracles(oracles, mean, stddev), odds, trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
+                            }
+                        }
+                    }
+                    break;
+                case 4:
+                    evaluateLigonWithReliableOracleForDataset(trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
+                    List<NoisyOracle> oracles = new ArrayList<>(1);
+                    oracles.add(new NoisyOracle(fullReferenceMapping, new ConfusionMatrix(new double[][]{new double[]{0.4, 0.4}, new double[]{0.1, 0.1}})));
+                    evaluateLigonForDataset(Integer.valueOf(args[2]), oracles, ODDS.EQUIVALENCE, trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
+            }
+            System.out.println("----- partly results -----\n" + resultStr);
         }
         System.out.println("----- final results -----\n" + resultStr);
         try {
-            Files.write(resultStr, new File("./"+datasetName+"_"+args[0]+"_result.txt"), Charset.defaultCharset());
+            Files.write(resultStr, new File("./" + datasetName + "_" + args[0] + "_result.txt"), Charset.defaultCharset());
+            Files.write(reliableResultStr, new File("./" + datasetName + "_" + args[0] + "_result_reliable.txt"), Charset.defaultCharset());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void evaluateLigonWithReliableOracleForDataset(String datasetName) throws UnsupportedMLImplementationException {
-        // evaluation parameters
+
+    public static void evaluateLigonWithReliableOracleForDataset(AMapping trainingMap, ACache sourceTestingCache, ACache targetTestingCache, ACache fullSourceCache, ACache fullTargetCache, AMapping testReferenceMap, AMapping referenceMapping) throws UnsupportedMLImplementationException {
+
         int mostInformativeExaplesCount = 10;
-        int posNegExSize = 10;
-        // training examples
-
-        AMapping posTrainingMap = sampleReferenceMap(fullReferenceMapping, posNegExSize);
-        AMapping negTrainingMap = MappingFactory.createDefaultMapping(); //generateNegativeExamples(posTrainingMap, posNegExSize); TODO{add later}
-        AMapping trainingMap = MappingOperations.union(posTrainingMap, negTrainingMap);
-
-        fillTrainingCaches(trainingMap);
         trainingMap.getReversedMap();
 
         ReliableOracle oracle = new ReliableOracle(fullReferenceMapping);
 
-        // initialize ligon
-        TrustedLigon ligon = new TrustedLigon(trainingMap, sourceTrainCache, targetTrainCache, oracle,
-                fullSourceCache, fullTargetCache, fullReferenceMapping);
+        TrustedLigon ligon = new TrustedLigon(trainingMap, null, null, oracle,
+                fullSourceCache, fullTargetCache, referenceMapping, sourceTestingCache, targetTestingCache, testReferenceMap);
 
-        resultStr += ligon.learn(trainingMap, mostInformativeExaplesCount);
+        String run = ligon.learn(trainingMap, mostInformativeExaplesCount);
+        String[] runs = run.split("\n");
+        int i = 1;
+        for (String s : runs) {
+            if (!s.trim().equals("")) {
+                reliableResultStr += fold + "\t" + i + "\t" + s + "\n";
+                i++;
+            }
+        }
     }
 
-    public static void evaluateLigonForDataset(String datasetName, int k, List<NoisyOracle> noisyOracles, ODDS odds) throws UnsupportedMLImplementationException {
+    public static void evaluateLigonForDataset(int k, List<NoisyOracle> noisyOracles, ODDS odds, AMapping trainingMap, ACache sourceTestingCache, ACache targetTestingCache, ACache fullSourceCache, ACache fullTargetCache, AMapping testReferenceMap, AMapping referenceMapping) throws UnsupportedMLImplementationException {
         // evaluation parameters
-
         int mostInformativeExaplesCount = 10;
-        int posNegExSize = 10;
-
-        // training examples
-
-        AMapping posTrainingMap = sampleReferenceMap(fullReferenceMapping, posNegExSize);
-        AMapping negTrainingMap = MappingFactory.createDefaultMapping(); //generateNegativeExamples(posTrainingMap, posNegExSize); TODO{add later}
-        AMapping trainingMap = MappingOperations.union(posTrainingMap, negTrainingMap);
-
-        fillTrainingCaches(trainingMap);
         trainingMap.getReversedMap();
 
         System.out.println("\n\n ---- noisyOracles ----\n" + noisyOracles);
 
         // initialize ligon
-        Ligon ligon = new Ligon(trainingMap, sourceTrainCache, targetTrainCache, noisyOracles,
-                fullSourceCache, fullTargetCache, fullReferenceMapping);
+        Ligon ligon = new Ligon(trainingMap, null, null, noisyOracles,
+                fullSourceCache, fullTargetCache, referenceMapping, sourceTestingCache, targetTestingCache, testReferenceMap);
 
-        resultStr += "K=" + k + "\n" + ligon.learn(trainingMap, k, odds, mostInformativeExaplesCount);
+        String run = ligon.learn(trainingMap, k, odds, mostInformativeExaplesCount);
+        String[] runs = run.split("\n");
+        int i = 1;
+        for (String s : runs) {
+            if (!s.trim().equals("")) {
+                resultStr += fold + "\t" + k + "\t" + noisyOracles.size() + "\t" + odds.name() + "\t" + i + "\t" + s + "\n";
+                i++;
+            }
+        }
 
 
     }
@@ -182,12 +189,20 @@ public class EvaluateLigon {
         for (int i = 0; i < noisyOracleCount; i++) {
             do {
                 rPTT = mean + (pTT.nextGaussian() * stddev);
-                rPTF = mean + (pTF.nextGaussian() * stddev);
-                rPFT = mean + (pFT.nextGaussian() * stddev);
-                rPFF = mean + (pFF.nextGaussian() * stddev);
-
             }
-            while (rPTT < 0 || rPTT > 1 || rPTF < 0 || rPTF > 1 || rPFT < 0 || rPFT > 1 || rPFF < 0 || rPFF > 1);
+            while (rPTT < 0 || rPTT > 1);
+            do {
+                rPTF = mean + (pTF.nextGaussian() * stddev);
+            }
+            while (rPTF < 0 || rPTF > 1);
+            do {
+                rPFT = mean + (pFT.nextGaussian() * stddev);
+            }
+            while (rPFT < 0 || rPFT > 1);
+            do {
+                rPFF = mean + (pFF.nextGaussian() * stddev);
+            }
+            while (rPFF < 0 || rPFF > 1);
             double sumR = rPTT + rPTF + rPFT + rPFF;
             noisyOracles.add(new NoisyOracle(fullReferenceMapping,
                     new ConfusionMatrix(new double[][]{{rPTT / sumR, rPTF / sumR}, {rPFT / sumR, rPFF / sumR}})));
@@ -196,78 +211,29 @@ public class EvaluateLigon {
     }
 
 
-    /**
-     * Extract the source and target training cache instances based on the input learnMap
-     *
-     * @param learnMap
-     *         to be used for training caches filling
-     * @author sherif
-     */
-    protected static void fillTrainingCaches(AMapping learnMap) {
-        if (learnMap.size() == fullReferenceMapping.size()) {
-            sourceTrainCache = fullSourceCache;
-            targetTrainCache = fullTargetCache;
-        } else {
-            sourceTrainCache = new HybridCache();
-            targetTrainCache = new HybridCache();
-            for (String s : learnMap.getMap().keySet()) {
-                if (fullSourceCache.containsUri(s)) {
-                    sourceTrainCache.addInstance(fullSourceCache.getInstance(s));
-                    for (String t : learnMap.getMap().get(s).keySet()) {
-                        if (fullTargetCache.containsUri(t)) {
-                            targetTrainCache.addInstance(fullTargetCache.getInstance(t));
-                        } else {
-                            logger.warn("Instance " + t + " not exist in the target dataset");
-                        }
+    protected static List<ACache> reduceCaches(AMapping refMap, ACache fullSourceCache, ACache fullTargetCache) {
+        ACache sourceTestCache = new HybridCache();
+        ACache targetTestCache = new HybridCache();
+        for (String s : refMap.getMap().keySet()) {
+            if (fullSourceCache.containsUri(s)) {
+                sourceTestCache.addInstance(fullSourceCache.getInstance(s));
+                for (String t : refMap.getMap().get(s).keySet()) {
+                    if (fullTargetCache.containsUri(t)) {
+                        targetTestCache.addInstance(fullTargetCache.getInstance(t));
+                    } else {
+                        logger.warn("Instance " + t + " not exist in the target dataset");
                     }
-                } else {
-                    logger.warn("Instance " + s + " not exist in the source dataset");
                 }
+            } else {
+                logger.warn("Instance " + s + " not exist in the source dataset");
             }
         }
+        return Lists.newArrayList(sourceTestCache, targetTestCache);
     }
 
 
-    /**
-     * Extract the source and target testing cache instances based on the input trainMap
-     *
-     * @param trainMap
-     *         to be used for testing caches filling
-     * @author sherif
-     */
-    protected static void fillTestingCaches(AMapping trainMap) {
-        if (trainMap.size() == fullReferenceMapping.size()) {
-            sourceTestCache = fullSourceCache;
-            targetTestCache = fullTargetCache;
-        } else {
-            sourceTestCache = new HybridCache();
-            targetTestCache = new HybridCache();
-            for (String s : trainMap.getMap().keySet()) {
-                if (fullSourceCache.containsUri(s)) {
-                    sourceTestCache.addInstance(fullSourceCache.getInstance(s));
-                    for (String t : trainMap.getMap().get(s).keySet()) {
-                        if (fullTargetCache.containsUri(t)) {
-                            targetTestCache.addInstance(fullTargetCache.getInstance(t));
-                        } else {
-                            logger.warn("Instance " + t + " not exist in the target dataset");
-                        }
-                    }
-                } else {
-                    logger.warn("Instance " + s + " not exist in the source dataset");
-                }
-            }
-        }
-    }
 
-
-    /**
-     * Remove AMapping entries with missing source or target instances
-     *
-     * @param map
-     *         input map
-     * @author sherif
-     */
-    protected static AMapping removeLinksWithNoInstances(AMapping map) {
+    protected static AMapping removeLinksWithNoInstances(AMapping map, ACache fullSourceCache, ACache fullTargetCache) {
         AMapping result = MappingFactory.createDefaultMapping();
         for (String s : map.getMap().keySet()) {
             for (String t : map.getMap().get(s).keySet()) {
@@ -322,15 +288,6 @@ public class EvaluateLigon {
     }
 
 
-    /**
-     * Computes a sample of the reference dataset with size equal to the the given fraction of the reference dataset
-     *
-     * @param reference
-     *         dataset
-     * @param fraction
-     *         of the reference dataset (sample size)
-     * @return
-     */
     public static AMapping sampleReferenceMap(AMapping reference, double fraction) {
         if (fraction == 1) {
             return reference;
@@ -343,13 +300,7 @@ public class EvaluateLigon {
         return sampleReferenceMap(reference, size);
     }
 
-    /**
-     * Computes a sample of the reference dataset with the given size
-     *
-     * @param reference
-     * @param size
-     * @return
-     */
+
     public static AMapping sampleReferenceMap(AMapping reference, int size) {
         Set<Integer> index = new HashSet<>();
         //get random indexes
@@ -404,37 +355,41 @@ public class EvaluateLigon {
         return null;
     }
 
-    /**
-     * @param map
-     *         result mapping
-     * @param ref
-     *         reference mapping
-     * @return
-     */
+
     protected static double recall(AMapping map, AMapping ref) {
         return new Recall().calculate(map, new GoldStandard(ref));
     }
 
-    /**
-     * @param map
-     *         result mapping
-     * @param ref
-     *         reference mapping
-     * @return
-     */
-    protected static double fScore(AMapping map, AMapping ref) {
+    static double fScore(AMapping map, AMapping ref) {
         return new FMeasure().calculate(map, new GoldStandard(ref));
     }
 
-    /**
-     * @param map
-     *         result mapping
-     * @param ref
-     *         reference mapping
-     * @return
-     */
+
     protected static double precision(AMapping map, AMapping ref) {
         return new Precision().calculate(map, new GoldStandard(ref));
+    }
+
+
+    private static List<AMapping> generateEvaluationSets(AMapping fullReferenceMapping) {
+        AMapping localRef = fullReferenceMapping.getSubMap(0.0d);
+        List<AMapping> result = new ArrayList<>(10);
+        for (int i=0; i<9; i++) {
+            AMapping subSet = sampleReferenceMap(localRef, 0.1d);
+            result.add(subSet);
+            localRef = MappingOperations.difference(localRef, subSet);
+        }
+        result.add(localRef);
+        return result;
+    }
+
+    private static AMapping getLearningPool(List<AMapping> subSets, int evaluationIndex) {
+        AMapping result = MappingFactory.createDefaultMapping();
+        for (int i = 0; i < 10; i++) {
+            if (i != evaluationIndex) {
+                result = MappingOperations.union(result, subSets.get(i));
+            }
+        }
+        return result;
     }
 
 }

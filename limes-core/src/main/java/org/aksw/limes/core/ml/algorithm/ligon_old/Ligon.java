@@ -276,7 +276,7 @@ public class Ligon {
 
             // 1. Train fuzzy WOMBAT 
             FuzzyWombatSimple fuzzyWombat = new FuzzyWombatSimple(); 
-//            fuzzyWombat.init(null, sourceTrainCache, targetTrainCache);
+//            fuzzyWombat.init(null, sourcePredictionCache, targetPredictionCache);
             fuzzyWombat.init(null, sourceTestCache, targetTestCache);
             mlModel = fuzzyWombat.learn(examples);
             AMapping learnedMap = fuzzyWombat.predict(sourceTrainCache, targetTrainCache, mlModel);

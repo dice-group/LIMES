@@ -29,6 +29,7 @@ import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
+import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,10 +40,11 @@ import org.slf4j.LoggerFactory;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  *
  */
+@SuppressWarnings("Duplicates")
 public class TrustedLigon {
     static Logger logger = LoggerFactory.getLogger(TrustedLigon.class);
 
-    String resultStr =  "tP\ttR\ttF\tMetricExpr\tP\tR\tF\n" ;
+    String resultStr =  "" ;
 
     protected ReliableOracle oracle;
 
@@ -60,6 +62,12 @@ public class TrustedLigon {
     // Olny for evaluation
     ACache fullSourceCache = null;
     ACache fullTargetCache = null;
+
+
+    ACache sourceTestingCache = null;
+    ACache targetTestingCache = null;
+
+    AMapping testReferenceMap = null;
     AMapping fullReferenceMap = null;
 
     protected ActiveMLAlgorithm activeWombat = null;
@@ -105,6 +113,23 @@ public class TrustedLigon {
     }
 
 
+    public TrustedLigon(AMapping trainigExamplesMap,
+                 ACache sourceTrainCache,
+                 ACache targetTrainCache,
+                 ReliableOracle oracle,
+                 ACache fullSourceCache,
+                 ACache fullTargetCache,
+                 AMapping fullReferenceMapping,
+                 ACache sourceTestingCache,
+                 ACache targetTestingCache,
+                 AMapping testReferenceMap) {
+        this(trainigExamplesMap, sourceTrainCache, targetTrainCache, oracle, fullSourceCache, fullTargetCache, fullReferenceMapping);
+        this.sourceTestingCache = sourceTestingCache;
+        this.targetTestingCache = targetTestingCache;
+        this.testReferenceMap = testReferenceMap;
+    }
+
+
 
     /**
      * Classify unlabeled examples to be positive or negative ones
@@ -132,7 +157,8 @@ public class TrustedLigon {
     //    public AMapping learn(AMapping labeledExamples,double k, ODDS odds,
     //            int mostInformativeExamplesCount) throws UnsupportedMLImplementationException{
     public String learn(AMapping labeledExamples, int mostInformativeExamplesCount) throws UnsupportedMLImplementationException{
-        initActiveWombat(fullSourceCache, fullTargetCache);
+        fillTrainingCaches(labeledExamples);
+        initActiveWombat(sourceTrainCache, targetTrainCache);
         int i = 0;
         do{
             AMapping mostInformativeExamples = getWombatMostInformativeExamples(labeledExamples, mostInformativeExamplesCount);
@@ -164,7 +190,7 @@ public class TrustedLigon {
         }
         assert (activeWombat.getClass().equals(ActiveMLAlgorithm.class));
         activeWombat.init(null, sourceCache, targetCache);
-        //        activeWombat.init(null, sourceTrainCache, targetTrainCache);
+        //        activeWombat.init(null, sourcePredictionCache, targetPredictionCache);
         return null;
         //                activeWombat.activeLearn();
     }
@@ -177,8 +203,9 @@ public class TrustedLigon {
      */
     protected AMapping getWombatMostInformativeExamples(AMapping labeledExamples, int mostInformativeExamplesCount) throws UnsupportedMLImplementationException {
         MLResults mlModel = activeWombat.activeLearn(labeledExamples);
-        AMapping learnedMap = activeWombat.predict(fullSourceCache, fullTargetCache, mlModel);
+        AMapping learnedMap = activeWombat.predict(sourceTrainCache, targetTrainCache, mlModel);
         computePerformanceIndicatorsWombat(labeledExamples, learnedMap, mlModel);
+        ((AWombat)activeWombat.getMl()).updateActiveLearningCaches(sourceTrainCache, targetTrainCache, fullSourceCache, fullTargetCache);
         return activeWombat.getNextExamples(mostInformativeExamplesCount);
     }
 
@@ -197,10 +224,39 @@ public class TrustedLigon {
      */
     private String computePerformanceIndicatorsWombat(AMapping labeledExamples, AMapping learnedMap, MLResults mlModel) {
 
+//        //PIs for training data
+//        resultStr += String.format("%.2f", new Precision().calculate(learnedMap, new GoldStandard(labeledExamples)))+ "\t" +
+//                String.format("%.2f",new Recall().calculate(learnedMap, new GoldStandard(labeledExamples)))   + "\t" +
+//                String.format("%.2f",new FMeasure().calculate(learnedMap, new GoldStandard(labeledExamples)))   + "\t" ;
+//
+//        //PIs for whole KB
+//        long start = System.currentTimeMillis();
+//        AMapping kbMap;
+//        LinkSpecification linkSpecification = mlModel.getLinkSpecification();
+//
+//        Rewriter rw = RewriterFactory.getDefaultRewriter();
+//        LinkSpecification rwLs = rw.rewrite(linkSpecification);
+//        IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, fullSourceCache, fullTargetCache);
+//        assert planner != null;
+//        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, fullSourceCache, fullTargetCache, "?x", "?y");
+//        assert engine != null;
+//        AMapping fullResultMap = engine.execute(rwLs, planner);
+//        kbMap = fullResultMap.getSubMap(linkSpecification.getThreshold());
+//        GoldStandard fullRefgoldStandard = new GoldStandard(fullReferenceMap);
+//        resultStr += linkSpecification.toStringOneLine() + "\t" +
+//                String.format("%.2f", new Precision().calculate(fullResultMap, fullRefgoldStandard))+ "\t" +
+//                String.format("%.2f",new Recall().calculate(fullResultMap, fullRefgoldStandard))   + "\t" +
+//                String.format("%.2f",new FMeasure().calculate(fullResultMap, fullRefgoldStandard))   + "\t" +
+//                //                (System.currentTimeMillis() - start)        +
+//                "\n" ;
+//        System.out.println(resultStr);
+//        return resultStr;
+
+
         //PIs for training data
-        resultStr += String.format("%.2f", new Precision().calculate(learnedMap, new GoldStandard(labeledExamples)))+ "\t" + 
-                String.format("%.2f",new Recall().calculate(learnedMap, new GoldStandard(labeledExamples)))   + "\t" + 
-                String.format("%.2f",new FMeasure().calculate(learnedMap, new GoldStandard(labeledExamples)))   + "\t" ;
+        resultStr += String.format("%.2f", new Precision().calculate(learnedMap, new GoldStandard(labeledExamples))) + "\t" +
+                String.format("%.2f", new Recall().calculate(learnedMap, new GoldStandard(labeledExamples))) + "\t" +
+                String.format("%.2f", new FMeasure().calculate(learnedMap, new GoldStandard(labeledExamples))) + "\t";
 
         //PIs for whole KB
         long start = System.currentTimeMillis();
@@ -210,19 +266,26 @@ public class TrustedLigon {
         Rewriter rw = RewriterFactory.getDefaultRewriter();
         LinkSpecification rwLs = rw.rewrite(linkSpecification);
         IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, fullSourceCache, fullTargetCache);
-        assert planner != null;
         ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, fullSourceCache, fullTargetCache, "?x", "?y");
-        assert engine != null;
         AMapping fullResultMap = engine.execute(rwLs, planner);
         kbMap = fullResultMap.getSubMap(linkSpecification.getThreshold());
         GoldStandard fullRefgoldStandard = new GoldStandard(fullReferenceMap);
-        resultStr += linkSpecification.toStringOneLine() + "\t" +
-                String.format("%.2f", new Precision().calculate(fullResultMap, fullRefgoldStandard))+ "\t" + 
-                String.format("%.2f",new Recall().calculate(fullResultMap, fullRefgoldStandard))   + "\t" + 
-                String.format("%.2f",new FMeasure().calculate(fullResultMap, fullRefgoldStandard))   + "\t" +
-                //                (System.currentTimeMillis() - start)        + 
-                "\n" ;
-        System.out.println(resultStr);
+        resultStr +=
+                String.format("%.2f", new Precision().calculate(kbMap, fullRefgoldStandard)) + "\t" +
+                        String.format("%.2f", new Recall().calculate(kbMap, fullRefgoldStandard)) + "\t" +
+                        String.format("%.2f", new FMeasure().calculate(kbMap, fullRefgoldStandard)) + "\t";
+        planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceTestingCache, targetTestingCache);
+        engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceTestingCache, targetTestingCache, "?x", "?y");
+        fullResultMap = engine.execute(rwLs, planner);
+        kbMap = fullResultMap.getSubMap(linkSpecification.getThreshold());
+        fullRefgoldStandard = new GoldStandard(testReferenceMap);
+        resultStr += String.format("%.2f", new Precision().calculate(kbMap, fullRefgoldStandard)) + "\t" +
+                String.format("%.2f", new Recall().calculate(kbMap, fullRefgoldStandard)) + "\t" +
+                String.format("%.2f", new FMeasure().calculate(kbMap, fullRefgoldStandard)) + "\t" +
+                linkSpecification.toStringOneLine() +
+                //                (System.currentTimeMillis() - start)        +
+                "\n";
+
         return resultStr;
     }
 

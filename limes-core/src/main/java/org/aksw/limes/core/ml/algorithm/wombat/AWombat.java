@@ -68,6 +68,9 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     public static List<String> sourceUris;
     public static List<String> targetUris;
 
+    protected ACache sourcePredictionCache;
+    protected ACache targetPredictionCache;
+
     protected Map<String, Double> sourcePropertiesCoverageMap;
     protected Map<String, Double> targetPropertiesCoverageMap;
 
@@ -108,7 +111,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         AMapping overallMapping = MappingFactory.createDefaultMapping();
         for (RefinementNode bestNode : bestNodes) {
             String metricExpr = bestNode.getMetricExpression();
-            AMapping metricExprMapping = executeMetricExpression(metricExpr);
+            AMapping metricExprMapping = executeMetricExpression(metricExpr, true);
             overallMapping = MappingOperations.add(overallMapping, metricExprMapping, false); // count for multiple links
         }
 
@@ -138,6 +141,16 @@ public abstract class AWombat extends ACoreMLAlgorithm {
             result.add(l.getSourceUri(), l.getTargetUri(), l.getProbability());
         }
         return result;
+    }
+
+
+    public void updateActiveLearningCaches (ACache trainingSource, ACache trainingTarget, ACache predictionSource, ACache predictionTarget) {
+        this.sourceCache = trainingSource;
+        this.targetCache= trainingTarget;
+        this.sourcePredictionCache = predictionSource;
+        this.targetPredictionCache = predictionTarget;
+        sourcePropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(sourceCache, getMinPropertyCoverage());
+        targetPropertiesCoverageMap = LinearSelfConfigurator.getPropertyStats(targetCache, getMinPropertyCoverage());
     }
 
 
@@ -254,15 +267,20 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     }
 
 
+
     private AMapping executeMetricExpression(String metricExpression) {
+        return executeMetricExpression(metricExpression, false);
+    }
+
+    private AMapping executeMetricExpression(String metricExpression, boolean usePredictionCache) {
         AMapping map;
         Double threshold = Double.parseDouble(metricExpression.substring(metricExpression.lastIndexOf("|") + 1, metricExpression.length()));
         Rewriter rw = RewriterFactory.getRewriter(RewriterType.DEFAULT);
         LinkSpecification ls = new LinkSpecification(metricExpression, threshold);
         LinkSpecification rwLs = rw.rewrite(ls);
-        IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceCache, targetCache);
+        IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, usePredictionCache ? sourcePredictionCache : sourceCache, usePredictionCache ? targetPredictionCache : targetCache);
         assert planner != null;
-        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache, "?x", "?y");
+        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, usePredictionCache ? sourcePredictionCache : sourceCache, usePredictionCache ? targetPredictionCache : targetCache, "?x", "?y");
         assert engine != null;
         AMapping resultMap = engine.execute(rwLs, planner);
         map = resultMap.getSubMap(threshold);
