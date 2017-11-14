@@ -12,19 +12,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.framework.junit.ApplicationTest;
-import org.testfx.util.WaitForAsyncUtils;
 
-import com.sun.javafx.robot.FXRobot;
-
-import javafx.scene.Node;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 public class EditLoadedConfigPropertiesTest extends ApplicationTest {
 
@@ -68,18 +57,7 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest {
 		clickOn("Edit Properties");
 
 		logger.info("Waiting for properties to finish loading");
-		int sec = 0;
-		while(listWindows().size() == 3){
-			sleep(1000);
-			sec++;
-			if(sec % 100 == 0){
-				logger.info("Waited: " + sec + " seconds");
-			}
-			//avoid infinite loop
-			if(sec > 1000){
-				break;
-			}
-		}
+		CustomGuiTest.waitUntilLoadingWindowIsClosed(2,500);
 		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", 180);
 		clickOn("#switchModeButton");
 		logger.info("Waiting for dbo:abbreviation");

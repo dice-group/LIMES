@@ -10,6 +10,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class CustomGuiTest {
 
@@ -34,6 +36,32 @@ public class CustomGuiTest {
 		}
 		logger.error("Maximum timeout reached, while waiting for Node " + nodeId + " to be not null!");
 		return false;
+	}
+	
+	/**
+	 * Waits until the number of visible windows is desiredNumberOfWindows or timeout in seconds is reached
+	 * @param desiredNumberOfWindows
+	 * @param timeout
+	 */
+	public static void waitUntilLoadingWindowIsClosed(int desiredNumberOfWindows, int timeout){
+		FxRobot rob = new FxRobot();
+		int sec = 0;
+		logger.info("Wait until only " + desiredNumberOfWindows + " windows are left open");
+		logger.info("Currently open windows: ");
+		for(Window w: rob.listWindows()){
+			logger.info(((Stage)w).getTitle());
+		}
+		while(rob.listWindows().size() > desiredNumberOfWindows){
+			rob.sleep(1000);
+			sec++;
+			if(sec % 100 == 0){
+				logger.info("Waited: " + sec + " seconds");
+			}
+			//avoid infinite loop
+			if(sec > timeout){
+				break;
+			}
+		}
 	}
 
 	/**
@@ -60,7 +88,9 @@ public class CustomGuiTest {
 		while (!node.isVisible() && timeout != 0) {
 			try {
 				timeout--;
-				logger.info("Timeoutremaining for "+ nodeId + " : " + timeout);
+				if(timeout % 10 == 0){
+                    logger.info("Timeoutremaining for "+ nodeId + " : " + timeout);
+				}
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				logger.error("Interrupted while waiting for Node " + nodeId + " to be visible!");
