@@ -69,7 +69,7 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest {
 
 		logger.info("Waiting for properties to finish loading");
 		int sec = 0;
-		while(listWindows().size() == 1){
+		while(listWindows().size() == 3){
 			sleep(1000);
 			sec++;
 			if(sec % 100 == 0){
