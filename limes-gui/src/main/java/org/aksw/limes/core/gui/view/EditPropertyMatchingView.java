@@ -189,6 +189,7 @@ public class EditPropertyMatchingView implements IEditView {
 
 		// ========== ADD EVERYTHING TO BORDERPANE ========================
 		BorderPane root = new BorderPane();
+		root.setId("root");
 		root.setCenter(propertiesColumn);
 		root.setBottom(buttons);
 		ScrollPane pane = new ScrollPane(root);

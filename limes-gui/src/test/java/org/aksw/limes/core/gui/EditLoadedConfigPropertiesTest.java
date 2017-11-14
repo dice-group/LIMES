@@ -15,7 +15,7 @@ import org.testfx.framework.junit.ApplicationTest;
 
 import javafx.stage.Stage;
 
-public class EditLoadedConfigPropertiesTest extends ApplicationTest{
+public class EditLoadedConfigPropertiesTest extends ApplicationTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(EditLoadedConfigPropertiesTest.class);
 	MainView mainView;
@@ -28,45 +28,46 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest{
 		mainController = new MainController(mainView);
 		mainView.setController(mainController);
 	}
-	
+
 	@Before
-	public void loadConfig(){
-		mainController.loadConfig(new File(Thread.currentThread().getContextClassLoader().getResource("gui/testConfig.xml").getFile()));
+	public void loadConfig() {
+		mainController.loadConfig(
+				new File(Thread.currentThread().getContextClassLoader().getResource("gui/testConfig.xml").getFile()));
 	}
-	
+
 	@BeforeClass
-	public static void setup(){
-        System.setProperty("testfx.robot", "glass");
-        System.setProperty("testfx.headless", "true");
-        System.setProperty("prism.order", "sw");
-        System.setProperty("prism.text", "t2k");
-        System.setProperty("java.awt.headless", "true");
+	public static void setup() {
+		System.setProperty("testfx.robot", "glass");
+		System.setProperty("testfx.headless", "true");
+		System.setProperty("prism.order", "sw");
+		System.setProperty("prism.text", "t2k");
+		System.setProperty("java.awt.headless", "true");
 	}
-	
+
 	@Test
-	public void testEditProperties() throws InterruptedException{
+	public void testEditProperties() throws InterruptedException {
 		logger.info("Clicking on Configuration");
 		clickOn("Configuration");
 		logger.info("Clicking on Edit");
 		clickOn("Edit");
-		//Necessary because otherwise the sub-menu vanishes
+		// Necessary because otherwise the sub-menu vanishes
 		logger.info("Moving to Edit Classes");
 		moveTo("Edit Classes");
 		logger.info("Clicking on Edit Properties");
 		clickOn("Edit Properties");
 
-		logger.info("Waiting for #automatedPropList");
-		CustomGuiTest.waitUntilNodeIsVisible("#automatedPropList", 180);
+		logger.info("Waiting for properties to finish loading");
+		CustomGuiTest.waitUntilLoadingWindowIsClosed(2,500);
+		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", 180);
 		clickOn("#switchModeButton");
 		logger.info("Waiting for dbo:abbreviation");
 		CustomGuiTest.waitUntilNodeIsVisible("dbo:abbreviation", 180);
 		clickOn("dbo:abbreviation");
 		clickOn("dbo:birthDate");
 		clickOn("Finish");
-		
+
 		clickOn("dbo:abbreviation");
 		clickOn("dbo:birthDate");
-		
 	}
-	
+
 }

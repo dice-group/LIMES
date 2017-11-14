@@ -20,6 +20,7 @@ import org.testfx.matcher.base.NodeMatchers;
 
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class ConfigurationWizardTest extends ApplicationTest{
 
@@ -71,6 +72,9 @@ public class ConfigurationWizardTest extends ApplicationTest{
 	
 	public void testEditEndpoint(){
 		logger.info("testEditEndpoint started");
+		for(Window w: listWindows()){
+			logger.info("Window open: " + ((Stage)w).getTitle());
+		}
 		clickOn("#SOURCEendpointURLTextField").write(resourcesPath + "datasets/Restaurants/restaurant1.nt");
 		clickOn("#SOURCEidNamespaceTextField").write("Restaurant");
 		clickOn("#TARGETendpointURLTextField").write(resourcesPath + "datasets/Persons2/person21.nt");
@@ -81,6 +85,7 @@ public class ConfigurationWizardTest extends ApplicationTest{
 	
 	public void testEditClassMatching(){
 		logger.info("testEditClassMatching started");
+		CustomGuiTest.waitUntilLoadingWindowIsClosed(2,500);
 		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", timeout);
 		//Test if manual matching gets loaded
 		logger.info("Clicking on Button to get Manual Matching");
@@ -103,6 +108,7 @@ public class ConfigurationWizardTest extends ApplicationTest{
 	}
 	
 	public void testEditPropertyMatching(){
+		CustomGuiTest.waitUntilLoadingWindowIsClosed(2,500);
 		logger.info("testEditPropertyMatching started");
 		logger.info("Waiting for #sourcePropColumn to be visible");
 		CustomGuiTest.waitUntilNodeIsVisible("#sourcePropColumn", timeout);

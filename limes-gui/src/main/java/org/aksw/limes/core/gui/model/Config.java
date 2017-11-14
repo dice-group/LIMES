@@ -227,6 +227,12 @@ public class Config extends Configuration {
 	if (tmp.getSourceInfo() == null || tmp.getTargetInfo() == null || tmp.getSourceInfo().equals(new KBInfo()) || tmp.getTargetInfo().equals(new KBInfo())) {
 	    throw new RuntimeException("Invalid configuration file!");
 	}
+	for (String s : tmp.getSourceInfo().getPrefixes().keySet()) {
+	    PrefixHelper.addPrefix(s, tmp.getSourceInfo().getPrefixes().get(s));
+	}
+	for (String s : tmp.getTargetInfo().getPrefixes().keySet()) {
+	    PrefixHelper.addPrefix(s, tmp.getTargetInfo().getPrefixes().get(s));
+	}
 	outConfig = new Config(tmp.getSourceInfo(), tmp.getTargetInfo(), tmp.getMetricExpression(),
 		tmp.getAcceptanceRelation(), tmp.getVerificationRelation(),
 		tmp.getAcceptanceThreshold(), tmp.getAcceptanceFile(),
@@ -238,12 +244,6 @@ public class Config extends Configuration {
 		tmp.getMlImplementationType(), tmp.getMlTrainingDataFile(),
 		tmp.getMlPseudoFMeasure());
 	outConfig.setMlTrainingDataFile(tmp.getMlTrainingDataFile());
-	for (String s : outConfig.getSourceInfo().getPrefixes().keySet()) {
-	    PrefixHelper.addPrefix(s, outConfig.getSourceInfo().getPrefixes().get(s));
-	}
-	for (String s : outConfig.getTargetInfo().getPrefixes().keySet()) {
-	    PrefixHelper.addPrefix(s, outConfig.getTargetInfo().getPrefixes().get(s));
-	}
 	if (tmp.getMlAlgorithmName() == null || tmp.getMlAlgorithmName().equals("")) {
 	    outConfig.metric = MetricParser.parse(outConfig.metricExpression, outConfig
 		    .getSourceInfo().getVar().replaceAll("\\?", ""),outConfig);
