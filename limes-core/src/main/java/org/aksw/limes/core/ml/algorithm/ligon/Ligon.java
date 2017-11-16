@@ -169,11 +169,15 @@ public class Ligon {
         double result = 0.0d;
         for (int i = 0; i < estimatedOracles.size(); i++) {
             result +=
-                    Math.log(estimatedOracles.get(i).confusionMatrix.getRightClassifiedPositiveExamplesProbability()) +
-                            Math.log(estimatedOracles.get(i).confusionMatrix.getWrongClassifiedPositiveExamplesProbability()) -
-                            Math.log(estimatedOracles.get(i).confusionMatrix.getRightClassifiedNegativeExamplesProbability()) -
-                            Math.log(estimatedOracles.get(i).confusionMatrix.getWrongClassifiedNegativeExamplesProbability());
+                    Math.log(estimatedOracles.get(i).confusionMatrix.getRightClassifiedPositiveExamplesProbability() +
+                            estimatedOracles.get(i).confusionMatrix.getWrongClassifiedPositiveExamplesProbability()) -
+                            Math.log(estimatedOracles.get(i).confusionMatrix.getRightClassifiedNegativeExamplesProbability() +
+                            estimatedOracles.get(i).confusionMatrix.getWrongClassifiedNegativeExamplesProbability());
+            logger.info("T=" + (estimatedOracles.get(i).confusionMatrix.getRightClassifiedPositiveExamplesProbability() + estimatedOracles.get(i).confusionMatrix.getWrongClassifiedPositiveExamplesProbability()));
+            logger.info("F=" + (estimatedOracles.get(i).confusionMatrix.getWrongClassifiedNegativeExamplesProbability() + estimatedOracles.get(i).confusionMatrix.getRightClassifiedNegativeExamplesProbability()));
+            logger.info("result=" + result);
         }
+//        result = result / (double) estimatedOracles.size();
         double oddsL = 1.0d;
         switch (odds) {
             case APPROXIMATE:
@@ -209,6 +213,7 @@ public class Ligon {
         for (String subject : unlabeledexamples.getMap().keySet()) {
             for (String object : unlabeledexamples.getMap().get(subject).keySet()) {
                 double OddsValue = computeOdds(subject, object, odds);
+                logger.info("odds=" + OddsValue + ", k=" + Math.log(k) + ", " + (OddsValue > Math.log(k)));
                 if (OddsValue > k) {
                     labeledExamples.add(subject, object, 1.0d);
                 } else if (OddsValue < (1 / k)) {

@@ -116,9 +116,13 @@ public class EvaluateLigon {
                     }
                     break;
                 case 4:
-                    evaluateLigonWithReliableOracleForDataset(trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
+//                    evaluateLigonWithReliableOracleForDataset(trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
                     List<NoisyOracle> oracles = new ArrayList<>(1);
                     oracles.add(new NoisyOracle(fullReferenceMapping, new ConfusionMatrix(new double[][]{new double[]{0.4, 0.4}, new double[]{0.1, 0.1}})));
+                    oracles.add(new NoisyOracle(fullReferenceMapping, new ConfusionMatrix(new double[][]{new double[]{0.4, 0.4}, new double[]{0.1, 0.1}})));
+                    oracles.add(new NoisyOracle(fullReferenceMapping, new ConfusionMatrix(new double[][]{new double[]{0.4, 0.4}, new double[]{0.1, 0.1}})));
+                    oracles.add(new NoisyOracle(fullReferenceMapping, new ConfusionMatrix(new double[][]{new double[]{0.4, 0.4}, new double[]{0.1, 0.1}})));
+                    oracles = getNoisyOracles(4, 0.75d, 0.5d);
                     evaluateLigonForDataset(Integer.valueOf(args[2]), oracles, ODDS.EQUIVALENCE, trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
             }
             System.out.println("----- partly results -----\n" + resultStr);
