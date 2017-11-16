@@ -25,5 +25,7 @@ WORKDIR /limes
 COPY --from=builder /limes/limes.jar limes.jar
 # set default java flags
 ENV JAVA_OPTS="-Xmx2G"
+# expose port
+EXPOSE 8080
 # assign start command
 CMD ["java", "-jar", "limes.jar", "-s"]
