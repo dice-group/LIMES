@@ -589,7 +589,11 @@ public class Config extends Configuration {
 	return mapping;
     }
 
-    /**
+    public void setMetric(Output metric) {
+		this.metric = metric;
+	}
+
+	/**
      * sets mapping
      * 
      * @param mapping
