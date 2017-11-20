@@ -125,17 +125,17 @@ public class SoundexMeasure extends StringMeasure {
 
     @Override
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
-        double value = 0;
+        double max = 0;
         double sim = 0;
         for (String source : instance1.getProperty(property1)) {
             for (String target : instance2.getProperty(property2)) {
                 sim = proximity(source, target);
-                if (sim > value) {
-                    value = sim;
+                if (sim > max) {
+                    max = sim;
                 }
             }
         }
-        return sim;
+        return max;
     }
 
     @Override
