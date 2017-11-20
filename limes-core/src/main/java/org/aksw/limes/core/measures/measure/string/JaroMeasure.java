@@ -12,7 +12,7 @@ import org.aksw.limes.core.io.cache.Instance;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class JaroMeasure extends StringMeasure {
+public class JaroMeasure extends AStringMeasure {
     public static int getTranspositions(List<Character> source, List<Character> target) {
         if (source.isEmpty() || target.isEmpty() || (source.size() != target.size())) {
             return -1;

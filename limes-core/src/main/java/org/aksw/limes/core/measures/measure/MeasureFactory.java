@@ -22,6 +22,7 @@ import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
 import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
+import org.aksw.limes.core.measures.measure.string.HammingDistanceMeasure;
 import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
 import org.aksw.limes.core.measures.measure.string.JaroMeasure;
 import org.aksw.limes.core.measures.measure.string.JaroWinklerMeasure;
@@ -29,6 +30,7 @@ import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
 import org.aksw.limes.core.measures.measure.string.MongeElkanMeasure;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
 import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
+import org.aksw.limes.core.measures.measure.string.SimpleEditDistanceMeasure;
 import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.AfterMeasure;
@@ -84,6 +86,8 @@ public class MeasureFactory {
     public static final String RATCLIFF = "ratcliff";
     public static final String SOUNDEX = "soundex";
     public static final String TRIGRAM = "trigram";
+    public static final String SIMPLE_EDIT_DISTANCE = "simple_edit_distance";
+    public static final String HAMMING_DISTANCE = "hamming_distance";
 
     // vector space measures
     public static final String EUCLIDEAN = "euclidean";
@@ -192,6 +196,12 @@ public class MeasureFactory {
         }
         if (measure.startsWith(TRIGRAM)) {
             return MeasureType.TRIGRAM;
+        }
+        if (measure.startsWith(SIMPLE_EDIT_DISTANCE)) {
+            return MeasureType.SIMPLE_EDIT_DISTANCE;
+        }
+        if (measure.startsWith(HAMMING_DISTANCE)) {
+            return MeasureType.HAMMING_DISTANCE;
         }
         ////////////////////////////
         if (measure.startsWith(EUCLIDEAN)) {
@@ -385,6 +395,10 @@ public class MeasureFactory {
             return new SoundexMeasure();
         case TRIGRAM:
             return new TrigramMeasure();
+        case SIMPLE_EDIT_DISTANCE:
+            return new SimpleEditDistanceMeasure();
+        case HAMMING_DISTANCE:
+            return new HammingDistanceMeasure();
         ////////////////////////////////////////////
 
         case EUCLIDEAN:

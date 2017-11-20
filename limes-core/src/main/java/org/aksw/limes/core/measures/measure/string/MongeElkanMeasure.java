@@ -2,7 +2,7 @@ package org.aksw.limes.core.measures.measure.string;
 
 import org.aksw.limes.core.io.cache.Instance;
 
-public class MongeElkanMeasure extends StringMeasure {
+public class MongeElkanMeasure extends AStringMeasure {
 
     public static final String split = " ";
 

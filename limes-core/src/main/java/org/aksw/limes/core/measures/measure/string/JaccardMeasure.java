@@ -12,7 +12,7 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.JaccardSimilarity;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class JaccardMeasure extends StringMeasure {
+public class JaccardMeasure extends AStringMeasure {
 
     public double getSimilarityChar(Object a, Object b) {
         String p1 = a + "";

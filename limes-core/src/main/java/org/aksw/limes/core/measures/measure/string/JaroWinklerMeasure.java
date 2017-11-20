@@ -20,7 +20,7 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
  * @author Kevin Dreßler
  */
 
-public class JaroWinklerMeasure extends StringMeasure implements ITrieFilterableStringMeasure {
+public class JaroWinklerMeasure extends AStringMeasure implements ITrieFilterableStringMeasure {
 
     public static double winklerBoostThreshold = 0.7d;
     private static char[][] sp = { { 'A', 'E' }, { 'A', 'I' }, { 'A', 'O' }, { 'A', 'U' }, { 'B', 'V' }, { 'E', 'I' },

@@ -14,7 +14,7 @@ import org.aksw.limes.core.measures.mapper.string.fastngram.NGramTokenizer;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class QGramSimilarityMeasure extends StringMeasure {
+public class QGramSimilarityMeasure extends AStringMeasure {
 
     ITokenizer tokenizer;
     int q = 3;

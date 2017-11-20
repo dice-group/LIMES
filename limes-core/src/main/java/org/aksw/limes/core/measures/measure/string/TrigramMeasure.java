@@ -11,7 +11,7 @@ import org.aksw.limes.core.io.cache.Instance;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class TrigramMeasure extends StringMeasure {
+public class TrigramMeasure extends AStringMeasure {
 
     public double getSimilarity(int overlap, int lengthA, int lengthB) {
         return ((double) 2 * overlap) / (double) (lengthA + lengthB);

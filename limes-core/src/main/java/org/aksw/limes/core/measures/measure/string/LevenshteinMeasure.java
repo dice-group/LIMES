@@ -10,7 +10,7 @@ import org.aksw.limes.core.io.cache.Instance;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class LevenshteinMeasure extends StringMeasure {
+public class LevenshteinMeasure extends AStringMeasure {
 
     public int getPrefixLength(int tokensNumber, double threshold) {
         throw new UnsupportedOperationException("Not supported yet.");

@@ -2,7 +2,7 @@ package org.aksw.limes.core.measures.measure.string;
 
 import org.aksw.limes.core.io.cache.Instance;
 
-public class SoundexMeasure extends StringMeasure {
+public class SoundexMeasure extends AStringMeasure {
 
     public static final int codeLength = 6;
 

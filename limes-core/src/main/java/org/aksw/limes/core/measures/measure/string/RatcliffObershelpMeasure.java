@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import org.aksw.limes.core.io.cache.Instance;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
-public class RatcliffObershelpMeasure extends StringMeasure implements ITrieFilterableStringMeasure {
+public class RatcliffObershelpMeasure extends AStringMeasure implements ITrieFilterableStringMeasure {
 
     /**
      * the current score will be stored here.

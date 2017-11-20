@@ -12,7 +12,7 @@ import org.aksw.limes.core.io.cache.Instance;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class OverlapMeasure extends StringMeasure {
+public class OverlapMeasure extends AStringMeasure {
 
     public int getPrefixLength(int tokensNumber, double threshold) {
         return (int) (tokensNumber - threshold + 1);

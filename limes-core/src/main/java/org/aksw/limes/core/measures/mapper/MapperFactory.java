@@ -12,6 +12,7 @@ import org.aksw.limes.core.measures.mapper.string.JaroWinklerMapper;
 import org.aksw.limes.core.measures.mapper.string.MongeElkanMapper;
 import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
 import org.aksw.limes.core.measures.mapper.string.RatcliffObershelpMapper;
+import org.aksw.limes.core.measures.mapper.string.SimpleEditDistanceMapper;
 import org.aksw.limes.core.measures.mapper.string.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGramMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.AfterMapper;
@@ -85,6 +86,8 @@ public class MapperFactory {
             return new MongeElkanMapper();
         case RATCLIFF:
             return new RatcliffObershelpMapper();
+        case SIMPLE_EDIT_DISTANCE:
+            return new SimpleEditDistanceMapper();
         ///////////////////////
         case EUCLIDEAN:
             return new HR3Mapper();
