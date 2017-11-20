@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE LIMES SYSTEM "limes.dtd">
+<LIMES>
+  <PREFIX>
+    <NAMESPACE>myprop#</NAMESPACE>
+    <LABEL>prop</LABEL>
+  </PREFIX>
+
+  <SOURCE>
+    <ID>datingcom</ID>
+    <ENDPOINT>src/test/resources/dating1.nt</ENDPOINT>
+    <VAR>?x</VAR>
+    <PAGESIZE>1000</PAGESIZE>
+    <!--<RESTRICTION>?x prop:has_pet "dog"</RESTRICTION>-->
+    <RESTRICTION></RESTRICTION>
+    <PROPERTY>prop:name AS lowercase</PROPERTY>
+    <PROPERTY>prop:email AS lowercase</PROPERTY>
+    <PROPERTY>prop:has_pet AS lowercase</PROPERTY>
+
+    <TYPE>N3</TYPE>
+  </SOURCE>
+
+  <TARGET>
+    <ID>cupidcom</ID>
+    <ENDPOINT>src/test/resources/dating2.nt</ENDPOINT>
+    <VAR>?y</VAR>
+    <PAGESIZE>1000</PAGESIZE>
+    <!--<RESTRICTION>?y prop:speaks "english"</RESTRICTION>-->
+    <RESTRICTION></RESTRICTION>
+    <PROPERTY>prop:name AS lowercase</PROPERTY>
+    <PROPERTY>prop:email AS lowercase</PROPERTY>
+    <PROPERTY>prop:speaks AS lowercase</PROPERTY>
+
+    <TYPE>N3</TYPE>
+  </TARGET>
+  <METRIC>simple_edit_distance(x.prop:name, y.prop:name)</METRIC>
+  <!--
+  <METRIC>AND(exactmatch(x.prop:email, y.prop:email)|0.9, mongeelkan(x.prop:name, y.prop:name)|0.07)</METRIC>
+  <METRIC>AND(exactmatch(x.prop:email, y.prop:email)|0.9, simple_edit_distance(x.prop:name, y.prop:name)|0.07)</METRIC>
+  <METRIC>exactmatch(x.prop:email, y.prop:email)</METRIC>
+  <METRIC>levenshtein(x.prop:name, y.prop:name)</METRIC>
+  <METRIC>simple_edit_distance(x.prop:name, y.prop:name)</METRIC>
+  -->
+
+  <ACCEPTANCE>
+    <THRESHOLD>0.5</THRESHOLD>
+    <FILE>my-accepted.txt</FILE>
+    <RELATION>verySimilar</RELATION>
+  </ACCEPTANCE>
+  <REVIEW>
+    <THRESHOLD>0.01</THRESHOLD>
+    <FILE>my-reviewme.txt</FILE>
+    <RELATION>quiteSimilar</RELATION>
+  </REVIEW>
+
+  <OUTPUT>N3</OUTPUT>
+</LIMES>

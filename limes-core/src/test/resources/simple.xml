@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE LIMES SYSTEM "limes.dtd">
+<LIMES>
+  <PREFIX>
+    <NAMESPACE>prop#</NAMESPACE>
+    <LABEL>prop</LABEL>
+  </PREFIX>
+
+  <SOURCE>
+    <ID>restaurant1</ID>
+    <ENDPOINT>src/test/resources/simple1.nt</ENDPOINT>
+    <VAR>?x</VAR>
+    <PAGESIZE>1000</PAGESIZE>
+    <RESTRICTION></RESTRICTION>
+    <PROPERTY>prop:name AS lowercase</PROPERTY>
+
+    <TYPE>N3</TYPE>
+  </SOURCE>
+
+  <TARGET>
+    <ID>restaurant2</ID>
+    <ENDPOINT>src/test/resources/simple2.nt</ENDPOINT>
+    <VAR>?y</VAR>
+    <PAGESIZE>1000</PAGESIZE>
+    <RESTRICTION></RESTRICTION>
+    <PROPERTY>prop:name AS lowercase</PROPERTY>
+
+    <TYPE>N3</TYPE>
+  </TARGET>
+
+  <METRIC>simple_edit_distance(x.prop:name, y.prop:name)</METRIC>
+
+  <ACCEPTANCE>
+    <THRESHOLD>0.5</THRESHOLD>
+    <FILE>my-accepted.txt</FILE>
+    <RELATION>verySimilar</RELATION>
+  </ACCEPTANCE>
+  <REVIEW>
+    <THRESHOLD>0.25</THRESHOLD>
+    <FILE>my-reviewme.txt</FILE>
+    <RELATION>quiteSimilar</RELATION>
+  </REVIEW>
+
+  <OUTPUT>N3</OUTPUT>
+</LIMES>
