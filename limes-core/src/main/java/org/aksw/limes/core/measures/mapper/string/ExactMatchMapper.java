@@ -58,7 +58,9 @@ public class ExactMatchMapper extends AMapper {
         Map<String, Set<String>> targetIndex = getValueToUriMap(target, properties.get(1));
         AMapping m = MappingFactory.createDefaultMapping();
         boolean swapped = sourceIndex.keySet().size() > targetIndex.keySet().size();
-        (swapped ? sourceIndex : targetIndex).keySet().stream().filter(targetIndex::containsKey).forEach(value -> {
+        (swapped ? sourceIndex : targetIndex).keySet().stream().filter(
+            (swapped ? targetIndex : sourceIndex)::containsKey).
+            forEach(value -> {
             for (String sourceUri : (swapped ? sourceIndex : targetIndex).get(value)) {
                 for (String targetUri : (swapped ? targetIndex : sourceIndex).get(value)) {
                     m.add(sourceUri, targetUri, 1d);
