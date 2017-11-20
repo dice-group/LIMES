@@ -140,7 +140,7 @@ public class SoundexMeasure extends StringMeasure {
 
     @Override
     public String getName() {
-        return "ratcliff-obershelp";
+        return "soundex";
     }
 
     @Override
