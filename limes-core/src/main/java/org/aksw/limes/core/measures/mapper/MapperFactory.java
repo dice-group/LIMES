@@ -12,7 +12,7 @@ import org.aksw.limes.core.measures.mapper.string.JaroWinklerMapper;
 import org.aksw.limes.core.measures.mapper.string.MongeElkanMapper;
 import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
 import org.aksw.limes.core.measures.mapper.string.RatcliffObershelpMapper;
-import org.aksw.limes.core.measures.mapper.string.SimpleEditDistanceMapper;
+import org.aksw.limes.core.measures.mapper.string.SimpleGeneralMapper;
 import org.aksw.limes.core.measures.mapper.string.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGramMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.AfterMapper;
@@ -40,6 +40,9 @@ import org.aksw.limes.core.measures.mapper.topology.IntersectsMapper;
 import org.aksw.limes.core.measures.mapper.topology.TouchesMapper;
 import org.aksw.limes.core.measures.mapper.topology.WithinMapper;
 import org.aksw.limes.core.measures.measure.MeasureType;
+import org.aksw.limes.core.measures.measure.string.SimpleEditDistanceMeasure;
+import org.aksw.limes.core.measures.measure.string.bilang.Dictionary;
+import org.aksw.limes.core.measures.measure.string.bilang.SimpleDictionaryMeasure;
 
 /**
  * Implements the mapper factory class. For each measure name, the factory
@@ -87,7 +90,9 @@ public class MapperFactory {
         case RATCLIFF:
             return new RatcliffObershelpMapper();
         case SIMPLE_EDIT_DISTANCE:
-            return new SimpleEditDistanceMapper();
+            return new SimpleGeneralMapper(new SimpleEditDistanceMeasure());
+        case SIMPLE_DICTIONARY:
+            return new SimpleGeneralMapper(new SimpleDictionaryMeasure(new Dictionary(Dictionary.DEFAULT_DICTIONARY_PATH)));
         ///////////////////////
         case EUCLIDEAN:
             return new HR3Mapper();

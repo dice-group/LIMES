@@ -18,9 +18,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 
-public class SimpleEditDistanceMapper extends AMapper {
+public class SimpleGeneralMapper extends AMapper {
 
-  static Logger logger = LoggerFactory.getLogger(SimpleEditDistanceMapper.class);
+  static Logger logger = LoggerFactory.getLogger(SimpleGeneralMapper.class);
+  private AMeasure measure;
+
+  public SimpleGeneralMapper(AMeasure measure) {
+
+    this.measure = measure;
+  }
 
   /**
    * Computes a mapping between a source and a target.
@@ -55,7 +61,6 @@ public class SimpleEditDistanceMapper extends AMapper {
     Map<String, Set<String>> sourceIndex = getValueToUriMap(source, properties.get(0));
     Map<String, Set<String>> targetIndex = getValueToUriMap(target, properties.get(1));
     AMapping m = MappingFactory.createDefaultMapping();
-    AMeasure measure = new SimpleEditDistanceMeasure();
     for (String x : sourceIndex.keySet()) {
       for (String y : targetIndex.keySet()) {
         double sim = measure.getSimilarity(x,y);
@@ -87,7 +92,7 @@ public class SimpleEditDistanceMapper extends AMapper {
 
   @Override
   public String getName() {
-    return "simpleEditDistance";
+    return "simpleGeneral";
   }
 
   @Override
