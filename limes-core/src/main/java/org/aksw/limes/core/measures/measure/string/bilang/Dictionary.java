@@ -59,4 +59,12 @@ public class Dictionary {
   public int targetSize() {
     return target2source.size();
   }
+
+  public HashMap<String, ArrayList<String>> getSource2targetMap() {
+    return source2target;
+  }
+
+  public HashMap<String, ArrayList<String>> getTarget2sourceMap() {
+    return target2source;
+  }
 }
