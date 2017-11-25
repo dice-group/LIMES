@@ -11,18 +11,18 @@ import java.util.stream.Stream;
 /**
  * Dictionary for translations from a source language to a target language
  */
-public class Dictionary {
+public class BilangDictionary {
 
   private HashMap<String, ArrayList<String>> source2target = new HashMap<>();
   private HashMap<String, ArrayList<String>> target2source = new HashMap<>();
 
   public static Path DEFAULT_DICTIONARY_PATH = Paths.get("src/test/resources/en-de-small.txt");
 
-  public Dictionary() {
+  public BilangDictionary() {
 
   }
 
-  public Dictionary(Path path) {
+  public BilangDictionary(Path path) {
     readDictionaryFile(path);
   }
 

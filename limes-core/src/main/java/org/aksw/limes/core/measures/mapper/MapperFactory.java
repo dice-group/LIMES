@@ -41,7 +41,7 @@ import org.aksw.limes.core.measures.mapper.topology.TouchesMapper;
 import org.aksw.limes.core.measures.mapper.topology.WithinMapper;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.string.SimpleEditDistanceMeasure;
-import org.aksw.limes.core.measures.measure.string.bilang.Dictionary;
+import org.aksw.limes.core.measures.measure.string.bilang.BilangDictionary;
 import org.aksw.limes.core.measures.measure.string.bilang.SimpleDictionaryMeasure;
 
 /**
@@ -92,7 +92,8 @@ public class MapperFactory {
         case SIMPLE_EDIT_DISTANCE:
             return new SimpleGeneralMapper(new SimpleEditDistanceMeasure());
         case SIMPLE_DICTIONARY:
-            return new SimpleGeneralMapper(new SimpleDictionaryMeasure(new Dictionary(Dictionary.DEFAULT_DICTIONARY_PATH)));
+            return new SimpleGeneralMapper(new SimpleDictionaryMeasure(new BilangDictionary(
+                BilangDictionary.DEFAULT_DICTIONARY_PATH)));
         ///////////////////////
         case EUCLIDEAN:
             return new HR3Mapper();

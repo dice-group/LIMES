@@ -9,10 +9,10 @@ import org.aksw.limes.core.measures.measure.string.SimpleEditDistanceMeasure;
 public class SimpleDictionaryMeasure extends AStringMeasure {
 
 
-  private Dictionary dictionary;
+  private BilangDictionary dictionary;
   private AMeasure innerMeasure = new SimpleEditDistanceMeasure();
 
-  public SimpleDictionaryMeasure(Dictionary dictionary) {
+  public SimpleDictionaryMeasure(BilangDictionary dictionary) {
     this.dictionary = dictionary;
   }
 
