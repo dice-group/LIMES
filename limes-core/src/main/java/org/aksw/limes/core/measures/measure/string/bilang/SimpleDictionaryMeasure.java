@@ -82,6 +82,6 @@ public class SimpleDictionaryMeasure extends AStringMeasure {
 
   @Override
   public String getName() {
-    return "simpleDictionary";
+    return "simple_dictionary";
   }
 }

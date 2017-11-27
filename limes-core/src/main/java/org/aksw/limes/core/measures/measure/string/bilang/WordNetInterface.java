@@ -23,6 +23,7 @@ public class WordNetInterface {
 
 
   private static POS[] allWordTypes = new POS[]{POS.NOUN, POS.VERB, POS.ADJECTIVE, POS.ADVERB};
+  public static String DEFAULT_WORDNET_HOME = "src/test/resources/WordNet-3.0";
 
   IDictionary dictionary = null;
 

@@ -30,10 +30,11 @@
     <PROPERTY>prop:name AS lowercase</PROPERTY>
     <PROPERTY>prop:email AS lowercase</PROPERTY>
     <PROPERTY>prop:speaks AS lowercase</PROPERTY>
+    <PROPERTY>prop:has_pet AS lowercase</PROPERTY>
 
     <TYPE>N3</TYPE>
   </TARGET>
-  <METRIC>simple_edit_distance(x.prop:name, y.prop:name)</METRIC>
+  <METRIC>wu_palmer(x.prop:has_pet, y.prop:has_pet)</METRIC>
   <!--
   <METRIC>AND(exactmatch(x.prop:email, y.prop:email)|0.9, mongeelkan(x.prop:name, y.prop:name)|0.07)</METRIC>
   <METRIC>AND(exactmatch(x.prop:email, y.prop:email)|0.9, simple_edit_distance(x.prop:name, y.prop:name)|0.07)</METRIC>
@@ -43,7 +44,7 @@
   -->
 
   <ACCEPTANCE>
-    <THRESHOLD>0.5</THRESHOLD>
+    <THRESHOLD>0.7</THRESHOLD>
     <FILE>my-accepted.txt</FILE>
     <RELATION>verySimilar</RELATION>
   </ACCEPTANCE>

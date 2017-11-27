@@ -88,6 +88,8 @@ public class MeasureFactory {
     public static final String TRIGRAM = "trigram";
     public static final String SIMPLE_EDIT_DISTANCE = "simple_edit_distance";
     public static final String HAMMING_DISTANCE = "hamming_distance";
+    public static final String SIMPLE_DICTIONARY = "simple_dictionary";
+    public static final String WU_PALMER = "wu_palmer";
 
     // vector space measures
     public static final String EUCLIDEAN = "euclidean";
@@ -202,6 +204,12 @@ public class MeasureFactory {
         }
         if (measure.startsWith(HAMMING_DISTANCE)) {
             return MeasureType.HAMMING_DISTANCE;
+        }
+        if (measure.startsWith(SIMPLE_DICTIONARY)) {
+            return MeasureType.SIMPLE_DICTIONARY;
+        }
+        if (measure.startsWith(WU_PALMER)) {
+            return MeasureType.WU_PALMER;
         }
         ////////////////////////////
         if (measure.startsWith(EUCLIDEAN)) {

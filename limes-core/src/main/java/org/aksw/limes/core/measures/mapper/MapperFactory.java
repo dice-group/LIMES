@@ -43,6 +43,8 @@ import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.string.SimpleEditDistanceMeasure;
 import org.aksw.limes.core.measures.measure.string.bilang.BilangDictionary;
 import org.aksw.limes.core.measures.measure.string.bilang.SimpleDictionaryMeasure;
+import org.aksw.limes.core.measures.measure.string.bilang.WordNetInterface;
+import org.aksw.limes.core.measures.measure.string.bilang.WordNetWuPalmerMeasure;
 
 /**
  * Implements the mapper factory class. For each measure name, the factory
@@ -94,6 +96,9 @@ public class MapperFactory {
         case SIMPLE_DICTIONARY:
             return new SimpleGeneralMapper(new SimpleDictionaryMeasure(new BilangDictionary(
                 BilangDictionary.DEFAULT_DICTIONARY_PATH)));
+        case WU_PALMER:
+            return new SimpleGeneralMapper(new WordNetWuPalmerMeasure(new WordNetInterface(
+                WordNetInterface.DEFAULT_WORDNET_HOME)));
         ///////////////////////
         case EUCLIDEAN:
             return new HR3Mapper();
