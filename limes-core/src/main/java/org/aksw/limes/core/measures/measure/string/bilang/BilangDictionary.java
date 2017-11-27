@@ -42,6 +42,8 @@ public class BilangDictionary {
   }
 
   public void addTranslation(String sourceWord, String targetWord) {
+    sourceWord = sourceWord.toLowerCase();
+    targetWord = targetWord.toLowerCase();
     if (!source2target.containsKey(sourceWord)) {
       source2target.put(sourceWord, new ArrayList<>(1));
     }
