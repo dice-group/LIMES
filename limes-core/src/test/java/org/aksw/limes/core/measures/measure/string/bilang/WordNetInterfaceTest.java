@@ -16,6 +16,10 @@ public class WordNetInterfaceTest {
     assertTrue(wn.getSimilarity("dog", "rocket") < wn.getSimilarity("dog", "mammal"));
     assertTrue(wn.getSimilarity("draw", "cook") > wn.getSimilarity("enter", "sign"));
     assertTrue(wn.getSimilarity("draw", "cook") < wn.getSimilarity("draw", "paint"));
+    System.out.println(wn.getSimilarity("cat", "rocket"));
+    System.out.println(wn.getSimilarity("dog", "rocket"));
+    System.out.println(wn.getSimilarity("cat", "tree"));
+    System.out.println(wn.getSimilarity("dog", "tree"));
   }
 
 }

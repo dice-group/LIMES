@@ -1,14 +1,16 @@
 package org.aksw.limes.core.measures.measure.string.bilang;
 
+import java.util.ArrayList;
 import org.aksw.limes.core.measures.measure.string.AStringMeasure;
 
-public class WordNetWuPalmerMeasure extends AStringMeasure {
+public class BilangWordNetWuPalmerMeasure extends AStringMeasure {
 
   private WordNetInterface wnInterface;
+  private BilangDictionary englishDictionary;
 
-  public WordNetWuPalmerMeasure(WordNetInterface wnInterface) {
-
+  public BilangWordNetWuPalmerMeasure(WordNetInterface wnInterface, BilangDictionary englishDictionary) {
     this.wnInterface = wnInterface;
+    this.englishDictionary = englishDictionary;
   }
 
   @Override
@@ -41,9 +43,21 @@ public class WordNetWuPalmerMeasure extends AStringMeasure {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
+  private double getSimilarity(String englishWord, String wordOfOtherLanguageInDictionary) {
+    double maxSimilarity = 0.0;
+    for (String englishTranslation : englishDictionary.getTarget2sourceMap().getOrDefault(
+        wordOfOtherLanguageInDictionary, new ArrayList<>())) {
+      double similarity = wnInterface.getSimilarity(englishWord, englishTranslation);
+      maxSimilarity = Math.max(maxSimilarity, similarity);
+    }
+    return maxSimilarity;
+  }
+
   @Override
   public double getSimilarity(Object object1, Object object2) {
-    return wnInterface.getSimilarity(""+object1, ""+object2);
+    String a = ("" + object1).toLowerCase();
+    String b = ("" + object2).toLowerCase();
+    return Math.max(getSimilarity(a, b), getSimilarity(b, a));
   }
 
   @Override
