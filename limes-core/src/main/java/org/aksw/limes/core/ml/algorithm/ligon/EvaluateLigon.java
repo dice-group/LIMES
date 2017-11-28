@@ -79,7 +79,10 @@ public class EvaluateLigon {
             fullReferenceMapping = learningPool;
             List<ACache> learning = reduceCaches(learningPool, fullSourceCache, fullTargetCache);
             List<ACache> testing = reduceCaches(testSet, fullSourceCache, fullTargetCache);
-            AMapping trainingMap = sampleReferenceMap(learningPool, 10);
+            AMapping trainingMap = MappingOperations.union(
+                    sampleReferenceMap(learningPool, 10),
+                    getNegativeExamples(learning.get(0), learning.get(1), learningPool, 10)
+            );
 
             switch (Integer.valueOf(args[0])) {
                 case 1:
@@ -93,7 +96,7 @@ public class EvaluateLigon {
                     break;
                 case 2:
                     // 2. series of experiments: find best model
-                    evaluateLigonWithReliableOracleForDataset(trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
+//                    evaluateLigonWithReliableOracleForDataset(trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
                     for (ODDS odds : oddsList) {
                         for (int oracles = 2; oracles <= 16; oracles *= 2) {
                             evaluateLigonForDataset(Integer.valueOf(args[2]), getNoisyOracles(oracles, 0.75d, 1.0d), odds, trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
@@ -318,6 +321,20 @@ public class EvaluateLigon {
         }
 
         return sample;
+    }
+
+    public static AMapping getNegativeExamples(ACache source, ACache target, AMapping reference, int size) {
+        AMapping negEx = MappingFactory.createDefaultMapping();
+        for (int i = 0; i < size; i++) {
+            int a, b;
+            do {
+                a = (int) (Math.random() * source.size());
+                b = (int) (Math.random() * target.size());
+            }
+            while (reference.getConfidence(source.getAllUris().get(a), target.getAllUris().get(b)) != 0);
+            negEx.add(source.getAllUris().get(a), target.getAllUris().get(b), 0.0);
+        }
+        return negEx;
     }
 
     public static DataSets toDataset(String d) {

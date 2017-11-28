@@ -175,10 +175,10 @@ public class Ligon {
     private void logConfusionMatrixes() {
         try {
             if (logOut == null) {
-                logOut = new File("./" + EvaluateLigon.datasetName + "_" + "cm.txt");
+                logOut = new File("./" + EvaluateLigon.datasetName + "_" + blackBoxOracles.size() + "_cm.txt");
                 String out = "it";
                 for (int i = 0; i < blackBoxOracles.size(); i++) {
-                    out += "\tbb\"+i+\"-TT\tbb\"+i+\"-TF\tbb\"+i+\"-FT\tbb\"+i+\"-FF\test\"+i+\"-TT\test\"+i+\"-TF\test\"+i+\"-FT\test\"+i+\"-FF";
+                    out += "\tbb"+i+"-TT\tbb"+i+"-TF\tbb"+i+"-FT\tbb"+i+"-FF\test"+i+"-TT\test"+i+"-TF\test"+i+"-FT\test"+i+"-FF";
                 }
                 Files.write(out + "\n", logOut, Charset.defaultCharset());
             } else {
@@ -252,10 +252,10 @@ public class Ligon {
             for (String object : unlabeledexamples.getMap().get(subject).keySet()) {
                 double OddsValue = computeOdds(subject, object, odds);
                 logger.info("odds=" + OddsValue + ", k=" + Math.log(k) + ", " + (OddsValue > Math.log(k)));
-                if (OddsValue > k) {
+                    if (OddsValue > Math.log(k)) {
                     labeledExamples.add(subject, object, 1.0d);
-                } else if (OddsValue < (1 / k)) {
-                    //                    labeledExamples.add(subject, object, 0.0d); //TODO add later
+                } else if (OddsValue < (1 / Math.log(k))) {
+                    labeledExamples.add(subject, object, 0.0d);
                 }
             }
         }
@@ -270,10 +270,11 @@ public class Ligon {
         fillTrainingCaches(labeledExamples);
         initActiveWombat(sourceTrainCache, targetTrainCache);
         int i = 0;
+        AMapping newLabeledExamples = labeledExamples;
         do {
-            updateOraclesConfusionMatrices(labeledExamples);
+            updateOraclesConfusionMatrices(newLabeledExamples);
             AMapping mostInformativeExamples = getWombatMostInformativeExamples(labeledExamples, mostInformativeExamplesCount);
-            AMapping newLabeledExamples = classifyUnlabeledExamples(mostInformativeExamples, k, odds);
+            newLabeledExamples = classifyUnlabeledExamples(mostInformativeExamples, k, odds);
             labeledExamples = MappingOperations.union(labeledExamples, newLabeledExamples);
             fillTrainingCaches(labeledExamples);
             i++;
