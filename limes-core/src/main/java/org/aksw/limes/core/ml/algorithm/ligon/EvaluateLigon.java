@@ -191,22 +191,10 @@ public class EvaluateLigon {
         Random pFF = new Random();
         double rPTT, rPTF, rPFT, rPFF;
         for (int i = 0; i < noisyOracleCount; i++) {
-            do {
-                rPTT = mean + (pTT.nextGaussian() * stddev);
-            }
-            while (rPTT < 0 || rPTT > 1);
-            do {
-                rPTF = mean + (pTF.nextGaussian() * stddev);
-            }
-            while (rPTF < 0 || rPTF > 1);
-            do {
-                rPFT = mean + (pFT.nextGaussian() * stddev);
-            }
-            while (rPFT < 0 || rPFT > 1);
-            do {
-                rPFF = mean + (pFF.nextGaussian() * stddev);
-            }
-            while (rPFF < 0 || rPFF > 1);
+            rPTT = pTT.nextDouble();
+            rPTF = pTF.nextDouble();
+            rPFT = pFT.nextDouble();
+            rPFF = pFF.nextDouble();
             double sumR = rPTT + rPTF + rPFT + rPFF;
             noisyOracles.add(new NoisyOracle(fullReferenceMapping,
                     new ConfusionMatrix(new double[][]{{rPTT / sumR, rPTF / sumR}, {rPFT / sumR, rPFF / sumR}})));
