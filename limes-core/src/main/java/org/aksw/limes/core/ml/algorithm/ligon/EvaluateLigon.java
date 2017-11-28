@@ -52,6 +52,7 @@ public class EvaluateLigon {
     public static String resultStr = "fold\tk\toracles\todds\titNr\tpTr\trTr\tfTr\tpF\trF\tfF\tpTe\trTe\tfTe\tTT_MSE\tTF_MSE\tFT_MSE\tFF_MSE\tls";
     public static String reliableResultStr = "fold\titNr\tpTr\trTr\tfTr\tpF\trF\tfF\tpTe\trTe\tfTe\tls";
     public static int fold = 1;
+    public static String datasetName;
 
 
     /**
@@ -63,7 +64,7 @@ public class EvaluateLigon {
         List<ODDS> oddsList = Arrays.asList(ODDS.HARD, ODDS.EQUIVALENCE, ODDS.APPROXIMATE);
         int mostInformativeExaplesCount = 10;
         // get training data
-        String datasetName = args[1];
+        datasetName = args[1];
         EvaluationData data = DataSetChooser.getData(datasetName);
         ACache fullSourceCache = data.getSourceCache();
         ACache fullTargetCache = data.getTargetCache();

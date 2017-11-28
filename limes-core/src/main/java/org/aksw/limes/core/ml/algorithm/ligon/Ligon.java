@@ -1,5 +1,6 @@
 package org.aksw.limes.core.ml.algorithm.ligon;
 
+import com.google.common.io.Files;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
@@ -24,6 +25,9 @@ import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +44,8 @@ public class Ligon {
 
     protected AMapping posExamplesMap = MappingFactory.createDefaultMapping();
     protected AMapping negExamplesMap = MappingFactory.createDefaultMapping();
+    private File logOut = null;
+    private int iteration = 1;
 
     public enum ODDS {
         HARD, RANDOM, EQUIVALENCE, APPROXIMATE
@@ -163,6 +169,38 @@ public class Ligon {
                 }
             }
         }
+        logConfusionMatrixes();
+    }
+
+    private void logConfusionMatrixes() {
+        try {
+            if (logOut == null) {
+                logOut = new File("./" + EvaluateLigon.datasetName + "_" + "cm.txt");
+                String out = "it";
+                for (int i = 0; i < blackBoxOracles.size(); i++) {
+                    out += "\tbb\"+i+\"-TT\tbb\"+i+\"-TF\tbb\"+i+\"-FT\tbb\"+i+\"-FF\test\"+i+\"-TT\test\"+i+\"-TF\test\"+i+\"-FT\test\"+i+\"-FF";
+                }
+                Files.write(out + "\n", logOut, Charset.defaultCharset());
+            } else {
+                String out = iteration + "";
+                for (int i = 0; i < blackBoxOracles.size(); i++) {
+                    ConfusionMatrix bb = blackBoxOracles.get(i).confusionMatrix;
+                    ConfusionMatrix est = estimatedOracles.get(i).confusionMatrix;
+                    out += "\t" + bb.getRightClassifiedPositiveExamplesProbability()
+                            + "\t" + bb.getWrongClassifiedPositiveExamplesProbability()
+                            + "\t" + bb.getWrongClassifiedNegativeExamplesProbability()
+                            + "\t" + bb.getRightClassifiedNegativeExamplesProbability()
+                            + "\t" + est.getRightClassifiedPositiveExamplesProbability()
+                            + "\t" + est.getWrongClassifiedPositiveExamplesProbability()
+                            + "\t" + est.getWrongClassifiedNegativeExamplesProbability()
+                            + "\t" + est.getRightClassifiedNegativeExamplesProbability();
+                }
+                Files.append(out + "\n", logOut, Charset.defaultCharset());
+                iteration++;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public double computeOdds(String subject, String object, ODDS odds) {
@@ -275,6 +313,7 @@ public class Ligon {
      */
     protected AMapping getWombatMostInformativeExamples(AMapping labeledExamples, int mostInformativeExamplesCount) throws UnsupportedMLImplementationException {
         MLResults mlModel = activeWombat.activeLearn(labeledExamples);
+        wombatBestFmeasure = mlModel.getQuality();
         AMapping learnedMap = activeWombat.predict(sourceTrainCache, targetTrainCache, mlModel);
         computePerformanceIndicatorsWombat(labeledExamples, learnedMap, mlModel);
         ((AWombat) activeWombat.getMl()).updateActiveLearningCaches(sourceTrainCache, targetTrainCache, fullSourceCache, fullTargetCache);
