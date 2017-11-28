@@ -90,7 +90,7 @@ public class EvaluateLigon {
                     evaluateLigonWithReliableOracleForDataset(trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
                     for (int oracles = 2; oracles <= 16; oracles *= 2) {
                         for (int k = 2; k <= 16; k *= 2) {
-                            evaluateLigonForDataset(k, getNoisyOracles(oracles, 0.75d, 1.0d), ODDS.EQUIVALENCE, trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
+                            evaluateLigonForDataset(k, getNoisyOracles(oracles, 0.5d, 0.5d), ODDS.EQUIVALENCE, trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
                         }
                     }
                     break;
@@ -99,7 +99,7 @@ public class EvaluateLigon {
 //                    evaluateLigonWithReliableOracleForDataset(trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
                     for (ODDS odds : oddsList) {
                         for (int oracles = 2; oracles <= 16; oracles *= 2) {
-                            evaluateLigonForDataset(Integer.valueOf(args[2]), getNoisyOracles(oracles, 0.75d, 1.0d), odds, trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
+                            evaluateLigonForDataset(Integer.valueOf(args[2]), getNoisyOracles(oracles, 0.5d, 0.5d), odds, trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
                         }
                     }
                     break;
@@ -186,22 +186,17 @@ public class EvaluateLigon {
 
     }
 
-    private static List<NoisyOracle> getNoisyOracles(int noisyOracleCount, double mean, double stddev) {
-        // create noisy oracles with normal distribution
+    private static List<NoisyOracle> getNoisyOracles(int noisyOracleCount, double mean, double interval) {
         List<NoisyOracle> noisyOracles = new ArrayList<>();
-        Random pTT = new Random();
-        Random pTF = new Random();
-        Random pFT = new Random();
-        Random pFF = new Random();
-        double rPTT, rPTF, rPFT, rPFF;
+        Random a = new Random();
+        Random b = new Random();
+        // we want our oracles to be at least as good as a coin flip..
+        double tt, ff;
         for (int i = 0; i < noisyOracleCount; i++) {
-            rPTT = pTT.nextDouble();
-            rPTF = pTF.nextDouble();
-            rPFT = pFT.nextDouble();
-            rPFF = pFF.nextDouble();
-            double sumR = rPTT + rPTF + rPFT + rPFF;
+            tt = a.nextDouble() * interval + mean;
+            ff = b.nextDouble() * interval + mean;
             noisyOracles.add(new NoisyOracle(fullReferenceMapping,
-                    new ConfusionMatrix(new double[][]{{rPTT / sumR, rPTF / sumR}, {rPFT / sumR, rPFF / sumR}})));
+                    new ConfusionMatrix(new double[][]{{ tt/ 2, ff/2 }, { (1-tt)/2, (1-ff)/2 }})));
         }
         return noisyOracles;
     }
@@ -260,29 +255,6 @@ public class EvaluateLigon {
                 (System.currentTimeMillis() - start) + "\n";
         return resultStr;
     }
-
-    public static AMapping generateNegativeExamples(AMapping posExamplesMapping, int size) {
-        AMapping negativeExampleMapping = MappingFactory.createDefaultMapping();
-        int i = 0;
-        List<String> sourceUris = new ArrayList<>(posExamplesMapping.getMap().keySet());
-        List<String> targetUris = new ArrayList<>();
-        for (String s : posExamplesMapping.getMap().keySet()) {
-            targetUris.addAll(posExamplesMapping.getMap().get(s).keySet());
-        }
-        Random random = new Random();
-        do {
-            String randomSourceUri, randomTargetUri;
-
-            do {
-                randomSourceUri = sourceUris.get(random.nextInt(sourceUris.size()));
-                randomTargetUri = targetUris.get(random.nextInt(targetUris.size()));
-            } while (posExamplesMapping.contains(randomSourceUri, randomTargetUri));
-            negativeExampleMapping.add(randomSourceUri, randomTargetUri, 0.0);
-            i++;
-        } while (i < size);
-        return negativeExampleMapping;
-    }
-
 
     public static AMapping sampleReferenceMap(AMapping reference, double fraction) {
         if (fraction == 1) {
