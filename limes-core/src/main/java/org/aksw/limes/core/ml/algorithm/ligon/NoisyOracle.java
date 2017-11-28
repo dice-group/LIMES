@@ -23,7 +23,7 @@ public class NoisyOracle implements Oracle {
         Random random = new Random();
         if(inOracle){
             double probRightPos =  confusionMatrix.getRightClassifiedPositiveExamplesProbability();
-            double probWrongPos =  confusionMatrix.getRightClassifiedPositiveExamplesProbability();
+            double probWrongPos =  confusionMatrix.getWrongClassifiedPositiveExamplesProbability();
             double minProb = (probRightPos < probWrongPos)? probRightPos : probWrongPos;
             double r = (probRightPos + probWrongPos) * random.nextDouble();
             if(r < minProb ){
@@ -37,9 +37,9 @@ public class NoisyOracle implements Oracle {
             double minProb = (probRightNeg < probWrongNeg)? probRightNeg : probWrongNeg;
             double r = (probRightNeg + probWrongNeg) * random.nextDouble();
             if(r < minProb ){
-                return (probRightNeg < probWrongNeg)? true : false;
+                return (probRightNeg < probWrongNeg)? false : true;
             }else{
-                return (probRightNeg < probWrongNeg)? false: true;
+                return (probRightNeg < probWrongNeg)? true : false;
             }
         }
     }
