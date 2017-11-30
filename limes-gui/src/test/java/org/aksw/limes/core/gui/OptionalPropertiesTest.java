@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -17,8 +16,6 @@ import org.aksw.limes.core.gui.model.metric.MetricParser;
 import org.aksw.limes.core.gui.model.metric.Output;
 import org.aksw.limes.core.gui.util.CustomGuiTest;
 import org.aksw.limes.core.gui.view.MainView;
-import org.aksw.limes.core.io.cache.ACache;
-import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -26,6 +23,8 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testfx.framework.junit.ApplicationTest;
 
 import javafx.scene.input.MouseButton;
@@ -33,6 +32,7 @@ import javafx.stage.Stage;
 
 public class OptionalPropertiesTest extends ApplicationTest{
 
+	private static final Logger logger = LoggerFactory.getLogger(OptionalPropertiesTest.class);
 	MainView mainView;
 	MainController mainController;
 	Config c;
@@ -133,14 +133,17 @@ public class OptionalPropertiesTest extends ApplicationTest{
 	@Test
 	public void testSwitchingOptionalProperties(){
 		clickOn("Run");
+		logger.info("Clicked on run");
 		CustomGuiTest.waitUntilLoadingWindowIsClosed("Mapping",200);
 		assertEquals(2,c.getMapping().size());
 		assertEquals(2,mainController.getCurrentConfig().getSourceEndpoint().getCache().size());
 		assertEquals(2,mainController.getCurrentConfig().getTargetEndpoint().getCache().size());
 
 		clickOn("test:sp1",MouseButton.SECONDARY);
+		logger.info("Set test:sp1 to be obligatory");
 		
 		clickOn("Run");
+		logger.info("Clicked on run again");
 		CustomGuiTest.waitUntilLoadingWindowIsClosed("Mapping",200);
 		assertEquals(1,c.getMapping().size());
 		assertEquals(1,mainController.getCurrentConfig().getSourceEndpoint().getCache().size());
