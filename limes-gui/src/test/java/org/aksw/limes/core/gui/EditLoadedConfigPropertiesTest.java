@@ -57,7 +57,7 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest {
 		clickOn("Edit Properties");
 
 		logger.info("Waiting for properties to finish loading");
-		CustomGuiTest.waitUntilLoadingWindowIsClosed(2,500);
+		CustomGuiTest.waitUntilLoadingWindowIsClosed("Getting properties",500);
 		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", 180);
 		clickOn("#switchModeButton");
 		logger.info("Waiting for dbo:abbreviation");

@@ -37,32 +37,6 @@ public class CustomGuiTest {
 		logger.error("Maximum timeout reached, while waiting for Node " + nodeId + " to be not null!");
 		return false;
 	}
-	
-	/**
-	 * Waits until the number of visible windows is desiredNumberOfWindows or timeout in seconds is reached
-	 * @param desiredNumberOfWindows
-	 * @param timeout
-	 */
-	public static void waitUntilLoadingWindowIsClosed(int desiredNumberOfWindows, int timeout){
-		FxRobot rob = new FxRobot();
-		int sec = 0;
-		logger.info("Wait until only " + desiredNumberOfWindows + " windows are left open");
-		logger.info("Currently open windows: ");
-		for(Window w: rob.listWindows()){
-			logger.info(((Stage)w).getTitle());
-		}
-		while(rob.listWindows().size() > desiredNumberOfWindows){
-			rob.sleep(1000);
-			sec++;
-			if(sec % 100 == 0){
-				logger.info("Waited: " + sec + " seconds");
-			}
-			//avoid infinite loop
-			if(sec > timeout){
-				break;
-			}
-		}
-	}
 
 	/**
 	 * Waits until windows is closed or timeout in seconds is reached
@@ -81,7 +55,6 @@ public class CustomGuiTest {
 			boolean closed = true;
             for(Window w: rob.listWindows()){
             	if(((Stage)w).getTitle().trim().equals(windowname.trim())){
-            		System.out.println("open");
             		closed = false;
             	}
             }

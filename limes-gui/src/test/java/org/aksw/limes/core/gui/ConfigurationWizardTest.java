@@ -85,7 +85,7 @@ public class ConfigurationWizardTest extends ApplicationTest{
 	
 	public void testEditClassMatching(){
 		logger.info("testEditClassMatching started");
-		CustomGuiTest.waitUntilLoadingWindowIsClosed(2,500);
+		CustomGuiTest.waitUntilLoadingWindowIsClosed("Get classes",500);
 		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", timeout);
 		//Test if manual matching gets loaded
 		logger.info("Clicking on Button to get Manual Matching");
@@ -108,7 +108,7 @@ public class ConfigurationWizardTest extends ApplicationTest{
 	}
 	
 	public void testEditPropertyMatching(){
-		CustomGuiTest.waitUntilLoadingWindowIsClosed(2,500);
+		CustomGuiTest.waitUntilLoadingWindowIsClosed("Getting properties",500);
 		logger.info("testEditPropertyMatching started");
 		logger.info("Waiting for #sourcePropColumn to be visible");
 		CustomGuiTest.waitUntilNodeIsVisible("#sourcePropColumn", timeout);
