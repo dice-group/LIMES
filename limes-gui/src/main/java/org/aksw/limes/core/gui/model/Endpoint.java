@@ -99,12 +99,10 @@ public class Endpoint {
 	 * @return cache
 	 */
 	public ACache getCache() {
-		if (cache == null) {
-			for (String key : config.getPrefixes().keySet()) {
-				info.getPrefixes().put(key, config.getPrefixes().get(key));
-			}
-			cache = HybridCache.getData(info);
-		}
+        for (String key : config.getPrefixes().keySet()) {
+            info.getPrefixes().put(key, config.getPrefixes().get(key));
+        }
+        cache = HybridCache.getData(info);
 		return cache;
 	}
 

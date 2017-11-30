@@ -15,6 +15,7 @@ import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.metric.MetricParser;
 import org.aksw.limes.core.gui.model.metric.Output;
+import org.aksw.limes.core.gui.util.CustomGuiTest;
 import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
@@ -35,8 +36,8 @@ public class OptionalPropertiesTest extends ApplicationTest{
 	MainView mainView;
 	MainController mainController;
 	Config c;
-	ACache sourceCache;
-	ACache targetCache;
+	KBInfo sourceInfo;
+	KBInfo targetInfo;
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
@@ -89,10 +90,8 @@ public class OptionalPropertiesTest extends ApplicationTest{
 		targetoptionalProperties.add("test:tp1");
 		ArrayList<String> classString = new ArrayList<>();
 		classString.add("?x rdf:type test:Person");
-		KBInfo sourceInfo = new KBInfo("source", sourceFile.getAbsolutePath(), "", "?x", sourceproperties, sourceoptionalProperties, classString, functions, prefixes, -1, "NT");
-		KBInfo targetInfo = new KBInfo("target", targetFile.getAbsolutePath(), "", "?x", targetproperties, targetoptionalProperties, classString, functions, prefixes, -1, "NT");
-        sourceCache = HybridCache.getData(sourceInfo);
-        targetCache = HybridCache.getData(targetInfo);
+		sourceInfo = new KBInfo("source", sourceFile.getAbsolutePath(), "", "?x", sourceproperties, sourceoptionalProperties, classString, functions, prefixes, -1, "NT");
+		targetInfo = new KBInfo("target", targetFile.getAbsolutePath(), "", "?x", targetproperties, targetoptionalProperties, classString, functions, prefixes, -1, "NT");
         c = new Config(sourceInfo, targetInfo, "cosine(x.test:sp2,y.test:tp2)", "owl:sameAs", "owl:sameAs", 0.9, "",0.7, "", prefixes, "TAB", "default", "default", "default", 2, "",null, null, "", null);
         Output out = MetricParser.parse(c.getMetricExpression(), c .getSourceInfo().getVar().replaceAll("\\?", ""),c);
         out.param1 = 0.9;
@@ -108,8 +107,8 @@ public class OptionalPropertiesTest extends ApplicationTest{
     +	"<http://www.test.org/s1> <http://www.test.org/ont#sp2> \"property2\" ."
     +	"<http://www.test.org/s1> <http://www.test.org/ont#sp3> \"property3\" ."
     +	"<http://www.test.org/s1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.test.org/ont#Person> ."
-    +	"<http://www.test.org/s2> <http://www.test.org/ont#sp2> \"property2\" ."
-    +	"<http://www.test.org/s2> <http://www.test.org/ont#sp3> \"property3\" ." 
+    +	"<http://www.test.org/s2> <http://www.test.org/ont#sp2> \"property22\" ."
+    +	"<http://www.test.org/s2> <http://www.test.org/ont#sp3> \"property33\" ." 
     +	"<http://www.test.org/s2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.test.org/ont#Person> ." ;
 		final File sourceFile = tempFolder.newFile("source.nt");
 		FileUtils.writeStringToFile(sourceFile, sourceString);
@@ -122,9 +121,9 @@ public class OptionalPropertiesTest extends ApplicationTest{
     +	"<http://www.test.org/t1> <http://www.test.org/ont#tp2> \"property2\" ."
     +	"<http://www.test.org/t1> <http://www.test.org/ont#tp3> \"property3\" ."
     +	"<http://www.test.org/t1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.test.org/ont#Person> ."
-    +	"<http://www.test.org/t2> <http://www.test.org/ont#tp1> \"property1\" ."
-    +	"<http://www.test.org/t2> <http://www.test.org/ont#tp2> \"property2\" ."
-    +	"<http://www.test.org/t2> <http://www.test.org/ont#tp3> \"property3\" ." 
+    +	"<http://www.test.org/t2> <http://www.test.org/ont#tp1> \"property12\" ."
+    +	"<http://www.test.org/t2> <http://www.test.org/ont#tp2> \"property22\" ."
+    +	"<http://www.test.org/t2> <http://www.test.org/ont#tp3> \"property32\" ." 
     +	"<http://www.test.org/t2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.test.org/ont#Person> ." ;
 		final File targetFile = tempFolder.newFile("target.nt");
 		FileUtils.writeStringToFile(targetFile, targetString);
@@ -133,14 +132,18 @@ public class OptionalPropertiesTest extends ApplicationTest{
 	
 	@Test
 	public void testSwitchingOptionalProperties(){
-		assertEquals(2,sourceCache.size());
-		assertEquals(2,targetCache.size());
-		
+		clickOn("Run");
+		CustomGuiTest.waitUntilLoadingWindowIsClosed("Mapping",200);
+		assertEquals(2,c.getMapping().size());
+		assertEquals(2,mainController.getCurrentConfig().getSourceEndpoint().getCache().size());
+		assertEquals(2,mainController.getCurrentConfig().getTargetEndpoint().getCache().size());
+
 		clickOn("test:sp1",MouseButton.SECONDARY);
 		
 		clickOn("Run");
-				
-		System.out.println(sourceCache.size());
-		System.out.println(targetCache.size());
+		CustomGuiTest.waitUntilLoadingWindowIsClosed("Mapping",200);
+		assertEquals(1,c.getMapping().size());
+		assertEquals(1,mainController.getCurrentConfig().getSourceEndpoint().getCache().size());
+		assertEquals(2,mainController.getCurrentConfig().getTargetEndpoint().getCache().size());
 	}
 }

@@ -65,6 +65,42 @@ public class CustomGuiTest {
 	}
 
 	/**
+	 * Waits until windows is closed or timeout in seconds is reached
+	 * @param name of window
+	 * @param timeout
+	 */
+	public static void waitUntilLoadingWindowIsClosed(String windowname, int timeout){
+		FxRobot rob = new FxRobot();
+		int sec = 0;
+		logger.info("Wait until " + windowname + " is closed");
+		logger.info("Currently open windows: ");
+		for(Window w: rob.listWindows()){
+			logger.info(((Stage)w).getTitle());
+		}
+		do{
+			boolean closed = true;
+            for(Window w: rob.listWindows()){
+            	if(((Stage)w).getTitle().trim().equals(windowname.trim())){
+            		System.out.println("open");
+            		closed = false;
+            	}
+            }
+            if(closed){
+            	break;
+            }
+			rob.sleep(1000);
+			sec++;
+			if(sec % 100 == 0){
+				logger.info("Waited: " + sec + " seconds");
+			}
+			//avoid infinite loop
+			if(sec > timeout){
+				break;
+			}
+		}while(true);
+	}
+
+	/**
 	 * Uses FxRobot from TestFX to lookup the node
 	 * 
 	 * @param nodeId
