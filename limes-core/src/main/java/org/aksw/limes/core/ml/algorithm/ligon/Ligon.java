@@ -93,6 +93,7 @@ public class Ligon {
         this.estimatedOracles = new ArrayList<>();
         for (NoisyOracle o : blackBoxOracles) {
             this.estimatedOracles.add(new NoisyOracle(null, new ConfusionMatrix(0.5d)));
+            lastOracleResponses.add(MappingFactory.createDefaultMapping());
         }
     }
 
@@ -152,9 +153,6 @@ public class Ligon {
 
 
     public void gatherOracleResponses(AMapping labeledExamples) {
-        for (int i = 0; i < blackBoxOracles.size(); i++) {
-            lastOracleResponses.add(MappingFactory.createDefaultMapping());
-        }
         for (String subject : labeledExamples.getMap().keySet()) {
             for (String object : labeledExamples.getMap().get(subject).keySet()) {
                 for (int i = 0; i < blackBoxOracles.size(); i++) {
