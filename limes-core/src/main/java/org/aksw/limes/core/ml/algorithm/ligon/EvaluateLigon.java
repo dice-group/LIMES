@@ -170,8 +170,7 @@ public class EvaluateLigon {
         System.out.println("\n\n ---- noisyOracles ----\n" + noisyOracles);
 
         // initialize ligon
-        Ligon ligon = new Ligon(trainingMap, null, null, noisyOracles,
-                fullSourceCache, fullTargetCache, referenceMapping, sourceTestingCache, targetTestingCache, testReferenceMap);
+        Ligon ligon = new Ligon(noisyOracles, fullSourceCache, fullTargetCache, referenceMapping, sourceTestingCache, targetTestingCache, testReferenceMap);
 
         String run = ligon.learn(trainingMap, k, odds, mostInformativeExaplesCount);
         String[] runs = run.split("\n");

@@ -42,9 +42,6 @@ public class Ligon {
     protected List<NoisyOracle> blackBoxOracles;
     protected List<NoisyOracle> estimatedOracles;
 
-    protected AMapping posExamplesMap = MappingFactory.createDefaultMapping();
-    protected AMapping negExamplesMap = MappingFactory.createDefaultMapping();
-
     protected List<AMapping> lastOracleResponses = new ArrayList<>();
 
     private File logOut = null;
@@ -76,20 +73,11 @@ public class Ligon {
     /**
      * Simplest contractor
      *
-     * @param trainigExamplesMap
-     * @param sourceTrainCache
-     * @param targetTrainCache
      * @param blackBoxOracles
      */
-    public Ligon(AMapping trainigExamplesMap,
-                 ACache sourceTrainCache,
-                 ACache targetTrainCache,
-                 List<NoisyOracle> blackBoxOracles) {
+    public Ligon(List<NoisyOracle> blackBoxOracles) {
         super();
         this.blackBoxOracles = blackBoxOracles;
-        //        this.estimatedOracles = FixedSizeList.decorate(Arrays.asList(new NoisyOracle[blackBoxOracles.size()]));
-        this.sourceTrainCache = sourceTrainCache;
-        this.targetTrainCache = targetTrainCache;
         this.estimatedOracles = new ArrayList<>();
         for (NoisyOracle o : blackBoxOracles) {
             this.estimatedOracles.add(new NoisyOracle(null, new ConfusionMatrix(0.5d)));
@@ -100,36 +88,27 @@ public class Ligon {
     /**
      * Complex constructor for evaluation
      *
-     * @param trainigExamplesMap
-     * @param sourceTrainCache
-     * @param targetTrainCache
      * @param blackBoxOracles
      */
-    public Ligon(AMapping trainigExamplesMap,
-                 ACache sourceTrainCache,
-                 ACache targetTrainCache,
-                 List<NoisyOracle> blackBoxOracles,
+    public Ligon(List<NoisyOracle> blackBoxOracles,
                  ACache fullSourceCache,
                  ACache fullTargetCache,
                  AMapping fullReferenceMapping) {
-        this(trainigExamplesMap, sourceTrainCache, targetTrainCache, blackBoxOracles);
+        this(blackBoxOracles);
         this.fullSourceCache = fullSourceCache;
         this.fullTargetCache = fullTargetCache;
         this.fullReferenceMap = fullReferenceMapping;
     }
 
 
-    public Ligon(AMapping trainigExamplesMap,
-                 ACache sourceTrainCache,
-                 ACache targetTrainCache,
-                 List<NoisyOracle> blackBoxOracles,
+    public Ligon(List<NoisyOracle> blackBoxOracles,
                  ACache fullSourceCache,
                  ACache fullTargetCache,
                  AMapping fullReferenceMapping,
                  ACache sourceTestingCache,
                  ACache targetTestingCache,
                  AMapping testReferenceMap) {
-        this(trainigExamplesMap, sourceTrainCache, targetTrainCache, blackBoxOracles, fullSourceCache, fullTargetCache, fullReferenceMapping);
+        this(blackBoxOracles, fullSourceCache, fullTargetCache, fullReferenceMapping);
         this.sourceTestingCache = sourceTestingCache;
         this.targetTestingCache = targetTestingCache;
         this.testReferenceMap = testReferenceMap;
@@ -438,7 +417,9 @@ public class Ligon {
                 sourceTrainCache.addInstance(fullSourceCache.getInstance(s));
                 for (String t : trainMap.getMap().get(s).keySet()) {
                     if (fullTargetCache.containsUri(t)) {
-                        targetTrainCache.addInstance(fullTargetCache.getInstance(t));
+                        if (!targetTrainCache.containsUri(t)) {
+                            targetTrainCache.addInstance(fullTargetCache.getInstance(t));
+                        }
                     } else {
                         logger.warn("Instance " + t + " not exist in the target dataset");
                     }
