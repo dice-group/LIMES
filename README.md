@@ -1,4 +1,6 @@
 # LIMES
+
+[![Join the chat at https://gitter.im/dice_limes/Lobby](https://badges.gitter.im/dice_limes/Lobby.svg)](https://gitter.im/dice_limes/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Repository for LIMES - Link Discovery Framework for Metric Spaces.
 =======
 
