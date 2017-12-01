@@ -200,17 +200,26 @@ public class Ligon {
 
     public double computeOdds(String subject, String object, ODDS odds) {
         double result = 0.0d;
-
         for (int i = 0; i < lastOracleResponses.size(); i++) {
             AMapping x = lastOracleResponses.get(i);
             ConfusionMatrix est = estimatedOracles.get(0).confusionMatrix;
             if (x.getConfidence(subject, object) == 1.0d) {
-                result += Math.log(est.getRightClassifiedPositiveExamplesProbability()) - Math.log(est.getWrongClassifiedNegativeExamplesProbability());
+                result += Math.log(est.getRightClassifiedPositiveExamplesProbability()) - Math.log(est.getRightClassifiedNegativeExamplesProbability()); 
             } else {
-                result += Math.log(est.getWrongClassifiedPositiveExamplesProbability()) - Math.log(est.getRightClassifiedNegativeExamplesProbability());
+                result += Math.log(est.getWrongClassifiedNegativeExamplesProbability()) -  Math.log(est.getWrongClassifiedPositiveExamplesProbability());
             }
 
         }
+//        for (int i = 0; i < lastOracleResponses.size(); i++) {
+//            AMapping x = lastOracleResponses.get(i);
+//            ConfusionMatrix est = estimatedOracles.get(0).confusionMatrix;
+//            if (x.getConfidence(subject, object) == 1.0d) {
+//                result += Math.log(est.getRightClassifiedPositiveExamplesProbability()) - Math.log(est.getWrongClassifiedNegativeExamplesProbability());
+//            } else {
+//                result += Math.log(est.getWrongClassifiedPositiveExamplesProbability()) - Math.log(est.getRightClassifiedNegativeExamplesProbability());
+//            }
+//
+//        }
 //
 //        for (int i = 0; i < estimatedOracles.size(); i++) {
 //            result +=
