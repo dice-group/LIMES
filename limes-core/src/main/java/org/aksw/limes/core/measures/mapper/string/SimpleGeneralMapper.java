@@ -18,13 +18,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 
+/**
+ * A very minimal (and rather inefficient) mapper. It simply compares all pairs of values with each other.
+ * The advantage is that it works with any string measure, so it's a good way to quickly test a new string
+ * measure without writing a new, separate, and optimized mapper class for it
+ */
 public class SimpleGeneralMapper extends AMapper {
 
   static Logger logger = LoggerFactory.getLogger(SimpleGeneralMapper.class);
   private AMeasure measure;
 
+  /**
+   * @param measure The measure to be used for string similarity evaluation.
+   */
   public SimpleGeneralMapper(AMeasure measure) {
-
     this.measure = measure;
   }
 

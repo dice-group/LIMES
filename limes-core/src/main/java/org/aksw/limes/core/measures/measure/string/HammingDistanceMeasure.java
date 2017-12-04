@@ -1,7 +1,9 @@
 package org.aksw.limes.core.measures.measure.string;
 
-import org.aksw.limes.core.io.cache.Instance;
-
+/**
+ * A very simple string similarity measure, that just computes the hamming distance
+ * between two strings of the same length.
+ */
 public class HammingDistanceMeasure extends AStringMeasure {
 
   @Override
@@ -29,6 +31,12 @@ public class HammingDistanceMeasure extends AStringMeasure {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
+  /**
+   * @param object1, the first string
+   * @param object2, the second string
+   * @return the similarity between the two given strings, which is computed as
+   *   one minus the hamming distance between them normalized by the strings's length.
+   */
   @Override
   public double getSimilarity(Object object1, Object object2) {
     String s1 = object1 + "";

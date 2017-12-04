@@ -6,6 +6,10 @@ import org.aksw.limes.core.measures.measure.AMeasure;
 import org.aksw.limes.core.measures.measure.string.AStringMeasure;
 import org.aksw.limes.core.measures.measure.string.SimpleEditDistanceMeasure;
 
+/**
+ * A very simple syntactical bilingual string measure based on a dictionary:
+ *
+ */
 public class SimpleDictionaryMeasure extends AStringMeasure {
 
 
@@ -50,23 +54,20 @@ public class SimpleDictionaryMeasure extends AStringMeasure {
    * iterates through all possible translations and uses innerMeasure to determine the similarity
    * as the product of the inner similarity from the input word to the e.g. english word,
    * multiplied by the inner similarity of the e.g. german translation of that word to the output word
-   * @param object1,
-   *            the source object (a string)
-   * @param object2,
-   *            the target object (a string)
-   *
+   * @param object1, the first word (a string as Object)
+   * @param object2, the second word (a string as Object)
    * @return best translation similarity
    */
   @Override
   public double getSimilarity(Object object1, Object object2) {
-    String a = ("" + object1).toLowerCase();
-    String b = ("" + object2).toLowerCase();
+    String input = ("" + object1).toLowerCase();
+    String output = ("" + object2).toLowerCase();
     double bestSimilarity = 0.0;
-    HashMap<String, ArrayList<String>> map = dictionary.getSource2targetMap();
+    HashMap<String, ArrayList<String>> map = dictionary.getSource2TargetMap();
     for (String sourceWord : map.keySet()) {
       for (String targetWord : map.get(sourceWord)) {
-        double similarity = innerMeasure.getSimilarity(a, sourceWord) *
-            innerMeasure.getSimilarity(targetWord, b);
+        double similarity = innerMeasure.getSimilarity(input, sourceWord) *
+            innerMeasure.getSimilarity(targetWord, output);
         if (similarity > bestSimilarity) {
           bestSimilarity = similarity;
         }
@@ -77,7 +78,7 @@ public class SimpleDictionaryMeasure extends AStringMeasure {
 
   @Override
   public double getRuntimeApproximation(double mappingSize) {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return  mappingSize / 1000d;
   }
 
   @Override

@@ -3,6 +3,10 @@ package org.aksw.limes.core.measures.measure.string;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.AMeasure;
 
+/**
+ * Abstract base class for all string measures.
+ * Methods that are the same for all string measures should go here.
+ */
 public abstract class AStringMeasure extends AMeasure implements IStringMeasure {
 
   public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {

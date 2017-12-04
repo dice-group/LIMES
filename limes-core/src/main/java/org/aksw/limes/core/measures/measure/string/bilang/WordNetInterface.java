@@ -19,14 +19,25 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * A class to interact with the JWI (Java WordNet Interface) API,
+ * in particular in order to compute the Wu-Palmer semantic similarity between two English words.
+ */
 public class WordNetInterface {
 
 
   private static POS[] allWordTypes = new POS[]{POS.NOUN, POS.VERB, POS.ADJECTIVE, POS.ADVERB};
+  /**
+   * Default path to a downloaded WordNet database
+   */
   public static String DEFAULT_WORDNET_HOME = "src/test/resources/WordNet-3.0";
 
   IDictionary dictionary = null;
 
+  /**
+   * Initializes this new instance by reading the wordNetHome database
+   * @param wordNetHome
+   */
   public WordNetInterface(String wordNetHome) {
     String path = wordNetHome + File.separator + "dict";
 
@@ -99,8 +110,15 @@ public class WordNetInterface {
   }
 
 
-
-  public double getSimilarity(String s1, String s2) {
+  /**
+   * Computes the Wu-Palmer similarity between two english words
+   * @param s1 first english word
+   * @param s2 second english word
+   * @return the Wu-Palmer similarity between those two english words, by iterating
+   *   through all possible word types and all possible synonyms of the words for that type,
+   *   and taking the overall best similarity score.
+   */
+  public double computeWuPalmerSimilarity(String s1, String s2) {
     double maxSimilarity = 0.0;
     for (POS wordType : allWordTypes) {
       double similarity = getBestSimilarityForWordType(s1, s2, wordType);
