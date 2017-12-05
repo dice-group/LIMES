@@ -181,14 +181,14 @@ public class Ligon {
                 for (int i = 0; i < blackBoxOracles.size(); i++) {
                     ConfusionMatrix bb = blackBoxOracles.get(i).confusionMatrix;
                     ConfusionMatrix est = estimatedOracles.get(i).confusionMatrix;
-                    out += "\t" + bb.getRightClassifiedPositiveExamplesProbability()
-                            + "\t" + bb.getWrongClassifiedPositiveExamplesProbability()
-                            + "\t" + bb.getWrongClassifiedNegativeExamplesProbability()
-                            + "\t" + bb.getRightClassifiedNegativeExamplesProbability()
-                            + "\t" + est.getRightClassifiedPositiveExamplesProbability()
-                            + "\t" + est.getWrongClassifiedPositiveExamplesProbability()
-                            + "\t" + est.getWrongClassifiedNegativeExamplesProbability()
-                            + "\t" + est.getRightClassifiedNegativeExamplesProbability();
+                    out += "\t" + bb.getTruePositiveProbability()
+                            + "\t" + bb.getFalsePositiveProbability()
+                            + "\t" + bb.getFalseNegativeProbability()
+                            + "\t" + bb.getTrueNegativeProbability()
+                            + "\t" + est.getTruePositiveProbability()
+                            + "\t" + est.getFalsePositiveProbability()
+                            + "\t" + est.getFalseNegativeProbability()
+                            + "\t" + est.getTrueNegativeProbability();
                 }
                 Files.append(out + "\n", logOut, Charset.defaultCharset());
                 iteration++;
@@ -204,9 +204,9 @@ public class Ligon {
             AMapping x = lastOracleResponses.get(i);
             ConfusionMatrix est = estimatedOracles.get(0).confusionMatrix;
             if (x.getConfidence(subject, object) == 1.0d) {
-                result += Math.log(est.getRightClassifiedPositiveExamplesProbability()) - Math.log(est.getRightClassifiedNegativeExamplesProbability()); 
+                result += Math.log(est.getTruePositiveProbability()) - Math.log(est.getFalsePositiveProbability()); 
             } else {
-                result += Math.log(est.getWrongClassifiedNegativeExamplesProbability()) -  Math.log(est.getWrongClassifiedPositiveExamplesProbability());
+                result +=  Math.log(est.getTrueNegativeProbability() -Math.log(est.getFalseNegativeProbability()));
             }
 
         }
@@ -395,13 +395,13 @@ public class Ligon {
         for (int i=0; i<estimatedOracles.size(); i++) {
             a = estimatedOracles.get(i).confusionMatrix;
             b = blackBoxOracles.get(i).confusionMatrix;
-            x = a.getRightClassifiedPositiveExamplesProbability() - b.getRightClassifiedPositiveExamplesProbability();
+            x = a.getTruePositiveProbability() - b.getTruePositiveProbability();
             tt += x*x;
-            x = a.getWrongClassifiedPositiveExamplesProbability() - b.getWrongClassifiedPositiveExamplesProbability();
+            x = a.getFalsePositiveProbability() - b.getFalsePositiveProbability();
             ft += x*x;
-            x = a.getRightClassifiedNegativeExamplesProbability() - b.getRightClassifiedNegativeExamplesProbability();
+            x = a.getTrueNegativeProbability() - b.getTrueNegativeProbability();
             tf += x*x;
-            x = a.getWrongClassifiedNegativeExamplesProbability() - b.getWrongClassifiedNegativeExamplesProbability();
+            x = a.getFalseNegativeProbability() - b.getFalseNegativeProbability();
             ff += x*x;
         }
         return String.format("%.4f", tt/size) + "\t" +

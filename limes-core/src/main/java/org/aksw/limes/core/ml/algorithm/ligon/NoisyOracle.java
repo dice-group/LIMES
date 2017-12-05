@@ -22,8 +22,8 @@ public class NoisyOracle implements Oracle {
 
         Random random = new Random();
         if(inOracle){
-            double probRightPos =  confusionMatrix.getRightClassifiedPositiveExamplesProbability();
-            double probWrongPos =  confusionMatrix.getWrongClassifiedPositiveExamplesProbability();
+            double probRightPos =  confusionMatrix.getTruePositiveProbability();
+            double probWrongPos =  confusionMatrix.getFalsePositiveProbability();
             double minProb = (probRightPos < probWrongPos)? probRightPos : probWrongPos;
             double r = (probRightPos + probWrongPos) * random.nextDouble();
             if(r < minProb ){
@@ -32,8 +32,8 @@ public class NoisyOracle implements Oracle {
                 return (probRightPos < probWrongPos)? false: true;
             }
         }else{
-            double probRightNeg =  confusionMatrix.getRightClassifiedNegativeExamplesProbability();
-            double probWrongNeg =  confusionMatrix.getWrongClassifiedNegativeExamplesProbability();
+            double probRightNeg =  confusionMatrix.getTrueNegativeProbability();
+            double probWrongNeg =  confusionMatrix.getFalseNegativeProbability();
             double minProb = (probRightNeg < probWrongNeg)? probRightNeg : probWrongNeg;
             double r = (probRightNeg + probWrongNeg) * random.nextDouble();
             if(r < minProb ){
@@ -56,10 +56,10 @@ public class NoisyOracle implements Oracle {
     @Override
     public String toString() {
         return "\nNoisyOracle ["+ 
-                confusionMatrix.getRightClassifiedPositiveExamplesProbability() + ", " +
-                confusionMatrix.getRightClassifiedNegativeExamplesProbability() + ", " +
-                confusionMatrix.getWrongClassifiedPositiveExamplesProbability() + ", " +
-                confusionMatrix.getWrongClassifiedNegativeExamplesProbability() +
+                confusionMatrix.getTruePositiveProbability() + ", " +
+                confusionMatrix.getTrueNegativeProbability() + ", " +
+                confusionMatrix.getFalsePositiveProbability() + ", " +
+                confusionMatrix.getFalseNegativeProbability() +
                 "]";
     }
 

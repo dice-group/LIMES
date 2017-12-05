@@ -29,7 +29,7 @@ public class ConfusionMatrix {
         c[0][0]++;
     }
     
-    public double getRightClassifiedPositiveExamplesProbability(){
+    public double getTruePositiveProbability(){
         return c[0][0] / sumConfusionMatriceEntries();
     }
     
@@ -49,7 +49,7 @@ public class ConfusionMatrix {
         return c[0][1];
     }
     
-    public double getRightClassifiedNegativeExamplesProbability(){
+    public double getTrueNegativeProbability(){
         return c[0][1] / sumConfusionMatriceEntries();
     }
 
@@ -65,7 +65,7 @@ public class ConfusionMatrix {
         return c[1][0];
     }
     
-    public double getWrongClassifiedPositiveExamplesProbability(){
+    public double getFalsePositiveProbability(){
         return c[1][0] / sumConfusionMatriceEntries();
     }
     
@@ -81,7 +81,7 @@ public class ConfusionMatrix {
         return c[1][1];
     }
     
-    public double getWrongClassifiedNegativeExamplesProbability(){
+    public double getFalseNegativeProbability(){
         return c[1][1] / sumConfusionMatriceEntries();
     }
     
