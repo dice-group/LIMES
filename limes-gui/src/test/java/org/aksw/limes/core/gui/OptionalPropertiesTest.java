@@ -132,19 +132,31 @@ public class OptionalPropertiesTest extends ApplicationTest{
 	
 	@Test
 	public void testSwitchingOptionalProperties(){
+		logger.info("INITIAL CACHES: " + 
+                    mainController.getCurrentConfig().getSourceEndpoint().getCache() + "\n" +
+                    mainController.getCurrentConfig().getTargetEndpoint().getCache());
 		clickOn("Run");
 		logger.info("Clicked on run");
 		CustomGuiTest.waitUntilLoadingWindowIsClosed("Mapping",200);
 		assertEquals(2,c.getMapping().size());
 		assertEquals(2,mainController.getCurrentConfig().getSourceEndpoint().getCache().size());
 		assertEquals(2,mainController.getCurrentConfig().getTargetEndpoint().getCache().size());
+		logger.info("AFTER RUN CACHES: " + 
+                    mainController.getCurrentConfig().getSourceEndpoint().getCache() + "\n" +
+                    mainController.getCurrentConfig().getTargetEndpoint().getCache());
 
 		clickOn("test:sp1",MouseButton.SECONDARY);
 		logger.info("Set test:sp1 to be obligatory");
 		
+		logger.info("AFTER SETTING SP1 CACHES: " + 
+                    mainController.getCurrentConfig().getSourceEndpoint().getCache() + "\n" +
+                    mainController.getCurrentConfig().getTargetEndpoint().getCache());
 		clickOn("Run");
 		logger.info("Clicked on run again");
 		CustomGuiTest.waitUntilLoadingWindowIsClosed("Mapping",200);
+		logger.info("AFTER SECOND RUN CACHES: " + 
+                    mainController.getCurrentConfig().getSourceEndpoint().getCache() + "\n" +
+                    mainController.getCurrentConfig().getTargetEndpoint().getCache());
 		assertEquals(1,c.getMapping().size());
 		assertEquals(1,mainController.getCurrentConfig().getSourceEndpoint().getCache().size());
 		assertEquals(2,mainController.getCurrentConfig().getTargetEndpoint().getCache().size());
