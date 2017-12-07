@@ -15,7 +15,7 @@ public class BilangWordNetWuPalmerMeasureTest {
     System.out.println(measure.getSimilarity("hund", "cat") + " " + measure.getSimilarity("katze", "dog"));
     System.out.println(measure.getSimilarity("mammal", "hund") + " " + measure.getSimilarity("hund", "rocket"));
     System.out.println(measure.getSimilarity("car", "rakete") + " " + measure.getSimilarity("football", "universe"));
-    assertEquals(0.0, measure.getSimilarity("cat", "cat"), eps);
+    assertEquals(0.0, measure.getSimilarity("cat", "cat"), eps);  // because they should be in different languages, the score here is expected to be zero
     assertEquals(0.0, measure.getSimilarity("hund", "hund"), eps);
     assertEquals(1.0, measure.getSimilarity("dog", "hund"), eps);
     assertEquals(1.0, measure.getSimilarity("katze", "cat"), eps);
