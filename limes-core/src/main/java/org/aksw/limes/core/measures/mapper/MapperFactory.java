@@ -5,6 +5,7 @@ import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.resourcesets.SetJaccardMapper;
 import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
+import org.aksw.limes.core.measures.mapper.string.DoubleMetaphoneMapper;
 import org.aksw.limes.core.measures.mapper.string.EDJoinMapper;
 import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
 import org.aksw.limes.core.measures.mapper.string.JaroMapper;
@@ -81,6 +82,8 @@ public class MapperFactory {
             return new ExactMatchMapper();
         case SOUNDEX:
             return new SoundexMapper();
+        case DOUBLEMETA:
+        	return new DoubleMetaphoneMapper();
         case MONGEELKAN:
             return new MongeElkanMapper();
         case RATCLIFF:

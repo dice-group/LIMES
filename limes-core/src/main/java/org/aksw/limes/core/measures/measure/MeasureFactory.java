@@ -21,6 +21,7 @@ import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjection
 import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
+import org.aksw.limes.core.measures.measure.string.DoubleMetaphoneMeasure;
 import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
 import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
 import org.aksw.limes.core.measures.measure.string.JaroMeasure;
@@ -83,6 +84,7 @@ public class MeasureFactory {
     public static final String QGRAMS = "qgrams";
     public static final String RATCLIFF = "ratcliff";
     public static final String SOUNDEX = "soundex";
+    public static final String DOUBLEMETA = "doublemeta";
     public static final String TRIGRAM = "trigram";
 
     // vector space measures
@@ -189,6 +191,9 @@ public class MeasureFactory {
         }
         if (measure.startsWith(SOUNDEX)) {
             return MeasureType.SOUNDEX;
+        }
+        if (measure.startsWith(DOUBLEMETA)) {
+            return MeasureType.DOUBLEMETA;
         }
         if (measure.startsWith(TRIGRAM)) {
             return MeasureType.TRIGRAM;
@@ -383,6 +388,8 @@ public class MeasureFactory {
             return new RatcliffObershelpMeasure();
         case SOUNDEX:
             return new SoundexMeasure();
+        case DOUBLEMETA:
+        	return new DoubleMetaphoneMeasure();
         case TRIGRAM:
             return new TrigramMeasure();
         ////////////////////////////////////////////
