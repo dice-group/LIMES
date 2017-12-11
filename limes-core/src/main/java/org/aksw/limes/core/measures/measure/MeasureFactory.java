@@ -20,6 +20,7 @@ import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjectionM
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
+import org.aksw.limes.core.measures.measure.space.ManhattanMeasure;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
 import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
 import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
@@ -87,6 +88,7 @@ public class MeasureFactory {
 
     // vector space measures
     public static final String EUCLIDEAN = "euclidean";
+    public static final String MANHATTAN = "manhattan";
     public static final String GEO_ORTHODROMIC = "geo_orthodromic";
     public static final String GEO_GREAT_ELLIPTIC = "geo_great_elliptic";
 
@@ -196,6 +198,9 @@ public class MeasureFactory {
         ////////////////////////////
         if (measure.startsWith(EUCLIDEAN)) {
             return MeasureType.EUCLIDEAN;
+        }
+        if (measure.startsWith(MANHATTAN)) {
+            return MeasureType.MANHATTAN;
         }
         if (measure.startsWith(GEO_ORTHODROMIC)) {
             return MeasureType.GEO_ORTHODROMIC;
@@ -389,6 +394,8 @@ public class MeasureFactory {
 
         case EUCLIDEAN:
             return new EuclideanMeasure();
+        case MANHATTAN:
+            return new ManhattanMeasure();
         case GEO_GREAT_ELLIPTIC:
             return new GeoGreatEllipticMeasure();
         case GEO_ORTHODROMIC:
