@@ -34,7 +34,7 @@
 
     <TYPE>N3</TYPE>
   </TARGET>
-  <METRIC>wu_palmer(x.prop:has_pet, y.prop:has_pet)</METRIC>
+  <METRIC>simple_edit_distance(x.prop:has_pet, y.prop:has_pet)</METRIC>
   <!--
   <METRIC>AND(exactmatch(x.prop:email, y.prop:email)|0.9, mongeelkan(x.prop:name, y.prop:name)|0.07)</METRIC>
   <METRIC>AND(exactmatch(x.prop:email, y.prop:email)|0.9, simple_edit_distance(x.prop:name, y.prop:name)|0.07)</METRIC>

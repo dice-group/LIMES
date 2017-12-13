@@ -8,7 +8,8 @@ public class FullLimesTest {
 
   @Test
   public void testMain() throws Exception {
-    String configPath = "src/test/resources/dating1.xml";
+    String configPath = "src/test/resources/dating-config.xml";
+    System.out.println(new File("").getAbsolutePath());
     Controller.main(new String[]{configPath});
   }
 }
