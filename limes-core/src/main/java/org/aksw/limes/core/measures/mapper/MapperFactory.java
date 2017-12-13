@@ -43,6 +43,8 @@ import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.string.SimpleEditDistanceMeasure;
 import org.aksw.limes.core.measures.measure.string.bilang.BilangDictionary;
 import org.aksw.limes.core.measures.measure.string.bilang.SimpleDictionaryMeasure;
+import org.aksw.limes.core.measures.measure.string.bilang.Word2VecMeasure;
+import org.aksw.limes.core.measures.measure.string.bilang.WordEmbeddings;
 import org.aksw.limes.core.measures.measure.string.bilang.WordNetInterface;
 import org.aksw.limes.core.measures.measure.string.bilang.BilangWordNetWuPalmerMeasure;
 
@@ -100,6 +102,9 @@ public class MapperFactory {
             return new SimpleGeneralMapper(new BilangWordNetWuPalmerMeasure(
                 new WordNetInterface(WordNetInterface.DEFAULT_WORDNET_HOME),
                 new BilangDictionary(BilangDictionary.DEFAULT_DICTIONARY_PATH)));
+        case WORD2VEC:
+            return new SimpleGeneralMapper(new Word2VecMeasure(
+                new WordEmbeddings(WordEmbeddings.DEFAULT_BILINGUAL_DICTIONARY_BASE_PATH)));
         ///////////////////////
         case EUCLIDEAN:
             return new HR3Mapper();

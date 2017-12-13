@@ -115,7 +115,13 @@ public class WordEmbeddings {
   private HashMap<String, Vectord> words2vectors = new HashMap<>();
   private int dimensions = -1;
 
+  public static final String DEFAULT_BILINGUAL_DICTIONARY_BASE_PATH = "src/test/resources/unsup.128";
+
   public WordEmbeddings() {
+  }
+
+  public WordEmbeddings(String bilingualDictionaryBase) {
+    readBilangDataFiles(bilingualDictionaryBase);
   }
 
   public boolean contains(String word) {

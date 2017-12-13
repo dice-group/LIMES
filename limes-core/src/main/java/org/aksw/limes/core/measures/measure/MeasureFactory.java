@@ -90,6 +90,7 @@ public class MeasureFactory {
     public static final String HAMMING_DISTANCE = "hamming_distance";
     public static final String SIMPLE_DICTIONARY = "simple_dictionary";
     public static final String WU_PALMER = "wu_palmer";
+    public static final String WORD2VEC = "word2vec";
 
     // vector space measures
     public static final String EUCLIDEAN = "euclidean";
@@ -210,6 +211,9 @@ public class MeasureFactory {
         }
         if (measure.startsWith(WU_PALMER)) {
             return MeasureType.WU_PALMER;
+        }
+        if (measure.startsWith(WORD2VEC)) {
+            return MeasureType.WORD2VEC;
         }
         ////////////////////////////
         if (measure.startsWith(EUCLIDEAN)) {
