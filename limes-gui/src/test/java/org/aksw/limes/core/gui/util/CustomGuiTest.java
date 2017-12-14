@@ -74,6 +74,32 @@ public class CustomGuiTest {
 	}
 
 	/**
+	 * Waits until number of windows is reduced to n or timeout in seconds is reached
+	 * @param n number of desired windows
+	 * @param timeout
+	 */
+	public static void waitUntilWindowIsClosed(int n, int timeout){
+		FxRobot rob = new FxRobot();
+		int sec = 0;
+		logger.info("Wait until " + n + " windows are left open");
+		logger.info("Currently open windows: ");
+		for(Window w: rob.listWindows()){
+			logger.info(((Stage)w).getTitle());
+		}
+		do{
+			rob.sleep(1000);
+			sec++;
+			if(sec % 100 == 0){
+				logger.info("Waited: " + sec + " seconds");
+			}
+			//avoid infinite loop
+			if(sec > timeout){
+				break;
+			}
+		}while(rob.listWindows().size() > n);
+	}
+
+	/**
 	 * Uses FxRobot from TestFX to lookup the node
 	 * 
 	 * @param nodeId

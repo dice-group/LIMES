@@ -1,6 +1,7 @@
 package org.aksw.limes.core.gui;
 
 import static org.testfx.api.FxAssert.verifyThat;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.util.Locale;
@@ -12,15 +13,19 @@ import org.aksw.limes.core.gui.util.CustomGuiTest;
 import org.aksw.limes.core.gui.util.ProjectPropertiesGetter;
 import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
 
+import javafx.application.Platform;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class EditLoadedConfigClassesTest extends ApplicationTest {
 
@@ -84,5 +89,23 @@ public class EditLoadedConfigClassesTest extends ApplicationTest {
 		CustomGuiTest.waitUntilNodeIsVisible("Person", 15);
 		verifyThat("Restaurant", NodeMatchers.isVisible());
 		verifyThat("Person", NodeMatchers.isVisible());
+	}
+
+
+	@AfterClass
+	public static void cleanup(){
+		FxRobot rob = new FxRobot();
+		for(Window w : rob.listWindows()){
+			int currentsize = rob.listWindows().size();
+			System.out.println(((Stage)w).getTitle());
+			//Avoid not on fx application thread error
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                	((Stage)w).close();
+                }
+            });
+            CustomGuiTest.waitUntilWindowIsClosed(currentsize - 1, 200);
+		}
+		assertEquals(0,rob.listWindows().size());
 	}
 }
