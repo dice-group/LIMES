@@ -1,10 +1,12 @@
 package org.aksw.limes.core.io.preprocessing;
 
+import com.sun.corba.se.impl.orbutil.CorbaResourceUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import org.aksw.limes.core.measures.measure.string.ADictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +30,7 @@ public class Preprocessor {
     public static final String AT               = "@";
     public static final String NO_LANG          = "nolang";
     public static final String NUMBER 		    = "number";
+    public static final String CORRECT_SPELLING = "correctspelling";
     static Logger logger = LoggerFactory.getLogger(Preprocessor.class.getName());
 
     public static String process(String entry, String functionChain) {
@@ -139,6 +142,9 @@ public class Preprocessor {
         }
         if (function.startsWith(URI_AS_STRING)) {
             return URIasString(entry);
+        }
+        if (function.startsWith(CORRECT_SPELLING)) {
+            return ADictionary.getDefaultDictionary().correctSpelling(entry);
         }
         //function not known...
         else {
