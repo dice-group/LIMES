@@ -21,6 +21,8 @@ public class WordEmbeddingsTest {
   @Test
   public void testSimilarity() {
     double eps = 0.00001;
+    System.out.println(we.getWordVector("Fußball"));
+    System.out.println(we.getCosineSimilarityForWords("football", "fußball"));
     System.out.println(we.getCosineSimilarityForWords("hund", "cat") + " " + we
         .getCosineSimilarityForWords("katze", "dog"));
     System.out.println(we.getCosineSimilarityForWords("mammal", "hund") + " " + we

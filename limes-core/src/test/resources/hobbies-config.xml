@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE LIMES SYSTEM "limes.dtd">
+<LIMES>
+  <PREFIX>
+    <NAMESPACE>myprop#</NAMESPACE>
+    <LABEL>prop</LABEL>
+  </PREFIX>
+
+  <SOURCE>
+    <ID>ade</ID>
+    <ENDPOINT>src/test/resources/hobbies1.nt</ENDPOINT>
+    <VAR>?x</VAR>
+    <PAGESIZE>1000</PAGESIZE>
+    <!--<RESTRICTION>?x prop:has_pet "dog"</RESTRICTION>-->
+    <RESTRICTION></RESTRICTION>
+    <PROPERTY>prop:has_hobby AS lowercase</PROPERTY>
+
+    <TYPE>N3</TYPE>
+  </SOURCE>
+
+  <TARGET>
+    <ID>bde</ID>
+    <ENDPOINT>src/test/resources/hobbies2.nt</ENDPOINT>
+    <VAR>?y</VAR>
+    <PAGESIZE>1000</PAGESIZE>
+    <!--<RESTRICTION>?y prop:speaks "english"</RESTRICTION>-->
+    <RESTRICTION></RESTRICTION>
+    <PROPERTY>prop:has_hobby AS lowercase</PROPERTY>
+
+    <TYPE>N3</TYPE>
+  </TARGET>
+  <METRIC>word2vec(x.prop:has_hobby, y.prop:has_hobby)</METRIC>
+  <!--
+  <METRIC>AND(exactmatch(x.prop:email, y.prop:email)|0.9, mongeelkan(x.prop:name, y.prop:name)|0.07)</METRIC>
+  <METRIC>AND(exactmatch(x.prop:email, y.prop:email)|0.9, simple_edit_distance(x.prop:name, y.prop:name)|0.07)</METRIC>
+  <METRIC>exactmatch(x.prop:email, y.prop:email)</METRIC>
+  <METRIC>levenshtein(x.prop:name, y.prop:name)</METRIC>
+  <METRIC>simple_edit_distance(x.prop:name, y.prop:name)</METRIC>
+  -->
+
+  <ACCEPTANCE>
+    <THRESHOLD>0.6</THRESHOLD>
+    <FILE>my-accepted.txt</FILE>
+    <RELATION>verySimilar</RELATION>
+  </ACCEPTANCE>
+  <REVIEW>
+    <THRESHOLD>0.3</THRESHOLD>
+    <FILE>my-reviewme.txt</FILE>
+    <RELATION>quiteSimilar</RELATION>
+  </REVIEW>
+
+  <OUTPUT>N3</OUTPUT>
+</LIMES>

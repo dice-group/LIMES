@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -110,6 +111,14 @@ public class WordEmbeddings {
         throw new RuntimeException("Vector lengths do not match!");
       }
     }
+
+    @Override
+    public String toString() {
+      return "Vectord{" +
+          "data=" + Arrays.toString(data) +
+          ", size=" + size +
+          '}';
+    }
   }
 
   private HashMap<String, Vectord> words2vectors = new HashMap<>();
@@ -125,10 +134,12 @@ public class WordEmbeddings {
   }
 
   public boolean contains(String word) {
+    word = word.toLowerCase();
     return words2vectors.containsKey(word);
   }
 
   public Vectord getWordVector(String word) {
+    word = word.toLowerCase();
     if (!contains(word)) {
       throw new RuntimeException("there is no embedding for word " + word);
     }
@@ -157,6 +168,7 @@ public class WordEmbeddings {
    * @param vector corresponding word vector
    */
   public void addWordVector(String word, Vectord vector) {
+    word = word.toLowerCase();
     if (words2vectors.size() == 0) {
       dimensions = vector.size;
     } else {
@@ -180,6 +192,11 @@ public class WordEmbeddings {
    * @return the cosine similarity for these two words
    */
   public double getCosineSimilarityForWords(String word1, String word2) {
+    word1 = word1.toLowerCase();
+    word2 = word2.toLowerCase();
+    if (!contains(word1) || ! contains(word2)) {
+      return 0.0;
+    }
     Vectord vector1 = getWordVector(word1);
     Vectord vector2 = getWordVector(word2);
     return vector1.cosineSimilarity(vector2);
