@@ -6,13 +6,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+import org.aksw.limes.core.measures.measure.string.ADictionary;
 
 /**
  * Dictionary for translations from a source language to a target language.
  * Two maps, one for each translation direction, are kept.
  */
-public class BilangDictionary {
+public class BilangDictionary extends ADictionary {
 
   private HashMap<String, ArrayList<String>> source2target = new HashMap<>();
   private HashMap<String, ArrayList<String>> target2source = new HashMap<>();
@@ -103,5 +106,13 @@ public class BilangDictionary {
    */
   public HashMap<String, ArrayList<String>> getTarget2SourceMap() {
     return target2source;
+  }
+
+
+  @Override
+  public Iterator<String> iterator() {
+    return Stream.concat(
+        source2target.keySet().stream(),
+        target2source.keySet().stream()).iterator();
   }
 }

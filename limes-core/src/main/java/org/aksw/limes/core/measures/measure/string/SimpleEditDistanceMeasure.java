@@ -18,17 +18,14 @@ public class SimpleEditDistanceMeasure extends AStringMeasure {
    * Creates a levensthein-like edit distance measure (insert/delete/substiture cost 1, match cost 0)
    */
   public SimpleEditDistanceMeasure() {
-    this(0,1,1,1);
+    this(0, 1, 1, 1);
   }
 
   /**
    * Creates a edit distance measure with the desired cost values.
-   * @param matchingCost
-   * @param insertionCost
-   * @param deletionCost
-   * @param substitutionCost
    */
-  public SimpleEditDistanceMeasure(int matchingCost, int insertionCost, int deletionCost, int substitutionCost) {
+  public SimpleEditDistanceMeasure(int matchingCost, int insertionCost, int deletionCost,
+      int substitutionCost) {
     this.matchingCost = matchingCost;
     this.insertionCost = insertionCost;
     this.deletionCost = deletionCost;
@@ -62,13 +59,14 @@ public class SimpleEditDistanceMeasure extends AStringMeasure {
 
   /**
    * returns the worst possible edit distance for two strings of the given lengths
+   *
    * @param length1 length of the first string
    * @param length2 length of the second string
-   * @return
    */
   public int getWorstCaseCost(int length1, int length2) {
     int min = Math.min(length1, length2);
-    int result = min * Math.min(insertionCost+deletionCost, Math.max(matchingCost, substitutionCost));
+    int result =
+        min * Math.min(insertionCost + deletionCost, Math.max(matchingCost, substitutionCost));
     int lengthDifference = length1 - length2;
     if (lengthDifference > 0) {
       result += lengthDifference * deletionCost;
@@ -82,8 +80,8 @@ public class SimpleEditDistanceMeasure extends AStringMeasure {
    * @param object1, the first string (as Object)
    * @param object2, the second string (as Object)
    * @return the similarity of of the two strings, which is one minus the edit distance
-   *   between them, normalized by the worst case edit cost that could have been for strings
-   *   of the same lengths.
+   * between them, normalized by the worst case edit cost that could have been for strings
+   * of the same lengths.
    */
   @Override
   public double getSimilarity(Object object1, Object object2) {
@@ -92,32 +90,42 @@ public class SimpleEditDistanceMeasure extends AStringMeasure {
     if (s1.isEmpty() && s2.isEmpty()) {
       return 1.0;
     }
+    int edDistance = computeEditDistance(s1, s2);
+    return 1.0 - edDistance / (double) getWorstCaseCost(s1.length(), s2.length());
+  }
+
+  public static int computeEditDistance(String s1, String s2) {
+    return computeEditDistance(s1, s2, 0, 1, 1, 1);
+  }
+
+  public static int computeEditDistance(String s1, String s2, int matchingCost, int insertionCost,
+      int deletionCost, int substitutionCost) {
     int length1 = s1.length(), length2 = s2.length();
     int[] previousRow = new int[length1 + 1];
     for (int i = 0; i <= length1; i++) {
       previousRow[i] = i * deletionCost;
     }
     for (int y = 0; y < length2; y++) {
-      int[] currentRow = new int[length1+1];
+      int[] currentRow = new int[length1 + 1];
       currentRow[0] = (y + 1) * insertionCost;
       char c2 = s2.charAt(y);
       for (int x = 0; x < length1; x++) {
         char c1 = s1.charAt(x);
         if (c1 == c2) {
-          currentRow[x+1] = previousRow[x];
+          currentRow[x + 1] = previousRow[x];
         } else {
           int matchingSubstitutionCost = matchingCost;
           if (s1.charAt(x) != s2.charAt(y)) {
             matchingSubstitutionCost = substitutionCost;
           }
-          currentRow[x+1] = NumberUtils.min(previousRow[x] + matchingSubstitutionCost,
-              previousRow[x+1] + insertionCost,
+          currentRow[x + 1] = NumberUtils.min(previousRow[x] + matchingSubstitutionCost,
+              previousRow[x + 1] + insertionCost,
               currentRow[x] + deletionCost);
         }
       }
       previousRow = currentRow;
     }
-    return 1.0 - previousRow[length1] / (double) getWorstCaseCost(length1, length2);
+    return previousRow[length1];
   }
 
   @Override
