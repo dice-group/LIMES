@@ -4,17 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import gnu.trove.map.TObjectIntMap;
-import gnu.trove.map.hash.TObjectIntHashMap;
+
+import it.uniroma2.sag.kelp.data.manipulator.WLSubtreeMapper;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.AMapper;
-import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.measure.graphs.Graph;
-import org.apache.spark.mllib.linalg.SparseVector;
-import java.lang.reflect.Array;
+
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -235,6 +232,7 @@ public class GraphSimilarityMapper extends AMapper{
 
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression, double threshold) {
+
         return null;
     }
 
