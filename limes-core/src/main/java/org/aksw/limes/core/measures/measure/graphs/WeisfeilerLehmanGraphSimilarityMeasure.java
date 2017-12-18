@@ -1,10 +1,9 @@
 package org.aksw.limes.core.measures.measure.graphs;
 
-import gnu.trove.map.TObjectIntMap;
-import gnu.trove.map.hash.TObjectIntHashMap;
+
 import org.aksw.jena_sparql_api.example.Example;
 import org.aksw.limes.core.io.cache.Instance;
-import org.apache.spark.mllib.linalg.SparseVector;
+
 import weka.gui.graphvisualizer.GraphNode;
 
 import java.util.ArrayList;
