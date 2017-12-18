@@ -1,8 +1,18 @@
 package org.aksw.limes.core.measures.measure.graphs;
 
+import gnu.trove.map.TObjectIntMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
+import org.aksw.jena_sparql_api.example.Example;
 import org.aksw.limes.core.io.cache.Instance;
+import org.apache.spark.mllib.linalg.SparseVector;
+import weka.gui.graphvisualizer.GraphNode;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class WeisfeilerLehmanGraphSimilarityMeasure extends AGraphSimilarityMeasure {
+
 
   @Override
   public double getSimilarity(Object object1, Object object2) {
@@ -25,3 +35,4 @@ public class WeisfeilerLehmanGraphSimilarityMeasure extends AGraphSimilarityMeas
     throw new UnsupportedOperationException("Not supported yet.");
   }
 }
+

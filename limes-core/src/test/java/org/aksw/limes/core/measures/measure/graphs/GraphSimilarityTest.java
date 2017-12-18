@@ -1,9 +1,10 @@
 package org.aksw.limes.core.measures.measure.graphs;
 
+import org.aksw.limes.core.measures.mapper.Graphs.GraphSimilarityMapper;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class NMSimilarityTest {
+public class GraphSimilarityTest {
 
     @Test
     public void testSimilarity() {
@@ -30,7 +31,7 @@ public class NMSimilarityTest {
             Graph graphB = new Graph(graphBSource);
             Graph graphC = new Graph(graphCSource);
 
-            NMSimilarity similarityMeasure = new NMSimilarity(graphB,graphC,  0.0001);
+            GraphSimilarityMapper similarityMeasure = new GraphSimilarityMapper(graphB,graphC,  0.0001);
             Double similarity = similarityMeasure.getGraphSimilarity();
             System.out.println("\nTwo graphs have " + similarity + "% of similarity");
             Assert.assertEquals(17.05, similarity, 0.01);

@@ -1,15 +1,26 @@
-package org.aksw.limes.core.measures.measure.graphs;
+package org.aksw.limes.core.measures.mapper.Graphs;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import gnu.trove.map.TObjectIntMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
+import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.measures.mapper.AMapper;
+import org.aksw.limes.core.measures.mapper.IMapper;
+import org.aksw.limes.core.measures.measure.graphs.Graph;
+import org.apache.spark.mllib.linalg.SparseVector;
 import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
+public class GraphSimilarityMapper extends AMapper{
 
-public class NMSimilarity {
     private Graph graphA;
     private Graph graphB;
     private List<List<Integer>> inNodeListA;
@@ -23,7 +34,9 @@ public class NMSimilarity {
     private int graphSizeA;
     private int graphSizeB;
 
-    public NMSimilarity(Graph graphA, Graph graphB, Double epsilon) {
+
+
+    public GraphSimilarityMapper(Graph graphA, Graph graphB, Double epsilon) {
         try {
             this.graphA = graphA;
             this.graphB = graphB;
@@ -46,6 +59,9 @@ public class NMSimilarity {
             e.printStackTrace();
         }
     }
+
+
+
 
     public void initializeSimilarityMatrices() {
         for (int i = 0; i < graphSizeA; i++) {
@@ -217,4 +233,23 @@ public class NMSimilarity {
         return finalGraphSimilarity;
     }
 
+    @Override
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression, double threshold) {
+        return null;
+    }
+
+    @Override
+    public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
+        return 0;
+    }
+
+    @Override
+    public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
+        return 0;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
 }

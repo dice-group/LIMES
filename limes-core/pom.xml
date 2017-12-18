@@ -283,6 +283,18 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-mllib_2.10</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.trove4j</groupId>
+            <artifactId>trove4j</artifactId>
+            <version>3.0.1</version>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -290,7 +302,11 @@
             <version>1.7.21</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>it.uniroma2.sag.kelp</groupId>
+            <artifactId>kelp-input-generator</artifactId>
+            <version>1.2.0-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -524,6 +540,27 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>it.uniroma2.sag.kelp</groupId>
+            <artifactId>graph-representation</artifactId>
+            <version>0.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>it.uniroma2.sag.kelp</groupId>
+            <artifactId>vector-representation</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependencies>
+        <dependency>
+            <groupId>it.uniroma2.sag.kelp</groupId>
+            <artifactId>discreterepresentation</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>it.uniroma2.sag.kelp</groupId>
+            <artifactId>core</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.fusesource.jansi</groupId>
             <artifactId>jansi</artifactId>
             <version>1.11</version>
@@ -576,6 +613,46 @@
             <name>AKSW Snapshot Repository</name>
             <url>http://maven.aksw.org/archiva/repository/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>sag_repo_release</id>
+            <name>Sag Libs Repository Stable</name>
+            <url>http://sag.art.uniroma2.it:8081/artifactory/kelp-release/</url>
+        </repository>
+        <snapshotRepository>
+            <id>sag_repo_snap</id>
+            <name>Sag Libs Repository Snapshots</name>
+            <url>http://sag.art.uniroma2.it:8081/artifactory/kelp-snapshot/</url>
+        </snapshotRepository>
     </distributionManagement>
-
+    <repositories>
+        <repository>
+            <id>sag_repo_snap</id>
+            <name>Sag Libs Repository Snapshots</name>
+            <releases>
+                <enabled>false</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <url>http://sag.art.uniroma2.it:8081/artifactory/kelp-snapshot/</url>
+        </repository>
+        <repository>
+            <id>sag_repo_release</id>
+            <name>Sag Libs Repository Stable</name>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <url>http://sag.art.uniroma2.it:8081/artifactory/kelp-release/</url>
+        </repository>
 </project>
