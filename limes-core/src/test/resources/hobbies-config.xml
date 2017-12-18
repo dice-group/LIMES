@@ -25,7 +25,7 @@
     <PAGESIZE>1000</PAGESIZE>
     <!--<RESTRICTION>?y prop:speaks "english"</RESTRICTION>-->
     <RESTRICTION></RESTRICTION>
-    <PROPERTY>prop:has_hobby AS lowercase</PROPERTY>
+    <PROPERTY>prop:has_hobby AS correctspelling</PROPERTY>
 
     <TYPE>N3</TYPE>
   </TARGET>
