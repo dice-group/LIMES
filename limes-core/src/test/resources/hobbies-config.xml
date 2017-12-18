@@ -44,7 +44,7 @@
     <RELATION>verySimilar</RELATION>
   </ACCEPTANCE>
   <REVIEW>
-    <THRESHOLD>0.3</THRESHOLD>
+    <THRESHOLD>0.45</THRESHOLD>
     <FILE>my-reviewme.txt</FILE>
     <RELATION>quiteSimilar</RELATION>
   </REVIEW>
