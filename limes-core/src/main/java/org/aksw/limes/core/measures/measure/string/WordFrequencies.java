@@ -24,7 +24,7 @@ public class WordFrequencies {
   /**
    * @param wordFrequenciesFile file should have two columns, separated by a space, word first,
    * then frequency (as int or double)
-   * @return WordFrequencies instance based on these frequencies
+   * @return WordFrequencies instance based on these frequencies, normalized
    */
   public static WordFrequencies fromWordFrequencyFile(Path wordFrequenciesFile) {
     try {
@@ -41,7 +41,9 @@ public class WordFrequencies {
         double frequency = Double.parseDouble(parts[1]);
         map.put(word, frequency);
       });
-      return new WordFrequencies(map);
+      WordFrequencies result = new WordFrequencies(map);
+      result.normalizeFrequencies();
+      return result;
     } catch (IOException e) {
       e.printStackTrace();
       throw new RuntimeException("Wasn't able to read frequency file.");
@@ -62,11 +64,15 @@ public class WordFrequencies {
     return result;
   }
 
-  public Set<String> keySet() {
+  public Set<String> wordSet() {
     return wordFrequencies.keySet();
   }
 
-  public boolean containsKey(String word) {
+  public boolean containsWord(String word) {
     return wordFrequencies.containsKey(word);
+  }
+
+  public double get(String word) {
+    return wordFrequencies.get(word);
   }
 }

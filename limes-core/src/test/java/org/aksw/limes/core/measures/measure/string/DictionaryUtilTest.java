@@ -10,24 +10,26 @@ public class DictionaryUtilTest {
 
   @Before
   public void setUp() {
-    DictionaryUtil.initInstance(Paths.get("src/test/resources/en-de-freq.txt"));
+    WordFrequencies wf = WordFrequencies.fromWordFrequencyFile(Paths.get("src/test/resources/small-freq.txt"));
+    DictionaryUtil.initInstance(wf);
   }
 
   @Test
   public void testDistance() {
-    DictionaryUtil du = DictionaryUtil.getInstance();
-    assertEquals(2, DictionaryUtil.damerauLevenshteinDistance("CA","ABC"));
-    assertEquals(3, DictionaryUtil.damerauLevenshteinDistance("abcdefg","acbedgf"));
-    assertEquals(2, DictionaryUtil.damerauLevenshteinDistance("abcd","bac"));
-    assertEquals(3, DictionaryUtil.damerauLevenshteinDistance("abcd","da"));
+    assertEquals(2, DictionaryUtil.damerauLevenshteinDistance("CA", "ABC"));
+    assertEquals(3, DictionaryUtil.damerauLevenshteinDistance("abcdefg", "acbedgf"));
+    assertEquals(2, DictionaryUtil.damerauLevenshteinDistance("abcd", "bac"));
+    assertEquals(3, DictionaryUtil.damerauLevenshteinDistance("abcd", "da"));
   }
+
   @Test
   public void testCorrectSpelling() {
     DictionaryUtil du = DictionaryUtil.getInstance();
+    assertEquals("universität", du.correctSpelling("universitätt"));
     assertEquals("custody", du.correctSpelling("cusstody"));
-    assertEquals("universität", du.correctSpelling("universitt"));
     assertEquals("verständnis", du.correctSpelling("verständnsi"));
     assertEquals("fußball", du.correctSpelling("fßbal"));
+    assertEquals("the", du.correctSpelling("tze"));
   }
 
 }

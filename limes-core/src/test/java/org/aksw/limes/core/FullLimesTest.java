@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import org.aksw.limes.core.controller.Controller;
 import org.aksw.limes.core.measures.measure.string.DictionaryUtil;
+import org.aksw.limes.core.measures.measure.string.WordFrequencies;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,7 +12,10 @@ public class FullLimesTest {
   @Before
   public void setUp() {
     System.out.println(new File("").getAbsolutePath());
-    DictionaryUtil.initInstance(Paths.get("src/test/resources/en-de-freq.txt"));
+    WordFrequencies wf = WordFrequencies
+        .fromWordFrequencyFile(Paths.get("src/test/resources/en-freq.txt"));
+    wf.merge(WordFrequencies.fromWordFrequencyFile(Paths.get("src/test/resources/de-freq.txt")));
+    DictionaryUtil.initInstance(wf);
   }
   @Test
   public void testMainDating() {

@@ -39,7 +39,7 @@ public final class DictionaryUtil {
 
   private DictionaryUtil(WordFrequencies wordFrequencies) {
     this.wordFrequencies = wordFrequencies;
-    for (String word : wordFrequencies.keySet()) {
+    for (String word : wordFrequencies.wordSet()) {
       addDeletesForWordToDictionary(word);
     }
   }
@@ -178,14 +178,13 @@ public final class DictionaryUtil {
       if (inputWordLength - currentString.length() > bestSuggestionDistance) {
         break;
       }
-
       if (rootsForStrings.containsKey(currentString)) {
         // currentString can be transformed to a true word
         if (wordFrequencies.containsWord(currentString)) {
           // currentString is already a true word
-          // distance is just the number of deletes so far plus word frequency
+          // distance is just the number of deletes so far plus (one minus) word frequency
           double suggestionDistance =
-              inputWordLength - currentString.length() + wordFrequencies.get(currentString);
+              inputWordLength - currentString.length() + 1-wordFrequencies.get(currentString);
           if (suggestionDistance < bestSuggestionDistance) { // new best suggestion found
             bestSuggestionDistance = suggestionDistance;
             bestSuggestion = currentString;
@@ -200,7 +199,7 @@ public final class DictionaryUtil {
             // manually to know the definite number of required edit operations
             suggestionDistance = damerauLevenshteinDistance(rootCandidate, inputWord);
           }
-          suggestionDistance += wordFrequencies.get(rootCandidate);
+          suggestionDistance += 1-wordFrequencies.get(rootCandidate);
           if (suggestionDistance < bestSuggestionDistance) {
             bestSuggestionDistance = suggestionDistance;
             bestSuggestion = rootCandidate;
