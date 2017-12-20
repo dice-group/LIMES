@@ -85,7 +85,7 @@ public final class DictionaryUtil {
           continue;
         }
         for (int c = 0; c < qItem.length(); c++) {
-          String word_minus_c = qItem.substring(0, c) + qItem.substring(c);
+          String word_minus_c = qItem.substring(0, c) + qItem.substring(c+1);
           deletes.add(word_minus_c);
           tmpQueue.add(word_minus_c);
 
