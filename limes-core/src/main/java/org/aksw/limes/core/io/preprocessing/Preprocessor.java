@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.aksw.limes.core.measures.measure.string.ADictionary;
+import org.aksw.limes.core.measures.measure.string.DictionaryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,7 +144,7 @@ public class Preprocessor {
             return URIasString(entry);
         }
         if (function.startsWith(CORRECT_SPELLING)) {
-            return ADictionary.getDefaultDictionary().correctSpelling(entry);
+            return DictionaryUtil.getInstance().correctSpelling(entry);
         }
         //function not known...
         else {
