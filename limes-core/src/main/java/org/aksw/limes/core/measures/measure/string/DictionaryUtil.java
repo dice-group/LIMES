@@ -2,43 +2,17 @@ package org.aksw.limes.core.measures.measure.string;
 
 import static com.google.common.primitives.Ints.min;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public final class DictionaryUtil {
 
   private static DictionaryUtil instance;
 
-  public static void initInstance(Path wordFrequenciesFile) {
-    try {
-      Map<String, Double> wordFrequencies = new HashMap<>();
-      Files.lines(wordFrequenciesFile).forEach(line -> {
-        if (line.isEmpty()) {
-          return;
-        }
-        String[] parts = line.split(" ");
-        if (parts.length != 2) {
-          throw new RuntimeException("Invalid file format. instance could not be initialized.");
-        }
-        String word = parts[0];
-        double frequency = Double.parseDouble(parts[1]);
-        wordFrequencies.put(word, frequency);
-      });
-      initInstance(wordFrequencies);
-    } catch (IOException e) {
-      e.printStackTrace();
-      throw new RuntimeException("instance could not be initialized.");
-    }
-  }
-
-  public static void initInstance(Map<String, Double> wordFrequencies) {
+  public static void initInstance(WordFrequencies wordFrequencies) {
     if (instance != null) {
       throw new RuntimeException("instance has already been initialized.");
     }
@@ -60,12 +34,12 @@ public final class DictionaryUtil {
   /**
    * maps all true words to their frequencies (= prior probabilities)
    */
-  private HashMap<String, Double> wordsWithFrequencies = new HashMap<>();
+  private final WordFrequencies wordFrequencies;
   private int longestWordLength = 0;
 
-  private DictionaryUtil(Map<String, Double> wordsWithFrequencies) {
-    this.wordsWithFrequencies.putAll(wordsWithFrequencies);
-    for (String word : wordsWithFrequencies.keySet()) {
+  private DictionaryUtil(WordFrequencies wordFrequencies) {
+    this.wordFrequencies = wordFrequencies;
+    for (String word : wordFrequencies.keySet()) {
       addDeletesForWordToDictionary(word);
     }
   }
@@ -90,7 +64,6 @@ public final class DictionaryUtil {
           tmpQueue.add(word_minus_c);
 
         }
-
       }
       queue.clear();
       queue.addAll(tmpQueue);
@@ -185,7 +158,7 @@ public final class DictionaryUtil {
    * @return corrected word for inputWord
    */
   public String correctSpelling(String inputWord) {
-    if (wordsWithFrequencies.containsKey(inputWord)) {
+    if (wordFrequencies.containsWord(inputWord)) {
       return inputWord; // distance of 0 always has precedence
     }
     int inputWordLength = inputWord.length();
@@ -208,11 +181,11 @@ public final class DictionaryUtil {
 
       if (rootsForStrings.containsKey(currentString)) {
         // currentString can be transformed to a true word
-        if (wordsWithFrequencies.containsKey(currentString)) {
+        if (wordFrequencies.containsWord(currentString)) {
           // currentString is already a true word
           // distance is just the number of deletes so far plus word frequency
           double suggestionDistance =
-              inputWordLength - currentString.length() + wordsWithFrequencies.get(currentString);
+              inputWordLength - currentString.length() + wordFrequencies.get(currentString);
           if (suggestionDistance < bestSuggestionDistance) { // new best suggestion found
             bestSuggestionDistance = suggestionDistance;
             bestSuggestion = currentString;
@@ -227,7 +200,7 @@ public final class DictionaryUtil {
             // manually to know the definite number of required edit operations
             suggestionDistance = damerauLevenshteinDistance(rootCandidate, inputWord);
           }
-          suggestionDistance += wordsWithFrequencies.get(rootCandidate);
+          suggestionDistance += wordFrequencies.get(rootCandidate);
           if (suggestionDistance < bestSuggestionDistance) {
             bestSuggestionDistance = suggestionDistance;
             bestSuggestion = rootCandidate;
