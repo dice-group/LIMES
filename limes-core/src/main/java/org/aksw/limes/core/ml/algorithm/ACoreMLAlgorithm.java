@@ -181,5 +181,19 @@ public abstract class ACoreMLAlgorithm {
         throw new NoSuchParameterException(par);
     }
 
+    /**
+     * @return the source cache
+     */
+    public ACache getSourceCache() {
+        return sourceCache;
+    }
+
+    /**
+     * @return the target cache
+     */
+    public ACache getTargetCache() {
+        return targetCache;
+    }
+
 
 }

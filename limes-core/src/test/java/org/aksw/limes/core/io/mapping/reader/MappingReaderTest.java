@@ -20,7 +20,8 @@ public class MappingReaderTest {
     
     @Test
     public void testReadMappingFromRDF() {
-        String file = System.getProperty("user.dir") + "/resources/mapping-test.nt";
+//        String file = System.getProperty("user.dir") + "/resources/mapping-test.nt";
+        String file = Thread.currentThread().getContextClassLoader().getResource("mapping-test.nt").getPath();
         RDFMappingReader r = new RDFMappingReader(file);
         AMapping map = r.read();
         assertTrue(map.equals(refMap));
@@ -28,7 +29,8 @@ public class MappingReaderTest {
     
     @Test
     public void testReadMappingFromCSV() {
-        String file = System.getProperty("user.dir") + "/resources/mapping-3col-test.csv";
+//        String file = System.getProperty("user.dir") + "/resources/mapping-3col-test.csv";
+        String file = Thread.currentThread().getContextClassLoader().getResource("mapping-3col-test.csv").getPath();
         CSVMappingReader r = new CSVMappingReader(file);
         AMapping map = r.read();
         assertTrue(map.equals(refMap));
@@ -36,7 +38,8 @@ public class MappingReaderTest {
     
     @Test
     public void testReadMappingFrom2ColumnsCSV() {
-        String file = System.getProperty("user.dir") + "/resources/mapping-2col-test.csv";
+//        String file = System.getProperty("user.dir") + "/resources/mapping-2col-test.csv";
+        String file = Thread.currentThread().getContextClassLoader().getResource("mapping-2col-test.csv").getPath();
         CSVMappingReader r = new CSVMappingReader(file);
         AMapping map = r.read();
         map.setPredicate("http://linkedgeodata.org/ontology/near");

@@ -526,8 +526,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getRestaurant() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER,"datasets/");
-        param.put(MapKey.DATASET_FOLDER,"datasets/Restaurants/");
+        param.put(MapKey.BASE_FOLDER,"src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER,"src/main/resources/datasets/Restaurants/");
         param.put(MapKey.CONFIG_FILE, "restaurants.xml");
         param.put(MapKey.REFERENCE_FILE, "restaurant1_restaurant2_goldstandard.rdf");
         param.put(MapKey.SOURCE_FILE, "restaurant1.nt");
@@ -578,8 +578,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getRestaurantFull() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER,"datasets/");
-        param.put(MapKey.DATASET_FOLDER,"datasets/Restaurants/");
+        param.put(MapKey.BASE_FOLDER,"src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER,"src/main/resources/datasets/Restaurants/");
         param.put(MapKey.CONFIG_FILE, "restaurants.xml");
         param.put(MapKey.REFERENCE_FILE, "restaurant1_restaurant2_goldstandard.rdf");
         param.put(MapKey.SOURCE_FILE, "restaurant1.nt");
@@ -665,8 +665,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getDBLPACM() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER,"datasets/"/* "Examples/GeneticEval/" */);
-        param.put(MapKey.DATASET_FOLDER,"datasets/DBLP-ACM/" /* "Datasets/DBLP-ACM/" */);
+        param.put(MapKey.BASE_FOLDER,"src/main/resources/datasets/"/* "Examples/GeneticEval/" */);
+        param.put(MapKey.DATASET_FOLDER,"src/main/resources/datasets/DBLP-ACM/" /* "Datasets/DBLP-ACM/" */);
         param.put(MapKey.CONFIG_FILE, "PublicationData.xml");
         param.put(MapKey.REFERENCE_FILE, "DBLP-ACM_perfectMapping.csv");
         param.put(MapKey.SOURCE_FILE, "ACM.csv");

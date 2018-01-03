@@ -27,7 +27,8 @@ public class FileQueryModuleTest {
 
         KBInfo kbinfo = new KBInfo(
                 "DBpedia",                                                            //String id
-                "resources/ibuprofen.nt",                                            //String endpoint
+//                "resources/ibuprofen.nt",                                            //String endpoint
+                Thread.currentThread().getContextClassLoader().getResource("ibuprofen.nt").getPath(),
                 null,                                                                //String graph
                 "?x",                                                                //String var
                 new ArrayList<String>(Arrays.asList("rdfs:label")),                    //List<String> properties
@@ -36,7 +37,9 @@ public class FileQueryModuleTest {
                 functions,                                                        //Map<String, Map<String, String>> functions
                 prefixes,                                                            //Map<String, String> prefixes
                 1000,                                                                //int pageSize
-                "N3"                                                                //String type
+                "N3",                                                                //String type
+                -1,                                                               //int minOffset
+                -1                                                                //int maxoffset
         );
         FileQueryModule fqm = new FileQueryModule(kbinfo);
         HybridCache cache = new HybridCache();

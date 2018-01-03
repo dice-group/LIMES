@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 public class MeshEuclid extends BooleanEuclid {
 	protected static Logger logger = Logger.getLogger(MeshEuclid.class);
 	
-	static final String ALGORITHM_NAME = MLAlgorithmFactory.EUCLID_MESH;
+	public static final String ALGORITHM_NAME = MLAlgorithmFactory.EUCLID_MESH;
 	
 	public static final String GRID_POINTS = "grid_points";
 
@@ -67,4 +67,17 @@ public class MeshEuclid extends BooleanEuclid {
 	protected String getName() {
 		return ALGORITHM_NAME;
 	}
+	
+	@Override
+	protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
+		assert (mlModel.classifiersSet());
+		List<SimpleClassifier> classifiers = mlModel.getClassifiers();
+		assert(classifiers.size()>0);
+		MeshBasedSelfConfigurator le = new MeshBasedSelfConfigurator(source, target);
+		configureEuclid(le);
+		AMapping map = le.getMapping(classifiers);
+		logger.info("Should predict with mlModel on Caches +"+source.size()+","+target.size()+"+ resulted in "+map.size()+" map.");
+		return map;
+	}
+
 }

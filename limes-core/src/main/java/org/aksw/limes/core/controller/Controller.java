@@ -7,7 +7,7 @@ import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
-import org.aksw.limes.core.gui.LimesGUI;
+//import org.aksw.limes.core.gui.LimesGUI;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
@@ -37,7 +37,7 @@ public class Controller {
 
     public static final String DEFAULT_LOGGING_PATH = "limes.log";
     private static final int MAX_ITERATIONS_NUMBER = 10;
-    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
+    private static Logger logger = null;
     private static int serverPort = 8080;
     private static Options options = getOptions();
 
@@ -52,13 +52,14 @@ public class Controller {
         CommandLine cmd = parseCommandLine(args);
         System.setProperty("logFilename", cmd.hasOption('o') ? cmd.getOptionValue("o") : DEFAULT_LOGGING_PATH);
         ((org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false)).reconfigure();
+        logger = LoggerFactory.getLogger(Controller.class);
         // II. Digest Options
         if (cmd.hasOption('h')) {
             printHelp();
             System.exit(0);
-        } else if (cmd.hasOption('g')){
-            LimesGUI.startGUI(new String[0]);
-            System.exit(0);
+//        } else if (cmd.hasOption('g')){
+//            LimesGUI.startGUI(new String[0]);
+//            System.exit(0);
         } else if (cmd.hasOption('s')){
             int port = serverPort;
             if (cmd.hasOption('p')) port = Integer.parseInt(cmd.getOptionValue('p'));
@@ -91,6 +92,8 @@ public class Controller {
     }
 
     public static Configuration getConfig(CommandLine cmd) {
+        if (logger == null)
+            logger = LoggerFactory.getLogger(Controller.class);
         // 1. Determine appropriate ConfigurationReader
         String format = "xml";
         String fileNameOrUri = cmd.getArgs()[0];
@@ -132,6 +135,8 @@ public class Controller {
      *
      */
     public static ResultMappings getMapping(Configuration config) {
+        if (logger == null)
+            logger = LoggerFactory.getLogger(Controller.class);
         AMapping results = null;
 
         // 3. Fill Caches
@@ -190,7 +195,7 @@ public class Controller {
      */
     private static Options getOptions() {
         Options options = new Options();
-        options.addOption("g", false, "Run LIMES GUI");
+//        options.addOption("g", false, "Run LIMES GUI");
         options.addOption("s", false, "Run LIMES Server");
         options.addOption("h", false, "Show this help");
         options.addOption("o", true, "Set path of log file. Default is 'limes.log'");

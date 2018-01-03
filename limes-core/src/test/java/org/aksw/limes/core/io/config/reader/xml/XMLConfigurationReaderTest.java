@@ -50,7 +50,9 @@ public class XMLConfigurationReaderTest {
                 functions,                                                        //Map<String, Map<String, String>> functions
                 prefixes,                                                         //Map<String, String> prefixes
                 2000,                                                             //int pageSize
-                "sparql"                                                          //String type
+                "sparql",                                                         //String type
+                -1,                                                               //int minOffset
+                -1                                                                //int maxoffset
         );
 
         targetInfo = new KBInfo(
@@ -64,7 +66,9 @@ public class XMLConfigurationReaderTest {
                 functions,                                                        //Map<String, Map<String, String>> functions
                 prefixes,                                                         //Map<String, String> prefixes
                 2000,                                                             //int pageSize
-                "sparql"                                                          //String type
+                "sparql",                                                         //String type
+                -1,                                                               //int minOffset
+                -1                                                                //int maxoffset
         );
         
         testConf = new Configuration();
@@ -88,7 +92,8 @@ public class XMLConfigurationReaderTest {
         testConf.setExecutionPlanner("default");
         testConf.setExecutionEngine("default");
 
-        String file= System.getProperty("user.dir") + "/resources/lgd-lgd.xml";
+//        String file= System.getProperty("user.dir") + "/resources/lgd-lgd.xml";
+        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.xml").getPath();
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
 
@@ -108,8 +113,6 @@ public class XMLConfigurationReaderTest {
         String file= System.getProperty("user.dir") + "/resources/lgd-lgd-optional-properties.xml";
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
-        System.out.println("testConf:\n" + testConf);
-        System.out.println("\n\nfileConf:\n" + fileConf);
         assertTrue(testConf.equals(fileConf));
     }
     
@@ -127,7 +130,8 @@ public class XMLConfigurationReaderTest {
         testConf.setTrainingDataFile("trainingData.nt");
         testConf.setMlAlgorithmParameters(mlParameters);
 
-        String file = System.getProperty("user.dir") +"/resources/lgd-lgd-ml.xml";
+//        String file = System.getProperty("user.dir") +"/resources/lgd-lgd-ml.xml";
+        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd-ml.xml").getPath();
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
         

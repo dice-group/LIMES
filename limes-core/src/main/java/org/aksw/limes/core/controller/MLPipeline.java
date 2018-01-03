@@ -38,14 +38,14 @@ public class MLPipeline {
             ACache source,
             ACache target,
             Configuration configuration,
-            String mlAlgrorithmName,
+            String mlAlgorithmName,
             MLImplementationType mlImplementationType,
             List<LearningParameter> learningParameters,
             String trainingDataFile,
             EvaluatorType pfmType,
             int maxIt
     ) throws UnsupportedMLImplementationException {
-        Class<? extends ACoreMLAlgorithm> clazz = MLAlgorithmFactory.getAlgorithmType(mlAlgrorithmName);
+        Class<? extends ACoreMLAlgorithm> clazz = MLAlgorithmFactory.getAlgorithmType(mlAlgorithmName);
         MLResults mlm;
         AMapping trainingDataMap = MappingFactory.createDefaultMapping();
         if (
@@ -60,7 +60,8 @@ public class MLPipeline {
                 SupervisedMLAlgorithm mls = new SupervisedMLAlgorithm(clazz);
                 mls.init(learningParameters, source, target);
                 mls.getMl().setConfiguration(configuration);
-               mlm = mls.learn(trainingDataMap);
+                mlm = mls.learn(trainingDataMap);
+                logger.info("Learned: " + mlm.getLinkSpecification().getFullExpression() + " with threshold: " + mlm.getLinkSpecification().getThreshold());
                 return mls.predict(source, target, mlm);
             case SUPERVISED_ACTIVE:
                 // for active learning, need to reiterate and prompt the user for evaluation of examples:
@@ -108,6 +109,7 @@ public class MLPipeline {
                     }
                     mlm = mla.activeLearn(nextExamples);
                 }
+                logger.info("Learned: " + mlm.getLinkSpecification().getFullExpression() + " with threshold: " + mlm.getLinkSpecification().getThreshold());
                 return mla.predict(source, target, mlm);
             case UNSUPERVISED:
                 UnsupervisedMLAlgorithm mlu = new UnsupervisedMLAlgorithm(clazz);
@@ -118,6 +120,7 @@ public class MLPipeline {
                     pfm = (PseudoFMeasure) EvaluatorFactory.create(pfmType);
                 }
                 mlm = mlu.learn(pfm);
+                logger.info("Learned: " + mlm.getLinkSpecification().getFullExpression() + " with threshold: " + mlm.getLinkSpecification().getThreshold());
                 return mlu.predict(source, target, mlm);
             default:
                 throw new UnsupportedMLImplementationException(clazz.getName());

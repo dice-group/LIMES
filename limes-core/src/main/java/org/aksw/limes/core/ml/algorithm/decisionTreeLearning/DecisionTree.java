@@ -375,10 +375,14 @@ public class DecisionTree {
 			cloned = this.cloneWithoutParent();
 			if (this.isLeftNode) {
 				parentClone.leftChild = cloned;
-				parentClone.rightChild = this.parent.rightChild.cloneWithoutParent();
+				if(this.parent.rightChild != null){
+					parentClone.rightChild = this.parent.rightChild.cloneWithoutParent();
+				}
 			} else {
 				parentClone.rightChild = cloned;
-				parentClone.leftChild = this.parent.leftChild.cloneWithoutParent();
+				if(this.parent.leftChild != null){
+					parentClone.leftChild = this.parent.leftChild.cloneWithoutParent();
+				}
 			}
 		}
 		return cloned;

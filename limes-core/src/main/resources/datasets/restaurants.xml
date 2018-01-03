@@ -13,14 +13,7 @@
 		<NAMESPACE>http://www.w3.org/2002/07/owl#</NAMESPACE>
 		<LABEL>owl</LABEL>
 	</PREFIX>
-	<PREFIX>
-		<NAMESPACE>http://www.okkam.org/ontology_person1.owl#</NAMESPACE>
-		<LABEL>okkamperson1</LABEL>
-	</PREFIX>
-	<PREFIX>
-		<NAMESPACE>http://www.okkam.org/ontology_person2.owl#</NAMESPACE>
-		<LABEL>okkamperson2</LABEL>
-	</PREFIX>
+	
 	<PREFIX>
 		<NAMESPACE>http://www.okkam.org/ontology_restaurant2.owl#</NAMESPACE>
 		<LABEL>okkamrestaurant2</LABEL>
@@ -34,11 +27,11 @@
 		<ENDPOINT>datasets/Restaurants/restaurant1.nt</ENDPOINT>
 		<VAR>?x</VAR>
 		<PAGESIZE>1000</PAGESIZE>
-		<RESTRICTION>?x rdf:type http://www.okkam.org/ontology_restaurant1.owl#Restaurant</RESTRICTION>
-		<PROPERTY>http://www.okkam.org/ontology_restaurant1.owl#has_address AS lowercase</PROPERTY>
-		<PROPERTY>http://www.okkam.org/ontology_restaurant1.owl#category AS lowercase</PROPERTY>
-		<PROPERTY>http://www.okkam.org/ontology_restaurant1.owl#phone_number</PROPERTY>
-		<PROPERTY>http://www.okkam.org/ontology_restaurant1.owl#name AS lowercase</PROPERTY>
+		<RESTRICTION>?x rdf:type okkamrestaurant1:Restaurant</RESTRICTION>
+		<PROPERTY>okkamrestaurant1:has_address AS lowercase</PROPERTY>
+		<PROPERTY>okkamrestaurant1:category AS lowercase</PROPERTY>
+		<PROPERTY>okkamrestaurant1:phone_number</PROPERTY>
+		<PROPERTY>okkamrestaurant1:name AS lowercase</PROPERTY>
 
 		<TYPE>N3</TYPE>
 </SOURCE>
@@ -48,15 +41,15 @@
 		<ENDPOINT>datasets/Restaurants/restaurant2.nt</ENDPOINT>
 		<VAR>?y</VAR>
 		<PAGESIZE>1000</PAGESIZE>
-		<RESTRICTION>?x rdf:type http://www.okkam.org/ontology_restaurant2.owl#Restaurant</RESTRICTION>
-		<PROPERTY>http://www.okkam.org/ontology_restaurant2.owl#has_address AS lowercase</PROPERTY>
-		<PROPERTY>http://www.okkam.org/ontology_restaurant2.owl#phone_number</PROPERTY>
-		<PROPERTY>http://www.okkam.org/ontology_restaurant2.owl#name AS lowercase</PROPERTY>
+		<RESTRICTION>?x rdf:type okkamrestaurant2:Restaurant</RESTRICTION>
+		<PROPERTY>okkamrestaurant2:has_address AS lowercase</PROPERTY>
+		<PROPERTY>okkamrestaurant2:phone_number</PROPERTY>
+		<PROPERTY>okkamrestaurant2:name AS lowercase</PROPERTY>
 
 		<TYPE>N3</TYPE>
 	</TARGET>	
 
-	<METRIC>levenshtein(x.http://www.okkam.org/ontology_restaurant1.owl#name, y.http://www.okkam.org/ontology_restaurant2.owl#name)</METRIC>
+	<METRIC>levenshtein(x.okkamrestaurant1:name, y.okkamrestaurant2:name)</METRIC>
 
 	<ACCEPTANCE>
 		<THRESHOLD>0.98</THRESHOLD>

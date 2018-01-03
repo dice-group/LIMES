@@ -153,6 +153,10 @@ public class DecisionTreeTest {
 		assertNull(root3);
 	}
 	
+	@Test
+	public void testGetTotalMapping(){
+		
+	}
 
 	private DecisionTree setGoldTree2(DecisionTreeLearning decisionTreeLearning) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException{
 		

@@ -56,7 +56,9 @@ public class RDFConfigurationReaderTest {
                 functions,                                                        //Map<String, Map<String, String>> functions
                 prefixes,                                                         //Map<String, String> prefixes
                 2000,                                                             //int pageSize
-                "sparql"                                                          //String type
+                "sparql",                                                         //String type
+                -1,                                                               //int minOffset
+                -1                                                                //int maxoffset
         );
 
         targetInfo = new KBInfo(
@@ -70,7 +72,9 @@ public class RDFConfigurationReaderTest {
                 functions,                                                        //Map<String, Map<String, String>> functions
                 prefixes,                                                         //Map<String, String> prefixes
                 2000,                                                             //int pageSize
-                "sparql"                                                          //String type
+                "sparql",                                                         //String type
+                -1,                                                               //int minOffset
+                -1                                                                //int maxoffset                
         );
         
         testConf = new Configuration();
@@ -99,7 +103,9 @@ public class RDFConfigurationReaderTest {
         testConf.setMlAlgorithmName("wombat simple");
         testConf.setMlAlgorithmParameters(mlParameters);
 
-        String file = SYSTEM_DIR + "/resources/lgd-lgd-ml.ttl";
+//        String file = System.getProperty("user.dir") + "/resources/lgd-lgd-ml.ttl";
+
+        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd-ml.ttl").getPath();
         RDFConfigurationReader c = new RDFConfigurationReader(file);
         Configuration fileConf = c.read();
         assertTrue(testConf.equals(fileConf));
@@ -108,8 +114,17 @@ public class RDFConfigurationReaderTest {
     @Test
     public void testRDFReaderForMetric() {
         testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
-        
-        String file = SYSTEM_DIR + "/resources/lgd-lgd.ttl";
+        testConf.setAcceptanceRelation("lgdo:near");       
+        testConf.setVerificationRelation("lgdo:near");
+        testConf.setAcceptanceThreshold(0.9); 
+        testConf.setAcceptanceFile("lgd_relaybox_verynear.nt");
+        testConf.setVerificationThreshold(0.5);
+        testConf.setVerificationFile("lgd_relaybox_near.nt");
+        testConf.setOutputFormat("TAB");
+
+//        String file = System.getProperty("user.dir") + "/resources/lgd-lgd.ttl";
+        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd.ttl").getPath();
+
         RDFConfigurationReader c = new RDFConfigurationReader(file);
         Configuration fileConf = c.read();
         assertTrue(testConf.equals(fileConf));
@@ -124,10 +139,7 @@ public class RDFConfigurationReaderTest {
 
         String file = SYSTEM_DIR + "/resources/lgd-lgd-optional-properties.ttl";
         RDFConfigurationReader c = new RDFConfigurationReader(file);
-        Configuration fileConf = c.read();
-        
-        System.out.println("testConf:\n" + testConf);
-        System.out.println("\n\nfileConf:\n" + fileConf);
+        Configuration fileConf = c.read();       
         
         assertTrue(testConf.equals(fileConf));
     }

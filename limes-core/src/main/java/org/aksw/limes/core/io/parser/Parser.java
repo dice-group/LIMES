@@ -1,5 +1,8 @@
 package org.aksw.limes.core.io.parser;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.exceptions.UnsupportedOperator;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
@@ -20,8 +23,8 @@ public class Parser implements IParser {
     public static final String ADD = "ADD";
     public static final String MAX = "MAX";
     public static final String MIN = "MIN";
-    protected double leftCoefficient;
-    protected double rightCoefficient;
+    protected double leftCoefficient = -1.0;
+    protected double rightCoefficient = -1.0;
     protected String leftTerm;
     protected String rightTerm;
     protected String operator;
@@ -80,12 +83,16 @@ public class Parser implements IParser {
     }
 
     public double getLeftCoefficient() {
+    	if(leftCoefficient != -1.0){
+    		return leftCoefficient;
+    	}
         leftCoefficient = 1.0;
+        logger.debug("Parsing " + getRightTerm());
         if (leftTerm.contains("*")) {
             String split[] = leftTerm.split("\\*");
             try {
                 leftCoefficient = Double.parseDouble(split[0]);
-                leftTerm = split[1];
+                leftTerm = Arrays.asList(split).stream().skip(1).collect(Collectors.joining("*"));
             } catch (Exception e) {
                 logger.warn("Error parsing " + leftTerm + " for coefficient <" + leftCoefficient + ">");
                 leftCoefficient = 1;
@@ -100,13 +107,16 @@ public class Parser implements IParser {
      * @return right coefficient
      */
     public double getRightCoefficient() {
+    	if(rightCoefficient != -1.0){
+    		return rightCoefficient;
+    	}
         rightCoefficient = 1;
         logger.debug("Parsing " + getRightTerm());
         if (rightTerm.contains("*")) {
             String split[] = rightTerm.split("\\*");
             try {
                 rightCoefficient = Double.parseDouble(split[0]);
-                rightTerm = split[1];
+                rightTerm = Arrays.asList(split).stream().skip(1).collect(Collectors.joining("*"));
             } catch (Exception e) {
                 rightCoefficient = 1.0;
                 logger.warn("Error parsing " + rightTerm + " for coefficient");
@@ -140,6 +150,8 @@ public class Parser implements IParser {
                 }
             }
 
+            leftCoefficient = -1.0;
+            rightCoefficient = -1.0;
             getLeftCoefficient();
             getRightCoefficient();
             // now compute thresholds based on operations
