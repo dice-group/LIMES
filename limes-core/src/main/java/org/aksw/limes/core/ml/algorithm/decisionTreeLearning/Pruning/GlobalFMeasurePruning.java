@@ -48,19 +48,35 @@ public class GlobalFMeasurePruning extends PruningFunctionDTL{
 //            System.out.println("left: " + tmpLeftChild);
             boolean deleteLeft = false;
             boolean deleteRight = false;
+            
+            
+            boolean leftalreadynull = false;
+            boolean rightalreadynull = false;
+            if(tmpLeftChild == null){
+            	leftalreadynull = true;
+            }
+            if(tmpRightChild == null){
+            	rightalreadynull = true;
+            }
+            
+            
+            
+            
             node.setRightChild(null);
             double tmp = 0.0;
-            tmp = node.calculateFMeasure(node.getTotalMapping(), node.getRefMapping());
-//            System.out.println(returnRoot(node));
-//            System.out.println("right null: " + tmp);
+            AMapping withoutRight = node.getTotalMapping();
+            tmp = node.calculateFMeasure(withoutRight, node.getRefMapping());
+            System.out.println(returnRoot(node));
+            System.out.println("right null: " + tmp);
             if (tmp >= DecisionTree.totalFMeasure) {
                 deleteRight = true;
             }
             node.setRightChild(tmpRightChild);
             node.setLeftChild(null);
-            tmp = node.calculateFMeasure(node.getTotalMapping(), node.getRefMapping());
-//            System.out.println(returnRoot(node));
-//            System.out.println("left null: " + tmp);
+            AMapping withoutLeft = node.getTotalMapping();
+            tmp = node.calculateFMeasure(withoutLeft, node.getRefMapping());
+            System.out.println(returnRoot(node));
+            System.out.println("left null: " + tmp );
             if (tmp >= DecisionTree.totalFMeasure) {
                 DecisionTree.totalFMeasure = tmp;
                 deleteLeft = true;
@@ -68,14 +84,27 @@ public class GlobalFMeasurePruning extends PruningFunctionDTL{
             }
             node.setRightChild(null);
             node.setLeftChild(null);
-            tmp = node.calculateFMeasure(node.getTotalMapping(), node.getRefMapping());
-//            System.out.println(returnRoot(node));
-//            System.out.println("both null: " + tmp);
+            AMapping withoutBoth = node.getTotalMapping();
+            tmp = node.calculateFMeasure(withoutBoth, node.getRefMapping());
+            System.out.println(returnRoot(node));
+            System.out.println("both null: " + tmp + "\n");
             if (tmp >= DecisionTree.totalFMeasure) {
                 DecisionTree.totalFMeasure = tmp;
                 deleteLeft = true;
                 deleteRight = true;
             }
+            
+            
+            
+            
+            if(leftalreadynull){
+            	assert withoutRight.equals(withoutBoth);
+            }
+            if(rightalreadynull){
+            	assert withoutLeft.equals(withoutBoth);
+            }
+            
+            
 //            if(node.isRoot()){
 //            	if(tmpLeftChild != null){
 //            	tmpLeftChild.setLeftChild(null);
@@ -115,12 +144,12 @@ public class GlobalFMeasurePruning extends PruningFunctionDTL{
             if (!deleteRight) {
                 node.setRightChild(tmpRightChild);
             }
-            System.out.println("Result: " + node);
+//            System.out.println("Result: " + node);
 			return node;
 		}
 		
 		public static void main(String[] args) throws UnsupportedMLImplementationException{
-			EvaluationData c = DataSetChooser.getData("dblpacm");
+			EvaluationData c = DataSetChooser.getData("amazongoogleproducts");
 			int FOLDS_COUNT = 10;
 				List<FoldData> folds = DTLEvaluation.generateFolds(c);
 
@@ -171,24 +200,24 @@ public class GlobalFMeasurePruning extends PruningFunctionDTL{
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
 					
 					
-					MLResults resone = new MLResults(one, null, 0.0, null);
-					MLResults restwo = new MLResults(two, null, 0.0, null);
-					AMapping mapping1in = dtl.predict(trainSourceCache, trainTargetCache, resone);
-					AMapping mapping2in = dtl.predict(trainSourceCache, trainTargetCache, restwo);
-					System.out.println(one);
-					System.out.println(two);
-					System.out.println(twomap.size());
-					System.out.println(mapping2in.size());
-					System.out.println("onein: " + new FMeasure().calculate(mapping1in,
-							new GoldStandard(trainData.map, trainSourceCache.getAllUris(), trainTargetCache.getAllUris())));
-					System.out.println("twoin: " + new FMeasure().calculate(mapping2in,
-							new GoldStandard(trainData.map, trainSourceCache.getAllUris(), trainTargetCache.getAllUris())));
-					AMapping mapping1 = dtl.predict(testSourceCache, testTargetCache, resone);
-					AMapping mapping2 = dtl.predict(testSourceCache, testTargetCache, restwo);
-					System.out.println("one: " + new FMeasure().calculate(mapping1,
-							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris())));
-					System.out.println("two: " + new FMeasure().calculate(mapping2,
-							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris())));
+//					MLResults resone = new MLResults(one, null, 0.0, null);
+//					MLResults restwo = new MLResults(two, null, 0.0, null);
+//					AMapping mapping1in = dtl.predict(trainSourceCache, trainTargetCache, resone);
+//					AMapping mapping2in = dtl.predict(trainSourceCache, trainTargetCache, restwo);
+//					System.out.println(one);
+//					System.out.println(two);
+//					System.out.println(twomap.size());
+//					System.out.println(mapping2in.size());
+//					System.out.println("onein: " + new FMeasure().calculate(mapping1in,
+//							new GoldStandard(trainData.map, trainSourceCache.getAllUris(), trainTargetCache.getAllUris())));
+//					System.out.println("twoin: " + new FMeasure().calculate(mapping2in,
+//							new GoldStandard(trainData.map, trainSourceCache.getAllUris(), trainTargetCache.getAllUris())));
+//					AMapping mapping1 = dtl.predict(testSourceCache, testTargetCache, resone);
+//					AMapping mapping2 = dtl.predict(testSourceCache, testTargetCache, restwo);
+//					System.out.println("one: " + new FMeasure().calculate(mapping1,
+//							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris())));
+//					System.out.println("two: " + new FMeasure().calculate(mapping2,
+//							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris())));
 
 					AMapping mapping = dtl.predict(testSourceCache, testTargetCache, res);
 					double giGFM = new FMeasure().calculate(mapping,

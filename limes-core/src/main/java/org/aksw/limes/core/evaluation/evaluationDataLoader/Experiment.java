@@ -33,7 +33,7 @@ public class Experiment {
     public static AMapping readOAEIMapping(String file) {
         AMapping m = MappingFactory.createDefaultMapping();
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(Experiment.class.getClassLoader().getResourceAsStream(file)));
             //read properties;
             String s = reader.readLine();
             String e1 = "", e2;

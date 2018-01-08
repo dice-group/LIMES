@@ -110,7 +110,7 @@ public class DTLEvaluation {
 
 	public static void main(String[] args) {
 		try {
-			performCrossValidationLowerMinPropertyCoverageMiddlePoints(args[0]);
+			performCrossvalidationGiniGlobalFMPruning(args[0]);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -130,6 +130,164 @@ public class DTLEvaluation {
 			} else {
 				logger.info(f.getPath() + " already exists");
 			}
+		}
+	}
+
+	public static void performCrossvalidationGiniGlobalFMPruning(String baseFolder) throws FileNotFoundException {
+
+		// ================================================================================================================
+		// Set up output
+		// ================================================================================================================
+		long start;
+		long end;
+		String fMeasureBase = baseFolder + "FMeasure/";
+		String precisionBase = baseFolder + "Precision/";
+		String recallBase = baseFolder + "Recall/";
+		String timeBase = baseFolder + "Time/";
+		String sizeBase = baseFolder + "Size/";
+		createDirectoriesIfNecessarry(baseFolder, fMeasureBase, precisionBase, recallBase, timeBase, sizeBase);
+
+		String[] datasets = { "dbplinkedmdb", "person1full", "person2full", "drugs", "restaurantsfull", "dblpacm",
+				"abtbuy", "dblpscholar", "amazongoogleproducts" };
+		String header = "Data\tGinGlob\n";
+
+		for (int k = 0; k < 10; k++) {
+
+			PrintWriter writerFMeasure = new PrintWriter(new FileOutputStream(fMeasureBase + k + ".csv", false));
+			writerFMeasure.write(header);
+			String datalineFMeasure = "";
+			PrintWriter writerPrecision = new PrintWriter(new FileOutputStream(precisionBase + k + ".csv", false));
+			writerPrecision.write(header);
+			String datalinePrecision = "";
+			PrintWriter writerRecall = new PrintWriter(new FileOutputStream(recallBase + k + ".csv", false));
+			writerRecall.write(header);
+			String datalineRecall = "";
+			PrintWriter writerTime = new PrintWriter(new FileOutputStream(timeBase + k + ".csv", false));
+			writerTime.write(header);
+			String datalineTime = "";
+			PrintWriter writerSize = new PrintWriter(new FileOutputStream(sizeBase + k + ".csv", false));
+			writerSize.write(header);
+			String datalineSize = "";
+
+			// ================================================================================================================
+			// Set up training data folds and caches
+			// ================================================================================================================
+
+			for (String dataName : datasets) {
+				logger.info("\n\n >>>>>>>>>>>>> " + dataName.toUpperCase() + "<<<<<<<<<<<<<<<<<\n\n");
+				DecisionTreeLearning.useJ48optimized = false;
+				DecisionTreeLearning.useJ48 = false;
+				EvaluationData c = DataSetChooser.getData(dataName);
+				folds = generateFolds(c);
+
+				FoldData trainData = new FoldData();
+				FoldData testData = folds.get(FOLDS_COUNT - 1);
+				// perform union on test folds
+				for (int i = 0; i < FOLDS_COUNT; i++) {
+					if (i != 9) {
+						trainData.map = MappingOperations.union(trainData.map, folds.get(i).map);
+						trainData.sourceCache = cacheUnion(trainData.sourceCache, folds.get(i).sourceCache);
+						trainData.targetCache = cacheUnion(trainData.targetCache, folds.get(i).targetCache);
+					}
+				}
+				// fix caches if necessary
+				for (String s : trainData.map.getMap().keySet()) {
+					for (String t : trainData.map.getMap().get(s).keySet()) {
+						if (!trainData.targetCache.containsUri(t)) {
+							// logger.info("target: " + t);
+							trainData.targetCache.addInstance(c.getTargetCache().getInstance(t));
+						}
+					}
+					if (!trainData.sourceCache.containsUri(s)) {
+						// logger.info("source: " + s);
+						trainData.sourceCache.addInstance(c.getSourceCache().getInstance(s));
+					}
+				}
+
+				AMapping trainingData = trainData.map;
+				ACache trainSourceCache = trainData.sourceCache;
+				ACache trainTargetCache = trainData.targetCache;
+				ACache testSourceCache = testData.sourceCache;
+				ACache testTargetCache = testData.targetCache;
+
+				// ================================================================================================================
+				// Learning Phase
+				// ================================================================================================================
+				try {
+					AMLAlgorithm dtl = null;
+					Configuration config = null;
+					MLResults res = null;
+					AMapping mapping = null;
+
+
+					// ========================================
+					logger.info("========Gini + Global==========");
+
+					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+							MLImplementationType.SUPERVISED_BATCH);
+					logger.info("source size: " + testSourceCache.size());
+					logger.info("target size: " + testTargetCache.size());
+					dtl.init(null, trainSourceCache, trainTargetCache);
+					config = c.getConfigReader().read();
+					dtl.getMl().setConfiguration(config);
+					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					start = System.currentTimeMillis();
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION, new GlobalFMeasurePruning());
+					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.4);
+					res = dtl.asSupervised().learn(trainingData);
+					end = System.currentTimeMillis();
+					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
+					mapping = dtl.predict(testSourceCache, testTargetCache, res);
+					double giGFM = new FMeasure().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGPrecision = new Precision().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					double giGRecall = new Recall().calculate(mapping,
+							new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris()));
+					int giGSize = res.getLinkSpecification().size();
+					logger.info("FMeasure: " + giGFM);
+					logger.info("Precision: " + giGPrecision);
+					logger.info("Recall: " + giGRecall);
+					long giGTime = (end - start);
+					logger.info("Time: " + giGTime);
+					logger.info("Size: " + giGSize);
+
+
+					// ================================================================================================================
+					// Print results for iteration
+					// ================================================================================================================
+
+					datalineFMeasure += dataName + "\t" + giGFM + "\n";
+					writerFMeasure.write(datalineFMeasure);
+					datalineFMeasure = "";
+
+					datalinePrecision += dataName + "\t" + giGPrecision +"\n";
+					writerPrecision.write(datalinePrecision);
+					datalinePrecision = "";
+
+					datalineRecall += dataName + "\t" + giGRecall + "\n";
+					writerRecall.write(datalineRecall);
+					datalineRecall = "";
+
+					datalineTime += dataName + "\t" + giGTime + "\n";
+					writerTime.write(datalineTime);
+					datalineTime = "";
+
+					datalineSize += dataName + "\t" + giGSize + "\n";
+					writerSize.write(datalineSize);
+					datalineSize = "";
+				} catch (UnsupportedMLImplementationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			writerFMeasure.close();
+			writerPrecision.close();
+			writerRecall.close();
+			writerTime.close();
+			writerSize.close();
 		}
 	}
 

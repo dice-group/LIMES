@@ -193,14 +193,14 @@ public class GiniIndex extends FitnessFunctionDTL {
 		double rightAll = rightFraction[0] + rightFraction[1];
 		double leftWeight = (leftAll) / currentMapping.size();
 		double rightWeight = (rightAll) / currentMapping.size();
-		System.out.println("leftAll: " + leftAll);
-		System.out.println("rightAll: " + rightAll);
-		System.out.println("leftWeight: " + leftWeight);
-		System.out.println("rightWeight: " + rightWeight);
-		System.out.println("left gini: " + gini(leftFraction[0]/leftAll, leftFraction[1]/leftAll));
-		System.out.println("right gini: " + gini(rightFraction[0]/rightAll, rightFraction[1]/rightAll));
+//		System.out.println("leftAll: " + leftAll);
+//		System.out.println("rightAll: " + rightAll);
+//		System.out.println("leftWeight: " + leftWeight);
+//		System.out.println("rightWeight: " + rightWeight);
+//		System.out.println("left gini: " + gini(leftFraction[0]/leftAll, leftFraction[1]/leftAll));
+//		System.out.println("right gini: " + gini(rightFraction[0]/rightAll, rightFraction[1]/rightAll));
 		double avgGini = leftWeight * gini(leftFraction[0]/leftAll, leftFraction[1]/leftAll) + rightWeight * gini(rightFraction[0]/rightAll,rightFraction[1]/rightAll);
-		System.out.println("avgGini: " + avgGini);
+//		System.out.println("avgGini: " + avgGini);
 		return avgGini;
 	}
 
@@ -252,7 +252,7 @@ public class GiniIndex extends FitnessFunctionDTL {
 					}
 					if (splitpoint != oldSplitpoint) {
 						oldSplitpoint = splitpoint;
-						System.out.println("\n" + mE + "|" + splitpoint);
+//						System.out.println("\n" + mE + "|" + splitpoint);
 						double gain = avgGini(currentNode, lessThanI, moreThanEqualsI);
 						logger.debug("Gain: " + gain + " for " + mE.metricExpression + "|" + splitpoint);
 						if (gain < bestGain) {

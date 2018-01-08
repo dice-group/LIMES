@@ -7,6 +7,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
@@ -27,6 +28,7 @@ import org.junit.Test;
 
 public class DecisionTreeTest {
 
+	public DecisionTree goldTreeMapping;
 	public DecisionTree goldTree2;
 	public AMLAlgorithm dtl;
 	public AMLAlgorithm dtl2;
@@ -71,6 +73,7 @@ public class DecisionTreeTest {
 		try {
 //			goldTree = setGoldTree(decisionTreeLearning);
 			goldTree2 = setGoldTree2(decisionTreeLearning2);
+			goldTreeMapping = setGoldTreeMapping(decisionTreeLearning2);
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -155,7 +158,80 @@ public class DecisionTreeTest {
 	
 	@Test
 	public void testGetTotalMapping(){
+
+		AMapping goldMap = MappingFactory.createDefaultMapping();
+		goldMap.add("B", "B", 1.0);
+		goldMap.add("C", "C", 1.0);
+		goldMap.add("D", "D", 1.0);
+		goldMap.add("E", "E", 1.0);
+		goldMap.add("F", "F", 1.0);
+
+		AMapping map = goldTreeMapping.getTotalMapping();
+		assertEquals(goldMap, map);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetPathMappings() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		Method calculatePathMappings = DecisionTree.class.getDeclaredMethod("calculatePathMappings", new Class[]{DecisionTree.class});
+		calculatePathMappings.setAccessible(true);
+//		List<String> pathstringsLeft = (List<String>) calculatePathMappings.invoke(goldTreeMapping.getLeftChild(), goldTreeMapping.getLeftChild());
+//		assertEquals(1, pathstringsLeft.size());
+//		List<String> pathstringsRight = (List<String>) calculatePathMappings.invoke(goldTreeMapping.getRightChild(), goldTreeMapping.getRightChild());
+//		assertEquals(1, pathstringsRight.size());
+		List<String> pathstrings = (List<String>) calculatePathMappings.invoke(goldTreeMapping, goldTreeMapping);
+		assertEquals(2, pathstrings.size());
+	}
+
+	private DecisionTree setGoldTreeMapping(DecisionTreeLearning decisionTreeLearning) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException{
 		
+		Field leftChildField = DecisionTree.class.getDeclaredField("leftChild");
+		leftChildField.setAccessible(true);
+		Field rightChildField = DecisionTree.class.getDeclaredField("rightChild");
+		rightChildField.setAccessible(true);
+
+		//root
+		DecisionTree root = createRoot(decisionTreeLearning,"jaccard", "att1", "att1", 1.0);
+		DecisionTree left = createNode(decisionTreeLearning,"cosine", "att2", "att2", 1.0, root, true);
+		DecisionTree right = createNode(decisionTreeLearning,"trigrams", "att3", "att3", 1.0, root, false);
+
+		leftChildField.set(root, left);
+		rightChildField.set(root, right);
+		
+		AMapping refMap = MappingFactory.createDefaultMapping();
+		refMap.add("A", "A", 1.0);
+		refMap.add("B", "B", 1.0);
+		refMap.add("C", "C", 1.0);
+		refMap.add("D", "D", 1.0);
+		refMap.add("E", "E", 1.0);
+		refMap.add("F", "F", 1.0);
+		refMap.add("G", "G", 1.0);
+		refMap.add("H", "H", 1.0);
+
+		AMapping rootMap = MappingFactory.createDefaultMapping();
+		rootMap.add("A", "A", 1.0);
+		rootMap.add("B", "B", 1.0);
+		rootMap.add("C", "C", 1.0);
+		
+		AMapping rightMap = MappingFactory.createDefaultMapping();
+		rightMap.add("C", "C", 1.0);
+		rightMap.add("H", "H", 1.0);
+
+		AMapping leftMap = MappingFactory.createDefaultMapping();
+		leftMap.add("B", "B", 1.0);
+		leftMap.add("D", "D", 1.0);
+		leftMap.add("E", "E", 1.0);
+		leftMap.add("F", "F", 1.0);
+
+		root.setRefMapping(refMap);
+		right.setRefMapping(refMap);
+		left.setRefMapping(refMap);
+
+		root.getClassifier().setMapping(rootMap);
+		left.getClassifier().setMapping(leftMap);
+		right.getClassifier().setMapping(rightMap);
+
+		return root;
 	}
 
 	private DecisionTree setGoldTree2(DecisionTreeLearning decisionTreeLearning) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException{

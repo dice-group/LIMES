@@ -176,6 +176,10 @@ public class DecisionTree {
 		// pathMappings = new HashMap<String, AMapping>();
 		DecisionTree rootNode = getRootNode();
 		List<String> pathStrings = calculatePathMappings(rootNode);
+		if(rootNode != null){
+			assert pathStrings.size() > 0;
+		}
+		System.out.println(pathStrings);
 		AMapping res = MappingFactory.createDefaultMapping();
 		Iterator<String> it = pathMappings.keySet().iterator();
 		while (it.hasNext()) {
@@ -228,29 +232,29 @@ public class DecisionTree {
 				String path = node.getPathString();
 				if (!pathMappings.keySet().contains(path)) {
 					pathMappings.put(path, res);
-					pathStrings.add(path);
 				}
+				pathStrings.add(path);
 			} else {
 				String path = node.getPathString();
 				if (!pathMappings.keySet().contains(path)) {
 					pathMappings.put(path, node.getPathMapping());
-					pathStrings.add(path);
 				}
+				pathStrings.add(path);
 			}
 		} else if (node.rightChild != null && node.leftChild == null) {
-			calculatePathMappings(node.rightChild);
+			pathStrings.addAll(calculatePathMappings(node.rightChild));
 		} else if (node.leftChild != null && node.rightChild == null) {
 			// if (!root) {
 			String path = node.getPathString();
 			if (!pathMappings.keySet().contains(path)) {
 				pathMappings.put(path, node.getPathMapping());
-				pathStrings.add(path);
 			}
+			pathStrings.add(path);
 			// }
-			calculatePathMappings(node.leftChild);
+			pathStrings.addAll(calculatePathMappings(node.leftChild));
 		} else {
-			calculatePathMappings(node.rightChild);
-			calculatePathMappings(node.leftChild);
+			pathStrings.addAll(calculatePathMappings(node.rightChild));
+			pathStrings.addAll(calculatePathMappings(node.leftChild));
 		}
 		return pathStrings;
 	}

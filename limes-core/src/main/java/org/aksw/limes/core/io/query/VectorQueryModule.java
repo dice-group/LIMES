@@ -1,7 +1,7 @@
 package org.aksw.limes.core.io.query;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 import org.aksw.limes.core.io.cache.ACache;
@@ -48,7 +48,7 @@ public class VectorQueryModule implements IQueryModule {
         try {
 
             // in case a CSV is used, endpoint is the file to read
-            BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(kb.getEndpoint())));
+            BufferedReader reader = new BufferedReader(new FileReader(kb.getEndpoint()));
             logger.info("Reading vectors from " + kb.getEndpoint());
             String s = reader.readLine();
             String uri;
