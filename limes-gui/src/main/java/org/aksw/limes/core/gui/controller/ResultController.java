@@ -7,6 +7,7 @@ import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.InstanceProperty;
 import org.aksw.limes.core.gui.model.Result;
 import org.aksw.limes.core.gui.view.ResultView;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -36,6 +37,17 @@ public class ResultController {
      */
     private Config currentConfig;
     
+    /**
+     * source cache for this result
+     * necessary to not get affected by any changes to the cache that was used to get the results
+     */
+    private ACache sourceCache;
+    /**
+     * target cache for this result
+     * necessary to not get affected by any changes to the cache that was used to get the results
+     */
+    private ACache targetCache;
+    
 
     /**
      * Constructor
@@ -54,7 +66,16 @@ public class ResultController {
         this.currentConfig = config;
         this.mainController = mainController;
     }
-
+    
+    public void setCachesFixed(){
+        if(sourceCache == null){
+        	sourceCache = currentConfig.getSourceEndpoint().getCache();
+        }
+        if(targetCache == null){
+        	targetCache = currentConfig.getTargetEndpoint().getCache();
+        }
+    }
+    
     /**
      * shows the properties of matched instances
      *
@@ -70,17 +91,14 @@ public class ResultController {
         ObservableList<InstanceProperty> targetPropertyList = FXCollections
                 .observableArrayList();
 
-        Instance i1 = currentConfig.getSourceEndpoint().getCache()
-                .getInstance(sourceURI);
-        Instance i2 = currentConfig.getTargetEndpoint().getCache()
-                .getInstance(targetURI);
+        Instance i1 = sourceCache.getInstance(sourceURI);
+        Instance i2 = targetCache.getInstance(targetURI);
         for (String prop : i1.getAllProperties()) {
             String value = "";
             for (String s : i1.getProperty(prop)) {
                 value += s + " ";
             }
             sourcePropertyList.add(new InstanceProperty(prop, value));
-
         }
 
         view.showSourceInstance(sourcePropertyList);
