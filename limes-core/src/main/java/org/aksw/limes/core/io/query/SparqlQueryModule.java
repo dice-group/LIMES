@@ -116,6 +116,20 @@ public class SparqlQueryModule implements IQueryModule {
                                     }
                                 }
                             }
+                            if(kb.getOptionalProperties() != null){
+                                for (int i = 0; i < kb.getOptionalProperties().size(); i++) {
+                                    propertyLabel = kb.getOptionalProperties().get(i);
+                                    if (soln.contains("v" + i)) {
+                                        rawValue = soln.get("v" + i).toString();
+                                        // remove localization information, e.g. @en
+                                        for (String propertyDub : kb.getFunctions().get(propertyLabel).keySet()) {
+                                            value = Preprocessor.process(rawValue,
+                                                    kb.getFunctions().get(propertyLabel).get(propertyDub));
+                                            cache.addTriple(uri, propertyDub, value);
+                                        }
+                                    }
+                                }
+                            }
                         } catch (Exception e) {
                             logger.warn("Error while processing: " + soln.toString());
                             logger.warn("Following exception occured: " + e.getMessage());

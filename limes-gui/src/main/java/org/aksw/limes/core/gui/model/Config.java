@@ -184,6 +184,14 @@ public class Config extends Configuration {
 	this.sourceEndpoint = new Endpoint(this.sourceInfo, this);
 	this.targetEndpoint = new Endpoint(this.targetInfo, this);
 
+	//Prevent problems with pre-defined prefixes in prefix helper
+	for(Map.Entry<String,String> e : this.sourceInfo.getPrefixes().entrySet()){
+		PrefixHelper.addPrefix(e.getKey(),e.getValue());
+	}
+	for(Map.Entry<String,String> e : this.targetInfo.getPrefixes().entrySet()){
+		PrefixHelper.addPrefix(e.getKey(),e.getValue());
+	}
+
 	//get Class restriction
 	if(sourceInfo.getRestrictions().size() == 1 && targetInfo.getRestrictions().size() == 1){
 		if(Pattern.matches(restrictionRegex, sourceInfo.getRestrictions().get(0)) && Pattern.matches(restrictionRegex, targetInfo.getRestrictions().get(0))){
@@ -485,7 +493,7 @@ public class Config extends Configuration {
     }
 
     public HashMap<String, String> getPrefixes() {
-	return (HashMap<String, String>) this.prefixes;
+    	return (HashMap<String, String>) this.prefixes;
     }
 
     /**
@@ -589,7 +597,11 @@ public class Config extends Configuration {
 	return mapping;
     }
 
-    /**
+    public void setMetric(Output metric) {
+		this.metric = metric;
+	}
+
+	/**
      * sets mapping
      * 
      * @param mapping
