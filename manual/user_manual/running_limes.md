@@ -29,6 +29,6 @@ The jar will be placed in `limes-gui/limes-gui/target/jfx/app/`
 The `limes-gui/target/jfx/app/lib` folder needs to be in the same folder as the .jar for the .jar to work!
 
 ## From Java
-See [Developer manual](/LIMES/developer_manual/)
+See [Developer manual](/developer_manual/)
 
 
