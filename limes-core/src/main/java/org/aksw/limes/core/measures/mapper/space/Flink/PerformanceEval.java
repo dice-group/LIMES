@@ -8,11 +8,11 @@ import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
-import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,36 +49,46 @@ public class PerformanceEval {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		prepareData(args[0]);
-		PrintWriter resWriter = new PrintWriter(new FileOutputStream("NormalHR3Eval.csv"));
-		resWriter.write("Iteration\tNormal\n");
-		resWriter.close();
+		ParameterTool parameter = ParameterTool.fromArgs(args);
+		prepareData(parameter.getRequired("input"));
+//		PrintWriter resWriter = new PrintWriter(new FileOutputStream("NormalHR3Eval.csv"));
+//		resWriter.write("Iteration\tNormal\n");
+//		resWriter.close();
 		long start, finish;
 		
-        HR3Mapper hr3m = new HR3Mapper();
-		for(int i = 0; i < 10; i++){
-    		resWriter = new PrintWriter(new FileOutputStream("NormalHR3Eval.csv", true));
-            start = System.currentTimeMillis();
-            hr3m.getMapping(source, target, "?x", "?y", measureExpr, 0.9);
-            finish = System.currentTimeMillis();
-            long hr3res = finish - start;
-            System.out.println("Normal: " + hr3res);
-            resWriter.write(i + "\t" + hr3res + "\n");
-    		resWriter.close();
+//        HR3Mapper hr3m = new HR3Mapper();
+//		for(int i = 0; i < 10; i++){
+//    		resWriter = new PrintWriter(new FileOutputStream("NormalHR3Eval.csv", true));
+//            start = System.currentTimeMillis();
+//            hr3m.getMapping(source, target, "?x", "?y", measureExpr, 0.9);
+//            finish = System.currentTimeMillis();
+//            long hr3res = finish - start;
+//            System.out.println("Normal: " + hr3res);
+//            resWriter.write(i + "\t" + hr3res + "\n");
+//    		resWriter.close();
+//		}
+		boolean append = Boolean.valueOf(parameter.getRequired("append"));
+		PrintWriter resWriter;
+		if(append){
+            resWriter = new PrintWriter(new FileOutputStream("FlinkHR3Eval.csv",append));
+            resWriter.write("Iteration\tFlink\n");
+		}else{
+            resWriter = new PrintWriter(new FileOutputStream("FlinkHR3Eval.csv"));
 		}
-		resWriter = new PrintWriter(new FileOutputStream("FlinkHR3Eval.csv"));
-		resWriter.write("Iteration\tFlink\n");
-		resWriter.close();
-        FlinkHR3Mapper flinkhr3m = new FlinkHR3Mapper(args[1]);
-		for(int i = 0; i < 10; i++){
-			resWriter = new PrintWriter(new FileOutputStream("FlinkHR3Eval.csv", true));
+        FlinkHR3Mapper flinkhr3m;
+        if(parameter.get("config") != null){
+                flinkhr3m = new FlinkHR3Mapper(parameter.get("config"));
+        }else{
+                flinkhr3m = new FlinkHR3Mapper();
+        }
+//		for(int i = 0; i < 10; i++){
             start = System.currentTimeMillis();
             flinkhr3m.getMapping(sourceDS, targetDS, "?x", "?y", measureExpr, 0.9);
             finish = System.currentTimeMillis();
             long flinkhr3res = finish - start;
-            resWriter.write(i + "\t" + flinkhr3res + "\n");
+            resWriter.write(parameter.getRequired("iteration") + "\t" + flinkhr3res + "\n");
     		resWriter.close();
     		logger.info("\n\n ====Comparisons: " + FlinkHR3Mapper.comparisons + "\n\n");
-		}
+//		}
 	}
 }
