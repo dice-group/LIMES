@@ -85,10 +85,8 @@ public final class DictionaryUtil {
    */
   private void addDeletesForWordToDictionary(String word) {
     longestWordLength = Math.max(longestWordLength, word.length());
-    rootsForStrings.put(word, new ArrayList<>(1));
-    rootsForStrings.get(word).add(word);
-
     Set<String> deletes = getDeletesSet(word);
+    deletes.add(word);
     for (String item : deletes) {
       if (!rootsForStrings.containsKey(item)) {
         rootsForStrings.put(item, new ArrayList<>(1));
@@ -158,13 +156,14 @@ public final class DictionaryUtil {
   /**
    * words with lower edit distance to inputWord are preferred over words with higher distance,
    * independent of their prior probabilities
-   * between candidates with the same edit distance to the inputWord, the one with the highest
+   * between candidates with the same Damerau-Levenshtein distance to the inputWord, the one with the highest
    * frequence (= prior probability) is chosen
+   * this is the efficient implementation, based on the symmetric deletion data structure
    *
    * @param inputWord potentially incorrectly spelled word
    * @return corrected word for inputWord
    */
-  public String correctSpelling(String inputWord) {
+  public String correctSpellingFast(String inputWord) {
     if (wordFrequencies.containsWord(inputWord)) {
       return inputWord; // distance of 0 always has precedence
     }
@@ -174,7 +173,7 @@ public final class DictionaryUtil {
     }
 
     String bestSuggestion = inputWord;
-    double bestSuggestionDistance = Double.MAX_VALUE; // DamerauLevenshtein + prior probability of word
+    double bestSuggestionDistance = Double.MAX_VALUE; // DamerauLevenshtein + (one minus) prior probability of word
 
     ArrayDeque<String> stringsToBeChecked = new ArrayDeque<>();
     stringsToBeChecked.add(inputWord);
@@ -187,26 +186,12 @@ public final class DictionaryUtil {
       }
       if (rootsForStrings.containsKey(currentString)) {
         // currentString can be transformed to a true word
-        if (wordFrequencies.containsWord(currentString)) {
-          // currentString is already a true word
-          // distance is just the number of deletes so far plus (one minus) word frequency
-          double suggestionDistance =
-              inputWordLength - currentString.length() + 1-wordFrequencies.get(currentString);
-          if (suggestionDistance < bestSuggestionDistance) { // new best suggestion found
-            bestSuggestionDistance = suggestionDistance;
-            bestSuggestion = currentString;
-          }
-        }
-
         // iterate through possible root words for currentString
         for (String rootCandidate : rootsForStrings.get(currentString)) {
-          double suggestionDistance = rootCandidate.length() - currentString.length();
-          if (currentString.length() != inputWordLength) {
-            // there might be deletes from both sides, so we have to compute the distance
-            // manually to know the definite number of required edit operations
-            suggestionDistance = damerauLevenshteinDistance(rootCandidate, inputWord);
-          }
-          suggestionDistance += 1-wordFrequencies.get(rootCandidate);
+          // there might be deletes from both sides, so we have to compute the distance
+          // manually to know the definite number of required edit operations
+          // and we add (one minus) word frequency on top, so that more frequent words are preferred
+          double suggestionDistance = damerauLevenshteinDistance(rootCandidate, inputWord) + 1-wordFrequencies.get(rootCandidate);;
           if (suggestionDistance < bestSuggestionDistance) {
             bestSuggestionDistance = suggestionDistance;
             bestSuggestion = rootCandidate;
@@ -216,6 +201,7 @@ public final class DictionaryUtil {
       int lenDiff = inputWordLength - currentString.length();
       if (lenDiff <= bestSuggestionDistance && lenDiff < MAX_EDIT_DISTANCE
           && currentString.length() > 1) {
+        // add children to queue to be checked
         for (int c = 0; c < currentString.length(); c++) {
           String child = currentString.substring(0, c) + currentString.substring(c + 1);
           if (!checkedStrings.contains(child)) {
@@ -226,5 +212,32 @@ public final class DictionaryUtil {
       }
     }
     return bestSuggestion;
+  }
+
+
+  /**
+   * words with lower edit distance to inputWord are preferred over words with higher distance,
+   * independent of their prior probabilities
+   * between candidates with the same Damerau-Levenshtein distance to the inputWord, the one with the highest
+   * frequence (= prior probability) is chosen
+   * this is the naive implementation, comparing inputWord with every entry in the provided word list
+   *
+   * @param inputWord potentially incorrectly spelled word
+   * @return corrected word for inputWord
+   */
+  public String correctSpellingNaive(String inputWord) {
+    String bestWord = inputWord;
+    int minDistance = Integer.MAX_VALUE;
+    double bestFrequencey = Double.MIN_VALUE;
+    for (String word : wordFrequencies.wordSet()) {
+      int distance = damerauLevenshteinDistance(inputWord, word);
+      double frequency = wordFrequencies.get(word);
+      if (distance < minDistance || (distance == minDistance && frequency > bestFrequencey)) {
+        bestWord = word;
+        minDistance = distance;
+        bestFrequencey = frequency;
+      }
+    }
+    return bestWord;
   }
 }
