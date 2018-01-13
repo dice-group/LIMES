@@ -1,6 +1,5 @@
 package org.aksw.limes.core.io.preprocessing;
 
-import com.sun.corba.se.impl.orbutil.CorbaResourceUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -144,7 +143,7 @@ public class Preprocessor {
             return URIasString(entry);
         }
         if (function.startsWith(CORRECT_SPELLING)) {
-            return DictionaryUtil.getInstance().correctSpelling(entry);
+            return DictionaryUtil.getInstance().correctSpellingFast(entry);
         }
         //function not known...
         else {
