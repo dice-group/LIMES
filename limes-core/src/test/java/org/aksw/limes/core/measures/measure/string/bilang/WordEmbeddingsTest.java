@@ -70,11 +70,11 @@ public class WordEmbeddingsTest {
 
   @Test
   public void testSum() {
-    Vectord a = we.getWordVector("woman");
-    Vectord b = we.getWordVector("universität");
+    Vectord a = we.getWordVector("water");
+    Vectord b = we.getWordVector("flugzeug");
     List<Pair<String, Double>> neighbors = we.computeNNearestWords(a.plus(b),50);
     neighbors.forEach(System.out::println);
-    assertTrue(neighbors.stream().anyMatch(it-> it.getKey().equals("scientist")));
+    assertTrue(neighbors.stream().anyMatch(it-> it.getKey().equals("ship")));
   }
 
 }

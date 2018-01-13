@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * a utility class for dictionary related operations, in particular spelling correction
  * given a WordFrequencies object, it computes a rather complex data struction in order to perform
- * spelling corrction fast
+ * spelling corrction fast, based on the SymSpell symmetric deletion spell correction algorithm
  * it is a singleton, so that the precomputation is done only once.
  * additionally though you can also create instances manually (for e.g. testing).
  */
