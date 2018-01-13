@@ -14,7 +14,7 @@ public class FullLimesTest {
     System.out.println(new File("").getAbsolutePath());
     WordFrequencies wf = WordFrequencies
         .fromWordFrequencyFile(Paths.get("src/test/resources/en-freq.txt"));
-    wf.merge(WordFrequencies.fromWordFrequencyFile(Paths.get("src/test/resources/de-freq.txt")));
+    wf = wf.merge(WordFrequencies.fromWordFrequencyFile(Paths.get("src/test/resources/de-freq.txt")));
     DictionaryUtil.initInstance(wf);
   }
   @Test

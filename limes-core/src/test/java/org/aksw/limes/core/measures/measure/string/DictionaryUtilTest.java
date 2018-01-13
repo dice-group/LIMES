@@ -23,6 +23,7 @@ public class DictionaryUtilTest {
   public void testCorrectSpellingFast() {
     WordFrequencies wf = WordFrequencies.fromWordFrequencyFile(Paths.get("src/test/resources/test-freq.txt"));
     DictionaryUtil du = new DictionaryUtil(wf);
+    assertEquals("verachteten", du.correctSpellingFast("veßrachtetexn"));
     assertEquals("universität", du.correctSpellingFast("universitätt"));
     assertEquals("custody", du.correctSpellingFast("cusstody"));
     assertEquals("verständnis", du.correctSpellingFast("verständnsi"));
@@ -44,9 +45,11 @@ public class DictionaryUtilTest {
   @Test
   public void testComparePerformances() {
     Timer timer = new Timer();
-    WordFrequencies wf = WordFrequencies
+    WordFrequencies wfEn = WordFrequencies
         .fromWordFrequencyFile(Paths.get("src/test/resources/en-freq.txt"));
-    wf.merge(WordFrequencies.fromWordFrequencyFile(Paths.get("src/test/resources/de-freq.txt")));
+    WordFrequencies wfDe = WordFrequencies
+        .fromWordFrequencyFile(Paths.get("src/test/resources/de-freq.txt"));
+    WordFrequencies wf = wfEn.merge(wfDe);
     System.out.println("read frequency files: " + timer.checkElapsedSecondsSinceLastCheck() + "s");
     DictionaryUtil du = new DictionaryUtil(wf);
     System.out.println("built spell correction data structure: " + timer.checkElapsedSecondsSinceLastCheck() + "s");

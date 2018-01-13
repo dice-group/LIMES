@@ -58,7 +58,12 @@ public class WordFrequencies {
   public WordFrequencies merge(WordFrequencies other) {
     HashMap<String, Double> resultMap = new HashMap<>();
     resultMap.putAll(this.wordFrequencies);
-    resultMap.putAll(other.wordFrequencies);
+    for (String otherWord : other.wordFrequencies.keySet()) {
+      if (!resultMap.containsKey(otherWord)) {
+        resultMap.put(otherWord, 0.0);
+      }
+      resultMap.put(otherWord, resultMap.get(otherWord) + other.get(otherWord));
+    }
     WordFrequencies result = new WordFrequencies(resultMap);
     result.normalizeFrequencies();
     return result;
