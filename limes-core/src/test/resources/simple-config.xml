@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE LIMES SYSTEM "limes.dtd">
+<LIMES>
+  <PREFIX>
+    <NAMESPACE>myprop#</NAMESPACE>
+    <LABEL>prop</LABEL>
+  </PREFIX>
+
+  <SOURCE>
+    <ID>acom</ID>
+    <ENDPOINT>src/test/resources/simple1.nt</ENDPOINT>
+    <VAR>?x</VAR>
+    <PAGESIZE>1000</PAGESIZE>
+    <RESTRICTION></RESTRICTION>
+    <PROPERTY>prop:hobby AS lowercase</PROPERTY>
+    <TYPE>N3</TYPE>
+  </SOURCE>
+
+  <TARGET>
+    <ID>bde</ID>
+    <ENDPOINT>src/test/resources/simple2.nt</ENDPOINT>
+    <VAR>?y</VAR>
+    <PAGESIZE>1000</PAGESIZE>
+    <RESTRICTION></RESTRICTION>
+    <PROPERTY>prop:hobby AS correctspelling</PROPERTY>
+    <TYPE>N3</TYPE>
+  </TARGET>
+  <METRIC>exactmatch(x.prop:hobby, y.prop:hobby)</METRIC>
+  <ACCEPTANCE>
+    <THRESHOLD>0.7</THRESHOLD>
+    <FILE>my-accepted.txt</FILE>
+    <RELATION>verySimilar</RELATION>
+  </ACCEPTANCE>
+  <REVIEW>
+    <THRESHOLD>0.01</THRESHOLD>
+    <FILE>my-reviewme.txt</FILE>
+    <RELATION>quiteSimilar</RELATION>
+  </REVIEW>
+
+  <OUTPUT>N3</OUTPUT>
+</LIMES>

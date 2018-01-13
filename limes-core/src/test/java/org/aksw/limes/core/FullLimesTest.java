@@ -17,6 +17,13 @@ public class FullLimesTest {
     wf = wf.merge(WordFrequencies.fromWordFrequencyFile(Paths.get("src/test/resources/de-freq.txt")));
     DictionaryUtil.initInstance(wf);
   }
+
+  @Test
+  public void testMainSimple() {
+    String configPath = "src/test/resources/simple-config.xml";
+    Controller.main(new String[]{configPath});
+  }
+
   @Test
   public void testMainDating() {
     String configPath = "src/test/resources/dating-config.xml";

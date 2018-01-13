@@ -1,0 +1,6 @@
+<http://a.com/giraffe> <myprop#hobby> "giraffe" .
+<http://a.com/universität> <myprop#hobby> "universität" .
+<http://a.com/professor> <myprop#hobby> "professor" .
+<http://a.com/flugzeug> <myprop#hobby> "flugzeug" .
+<http://a.com/schiff> <myprop#hobby> "schiff" .
+<http://a.com/universe> <myprop#hobby> "universe" .
