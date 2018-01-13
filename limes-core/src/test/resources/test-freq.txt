@@ -1,0 +1,8 @@
+ich 100
+the 200
+custody 11
+universität 10
+gerät 9
+tee 8
+verständnis 7
+fußball 6

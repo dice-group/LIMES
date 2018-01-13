@@ -8,12 +8,6 @@ import org.junit.Test;
 
 public class DictionaryUtilTest {
 
-  @Before
-  public void setUp() {
-    WordFrequencies wf = WordFrequencies.fromWordFrequencyFile(Paths.get("src/test/resources/small-freq.txt"));
-    DictionaryUtil.initInstance(wf);
-  }
-
   @Test
   public void testDistance() {
     assertEquals(2, DictionaryUtil.damerauLevenshteinDistance("CA", "ABC"));
@@ -24,7 +18,8 @@ public class DictionaryUtilTest {
 
   @Test
   public void testCorrectSpelling() {
-    DictionaryUtil du = DictionaryUtil.getInstance();
+    WordFrequencies wf = WordFrequencies.fromWordFrequencyFile(Paths.get("src/test/resources/test-freq.txt"));
+    DictionaryUtil du = new DictionaryUtil(wf);
     assertEquals("universität", du.correctSpelling("universitätt"));
     assertEquals("custody", du.correctSpelling("cusstody"));
     assertEquals("verständnis", du.correctSpelling("verständnsi"));

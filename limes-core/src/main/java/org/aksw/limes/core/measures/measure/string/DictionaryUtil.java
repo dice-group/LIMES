@@ -8,6 +8,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * a utility class for dictionary related operations, in particular spelling correction
+ * given a WordFrequencies object, it computes a rather complex data struction in order to perform
+ * spelling corrction fast
+ * it is a singleton, so that the precomputation is done only once.
+ * additionally though you can also create instances manually (for e.g. testing).
+ */
 public final class DictionaryUtil {
 
   private static DictionaryUtil instance;
@@ -37,7 +44,7 @@ public final class DictionaryUtil {
   private final WordFrequencies wordFrequencies;
   private int longestWordLength = 0;
 
-  private DictionaryUtil(WordFrequencies wordFrequencies) {
+  public DictionaryUtil(WordFrequencies wordFrequencies) {
     this.wordFrequencies = wordFrequencies;
     for (String word : wordFrequencies.wordSet()) {
       addDeletesForWordToDictionary(word);
@@ -95,11 +102,11 @@ public final class DictionaryUtil {
    */
   public static int damerauLevenshteinDistance(String word1, String word2) {
     if (word1 == null) {
-      throw new NullPointerException("s1 must not be null");
+      throw new NullPointerException("word1 must not be null");
     }
 
     if (word2 == null) {
-      throw new NullPointerException("s2 must not be null");
+      throw new NullPointerException("word2 must not be null");
     }
     if (word1.equals(word2)) {
       return 0;
