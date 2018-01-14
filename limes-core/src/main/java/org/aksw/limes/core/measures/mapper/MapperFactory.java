@@ -1,5 +1,6 @@
 package org.aksw.limes.core.measures.mapper;
 
+import it.uniroma2.sag.kelp.data.manipulator.WLSubtreeMapper;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.measures.mapper.Graphs.GraphSimilarityMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
@@ -179,8 +180,8 @@ public class MapperFactory {
         case SET_JACCARD:
             return new SetJaccardMapper();
 
-        //case GRAPH_WSL:
-          //  return new GraphSimilarityMapper();
+        case GRAPH_WSL:
+          return new WLSubtreeMapper(String a, String b, int);
 
         default:
             throw new InvalidMeasureException(type.toString());
