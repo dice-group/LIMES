@@ -39,7 +39,6 @@ import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator;
-import org.apache.jena.atlas.lib.CacheFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,8 +68,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     public static final String PARAMETER_ATOMIC_MEASURES = "atomic measures";
     public static final String PARAMETER_SAVE_MAPPING = "save mapping";
     
-    protected String sourceVariable = configuration.getSourceInfo().getVar();
-    protected String targetVariable = configuration.getTargetInfo().getVar();
+    protected String sourceVariable = configuration.getSourceInfo().getVar().trim().substring(1);
+    protected String targetVariable = configuration.getTargetInfo().getVar().trim().substring(1);
 
     public static List<String> sourceUris;
     public static List<String> targetUris;
