@@ -7,6 +7,12 @@ import org.junit.Test;
 public class WordNetInterfaceTest {
 
   @Test
+  public void testPath() {
+    WordNetInterface wn = new WordNetInterface("src/test/resources/WordNet-3.0");
+    System.out.println(wn.computeWuPalmerSimilarity("plane", "airport"));
+  }
+
+  @Test
   public void testSimilarity() {
     WordNetInterface wn = new WordNetInterface("src/test/resources/WordNet-3.0");
     double eps = 0.00001;

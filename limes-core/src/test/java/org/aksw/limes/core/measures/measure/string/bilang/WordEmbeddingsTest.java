@@ -73,7 +73,7 @@ public class WordEmbeddingsTest {
   @Test
   public void testSum() {
     Vectord a = we.getWordVector("water");
-    Vectord b = we.getWordVector("flugzeug");
+    Vectord b = we.getWordVector("plane");
     List<Pair<String, Double>> neighbors = we.computeNNearestWords(a.plus(b), 50);
     neighbors.forEach(System.out::println);
     assertTrue(neighbors.stream().anyMatch(it -> it.getKey().equals("ship")));

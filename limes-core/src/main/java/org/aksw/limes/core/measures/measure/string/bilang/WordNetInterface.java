@@ -76,6 +76,7 @@ public class WordNetInterface {
       synset = dictionary.getSynset(hypernyms.get(0)); // TODO: consider all possible hypernyms?
     }
     Collections.reverse(result);
+//    result.forEach(it-> System.out.println(it.getWords().get(0).getLemma()));
     return result;
   }
 
