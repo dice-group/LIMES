@@ -68,6 +68,9 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     public static final String PARAMETER_VERBOSE = "verbose";
     public static final String PARAMETER_ATOMIC_MEASURES = "atomic measures";
     public static final String PARAMETER_SAVE_MAPPING = "save mapping";
+    
+    protected String sourceVariable = configuration.getSourceInfo().getVar();
+    protected String targetVariable = configuration.getTargetInfo().getVar();
 
     public static List<String> sourceUris;
     public static List<String> targetUris;
@@ -132,9 +135,9 @@ public abstract class AWombat extends ACoreMLAlgorithm {
      * the atomic mapper measure(sourceProperty, targetProperty)
      */
     public AMapping executeAtomicMeasure(String sourceProperty, String targetProperty, String measure, double threshold) {
-        String measureExpression = measure + "(x." + sourceProperty + ", y." + targetProperty + ")";
+        String measureExpression = measure + "(" + sourceVariable + "." + sourceProperty + ", " + targetVariable + "." + targetProperty + ")";
         Instruction inst = new Instruction(Instruction.Command.RUN, measureExpression, threshold + "", -1, -1, -1);
-        ExecutionEngine ee = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache, "?x", "?y");
+        ExecutionEngine ee = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache, "?" + sourceVariable, "?" + targetVariable);
         Plan plan = new Plan();
         plan.addInstruction(inst);
         return ((SimpleExecutionEngine) ee).executeInstructions(plan);
@@ -176,7 +179,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
             LinkSpecification rwLs = rw.rewrite(ls);
             IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceCache, targetCache);
             assert planner != null;
-            ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache, "?x", "?y");
+            
+			ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache, "?" + sourceVariable, "?" + targetVariable);
             assert engine != null;
             AMapping resultMap = engine.execute(rwLs, planner);
             map = resultMap.getSubMap(threshold);
@@ -221,7 +225,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         LinkSpecification rwLs = rw.rewrite(ls);
         IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sCache, tCache);
         assert planner != null;
-        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sCache, tCache, "?x", "?y");
+        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sCache, tCache, "?" + sourceVariable, "?" + targetVariable);
         assert engine != null;
         AMapping resultMap = engine.execute(rwLs, planner);
         map = resultMap.getSubMap(ls.getThreshold());
