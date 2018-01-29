@@ -39,7 +39,7 @@ public class PPJoinTest {
 		System.out.println("Similar Record");
 		System.out.println(ppjoinalgo.similarRecords);
 		
-		assert(ppjoinalgo.similarRecords != null);
+		assert(!ppjoinalgo.similarRecords.isEmpty());
 	}
 
 }
