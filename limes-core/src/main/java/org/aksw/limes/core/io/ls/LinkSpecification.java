@@ -73,7 +73,7 @@ public class LinkSpecification implements ILinkSpecification {
     }
 
     public void setAtomicFilterExpression(String atomicMeasure, String prop1, String prop2) {
-        this.setAtomicMeasure(atomicMeasure);
+        this.setAtomicMeasure(atomicMeasure);planning
         this.prop1 = prop1;
         this.prop2 = prop2;
         this.filterExpression = atomicMeasure + "(" + prop1 + "," + prop2 + ")";
@@ -247,7 +247,7 @@ public class LinkSpecification implements ILinkSpecification {
                 leftSpec.readSpec(p.getLeftTerm(), Math.abs(theta - p.getRightCoefficient()) / p.getLeftCoefficient());
                 rightSpec.readSpec(p.getRightTerm(),
                         Math.abs(theta - p.getLeftCoefficient()) / p.getRightCoefficient());
-                filterExpression = spec;
+                filterExpression = null;
                 setThreshold(theta);
                 fullExpression = "AND(" + leftSpec.fullExpression + "|"
                         + (Math.abs(theta - p.getRightCoefficient()) / p.getLeftCoefficient()) + ","
