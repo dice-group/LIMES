@@ -8,12 +8,16 @@ import java.util.Locale;
 import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.util.CustomGuiTest;
 import org.aksw.limes.core.gui.view.MainView;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 
+import javafx.application.Platform;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class SaveAndLoadConfigTest extends ApplicationTest{
 	
@@ -65,5 +69,22 @@ public class SaveAndLoadConfigTest extends ApplicationTest{
 	public void loadNewConfig(){
 		mainController.loadConfig(changedTestConfig);
 		assertEquals(metricExpression, mainController.getCurrentConfig().getMetricExpression());
+	}
+
+	@AfterClass
+	public static void cleanup(){
+		FxRobot rob = new FxRobot();
+		for(Window w : rob.listWindows()){
+			int currentsize = rob.listWindows().size();
+			System.out.println(((Stage)w).getTitle());
+			//Avoid not on fx application thread error
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                	((Stage)w).close();
+                }
+            });
+            CustomGuiTest.waitUntilWindowIsClosed(currentsize - 1, 200);
+		}
+		assertEquals(0,rob.listWindows().size());
 	}
 }

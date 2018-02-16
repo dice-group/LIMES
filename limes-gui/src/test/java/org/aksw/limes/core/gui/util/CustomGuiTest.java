@@ -37,21 +37,30 @@ public class CustomGuiTest {
 		logger.error("Maximum timeout reached, while waiting for Node " + nodeId + " to be not null!");
 		return false;
 	}
-	
+
 	/**
-	 * Waits until the number of visible windows is desiredNumberOfWindows or timeout in seconds is reached
-	 * @param desiredNumberOfWindows
+	 * Waits until windows is closed or timeout in seconds is reached
+	 * @param name of window
 	 * @param timeout
 	 */
-	public static void waitUntilLoadingWindowIsClosed(int desiredNumberOfWindows, int timeout){
+	public static void waitUntilLoadingWindowIsClosed(String windowname, int timeout){
 		FxRobot rob = new FxRobot();
 		int sec = 0;
-		logger.info("Wait until only " + desiredNumberOfWindows + " windows are left open");
+		logger.info("Wait until " + windowname + " is closed");
 		logger.info("Currently open windows: ");
 		for(Window w: rob.listWindows()){
 			logger.info(((Stage)w).getTitle());
 		}
-		while(rob.listWindows().size() > desiredNumberOfWindows){
+		do{
+			boolean closed = true;
+            for(Window w: rob.listWindows()){
+            	if(((Stage)w).getTitle().trim().equals(windowname.trim())){
+            		closed = false;
+            	}
+            }
+            if(closed){
+            	break;
+            }
 			rob.sleep(1000);
 			sec++;
 			if(sec % 100 == 0){
@@ -61,7 +70,33 @@ public class CustomGuiTest {
 			if(sec > timeout){
 				break;
 			}
+		}while(true);
+	}
+
+	/**
+	 * Waits until number of windows is reduced to n or timeout in seconds is reached
+	 * @param n number of desired windows
+	 * @param timeout
+	 */
+	public static void waitUntilWindowIsClosed(int n, int timeout){
+		FxRobot rob = new FxRobot();
+		int sec = 0;
+		logger.info("Wait until " + n + " windows are left open");
+		logger.info("Currently open windows: ");
+		for(Window w: rob.listWindows()){
+			logger.info(((Stage)w).getTitle());
 		}
+		do{
+			rob.sleep(1000);
+			sec++;
+			if(sec % 100 == 0){
+				logger.info("Waited: " + sec + " seconds");
+			}
+			//avoid infinite loop
+			if(sec > timeout){
+				break;
+			}
+		}while(rob.listWindows().size() > n);
 	}
 
 	/**

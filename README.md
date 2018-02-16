@@ -1,6 +1,4 @@
-# LIMES
-Repository for LIMES - Link Discovery Framework for Metric Spaces.
-=======
+# LIMES - Link Discovery Framework for Metric Spaces.
 
 [![Build Status](https://travis-ci.org/dice-group/LIMES.svg?branch=dev)](https://travis-ci.org/dice-group/LIMES)
 
