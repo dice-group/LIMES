@@ -73,7 +73,7 @@ public class LinkSpecification implements ILinkSpecification {
     }
 
     public void setAtomicFilterExpression(String atomicMeasure, String prop1, String prop2) {
-        this.setAtomicMeasure(atomicMeasure);planning
+        this.setAtomicMeasure(atomicMeasure);
         this.prop1 = prop1;
         this.prop2 = prop2;
         this.filterExpression = atomicMeasure + "(" + prop1 + "," + prop2 + ")";
