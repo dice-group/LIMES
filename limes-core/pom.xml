@@ -1,18 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.aksw.limes.core</groupId>
     <artifactId>limes-core</artifactId>
-    <version>1.2.3</version>
     <name>LIMES</name>
     <description>LIMES – Link Discovery Framework for Metric Spaces.</description>
     <url>http://aksw.org/Projects/LIMES</url>
 
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <parent>
+        <groupId>org.aksw.limes</groupId>
+        <artifactId>limes-full</artifactId>
+        <version>1.2.4</version>
+    </parent>
 
     <scm>
         <connection>scm:git:git@github.com:AKSW/LIMES-dev.git</connection>
@@ -132,8 +130,8 @@
                                 implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                             <mainClass>org.aksw.limes.core.controller.Controller</mainClass>
                             <manifestEntries>
-                                <X-Compile-Source-JDK>${maven.compile.source}</X-Compile-Source-JDK>
-                                <X-Compile-Target-JDK>${maven.compile.target}</X-Compile-Target-JDK>
+                                <X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
+                                <X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
                             </manifestEntries>
                         </transformer>
                         <transformer
