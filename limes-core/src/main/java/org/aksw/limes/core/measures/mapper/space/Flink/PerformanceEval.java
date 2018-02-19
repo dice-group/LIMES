@@ -29,8 +29,8 @@ public class PerformanceEval {
 	private static void prepareData(String configPath){
 		RDFConfigurationReader reader = new RDFConfigurationReader(configPath);
 		Configuration c = reader.read();
-		source = HybridCache.getData(c.getSourceInfo());
-		target = HybridCache.getData(c.getTargetInfo());
+//		source = HybridCache.getData(c.getSourceInfo());
+//		target = HybridCache.getData(c.getTargetInfo());
 //    	sourceDS = env.fromCollection(source.getAllInstances());
 //    	targetDS = env.fromCollection(target.getAllInstances());
     	sourceDS = readInstancesFromCSV(c.getSourceInfo().getEndpoint()); 
@@ -39,6 +39,7 @@ public class PerformanceEval {
 	}
 	
 	private static DataSet<Instance> readInstancesFromCSV(String path){
+		System.out.println(path);
 		DataSet<Tuple3<String,Double,Double>> lines = (DataSet<Tuple3<String, Double, Double>>) env.readCsvFile(path).ignoreFirstLine().types(String.class, Double.class, Double.class);
 		return lines.map(line -> {
 			Instance i = new Instance(line.f0);
