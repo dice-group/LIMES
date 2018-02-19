@@ -9,9 +9,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-	<groupId>org.aksw.limes.full</groupId>
+	<groupId>org.aksw.limes</groupId>
 	<artifactId>limes-full</artifactId>
-	<version>${limes.version}</version>
+	<version>1.2.4</version>
 	<name>LIMES</name>
 	<description>LIMES – Link Discovery Framework for Metric Spaces.</description>
 	<url>http://aksw.org/Projects/LIMES</url>

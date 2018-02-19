@@ -7,7 +7,7 @@
     <url>http://aksw.org/Projects/LIMES</url>
 
     <parent>
-        <groupId>org.aksw.limes.full</groupId>
+        <groupId>org.aksw.limes</groupId>
         <artifactId>limes-full</artifactId>
         <version>1.2.4</version>
     </parent>
@@ -130,8 +130,8 @@
                                 implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                             <mainClass>org.aksw.limes.core.controller.Controller</mainClass>
                             <manifestEntries>
-                                <X-Compile-Source-JDK>${maven.compile.source}</X-Compile-Source-JDK>
-                                <X-Compile-Target-JDK>${maven.compile.target}</X-Compile-Target-JDK>
+                                <X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
+                                <X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
                             </manifestEntries>
                         </transformer>
                         <transformer
