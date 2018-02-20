@@ -68,7 +68,7 @@ public class KBInfo implements Serializable {
     public KBInfo(String id, String endpoint, String graph, String var,
             List<String> properties, List<String> optionalProperties,
             ArrayList<String> restrictions, Map<String, Map<String, String>> functions,
-            Map<String, String> prefixes, int pageSize, String type, int minoffset, int maxoffset) {
+            Map<String, String> prefixes, int pageSize, String type) {
         super();
         this.id = id;
         this.endpoint = endpoint;
@@ -81,6 +81,14 @@ public class KBInfo implements Serializable {
         this.prefixes = prefixes;
         this.pageSize = pageSize;
         this.type = type;
+    }
+
+    public KBInfo(String id, String endpoint, String graph, String var,
+                  List<String> properties, List<String> optionalProperties,
+                  ArrayList<String> restrictions, Map<String, Map<String, String>> functions,
+                  Map<String, String> prefixes, int pageSize, String type, int minoffset, int maxoffset) {
+        this(id, endpoint, graph, var, properties, optionalProperties, restrictions, functions,
+                prefixes, pageSize, type);
         this.maxoffset = maxoffset;
         this.minoffset = minoffset;
     }
