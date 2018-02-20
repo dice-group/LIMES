@@ -8,7 +8,9 @@ import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 //import org.aksw.limes.core.gui.LimesGUI;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
+import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
@@ -28,6 +30,8 @@ import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.function.Function;
+
 /**
  * This is the default LIMES Controller used to run the software as CLI.
  *
@@ -35,10 +39,11 @@ import org.slf4j.LoggerFactory;
  */
 public class Controller {
 
-    public static final String DEFAULT_LOGGING_PATH = "limes.log";
+    private static final String DEFAULT_LOGGING_PATH = "limes.log";
     private static final int MAX_ITERATIONS_NUMBER = 10;
     private static Logger logger = null;
-    private static int serverPort = 8080;
+    private static int defaultPort = 8080;
+    private static int defaultLimit = -1;
     private static Options options = getOptions();
 
     /**
@@ -61,9 +66,11 @@ public class Controller {
 //            LimesGUI.startGUI(new String[0]);
 //            System.exit(0);
         } else if (cmd.hasOption('s')){
-            int port = serverPort;
+            int port = defaultPort;
             if (cmd.hasOption('p')) port = Integer.parseInt(cmd.getOptionValue('p'));
-            SimpleServer.startServer(port);
+            int limit = defaultLimit;
+            if (cmd.hasOption('l')) limit = Integer.parseInt(cmd.getOptionValue('l'));
+            SimpleServer.startServer(port, limit);
         } else {
             // III. Has Arguments?
             if (cmd.getArgs().length < 1) {
@@ -78,7 +85,7 @@ public class Controller {
         }
     }
 
-    public static CommandLine parseCommandLine(String[] args) {
+    private static CommandLine parseCommandLine(String[] args) {
         CommandLineParser parser = new BasicParser();
         CommandLine cl = null;
         try {
@@ -135,13 +142,27 @@ public class Controller {
      *
      */
     public static ResultMappings getMapping(Configuration config) {
+        return  getMapping(config, -1);
+    }
+
+
+    static ResultMappings getMapping(Configuration config, int limit) {
         if (logger == null)
             logger = LoggerFactory.getLogger(Controller.class);
         AMapping results = null;
 
         // 3. Fill Caches
-        HybridCache sourceCache = HybridCache.getData(config.getSourceInfo());
-        HybridCache targetCache = HybridCache.getData(config.getTargetInfo());
+        ACache sourceCache = HybridCache.getData(config.getSourceInfo());
+        ACache targetCache = HybridCache.getData(config.getTargetInfo());
+        if (limit > 0) {
+            Function<ACache, ACache> getSubCache = c -> {
+                ACache reducedCache = new MemoryCache();
+                c.getAllInstances().subList(0, limit).forEach(reducedCache::addInstance);
+                return reducedCache;
+            };
+            sourceCache = getSubCache.apply(sourceCache);
+            targetCache = getSubCache.apply(targetCache);
+        }
 
         // 4. Machine Learning or Planning
         StopWatch stopWatch = new StopWatch();
@@ -202,7 +223,7 @@ public class Controller {
         options.addOption("f", true, "Optionally configure format of <config_file_or_uri>, either \"xml\" (default) or " +
                 "\"rdf\". If not specified, LIMES tries to infer the format from file ending.");
         options.addOption("p", true, "Optionally configure HTTP server port. Only effective if -s is specified. Default port is 8080.");
-        // options.addOption("s", false, "Silent run");
+        options.addOption("l", true, "Optionally configure a limit for source and target resources processed by LIMES Server. Only effective if -s is specified. Default value is -1 (no limit).");
         // options.addOption("v", false, "Verbose run");
         return options;
     }
