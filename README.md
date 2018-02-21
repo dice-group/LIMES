@@ -1,8 +1,6 @@
 # LIMES - Link Discovery Framework for Metric Spaces.
 
-[![Build Status](https://travis-ci.org/dice-group/LIMES.svg?branch=dev)](https://travis-ci.org/dice-group/LIMES)
-
-Development branch for LIMES - Link Discovery Framework for Metric Spaces.
+[![Build Status](https://travis-ci.org/dice-group/LIMES.svg?branch=master)](https://travis-ci.org/dice-group/LIMES)
 
 ## Generating Jar File (Headless)
 installing use:
