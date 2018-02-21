@@ -45,7 +45,9 @@ public class SparqlQueryModuleTest {
                 functions,                                                       //Map<String, Map<String, String>> functions
                 prefixes,                                                        //Map<String, String> prefixes
                 1000,                                                            //int pageSize
-                "sparql"                                                         //String type
+                "sparql",                                                         //String type
+                -1,                                                               //int minOffset
+                -1                                                                //int maxoffset
         );
     }
 

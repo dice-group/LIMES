@@ -51,7 +51,9 @@ public class XMLConfigurationReaderTest {
                 functions,                                                        //Map<String, Map<String, String>> functions
                 prefixes,                                                         //Map<String, String> prefixes
                 2000,                                                             //int pageSize
-                "sparql"                                                          //String type
+                "sparql",                                                         //String type
+                -1,                                                               //int minOffset
+                -1                                                                //int maxoffset
         );
 
         targetInfo = new KBInfo(
@@ -65,7 +67,9 @@ public class XMLConfigurationReaderTest {
                 functions,                                                        //Map<String, Map<String, String>> functions
                 prefixes,                                                         //Map<String, String> prefixes
                 2000,                                                             //int pageSize
-                "sparql"                                                          //String type
+                "sparql",                                                         //String type
+                -1,                                                               //int minOffset
+                -1                                                                //int maxoffset
         );
         
         testConf = new Configuration();

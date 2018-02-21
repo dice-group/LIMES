@@ -139,7 +139,7 @@ public class OptionalPropertiesTest extends ApplicationTest{
 		logger.info("INITIAL CACHES: " + 
                     mainController.getCurrentConfig().getSourceEndpoint().getCache() + "\n" +
                     mainController.getCurrentConfig().getTargetEndpoint().getCache());
-		clickOn("Run");
+		clickOn("#toolBarRunButton");
 		logger.info("Clicked on run");
 		CustomGuiTest.waitUntilLoadingWindowIsClosed("Mapping",200);
 		assertEquals(2,c.getMapping().size());
@@ -155,7 +155,7 @@ public class OptionalPropertiesTest extends ApplicationTest{
 		logger.info("AFTER SETTING SP1 CACHES: " + 
                     mainController.getCurrentConfig().getSourceEndpoint().getCache() + "\n" +
                     mainController.getCurrentConfig().getTargetEndpoint().getCache());
-		clickOn("Run");
+		clickOn("#toolBarRunButton");
 		logger.info("Clicked on run again");
 		CustomGuiTest.waitUntilLoadingWindowIsClosed("Mapping",200);
 		logger.info("AFTER SECOND RUN CACHES: " + 

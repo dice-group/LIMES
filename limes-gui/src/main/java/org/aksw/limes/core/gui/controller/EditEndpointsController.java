@@ -11,6 +11,9 @@ import org.aksw.limes.core.gui.view.IEditView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.io.config.KBInfo;
 
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+
 /**
  * 
  * Controller class for editing endpoint step in {@link WizardController}
@@ -97,49 +100,50 @@ public class EditEndpointsController implements IEditController {
 	return view;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public boolean validate() {
 	boolean valid = true;
-	if (view.getSourceFields()[0].getText() == null || view.getSourceFields()[0].getText().equals("") || view.getSourceFields()[0].getText().equals(emptyFieldError)) {
-	    view.getSourceFields()[0].setText(emptyFieldError);
-	    view.getSourceFields()[0].setStyle("-fx-text-inner-color: red;");
-	    view.getSourceFields()[0].setOnMouseClicked(e -> {
-		if (view.getSourceFields()[0].getText().equals(emptyFieldError)) {
-		    view.getSourceFields()[0].setStyle("");
-		    view.getSourceFields()[0].setText("");
+	if (((ComboBox<String>)view.getSourceFields()[0]).getValue() == null || ((ComboBox<String>)view.getSourceFields()[0]).getValue().equals("") || ((ComboBox<String>)view.getSourceFields()[0]).getValue().equals(emptyFieldError)) {
+	   ((ComboBox<String>)view.getSourceFields()[0]).setValue(emptyFieldError);
+	   ((ComboBox<String>)view.getSourceFields()[0]).setStyle("-fx-text-inner-color: red;");
+	   ((ComboBox<String>)view.getSourceFields()[0]).setOnMouseClicked(e -> {
+		if (((ComboBox<String>)view.getSourceFields()[0]).getValue().equals(emptyFieldError)) {
+		    ((ComboBox<String>)view.getSourceFields()[0]).setStyle("");
+		    ((ComboBox<String>)view.getSourceFields()[0]).setValue("");
 		}
 	    });
 	    valid = false;
 	}
-	if (view.getTargetFields()[0].getText() == null || view.getTargetFields()[0].getText().equals("")|| view.getTargetFields()[0].getText().equals(emptyFieldError)) {
-	    view.getTargetFields()[0].setText(emptyFieldError);
-	    view.getTargetFields()[0].setStyle("-fx-text-inner-color: red;");
-	    view.getTargetFields()[0].setOnMouseClicked(e -> {
-		if (view.getTargetFields()[0].getText().equals(emptyFieldError)) {
-		    view.getTargetFields()[0].setStyle("");
-		    view.getTargetFields()[0].setText("");
+	if (((ComboBox<String>)view.getTargetFields()[0]).getValue() == null || ((ComboBox<String>)view.getTargetFields()[0]).getValue().equals("")|| ((ComboBox<String>)view.getTargetFields()[0]).getValue().equals(emptyFieldError)) {
+	    ((ComboBox<String>)view.getTargetFields()[0]).setValue(emptyFieldError);
+	    ((ComboBox<String>)view.getTargetFields()[0]).setStyle("-fx-text-inner-color: red;");
+	    ((ComboBox<String>)view.getTargetFields()[0]).setOnMouseClicked(e -> {
+		if (((ComboBox<String>)view.getTargetFields()[0]).getValue().equals(emptyFieldError)) {
+		    ((ComboBox<String>)view.getTargetFields()[0]).setStyle("");
+		    ((ComboBox<String>)view.getTargetFields()[0]).setValue("");
 		}
 	    });
 	    valid = false;
 	}
-	if (view.getSourceFields()[3].getText() == null || view.getSourceFields()[3].getText().equals("")|| view.getSourceFields()[3].getText().equals(emptyFieldError)) {
-	    view.getSourceFields()[3].setText(emptyFieldError);
-	    view.getSourceFields()[3].setStyle("-fx-text-inner-color: red;");
-	    view.getSourceFields()[3].setOnMouseClicked(e -> {
-		if (view.getSourceFields()[3].getText().equals(emptyFieldError)) {
-		    view.getSourceFields()[3].setStyle("");
-		    view.getSourceFields()[3].setText("");
+	if (((TextField)view.getSourceFields()[3]).getText() == null || ((TextField)view.getSourceFields()[3]).getText().equals("")|| ((TextField)view.getSourceFields()[3]).getText().equals(emptyFieldError)) {
+	    ((TextField)view.getSourceFields()[3]).setText(emptyFieldError);
+	    ((TextField)view.getSourceFields()[3]).setStyle("-fx-text-inner-color: red;");
+	    ((TextField)view.getSourceFields()[3]).setOnMouseClicked(e -> {
+		if (((TextField)view.getSourceFields()[3]).getText().equals(emptyFieldError)) {
+		    ((TextField)view.getSourceFields()[3]).setStyle("");
+		    ((TextField)view.getSourceFields()[3]).setText("");
 		}
 	    });
 	    valid = false;
 	}
-	if (view.getTargetFields()[3].getText() == null || view.getTargetFields()[3].getText().equals("")|| view.getTargetFields()[3].getText().equals(emptyFieldError)) {
-	    view.getTargetFields()[3].setText(emptyFieldError);
-	    view.getTargetFields()[3].setStyle("-fx-text-inner-color: red;");
-	    view.getTargetFields()[3].setOnMouseClicked(e -> {
-		if (view.getTargetFields()[3].getText().equals(emptyFieldError)) {
-		    view.getTargetFields()[3].setStyle("");
-		    view.getTargetFields()[3].setText("");
+	if (((TextField)view.getTargetFields()[3]).getText() == null || ((TextField)view.getTargetFields()[3]).getText().equals("")|| ((TextField)view.getTargetFields()[3]).getText().equals(emptyFieldError)) {
+	    ((TextField)view.getTargetFields()[3]).setText(emptyFieldError);
+	    ((TextField)view.getTargetFields()[3]).setStyle("-fx-text-inner-color: red;");
+	    ((TextField)view.getTargetFields()[3]).setOnMouseClicked(e -> {
+		if (((TextField)view.getTargetFields()[3]).getText().equals(emptyFieldError)) {
+		    ((TextField)view.getTargetFields()[3]).setStyle("");
+		    ((TextField)view.getTargetFields()[3]).setText("");
 		}
 	    });
 	    valid = false;

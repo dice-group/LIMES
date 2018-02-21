@@ -393,6 +393,7 @@ public class EditPropertyMatchingView implements IEditView {
 			public void handle(MouseEvent e) {
 				if (addedSourcePropsList.getSelectionModel().getSelectedItem() != null) {
 					sourcePropList.getItems().add(addedSourcePropsList.getSelectionModel().getSelectedItem());
+					Collections.sort(sourcePropList.getItems());
 					addedSourcePropsList.getItems().remove(addedSourcePropsList.getSelectionModel().getSelectedItem());
 				}
 			}
@@ -403,6 +404,7 @@ public class EditPropertyMatchingView implements IEditView {
 			public void handle(MouseEvent e) {
 				if (addedTargetPropsList.getSelectionModel().getSelectedItem() != null) {
 					targetPropList.getItems().add(addedTargetPropsList.getSelectionModel().getSelectedItem());
+					Collections.sort(targetPropList.getItems());
 					addedTargetPropsList.getItems().remove(addedTargetPropsList.getSelectionModel().getSelectedItem());
 				}
 			}

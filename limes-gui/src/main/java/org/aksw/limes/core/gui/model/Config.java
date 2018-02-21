@@ -232,7 +232,7 @@ public class Config extends Configuration {
 	}
 	Config outConfig;
 	Configuration tmp = reader.read();
-	if (tmp.getSourceInfo() == null || tmp.getTargetInfo() == null) {
+	if (tmp.getSourceInfo() == null || tmp.getTargetInfo() == null || tmp.getSourceInfo().equals(new KBInfo()) || tmp.getTargetInfo().equals(new KBInfo())) {
 	    throw new RuntimeException("Invalid configuration file!");
 	}
 	for (String s : tmp.getSourceInfo().getPrefixes().keySet()) {

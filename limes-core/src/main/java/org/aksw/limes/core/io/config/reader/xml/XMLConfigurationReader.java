@@ -68,6 +68,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
     protected static final String TRAINING = "TRAINING";
     protected static final String VALUE = "VALUE";
     protected static final String PARAMETER = "PARAMETER";
+    protected static final String MAXOFFSET = "MAXOFFSET";
+    protected static final String MINOFFSET = "MINOFFSET";
 
     /**
      * Constructor
@@ -228,6 +230,10 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 kbinfo.setEndpoint(getText(child));
             } else if (child.getNodeName().equals(GRAPH)) {
                 kbinfo.setGraph(getText(child));
+            } else if(child.getNodeName().equals(MAXOFFSET)) {
+                kbinfo.setMaxOffset(Integer.parseInt(getText(child)));
+            } else if(child.getNodeName().equals(MINOFFSET)) {
+                kbinfo.setMinOffset(Integer.parseInt(getText(child)));
             } else if (child.getNodeName().equals(RESTRICTION)) {
                 String restriction = getText(child).trim();
                 if (restriction.endsWith(".")) {
@@ -247,6 +253,20 @@ public class XMLConfigurationReader extends AConfigurationReader {
             } else if (child.getNodeName().equals(TYPE)) {
                 kbinfo.setType(getText(child));
             }
+        }
+
+        KBInfo targetInfo = configuration.getTargetInfo();
+        KBInfo sourceInfo = configuration.getSourceInfo();
+        boolean partialTarget = (targetInfo.getMinOffset() > 0 || targetInfo.getMaxOffset() > 0);
+        boolean partialSource = (sourceInfo.getMinOffset() > 0 || sourceInfo.getMaxOffset() > 0);
+
+        if(partialTarget && partialSource) {
+             logger.warn("Looks like you requested only subsets from BOTH endpoints!");
+        }
+
+        if(kbinfo.getMinOffset() > 0 && kbinfo.getMaxOffset() > 0 && kbinfo.getMinOffset() > kbinfo.getMaxOffset()) {
+            logger.error(kb + " query limit missmatch: MINOFFSET > MAXOFFSET");
+            throw new RuntimeException();
         }
         kbinfo.setPrefixes(configuration.getPrefixes());
     }
