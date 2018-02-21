@@ -33,6 +33,7 @@ public class XMLConfigurationReaderTest {
         prefixes.put("geos", "http://www.opengis.net/ont/geosparql#");
         prefixes.put("lgdo", "http://linkedgeodata.org/ontology/");
         prefixes.put("geom", "http://geovocab.org/geometry#");
+        prefixes.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
         prefixes = Collections.unmodifiableMap(prefixes);
         HashMap<String, String> f = new HashMap<>();
         f.put("polygon", null);
