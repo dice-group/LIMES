@@ -21,9 +21,6 @@ public class FileQueryModuleTest {
         prefixes.put("dbpo", "http://dbpedia.org/ontology/");
 
         Map<String, Map<String, String>> functions = new HashMap<>();
-        HashMap<String, String> f = new HashMap<String, String>();
-        f.put("label", null);
-        functions.put("rdfs:label", f);
 
         KBInfo kbinfo = new KBInfo(
                 "DBpedia",                                                            //String id
@@ -46,6 +43,7 @@ public class FileQueryModuleTest {
         fqm.fillCache(cache);
 
         assertTrue(cache.size() > 0);
+        System.out.println(cache);
     }
 
 }

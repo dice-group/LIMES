@@ -28,11 +28,6 @@ public class SparqlQueryModuleTest {
         prefixes.put("dbpo", "http://dbpedia.org/ontology/");
         
         functions = new HashMap<>();
-        HashMap<String, String> f = new HashMap<>();
-        f.put("label", null);
-        functions.put("rdfs:label", f);
-        f.put("comment", null);
-        functions.put("rdfs:comment", f);
         
         kbInfo = new KBInfo(
                 "DBpedia",                                                       //String id

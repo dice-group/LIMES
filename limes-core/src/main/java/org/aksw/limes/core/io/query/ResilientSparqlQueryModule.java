@@ -92,12 +92,8 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
                     for (int i = 0; i < kb.getProperties().size(); i++) {
                         propertyLabel = kb.getProperties().get(i);
                         if (soln.contains("v" + i)) {
-                            rawValue = soln.get("v" + i).toString();
-                            //remove localization information, e.g. @en
-                            for (String propertyDub : kb.getFunctions().get(propertyLabel).keySet()) {
-                                value = Preprocessor.process(rawValue, kb.getFunctions().get(propertyLabel).get(propertyDub));
-                                cache.addTriple(uri, propertyDub, value);
-                            }
+                            value = soln.get("v" + i).toString();
+                            cache.addTriple(uri, propertyLabel, value);
                         }
                     }
                 } catch (Exception e) {

@@ -22,9 +22,6 @@ public class ResilientSparqlQueryModuleTest {
         prefixes.put("dbpo", "http://dbpedia.org/ontology/");
 
         Map<String, Map<String, String>> functions = new HashMap<>();
-        HashMap<String, String> f = new HashMap<String, String>();
-        f.put("label", null);
-        functions.put("rdfs:label", f);
 
         KBInfo kbInfo = new KBInfo(
                 "DBpedia",                                                     //String id
