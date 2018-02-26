@@ -142,10 +142,9 @@ public class RelateDE9IM {
 	}
 
 	public boolean isCrosses(Geometry g1,Geometry g2) {
-		//
-		//		System.out.println(" the second constuctor inside crosse");
-		System.out.println(" g1.getDimension() "+g1.getDimension());
-		System.out.println(" g2.getDimension() "+g2.getDimension());
+
+		//System.out.println(" g1.getDimension() "+g1.getDimension());
+		//System.out.println(" g2.getDimension() "+g2.getDimension());
 		if (g1.getDimension()< g2.getDimension())
 		{
 			return (im[0]>=0||im[0]==Dimension.TRUE)&&(im[2]>=0||im[2]==Dimension.TRUE);

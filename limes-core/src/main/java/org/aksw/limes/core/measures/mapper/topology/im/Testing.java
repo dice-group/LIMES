@@ -1,7 +1,6 @@
 package org.aksw.limes.core.measures.mapper.topology.im;
 
-
-
+import org.geotools.geometry.jts.JTSFactoryFinder;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -49,12 +48,6 @@ public class Testing {
 		System.out.println("overlaps: "+relatedeIM.isOverlaps());
 		System.out.println("crosses: "+relatedeIM.isCrosses(g1,g2));
 		System.out.println("the TIME2= "+(System.nanoTime()-t2)/1000);
-
-		//		double x=GeoOrthodromicMeasure.distance(51.44416923969517, 10.593362199988341, 51.0884746930557, 10.379321704968273);
-		//		double sim=1/(1+x);
-		//		System.out.println("the x values is "+ x);
-		//		System.out.println("the similarty is "+ sim);
-
 	}
 
 
