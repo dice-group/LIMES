@@ -16,8 +16,6 @@ public class RelateDE9IMTest extends TestCase {
 	GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory( null );
 	WKTReader reader = new WKTReader( geometryFactory );
 
-
-
 	public RelateDE9IMTest(String name) { super(name); }
 
 	public static TestSuite suite() { return new TestSuite(RelateDE9IMTest.class); }
@@ -25,14 +23,12 @@ public class RelateDE9IMTest extends TestCase {
 
 	public void testIsDisjoint()  {
 
-
 		assertTrue((new RelateDE9IM("FF*FF****")).isDisjoint());
 		assertTrue((new RelateDE9IM("FF1FF2T*0")).isDisjoint());
 		assertTrue(! (new RelateDE9IM("*F*FF****")).isDisjoint());
 	}
 
 	public void testIsTouches() {
-
 		assertTrue((new RelateDE9IM("FT*******")).isTouches());
 		assertTrue((new RelateDE9IM("F**T*****")).isTouches());
 		assertTrue((new RelateDE9IM("F***T****")).isTouches());	

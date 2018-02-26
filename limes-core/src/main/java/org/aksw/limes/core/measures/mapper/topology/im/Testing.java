@@ -13,20 +13,15 @@ public class Testing {
 
 		GeometryFactory geometryFactory =JTSFactoryFinder.getGeometryFactory( null );
 		WKTReader reader = new WKTReader( geometryFactory );
-
 		Geometry g1= reader.read("POLYGON ((20 10, 30 0, 40 10, 30 20, 20 10))");
 		Geometry g2= reader.read("POLYGON ((10 10, 20 0, 30 10, 20 20, 10 10))");
-
 		RelateDE9IM relatedeIM=new RelateDE9IM();
+		relatedeIM.relateIM(g1, g2);
 
-		int[]im;
-		im=new int[9];
-		im=relatedeIM.relateIM(g1, g2);
-		for(int i=0;i<9;i++)
-			System.out.println(" im "+ im[i]);
 
 		double t1=System.nanoTime();
 		System.out.println("contains:"+g1.contains(g2));
+		System.out.println("touches:"+g1.touches(g2));
 		System.out.println("equals: "+g1.equals(g2));
 		System.out.println("disjoint: "+g1.disjoint(g2));
 		System.out.println("coverdby: "+g1.coveredBy(g2));
@@ -36,9 +31,9 @@ public class Testing {
 		System.out.println("overlaps: "+g1.overlaps(g2));
 		System.out.println("crosses: "+g1.crosses(g2));
 		System.out.println("the TIME1= "+(System.nanoTime()-t1)/1000);
-
 		double t2=System.nanoTime();
 		System.out.println("contains: "+relatedeIM.isContains());
+		System.out.println("touches: "+relatedeIM. isTouches());
 		System.out.println("equals: "+relatedeIM.isEquals());
 		System.out.println("disjoint:  "+relatedeIM.isDisjoint());
 		System.out.println("coverdby: "+relatedeIM.isCoveredBy());
@@ -49,7 +44,5 @@ public class Testing {
 		System.out.println("crosses: "+relatedeIM.isCrosses(g1,g2));
 		System.out.println("the TIME2= "+(System.nanoTime()-t2)/1000);
 	}
-
-
 
 }
