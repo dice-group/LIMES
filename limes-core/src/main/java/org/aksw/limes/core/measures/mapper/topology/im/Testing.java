@@ -1,11 +1,10 @@
 package org.aksw.limes.core.measures.mapper.topology.im;
 
 
-import org.geotools.geometry.jts.JTSFactoryFinder;
+
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 

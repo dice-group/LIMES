@@ -7,7 +7,6 @@ import com.vividsolutions.jts.operation.relate.RelateOp;
 
 public class RelateDE9IM {
 
-
 	private int[] im;
 
 	public RelateDE9IM(String elements) {
@@ -17,7 +16,6 @@ public class RelateDE9IM {
 		im= new int[9];
 		set(elements);
 	}
-
 
 	public RelateDE9IM( Geometry g1,Geometry g2) {
 		this();
@@ -94,8 +92,6 @@ public class RelateDE9IM {
 
 	}
 
-
-
 	public boolean isEquals() {
 		if((im[0]>=0 ||im[0]==Dimension.TRUE)&&im[2]==Dimension.FALSE&&im[5]==Dimension.FALSE&&im[6]==Dimension.FALSE&&im[7]==Dimension.FALSE)
 			return true;
@@ -111,7 +107,8 @@ public class RelateDE9IM {
 		boolean b2=im[0]==1&&(im[2]>=0||im[2]==Dimension.TRUE)&&(im[6]>=0||im[6]==Dimension.TRUE);
 		if(b1==true || b2==true)
 			return true;
-		else return false;
+		else 
+			return false;
 
 	}
 
@@ -142,9 +139,7 @@ public class RelateDE9IM {
 			return true;
 		else 
 			return false;
-
 	}
-
 
 	public boolean isCrosses(Geometry g1,Geometry g2) {
 		//
@@ -165,8 +160,6 @@ public class RelateDE9IM {
 		{
 			return im[0]==0; 
 		} 
-
-
 
 		return false;
 
