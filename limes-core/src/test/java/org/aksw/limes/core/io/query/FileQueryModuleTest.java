@@ -28,7 +28,7 @@ public class FileQueryModuleTest {
                 Thread.currentThread().getContextClassLoader().getResource("ibuprofen.nt").getPath(),
                 null,                                                                //String graph
                 "?x",                                                                //String var
-                new ArrayList<String>(Arrays.asList("rdfs:label")),                    //List<String> properties
+                new ArrayList<String>(Arrays.asList("rdfs:label","dbpo:abstract")),                    //List<String> properties
                 null,                    //List<String> optionlProperties
                 new ArrayList<String>(Arrays.asList("?x rdf:type dbpo:Drug")),        //ArrayList<String> restrictions
                 functions,                                                        //Map<String, Map<String, String>> functions
@@ -43,7 +43,11 @@ public class FileQueryModuleTest {
         fqm.fillCache(cache);
 
         assertTrue(cache.size() > 0);
-        System.out.println(cache);
+        for(String abs: cache.getAllInstances().get(0).getProperty("dbpo:abstract")){
+        	if(abs.contains("@en")){
+        		System.out.println(abs);
+        	}
+        }
     }
 
 }

@@ -1,68 +1,166 @@
 package org.aksw.limes.core.io.preprocessing;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.TreeSet;
 
 import org.aksw.limes.core.io.cache.HybridCache;
-import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.preprocessing.AProcessingFunction.IllegalNumberOfPropertiesException;
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.io.preprocessing.AProcessingFunction.IllegalNumberOfParametersException;
+import org.aksw.limes.core.io.preprocessing.functions.CleanIri;
+import org.aksw.limes.core.io.preprocessing.functions.RegexReplace;
+import org.aksw.limes.core.io.preprocessing.functions.RemoveLanguageTag;
+import org.aksw.limes.core.io.preprocessing.functions.Replace;
+import org.aksw.limes.core.io.preprocessing.functions.ToLowercase;
 import org.aksw.limes.core.io.preprocessing.functions.ToUppercase;
-import org.aksw.limes.core.io.query.FileQueryModule;
 import org.junit.Before;
 import org.junit.Test;
 
 public class PreprocessingFunctionsTest {
 	public static final String TEST_INSTANCE = "http://dbpedia.org/resource/Ibuprofen";
 	public static final String UPPERCASE_EXPECTED = "IBUPROFEN@DE";
+	public static final String LOWERCASE_EXPECTED = "ibuprofen@de";
+	public static final String REPLACE_EXPECTED = "Ibuprofen";
+	public static final String REPLACE_EXPECTED2 = "Ibuprofen@en";
+	public static final String REMOVELANGUAGETAG_EXPECTED = "testext";
+	public static final String REGEX_REPLACE_EXPECTED = "Ibuprofen is a nonsteroidal anti-inflammatory drug derivative of propionic acid used for relieving pain, helping with fever and reducing inflammation.";
+	public static final String CLEAN_IRI_EXPECTED = "label";
+
+	public static final String PROP_LABEL = "rdfs:label";
+	public static final String PROP_TEST2 = "test2";
+	public static final String PROP_ABSTRACT = "dbo:abstract";
+	public static final String PROP_ABSTRACT_VALUE = "Ibuprofen (/ˈaɪbjuːproʊfɛn/ or /aɪbjuːˈproʊfən/ EYE-bew-PROH-fən; from isobutylphenylpropanoic acid) is a nonsteroidal anti-inflammatory drug (NSAID) derivative of propionic acid used for relieving pain, helping with fever and reducing inflammation.@en";
+	public static final String PROP_IRI = "iri";
+	public static final String PROP_IRI_VALUE = "http://www.w3.org/2000/01/rdf-schema#label";
+	//Removes everything inside braces and language tag
+	public static final String REGEX = "\\((.*?)\\) |@\\w*"; 
 	public HybridCache cache;
 
 	@Before
-	public void prepareData(){
-        HashMap<String, String> prefixes = new HashMap<>();
-        prefixes.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-        prefixes.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-        prefixes.put("dbpo", "http://dbpedia.org/ontology/");
+	public void prepareData() {
+		cache = new HybridCache();
+		Instance testInstance = new Instance(TEST_INSTANCE);
 
-        Map<String, Map<String, String>> functions = new HashMap<>();
+		TreeSet<String> labels = new TreeSet<>();
+		labels.add("Ibuprofen@de");
+		labels.add("Ibuprofen@en");
+		testInstance.addProperty(PROP_LABEL, labels);
 
-        KBInfo kbinfo = new KBInfo(
-                "DBpedia",                                                            //String id
-//                "resources/ibuprofen.nt",                                            //String endpoint
-                Thread.currentThread().getContextClassLoader().getResource("ibuprofen.nt").getPath(),
-                null,                                                                //String graph
-                "?x",                                                                //String var
-                new ArrayList<String>(Arrays.asList("rdfs:label")),                    //List<String> properties
-                null,                    //List<String> optionlProperties
-                new ArrayList<String>(Arrays.asList("?x rdf:type dbpo:Drug")),        //ArrayList<String> restrictions
-                functions,                                                        //Map<String, Map<String, String>> functions
-                prefixes,                                                            //Map<String, String> prefixes
-                1000,                                                                //int pageSize
-                "N3",                                                                //String type
-                -1,                                                               //int minOffset
-                -1                                                                //int maxoffset
-        );
-        FileQueryModule fqm = new FileQueryModule(kbinfo);
-        cache = new HybridCache();
-        fqm.fillCache(cache);
+		TreeSet<String> test2 = new TreeSet<>();
+		test2.add(REMOVELANGUAGETAG_EXPECTED);
+		testInstance.addProperty(PROP_TEST2, test2);
+
+		TreeSet<String> abstractProp = new TreeSet<>();
+		abstractProp.add(PROP_ABSTRACT_VALUE);
+		testInstance.addProperty(PROP_ABSTRACT,abstractProp);
+
+		TreeSet<String> iri = new TreeSet<>();
+		iri.add(PROP_IRI);
+		testInstance.addProperty(PROP_IRI,PROP_IRI_VALUE);
+
+		cache.addInstance(testInstance);
 	}
-	
+
 	@Test
-	public void testUppercase() throws IllegalNumberOfPropertiesException{
-		new ToUppercase().applyFunction(cache, "rdfs:label");
+	public void testHasPropertyPredicate() {
+		Instance i = new Instance("uri");
+		i.addProperty("a", "a");
+		i.addProperty("b", "b");
+		i.addProperty("c", "c");
+		assertTrue(AProcessingFunction.hasProperty("a").test(i));
+	}
+
+	@Test
+	public void testHasPropertyPredicateWrongProperty() {
+		Instance i = new Instance("uri");
+		i.addProperty("a", "a");
+		i.addProperty("b", "b");
+		i.addProperty("c", "c");
+		assertFalse(AProcessingFunction.hasProperty("d").test(i));
+	}
+
+	@Test
+	public void testHasPropertyPredicateMultipleProperties() {
+		Instance i = new Instance("uri");
+		i.addProperty("a", "a");
+		i.addProperty("b", "b");
+		i.addProperty("c", "c");
+		assertTrue(AProcessingFunction.hasProperty(new String[] { "a", "b", "d" }).test(i));
+	}
+
+	@Test
+	public void testUppercase() throws IllegalNumberOfParametersException {
+		new ToUppercase().process(cache, new String[] { PROP_LABEL });
 		assertTrue(cache.size() > 0);
-		assertEquals(UPPERCASE_EXPECTED, cache.getInstance(TEST_INSTANCE).getProperty("rdfs:label").first());
+		assertEquals(UPPERCASE_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_LABEL).first());
+	}
+
+	@Test
+	public void testAProcessingFunctionWrongPropertyNumber() {
+		try {
+			// The relevant functionality is the same for all classes that
+			// extend AProcessingFunction
+			new ToUppercase().process(cache, new String[0]);
+			assertFalse(true);
+		} catch (IllegalNumberOfParametersException e) {
+		}
+	}
+
+	@Test
+	public void testAProcessingFunctionWrongArgumentNumber() {
+		try {
+			// The relevant functionality is the same for all classes that
+			// extend AProcessingFunction
+			new ToUppercase().process(cache, new String[] { PROP_LABEL }, "bla");
+			assertFalse(true);
+		} catch (IllegalNumberOfParametersException e) {
+		}
+	}
+
+	@Test
+	public void testLowercase() throws IllegalNumberOfParametersException {
+		new ToLowercase().process(cache, new String[] { PROP_LABEL });
+		assertTrue(cache.size() > 0);
+		assertEquals(LOWERCASE_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_LABEL).first());
+	}
+
+	@Test
+	public void testRemoveLanguageTag() throws IllegalNumberOfParametersException {
+		new RemoveLanguageTag().process(cache, new String[] { PROP_LABEL });
+		assertTrue(cache.size() > 0);
+		assertEquals(1, cache.getInstance(TEST_INSTANCE).getProperty(PROP_LABEL).size());
+		assertEquals(REPLACE_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_LABEL).first());
+	}
+
+	@Test
+	public void testRemoveLanguageTagNoTagPresent() throws IllegalNumberOfParametersException {
+		new RemoveLanguageTag().process(cache, new String[] { PROP_TEST2 });
+		assertTrue(cache.size() > 0);
+		assertEquals(1, cache.getInstance(TEST_INSTANCE).getProperty(PROP_TEST2).size());
+		assertEquals(REMOVELANGUAGETAG_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_TEST2).first());
+	}
+
+	@Test
+	public void testReplace() throws IllegalNumberOfParametersException {
+		new Replace().process(cache, new String[] { PROP_LABEL }, "@de", "");
+		assertTrue(cache.size() > 0);
+		assertTrue(cache.getInstance(TEST_INSTANCE).getProperty(PROP_LABEL).contains(REPLACE_EXPECTED));
+		assertTrue(cache.getInstance(TEST_INSTANCE).getProperty(PROP_LABEL).contains(REPLACE_EXPECTED2));
 	}
 	
 	@Test
-	public void testUppercaseWrongParameterNumber(){
-		try{
-            new ToUppercase().applyFunction(cache, new String[0]);
-            assertFalse(true);
-		}catch(IllegalNumberOfPropertiesException e){
-		}
+	public void testRegexReplace() throws IllegalNumberOfParametersException {
+		new RegexReplace().process(cache, new String[] { PROP_ABSTRACT }, REGEX, "");
+		assertTrue(cache.size() > 0);
+		assertEquals(REGEX_REPLACE_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_ABSTRACT).first());
+	}
+
+	@Test
+	public void testCleanIri() throws IllegalNumberOfParametersException {
+		new CleanIri().process(cache, new String[] { PROP_IRI });
+		assertTrue(cache.size() > 0);
+		assertEquals(CLEAN_IRI_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_IRI).first());
 	}
 }

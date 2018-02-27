@@ -36,5 +36,4 @@ public class PreprocessorTest {
         assertTrue(process.equals(anObject));
     }
 
-
 }

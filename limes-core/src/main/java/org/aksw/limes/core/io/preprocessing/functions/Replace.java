@@ -1,6 +1,7 @@
 package org.aksw.limes.core.io.preprocessing.functions;
 
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.preprocessing.AProcessingFunction;
@@ -14,7 +15,7 @@ public class Replace extends AProcessingFunction implements IProcessingFunction 
             TreeSet<String> oldValues = i.getProperty(prop);
             TreeSet<String> newValues = new TreeSet<>();
             for (String value : oldValues) {
-                newValues.add(value.replace(arguments[0],arguments[1]));
+                newValues.add(value.replaceAll(Pattern.quote(arguments[0]),arguments[1]));
             }
             i.replaceProperty(prop, newValues);
 		}

@@ -6,7 +6,7 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.preprocessing.AProcessingFunction;
 import org.aksw.limes.core.io.preprocessing.IProcessingFunction;
 
-public class ToUppercase extends AProcessingFunction implements IProcessingFunction {
+public class RegexReplace extends AProcessingFunction implements IProcessingFunction {
 
 	@Override
 	public Instance applyFunction(Instance i, String[] properties, String... arguments) {
@@ -14,7 +14,7 @@ public class ToUppercase extends AProcessingFunction implements IProcessingFunct
             TreeSet<String> oldValues = i.getProperty(prop);
             TreeSet<String> newValues = new TreeSet<>();
             for (String value : oldValues) {
-                newValues.add(value.toUpperCase());
+                newValues.add(value.replaceAll(arguments[0],arguments[1]));
             }
             i.replaceProperty(prop, newValues);
 		}
@@ -34,12 +34,12 @@ public class ToUppercase extends AProcessingFunction implements IProcessingFunct
 
 	@Override
 	public int minNumberOfArguments() {
-		return 0;
+		return 2;
 	}
 
 	@Override
 	public int maxNumberOfArguments() {
-		return 0;
+		return 2;
 	}
 
 }

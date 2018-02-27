@@ -6,7 +6,7 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.preprocessing.AProcessingFunction;
 import org.aksw.limes.core.io.preprocessing.IProcessingFunction;
 
-public class ToUppercase extends AProcessingFunction implements IProcessingFunction {
+public class RemoveLanguageTag extends AProcessingFunction implements IProcessingFunction {
 
 	@Override
 	public Instance applyFunction(Instance i, String[] properties, String... arguments) {
@@ -14,7 +14,11 @@ public class ToUppercase extends AProcessingFunction implements IProcessingFunct
             TreeSet<String> oldValues = i.getProperty(prop);
             TreeSet<String> newValues = new TreeSet<>();
             for (String value : oldValues) {
-                newValues.add(value.toUpperCase());
+            	if(value.contains(AT)){
+            		newValues.add(value.substring(0, value.lastIndexOf(AT)));
+            	}else{
+            		newValues.add(value);
+            	}
             }
             i.replaceProperty(prop, newValues);
 		}
