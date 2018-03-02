@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ import org.junit.Test;
 public class XMLConfigurationReaderTest {
     
     Map<String, String> prefixes = new HashMap<>();
-    Map<String, Map<String, String>> functions = new HashMap<>();
+    LinkedHashMap<String, Map<String, String>> functions = new LinkedHashMap<>();
     KBInfo sourceInfo, targetInfo;
     Configuration testConf;
 
@@ -38,7 +39,6 @@ public class XMLConfigurationReaderTest {
         HashMap<String, String> f = new HashMap<>();
         f.put("polygon", null);
         functions.put("geom:geometry/geos:asWKT", f);
-        functions = Collections.unmodifiableMap(functions);
         
         sourceInfo = new KBInfo(
                 "linkedgeodata",                                                  //String id
