@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
@@ -29,7 +30,7 @@ import org.slf4j.LoggerFactory;
  * @version Jul 8, 2015
  */
 public class MemoryCache extends ACache {
-    private static final Logger logger = LoggerFactory.getLogger(MemoryCache.class);
+    private static final Logger logger = LoggerFactory.getLogger(MemoryCacheTest.class);
     
     // maps uris to instance. A bit redundant as instance contain their URI
     protected HashMap<String, Instance> instanceMap = null;
@@ -47,6 +48,10 @@ public class MemoryCache extends ACache {
      * @return null if no next instance, else the next instance
      */
     public Instance getNextInstance() {
+        if (instanceIterator == null) {
+            instanceIterator = instanceMap.values().iterator();
+        }
+
         if (instanceIterator.hasNext()) {
             return instanceIterator.next();
         } else {
@@ -255,5 +260,32 @@ public class MemoryCache extends ACache {
         }
         return model;
     }
+
+    /**
+     * Ignores instanceIterator since there is no sane way to test the equality of iterators 
+     */
+	@Override
+	public MemoryCache clone() {
+		MemoryCache clone = new MemoryCache();
+		for(Instance i : getAllInstances()){
+			clone.addInstance(i.copy());
+		}
+		return clone;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(instanceMap);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof MemoryCache){
+			final MemoryCache other = (MemoryCache) obj;
+			return Objects.equals(instanceMap, other.instanceMap);
+		}else{
+			return false;
+		}
+	}
 
 }

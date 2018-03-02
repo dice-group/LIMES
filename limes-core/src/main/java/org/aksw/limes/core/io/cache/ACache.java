@@ -36,6 +36,15 @@ public abstract class ACache implements ICache {
     public abstract void replaceInstance(String uri, Instance a);
 
     public abstract Set<String> getAllProperties();
+    
+    @Override
+    public abstract ACache clone();
+    
+    @Override
+    public abstract int hashCode();
+
+    @Override
+    public abstract boolean equals(Object obj);
 
     /**
      * Method to processData according to specific preprocessing steps.
