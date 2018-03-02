@@ -4,23 +4,30 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.preprocessing.AProcessingFunction;
-import org.aksw.limes.core.io.preprocessing.IProcessingFunction;
+import org.aksw.limes.core.io.preprocessing.APreprocessingFunction;
+import org.aksw.limes.core.io.preprocessing.IPreprocessingFunction;
+import org.apache.commons.lang.ArrayUtils;
 
-public class Concat extends AProcessingFunction implements IProcessingFunction {
+public class Concat extends APreprocessingFunction implements IPreprocessingFunction {
+	public static final String GLUE_FLAG = "glue=";
 	private String resultProperty;
 	private String glue;
 
 	@Override
-	public Instance applyFunction(Instance inst, String[] properties, String... arguments) {
-		resultProperty = arguments[0];
-		if (arguments.length > 1 && arguments[1] != null) {
-			glue = arguments[1];
-		} else {
+	public Instance applyFunctionAfterCheck(Instance inst, String property, String... arguments) {
+		resultProperty = property;
+		
+		//glue flag might have leading white spaces, trailing should NOT be removed, as they could be the glue
+		glue = arguments[arguments.length-1].replaceAll("^\\s+","");
+		//Check if glue flag is used
+		if (glue.startsWith(GLUE_FLAG)) {
+			glue = glue.replace(GLUE_FLAG, "");
+			arguments = (String[]) ArrayUtils.removeElement(arguments, arguments[arguments.length-1]);
+		} else { //Else don't use glue
 			glue = "";
 		}
 		ArrayList<ArrayList<String>> oldValues = new ArrayList<>();
-		for (String prop : properties) {
+		for (String prop : arguments) {
 			ArrayList<String> treeValues = new ArrayList<>();
 			inst.getProperty(prop).forEach(e -> treeValues.add(e));
 			oldValues.add(treeValues);
@@ -40,7 +47,8 @@ public class Concat extends AProcessingFunction implements IProcessingFunction {
 		return res;
 	}
 
-	public static ArrayList<String> concatArrayElements(ArrayList<String> first, ArrayList<String> toConcat, String... glue) {
+	public static ArrayList<String> concatArrayElements(ArrayList<String> first, ArrayList<String> toConcat,
+			String... glue) {
 		ArrayList<String> res = new ArrayList<>();
 		for (String firstPart : first) {
 			res.addAll(concatStringToElements(firstPart, toConcat, glue));
@@ -48,7 +56,8 @@ public class Concat extends AProcessingFunction implements IProcessingFunction {
 		return res;
 	}
 
-	public static ArrayList<String> concatStringToElements(String firstPart, ArrayList<String> toConcat, String... glue) {
+	public static ArrayList<String> concatStringToElements(String firstPart, ArrayList<String> toConcat,
+			String... glue) {
 		ArrayList<String> res = new ArrayList<>();
 		for (String secondPart : toConcat) {
 			if (glue.length > 0) {
@@ -61,23 +70,13 @@ public class Concat extends AProcessingFunction implements IProcessingFunction {
 	}
 
 	@Override
-	public int minNumberOfProperties() {
-		return 2;
-	}
-
-	@Override
-	public int maxNumberOfProperties() {
-		return -1;
-	}
-
-	@Override
 	public int minNumberOfArguments() {
-		return 1;
+		return 2;
 	}
 
 	@Override
 	public int maxNumberOfArguments() {
-		return 2;
+		return -1;
 	}
 
 }

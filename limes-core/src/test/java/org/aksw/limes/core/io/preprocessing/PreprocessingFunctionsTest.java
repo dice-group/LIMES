@@ -8,14 +8,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeSet;
 
+import org.aksw.limes.core.exceptions.IllegalNumberOfParametersException;
 import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.preprocessing.AProcessingFunction.IllegalNumberOfParametersException;
 import org.aksw.limes.core.io.preprocessing.functions.CleanIri;
 import org.aksw.limes.core.io.preprocessing.functions.CleanNumber;
 import org.aksw.limes.core.io.preprocessing.functions.Concat;
 import org.aksw.limes.core.io.preprocessing.functions.RegexReplace;
 import org.aksw.limes.core.io.preprocessing.functions.RemoveLanguageTag;
+import org.aksw.limes.core.io.preprocessing.functions.RenameProperty;
 import org.aksw.limes.core.io.preprocessing.functions.Replace;
 import org.aksw.limes.core.io.preprocessing.functions.ToCelsius;
 import org.aksw.limes.core.io.preprocessing.functions.ToFahrenheit;
@@ -48,33 +49,38 @@ public class PreprocessingFunctionsTest {
 	public static final String PROP_TEST2 = "test2";
 	public static final String PROP_ABSTRACT = "dbo:abstract";
 	public static final String PROP_IRI = "iri";
+	public static final String PROP_IRI_NO_HASHTAG = "irino#";
 	public static final String PROP_NUMBER = "number";
+	public static final String PROP_NUMBER_NOT_PARSEABLE = "numbernotparseable";
 	public static final String PROP_CONCAT1 = "concat1";
 	public static final String PROP_CONCAT2 = "concat2";
 	public static final String PROP_CONCAT_RESULT = "concatresult";
 	
 	//=============== VALUES ===========================================
 	public static final String PROP_NUMBER_VALUE = "10^^http://www.w3.org/2001/XMLSchema#positiveInteger";
+	public static final String PROP_NUMBER_NOT_PARSEABLE_VALUE = "10.0.0.1^^http://www.w3.org/2001/XMLSchema#positiveInteger";
 	public static final String PROP_TEMPERATURE = "temperature";
 	public static final String PROP_TEMPERATURE_VALUE = "-20^^http://www.w3.org/2001/XMLSchema#decimal";
 	public static final String PROP_ABSTRACT_VALUE = "Ibuprofen (/ˈaɪbjuːproʊfɛn/ or /aɪbjuːˈproʊfən/ EYE-bew-PROH-fən; from isobutylphenylpropanoic acid) is a nonsteroidal anti-inflammatory drug (NSAID) derivative of propionic acid used for relieving pain, helping with fever and reducing inflammation.@en";
 	public static final String PROP_IRI_VALUE = "http://www.w3.org/2000/01/rdf-schema#label";
+	public static final String PROP_IRI_NO_HASHTAG_VALUE = "http://www.w3.org/2000/01/rdf-schema/label";
 	public static final String PROP_CONCAT1_VALUE1 = "hello";
 	public static final String PROP_CONCAT1_VALUE2 = "goodbye";
 	public static final String PROP_CONCAT2_VALUE = "world";
+	public static final String PROP_LABEL_VALUE1 = "Ibuprofen@de";
+	public static final String PROP_LABEL_VALUE2 = "Ibuprofen@en";
 
 	//Used for RegexReplaceTest Removes everything inside braces and language tag
 	public static final String REGEX = "\\((.*?)\\) |@\\w*"; 
-	public HybridCache cache;
+	public Instance testInstance;
 
 	@Before
 	public void prepareData() {
-		cache = new HybridCache();
-		Instance testInstance = new Instance(TEST_INSTANCE);
+		testInstance = new Instance(TEST_INSTANCE);
 
 		TreeSet<String> labels = new TreeSet<>();
-		labels.add("Ibuprofen@de");
-		labels.add("Ibuprofen@en");
+		labels.add(PROP_LABEL_VALUE1);
+		labels.add(PROP_LABEL_VALUE2);
 		testInstance.addProperty(PROP_LABEL, labels);
 
 		testInstance.addProperty(PROP_TEST2, REMOVELANGUAGETAG_EXPECTED);
@@ -82,6 +88,8 @@ public class PreprocessingFunctionsTest {
 		testInstance.addProperty(PROP_IRI,PROP_IRI_VALUE);
 		testInstance.addProperty(PROP_NUMBER,PROP_NUMBER_VALUE);
 		testInstance.addProperty(PROP_TEMPERATURE, PROP_TEMPERATURE_VALUE);
+		testInstance.addProperty(PROP_NUMBER_NOT_PARSEABLE, PROP_NUMBER_NOT_PARSEABLE_VALUE);
+		testInstance.addProperty(PROP_IRI_NO_HASHTAG, PROP_IRI_NO_HASHTAG_VALUE);
 
 		TreeSet<String> concat1 = new TreeSet<>();
 		concat1.add(PROP_CONCAT1_VALUE1);
@@ -89,7 +97,6 @@ public class PreprocessingFunctionsTest {
 		testInstance.addProperty(PROP_CONCAT1, concat1);
 		testInstance.addProperty(PROP_CONCAT2, PROP_CONCAT2_VALUE);
 
-		cache.addInstance(testInstance);
 		
 		
 		toConcatInOrder = new ArrayList<>();
@@ -104,7 +111,7 @@ public class PreprocessingFunctionsTest {
 		i.addProperty("a", "a");
 		i.addProperty("b", "b");
 		i.addProperty("c", "c");
-		assertTrue(AProcessingFunction.hasProperty("a").test(i));
+		assertTrue(APreprocessingFunction.hasProperty("a").test(i));
 	}
 
 	@Test
@@ -113,7 +120,7 @@ public class PreprocessingFunctionsTest {
 		i.addProperty("a", "a");
 		i.addProperty("b", "b");
 		i.addProperty("c", "c");
-		assertFalse(AProcessingFunction.hasProperty("d").test(i));
+		assertFalse(APreprocessingFunction.hasProperty("d").test(i));
 	}
 
 	@Test
@@ -122,25 +129,13 @@ public class PreprocessingFunctionsTest {
 		i.addProperty("a", "a");
 		i.addProperty("b", "b");
 		i.addProperty("c", "c");
-		assertTrue(AProcessingFunction.hasProperty(new String[] { "a", "b", "d" }).test(i));
+		assertTrue(APreprocessingFunction.hasProperty(new String[] { "a", "b", "d" }).test(i));
 	}
 
 	@Test
 	public void testUppercase() throws IllegalNumberOfParametersException {
-		new ToUppercase().process(cache, new String[] { PROP_LABEL });
-		assertTrue(cache.size() > 0);
-		assertEquals(UPPERCASE_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_LABEL).first());
-	}
-
-	@Test
-	public void testAProcessingFunctionWrongPropertyNumber() {
-		try {
-			// The relevant functionality is the same for all classes that
-			// extend AProcessingFunction
-			new ToUppercase().process(cache, new String[0]);
-			assertFalse(true);
-		} catch (IllegalNumberOfParametersException e) {
-		}
+		new ToUppercase().applyFunction(testInstance, PROP_LABEL);
+		assertEquals(UPPERCASE_EXPECTED,testInstance.getProperty(PROP_LABEL).first());
 	}
 
 	@Test
@@ -148,7 +143,7 @@ public class PreprocessingFunctionsTest {
 		try {
 			// The relevant functionality is the same for all classes that
 			// extend AProcessingFunction
-			new ToUppercase().process(cache, new String[] { PROP_LABEL }, "bla");
+			new ToUppercase().applyFunction(testInstance, PROP_LABEL, "bla");
 			assertFalse(true);
 		} catch (IllegalNumberOfParametersException e) {
 		}
@@ -156,68 +151,77 @@ public class PreprocessingFunctionsTest {
 
 	@Test
 	public void testLowercase() throws IllegalNumberOfParametersException {
-		new ToLowercase().process(cache, new String[] { PROP_LABEL });
-		assertTrue(cache.size() > 0);
-		assertEquals(LOWERCASE_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_LABEL).first());
+		new ToLowercase().applyFunction(testInstance, PROP_LABEL);
+		assertEquals(LOWERCASE_EXPECTED,testInstance.getProperty(PROP_LABEL).first());
 	}
 
 	@Test
 	public void testRemoveLanguageTag() throws IllegalNumberOfParametersException {
-		new RemoveLanguageTag().process(cache, new String[] { PROP_LABEL });
-		assertTrue(cache.size() > 0);
-		assertEquals(1, cache.getInstance(TEST_INSTANCE).getProperty(PROP_LABEL).size());
-		assertEquals(REPLACE_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_LABEL).first());
+		new RemoveLanguageTag().applyFunction(testInstance, PROP_LABEL);
+		assertEquals(1,testInstance.getProperty(PROP_LABEL).size());
+		assertEquals(REPLACE_EXPECTED,testInstance.getProperty(PROP_LABEL).first());
 	}
 
 	@Test
 	public void testRemoveLanguageTagNoTagPresent() throws IllegalNumberOfParametersException {
-		new RemoveLanguageTag().process(cache, new String[] { PROP_TEST2 });
-		assertTrue(cache.size() > 0);
-		assertEquals(1, cache.getInstance(TEST_INSTANCE).getProperty(PROP_TEST2).size());
-		assertEquals(REMOVELANGUAGETAG_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_TEST2).first());
+		new RemoveLanguageTag().applyFunction(testInstance, PROP_TEST2);
+		assertEquals(1,testInstance.getProperty(PROP_TEST2).size());
+		assertEquals(REMOVELANGUAGETAG_EXPECTED,testInstance.getProperty(PROP_TEST2).first());
 	}
 
 	@Test
 	public void testReplace() throws IllegalNumberOfParametersException {
-		new Replace().process(cache, new String[] { PROP_LABEL }, "@de", "");
-		assertTrue(cache.size() > 0);
-		assertTrue(cache.getInstance(TEST_INSTANCE).getProperty(PROP_LABEL).contains(REPLACE_EXPECTED));
-		assertTrue(cache.getInstance(TEST_INSTANCE).getProperty(PROP_LABEL).contains(REPLACE_EXPECTED2));
+		new Replace().applyFunction(testInstance, PROP_LABEL, "@de");
+		assertTrue(testInstance.getProperty(PROP_LABEL).contains(REPLACE_EXPECTED));
+		assertTrue(testInstance.getProperty(PROP_LABEL).contains(REPLACE_EXPECTED2));
 	}
 	
 	@Test
 	public void testRegexReplace() throws IllegalNumberOfParametersException {
-		new RegexReplace().process(cache, new String[] { PROP_ABSTRACT }, REGEX, "");
-		assertTrue(cache.size() > 0);
-		assertEquals(REGEX_REPLACE_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_ABSTRACT).first());
+		new RegexReplace().applyFunction(testInstance, PROP_ABSTRACT, REGEX, "");
+		assertEquals(REGEX_REPLACE_EXPECTED,testInstance.getProperty(PROP_ABSTRACT).first());
 	}
 
 	@Test
 	public void testCleanIri() throws IllegalNumberOfParametersException {
-		new CleanIri().process(cache, new String[] { PROP_IRI });
-		assertTrue(cache.size() > 0);
-		assertEquals(CLEAN_IRI_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_IRI).first());
+		new CleanIri().applyFunction(testInstance, PROP_IRI);
+		assertEquals(CLEAN_IRI_EXPECTED,testInstance.getProperty(PROP_IRI).first());
+	}
+
+	@Test
+	public void testCleanIriNoHashtag() throws IllegalNumberOfParametersException {
+		new CleanIri().applyFunction(testInstance, PROP_IRI_NO_HASHTAG);
+		assertEquals(CLEAN_IRI_EXPECTED,testInstance.getProperty(PROP_IRI_NO_HASHTAG).first());
 	}
 
 	@Test
 	public void testCleanNumber() throws IllegalNumberOfParametersException {
-		new CleanNumber().process(cache, new String[] { PROP_NUMBER });
-		assertTrue(cache.size() > 0);
-		assertEquals(CLEAN_NUMBER_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_NUMBER).first());
+		new CleanNumber().applyFunction(testInstance, PROP_NUMBER);
+		assertEquals(CLEAN_NUMBER_EXPECTED,testInstance.getProperty(PROP_NUMBER).first());
+	}
+	
+	@Test
+	public void testCleanNumberNotParseable() throws IllegalNumberOfParametersException {
+		new CleanNumber().applyFunction(testInstance, PROP_NUMBER_NOT_PARSEABLE);
+		assertEquals("0",testInstance.getProperty(PROP_NUMBER_NOT_PARSEABLE).first());
+	}
+	
+	@Test
+	public void testCleanNumberNoNumberPresent() throws IllegalNumberOfParametersException {
+		new CleanNumber().applyFunction(testInstance, PROP_LABEL);
+		assertEquals("0",testInstance.getProperty(PROP_LABEL).first());
 	}
 
 	@Test
 	public void testToCelsius() throws IllegalNumberOfParametersException {
-		new ToCelsius().process(cache, new String[] { PROP_TEMPERATURE });
-		assertTrue(cache.size() > 0);
-		assertEquals(TO_CELSIUS_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_TEMPERATURE).first());
+		new ToCelsius().applyFunction(testInstance, PROP_TEMPERATURE);
+		assertEquals(TO_CELSIUS_EXPECTED,testInstance.getProperty(PROP_TEMPERATURE).first());
 	}
 
 	@Test
 	public void testToFahrenheit() throws IllegalNumberOfParametersException {
-		new ToFahrenheit().process(cache, new String[] { PROP_TEMPERATURE });
-		assertTrue(cache.size() > 0);
-		assertEquals(TO_FAHRENHEIT_EXPECTED,cache.getInstance(TEST_INSTANCE).getProperty(PROP_TEMPERATURE).first());
+		new ToFahrenheit().applyFunction(testInstance, PROP_TEMPERATURE);
+		assertEquals(TO_FAHRENHEIT_EXPECTED,testInstance.getProperty(PROP_TEMPERATURE).first());
 	}
 	
 	@Test
@@ -228,15 +232,21 @@ public class PreprocessingFunctionsTest {
 	
 	@Test
 	public void testConcat() throws IllegalNumberOfParametersException {
-		new Concat().process(cache, new String[] { PROP_CONCAT1, PROP_CONCAT2 }, PROP_CONCAT_RESULT);
-		assertTrue(cache.size() > 0);
-		assertEquals(CONCAT_EXPECTED, cache.getInstance(TEST_INSTANCE).getProperty(PROP_CONCAT_RESULT));
+		new Concat().applyFunction(testInstance, PROP_CONCAT_RESULT, PROP_CONCAT1, PROP_CONCAT2);
+		assertEquals(CONCAT_EXPECTED,testInstance.getProperty(PROP_CONCAT_RESULT));
 	}
 
 	@Test
 	public void testConcatGlue() throws IllegalNumberOfParametersException {
-		new Concat().process(cache, new String[] { PROP_CONCAT1, PROP_CONCAT2 }, PROP_CONCAT_RESULT, " ");
-		assertTrue(cache.size() > 0);
-		assertEquals(CONCAT_EXPECTED_GLUE, cache.getInstance(TEST_INSTANCE).getProperty(PROP_CONCAT_RESULT));
+		new Concat().applyFunction(testInstance, PROP_CONCAT_RESULT, PROP_CONCAT1, PROP_CONCAT2, "glue= ");
+		assertEquals(CONCAT_EXPECTED_GLUE,testInstance.getProperty(PROP_CONCAT_RESULT));
 	}
+	
+	@Test
+	public void testRenameProperty() throws IllegalNumberOfParametersException {
+		String expected = PROP_LABEL.replace("rdfs:","");
+		new RenameProperty().applyFunction(testInstance, PROP_LABEL, expected);
+		assertTrue(testInstance.getAllProperties().contains(expected));
+	}
+	
 }

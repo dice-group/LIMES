@@ -108,7 +108,7 @@ public class SparqlQueryModule implements IQueryModule {
             ResultSet results = qexec.execSelect();
 
             // write
-            String uri, propertyLabel, rawValue, value;
+            String uri, propertyLabel, value;
             try {
                 if (results.hasNext()) {
                     moreResults = true;

@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -71,7 +72,7 @@ public class OptionalPropertiesTest extends ApplicationTest{
 		prefixes.put("owl","http://www.w3.org/2002/07/owl#");
 		prefixes.put("test","http://www.test.org/ont#");
 		prefixes.put("rdf","http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-        Map<String, Map<String,String>> functions = new HashMap<>();
+        LinkedHashMap<String, Map<String,String>> functions = new LinkedHashMap<>();
         HashMap<String, String> f = new HashMap<>();
         f.put("test:sp1", null);
         functions.put("test:sp1", f);

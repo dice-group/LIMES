@@ -5,37 +5,34 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.preprocessing.AProcessingFunction;
-import org.aksw.limes.core.io.preprocessing.IProcessingFunction;
+import org.aksw.limes.core.io.preprocessing.APreprocessingFunction;
+import org.aksw.limes.core.io.preprocessing.IPreprocessingFunction;
 
 /**
- * Removes type information from number properties
+ * Removes type information from number propertyerties
  * 
  * @author Daniel Obraczka
  *
  */
-public class CleanNumber extends AProcessingFunction implements IProcessingFunction {
+public class CleanNumber extends APreprocessingFunction implements IPreprocessingFunction {
 	/**
 	 * Matches a number that is followed by "^"
 	 */
 	public static final Pattern regex = Pattern.compile("[0-9,.-]+(?=\\^)");
 
 	@Override
-	public Instance applyFunction(Instance i, String[] properties, String... arguments) {
-		for (String prop : properties) {
-			TreeSet<String> oldValues = i.getProperty(prop);
+	public Instance applyFunctionAfterCheck(Instance i, String property, String... arguments) {
+			TreeSet<String> oldValues = i.getProperty(property);
 			TreeSet<String> newValues = new TreeSet<>();
 			for (String value : oldValues) {
 				newValues.add(removeTypeInformation(value));
 			}
-			i.replaceProperty(prop, newValues);
-		}
+			i.replaceProperty(property, newValues);
 		return i;
-
 	}
 
 	/**
-	 * Removes type information from number properties, e.g.
+	 * Removes type information from number propertyerties, e.g.
 	 * "10^^http://www.w3.org/2001/XMLSchema#positiveInteger" would become "10"
 	 * 
 	 * @param number
@@ -58,15 +55,6 @@ public class CleanNumber extends AProcessingFunction implements IProcessingFunct
 		return newValue;
 	}
 
-	@Override
-	public int minNumberOfProperties() {
-		return 1;
-	}
-
-	@Override
-	public int maxNumberOfProperties() {
-		return -1;
-	}
 
 	@Override
 	public int minNumberOfArguments() {
