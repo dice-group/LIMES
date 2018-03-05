@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  * @version Jul 8, 2015
  */
 public class MemoryCache extends ACache {
-    private static final Logger logger = LoggerFactory.getLogger(MemoryCacheTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(MemoryCache.class);
     
     // maps uris to instance. A bit redundant as instance contain their URI
     protected HashMap<String, Instance> instanceMap = null;
