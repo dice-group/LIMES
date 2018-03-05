@@ -12,6 +12,8 @@ import java.util.Map;
 
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.io.preprocessing.NEWPreprocessor;
+import org.aksw.limes.core.io.preprocessing.functions.Concat;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.junit.Before;
@@ -26,6 +28,7 @@ public class XMLConfigurationReaderTest {
     
     Map<String, String> prefixes = new HashMap<>();
     LinkedHashMap<String, Map<String, String>> functions = new LinkedHashMap<>();
+    ArrayList<String> properties;
     KBInfo sourceInfo, targetInfo;
     Configuration testConf;
 
@@ -35,17 +38,17 @@ public class XMLConfigurationReaderTest {
         prefixes.put("lgdo", "http://linkedgeodata.org/ontology/");
         prefixes.put("geom", "http://geovocab.org/geometry#");
         prefixes.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-        prefixes = Collections.unmodifiableMap(prefixes);
         HashMap<String, String> f = new HashMap<>();
         f.put("polygon", null);
         functions.put("geom:geometry/geos:asWKT", f);
+        properties = new ArrayList<String>(Arrays.asList("geom:geometry/geos:asWKT"));
         
         sourceInfo = new KBInfo(
                 "linkedgeodata",                                                  //String id
                 "http://linkedgeodata.org/sparql",                                //String endpoint
                 null,                                                             //String graph
                 "?x",                                                             //String var
-                new ArrayList<String>(Arrays.asList("geom:geometry/geos:asWKT")), //List<String> properties
+                properties, //List<String> properties
                 new ArrayList<String>(),                                          //List<String> optionalProperties
                 new ArrayList<String>(Arrays.asList("?x a lgdo:RelayBox")),       //ArrayList<String> restrictions
                 functions,                                                        //Map<String, Map<String, String>> functions
@@ -61,7 +64,7 @@ public class XMLConfigurationReaderTest {
                 "http://linkedgeodata.org/sparql",                                //String endpoint
                 null,                                                             //String graph
                 "?y",                                                             //String var
-                new ArrayList<String>(Arrays.asList("geom:geometry/geos:asWKT")), //List<String> properties
+                properties, //List<String> properties
                 new ArrayList<String>(),                                          //List<String> optionalProperties
                 new ArrayList<String>(Arrays.asList("?y a lgdo:RelayBox")),       //ArrayList<String> restrictions
                 functions,                                                        //Map<String, Map<String, String>> functions
@@ -137,6 +140,17 @@ public class XMLConfigurationReaderTest {
         Configuration fileConf = c.read();
         
         assertTrue(testConf.equals(fileConf));
+    }
+
+    
+    @Test
+    public void testNAryFunctions() {
+    	prefixes.put("geopos","http://www.w3.org/2003/01/geo/wgs84_pos#");
+    	properties.add("geopos:lat");
+    	properties.add("geopos:long");
+        HashMap<String, String> f3 = new HashMap<>();
+        f3.put("latlong", "concat(geopos:lat, geopos:long,"+Concat.GLUE_FLAG+",)");
+        functions.put(NEWPreprocessor.N_ARY_FUNCTION_PROPERTY_NAME, f3);
     }
 
 }

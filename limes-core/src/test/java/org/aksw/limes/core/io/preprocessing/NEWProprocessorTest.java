@@ -63,8 +63,9 @@ public class NEWProprocessorTest {
 	public static final String INST3_PROP_CONCAT_VALUE2_EXPECTED = "label60.05";
 	
 	
-	public static final String[] FUNCTIONCHAIN1_FUNCTION1_EXPECTED = new String[]{"lowercase"};
-	public static final String[] FUNCTIONCHAIN1_FUNCTION2_EXPECTED = new String[]{"replace", "test"};
+	public static final String FUNCTIONID1_EXPECTED = "lowercase";
+	public static final String FUNCTIONID2_EXPECTED = "replace";
+	public static final String FUNCTIONID3_EXPECTED = "concat";
 	
 	public static Instance i1expected;
 	public static Instance i2expected;
@@ -82,7 +83,7 @@ public class NEWProprocessorTest {
         functions.put(PROP_NUMBER, f2);
         HashMap<String, String> f3 = new HashMap<>();
         f3.put(PROP_CONCAT, "concat("+PROP_RENAMED_LABEL +","+PROP_NUMBER+")");
-        functions.put(null, f3);
+        functions.put(NEWPreprocessor.N_ARY_FUNCTION_PROPERTY_NAME, f3);
 		
         kbInfo = new KBInfo(
                 "DBpedia",                                                       //String id
@@ -130,10 +131,11 @@ public class NEWProprocessorTest {
 	}
 	
 	@Test
-	public void testRetrieveArguments(){
+	public void testgetFunctionId(){
 		String[] functionchain = functions.get(PROP_LABEL).get(PROP_RENAMED_LABEL).split("->");
-		assertArrayEquals(FUNCTIONCHAIN1_FUNCTION1_EXPECTED, NEWPreprocessor.retrieveArguments(functionchain[0]));
-		assertArrayEquals(FUNCTIONCHAIN1_FUNCTION2_EXPECTED, NEWPreprocessor.retrieveArguments(functionchain[1]));
+		assertEquals(FUNCTIONID1_EXPECTED, NEWPreprocessor.getFunctionId(functionchain[0]));
+		assertEquals(FUNCTIONID2_EXPECTED, NEWPreprocessor.getFunctionId(functionchain[1]));
+		assertEquals(FUNCTIONID3_EXPECTED, NEWPreprocessor.getFunctionId(functionchain[2]));
 	}
 	
 	@Test

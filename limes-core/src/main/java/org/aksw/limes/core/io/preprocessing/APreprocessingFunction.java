@@ -47,4 +47,12 @@ public abstract class APreprocessingFunction implements IPreprocessingFunction {
 		return i -> !Collections.disjoint(i.getAllProperties(), Arrays.asList(property));
 	}
 	
+	
+	public String[] retrieveArguments(String args) {
+		// Remove closing parenthesis and split on opening parenthesis and comma
+		// so e.g. "replace(test,)" would become "[replace, test]"
+		String[] tmp = args.replace(")", "").split("\\(|,");
+		return Arrays.copyOfRange(tmp, 1, tmp.length);
+	}
+	
 }

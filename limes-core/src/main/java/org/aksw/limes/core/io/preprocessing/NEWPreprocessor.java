@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 public class NEWPreprocessor {
 	static Logger logger = LoggerFactory.getLogger(NEWPreprocessor.class.getName());
+	
+	public static final String N_ARY_FUNCTION_PROPERTY_NAME = "n_ary_function";
 
 	public static ACache applyFunctionsToCache(ACache cache, Map<String, Map<String, String>> functions) {
 		ACache cacheClone = cache.clone();
@@ -23,11 +25,11 @@ public class NEWPreprocessor {
                         if (!functionChain.equals("")) {
                             String split[] = functionChain.split("->");
                             for (int i = 0; i < split.length; i++) {
-                                String[] arguments = retrieveArguments(split[i]);
-                                String functionId = arguments[0];
+                                String functionId = getFunctionId(split[i]);
                                 PreprocessingFunctionType type = PreprocessingFunctionFactory
                                         .getPreprocessingType(functionId);
                                 APreprocessingFunction func = PreprocessingFunctionFactory.getPreprocessingFunction(type);
+                                String[] arguments = func.retrieveArguments(split[i]);
                                 if (arguments.length > 1) {
                                     arguments = Arrays.copyOfRange(arguments, 1, arguments.length);
                                     func.applyFunction(inst, propertyDub, arguments);
@@ -52,10 +54,9 @@ public class NEWPreprocessor {
 			func.applyFunction(inst, property, propertyDub);
 		}
 	}
-
-	public static String[] retrieveArguments(String args) {
-		// Remove closing parenthesis and split on opening parenthesis and comma
-		// so e.g. "replace(test,)" would become "[replace, test]"
-		return args.replace(")", "").split("\\(|,");
+	
+	public static String getFunctionId(String argString){
+		return argString.split("\\(")[0];
 	}
+
 }

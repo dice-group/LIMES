@@ -1,6 +1,7 @@
 package org.aksw.limes.core.io.preprocessing;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -44,6 +45,11 @@ public class PreprocessingFunctionsTest {
 	public static final TreeSet<String> CONCAT_EXPECTED_GLUE = new TreeSet<String>(Arrays.asList("hello world", "goodbye world"));
 	public static final ArrayList<String>CONCAT_IN_ORDER_EXPECTED = new ArrayList<String>(Arrays.asList("a1b1c1","a1b1c2","a1b2c1","a1b2c2","a1b3c1","a1b3c2","a2b1c1","a2b1c2","a2b2c1","a2b2c2","a2b3c1","a2b3c2","a3b1c1","a3b1c2","a3b2c1","a3b2c2","a3b3c1","a3b3c2","a4b1c1","a4b1c2","a4b2c1","a4b2c2","a4b3c1","a4b3c2"));
 
+	public static final String[] FUNCTION_CHAIN_1_EXPECTED = new String[]{"label1","label2"};
+	public static final String[] FUNCTION_CHAIN_2_EXPECTED = new String[]{"label1","label2","glue=,"};
+	public static final String[] FUNCTION_CHAIN_3_EXPECTED = new String[]{"label1","label2","glue= "};
+	public static final String[] FUNCTION_CHAIN_4_EXPECTED = new String[]{""};
+
 	//=============== PROPERTIES =======================================
 	public static final String PROP_LABEL = "rdfs:label";
 	public static final String PROP_TEST2 = "test2";
@@ -69,6 +75,11 @@ public class PreprocessingFunctionsTest {
 	public static final String PROP_CONCAT2_VALUE = "world";
 	public static final String PROP_LABEL_VALUE1 = "Ibuprofen@de";
 	public static final String PROP_LABEL_VALUE2 = "Ibuprofen@en";
+	
+	public static final String FUNCTION_CHAIN_1 = "concat(label1,label2";
+	public static final String FUNCTION_CHAIN_2 = "concat(label1,label2,glue=,";
+	public static final String FUNCTION_CHAIN_3 = "concat(label1,label2,glue= ";
+	public static final String FUNCTION_CHAIN_4 = "lowercase";
 
 	//Used for RegexReplaceTest Removes everything inside braces and language tag
 	public static final String REGEX = "\\((.*?)\\) |@\\w*"; 
@@ -154,6 +165,12 @@ public class PreprocessingFunctionsTest {
 		new ToLowercase().applyFunction(testInstance, PROP_LABEL);
 		assertEquals(LOWERCASE_EXPECTED,testInstance.getProperty(PROP_LABEL).first());
 	}
+	
+	@Test
+	public void testRetrieveArguments(){
+		String[] args1 = new ToLowercase().retrieveArguments(FUNCTION_CHAIN_4);
+		assertArrayEquals(FUNCTION_CHAIN_4_EXPECTED, args1);
+	}
 
 	@Test
 	public void testRemoveLanguageTag() throws IllegalNumberOfParametersException {
@@ -222,6 +239,17 @@ public class PreprocessingFunctionsTest {
 	public void testToFahrenheit() throws IllegalNumberOfParametersException {
 		new ToFahrenheit().applyFunction(testInstance, PROP_TEMPERATURE);
 		assertEquals(TO_FAHRENHEIT_EXPECTED,testInstance.getProperty(PROP_TEMPERATURE).first());
+	}
+	
+	@Test
+	public void testRetrieveArgumentsConcat(){
+		Concat concat = new Concat();
+		String[] args1 = concat.retrieveArguments(FUNCTION_CHAIN_1);
+		String[] args2 = concat.retrieveArguments(FUNCTION_CHAIN_2);
+		String[] args3 = concat.retrieveArguments(FUNCTION_CHAIN_3);
+		assertArrayEquals(FUNCTION_CHAIN_1_EXPECTED, args1);
+		assertArrayEquals(FUNCTION_CHAIN_2_EXPECTED, args2);
+		assertArrayEquals(FUNCTION_CHAIN_3_EXPECTED, args3);
 	}
 	
 	@Test

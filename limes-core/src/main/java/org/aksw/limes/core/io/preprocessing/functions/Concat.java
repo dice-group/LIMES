@@ -1,6 +1,7 @@
 package org.aksw.limes.core.io.preprocessing.functions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.TreeSet;
 
 import org.aksw.limes.core.io.cache.Instance;
@@ -65,6 +66,17 @@ public class Concat extends APreprocessingFunction implements IPreprocessingFunc
 			} else {
 				res.add(firstPart + secondPart);
 			}
+		}
+		return res;
+	}
+	
+	@Override
+	public String[] retrieveArguments(String args) {
+		String[] res = super.retrieveArguments(args);
+		if(args.contains(GLUE_FLAG)){
+			String glue = args.substring(args.indexOf(GLUE_FLAG), args.length()); 
+			res[res.length -1] = glue;
+			return res;
 		}
 		return res;
 	}
