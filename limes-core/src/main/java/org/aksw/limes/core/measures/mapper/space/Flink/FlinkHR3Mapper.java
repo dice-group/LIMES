@@ -19,14 +19,9 @@ import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.typeutils.ResultTypeQueryable;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
-import org.apache.flink.configuration.ConfigConstants;
-import org.apache.flink.configuration.ConfigOptions;
-import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.GlobalConfiguration;
-import org.apache.flink.runtime.minicluster.FlinkMiniCluster;
-import org.apache.flink.runtime.minicluster.LocalFlinkMiniCluster;
 import org.apache.flink.util.Collector;
 
 public class FlinkHR3Mapper {
@@ -43,16 +38,6 @@ public class FlinkHR3Mapper {
 		
 	}
 	
-	public FlinkHR3Mapper(String configDir){
-		Configuration config = GlobalConfiguration.loadConfiguration(configDir);
-		System.out.println("Akka client timeout: " + config.getString(ConfigConstants.AKKA_CLIENT_TIMEOUT,null));
-		System.out.println("Default parallelism: " + config.getString(ConfigConstants.DEFAULT_PARALLELISM_KEY,null));
-		System.out.println("# slots: " + config.getString(ConfigConstants.TASK_MANAGER_NUM_TASK_SLOTS,null));
-		FlinkMiniCluster cluster = new LocalFlinkMiniCluster(config);
-		cluster.start();
-	}
-
-
 	public AMapping getMapping(DataSet<Instance> source, DataSet<Instance> target, String sourceVar, String targetVar,
 			String expression, double threshold) throws Exception {
 		AMapping mapping = MappingFactory.createDefaultMapping();
@@ -94,7 +79,7 @@ public class FlinkHR3Mapper {
 			thresholds.add(measure.getThreshold(i, threshold));
 			properties.add(split[i]);
 		}
-
+		
 		DataSet<Tuple2<Tuple, Instance>> sourceBid = source.flatMap(new GetSourceInstanceBlocksToCompare());
 		DataSet<Tuple2<Tuple, Instance>> targetBid = target.flatMap(new GetTargetBlocks());
 
@@ -107,11 +92,15 @@ public class FlinkHR3Mapper {
 						// compare the instances
 						.with(new Joiner(measure, property1, property2, threshold))
 						.returns(new TypeHint<MappingObject>() {}.getTypeInfo());
+		DataSet<Tuple3<String, String, Double>> resPrintable = result.map(m -> new Tuple3<String, String, Double>(m.sid, m.tid, m.sim))
+																	 .returns(new TypeHint<Tuple3<String, String, Double>>() {}.getTypeInfo());
+		resPrintable.writeAsCsv("/tmp/res");
+		PerformanceEval.env.execute("Write output");
+//		List<MappingObject> tmpRes = result.collect();
+//		for (MappingObject m : tmpRes) {
+//			mapping.add(m.sid, m.tid, m.sim);
+//		}
 
-		List<MappingObject> tmpRes = result.collect();
-		for (MappingObject m : tmpRes) {
-			mapping.add(m.sid, m.tid, m.sim);
-		}
 		return mapping;
 	}
 
@@ -157,7 +146,7 @@ public class FlinkHR3Mapper {
 		public void join(Tuple2<Tuple, Instance> first, Tuple2<Tuple, Instance> second, Collector<MappingObject> out)
 				throws Exception {
 			comparisons++;
-//			System.out.println(first.f0 + " : " + first.f1 + " - > " + second.f0 + " : " + second.f1);
+			PerformanceEval.logger.info(first.f0 + " : " + first.f1 + " - > " + second.f0 + " : " + second.f1);
 			double sim = measure.getSimilarity(first.f1, second.f1, property1, property2);
 			if (sim >= threshold) {
 				out.collect(new MappingObject(first.f1.getUri(), second.f1.getUri(), sim));
@@ -239,12 +228,14 @@ public class FlinkHR3Mapper {
 		private transient TypeInformation typeInformation;
 
 		public GetSourceInstanceBlocksToCompare() {
+			PerformanceEval.logger.info("GetSourceInstanceBlocksToCompare constructor");
 			typeInformation = getBlockInstanceMapperTypeInfo();
 		}
 
 		@Override
 		public void flatMap(Instance a, Collector<Tuple2<Tuple, Instance>> out) throws Exception {
 			int blockId;
+			PerformanceEval.logger.info("GetSourceInstanceBlocksToCompare flatmap");
 			ArrayList<ArrayList<Double>> combinations = new ArrayList<ArrayList<Double>>();
 			// get all property combinations
 			for (int i = 0; i < dim; i++) {

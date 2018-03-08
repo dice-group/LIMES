@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.TreeSet;
 
 import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.measures.mapper.space.Flink.PerformanceEval;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.slf4j.Logger;
@@ -105,6 +106,7 @@ public class HR3Blocker implements IBlockingModule {
                 }
             }
         }
+        PerformanceEval.logger.info("addIdsToList" + result);
         return result;
     }
 

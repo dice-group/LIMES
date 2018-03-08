@@ -701,7 +701,7 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<dependencies>
+<!--  			<dependencies>
 				<dependency>
 					<groupId>org.apache.flink</groupId>
 					<artifactId>flink-scala</artifactId>
@@ -721,6 +721,7 @@
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
+-->
 		</profile>
 	</profiles>
 </project>
