@@ -38,15 +38,6 @@ public class PerformanceEval {
     	measureExpr = c.getMetricExpression();
     	threshold = c.getAcceptanceThreshold();
 	}
-
-	private static void prepareDataOLD(String configPath){
-		RDFConfigurationReader reader = new RDFConfigurationReader(configPath);
-		Configuration c = reader.read();
-		source = HybridCache.getData(c.getSourceInfo());
-		target = HybridCache.getData(c.getTargetInfo());
-    	measureExpr = c.getMetricExpression();
-    	threshold = c.getAcceptanceThreshold();
-	}
 	
 	private static DataSet<Instance> readInstancesFromCSV(String path){
 		System.out.println(path);
@@ -61,46 +52,23 @@ public class PerformanceEval {
 	
 	public static void main(String[] args) throws Exception{
 		ParameterTool parameter = ParameterTool.fromArgs(args);
-		if(parameter.getRequired("mode").equals("normal")){
-			prepareDataOLD(parameter.getRequired("input"));
-            PrintWriter resWriter = new PrintWriter(new FileOutputStream("NormalHR3Eval.csv"));
-            resWriter.write("Iteration\tNormal\n");
-            resWriter.close();
-
-            long start, finish;
-            HR3Mapper hr3m = new HR3Mapper();
-            for(int i = 0; i < 10; i++){
-                resWriter = new PrintWriter(new FileOutputStream("NormalHR3Eval.csv", true));
-                start = System.currentTimeMillis();
-                AMapping links = hr3m.getMapping(source, target, "?x", "?y", measureExpr, threshold);
-                logger.error("link size: " + links.size());
-                finish = System.currentTimeMillis();
-                long hr3res = finish - start;
-                System.out.println("Normal: " + hr3res);
-//                resWriter.write(i + "\t" + hr3res + "\n");
-                resWriter.close();
-                CSVMappingWriter linkWriter = new CSVMappingWriter();
-                linkWriter.write(links, "NormalHR3links.csv");
-            }
-		}else{
 			prepareDataFLINK(parameter.getRequired("input"));
             PrintWriter resWriter = new PrintWriter(new FileOutputStream("FlinkHR3Eval.csv"));
             resWriter.write("Iteration\tFlink\n");
             resWriter.close();
             FlinkHR3Mapper flinkhr3m = new FlinkHR3Mapper();
-//            for(int i = 0; i < 10; i++){
+            for(int i = 0; i < 10; i++){
                 resWriter = new PrintWriter(new FileOutputStream("FlinkHR3Eval.csv", true));
                 long start = System.currentTimeMillis();
                 AMapping links = flinkhr3m.getMapping(sourceDS, targetDS, "?x", "?y", measureExpr, 0.9);
                 long finish = System.currentTimeMillis();
                 long flinkhr3res = finish - start;
                 logger.error("link size: " + links.size());
-//                resWriter.write(i + "\t" + flinkhr3res + "\n");
+                resWriter.write(i + "\t" + flinkhr3res + "\n");
                 resWriter.close();
                 CSVMappingWriter linkWriter = new CSVMappingWriter();
                 linkWriter.write(links, "FlinkHR3links.csv");
                 logger.info("\n\n ====Comparisons: " + FlinkHR3Mapper.comparisons + "\n\n");
-//            }
-        }
+            }
 	}
 }

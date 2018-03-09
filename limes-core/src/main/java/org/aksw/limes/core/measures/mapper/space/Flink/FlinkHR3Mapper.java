@@ -92,14 +92,10 @@ public class FlinkHR3Mapper {
 						// compare the instances
 						.with(new Joiner(measure, property1, property2, threshold))
 						.returns(new TypeHint<MappingObject>() {}.getTypeInfo());
-		DataSet<Tuple3<String, String, Double>> resPrintable = result.map(m -> new Tuple3<String, String, Double>(m.sid, m.tid, m.sim))
-																	 .returns(new TypeHint<Tuple3<String, String, Double>>() {}.getTypeInfo());
-		resPrintable.writeAsCsv("/tmp/res");
-		PerformanceEval.env.execute("Write output");
-//		List<MappingObject> tmpRes = result.collect();
-//		for (MappingObject m : tmpRes) {
-//			mapping.add(m.sid, m.tid, m.sim);
-//		}
+		List<MappingObject> tmpRes = result.collect();
+		for (MappingObject m : tmpRes) {
+			mapping.add(m.sid, m.tid, m.sim);
+		}
 
 		return mapping;
 	}
