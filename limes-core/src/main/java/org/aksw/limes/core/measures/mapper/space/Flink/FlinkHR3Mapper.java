@@ -12,8 +12,10 @@ import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.space.blocking.HR3Blocker;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
+import org.apache.flink.api.common.accumulators.IntCounter;
 import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
+import org.apache.flink.api.common.functions.RichFlatJoinFunction;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.DataSet;
@@ -22,17 +24,18 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.typeutils.ResultTypeQueryable;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.util.Collector;
 
 public class FlinkHR3Mapper {
+
 	/*
-	 * Used for debugging
+	 * params
 	 */
-	public static int comparisons = 0;
 	public static int granularity = 4;
-	public static int dim;
+	public int dim;
 	public static ArrayList<Double> thresholds = new ArrayList<Double>();
-	public static ArrayList<String> properties = new ArrayList<String>();
+	public ArrayList<String> properties = new ArrayList<String>();
 
 	public FlinkHR3Mapper(){
 		
@@ -79,9 +82,11 @@ public class FlinkHR3Mapper {
 			thresholds.add(measure.getThreshold(i, threshold));
 			properties.add(split[i]);
 		}
-		
-		DataSet<Tuple2<Tuple, Instance>> sourceBid = source.flatMap(new GetSourceInstanceBlocksToCompare());
-		DataSet<Tuple2<Tuple, Instance>> targetBid = target.flatMap(new GetTargetBlocks());
+
+		DataSet<Tuple2<Tuple, Instance>> sourceBid = source
+				.flatMap(new GetSourceInstanceBlocksToCompare(properties, dim, getBlockInstanceMapperTypeInfo(), granularity, thresholds));
+		DataSet<Tuple2<Tuple, Instance>> targetBid = target
+				.flatMap(new GetTargetBlocks(properties, dim, getBlockInstanceMapperTypeInfo(), granularity, thresholds));
 
 		// comparison
 		DataSet<MappingObject> result =
@@ -103,7 +108,7 @@ public class FlinkHR3Mapper {
 	/**
 	 * @return TypeInfo depending on the number of {@link #dim}
 	 */
-	private static TypeInformation getBlockInstanceMapperTypeInfo() {
+	private TypeInformation getBlockInstanceMapperTypeInfo() {
 		TypeInformation<Integer> tinteger = TypeInformation.of(new TypeHint<Integer>() { });
 		TypeInformation<Instance> tinstance = TypeInformation.of(new TypeHint<Instance>() { });
 		TypeInformation[] dimTypes = new TypeInformation[dim];
@@ -121,13 +126,15 @@ public class FlinkHR3Mapper {
 	 * @author Daniel Obraczka
 	 *
 	 */
-	private static class Joiner implements FlatJoinFunction<Tuple2<Tuple, Instance>, Tuple2<Tuple, Instance>, MappingObject>,
+	private static class Joiner extends RichFlatJoinFunction<Tuple2<Tuple, Instance>, Tuple2<Tuple, Instance>, MappingObject> implements
 			ResultTypeQueryable<MappingObject> {
 		public ISpaceMeasure measure;
 		public String property1;
 		public String property2;
 		public double threshold;
 		private transient TypeInformation<MappingObject> typeInformation;
+
+		private IntCounter comparisons = new IntCounter();
 
 		public Joiner(ISpaceMeasure measure, String property1, String property2, double threshold) {
 			this.measure = measure;
@@ -139,9 +146,15 @@ public class FlinkHR3Mapper {
 		}
 
 		@Override
+		public void open(Configuration parameters) throws Exception {
+			super.open(parameters);
+			getRuntimeContext().addAccumulator("comparisons", this.comparisons);
+		}
+
+		@Override
 		public void join(Tuple2<Tuple, Instance> first, Tuple2<Tuple, Instance> second, Collector<MappingObject> out)
 				throws Exception {
-			comparisons++;
+			comparisons.add(1);
 			PerformanceEval.logger.info(first.f0 + " : " + first.f1 + " - > " + second.f0 + " : " + second.f1);
 			double sim = measure.getSimilarity(first.f1, second.f1, property1, property2);
 			if (sim >= threshold) {
@@ -180,10 +193,19 @@ public class FlinkHR3Mapper {
 	 *
 	 */
 	private static class GetTargetBlocks implements FlatMapFunction<Instance, Tuple2<Tuple,Instance>> ,ResultTypeQueryable<Tuple2<Tuple, Instance>> {
+		private final ArrayList<String> properties;
+		private final int dim;
 		private transient TypeInformation typeInformation;
+		private final int granularity;
+		private final ArrayList<Double> thresholds;
 
-		public GetTargetBlocks() {
-			typeInformation = getBlockInstanceMapperTypeInfo();
+		public GetTargetBlocks(ArrayList<String> properties, int dim, TypeInformation typeInformation,
+							   int granularity, ArrayList<Double> thresholds) {
+			this.properties = properties;
+			this.dim = dim;
+			this.typeInformation = typeInformation;
+			this.granularity = granularity;
+			this.thresholds = thresholds;
 		}
 
 		@Override
@@ -219,13 +241,24 @@ public class FlinkHR3Mapper {
 	 * @author Daniel Obraczka
 	 *
 	 */
-	private static class GetSourceInstanceBlocksToCompare implements FlatMapFunction<Instance, Tuple2<Tuple, Instance>> ,ResultTypeQueryable<Tuple2<Tuple, Instance>> {
+	private static class GetSourceInstanceBlocksToCompare
+			implements FlatMapFunction<Instance, Tuple2<Tuple, Instance>>,
+			ResultTypeQueryable<Tuple2<Tuple, Instance>> {
 
+		private final ArrayList<String> properties;
+		private final int dim;
 		private transient TypeInformation typeInformation;
+		private final int granularity;
+		private final ArrayList<Double> thresholds;
 
-		public GetSourceInstanceBlocksToCompare() {
+		public GetSourceInstanceBlocksToCompare(ArrayList<String> properties, int dim, TypeInformation typeInformation,
+												int granularity, ArrayList<Double> thresholds) {
+			this.properties = properties;
+			this.dim = dim;
+			this.typeInformation = typeInformation;
+			this.granularity = granularity;
+			this.thresholds = thresholds;
 			PerformanceEval.logger.info("GetSourceInstanceBlocksToCompare constructor");
-			typeInformation = getBlockInstanceMapperTypeInfo();
 		}
 
 		@Override
@@ -237,6 +270,7 @@ public class FlinkHR3Mapper {
 			for (int i = 0; i < dim; i++) {
 				combinations = HR3Blocker.addIdsToList(combinations, a.getProperty(properties.get(i)));
 			}
+
 			//GET BLOCKS
 			for (int i = 0; i < combinations.size(); i++) {
 				ArrayList<Double> combination = combinations.get(i);
