@@ -103,8 +103,6 @@ public class HR3FlinkTest {
 
     	FlinkHR3Mapper flinkhr3m = new FlinkHR3Mapper();
     	AMapping flinkM = flinkhr3m.getMapping(sourceDS, targetDS, "?x", "?y", measureExpr, 0.9);
-    	System.out.println("Regular comparisons: " + HR3Mapper.comparisons);
-    	System.out.println("Flink comparisons: " + FlinkHR3Mapper.comparisons);
     	assertEquals(regM,flinkM);
     }
 
