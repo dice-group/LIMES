@@ -40,7 +40,6 @@ public class PerformanceEval {
 	}
 	
 	private static DataSet<Instance> readInstancesFromCSV(String path){
-		System.out.println(path);
 		DataSet<Tuple3<String,Double,Double>> lines = (DataSet<Tuple3<String, Double, Double>>) env.readCsvFile(path).ignoreFirstLine().types(String.class, Double.class, Double.class);
 		return lines.map(line -> {
 			Instance i = new Instance(line.f0);
@@ -56,19 +55,23 @@ public class PerformanceEval {
             PrintWriter resWriter = new PrintWriter(new FileOutputStream("FlinkHR3Eval.csv"));
             resWriter.write("Iteration\tFlink\n");
             resWriter.close();
+
             FlinkHR3Mapper flinkhr3m = new FlinkHR3Mapper();
             for(int i = 0; i < 10; i++){
                 resWriter = new PrintWriter(new FileOutputStream("FlinkHR3Eval.csv", true));
                 long start = System.currentTimeMillis();
+
                 AMapping links = flinkhr3m.getMapping(sourceDS, targetDS, "?x", "?y", measureExpr, 0.9);
                 long finish = System.currentTimeMillis();
                 long flinkhr3res = finish - start;
-                logger.error("link size: " + links.size());
+                logger.info("link size: " + links.size());
                 resWriter.write(i + "\t" + flinkhr3res + "\n");
                 resWriter.close();
                 CSVMappingWriter linkWriter = new CSVMappingWriter();
                 linkWriter.write(links, "FlinkHR3links.csv");
-                logger.info("\n\n ====Comparisons: " + FlinkHR3Mapper.comparisons + "\n\n");
+                int comparisons = env.getLastJobExecutionResult().getAccumulatorResult("comparisons");
+                logger.info("\n\n ====Comparisons: " + comparisons + "\n\n");
+                System.out.println("\n\n ====Comparisons: " + comparisons + "\n\n");
             }
 	}
 }

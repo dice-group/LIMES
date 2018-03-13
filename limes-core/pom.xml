@@ -231,12 +231,13 @@
                                 implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                <mainClass>org.aksw.limes.core.measures.mapper.space.Flink.PerformanceEval</mainClass>
                             <manifestEntries>
-                                <X-Compile-Source-JDK>${maven.compile.source}</X-Compile-Source-JDK>
-                                <X-Compile-Target-JDK>${maven.compile.target}</X-Compile-Target-JDK>
+                                <X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
+                                <X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
                             </manifestEntries>
                         </transformer>
-                     <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" /> </transformers>
-                    <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                     <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                    </transformers>
+
                 </configuration>
             </plugin>
 
@@ -391,17 +392,17 @@
 		<dependency>
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-java</artifactId>
-			<version>1.3.2</version>
+			<version>1.4.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.flink</groupId>
-			<artifactId>flink-streaming-java_2.10</artifactId>
-			<version>1.3.2</version>
+			<artifactId>flink-streaming-java_2.11</artifactId>
+			<version>1.4.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.flink</groupId>
-			<artifactId>flink-clients_2.10</artifactId>
-			<version>1.3.2</version>
+			<artifactId>flink-clients_2.11</artifactId>
+			<version>1.4.2</version>
 		</dependency>
 
 
