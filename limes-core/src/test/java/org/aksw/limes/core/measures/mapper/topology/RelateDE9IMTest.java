@@ -42,7 +42,7 @@ public class RelateDE9IMTest extends TestCase {
 
 	}
 
-	public void testIsWithin() throws ParseException {
+	public void testIsWithin() {
 
 		assertTrue((new RelateDE9IM("T0F00F000")).isWithin());
 		assertTrue(! (new RelateDE9IM("T00000FF0")).isWithin());
@@ -73,12 +73,12 @@ public class RelateDE9IMTest extends TestCase {
 		assertTrue(! (new RelateDE9IM("1FFF0FFF2")).isOverlaps());
 		assertTrue(! (new RelateDE9IM("2FFF1FFF2")).isOverlaps());
 	}
-	public void testIsCrosses() throws ParseException {
-		Geometry g1= (Polygon) reader.read("POLYGON ((20 10, 30 0, 40 10, 30 20, 20 10))");
-		Geometry g2= (Polygon) reader.read("POLYGON ((10 10, 20 0, 30 10, 20 20, 10 10))");
-		assertTrue(! (new RelateDE9IM("T*T******")).isCrosses(g1,g2));
-		assertTrue(! (new RelateDE9IM("T*****T**")).isCrosses(g1,g2));
-		assertTrue(! (new RelateDE9IM("0********")).isCrosses(g1,g2));
+	public void testIsCrosses(){
+		//Geometry g1= (Polygon) reader.read("POLYGON ((20 10, 30 0, 40 10, 30 20, 20 10))");
+		//Geometry g2= (Polygon) reader.read("POLYGON ((10 10, 20 0, 30 10, 20 20, 10 10))");
+		assertTrue(! (new RelateDE9IM("T*T******")).isCrosses());
+		assertTrue(! (new RelateDE9IM("T*****T**")).isCrosses());
+		assertTrue(! (new RelateDE9IM("0********")).isCrosses());
 	}
 
 	public void testIsCovers() {

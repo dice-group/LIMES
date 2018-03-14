@@ -1,4 +1,5 @@
-package org.aksw.limes.core.measures.mapper.topology;
+package org.aksw.limes.core.measures.mapper.topology.im;
+
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -32,7 +33,16 @@ import com.vividsolutions.jts.io.WKTReader;
  *
  * @author kdressler
  */
-public class RADON {
+
+/**
+ *
+ * based on the original RADON
+ */
+
+public class RADON_2 {
+
+
+	static List<Boolean> allRel=new ArrayList<Boolean>();
 
 	public static class GridSizeHeuristics {
 
@@ -230,27 +240,30 @@ public class RADON {
 	public static class Matcher implements Runnable {
 
 		public static int maxSize = 1000;
-		private String relation;
+		private int j;
 		private final List<Map<String, Set<String>>> result;
 		private List<MBBIndex> scheduled;
 
-		public Matcher(String relation, List<Map<String, Set<String>>> result) {
-			this.relation = relation;
+		public Matcher(List<Map<String, Set<String>>> result) {
+
 			this.result = result;
 			this.scheduled = new ArrayList<>();
-		}
 
-		@Override
+		}
 		public void run() {
 			Map<String, Set<String>> temp = new HashMap<>();
 			for (int i = 0; i < scheduled.size(); i += 2) {
 				MBBIndex s = scheduled.get(i);
 				MBBIndex t = scheduled.get(i + 1);
-				if (relate(s.polygon, t.polygon, relation)) {
-					if (!temp.containsKey(s.origin_uri)) {
-						temp.put(s.origin_uri, new HashSet<>());
+				//List<Boolean> allRel=new ArrayList<Boolean>();
+				allRel=relate1(s.polygon, t.polygon);
+				for(int j=0;j<allRel.size();j++) {
+					if (allRel.get(j)==true) {
+						if (!temp.containsKey(s.origin_uri)) {
+							temp.put(s.origin_uri, new HashSet<>());
+						}
+						temp.get(s.origin_uri).add(t.origin_uri);
 					}
-					temp.get(s.origin_uri).add(t.origin_uri);
 				}
 			}
 			synchronized (result) {
@@ -267,32 +280,37 @@ public class RADON {
 			return scheduled.size();
 		}
 
-		private static Boolean relate(Geometry geometry1, Geometry geometry2, String relation) {
-			switch (relation) {
-			case EQUALS:
-				return geometry1.equals(geometry2);
-			case DISJOINT:
-				return geometry1.disjoint(geometry2);
-			case INTERSECTS:
-				return geometry1.intersects(geometry2);
-			case TOUCHES:
-				return geometry1.touches(geometry2);
-			case CROSSES:
-				return geometry1.crosses(geometry2);
-			case WITHIN:
-				return geometry1.within(geometry2);
-			case CONTAINS:
-				return geometry1.contains(geometry2);
-			case COVERS:
-				return geometry1.covers(geometry2);
-			case COVEREDBY:
-				return geometry1.coveredBy(geometry2);
-			case OVERLAPS:
-				return geometry1.overlaps(geometry2);
-			default:
-				return geometry1.relate(geometry2, relation);
-			}
+		private static List<Boolean> relate1(Geometry geometry1, Geometry geometry2) {
+
+			// getting all relations at one by computing the intersection matrix one time for polygon
+
+			RelateDE9IM relatedeIM=new RelateDE9IM(geometry1, geometry2);
+			List<Boolean> allRel=new ArrayList<Boolean>();
+			boolean equals=relatedeIM.isEquals();
+			boolean disjoint=relatedeIM.isDisjoint();
+			boolean intersects=relatedeIM.isIntersects();
+			boolean touches=relatedeIM.isTouches();
+			boolean crosses=relatedeIM.isCrosses();
+			boolean within=relatedeIM.isWithin();
+			boolean contains=relatedeIM.isContains();
+			boolean covers=relatedeIM.isCovers();
+			boolean coverdby=relatedeIM.isCoveredBy();
+			boolean overlaps=relatedeIM.isOverlaps();
+			allRel.add(equals);
+			allRel.add(disjoint);
+			allRel.add(intersects);
+			allRel.add(touches);
+			allRel.add(crosses);
+			allRel.add(within);
+			allRel.add(contains);
+			allRel.add(covers);
+			allRel.add(coverdby);
+			allRel.add(overlaps);
+			return allRel;
+
 		}
+
+
 	}
 
 	public static class Merger implements Runnable {
@@ -327,20 +345,10 @@ public class RADON {
 		}
 	}
 
-	public static final String EQUALS = "equals";
-	public static final String DISJOINT = "disjoint";
-	public static final String INTERSECTS = "intersects";
-	public static final String TOUCHES = "touches";
-	public static final String CROSSES = "crosses";
-	public static final String WITHIN = "within";
-	public static final String CONTAINS = "contains";
-	public static final String OVERLAPS = "overlaps";
-	public static final String COVERS = "covers";
-	public static final String COVEREDBY = "coveredby";
 	// best measure according to our evaluation in the RADON paper
 	public static String heuristicStatMeasure = "avg";
 
-	private static final Logger logger = LoggerFactory.getLogger(RADON.class);
+	private static final Logger logger = LoggerFactory.getLogger(RADON_2.class);
 
 	public static Map<String, Geometry> getGeometryMapFromCache(ACache c, String property) {
 		WKTReader wktReader = new WKTReader();
@@ -359,57 +367,23 @@ public class RADON {
 		return gMap;
 	}
 
+
 	public static AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar,
-			String expression, double threshold, String relation) {
+			String expression, double threshold) {
 		if (threshold <= 0) {
 			throw new InvalidThresholdException(threshold);
 		}
-		//System.out.println("RADON is here");
 		List<String> properties = PropertyFetcher.getProperties(expression, threshold);
-
 		Map<String, Geometry> sourceMap = getGeometryMapFromCache(source, properties.get(0));
-
 		Map<String, Geometry> targetMap = getGeometryMapFromCache(target, properties.get(1));
-		//	System.out.println("RADON is still here "+targetMap.toString());
-		return getMapping(sourceMap, targetMap, relation);
+
+		return getMapping(sourceMap, targetMap);
 	}
 
-	public static AMapping getMapping(Set<Polygon> sourceData, Set<Polygon> targetData, String relation) {
-		Map<String, Geometry> source, target;
-		source = new HashMap<>();
-		target = new HashMap<>();
-		for (Polygon polygon : sourceData) {
-			try {
-				source.put(polygon.uri, polygon.getGeometry());
-			} catch (ParseException e) {
-				logger.warn("Skipping malformed geometry at " + polygon.uri + "...");
-			}
-		}
-		for (Polygon polygon : targetData) {
-			try {
-				target.put(polygon.uri, polygon.getGeometry());
-			} catch (ParseException e) {
-				logger.warn("Skipping malformed geometry at " + polygon.uri + "...");
-			}
-		}
-		return getMapping(source, target, relation);
-	}
-
-	public static AMapping getMapping(Map<String, Geometry> sourceData, Map<String, Geometry> targetData,
-			String relation) {
+	public static AMapping getMapping(Map<String, Geometry> sourceData, Map<String, Geometry> targetData) {
 		double thetaX, thetaY;
 		int numThreads = new Double(Math.ceil((double) Runtime.getRuntime().availableProcessors() / 2.0d)).intValue();
-		// Relation thats actually used for computation.
-		// Might differ from input relation when swapping occurs or the input
-		// relation is 'disjoint'.
-		String rel = relation;
 
-		// When relation for AMapping M is 'disjoint' we compute AMapping M'
-		// relation 'intersects'
-		// and return M = (S x T) \ M'
-		boolean disjointStrategy = rel.equals(DISJOINT);
-		if (disjointStrategy)
-			rel = INTERSECTS;
 
 		GridSizeHeuristics heuristicsS = new GridSizeHeuristics(sourceData.values());
 		GridSizeHeuristics heuristicsT = new GridSizeHeuristics(targetData.values());
@@ -424,20 +398,7 @@ public class RADON {
 			swap = sourceData;
 			sourceData = targetData;
 			targetData = swap;
-			switch (rel) {
-			case WITHIN:
-				rel = CONTAINS;
-				break;
-			case CONTAINS:
-				rel = WITHIN;
-				break;
-			case COVERS:
-				rel = COVEREDBY;
-				break;
-			case COVEREDBY:
-				rel = COVERS;
-				break;
-			}
+
 		}
 
 		// set up indexes
@@ -450,47 +411,48 @@ public class RADON {
 		AMapping m = MappingFactory.createDefaultMapping();
 		List<Map<String, Set<String>>> results = Collections.synchronizedList(new ArrayList<>());
 		Map<String, Set<String>> computed = new HashMap<>();
-		Matcher matcher = new Matcher(rel, results);
+
+		Matcher matcher = new Matcher(results);
 
 		for (Integer lat : sourceIndex.map.keySet()) {
 			for (Integer lon : sourceIndex.map.get(lat).keySet()) {
 				List<MBBIndex> source = sourceIndex.getSquare(lat, lon);
-				//System.out.println("RAD source: "+source.toString());
 				List<MBBIndex> target = targetIndex.getSquare(lat, lon);
-				//System.out.println("RAD target: "+target.toString());
 				if (target != null && target.size() > 0) {
 					for (MBBIndex a : source) {
-						//	System.out.println("RADON jumped there 12");
 						if (!computed.containsKey(a.uri))
 							computed.put(a.uri, new HashSet<>());
 						for (MBBIndex b : target) {
 							if (!computed.get(a.uri).contains(b.uri)) {
 								computed.get(a.uri).add(b.uri);
-								boolean compute = (rel.equals(COVERS) && a.covers(b))
-										|| (rel.equals(COVEREDBY) && b.covers(a))
-										|| (rel.equals(CONTAINS) && a.contains(b))
-										|| (rel.equals(WITHIN) && b.contains(a)) || (rel.equals(EQUALS) && a.equals(b))
-										|| rel.equals(INTERSECTS) || rel.equals(CROSSES) || rel.equals(TOUCHES)
-										|| rel.equals(OVERLAPS);
-								if (compute) {
-									//System.out.println(" the new relation is: "+rel);
-									if (numThreads == 1) {
+								boolean compute = (a.covers(b))
+										|| ( b.covers(a))
+										|| (a.contains(b))
+										|| (b.contains(a)) ||(a.equals(b));
 
-										if (Matcher.relate(a.polygon, b.polygon, rel)) {
-											if (swapped)
-												m.add(b.origin_uri, a.origin_uri, 1.0);
-											else
-												m.add(a.origin_uri, b.origin_uri, 1.0);
+								allRel=Matcher.relate1(a.polygon, b.polygon);
+								if (compute) {
+
+									if (numThreads == 1) {
+										for(int k=0;k<allRel.size();k++) {
+											if(allRel.get(k)==true) {
+												if (swapped) 
+													m.add(b.origin_uri, a.origin_uri, 1.0);
+												else
+													m.add(a.origin_uri, b.origin_uri, 1.0);}
 										}
-									} else {
-										matcher.schedule(a, b);
-										if (matcher.size() == Matcher.maxSize) {
-											matchExec.execute(matcher);
-											matcher = new Matcher(rel, results);
-											if (results.size() > 0) {
-												mergerExec.execute(new Merger(results, m));
+									} else { for(int k=0;k<allRel.size();k++) {
+										if(allRel.get(k)==true) {
+											matcher.schedule(a, b);
+											if (matcher.size() == Matcher.maxSize) {
+												matchExec.execute(matcher);
+												matcher = new Matcher(results);
+												if (results.size() > 0) {
+													mergerExec.execute(new Merger(results, m));
+												}
 											}
 										}
+									}
 									}
 								}
 							}
@@ -526,26 +488,8 @@ public class RADON {
 				}
 			}
 		}
-		//System.out.println("RADON jumped there 1");
-		// Compute M = (S x T) \ M' for disjoint relation
-		if (disjointStrategy) {
-			AMapping disjoint = MappingFactory.createDefaultMapping();
-			for (String s : sourceData.keySet()) {
-				for (String t : targetData.keySet()) {
-					if (swapped) {
-						if (!m.contains(t, s)) {
-							disjoint.add(t, s, 1.0d);
-						}
-					} else {
-						if (!m.contains(s, t)) {
-							disjoint.add(s, t, 1.0d);
-						}
-					}
-				}
-			}
-			m = disjoint;
-		}
-		System.out.println("the size of RADON "+ m.getSize());
+
+		//System.out.println(" Radon Size "+m.size());
 		return m;
 	}
 
@@ -598,4 +542,5 @@ public class RADON {
 			}
 		}
 	}
+
 }
