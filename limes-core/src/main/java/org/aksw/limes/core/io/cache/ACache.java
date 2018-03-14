@@ -46,14 +46,14 @@ public abstract class ACache implements ICache {
     @Override
     public abstract boolean equals(Object obj);
 
-    /**
-     * Method to processData according to specific preprocessing steps.
-     *
-     * @param propertyProcess
-     *         Map maps propertyNames to preprocessing functions.
-     * @return cacheof processed data
-     */
-    public abstract ACache processData(Map<String, String> propertyProcess);
+//    /**
+//     * Method to processData according to specific preprocessing steps.
+//     *
+//     * @param propertyProcess
+//     *         Map maps propertyNames to preprocessing functions.
+//     * @return cacheof processed data
+//     */
+//    public abstract ACache processData(Map<String, String> propertyProcess);
 
     /**
      * Method to process data of a property into a new property with specific preprocessing.

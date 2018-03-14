@@ -1,6 +1,5 @@
 package org.aksw.limes.core.io.preprocessing;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import org.aksw.limes.core.io.cache.ACache;
@@ -13,7 +12,16 @@ public class NEWPreprocessor {
 	
 
 	public static ACache applyFunctionsToCache(ACache cache, Map<String, Map<String, String>> functions) {
-		ACache cacheClone = cache.clone();
+		return applyFunctionsToCache(cache, functions, false);
+	}
+
+	public static ACache applyFunctionsToCache(ACache cache, Map<String, Map<String, String>> functions, boolean cloneCache) {
+		ACache cacheClone;
+		if(cloneCache){
+			cacheClone = cache.clone();
+		}else{
+			cacheClone = cache;
+		}
 		functions.forEach((property, innerMap) -> {
 			innerMap.forEach((propertyDub, functionChain) -> {
 				System.out.println(property);

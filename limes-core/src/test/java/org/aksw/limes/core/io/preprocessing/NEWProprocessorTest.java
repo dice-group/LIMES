@@ -139,7 +139,7 @@ public class NEWProprocessorTest {
 	
 	@Test
 	public void testProcess(){
-		ACache processedCache = NEWPreprocessor.applyFunctionsToCache(cache, functions);
+		ACache processedCache = NEWPreprocessor.applyFunctionsToCache(cache, functions, true);
 		assertTrue(processedCache != cache);
 		System.out.println(processedCache);
 

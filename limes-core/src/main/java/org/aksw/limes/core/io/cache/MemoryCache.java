@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import org.aksw.limes.core.io.preprocessing.NEWPreprocessor;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
@@ -164,38 +166,43 @@ public class MemoryCache extends ACache {
         return c;
     }
 
-    public ACache processData(Map<String, String> propertyMap) {
-        ACache c = new MemoryCache();
-        for (Instance instance : getAllInstances()) {
-            String uri = instance.getUri();
-            for (String p : instance.getAllProperties()) {
-                for (String value : instance.getProperty(p)) {
-                    if (propertyMap.containsKey(p)) {
-                        c.addTriple(uri, p, Preprocessor.process(value, propertyMap.get(p)));
-                    } else {
-                        c.addTriple(uri, p, value);
-                    }
-                }
-            }
-        }
-        return c;
-    }
+//    public ACache processData(Map<String, String> propertyMap) {
+//        ACache c = new MemoryCache();
+//        for (Instance instance : getAllInstances()) {
+//            String uri = instance.getUri();
+//            for (String p : instance.getAllProperties()) {
+//                for (String value : instance.getProperty(p)) {
+//                    if (propertyMap.containsKey(p)) {
+//                        c.addTriple(uri, p, Preprocessor.process(value, propertyMap.get(p)));
+//                    } else {
+//                        c.addTriple(uri, p, value);
+//                    }
+//                }
+//            }
+//        }
+//        return c;
+//    }
 
     public ACache addProperty(String sourcePropertyName, String targetPropertyName, String processingChain) {
-        ACache c = new MemoryCache();
-        for (Instance instance : getAllInstances()) {
-            String uri = instance.getUri();
-            for (String p : instance.getAllProperties()) {
-                for (String value : instance.getProperty(p)) {
-                    if (p.equals(sourcePropertyName)) {
-                        c.addTriple(uri, targetPropertyName, Preprocessor.process(value, processingChain));
-                        c.addTriple(uri, p, value);
-                    } else {
-                        c.addTriple(uri, p, value);
-                    }
-                }
-            }
-        }
+//        ACache c = new MemoryCache();
+//        for (Instance instance : getAllInstances()) {
+//            String uri = instance.getUri();
+//            for (String p : instance.getAllProperties()) {
+//                for (String value : instance.getProperty(p)) {
+//                    if (p.equals(sourcePropertyName)) {
+//                        c.addTriple(uri, targetPropertyName, Preprocessor.process(value, processingChain));
+//                        c.addTriple(uri, p, value);
+//                    } else {
+//                        c.addTriple(uri, p, value);
+//                    }
+//                }
+//            }
+//        }
+    	LinkedHashMap<String, Map<String,String>> functions = new LinkedHashMap<>();
+    	HashMap<String, String> f1 = new HashMap<>();
+    	f1.put(targetPropertyName, processingChain);
+    	functions.put(sourcePropertyName,f1);
+    	ACache c = NEWPreprocessor.applyFunctionsToCache(this, functions, true);
         logger.debug("Cache is ready");
         return c;
     }

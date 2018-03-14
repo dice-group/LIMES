@@ -16,6 +16,7 @@ import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.preprocessing.NEWPreprocessor;
 import org.aksw.limes.core.io.serializer.ISerializer;
 import org.aksw.limes.core.io.serializer.SerializerFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
@@ -163,8 +164,12 @@ public class Controller {
             sourceCache = getSubCache.apply(sourceCache);
             targetCache = getSubCache.apply(targetCache);
         }
+        
+        // 4. Apply preprocessing 
+        sourceCache = NEWPreprocessor.applyFunctionsToCache(sourceCache, config.getSourceInfo().getFunctions());
+        targetCache = NEWPreprocessor.applyFunctionsToCache(targetCache, config.getTargetInfo().getFunctions());
 
-        // 4. Machine Learning or Planning
+        // 5. Machine Learning or Planning
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         boolean isAlgorithm = !config.getMlAlgorithmName().equals("");
