@@ -1,0 +1,7 @@
+#!/bin/sh
+
+base="/usr/share/lib/limes-cli"
+java -cp "$base/.:$base/lib/*" "org.aksw.limes.core.controller.Controller" "$@"
+
+#java -jar "/usr/share/lib/limes-cli/limes-cli.jar" "$@"
+
