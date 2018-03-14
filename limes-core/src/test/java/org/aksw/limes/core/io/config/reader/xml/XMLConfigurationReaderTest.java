@@ -1,14 +1,18 @@
 package org.aksw.limes.core.io.config.reader.xml;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
@@ -18,6 +22,11 @@ import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.junit.Before;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -101,6 +110,7 @@ public class XMLConfigurationReaderTest {
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
 
+        assertEquals(testConf, fileConf);
         assertTrue(testConf.equals(fileConf));
     }
     
@@ -141,16 +151,69 @@ public class XMLConfigurationReaderTest {
         
         assertTrue(testConf.equals(fileConf));
     }
+    
+    @Test
+    public void testProcessNaryFunctions() throws ParserConfigurationException, SAXException, IOException{
+        String input = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd-concat.xml").getPath();
+        DtdChecker dtdChecker = new DtdChecker();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        // make sure document is valid
+        factory.setValidating(true);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        builder.setErrorHandler(dtdChecker);
+
+        builder.setEntityResolver(new EntityResolver() {
+            @Override
+            public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+                if (systemId.contains("limes.dtd")) {
+                    String dtd = getClass().getResource("/limes.dtd").toString();
+                    return new InputSource(dtd);
+                } else {
+                    return null;
+                }
+            }
+        });
+        Document xmlDocument = builder.parse(input);
+        NodeList list = xmlDocument.getElementsByTagName(XMLConfigurationReader.FUNCTIONS);
+        NodeList children = list.item(0).getChildNodes();
+        XMLConfigurationReader reader = new XMLConfigurationReader(input);
+        reader.processNaryFunctions(XMLConfigurationReader.FUNCTIONS, children);
+
+        HashMap<String, String> f3 = new HashMap<>();
+        f3.put("latlong", "concat(geopos:lat, geopos:long, "+Concat.GLUE_FLAG+",)");
+        LinkedHashMap<String, Map<String, String>> concatFunc = new LinkedHashMap<>();
+        concatFunc.put("latlong", f3);
+        assertEquals(concatFunc,reader.getConfiguration().getSourceInfo().getFunctions());
+        assertEquals(concatFunc,reader.getConfiguration().getTargetInfo().getFunctions());
+    }
 
     
     @Test
     public void testNAryFunctions() {
+        testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
+        testConf.setExecutionRewriter("default");
+        testConf.setExecutionPlanner("default");
+        testConf.setExecutionEngine("default");
     	prefixes.put("geopos","http://www.w3.org/2003/01/geo/wgs84_pos#");
     	properties.add("geopos:lat");
     	properties.add("geopos:long");
         HashMap<String, String> f3 = new HashMap<>();
-        f3.put("latlong", "concat(geopos:lat, geopos:long,"+Concat.GLUE_FLAG+",)");
-        functions.put(NEWPreprocessor.N_ARY_FUNCTION_PROPERTY_NAME, f3);
+        f3.put("latlong", "concat(geopos:lat, geopos:long, "+Concat.GLUE_FLAG+",)");
+        functions.put("latlong", f3);
+
+        testConf.setPrefixes(prefixes);
+        sourceInfo.setProperties(properties);
+        sourceInfo.setFunctions(functions);
+        targetInfo.setProperties(properties);
+        targetInfo.setFunctions(functions);
+        testConf.setSourceInfo(sourceInfo);
+        testConf.setTargetInfo(targetInfo);
+
+        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd-concat.xml").getPath();
+        XMLConfigurationReader c = new XMLConfigurationReader(file);
+        Configuration fileConf = c.read();
+        
+        assertEquals(testConf, fileConf);
     }
 
 }

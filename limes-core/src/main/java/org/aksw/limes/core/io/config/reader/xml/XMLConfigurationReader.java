@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,6 +72,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
     protected static final String PARAMETER = "PARAMETER";
     protected static final String MAXOFFSET = "MAXOFFSET";
     protected static final String MINOFFSET = "MINOFFSET";
+    protected static final String FUNCTIONS = "FUNCTIONS";
+    protected static final String FUNCTION = "FUNCTION";
 
     /**
      * Constructor
@@ -270,6 +274,36 @@ public class XMLConfigurationReader extends AConfigurationReader {
         }
         kbinfo.setPrefixes(configuration.getPrefixes());
     }
+    
+    
+    public void processNaryFunctions(String kb, NodeList children) {
+    	KBInfo sourceInfo = configuration.getSourceInfo();
+    	KBInfo targetInfo = configuration.getTargetInfo();
+    	
+        for (int i = 0; i < children.getLength(); i++) {
+            Node child = children.item(i);
+            if(child.getNodeName().equals(FUNCTION)){
+                String function = getText(child);
+                String newPropertyName;
+                if(!function.contains(AS)){
+                    logger.warn("You did not provide a new property name for your function \"" + function + "\" we will use the function name as new property name");
+                    newPropertyName = function;
+                }else{
+                    String[] funcArr = function.split(AS);
+                    function = funcArr[0];
+                    newPropertyName = funcArr[1];
+                }
+                HashMap<String, String> funcMap = new HashMap<>();
+                funcMap.put(newPropertyName, function);
+                LinkedHashMap<String, Map<String, String>> sourceFunctions = sourceInfo.getFunctions();
+           		sourceFunctions.put(newPropertyName, funcMap);
+           		sourceInfo.setFunctions(sourceFunctions);
+                LinkedHashMap<String, Map<String, String>> targetFunctions = targetInfo.getFunctions();
+           		targetFunctions.put(newPropertyName, funcMap);
+           		targetInfo.setFunctions(targetFunctions);
+            }
+        }
+    }
 
     /**
      * Returns true if the input complies to the LIMES DTD and contains
@@ -334,14 +368,22 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 list = xmlDocument.getElementsByTagName(TARGET);
                 children = list.item(0).getChildNodes();
                 processKBDescription(TARGET, children);
+                
+                // 3. Process n-ary functions if necessary
+                list = xmlDocument.getElementsByTagName(FUNCTIONS);
+                if(list.getLength() > 0){
+                	children = list.item(0).getChildNodes();
+                    processNaryFunctions(FUNCTIONS, children);
+                }
+                
 
-                // 3.METRIC
+                // 4.METRIC
                 list = xmlDocument.getElementsByTagName(METRIC);
                 if (list.getLength() > 0) {
                     configuration.setMetricExpression(getText(list.item(0)));
                 } else {
 
-                    // 4.MLAGORITHM
+                    // 5.MLAGORITHM
                     list = xmlDocument.getElementsByTagName(MLALGORITHM);
                     if (list.getLength() > 0) {
                         for (int i = 0; i < list.getLength(); i++) {
@@ -370,7 +412,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                         throw new RuntimeException();
                     }
                 }
-                // 5. ACCEPTANCE file and conditions
+                // 6. ACCEPTANCE file and conditions
                 list = xmlDocument.getElementsByTagName(ACCEPTANCE);
                 children = list.item(0).getChildNodes();
                 for (int i = 0; i < children.getLength(); i++) {
@@ -385,7 +427,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                     }
                 }
 
-                // 6. VERIFICATION file and conditions
+                // 7. VERIFICATION file and conditions
                 list = xmlDocument.getElementsByTagName(REVIEW);
                 children = list.item(0).getChildNodes();
                 for (int i = 0; i < children.getLength(); i++) {
@@ -400,7 +442,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                     }
                 }
 
-                // 7. EXECUTION
+                // 8. EXECUTION
                 if (list.getLength() > 0) {
                     list = xmlDocument.getElementsByTagName(EXECUTION);
                     for (int i = 0; i < list.getLength(); i++) {
@@ -418,7 +460,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                     }
                 }
 
-                // 8. TILING if necessary
+                // 9. TILING if necessary
                 list = xmlDocument.getElementsByTagName(GRANULARITY);
                 if (list.getLength() > 0) {
                     children = list.item(0).getChildNodes();
@@ -427,7 +469,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
                     // TODO add default granularity value
                 }
 
-                // 9. OUTPUT format
+                // 10. OUTPUT format
                 list = xmlDocument.getElementsByTagName(OUTPUT);
                 if (list.getLength() > 0) {
                     children = list.item(0).getChildNodes();

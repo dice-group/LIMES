@@ -83,7 +83,7 @@ public class NEWProprocessorTest {
         functions.put(PROP_NUMBER, f2);
         HashMap<String, String> f3 = new HashMap<>();
         f3.put(PROP_CONCAT, "concat("+PROP_RENAMED_LABEL +","+PROP_NUMBER+")");
-        functions.put(NEWPreprocessor.N_ARY_FUNCTION_PROPERTY_NAME, f3);
+        functions.put(PROP_CONCAT, f3);
 		
         kbInfo = new KBInfo(
                 "DBpedia",                                                       //String id
@@ -135,7 +135,6 @@ public class NEWProprocessorTest {
 		String[] functionchain = functions.get(PROP_LABEL).get(PROP_RENAMED_LABEL).split("->");
 		assertEquals(FUNCTIONID1_EXPECTED, NEWPreprocessor.getFunctionId(functionchain[0]));
 		assertEquals(FUNCTIONID2_EXPECTED, NEWPreprocessor.getFunctionId(functionchain[1]));
-		assertEquals(FUNCTIONID3_EXPECTED, NEWPreprocessor.getFunctionId(functionchain[2]));
 	}
 	
 	@Test

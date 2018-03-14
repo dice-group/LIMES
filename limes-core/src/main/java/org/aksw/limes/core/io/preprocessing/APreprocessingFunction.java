@@ -35,10 +35,10 @@ public abstract class APreprocessingFunction implements IPreprocessingFunction {
 
 	public void testIfNumberOfArgumentsIsLegal(String... arguments) throws IllegalNumberOfParametersException{
 		if(arguments.length < minNumberOfArguments()){
-			throw new IllegalNumberOfParametersException("The function " + this.getClass().toString().replace("org.aksw.limes.core.io.preprocessing.functions.","") + " takes at least " + minNumberOfArguments() + " number of properties!");
+			throw new IllegalNumberOfParametersException("The function " + this.getClass().toString().replace("org.aksw.limes.core.io.preprocessing.functions.","") + " takes at least " + minNumberOfArguments() + " arguments!");
 		}
 		if(arguments.length > maxNumberOfArguments() && maxNumberOfArguments() != -1){
-			throw new IllegalNumberOfParametersException("The function " + this.getClass().toString().replace("org.aksw.limes.core.io.preprocessing.functions.","") + " takes at most " + maxNumberOfArguments() + " number of properties!");
+			throw new IllegalNumberOfParametersException("The function " + this.getClass().toString().replace("org.aksw.limes.core.io.preprocessing.functions.","") + " takes at most " + maxNumberOfArguments() + " arguments!");
 		}
 	}
 

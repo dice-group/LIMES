@@ -48,7 +48,7 @@ public class PreprocessingFunctionsTest {
 	public static final String[] FUNCTION_CHAIN_1_EXPECTED = new String[]{"label1","label2"};
 	public static final String[] FUNCTION_CHAIN_2_EXPECTED = new String[]{"label1","label2","glue=,"};
 	public static final String[] FUNCTION_CHAIN_3_EXPECTED = new String[]{"label1","label2","glue= "};
-	public static final String[] FUNCTION_CHAIN_4_EXPECTED = new String[]{""};
+	public static final String[] FUNCTION_CHAIN_4_EXPECTED = new String[]{};
 
 	//=============== PROPERTIES =======================================
 	public static final String PROP_LABEL = "rdfs:label";

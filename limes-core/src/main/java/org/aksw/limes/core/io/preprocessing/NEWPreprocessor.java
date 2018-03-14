@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 public class NEWPreprocessor {
 	static Logger logger = LoggerFactory.getLogger(NEWPreprocessor.class.getName());
 	
-	public static final String N_ARY_FUNCTION_PROPERTY_NAME = "n_ary_function";
 
 	public static ACache applyFunctionsToCache(ACache cache, Map<String, Map<String, String>> functions) {
 		ACache cacheClone = cache.clone();
@@ -30,8 +29,7 @@ public class NEWPreprocessor {
                                         .getPreprocessingType(functionId);
                                 APreprocessingFunction func = PreprocessingFunctionFactory.getPreprocessingFunction(type);
                                 String[] arguments = func.retrieveArguments(split[i]);
-                                if (arguments.length > 1) {
-                                    arguments = Arrays.copyOfRange(arguments, 1, arguments.length);
+                                if (arguments.length > 0) {
                                     func.applyFunction(inst, propertyDub, arguments);
                                 } else {
                                     func.applyFunction(inst, propertyDub);
