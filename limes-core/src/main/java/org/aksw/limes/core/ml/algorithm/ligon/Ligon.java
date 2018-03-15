@@ -33,6 +33,10 @@ import java.util.List;
 
 import static org.junit.Assert.fail;
 
+/**
+ * @author mohamedsherif
+ *
+ */
 @SuppressWarnings("Duplicates")
 public class Ligon {
     static Logger logger = LoggerFactory.getLogger(Ligon.class);
@@ -56,7 +60,7 @@ public class Ligon {
     ACache sourceTrainCache = null;
     ACache targetTrainCache = null;
 
-    // Olny for evaluation
+    // Only for evaluation
     ACache fullSourceCache = null;
     ACache fullTargetCache = null;
 
@@ -80,7 +84,7 @@ public class Ligon {
         this.blackBoxOracles = blackBoxOracles;
         this.estimatedOracles = new ArrayList<>();
         for (NoisyOracle o : blackBoxOracles) {
-            this.estimatedOracles.add(new NoisyOracle(null, new ConfusionMatrix(0.5d)));
+            this.estimatedOracles.add(new NoisyOracle());
             lastOracleResponses.add(MappingFactory.createDefaultMapping());
         }
     }
@@ -116,11 +120,11 @@ public class Ligon {
 
 
     /**
-     * Process 1 link by all black box oracles
+     * Process 1 link by all black-box oracles
      *
      * @param subject
      * @param object
-     * @return vector of all black box oracles results
+     * @return vector of all black-box oracles results
      */
     protected List<Boolean> getOracleFeedback(String subject, String object) {
         List<Boolean> result = new ArrayList<>();
@@ -146,19 +150,19 @@ public class Ligon {
             for (String object : labeledExamples.getMap().get(subject).keySet()) {
                 double confidence = labeledExamples.getConfidence(subject, object);
                 for (int i = 0; i < lastOracleResponses.size(); i++) {
-                    AMapping x = lastOracleResponses.get(i);
-                    ConfusionMatrix d = estimatedOracles.get(i).confusionMatrix;
-                    if (confidence == 1.0d) { //positive example
-                        if (x.getConfidence(subject, object) == 1.0d) { //true prediction
-                            d.incrementRightClassifiedPositiveExamplesCount();
-                        } else { //false prediction
-                            d.incrementWrongClassifiedPositiveExamplesCount();
+                    AMapping oracleMap = lastOracleResponses.get(i);
+                    ConfusionMatrix confMat = estimatedOracles.get(i).confusionMatrix;
+                    if (confidence == 1.0d) { 									// Positive example
+                        if (oracleMap.getConfidence(subject, object) == 1.0d) { 	// True prediction
+                            confMat.incrementTruePositiveCount();
+                        } else { 												// False prediction
+                            confMat.incrementFalsePositiveCount();
                         }
-                    } else if (confidence == 0.0d) { //negative example
-                        if (x.getConfidence(subject, object) == 1.0d) { //true prediction
-                            d.incrementWrongClassifiedNegativeExamplesCount();
-                        } else { //false prediction
-                            d.incrementRightClassifiedNegativeExamplesCount();
+                    } else if (confidence == 0.0d) { 							// Negative example
+                        if (oracleMap.getConfidence(subject, object) == 0.0d) { 	// True prediction
+                            confMat.incrementFalseNegativeCount();
+                        } else { 												// False prediction
+                            confMat.incrementTrueNegativeCount();
                         }
                     }
                 }
@@ -198,7 +202,7 @@ public class Ligon {
         }
     }
 
-    public double computeOdds(String subject, String object, ODDS odds) {
+    public double computeOdds(String subject, String object, ODDS oddsStrategy) {
         double result = 0.0d;
         for (int i = 0; i < lastOracleResponses.size(); i++) {
             AMapping x = lastOracleResponses.get(i);
@@ -206,7 +210,8 @@ public class Ligon {
             if (x.getConfidence(subject, object) == 1.0d) {
                 result += Math.log(est.getTruePositiveProbability()) - Math.log(est.getFalsePositiveProbability()); 
             } else {
-                result +=  Math.log(est.getTrueNegativeProbability() -Math.log(est.getFalseNegativeProbability()));
+                result +=  Math.log(est.getFalseNegativeProbability()) - Math.log(est.getTrueNegativeProbability());
+//                result +=  Math.log(est.getTrueNegativeProbability() -Math.log(est.getFalseNegativeProbability()));
             }
 
         }
@@ -233,7 +238,7 @@ public class Ligon {
 //        }
 //        result = result / (double) estimatedOracles.size();
         double oddsL;
-        switch (odds) {
+        switch (oddsStrategy) {
             case APPROXIMATE:
                 oddsL = wombatBestFmeasure;
                 break;
@@ -257,20 +262,20 @@ public class Ligon {
      *
      * @param unlabeledexamples
      * @param k
-     * @param odds
+     * @param oddsStrategy
      * @return mapping of positive and negative examples, where
      * positive examples have confidence score of 1d and
      * negative examples have a confidence score of 0d
      */
-    protected AMapping classifyUnlabeledExamples(AMapping unlabeledexamples, double k, ODDS odds) {
+    protected AMapping classifyUnlabeledExamples(AMapping unlabeledexamples, double k, ODDS oddsStrategy) {
         AMapping labeledExamples = MappingFactory.createDefaultMapping();
         for (String subject : unlabeledexamples.getMap().keySet()) {
             for (String object : unlabeledexamples.getMap().get(subject).keySet()) {
-                double OddsValue = computeOdds(subject, object, odds);
-                logger.info("odds=" + OddsValue + ", k=" + Math.log(k) + ", classifyAs " + (OddsValue > Math.log(k) ? "+" : (OddsValue < -Math.log(k) ? "-" : "?")));
-                if (OddsValue > Math.log(k)) {
+                double OddsValue = computeOdds(subject, object, oddsStrategy);
+                logger.info("odds=" + OddsValue + ", k=" + Math.log(k) + ", classifyAs " + (OddsValue >= Math.log(k) ? "+" : (OddsValue <= -Math.log(k) ? "-" : "?")));
+                if (OddsValue >= Math.log(k)) {
                     labeledExamples.add(subject, object, 1.0d);
-                } else if (OddsValue < -Math.log(k)) {
+                } else if (OddsValue <= -Math.log(k)) { 			// log(1/k)
                     labeledExamples.add(subject, object, 0.0d);
                 }
             }
@@ -414,8 +419,7 @@ public class Ligon {
     /**
      * Extract the source and target training cache instances based on the input learnMap
      *
-     * @param trainMap
-     *         to be used for training caches filling
+     * @param trainMap to be used for training caches filling
      * @author sherif
      */
     protected void fillTrainingCaches(AMapping trainMap) {

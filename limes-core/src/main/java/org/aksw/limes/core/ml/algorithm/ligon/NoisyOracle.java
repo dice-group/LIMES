@@ -5,16 +5,23 @@ import java.util.Random;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 
+/**
+ * @author mohamedsherif
+ *
+ */
 public class NoisyOracle implements Oracle {
 
     protected AMapping oracleMap;
-    ConfusionMatrix confusionMatrix = new ConfusionMatrix();
-
+    protected ConfusionMatrix confusionMatrix = new ConfusionMatrix();
 
     public NoisyOracle(AMapping oracleMap, ConfusionMatrix confusionMatrix) {
         super();
         this.oracleMap = oracleMap;
         this.confusionMatrix = confusionMatrix;
+    }
+    
+    public NoisyOracle() {
+    		this(null, new ConfusionMatrix());
     }
 
     public boolean predict(String subject, String object){
@@ -22,24 +29,24 @@ public class NoisyOracle implements Oracle {
 
         Random random = new Random();
         if(inOracle){
-            double probRightPos =  confusionMatrix.getTruePositiveProbability();
-            double probWrongPos =  confusionMatrix.getFalsePositiveProbability();
-            double minProb = (probRightPos < probWrongPos)? probRightPos : probWrongPos;
-            double r = (probRightPos + probWrongPos) * random.nextDouble();
-            if(r < minProb ){
-                return (probRightPos < probWrongPos)? true : false;
+            double probTruePos  = confusionMatrix.getTruePositiveProbability();
+            double probFalsePos = confusionMatrix.getFalsePositiveProbability();
+            double minProb = (probTruePos < probFalsePos) ? probTruePos : probFalsePos;
+            double r = (probTruePos + probFalsePos) * random.nextDouble();
+            if(r < minProb){
+                return (probTruePos < probFalsePos) ? true : false;
             }else{
-                return (probRightPos < probWrongPos)? false: true;
+                return (probTruePos < probFalsePos) ? false: true;
             }
         }else{
-            double probRightNeg =  confusionMatrix.getTrueNegativeProbability();
-            double probWrongNeg =  confusionMatrix.getFalseNegativeProbability();
-            double minProb = (probRightNeg < probWrongNeg)? probRightNeg : probWrongNeg;
-            double r = (probRightNeg + probWrongNeg) * random.nextDouble();
-            if(r < minProb ){
-                return (probRightNeg < probWrongNeg)? false : true;
+            double probTrueNeg  = confusionMatrix.getTrueNegativeProbability();
+            double probFalseNeg = confusionMatrix.getFalseNegativeProbability();
+            double minProb = (probTrueNeg < probFalseNeg) ? probTrueNeg : probFalseNeg;
+            double r = (probTrueNeg + probFalseNeg) * random.nextDouble();
+            if(r < minProb){
+                return (probTrueNeg < probFalseNeg) ? false : true;
             }else{
-                return (probRightNeg < probWrongNeg)? true : false;
+                return (probTrueNeg < probFalseNeg) ? true : false;
             }
         }
     }
@@ -55,12 +62,7 @@ public class NoisyOracle implements Oracle {
 
     @Override
     public String toString() {
-        return "\nNoisyOracle ["+ 
-                confusionMatrix.getTruePositiveProbability() + ", " +
-                confusionMatrix.getTrueNegativeProbability() + ", " +
-                confusionMatrix.getFalsePositiveProbability() + ", " +
-                confusionMatrix.getFalseNegativeProbability() +
-                "]";
+        return "\nNoisyOracle "+ confusionMatrix.characteristicMatrixToString();
     }
 
 
