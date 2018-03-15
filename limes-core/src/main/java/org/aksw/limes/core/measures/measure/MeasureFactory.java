@@ -19,6 +19,7 @@ import org.aksw.limes.core.measures.measure.pointsets.sumofmin.NaiveSumOfMinMeas
 import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.*;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
 import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
@@ -142,6 +143,12 @@ public class MeasureFactory {
 
     // Resource set measures
     public static final String SET_JACCARD = "set_jaccard";
+
+    // Semantic edge-counting measures
+    public static final String SHORTEST_PATH = "shortest_path";
+    public static final String LCH = "lch";
+    public static final String LI = "li";
+    public static final String WU_PALMER = "wu_palmer";
 
     /**
      * Factory function for retrieving a measure name from the set of allowed
@@ -345,6 +352,20 @@ public class MeasureFactory {
         if (measure.startsWith(SET_JACCARD)) {
             return MeasureType.SET_JACCARD;
         }
+
+        ////////////////////////////////////////////////////
+        if (measure.startsWith(SHORTEST_PATH)) {
+            return MeasureType.SHORTEST_PATH;
+        }
+        if (measure.startsWith(LCH)) {
+            return MeasureType.LCH;
+        }
+        if (measure.startsWith(LI)) {
+            return MeasureType.LI;
+        }
+        if (measure.startsWith(WU_PALMER)) {
+            return MeasureType.WU_PALMER;
+        }
         throw new InvalidMeasureException(measure);
     }
 
@@ -486,6 +507,15 @@ public class MeasureFactory {
         ///////////////////////
         case SET_JACCARD:
             return new SetJaccardMeasure();
+        ///////////////////////
+        case SHORTEST_PATH:
+            return new ShortestPathMeasure();
+        case LCH:
+            return new LCHMeasure();
+        case LI:
+            return new LiMeasure();
+        case WU_PALMER:
+            return new WuPalmerMeasure();
         default:
             throw new InvalidMeasureException(type.toString());
         }

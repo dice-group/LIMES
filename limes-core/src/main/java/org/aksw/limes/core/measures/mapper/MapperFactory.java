@@ -4,6 +4,7 @@ import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.resourcesets.SetJaccardMapper;
+import org.aksw.limes.core.measures.mapper.semantic.edgecounting.EdgeCountingSemanticMapper;
 import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
 import org.aksw.limes.core.measures.mapper.string.EDJoinMapper;
 import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
@@ -39,6 +40,10 @@ import org.aksw.limes.core.measures.mapper.topology.IntersectsMapper;
 import org.aksw.limes.core.measures.mapper.topology.TouchesMapper;
 import org.aksw.limes.core.measures.mapper.topology.WithinMapper;
 import org.aksw.limes.core.measures.measure.MeasureType;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.LCHMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.LiMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.ShortestPathMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.WuPalmerMeasure;
 
 /**
  * Implements the mapper factory class. For each measure name, the factory
@@ -172,6 +177,16 @@ public class MapperFactory {
         ///////////////////////
         case SET_JACCARD:
             return new SetJaccardMapper();
+
+        ///////////////////////
+        case SHORTEST_PATH:
+            return new EdgeCountingSemanticMapper();
+        case LCH:
+            return new EdgeCountingSemanticMapper();
+        case LI:
+            return new EdgeCountingSemanticMapper();
+        case WU_PALMER:
+            return new EdgeCountingSemanticMapper();
         default:
             throw new InvalidMeasureException(type.toString());
         }
