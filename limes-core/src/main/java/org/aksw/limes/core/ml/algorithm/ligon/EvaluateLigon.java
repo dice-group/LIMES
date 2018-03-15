@@ -49,8 +49,8 @@ public class EvaluateLigon {
     private static final Logger logger = Logger.getLogger(EvaluateLigon.class);
 
     public static AMapping fullReferenceMapping;
-    public static String resultStr = "fold\tk\toracles\todds\titNr\tpTr\trTr\tfTr\tpF\trF\tfF\tpTe\trTe\tfTe\tTT_MSE\tTF_MSE\tFT_MSE\tFF_MSE\tls";
-    public static String reliableResultStr = "fold\titNr\tpTr\trTr\tfTr\tpF\trF\tfF\tpTe\trTe\tfTe\tls";
+    public static String resultStr = "fold\tk\toracles\todds\titNr\tpTr\trTr\tfTr\tpF\trF\tfF\tpTe\trTe\tfTe\tTT_MSE\tTF_MSE\tFT_MSE\tFF_MSE\tls\n";
+    public static String reliableResultStr = "fold\titNr\tpTr\trTr\tfTr\tpF\trF\tfF\tpTe\trTe\tfTe\tls\n";
     public static int fold = 1;
     public static String datasetName;
 
