@@ -9,8 +9,7 @@ import org.aksw.limes.core.io.preprocessing.APreprocessingFunction;
 import org.aksw.limes.core.io.preprocessing.IPreprocessingFunction;
 
 /**
- * Removes type information from number propertyerties
- * 
+ * Removes type information from number properties
  * @author Daniel Obraczka
  *
  */

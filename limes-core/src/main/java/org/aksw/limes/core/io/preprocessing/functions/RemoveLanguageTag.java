@@ -6,6 +6,12 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.preprocessing.APreprocessingFunction;
 import org.aksw.limes.core.io.preprocessing.IPreprocessingFunction;
 
+/**
+ * Deletes everything after and including <code>@</code>
+ * Used to delete language tags so e.g. <code>Ibuprofen@en</code> will become <code>Ibuprofen</code> 
+ * @author Daniel Obraczka
+ *
+ */
 public class RemoveLanguageTag extends APreprocessingFunction implements IPreprocessingFunction {
 
 	@Override

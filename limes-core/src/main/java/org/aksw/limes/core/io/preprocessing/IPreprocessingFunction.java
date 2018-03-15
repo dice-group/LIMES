@@ -1,20 +1,17 @@
 package org.aksw.limes.core.io.preprocessing;
 
-import org.aksw.limes.core.exceptions.IllegalNumberOfParametersException;
-import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 
 public interface IPreprocessingFunction {
-
-//	/**
-//	 * Applies the function to the properties of the instances in the cache
-//	 * @param c cache to apply function on
-//	 * @param arguments arguments the function will use
-//	 * @param properties properties on which values the function should be applied
-//	 * @throws IllegalNumberOfParametersException thrown if an illegal number of properties is given
-//	 */
-//	public void process(ACache c, String[] properties ,String ... arguments) throws IllegalNumberOfParametersException;
 	
+	/**
+	 * Applies the function to this instance
+	 * @param i the instance that will be preprocessed
+	 * @param property for unary operators this is the property on which the function will be applied,
+	 *  for n-ary fucntions this is the name of the new property where the result of the preprocessing will be stored
+	 * @param arguments some functions take arguments
+	 * @return the preprocessed instance
+	 */
 	public Instance applyFunction(Instance i, String property, String... arguments);
 
 	

@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.aksw.limes.core.util.DataCleaner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

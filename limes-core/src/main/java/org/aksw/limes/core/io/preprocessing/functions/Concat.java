@@ -30,7 +30,7 @@ public class Concat extends APreprocessingFunction implements IPreprocessingFunc
 		ArrayList<ArrayList<String>> oldValues = new ArrayList<>();
 		for (String prop : arguments) {
 			ArrayList<String> treeValues = new ArrayList<>();
-			inst.getProperty(prop).forEach(e -> treeValues.add(e));
+			inst.getProperty(prop.trim()).forEach(e -> treeValues.add(e));
 			oldValues.add(treeValues);
 		}
 		ArrayList<String> newValues = concatElementsInOrder(oldValues, glue);
@@ -50,6 +50,9 @@ public class Concat extends APreprocessingFunction implements IPreprocessingFunc
 
 	public static ArrayList<String> concatArrayElements(ArrayList<String> first, ArrayList<String> toConcat,
 			String... glue) {
+		if(toConcat.isEmpty()){
+			return first;
+		}
 		ArrayList<String> res = new ArrayList<>();
 		for (String firstPart : first) {
 			res.addAll(concatStringToElements(firstPart, toConcat, glue));
@@ -74,7 +77,8 @@ public class Concat extends APreprocessingFunction implements IPreprocessingFunc
 	public String[] retrieveArguments(String args) {
 		String[] res = super.retrieveArguments(args);
 		if(args.contains(GLUE_FLAG)){
-			String glue = args.substring(args.indexOf(GLUE_FLAG), args.length()); 
+			//Last character is ")"
+			String glue = args.substring(args.indexOf(GLUE_FLAG), args.length()-1); 
 			res[res.length -1] = glue;
 			return res;
 		}

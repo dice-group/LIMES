@@ -117,33 +117,6 @@ public class PreprocessingFunctionsTest {
 	}
 
 	@Test
-	public void testHasPropertyPredicate() {
-		Instance i = new Instance("uri");
-		i.addProperty("a", "a");
-		i.addProperty("b", "b");
-		i.addProperty("c", "c");
-		assertTrue(APreprocessingFunction.hasProperty("a").test(i));
-	}
-
-	@Test
-	public void testHasPropertyPredicateWrongProperty() {
-		Instance i = new Instance("uri");
-		i.addProperty("a", "a");
-		i.addProperty("b", "b");
-		i.addProperty("c", "c");
-		assertFalse(APreprocessingFunction.hasProperty("d").test(i));
-	}
-
-	@Test
-	public void testHasPropertyPredicateMultipleProperties() {
-		Instance i = new Instance("uri");
-		i.addProperty("a", "a");
-		i.addProperty("b", "b");
-		i.addProperty("c", "c");
-		assertTrue(APreprocessingFunction.hasProperty(new String[] { "a", "b", "d" }).test(i));
-	}
-
-	@Test
 	public void testUppercase() throws IllegalNumberOfParametersException {
 		new ToUppercase().applyFunction(testInstance, PROP_LABEL);
 		assertEquals(UPPERCASE_EXPECTED,testInstance.getProperty(PROP_LABEL).first());

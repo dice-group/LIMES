@@ -6,6 +6,13 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.preprocessing.APreprocessingFunction;
 import org.aksw.limes.core.io.preprocessing.IPreprocessingFunction;
 
+/**
+ * Cleans IRIs
+ * e.g. <code>http://www.w3.org/2000/01/rdf-schema#label</code> will become <code>label</code>
+ * Basically it removes everything until the last <code>/</code> or <code>#</code>
+ * @author Daniel Obraczka
+ *
+ */
 public class CleanIri extends APreprocessingFunction implements IPreprocessingFunction {
 
 	@Override

@@ -31,7 +31,7 @@ public class PreprocessingFunctionFactory {
     public static final String TO_LOWERCASE = "lowercase";
     
     public static PreprocessingFunctionType getPreprocessingType(String expression){
-    	switch(expression){
+    	switch(expression.trim()){
             case(CLEAN_IRI): 
             	return PreprocessingFunctionType.CLEAN_IRI;
             case(CLEAN_NUMBER): 

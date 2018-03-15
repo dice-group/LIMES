@@ -16,7 +16,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.preprocessing.NEWPreprocessor;
+import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.aksw.limes.core.io.preprocessing.functions.Concat;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;

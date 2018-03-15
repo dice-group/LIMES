@@ -12,7 +12,6 @@ import org.aksw.jena_sparql_api.core.SparqlServiceReference;
 import org.aksw.jena_sparql_api.pagination.core.QueryExecutionFactoryPaginated;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
@@ -80,7 +79,7 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
         int counter = 0;
         ResultSet results = qe.execSelect();
         //write
-        String uri, propertyLabel, rawValue, value;
+        String uri, propertyLabel, value;
         while (results.hasNext()) {
             QuerySolution soln = results.nextSolution();
             // process query here

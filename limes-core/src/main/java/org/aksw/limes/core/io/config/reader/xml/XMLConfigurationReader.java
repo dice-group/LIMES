@@ -285,11 +285,12 @@ public class XMLConfigurationReader extends AConfigurationReader {
             if(child.getNodeName().equals(FUNCTION)){
                 String function = getText(child);
                 String newPropertyName;
-                if(!function.contains(AS)){
-                    logger.warn("You did not provide a new property name for your function \"" + function + "\" we will use the function name as new property name");
+                if(!function.contains(RENAME)){
+                    logger.warn("You did not provide a new property name for your function \"" + function + "\" we will use the function name as new property name"
+                    		+ "\n You can provide a new property name using the " + RENAME + " keyword");
                     newPropertyName = function;
                 }else{
-                    String[] funcArr = function.split(AS);
+                    String[] funcArr = function.split(RENAME);
                     function = funcArr[0];
                     newPropertyName = funcArr[1];
                 }
