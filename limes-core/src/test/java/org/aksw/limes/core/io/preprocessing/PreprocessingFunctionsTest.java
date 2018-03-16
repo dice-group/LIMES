@@ -1,7 +1,7 @@
 package org.aksw.limes.core.io.preprocessing;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -10,19 +10,21 @@ import java.util.Arrays;
 import java.util.TreeSet;
 
 import org.aksw.limes.core.exceptions.IllegalNumberOfParametersException;
-import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.preprocessing.functions.CleanIri;
 import org.aksw.limes.core.io.preprocessing.functions.CleanNumber;
 import org.aksw.limes.core.io.preprocessing.functions.Concat;
 import org.aksw.limes.core.io.preprocessing.functions.RegexReplace;
+import org.aksw.limes.core.io.preprocessing.functions.RemoveBraces;
 import org.aksw.limes.core.io.preprocessing.functions.RemoveLanguageTag;
+import org.aksw.limes.core.io.preprocessing.functions.RemoveNonAlphanumeric;
 import org.aksw.limes.core.io.preprocessing.functions.RenameProperty;
 import org.aksw.limes.core.io.preprocessing.functions.Replace;
 import org.aksw.limes.core.io.preprocessing.functions.ToCelsius;
 import org.aksw.limes.core.io.preprocessing.functions.ToFahrenheit;
 import org.aksw.limes.core.io.preprocessing.functions.ToLowercase;
 import org.aksw.limes.core.io.preprocessing.functions.ToUppercase;
+import org.aksw.limes.core.io.preprocessing.functions.UriAsString;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,6 +46,9 @@ public class PreprocessingFunctionsTest {
 	public static final TreeSet<String> CONCAT_EXPECTED = new TreeSet<String>(Arrays.asList("helloworld","goodbyeworld"));
 	public static final TreeSet<String> CONCAT_EXPECTED_GLUE = new TreeSet<String>(Arrays.asList("hello world", "goodbye world"));
 	public static final ArrayList<String>CONCAT_IN_ORDER_EXPECTED = new ArrayList<String>(Arrays.asList("a1b1c1","a1b1c2","a1b2c1","a1b2c2","a1b3c1","a1b3c2","a2b1c1","a2b1c2","a2b2c1","a2b2c2","a2b3c1","a2b3c2","a3b1c1","a3b1c2","a3b2c1","a3b2c2","a3b3c1","a3b3c2","a4b1c1","a4b1c2","a4b2c1","a4b2c2","a4b3c1","a4b3c2"));
+	public static final String REMOVE_BRACES_EXPECTED = "Test";
+	public static final String REMOVE_NON_ALPHANUMERIC_EXPECTED = "alphanumeric";
+	public static final String URI_AS_STRING_EXPECTED = "uri as string";
 
 	public static final String[] FUNCTION_CHAIN_1_EXPECTED = new String[]{"label1","label2"};
 	public static final String[] FUNCTION_CHAIN_2_EXPECTED = new String[]{"label1","label2","glue=,"};
@@ -61,6 +66,9 @@ public class PreprocessingFunctionsTest {
 	public static final String PROP_CONCAT1 = "concat1";
 	public static final String PROP_CONCAT2 = "concat2";
 	public static final String PROP_CONCAT_RESULT = "concatresult";
+	public static final String PROP_BRACES = "braces";
+	public static final String PROP_NON_ALPHANUMERIC = "nonalphanumeric";
+	public static final String PROP_URI_AS_STRING = "uriasstring";
 	
 	//=============== VALUES ===========================================
 	public static final String PROP_NUMBER_VALUE = "10^^http://www.w3.org/2001/XMLSchema#positiveInteger";
@@ -75,10 +83,13 @@ public class PreprocessingFunctionsTest {
 	public static final String PROP_CONCAT2_VALUE = "world";
 	public static final String PROP_LABEL_VALUE1 = "Ibuprofen@de";
 	public static final String PROP_LABEL_VALUE2 = "Ibuprofen@en";
+	public static final String PROP_BRACES_VALUE = "T((e)est";
+	public static final String PROP_NON_ALPHANUMERIC_VALUE = "a!lp%h|a^n&u*m<e)r=ic";
+	public static final String PROP_URI_AS_STRING_VALUE = "http://example.org/uri_as_string";
 	
-	public static final String FUNCTION_CHAIN_1 = "concat(label1,label2";
-	public static final String FUNCTION_CHAIN_2 = "concat(label1,label2,glue=,";
-	public static final String FUNCTION_CHAIN_3 = "concat(label1,label2,glue= ";
+	public static final String FUNCTION_CHAIN_1 = "concat(label1,label2)";
+	public static final String FUNCTION_CHAIN_2 = "concat(label1,label2,glue=,)";
+	public static final String FUNCTION_CHAIN_3 = "concat(label1,label2,glue= )";
 	public static final String FUNCTION_CHAIN_4 = "lowercase";
 
 	//Used for RegexReplaceTest Removes everything inside braces and language tag
@@ -101,6 +112,9 @@ public class PreprocessingFunctionsTest {
 		testInstance.addProperty(PROP_TEMPERATURE, PROP_TEMPERATURE_VALUE);
 		testInstance.addProperty(PROP_NUMBER_NOT_PARSEABLE, PROP_NUMBER_NOT_PARSEABLE_VALUE);
 		testInstance.addProperty(PROP_IRI_NO_HASHTAG, PROP_IRI_NO_HASHTAG_VALUE);
+		testInstance.addProperty(PROP_BRACES, PROP_BRACES_VALUE);
+		testInstance.addProperty(PROP_NON_ALPHANUMERIC, PROP_NON_ALPHANUMERIC_VALUE);
+		testInstance.addProperty(PROP_URI_AS_STRING, PROP_URI_AS_STRING_VALUE);
 
 		TreeSet<String> concat1 = new TreeSet<>();
 		concat1.add(PROP_CONCAT1_VALUE1);
@@ -250,4 +264,21 @@ public class PreprocessingFunctionsTest {
 		assertTrue(testInstance.getAllProperties().contains(expected));
 	}
 	
+	@Test
+	public void testRemoveBraces() throws IllegalNumberOfParametersException {
+		new RemoveBraces().applyFunction(testInstance, PROP_BRACES);
+		assertEquals(REMOVE_BRACES_EXPECTED, testInstance.getProperty(PROP_BRACES).first());
+	}
+	
+	@Test
+	public void testRemoveNonAlphanumeric() throws IllegalNumberOfParametersException {
+		new RemoveNonAlphanumeric().applyFunction(testInstance, PROP_NON_ALPHANUMERIC);
+		assertEquals(REMOVE_NON_ALPHANUMERIC_EXPECTED, testInstance.getProperty(PROP_NON_ALPHANUMERIC).first());
+	}
+
+	@Test
+	public void testUriAsString() throws IllegalNumberOfParametersException {
+		new UriAsString().applyFunction(testInstance, PROP_URI_AS_STRING);
+		assertEquals(URI_AS_STRING_EXPECTED, testInstance.getProperty(PROP_URI_AS_STRING).first());
+	}
 }

@@ -5,7 +5,9 @@ import org.aksw.limes.core.io.preprocessing.functions.CleanIri;
 import org.aksw.limes.core.io.preprocessing.functions.CleanNumber;
 import org.aksw.limes.core.io.preprocessing.functions.Concat;
 import org.aksw.limes.core.io.preprocessing.functions.RegexReplace;
+import org.aksw.limes.core.io.preprocessing.functions.RemoveBraces;
 import org.aksw.limes.core.io.preprocessing.functions.RemoveLanguageTag;
+import org.aksw.limes.core.io.preprocessing.functions.RemoveNonAlphanumeric;
 import org.aksw.limes.core.io.preprocessing.functions.RenameProperty;
 import org.aksw.limes.core.io.preprocessing.functions.Replace;
 import org.aksw.limes.core.io.preprocessing.functions.ToCelsius;
@@ -29,6 +31,8 @@ public class PreprocessingFunctionFactory {
     public static final String TO_FAHRENHEIT = "fahrenheit";
     public static final String TO_UPPERCASE = "uppercase";
     public static final String TO_LOWERCASE = "lowercase";
+    public static final String REMOVE_BRACES = "removebraces";
+    public static final String REMOVE_NON_ALPHANUMERIC = "regularalphabet";
     
     public static PreprocessingFunctionType getPreprocessingType(String expression){
     	switch(expression.trim()){
@@ -54,6 +58,10 @@ public class PreprocessingFunctionFactory {
             	return PreprocessingFunctionType.TO_UPPERCASE;
             case(TO_LOWERCASE): 
             	return PreprocessingFunctionType.TO_LOWERCASE;
+            case(REMOVE_BRACES): 
+            	return PreprocessingFunctionType.REMOVE_BRACES;
+            case(REMOVE_NON_ALPHANUMERIC): 
+            	return PreprocessingFunctionType.REMOVE_NON_ALPHANUMERIC;
     		default:
     			throw new InvalidPreprocessingFunctionException(expression);
     	}
@@ -83,6 +91,10 @@ public class PreprocessingFunctionFactory {
             	return new ToUppercase();
             case TO_LOWERCASE: 
             	return new ToLowercase();
+            case REMOVE_BRACES: 
+            	return new RemoveBraces();
+            case REMOVE_NON_ALPHANUMERIC: 
+            	return new RemoveNonAlphanumeric();
             default:
     			throw new InvalidPreprocessingFunctionException(type.toString());
 	    }

@@ -19,7 +19,7 @@ public abstract class APreprocessingFunction implements IPreprocessingFunction {
 		return applyFunctionAfterCheck(inst, property, arguments);
     }
     
-    public abstract Instance applyFunctionAfterCheck(Instance inst, String properties, String ... arguments);
+    public abstract Instance applyFunctionAfterCheck(Instance inst, String property, String ... arguments);
 
 	public void testIfNumberOfArgumentsIsLegal(String... arguments) throws IllegalNumberOfParametersException{
 		if(arguments.length < minNumberOfArguments()){
