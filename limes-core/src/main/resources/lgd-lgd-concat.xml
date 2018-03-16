@@ -42,7 +42,7 @@
 		<PROPERTY>geopos:long</PROPERTY>
 	</TARGET>
 	<FUNCTIONS>
-		<FUNCTION>concat(geopos:lat, geopos:long, glue=,) AS latlong</FUNCTION>
+		<FUNCTION>concat(geopos:lat, geopos:long, glue=,) RENAME latlong</FUNCTION>
 	</FUNCTIONS>
 	<METRIC>geo_hausdorff(x.polygon, y.polygon)</METRIC>
 	<ACCEPTANCE>
