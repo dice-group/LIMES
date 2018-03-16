@@ -14,8 +14,11 @@ import org.aksw.limes.core.io.preprocessing.functions.ToCelsius;
 import org.aksw.limes.core.io.preprocessing.functions.ToFahrenheit;
 import org.aksw.limes.core.io.preprocessing.functions.ToLowercase;
 import org.aksw.limes.core.io.preprocessing.functions.ToUppercase;
+import org.aksw.limes.core.io.preprocessing.functions.UriAsString;
+import org.aksw.limes.core.io.preprocessing.functions.Split;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 public class PreprocessingFunctionFactory {
     static Logger logger = LoggerFactory.getLogger(PreprocessingFunctionFactory.class);
@@ -33,6 +36,8 @@ public class PreprocessingFunctionFactory {
     public static final String TO_LOWERCASE = "lowercase";
     public static final String REMOVE_BRACES = "removebraces";
     public static final String REMOVE_NON_ALPHANUMERIC = "regularalphabet";
+    public static final String URI_AS_STRING = "uriasstring";
+    public static final String SPLIT = "split";
     
     public static PreprocessingFunctionType getPreprocessingType(String expression){
     	switch(expression.trim()){
@@ -62,6 +67,10 @@ public class PreprocessingFunctionFactory {
             	return PreprocessingFunctionType.REMOVE_BRACES;
             case(REMOVE_NON_ALPHANUMERIC): 
             	return PreprocessingFunctionType.REMOVE_NON_ALPHANUMERIC;
+            case(URI_AS_STRING): 
+            	return PreprocessingFunctionType.URI_AS_STRING;
+            case(SPLIT): 
+            	return PreprocessingFunctionType.SPLIT;
     		default:
     			throw new InvalidPreprocessingFunctionException(expression);
     	}
@@ -95,6 +104,10 @@ public class PreprocessingFunctionFactory {
             	return new RemoveBraces();
             case REMOVE_NON_ALPHANUMERIC: 
             	return new RemoveNonAlphanumeric();
+            case URI_AS_STRING: 
+            	return new UriAsString();
+            case SPLIT: 
+            	return new Split();
             default:
     			throw new InvalidPreprocessingFunctionException(type.toString());
 	    }

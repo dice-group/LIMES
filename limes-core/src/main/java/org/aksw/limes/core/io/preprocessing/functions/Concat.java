@@ -73,17 +73,17 @@ public class Concat extends APreprocessingFunction implements IPreprocessingFunc
 		return res;
 	}
 	
-	@Override
-	public String[] retrieveArguments(String args) {
-		String[] res = super.retrieveArguments(args);
-		if(args.contains(GLUE_FLAG)){
-			//Last character is ")"
-			String glue = args.substring(args.indexOf(GLUE_FLAG), args.length()-1); 
-			res[res.length -1] = glue;
-			return res;
-		}
-		return res;
-	}
+//	@Override
+//	public String[] retrieveArguments(String args) {
+//		String[] res = super.retrieveArguments(args);
+//		if(args.contains(GLUE_FLAG)){
+//			//Last character is ")"
+//			String glue = args.substring(args.indexOf(GLUE_FLAG), args.length()-1); 
+//			res[res.length -1] = glue;
+//			return res;
+//		}
+//		return res;
+//	}
 
 	@Override
 	public int minNumberOfArguments() {

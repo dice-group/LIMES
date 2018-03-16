@@ -20,6 +20,7 @@ import org.aksw.limes.core.io.preprocessing.functions.RemoveLanguageTag;
 import org.aksw.limes.core.io.preprocessing.functions.RemoveNonAlphanumeric;
 import org.aksw.limes.core.io.preprocessing.functions.RenameProperty;
 import org.aksw.limes.core.io.preprocessing.functions.Replace;
+import org.aksw.limes.core.io.preprocessing.functions.Split;
 import org.aksw.limes.core.io.preprocessing.functions.ToCelsius;
 import org.aksw.limes.core.io.preprocessing.functions.ToFahrenheit;
 import org.aksw.limes.core.io.preprocessing.functions.ToLowercase;
@@ -49,11 +50,16 @@ public class PreprocessingFunctionsTest {
 	public static final String REMOVE_BRACES_EXPECTED = "Test";
 	public static final String REMOVE_NON_ALPHANUMERIC_EXPECTED = "alphanumeric";
 	public static final String URI_AS_STRING_EXPECTED = "uri as string";
+	public static final String SPLITTED1_EXPECTED = "I am split ";
+	public static final String SPLITTED2_EXPECTED = " in half";
 
 	public static final String[] FUNCTION_CHAIN_1_EXPECTED = new String[]{"label1","label2"};
 	public static final String[] FUNCTION_CHAIN_2_EXPECTED = new String[]{"label1","label2","glue=,"};
 	public static final String[] FUNCTION_CHAIN_3_EXPECTED = new String[]{"label1","label2","glue= "};
 	public static final String[] FUNCTION_CHAIN_4_EXPECTED = new String[]{};
+	public static final String[] FUNCTION_CHAIN_5_EXPECTED = new String[]{"rdfs:label", Split.LIMIT_KEYWORD +"0", Split.SPLIT_CHAR_KEYWORD + ","};
+	public static final String KEYWORD_RETRIEVAL_EXPECTED1 = ",";
+	public static final String KEYWORD_RETRIEVAL_EXPECTED2 = " ";
 
 	//=============== PROPERTIES =======================================
 	public static final String PROP_LABEL = "rdfs:label";
@@ -69,6 +75,9 @@ public class PreprocessingFunctionsTest {
 	public static final String PROP_BRACES = "braces";
 	public static final String PROP_NON_ALPHANUMERIC = "nonalphanumeric";
 	public static final String PROP_URI_AS_STRING = "uriasstring";
+	public static final String PROP_SPLIT = "split";
+	public static final String PROP_SPLITTED1 = "splitted1";
+	public static final String PROP_SPLITTED2 = "splitted2";
 	
 	//=============== VALUES ===========================================
 	public static final String PROP_NUMBER_VALUE = "10^^http://www.w3.org/2001/XMLSchema#positiveInteger";
@@ -86,11 +95,16 @@ public class PreprocessingFunctionsTest {
 	public static final String PROP_BRACES_VALUE = "T((e)est";
 	public static final String PROP_NON_ALPHANUMERIC_VALUE = "a!lp%h|a^n&u*m<e)r=ic";
 	public static final String PROP_URI_AS_STRING_VALUE = "http://example.org/uri_as_string";
+	public static final String PROP_SPLIT_VALUE = "I am split | in half";
 	
 	public static final String FUNCTION_CHAIN_1 = "concat(label1,label2)";
 	public static final String FUNCTION_CHAIN_2 = "concat(label1,label2,glue=,)";
 	public static final String FUNCTION_CHAIN_3 = "concat(label1,label2,glue= )";
 	public static final String FUNCTION_CHAIN_4 = "lowercase";
+	public static final String FUNCTION_CHAIN_5 = "split(rdfs:label, " + Split.LIMIT_KEYWORD +"0," + Split.SPLIT_CHAR_KEYWORD + ",)";
+	
+	public static final String KEYWORD1 = "glue=,";
+	public static final String KEYWORD2 = "glue= ";
 
 	//Used for RegexReplaceTest Removes everything inside braces and language tag
 	public static final String REGEX = "\\((.*?)\\) |@\\w*"; 
@@ -115,6 +129,7 @@ public class PreprocessingFunctionsTest {
 		testInstance.addProperty(PROP_BRACES, PROP_BRACES_VALUE);
 		testInstance.addProperty(PROP_NON_ALPHANUMERIC, PROP_NON_ALPHANUMERIC_VALUE);
 		testInstance.addProperty(PROP_URI_AS_STRING, PROP_URI_AS_STRING_VALUE);
+		testInstance.addProperty(PROP_SPLIT, PROP_SPLIT_VALUE);
 
 		TreeSet<String> concat1 = new TreeSet<>();
 		concat1.add(PROP_CONCAT1_VALUE1);
@@ -155,8 +170,20 @@ public class PreprocessingFunctionsTest {
 	
 	@Test
 	public void testRetrieveArguments(){
-		String[] args1 = new ToLowercase().retrieveArguments(FUNCTION_CHAIN_4);
-		assertArrayEquals(FUNCTION_CHAIN_4_EXPECTED, args1);
+		String[] args4 = new ToLowercase().retrieveArguments(FUNCTION_CHAIN_4);
+		assertArrayEquals(FUNCTION_CHAIN_4_EXPECTED, args4);
+		String[] args5 = new Split().retrieveArguments(FUNCTION_CHAIN_5);
+		assertArrayEquals(FUNCTION_CHAIN_5_EXPECTED, args5);
+	}
+	
+	@Test
+	public void testRetrieveKeywordArguments(){
+		String keyword1 = new Concat().retrieveKeywordArgumentValue(KEYWORD1, Concat.GLUE_FLAG);
+		assertEquals(KEYWORD_RETRIEVAL_EXPECTED1, keyword1);
+		String keyword2 = new Concat().retrieveKeywordArgumentValue(KEYWORD2, Concat.GLUE_FLAG);
+		assertEquals(KEYWORD_RETRIEVAL_EXPECTED2, keyword2);
+		String keyword3 = new Split().retrieveKeywordArgumentValue(FUNCTION_CHAIN_1, Split.LIMIT_KEYWORD);
+		assertEquals("", keyword3);
 	}
 
 	@Test
@@ -280,5 +307,13 @@ public class PreprocessingFunctionsTest {
 	public void testUriAsString() throws IllegalNumberOfParametersException {
 		new UriAsString().applyFunction(testInstance, PROP_URI_AS_STRING);
 		assertEquals(URI_AS_STRING_EXPECTED, testInstance.getProperty(PROP_URI_AS_STRING).first());
+	}
+	
+	
+	@Test
+	public void testSplit() throws IllegalNumberOfParametersException {
+		new Split().applyFunction(testInstance, PROP_SPLIT, PROP_SPLITTED1, PROP_SPLITTED2, "splitChar=|");
+		assertEquals(SPLITTED1_EXPECTED, testInstance.getProperty(PROP_SPLITTED1).first());
+		assertEquals(SPLITTED2_EXPECTED, testInstance.getProperty(PROP_SPLITTED2).first());
 	}
 }
