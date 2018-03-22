@@ -103,6 +103,15 @@ public class EvaluateLigon {
                         }
                     }
                     break;
+                case 5:
+                    // 2. series of experiments: find best model
+                    evaluateLigonWithReliableOracleForDataset(trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
+                    for (ODDS odds : oddsList) {
+                        for (int k = 2; k <= 16; k *= 2) {
+                            evaluateLigonForDataset(k, getNoisyOracles(Integer.valueOf(args[2]), 0.5d, 0.5d), odds, trainingMap, testing.get(0), testing.get(1), learning.get(0), learning.get(1), testSet, learningPool);
+                        }
+                    }
+                    break;
                 case 3:
                     // 3. series of experiment: measure robustness
                     // baseline:
