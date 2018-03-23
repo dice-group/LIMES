@@ -25,15 +25,16 @@ public class Split extends APreprocessingFunction {
 	}
 
 	@Override
-	public Instance applyFunctionAfterCheck(Instance inst, String property, String... arguments) {
+	public Instance applyFunctionAfterCheck(Instance inst, String resultProperties, String... arguments) {
 		//Get the keyword values
 		String possibleKeywordArg1 = arguments[arguments.length - 1];
 		String possibleKeywordArg2 = arguments[arguments.length - 2];
 		String splitChar = retrieveKeywordArgumentValue(possibleKeywordArg1, SPLIT_CHAR_KEYWORD);
-		int limit = arguments.length - 1;
-		int remainingPropertyArgs = arguments.length - 1;
+		String property = arguments[0];
+		String[] resultPropArr = resultProperties.split(",");
+		int limit = resultPropArr.length;
 		if (splitChar.equals("")) {
-			String limitString = retrieveKeywordArgumentValue(possibleKeywordArg1, LIMIT_KEYWORD);
+			String limitString = retrieveKeywordArgumentValue(possibleKeywordArg1, LIMIT_KEYWORD).trim();
 			// If the last arg is neither limit nor splitChar we assume they are
 			// not provided and throw an exception
 			if (limitString.equals("")) {
@@ -48,14 +49,12 @@ public class Split extends APreprocessingFunction {
 				logger.error("Split character for split function is not provided (empty string is NOT permitted!)");
 				throw new MalformedPreprocessingFunctionException();
 			}
-			remainingPropertyArgs--;
 		}
-		String[] resultProperties = Arrays.copyOf(arguments, remainingPropertyArgs);
 		//Perfom the split
 		for (String toSplit : inst.getProperty(property.trim())) {
 			String[] splitArr = toSplit.split(Pattern.quote(splitChar), limit);
 			for (int i = 0; i < splitArr.length; i++) {
-				inst.addProperty(resultProperties[i], splitArr[i]);
+				inst.addProperty(resultPropArr[i].trim(), splitArr[i]);
 			}
 		}
 		return inst;

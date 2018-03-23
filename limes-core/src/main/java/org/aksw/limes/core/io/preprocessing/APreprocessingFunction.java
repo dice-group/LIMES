@@ -15,7 +15,7 @@ public abstract class APreprocessingFunction implements IPreprocessingFunction {
 	 */
 	public static final String commaWithoutPrecedingEquals = "(?<!\\=),";
 	
-	public static final Pattern checkFunctionString = Pattern.compile("^\\w+\\(.*\\)|\\w+");
+	public static final Pattern checkFunctionString = Pattern.compile("^\\w+\\(.*\\)$|^\\w+$");
 
 	@Override
 	public Instance applyFunction(Instance inst, String property, String... arguments) {
