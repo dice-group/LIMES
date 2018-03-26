@@ -10,22 +10,17 @@ import org.aksw.limes.core.io.preprocessing.IPreprocessingFunction;
 import org.apache.commons.lang.ArrayUtils;
 
 public class Concat extends APreprocessingFunction implements IPreprocessingFunction {
-	public static final String GLUE_FLAG = "glue=";
+	public static final String GLUE_KEYWORD = "glue=";
 	private String resultProperty;
 	private String glue;
 
 	@Override
 	public Instance applyFunctionAfterCheck(Instance inst, String property, String... arguments) {
 		resultProperty = property;
-		
-		//glue flag might have leading white spaces, trailing should NOT be removed, as they could be the glue
-		glue = arguments[arguments.length-1].replaceAll("^\\s+","");
-		//Check if glue flag is used
-		if (glue.startsWith(GLUE_FLAG)) {
-			glue = glue.replace(GLUE_FLAG, "");
+		glue = retrieveKeywordArgumentValue(arguments[arguments.length-1], GLUE_KEYWORD);
+		if (!glue.equals("")) {
+			//Remaining arguments are the properties that will be concatenated
 			arguments = (String[]) ArrayUtils.removeElement(arguments, arguments[arguments.length-1]);
-		} else { //Else don't use glue
-			glue = "";
 		}
 		ArrayList<ArrayList<String>> oldValues = new ArrayList<>();
 		for (String prop : arguments) {
@@ -73,18 +68,6 @@ public class Concat extends APreprocessingFunction implements IPreprocessingFunc
 		return res;
 	}
 	
-//	@Override
-//	public String[] retrieveArguments(String args) {
-//		String[] res = super.retrieveArguments(args);
-//		if(args.contains(GLUE_FLAG)){
-//			//Last character is ")"
-//			String glue = args.substring(args.indexOf(GLUE_FLAG), args.length()-1); 
-//			res[res.length -1] = glue;
-//			return res;
-//		}
-//		return res;
-//	}
-
 	@Override
 	public int minNumberOfArguments() {
 		return 2;

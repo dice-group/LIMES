@@ -5,16 +5,18 @@ import java.util.regex.Pattern;
 import org.aksw.limes.core.exceptions.IllegalNumberOfParametersException;
 import org.aksw.limes.core.exceptions.MalformedPreprocessingFunctionException;
 import org.aksw.limes.core.io.cache.Instance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class APreprocessingFunction implements IPreprocessingFunction {
+	static Logger logger = LoggerFactory.getLogger(APreprocessingFunction.class.getName());
 
 	public static final String AT = "@";
 	/**
-	 * Matches commas without preceding equals sign 
-	 * Used to split functions that have keywords
+	 * Matches comma if that comma is not followed by quotation mark
 	 */
-	public static final String commaWithoutPrecedingEquals = "(?<!\\=),";
-	
+	public static final String commaNotInsideQuotation = "," //match comma
+														+"(?!\")"; //negative lookahead checks if comma is followed by quotation
 	public static final Pattern checkFunctionString = Pattern.compile("^\\w+\\(.*\\)$|^\\w+$");
 
 	@Override
@@ -54,17 +56,37 @@ public abstract class APreprocessingFunction implements IPreprocessingFunction {
 		}
 		args = args.substring(args.indexOf("(") + 1,args.length() - 1);
 		// This regex is necessesary since keyword values can be ","
-		return args.split(commaWithoutPrecedingEquals);
+		String[] argumentsSplit = args.split(commaNotInsideQuotation);
+		for(int i = 0; i < argumentsSplit.length; i++){
+			//Remove preceding whitespace
+			argumentsSplit[i] = argumentsSplit[i].replaceAll("^\\s+","");
+		}
+		return argumentsSplit;
 	}
 	
 	public void sanityCheckArguments(String args) {
-		if(!checkFunctionString.matcher(args).find())
+		//Check if there is an even amount of quotation marks or if quotations marks are used as arguments
+		if((args.length() - args.replace("\"","").length()) % 2 != 0 || args.contains("\"\"\"")){
+			//Check if the quotations that are not arguments are correct
+			String permittedUnevenQuotationsRemoved = args.replace("\"\"\"","");
+			if((permittedUnevenQuotationsRemoved.length() - permittedUnevenQuotationsRemoved.replace("\"","").length()) % 2 != 0){
+                logger.error("Unmatched quotation mark!");
+                throw new MalformedPreprocessingFunctionException(args);
+			}
+		}
+		if(!checkFunctionString.matcher(args).find()){
 			throw new MalformedPreprocessingFunctionException(args);
+		}
 	}
 
 	public String retrieveKeywordArgumentValue(String arg, String keyword) {
 		if(keyword != null && !keyword.equals("") && arg.contains(keyword)){
-			return arg.substring(arg.indexOf(keyword) + keyword.length(), arg.length());
+			String afterKeyword = arg.substring(arg.indexOf(keyword) + keyword.length(), arg.length());
+			if(!afterKeyword.startsWith("\"") || !afterKeyword.endsWith("\"")){
+				logger.error("Keyword values must be enclosed in quotation marks!");
+                throw new MalformedPreprocessingFunctionException(arg);
+			}
+			return afterKeyword.substring(1, afterKeyword.length() - 1);
 		}
 		return "";
 	}

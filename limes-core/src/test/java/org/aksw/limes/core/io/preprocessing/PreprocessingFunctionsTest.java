@@ -60,11 +60,13 @@ public class PreprocessingFunctionsTest {
 	public static final String SPLITTED2_EXPECTED = " in half";
 
 	public static final String[] FUNCTION_CHAIN_1_EXPECTED = new String[] { "label1", "label2" };
-	public static final String[] FUNCTION_CHAIN_2_EXPECTED = new String[] { "label1", "label2", "glue=," };
-	public static final String[] FUNCTION_CHAIN_3_EXPECTED = new String[] { "label1", "label2", "glue= " };
+	public static final String[] FUNCTION_CHAIN_2_EXPECTED = new String[] { "label1", "label2", "glue=\",\"" };
+	public static final String[] FUNCTION_CHAIN_3_EXPECTED = new String[] { "label1", "label2", "glue=\" \"" };
 	public static final String[] FUNCTION_CHAIN_4_EXPECTED = new String[] {};
-	public static final String[] FUNCTION_CHAIN_5_EXPECTED = new String[] { "rdfs:label", Split.LIMIT_KEYWORD + "0",
-			Split.SPLIT_CHAR_KEYWORD + "," };
+	public static final String[] FUNCTION_CHAIN_5_EXPECTED = new String[] { "rdfs:label", "limit=\"0\"",
+			"splitChar=\",\"" };
+	public static final String[] FUNCTION_CHAIN_6_EXPECTED = new String[] { "rdfs:label", "limit=\"-1\"",
+			"splitChar=\"\"\"" };
 	public static final String KEYWORD_RETRIEVAL_EXPECTED1 = ",";
 	public static final String KEYWORD_RETRIEVAL_EXPECTED2 = " ";
 
@@ -105,18 +107,20 @@ public class PreprocessingFunctionsTest {
 	public static final String PROP_SPLIT_VALUE = "I am split | in half";
 
 	public static final String FUNCTION_CHAIN_1 = "concat(label1,label2)";
-	public static final String FUNCTION_CHAIN_2 = "concat(label1,label2,glue=,)";
-	public static final String FUNCTION_CHAIN_3 = "concat(label1,label2,glue= )";
+	public static final String FUNCTION_CHAIN_2 = "concat(label1,label2,glue=\",\")";
+	public static final String FUNCTION_CHAIN_3 = "concat(label1,label2,glue=\" \")";
 	public static final String FUNCTION_CHAIN_4 = "lowercase";
-	public static final String FUNCTION_CHAIN_5 = "split(rdfs:label," + Split.LIMIT_KEYWORD + "0,"
-			+ Split.SPLIT_CHAR_KEYWORD + ",)";
+	public static final String FUNCTION_CHAIN_5 = "split(rdfs:label, limit=\"0\",splitChar=\",\")";
+	public static final String FUNCTION_CHAIN_6 = "split(rdfs:label, limit=\"-1\",splitChar=\"\"\")";
 
-	public static final String KEYWORD1 = "glue=,";
-	public static final String KEYWORD2 = "glue= ";
+	public static final String KEYWORD1 = "glue=\",\"";
+	public static final String KEYWORD2 = "glue=\" \"";
 
-	public static final String SANITY_CHECK1 = "concat(label1,label2,glue=,";
-	public static final String SANITY_CHECK2 = "concatlabel1,label2,glue=,)";
-	public static final String SANITY_CHECK3 = "(label1,label2,glue=,)";
+	public static final String SANITY_CHECK1 = "concat(label1,label2,glue=\",\"";
+	public static final String SANITY_CHECK2 = "concatlabel1,label2,glue=\",\")";
+	public static final String SANITY_CHECK3 = "(label1,label2,glue=\",\")";
+	public static final String SANITY_CHECK4 = "concat(label1,label2,glue=\",)";
+	public static final String SANITY_CHECK5 = "split(label1, limit=\"1, splitChar=\"\"\")";
 
 	// Used for RegexReplaceTest Removes everything inside braces and language
 	// tag
@@ -185,6 +189,8 @@ public class PreprocessingFunctionsTest {
 		assertArrayEquals(FUNCTION_CHAIN_4_EXPECTED, args4);
 		String[] args5 = new Split().retrieveArguments(FUNCTION_CHAIN_5);
 		assertArrayEquals(FUNCTION_CHAIN_5_EXPECTED, args5);
+		String[] args6 = new Split().retrieveArguments(FUNCTION_CHAIN_6);
+		assertArrayEquals(FUNCTION_CHAIN_6_EXPECTED, args6);
 	}
 
 	@Test
@@ -202,12 +208,22 @@ public class PreprocessingFunctionsTest {
 					assertTrue(false);
 				} catch (MalformedPreprocessingFunctionException e3) {
 					try {
-						new Split().sanityCheckArguments(FUNCTION_CHAIN_1);
-						new Split().sanityCheckArguments(FUNCTION_CHAIN_2);
-						new Split().sanityCheckArguments(FUNCTION_CHAIN_3);
-						new Split().sanityCheckArguments(FUNCTION_CHAIN_4);
-					} catch (MalformedPreprocessingFunctionException e4) {
+						new Split().sanityCheckArguments(SANITY_CHECK4);
 						assertTrue(false);
+					} catch (MalformedPreprocessingFunctionException e4) {
+						try {
+							new Split().sanityCheckArguments(SANITY_CHECK5);
+							assertTrue(false);
+						} catch (MalformedPreprocessingFunctionException e5) {
+							try {
+								new Split().sanityCheckArguments(FUNCTION_CHAIN_1);
+								new Split().sanityCheckArguments(FUNCTION_CHAIN_2);
+								new Split().sanityCheckArguments(FUNCTION_CHAIN_3);
+								new Split().sanityCheckArguments(FUNCTION_CHAIN_4);
+							} catch (MalformedPreprocessingFunctionException e6) {
+								assertTrue(false);
+							}
+						}
 					}
 				}
 			}
@@ -216,12 +232,17 @@ public class PreprocessingFunctionsTest {
 
 	@Test
 	public void testRetrieveKeywordArguments() {
-		String keyword1 = new Concat().retrieveKeywordArgumentValue(KEYWORD1, Concat.GLUE_FLAG);
+		String keyword1 = new Concat().retrieveKeywordArgumentValue(KEYWORD1, Concat.GLUE_KEYWORD);
 		assertEquals(KEYWORD_RETRIEVAL_EXPECTED1, keyword1);
-		String keyword2 = new Concat().retrieveKeywordArgumentValue(KEYWORD2, Concat.GLUE_FLAG);
+		String keyword2 = new Concat().retrieveKeywordArgumentValue(KEYWORD2, Concat.GLUE_KEYWORD);
 		assertEquals(KEYWORD_RETRIEVAL_EXPECTED2, keyword2);
 		String keyword3 = new Split().retrieveKeywordArgumentValue(FUNCTION_CHAIN_1, Split.LIMIT_KEYWORD);
 		assertEquals("", keyword3);
+		try{
+            new Split().retrieveKeywordArgumentValue("limit=,", Split.LIMIT_KEYWORD);
+            assertTrue(false);
+        } catch (MalformedPreprocessingFunctionException e6) {
+        }
 	}
 
 	@Test
@@ -317,7 +338,7 @@ public class PreprocessingFunctionsTest {
 
 	@Test
 	public void testConcatGlue() throws IllegalNumberOfParametersException {
-		new Concat().applyFunction(testInstance, PROP_CONCAT_RESULT, PROP_CONCAT1, PROP_CONCAT2, "glue= ");
+		new Concat().applyFunction(testInstance, PROP_CONCAT_RESULT, PROP_CONCAT1, PROP_CONCAT2, "glue=\" \"");
 		assertEquals(CONCAT_EXPECTED_GLUE, testInstance.getProperty(PROP_CONCAT_RESULT));
 	}
 
@@ -348,7 +369,7 @@ public class PreprocessingFunctionsTest {
 
 	@Test
 	public void testSplit() throws IllegalNumberOfParametersException {
-		new Split().applyFunction(testInstance, PROP_SPLITTED1+","+PROP_SPLITTED2, PROP_SPLIT, "splitChar=|");
+		new Split().applyFunction(testInstance, PROP_SPLITTED1 + "," + PROP_SPLITTED2, PROP_SPLIT, "splitChar=\"|\"");
 		assertEquals(SPLITTED1_EXPECTED, testInstance.getProperty(PROP_SPLITTED1).first());
 		assertEquals(SPLITTED2_EXPECTED, testInstance.getProperty(PROP_SPLITTED2).first());
 	}

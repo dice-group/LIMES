@@ -18,6 +18,7 @@ import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.aksw.limes.core.io.preprocessing.functions.Concat;
+import org.aksw.limes.core.io.preprocessing.functions.Split;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.junit.Before;
@@ -153,42 +154,6 @@ public class XMLConfigurationReaderTest {
     }
     
     @Test
-    public void testProcessNaryFunctions() throws ParserConfigurationException, SAXException, IOException{
-        String input = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd-concat.xml").getPath();
-        DtdChecker dtdChecker = new DtdChecker();
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        // make sure document is valid
-        factory.setValidating(true);
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        builder.setErrorHandler(dtdChecker);
-
-        builder.setEntityResolver(new EntityResolver() {
-            @Override
-            public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-                if (systemId.contains("limes.dtd")) {
-                    String dtd = getClass().getResource("/limes.dtd").toString();
-                    return new InputSource(dtd);
-                } else {
-                    return null;
-                }
-            }
-        });
-        Document xmlDocument = builder.parse(input);
-        NodeList list = xmlDocument.getElementsByTagName(XMLConfigurationReader.FUNCTIONS);
-        NodeList children = list.item(0).getChildNodes();
-        XMLConfigurationReader reader = new XMLConfigurationReader(input);
-        reader.processNaryFunctions(XMLConfigurationReader.FUNCTIONS, children);
-
-        HashMap<String, String> f3 = new HashMap<>();
-        f3.put("latlong", "concat(geopos:lat, geopos:long, "+Concat.GLUE_FLAG+",)");
-        LinkedHashMap<String, Map<String, String>> concatFunc = new LinkedHashMap<>();
-        concatFunc.put("latlong", f3);
-        assertEquals(concatFunc,reader.getConfiguration().getSourceInfo().getFunctions());
-        assertEquals(concatFunc,reader.getConfiguration().getTargetInfo().getFunctions());
-    }
-
-    
-    @Test
     public void testNAryFunctions() {
         testConf.setMetricExpression("geo_hausdorff(x.polygon, y.polygon)");
         testConf.setExecutionRewriter("default");
@@ -198,8 +163,11 @@ public class XMLConfigurationReaderTest {
     	properties.add("geopos:lat");
     	properties.add("geopos:long");
         HashMap<String, String> f3 = new HashMap<>();
-        f3.put("latlong", "concat(geopos:lat, geopos:long, "+Concat.GLUE_FLAG+",)");
+        f3.put("latlong", "concat(geopos:lat, geopos:long, "+Concat.GLUE_KEYWORD+",)");
         functions.put("latlong", f3);
+        HashMap<String, String> f4 = new HashMap<>();
+        f4.put("poly1,poly2", "split(polygon, "+ Split.SPLIT_CHAR_KEYWORD +"\".\","+Split.LIMIT_KEYWORD+"\"2\")");
+        functions.put("poly1,poly2", f4);
 
         testConf.setPrefixes(prefixes);
         sourceInfo.setProperties(properties);
@@ -209,7 +177,7 @@ public class XMLConfigurationReaderTest {
         testConf.setSourceInfo(sourceInfo);
         testConf.setTargetInfo(targetInfo);
 
-        String file = Thread.currentThread().getContextClassLoader().getResource("lgd-lgd-concat.xml").getPath();
+        String file = Thread.currentThread().getContextClassLoader().getResource("naryfunctionstest.xml").getPath();
         XMLConfigurationReader c = new XMLConfigurationReader(file);
         Configuration fileConf = c.read();
         
