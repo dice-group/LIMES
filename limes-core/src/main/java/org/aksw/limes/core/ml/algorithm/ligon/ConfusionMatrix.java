@@ -42,27 +42,27 @@ public class ConfusionMatrix {
 	}
 
 	public double getTruePositiveProbability(){
-		return c[0][0] / sumConfusionMatriceEntries();
+		return c[0][0] / ( c[0][0] + c[1][0] );
 	}
 
 	public double getTruePositiveCount(){
 		return c[0][0];
 	}
 
-	public void setTrueNegativeCount(int x){
+	public void setFalseNegativeCount(int x){
 		c[0][1] = x;
 	}
 
-	public void incrementTrueNegativeCount(){
+	public void incrementFalseNegativeCount(){
 		c[0][1]++;
 	}
 
-	public double getTrueNegativeCount(){
+	public double getFalseNegativeCount(){
 		return c[0][1];
 	}
 
-	public double getTrueNegativeProbability(){
-		return c[0][1] / sumConfusionMatriceEntries();
+	public double getFalseNegativeProbability(){
+		return c[0][1] / ( c[0][1] + c[1][1] );
 	}
 
 	public void setFalsePositiveCount(int x){
@@ -78,34 +78,34 @@ public class ConfusionMatrix {
 	}
 
 	public double getFalsePositiveProbability(){
-		return c[1][0] / sumConfusionMatriceEntries();
+		return c[1][0] / ( c[0][0] + c[1][0] );
 	}
 
-	public void setFalseNegativeCount(int x){
+	public void setTrueNegativeCount(int x){
 		c[1][1] = x;
 	}
 
-	public void incrementFalseNegativeCount(){
+	public void incrementTrueNegativeCount(){
 		c[1][1]++;
 	}
 
-	public double getFalseNegativeCount(){
+	public double getTrueNegativeCount(){
 		return c[1][1];
 	}
 
-	public double getFalseNegativeProbability(){
-		return c[1][1] / sumConfusionMatriceEntries();
+	public double getTrueNegativeProbability(){
+		return c[1][1] / ( c[0][1] + c[1][1] );
 	}
 
-	private double sumConfusionMatriceEntries(){
-		double sum = 0.0d;
-		for(int i = 0 ; i < 2 ; i++){
-			for(int j = 0 ; j < 2 ; j++){
-				sum += c[i][j];
-			}
-		}
-		return sum;
-	}
+//	private double sumConfusionMatriceEntries(){
+//		double sum = 0.0d;
+//		for(int i = 0 ; i < 2 ; i++){
+//			for(int j = 0 ; j < 2 ; j++){
+//				sum += c[i][j];
+//			}
+//		}
+//		return sum;
+//	}
 
 	@Override
 	public String toString() {
@@ -113,12 +113,12 @@ public class ConfusionMatrix {
 	}
 
 	public String characteristicMatrixToString() {
-		return "characteristicMatrix {{"+ 
+		return "characteristicMatrix { {"+ 
 				getTruePositiveProbability() + ", " +
-				getTrueNegativeProbability() + "}, {" +
+				getFalseNegativeProbability() + "}, {" +
 				getFalsePositiveProbability() + ", " +
-				getFalseNegativeProbability() +
-				"}}";
+				getTrueNegativeProbability() + 
+				"} }";
 	}
 
 }

@@ -61,7 +61,7 @@ public class EvaluateLigon {
      * @author sherif
      */
     public static void main(String[] args) throws UnsupportedMLImplementationException {
-        List<ODDS> oddsList = Arrays.asList(ODDS.HARD, ODDS.EQUIVALENCE, ODDS.APPROXIMATE);
+        List<ODDS> oddsList = Arrays.asList(ODDS.IGNORE, ODDS.EQUIVALENCE, ODDS.APPROXIMATE);
         int mostInformativeExaplesCount = 10;
         // get training data
         datasetName = args[1];
