@@ -179,7 +179,6 @@ public class DecisionTree {
 		if(rootNode != null){
 			assert pathStrings.size() > 0;
 		}
-		System.out.println(pathStrings);
 		AMapping res = MappingFactory.createDefaultMapping();
 		Iterator<String> it = pathMappings.keySet().iterator();
 		while (it.hasNext()) {

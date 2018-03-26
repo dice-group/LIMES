@@ -66,8 +66,8 @@ public class GlobalFMeasurePruning extends PruningFunctionDTL{
             double tmp = 0.0;
             AMapping withoutRight = node.getTotalMapping();
             tmp = node.calculateFMeasure(withoutRight, node.getRefMapping());
-            System.out.println(returnRoot(node));
-            System.out.println("right null: " + tmp);
+//            System.out.println(returnRoot(node));
+//            System.out.println("right null: " + tmp);
             if (tmp >= DecisionTree.totalFMeasure) {
                 deleteRight = true;
             }
@@ -75,8 +75,8 @@ public class GlobalFMeasurePruning extends PruningFunctionDTL{
             node.setLeftChild(null);
             AMapping withoutLeft = node.getTotalMapping();
             tmp = node.calculateFMeasure(withoutLeft, node.getRefMapping());
-            System.out.println(returnRoot(node));
-            System.out.println("left null: " + tmp );
+//            System.out.println(returnRoot(node));
+//            System.out.println("left null: " + tmp );
             if (tmp >= DecisionTree.totalFMeasure) {
                 DecisionTree.totalFMeasure = tmp;
                 deleteLeft = true;
@@ -86,8 +86,8 @@ public class GlobalFMeasurePruning extends PruningFunctionDTL{
             node.setLeftChild(null);
             AMapping withoutBoth = node.getTotalMapping();
             tmp = node.calculateFMeasure(withoutBoth, node.getRefMapping());
-            System.out.println(returnRoot(node));
-            System.out.println("both null: " + tmp + "\n");
+//            System.out.println(returnRoot(node));
+//            System.out.println("both null: " + tmp + "\n");
             if (tmp >= DecisionTree.totalFMeasure) {
                 DecisionTree.totalFMeasure = tmp;
                 deleteLeft = true;

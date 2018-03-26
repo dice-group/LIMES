@@ -61,10 +61,6 @@ public class GiniIndex extends FitnessFunctionDTL {
 		}
 		currentInstances = new ArrayList<TrainingInstance>();
 		currentInstances.addAll(fullInstances);
-		for(TrainingInstance ti : currentInstances){
-			System.out.println(ti);
-			System.out.println(ti.getMeasureValues());
-		}
 	}
 
 	private void updateInstances(DecisionTree currentNode) {
