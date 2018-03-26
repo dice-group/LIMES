@@ -41,6 +41,8 @@ import static org.junit.Assert.fail;
 public class Ligon {
 	static Logger logger = LoggerFactory.getLogger(Ligon.class);
 
+	private long t_eval;
+
 	String resultStr = "";
 
 	protected List<NoisyOracle> blackBoxOracles;
@@ -293,17 +295,21 @@ public class Ligon {
 		int i = 0;
 		AMapping newLabeledExamples = labeledExamples;
 		gatherOracleResponses(labeledExamples);
+        long start = System.currentTimeMillis();
+        long t_wombat = 0;
 		do {
 			updateOraclesConfusionMatrices(newLabeledExamples);
-			AMapping mostInformativeExamples = getWombatMostInformativeExamples(labeledExamples, mostInformativeExamplesCount);
-			gatherOracleResponses(mostInformativeExamples);
+            long start_wombat = System.currentTimeMillis();
+            AMapping mostInformativeExamples = getWombatMostInformativeExamples(labeledExamples, mostInformativeExamplesCount);
+            t_wombat += (System.currentTimeMillis() - start_wombat);
+            gatherOracleResponses(mostInformativeExamples);
 			newLabeledExamples = classifyUnlabeledExamples(mostInformativeExamples, k, odds);
 			labeledExamples = MappingOperations.union(labeledExamples, newLabeledExamples);
 			fillTrainingCaches(labeledExamples);
 			i++;
 		} while (i < 10);
 		//        System.out.println(resultStr);
-		return resultStr;
+		return resultStr + "/t" + (t_eval + System.currentTimeMillis() - start) +  "/t" + (t_wombat + t_eval);
 		//        return labeledExamples;
 	}
 
@@ -339,7 +345,9 @@ public class Ligon {
 		MLResults mlModel = activeWombat.activeLearn(labeledExamples);
 		wombatBestFmeasure = mlModel.getQuality();
 		AMapping learnedMap = activeWombat.predict(sourceTrainCache, targetTrainCache, mlModel);
+        long start = System.currentTimeMillis();
 		computePerformanceIndicatorsWombat(labeledExamples, learnedMap, mlModel);
+		t_eval -= (System.currentTimeMillis() - start);
 		((AWombat) activeWombat.getMl()).updateActiveLearningCaches(sourceTrainCache, targetTrainCache, fullSourceCache, fullTargetCache);
 		return activeWombat.getNextExamples(mostInformativeExamplesCount);
 	}
@@ -363,26 +371,16 @@ public class Ligon {
 				String.format("%.2f", new FMeasure().calculate(learnedMap, new GoldStandard(labeledExamples))) + "\t";
 
 		//PIs for whole KB
-		long start = System.currentTimeMillis();
 		AMapping kbMap;
 		LinkSpecification linkSpecification = mlModel.getLinkSpecification();
-
 		Rewriter rw = RewriterFactory.getDefaultRewriter();
 		LinkSpecification rwLs = rw.rewrite(linkSpecification);
-		IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, fullSourceCache, fullTargetCache);
-		ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, fullSourceCache, fullTargetCache, "?x", "?y");
-		AMapping fullResultMap = engine.execute(rwLs, planner);
+		resultStr += "0.00\t0.00\t0.00\t";
+        IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceTestingCache, targetTestingCache);
+        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceTestingCache, targetTestingCache, "?x", "?y");
+        AMapping fullResultMap = engine.execute(rwLs, planner);
 		kbMap = fullResultMap.getSubMap(linkSpecification.getThreshold());
-		GoldStandard fullRefgoldStandard = new GoldStandard(fullReferenceMap);
-		resultStr +=
-				String.format("%.2f", new Precision().calculate(kbMap, fullRefgoldStandard)) + "\t" +
-						String.format("%.2f", new Recall().calculate(kbMap, fullRefgoldStandard)) + "\t" +
-						String.format("%.2f", new FMeasure().calculate(kbMap, fullRefgoldStandard)) + "\t";
-		planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceTestingCache, targetTestingCache);
-		engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceTestingCache, targetTestingCache, "?x", "?y");
-		fullResultMap = engine.execute(rwLs, planner);
-		kbMap = fullResultMap.getSubMap(linkSpecification.getThreshold());
-		fullRefgoldStandard = new GoldStandard(testReferenceMap);
+        GoldStandard fullRefgoldStandard = new GoldStandard(testReferenceMap);
 		resultStr += String.format("%.2f", new Precision().calculate(kbMap, fullRefgoldStandard)) + "\t" +
 				String.format("%.2f", new Recall().calculate(kbMap, fullRefgoldStandard)) + "\t" +
 				String.format("%.2f", new FMeasure().calculate(kbMap, fullRefgoldStandard)) + "\t" + computeMSE() + "\t" +

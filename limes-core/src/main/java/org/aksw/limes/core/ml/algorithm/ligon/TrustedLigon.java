@@ -262,29 +262,18 @@ public class TrustedLigon {
         long start = System.currentTimeMillis();
         AMapping kbMap;
         LinkSpecification linkSpecification = mlModel.getLinkSpecification();
-
         Rewriter rw = RewriterFactory.getDefaultRewriter();
         LinkSpecification rwLs = rw.rewrite(linkSpecification);
-        IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, fullSourceCache, fullTargetCache);
-        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, fullSourceCache, fullTargetCache, "?x", "?y");
+        resultStr += "0.00\t0.00\t0.00\t";
+        IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceTestingCache, targetTestingCache);
+        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceTestingCache, targetTestingCache, "?x", "?y");
         AMapping fullResultMap = engine.execute(rwLs, planner);
         kbMap = fullResultMap.getSubMap(linkSpecification.getThreshold());
-        GoldStandard fullRefgoldStandard = new GoldStandard(fullReferenceMap);
-        resultStr +=
-                String.format("%.2f", new Precision().calculate(kbMap, fullRefgoldStandard)) + "\t" +
-                        String.format("%.2f", new Recall().calculate(kbMap, fullRefgoldStandard)) + "\t" +
-                        String.format("%.2f", new FMeasure().calculate(kbMap, fullRefgoldStandard)) + "\t";
-        planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceTestingCache, targetTestingCache);
-        engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceTestingCache, targetTestingCache, "?x", "?y");
-        fullResultMap = engine.execute(rwLs, planner);
-        kbMap = fullResultMap.getSubMap(linkSpecification.getThreshold());
-        fullRefgoldStandard = new GoldStandard(testReferenceMap);
+        GoldStandard fullRefgoldStandard = new GoldStandard(testReferenceMap);
         resultStr += String.format("%.2f", new Precision().calculate(kbMap, fullRefgoldStandard)) + "\t" +
                 String.format("%.2f", new Recall().calculate(kbMap, fullRefgoldStandard)) + "\t" +
                 String.format("%.2f", new FMeasure().calculate(kbMap, fullRefgoldStandard)) + "\t" +
-                linkSpecification.toStringOneLine() +
-                //                (System.currentTimeMillis() - start)        +
-                "\n";
+                linkSpecification.toStringOneLine() + "\n";
 
         return resultStr;
     }
