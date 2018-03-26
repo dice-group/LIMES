@@ -408,12 +408,10 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	 */
 	@Override
 	protected MLResults activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
-
 		if (oracleMapping.size() == 0) {
 			logger.error("empty oracle Mapping! Returning empty MLResults!");
 			return new MLResults();
 		}
-		logger.info("oracleBefore: " + oracleMapping.size());
 		// Add all previously labeled matches
 		oracleMapping = addAll(oracleMapping);
 		// These are the instances labeled by the user so we keep them to not
@@ -423,51 +421,47 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 				previouslyPresentedCandidates.add(sourceURI, targetURI, value);
 			});
 		});
-		logger.info("oracleAfter: " + oracleMapping.size());
-		this.mlresult =  learn(oracleMapping);
-		deltaLS = subtractDeltaFromLS(this.mlresult.getLinkSpecification());
+		LinkSpecification resLS = buildTreeAndParseToLS(oracleMapping);
+		if (resLS == null) {
+			logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
+			if (addBase(oracleMapping)) {
+				resLS = buildTreeAndParseToLS(oracleMapping);
+			} else {
+				// if adding the base does not help we call wombat
+				handleUniformTrainingData(oracleMapping);
+			}
+		}
+		this.mlresult = new MLResults();
+		if (useJ48optimized) {
+			trainingData = oracleMapping;
+			LinkSpecification raisedLS = null;
+			// If we get the same tree again, raise the threshold to get better
+			// results faster
+			while (alreadySeenLS.get(resLS.toString()) != null) {
+				logger.debug("Already seen " + resLS);
+				raisedLS = raiseThreshold(resLS);
+				// they are the same if we reached the maximum threshold
+				if (raisedLS.equals(resLS)) {
+					break;
+				} else {
+					resLS = raisedLS;
+				}
+				logger.debug("Setting threshold to: " + resLS.getThreshold());
+			}
+			if (checkIfThereWasBetterLSBefore(resLS, null, null)) {
+				logger.debug("Already had better LinkSpecification: " + bestLS);
+			} else {
+				logger.info("Learned LinkSpecification: " + resLS.toStringOneLine());
+			}
+			this.mlresult.setLinkSpecification(bestLS);
+
+		} else {
+			this.mlresult.setLinkSpecification(resLS);
+		}
+		this.mlresult.setMapping(prediction);
+		this.mlresult.setQuality(bestFMeasure);
+		deltaLS = subtractDeltaFromLS(resLS);
 		return this.mlresult;
-//		LinkSpecification resLS = buildTreeAndParseToLS(oracleMapping);
-//		if (resLS == null) {
-//			logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
-//			if (addBase(oracleMapping)) {
-//				resLS = buildTreeAndParseToLS(oracleMapping);
-//			} else {
-//				// if adding the base does not help we call wombat
-//				handleUniformTrainingData(oracleMapping);
-//			}
-//		}
-//		this.mlresult = new MLResults();
-//		if (useJ48optimized) {
-//			trainingData = oracleMapping;
-//			LinkSpecification raisedLS = null;
-//			// If we get the same tree again, raise the threshold to get better
-//			// results faster
-//			while (alreadySeenLS.get(resLS.toString()) != null) {
-//				logger.debug("Already seen " + resLS);
-//				raisedLS = raiseThreshold(resLS);
-//				// they are the same if we reached the maximum threshold
-//				if (raisedLS.equals(resLS)) {
-//					break;
-//				} else {
-//					resLS = raisedLS;
-//				}
-//				logger.debug("Setting threshold to: " + resLS.getThreshold());
-//			}
-//			if (checkIfThereWasBetterLSBefore(resLS, null, null)) {
-//				logger.debug("Already had better LinkSpecification: " + bestLS);
-//			} else {
-//				logger.info("Learned LinkSpecification: " + resLS.toStringOneLine());
-//			}
-//			this.mlresult.setLinkSpecification(bestLS);
-//
-//		} else {
-//			this.mlresult.setLinkSpecification(resLS);
-//		}
-//		this.mlresult.setMapping(prediction);
-//		this.mlresult.setQuality(bestFMeasure);
-//		deltaLS = subtractDeltaFromLS(resLS);
-//		return this.mlresult;
 	}
 
 	/**
