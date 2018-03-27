@@ -162,18 +162,26 @@ public class XMLConfigurationReaderTest {
     	prefixes.put("geopos","http://www.w3.org/2003/01/geo/wgs84_pos#");
     	properties.add("geopos:lat");
     	properties.add("geopos:long");
+
+    	LinkedHashMap<String, Map<String, String>> sourceFunctions = new LinkedHashMap<>();
+    	LinkedHashMap<String, Map<String, String>> targetFunctions = new LinkedHashMap<>();
+        HashMap<String, String> f = new HashMap<>();
+        f.put("polygon", null);
+        sourceFunctions.put("geom:geometry/geos:asWKT", f);
+        targetFunctions.put("geom:geometry/geos:asWKT", f);
         HashMap<String, String> f3 = new HashMap<>();
         f3.put("latlong", "concat(geopos:lat, geopos:long, "+Concat.GLUE_KEYWORD+",)");
-        functions.put("latlong", f3);
+        sourceFunctions.put("latlong", f3);
         HashMap<String, String> f4 = new HashMap<>();
         f4.put("poly1,poly2", "split(polygon, "+ Split.SPLIT_CHAR_KEYWORD +"\".\")");
-        functions.put("poly1,poly2", f4);
+        targetFunctions.put("poly1,poly2", f4);
+
 
         testConf.setPrefixes(prefixes);
         sourceInfo.setProperties(properties);
-        sourceInfo.setFunctions(functions);
+        sourceInfo.setFunctions(sourceFunctions);
         targetInfo.setProperties(properties);
-        targetInfo.setFunctions(functions);
+        targetInfo.setFunctions(targetFunctions);
         testConf.setSourceInfo(sourceInfo);
         testConf.setTargetInfo(targetInfo);
 
