@@ -37,6 +37,7 @@ Optional properties can be set to segment the requested dataset.
 * The limits of the query can be set with the `MINOFFSET` and `MAXOFFSET` tags directly after the `PAGESIZE` tag. The resulting query will ask about the statements in the interval [`MINOFFSET`, `MAXOFFSET`]. Note that `MINOFFSET` must be smaller than `MAXOFFSET`! If both `SOURCE` and `TARGET` are restricted, a warning is generated.
 
 ## Pre-processing Functions
+### Simple
 
 Currently, LIMES supports the following set of pre-processing functions:
 * `nolang` for removing language tags
@@ -79,7 +80,33 @@ In addition, the following allows splitting the values of `foaf:homepage` into t
         <TYPE>sparql</TYPE>
     </SOURCE>
 
-In addition, a source type can be set via `TYPE`. The default type is set to `SPARQL` (for a SPARQL endpoint) but LIMES also supports reading files directly from the hard-drive. The supported data formats are
+### Complex 
+It is also possible to use complex pre-processing functions, i.e. functions that manipulate multiple values at once.
+Currently the following complex pre-processing functions are available:
+* `concat(property1, property2, glue=",") RENAME newprop` this concatenates the values of `property1` and `property2` into `newprop` using a comma as glue between the values. The use of the `glue=` argument is optional. So `concat(property1, property2) RENAME newprop` would be valid as well.
+* `split(property, splitChar=",") RENAME prop1,prop2` this splits the values of `property` on the comma character, the first part is stored in `prop1` the rest in `prop2`. The `splitChar=` argument is mandatory. You can control the maximum number of splits by providing more or less properties after the `RENAME` keyword. For example if you would write `RENAME prop1,prop2,prop3` the values of `property` would be split into at most 3 values if 3 or more commas are present.
+
+Complex pre-processing functions are provided using the `FUNCTION` tag.
+
+
+    <SOURCE>
+        <ID>mesh</ID>
+        <ENDPOINT>http://dbpedia.org/sparql</ENDPOINT>
+        <VAR>?y</VAR>
+        <PAGESIZE>5000</PAGESIZE>
+        <RESTRICTION>?y rdf:type dbo:Airport</RESTRICTION>
+        <PROPERTY>rdfs:label</PROPERTY>
+        <PROPERTY>geo:lat</PROPERTY>
+        <PROPERTY>geo:long</PROPERTY>
+        <FUNCTION>concat(geo:lat, geo:long, glue=",") RENAME latlong</FUNCTION>
+        <TYPE>sparql</TYPE>
+    </SOURCE>
+
+Please note that complex functions always require the `RENAME` operation.
+
+
+## Source types
+A source type can be set via `TYPE`. The default type is set to `SPARQL` (for a SPARQL endpoint) but LIMES also supports reading files directly from the hard-drive. The supported data formats are
 * `CSV`: Character-separated file can be loaded directly into LIMES. Note that the separation character is set to `TAB` as a default. The user can alter this setting programmatically. 
 * `N3` (which also reads `NT` files) reads files in the `N3` language.
 * `N-TRIPLE` reads files in W3C's core [N-Triples format](http://www.w3.org/TR/rdf-testcases/\#ntriples)
