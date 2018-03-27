@@ -166,7 +166,7 @@ public class XMLConfigurationReaderTest {
         f3.put("latlong", "concat(geopos:lat, geopos:long, "+Concat.GLUE_KEYWORD+",)");
         functions.put("latlong", f3);
         HashMap<String, String> f4 = new HashMap<>();
-        f4.put("poly1,poly2", "split(polygon, "+ Split.SPLIT_CHAR_KEYWORD +"\".\","+Split.LIMIT_KEYWORD+"\"2\")");
+        f4.put("poly1,poly2", "split(polygon, "+ Split.SPLIT_CHAR_KEYWORD +"\".\")");
         functions.put("poly1,poly2", f4);
 
         testConf.setPrefixes(prefixes);

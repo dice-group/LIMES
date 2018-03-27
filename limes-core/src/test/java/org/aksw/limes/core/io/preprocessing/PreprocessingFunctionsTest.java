@@ -63,10 +63,8 @@ public class PreprocessingFunctionsTest {
 	public static final String[] FUNCTION_CHAIN_2_EXPECTED = new String[] { "label1", "label2", "glue=\",\"" };
 	public static final String[] FUNCTION_CHAIN_3_EXPECTED = new String[] { "label1", "label2", "glue=\" \"" };
 	public static final String[] FUNCTION_CHAIN_4_EXPECTED = new String[] {};
-	public static final String[] FUNCTION_CHAIN_5_EXPECTED = new String[] { "rdfs:label", "limit=\"0\"",
-			"splitChar=\",\"" };
-	public static final String[] FUNCTION_CHAIN_6_EXPECTED = new String[] { "rdfs:label", "limit=\"-1\"",
-			"splitChar=\"\"\"" };
+	public static final String[] FUNCTION_CHAIN_5_EXPECTED = new String[] { "rdfs:label", "splitChar=\",\"" };
+	public static final String[] FUNCTION_CHAIN_6_EXPECTED = new String[] { "rdfs:label", "splitChar=\"\"\"" };
 	public static final String KEYWORD_RETRIEVAL_EXPECTED1 = ",";
 	public static final String KEYWORD_RETRIEVAL_EXPECTED2 = " ";
 
@@ -110,8 +108,8 @@ public class PreprocessingFunctionsTest {
 	public static final String FUNCTION_CHAIN_2 = "concat(label1,label2,glue=\",\")";
 	public static final String FUNCTION_CHAIN_3 = "concat(label1,label2,glue=\" \")";
 	public static final String FUNCTION_CHAIN_4 = "lowercase";
-	public static final String FUNCTION_CHAIN_5 = "split(rdfs:label, limit=\"0\",splitChar=\",\")";
-	public static final String FUNCTION_CHAIN_6 = "split(rdfs:label, limit=\"-1\",splitChar=\"\"\")";
+	public static final String FUNCTION_CHAIN_5 = "split(rdfs:label, splitChar=\",\")";
+	public static final String FUNCTION_CHAIN_6 = "split(rdfs:label, splitChar=\"\"\")";
 
 	public static final String KEYWORD1 = "glue=\",\"";
 	public static final String KEYWORD2 = "glue=\" \"";
@@ -236,10 +234,10 @@ public class PreprocessingFunctionsTest {
 		assertEquals(KEYWORD_RETRIEVAL_EXPECTED1, keyword1);
 		String keyword2 = new Concat().retrieveKeywordArgumentValue(KEYWORD2, Concat.GLUE_KEYWORD);
 		assertEquals(KEYWORD_RETRIEVAL_EXPECTED2, keyword2);
-		String keyword3 = new Split().retrieveKeywordArgumentValue(FUNCTION_CHAIN_1, Split.LIMIT_KEYWORD);
+		String keyword3 = new Split().retrieveKeywordArgumentValue(FUNCTION_CHAIN_1, Split.SPLIT_CHAR_KEYWORD);
 		assertEquals("", keyword3);
 		try{
-            new Split().retrieveKeywordArgumentValue("limit=,", Split.LIMIT_KEYWORD);
+            new Split().retrieveKeywordArgumentValue("splitChar=,", Split.SPLIT_CHAR_KEYWORD);
             assertTrue(false);
         } catch (MalformedPreprocessingFunctionException e6) {
         }
