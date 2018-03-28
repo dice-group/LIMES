@@ -7,6 +7,7 @@ import org.aksw.limes.core.gui.controller.ResultController;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.InstanceProperty;
 import org.aksw.limes.core.gui.model.Result;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.slf4j.Logger;
@@ -250,11 +251,12 @@ public class ResultView {
      */
     public void showResults(ObservableList<Result> results, AMapping resultMapping) {
 	if(learnedLS != null){
-	saveLinkSpecButton.setVisible(true);
+        saveLinkSpecButton.setVisible(true);
 	}
         this.results = results;
         table.setItems(results);
         this.mapping = resultMapping;
+        this.controller.setCachesFixed();
     }
 
     /**

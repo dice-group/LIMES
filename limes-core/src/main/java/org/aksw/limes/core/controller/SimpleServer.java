@@ -34,10 +34,12 @@ public class SimpleServer {
     private static final String LOCK_DIR_PATH = "/lock/";
     private static final String QUERY_PARAM_RESULT_TYPE = "result_type";
     private static final String QUERY_PARAM_JOB_ID = "job_id";
-    public static final String CONFIG_FILE_PREFIX = "limes_server_cfg_";
+    private static final String CONFIG_FILE_PREFIX = "limes_server_cfg_";
     private static ConcurrentMap<Long, Integer> jobs = new ConcurrentHashMap<>();
+    private static int limit;
 
-    public static void startServer(int port) {
+    public static void startServer(int port, int limit) {
+        SimpleServer.limit = limit;
         HttpServer server = null;
         logger.info("Attempting to start LIMES server at port " + port + "...");
         try {
@@ -54,10 +56,16 @@ public class SimpleServer {
         logger.info("Server has been started! Waiting for requests...");
     }
 
+    private static void addCORSHeaders(Headers headers) {
+        headers.add("Access-Control-Allow-Origin", "*");
+        headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    }
+
     private static class ExecuteHandler implements HttpHandler {
 
         @Override
         public void handle(HttpExchange t) throws IOException {
+            addCORSHeaders(t.getResponseHeaders());
             if (t.getRequestMethod().equals("POST")) {
                 Headers headers = t.getRequestHeaders();
                 String boundary = "boundary=";
@@ -79,7 +87,7 @@ public class SimpleServer {
                 AConfigurationReader reader = new XMLConfigurationReader(STORAGE_DIR_PATH + CONFIG_FILE_PREFIX + id + ".xml");
                 Configuration config = reader.read();
                 jobs.put(Long.parseLong(id), 1);
-                ResultMappings mappings = Controller.getMapping(config);
+                ResultMappings mappings = Controller.getMapping(config, limit);
                 String outputFormat = config.getOutputFormat();
                 ISerializer output = SerializerFactory.createSerializer(outputFormat);
                 output.setPrefixes(config.getPrefixes());
@@ -100,6 +108,10 @@ public class SimpleServer {
                 _acceptanceFile.renameTo(acceptanceFile);
                 lockDir.delete();
                 jobs.put(Long.parseLong(id), 2);
+            } else if (t.getRequestMethod().equals("OPTIONS")) {
+                // we only accept POST requests here, anything else gets code "405 - Method Not Allowed"
+                t.sendResponseHeaders(200 ,-1);
+                logger.info("Replied to OPTIONS request");
             } else {
                 // we only accept POST requests here, anything else gets code "405 - Method Not Allowed"
                 t.sendResponseHeaders(405 ,-1);
@@ -132,6 +144,7 @@ public class SimpleServer {
 
         @Override
         public void handle(HttpExchange t) throws IOException {
+            addCORSHeaders(t.getResponseHeaders());
             if (t.getRequestMethod().equals("GET")) {
                 Map<String, String> params = queryToMap(t.getRequestURI().getRawQuery());
                 if (params.containsKey(QUERY_PARAM_JOB_ID) && params.containsKey(QUERY_PARAM_RESULT_TYPE) &&
@@ -186,6 +199,11 @@ public class SimpleServer {
                     t.sendResponseHeaders(400 ,-1);
                     logger.info("Bad request: " + t.getRequestURI() + "\nPlease specify job_id and result_type query parameters!");
                 }
+
+            } else if (t.getRequestMethod().equals("OPTIONS")) {
+                // we only accept POST requests here, anything else gets code "405 - Method Not Allowed"
+                t.sendResponseHeaders(200 ,-1);
+                logger.info("Replied to OPTIONS request");
             } else {
                 // we only accept GET requests here, anything else gets code "405 - Method Not Allowed"
                 t.sendResponseHeaders(405 ,-1);
@@ -198,6 +216,7 @@ public class SimpleServer {
 
         @Override
         public void handle(HttpExchange t) throws IOException {
+            addCORSHeaders(t.getResponseHeaders());
             if (t.getRequestMethod().equals("GET")) {
                 Map<String, String> params = queryToMap(t.getRequestURI().getRawQuery());
                 if (params.containsKey(QUERY_PARAM_JOB_ID)) {
@@ -226,6 +245,10 @@ public class SimpleServer {
                     t.sendResponseHeaders(400, -1);
                     logger.info("Bad request: " + t.getRequestURI() + "\nPlease specify job_id query parameters!");
                 }
+            } else if (t.getRequestMethod().equals("OPTIONS")) {
+                // we only accept POST requests here, anything else gets code "405 - Method Not Allowed"
+                t.sendResponseHeaders(200 ,-1);
+                logger.info("Replied to OPTIONS request");
             } else {
                 // we only accept GET requests here, anything else gets code "405 - Method Not Allowed"
                 t.sendResponseHeaders(405, -1);
@@ -234,24 +257,24 @@ public class SimpleServer {
         }
     }
 
-        public static Map<String, String> queryToMap(String query){
-            Map<String, String> result = new HashMap<>();
-            if (query == null)
-                return result;
-            for (String param : query.split("&")) {
-                try {
-                    param = java.net.URLDecoder.decode(param, "UTF-8");
-                    String pair[] = param.split("=");
-                    if (pair.length > 1) {
-                        result.put(pair[0], pair[1]);
-                    } else {
-                        result.put(pair[0], "");
-                    }
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
+    private static Map<String, String> queryToMap(String query){
+        Map<String, String> result = new HashMap<>();
+        if (query == null)
             return result;
+        for (String param : query.split("&")) {
+            try {
+                param = java.net.URLDecoder.decode(param, "UTF-8");
+                String pair[] = param.split("=");
+                if (pair.length > 1) {
+                    result.put(pair[0], pair[1]);
+                } else {
+                    result.put(pair[0], "");
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
-
+        return result;
     }
+
+}

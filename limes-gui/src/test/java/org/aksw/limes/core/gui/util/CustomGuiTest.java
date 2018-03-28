@@ -10,6 +10,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class CustomGuiTest {
 
@@ -37,6 +39,67 @@ public class CustomGuiTest {
 	}
 
 	/**
+	 * Waits until windows is closed or timeout in seconds is reached
+	 * @param name of window
+	 * @param timeout
+	 */
+	public static void waitUntilLoadingWindowIsClosed(String windowname, int timeout){
+		FxRobot rob = new FxRobot();
+		int sec = 0;
+		logger.info("Wait until " + windowname + " is closed");
+		logger.info("Currently open windows: ");
+		for(Window w: rob.listWindows()){
+			logger.info(((Stage)w).getTitle());
+		}
+		do{
+			boolean closed = true;
+            for(Window w: rob.listWindows()){
+            	if(((Stage)w).getTitle().trim().equals(windowname.trim())){
+            		closed = false;
+            	}
+            }
+            if(closed){
+            	break;
+            }
+			rob.sleep(1000);
+			sec++;
+			if(sec % 100 == 0){
+				logger.info("Waited: " + sec + " seconds");
+			}
+			//avoid infinite loop
+			if(sec > timeout){
+				break;
+			}
+		}while(true);
+	}
+
+	/**
+	 * Waits until number of windows is reduced to n or timeout in seconds is reached
+	 * @param n number of desired windows
+	 * @param timeout
+	 */
+	public static void waitUntilWindowIsClosed(int n, int timeout){
+		FxRobot rob = new FxRobot();
+		int sec = 0;
+		logger.info("Wait until " + n + " windows are left open");
+		logger.info("Currently open windows: ");
+		for(Window w: rob.listWindows()){
+			logger.info(((Stage)w).getTitle());
+		}
+		do{
+			rob.sleep(1000);
+			sec++;
+			if(sec % 100 == 0){
+				logger.info("Waited: " + sec + " seconds");
+			}
+			//avoid infinite loop
+			if(sec > timeout){
+				break;
+			}
+		}while(rob.listWindows().size() > n);
+	}
+
+	/**
 	 * Uses FxRobot from TestFX to lookup the node
 	 * 
 	 * @param nodeId
@@ -60,7 +123,9 @@ public class CustomGuiTest {
 		while (!node.isVisible() && timeout != 0) {
 			try {
 				timeout--;
-				logger.info("Timeoutremaining for "+ nodeId + " : " + timeout);
+				if(timeout % 10 == 0){
+                    logger.info("Timeoutremaining for "+ nodeId + " : " + timeout);
+				}
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				logger.error("Interrupted while waiting for Node " + nodeId + " to be visible!");

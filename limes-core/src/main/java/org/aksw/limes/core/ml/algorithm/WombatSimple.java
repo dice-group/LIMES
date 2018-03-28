@@ -285,7 +285,7 @@ public class WombatSimple extends AWombat {
         AMapping map = MappingFactory.createDefaultMapping();
         for (ExtendedClassifier c : classifiers) {
             for (LogicOperator op : LogicOperator.values()) {
-                if (node.getValue().getMetricExpression() != c.getMetricExpression()) { // do not create the same metricExpression again
+                if (!node.getValue().getMetricExpression().equals(c.getMetricExpression())) { // do not create the same metricExpression again
                     if (op.equals(LogicOperator.AND)) {
                         map = MappingOperations.intersection(node.getValue().getMapping(), c.getMapping());
                     } else if (op.equals(LogicOperator.OR)) {

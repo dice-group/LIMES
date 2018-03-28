@@ -13,6 +13,10 @@
 		<NAMESPACE>http://linkedgeodata.org/ontology/</NAMESPACE>
 		<LABEL>lgdo</LABEL>
 	</PREFIX>
+    <PREFIX>
+        <NAMESPACE>http://www.w3.org/2000/01/rdf-schema#</NAMESPACE>
+        <LABEL>rdfs</LABEL>
+    </PREFIX>
 	<SOURCE>
 		<ID>linkedgeodata</ID>
 		<ENDPOINT>http://linkedgeodata.org/sparql</ENDPOINT>

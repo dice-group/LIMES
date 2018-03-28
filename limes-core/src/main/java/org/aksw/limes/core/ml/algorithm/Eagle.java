@@ -209,6 +209,7 @@ public class Eagle extends ACoreMLAlgorithm {
     	learningParameters.add(new LearningParameter(REPRODUCTION_RATE, 0.4f, Float.class, 0f, 1f, Double.NaN, REPRODUCTION_RATE));
     	learningParameters.add(new LearningParameter(CROSSOVER_RATE, 0.3f, Float.class, 0f, 1f, Double.NaN, CROSSOVER_RATE));
     	learningParameters.add(new LearningParameter(MEASURE, new FMeasure(), IQualitativeMeasure.class, Double.NaN, Double.NaN, Double.NaN, MEASURE));
+    	learningParameters.add(new LearningParameter(PSEUDO_FMEASURE, new PseudoFMeasure(), IQualitativeMeasure.class, Double.NaN, Double.NaN, Double.NaN, MEASURE));
     	learningParameters.add(new LearningParameter(PROPERTY_MAPPING, new PropertyMapping(), PropertyMapping.class, Double.NaN, Double.NaN, Double.NaN, PROPERTY_MAPPING));  	    
     }
 

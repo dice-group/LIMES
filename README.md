@@ -1,6 +1,4 @@
-# LIMES
-Repository for LIMES - Link Discovery Framework for Metric Spaces.
-=======
+# LIMES - Link Discovery Framework for Metric Spaces.
 
 [![Build Status](https://travis-ci.org/dice-group/LIMES.svg?branch=dev)](https://travis-ci.org/dice-group/LIMES)
 
@@ -26,6 +24,8 @@ mvn jfx:jar -Dcheckstyle.skip=true -Dmaven.test.skip=true
 ```
 
 The .jar will be placed in `limes-gui/target/jfx/app/limes-GUI-VERSION-SNAPSHOT-jfx.jar`
+
+The `limes-gui/target/jfx/app/lib` folder needs to be in the same folder as the .jar for the .jar to work!
 
 ### Importing into Eclipse
 In case Eclipse does not recognize the project as Java. Please run the following from the `limes-core/` directory:

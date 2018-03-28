@@ -171,9 +171,9 @@ public class NodeViewRectangle {
 				cutoff = ((100 / (double) (this.node.getWidth() - 30)) * labelWidth - 100) / 100;
 			}
 			if (thresholdValue == -1) {
-				label = new Text(text.substring(0, (int) (text.length() - (text.length() * cutoff))) + "...");
+				label = new Text(text.substring(0, (int) (text.length() - Math.abs(text.length() * cutoff))) + "...");
 			} else {
-				label = new Text(text.substring(0, (int) (text.length() - (text.length() * cutoff))) + "... : ");
+				label = new Text(text.substring(0, (int) (text.length() - Math.abs(text.length() * cutoff))) + "... : ");
 			}
 		}
 		if (!leftAligned) {

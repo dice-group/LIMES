@@ -1,6 +1,7 @@
 package org.aksw.limes.core.gui;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.testfx.api.FxAssert.verifyThat;
 
 import java.util.Locale;
@@ -9,6 +10,7 @@ import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.util.CustomGuiTest;
 import org.aksw.limes.core.gui.util.ProjectPropertiesGetter;
 import org.aksw.limes.core.gui.view.MainView;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,8 +20,10 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
 
+import javafx.application.Platform;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class ConfigurationWizardTest extends ApplicationTest{
 
@@ -71,6 +75,9 @@ public class ConfigurationWizardTest extends ApplicationTest{
 	
 	public void testEditEndpoint(){
 		logger.info("testEditEndpoint started");
+		for(Window w: listWindows()){
+			logger.info("Window open: " + ((Stage)w).getTitle());
+		}
 		clickOn("#SOURCEendpointURLTextField").write(resourcesPath + "datasets/Restaurants/restaurant1.nt");
 		clickOn("#SOURCEidNamespaceTextField").write("Restaurant");
 		clickOn("#TARGETendpointURLTextField").write(resourcesPath + "datasets/Persons2/person21.nt");
@@ -81,6 +88,7 @@ public class ConfigurationWizardTest extends ApplicationTest{
 	
 	public void testEditClassMatching(){
 		logger.info("testEditClassMatching started");
+		CustomGuiTest.waitUntilLoadingWindowIsClosed("Get classes",500);
 		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", timeout);
 		//Test if manual matching gets loaded
 		logger.info("Clicking on Button to get Manual Matching");
@@ -103,6 +111,7 @@ public class ConfigurationWizardTest extends ApplicationTest{
 	}
 	
 	public void testEditPropertyMatching(){
+		CustomGuiTest.waitUntilLoadingWindowIsClosed("Getting properties",500);
 		logger.info("testEditPropertyMatching started");
 		logger.info("Waiting for #sourcePropColumn to be visible");
 		CustomGuiTest.waitUntilNodeIsVisible("#sourcePropColumn", timeout);
@@ -130,4 +139,20 @@ public class ConfigurationWizardTest extends ApplicationTest{
 		clickOn("Finish");
 	}
 
+	@AfterClass
+	public static void cleanup(){
+		FxRobot rob = new FxRobot();
+		for(Window w : rob.listWindows()){
+			int currentsize = rob.listWindows().size();
+			System.out.println(((Stage)w).getTitle());
+			//Avoid not on fx application thread error
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                	((Stage)w).close();
+                }
+            });
+            CustomGuiTest.waitUntilWindowIsClosed(currentsize - 1, 200);
+		}
+		assertEquals(0,rob.listWindows().size());
+	}
 }
