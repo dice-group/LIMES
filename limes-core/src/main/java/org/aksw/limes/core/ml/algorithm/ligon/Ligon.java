@@ -73,7 +73,7 @@ public class Ligon {
 	AMapping fullReferenceMap = null;
 
 	protected ActiveMLAlgorithm activeWombat = null;
-	protected double wombatBestFmeasure = 1.0;
+	protected double approximateOdds = 1.0;
 
 
 	/**
@@ -242,7 +242,7 @@ public class Ligon {
 		double oddsL;
 		switch (oddsStrategy) {
 		case APPROXIMATE:
-			oddsL = wombatBestFmeasure;
+			oddsL = approximateOdds;
 			break;
 		case EQUIVALENCE:
 			double minKbSize = (sourceTrainCache.size() < targetTrainCache.size()) ? sourceTrainCache.size() : targetTrainCache.size();
@@ -343,8 +343,8 @@ public class Ligon {
 	 */
 	protected AMapping getWombatMostInformativeExamples(AMapping labeledExamples, int mostInformativeExamplesCount) throws UnsupportedMLImplementationException {
 		MLResults mlModel = activeWombat.activeLearn(labeledExamples);
-		wombatBestFmeasure = mlModel.getQuality();
 		AMapping learnedMap = activeWombat.predict(sourceTrainCache, targetTrainCache, mlModel);
+        approximateOdds = learnedMap.size() / (sourceTrainCache.size() * targetTrainCache.size() - learnedMap.size());
         long start = System.currentTimeMillis();
 		computePerformanceIndicatorsWombat(labeledExamples, learnedMap, mlModel);
 		t_eval -= (System.currentTimeMillis() - start);
