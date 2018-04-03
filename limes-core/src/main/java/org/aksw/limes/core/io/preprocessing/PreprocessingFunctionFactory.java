@@ -10,12 +10,13 @@ import org.aksw.limes.core.io.preprocessing.functions.RemoveLanguageTag;
 import org.aksw.limes.core.io.preprocessing.functions.RemoveNonAlphanumeric;
 import org.aksw.limes.core.io.preprocessing.functions.RenameProperty;
 import org.aksw.limes.core.io.preprocessing.functions.Replace;
+import org.aksw.limes.core.io.preprocessing.functions.Split;
 import org.aksw.limes.core.io.preprocessing.functions.ToCelsius;
 import org.aksw.limes.core.io.preprocessing.functions.ToFahrenheit;
 import org.aksw.limes.core.io.preprocessing.functions.ToLowercase;
 import org.aksw.limes.core.io.preprocessing.functions.ToUppercase;
+import org.aksw.limes.core.io.preprocessing.functions.ToWktPoint;
 import org.aksw.limes.core.io.preprocessing.functions.UriAsString;
-import org.aksw.limes.core.io.preprocessing.functions.Split;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +39,7 @@ public class PreprocessingFunctionFactory {
     public static final String REMOVE_NON_ALPHANUMERIC = "regularalphabet";
     public static final String URI_AS_STRING = "uriasstring";
     public static final String SPLIT = "split";
+    public static final String TO_WKT_POINT = "toWktPoint";
     
     public static PreprocessingFunctionType getPreprocessingType(String expression){
     	switch(expression.trim()){
@@ -71,6 +73,8 @@ public class PreprocessingFunctionFactory {
             	return PreprocessingFunctionType.URI_AS_STRING;
             case(SPLIT): 
             	return PreprocessingFunctionType.SPLIT;
+            case(TO_WKT_POINT): 
+            	return PreprocessingFunctionType.TO_WKT_POINT;
     		default:
     			throw new InvalidPreprocessingFunctionException(expression);
     	}
@@ -108,6 +112,8 @@ public class PreprocessingFunctionFactory {
             	return new UriAsString();
             case SPLIT: 
             	return new Split();
+            case TO_WKT_POINT: 
+            	return new ToWktPoint();
             default:
     			throw new InvalidPreprocessingFunctionException(type.toString());
 	    }

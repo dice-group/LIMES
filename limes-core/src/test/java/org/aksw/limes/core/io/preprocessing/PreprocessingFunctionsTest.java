@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.TreeSet;
 
 import org.aksw.limes.core.exceptions.IllegalNumberOfParametersException;
@@ -26,6 +27,7 @@ import org.aksw.limes.core.io.preprocessing.functions.ToCelsius;
 import org.aksw.limes.core.io.preprocessing.functions.ToFahrenheit;
 import org.aksw.limes.core.io.preprocessing.functions.ToLowercase;
 import org.aksw.limes.core.io.preprocessing.functions.ToUppercase;
+import org.aksw.limes.core.io.preprocessing.functions.ToWktPoint;
 import org.aksw.limes.core.io.preprocessing.functions.UriAsString;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +45,7 @@ public class PreprocessingFunctionsTest {
 	public static final String REGEX_REPLACE_EXPECTED = "Ibuprofen is a nonsteroidal anti-inflammatory drug derivative of propionic acid used for relieving pain, helping with fever and reducing inflammation.";
 	public static final String CLEAN_IRI_EXPECTED = "label";
 	public static final String CLEAN_NUMBER_EXPECTED = "10";
+	public static final String CLEAN_NUMBER_EXPECTED2 = "223";
 	public static final String TO_CELSIUS_EXPECTED = "-28.88888888888889";
 	public static final String TO_FAHRENHEIT_EXPECTED = "-4.0";
 	public static final TreeSet<String> CONCAT_EXPECTED = new TreeSet<String>(
@@ -58,6 +61,8 @@ public class PreprocessingFunctionsTest {
 	public static final String URI_AS_STRING_EXPECTED = "uri as string";
 	public static final String SPLITTED1_EXPECTED = "I am split ";
 	public static final String SPLITTED2_EXPECTED = " in half";
+	public static final String TO_WKT_POINT_EXPECTED = "POINT(10 -20)";
+
 
 	public static final String[] FUNCTION_CHAIN_1_EXPECTED = new String[] { "label1", "label2" };
 	public static final String[] FUNCTION_CHAIN_2_EXPECTED = new String[] { "label1", "label2", "glue=\",\"" };
@@ -88,6 +93,7 @@ public class PreprocessingFunctionsTest {
 
 	// =============== VALUES ===========================================
 	public static final String PROP_NUMBER_VALUE = "10^^http://www.w3.org/2001/XMLSchema#positiveInteger";
+	public static final String PROP_NUMBER_VALUE2 = "223";
 	public static final String PROP_NUMBER_NOT_PARSEABLE_VALUE = "10.0.0.1^^http://www.w3.org/2001/XMLSchema#positiveInteger";
 	public static final String PROP_TEMPERATURE = "temperature";
 	public static final String PROP_TEMPERATURE_VALUE = "-20^^http://www.w3.org/2001/XMLSchema#decimal";
@@ -138,6 +144,7 @@ public class PreprocessingFunctionsTest {
 		testInstance.addProperty(PROP_ABSTRACT, PROP_ABSTRACT_VALUE);
 		testInstance.addProperty(PROP_IRI, PROP_IRI_VALUE);
 		testInstance.addProperty(PROP_NUMBER, PROP_NUMBER_VALUE);
+		testInstance.addProperty(PROP_NUMBER, PROP_NUMBER_VALUE2);
 		testInstance.addProperty(PROP_TEMPERATURE, PROP_TEMPERATURE_VALUE);
 		testInstance.addProperty(PROP_NUMBER_NOT_PARSEABLE, PROP_NUMBER_NOT_PARSEABLE_VALUE);
 		testInstance.addProperty(PROP_IRI_NO_HASHTAG, PROP_IRI_NO_HASHTAG_VALUE);
@@ -285,7 +292,9 @@ public class PreprocessingFunctionsTest {
 	@Test
 	public void testCleanNumber() throws IllegalNumberOfParametersException {
 		new CleanNumber().applyFunction(testInstance, PROP_NUMBER);
-		assertEquals(CLEAN_NUMBER_EXPECTED, testInstance.getProperty(PROP_NUMBER).first());
+		Iterator<String> it = testInstance.getProperty(PROP_NUMBER).iterator();
+		assertEquals(CLEAN_NUMBER_EXPECTED, it.next());
+		assertEquals(CLEAN_NUMBER_EXPECTED2, it.next());
 	}
 
 	@Test
@@ -370,5 +379,12 @@ public class PreprocessingFunctionsTest {
 		new Split().applyFunction(testInstance, PROP_SPLITTED1 + "," + PROP_SPLITTED2, PROP_SPLIT, "splitChar=\"|\"");
 		assertEquals(SPLITTED1_EXPECTED, testInstance.getProperty(PROP_SPLITTED1).first());
 		assertEquals(SPLITTED2_EXPECTED, testInstance.getProperty(PROP_SPLITTED2).first());
+	}
+
+	@Test
+	public void testToWktPoint() throws IllegalNumberOfParametersException {
+		String propWktPoint = "wktPoint";
+		new ToWktPoint().applyFunction(testInstance, propWktPoint, PROP_NUMBER, PROP_TEMPERATURE);
+		assertEquals(TO_WKT_POINT_EXPECTED, testInstance.getProperty(propWktPoint).first());
 	}
 }

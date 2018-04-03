@@ -17,7 +17,8 @@ public class CleanNumber extends APreprocessingFunction implements IPreprocessin
 	/**
 	 * Matches a number that is followed by "^"
 	 */
-	public static final Pattern regex = Pattern.compile("[0-9,.-]+(?=\\^)");
+	public static final Pattern typedNumber = Pattern.compile("[0-9,.-]+(?=\\^)");
+	public static final Pattern untypedNumber = Pattern.compile("-{0,1}[0-9]+.{0,1}[0-9]");
 
 	@Override
 	public Instance applyFunctionAfterCheck(Instance i, String property, String... arguments) {
@@ -38,7 +39,10 @@ public class CleanNumber extends APreprocessingFunction implements IPreprocessin
 	 * @return number without type information as String or 0
 	 */
 	public static String removeTypeInformation(String number) {
-		Matcher m = regex.matcher(number);
+		if (untypedNumber.matcher(number).matches()){
+			return number;
+		}
+		Matcher m = typedNumber.matcher(number);
 		String newValue;
 		if (m.find()) {
 			newValue = m.group();
