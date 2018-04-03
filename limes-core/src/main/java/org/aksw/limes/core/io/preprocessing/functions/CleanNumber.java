@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.preprocessing.APreprocessingFunction;
 import org.aksw.limes.core.io.preprocessing.IPreprocessingFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Removes type information from number properties
@@ -14,6 +16,7 @@ import org.aksw.limes.core.io.preprocessing.IPreprocessingFunction;
  *
  */
 public class CleanNumber extends APreprocessingFunction implements IPreprocessingFunction {
+    static Logger logger = LoggerFactory.getLogger(CleanNumber.class);
 	/**
 	 * Matches a number that is followed by "^"
 	 */
@@ -50,9 +53,11 @@ public class CleanNumber extends APreprocessingFunction implements IPreprocessin
 				// Check if it is a parseable double
 				Double.parseDouble(newValue);
 			} catch (Exception e) {
+				logger.error(newValue + " is not a parseable double\n Using 0 instead");
 				return 0 + "";
 			}
 		} else {
+			logger.error(number + " is not a typed double\n Using 0 instead");
 			return 0 + "";
 		}
 		return newValue;
