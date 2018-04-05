@@ -86,4 +86,5 @@ public class MetricParserTest {
 		Output o2 = MetricParser.parse("ADD(0.2* Jaro(a.foaf:name, b.sg:publishedName),0.8* Overlap(a.purl:identifier, b.sg:hasPerson))","a", new Config());
 		assertEquals(testO2, o2);
 	}
+
 }

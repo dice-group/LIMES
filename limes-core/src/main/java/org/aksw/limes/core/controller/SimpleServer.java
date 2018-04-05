@@ -34,10 +34,12 @@ public class SimpleServer {
     private static final String LOCK_DIR_PATH = "/lock/";
     private static final String QUERY_PARAM_RESULT_TYPE = "result_type";
     private static final String QUERY_PARAM_JOB_ID = "job_id";
-    public static final String CONFIG_FILE_PREFIX = "limes_server_cfg_";
+    private static final String CONFIG_FILE_PREFIX = "limes_server_cfg_";
     private static ConcurrentMap<Long, Integer> jobs = new ConcurrentHashMap<>();
+    private static int limit;
 
-    public static void startServer(int port) {
+    public static void startServer(int port, int limit) {
+        SimpleServer.limit = limit;
         HttpServer server = null;
         logger.info("Attempting to start LIMES server at port " + port + "...");
         try {
@@ -54,7 +56,7 @@ public class SimpleServer {
         logger.info("Server has been started! Waiting for requests...");
     }
 
-    public static void addCORSHeaders(Headers headers) {
+    private static void addCORSHeaders(Headers headers) {
         headers.add("Access-Control-Allow-Origin", "*");
         headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     }
@@ -85,7 +87,7 @@ public class SimpleServer {
                 AConfigurationReader reader = new XMLConfigurationReader(STORAGE_DIR_PATH + CONFIG_FILE_PREFIX + id + ".xml");
                 Configuration config = reader.read();
                 jobs.put(Long.parseLong(id), 1);
-                ResultMappings mappings = Controller.getMapping(config);
+                ResultMappings mappings = Controller.getMapping(config, limit);
                 String outputFormat = config.getOutputFormat();
                 ISerializer output = SerializerFactory.createSerializer(outputFormat);
                 output.setPrefixes(config.getPrefixes());
@@ -255,7 +257,7 @@ public class SimpleServer {
         }
     }
 
-    public static Map<String, String> queryToMap(String query){
+    private static Map<String, String> queryToMap(String query){
         Map<String, String> result = new HashMap<>();
         if (query == null)
             return result;
