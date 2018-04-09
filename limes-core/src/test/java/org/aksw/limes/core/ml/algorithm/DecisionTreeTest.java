@@ -283,7 +283,7 @@ public class DecisionTreeTest {
 
 
 	private DecisionTree createRoot(DecisionTreeLearning decisionTreeLearning, String measure, String sourceProperty, String targetProperty, double threshold) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
-		DecisionTree tree = new DecisionTree(decisionTreeLearning, sourceCache, targetCache, null, null, pfm, (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE), (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_PROPERTY_LEARNING_RATE), threshold, MappingFactory.createDefaultMapping());
+		DecisionTree tree = new DecisionTree(decisionTreeLearning, sourceCache, targetCache, pfm, (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE), (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_PROPERTY_LEARNING_RATE), threshold, MappingFactory.createDefaultMapping());
 		
 		ExtendedClassifier ec = new ExtendedClassifier(measure, threshold, sourceProperty, targetProperty);
 		

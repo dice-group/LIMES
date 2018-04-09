@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
@@ -149,36 +148,6 @@ public class GiniIndex extends FitnessFunctionDTL {
 		return 1 - res;
 	}
 	
-	/*
-	public static void main(String[] args){
-		GiniGain gg = new GiniGain();
-		AMapping refMapping = MappingFactory.createDefaultMapping();
-		refMapping.add("m1", "m1",1.0);
-		refMapping.add("m2", "m2",1.0);
-		refMapping.add("m3", "m3",0.0);
-		refMapping.add("m4", "m4",1.0);
-		refMapping.add("m5", "m5",0.0);
-		refMapping.add("m6", "m6",0.0);
-		refMapping.add("m7", "m7",0.0);
-		refMapping.add("m8", "m8",1.0);
-		refMapping.add("m9", "m9",0.0);
-		DecisionTree t = new DecisionTree(null, null, null, null, 0, 0, refMapping);
-		ArrayList<TrainingInstance> left = new ArrayList<TrainingInstance>();
-		ArrayList<TrainingInstance> right = new ArrayList<TrainingInstance>();
-		left.add(new TrainingInstance(null, null, 0.0));
-		left.add(new TrainingInstance(null, null, 1.0));
-
-		right.add(new TrainingInstance(null, null, 1.0));
-		right.add(new TrainingInstance(null, null, 1.0));
-		right.add(new TrainingInstance(null, null, 1.0));
-		right.add(new TrainingInstance(null, null, 0.0));
-		right.add(new TrainingInstance(null, null, 0.0));
-		right.add(new TrainingInstance(null, null, 0.0));
-		right.add(new TrainingInstance(null, null, 0.0));
-		System.out.println(gg.gain(t,left,right));
-	}
-	*/
-
 	private double avgGini(DecisionTree currentNode, List<TrainingInstance> left, List<TrainingInstance> right) {
 		if (currentNode.getParent() == null) {
 			currentMapping = currentNode.getRefMapping();
@@ -189,22 +158,10 @@ public class GiniIndex extends FitnessFunctionDTL {
 		double rightAll = rightFraction[0] + rightFraction[1];
 		double leftWeight = (leftAll) / currentMapping.size();
 		double rightWeight = (rightAll) / currentMapping.size();
-//		System.out.println("leftAll: " + leftAll);
-//		System.out.println("rightAll: " + rightAll);
-//		System.out.println("leftWeight: " + leftWeight);
-//		System.out.println("rightWeight: " + rightWeight);
-//		System.out.println("left gini: " + gini(leftFraction[0]/leftAll, leftFraction[1]/leftAll));
-//		System.out.println("right gini: " + gini(rightFraction[0]/rightAll, rightFraction[1]/rightAll));
 		double avgGini = leftWeight * gini(leftFraction[0]/leftAll, leftFraction[1]/leftAll) + rightWeight * gini(rightFraction[0]/rightAll,rightFraction[1]/rightAll);
-//		System.out.println("avgGini: " + avgGini);
 		return avgGini;
 	}
 
-
-
-	// nach sortieren alle splitpunkte durchnehmen und gain ratio berechnen
-	// dafür gain ratio implementieren
-	// und methode wo teilmappings rausfindet wenn man split macht
 
 	@Override
 	public ExtendedClassifier getBestClassifier(DecisionTree currentNode) {
@@ -248,7 +205,6 @@ public class GiniIndex extends FitnessFunctionDTL {
 					}
 					if (splitpoint != oldSplitpoint) {
 						oldSplitpoint = splitpoint;
-//						System.out.println("\n" + mE + "|" + splitpoint);
 						double gain = avgGini(currentNode, lessThanI, moreThanEqualsI);
 						logger.debug("Gain: " + gain + " for " + mE.metricExpression + "|" + splitpoint);
 						if (gain < bestGain) {
@@ -261,7 +217,6 @@ public class GiniIndex extends FitnessFunctionDTL {
 						break;
 				}
 			} else {
-//				System.out.println("Ommitting: " + mE);
 			}
 		}
 		if (bestMetric == null)
@@ -269,37 +224,12 @@ public class GiniIndex extends FitnessFunctionDTL {
 		ExtendedClassifier ec = new ExtendedClassifier(bestMetric.measure, bestSplitpoint, bestMetric.sourceProperty,
 				bestMetric.targetProperty);
 		ec.setfMeasure(bestGain);
-//		ec.setMapping(getNodeMapping(currentNode,ec));
 		String measureExpression = bestMetric.measure + "(x." + bestMetric.sourceProperty + ",y." + bestMetric.targetProperty + ")";
 		ec.setMapping(currentNode.executeAtomicMeasure(measureExpression, bestSplitpoint));
 		return ec;
 	}
 
 
-	private AMapping getNodeMapping(DecisionTree currentNode, ExtendedClassifier ec) {
-		ArrayList<TrainingInstance> newInstances = new ArrayList<TrainingInstance>();
-		String splitExpression = ec.getMetricExpression().split("\\|")[0];
-		double splitpoint = ec.getThreshold();
-		for (TrainingInstance t : currentInstances) {
-			if (t.getMeasureValues().get(splitExpression) > splitpoint) {
-				if (currentMapping.getMap().get(t.getSourceUri()) != null) {
-					if (currentMapping.getMap().get(t.getSourceUri()).get(t.getTargetUri()) != null) {
-						newInstances.add(t);
-					}
-				}
-			}
-		}
-		return trainingInstancesToMapping(newInstances);
-	}
-
-	private AMapping trainingInstancesToMapping(ArrayList<TrainingInstance> trainingInstances) {
-		AMapping resMap = MappingFactory.createDefaultMapping();
-		for (TrainingInstance t : trainingInstances) {
-			resMap.add(t.getSourceUri(), t.getTargetUri(), t.getClassLabel());
-		}
-		return resMap;
-	}
-	
 	private List<TrainingInstance> mappingToTrainingInstance(AMapping mapping){
 		List<TrainingInstance> instances = new ArrayList<TrainingInstance>();
 		for(TrainingInstance t: fullInstances){

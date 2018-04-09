@@ -47,57 +47,6 @@ public class GlobalFMeasure extends FitnessFunctionDTL{
 				maxFM = pfm;
 			}
 		}
-	/*	
-	// ==== BINARY SEARCH ====
-		double leftThreshold = dt.getMinPropertyCoverage();
-		double rightThreshold = 1.0;
-			cp = new ExtendedClassifier(measure, leftThreshold, sourceProperty, targetProperty);
-//			AMapping basemapping = currentNode.getMeasureMapping(measureExpression, cp);
-			// double pfm = prfm.calculate(mapping, gs, 0.1);
-//			LinearFilter filter = new LinearFilter();
-			double leftfm = 0.0;
-			double rightfm  = 0.0;
-//		System.out.println("==== " + measureExpression + "====");
-		double tau = 2.0;
-		while((rightThreshold - leftThreshold > 0.01) || leftfm == 1.0 || rightfm == 1.0){
-//			System.out.println("Left Threshold: " + leftThreshold);
-//			System.out.println("Right Threshold: " + rightThreshold);
-//			AMapping leftMapping = filter.filter(basemapping, leftThreshold);
-			cp.setThreshold(leftThreshold);
-			AMapping leftMapping = currentNode.getMeasureMapping(measureExpression, cp);
-			leftfm = calculateFMeasure(leftMapping, currentNode.getRefMapping(), currentNode);
-//			System.out.println("Left fM: " + leftfm);
-			cp.setThreshold(rightThreshold);
-			AMapping rightMapping = currentNode.getMeasureMapping(measureExpression, cp);
-//			AMapping rightMapping = filter.filter(basemapping, rightThreshold);
-			rightfm = calculateFMeasure(rightMapping, currentNode.getRefMapping(), currentNode);
-//			System.out.println("Right fM: " + rightfm);
-
-			double middleThreshold = leftThreshold + ((rightThreshold - leftThreshold) / tau);
-			cp.setThreshold(middleThreshold);
-			AMapping middleMapping = currentNode.getMeasureMapping(measureExpression, cp);
-			double middlefm = calculateFMeasure(middleMapping, currentNode.getRefMapping(), currentNode);
-//			System.out.println("Middle fM: " + middlefm);
-//			System.out.println("Middle Threshold: " + middleThreshold);
-			if(middlefm >= leftfm){
-				leftThreshold = middleThreshold;
-			}else{
-				rightThreshold = middleThreshold;
-			}
-//			System.out.println("Left Threshold: " + leftThreshold);
-//			System.out.println("Right Threshold: " + rightThreshold);
-//			System.out.println(" ------ ");
-		}
-		if(rightfm > leftfm){
-			theta = rightThreshold;
-			maxFM = rightfm;
-		}else{
-			theta = leftThreshold;
-			maxFM = leftfm;
-		}
-		
-		
-		*/
 		
 		cp = new ExtendedClassifier(measure, theta, sourceProperty, targetProperty);
 		cp.setfMeasure(maxFM);
@@ -115,7 +64,7 @@ public class GlobalFMeasure extends FitnessFunctionDTL{
 		AMapping updatedRefMapping = removeNegativeExamplesFromMapping(refMap);
 		double res = 0.0;
 		if (DecisionTree.isSupervised) {
-			GoldStandard gs = new GoldStandard(updatedRefMapping, currentNode.getTestSourceCache().getAllUris(), currentNode.getTestTargetCache().getAllUris());
+			GoldStandard gs = new GoldStandard(updatedRefMapping, currentNode.getSourceCache().getAllUris(), currentNode.getTargetCache().getAllUris());
 			FMeasure fm = new FMeasure();
 			res = fm.calculate(mapping, gs);
 		} else {

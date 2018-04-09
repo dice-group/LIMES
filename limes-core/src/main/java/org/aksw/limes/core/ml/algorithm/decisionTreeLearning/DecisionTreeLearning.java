@@ -24,6 +24,7 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
+import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
@@ -165,7 +166,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	public static boolean useJ48optimized = false;
 	public static boolean buildTestCaches = false;
 
-	// TODO check whats wrong with these
+	// TODO check whats wrong with exactmatch and levenshtein
 	public static final String[] stringMeasures = { "cosine",
 			// "exactmatch",
 			"jaccard", "jaro",
@@ -352,13 +353,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 						} else {
 							inst.setValue(i, MeasureProcessor.getSimilarity(sourceCache.getInstance(sourceURI),
 									targetCache.getInstance(targetURI), metricExpression, threshold, "?x", "?y"));
-							// System.out.println(sourceURI);
-							// System.out.println(targetURI);
-							// System.out.println(inst.attribute(i));
-							// System.err.println(sourceCache.getInstance(sourceURI).getProperty(propertyA));
-							// System.err.println(targetCache.getInstance(targetURI).getProperty(propertyB));
-							// System.out.println(inst.value(i));
-							// System.out.println(inst);
 						}
 					} else {
 						String classValue = "negative";
@@ -376,7 +370,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
 			});
 		});
-		// System.out.println(trainingSet);
 		return instanceMap;
 	}
 
@@ -907,7 +900,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 		// MLResults res = new MLResults(ls,
 		// UnsupervisedDecisionTree.getTotalMapping(root), -1.0, null);
 		// return res;
-		logger.error("FIX THIS!");
+		logger.error("Not implemented yet!");
 		return null;
 	}
 
@@ -1019,12 +1012,6 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 
 	@Override
 	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
-		if(buildTestCaches){
-			TestCacheBuilder.buildFromMapping(trainingData, sourceCache, targetCache, testSourceCache, testTargetCache);
-		}else{
-			testSourceCache = sourceCache;
-			testTargetCache = targetCache;
-		}
 		if(useJ48){
 			return activeLearn(trainingData);
 		}else if(useMergeAndConquer){
@@ -1034,7 +1021,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 		}else{
 			this.trainingData = trainingData;
 			DecisionTree.isSupervised = true;
-			root = new DecisionTree(this, sourceCache, targetCache, testSourceCache, testTargetCache, null,
+			root = new DecisionTree(this, sourceCache, targetCache, null,
 					(double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
 					(double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
 					(double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData);
@@ -1044,20 +1031,11 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 			DecisionTree.maxDepth = (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
 			root.buildTree((int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
 			logger.info("FULL:\n" + root.toString());
-			
+
 			root.prune();
 			logger.info("PRUNED:\n" + root.toString());
-			// LinkSpecification ls = tp.parseTreePrefix(root.toString());
 
 			LinkSpecification ls = root.getTotalLS();
-//			System.out.println("Size: " + ls.size());
-			// if (checkIfThereWasBetterLSBefore(ls, root.getTestSourceCache(),
-			// root.getTestTargetCache())) {
-			// logger.debug("Already had better LinkSpecification: " + bestLS);
-			// } else {
-			// logger.debug("Learned LinkSpecification: " +
-			// ls.toStringOneLine());
-			// }
 			if (bestLS == null)
 				bestLS = ls;
 			MLResults res = new MLResults(bestLS, null, -1.0, null);
@@ -1106,53 +1084,13 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	public void setInitialMapping(AMapping initialMapping) {
 		this.initialMapping = initialMapping;
 	}
-/*
-	public static void main(String[] args) {
-		
-//		check this tree with checkiftherewasbetterlsbefore
-//		[qgrams§title|title: <= 0.504587, > 0.504587[jaro§authors|authors: <=
-//		0.675724, > 0.675724[negative (304.0)][jaro§title|title: <= 0.677374,
-//		> 0.677374[qgrams§authors|authors: <= 0.355556, > 0.355556[positive
-//		(4.0)][cosine§authors|authors: <= 0.612372, > 0.612372[negative
-//		(4.0)][positive (2.0)]]][negative (7.0)]]][positive (19.0/1.0)]]
-		
-		EvaluationData c = DataSetChooser.getData("dblpscholar");
-		try {
-			AMLAlgorithm dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
-					MLImplementationType.SUPERVISED_BATCH);
-			dtl.init(null, c.getSourceCache(), c.getTargetCache());
-			dtl.getMl().setConfiguration(c.getConfigReader().read());
-			((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
-			LinkSpecification ls = (((DecisionTreeLearning) dtl.getMl()).tp.parseTreePrefix(
-					"qgrams§title|title: <= 0.504587, > 0.504587[jaro§authors|authors: <= 0.675724, > 0.675724[negative (304.0)][jaro§title|title: <= 0.677374, > 0.677374[qgrams§authors|authors: <= 0.355556, > 0.355556[positive (4.0)][cosine§authors|authors: <= 0.612372, > 0.612372[negative (4.0)][positive (2.0)]]][negative (7.0)]]][positive (19.0/1.0)]"));
-			((DecisionTreeLearning) dtl.getMl()).checkIfThereWasBetterLSBefore(
-					((DecisionTreeLearning) dtl.getMl()).tp.pruneLS(ls, DecisionTreeLearning.maxLinkSpecHeight), null,
-					null);
-			// CSVMappingReader reader = new
-			// CSVMappingReader("/home/ohdorno/Documents/Uni/BA_Informatik/example.csv",",");
-			// AMapping trainingMapping = reader.read();
-			// MLResults res = dtl.asSupervised().learn(trainingMapping);
-			// System.out.println(res.getLinkSpecification());
-			// ((DecisionTreeLearning)dtl.getMl()).checkIfThereWasBetterLSBefore(new
-			// LinkSpecification("AND(cosine(x.http://www.okkam.org/ontology_person1.owl#surname,
-			// y.http://www.okkam.org/ontology_person2.owl#given_name)|0.1,
-			// cosine(x.http://www.okkam.org/ontology_person1.owl#surname,
-			// y.http://www.okkam.org/ontology_person2.owl#given_name)|
-			// 0.1)|0.1",0.0));
-		} catch (UnsupportedMLImplementationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// DecisionTreeLearning dtl = new DecisionTreeLearning();
-		// LinkSpecification resLS = new LinkSpecification(
-		// "OR(jaccard(x.surname,y.name)|0.5941,OR(XOR(OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728)|0.5807,OR(XOR(trigrams(x.name,y.name)|0.7728,qgrams(x.surname,y.name)|0.6029)|0.7728,trigrams(x.surname,y.name)|0.5919)|0.5807)|0.7728,trigrams(x.name,y.name)|0.9728)|0.9807)",
-		// 0.8);
-		// System.out.println(ls);
-		// System.out.println("\n\n\n");
-		// System.out.println(dtl.subtractDeltaFromLS(new
-		// LinkSpecification("jaccard(x.surname,y.surname)",0.1)));
 
+	public ACache getTestSourceCache() {
+		return testSourceCache;
 	}
-*/
+
+	public ACache getTestTargetCache() {
+		return testTargetCache;
+	}
 
 }
