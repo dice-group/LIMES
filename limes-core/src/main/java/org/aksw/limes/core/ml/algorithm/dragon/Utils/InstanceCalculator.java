@@ -1,9 +1,9 @@
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Utils;
+package org.aksw.limes.core.ml.algorithm.dragon.Utils;
 
 import java.util.List;
 
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.TrainingInstance;
+import org.aksw.limes.core.ml.algorithm.dragon.TrainingInstance;
 
 public class InstanceCalculator {
 

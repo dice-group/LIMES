@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning;
+package org.aksw.limes.core.ml.algorithm.dragon;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -33,11 +33,11 @@ import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.FitnessFunctionDTL;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GiniIndex;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning.ErrorEstimatePruning;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning.PruningFunctionDTL;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Utils.TestCacheBuilder;
+import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.FitnessFunctionDTL;
+import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.GiniIndex;
+import org.aksw.limes.core.ml.algorithm.dragon.Pruning.ErrorEstimatePruning;
+import org.aksw.limes.core.ml.algorithm.dragon.Pruning.PruningFunctionDTL;
+import org.aksw.limes.core.ml.algorithm.dragon.Utils.TestCacheBuilder;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.util.ParenthesisMatcher;
 import org.apache.log4j.Logger;
@@ -56,7 +56,7 @@ import weka.core.Instances;
  *         studserv.uni-leipzig.de{@literal >}
  *
  */
-public class DecisionTreeLearning extends ACoreMLAlgorithm {
+public class Dragon extends ACoreMLAlgorithm {
 	/**
 	 * LinkSpecs that have already been checked, <ls.toString(), fmeasure value>
 	 */
@@ -67,7 +67,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	 */
 	private HashMap<String, AMapping> alreadyCalculatedMapping;
 
-	static Logger logger = Logger.getLogger(DecisionTreeLearning.class);
+	static Logger logger = Logger.getLogger(Dragon.class);
 
 	private PropertyMapping propertyMapping;
 	/**
@@ -184,7 +184,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	/**
 	 * Constructor uses superconstructor and initializes TreeParser object
 	 */
-	public DecisionTreeLearning() {
+	public Dragon() {
 		super();
 		this.tp = new TreeParser(this);
 	}
@@ -195,7 +195,7 @@ public class DecisionTreeLearning extends ACoreMLAlgorithm {
 	 * 
 	 * @param c
 	 */
-	public DecisionTreeLearning(Configuration c) {
+	public Dragon(Configuration c) {
 		super();
 		this.configuration = c;
 		this.tp = new TreeParser(this);

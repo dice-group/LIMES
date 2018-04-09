@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning.evaluation;
+package org.aksw.limes.core.ml.algorithm.dragon.evaluation;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,9 +29,9 @@ import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTreeLearning;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GlobalFMeasure;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning.ErrorEstimatePruning;
+import org.aksw.limes.core.ml.algorithm.dragon.Dragon;
+import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.GlobalFMeasure;
+import org.aksw.limes.core.ml.algorithm.dragon.Pruning.ErrorEstimatePruning;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -190,16 +190,16 @@ public class ActiveDTLEvaluation {
 				double[] GErRecall = new double[activeLearningIterations];
 				int[] GErSize = new int[activeLearningIterations];
 				GoldStandard gs = new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris());
-				dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+				dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 						MLImplementationType.SUPERVISED_ACTIVE);
 				dtl.init(null, trainSourceCache, trainTargetCache);
 				config = c.getConfigReader().read();
 				dtl.getMl().setConfiguration(config);
-				((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+				((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 				start = System.currentTimeMillis();
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
-				dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION, new ErrorEstimatePruning());
+				dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+				dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
+				dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION, new ErrorEstimatePruning());
 				res = dtl.asActive().activeLearn(initialTrainingData);
 				end = System.currentTimeMillis();
                 logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());

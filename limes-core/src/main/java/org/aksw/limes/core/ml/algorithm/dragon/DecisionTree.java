@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning;
+package org.aksw.limes.core.ml.algorithm.dragon;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,15 +21,15 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.FitnessFunctionDTL;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning.PruningFunctionDTL;
+import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.FitnessFunctionDTL;
+import org.aksw.limes.core.ml.algorithm.dragon.Pruning.PruningFunctionDTL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DecisionTree {
 	protected static Logger logger = LoggerFactory.getLogger(DecisionTree.class);
 
-	private DecisionTreeLearning dtl;
+	private Dragon dtl;
 	private static HashMap<String, AMapping> calculatedMappings = new HashMap<String, AMapping>();
 	private static HashMap<String, AMapping> pathMappings = new HashMap<String, AMapping>();
 	public static double totalFMeasure = 0.0;
@@ -56,7 +56,7 @@ public class DecisionTree {
 	public static FitnessFunctionDTL fitnessFunction;
 	public static PruningFunctionDTL pruningFunction;
 
-	public DecisionTree(DecisionTreeLearning dtl, ACache sourceCache, ACache targetCache,PseudoFMeasure pseudoFMeasure,
+	public DecisionTree(Dragon dtl, ACache sourceCache, ACache targetCache,PseudoFMeasure pseudoFMeasure,
 			double minPropertyCoverage, double propertyLearningRate, double pruningConfidence, AMapping refMapping) {
 		calculatedMappings = new HashMap<String, AMapping>();
 		pathMappings = new HashMap<String, AMapping>();
@@ -73,7 +73,7 @@ public class DecisionTree {
 		this.refMapping = refMapping;
 	}
 
-	private DecisionTree(DecisionTreeLearning dtl, ACache sourceCache, ACache targetCache, PseudoFMeasure pseudoFMeasure, double minPropertyCoverage, double pruningConfidence,
+	private DecisionTree(Dragon dtl, ACache sourceCache, ACache targetCache, PseudoFMeasure pseudoFMeasure, double minPropertyCoverage, double pruningConfidence,
 			double propertyLearningRate, DecisionTree parent, boolean isLeftNode, AMapping refMapping) {
 		this.dtl = dtl;
 		this.sourceCache = sourceCache;
@@ -533,7 +533,7 @@ public class DecisionTree {
 		return parent;
 	}
 
-	public DecisionTreeLearning getDtl() {
+	public Dragon getDtl() {
 		return dtl;
 	}
 

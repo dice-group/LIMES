@@ -1,6 +1,6 @@
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning;
+package org.aksw.limes.core.ml.algorithm.dragon.Pruning;
 
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTree;
+import org.aksw.limes.core.ml.algorithm.dragon.DecisionTree;
 
 public abstract class PruningFunctionDTL {
 

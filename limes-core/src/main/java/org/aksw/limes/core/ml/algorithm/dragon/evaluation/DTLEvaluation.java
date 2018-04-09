@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning.evaluation;
+package org.aksw.limes.core.ml.algorithm.dragon.evaluation;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,11 +31,11 @@ import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTreeLearning;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GiniIndex;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions.GlobalFMeasure;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning.ErrorEstimatePruning;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning.GlobalFMeasurePruning;
+import org.aksw.limes.core.ml.algorithm.dragon.Dragon;
+import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.GiniIndex;
+import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.GlobalFMeasure;
+import org.aksw.limes.core.ml.algorithm.dragon.Pruning.ErrorEstimatePruning;
+import org.aksw.limes.core.ml.algorithm.dragon.Pruning.GlobalFMeasurePruning;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -180,8 +180,8 @@ public class DTLEvaluation {
 
 			for (String dataName : datasets) {
 				logger.info("\n\n >>>>>>>>>>>>> " + dataName.toUpperCase() + "<<<<<<<<<<<<<<<<<\n\n");
-				DecisionTreeLearning.useJ48optimized = false;
-				DecisionTreeLearning.useJ48 = false;
+				Dragon.useJ48optimized = false;
+				Dragon.useJ48 = false;
 				EvaluationData c = DataSetChooser.getData(dataName);
 				folds = generateFolds(c);
 
@@ -229,20 +229,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========Global + Gini + UP + 0.05==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new GlobalFMeasurePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.05);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.05);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -264,20 +264,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========ErrorEstimate + Gini + UP + 0.05==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new ErrorEstimatePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.05);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.05);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -299,20 +299,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========Global + Gini + UP + 0.2==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new GlobalFMeasurePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.2);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.2);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -334,20 +334,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========ErrorEstimate + Gini + UP + 0.2==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new ErrorEstimatePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.2);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.2);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -369,20 +369,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========Global + Gini + UP + 0.4==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new GlobalFMeasurePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.4);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.4);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -404,20 +404,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========ErrorEstimate + Gini + UP + 0.4==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new ErrorEstimatePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.4);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.4);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -439,20 +439,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========Global + Gini + UP + 0.8==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new GlobalFMeasurePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.8);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.8);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -474,20 +474,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========ErrorEstimate + Gini + UP + 0.8==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new ErrorEstimatePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.8);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.8);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -511,20 +511,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========Global + Gini + Middle + 0.05==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new GlobalFMeasurePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.05);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.05);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -546,20 +546,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========ErrorEstimate + Gini + Middle + 0.05==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new ErrorEstimatePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.05);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.05);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -581,20 +581,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========Global + Gini + Middle + 0.2==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new GlobalFMeasurePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.2);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.2);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -616,20 +616,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========ErrorEstimate + Gini + Middle + 0.2==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new ErrorEstimatePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.2);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.2);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -651,20 +651,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========Global + Gini + Middle + 0.4==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new GlobalFMeasurePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.4);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.4);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -686,20 +686,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========ErrorEstimate + Gini + Middle + 0.4==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new ErrorEstimatePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.4);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.4);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -721,20 +721,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========Global + Gini + Middle + 0.8==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new GlobalFMeasurePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.8);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.8);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -756,20 +756,20 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========ErrorEstimate + Gini + Middle + 0.8==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new ErrorEstimatePruning());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE, 0.8);
+					dtl.getMl().setParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE, 0.8);
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -815,23 +815,23 @@ public class DTLEvaluation {
 					logger.info("Time: " + wombatTime);
 					logger.info("Size: " + wombatSize);
 
-					DecisionTreeLearning.useMergeAndConquer = false;
+					Dragon.useMergeAndConquer = false;
 					// ==================================
 
 					logger.info("========Global + ErrorEstimate==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new ErrorEstimatePruning());
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
@@ -854,18 +854,18 @@ public class DTLEvaluation {
 
 					logger.info("========Global + Global==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_PRUNING_FUNCTION,
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
+					dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION,
 							new GlobalFMeasurePruning());
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
@@ -888,17 +888,17 @@ public class DTLEvaluation {
 					// ========================================
 					logger.info("========J48==========");
 
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					DecisionTreeLearning.useJ48 = true;
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					Dragon.useJ48 = true;
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -919,18 +919,18 @@ public class DTLEvaluation {
 					// ========================================
 
 					logger.info("========J48 optimized==========");
-					dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+					dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 							MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					dtl.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					dtl.getMl().setConfiguration(config);
-					((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+					((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 					start = System.currentTimeMillis();
-					dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-					DecisionTreeLearning.useJ48 = true;
-					DecisionTreeLearning.useJ48optimized = true;
+					dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+					Dragon.useJ48 = true;
+					Dragon.useJ48optimized = true;
 					res = dtl.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();
 					logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -948,8 +948,8 @@ public class DTLEvaluation {
 					long j48optTime = (end - start);
 					logger.info("Time: " + j48optTime);
 					logger.info("Size: " + j48optSize);
-					DecisionTreeLearning.useJ48 = false;
-					DecisionTreeLearning.useJ48optimized = false;
+					Dragon.useJ48 = false;
+					Dragon.useJ48optimized = false;
 
 
 					// ================================================================================================================

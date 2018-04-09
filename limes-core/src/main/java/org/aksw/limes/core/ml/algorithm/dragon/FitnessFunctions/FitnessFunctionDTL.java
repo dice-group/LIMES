@@ -1,7 +1,7 @@
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions;
+package org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions;
 
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTree;
+import org.aksw.limes.core.ml.algorithm.dragon.DecisionTree;
 
 public abstract class FitnessFunctionDTL {
 	protected DecisionTree dt;

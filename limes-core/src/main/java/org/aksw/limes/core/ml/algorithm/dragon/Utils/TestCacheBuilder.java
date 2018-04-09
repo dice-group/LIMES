@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Utils;
+package org.aksw.limes.core.ml.algorithm.dragon.Utils;
 
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;

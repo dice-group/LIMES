@@ -1,5 +1,5 @@
 
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning;
+package org.aksw.limes.core.ml.algorithm.dragon;
 
 import java.util.Iterator;
 import java.util.List;
@@ -28,7 +28,7 @@ public class TreeParser {
     public static final String classNegative = "negative";
     private static final String irrelevant = "irrelevant";
 
-    private DecisionTreeLearning dtl;
+    private Dragon dtl;
 
     /**
      * Constructor
@@ -36,7 +36,7 @@ public class TreeParser {
      * @param dtl
      *            corresponding DecisionTreeLearning
      */
-    public TreeParser(DecisionTreeLearning dtl) {
+    public TreeParser(Dragon dtl) {
 	this.dtl = dtl;
     }
 

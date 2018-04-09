@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning;
+package org.aksw.limes.core.ml.algorithm.dragon;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +26,7 @@ public class MergeAndConquer {
 	private HashMap<String, AMapping> calculatedMappings = new HashMap<String, AMapping>();
 	public static List<LogicOperator> allowedOperators = Arrays.asList(LogicOperator.AND, LogicOperator.OR,
 			LogicOperator.MINUS);
-	private DecisionTreeLearning dtl;
+	private Dragon dtl;
 	private double minPropertyCoverage;
 	private double propertyLearningRate;
 	private int maxLinkSpecHeight;
@@ -34,7 +34,7 @@ public class MergeAndConquer {
 	private ACache testTargetCache;
 	private AMapping refMapping;
 
-	public MergeAndConquer(DecisionTreeLearning dtl, double minPropertyCoverage, double propertyLearningRate,
+	public MergeAndConquer(Dragon dtl, double minPropertyCoverage, double propertyLearningRate,
 			int maxLinkSpecHeight, ACache testSourceCache, ACache testTargetCache, AMapping refMapping) {
 		this.dtl = dtl;
 		this.minPropertyCoverage = minPropertyCoverage;
@@ -54,7 +54,7 @@ public class MergeAndConquer {
 		List<LinkSpecification> initialClassifiers = new ArrayList<>();
 		logger.info("PropPairs: " + dtl.getPropertyMapping().stringPropPairs.size());
 		for (PairSimilar<String> propPair : dtl.getPropertyMapping().stringPropPairs) {
-			for (String measure : DecisionTreeLearning.defaultMeasures) {
+			for (String measure : Dragon.defaultMeasures) {
 				LinkSpecification ls = findClassifier(propPair.a, propPair.b, measure);
 				if (ls != null)
 					initialClassifiers.add(ls);
@@ -274,7 +274,7 @@ public class MergeAndConquer {
 	}
 
 	private String getPropertiesFromMappingKey(String key) {
-		for (String measure : DecisionTreeLearning.defaultMeasures) {
+		for (String measure : Dragon.defaultMeasures) {
 			key = key.replace(measure, "");
 		}
 		key = key.split("\\|")[0];

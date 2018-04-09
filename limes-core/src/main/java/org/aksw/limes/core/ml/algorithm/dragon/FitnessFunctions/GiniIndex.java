@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions;
+package org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,10 +11,10 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTree;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTreeLearning;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.TrainingInstance;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Utils.InstanceCalculator;
+import org.aksw.limes.core.ml.algorithm.dragon.DecisionTree;
+import org.aksw.limes.core.ml.algorithm.dragon.Dragon;
+import org.aksw.limes.core.ml.algorithm.dragon.TrainingInstance;
+import org.aksw.limes.core.ml.algorithm.dragon.Utils.InstanceCalculator;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class GiniIndex extends FitnessFunctionDTL {
 				TrainingInstance currentInstance = new TrainingInstance(s, t,
 						dt.getRefMapping().getMap().get(s).get(t));
 				for (PairSimilar<String> propPair : dt.getDtl().getPropertyMapping().stringPropPairs) {
-					for (String measure : DecisionTreeLearning.defaultMeasures) {
+					for (String measure : Dragon.defaultMeasures) {
 						String metricExpression = measure + "(x." + propPair.a + ",y." + propPair.b + ")";
 						metricExpressions.add(new Metric(propPair.a, propPair.b, metricExpression, measure));
 						if (dt.getTargetCache().getInstance(t) != null || dt.getSourceCache().getInstance(s) != null) {

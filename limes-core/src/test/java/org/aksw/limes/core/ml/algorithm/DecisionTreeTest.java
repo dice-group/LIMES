@@ -21,8 +21,8 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTree;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTreeLearning;
+import org.aksw.limes.core.ml.algorithm.dragon.DecisionTree;
+import org.aksw.limes.core.ml.algorithm.dragon.Dragon;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,9 +47,9 @@ public class DecisionTreeTest {
 		c = DataSetChooser.getData(DataSetChooser.DataSets.RESTAURANTS_FIXED);
 		c2 = DataSetChooser.getData(DataSetChooser.DataSets.PERSON2);
 		try {
-			dtl = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+			dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 					MLImplementationType.SUPERVISED_BATCH);
-			dtl2 = MLAlgorithmFactory.createMLAlgorithm(DecisionTreeLearning.class,
+			dtl2 = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 					MLImplementationType.UNSUPERVISED);
 			sourceCache = c.getSourceCache();
 			targetCache = c.getTargetCache();
@@ -58,18 +58,18 @@ public class DecisionTreeTest {
 			dtl.init(null, sourceCache, targetCache);
 			dtl2.init(null, sourceCache2, targetCache2);
 			dtl.getMl().setConfiguration(c.getConfigReader().read());
-			((DecisionTreeLearning) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+			((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 			dtl2.getMl().setConfiguration(c2.getConfigReader().read());
-			((DecisionTreeLearning) dtl2.getMl()).setPropertyMapping(c2.getPropertyMapping());
+			((Dragon) dtl2.getMl()).setPropertyMapping(c2.getPropertyMapping());
 
-			dtl2.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+			dtl2.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
 //			dtl2.asUnsupervised().learn(new PseudoFMeasure());
 		} catch (UnsupportedMLImplementationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 //		DecisionTreeLearning decisionTreeLearning = (DecisionTreeLearning)dtl.getMl();
-		DecisionTreeLearning decisionTreeLearning2 = (DecisionTreeLearning)dtl2.getMl();
+		Dragon decisionTreeLearning2 = (Dragon)dtl2.getMl();
 		try {
 //			goldTree = setGoldTree(decisionTreeLearning);
 			goldTree2 = setGoldTree2(decisionTreeLearning2);
@@ -83,11 +83,11 @@ public class DecisionTreeTest {
 	
 	@Test
 	public void testLearn() throws UnsupportedMLImplementationException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
-		dtl.getMl().setParameter(DecisionTreeLearning.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
+		dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
 		MLResults res = dtl.asSupervised().learn(getTrainingData(c.getReferenceMapping()));
 		Field sourceCacheField = DecisionTree.class.getDeclaredField("sourceCache");
 		sourceCacheField.setAccessible(true);
-		assertEquals(sourceCache, sourceCacheField.get(((DecisionTreeLearning)dtl.getMl()).root));
+		assertEquals(sourceCache, sourceCacheField.get(((Dragon)dtl.getMl()).root));
 		System.out.println(res.getLinkSpecification());
 		System.out.println("FMeasure: " + new FMeasure().calculate(dtl.predict(sourceCache, targetCache, res), new GoldStandard(c.getReferenceMapping())));
 	}
@@ -151,7 +151,7 @@ public class DecisionTreeTest {
 		DecisionTree leftChild = (DecisionTree) leftChildField.get(goldTree2);
 		DecisionTree root2 = (DecisionTree) getRootNode.invoke(leftChild, new Object[0]);
 		assertEquals(goldTree2.toString(),root2.toString());
-		DecisionTree detachedNode = createNode((DecisionTreeLearning)dtl2.getMl(),"jaccard", "http://www.okkam.org/ontology_person1.owl#date_of_birth", "http://www.okkam.org/ontology_person2.owl#date_of_birth", 1.0, null, false);
+		DecisionTree detachedNode = createNode((Dragon)dtl2.getMl(),"jaccard", "http://www.okkam.org/ontology_person1.owl#date_of_birth", "http://www.okkam.org/ontology_person2.owl#date_of_birth", 1.0, null, false);
 		DecisionTree root3 = (DecisionTree) getRootNode.invoke(detachedNode, new Object[0]);
 		assertNull(root3);
 	}
@@ -183,7 +183,7 @@ public class DecisionTreeTest {
 		assertEquals(2, pathstrings.size());
 	}
 
-	private DecisionTree setGoldTreeMapping(DecisionTreeLearning decisionTreeLearning) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException{
+	private DecisionTree setGoldTreeMapping(Dragon decisionTreeLearning) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException{
 		
 		Field leftChildField = DecisionTree.class.getDeclaredField("leftChild");
 		leftChildField.setAccessible(true);
@@ -234,7 +234,7 @@ public class DecisionTreeTest {
 		return root;
 	}
 
-	private DecisionTree setGoldTree2(DecisionTreeLearning decisionTreeLearning) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException{
+	private DecisionTree setGoldTree2(Dragon decisionTreeLearning) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException{
 		
 		Field leftChildField = DecisionTree.class.getDeclaredField("leftChild");
 		leftChildField.setAccessible(true);
@@ -282,8 +282,8 @@ public class DecisionTreeTest {
 	}
 
 
-	private DecisionTree createRoot(DecisionTreeLearning decisionTreeLearning, String measure, String sourceProperty, String targetProperty, double threshold) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
-		DecisionTree tree = new DecisionTree(decisionTreeLearning, sourceCache, targetCache, pfm, (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE), (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_PROPERTY_LEARNING_RATE), threshold, MappingFactory.createDefaultMapping());
+	private DecisionTree createRoot(Dragon decisionTreeLearning, String measure, String sourceProperty, String targetProperty, double threshold) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
+		DecisionTree tree = new DecisionTree(decisionTreeLearning, sourceCache, targetCache, pfm, (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE), (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_PROPERTY_LEARNING_RATE), threshold, MappingFactory.createDefaultMapping());
 		
 		ExtendedClassifier ec = new ExtendedClassifier(measure, threshold, sourceProperty, targetProperty);
 		
@@ -296,12 +296,12 @@ public class DecisionTreeTest {
 		
 	}
 
-	private DecisionTree createNode(DecisionTreeLearning decisionTreeLearning, String measure, String sourceProperty, String targetProperty, double threshold, DecisionTree parent, boolean isLeftNode) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException{
+	private DecisionTree createNode(Dragon decisionTreeLearning, String measure, String sourceProperty, String targetProperty, double threshold, DecisionTree parent, boolean isLeftNode) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException{
 		Constructor <DecisionTree> constructor;
-		Class<?>[] parameterTypes = {DecisionTreeLearning.class, ACache.class, ACache.class, ACache.class, ACache.class, PseudoFMeasure.class, double.class, double.class, double.class, DecisionTree.class, boolean.class, AMapping.class};
+		Class<?>[] parameterTypes = {Dragon.class, ACache.class, ACache.class, ACache.class, ACache.class, PseudoFMeasure.class, double.class, double.class, double.class, DecisionTree.class, boolean.class, AMapping.class};
 		constructor = DecisionTree.class.getDeclaredConstructor(parameterTypes);
 		constructor.setAccessible(true);
-		DecisionTree tree = constructor.newInstance(decisionTreeLearning, sourceCache, targetCache, null, null, pfm, (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_MIN_PROPERTY_COVERAGE),(double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_PRUNING_CONFIDENCE), (double)decisionTreeLearning.getParameter(DecisionTreeLearning.PARAMETER_PROPERTY_LEARNING_RATE), parent, isLeftNode, MappingFactory.createDefaultMapping());
+		DecisionTree tree = constructor.newInstance(decisionTreeLearning, sourceCache, targetCache, null, null, pfm, (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE),(double)decisionTreeLearning.getParameter(Dragon.PARAMETER_PRUNING_CONFIDENCE), (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_PROPERTY_LEARNING_RATE), parent, isLeftNode, MappingFactory.createDefaultMapping());
 		ExtendedClassifier ec = new ExtendedClassifier(measure, threshold, sourceProperty, targetProperty);
 		
 		Field classifierField;

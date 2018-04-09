@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning.FitnessFunctions;
+package org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,8 +12,8 @@ import org.aksw.limes.core.execution.engine.filter.LinearFilter;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTree;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTreeLearning;
+import org.aksw.limes.core.ml.algorithm.dragon.DecisionTree;
+import org.aksw.limes.core.ml.algorithm.dragon.Dragon;
 
 public class GlobalFMeasure extends FitnessFunctionDTL{
 
@@ -79,7 +79,7 @@ public class GlobalFMeasure extends FitnessFunctionDTL{
 		// logger.info("Getting all classifiers ...");
 		List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
 		for (PairSimilar<String> propPair : dt.getDtl().getPropertyMapping().stringPropPairs) {
-			for (String measure : DecisionTreeLearning.defaultMeasures) {
+			for (String measure : Dragon.defaultMeasures) {
 				ExtendedClassifier cp = findClassifier(propPair.a, propPair.b, measure, currentNode);
 				if (cp != null)
 					initialClassifiers.add(cp);

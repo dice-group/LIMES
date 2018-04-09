@@ -1,7 +1,7 @@
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning;
+package org.aksw.limes.core.ml.algorithm.dragon.Pruning;
 
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTree;
+import org.aksw.limes.core.ml.algorithm.dragon.DecisionTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

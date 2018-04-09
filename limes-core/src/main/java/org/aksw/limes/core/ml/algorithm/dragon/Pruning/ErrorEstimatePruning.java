@@ -1,9 +1,9 @@
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Pruning;
+package org.aksw.limes.core.ml.algorithm.dragon.Pruning;
 
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.DecisionTree;
-import org.aksw.limes.core.ml.algorithm.decisionTreeLearning.Utils.InstanceCalculator;
+import org.aksw.limes.core.ml.algorithm.dragon.DecisionTree;
+import org.aksw.limes.core.ml.algorithm.dragon.Utils.InstanceCalculator;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 public class ErrorEstimatePruning extends PruningFunctionDTL{

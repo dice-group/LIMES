@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.decisionTreeLearning;
+package org.aksw.limes.core.ml.algorithm.dragon;
 
 import java.util.HashMap;
 
