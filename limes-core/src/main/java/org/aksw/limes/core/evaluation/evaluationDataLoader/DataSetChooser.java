@@ -54,20 +54,11 @@ public class DataSetChooser {
         case "PERSON1":
             param = getPerson1();
             break;
-        case "PERSON1FULL":
-        	param = getPerson1Full();
-        	break;
         case "PERSON2":
             param = getPerson2();
             break;
-        case "PERSON2FULL":
-        	param = getPerson2Full();
-        	break;
         case "RESTAURANTS":
             param = getRestaurant();
-            break;
-        case "RESTAURANTSFULL":
-            param = getRestaurantFull();
             break;
         case "RESTAURANTSFIXED":
             param = getRestaurant();
@@ -114,10 +105,6 @@ public class DataSetChooser {
         if (d.equals("RESTAURANTSFIXED")) {
             data.setReferenceMapping(fixed);
             data.setName("Restaurants_fixed");
-        }
-        if(d.equals("RESTAURANTSFULL")){
-            data.setReferenceMapping(fixed);
-            data.setName("Restaurants_full");
         }
         return data;
     }
@@ -240,8 +227,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getPersonNew() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, DataSetChooser.class.getClassLoader().getResource("src/main/resources/datasets/").getPath());
-        param.put(MapKey.DATASET_FOLDER, DataSetChooser.class.getClassLoader().getResource("src/main/resources/datasets/Persons1/").getPath());
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Persons1/");
         param.put(MapKey.CONFIG_FILE, "personsNew.xml");
         param.put(MapKey.REFERENCE_FILE, "dataset11_dataset12_goldstandard_person.xml");
         param.put(MapKey.SOURCE_FILE, "person11.nt");
@@ -276,45 +263,11 @@ public class DataSetChooser {
         return param;
     }
 
-    private static HashMap<MapKey, Object> getPerson1Full() {
-        HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
-        // folders & files
-        param.put(MapKey.BASE_FOLDER,"datasets/");
-        param.put(MapKey.DATASET_FOLDER,"datasets/Persons1/");
-        param.put(MapKey.CONFIG_FILE, "persons1.xml");
-        param.put(MapKey.REFERENCE_FILE, "dataset11_dataset12_goldstandard_person.xml");
-        param.put(MapKey.SOURCE_FILE, "person11.nt");
-        param.put(MapKey.TARGET_FILE, "person12.nt");
-        String type = "-Person";
-        param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
-        param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Persons1.csv");
-        param.put(MapKey.NAME, "Persons1");
-        // data
-        AConfigurationReader cR = new XMLConfigurationReader(
-                "" + param.get(MapKey.BASE_FOLDER) + param.get(MapKey.CONFIG_FILE));
-        cR.read();
-        param.put(MapKey.CONFIG_READER, cR);
-
-        param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
-                "full" + (String) param.get(MapKey.CONFIG_FILE)));
-        param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFileFull(
-                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
-        param.put(MapKey.TARGET_CACHE, Experiment.readOAEIFileFull(
-                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.TARGET_FILE), type));
-        param.put(MapKey.REFERENCE_MAPPING, Experiment.readOAEIMapping(
-                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.REFERENCE_FILE)));
-
-        param.put(MapKey.SOURCE_CLASS, "http://www.okkam.org/ontology_person1.owl#Person");
-        param.put(MapKey.TARGET_CLASS, "okkamperson2:Person");
-
-        return param;
-    }
-
     private static HashMap<MapKey, Object> getPerson1() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER,"datasets/");
-        param.put(MapKey.DATASET_FOLDER,"datasets/Persons1/");
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Persons1/");
         param.put(MapKey.CONFIG_FILE, "persons1.xml");
         param.put(MapKey.REFERENCE_FILE, "dataset11_dataset12_goldstandard_person.xml");
         param.put(MapKey.SOURCE_FILE, "person11.nt");
@@ -333,6 +286,9 @@ public class DataSetChooser {
                 (String) param.get(MapKey.CONFIG_FILE)));
         param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFile(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
+        param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFile(
+                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
+
         param.put(MapKey.TARGET_CACHE, Experiment.readOAEIFile(
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.TARGET_FILE), type));
         param.put(MapKey.REFERENCE_MAPPING, Experiment.readOAEIMapping(
@@ -378,8 +334,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getPerson1CSV() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER,"src/main/resources/datasets/");
-        param.put(MapKey.DATASET_FOLDER,"src/main/resources/datasets/Persons1/");
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Persons1/");
         param.put(MapKey.CONFIG_FILE, "persons1_csv.xml");
         param.put(MapKey.REFERENCE_FILE, "dataset11_dataset12_goldstandard_person.xml.csv");
         param.put(MapKey.SOURCE_FILE, "person11.nt");
@@ -408,8 +364,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getPerson2() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER,"src/main/resources/datasets/");
-        param.put(MapKey.DATASET_FOLDER,"src/main/resources/datasets/Persons2/");
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Persons2/");
         param.put(MapKey.CONFIG_FILE, "persons2.xml");
         param.put(MapKey.REFERENCE_FILE, "dataset21_dataset22_goldstandard_person.xml");
         param.put(MapKey.SOURCE_FILE, "person21.nt");
@@ -449,55 +405,11 @@ public class DataSetChooser {
         return param;
     }
 
-    private static HashMap<MapKey, Object> getPerson2Full() {
-        HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
-        // folders & files
-        param.put(MapKey.BASE_FOLDER,"datasets/");
-        param.put(MapKey.DATASET_FOLDER,"datasets/Persons2/");
-        param.put(MapKey.CONFIG_FILE, "persons2.xml");
-        param.put(MapKey.REFERENCE_FILE, "dataset21_dataset22_goldstandard_person.xml");
-        param.put(MapKey.SOURCE_FILE, "person21.nt");
-        param.put(MapKey.TARGET_FILE, "person22.nt");
-        String type = "-Person";
-        param.put(MapKey.EVALUATION_RESULTS_FOLDER, "resources/results/");
-        param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Persons2.csv");
-        param.put(MapKey.NAME, "Persons2");
-        // data
-        // Cache sC =
-        // Experiment.readOAEIFile((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.SOURCE_FILE),
-        // type);
-        // Experiment.toCsvFile(sC,
-        // (String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.SOURCE_FILE)+".csv");
-        // Cache tC =
-        // Experiment.readOAEIFile((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.TARGET_FILE),
-        // type);
-        // Experiment.toCsvFile(tC,
-        // (String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.TARGET_FILE)+".csv");
-        // Experiment.toCsvFile(Experiment.readOAEIMapping((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.REFERENCE_FILE)),
-        // (String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.REFERENCE_FILE)+".csv");
-        AConfigurationReader cR = new XMLConfigurationReader(
-                "" + param.get(MapKey.BASE_FOLDER) + param.get(MapKey.CONFIG_FILE));
-        cR.read();
-        param.put(MapKey.CONFIG_READER, cR);
-        param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
-                "full" + (String) param.get(MapKey.CONFIG_FILE)));
-        param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFileFull(
-                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
-        param.put(MapKey.TARGET_CACHE, Experiment.readOAEIFileFull(
-                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.TARGET_FILE), type));
-        param.put(MapKey.REFERENCE_MAPPING, Experiment.readOAEIMapping(
-                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.REFERENCE_FILE)));
-
-        param.put(MapKey.SOURCE_CLASS, "http://www.okkam.org/ontology_person1.owl#Person");
-        param.put(MapKey.TARGET_CLASS, "okkamperson2:Person");
-        return param;
-    }
-
     private static HashMap<MapKey, Object> getPerson2CSV() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER,"datasets/");
-        param.put(MapKey.DATASET_FOLDER,"datasets/Persons2/");
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Persons2/");
         param.put(MapKey.CONFIG_FILE, "persons2_csv.xml");
         param.put(MapKey.REFERENCE_FILE, "dataset21_dataset22_goldstandard_person.xml.csv");
         param.put(MapKey.SOURCE_FILE, "person21.nt");
@@ -526,8 +438,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getRestaurant() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER,"datasets/");
-        param.put(MapKey.DATASET_FOLDER,"datasets/Restaurants/");
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Restaurants/");
         param.put(MapKey.CONFIG_FILE, "restaurants.xml");
         param.put(MapKey.REFERENCE_FILE, "restaurant1_restaurant2_goldstandard.rdf");
         param.put(MapKey.SOURCE_FILE, "restaurant1.nt");
@@ -574,65 +486,13 @@ public class DataSetChooser {
         param.put(MapKey.TARGET_CLASS, "http://www.okkam.org/ontology_restaurant2.owl#Restaurant");
         return param;
     }
-    
-    private static HashMap<MapKey, Object> getRestaurantFull() {
-        HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
-        // folders & files
-        param.put(MapKey.BASE_FOLDER,"datasets/");
-        param.put(MapKey.DATASET_FOLDER,"datasets/Restaurants/");
-        param.put(MapKey.CONFIG_FILE, "restaurants.xml");
-        param.put(MapKey.REFERENCE_FILE, "restaurant1_restaurant2_goldstandard.rdf");
-        param.put(MapKey.SOURCE_FILE, "restaurant1.nt");
-        param.put(MapKey.TARGET_FILE, "restaurant2.nt");
-        String type = "-Restaurant";
-        param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_Restaurants.csv");
-        param.put(MapKey.NAME, "Restaurants");
-        // data
-        // Cache sC =
-        // Experiment.readOAEIFile((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.SOURCE_FILE),
-        // type);
-        // Experiment.toCsvFile(sC,
-        // (String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.SOURCE_FILE)+".csv");
-        // Cache tC =
-        // Experiment.readOAEIFile((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.TARGET_FILE),
-        // type);
-        // Experiment.toCsvFile(tC,
-        // (String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.TARGET_FILE)+".csv");
-        // Experiment.toCsvFile(Experiment.readOAEIMapping((String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.REFERENCE_FILE)),
-        // (String)param.get(MapKey.DATASET_FOLDER)+(String)param.get(MapKey.REFERENCE_FILE)+".csv");
-
-        AConfigurationReader cR = new XMLConfigurationReader(
-                "" + param.get(MapKey.BASE_FOLDER) + param.get(MapKey.CONFIG_FILE));
-        cR.read();
-        param.put(MapKey.CONFIG_READER, cR);
-        param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
-                "full" + (String) param.get(MapKey.CONFIG_FILE)));
-        param.put(MapKey.SOURCE_CACHE,
-                Experiment.readOAEIFileFull(
-                        /* (String)param.get(MapKey.BASE_FOLDER)+ */param.get(MapKey.DATASET_FOLDER)
-                                + (String) param.get(MapKey.SOURCE_FILE),
-                        type));
-        param.put(MapKey.TARGET_CACHE,
-                Experiment.readOAEIFileFull(
-                        /* (String)param.get(MapKey.BASE_FOLDER)+ */param.get(MapKey.DATASET_FOLDER)
-                                + (String) param.get(MapKey.TARGET_FILE),
-                        type));
-        param.put(MapKey.REFERENCE_MAPPING,
-                Experiment.readOAEIMapping(
-                        /* (String)param.get(MapKey.BASE_FOLDER)+ */param.get(MapKey.DATASET_FOLDER)
-                                + (String) param.get(MapKey.REFERENCE_FILE)));
-
-        param.put(MapKey.SOURCE_CLASS, "http://www.okkam.org/ontology_restaurant1.owl#Restaurant");
-        param.put(MapKey.TARGET_CLASS, "http://www.okkam.org/ontology_restaurant2.owl#Restaurant");
-        return param;
-    }
 
     private static HashMap<MapKey, Object> getRestaurantCSV() {
 
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, DataSetChooser.class.getClassLoader().getResource("src/main/resources/datasets/").getPath());
-        param.put(MapKey.DATASET_FOLDER, DataSetChooser.class.getClassLoader().getResource("src/main/resources/datasets/Restaurants/").getPath());
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Restaurants/");
         param.put(MapKey.CONFIG_FILE, "restaurants_csv.xml");
         param.put(MapKey.REFERENCE_FILE, "restaurant1_restaurant2_goldstandard.rdf.csv");
         param.put(MapKey.SOURCE_FILE, "restaurant1.nt");
@@ -665,8 +525,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getDBLPACM() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER,"datasets/"/* "Examples/GeneticEval/" */);
-        param.put(MapKey.DATASET_FOLDER,"datasets/DBLP-ACM/" /* "Datasets/DBLP-ACM/" */);
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/"/* "Examples/GeneticEval/" */);
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/DBLP-ACM/" /* "Datasets/DBLP-ACM/" */);
         param.put(MapKey.CONFIG_FILE, "PublicationData.xml");
         param.put(MapKey.REFERENCE_FILE, "DBLP-ACM_perfectMapping.csv");
         param.put(MapKey.SOURCE_FILE, "ACM.csv");
@@ -697,8 +557,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getAbtBuy() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER,"datasets/"/* "Examples/GeneticEval/" */);
-        param.put(MapKey.DATASET_FOLDER,"datasets/Abt-Buy/" /* "Datasets/Abt-Buy/" */);
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/"/* "Examples/GeneticEval/" */);
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Abt-Buy/" /* "Datasets/Abt-Buy/" */);
         param.put(MapKey.CONFIG_FILE, "Abt-Buy.xml");
         param.put(MapKey.REFERENCE_FILE, "abt_buy_perfectMapping.csv");
         param.put(MapKey.SOURCE_FILE, "Abt.csv");
@@ -730,8 +590,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getDBLPScholar() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER,"datasets/"/* "Examples/GeneticEval/" */);
-        param.put(MapKey.DATASET_FOLDER,"datasets/DBLP-Scholar/"/* "Datasets/DBLP-Scholar/" */);
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/"/* "Examples/GeneticEval/" */);
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/DBLP-Scholar/"/* "Datasets/DBLP-Scholar/" */);
         param.put(MapKey.CONFIG_FILE, "DBLP-Scholar.xml");
         param.put(MapKey.REFERENCE_FILE, "DBLP-Scholar_perfectMapping.csv");
         param.put(MapKey.SOURCE_FILE, "DBLP1.csv");
@@ -765,8 +625,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getAmazonGoogleProducts() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER,"datasets/");
-        param.put(MapKey.DATASET_FOLDER,"datasets/Amazon-GoogleProducts/");
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Amazon-GoogleProducts/");
         param.put(MapKey.CONFIG_FILE, "Amazon-GoogleProducts.xml");
         param.put(MapKey.REFERENCE_FILE, "Amzon_GoogleProducts_perfectMapping.csv");
         param.put(MapKey.SOURCE_FILE, "Amazon.csv");
@@ -799,8 +659,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getDBPediaLinkedMDB() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "datasets/");
-        param.put(MapKey.DATASET_FOLDER, "datasets/dbpedia-linkedmdb/");
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/dbpedia-linkedmdb/");
         param.put(MapKey.CONFIG_FILE, "dbpedia-linkedmdb.xml");
         param.put(MapKey.REFERENCE_FILE, "reference.csv");
         param.put(MapKey.SOURCE_FILE, "source.csv");
@@ -833,8 +693,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getDrugs() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER,"datasets/");
-        param.put(MapKey.DATASET_FOLDER,"datasets/dailymed-drugbank-ingredients/");
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/dailymed-drugbank-ingredients/");
         param.put(MapKey.CONFIG_FILE, "dailymed-drugbank.xml");
         param.put(MapKey.REFERENCE_FILE, "reference2.csv");
         param.put(MapKey.SOURCE_FILE, "source2.csv");

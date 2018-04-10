@@ -193,12 +193,16 @@ public class XMLConfigurationReader extends AConfigurationReader {
      */
     @Override
     public Configuration read() {
-        InputStream input = this.getClass().getClassLoader().getResourceAsStream(fileNameOrUri);
-        if (input == null) {
+        try {
+            File f = new File(fileNameOrUri);
+            InputStream input = new FileInputStream(f);
+            return validateAndRead(input, fileNameOrUri);
+        } catch (FileNotFoundException e) {
+            logger.warn(e.getMessage());
+            e.printStackTrace();
             logger.warn("Some values were not set. Crossing my fingers and using defaults.");
-            return configuration;
         }
-        return validateAndRead(input, fileNameOrUri);
+        return configuration;
     }
 
     public void afterPropertiesSet(Configuration configuration) {
@@ -261,9 +265,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
         }
 
         if(kbinfo.getMinOffset() > 0 && kbinfo.getMaxOffset() > 0 && kbinfo.getMinOffset() > kbinfo.getMaxOffset()) {
-            // TODO: handle the problem more elegant, or change the status code to something more meaningful
             logger.error(kb + " query limit missmatch: MINOFFSET > MAXOFFSET");
-            System.exit(1);
+            throw new RuntimeException();
         }
         kbinfo.setPrefixes(configuration.getPrefixes());
     }

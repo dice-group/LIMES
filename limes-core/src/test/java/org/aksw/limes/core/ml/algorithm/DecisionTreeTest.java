@@ -160,7 +160,6 @@ public class DecisionTreeTest {
 	public void testGetTotalMapping(){
 
 		AMapping goldMap = MappingFactory.createDefaultMapping();
-		goldMap.add("B", "B", 1.0);
 		goldMap.add("C", "C", 1.0);
 		goldMap.add("D", "D", 1.0);
 		goldMap.add("E", "E", 1.0);
@@ -298,10 +297,10 @@ public class DecisionTreeTest {
 
 	private DecisionTree createNode(Dragon decisionTreeLearning, String measure, String sourceProperty, String targetProperty, double threshold, DecisionTree parent, boolean isLeftNode) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException{
 		Constructor <DecisionTree> constructor;
-		Class<?>[] parameterTypes = {Dragon.class, ACache.class, ACache.class, ACache.class, ACache.class, PseudoFMeasure.class, double.class, double.class, double.class, DecisionTree.class, boolean.class, AMapping.class};
+		Class<?>[] parameterTypes = {Dragon.class, ACache.class, ACache.class, PseudoFMeasure.class, double.class, double.class, double.class, DecisionTree.class, boolean.class, AMapping.class};
 		constructor = DecisionTree.class.getDeclaredConstructor(parameterTypes);
 		constructor.setAccessible(true);
-		DecisionTree tree = constructor.newInstance(decisionTreeLearning, sourceCache, targetCache, null, null, pfm, (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE),(double)decisionTreeLearning.getParameter(Dragon.PARAMETER_PRUNING_CONFIDENCE), (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_PROPERTY_LEARNING_RATE), parent, isLeftNode, MappingFactory.createDefaultMapping());
+		DecisionTree tree = constructor.newInstance(decisionTreeLearning, sourceCache, targetCache, pfm, (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE),(double)decisionTreeLearning.getParameter(Dragon.PARAMETER_PRUNING_CONFIDENCE), (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_PROPERTY_LEARNING_RATE), parent, isLeftNode, MappingFactory.createDefaultMapping());
 		ExtendedClassifier ec = new ExtendedClassifier(measure, threshold, sourceProperty, targetProperty);
 		
 		Field classifierField;

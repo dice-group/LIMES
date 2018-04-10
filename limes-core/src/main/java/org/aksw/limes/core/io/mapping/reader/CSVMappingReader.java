@@ -2,7 +2,6 @@ package org.aksw.limes.core.io.mapping.reader;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.InputStreamReader;
 
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -53,7 +52,7 @@ public class CSVMappingReader extends AMappingReader {
     @Override
     public AMapping read() {
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(file)));
+            BufferedReader reader = new BufferedReader(new FileReader(file));
             String line = reader.readLine();
             reader.close();
             String col[];
@@ -90,7 +89,7 @@ public class CSVMappingReader extends AMappingReader {
     public AMapping readTwoColumnFile() {
         AMapping m = MappingFactory.createDefaultMapping();
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(file)));
+            BufferedReader reader = new BufferedReader(new FileReader(file));
             String line = reader.readLine();
             String split[];
             while (line != null) {
@@ -99,11 +98,11 @@ public class CSVMappingReader extends AMappingReader {
                 split = DataCleaner.separate(line, delimiter, 2);
                 // check if it's the line with the properties
                 if (!split[0].startsWith("id")) {
-//                    if (!split[0].startsWith("<")) {
+                    if (!split[0].startsWith("<")) {
                         m.add(split[0], split[1], 1.0);
-//                    } else {
-//                        m.add(split[0].substring(1, split[0].length() - 1), split[1].substring(1, split[1].length() - 1), 1.0);
-//                    }
+                    } else {
+                        m.add(split[0].substring(1, split[0].length() - 1), split[1].substring(1, split[1].length() - 1), 1.0);
+                    }
                 }
                 line = reader.readLine();
             }
