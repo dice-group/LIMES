@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>LIMES Web UI</title>
+
+  <meta charset="utf-8">
+  <meta name="description" content="LIMES Web UI">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <!-- styles -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://unpkg.com/vue-material@0.8.1/dist/vue-material.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+
+  <!-- LIMES server ref -->
+  <script>
+    // should not have trailing slash!
+    window.LIMES_SERVER_URL = 'http://localhost:8080';
+  </script>
+</head>
+
+<body>
+  <div id="app">
+    Loading..
+  </div>
+
+  <!-- templates -->
+  <!-- main app template -->
+  <script type="text/x-template" id="mainApp">
+    <div>
+      <md-toolbar>
+        <h2 class="md-title" style="flex: 1">LIMES Web UI</h2>
+        <md-button v-on:click="exampleConfig()">Try example LGD config</md-button>
+      </md-toolbar>
+
+      <!-- config text dialog -->
+      <md-dialog ref="configDialog">
+        <md-dialog-title>Config XML</md-dialog-title>
+
+        <md-dialog-content><pre><code class="xml">{{ configText }}</code></pre></md-dialog-content>
+
+        <md-dialog-actions>
+          <md-button class="md-primary" @click="closeConfig()">Close</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+
+      <!-- job status dialog -->
+      <md-dialog ref="jobDialog">
+        <md-dialog-title>Job status</md-dialog-title>
+
+        <md-dialog-content>
+          <div class="md-flex">
+            <md-spinner md-indeterminate v-if="jobRunning"></md-spinner>
+          </div>
+          <div class="md-flex" v-if="!jobError">
+            {{ jobStatusText }}
+          </div>
+          <div class="md-flex" style="color: red;" v-if="jobError">
+            {{ jobError }}
+          </div>
+          <div class="md-flex" v-if="jobStatus === '2'">
+            Get results:
+            <a v-bind:href=" window.LIMES_SERVER_URL + '/get_result/?job_id=' + jobId + '&result_type=acceptance' ">Acceptance</a>
+            <a v-bind:href=" window.LIMES_SERVER_URL + '/get_result/?job_id=' + jobId + '&result_type=review' ">Review</a>
+          </div>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+          <md-button class="md-primary" @click="closeStatus()">Close</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+
+      <md-layout md-gutter>
+        <md-layout md-flex-offset="25" md-column>
+          <!-- prefixes UI -->
+          <prefixes-list v-bind:prefixes="prefixes"></prefixes-list>
+          <!-- datasources UI -->
+          <datasource-component v-bind:source="source" title="Data source"></datasource-component>
+          <datasource-component v-bind:source="target" title="Data target"></datasource-component>
+          <!-- metrics UI -->
+          <metrics-component v-bind:metrics="metrics"></metrics-component>
+          <!-- acceptance UI -->
+          <accreview-component v-bind:data="acceptance" title="Acceptance Condition"></accreview-component>
+          <accreview-component v-bind:data="review" title="Review Condition"></accreview-component>
+          <!-- machine learning UI -->
+          <mlalgorithm-component v-bind:data="mlalgorithm"></mlalgorithm-component>
+          <!-- execution UI -->
+          <execution-component v-bind:execution="execution"></execution-component>
+          <!-- output UI -->
+          <output-component v-bind:output="output"></output-component>
+
+          <!-- done button -->
+          <md-layout md-gutter="16">
+            <md-layout>
+              <md-button class="md-raised md-flex" v-on:click="showConfig()">Display config</md-button>
+            </md-layout>
+            <md-layout>
+              <md-button class="md-raised md-primary md-flex" v-on:click="execute()">Execute</md-button>
+            </md-layout>
+          </md-layout>
+        </md-layout>
+        <md-layout md-flex="25"></md-layout>
+      </md-layout>
+    </div>
+  </script>
+
+  <!-- prefixes component -->
+  <script type="text/x-template" id="prefixComponent">
+    <md-whiteframe md-tag="section" style="margin-top: 20px; flex: 1; padding-top: 15px; padding-left: 15px;">
+      <div class="md-title">Prefixes</div>
+
+      <md-layout>
+        <div style="padding-top: 20px;" v-if="!prefixes.length">No prefixes defined..</div>
+        <md-chip v-for="prefix in prefixes" md-deletable v-on:delete="deleteChip(prefix)" style="margin-left: 3px">
+          {{ prefix.label }}
+          <md-tooltip md-direction="bottom">{{ prefix.namespace }}</md-tooltip>
+        </md-chip>
+      </md-layout>
+
+      <md-layout md-gutter="8">
+        <md-layout md-flex="33">
+          <md-input-container>
+            <label>Label</label>
+            <md-input v-model="label" placeholder="Label"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout md-flex>
+          <md-input-container>
+            <label>Namespace</label>
+            <md-input v-model="namespace" placeholder="Namespace"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout md-flex="25">
+          <md-button v-on:click="add()">Add</md-button>
+        </md-layout>
+      </md-layout>
+    </md-whiteframe>
+  </script>
+
+  <!-- datasource component -->
+  <script type="text/x-template" id="datasourceComponent">
+    <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
+      <div class="md-title">{{ title }}</div>
+
+      <!-- source -->
+      <md-layout md-column>
+        <md-layout>
+          <md-input-container>
+            <label>ID</label>
+            <md-input v-model="source.id" placeholder="ID"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout>
+          <md-input-container>
+            <label>Endpoint</label>
+            <md-input v-model="source.endpoint" placeholder="Endpoint"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout>
+          <md-input-container>
+            <label>Var</label>
+            <md-input v-model="source.var" placeholder="Var"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout>
+          <md-input-container>
+            <label>Pagesize</label>
+            <md-input v-model="source.pagesize" placeholder="Pagesize"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout>
+          <md-input-container>
+            <label>Restriction</label>
+            <md-input v-model="source.restriction" placeholder="Restriction"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout>
+          <md-input-container>
+            <label>Type (optional)</label>
+            <md-input v-model="source.type" placeholder="Type (optional)"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout>
+          Properties
+          <md-chips v-model="source.properties" md-input-placeholder="Add a property"></md-chips>
+        </md-layout>
+        <md-layout>
+          Optional Properties
+          <md-chips v-model="source.optionalProperties" md-input-placeholder="Add an optional property"></md-chips>
+        </md-layout>
+      </md-layout>
+    </md-whiteframe>
+  </script>
+
+  <!-- metrics component -->
+  <script type="text/x-template" id="metricsComponent">
+    <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
+      <div class="md-title">Metrics</div>
+      <md-chips v-model="metrics" md-input-placeholder="Add a metric"></md-chips>
+    </md-whiteframe>
+  </script>
+
+  <!-- acceptance / review component -->
+  <script type="text/x-template" id="accreviewComponent">
+    <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
+      <div class="md-title">{{ title }}</div>
+
+      <md-input-container>
+        <label>Threshold</label>
+        <md-input v-model="data.threshold" placeholder="Threshold"></md-input>
+      </md-input-container>
+      <md-input-container>
+        <label>File</label>
+        <md-input v-model="data.file" placeholder="File"></md-input>
+      </md-input-container>
+      <md-input-container>
+        <label>Relation</label>
+        <md-input v-model="data.relation" placeholder="Relation"></md-input>
+      </md-input-container>
+    </md-whiteframe>
+  </script>
+
+  <!-- mlalgorithm component -->
+  <script type="text/x-template" id="mlalgorithmComponent">
+    <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
+      <md-layout>
+        <md-layout md-flex="75" style="align-items: center;">
+          <div class="md-title" style="height: 26px;">
+            Machine Learning
+          </div>
+        </md-layout>
+        <md-layout>
+          <md-button v-on:click="enable()" v-if="!data.enabled">Enable</md-button>
+          <md-button v-on:click="disable()" v-if="data.enabled">Disable</md-button>
+        </md-layout>
+      </md-layout>
+
+      <md-input-container v-if="data.enabled">
+        <label>Name</label>
+        <md-input v-model="data.name" placeholder="Name"></md-input>
+      </md-input-container>
+      <md-input-container v-if="data.enabled">
+        <label>Type</label>
+        <md-input v-model="data.type" placeholder="Type"></md-input>
+      </md-input-container>
+      <md-input-container v-if="data.enabled">
+        <label>Training</label>
+        <md-input v-model="data.training" placeholder="Training"></md-input>
+      </md-input-container>
+
+      <md-layout v-if="data.enabled">
+        <div style="padding-top: 20px;" v-if="!data.parameters.length">No parameters defined..</div>
+        <md-chip v-for="param in data.parameters" md-deletable v-on:delete="deleteParam(param)" style="margin-left: 3px">
+          {{ param.name }}: {{ param.value }}
+        </md-chip>
+      </md-layout>
+      <md-layout md-gutter="8" v-if="data.enabled">
+        <md-layout md-flex="33">
+          <md-input-container>
+            <label>Name</label>
+            <md-input v-model="name" placeholder="Name"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout md-flex>
+          <md-input-container>
+            <label>Value</label>
+            <md-input v-model="value" placeholder="Value"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout md-flex="25">
+          <md-button v-on:click="add()">Add</md-button>
+        </md-layout>
+      </md-layout>
+
+    </md-whiteframe>
+  </script>
+
+  <!-- execution component -->
+  <script type="text/x-template" id="executionComponent">
+    <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
+      <div class="md-title">Execution</div>
+
+      <md-layout md-gutter="8" style="padding-top: 10px; padding-bottom: 15px;">
+        <md-layout md-flex="50">
+          <md-field>
+            <label for="planner">Planner</label>
+            <md-select v-model="execution.planner" name="planner" id="planner">
+              <md-option value="DEFAULT">Default</md-option>
+              <md-option value="HELIOS">Helios</md-option>
+              <md-option value="DYNAMIC">Dynamic</md-option>
+            </md-select>
+          </md-field>
+        </md-layout>
+        <md-layout md-flex="50">
+          <md-field>
+            <label for="engine">Engine</label>
+            <md-select v-model="execution.engine" name="engine" id="engine">
+              <md-option value="DEFAULT">Default</md-option>
+              <md-option value="SIMPLE">Simple</md-option>
+            </md-select>
+          </md-field>
+        </md-layout>
+      </md-layout>
+    </md-whiteframe>
+  </script>
+
+  <!-- output component -->
+  <script type="text/x-template" id="outputComponent">
+    <md-whiteframe md-tag="section" style="flex: 1; padding: 15px;">
+      <div class="md-title">Output</div>
+
+      <md-select v-model="output" name="output" id="output">
+        <md-option value="TAB">TAB</md-option>
+        <md-option value="N3">N3</md-option>
+      </md-select>
+    </md-whiteframe>
+  </script>
+
+  <!-- libs -->
+  <script src="https://unpkg.com/vue@2.5.3/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/vue-material@0.8.1/dist/vue-material.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/xml.min.js"></script>
+  <!-- our scripts -->
+  <script src="prefixes.js"></script>
+  <script src="mlalgorithm.js"></script>
+  <script src="simplecomponents.js"></script>
+  <script src="main.js"></script>
+</body>
+
+</html>
