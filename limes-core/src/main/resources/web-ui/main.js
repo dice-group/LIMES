@@ -34,6 +34,7 @@ let app = new Vue({
     jobStatus: '-1',
     jobStatusText: 'loading..',
     jobError: false,
+    results: [],
     // config
     prefixes: [],
     source: {
@@ -162,6 +163,7 @@ let app = new Vue({
     },
     showConfig() {
       this.configText = this.generateConfig();
+      console.log(this.configText);
       this.$refs.configDialog.open();
       // syntax highlight for xml
       setTimeout(() => hljs.highlightBlock(document.getElementsByTagName('code')[0]));
@@ -176,14 +178,14 @@ let app = new Vue({
     execute() {
       this.jobError = false;
       const config = this.generateConfig();
-      const configBlob = new Blob([config], {type: 'text/plain'});
+      const configBlob = new Blob([config], {type: 'text/xml'});
       const fd = new FormData();
-      fd.append('fileupload', configBlob, 'config.xml');
-      fetch(window.LIMES_SERVER_URL + '/execute', {
+      fd.append('config_file', configBlob, 'config.xml');
+      fetch(window.LIMES_SERVER_URL + '/submit', {
         method: 'post',
         body: fd,
       })
-        .then(r => r.text())
+        .then(r => r.json().then(x => x.requestId))
         .then(r => {
           this.jobId = r;
           this.jobRunning = true;
@@ -200,36 +202,46 @@ let app = new Vue({
     },
     getStatus() {
       this.jobError = false;
-      fetch(window.LIMES_SERVER_URL + '/get_status/?job_id=' + this.jobId)
-        .then(r => r.text())
+      fetch(window.LIMES_SERVER_URL + '/status/' + this.jobId)
+        .then(r => r.json().then(x => x.status))
         .then(status => {
           this.jobError = false;
-          this.jobStatus = status;
-          if (status === '-1') {
+          this.jobStatus = status.code;
+          if (status.code === -1) {
             this.jobRunning = false;
-            this.jobStatusText =
-              'Status Unknown - a configuration file for the given job_id has not been found on the server';
+            this.jobStatusText = status.description;
           }
-          if (status === '0') {
+          if (status.code === 0) {
             this.jobRunning = true;
-            this.jobStatusText =
-              'Status Scheduled - the configuration file is present and the job is waiting for execution';
+            this.jobStatusText = status.description;
             setTimeout(() => this.getStatus(), 5000);
           }
-          if (status === '1') {
+          if (status.code === 1) {
             this.jobRunning = true;
-            this.jobStatusText = 'Status Running - the job is currently running';
+            this.jobStatusText = status.description;
             setTimeout(() => this.getStatus(), 5000);
           }
-          if (status === '2') {
+          if (status.code === 2) {
             this.jobRunning = false;
-            this.jobStatusText = 'Status Finished - the job is finished and its output files are ready for delivery';
-            this.jobShowResult = true;
+            this.jobStatusText = status.description;
+            this.getResults();
           }
         })
         .catch(e => {
           this.jobError = `Error getting job status: ${e.toString()}`;
           this.jobRunning = false;
+        });
+    },
+    getResults() {
+      this.jobError = false;
+      fetch(window.LIMES_SERVER_URL + '/results/' + this.jobId)
+        .then(r => r.json())
+        .then(results => {
+          this.results = results.availableFiles;
+          this.jobShowResult = true;
+        })
+        .catch(e => {
+          this.jobError = `Error getting job results: ${e.toString()}`;
         });
     },
     exampleConfig() {
@@ -245,6 +257,10 @@ let app = new Vue({
         {
           namespace: 'http://linkedgeodata.org/ontology/',
           label: 'lgdo',
+        },
+        {
+          namespace: 'http://www.w3.org/2000/01/rdf-schema#',
+          label: 'rdfs',
         },
       ];
       this.source = {

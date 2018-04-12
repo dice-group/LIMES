@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author Kevin Dreßler
  */
 
+@Deprecated
 public class SimpleServer {
 
     private static final Logger logger = LoggerFactory.getLogger(SimpleServer.class.getName());

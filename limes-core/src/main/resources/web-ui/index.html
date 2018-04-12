@@ -60,10 +60,14 @@
           <div class="md-flex" style="color: red;" v-if="jobError">
             {{ jobError }}
           </div>
-          <div class="md-flex" v-if="jobStatus === '2'">
+          <div class="md-flex" v-if="jobStatus > 0 || jobStatus === -2">
+            <a v-bind:href=" window.LIMES_SERVER_URL + '/logs/' + jobId" target="_blank">Show log</a>
+          </div>
+          <div class="md-flex" v-if="jobStatus === 2">
             Get results:
-            <a v-bind:href=" window.LIMES_SERVER_URL + '/get_result/?job_id=' + jobId + '&result_type=acceptance' ">Acceptance</a>
-            <a v-bind:href=" window.LIMES_SERVER_URL + '/get_result/?job_id=' + jobId + '&result_type=review' ">Review</a>
+              <ul>
+                <li v-for="r in results"><a v-bind:href=" window.LIMES_SERVER_URL + '/result/' + jobId + '/' + r " target="_blank">{{r}}</a></li>
+              </ul>
           </div>
         </md-dialog-content>
 
