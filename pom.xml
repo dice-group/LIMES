@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <limes.version>1.3.0</limes.version>
+        <limes.version>1.3.1</limes.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -11,7 +11,7 @@
 
 	<groupId>org.aksw.limes</groupId>
 	<artifactId>limes-full</artifactId>
-	<version>1.3.0</version>
+	<version>1.3.1</version>
 	<name>LIMES</name>
 	<description>LIMES – Link Discovery Framework for Metric Spaces.</description>
 	<url>http://aksw.org/Projects/LIMES</url>
