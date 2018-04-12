@@ -13,12 +13,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class APRFTest {
-	GoldStandard gold1to1;
-	GoldStandard gold1toN;
+	public GoldStandard gold1to1;
+	public GoldStandard gold1toN;
 	
-	AMapping pred;
-	AMapping predWithNegativeExamples;
-	List<String> dataset;
+	public AMapping pred;
+	public AMapping predWithNegativeExamples;
+	public List<String> dataset;
 	
 	@Before
 	public void setupData(){

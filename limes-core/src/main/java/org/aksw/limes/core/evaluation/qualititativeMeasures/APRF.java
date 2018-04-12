@@ -57,10 +57,8 @@ public abstract class APRF implements IQualitativeMeasure {
         double FNCounter = 0;
         for (String sUri : goldStandard.getMap().keySet()){
             for (String tUri : goldStandard.getMap().get(sUri).keySet()){
-                if (goldStandard.getMap().get(sUri).get(tUri) > 0){
-                    if (!(predictions.contains(sUri, tUri) && predictions.getMap().get(sUri).get(tUri) > 0)){
+                if (goldStandard.getMap().get(sUri).get(tUri) > 0 && (!(predictions.contains(sUri, tUri) && predictions.getMap().get(sUri).get(tUri) > 0))){
                         FNCounter++;
-                    }
                 }
             }
         }
