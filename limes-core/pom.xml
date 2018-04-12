@@ -130,6 +130,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.4.3</version>
                 <configuration>
+                <!--  
                 <artifactSet>
 								<excludes>
 									<exclude>org.apache.flink:flink-shaded-*</exclude>
@@ -206,6 +207,7 @@
 									<exclude>commons-cli:commons-cli</exclude>
 								</excludes>
 							</artifactSet>
+							-->
 							<filters>
 								<filter>
 									<artifact>org.apache.flink:*</artifact>
@@ -229,7 +231,7 @@
                     <transformers>
                         <transformer
                                 implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                               <mainClass>org.aksw.limes.core.measures.mapper.space.Flink.PerformanceEval</mainClass>
+                               <mainClass>org.aksw.limes.core.measures.mapper.space.Flink.PerformanceEvalOLD</mainClass>
                             <manifestEntries>
                                 <X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
                                 <X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>

@@ -61,7 +61,7 @@ public class PerformanceEval {
                 resWriter = new PrintWriter(new FileOutputStream("FlinkHR3Eval.csv", true));
                 long start = System.currentTimeMillis();
 
-                AMapping links = flinkhr3m.getMapping(sourceDS, targetDS, "?x", "?y", measureExpr, 0.9);
+                AMapping links = flinkhr3m.getMapping(sourceDS, targetDS, "?x", "?y", measureExpr, threshold);
                 long finish = System.currentTimeMillis();
                 long flinkhr3res = finish - start;
                 logger.info("link size: " + links.size());

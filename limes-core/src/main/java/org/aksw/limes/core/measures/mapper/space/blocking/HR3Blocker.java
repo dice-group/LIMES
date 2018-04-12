@@ -106,7 +106,6 @@ public class HR3Blocker implements IBlockingModule {
                 }
             }
         }
-        PerformanceEval.logger.info("addIdsToList" + result);
         return result;
     }
 
