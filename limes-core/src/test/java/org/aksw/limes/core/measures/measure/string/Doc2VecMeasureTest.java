@@ -1,53 +1,33 @@
 package org.aksw.limes.core.measures.measure.string;
 
-import java.io.File;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
-import org.datavec.api.util.ClassPathResource;
-import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
-import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
-import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
-import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
-import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
-import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.ops.transforms.Transforms;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.aksw.limes.core.measures.measure.AMeasure;
+import org.junit.Test;
 
 public class Doc2VecMeasureTest {
 
-  private static final Logger log = LoggerFactory.getLogger(Doc2VecMeasure.class);
-
   @Test
-  public void testDL4J() throws Exception {
-    TokenizerFactory t = new DefaultTokenizerFactory();
-    t.setTokenPreProcessor(new CommonPreprocessor());
-
-    // we load externally originated model
-    ParagraphVectors vectors = WordVectorSerializer.readParagraphVectors(new File("src/test/resources/doc2vec-precomputed.pv"));
-    vectors.setTokenizerFactory(t);
-    vectors.getConfiguration().setIterations(1); // please note, we set iterations to 1 here, just to speedup inference
-
-        /*
-        // here's alternative way of doing this, word2vec model can be used directly
-        // PLEASE NOTE: you can't use Google-like model here, since it doesn't have any Huffman tree information shipped.
-
-        ParagraphVectors vectors = new ParagraphVectors.Builder()
-            .useExistingWordVectors(word2vec)
-            .build();
-        */
-    // we have to define tokenizer here, because restored model has no idea about it
-
-
-    INDArray inferredVectorA = vectors.inferVector("This is my world .");
-    INDArray inferredVectorA2 = vectors.inferVector("This is my world .");
-    INDArray inferredVectorB = vectors.inferVector("This is my way .");
-
-    // high similarity expected here, since in underlying corpus words WAY and WORLD have really close context
-    log.info("Cosine similarity A/B: {}", Transforms.cosineSim(inferredVectorA, inferredVectorB));
-
-    // equality expected here, since inference is happening for the same sentences
-    log.info("Cosine similarity A/A2: {}", Transforms.cosineSim(inferredVectorA, inferredVectorA2));
+  public void testMeasure() {
+    AMeasure measure = new Doc2VecMeasure(Doc2VecMeasure.DEFAULT_PRECOMPUTED_VECTORS_FILE_PATH);
+    String a = "You eat an apple";
+    String b = "You are eating an apple";
+    String c = "That man eats an apple";
+    String d = "That man is tall";
+    String e = "That woman is tall";
+    String f = "That woman is small";
+    String g = "That woman is old";
+    String h = "Her sister is a woman";
+    String ii = "His brother is a man";
+    String[] strings = new String[]{a,b,c,d,e,f,g,h,ii};
+    for (int i = 0; i < strings.length-1; i++) {
+      for (int j = i+1; j < strings.length; j++) {
+        String x = strings[i];
+        String y = strings[j];
+        System.out.println(x + " VS " + y + ": " + measure.getSimilarity(x, y));
+      }
+    }
+    assertTrue(measure.getSimilarity(a,b) > measure.getSimilarity(d, ii));
   }
 }
 

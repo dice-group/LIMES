@@ -91,6 +91,7 @@ public class MeasureFactory {
     public static final String SIMPLE_DICTIONARY = "simple_dictionary";
     public static final String WU_PALMER = "wu_palmer";
     public static final String WORD2VEC = "word2vec";
+    public static final String DOC2VEC = "doc2vec";
 
     // vector space measures
     public static final String EUCLIDEAN = "euclidean";
@@ -214,6 +215,9 @@ public class MeasureFactory {
         }
         if (measure.startsWith(WORD2VEC)) {
             return MeasureType.WORD2VEC;
+        }
+        if (measure.startsWith(DOC2VEC)) {
+            return MeasureType.DOC2VEC;
         }
         ////////////////////////////
         if (measure.startsWith(EUCLIDEAN)) {

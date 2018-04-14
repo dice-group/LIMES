@@ -40,6 +40,7 @@ import org.aksw.limes.core.measures.mapper.topology.IntersectsMapper;
 import org.aksw.limes.core.measures.mapper.topology.TouchesMapper;
 import org.aksw.limes.core.measures.mapper.topology.WithinMapper;
 import org.aksw.limes.core.measures.measure.MeasureType;
+import org.aksw.limes.core.measures.measure.string.Doc2VecMeasure;
 import org.aksw.limes.core.measures.measure.string.SimpleEditDistanceMeasure;
 import org.aksw.limes.core.measures.measure.string.bilang.BilangDictionary;
 import org.aksw.limes.core.measures.measure.string.bilang.SimpleDictionaryMeasure;
@@ -105,6 +106,9 @@ public class MapperFactory {
         case WORD2VEC:
             return new SimpleGeneralMapper(new Word2VecMeasure(
                 new WordEmbeddings(WordEmbeddings.DEFAULT_BILINGUAL_DICTIONARY_BASE_PATH)));
+        case DOC2VEC:
+            return new SimpleGeneralMapper(
+                new Doc2VecMeasure(Doc2VecMeasure.DEFAULT_PRECOMPUTED_VECTORS_FILE_PATH));
         ///////////////////////
         case EUCLIDEAN:
             return new HR3Mapper();
