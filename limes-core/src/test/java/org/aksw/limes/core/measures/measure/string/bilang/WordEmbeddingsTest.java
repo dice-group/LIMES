@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+import org.aksw.limes.core.measures.measure.AMeasure;
 import org.aksw.limes.core.measures.measure.string.bilang.WordEmbeddings.Vectord;
 import org.apache.commons.math3.util.Pair;
 import org.junit.Before;
@@ -80,7 +81,7 @@ public class WordEmbeddingsTest {
   }
 
   @Test
-  public void testCompareVersusWordNet() {
+  public void testCompareVersusWordNetVersusNaive() {
     try {
       ArrayList<String> words1 = new ArrayList<>();
       ArrayList<String> words2 = new ArrayList<>();
@@ -96,35 +97,21 @@ public class WordEmbeddingsTest {
         similarities.add(similarity);
       });
       lines.close();
+      BilangDictionary dictionary = new BilangDictionary(BilangDictionary.DEFAULT_DICTIONARY_PATH);
+      SimpleDictionaryMeasure naiveMeasure = new SimpleDictionaryMeasure(dictionary);
       WordNetInterface wn = new WordNetInterface("src/test/resources/WordNet-3.0");
+      System.out.println("human, naive, wordnet, embedding");
       int size = words1.size();
-      int weCorrect = 0;
-      int wnCorrect = 0;
-      for (int i = 0; i < size; i += 2) {
+      for (int i = 0; i < size; i++) {
         String a = words1.get(i);
         String b = words2.get(i);
-        String c = words1.get(i + 1);
-        String d = words2.get(i + 1);
-        double sim1 = similarities.get(i);
-        double sim2 = similarities.get(i + 1);
-        System.out.println(a + " " + b + " " + c + " " + d + " " + sim1 + " " + sim2);
-        if (sim1 < sim2 == we.getCosineSimilarityForWords(a, b) < we
-            .getCosineSimilarityForWords(c, d)) {
-          weCorrect++;
-          System.out.println("word2vec correct");
-        } else {
-          System.out.println("word2vec incorrect");
-        }
-        if (sim1 < sim2 == wn.computeWuPalmerSimilarity(a,b) < wn.computeWuPalmerSimilarity(c,d)) {
-          wnCorrect++;
-          System.out.println("wordnet correct");
-        } else {
-          System.out.println("wordnet incorrect");
-        }
-
+        double simHuman = similarities.get(i);
+        double simNaive = naiveMeasure.getSimilarity(a, b);
+        double simWordNet = wn.computeWuPalmerSimilarity(a, b);
+        double simWe = we.getCosineSimilarityForWords(a, b);
+        System.out.println(a + " " + b + " " + simHuman + " " + simNaive + " " +
+            simWordNet + " " + simWe);
       }
-      System.out.println("word2vec score (out of " + (size/2) + "): " + weCorrect);
-      System.out.println("WordNet score (out of " + (size/2) + "): " + wnCorrect);
     } catch (IOException e) {
       e.printStackTrace();
     }
