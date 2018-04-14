@@ -1,93 +1,53 @@
 package org.aksw.limes.core.measures.measure.string;
 
+import java.io.File;
 import org.junit.Test;
 
-
-import java.nio.file.Paths;
 import org.datavec.api.util.ClassPathResource;
+import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
-import org.deeplearning4j.models.word2vec.VocabWord;
-import org.deeplearning4j.models.word2vec.wordstore.inmemory.AbstractCache;
-import org.deeplearning4j.text.documentiterator.LabelsSource;
-import org.deeplearning4j.text.sentenceiterator.BasicLineIterator;
-import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.ops.transforms.Transforms;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
 
 public class Doc2VecMeasureTest {
 
   private static final Logger log = LoggerFactory.getLogger(Doc2VecMeasure.class);
 
   @Test
-  public void testMeasure() throws Exception {
-    System.out.println(new File("").getAbsolutePath());
-    File file = new File("src/test/resources/raw_sentences.txt");
-    SentenceIterator iter = new BasicLineIterator(file);
-
-    AbstractCache<VocabWord> cache = new AbstractCache<>();
-
+  public void testDL4J() throws Exception {
     TokenizerFactory t = new DefaultTokenizerFactory();
     t.setTokenPreProcessor(new CommonPreprocessor());
 
-        /*
-             if you don't have LabelAwareIterator handy, you can use synchronized labels generator
-              it will be used to label each document/sequence/line with it's own label.
+    // we load externally originated model
+    ParagraphVectors vectors = WordVectorSerializer.readParagraphVectors(new File("src/test/resources/doc2vec-precomputed.pv"));
+    vectors.setTokenizerFactory(t);
+    vectors.getConfiguration().setIterations(1); // please note, we set iterations to 1 here, just to speedup inference
 
-              But if you have LabelAwareIterator ready, you can can provide it, for your in-house labels
+        /*
+        // here's alternative way of doing this, word2vec model can be used directly
+        // PLEASE NOTE: you can't use Google-like model here, since it doesn't have any Huffman tree information shipped.
+
+        ParagraphVectors vectors = new ParagraphVectors.Builder()
+            .useExistingWordVectors(word2vec)
+            .build();
         */
-    LabelsSource source = new LabelsSource("DOC_");
+    // we have to define tokenizer here, because restored model has no idea about it
 
-    ParagraphVectors vec = new ParagraphVectors.Builder()
-        .minWordFrequency(1)
-        .iterations(5)
-        .epochs(1)
-        .layerSize(100)
-        .learningRate(0.025)
-        .labelsSource(source)
-        .windowSize(5)
-        .iterate(iter)
-        .trainWordVectors(false)
-        .vocabCache(cache)
-        .tokenizerFactory(t)
-        .sampling(0)
-        .build();
 
-    vec.fit();
+    INDArray inferredVectorA = vectors.inferVector("This is my world .");
+    INDArray inferredVectorA2 = vectors.inferVector("This is my world .");
+    INDArray inferredVectorB = vectors.inferVector("This is my way .");
 
-        /*
-            In training corpus we have few lines that contain pretty close words invloved.
-            These sentences should be pretty close to each other in vector space
+    // high similarity expected here, since in underlying corpus words WAY and WORLD have really close context
+    log.info("Cosine similarity A/B: {}", Transforms.cosineSim(inferredVectorA, inferredVectorB));
 
-            line 3721: This is my way .
-            line 6348: This is my case .
-            line 9836: This is my house .
-            line 12493: This is my world .
-            line 16393: This is my work .
-
-            this is special sentence, that has nothing common with previous sentences
-            line 9853: We now have one .
-
-            Note that docs are indexed from 0
-         */
-
-    double similarity1 = vec.similarity("DOC_9835", "DOC_12492");
-    log.info("9836/12493 ('This is my house .'/'This is my world .') similarity: " + similarity1);
-
-    double similarity2 = vec.similarity("DOC_3720", "DOC_16392");
-    log.info("3721/16393 ('This is my way .'/'This is my work .') similarity: " + similarity2);
-
-    double similarity3 = vec.similarity("DOC_6347", "DOC_3720");
-    log.info("6348/3721 ('This is my case .'/'This is my way .') similarity: " + similarity3);
-
-    // likelihood in this case should be significantly lower
-    double similarityX = vec.similarity("DOC_3720", "DOC_9852");
-    log.info("3721/9853 ('This is my way .'/'We now have one .') similarity: " + similarityX +
-        "(should be significantly lower)");
+    // equality expected here, since inference is happening for the same sentences
+    log.info("Cosine similarity A/A2: {}", Transforms.cosineSim(inferredVectorA, inferredVectorA2));
   }
 }
 
