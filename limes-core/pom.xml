@@ -8,6 +8,9 @@
     <description>LIMES – Link Discovery Framework for Metric Spaces.</description>
     <url>http://aksw.org/Projects/LIMES</url>
 
+
+
+
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -289,6 +292,11 @@
             <artifactId>deeplearning4j</artifactId>
             <version>0.9.1</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.deeplearning4j</groupId>-->
+            <!--<artifactId>deeplearning4j-examples-parent</artifactId>-->
+            <!--<version>1.0.0-alpha</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native-platform</artifactId>
@@ -587,6 +595,11 @@
             <groupId>edu.mit</groupId>
             <artifactId>jwi</artifactId>
             <version>2.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-nlp</artifactId>
+            <version>0.9.1</version>
         </dependency>
     </dependencies>
 
