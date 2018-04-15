@@ -7,6 +7,7 @@ import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.config.writer.RDFConfigurationWriter;
 import org.aksw.limes.core.io.config.writer.XMLConfigurationWriter;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.junit.Test;
 
 
@@ -15,7 +16,7 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
-public class NewTest1 {
+public class FullGraphSimilarityTest {
     @Test
     public void execute() throws Exception {
 
@@ -55,7 +56,7 @@ public class NewTest1 {
         XMLConfigurationReader.processProperty(target, "geom:geometry/geos:asWKT RENAME polygon");
         conf.setTargetInfo(target);
 
-        conf.setMetricExpression("graph_WSLKernel(x,y)");
+        conf.setMetricExpression("graph_wls(x,y)");
 
         conf.setAcceptanceFile("lgd_relaybox_verynear.nt");
         conf.setAcceptanceThreshold(0.9);
@@ -71,7 +72,7 @@ public class NewTest1 {
 
         conf.setOutputFormat("TAB");
 
-        Controller.getMapping(conf).getAcceptanceMapping();
+        AMapping mapping = Controller.getMapping(conf).getAcceptanceMapping();
         //ILIMESRunner run = new InMemLIMESRunner();
 
         //System.out.println(

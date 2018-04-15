@@ -1,7 +1,7 @@
 package org.aksw.limes.core.measures.mapper;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
-import org.aksw.limes.core.measures.mapper.Graphs.GraphSimilarityMapper;
+import org.aksw.limes.core.measures.mapper.graphs.WLSimilarityMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.resourcesets.SetJaccardMapper;
@@ -41,7 +41,6 @@ import org.aksw.limes.core.measures.mapper.topology.IntersectsMapper;
 import org.aksw.limes.core.measures.mapper.topology.TouchesMapper;
 import org.aksw.limes.core.measures.mapper.topology.WithinMapper;
 import org.aksw.limes.core.measures.measure.MeasureType;
-import org.aksw.limes.core.measures.measure.graphs.Graph;
 
 /**
  * Implements the mapper factory class. For each measure name, the factory
@@ -54,7 +53,6 @@ import org.aksw.limes.core.measures.measure.graphs.Graph;
  * @version 1.0
  */
 public class MapperFactory {
-    private static GraphSimilarityMapper similarityMapper;
 
     /**
      * Factory function for retrieving the desired mapper instance given an
@@ -179,8 +177,8 @@ public class MapperFactory {
         case SET_JACCARD:
             return new SetJaccardMapper();
 
-        //case GRAPH_WSL:
-          //  return new GraphSimilarityMapper();
+        case GRAPH_WLS:
+            return new WLSimilarityMapper();
 
         default:
             throw new InvalidMeasureException(type.toString());

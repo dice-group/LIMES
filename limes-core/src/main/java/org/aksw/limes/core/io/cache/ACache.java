@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
+import org.aksw.limes.core.io.config.KBInfo;
 import org.apache.jena.rdf.model.Model;
 
 /**
@@ -74,5 +75,23 @@ public abstract class ACache implements ICache {
      * @return JENA RDF Model
      */
     public abstract Model parseCSVtoRDFModel(String baseURI, String IDbaseURI, String rdfType);
+
+
+    //KBInfo is saved to get access to the endpoint in process of calculation
+    //But it can be null if the resources are not received by an endpoint
+    protected KBInfo kbInfo;
+
+
+    public KBInfo getKbInfo() {
+        return kbInfo;
+    }
+
+    public void setKbInfo(KBInfo kbInfo) {
+        this.kbInfo = kbInfo;
+    }
+
+
+
+
 
 }

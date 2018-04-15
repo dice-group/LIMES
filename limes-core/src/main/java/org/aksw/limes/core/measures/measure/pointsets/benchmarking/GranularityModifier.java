@@ -16,7 +16,7 @@ import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 public class GranularityModifier extends AbstractPolygonModifier {
 
     /**
-     * Modifies a polygon by reducing the total amount of points that describe
+     * Modifies a polygon by reducing the total amount of points that queryDescription
      * it to threshold * original number of points. Assumes that the threshold
      * is less than 1. If it larger than 1, then it is replaced by 1/threshold.
      * The reduction is carried out randomly by "flipping a coin".

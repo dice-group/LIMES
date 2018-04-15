@@ -105,6 +105,7 @@ public class HybridCache extends MemoryCache implements Serializable {
     public static HybridCache getData(File folder, KBInfo kb) {
 
         HybridCache cache = new HybridCache(folder);
+
         //1. Try to get content from a serialization
         String hash = kb.hashCode() + "";
         File cacheFile = new File(folder + "cache/" + hash + ".ser");
@@ -134,6 +135,7 @@ public class HybridCache extends MemoryCache implements Serializable {
             cache.saveToFile(new File(folder.getAbsolutePath() + File.separatorChar + "cache/" + hash + ".ser"));
         }
 
+        cache.setKbInfo(kb);
         return cache;
     }
 
@@ -159,6 +161,7 @@ public class HybridCache extends MemoryCache implements Serializable {
      */
     public static HybridCache getNoPrefixData(File folder, KBInfo kb) {
         HybridCache cache = new HybridCache();
+
         //1. Try to get content from a serialization
         File cacheFile = new File(folder.getAbsolutePath() + File.separatorChar + "cache/" + kb.hashCode() + ".ser");
         try {
@@ -185,6 +188,7 @@ public class HybridCache extends MemoryCache implements Serializable {
             cache.saveToFile(new File(folder.getAbsolutePath() + File.separatorChar + "cache/" + kb.hashCode() + ".ser"));
         }
 
+        cache.setKbInfo(kb);
         return cache;
     }
 

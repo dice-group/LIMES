@@ -88,7 +88,6 @@ public class MeasureFactory {
     public static final String TRIGRAM = "trigram";
     public static final String SIMPLE_EDIT_DISTANCE = "simple_edit_distance";
     public static final String HAMMING_DISTANCE = "hamming_distance";
-    public static final String WSL_KERNEL = "graph_wslkernel";
 
     // vector space measures
     public static final String EUCLIDEAN = "euclidean";
@@ -147,6 +146,9 @@ public class MeasureFactory {
 
     // Resource set measures
     public static final String SET_JACCARD = "set_jaccard";
+
+    //Graph measures
+    public static final String WLS_KERNEL = "graph_wls";
 
     /**
      * Factory function for retrieving a measure name from the set of allowed
@@ -357,8 +359,8 @@ public class MeasureFactory {
             return MeasureType.SET_JACCARD;
         }
 
-        if (measure.startsWith(WSL_KERNEL)){
-            return MeasureType.GRAPH_WSL;
+        if (measure.startsWith(WLS_KERNEL)){
+            return MeasureType.GRAPH_WLS;
 
         }
         throw new InvalidMeasureException(measure);
