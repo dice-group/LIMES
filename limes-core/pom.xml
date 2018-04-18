@@ -100,22 +100,19 @@
                     </execution>
                 </executions>
             </plugin>
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-javadoc-plugin</artifactId>
-    <version>2.10.2</version>
-    <executions>
-        <execution>
-            <id>attach-javadocs</id>
-            <goals>
-                <goal>jar</goal>
-            </goals>
-            <configuration> <!-- add this to disable checking -->
-                <additionalparam>-Xdoclint:none</additionalparam>
-            </configuration>
-        </execution>
-    </executions>
-</plugin>
+	<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+	</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -141,7 +138,7 @@
                     <forkMode>pertest</forkMode>
                     <argLine>${argLine} -Xms256m -Xmx512m</argLine>
                     <testFailureIgnore>false</testFailureIgnore>
-                    <skipTests>false</skipTests>
+                    <skipTests>true</skipTests>
                     <useManifestOnlyJar>false</useManifestOnlyJar>
                     <!-- used to debug one only package via CLI (mvn test -DtestGroup=org/aksw/limes/...) -->
                     <!-- <includes>
