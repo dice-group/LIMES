@@ -20,7 +20,13 @@
 
     <build>
 	<plugins>
-
+		<plugin>
+      			<groupId>org.apache.maven.plugins</groupId>
+      			<artifactId>maven-javadoc-plugin</artifactId>
+      			<configuration>
+        			<additionalparam>-Xdoclint:none</additionalparam>
+      			</configuration>
+    		</plugin>
 		<plugin>
                 	<groupId>org.jacoco</groupId>
                 	<artifactId>jacoco-maven-plugin</artifactId>
@@ -101,7 +107,7 @@
                     		<forkMode>pertest</forkMode>
                     		<argLine>@{argLine} -Xms256m -Xmx512m</argLine>
                     		<testFailureIgnore>false</testFailureIgnore>
-                    		<skipTests>false</skipTests>
+                    		<skipTests>true</skipTests>
 				<useManifestOnlyJar>false</useManifestOnlyJar>
                     		<excludes>
             				<exclude>**/LeastCommonSubsumerFinderTest.java</exclude>
