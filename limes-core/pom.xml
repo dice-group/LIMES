@@ -19,180 +19,159 @@
     </scm>
 
     <build>
-	
+	<plugins>
 
+		<plugin>
+                	<groupId>org.jacoco</groupId>
+                	<artifactId>jacoco-maven-plugin</artifactId>
+                	<version>0.7.7.201606060606</version>
+                	<executions>
+                    		<execution>
+                        		<id>pre-unit-test</id>
+                        		<goals>
+                            			<goal>prepare-agent</goal>
+                        		</goals>
+                    		</execution>
+                    		<execution>
+                        		<id>post-unit-test</id>
+                        		<phase>test</phase>
+                        		<goals>
+                            			<goal>report</goal>
+                        		</goals>
+                    		</execution>
+                	</executions>
+	 	</plugin>
 
-        <plugins>
+            	<plugin>
+                	<groupId>org.apache.maven.plugins</groupId>
+                	<artifactId>maven-release-plugin</artifactId>
+                	<version>2.5.1</version>
+                	<configuration>
+                    		<arguments>-P!source-artifacts</arguments>
+                    		<useReleaseProfile>false</useReleaseProfile>
+                    		<goals>-Dmaven.test.skip=true deploy</goals>
+                	</configuration>
+		</plugin>
 
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.7.201606060606</version>
-                <executions>
-                    <execution>
-                        <id>pre-unit-test</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Temporary solution! -->
+            	<plugin>
+                	<groupId>org.apache.maven.plugins</groupId>
+                	<artifactId>maven-compiler-plugin</artifactId>
+                	<version>3.1</version>
+                	<configuration>
+                    		<source>${maven.compiler.source}</source>
+                    		<target>${maven.compiler.target}</target>
+                    		<encoding>${project.build.sourceEncoding}</encoding>
+                	</configuration>
+		</plugin>
 
-       		
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.1</version>
-                <configuration>
-                    <arguments>-P!source-artifacts</arguments>
-                    <useReleaseProfile>false</useReleaseProfile>
-                    <goals>-Dmaven.test.skip=true deploy</goals>
-                </configuration>
-            </plugin>
+            	<plugin>
+                	<groupId>org.apache.maven.plugins</groupId>
+                	<artifactId>maven-source-plugin</artifactId>
+                	<version>2.2.1</version>
+                	<executions>
+                    		<execution>
+                        		<id>attach-sources</id>
+                        		<phase>verify</phase>
+                        		<goals>
+                            			<goal>jar-no-fork</goal>
+                        		</goals>
+                   		</execution>
+                	</executions>
+		</plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-	<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-	</plugin>
+                <plugin>
+                	<groupId>org.apache.maven.plugins</groupId>
+                	<artifactId>maven-javadoc-plugin</artifactId>
+                	<version>2.9.1</version>
+                	<executions>
+                    		<execution>
+                        		<id>attach-javadocs</id>
+                        		<goals>
+                            			<goal>jar</goal>
+                        		</goals>
+                    		</execution>
+                	</executions>
+		</plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.17</version>
-                <configuration>
-                    <forkMode>pertest</forkMode>
-                    <argLine>${argLine} -Xms256m -Xmx512m</argLine>
-                    <testFailureIgnore>false</testFailureIgnore>
-                    <skipTests>true</skipTests>
-                    <useManifestOnlyJar>false</useManifestOnlyJar>
-                    <excludes>
-            		<exclude>**/LeastCommonSubsumerFinderTest.java</exclude>
-            		<exclude>**/AEdgeCountingSemanticMeasureTest.java</exclude>
-	    		<exclude>**/LCHMeasureTest.java</exclude>
-            		<exclude>**/LiMeasureTest.java</exclude>
-	    		<exclude>**/ShortestPathMeasureTest.java</exclude>
-            		<exclude>**/StopWordsTest.java</exclude>
-            		<exclude>**/Test1.java</exclude>
-            		<exclude>**/WuPalmerMeasureTest.java</exclude>
-	   		 <exclude>**/XMLConfigurationReaderTest.java</exclude>
-         	 </excludes>
-                </configuration>
+                	<groupId>org.apache.maven.plugins</groupId>
+                	<artifactId>maven-surefire-plugin</artifactId>
+			<version>2.20.1</version>
+                	<configuration>
+                    		<forkMode>pertest</forkMode>
+                    		<argLine>@{argLine} -Xms256m -Xmx512m</argLine>
+                    		<testFailureIgnore>false</testFailureIgnore>
+                    		<skipTests>false</skipTests>
+				<useManifestOnlyJar>false</useManifestOnlyJar>
+                    		<excludes>
+            				<exclude>**/LeastCommonSubsumerFinderTest.java</exclude>
+            				<exclude>**/AEdgeCountingSemanticMeasureTest.java</exclude>
+	    				<exclude>**/LCHMeasureTest.java</exclude>
+            				<exclude>**/LiMeasureTest.java</exclude>
+	    				<exclude>**/ShortestPathMeasureTest.java</exclude>
+            				<exclude>**/StopWordsTest.java</exclude>
+            				<exclude>**/Test1.java</exclude>
+            				<exclude>**/WuPalmerMeasureTest.java</exclude>
+	   		 		<exclude>**/XMLConfigurationReaderTest.java</exclude>
+         	 		</excludes>
+                	</configuration>
                 
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
-                <configuration>
-                    <!-- filter all the META-INF files of other artifacts -->
-                    <filters>
-                        <filter>
-                            <artifact>*:*</artifact>
-                            <excludes>
-                                <exclude>META-INF/*.SF</exclude>
-                                <exclude>META-INF/*.DSA</exclude>
-                                <exclude>META-INF/*.RSA</exclude>
-                            </excludes>
-                        </filter>
-                    </filters>
-                    <transformers>
-                        <transformer
-                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>org.aksw.limes.core.controller.Controller</mainClass>
-                            <manifestEntries>
-                                <X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
-                                <X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
-                            </manifestEntries>
-                        </transformer>
-                        <transformer
-                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                    </transformers>
-                </configuration>
-            </plugin>
+             <plugin>
+             		<groupId>org.apache.maven.plugins</groupId>
+                	<artifactId>maven-shade-plugin</artifactId>
+                	<version>2.4.3</version>
+                	<configuration>
+                    		<filters>
+                        		<filter>
+                            			<artifact>*:*</artifact>
+                            			<excludes>
+                                			<exclude>META-INF/*.SF</exclude>
+                                			<exclude>META-INF/*.DSA</exclude>
+                                			<exclude>META-INF/*.RSA</exclude>
+                            			</excludes>
+                        		</filter>
+                    		</filters>
+                    		<transformers>
+                        		<transformer
+                                		implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            			<mainClass>org.aksw.limes.core.controller.Controller</mainClass>
+                            			<manifestEntries>
+                                			<X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
+                                			<X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
+                            			</manifestEntries>
+                        		</transformer>
+                        		<transformer
+                                		implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                    		</transformers>
+                	</configuration>
+	    </plugin>
 
             <plugin>
-                <artifactId>exec-maven-plugin</artifactId>
-                <groupId>org.codehaus.mojo</groupId>
-                <executions>
-                    <execution><!-- symlink hooks to git -->
-                        <id>Git-Hooks-Setup</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${basedir}/../git-hooks/setup.sh</executable>
-                            <workingDirectory>${basedir}/../git-hooks</workingDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.17</version>
-                <executions>
-                    <execution>
-                        <id>validate</id>
-                        <phase>validate</phase>
-                        <configuration>
-                            <configLocation>resources/checkstyle.xml</configLocation>
-                            <encoding>UTF-8</encoding>
-                            <consoleOutput>false</consoleOutput>
-                            <failsOnError>true</failsOnError>
-                            <linkXRef>false</linkXRef>
-                        </configuration>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+                	<groupId>org.apache.maven.plugins</groupId>
+                	<artifactId>maven-checkstyle-plugin</artifactId>
+                	<version>3.0.0</version>
+                	<executions>
+                    		<execution>
+                        		<id>validate</id>
+                        		<phase>validate</phase>
+                        		<configuration>
+                            			<configLocation>resources/checkstyle.xml</configLocation>
+                            			<encoding>UTF-8</encoding>
+                            			<consoleOutput>false</consoleOutput>
+                            			<failsOnError>true</failsOnError>
+                            			<linkXRef>false</linkXRef>
+                        		</configuration>
+                        		<goals>
+                            			<goal>check</goal>
+                       			</goals>
+                    		</execution>
+                	</executions>
+		</plugin>
         </plugins>
+
+
         <pluginManagement>
             <plugins>
                 <!--This plugin's configuration is used to store Eclipse m2e settings
@@ -220,13 +199,13 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore></ignore>
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
                         </lifecycleMappingMetadata>
                     </configuration>
-                </plugin>
+		</plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -236,12 +215,12 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.3</version>
-            </plugin>
+                <version>3.0.5</version>
+	    </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.6</version>
+                <version>3.9.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -257,7 +236,7 @@
                         </reports>
                     </reportSet>
                 </reportSets>
-            </plugin>
+	    </plugin>
         </plugins>
     </reporting>
 
@@ -294,44 +273,31 @@
     </repositories>
 
     <dependencies>
-<dependency>
-    <groupId>xml-apis</groupId>
-    <artifactId>xml-apis</artifactId>
-    <version>1.4.01</version>
-</dependency>
+
+	<dependency>
+    		<groupId>xml-apis</groupId>
+    		<artifactId>xml-apis</artifactId>
+    		<version>1.4.01</version>
+	</dependency>
+
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.21</version>
+            	<groupId>org.slf4j</groupId>
+            	<artifactId>slf4j-api</artifactId>
+            	<version>1.7.21</version>
         </dependency>
-	<!-- main library dependency -->
+
 	<dependency>
             	<groupId>edu.mit</groupId>
            	 <artifactId>jwi</artifactId>
             	<version>2.4.1-SNAPSHOT</version>
 	</dependency>
-	
-	<!-- Princeton WordNet 3.1 data dependency -->
-	
- 	
-	<!-- https://mvnrepository.com/artifact/edu.stanford.nlp/stanford-corenlp -->
-	<dependency>
-    		<groupId>edu.stanford.nlp</groupId>
-    		<artifactId>stanford-corenlp</artifactId>
-    		<version>3.9.1</version>
-	</dependency>
-	<dependency>
-    		<groupId>edu.stanford.nlp</groupId>
-    		<artifactId>stanford-corenlp</artifactId>
-    		<version>3.9.1</version>
-    		<classifier>models</classifier>
-	</dependency>
-	<!-- https://mvnrepository.com/artifact/com.carrotsearch/hppc -->
+
 	<dependency>
     		<groupId>com.carrotsearch</groupId>
     		<artifactId>hppc</artifactId>
     		<version>0.7.3</version>
 	</dependency>
+
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
