@@ -13,11 +13,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class APRFTest {
-	GoldStandard gold1to1;
-	GoldStandard gold1toN;
+	public GoldStandard gold1to1;
+	public GoldStandard gold1toN;
 	
-	AMapping pred;
-	List<String> dataset;
+	public AMapping pred;
+	public AMapping predWithNegativeExamples;
+	public List<String> dataset;
 	
 	@Before
 	public void setupData(){
@@ -25,6 +26,7 @@ public class APRFTest {
 		gold1to1 = initGoldStandard1to1List();
 		gold1toN = initGoldStandard1toNList();
 		pred = initPredictionsList();
+		predWithNegativeExamples = initPredictionsWithNegativeExamplesList();
 	}
 
 	@Test
@@ -37,6 +39,15 @@ public class APRFTest {
 		assertEquals(3.0, falsePositive, 0.0);
 		double falseNegative = APRF.falseNegative(pred, gold1to1.referenceMappings);
 		assertEquals(3.0, falseNegative, 0.0);
+
+		double truePositiveNeg = APRF.trueFalsePositive(predWithNegativeExamples, gold1to1.referenceMappings, true);
+		assertEquals(7.0, truePositiveNeg, 0.0);
+		double trueNegativeNeg = APRF.trueNegative(predWithNegativeExamples, gold1to1);
+		assertEquals(87.0, trueNegativeNeg, 0.0);
+		double falsePositiveNeg = APRF.trueFalsePositive(predWithNegativeExamples, gold1to1.referenceMappings, false);
+		assertEquals(3.0, falsePositiveNeg, 0.0);
+		double falseNegativeNeg = APRF.falseNegative(predWithNegativeExamples, gold1to1.referenceMappings);
+		assertEquals(3.0, falseNegativeNeg, 0.0);
 	}
 
 	@Test
@@ -51,6 +62,15 @@ public class APRFTest {
 		assertEquals(2.0, falsePositive, 0.0);
 		double falseNegative = APRF.falseNegative(pred, gold1toN.referenceMappings);
 		assertEquals(3.0, falseNegative, 0.0);
+
+		double truePositiveNeg = APRF.trueFalsePositive(predWithNegativeExamples, gold1toN.referenceMappings, true);
+		assertEquals(8.0, truePositiveNeg, 0.0);
+		double trueNegativeNeg = APRF.trueNegative(predWithNegativeExamples, gold1toN);
+		assertEquals(87.0, trueNegativeNeg, 0.0);
+		double falsePositiveNeg = APRF.trueFalsePositive(predWithNegativeExamples, gold1toN.referenceMappings, false);
+		assertEquals(2.0, falsePositiveNeg, 0.0);
+		double falseNegativeNeg = APRF.falseNegative(predWithNegativeExamples, gold1toN.referenceMappings);
+		assertEquals(3.0, falseNegativeNeg, 0.0);
 	}
 
     private GoldStandard initGoldStandard1to1List() {
@@ -99,7 +119,27 @@ public class APRFTest {
         pred.add("http://dbpedia.org/resource/H", "http://dbpedia.org/resource/H", 1);
         pred.add("http://dbpedia.org/resource/I", "http://dbpedia.org/resource/H", 1);
         pred.add("http://dbpedia.org/resource/I", "http://dbpedia.org/resource/I", 1);
+        return pred;
+    }
 
+    private AMapping initPredictionsWithNegativeExamplesList() {
+
+        AMapping pred = MappingFactory.createDefaultMapping();
+        pred.add("http://dbpedia.org/resource/A", "http://dbpedia.org/resource/A", 1);
+        pred.add("http://dbpedia.org/resource/B", "http://dbpedia.org/resource/B", 1);
+        pred.add("http://dbpedia.org/resource/C", "http://dbpedia.org/resource/C", 1);
+        pred.add("http://dbpedia.org/resource/C", "http://dbpedia.org/resource/D", 1);
+        pred.add("http://dbpedia.org/resource/D", "http://dbpedia.org/resource/F", 1);
+        pred.add("http://dbpedia.org/resource/F", "http://dbpedia.org/resource/F", 1);
+        pred.add("http://dbpedia.org/resource/G", "http://dbpedia.org/resource/G", 1);
+        pred.add("http://dbpedia.org/resource/H", "http://dbpedia.org/resource/H", 1);
+        pred.add("http://dbpedia.org/resource/I", "http://dbpedia.org/resource/H", 1);
+        pred.add("http://dbpedia.org/resource/I", "http://dbpedia.org/resource/I", 1);
+        pred.add("http://dbpedia.org/resource/F", "http://dbpedia.org/resource/A", 0);
+        pred.add("http://dbpedia.org/resource/G", "http://dbpedia.org/resource/B", 0);
+        pred.add("http://dbpedia.org/resource/H", "http://dbpedia.org/resource/D", 0);
+        pred.add("http://dbpedia.org/resource/I", "http://dbpedia.org/resource/C", 0);
+        pred.add("http://dbpedia.org/resource/I", "http://dbpedia.org/resource/F", 0);
         return pred;
 
     }
