@@ -2,11 +2,14 @@ package org.aksw.limes.core.measures.measure.semantic.edgecounting;
 
 import java.util.List;
 
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.LeastCommonSubsumer;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.ShortestPathFinder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.mit.jwi.item.ISynset;
 
 public class ShortestPathMeasure extends AEdgeCountingSemanticMeasure {
+    private static final Logger logger = LoggerFactory.getLogger(ShortestPathMeasure.class);
 
     public ShortestPathMeasure() {
         super();
@@ -18,19 +21,34 @@ public class ShortestPathMeasure extends AEdgeCountingSemanticMeasure {
     public double getSimilarity(ISynset synset1, List<List<ISynset>> synset1Tree, ISynset synset2,
             List<List<ISynset>> synset2Tree) {
 
-        if (synset1.getType() != synset2.getType())
+        if (synset1.getType() != synset2.getType()) {
+            logger.info(synset1.getType() + " " + synset2.getType());
             return 0;
+        }
+
+        if (synset1Tree.isEmpty() == true || synset2Tree.isEmpty() == true) {
+            logger.info("Empty trees");
+            return 0;
+        }
 
         if (synset1.getOffset() == synset2.getOffset()) {
+            logger.info("Max value: " + maxValue);
             return maxValue;
         }
 
-        LeastCommonSubsumer lcs = this.getLeastCommonSubsumer(synset1, synset1Tree, synset2, synset2Tree);
+        int shortestPath = ShortestPathFinder.shortestPath(synset1Tree, synset2Tree);
+        if (shortestPath == -1) {
+            logger.error("Error finding shortest path");
+            return 0;
+        }
 
-        double D = (double) getHierarchyDepth(lcs.getCommonSynset().getType());
-        double sim = (double) (2.0 * D) - (double) (lcs.getSynsetsDistance());
+        logger.info("Synsets distance " + shortestPath);
+
+        double D = (double) getHierarchyDepth(synset1.getType());
+        double sim = (double) (2.0 * D) - (double) (shortestPath);
         // normalize
         sim /= (double) (2.0 * D);
+        logger.info("Similarity: " + sim);
         return sim;
     }
 
