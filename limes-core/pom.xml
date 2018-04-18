@@ -18,6 +18,17 @@
     </scm>
 
     <build>
+	<resources>
+      	<resource>
+        <directory>src/test/java/org/aksw/limes/core/measures/</directory>
+        <excludes>
+          <exclude>mapper/semantic/*</exclude>
+          <exclude>measure/semantic/*</exclude>
+        </excludes>
+      </resource>
+    </resources>
+
+
         <plugins>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -41,17 +52,7 @@
             </plugin>
             <!-- Temporary solution! -->
 
-       		<plugin>
-            		<groupId>org.apache.maven.plugins</groupId>
-            		<artifactId>maven-compiler-plugin</artifactId>
-            		<version>2.3.2</version>
-            		<configuration>
-                 		<excludes>
-                			<exclude>src/test/java/org/aksw/limes/core/measures/mapper/semantic/*</exclude>
-					<exclude>src/test/java/org/aksw/limes/core/measures/measure/semantic/*</exclude>
-          			</excludes>
-            		</configuration>
-        	</plugin>
+       		
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
