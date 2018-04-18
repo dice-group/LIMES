@@ -20,10 +20,10 @@
     <build>
 	<resources>
       	<resource>
-        <directory>src/test/java/org/aksw/limes/core/measures/</directory>
+        <directory>src/test/java/org/aksw/limes/core/measures</directory>
         <excludes>
-          <exclude>mapper/semantic/*</exclude>
-          <exclude>measure/semantic/*</exclude>
+          <exclude>mapper/semantic/**</exclude>
+          <exclude>measure/semantic/**</exclude>
         </excludes>
       </resource>
     </resources>
