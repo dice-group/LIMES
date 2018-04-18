@@ -39,7 +39,12 @@
                     </execution>
                 </executions>
             </plugin>
-
+	<configuration>
+          <excludes>
+                <exclude>src/test/java/org/aksw/limes/core/measures/mapper/semantic/*</exclude>
+		<exclude>src/test/java/org/aksw/limes/core/measures/measure/semantic/*</exclude>
+          </excludes>
+        </configuration>
             <!-- Temporary solution! -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
