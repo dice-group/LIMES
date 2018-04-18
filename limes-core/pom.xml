@@ -110,7 +110,6 @@
             				<exclude>**/LiMeasureTest.java</exclude>
 	    				<exclude>**/ShortestPathMeasureTest.java</exclude>
             				<exclude>**/StopWordsTest.java</exclude>
-            				<exclude>**/Test1.java</exclude>
             				<exclude>**/WuPalmerMeasureTest.java</exclude>
 	   		 		<exclude>**/XMLConfigurationReaderTest.java</exclude>
          	 		</excludes>
