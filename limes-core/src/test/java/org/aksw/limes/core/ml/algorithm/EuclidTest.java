@@ -19,8 +19,10 @@ import org.junit.Test;
 public class EuclidTest extends MLAlgorithmTest{
 	
 
-	@Test
+	@SuppressWarnings("unchecked")
+    @Test
 	public void testAlgorithms() {
+        @SuppressWarnings("rawtypes")
         Class[] algorithms = {
         		LinearEuclid.class, 
         		BooleanEuclid.class,

@@ -3,6 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>limes-core</artifactId>
     <name>LIMES</name>
+	<version>1.3.0</version>
     <description>LIMES – Link Discovery Framework for Metric Spaces.</description>
     <url>http://aksw.org/Projects/LIMES</url>
 
@@ -23,24 +24,6 @@
 
         <plugins>
 
-<plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.21.0</version>
-        <configuration>
-          <excludes>
-            <exclude>**/LeastCommonSubsumerFinderTest.java</exclude>
-            <exclude>**/AEdgeCountingSemanticMeasureTest.java</exclude>
-	    <exclude>**/LCHMeasureTest.java</exclude>
-            <exclude>**/LiMeasureTest.java</exclude>
-	    <exclude>**/ShortestPathMeasureTest.java</exclude>
-            <exclude>**/StopWordsTest.java</exclude>
-            <exclude>**/Test1.java</exclude>
-            <exclude>**/WuPalmerMeasureTest.java</exclude>
-	    <exclude>**/XMLConfigurationReaderTest.java</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -124,10 +107,17 @@
                     <testFailureIgnore>false</testFailureIgnore>
                     <skipTests>true</skipTests>
                     <useManifestOnlyJar>false</useManifestOnlyJar>
-                    <!-- used to debug one only package via CLI (mvn test -DtestGroup=org/aksw/limes/...) -->
-                    <!-- <includes>
-                        <include>**/${testGroup}/*Test.java</include>
-                    </includes> -->
+                    <excludes>
+            		<exclude>**/LeastCommonSubsumerFinderTest.java</exclude>
+            		<exclude>**/AEdgeCountingSemanticMeasureTest.java</exclude>
+	    		<exclude>**/LCHMeasureTest.java</exclude>
+            		<exclude>**/LiMeasureTest.java</exclude>
+	    		<exclude>**/ShortestPathMeasureTest.java</exclude>
+            		<exclude>**/StopWordsTest.java</exclude>
+            		<exclude>**/Test1.java</exclude>
+            		<exclude>**/WuPalmerMeasureTest.java</exclude>
+	   		 <exclude>**/XMLConfigurationReaderTest.java</exclude>
+         	 </excludes>
                 </configuration>
                 
             </plugin>
