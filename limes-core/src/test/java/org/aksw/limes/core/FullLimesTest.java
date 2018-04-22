@@ -11,11 +11,11 @@ import org.junit.Test;
 public class FullLimesTest {
   @Before
   public void setUp() {
-    System.out.println(new File("").getAbsolutePath());
-    WordFrequencies wf = WordFrequencies
-        .fromWordFrequencyFile(Paths.get("src/test/resources/en-freq.txt"));
-    wf = wf.merge(WordFrequencies.fromWordFrequencyFile(Paths.get("src/test/resources/de-freq.txt")));
-    DictionaryUtil.initInstance(wf);
+//    System.out.println(new File("").getAbsolutePath());
+//    WordFrequencies wf = WordFrequencies
+//        .fromWordFrequencyFile(Paths.get("src/test/resources/en-freq.txt"));
+//    wf = wf.merge(WordFrequencies.fromWordFrequencyFile(Paths.get("src/test/resources/de-freq.txt")));
+//    DictionaryUtil.initInstance(wf);
   }
 
   @Test
@@ -33,6 +33,12 @@ public class FullLimesTest {
   @Test
   public void testMainHobbies() {
     String configPath = "src/test/resources/hobbies-config.xml";
+    Controller.main(new String[]{configPath});
+  }
+
+  @Test
+  public void testMainSparql() {
+    String configPath = "src/test/resources/with-sparql-config.xml";
     Controller.main(new String[]{configPath});
   }
 }
