@@ -47,18 +47,52 @@ public class Doc2VecMeasureTest {
       + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
       + "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
       + "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n"
-      + "PREFIX dc: <http://purl.org/dc/elements/1.1/>\n"
       + "PREFIX dbr: <http://dbpedia.org/resource/>\n"
       + "PREFIX dbo: <http://dbpedia.org/ontology/>\n"
-      + "PREFIX dbp: <http://dbpedia.org/property/>\n"
-      + "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n";
+      + "PREFIX dbp: <http://dbpedia.org/property/>\n";
 
   @Test
-  public void testWithSparql() {
+  public void testSparqlSimple() {
+    String queryString = "\n"
+        + "PREFIX imdb: <http://data.linkedmdb.org/resource/movie/>\n"
+        + "PREFIX dcterms: <http://purl.org/dc/terms/>\n"
+        + "PREFIX dbpo: <http://dbpedia.org/ontology/>\n"
+        + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+        + "\n"
+        + "SELECT ?birthDate ?spouseName ?movieTitle ?movieDate {\n"
+        + "  { SERVICE <http://dbpedia.org/sparql>\n"
+        + "    { SELECT ?birthDate ?spouseName WHERE {\n"
+        + "        ?actor rdfs:label \"Arnold Schwarzenegger\"@en ;\n"
+        + "               dbpo:birthDate ?birthDate ;\n"
+        + "               dbpo:spouse ?spouseURI .\n"
+        + "        ?spouseURI rdfs:label ?spouseName .\n"
+        + "        FILTER ( lang(?spouseName) = \"en\" )\n"
+        + "      }\n"
+        + "    }\n"
+        + "  }\n"
+        + "  { SERVICE <http://data.linkedmdb.org/sparql>\n"
+        + "    { SELECT ?actor ?movieTitle ?movieDate WHERE {\n"
+        + "      ?actor imdb:actor_name \"Arnold Schwarzenegger\".\n"
+        + "      ?movie imdb:actor ?actor ;\n"
+        + "             dcterms:title ?movieTitle ;\n"
+        + "             dcterms:date ?movieDate .\n"
+        + "      }\n"
+        + "    }\n"
+        + "  }\n"
+        + "}";
+
+    Query query = QueryFactory.create(queryString);
+    QueryExecution qExe = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
+    ResultSet results = qExe.execSelect();
+    ResultSetFormatter.out(System.out, results, query) ;
+  }
+
+  @Test
+  public void testWithSparqlAbstractComparison() {
 
     String queryString = DEFAULT_SPARQL_PREFIXES +
         "select distinct ?x ?name ?abstract {\n"
-        + "?x a dbo:Film;\n"
+        + "?x a owl:Thing;\n"
         + "foaf:name ?name;\n"
         + "dbo:abstract ?abstract.\n"
         + "FILTER (langMatches(lang(?abstract),\"en\"))\n"
@@ -76,6 +110,7 @@ public class Doc2VecMeasureTest {
       abstracts.add(x.getLiteral("abstract").getString());
     }
     int size = names.size();
+    System.out.println(size + " entity names");
     Doc2VecMeasure measure = new Doc2VecMeasure(Doc2VecMeasure.DEFAULT_PRECOMPUTED_VECTORS_FILE_PATH);
     ArrayList<Pair<Double, String>> comparisons = new ArrayList<>();
 
