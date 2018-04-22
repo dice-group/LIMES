@@ -74,9 +74,13 @@ public class Doc2VecMeasure extends AStringMeasure {
   public double getSimilarity(Object object1, Object object2) {
     String a = ("" + object1).toLowerCase();
     String b = ("" + object2).toLowerCase();
-    INDArray inferredVectorA = vectors.inferVector(a);
-    INDArray inferredVectorB = vectors.inferVector(b);
-    return Transforms.cosineSim(inferredVectorA, inferredVectorB);
+    try {
+      INDArray inferredVectorA = vectors.inferVector(a);
+      INDArray inferredVectorB = vectors.inferVector(b);
+      return Transforms.cosineSim(inferredVectorA, inferredVectorB);
+    } catch (RuntimeException e) {
+      return 0.0;
+    }
   }
 
   @Override
