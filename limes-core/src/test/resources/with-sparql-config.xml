@@ -41,7 +41,7 @@
     <PROPERTY>foaf:name AS lowercase</PROPERTY>
     <TYPE>sparql</TYPE>
   </TARGET>
-  <METRIC>simple_edit_distance(x.foaf:name, y.foaf:name)</METRIC>
+  <METRIC>doc2vec(x.foaf:name, y.foaf:name)</METRIC>
   <!--
   <METRIC>AND(exactmatch(x.prop:email, y.prop:email)|0.9, mongeelkan(x.prop:name, y.prop:name)|0.07)</METRIC>
   <METRIC>AND(exactmatch(x.prop:email, y.prop:email)|0.9, simple_edit_distance(x.prop:name, y.prop:name)|0.07)</METRIC>

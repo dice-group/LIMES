@@ -1,8 +1,16 @@
 package org.aksw.limes.core.measures.measure.string;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.aksw.limes.core.measures.measure.AMeasure;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFormatter;
+import org.apache.jena.rdf.model.RDFNode;
 import org.junit.Test;
 
 public class Doc2VecMeasureTest {
@@ -29,6 +37,34 @@ public class Doc2VecMeasureTest {
     }
     assertTrue(measure.getSimilarity(a, b) > measure.getSimilarity(b, d));
     assertTrue(measure.getSimilarity(g, h) > measure.getSimilarity(h, ii));
+  }
+
+  @Test
+  public void testWithSparql() {
+    String s2 = "PREFIX  g:    <http://www.w3.org/2003/01/geo/wgs84_pos#>\n" +
+        "PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+        "PREFIX  onto: <http://dbpedia.org/ontology/>\n" +
+        "\n" +
+        "SELECT  ?subject ?stadium ?lat ?long\n" +
+        "WHERE\n" +
+        "  { ?subject g:lat ?lat .\n" +
+        "    ?subject g:long ?long .\n" +
+        "    ?subject <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> onto:Stadium .\n" +
+        "    ?subject rdfs:label ?stadium\n" +
+        "    FILTER ( ( ( ( ( ?lat >= 52.4814 ) && ( ?lat <= 57.4814 ) ) && ( ?long >= -1.89358 ) ) && ( ?long <= 3.10642 ) ) && ( lang(?stadium) = \"en\" ) )\n"
+        +
+        "  }\n" +
+        "LIMIT   5\n" +
+        "";
+
+    Query query = QueryFactory.create(s2);
+    QueryExecution qExe = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
+    ResultSet results = qExe.execSelect();
+    while (results.hasNext()) {
+      QuerySolution x = results.next();
+      System.out.println(x.get("subject"));
+    }
+
   }
 }
 
