@@ -10,6 +10,7 @@ import org.aksw.limes.core.measures.mapper.string.EDJoinMapper;
 import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
 import org.aksw.limes.core.measures.mapper.string.JaroMapper;
 import org.aksw.limes.core.measures.mapper.string.JaroWinklerMapper;
+import org.aksw.limes.core.measures.mapper.string.KoelnPhoneticMapper;
 import org.aksw.limes.core.measures.mapper.string.MongeElkanMapper;
 import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
 import org.aksw.limes.core.measures.mapper.string.RatcliffObershelpMapper;
@@ -84,6 +85,8 @@ public class MapperFactory {
             return new SoundexMapper();
         case DOUBLEMETA:
         	return new DoubleMetaphoneMapper();
+        case KOELN:
+        	return new KoelnPhoneticMapper();
         case MONGEELKAN:
             return new MongeElkanMapper();
         case RATCLIFF:

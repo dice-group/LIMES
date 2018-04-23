@@ -14,12 +14,6 @@ public class EDoubleMetaphone {
 		slavoGermanic = checkSlavoGermanic();
 		
 		calculateMetaphone();
-		while (metaphone.length()<4) {
-			metaphone += " ";
-		}
-		while (metaphone2.length()<4) {
-			metaphone2 += " ";
-		}
 	}
 	
 	private boolean checkSlavoGermanic() {
@@ -84,7 +78,6 @@ public class EDoubleMetaphone {
 	}
 	
 	private void calculateMetaphone() {
-		int i = 0;
 		
         int current = 0;
 

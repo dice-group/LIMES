@@ -15,14 +15,14 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
-import org.aksw.limes.core.measures.measure.string.DoubleMetaphoneMeasure;
+import org.aksw.limes.core.measures.measure.string.KoelnPhoneticMeasure;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 
 /**
  * @author Ewald Neufeld
  */
-public class DoubleMetaphoneMapper extends AMapper {
+public class KoelnPhoneticMapper extends AMapper {
 
     /**
      * Computes a mapping between a source and a target.
@@ -58,11 +58,10 @@ public class DoubleMetaphoneMapper extends AMapper {
         // create inverted lists (code=>index of original list)
         invListA = getInvertedList(listA);
         invListB = getInvertedList(listB);
-        
         Deque<Triple<Integer, List<Integer>, List<Integer>>> similarityBook = new ArrayDeque<>();
         // construct trie from smaller list
         TrieNode trie = TrieNode.recursiveAddAll(invListB);
-//      int maxDistance = getMaxDistance(threshold);
+        int maxDistance = getMaxDistance(threshold);
         // iterate over other list
         for (Map.Entry<String, List<Integer>> entry : invListA.entrySet()) {
             // for each entry do trie search
@@ -79,6 +78,9 @@ public class DoubleMetaphoneMapper extends AMapper {
                     if (entry.getKey().length()>current.getPosition() && nodeEntry.getKey().equals(entry.getKey().charAt(current.getPosition()))) {
                         queue.push(new TrieSearchState(current.getDistance(), current.getPosition() + 1,
                                 nodeEntry.getValue()));
+                    } else if (current.getDistance() < maxDistance) {
+                        queue.push(new TrieSearchState(current.getDistance() + 1, current.getPosition() + 1,
+                                nodeEntry.getValue()));
                     }
                 }
             }
@@ -90,14 +92,10 @@ public class DoubleMetaphoneMapper extends AMapper {
                 String a = listA.get(i);
                 for (Integer j : t.getRight()) {
                     String b = listB.get(j);
-                    int length = a.length();
-                    if (a.length()>b.length()) {
-                    	length = b.length();
-                    }
                     for (String sourceUri : sourceMap.get(a)) {
                         for (String targetUri : targetMap.get(b)) {
                             result.add(sourceUri, targetUri,
-                                    (1.0d - (t.getLeft().doubleValue() / length)));
+                                    (1.0d - (t.getLeft().doubleValue() / (double) a.length())));
                         }
                     }
                 }
@@ -111,23 +109,21 @@ public class DoubleMetaphoneMapper extends AMapper {
         Map<String, List<Integer>> result = new HashMap<>(list.size());
         for (int i = 0, listASize = list.size(); i < listASize; i++) {
             String s = list.get(i);
-            List<String> code = DoubleMetaphoneMeasure.getCode(s);
+            String code = KoelnPhoneticMeasure.getCode(s);
             List<Integer> ref;
-            for (String c: code) {
-            	if (!result.containsKey(c)) {
-            		ref = new LinkedList<>();
-            		result.put(c, ref);
-            	} else {
-            		ref = result.get(c);
-            	}
-            	ref.add(i);
+            if (!result.containsKey(code)) {
+                ref = new LinkedList<>();
+                result.put(code, ref);
+            } else {
+                ref = result.get(code);
             }
+            ref.add(i);
         }
         return result;
     }
 
     public String getName() {
-        return "doubleMetaphone";
+        return "koelnPhonetic";
     }
 
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
@@ -138,9 +134,9 @@ public class DoubleMetaphoneMapper extends AMapper {
         return 1000d;
     }
 
-//    private int getMaxDistance(double threshold) {
-//        return new Double(Math.floor(DoubleMetaphoneMeasure.codeLength * (1 - threshold))).intValue();
-//    }
+    private int getMaxDistance(double threshold) {
+        return new Double(Math.floor(4 * (1 - threshold))).intValue();
+    }
 
     static class TrieNode {
 
@@ -159,10 +155,8 @@ public class DoubleMetaphoneMapper extends AMapper {
         }
 
         public static void recursiveAddAll(TrieNode root, Map<String, List<Integer>> code2References) {
-            for (Map.Entry<String, List<Integer>> entry : code2References.entrySet()) {
-            	TrieNode.recursiveAdd(root, entry.getKey(), entry.getValue());
-            	
-            }
+            for (Map.Entry<String, List<Integer>> entry : code2References.entrySet())
+                TrieNode.recursiveAdd(root, entry.getKey(), entry.getValue());
         }
 
         private static void recursiveAdd(TrieNode node, String code, List<Integer> references) {

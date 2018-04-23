@@ -1,25 +1,55 @@
 package org.aksw.limes.core.measures.measure.string;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.aksw.limes.core.io.cache.Instance;
 
 public class DoubleMetaphoneMeasure extends StringMeasure {
+	
 
-    public static final int codeLength = 4;
 
-    public static String getCode(String string) {
+    public static List<String> getCode(String string) {
+    	ArrayList<String> map = new ArrayList<String>();
+    	
     	EDoubleMetaphone ephone = new EDoubleMetaphone(string);
-        return ephone.getDoubleMetaphoneRepresentation();
+    	map.add(ephone.getDoubleMetaphoneRepresentation());
+    	map.add(ephone.getDoubleMetaphoneRepresentation2());
+    	
+        return map;
     }
 
-    public double proximity(String s1, String s2) {
-        char[] c1, c2;
-        c1 = DoubleMetaphoneMeasure.getCode(s1).toCharArray();
-        c2 = DoubleMetaphoneMeasure.getCode(s2).toCharArray();
+    private double getProximity(char[] s1, char[] s2) {
+        int shorter;
+        int longer;
+        if (s1.length>s2.length) {
+        	shorter = s2.length; 
+        	longer = s1.length;
+        }else {
+        	shorter =  s1.length;
+        	longer = s2.length;
+        }
         double distance = 0d;
-        for (int i = 0; i < c1.length; i++)
-            if (c1[i] != c2[i])
+        for (int i = 0; i < shorter; i++)
+            if (s1[i] != s2[i])
                 distance += 1d;
-        return (1.0d - (distance / (double) DoubleMetaphoneMeasure.codeLength));
+        return (1.0d - (distance / (double) longer));
+    }
+    
+    public double proximity(String s1, String s2) {
+    	List<String> map1 = DoubleMetaphoneMeasure.getCode(s1);
+    	List<String> map2 = DoubleMetaphoneMeasure.getCode(s2);
+    	double proximity = 0d;
+    	double check = 0d;
+    	for (String k1: map1) {
+    		for(String k2: map2) {
+    			check = getProximity(k1.toCharArray(), k2.toCharArray());
+    			if (check > proximity) {
+    				proximity = check;
+    			}
+    		}
+    	}
+        return proximity;
     }
 
     @Override

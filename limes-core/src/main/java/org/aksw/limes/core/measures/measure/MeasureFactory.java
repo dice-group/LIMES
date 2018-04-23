@@ -26,6 +26,7 @@ import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
 import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
 import org.aksw.limes.core.measures.measure.string.JaroMeasure;
 import org.aksw.limes.core.measures.measure.string.JaroWinklerMeasure;
+import org.aksw.limes.core.measures.measure.string.KoelnPhoneticMeasure;
 import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
 import org.aksw.limes.core.measures.measure.string.MongeElkanMeasure;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
@@ -85,6 +86,7 @@ public class MeasureFactory {
     public static final String RATCLIFF = "ratcliff";
     public static final String SOUNDEX = "soundex";
     public static final String DOUBLEMETA = "doublemeta";
+    public static final String KOELN = "koeln";
     public static final String TRIGRAM = "trigram";
 
     // vector space measures
@@ -194,6 +196,9 @@ public class MeasureFactory {
         }
         if (measure.startsWith(DOUBLEMETA)) {
             return MeasureType.DOUBLEMETA;
+        }
+        if (measure.startsWith(KOELN)) {
+            return MeasureType.KOELN;
         }
         if (measure.startsWith(TRIGRAM)) {
             return MeasureType.TRIGRAM;
@@ -390,6 +395,8 @@ public class MeasureFactory {
             return new SoundexMeasure();
         case DOUBLEMETA:
         	return new DoubleMetaphoneMeasure();
+        case KOELN:
+        	return new KoelnPhoneticMeasure();
         case TRIGRAM:
             return new TrigramMeasure();
         ////////////////////////////////////////////
