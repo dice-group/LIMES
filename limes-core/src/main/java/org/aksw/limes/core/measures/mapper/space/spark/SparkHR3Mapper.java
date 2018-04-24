@@ -1,6 +1,7 @@
 package org.aksw.limes.core.measures.mapper.space.spark;
 
 import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
@@ -9,12 +10,14 @@ import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
 import org.aksw.limes.core.measures.mapper.space.blocking.IBlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Encoders;
+import org.apache.spark.sql.SparkSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import scala.Tuple3;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeSet;
-
-// * Previously call ToralOrderBlockingMapper
+import java.util.*;
 
 /**
  * Uses metric spaces to create blocks.
@@ -24,17 +27,52 @@ import java.util.TreeSet;
 @SuppressWarnings("Duplicates")
 public class SparkHR3Mapper extends AMapper {
 
-    public int granularity = 4;
+    private static final Logger logger = LoggerFactory.getLogger(SparkHR3Mapper.class);
 
-    // this might only work for substraction. Need to create something that
-    // transforms
-    // the threshold on real numbers into a threshold in the function space.
-    // Then it will work
-    // perfectly
+    private static class HR3Block {
+
+        private List<Integer> blockId;
+        private KryoSerializationWrapper<Instance> instance;
+
+        public static HR3Block create(List<Integer> blockId, Instance instance) {
+            HR3Block hr3Block = new HR3Block();
+            hr3Block.blockId = blockId;
+            hr3Block.instance = new KryoSerializationWrapper<>(instance, Instance.class);
+            return hr3Block;
+        }
+
+        public List<Integer> getBlockId() {
+            return blockId;
+        }
+
+        public void setBlockId(List<Integer> blockId) {
+            this.blockId = blockId;
+        }
+
+        public KryoSerializationWrapper<Instance> getInstance() {
+            return instance;
+        }
+
+        public void setInstance(KryoSerializationWrapper<Instance> instance) {
+            this.instance = instance;
+        }
+    }
+
+    public int granularity = 4;
 
     public String getName() {
         return "TotalOrderBlockingMapper";
     }
+
+    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
+                               double threshold) {
+        SparkSession spark = SparkSession.builder().getOrCreate();
+        return getMapping(
+                spark.createDataset(source.getAllInstances(), Encoders.kryo(Instance.class)),
+                spark.createDataset(source.getAllInstances(), Encoders.kryo(Instance.class)),
+                sourceVar, targetVar, expression, threshold);
+    }
+
 
     /**
      * Computes a mapping between a source and a target.
@@ -54,17 +92,9 @@ public class SparkHR3Mapper extends AMapper {
      * @return A mapping which contains links between the source instances and
      *         the target instances
      */
-    public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
-            double threshold) {
-
-        
-        
+    public AMapping getMapping(Dataset<Instance> source, Dataset<Instance> target, String sourceVar, String targetVar, String expression,
+                               double threshold) {
         AMapping mapping = MappingFactory.createDefaultMapping();
-
-        // maps each block id to a set of instances. Actually one should
-        // integrate LIMES here
-        HashMap<ArrayList<Integer>, TreeSet<String>> targetBlocks = new HashMap<>();
-
         // 0. get properties
         String property1, property2;
         // get property labels
@@ -80,7 +110,6 @@ public class SparkHR3Mapper extends AMapper {
         } else {
             property1 = term1;
         }
-
         // get second property label
         String term2 = p.getRightTerm();
         if (term2.contains(".")) {
@@ -92,72 +121,39 @@ public class SparkHR3Mapper extends AMapper {
         } else {
             property2 = term2;
         }
-
         // get number of dimensions we are dealing with
         int dimensions = property2.split("\\|").length;
-        // important. The Blocking module takes care of the transformation from
-        // similarity to
-        // distance threshold. Central for finding the right blocks and might
-        // differ from blocker
-        // to blocker.
         IBlockingModule generator = BlockingFactory.getBlockingModule(property2, p.getOperator(), threshold,
                 granularity);
-
         // initialize the measure for similarity computation
-        ISpaceMeasure measure = SpaceMeasureFactory.getMeasure(p.getOperator(), dimensions);
-
-        // compute blockid for each of the elements of the target
-        // implement our simple yet efficient blocking approach
-        ArrayList<ArrayList<Integer>> blockIds;
-        for (String key : target.getAllUris()) {
-            blockIds = generator.getAllBlockIds(target.getInstance(key));
-            for (int ids = 0; ids < blockIds.size(); ids++) {
-                if (!targetBlocks.containsKey(blockIds.get(ids))) {
-                    targetBlocks.put(blockIds.get(ids), new TreeSet<String>());
-                }
-                targetBlocks.get(blockIds.get(ids)).add(key);
-            }
-        }
-
-        ArrayList<ArrayList<Integer>> blocksToCompare;
-        // comparison
-        TreeSet<String> uris;
-        double sim;
-        int counter = 0;
-        source.getAllUris().size();
-        for (String sourceInstanceUri : source.getAllUris()) {
-            counter++;
-            if (counter % 1000 == 0) {
-                // logger.info("Processed " + (counter * 100 / size) + "% of the
-                // links");
-                // get key
-
-            }
-            // logger.info("Getting "+property1+" from "+sourceInstanceUri);
-            blockIds = generator.getAllSourceIds(source.getInstance(sourceInstanceUri), property1);
-            // logger.info("BlockId for "+sourceInstanceUri+" is "+blockId);
-            // for all blocks in [-1, +1] in each dimension compute similarities
-            // and store them
-            for (int ids = 0; ids < blockIds.size(); ids++) {
-                blocksToCompare = generator.getBlocksToCompare(blockIds.get(ids));
-
-                // logger.info(sourceInstanceUri+" is to compare with blocks
-                // "+blocksToCompare);
-                for (int index = 0; index < blocksToCompare.size(); index++) {
-                    if (targetBlocks.containsKey(blocksToCompare.get(index))) {
-                        uris = targetBlocks.get(blocksToCompare.get(index));
-                        for (String targetInstanceUri : uris) {
-                            sim = measure.getSimilarity(source.getInstance(sourceInstanceUri),
-                                    target.getInstance(targetInstanceUri), property1, property2);
-                            if (sim >= threshold) {
-                                mapping.add(sourceInstanceUri, targetInstanceUri, sim);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        // logger.info("Cmin = "+necessaryComparisons+"; C = "+comparisons);
+        ISpaceMeasure spaceMeasure = SpaceMeasureFactory.getMeasure(p.getOperator(), dimensions);
+        KryoSerializationWrapper<ISpaceMeasure> measure = new KryoSerializationWrapper<>(spaceMeasure, spaceMeasure.getClass());
+        final String finalProperty1 = property1;
+        final String finalProperty2 = property2;
+        KryoSerializationWrapper<IBlockingModule> blockingWrapper = new KryoSerializationWrapper<>(generator, generator.getClass());
+        Dataset<HR3Block> sourceBlocks = source
+                .flatMap(i -> {
+                    final IBlockingModule gen = blockingWrapper.get();
+                    return gen.getAllSourceIds(i, finalProperty1).stream()
+                            .flatMap(x -> gen.getBlocksToCompare(x).stream())
+                            .map(x -> HR3Block.create(x, i)).iterator();
+                }, Encoders.bean(HR3Block.class));
+        Dataset<HR3Block> targetBlocks = target
+                .flatMap(i -> {
+                    final IBlockingModule gen = blockingWrapper.get();
+                    return gen.getAllBlockIds(i).stream().map(x -> HR3Block.create(x, i)).iterator();
+                }, Encoders.bean(HR3Block.class));
+        sourceBlocks.repartition(sourceBlocks.col("blockId"));
+        targetBlocks.repartition(targetBlocks.col("blockId"));
+        sourceBlocks.joinWith(targetBlocks, sourceBlocks.col("blockId").equalTo(targetBlocks.col("blockId")))
+                .map(tuple -> {
+                    final Instance s = tuple._1().getInstance().get();
+                    final Instance t = tuple._2().getInstance().get();
+                    final double sim = measure.get().getSimilarity(s, t, finalProperty1, finalProperty2);
+                    return new Tuple3<>(s.getUri(), t.getUri(), sim);
+                }, Encoders.tuple(Encoders.STRING(), Encoders.STRING(), Encoders.DOUBLE()))
+                .collectAsList()
+                .forEach(t -> mapping.add(t._1(), t._2(), t._3()));
         return mapping;
     }
 

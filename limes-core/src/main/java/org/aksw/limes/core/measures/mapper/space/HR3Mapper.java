@@ -1,13 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.aksw.limes.core.measures.mapper.space;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeSet;
-// * Previously call ToralOrderBlockingMapper
+import java.util.HashSet;
 
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -18,21 +13,20 @@ import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
 import org.aksw.limes.core.measures.mapper.space.blocking.IBlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Uses metric spaces to create blocks.
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
+@SuppressWarnings("Duplicates")
 public class HR3Mapper extends AMapper {
 
-    public int granularity = 4;
+    private static final Logger logger = LoggerFactory.getLogger(HR3Mapper.class);
 
-    // this might only work for substraction. Need to create something that
-    // transforms
-    // the threshold on real numbers into a threshold in the function space.
-    // Then it will work
-    // perfectly
+    public int granularity = 4;
 
     public String getName() {
         return "TotalOrderBlockingMapper";
@@ -58,15 +52,7 @@ public class HR3Mapper extends AMapper {
      */
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
             double threshold) {
-
-        
-        
         AMapping mapping = MappingFactory.createDefaultMapping();
-
-        // maps each block id to a set of instances. Actually one should
-        // integrate LIMES here
-        HashMap<ArrayList<Integer>, TreeSet<String>> targetBlocks = new HashMap<ArrayList<Integer>, TreeSet<String>>();
-
         // 0. get properties
         String property1, property2;
         // get property labels
@@ -82,7 +68,6 @@ public class HR3Mapper extends AMapper {
         } else {
             property1 = term1;
         }
-
         // get second property label
         String term2 = p.getRightTerm();
         if (term2.contains(".")) {
@@ -94,62 +79,44 @@ public class HR3Mapper extends AMapper {
         } else {
             property2 = term2;
         }
-
         // get number of dimensions we are dealing with
         int dimensions = property2.split("\\|").length;
-        // important. The Blocking module takes care of the transformation from
-        // similarity to
-        // distance threshold. Central for finding the right blocks and might
-        // differ from blocker
-        // to blocker.
         IBlockingModule generator = BlockingFactory.getBlockingModule(property2, p.getOperator(), threshold,
                 granularity);
-
         // initialize the measure for similarity computation
         ISpaceMeasure measure = SpaceMeasureFactory.getMeasure(p.getOperator(), dimensions);
-
         // compute blockid for each of the elements of the target
-        // implement our simple yet efficient blocking approach
-        ArrayList<ArrayList<Integer>> blockIds;
+        HashMap<ArrayList<Integer>, HashSet<String>> targetBlocks = getTargetBlocks(target, generator);
+        // comparison
+        matchBlocks(source, target, threshold, mapping, targetBlocks, property1, property2, generator, measure);
+        return mapping;
+    }
+
+    private HashMap<ArrayList<Integer>, HashSet<String>> getTargetBlocks(ACache target, IBlockingModule generator) {
+        HashMap<ArrayList<Integer>, HashSet<String>> targetBlocks = new HashMap<>();
         for (String key : target.getAllUris()) {
-            blockIds = generator.getAllBlockIds(target.getInstance(key));
+            ArrayList<ArrayList<Integer>> blockIds = generator.getAllBlockIds(target.getInstance(key));
             for (int ids = 0; ids < blockIds.size(); ids++) {
                 if (!targetBlocks.containsKey(blockIds.get(ids))) {
-                    targetBlocks.put(blockIds.get(ids), new TreeSet<String>());
+                    targetBlocks.put(blockIds.get(ids), new HashSet<String>());
                 }
                 targetBlocks.get(blockIds.get(ids)).add(key);
             }
         }
+        return targetBlocks;
+    }
 
-        ArrayList<ArrayList<Integer>> blocksToCompare;
-        // comparison
-        TreeSet<String> uris;
-        double sim;
-        int counter = 0;
-        source.getAllUris().size();
+    private void matchBlocks(ACache source, ACache target, double threshold, AMapping mapping, HashMap<ArrayList<Integer>, HashSet<String>> targetBlocks, String property1, String property2, IBlockingModule generator, ISpaceMeasure measure) {
         for (String sourceInstanceUri : source.getAllUris()) {
-            counter++;
-            if (counter % 1000 == 0) {
-                // logger.info("Processed " + (counter * 100 / size) + "% of the
-                // links");
-                // get key
-
-            }
-            // logger.info("Getting "+property1+" from "+sourceInstanceUri);
-            blockIds = generator.getAllSourceIds(source.getInstance(sourceInstanceUri), property1);
-            // logger.info("BlockId for "+sourceInstanceUri+" is "+blockId);
-            // for all blocks in [-1, +1] in each dimension compute similarities
-            // and store them
-            for (int ids = 0; ids < blockIds.size(); ids++) {
-                blocksToCompare = generator.getBlocksToCompare(blockIds.get(ids));
-
-                // logger.info(sourceInstanceUri+" is to compare with blocks
-                // "+blocksToCompare);
-                for (int index = 0; index < blocksToCompare.size(); index++) {
-                    if (targetBlocks.containsKey(blocksToCompare.get(index))) {
-                        uris = targetBlocks.get(blocksToCompare.get(index));
+            // for all blocks in [-1, +1] in each dimension compute similarities and store them
+            ArrayList<ArrayList<Integer>> blockIds = generator.getAllSourceIds(source.getInstance(sourceInstanceUri), property1);
+            for (ArrayList<Integer> blockId : blockIds) {
+                ArrayList<ArrayList<Integer>> blocksToCompare = generator.getBlocksToCompare(blockId);
+                for (ArrayList<Integer> aBlocksToCompare : blocksToCompare) {
+                    if (targetBlocks.containsKey(aBlocksToCompare)) {
+                        final HashSet<String> uris = targetBlocks.get(aBlocksToCompare);
                         for (String targetInstanceUri : uris) {
-                            sim = measure.getSimilarity(source.getInstance(sourceInstanceUri),
+                            final double sim = measure.getSimilarity(source.getInstance(sourceInstanceUri),
                                     target.getInstance(targetInstanceUri), property1, property2);
                             if (sim >= threshold) {
                                 mapping.add(sourceInstanceUri, targetInstanceUri, sim);
@@ -159,8 +126,6 @@ public class HR3Mapper extends AMapper {
                 }
             }
         }
-        // logger.info("Cmin = "+necessaryComparisons+"; C = "+comparisons);
-        return mapping;
     }
 
     // need to change this
