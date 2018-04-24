@@ -14,6 +14,8 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
@@ -27,7 +29,7 @@ import algorithms.edjoin.Record;
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class EDJoinMapper extends AMapper {
+public class EDJoinMapper extends AMapper implements IStringSemanticMapper {
 
     static Logger logger = LoggerFactory.getLogger(EDJoinMapper.class);
     private static int Q = -1;
@@ -36,6 +38,76 @@ public class EDJoinMapper extends AMapper {
     private static HashMap<Integer, String> targetMap;
     @SuppressWarnings("unused")
     private int comparisons = 0;
+    private static AEdgeCountingSemanticMeasure semanticSimilarity = null;
+
+    private static ACache sourceCache = null;
+    private static ACache targetCache = null;
+    private static String prop1 = null;
+    private static String prop2 = null;
+    private static double thrs;
+
+    @Override
+    public void setSemanticStrategy(String semanticStrategy) {
+        semanticSimilarity = SemanticFactory.createMeasure(SemanticFactory.getMeasureType(semanticStrategy));
+    }
+    public AEdgeCountingSemanticMeasure getSemanticStrategy(){
+        return semanticSimilarity;
+    }
+    public static double getSemanticSimilarity(String uri1, String uri2) {
+        if (semanticSimilarity != null) {
+            Instance instance1 = null;
+            Instance instance2 = null;
+            if(sourceCache.containsUri(uri1) && targetCache.containsUri(uri2)){
+                 instance1 = sourceCache.getInstance(uri1);
+                 instance2 = targetCache.getInstance(uri2);
+                 double semanticSim = semanticSimilarity.getSimilarity(instance1, instance2, prop1, prop2);
+                 return semanticSim;
+                 
+            }else if(targetCache.containsUri(uri1) && sourceCache.containsUri(uri2)){
+                instance1 = targetCache.getInstance(uri1);
+                instance2 = sourceCache.getInstance(uri2);
+                double semanticSim = semanticSimilarity.getSimilarity(instance1, instance2, prop1, prop2);
+                return semanticSim;
+            }
+            
+            
+        }
+        return 0;
+    }
+
+    public static String[] getURIs(HashMap<Integer, String> sourceMap, HashMap<Integer, String> targetMap,
+            Record currentRec, Record y) {
+        String[] ids = new String[2];
+        ids[0] = null;
+        ids[1] = null;
+        if ((sourceMap.containsKey(currentRec.id) && targetMap.containsKey(y.id))) {
+            ids[0] = sourceMap.get(currentRec.id);
+            ids[1] = targetMap.get(y.id);
+        } else if (targetMap.containsKey(currentRec.id) && sourceMap.containsKey(y.id)) {
+            ids[0] = sourceMap.get(y.id);
+            ids[1] = targetMap.get(currentRec.id);
+
+        }
+        return ids;
+
+    }
+
+    public static AMapping addBySemantic(Record currentRec, Record y, HashMap<Integer, String> sourceMap,
+            HashMap<Integer, String> targetMap, AMapping mapping) {
+
+        if (semanticSimilarity == null) {
+            return mapping;
+        }
+        String[] ids = getURIs(sourceMap, targetMap, currentRec, y);
+        if (ids[0] != null && ids[1] != null) {
+            double semanticSim = getSemanticSimilarity(ids[0], ids[1]);
+            if (semanticSim >= thrs) {
+                mapping.add(ids[0], ids[1], semanticSim);
+
+            }
+        }
+        return mapping;
+    }
 
     private static Record[] qTokenizer(String[] objects, int q) {
         StoppUhr s = new StoppUhr();
@@ -74,7 +146,7 @@ public class EDJoinMapper extends AMapper {
     private static int verification(Record currentRec, HashMap<Integer, Record> candidates, ArrayList<String> objects,
             int q, int threshold) {
         int count = 0;
-        String id1, id2;
+        String id1 = null, id2 = null;
         Iterator<Record> iter = candidates.values().iterator();
         while (iter.hasNext()) {
             Record y = iter.next();
@@ -108,9 +180,18 @@ public class EDJoinMapper extends AMapper {
                                 }
                                 count++;
                             }
+                        } else {
+                            mapping = addBySemantic(currentRec, y, sourceMap, targetMap, mapping);
                         }
+                    } else {
+                        mapping = addBySemantic(currentRec, y, sourceMap, targetMap, mapping);
                     }
+
+                } else {
+                    mapping = addBySemantic(currentRec, y, sourceMap, targetMap, mapping);
                 }
+            } else {
+                mapping = addBySemantic(currentRec, y, sourceMap, targetMap, mapping);
             }
         }
         return count;
@@ -393,6 +474,8 @@ public class EDJoinMapper extends AMapper {
             logger.error(MarkerFactory.getMarker("FATAL"), "Property values could not be read. Exiting");
             throw new RuntimeException();
         }
+        prop1 = properties.get(0);
+        prop2 = properties.get(1);
 
         // if expression is not atomic terminate
         if (!p.isAtomic()) {
@@ -406,6 +489,7 @@ public class EDJoinMapper extends AMapper {
         // later on
         // logger.info("Filling objects from source knowledge base.");
         sourceMap = new HashMap<Integer, String>();
+        sourceCache = source;
         ArrayList<String> uris = source.getAllUris();
         ArrayList<String> entries = new ArrayList<String>();
         Instance instance;
@@ -422,6 +506,7 @@ public class EDJoinMapper extends AMapper {
         // 3.2 fill objects from target in entries
         // logger.info("Filling objects from target knowledge base.");
         targetMap = new HashMap<Integer, String>();
+        targetCache = target;
         uris = target.getAllUris();
         for (int i = 0; i < uris.size(); i++) {
             instance = target.getInstance(uris.get(i));
@@ -484,8 +569,11 @@ public class EDJoinMapper extends AMapper {
                                     }
                                 }
                                 count++;
+                            } else {
+                                mapping = addBySemantic(records[i], records[j], sourceMap, targetMap, mapping);
                             }
                         } else {
+                            mapping = addBySemantic(records[i], records[j], sourceMap, targetMap, mapping);
                             break;
                         }
                     }

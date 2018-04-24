@@ -19,5 +19,17 @@ public enum MeasureType {
     TRIGRAM, QGRAMS, SOUNDEX, EUCLIDEAN, JAROWINKLER, MONGEELKAN, RATCLIFF,
     TOP_EQUALS, TOP_DISJOINT, TOP_INTERSECTS, TOP_OVERLAPS, TOP_CROSSES, TOP_CONTAINS, TOP_WITHIN, TOP_TOUCHES, TOP_COVERS, TOP_COVERED_BY,
     SET_JACCARD,
-    SHORTEST_PATH,LCH,LI,WU_PALMER
+    SHORTEST_PATH,LCH,LI,WUPALMER, 
+    SEM_COSINE,SEM_JACCARD, SEM_LEVENSHTEIN, SEM_OVERLAP, SEM_QGRAMS, SEM_TRIGRAM;
+    
+    private String strategy = null;
+    
+    public void setStrategy(String str){
+        strategy = str;
+    }
+    
+    public String getStrategy(){
+        return this.strategy;
+    }
+    
 }

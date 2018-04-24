@@ -41,7 +41,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     protected static final int ADJECTIVE_DEPTH = 1;
     protected static final int ADVERB_DEPTH = 1;
 
-    protected IRAMDictionary dictionary;
+    protected IRAMDictionary dictionary = null;
     protected static boolean useInstanceHypernyms = true;
     protected static boolean useHypernyms = true;
 
@@ -65,7 +65,6 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                     "Please read the instructions in the README.md file on how to download the worndet database files.");
             throw new RuntimeException();
         } else {
-            logger.info("Wordnet dictionary folder exists.");
             exFile = new File(wordNetFolder + "JWI_Export_.wn");
             if (!exFile.exists()) {
                 logger.info("No exported wordnet file is found. Creating one..");
@@ -75,7 +74,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                 try {
                     dictionary.open();
                     dictionary.export(new FileOutputStream(exFile));
-                    logger.info("Export is " + (exFile.length() / 1048576) + " MB");
+                    //logger.info("Export is " + (exFile.length() / 1048576) + " MB");
                 } catch (IOException e1) {
                     logger.error("Couldn't open wordnet dictionary. Exiting..");
                     e1.printStackTrace();
@@ -97,7 +96,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
     public void openDictionaryFromFile() {
         if (!exFile.exists()) {
-            logger.info("No exported wordnet file is found. Exiting..");
+            logger.error("No exported wordnet file is found. Exiting..");
             logger.error("Please execute the exportDictionaryToFile function first.");
             logger.error(
                     "Please read the instructions in the README.md file on how to download the worndet database files.");
@@ -134,17 +133,9 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     }
 
     public IWord getIWord(IWordID wordID) {
-        boolean flag = false;
-        if (dictionary == null) {
-            openDictionaryFromFile();
-            flag = true;
-        }
         IWord iword = null;
         if (wordID != null)
             iword = dictionary.getWord(wordID);
-
-        if (flag == true)
-            removeDictionary();
 
         return iword;
     }
@@ -218,18 +209,11 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                     List<List<ISynset>> synset1Tree = getHypernymTrees(synset1);
                     if (synset1Tree.isEmpty() == false) {
 
-                        logger.info("-------------------------------------------------------------");
-                        logger.info("Checking 1st synset: " + synset1.getID());
-
                         for (Map.Entry<ISynset, List<List<ISynset>>> entry2 : trees2.entrySet()) {
 
                             ISynset synset2 = entry2.getKey();
                             List<List<ISynset>> synset2Tree = entry2.getValue();
-                            logger.info("++++++++");
-                            logger.info("Checking 2nd synset: " + synset2.getID());
-
                             sim = getSimilarity(synset1, synset1Tree, synset2, synset2Tree);
-
                             if (sim > maxSim) {
                                 maxSim = sim;
                             }
@@ -250,14 +234,15 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     @Override
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         // test in each semantic similarity
+        this.openDictionaryFromFile();
         double sim = 0;
         double maxSim = 0;
         HashMap<String, Double> similaritiesMap = new HashMap<String, Double>();
         for (String sourceValue : instance1.getProperty(property1)) {
-            logger.info("Source value: " + sourceValue);
+            //logger.info("Source value: " + sourceValue);
             for (String targetValue : instance2.getProperty(property2)) {
                 // create bag of words for each property value
-                logger.info("Target value: " + targetValue);
+                //logger.info("Target value: " + targetValue);
                 double sourceTokensSum = 0;
                 // compare each token of the current source value
                 // with every token of the current target value
@@ -281,22 +266,22 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                             if (!Stopwords.isStopword(targetToken)) {
 
                                 double targetTokenSim = 0.0d;
-                                logger.info("Source token: " + sourceToken + " Target token: " + targetToken);
+                                //logger.info("Source token: " + sourceToken + " Target token: " + targetToken);
                                 String together = sourceToken + "||" + targetToken;
                                 String together2 = targetToken + "||" + sourceToken;
                                 if (similaritiesMap.containsKey(together)) {
                                     targetTokenSim = similaritiesMap.get(together);
-                                    logger.info("Similarity exists");
+                                    //logger.info("Similarity exists");
                                 } else if (similaritiesMap.containsKey(together2)) {
                                     targetTokenSim = similaritiesMap.get(together2);
-                                    logger.info("Similarity exists2");
+                                    //logger.info("Similarity exists2");
                                 } else {
-                                    logger.info("Similarity doesn't exist");
+                                    //logger.info("Similarity doesn't exist");
                                     targetTokenSim = getSimilarity(sourceToken, targetToken);
                                     similaritiesMap.put(together, targetTokenSim);
                                 }
-                                logger.info("Source token: " + sourceToken + " Target token: " + targetToken + ":"
-                                        + targetTokenSim);
+                                //logger.info("Source token: " + sourceToken + " Target token: " + targetToken + ":"
+                                //        + targetTokenSim);
 
                                 // for the current source token, keep the
                                 // highest
@@ -310,29 +295,23 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                                 if (maxTargetTokenSim == 1.0d) {
                                     break;
                                 }
-                            } else {
-                                logger.info("Target: " + targetToken + " stop word");
-                            }
+                            } 
                         }
                         // for the current source bag of words, add the max
                         // similarity to the sum over all current source
                         // token similarities
-                        logger.info("Max for " + sourceToken + " " + maxTargetTokenSim);
                         sourceTokensSum += maxTargetTokenSim;
-                        logger.info("Sum  " + sourceTokensSum);
-                    } else {
-                        logger.info("Source: " + sourceToken + " stop word");
-                    }
+                    } 
 
                 }
                 // get the average of the max similarities of each source token
                 // this is the similarity of the current source bag of words
-                logger.info("Non stop words " + counter);
+                //logger.info("Non stop words " + counter);
                 if (counter > 0)
                     sim = (double) sourceTokensSum / ((double) (counter));
                 else
                     sim = 0;
-                logger.info("Average Sum  " + sim);
+                //logger.info("Average Sum  " + sim);
 
                 if (sim > maxSim) {
                     maxSim = sim;
@@ -342,6 +321,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                 }
             }
         }
+        this.removeDictionary();
         return maxSim;
 
     }
@@ -357,7 +337,6 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
             return 0.0d;
         else {
             if (idxWord1.getPOS().getNumber() != idxWord2.getPOS().getNumber()) {
-                logger.info(""+idxWord1.getPOS().getNumber()+" "+idxWord2.getPOS().getNumber());
                 return 0.0d;
             } else {
                 return this.getSimilarity(idxWord1, idxWord2);
@@ -370,11 +349,6 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         if (str == null)
             return null;
 
-        boolean flag = false;
-        if (this.dictionary == null) {
-            openDictionaryFromFile();
-            flag = true;
-        }
         IIndexWord idxWord1 = dictionary.getIndexWord(str, POS.NOUN);
         if (idxWord1 == null) {
             idxWord1 = dictionary.getIndexWord(str, POS.ADJECTIVE);
@@ -386,9 +360,6 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
             }
 
         }
-        if (flag == true) {
-            removeDictionary();
-        }
         return idxWord1;
     }
 
@@ -396,15 +367,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         if (synset == null)
             return new ArrayList<List<ISynset>>();
 
-        boolean flag = false;
-        if (dictionary == null) {
-            openDictionaryFromFile();
-            flag = true;
-        }
         List<List<ISynset>> trees = getHypernymTrees(synset, new HashSet<ISynsetID>());
-
-        if (flag == true)
-            removeDictionary();
 
         return trees;
     }

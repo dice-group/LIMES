@@ -40,10 +40,6 @@ import org.aksw.limes.core.measures.mapper.topology.IntersectsMapper;
 import org.aksw.limes.core.measures.mapper.topology.TouchesMapper;
 import org.aksw.limes.core.measures.mapper.topology.WithinMapper;
 import org.aksw.limes.core.measures.measure.MeasureType;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.LCHMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.LiMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.ShortestPathMeasure;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.WuPalmerMeasure;
 
 /**
  * Implements the mapper factory class. For each measure name, the factory
@@ -185,8 +181,25 @@ public class MapperFactory {
             return new EdgeCountingSemanticMapper();
         case LI:
             return new EdgeCountingSemanticMapper();
-        case WU_PALMER:
+        case WUPALMER:
             return new EdgeCountingSemanticMapper();
+            
+        //////////////////////////////////////////
+        case SEM_COSINE:
+        case SEM_JACCARD:
+        case SEM_OVERLAP:
+        case SEM_TRIGRAM:
+            PPJoinPlusPlus mapperPP = new PPJoinPlusPlus();
+            mapperPP.setSemanticStrategy(type.getStrategy());
+            return mapperPP;
+        case SEM_LEVENSHTEIN:
+            EDJoinMapper mapperLeven = new EDJoinMapper();
+            mapperLeven.setSemanticStrategy(type.getStrategy());
+            return mapperLeven;
+        case SEM_QGRAMS:
+            FastNGramMapper mapperQGrams = new FastNGramMapper();
+            mapperQGrams.setSemanticStrategy(type.getStrategy());
+            return mapperQGrams;
         default:
             throw new InvalidMeasureException(type.toString());
         }

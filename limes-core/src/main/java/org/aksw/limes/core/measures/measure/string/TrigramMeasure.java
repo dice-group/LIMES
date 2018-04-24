@@ -13,6 +13,10 @@ import org.aksw.limes.core.io.cache.Instance;
  */
 public class TrigramMeasure extends StringMeasure {
 
+    public TrigramMeasure() {
+    }
+
+
     public double getSimilarity(int overlap, int lengthA, int lengthB) {
         return ((double) 2 * overlap) / (double) (lengthA + lengthB);
     }

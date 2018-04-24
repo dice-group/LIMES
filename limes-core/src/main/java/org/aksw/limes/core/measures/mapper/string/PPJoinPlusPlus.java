@@ -21,6 +21,8 @@ import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticFactory;
 import org.aksw.limes.core.measures.measure.string.IStringMeasure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,10 +105,80 @@ class PartitionResult {
  * @author Dawid Kotlarz
  * @version 1.0
  */
-public class PPJoinPlusPlus extends AMapper {
+public class PPJoinPlusPlus extends AMapper implements IStringSemanticMapper {
 
     static Logger logger = LoggerFactory.getLogger(PPJoinPlusPlus.class);
     private static final int MAX_DEPTH = 2;
+    private static AEdgeCountingSemanticMeasure semanticSimilarity = null;
+    private static ACache sourceCache = null;
+    private static ACache targetCache = null;
+    private static String prop1 = null;
+    private static String prop2 = null;
+    private static double thrs;
+
+    @Override
+    public void setSemanticStrategy(String semanticStrategy) {
+        semanticSimilarity = SemanticFactory.createMeasure(SemanticFactory.getMeasureType(semanticStrategy));
+    }
+
+    public AEdgeCountingSemanticMeasure getSemanticStrategy() {
+        return semanticSimilarity;
+    }
+
+    public static double getSemanticSimilarity(String uri1, String uri2) {
+        if (semanticSimilarity != null) {
+            Instance instance1 = null;
+            Instance instance2 = null;
+            if(sourceCache.containsUri(uri1) && targetCache.containsUri(uri2)){
+                 instance1 = sourceCache.getInstance(uri1);
+                 instance2 = targetCache.getInstance(uri2);
+                 double semanticSim = semanticSimilarity.getSimilarity(instance1, instance2, prop1, prop2);
+                 return semanticSim;
+                 
+            }else if(targetCache.containsUri(uri1) && sourceCache.containsUri(uri2)){
+                instance1 = targetCache.getInstance(uri1);
+                instance2 = sourceCache.getInstance(uri2);
+                double semanticSim = semanticSimilarity.getSimilarity(instance1, instance2, prop1, prop2);
+                return semanticSim;
+            }
+            
+            
+        }
+        return 0;
+    }
+
+    public static String[] getURIs(HashMap<Integer, String> sourceMap, HashMap<Integer, String> targetMap,
+            Record currentRec, Record y) {
+        String[] ids = new String[2];
+        ids[0] = null;
+        ids[1] = null;
+        if ((sourceMap.containsKey(currentRec.id) && targetMap.containsKey(y.id))) {
+            ids[0] = sourceMap.get(currentRec.id);
+            ids[1] = targetMap.get(y.id);
+        } else if (targetMap.containsKey(currentRec.id) && sourceMap.containsKey(y.id)) {
+            ids[0] = sourceMap.get(y.id);
+            ids[1] = targetMap.get(currentRec.id);
+
+        }
+        return ids;
+
+    }
+
+    public static AMapping addBySemantic(Record currentRec, Record y, HashMap<Integer, String> sourceMap,
+            HashMap<Integer, String> targetMap, AMapping mapping) {
+
+        if (semanticSimilarity == null) {
+            return mapping;
+        }
+        String[] ids = getURIs(sourceMap, targetMap, currentRec, y);
+        if (ids[0] != null && ids[1] != null) {
+            double semanticSim = getSemanticSimilarity(ids[0], ids[1]);
+            if (semanticSim >= thrs) {
+                mapping.add(ids[0], ids[1], semanticSim);
+            }
+        }
+        return mapping;
+    }
 
     /**
      * Berechnet die Überlappung zwischen zwei Datensätzen mithilfe ihrer Tokens
@@ -412,6 +484,11 @@ public class PPJoinPlusPlus extends AMapper {
                     "Expression " + expression + " was given to a mapper to process");
         }
 
+        sourceCache = source;
+        targetCache = target;
+        prop1 = property1;
+        prop2 = property2;
+        thrs = threshold;
         // 3.1 fill objects from source in entry
         // logger.info("Filling objects from source knowledge base.");
         sourceMap = new HashMap<>();
@@ -452,7 +529,6 @@ public class PPJoinPlusPlus extends AMapper {
         if (threshold == 0) {
         } else {
         }
-
         MeasureType type = MeasureFactory.getMeasureType(p.getOperator());
         measure = (IStringMeasure) MeasureFactory.createMeasure(type);
         // logger.info("Beginninng comparison per se");
@@ -617,8 +693,13 @@ public class PPJoinPlusPlus extends AMapper {
                         }
                         count++;
                     }
+                } else {
+                    mapping = addBySemantic(currentRec, key, sourceMap, targetMap, mapping);
                 }
                 // count++;
+            } else {
+                Record key = (Record) e.getKey();
+                mapping = addBySemantic(currentRec, key, sourceMap, targetMap, mapping);
             }
         }
         return count;

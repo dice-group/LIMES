@@ -10,6 +10,7 @@ import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
+import org.aksw.limes.core.measures.mapper.semantic.edgecounting.EdgeCountingSemanticMapper;
 import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
 import org.aksw.limes.core.measures.mapper.string.EDJoinMapper;
 import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
@@ -43,8 +44,18 @@ import org.aksw.limes.core.measures.mapper.topology.DisjointMapper;
 import org.aksw.limes.core.measures.mapper.topology.IntersectsMapper;
 import org.aksw.limes.core.measures.mapper.topology.TouchesMapper;
 import org.aksw.limes.core.measures.mapper.topology.WithinMapper;
+import org.aksw.limes.core.measures.measure.AMeasure;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.LCHMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.LiMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.ShortestPathMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.WuPalmerMeasure;
+import org.aksw.limes.core.measures.measure.string.CosineMeasure;
+import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
+import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
+import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
+import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -106,6 +117,330 @@ public class MapperFactoryTest {
     }
 
     @Test
+    public void testgetMeasureTypeforSemanticSimilarities() {
+        System.out.println("testgetMeasureTypeforSemanticSimilarities");
+        String expression = null;
+        MeasureType type = null;
+        AMeasure measure = null;
+        AMapper mapper = null;
+
+        expression = "shortest_path(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SHORTEST_PATH));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof ShortestPathMeasure);
+        mapper = MapperFactory.createMapper(type);
+        assertTrue(mapper instanceof EdgeCountingSemanticMapper);
+        /////////////////////////////////////////////
+        expression = "li(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.LI));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof LiMeasure);
+        mapper = MapperFactory.createMapper(type);
+        assertTrue(mapper instanceof EdgeCountingSemanticMapper);
+
+        /////////////////////////////////////////////
+        expression = "lch(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.LCH));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof LCHMeasure);
+        mapper = MapperFactory.createMapper(type);
+        assertTrue(mapper instanceof EdgeCountingSemanticMapper);
+
+        /////////////////////////////////////////////
+        expression = "wupalmer(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.WUPALMER));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof WuPalmerMeasure);
+        mapper = MapperFactory.createMapper(type);
+        assertTrue(mapper instanceof EdgeCountingSemanticMapper);
+
+        /////////////////////////////////////////////
+        /////////////////////////////////////////////
+        /////////////////////////////////////////////
+        String strategy = null;
+
+        expression = "sem_cosine_shortest_path(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_COSINE));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof CosineMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("shortest_path"));
+        PPJoinPlusPlus mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof ShortestPathMeasure);
+
+        expression = "sem_cosine_li(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_COSINE));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof CosineMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("li"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof LiMeasure);
+
+        expression = "sem_cosine_lch(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_COSINE));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof CosineMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("lch"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof LCHMeasure);
+
+        expression = "sem_cosine_wupalmer(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_COSINE));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof CosineMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("wupalmer"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof WuPalmerMeasure);
+        /////////////////////////////////////////////
+        /////////////////////////////////////////////
+        /////////////////////////////////////////////
+        expression = "sem_jaccard_shortest_path(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_JACCARD));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof JaccardMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("shortest_path"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof ShortestPathMeasure);
+
+        expression = "sem_jaccard_li(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_JACCARD));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof JaccardMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("li"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof LiMeasure);
+
+        expression = "sem_jaccard_lch(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_JACCARD));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof JaccardMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("lch"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof LCHMeasure);
+
+        expression = "sem_jaccard_wupalmer(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_JACCARD));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof JaccardMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("wupalmer"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof WuPalmerMeasure);
+        /////////////////////////////////////////////
+        /////////////////////////////////////////////
+        /////////////////////////////////////////////
+        expression = "sem_overlap_shortest_path(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_OVERLAP));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof TrigramMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("shortest_path"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof ShortestPathMeasure);
+
+        expression = "sem_overlap_li(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_OVERLAP));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof TrigramMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("li"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof LiMeasure);
+
+        expression = "sem_overlap_lch(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_OVERLAP));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof TrigramMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("lch"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof LCHMeasure);
+
+        expression = "sem_overlap_wupalmer(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_OVERLAP));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof TrigramMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("wupalmer"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof WuPalmerMeasure);
+        /////////////////////////////////////////////
+        /////////////////////////////////////////////
+        /////////////////////////////////////////////
+        expression = "sem_trigram_shortest_path(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_TRIGRAM));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof TrigramMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("shortest_path"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof ShortestPathMeasure);
+
+        expression = "sem_trigram_li(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_TRIGRAM));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof TrigramMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("li"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof LiMeasure);
+
+        expression = "sem_trigram_lch(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_TRIGRAM));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof TrigramMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("lch"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof LCHMeasure);
+
+        expression = "sem_trigram_wupalmer(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_TRIGRAM));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof TrigramMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("wupalmer"));
+        mapper1 = (PPJoinPlusPlus) MapperFactory.createMapper(type);
+        assertTrue(mapper1 instanceof PPJoinPlusPlus);
+        assertTrue(mapper1.getSemanticStrategy() instanceof WuPalmerMeasure);
+        /////////////////////////////////////////////
+        /////////////////////////////////////////////
+        /////////////////////////////////////////////
+        expression = "sem_qgrams_shortest_path(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_QGRAMS));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof QGramSimilarityMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("shortest_path"));
+        FastNGramMapper mapper2 = (FastNGramMapper) MapperFactory.createMapper(type);
+        assertTrue(mapper2 instanceof FastNGramMapper);
+        assertTrue(mapper2.getSemanticStrategy() instanceof ShortestPathMeasure);
+
+        expression = "sem_qgrams_li(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_QGRAMS));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof QGramSimilarityMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("li"));
+        mapper2 = (FastNGramMapper) MapperFactory.createMapper(type);
+        assertTrue(mapper2 instanceof FastNGramMapper);
+        assertTrue(mapper2.getSemanticStrategy() instanceof LiMeasure);
+
+        expression = "sem_qgrams_lch(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_QGRAMS));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof QGramSimilarityMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("lch"));
+        mapper2 = (FastNGramMapper) MapperFactory.createMapper(type);
+        assertTrue(mapper2 instanceof FastNGramMapper);
+        assertTrue(mapper2.getSemanticStrategy() instanceof LCHMeasure);
+
+        expression = "sem_qgrams_wupalmer(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_QGRAMS));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof QGramSimilarityMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("wupalmer"));
+        mapper2 = (FastNGramMapper) MapperFactory.createMapper(type);
+        assertTrue(mapper2 instanceof FastNGramMapper);
+        assertTrue(mapper2.getSemanticStrategy() instanceof WuPalmerMeasure);
+        /////////////////////////////////////////////
+        /////////////////////////////////////////////
+        /////////////////////////////////////////////
+        expression = "sem_levenshtein_shortest_path(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_LEVENSHTEIN));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof LevenshteinMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("shortest_path"));
+        EDJoinMapper mapper3 = (EDJoinMapper) MapperFactory.createMapper(type);
+        assertTrue(mapper3 instanceof EDJoinMapper);
+        assertTrue(mapper3.getSemanticStrategy() instanceof ShortestPathMeasure);
+
+        expression = "sem_levenshtein_li(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_LEVENSHTEIN));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof LevenshteinMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("li"));
+        mapper3 = (EDJoinMapper) MapperFactory.createMapper(type);
+        assertTrue(mapper3 instanceof EDJoinMapper);
+        assertTrue(mapper3.getSemanticStrategy() instanceof LiMeasure);
+
+        expression = "sem_levenshtein_lch(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_LEVENSHTEIN));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof LevenshteinMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("lch"));
+        mapper3 = (EDJoinMapper) MapperFactory.createMapper(type);
+        assertTrue(mapper3 instanceof EDJoinMapper);
+        assertTrue(mapper3.getSemanticStrategy() instanceof LCHMeasure);
+        
+
+        expression = "sem_levenshtein_wupalmer(x.name,y.name)";
+        type = MeasureFactory.getMeasureType(expression);
+        assertTrue(type.equals(MeasureType.SEM_LEVENSHTEIN));
+        measure = MeasureFactory.createMeasure(type);
+        assertTrue(measure instanceof LevenshteinMeasure);
+        strategy = type.getStrategy();
+        assertTrue(strategy.equals("wupalmer"));
+        mapper3 = (EDJoinMapper) MapperFactory.createMapper(type);
+        assertTrue(mapper3 instanceof EDJoinMapper);
+        assertTrue(mapper3.getSemanticStrategy() instanceof WuPalmerMeasure);
+
+    }
+
+    // @Test
     public void test() {
         MeasureType type = null;
         AMapper mapper = null;

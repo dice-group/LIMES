@@ -10,9 +10,9 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
-import org.aksw.limes.core.measures.measure.MeasureFactory;
-import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticFactory;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
@@ -41,8 +41,8 @@ public class EdgeCountingSemanticMapper extends AMapper {
         }
 
         AMapping m = MappingFactory.createDefaultMapping();
-        MeasureType type = MeasureFactory.getMeasureType(p.getOperator());
-        AEdgeCountingSemanticMeasure measure = (AEdgeCountingSemanticMeasure) MeasureFactory.createMeasure(type);
+        SemanticType type = SemanticFactory.getMeasureType(p.getOperator());
+        AEdgeCountingSemanticMeasure measure = (AEdgeCountingSemanticMeasure) SemanticFactory.createMeasure(type);
 
         for (Instance sourceInstance : source.getAllInstances()) {
             for (Instance targetInstance : target.getAllInstances()) {

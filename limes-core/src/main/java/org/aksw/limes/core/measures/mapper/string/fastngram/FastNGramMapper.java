@@ -18,19 +18,32 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.AMapper;
+import org.aksw.limes.core.measures.mapper.string.IStringSemanticMapper;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticFactory;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 
+
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class FastNGramMapper extends AMapper {
+public class FastNGramMapper extends AMapper implements IStringSemanticMapper {
 
     static Logger logger = LoggerFactory.getLogger(FastNGramMapper.class);
     static int q = 3;
+    private static AEdgeCountingSemanticMeasure semanticSimilarity = null;
 
+    @Override
+    public void setSemanticStrategy(String semanticStrategy) {
+        semanticSimilarity = SemanticFactory.createMeasure(SemanticFactory.getMeasureType(semanticStrategy));
+    }
+
+    public AEdgeCountingSemanticMeasure getSemanticStrategy(){
+        return semanticSimilarity;
+    }
     public static AMapping compute(Set<String> source, Set<String> target, int q, double threshold) {
         Index index = new Index(q);
         double kappa = (1 + threshold) / threshold;
@@ -50,10 +63,12 @@ public class FastNGramMapper extends AMapper {
             double sourceSize = (double) sourceTokens.size();
             for (int size = (int) Math.ceil(sourceSize * threshold); size <= (int) Math
                     .floor(sourceSize / threshold); size++) {
+                
                 if (allSizes.contains(size)) {
                     // maps tokens to strings
                     Map<String, Set<String>> stringsOfSize = index.getStrings(size);
                     Map<String, Integer> countMap = new HashMap<String, Integer>();
+                    
                     for (String token : sourceTokens) {
                         if (stringsOfSize.containsKey(token)) {
                             // take each string and add it to the count map
@@ -73,6 +88,13 @@ public class FastNGramMapper extends AMapper {
                             double similarity = sim.getSimilarity(targetTokens.get(candidate), sourceTokens);
                             if (similarity >= threshold) {
                                 result.add(s, candidate, similarity);
+                            }else{
+                                if(semanticSimilarity != null){
+                                    similarity = semanticSimilarity.getSimilarity(s, candidate);
+                                    if(similarity >= threshold){
+                                        result.add(s, candidate, similarity);
+                                    }
+                                }
                             }
                         }
                     }
@@ -86,6 +108,13 @@ public class FastNGramMapper extends AMapper {
                 double confidence = result.getConfidence(key, value);
                 if (confidence >= threshold) {
                     tempMapping.add(key, value, confidence);
+                }else{
+                    if(semanticSimilarity != null){
+                        confidence = semanticSimilarity.getSimilarity(key, value);
+                        if(confidence >= threshold){
+                            tempMapping.add(key, value, confidence);
+                        }
+                    }
                 }
             }
         }
@@ -252,5 +281,8 @@ public class FastNGramMapper extends AMapper {
             return 8.2 + 0.001 * sourceSize + 0.001 * targetSize - 16.75 * threshold;
         }
     }
+
+
+    
 
 }

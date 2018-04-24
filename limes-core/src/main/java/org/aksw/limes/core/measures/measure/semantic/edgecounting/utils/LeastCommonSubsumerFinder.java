@@ -3,13 +3,10 @@ package org.aksw.limes.core.measures.measure.semantic.edgecounting.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import edu.mit.jwi.item.ISynset;
 
 public class LeastCommonSubsumerFinder {
-    private static final Logger logger = LoggerFactory.getLogger(LeastCommonSubsumerFinder.class);
     LeastCommonSubsumer lcs = null;
 
     public int getDepth() {
@@ -35,13 +32,9 @@ public class LeastCommonSubsumerFinder {
         lcs = new LeastCommonSubsumer();
         int path1Pos, path2Pos;
 
-        logger.info("# paths for 1st: " + synset1Tree.size());
-        logger.info("# paths for 2nd: " + synset2Tree.size());
 
         for (List<ISynset> synset1HypernymPath : synset1Tree) {
-            logger.info("Size of synset tree1: "+synset1HypernymPath.size());
             for (List<ISynset> synset2HypernymPath : synset2Tree) {
-                logger.info("Size of synset tree2: "+synset2HypernymPath.size());
 
                 path1Pos = 0;
                 path2Pos = 0;
@@ -59,10 +52,6 @@ public class LeastCommonSubsumerFinder {
                 int newPath = synset1HypernymPath.size() + synset2HypernymPath.size() - 2 * path1Pos;
                 int oldPath = lcs.getPs1().size() + lcs.getPs2().size();
 
-                logger.info("path1Pos = " + path1Pos);
-                logger.info("lcs.getDepth() = " + lcs.getDepth());
-                logger.info("newPath = " + newPath);
-                logger.info("oldPath = " + oldPath);
                 
                 if ((lcs.getPath() == null) || (path1Pos > lcs.getDepth())
                         || ( (path1Pos == lcs.getDepth()) && (newPath < oldPath) ) ) {
@@ -90,14 +79,10 @@ public class LeastCommonSubsumerFinder {
         lcs = new LeastCommonSubsumer();
         int path1Pos, path2Pos;
 
-        logger.info("# paths for 1st: " + synset1Tree.size());
-        logger.info("# paths for 2nd: " + synset2Tree.size());
 
         for (List<ISynset> synset1HypernymPath : synset1Tree) {
-            logger.info("Size of synset tree1: "+synset1HypernymPath.size());
 
             for (List<ISynset> synset2HypernymPath : synset2Tree) {
-                logger.info("Size of synset tree2: "+synset2HypernymPath.size());
 
                 path1Pos = 0;
                 path2Pos = 0;
@@ -115,10 +100,6 @@ public class LeastCommonSubsumerFinder {
                 int newPath = synset1HypernymPath.size() + synset2HypernymPath.size() - 2 * path1Pos;
                 int oldPath = lcs.getPs1().size() + lcs.getPs2().size();
 
-                logger.info("newPath = " + newPath);
-                logger.info("oldPath = " + oldPath);
-                logger.info("path1Pos = " + path1Pos);
-                logger.info("lcs.getDepth() = " + lcs.getDepth());
 
                 if ((lcs.getPath() == null) || (newPath < oldPath)
                         || ((path1Pos > lcs.getDepth()) && (newPath == oldPath))) {
