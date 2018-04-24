@@ -52,7 +52,6 @@ public class SparkEvaluation {
     private static Dataset<Instance> readInstancesFromCSV(String path){
         Dataset<Row> ds = spark.read()
                 .format("csv")
-                .option("timestampFormat", "yyyy/MM/dd HH:mm:ss ZZ")
                 .option("header", "true")
                 .option("mode", "DROPMALFORMED")
                 .load(path);
