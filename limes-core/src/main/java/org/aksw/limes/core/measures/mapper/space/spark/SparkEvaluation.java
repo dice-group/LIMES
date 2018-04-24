@@ -23,7 +23,7 @@ public class SparkEvaluation {
             .master("local[*]")
             .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
             .config("spark.kryo.registrator", LimesKryoRegistrator.class.getName())
-            .getOrCreate();;
+            .getOrCreate();
 
     public static void main(String[] args) throws Exception {
         RDFConfigurationReader reader = new RDFConfigurationReader(args[0]);
@@ -50,7 +50,12 @@ public class SparkEvaluation {
     }
 
     private static Dataset<Instance> readInstancesFromCSV(String path){
-        Dataset<Row> ds = spark.read().csv(path);
+        Dataset<Row> ds = spark.read()
+                .format("csv")
+                .option("timestampFormat", "yyyy/MM/dd HH:mm:ss ZZ")
+                .option("header", "true")
+                .option("mode", "DROPMALFORMED")
+                .load(path);
         return ds.map(line -> {
             Instance i = new Instance(line.getString(0));
             i.addProperty("lat",line.getString(1));

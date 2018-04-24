@@ -15,6 +15,7 @@ import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.SparkSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import scala.Tuple2;
 import scala.Tuple3;
 
 import java.util.*;
@@ -29,32 +30,22 @@ public class SparkHR3Mapper extends AMapper {
 
     private static final Logger logger = LoggerFactory.getLogger(SparkHR3Mapper.class);
 
-    private static class HR3Block {
+    public static class HR3Block {
 
-        private List<Integer> blockId;
-        private KryoSerializationWrapper<Instance> instance;
+        private List<Integer> id;
 
-        public static HR3Block create(List<Integer> blockId, Instance instance) {
+        public static Tuple2<HR3Block, Instance> createTuple(List<Integer> blockId, Instance instance) {
             HR3Block hr3Block = new HR3Block();
-            hr3Block.blockId = blockId;
-            hr3Block.instance = new KryoSerializationWrapper<>(instance, Instance.class);
-            return hr3Block;
+            hr3Block.id = blockId;
+            return new Tuple2<>(hr3Block, instance);
         }
 
-        public List<Integer> getBlockId() {
-            return blockId;
+        public List<Integer> getId() {
+            return id;
         }
 
-        public void setBlockId(List<Integer> blockId) {
-            this.blockId = blockId;
-        }
-
-        public KryoSerializationWrapper<Instance> getInstance() {
-            return instance;
-        }
-
-        public void setInstance(KryoSerializationWrapper<Instance> instance) {
-            this.instance = instance;
+        public void setId(List<Integer> id) {
+            this.id = id;
         }
     }
 
@@ -131,24 +122,24 @@ public class SparkHR3Mapper extends AMapper {
         final String finalProperty1 = property1;
         final String finalProperty2 = property2;
         KryoSerializationWrapper<IBlockingModule> blockingWrapper = new KryoSerializationWrapper<>(generator, generator.getClass());
-        Dataset<HR3Block> sourceBlocks = source
+        Dataset<Tuple2<HR3Block, Instance>> sourceBlocks = source
                 .flatMap(i -> {
                     final IBlockingModule gen = blockingWrapper.get();
                     return gen.getAllSourceIds(i, finalProperty1).stream()
                             .flatMap(x -> gen.getBlocksToCompare(x).stream())
-                            .map(x -> HR3Block.create(x, i)).iterator();
-                }, Encoders.bean(HR3Block.class));
-        Dataset<HR3Block> targetBlocks = target
+                            .map(x -> HR3Block.createTuple(x, i)).iterator();
+                }, Encoders.tuple(Encoders.bean(HR3Block.class),Encoders.kryo(Instance.class)));
+        Dataset<Tuple2<HR3Block, Instance>> targetBlocks = target
                 .flatMap(i -> {
                     final IBlockingModule gen = blockingWrapper.get();
-                    return gen.getAllBlockIds(i).stream().map(x -> HR3Block.create(x, i)).iterator();
-                }, Encoders.bean(HR3Block.class));
-        sourceBlocks.repartition(sourceBlocks.col("blockId"));
-        targetBlocks.repartition(targetBlocks.col("blockId"));
-        sourceBlocks.joinWith(targetBlocks, sourceBlocks.col("blockId").equalTo(targetBlocks.col("blockId")))
+                    return gen.getAllBlockIds(i).stream().map(x -> HR3Block.createTuple(x, i)).iterator();
+                }, Encoders.tuple(Encoders.bean(HR3Block.class),Encoders.kryo(Instance.class)));
+        sourceBlocks.repartition(sourceBlocks.col("_1.id"));
+        targetBlocks.repartition(targetBlocks.col("_1.id"));
+        sourceBlocks.joinWith(targetBlocks, sourceBlocks.col("_1.id").equalTo(targetBlocks.col("_1.id")))
                 .map(tuple -> {
-                    final Instance s = tuple._1().getInstance().get();
-                    final Instance t = tuple._2().getInstance().get();
+                    final Instance s = tuple._1()._2();
+                    final Instance t = tuple._2()._2();
                     final double sim = measure.get().getSimilarity(s, t, finalProperty1, finalProperty2);
                     return new Tuple3<>(s.getUri(), t.getUri(), sim);
                 }, Encoders.tuple(Encoders.STRING(), Encoders.STRING(), Encoders.DOUBLE()))
