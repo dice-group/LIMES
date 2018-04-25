@@ -327,12 +327,13 @@
             <artifactId>icu4j</artifactId>
             <version>57.1</version>
         </dependency>
-
-<dependency>
-  <groupId>commons-codec</groupId>
-  <artifactId>commons-codec</artifactId>
-  <version>1.11</version>
-</dependency>
+        
+        <!-- commons codec for koeln phonetic measure-->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.11</version>
+        </dependency>
         <!-- jena-sparql-api -->
 
         <dependency>
