@@ -93,12 +93,14 @@ public class EdgeCountingSemanticMapper extends AMapper {
         for (Future<Pair<Pair<String, String>, Double>> entry : list) {
             try {
                 Pair<Pair<String, String>, Double> pair = entry.get();
-                String uri1 = pair.getLeft().getLeft();
-                String uri2 = pair.getLeft().getRight();
-                Double sim = pair.getRight();
+                if (pair != null) {
+                    String uri1 = pair.getLeft().getLeft();
+                    String uri2 = pair.getLeft().getRight();
+                    Double sim = pair.getRight();
 
-                if (sim >= threshold) {
-                    m.add(uri1, uri2, sim);
+                    if (sim >= threshold) {
+                        m.add(uri1, uri2, sim);
+                    }
                 }
             } catch (InterruptedException | ExecutionException e) {
                 // TODO Auto-generated catch block
