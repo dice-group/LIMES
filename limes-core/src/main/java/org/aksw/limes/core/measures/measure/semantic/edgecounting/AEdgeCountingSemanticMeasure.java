@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.measures.measure.AMeasure;
+import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.semantic.ASemanticMeasure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +76,8 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                 try {
                     dictionary.open();
                     dictionary.export(new FileOutputStream(exFile));
-                    //logger.info("Export is " + (exFile.length() / 1048576) + " MB");
+                    // logger.info("Export is " + (exFile.length() / 1048576) +
+                    // " MB");
                 } catch (IOException e1) {
                     logger.error("Couldn't open wordnet dictionary. Exiting..");
                     e1.printStackTrace();
@@ -239,10 +242,10 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         double maxSim = 0;
         HashMap<String, Double> similaritiesMap = new HashMap<String, Double>();
         for (String sourceValue : instance1.getProperty(property1)) {
-            //logger.info("Source value: " + sourceValue);
+            // logger.info("Source value: " + sourceValue);
             for (String targetValue : instance2.getProperty(property2)) {
                 // create bag of words for each property value
-                //logger.info("Target value: " + targetValue);
+                // logger.info("Target value: " + targetValue);
                 double sourceTokensSum = 0;
                 // compare each token of the current source value
                 // with every token of the current target value
@@ -266,28 +269,24 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                             if (!Stopwords.isStopword(targetToken)) {
 
                                 double targetTokenSim = 0.0d;
-                                //logger.info("Source token: " + sourceToken + " Target token: " + targetToken);
+                                // logger.info("Source token: " + sourceToken +
+                                // " Target token: " + targetToken);
                                 String together = sourceToken + "||" + targetToken;
                                 String together2 = targetToken + "||" + sourceToken;
                                 if (similaritiesMap.containsKey(together)) {
                                     targetTokenSim = similaritiesMap.get(together);
-                                    //logger.info("Similarity exists");
+                                    // logger.info("Similarity exists");
                                 } else if (similaritiesMap.containsKey(together2)) {
                                     targetTokenSim = similaritiesMap.get(together2);
-                                    //logger.info("Similarity exists2");
+                                    // logger.info("Similarity exists2");
                                 } else {
-                                    //logger.info("Similarity doesn't exist");
-                                    targetTokenSim = getSimilarity(sourceToken, targetToken);
+                                    // logger.info("Similarity doesn't exist");
+                                    AMeasure exactMatch = MeasureFactory
+                                            .createMeasure(MeasureFactory.getMeasureType("exactmatch"));
+                                    double exactSim = exactMatch.getSimilarity(sourceToken, targetToken);
+                                    targetTokenSim = (exactSim == 1d) ? 1d : getSimilarity(sourceToken, targetToken);
                                     similaritiesMap.put(together, targetTokenSim);
                                 }
-                                //logger.info("Source token: " + sourceToken + " Target token: " + targetToken + ":"
-                                //        + targetTokenSim);
-
-                                // for the current source token, keep the
-                                // highest
-                                // similarity obtained by comparing it with all
-                                // current
-                                // target tokens
 
                                 if (targetTokenSim > maxTargetTokenSim) {
                                     maxTargetTokenSim = targetTokenSim;
@@ -295,23 +294,23 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                                 if (maxTargetTokenSim == 1.0d) {
                                     break;
                                 }
-                            } 
+                            }
                         }
                         // for the current source bag of words, add the max
                         // similarity to the sum over all current source
                         // token similarities
                         sourceTokensSum += maxTargetTokenSim;
-                    } 
+                    }
 
                 }
                 // get the average of the max similarities of each source token
                 // this is the similarity of the current source bag of words
-                //logger.info("Non stop words " + counter);
+                // logger.info("Non stop words " + counter);
                 if (counter > 0)
                     sim = (double) sourceTokensSum / ((double) (counter));
                 else
                     sim = 0;
-                //logger.info("Average Sum  " + sim);
+                // logger.info("Average Sum " + sim);
 
                 if (sim > maxSim) {
                     maxSim = sim;
@@ -417,7 +416,5 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
         return result;
     }
-
-    
 
 }

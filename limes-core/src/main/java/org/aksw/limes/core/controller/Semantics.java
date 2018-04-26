@@ -100,6 +100,7 @@ public class Semantics {
             e.printStackTrace();
             throw new RuntimeException();
         }
+        writer.writeNext(new String[] { "Experiment " + experiment }, false);
         writer.writeNext(new String[] { "GoldStandard", "Predictions", "Precision", "Recall", "F-measure", "Accuracy",
                 "Runtime", "LS" }, false);
         try {
@@ -127,33 +128,34 @@ public class Semantics {
         boolean verbose = false;
 
         learningParameters = new ArrayList<>();
-        learningParameters.add(new LearningParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize, Long.class,
-                10d, Long.MAX_VALUE, 10d, AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE));
-        learningParameters.add(new LearningParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, maxIterationNumber, Integer.class,
-                1d, Integer.MAX_VALUE, 10d, AWombat.PARAMETER_MAX_ITERATIONS_NUMBER));
-        learningParameters.add(new LearningParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, maxIterationTimeInMin,
-                Integer.class, 1d, Integer.MAX_VALUE, 1, AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES));
+        learningParameters.add(new LearningParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize,
+                Long.class, 10d, Long.MAX_VALUE, 10d, AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE));
+        learningParameters.add(new LearningParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, maxIterationNumber,
+                Integer.class, 1d, Integer.MAX_VALUE, 10d, AWombat.PARAMETER_MAX_ITERATIONS_NUMBER));
+        learningParameters
+                .add(new LearningParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, maxIterationTimeInMin,
+                        Integer.class, 1d, Integer.MAX_VALUE, 1, AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES));
         learningParameters.add(new LearningParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES, maxExecutionTimeInMin,
                 Integer.class, 1d, Integer.MAX_VALUE, 1, AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES));
-        learningParameters.add(new LearningParameter(AWombat.PARAMETER_MAX_FITNESS_THRESHOLD, maxFitnessThreshold, Double.class,
-                0d, 1d, 0.01d, AWombat.PARAMETER_MAX_FITNESS_THRESHOLD));
-        learningParameters.add(new LearningParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, minPropertyCoverage, Double.class,
-                0d, 1d, 0.01d, AWombat.PARAMETER_MIN_PROPERTY_COVERAGE));
+        learningParameters.add(new LearningParameter(AWombat.PARAMETER_MAX_FITNESS_THRESHOLD, maxFitnessThreshold,
+                Double.class, 0d, 1d, 0.01d, AWombat.PARAMETER_MAX_FITNESS_THRESHOLD));
+        learningParameters.add(new LearningParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE, minPropertyCoverage,
+                Double.class, 0d, 1d, 0.01d, AWombat.PARAMETER_MIN_PROPERTY_COVERAGE));
         learningParameters.add(new LearningParameter(AWombat.PARAMETER_PROPERTY_LEARNING_RATE, propertyLearningRate,
                 Double.class, 0d, 1d, 0.01d, AWombat.PARAMETER_PROPERTY_LEARNING_RATE));
         learningParameters.add(new LearningParameter(AWombat.PARAMETER_OVERALL_PENALTY_WEIGHT, overallPenaltyWeight,
                 Double.class, 0d, 1d, 0.01d, AWombat.PARAMETER_OVERALL_PENALTY_WEIGHT));
         learningParameters.add(new LearningParameter(AWombat.PARAMETER_CHILDREN_PENALTY_WEIGHT, childrenPenaltyWeight,
                 Double.class, 0d, 1d, 0.01d, AWombat.PARAMETER_CHILDREN_PENALTY_WEIGHT));
-        learningParameters.add(new LearningParameter(AWombat.PARAMETER_COMPLEXITY_PENALTY_WEIGHT, complexityPenaltyWeight,
-                Double.class, 0d, 1d, 0.01d, AWombat.PARAMETER_COMPLEXITY_PENALTY_WEIGHT));
-        learningParameters
-                .add(new LearningParameter(AWombat.PARAMETER_VERBOSE, verbose, Boolean.class, 0, 1, 0, AWombat.PARAMETER_VERBOSE));
-        learningParameters.add(new LearningParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measures, MeasureType.class, 0, 0, 0,
-                AWombat.PARAMETER_ATOMIC_MEASURES));
-        learningParameters.add(new LearningParameter(AWombat.PARAMETER_SAVE_MAPPING, saveMapping, Boolean.class, 0, 1, 0,
-                AWombat.PARAMETER_SAVE_MAPPING));
-        
+        learningParameters.add(new LearningParameter(AWombat.PARAMETER_COMPLEXITY_PENALTY_WEIGHT,
+                complexityPenaltyWeight, Double.class, 0d, 1d, 0.01d, AWombat.PARAMETER_COMPLEXITY_PENALTY_WEIGHT));
+        learningParameters.add(new LearningParameter(AWombat.PARAMETER_VERBOSE, verbose, Boolean.class, 0, 1, 0,
+                AWombat.PARAMETER_VERBOSE));
+        learningParameters.add(new LearningParameter(AWombat.PARAMETER_ATOMIC_MEASURES, measures, MeasureType.class, 0,
+                0, 0, AWombat.PARAMETER_ATOMIC_MEASURES));
+        learningParameters.add(new LearningParameter(AWombat.PARAMETER_SAVE_MAPPING, saveMapping, Boolean.class, 0, 1,
+                0, AWombat.PARAMETER_SAVE_MAPPING));
+
         return learningParameters;
     }
 
@@ -164,7 +166,10 @@ public class Semantics {
      */
     public static void main(String[] args) throws UnsupportedMLImplementationException {
         // get training data
-
+        if (args.length != 2) {
+            logger.error("Not enough arguments");
+            System.exit(1);
+        }
         Semantics.init(args);
         ACache fullSourceCache = data.getSourceCache();
         ACache fullTargetCache = data.getTargetCache();
@@ -173,6 +178,7 @@ public class Semantics {
 
         for (int i = 0; i < 10; i++) {
             fold = i + 1;
+            logger.info("Fold: " + fold);
             AMapping testSet = subSets.get(i);
             testSet.getReversedMap();
             AMapping trainingSet = getLearningPool(subSets, i);// training set
@@ -207,22 +213,28 @@ public class Semantics {
             // create wombat and let it learn
             SupervisedMLAlgorithm wombat = MLAlgorithmFactory
                     .createMLAlgorithm(WombatSimple.class, MLImplementationType.SUPERVISED_BATCH).asSupervised();
+            logger.info("Init WOMBAT");
             wombat.init(lp, trainingCaches.get(0), trainingCaches.get(1));
+            logger.info("WOMBAT is learning..");
             MLResults mlResults = wombat.learn(trainingSet);
+            logger.info("WOMBAT is done!");
 
+            logger.info("LS: \n" + mlResults.getLinkSpecification().toString());
             // execute ls
             StopWatch stopWatch = new StopWatch();
             stopWatch.start();
             AMapping predictions = executeLinkSpecs(mlResults.getLinkSpecification(), testingCaches.get(0),
                     testingCaches.get(1));
             long runtime = stopWatch.getTime();
-
+            
             // evaluate
             // compare results from limes to test set
-            evaluate(predictions, testSet, runtime, mlResults.getLinkSpecification(), resultsFileTest, csvWriterTest);
+            logger.info("Evaluating results");
+            evaluate(predictions, testSet, runtime, mlResults.getLinkSpecification(), resultsFileTest, csvWriterTest,
+                    testingCaches.get(0), testingCaches.get(1));
             // compare mapping from MLResults with the training set
             evaluate(mlResults.getMapping(), trainingSet, 0, mlResults.getLinkSpecification(), resultsFileTraining,
-                    csvWriterTrain);
+                    csvWriterTrain, trainingCaches.get(0), trainingCaches.get(1));
         }
     }
 
@@ -275,15 +287,15 @@ public class Semantics {
     }
 
     public static void evaluate(AMapping predictions, AMapping referenceSet, long runtime,
-            LinkSpecification linkSpecification, String file, CSVWriter writer) {
+            LinkSpecification linkSpecification, String file, CSVWriter writer, ACache source, ACache target) {
         QualitativeMeasuresEvaluator evaluator = new QualitativeMeasuresEvaluator();
         Set<EvaluatorType> evaluationMeasures = new LinkedHashSet<EvaluatorType>();
         evaluationMeasures.add(EvaluatorType.PRECISION);
         evaluationMeasures.add(EvaluatorType.RECALL);
         evaluationMeasures.add(EvaluatorType.F_MEASURE);
         evaluationMeasures.add(EvaluatorType.ACCURACY);
-        Map<EvaluatorType, Double> evaluations = evaluator.evaluate(predictions, new GoldStandard(referenceSet),
-                evaluationMeasures);
+        Map<EvaluatorType, Double> evaluations = evaluator.evaluate(predictions,
+                new GoldStandard(referenceSet, source, target), evaluationMeasures);
 
         writeResults(evaluations, runtime, predictions.getNumberofMappings(), referenceSet.getNumberofMappings(),
                 linkSpecification, file, writer);
