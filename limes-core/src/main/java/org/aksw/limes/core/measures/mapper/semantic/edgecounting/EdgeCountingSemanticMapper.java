@@ -90,6 +90,7 @@ public class EdgeCountingSemanticMapper extends AMapper {
                 list.add(similarity);
             }
         }
+        executor.shutdown();
         for (Future<Pair<Pair<String, String>, Double>> entry : list) {
             try {
                 Pair<Pair<String, String>, Double> pair = entry.get();
@@ -107,7 +108,7 @@ public class EdgeCountingSemanticMapper extends AMapper {
                 e.printStackTrace();
             }
         }
-        executor.shutdown();
+        
         return m;
     }
 
