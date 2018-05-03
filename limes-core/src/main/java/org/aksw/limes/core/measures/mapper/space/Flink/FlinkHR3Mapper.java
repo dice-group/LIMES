@@ -83,12 +83,12 @@ public class FlinkHR3Mapper {
 			properties.add(split[i]);
 		}
 
-		System.out.println("sourcecount:" + source.count());
-		System.out.println("propertieslist:" + properties);
 		DataSet<Tuple2<Tuple, Instance>> sourceBid = source
-				.flatMap(new GetSourceInstanceBlocksToCompare(properties, dim, getBlockInstanceMapperTypeInfo(), granularity, thresholds));
+				.flatMap(new GetSourceInstanceBlocksToCompare(properties, dim, getBlockInstanceMapperTypeInfo(), granularity, thresholds))
+				.partitionByHash(0);
 		DataSet<Tuple2<Tuple, Instance>> targetBid = target
-				.flatMap(new GetTargetBlocks(properties, dim, getBlockInstanceMapperTypeInfo(), granularity, thresholds));
+				.flatMap(new GetTargetBlocks(properties, dim, getBlockInstanceMapperTypeInfo(), granularity, thresholds))
+				.partitionByHash(0);
 
 		// comparison
 		DataSet<MappingObject> result =
