@@ -30,20 +30,20 @@ import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.dragon.Dragon;
-import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.GlobalFMeasure;
-import org.aksw.limes.core.ml.algorithm.dragon.Pruning.ErrorEstimatePruning;
+import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.GiniIndex;
+import org.aksw.limes.core.ml.algorithm.dragon.Pruning.GlobalFMeasurePruning;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ActiveDTLEvaluation {
 
-	private static final int activeLearningIterations = 10;
+	private static final int activeLearningIterations = 100;
 	private static final int experimentIterations = 1;
 //	private static final int initialTrainingDataSize = 10;
 	private static List<FoldData> folds = new ArrayList<>();
 	private static int FOLDS_COUNT = 10;
 
-	protected static Logger logger = LoggerFactory.getLogger(DTLEvaluation.class);
+	protected static Logger logger = LoggerFactory.getLogger(ActiveDTLEvaluation.class);
 
 	public static List<FoldData> generateFolds(EvaluationData data) {
 		folds = new ArrayList<>();
@@ -109,7 +109,7 @@ public class ActiveDTLEvaluation {
 		long end;
 //		String[] datasets = { "dbplinkedmdb", "person1full", "person2full", "drugs", "restaurantsfull", "dblpacm",
 //				"abtbuy", "dblpscholar", "amazongoogleproducts" };
-		String[] datasets = {"drugs", "restaurantsfull", "dbplinkedmdb", "abtbuy"};
+		String[] datasets = {"amazongoogleproducts"};
 
 		String header = "Iterations\tGloE\tGloG\tGinG\tGinE\n";
 
@@ -171,9 +171,8 @@ public class ActiveDTLEvaluation {
 				ACache trainTargetCache = trainData.targetCache;
 				ACache testSourceCache = testData.sourceCache;
 				ACache testTargetCache = testData.targetCache;
-				int initialTrainingDataSize = (int)Math.ceil((double)trainingData.size() / 10.0);
+				int initialTrainingDataSize = 10;
 				AMapping initialTrainingData = getInitialTrainingData(trainingData, initialTrainingDataSize);
-//				AMapping initialTrainingData = getInitialTrainingData(trainingData, initialTrainingDataSize);
 				logger.info("InitialSize: " + initialTrainingData.size());
 
 				AMLAlgorithm dtl = null;
@@ -198,8 +197,8 @@ public class ActiveDTLEvaluation {
 				((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
 				start = System.currentTimeMillis();
 				dtl.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
-				dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
-				dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION, new ErrorEstimatePruning());
+				dtl.getMl().setParameter(Dragon.PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+				dtl.getMl().setParameter(Dragon.PARAMETER_PRUNING_FUNCTION, new GlobalFMeasurePruning());
 				res = dtl.asActive().activeLearn(initialTrainingData);
 				end = System.currentTimeMillis();
                 logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -219,6 +218,7 @@ public class ActiveDTLEvaluation {
 					start = System.currentTimeMillis();
 					AMapping examples = dtl.asActive().getNextExamples(initialTrainingDataSize);
 					examples = oracleFeedback(examples, c.getReferenceMapping());
+					new GiniIndex();
 					res = dtl.asActive().activeLearn(examples);
 					end = System.currentTimeMillis();
                     logger.info("LinkSpec: " + res.getLinkSpecification().toStringPretty());
@@ -235,6 +235,7 @@ public class ActiveDTLEvaluation {
                     logger.info("Time: " + GErTime);
                     logger.info("Size: " + GErSize[i]);
 				}
+				System.out.println(GErFM);
 //				// ========================================
 //
 //				logger.info("========Global + Global==========");
@@ -376,7 +377,7 @@ public class ActiveDTLEvaluation {
 		AMapping result = MappingFactory.createDefaultMapping();
 		for(Entry<String, HashMap<String, Double>> entry : data.getMap().entrySet()){
 			result.add(entry.getKey(), entry.getValue());
-			if(result.size() == size){
+			if(result.size() >= size){
 				break;
 			}
 		}

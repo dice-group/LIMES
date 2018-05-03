@@ -26,6 +26,8 @@ public class FMeasure extends APRF implements IQualitativeMeasure {
 
         double p = precision(predictions, goldStandard);
         double r = recall(predictions, goldStandard);
+        logger.info("Precision: " + p);
+        logger.info("Recall: " + r);
 
         if (p + r > 0d)
             return 2 * p * r / (p + r);

@@ -3,14 +3,9 @@ package org.aksw.limes.core.ml.algorithm.dragon;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.aksw.limes.core.datastrutures.GoldStandard;
-import org.aksw.limes.core.datastrutures.PairSimilar;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
@@ -18,13 +13,13 @@ import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
 import org.aksw.limes.core.execution.rewriter.Rewriter;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MemoryMapping;
-import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
@@ -37,16 +32,10 @@ import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.FitnessFunctionD
 import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.GiniIndex;
 import org.aksw.limes.core.ml.algorithm.dragon.Pruning.ErrorEstimatePruning;
 import org.aksw.limes.core.ml.algorithm.dragon.Pruning.PruningFunctionDTL;
-import org.aksw.limes.core.ml.algorithm.dragon.Utils.TestCacheBuilder;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.aksw.limes.core.util.ParenthesisMatcher;
 import org.apache.log4j.Logger;
 
 import weka.classifiers.trees.J48;
-import weka.core.Attribute;
-import weka.core.DenseInstance;
-import weka.core.Instance;
-import weka.core.Instances;
 
 /**
  * This class uses decision trees and an active learning approach to learn link
@@ -58,10 +47,6 @@ import weka.core.Instances;
  */
 public class Dragon extends ACoreMLAlgorithm {
 	/**
-	 * LinkSpecs that have already been checked, <ls.toString(), fmeasure value>
-	 */
-	private HashMap<String, Double> alreadySeenLS;
-	/**
 	 * delta Mappings that have already been calculated <deltaLS.toString(),
 	 * mapping>
 	 */
@@ -70,17 +55,12 @@ public class Dragon extends ACoreMLAlgorithm {
 	static Logger logger = Logger.getLogger(Dragon.class);
 
 	private PropertyMapping propertyMapping;
-	/**
-	 * weka instances
-	 */
-	private Instances trainingSet;
 	private MLResults mlresult;
 	/**
 	 * LinkSpec with the subtracted delta threshold
 	 */
 	private LinkSpecification deltaLS;
 	public TreeParser tp;
-	private J48 tree;
 	private Configuration configuration;
 	/**
 	 * Candidates which the user has labeles
@@ -92,26 +72,12 @@ public class Dragon extends ACoreMLAlgorithm {
 	private ArrayList<SourceTargetValue> base;
 
 	/**
-	 * helper boolean for uniformTrainingData
-	 */
-	private boolean negativeExample = false;
-	/**
-	 * helper boolean for uniformTrainingData
-	 */
-	private boolean positiveExample = false;
-	/**
 	 * Since the most informative links are the ones near the boundary, where
 	 * the instance pairs are being classified as links or not, we need to shift
 	 * the threshold of the measure so we can also get the instance pairs that
 	 * are almost classified as links
 	 */
 	private static final double delta = -0.1;
-
-	/**
-	 * if we have already seen a linkspecification we raise the threshold by
-	 * this amount
-	 */
-	private static final double thresholdRaise = 0.05;
 
 	// Parameters
 	public static final String PARAMETER_UNPRUNED_TREE = "use unpruned tree";
@@ -151,21 +117,13 @@ public class Dragon extends ACoreMLAlgorithm {
 	private static final PruningFunctionDTL pruningFunction = new ErrorEstimatePruning();
 	private AMapping initialMapping = MappingFactory.createDefaultMapping();
 	private LinkSpecification bestLS;
-	private FMeasure fmeasure;
-	private double bestFMeasure = 0.0;
+	private double bestFMeasure;
 	private AMapping prediction;
-	private AMapping trainingData;
 	public DecisionTree root;
 	
 	private ACache testSourceCache = new MemoryCache();
 	private ACache testTargetCache = new MemoryCache();
 	
-
-	public static boolean useJ48 = false;
-	public static boolean useMergeAndConquer = false;
-	public static boolean useJ48optimized = false;
-	public static boolean buildTestCaches = false;
-
 	// TODO check whats wrong with exactmatch and levenshtein
 	public static final String[] stringMeasures = { "cosine",
 			// "exactmatch",
@@ -201,81 +159,6 @@ public class Dragon extends ACoreMLAlgorithm {
 		this.tp = new TreeParser(this);
 	}
 
-	/**
-	 * Generates training set out of config if there is a linkspec, else returns
-	 * a random mapping
-	 * 
-	 * @return mapping of executed linkspec
-	 */
-	public AMapping getTrainingMapping() {
-		logger.info("Getting initial training mapping...");
-		AMapping mapping = MappingFactory.createDefaultMapping();
-		if (this.initialMapping.size() > 0) {
-			mapping = this.initialMapping;
-			mapping = balanceInitialMapping(mapping);
-		} else if (this.bestLS != null) {
-			logger.info("...by running given LinkSpecification...");
-			DynamicPlanner dp = new DynamicPlanner(sourceCache, targetCache);
-			SimpleExecutionEngine ee = new SimpleExecutionEngine(sourceCache, targetCache,
-					this.configuration.getSourceInfo().getVar(), this.configuration.getTargetInfo().getVar());
-			mapping = ee.execute(bestLS, dp);
-		} else if (this.configuration != null) {
-			logger.info("...by running LinkSpecification from Configuration...");
-			if (this.configuration.getMetricExpression() != null
-					&& !this.configuration.getMetricExpression().isEmpty()) {
-				bestLS = new LinkSpecification();
-				bestLS.readSpec(this.configuration.getMetricExpression(), this.configuration.getAcceptanceThreshold());
-				DynamicPlanner dp = new DynamicPlanner(sourceCache, targetCache);
-				SimpleExecutionEngine ee = new SimpleExecutionEngine(sourceCache, targetCache,
-						this.configuration.getSourceInfo().getVar(), this.configuration.getTargetInfo().getVar());
-				mapping = ee.execute(bestLS, dp);
-			}
-		} else {
-			logger.error("No initial mapping or linkspecification as parameter given! Returning null!");
-			mapping = null;
-		}
-		return mapping;
-	}
-
-	/**
-	 * Creates {@link Instances}, with attributes but does not fill them with
-	 * values Attributes are of the form: measure delimiter propertyA |
-	 * propertyB (without spaces)
-	 * 
-	 * @param mapping
-	 *            will be used to create attributes
-	 * @return trainingInstances
-	 */
-	private Instances createEmptyTrainingInstances(AMapping mapping) {
-		ArrayList<Attribute> attributes = new ArrayList<Attribute>();
-		for (PairSimilar<String> propPair : propertyMapping.stringPropPairs) {
-			for (String measure : stringMeasures) {
-				Attribute attr = new Attribute(measure + TreeParser.delimiter + propPair.a + "|" + propPair.b);
-				attributes.add(attr);
-			}
-		}
-		for (PairSimilar<String> propPair : propertyMapping.datePropPairs) {
-			for (String measure : dateMeasures) {
-				Attribute attr = new Attribute(measure + TreeParser.delimiter + propPair.a + "|" + propPair.b);
-				attributes.add(attr);
-			}
-		}
-		for (PairSimilar<String> propPair : propertyMapping.pointsetPropPairs) {
-			for (String measure : pointsetMeasures) {
-				Attribute attr = new Attribute(measure + TreeParser.delimiter + propPair.a + "|" + propPair.b);
-				attributes.add(attr);
-			}
-		}
-		// TODO what about number properties????
-		ArrayList<String> matchClass = new ArrayList<String>(2);
-		matchClass.add("positive");
-		matchClass.add("negative");
-		Attribute match = new Attribute("match", matchClass);
-		attributes.add(match);
-		Instances trainingInstances = new Instances("link", attributes, mapping.size());
-		trainingInstances.setClass(match);
-		return trainingInstances;
-	}
 
 	/**
 	 * Helper class for easier handling of links or link candidates
@@ -310,69 +193,6 @@ public class Dragon extends ACoreMLAlgorithm {
 		}
 	}
 
-	/**
-	 * Fills every attribute (except the class attribute) of the weka Instances
-	 * by running all similarity measures for properties of corresponding source
-	 * and target Instances
-	 * 
-	 * @param trainingSet
-	 * @param mapping
-	 */
-	private HashMap<Instance, SourceTargetValue> fillInstances(Instances trainingSet, AMapping mapping) {
-		HashMap<Instance, SourceTargetValue> instanceMap = new HashMap<Instance, SourceTargetValue>();
-		mapping.getMap().forEach((sourceURI, map2) -> {
-			map2.forEach((targetURI, value) -> {
-				Instance inst = new DenseInstance(trainingSet.numAttributes());
-				inst.setDataset(trainingSet);
-				for (int i = 0; i < trainingSet.numAttributes(); i++) {
-					// class index has to be left empty
-					if (i != trainingSet.classIndex()) {
-						String[] measureAndProperties = tp.getMeasureAndProperties(trainingSet.attribute(i).name());
-						String measureName = measureAndProperties[0];
-						String propertyA = measureAndProperties[1];
-						String propertyB = measureAndProperties[2];
-						String metricExpression = measureName + "(x." + propertyA + ", y." + propertyB + ")";
-						if (targetCache.getInstance(targetURI) == null || sourceCache.getInstance(sourceURI) == null) {
-							// instances in caches are sometimes
-							// surrounded by angle brackets
-							if (sourceCache.getInstance("<" + sourceURI + ">") == null
-									|| targetCache.getInstance("<" + targetURI + ">") == null) {
-								if (sourceCache.getInstance("<" + sourceURI + ">") == null)
-									logger.error("source null");
-								if (targetCache.getInstance("<" + targetURI + ">") == null)
-									logger.error("target null");
-								logger.error(
-										"URI from training mapping cannot be found in source/target cache.\n sourceURI: "
-												+ sourceURI + " targetURI: " + targetURI + " : " + value);
-							} else {
-								inst.setValue(i,
-										MeasureProcessor.getSimilarity(sourceCache.getInstance("<" + sourceURI + ">"),
-												targetCache.getInstance("<" + targetURI + ">"), metricExpression,
-												threshold, "?x", "?y"));
-							}
-						} else {
-							inst.setValue(i, MeasureProcessor.getSimilarity(sourceCache.getInstance(sourceURI),
-									targetCache.getInstance(targetURI), metricExpression, threshold, "?x", "?y"));
-						}
-					} else {
-						String classValue = "negative";
-						if (value > 0.9) {
-							classValue = "positive";
-							positiveExample = true;
-						} else {
-							negativeExample = true;
-						}
-						inst.setValue(i, classValue);
-					}
-				}
-				instanceMap.put(inst, new SourceTargetValue(sourceURI, targetURI, value));
-				trainingSet.add(inst);
-
-			});
-		});
-		return instanceMap;
-	}
-
 	@Override
 	public String getName() {
 		return "Decision Tree Learning";
@@ -384,11 +204,12 @@ public class Dragon extends ACoreMLAlgorithm {
 	 */
 	@Override
 	protected MLResults activeLearn() throws UnsupportedMLImplementationException {
-		trainingData = getTrainingMapping();
-		if (trainingData == null) {
-			return null;
-		}
-		return activeLearn(trainingData);
+//		trainingData = getTrainingMapping();
+//		if (trainingData == null) {
+//			return null;
+//		}
+//		return activeLearn(trainingData);
+		throw new UnsupportedMLImplementationException("Not implemented yet!");
 	}
 
 	/**
@@ -414,165 +235,27 @@ public class Dragon extends ACoreMLAlgorithm {
 				previouslyPresentedCandidates.add(sourceURI, targetURI, value);
 			});
 		});
-		LinkSpecification resLS = buildTreeAndParseToLS(oracleMapping);
-		if (resLS == null) {
-			logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
-			if (addBase(oracleMapping)) {
-				resLS = buildTreeAndParseToLS(oracleMapping);
-			} else {
-				// if adding the base does not help we call wombat
-				handleUniformTrainingData(oracleMapping);
+		MLResults tmpMLResult = learn(oracleMapping);
+		DecisionTree tree = (DecisionTree)tmpMLResult.getDetails().get("tree");
+		AMapping treeMapping = tree.getTotalMapping();
+		tmpMLResult.setQuality(tree.calculateFMeasure(treeMapping, oracleMapping));
+		if(bestLS == null){
+			this.mlresult = tmpMLResult;
+			bestLS = tmpMLResult.getLinkSpecification();
+			bestFMeasure = tmpMLResult.getQuality();
+            deltaLS = subtractDeltaFromLS(this.mlresult.getLinkSpecification());
+		}else{
+			if((tmpMLResult.getQuality() > bestFMeasure) || (tmpMLResult.getQuality() >= bestFMeasure && tmpMLResult.getLinkSpecification().size() < bestLS.size())){
+				this.mlresult = tmpMLResult;
+                bestLS = tmpMLResult.getLinkSpecification();
+                bestFMeasure = tmpMLResult.getQuality();
+                deltaLS = subtractDeltaFromLS(this.mlresult.getLinkSpecification());
 			}
 		}
-		this.mlresult = new MLResults();
-		if (useJ48optimized) {
-			trainingData = oracleMapping;
-			LinkSpecification raisedLS = null;
-			// If we get the same tree again, raise the threshold to get better
-			// results faster
-			while (alreadySeenLS.get(resLS.toString()) != null) {
-				logger.debug("Already seen " + resLS);
-				raisedLS = raiseThreshold(resLS);
-				// they are the same if we reached the maximum threshold
-				if (raisedLS.equals(resLS)) {
-					break;
-				} else {
-					resLS = raisedLS;
-				}
-				logger.debug("Setting threshold to: " + resLS.getThreshold());
-			}
-			if (checkIfThereWasBetterLSBefore(resLS, null, null)) {
-				logger.debug("Already had better LinkSpecification: " + bestLS);
-			} else {
-				logger.info("Learned LinkSpecification: " + resLS.toStringOneLine());
-			}
-			this.mlresult.setLinkSpecification(bestLS);
-
-		} else {
-			this.mlresult.setLinkSpecification(resLS);
-		}
-		this.mlresult.setMapping(prediction);
-		this.mlresult.setQuality(bestFMeasure);
-		deltaLS = subtractDeltaFromLS(resLS);
+		logger.info("\n\n === bestFM == \n : " + bestFMeasure);
 		return this.mlresult;
 	}
 
-	/**
-	 * Builds the J48 tree and calls the parser to get the LinkSpecification
-	 * 
-	 * @param oracleMapping
-	 * @return
-	 */
-	private LinkSpecification buildTreeAndParseToLS(AMapping oracleMapping) {
-		this.trainingSet = createEmptyTrainingInstances(oracleMapping);
-		fillInstances(trainingSet, oracleMapping);
-		if (!(negativeExample & positiveExample)) {
-			logger.debug("negative examples: " + negativeExample + " positive examples:" + positiveExample);
-			negativeExample = false;
-			positiveExample = false;
-			return null;
-		}
-		LinkSpecification resLS = null;
-		try {
-			String[] options = getOptionsArray();
-			tree = new J48();
-			tree.setOptions(options);
-			logger.info("Building classifier....");
-			tree.buildClassifier(trainingSet);
-			System.out.println("J48 tree: \n" + tree.prefix());
-			// System.out.println(tree.graph());
-			if (tree.prefix().startsWith("[negative ") || tree.prefix().startsWith("[positive ")) {
-				logger.info("Bad tree! Giving the algorithm more information by adding more instances.");
-				if (addBase(oracleMapping)) {
-					resLS = buildTreeAndParseToLS(oracleMapping);
-				} else {
-					handleUniformTrainingData(oracleMapping);
-				}
-			}
-			logger.info("Parsing tree to LinkSpecification...");
-			resLS = treeToLinkSpec(tree);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return resLS;
-	}
-
-	/**
-	 * Checks if there was already a better LinkSpecification before if this is
-	 * batch learning it checks all thresholds above the learned also
-	 * 
-	 * @param ls
-	 * @return
-	 */
-	private boolean checkIfThereWasBetterLSBefore(LinkSpecification ls, ACache source, ACache target) {
-		if (source == null || target == null) {
-			source = this.testSourceCache;
-			target = this.testTargetCache;
-		}
-		while (alreadySeenLS.get(ls.toString()) == null && ls.getThreshold() != 1.0) {
-			logger.debug("Checking: " + ls);
-			MLResults tmp = new MLResults();
-			tmp.setLinkSpecification(ls);
-			AMapping pred = predict(source, target, tmp);
-			double pfresult = fmeasure.calculate(pred,
-					new GoldStandard(trainingData, source.getAllUris(), target.getAllUris()));
-			logger.debug("best before: " + bestFMeasure + " now: " + pfresult);
-			alreadySeenLS.put(ls.toString(), pfresult);
-			if (pfresult > bestFMeasure) {
-				this.prediction = pred;
-				this.bestLS = ls;
-				this.bestFMeasure = pfresult;
-			}
-			LinkSpecification raisedLS = raiseThreshold(ls);
-			// they are the same if we reached the maximum threshold
-			if (raisedLS.equals(ls)) {
-				break;
-			} else {
-				ls = raisedLS;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Adds {@link #base} to the oracle mapping, until positive and negative
-	 * examples are equal
-	 * 
-	 * @param oracleMapping
-	 * @return
-	 */
-	private boolean addBase(AMapping oracleMapping) {
-		boolean changed = false;
-		int positive = 0;
-		int negative = 0;
-		for (String s : oracleMapping.getMap().keySet()) {
-			for (String t : oracleMapping.getMap().get(s).keySet()) {
-				if (oracleMapping.getMap().get(s).get(t) == 1.0) {
-					positive++;
-				} else {
-					negative++;
-				}
-			}
-		}
-		logger.debug("positive: " + positive + " negative: " + negative);
-		if (base.size() != 0) {
-			Iterator<SourceTargetValue> it = base.iterator();
-			while (it.hasNext() && positive != negative) {
-				SourceTargetValue inst = it.next();
-				if (inst.value == 1.0) {
-					positive++;
-				} else {
-					negative++;
-				}
-				if (!oracleMapping.contains(inst.sourceUri, inst.targetUri)) {
-					oracleMapping.add(inst.sourceUri, inst.targetUri, inst.value);
-					changed = true;
-				}
-			}
-		}
-		logger.debug("positive: " + positive + " negative: " + negative);
-		return changed;
-	}
 
 	/**
 	 * Adds all {@link #previouslyPresentedCandidates} by calling union on the
@@ -585,51 +268,6 @@ public class Dragon extends ACoreMLAlgorithm {
 		return ((MemoryMapping) oracleMapping).union(previouslyPresentedCandidates);
 	}
 
-	/**
-	 * Tries to get an equal amount of positive and negative examples. If
-	 * positive == negative it just returns the mapping If positive < negative
-	 * it deletes some negative examples. If negative < mapping.size / 4 it
-	 * returns null, telling the user to provide more negative examples
-	 * 
-	 * @param oracleMapping
-	 * @return
-	 */
-	private AMapping balanceInitialMapping(AMapping oracleMapping) {
-		AMapping originalOracleMapping = MappingFactory.createDefaultMapping();
-		int positive = 0;
-		int negative = 0;
-		for (String s : oracleMapping.getMap().keySet()) {
-			for (String t : oracleMapping.getMap().get(s).keySet()) {
-				double v = oracleMapping.getMap().get(s).get(t);
-				if (v == 1.0) {
-					originalOracleMapping.add(s, t, v);
-					positive++;
-				} else {
-					originalOracleMapping.add(s, t, v);
-					negative++;
-				}
-			}
-		}
-		logger.debug("Initial mapping contains  " + positive + " positive and  " + negative + " negative examples");
-		if (positive == negative) {
-			return oracleMapping;
-		} else if (positive < negative) {
-			Iterator<Entry<String, HashMap<String, Double>>> it = oracleMapping.getMap().entrySet().iterator();
-			while (it.hasNext()) {
-				Entry<String, HashMap<String, Double>> item = it.next();
-				if (item.getValue().values().contains(0.0) && positive != negative) {
-					it.remove();
-					negative--;
-				}
-			}
-		} else if (negative < (float) oracleMapping.size() / 4.0) {
-			logger.error(
-					"Please provide more negative examples! An equal amount of positive and negative examples works best");
-			return null;
-		}
-		logger.debug("Balanced mapping contains  " + positive + " positive and  " + negative + " negative examples");
-		return oracleMapping;
-	}
 
 	/**
 	 * calls wombat because it is designed to handle this case
@@ -657,76 +295,6 @@ public class Dragon extends ACoreMLAlgorithm {
 		}
 	}
 
-	/**
-	 * Takes the options and puts them into a String[] so it can be used as
-	 * options in {@link J48}
-	 * 
-	 * @return array with options
-	 */
-	private String[] getOptionsArray() {
-		ArrayList<String> tmpOptions = new ArrayList<>();
-		if ((boolean) getParameter(PARAMETER_UNPRUNED_TREE)) {
-			tmpOptions.add("-U");
-		}
-		if (!((boolean) getParameter(PARAMETER_COLLAPSE_TREE))) {
-			tmpOptions.add("-O");
-		}
-		// default value in J48 is 0.25
-		if (((double) getParameter(PARAMETER_PRUNING_CONFIDENCE)) != 0.25) {
-			tmpOptions.add("-C");
-			tmpOptions.add(String.valueOf((double) getParameter(PARAMETER_PRUNING_CONFIDENCE)));
-		}
-		if ((boolean) getParameter(PARAMETER_REDUCED_ERROR_PRUNING)) {
-			tmpOptions.add("-R");
-		}
-		// default value in J48 is 3
-		if (((int) getParameter(PARAMETER_FOLD_NUMBER)) != 3) {
-			tmpOptions.add("-N");
-			tmpOptions.add(String.valueOf(((int) getParameter(PARAMETER_FOLD_NUMBER))));
-		}
-		if (!((boolean) getParameter(PARAMETER_SUBTREE_RAISING))) {
-			tmpOptions.add("-S");
-		}
-		if (!((boolean) getParameter(PARAMETER_CLEAN_UP))) {
-			tmpOptions.add("-L");
-		}
-		if (((boolean) getParameter(PARAMETER_LAPLACE_SMOOTHING))) {
-			tmpOptions.add("-A");
-		}
-		if (!((boolean) getParameter(PARAMETER_MDL_CORRECTION))) {
-			tmpOptions.add("-J");
-		}
-		// default value in J48 is 1
-		if (((int) getParameter(PARAMETER_SEED)) != 1) {
-			tmpOptions.add("-Q");
-			tmpOptions.add(String.valueOf(((int) getParameter(PARAMETER_SEED))));
-		}
-		String[] options = new String[tmpOptions.size()];
-		return tmpOptions.toArray(options);
-	}
-
-	/**
-	 * calls {@link TreeParser#parseTreePrefix(String)} to parse a
-	 * {@link LinkSpecification} from a {@link J48} tree
-	 * 
-	 * @param tree
-	 * @return
-	 */
-	private LinkSpecification treeToLinkSpec(J48 tree) {
-		LinkSpecification ls = new LinkSpecification();
-		try {
-			logger.debug(tree.prefix());
-			logger.debug(tree.graph());
-			String treeString = tree.prefix().substring(1,
-					ParenthesisMatcher.findMatchingParenthesis(tree.prefix(), 0));
-			ls = tp.pruneLS(tp.parseTreePrefix(treeString), (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return ls;
-	}
-
 	@Override
 	public AMapping predict(ACache source, ACache target, MLResults mlModel) {
 		LinkSpecification ls = mlModel.getLinkSpecification();
@@ -744,14 +312,8 @@ public class Dragon extends ACoreMLAlgorithm {
 		super.init(lp, sourceCache, targetCache);
 		this.previouslyPresentedCandidates = MappingFactory.createDefaultMapping();
 		this.base = new ArrayList<SourceTargetValue>();
-		this.fmeasure = new FMeasure();
-		this.negativeExample = false;
-		this.positiveExample = false;
-		this.trainingSet = null;
 		this.bestLS = null;
-		this.bestFMeasure = 0.0;
 		this.prediction = null;
-		alreadySeenLS = new HashMap<String, Double>();
 		alreadyCalculatedMapping = new HashMap<String, AMapping>();
 		if (lp == null) {
 			setDefaultParameters();
@@ -774,17 +336,6 @@ public class Dragon extends ACoreMLAlgorithm {
 		return manipulateThreshold(lsClone, false, delta);
 	}
 
-	private LinkSpecification raiseThreshold(LinkSpecification ls) {
-		LinkSpecification lsClone = ls.clone();
-		if (lsClone.getMeasure().startsWith("MINUS")) {
-			return manipulateThreshold(lsClone, true, thresholdRaise);
-		}
-		lsClone = manipulateThreshold(lsClone, false, thresholdRaise);
-		if (lsClone.equals(ls)) {
-			logger.debug("Can't raise threshold anymore, maximum reached!");
-		}
-		return lsClone;
-	}
 
 	/**
 	 * Shifts the thresholds of the atomic measures in the link specification.
@@ -971,15 +522,25 @@ public class Dragon extends ACoreMLAlgorithm {
 				}
 			}
 		} else {
-			logger.info("All Candidates have been presented. Returning most certain candidates");
-			base.sort((s1, s2) -> s1.compoundMeasureValue.compareTo(s2.compoundMeasureValue));
-			size = (base.size() < size) ? base.size() : size;
-			for (int i = 0; i < size; i++) {
-				SourceTargetValue candidate = base.get(i);
-				mostInformativeLinkCandidates.add(candidate.sourceUri, candidate.targetUri, candidate.value);
-			}
-
+			logger.info("All Candidates have been presented. Returning random unseen link candidates");
+//			base.sort((s1, s2) -> s1.compoundMeasureValue.compareTo(s2.compoundMeasureValue));
+//			size = (base.size() < size) ? base.size() : size;
+//			for (int i = 0; i < size; i++) {
+//				SourceTargetValue candidate = base.get(i);
+//				mostInformativeLinkCandidates.add(candidate.sourceUri, candidate.targetUri, candidate.value);
+//			}
+			outerloop:
+            for(Instance s: sourceCache.getAllInstances()){
+                for(Instance t: targetCache.getAllInstances()){
+                    if(!previouslyPresentedCandidates.contains(s.getUri(),t.getUri())){
+                        mostInformativeLinkCandidates.add(s.getUri(), t.getUri(), 0.0);
+                        if(mostInformativeLinkCandidates.size() >= size)
+                        	break outerloop;
+                    }
+                }
+            }
 		}
+		logger.info(mostInformativeLinkCandidates.size());
 		return mostInformativeLinkCandidates;
 	}
 
@@ -1012,35 +573,26 @@ public class Dragon extends ACoreMLAlgorithm {
 
 	@Override
 	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
-		if(useJ48){
-			return activeLearn(trainingData);
-		}else if(useMergeAndConquer){
-			MergeAndConquer mac = new MergeAndConquer(this,(double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE), (double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE), (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT), testSourceCache, testTargetCache, trainingData);
-			LinkSpecification ls = mac.learn(null);
-			return new MLResults(ls, null, ls.getQuality(), null);
-		}else{
-			this.trainingData = trainingData;
-			DecisionTree.isSupervised = true;
-			root = new DecisionTree(this, sourceCache, targetCache, null,
-					(double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
-					(double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
-					(double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData);
-			DecisionTree.fitnessFunction = (FitnessFunctionDTL) getParameter(PARAMETER_FITNESS_FUNCTION);
-			DecisionTree.pruningFunction = (PruningFunctionDTL) getParameter(PARAMETER_PRUNING_FUNCTION);
-			DecisionTree.fitnessFunction.setDt(root);
-			DecisionTree.maxDepth = (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
-			root.buildTree((int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
-			logger.info("FULL:\n" + root.toString());
+        DecisionTree.isSupervised = true;
+        root = new DecisionTree(this, sourceCache, targetCache, null,
+                (double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
+                (double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
+                (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData);
+        DecisionTree.fitnessFunction = (FitnessFunctionDTL) getParameter(PARAMETER_FITNESS_FUNCTION);
+        DecisionTree.pruningFunction = (PruningFunctionDTL) getParameter(PARAMETER_PRUNING_FUNCTION);
+        DecisionTree.fitnessFunction.setDt(root);
+        DecisionTree.maxDepth = (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
+        root.buildTree((int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
+        logger.info("FULL:\n" + root.toString());
 
-			root.prune();
-			logger.info("PRUNED:\n" + root.toString());
+        root.prune();
+        logger.info("PRUNED:\n" + root.toString());
 
-			LinkSpecification ls = root.getTotalLS();
-			if (bestLS == null)
-				bestLS = ls;
-			MLResults res = new MLResults(bestLS, null, -1.0, null);
-			return res;
-		}
+        LinkSpecification ls = root.getTotalLS();
+        HashMap<String, Object> details = new HashMap<>();
+        details.put("tree",root);
+        MLResults res = new MLResults(ls, null, -1.0, details);
+        return res;
 	}
 
 	public ACache getSourceCache() {
