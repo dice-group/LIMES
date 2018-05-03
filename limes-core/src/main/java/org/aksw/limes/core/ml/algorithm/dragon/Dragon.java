@@ -238,6 +238,7 @@ public class Dragon extends ACoreMLAlgorithm {
 		MLResults tmpMLResult = learn(oracleMapping);
 		DecisionTree tree = (DecisionTree)tmpMLResult.getDetails().get("tree");
 		AMapping treeMapping = tree.getTotalMapping();
+		logger.info("treeMapping size: " + treeMapping.size());
 		tmpMLResult.setQuality(tree.calculateFMeasure(treeMapping, oracleMapping));
 		if(bestLS == null){
 			this.mlresult = tmpMLResult;
@@ -245,7 +246,7 @@ public class Dragon extends ACoreMLAlgorithm {
 			bestFMeasure = tmpMLResult.getQuality();
             deltaLS = subtractDeltaFromLS(this.mlresult.getLinkSpecification());
 		}else{
-			if((tmpMLResult.getQuality() > bestFMeasure) || (tmpMLResult.getQuality() >= bestFMeasure && tmpMLResult.getLinkSpecification().size() < bestLS.size())){
+			if(tmpMLResult.getQuality() > bestFMeasure){ 
 				this.mlresult = tmpMLResult;
                 bestLS = tmpMLResult.getLinkSpecification();
                 bestFMeasure = tmpMLResult.getQuality();
