@@ -38,7 +38,7 @@ public class ActiveMLAlgorithm extends AMLAlgorithm {
      * @throws UnsupportedMLImplementationException if ML implementation is not supported
      */
     public AMapping getNextExamples(int size) throws UnsupportedMLImplementationException {
-        return getMl().getNextExamples(size);
+		throw new UnsupportedMLImplementationException("Not implemented yet!");
     }
 
     /**

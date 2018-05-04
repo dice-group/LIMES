@@ -34,6 +34,7 @@ public class DecisionTree {
 	public static double totalFMeasure = 0.0;
 	public static int maxDepth = 0;
 	private static String spaceChar = "︴";
+	private static final String delimiter = "§";
 
 	private ACache sourceCache;
 	private ACache targetCache;
@@ -448,7 +449,7 @@ public class DecisionTree {
 	public String toStringOneLine() {
 		String res = "";
 		if (classifier != null) {
-			res += classifier.getMeasure() + TreeParser.delimiter + classifier.getSourceProperty() + "|"
+			res += classifier.getMeasure() + delimiter + classifier.getSourceProperty() + "|"
 					+ classifier.getTargetProperty() + ": <= " + classifier.getThreshold() + ", > "
 					+ classifier.getThreshold() + "[";
 			if (leftChild != null) {
@@ -474,7 +475,7 @@ public class DecisionTree {
 		String res = "\n";
 		res += new String(new char[depth]).replace("\0", "\t");
 		if (classifier != null) {
-			res += classifier.getMeasure() + TreeParser.delimiter + classifier.getSourceProperty() + "|"
+			res += classifier.getMeasure() + delimiter + classifier.getSourceProperty() + "|"
 					+ classifier.getTargetProperty() + ": <= " + classifier.getThreshold() + ", > "
 					+ classifier.getThreshold() + "[";
 			if (leftChild != null) {
