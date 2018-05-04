@@ -32,6 +32,7 @@ import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.FitnessFunctionD
 import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.GiniIndex;
 import org.aksw.limes.core.ml.algorithm.dragon.Pruning.ErrorEstimatePruning;
 import org.aksw.limes.core.ml.algorithm.dragon.Pruning.PruningFunctionDTL;
+import org.aksw.limes.core.ml.algorithm.dragon.Utils.TestCacheBuilder;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.apache.log4j.Logger;
 
@@ -123,6 +124,7 @@ public class Dragon extends ACoreMLAlgorithm {
 	
 	private ACache testSourceCache = new MemoryCache();
 	private ACache testTargetCache = new MemoryCache();
+	private boolean isActive = false;
 	
 	// TODO check whats wrong with exactmatch and levenshtein
 	public static final String[] stringMeasures = { "cosine",
@@ -222,6 +224,7 @@ public class Dragon extends ACoreMLAlgorithm {
 	 */
 	@Override
 	protected MLResults activeLearn(AMapping oracleMapping) throws UnsupportedMLImplementationException {
+		isActive = true;
 		if (oracleMapping.size() == 0) {
 			logger.error("empty oracle Mapping! Returning empty MLResults!");
 			return new MLResults();
@@ -235,9 +238,21 @@ public class Dragon extends ACoreMLAlgorithm {
 				previouslyPresentedCandidates.add(sourceURI, targetURI, value);
 			});
 		});
+		TestCacheBuilder.buildFromMapping(oracleMapping, sourceCache, targetCache, testSourceCache, testTargetCache);
 		MLResults tmpMLResult = learn(oracleMapping);
 		DecisionTree tree = (DecisionTree)tmpMLResult.getDetails().get("tree");
 		AMapping treeMapping = tree.getTotalMapping();
+		for(String s: treeMapping.getMap().keySet()){
+            for(String t: treeMapping.getMap().get(s).keySet()){
+            	Instance testsi = testSourceCache.getInstance(s);
+            	Instance testti = testTargetCache.getInstance(t);
+            	if(testsi == null || testti == null){
+            		System.exit(1);
+            	}
+            	Instance si = sourceCache.getInstance(s);
+            	Instance ti = targetCache.getInstance(t);
+            }
+		}
 		logger.info("treeMapping size: " + treeMapping.size());
 		tmpMLResult.setQuality(tree.calculateFMeasure(treeMapping, oracleMapping));
 		if(bestLS == null){
@@ -246,7 +261,7 @@ public class Dragon extends ACoreMLAlgorithm {
 			bestFMeasure = tmpMLResult.getQuality();
             deltaLS = subtractDeltaFromLS(this.mlresult.getLinkSpecification());
 		}else{
-			if(tmpMLResult.getQuality() > bestFMeasure){ 
+			if((tmpMLResult.getQuality() > bestFMeasure) || (tmpMLResult.getQuality() >= bestFMeasure && tmpMLResult.getLinkSpecification().size() < bestLS.size())){ 
 				this.mlresult = tmpMLResult;
                 bestLS = tmpMLResult.getLinkSpecification();
                 bestFMeasure = tmpMLResult.getQuality();
@@ -574,11 +589,17 @@ public class Dragon extends ACoreMLAlgorithm {
 
 	@Override
 	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
-        DecisionTree.isSupervised = true;
-        root = new DecisionTree(this, sourceCache, targetCache, null,
-                (double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
-                (double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
-                (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData);
+		if(isActive){
+            root = new DecisionTree(this, testSourceCache, testTargetCache, null,
+                    (double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
+                    (double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
+                    (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData);
+        }else{
+            root = new DecisionTree(this, sourceCache, targetCache, null,
+                    (double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
+                    (double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
+                    (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData);
+        }
         DecisionTree.fitnessFunction = (FitnessFunctionDTL) getParameter(PARAMETER_FITNESS_FUNCTION);
         DecisionTree.pruningFunction = (PruningFunctionDTL) getParameter(PARAMETER_PRUNING_FUNCTION);
         DecisionTree.fitnessFunction.setDt(root);

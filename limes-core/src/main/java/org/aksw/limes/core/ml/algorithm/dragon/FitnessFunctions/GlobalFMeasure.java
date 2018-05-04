@@ -63,15 +63,9 @@ public class GlobalFMeasure extends FitnessFunctionDTL{
 	private double calculateFMeasure(AMapping mapping, AMapping refMap, DecisionTree currentNode) {
 		AMapping updatedRefMapping = removeNegativeExamplesFromMapping(refMap);
 		double res = 0.0;
-		if (DecisionTree.isSupervised) {
-			GoldStandard gs = new GoldStandard(updatedRefMapping, currentNode.getSourceCache().getAllUris(), currentNode.getTargetCache().getAllUris());
-			FMeasure fm = new FMeasure();
-			res = fm.calculate(mapping, gs);
-		} else {
-			GoldStandard gs = new GoldStandard(null, currentNode.getSourceCache().getAllUris(), currentNode.getTargetCache().getAllUris());
-			PseudoRefFMeasure prfm = new PseudoRefFMeasure();
-			res = prfm.calculate(mapping, gs);
-		}
+        GoldStandard gs = new GoldStandard(updatedRefMapping, currentNode.getSourceCache().getAllUris(), currentNode.getTargetCache().getAllUris());
+        FMeasure fm = new FMeasure();
+        res = fm.calculate(mapping, gs);
 		return res;
 	}
 	@Override

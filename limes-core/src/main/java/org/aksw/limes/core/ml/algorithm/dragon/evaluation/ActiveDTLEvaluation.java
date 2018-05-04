@@ -2,6 +2,8 @@ package org.aksw.limes.core.ml.algorithm.dragon.evaluation;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 public class ActiveDTLEvaluation {
 
-	private static final int activeLearningIterations = 100;
+	private static final int activeLearningIterations = 10;
 	private static final int experimentIterations = 1;
 //	private static final int initialTrainingDataSize = 10;
 	private static List<FoldData> folds = new ArrayList<>();
@@ -107,37 +109,41 @@ public class ActiveDTLEvaluation {
 		// ================================================================================================================
 		long start;
 		long end;
-//		String[] datasets = { "dbplinkedmdb", "person1full", "person2full", "drugs", "restaurantsfull", "dblpacm",
-//				"abtbuy", "dblpscholar", "amazongoogleproducts" };
-		String[] datasets = {"amazongoogleproducts"};
+//		String[] datasets = { /*"dbplinkedmdb",*/ "person1", "person2", "drugs", "restaurants", "dblpacm", "abtbuy", "dblpscholar", "amazongoogleproducts" };
+		String[] datasets = {"abtbuy"};
 
 		String header = "Iterations\tGloE\tGloG\tGinG\tGinE\n";
 
 		for (int k = 0; k < experimentIterations; k++) {
 
 			for (String ds : datasets) {
-//				String fMeasureBase = baseFolder + "/" + ds + "/FMeasure/";
-//				String precisionBase = baseFolder + "/" + ds + "/Precision/";
-//				String recallBase = baseFolder + "/" + ds + "/Recall/";
-//				String timeBase = baseFolder + "/" + ds + "/Time/";
-//				String sizeBase = baseFolder + "/" + ds + "/Size/";
-//				createDirectoriesIfNecessarry(baseFolder, fMeasureBase, precisionBase, recallBase, timeBase, sizeBase);
-//
-//				PrintWriter writerFMeasure = new PrintWriter(new FileOutputStream(fMeasureBase + k + ".csv", false));
-//				writerFMeasure.write(header);
-//				String datalineFMeasure = "";
-//				PrintWriter writerPrecision = new PrintWriter(new FileOutputStream(precisionBase + k + ".csv", false));
-//				writerPrecision.write(header);
-//				String datalinePrecision = "";
-//				PrintWriter writerRecall = new PrintWriter(new FileOutputStream(recallBase + k + ".csv", false));
-//				writerRecall.write(header);
-//				String datalineRecall = "";
-//				PrintWriter writerTime = new PrintWriter(new FileOutputStream(timeBase + k + ".csv", false));
-//				writerTime.write(header);
-//				String datalineTime = "";
-//				PrintWriter writerSize = new PrintWriter(new FileOutputStream(sizeBase + k + ".csv", false));
-//				writerSize.write(header);
-//				String datalineSize = "";
+				String fMeasureBase = baseFolder + "/" + ds + "/FMeasure/";
+				String precisionBase = baseFolder + "/" + ds + "/Precision/";
+				String recallBase = baseFolder + "/" + ds + "/Recall/";
+				String timeBase = baseFolder + "/" + ds + "/Time/";
+				String sizeBase = baseFolder + "/" + ds + "/Size/";
+				String lsBase = baseFolder + "/" + ds + "/LS/";
+				createDirectoriesIfNecessarry(baseFolder + "/" + ds, fMeasureBase, precisionBase, recallBase, timeBase, sizeBase,lsBase);
+
+				PrintWriter writerFMeasure = new PrintWriter(new FileOutputStream(fMeasureBase + k + ".csv", false));
+				writerFMeasure.write(header);
+				String datalineFMeasure = "";
+				PrintWriter writerPrecision = new PrintWriter(new FileOutputStream(precisionBase + k + ".csv", false));
+				writerPrecision.write(header);
+				String datalinePrecision = "";
+				PrintWriter writerRecall = new PrintWriter(new FileOutputStream(recallBase + k + ".csv", false));
+				writerRecall.write(header);
+				String datalineRecall = "";
+				PrintWriter writerTime = new PrintWriter(new FileOutputStream(timeBase + k + ".csv", false));
+				writerTime.write(header);
+				String datalineTime = "";
+				PrintWriter writerSize = new PrintWriter(new FileOutputStream(sizeBase + k + ".csv", false));
+				writerSize.write(header);
+				String datalineSize = "";
+
+				PrintWriter writerLS = new PrintWriter(new FileOutputStream(lsBase + k + ".csv", false));
+				writerLS.write(header);
+				String datalineLS = "";
 
 				EvaluationData c = DataSetChooser.getData(ds);
 				folds = generateFolds(c);
@@ -171,7 +177,7 @@ public class ActiveDTLEvaluation {
 				ACache trainTargetCache = trainData.targetCache;
 				ACache testSourceCache = testData.sourceCache;
 				ACache testTargetCache = testData.targetCache;
-				int initialTrainingDataSize = 10;
+				int initialTrainingDataSize = 20;
 				AMapping initialTrainingData = getInitialTrainingData(trainingData, initialTrainingDataSize);
 				logger.info("InitialSize: " + initialTrainingData.size());
 
@@ -188,6 +194,7 @@ public class ActiveDTLEvaluation {
 				double[] GErPrecision = new double[activeLearningIterations];
 				double[] GErRecall = new double[activeLearningIterations];
 				int[] GErSize = new int[activeLearningIterations];
+				long[] GErTime = new long[activeLearningIterations];
 				GoldStandard gs = new GoldStandard(testData.map, testSourceCache.getAllUris(), testTargetCache.getAllUris());
 				dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 						MLImplementationType.SUPERVISED_ACTIVE);
@@ -211,7 +218,7 @@ public class ActiveDTLEvaluation {
                 logger.info("FMeasure: " + GErFM[0]);
                 logger.info("Precision: " + GErPrecision[0]);
                 logger.info("Recall: " + GErRecall[0]);
-                long GErTime = (end - start);
+                GErTime[0] = (end - start);
                 logger.info("Time: " + GErTime);
                 logger.info("Size: " + GErSize[0]);
 				for(int i = 1; i < activeLearningIterations; i++){
@@ -231,11 +238,10 @@ public class ActiveDTLEvaluation {
                     logger.info("FMeasure: " + GErFM[i]);
                     logger.info("Precision: " + GErPrecision[i]);
                     logger.info("Recall: " + GErRecall[i]);
-                    GErTime = (end - start);
+                    GErTime[i] = (end - start);
                     logger.info("Time: " + GErTime);
                     logger.info("Size: " + GErSize[i]);
 				}
-				System.out.println(GErFM);
 //				// ========================================
 //
 //				logger.info("========Global + Global==========");
@@ -343,34 +349,63 @@ public class ActiveDTLEvaluation {
 				// Print results for iteration
 				// ================================================================================================================
 
-//				datalineFMeasure += dataName + "\t" + womFM + "\t" + MaCFM + "\t" + GErFM + "\t" + GGFM + "\t" + giGFM
-//						+ "\t" + giErFM + "\t" + j48FM + "\t" + j48optFM + "\n";
-//				writerFMeasure.write(datalineFMeasure);
-//				datalineFMeasure = "";
-//
-//				datalinePrecision += dataName + "\t" + womPrecision + "\t" + MaCPrecision + "\t" + GErPrecision + "\t"
-//						+ GGPrecision + "\t" + giGPrecision + "\t" + giErPrecision + "\t" + j48Precision + "\t"
-//						+ j48optPrecision + "\n";
-//				writerPrecision.write(datalinePrecision);
-//				datalinePrecision = "";
-//
-//				datalineRecall += dataName + "\t" + womRecall + "\t" + MaCRecall + "\t" + GErRecall + "\t" + GGRecall
-//						+ "\t" + giGRecall + "\t" + giErRecall + "\t" + j48Recall + "\t" + j48optRecall + "\n";
-//				writerRecall.write(datalineRecall);
-//				datalineRecall = "";
-//
-//				datalineTime += dataName + "\t" + womTime + "\t" + MaCTime + "\t" + GErTime + "\t" + GGTime + "\t"
-//						+ giGTime + "\t" + giErTime + "\t" + j48Time + "\t" + j48optTime + "\n";
-//				writerTime.write(datalineTime);
-//				datalineTime = "";
+				datalineFMeasure += ds + /*"\t" + womFM + "\t" + MaCFM + "\t" +*/ arrayToDelimitedStringarray(GErFM) /*+ "\t" + GGFM + "\t" + giGFM
+						+ "\t" + giErFM + "\t" + j48FM + "\t" + j48optFM*/ + "\n";
+				writerFMeasure.write(datalineFMeasure);
+				datalineFMeasure = "";
 
-//                writerFMeasure.close();
-//                writerPrecision.close();
-//                writerRecall.close();
-//                writerTime.close();
-//                writerSize.close();
+				datalinePrecision += ds + /*"\t" + womPrecision + "\t" + MaCPrecision + "\t" + */arrayToDelimitedStringarray(GErPrecision) /* + "\t"
+						+ GGPrecision + "\t" + giGPrecision + "\t" + giErPrecision + "\t" + j48Precision + "\t"
+						+ j48optPrecision */+ "\n";
+				writerPrecision.write(datalinePrecision);
+				datalinePrecision = "";
+
+				datalineRecall += ds + /*"\t" + womRecall + "\t" + MaCRecall + "\t" +*/ arrayToDelimitedStringarray(GErRecall) /*+ "\t" + GGRecall
+						+ "\t" + giGRecall + "\t" + giErRecall + "\t" + j48Recall + "\t" + j48optRecall */+ "\n";
+				writerRecall.write(datalineRecall);
+				datalineRecall = "";
+
+				datalineTime += ds + /*"\t" + womTime + "\t" + MaCTime + "\t" +*/ arrayToDelimitedStringarray(GErTime) /*+ "\t" + GGTime + "\t"
+						+ giGTime + "\t" + giErTime + "\t" + j48Time + "\t" + j48optTime */+ "\n";
+				writerTime.write(datalineTime);
+				datalineTime = "";
+
+				datalineSize += ds + /*"\t" + womTime + "\t" + MaCTime + "\t" +*/ arrayToDelimitedStringarray(GErSize) /*+ "\t" + GGTime + "\t"
+						+ giGTime + "\t" + giErTime + "\t" + j48Time + "\t" + j48optTime */+ "\n";
+				writerSize.write(datalineSize);
+				datalineSize = "";
+
+                writerFMeasure.close();
+                writerPrecision.close();
+                writerRecall.close();
+                writerTime.close();
+                writerSize.close();
 			}
 		}
+	}
+	
+	public static String arrayToDelimitedStringarray(double[] arr){
+		String res = "";
+		for(int i = 0; i < arr.length; i++){
+			res += "\t" + String.valueOf(arr[i]);
+		}
+		return res;
+	}
+
+	public static String arrayToDelimitedStringarray(long[] arr){
+		String res = "";
+		for(int i = 0; i < arr.length; i++){
+			res += "\t" + String.valueOf(arr[i]);
+		}
+		return res;
+	}
+
+	public static String arrayToDelimitedStringarray(int[] arr){
+		String res = "";
+		for(int i = 0; i < arr.length; i++){
+			res += "\t" + String.valueOf(arr[i]);
+		}
+		return res;
 	}
 
 	public static AMapping getInitialTrainingData(AMapping data, int size) {

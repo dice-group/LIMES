@@ -50,7 +50,6 @@ public class DecisionTree {
 	private double propertyLearningRate;
 	private double pruningConfidence;
 
-	public static boolean isSupervised = false;
 	private AMapping refMapping;
 	public static FitnessFunctionDTL fitnessFunction;
 	public static PruningFunctionDTL pruningFunction;
