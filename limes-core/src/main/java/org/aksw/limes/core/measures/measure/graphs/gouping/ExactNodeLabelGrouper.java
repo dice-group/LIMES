@@ -15,4 +15,9 @@ public class ExactNodeLabelGrouper implements INodeLabelGrouper{
         }
         return n.toString();
     }
+
+    @Override
+    public void endGrouping() {
+
+    }
 }

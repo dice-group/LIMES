@@ -1,11 +1,15 @@
 package org.aksw.limes.core.evaluation.evaluationDataLoader;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser.MapKey;
 import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
+import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.slf4j.Logger;
@@ -74,7 +78,17 @@ public class EvaluationData {
         data.targetFileName = (String) map.get(MapKey.TARGET_FILE);
         data.sourceClass = (String) map.get(MapKey.SOURCE_CLASS);
         data.targetClass = (String) map.get(MapKey.TARGET_CLASS);
+        data.injectKBInfo();
         return data;
+    }
+
+    private void injectKBInfo(){
+        this.sourceCache.setKbInfo(
+                this.configReader.getConfiguration().getSourceInfo()
+        );
+        this.targetCache.setKbInfo(
+                this.configReader.getConfiguration().getTargetInfo()
+        );
     }
 
     public File getConfigFile() {

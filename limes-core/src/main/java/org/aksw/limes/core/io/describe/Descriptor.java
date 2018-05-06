@@ -6,6 +6,9 @@ import org.aksw.jena_sparql_api.core.FluentQueryExecutionFactory;
 import org.aksw.jena_sparql_api.core.QueryExecutionFactory;
 import org.aksw.jena_sparql_api.core.SparqlServiceReference;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.io.query.FileQueryModule;
+import org.aksw.limes.core.io.query.ModelRegistry;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.sparql.core.DatasetDescription;
 
 import java.util.ArrayList;
@@ -41,18 +44,27 @@ public class Descriptor {
         this(kb, new DefaultConnetionConfig());
     }
 
+    private FluentQueryExecutionFactory<?> initFactory(KBInfo info){
+        if(info.getType().equalsIgnoreCase("N3")){
+            new FileQueryModule(info);
+            Model model = ModelRegistry.getInstance().getMap().get(info.getEndpoint());
+            return FluentQueryExecutionFactory.from(model);
+        }else{
+            DatasetDescription dd = new DatasetDescription();
+            if(info.getGraph() != null) {
+                dd.addDefaultGraphURI(info.getGraph());
+            }
+
+            SparqlServiceReference ssr = new SparqlServiceReference(info.getEndpoint(), dd);
+
+            return FluentQueryExecutionFactory.http(ssr);
+        }
+    }
+
     protected QueryExecutionFactory initQueryExecution(KBInfo kbInfo, IConnectionConfig config) {
         QueryExecutionFactory qef;
 
-        DatasetDescription dd = new DatasetDescription();
-        if(kbInfo.getGraph() != null) {
-            dd.addDefaultGraphURI(kbInfo.getGraph());
-        }
-
-        SparqlServiceReference ssr = new SparqlServiceReference(kbInfo.getEndpoint(), dd);
-
-        qef = FluentQueryExecutionFactory
-                .http(ssr)
+        qef =   initFactory(kbInfo)
                 .config()
                     .withDelay(config.getRequestDelayInMs(), TimeUnit.MILLISECONDS)
                 .end()

@@ -230,7 +230,7 @@ public class WLSimilarityMapper extends AMapper {
         Vector sourceDot = selfDot(sourceMat);
 
 
-        List<String> targetURIs = source.getAllUris();
+        List<String> targetURIs = target.getAllUris();
 
         List<AbstractMatrix> targetMat = mapMatrix(
                 target.getKbInfo(),
@@ -266,7 +266,6 @@ public class WLSimilarityMapper extends AMapper {
 
             }
         }
-
 
 
         return mapping;
