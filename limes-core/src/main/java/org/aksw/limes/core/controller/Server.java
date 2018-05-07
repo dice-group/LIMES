@@ -64,7 +64,6 @@ public class Server {
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
         }
-        threadPool(8, 1, 30000);
         port(port);
         staticFiles.location("/web-ui");
         staticFiles.expireTime(10);
