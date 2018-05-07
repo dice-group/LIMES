@@ -85,7 +85,7 @@ It is also possible to use complex pre-processing functions, i.e. functions that
 Currently the following complex pre-processing functions are available:
 * `concat(property1, property2, glue=",") RENAME newprop` this concatenates the values of `property1` and `property2` into `newprop` using a comma as glue between the values. The use of the `glue=` argument is optional. So `concat(property1, property2) RENAME newprop` would be valid as well.
 * `split(property, splitChar=",") RENAME prop1,prop2` this splits the values of `property` on the comma character, the first part is stored in `prop1` the rest in `prop2`. The `splitChar=` argument is mandatory. You can control the maximum number of splits by providing more or less properties after the `RENAME` keyword. For example if you would write `RENAME prop1,prop2,prop3` the values of `property` would be split into at most 3 values if 3 or more commas are present.
-* `toWktPoint(property1, property2)` RENAME wktPoint` this takes the values of property1 and property2 and stores them as `POINT(p1 p2)`. The values of the two properties have to be numbers.
+* `toWktPoint(property1, property2) RENAME wktPoint` this takes the values of property1 and property2 and stores them as `POINT(p1 p2)`. The values of the two properties have to be numbers.
 
 Complex pre-processing functions are provided using the `FUNCTION` tag.
 
