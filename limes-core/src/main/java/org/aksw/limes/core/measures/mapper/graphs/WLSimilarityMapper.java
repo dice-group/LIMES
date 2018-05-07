@@ -16,6 +16,8 @@ import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.graphs.AGraphSimilarityMeasure;
+import org.aksw.limes.core.measures.measure.graphs.gouping.CollectingGrouperWrapper;
+import org.aksw.limes.core.measures.measure.graphs.gouping.IDependendNodeLabelGrouper;
 import org.aksw.limes.core.measures.measure.graphs.gouping.INodeLabelGrouper;
 import org.aksw.limes.core.measures.measure.graphs.gouping.NodeLabelGrouperFactory;
 import org.aksw.limes.core.measures.measure.graphs.representation.WLModelIteration;
@@ -214,6 +216,8 @@ public class WLSimilarityMapper extends AMapper {
 
         INodeLabelGrouper grouper = new NodeLabelGrouperFactory().create();
 
+        CollectingGrouperWrapper sourceGrouper = new CollectingGrouperWrapper(grouper);
+
         Map<String, Integer> index = new HashMap<>();
         index.put("#counter#", 0);
 
@@ -223,12 +227,15 @@ public class WLSimilarityMapper extends AMapper {
                 source.getKbInfo(),
                 sourceURIs,
                 2,
-                grouper,
+                sourceGrouper,
                 index
         );
 
         Vector sourceDot = selfDot(sourceMat);
 
+        if(grouper instanceof IDependendNodeLabelGrouper){
+            ((IDependendNodeLabelGrouper) grouper).injectLabels(sourceGrouper.getCollectedLabels());
+        }
 
         List<String> targetURIs = target.getAllUris();
 
