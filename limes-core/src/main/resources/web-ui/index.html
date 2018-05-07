@@ -39,7 +39,7 @@
       <md-dialog ref="configDialog">
         <md-dialog-title>Config XML</md-dialog-title>
 
-        <md-dialog-content><pre><code class="xml">{{ configText }}</code></pre></md-dialog-content>
+        <md-dialog-content><pre><code class="xml hljs" v-html="configText"></code></pre></md-dialog-content>
 
         <md-dialog-actions>
           <md-button class="md-primary" @click="closeConfig()">Close</md-button>
@@ -79,7 +79,7 @@
       <md-layout md-gutter>
         <md-layout md-flex-offset="25" md-column>
           <!-- prefixes UI -->
-          <prefixes-list v-bind:prefixes="prefixes"></prefixes-list>
+          <prefixes-list v-bind:deleteChip="deletePrefix" v-bind:addPrefix="addPrefix" v-bind:prefixes="prefixes"></prefixes-list>
           <!-- datasources UI -->
           <datasource-component v-bind:source="source" title="Data source"></datasource-component>
           <datasource-component v-bind:source="target" title="Data target"></datasource-component>
@@ -315,7 +315,7 @@
     <md-whiteframe md-tag="section" style="flex: 1; padding: 15px;">
       <div class="md-title">Output</div>
 
-      <md-select v-model="output" name="output" id="output">
+      <md-select v-model="output.type" name="output" id="output">
         <md-option value="TAB">TAB</md-option>
         <md-option value="N3">N3</md-option>
       </md-select>

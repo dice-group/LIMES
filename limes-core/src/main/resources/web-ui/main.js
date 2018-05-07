@@ -85,7 +85,9 @@ let app = new Vue({
       planner: 'DEFAULT',
       engine: 'DEFAULT',
     },
-    output: 'TAB',
+    output: {
+      type: 'TAB',
+    },
   },
   mounted() {
     const jobIdmatches = /\?jobId=(.+)/.exec(window.location.search);
@@ -98,6 +100,14 @@ let app = new Vue({
     }
   },
   methods: {
+    deletePrefix(prefix) {
+      this.prefixes = this.prefixes.filter(p => p.label !== prefix.label && p.namespace !== prefix.namespace);
+    },
+    addPrefix(prefix) {
+      // push new prefix
+      this.prefixes.push(prefix);
+    },
+
     generateConfig() {
       const configHeader = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE LIMES SYSTEM "limes.dtd">
@@ -154,7 +164,7 @@ let app = new Vue({
 </EXECUTION>
 `;
 
-      const output = `<OUTPUT>${this.output}</OUTPUT>
+      const output = `<OUTPUT>${this.output.type}</OUTPUT>
 `;
 
       const config =
@@ -162,11 +172,14 @@ let app = new Vue({
       return config;
     },
     showConfig() {
-      this.configText = this.generateConfig();
-      console.log(this.configText);
+      // generate new config
+      const cfg = this.generateConfig();
+      // highlight the code
+      const h = hljs.highlight('xml', cfg);
+      // set text to highlighted html
+      this.configText = h.value;
+      // show dialog
       this.$refs.configDialog.open();
-      // syntax highlight for xml
-      setTimeout(() => hljs.highlightBlock(document.getElementsByTagName('code')[0]));
     },
     closeConfig() {
       this.$refs.configDialog.close();
@@ -299,7 +312,7 @@ let app = new Vue({
         planner: 'DEFAULT',
         engine: 'DEFAULT',
       };
-      this.output = 'TAB';
+      this.output = {type: 'TAB'};
     },
   },
 });

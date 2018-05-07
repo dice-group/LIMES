@@ -1,7 +1,7 @@
 // Define a new component for prefixes
 Vue.component('prefixes-list', {
   template: '#prefixComponent',
-  props: ['prefixes'],
+  props: ['prefixes', 'deleteChip', 'addPrefix'],
   data() {
     return {
       label: '',
@@ -9,12 +9,8 @@ Vue.component('prefixes-list', {
     };
   },
   methods: {
-    deleteChip(prefix) {
-      this.prefixes = this.prefixes.filter(p => p.label !== prefix.label && p.namespace !== prefix.namespace);
-    },
     add() {
-      // push new prefix
-      this.prefixes.push({
+      this.addPrefix({
         label: this.label,
         namespace: this.namespace,
       });
