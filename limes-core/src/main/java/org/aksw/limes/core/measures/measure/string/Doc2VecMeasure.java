@@ -77,7 +77,7 @@ public class Doc2VecMeasure extends AStringMeasure {
     try {
       INDArray inferredVectorA = vectors.inferVector(a);
       INDArray inferredVectorB = vectors.inferVector(b);
-      return Transforms.cosineSim(inferredVectorA, inferredVectorB);
+      return Math.max(0, Math.min(1, Transforms.cosineSim(inferredVectorA, inferredVectorB)));
     } catch (RuntimeException e) {
       return 0.0;
     }
