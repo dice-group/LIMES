@@ -23,6 +23,7 @@ import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.dragon.DecisionTree;
 import org.aksw.limes.core.ml.algorithm.dragon.Dragon;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,7 +51,7 @@ public class DecisionTreeTest {
 			dtl = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
 					MLImplementationType.SUPERVISED_BATCH);
 			dtl2 = MLAlgorithmFactory.createMLAlgorithm(Dragon.class,
-					MLImplementationType.UNSUPERVISED);
+					MLImplementationType.SUPERVISED_BATCH);
 			sourceCache = c.getSourceCache();
 			targetCache = c.getTargetCache();
 			sourceCache2 = c2.getSourceCache();
@@ -60,7 +61,7 @@ public class DecisionTreeTest {
 			dtl.getMl().setConfiguration(c.getConfigReader().read());
 			((Dragon) dtl.getMl()).setParameter(Dragon.PARAMETER_PROPERTY_MAPPING, c.getPropertyMapping());
 			dtl2.getMl().setConfiguration(c2.getConfigReader().read());
-			((Dragon) dtl.getMl()).setParameter(Dragon.PARAMETER_PROPERTY_MAPPING, c2.getPropertyMapping());
+			((Dragon) dtl2.getMl()).setParameter(Dragon.PARAMETER_PROPERTY_MAPPING, c2.getPropertyMapping());
 
 			dtl2.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
 //			dtl2.asUnsupervised().learn(new PseudoFMeasure());
@@ -297,10 +298,10 @@ public class DecisionTreeTest {
 
 	private DecisionTree createNode(Dragon decisionTreeLearning, String measure, String sourceProperty, String targetProperty, double threshold, DecisionTree parent, boolean isLeftNode) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException{
 		Constructor <DecisionTree> constructor;
-		Class<?>[] parameterTypes = {Dragon.class, ACache.class, ACache.class, PseudoFMeasure.class, double.class, double.class, double.class, DecisionTree.class, boolean.class, AMapping.class};
+		Class<?>[] parameterTypes = {Dragon.class, ACache.class, ACache.class, PseudoFMeasure.class, double.class, double.class, double.class, DecisionTree.class, boolean.class, AMapping.class, PropertyMapping.class};
 		constructor = DecisionTree.class.getDeclaredConstructor(parameterTypes);
 		constructor.setAccessible(true);
-		DecisionTree tree = constructor.newInstance(decisionTreeLearning, sourceCache, targetCache, pfm, (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE),(double)decisionTreeLearning.getParameter(Dragon.PARAMETER_PRUNING_CONFIDENCE), (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_PROPERTY_LEARNING_RATE), parent, isLeftNode, MappingFactory.createDefaultMapping());
+		DecisionTree tree = constructor.newInstance(decisionTreeLearning, sourceCache, targetCache, pfm, (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE),(double)decisionTreeLearning.getParameter(Dragon.PARAMETER_PRUNING_CONFIDENCE), (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_PROPERTY_LEARNING_RATE), parent, isLeftNode, MappingFactory.createDefaultMapping(), (PropertyMapping)decisionTreeLearning.getParameter(Dragon.PARAMETER_PROPERTY_MAPPING));
 		ExtendedClassifier ec = new ExtendedClassifier(measure, threshold, sourceProperty, targetProperty);
 		
 		Field classifierField;
