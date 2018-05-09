@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,6 +75,7 @@ public class XMLConfigurationReader extends AConfigurationReader {
     protected static final String PARAMETER = "PARAMETER";
     protected static final String MAXOFFSET = "MAXOFFSET";
     protected static final String MINOFFSET = "MINOFFSET";
+    protected static final String FUNCTION = "FUNCTION";
 
     /**
      * Constructor
@@ -255,6 +258,8 @@ public class XMLConfigurationReader extends AConfigurationReader {
                 kbinfo.setVar(getText(child));
             } else if (child.getNodeName().equals(TYPE)) {
                 kbinfo.setType(getText(child));
+            } else if (child.getNodeName().equals(FUNCTION)) {
+            	setComplexFunction(kbinfo, getText(child)); 
             }
         }
 
@@ -272,6 +277,24 @@ public class XMLConfigurationReader extends AConfigurationReader {
             throw new RuntimeException();
         }
         kbinfo.setPrefixes(configuration.getPrefixes());
+    }
+    
+    
+    public void setComplexFunction(KBInfo info, String function) {
+        String newPropertyName;
+        if(!function.contains(RENAME)){
+            logger.warn("You did not provide a new property name for your function \"" + function + "\" we will use the function name as new property name"
+                    + "\n You can provide a new property name using the " + RENAME + " keyword");
+            newPropertyName = function;
+        }else{
+            String[] funcArr = function.split(RENAME);
+            function = funcArr[0];
+            newPropertyName = funcArr[1];
+        }
+        HashMap<String, String> funcMap = new HashMap<>();
+        funcMap.put(newPropertyName, function);
+        LinkedHashMap<String, Map<String, String>> functions = info.getFunctions();
+        functions.put(newPropertyName, funcMap);
     }
 
     /**
