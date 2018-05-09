@@ -1,5 +1,7 @@
 package org.aksw.limes.core.gui.view.ml;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +24,7 @@ import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.algorithm.eagle.util.TerminationCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +78,7 @@ public class MachineLearningView {
      * array containing all implemented algorithms
      */
     private static final String[] algorithms = {MLAlgorithmFactory.EUCLID_LINEAR, MLAlgorithmFactory.EUCLID_BOOLEAN, MLAlgorithmFactory.EUCLID_MESH, MLAlgorithmFactory.EAGLE, MLAlgorithmFactory.WOMBAT_COMPLETE,
-	    MLAlgorithmFactory.WOMBAT_SIMPLE };
+	    MLAlgorithmFactory.WOMBAT_SIMPLE, MLAlgorithmFactory.DRAGON};
 
     /**
      * corresponding controller
@@ -156,6 +159,7 @@ public class MachineLearningView {
 		logger.info("Unknown subclass of MachineLearningView");
 	    }
 	}
+	Collections.sort(mloptions);
 	ComboBox<String> mlOptionsChooser = new ComboBox<String>(mloptions);
 	mlOptionsChooser.setPromptText("choose algorithm");
 
@@ -183,9 +187,6 @@ public class MachineLearningView {
 	});
 
 	learnButton.setOnAction(e -> {
-//	    for(LearningParameter l : this.mlController.getMlModel().getMlalgorithm().getParameters()){
-//		System.err.println(l.getValue().toString());
-//	    }
 	    learnButton.setDisable(true);
 	    this.mlController.learn(this);
 	});
@@ -237,11 +238,13 @@ public class MachineLearningView {
 	    case "iqualitativemeasure":
 		addQualitativeMeasureParameterHBox(params.get(i), root, i);
 		break;
+	    case "amapping":
+		break;
 	    default:
 		if (params.get(i).getClazz().isEnum()) {
 		    addEnumParameterHBox(params.get(i), root, i);
-		} else {
-		    logger.error("Unknown LearningParameter clazz " + params.get(i).getClazz().getSimpleName().toString().toLowerCase().trim() + "!");
+	    } else {
+	    	addObjectParameterHBox(params.get(i), root, i);
 		}
 		break;
 	    }
@@ -388,14 +391,34 @@ public class MachineLearningView {
 	cb.setValue(param.getValue());
 	cb.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Enum>() {
 	    public void changed(ObservableValue ov, Enum value, Enum new_value ){
-	    param.setValue(new_value.toString());
+	    param.setValue(new_value);
 	    }
 	});
 	root.add(parameterLabel, 0, position);
 	root.add(cb, 1, position);
 
     }
-
+    
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private void addObjectParameterHBox(LearningParameter param, GridPane root, int position) {
+        Label parameterLabel = new Label(param.getName());
+        ChoiceBox cb = new ChoiceBox();
+        if(param.getInstanceOptions() == null){
+		    logger.error("Wrongly implemented learning parameter " + param.getName() + "!\n Please provide instanceOptions!");
+		    return;
+        }
+        cb.setItems(FXCollections.observableArrayList(param.getInstanceOptions()).sorted());
+        cb.setValue(param.getValue());
+        cb.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            public void changed(ObservableValue ov, String value, String new_value ){
+                param.setValue(new_value);
+            }
+        });
+        root.add(parameterLabel, 0, position);
+        root.add(cb, 1, position);
+    }
+    
     /**
      * creates a {@link javafx.scene.layout.HBox} with the information from the
      * learning parameter if it is a {@link IQualitativeMeasure}

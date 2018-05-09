@@ -294,17 +294,20 @@ public class MainView {
        	menuLearn.setId("menuLearn"); 
 
         itemBatchLearning = new MenuItem("Batch Learning");
+        itemBatchLearning.setId("#menuLearnBatchLearning");
         itemBatchLearning.setOnAction(e -> {
             controller.showBatchLearning();
         });
 
 
         itemUnsupervisedLearning = new MenuItem("Unsupervised Learning");
+        itemUnsupervisedLearning.setId("#menuLearnUnsupervisedLearning");
         itemUnsupervisedLearning.setOnAction(e -> {
             controller.showUnsupervisedLearning();
         });
 
         itemActiveLearning = new MenuItem("Active Learning");
+        itemActiveLearning.setId("#menuLearnActiveLearning");
         itemActiveLearning.setOnAction(e -> {
             controller.showActiveLearning();
         });

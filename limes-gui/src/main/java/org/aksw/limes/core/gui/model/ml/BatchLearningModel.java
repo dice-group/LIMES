@@ -1,8 +1,11 @@
 package org.aksw.limes.core.gui.model.ml;
 
+import java.util.List;
+
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 
 import javafx.concurrent.Task;
@@ -37,6 +40,7 @@ public class BatchLearningModel extends MachineLearningModel {
             @Override
             protected Void call() {
         	MLResults model = null;
+        		List<LearningParameter> learningParameters = mlalgorithm.getParameters();
                 try {
                     mlalgorithm.init(learningParameters, sourceCache, targetCache);
 //                    RDFMappingReader mappingReader = new RDFMappingReader(config.getMlTrainingDataFile());

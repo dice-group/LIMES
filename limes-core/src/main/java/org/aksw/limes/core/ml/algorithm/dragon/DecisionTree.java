@@ -22,6 +22,7 @@ import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.FitnessFunctionDTL;
 import org.aksw.limes.core.ml.algorithm.dragon.Pruning.PruningFunctionDTL;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,9 +55,10 @@ public class DecisionTree {
 	private AMapping refMapping;
 	public static FitnessFunctionDTL fitnessFunction;
 	public static PruningFunctionDTL pruningFunction;
+	private PropertyMapping propertyMapping;
 
 	public DecisionTree(Dragon dtl, ACache sourceCache, ACache targetCache,PseudoFMeasure pseudoFMeasure,
-			double minPropertyCoverage, double propertyLearningRate, double pruningConfidence, AMapping refMapping) {
+			double minPropertyCoverage, double propertyLearningRate, double pruningConfidence, AMapping refMapping, PropertyMapping propertyMapping) {
 		calculatedMappings = new HashMap<String, AMapping>();
 		pathMappings = new HashMap<String, AMapping>();
 		totalFMeasure = 0.0;
@@ -70,10 +72,11 @@ public class DecisionTree {
 		root = true;
 		depth = 0;
 		this.refMapping = refMapping;
+		this.propertyMapping = propertyMapping;
 	}
 
 	private DecisionTree(Dragon dtl, ACache sourceCache, ACache targetCache, PseudoFMeasure pseudoFMeasure, double minPropertyCoverage, double pruningConfidence,
-			double propertyLearningRate, DecisionTree parent, boolean isLeftNode, AMapping refMapping) {
+			double propertyLearningRate, DecisionTree parent, boolean isLeftNode, AMapping refMapping, PropertyMapping propertyMapping) {
 		this.dtl = dtl;
 		this.sourceCache = sourceCache;
 		this.targetCache = targetCache;
@@ -87,6 +90,7 @@ public class DecisionTree {
 		if (parent != null)
 			this.depth = this.parent.depth + 1;
 		this.refMapping = refMapping;
+		this.propertyMapping = propertyMapping;
 	}
 
 
@@ -101,10 +105,10 @@ public class DecisionTree {
 				return null;
 			}
 		}
-		if (maxDepth != this.depth && this.depth < (dtl.getPropertyMapping().getCompletePropMapping().size())) {
-			rightChild = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure, minPropertyCoverage, pruningConfidence, propertyLearningRate, this, false, refMapping);
+		if (maxDepth != this.depth && this.depth < (propertyMapping.getCompletePropMapping().size())) {
+			rightChild = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure, minPropertyCoverage, pruningConfidence, propertyLearningRate, this, false, refMapping,propertyMapping);
 			rightChild = rightChild.buildTree(maxDepth);
-			leftChild = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure, minPropertyCoverage, pruningConfidence, propertyLearningRate, this, true, refMapping);
+			leftChild = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure, minPropertyCoverage, pruningConfidence, propertyLearningRate, this, true, refMapping, propertyMapping);
 			leftChild = leftChild.buildTree(maxDepth);
 		}
 		return this;
@@ -334,7 +338,7 @@ public class DecisionTree {
 		DecisionTree cloned = null;
 		if (this.root) {
 			cloned = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure, minPropertyCoverage, pruningConfidence,
-					propertyLearningRate, refMapping);
+					propertyLearningRate, refMapping, propertyMapping);
 			cloned.classifier = new ExtendedClassifier(classifier.getMeasure(), classifier.getThreshold(),
 					classifier.getSourceProperty(), classifier.getTargetProperty());
 			cloned.depth = depth;
@@ -366,10 +370,10 @@ public class DecisionTree {
 		DecisionTree cloned = null;
 		if (root) {
 			cloned = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure, minPropertyCoverage, pruningConfidence,
-					propertyLearningRate, refMapping);
+					propertyLearningRate, refMapping, propertyMapping);
 		} else {
 			cloned = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure,
-					minPropertyCoverage, pruningConfidence, propertyLearningRate, null, isLeftNode, refMapping);
+					minPropertyCoverage, pruningConfidence, propertyLearningRate, null, isLeftNode, refMapping, propertyMapping);
 		}
 		cloned.classifier = new ExtendedClassifier(classifier.getMeasure(), classifier.getThreshold(),
 				classifier.getSourceProperty(), classifier.getTargetProperty());
@@ -395,10 +399,10 @@ public class DecisionTree {
 		}
 		if (root) {
 			cloned = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure, minPropertyCoverage, pruningConfidence,
-					propertyLearningRate, refMapping);
+					propertyLearningRate, refMapping, propertyMapping);
 		} else {
 			cloned = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure,
-					minPropertyCoverage, pruningConfidence, propertyLearningRate, parentClone, isLeftNode, refMapping);
+					minPropertyCoverage, pruningConfidence, propertyLearningRate, parentClone, isLeftNode, refMapping, propertyMapping);
 		}
 		cloned.classifier = new ExtendedClassifier(classifier.getMeasure(), classifier.getThreshold());
 		cloned.depth = depth;
@@ -571,4 +575,13 @@ public class DecisionTree {
 	public void setPruningConfidence(double pruningConfidence) {
 		this.pruningConfidence = pruningConfidence;
 	}
+
+	public PropertyMapping getPropertyMapping() {
+		return propertyMapping;
+	}
+
+	public void setPropertyMapping(PropertyMapping propertyMapping) {
+		this.propertyMapping = propertyMapping;
+	}
+	
 }

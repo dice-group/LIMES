@@ -2,6 +2,7 @@ package org.aksw.limes.core.io.query;
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -45,7 +46,12 @@ public class CsvQueryModule implements IQueryModule {
     public void fillCache(ACache c) {
         try {
             // in case a CSV is use, endpoint is the file to read
-            BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(kb.getEndpoint())));
+        	BufferedReader reader;
+        	try{
+        		reader = new BufferedReader(new FileReader(new File(kb.getEndpoint())));
+        	}catch(Exception e){
+        		reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(kb.getEndpoint())));
+        	}
             String s = reader.readLine();
             String split[];
             //first read name of properties. URI = first column

@@ -79,7 +79,9 @@ public class MLPropertyMatchingView {
 	 */
 	private void createRootPane() {
 		sourcePropList = new ListView<String>();
+		sourcePropList.setId("MLPropertyMatchingViewSourcePropList");
 		targetPropList = new ListView<String>();
+		sourcePropList.setId("MLPropertyMatchingViewTargetPropList");
 		if (mainViewToolBox.getToolBoxSourceProperties() != null) {
 			for(PropertyItem prop: mainViewToolBox.getToolBoxSourceProperties().getItems()){
 				sourcePropList.getItems().add(prop.getName());

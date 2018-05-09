@@ -15,13 +15,14 @@ import org.aksw.limes.core.ml.algorithm.dragon.DecisionTree;
 import org.aksw.limes.core.ml.algorithm.dragon.Dragon;
 import org.aksw.limes.core.ml.algorithm.dragon.TrainingInstance;
 import org.aksw.limes.core.ml.algorithm.dragon.Utils.InstanceCalculator;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GiniIndex extends FitnessFunctionDTL {
-	protected static Logger logger = LoggerFactory.getLogger(InformationGain.class);
+	protected static Logger logger = LoggerFactory.getLogger(GiniIndex.class);
 	private static List<TrainingInstance> fullInstances;
 	private static List<TrainingInstance> currentInstances;
 	private static HashSet<Metric> metricExpressions;
@@ -41,7 +42,7 @@ public class GiniIndex extends FitnessFunctionDTL {
 			for (String t : dt.getRefMapping().getMap().get(s).keySet()) {
 				TrainingInstance currentInstance = new TrainingInstance(s, t,
 						dt.getRefMapping().getMap().get(s).get(t));
-				for (PairSimilar<String> propPair : dt.getDtl().getPropertyMapping().stringPropPairs) {
+				for (PairSimilar<String> propPair : propertyMapping.stringPropPairs) {
 					for (String measure : Dragon.defaultMeasures) {
 						String metricExpression = measure + "(x." + propPair.a + ",y." + propPair.b + ")";
 						metricExpressions.add(new Metric(propPair.a, propPair.b, metricExpression, measure));
@@ -247,4 +248,5 @@ public class GiniIndex extends FitnessFunctionDTL {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 }

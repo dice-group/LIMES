@@ -7,13 +7,13 @@ import java.util.List;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoRefFMeasure;
 import org.aksw.limes.core.execution.engine.filter.LinearFilter;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.dragon.DecisionTree;
 import org.aksw.limes.core.ml.algorithm.dragon.Dragon;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 
 public class GlobalFMeasure extends FitnessFunctionDTL{
 
@@ -72,7 +72,7 @@ public class GlobalFMeasure extends FitnessFunctionDTL{
 	public ExtendedClassifier getBestClassifier(DecisionTree currentNode) {
 		// logger.info("Getting all classifiers ...");
 		List<ExtendedClassifier> initialClassifiers = new ArrayList<>();
-		for (PairSimilar<String> propPair : dt.getDtl().getPropertyMapping().stringPropPairs) {
+		for (PairSimilar<String> propPair : propertyMapping.stringPropPairs) {
 			for (String measure : Dragon.defaultMeasures) {
 				ExtendedClassifier cp = findClassifier(propPair.a, propPair.b, measure, currentNode);
 				if (cp != null)

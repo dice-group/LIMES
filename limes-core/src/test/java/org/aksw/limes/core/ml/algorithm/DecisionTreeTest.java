@@ -58,9 +58,9 @@ public class DecisionTreeTest {
 			dtl.init(null, sourceCache, targetCache);
 			dtl2.init(null, sourceCache2, targetCache2);
 			dtl.getMl().setConfiguration(c.getConfigReader().read());
-			((Dragon) dtl.getMl()).setPropertyMapping(c.getPropertyMapping());
+			((Dragon) dtl.getMl()).setParameter(Dragon.PARAMETER_PROPERTY_MAPPING, c.getPropertyMapping());
 			dtl2.getMl().setConfiguration(c2.getConfigReader().read());
-			((Dragon) dtl2.getMl()).setPropertyMapping(c2.getPropertyMapping());
+			((Dragon) dtl.getMl()).setParameter(Dragon.PARAMETER_PROPERTY_MAPPING, c2.getPropertyMapping());
 
 			dtl2.getMl().setParameter(Dragon.PARAMETER_MAX_LINK_SPEC_HEIGHT, 3);
 //			dtl2.asUnsupervised().learn(new PseudoFMeasure());
@@ -282,7 +282,7 @@ public class DecisionTreeTest {
 
 
 	private DecisionTree createRoot(Dragon decisionTreeLearning, String measure, String sourceProperty, String targetProperty, double threshold) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
-		DecisionTree tree = new DecisionTree(decisionTreeLearning, sourceCache, targetCache, pfm, (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE), (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_PROPERTY_LEARNING_RATE), threshold, MappingFactory.createDefaultMapping());
+		DecisionTree tree = new DecisionTree(decisionTreeLearning, sourceCache, targetCache, pfm, (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_MIN_PROPERTY_COVERAGE), (double)decisionTreeLearning.getParameter(Dragon.PARAMETER_PROPERTY_LEARNING_RATE), threshold, MappingFactory.createDefaultMapping(), c.getPropertyMapping());
 		
 		ExtendedClassifier ec = new ExtendedClassifier(measure, threshold, sourceProperty, targetProperty);
 		

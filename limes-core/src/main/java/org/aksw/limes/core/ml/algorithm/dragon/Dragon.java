@@ -22,7 +22,9 @@ import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.FitnessFunctionDTL;
 import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.GiniIndex;
+import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.GlobalFMeasure;
 import org.aksw.limes.core.ml.algorithm.dragon.Pruning.ErrorEstimatePruning;
+import org.aksw.limes.core.ml.algorithm.dragon.Pruning.GlobalFMeasurePruning;
 import org.aksw.limes.core.ml.algorithm.dragon.Pruning.PruningFunctionDTL;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.apache.log4j.Logger;
@@ -41,49 +43,35 @@ public class Dragon extends ACoreMLAlgorithm {
 
 	private static Logger logger = Logger.getLogger(Dragon.class);
 
-	private PropertyMapping propertyMapping;
 	private MLResults mlresult;
 	private Configuration configuration;
 
 
 	// Parameters
-	public static final String PARAMETER_UNPRUNED_TREE = "use unpruned tree";
-	public static final String PARAMETER_COLLAPSE_TREE = "collapse tree";
 	public static final String PARAMETER_PRUNING_CONFIDENCE = "confidence threshold for pruning";
-	public static final String PARAMETER_REDUCED_ERROR_PRUNING = "reduced error pruning";
-	public static final String PARAMETER_FOLD_NUMBER = "number of folds for reduced error pruning";
-	public static final String PARAMETER_SUBTREE_RAISING = "perform subtree raising";
-	public static final String PARAMETER_CLEAN_UP = "clean up after building tree";
-	public static final String PARAMETER_LAPLACE_SMOOTHING = "laplace smoothing for predicted probabilities";
-	public static final String PARAMETER_MDL_CORRECTION = "MDL correction for predicted probabilities";
-	public static final String PARAMETER_SEED = "seed for random data shuffling";
 	public static final String PARAMETER_PROPERTY_MAPPING = "property mapping";
 	public static final String PARAMETER_MAPPING = "initial mapping as training data";
-	public static final String PARAMETER_LINK_SPECIFICATION = "initial link specification to start training";
 	public static final String PARAMETER_MAX_LINK_SPEC_HEIGHT = "maximum height of the link specification";
 	public static final String PARAMETER_MIN_PROPERTY_COVERAGE = "minimum property coverage";
 	public static final String PARAMETER_PROPERTY_LEARNING_RATE = "property learning rate";
 	public static final String PARAMETER_FITNESS_FUNCTION = "fitness function";
 	public static final String PARAMETER_PRUNING_FUNCTION = "pruning function";
+	
+	//Strings for different function options
+	public static final String FITNESS_NAME_GINI_INDEX = "GiniIndex";
+	public static final String FITNESS_NAME_GLOBAL_FMEASURE = "GlobalFMeasure";
+	public static final String PRUNING_NAME_ERROR_ESTIMATE_PRUNING = "ErrorEstimate";
+	public static final String PRUNING_NAME_GLOBAL_FMEASURE = "GlobalFmeasure";
+	
 
 	// Default parameters
-	private static final boolean unprunedTree = false;
-	private static final boolean collapseTree = true;
 	private static final double pruningConfidence = 0.25;
-	private static final boolean reducedErrorPruning = false;
-	private static final int foldNumber = 3;
-	private static final boolean subtreeRaising = true;
-	private static final boolean cleanUp = true;
-	private static final boolean laplaceSmoothing = false;
-	private static final boolean mdlCorrection = true;
-	private static final int seed = 1;
-	private static final int maxLinkSpecHeight = 1;
+	private static final int maxLinkSpecHeight = 3;
 	private static final double minPropertyCoverage = 0.6;
 	private static final double propertyLearningRate = 0.95;
 	private static final FitnessFunctionDTL fitnessFunction = new GiniIndex();
 	private static final PruningFunctionDTL pruningFunction = new ErrorEstimatePruning();
 	private AMapping initialMapping = MappingFactory.createDefaultMapping();
-	private LinkSpecification bestLS;
 	private AMapping prediction;
 	public DecisionTree root;
 	
@@ -106,6 +94,14 @@ public class Dragon extends ACoreMLAlgorithm {
 
 	public static final double threshold = 0.01;
 
+
+    /**
+     * Dragon constructor.
+     */
+    public Dragon() {
+    	super();
+    	setDefaultParameters();
+    }
 	/**
 	 * Constructor uses superconstructor, initializes TreeParser object and sets
 	 * configuration
@@ -114,6 +110,7 @@ public class Dragon extends ACoreMLAlgorithm {
 	 */
 	public Dragon(Configuration c) {
 		super();
+    	setDefaultParameters();
 		this.configuration = c;
 	}
 
@@ -153,7 +150,7 @@ public class Dragon extends ACoreMLAlgorithm {
 
 	@Override
 	public String getName() {
-		return "Decision Tree Learning";
+		return "Dragon";
 	}
 
 	/**
@@ -193,10 +190,28 @@ public class Dragon extends ACoreMLAlgorithm {
 	@Override
 	public void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
 		super.init(lp, sourceCache, targetCache);
-		this.bestLS = null;
 		this.prediction = null;
 		if (lp == null) {
 			setDefaultParameters();
+		}else{
+			instantiateFunctionParameters();
+		}
+	}
+	
+	private void instantiateFunctionParameters(){
+		if(getParameter(PARAMETER_FITNESS_FUNCTION) instanceof String){
+            if(((String)getParameter(PARAMETER_FITNESS_FUNCTION)).toLowerCase().equals(FITNESS_NAME_GINI_INDEX.toLowerCase())){
+                setParameter(PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+            }else if(((String)getParameter(PARAMETER_FITNESS_FUNCTION)).toLowerCase().equals(FITNESS_NAME_GLOBAL_FMEASURE.toLowerCase())){
+                setParameter(PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
+            }
+		}
+		if(getParameter(PARAMETER_PRUNING_FUNCTION) instanceof String){
+            if(((String)getParameter(PARAMETER_PRUNING_FUNCTION)).toLowerCase().equals(PRUNING_NAME_GLOBAL_FMEASURE.toLowerCase())){
+                setParameter(PARAMETER_PRUNING_FUNCTION, new GlobalFMeasurePruning());
+            }else if(((String)getParameter(PARAMETER_PRUNING_FUNCTION)).toLowerCase().equals(PRUNING_NAME_ERROR_ESTIMATE_PRUNING.toLowerCase())){
+                setParameter(PARAMETER_PRUNING_FUNCTION, new ErrorEstimatePruning());
+            }
 		}
 	}
 
@@ -204,31 +219,12 @@ public class Dragon extends ACoreMLAlgorithm {
 	@Override
 	public void setDefaultParameters() {
 		learningParameters = new ArrayList<>();
-		learningParameters.add(new LearningParameter(PARAMETER_UNPRUNED_TREE, unprunedTree, Boolean.class, 0, 1, 0,
-				PARAMETER_UNPRUNED_TREE));
-		learningParameters.add(new LearningParameter(PARAMETER_COLLAPSE_TREE, collapseTree, Boolean.class, 0, 1, 1,
-				PARAMETER_COLLAPSE_TREE));
 		learningParameters.add(new LearningParameter(PARAMETER_PRUNING_CONFIDENCE, pruningConfidence, Double.class, 0d,
 				1d, 0.01d, PARAMETER_PRUNING_CONFIDENCE));
-		learningParameters.add(new LearningParameter(PARAMETER_REDUCED_ERROR_PRUNING, reducedErrorPruning,
-				Boolean.class, 0, 1, 0, PARAMETER_REDUCED_ERROR_PRUNING));
-		learningParameters.add(new LearningParameter(PARAMETER_FOLD_NUMBER, foldNumber, Integer.class, 0, 10, 1,
-				PARAMETER_FOLD_NUMBER));
-		learningParameters.add(new LearningParameter(PARAMETER_SUBTREE_RAISING, subtreeRaising, Boolean.class, 0, 1, 0,
-				PARAMETER_SUBTREE_RAISING));
-		learningParameters
-				.add(new LearningParameter(PARAMETER_CLEAN_UP, cleanUp, Boolean.class, 0, 1, 0, PARAMETER_CLEAN_UP));
-		learningParameters.add(new LearningParameter(PARAMETER_LAPLACE_SMOOTHING, laplaceSmoothing, Boolean.class, 0, 1,
-				0, PARAMETER_LAPLACE_SMOOTHING));
-		learningParameters.add(new LearningParameter(PARAMETER_MDL_CORRECTION, mdlCorrection, Boolean.class, 0, 1, 0,
-				PARAMETER_MDL_CORRECTION));
-		learningParameters.add(new LearningParameter(PARAMETER_SEED, seed, Integer.class, 0, 100, 1, PARAMETER_SEED));
-		learningParameters.add(new LearningParameter(PARAMETER_PROPERTY_MAPPING, propertyMapping, PropertyMapping.class,
+		learningParameters.add(new LearningParameter(PARAMETER_PROPERTY_MAPPING, new PropertyMapping(), PropertyMapping.class,
 				Double.NaN, Double.NaN, Double.NaN, PARAMETER_PROPERTY_MAPPING));
 		learningParameters.add(new LearningParameter(PARAMETER_MAPPING, initialMapping, AMapping.class, Double.NaN,
 				Double.NaN, Double.NaN, PARAMETER_MAPPING));
-		learningParameters.add(new LearningParameter(PARAMETER_LINK_SPECIFICATION, bestLS, LinkSpecification.class,
-				Double.NaN, Double.NaN, Double.NaN, PARAMETER_LINK_SPECIFICATION));
 		learningParameters.add(new LearningParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT, maxLinkSpecHeight, Integer.class,
 				1, 100000, 1, PARAMETER_MAX_LINK_SPEC_HEIGHT));
 		learningParameters.add(new LearningParameter(PARAMETER_MIN_PROPERTY_COVERAGE, minPropertyCoverage, Double.class,
@@ -236,9 +232,9 @@ public class Dragon extends ACoreMLAlgorithm {
 		learningParameters.add(new LearningParameter(PARAMETER_PROPERTY_LEARNING_RATE, propertyLearningRate,
 				Double.class, 0d, 1d, 0.01d, PARAMETER_PROPERTY_LEARNING_RATE));
 		learningParameters.add(new LearningParameter(PARAMETER_FITNESS_FUNCTION, fitnessFunction,
-				FitnessFunctionDTL.class, Double.NaN, Double.NaN, Double.NaN, PARAMETER_FITNESS_FUNCTION));
+				FitnessFunctionDTL.class, new String[]{FITNESS_NAME_GINI_INDEX, FITNESS_NAME_GLOBAL_FMEASURE}, PARAMETER_FITNESS_FUNCTION));
 		learningParameters.add(new LearningParameter(PARAMETER_PRUNING_FUNCTION, pruningFunction,
-				PruningFunctionDTL.class, Double.NaN, Double.NaN, Double.NaN, PARAMETER_PRUNING_FUNCTION));
+				PruningFunctionDTL.class, new String[]{PRUNING_NAME_ERROR_ESTIMATE_PRUNING, PRUNING_NAME_GLOBAL_FMEASURE}, PARAMETER_FITNESS_FUNCTION));
 	}
 
 	@Override
@@ -258,14 +254,15 @@ public class Dragon extends ACoreMLAlgorithm {
             root = new DecisionTree(this, testSourceCache, testTargetCache, null,
                     (double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
                     (double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
-                    (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData);
+                    (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData, (PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
         }else{
             root = new DecisionTree(this, sourceCache, targetCache, null,
                     (double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
                     (double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
-                    (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData);
+                    (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData, (PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
         }
         DecisionTree.fitnessFunction = (FitnessFunctionDTL) getParameter(PARAMETER_FITNESS_FUNCTION);
+        DecisionTree.fitnessFunction.setPropertyMapping((PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
         DecisionTree.pruningFunction = (PruningFunctionDTL) getParameter(PARAMETER_PRUNING_FUNCTION);
         DecisionTree.fitnessFunction.setDt(root);
         DecisionTree.maxDepth = (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
@@ -296,14 +293,6 @@ public class Dragon extends ACoreMLAlgorithm {
 
 	public void setTargetCache(ACache targetCache) {
 		this.targetCache = targetCache;
-	}
-
-	public PropertyMapping getPropertyMapping() {
-		return propertyMapping;
-	}
-
-	public void setPropertyMapping(PropertyMapping propertyMapping) {
-		this.propertyMapping = propertyMapping;
 	}
 
 	@Override

@@ -12,11 +12,14 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.aksw.limes.core.evaluation.evaluationDataLoader.PropMapper;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
+import org.aksw.limes.core.ml.algorithm.dragon.Dragon;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -359,9 +362,14 @@ public class XMLConfigurationReader extends AConfigurationReader {
                                     Element e = (Element) child;
                                     String mlParameterName = getText(
                                             e.getElementsByTagName(NAME).item(0).getChildNodes().item(0));
-                                    String mlParameterValue = getText(
-                                            e.getElementsByTagName(VALUE).item(0).getChildNodes().item(0));
-                                    configuration.addMlAlgorithmParameter(mlParameterName, mlParameterValue);
+                                    if(mlParameterName.equalsIgnoreCase(Dragon.PARAMETER_PROPERTY_MAPPING)){
+                                        String propMapFile = getText(e.getElementsByTagName(VALUE).item(0).getChildNodes().item(0));
+                                        PropertyMapping propertyMapping = PropMapper.getPropertyMappingFromFile(propMapFile);
+                                    	configuration.addMlAlgorithmParameter(mlParameterName.toLowerCase(), propertyMapping);
+                                    }else{
+                                    	String mlParameterValue = getText(e.getElementsByTagName(VALUE).item(0).getChildNodes().item(0));
+                                    	configuration.addMlAlgorithmParameter(mlParameterName, mlParameterValue);
+                                    }
                                 }
                             }
                         }

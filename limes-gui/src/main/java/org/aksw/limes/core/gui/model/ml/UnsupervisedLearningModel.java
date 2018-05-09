@@ -1,8 +1,11 @@
 package org.aksw.limes.core.gui.model.ml;
 
+import java.util.List;
+
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 
 import javafx.concurrent.Task;
@@ -22,8 +25,7 @@ public class UnsupervisedLearningModel extends MachineLearningModel {
      * @param sourceCache source
      * @param targetCache target
      */
-    public UnsupervisedLearningModel(Config config, ACache sourceCache,
-                                     ACache targetCache) {
+    public UnsupervisedLearningModel(Config config, ACache sourceCache, ACache targetCache) {
         super(config, sourceCache, targetCache);
     }
 
@@ -37,6 +39,9 @@ public class UnsupervisedLearningModel extends MachineLearningModel {
             @Override
             protected Void call() {
         	MLResults model = null;
+        		List<LearningParameter> learningParameters = mlalgorithm.getParameters();
+        		ACache sourceCache = mlalgorithm.getMl().getSourceCache();
+        		ACache targetCache = mlalgorithm.getMl().getTargetCache();
                 try {
                     mlalgorithm.init(learningParameters, sourceCache, targetCache);
                     model = mlalgorithm.asUnsupervised().learn(new PseudoFMeasure());

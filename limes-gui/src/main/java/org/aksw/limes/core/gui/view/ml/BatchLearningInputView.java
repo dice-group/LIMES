@@ -45,6 +45,7 @@ public class BatchLearningInputView {
     private void createRootPane() {
 	HBox fileHBox = new HBox();
 	TextField filePathField = new TextField("");
+	filePathField.setId("filePathField");
 	Tooltip tip = new Tooltip();
 	tip.setText("Provide a file with a training mapping");
 	filePathField.setTooltip(tip);

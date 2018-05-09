@@ -98,13 +98,6 @@ public abstract class MachineLearningModel {
         this.mlalgorithm = mlalgorithm;
     }
 
-    /**
-     * return learning parameters
-     * @return learningParameters
-     */
-    public List<LearningParameter> getLearningParameters() {
-        return learningParameters;
-    }
 
     /**
      * set learning parameters

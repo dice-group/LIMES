@@ -202,6 +202,10 @@ public class Config extends Configuration {
 			this.sourceEndpoint.setCurrentClassAsString(PrefixHelper.expand(sourceClass));
 			this.targetEndpoint.setCurrentClassAsString(PrefixHelper.expand(targetClass));
 			logger.debug(this.sourceEndpoint.getCurrentClass().getUri() + " " + this.targetEndpoint.getCurrentClass().getUri());
+		}else if((sourceInfo.getRestrictions().get(0).equals("") && targetInfo.getRestrictions().get(0).equals("")) || (sourceInfo.getRestrictions().get(0) == null && targetInfo.getRestrictions().get(0) == null)){
+			this.sourceEndpoint.setCurrentClassAsString("");
+			this.targetEndpoint.setCurrentClassAsString("");
+			logger.error("Restrictions are empty!");
 		}else{
 			logger.error("Restrictions that are more complex than \" ?y a prefix:class \" are not yet implemented in the GUI");
 		}
