@@ -136,6 +136,6 @@ if __name__ == "__main__":
 		for a,b in en.items():
 			dic[a].append(b)
 	print("="*20)
-	for a,b in dic.items():
+	for a,b in sorted(dic.items()):
 		if len(b) == 2:
 			print("{}\t{}\t{}".format(a,b[0],b[1]))
