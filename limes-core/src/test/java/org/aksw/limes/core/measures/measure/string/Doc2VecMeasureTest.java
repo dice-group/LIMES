@@ -2,8 +2,15 @@ package org.aksw.limes.core.measures.measure.string;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.DoubleSummaryStatistics;
+import java.util.List;
+import java.util.stream.Stream;
 import org.aksw.limes.core.measures.measure.AMeasure;
+import org.aksw.limes.core.measures.measure.string.bilang.WordEmbeddings.Vectord;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -12,6 +19,7 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.sdb.sql.MySQLEngineType;
 import org.junit.Test;
 import org.nd4j.linalg.primitives.Pair;
 import org.nd4j.linalg.primitives.Triple;
@@ -53,33 +61,14 @@ public class Doc2VecMeasureTest {
 
   @Test
   public void testSparqlSimple() {
-    String queryString = "\n"
-        + "PREFIX imdb: <http://data.linkedmdb.org/resource/movie/>\n"
-        + "PREFIX dcterms: <http://purl.org/dc/terms/>\n"
-        + "PREFIX dbpo: <http://dbpedia.org/ontology/>\n"
-        + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
-        + "\n"
-        + "SELECT ?birthDate ?spouseName ?movieTitle ?movieDate {\n"
-        + "  { SERVICE <http://dbpedia.org/sparql>\n"
-        + "    { SELECT ?birthDate ?spouseName WHERE {\n"
-        + "        ?actor rdfs:label \"Arnold Schwarzenegger\"@en ;\n"
-        + "               dbpo:birthDate ?birthDate ;\n"
-        + "               dbpo:spouse ?spouseURI .\n"
-        + "        ?spouseURI rdfs:label ?spouseName .\n"
-        + "        FILTER ( lang(?spouseName) = \"en\" )\n"
-        + "      }\n"
-        + "    }\n"
-        + "  }\n"
-        + "  { SERVICE <http://data.linkedmdb.org/sparql>\n"
-        + "    { SELECT ?actor ?movieTitle ?movieDate WHERE {\n"
-        + "      ?actor imdb:actor_name \"Arnold Schwarzenegger\".\n"
-        + "      ?movie imdb:actor ?actor ;\n"
-        + "             dcterms:title ?movieTitle ;\n"
-        + "             dcterms:date ?movieDate .\n"
-        + "      }\n"
-        + "    }\n"
-        + "  }\n"
-        + "}";
+    String queryString = DEFAULT_SPARQL_PREFIXES +
+        "select distinct ?x ?name ?abstract {\n"
+        + "?x a owl:Thing;\n"
+        + "foaf:name ?name;\n"
+        + "dbo:abstract ?abstract.\n"
+        + "FILTER (langMatches(lang(?abstract),\"en\"))\n"
+        + "}\n"
+        + "LIMIT 100";
 
     Query query = QueryFactory.create(queryString);
     QueryExecution qExe = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
@@ -133,6 +122,91 @@ public class Doc2VecMeasureTest {
       Pair<Double, String> pair = comparisons.get(i);
       System.out.println(pair.getFirst() + "\t" + pair.getSecond());
     }
+  }
+
+  @Test
+  public void testWithSimpleAndNormalEnglishWikipediaAbstractsAllComparisons() {
+    ArrayList<String> names = new ArrayList<String>();
+    ArrayList<String> simpleAbstracts = new ArrayList<String>();
+    ArrayList<String> normalAbstracts = new ArrayList<String>();
+    try {
+      Stream<String> lines = Files.lines(Paths.get("src/test/resources/simple-and-normal-english-wiki-abstracts.csv"));
+      lines.forEach(line -> {
+        String[] parts = line.split("\t");
+        if (parts.length > 2) {
+          names.add(parts[0]);
+          simpleAbstracts.add(parts[1]);
+          normalAbstracts.add(parts[2]);
+        }
+      });
+      lines.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    int size = names.size();
+    System.out.println(size + " entity names");
+    Doc2VecMeasure measure = new Doc2VecMeasure(Doc2VecMeasure.DEFAULT_PRECOMPUTED_VECTORS_FILE_PATH);
+    ArrayList<Pair<Double, String>> comparisons = new ArrayList<>();
+
+    for (int a = 0; a < size; a++) {
+      System.out.println(a + "\t" + names.get(a));
+      for (int b = 0; b < size; b++) {
+        double score = measure.getSimilarity(simpleAbstracts.get(a), normalAbstracts.get(b));
+        comparisons.add(new Pair<>(score, names.get(a) + " VS " + names.get(b)));
+      }
+    }
+
+    comparisons.sort((a,b) -> {
+      if (a.getFirst() < b.getFirst())
+        return 1;
+      if (a.getFirst() > b.getFirst())
+        return -1;
+      return -a.getSecond().compareTo(b.getSecond());
+    });
+
+    for (int i = 0; i < size * size; i++) {
+      Pair<Double, String> pair = comparisons.get(i);
+      System.out.println(pair.getFirst() + "\t" + pair.getSecond());
+    }
+  }
+
+
+  @Test
+  public void testWithSimpleAndNormalEnglishWikipediaAbstractsSameAsVsDifferent() {
+    ArrayList<String> names = new ArrayList<String>();
+    ArrayList<String> simpleAbstracts = new ArrayList<String>();
+    ArrayList<String> normalAbstracts = new ArrayList<String>();
+    try {
+      Stream<String> lines = Files.lines(Paths.get("src/test/resources/simple-and-normal-english-wiki-abstracts.csv"));
+      lines.forEach(line -> {
+        String[] parts = line.split("\t");
+        if (parts.length > 2) {
+          names.add(parts[0]);
+          simpleAbstracts.add(parts[1]);
+          normalAbstracts.add(parts[2]);
+        }
+      });
+      lines.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    int size = names.size();
+    System.out.println(size + " entity names");
+    Doc2VecMeasure measure = new Doc2VecMeasure(Doc2VecMeasure.DEFAULT_PRECOMPUTED_VECTORS_FILE_PATH);
+    for (int a = 0; a < size; a++) {
+      double sameScore = measure.getSimilarity(simpleAbstracts.get(a), normalAbstracts.get(a));
+      System.out.println(a + "\t" + names.get(a) + " with itself = " + sameScore + ", with others:");
+      List<Double> otherScores = new ArrayList<>();
+      for (int b = 0; b < size; b++) {
+        if (b == a)
+          continue;
+        double score = measure.getSimilarity(simpleAbstracts.get(a), normalAbstracts.get(b));
+        otherScores.add(score);
+      }
+      System.out.println("mean: " + MyUtil.getMean(otherScores) + ", std: " +
+      MyUtil.getStdDeviation(otherScores) + ", median: " + MyUtil.getMedian(otherScores));
+    }
+
   }
 }
 
