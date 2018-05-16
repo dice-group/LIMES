@@ -1,6 +1,6 @@
 package org.aksw.limes.core.measures.measure.DataModel;
 
-import javafx.util.Pair;
+
 
 public class ResourcePair {
     private String label;
