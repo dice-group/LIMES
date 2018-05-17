@@ -1,27 +1,28 @@
 package org.aksw.limes.core.ml.algorithm.dragon;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class TrainingInstance {
-    private String sourceUri;
-    private String targetUri;
-    private double classLabel;
-    private HashMap<String,Double> measureValues;
-    
+	private String sourceUri;
+	private String targetUri;
+	private double classLabel;
+	private Map<String, Double> measureValues;
+
 	public TrainingInstance(String sourceUri, String targetUri, double classLabel) {
 		this.sourceUri = sourceUri;
 		this.targetUri = targetUri;
 		this.classLabel = classLabel;
-		this.measureValues = new HashMap<String,Double>();
+		this.measureValues = new HashMap<>();
 	}
-	
+
 	@Override
-	public String toString(){
+	public String toString() {
 		return this.sourceUri + " -> " + this.targetUri + " : " + this.classLabel;
 	}
 
 	public String getSourceUri() {
-		return sourceUri;
+		return this.sourceUri;
 	}
 
 	public void setSourceUri(String sourceUri) {
@@ -29,7 +30,7 @@ public class TrainingInstance {
 	}
 
 	public String getTargetUri() {
-		return targetUri;
+		return this.targetUri;
 	}
 
 	public void setTargetUri(String targetUri) {
@@ -37,20 +38,19 @@ public class TrainingInstance {
 	}
 
 	public double getClassLabel() {
-		return classLabel;
+		return this.classLabel;
 	}
 
 	public void setClassLabel(double classLabel) {
 		this.classLabel = classLabel;
 	}
 
-	public HashMap<String, Double> getMeasureValues() {
-		return measureValues;
+	public Map<String, Double> getMeasureValues() {
+		return this.measureValues;
 	}
 
-	public void setMeasureValues(HashMap<String, Double> measureValues) {
+	public void setMeasureValues(Map<String, Double> measureValues) {
 		this.measureValues = measureValues;
 	}
-    
-    
+
 }

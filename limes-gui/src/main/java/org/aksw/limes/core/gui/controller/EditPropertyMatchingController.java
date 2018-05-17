@@ -14,7 +14,6 @@ import org.aksw.limes.core.gui.view.MainView;
 import org.aksw.limes.core.gui.view.TaskProgressView;
 
 import javafx.scene.paint.Color;
-import weka.gui.SysErrLog;
 
 /**
  * Controller class for property matching step in {@link WizardController}
@@ -27,12 +26,12 @@ public class EditPropertyMatchingController implements IEditController {
 	/**
 	 * Config of the LIMES Query
 	 */
-	private Config config;
+	private final Config config;
 
 	/**
 	 * corresponding view
 	 */
-	private EditPropertyMatchingView view;
+	private final EditPropertyMatchingView view;
 
 	/**
 	 * the view called in the {@link #load()} method
@@ -42,7 +41,7 @@ public class EditPropertyMatchingController implements IEditController {
 	/**
 	 * constructor initializes object variables and sets this controller to the
 	 * corresponding view
-	 * 
+	 *
 	 * @param config
 	 *            Config of Limes Query
 	 * @param view
@@ -56,32 +55,33 @@ public class EditPropertyMatchingController implements IEditController {
 
 	@Override
 	public void load() {
-		checkIfAutomationIsPossible();
-		if (view.isAutomated()) {
-			loadAutomatedPropertyMatching();
+		this.checkIfAutomationIsPossible();
+		if (this.view.isAutomated()) {
+			this.loadAutomatedPropertyMatching();
 		} else {
-			loadManualPropertyMatching();
+			this.loadManualPropertyMatching();
 		}
 	}
 
 	@Override
-	public void load(boolean automated){
-		if(automated){
-			loadAutomatedPropertyMatching();
-		}else{
-			loadManualPropertyMatching();
+	public void load(boolean automated) {
+		if (automated) {
+			this.loadAutomatedPropertyMatching();
+		} else {
+			this.loadManualPropertyMatching();
 		}
 	}
 
 	private void loadAutomatedPropertyMatching() {
-		GetAutomatedPropertiesTask getPropertiesTask = new GetAutomatedPropertiesTask(config.getSourceInfo(),
-				config.getTargetInfo(), config.getSourceEndpoint().getModel(), config.getTargetEndpoint().getModel(),
-				config.getSourceEndpoint().getCurrentClass().getUri().toString(),
-				config.getTargetEndpoint().getCurrentClass().getUri().toString());
-		taskProgressView = new TaskProgressView("Getting properties");
-		TaskProgressController taskProgressController = new TaskProgressController(taskProgressView);
+		final GetAutomatedPropertiesTask getPropertiesTask = new GetAutomatedPropertiesTask(this.config.getSourceInfo(),
+				this.config.getTargetInfo(), this.config.getSourceEndpoint().getModel(),
+				this.config.getTargetEndpoint().getModel(),
+				this.config.getSourceEndpoint().getCurrentClass().getUri().toString(),
+				this.config.getTargetEndpoint().getCurrentClass().getUri().toString());
+		this.taskProgressView = new TaskProgressView("Getting properties");
+		final TaskProgressController taskProgressController = new TaskProgressController(this.taskProgressView);
 		taskProgressController.addTask(getPropertiesTask, properties -> {
-			view.showAutomatedProperties(properties);
+			this.view.showAutomatedProperties(properties);
 		}, error -> {
 			MainView.showErrorWithStacktrace("An error occured", "Error while loading source properties",
 					getPropertiesTask.getException());
@@ -89,18 +89,18 @@ public class EditPropertyMatchingController implements IEditController {
 	}
 
 	private void loadManualPropertyMatching() {
-		GetPropertiesTask getSourcePropertiesTask = config.getSourceEndpoint().createGetPropertiesTask();
-		GetPropertiesTask getTargetPropertiesTask = config.getTargetEndpoint().createGetPropertiesTask();
-		taskProgressView = new TaskProgressView("Getting properties");
-		TaskProgressController taskProgressController = new TaskProgressController(taskProgressView);
+		final GetPropertiesTask getSourcePropertiesTask = this.config.getSourceEndpoint().createGetPropertiesTask();
+		final GetPropertiesTask getTargetPropertiesTask = this.config.getTargetEndpoint().createGetPropertiesTask();
+		this.taskProgressView = new TaskProgressView("Getting properties");
+		final TaskProgressController taskProgressController = new TaskProgressController(this.taskProgressView);
 		taskProgressController.addTask(getSourcePropertiesTask, properties -> {
-			view.showAvailableProperties(SOURCE, properties);
+			this.view.showAvailableProperties(SOURCE, properties);
 		}, error -> {
 			MainView.showErrorWithStacktrace("An error occured", "Error while loading source properties",
 					getSourcePropertiesTask.getException());
 		});
 		taskProgressController.addTask(getTargetPropertiesTask, properties -> {
-			view.showAvailableProperties(TARGET, properties);
+			this.view.showAvailableProperties(TARGET, properties);
 		}, error -> {
 			MainView.showErrorWithStacktrace("An error occured", "Error while loading target properties",
 					getTargetPropertiesTask.getException());
@@ -112,35 +112,35 @@ public class EditPropertyMatchingController implements IEditController {
 	 */
 	@Override
 	public IEditView getView() {
-		return view;
+		return this.view;
 	}
 
 	/**
 	 * Saves the properties
-	 * 
+	 *
 	 * @param sourceProperties
 	 *            source properties to save
 	 * @param targetProperties
 	 *            target properties to save
 	 */
 	public void save(List<String> sourceProperties, List<String> targetProperties) {
-		config.setPropertiesMatching(sourceProperties, targetProperties);
+		this.config.setPropertiesMatching(sourceProperties, targetProperties);
 	}
 
 	@Override
 	public boolean validate() {
 		boolean valid = true;
-		if (view.isAutomated()) {
-			if (view.getAddedAutomatedPropsList().getItems().size() == 0) {
-				view.getMissingPropertiesLabel().setVisible(true);
-				view.getMissingPropertiesLabel().setTextFill(Color.RED);
+		if (this.view.isAutomated()) {
+			if (this.view.getAddedAutomatedPropsList().getItems().size() == 0) {
+				this.view.getMissingPropertiesLabel().setVisible(true);
+				this.view.getMissingPropertiesLabel().setTextFill(Color.RED);
 				valid = false;
 			}
 		} else {
-			if (view.getAddedSourcePropsList().getItems().size() == 0
-					|| view.getAddedTargetPropsList().getItems().size() == 0) {
-				view.getMissingPropertiesLabel().setVisible(true);
-				view.getMissingPropertiesLabel().setTextFill(Color.RED);
+			if (this.view.getAddedSourcePropsList().getItems().size() == 0
+					|| this.view.getAddedTargetPropsList().getItems().size() == 0) {
+				this.view.getMissingPropertiesLabel().setVisible(true);
+				this.view.getMissingPropertiesLabel().setTextFill(Color.RED);
 				valid = false;
 			}
 		}
@@ -149,7 +149,7 @@ public class EditPropertyMatchingController implements IEditController {
 
 	@Override
 	public TaskProgressView getTaskProgressView() {
-		return taskProgressView;
+		return this.taskProgressView;
 	}
 
 	@Override
@@ -158,13 +158,14 @@ public class EditPropertyMatchingController implements IEditController {
 	}
 
 	public Config getConfig() {
-		return config;
+		return this.config;
 	}
 
 	@Override
 	public void checkIfAutomationIsPossible() {
-    	//if the uris of the class are the same automation is useless
-    	boolean automated = ! config.getSourceEndpoint().getCurrentClass().getUri().equals(config.getTargetEndpoint().getCurrentClass().getUri());
-    	view.setAutomated(automated);
+		// if the uris of the class are the same automation is useless
+		final boolean automated = !this.config.getSourceEndpoint().getCurrentClass().getUri()
+				.equals(this.config.getTargetEndpoint().getCurrentClass().getUri());
+		this.view.setAutomated(automated);
 	}
 }

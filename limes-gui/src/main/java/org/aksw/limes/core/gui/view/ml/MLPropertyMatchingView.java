@@ -11,7 +11,6 @@ import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,7 +20,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.Tooltip;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -30,7 +28,7 @@ import javafx.stage.Stage;
 
 /**
  * Class that creates a view to let the user match the properties
- * 
+ *
  * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
  *         studserv.uni-leipzig.de{@literal >}
  *
@@ -45,7 +43,7 @@ public class MLPropertyMatchingView {
 	private Button cancelButton;
 	private Button finishButton;
 	private Stage stage;
-	private LearningParameter param;
+	private final LearningParameter param;
 	/**
 	 * contains all the unmatchedPropertyBoxes where Properties have already
 	 * been matched plus one empty/unfinished one
@@ -56,13 +54,13 @@ public class MLPropertyMatchingView {
 	 * an unfinished matching
 	 */
 	private HBox unmatchedPropertyBox;
-	private Config config;
+	private final Config config;
 
-	private ToolBox mainViewToolBox;
+	private final ToolBox mainViewToolBox;
 
 	/**
 	 * Constructor sets the parameters, creates the view and adds listeners
-	 * 
+	 *
 	 * @param config
 	 * @param param
 	 */
@@ -70,87 +68,91 @@ public class MLPropertyMatchingView {
 		this.config = config;
 		this.param = param;
 		this.mainViewToolBox = tb;
-		createRootPane();
-		addListeners();
+		this.createRootPane();
+		this.addListeners();
 	}
 
 	/**
 	 * Creates the root pane and opens a stage with all the elements
 	 */
 	private void createRootPane() {
-		sourcePropList = new ListView<String>();
-		sourcePropList.setId("MLPropertyMatchingViewSourcePropList");
-		targetPropList = new ListView<String>();
-		sourcePropList.setId("MLPropertyMatchingViewTargetPropList");
-		if (mainViewToolBox.getToolBoxSourceProperties() != null) {
-			for(PropertyItem prop: mainViewToolBox.getToolBoxSourceProperties().getItems()){
-				sourcePropList.getItems().add(prop.getName());
+		this.sourcePropList = new ListView<>();
+		this.sourcePropList.setId("MLPropertyMatchingViewSourcePropList");
+		this.targetPropList = new ListView<>();
+		this.sourcePropList.setId("MLPropertyMatchingViewTargetPropList");
+		if (this.mainViewToolBox.getToolBoxSourceProperties() != null) {
+			for (final PropertyItem prop : this.mainViewToolBox.getToolBoxSourceProperties().getItems()) {
+				this.sourcePropList.getItems().add(prop.getName());
 			}
 		} else {
-			sourcePropList.getItems().addAll(config.getSourceInfo().getProperties());
+			this.sourcePropList.getItems().addAll(this.config.getSourceInfo().getProperties());
 		}
-		if (mainViewToolBox.getToolBoxTargetProperties() != null) {
-			for(PropertyItem prop: mainViewToolBox.getToolBoxTargetProperties().getItems()){
-				targetPropList.getItems().add(prop.getName());
+		if (this.mainViewToolBox.getToolBoxTargetProperties() != null) {
+			for (final PropertyItem prop : this.mainViewToolBox.getToolBoxTargetProperties().getItems()) {
+				this.targetPropList.getItems().add(prop.getName());
 			}
 		} else {
-			targetPropList.getItems().addAll(config.getTargetInfo().getProperties());
+			this.targetPropList.getItems().addAll(this.config.getTargetInfo().getProperties());
 		}
-		Label sourceLabel = new Label("available Source Properties:");
-		Label targetLabel = new Label("available Target Properties:");
-		VBox sourceColumn = new VBox();
-		VBox targetColumn = new VBox();
-		sourceColumn.getChildren().addAll(sourceLabel, sourcePropList);
-		targetColumn.getChildren().addAll(targetLabel, targetPropList);
-		matchedPropertiesBox = new VBox();
-		cancelButton = new Button("cancel");
-		cancelButton.setTooltip(new Tooltip("cancel property matching"));
-		finishButton = new Button("finish");
-		finishButton.setTooltip(new Tooltip("set this property matching"));
-		makeUnmatchedPropertyBox();
-		finishButton.setDisable(true);
-		HBox buttons = new HBox();
-		buttons.getChildren().addAll(cancelButton, finishButton);
-		BorderPane root = new BorderPane();
-		HBox hb = new HBox();
+		final Label sourceLabel = new Label("available Source Properties:");
+		final Label targetLabel = new Label("available Target Properties:");
+		final VBox sourceColumn = new VBox();
+		final VBox targetColumn = new VBox();
+		sourceColumn.getChildren().addAll(sourceLabel, this.sourcePropList);
+		targetColumn.getChildren().addAll(targetLabel, this.targetPropList);
+		this.matchedPropertiesBox = new VBox();
+		this.cancelButton = new Button("cancel");
+		this.cancelButton.setTooltip(new Tooltip("cancel property matching"));
+		this.finishButton = new Button("finish");
+		this.finishButton.setTooltip(new Tooltip("set this property matching"));
+		this.makeUnmatchedPropertyBox();
+		this.finishButton.setDisable(true);
+		final HBox buttons = new HBox();
+		buttons.getChildren().addAll(this.cancelButton, this.finishButton);
+		final BorderPane root = new BorderPane();
+		final HBox hb = new HBox();
 		hb.getChildren().addAll(sourceColumn, targetColumn);
 		HBox.setHgrow(sourceColumn, Priority.ALWAYS);
 		HBox.setHgrow(targetColumn, Priority.ALWAYS);
-		VBox topBox = new VBox();
+		final VBox topBox = new VBox();
 		topBox.getChildren().addAll(hb);
 		root.setTop(topBox);
-		root.setCenter(matchedPropertiesBox);
+		root.setCenter(this.matchedPropertiesBox);
 		root.setBottom(buttons);
-		rootPane = new ScrollPane(root);
-		rootPane.setFitToHeight(true);
-		rootPane.setFitToWidth(true);
-		Scene scene = new Scene(rootPane, 300, 400);
+		this.rootPane = new ScrollPane(root);
+		this.rootPane.setFitToHeight(true);
+		this.rootPane.setFitToWidth(true);
+		final Scene scene = new Scene(this.rootPane, 300, 400);
 		scene.getStylesheets().add("gui/main.css");
-		stage = new Stage();
-		stage.setTitle("LIMES - Property Matching");
-		stage.setScene(scene);
-		stage.show();
+		this.stage = new Stage();
+		this.stage.setTitle("LIMES - Property Matching");
+		this.stage.setScene(scene);
+		this.stage.show();
 	}
 
 	/**
 	 * adds the listeners
 	 */
 	private void addListeners() {
-		cancelButton.setOnAction(e -> {
-			stage.close();
+		this.cancelButton.setOnAction(e -> {
+			this.stage.close();
 		});
 
-		finishButton.setOnAction(e -> {
-			if (!sourcePropertyUnmatched && !targetPropertyUnmatched) {
-				PropertyMapping propMap = new PropertyMapping();
+		this.finishButton.setOnAction(e -> {
+			if (!this.sourcePropertyUnmatched && !this.targetPropertyUnmatched) {
+				final PropertyMapping propMap = new PropertyMapping();
 				// size -1 because there is always another empty
 				// unmatchedPropertyBox
 				// inside
-				for (int i = 0; i < matchedPropertiesBox.getChildren().size() - 1; i++) {
-					HBox row = (HBox) matchedPropertiesBox.getChildren().get(i);
-					String sourceProp = ((Label) ((VBox) row.getChildren().get(0)).getChildren().get(0)).getText();
-					String targetProp = ((Label) ((VBox) row.getChildren().get(1)).getChildren().get(0)).getText();
-					String type = ((Spinner<String>) ((HBox) row.getChildren().get(2)).getChildren().get(0)).getValue();
+				for (int i = 0; i < this.matchedPropertiesBox.getChildren().size() - 1; i++) {
+					final HBox row = (HBox) this.matchedPropertiesBox.getChildren().get(i);
+					final String sourceProp = ((Label) ((VBox) row.getChildren().get(0)).getChildren().get(0))
+							.getText();
+					final String targetProp = ((Label) ((VBox) row.getChildren().get(1)).getChildren().get(0))
+							.getText();
+					@SuppressWarnings("unchecked")
+					final String type = ((Spinner<String>) ((HBox) row.getChildren().get(2)).getChildren().get(0))
+							.getValue();
 					switch (type) {
 					case "String":
 						propMap.addStringPropertyMatch(sourceProp, targetProp);
@@ -168,54 +170,58 @@ public class MLPropertyMatchingView {
 				}
 				this.param.setValue(propMap);
 				this.config.propertyMapping = propMap;
-				stage.close();
+				this.stage.close();
 			}
 		});
-		sourcePropList.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				if (sourcePropList.getSelectionModel().getSelectedItem() != null) {
-					if (sourcePropertyUnmatched || (!sourcePropertyUnmatched && !targetPropertyUnmatched)) {
-						Label sourceProp = new Label(sourcePropList.getSelectionModel().getSelectedItem());
-						sourceProp.setAlignment(Pos.BASELINE_LEFT);
-						((VBox) unmatchedPropertyBox.getChildren().get(0)).getChildren().add(sourceProp);
-						sourcePropList.getItems().remove(sourcePropList.getSelectionModel().getSelectedItem());
+		this.sourcePropList.setOnMouseClicked(e -> {
+			if (MLPropertyMatchingView.this.sourcePropList.getSelectionModel().getSelectedItem() != null) {
+				if (MLPropertyMatchingView.this.sourcePropertyUnmatched
+						|| !MLPropertyMatchingView.this.sourcePropertyUnmatched
+								&& !MLPropertyMatchingView.this.targetPropertyUnmatched) {
+					final Label sourceProp = new Label(
+							MLPropertyMatchingView.this.sourcePropList.getSelectionModel().getSelectedItem());
+					sourceProp.setAlignment(Pos.BASELINE_LEFT);
+					((VBox) MLPropertyMatchingView.this.unmatchedPropertyBox.getChildren().get(0)).getChildren()
+							.add(sourceProp);
+					MLPropertyMatchingView.this.sourcePropList.getItems()
+							.remove(MLPropertyMatchingView.this.sourcePropList.getSelectionModel().getSelectedItem());
 
-						// because always at least two VBoxes are contained
-						if (unmatchedPropertyBox.getChildren().size() < 3) {
-							addSpinnerAndButton();
-						}
-						if (sourcePropertyUnmatched) {
-							sourcePropertyUnmatched = false;
-							makeUnmatchedPropertyBox();
-						} else {
-							finishButton.setDisable(true);
-							targetPropertyUnmatched = true;
-						}
+					// because always at least two VBoxes are contained
+					if (MLPropertyMatchingView.this.unmatchedPropertyBox.getChildren().size() < 3) {
+						MLPropertyMatchingView.this.addSpinnerAndButton();
+					}
+					if (MLPropertyMatchingView.this.sourcePropertyUnmatched) {
+						MLPropertyMatchingView.this.sourcePropertyUnmatched = false;
+						MLPropertyMatchingView.this.makeUnmatchedPropertyBox();
+					} else {
+						MLPropertyMatchingView.this.finishButton.setDisable(true);
+						MLPropertyMatchingView.this.targetPropertyUnmatched = true;
 					}
 				}
 			}
 		});
 
-		targetPropList.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				if (targetPropList.getSelectionModel().getSelectedItem() != null) {
-					if (targetPropertyUnmatched || (!sourcePropertyUnmatched && !targetPropertyUnmatched)) {
-						Label targetProp = new Label(targetPropList.getSelectionModel().getSelectedItem());
-						targetProp.setAlignment(Pos.BASELINE_LEFT);
-						((VBox) unmatchedPropertyBox.getChildren().get(1)).getChildren().add(targetProp);
-						targetPropList.getItems().remove(targetPropList.getSelectionModel().getSelectedItem());
-						if (unmatchedPropertyBox.getChildren().size() < 3) {
-							addSpinnerAndButton();
-						}
-						if (targetPropertyUnmatched) {
-							targetPropertyUnmatched = false;
-							makeUnmatchedPropertyBox();
-						} else {
-							finishButton.setDisable(true);
-							sourcePropertyUnmatched = true;
-						}
+		this.targetPropList.setOnMouseClicked(e -> {
+			if (MLPropertyMatchingView.this.targetPropList.getSelectionModel().getSelectedItem() != null) {
+				if (MLPropertyMatchingView.this.targetPropertyUnmatched
+						|| !MLPropertyMatchingView.this.sourcePropertyUnmatched
+								&& !MLPropertyMatchingView.this.targetPropertyUnmatched) {
+					final Label targetProp = new Label(
+							MLPropertyMatchingView.this.targetPropList.getSelectionModel().getSelectedItem());
+					targetProp.setAlignment(Pos.BASELINE_LEFT);
+					((VBox) MLPropertyMatchingView.this.unmatchedPropertyBox.getChildren().get(1)).getChildren()
+							.add(targetProp);
+					MLPropertyMatchingView.this.targetPropList.getItems()
+							.remove(MLPropertyMatchingView.this.targetPropList.getSelectionModel().getSelectedItem());
+					if (MLPropertyMatchingView.this.unmatchedPropertyBox.getChildren().size() < 3) {
+						MLPropertyMatchingView.this.addSpinnerAndButton();
+					}
+					if (MLPropertyMatchingView.this.targetPropertyUnmatched) {
+						MLPropertyMatchingView.this.targetPropertyUnmatched = false;
+						MLPropertyMatchingView.this.makeUnmatchedPropertyBox();
+					} else {
+						MLPropertyMatchingView.this.finishButton.setDisable(true);
+						MLPropertyMatchingView.this.sourcePropertyUnmatched = true;
 					}
 				}
 			}
@@ -223,47 +229,47 @@ public class MLPropertyMatchingView {
 	}
 
 	private void addSpinnerAndButton() {
-		List<String> propertyTypeList = new ArrayList<String>();
+		final List<String> propertyTypeList = new ArrayList<>();
 		propertyTypeList.add("String");
 		propertyTypeList.add("Number");
 		propertyTypeList.add("Date");
 		propertyTypeList.add("Pointset");
-		ObservableList<String> obsPropTypeList = FXCollections.observableList(propertyTypeList);
-		SpinnerValueFactory<String> svf = new SpinnerValueFactory.ListSpinnerValueFactory<>(obsPropTypeList);
-		Spinner<String> propertyTypeSpinner = new Spinner<String>();
+		final ObservableList<String> obsPropTypeList = FXCollections.observableList(propertyTypeList);
+		final SpinnerValueFactory<String> svf = new SpinnerValueFactory.ListSpinnerValueFactory<>(obsPropTypeList);
+		final Spinner<String> propertyTypeSpinner = new Spinner<>();
 		propertyTypeSpinner.setValueFactory(svf);
-		Button deleteRowButton = new Button("x");
-		HBox spinnerAndButtonBox = new HBox();
+		final Button deleteRowButton = new Button("x");
+		final HBox spinnerAndButtonBox = new HBox();
 		spinnerAndButtonBox.setAlignment(Pos.CENTER_RIGHT);
 		HBox.setHgrow(spinnerAndButtonBox, Priority.ALWAYS);
 		spinnerAndButtonBox.getChildren().addAll(propertyTypeSpinner, deleteRowButton);
-		unmatchedPropertyBox.getChildren().add(spinnerAndButtonBox);
-		unmatchedPropertyBox.setAlignment(Pos.CENTER_LEFT);
-		unmatchedPropertyBox.setPrefWidth(stage.getWidth());
+		this.unmatchedPropertyBox.getChildren().add(spinnerAndButtonBox);
+		this.unmatchedPropertyBox.setAlignment(Pos.CENTER_LEFT);
+		this.unmatchedPropertyBox.setPrefWidth(this.stage.getWidth());
 		deleteRowButton.setOnAction(e_ -> {
-			HBox column = (HBox) deleteRowButton.getParent();
-			String matchedSource = ((Label) ((VBox) column.getChildren().get(0)).getChildren().get(0)).getText();
-			String matchedTarget = ((Label) ((VBox) column.getChildren().get(1)).getChildren().get(0)).getText();
+			final HBox column = (HBox) deleteRowButton.getParent();
+			final String matchedSource = ((Label) ((VBox) column.getChildren().get(0)).getChildren().get(0)).getText();
+			final String matchedTarget = ((Label) ((VBox) column.getChildren().get(1)).getChildren().get(0)).getText();
 			if (matchedSource != null) {
-				sourcePropList.getItems().add(matchedSource);
+				this.sourcePropList.getItems().add(matchedSource);
 			}
 			if (matchedTarget != null) {
-				targetPropList.getItems().add(matchedTarget);
+				this.targetPropList.getItems().add(matchedTarget);
 			}
-			VBox row = (VBox) deleteRowButton.getParent().getParent();
+			final VBox row = (VBox) deleteRowButton.getParent().getParent();
 			row.getChildren().remove(deleteRowButton.getParent());
 		});
 	}
 
 	private void makeUnmatchedPropertyBox() {
-		finishButton.setDisable(false);
-		sourcePropertyUnmatched = false;
-		unmatchedPropertyBox = new HBox();
-		unmatchedPropertyBox.setSpacing(20);
-		VBox unmatchedProp1 = new VBox();
-		VBox unmatchedProp2 = new VBox();
-		unmatchedPropertyBox.getChildren().addAll(unmatchedProp1, unmatchedProp2);
-		matchedPropertiesBox.getChildren().add(unmatchedPropertyBox);
+		this.finishButton.setDisable(false);
+		this.sourcePropertyUnmatched = false;
+		this.unmatchedPropertyBox = new HBox();
+		this.unmatchedPropertyBox.setSpacing(20);
+		final VBox unmatchedProp1 = new VBox();
+		final VBox unmatchedProp2 = new VBox();
+		this.unmatchedPropertyBox.getChildren().addAll(unmatchedProp1, unmatchedProp2);
+		this.matchedPropertiesBox.getChildren().add(this.unmatchedPropertyBox);
 	}
 
 }

@@ -16,9 +16,9 @@ import org.aksw.limes.core.gui.view.TaskProgressView;
 import javafx.scene.paint.Color;
 
 /**
- * 
+ *
  * Controller class for class matching step in {@link WizardController}
- * 
+ *
  * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
  *         studserv.uni-leipzig.de{@literal >}
  *
@@ -27,11 +27,11 @@ public class EditClassMatchingController implements IEditController {
 	/**
 	 * Config of the LIMES Query
 	 */
-	private Config config;
+	private final Config config;
 	/**
 	 * corresponding view
 	 */
-	private EditClassMatchingView view;
+	private final EditClassMatchingView view;
 
 	/**
 	 * the view called in the {@link #load()} method
@@ -41,7 +41,7 @@ public class EditClassMatchingController implements IEditController {
 	/**
 	 * constructor initializes object variables and sets this controller to the
 	 * corresponding view
-	 * 
+	 *
 	 * @param config
 	 *            Config of Limes Query
 	 * @param view
@@ -55,31 +55,32 @@ public class EditClassMatchingController implements IEditController {
 
 	@Override
 	public void load() {
-		checkIfAutomationIsPossible();
-		if (view.isAutomated()) {
-			loadAutomated();
+		this.checkIfAutomationIsPossible();
+		if (this.view.isAutomated()) {
+			this.loadAutomated();
 		} else {
-			loadManual();
+			this.loadManual();
 		}
 	}
-	
+
 	@Override
-	public void load(boolean automated){
-		if(automated){
-			loadAutomated();
-		}else{
-			loadManual();
+	public void load(boolean automated) {
+		if (automated) {
+			this.loadAutomated();
+		} else {
+			this.loadManual();
 		}
 	}
 
 	private void loadAutomated() {
-		taskProgressView = new TaskProgressView("Get classes");
+		this.taskProgressView = new TaskProgressView("Get classes");
 
-		GetAutomatedClassMatchingTask getClassesTask = new GetAutomatedClassMatchingTask(config.getSourceInfo(),
-				config.getTargetInfo(), config.getSourceEndpoint().getModel(), config.getTargetEndpoint().getModel());
-		TaskProgressController taskProgressController = new TaskProgressController(taskProgressView);
+		final GetAutomatedClassMatchingTask getClassesTask = new GetAutomatedClassMatchingTask(
+				this.config.getSourceInfo(), this.config.getTargetInfo(), this.config.getSourceEndpoint().getModel(),
+				this.config.getTargetEndpoint().getModel());
+		final TaskProgressController taskProgressController = new TaskProgressController(this.taskProgressView);
 		taskProgressController.addTask(getClassesTask, items -> {
-			view.showTable(items);
+			this.view.showTable(items);
 		}, error -> {
 			MainView.showErrorWithStacktrace("Error while loading source classes", error.getMessage(),
 					getClassesTask.getException());
@@ -87,21 +88,21 @@ public class EditClassMatchingController implements IEditController {
 	}
 
 	private void loadManual() {
-		taskProgressView = new TaskProgressView("Get classes");
-		Endpoint sourceEndpoint = config.getSourceEndpoint();
-		GetClassesTask getSourceClassesTask = sourceEndpoint.createGetClassesTask(taskProgressView);
-		Endpoint targetEndpoint = config.getTargetEndpoint();
-		GetClassesTask getTargetClassesTask = targetEndpoint.createGetClassesTask(taskProgressView);
+		this.taskProgressView = new TaskProgressView("Get classes");
+		final Endpoint sourceEndpoint = this.config.getSourceEndpoint();
+		final GetClassesTask getSourceClassesTask = sourceEndpoint.createGetClassesTask(this.taskProgressView);
+		final Endpoint targetEndpoint = this.config.getTargetEndpoint();
+		final GetClassesTask getTargetClassesTask = targetEndpoint.createGetClassesTask(this.taskProgressView);
 
-		TaskProgressController taskProgressController = new TaskProgressController(taskProgressView);
+		final TaskProgressController taskProgressController = new TaskProgressController(this.taskProgressView);
 		taskProgressController.addTask(getSourceClassesTask, items -> {
-			view.showTree(SOURCE, items, sourceEndpoint.getCurrentClass());
+			this.view.showTree(SOURCE, items, sourceEndpoint.getCurrentClass());
 		}, error -> {
 			MainView.showErrorWithStacktrace("Error while loading source classes", error.getMessage(),
 					getSourceClassesTask.getException());
 		});
 		taskProgressController.addTask(getTargetClassesTask, items -> {
-			view.showTree(TARGET, items, targetEndpoint.getCurrentClass());
+			this.view.showTree(TARGET, items, targetEndpoint.getCurrentClass());
 		}, error -> {
 			MainView.showErrorWithStacktrace("Error while loading target classes", error.getMessage(),
 					getTargetClassesTask.getException());
@@ -110,20 +111,20 @@ public class EditClassMatchingController implements IEditController {
 
 	/**
 	 * Saves the selected classes
-	 * 
+	 *
 	 * @param sourceClass
 	 *            class for source
 	 * @param targetClass
 	 *            class for target
 	 */
 	public void save(ClassMatchingNode sourceClass, ClassMatchingNode targetClass) {
-		config.getSourceEndpoint().setCurrentClass(sourceClass);
-		config.getTargetEndpoint().setCurrentClass(targetClass);
+		this.config.getSourceEndpoint().setCurrentClass(sourceClass);
+		this.config.getTargetEndpoint().setCurrentClass(targetClass);
 	}
 
 	public void save(String sourceClass, String targetClass) {
-		config.getSourceEndpoint().setCurrentClassAsString(sourceClass);
-		config.getTargetEndpoint().setCurrentClassAsString(targetClass);
+		this.config.getSourceEndpoint().setCurrentClassAsString(sourceClass);
+		this.config.getTargetEndpoint().setCurrentClassAsString(targetClass);
 	}
 
 	/**
@@ -131,23 +132,23 @@ public class EditClassMatchingController implements IEditController {
 	 */
 	@Override
 	public IEditView getView() {
-		return view;
+		return this.view;
 	}
 
 	@Override
 	public boolean validate() {
 		boolean valid = true;
-		if (view.isAutomated()) {
-			if (view.getTableView().getSelectionModel().getSelectedItem() == null) {
-				view.getErrorAutomatedMissingClassMatchingLabel().setVisible(true);
-				view.getErrorAutomatedMissingClassMatchingLabel().setTextFill(Color.RED);
+		if (this.view.isAutomated()) {
+			if (this.view.getTableView().getSelectionModel().getSelectedItem() == null) {
+				this.view.getErrorAutomatedMissingClassMatchingLabel().setVisible(true);
+				this.view.getErrorAutomatedMissingClassMatchingLabel().setTextFill(Color.RED);
 				valid = false;
 			}
 		} else {
-			if (view.getSourceTreeView().getSelectionModel().getSelectedItem() == null
-					|| view.getTargetTreeView().getSelectionModel().getSelectedItem() == null) {
-				view.getErrorManualMissingClassMatchingLabel().setVisible(true);
-				view.getErrorManualMissingClassMatchingLabel().setTextFill(Color.RED);
+			if (this.view.getSourceTreeView().getSelectionModel().getSelectedItem() == null
+					|| this.view.getTargetTreeView().getSelectionModel().getSelectedItem() == null) {
+				this.view.getErrorManualMissingClassMatchingLabel().setVisible(true);
+				this.view.getErrorManualMissingClassMatchingLabel().setTextFill(Color.RED);
 				valid = false;
 			}
 		}
@@ -156,7 +157,7 @@ public class EditClassMatchingController implements IEditController {
 
 	@Override
 	public TaskProgressView getTaskProgressView() {
-		return taskProgressView;
+		return this.taskProgressView;
 	}
 
 	@Override
@@ -165,14 +166,15 @@ public class EditClassMatchingController implements IEditController {
 	}
 
 	public Config getConfig() {
-		return config;
+		return this.config;
 	}
-	
+
 	@Override
-	public void checkIfAutomationIsPossible(){
-		//If the endpoints are the same automation is useless
-		boolean automated = !config.getSourceInfo().getEndpoint().equals(config.getTargetInfo().getEndpoint());
-		view.setAutomated(automated);
+	public void checkIfAutomationIsPossible() {
+		// If the endpoints are the same automation is useless
+		final boolean automated = !this.config.getSourceInfo().getEndpoint()
+				.equals(this.config.getTargetInfo().getEndpoint());
+		this.view.setAutomated(automated);
 	}
 
 }

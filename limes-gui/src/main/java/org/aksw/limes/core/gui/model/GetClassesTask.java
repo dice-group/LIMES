@@ -18,129 +18,127 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 
 /**
- * Task for loading classes in {@link org.aksw.limes.core.gui.view.WizardView}   
+ * Task for loading classes in {@link org.aksw.limes.core.gui.view.WizardView}
+ * 
  * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
  *         studserv.uni-leipzig.de{@literal >}
  *
  */
 public class GetClassesTask extends Task<List<ClassMatchingNode>> {
-    /**
-     * config
-     */
-    private Config config;
-    /**
-     * info
-     */
-    private KBInfo info;
-    /**
-     * model
-     */
-    private Model model;
-    /**
-     * view for displaying progress of task
-     */
-    private TaskProgressView view;
-    /**
-     * used for progress
-     */
-    private int counter;
-    /**
-     * used for progress
-     */
-    private int maxSize;
-    /**
-     * progress
-     */
-    private double progress;
+	/**
+	 * config
+	 */
+	private final Config config;
+	/**
+	 * info
+	 */
+	private final KBInfo info;
+	/**
+	 * model
+	 */
+	private final Model model;
+	/**
+	 * view for displaying progress of task
+	 */
+	private final TaskProgressView view;
+	/**
+	 * used for progress
+	 */
+	private int counter;
+	/**
+	 * used for progress
+	 */
+	private int maxSize;
+	/**
+	 * progress
+	 */
+	private double progress;
 
-    /**
-     * Constructor
-     * @param info
-     * @param model
-     * @param view
-     */
-    public GetClassesTask(KBInfo info, Model model, TaskProgressView view, Config config) {
-        this.info = info;
-        this.model = model;
-        this.view = view;
-        this.config = config;
-    }
-
-    /**
-     * Get classes for matching.
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    protected List<ClassMatchingNode> call() throws Exception {
-	List<ClassMatchingNode> result = (List<ClassMatchingNode>) TaskResultSerializer.getTaskResult(this);
-	if(result != null){
-	    Collections.sort(result, new ClassMatchingNodeComparator());
-	    return result;
-	}
-        Set<String> rootClasses = SPARQLHelper.rootClassesUncached(info.getEndpoint(),
-                info.getGraph(), model, config);
-        counter = 0;
-        progress = 0;
-        result = getClassMatchingNodes(rootClasses);
-        TaskResultSerializer.serializeTaskResult(this, result);
-        Collections.sort(result, new ClassMatchingNodeComparator());
-        return result;
-    }
-
-    /**
-     * loads the classes and displays progress in progress bar
-     * @param classes
-     * @return
-     */
-    private List<ClassMatchingNode> getClassMatchingNodes(Set<String> classes) {
-        maxSize += classes.size();
-        if (isCancelled()) {
-            return null;
-        }
-        List<ClassMatchingNode> result = new ArrayList<ClassMatchingNode>();
-        for (String class_ : classes) {
-            try {
-                counter++;
-                List<ClassMatchingNode> children = getClassMatchingNodes(SPARQLHelper
-                        .subClassesOfUncached(info.getEndpoint(), info.getGraph(), class_, model));
-                result.add(new ClassMatchingNode(new URI(class_), children));
-                double tmpProgress = (double) counter / maxSize;
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        view.getInformationLabel().set("Getting: " + class_);
-                        if (tmpProgress > progress) {
-                            progress = tmpProgress;
-                            view.getProgressBar().setProgress(progress);
-                        }
-                    }
-                });
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        return result;
-    }
-    
-    /**
-     * 
-     * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
-     *         studserv.uni-leipzig.de{@literal >}
-     *	Helper class to sort ClassMatchingNodes by name
-     */
-    class ClassMatchingNodeComparator implements Comparator<ClassMatchingNode> {
-	    @Override
-	    public int compare(ClassMatchingNode a, ClassMatchingNode b) {
-	        return a.getName().compareToIgnoreCase(b.getName());
-	    }
+	/**
+	 * Constructor
+	 * 
+	 * @param info
+	 * @param model
+	 * @param view
+	 */
+	public GetClassesTask(KBInfo info, Model model, TaskProgressView view, Config config) {
+		this.info = info;
+		this.model = model;
+		this.view = view;
+		this.config = config;
 	}
 
-    public int hashCode() {
-      return new HashCodeBuilder(17, 37).
-        append(info.getEndpoint()).
-        append(info.getGraph()).
-        append(model).
-        toHashCode();
-    }
+	/**
+	 * Get classes for matching.
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	protected List<ClassMatchingNode> call() throws Exception {
+		List<ClassMatchingNode> result = (List<ClassMatchingNode>) TaskResultSerializer.getTaskResult(this);
+		if (result != null) {
+			Collections.sort(result, new ClassMatchingNodeComparator());
+			return result;
+		}
+		final Set<String> rootClasses = SPARQLHelper.rootClassesUncached(this.info.getEndpoint(), this.info.getGraph(),
+				this.model, this.config);
+		this.counter = 0;
+		this.progress = 0;
+		result = this.getClassMatchingNodes(rootClasses);
+		TaskResultSerializer.serializeTaskResult(this, result);
+		Collections.sort(result, new ClassMatchingNodeComparator());
+		return result;
+	}
+
+	/**
+	 * loads the classes and displays progress in progress bar
+	 * 
+	 * @param classes
+	 * @return
+	 */
+	private List<ClassMatchingNode> getClassMatchingNodes(Set<String> classes) {
+		this.maxSize += classes.size();
+		if (this.isCancelled()) {
+			return null;
+		}
+		final List<ClassMatchingNode> result = new ArrayList<>();
+		for (final String class_ : classes) {
+			try {
+				this.counter++;
+				final List<ClassMatchingNode> children = this.getClassMatchingNodes(SPARQLHelper
+						.subClassesOfUncached(this.info.getEndpoint(), this.info.getGraph(), class_, this.model));
+				result.add(new ClassMatchingNode(new URI(class_), children));
+				final double tmpProgress = (double) this.counter / this.maxSize;
+				Platform.runLater(() -> {
+					GetClassesTask.this.view.getInformationLabel().set("Getting: " + class_);
+					if (tmpProgress > GetClassesTask.this.progress) {
+						GetClassesTask.this.progress = tmpProgress;
+						GetClassesTask.this.view.getProgressBar().setProgress(GetClassesTask.this.progress);
+					}
+				});
+			} catch (final Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
+	 *         studserv.uni-leipzig.de{@literal >} Helper class to sort
+	 *         ClassMatchingNodes by name
+	 */
+	class ClassMatchingNodeComparator implements Comparator<ClassMatchingNode> {
+		@Override
+		public int compare(ClassMatchingNode a, ClassMatchingNode b) {
+			return a.getName().compareToIgnoreCase(b.getName());
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 37).append(this.info.getEndpoint()).append(this.info.getGraph())
+				.append(this.model).toHashCode();
+	}
 }

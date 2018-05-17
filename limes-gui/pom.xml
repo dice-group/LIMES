@@ -40,7 +40,7 @@
         <dependency>
             <groupId>org.aksw.limes</groupId>
             <artifactId>limes-core</artifactId>
-            <version>${limes.version}</version>
+            <version>${limes.version}</version><!--$NO-MVN-MAN-VER$-->
             <scope>compile</scope>
         </dependency>
         <dependency>

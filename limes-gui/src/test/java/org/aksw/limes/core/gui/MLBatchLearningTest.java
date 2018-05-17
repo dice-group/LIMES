@@ -13,94 +13,83 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 
 import javafx.application.Platform;
-import javafx.scene.control.ListView;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class MLBatchLearningTest extends ApplicationTest{
+public class MLBatchLearningTest extends ApplicationTest {
 
 	MainView mainView;
 	MainController mainController;
 	private static final int timeout = 180;
-	private static final Logger logger = LoggerFactory.getLogger(ConfigurationWizardTest.class);
 	private String resourcesPath;
-	
 
 	@Override
 	public void start(Stage stage) throws Exception {
 		Locale.setDefault(new Locale("en", "US"));
-		mainView = new MainView(stage);
-		mainController = new MainController(mainView);
-		mainView.setController(mainController);
-		resourcesPath = ProjectPropertiesGetter.getProperty(Thread.currentThread().getContextClassLoader().getResource("project.properties").getPath(), "limes-core.resources");
+		this.mainView = new MainView(stage);
+		this.mainController = new MainController(this.mainView);
+		this.mainView.setController(this.mainController);
+		this.resourcesPath = ProjectPropertiesGetter.getProperty(
+				Thread.currentThread().getContextClassLoader().getResource("project.properties").getPath(),
+				"limes-core.resources");
 	}
-	
+
 	@Before
 	public void loadConfig() {
-		mainController.loadConfig(new File(resourcesPath + "datasets/Amazon-GoogleProducts.xml"));
+		this.mainController.loadConfig(new File(this.resourcesPath + "datasets/Amazon-GoogleProducts.xml"));
 	}
-	
+
 	@BeforeClass
-	public static void setup(){
-        System.setProperty("testfx.robot", "glass");
-        System.setProperty("testfx.headless", "true");
-        System.setProperty("prism.order", "sw");
-        System.setProperty("prism.text", "t2k");
-        System.setProperty("java.awt.headless", "true");
+	public static void setup() {
+		System.setProperty("testfx.robot", "glass");
+		System.setProperty("testfx.headless", "true");
+		System.setProperty("prism.order", "sw");
+		System.setProperty("prism.text", "t2k");
+		System.setProperty("java.awt.headless", "true");
 	}
-	
+
 	@Test
-	public void walkThrough(){
-		FxRobot robo = new FxRobot();
-		clickOn("#menuLearn");
-		clickOn("Batch Learning");
-		clickOn("choose algorithm");
-		clickOn("Dragon");
-        Platform.runLater(new Runnable() {
-            @Override public void run() {
-            	((Stage)robo.window("LIMES - Property Matching")).setFullScreen(true);
-            }
-        });
-		moveTo("available Source Properties:");
-		clickOn("title");
-		clickOn("name");
-		clickOn("description");
-		clickOn("description");
-		clickOn("manufacturer");
-		clickOn("manufacturer");
-		clickOn("price");
-		clickOn("price");
+	public void walkThrough() {
+		final FxRobot robo = new FxRobot();
+		this.clickOn("#menuLearn");
+		this.clickOn("Batch Learning");
+		this.clickOn("choose algorithm");
+		this.clickOn("Dragon");
+		Platform.runLater(() -> ((Stage) robo.window("LIMES - Property Matching")).setFullScreen(true));
+		this.moveTo("available Source Properties:");
+		this.clickOn("title");
+		this.clickOn("name");
+		this.clickOn("description");
+		this.clickOn("description");
+		this.clickOn("manufacturer");
+		this.clickOn("manufacturer");
+		this.clickOn("price");
+		this.clickOn("price");
 		CustomGuiTest.waitUntilNodeIsVisible("finish", timeout);
-		clickOn("finish");
-		clickOn("learn");
+		this.clickOn("finish");
+		this.clickOn("learn");
 		CustomGuiTest.waitUntilNodeIsVisible("#filePathField", timeout);
-		clickOn("#filePathField").write(resourcesPath + "datasets/Amazon-GoogleProducts/Amzon_GoogleProducts_perfectMapping.csv");
-		clickOn("Save");
-		CustomGuiTest.waitUntilLoadingWindowIsClosed("Learning", timeout*10);
+		this.clickOn("#filePathField")
+				.write(this.resourcesPath + "datasets/Amazon-GoogleProducts/Amzon_GoogleProducts_perfectMapping.csv");
+		this.clickOn("Save");
+		CustomGuiTest.waitUntilLoadingWindowIsClosed("Learning", timeout * 10);
 	}
 
 	@AfterClass
-	public static void cleanup(){
-		FxRobot rob = new FxRobot();
-		for(Window w : rob.listWindows()){
-			int currentsize = rob.listWindows().size();
-			System.out.println(((Stage)w).getTitle());
-			//Avoid not on fx application thread error
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                	((Stage)w).close();
-                }
-            });
-            CustomGuiTest.waitUntilWindowIsClosed(currentsize - 1, 200);
+	public static void cleanup() {
+		final FxRobot rob = new FxRobot();
+		for (final Window w : rob.listWindows()) {
+			final int currentsize = rob.listWindows().size();
+			System.out.println(((Stage) w).getTitle());
+			// Avoid not on fx application thread error
+			Platform.runLater(() -> ((Stage) w).close());
+			CustomGuiTest.waitUntilWindowIsClosed(currentsize - 1, 200);
 		}
-		assertEquals(0,rob.listWindows().size());
+		assertEquals(0, rob.listWindows().size());
 	}
 
 }
