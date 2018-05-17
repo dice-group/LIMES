@@ -38,7 +38,7 @@ public class SaveAndLoadConfigTest extends ApplicationTest {
 		this.mainView = new MainView(stage);
 		this.mainController = new MainController(this.mainView);
 		this.mainView.setController(this.mainController);
-		this.changedTestConfig = this.folder.newFile("src/test/resources/gui/changedTestConfig.ttl");
+		this.changedTestConfig = this.folder.newFile("changedTestConfig.ttl");
 	}
 
 	@Before
