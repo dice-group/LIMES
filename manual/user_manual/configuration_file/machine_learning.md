@@ -12,16 +12,16 @@ In most cases, finding a good metric expression (i.s. one that achieve high F-Me
 	</MLALGORITHM>
 
 In particular:
-* The the tag `NAME` contains the name of the machine learning algorithm. Currently, we implemented the folowing algorithms:
-    + womabt simple
+* The tag `NAME` contains the name of the machine learning algorithm. Currently, we implemented the following algorithms:
+    + wombat simple
     + wombat complete
     + eagle
-* The the tag `TYPE` contains the type of the machine learning algorithm, which could tak one of the values:
+* The tag `TYPE` contains the type of the machine learning algorithm, which could take one of the values:
     + supervised batch
     + supervised active
     + unsupervised
-* The the tag `TRAINING` contains the full path to the training data file. Note that this tag is not required in case of the supervised active and unsupervised learning algorithms. Usually a `*.ttl` file is used where the URIs of the entities are linked via `owl:sameAs` e.g.: ```<http://sourceexample.org/entity1> <http://www.w3.org/2002/07/owl#sameAs><http://targetexample.org/entity1> . ```
-* The the tag `PARAMETER` contains the the name (using the sub-tag `NAME`) and the value (using the sub-tag `VALUE`) of the used machine learning algorithm parameter. User can use as many `PARAMETER` tags as it is required. Note that LIMES uses the default values of all unspecified parameters. 
+* The tag `TRAINING` contains the full path to the training data file. Note that this tag is not required in case of the supervised active and unsupervised learning algorithms. Usually a `*.ttl` file is used where the URIs of the entities are linked via `owl:sameAs` e.g.: ```<http://sourceexample.org/entity1> <http://www.w3.org/2002/07/owl#sameAs><http://targetexample.org/entity1> . ```
+* The tag `PARAMETER` contains the name (using the sub-tag `NAME`) and the value (using the sub-tag `VALUE`) of the used machine learning algorithm parameter. Users can use as many `PARAMETER` tags as required. Note that LIMES uses the default values of all unspecified parameters. 
 
 The following table contains a list of implemented algorithms together with supported implementations and parameters.
 
