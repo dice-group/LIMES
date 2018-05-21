@@ -92,4 +92,8 @@ public class Doc2VecMeasure extends AStringMeasure {
   public String getName() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
+
+  public INDArray inferVector(String text) {
+    return vectors.inferVector(text);
+  }
 }
