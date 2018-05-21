@@ -21,6 +21,7 @@ import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.sdb.sql.MySQLEngineType;
 import org.junit.Test;
+import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.primitives.Pair;
 import org.nd4j.linalg.primitives.Triple;
 
@@ -50,14 +51,15 @@ public class Doc2VecMeasureTest {
     assertTrue(measure.getSimilarity(g, h) > measure.getSimilarity(h, ii));
   }
 
-  public static final String DEFAULT_SPARQL_PREFIXES = "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"
-      + "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n"
-      + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
-      + "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
-      + "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n"
-      + "PREFIX dbr: <http://dbpedia.org/resource/>\n"
-      + "PREFIX dbo: <http://dbpedia.org/ontology/>\n"
-      + "PREFIX dbp: <http://dbpedia.org/property/>\n";
+  public static final String DEFAULT_SPARQL_PREFIXES =
+      "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"
+          + "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n"
+          + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+          + "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+          + "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n"
+          + "PREFIX dbr: <http://dbpedia.org/resource/>\n"
+          + "PREFIX dbo: <http://dbpedia.org/ontology/>\n"
+          + "PREFIX dbp: <http://dbpedia.org/property/>\n";
 
   @Test
   public void testSparqlSimple() {
@@ -73,7 +75,7 @@ public class Doc2VecMeasureTest {
     Query query = QueryFactory.create(queryString);
     QueryExecution qExe = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
     ResultSet results = qExe.execSelect();
-    ResultSetFormatter.out(System.out, results, query) ;
+    ResultSetFormatter.out(System.out, results, query);
   }
 
   @Test
@@ -100,21 +102,24 @@ public class Doc2VecMeasureTest {
     }
     int size = names.size();
     System.out.println(size + " entity names");
-    Doc2VecMeasure measure = new Doc2VecMeasure(Doc2VecMeasure.DEFAULT_PRECOMPUTED_VECTORS_FILE_PATH);
+    Doc2VecMeasure measure = new Doc2VecMeasure(
+        Doc2VecMeasure.DEFAULT_PRECOMPUTED_VECTORS_FILE_PATH);
     ArrayList<Pair<Double, String>> comparisons = new ArrayList<>();
 
     for (int a = 0; a < size; a++) {
-      for (int b = a+1; b < size; b++) {
+      for (int b = a + 1; b < size; b++) {
         double score = measure.getSimilarity(abstracts.get(a), abstracts.get(b));
         comparisons.add(new Pair<>(score, names.get(a) + " VS " + names.get(b)));
       }
     }
 
-    comparisons.sort((a,b) -> {
-      if (a.getFirst() < b.getFirst())
+    comparisons.sort((a, b) -> {
+      if (a.getFirst() < b.getFirst()) {
         return 1;
-      if (a.getFirst() > b.getFirst())
+      }
+      if (a.getFirst() > b.getFirst()) {
         return -1;
+      }
       return -a.getSecond().compareTo(b.getSecond());
     });
 
@@ -130,7 +135,8 @@ public class Doc2VecMeasureTest {
     ArrayList<String> simpleAbstracts = new ArrayList<String>();
     ArrayList<String> normalAbstracts = new ArrayList<String>();
     try {
-      Stream<String> lines = Files.lines(Paths.get("src/test/resources/simple-and-normal-english-wiki-abstracts.csv"));
+      Stream<String> lines = Files
+          .lines(Paths.get("src/test/resources/simple-and-normal-english-wiki-abstracts.csv"));
       lines.forEach(line -> {
         String[] parts = line.split("\t");
         if (parts.length > 2) {
@@ -145,7 +151,8 @@ public class Doc2VecMeasureTest {
     }
     int size = names.size();
     System.out.println(size + " entity names");
-    Doc2VecMeasure measure = new Doc2VecMeasure(Doc2VecMeasure.DEFAULT_PRECOMPUTED_VECTORS_FILE_PATH);
+    Doc2VecMeasure measure = new Doc2VecMeasure(
+        Doc2VecMeasure.DEFAULT_PRECOMPUTED_VECTORS_FILE_PATH);
     ArrayList<Pair<Double, String>> comparisons = new ArrayList<>();
 
     for (int a = 0; a < size; a++) {
@@ -156,11 +163,13 @@ public class Doc2VecMeasureTest {
       }
     }
 
-    comparisons.sort((a,b) -> {
-      if (a.getFirst() < b.getFirst())
+    comparisons.sort((a, b) -> {
+      if (a.getFirst() < b.getFirst()) {
         return 1;
-      if (a.getFirst() > b.getFirst())
+      }
+      if (a.getFirst() > b.getFirst()) {
         return -1;
+      }
       return -a.getSecond().compareTo(b.getSecond());
     });
 
@@ -177,7 +186,8 @@ public class Doc2VecMeasureTest {
     ArrayList<String> simpleAbstracts = new ArrayList<String>();
     ArrayList<String> normalAbstracts = new ArrayList<String>();
     try {
-      Stream<String> lines = Files.lines(Paths.get("src/test/resources/simple-and-normal-english-wiki-abstracts.csv"));
+      Stream<String> lines = Files
+          .lines(Paths.get("src/test/resources/simple-and-normal-english-wiki-abstracts.csv"));
       lines.forEach(line -> {
         String[] parts = line.split("\t");
         if (parts.length > 2) {
@@ -192,20 +202,57 @@ public class Doc2VecMeasureTest {
     }
     int size = names.size();
     System.out.println(size + " entity names");
-    Doc2VecMeasure measure = new Doc2VecMeasure(Doc2VecMeasure.DEFAULT_PRECOMPUTED_VECTORS_FILE_PATH);
+    Doc2VecMeasure measure = new Doc2VecMeasure(
+        Doc2VecMeasure.DEFAULT_PRECOMPUTED_VECTORS_FILE_PATH);
     for (int a = 0; a < size; a++) {
       double sameScore = measure.getSimilarity(simpleAbstracts.get(a), normalAbstracts.get(a));
-      System.out.println(a + "\t" + names.get(a) + " with itself = " + sameScore + ", with others:");
       List<Double> otherScores = new ArrayList<>();
       for (int b = 0; b < size; b++) {
-        if (b == a)
+        if (b == a) {
           continue;
+        }
         double score = measure.getSimilarity(simpleAbstracts.get(a), normalAbstracts.get(b));
         otherScores.add(score);
       }
-      System.out.println("mean: " + MyUtil.getMean(otherScores) + ", std: " +
-      MyUtil.getStdDeviation(otherScores) + ", median: " + MyUtil.getMedian(otherScores));
+      System.out.println(
+          names.get(a) + "\t" + sameScore + "\t" + MyUtil.getMean(otherScores) + "\t" + MyUtil
+              .getStdDeviation(otherScores));
     }
+
+  }
+
+  @Test
+  public void testPrintWordEmbeddingsForWikiAbstracts() {
+    ArrayList<String> names = new ArrayList<String>();
+    ArrayList<String> simpleAbstracts = new ArrayList<String>();
+    ArrayList<String> normalAbstracts = new ArrayList<String>();
+    try {
+      Stream<String> lines = Files
+          .lines(Paths.get("src/test/resources/simple-and-normal-english-wiki-abstracts.csv"));
+      lines.forEach(line -> {
+        String[] parts = line.split("\t");
+        if (parts.length > 2) {
+          names.add(parts[0]);
+          simpleAbstracts.add(parts[1]);
+          normalAbstracts.add(parts[2]);
+        }
+      });
+      lines.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    int size = names.size();
+    System.out.println(size + " entity names");
+    Doc2VecMeasure measure = new Doc2VecMeasure(
+        Doc2VecMeasure.DEFAULT_PRECOMPUTED_VECTORS_FILE_PATH);
+    for (int a = 0; a < size; a++) {
+      INDArray vector1 = measure.inferVector(simpleAbstracts.get(a));
+      INDArray vector2 = measure.inferVector(normalAbstracts.get(a));
+      System.out.println(names.get(a));
+      System.out.println(vector1);
+      System.out.println(vector2);
+    }
+
 
   }
 }
