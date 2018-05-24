@@ -3,9 +3,9 @@
 **###Version 1.3.0**
 
 New Features:
- -adds ManhattanMeasure to set of supported measures
- -adds -l option to LIMES server
- -adds MIN- and MAXOFFSET to the XML-config in order to allow partial fetching
+- Adds ManhattanMeasure to set of supported measures
+- Adds -l option to LIMES server
+- Adds MIN- and MAXOFFSET to the XML-config in order to allow partial fetching
 
 Bugfixes:
 
