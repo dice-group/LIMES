@@ -1,22 +1,7 @@
+import sys
+
 import matplotlib
 
-"""scatterplot
-import numpy as np
-import matplotlib.pyplot as plt
-
-
-m = np.loadtxt("/home/swante/Dropbox/uef/clu/ex1/foo.txt")
-plt.scatter(m[:,0],m[:,1])
-plt.show()
-
-"""
-
-"""simple plot
-
-t = np.linspace(0,8,1000)
-plt.plot(t,np.sin(t))
-plt.show()
-"""
 
 matplotlib.use("TkAgg")
 import numpy as np
@@ -47,9 +32,10 @@ for i in range(0, len(lines), 3):
 
 from sklearn.preprocessing import StandardScaler
 x = StandardScaler().fit_transform(x)
-from sklearn.decomposition import PCA
-pca = PCA(n_components=2)
-x_fit = pca.fit_transform(x)
+# from sklearn.decomposition import PCA
+# x_fit = PCA(n_components=2).fit_transform(x)
+from sklearn.manifold import TSNE
+x_fit = TSNE(n_components=2).fit_transform(x)
 
 fig = plt.figure(figsize = (8,8))
 ax = fig.add_subplot(1,1,1)
