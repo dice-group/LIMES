@@ -286,7 +286,6 @@
     </repositories>
 
     <dependencies>
-
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j</artifactId>
@@ -601,12 +600,6 @@
             <artifactId>deeplearning4j-nlp</artifactId>
             <version>0.9.1</version>
         </dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>RELEASE</version>
-        <scope>test</scope>
-      </dependency>
     </dependencies>
 
     <distributionManagement>
