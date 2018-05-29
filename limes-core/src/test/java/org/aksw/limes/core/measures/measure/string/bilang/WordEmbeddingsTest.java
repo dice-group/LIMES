@@ -48,7 +48,7 @@ public class WordEmbeddingsTest {
     List<Pair<String, Double>> neighbors = we
         .computeNNearestWords(we.getWordVector("university"), 50);
     neighbors.forEach(System.out::println);
-    assertTrue(neighbors.stream().anyMatch(it -> it.getKey().equals("niederlande")));
+    assertTrue(neighbors.stream().anyMatch(it -> it.getKey().equals("professor")));
   }
 
   @Test
