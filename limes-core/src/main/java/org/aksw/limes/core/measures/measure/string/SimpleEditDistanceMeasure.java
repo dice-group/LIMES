@@ -90,7 +90,7 @@ public class SimpleEditDistanceMeasure extends AStringMeasure {
     if (s1.isEmpty() && s2.isEmpty()) {
       return 1.0;
     }
-    int edDistance = computeEditDistance(s1, s2);
+    int edDistance = computeEditDistance(s1, s2, matchingCost, insertionCost, deletionCost, substitutionCost);
     return 1.0 - edDistance / (double) getWorstCaseCost(s1.length(), s2.length());
   }
 

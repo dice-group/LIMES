@@ -21,6 +21,7 @@ public class SimpleEditDistanceMeasureTest {
   @Test
   public void testGetSimilarity() {
     SimpleEditDistanceMeasure measure = new SimpleEditDistanceMeasure(0, 2, 3, 4);
+    measure.getWorstCaseCost(4,3);
     final double eps = 0.000001;
     assertEquals(1.0, measure.getSimilarity("", ""), eps);
     assertEquals(1.0, measure.getSimilarity("abc", "abc"), eps);
