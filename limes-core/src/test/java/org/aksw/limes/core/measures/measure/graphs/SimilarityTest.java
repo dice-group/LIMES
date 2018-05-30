@@ -22,7 +22,7 @@ public class SimilarityTest {
     public void testSimilarity(){
         String[] datasets = {"PERSON1","PERSON2" , "RESTAURANTS","OAEI2014BOOKS","DBLPACM","ABTBUY","DBLPSCHOLAR","AMAZONGOOGLEPRODUCTS","DBPLINKEDMDB","DRUGS","PERSON2_CSV","PERSON2_CSV","PERSON1_CSV","RESTAURANTS_CSV"};
 
-        EvaluationData dataset = DataSetChooser.getData(datasets[1]);
+        EvaluationData dataset = DataSetChooser.getData(datasets[0]);
 
         WLSimilarityMapper mapper = new WLSimilarityMapper();
         AMapping mapping = mapper.getMapping(dataset.getSourceCache(), dataset.getTargetCache(), null, null,
