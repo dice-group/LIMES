@@ -19,7 +19,7 @@ import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.measures.mapper.CrispSetOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.FitnessFunctionDTL;
 import org.aksw.limes.core.ml.algorithm.dragon.Pruning.PruningFunctionDTL;
@@ -71,8 +71,8 @@ public class DecisionTree {
 		this.minPropertyCoverage = minPropertyCoverage;
 		this.propertyLearningRate = propertyLearningRate;
 		this.pruningConfidence = pruningConfidence;
-		this.root = true;
-		this.depth = 0;
+		root = true;
+		depth = 0;
 		this.refMapping = refMapping;
 		this.propertyMapping = propertyMapping;
 	}
@@ -89,35 +89,35 @@ public class DecisionTree {
 		this.pruningConfidence = pruningConfidence;
 		this.parent = parent;
 		this.isLeftNode = isLeftNode;
-		this.root = false;
+		root = false;
 		if (parent != null) {
-			this.depth = this.parent.depth + 1;
+			depth = this.parent.depth + 1;
 		}
 		this.refMapping = refMapping;
 		this.propertyMapping = propertyMapping;
 	}
 
 	public DecisionTree buildTree(int maxDepth) {
-		this.classifier = fitnessFunction.getBestClassifier(this);
-		if (this.classifier == null) {
+		classifier = fitnessFunction.getBestClassifier(this);
+		if (classifier == null) {
 			return null;
 		}
-		if (this.root) {
-			totalFMeasure = this.classifier.getfMeasure();
+		if (root) {
+			totalFMeasure = classifier.getfMeasure();
 		} else {
 			if (fitnessFunction.stopCondition(this)) {
 				return null;
 			}
 		}
-		if (maxDepth != this.depth && this.depth < this.propertyMapping.getCompletePropMapping().size()) {
-			this.rightChild = new DecisionTree(this.dtl, this.sourceCache, this.targetCache, this.pseudoFMeasure,
-					this.minPropertyCoverage, this.pruningConfidence, this.propertyLearningRate, this, false,
-					this.refMapping, this.propertyMapping);
-			this.rightChild = this.rightChild.buildTree(maxDepth);
-			this.leftChild = new DecisionTree(this.dtl, this.sourceCache, this.targetCache, this.pseudoFMeasure,
-					this.minPropertyCoverage, this.pruningConfidence, this.propertyLearningRate, this, true,
-					this.refMapping, this.propertyMapping);
-			this.leftChild = this.leftChild.buildTree(maxDepth);
+		if (maxDepth != depth && depth < propertyMapping.getCompletePropMapping().size()) {
+			rightChild = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure,
+					minPropertyCoverage, pruningConfidence, propertyLearningRate, this, false,
+					refMapping, propertyMapping);
+			rightChild = rightChild.buildTree(maxDepth);
+			leftChild = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure,
+					minPropertyCoverage, pruningConfidence, propertyLearningRate, this, true,
+					refMapping, propertyMapping);
+			leftChild = leftChild.buildTree(maxDepth);
 		}
 		return this;
 	}
@@ -125,22 +125,22 @@ public class DecisionTree {
 	public DecisionTree prune() {
 		int currentDepth = maxDepth;
 		while (currentDepth >= 0) {
-			this.getRootNode().prune(currentDepth);
+			getRootNode().prune(currentDepth);
 			currentDepth--;
 		}
 		return this;
 	}
 
 	private DecisionTree prune(int depth) {
-		if (this.rightChild == null && this.leftChild == null) {
+		if (rightChild == null && leftChild == null) {
 			return this;
 		}
 		// Go to the leaves
-		if (this.rightChild != null) {
-			this.rightChild.prune(depth);
+		if (rightChild != null) {
+			rightChild.prune(depth);
 		}
-		if (this.leftChild != null) {
-			this.leftChild.prune(depth);
+		if (leftChild != null) {
+			leftChild.prune(depth);
 		}
 		if (this.depth != depth) {
 			return this;
@@ -149,30 +149,30 @@ public class DecisionTree {
 	}
 
 	private DecisionTree getRootNode() {
-		if (!this.root) {
-			if (this.parent == null) {
+		if (!root) {
+			if (parent == null) {
 				logger.error("Detached node!Cannot get root! Returning null!");
 				return null;
 			}
-			return this.parent.getRootNode();
+			return parent.getRootNode();
 		}
 		return this;
 	}
 
 	public AMapping getTotalMapping() {
-		final DecisionTree rootNode = this.getRootNode();
-		final List<String> pathStrings = this.calculatePathMappings(rootNode);
+		DecisionTree rootNode = getRootNode();
+		List<String> pathStrings = calculatePathMappings(rootNode);
 		if (rootNode != null) {
 			assert pathStrings.size() > 0;
 		}
 		AMapping res = MappingFactory.createDefaultMapping();
-		final Iterator<String> it = pathMappings.keySet().iterator();
+		Iterator<String> it = pathMappings.keySet().iterator();
 		while (it.hasNext()) {
-			final String s = it.next();
+			String s = it.next();
 			if (!pathStrings.contains(s)) {
 				it.remove();
 			} else {
-				res = MappingOperations.union(pathMappings.get(s), res);
+				res = CrispSetOperations.INSTANCE.union(pathMappings.get(s), res);
 			}
 		}
 		return res;
@@ -184,106 +184,106 @@ public class DecisionTree {
 		}
 		if (node.rightChild == null && node.leftChild == null) {
 			if (node.root) {
-				final String path = node.getPathString();
+				String path = node.getPathString();
 				if (!pathStrings.contains(path)) {
 					pathStrings.add(path);
 				}
 			} else {
-				final String path = node.getPathString();
+				String path = node.getPathString();
 				if (!pathStrings.contains(path)) {
 					pathStrings.add(path);
 				}
 			}
 		} else if (node.rightChild != null && node.leftChild == null) {
-			this.calculatePathKeys(node.rightChild, pathStrings);
+			calculatePathKeys(node.rightChild, pathStrings);
 		} else if (node.leftChild != null && node.rightChild == null) {
-			final String path = node.getPathString();
+			String path = node.getPathString();
 			if (!pathStrings.contains(path)) {
 				pathStrings.add(path);
 			}
-			this.calculatePathKeys(node.leftChild, pathStrings);
+			calculatePathKeys(node.leftChild, pathStrings);
 		} else {
-			this.calculatePathKeys(node.rightChild, pathStrings);
-			this.calculatePathKeys(node.leftChild, pathStrings);
+			calculatePathKeys(node.rightChild, pathStrings);
+			calculatePathKeys(node.leftChild, pathStrings);
 		}
 		return pathStrings;
 	}
 
 	private List<String> calculatePathMappings(DecisionTree node) {
-		final List<String> pathStrings = new ArrayList<>();
+		List<String> pathStrings = new ArrayList<>();
 		if (node.rightChild == null && node.leftChild == null) {
 			if (node.root) {
-				final AMapping res = node.classifier.getMapping();
-				final String path = node.getPathString();
+				AMapping res = node.classifier.getMapping();
+				String path = node.getPathString();
 				if (!pathMappings.keySet().contains(path)) {
 					pathMappings.put(path, res);
 				}
 				pathStrings.add(path);
 			} else {
-				final String path = node.getPathString();
+				String path = node.getPathString();
 				if (!pathMappings.keySet().contains(path)) {
 					pathMappings.put(path, node.getPathMapping());
 				}
 				pathStrings.add(path);
 			}
 		} else if (node.rightChild != null && node.leftChild == null) {
-			pathStrings.addAll(this.calculatePathMappings(node.rightChild));
+			pathStrings.addAll(calculatePathMappings(node.rightChild));
 		} else if (node.leftChild != null && node.rightChild == null) {
-			final String path = node.getPathString();
+			String path = node.getPathString();
 			if (!pathMappings.keySet().contains(path)) {
 				pathMappings.put(path, node.getPathMapping());
 			}
 			pathStrings.add(path);
-			pathStrings.addAll(this.calculatePathMappings(node.leftChild));
+			pathStrings.addAll(calculatePathMappings(node.leftChild));
 		} else {
-			pathStrings.addAll(this.calculatePathMappings(node.rightChild));
-			pathStrings.addAll(this.calculatePathMappings(node.leftChild));
+			pathStrings.addAll(calculatePathMappings(node.rightChild));
+			pathStrings.addAll(calculatePathMappings(node.leftChild));
 		}
 		return pathStrings;
 	}
 
 	public AMapping getPathMapping() {
-		if (this.root) {
-			return this.classifier.getMapping();
+		if (root) {
+			return classifier.getMapping();
 		}
-		final AMapping parentMapping = this.parent.getPathMapping();
-		final AMapping nodeMapping = this.classifier.getMapping();
+		AMapping parentMapping = parent.getPathMapping();
+		AMapping nodeMapping = classifier.getMapping();
 		AMapping res = null;
-		if (this.isLeftNode) {
-			res = MappingOperations.difference(nodeMapping, parentMapping);
+		if (isLeftNode) {
+			res = CrispSetOperations.INSTANCE.difference(nodeMapping, parentMapping);
 		} else {
-			res = MappingOperations.intersection(nodeMapping, parentMapping);
+			res = CrispSetOperations.INSTANCE.intersection(nodeMapping, parentMapping);
 		}
 		return res;
 	}
 
 	public String getPathString() {
-		String str = "" + this.depth;
-		if (this.root) {
-			if (this.classifier.getMetricExpression() != null && !this.classifier.getMetricExpression().equals("")) {
-				str += spaceChar + this.classifier.getMetricExpression();
+		String str = "" + depth;
+		if (root) {
+			if (classifier.getMetricExpression() != null && !classifier.getMetricExpression().equals("")) {
+				str += spaceChar + classifier.getMetricExpression();
 			}
 		} else {
-			if (this.isLeftNode) {
+			if (isLeftNode) {
 				str += "left";
 			} else {
 				str += "right";
 			}
-			str += this.parent.getPathString() + spaceChar + "³" + this.isLeftNode + "³"
-					+ this.classifier.getMetricExpression();
+			str += parent.getPathString() + spaceChar + "³" + isLeftNode + "³"
+					+ classifier.getMetricExpression();
 		}
 		return str;
 	}
 
 	public LinkSpecification getTotalLS() {
-		final List<String> paths = this.calculatePathKeys(this.getRootNode(), null);
-		final String left = "³true³";
-		final String right = "³false³";
-		final String[] pathLS = new String[paths.size()];
+		List<String> paths = calculatePathKeys(getRootNode(), null);
+		String left = "³true³";
+		String right = "³false³";
+		String[] pathLS = new String[paths.size()];
 		int countPathLS = 0;
-		for (final String s : paths) {
+		for (String s : paths) {
 			double outerThreshold = 0.0;
-			final String[] path = s.split(spaceChar);
+			String[] path = s.split(spaceChar);
 			String lsString = "";
 			for (int i = 1; i < path.length; i++) {
 				if (path[i].startsWith(left)) {
@@ -321,8 +321,8 @@ public class DecisionTree {
 		LinkSpecification finalLS = null;
 		if (pathLS.length == 1) {
 			// Split on last | to get threshold
-			final int index = pathLS[0].lastIndexOf("|");
-			final String[] lsStringArr = { pathLS[0].substring(0, index), pathLS[0].substring(index + 1) };
+			int index = pathLS[0].lastIndexOf("|");
+			String[] lsStringArr = { pathLS[0].substring(0, index), pathLS[0].substring(index + 1) };
 			return new LinkSpecification(lsStringArr[0], Double.parseDouble(lsStringArr[1]));
 		}
 		for (int i = 0; i < pathLS.length; i++) {
@@ -344,31 +344,31 @@ public class DecisionTree {
 	@Override
 	public DecisionTree clone() {
 		DecisionTree cloned = null;
-		if (this.root) {
-			cloned = new DecisionTree(this.dtl, this.sourceCache, this.targetCache, this.pseudoFMeasure,
-					this.minPropertyCoverage, this.pruningConfidence, this.propertyLearningRate, this.refMapping,
-					this.propertyMapping);
-			cloned.classifier = new ExtendedClassifier(this.classifier.getMeasure(), this.classifier.getThreshold(),
-					this.classifier.getSourceProperty(), this.classifier.getTargetProperty());
-			cloned.depth = this.depth;
-			if (this.rightChild != null) {
-				cloned.rightChild = this.rightChild.cloneWithoutParent();
+		if (root) {
+			cloned = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure,
+					minPropertyCoverage, pruningConfidence, propertyLearningRate, refMapping,
+					propertyMapping);
+			cloned.classifier = new ExtendedClassifier(classifier.getMeasure(), classifier.getThreshold(),
+					classifier.getSourceProperty(), classifier.getTargetProperty());
+			cloned.depth = depth;
+			if (rightChild != null) {
+				cloned.rightChild = rightChild.cloneWithoutParent();
 			}
-			if (this.leftChild != null) {
-				cloned.leftChild = this.leftChild.cloneWithoutParent();
+			if (leftChild != null) {
+				cloned.leftChild = leftChild.cloneWithoutParent();
 			}
 		} else {
-			final DecisionTree parentClone = this.parent.cloneWithoutChild(this.isLeftNode);
-			cloned = this.cloneWithoutParent();
-			if (this.isLeftNode) {
+			DecisionTree parentClone = parent.cloneWithoutChild(isLeftNode);
+			cloned = cloneWithoutParent();
+			if (isLeftNode) {
 				parentClone.leftChild = cloned;
-				if (this.parent.rightChild != null) {
-					parentClone.rightChild = this.parent.rightChild.cloneWithoutParent();
+				if (parent.rightChild != null) {
+					parentClone.rightChild = parent.rightChild.cloneWithoutParent();
 				}
 			} else {
 				parentClone.rightChild = cloned;
-				if (this.parent.leftChild != null) {
-					parentClone.leftChild = this.parent.leftChild.cloneWithoutParent();
+				if (parent.leftChild != null) {
+					parentClone.leftChild = parent.leftChild.cloneWithoutParent();
 				}
 			}
 		}
@@ -377,25 +377,25 @@ public class DecisionTree {
 
 	protected DecisionTree cloneWithoutParent() {
 		DecisionTree cloned = null;
-		if (this.root) {
-			cloned = new DecisionTree(this.dtl, this.sourceCache, this.targetCache, this.pseudoFMeasure,
-					this.minPropertyCoverage, this.pruningConfidence, this.propertyLearningRate, this.refMapping,
-					this.propertyMapping);
+		if (root) {
+			cloned = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure,
+					minPropertyCoverage, pruningConfidence, propertyLearningRate, refMapping,
+					propertyMapping);
 		} else {
-			cloned = new DecisionTree(this.dtl, this.sourceCache, this.targetCache, this.pseudoFMeasure,
-					this.minPropertyCoverage, this.pruningConfidence, this.propertyLearningRate, null, this.isLeftNode,
-					this.refMapping, this.propertyMapping);
+			cloned = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure,
+					minPropertyCoverage, pruningConfidence, propertyLearningRate, null, isLeftNode,
+					refMapping, propertyMapping);
 		}
-		cloned.classifier = new ExtendedClassifier(this.classifier.getMeasure(), this.classifier.getThreshold(),
-				this.classifier.getSourceProperty(), this.classifier.getTargetProperty());
-		cloned.depth = this.depth;
-		if (this.leftChild != null) {
-			final DecisionTree leftClone = this.leftChild.cloneWithoutParent();
+		cloned.classifier = new ExtendedClassifier(classifier.getMeasure(), classifier.getThreshold(),
+				classifier.getSourceProperty(), classifier.getTargetProperty());
+		cloned.depth = depth;
+		if (leftChild != null) {
+			DecisionTree leftClone = leftChild.cloneWithoutParent();
 			leftClone.parent = cloned;
 			cloned.leftChild = leftClone;
 		}
-		if (this.rightChild != null) {
-			final DecisionTree rightClone = this.rightChild.cloneWithoutParent();
+		if (rightChild != null) {
+			DecisionTree rightClone = rightChild.cloneWithoutParent();
 			rightClone.parent = cloned;
 			cloned.rightChild = rightClone;
 		}
@@ -405,27 +405,27 @@ public class DecisionTree {
 	protected DecisionTree cloneWithoutChild(boolean withoutLeft) {
 		DecisionTree cloned = null;
 		DecisionTree parentClone = null;
-		if (this.parent != null) {
-			parentClone = this.parent.cloneWithoutChild(this.isLeftNode);
+		if (parent != null) {
+			parentClone = parent.cloneWithoutChild(isLeftNode);
 		}
-		if (this.root) {
-			cloned = new DecisionTree(this.dtl, this.sourceCache, this.targetCache, this.pseudoFMeasure,
-					this.minPropertyCoverage, this.pruningConfidence, this.propertyLearningRate, this.refMapping,
-					this.propertyMapping);
+		if (root) {
+			cloned = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure,
+					minPropertyCoverage, pruningConfidence, propertyLearningRate, refMapping,
+					propertyMapping);
 		} else {
-			cloned = new DecisionTree(this.dtl, this.sourceCache, this.targetCache, this.pseudoFMeasure,
-					this.minPropertyCoverage, this.pruningConfidence, this.propertyLearningRate, parentClone,
-					this.isLeftNode, this.refMapping, this.propertyMapping);
+			cloned = new DecisionTree(dtl, sourceCache, targetCache, pseudoFMeasure,
+					minPropertyCoverage, pruningConfidence, propertyLearningRate, parentClone,
+					isLeftNode, refMapping, propertyMapping);
 		}
-		cloned.classifier = new ExtendedClassifier(this.classifier.getMeasure(), this.classifier.getThreshold());
-		cloned.depth = this.depth;
+		cloned.classifier = new ExtendedClassifier(classifier.getMeasure(), classifier.getThreshold());
+		cloned.depth = depth;
 		if (parentClone != null) {
-			if (this.isLeftNode) {
+			if (isLeftNode) {
 				parentClone.leftChild = cloned;
-				parentClone.rightChild = this.parent.rightChild.cloneWithoutParent();
+				parentClone.rightChild = parent.rightChild.cloneWithoutParent();
 			} else {
 				parentClone.rightChild = cloned;
-				parentClone.leftChild = this.parent.leftChild.cloneWithoutParent();
+				parentClone.leftChild = parent.leftChild.cloneWithoutParent();
 			}
 		}
 		return cloned;
@@ -433,53 +433,53 @@ public class DecisionTree {
 
 	public double calculateFMeasure(AMapping mapping, AMapping refMap) {
 		double res = 0.0;
-		final GoldStandard gs = new GoldStandard(refMap, this.dtl.getTestSourceCache().getAllUris(),
-				this.dtl.getTestTargetCache().getAllUris());
-		final FMeasure fm = new FMeasure();
+		GoldStandard gs = new GoldStandard(refMap, dtl.getTestSourceCache().getAllUris(),
+				dtl.getTestTargetCache().getAllUris());
+		FMeasure fm = new FMeasure();
 		res = fm.calculate(mapping, gs);
 		return res;
 	}
 
 	public AMapping getMeasureMapping(String measureExpression, ExtendedClassifier cp) {
-		if (this.root) {
-			final AMapping mapping = this.executeAtomicMeasure(measureExpression, cp.getThreshold());
+		if (root) {
+			AMapping mapping = executeAtomicMeasure(measureExpression, cp.getThreshold());
 			calculatedMappings.put(cp.getMetricExpression(), mapping);
 			return mapping;
 		}
-		this.classifier = cp;
+		classifier = cp;
 		AMapping classifierMapping = calculatedMappings.get(cp.getMetricExpression());
 		if (classifierMapping == null) {
-			classifierMapping = this.executeAtomicMeasure(measureExpression, cp.getThreshold());
+			classifierMapping = executeAtomicMeasure(measureExpression, cp.getThreshold());
 			calculatedMappings.put(cp.getMetricExpression(), classifierMapping);
 		}
-		this.classifier.setMapping(classifierMapping);
-		return this.getTotalMapping();
+		classifier.setMapping(classifierMapping);
+		return getTotalMapping();
 	}
 
 	public AMapping executeAtomicMeasure(String measureExpression, double threshold) {
-		final Instruction inst = new Instruction(Instruction.Command.RUN, measureExpression, threshold + "", -1, -1,
+		Instruction inst = new Instruction(Instruction.Command.RUN, measureExpression, threshold + "", -1, -1,
 				-1);
-		final ExecutionEngine ee = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, this.sourceCache,
-				this.targetCache, "?x", "?y");
-		final Plan plan = new Plan();
+		ExecutionEngine ee = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache,
+				targetCache, "?x", "?y");
+		Plan plan = new Plan();
 		plan.addInstruction(inst);
 		return ((SimpleExecutionEngine) ee).executeInstructions(plan);
 	}
 
 	public String toStringOneLine() {
 		String res = "";
-		if (this.classifier != null) {
-			res += this.classifier.getMeasure() + delimiter + this.classifier.getSourceProperty() + "|"
-					+ this.classifier.getTargetProperty() + ": <= " + this.classifier.getThreshold() + ", > "
-					+ this.classifier.getThreshold() + "[";
-			if (this.leftChild != null) {
-				res += this.leftChild.toString();
+		if (classifier != null) {
+			res += classifier.getMeasure() + delimiter + classifier.getSourceProperty() + "|"
+					+ classifier.getTargetProperty() + ": <= " + classifier.getThreshold() + ", > "
+					+ classifier.getThreshold() + "[";
+			if (leftChild != null) {
+				res += leftChild.toString();
 			} else {
 				res += "negative (0)";
 			}
 			res += "][";
-			if (this.rightChild != null) {
-				res += this.rightChild.toString();
+			if (rightChild != null) {
+				res += rightChild.toString();
 			} else {
 				res += "positive (0)";
 			}
@@ -493,19 +493,19 @@ public class DecisionTree {
 	@Override
 	public String toString() {
 		String res = "\n";
-		res += new String(new char[this.depth]).replace("\0", "\t");
-		if (this.classifier != null) {
-			res += this.classifier.getMeasure() + delimiter + this.classifier.getSourceProperty() + "|"
-					+ this.classifier.getTargetProperty() + ": <= " + this.classifier.getThreshold() + ", > "
-					+ this.classifier.getThreshold() + "[";
-			if (this.leftChild != null) {
-				res += this.leftChild.toString();
+		res += new String(new char[depth]).replace("\0", "\t");
+		if (classifier != null) {
+			res += classifier.getMeasure() + delimiter + classifier.getSourceProperty() + "|"
+					+ classifier.getTargetProperty() + ": <= " + classifier.getThreshold() + ", > "
+					+ classifier.getThreshold() + "[";
+			if (leftChild != null) {
+				res += leftChild.toString();
 			} else {
 				res += "negative (0)";
 			}
 			res += "][";
-			if (this.rightChild != null) {
-				res += this.rightChild.toString();
+			if (rightChild != null) {
+				res += rightChild.toString();
 			} else {
 				res += "positive (0)";
 			}
@@ -521,27 +521,27 @@ public class DecisionTree {
 	}
 
 	public AMapping getRefMapping() {
-		return this.refMapping;
+		return refMapping;
 	}
 
 	public double getMinPropertyCoverage() {
-		return this.minPropertyCoverage;
+		return minPropertyCoverage;
 	}
 
 	public double getPropertyLearningRate() {
-		return this.propertyLearningRate;
+		return propertyLearningRate;
 	}
 
 	public ACache getSourceCache() {
-		return this.sourceCache;
+		return sourceCache;
 	}
 
 	public ACache getTargetCache() {
-		return this.targetCache;
+		return targetCache;
 	}
 
 	public ExtendedClassifier getClassifier() {
-		return this.classifier;
+		return classifier;
 	}
 
 	public void setClassifier(ExtendedClassifier classifier) {
@@ -549,23 +549,23 @@ public class DecisionTree {
 	}
 
 	public DecisionTree getParent() {
-		return this.parent;
+		return parent;
 	}
 
 	public Dragon getDtl() {
-		return this.dtl;
+		return dtl;
 	}
 
 	public boolean isLeftNode() {
-		return this.isLeftNode;
+		return isLeftNode;
 	}
 
 	public boolean isRoot() {
-		return this.root;
+		return root;
 	}
 
 	public DecisionTree getLeftChild() {
-		return this.leftChild;
+		return leftChild;
 	}
 
 	public void setLeftChild(DecisionTree leftChild) {
@@ -573,7 +573,7 @@ public class DecisionTree {
 	}
 
 	public DecisionTree getRightChild() {
-		return this.rightChild;
+		return rightChild;
 	}
 
 	public void setRightChild(DecisionTree rightChild) {
@@ -585,7 +585,7 @@ public class DecisionTree {
 	}
 
 	public double getPruningConfidence() {
-		return this.pruningConfidence;
+		return pruningConfidence;
 	}
 
 	public void setPruningConfidence(double pruningConfidence) {
@@ -593,7 +593,7 @@ public class DecisionTree {
 	}
 
 	public PropertyMapping getPropertyMapping() {
-		return this.propertyMapping;
+		return propertyMapping;
 	}
 
 	public void setPropertyMapping(PropertyMapping propertyMapping) {

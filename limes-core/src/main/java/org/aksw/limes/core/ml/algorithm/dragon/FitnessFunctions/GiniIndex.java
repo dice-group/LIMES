@@ -9,7 +9,7 @@ import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.measures.mapper.CrispSetOperations;
 import org.aksw.limes.core.measures.measure.MeasureProcessor;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.dragon.DecisionTree;
@@ -38,20 +38,19 @@ public class GiniIndex extends FitnessFunctionDTL {
 	private void populateInstances() {
 		metricExpressions = new HashSet<>();
 		fullInstances = new ArrayList<>();
-		for (final String s : this.dt.getRefMapping().getMap().keySet()) {
-			for (final String t : this.dt.getRefMapping().getMap().get(s).keySet()) {
-				final TrainingInstance currentInstance = new TrainingInstance(s, t,
-						this.dt.getRefMapping().getMap().get(s).get(t));
-				for (final PairSimilar<String> propPair : this.propertyMapping.stringPropPairs) {
-					for (final String measure : Dragon.defaultMeasures) {
-						final String metricExpression = measure + "(x." + propPair.a + ",y." + propPair.b + ")";
+		for (String s : dt.getRefMapping().getMap().keySet()) {
+			for (String t : dt.getRefMapping().getMap().get(s).keySet()) {
+				TrainingInstance currentInstance = new TrainingInstance(s, t,
+						dt.getRefMapping().getMap().get(s).get(t));
+				for (PairSimilar<String> propPair : propertyMapping.stringPropPairs) {
+					for (String measure : Dragon.defaultMeasures) {
+						String metricExpression = measure + "(x." + propPair.a + ",y." + propPair.b + ")";
 						metricExpressions.add(new Metric(propPair.a, propPair.b, metricExpression, measure));
-						if (this.dt.getTargetCache().getInstance(t) != null
-								|| this.dt.getSourceCache().getInstance(s) != null) {
+						if (dt.getTargetCache().getInstance(t) != null || dt.getSourceCache().getInstance(s) != null) {
 							currentInstance.getMeasureValues().put(metricExpression,
-									MeasureProcessor.getSimilarity(this.dt.getSourceCache().getInstance(s),
-											this.dt.getTargetCache().getInstance(t), metricExpression,
-											this.dt.getMinPropertyCoverage(), "?x", "?y"));
+									MeasureProcessor.getSimilarity(dt.getSourceCache().getInstance(s),
+											dt.getTargetCache().getInstance(t), metricExpression,
+											dt.getMinPropertyCoverage(), "?x", "?y"));
 						} else {
 							System.err.println("Could not find");
 						}
@@ -65,15 +64,15 @@ public class GiniIndex extends FitnessFunctionDTL {
 	}
 
 	private void updateInstances(DecisionTree currentNode) {
-		this.currentMapping = null;
+		currentMapping = null;
 		if (currentNode.isLeftNode()) {
 			AMapping base = null;
 			base = currentNode.getRefMapping();
-			this.currentMapping = MappingOperations.difference(base, currentNode.getParent().getPathMapping());
+			currentMapping = CrispSetOperations.INSTANCE.difference(base, currentNode.getParent().getPathMapping());
 		} else {
-			this.currentMapping = currentNode.getParent().getPathMapping();
+			currentMapping = currentNode.getParent().getPathMapping();
 		}
-		currentInstances = this.mappingToTrainingInstance(this.currentMapping);
+		currentInstances = mappingToTrainingInstance(currentMapping);
 	}
 
 	private class Metric {
@@ -91,7 +90,7 @@ public class GiniIndex extends FitnessFunctionDTL {
 
 		@Override
 		public String toString() {
-			return this.metricExpression;
+			return metricExpression;
 		}
 
 		@Override
@@ -105,16 +104,16 @@ public class GiniIndex extends FitnessFunctionDTL {
 			if (obj.getClass() != this.getClass()) {
 				return false;
 			}
-			final Metric rhs = (Metric) obj;
-			return new EqualsBuilder().append(this.sourceProperty, rhs.sourceProperty)
-					.append(this.targetProperty, rhs.targetProperty).append(this.measure, rhs.measure)
-					.append(this.metricExpression, rhs.metricExpression).isEquals();
+			Metric rhs = (Metric) obj;
+			return new EqualsBuilder().append(sourceProperty, rhs.sourceProperty)
+					.append(targetProperty, rhs.targetProperty).append(measure, rhs.measure)
+					.append(metricExpression, rhs.metricExpression).isEquals();
 		}
 
 		@Override
 		public int hashCode() {
-			return new HashCodeBuilder(17, 35).append(this.sourceProperty).append(this.targetProperty)
-					.append(this.measure).append(this.metricExpression).toHashCode();
+			return new HashCodeBuilder(17, 35).append(sourceProperty).append(targetProperty).append(measure)
+					.append(metricExpression).toHashCode();
 		}
 	}
 
@@ -123,12 +122,12 @@ public class GiniIndex extends FitnessFunctionDTL {
 		public String mE;
 
 		public MetricValueComparator(String metricExpression) {
-			this.mE = metricExpression;
+			mE = metricExpression;
 		}
 
 		@Override
 		public int compare(TrainingInstance o1, TrainingInstance o2) {
-			return o1.getMeasureValues().get(this.mE).compareTo(o2.getMeasureValues().get(this.mE));
+			return o1.getMeasureValues().get(mE).compareTo(o2.getMeasureValues().get(mE));
 		}
 
 	}
@@ -141,7 +140,7 @@ public class GiniIndex extends FitnessFunctionDTL {
 	 */
 	private double gini(double... pn) {
 		double res = 0.0;
-		for (final double pi : pn) {
+		for (double pi : pn) {
 			// if all instances belong to one class return 0
 			if (pi == 0.0 && pn.length == 2) {
 				return 0;
@@ -153,33 +152,33 @@ public class GiniIndex extends FitnessFunctionDTL {
 
 	private double avgGini(DecisionTree currentNode, List<TrainingInstance> left, List<TrainingInstance> right) {
 		if (currentNode.getParent() == null) {
-			this.currentMapping = currentNode.getRefMapping();
+			currentMapping = currentNode.getRefMapping();
 		}
-		final double[] leftFraction = InstanceCalculator.getNumberOfPositiveNegativeInstances(left);
-		final double[] rightFraction = InstanceCalculator.getNumberOfPositiveNegativeInstances(right);
-		final double leftAll = leftFraction[0] + leftFraction[1];
-		final double rightAll = rightFraction[0] + rightFraction[1];
-		final double leftWeight = leftAll / this.currentMapping.size();
-		final double rightWeight = rightAll / this.currentMapping.size();
-		final double avgGini = leftWeight * this.gini(leftFraction[0] / leftAll, leftFraction[1] / leftAll)
-				+ rightWeight * this.gini(rightFraction[0] / rightAll, rightFraction[1] / rightAll);
+		double[] leftFraction = InstanceCalculator.getNumberOfPositiveNegativeInstances(left);
+		double[] rightFraction = InstanceCalculator.getNumberOfPositiveNegativeInstances(right);
+		double leftAll = leftFraction[0] + leftFraction[1];
+		double rightAll = rightFraction[0] + rightFraction[1];
+		double leftWeight = leftAll / currentMapping.size();
+		double rightWeight = rightAll / currentMapping.size();
+		double avgGini = leftWeight * gini(leftFraction[0] / leftAll, leftFraction[1] / leftAll)
+				+ rightWeight * gini(rightFraction[0] / rightAll, rightFraction[1] / rightAll);
 		return avgGini;
 	}
 
 	@Override
 	public ExtendedClassifier getBestClassifier(DecisionTree currentNode) {
 		if (fullInstances == null) {
-			this.populateInstances();
+			populateInstances();
 		} else {
 			if (currentNode.getParent() == null) {
 				logger.error("Node has no parent. This should not happen! Returning null");
 				return null;
 			}
-			this.updateInstances(currentNode);
+			updateInstances(currentNode);
 			if (currentInstances.size() == 0) {
 				return null;
 			}
-			final double[] posNeg = InstanceCalculator.getNumberOfPositiveNegativeInstances(currentInstances);
+			double[] posNeg = InstanceCalculator.getNumberOfPositiveNegativeInstances(currentInstances);
 			if (posNeg[0] == 0.0 || posNeg[1] == 0.0) {
 				return null;
 			}
@@ -188,12 +187,12 @@ public class GiniIndex extends FitnessFunctionDTL {
 		Metric bestMetric = null;
 		double bestGain = 1.0;
 		double bestSplitpoint = 0.0;
-		for (final Metric mE : metricExpressions) {
+		for (Metric mE : metricExpressions) {
 			if (currentNode.getParent() == null
 					|| !currentNode.getParent().getPathString().contains(mE.metricExpression)) {
 				Collections.sort(currentInstances, new MetricValueComparator(mE.metricExpression));
-				final ArrayList<TrainingInstance> lessThanI = new ArrayList<>();
-				final ArrayList<TrainingInstance> moreThanEqualsI = new ArrayList<>();
+				ArrayList<TrainingInstance> lessThanI = new ArrayList<>();
+				ArrayList<TrainingInstance> moreThanEqualsI = new ArrayList<>();
 				moreThanEqualsI.addAll(currentInstances);
 				double oldSplitpoint = 0.0;
 				for (int i = 0; i < currentInstances.size() - 1; i++) {
@@ -209,7 +208,7 @@ public class GiniIndex extends FitnessFunctionDTL {
 					}
 					if (splitpoint != oldSplitpoint) {
 						oldSplitpoint = splitpoint;
-						final double gain = this.avgGini(currentNode, lessThanI, moreThanEqualsI);
+						double gain = avgGini(currentNode, lessThanI, moreThanEqualsI);
 						logger.debug("Gain: " + gain + " for " + mE.metricExpression + "|" + splitpoint);
 						if (gain < bestGain) {
 							bestMetric = mE;
@@ -227,18 +226,18 @@ public class GiniIndex extends FitnessFunctionDTL {
 		if (bestMetric == null) {
 			return null;
 		}
-		final ExtendedClassifier ec = new ExtendedClassifier(bestMetric.measure, bestSplitpoint,
+		ExtendedClassifier ec = new ExtendedClassifier(bestMetric.measure, bestSplitpoint,
 				bestMetric.sourceProperty, bestMetric.targetProperty);
 		ec.setfMeasure(bestGain);
-		final String measureExpression = bestMetric.measure + "(x." + bestMetric.sourceProperty + ",y."
+		String measureExpression = bestMetric.measure + "(x." + bestMetric.sourceProperty + ",y."
 				+ bestMetric.targetProperty + ")";
 		ec.setMapping(currentNode.executeAtomicMeasure(measureExpression, bestSplitpoint));
 		return ec;
 	}
 
 	private List<TrainingInstance> mappingToTrainingInstance(AMapping mapping) {
-		final List<TrainingInstance> instances = new ArrayList<>();
-		for (final TrainingInstance t : fullInstances) {
+		List<TrainingInstance> instances = new ArrayList<>();
+		for (TrainingInstance t : fullInstances) {
 			if (mapping.getMap().containsKey(t.getSourceUri())
 					&& mapping.getMap().get(t.getSourceUri()).containsKey(t.getTargetUri())) {
 				instances.add(t);

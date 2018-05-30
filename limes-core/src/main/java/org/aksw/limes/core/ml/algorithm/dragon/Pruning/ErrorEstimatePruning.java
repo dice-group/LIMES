@@ -1,21 +1,21 @@
 package org.aksw.limes.core.ml.algorithm.dragon.Pruning;
 
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.measures.mapper.CrispSetOperations;
 import org.aksw.limes.core.ml.algorithm.dragon.DecisionTree;
 import org.aksw.limes.core.ml.algorithm.dragon.Utils.InstanceCalculator;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 public class ErrorEstimatePruning extends PruningFunctionDTL{
 	public static double defaultConfidence = 0.25;
-	
+
 	/**
 	 * Calculates the pessimistic error rate e using the formula
 	 * (f + (z^2)/2N + z * sqrt(f/N - f^2/N + z^2/(4N^2)))/1 + z^2/N
 	 * @param f observed error rate E/N, with N number of instances where E are errors
 	 * @param N number of instances
 	 * @param z confidence limit
-	 * @return error 
+	 * @return error
 	 */
 	public static double errorRate(double f, double N, double z){
 		double zPot = Math.pow(z, 2.0);
@@ -25,7 +25,7 @@ public class ErrorEstimatePruning extends PruningFunctionDTL{
 		double error = counter/denominator;
 		return error;
 	}
-	
+
 	public static void main(String[] args){
 
 		System.out.println();
@@ -70,16 +70,18 @@ public class ErrorEstimatePruning extends PruningFunctionDTL{
 		DecisionTree t = new DecisionTree(null, null, null, null, 0, 0, pC, null);
 		t.setClassifier(ec);
 		eep.pruneChild(t,parentMapping);
-		*/
+		 */
 	}
 
 	@Override
 	public DecisionTree pruneChildNodesIfNecessary(DecisionTree node) {
 		AMapping leftMapping = null;
 		if(node.isRoot()){
-			leftMapping = MappingOperations.difference(node.getRefMapping(), node.getClassifier().getMapping());
+			leftMapping = CrispSetOperations.INSTANCE.difference(node.getRefMapping(),
+					node.getClassifier().getMapping());
 		}else{
-			leftMapping = MappingOperations.difference(node.getParent().getClassifier().getMapping(), node.getClassifier().getMapping());
+			leftMapping = CrispSetOperations.INSTANCE.difference(node.getParent().getClassifier().getMapping(),
+					node.getClassifier().getMapping());
 		}
 		if(node.getLeftChild() != null && pruneChild(node.getLeftChild(), leftMapping)){
 			node.setLeftChild(null);
@@ -89,9 +91,9 @@ public class ErrorEstimatePruning extends PruningFunctionDTL{
 		}
 		return node;
 	}
-	
+
 	public boolean pruneChild(DecisionTree node, AMapping parent){
-		AMapping leftMapping = MappingOperations.difference(parent, node.getClassifier().getMapping());
+		AMapping leftMapping = CrispSetOperations.INSTANCE.difference(parent, node.getClassifier().getMapping());
 		double[] posNegLeft = InstanceCalculator.getNumberOfPositiveNegativeInstances(leftMapping);
 		double[] posNegRight = InstanceCalculator.getNumberOfPositiveNegativeInstances(node.getClassifier().getMapping());
 		double[] posNegParent = InstanceCalculator.getNumberOfPositiveNegativeInstances(parent);
@@ -106,7 +108,7 @@ public class ErrorEstimatePruning extends PruningFunctionDTL{
 		}
 		return false;
 	}
-	
+
 	private double getErrorRate(double[] posNeg, double confidence){
 		double z = 0.0;
 		if(confidence == defaultConfidence){
