@@ -24,6 +24,9 @@ public class LinkSpecification implements ILinkSpecification {
 	protected static final String XOR = "XOR";
 	protected static final String MIN = "MIN";
 	protected static final String AND = "AND";
+	protected static final String LUKT = "LUKT";
+	protected static final String LUKTCO = "LUKTCO";
+	protected static final String LUKDIFF = "LUKDIFF";
 	protected double threshold;
 	protected LogicOperator operator;
 	protected List<LinkSpecification> children; // children must be a list
@@ -254,6 +257,30 @@ public class LinkSpecification implements ILinkSpecification {
 						+ rightSpec.fullExpression + "|"
 						+ (Math.abs(theta - p.getLeftCoefficient()) / p.getRightCoefficient()) + ")";
 
+			} else if (p.getOperator().equalsIgnoreCase(LUKT)) {
+				setOperator(LogicOperator.LUKASIEWICZT);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				fullExpression = "LUKT(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
+						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
+			} else if (p.getOperator().equalsIgnoreCase(LUKTCO)) {
+				setOperator(LogicOperator.LUKASIEWICZTCO);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				fullExpression = "LUKTCO(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
+						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
+			} else if (p.getOperator().equalsIgnoreCase(LUKDIFF)) {
+				setOperator(LogicOperator.LUKASIEWICZDIFF);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				fullExpression = "LUKDIFF(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
+						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			}
 		}
 	}

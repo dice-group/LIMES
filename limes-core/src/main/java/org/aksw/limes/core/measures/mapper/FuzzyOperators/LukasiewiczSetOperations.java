@@ -16,12 +16,8 @@ public enum LukasiewiczSetOperations implements MappingOperations {
 	@Override
 	public AMapping difference(AMapping map1, AMapping map2) {
 		final AMapping map = MappingFactory.createDefaultMapping();
-		// go through all the keys in map1
 		for (final String key : map1.getMap().keySet()) {
-			// if the first term (key) can also be found in map2
 			if (map2.getMap().containsKey(key)) {
-				// then go through the second terms and checks whether they can
-				// be found in map2 as well
 				for (final String value : map1.getMap().get(key).keySet()) {
 					if (!map2.getMap().get(key).containsKey(value)) {
 						// no link means map2 similarity is 0, of which the
@@ -45,19 +41,13 @@ public enum LukasiewiczSetOperations implements MappingOperations {
 
 	@Override
 	public AMapping intersection(AMapping map1, AMapping map2) {
-		final AMapping map = MappingFactory.createDefaultMapping();
-		// takes care of not running the filter if some set is empty
-		if (map1.size() == 0 || map2.size() == 0) {
+		if (map1 == null || map1.size() == 0 || map2 == null || map2.size() == 0) {
 			return MappingFactory.createDefaultMapping();
 		}
-		// go through all the keys in map1
+		final AMapping map = MappingFactory.createDefaultMapping();
 		for (final String key : map1.getMap().keySet()) {
-			// if the first term (key) can also be found in map2
 			if (map2.getMap().containsKey(key)) {
-				// then go through the second terms and checks whether they can
-				// be found in map2 as well
 				for (final String value : map1.getMap().get(key).keySet()) {
-					// if yes, apply lukasiewicz t-norm
 					if (map2.getMap().get(key).containsKey(value)) {
 						final double sim = tNorm(map1.getMap().get(key).get(value), map2.getMap().get(key).get(value));
 						if (sim > 0) {
@@ -72,8 +62,14 @@ public enum LukasiewiczSetOperations implements MappingOperations {
 
 	@Override
 	public AMapping union(AMapping map1, AMapping map2) {
+		if ((map1 == null || map1.size() == 0) && (map2 == null || map2.size() == 0)) {
+			return MappingFactory.createDefaultMapping();
+		} else if (map1 == null || map1.size() == 0) {
+			return map2;
+		} else if (map2 == null || map2.size() == 0) {
+			return map1;
+		}
 		final AMapping map = MappingFactory.createDefaultMapping();
-		// go through all the keys in map1
 		for (final String key : map1.getMap().keySet()) {
 			for (final String value : map1.getMap().get(key).keySet()) {
 				if (map2.getMap().containsKey(key)) {
@@ -86,9 +82,7 @@ public enum LukasiewiczSetOperations implements MappingOperations {
 				}
 			}
 		}
-		// go through all the keys in map2
 		for (final String key : map2.getMap().keySet()) {
-			// if the first term (key) can also be found in map2
 			for (final String value : map2.getMap().get(key).keySet()) {
 				if (map1.getMap().containsKey(key)) {
 					final double sim = tConorm(map1.getMap().get(key).get(value), map2.getMap().get(key).get(value));
@@ -113,11 +107,8 @@ public enum LukasiewiczSetOperations implements MappingOperations {
 	public double tNorm(double a, double b) {
 		final BigDecimal aExact = BigDecimal.valueOf(a);
 		final BigDecimal bExact = BigDecimal.valueOf(b);
-		final double tmpRes = aExact.add(bExact).subtract(BigDecimal.valueOf(-10)).doubleValue();
-		if (tmpRes > 0) {
-			return tmpRes;
-		}
-		return 0.0;
+		final double tmpRes = aExact.add(bExact.subtract(BigDecimal.valueOf(1))).doubleValue();
+		return Math.max(tmpRes, 0.0);
 	}
 
 	/**
@@ -131,9 +122,21 @@ public enum LukasiewiczSetOperations implements MappingOperations {
 		final BigDecimal aExact = BigDecimal.valueOf(a);
 		final BigDecimal bExact = BigDecimal.valueOf(b);
 		final double tmpRes = aExact.add(bExact).doubleValue();
-		if (tmpRes < 1.0) {
-			return tmpRes;
-		}
-		return 1.0;
+		return Math.min(tmpRes, 1.0);
+	}
+
+	@Override
+	public AMapping difference(AMapping map1, AMapping map2, double[] parameters) {
+		return difference(map1, map2);
+	}
+
+	@Override
+	public AMapping intersection(AMapping map1, AMapping map2, double[] parameters) {
+		return intersection(map1, map2);
+	}
+
+	@Override
+	public AMapping union(AMapping map1, AMapping map2, double[] parameters) {
+		return union(map1, map2);
 	}
 }

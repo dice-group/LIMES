@@ -20,6 +20,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.CrispSetOperations;
 import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.MapperFactory;
+import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.slf4j.Logger;
@@ -81,25 +82,26 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 			Instruction inst = instructions.get(i);
 			// get the index for writing the results
 			int index = inst.getResultIndex();
+			Command op = inst.getCommand();
 			// first process the RUN operator
-			if (inst.getCommand().equals(Command.RUN)) {
+			if (op.equals(Command.RUN)) {
 				m = executeRun(inst);
 			} // runs the filter operator
-			else if (inst.getCommand().equals(Command.FILTER)) {
+			else if (op.equals(Command.FILTER)) {
 				m = executeFilter(inst, buffer.get(inst.getSourceIndex()));
-			} else if (inst.getCommand().equals(Command.REVERSEFILTER)) {
+			} else if (op.equals(Command.REVERSEFILTER)) {
 				m = executeReverseFilter(inst, buffer.get(inst.getSourceIndex()));
 			} // runs set operations such as intersection,
-			else if (inst.getCommand().equals(Command.INTERSECTION)) {
-				m = executeIntersection(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
+			else if (Command.intersections.contains(op)) {
+				m = executeIntersection(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()), op);
 			} // union
-			else if (inst.getCommand().equals(Command.UNION)) {
-				m = executeUnion(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
+			else if (Command.unions.contains(op)) {
+				m = executeUnion(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()), op);
 			} // diff
-			else if (inst.getCommand().equals(Command.DIFF)) {
-				m = executeDifference(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
+			else if (Command.diffs.contains(op)) {
+				m = executeDifference(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()), op);
 			} // xor
-			else if (inst.getCommand().equals(Command.XOR)) {
+			else if (op.equals(Command.XOR)) {
 				LinearFilter f = new LinearFilter();
 				AMapping m1 = executeUnion(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()));
 				m1 = f.filter(m1, Double.parseDouble(inst.getThreshold()));
@@ -107,7 +109,7 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 				m2 = f.filter(m2, Double.parseDouble(inst.getThreshold()));
 				m = executeDifference(m1, m2);
 			} // end of processing. Return the indicated mapping
-			else if (inst.getCommand().equals(Command.RETURN)) {
+			else if (op.equals(Command.RETURN)) {
 				if (buffer.isEmpty()) {
 					return m;
 				}
@@ -236,6 +238,10 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 		return CrispSetOperations.INSTANCE.difference(m1, m2);
 	}
 
+	public AMapping executeDifference(AMapping m1, AMapping m2, Command c) {
+		return MappingOperations.getInstanceByEnum(c).difference(m1, m2);
+	}
+
 	/**
 	 * Implements the intersection between two mappings.
 	 *
@@ -249,6 +255,10 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 		return CrispSetOperations.INSTANCE.intersection(m1, m2);
 	}
 
+	public AMapping executeIntersection(AMapping m1, AMapping m2, Command c) {
+		return MappingOperations.getInstanceByEnum(c).intersection(m1, m2);
+	}
+
 	/**
 	 * Implements the union between two mappings.
 	 *
@@ -260,6 +270,10 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 	 */
 	public AMapping executeUnion(AMapping m1, AMapping m2) {
 		return CrispSetOperations.INSTANCE.union(m1, m2);
+	}
+
+	public AMapping executeUnion(AMapping m1, AMapping m2, Command c) {
+		return MappingOperations.getInstanceByEnum(c).union(m1, m2);
 	}
 
 	/**
@@ -291,14 +305,15 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 			AMapping m2, result = m;
 			for (int i = 1; i < plan.getSubPlans().size(); i++) {
 				m2 = executeStatic(plan.getSubPlans().get(i));
-				if (plan.getOperator().equals(Command.INTERSECTION)) {
-					result = executeIntersection(m, m2);
+				Command op = plan.getOperator();
+				if (Command.intersections.contains(op)) {
+					result = executeIntersection(m, m2, op);
 				} // union
-				else if (plan.getOperator().equals(Command.UNION)) {
-					result = executeUnion(m, m2);
+				else if (Command.unions.contains(op)) {
+					result = executeUnion(m, m2, op);
 				} // diff
-				else if (plan.getOperator().equals(Command.DIFF)) {
-					result = executeDifference(m, m2);
+				else if (Command.diffs.contains(op)) {
+					result = executeDifference(m, m2, op);
 					// exclusive or
 				} else if (plan.getOperator().equals(Command.XOR)) {
 					LinearFilter f = new LinearFilter();
@@ -392,11 +407,11 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 								result = executeFilter(plan.getFilteringInstruction(), m);
 							}
 							// }
-					} else { // second plan is run
-						LinkSpecification secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
-						m2 = executeDynamic(secondSpec, planner);
-						result = executeIntersection(m, m2);
-					}
+						} else { // second plan is run
+							LinkSpecification secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
+							m2 = executeDynamic(secondSpec, planner);
+							result = executeIntersection(m, m2);
+						}
 					} // union
 					else if (spec.getOperator().equals(LogicOperator.OR)) {
 						LinkSpecification secondSpec = planner.getLinkSpec(plan.getSubPlans().get(1));
@@ -438,10 +453,8 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 						result = executeDifference(mleft, mright);
 					}
 					m = result;
-					if (plan.getOperator() != null) {
-						if (plan.getFilteringInstruction() != null) {
-							m = executeFilter(plan.getFilteringInstruction(), m);
-						}
+					if (plan.getOperator() != null && plan.getFilteringInstruction() != null) {
+						m = executeFilter(plan.getFilteringInstruction(), m);
 					}
 
 				}

@@ -109,4 +109,19 @@ public enum CrispSetOperations implements MappingOperations {
 		}
 		return map;
 	}
+
+	@Override
+	public AMapping difference(AMapping map1, AMapping map2, double[] parameters) {
+		return difference(map1, map2);
+	}
+
+	@Override
+	public AMapping intersection(AMapping map1, AMapping map2, double[] parameters) {
+		return intersection(map1, map2);
+	}
+
+	@Override
+	public AMapping union(AMapping map1, AMapping map2, double[] parameters) {
+		return union(map1, map2);
+	}
 }
