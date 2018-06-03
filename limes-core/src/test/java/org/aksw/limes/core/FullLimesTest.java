@@ -9,6 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class FullLimesTest {
+  
+  static String basePath = "src/test/resources/datasets/";
+  
   @Before
   public void setUp() {
 //    System.out.println(new File("").getAbsolutePath());
@@ -20,25 +23,25 @@ public class FullLimesTest {
 
   @Test
   public void testMainSimple() {
-    String configPath = "src/test/resources/simple-config.xml";
+    String configPath = basePath + "simple-config.xml";
     Controller.main(new String[]{configPath});
   }
 
   @Test
   public void testMainDating() {
-    String configPath = "src/test/resources/dating-config.xml";
+    String configPath = basePath + "dating-config.xml";
     Controller.main(new String[]{configPath});
   }
 
   @Test
   public void testMainHobbies() {
-    String configPath = "src/test/resources/hobbies-config.xml";
+    String configPath = basePath + "hobbies-config.xml";
     Controller.main(new String[]{configPath});
   }
 
   @Test
   public void testMainSparql() {
-    String configPath = "src/test/resources/with-sparql-config.xml";
+    String configPath = basePath + "with-sparql-config.xml";
     Controller.main(new String[]{configPath});
   }
 }
