@@ -164,7 +164,7 @@ public class LinkSpecificationTest {
 	@Test
 	public void testLukasiewiczTNorm(){
 		String fullExpr = "LUKT(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)";
-		LinkSpecification ls = new LinkSpecification("LUKT(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)", 0.0);
+		LinkSpecification ls = new LinkSpecification(fullExpr, 0.0);
 
 		assertEquals(LogicOperator.LUKASIEWICZT, ls.getOperator());
 		assertEquals(2, ls.getChildren().size());
@@ -206,6 +206,54 @@ public class LinkSpecificationTest {
 		assertEquals(2, ls.getChildren().get(1).getChildren().size());
 		assertEquals(0.0, ls.getChildren().get(1).getThreshold(), 0);
 		assertEquals("LUKTCO(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)",
+				ls.getChildren().get(1).getFullExpression());
+	}
+
+	@Test
+	public void testAlgebraicTNorm() {
+		String fullExpr = "ALGT(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)";
+		LinkSpecification ls = new LinkSpecification(fullExpr, 0.0);
+
+		assertEquals(LogicOperator.ALGEBRAICT, ls.getOperator());
+		assertEquals(2, ls.getChildren().size());
+		assertEquals(0.0, ls.getThreshold(), 0);
+		assertEquals(fullExpr, ls.getFullExpression());
+	}
+
+	@Test
+	public void testAlgebraicTConorm() {
+		String fullExpr = "ALGTCO(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)";
+		LinkSpecification ls = new LinkSpecification(fullExpr, 0.0);
+		assertEquals(LogicOperator.ALGEBRAICTCO, ls.getOperator());
+		assertEquals(2, ls.getChildren().size());
+		assertEquals(0.0, ls.getThreshold(), 0);
+		assertEquals(fullExpr, ls.getFullExpression());
+	}
+
+	@Test
+	public void testAlgebraicDiff() {
+		String fullExpr = "ALGDIFF(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)";
+		LinkSpecification ls = new LinkSpecification(fullExpr, 0.0);
+		assertEquals(LogicOperator.ALGEBRAICDIFF, ls.getOperator());
+		assertEquals(2, ls.getChildren().size());
+		assertEquals(0.0, ls.getThreshold(), 0);
+		assertEquals(fullExpr, ls.getFullExpression());
+	}
+
+	@Test
+	public void testAlgebraicComplex() {
+		String fullExpr = "ALGT(trigrams(x.h,y.h)|0.7,ALGTCO(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)|0.0)";
+		LinkSpecification ls = new LinkSpecification(fullExpr, 0.0);
+		assertEquals(LogicOperator.ALGEBRAICT, ls.getOperator());
+		assertEquals(2, ls.getChildren().size());
+		assertEquals(0.0, ls.getThreshold(), 0);
+		assertEquals(fullExpr, ls.getFullExpression());
+
+		assertEquals(LogicOperator.ALGEBRAICTCO,
+				ls.getChildren().get(1).getOperator());
+		assertEquals(2, ls.getChildren().get(1).getChildren().size());
+		assertEquals(0.0, ls.getChildren().get(1).getThreshold(), 0);
+		assertEquals("ALGTCO(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)",
 				ls.getChildren().get(1).getFullExpression());
 	}
 }

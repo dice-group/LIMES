@@ -24,12 +24,17 @@ public class Instruction {
 	 * Enum class of allowed command.
 	 */
 	public enum Command {
-		RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER, LUKASIEWICZT, LUKASIEWICZTCO, LUKASIEWICZDIFF;
+		RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER, LUKASIEWICZT, LUKASIEWICZTCO, LUKASIEWICZDIFF, ALGEBRAICT, ALGEBRAICTCO, ALGEBRAICDIFF;
 
-		public static EnumSet<Command> unions = EnumSet.of(UNION, LUKASIEWICZTCO);
-		public static EnumSet<Command> intersections = EnumSet.of(INTERSECTION, LUKASIEWICZT);
-		public static EnumSet<Command> diffs = EnumSet.of(DIFF, LUKASIEWICZDIFF);
+		public static EnumSet<Command> unions = EnumSet.of(UNION,
+				LUKASIEWICZTCO, ALGEBRAICTCO);
+		public static EnumSet<Command> intersections = EnumSet.of(INTERSECTION,
+				LUKASIEWICZT, ALGEBRAICT);
+		public static EnumSet<Command> diffs = EnumSet.of(DIFF, LUKASIEWICZDIFF,
+				ALGEBRAICDIFF);
 		public static EnumSet<Command> lukasiewicz = EnumSet.of(LUKASIEWICZT, LUKASIEWICZTCO, LUKASIEWICZDIFF);
+		public static EnumSet<Command> algebraic = EnumSet.of(ALGEBRAICT,
+				ALGEBRAICTCO, ALGEBRAICDIFF);
 	}
 
 	static Logger logger = LoggerFactory.getLogger(Instruction.class);

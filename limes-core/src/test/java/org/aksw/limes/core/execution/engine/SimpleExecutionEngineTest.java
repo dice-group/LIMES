@@ -28,6 +28,10 @@ public class SimpleExecutionEngineTest {
 	public AMapping lukIntersection = MappingFactory.createDefaultMapping();
 	public AMapping lukDifference = MappingFactory.createDefaultMapping();
 
+	public AMapping algUnion = MappingFactory.createDefaultMapping();
+	public AMapping algIntersection = MappingFactory.createDefaultMapping();
+	public AMapping algDifference = MappingFactory.createDefaultMapping();
+
 	@Before
 	public void setUp() {
 		source = new MemoryCache();
@@ -73,10 +77,11 @@ public class SimpleExecutionEngineTest {
 		target.addTriple("T5", "name", "oleole");
 		target.addTriple("T5", "age", "56");
 
-		preparelukasiewiczGoldData();
+		prepareLukasiewiczGoldData();
+		prepareAlgebraicGoldData();
 	}
 
-	private void preparelukasiewiczGoldData(){
+	private void prepareLukasiewiczGoldData() {
 		lukUnion.add("S4", "T4", 1.0);
 		lukUnion.add("S5", "T5", 1.0);
 		lukUnion.add("S1", "T1", 0.5);
@@ -85,9 +90,23 @@ public class SimpleExecutionEngineTest {
 		lukIntersection.add("S4", "T4", 0.6666666666666666);
 		lukIntersection.add("S2", "T2", 1.0);
 
-		lukDifference.add("S4", "T4", 0.33333333333333337);
+		lukDifference.add("S4", "T4", 0.3333333333333334);
 		lukDifference.add("S5", "T5", 1.0);
 		lukDifference.add("S1", "T1", 0.5);
+	}
+
+	private void prepareAlgebraicGoldData() {
+		algUnion.add("S1", "T1", 0.5);
+		algUnion.add("S2", "T2", 1.0);
+		algUnion.add("S4", "T4", 1.0);
+		algUnion.add("S5", "T5", 1.0);
+
+		algIntersection.add("S2", "T2", 1.0);
+		algIntersection.add("S4", "T4", 0.6666666666666666);
+
+		algDifference.add("S1", "T1", 0.5);
+		algDifference.add("S4", "T4", 0.3333333333333334);
+		algDifference.add("S5", "T5", 1.0);
 	}
 
 	@After
@@ -707,5 +726,101 @@ public class SimpleExecutionEngineTest {
 
 		assertEquals(mDifference, mDifference2);
 		assertEquals(lukDifference, mDifference);
+	}
+
+	@Test
+	public void algebraicUnion() {
+		SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target,
+				"?x", "?y");
+		Instruction run1 = new Instruction(Command.RUN,
+				"qgrams(x.surname,y.surname)", "0.4", -1, -1, 0);
+		Instruction run2 = new Instruction(Command.RUN,
+				"trigrams(x.name,y.name)", "0.4", -1, -1, 1);
+		Instruction union = new Instruction(Command.ALGEBRAICTCO, "", "0.0", 0,
+				1, 2);
+
+		AMapping a = ee.executeRun(run1);
+		AMapping b = ee.executeRun(run2);
+
+		System.out.println(a);
+		System.out.println(b);
+
+		AMapping mUnion = ee.executeUnion(a, b, Command.ALGEBRAICTCO);
+
+		Plan plan = new Plan();
+		plan.addInstruction(run1);
+		plan.addInstruction(run2);
+		plan.addInstruction(union);
+		AMapping mUnion2 = ee.executeInstructions(plan);
+
+		assertEquals(mUnion, mUnion2);
+		assertEquals(algUnion, mUnion);
+
+		AMapping emptyMapping = MappingFactory.createDefaultMapping();
+		AMapping mEmpty = ee.executeUnion(mUnion, emptyMapping);
+		// 0 is identity element
+		assertEquals(mUnion, mEmpty);
+
+		AMapping totalEmpty = ee.executeUnion(emptyMapping, emptyMapping);
+		assertEquals(emptyMapping, totalEmpty);
+
+	}
+
+	@Test
+	public void algebraicIntersection() {
+		SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target,
+				"?x", "?y");
+		Instruction run1 = new Instruction(Command.RUN,
+				"qgrams(x.surname,y.surname)", "0.4", -1, -1, 0);
+		Instruction run2 = new Instruction(Command.RUN,
+				"trigrams(x.name,y.name)", "0.4", -1, -1, 1);
+		Instruction intersection = new Instruction(Command.ALGEBRAICT, "",
+				"0.4", 0, 1, 2);
+
+		AMapping a = ee.executeRun(run1);
+		AMapping b = ee.executeRun(run2);
+
+		AMapping mIntersection = ee.executeIntersection(a, b,
+				Command.ALGEBRAICT);
+
+		Plan plan = new Plan();
+		plan.addInstruction(run1);
+		plan.addInstruction(run2);
+		plan.addInstruction(intersection);
+		AMapping mIntersection2 = ee.executeInstructions(plan);
+
+		assertEquals(mIntersection, mIntersection2);
+		assertEquals(algIntersection, mIntersection);
+
+		AMapping emptyMapping = MappingFactory.createDefaultMapping();
+		AMapping mEmpty = ee.executeIntersection(mIntersection, emptyMapping);
+		assertEquals(mEmpty, emptyMapping);
+	}
+
+	@Test
+	public void algebraicDifference() {
+		SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target,
+				"?x", "?y");
+		Instruction run1 = new Instruction(Command.RUN,
+				"qgrams(x.surname,y.surname)", "0.4", -1, -1, 0);
+		Instruction run2 = new Instruction(Command.RUN,
+				"trigrams(x.name,y.name)", "0.4", -1, -1, 1);
+		Instruction difference = new Instruction(Command.ALGEBRAICDIFF, "",
+				"0.4", 0, 1, 2);
+
+		AMapping a = ee.executeRun(run1);
+		AMapping b = ee.executeRun(run2);
+
+		AMapping mDifference = ee.executeDifference(a, b,
+				Command.ALGEBRAICDIFF);
+
+		Plan plan = new Plan();
+		plan.addInstruction(run1);
+		plan.addInstruction(run2);
+		plan.addInstruction(difference);
+		AMapping mDifference2 = ee.executeInstructions(plan);
+
+		assertEquals(mDifference, mDifference2);
+		assertEquals(algDifference, mDifference);
 	}
 }

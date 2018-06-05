@@ -2,6 +2,7 @@ package org.aksw.limes.core.measures.mapper;
 
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.measures.mapper.FuzzyOperators.AlgebraicSetOperations;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.LukasiewiczSetOperations;
 
 // Classes should be enum to ensure they are singletons
@@ -22,8 +23,10 @@ public interface MappingOperations {
 	static MappingOperations getInstanceByEnum(Command c) {
 		if (Command.lukasiewicz.contains(c)) {
 			return LukasiewiczSetOperations.INSTANCE;
-		} else {
-			return CrispSetOperations.INSTANCE;
+		} else if (Command.algebraic.contains(c)) {
+			return AlgebraicSetOperations.INSTANCE;
 		}
+
+		return CrispSetOperations.INSTANCE;
 	}
 }

@@ -27,6 +27,9 @@ public class LinkSpecification implements ILinkSpecification {
 	protected static final String LUKT = "LUKT";
 	protected static final String LUKTCO = "LUKTCO";
 	protected static final String LUKDIFF = "LUKDIFF";
+	protected static final String ALGT = "ALGT";
+	protected static final String ALGTCO = "ALGTCO";
+	protected static final String ALGDIFF = "ALGDIFF";
 	protected double threshold;
 	protected LogicOperator operator;
 	protected List<LinkSpecification> children; // children must be a list
@@ -61,7 +64,7 @@ public class LinkSpecification implements ILinkSpecification {
 
 	/**
 	 * Creates a spec with a measure read inside
-	 * 
+	 *
 	 * @param measure
 	 *            String representation of the spec
 	 * @param threshold
@@ -76,10 +79,10 @@ public class LinkSpecification implements ILinkSpecification {
 	}
 
 	public void setAtomicFilterExpression(String atomicMeasure, String prop1, String prop2) {
-		this.setAtomicMeasure(atomicMeasure);
+		setAtomicMeasure(atomicMeasure);
 		this.prop1 = prop1;
 		this.prop2 = prop2;
-		this.filterExpression = atomicMeasure + "(" + prop1 + "," + prop2 + ")";
+		filterExpression = atomicMeasure + "(" + prop1 + "," + prop2 + ")";
 	}
 
 	/**
@@ -89,8 +92,9 @@ public class LinkSpecification implements ILinkSpecification {
 	 *            to be added
 	 */
 	public void addChild(LinkSpecification spec) {
-		if (getChildren() == null)
+		if (getChildren() == null) {
 			setChildren(new ArrayList<LinkSpecification>());
+		}
 		getChildren().add(spec);
 	}
 
@@ -101,8 +105,9 @@ public class LinkSpecification implements ILinkSpecification {
 	 *            to be added
 	 */
 	public void addDependency(LinkSpecification spec) {
-		if (getDependencies() == null)
+		if (getDependencies() == null) {
 			setDependencies(new ArrayList<LinkSpecification>());
+		}
 		getDependencies().add(spec);
 	}
 
@@ -116,27 +121,30 @@ public class LinkSpecification implements ILinkSpecification {
 		if (getDependencies().contains(spec)) {
 			getDependencies().remove(spec);
 		}
-		if (getDependencies().isEmpty())
+		if (getDependencies().isEmpty()) {
 			setDependencies(null);
+		}
 	}
 
 	/**
 	 * Checks whether a spec has dependencies
-	 * 
+	 *
 	 * @return true if the spec has dependencies, false otherwise
 	 */
 	public boolean hasDependencies() {
-		if (getDependencies() == null)
+		if (getDependencies() == null) {
 			return false;
-		return (!getDependencies().isEmpty());
+		}
+		return !getDependencies().isEmpty();
 	}
 
 	/**
 	 * @return True if the spec is empty, all false
 	 */
 	public boolean isEmpty() {
-		if (filterExpression == null && (getChildren() == null || getChildren().isEmpty()))
+		if (filterExpression == null && (getChildren() == null || getChildren().isEmpty())) {
 			return true;
+		}
 		return false;
 	}
 
@@ -144,8 +152,9 @@ public class LinkSpecification implements ILinkSpecification {
 	 * @return True if the spec is a leaf (has no children), else false
 	 */
 	public boolean isAtomic() {
-		if (getChildren() == null)
+		if (getChildren() == null) {
 			return true;
+		}
 		return getChildren().isEmpty();
 	}
 
@@ -153,12 +162,12 @@ public class LinkSpecification implements ILinkSpecification {
 	 * Create the path of operators for each leaf spec
 	 */
 	public void pathOfAtomic() {
-		if (this.isAtomic())
+		if (isAtomic()) {
 			treePath += "";
-		else {
+		} else {
 			if (getChildren() != null) {
 				for (LinkSpecification child : getChildren()) {
-					String parentPath = this.treePath;
+					String parentPath = treePath;
 					if (child == getChildren().get(0)) {
 						child.treePath = parentPath + ": " + getOperator() + "->left";
 					} else {
@@ -253,9 +262,9 @@ public class LinkSpecification implements ILinkSpecification {
 				filterExpression = null;
 				setThreshold(theta);
 				fullExpression = "AND(" + leftSpec.fullExpression + "|"
-						+ (Math.abs(theta - p.getRightCoefficient()) / p.getLeftCoefficient()) + ","
+						+ Math.abs(theta - p.getRightCoefficient()) / p.getLeftCoefficient() + ","
 						+ rightSpec.fullExpression + "|"
-						+ (Math.abs(theta - p.getLeftCoefficient()) / p.getRightCoefficient()) + ")";
+						+ Math.abs(theta - p.getLeftCoefficient()) / p.getRightCoefficient() + ")";
 
 			} else if (p.getOperator().equalsIgnoreCase(LUKT)) {
 				setOperator(LogicOperator.LUKASIEWICZT);
@@ -281,6 +290,33 @@ public class LinkSpecification implements ILinkSpecification {
 				setThreshold(theta);
 				fullExpression = "LUKDIFF(" + leftSpec.fullExpression + "|" + p.getThreshold1() + ","
 						+ rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
+			} else if (p.getOperator().equalsIgnoreCase(ALGT)) {
+				setOperator(LogicOperator.ALGEBRAICT);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				fullExpression = "ALGT(" + leftSpec.fullExpression + "|"
+						+ p.getThreshold1() + "," + rightSpec.fullExpression
+						+ "|" + p.getThreshold2() + ")";
+			} else if (p.getOperator().equalsIgnoreCase(ALGTCO)) {
+				setOperator(LogicOperator.ALGEBRAICTCO);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				fullExpression = "ALGTCO(" + leftSpec.fullExpression + "|"
+						+ p.getThreshold1() + "," + rightSpec.fullExpression
+						+ "|" + p.getThreshold2() + ")";
+			} else if (p.getOperator().equalsIgnoreCase(ALGDIFF)) {
+				setOperator(LogicOperator.ALGEBRAICDIFF);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				fullExpression = "ALGDIFF(" + leftSpec.fullExpression + "|"
+						+ p.getThreshold1() + "," + rightSpec.fullExpression
+						+ "|" + p.getThreshold2() + ")";
 			}
 		}
 	}
@@ -291,7 +327,7 @@ public class LinkSpecification implements ILinkSpecification {
 	 * @return List of atomic spec, i.e., all leaves of the link spec
 	 */
 	public List<LinkSpecification> getAllLeaves() {
-		List<LinkSpecification> allLeaves = new ArrayList<LinkSpecification>();
+		List<LinkSpecification> allLeaves = new ArrayList<>();
 		if (isAtomic()) {
 			allLeaves.add(this);
 		} else {
@@ -303,7 +339,7 @@ public class LinkSpecification implements ILinkSpecification {
 	}
 
 	public LinkSpecification setLeaf(LinkSpecification leaf, int n) {
-		LinkSpecification clone = this.clone();
+		LinkSpecification clone = clone();
 		clone.setLeaf(leaf, null, n);
 		return clone;
 	}
@@ -356,6 +392,7 @@ public class LinkSpecification implements ILinkSpecification {
 	 *
 	 * @return Hash code
 	 */
+	@Override
 	public int hashCode() {
 		int res = new Random().nextInt();
 		return res;
@@ -366,6 +403,7 @@ public class LinkSpecification implements ILinkSpecification {
 	 *
 	 * @return Clone of current spec
 	 */
+	@Override
 	public LinkSpecification clone() {
 		LinkSpecification clone = new LinkSpecification();
 		clone.setThreshold(threshold);
@@ -376,15 +414,16 @@ public class LinkSpecification implements ILinkSpecification {
 		clone.prop1 = prop1;
 		clone.prop2 = prop2;
 		clone.atomicMeasure = atomicMeasure;
-		List<LinkSpecification> l = new ArrayList<LinkSpecification>();
+		List<LinkSpecification> l = new ArrayList<>();
 		LinkSpecification childCopy;
-		if (getChildren() != null)
+		if (getChildren() != null) {
 			for (LinkSpecification c : getChildren()) {
 				childCopy = c.clone();
 				clone.addChild(childCopy);
 				childCopy.parent = clone;
 				l.add(childCopy);
 			}
+		}
 
 		return clone;
 	}
@@ -401,9 +440,11 @@ public class LinkSpecification implements ILinkSpecification {
 				str += "\n  ->" + child;
 			}
 			return str;
-		} else
+		}
+		else {
 			return "(" + filterExpression + ", " + getThreshold() + ", " + getOperator() + ", null)";
-		// }
+			// }
+		}
 	}
 
 	public int getDepth() {
@@ -421,9 +462,11 @@ public class LinkSpecification implements ILinkSpecification {
 				str += "\n  " + indent + " ->" + child.toStringPretty();
 			}
 			return str;
-		} else
+		}
+		else {
 			return "(" + filterExpression + ", " + getThreshold() + ", " + getOperator() + ", null)";
-		// }
+			// }
+		}
 	}
 
 	/**
@@ -432,15 +475,18 @@ public class LinkSpecification implements ILinkSpecification {
 	public String toStringOneLine() {
 		if (getChildren() != null) {
 			String str = "(" + getShortendFilterExpression() + ", " + getThreshold() + ", " + getOperator()
-					+ ", null,)";
+			+ ", null,)";
 			str += "{";
-			for (LinkSpecification child : getChildren())
+			for (LinkSpecification child : getChildren()) {
 				str += child.toStringOneLine() + ",";
+			}
 			str += "}";
 			return str;
-		} else
+		}
+		else {
 			return "(" + getShortendFilterExpression() + ", " + getThreshold() + ", " + getOperator() + ", null)";
-		// }
+			// }
+		}
 	}
 
 	/**
@@ -449,16 +495,16 @@ public class LinkSpecification implements ILinkSpecification {
 	 * @return True if root, else false
 	 */
 	public boolean isRoot() {
-		return (parent == null);
+		return parent == null;
 	}
 
 	/**
 	 * @return the filter expression implemented in the spec
 	 */
 	public String getMeasure() {
-		if (isAtomic())
+		if (isAtomic()) {
 			return filterExpression;
-		else {
+		} else {
 			return getOperator() + "(" + ")";
 		}
 	}
@@ -467,41 +513,52 @@ public class LinkSpecification implements ILinkSpecification {
 	public boolean equals(Object other) {
 		LinkSpecification o = (LinkSpecification) other;
 
-		if (this.isAtomic() && o.isAtomic()) {
-			if (this.filterExpression == null && o.filterExpression == null)
+		if (isAtomic() && o.isAtomic()) {
+			if (filterExpression == null && o.filterExpression == null) {
 				return true;
-			if (this.filterExpression != null && o.filterExpression == null)
+			}
+			if (filterExpression != null && o.filterExpression == null) {
 				return false;
-			if (this.filterExpression == null && o.filterExpression != null)
+			}
+			if (filterExpression == null && o.filterExpression != null) {
 				return false;
-			if (this.filterExpression.equalsIgnoreCase(o.filterExpression))
-				return Math.abs(this.getThreshold() - o.getThreshold()) < 0.001d;
+			}
+			if (filterExpression.equalsIgnoreCase(o.filterExpression)) {
+				return Math.abs(getThreshold() - o.getThreshold()) < 0.001d;
+			}
 
-		} else if (!this.isAtomic() && !o.isAtomic()) {
-			if (this.getOperator() == null && o.getOperator() != null)
+		} else if (!isAtomic() && !o.isAtomic()) {
+			if (getOperator() == null && o.getOperator() != null) {
 				return false;
-			if (this.getOperator() != null && o.getOperator() == null)
+			}
+			if (getOperator() != null && o.getOperator() == null) {
 				return false;
-			if (this.getOperator() == null && o.getOperator() == null)
+			}
+			if (getOperator() == null && o.getOperator() == null) {
 				return true;
-			if (this.getOperator().equals(o.getOperator())) {
-				if (this.getChildren() == null && o.getChildren() == null)
+			}
+			if (getOperator().equals(o.getOperator())) {
+				if (getChildren() == null && o.getChildren() == null) {
 					return true;
-				if (this.getChildren() != null && o.getChildren() == null)
+				}
+				if (getChildren() != null && o.getChildren() == null) {
 					return false;
-				if (this.getChildren() == null && o.getChildren() != null)
+				}
+				if (getChildren() == null && o.getChildren() != null) {
 					return false;
+				}
 				// HashSet<LinkSpecification> hs = new
 				// HashSet<LinkSpecification>();
 				// if (this.getChildren() != null)
 				// hs.addAll(getChildren());
 				// return (!hs.addAll(o.getChildren()));
-				return this.getChildren().equals(o.getChildren());
+				return getChildren().equals(o.getChildren());
 			} // not equal operators
 			return false;
 
-		} else// one is atomic the other one is not
+		} else {
 			return false;
+		}
 		return false;
 
 	}
@@ -513,56 +570,69 @@ public class LinkSpecification implements ILinkSpecification {
 
 		// logger.info("LinkSpecification.compareTo: this="+this+"
 		// -other="+other);
-		if (other.size() > size())
+		if (other.size() > size()) {
 			return -1;
-		if (other.size() < size())
+		}
+		if (other.size() < size()) {
 			return 1;
-		if (this.isEmpty() && other.isEmpty())
+		}
+		if (isEmpty() && other.isEmpty()) {
 			return 0;
+		}
 		// size is equal
 		// if(!this.isAtomic() && !other.isAtomic()) {
 		// return 0;
 		// }
-		if (this.isAtomic() && other.isAtomic()) {
-			if (this.getThreshold() > other.getThreshold())
+		if (isAtomic() && other.isAtomic()) {
+			if (getThreshold() > other.getThreshold()) {
 				return 1;
-			if (this.getThreshold() < other.getThreshold())
+			}
+			if (getThreshold() < other.getThreshold()) {
 				return -1;
-			if (this.filterExpression == null && other.filterExpression != null)
+			}
+			if (filterExpression == null && other.filterExpression != null) {
 				return -1;
-			if (this.filterExpression != null && other.filterExpression == null)
+			}
+			if (filterExpression != null && other.filterExpression == null) {
 				return 1;
-			if (this.filterExpression == null && other.filterExpression == null)
+			}
+			if (filterExpression == null && other.filterExpression == null) {
 				return 0;
-			return this.filterExpression.compareToIgnoreCase(other.filterExpression);
+			}
+			return filterExpression.compareToIgnoreCase(other.filterExpression);
 		} else { // even size, non atomic
-			if (this.getOperator() == other.getOperator()) {
+			if (getOperator() == other.getOperator()) {
 
 				// same operators
 				if (getAllLeaves().size() == other.getAllLeaves().size()) {
 					List<LinkSpecification> leaves = getAllLeaves();
 					List<LinkSpecification> otherLeaves = other.getAllLeaves();
 					for (int i = 0; i < leaves.size(); i++) {
-						if (leaves.get(i).compareTo(otherLeaves.get(i)) != 0)
+						if (leaves.get(i).compareTo(otherLeaves.get(i)) != 0) {
 							return leaves.get(i).compareTo(otherLeaves.get(i));
+						}
 					}
 					return 0;
-				} else
+				} else {
 					return getAllLeaves().size() - other.getAllLeaves().size();
+				}
 			} else {
 				// non-atomic, different operators
-				return this.getOperator().compareTo(other.getOperator());
+				return getOperator().compareTo(other.getOperator());
 			}
 		}
 	}
 
 	public String getShortendFilterExpression() {
-		if (filterExpression == null)
+		if (filterExpression == null) {
 			return null;
-		if (filterExpression.length() <= 0)
+		}
+		if (filterExpression.length() <= 0) {
 			return "";
-		if (!isAtomic())
+		}
+		if (!isAtomic()) {
 			return filterExpression;
+		}
 		// "trigrams(x.prop1,y.prop2)" expect something like this...
 		int beginProp1 = filterExpression.indexOf("(");
 		int brakeProp = filterExpression.indexOf(",");
@@ -570,14 +640,16 @@ public class LinkSpecification implements ILinkSpecification {
 		String measure = filterExpression.substring(0, beginProp1);
 		String prop1 = filterExpression.substring(beginProp1 + 1, brakeProp);
 		String prop2 = filterExpression.substring(brakeProp + 1, endProp2);
-		if (prop1.lastIndexOf("#") != -1)
+		if (prop1.lastIndexOf("#") != -1) {
 			prop1 = prop1.substring(prop1.lastIndexOf("#") + 1);
-		else if (prop1.lastIndexOf("/") != -1)
+		} else if (prop1.lastIndexOf("/") != -1) {
 			prop1 = prop1.substring(prop1.lastIndexOf("/") + 1);
-		if (prop2.lastIndexOf("#") != -1)
+		}
+		if (prop2.lastIndexOf("#") != -1) {
 			prop2 = prop2.substring(prop2.lastIndexOf("#") + 1);
-		else if (prop2.lastIndexOf("/") != -1)
+		} else if (prop2.lastIndexOf("/") != -1) {
 			prop2 = prop2.substring(prop2.lastIndexOf("/") + 1);
+		}
 		DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.ENGLISH);
 		df.applyPattern("#,###,######0.00");
 		return measure + "(" + prop1 + "," + prop2 + ")|" + df.format(getThreshold());
@@ -592,12 +664,14 @@ public class LinkSpecification implements ILinkSpecification {
 	 */
 	public String getAtomicMeasure() {
 		if (isAtomic()) {
-			if (atomicMeasure.length() > 0)
+			if (atomicMeasure.length() > 0) {
 				return atomicMeasure;
-			else
+			} else {
 				return filterExpression.substring(0, filterExpression.indexOf("("));
-		} else
+			}
+		} else {
 			return null;
+		}
 	}
 
 	/**
@@ -617,11 +691,12 @@ public class LinkSpecification implements ILinkSpecification {
 	 */
 	public boolean containsRedundantProperties() {
 		List<LinkSpecification> leaves = getAllLeaves();
-		HashSet<String> props = new HashSet<String>();
+		HashSet<String> props = new HashSet<>();
 		for (LinkSpecification leave : leaves) {
 			String propStr = leave.prop1 + "_" + leave.prop2;
-			if (!props.add(propStr))
+			if (!props.add(propStr)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -675,11 +750,11 @@ public class LinkSpecification implements ILinkSpecification {
 	}
 
 	public String getProperty1() {
-		return this.prop1;
+		return prop1;
 	}
 
 	public String getProperty2() {
-		return this.prop2;
+		return prop2;
 	}
 
 	public double getQuality() {

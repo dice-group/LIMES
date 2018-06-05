@@ -75,6 +75,12 @@ public class CanonicalPlanner extends Planner {
 				plan.setOperator(Instruction.Command.LUKASIEWICZTCO);
 			} else if (spec.getOperator().equals(LogicOperator.LUKASIEWICZDIFF)) {
 				plan.setOperator(Instruction.Command.LUKASIEWICZDIFF);
+			} else if (spec.getOperator().equals(LogicOperator.ALGEBRAICT)) {
+				plan.setOperator(Instruction.Command.ALGEBRAICT);
+			} else if (spec.getOperator().equals(LogicOperator.ALGEBRAICTCO)) {
+				plan.setOperator(Instruction.Command.ALGEBRAICTCO);
+			} else if (spec.getOperator().equals(LogicOperator.ALGEBRAICDIFF)) {
+				plan.setOperator(Instruction.Command.ALGEBRAICDIFF);
 			} else {
 				System.out.println("Wrong operator: " + spec.getOperator() + ". at LS: " + spec);
 				return null;

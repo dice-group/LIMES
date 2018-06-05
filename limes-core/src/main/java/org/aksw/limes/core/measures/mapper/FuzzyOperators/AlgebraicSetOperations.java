@@ -6,7 +6,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 
-public enum LukasiewiczSetOperations implements MappingOperations {
+public enum AlgebraicSetOperations implements MappingOperations {
 
 	INSTANCE;
 
@@ -22,7 +22,7 @@ public enum LukasiewiczSetOperations implements MappingOperations {
 					if (!map2.getMap().get(key).containsKey(value)) {
 						// no link means map2 similarity is 0, of which the
 						// negation is 1
-						// max{a+1-1,0} is always a
+						// a*1 is always a
 						map.add(key, value, map1.getMap().get(key).get(value));
 					} else {
 						final double sim = tNorm(
@@ -102,7 +102,7 @@ public enum LukasiewiczSetOperations implements MappingOperations {
 	}
 
 	/**
-	 * Returns lukasiewicz t-norm, i.e. max{a+b-1,0}
+	 * Returns algebraic t-norm, i.e. a*b
 	 *
 	 * @param a
 	 * @param b
@@ -115,13 +115,11 @@ public enum LukasiewiczSetOperations implements MappingOperations {
 	}
 
 	private double tNorm(BigDecimal a, BigDecimal b) {
-		final double tmpRes = a.add(b.subtract(BigDecimal.valueOf(1)))
-				.doubleValue();
-		return Math.max(tmpRes, 0.0);
+		return a.multiply(b).doubleValue();
 	}
 
 	/**
-	 * Returns lukasiewicz t-conorm, i.e. min{a+b,1}
+	 * Returns algebraic t-conorm, i.e. a+b-a*b
 	 *
 	 * @param a
 	 * @param b
@@ -130,8 +128,8 @@ public enum LukasiewiczSetOperations implements MappingOperations {
 	public double tConorm(double a, double b) {
 		final BigDecimal aExact = BigDecimal.valueOf(a);
 		final BigDecimal bExact = BigDecimal.valueOf(b);
-		final double tmpRes = aExact.add(bExact).doubleValue();
-		return Math.min(tmpRes, 1.0);
+		return aExact.add(bExact).subtract(aExact.multiply(bExact))
+				.doubleValue();
 	}
 
 	@Override

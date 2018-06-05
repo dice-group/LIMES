@@ -59,7 +59,9 @@ public class Parser implements IParser {
 					|| copy.startsWith("add(") || copy.startsWith("xor(") || copy.startsWith("minus(")
 					|| copy.startsWith("mult(") || copy.startsWith("diff(")
 					|| copy.startsWith("lukt") || copy.startsWith("luktco")
-					|| copy.startsWith("lukdiff")) {
+					|| copy.startsWith("lukdiff") || copy.startsWith("algt")
+					|| copy.startsWith("algtco")
+					|| copy.startsWith("algdiff")) {
 				return false;
 			} else {
 				int index = copy.indexOf("(");
