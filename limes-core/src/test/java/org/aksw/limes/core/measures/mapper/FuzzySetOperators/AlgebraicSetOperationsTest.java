@@ -2,6 +2,8 @@ package org.aksw.limes.core.measures.mapper.FuzzySetOperators;
 
 import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
+
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.AlgebraicSetOperations;
@@ -95,13 +97,24 @@ public class AlgebraicSetOperationsTest {
 
 	@Test
 	public void testTNorm() {
-		assertEquals(0.24, aso.tNorm(0.8, 0.3), 0);
-		assertEquals(0.18, aso.tNorm(0.6, 0.3), 0);
+		assertEquals(0.24,
+				aso.tNorm(BigDecimal.valueOf(0.8), BigDecimal.valueOf(0.3)), 0);
+		assertEquals(0.18,
+				aso.tNorm(BigDecimal.valueOf(0.6), BigDecimal.valueOf(0.3)), 0);
+		assertEquals(0.3,
+				aso.tNorm(BigDecimal.valueOf(1.0), BigDecimal.valueOf(0.3)), 0);
 	}
 
 	@Test
 	public void testTConorm() {
-		assertEquals(0.86, aso.tConorm(0.8, 0.3), 0);
-		assertEquals(0.58, aso.tConorm(0.4, 0.3), 0);
+		assertEquals(0.86,
+				aso.tConorm(BigDecimal.valueOf(0.8), BigDecimal.valueOf(0.3)),
+				0);
+		assertEquals(0.58,
+				aso.tConorm(BigDecimal.valueOf(0.4), BigDecimal.valueOf(0.3)),
+				0);
+		assertEquals(0.3,
+				aso.tConorm(BigDecimal.valueOf(0.0), BigDecimal.valueOf(0.3)),
+				0);
 	}
 }

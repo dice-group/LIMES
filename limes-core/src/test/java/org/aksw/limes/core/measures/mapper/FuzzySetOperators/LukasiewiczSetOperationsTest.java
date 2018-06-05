@@ -2,6 +2,8 @@ package org.aksw.limes.core.measures.mapper.FuzzySetOperators;
 
 import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
+
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.LukasiewiczSetOperations;
@@ -66,33 +68,44 @@ public class LukasiewiczSetOperationsTest {
 
 	@Test
 	public void testm1Differencem2() {
-		assertEquals("m1/m2 is wrong!", m1Minusm2, lso.difference(m1, m2));
+		assertEquals(m1Minusm2, lso.difference(m1, m2));
 	}
 
 	@Test
 	public void testm2Differencem1() {
-		assertEquals("m2/m1 is wrong!", m2Minusm1, lso.difference(m2, m1));
+		assertEquals(m2Minusm1, lso.difference(m2, m1));
 	}
 
 	@Test
 	public void testIntersection() {
-		assertEquals("Lukasiewicz intersection is wrong!", intersection, lso.intersection(m1, m2));
+		assertEquals(intersection, lso.intersection(m1, m2));
 	}
 
 	@Test
 	public void testUnion() {
-		assertEquals("Lukasiewicz union is wrong!", union, lso.union(m1, m2));
+		assertEquals(union, lso.union(m1, m2));
 	}
 
 	@Test
 	public void testTNorm() {
-		assertEquals("Lukasiewicz t-norm is wrong", 0.1, lso.tNorm(0.8, 0.3), 0);
-		assertEquals("Lukasiewicz t-norm is wrong", 0.0, lso.tNorm(0.6, 0.3), 0);
+		assertEquals(0.1,
+				lso.tNorm(BigDecimal.valueOf(0.8), BigDecimal.valueOf(0.3)), 0);
+		assertEquals(0.0,
+				lso.tNorm(BigDecimal.valueOf(0.6), BigDecimal.valueOf(0.3)), 0);
+		assertEquals(0.3,
+				lso.tNorm(BigDecimal.valueOf(1.0), BigDecimal.valueOf(0.3)), 0);
 	}
 
 	@Test
 	public void testTConorm() {
-		assertEquals("Lukasiewicz t-conorm is wrong", 1.0, lso.tConorm(0.8, 0.3), 0);
-		assertEquals("Lukasiewicz t-conorm is wrong", 0.7, lso.tConorm(0.4, 0.3), 0);
+		assertEquals(1.0,
+				lso.tConorm(BigDecimal.valueOf(0.8), BigDecimal.valueOf(0.3)),
+				0);
+		assertEquals(0.7,
+				lso.tConorm(BigDecimal.valueOf(0.4), BigDecimal.valueOf(0.3)),
+				0);
+		assertEquals(0.3,
+				lso.tConorm(BigDecimal.valueOf(0.0), BigDecimal.valueOf(0.3)),
+				0);
 	}
 }

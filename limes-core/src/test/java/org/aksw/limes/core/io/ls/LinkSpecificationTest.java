@@ -256,4 +256,52 @@ public class LinkSpecificationTest {
 		assertEquals("ALGTCO(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)",
 				ls.getChildren().get(1).getFullExpression());
 	}
+
+	@Test
+	public void testEinsteinTNorm() {
+		String fullExpr = "EINT(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)";
+		LinkSpecification ls = new LinkSpecification(fullExpr, 0.0);
+
+		assertEquals(LogicOperator.EINSTEINT, ls.getOperator());
+		assertEquals(2, ls.getChildren().size());
+		assertEquals(0.0, ls.getThreshold(), 0);
+		assertEquals(fullExpr, ls.getFullExpression());
+	}
+
+	@Test
+	public void testEinsteinTConorm() {
+		String fullExpr = "EINTCO(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)";
+		LinkSpecification ls = new LinkSpecification(fullExpr, 0.0);
+		assertEquals(LogicOperator.EINSTEINTCO, ls.getOperator());
+		assertEquals(2, ls.getChildren().size());
+		assertEquals(0.0, ls.getThreshold(), 0);
+		assertEquals(fullExpr, ls.getFullExpression());
+	}
+
+	@Test
+	public void testEinsteinDiff() {
+		String fullExpr = "EINDIFF(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)";
+		LinkSpecification ls = new LinkSpecification(fullExpr, 0.0);
+		assertEquals(LogicOperator.EINSTEINDIFF, ls.getOperator());
+		assertEquals(2, ls.getChildren().size());
+		assertEquals(0.0, ls.getThreshold(), 0);
+		assertEquals(fullExpr, ls.getFullExpression());
+	}
+
+	@Test
+	public void testEinsteinComplex() {
+		String fullExpr = "EINT(trigrams(x.h,y.h)|0.7,EINTCO(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)|0.0)";
+		LinkSpecification ls = new LinkSpecification(fullExpr, 0.0);
+		assertEquals(LogicOperator.EINSTEINT, ls.getOperator());
+		assertEquals(2, ls.getChildren().size());
+		assertEquals(0.0, ls.getThreshold(), 0);
+		assertEquals(fullExpr, ls.getFullExpression());
+
+		assertEquals(LogicOperator.EINSTEINTCO,
+				ls.getChildren().get(1).getOperator());
+		assertEquals(2, ls.getChildren().get(1).getChildren().size());
+		assertEquals(0.0, ls.getChildren().get(1).getThreshold(), 0);
+		assertEquals("EINTCO(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)",
+				ls.getChildren().get(1).getFullExpression());
+	}
 }

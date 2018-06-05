@@ -60,8 +60,9 @@ public class Parser implements IParser {
 					|| copy.startsWith("mult(") || copy.startsWith("diff(")
 					|| copy.startsWith("lukt") || copy.startsWith("luktco")
 					|| copy.startsWith("lukdiff") || copy.startsWith("algt")
-					|| copy.startsWith("algtco")
-					|| copy.startsWith("algdiff")) {
+					|| copy.startsWith("algtco") || copy.startsWith("algdiff")
+					|| copy.startsWith("eint") || copy.startsWith("eintco")
+					|| copy.startsWith("eindiff")) {
 				return false;
 			} else {
 				int index = copy.indexOf("(");

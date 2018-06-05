@@ -1,5 +1,7 @@
 package org.aksw.limes.core.measures.mapper;
 
+import java.math.BigDecimal;
+
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 
@@ -123,5 +125,17 @@ public enum CrispSetOperations implements MappingOperations {
 	@Override
 	public AMapping union(AMapping map1, AMapping map2, double[] parameters) {
 		return union(map1, map2);
+	}
+
+	@Override
+	public double tNorm(BigDecimal a, BigDecimal b) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double tConorm(BigDecimal a, BigDecimal b) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

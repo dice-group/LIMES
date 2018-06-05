@@ -24,17 +24,19 @@ public class Instruction {
 	 * Enum class of allowed command.
 	 */
 	public enum Command {
-		RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER, LUKASIEWICZT, LUKASIEWICZTCO, LUKASIEWICZDIFF, ALGEBRAICT, ALGEBRAICTCO, ALGEBRAICDIFF;
+		RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER, LUKASIEWICZT, LUKASIEWICZTCO, LUKASIEWICZDIFF, ALGEBRAICT, ALGEBRAICTCO, ALGEBRAICDIFF, EINSTEINT, EINSTEINTCO, EINSTEINDIFF;
 
 		public static EnumSet<Command> unions = EnumSet.of(UNION,
-				LUKASIEWICZTCO, ALGEBRAICTCO);
+				LUKASIEWICZTCO, ALGEBRAICTCO, EINSTEINTCO);
 		public static EnumSet<Command> intersections = EnumSet.of(INTERSECTION,
-				LUKASIEWICZT, ALGEBRAICT);
+				LUKASIEWICZT, ALGEBRAICT, EINSTEINT);
 		public static EnumSet<Command> diffs = EnumSet.of(DIFF, LUKASIEWICZDIFF,
-				ALGEBRAICDIFF);
+				ALGEBRAICDIFF, EINSTEINDIFF);
 		public static EnumSet<Command> lukasiewicz = EnumSet.of(LUKASIEWICZT, LUKASIEWICZTCO, LUKASIEWICZDIFF);
 		public static EnumSet<Command> algebraic = EnumSet.of(ALGEBRAICT,
 				ALGEBRAICTCO, ALGEBRAICDIFF);
+		public static EnumSet<Command> einstein = EnumSet.of(EINSTEINT,
+				EINSTEINTCO, EINSTEINDIFF);
 	}
 
 	static Logger logger = LoggerFactory.getLogger(Instruction.class);
@@ -361,6 +363,18 @@ public class Instruction {
 			s.append("LUKASIEWICZTCONORM\t");
 		} else if (command.equals(Command.LUKASIEWICZDIFF)) {
 			s.append("LUKASIEWICZDIFF\t");
+		} else if (command.equals(Command.ALGEBRAICT)) {
+			s.append("ALGEBRAICTNORM\t");
+		} else if (command.equals(Command.ALGEBRAICTCO)) {
+			s.append("ALGEBRAICTCONORM\t");
+		} else if (command.equals(Command.ALGEBRAICDIFF)) {
+			s.append("ALGEBRAICDIFF\t");
+		} else if (command.equals(Command.EINSTEINT)) {
+			s.append("EINSTEINTNORM\t");
+		} else if (command.equals(Command.EINSTEINTCO)) {
+			s.append("EINSTEINTCONORM\t");
+		} else if (command.equals(Command.EINSTEINDIFF)) {
+			s.append("EINSTEINDIFF\t");
 		}
 
 		s.append(measureExpression + "\t");

@@ -30,6 +30,9 @@ public class LinkSpecification implements ILinkSpecification {
 	protected static final String ALGT = "ALGT";
 	protected static final String ALGTCO = "ALGTCO";
 	protected static final String ALGDIFF = "ALGDIFF";
+	protected static final String EINT = "EINT";
+	protected static final String EINTCO = "EINTCO";
+	protected static final String EINDIFF = "EINDIFF";
 	protected double threshold;
 	protected LogicOperator operator;
 	protected List<LinkSpecification> children; // children must be a list
@@ -315,6 +318,33 @@ public class LinkSpecification implements ILinkSpecification {
 				filterExpression = null;
 				setThreshold(theta);
 				fullExpression = "ALGDIFF(" + leftSpec.fullExpression + "|"
+						+ p.getThreshold1() + "," + rightSpec.fullExpression
+						+ "|" + p.getThreshold2() + ")";
+			} else if (p.getOperator().equalsIgnoreCase(EINT)) {
+				setOperator(LogicOperator.EINSTEINT);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				fullExpression = "EINT(" + leftSpec.fullExpression + "|"
+						+ p.getThreshold1() + "," + rightSpec.fullExpression
+						+ "|" + p.getThreshold2() + ")";
+			} else if (p.getOperator().equalsIgnoreCase(EINTCO)) {
+				setOperator(LogicOperator.EINSTEINTCO);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				fullExpression = "EINTCO(" + leftSpec.fullExpression + "|"
+						+ p.getThreshold1() + "," + rightSpec.fullExpression
+						+ "|" + p.getThreshold2() + ")";
+			} else if (p.getOperator().equalsIgnoreCase(EINDIFF)) {
+				setOperator(LogicOperator.EINSTEINDIFF);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				fullExpression = "EINDIFF(" + leftSpec.fullExpression + "|"
 						+ p.getThreshold1() + "," + rightSpec.fullExpression
 						+ "|" + p.getThreshold2() + ")";
 			}
