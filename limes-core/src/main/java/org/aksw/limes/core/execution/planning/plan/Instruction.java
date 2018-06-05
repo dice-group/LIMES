@@ -272,12 +272,8 @@ public class Instruction {
 		EqualsBuilder eb = new EqualsBuilder();
 		Instruction o = (Instruction) other;
 		eb.append(command, o.getCommand());
-		eb.append(mainThreshold, o.getThreshold());
 		eb.append(measureExpression, o.getMeasureExpression());
 		eb.append(parameters, o.getParameters());
-		eb.append(resultIndex, o.getResultIndex());
-		eb.append(sourceIndex, o.getSourceIndex());
-		eb.append(targetIndex, o.getTargetIndex());
 		eb.append(threshold, o.getThreshold());
 		return eb.isEquals();
 	}
@@ -286,12 +282,8 @@ public class Instruction {
 	public int hashCode() {
 		HashCodeBuilder hb = new HashCodeBuilder();
 		hb.append(command);
-		hb.append(mainThreshold);
 		hb.append(measureExpression);
 		hb.append(parameters);
-		hb.append(resultIndex);
-		hb.append(sourceIndex);
-		hb.append(targetIndex);
 		hb.append(threshold);
 		return hb.toHashCode();
 	}
@@ -371,7 +363,7 @@ public class Instruction {
 		s.append(sourceIndex + "\t");
 		s.append(targetIndex + "\t");
 		s.append(resultIndex);
-		if (parameters.size() > 0) {
+		if (parameters != null && parameters.size() > 0) {
 			s.append("PARAMETERS:\t");
 			parameters.forEach((key, value) -> {
 				s.append(key + " -> " + value);
