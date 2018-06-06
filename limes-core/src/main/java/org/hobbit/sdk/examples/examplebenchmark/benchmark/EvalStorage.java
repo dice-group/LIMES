@@ -31,6 +31,7 @@ public class EvalStorage extends AbstractEvaluationStorage {
 		logger.debug("Init()");
 	}
 	
+	// the actual response gets transmitted here
 	@Override
 	public void receiveResponseData(String taskId, long timestamp, byte[] data) {
 		logger.trace("receiveResponseData()->{}", new String(data));
