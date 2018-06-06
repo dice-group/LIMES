@@ -41,12 +41,12 @@ def plotFit(x_fit, title):
 	ax.scatter(x_fit[::2, 0], x_fit[::2, 1], color="r")
 	ax.scatter(x_fit[1::2, 0], x_fit[1::2, 1], color="b")
 
-	from matplotlib import collections  as mc
-
-	lines = [[x_fit[it], x_fit[it + 1]] for it in
-	         range(0, len(x_fit), 2)]
-	lc = mc.LineCollection(lines, color="k")
-	ax.add_collection(lc)
+	# from matplotlib import collections  as mc
+	#
+	# lines = [[x_fit[it], x_fit[it + 1]] for it in
+	#          range(0, len(x_fit), 2)]
+	# lc = mc.LineCollection(lines, color="k")
+	# ax.add_collection(lc)
 
 	for label, x, y in zip(labels, x_fit[::2, 0], x_fit[::2, 1]):
 		plt.annotate(
@@ -73,6 +73,12 @@ from sklearn.manifold import TSNE
 from sklearn.metrics import pairwise_distances
 distance_matrix = pairwise_distances(x, x, metric='cosine', n_jobs=-1)
 distance_matrix = np.maximum(np.zeros(shape=distance_matrix.shape), distance_matrix)
+avg_dist_all = np.mean(distance_matrix)
+avg_dist_simple = np.mean(distance_matrix[::2,::2])
+avg_dist_normal = np.mean(distance_matrix[1::2,1::2])
+avg_dist_pairs = 1/(len(x)//2)*sum(my_cosine_distance(x[i], x[i + 1]) for i in range(0, len(x), 2))
+print(avg_dist_all, avg_dist_simple, avg_dist_normal, avg_dist_pairs)
+sys.exit()
 xs = []
 ys = []
 for lr in range(5,100,5):
