@@ -62,7 +62,8 @@ public class Parser implements IParser {
 					|| copy.startsWith("lukdiff") || copy.startsWith("algt")
 					|| copy.startsWith("algtco") || copy.startsWith("algdiff")
 					|| copy.startsWith("eint") || copy.startsWith("eintco")
-					|| copy.startsWith("eindiff")) {
+					|| copy.startsWith("eindiff") || copy.startsWith("hamt") || copy.startsWith("hamtco")
+					|| copy.startsWith("hamdiff")) {
 				return false;
 			} else {
 				int index = copy.indexOf("(");

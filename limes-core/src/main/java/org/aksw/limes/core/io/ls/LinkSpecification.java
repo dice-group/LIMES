@@ -33,6 +33,9 @@ public class LinkSpecification implements ILinkSpecification {
 	protected static final String EINT = "EINT";
 	protected static final String EINTCO = "EINTCO";
 	protected static final String EINDIFF = "EINDIFF";
+	protected static final String HAMT = "HAMT";
+	protected static final String HAMTCO = "HAMTCO";
+	protected static final String HAMDIFF = "HAMDIFF";
 	protected double threshold;
 	protected LogicOperator operator;
 	protected List<LinkSpecification> children; // children must be a list
@@ -56,6 +59,10 @@ public class LinkSpecification implements ILinkSpecification {
 	protected String fullExpression = "";
 	// just a quick hack to have lower borders for advanced threshold searches
 	private double lowThreshold = 0d;
+	/**
+	 * Used for parameterized t-norms/t-conorms
+	 */
+	protected double operatorParameter;
 
 	public LinkSpecification() {
 		setOperator(null);
@@ -347,8 +354,39 @@ public class LinkSpecification implements ILinkSpecification {
 				fullExpression = "EINDIFF(" + leftSpec.fullExpression + "|"
 						+ p.getThreshold1() + "," + rightSpec.fullExpression
 						+ "|" + p.getThreshold2() + ")";
+			} else if (p.getOperator().toUpperCase().startsWith(HAMTCO)) {
+				setOperator(LogicOperator.HAMACHERTCO);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				operatorParameter = getParameter(p.getOperator().toUpperCase(), HAMTCO);
+				fullExpression = "HAMTCO_" + operatorParameter + "(" + leftSpec.fullExpression + "|" + p.getThreshold1()
+				+ "," + rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
+			} else if (p.getOperator().toUpperCase().startsWith(HAMT)) {
+				setOperator(LogicOperator.HAMACHERT);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				operatorParameter = getParameter(p.getOperator().toUpperCase(), HAMT);
+				fullExpression = "HAMT_" + operatorParameter + "(" + leftSpec.fullExpression + "|" + p.getThreshold1()
+				+ "," + rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
+			} else if (p.getOperator().toUpperCase().startsWith(HAMDIFF)) {
+				setOperator(LogicOperator.HAMACHERDIFF);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				operatorParameter = getParameter(p.getOperator().toUpperCase(), HAMDIFF);
+				fullExpression = "HAMDIFF_" + operatorParameter + "(" + leftSpec.fullExpression + "|"
+						+ p.getThreshold1() + "," + rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			}
 		}
+	}
+
+	private double getParameter(String opWithParameter, String op) {
+		return Double.valueOf(opWithParameter.replace(op + "_", ""));
 	}
 
 	/**
@@ -801,6 +839,14 @@ public class LinkSpecification implements ILinkSpecification {
 
 	public void setLowThreshold(double lowThreshold) {
 		this.lowThreshold = lowThreshold;
+	}
+
+	public double getOperatorParameter() {
+		return operatorParameter;
+	}
+
+	public void setOperatorParameter(double operatorParameter) {
+		this.operatorParameter = operatorParameter;
 	}
 
 }

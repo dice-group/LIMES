@@ -4,11 +4,14 @@ import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 
+import org.aksw.limes.core.exceptions.ParameterOutOfRangeException;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.EinsteinSetOperations;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class EinsteinSetOperationsTest {
 
@@ -20,6 +23,9 @@ public class EinsteinSetOperationsTest {
 	public AMapping union;
 
 	public EinsteinSetOperations eso = EinsteinSetOperations.INSTANCE;
+
+	@Rule
+	public ExpectedException exceptions = ExpectedException.none();
 
 	@Before
 	public void prepareData() {
@@ -77,44 +83,59 @@ public class EinsteinSetOperationsTest {
 
 	@Test
 	public void testm1Differencem2() {
-		assertEquals(m1Minusm2, eso.difference(m1, m2));
+		assertEquals(m1Minusm2, eso.difference(m1, m2, Double.NaN));
 	}
 
 	@Test
 	public void testm2Differencem1() {
-		assertEquals(m2Minusm1, eso.difference(m2, m1));
+		assertEquals(m2Minusm1, eso.difference(m2, m1, Double.NaN));
 	}
 
 	@Test
 	public void testIntersection() {
-		assertEquals(intersection, eso.intersection(m1, m2));
+		assertEquals(intersection, eso.intersection(m1, m2, Double.NaN));
 	}
 
 	@Test
 	public void testUnion() {
-		assertEquals(union, eso.union(m1, m2));
+		assertEquals(union, eso.union(m1, m2, Double.NaN));
 	}
 
 	@Test
 	public void testTNorm() {
-		assertEquals(0.210526316,
-				eso.tNorm(BigDecimal.valueOf(0.8), BigDecimal.valueOf(0.3)), 0);
-		assertEquals(0.140625,
-				eso.tNorm(BigDecimal.valueOf(0.6), BigDecimal.valueOf(0.3)), 0);
-		assertEquals(0.3,
-				eso.tNorm(BigDecimal.valueOf(1.0), BigDecimal.valueOf(0.3)), 0);
+		assertEquals(0.210526316, eso.tNorm(BigDecimal.valueOf(0.8), BigDecimal.valueOf(0.3), Double.NaN), 0);
+		assertEquals(0.140625, eso.tNorm(BigDecimal.valueOf(0.6), BigDecimal.valueOf(0.3), Double.NaN), 0);
+		assertEquals(0.3, eso.tNorm(BigDecimal.valueOf(1.0), BigDecimal.valueOf(0.3), Double.NaN), 0);
 	}
 
 	@Test
 	public void testTConorm() {
-		assertEquals(0.887096774,
-				eso.tConorm(BigDecimal.valueOf(0.8), BigDecimal.valueOf(0.3)),
-				0);
-		assertEquals(0.625,
-				eso.tConorm(BigDecimal.valueOf(0.4), BigDecimal.valueOf(0.3)),
-				0);
-		assertEquals(0.3,
-				eso.tConorm(BigDecimal.valueOf(0.0), BigDecimal.valueOf(0.3)),
-				0);
+		assertEquals(0.887096774, eso.tConorm(BigDecimal.valueOf(0.8), BigDecimal.valueOf(0.3), Double.NaN), 0);
+		assertEquals(0.625, eso.tConorm(BigDecimal.valueOf(0.4), BigDecimal.valueOf(0.3), Double.NaN), 0);
+		assertEquals(0.3, eso.tConorm(BigDecimal.valueOf(0.0), BigDecimal.valueOf(0.3), Double.NaN), 0);
+	}
+
+	@Test
+	public void testAOutOfRangeTNorm() throws Exception {
+		exceptions.expect(ParameterOutOfRangeException.class);
+		eso.tNorm(BigDecimal.valueOf(2.0), BigDecimal.valueOf(0.3), Double.NaN);
+	}
+
+	@Test
+	public void testAOutOfRangeTConorm() throws Exception {
+		exceptions.expect(ParameterOutOfRangeException.class);
+		eso.tConorm(BigDecimal.valueOf(2.0), BigDecimal.valueOf(0.3), Double.NaN);
+	}
+
+	@Test
+	public void testBOutOfRangeTNorm() throws Exception {
+		exceptions.expect(ParameterOutOfRangeException.class);
+		eso.tNorm(BigDecimal.valueOf(1.0), BigDecimal.valueOf(-1.3), Double.NaN);
+	}
+
+	@Test
+	public void testBOutOfRangeTConorm() throws Exception {
+		exceptions.expect(ParameterOutOfRangeException.class);
+		eso.tConorm(BigDecimal.valueOf(1.0), BigDecimal.valueOf(-1.3), Double.NaN);
 	}
 }

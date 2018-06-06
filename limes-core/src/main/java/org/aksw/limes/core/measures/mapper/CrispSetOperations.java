@@ -9,6 +9,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
  * Implements the mapping operations abstract class.
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
+ * @author Daniel Obraczka (obraczka@studserv.uni-leipzig.de)
  */
 public enum CrispSetOperations implements MappingOperations {
 
@@ -23,7 +24,6 @@ public enum CrispSetOperations implements MappingOperations {
 	 *            Second mapping
 	 * @return map1 \ map2
 	 */
-	@Override
 	public AMapping difference(AMapping map1, AMapping map2) {
 		final AMapping map = MappingFactory.createDefaultMapping();
 
@@ -56,7 +56,6 @@ public enum CrispSetOperations implements MappingOperations {
 	 *            Second mapping
 	 * @return Intersection of map1 and map2
 	 */
-	@Override
 	public AMapping intersection(AMapping map1, AMapping map2) {
 		final AMapping map = MappingFactory.createDefaultMapping();
 		// takes care of not running the filter if some set is empty
@@ -94,7 +93,6 @@ public enum CrispSetOperations implements MappingOperations {
 	 *            Second mapping
 	 * @return Union of map1 and map2
 	 */
-	@Override
 	public AMapping union(AMapping map1, AMapping map2) {
 		final AMapping map = MappingFactory.createDefaultMapping();
 		// go through all the keys in map1
@@ -113,29 +111,28 @@ public enum CrispSetOperations implements MappingOperations {
 	}
 
 	@Override
-	public AMapping difference(AMapping map1, AMapping map2, double[] parameters) {
+	public AMapping difference(AMapping map1, AMapping map2, double parameter) {
 		return difference(map1, map2);
 	}
 
 	@Override
-	public AMapping intersection(AMapping map1, AMapping map2, double[] parameters) {
+	public AMapping intersection(AMapping map1, AMapping map2,
+			double parameter) {
 		return intersection(map1, map2);
 	}
 
 	@Override
-	public AMapping union(AMapping map1, AMapping map2, double[] parameters) {
+	public AMapping union(AMapping map1, AMapping map2, double parameter) {
 		return union(map1, map2);
 	}
 
 	@Override
-	public double tNorm(BigDecimal a, BigDecimal b) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double tNorm(BigDecimal a, BigDecimal b, double parameter) {
+		return Math.min(a.doubleValue(), b.doubleValue());
 	}
 
 	@Override
-	public double tConorm(BigDecimal a, BigDecimal b) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double tConorm(BigDecimal a, BigDecimal b, double parameter) {
+		return Math.max(a.doubleValue(), b.doubleValue());
 	}
 }

@@ -93,13 +93,19 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 				m = executeReverseFilter(inst, buffer.get(inst.getSourceIndex()));
 			} // runs set operations such as intersection,
 			else if (Command.intersections.contains(op)) {
-				m = executeIntersection(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()), op);
+				m = executeIntersection(buffer.get(inst.getSourceIndex()),
+						buffer.get(inst.getTargetIndex()), op,
+						inst.getParameter());
 			} // union
 			else if (Command.unions.contains(op)) {
-				m = executeUnion(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()), op);
+				m = executeUnion(buffer.get(inst.getSourceIndex()),
+						buffer.get(inst.getTargetIndex()), op,
+						inst.getParameter());
 			} // diff
 			else if (Command.diffs.contains(op)) {
-				m = executeDifference(buffer.get(inst.getSourceIndex()), buffer.get(inst.getTargetIndex()), op);
+				m = executeDifference(buffer.get(inst.getSourceIndex()),
+						buffer.get(inst.getTargetIndex()), op,
+						inst.getParameter());
 			} // xor
 			else if (op.equals(Command.XOR)) {
 				LinearFilter f = new LinearFilter();
@@ -238,8 +244,10 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 		return CrispSetOperations.INSTANCE.difference(m1, m2);
 	}
 
-	public AMapping executeDifference(AMapping m1, AMapping m2, Command c) {
-		return MappingOperations.getInstanceByEnum(c).difference(m1, m2);
+	public AMapping executeDifference(AMapping m1, AMapping m2, Command c,
+			double parameter) {
+		return MappingOperations.getInstanceByEnum(c).difference(m1, m2,
+				parameter);
 	}
 
 	/**
@@ -255,8 +263,10 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 		return CrispSetOperations.INSTANCE.intersection(m1, m2);
 	}
 
-	public AMapping executeIntersection(AMapping m1, AMapping m2, Command c) {
-		return MappingOperations.getInstanceByEnum(c).intersection(m1, m2);
+	public AMapping executeIntersection(AMapping m1, AMapping m2, Command c,
+			double parameter) {
+		return MappingOperations.getInstanceByEnum(c).intersection(m1, m2,
+				parameter);
 	}
 
 	/**
@@ -272,8 +282,9 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 		return CrispSetOperations.INSTANCE.union(m1, m2);
 	}
 
-	public AMapping executeUnion(AMapping m1, AMapping m2, Command c) {
-		return MappingOperations.getInstanceByEnum(c).union(m1, m2);
+	public AMapping executeUnion(AMapping m1, AMapping m2, Command c,
+			double parameter) {
+		return MappingOperations.getInstanceByEnum(c).union(m1, m2, parameter);
 	}
 
 	/**
@@ -307,13 +318,16 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 				m2 = executeStatic(plan.getSubPlans().get(i));
 				Command op = plan.getOperator();
 				if (Command.intersections.contains(op)) {
-					result = executeIntersection(m, m2, op);
+					result = executeIntersection(m, m2, op,
+							plan.getCommandParameter());
 				} // union
 				else if (Command.unions.contains(op)) {
-					result = executeUnion(m, m2, op);
+					result = executeUnion(m, m2, op,
+							plan.getCommandParameter());
 				} // diff
 				else if (Command.diffs.contains(op)) {
-					result = executeDifference(m, m2, op);
+					result = executeDifference(m, m2, op,
+							plan.getCommandParameter());
 					// exclusive or
 				} else if (plan.getOperator().equals(Command.XOR)) {
 					LinearFilter f = new LinearFilter();

@@ -2,6 +2,9 @@ package org.aksw.limes.core.io.ls;
 
 import static org.junit.Assert.assertEquals;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.junit.Test;
 
@@ -303,5 +306,66 @@ public class LinkSpecificationTest {
 		assertEquals(0.0, ls.getChildren().get(1).getThreshold(), 0);
 		assertEquals("EINTCO(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)",
 				ls.getChildren().get(1).getFullExpression());
+	}
+
+	@Test
+	public void testGetParameter() throws NoSuchMethodException, SecurityException, IllegalAccessException,
+	IllegalArgumentException, InvocationTargetException {
+		LinkSpecification ls = new LinkSpecification();
+		Method method = LinkSpecification.class.getDeclaredMethod("getParameter", String.class, String.class);
+		method.setAccessible(true);
+		double p = (double) method.invoke(ls, "HAMTCO_2.1", LinkSpecification.HAMTCO);
+		assertEquals(2.1, p, 0.0);
+	}
+
+	@Test
+	public void testHamacherTNorm() {
+		String fullExpr = "HAMT_2.1(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)";
+		LinkSpecification ls = new LinkSpecification(fullExpr, 0.0);
+
+		assertEquals(LogicOperator.HAMACHERT, ls.getOperator());
+		assertEquals(2, ls.getChildren().size());
+		assertEquals(0.0, ls.getThreshold(), 0);
+		assertEquals(fullExpr, ls.getFullExpression());
+	}
+
+	@Test
+	public void testHamacherTConorm() {
+		String fullExpr = "HAMTCO_2.1(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)";
+		LinkSpecification ls = new LinkSpecification(fullExpr, 0.0);
+		assertEquals(LogicOperator.HAMACHERTCO, ls.getOperator());
+		assertEquals(2, ls.getChildren().size());
+		assertEquals(0.0, ls.getThreshold(), 0);
+		assertEquals(fullExpr, ls.getFullExpression());
+		assertEquals(2.1, ls.getOperatorParameter(), 0.0);
+	}
+
+	@Test
+	public void testHamacherDiff() {
+		String fullExpr = "HAMDIFF_2.1(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)";
+		LinkSpecification ls = new LinkSpecification(fullExpr, 0.0);
+		assertEquals(LogicOperator.HAMACHERDIFF, ls.getOperator());
+		assertEquals(2, ls.getChildren().size());
+		assertEquals(0.0, ls.getThreshold(), 0);
+		assertEquals(fullExpr, ls.getFullExpression());
+		assertEquals(2.1, ls.getOperatorParameter(), 0.0);
+	}
+
+	@Test
+	public void testHamacherComplex() {
+		String fullExpr = "HAMT_2.1(trigrams(x.h,y.h)|0.7,HAMTCO_2.3(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)|0.0)";
+		LinkSpecification ls = new LinkSpecification(fullExpr, 0.0);
+		assertEquals(LogicOperator.HAMACHERT, ls.getOperator());
+		assertEquals(2, ls.getChildren().size());
+		assertEquals(0.0, ls.getThreshold(), 0);
+		assertEquals(fullExpr, ls.getFullExpression());
+		assertEquals(2.1, ls.getOperatorParameter(), 0.0);
+
+		assertEquals(LogicOperator.HAMACHERTCO, ls.getChildren().get(1).getOperator());
+		assertEquals(2, ls.getChildren().get(1).getChildren().size());
+		assertEquals(0.0, ls.getChildren().get(1).getThreshold(), 0);
+		assertEquals("HAMTCO_2.3(jaccard(x.h,y.h)|0.2,jaccard(x.p,y.p)|0.3)",
+				ls.getChildren().get(1).getFullExpression());
+		assertEquals(2.3, ls.getChildren().get(1).getOperatorParameter(), 0.0);
 	}
 }

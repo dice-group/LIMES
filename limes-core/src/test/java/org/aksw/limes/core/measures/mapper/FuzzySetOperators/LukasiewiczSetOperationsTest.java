@@ -4,11 +4,14 @@ import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 
+import org.aksw.limes.core.exceptions.ParameterOutOfRangeException;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.LukasiewiczSetOperations;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class LukasiewiczSetOperationsTest {
 
@@ -20,6 +23,9 @@ public class LukasiewiczSetOperationsTest {
 	public AMapping union;
 
 	public LukasiewiczSetOperations lso = LukasiewiczSetOperations.INSTANCE;
+
+	@Rule
+	public ExpectedException exceptions = ExpectedException.none();
 
 	@Before
 	public void prepareData() {
@@ -68,44 +74,53 @@ public class LukasiewiczSetOperationsTest {
 
 	@Test
 	public void testm1Differencem2() {
-		assertEquals(m1Minusm2, lso.difference(m1, m2));
+		assertEquals(m1Minusm2, lso.difference(m1, m2, Double.NaN));
 	}
 
 	@Test
 	public void testm2Differencem1() {
-		assertEquals(m2Minusm1, lso.difference(m2, m1));
+		assertEquals(m2Minusm1, lso.difference(m2, m1, Double.NaN));
 	}
 
 	@Test
 	public void testIntersection() {
-		assertEquals(intersection, lso.intersection(m1, m2));
+		assertEquals(intersection, lso.intersection(m1, m2, Double.NaN));
 	}
 
 	@Test
 	public void testUnion() {
-		assertEquals(union, lso.union(m1, m2));
+		assertEquals(union, lso.union(m1, m2, Double.NaN));
 	}
 
 	@Test
 	public void testTNorm() {
-		assertEquals(0.1,
-				lso.tNorm(BigDecimal.valueOf(0.8), BigDecimal.valueOf(0.3)), 0);
-		assertEquals(0.0,
-				lso.tNorm(BigDecimal.valueOf(0.6), BigDecimal.valueOf(0.3)), 0);
-		assertEquals(0.3,
-				lso.tNorm(BigDecimal.valueOf(1.0), BigDecimal.valueOf(0.3)), 0);
+		assertEquals(0.1, lso.tNorm(BigDecimal.valueOf(0.8), BigDecimal.valueOf(0.3), Double.NaN), 0);
+		assertEquals(0.0, lso.tNorm(BigDecimal.valueOf(0.6), BigDecimal.valueOf(0.3), Double.NaN), 0);
+		assertEquals(0.3, lso.tNorm(BigDecimal.valueOf(1.0), BigDecimal.valueOf(0.3), Double.NaN), 0);
 	}
 
 	@Test
 	public void testTConorm() {
-		assertEquals(1.0,
-				lso.tConorm(BigDecimal.valueOf(0.8), BigDecimal.valueOf(0.3)),
-				0);
-		assertEquals(0.7,
-				lso.tConorm(BigDecimal.valueOf(0.4), BigDecimal.valueOf(0.3)),
-				0);
-		assertEquals(0.3,
-				lso.tConorm(BigDecimal.valueOf(0.0), BigDecimal.valueOf(0.3)),
-				0);
+		assertEquals(1.0, lso.tConorm(BigDecimal.valueOf(0.8), BigDecimal.valueOf(0.3), Double.NaN), 0);
+		assertEquals(0.7, lso.tConorm(BigDecimal.valueOf(0.4), BigDecimal.valueOf(0.3), Double.NaN), 0);
+		assertEquals(0.3, lso.tConorm(BigDecimal.valueOf(0.0), BigDecimal.valueOf(0.3), Double.NaN), 0);
+	}
+
+	@Test
+	public void testAOutOfRangeTNorm() throws Exception {
+		exceptions.expect(ParameterOutOfRangeException.class);
+		lso.tNorm(BigDecimal.valueOf(2.0), BigDecimal.valueOf(0.3), Double.NaN);
+	}
+
+	@Test
+	public void testAOutOfRangeTConorm() throws Exception {
+		exceptions.expect(ParameterOutOfRangeException.class);
+		lso.tConorm(BigDecimal.valueOf(2.0), BigDecimal.valueOf(0.3), Double.NaN);
+	}
+
+	@Test
+	public void testBOutOfRangeTNorm() throws Exception {
+		exceptions.expect(ParameterOutOfRangeException.class);
+		lso.tNorm(BigDecimal.valueOf(1.0), BigDecimal.valueOf(-1.3), Double.NaN);
 	}
 }

@@ -1,8 +1,6 @@
 package org.aksw.limes.core.execution.planning.plan;
 
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -24,19 +22,22 @@ public class Instruction {
 	 * Enum class of allowed command.
 	 */
 	public enum Command {
-		RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER, LUKASIEWICZT, LUKASIEWICZTCO, LUKASIEWICZDIFF, ALGEBRAICT, ALGEBRAICTCO, ALGEBRAICDIFF, EINSTEINT, EINSTEINTCO, EINSTEINDIFF;
+		RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER, LUKASIEWICZT, LUKASIEWICZTCO,
+		LUKASIEWICZDIFF, ALGEBRAICT, ALGEBRAICTCO, ALGEBRAICDIFF, EINSTEINT, EINSTEINTCO, EINSTEINDIFF, HAMACHERT,
+		HAMACHERTCO, HAMACHERDIFF;
 
-		public static EnumSet<Command> unions = EnumSet.of(UNION,
-				LUKASIEWICZTCO, ALGEBRAICTCO, EINSTEINTCO);
-		public static EnumSet<Command> intersections = EnumSet.of(INTERSECTION,
-				LUKASIEWICZT, ALGEBRAICT, EINSTEINT);
-		public static EnumSet<Command> diffs = EnumSet.of(DIFF, LUKASIEWICZDIFF,
-				ALGEBRAICDIFF, EINSTEINDIFF);
+		public static EnumSet<Command> unions = EnumSet.of(UNION, LUKASIEWICZTCO, ALGEBRAICTCO, EINSTEINTCO,
+				HAMACHERTCO);
+		public static EnumSet<Command> intersections = EnumSet.of(INTERSECTION, LUKASIEWICZT, ALGEBRAICT, EINSTEINT,
+				HAMACHERT);
+		public static EnumSet<Command> diffs = EnumSet.of(DIFF, LUKASIEWICZDIFF, ALGEBRAICDIFF, EINSTEINDIFF,
+				HAMACHERDIFF);
+
+		public static EnumSet<Command> crisp = EnumSet.of(UNION, INTERSECTION, DIFF);
 		public static EnumSet<Command> lukasiewicz = EnumSet.of(LUKASIEWICZT, LUKASIEWICZTCO, LUKASIEWICZDIFF);
-		public static EnumSet<Command> algebraic = EnumSet.of(ALGEBRAICT,
-				ALGEBRAICTCO, ALGEBRAICDIFF);
-		public static EnumSet<Command> einstein = EnumSet.of(EINSTEINT,
-				EINSTEINTCO, EINSTEINDIFF);
+		public static EnumSet<Command> algebraic = EnumSet.of(ALGEBRAICT, ALGEBRAICTCO, ALGEBRAICDIFF);
+		public static EnumSet<Command> einstein = EnumSet.of(EINSTEINT, EINSTEINTCO, EINSTEINDIFF);
+		public static EnumSet<Command> hamacher = EnumSet.of(HAMACHERT, HAMACHERTCO, HAMACHERDIFF);
 	}
 
 	static Logger logger = LoggerFactory.getLogger(Instruction.class);
@@ -73,7 +74,7 @@ public class Instruction {
 	/**
 	 * Used for parameterized t-norms/t-conorms
 	 */
-	private Map<String, Double> parameters;
+	private double parameter = Double.NaN;
 
 	/**
 	 * Constructor of Instruction class.
@@ -118,15 +119,14 @@ public class Instruction {
 	 *            Result index
 	 *
 	 */
-	public Instruction(Command c, String measure, String thrs, int source, int target, int result,
-			Map<String, Double> parameters) {
+	public Instruction(Command c, String measure, String thrs, int source, int target, int result, double parameter) {
 		command = c;
 		measureExpression = measure;
 		threshold = thrs;
 		sourceIndex = source;
 		targetIndex = target;
 		resultIndex = result;
-		setParameters(parameters);
+		setParameter(parameter);
 	}
 
 	/* Setters and Getters for private fields */
@@ -280,7 +280,7 @@ public class Instruction {
 		Instruction o = (Instruction) other;
 		eb.append(command, o.getCommand());
 		eb.append(measureExpression, o.getMeasureExpression());
-		eb.append(parameters, o.getParameters());
+		eb.append(parameter, o.getParameter());
 		eb.append(threshold, o.getThreshold());
 		return eb.isEquals();
 	}
@@ -290,7 +290,7 @@ public class Instruction {
 		HashCodeBuilder hb = new HashCodeBuilder();
 		hb.append(command);
 		hb.append(measureExpression);
-		hb.append(parameters);
+		hb.append(parameter);
 		hb.append(threshold);
 		return hb.toHashCode();
 	}
@@ -322,16 +322,7 @@ public class Instruction {
 			newInstruction.setMeasureExpression(new String(measureExpression));
 		}
 
-		if (parameters == null) {
-			newInstruction.setParameters(null);
-		} else {
-			Map<String, Double> clonedParameters = new HashMap<>();
-			parameters.forEach((key, value) -> {
-				clonedParameters.put(key, value);
-			});
-			newInstruction.setParameters(clonedParameters);
-		}
-
+		newInstruction.setParameter(parameter);
 		return newInstruction;
 	}
 
@@ -375,6 +366,12 @@ public class Instruction {
 			s.append("EINSTEINTCONORM\t");
 		} else if (command.equals(Command.EINSTEINDIFF)) {
 			s.append("EINSTEINDIFF\t");
+		} else if (command.equals(Command.HAMACHERT)) {
+			s.append("HAMACHERTNORM\t");
+		} else if (command.equals(Command.HAMACHERTCO)) {
+			s.append("HAMACHERTCONORM\t");
+		} else if (command.equals(Command.HAMACHERDIFF)) {
+			s.append("HAMACHERDIFF\t");
 		}
 
 		s.append(measureExpression + "\t");
@@ -382,21 +379,18 @@ public class Instruction {
 		s.append(sourceIndex + "\t");
 		s.append(targetIndex + "\t");
 		s.append(resultIndex);
-		if (parameters != null && parameters.size() > 0) {
-			s.append("PARAMETERS:\t");
-			parameters.forEach((key, value) -> {
-				s.append(key + " -> " + value);
-			});
+		if (parameter != Double.NaN) {
+			s.append(parameter);
 		}
 		return s.toString();
 	}
 
-	public Map<String, Double> getParameters() {
-		return parameters;
+	public double getParameter() {
+		return parameter;
 	}
 
-	public void setParameters(Map<String, Double> parameters) {
-		this.parameters = parameters;
+	public void setParameter(double parameter) {
+		this.parameter = parameter;
 	}
 
 }

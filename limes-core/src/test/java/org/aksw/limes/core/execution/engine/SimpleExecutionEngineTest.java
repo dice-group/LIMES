@@ -36,6 +36,10 @@ public class SimpleExecutionEngineTest {
 	public AMapping einstIntersection = MappingFactory.createDefaultMapping();
 	public AMapping einstDifference = MappingFactory.createDefaultMapping();
 
+	public AMapping hamUnion = MappingFactory.createDefaultMapping();
+	public AMapping hamIntersection = MappingFactory.createDefaultMapping();
+	public AMapping hamDifference = MappingFactory.createDefaultMapping();
+
 	@Before
 	public void setUp() {
 		source = new MemoryCache();
@@ -84,13 +88,14 @@ public class SimpleExecutionEngineTest {
 		prepareLukasiewiczGoldData();
 		prepareAlgebraicGoldData();
 		prepareEinsteinGoldData();
+		prepareHamacherGoldData();
 	}
 
 	private void prepareLukasiewiczGoldData() {
-		lukUnion.add("S4", "T4", 1.0);
-		lukUnion.add("S5", "T5", 1.0);
 		lukUnion.add("S1", "T1", 0.5);
 		lukUnion.add("S2", "T2", 1.0);
+		lukUnion.add("S4", "T4", 1.0);
+		lukUnion.add("S5", "T5", 1.0);
 
 		lukIntersection.add("S4", "T4", 0.6666666666666666);
 		lukIntersection.add("S2", "T2", 1.0);
@@ -126,6 +131,20 @@ public class SimpleExecutionEngineTest {
 		einstDifference.add("S1", "T1", 0.5);
 		einstDifference.add("S4", "T4", 0.333333333);
 		einstDifference.add("S5", "T5", 1.0);
+	}
+
+	private void prepareHamacherGoldData() {
+		hamUnion.add("S1", "T1", 0.5);
+		hamUnion.add("S2", "T2", 1.0);
+		hamUnion.add("S4", "T4", 1.0);
+		hamUnion.add("S5", "T5", 1.0);
+
+		hamIntersection.add("S2", "T2", 1.0);
+		hamIntersection.add("S4", "T4", 0.666666667);
+
+		hamDifference.add("S1", "T1", 0.5);
+		hamDifference.add("S4", "T4", 0.333333333);
+		hamDifference.add("S5", "T5", 1.0);
 	}
 
 	@After
@@ -678,7 +697,7 @@ public class SimpleExecutionEngineTest {
 		AMapping a = ee.executeRun(run1);
 		AMapping b = ee.executeRun(run2);
 
-		AMapping mUnion = ee.executeUnion(a, b, Command.LUKASIEWICZTCO);
+		AMapping mUnion = ee.executeUnion(a, b, Command.LUKASIEWICZTCO, Double.NaN);
 
 		Plan plan = new Plan();
 		plan.addInstruction(run1);
@@ -709,7 +728,7 @@ public class SimpleExecutionEngineTest {
 		AMapping a = ee.executeRun(run1);
 		AMapping b = ee.executeRun(run2);
 
-		AMapping mIntersection = ee.executeIntersection(a, b, Command.LUKASIEWICZT);
+		AMapping mIntersection = ee.executeIntersection(a, b, Command.LUKASIEWICZT, Double.NaN);
 
 		Plan plan = new Plan();
 		plan.addInstruction(run1);
@@ -735,7 +754,7 @@ public class SimpleExecutionEngineTest {
 		AMapping a = ee.executeRun(run1);
 		AMapping b = ee.executeRun(run2);
 
-		AMapping mDifference = ee.executeDifference(a, b, Command.LUKASIEWICZDIFF);
+		AMapping mDifference = ee.executeDifference(a, b, Command.LUKASIEWICZDIFF, Double.NaN);
 
 		Plan plan = new Plan();
 		plan.addInstruction(run1);
@@ -761,7 +780,7 @@ public class SimpleExecutionEngineTest {
 		AMapping a = ee.executeRun(run1);
 		AMapping b = ee.executeRun(run2);
 
-		AMapping mUnion = ee.executeUnion(a, b, Command.ALGEBRAICTCO);
+		AMapping mUnion = ee.executeUnion(a, b, Command.ALGEBRAICTCO, Double.NaN);
 
 		Plan plan = new Plan();
 		plan.addInstruction(run1);
@@ -796,8 +815,7 @@ public class SimpleExecutionEngineTest {
 		AMapping a = ee.executeRun(run1);
 		AMapping b = ee.executeRun(run2);
 
-		AMapping mIntersection = ee.executeIntersection(a, b,
-				Command.ALGEBRAICT);
+		AMapping mIntersection = ee.executeIntersection(a, b, Command.ALGEBRAICT, Double.NaN);
 
 		Plan plan = new Plan();
 		plan.addInstruction(run1);
@@ -827,8 +845,7 @@ public class SimpleExecutionEngineTest {
 		AMapping a = ee.executeRun(run1);
 		AMapping b = ee.executeRun(run2);
 
-		AMapping mDifference = ee.executeDifference(a, b,
-				Command.ALGEBRAICDIFF);
+		AMapping mDifference = ee.executeDifference(a, b, Command.ALGEBRAICDIFF, Double.NaN);
 
 		Plan plan = new Plan();
 		plan.addInstruction(run1);
@@ -854,7 +871,7 @@ public class SimpleExecutionEngineTest {
 		AMapping a = ee.executeRun(run1);
 		AMapping b = ee.executeRun(run2);
 
-		AMapping mUnion = ee.executeUnion(a, b, Command.EINSTEINTCO);
+		AMapping mUnion = ee.executeUnion(a, b, Command.EINSTEINTCO, Double.NaN);
 
 		Plan plan = new Plan();
 		plan.addInstruction(run1);
@@ -889,8 +906,7 @@ public class SimpleExecutionEngineTest {
 		AMapping a = ee.executeRun(run1);
 		AMapping b = ee.executeRun(run2);
 
-		AMapping mIntersection = ee.executeIntersection(a, b,
-				Command.EINSTEINT);
+		AMapping mIntersection = ee.executeIntersection(a, b, Command.EINSTEINT, Double.NaN);
 
 		Plan plan = new Plan();
 		plan.addInstruction(run1);
@@ -920,7 +936,7 @@ public class SimpleExecutionEngineTest {
 		AMapping a = ee.executeRun(run1);
 		AMapping b = ee.executeRun(run2);
 
-		AMapping mDifference = ee.executeDifference(a, b, Command.EINSTEINDIFF);
+		AMapping mDifference = ee.executeDifference(a, b, Command.EINSTEINDIFF, Double.NaN);
 
 		Plan plan = new Plan();
 		plan.addInstruction(run1);
@@ -930,5 +946,89 @@ public class SimpleExecutionEngineTest {
 
 		assertEquals(mDifference, mDifference2);
 		assertEquals(einstDifference, mDifference);
+	}
+
+	@Test
+	public void hamacherUnion() {
+		double p = 3.1;
+		SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+		Instruction run1 = new Instruction(Command.RUN, "qgrams(x.surname,y.surname)", "0.4", -1, -1, 0);
+		Instruction run2 = new Instruction(Command.RUN, "trigrams(x.name,y.name)", "0.4", -1, -1, 1);
+		Instruction union = new Instruction(Command.HAMACHERTCO, "", "0.0", 0, 1, 2, p);
+
+		AMapping a = ee.executeRun(run1);
+		AMapping b = ee.executeRun(run2);
+		System.out.println(a);
+		System.out.println(b);
+
+		AMapping mUnion = ee.executeUnion(a, b, Command.HAMACHERTCO, p);
+
+		Plan plan = new Plan();
+		plan.addInstruction(run1);
+		plan.addInstruction(run2);
+		plan.addInstruction(union);
+		AMapping mUnion2 = ee.executeInstructions(plan);
+
+		assertEquals(mUnion, mUnion2);
+		assertEquals(hamUnion, mUnion);
+
+		AMapping emptyMapping = MappingFactory.createDefaultMapping();
+		AMapping mEmpty = ee.executeUnion(mUnion, emptyMapping);
+		// 0 is identity element
+		assertEquals(mUnion, mEmpty);
+
+		AMapping totalEmpty = ee.executeUnion(emptyMapping, emptyMapping);
+		assertEquals(emptyMapping, totalEmpty);
+
+	}
+
+	@Test
+	public void hamacherIntersection() {
+		double p = 3.1;
+		SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+		Instruction run1 = new Instruction(Command.RUN, "qgrams(x.surname,y.surname)", "0.4", -1, -1, 0);
+		Instruction run2 = new Instruction(Command.RUN, "trigrams(x.name,y.name)", "0.4", -1, -1, 1);
+		Instruction intersection = new Instruction(Command.HAMACHERT, "", "0.4", 0, 1, 2, p);
+
+		AMapping a = ee.executeRun(run1);
+		AMapping b = ee.executeRun(run2);
+
+		AMapping mIntersection = ee.executeIntersection(a, b, Command.HAMACHERT, p);
+
+		Plan plan = new Plan();
+		plan.addInstruction(run1);
+		plan.addInstruction(run2);
+		plan.addInstruction(intersection);
+		AMapping mIntersection2 = ee.executeInstructions(plan);
+
+		assertEquals(mIntersection, mIntersection2);
+		assertEquals(hamIntersection, mIntersection);
+
+		AMapping emptyMapping = MappingFactory.createDefaultMapping();
+		AMapping mEmpty = ee.executeIntersection(mIntersection, emptyMapping);
+		assertEquals(mEmpty, emptyMapping);
+	}
+
+	@Test
+	public void hamacherDifference() {
+		double p = 3.1;
+		SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target, "?x", "?y");
+		Instruction run1 = new Instruction(Command.RUN, "qgrams(x.surname,y.surname)", "0.4", -1, -1, 0);
+		Instruction run2 = new Instruction(Command.RUN, "trigrams(x.name,y.name)", "0.4", -1, -1, 1);
+		Instruction difference = new Instruction(Command.HAMACHERDIFF, "", "0.4", 0, 1, 2, p);
+
+		AMapping a = ee.executeRun(run1);
+		AMapping b = ee.executeRun(run2);
+
+		AMapping mDifference = ee.executeDifference(a, b, Command.HAMACHERDIFF, p);
+
+		Plan plan = new Plan();
+		plan.addInstruction(run1);
+		plan.addInstruction(run2);
+		plan.addInstruction(difference);
+		AMapping mDifference2 = ee.executeInstructions(plan);
+
+		assertEquals(mDifference, mDifference2);
+		assertEquals(hamDifference, mDifference);
 	}
 }
