@@ -75,7 +75,7 @@ distance_matrix = pairwise_distances(x, x, metric='cosine', n_jobs=-1)
 distance_matrix = np.maximum(np.zeros(shape=distance_matrix.shape), distance_matrix)
 xs = []
 ys = []
-for lr in range(50,1000,50):
+for lr in range(5,100,5):
 	x_fit = TSNE(n_components=2, metric="precomputed", learning_rate=lr).fit_transform(distance_matrix)
 	mean_all_pairs_distance = 1/(len(x_fit)**2)*sum(sum(np.linalg.norm(x_fit[a] - x_fit[b]) for b in range(len(x_fit))) for a in range(len(x_fit)))
 	mean_correct_pair_distance = 1 / (len(x_fit) // 2) * sum(np.linalg.norm(x_fit[i] - x_fit[i + 1]) for i in range(0, len(x_fit), 2))
@@ -84,7 +84,7 @@ for lr in range(50,1000,50):
 	ys.append(quality)
 	print(lr, mean_correct_pair_distance, mean_all_pairs_distance, quality)
 	title = '2 component reduction, learning-rate=' + str(lr)
-	# plotFit(x_fit, title)
+	plotFit(x_fit, title)
 
 plt.plot(xs, ys)
 plt.title("mean relative distance for learning rate")

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE LIMES SYSTEM "limes.dtd">
+<LIMES>
+  <PREFIX>
+    <NAMESPACE>myprop#</NAMESPACE>
+    <LABEL>prop</LABEL>
+  </PREFIX>
+
+  <SOURCE>
+    <ID>data1</ID>
+    <ENDPOINT>src/test/resources/descriptions1.nt</ENDPOINT>
+    <VAR>?x</VAR>
+    <PAGESIZE>1000</PAGESIZE>
+    <RESTRICTION></RESTRICTION>
+    <PROPERTY>prop:description AS lowercase</PROPERTY>
+    <TYPE>N3</TYPE>
+  </SOURCE>
+
+  <TARGET>
+    <ID>data2</ID>
+    <ENDPOINT>src/test/resources/descriptions2.nt</ENDPOINT>
+    <VAR>?y</VAR>
+    <PAGESIZE>1000</PAGESIZE>
+    <RESTRICTION></RESTRICTION>
+    <PROPERTY>prop:description AS lowercase</PROPERTY>
+    <TYPE>N3</TYPE>
+  </TARGET>
+  <METRIC>doc2vec(x.prop:description, y.prop:description)</METRIC>
+  <ACCEPTANCE>
+    <THRESHOLD>0.55</THRESHOLD>
+    <FILE>my-accepted.txt</FILE>
+    <RELATION>verySimilar</RELATION>
+  </ACCEPTANCE>
+  <REVIEW>
+    <THRESHOLD>0.3</THRESHOLD>
+    <FILE>my-reviewme.txt</FILE>
+    <RELATION>quiteSimilar</RELATION>
+  </REVIEW>
+
+  <OUTPUT>N3</OUTPUT>
+</LIMES>

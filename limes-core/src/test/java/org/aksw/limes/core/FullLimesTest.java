@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class FullLimesTest {
   
-  static String basePath = "src/test/resources/datasets/";
+  static String basePath = "src/test/resources/";
   
   @Before
   public void setUp() {
@@ -42,6 +42,12 @@ public class FullLimesTest {
   @Test
   public void testMainSparql() {
     String configPath = basePath + "with-sparql-config.xml";
+    Controller.main(new String[]{configPath});
+  }
+  
+  @Test
+  public void testMainDoc2Vec() {
+    String configPath = basePath + "descriptions-config.xml";
     Controller.main(new String[]{configPath});
   }
 }

@@ -1,0 +1,4 @@
+<http://cat> <myprop#description> "a cat is a very common pet animal. you can feed and touch it." .
+<http://meter> <myprop#description> "a meter is a unit of space. it measures distances." .
+<http://bus> <myprop#description> "a bus is a machine that transports many students via roads." .
+<http://physics> <myprop#description> "mathematics is a difficult science subject taught at school" .

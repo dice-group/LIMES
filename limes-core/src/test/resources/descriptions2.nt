@@ -1,0 +1,4 @@
+<http://dog> <myprop#description> "a dog is a very popular pet animal. you can cuddle it." .
+<http://second> <myprop#description> "a meter is a unit of time. it measures periods." .
+<http://car> <myprop#description> "a bus is a vehicle that drives many people via streets." .
+<http://biology> <myprop#description> "biology ia an easy science class taught at university" .
