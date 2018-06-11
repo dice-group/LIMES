@@ -5,14 +5,18 @@ import org.aksw.jena_sparql_api.cache.extra.CacheFrontend;
 import org.aksw.jena_sparql_api.core.FluentQueryExecutionFactory;
 import org.aksw.jena_sparql_api.core.QueryExecutionFactory;
 import org.aksw.jena_sparql_api.core.SparqlServiceReference;
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.KBInfo;
+import org.aksw.limes.core.io.query.CsvQueryModule;
 import org.aksw.limes.core.io.query.FileQueryModule;
 import org.aksw.limes.core.io.query.ModelRegistry;
-import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.core.DatasetDescription;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -44,10 +48,56 @@ public class Descriptor {
         this(kb, new DefaultConnetionConfig());
     }
 
+
+    private Model processCSV(KBInfo info){
+        CsvQueryModule module = new CsvQueryModule(info);
+        MemoryCache cache = new MemoryCache();
+        module.fillAllInCache(cache);
+
+        Model model = ModelFactory.createDefaultModel();
+
+        for(Instance instance: cache.getAllInstances()){
+            Resource resource = model.createResource(instance.getUri());
+            for(String prop: instance.getAllProperties()) {
+                Property property = model.createProperty("", prop);
+                TreeSet<String> properties = instance.getProperty(prop);
+
+                if(properties.size() == 1){
+                    for(String s: properties) {
+                        Literal literal = model.createLiteral(s, false);
+                        model.add(
+                                model.createStatement(resource, property, literal)
+                        );
+                    }
+                }else{
+                    List<RDFNode> list = new ArrayList<>();
+                    for(String s: properties){
+                        list.add(model.createLiteral(s, false));
+                    }
+                    model.add(
+                      model.createStatement(resource, property, model.createList(list.iterator()))
+                    );
+                }
+
+            }
+        }
+
+
+        return model;
+    }
+
+
     private FluentQueryExecutionFactory<?> initFactory(KBInfo info){
-        if(info.getType().equalsIgnoreCase("N3")){
+        String name = info.getType();
+        if(name.equalsIgnoreCase("N3") || name.toLowerCase().startsWith("nt") ||
+            name.toLowerCase().startsWith("n-triple") ||
+                name.toLowerCase().startsWith("turtle") || name.toLowerCase().startsWith("ttl") ||
+                name.toLowerCase().startsWith("rdf") || name.toLowerCase().startsWith("xml")) {
             new FileQueryModule(info);
             Model model = ModelRegistry.getInstance().getMap().get(info.getEndpoint());
+            return FluentQueryExecutionFactory.from(model);
+        }else if(name.equalsIgnoreCase("csv")){
+            Model model = processCSV(info);
             return FluentQueryExecutionFactory.from(model);
         }else{
             DatasetDescription dd = new DatasetDescription();

@@ -120,7 +120,7 @@ public class CsvQueryModule implements IQueryModule {
                 while (s != null) {
                     split = s.split(SEP);
                     split = DataCleaner.separate(s, SEP, properties.size());
-                    id = split[0].substring(1, split[0].length() - 1);
+                    id = cleanID(split[0]);
                     //logger.info(id);
                     for (String propertyLabel : kb.getProperties()) {
                         rawValue = split[properties.indexOf(propertyLabel)];
@@ -149,6 +149,14 @@ public class CsvQueryModule implements IQueryModule {
             logger.warn(s);
             e.printStackTrace();
         }
+    }
+
+    private String cleanID(String id){
+        Pattern p = Pattern.compile("(<|\\\")(.+)(>|\\\")");
+        if(p.matcher(id).matches()){
+            return id.substring(1, id.length()-1);
+        }
+        return id;
     }
 
 }

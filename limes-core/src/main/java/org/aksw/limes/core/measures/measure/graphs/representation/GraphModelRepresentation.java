@@ -2,6 +2,7 @@ package org.aksw.limes.core.measures.measure.graphs.representation;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import org.aksw.limes.core.io.describe.IResourceDescriptor;
 import org.aksw.limes.core.measures.measure.graphs.gouping.IEdgeLabelGrouper;
 import org.aksw.limes.core.measures.measure.graphs.gouping.INodeLabelGrouper;
 import org.aksw.limes.core.measures.measure.graphs.gouping.NulifyEdgeLabelGrouper;
@@ -15,23 +16,29 @@ import java.util.Set;
 
 public class GraphModelRepresentation {
 
+    private INodeLabelGrouper nodeLabelGrouper;
+    private IEdgeLabelGrouper edgeLabelGrouper;
+    private IResourceDescriptor descriptor;
     private Multimap<String, Edge> map;
 
 
-    public GraphModelRepresentation(Model m, INodeLabelGrouper grouper, IEdgeLabelGrouper edgeGrouper){
-        map = HashMultimap.create();
-        StmtIterator it = m.listStatements();
-
-        while (it.hasNext())
-            parseStatement(it.nextStatement(), grouper, edgeGrouper);
+    public GraphModelRepresentation(IResourceDescriptor descriptor, INodeLabelGrouper grouper, IEdgeLabelGrouper edgeGrouper){
+        this.descriptor = descriptor;
+        this.nodeLabelGrouper = grouper;
+        this.edgeLabelGrouper = edgeGrouper;
     }
 
-    public GraphModelRepresentation(Model m, INodeLabelGrouper grouper){
-        map = HashMultimap.create();
-        StmtIterator it = m.listStatements();
+    public GraphModelRepresentation(IResourceDescriptor descriptor, INodeLabelGrouper grouper){
+        this(descriptor, grouper, new NulifyEdgeLabelGrouper());
+    }
 
-        while (it.hasNext())
-            parseStatement(it.nextStatement(), grouper, new NulifyEdgeLabelGrouper());
+    private void lazyLoad(){
+        if(map != null)return;
+        map = HashMultimap.create();
+        StmtIterator it = descriptor.queryDescription().listStatements();
+
+        while(it.hasNext())
+            parseStatement(it.nextStatement(), nodeLabelGrouper, edgeLabelGrouper);
     }
 
     private void parseStatement(Statement statement, INodeLabelGrouper grouper, IEdgeLabelGrouper edgeGrouper){
@@ -43,11 +50,17 @@ public class GraphModelRepresentation {
 
     }
 
+    public IResourceDescriptor getRootDescriptor(){
+        return this.descriptor;
+    }
+
     public Set<String> getVertices(){
+        lazyLoad();
         return map.keySet();
     }
 
     public Collection<Edge> getNeighbours(String s){
+        lazyLoad();
         return map.get(s);
     }
 

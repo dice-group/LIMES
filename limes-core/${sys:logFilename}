@@ -1,0 +1,1045 @@
+13:49:27.843 [main] INFO  org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser:783 - Removed 0 mappings as the instances are not found in the Caches
+13:49:27.845 [main] INFO  org.aksw.limes.core.measures.measure.graphs.SimilarityTest:37 - Evaluate dataset Persons1.
+13:49:29.067 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:52 - here
+13:49:29.067 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:53 - RDF model read from src/main/resources/datasets/Persons1/person11.nt is of size 9000
+13:49:29.077 [main] INFO  LIMES:32 - Registry = [src/main/resources/datasets/Persons1/person11.nt]
+13:49:29.260 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:52 - here
+13:49:29.260 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:53 - RDF model read from src/main/resources/datasets/Persons1/person12.nt is of size 7000
+13:49:29.261 [main] INFO  LIMES:32 - Registry = [src/main/resources/datasets/Persons1/person12.nt, src/main/resources/datasets/Persons1/person11.nt]
+13:49:29.338 [main] INFO  GraphMapper:48 - Build source WL representation for 500 instances.
+13:49:29.700 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:49:29.963 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+13:49:30.143 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+13:49:30.319 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+13:49:30.528 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+13:49:30.699 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+13:49:30.851 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+13:49:30.994 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+13:49:31.156 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+13:49:31.319 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+13:49:31.469 [main] INFO  GraphMapper:57 - Build target WL representation for 500 instances.
+13:49:31.472 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:49:31.605 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+13:49:31.708 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+13:49:31.805 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+13:49:31.960 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+13:49:32.060 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+13:49:32.153 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+13:49:32.267 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+13:49:32.367 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+13:49:32.460 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+13:49:32.803 [main] INFO  GraphMapper:74 - Compare 250000 tuples.
+13:49:32.803 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+13:49:32.814 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+13:49:32.820 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+13:49:32.827 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+13:49:32.830 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+13:49:32.831 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+13:49:32.834 [main] INFO  GraphMapper:102 - Compared 60 percent of source and target entities.
+13:49:32.835 [main] INFO  GraphMapper:102 - Compared 70 percent of source and target entities.
+13:49:32.838 [main] INFO  GraphMapper:102 - Compared 80 percent of source and target entities.
+13:49:32.839 [main] INFO  GraphMapper:102 - Compared 90 percent of source and target entities.
+13:49:32.923 [main] INFO  org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser:783 - Removed 0 mappings as the instances are not found in the Caches
+13:49:32.923 [main] INFO  org.aksw.limes.core.measures.measure.graphs.SimilarityTest:37 - Evaluate dataset Persons2.
+13:49:33.108 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:52 - here
+13:49:33.109 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:53 - RDF model read from src/main/resources/datasets/Persons2/person21.nt is of size 10800
+13:49:33.109 [main] INFO  LIMES:32 - Registry = [src/main/resources/datasets/Persons2/person21.nt, src/main/resources/datasets/Persons1/person12.nt, src/main/resources/datasets/Persons1/person11.nt]
+13:49:33.173 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:52 - here
+13:49:33.173 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:53 - RDF model read from src/main/resources/datasets/Persons2/person22.nt is of size 5600
+13:49:33.173 [main] INFO  LIMES:32 - Registry = [src/main/resources/datasets/Persons2/person21.nt, src/main/resources/datasets/Persons1/person12.nt, src/main/resources/datasets/Persons1/person11.nt, src/main/resources/datasets/Persons2/person22.nt]
+13:49:33.174 [main] INFO  GraphMapper:48 - Build source WL representation for 600 instances.
+13:49:33.179 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:49:33.374 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+13:49:33.537 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+13:49:33.674 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+13:49:33.795 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+13:49:33.912 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+13:49:34.023 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+13:49:34.148 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+13:49:34.304 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+13:49:34.498 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+13:49:34.632 [main] INFO  GraphMapper:57 - Build target WL representation for 600 instances.
+13:49:34.634 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:49:34.728 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+13:49:34.818 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+13:49:34.911 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+13:49:35.011 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+13:49:35.100 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+13:49:35.186 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+13:49:35.290 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+13:49:35.374 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+13:49:35.453 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+13:49:35.708 [main] INFO  GraphMapper:74 - Compare 240000 tuples.
+13:49:35.709 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+13:49:35.711 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+13:49:35.712 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+13:49:35.713 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+13:49:35.713 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+13:49:35.715 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+13:49:35.716 [main] INFO  GraphMapper:102 - Compared 60 percent of source and target entities.
+13:49:35.717 [main] INFO  GraphMapper:102 - Compared 70 percent of source and target entities.
+13:49:35.719 [main] INFO  GraphMapper:102 - Compared 80 percent of source and target entities.
+13:49:35.720 [main] INFO  GraphMapper:102 - Compared 90 percent of source and target entities.
+13:49:35.724 [main] INFO  GraphMapper:102 - Compared 100 percent of source and target entities.
+13:49:35.725 [main] INFO  GraphMapper:102 - Compared 110 percent of source and target entities.
+13:49:35.727 [main] INFO  GraphMapper:102 - Compared 120 percent of source and target entities.
+13:49:35.728 [main] INFO  GraphMapper:102 - Compared 130 percent of source and target entities.
+13:49:35.729 [main] INFO  GraphMapper:102 - Compared 140 percent of source and target entities.
+13:49:35.772 [main] INFO  org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser:783 - Removed 23 mappings as the instances are not found in the Caches
+13:49:35.773 [main] INFO  org.aksw.limes.core.measures.measure.graphs.SimilarityTest:37 - Evaluate dataset Restaurants.
+13:49:35.785 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:52 - here
+13:49:35.786 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:53 - RDF model read from src/main/resources/datasets/Restaurants/restaurant1.nt is of size 1130
+13:49:35.786 [main] INFO  LIMES:32 - Registry = [src/main/resources/datasets/Persons2/person21.nt, src/main/resources/datasets/Persons1/person12.nt, src/main/resources/datasets/Persons1/person11.nt, src/main/resources/datasets/Persons2/person22.nt, src/main/resources/datasets/Restaurants/restaurant1.nt]
+13:49:35.863 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:52 - here
+13:49:35.864 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:53 - RDF model read from src/main/resources/datasets/Restaurants/restaurant2.nt is of size 7520
+13:49:35.864 [main] INFO  LIMES:32 - Registry = [src/main/resources/datasets/Restaurants/restaurant2.nt, src/main/resources/datasets/Persons2/person21.nt, src/main/resources/datasets/Persons1/person12.nt, src/main/resources/datasets/Persons1/person11.nt, src/main/resources/datasets/Persons2/person22.nt, src/main/resources/datasets/Restaurants/restaurant1.nt]
+13:49:35.864 [main] INFO  GraphMapper:48 - Build source WL representation for 113 instances.
+13:49:35.877 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:49:35.904 [main] INFO  GraphMapper:102 - Created 9 percent of entries
+13:49:35.938 [main] INFO  GraphMapper:102 - Created 19 percent of entries
+13:49:35.974 [main] INFO  GraphMapper:102 - Created 29 percent of entries
+13:49:36.008 [main] INFO  GraphMapper:102 - Created 38 percent of entries
+13:49:36.045 [main] INFO  GraphMapper:102 - Created 48 percent of entries
+13:49:36.077 [main] INFO  GraphMapper:102 - Created 58 percent of entries
+13:49:36.103 [main] INFO  GraphMapper:102 - Created 68 percent of entries
+13:49:36.126 [main] INFO  GraphMapper:102 - Created 77 percent of entries
+13:49:36.158 [main] INFO  GraphMapper:102 - Created 87 percent of entries
+13:49:36.192 [main] INFO  GraphMapper:102 - Created 97 percent of entries
+13:49:36.198 [main] INFO  GraphMapper:57 - Build target WL representation for 113 instances.
+13:49:36.201 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:49:36.351 [main] INFO  GraphMapper:102 - Created 9 percent of entries
+13:49:36.498 [main] INFO  GraphMapper:102 - Created 19 percent of entries
+13:49:36.648 [main] INFO  GraphMapper:102 - Created 29 percent of entries
+13:49:36.783 [main] INFO  GraphMapper:102 - Created 39 percent of entries
+13:49:36.909 [main] INFO  GraphMapper:102 - Created 49 percent of entries
+13:49:37.039 [main] INFO  GraphMapper:102 - Created 59 percent of entries
+13:49:37.162 [main] INFO  GraphMapper:102 - Created 69 percent of entries
+13:49:37.297 [main] INFO  GraphMapper:102 - Created 79 percent of entries
+13:49:37.414 [main] INFO  GraphMapper:102 - Created 89 percent of entries
+13:49:37.531 [main] INFO  GraphMapper:102 - Created 99 percent of entries
+13:49:37.559 [main] INFO  GraphMapper:74 - Compare 72433 tuples.
+13:49:37.560 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+13:49:37.561 [main] INFO  GraphMapper:102 - Compared 9 percent of source and target entities.
+13:49:37.561 [main] INFO  GraphMapper:102 - Compared 9 percent of source and target entities.
+13:49:37.562 [main] INFO  GraphMapper:102 - Compared 9 percent of source and target entities.
+13:49:37.562 [main] INFO  GraphMapper:102 - Compared 9 percent of source and target entities.
+13:49:37.562 [main] INFO  GraphMapper:102 - Compared 9 percent of source and target entities.
+13:49:37.562 [main] INFO  GraphMapper:102 - Compared 9 percent of source and target entities.
+13:49:37.578 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/113762058.ser
+13:49:37.578 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:115 - Found cached data. Loading data from file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/113762058.ser
+13:49:37.670 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:121 - Cached data loaded successfully from file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/113762058.ser
+13:49:37.670 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:122 - Size = 188
+13:49:37.670 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-1805735415.ser
+13:49:37.671 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:115 - Found cached data. Loading data from file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-1805735415.ser
+13:49:37.693 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:121 - Cached data loaded successfully from file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-1805735415.ser
+13:49:37.694 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:122 - Size = 58
+13:49:37.764 [main] INFO  org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser:783 - Removed 0 mappings as the instances are not found in the Caches
+13:49:37.764 [main] INFO  org.aksw.limes.core.measures.measure.graphs.SimilarityTest:37 - Evaluate dataset OAEI2014.
+13:49:38.493 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:52 - here
+13:49:38.493 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:53 - RDF model read from src/main/resources/datasets/OAEI2014/oaei2014_identity_a.owl is of size 12491
+13:49:38.493 [main] INFO  LIMES:32 - Registry = [src/main/resources/datasets/Restaurants/restaurant2.nt, src/main/resources/datasets/OAEI2014/oaei2014_identity_a.owl, src/main/resources/datasets/Persons2/person21.nt, src/main/resources/datasets/Persons1/person12.nt, src/main/resources/datasets/Persons1/person11.nt, src/main/resources/datasets/Persons2/person22.nt, src/main/resources/datasets/Restaurants/restaurant1.nt]
+13:49:38.884 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:52 - here
+13:49:38.884 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:53 - RDF model read from src/main/resources/datasets/OAEI2014/oaei2014_identity_b.owl is of size 11874
+13:49:38.884 [main] INFO  LIMES:32 - Registry = [src/main/resources/datasets/Restaurants/restaurant2.nt, src/main/resources/datasets/OAEI2014/oaei2014_identity_a.owl, src/main/resources/datasets/Persons2/person21.nt, src/main/resources/datasets/Persons1/person12.nt, src/main/resources/datasets/OAEI2014/oaei2014_identity_b.owl, src/main/resources/datasets/Persons1/person11.nt, src/main/resources/datasets/Persons2/person22.nt, src/main/resources/datasets/Restaurants/restaurant1.nt]
+13:49:38.885 [main] INFO  GraphMapper:48 - Build source WL representation for 188 instances.
+13:49:38.897 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:49:38.987 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+13:49:39.057 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+13:49:39.128 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+13:49:39.193 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+13:49:39.259 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+13:49:39.314 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+13:49:39.375 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+13:49:39.435 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+13:49:39.497 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+13:49:39.552 [main] INFO  GraphMapper:57 - Build target WL representation for 188 instances.
+13:49:39.557 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:49:39.578 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+13:49:39.599 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+13:49:39.621 [main] INFO  GraphMapper:102 - Created 31 percent of entries
+13:49:39.643 [main] INFO  GraphMapper:102 - Created 41 percent of entries
+13:49:39.662 [main] INFO  GraphMapper:102 - Created 51 percent of entries
+13:49:39.681 [main] INFO  GraphMapper:102 - Created 62 percent of entries
+13:49:39.701 [main] INFO  GraphMapper:102 - Created 72 percent of entries
+13:49:39.720 [main] INFO  GraphMapper:102 - Created 82 percent of entries
+13:49:39.741 [main] INFO  GraphMapper:102 - Created 93 percent of entries
+13:49:39.757 [main] INFO  GraphMapper:74 - Compare 10904 tuples.
+13:49:39.757 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+13:49:39.758 [main] INFO  GraphMapper:102 - Compared 39 percent of source and target entities.
+13:49:39.758 [main] INFO  GraphMapper:102 - Compared 89 percent of source and target entities.
+13:49:39.758 [main] INFO  GraphMapper:102 - Compared 139 percent of source and target entities.
+13:49:39.758 [main] INFO  GraphMapper:102 - Compared 189 percent of source and target entities.
+13:49:39.759 [main] INFO  GraphMapper:102 - Compared 239 percent of source and target entities.
+13:49:39.759 [main] INFO  GraphMapper:102 - Compared 289 percent of source and target entities.
+13:49:39.768 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/864012501.ser
+13:49:39.768 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for dblp2
+13:49:39.770 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <CSV> reader
+13:49:39.853 [main] INFO  org.aksw.limes.core.io.query.CsvQueryModule:84 - Retrieved 2616 statements
+13:49:39.854 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 2616 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/864012501.ser
+13:49:40.455 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/1237428671.ser
+13:49:40.455 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for acm
+13:49:40.455 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <CSV> reader
+13:49:40.498 [main] INFO  org.aksw.limes.core.io.query.CsvQueryModule:84 - Retrieved 2294 statements
+13:49:40.498 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 2294 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/1237428671.ser
+13:49:41.052 [main] INFO  org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser:783 - Removed 0 mappings as the instances are not found in the Caches
+13:49:41.053 [main] INFO  org.aksw.limes.core.measures.measure.graphs.SimilarityTest:37 - Evaluate dataset DBLP-ACM.
+13:49:41.055 [main] INFO  LIMES:112 - Properties = [id, title, authors, venue, year]
+13:49:41.055 [main] INFO  LIMES:113 - KB Properties = [title, authors, venue]
+13:49:41.117 [main] INFO  LIMES:146 - Retrieved 2616 statements
+13:49:41.195 [main] INFO  LIMES:112 - Properties = [id, title, authors, venue, year]
+13:49:41.196 [main] INFO  LIMES:113 - KB Properties = [title, authors, venue]
+13:49:41.280 [main] INFO  LIMES:146 - Retrieved 2294 statements
+13:49:41.331 [main] INFO  GraphMapper:48 - Build source WL representation for 2616 instances.
+13:49:41.553 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:49:55.634 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+13:50:09.599 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+13:50:23.545 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+13:50:37.538 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+13:50:51.514 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+13:51:05.471 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+13:51:19.442 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+13:51:33.412 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+13:51:47.362 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+13:52:01.186 [main] INFO  GraphMapper:57 - Build target WL representation for 2616 instances.
+13:52:01.193 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:52:13.410 [main] INFO  GraphMapper:102 - Created 9 percent of entries
+13:52:25.604 [main] INFO  GraphMapper:102 - Created 19 percent of entries
+13:52:37.818 [main] INFO  GraphMapper:102 - Created 29 percent of entries
+13:52:50.039 [main] INFO  GraphMapper:102 - Created 39 percent of entries
+13:53:02.259 [main] INFO  GraphMapper:102 - Created 49 percent of entries
+13:53:14.502 [main] INFO  GraphMapper:102 - Created 59 percent of entries
+13:53:26.707 [main] INFO  GraphMapper:102 - Created 69 percent of entries
+13:53:38.922 [main] INFO  GraphMapper:102 - Created 79 percent of entries
+13:53:51.160 [main] INFO  GraphMapper:102 - Created 89 percent of entries
+13:54:03.357 [main] INFO  GraphMapper:102 - Created 99 percent of entries
+13:54:05.076 [main] INFO  GraphMapper:74 - Compare 6001104 tuples.
+13:54:05.076 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+13:54:05.091 [main] INFO  GraphMapper:102 - Compared 9 percent of source and target entities.
+13:54:05.104 [main] INFO  GraphMapper:102 - Compared 19 percent of source and target entities.
+13:54:05.118 [main] INFO  GraphMapper:102 - Compared 29 percent of source and target entities.
+13:54:05.131 [main] INFO  GraphMapper:102 - Compared 39 percent of source and target entities.
+13:54:05.159 [main] INFO  GraphMapper:102 - Compared 59 percent of source and target entities.
+13:54:05.171 [main] INFO  GraphMapper:102 - Compared 69 percent of source and target entities.
+13:54:05.184 [main] INFO  GraphMapper:102 - Compared 79 percent of source and target entities.
+13:54:05.197 [main] INFO  GraphMapper:102 - Compared 89 percent of source and target entities.
+13:54:05.223 [main] INFO  GraphMapper:102 - Compared 109 percent of source and target entities.
+13:54:05.256 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/1365950682.ser
+13:54:05.257 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:115 - Found cached data. Loading data from file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/1365950682.ser
+13:54:05.446 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:121 - Cached data loaded successfully from file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/1365950682.ser
+13:54:05.446 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:122 - Size = 1081
+13:54:05.446 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/1794772660.ser
+13:54:05.447 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:115 - Found cached data. Loading data from file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/1794772660.ser
+13:54:05.600 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:121 - Cached data loaded successfully from file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/1794772660.ser
+13:54:05.600 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:122 - Size = 1092
+13:54:05.604 [main] INFO  org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser:783 - Removed 0 mappings as the instances are not found in the Caches
+13:54:05.604 [main] INFO  org.aksw.limes.core.measures.measure.graphs.SimilarityTest:37 - Evaluate dataset Abt-Buy.
+13:54:05.605 [main] INFO  LIMES:112 - Properties = [id, name, description, price]
+13:54:05.606 [main] INFO  LIMES:113 - KB Properties = [name, description, price]
+13:54:05.671 [main] INFO  LIMES:146 - Retrieved 1081 statements
+13:54:05.698 [main] INFO  LIMES:112 - Properties = [id, name, description, manufacturer, price]
+13:54:05.698 [main] INFO  LIMES:113 - KB Properties = [name, description, price]
+13:54:05.749 [main] INFO  LIMES:146 - Retrieved 1092 statements
+13:54:05.772 [main] INFO  GraphMapper:48 - Build source WL representation for 1081 instances.
+13:54:05.780 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:54:06.093 [main] INFO  GraphMapper:102 - Created 9 percent of entries
+13:54:06.287 [main] INFO  GraphMapper:102 - Created 19 percent of entries
+13:54:06.511 [main] INFO  GraphMapper:102 - Created 29 percent of entries
+13:54:06.754 [main] INFO  GraphMapper:102 - Created 39 percent of entries
+13:54:06.948 [main] INFO  GraphMapper:102 - Created 49 percent of entries
+13:54:07.161 [main] INFO  GraphMapper:102 - Created 59 percent of entries
+13:54:07.362 [main] INFO  GraphMapper:102 - Created 69 percent of entries
+13:54:07.713 [main] INFO  GraphMapper:102 - Created 79 percent of entries
+13:54:07.960 [main] INFO  GraphMapper:102 - Created 89 percent of entries
+13:54:08.237 [main] INFO  GraphMapper:102 - Created 99 percent of entries
+13:54:08.272 [main] INFO  GraphMapper:57 - Build target WL representation for 1081 instances.
+13:54:08.274 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:54:08.487 [main] INFO  GraphMapper:102 - Created 9 percent of entries
+13:54:08.846 [main] INFO  GraphMapper:102 - Created 19 percent of entries
+13:54:09.054 [main] INFO  GraphMapper:102 - Created 29 percent of entries
+13:54:09.215 [main] INFO  GraphMapper:102 - Created 39 percent of entries
+13:54:09.397 [main] INFO  GraphMapper:102 - Created 49 percent of entries
+13:54:09.569 [main] INFO  GraphMapper:102 - Created 59 percent of entries
+13:54:09.788 [main] INFO  GraphMapper:102 - Created 69 percent of entries
+13:54:10.007 [main] INFO  GraphMapper:102 - Created 79 percent of entries
+13:54:10.190 [main] INFO  GraphMapper:102 - Created 89 percent of entries
+13:54:10.367 [main] INFO  GraphMapper:102 - Created 99 percent of entries
+13:54:10.614 [main] INFO  GraphMapper:74 - Compare 1180452 tuples.
+13:54:10.615 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+13:54:10.618 [main] INFO  GraphMapper:102 - Compared 9 percent of source and target entities.
+13:54:10.622 [main] INFO  GraphMapper:102 - Compared 19 percent of source and target entities.
+13:54:10.626 [main] INFO  GraphMapper:102 - Compared 29 percent of source and target entities.
+13:54:10.629 [main] INFO  GraphMapper:102 - Compared 39 percent of source and target entities.
+13:54:10.633 [main] INFO  GraphMapper:102 - Compared 49 percent of source and target entities.
+13:54:10.637 [main] INFO  GraphMapper:102 - Compared 59 percent of source and target entities.
+13:54:10.640 [main] INFO  GraphMapper:102 - Compared 69 percent of source and target entities.
+13:54:10.645 [main] INFO  GraphMapper:102 - Compared 79 percent of source and target entities.
+13:54:10.649 [main] INFO  GraphMapper:102 - Compared 89 percent of source and target entities.
+13:54:10.670 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-1791360035.ser
+13:54:10.670 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for dblp1
+13:54:10.670 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <CSV> reader
+13:54:10.712 [main] INFO  org.aksw.limes.core.io.query.CsvQueryModule:84 - Retrieved 2616 statements
+13:54:10.712 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 2616 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-1791360035.ser
+13:54:11.372 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/82208463.ser
+13:54:11.372 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for scholar
+13:54:11.372 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <CSV> reader
+13:54:12.200 [main] INFO  org.aksw.limes.core.io.query.CsvQueryModule:84 - Retrieved 64263 statements
+13:54:12.201 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 64263 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/82208463.ser
+13:54:27.704 [main] INFO  org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser:783 - Removed 0 mappings as the instances are not found in the Caches
+13:54:27.704 [main] INFO  org.aksw.limes.core.measures.measure.graphs.SimilarityTest:37 - Evaluate dataset DBLP-SCHOLAR.
+13:54:27.725 [main] INFO  LIMES:112 - Properties = [id, title, authors, venue, year]
+13:54:27.726 [main] INFO  LIMES:113 - KB Properties = [title, authors, venue, year]
+13:54:27.751 [main] INFO  LIMES:146 - Retrieved 2616 statements
+13:54:27.783 [main] INFO  LIMES:112 - Properties = [﻿id, title, authors, venue, year]
+13:54:27.783 [main] INFO  LIMES:113 - KB Properties = [title, authors, venue, year]
+13:54:29.610 [main] INFO  LIMES:146 - Retrieved 64263 statements
+13:54:30.420 [main] INFO  GraphMapper:48 - Build source WL representation for 2616 instances.
+13:54:30.430 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:54:31.767 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+13:54:32.166 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+13:54:32.569 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+13:54:32.968 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+13:54:33.383 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+13:54:33.798 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+13:54:34.217 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+13:54:34.648 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+13:54:35.073 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+13:54:35.590 [main] INFO  GraphMapper:57 - Build target WL representation for 2616 instances.
+13:54:35.607 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:55:03.965 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+13:55:32.261 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+13:56:00.531 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+13:56:27.257 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+13:56:53.915 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+13:57:20.622 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+13:57:47.232 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+13:58:13.885 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+13:58:40.524 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+13:59:11.516 [main] INFO  GraphMapper:74 - Compare 13080000 tuples.
+13:59:11.516 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+13:59:11.587 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+13:59:11.587 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+13:59:11.663 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+13:59:11.663 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+13:59:11.745 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+13:59:11.745 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+13:59:11.825 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+13:59:11.825 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+13:59:11.889 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+13:59:11.889 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+13:59:11.905 [main] INFO  GraphMapper:48 - Build source WL representation for 2616 instances.
+13:59:11.906 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:59:11.907 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+13:59:11.907 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+13:59:11.908 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+13:59:11.909 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+13:59:11.910 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+13:59:11.911 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+13:59:11.912 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+13:59:11.914 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+13:59:11.916 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+13:59:12.025 [main] INFO  GraphMapper:57 - Build target WL representation for 2616 instances.
+13:59:12.055 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+13:59:38.705 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:00:05.119 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:00:31.766 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:00:58.459 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:01:25.124 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:01:51.826 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:02:19.837 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:02:48.085 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:03:16.212 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:03:48.778 [main] INFO  GraphMapper:74 - Compare 13080000 tuples.
+14:03:48.778 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+14:03:48.857 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:03:48.857 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:03:48.920 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:03:48.922 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:03:48.986 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:03:48.986 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:03:49.073 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:03:49.074 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:03:49.155 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:03:49.155 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:03:49.170 [main] INFO  GraphMapper:48 - Build source WL representation for 2616 instances.
+14:03:49.170 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:03:49.171 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:03:49.172 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:03:49.173 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:03:49.174 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:03:49.175 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:03:49.176 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:03:49.177 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:03:49.178 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:03:49.179 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:03:49.285 [main] INFO  GraphMapper:57 - Build target WL representation for 2616 instances.
+14:03:49.301 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:04:17.533 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:04:45.733 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:05:13.947 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:05:42.194 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:06:10.269 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:06:38.403 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:07:05.894 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:07:32.522 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:07:59.136 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:08:29.719 [main] INFO  GraphMapper:74 - Compare 13080000 tuples.
+14:08:29.719 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+14:08:29.793 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:08:29.793 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:08:29.857 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:08:29.857 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:08:29.927 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:08:29.928 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:08:30.048 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:08:30.049 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:08:30.115 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:08:30.116 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:08:30.130 [main] INFO  GraphMapper:48 - Build source WL representation for 2616 instances.
+14:08:30.131 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:08:30.131 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:08:30.132 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:08:30.133 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:08:30.134 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:08:30.135 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:08:30.136 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:08:30.138 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:08:30.139 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:08:30.140 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:08:30.266 [main] INFO  GraphMapper:57 - Build target WL representation for 2616 instances.
+14:08:30.283 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:08:56.896 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:09:23.527 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:09:50.205 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:10:16.876 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:10:43.502 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:11:10.083 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:11:36.767 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:12:03.409 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:12:30.048 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:13:01.655 [main] INFO  GraphMapper:74 - Compare 13080000 tuples.
+14:13:01.655 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+14:13:01.727 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:13:01.727 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:13:01.787 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:13:01.787 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:13:01.854 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:13:01.855 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:13:01.931 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:13:01.931 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:13:02.015 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:13:02.015 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:13:02.030 [main] INFO  GraphMapper:48 - Build source WL representation for 2616 instances.
+14:13:02.030 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:13:02.031 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:13:02.032 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:13:02.033 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:13:02.033 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:13:02.034 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:13:02.035 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:13:02.036 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:13:02.046 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:13:02.048 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:13:02.128 [main] INFO  GraphMapper:57 - Build target WL representation for 2616 instances.
+14:13:02.136 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:13:28.765 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:13:55.501 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:14:22.106 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:14:48.866 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:15:15.533 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:15:42.161 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:16:08.858 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:16:35.491 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:17:02.172 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:17:35.075 [main] INFO  GraphMapper:74 - Compare 13080000 tuples.
+14:17:35.075 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+14:17:35.142 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:17:35.142 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:17:35.207 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:17:35.207 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:17:35.299 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:17:35.299 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:17:35.378 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:17:35.378 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:17:35.447 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:17:35.447 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:17:35.463 [main] INFO  GraphMapper:48 - Build source WL representation for 2616 instances.
+14:17:35.464 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:17:35.464 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:17:35.465 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:17:35.466 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:17:35.467 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:17:35.468 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:17:35.469 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:17:35.470 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:17:35.471 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:17:35.471 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:17:35.564 [main] INFO  GraphMapper:57 - Build target WL representation for 2616 instances.
+14:17:35.622 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:18:02.191 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:18:28.852 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:18:55.508 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:19:22.122 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:19:48.838 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:20:15.548 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:20:42.212 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:21:08.914 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:21:35.599 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:22:06.331 [main] INFO  GraphMapper:74 - Compare 13080000 tuples.
+14:22:06.332 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+14:22:06.442 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:22:06.442 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:22:06.527 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:22:06.528 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:22:06.617 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:22:06.617 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:22:06.686 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:22:06.686 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:22:06.747 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:22:06.747 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:22:06.765 [main] INFO  GraphMapper:48 - Build source WL representation for 2616 instances.
+14:22:06.765 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:22:06.766 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:22:06.767 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:22:06.768 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:22:06.768 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:22:06.769 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:22:06.770 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:22:06.771 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:22:06.772 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:22:06.773 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:22:06.857 [main] INFO  GraphMapper:57 - Build target WL representation for 2616 instances.
+14:22:06.878 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:22:33.527 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:23:00.229 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:23:26.949 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:23:53.637 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:24:20.377 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:24:47.032 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:25:13.673 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:25:40.367 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:26:07.135 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:26:37.744 [main] INFO  GraphMapper:74 - Compare 13080000 tuples.
+14:26:37.744 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+14:26:37.813 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:26:37.813 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:26:37.874 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:26:37.874 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:26:37.951 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:26:37.951 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:26:38.050 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:26:38.050 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:26:38.118 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:26:38.118 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:26:38.134 [main] INFO  GraphMapper:48 - Build source WL representation for 2616 instances.
+14:26:38.134 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:26:38.135 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:26:38.136 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:26:38.137 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:26:38.138 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:26:38.139 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:26:38.148 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:26:38.150 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:26:38.151 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:26:38.152 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:26:38.261 [main] INFO  GraphMapper:57 - Build target WL representation for 2616 instances.
+14:26:38.281 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:27:04.935 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:27:31.662 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:27:58.236 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:28:24.935 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:28:51.605 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:29:18.335 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:29:46.579 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:30:14.958 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:30:43.205 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:31:15.910 [main] INFO  GraphMapper:74 - Compare 13080000 tuples.
+14:31:15.910 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+14:31:15.992 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:31:15.993 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:31:16.058 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:31:16.058 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:31:16.122 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:31:16.122 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:31:16.203 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:31:16.203 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:31:16.280 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:31:16.280 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:31:16.295 [main] INFO  GraphMapper:48 - Build source WL representation for 2616 instances.
+14:31:16.295 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:31:16.296 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:31:16.296 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:31:16.297 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:31:16.298 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:31:16.299 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:31:16.300 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:31:16.301 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:31:16.302 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:31:16.303 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:31:16.416 [main] INFO  GraphMapper:57 - Build target WL representation for 2616 instances.
+14:31:16.437 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:31:44.793 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:32:13.140 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:32:41.540 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:33:09.953 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:33:38.338 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:34:06.795 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:34:35.183 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:35:03.883 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:35:31.972 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:36:03.643 [main] INFO  GraphMapper:74 - Compare 13080000 tuples.
+14:36:03.644 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+14:36:03.705 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:36:03.705 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:36:03.767 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:36:03.768 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:36:03.829 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:36:03.829 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:36:03.893 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:36:03.893 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:36:03.953 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:36:03.953 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:36:03.968 [main] INFO  GraphMapper:48 - Build source WL representation for 2616 instances.
+14:36:03.968 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:36:03.969 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:36:03.969 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:36:03.970 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:36:03.971 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:36:03.972 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:36:03.973 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:36:03.974 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:36:03.975 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:36:03.975 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:36:04.049 [main] INFO  GraphMapper:57 - Build target WL representation for 2616 instances.
+14:36:04.065 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:36:31.927 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:36:59.770 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:37:27.832 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:37:55.983 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:38:24.068 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:38:52.240 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:39:19.182 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:39:48.396 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:40:16.420 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:40:47.861 [main] INFO  GraphMapper:74 - Compare 13080000 tuples.
+14:40:47.861 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+14:40:47.927 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:40:47.928 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:40:47.988 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:40:47.988 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:40:48.051 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:40:48.051 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:40:48.115 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:40:48.115 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:40:48.176 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:40:48.176 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:40:48.190 [main] INFO  GraphMapper:48 - Build source WL representation for 2616 instances.
+14:40:48.191 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:40:48.192 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:40:48.193 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:40:48.193 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:40:48.204 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:40:48.205 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:40:48.207 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:40:48.208 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:40:48.209 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:40:48.210 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:40:48.282 [main] INFO  GraphMapper:57 - Build target WL representation for 2616 instances.
+14:40:48.289 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:41:16.515 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:41:44.667 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:42:12.749 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:42:40.767 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:43:08.970 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:43:37.136 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:44:05.116 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:44:33.236 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:45:01.382 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:45:34.153 [main] INFO  GraphMapper:74 - Compare 13080000 tuples.
+14:45:34.153 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+14:45:34.224 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:45:34.224 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:45:34.295 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:45:34.295 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:45:34.368 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:45:34.369 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:45:34.436 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:45:34.437 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:45:34.506 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:45:34.506 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:45:34.523 [main] INFO  GraphMapper:48 - Build source WL representation for 2616 instances.
+14:45:34.524 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:45:34.525 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:45:34.526 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:45:34.527 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:45:34.528 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:45:34.529 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:45:34.530 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:45:34.531 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:45:34.532 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:45:34.533 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:45:34.630 [main] INFO  GraphMapper:57 - Build target WL representation for 2616 instances.
+14:45:34.637 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:46:02.345 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:46:29.963 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:46:57.801 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:47:25.848 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:47:54.021 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:48:21.955 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:48:50.075 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:49:18.251 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:49:46.214 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:50:17.753 [main] INFO  GraphMapper:74 - Compare 13080000 tuples.
+14:50:17.753 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+14:50:17.814 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:50:17.814 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:50:17.874 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:50:17.874 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:50:17.934 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:50:17.934 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:50:17.995 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:50:17.995 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:50:18.055 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:50:18.055 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:50:18.069 [main] INFO  GraphMapper:48 - Build source WL representation for 2616 instances.
+14:50:18.069 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:50:18.070 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:50:18.071 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:50:18.072 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:50:18.073 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:50:18.074 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:50:18.075 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:50:18.076 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:50:18.077 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:50:18.078 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:50:18.153 [main] INFO  GraphMapper:57 - Build target WL representation for 2616 instances.
+14:50:18.169 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:50:42.183 [main] INFO  GraphMapper:102 - Created 9 percent of entries
+14:51:06.104 [main] INFO  GraphMapper:102 - Created 19 percent of entries
+14:51:30.185 [main] INFO  GraphMapper:102 - Created 29 percent of entries
+14:51:54.172 [main] INFO  GraphMapper:102 - Created 39 percent of entries
+14:52:18.203 [main] INFO  GraphMapper:102 - Created 49 percent of entries
+14:52:42.235 [main] INFO  GraphMapper:102 - Created 59 percent of entries
+14:53:06.577 [main] INFO  GraphMapper:102 - Created 69 percent of entries
+14:53:30.836 [main] INFO  GraphMapper:102 - Created 79 percent of entries
+14:53:54.963 [main] INFO  GraphMapper:102 - Created 89 percent of entries
+14:54:19.382 [main] INFO  GraphMapper:102 - Created 99 percent of entries
+14:54:22.030 [main] INFO  GraphMapper:74 - Compare 11152008 tuples.
+14:54:22.030 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+14:54:22.073 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:54:22.074 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:54:22.117 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:54:22.117 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:54:22.160 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:54:22.204 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:54:22.204 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:54:22.247 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:54:22.248 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+14:54:22.291 [main] INFO  GraphMapper:102 - Compared 60 percent of source and target entities.
+14:54:22.326 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/1786504756.ser
+14:54:22.372 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for amazon
+14:54:22.373 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <CSV> reader
+14:54:22.398 [main] INFO  org.aksw.limes.core.io.query.CsvQueryModule:84 - Retrieved 1363 statements
+14:54:22.399 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 1363 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/1786504756.ser
+14:54:22.740 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-1094185988.ser
+14:54:22.740 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for googleprod
+14:54:22.740 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <CSV> reader
+14:54:22.774 [main] INFO  org.aksw.limes.core.io.query.CsvQueryModule:84 - Retrieved 3226 statements
+14:54:22.774 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 3226 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-1094185988.ser
+14:54:23.527 [main] INFO  org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser:783 - Removed 0 mappings as the instances are not found in the Caches
+14:54:23.527 [main] INFO  org.aksw.limes.core.measures.measure.graphs.SimilarityTest:37 - Evaluate dataset Amazon-GoogleProducts.
+14:54:23.528 [main] INFO  LIMES:112 - Properties = [id, title, description, manufacturer, price]
+14:54:23.528 [main] INFO  LIMES:113 - KB Properties = [title, description, manufacturer, price]
+14:54:23.553 [main] INFO  LIMES:146 - Retrieved 1363 statements
+14:54:23.571 [main] INFO  LIMES:112 - Properties = [id, name, description, manufacturer, price]
+14:54:23.571 [main] INFO  LIMES:113 - KB Properties = [name, description, manufacturer, price]
+14:54:23.602 [main] INFO  LIMES:146 - Retrieved 3226 statements
+14:54:23.649 [main] INFO  GraphMapper:48 - Build source WL representation for 1363 instances.
+14:54:23.694 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:54:31.434 [main] INFO  GraphMapper:102 - Created 9 percent of entries
+14:54:39.206 [main] INFO  GraphMapper:102 - Created 19 percent of entries
+14:54:46.892 [main] INFO  GraphMapper:102 - Created 29 percent of entries
+14:54:54.592 [main] INFO  GraphMapper:102 - Created 39 percent of entries
+14:55:02.115 [main] INFO  GraphMapper:102 - Created 49 percent of entries
+14:55:09.753 [main] INFO  GraphMapper:102 - Created 59 percent of entries
+14:55:17.376 [main] INFO  GraphMapper:102 - Created 69 percent of entries
+14:55:25.000 [main] INFO  GraphMapper:102 - Created 79 percent of entries
+14:55:32.492 [main] INFO  GraphMapper:102 - Created 89 percent of entries
+14:55:40.167 [main] INFO  GraphMapper:102 - Created 99 percent of entries
+14:55:40.314 [main] INFO  GraphMapper:57 - Build target WL representation for 1363 instances.
+14:55:40.321 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:55:58.409 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:56:16.819 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:56:34.889 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:56:53.109 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:57:11.336 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:57:29.709 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:57:47.895 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:58:05.896 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:58:23.922 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:58:43.007 [main] INFO  GraphMapper:74 - Compare 4397038 tuples.
+14:58:43.007 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+14:58:43.037 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:58:43.037 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+14:58:43.065 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:58:43.065 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:58:43.065 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+14:58:43.094 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:58:43.094 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+14:58:43.123 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:58:43.123 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+14:58:43.149 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/2094117811.ser
+14:58:43.150 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for linkedmdb
+14:58:43.150 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <CSV> reader
+14:58:43.174 [main] INFO  org.aksw.limes.core.io.query.CsvQueryModule:84 - Retrieved 1017 statements
+14:58:43.174 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 1017 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/2094117811.ser
+14:58:43.325 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-513684782.ser
+14:58:43.325 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for dbpedia
+14:58:43.325 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <CSV> reader
+14:58:43.340 [main] INFO  org.aksw.limes.core.io.query.CsvQueryModule:84 - Retrieved 1042 statements
+14:58:43.340 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 1042 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-513684782.ser
+14:58:43.524 [main] INFO  org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser:783 - Removed 1056 mappings as the instances are not found in the Caches
+14:58:43.524 [main] INFO  org.aksw.limes.core.measures.measure.graphs.SimilarityTest:37 - Evaluate dataset DBPedia-LinkedMDB.
+14:58:43.525 [main] INFO  LIMES:112 - Properties = [id, title, director]
+14:58:43.525 [main] INFO  LIMES:113 - KB Properties = [title, director]
+14:58:43.546 [main] INFO  LIMES:146 - Retrieved 1017 statements
+14:58:43.553 [main] INFO  LIMES:112 - Properties = [id, title, director]
+14:58:43.554 [main] INFO  LIMES:113 - KB Properties = [title, director]
+14:58:43.569 [main] INFO  LIMES:146 - Retrieved 1042 statements
+14:58:43.578 [main] INFO  GraphMapper:48 - Build source WL representation for 1017 instances.
+14:58:43.584 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:58:49.315 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+14:58:55.144 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+14:59:00.712 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+14:59:06.420 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+14:59:12.118 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+14:59:17.783 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+14:59:23.395 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+14:59:29.090 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+14:59:34.833 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+14:59:40.453 [main] INFO  GraphMapper:57 - Build target WL representation for 1017 instances.
+14:59:40.455 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+14:59:46.323 [main] INFO  GraphMapper:102 - Created 9 percent of entries
+14:59:52.213 [main] INFO  GraphMapper:102 - Created 19 percent of entries
+14:59:58.188 [main] INFO  GraphMapper:102 - Created 29 percent of entries
+15:00:04.058 [main] INFO  GraphMapper:102 - Created 39 percent of entries
+15:00:10.015 [main] INFO  GraphMapper:102 - Created 49 percent of entries
+15:00:15.950 [main] INFO  GraphMapper:102 - Created 59 percent of entries
+15:00:21.917 [main] INFO  GraphMapper:102 - Created 69 percent of entries
+15:00:27.901 [main] INFO  GraphMapper:102 - Created 79 percent of entries
+15:00:33.797 [main] INFO  GraphMapper:102 - Created 89 percent of entries
+15:00:39.747 [main] INFO  GraphMapper:102 - Created 99 percent of entries
+15:00:39.878 [main] INFO  GraphMapper:74 - Compare 1059714 tuples.
+15:00:39.878 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+15:00:39.881 [main] INFO  GraphMapper:102 - Compared 9 percent of source and target entities.
+15:00:39.884 [main] INFO  GraphMapper:102 - Compared 19 percent of source and target entities.
+15:00:39.886 [main] INFO  GraphMapper:102 - Compared 29 percent of source and target entities.
+15:00:39.889 [main] INFO  GraphMapper:102 - Compared 39 percent of source and target entities.
+15:00:39.892 [main] INFO  GraphMapper:102 - Compared 49 percent of source and target entities.
+15:00:39.894 [main] INFO  GraphMapper:102 - Compared 59 percent of source and target entities.
+15:00:39.897 [main] INFO  GraphMapper:102 - Compared 69 percent of source and target entities.
+15:00:39.900 [main] INFO  GraphMapper:102 - Compared 79 percent of source and target entities.
+15:00:39.902 [main] INFO  GraphMapper:102 - Compared 89 percent of source and target entities.
+15:00:39.921 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-913542972.ser
+15:00:39.921 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for daily
+15:00:39.921 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <CSV> reader
+15:00:39.925 [main] INFO  org.aksw.limes.core.io.query.CsvQueryModule:84 - Retrieved 1046 statements
+15:00:39.925 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 1046 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-913542972.ser
+15:00:40.030 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-1981164713.ser
+15:00:40.030 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for drugbank
+15:00:40.030 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <CSV> reader
+15:00:40.035 [main] INFO  org.aksw.limes.core.io.query.CsvQueryModule:84 - Retrieved 934 statements
+15:00:40.035 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 934 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-1981164713.ser
+15:00:40.124 [main] INFO  org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser:783 - Removed 0 mappings as the instances are not found in the Caches
+15:00:40.124 [main] INFO  org.aksw.limes.core.measures.measure.graphs.SimilarityTest:37 - Evaluate dataset Drugs.
+15:00:40.125 [main] INFO  LIMES:112 - Properties = [id, name]
+15:00:40.125 [main] INFO  LIMES:113 - KB Properties = [name]
+15:00:40.129 [main] INFO  LIMES:146 - Retrieved 1046 statements
+15:00:40.132 [main] INFO  LIMES:112 - Properties = [id, name]
+15:00:40.132 [main] INFO  LIMES:113 - KB Properties = [name]
+15:00:40.135 [main] INFO  LIMES:146 - Retrieved 934 statements
+15:00:40.138 [main] INFO  GraphMapper:48 - Build source WL representation for 1046 instances.
+15:00:40.144 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+15:00:46.134 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+15:00:52.215 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+15:00:58.181 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+15:01:04.170 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+15:01:10.174 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+15:01:16.157 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+15:01:22.126 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+15:01:28.062 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+15:01:34.045 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+15:01:39.711 [main] INFO  GraphMapper:57 - Build target WL representation for 1046 instances.
+15:01:39.716 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+15:01:45.016 [main] INFO  GraphMapper:102 - Created 9 percent of entries
+15:01:50.225 [main] INFO  GraphMapper:102 - Created 19 percent of entries
+15:01:55.546 [main] INFO  GraphMapper:102 - Created 29 percent of entries
+15:02:00.842 [main] INFO  GraphMapper:102 - Created 39 percent of entries
+15:02:06.122 [main] INFO  GraphMapper:102 - Created 49 percent of entries
+15:02:11.408 [main] INFO  GraphMapper:102 - Created 59 percent of entries
+15:02:16.711 [main] INFO  GraphMapper:102 - Created 69 percent of entries
+15:02:22.065 [main] INFO  GraphMapper:102 - Created 79 percent of entries
+15:02:27.373 [main] INFO  GraphMapper:102 - Created 89 percent of entries
+15:02:32.746 [main] INFO  GraphMapper:102 - Created 99 percent of entries
+15:02:33.034 [main] INFO  GraphMapper:74 - Compare 976964 tuples.
+15:02:33.034 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+15:02:33.037 [main] INFO  GraphMapper:102 - Compared 9 percent of source and target entities.
+15:02:33.039 [main] INFO  GraphMapper:102 - Compared 19 percent of source and target entities.
+15:02:33.041 [main] INFO  GraphMapper:102 - Compared 29 percent of source and target entities.
+15:02:33.044 [main] INFO  GraphMapper:102 - Compared 39 percent of source and target entities.
+15:02:33.049 [main] INFO  GraphMapper:102 - Compared 59 percent of source and target entities.
+15:02:33.051 [main] INFO  GraphMapper:102 - Compared 69 percent of source and target entities.
+15:02:33.053 [main] INFO  GraphMapper:102 - Compared 79 percent of source and target entities.
+15:02:33.056 [main] INFO  GraphMapper:102 - Compared 89 percent of source and target entities.
+15:02:33.060 [main] INFO  GraphMapper:102 - Compared 109 percent of source and target entities.
+15:02:33.083 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/553925448.ser
+15:02:33.083 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for person11
+15:02:33.083 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <CSV> reader
+15:02:33.092 [main] INFO  org.aksw.limes.core.io.query.CsvQueryModule:84 - Retrieved 600 statements
+15:02:33.092 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 600 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/553925448.ser
+15:02:33.313 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-142307658.ser
+15:02:33.313 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for person12
+15:02:33.313 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <CSV> reader
+15:02:33.319 [main] INFO  org.aksw.limes.core.io.query.CsvQueryModule:84 - Retrieved 400 statements
+15:02:33.319 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 400 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-142307658.ser
+15:02:33.472 [main] INFO  org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser:783 - Removed 0 mappings as the instances are not found in the Caches
+15:02:33.472 [main] INFO  org.aksw.limes.core.measures.measure.graphs.SimilarityTest:37 - Evaluate dataset Persons2_CSV.
+15:02:33.473 [main] INFO  LIMES:112 - Properties = [ID, http://www.okkam.org/ontology_person1.owl#surname, http://www.okkam.org/ontology_person1.owl#soc_sec_id, http://www.okkam.org/ontology_person1.owl#phone_numer, http://www.okkam.org/ontology_person1.owl#has_address, http://www.okkam.org/ontology_person1.owl#date_of_birth, http://www.okkam.org/ontology_person1.owl#given_name, http://www.okkam.org/ontology_person1.owl#age]
+15:02:33.473 [main] INFO  LIMES:113 - KB Properties = [http://www.okkam.org/ontology_person1.owl#surname, http://www.okkam.org/ontology_person1.owl#given_name, http://www.okkam.org/ontology_person1.owl#age, http://www.okkam.org/ontology_person1.owl#phone_numer, http://www.okkam.org/ontology_person1.owl#soc_sec_id, http://www.okkam.org/ontology_person1.owl#has_address, http://www.okkam.org/ontology_person1.owl#date_of_birth]
+15:02:33.480 [main] INFO  LIMES:146 - Retrieved 600 statements
+15:02:33.486 [main] INFO  LIMES:112 - Properties = [ID, http://www.okkam.org/ontology_person2.owl#surname, http://www.okkam.org/ontology_person2.owl#phone_numer, http://www.okkam.org/ontology_person2.owl#soc_sec_id, http://www.okkam.org/ontology_person2.owl#date_of_birth, http://www.okkam.org/ontology_person2.owl#has_address, http://www.okkam.org/ontology_person2.owl#given_name, http://www.okkam.org/ontology_person2.owl#age]
+15:02:33.486 [main] INFO  LIMES:113 - KB Properties = [http://www.okkam.org/ontology_person2.owl#surname, http://www.okkam.org/ontology_person2.owl#given_name, http://www.okkam.org/ontology_person2.owl#age, http://www.okkam.org/ontology_person2.owl#phone_numer, http://www.okkam.org/ontology_person2.owl#has_address, http://www.okkam.org/ontology_person2.owl#soc_sec_id, http://www.okkam.org/ontology_person2.owl#date_of_birth]
+15:02:33.490 [main] INFO  LIMES:146 - Retrieved 400 statements
+15:02:33.494 [main] INFO  GraphMapper:48 - Build source WL representation for 600 instances.
+15:02:33.501 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+15:02:36.920 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+15:02:40.342 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+15:02:43.745 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+15:02:47.130 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+15:02:50.543 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+15:02:53.963 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+15:02:57.407 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+15:03:00.851 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+15:03:04.235 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+15:03:07.607 [main] INFO  GraphMapper:57 - Build target WL representation for 600 instances.
+15:03:07.616 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+15:03:09.899 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+15:03:12.215 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+15:03:14.476 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+15:03:16.793 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+15:03:19.067 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+15:03:21.374 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+15:03:23.675 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+15:03:25.946 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+15:03:28.216 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+15:03:30.515 [main] INFO  GraphMapper:74 - Compare 240000 tuples.
+15:03:30.515 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+15:03:30.515 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+15:03:30.516 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+15:03:30.516 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+15:03:30.517 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+15:03:30.517 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+15:03:30.518 [main] INFO  GraphMapper:102 - Compared 60 percent of source and target entities.
+15:03:30.518 [main] INFO  GraphMapper:102 - Compared 70 percent of source and target entities.
+15:03:30.518 [main] INFO  GraphMapper:102 - Compared 80 percent of source and target entities.
+15:03:30.519 [main] INFO  GraphMapper:102 - Compared 90 percent of source and target entities.
+15:03:30.519 [main] INFO  GraphMapper:102 - Compared 100 percent of source and target entities.
+15:03:30.520 [main] INFO  GraphMapper:102 - Compared 110 percent of source and target entities.
+15:03:30.520 [main] INFO  GraphMapper:102 - Compared 120 percent of source and target entities.
+15:03:30.521 [main] INFO  GraphMapper:102 - Compared 130 percent of source and target entities.
+15:03:30.521 [main] INFO  GraphMapper:102 - Compared 140 percent of source and target entities.
+15:03:30.526 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/553925448.ser
+15:03:30.527 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:115 - Found cached data. Loading data from file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/553925448.ser
+15:03:30.653 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:121 - Cached data loaded successfully from file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/553925448.ser
+15:03:30.653 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:122 - Size = 600
+15:03:30.653 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-142307658.ser
+15:03:30.653 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:115 - Found cached data. Loading data from file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-142307658.ser
+15:03:30.735 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:121 - Cached data loaded successfully from file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-142307658.ser
+15:03:30.735 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:122 - Size = 400
+15:03:30.736 [main] INFO  org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser:783 - Removed 0 mappings as the instances are not found in the Caches
+15:03:30.737 [main] INFO  org.aksw.limes.core.measures.measure.graphs.SimilarityTest:37 - Evaluate dataset Persons2_CSV.
+15:03:30.737 [main] INFO  LIMES:112 - Properties = [ID, http://www.okkam.org/ontology_person1.owl#surname, http://www.okkam.org/ontology_person1.owl#soc_sec_id, http://www.okkam.org/ontology_person1.owl#phone_numer, http://www.okkam.org/ontology_person1.owl#has_address, http://www.okkam.org/ontology_person1.owl#date_of_birth, http://www.okkam.org/ontology_person1.owl#given_name, http://www.okkam.org/ontology_person1.owl#age]
+15:03:30.737 [main] INFO  LIMES:113 - KB Properties = [http://www.okkam.org/ontology_person1.owl#surname, http://www.okkam.org/ontology_person1.owl#given_name, http://www.okkam.org/ontology_person1.owl#age, http://www.okkam.org/ontology_person1.owl#phone_numer, http://www.okkam.org/ontology_person1.owl#soc_sec_id, http://www.okkam.org/ontology_person1.owl#has_address, http://www.okkam.org/ontology_person1.owl#date_of_birth]
+15:03:30.741 [main] INFO  LIMES:146 - Retrieved 600 statements
+15:03:30.749 [main] INFO  LIMES:112 - Properties = [ID, http://www.okkam.org/ontology_person2.owl#surname, http://www.okkam.org/ontology_person2.owl#phone_numer, http://www.okkam.org/ontology_person2.owl#soc_sec_id, http://www.okkam.org/ontology_person2.owl#date_of_birth, http://www.okkam.org/ontology_person2.owl#has_address, http://www.okkam.org/ontology_person2.owl#given_name, http://www.okkam.org/ontology_person2.owl#age]
+15:03:30.749 [main] INFO  LIMES:113 - KB Properties = [http://www.okkam.org/ontology_person2.owl#surname, http://www.okkam.org/ontology_person2.owl#given_name, http://www.okkam.org/ontology_person2.owl#age, http://www.okkam.org/ontology_person2.owl#phone_numer, http://www.okkam.org/ontology_person2.owl#has_address, http://www.okkam.org/ontology_person2.owl#soc_sec_id, http://www.okkam.org/ontology_person2.owl#date_of_birth]
+15:03:30.752 [main] INFO  LIMES:146 - Retrieved 400 statements
+15:03:30.756 [main] INFO  GraphMapper:48 - Build source WL representation for 600 instances.
+15:03:30.758 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+15:03:30.834 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+15:03:30.919 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+15:03:30.995 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+15:03:31.072 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+15:03:31.147 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+15:03:31.233 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+15:03:31.311 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+15:03:31.388 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+15:03:31.475 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+15:03:31.565 [main] INFO  GraphMapper:57 - Build target WL representation for 600 instances.
+15:03:31.567 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+15:03:31.618 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+15:03:31.669 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+15:03:31.726 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+15:03:31.790 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+15:03:31.841 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+15:03:31.897 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+15:03:31.948 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+15:03:32.000 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+15:03:32.053 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+15:03:32.223 [main] INFO  GraphMapper:74 - Compare 240000 tuples.
+15:03:32.224 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
+15:03:32.224 [main] INFO  GraphMapper:102 - Compared 10 percent of source and target entities.
+15:03:32.225 [main] INFO  GraphMapper:102 - Compared 20 percent of source and target entities.
+15:03:32.225 [main] INFO  GraphMapper:102 - Compared 30 percent of source and target entities.
+15:03:32.226 [main] INFO  GraphMapper:102 - Compared 40 percent of source and target entities.
+15:03:32.226 [main] INFO  GraphMapper:102 - Compared 50 percent of source and target entities.
+15:03:32.226 [main] INFO  GraphMapper:102 - Compared 60 percent of source and target entities.
+15:03:32.227 [main] INFO  GraphMapper:102 - Compared 70 percent of source and target entities.
+15:03:32.228 [main] INFO  GraphMapper:102 - Compared 80 percent of source and target entities.
+15:03:32.228 [main] INFO  GraphMapper:102 - Compared 90 percent of source and target entities.
+15:03:32.228 [main] INFO  GraphMapper:102 - Compared 100 percent of source and target entities.
+15:03:32.229 [main] INFO  GraphMapper:102 - Compared 110 percent of source and target entities.
+15:03:32.229 [main] INFO  GraphMapper:102 - Compared 120 percent of source and target entities.
+15:03:32.230 [main] INFO  GraphMapper:102 - Compared 130 percent of source and target entities.
+15:03:32.230 [main] INFO  GraphMapper:102 - Compared 140 percent of source and target entities.
+15:03:32.245 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/1131466378.ser
+15:03:32.246 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for person11
+15:03:32.246 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <CSV> reader
+15:03:32.252 [main] INFO  org.aksw.limes.core.io.query.CsvQueryModule:84 - Retrieved 500 statements
+15:03:32.252 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 500 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/1131466378.ser
+15:03:32.450 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/435233272.ser
+15:03:32.451 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for person12
+15:03:32.451 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <CSV> reader
+15:03:32.456 [main] INFO  org.aksw.limes.core.io.query.CsvQueryModule:84 - Retrieved 500 statements
+15:03:32.456 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 500 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/435233272.ser
+15:03:32.718 [main] INFO  org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser:783 - Removed 0 mappings as the instances are not found in the Caches
+15:03:32.719 [main] INFO  org.aksw.limes.core.measures.measure.graphs.SimilarityTest:37 - Evaluate dataset Persons1_CSV.
+15:03:32.720 [main] INFO  LIMES:112 - Properties = [ID, http://www.okkam.org/ontology_person1.owl#surname, http://www.okkam.org/ontology_person1.owl#soc_sec_id, http://www.okkam.org/ontology_person1.owl#phone_numer, http://www.okkam.org/ontology_person1.owl#has_address, http://www.okkam.org/ontology_person1.owl#date_of_birth, http://www.okkam.org/ontology_person1.owl#given_name, http://www.okkam.org/ontology_person1.owl#age]
+15:03:32.720 [main] INFO  LIMES:113 - KB Properties = [http://www.okkam.org/ontology_person1.owl#surname, http://www.okkam.org/ontology_person1.owl#given_name, http://www.okkam.org/ontology_person1.owl#age, http://www.okkam.org/ontology_person1.owl#phone_numer, http://www.okkam.org/ontology_person1.owl#soc_sec_id, http://www.okkam.org/ontology_person1.owl#has_address, http://www.okkam.org/ontology_person1.owl#date_of_birth]
+15:03:32.723 [main] INFO  LIMES:146 - Retrieved 500 statements
+15:03:32.729 [main] INFO  LIMES:112 - Properties = [ID, http://www.okkam.org/ontology_person2.owl#surname, http://www.okkam.org/ontology_person2.owl#phone_numer, http://www.okkam.org/ontology_person2.owl#soc_sec_id, http://www.okkam.org/ontology_person2.owl#date_of_birth, http://www.okkam.org/ontology_person2.owl#has_address, http://www.okkam.org/ontology_person2.owl#given_name, http://www.okkam.org/ontology_person2.owl#age]
+15:03:32.729 [main] INFO  LIMES:113 - KB Properties = [http://www.okkam.org/ontology_person2.owl#surname, http://www.okkam.org/ontology_person2.owl#given_name, http://www.okkam.org/ontology_person2.owl#age, http://www.okkam.org/ontology_person2.owl#phone_numer, http://www.okkam.org/ontology_person2.owl#has_address, http://www.okkam.org/ontology_person2.owl#soc_sec_id, http://www.okkam.org/ontology_person2.owl#date_of_birth]
+15:03:32.733 [main] INFO  LIMES:146 - Retrieved 500 statements
+15:03:32.738 [main] INFO  GraphMapper:48 - Build source WL representation for 500 instances.
+15:03:32.739 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+15:03:32.805 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+15:03:32.871 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+15:03:32.935 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+15:03:33.013 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+15:03:33.077 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+15:03:33.141 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+15:03:33.206 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+15:03:33.270 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+15:03:33.354 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+15:03:33.496 [main] INFO  GraphMapper:57 - Build target WL representation for 500 instances.
+15:03:33.514 [main] INFO  GraphMapper:102 - Created 0 percent of entries
+15:03:36.012 [main] INFO  GraphMapper:102 - Created 10 percent of entries
+15:03:38.256 [main] INFO  GraphMapper:102 - Created 20 percent of entries
+15:03:40.327 [main] INFO  GraphMapper:102 - Created 30 percent of entries
+15:03:42.840 [main] INFO  GraphMapper:102 - Created 40 percent of entries
+15:03:45.186 [main] INFO  GraphMapper:102 - Created 50 percent of entries
+15:03:47.734 [main] INFO  GraphMapper:102 - Created 60 percent of entries
+15:03:50.204 [main] INFO  GraphMapper:102 - Created 70 percent of entries
+15:03:52.596 [main] INFO  GraphMapper:102 - Created 80 percent of entries
+15:03:54.908 [main] INFO  GraphMapper:102 - Created 90 percent of entries
+15:03:57.293 [main] INFO  GraphMapper:74 - Compare 250000 tuples.
+15:03:57.294 [main] INFO  GraphMapper:102 - Compared 0 percent of source and target entities.
