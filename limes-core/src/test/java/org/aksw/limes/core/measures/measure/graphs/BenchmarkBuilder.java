@@ -26,7 +26,7 @@ public class BenchmarkBuilder {
 
     public static void main(String[] args) {
 
-        int[] size_benchmarks = {1000, 10000, 1000000, 100000000}; // size of the benchmark series
+        int[] size_benchmarks = {1000, 10000};//, 1000000, 100000000}; // size of the benchmark series
         int nbFiles = 3; // number of files to generate per series
 
         // the directory in which the data are and the results will be generated
@@ -51,7 +51,7 @@ public class BenchmarkBuilder {
 
 
             GraphConf goConf = new GraphConf(uriFactory.createURI("http://gene_ontology"));
-            goConf.addGDataConf(new GDataConf(GFormat.RDF_XML, onto_dir + "go_20130302-termdb.owl"));
+            goConf.addGDataConf(new GDataConf(GFormat.RDF_XML, onto_dir + "go_weekly-termdb.owl"));
 
             GDataConf annotConf = new GDataConf(GFormat.TSV_ANNOT, annot_dir + "dump_orgHsegGO_sml.tsv");
             annotConf.addParameter(GraphLoader_TSVannot.PARAM_PREFIX_SUBJECT, ns_gene);
@@ -62,15 +62,13 @@ public class BenchmarkBuilder {
             URI GOtermBP = uriFactory.createURI("http://purl.org/obo/owl/GO#GO_0008150");
             GAction rooting = new GAction(GActionType.VERTICES_REDUCTION);
             rooting.addParameter("root_uri", GOtermBP.stringValue());
-            goConf.addGAction(rooting);
+            //goConf.addGAction(rooting);
 
             G go = GraphLoaderGeneric.load(goConf);
 
             System.out.println(go);
 
 //            UtilDebug.exit();
-
-
 
             /*
              * At this stage the graph contains the taxonomic graph
@@ -86,6 +84,8 @@ public class BenchmarkBuilder {
                     classes.add(u);
                 } else if (u.getNamespace().equals(ns_gene)) {
                     genes.add(u);
+
+
             }
             }
             System.out.println("BP terms: " + classes.size());
@@ -132,7 +132,7 @@ public class BenchmarkBuilder {
                         a = classes.get(r.nextInt(classes.size()));
                         b = classes.get(r.nextInt(classes.size()));
 
-                        bw.write("GO:" + a.getLocalName().split("_")[1] + "\t" + "GO:" + b.getLocalName().split("_")[1] + "\n");
+                        bw.write("GO:" + matchStr(a.getLocalName()) + "\t" + "GO:" + matchStr(b.getLocalName()) + "\n");
                     }
                     bw.close();
                     System.out.println("Benchmark generated at " + fname);
@@ -170,5 +170,12 @@ public class BenchmarkBuilder {
             e.printStackTrace();
         }
         System.out.println("done.");
+    }
+
+    private static String matchStr(String s){
+        if(s.contains("_")){
+            return s.split("_")[1];
+        }
+        return s;
     }
 }
