@@ -1,5 +1,6 @@
 package org.aksw.limes.core.measures.measure.graphs.representation;
 
+import org.aksw.limes.core.io.describe.IResourceDescriptor;
 import org.aksw.limes.core.measures.measure.graphs.gouping.INodeLabelGrouper;
 import org.apache.jena.rdf.model.Model;
 
@@ -12,8 +13,12 @@ public class WLModelRepresentation {
 
     private List<WLModelIteration> list = new ArrayList<>();
 
-    public WLModelRepresentation(Model model, INodeLabelGrouper grouper){
-        this.representation = new GraphModelRepresentation(model, grouper);
+    public WLModelRepresentation(IResourceDescriptor descriptor, INodeLabelGrouper grouper){
+        this.representation = new GraphModelRepresentation(descriptor, grouper);
+    }
+
+    public IResourceDescriptor getModelDescriptor(){
+        return representation.getRootDescriptor();
     }
 
     public WLModelIteration getIteration(int i){
