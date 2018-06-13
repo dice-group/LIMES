@@ -63,7 +63,7 @@ def plotFit(x_fit, title):
 	myshow(block=False)
 
 def my_cosine_distance(a,b):
-	return 1-0.5*np.dot(a,b)/(np.linalg.norm(a)*np.linalg.norm(b))
+	return 1-0.5*(1+np.dot(a,b)/(np.linalg.norm(a)*np.linalg.norm(b)))
 
 from sklearn.preprocessing import StandardScaler
 x = StandardScaler().fit_transform(x)
@@ -72,12 +72,14 @@ x = StandardScaler().fit_transform(x)
 from sklearn.manifold import TSNE
 from sklearn.metrics import pairwise_distances
 distance_matrix = pairwise_distances(x, x, metric='cosine', n_jobs=-1)
-distance_matrix = np.maximum(np.zeros(shape=distance_matrix.shape), distance_matrix)
+distance_matrix = np.maximum(np.zeros(shape=distance_matrix.shape), distance_matrix) * 0.5
+print(np.mean(distance_matrix))
 avg_dist_all = np.mean(distance_matrix)
 avg_dist_simple = np.mean(distance_matrix[::2,::2])
 avg_dist_normal = np.mean(distance_matrix[1::2,1::2])
 avg_dist_pairs = 1/(len(x)//2)*sum(my_cosine_distance(x[i], x[i + 1]) for i in range(0, len(x), 2))
 print(avg_dist_all, avg_dist_simple, avg_dist_normal, avg_dist_pairs)
+# results: 0.499697531375 0.471654812898 0.471823169607 0.442123100908
 sys.exit()
 xs = []
 ys = []
