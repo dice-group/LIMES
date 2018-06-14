@@ -1,9 +1,7 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <limes.version>1.3.1-SNAPSHOT</limes.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -11,7 +9,7 @@
 
 	<groupId>org.aksw.limes</groupId>
 	<artifactId>limes-full</artifactId>
-	<version>1.3.1-SNAPSHOT</version>
+	<version>1.3.2-SNAPSHOT</version>
 	<name>LIMES</name>
 	<description>LIMES – Link Discovery Framework for Metric Spaces.</description>
 	<url>http://aksw.org/Projects/LIMES</url>
@@ -21,5 +19,11 @@
 		<module>limes-gui</module>
 		<module>limes-core</module>
 	</modules>
+
+    <scm>
+        <url>https://github.com/dice-group/LIMES</url>
+        <connection>scm:git:https://github.com/dice-group/LIMES.git</connection>
+        <tag>HEAD</tag>
+    </scm>
 
 </project>
