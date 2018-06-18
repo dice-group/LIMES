@@ -46,9 +46,14 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     protected IRAMDictionary dictionary = null;
     protected static boolean useInstanceHypernyms = true;
     protected static boolean useHypernyms = true;
+    protected boolean flag = true;
 
     public IRAMDictionary getDictionary() {
         return dictionary;
+    }
+
+    public void setDictionary(IRAMDictionary dict) {
+        this.dictionary = dict;
     }
 
     protected File exFile = null;
@@ -57,6 +62,10 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     // System.getProperty("user.dir") + "/src/main/resources/wordnet/dict/"
     public AEdgeCountingSemanticMeasure() {
         exportDictionaryToFile();
+    }
+
+    public void setFlag(boolean f) {
+        flag = f;
     }
 
     public void exportDictionaryToFile() {
@@ -237,7 +246,9 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     @Override
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         // test in each semantic similarity
-        this.openDictionaryFromFile();
+
+        if (flag == true)
+            this.openDictionaryFromFile();
         double sim = 0;
         double maxSim = 0;
         HashMap<String, Double> similaritiesMap = new HashMap<String, Double>();
@@ -281,10 +292,8 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                                     // logger.info("Similarity exists2");
                                 } else {
                                     // logger.info("Similarity doesn't exist");
-                                    AMeasure exactMatch = MeasureFactory
-                                            .createMeasure(MeasureFactory.getMeasureType("exactmatch"));
-                                    double exactSim = exactMatch.getSimilarity(sourceToken, targetToken);
-                                    targetTokenSim = (exactSim == 1d) ? 1d : getSimilarity(sourceToken, targetToken);
+                                    targetTokenSim = (sourceToken.equals(targetToken) == true) ? 1d
+                                            : getSimilarity(sourceToken, targetToken);
                                     similaritiesMap.put(together, targetTokenSim);
                                 }
 
@@ -320,7 +329,8 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                 }
             }
         }
-        this.removeDictionary();
+        if (flag == true)
+            this.removeDictionary();
         return maxSim;
 
     }
