@@ -6,6 +6,16 @@ import com.vividsolutions.jts.geom.IntersectionMatrix;
 import com.vividsolutions.jts.geom.Location;
 import com.vividsolutions.jts.operation.relate.RelateOp;
 
+
+/**
+ * @author Abdullah Ahmed
+ *
+ */
+
+/* the implementation of RCC8 according to the paper "Reducing 9-Intersection to 4-Intersection for Identifying
+   Relations in Region Connection Calculus" by Chaman L. Sabharwal and Jennifer L. Leopold 
+*/
+
 public class ReducedIntersectionMatrix {
 
 	private static int[][] im;
