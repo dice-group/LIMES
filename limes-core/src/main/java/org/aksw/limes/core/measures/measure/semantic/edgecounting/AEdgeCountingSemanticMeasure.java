@@ -1,33 +1,22 @@
 package org.aksw.limes.core.measures.measure.semantic.edgecounting;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.measures.measure.AMeasure;
-import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.semantic.ASemanticMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.preprocessing.DB.DBImplementation;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.HypernymTreesFinder;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.SemanticDictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.mit.jwi.IRAMDictionary;
-import edu.mit.jwi.RAMDictionary;
-import edu.mit.jwi.data.ILoadPolicy;
 import edu.mit.jwi.item.IIndexWord;
 import edu.mit.jwi.item.ISynset;
-import edu.mit.jwi.item.ISynsetID;
 import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.IWordID;
 import edu.mit.jwi.item.POS;
-import edu.mit.jwi.item.Pointer;
 import weka.core.Stopwords;
 import weka.core.tokenizers.WordTokenizer;
 
@@ -43,89 +32,25 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     protected static final int ADJECTIVE_DEPTH = 1;
     protected static final int ADVERB_DEPTH = 1;
 
-    protected IRAMDictionary dictionary = null;
-    protected static boolean useInstanceHypernyms = true;
-    protected static boolean useHypernyms = true;
-    protected boolean flag = true;
+    protected DBImplementation db = null;
+    protected SemanticDictionary dictionary = null;
+    protected boolean dictionaryFlag = true;
 
-    public IRAMDictionary getDictionary() {
+    public SemanticDictionary getSemanticDictionary() {
         return dictionary;
     }
 
-    public void setDictionary(IRAMDictionary dict) {
+    public void setDictionary(SemanticDictionary dict) {
         this.dictionary = dict;
     }
 
-    protected File exFile = null;
-    protected String wordNetFolder = System.getProperty("user.dir") + "/src/main/resources/wordnet/dict/";
-
-    // System.getProperty("user.dir") + "/src/main/resources/wordnet/dict/"
     public AEdgeCountingSemanticMeasure() {
-        exportDictionaryToFile();
+        dictionary = new SemanticDictionary();
+        dictionary.exportDictionaryToFile();
     }
 
-    public void setFlag(boolean f) {
-        flag = f;
-    }
-
-    public void exportDictionaryToFile() {
-        File dictionaryFolder = new File(wordNetFolder);
-        if (!dictionaryFolder.exists()) {
-            logger.error("Wordnet dictionary folder doesn't exist. Can't do anything");
-            logger.error(
-                    "Please read the instructions in the README.md file on how to download the worndet database files.");
-            throw new RuntimeException();
-        } else {
-            exFile = new File(wordNetFolder + "JWI_Export_.wn");
-            if (!exFile.exists()) {
-                logger.info("No exported wordnet file is found. Creating one..");
-                dictionary = new RAMDictionary(dictionaryFolder);
-                dictionary.setLoadPolicy(ILoadPolicy.IMMEDIATE_LOAD);
-                logger.info("Loaded dictionary into memory. Now exporting it to file.");
-                try {
-                    dictionary.open();
-                    dictionary.export(new FileOutputStream(exFile));
-                    // logger.info("Export is " + (exFile.length() / 1048576) +
-                    // " MB");
-                } catch (IOException e1) {
-                    logger.error("Couldn't open wordnet dictionary. Exiting..");
-                    e1.printStackTrace();
-                    throw new RuntimeException();
-                } finally {
-                    removeDictionary();
-                }
-            }
-        }
-
-    }
-
-    public void removeDictionary() {
-        if (dictionary != null) {
-            dictionary.close();
-            dictionary = null;
-        }
-    }
-
-    public void openDictionaryFromFile() {
-        if (!exFile.exists()) {
-            logger.error("No exported wordnet file is found. Exiting..");
-            logger.error("Please execute the exportDictionaryToFile function first.");
-            logger.error(
-                    "Please read the instructions in the README.md file on how to download the worndet database files.");
-            throw new RuntimeException();
-        } else {
-            if (dictionary == null) {
-                dictionary = new RAMDictionary(exFile);
-                try {
-                    dictionary.open();
-                } catch (IOException e2) {
-                    logger.error("Couldn't open wordnet dictionary. Exiting..");
-                    e2.printStackTrace();
-                    throw new RuntimeException();
-                }
-            }
-        }
-
+    public void setDictionaryFlag(boolean f) {
+        dictionaryFlag = f;
     }
 
     public int getHierarchyDepth(int posNumber) {
@@ -175,7 +100,14 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
             if (iword != null) {
                 synset = getSynset(iword);
                 if (synset != null) {
-                    List<List<ISynset>> trees = getHypernymTrees(synset);
+                    
+                    List<List<ISynset>> trees = null;
+                    if (db.isEmpty()) {
+                        trees = HypernymTreesFinder.getHypernymTrees(dictionary, synset);
+                    } else {
+                        trees = db.getSynsetsTrees(synset.getID());
+                    }
+
                     if (trees.isEmpty() == false)
                         hypernymTrees.put(synset, trees);
                 }
@@ -187,8 +119,19 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
     @Override
     public double getSimilarity(ISynset synset1, ISynset synset2) {
-        List<List<ISynset>> list1 = this.getHypernymTrees(synset1);
-        List<List<ISynset>> list2 = this.getHypernymTrees(synset2);
+        List<List<ISynset>> list1 = null;
+        if (db.isEmpty()) {
+            list1 = HypernymTreesFinder.getHypernymTrees(dictionary, synset1);
+        } else {
+            list1 = db.getSynsetsTrees(synset1.getID());
+        }
+        
+        List<List<ISynset>> list2 = null;
+        if (db.isEmpty()) {
+            list2 = HypernymTreesFinder.getHypernymTrees(dictionary, synset2);
+        } else {
+            list2 = db.getSynsetsTrees(synset2.getID());
+        }
 
         return getSimilarity(synset1, list1, synset2, list2);
     }
@@ -218,7 +161,12 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
             if (iword1 != null) {
                 ISynset synset1 = getSynset(iword1);
                 if (synset1 != null) {
-                    List<List<ISynset>> synset1Tree = getHypernymTrees(synset1);
+                    List<List<ISynset>> synset1Tree = null;
+                    if (db.isEmpty()) {
+                        synset1Tree = HypernymTreesFinder.getHypernymTrees(dictionary, synset1);
+                    } else {
+                        synset1Tree = db.getSynsetsTrees(synset1.getID());
+                    }
                     if (synset1Tree.isEmpty() == false) {
 
                         for (Map.Entry<ISynset, List<List<ISynset>>> entry2 : trees2.entrySet()) {
@@ -246,9 +194,10 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     @Override
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         // test in each semantic similarity
-
-        if (flag == true)
-            this.openDictionaryFromFile();
+        db = new DBImplementation();
+        db.init();
+        if (dictionaryFlag == true)
+            dictionary.openDictionaryFromFile();
         double sim = 0;
         double maxSim = 0;
         HashMap<String, Double> similaritiesMap = new HashMap<String, Double>();
@@ -329,10 +278,11 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                 }
             }
         }
-        if (flag == true)
-            this.removeDictionary();
+        if (dictionaryFlag == true)
+            dictionary.removeDictionary();
+        db.close();
+        
         return maxSim;
-
     }
 
     @Override
@@ -370,61 +320,6 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
         }
         return idxWord1;
-    }
-
-    public List<List<ISynset>> getHypernymTrees(ISynset synset) {
-        if (synset == null)
-            return new ArrayList<List<ISynset>>();
-
-        List<List<ISynset>> trees = getHypernymTrees(synset, new HashSet<ISynsetID>());
-
-        return trees;
-    }
-
-    public List<List<ISynset>> getHypernymTrees(ISynset synset, Set<ISynsetID> history) {
-
-        // only noun hierarchy has instance hypernyms
-        useInstanceHypernyms = synset.getType() == 1;
-        // only noun and verb hierarchies have hypernyms
-        useHypernyms = (synset.getType() == 1 || synset.getType() == 2);
-
-        // get the hypernyms
-        List<ISynsetID> hypernymIds = useHypernyms ? synset.getRelatedSynsets(Pointer.HYPERNYM)
-                : Collections.emptyList();
-        // get the hypernyms (if this is an instance)
-        List<ISynsetID> instanceHypernymIds = useInstanceHypernyms ? synset.getRelatedSynsets(Pointer.HYPERNYM_INSTANCE)
-                : Collections.emptyList();
-
-        List<List<ISynset>> result = new ArrayList<List<ISynset>>();
-
-        // If this is the highest node and has no other hypernyms
-        if ((hypernymIds.size() == 0) && (instanceHypernymIds.size() == 0)) {
-            // return the tree containing only the current node
-            List<ISynset> tree = new ArrayList<ISynset>();
-            tree.add(synset);
-            result.add(tree);
-        } else {
-            // for all (direct) hypernyms of this synset
-            for (ISynsetID hypernymId : hypernymIds) {
-
-                List<List<ISynset>> hypernymTrees = getHypernymTrees(dictionary.getSynset(hypernymId), history);
-                // add the current Tree and
-                for (List<ISynset> hypernymTree : hypernymTrees) {
-                    hypernymTree.add(synset);
-                    result.add(hypernymTree);
-                }
-            }
-            for (ISynsetID hypernymId : instanceHypernymIds) {
-                List<List<ISynset>> hypernymTrees = getHypernymTrees(dictionary.getSynset(hypernymId), history);
-                // add the current Tree and
-                for (List<ISynset> hypernymTree : hypernymTrees) {
-                    hypernymTree.add(synset);
-                    result.add(hypernymTree);
-                }
-            }
-        }
-
-        return result;
     }
 
 }

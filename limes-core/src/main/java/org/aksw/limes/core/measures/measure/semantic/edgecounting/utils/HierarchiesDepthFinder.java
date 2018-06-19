@@ -20,8 +20,8 @@ import edu.mit.jwi.item.ISynsetID;
 import edu.mit.jwi.item.POS;
 import edu.mit.jwi.item.Pointer;
 
-public class HierarchiesDepthCounter {
-    private static final Logger logger = LoggerFactory.getLogger(HierarchiesDepthCounter.class);
+public class HierarchiesDepthFinder {
+    private static final Logger logger = LoggerFactory.getLogger(HierarchiesDepthFinder.class);
 
     protected IRAMDictionary dictionary;
 
@@ -186,7 +186,7 @@ public class HierarchiesDepthCounter {
     }
 
     public static void main(String[] args) {
-        HierarchiesDepthCounter hdc = new HierarchiesDepthCounter();
+        HierarchiesDepthFinder hdc = new HierarchiesDepthFinder();
         hdc.exportDictionaryInFile();
         try {
             hdc.dictionary = new RAMDictionary(hdc.exFile);

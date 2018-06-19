@@ -306,7 +306,18 @@
     		<artifactId>hppc</artifactId>
     		<version>0.7.3</version>
 	</dependency>
-
+	<!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+	<dependency>
+   	 	<groupId>redis.clients</groupId>
+    		<artifactId>jedis</artifactId>
+    		<version>2.9.0</version>
+	</dependency>
+	
+	<dependency>
+    		<groupId>io.lettuce</groupId>
+    		<artifactId>lettuce-core</artifactId>
+    		<version>5.0.1.RELEASE</version>
+	</dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>

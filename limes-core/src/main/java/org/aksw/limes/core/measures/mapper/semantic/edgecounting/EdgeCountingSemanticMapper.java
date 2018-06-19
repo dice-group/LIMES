@@ -1,15 +1,6 @@
 package org.aksw.limes.core.measures.mapper.semantic.edgecounting;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.ACache;
@@ -22,110 +13,14 @@ import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticFactory;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticType;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 
-import edu.mit.jwi.IRAMDictionary;
-import edu.mit.jwi.RAMDictionary;
-import edu.mit.jwi.data.ILoadPolicy;
 
 public class EdgeCountingSemanticMapper extends AMapper {
     static Logger logger = LoggerFactory.getLogger(EdgeCountingSemanticMapper.class);
-    protected IRAMDictionary dictionary = null;
-    protected String wordNetFolder = System.getProperty("user.dir") + "/src/main/resources/wordnet/dict/";
-    protected File exFile = null;
 
-    
-    public void exportDictionaryToFile() {
-        File dictionaryFolder = new File(wordNetFolder);
-        if (!dictionaryFolder.exists()) {
-            logger.error("Wordnet dictionary folder doesn't exist. Can't do anything");
-            logger.error(
-                    "Please read the instructions in the README.md file on how to download the worndet database files.");
-            throw new RuntimeException();
-        } else {
-            exFile = new File(wordNetFolder + "JWI_Export_.wn");
-            if (!exFile.exists()) {
-                logger.info("No exported wordnet file is found. Creating one..");
-                dictionary = new RAMDictionary(dictionaryFolder);
-                dictionary.setLoadPolicy(ILoadPolicy.IMMEDIATE_LOAD);
-                logger.info("Loaded dictionary into memory. Now exporting it to file.");
-                try {
-                    dictionary.open();
-                    dictionary.export(new FileOutputStream(exFile));
-                    // logger.info("Export is " + (exFile.length() / 1048576) +
-                    // " MB");
-                } catch (IOException e1) {
-                    logger.error("Couldn't open wordnet dictionary. Exiting..");
-                    e1.printStackTrace();
-                    throw new RuntimeException();
-                } finally {
-                    removeDictionary();
-                }
-            }
-        }
-
-    }
-    public void removeDictionary() {
-        if (dictionary != null) {
-            dictionary.close();
-            dictionary = null;
-        }
-    }
-
-    public void openDictionaryFromFile() {
-        if (!exFile.exists()) {
-            logger.error("No exported wordnet file is found. Exiting..");
-            logger.error("Please execute the exportDictionaryToFile function first.");
-            logger.error(
-                    "Please read the instructions in the README.md file on how to download the worndet database files.");
-            throw new RuntimeException();
-        } else {
-            if (dictionary == null) {
-                dictionary = new RAMDictionary(exFile);
-                try {
-                    dictionary.open();
-                } catch (IOException e2) {
-                    logger.error("Couldn't open wordnet dictionary. Exiting..");
-                    e2.printStackTrace();
-                    throw new RuntimeException();
-                }
-            }
-        }
-
-    }
-    public class SimilarityThread implements Callable<Pair<Pair<String, String>, Double>> {
-        AEdgeCountingSemanticMeasure measure = null;
-        Instance instance1 = null;
-        Instance instance2 = null;
-        String property1 = null;
-        String property2 = null;
-        IRAMDictionary dictionary = null;
-
-        public SimilarityThread(String expression, Instance s, Instance t, String prop1, String prop2, IRAMDictionary dict) {
-            SemanticType type = SemanticFactory.getMeasureType(expression);
-            measure = (AEdgeCountingSemanticMeasure) SemanticFactory.createMeasure(type);
-            instance1 = s;
-            instance2 = t;
-            property1 = prop1;
-            property2 = prop2;
-            dictionary = dict;
-            measure.setDictionary(dictionary);
-            measure.setFlag(false);
-        }
-
-        @Override
-        public Pair<Pair<String, String>, Double> call() throws Exception {
-            double sim = measure.getSimilarity(instance1, instance2, property1, property2);
-            Pair<String, String> p1 = new ImmutablePair<String, String>(instance1.getUri(), instance2.getUri());
-            Pair<Pair<String, String>, Double> p2 = new ImmutablePair<Pair<String, String>, Double>(p1, sim);
-            return p2;
-        }
-
-    }
 
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
@@ -148,42 +43,18 @@ public class EdgeCountingSemanticMapper extends AMapper {
         }
 
         AMapping m = MappingFactory.createDefaultMapping();
-
-        this.exportDictionaryToFile();
-        this.openDictionaryFromFile();
-        int poolSize = 2 * Runtime.getRuntime().availableProcessors();
-        ExecutorService executor = Executors.newFixedThreadPool(poolSize);
-
-        List<Future<Pair<Pair<String, String>, Double>>> list = new ArrayList<Future<Pair<Pair<String, String>, Double>>>();
+        SemanticType type = SemanticFactory.getMeasureType(expression);
+        AEdgeCountingSemanticMeasure measure = (AEdgeCountingSemanticMeasure) SemanticFactory.createMeasure(type);
+        
         for (Instance sourceInstance : source.getAllInstances()) {
             for (Instance targetInstance : target.getAllInstances()) {
-
-                
-                SimilarityThread thread = new SimilarityThread(p.getOperator(), sourceInstance, targetInstance,
-                        properties.get(0), properties.get(1), dictionary);
-
-                Future<Pair<Pair<String, String>, Double>> similarity = executor.submit(thread);
-                list.add(similarity);
-            }
-        }
-        for (Future<Pair<Pair<String, String>, Double>> entry : list) {
-            try {
-                Pair<Pair<String, String>, Double> pair = entry.get();
-                if (pair != null) {
-                    String uri1 = pair.getLeft().getLeft();
-                    String uri2 = pair.getLeft().getRight();
-                    Double sim = pair.getRight();
-
-                    if (sim >= threshold) {
-                        m.add(uri1, uri2, sim);
-                    }
+                double similarity = measure.getSimilarity(sourceInstance, targetInstance, properties.get(0), properties.get(1));
+                if(similarity >= threshold){
+                    m.add(sourceInstance.getUri(), targetInstance.getUri(), similarity);
                 }
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
             }
         }
-        executor.shutdown();
-        this.removeDictionary();
+     
         return m;
     }
 

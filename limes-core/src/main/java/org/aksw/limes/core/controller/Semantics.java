@@ -62,11 +62,10 @@ public class Semantics {
     public static EvaluationData data = null;
     public static CSVWriter csvWriterTest = null;
     public static CSVWriter csvWriterTrain = null;
-
     public static int experiment = 0;
 
     public static void init(String[] args) {
-
+        
         datasetName = args[0];
         experiment = Integer.valueOf(args[1]);
 
@@ -236,6 +235,7 @@ public class Semantics {
             evaluate(mlResults.getMapping(), trainingSet, 0, mlResults.getLinkSpecification(), resultsFileTraining,
                     csvWriterTrain, trainingCaches.get(0), trainingCaches.get(1));
         }
+        
     }
 
     protected static List<ACache> reduceCaches(AMapping refMap, ACache fullSourceCache, ACache fullTargetCache) {
