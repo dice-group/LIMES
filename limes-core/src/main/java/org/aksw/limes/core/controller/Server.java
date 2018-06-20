@@ -279,7 +279,7 @@ public class Server {
 
     }
 
-    private static class StatusMessage {
+    private static class StatusMessage extends ServerMessage {
 
         private Status status;
 
@@ -295,7 +295,7 @@ public class Server {
         }
     }
 
-    private static class ResultsMessage {
+    private static class ResultsMessage extends ServerMessage {
 
         private List<String> availableFiles;
 
@@ -304,7 +304,7 @@ public class Server {
         }
     }
 
-    private static class SubmitMessage {
+    private static class SubmitMessage extends ServerMessage {
 
         private String requestId;
 
