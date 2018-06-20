@@ -1,0 +1,12 @@
+Package: limes-cli
+Version: [[version]]
+Section: web
+Priority: optional
+Architecture: all
+Depends: java-runtime-headless
+Maintainer: Claus Stadler <cstadler@informatik.uni-leipzig.de>
+Description: [[description]]
+Distribution: ldstack-nightly
+Homepage: https://github.com/dice-group/LIMES
+Vcs-Git: git://github.com/dice-group/LIMES.git
+Vcs-Browser: https://github.com/dice-group/LIMES
