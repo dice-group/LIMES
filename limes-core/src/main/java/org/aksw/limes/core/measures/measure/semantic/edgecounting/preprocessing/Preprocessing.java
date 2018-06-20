@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.mit.jwi.item.ISynset;
+import edu.mit.jwi.item.ISynsetID;
 import edu.mit.jwi.item.POS;
 
 public class Preprocessing {
@@ -21,13 +22,15 @@ public class Preprocessing {
 
     public static void main(String[] args){
         db.init();
+        dictionary = new SemanticDictionary();
         dictionary.exportDictionaryToFile();
         dictionary.openDictionaryFromFile();
         for (POS pos : POS.values()) {
             Iterator<ISynset> iterator = dictionary.getDictionary().getSynsetIterator(pos);
             while (iterator.hasNext()) {
                 ISynset synset = iterator.next();
-                List<List<ISynset>> trees = HypernymTreesFinder.getHypernymTrees(dictionary,synset);
+                logger.info("ID: "+synset.getID());
+                List<List<ISynsetID>> trees = HypernymTreesFinder.getHypernymTrees(dictionary,synset);
                 db.addSysnetTrees(synset.getID(), trees);
             }
         }

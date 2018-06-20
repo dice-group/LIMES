@@ -1,5 +1,6 @@
 package org.aksw.limes.core.measures.measure.semantic.edgecounting;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import edu.mit.jwi.item.IIndexWord;
 import edu.mit.jwi.item.ISynset;
+import edu.mit.jwi.item.ISynsetID;
 import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.IWordID;
 import edu.mit.jwi.item.POS;
@@ -35,6 +37,14 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     protected DBImplementation db = null;
     protected SemanticDictionary dictionary = null;
     protected boolean dictionaryFlag = true;
+    
+    public AEdgeCountingSemanticMeasure(DBImplementation d) {
+        dictionary = new SemanticDictionary();
+        dictionary.exportDictionaryToFile();
+        db = d;
+        if (d != null)
+            db.init();
+    }
 
     public SemanticDictionary getSemanticDictionary() {
         return dictionary;
@@ -42,11 +52,6 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
     public void setDictionary(SemanticDictionary dict) {
         this.dictionary = dict;
-    }
-
-    public AEdgeCountingSemanticMeasure() {
-        dictionary = new SemanticDictionary();
-        dictionary.exportDictionaryToFile();
     }
 
     public void setDictionaryFlag(boolean f) {
@@ -83,13 +88,28 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         return iword.getSynset();
     }
 
-    protected HashMap<ISynset, List<List<ISynset>>> preprocessHypernymTrees(IIndexWord word) {
+    public List<List<ISynsetID>> getTrees(ISynset synset) {
+
+        List<List<ISynsetID>> trees = new ArrayList<List<ISynsetID>>();
+        if (db == null) {
+            trees = HypernymTreesFinder.getHypernymTrees(dictionary, synset);
+        } else {
+            if (db.isEmpty()) {
+                trees = HypernymTreesFinder.getHypernymTrees(dictionary, synset);
+            } else {
+                trees = db.getSynsetsTrees(synset.getID());
+            }
+        }
+        return trees;
+    }
+
+    protected HashMap<ISynset, List<List<ISynsetID>>> preprocessHypernymTrees(IIndexWord word) {
 
         if (word == null)
             return null;
 
         ISynset synset;
-        HashMap<ISynset, List<List<ISynset>>> hypernymTrees = new HashMap<ISynset, List<List<ISynset>>>();
+        HashMap<ISynset, List<List<ISynsetID>>> hypernymTrees = new HashMap<ISynset, List<List<ISynsetID>>>();
 
         List<IWordID> wordIDs = word.getWordIDs();
         if (wordIDs == null) {
@@ -100,14 +120,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
             if (iword != null) {
                 synset = getSynset(iword);
                 if (synset != null) {
-                    
-                    List<List<ISynset>> trees = null;
-                    if (db.isEmpty()) {
-                        trees = HypernymTreesFinder.getHypernymTrees(dictionary, synset);
-                    } else {
-                        trees = db.getSynsetsTrees(synset.getID());
-                    }
-
+                    List<List<ISynsetID>> trees = getTrees(synset);
                     if (trees.isEmpty() == false)
                         hypernymTrees.put(synset, trees);
                 }
@@ -119,19 +132,8 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
     @Override
     public double getSimilarity(ISynset synset1, ISynset synset2) {
-        List<List<ISynset>> list1 = null;
-        if (db.isEmpty()) {
-            list1 = HypernymTreesFinder.getHypernymTrees(dictionary, synset1);
-        } else {
-            list1 = db.getSynsetsTrees(synset1.getID());
-        }
-        
-        List<List<ISynset>> list2 = null;
-        if (db.isEmpty()) {
-            list2 = HypernymTreesFinder.getHypernymTrees(dictionary, synset2);
-        } else {
-            list2 = db.getSynsetsTrees(synset2.getID());
-        }
+        List<List<ISynsetID>> list1 = getTrees(synset1);
+        List<List<ISynsetID>> list2 = getTrees(synset2);
 
         return getSimilarity(synset1, list1, synset2, list2);
     }
@@ -148,7 +150,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         if (w1.getPOS().getNumber() != w2.getPOS().getNumber())
             return maxSim;
 
-        HashMap<ISynset, List<List<ISynset>>> trees2 = preprocessHypernymTrees(w2);
+        HashMap<ISynset, List<List<ISynsetID>>> trees2 = preprocessHypernymTrees(w2);
         if (trees2.isEmpty() == true)
             return maxSim;
 
@@ -161,18 +163,13 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
             if (iword1 != null) {
                 ISynset synset1 = getSynset(iword1);
                 if (synset1 != null) {
-                    List<List<ISynset>> synset1Tree = null;
-                    if (db.isEmpty()) {
-                        synset1Tree = HypernymTreesFinder.getHypernymTrees(dictionary, synset1);
-                    } else {
-                        synset1Tree = db.getSynsetsTrees(synset1.getID());
-                    }
+
+                    List<List<ISynsetID>> synset1Tree = getTrees(synset1);
+
                     if (synset1Tree.isEmpty() == false) {
-
-                        for (Map.Entry<ISynset, List<List<ISynset>>> entry2 : trees2.entrySet()) {
-
+                        for (Map.Entry<ISynset, List<List<ISynsetID>>> entry2 : trees2.entrySet()) {
                             ISynset synset2 = entry2.getKey();
-                            List<List<ISynset>> synset2Tree = entry2.getValue();
+                            List<List<ISynsetID>> synset2Tree = entry2.getValue();
                             sim = getSimilarity(synset1, synset1Tree, synset2, synset2Tree);
                             if (sim > maxSim) {
                                 maxSim = sim;
@@ -194,8 +191,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     @Override
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         // test in each semantic similarity
-        db = new DBImplementation();
-        db.init();
+
         if (dictionaryFlag == true)
             dictionary.openDictionaryFromFile();
         double sim = 0;
@@ -280,8 +276,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         }
         if (dictionaryFlag == true)
             dictionary.removeDictionary();
-        db.close();
-        
+
         return maxSim;
     }
 
@@ -298,7 +293,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
             if (idxWord1.getPOS().getNumber() != idxWord2.getPOS().getNumber()) {
                 return 0.0d;
             } else {
-                return this.getSimilarity(idxWord1, idxWord2);
+                return getSimilarity(idxWord1, idxWord2);
             }
         }
     }

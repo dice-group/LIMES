@@ -19,6 +19,7 @@ import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticFactory;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticType;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.preprocessing.DB.DBImplementation;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.SemanticDictionary;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -41,7 +42,8 @@ public class EdgeCountingSemanticMapperThreading extends AMapper{
 
         public SimilarityThread(String expression, Instance s, Instance t, String prop1, String prop2, SemanticDictionary dict) {
             SemanticType type = SemanticFactory.getMeasureType(expression);
-            measure = (AEdgeCountingSemanticMeasure) SemanticFactory.createMeasure(type);
+            DBImplementation d = new DBImplementation();
+            measure = (AEdgeCountingSemanticMeasure) SemanticFactory.createMeasure(type,d);
             instance1 = s;
             instance2 = t;
             property1 = prop1;

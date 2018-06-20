@@ -185,21 +185,7 @@ public class MapperFactory {
             return new EdgeCountingSemanticMapper();
             
         //////////////////////////////////////////
-        case SEM_COSINE:
-        case SEM_JACCARD:
-        case SEM_OVERLAP:
-        case SEM_TRIGRAM:
-            PPJoinPlusPlus mapperPP = new PPJoinPlusPlus();
-            mapperPP.setSemanticStrategy(type.getStrategy());
-            return mapperPP;
-        case SEM_LEVENSHTEIN:
-            EDJoinMapper mapperLeven = new EDJoinMapper();
-            mapperLeven.setSemanticStrategy(type.getStrategy());
-            return mapperLeven;
-        case SEM_QGRAMS:
-            FastNGramMapper mapperQGrams = new FastNGramMapper();
-            mapperQGrams.setSemanticStrategy(type.getStrategy());
-            return mapperQGrams;
+        
         default:
             throw new InvalidMeasureException(type.toString());
         }

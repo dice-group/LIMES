@@ -5,6 +5,7 @@ import java.util.List;
 import org.aksw.limes.core.measures.measure.semantic.ISemanticMeasure;
 
 import edu.mit.jwi.item.ISynset;
+import edu.mit.jwi.item.ISynsetID;
 
 public interface IEdgeCountingSemanticMeasure extends ISemanticMeasure {
     
@@ -16,6 +17,7 @@ public interface IEdgeCountingSemanticMeasure extends ISemanticMeasure {
      * @param synsets2
      * @return semantic similarity of two synsets
      */
-    public double getSimilarity(ISynset synset1, List<List<ISynset>> synset1Tree, ISynset synset2, List<List<ISynset>> synset2Tree);
+    public double getSimilarity(ISynset synset1, List<List<ISynsetID>> synset1Tree, ISynset synset2, List<List<ISynsetID>> synset2Tree);
 
+    
 }

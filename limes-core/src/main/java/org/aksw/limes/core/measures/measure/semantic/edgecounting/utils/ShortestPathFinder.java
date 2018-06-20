@@ -2,12 +2,11 @@ package org.aksw.limes.core.measures.measure.semantic.edgecounting.utils;
 
 import java.util.List;
 
-
-import edu.mit.jwi.item.ISynset;
+import edu.mit.jwi.item.ISynsetID;
 
 public class ShortestPathFinder {
 
-    public static int shortestPath(List<List<ISynset>> synset1Tree, List<List<ISynset>> synset2Tree) {
+    public static int shortestPath(List<List<ISynsetID>> synset1Tree, List<List<ISynsetID>> synset2Tree) {
         int path = Integer.MAX_VALUE;
 
 
@@ -21,8 +20,8 @@ public class ShortestPathFinder {
         int path1Pos, path2Pos;
 
 
-        for (List<ISynset> synset1HypernymPath : synset1Tree) {
-            for (List<ISynset> synset2HypernymPath : synset2Tree) {
+        for (List<ISynsetID> synset1HypernymPath : synset1Tree) {
+            for (List<ISynsetID> synset2HypernymPath : synset2Tree) {
                 path1Pos = 0;
                 path2Pos = 0;
                 while ((path1Pos < synset1HypernymPath.size()) && (path2Pos < synset2HypernymPath.size())

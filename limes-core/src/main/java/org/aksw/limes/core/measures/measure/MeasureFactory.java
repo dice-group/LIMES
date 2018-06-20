@@ -86,13 +86,6 @@ public class MeasureFactory {
     public static final String SOUNDEX = "soundex";
     public static final String TRIGRAM = "trigram";
 
-    // semantic String measures
-    public static final String SEM_COSINE = "sem_cosine";
-    public static final String SEM_LEVENSHTEIN = "sem_levenshtein";
-    public static final String SEM_QGRAMS = "sem_qgrams";
-    public static final String SEM_TRIGRAM = "sem_trigram";
-    public static final String SEM_JACCARD = "sem_jaccard";
-    public static final String SEM_OVERLAP = "sem_overlap";
 
     // vector space measures
     public static final String EUCLIDEAN = "euclidean";
@@ -375,83 +368,12 @@ public class MeasureFactory {
             return MeasureType.WUPALMER;
         }
         ///////////////////////////////////////////
-        if (measure.startsWith(SEM_COSINE)) {
-            String semanticStrategy = getStrategy(measure);
-            boolean flag = validateSemanticSimilarity(semanticStrategy);
-            if (flag == false)
-                throw new InvalidMeasureException(measure);
-            MeasureType type = MeasureType.SEM_COSINE;
-            type.setStrategy(semanticStrategy);
-            return type;
-        }
-        if (measure.startsWith(SEM_JACCARD)) {
-            String semanticStrategy = getStrategy(measure);
-            boolean flag = validateSemanticSimilarity(semanticStrategy);
-            if (flag == false)
-                throw new InvalidMeasureException(measure);
-            MeasureType type = MeasureType.SEM_JACCARD;
-            type.setStrategy(semanticStrategy);
-            return type;
-        }
-        if (measure.startsWith(SEM_LEVENSHTEIN)) {
-            String semanticStrategy = getStrategy(measure);
-            boolean flag = validateSemanticSimilarity(semanticStrategy);
-            if (flag == false)
-                throw new InvalidMeasureException(measure);
-            MeasureType type = MeasureType.SEM_LEVENSHTEIN;
-            type.setStrategy(semanticStrategy);
-            return type;
-        }
-        if (measure.startsWith(SEM_OVERLAP)) {
-            String semanticStrategy = getStrategy(measure);
-            boolean flag = validateSemanticSimilarity(semanticStrategy);
-            if (flag == false)
-                throw new InvalidMeasureException(measure);
-            MeasureType type = MeasureType.SEM_OVERLAP;
-            type.setStrategy(semanticStrategy);
-            return type;
-        }
-        if (measure.startsWith(SEM_QGRAMS)) {
-            String semanticStrategy = getStrategy(measure);
-            boolean flag = validateSemanticSimilarity(semanticStrategy);
-            if (flag == false)
-                throw new InvalidMeasureException(measure);
-            MeasureType type = MeasureType.SEM_QGRAMS;
-            type.setStrategy(semanticStrategy);
-            return type;
-        }
-        if (measure.startsWith(SEM_TRIGRAM)) {
-            String semanticStrategy = getStrategy(measure);
-            boolean flag = validateSemanticSimilarity(semanticStrategy);
-            if (flag == false)
-                throw new InvalidMeasureException(measure);
-            MeasureType type = MeasureType.SEM_TRIGRAM;
-            type.setStrategy(semanticStrategy);
-            return type;
-        }
-
+        
         //////////////////////////////////
         throw new InvalidMeasureException(measure);
     }
 
-    public static boolean validateSemanticSimilarity(String name) {
-        if (name.equals(SHORTEST_PATH) || name.equals(LI) || name.equals(LCH) || name.equals(WUPALMER))
-            return true;
-        return false;
-    }
-
-    public static String getStrategy(String measure){
-        if(measure.contains("shortest_path"))
-            return "shortest_path";
-        if(measure.contains("li"))
-            return "li";
-        if(measure.contains("lch"))
-            return "lch";
-        if(measure.contains("wupalmer"))
-            return "wupalmer";
     
-        return null;
-    }
     
     /**
      * Factory function for retrieving the desired measure instance.
@@ -593,27 +515,15 @@ public class MeasureFactory {
             return new SetJaccardMeasure();
         ///////////////////////
         case SHORTEST_PATH:
-            return new ShortestPathMeasure();
+            return new ShortestPathMeasure(null);
         case LCH:
-            return new LCHMeasure();
+            return new LCHMeasure(null);
         case LI:
-            return new LiMeasure();
+            return new LiMeasure(null);
         case WUPALMER:
-            return new WuPalmerMeasure();
+            return new WuPalmerMeasure(null);
 
         ////////////////////////////////
-        case SEM_COSINE:
-            return new CosineMeasure();
-        case SEM_JACCARD:
-            return new JaccardMeasure();
-        case SEM_LEVENSHTEIN:
-            return new LevenshteinMeasure();
-        case SEM_OVERLAP:
-            return new TrigramMeasure();
-        case SEM_QGRAMS:
-            return new QGramSimilarityMeasure();
-        case SEM_TRIGRAM:
-            return new TrigramMeasure();
         default:
             throw new InvalidMeasureException(type.toString());
         }

@@ -14,7 +14,7 @@ public class HypernymTreesFinder {
     public static boolean useInstanceHypernyms = true;
     public static boolean useHypernyms = true;
 
-    public static List<List<ISynset>> getHypernymTrees(SemanticDictionary dictionary, ISynset synset) {
+    /*public static List<List<ISynset>> getHypernymTrees(SemanticDictionary dictionary, ISynset synset) {
         if (synset == null)
             return new ArrayList<List<ISynset>>();
 
@@ -61,6 +61,61 @@ public class HypernymTreesFinder {
                 // add the current Tree and
                 for (List<ISynset> hypernymTree : hypernymTrees) {
                     hypernymTree.add(synset);
+                    result.add(hypernymTree);
+                }
+            }
+        }
+
+        return result;
+    }*/
+    
+    public static List<List<ISynsetID>> getHypernymTrees(SemanticDictionary dictionary, ISynset synset) {
+        if (synset == null)
+            return new ArrayList<List<ISynsetID>>();
+
+        
+        List<List<ISynsetID>> trees = getHypernymTrees(dictionary, synset, new HashSet<ISynsetID>());
+
+        return trees;
+    }
+    
+    public static List<List<ISynsetID>> getHypernymTrees(SemanticDictionary dictionary, ISynset synset, Set<ISynsetID> history) {
+
+        // only noun hierarchy has instance hypernyms
+        useInstanceHypernyms = synset.getType() == 1;
+        // only noun and verb hierarchies have hypernyms
+        useHypernyms = (synset.getType() == 1 || synset.getType() == 2);
+
+        // get the hypernyms
+        List<ISynsetID> hypernymIds = useHypernyms ? synset.getRelatedSynsets(Pointer.HYPERNYM)
+                : Collections.emptyList();
+        // get the hypernyms (if this is an instance)
+        List<ISynsetID> instanceHypernymIds = useInstanceHypernyms ? synset.getRelatedSynsets(Pointer.HYPERNYM_INSTANCE)
+                : Collections.emptyList();
+
+        List<List<ISynsetID>> result = new ArrayList<List<ISynsetID>>();
+
+        // If this is the highest node and has no other hypernyms
+        if ((hypernymIds.size() == 0) && (instanceHypernymIds.size() == 0)) {
+            // return the tree containing only the current node
+            List<ISynsetID> tree = new ArrayList<ISynsetID>();
+            tree.add(synset.getID());
+            result.add(tree);
+        } else {
+            // for all (direct) hypernyms of this synset
+            for (ISynsetID hypernymId : hypernymIds) {
+                List<List<ISynsetID>> hypernymTrees = getHypernymTrees(dictionary,dictionary.getSynset(hypernymId), history);
+                // add the current Tree and
+                for (List<ISynsetID> hypernymTree : hypernymTrees) {
+                    hypernymTree.add(synset.getID());
+                    result.add(hypernymTree);
+                }
+            }
+            for (ISynsetID hypernymId : instanceHypernymIds) {
+                List<List<ISynsetID>> hypernymTrees = getHypernymTrees(dictionary, dictionary.getSynset(hypernymId), history);
+                // add the current Tree and
+                for (List<ISynsetID> hypernymTree : hypernymTrees) {
+                    hypernymTree.add(synset.getID());
                     result.add(hypernymTree);
                 }
             }

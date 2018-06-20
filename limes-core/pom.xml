@@ -111,6 +111,9 @@
 				<useManifestOnlyJar>false</useManifestOnlyJar>
                     		<excludes>
             				<exclude>**/LeastCommonSubsumerFinderTest.java</exclude>
+					<exclude>**/HypernymTreesFinderTest.java</exclude>
+					<exclude>**/SemanticDictionaryTest.java</exclude>
+					<exclude>**/ShortestPathFinderTest.java</exclude>
             				<exclude>**/AEdgeCountingSemanticMeasureTest.java</exclude>
 	    				<exclude>**/LCHMeasureTest.java</exclude>
             				<exclude>**/LiMeasureTest.java</exclude>

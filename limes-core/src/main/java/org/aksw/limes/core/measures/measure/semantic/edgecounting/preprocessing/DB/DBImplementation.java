@@ -57,20 +57,20 @@ public class DBImplementation {
         return (redisSyncCommands.randomkey() != null) ? true : false;
     }
 
-    private List<List<ISynset>> decodeSynsets(String json) {
+    private List<List<ISynsetID>> decodeSynsets(String json) {
         if (json == null)
-            return new ArrayList<List<ISynset>>();
+            return new ArrayList<List<ISynsetID>>();
         Gson gson = new Gson();
-        return gson.fromJson(json, new TypeToken<List<List<ISynset>>>() {
+        return gson.fromJson(json, new TypeToken<List<List<ISynsetID>>>() {
         }.getType());
     }
 
-    public List<List<ISynset>> getSynsetsTrees(ISynsetID synsetID) {
+    public List<List<ISynsetID>> getSynsetsTrees(ISynsetID synsetID) {
         return decodeSynsets(redisSyncCommands.hget(SYNSETS_TREES, synsetID.toString()));
 
     }
 
-    public void addSysnetTrees(ISynsetID synsetID, List<List<ISynset>> trees) {
+    public void addSysnetTrees(ISynsetID synsetID, List<List<ISynsetID>> trees) {
         Gson gson = new Gson();
         String typeKey = SYNSETS_TREES;
         // add to good sequences

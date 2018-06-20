@@ -3,8 +3,7 @@ package org.aksw.limes.core.measures.measure.semantic.edgecounting.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import edu.mit.jwi.item.ISynset;
+import edu.mit.jwi.item.ISynsetID;
 
 public class LeastCommonSubsumerFinder {
     LeastCommonSubsumer lcs = null;
@@ -21,7 +20,7 @@ public class LeastCommonSubsumerFinder {
         return lcs.getSynsetsDistance();
     }
 
-    public void getLeastCommonSubsumer(List<List<ISynset>> synset1Tree, List<List<ISynset>> synset2Tree) {
+    public void getLeastCommonSubsumer(List<List<ISynsetID>> synset1Tree, List<List<ISynsetID>> synset2Tree) {
 
         if (synset1Tree == null || synset2Tree == null)
             return;
@@ -32,9 +31,8 @@ public class LeastCommonSubsumerFinder {
         lcs = new LeastCommonSubsumer();
         int path1Pos, path2Pos;
 
-
-        for (List<ISynset> synset1HypernymPath : synset1Tree) {
-            for (List<ISynset> synset2HypernymPath : synset2Tree) {
+        for (List<ISynsetID> synset1HypernymPath : synset1Tree) {
+            for (List<ISynsetID> synset2HypernymPath : synset2Tree) {
 
                 path1Pos = 0;
                 path2Pos = 0;
@@ -45,16 +43,14 @@ public class LeastCommonSubsumerFinder {
                     ++path2Pos;
                 }
                 // if 0) there is no DCS available until now, 1) the new common
-                // synset is deeper
+                // synset is located deeper in the hierarchy
                 // than our current DCS or 2) the new common synset has the same
-                // depth but a
-                // smaller distance between the two synsets
+                // depth but a smaller distance between the two synsets
                 int newPath = synset1HypernymPath.size() + synset2HypernymPath.size() - 2 * path1Pos;
                 int oldPath = lcs.getPs1().size() + lcs.getPs2().size();
 
-                
                 if ((lcs.getPath() == null) || (path1Pos > lcs.getDepth())
-                        || ( (path1Pos == lcs.getDepth()) && (newPath < oldPath) ) ) {
+                        || ((path1Pos == lcs.getDepth()) && (newPath < oldPath))) {
                     // we have found a new DCS
 
                     lcs.setPaths(synset1HypernymPath.subList(0, path1Pos),
@@ -67,8 +63,8 @@ public class LeastCommonSubsumerFinder {
         }
     }
 
-    public void getLeastCommonSubsumerViaShortestPath(List<List<ISynset>> synset1Tree,
-            List<List<ISynset>> synset2Tree) {
+    public void getLeastCommonSubsumerViaShortestPath(List<List<ISynsetID>> synset1Tree,
+            List<List<ISynsetID>> synset2Tree) {
 
         if (synset1Tree == null || synset2Tree == null)
             return;
@@ -79,10 +75,9 @@ public class LeastCommonSubsumerFinder {
         lcs = new LeastCommonSubsumer();
         int path1Pos, path2Pos;
 
+        for (List<ISynsetID> synset1HypernymPath : synset1Tree) {
 
-        for (List<ISynset> synset1HypernymPath : synset1Tree) {
-
-            for (List<ISynset> synset2HypernymPath : synset2Tree) {
+            for (List<ISynsetID> synset2HypernymPath : synset2Tree) {
 
                 path1Pos = 0;
                 path2Pos = 0;
@@ -95,11 +90,10 @@ public class LeastCommonSubsumerFinder {
                 // if 0) there is no DCS available until now, 1) the new
                 // distance between the synset is less than the existing one
                 // or 2) the current distance of synsets is the same as the
-                // existing one but the new common synset is deeper
-                // than our current DCS 
+                // existing one but the new common synset is deeper in the
+                // hierarchy than our current DCS
                 int newPath = synset1HypernymPath.size() + synset2HypernymPath.size() - 2 * path1Pos;
                 int oldPath = lcs.getPs1().size() + lcs.getPs2().size();
-
 
                 if ((lcs.getPath() == null) || (newPath < oldPath)
                         || ((path1Pos > lcs.getDepth()) && (newPath == oldPath))) {
@@ -117,27 +111,27 @@ public class LeastCommonSubsumerFinder {
 
     private class LeastCommonSubsumer {
 
-        protected List<ISynset> ps1;
-        protected List<ISynset> ps2;
+        protected List<ISynsetID> ps1;
+        protected List<ISynsetID> ps2;
 
-        protected List<ISynset> path;
+        protected List<ISynsetID> path;
 
         protected LeastCommonSubsumer() {
-            this.ps1 = new ArrayList<ISynset>();
-            this.ps2 = new ArrayList<ISynset>();
+            this.ps1 = new ArrayList<ISynsetID>();
+            this.ps2 = new ArrayList<ISynsetID>();
         }
 
-        protected void setPaths(List<ISynset> p, List<ISynset> pathSynset1, List<ISynset> pathSynset2) {
+        protected void setPaths(List<ISynsetID> p, List<ISynsetID> pathSynset1, List<ISynsetID> pathSynset2) {
             ps1 = pathSynset1;
             ps2 = pathSynset2;
             path = p;
         }
 
-        protected List<ISynset> getPs1() {
+        protected List<ISynsetID> getPs1() {
             return ps1;
         }
 
-        protected List<ISynset> getPs2() {
+        protected List<ISynsetID> getPs2() {
             return ps2;
         }
 
@@ -153,7 +147,7 @@ public class LeastCommonSubsumerFinder {
             return ps1.size() + ps2.size();
         }
 
-        protected List<ISynset> getPath() {
+        protected List<ISynsetID> getPath() {
             return this.path;
         }
 

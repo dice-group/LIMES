@@ -2,27 +2,28 @@ package org.aksw.limes.core.measures.measure.semantic.edgecounting;
 
 import java.util.List;
 
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.preprocessing.DB.DBImplementation;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.ShortestPathFinder;
 
 import edu.mit.jwi.item.ISynset;
+import edu.mit.jwi.item.ISynsetID;
 
 public class ShortestPathMeasure extends AEdgeCountingSemanticMeasure {
 
-    public ShortestPathMeasure() {
-        super();
+    public ShortestPathMeasure(DBImplementation d) {
+        super(d);
     }
 
     double maxValue = 1;
 
     @Override
-    public double getSimilarity(ISynset synset1, List<List<ISynset>> synset1Tree, ISynset synset2,
-            List<List<ISynset>> synset2Tree) {
-
-        if (synset1.getType() != synset2.getType()) {
+    public double getSimilarity(ISynset synset1, List<List<ISynsetID>> synset1Tree, ISynset synset2,
+            List<List<ISynsetID>> synset2Tree) {
+        
+        if (synset1Tree.isEmpty() == true || synset2Tree.isEmpty() == true) {
             return 0;
         }
-
-        if (synset1Tree.isEmpty() == true || synset2Tree.isEmpty() == true) {
+        if (synset1.getType() != synset2.getType()) {
             return 0;
         }
 
@@ -57,5 +58,6 @@ public class ShortestPathMeasure extends AEdgeCountingSemanticMeasure {
     public String getType() {
         return "semantic";
     }
+
 
 }
