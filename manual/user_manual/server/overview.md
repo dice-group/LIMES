@@ -33,18 +33,22 @@ The following HTTP endpoints are currently implemented:
 
 ```
 // Get latest LIMES, dev branch
-$ git clone https://github.com/AKSW/LIMES-dev && cd LIMES-dev && git checkout dev 
+$ git clone https://github.com/dice-group/LIMES && cd LIMES && git checkout dev 
 // Assembly
 $ mvn clean package shade:shade -Dmaven.test.skip=true
-$ cd target
+$ cd limes-core/target
 // Run LIMES as HTTP server on port 8080
-// The example is for version 1.0.0, the filename may differ
 // You can also run it on port 80 for example by adding -p 80 flag
-$ java -jar limes-core-1.0.0-SNAPSHOT.jar -s
+$ java -jar limes-core-LATEST_RELEASE_VERSION_NUMBER.jar -s
+// Get output
+15:05:46.078 [main] INFO  org.aksw.limes.core.controller.SimpleServer:44 - Attempting to start LIMES server at port 8080...
+15:05:46.088 [main] INFO  org.aksw.limes.core.controller.SimpleServer:56 - Server has been started! Waiting for requests...
+// Open new terminal
+$ cd PATH_TO_LIMES/LIMES/limes-core/target
 // Download example XML mapping
-$ wget https://raw.githubusercontent.com/AKSW/LIMES-dev/master/limes-core/resources/lgd-lgd.xml
-// Run mapping against endpoint
-$ curl --form "fileupload=@lgd-lgd.xml" http://localhost:8080/execute
+$ wget https://raw.githubusercontent.com/dice-group/LIMES/master/limes-core/resources/lgd-lgd-optional-properties.xml
+// Run mapping against endpoint and get job id
+$ curl --form "fileupload=@lgd-lgd-optional-properties.xml" http://localhost:8080/execute
 46839272943
 // Observe the status
 $ curl http://localhost:8080/get_status?job_id=46839272943
