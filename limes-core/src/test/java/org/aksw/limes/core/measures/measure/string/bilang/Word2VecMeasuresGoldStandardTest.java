@@ -95,6 +95,34 @@ public class Word2VecMeasuresGoldStandardTest {
 		
 	}
 	
+	/*
+	Evaluation measures for naive, WordNet, Word2Vec
+======================================
+precision: 0.484375
+recall: 0.3563218390804598
+fmeasure: 0.4105960264900662
+accuracy: 0.9985634039256198
+pprecision: 0.82421875
+precall: 0.2997159090909091
+pfmeasure: 0.4395833333333333
+======================================
+precision: 0.5838150289017341
+recall: 0.5804597701149425
+fmeasure: 0.5821325648414986
+accuracy: 0.9988297391528925
+pprecision: 0.7716763005780347
+precall: 0.37926136363636365
+pfmeasure: 0.5085714285714286
+======================================
+precision: 0.6514285714285715
+recall: 0.6551724137931034
+fmeasure: 0.6532951289398281
+accuracy: 0.9990234375
+pprecision: 0.8085714285714286
+precall: 0.40198863636363635
+pfmeasure: 0.5370018975332068
+	 */
+	
 	
 	public void testPredictionAgaintHumanScores(AMapping predictions, GoldStandard goldStandard) {
 		Set<EvaluatorType> evaluationMeasures = initEvalMeasures();
