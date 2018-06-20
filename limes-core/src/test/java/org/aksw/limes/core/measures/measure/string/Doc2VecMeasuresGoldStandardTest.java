@@ -60,21 +60,45 @@ public class Doc2VecMeasuresGoldStandardTest {
 				String simpleAbstract = simpleAbstracts.get(i);
 				String normalAbstract = normalAbstracts.get(j);
 				double sim = measure.getSimilarity(simpleAbstract, normalAbstract);
+//				System.out.println(sim);
 				if (sim < bestSim) {
 					bestSim = sim;
 					bestJ = j;
 				}
+				if (sim > 0.154033065905) {
+					predictions.add(sourceUris.get(i), targetUris.get(j), 1);
+				}
 			}
-			predictions.add(sourceUris.get(i), targetUris.get(bestJ), 1);
+//			predictions.add(sourceUris.get(i), targetUris.get(bestJ), 1);
 		}
 		goldStandard =  new GoldStandard(goldMapping, sourceUris, targetUris);
 	}
 	
+	/*
+	with threshold 0.7
+	precision: 0.015741270749856897
+	recall: 0.6111111111111112
+	fmeasure: 0.030691964285714284
+	accuracy: 0.5711111111111111
+	pprecision: 0.024899828277046364
+	precall: 0.9666666666666667
+	pfmeasure: 0.04854910714285714
+	
+	with threshold 0.154033065905:
+	precision: 0.01111934766493699
+	recall: 1.0
+	fmeasure: 0.021994134897360705
+	accuracy: 0.011851851851851851
+	pprecision: 0.01111934766493699
+	precall: 1.0
+	pfmeasure: 0.021994134897360705
+	 */
+	
 	@Test
 	public void testGoldenStandard() {
-		Set<EvaluatorType> measure = initEvalMeasures();
+		Set<EvaluatorType> measures = initEvalMeasures();
 		
-		Map<EvaluatorType, Double> calculations = testQualitativeEvaluator(predictions, goldStandard, measure);
+		Map<EvaluatorType, Double> calculations = testQualitativeEvaluator(predictions, goldStandard, measures);
 		
 		double precision = calculations.get(EvaluatorType.PRECISION);
 		System.out.println("precision: " + precision);
