@@ -56,8 +56,8 @@ public class Controller {
     public static void main(String[] args) {
         // I. Configure Logger
         CommandLine cmd = parseCommandLine(args);
-        System.setProperty("logFilename", cmd.hasOption('o') ? cmd.getOptionValue("o") : DEFAULT_LOGGING_PATH);
-        ((org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false)).reconfigure();
+//        System.setProperty("logFilename", cmd.hasOption('o') ? cmd.getOptionValue("o") : DEFAULT_LOGGING_PATH);
+//        ((org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false)).reconfigure();
         logger = LoggerFactory.getLogger(Controller.class);
         // II. Digest Options
         if (cmd.hasOption('h')) {
@@ -71,7 +71,7 @@ public class Controller {
             if (cmd.hasOption('p')) port = Integer.parseInt(cmd.getOptionValue('p'));
             int limit = defaultLimit;
             if (cmd.hasOption('l')) limit = Integer.parseInt(cmd.getOptionValue('l'));
-            SimpleServer.startServer(port, limit);
+            Server.getInstance().run(port, limit);
         } else {
             // III. Has Arguments?
             if (cmd.getArgs().length < 1) {
