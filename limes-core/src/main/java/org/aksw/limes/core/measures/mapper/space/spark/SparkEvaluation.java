@@ -20,7 +20,6 @@ public class SparkEvaluation {
 
     private static SparkSession spark = SparkSession.builder()
             .appName("Example")
-            .master("local[*]")
             .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
             .config("spark.kryo.registrator", LimesKryoRegistrator.class.getName())
             .getOrCreate();
