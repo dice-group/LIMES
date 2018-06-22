@@ -10,6 +10,8 @@ import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.graphs.AGraphSimilarityMeasure;
+import org.aksw.limes.core.measures.measure.graphs.gouping.*;
+import org.aksw.limes.core.measures.measure.graphs.gouping.labels.*;
 import org.aksw.limes.core.measures.measure.graphs.representation.WLDescriptionFactory;
 
 
@@ -142,13 +144,25 @@ public class WLSimilarityMapper extends AMapper {
         return mapping;
     }
 
+    private IDependendNodeLabelGrouper initDependentGrouper(){
+        List<SimDefinition> definitions = new ArrayList<>();
+        definitions.add(new SimDefinition(new JaccardSimilarity(), 0.62));
+        definitions.add(new SimDefinition(new LevenshteinSimilarity(), 0.4));
+        definitions.add(new SimDefinition(new CosineSimilarity(), 0.55));
+        return new MaxSimGrouper(definitions, new ExactNodeLabelGrouper());
+    }
+
 
     private AMapping mapWLSimilarity(ACache source, ACache target, double threshold){
         List<List<String>> sourceUris = split(source.getAllUris());
         List<List<String>> targetUris = split(target.getAllUris());
 
-        WLDescriptionFactory sourceFactory = new WLDescriptionFactory(source.getKbInfo());
-        WLDescriptionFactory targetFactory = new WLDescriptionFactory(target.getKbInfo());
+        ICollectingNodeLabelGrouper sourceGrouper = new CollectingGrouperWrapper(new ExactNodeLabelGrouper());
+        IDependendNodeLabelGrouper targetGrouper = initDependentGrouper();
+        sourceGrouper.collectOn(targetGrouper.getDependLabelConsumer());
+
+        WLDescriptionFactory sourceFactory = new WLDescriptionFactory(source.getKbInfo(), sourceGrouper);
+        WLDescriptionFactory targetFactory = new WLDescriptionFactory(target.getKbInfo(), targetGrouper);
 
         List<Future<AMapping>> mappings = new ArrayList<>();
 

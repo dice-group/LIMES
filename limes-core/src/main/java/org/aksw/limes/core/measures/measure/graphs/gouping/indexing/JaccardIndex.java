@@ -8,9 +8,12 @@ public class JaccardIndex {
 
     private NgramIndexer indexer;
 
-    public JaccardIndex(int window, Set<String> index){
+    public JaccardIndex(int window){
         indexer = new NgramIndexer(window);
-        indexer.index(index);
+    }
+
+    public void index(String s){
+        indexer.index(s);
     }
 
     public Map<String, Double> getNearestStrings(String s, double threshold){

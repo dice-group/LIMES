@@ -7,9 +7,18 @@ import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +41,9 @@ public class DataSetChooser2 {
         chooser.registerDataSet(new RestaurantsFixedDataSet());
         chooser.registerDataSet(new AbtBuyDataSet());
         chooser.registerDataSet(new DBLPACMDataSet());
+        chooser.registerDataSet(new AmazonGoogleDataset());
+        chooser.registerDataSet(new DBPLinkMDBDataset());
+        chooser.registerDataSet(new DrugsDataset());
 
         return chooser;
     }
@@ -77,18 +89,19 @@ public class DataSetChooser2 {
     }
 
     private void initMapping(Map<DataSetChooser.MapKey, Object> param, IDataSet dataSet){
-        param.put(DataSetChooser.MapKey.BASE_FOLDER, path(dataSet.getBaseFolder()));
-        param.put(DataSetChooser.MapKey.DATASET_FOLDER, path(dataSet.getDataSetFolder()));
+        param.put(DataSetChooser.MapKey.BASE_FOLDER, dataSet.getBaseFolder());
+        param.put(DataSetChooser.MapKey.DATASET_FOLDER, dataSet.getDataSetFolder());
         param.put(DataSetChooser.MapKey.CONFIG_FILE, dataSet.getConfigFile());
         param.put(DataSetChooser.MapKey.REFERENCE_FILE, dataSet.getReferenceFile());
         param.put(DataSetChooser.MapKey.SOURCE_FILE, dataSet.getSourceFile());
         param.put(DataSetChooser.MapKey.TARGET_FILE, dataSet.getTargetFile());
-        param.put(DataSetChooser.MapKey.EVALUATION_RESULTS_FOLDER, path(getEvalFolder()));
+        param.put(DataSetChooser.MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
         param.put(DataSetChooser.MapKey.EVALUATION_FILENAME, dataSet.getEvaluationFilename());
         param.put(DataSetChooser.MapKey.NAME, dataSet.getName());
 
-        AConfigurationReader cR = new XMLConfigurationReader(
-                (String) param.get(DataSetChooser.MapKey.BASE_FOLDER) + param.get(DataSetChooser.MapKey.CONFIG_FILE));
+        String crPath = PathResolver.resolvePath((String) param.get(DataSetChooser.MapKey.BASE_FOLDER) + param.get(DataSetChooser.MapKey.CONFIG_FILE));
+
+        AConfigurationReader cR = new XMLConfigurationReader(crPath);
         cR.read();
         param.put(DataSetChooser.MapKey.CONFIG_READER, cR);
 
@@ -97,12 +110,12 @@ public class DataSetChooser2 {
         PathResolver.resolvePath(cfg.getSourceInfo());
         PathResolver.resolvePath(cfg.getTargetInfo());
 
-        IDataSetIO io = dataSet.getIO();
+        IDataSetIO io = new PathResolvingIO(dataSet.getIO());
 
         param.put(DataSetChooser.MapKey.PROPERTY_MAPPING, io.loadProperties((String) param.get(DataSetChooser.MapKey.BASE_FOLDER),
                 (String) param.get(DataSetChooser.MapKey.CONFIG_FILE)));
-        param.put(DataSetChooser.MapKey.SOURCE_CACHE, io.loadSourceCache(cfg,(String) param.get(DataSetChooser.MapKey.DATASET_FOLDER) + (String) param.get(DataSetChooser.MapKey.SOURCE_FILE), dataSet.getOAEIType()));
-        param.put(DataSetChooser.MapKey.TARGET_CACHE, io.loadTargetCache(cfg,(String) param.get(DataSetChooser.MapKey.DATASET_FOLDER) + (String) param.get(DataSetChooser.MapKey.TARGET_FILE), dataSet.getOAEIType()));
+        param.put(DataSetChooser.MapKey.SOURCE_CACHE, io.loadSourceCache(cfg,(String) param.get(DataSetChooser.MapKey.DATASET_FOLDER) + param.get(DataSetChooser.MapKey.SOURCE_FILE), dataSet.getOAEIType()));
+        param.put(DataSetChooser.MapKey.TARGET_CACHE, io.loadTargetCache(cfg,(String) param.get(DataSetChooser.MapKey.DATASET_FOLDER) + param.get(DataSetChooser.MapKey.TARGET_FILE), dataSet.getOAEIType()));
         param.put(DataSetChooser.MapKey.REFERENCE_MAPPING,
                   io.loadMapping(cfg, (String) param.get(DataSetChooser.MapKey.DATASET_FOLDER) + (String) param.get(DataSetChooser.MapKey.REFERENCE_FILE)));
 
@@ -114,9 +127,6 @@ public class DataSetChooser2 {
 
     }
 
-    private String path(String path){
-        return PathResolver.resolvePath(path);
-    }
 
     public static AMapping fixReferenceMap(AMapping original, ACache sC, ACache tC) {
         int count = 0;

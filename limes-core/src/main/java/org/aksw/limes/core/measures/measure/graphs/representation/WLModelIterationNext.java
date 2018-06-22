@@ -48,9 +48,11 @@ public class WLModelIterationNext implements WLModelIteration {
 
         List<String> neighbourhoodLabels = new ArrayList<>();
         for(GraphModelRepresentation.Edge e: representation.getNeighbours(s)){
-            neighbourhoodLabels.add(this.function.hashString(e.getEdgeName()+" "+ previousRelabelNode(e.getNode()),
+            String nodeLabel = previousRelabelNode(e.getNode());
+            if(nodeLabel != null)
+                neighbourhoodLabels.add(this.function.hashString(e.getEdgeName()+" "+ nodeLabel,
                                                 Charset.defaultCharset())
-                                     .toString());
+                                        .toString());
         }
 
         String[] sorted = neighbourhoodLabels.toArray(new String[neighbourhoodLabels.size()]);

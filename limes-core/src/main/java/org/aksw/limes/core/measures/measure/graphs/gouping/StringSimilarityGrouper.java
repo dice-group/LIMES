@@ -6,6 +6,7 @@ import org.apache.jena.graph.Node_Literal;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class StringSimilarityGrouper implements IDependendNodeLabelGrouper {
 
@@ -16,11 +17,6 @@ public class StringSimilarityGrouper implements IDependendNodeLabelGrouper {
     public StringSimilarityGrouper(double threshold, INodeLabelGrouper defaultStrategy) {
         this.defaultStrategy = defaultStrategy;
         this.threshold = threshold;
-    }
-
-    @Override
-    public void injectLabels(Set<String> labels) {
-        index = new JaccardIndex(3, labels);
     }
 
     @Override
@@ -45,6 +41,19 @@ public class StringSimilarityGrouper implements IDependendNodeLabelGrouper {
 
     @Override
     public void endGrouping() {
+        defaultStrategy.endGrouping();
     }
 
+    private void index(String s){
+        if(index == null){
+            index = new JaccardIndex(3);
+        }
+        index.index(s);
+    }
+
+
+    @Override
+    public Consumer<String> getDependLabelConsumer() {
+        return (x -> index(x));
+    }
 }

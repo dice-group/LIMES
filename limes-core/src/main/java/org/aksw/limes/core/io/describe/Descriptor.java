@@ -129,21 +129,36 @@ public class Descriptor {
     }
 
     public IResourceDescriptor describe(String s){
-        return this.factory.createDescriptor(s);
+        return describe(s, 0);
     }
 
-    public List<IResourceDescriptor> describeAll(Iterable<String> uris){
+    public IResourceDescriptor describe(String s, int recursion){
+        if(recursion == 0){
+            return this.factory.createDescriptor(s);
+        }
+        return this.factory.createRecursiveDescriptor(recursion, s);
+    }
+
+    public List<IResourceDescriptor> describeAll(Iterable<String> uris, int recursion){
         List<IResourceDescriptor> descriptors = new ArrayList<>();
         for(String uri: uris){
-            descriptors.add(this.describe(uri));
+            descriptors.add(this.describe(uri, recursion));
         }
         return descriptors;
     }
 
-    public Stream<IResourceDescriptor> describeAllStream(Iterable<String> uris){
+    public List<IResourceDescriptor> describeAll(Iterable<String> uris){
+        return describeAll(uris, 0);
+    }
+
+    public Stream<IResourceDescriptor> describeAllStream(Iterable<String> uris, int recursion){
         return StreamSupport.stream(uris.spliterator(), false).map(
-           uri -> this.describe(uri)
+           uri -> this.describe(uri, recursion)
         );
+    }
+
+    public Stream<IResourceDescriptor> describeAllStream(Iterable<String> uris){
+        return describeAllStream(uris, 0);
     }
 
 

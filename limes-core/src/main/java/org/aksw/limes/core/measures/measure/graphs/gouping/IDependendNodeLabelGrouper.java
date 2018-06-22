@@ -1,8 +1,9 @@
 package org.aksw.limes.core.measures.measure.graphs.gouping;
 
-import java.util.Set;
+
+import java.util.function.Consumer;
 
 public interface IDependendNodeLabelGrouper extends INodeLabelGrouper {
 
-    public void injectLabels(Set<String> labels);
+    public Consumer<String> getDependLabelConsumer();
 }

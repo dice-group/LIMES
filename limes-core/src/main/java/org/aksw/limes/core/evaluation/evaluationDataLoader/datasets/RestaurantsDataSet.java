@@ -5,7 +5,7 @@ import org.aksw.limes.core.evaluation.evaluationDataLoader.IDataSetIO;
 public class RestaurantsDataSet extends BaseDataSet {
     @Override
     public String getName() {
-        return "Person1";
+        return "restaurants";
     }
 
     @Override
