@@ -57,6 +57,7 @@ public class SimilarityTest {
                 writer.println(d + ":");
                 for (Map.Entry<EvaluatorType, Double> e : quality.entrySet()) {
                     writer.println(String.format("\t%s: %f", e.getKey().name(), e.getValue()));
+                    System.out.println(String.format("\t%s: %f", e.getKey().name(), e.getValue()));
                 }
             }
         }finally{

@@ -5,11 +5,12 @@ import org.apache.jena.graph.Node_Literal;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
-public class CollectingGrouperWrapper implements INodeLabelGrouper {
+public class CollectingGrouperWrapper implements ICollectingNodeLabelGrouper{
 
     private INodeLabelGrouper delegate;
-    private Set<String> nodeLabels = new HashSet<>();
+    private Consumer<String> nodeLabelConsumer;
 
     public CollectingGrouperWrapper(INodeLabelGrouper delegate) {
         this.delegate = delegate;
@@ -18,9 +19,14 @@ public class CollectingGrouperWrapper implements INodeLabelGrouper {
     @Override
     public String group(Node n) {
         if(n instanceof Node_Literal){
-            this.nodeLabels.add(n.getLiteral().toString());
+            consume(n.getLiteral().toString());
         }
         return this.delegate.group(n);
+    }
+
+    private void consume(String s){
+        if(nodeLabelConsumer != null)
+            nodeLabelConsumer.accept(s);
     }
 
     @Override
@@ -28,7 +34,9 @@ public class CollectingGrouperWrapper implements INodeLabelGrouper {
         this.delegate.endGrouping();
     }
 
-    public Set<String> getCollectedLabels(){
-        return this.nodeLabels;
+
+    @Override
+    public void collectOn(Consumer<String> consumer) {
+        this.nodeLabelConsumer = consumer;
     }
 }

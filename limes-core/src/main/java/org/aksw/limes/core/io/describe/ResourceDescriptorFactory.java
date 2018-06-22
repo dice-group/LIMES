@@ -22,4 +22,11 @@ public class ResourceDescriptorFactory {
         return new ResourceDescriptor(this.factory, node);
     }
 
+    public IResourceDescriptor createRecursiveDescriptor(int depth, Node node){
+        return new RecursiveResourceDescriptor(depth, this.factory, node);
+    }
+
+    public IResourceDescriptor createRecursiveDescriptor(int depth, String uri){
+        return new RecursiveResourceDescriptor(depth, this.factory, nodeFactory.createURI(uri));
+    }
 }

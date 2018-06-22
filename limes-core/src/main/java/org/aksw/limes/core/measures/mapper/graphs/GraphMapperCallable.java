@@ -5,10 +5,6 @@ import no.uib.cipr.matrix.*;
 import no.uib.cipr.matrix.sparse.FlexCompRowMatrix;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.measure.graphs.gouping.CollectingGrouperWrapper;
-import org.aksw.limes.core.measures.measure.graphs.gouping.IDependendNodeLabelGrouper;
-import org.aksw.limes.core.measures.measure.graphs.gouping.INodeLabelGrouper;
-import org.aksw.limes.core.measures.measure.graphs.gouping.NodeLabelGrouperFactory;
 import org.aksw.limes.core.measures.measure.graphs.representation.WLModelRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,20 +37,13 @@ public class GraphMapperCallable implements Callable<AMapping> {
 
     @Override
     public AMapping call() throws Exception {
-        INodeLabelGrouper grouper = new NodeLabelGrouperFactory().create();
-
-        CollectingGrouperWrapper sourceGrouper = new CollectingGrouperWrapper(grouper);
 
         logger.info(String.format("Build source WL representation for %d instances.", sourceModel.size()));
         List<AbstractMatrix> sourceMat = matrices(sourceModel, iteration);
 
         Vector sourceDot = selfDot(sourceMat);
 
-        if(grouper instanceof IDependendNodeLabelGrouper){
-            ((IDependendNodeLabelGrouper) grouper).injectLabels(sourceGrouper.getCollectedLabels());
-        }
-
-        logger.info(String.format("Build target WL representation for %d instances.", sourceModel.size()));
+        logger.info(String.format("Build target WL representation for %d instances.", targetModel.size()));
         List<AbstractMatrix> targetMat = matrices(targetModel, iteration);
 
         Vector targetDot = selfDot(targetMat);
