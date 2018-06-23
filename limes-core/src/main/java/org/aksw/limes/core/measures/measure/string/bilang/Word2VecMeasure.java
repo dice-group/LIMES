@@ -7,6 +7,8 @@ import org.aksw.limes.core.measures.measure.string.AStringMeasure;
  * of the (potentially bilingual) word vectors created by word2vec-like algorithms.
  * In particular, the data from the paper "Bilingual Word Representations with Monolingual Quality in Mind"
  * is the basis for this measure.
+ *
+ * @author Swante Scholz
  */
 public class Word2VecMeasure extends AStringMeasure {
     

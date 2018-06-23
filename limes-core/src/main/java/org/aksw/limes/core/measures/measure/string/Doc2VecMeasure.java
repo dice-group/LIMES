@@ -14,6 +14,8 @@ import org.nd4j.linalg.ops.transforms.Transforms;
 /**
  * computes similarity between arbitrary-length strings (sentences/paragraphs/documents)
  * based on precomputed document embeddings that are loaded in the constructor
+ *
+ * @author Swante Scholz
  */
 public class Doc2VecMeasure extends AStringMeasure {
     

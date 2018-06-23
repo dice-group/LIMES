@@ -6,6 +6,8 @@ import org.aksw.limes.core.measures.measure.AMeasure;
 /**
  * Abstract base class for all string measures.
  * Methods that are the same for all string measures should go here.
+ *
+ * @author Swante Scholz
  */
 public abstract class AStringMeasure extends AMeasure implements IStringMeasure {
     

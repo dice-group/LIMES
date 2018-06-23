@@ -6,6 +6,8 @@ import org.apache.commons.lang3.math.NumberUtils;
  * A rather simple edit distance measure implementation.
  * In contrast to the LevenshteinMeasure, this class allows for different cost for the four
  * possible kinds of operations (match, insert, delete, substitute)
+ *
+ * @author Swante Scholz
  */
 public class SimpleEditDistanceMeasure extends AStringMeasure {
     

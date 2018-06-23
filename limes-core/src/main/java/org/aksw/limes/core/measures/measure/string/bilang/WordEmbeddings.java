@@ -11,7 +11,8 @@ import java.util.stream.Stream;
 import org.apache.commons.math3.util.Pair;
 
 /**
- * saves the word vectors (embeddings) for each word from potentially multiple languages
+ * Saves the word vectors (embeddings) for each word from potentially multiple languages.
+ * @author Swante Scholz
  */
 public class WordEmbeddings {
     

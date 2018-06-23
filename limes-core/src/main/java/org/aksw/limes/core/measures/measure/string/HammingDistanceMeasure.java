@@ -3,6 +3,8 @@ package org.aksw.limes.core.measures.measure.string;
 /**
  * A very simple string similarity measure, that just computes the hamming distance
  * between two strings of the same length.
+ *
+ * @author Swante Scholz
  */
 public class HammingDistanceMeasure extends AStringMeasure {
     

@@ -19,6 +19,8 @@ import java.util.List;
 /**
  * A class to interact with the JWI (Java WordNet Interface) API,
  * in particular in order to compute the Wu-Palmer semantic similarity between two English words.
+ *
+ * @author Swante Scholz
  */
 public class WordNetInterface {
     

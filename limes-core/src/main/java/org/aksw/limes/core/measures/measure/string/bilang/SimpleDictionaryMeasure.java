@@ -8,6 +8,8 @@ import org.aksw.limes.core.measures.measure.string.SimpleEditDistanceMeasure;
 
 /**
  * A very simple syntactical bilingual string measure based on a dictionary:
+ *
+ * @author Swante Scholz
  */
 public class SimpleDictionaryMeasure extends AStringMeasure {
     
