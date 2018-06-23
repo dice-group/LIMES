@@ -69,7 +69,7 @@ def my_cosine_distance(a, b):
 x = np.array(x)
 from sklearn.preprocessing import StandardScaler
 
-x = StandardScaler().fit_transform(x)
+# x = StandardScaler().fit_transform(x)
 # from sklearn.decomposition import PCA
 # x_fit = PCA(n_components=2).fit_transform(x)
 
@@ -87,8 +87,8 @@ avg_dist_pairs = 1 / (len(x) // 2) * sum(
 print(avg_dist_all, avg_dist_simple, avg_dist_normal, avg_dist_pairs)
 # results: 0.499697531375 0.471654812898 0.471823169607 0.442123100908
 confidences = []
-for a in range(len(distance_matrix)):
-	for b in range(a, len(distance_matrix)):
+for a in range(0, len(distance_matrix), 2):
+	for b in range(1, len(distance_matrix), 2):
 		confidence = distance_matrix[a, b]
 		if a % 2 == 0 and a + 1 == b:  # golden standard
 			confidences.append((confidence, True))
@@ -130,10 +130,18 @@ print(best_threshold, best_f_score, bests,
 # =======================
 
 """
+first try:
 0.499697531375
 0.499697531375 0.471654812898 0.471823169607 0.442123100908
-best threshold, best f score, tp,tn,fn,tp, (tp/(fn+tp))/(p/(p+n))('red / green'):
+best threshold, best f score, tp,tn,fn,fp, (tp/(fn+tp))/(p/(p+n))('red / green'):
 0.154033065905 0.011020284589766878 (91, 229, 0, 16333) 1.0139430102289333
+
+bugfixed (not standardized):
+0.163774287326
+0.163774287326 0.192452176882 0.121326485291 0.143316474943
+best threshold, best f score, tp,tn,fn,fp, (tp/(fn+tp))/(p/(p+n))('red / green'):
+0.0495554248693 0.022123893805309738 (90, 54, 0, 7956) 1.0067114093959733
+
 """
 
 sys.exit()

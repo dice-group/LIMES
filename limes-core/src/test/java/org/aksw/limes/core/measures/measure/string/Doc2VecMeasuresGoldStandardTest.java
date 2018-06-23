@@ -65,7 +65,7 @@ public class Doc2VecMeasuresGoldStandardTest {
 					bestSim = sim;
 					bestJ = j;
 				}
-				if (sim > 0.154033065905) {
+				if (sim > 0.0495554248693) {
 					predictions.add(sourceUris.get(i), targetUris.get(j), 1);
 				}
 			}
