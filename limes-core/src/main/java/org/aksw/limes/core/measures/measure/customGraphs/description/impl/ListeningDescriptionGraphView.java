@@ -25,13 +25,20 @@ public class ListeningDescriptionGraphView implements IGraphLoaded {
         this.listener = listener;
     }
 
+    private String fixEmptyString(String s){
+        if(s.isEmpty()){
+            return "EMPTY";
+        }
+        return s;
+    }
+
     @Override
     public void onStatement(String src, String property, RDFNode object) {
 
         for(Consumer<ILabel> consumer: listener) {
-            consumer.accept(new Label(ILabel.LabelType.EDGE, property));
+            //consumer.accept(new Label(ILabel.LabelType.EDGE, property));
             if(object.isLiteral())
-                consumer.accept(new Label(ILabel.LabelType.NODE, object.toString()));
+                consumer.accept(new Label(ILabel.LabelType.NODE, fixEmptyString(object.toString())));
         }
 
         delegate.onStatement(src, property, object);

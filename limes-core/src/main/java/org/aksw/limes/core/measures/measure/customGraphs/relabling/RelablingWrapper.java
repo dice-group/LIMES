@@ -28,11 +28,34 @@ public class RelablingWrapper implements IDescriptionGraphView {
         return delegate.getRoot();
     }
 
-    private String relabel(ILabel label){
-        if(!relabelCache.containsKey(label)){
-           relabelCache.put(label, relabel.relabel(label));
+    private Map<ILabel, String> relabel(Set<ILabel> labels){
+
+        Map<ILabel, String> relabelMapping = new HashMap<>();
+
+        Set<ILabel> search = new HashSet<>();
+
+        for(ILabel label: labels){
+            if(relabelCache.containsKey(label)){
+                relabelMapping.put(label, relabelCache.get(label));
+            }else{
+                search.add(label);
+            }
         }
-        return relabelCache.get(label);
+
+        if(!search.isEmpty()) {
+            Map<ILabel, String> searches = relabel.relabel(search);
+            relabelMapping.putAll(searches);
+            relabelCache.putAll(searches);
+        }
+
+        return relabelMapping;
+    }
+
+    private String fixEmptyString(String s){
+        if(s.isEmpty()){
+            return "EMPTY";
+        }
+        return s;
     }
 
     @Override
@@ -44,14 +67,22 @@ public class RelablingWrapper implements IDescriptionGraphView {
     public Set<INode> getNodesAndLeaves() {
         Set<INode> out = new HashSet<>();
 
+        Set<ILabel> openLabels = new HashSet<>();
+
         for(INode node: delegate.getNodesAndLeaves()){
             if(node.getType() == INode.NodeType.URL){
                 out.add(node);
                 continue;
             }
-            String label = relabel(new Label(ILabel.LabelType.NODE, node.getLabel()));
-            if(label != null)
-                out.add(new BaseNode(label, INode.NodeType.LITERAL));
+            openLabels.add(new Label(ILabel.LabelType.NODE, fixEmptyString(node.getLabel())));
+        }
+
+        Map<ILabel, String> relabel = relabel(openLabels);
+
+        for(Map.Entry<ILabel, String> e: relabel.entrySet()){
+            if(e.getValue() != null){
+                out.add(new BaseNode(e.getValue(), INode.NodeType.LITERAL));
+            }
         }
 
         return out;
@@ -62,12 +93,23 @@ public class RelablingWrapper implements IDescriptionGraphView {
         Multimap<String, IEdge> map = delegate.getNeighbours(node);
         Multimap<String, IEdge> out = HashMultimap.create();
 
+        Set<ILabel> openLabels = new HashSet<>();
+
         for(IEdge edge: map.values()){
-            String edgeType = relabel(new Label(ILabel.LabelType.EDGE, edge.getEdgeType()));
+            openLabels.add(new Label(ILabel.LabelType.EDGE, edge.getEdgeType()));
+            if(edge.getTarget().getType() == INode.NodeType.LITERAL)
+                openLabels.add(new Label(ILabel.LabelType.NODE, fixEmptyString(edge.getTarget().getLabel())));
+        }
+
+        Map<ILabel, String> relabel = relabel(openLabels);
+
+
+        for(IEdge edge: map.values()){
+            String edgeType = relabel.get(new Label(ILabel.LabelType.EDGE, edge.getEdgeType()));
 
             String objectLabel = edge.getTarget().getLabel();
             if(edge.getTarget().getType() != INode.NodeType.URL) {
-                objectLabel = relabel(new Label(ILabel.LabelType.NODE, edge.getTarget().getLabel()));
+                objectLabel = relabel.get(new Label(ILabel.LabelType.NODE, edge.getTarget().getLabel()));
                 if(objectLabel==null)continue;
             }
 

@@ -8,20 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author Cedric Richter
- */
-public class ExactRelabel implements IGraphRelabel {
+public class ConstantRelabel implements IGraphRelabel {
 
-    private boolean ignoreEdge;
-
-    public ExactRelabel(boolean ignoreEdge){
-        this.ignoreEdge = ignoreEdge;
-    }
-
-    public ExactRelabel(){
-        this(false);
-    }
+    public static final String LITERAL_CONSTANT = "_LITERAL_";
 
     @Override
     public ILabelCollector getPriorLabelCollector() {
@@ -30,10 +19,9 @@ public class ExactRelabel implements IGraphRelabel {
 
     @Override
     public String relabel(ILabel label) {
-        if(ignoreEdge && label.getType() == ILabel.LabelType.EDGE){
+        if(label.getType() == ILabel.LabelType.EDGE)
             return null;
-        }
-        return label.getContent();
+        return LITERAL_CONSTANT;
     }
 
     @Override
