@@ -6,9 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Utility functions used for testing
  * @author Swante Scholz
  */
-public class MyUtil {
+public class MyTestUtil {
     
     static double getMean(Collection<Double> data) {
         double sum = 0.0;

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
+ * A very simple test class to see if the {@link SimpleEditDistanceMeasure} is working correctly
  * @author Swante Scholz
  */
 public class SimpleEditDistanceMeasureTest {

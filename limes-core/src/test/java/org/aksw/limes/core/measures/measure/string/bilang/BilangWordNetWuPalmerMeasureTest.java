@@ -6,6 +6,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
+ * Test class for the bilingual WordNet based semantic similarity metric {@link BilangWordNetWuPalmerMeasure}.
+ * As expected, we see for example, that "hund" (German) and "mammal" (English) are more similar to each other
+ * than "hund" (German) and "rocket" (English)
  * @author Swante Scholz
  */
 public class BilangWordNetWuPalmerMeasureTest {

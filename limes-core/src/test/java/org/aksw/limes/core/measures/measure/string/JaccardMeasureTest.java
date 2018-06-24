@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
+ * A simple test to siee if the {@link JaccardMeasure} is working correctly.
  * @author Swante Scholz
  */
 public class JaccardMeasureTest {

@@ -14,6 +14,8 @@ import org.apache.commons.math3.util.Pair;
 import org.junit.Test;
 
 /**
+ * Test for the {@link WordEmbeddings} class used for the {@link Word2VecMeasure} measure.
+ *
  * @author Swante Scholz
  */
 public class WordEmbeddingsTest {

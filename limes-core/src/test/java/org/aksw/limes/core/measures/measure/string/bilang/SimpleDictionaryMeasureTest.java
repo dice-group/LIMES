@@ -7,6 +7,8 @@ import org.aksw.limes.core.measures.measure.AMeasure;
 import org.junit.Test;
 
 /**
+ * Testing the {@link SimpleDictionaryMeasure}. No semantic similarity is considered here.
+ *
  * @author Swante Scholz
  */
 public class SimpleDictionaryMeasureTest {

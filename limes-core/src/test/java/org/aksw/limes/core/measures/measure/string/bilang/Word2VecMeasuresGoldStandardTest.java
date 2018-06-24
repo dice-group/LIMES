@@ -17,25 +17,31 @@ import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.measures.measure.string.MyUtil;
+import org.aksw.limes.core.measures.measure.string.MyTestUtil;
 import org.junit.Test;
 
 /**
+ * Tests for the {@link Word2VecMeasure} similarity measure in comparison with the other, less sophisticated
+ * word similarity metrics. We can see that {@link Word2VecMeasure} works better than the other ones.
+ * The test set is a dataset of 352 English word pairs, attached with average similarity scores assigned to
+ * them by human test subjects. No similar dataset was available for English/German word pairs,
+ * so the testings is performed only mono-lingually unfortunately.
+ *
  * @author Swante Scholz
  */
 public class Word2VecMeasuresGoldStandardTest {
     
     public static final double epsilon = 0.00001;
-    static String basePath = "src/test/resources/";
+    private static String basePath = "src/test/resources/";
     
-    WordEmbeddings we = new WordEmbeddings("src/test/resources/unsup.128");
+    private WordEmbeddings wordEmbeddings = new WordEmbeddings(basePath + "unsup.128");
     
     @Test
     public void testMyThreeWordMeasures() throws IOException {
         ArrayList<String> words1 = new ArrayList<>();
         ArrayList<String> words2 = new ArrayList<>();
         ArrayList<Double> similarities = new ArrayList<>();
-        Stream<String> lines = Files.lines(Paths.get("src/test/resources/wordsim352.tab"));
+        Stream<String> lines = Files.lines(Paths.get(basePath + "ordsim352.tab"));
         lines.forEach(line -> {
             String[] parts = line.split("\t");
             String word1 = parts[0];
@@ -49,11 +55,11 @@ public class Word2VecMeasuresGoldStandardTest {
         BilangDictionary dictionary = new BilangDictionary(
             BilangDictionary.DEFAULT_DICTIONARY_PATH);
         SimpleDictionaryMeasure naiveMeasure = new SimpleDictionaryMeasure(dictionary);
-        WordNetInterface wn = new WordNetInterface("src/test/resources/WordNet-3.0");
-        ArrayList<Double> humanSims = new ArrayList<Double>();
-        ArrayList<Double> naiveSims = new ArrayList<Double>();
-        ArrayList<Double> wnSims = new ArrayList<Double>();
-        ArrayList<Double> w2vSims = new ArrayList<Double>();
+        WordNetInterface wn = new WordNetInterface(basePath + "/WordNet-3.0");
+        ArrayList<Double> humanSims = new ArrayList<>();
+        ArrayList<Double> naiveSims = new ArrayList<>();
+        ArrayList<Double> wnSims = new ArrayList<>();
+        ArrayList<Double> w2vSims = new ArrayList<>();
         System.out.println("human, naive, wordnet, embedding");
         int size = words1.size();
         for (int i = 0; i < size; i++) {
@@ -62,7 +68,7 @@ public class Word2VecMeasuresGoldStandardTest {
             double simHuman = similarities.get(i);
             double simNaive = naiveMeasure.getSimilarity(a, b);
             double simWordNet = wn.computeWuPalmerSimilarity(a, b);
-            double simWe = we.getCosineSimilarityForWords(a, b);
+            double simWe = wordEmbeddings.getCosineSimilarityForWords(a, b);
             System.out.println(a + " " + b + " " + simHuman + " " + simNaive + " " +
                 simWordNet + " " + simWe);
             humanSims.add(simHuman);
@@ -73,7 +79,7 @@ public class Word2VecMeasuresGoldStandardTest {
         
         AMapping goldMapping = MappingFactory.createDefaultMapping();
         
-        double humanMedian = MyUtil.getMedian(humanSims);
+        double humanMedian = MyTestUtil.getMedian(humanSims);
         for (int i = 0; i < size; i++) {
             if (humanSims.get(i) > humanMedian) {
                 goldMapping.add(words1.get(i), words2.get(i), 1.0);
@@ -83,7 +89,7 @@ public class Word2VecMeasuresGoldStandardTest {
         GoldStandard goldStandard = new GoldStandard(goldMapping, words1, words2);
         Arrays.asList(naiveSims, wnSims, w2vSims).forEach(sims -> {
             AMapping predictions = MappingFactory.createDefaultMapping();
-            double median = MyUtil.getMedian(sims);
+            double median = MyTestUtil.getMedian(sims);
             for (int i = 0; i < size; i++) {
                 if (sims.get(i) > median) {
                     predictions.add(words1.get(i), words2.get(i), 1.0);
@@ -124,7 +130,7 @@ pfmeasure: 0.5370018975332068
 	 */
     
     
-    public void testPredictionAgaintHumanScores(AMapping predictions, GoldStandard goldStandard) {
+    private void testPredictionAgaintHumanScores(AMapping predictions, GoldStandard goldStandard) {
         Set<EvaluatorType> evaluationMeasures = initEvalMeasures();
         
         Map<EvaluatorType, Double> calculations = new QualitativeMeasuresEvaluator()

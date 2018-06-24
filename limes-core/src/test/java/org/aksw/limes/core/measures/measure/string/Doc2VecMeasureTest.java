@@ -21,6 +21,10 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.primitives.Pair;
 
 /**
+ * Multiple tests to see how the {@link Doc2VecMeasure} is performing.
+ * In theory it should be able to give a similarity score for two arbitrary English texts (German doesn't currently work).
+ * Unfortunately the results are not yet that good.
+ *
  * @author Swante Scholz
  */
 public class Doc2VecMeasureTest {
@@ -220,7 +224,7 @@ public class Doc2VecMeasureTest {
                 otherScores.add(score);
             }
             System.out.println(
-                names.get(a) + "\t" + sameScore + "\t" + MyUtil.getMean(otherScores) + "\t" + MyUtil
+                names.get(a) + "\t" + sameScore + "\t" + MyTestUtil.getMean(otherScores) + "\t" + MyTestUtil
                     .getStdDeviation(otherScores));
         }
         
