@@ -19,6 +19,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * A gold standard test for the doc2vec measure. I use a prepared dataset of normal English and simple English Wikipedia abstracts
+ * of about 90 common topics. Clearly the two versions on the same topic should tend to be more similar to each other than to most
+ * other articles. Unfortunately, my current doc2vec measure does shows rather small correlations.
+ *
  * @author Swante Scholz
  */
 public class Doc2VecMeasuresGoldStandardTest {

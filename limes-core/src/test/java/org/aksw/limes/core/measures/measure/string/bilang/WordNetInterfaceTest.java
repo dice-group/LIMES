@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
- * Tests for the
+ * Tests for the WordNetInterface. WordNet works best on nouns, since the tree structures for verbs and adjectives are much smaller.
  *
  * @author Swante Scholz
  */

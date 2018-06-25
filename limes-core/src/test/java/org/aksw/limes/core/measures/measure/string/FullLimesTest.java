@@ -7,6 +7,7 @@ import org.junit.Test;
 /**
  * This test class is for testing a complete run of LIMES. Given a configuration XML file, we start
  * LIMES to see if the new string measures work.
+ *
  * @author Swante Scholz
  */
 public class FullLimesTest {

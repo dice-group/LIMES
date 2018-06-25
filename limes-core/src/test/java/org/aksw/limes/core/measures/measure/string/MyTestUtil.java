@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Utility functions used for testing
+ *
  * @author Swante Scholz
  */
 public class MyTestUtil {

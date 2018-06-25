@@ -9,6 +9,8 @@ import org.aksw.limes.core.util.Timer;
 import org.junit.Test;
 
 /**
+ * Some tests for my dictionary utilities, in particular the spelling correction.
+ *
  * @author Swante Scholz
  */
 public class DictionaryUtilTest {

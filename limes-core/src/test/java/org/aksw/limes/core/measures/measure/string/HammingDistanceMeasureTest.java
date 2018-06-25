@@ -7,6 +7,8 @@ import org.aksw.limes.core.measures.measure.AMeasure;
 import org.junit.Test;
 
 /**
+ * A simple test for the {@link HammingDistanceMeasure}
+ *
  * @author Swante Scholz
  */
 public class HammingDistanceMeasureTest {
