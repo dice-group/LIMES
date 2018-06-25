@@ -5,7 +5,9 @@ import org.aksw.limes.core.measures.measure.customGraphs.relabling.ILabel;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.ILabelCollector;
 import org.aksw.limes.core.measures.measure.graphs.gouping.indexing.JaccardIndex;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -54,4 +56,16 @@ public class JaccardIndexRelabel implements IGraphRelabel {
         }
         return max_label;
     }
+
+    @Override
+    public Map<ILabel, String> relabel(Set<ILabel> labels) {
+        Map<ILabel, String> mapping = new HashMap<>();
+
+        for(ILabel label: labels){
+            mapping.put(label, relabel(label));
+        }
+
+        return mapping;
+    }
+
 }

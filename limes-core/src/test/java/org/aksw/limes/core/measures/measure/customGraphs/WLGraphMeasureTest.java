@@ -4,10 +4,10 @@ import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.io.describe.Descriptor;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.measures.measure.bags.CosineBagMeasure;
+import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.bags.JaccardBagMeasure;
+import org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster.SimilarityFilter;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.impl.MaxSimRelabel;
-import org.aksw.limes.core.measures.measure.customGraphs.relabling.impl.SimDefinition;
 import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
 import org.aksw.limes.core.measures.measure.string.JaroWinklerMeasure;
 import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
@@ -31,10 +31,10 @@ public class WLGraphMeasureTest {
         Descriptor sourceDescriptor = new Descriptor(data.getSourceCache().getKbInfo());
         Descriptor targetDescriptor = new Descriptor(data.getTargetCache().getKbInfo());
 
-        SimDefinition def1 = new SimDefinition(new JaroWinklerMeasure(), 0.5);
-        SimDefinition def2 = new SimDefinition(new TrigramMeasure(), 0.4);
-        SimDefinition def3 = new SimDefinition(new LevenshteinMeasure(), 0.3);
-        List<SimDefinition> list = Arrays.asList(new SimDefinition[]{def1, def2, def3});
+        SimilarityFilter def1 = new SimilarityFilter(MeasureType.JAROWINKLER, 0.5);
+        SimilarityFilter def2 = new SimilarityFilter(MeasureType.TRIGRAM, 0.4);
+        SimilarityFilter def3 = new SimilarityFilter(MeasureType.LEVENSHTEIN, 0.3);
+        List<SimilarityFilter> list = Arrays.asList(new SimilarityFilter[]{def1, def2, def3});
 
         MaxSimRelabel relabel = new MaxSimRelabel(list);
 

@@ -1,8 +1,12 @@
 package org.aksw.limes.core.measures.measure.customGraphs.relabling.impl;
 
+import com.google.common.collect.Table;
+import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.IGraphRelabel;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.ILabel;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.ILabelCollector;
+import org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster.MappingHelper;
+import org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster.SimilarityFilter;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -12,10 +16,10 @@ import java.util.function.Consumer;
  */
 public class MaxSimRelabel implements IGraphRelabel {
 
-    private List<SimDefinition> definitions;
-    private Set<String> labels = new HashSet<>();
+    protected List<SimilarityFilter> definitions;
+    protected Set<String> labels = new HashSet<>();
 
-    public MaxSimRelabel(List<SimDefinition> definitions) {
+    public MaxSimRelabel(List<SimilarityFilter> definitions) {
         this.definitions = definitions;
     }
 
@@ -29,61 +33,109 @@ public class MaxSimRelabel implements IGraphRelabel {
         };
     }
 
-    private Set<String> dominates(Vector<Double> vec, Map<String, Vector<Double>> compare){
-        Set<String> dominated = new HashSet<>();
-
-        for(Map.Entry<String, Vector<Double>> e: compare.entrySet()){
-            boolean isDominated = true;
-
-            Vector<Double> partner = e.getValue();
-
-            for(int i = 0; i < vec.size() && i < partner.size() && isDominated; i++){
-                isDominated &= vec.get(i) >= partner.get(i);
-            }
-
-            if(isDominated)
-                dominated.add(e.getKey());
-        }
-
-        return dominated;
-    }
-
-    private void paretoAdd(String s, Vector<Double> vec, Map<String, Vector<Double>> compare){
-        for(String del: dominates(vec, compare))
-            compare.remove(del);
-        compare.put(s, vec);
-    }
 
     @Override
     public String relabel(ILabel label) {
         if(label.getType() == ILabel.LabelType.EDGE)
             return null;
 
-        Map<String, Vector<Double>> candidates = new HashMap<>();
+        Set<ILabel> labels = new HashSet<>();
+        labels.add(label);
 
-        for(String comp: labels) {
-            Vector<Double> v = new Vector<>(definitions.size());
-            boolean save = false;
+        return relabel(labels).get(label);
 
-            for(SimDefinition definition: definitions){
-                double sim = definition.getMeasure().getSimilarity(label.getContent(), comp);
-                v.add(sim);
-                save |= sim >= definition.getThreshold();
+    }
+
+    private Map<String, String> innerRelabel(Set<String> L){
+
+        Map<String, String> result = new HashMap<>();
+
+        for(String s: L)
+            result.put(s, s);
+
+
+        Map<String, Map<String, ParetoFrontHelper.AnnotatedVector>> paretoMap = new HashMap<>();
+
+        for(int i = 0; i < definitions.size(); i++){
+
+            SimilarityFilter filter = definitions.get(i);
+
+            AMapping mapping = MappingHelper.filter(labels, L, filter);
+
+            for(Map.Entry<String, HashMap<String, Double>> e: mapping.getMap().entrySet()){
+
+                if(!paretoMap.containsKey(e.getKey()))
+                    paretoMap.put(e.getKey(), new HashMap<>());
+                Map<String, ParetoFrontHelper.AnnotatedVector> map = paretoMap.get(e.getKey());
+
+                for(Map.Entry<String, Double> t: e.getValue().entrySet()){
+
+                    if(!map.containsKey(t.getKey())) {
+                        ParetoFrontHelper.AnnotatedVector vector = new ParetoFrontHelper.AnnotatedVector(t.getKey());
+                        for(int j = 0; j < i; j++)
+                            vector.vector.add(0.0);
+                        map.put(t.getKey(), vector);
+                    }
+
+                    ParetoFrontHelper.AnnotatedVector vector = map.get(t.getKey());
+
+                    vector.vector.add((t.getValue() - filter.getThreshold())/(1 - filter.getThreshold()));
+
+                }
+
             }
-
-            if(save)
-                paretoAdd(comp, v, candidates);
         }
 
-        String out = null;
-        double max_vol = 0;
+        for(Map.Entry<String, Map<String, ParetoFrontHelper.AnnotatedVector>> res: paretoMap.entrySet()){
 
-        for(Map.Entry<String, Vector<Double>> candidate: candidates.entrySet()){
-            double vol = candidate.getValue().stream().reduce((x, y)->x+y).get();
+            Set<ParetoFrontHelper.AnnotatedVector> pareto = ParetoFrontHelper.instance().pareto(
+                    new HashSet<>(res.getValue().values())
+            );
 
-            if(vol > max_vol) {
-                out = candidate.getKey();
-                max_vol = vol;
+            String relabel = res.getKey();
+            double min_dist = Double.POSITIVE_INFINITY;
+
+            for(ParetoFrontHelper.AnnotatedVector vec : pareto){
+                double dist = 0.0;
+
+                for(int i = 0; i < vec.vector.size(); i++)
+                    dist += vec.vector.get(i) * vec.vector.get(i);
+
+                dist = Math.sqrt(dist);
+
+                if(dist < min_dist){
+                    min_dist = dist;
+                    relabel = vec.annotation;
+                }
+
+            }
+
+            result.put(res.getKey(), relabel);
+        }
+
+        return result;
+    }
+
+
+    @Override
+    public Map<ILabel, String> relabel(Set<ILabel> labels) {
+        Map<ILabel, String> out = new HashMap<>();
+        Map<String, ILabel> reverse = new HashMap<>();
+
+        for(ILabel label: labels){
+            if(label.getType() == ILabel.LabelType.EDGE){
+                out.put(label, null);
+            }else {
+                reverse.put(label.getContent(), label);
+            }
+        }
+
+        if(!reverse.isEmpty()){
+
+            Map<String, String> relabel = innerRelabel(reverse.keySet());
+
+            for(Map.Entry<String, String> e: relabel.entrySet()){
+                out.put(reverse.get(e.getKey()), e.getValue());
             }
 
         }

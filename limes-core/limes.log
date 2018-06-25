@@ -1,0 +1,44 @@
+10:38:46.550 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-1869726953.ser
+10:38:46.552 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for datingcom
+10:38:46.555 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <N3> reader
+10:38:48.389 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:52 - here
+10:38:48.392 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:53 - RDF model read from src/test/resources/dating1.nt is of size 104
+10:38:48.398 [main] INFO  LIMES:32 - Registry = [src/test/resources/dating1.nt]
+10:38:48.404 [main] INFO  org.aksw.limes.core.io.query.SparqlQueryModule:231 - Query issued is 
+PREFIX prop: <myprop#>
+SELECT DISTINCT ?x ?v0 ?v1 ?v2
+WHERE {
+?x prop:name ?v0 .
+?x prop:email ?v1 .
+?x prop:has_pet ?v2 .
+}
+10:38:48.406 [main] INFO  org.aksw.limes.core.io.query.SparqlQueryModule:58 - Querying the endpoint.
+10:38:48.407 [main] INFO  org.aksw.limes.core.io.query.SparqlQueryModule:64 - Getting statements 0 to 1000
+10:38:49.012 [main] INFO  org.aksw.limes.core.io.query.SparqlQueryModule:64 - Getting statements 1000 to 2000
+10:38:49.019 [main] INFO  org.aksw.limes.core.io.query.SparqlQueryModule:139 - Retrieved 26 triples and 26 entities.
+10:38:49.020 [main] INFO  org.aksw.limes.core.io.query.SparqlQueryModule:140 - Retrieving statements took 0.616 seconds.
+10:38:49.021 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 26 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-1869726953.ser
+10:38:49.052 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:112 - Checking for file /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-814808197.ser
+10:38:49.055 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:128 - No cached data found for cupidcom
+10:38:49.056 [main] INFO  org.aksw.limes.core.io.query.QueryModuleFactory:18 - Generating <N3> reader
+10:38:49.080 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:52 - here
+10:38:49.082 [main] INFO  org.aksw.limes.core.io.query.FileQueryModule:53 - RDF model read from src/test/resources/dating2.nt is of size 105
+10:38:49.082 [main] INFO  LIMES:32 - Registry = [src/test/resources/dating2.nt, src/test/resources/dating1.nt]
+10:38:49.083 [main] INFO  org.aksw.limes.core.io.query.SparqlQueryModule:231 - Query issued is 
+PREFIX prop: <myprop#>
+SELECT DISTINCT ?y ?v0 ?v1 ?v2
+WHERE {
+?y prop:name ?v0 .
+?y prop:email ?v1 .
+?y prop:speaks ?v2 .
+}
+10:38:49.085 [main] INFO  org.aksw.limes.core.io.query.SparqlQueryModule:58 - Querying the endpoint.
+10:38:49.085 [main] INFO  org.aksw.limes.core.io.query.SparqlQueryModule:64 - Getting statements 0 to 1000
+10:38:49.102 [main] INFO  org.aksw.limes.core.io.query.SparqlQueryModule:64 - Getting statements 1000 to 2000
+10:38:49.108 [main] INFO  org.aksw.limes.core.io.query.SparqlQueryModule:139 - Retrieved 27 triples and 26 entities.
+10:38:49.109 [main] INFO  org.aksw.limes.core.io.query.SparqlQueryModule:140 - Retrieving statements took 0.026 seconds.
+10:38:49.109 [main] INFO  org.aksw.limes.core.io.cache.HybridCache:308 - Serializing 26 objects to /Users/cedricrichter/IdeaProjects/LIMES/limes-core/cache/-814808197.ser
+10:38:49.349 [main] INFO  org.aksw.limes.core.controller.Controller:166 - Mapping task finished in 216 ms
+10:38:49.358 [main] INFO  org.aksw.limes.core.controller.Controller:170 - Mapping size: 20 (accepted) + 465 (need verification) = 485 (total)
+10:38:49.372 [main] INFO  org.aksw.limes.core.io.serializer.SerializerFactory:15 - Getting serializer with name N3
+10:38:49.373 [main] INFO  org.aksw.limes.core.io.serializer.SerializerFactory:27 - Serializer with name N3 not found. Using .nt as default format.

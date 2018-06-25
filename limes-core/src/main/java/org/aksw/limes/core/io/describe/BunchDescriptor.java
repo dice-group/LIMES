@@ -1,9 +1,6 @@
 package org.aksw.limes.core.io.describe;
 
-import org.aksw.jena_sparql_api.cache.core.QueryExecutionFactoryCacheEx;
-import org.aksw.jena_sparql_api.cache.extra.CacheFrontend;
 import org.aksw.jena_sparql_api.core.FluentQueryExecutionFactory;
-import org.aksw.jena_sparql_api.core.QueryExecutionFactory;
 import org.aksw.jena_sparql_api.core.SparqlServiceReference;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
@@ -14,40 +11,29 @@ import org.aksw.limes.core.io.query.ModelRegistry;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.core.DatasetDescription;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class Descriptor implements IDescriptor {
+public class BunchDescriptor implements IDescriptor {
 
-    private ResourceDescriptorFactory factory;
+    private IDescriptor backend;
+    private int cachedRecursion;
+    private Set<String> bunch;
+    private KBInfo info;
+    private Map<String, Model> cache;
 
-
-    public Descriptor(QueryExecutionFactory qef){
-        this.factory = new ResourceDescriptorFactory(qef);
+    public BunchDescriptor(KBInfo info, Set<String> bunch, int recursion){
+        this(info, new Descriptor(info), bunch, recursion);
     }
 
-    public Descriptor(KBInfo kb, IConnectionConfig config, CacheFrontend frontend) {
-        QueryExecutionFactory qef = initQueryExecution(kb, config);
 
-        if(frontend != null){
-            qef = wrapCachedQueryExecution(qef, frontend);
-        }
-
-        this.factory = new ResourceDescriptorFactory(qef);
+    public BunchDescriptor(KBInfo info, IDescriptor backend, Set<String> bunch, int recursion){
+        this.backend = backend;
+        this.cachedRecursion = recursion;
+        this.bunch = bunch;
+        this.info = info;
     }
-
-    public Descriptor(KBInfo kb, IConnectionConfig config){
-        this(kb, config, null);
-    }
-
-    public Descriptor(KBInfo kb){
-        this(kb, new DefaultConnetionConfig());
-    }
-
 
     private Model processCSV(KBInfo info){
         CsvQueryModule module = new CsvQueryModule(info);
@@ -75,7 +61,7 @@ public class Descriptor implements IDescriptor {
                         list.add(model.createLiteral(s, false));
                     }
                     model.add(
-                      model.createStatement(resource, property, model.createList(list.iterator()))
+                            model.createStatement(resource, property, model.createList(list.iterator()))
                     );
                 }
 
@@ -86,57 +72,99 @@ public class Descriptor implements IDescriptor {
         return model;
     }
 
-
-    private FluentQueryExecutionFactory<?> initFactory(KBInfo info){
+    private Model loadComplete(){
         String name = info.getType();
         if(name.equalsIgnoreCase("N3") || name.toLowerCase().startsWith("nt") ||
-            name.toLowerCase().startsWith("n-triple") ||
+                name.toLowerCase().startsWith("n-triple") ||
                 name.toLowerCase().startsWith("turtle") || name.toLowerCase().startsWith("ttl") ||
                 name.toLowerCase().startsWith("rdf") || name.toLowerCase().startsWith("xml")) {
             new FileQueryModule(info);
             Model model = ModelRegistry.getInstance().getMap().get(info.getEndpoint());
-            return FluentQueryExecutionFactory.from(model);
+            return model;
         }else if(name.equalsIgnoreCase("csv")){
             Model model = processCSV(info);
-            return FluentQueryExecutionFactory.from(model);
+            return model;
         }else{
-            DatasetDescription dd = new DatasetDescription();
-            if(info.getGraph() != null) {
-                dd.addDefaultGraphURI(info.getGraph());
-            }
-
-            SparqlServiceReference ssr = new SparqlServiceReference(info.getEndpoint(), dd);
-
-            return FluentQueryExecutionFactory.http(ssr);
+            return null;
         }
     }
 
-    protected QueryExecutionFactory initQueryExecution(KBInfo kbInfo, IConnectionConfig config) {
-        QueryExecutionFactory qef;
 
-        qef =   initFactory(kbInfo)
-                .config()
-                    .withDelay(config.getRequestDelayInMs(), TimeUnit.MILLISECONDS)
-                .end()
-                .create();
-        return qef;
+    private void initCache(){
+        cache = new HashMap<>(bunch.size());
+
+        Model complete = loadComplete();
+        if(complete == null)return;
+
+        Stack<Discover> stack = new Stack<>();
+
+        for(String s: bunch){
+            Resource r = complete.getResource(s);
+
+            if(r == null)continue;
+
+            stack.push(new Discover(s, r, 0));
+            cache.put(s, ModelFactory.createDefaultModel());
+        }
+
+        while (!stack.isEmpty()){
+            Discover discover = stack.pop();
+
+            if(discover.depth > cachedRecursion){
+                continue;
+            }
+
+            Resource r = discover.resource;
+
+            Model m = cache.get(discover.root);
+            StmtIterator iterator = r.listProperties();
+
+            while(iterator.hasNext()){
+                Statement stmt = iterator.nextStatement();
+                m.add(stmt);
+
+                if(stmt.getObject().isResource()){
+                    stack.push(new Discover(discover.root, stmt.getObject().asResource(), discover.depth+1));
+                }
+            }
+
+
+        }
+
+
+
     }
 
-    protected QueryExecutionFactory wrapCachedQueryExecution(QueryExecutionFactory qef,
-                                                             CacheFrontend frontend){
-        return new QueryExecutionFactoryCacheEx(qef, frontend);
 
+    private Model load(String s, int recursion){
+        if(cache == null)initCache();
+
+        if(recursion == cachedRecursion && cache.containsKey(s)){
+            return cache.get(s);
+        }
+
+        return backend.describe(s, recursion).queryDescription();
     }
 
-    public IResourceDescriptor describe(String s){
+
+    @Override
+    public IResourceDescriptor describe(String s) {
         return describe(s, 0);
     }
 
-    public IResourceDescriptor describe(String s, int recursion){
-        if(recursion == 0){
-            return this.factory.createDescriptor(s);
-        }
-        return this.factory.createRecursiveDescriptor(recursion, s);
+    @Override
+    public IResourceDescriptor describe(String s, int recursion) {
+        return new IResourceDescriptor() {
+            @Override
+            public String getURI() {
+                return s;
+            }
+
+            @Override
+            public Model queryDescription() {
+                return load(s, recursion);
+            }
+        };
     }
 
     public List<IResourceDescriptor> describeAll(Iterable<String> uris, int recursion){
@@ -153,7 +181,7 @@ public class Descriptor implements IDescriptor {
 
     public Stream<IResourceDescriptor> describeAllStream(Iterable<String> uris, int recursion){
         return StreamSupport.stream(uris.spliterator(), false).map(
-           uri -> this.describe(uri, recursion)
+                uri -> this.describe(uri, recursion)
         );
     }
 
@@ -161,5 +189,18 @@ public class Descriptor implements IDescriptor {
         return describeAllStream(uris, 0);
     }
 
+
+    private class Discover{
+
+        private String root;
+        private Resource resource;
+        private int depth;
+
+        public Discover(String root, Resource resource, int depth) {
+            this.root = root;
+            this.resource = resource;
+            this.depth = depth;
+        }
+    }
 
 }

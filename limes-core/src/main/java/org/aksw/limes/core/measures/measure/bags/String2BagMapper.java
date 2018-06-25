@@ -7,6 +7,7 @@ import com.google.common.collect.Multiset;
  */
 public class String2BagMapper {
 
+    //(A, B, B, C) ==> {A:1, B:2, C:1}
     public static Multiset<String> getBag(String s){
         Multiset<String> out = HashMultiset.create();
 
