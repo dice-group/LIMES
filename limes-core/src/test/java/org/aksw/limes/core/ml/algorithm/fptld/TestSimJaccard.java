@@ -41,8 +41,7 @@ public class TestSimJaccard {
 
 	@Test
 	public void testGetSimilarity() {
-		SimFuzzyJaccard sfj = new SimFuzzyJaccard();
-		double test = sfj.getSimilarity(m1, m2);
+		double test = SimFuzzyJaccard.INSTANCE.getSimilarity(m1, m2);
 		assertEquals(gold, test, 0.0);
 	}
 

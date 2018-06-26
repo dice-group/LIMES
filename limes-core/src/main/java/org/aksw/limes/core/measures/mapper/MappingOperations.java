@@ -2,6 +2,7 @@ package org.aksw.limes.core.measures.mapper;
 
 import java.math.BigDecimal;
 
+import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.ParameterOutOfRangeException;
 import org.aksw.limes.core.exceptions.UnsupportedOperator;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
@@ -78,7 +79,7 @@ public interface MappingOperations {
 		final AMapping map = MappingFactory.createDefaultMapping();
 		for (final String key : map1.getMap().keySet()) {
 			for (final String value : map1.getMap().get(key).keySet()) {
-				if (map2.getMap().containsKey(key)) {
+				if (map2.getMap().containsKey(key) && map2.getMap().get(key).get(value) != null) {
 					final double sim = tConorm(BigDecimal.valueOf(map1.getMap().get(key).get(value)),
 							BigDecimal.valueOf(map2.getMap().get(key).get(value)), parameter);
 					if (sim > 0) {
@@ -91,7 +92,7 @@ public interface MappingOperations {
 		}
 		for (final String key : map2.getMap().keySet()) {
 			for (final String value : map2.getMap().get(key).keySet()) {
-				if (map1.getMap().containsKey(key)) {
+				if (map1.getMap().containsKey(key) && map1.getMap().get(key).get(value) != null) {
 					final double sim = tConorm(BigDecimal.valueOf(map1.getMap().get(key).get(value)),
 							BigDecimal.valueOf(map2.getMap().get(key).get(value)), parameter);
 					if (sim > 0) {
@@ -143,5 +144,63 @@ public interface MappingOperations {
 		} else {
 			throw new UnsupportedOperator(c.toString());
 		}
+	}
+
+	static AMapping performOperation(AMapping a, AMapping b, LogicOperator op) {
+		return performOperation(a, b, op, Double.NaN);
+	}
+
+	static AMapping performOperation(AMapping a, AMapping b, LogicOperator op, double p) {
+		AMapping res = null;
+		switch (op) {
+		case AND:
+			res = CrispSetOperations.INSTANCE.intersection(a, b);
+			break;
+		case OR:
+			res = CrispSetOperations.INSTANCE.union(a, b);
+			break;
+		case DIFF:
+			res = CrispSetOperations.INSTANCE.difference(a, b);
+			break;
+		case LUKASIEWICZT:
+			res = LukasiewiczSetOperations.INSTANCE.intersection(a, b, p);
+			break;
+		case LUKASIEWICZTCO:
+			res = LukasiewiczSetOperations.INSTANCE.union(a, b, p);
+			break;
+		case LUKASIEWICZDIFF:
+			res = LukasiewiczSetOperations.INSTANCE.difference(a, b, p);
+			break;
+		case ALGEBRAICT:
+			res = AlgebraicSetOperations.INSTANCE.intersection(a, b, p);
+			break;
+		case ALGEBRAICTCO:
+			res = AlgebraicSetOperations.INSTANCE.union(a, b, p);
+			break;
+		case ALGEBRAICDIFF:
+			res = AlgebraicSetOperations.INSTANCE.difference(a, b, p);
+			break;
+		case EINSTEINT:
+			res = EinsteinSetOperations.INSTANCE.intersection(a, b, p);
+			break;
+		case EINSTEINTCO:
+			res = EinsteinSetOperations.INSTANCE.union(a, b, p);
+			break;
+		case EINSTEINDIFF:
+			res = EinsteinSetOperations.INSTANCE.difference(a, b, p);
+			break;
+		case HAMACHERT:
+			res = HamacherSetOperations.INSTANCE.intersection(a, b, p);
+			break;
+		case HAMACHERTCO:
+			res = HamacherSetOperations.INSTANCE.union(a, b, p);
+			break;
+		case HAMACHERDIFF:
+			res = HamacherSetOperations.INSTANCE.difference(a, b, p);
+			break;
+		default:
+			throw new UnsupportedOperator(op + " can not be used in here");
+		}
+		return res;
 	}
 }

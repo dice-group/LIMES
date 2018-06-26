@@ -41,8 +41,7 @@ public class TestSimRMSE {
 
 	@Test
 	public void testGetSimilarity() {
-		SimFuzzyRMSE sfrmse = new SimFuzzyRMSE();
-		double test = sfrmse.getSimilarity(m1, m2);
+		double test = SimFuzzyRMSE.INSTANCE.getSimilarity(m1, m2);
 		assertEquals(gold, test, 0.0);
 	}
 

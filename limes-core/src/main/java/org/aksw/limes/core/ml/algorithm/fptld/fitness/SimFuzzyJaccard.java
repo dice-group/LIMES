@@ -13,7 +13,9 @@ import org.aksw.limes.core.measures.mapper.MappingOperations;
  * @author Daniel Obraczka
  *
  */
-public class SimFuzzyJaccard implements FuzzySimilarity {
+public enum SimFuzzyJaccard implements FuzzySimilarity {
+
+	INSTANCE;
 
 	@Override
 	public double getSimilarity(AMapping a, AMapping b) {

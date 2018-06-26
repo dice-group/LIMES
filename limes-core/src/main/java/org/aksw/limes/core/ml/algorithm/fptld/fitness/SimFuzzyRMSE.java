@@ -6,7 +6,9 @@ import java.math.RoundingMode;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 
-public class SimFuzzyRMSE implements FuzzySimilarity {
+public enum SimFuzzyRMSE implements FuzzySimilarity {
+
+	INSTANCE;
 
 	@Override
 	public double getSimilarity(AMapping a, AMapping b) {

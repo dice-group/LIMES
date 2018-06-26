@@ -34,7 +34,7 @@ import weka.classifiers.trees.J48;
 /**
  * This class uses decision trees and an active learning approach to learn link
  * specifications
- * 
+ *
  * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
  *         studserv.uni-leipzig.de{@literal >}
  *
@@ -56,13 +56,13 @@ public class Dragon extends ACoreMLAlgorithm {
 	public static final String PARAMETER_PROPERTY_LEARNING_RATE = "property learning rate";
 	public static final String PARAMETER_FITNESS_FUNCTION = "fitness function";
 	public static final String PARAMETER_PRUNING_FUNCTION = "pruning function";
-	
+
 	//Strings for different function options
 	public static final String FITNESS_NAME_GINI_INDEX = "GiniIndex";
 	public static final String FITNESS_NAME_GLOBAL_FMEASURE = "GlobalFMeasure";
 	public static final String PRUNING_NAME_ERROR_ESTIMATE_PRUNING = "ErrorEstimate";
 	public static final String PRUNING_NAME_GLOBAL_FMEASURE = "GlobalFmeasure";
-	
+
 
 	// Default parameters
 	private static final double pruningConfidence = 0.25;
@@ -74,11 +74,11 @@ public class Dragon extends ACoreMLAlgorithm {
 	private AMapping initialMapping = MappingFactory.createDefaultMapping();
 	private AMapping prediction;
 	public DecisionTree root;
-	
-	private ACache testSourceCache = new MemoryCache();
-	private ACache testTargetCache = new MemoryCache();
-	private boolean isActive = false;
-	
+
+	private final ACache testSourceCache = new MemoryCache();
+	private final ACache testTargetCache = new MemoryCache();
+	private final boolean isActive = false;
+
 	// TODO check whats wrong with exactmatch and levenshtein
 	public static final String[] stringMeasures = { "cosine",
 			// "exactmatch",
@@ -95,29 +95,29 @@ public class Dragon extends ACoreMLAlgorithm {
 	public static final double threshold = 0.01;
 
 
-    /**
-     * Dragon constructor.
-     */
-    public Dragon() {
-    	super();
-    	setDefaultParameters();
-    }
+	/**
+	 * Dragon constructor.
+	 */
+	public Dragon() {
+		super();
+		setDefaultParameters();
+	}
 	/**
 	 * Constructor uses superconstructor, initializes TreeParser object and sets
 	 * configuration
-	 * 
+	 *
 	 * @param c
 	 */
 	public Dragon(Configuration c) {
 		super();
-    	setDefaultParameters();
-		this.configuration = c;
+		setDefaultParameters();
+		configuration = c;
 	}
 
 
 	/**
 	 * Helper class for easier handling of links or link candidates
-	 * 
+	 *
 	 * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
 	 *         studserv.uni-leipzig.de{@literal >}
 	 *
@@ -166,7 +166,7 @@ public class Dragon extends ACoreMLAlgorithm {
 	 * Creates a training set out of the oracleMapping and uses {@link J48} to
 	 * build a decision tree The decision tree gets parsed to a
 	 * {@link LinkSpecification} by {@link TreeParser}
-	 * 
+	 *
 	 * @param oracleMapping
 	 * @return res wrapper containing learned link specification
 	 */
@@ -182,36 +182,36 @@ public class Dragon extends ACoreMLAlgorithm {
 		ls = rw.rewrite(ls);
 		DynamicPlanner dp = new DynamicPlanner(source, target);
 		SimpleExecutionEngine ee = new SimpleExecutionEngine(source, target,
-				this.configuration.getSourceInfo().getVar(), this.configuration.getTargetInfo().getVar());
-		this.prediction = ee.execute(ls, dp);
-		return this.prediction;
+				configuration.getSourceInfo().getVar(), configuration.getTargetInfo().getVar());
+		prediction = ee.execute(ls, dp);
+		return prediction;
 	}
 
 	@Override
 	public void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
 		super.init(lp, sourceCache, targetCache);
-		this.prediction = null;
+		prediction = null;
 		if (lp == null) {
 			setDefaultParameters();
 		}else{
 			instantiateFunctionParameters();
 		}
 	}
-	
+
 	private void instantiateFunctionParameters(){
 		if(getParameter(PARAMETER_FITNESS_FUNCTION) instanceof String){
-            if(((String)getParameter(PARAMETER_FITNESS_FUNCTION)).toLowerCase().equals(FITNESS_NAME_GINI_INDEX.toLowerCase())){
-                setParameter(PARAMETER_FITNESS_FUNCTION, new GiniIndex());
-            }else if(((String)getParameter(PARAMETER_FITNESS_FUNCTION)).toLowerCase().equals(FITNESS_NAME_GLOBAL_FMEASURE.toLowerCase())){
-                setParameter(PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
-            }
+			if(((String)getParameter(PARAMETER_FITNESS_FUNCTION)).toLowerCase().equals(FITNESS_NAME_GINI_INDEX.toLowerCase())){
+				setParameter(PARAMETER_FITNESS_FUNCTION, new GiniIndex());
+			}else if(((String)getParameter(PARAMETER_FITNESS_FUNCTION)).toLowerCase().equals(FITNESS_NAME_GLOBAL_FMEASURE.toLowerCase())){
+				setParameter(PARAMETER_FITNESS_FUNCTION, new GlobalFMeasure());
+			}
 		}
 		if(getParameter(PARAMETER_PRUNING_FUNCTION) instanceof String){
-            if(((String)getParameter(PARAMETER_PRUNING_FUNCTION)).toLowerCase().equals(PRUNING_NAME_GLOBAL_FMEASURE.toLowerCase())){
-                setParameter(PARAMETER_PRUNING_FUNCTION, new GlobalFMeasurePruning());
-            }else if(((String)getParameter(PARAMETER_PRUNING_FUNCTION)).toLowerCase().equals(PRUNING_NAME_ERROR_ESTIMATE_PRUNING.toLowerCase())){
-                setParameter(PARAMETER_PRUNING_FUNCTION, new ErrorEstimatePruning());
-            }
+			if(((String)getParameter(PARAMETER_PRUNING_FUNCTION)).toLowerCase().equals(PRUNING_NAME_GLOBAL_FMEASURE.toLowerCase())){
+				setParameter(PARAMETER_PRUNING_FUNCTION, new GlobalFMeasurePruning());
+			}else if(((String)getParameter(PARAMETER_PRUNING_FUNCTION)).toLowerCase().equals(PRUNING_NAME_ERROR_ESTIMATE_PRUNING.toLowerCase())){
+				setParameter(PARAMETER_PRUNING_FUNCTION, new ErrorEstimatePruning());
+			}
 		}
 	}
 
@@ -251,40 +251,42 @@ public class Dragon extends ACoreMLAlgorithm {
 	@Override
 	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
 		if(isActive){
-            root = new DecisionTree(this, testSourceCache, testTargetCache, null,
-                    (double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
-                    (double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
-                    (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData, (PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
-        }else{
-            root = new DecisionTree(this, sourceCache, targetCache, null,
-                    (double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
-                    (double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
-                    (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData, (PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
-        }
-        DecisionTree.fitnessFunction = (FitnessFunctionDTL) getParameter(PARAMETER_FITNESS_FUNCTION);
-        DecisionTree.fitnessFunction.setPropertyMapping((PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
-        DecisionTree.pruningFunction = (PruningFunctionDTL) getParameter(PARAMETER_PRUNING_FUNCTION);
-        DecisionTree.fitnessFunction.setDt(root);
-        DecisionTree.maxDepth = (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
-        root.buildTree((int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
-        logger.info("FULL:\n" + root.toString());
+			root = new DecisionTree(this, testSourceCache, testTargetCache, null,
+					(double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
+					(double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
+					(double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData, (PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
+		}else{
+			root = new DecisionTree(this, sourceCache, targetCache, null,
+					(double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
+					(double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
+					(double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData, (PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
+		}
+		DecisionTree.fitnessFunction = (FitnessFunctionDTL) getParameter(PARAMETER_FITNESS_FUNCTION);
+		DecisionTree.fitnessFunction.setPropertyMapping((PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
+		DecisionTree.pruningFunction = (PruningFunctionDTL) getParameter(PARAMETER_PRUNING_FUNCTION);
+		DecisionTree.fitnessFunction.setDt(root);
+		DecisionTree.maxDepth = (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
+		root.buildTree((int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
+		logger.info("FULL:\n" + root.toString());
 
-        root.prune();
-        logger.info("PRUNED:\n" + root.toString());
+		root.prune();
+		logger.info("PRUNED:\n" + root.toString());
 
-        LinkSpecification ls = root.getTotalLS();
-        HashMap<String, Object> details = new HashMap<>();
-        details.put("tree",root);
-        MLResults res = new MLResults(ls, null, -1.0, details);
-        return res;
+		LinkSpecification ls = root.getTotalLS();
+		HashMap<String, Object> details = new HashMap<>();
+		details.put("tree",root);
+		MLResults res = new MLResults(ls, null, -1.0, details);
+		return res;
 	}
 
+	@Override
 	public ACache getSourceCache() {
-		return this.sourceCache;
+		return sourceCache;
 	}
 
+	@Override
 	public ACache getTargetCache() {
-		return this.targetCache;
+		return targetCache;
 	}
 
 	public void setSourceCache(ACache sourceCache) {
