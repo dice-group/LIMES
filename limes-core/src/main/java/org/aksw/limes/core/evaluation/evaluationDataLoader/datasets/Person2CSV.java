@@ -2,24 +2,14 @@ package org.aksw.limes.core.evaluation.evaluationDataLoader.datasets;
 
 import org.aksw.limes.core.evaluation.evaluationDataLoader.IDataSetIO;
 
-/**
- * Class to Select AmazonGoogle Dataset for the evaluation.
- * Using this class you can perform a variety of functions on the selected dataset.
- * You can use the following functions like getName, getDataSetFolder, getConfigFile, getReferenceFile,
- * getSourceFile, getTargetFile, getSourceClass, getTargetClass, getEvaluationFilename etc.
- *
- * @author Cedric Richter
- *
- */
-
-public class AmazonGoogleDataset extends BaseDataSet {
+public class Person2CSV extends BaseDataSet {
 
     /**
      * @return the NameOfDataSet
      */
     @Override
     public String getName() {
-        return "amazongoogleproducts";
+        return "Persons2_CSV";
     }
 
     /**
@@ -27,34 +17,31 @@ public class AmazonGoogleDataset extends BaseDataSet {
      */
     @Override
     public String getDataSetFolder() {
-        return this.getBaseFolder()+"Amazon-GoogleProducts/";
+        return super.getBaseFolder() + "Persons2";
     }
-
 
     /**
      * @return the ConfigFile
      */
     @Override
     public String getConfigFile() {
-        return "Amazon-GoogleProducts.xml";
+        return "persons2_csv.xml";
     }
-
 
     /**
      * @return the ReferenceFile
      */
     @Override
     public String getReferenceFile() {
-        return "Amzon_GoogleProducts_perfectMapping.csv";
+        return "dataset21_dataset22_goldstandard_person.xml.csv";
     }
-
 
     /**
      * @return the SourceFile
      */
     @Override
     public String getSourceFile() {
-        return "Amazon.csv";
+        return "person21.nt";
     }
 
     /**
@@ -62,23 +49,21 @@ public class AmazonGoogleDataset extends BaseDataSet {
      */
     @Override
     public String getTargetFile() {
-        return "GoogleProducts.csv";
+        return "person22.nt";
     }
 
     /**
      * @return the SourceClass
      */
     @Override
-    public String getSourceClass() {
-        return "amazon:product";
-    }
+    public String getSourceClass() { return "http://www.okkam.org/ontology_person1.owl#Person"; }
 
     /**
      * @return the TargetClass
      */
     @Override
     public String getTargetClass() {
-        return "google:product";
+        return "okkamperson2:Person";
     }
 
     /**
@@ -86,19 +71,26 @@ public class AmazonGoogleDataset extends BaseDataSet {
      */
     @Override
     public String getEvaluationFilename() {
-        return "Pseudo_eval_Amazon-GoogleProducts.csv";
+        return "Pseudo_eval_Persons2.csv";
     }
 
-    @Override
-    public String getOAEIType() {
-        return null;
-    }
 
     /**
-     * @return a new Oracle
+     * @return OAEIType
+     */
+    @Override
+    public String getOAEIType() {
+        return "-Person";
+    }
+
+
+    /**
+     * @return get OAEIDataSetIO utils to load dataSet
      */
     @Override
     public IDataSetIO getIO() {
-        return new OracleIO();
+        return new OAEIDataSetIO();
     }
+
+
 }

@@ -7,6 +7,7 @@ import org.aksw.limes.core.measures.mapper.IMapper;
 import java.util.Map;
 
 /**
+ * Interface class for BagMappers contains the abstract methods that Cosine and Jaccard Bag Mappers can implement.
  * @author Cedric Richter
  */
 public interface IBagMapper extends IMapper {

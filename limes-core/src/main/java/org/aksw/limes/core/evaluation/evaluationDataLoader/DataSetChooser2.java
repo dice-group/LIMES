@@ -22,6 +22,17 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class to Load, Choose and Perform evaluation on different Datasets. Also grants central access to evaluation datasets.
+ * Using this class you can perform a variety of functions. Like choose which data set to evaluate,
+ * registerDataSet,  mapDataSet, get data for evaluation, initializeMapping and fixReferenceMapping
+ *
+ *
+ * @author Cedric Richter
+ *
+ */
+
+
 public class DataSetChooser2 {
 
     static Logger logger = LoggerFactory.getLogger(DataSetChooser2.class);
@@ -30,7 +41,10 @@ public class DataSetChooser2 {
         return "results/";
     }
 
-
+    /**
+     * Initializes dataSet based on choice
+     * @return the choosen dataSet
+     */
     private static DataSetChooser2 initDefault(){
         DataSetChooser2 chooser = new DataSetChooser2();
 
@@ -44,11 +58,13 @@ public class DataSetChooser2 {
         chooser.registerDataSet(new AmazonGoogleDataset());
         chooser.registerDataSet(new DBPLinkMDBDataset());
         chooser.registerDataSet(new DrugsDataset());
+        chooser.registerDataSet(new CitiesDataSet());
 
         return chooser;
     }
 
     private static DataSetChooser2 globalInstance;
+
 
     public static DataSetChooser2 instance(){
         if(globalInstance == null){
@@ -57,7 +73,10 @@ public class DataSetChooser2 {
         return globalInstance;
     }
 
-
+    /**
+     * Creates a new HashMap, registersDataSet
+     * @return dataSetMap
+     */
     private Map<String, IDataSet> dataSetMap = new HashMap<>();
 
     public DataSetChooser2(){}
@@ -70,7 +89,9 @@ public class DataSetChooser2 {
         }
         return false;
     }
-
+    /**
+     * @return data from evaluation build from DataSetMap
+     */
     public EvaluationData getData(String name){
         String key = calcKey(name);
         Map<DataSetChooser.MapKey, Object> param = new HashMap<>();
@@ -88,6 +109,11 @@ public class DataSetChooser2 {
         return s.replace("-", "").toLowerCase();
     }
 
+    /**
+     * Initalizes Mapping on choosen dataBase, takes all the necessary info like dataSetName, basefolder, datasetFolder,
+     * configFile, referenceFile, source & target file, evaluationFolder & evaluationFile
+     * Resolves path issues and loads everything in the MapKey.
+     */
     private void initMapping(Map<DataSetChooser.MapKey, Object> param, IDataSet dataSet){
         param.put(DataSetChooser.MapKey.BASE_FOLDER, dataSet.getBaseFolder());
         param.put(DataSetChooser.MapKey.DATASET_FOLDER, dataSet.getDataSetFolder());
@@ -127,7 +153,9 @@ public class DataSetChooser2 {
 
     }
 
-
+    /**
+     * Reference Mapping is fixed in this function
+     */
     public static AMapping fixReferenceMap(AMapping original, ACache sC, ACache tC) {
         int count = 0;
         AMapping fixed = MappingFactory.createMapping(MappingFactory.MappingType.MEMORY_MAPPING);

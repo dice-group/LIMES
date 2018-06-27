@@ -4,6 +4,9 @@ import com.google.common.collect.Multiset;
 import org.aksw.limes.core.io.cache.Instance;
 
 /**
+ * Class implements the basic idea of BagToWords Model
+ * Data (such as a string or from a file) is represented as the bag (multiset) of its words
+ *
  * @author Cedric Richter
  */
 public abstract class ABagMeasure implements IBagMeasure {
@@ -26,6 +29,9 @@ public abstract class ABagMeasure implements IBagMeasure {
         return max;
     }
 
+    /**
+     * @return the similarity between two multiset instances
+     */
     @Override
     public double getSimilarity(Object o1, Object o2){
         if(o1 instanceof String)

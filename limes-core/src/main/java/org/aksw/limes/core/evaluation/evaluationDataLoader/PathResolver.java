@@ -11,6 +11,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+/**
+ * This class helps resolves the issue concerning with Paths.
+ *
+ * @author Cedric Richter
+ *
+ */
+
 public class PathResolver {
 
     public static final String RESOURCE_PREFIX = "src/main/resources/";
@@ -28,12 +35,18 @@ public class PathResolver {
         return path;
     }
 
+    /**
+     * @return the endpoint KBInfo
+     */
     public static void resolvePath(KBInfo info){
         info.setEndpoint(
                 PathResolver.resolvePath(info.getEndpoint())
         );
     }
 
+    /**
+     * @return path of syncResource as a Stream
+     */
     public static String syncResource(String path){
         if(!Files.exists(Paths.get(path))) {
             InputStream inputStream = DataSetChooser2.class.getClassLoader().getResourceAsStream(path);

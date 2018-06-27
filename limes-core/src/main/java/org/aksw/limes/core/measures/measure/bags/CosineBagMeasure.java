@@ -9,8 +9,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ *
+ * This Bag Measure works on the idea of Cosine Similarity, in which:
+ * the number of common attributes is divided by the total number of possible attributes
+ *
+ * Cosine similarity is for comparing two real-valued vectors
+ *
+ * if x and y are two vectors then: the dot product of (x, y) divided by
+ * the sqrt of dot product of (x, x) multiplied by sqrt of the dot product of (y, y)
+ *
+ * @see org.aksw.limes.core.measures.mapper.bags.cosine.CosineBagMapper
+ *
  * @author Cedric Richter
  */
+
 public class CosineBagMeasure extends ABagMeasure {
 
     public static final double VECTOR_DENSITY_THRESHOLD = 0.7;

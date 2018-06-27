@@ -2,24 +2,14 @@ package org.aksw.limes.core.evaluation.evaluationDataLoader.datasets;
 
 import org.aksw.limes.core.evaluation.evaluationDataLoader.IDataSetIO;
 
-/**
- * Class to Select AmazonGoogle Dataset for the evaluation.
- * Using this class you can perform a variety of functions on the selected dataset.
- * You can use the following functions like getName, getDataSetFolder, getConfigFile, getReferenceFile,
- * getSourceFile, getTargetFile, getSourceClass, getTargetClass, getEvaluationFilename etc.
- *
- * @author Cedric Richter
- *
- */
-
-public class AmazonGoogleDataset extends BaseDataSet {
+public class CitiesDataSet extends BaseDataSet {
 
     /**
      * @return the NameOfDataSet
      */
     @Override
     public String getName() {
-        return "amazongoogleproducts";
+        return "Cities";
     }
 
     /**
@@ -27,34 +17,31 @@ public class AmazonGoogleDataset extends BaseDataSet {
      */
     @Override
     public String getDataSetFolder() {
-        return this.getBaseFolder()+"Amazon-GoogleProducts/";
+        return getBaseFolder() + "Cities/";
     }
-
 
     /**
      * @return the ConfigFile
      */
     @Override
     public String getConfigFile() {
-        return "Amazon-GoogleProducts.xml";
+        return "CityDataSet.xml";
     }
-
 
     /**
      * @return the ReferenceFile
      */
     @Override
     public String getReferenceFile() {
-        return "Amzon_GoogleProducts_perfectMapping.csv";
+        return "CitiesDataGoldStandard.csv";
     }
-
 
     /**
      * @return the SourceFile
      */
     @Override
     public String getSourceFile() {
-        return "Amazon.csv";
+        return "CityDataSetDBPedia.txt";
     }
 
     /**
@@ -62,7 +49,7 @@ public class AmazonGoogleDataset extends BaseDataSet {
      */
     @Override
     public String getTargetFile() {
-        return "GoogleProducts.csv";
+        return "CityDataSetwikidata.txt";
     }
 
     /**
@@ -70,24 +57,23 @@ public class AmazonGoogleDataset extends BaseDataSet {
      */
     @Override
     public String getSourceClass() {
-        return "amazon:product";
+        return "http://www.w3.org/2002/07/owl#City";
     }
 
     /**
      * @return the TargetClass
      */
     @Override
-    public String getTargetClass() {
-        return "google:product";
-    }
+    public String getTargetClass() { return "http://www.bigdata.com/rdf#City"; }
 
     /**
      * @return the EvaluationFileName
      */
     @Override
     public String getEvaluationFilename() {
-        return "Pseudo_eval_Amazon-GoogleProducts.csv";
+        return "Pseudo_eval_City.csv";
     }
+
 
     @Override
     public String getOAEIType() {
@@ -101,4 +87,5 @@ public class AmazonGoogleDataset extends BaseDataSet {
     public IDataSetIO getIO() {
         return new OracleIO();
     }
+
 }

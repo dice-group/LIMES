@@ -14,29 +14,61 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * This Bag Mapper works on the idea of Cosine Similarity, in which:
+ * the number of common attributes is divided by the total number of possible attributes
+ *
+ * Cosine similarity is for comparing two real-valued vectors
+ *
+ * if x and y are two vectors then: the dot product of (x, y) divided by
+ * the sqrt of dot product of (x, x) multiplied by sqrt of the dot product of (y, y)
+ *
+ *you can easily map each map to vector,
+ * each word to occurance,
+ *
  * @author Cedric Richter
  */
 public class CosineBagMapper implements IBagMapper {
+
+    /**
+     * This method is not yet implmented.
+     * @return Throws an exception if a Bag is not yet implemented
+     *
+     */
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression, double threshold) {
         throw new NotYetImplementedException("How should a bag be parsed?");
     }
 
+    /**
+     * This method is not yet implmented.
+     * @return the RunTimeApproximation
+     */
     @Override
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 0;
     }
 
+    /**
+     * This method is not yet implmented.
+     * @return the MappingSizeApproximation
+     */
     @Override
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 0;
     }
 
+    /**
+     * @return the Name of BagType
+     */
     @Override
     public String getName() {
         return "bag_cosine";
     }
 
+    /**
+     * Fast Map for Cosine Similarity
+     * @return Mapping after Creating Cosine Matrix indexes and calculations for source and target
+     */
     @Override
     public <T> AMapping getMapping(Map<String, Multiset<T>> source, Map<String, Multiset<T>> target, double threshold) {
 
@@ -97,6 +129,10 @@ public class CosineBagMapper implements IBagMapper {
         return mapping;
     }
 
+    /**
+     * Check if the Matrix is instanceOf FlexCompRowMatrix
+     * @return the FlexCompRowMatrix or creates a new Matrix of FlexCompRowMatrix type
+     */
     private FlexCompRowMatrix castOrTransform(Matrix matrix){
         if(matrix instanceof FlexCompRowMatrix){
             return (FlexCompRowMatrix)matrix;
@@ -105,6 +141,9 @@ public class CosineBagMapper implements IBagMapper {
         }
     }
 
+    /**
+     * @return self dot product of a vector
+     */
     private Vector selfDot(Matrix A){
         DenseVector vector = new DenseVector(A.numRows());
 
@@ -130,6 +169,9 @@ public class CosineBagMapper implements IBagMapper {
         return A;
     }
 
+    /**
+     * @return Dot product between two vectors
+     */
     private Matrix dotProduct(Matrix A, Matrix B){
         DenseMatrix out = new DenseMatrix(A.numRows(), B.numRows());
         FlexCompRowMatrix rA = reshapeCol(castOrTransform(A), B);
@@ -147,7 +189,9 @@ public class CosineBagMapper implements IBagMapper {
         return out;
     }
 
-
+    /**
+     * @return a New Matrix
+     */
     private Matrix createMatrix(List<MatrixEntries> entries, int dim0, int dim1){
         FlexCompRowMatrix matrix = new FlexCompRowMatrix(dim0, dim1);
 
@@ -158,7 +202,9 @@ public class CosineBagMapper implements IBagMapper {
     }
 
 
-
+    /**
+     * @return Matrix Entries
+     */
     private class MatrixEntries {
 
         int row, column, value;

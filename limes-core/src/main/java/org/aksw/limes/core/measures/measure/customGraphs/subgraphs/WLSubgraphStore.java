@@ -13,6 +13,7 @@ public abstract class WLSubgraphStore {
     protected IDescriptionGraphView view;
     private Multiset<String> cache;
 
+    //subgraph certs backend
     public WLSubgraphStore(IDescriptionGraphView view) {
         this.view = view;
     }
@@ -31,6 +32,7 @@ public abstract class WLSubgraphStore {
         return  cache;
     }
 
+    //relabel nodes wsl
     public abstract String map(INode node_uri);
 
 }

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ *
  * @author Cedric Richter
  */
 public class ExactRelabel implements IGraphRelabel {

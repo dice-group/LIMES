@@ -93,6 +93,10 @@ public class DataSetChooser {
         case "OAEI2014BOOKS":
             param = getOAEI2014Books();
             break;
+        case "CITIES":
+            param = getCities();
+            break;
+
         /*
          * case "TOWNS": param = getTowns(); break; case "VILLAGES": param =
          * getVillages(); break; case "MOVIES": param = getMovies(); break;
@@ -211,6 +215,10 @@ public class DataSetChooser {
             param = getOAEI2014Books();
             break;
 
+         case CITIES:
+            param = getCities();
+            break;
+
         }
 
         param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
@@ -299,6 +307,48 @@ public class DataSetChooser {
 
         return param;
     }
+
+    //START
+
+    private static HashMap<MapKey, Object> getCities() {
+        HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+        // folders & files
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Cities/");
+        param.put(MapKey.CONFIG_FILE, "CityDataSet.xml");
+        param.put(MapKey.REFERENCE_FILE, "CitiesDataGoldStandard.csv");
+        param.put(MapKey.SOURCE_FILE, "CityDataSetDBPedia.txt");
+        param.put(MapKey.TARGET_FILE, "CityDataSetwikidata.txt");
+        String type = "-City";
+        param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
+        param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_City.csv");
+        param.put(MapKey.NAME, "Cities");
+        // data
+        AConfigurationReader cR = new XMLConfigurationReader(
+                "" + param.get(MapKey.BASE_FOLDER) + param.get(MapKey.CONFIG_FILE));
+        cR.read();
+        param.put(MapKey.CONFIG_READER, cR);
+
+        param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
+                (String) param.get(MapKey.CONFIG_FILE)));
+        param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFile(
+                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
+        param.put(MapKey.SOURCE_CACHE, Experiment.readOAEIFile(
+                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.SOURCE_FILE), type));
+
+        param.put(MapKey.TARGET_CACHE, Experiment.readOAEIFile(
+                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.TARGET_FILE), type));
+        param.put(MapKey.REFERENCE_MAPPING, Experiment.readOAEIMapping(
+                (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.REFERENCE_FILE)));
+
+        param.put(MapKey.SOURCE_CLASS, "http://www.w3.org/2002/07/owl#City");
+        param.put(MapKey.TARGET_CLASS, "http://www.bigdata.com/rdf#City");
+
+        return param;
+    }
+
+
+    //END
 
     private static HashMap<MapKey, Object> getOAEI2014Books() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
@@ -902,7 +952,7 @@ public class DataSetChooser {
     }
 
     public enum DataSets {
-        PERSON1, PERSON1_CSV, PERSON2, PERSON2_CSV, RESTAURANTS, OAEI2014BOOKS, RESTAURANTS_FIXED, DBLPACM, ABTBUY, DBLPSCHOLAR, AMAZONGOOGLEPRODUCTS, DBPLINKEDMDB, DRUGS, RESTAURANTS_CSV// ,TOWNS,
+        PERSON1, PERSON1_CSV, PERSON2, PERSON2_CSV, RESTAURANTS, OAEI2014BOOKS, RESTAURANTS_FIXED, DBLPACM, ABTBUY, DBLPSCHOLAR, AMAZONGOOGLEPRODUCTS, DBPLINKEDMDB, DRUGS, RESTAURANTS_CSV, CITIES, // ,TOWNS,
         // VILLAGES,
         // MOVIES
     }

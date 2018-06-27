@@ -32,7 +32,8 @@ public class SimilarityTest {
     public void testSimilarity() throws FileNotFoundException {
         String[] datasets = {"PERSON1","PERSON2" , "RESTAURANTS","OAEI2014BOOKS","DBLPACM","ABTBUY","DBLPSCHOLAR","AMAZONGOOGLEPRODUCTS","DBPLINKEDMDB","DRUGS","PERSON2_CSV","PERSON2_CSV","PERSON1_CSV","RESTAURANTS_CSV"};
 
-        datasets = new String[]{"DRUGS","PERSON2_CSV","PERSON2_CSV","PERSON1_CSV","RESTAURANTS_CSV"};
+        datasets = new String[]{"CITIES"};
+//        "DRUGS","PERSON2_CSV","PERSON2_CSV","PERSON1_CSV","RESTAURANTS_CSV",
 
         File f = new File("result.txt");
         PrintWriter writer = new PrintWriter(f);

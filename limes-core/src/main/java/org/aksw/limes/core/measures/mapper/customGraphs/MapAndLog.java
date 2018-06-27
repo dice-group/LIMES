@@ -8,6 +8,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.function.Function;
 
+/**
+ * Class for Mapping and Logging
+ * Logs time taken for each iteration etc.
+ *
+ * @author Cedric Richter
+ */
+
 public class MapAndLog<T, R> implements Function<T, R> {
 
     private Log logger;

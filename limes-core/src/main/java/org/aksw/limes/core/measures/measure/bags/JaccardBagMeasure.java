@@ -6,9 +6,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Class for JaccardBagMeasure defining mapper description for JaccardBagMapper.
+ *
+ *
+ *
  * @author Cedric Richter
  */
+
 public class JaccardBagMeasure extends ABagMeasure {
+
+    /**
+     * Computes the similarity between two bags
+     * @return the remainder of minSum/maxSum
+     */
     @Override
     public <T> double getSimilarity(Multiset<T> A, Multiset<T> B) {
 
@@ -44,11 +54,19 @@ public class JaccardBagMeasure extends ABagMeasure {
         return index;
     }
 
+    /**
+     * Obtains the runtimeApproximation based on MappingSize
+     * @return MappingSize
+     */
     @Override
     public double getRuntimeApproximation(double mappingSize) {
         return mappingSize;
     }
 
+    /**
+     *
+     * @return Name of the Bag
+     */
     @Override
     public String getName() {
         return "jaccard";

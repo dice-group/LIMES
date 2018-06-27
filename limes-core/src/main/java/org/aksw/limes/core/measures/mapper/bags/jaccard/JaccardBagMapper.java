@@ -32,6 +32,10 @@ public class JaccardBagMapper implements IBagMapper {
 
     private IBagMeasure sim = new JaccardBagMeasure();
 
+    /**
+     * uses similar logic as FastNGram Mapper
+     * @return Mapping of string 2 string above jaccard threshold
+     */
     @Override
     public <T> AMapping getMapping(Map<String, Multiset<T>> source, Map<String, Multiset<T>> target, double threshold) {
 
@@ -88,6 +92,9 @@ public class JaccardBagMapper implements IBagMapper {
         return result;
     }
 
+    /**
+     * @return output after adding bags to multisets
+     */
     private <T> Set<KeyedBag<T>> fromMap(Map<String, Multiset<T>> map){
         Set<KeyedBag<T>> output = new HashSet<>();
 
@@ -98,21 +105,34 @@ public class JaccardBagMapper implements IBagMapper {
         return output;
     }
 
+    /**
+     * This method is not yet implemented.
+     * @return the Mapping using source, target, sourceVariable, targetVariable, expression & threshold
+     */
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression, double threshold) {
         return null;
     }
 
+    /**
+     * @return the RunTimeApproximation
+     */
     @Override
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 0;
     }
 
+    /**
+     * @return the MappingSizeApproximation
+     */
     @Override
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 0;
     }
 
+    /**
+     * @return the Name of BagType i.e. Cosine or Jaccard
+     */
     @Override
     public String getName() {
         return "bag_jaccard";
