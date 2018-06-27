@@ -66,6 +66,13 @@ def my_cosine_distance(a, b):
 			1 + np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
 
 
+a = [1,1]
+b = [-1,-1]
+print(1-my_cosine_distance(a,b))
+# python: 0.998964444867
+# java: 0.9979289174079895
+sys.exit()
+
 x = np.array(x)
 from sklearn.preprocessing import StandardScaler
 
@@ -78,6 +85,7 @@ from sklearn.metrics import pairwise_distances
 distance_matrix = pairwise_distances(x, x, metric='cosine', n_jobs=-1)
 distance_matrix = np.maximum(np.zeros(shape=distance_matrix.shape),
                              distance_matrix) * 0.5
+print(distance_matrix)
 print(np.mean(distance_matrix))
 avg_dist_all = np.mean(distance_matrix)
 avg_dist_simple = np.mean(distance_matrix[::2, ::2])
@@ -89,7 +97,7 @@ print(avg_dist_all, avg_dist_simple, avg_dist_normal, avg_dist_pairs)
 confidences = []
 for a in range(0, len(distance_matrix), 2):
 	for b in range(1, len(distance_matrix), 2):
-		confidence = distance_matrix[a, b]
+		confidence = 1 - distance_matrix[a, b]
 		if a % 2 == 0 and a + 1 == b:  # golden standard
 			confidences.append((confidence, True))
 		else:
@@ -130,6 +138,10 @@ print(best_threshold, best_f_score, bests,
 # =======================
 
 """
+sim instead distance results:
+best threshold, best f score, tp,tn,fn,fp, (tp/(fn+tp))/(p/(p+n))('red / green'):
+0.945193769973 0.07253886010362695 (7, 7914, 83, 96) 6.116504854368932
+
 first try:
 0.499697531375
 0.499697531375 0.471654812898 0.471823169607 0.442123100908

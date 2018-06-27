@@ -18,6 +18,8 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
 import org.junit.Test;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.cpu.nativecpu.NDArray;
+import org.nd4j.linalg.ops.transforms.Transforms;
 import org.nd4j.linalg.primitives.Pair;
 
 /**
@@ -28,6 +30,19 @@ import org.nd4j.linalg.primitives.Pair;
  * @author Swante Scholz
  */
 public class Doc2VecMeasureTest {
+    
+    @Test
+    public void testCosineUtility() {
+        INDArray a = new NDArray(new float[]{1,1});
+        INDArray b = new NDArray(new float[]{1,-1});
+        INDArray c = new NDArray(new float[]{-1,-1});
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(c);
+        System.out.println(Doc2VecMeasure.getSimilarityForInferredVectors(a,a));
+        System.out.println(Doc2VecMeasure.getSimilarityForInferredVectors(a,b));
+        System.out.println(Doc2VecMeasure.getSimilarityForInferredVectors(a,c));
+    }
     
     @Test
     public void testMeasure() {

@@ -8,6 +8,7 @@ import org.aksw.limes.core.measures.measure.string.AStringMeasure;
  * Given any dictionary from English to another language (e.g. German), and two words to compare,
  * this measure looks at all English translations of the word of the other language, computes the Wu-Palmer similarity
  * between them and the given English word, and returns the best similarity value of those comparisons.
+ *
  * @author Swante Scholz
  */
 public class BilangWordNetWuPalmerMeasure extends AStringMeasure {

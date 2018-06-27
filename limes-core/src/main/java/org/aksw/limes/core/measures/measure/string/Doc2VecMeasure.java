@@ -102,6 +102,6 @@ public class Doc2VecMeasure extends AStringMeasure {
     
     public static double getSimilarityForInferredVectors(INDArray inferredVector1,
         INDArray inferredVector2) {
-        return Math.max(0, Math.min(1, Transforms.cosineSim(inferredVector1, inferredVector2)));
+        return Math.max(0, Math.min(1, 0.5 * (1+Transforms.cosineSim(inferredVector1, inferredVector2))));
     }
 }

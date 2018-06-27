@@ -8,8 +8,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
@@ -17,6 +20,7 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.junit.Before;
 import org.junit.Test;
+import org.nd4j.linalg.api.ndarray.INDArray;
 
 /**
  * A gold standard test for the doc2vec measure. I use a prepared dataset of normal English and simple English Wikipedia abstracts
@@ -32,7 +36,6 @@ public class Doc2VecMeasuresGoldStandardTest {
     
     GoldStandard goldStandard;
     AMapping predictions = MappingFactory.createDefaultMapping();
-    ;
     
     @Before
     public void setupData() throws IOException {
@@ -58,20 +61,31 @@ public class Doc2VecMeasuresGoldStandardTest {
                 normalAbstracts.add(normalAbstract);
                 goldMapping.add(sourceUri, targetUri, 1);
             });
+        List<INDArray> simpleVectors = simpleAbstracts.stream().map(it -> {return measure.inferVector(it);}).collect(
+            Collectors.toList());
+        List<INDArray> normalVectors = normalAbstracts.stream().map(it -> {return measure.inferVector(it);}).collect(
+            Collectors.toList());
         for (int i = 0; i < sourceUris.size(); i++) {
-            System.out.println(i);
             double bestSim = Double.MAX_VALUE;
             int bestJ = -1;
+            INDArray simpleVector = simpleVectors.get(i);
             for (int j = 0; j < targetUris.size(); j++) {
-                String simpleAbstract = simpleAbstracts.get(i);
-                String normalAbstract = normalAbstracts.get(j);
-                double sim = measure.getSimilarity(simpleAbstract, normalAbstract);
-//				System.out.println(sim);
+                INDArray normalVector = normalVectors.get(i);
+                double sim = Doc2VecMeasure.getSimilarityForInferredVectors(simpleVector, normalVector);
+//                System.out.println(simpleVector);
+//                System.out.println(normalVector);
+//                System.out.println(sim);
+//                System.exit(0);
+                /*
+[-0.05,  0.11,  -0.10,  -0.07,  0.05,  -0.04,  0.05,  0.02,  0.10,  0.08,  -0.03,  0.01,  -0.10,  0.08,  0.21,  -0.03,  -0.02,  0.04,  -0.07,  0.08,  -0.01,  0.09,  -0.00,  -0.10,  -0.08,  0.13,  0.07,  -0.16,  0.12,  0.00,  -0.01,  -0.21,  0.02,  0.02,  -0.05,  -0.06,  -0.05,  0.04,  -0.15,  0.04,  0.01,  0.01,  0.09,  0.15,  0.08,  -0.08,  -0.03,  -0.08,  0.04,  -0.02,  -0.12,  0.00,  0.05,  -0.00,  -0.10,  -0.01,  0.09,  0.04,  0.06,  0.04,  0.01,  -0.09,  -0.04,  0.11,  0.03,  0.00,  -0.13,  -0.03,  -0.02,  0.04,  0.04,  0.08,  0.01,  0.07,  -0.03,  0.04,  -0.01,  0.03,  -0.03,  -0.04,  0.08,  -0.06,  -0.15,  -0.07,  -0.06,  0.10,  -0.02,  -0.00,  -0.06,  0.07,  -0.07,  -0.03,  -0.09,  -0.04,  -0.11,  -0.02,  0.17,  -0.05,  -0.17,  0.07]
+[-0.03,  0.15,  -0.01,  -0.09,  -0.03,  0.01,  -0.04,  0.01,  0.01,  0.12,  -0.07,  -0.05,  -0.25,  0.14,  0.27,  -0.18,  -0.14,  0.07,  -0.13,  0.17,  0.02,  0.11,  0.01,  -0.03,  -0.06,  0.06,  0.07,  -0.19,  0.12,  -0.08,  0.02,  -0.23,  0.04,  0.14,  -0.10,  -0.15,  -0.08,  -0.12,  -0.24,  0.01,  0.02,  0.17,  -0.02,  0.20,  0.16,  -0.07,  -0.03,  -0.03,  0.16,  -0.05,  -0.08,  -0.10,  0.10,  -0.10,  -0.02,  -0.06,  0.15,  0.15,  0.04,  0.07,  -0.05,  -0.16,  -0.04,  0.06,  0.01,  -0.09,  -0.13,  0.07,  -0.12,  0.05,  0.12,  0.02,  0.02,  0.15,  -0.09,  0.07,  0.00,  -0.09,  -0.06,  -0.01,  0.09,  -0.19,  -0.21,  0.02,  0.00,  0.09,  -0.02,  -0.04,  -0.02,  0.00,  -0.01,  0.01,  -0.05,  0.02,  -0.06,  -0.08,  0.11,  -0.03,  -0.08,  -0.03]
+0.7531705498695374
+                 */
                 if (sim < bestSim) {
                     bestSim = sim;
                     bestJ = j;
                 }
-                if (sim > 0.0495554248693) {
+                if (sim > 0.7) {
                     predictions.add(sourceUris.get(i), targetUris.get(j), 1);
                 }
             }
