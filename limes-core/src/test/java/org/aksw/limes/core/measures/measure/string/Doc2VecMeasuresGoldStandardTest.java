@@ -102,6 +102,7 @@ public class Doc2VecMeasuresGoldStandardTest {
                 }
                 if (sim > 0.945193769973) {
                     predictions.add(sourceUris.get(i), targetUris.get(j), 1);
+                    System.out.println(names.get(i) + " " + names.get(j) + " " + sim);
                 }
             }
 //			predictions.add(sourceUris.get(i), targetUris.get(bestJ), 1);

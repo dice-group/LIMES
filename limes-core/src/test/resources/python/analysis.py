@@ -63,10 +63,10 @@ def plotFit(x_fit, title):
 
 def my_cosine_distance(a, b):
 	return 1 - 0.5 * (
-			1 + np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
+		1 + np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
+
 
 x = np.array(x)
-from sklearn.preprocessing import StandardScaler
 
 # x = StandardScaler().fit_transform(x)
 # from sklearn.decomposition import PCA
@@ -77,11 +77,10 @@ from sklearn.metrics import pairwise_distances
 distance_matrix = pairwise_distances(x, x, metric='cosine', n_jobs=-1)
 distance_matrix = np.maximum(np.zeros(shape=distance_matrix.shape),
                              distance_matrix) * 0.5
-print(distance_matrix)
-print(1-distance_matrix[0,1])
-print(1-my_cosine_distance(x[0],x[1]))
-sys.exit()
-print(np.mean(distance_matrix))
+# print(distance_matrix)
+# print(1-distance_matrix[0,1])
+# print(1-my_cosine_distance(x[0],x[1]))
+# sys.exit()
 avg_dist_all = np.mean(distance_matrix)
 avg_dist_simple = np.mean(distance_matrix[::2, ::2])
 avg_dist_normal = np.mean(distance_matrix[1::2, 1::2])
@@ -123,37 +122,46 @@ for c, b in confidences:
 	f = f_score()
 	if f > best_f_score:
 		best_f_score = f
-		best_threshold = c + 0.001
+		best_threshold = c + 0.00001
 		bests = (tp, tn, fn, fp)
 print(
 	"best threshold, best f score, tp,tn,fn,fp, (tp/(fn+tp))/(p/(p+n))('red / green'):")
-tp,tn,fn,fp = bests
+tp, tn, fn, fp = bests
 print(best_threshold, best_f_score, bests,
       (tp / (fn + tp)) / ((tp + fp) / (tp + fp + tn + fn)))
-print("recall:", tp / (tp+fn))
-print("precision:", tp / (tp+fp))
-# =======================
+print("recall:", tp / (tp + fn))
+print("precision:", tp / (tp + fp))
 
+# =======================
+# for a in range(0, len(distance_matrix), 2):
+# 	for b in range(1, len(distance_matrix), 2):
+# 		confidence = 1 - distance_matrix[a, b]
+# 		if confidence > best_threshold:
+# 			print(labels[a//2], labels[b//2], confidence)
 """
+new with more precise vectors:
+0.163334919846 0.191863656086 0.121075142798 0.143025340954
+best threshold, best f score, tp,tn,fn,fp, (tp/(fn+tp))/(p/(p+n))('red / green'):
+0.945634824763 0.0717948717948718 (7, 7912, 83, 98) 6.0
+recall: 0.07777777777777778
+precision: 0.06666666666666667
+
 sim instead distance results:
-0.163774287326
 0.163774287326 0.192452176882 0.121326485291 0.143316474943
 best threshold, best f score, tp,tn,fn,fp, (tp/(fn+tp))/(p/(p+n))('red / green'):
 0.945193769973 0.07253886010362695 (7, 7914, 83, 96) 6.116504854368932
 recall: 0.07777777777777778
 precision: 0.06796116504854369
 
-first try:
-0.499697531375
-0.499697531375 0.471654812898 0.471823169607 0.442123100908
-best threshold, best f score, tp,tn,fn,fp, (tp/(fn+tp))/(p/(p+n))('red / green'):
-0.154033065905 0.011020284589766878 (91, 229, 0, 16333) 1.0139430102289333
-
 bugfixed (not standardized):
-0.163774287326
 0.163774287326 0.192452176882 0.121326485291 0.143316474943
 best threshold, best f score, tp,tn,fn,fp, (tp/(fn+tp))/(p/(p+n))('red / green'):
 0.0495554248693 0.022123893805309738 (90, 54, 0, 7956) 1.0067114093959733
+
+first try:
+0.499697531375 0.471654812898 0.471823169607 0.442123100908
+best threshold, best f score, tp,tn,fn,fp, (tp/(fn+tp))/(p/(p+n))('red / green'):
+0.154033065905 0.011020284589766878 (91, 229, 0, 16333) 1.0139430102289333
 
 """
 
