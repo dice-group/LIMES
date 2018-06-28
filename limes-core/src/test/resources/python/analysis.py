@@ -139,6 +139,13 @@ print("precision:", tp / (tp + fp))
 # 		if confidence > best_threshold:
 # 			print(labels[a//2], labels[b//2], confidence)
 """
+lower epsilon for threshold
+0.163334919846 0.191863656086 0.121075142798 0.143025340954
+best threshold, best f score, tp,tn,fn,fp, (tp/(fn+tp))/(p/(p+n))('red / green'):
+0.944644824763 0.0717948717948718 (7, 7912, 83, 98) 6.0
+recall: 0.07777777777777778
+precision: 0.06666666666666667
+
 new with more precise vectors:
 0.163334919846 0.191863656086 0.121075142798 0.143025340954
 best threshold, best f score, tp,tn,fn,fp, (tp/(fn+tp))/(p/(p+n))('red / green'):
