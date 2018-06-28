@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,7 @@ public class Doc2VecMeasuresGoldStandardTest {
     public void setupData() throws IOException {
         Doc2VecMeasure measure = new Doc2VecMeasure(
             Doc2VecMeasure.DEFAULT_PRECOMPUTED_VECTORS_FILE_PATH);
+        ArrayList<String> names = new ArrayList<String>();
         ArrayList<String> sourceUris = new ArrayList<String>();
         ArrayList<String> targetUris = new ArrayList<String>();
         AMapping goldMapping = MappingFactory.createDefaultMapping();
@@ -51,6 +53,7 @@ public class Doc2VecMeasuresGoldStandardTest {
             new File(basePath, "simple-and-normal-english-wiki-abstracts.csv").toPath()).
             forEach(line -> {
                 String[] parts = line.split("\t");
+                names.add(parts[0]);
                 String sourceUri = "http://a.de/" + parts[0];
                 String targetUri = "http://b.de/" + parts[0];
                 sourceUris.add(sourceUri);
@@ -66,6 +69,12 @@ public class Doc2VecMeasuresGoldStandardTest {
         List<INDArray> normalVectors = normalAbstracts.stream().map(it -> {return measure.inferVector(it);}).collect(
             Collectors.toList());
         for (int i = 0; i < sourceUris.size(); i++) {
+            System.out.println(names.get(i));
+            System.out.println(Arrays.stream(simpleVectors.get(i).data().asDouble()).mapToObj(it -> ""+it ).collect( Collectors.joining( " " ) ));
+            System.out.println(Arrays.stream(normalVectors.get(i).data().asDouble()).mapToObj(it -> ""+it ).collect( Collectors.joining( " " ) ));
+        }
+        System.exit(0);
+        for (int i = 0; i < sourceUris.size(); i++) {
             double bestSim = Double.MAX_VALUE;
             int bestJ = -1;
             INDArray simpleVector = simpleVectors.get(i);
@@ -79,13 +88,14 @@ public class Doc2VecMeasuresGoldStandardTest {
                 /*
 [-0.05,  0.11,  -0.10,  -0.07,  0.05,  -0.04,  0.05,  0.02,  0.10,  0.08,  -0.03,  0.01,  -0.10,  0.08,  0.21,  -0.03,  -0.02,  0.04,  -0.07,  0.08,  -0.01,  0.09,  -0.00,  -0.10,  -0.08,  0.13,  0.07,  -0.16,  0.12,  0.00,  -0.01,  -0.21,  0.02,  0.02,  -0.05,  -0.06,  -0.05,  0.04,  -0.15,  0.04,  0.01,  0.01,  0.09,  0.15,  0.08,  -0.08,  -0.03,  -0.08,  0.04,  -0.02,  -0.12,  0.00,  0.05,  -0.00,  -0.10,  -0.01,  0.09,  0.04,  0.06,  0.04,  0.01,  -0.09,  -0.04,  0.11,  0.03,  0.00,  -0.13,  -0.03,  -0.02,  0.04,  0.04,  0.08,  0.01,  0.07,  -0.03,  0.04,  -0.01,  0.03,  -0.03,  -0.04,  0.08,  -0.06,  -0.15,  -0.07,  -0.06,  0.10,  -0.02,  -0.00,  -0.06,  0.07,  -0.07,  -0.03,  -0.09,  -0.04,  -0.11,  -0.02,  0.17,  -0.05,  -0.17,  0.07]
 [-0.03,  0.15,  -0.01,  -0.09,  -0.03,  0.01,  -0.04,  0.01,  0.01,  0.12,  -0.07,  -0.05,  -0.25,  0.14,  0.27,  -0.18,  -0.14,  0.07,  -0.13,  0.17,  0.02,  0.11,  0.01,  -0.03,  -0.06,  0.06,  0.07,  -0.19,  0.12,  -0.08,  0.02,  -0.23,  0.04,  0.14,  -0.10,  -0.15,  -0.08,  -0.12,  -0.24,  0.01,  0.02,  0.17,  -0.02,  0.20,  0.16,  -0.07,  -0.03,  -0.03,  0.16,  -0.05,  -0.08,  -0.10,  0.10,  -0.10,  -0.02,  -0.06,  0.15,  0.15,  0.04,  0.07,  -0.05,  -0.16,  -0.04,  0.06,  0.01,  -0.09,  -0.13,  0.07,  -0.12,  0.05,  0.12,  0.02,  0.02,  0.15,  -0.09,  0.07,  0.00,  -0.09,  -0.06,  -0.01,  0.09,  -0.19,  -0.21,  0.02,  0.00,  0.09,  -0.02,  -0.04,  -0.02,  0.00,  -0.01,  0.01,  -0.05,  0.02,  -0.06,  -0.08,  0.11,  -0.03,  -0.08,  -0.03]
-0.7531705498695374
+0.8765852749347687 (java)
+0.874614224654 (python)
                  */
                 if (sim < bestSim) {
                     bestSim = sim;
                     bestJ = j;
                 }
-                if (sim > 0.7) {
+                if (sim > 0.945193769973) {
                     predictions.add(sourceUris.get(i), targetUris.get(j), 1);
                 }
             }
@@ -95,6 +105,15 @@ public class Doc2VecMeasuresGoldStandardTest {
     }
 	
 	/*
+	with 9.55:
+	precision: 0.011111111111111112
+recall: 0.05555555555555555
+fmeasure: 0.018518518518518517
+accuracy: 0.9345679012345679
+pprecision: 0.10555555555555556
+precall: 0.5277777777777778
+pfmeasure: 0.17592592592592593
+	
 	with threshold 0.7
 	precision: 0.015741270749856897
 	recall: 0.6111111111111112
