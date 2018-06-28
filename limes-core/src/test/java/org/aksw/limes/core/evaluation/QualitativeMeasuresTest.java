@@ -32,6 +32,32 @@ public class QualitativeMeasuresTest {
 	AMapping pred;
 	List<String> dataset;
 	
+	@Test
+    public void testMyFmeasureCheck() {
+        Set<EvaluatorType> measures = initEvalMeasures();
+        List<String> sources = new ArrayList<String>();
+        List<String> targets = new ArrayList<String>();
+        sources.add("a");
+        sources.add("b");
+        targets.add("A");
+        targets.add("B");
+        AMapping pred = MappingFactory.createDefaultMapping();
+        pred.add("a", "A", 1);
+        pred.add("a", "B", 1);
+        AMapping gold = MappingFactory.createDefaultMapping();
+        gold.add("a", "A", 1);
+        gold.add("b", "B", 1);
+        
+        GoldStandard gs = new GoldStandard(gold, sources, targets);
+        Map<EvaluatorType, Double> calculations = new QualitativeMeasuresEvaluator().evaluate(pred, gs, measures);
+        double precision = calculations.get(EvaluatorType.PRECISION);
+        double recall = calculations.get(EvaluatorType.RECALL);
+        double fmeasure = calculations.get(EvaluatorType.F_MEASURE);
+        System.out.println(precision);
+        System.out.println(recall);
+        System.out.println(fmeasure);
+    }
+	
 	@Before
 	public void setupData(){
 		dataset = initDataSet();
@@ -130,7 +156,7 @@ public class QualitativeMeasuresTest {
         gold.add("http://dbpedia.org/resource/A", "http://dbpedia.org/resource/A", 1);
         gold.add("http://dbpedia.org/resource/B", "http://dbpedia.org/resource/B", 1);
         gold.add("http://dbpedia.org/resource/C", "http://dbpedia.org/resource/C", 1);
-        gold.add("http://dbpedia.org/resource/C", "http://dbpedia.org/resource/D", 1); 
+        gold.add("http://dbpedia.org/resource/C", "http://dbpedia.org/resource/D", 1);
         gold.add("http://dbpedia.org/resource/D", "http://dbpedia.org/resource/D", 1);
         gold.add("http://dbpedia.org/resource/E", "http://dbpedia.org/resource/E", 1);
         gold.add("http://dbpedia.org/resource/F", "http://dbpedia.org/resource/F", 1);
