@@ -28,7 +28,13 @@ public class McNemarsTest {
 		return MappingOperations.intersection(aRight, bWrong).getSize();
 	}
 
+	public static double calculate(int[] successesAndFailures) {
+		return calculate(successesAndFailures[0], successesAndFailures[1]);
+	}
 	public static double calculate(int successes, int failures) {
+		if (successes == 0 && failures == 0) {
+			return Double.NaN;
+		}
 		BigDecimal s = BigDecimal.valueOf(successes);
 		BigDecimal f = BigDecimal.valueOf(failures);
 		double chisquared = s.subtract(f).abs().subtract(BigDecimal.ONE).pow(2)

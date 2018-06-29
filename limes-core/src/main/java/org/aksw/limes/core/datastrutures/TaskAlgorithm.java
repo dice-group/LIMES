@@ -1,6 +1,7 @@
 package org.aksw.limes.core.datastrutures;
 
 import java.util.List;
+import java.util.Map;
 
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
@@ -21,6 +22,10 @@ public class TaskAlgorithm {
     private AMLAlgorithm mlAlgorithm;
     /** The parameters required by the machine learning algorithm*/
     private List<LearningParameter> mlParameter;
+	/** parameter values to explore in grid search */
+	private Map<LearningParameter, List<Object>> mlParameterValues;
+
+	private String name;
 
     public TaskAlgorithm() {
     }
@@ -30,6 +35,14 @@ public class TaskAlgorithm {
         this.mlAlgorithm=mlAlgorithm;
         this.mlParameter=mlParameter;
     }
+
+	public TaskAlgorithm(MLImplementationType mlType, AMLAlgorithm mlAlgorithm, List<LearningParameter> mlParameter,
+			Map<LearningParameter, List<Object>> mlParameterValues) {
+		this.mlType = mlType;
+		this.mlAlgorithm = mlAlgorithm;
+		this.mlParameter = mlParameter;
+		this.mlParameterValues = mlParameterValues;
+	}
 
     public MLImplementationType getMlType() {
         return mlType;
@@ -54,4 +67,24 @@ public class TaskAlgorithm {
     public void setMlParameter(List<LearningParameter> mlParameter) {
         this.mlParameter = mlParameter;
     }
+
+	public Map<LearningParameter, List<Object>> getMlParameterValues() {
+		return mlParameterValues;
+	}
+
+	public void setMlParameterValues(Map<LearningParameter, List<Object>> mlParameterValues) {
+		this.mlParameterValues = mlParameterValues;
+	}
+
+	public String getName() {
+		if (name == null || name.equals("")) {
+			return mlAlgorithm.getName();
+		}
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }
