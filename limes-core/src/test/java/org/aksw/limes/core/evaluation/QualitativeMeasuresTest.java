@@ -22,18 +22,19 @@ import org.junit.Test;
 /**
  * @author mofeed
  * @author Klaus Lyko
+ * @author Daniel Obraczka
  */
 public class QualitativeMeasuresTest {
 	public static final double epsilon = 0.00001;
 
-	GoldStandard gold1to1;
-	GoldStandard gold1toN;
-	GoldStandard gold1to1WithNeg;
-	GoldStandard gold1toNWithNeg;
+	public GoldStandard gold1to1;
+	public GoldStandard gold1toN;
+	public GoldStandard gold1to1WithNeg;
+	public GoldStandard gold1toNWithNeg;
 	
-	AMapping pred;
-	AMapping predWithNeg;
-	List<String> dataset;
+	public AMapping pred;
+	public AMapping predWithNeg;
+	public List<String> dataset;
 	
 	@Before
 	public void setupData(){
