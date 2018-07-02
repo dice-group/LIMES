@@ -215,9 +215,10 @@ public class MemoryMapping extends AMapping{
     }
 
 	/**
-	 * Computes the number of mappings with value > 0 contained in the object
+	 * Computes the number of mappings with value greater than 0 contained in the
+	 * object
 	 * 
-	 * @return number of mappings with value > 0
+	 * @return number of mappings with value greater than 0
 	 */
 	@Override
 	public int getNumberofPositiveMappings() {
