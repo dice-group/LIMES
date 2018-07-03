@@ -45,6 +45,10 @@ public abstract class AMapping implements IMapping {
 
     public abstract int getNumberofMappings();
 
+	public abstract int getNumberofPositiveMappings();
+
+	public abstract AMapping getOnlyPositiveExamples();
+
     public abstract boolean contains(String key, String value);
 
     public abstract AMapping getBestOneToNMapping();
