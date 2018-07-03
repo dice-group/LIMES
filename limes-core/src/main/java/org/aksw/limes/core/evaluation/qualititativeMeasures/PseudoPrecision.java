@@ -42,7 +42,8 @@ public class PseudoPrecision extends APseudoPRF {
      */
     @Override
     public double calculate(AMapping predictions, GoldStandard goldStandard) {
-        AMapping res = predictions;
+		predictions = predictions.getOnlyPositiveExamples();
+		AMapping res = predictions;
         AMapping rev = res.reverseSourceTarget();
         if (useOneToOneMapping) {
             res = predictions.getBestOneToNMapping();
@@ -61,6 +62,5 @@ public class PseudoPrecision extends APseudoPRF {
         if (p == 0 || q == 0) return 0;
         return p / q;
     }
-
 
 }
