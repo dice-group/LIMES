@@ -1,5 +1,8 @@
 package org.aksw.limes.core.evaluation.evaluator;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.aksw.limes.core.datastrutures.EvaluationRun;
+import org.apache.commons.math3.util.Pair;
 
 import de.vandermeer.asciitable.AsciiTable;
 
@@ -17,6 +21,7 @@ public class Summary {
 	private Map<String, Map<String, Double>> statisticalTestResults;
 	private List<String> usedDatasets = new ArrayList<>();
 	private List<String> usedAlgorithms = new ArrayList<>();
+	public static final int PRECISION = 2;
 
 	public Summary(List<EvaluationRun> singleRuns, int runsPerDataSet) {
 		this.singleRuns = singleRuns;
@@ -51,12 +56,38 @@ public class Summary {
 				usedAlgorithms.add(algo);
 			}
 		}
-		List<EvaluationRun> result = new ArrayList<>();
+		// Calculate mean
 		algoDataRunMap.forEach((algo, map) -> {
 			map.forEach((data, eRun) -> {
 				for (EvaluatorType measureType : eRun.qualititativeScores.keySet()) {
 					eRun.qualititativeScores.put(measureType,
 							eRun.qualititativeScores.get(measureType) / runsPerDataSet);
+				}
+			});
+		});
+		List<EvaluationRun> result = new ArrayList<>();
+		// Calculate variance
+		for (EvaluationRun e : singleRuns) {
+			for (EvaluatorType eType : e.qualititativeScores.keySet()) {
+				EvaluationRun averagedRun = algoDataRunMap.get(e.getAlgorithmName()).get(e.getDatasetName());
+				double squaredDifference = Math
+						.pow(e.qualititativeScores.get(eType) - averagedRun.qualititativeScores.get(eType), 2);
+				if (averagedRun.qualititativeScoresWithVariance.get(eType) != null) {
+					Pair<Double, Double> valueVariance = averagedRun.qualititativeScoresWithVariance.get(eType);
+					averagedRun.qualititativeScoresWithVariance.put(eType, new Pair<Double, Double>(
+							valueVariance.getFirst(), squaredDifference + valueVariance.getSecond()));
+				} else {
+					averagedRun.qualititativeScoresWithVariance.put(eType,
+							new Pair<Double, Double>(averagedRun.qualititativeScores.get(eType), squaredDifference));
+				}
+			}
+		}
+		algoDataRunMap.forEach((algo, map) -> {
+			map.forEach((data, eRun) -> {
+				for (EvaluatorType eType : eRun.qualititativeScores.keySet()) {
+					Pair<Double, Double> old = eRun.qualititativeScoresWithVariance.get(eType);
+					eRun.qualititativeScoresWithVariance.put(eType,
+							new Pair<Double, Double>(old.getFirst(), old.getSecond() / runsPerDataSet));
 				}
 				result.add(eRun);
 			});
@@ -93,7 +124,9 @@ public class Summary {
 			}
 			StringBuilder cell = new StringBuilder();
 			for (EvaluatorType eType : er.qualititativeScores.keySet()) {
-				cell.append(eType).append(": ").append(er.qualititativeScores.get(eType)).append("\n");
+				Pair<Double, Double> valueVariance = er.qualititativeScoresWithVariance.get(eType);
+				cell.append(eType).append(": ").append(round(valueVariance.getFirst())).append(" (")
+						.append(round(valueVariance.getSecond())).append(")").append("\n");
 			}
 			currentRow.add(cell.toString());
 		}
@@ -137,6 +170,12 @@ public class Summary {
 		at.addRule();
 		overall.append(at.render());
 		return overall.toString();
+	}
+
+	public String round(double d) {
+		BigDecimal.valueOf(d).round(new java.math.MathContext(PRECISION, RoundingMode.HALF_UP));
+		DecimalFormat twoDForm = new DecimalFormat("0." + new String(new char[PRECISION]).replace("\0", "0"));
+		return twoDForm.format(d);
 	}
 
 	public List<EvaluationRun> getSingleRuns() {

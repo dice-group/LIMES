@@ -100,7 +100,6 @@ public class SummaryTest {
 			}
 			return e1.getAlgorithmName().compareTo(e2.getAlgorithmName());
 		});
-		System.out.println(avgRuns);
 		assertEquals(0.1, avgRuns.get(0).qualititativeScores.get(EvaluatorType.F_MEASURE), 0);
 		assertEquals(0.1, avgRuns.get(1).qualititativeScores.get(EvaluatorType.F_MEASURE), 0);
 		assertEquals(0.36, avgRuns.get(2).qualititativeScores.get(EvaluatorType.F_MEASURE), 0);

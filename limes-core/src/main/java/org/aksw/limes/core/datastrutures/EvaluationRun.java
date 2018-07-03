@@ -10,6 +10,7 @@ import java.util.Set;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.RunRecord;
 import org.aksw.limes.core.io.ls.LinkSpecification;
+import org.apache.commons.math3.util.Pair;
 
 /**
  * This class represents a single run for an algorithm with specific implementation using specific datasets with its qualitative scores and quantitative records
@@ -28,6 +29,11 @@ public class EvaluationRun {
     private String datasetName="";
     /** The qualitative measures scores e.g. F-MEASURE*/
     public Map<EvaluatorType, Double> qualititativeScores = new HashMap<EvaluatorType, Double>();
+	/**
+	 * The qualitative measures scores e.g. F-MEASURE with value as first pair
+	 * value, and variance as second
+	 */
+	public Map<EvaluatorType, Pair<Double, Double>> qualititativeScoresWithVariance = new HashMap<>();
     /** The quantitative measures record */
     RunRecord quanititativeRecord = new RunRecord();
     private LinkSpecification learnedLS;
