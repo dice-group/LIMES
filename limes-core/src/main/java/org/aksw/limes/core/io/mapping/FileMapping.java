@@ -68,5 +68,10 @@ public class FileMapping extends AMapping {
         return null;
     }
 
+	@Override
+	public double getValue(String s, String t) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }

@@ -51,6 +51,8 @@ public abstract class AMapping implements IMapping {
 
     public abstract AMapping getSubMap(double threshold);
 
+	public abstract double getValue(String s, String t);
+
     /**
      * Returns the best one to one mapping with a bias towards the source Should
      * actually be solved with Hospital residents

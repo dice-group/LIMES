@@ -15,8 +15,10 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.CrispSetOperations;
+import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+import org.aksw.limes.core.ml.algorithm.fptld.nodes.InternalNode;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.aksw.limes.core.ml.algorithm.wombat.LinkEntropy;
 import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;
@@ -38,7 +40,7 @@ public class WombatSimple extends AWombat {
 	protected List<ExtendedClassifier> classifiers = null;
 	protected int iterationNr = 0;
 	public PropertyMapping propMap;
-
+	private LogicOperator[] availableOperators;
 
 
 	/**
@@ -282,20 +284,16 @@ public class WombatSimple extends AWombat {
 	private Tree<RefinementNode> expandNode(Tree<RefinementNode> node) {
 		AMapping map = MappingFactory.createDefaultMapping();
 		for (ExtendedClassifier c : classifiers) {
-			for (LogicOperator op : LogicOperator.values()) {
+			for (LogicOperator op : availableOperators) {
 				if (!node.getValue().getMetricExpression().equals(c.getMetricExpression())) { // do not create the same metricExpression again
-					if (op.equals(LogicOperator.AND)) {
-						map = CrispSetOperations.INSTANCE.intersection(node.getValue().getMapping(), c.getMapping());
-					} else if (op.equals(LogicOperator.OR)) {
-						map = CrispSetOperations.INSTANCE.union(node.getValue().getMapping(), c.getMapping());
-					} else if (op.equals(LogicOperator.MINUS)) {
-						map = CrispSetOperations.INSTANCE.difference(node.getValue().getMapping(), c.getMapping());
-					}
-					String metricExpr = op + "(" + node.getValue().getMetricExpression() + "," + c.getMetricExpression() + ")|0";
+					map = MappingOperations.performOperation(node.getValue().getMapping(), c.getMapping(), op);
+					String metricExpr = InternalNode.opToExpMapping.get(op) + "("
+							+ node.getValue().getMetricExpression() + "," + c.getMetricExpression() + ")|0";
 					RefinementNode child = createNode(map, metricExpr);
 					node.addChild(new Tree<>(child));
 				}
 			}
+
 		}
 		if (isVerbose()) {
 			refinementTreeRoot.print();
@@ -322,6 +320,13 @@ public class WombatSimple extends AWombat {
 		}
 	}
 
+	public LogicOperator[] getAvailableOperators() {
+		return availableOperators;
+	}
+
+	public void setAvailableOperators(LogicOperator[] availableOperators) {
+		this.availableOperators = availableOperators;
+	}
 
 
 }

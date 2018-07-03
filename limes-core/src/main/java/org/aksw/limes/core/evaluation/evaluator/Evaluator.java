@@ -184,6 +184,7 @@ public class Evaluator {
 			} catch (UnsupportedMLImplementationException e) {
 				e.printStackTrace();
 			}
+			System.out.println(model.getLinkSpecification());
 			EvaluationRun er = new EvaluationRun(algorithm.getName() ,dataset.dataName, eval.evaluate(algorithm.predict(testSourceCache, testTargetCache, model), goldStandard, qlMeasures));
 			er.display();
 			runsList.add(er);

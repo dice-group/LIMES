@@ -325,4 +325,15 @@ public class MemoryMapping extends AMapping{
         return result;
     }
 
+	/**
+	 * @return value if link is in mapping, 0 else
+	 */
+	@Override
+	public double getValue(String s, String t) {
+		if (map.get(s) != null) {
+			return map.get(s).get(t);
+		}
+		return 0;
+	}
+
 }

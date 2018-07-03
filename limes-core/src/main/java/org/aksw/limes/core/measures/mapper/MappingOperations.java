@@ -162,6 +162,9 @@ public interface MappingOperations {
 		case DIFF:
 			res = CrispSetOperations.INSTANCE.difference(a, b);
 			break;
+		case MINUS:
+			res = CrispSetOperations.INSTANCE.difference(a, b);
+			break;
 		case LUKASIEWICZT:
 			res = LukasiewiczSetOperations.INSTANCE.intersection(a, b, p);
 			break;

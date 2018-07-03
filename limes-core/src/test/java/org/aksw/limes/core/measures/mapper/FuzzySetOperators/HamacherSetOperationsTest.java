@@ -121,6 +121,46 @@ public class HamacherSetOperationsTest {
 	}
 
 	@Test
+	public void testPOptimizedIntersection() {
+		AMapping ref = MappingFactory.createDefaultMapping();
+		ref.add("i3", "i3", 1.0);
+		ref.add("i5", "i5", 1.0);
+
+		AMapping a = MappingFactory.createDefaultMapping();
+		a.add("i3", "i3", 0.9);
+		a.add("i4", "i4", 0.7);
+		a.add("i6", "i6", 0.2);
+		a.add("i5", "i5", 0.6);
+
+		AMapping b = MappingFactory.createDefaultMapping();
+		b.add("i3", "i3", 0.8);
+		b.add("i6", "i6", 0.4);
+		b.add("i5", "i5", 0.9);
+
+		HamacherSetOperations.INSTANCE.intersection(a, b, ref);
+	}
+
+	@Test
+	public void testPOptimizedUnion() {
+		AMapping ref = MappingFactory.createDefaultMapping();
+		ref.add("i3", "i3", 1.0);
+		ref.add("i5", "i5", 1.0);
+
+		AMapping a = MappingFactory.createDefaultMapping();
+		a.add("i3", "i3", 0.9);
+		a.add("i4", "i4", 0.7);
+		a.add("i6", "i6", 0.2);
+		a.add("i5", "i5", 0.6);
+
+		AMapping b = MappingFactory.createDefaultMapping();
+		b.add("i3", "i3", 0.8);
+		b.add("i6", "i6", 0.4);
+		b.add("i5", "i5", 0.9);
+
+		HamacherSetOperations.INSTANCE.union(a, b, ref);
+	}
+
+	@Test
 	public void testm1Differencem2p1() {
 		assertEquals(m1Minusm2p1, hso.difference(m1, m2, 1.0));
 	}
