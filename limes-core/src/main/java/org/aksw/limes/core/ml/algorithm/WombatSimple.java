@@ -40,7 +40,8 @@ public class WombatSimple extends AWombat {
 	protected List<ExtendedClassifier> classifiers = null;
 	protected int iterationNr = 0;
 	public PropertyMapping propMap;
-	private LogicOperator[] availableOperators;
+	private LogicOperator[] availableOperators = new LogicOperator[] { LogicOperator.AND, LogicOperator.OR,
+			LogicOperator.MINUS };
 
 
 	/**
