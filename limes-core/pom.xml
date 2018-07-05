@@ -258,12 +258,16 @@
             <version>1.7.21</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>de.vandermeer</groupId>
+            <artifactId>asciitable</artifactId>
+            <version>0.3.2</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
-            <version>3.0</version>
+            <version>3.3</version>
         </dependency>
 
         <dependency>
