@@ -66,6 +66,11 @@ public class LearningParameter {
         this.description = description;
     }
 
+	@Override
+	public String toString() {
+		return new StringBuilder("").append(name).append(" : ").append(value).toString();
+	}
+
     
     
     /**

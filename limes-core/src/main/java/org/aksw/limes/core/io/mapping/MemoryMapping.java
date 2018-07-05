@@ -214,6 +214,26 @@ public class MemoryMapping extends AMapping{
         return size;
     }
 
+	/**
+	 * Computes the number of mappings with value greater than 0 contained in the
+	 * object
+	 * 
+	 * @return number of mappings with value greater than 0
+	 */
+	@Override
+	public int getNumberofPositiveMappings() {
+		int size = 0;
+		for (String s : map.keySet()) {
+			for (String k : map.get(s).keySet()) {
+				if (map.get(s).get(k) > 0) {
+					size++;
+				}
+			}
+		}
+		return size;
+	}
+
+
     /**
      * Computes the best one to n mapping for the current mapping, i.e., for
      * each element of the source, it gets the best t from target. This does not
@@ -227,7 +247,6 @@ public class MemoryMapping extends AMapping{
         for (String s : map.keySet()) {
             double maxSim = 0;
             Set<String> target = new HashSet<String>();
-            ;
             for (String t : map.get(s).keySet()) {
                 if (getConfidence(s, t) == maxSim) {
                     target.add(t);
@@ -334,6 +353,18 @@ public class MemoryMapping extends AMapping{
 			return map.get(s).get(t);
 		}
 		return 0;
+	}
+
+	@Override
+	public AMapping getOnlyPositiveExamples() {
+		AMapping onlyPos = MappingFactory.createDefaultMapping();
+		map.forEach((key, subMap) -> {
+			subMap.forEach((key2, value) -> {
+				if (value > 0)
+					onlyPos.add(key, key2, value);
+			});
+		});
+		return onlyPos;
 	}
 
 }
