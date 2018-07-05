@@ -34,6 +34,7 @@ public class EvaluationRun {
 	 * value, and variance as second
 	 */
 	public Map<EvaluatorType, Pair<Double, Double>> qualititativeScoresWithVariance = new HashMap<>();
+	private int runInExperiment = 0;
     /** The quantitative measures record */
     RunRecord quanititativeRecord = new RunRecord();
     private LinkSpecification learnedLS;
@@ -67,6 +68,17 @@ public class EvaluationRun {
             this.qualititativeScores.put(evaluator, evaluatorsScores.get(evaluator));
         }
     }
+
+	public EvaluationRun(String algorithmName, String implementation, String datasetName,
+			Map<EvaluatorType, Double> evaluatorsScores, int run) {
+		this.algorithmName = algorithmName;
+		this.datasetName = datasetName;
+		this.implementationType = implementation;
+		for (EvaluatorType evaluator : evaluatorsScores.keySet()) {
+			this.qualititativeScores.put(evaluator, evaluatorsScores.get(evaluator));
+		}
+		this.runInExperiment = run;
+	}
     /** 
      * @param  algorithmName The name of the evaluated algorithm
      * @param  implementation The implementation type of the evaluated algorithm
@@ -126,6 +138,7 @@ public class EvaluationRun {
 
 
     }
+
     @Override
     public String toString() {
         String erString = Serialize(":");
@@ -159,6 +172,14 @@ public class EvaluationRun {
     public String getDatasetName() {
         return datasetName;
     }
+
+	public int getRunInExperiment() {
+		return runInExperiment;
+	}
+
+	public void setRunInExperiment(int runInExperiment) {
+		this.runInExperiment = runInExperiment;
+	}
 
 
 }

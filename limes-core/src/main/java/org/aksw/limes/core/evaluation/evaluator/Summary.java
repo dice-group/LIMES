@@ -1,6 +1,10 @@
 package org.aksw.limes.core.evaluation.evaluator;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -8,19 +12,24 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.aksw.limes.core.datastrutures.EvaluationRun;
 import org.apache.commons.math3.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.vandermeer.asciitable.AsciiTable;
 
 public class Summary {
 
+	public static final Logger logger = LoggerFactory.getLogger(Summary.class);
 	private List<EvaluationRun> singleRuns;
 	private List<EvaluationRun> averagedRuns;
-	private Map<String, Map<String, Double>> statisticalTestResults;
+	private Map<String, Map<String, Map<String, Double>>> statisticalTestResults;
 	private List<String> usedDatasets = new ArrayList<>();
 	private List<String> usedAlgorithms = new ArrayList<>();
+	private List<String> usedEvaluators = new ArrayList<>();
 	public static final int PRECISION = 2;
 
 	public Summary(List<EvaluationRun> singleRuns, int runsPerDataSet) {
@@ -43,6 +52,9 @@ public class Summary {
 				for (EvaluatorType measureType : e.qualititativeScores.keySet()) {
 					eRun.qualititativeScores.put(measureType,
 							eRun.qualititativeScores.get(measureType) + e.qualititativeScores.get(measureType));
+					if (!usedEvaluators.contains(measureType.toString())) {
+						usedEvaluators.add(measureType.toString());
+					}
 				}
 			} else {
 				eRun = e;
@@ -139,43 +151,114 @@ public class Summary {
 		overall.append("\n ========= STATISTICAL TEST RESULTS ========\n");
 		at = new AsciiTable();
 		at.addRule();
-
-		List<String> header = new ArrayList<>();
-		header.addAll(usedAlgorithms);
-		header.add(0, "");
-		at.addRow(header);
-		at.addRule();
-		currentRow = new ArrayList<>();
-		for (String a : header) {
-			if (!a.equals("")) {
-				currentRow.add(a);
-				for (String b : header) {
-					if (!a.equals(b)) {
-					if (statisticalTestResults.get(a) == null) {
-						currentRow.add("-");
-					} else {
-						Double value = statisticalTestResults.get(a).get(b);
-						if (value == null) {
-							currentRow.add("-");
-						} else {
-							currentRow.add(value.toString());
+		for (String dataSet : statisticalTestResults.keySet()) {
+			overall.append("\n +++++ " + dataSet + " +++++ \n");
+			List<String> header = new ArrayList<>();
+			header.addAll(usedAlgorithms);
+			header.add(0, "");
+			at.addRow(header);
+			at.addRule();
+			currentRow = new ArrayList<>();
+			for (String a : header) {
+				if (!a.equals("")) {
+					currentRow.add(a);
+					for (String b : header) {
+						if (!a.equals(b)) {
+							if (statisticalTestResults.get(dataSet).get(a) == null) {
+								currentRow.add("-");
+							} else {
+								Double value = statisticalTestResults.get(dataSet).get(a).get(b);
+								if (value == null) {
+									currentRow.add("-");
+								} else {
+									currentRow.add(round(value));
+								}
+							}
 						}
 					}
-					}
+					at.addRow(currentRow);
+					currentRow = new ArrayList<>();
 				}
-				at.addRow(currentRow);
-				currentRow = new ArrayList<>();
 			}
+			at.addRule();
+			overall.append(at.render());
 		}
-		at.addRule();
-		overall.append(at.render());
 		return overall.toString();
 	}
 
 	public String round(double d) {
-		BigDecimal.valueOf(d).round(new java.math.MathContext(PRECISION, RoundingMode.HALF_UP));
+		BigDecimal.valueOf(d).round(new MathContext(PRECISION, RoundingMode.HALF_UP));
 		DecimalFormat twoDForm = new DecimalFormat("0." + new String(new char[PRECISION]).replace("\0", "0"));
 		return twoDForm.format(d);
+	}
+
+	public void printToFiles(String dir) throws FileNotFoundException {
+		// TODO Fix code duplication
+		Map<Integer, Map<String, Map<String, List<EvaluationRun>>>> grouped = singleRuns.stream()
+				.collect(Collectors.groupingBy(EvaluationRun::getRunInExperiment, Collectors.groupingBy(
+						EvaluationRun::getAlgorithmName, Collectors.groupingBy(EvaluationRun::getDatasetName))));
+		for (String eType : usedEvaluators) {
+			for (Integer run : grouped.keySet()) {
+				String runDir = "Run" + run;
+				runDir = createDirectoriesIfNecessary(dir, runDir);
+				String rows = "\t" + String.join("\t", usedDatasets) + "\n";
+				for (String algo : usedAlgorithms) {
+					String row = algo;
+					for (String data : usedDatasets) {
+						row += "\t" + grouped.get(run).get(algo).get(data).get(0).qualititativeScores
+								.get(EvaluatorType.valueOf(eType));
+					}
+					row += "\n";
+					rows += row;
+				}
+				try (PrintWriter out = new PrintWriter(runDir + File.separatorChar + eType)) {
+					out.print(rows);
+				}
+			}
+		}
+		Map<String, Map<String, List<EvaluationRun>>> groupedAvg = averagedRuns.stream().collect(Collectors
+				.groupingBy(EvaluationRun::getAlgorithmName, Collectors.groupingBy(EvaluationRun::getDatasetName)));
+		for (String eType : usedEvaluators) {
+			String runDir = "Avg";
+			runDir = createDirectoriesIfNecessary(dir, runDir);
+			String rows = "\t" + String.join("\t", usedDatasets) + "\n";
+			String rowsVar = "\t" + String.join("\t", usedDatasets) + "\n";
+			for (String algo : usedAlgorithms) {
+				String row = algo;
+				String rowVar = algo;
+				for (String data : usedDatasets) {
+					row += "\t" + groupedAvg.get(algo).get(data).get(0).qualititativeScores
+							.get(EvaluatorType.valueOf(eType));
+					rowVar += "\t" + groupedAvg.get(algo).get(data).get(0).qualititativeScoresWithVariance
+							.get(EvaluatorType.valueOf(eType)).getSecond();
+				}
+				row += "\n";
+				rowVar += "\n";
+				rows += row;
+				rowsVar += rowVar;
+			}
+			try (PrintWriter out = new PrintWriter(runDir + File.separatorChar + eType)) {
+				out.print(rows);
+			}
+			try (PrintWriter out = new PrintWriter(runDir + File.separatorChar + eType + "Variance")) {
+				out.print(rowsVar);
+			}
+		}
+	}
+
+	private String createDirectoriesIfNecessary(String base, String folder) {
+		File f = new File(base + File.separatorChar + folder);
+		if (!f.exists()) {
+			boolean success = f.mkdirs();
+			if (success) {
+				logger.info("Successfully created directory: " + f.getPath());
+			} else {
+				logger.error("Error while trying to create: " + f.getPath());
+			}
+		} else {
+			logger.info(f.getPath() + " already exists");
+		}
+		return f.getAbsolutePath();
 	}
 
 	public List<EvaluationRun> getSingleRuns() {
@@ -186,11 +269,11 @@ public class Summary {
 		return averagedRuns;
 	}
 
-	public Map<String, Map<String, Double>> getStatisticalTestResults() {
+	public Map<String, Map<String, Map<String, Double>>> getStatisticalTestResults() {
 		return statisticalTestResults;
 	}
 
-	public void setStatisticalTestResults(Map<String, Map<String, Double>> statisticalTestResults) {
+	public void setStatisticalTestResults(Map<String, Map<String, Map<String, Double>>> statisticalTestResults) {
 		this.statisticalTestResults = statisticalTestResults;
 	}
 
