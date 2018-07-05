@@ -117,11 +117,12 @@ public class Summary {
 			}
 			return e1.getAlgorithmName().compareTo(e2.getAlgorithmName());
 		});
-		Collections.sort(usedDatasets);
-		usedDatasets.add(0, "");
+		List<String> datasetsCopy = new ArrayList<String>(usedDatasets);
+		Collections.sort(datasetsCopy);
+		datasetsCopy.add(0, "");
 		AsciiTable at = new AsciiTable();
 		at.addRule();
-		at.addRow(usedDatasets);
+		at.addRow(datasetsCopy);
 		at.addRule();
 		String currentAlgo = averagedRuns.get(0).getAlgorithmName();
 		List<String> currentRow = new ArrayList<>();
@@ -149,10 +150,10 @@ public class Summary {
 			return overall.toString();
 		}
 		overall.append("\n ========= STATISTICAL TEST RESULTS ========\n");
-		at = new AsciiTable();
-		at.addRule();
 		for (String dataSet : statisticalTestResults.keySet()) {
 			overall.append("\n +++++ " + dataSet + " +++++ \n");
+			at = new AsciiTable();
+			at.addRule();
 			List<String> header = new ArrayList<>();
 			header.addAll(usedAlgorithms);
 			header.add(0, "");
@@ -242,6 +243,37 @@ public class Summary {
 			}
 			try (PrintWriter out = new PrintWriter(runDir + File.separatorChar + eType + "Variance")) {
 				out.print(rowsVar);
+			}
+		}
+
+		String runDir = createDirectoriesIfNecessary(dir, "statistics");
+		for (String dataSet : statisticalTestResults.keySet()) {
+			List<String> header = new ArrayList<>();
+			header.addAll(usedAlgorithms);
+			header.add(0, "");
+			String result = String.join("\t", header) + "\n";
+			for (String a : header) {
+				if (!a.equals("")) {
+					result += a;
+					for (String b : header) {
+						if (!a.equals(b)) {
+							if (statisticalTestResults.get(dataSet).get(a) == null) {
+								result += "\t-";
+							} else {
+								Double value = statisticalTestResults.get(dataSet).get(a).get(b);
+								if (value == null) {
+									result += "\t-";
+								} else {
+									result += "\t" + value;
+								}
+							}
+						}
+					}
+					result += "\n";
+				}
+			}
+			try (PrintWriter out = new PrintWriter(runDir + File.separatorChar + dataSet)) {
+				out.print(result);
 			}
 		}
 	}

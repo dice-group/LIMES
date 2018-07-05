@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.aksw.limes.core.datastrutures.EvaluationRun;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
@@ -117,6 +119,19 @@ public class SummaryTest {
 	@Test
 	public void testWriteToFiles() throws FileNotFoundException, IOException {
 		Summary s = new Summary(runs, 5);
+		// Values in this map are arbitrary only to check correctly writing to file
+		Map<String, Map<String, Map<String, Double>>> statisticalTestResults = new HashMap<>();
+		Map<String, Map<String, Double>> d1a1a2Map = new HashMap<>();
+		Map<String, Double> a2Map1 = new HashMap<>();
+		a2Map1.put("algo2", 12.332);
+		d1a1a2Map.put("algo1", a2Map1);
+		statisticalTestResults.put("data1", d1a1a2Map);
+		Map<String, Map<String, Double>> d2a1a2Map = new HashMap<>();
+		Map<String, Double> a2Map2 = new HashMap<>();
+		a2Map2.put("algo2", 0.332);
+		d2a1a2Map.put("algo1", a2Map2);
+		statisticalTestResults.put("data2", d2a1a2Map);
+		s.setStatisticalTestResults(statisticalTestResults);
 		File f = folder.newFolder();
 		s.printToFiles(f.getAbsolutePath());
 		String[] paths = {
@@ -133,9 +148,11 @@ public class SummaryTest {
 				f.getAbsolutePath() + File.separatorChar + "Avg" + File.separatorChar + EvaluatorType.F_MEASURE,
 				f.getAbsolutePath() + File.separatorChar + "Avg" + File.separatorChar + EvaluatorType.PRECISION,
 				f.getAbsolutePath() + File.separatorChar + "Avg" + File.separatorChar + EvaluatorType.F_MEASURE
-						+ "Variance",
+						+ "Variance", // 11
 				f.getAbsolutePath() + File.separatorChar + "Avg" + File.separatorChar + EvaluatorType.PRECISION
-						+ "Variance" };
+						+ "Variance",
+				f.getAbsolutePath() + File.separatorChar + "statistics" + File.separatorChar + "data1",
+				f.getAbsolutePath() + File.separatorChar + "statistics" + File.separatorChar + "data2", };
         assertEquals("\tdata1\tdata2\n"+algo1+"\t0.5\t0.5\n"+algo2+"\t0.5\t0.5\n", new String(Files.readAllBytes(Paths.get(paths[1]))));
         assertEquals("\tdata1\tdata2\n"+algo1+"\t0.5\t0.5\n"+algo2+"\t0.5\t0.5\n", new String(Files.readAllBytes(Paths.get(paths[3]))));
         assertEquals("\tdata1\tdata2\n"+algo1+"\t0.5\t0.5\n"+algo2+"\t0.5\t0.5\n", new String(Files.readAllBytes(Paths.get(paths[5]))));
@@ -158,6 +175,11 @@ public class SummaryTest {
 				new String(Files.readAllBytes(Paths.get(paths[10]))));
 		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.0\t0.0\n" + algo2 + "\t0.02088\t3.342495833295187E-4\n",
 				new String(Files.readAllBytes(Paths.get(paths[12]))));
+
+		assertEquals("\talgo1\talgo2\nalgo1\t-\t12.332\nalgo2\t-\t-\n",
+				new String(Files.readAllBytes(Paths.get(paths[14]))));
+		assertEquals("\talgo1\talgo2\nalgo1\t-\t0.332\nalgo2\t-\t-\n",
+				new String(Files.readAllBytes(Paths.get(paths[15]))));
     }
 
 }
