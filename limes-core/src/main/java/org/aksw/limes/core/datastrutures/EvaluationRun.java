@@ -79,12 +79,19 @@ public class EvaluationRun {
 		}
 		this.runInExperiment = run;
 	}
-    /** 
-     * @param  algorithmName The name of the evaluated algorithm
-     * @param  implementation The implementation type of the evaluated algorithm
-     * @param  datasetName The name of used dataset for evaluation
-     * @param  evaluatorsScores A map of pairs (evaluator,score), e.g (F-MEASURE,0.9)
-     * */
+    
+	/**
+	 * @param algorithmName
+	 *            The name of the evaluated algorithm
+	 * @param implementation
+	 *            The implementation type of the evaluated algorithm
+	 * @param datasetName
+	 *            The name of used dataset for evaluation
+	 * @param evaluatorsScores
+	 *            A map of pairs (evaluator,score), e.g (F-MEASURE,0.9)
+	 * @param learnedLS
+	 *            learned LinkSpec
+	 */
     public EvaluationRun(String algorithmName,String implementation, String datasetName,Map<EvaluatorType, Double> evaluatorsScores, LinkSpecification learnedLS)
     {
         this.algorithmName = algorithmName;
@@ -95,6 +102,13 @@ public class EvaluationRun {
         }
         this.learnedLS = learnedLS;
     }
+
+	public EvaluationRun(String algorithmName, String implementation, String datasetName,
+			Map<EvaluatorType, Double> evaluatorsScores, int run, LinkSpecification learnedLS) {
+		this(algorithmName, implementation, datasetName, evaluatorsScores, learnedLS);
+		this.runInExperiment = run;
+	}
+
     /** 
      * @param  algorithmName The name of the evaluated algorithm
      * @param  datasetName The name of used dataset for evaluation
@@ -181,5 +195,35 @@ public class EvaluationRun {
 		this.runInExperiment = runInExperiment;
 	}
 
+	public RunRecord getQuanititativeRecord() {
+		return quanititativeRecord;
+	}
+
+	public void setQuanititativeRecord(RunRecord quanititativeRecord) {
+		this.quanititativeRecord = quanititativeRecord;
+	}
+
+	@Override
+	public EvaluationRun clone() {
+		EvaluationRun clone = new EvaluationRun();
+		clone.algorithmName = algorithmName;
+		clone.implementationType = implementationType;
+		clone.datasetName = datasetName;
+		Map<EvaluatorType, Double> cloneQualiScores = new HashMap<>();
+		qualititativeScores.forEach((key, value) -> cloneQualiScores.put(key, value));
+		clone.qualititativeScores = cloneQualiScores;
+		Map<EvaluatorType, Pair<Double, Double>> cloneQualiScoresWithVariance = new HashMap<>();
+		qualititativeScoresWithVariance.forEach((key, value) -> cloneQualiScoresWithVariance.put(key,
+				new Pair<Double, Double>(value.getFirst(), value.getSecond())));
+		clone.qualititativeScoresWithVariance = cloneQualiScoresWithVariance;
+		clone.runInExperiment = runInExperiment;
+		if (quanititativeRecord != null) {
+			clone.quanititativeRecord = quanititativeRecord.clone();
+		}
+		if (learnedLS != null) {
+			clone.learnedLS = learnedLS.clone();
+		}
+		return clone;
+	}
 
 }

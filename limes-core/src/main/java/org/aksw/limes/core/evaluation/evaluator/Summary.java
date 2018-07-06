@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.aksw.limes.core.datastrutures.EvaluationRun;
+import org.aksw.limes.core.evaluation.quantitativeMeasures.RunRecord;
 import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,9 @@ public class Summary {
 	private List<String> usedAlgorithms = new ArrayList<>();
 	private List<String> usedEvaluators = new ArrayList<>();
 	public static final int PRECISION = 2;
+	public static final String MEMORY = "MEM";
+	public static final String TIME = "TIME";
+	public static final String LS_SIZE = "LS_SIZE";
 
 	public Summary(List<EvaluationRun> singleRuns, int runsPerDataSet) {
 		this.singleRuns = singleRuns;
@@ -56,8 +60,21 @@ public class Summary {
 						usedEvaluators.add(measureType.toString());
 					}
 				}
+				if (eRun.getQuanititativeRecord() != null) {
+					RunRecord rr = eRun.getQuanititativeRecord();
+					if (rr.getRunMemory() != 0) {
+						rr.setRunMemory(rr.getRunMemory() + e.getQuanititativeRecord().getRunMemory());
+					}
+					if (rr.getRunTime() != 0) {
+						rr.setRunTime(rr.getRunTime() + e.getQuanititativeRecord().getRunTime());
+					}
+					if (rr.getLinkSpecSize() != 0) {
+						rr.setLinkSpecSize(rr.getLinkSpecSize() + e.getQuanititativeRecord().getLinkSpecSize());
+					}
+					eRun.setQuanititativeRecord(rr);
+				}
 			} else {
-				eRun = e;
+				eRun = e.clone();
 			}
 			dataRunMap.put(dataSet, eRun);
 			algoDataRunMap.put(algo, dataRunMap);
@@ -75,13 +92,26 @@ public class Summary {
 					eRun.qualititativeScores.put(measureType,
 							eRun.qualititativeScores.get(measureType) / runsPerDataSet);
 				}
+				if (eRun.getQuanititativeRecord() != null) {
+					RunRecord rr = eRun.getQuanititativeRecord();
+					if (rr.getRunMemory() != 0) {
+						rr.setRunMemory(rr.getRunMemory() / runsPerDataSet);
+					}
+					if (rr.getRunTime() != 0) {
+						rr.setRunTime(rr.getRunTime() / runsPerDataSet);
+					}
+					if (rr.getLinkSpecSize() != 0) {
+						rr.setLinkSpecSize(rr.getLinkSpecSize() / runsPerDataSet);
+					}
+					eRun.setQuanititativeRecord(rr);
+				}
 			});
 		});
 		List<EvaluationRun> result = new ArrayList<>();
 		// Calculate variance
 		for (EvaluationRun e : singleRuns) {
+			EvaluationRun averagedRun = algoDataRunMap.get(e.getAlgorithmName()).get(e.getDatasetName());
 			for (EvaluatorType eType : e.qualititativeScores.keySet()) {
-				EvaluationRun averagedRun = algoDataRunMap.get(e.getAlgorithmName()).get(e.getDatasetName());
 				double squaredDifference = Math
 						.pow(e.qualititativeScores.get(eType) - averagedRun.qualititativeScores.get(eType), 2);
 				if (averagedRun.qualititativeScoresWithVariance.get(eType) != null) {
@@ -93,6 +123,27 @@ public class Summary {
 							new Pair<Double, Double>(averagedRun.qualititativeScores.get(eType), squaredDifference));
 				}
 			}
+			if (e.getQuanititativeRecord() != null) {
+				RunRecord rr = e.getQuanititativeRecord();
+				if (rr.getRunMemory() != 0) {
+					double squaredDifference = Math
+							.pow(rr.getRunMemory() - averagedRun.getQuanititativeRecord().getRunMemory(), 2);
+					averagedRun.getQuanititativeRecord().setRunMemoryVariance(
+							squaredDifference + averagedRun.getQuanititativeRecord().getRunMemoryVariance());
+				}
+				if (rr.getRunTime() != 0) {
+					double squaredDifference = Math
+							.pow(rr.getRunTime() - averagedRun.getQuanititativeRecord().getRunTime(), 2);
+					averagedRun.getQuanititativeRecord().setRunTimeVariance(
+							squaredDifference + averagedRun.getQuanititativeRecord().getRunTimeVariance());
+				}
+				if (rr.getLinkSpecSize() != 0) {
+					double squaredDifference = Math
+							.pow(rr.getLinkSpecSize() - averagedRun.getQuanititativeRecord().getLinkSpecSize(), 2);
+					averagedRun.getQuanititativeRecord().setLinkSpecSizeVariance(
+							squaredDifference + averagedRun.getQuanititativeRecord().getLinkSpecSizeVariance());
+				}
+			}
 		}
 		algoDataRunMap.forEach((algo, map) -> {
 			map.forEach((data, eRun) -> {
@@ -100,6 +151,19 @@ public class Summary {
 					Pair<Double, Double> old = eRun.qualititativeScoresWithVariance.get(eType);
 					eRun.qualititativeScoresWithVariance.put(eType,
 							new Pair<Double, Double>(old.getFirst(), old.getSecond() / runsPerDataSet));
+				}
+				if (eRun.getQuanititativeRecord() != null) {
+					RunRecord rr = eRun.getQuanititativeRecord();
+					if (rr.getRunMemoryVariance() != 0) {
+						rr.setRunMemoryVariance(rr.getRunMemoryVariance() / runsPerDataSet);
+					}
+					if (rr.getRunTimeVariance() != 0) {
+						rr.setRunTimeVariance(rr.getRunTimeVariance() / runsPerDataSet);
+					}
+					if (rr.getLinkSpecSizeVariance() != 0) {
+						rr.setLinkSpecSizeVariance(rr.getLinkSpecSizeVariance() / runsPerDataSet);
+					}
+					eRun.setQuanititativeRecord(rr);
 				}
 				result.add(eRun);
 			});
@@ -140,6 +204,21 @@ public class Summary {
 				Pair<Double, Double> valueVariance = er.qualititativeScoresWithVariance.get(eType);
 				cell.append(eType).append(": ").append(round(valueVariance.getFirst())).append(" (")
 						.append(round(valueVariance.getSecond())).append(")").append("\n");
+			}
+			if (er.getQuanititativeRecord() != null) {
+				RunRecord rr = er.getQuanititativeRecord();
+				if (rr.getRunMemory() != 0) {
+					cell.append("Mem: ").append(round(rr.getRunMemory())).append(" (")
+							.append(round(rr.getRunMemoryVariance())).append(")").append("\n");
+				}
+				if (rr.getRunTime() != 0) {
+					cell.append("Time: ").append(round(rr.getRunTime())).append(" (")
+							.append(round(rr.getRunTimeVariance())).append(")").append("\n");
+				}
+				if (rr.getLinkSpecSize() != 0) {
+					cell.append("LSsize: ").append(round(rr.getLinkSpecSize())).append(" (")
+							.append(round(rr.getLinkSpecSizeVariance())).append(")").append("\n");
+				}
 			}
 			currentRow.add(cell.toString());
 		}
@@ -189,7 +268,7 @@ public class Summary {
 
 	public String round(double d) {
 		BigDecimal.valueOf(d).round(new MathContext(PRECISION, RoundingMode.HALF_UP));
-		DecimalFormat twoDForm = new DecimalFormat("0." + new String(new char[PRECISION]).replace("\0", "0"));
+		DecimalFormat twoDForm = new DecimalFormat("########0." + new String(new char[PRECISION]).replace("\0", "0"));
 		return twoDForm.format(d);
 	}
 
@@ -198,7 +277,17 @@ public class Summary {
 		Map<Integer, Map<String, Map<String, List<EvaluationRun>>>> grouped = singleRuns.stream()
 				.collect(Collectors.groupingBy(EvaluationRun::getRunInExperiment, Collectors.groupingBy(
 						EvaluationRun::getAlgorithmName, Collectors.groupingBy(EvaluationRun::getDatasetName))));
-		for (String eType : usedEvaluators) {
+		List<String> evaluations = new ArrayList<>(usedEvaluators);
+		if (singleRuns.get(0).getQuanititativeRecord().getRunMemory() != 0) {
+			evaluations.add(MEMORY);
+		}
+		if (singleRuns.get(0).getQuanititativeRecord().getRunTime() != 0) {
+			evaluations.add(TIME);
+		}
+		if (singleRuns.get(0).getQuanititativeRecord().getLinkSpecSize() != 0) {
+			evaluations.add(LS_SIZE);
+		}
+		for (String eType : evaluations) {
 			for (Integer run : grouped.keySet()) {
 				String runDir = "Run" + run;
 				runDir = createDirectoriesIfNecessary(dir, runDir);
@@ -206,8 +295,19 @@ public class Summary {
 				for (String algo : usedAlgorithms) {
 					String row = algo;
 					for (String data : usedDatasets) {
-						row += "\t" + grouped.get(run).get(algo).get(data).get(0).qualititativeScores
-								.get(EvaluatorType.valueOf(eType));
+						if (eType.equals(MEMORY)) {
+							row += "\t" + grouped.get(run).get(algo).get(data).get(0).getQuanititativeRecord()
+									.getRunMemory();
+						} else if (eType.equals(TIME)) {
+							row += "\t"
+									+ grouped.get(run).get(algo).get(data).get(0).getQuanititativeRecord().getRunTime();
+						} else if (eType.equals(LS_SIZE)) {
+							row += "\t" + grouped.get(run).get(algo).get(data).get(0).getQuanititativeRecord()
+									.getLinkSpecSize();
+						} else {
+							row += "\t" + grouped.get(run).get(algo).get(data).get(0).qualititativeScores
+									.get(EvaluatorType.valueOf(eType));
+						}
 					}
 					row += "\n";
 					rows += row;
@@ -219,7 +319,7 @@ public class Summary {
 		}
 		Map<String, Map<String, List<EvaluationRun>>> groupedAvg = averagedRuns.stream().collect(Collectors
 				.groupingBy(EvaluationRun::getAlgorithmName, Collectors.groupingBy(EvaluationRun::getDatasetName)));
-		for (String eType : usedEvaluators) {
+		for (String eType : evaluations) {
 			String runDir = "Avg";
 			runDir = createDirectoriesIfNecessary(dir, runDir);
 			String rows = "\t" + String.join("\t", usedDatasets) + "\n";
@@ -228,10 +328,25 @@ public class Summary {
 				String row = algo;
 				String rowVar = algo;
 				for (String data : usedDatasets) {
-					row += "\t" + groupedAvg.get(algo).get(data).get(0).qualititativeScores
-							.get(EvaluatorType.valueOf(eType));
-					rowVar += "\t" + groupedAvg.get(algo).get(data).get(0).qualititativeScoresWithVariance
-							.get(EvaluatorType.valueOf(eType)).getSecond();
+					if (eType.equals(MEMORY)) {
+						row += "\t" + groupedAvg.get(algo).get(data).get(0).getQuanititativeRecord().getRunMemory();
+						rowVar += "\t"
+								+ groupedAvg.get(algo).get(data).get(0).getQuanititativeRecord().getRunMemoryVariance();
+					} else if (eType.equals(TIME)) {
+						row += "\t" + groupedAvg.get(algo).get(data).get(0).getQuanititativeRecord().getRunTime();
+						rowVar += "\t"
+								+ groupedAvg.get(algo).get(data).get(0).getQuanititativeRecord().getRunTimeVariance();
+					} else if (eType.equals(LS_SIZE)) {
+						row += "\t" + groupedAvg.get(algo).get(data).get(0).getQuanititativeRecord().getLinkSpecSize();
+						rowVar += "\t" + groupedAvg.get(algo).get(data).get(0).getQuanititativeRecord()
+								.getLinkSpecSizeVariance();
+					} else {
+						row += "\t" + groupedAvg.get(algo).get(data).get(0).qualititativeScores
+								.get(EvaluatorType.valueOf(eType));
+						rowVar += "\t"
+								+ groupedAvg.get(algo).get(data).get(0).qualititativeScoresWithVariance
+										.get(EvaluatorType.valueOf(eType)).getSecond();
+					}
 				}
 				row += "\n";
 				rowVar += "\n";
@@ -287,8 +402,6 @@ public class Summary {
 			} else {
 				logger.error("Error while trying to create: " + f.getPath());
 			}
-		} else {
-			logger.info(f.getPath() + " already exists");
 		}
 		return f.getAbsolutePath();
 	}

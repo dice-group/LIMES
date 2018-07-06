@@ -15,6 +15,7 @@ import java.util.Map;
 import org.aksw.limes.core.datastrutures.EvaluationRun;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.evaluator.Summary;
+import org.aksw.limes.core.evaluation.quantitativeMeasures.RunRecord;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -76,6 +77,29 @@ public class SummaryTest {
 		EvaluationRun e45 = new EvaluationRun(algo2, "supervised", "data2",
 				ImmutableMap.of(EvaluatorType.F_MEASURE, 0.978, EvaluatorType.PRECISION, 0.5), 4);
 
+		e11.setQuanititativeRecord(new RunRecord(0, 10, 3));
+		e12.setQuanititativeRecord(new RunRecord(1, 20, 3));
+		e13.setQuanititativeRecord(new RunRecord(2, 30, 3));
+		e14.setQuanititativeRecord(new RunRecord(3, 20, 3));
+		e15.setQuanititativeRecord(new RunRecord(4, 10, 3));
+
+		e21.setQuanititativeRecord(new RunRecord(0, 100, 3));
+		e22.setQuanititativeRecord(new RunRecord(1, 100, 4));
+		e23.setQuanititativeRecord(new RunRecord(2, 100, 5));
+		e24.setQuanititativeRecord(new RunRecord(3, 100, 4));
+		e25.setQuanititativeRecord(new RunRecord(4, 100, 3));
+
+		e31.setQuanititativeRecord(new RunRecord(0, 10, 1));
+		e32.setQuanititativeRecord(new RunRecord(1, 20, 2));
+		e33.setQuanititativeRecord(new RunRecord(2, 30, 3));
+		e34.setQuanititativeRecord(new RunRecord(3, 40, 4));
+		e35.setQuanititativeRecord(new RunRecord(4, 50, 5));
+
+		e41.setQuanititativeRecord(new RunRecord(0, 10, 3));
+		e42.setQuanititativeRecord(new RunRecord(1, 10, 3));
+		e43.setQuanititativeRecord(new RunRecord(2, 10, 3));
+		e44.setQuanititativeRecord(new RunRecord(3, 10, 3));
+		e45.setQuanititativeRecord(new RunRecord(4, 10, 3));
 		runs = new ArrayList<>();
 		runs.add(e11);
 		runs.add(e12);
@@ -114,6 +138,54 @@ public class SummaryTest {
 		assertEquals(0.1, avgRuns.get(1).qualititativeScores.get(EvaluatorType.F_MEASURE), 0);
 		assertEquals(0.36, avgRuns.get(2).qualititativeScores.get(EvaluatorType.F_MEASURE), 0);
 		assertEquals(0.97196402, avgRuns.get(3).qualititativeScores.get(EvaluatorType.F_MEASURE), 0);
+
+		assertEquals(0.1, avgRuns.get(0).qualititativeScoresWithVariance.get(EvaluatorType.F_MEASURE).getFirst(), 0);
+		assertEquals(0.1, avgRuns.get(1).qualititativeScoresWithVariance.get(EvaluatorType.F_MEASURE).getFirst(), 0);
+		assertEquals(0.36, avgRuns.get(2).qualititativeScoresWithVariance.get(EvaluatorType.F_MEASURE).getFirst(), 0);
+		assertEquals(0.97196402, avgRuns.get(3).qualititativeScoresWithVariance.get(EvaluatorType.F_MEASURE).getFirst(),
+				0);
+
+		assertEquals(0.0, avgRuns.get(0).qualititativeScoresWithVariance.get(EvaluatorType.F_MEASURE).getSecond(), 0);
+		assertEquals(0.0, avgRuns.get(1).qualititativeScoresWithVariance.get(EvaluatorType.F_MEASURE).getSecond(), 0);
+		assertEquals(0.03498, avgRuns.get(2).qualititativeScoresWithVariance.get(EvaluatorType.F_MEASURE).getSecond(),
+				0.01);
+		assertEquals(0.001370014,
+				avgRuns.get(3).qualititativeScoresWithVariance.get(EvaluatorType.F_MEASURE).getSecond(), 0.01);
+
+		assertEquals(0.5, avgRuns.get(0).qualititativeScores.get(EvaluatorType.PRECISION), 0);
+		assertEquals(0.5, avgRuns.get(1).qualititativeScores.get(EvaluatorType.PRECISION), 0);
+		assertEquals(0.5, avgRuns.get(2).qualititativeScores.get(EvaluatorType.PRECISION), 0);
+		assertEquals(0.5, avgRuns.get(3).qualititativeScores.get(EvaluatorType.PRECISION), 0);
+
+		assertEquals(0.5, avgRuns.get(0).qualititativeScoresWithVariance.get(EvaluatorType.PRECISION).getFirst(), 0);
+		assertEquals(0.5, avgRuns.get(1).qualititativeScoresWithVariance.get(EvaluatorType.PRECISION).getFirst(), 0);
+		assertEquals(0.5, avgRuns.get(2).qualititativeScoresWithVariance.get(EvaluatorType.PRECISION).getFirst(), 0);
+		assertEquals(0.5, avgRuns.get(3).qualititativeScoresWithVariance.get(EvaluatorType.PRECISION).getFirst(), 0);
+
+		assertEquals(0.0, avgRuns.get(0).qualititativeScoresWithVariance.get(EvaluatorType.PRECISION).getSecond(), 0);
+		assertEquals(0.0, avgRuns.get(1).qualititativeScoresWithVariance.get(EvaluatorType.PRECISION).getSecond(), 0);
+		assertEquals(0.0, avgRuns.get(2).qualititativeScoresWithVariance.get(EvaluatorType.PRECISION).getSecond(), 0);
+		assertEquals(0.0, avgRuns.get(3).qualititativeScoresWithVariance.get(EvaluatorType.PRECISION).getSecond(), 0);
+
+		assertEquals(18, avgRuns.get(0).getQuanititativeRecord().getRunTime(), 0);
+		assertEquals(100, avgRuns.get(1).getQuanititativeRecord().getRunTime(), 0);
+		assertEquals(30, avgRuns.get(2).getQuanititativeRecord().getRunTime(), 0);
+		assertEquals(10, avgRuns.get(3).getQuanititativeRecord().getRunTime(), 0);
+
+		assertEquals(3, avgRuns.get(0).getQuanititativeRecord().getLinkSpecSize(), 0);
+		assertEquals(3.8, avgRuns.get(1).getQuanititativeRecord().getLinkSpecSize(), 0);
+		assertEquals(3, avgRuns.get(2).getQuanititativeRecord().getLinkSpecSize(), 0);
+		assertEquals(3, avgRuns.get(3).getQuanititativeRecord().getLinkSpecSize(), 0);
+
+		assertEquals(56, avgRuns.get(0).getQuanititativeRecord().getRunTimeVariance(), 0);
+		assertEquals(0, avgRuns.get(1).getQuanititativeRecord().getRunTimeVariance(), 0);
+		assertEquals(200, avgRuns.get(2).getQuanititativeRecord().getRunTimeVariance(), 0);
+		assertEquals(0, avgRuns.get(3).getQuanititativeRecord().getRunTimeVariance(), 0);
+
+		assertEquals(0, avgRuns.get(0).getQuanititativeRecord().getLinkSpecSizeVariance(), 0);
+		assertEquals(0.56, avgRuns.get(1).getQuanititativeRecord().getLinkSpecSizeVariance(), 0.01);
+		assertEquals(2, avgRuns.get(2).getQuanititativeRecord().getLinkSpecSizeVariance(), 0);
+		assertEquals(0, avgRuns.get(3).getQuanititativeRecord().getLinkSpecSizeVariance(), 0);
 	}
 
 	@Test
@@ -148,21 +220,44 @@ public class SummaryTest {
 				f.getAbsolutePath() + File.separatorChar + "Avg" + File.separatorChar + EvaluatorType.F_MEASURE,
 				f.getAbsolutePath() + File.separatorChar + "Avg" + File.separatorChar + EvaluatorType.PRECISION,
 				f.getAbsolutePath() + File.separatorChar + "Avg" + File.separatorChar + EvaluatorType.F_MEASURE
-						+ "Variance", // 11
+						+ "Variance", // 12
 				f.getAbsolutePath() + File.separatorChar + "Avg" + File.separatorChar + EvaluatorType.PRECISION
 						+ "Variance",
 				f.getAbsolutePath() + File.separatorChar + "statistics" + File.separatorChar + "data1",
-				f.getAbsolutePath() + File.separatorChar + "statistics" + File.separatorChar + "data2", };
-        assertEquals("\tdata1\tdata2\n"+algo1+"\t0.5\t0.5\n"+algo2+"\t0.5\t0.5\n", new String(Files.readAllBytes(Paths.get(paths[1]))));
-        assertEquals("\tdata1\tdata2\n"+algo1+"\t0.5\t0.5\n"+algo2+"\t0.5\t0.5\n", new String(Files.readAllBytes(Paths.get(paths[3]))));
-        assertEquals("\tdata1\tdata2\n"+algo1+"\t0.5\t0.5\n"+algo2+"\t0.5\t0.5\n", new String(Files.readAllBytes(Paths.get(paths[5]))));
-        assertEquals("\tdata1\tdata2\n"+algo1+"\t0.5\t0.5\n"+algo2+"\t0.5\t0.5\n", new String(Files.readAllBytes(Paths.get(paths[7]))));
-        assertEquals("\tdata1\tdata2\n"+algo1+"\t0.5\t0.5\n"+algo2+"\t0.5\t0.5\n", new String(Files.readAllBytes(Paths.get(paths[9]))));
-        assertEquals("\tdata1\tdata2\n"+algo1+"\t0.5\t0.5\n"+algo2+"\t0.5\t0.5\n", new String(Files.readAllBytes(Paths.get(paths[11]))));
+				f.getAbsolutePath() + File.separatorChar + "statistics" + File.separatorChar + "data2", // 15
+				// Quantitative
+				f.getAbsolutePath() + File.separatorChar + "Run0" + File.separatorChar + Summary.TIME,
+				f.getAbsolutePath() + File.separatorChar + "Run0" + File.separatorChar + Summary.LS_SIZE,
+				f.getAbsolutePath() + File.separatorChar + "Run1" + File.separatorChar + Summary.TIME, // 18
+				f.getAbsolutePath() + File.separatorChar + "Run1" + File.separatorChar + Summary.LS_SIZE,
+				f.getAbsolutePath() + File.separatorChar + "Run2" + File.separatorChar + Summary.TIME,
+				f.getAbsolutePath() + File.separatorChar + "Run2" + File.separatorChar + Summary.LS_SIZE, // 21
+				f.getAbsolutePath() + File.separatorChar + "Run3" + File.separatorChar + Summary.TIME,
+				f.getAbsolutePath() + File.separatorChar + "Run3" + File.separatorChar + Summary.LS_SIZE,
+				f.getAbsolutePath() + File.separatorChar + "Run4" + File.separatorChar + Summary.TIME, // 24
+				f.getAbsolutePath() + File.separatorChar + "Run4" + File.separatorChar + Summary.LS_SIZE,
+				f.getAbsolutePath() + File.separatorChar + "Avg" + File.separatorChar + Summary.TIME,
+				f.getAbsolutePath() + File.separatorChar + "Avg" + File.separatorChar + Summary.LS_SIZE, // 27
+				f.getAbsolutePath() + File.separatorChar + "Avg" + File.separatorChar + Summary.TIME + "Variance",
+				f.getAbsolutePath() + File.separatorChar + "Avg" + File.separatorChar + Summary.LS_SIZE + "Variance", };
+
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.5\t0.5\n" + algo2 + "\t0.5\t0.5\n",
+				new String(Files.readAllBytes(Paths.get(paths[1]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.5\t0.5\n" + algo2 + "\t0.5\t0.5\n",
+				new String(Files.readAllBytes(Paths.get(paths[3]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.5\t0.5\n" + algo2 + "\t0.5\t0.5\n",
+				new String(Files.readAllBytes(Paths.get(paths[5]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.5\t0.5\n" + algo2 + "\t0.5\t0.5\n",
+				new String(Files.readAllBytes(Paths.get(paths[7]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.5\t0.5\n" + algo2 + "\t0.5\t0.5\n",
+				new String(Files.readAllBytes(Paths.get(paths[9]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.5\t0.5\n" + algo2 + "\t0.5\t0.5\n",
+				new String(Files.readAllBytes(Paths.get(paths[11]))));
 		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.0\t0.0\n" + algo2 + "\t0.0\t0.0\n",
 				new String(Files.readAllBytes(Paths.get(paths[13]))));
 
-        assertEquals("\tdata1\tdata2\n"+algo1+"\t0.1\t0.1\n"+algo2+"\t0.36\t0.97196402\n", new String(Files.readAllBytes(Paths.get(paths[0]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.1\t0.1\n" + algo2 + "\t0.1\t0.9\n",
+				new String(Files.readAllBytes(Paths.get(paths[0]))));
 		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.1\t0.1\n" + algo2 + "\t0.2\t1.0\n",
 				new String(Files.readAllBytes(Paths.get(paths[2]))));
 		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.1\t0.1\n" + algo2 + "\t0.4\t0.999\n",
@@ -173,13 +268,43 @@ public class SummaryTest {
 				new String(Files.readAllBytes(Paths.get(paths[8]))));
 		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.1\t0.1\n" + algo2 + "\t0.36\t0.97196402\n",
 				new String(Files.readAllBytes(Paths.get(paths[10]))));
-		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.0\t0.0\n" + algo2 + "\t0.02088\t3.342495833295187E-4\n",
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.0\t0.0\n" + algo2 + "\t0.0344\t0.0013700136182415992\n",
 				new String(Files.readAllBytes(Paths.get(paths[12]))));
 
 		assertEquals("\talgo1\talgo2\nalgo1\t-\t12.332\nalgo2\t-\t-\n",
 				new String(Files.readAllBytes(Paths.get(paths[14]))));
 		assertEquals("\talgo1\talgo2\nalgo1\t-\t0.332\nalgo2\t-\t-\n",
 				new String(Files.readAllBytes(Paths.get(paths[15]))));
-    }
+
+		// Quantitative
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t10.0\t100.0\n" + algo2 + "\t10.0\t10.0\n",
+				new String(Files.readAllBytes(Paths.get(paths[16]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t3.0\t3.0\n" + algo2 + "\t1.0\t3.0\n",
+				new String(Files.readAllBytes(Paths.get(paths[17]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t20.0\t100.0\n" + algo2 + "\t20.0\t10.0\n",
+				new String(Files.readAllBytes(Paths.get(paths[18]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t3.0\t4.0\n" + algo2 + "\t2.0\t3.0\n",
+				new String(Files.readAllBytes(Paths.get(paths[19]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t30.0\t100.0\n" + algo2 + "\t30.0\t10.0\n",
+				new String(Files.readAllBytes(Paths.get(paths[20]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t3.0\t5.0\n" + algo2 + "\t3.0\t3.0\n",
+				new String(Files.readAllBytes(Paths.get(paths[21]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t20.0\t100.0\n" + algo2 + "\t40.0\t10.0\n",
+				new String(Files.readAllBytes(Paths.get(paths[22]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t3.0\t4.0\n" + algo2 + "\t4.0\t3.0\n",
+				new String(Files.readAllBytes(Paths.get(paths[23]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t10.0\t100.0\n" + algo2 + "\t50.0\t10.0\n",
+				new String(Files.readAllBytes(Paths.get(paths[24]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t3.0\t3.0\n" + algo2 + "\t5.0\t3.0\n",
+				new String(Files.readAllBytes(Paths.get(paths[25]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t18.0\t100.0\n" + algo2 + "\t30.0\t10.0\n",
+				new String(Files.readAllBytes(Paths.get(paths[26]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t3.0\t3.8\n" + algo2 + "\t3.0\t3.0\n",
+				new String(Files.readAllBytes(Paths.get(paths[27]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t56.0\t0.0\n" + algo2 + "\t200.0\t0.0\n",
+				new String(Files.readAllBytes(Paths.get(paths[28]))));
+		assertEquals("\tdata1\tdata2\n" + algo1 + "\t0.0\t0.5599999999999999\n" + algo2 + "\t2.0\t0.0\n",
+				new String(Files.readAllBytes(Paths.get(paths[29]))));
+	}
 
 }
