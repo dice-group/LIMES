@@ -41,7 +41,7 @@
 		<ENDPOINT>src/main/resources/datasets/Restaurants/restaurant2.nt</ENDPOINT>
 		<VAR>?y</VAR>
 		<PAGESIZE>1000</PAGESIZE>
-		<RESTRICTION>?x rdf:type okkamrestaurant2:Restaurant</RESTRICTION>
+		<RESTRICTION>?y rdf:type okkamrestaurant2:Restaurant</RESTRICTION>
 		<PROPERTY>okkamrestaurant2:has_address AS lowercase</PROPERTY>
 		<PROPERTY>okkamrestaurant2:phone_number</PROPERTY>
 		<PROPERTY>okkamrestaurant2:name AS lowercase</PROPERTY>

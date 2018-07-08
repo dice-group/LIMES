@@ -6,12 +6,11 @@ import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.IMapper;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
@@ -20,6 +19,8 @@ import java.util.concurrent.FutureTask;
  * @author Cedric Richter
  */
 public class ChunkedMapper implements IMapper {
+
+    static Log log = LogFactory.getLog(ChunkedMapper.class);
 
     private int chunkSize;
     private IMapper delegate;
@@ -47,6 +48,7 @@ public class ChunkedMapper implements IMapper {
         for(ACache sourceCache: IteratorUtils.makeIterable(sourceChunks)){
             targetChunks = new ChunkIterator(target, chunkSize);
             for(ACache targetCache: IteratorUtils.makeIterable(targetChunks)){
+                log.info("Execute chunk.");
                 futures.add(execute(new ChunkExecutor(delegate, sourceCache, targetCache, sourceVar, targetVar, expression, threshold)));
             }
         }
@@ -58,7 +60,8 @@ public class ChunkedMapper implements IMapper {
                 if(mapping == null){
                     mapping = futureMapping.get();
                 }else{
-                    mapping.getMap().putAll(futureMapping.get().getMap());
+                    for(Map.Entry<String, HashMap<String, Double>> e: futureMapping.get().getMap().entrySet())
+                        mapping.add(e.getKey(), e.getValue());
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -115,6 +118,7 @@ public class ChunkedMapper implements IMapper {
                 MemoryCache cache = new MemoryCache();
                 for(int i = 0; i < chunkSize && urlIterator.hasNext(); i++)
                     cache.addInstance(this.base.getInstance(urlIterator.next()));
+                cache.setKbInfo(this.base.getKbInfo());
                 return cache;
             }
             return null;

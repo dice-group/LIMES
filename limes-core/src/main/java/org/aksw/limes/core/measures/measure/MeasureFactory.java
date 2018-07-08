@@ -148,7 +148,7 @@ public class MeasureFactory {
     public static final String SET_JACCARD = "set_jaccard";
 
     //Graph measures
-    public static final String WLS_KERNEL = "graph_wls";
+    public static final String GRAPH_TOP = "graph_top";
 
     /**
      * Factory function for retrieving a measure name from the set of allowed
@@ -359,8 +359,8 @@ public class MeasureFactory {
             return MeasureType.SET_JACCARD;
         }
 
-        if (measure.startsWith(WLS_KERNEL)){
-            return MeasureType.GRAPH_WLS;
+        if (measure.startsWith(GRAPH_TOP)){
+            return MeasureType.GRAPH_TOP;
 
         }
         throw new InvalidMeasureException(measure);

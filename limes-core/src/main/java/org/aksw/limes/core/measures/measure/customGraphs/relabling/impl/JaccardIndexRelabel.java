@@ -3,7 +3,8 @@ package org.aksw.limes.core.measures.measure.customGraphs.relabling.impl;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.IGraphRelabel;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.ILabel;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.ILabelCollector;
-import org.aksw.limes.core.measures.measure.graphs.gouping.indexing.JaccardIndex;
+import org.aksw.limes.core.measures.measure.customGraphs.relabling.impl.jaccard.JaccardIndex;
+
 
 import java.util.HashMap;
 import java.util.Map;

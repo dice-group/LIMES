@@ -25,7 +25,7 @@ public class ResourceDescriptor implements IResourceDescriptor {
     @Override
     public Model queryDescription() {
         QueryExecution qe = qef.createQueryExecution(
-                CannedQueryUtils.describe(this.node)
+                CannedQueryUtils.outgoing(this.node)
         );
         return qe.execDescribe();
     }

@@ -19,7 +19,9 @@ public class AffinityPropagationTest {
 
         Set<String> set = randomSet(1000);
 
-        AffinityPropagation AP = new AffinityPropagation(filter, set);
+        AffinityPropagation AP = new AffinityPropagation(
+                new ORSimilarityAggregator().getSimilarities(set, set, filter)
+        );
 
         double last = 0;
         double act = 0;

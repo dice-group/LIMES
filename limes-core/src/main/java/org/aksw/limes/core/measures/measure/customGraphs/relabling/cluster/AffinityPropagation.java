@@ -5,106 +5,43 @@ package org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.apache.commons.collections.bag.HashBag;
 import org.apache.jena.base.Sys;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class AffinityPropagation {
 
-    private static final int THREAD_COUNT = 8;
-
-    private List<SimilarityFilter> filters;
     private Table<String, String, Double> similarities = HashBasedTable.create();
     private APState state;
 
+    private double zero = 0.0;
+
     private double accumulatedError;
 
-    private ExecutorService service;
     private Set<Integer> openIds;
 
-    public AffinityPropagation(List<SimilarityFilter> filters, Set<String> items) {
-        this.filters = filters;
-        this.initSimilarities(items);
+    public AffinityPropagation(Table<String, String, Double> similarities) {
+        this.similarities = similarities;
+        initSelfSimilarities();
         state = new APState(similarities);
-        service = Executors.newFixedThreadPool(THREAD_COUNT);
-    }
-
-    private Table<String, String, Double> fromMapping(AMapping mapping, double threshold){
-        Table<String, String, Double> ret = HashBasedTable.create();
-
-        for(Map.Entry<String, HashMap<String, Double>> e: mapping.getMap().entrySet()){
-            for(Map.Entry<String, Double> t: e.getValue().entrySet()){
-                if(e.getKey().equals(t.getKey()))continue;
-                double distance = 1 - (t.getValue() - threshold)/(1 - threshold);
-                ret.put(e.getKey(), t.getKey(),
-                        distance*distance);
-
-            }
-        }
-
-        return ret;
-    }
-
-    private Table<String, String, Double> eucMerge(AMapping mapping, Table<String, String, Double> base, double threshold){
-        Table<String, String, Double> ret = HashBasedTable.create();
-
-        for(Map.Entry<String, HashMap<String, Double>> e: mapping.getMap().entrySet()){
-            for(Map.Entry<String, Double> t: e.getValue().entrySet()){
-                if(e.getKey().equals(t.getKey()))continue;
-
-                double baseVal = base.contains(e.getKey(), t.getKey())?base.get(e.getKey(), t.getKey()):0.0;
-
-                double distance = 1 - (t.getValue() - threshold)/(1 - threshold);
-                ret.put(e.getKey(), t.getKey(),
-                        baseVal + distance*distance);
-
-            }
-        }
-
-        return ret;
-    }
-
-    private void putSim(String s1, String s2, double sim){
-        if(similarities.contains(s1, s1)){
-            similarities.put(s1, s1, Math.min(similarities.get(s1, s1), sim));
-        }else{
-            similarities.put(s1, s1, sim);
-        }
-        if(similarities.contains(s2, s2)){
-            similarities.put(s2, s2, Math.min(similarities.get(s2, s2), sim));
-        }else{
-            similarities.put(s2, s2, sim);
-        }
-        similarities.put(s1, s2, sim);
     }
 
 
-    private void initSimilarities(Set<String> set){
+    private void initSelfSimilarities(){
+        for(String s: new HashSet<>(similarities.rowKeySet())){
+            double min = Double.POSITIVE_INFINITY;
 
-        MappingPlanner planner = new MappingPlanner(set);
+            for(Double d: similarities.column(s).values())
+                min = Math.min(min, d);
 
-        Table<String, String, Double> ret = null;
+            min = min == Double.POSITIVE_INFINITY?0.0:min;
 
-        for(SimilarityFilter filter: filters){
-
-            AMapping mapping = planner.execute(filter);
-
-            if(ret == null){
-                ret = fromMapping(mapping, filter.getThreshold());
-            }else{
-                ret = eucMerge(mapping, ret, filter.getThreshold());
-            }
-
+            similarities.put(s, s, min);
+            zero = Math.min(zero, min);
         }
-
-        for(Table.Cell<String, String, Double> cell: ret.cellSet()){
-            putSim(cell.getRowKey(), cell.getColumnKey(),(-1)*Math.sqrt(cell.getValue()));
-        }
-
-
     }
+
 
     public double iterate(){
 
@@ -113,30 +50,9 @@ public class AffinityPropagation {
 
         openIds = new HashSet<>();
         int id = 0;
-        int steps = 0;
 
         openIds.add(id);
         new APExecutor(this, id, similarities.rowKeySet(), view).run();
-
-        /**
-        Set<String> rows = new HashSet<>(chunk);
-        for(String key: similarities.rowKeySet()){
-            rows.add(key);
-            steps ++;
-
-            if(steps >= chunk){
-                openIds.add(id);
-                new APExecutor(this, id++, rows, view).run();
-                steps = 0;
-                rows = new HashSet<>(chunk);
-            }
-        }
-
-        if(steps > 0) {
-            openIds.add(id);
-            new APExecutor(this, id++, rows, view).run();
-        }
-        */
 
         synchronized (this) {
             while (!openIds.isEmpty()) {
@@ -195,6 +111,7 @@ public class AffinityPropagation {
         return out;
 
     }
+
 
     synchronized void finish(int id, double accError, boolean error){
         accumulatedError += accError;

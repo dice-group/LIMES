@@ -19,6 +19,12 @@ public class APState {
         this.similarities = similarities;
     }
 
+    public APState(APState state, Table<String, String, Double> similarities){
+        this(similarities);
+        A = new WeakHashMap<>(state.A);
+        R = new WeakHashMap<>(state.R);
+    }
+
     public APStateView newPhase(){
 
         IterationId next = new IterationId(currentId.i + 1);

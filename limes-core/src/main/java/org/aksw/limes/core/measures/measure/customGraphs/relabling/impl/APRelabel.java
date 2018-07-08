@@ -1,11 +1,14 @@
 package org.aksw.limes.core.measures.measure.customGraphs.relabling.impl;
 
+import com.google.common.collect.Table;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.IGraphRelabel;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.ILabel;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.ILabelCollector;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.ITwoSideLabelCollector;
+import org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster.ASimilarityAggregator;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster.AffinityPropagation;
+import org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster.ORSimilarityAggregator;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster.SimilarityFilter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,7 +25,8 @@ public class APRelabel implements IGraphRelabel {
     static Log logger = LogFactory.getLog(APRelabel.class);
 
     protected List<SimilarityFilter> definitions;
-    protected Set<String> labels = new HashSet<>();
+    protected Set<String> srcSet = new HashSet<>();
+    protected Set<String> targetSet = new HashSet<>();
     private Map<String, String> cache;
 
     private boolean runAP = false;
@@ -36,14 +40,23 @@ public class APRelabel implements IGraphRelabel {
         return new ITwoSideLabelCollector() {
             @Override
             public Consumer<ILabel> getTargetLabelConsumer() {
-                return getSourceLabelConsumer();
+                return (x -> {addLabel(x, false);});
             }
 
             @Override
             public Consumer<ILabel> getSourceLabelConsumer() {
-                return (x -> {if(x.getType()==ILabel.LabelType.NODE)labels.add(x.getContent());});
+                return (x -> {addLabel(x, true);});
             }
         };
+    }
+
+    private void addLabel(ILabel label, boolean isSource){
+        runAP = false;
+        if(label.getType() != ILabel.LabelType.NODE)return;
+        if(isSource)
+            srcSet.add(label.getContent());
+        else
+            targetSet.add(label.getContent());
     }
 
     private void runAP(){
@@ -54,8 +67,24 @@ public class APRelabel implements IGraphRelabel {
 
         long startTime = System.currentTimeMillis();
 
-        AffinityPropagation AP = new AffinityPropagation(definitions, labels);
-        logger.info("Initialized AP with "+labels.size()+" instances ["+(System.currentTimeMillis() - startTime)+" ms]");
+        Set<String> baseLabels, attachLabels;
+
+        if(srcSet.size() < targetSet.size()){
+            baseLabels = srcSet;
+            attachLabels = targetSet;
+        }else{
+            baseLabels = targetSet;
+            attachLabels = srcSet;
+        }
+
+        baseLabels.addAll(attachLabels);
+
+        ASimilarityAggregator aggregator = new ORSimilarityAggregator();
+
+        AffinityPropagation AP = new AffinityPropagation(
+                aggregator.getSimilarities(baseLabels, baseLabels, definitions)
+        );
+        logger.info("Initialized AP with "+baseLabels.size()+" instances ["+(System.currentTimeMillis() - startTime)+" ms]");
 
         double last = 0;
         double act = 0;
@@ -80,25 +109,61 @@ public class APRelabel implements IGraphRelabel {
             logger.info("AP iteration "+iteration+": "+act +"("+format.format(improve)+" improvement ) ["+time+" ms]");
             iteration++;
 
-            if(Math.abs(act - last) < 0.00001) {
+            if(Math.abs(act - last) < 0.001) {
                 steps++;
             }else{
                 steps = 0;
             }
 
-        }while (steps < 10);
+        }while (steps < 3);
 
         cache = AP.cluster();
-        int size = labels.size();
+        int size = baseLabels.size();
 
-        labels.removeAll(cache.keySet());
-        labels.addAll(cache.values());
+        baseLabels.removeAll(cache.keySet());
+        baseLabels.addAll(cache.values());
 
         format.setMaximumFractionDigits(2);
 
-        logger.info("Finished AP. Reduce labels by "+format.format(1 - (double)labels.size()/size));
+        logger.info("Finished AP. Reduce labels by "+format.format(1 - (double)baseLabels.size()/size));
 
         runAP = true;
+
+/*
+        logger.info("Predict label for "+attachLabels.size()+" entities");
+        startTime = System.currentTimeMillis();
+
+        Table<String, String, Double> predict = aggregator.getSimilarities(attachLabels, baseLabels, definitions);
+
+        int neigh = 0;
+        int count = 0;
+
+        for(String s: predict.rowKeySet()){
+            Map<String, Double> row = predict.row(s);
+            neigh += row.size();
+            count++;
+
+            double max = Double.NEGATIVE_INFINITY;
+            String example = null;
+
+            for(Map.Entry<String, Double> e: row.entrySet()){
+                if(e.getValue() > max)
+                    example = e.getKey();
+            }
+
+            logger.info(s+" --> "+example);
+
+            cache.put(s, example);
+        }
+
+        logger.info("Average options: "+((double)neigh/count));
+
+        logger.info("Finished prediction. ["+(System.currentTimeMillis() - startTime)+" ms]");
+
+
+
+        runAP = true;
+        */
     }
 
     @Override

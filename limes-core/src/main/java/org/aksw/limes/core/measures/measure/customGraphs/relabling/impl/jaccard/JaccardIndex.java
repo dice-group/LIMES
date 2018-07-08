@@ -1,8 +1,7 @@
-package org.aksw.limes.core.measures.measure.graphs.gouping.indexing;
+package org.aksw.limes.core.measures.measure.customGraphs.relabling.impl.jaccard;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class JaccardIndex {
 

@@ -28,6 +28,8 @@ public class APExecutor implements Runnable {
 
                 Map<String, Double> neighbours = view.getNeighbours(s);
 
+                if(neighbours == null)continue;
+
                 for (Map.Entry<String, Double> n : neighbours.entrySet()) {
                     double max = Double.NEGATIVE_INFINITY;
                     for (Map.Entry<String, Double> ni : neighbours.entrySet()) {
@@ -60,9 +62,13 @@ public class APExecutor implements Runnable {
                             a += Math.max(0, view.readR(ni.getKey(), n.getKey()));
                         }
                     } else {
-                        for (Map.Entry<String, Double> ni : view.getNeighbours(n.getKey()).entrySet()) {
-                            if (ni.getKey().equals(n.getKey()) || ni.getKey().equals(s)) continue;
-                            a += Math.max(0, view.readR(ni.getKey(), n.getKey()));
+                        Map<String, Double> neigh = view.getNeighbours(n.getKey());
+
+                        if(neigh != null) {
+                            for (Map.Entry<String, Double> ni : view.getNeighbours(n.getKey()).entrySet()) {
+                                if (ni.getKey().equals(n.getKey()) || ni.getKey().equals(s)) continue;
+                                a += Math.max(0, view.readR(ni.getKey(), n.getKey()));
+                            }
                         }
                         a += view.readR(n.getKey(), n.getKey());
                         a = Math.max(0, a);

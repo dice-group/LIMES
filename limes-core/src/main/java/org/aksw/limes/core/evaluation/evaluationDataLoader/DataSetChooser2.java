@@ -44,6 +44,7 @@ public class DataSetChooser2 {
         chooser.registerDataSet(new AmazonGoogleDataset());
         chooser.registerDataSet(new DBPLinkMDBDataset());
         chooser.registerDataSet(new DrugsDataset());
+        chooser.registerDataSet(new DLDataSet());
 
         return chooser;
     }

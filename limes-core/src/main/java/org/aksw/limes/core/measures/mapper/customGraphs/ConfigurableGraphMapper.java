@@ -11,6 +11,7 @@ import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.describe.*;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.bags.IBagMapper;
 import org.aksw.limes.core.measures.measure.customGraphs.description.IDescriptionGraphView;
@@ -26,7 +27,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class ConfigurableGraphMapper implements IMapper {
+public class ConfigurableGraphMapper extends AMapper {
 
     private static final String CACHE_FOLDER = "cache/";
 

@@ -1,7 +1,7 @@
 package org.aksw.limes.core.measures.mapper;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
-import org.aksw.limes.core.measures.mapper.graphs.WLSimilarityMapper;
+import org.aksw.limes.core.measures.mapper.customGraphs.TopologicalGraphMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.resourcesets.SetJaccardMapper;
@@ -177,8 +177,8 @@ public class MapperFactory {
         case SET_JACCARD:
             return new SetJaccardMapper();
 
-        case GRAPH_WLS:
-            return new WLSimilarityMapper();
+        case GRAPH_TOP:
+            return new TopologicalGraphMapper(2, 1);
 
         default:
             throw new InvalidMeasureException(type.toString());
