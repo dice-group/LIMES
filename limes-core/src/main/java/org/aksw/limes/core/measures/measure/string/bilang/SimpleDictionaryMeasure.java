@@ -52,7 +52,7 @@ public class SimpleDictionaryMeasure extends AStringMeasure {
     }
     
     /**
-     * iterates through all possible translations and uses innerMeasure to determine the similarity
+     * Iterates through all possible translations and uses innerMeasure to determine the similarity
      * as the product of the inner similarity from the input word to the e.g. english word,
      * multiplied by the inner similarity of the e.g. german translation of that word to the output word
      *
