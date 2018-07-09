@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import org.aksw.limes.core.exceptions.MissingStringMeasureResourceException;
 
 /**
  * A class to interact with the JWI (Java WordNet Interface) API,
@@ -44,6 +45,7 @@ public class WordNetInterface {
             dictionary.open();
         } catch (IOException e) {
             e.printStackTrace();
+            throw new MissingStringMeasureResourceException(wordNetHome, "The unpacked WordNet-3.0 database", "http://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.gz");
         }
     }
     

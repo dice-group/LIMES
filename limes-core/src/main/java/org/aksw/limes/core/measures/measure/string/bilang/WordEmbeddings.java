@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
+import org.aksw.limes.core.exceptions.MissingStringMeasureResourceException;
 import org.apache.commons.math3.util.Pair;
 
 /**
@@ -157,10 +158,10 @@ public class WordEmbeddings {
     }
     
     /**
-     * adds new word vector, checks if the number of dimensions fit to other word vectors
+     * Adds new word vector, checks if the number of dimensions fits to other word vectors
      * that are already here.
      * if the same word is already present (perhaps for another language), the new word
-     * vector for it is the average of the two
+     * vector for it is the average of the two.
      *
      * @param word new word
      * @param vector corresponding word vector
@@ -183,8 +184,8 @@ public class WordEmbeddings {
     }
     
     /**
-     * the language of the two words does not matter if the embeddings are from
-     * bilingual training
+     * The language of the two words does not matter if the embeddings are from
+     * bilingual training. So e.g. English/German, German/German, and English/English work all equally.
      *
      * @return the cosine similarity for these two words
      */
@@ -200,7 +201,7 @@ public class WordEmbeddings {
     }
     
     /**
-     * reads two files from "Bilingual Word Representations with Monolingual Quality in Mind"
+     * Teads two files from "Bilingual Word Representations with Monolingual Quality in Mind"
      * one english and one german one (e.g. "unsup.40.en" and "unsup.40.de")
      * the first line of the files is ignored
      *
@@ -227,6 +228,12 @@ public class WordEmbeddings {
             lines.close();
         } catch (IOException e) {
             e.printStackTrace();
+            throw new MissingStringMeasureResourceException(filepath, "A plain text file representing "
+                + "all word embeddings (i.e. vectors) for the desired language. In the first columns are the words, then a simple "
+                + "space follows. The remaining columns contain the coordinates of the words in n-dimensional space. "
+                + "The very first line contains two integers A and B separated by a space. A is the number of entries "
+                + "that follow, B is n, the dimensionality of the word vectors.", "Just download the unsup.128.en/de files from here: "
+                + "https://nlp.stanford.edu/~lmthang/bivec/");
         }
     }
     

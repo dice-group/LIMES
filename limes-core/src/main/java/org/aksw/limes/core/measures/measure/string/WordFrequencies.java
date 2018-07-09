@@ -5,20 +5,26 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Set;
+import org.aksw.limes.core.exceptions.MissingStringMeasureResourceException;
 
 /**
+ * This class saves for all words of a language the frequency with which they occur.
+ *
  * @author Swante Scholz
  */
 public class WordFrequencies {
     
     private HashMap<String, Double> wordFrequencies = new HashMap<>();
     
+    /**
+     * @param wordFrequencies maps words to their frequencies
+     */
     public WordFrequencies(HashMap<String, Double> wordFrequencies) {
         this.wordFrequencies.putAll(wordFrequencies);
     }
     
     /**
-     * scales all frequencies so that they sum up to 1.0
+     * Scales all frequencies so that they sum up to 1.0
      */
     public void normalizeFrequencies() {
         double totalFrequency = wordFrequencies.values().stream().mapToDouble(Double::doubleValue)
@@ -27,8 +33,8 @@ public class WordFrequencies {
     }
     
     /**
-     * @param wordFrequenciesFile file should have two columns, separated by a space, word first,
-     * then frequency (as int or double)
+     * @param wordFrequenciesFile A file should have two columns, separated by a space, word first,
+     * then frequency (as int or double). The frequencies doen't have to be normalized, as they will be normalized here.
      * @return WordFrequencies instance based on these frequencies, normalized
      */
     public static WordFrequencies fromWordFrequencyFile(Path wordFrequenciesFile) {
@@ -51,7 +57,10 @@ public class WordFrequencies {
             return result;
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Wasn't able to read frequency file.");
+            throw new MissingStringMeasureResourceException(wordFrequenciesFile.toAbsolutePath().toString(), "A plain text word-frequncy file. "
+                + "One line per entry: First the word, then a single space, then the relative frequence of that word in the language. "
+                + "About 100k words would be great.",
+                "Have a look here: https://github.com/hermitdave/FrequencyWords/tree/master/content/2016");
         }
     }
     

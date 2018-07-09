@@ -97,10 +97,25 @@ public class SimpleEditDistanceMeasure extends AStringMeasure {
         return 1.0 - edDistance / (double) getWorstCaseCost(s1.length(), s2.length());
     }
     
+    /**
+     *
+     * @param s1 first string
+     * @param s2 second string
+     * @return the edit distance with default settings
+     */
     public static int computeEditDistance(String s1, String s2) {
         return computeEditDistance(s1, s2, 0, 1, 1, 1);
     }
     
+    /**
+     * @param s1 first string
+     * @param s2 second string
+     * @param matchingCost
+     * @param insertionCost
+     * @param deletionCost
+     * @param substitutionCost
+     * @return the edit distance with the given parameters
+     */
     public static int computeEditDistance(String s1, String s2, int matchingCost, int insertionCost,
         int deletionCost, int substitutionCost) {
         int length1 = s1.length(), length2 = s2.length();

@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Stream;
+import org.aksw.limes.core.exceptions.MissingStringMeasureResourceException;
 
 /**
  * Dictionary for translations from a source language to a target language.
@@ -58,6 +59,10 @@ public class BilangDictionary {
             lines.close();
         } catch (IOException e) {
             e.printStackTrace();
+            throw new MissingStringMeasureResourceException(pathToDictionary.toAbsolutePath().toString(), "A plain text dictionary file. "
+                + "One translation per line, first the word in the source language, then a tab character, then the word "
+                + "in the target language. A dictionary with about 200 thousand entries proved to be a good balance "
+                + "between performance and quality.", "You can try this (but you'll have to simplify the format): https://www1.dict.cc/translation_file_request.php?l=e");
         }
     }
     
