@@ -271,7 +271,7 @@ public class Evaluator {
 					EvaluationRun er = new EvaluationRun(tAlgo.getName(), tAlgo.getMlType().toString(),
 							dataset.dataName, eval.evaluate(prediction, goldStandard, qlMeasures), k,
 							model.getLinkSpecification());
-					er.setQuanititativeRecord(new RunRecord(k, runTime, model.getLinkSpecification().size()));
+					er.setQuanititativeRecord(new RunRecord(k, runTime, 0.0, model.getLinkSpecification().size()));
 					er.display();
 					runsList.add(er);
 				}

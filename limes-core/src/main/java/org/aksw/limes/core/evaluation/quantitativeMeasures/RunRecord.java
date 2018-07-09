@@ -39,12 +39,7 @@ public class RunRecord {
         this.runMemory = runMemory;
     }
 
-	public RunRecord(long runId, double runTime, int linkSpecSize) {
-		this(runId, runTime);
-		this.linkSpecSize = linkSpecSize;
-	}
-
-	public RunRecord(long runId, double runTime, double runMemory, int linkSpecSize) {
+	public RunRecord(long runId, double runTime, double runMemory, double linkSpecSize) {
 		this(runId, runTime, runMemory);
 		this.linkSpecSize = linkSpecSize;
 	}
