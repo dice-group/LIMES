@@ -19,6 +19,7 @@ import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.McNemarsTest;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.IQuantitativeMeasure;
+import org.aksw.limes.core.evaluation.quantitativeMeasures.RunRecord;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
@@ -260,13 +261,17 @@ public class Evaluator {
 							params = lps;
 						}
 					}
+					long begin = System.currentTimeMillis();
 					// train
 					MLResults model = trainModel(algorithm, params, trainingData,
 							dataset.evalData.getConfigReader().read(), trainSourceCache, trainTargetCache);
 					AMapping prediction = algorithm.predict(testSourceCache, testTargetCache, model);
+					double runTime = ((double) (System.currentTimeMillis() - begin)) / 1000.0;
 					algoMappings.put(tAlgo.getName(), prediction);
 					EvaluationRun er = new EvaluationRun(tAlgo.getName(), tAlgo.getMlType().toString(),
-							dataset.dataName, eval.evaluate(prediction, goldStandard, qlMeasures), k);
+							dataset.dataName, eval.evaluate(prediction, goldStandard, qlMeasures), k,
+							model.getLinkSpecification());
+					er.setQuanititativeRecord(new RunRecord(k, runTime, 0.0, model.getLinkSpecification().size()));
 					er.display();
 					runsList.add(er);
 				}

@@ -14,6 +14,11 @@ public class RunRecord {
     /** The memory space utilized by the run*/
     private double runMemory = 0;
 
+	private double linkSpecSize;
+	private double runTimeVariance;
+	private double runMemoryVariance;
+	private double linkSpecSizeVariance;
+
     public RunRecord() {}
     /**
      * @param runId the id of the run
@@ -34,6 +39,10 @@ public class RunRecord {
         this.runMemory = runMemory;
     }
 
+	public RunRecord(long runId, double runTime, double runMemory, double linkSpecSize) {
+		this(runId, runTime, runMemory);
+		this.linkSpecSize = linkSpecSize;
+	}
 
     public long getRunId() {
         return runId;
@@ -66,6 +75,62 @@ public class RunRecord {
 
     @Override
     public String toString() {
-        return runId + ":" + runTime + ":" + runMemory;
+		String out = runId + ":";
+		if (runTime != 0) {
+			out += " time: " + runTime;
+		}
+		if (runMemory != 0) {
+			out += " mem: " + runMemory;
+		}
+		if (linkSpecSize != 0) {
+			out += " ls size: " + linkSpecSize;
+		}
+		return out;
     }
+
+	public double getLinkSpecSize() {
+		return linkSpecSize;
+	}
+
+	public void setLinkSpecSize(double linkSpecSize) {
+		this.linkSpecSize = linkSpecSize;
+	}
+
+	public double getRunTimeVariance() {
+		return runTimeVariance;
+	}
+
+	public void setRunTimeVariance(double runTimeVariance) {
+		this.runTimeVariance = runTimeVariance;
+	}
+
+	public double getRunMemoryVariance() {
+		return runMemoryVariance;
+	}
+
+	public void setRunMemoryVariance(double runMemoryVariance) {
+		this.runMemoryVariance = runMemoryVariance;
+	}
+
+	public double getLinkSpecSizeVariance() {
+		return linkSpecSizeVariance;
+	}
+
+	public void setLinkSpecSizeVariance(double linkSpecSizeVariance) {
+		this.linkSpecSizeVariance = linkSpecSizeVariance;
+	}
+
+	@Override
+	public RunRecord clone() {
+		RunRecord clone = new RunRecord();
+		clone.runId = runId;
+		clone.runTime = runTime;
+		clone.runMemory = runMemory;
+		clone.linkSpecSize = linkSpecSize;
+		clone.runTimeVariance = runTimeVariance;
+		clone.runMemoryVariance = runMemoryVariance;
+		clone.linkSpecSizeVariance = linkSpecSizeVariance;
+		return clone;
+	}
+
 }
