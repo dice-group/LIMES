@@ -271,7 +271,20 @@ public class Summary {
 							} else {
 								Double value = statisticalTestResults.get(dataSet).get(a).get(b);
 								if (value == null) {
+							if (statisticalTestResults.get(dataSet).get(b) != null) {
+								value = statisticalTestResults.get(dataSet).get(b).get(a);
+								if (value == null) {
 									currentRow.add("-");
+								} else {
+									if (round) {
+										currentRow.add(round(value));
+									} else {
+										currentRow.add(value.toString());
+									}
+								}
+							} else {
+								currentRow.add("-");
+							}
 								} else {
 							if (round) {
 								currentRow.add(round(value));
