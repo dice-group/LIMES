@@ -233,7 +233,7 @@ public class Summary {
 		overall.append("\n ========= STATISTICAL TEST RESULTS ========\n");
 		for (String dataSet : statisticalTestResults.keySet()) {
 			overall.append("\n +++++ " + dataSet + " +++++ \n");
-			overall.append(statisticalResultsToTable(dataSet, true));
+			overall.append(statisticalResultsToTable(dataSet, true).render());
 		}
 		return overall.toString();
 	}
