@@ -10,7 +10,7 @@ import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.measure.AMeasure;
 import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
-import org.aksw.limes.core.measures.measure.string.StringMeasure;
+import org.aksw.limes.core.measures.measure.string.AStringMeasure;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ALDecider.Triple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.apache.log4j.Logger;
@@ -39,7 +39,7 @@ public class Clustering {
     PropertyMapping propMap;
     AMapping reference;
     
-    StringMeasure measure = new SoundexMeasure(); 
+    AStringMeasure measure = new SoundexMeasure();
     
     double threshold = 0.6;
 	public Clustering(ACache sourceCache, ACache targetCache, PropertyMapping propMap) {

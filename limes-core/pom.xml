@@ -252,11 +252,21 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>edu.mit</groupId>
+            <artifactId>jwi</artifactId>
+            <version>2.2.3</version>
+        </dependency>
       <dependency>
         <groupId>org.deeplearning4j</groupId>
         <artifactId>deeplearning4j</artifactId>
         <version>0.9.1</version>
       </dependency>
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-nlp</artifactId>
+            <version>0.9.1</version>
+        </dependency>
       <!--<dependency>-->
       <!--<groupId>org.deeplearning4j</groupId>-->
       <!--<artifactId>deeplearning4j-examples-parent</artifactId>-->
