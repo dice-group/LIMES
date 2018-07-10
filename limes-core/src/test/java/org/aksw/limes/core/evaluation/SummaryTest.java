@@ -305,7 +305,8 @@ public class SummaryTest {
 		AsciiTable at = s.statisticalResultsToTable(data1, true);
 		System.out.println(at.render());
 		String[] expectedCells = new String[] { "", ham, fuzzy, crisp, all, allham + "0", allfuzzy + "0",
-				allcrisp + "0", ham, "-", hamfuzzy + "0", hamcrisp + "0", fuzzy, "-", "-", fuzzycrisp + "0" };
+				allcrisp + "0", ham, "-", hamfuzzy + "0", hamcrisp + "0", fuzzy, hamfuzzy + "0", "-",
+				fuzzycrisp + "0" };
 		int i = 0;
 		for (AT_Row row : at.getRawContent()) {
 			if (row.getCells() != null) {
