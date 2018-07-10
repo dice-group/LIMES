@@ -20,6 +20,8 @@ import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.vandermeer.asciitable.AT_Cell;
+import de.vandermeer.asciitable.AT_Row;
 import de.vandermeer.asciitable.AsciiTable;
 
 public class Summary {
@@ -231,49 +233,75 @@ public class Summary {
 		overall.append("\n ========= STATISTICAL TEST RESULTS ========\n");
 		for (String dataSet : statisticalTestResults.keySet()) {
 			overall.append("\n +++++ " + dataSet + " +++++ \n");
-			at = new AsciiTable();
+			overall.append(statisticalResultsToTable(dataSet, true));
+		}
+		return overall.toString();
+	}
+
+	public AsciiTable statisticalResultsToTable(String dataSet, boolean round) {
+			AsciiTable at = new AsciiTable();
 			at.addRule();
 			List<String> header = new ArrayList<>();
 			header.addAll(usedAlgorithms);
-			header.add(0, "");
+			header.set(0, "");
 			at.addRow(header);
 			at.addRule();
-			currentRow = new ArrayList<>();
-			for (String a : header) {
-				if (!a.equals("")) {
+		List<String> firstColumn = new ArrayList<>(usedAlgorithms);
+			firstColumn.remove(firstColumn.size() - 1);
+			List<String> currentRow = new ArrayList<>();
+			for (String a : firstColumn) {
 					currentRow.add(a);
 					for (String b : header) {
-						if (!a.equals(b)) {
+					if (!b.equals("")) {
 							if (statisticalTestResults.get(dataSet).get(a) == null) {
-								currentRow.add("-");
+								if (statisticalTestResults.get(dataSet).get(b) == null) {
+									currentRow.add("-");
+								} else {
+									Double value = statisticalTestResults.get(dataSet).get(b).get(a);
+									if (value == null) {
+										currentRow.add("-");
+									} else {
+								if (round) {
+									currentRow.add(round(value));
+								} else {
+									currentRow.add(value.toString());
+								}
+									}
+								}
 							} else {
 								Double value = statisticalTestResults.get(dataSet).get(a).get(b);
 								if (value == null) {
 									currentRow.add("-");
 								} else {
-									currentRow.add(round(value));
+							if (round) {
+								currentRow.add(round(value));
+							} else {
+								currentRow.add(value.toString());
+							}
 								}
 							}
 						}
 					}
 					at.addRow(currentRow);
 					currentRow = new ArrayList<>();
-				}
 			}
 			at.addRule();
-			overall.append(at.render());
-		}
-		return overall.toString();
+		return at;
 	}
 
 	public String round(double d) {
-		BigDecimal.valueOf(d).round(new MathContext(PRECISION, RoundingMode.HALF_UP));
+		try {
+			d = BigDecimal.valueOf(d).round(new MathContext(PRECISION, RoundingMode.HALF_UP)).doubleValue();
+		} catch (NumberFormatException e) {
+			System.out.println(d);
+			return "NaN";
+		}
 		DecimalFormat twoDForm = new DecimalFormat("########0." + new String(new char[PRECISION]).replace("\0", "0"));
 		return twoDForm.format(d);
 	}
 
 	public void printToFiles(String dir) throws FileNotFoundException {
-		// TODO Fix code duplication
+		// TODO Fix code duplication with toString
 		Map<Integer, Map<String, Map<String, List<EvaluationRun>>>> grouped = singleRuns.stream()
 				.collect(Collectors.groupingBy(EvaluationRun::getRunInExperiment, Collectors.groupingBy(
 						EvaluationRun::getAlgorithmName, Collectors.groupingBy(EvaluationRun::getDatasetName))));
@@ -363,30 +391,21 @@ public class Summary {
 
 		String runDir = createDirectoriesIfNecessary(dir, "statistics");
 		for (String dataSet : statisticalTestResults.keySet()) {
-			List<String> header = new ArrayList<>();
-			header.addAll(usedAlgorithms);
-			header.add(0, "");
-			String result = String.join("\t", header) + "\n";
-			for (String a : header) {
-				if (!a.equals("")) {
-					result += a;
-					for (String b : header) {
-						if (!a.equals(b)) {
-							if (statisticalTestResults.get(dataSet).get(a) == null) {
-								result += "\t-";
-							} else {
-								Double value = statisticalTestResults.get(dataSet).get(a).get(b);
-								if (value == null) {
-									result += "\t-";
-								} else {
-									result += "\t" + value;
-								}
-							}
-						}
+			AsciiTable at = statisticalResultsToTable(dataSet, false);
+			System.out.println(at.render());
+			String result = "";
+			for (AT_Row row : at.getRawContent()) {
+				if (row.getCells() != null) {
+					for (AT_Cell cell : row.getCells()) {
+						result += cell.getContent().toString() + "\t";
+					}
+					if (result.endsWith("\t")) {
+						result = result.substring(0, result.length() - 1);
 					}
 					result += "\n";
 				}
 			}
+			System.out.println(result);
 			try (PrintWriter out = new PrintWriter(runDir + File.separatorChar + dataSet)) {
 				out.print(result);
 			}
