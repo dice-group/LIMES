@@ -1,5 +1,6 @@
 package org.aksw.limes.core.measures.measure.string.bilang;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Paths;
@@ -25,7 +26,8 @@ public class SimpleDictionaryMeasureTest {
             measure.getSimilarity("dogg", "huund") + " " + measure.getSimilarity("dog", "Hund"));
         assertTrue(measure.getSimilarity("dog", "Katze") < measure.getSimilarity("dog", "Hund"));
         assertTrue(measure.getSimilarity("dogg", "huund") < measure.getSimilarity("dog", "Hund"));
-        assertTrue(measure.getSimilarity("dog", "hund") == measure.getSimilarity("dog", "Hund"));
+        assertEquals(measure.getSimilarity("dog", "hund"), measure.getSimilarity("dog", "Hund"),
+            0.0);
         
     }
 }

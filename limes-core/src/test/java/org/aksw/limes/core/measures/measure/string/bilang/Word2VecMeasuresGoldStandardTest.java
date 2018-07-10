@@ -27,6 +27,8 @@ import org.junit.Test;
  * them by human test subjects. No similar dataset was available for English/German word pairs,
  * so the testings is performed only mono-lingually unfortunately.
  *
+ * For this test to work you need the
+ *
  * @author Swante Scholz
  */
 public class Word2VecMeasuresGoldStandardTest {
@@ -41,7 +43,7 @@ public class Word2VecMeasuresGoldStandardTest {
         ArrayList<String> words1 = new ArrayList<>();
         ArrayList<String> words2 = new ArrayList<>();
         ArrayList<Double> similarities = new ArrayList<>();
-        Stream<String> lines = Files.lines(Paths.get(basePath + "ordsim352.tab"));
+        Stream<String> lines = Files.lines(Paths.get(basePath + "wordsim352.tab"));
         lines.forEach(line -> {
             String[] parts = line.split("\t");
             String word1 = parts[0];
