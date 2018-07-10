@@ -16,12 +16,14 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.CrispSetOperations;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.measures.mapper.FuzzyOperators.HamacherSetOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.algorithm.fptld.nodes.InternalNode;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.aksw.limes.core.ml.algorithm.wombat.LinkEntropy;
 import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;
+import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -287,9 +289,36 @@ public class WombatSimple extends AWombat {
 		for (ExtendedClassifier c : classifiers) {
 			for (LogicOperator op : availableOperators) {
 				if (!node.getValue().getMetricExpression().equals(c.getMetricExpression())) { // do not create the same metricExpression again
-					map = MappingOperations.performOperation(node.getValue().getMapping(), c.getMapping(), op);
-					String metricExpr = InternalNode.opToExpMapping.get(op) + "("
-							+ node.getValue().getMetricExpression() + "," + c.getMetricExpression() + ")|0";
+					String metricExpr = "";
+					if (op.toString().startsWith("HAMACHERTCO")) {
+						Pair<AMapping, Double> result = HamacherSetOperations.INSTANCE.union(
+								node.getValue().getMapping(), c.getMapping(),
+								trainingData);
+						map = result.getFirst();
+						metricExpr = InternalNode.opToExpMapping.get(op) + "_" + result.getSecond() + "("
+								+ node.getValue().getMetricExpression()
+								+ "," + c.getMetricExpression() + ")|0";
+					} else if (op.toString().startsWith("HAMACHERT")) {
+						Pair<AMapping, Double> result = HamacherSetOperations.INSTANCE.intersection(
+								node.getValue().getMapping(), c.getMapping(),
+								trainingData);
+						map = result.getFirst();
+						metricExpr = InternalNode.opToExpMapping.get(op) + "_" + result.getSecond() + "("
+								+ node.getValue().getMetricExpression()
+								+ "," + c.getMetricExpression() + ")|0";
+					} else if (op.toString().startsWith("HAMACHERDIFF")) {
+						Pair<AMapping, Double> result = HamacherSetOperations.INSTANCE.difference(
+								node.getValue().getMapping(), c.getMapping(),
+								trainingData);
+						map = result.getFirst();
+						metricExpr = InternalNode.opToExpMapping.get(op) + "_" + result.getSecond() + "("
+								+ node.getValue().getMetricExpression()
+								+ "," + c.getMetricExpression() + ")|0";
+					} else {
+						map = MappingOperations.performOperation(node.getValue().getMapping(), c.getMapping(), op);
+						metricExpr = InternalNode.opToExpMapping.get(op) + "(" + node.getValue().getMetricExpression()
+								+ "," + c.getMetricExpression() + ")|0";
+					}
 					RefinementNode child = createNode(map, metricExpr);
 					node.addChild(new Tree<>(child));
 				}

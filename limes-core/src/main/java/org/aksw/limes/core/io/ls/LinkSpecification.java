@@ -523,8 +523,10 @@ public class LinkSpecification implements ILinkSpecification {
 	}
 
 	public String toStringPretty() {
+		String op = "" + operator;
+		op += operatorParameter != 0.0 ? "_" + operatorParameter : "";
 		if (getChildren() != null) {
-			String str = "(" + filterExpression + ", " + getThreshold() + ", " + getOperator() + ", null,)";
+			String str = "(" + filterExpression + ", " + getThreshold() + ", " + op + ", null,)";
 			String indent = new String(new char[getDepth()]).replace("\0", "\t");
 			for (LinkSpecification child : getChildren()) {
 				str += "\n  " + indent + " ->" + child.toStringPretty();
@@ -532,7 +534,7 @@ public class LinkSpecification implements ILinkSpecification {
 			return str;
 		}
 		else {
-			return "(" + filterExpression + ", " + getThreshold() + ", " + getOperator() + ", null)";
+			return "(" + filterExpression + ", " + getThreshold() + ", " + op + ", null)";
 			// }
 		}
 	}

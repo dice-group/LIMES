@@ -7,13 +7,14 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.fptld.fitness.SimFuzzyRMSE;
+import org.apache.commons.math3.util.Pair;
 
 public enum HamacherSetOperations implements MappingOperations {
 
 	INSTANCE;
-	private double bestRMSE = 0.0;
-	private double bestP = 1.0;
-	private AMapping bestMapping = MappingFactory.createDefaultMapping();
+	private double bestRMSE;
+	private double bestP;
+	private AMapping bestMapping;
 	public static final int maxTries = 10;
 	public static final double epsilon = 0.0001;
 
@@ -61,9 +62,15 @@ public enum HamacherSetOperations implements MappingOperations {
 	 *            second Mapping for intersection
 	 * @param ref
 	 *            trainingData or reference Mapping
-	 * @return mapping using best p value
+	 * @return pair mapping,best p value
 	 */
-	public AMapping intersection(AMapping a, AMapping b, AMapping ref) {
+	public Pair<AMapping, Double> intersection(AMapping a, AMapping b, AMapping ref) {
+		if (a == null || a.size() == 0 || b == null || b.size() == 0) {
+			return new Pair<AMapping, Double>(MappingFactory.createDefaultMapping(), 1.0);
+		}
+		bestP = 1.0;
+		bestRMSE = 0;
+		bestMapping = MappingFactory.createDefaultMapping();
 		double p = bestP;
 		double errorOld = 0;
 		double error = errorOld - 1;
@@ -81,7 +88,7 @@ public enum HamacherSetOperations implements MappingOperations {
 			p = Math.abs(error / (errorOld - error) * p);
 			tries++;
 		}
-		return bestMapping;
+		return new Pair<AMapping, Double>(bestMapping, bestP);
 	}
 
 	/**
@@ -94,9 +101,19 @@ public enum HamacherSetOperations implements MappingOperations {
 	 *            second Mapping for union
 	 * @param ref
 	 *            trainingData or reference Mapping
-	 * @return mapping using best p value
+	 * @return pair mapping,best p value
 	 */
-	public AMapping union(AMapping a, AMapping b, AMapping ref) {
+	public Pair<AMapping, Double> union(AMapping a, AMapping b, AMapping ref) {
+		if ((a == null || a.size() == 0) && (b == null || b.size() == 0)) {
+			return new Pair<AMapping, Double>(MappingFactory.createDefaultMapping(), 1.0);
+		} else if (a == null || a.size() == 0) {
+			return new Pair<AMapping, Double>(b, 1.0);
+		} else if (b == null || b.size() == 0) {
+			return new Pair<AMapping, Double>(a, 1.0);
+		}
+		bestP = 1.0;
+		bestRMSE = 0;
+		bestMapping = MappingFactory.createDefaultMapping();
 		double p = bestP;
 		double errorOld = 0;
 		double error = errorOld - 1;
@@ -114,7 +131,17 @@ public enum HamacherSetOperations implements MappingOperations {
 			p = Math.abs(error / (errorOld - error) * p);
 			tries++;
 		}
-		return bestMapping;
+		return new Pair<AMapping, Double>(bestMapping, bestP);
+	}
+
+	public Pair<AMapping, Double> difference(AMapping a, AMapping b, AMapping ref) {
+		AMapping bNeg = MappingFactory.createDefaultMapping();
+		b.getMap().forEach((key, inner) -> {
+			inner.forEach((key2, value) -> {
+				bNeg.add(key, key2, 1 - value);
+			});
+		});
+		return intersection(a, bNeg, ref);
 	}
 
 	/**

@@ -350,7 +350,9 @@ public class MemoryMapping extends AMapping{
 	@Override
 	public double getValue(String s, String t) {
 		if (map.get(s) != null) {
-			return map.get(s).get(t);
+			if (map.get(s).get(t) != null) {
+				return map.get(s).get(t);
+			}
 		}
 		return 0;
 	}
