@@ -146,7 +146,7 @@ public class EvaluationRun {
         }
         if(learnedLS != null){
             System.out.println("------------------------------------------------------------------------------------------------------------------");
-            System.out.println(learnedLS);
+			System.out.println(learnedLS.toStringPretty());
         }
         System.out.println("==================================================================================================================");
 

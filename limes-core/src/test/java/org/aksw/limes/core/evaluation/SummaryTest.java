@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -22,6 +23,10 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import com.google.common.collect.ImmutableMap;
+
+import de.vandermeer.asciitable.AT_Cell;
+import de.vandermeer.asciitable.AT_Row;
+import de.vandermeer.asciitable.AsciiTable;
 
 public class SummaryTest {
 	public List<EvaluationRun> runs;
@@ -261,6 +266,58 @@ public class SummaryTest {
 	}
 
 	@Test
+	public void testStatisticalResultsToTable()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Map<String, Map<String, Map<String, Double>>> statisticalTestResults = new HashMap<>();
+		HashMap<String, Map<String, Double>> inner = new HashMap<>();
+		final String ham = "ham";
+		final String fuzzy = "fuzzy";
+		final String crisp = "crisp";
+		final String all = "all";
+		final double allham = 1.0;
+		final double allfuzzy = 1.1;
+		final double allcrisp = 1.2;
+		final double hamfuzzy = 2.0;
+		final double hamcrisp = 2.1;
+		final double fuzzycrisp = 3.0;
+		HashMap<String, Double> allInner = new HashMap<>();
+		allInner.put(ham, allham);
+		allInner.put(fuzzy, allfuzzy);
+		allInner.put(crisp, allcrisp);
+		inner.put(all, allInner);
+
+		HashMap<String, Double> hamInner = new HashMap<>();
+		hamInner.put(fuzzy, hamfuzzy);
+		hamInner.put(crisp, hamcrisp);
+		inner.put(ham, hamInner);
+
+		HashMap<String, Double> fuzInner = new HashMap<>();
+		fuzInner.put(crisp, fuzzycrisp);
+		inner.put(fuzzy, fuzInner);
+		statisticalTestResults.put(data1, inner);
+		Summary s = new Summary(new ArrayList<EvaluationRun>(), 5);
+		Field algos = Summary.class.getDeclaredField("usedAlgorithms");
+		algos.setAccessible(true);
+		List<String> usedAlgos = new ArrayList<String>(inner.keySet());
+		usedAlgos.add(crisp);
+		algos.set(s, usedAlgos);
+		s.setStatisticalTestResults(statisticalTestResults);
+		AsciiTable at = s.statisticalResultsToTable(data1, true);
+		System.out.println(at.render());
+		String[] expectedCells = new String[] { "", ham, fuzzy, crisp, all, allham + "0", allfuzzy + "0",
+				allcrisp + "0", ham, "-", hamfuzzy + "0", hamcrisp + "0", fuzzy, "-", "-", fuzzycrisp + "0" };
+		int i = 0;
+		for (AT_Row row : at.getRawContent()) {
+			if (row.getCells() != null) {
+				for (AT_Cell cell : row.getCells()) {
+					assertEquals(expectedCells[i], cell.getContent().toString());
+					i++;
+				}
+			}
+		}
+	}
+
+	@Test
 	public void testWriteToFiles() throws FileNotFoundException, IOException {
 		Summary s = new Summary(runs, 5);
 		// Values in this map are arbitrary only to check correctly writing to file
@@ -270,6 +327,7 @@ public class SummaryTest {
 		a2Map1.put(algo2, statistic1);
 		d1a1a2Map.put(algo1, a2Map1);
 		statisticalTestResults.put(data1, d1a1a2Map);
+
 		Map<String, Map<String, Double>> d2a1a2Map = new HashMap<>();
 		Map<String, Double> a2Map2 = new HashMap<>();
 		a2Map2.put(algo2, statistic2);
@@ -341,8 +399,8 @@ public class SummaryTest {
 						+ 0.0344 + "\t" + 0.0013700136182415992 + "\n",
 				"\t" + data1 + "\t" + data2 + "\n" + algo1 + "\t" + pVar + "\t" + pVar + "\n" + algo2 + "\t" + pVar
 						+ "\t" + pVar + "\n",
-				"\t" + algo1 + "\t" + algo2 + "\n" + algo1 + "\t-\t" + statistic1 + "\n" + algo2 + "\t-\t-\n",
-				"\t" + algo1 + "\t" + algo2 + "\n" + algo1 + "\t-\t" + statistic2 + "\n" + algo2 + "\t-\t-\n",
+				"\t" + algo2 + "\n" + algo1 + "\t" + statistic1 + "\n",
+				"\t" + algo2 + "\n" + algo1 + "\t" + statistic2 + "\n",
 		// Quantitative
 				"\t" + data1 + "\t" + data2 + "\n" + algo1 + "\t" + e11and15runTime + "\t" + runTimeAvg2 + "\n" + algo2
 						+ "\t" + e31runTime + "\t" + runTimeAvg4 + "\n",

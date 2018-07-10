@@ -245,21 +245,27 @@ public class Evaluator {
 				for (TaskAlgorithm tAlgo : TaskAlgorithms) {
 					AMLAlgorithm algorithm = tAlgo.getMlAlgorithm();
 					// tune parameters
-					Set<List<LearningParameter>> parameterGrid = createParameterGrid(tAlgo.getMlParameterValues());
 					List<LearningParameter> params = null;
-					double bestFM = 0.0;
-					for (List<LearningParameter> lps : parameterGrid) {
-						MLResults tuneModel = trainModel(algorithm, lps, tuneFolds.get(0).map,
-								dataset.evalData.getConfigReader().read(), tuneFolds.get(0).sourceCache,
-								tuneFolds.get(0).targetCache);
-						double current = eval
-								.evaluate(algorithm.predict(tuneFolds.get(1).sourceCache, tuneFolds.get(1).targetCache,
-										tuneModel), tuneGold, ImmutableSet.of(EvaluatorType.F_MEASURE))
-								.get(EvaluatorType.F_MEASURE);
-						if (current > bestFM) {
-							bestFM = current;
-							params = lps;
+					if (tAlgo.getMlParameterValues() != null) {
+						Set<List<LearningParameter>> parameterGrid = createParameterGrid(tAlgo.getMlParameterValues());
+						double bestFM = 0.0;
+						for (List<LearningParameter> lps : parameterGrid) {
+							MLResults tuneModel = trainModel(algorithm, lps, tuneFolds.get(0).map,
+									dataset.evalData.getConfigReader().read(), tuneFolds.get(0).sourceCache,
+									tuneFolds.get(0).targetCache);
+							double current = eval
+									.evaluate(
+											algorithm.predict(tuneFolds.get(1).sourceCache,
+													tuneFolds.get(1).targetCache, tuneModel),
+											tuneGold, ImmutableSet.of(EvaluatorType.F_MEASURE))
+									.get(EvaluatorType.F_MEASURE);
+							if (current > bestFM) {
+								bestFM = current;
+								params = lps;
+							}
 						}
+					} else {
+						params = tAlgo.getMlParameter();
 					}
 					long begin = System.currentTimeMillis();
 					// train
@@ -286,6 +292,7 @@ public class Evaluator {
 				}
 			}
 		}
+		System.out.println(statisticalTestResults);
 		Summary summary = new Summary(runsList, foldNumber);
 		summary.setStatisticalTestResults(statisticalTestResults);
 		return summary;
