@@ -24,3 +24,16 @@ hs_err_pid*
 
 # ignore gitbook builds
 _book
+limes-core/src/test/resources/WordNet-3.0/
+limes-core/src/test/resources/de-freq-orig.txt
+limes-core/src/test/resources/de-freq.txt
+limes-core/src/test/resources/doc2vec-precomputed.pv
+limes-core/src/test/resources/en-de-freq.txt
+limes-core/src/test/resources/en-de-small.txt
+limes-core/src/test/resources/en-freq.txt
+limes-core/src/test/resources/raw_sentences.txt
+limes-core/src/test/resources/readme.txt
+limes-core/src/test/resources/unsup.128.de
+limes-core/src/test/resources/unsup.128.en
+limes-core/src/test/resources/unsup.40.de
+limes-core/src/test/resources/unsup.40.en
