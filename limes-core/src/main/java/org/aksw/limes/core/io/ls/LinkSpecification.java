@@ -179,7 +179,7 @@ public class LinkSpecification implements ILinkSpecification {
      *            Global threshold
      */
     public void readSpec(String spec, double theta) {
-
+        spec = spec.trim();
         Parser p = new Parser(spec, theta);
         if (p.isAtomic()) {
             filterExpression = spec;
@@ -247,7 +247,7 @@ public class LinkSpecification implements ILinkSpecification {
                 leftSpec.readSpec(p.getLeftTerm(), Math.abs(theta - p.getRightCoefficient()) / p.getLeftCoefficient());
                 rightSpec.readSpec(p.getRightTerm(),
                         Math.abs(theta - p.getLeftCoefficient()) / p.getRightCoefficient());
-                filterExpression = spec;
+                filterExpression = null;
                 setThreshold(theta);
                 fullExpression = "AND(" + leftSpec.fullExpression + "|"
                         + (Math.abs(theta - p.getRightCoefficient()) / p.getLeftCoefficient()) + ","

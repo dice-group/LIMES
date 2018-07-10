@@ -1,10 +1,7 @@
-# LIMES
-Repository for LIMES - Link Discovery Framework for Metric Spaces.
-=======
+# LIMES - Link Discovery Framework for Metric Spaces.
 
 [![Build Status](https://travis-ci.org/dice-group/LIMES.svg?branch=master)](https://travis-ci.org/dice-group/LIMES)
-
-Development branch for LIMES - Link Discovery Framework for Metric Spaces.
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f565ba159e0340ad9dd3e5de41b12ed9)](https://www.codacy.com/app/MSherif/LIMES?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dice-group/LIMES&amp;utm_campaign=Badge_Grade)
 
 ## Generating Jar File (Headless)
 installing use:

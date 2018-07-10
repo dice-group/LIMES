@@ -7,6 +7,10 @@ import java.io.StringWriter;
 import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.view.graphBuilder.GraphBuildView;
 
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -27,6 +31,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -62,9 +67,14 @@ public class MainView {
     /**
      * Button to run mapping
      */
-    private Button runButton;
-    /**
-     * MenuItem to start the BatchLearning Dialog
+//    private Button runButton;
+
+    private Button toolBarNewConfigButton;
+    private Button toolBarLoadConfigButton;
+    private Button toolBarSaveConfigButton;
+    private Button toolBarRunButton;  
+
+    /** MenuItem to start the BatchLearning Dialog
      */
     private MenuItem itemBatchLearning;
     /**
@@ -83,6 +93,10 @@ public class MainView {
     * Scene of the main view
     */
     private Scene scene;
+   /**
+    * path to toolbar icons
+    */
+    private String toolbarPath = "gui/toolbar/";
 
     /**
      * Constructor
@@ -121,25 +135,17 @@ public class MainView {
         menuBox.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(flow, Priority.ALWAYS);
         menuBox.getChildren().addAll(menuBar, flow);
+        VBox menuAndToolbarBox = new VBox();
+        menuAndToolbarBox.getChildren().addAll(menuBox, buildToolbar(stage));
         toolBox = new ToolBox(this);
         graphBuild = new GraphBuildView(toolBox);
-        HBox runBox = new HBox(0);
-        runBox.setAlignment(Pos.CENTER_RIGHT);
-        runButton = new Button("Run");
-        runButton.setId("runButton");
-        runButton.setTooltip(new Tooltip("Execute this link specification"));
-        runButton.setOnAction(e -> {
-            controller.map();
-        });
-        runBox.getChildren().add(runButton);
-        root.setTop(menuBox);
+        root.setTop(menuAndToolbarBox);
         root.setLeft(toolBox);
         root.setRight(graphBuild);
-        root.setBottom(runBox);
         graphBuild.widthProperty().bind(
                 root.widthProperty().subtract(toolBox.widthProperty()));
-        graphBuild.heightProperty().bind(toolBox.heightProperty().subtract(runBox.heightProperty()));
-        toolBox.prefHeightProperty().bind(root.heightProperty().subtract(runBox.heightProperty()));
+        graphBuild.heightProperty().bind(toolBox.heightProperty());
+        toolBox.prefHeightProperty().bind(root.heightProperty());
         toolBox.setMinHeight(toolBox.prefHeightProperty().doubleValue());
         
 
@@ -157,6 +163,55 @@ public class MainView {
         stage.setTitle("LIMES");
         stage.setScene(scene);
         stage.show();
+    }
+    
+    private HBox buildToolbar(Window stage){
+    	double imageSize = 20.0;
+    	//Load icons
+    	Image imageNewConfig = new Image(toolbarPath + "new_file.png",imageSize,imageSize,true, true);
+    	Image imageSaveConfig = new Image(toolbarPath + "save_file.png",imageSize,imageSize,true, true);
+    	Image imageLoadConfig = new Image(toolbarPath + "load_file.png",imageSize,imageSize,true, true);
+    	Image imageRun = new Image(toolbarPath + "run.png",imageSize,imageSize,true, true);
+    	//Create Buttons
+    	toolBarNewConfigButton = new Button("", new ImageView(imageNewConfig));
+    	toolBarLoadConfigButton = new Button("", new ImageView(imageLoadConfig));
+    	toolBarSaveConfigButton = new Button("", new ImageView(imageSaveConfig));
+    	toolBarRunButton = new Button("", new ImageView(imageRun));
+    	//Add tooltips
+    	toolBarNewConfigButton.setTooltip(new Tooltip("Create a new configuration"));
+    	toolBarLoadConfigButton.setTooltip(new Tooltip("Load a new configuration file"));
+    	toolBarSaveConfigButton.setTooltip(new Tooltip("Save this configuration to a file"));
+    	toolBarRunButton.setTooltip(new Tooltip("Execute this link specification"));
+    	//Set ids
+    	toolBarNewConfigButton.setId("toolBarNewConfigButton");
+    	toolBarLoadConfigButton.setId("toolBarLoadConfigButton");
+    	toolBarSaveConfigButton.setId("toolBarSaveConfigButton");
+    	toolBarRunButton.setId("toolBarRunButton");
+    	//Custom style class
+    	toolBarNewConfigButton.getStyleClass().add("toolBarButton");
+    	toolBarLoadConfigButton.getStyleClass().add("toolBarButton");
+    	toolBarSaveConfigButton.getStyleClass().add("toolBarButton");
+    	toolBarRunButton.getStyleClass().add("toolBarButton");
+    	
+    	//Functionality
+    	toolBarNewConfigButton.setOnMouseClicked(e -> {
+        WizardView wizardView = new WizardView();
+        controller.newConfig(wizardView,new EditEndpointsView(wizardView), new EditClassMatchingView(wizardView),
+                new EditPropertyMatchingView(wizardView));
+        });
+    	toolBarLoadConfigButton.setOnMouseClicked(new LoadConfigEventHandler(stage));
+    	toolBarSaveConfigButton.setOnMouseClicked(new SaveConfigEventHandler(stage));
+    	toolBarRunButton.setOnMouseClicked(e -> {
+            controller.map();
+        });
+    	
+    	//put in hbox and style it
+    	HBox toolBarBox = new HBox();
+    	toolBarBox.getChildren().addAll(toolBarNewConfigButton, toolBarLoadConfigButton, toolBarSaveConfigButton, toolBarRunButton);
+        toolBarBox.setStyle("-fx-background-color: linear-gradient(to bottom, derive(-fx-base,30%), derive(-fx-base,60%));");
+        toolBarBox.setSpacing(5.0);
+        toolBarBox.setPadding(new Insets(0.0,0.0,1.0,15.0));
+    	return toolBarBox;
     }
 
     /**
@@ -203,29 +258,13 @@ public class MainView {
         //=========== Load Configuration ===================
         MenuItem itemLoad = new MenuItem("Load Configuration");
         itemLoad.setId("itemLoad");
-        itemLoad.setOnAction(e -> {
-            FileChooser fileChooser = new FileChooser();
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LIMES Configuration File (*.xml, *.rdf, *.ttl, *.n3, *.nt)", "*.xml", "*.rdf", "*.ttl", "*.n3", "*.nt");
-            fileChooser.getExtensionFilters().add(extFilter);
-            File file = fileChooser.showOpenDialog(stage);
-            if (file != null) {
-                controller.loadConfig(file);
-            }
-        });
+        itemLoad.setOnAction(new LoadConfigEventHandler(stage));
         menuConfiguration.getItems().add(itemLoad);
         
         //========== Save Configuration ===================
         itemSave = new MenuItem("Save Configuration");
         itemSave.setId("itemSave");
-        itemSave.setOnAction(e -> {
-            FileChooser fileChooser = new FileChooser();
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LIMES Configuration File (*.rdf, *.ttl, *.n3, *.nt)", "*.rdf", "*.ttl", "*.n3", "*.nt");
-            fileChooser.getExtensionFilters().add(extFilter);
-            File file = fileChooser.showSaveDialog(stage);
-            if (file != null) {
-                controller.saveConfig(file);
-            }
-        });
+        itemSave.setOnAction(new SaveConfigEventHandler(stage));
         menuConfiguration.getItems().add(itemSave);
         menuConfiguration.getItems().add(new SeparatorMenuItem());
         
@@ -276,6 +315,44 @@ public class MainView {
         menuBar.setId("menuBar");
         return menuBar;
     }
+    
+    private class LoadConfigEventHandler implements EventHandler{
+    	private Window stage;
+
+		public LoadConfigEventHandler(Window stage) {
+			this.stage = stage;
+		}
+
+		@Override
+		public void handle(Event event) {
+            FileChooser fileChooser = new FileChooser();
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LIMES Configuration File (*.xml, *.rdf, *.ttl, *.n3, *.nt)", "*.xml", "*.rdf", "*.ttl", "*.n3", "*.nt");
+            fileChooser.getExtensionFilters().add(extFilter);
+            File file = fileChooser.showOpenDialog(stage);
+            if (file != null) {
+                controller.loadConfig(file);
+            }
+		}
+    }
+
+    private class SaveConfigEventHandler implements EventHandler{
+    	private Window stage;
+
+		public SaveConfigEventHandler(Window stage) {
+			this.stage = stage;
+		}
+
+		@Override
+		public void handle(Event event) {
+            FileChooser fileChooser = new FileChooser();
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LIMES Configuration File (*.rdf, *.ttl, *.n3, *.nt)", "*.rdf", "*.ttl", "*.n3", "*.nt");
+            fileChooser.getExtensionFilters().add(extFilter);
+            File file = fileChooser.showSaveDialog(stage);
+            if (file != null) {
+                controller.saveConfig(file);
+            }
+		}
+    }
 
     /**
      * Enables menu and run buttons, if config is loaded
@@ -286,7 +363,8 @@ public class MainView {
     public void showLoadedConfig(boolean isLoaded) {
     	menuEdit.setDisable(!isLoaded);
         itemSave.setDisable(!isLoaded);
-        runButton.setDisable(!isLoaded);
+        toolBarSaveConfigButton.setDisable(!isLoaded);
+        toolBarRunButton.setDisable(!isLoaded);
         itemBatchLearning.setDisable(!isLoaded);
         itemUnsupervisedLearning.setDisable(!isLoaded);
         itemActiveLearning.setDisable(!isLoaded);

@@ -112,6 +112,8 @@ public class MapperFactory {
         ///////////////////////
         case EUCLIDEAN:
             return new HR3Mapper();
+        case MANHATTAN:
+            return new HR3Mapper();
         case GEO_ORTHODROMIC:
         case GEO_GREAT_ELLIPTIC:
             ///////////////////////

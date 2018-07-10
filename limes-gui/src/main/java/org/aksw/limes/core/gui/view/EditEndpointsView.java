@@ -10,11 +10,14 @@ import java.net.URL;
 import org.aksw.limes.core.gui.controller.EditEndpointsController;
 import org.aksw.limes.core.gui.util.SourceOrTarget;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -38,6 +41,7 @@ import javafx.stage.FileChooser;
 public class EditEndpointsView implements IEditView {
 	private static final String pageSizeError = "Only numbers are permitted!";
 	private static final String endpointURLError = "Invalid URL or file not found!";
+	private static final String[] recommendedEndpoints = {"http://dbpedia.org/sparql", "http://linkedgeodata.org/sparql"};
 	/**
 	 * Corresponding Controller
 	 */
@@ -45,11 +49,11 @@ public class EditEndpointsView implements IEditView {
 	/**
 	 * Field to put in the SourceURL
 	 */
-	private TextField[] sourceFields;
+	private Node[] sourceFields;
 	/**
 	 * Field to put in the SourceURL
 	 */
-	private TextField[] targetFields;
+	private Node[] targetFields;
 	/**
 	 * Pane to arrange the Elements of the View
 	 */
@@ -121,31 +125,36 @@ public class EditEndpointsView implements IEditView {
 		pane.getColumnConstraints().addAll(column1, column2);
 
 		pane.add(new Label("Endpoint URL"), 0, 0);
-		TextField endpointURL = new TextField("");
+		ComboBox<String> endpointURL = new ComboBox<>();
+		endpointURL.getItems().addAll(recommendedEndpoints);
+		endpointURL.setEditable(true);
 		endpointURL.setId(sourceOrTarget + "endpointURLTextField");
-		endpointURL.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-			if (endpointURL.getText() != null && !endpointURL.getText().equals("")) {
-				if (!newValue) { // when focus lost
+		endpointURL.valueProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+			if (endpointURL.getValue() != null && !endpointURL.getValue().equals("")) {
 					// check if it is a file
-					File f = new File(endpointURL.getText());
+					File f = new File(endpointURL.getValue());
 					if (!(f.exists() && !f.isDirectory())) {
 						// check if it is a valid URL
 						try {
-							new URL(endpointURL.getText());
+							new URL(endpointURL.getValue());
 						} catch (MalformedURLException e) {
 							// set the textField to error msg
-							endpointURL.setText(endpointURLError);
+							endpointURL.setValue(endpointURLError);
 							endpointURL.setStyle("-fx-text-inner-color: red;");
 						}
 					}
 				}
 			}
 		});
-		endpointURL.setOnMouseClicked(e -> {
-			if (endpointURL.getText() != null && !endpointURL.getText().equals("")) {
-				if (endpointURL.getText().equals(endpointURLError)) {
+
+		endpointURL.setOnMouseEntered(e -> {
+			if (endpointURL.getValue() != null && !endpointURL.getValue().equals("")) {
+				if (endpointURL.getValue().equals(endpointURLError)) {
 					endpointURL.setStyle("");
-					endpointURL.setText("");
+					endpointURL.setValue("");
 				}
 			}
 		});
@@ -161,7 +170,7 @@ public class EditEndpointsView implements IEditView {
 			fileChooser.getExtensionFilters().add(extFilter);
 			File file = fileChooser.showOpenDialog(wizardView.getStage());
 			if (file != null) {
-				endpointURL.setText(file.getAbsolutePath());
+				endpointURL.setValue(file.getAbsolutePath());
 				;
 			}
 		});
@@ -201,7 +210,7 @@ public class EditEndpointsView implements IEditView {
 		});
 		pane.add(pageSize, 1, 3);
 
-		TextField[] textFields = new TextField[] { endpointURL, idNamespace, graph, pageSize };
+		Node[] textFields = new Node[] { endpointURL, idNamespace, graph, pageSize };
 		if (sourceOrTarget == SOURCE) {
 			sourceFields = textFields;
 			return new TitledPane("Source endpoint", pane);
@@ -225,31 +234,33 @@ public class EditEndpointsView implements IEditView {
 	 * @param pageSize
 	 *            Length of the Limes Query
 	 */
+	@SuppressWarnings("unchecked")
 	public void setFields(SourceOrTarget sourceOrTarget, String endpoint, String idNamespace, String graph,
 			String pageSize) {
-		TextField[] textFields = sourceOrTarget == SOURCE ? sourceFields : targetFields;
-		textFields[0].setText(endpoint);
-		textFields[1].setText(idNamespace);
-		textFields[2].setText(graph);
-		textFields[3].setText(pageSize);
+		Node[] textFields = sourceOrTarget == SOURCE ? sourceFields : targetFields;
+		((ComboBox<String>)textFields[0]).setValue(endpoint);
+		((TextField)textFields[1]).setText(idNamespace);
+		((TextField)textFields[2]).setText(graph);
+		((TextField)textFields[3]).setText(pageSize);
 	}
 
 	/**
 	 * Saves the actual Parameters to the Controller
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void save() {
-		controller.save(SOURCE, sourceFields[0].getText(), sourceFields[1].getText(), sourceFields[2].getText(),
-				sourceFields[3].getText());
-		controller.save(TARGET, targetFields[0].getText(), targetFields[1].getText(), targetFields[2].getText(),
-				targetFields[3].getText());
+		controller.save(SOURCE, ((ComboBox<String>)sourceFields[0]).getValue(), ((TextField)sourceFields[1]).getText(), ((TextField)sourceFields[2]).getText(),
+				((TextField)sourceFields[3]).getText());
+		controller.save(TARGET, ((ComboBox<String>)targetFields[0]).getValue(), ((TextField)targetFields[1]).getText(), ((TextField)targetFields[2]).getText(),
+				((TextField)targetFields[3]).getText());
 	}
 
-	public TextField[] getSourceFields() {
+	public Node[] getSourceFields() {
 		return sourceFields;
 	}
 
-	public TextField[] getTargetFields() {
+	public Node[] getTargetFields() {
 		return targetFields;
 	}
 

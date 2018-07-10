@@ -69,5 +69,16 @@ public class HybridMapping extends AMapping {
         return null;
     }
 
+	@Override
+	public int getNumberofPositiveMappings() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public AMapping getOnlyPositiveExamples() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
