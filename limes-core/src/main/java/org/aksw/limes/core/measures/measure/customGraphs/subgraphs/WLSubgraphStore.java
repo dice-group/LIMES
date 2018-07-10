@@ -6,6 +6,8 @@ import org.aksw.limes.core.measures.measure.customGraphs.description.IDescriptio
 import org.aksw.limes.core.measures.measure.customGraphs.description.INode;
 
 /**
+ * Creates WLSubgraph certificates
+ *
  * @author Cedric Richter
  */
 public abstract class WLSubgraphStore {

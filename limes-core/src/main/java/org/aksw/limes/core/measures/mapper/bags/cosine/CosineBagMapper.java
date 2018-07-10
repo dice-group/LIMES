@@ -25,6 +25,8 @@ import java.util.Map;
  *you can easily map each map to vector,
  * each word to occurance,
  *
+ * @see org.aksw.limes.core.measures.measure.bags.CosineBagMeasure
+ *
  * @author Cedric Richter
  */
 public class CosineBagMapper implements IBagMapper {

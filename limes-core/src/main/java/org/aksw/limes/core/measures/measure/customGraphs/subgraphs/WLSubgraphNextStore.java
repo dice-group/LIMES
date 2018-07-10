@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Class to further iterate or start collecting multiset
+ *
  * @author Cedric Richter
  */
 public class WLSubgraphNextStore extends WLSubgraphStore {

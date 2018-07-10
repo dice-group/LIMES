@@ -25,6 +25,7 @@ import java.util.Set;
  * Let X be n times contained in the bag, then we add
  *  X_1, X_2, X_3, ..., X_n to the corresponding set.
  *
+ * @see org.aksw.limes.core.measures.measure.bags.JaccardBagMeasure
  *
  * @author Cedric Richter
  */

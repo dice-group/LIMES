@@ -9,12 +9,14 @@ public class CityDataSetTest {
     @Test
     public void citydataset_test(){
 
-        CityDataSetWiki tc = new CityDataSetWiki();
+       CityDataSetWiki tc = new CityDataSetWiki();
         try {
             tc.getQuery();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
 
     }
 }

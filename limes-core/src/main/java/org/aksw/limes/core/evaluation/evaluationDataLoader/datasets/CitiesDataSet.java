@@ -41,7 +41,7 @@ public class CitiesDataSet extends BaseDataSet {
      */
     @Override
     public String getSourceFile() {
-        return "CityDataSetDBPedia.txt";
+        return "CityDataSetDBpedia.nt";
     }
 
     /**
@@ -49,7 +49,7 @@ public class CitiesDataSet extends BaseDataSet {
      */
     @Override
     public String getTargetFile() {
-        return "CityDataSetwikidata.txt";
+        return "CityDatasetWIKI.nt";
     }
 
     /**

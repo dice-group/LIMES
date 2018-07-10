@@ -18,7 +18,7 @@ import java.util.Map;
  * if x and y are two vectors then: the dot product of (x, y) divided by
  * the sqrt of dot product of (x, x) multiplied by sqrt of the dot product of (y, y)
  *
- * @see org.aksw.limes.core.measures.mapper.bags.cosine.CosineBagMapper
+ *
  *
  * @author Cedric Richter
  */

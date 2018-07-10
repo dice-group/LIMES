@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
+ * Collects Subgraphs then map them to Certificates only compare subgraphs cert bagmapper to find
+ *
  * @author Cedric Richter
  */
 public class WLSubgraphCollector {

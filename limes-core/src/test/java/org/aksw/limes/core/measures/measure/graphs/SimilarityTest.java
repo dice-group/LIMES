@@ -3,6 +3,7 @@ package org.aksw.limes.core.measures.measure.graphs;
 import com.github.andrewoma.dexx.collection.Sets;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser2;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.evaluator.Evaluator;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
@@ -30,7 +31,7 @@ public class SimilarityTest {
 
     @Test
     public void testSimilarity() throws FileNotFoundException {
-        String[] datasets = {"PERSON1","PERSON2" , "RESTAURANTS","OAEI2014BOOKS","DBLPACM","ABTBUY","DBLPSCHOLAR","AMAZONGOOGLEPRODUCTS","DBPLINKEDMDB","DRUGS","PERSON2_CSV","PERSON2_CSV","PERSON1_CSV","RESTAURANTS_CSV"};
+        String[] datasets = {"PERSON1","PERSON2" , "RESTAURANTS","OAEI2014BOOKS","DBLPACM","ABTBUY","DBLPSCHOLAR","AMAZONGOOGLEPRODUCTS","DBPLINKEDMDB","DRUGS","PERSON2_CSV","PERSON2_CSV","PERSON1_CSV","RESTAURANTS_CSV", "CITIES"};
 
         datasets = new String[]{"CITIES"};
 //        "DRUGS","PERSON2_CSV","PERSON2_CSV","PERSON1_CSV","RESTAURANTS_CSV",
@@ -39,7 +40,7 @@ public class SimilarityTest {
         PrintWriter writer = new PrintWriter(f);
         try {
             for (String d : datasets) {
-                EvaluationData dataset = DataSetChooser.getData(d);
+                EvaluationData dataset = DataSetChooser2.instance().getData(d);
                 logger.info(String.format("Evaluate dataset %s.", dataset.getName()));
 
                 List<SimilarityFilter> definitions = new ArrayList<>();

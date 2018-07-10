@@ -8,6 +8,8 @@ import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 
 /**
+ * Class to load the graph descriptor via hook
+ *
  * @author Cedric Richter
  */
 public class LoadingHook {

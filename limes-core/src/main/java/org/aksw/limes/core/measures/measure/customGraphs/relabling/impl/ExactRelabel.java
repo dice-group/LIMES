@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Class to relabel exact edges, every lateral to one label
  *
  * @author Cedric Richter
  */

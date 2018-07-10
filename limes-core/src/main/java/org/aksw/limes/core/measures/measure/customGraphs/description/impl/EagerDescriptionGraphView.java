@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Quick description of graph via loading hook and multimap
+ * i.e. from Literal to URI
+ *
  * @author Cedric Richter
  */
 public class EagerDescriptionGraphView implements IGraphLoaded {
@@ -39,6 +42,7 @@ public class EagerDescriptionGraphView implements IGraphLoaded {
         graph.putIfAbsent(srcNode, HashMultimap.create());
         graph.get(srcNode).put(property, new BaseEdgeContainer(srcNode, property, targetNode));
     }
+
 
 
     @Override

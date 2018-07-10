@@ -12,6 +12,9 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
+ * Class to handle and relabel Maximum Sim
+ * More than 1 Measure = Multiple vectors in ParetoFront --> Volume of Vector add up each sim and only select Max
+ *
  * @author Cedric Richter
  */
 public class MaxSimRelabel implements IGraphRelabel {

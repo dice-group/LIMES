@@ -1,7 +1,6 @@
 package org.aksw.limes.core.measures.measure.graphs;
 
-import com.bordercloud.sparql.Endpoint;
-import com.bordercloud.sparql.EndpointException;
+
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdfxml.xmloutput.impl.Abbreviated;
@@ -28,19 +27,23 @@ public class CityDataSetWiki {
         String
                 queryString =
                 "PREFIX bd: <http://www.bigdata.com/rdf#>\n" +
-                        "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n" +
-                        "PREFIX wikibase: <http://wikiba.se/ontology#>\n" +
-                        " PREFIX wd: <http://www.wikidata.org/entity/>\n" +
-                        "SELECT ?Name ?NameLabel WHERE {\n" +
-                        "   ?Name wdt:P31 wd:Q515.\n" +
-                        "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
-                        "}\n" +
-                        "LIMIT 100";
+                "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n" +
+                       "PREFIX wikibase: <http://wikiba.se/ontology#>\n" +
+                       "PREFIX wd: <http://www.wikidata.org/entity/>\n" +
+                       "SELECT  ?s ?p ?o\n" +
+                       "  where {\n" +
+                       "    SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
+                       "    ?s ?p ?o.\n" +
+                       "    ?s wdt:P31 ?o.\n" +
+                       "    ?s ?p wd:Q515 .\n" +
+                       "  }\n" +
+                       "LIMIT 100";
 
         Query query = QueryFactory.create(queryString);
         QueryExecution qexec = QueryExecutionFactory.sparqlService("https://query.wikidata.org/sparql", queryString);
         try {
             ResultSet results = qexec.execSelect();
+            //ResultSetFormatter.out(results,query);
             String resultString = ResultSetFormatter.asText(results);
             writeFile(path , resultString.toString() );
         } catch (Exception e) {

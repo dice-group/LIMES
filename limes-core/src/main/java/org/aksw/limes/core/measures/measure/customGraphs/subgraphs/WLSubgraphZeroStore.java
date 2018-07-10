@@ -5,6 +5,7 @@ import org.aksw.limes.core.measures.measure.customGraphs.description.IDescriptio
 import org.aksw.limes.core.measures.measure.customGraphs.description.INode;
 
 /**
+ * Class to map zero-node i.e. Every URI is map to default label
  * @author Cedric Richter
  */
 public class WLSubgraphZeroStore extends WLSubgraphStore {

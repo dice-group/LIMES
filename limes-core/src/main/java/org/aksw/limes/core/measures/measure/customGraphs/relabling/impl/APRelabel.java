@@ -15,8 +15,11 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
+ * Class to Relabel AP (AffinityPropagation)
+ *
  * @author Cedric Richter
  */
+
 public class APRelabel implements IGraphRelabel {
 
     static Log logger = LogFactory.getLog(APRelabel.class);

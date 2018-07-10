@@ -13,8 +13,11 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
+ * This class Listens to Literate i.e. Discover and Push Operations on graph
+ *
  * @author Cedric Richter
  */
+
 public class ListeningDescriptionGraphView implements IGraphLoaded {
 
     private IGraphLoaded delegate;

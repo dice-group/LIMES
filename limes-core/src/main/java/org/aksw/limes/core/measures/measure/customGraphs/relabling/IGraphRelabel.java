@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Interface that provides that relabeled graph
  * @author Cedric Richter
  */
 public interface IGraphRelabel {

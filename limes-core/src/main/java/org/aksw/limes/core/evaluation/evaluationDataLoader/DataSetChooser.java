@@ -214,7 +214,6 @@ public class DataSetChooser {
         case OAEI2014BOOKS:
             param = getOAEI2014Books();
             break;
-
          case CITIES:
             param = getCities();
             break;
@@ -317,8 +316,8 @@ public class DataSetChooser {
         param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Cities/");
         param.put(MapKey.CONFIG_FILE, "CityDataSet.xml");
         param.put(MapKey.REFERENCE_FILE, "CitiesDataGoldStandard.csv");
-        param.put(MapKey.SOURCE_FILE, "CityDataSetDBPedia.txt");
-        param.put(MapKey.TARGET_FILE, "CityDataSetwikidata.txt");
+        param.put(MapKey.SOURCE_FILE, "CityDataSetDBpedia.nt");
+        param.put(MapKey.TARGET_FILE, "CityDatasetWIKI.nt");
         String type = "-City";
         param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
         param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_City.csv");
@@ -342,7 +341,7 @@ public class DataSetChooser {
                 (String) param.get(MapKey.DATASET_FOLDER) + (String) param.get(MapKey.REFERENCE_FILE)));
 
         param.put(MapKey.SOURCE_CLASS, "http://www.w3.org/2002/07/owl#City");
-        param.put(MapKey.TARGET_CLASS, "http://www.bigdata.com/rdf#City");
+        param.put(MapKey.TARGET_CLASS, "http://www.wikidata.org/entity/#");
 
         return param;
     }

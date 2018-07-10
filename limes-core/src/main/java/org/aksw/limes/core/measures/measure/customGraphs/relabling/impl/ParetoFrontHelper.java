@@ -6,6 +6,15 @@ import com.google.common.math.IntMath;
 import java.math.RoundingMode;
 import java.util.*;
 
+/**
+ * Class that helps resolving ParetoFront in MaxSimRelabel
+ *
+ * The plot of the objective functions whose non-dominated vectors are in the Pareto optimal set is called the Pareto front.
+ *
+ *
+ * @author Cedric Richter
+ */
+
 public class ParetoFrontHelper {
 
     private static ParetoFrontHelper instance;

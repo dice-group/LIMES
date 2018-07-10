@@ -1,7 +1,0 @@
-12:12:26.442 [main] ERROR org.aksw.limes.core.io.config.reader.xml.DtdChecker:32 - Error at 1 line.
-12:12:26.442 [main] ERROR org.aksw.limes.core.io.config.reader.xml.DtdChecker:33 - Content is not allowed in prolog.
-12:12:26.442 [main] WARN  org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader:418 - Content is not allowed in prolog.
-12:12:26.458 [main] WARN  org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader:420 - Some values were not set. Crossing my fingers and using defaults.
-12:12:26.567 [main] INFO  org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser:833 - Removed 0 mappings as the instances are not found in the Caches
-12:12:26.567 [main] INFO  org.aksw.limes.core.measures.measure.graphs.SimilarityTest:43 - Evaluate dataset Cities.
-12:12:26.848 [main] INFO  org.aksw.limes.core.measures.mapper.customGraphs.ConfigurableGraphMapper:81 - [50% ; 00:01 < 00:01] Finished iteration 0

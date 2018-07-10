@@ -21,7 +21,7 @@ public class RecursiveModelBuilder {
 
     private Model describe(Node n){
         QueryExecution qe = qef.createQueryExecution(
-                CannedQueryUtils.describe(n)
+                CannedQueryUtils.outgoing(n)
         );
         return qe.execDescribe();
     }

@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Lazy and detailed description of graph via loading hook and multimap
+ * i.e. from Literal to URI
+ *
  * @author Cedric Richter
  */
 public class LazyDescriptionGraphView implements IGraphLoaded {

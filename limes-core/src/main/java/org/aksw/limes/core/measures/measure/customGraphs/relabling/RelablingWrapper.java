@@ -10,6 +10,10 @@ import org.aksw.limes.core.measures.measure.customGraphs.description.impl.BaseNo
 import java.util.*;
 
 /**
+ * Relabeling Wrapper automatically changes edge types and literals.
+ *
+ * Wrapper for relabeled edges, gathers every relabeled node, source, target etc. and add them to graphView
+ *
  * @author Cedric Richter
  */
 public class RelablingWrapper implements IDescriptionGraphView {
