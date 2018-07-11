@@ -3,6 +3,12 @@ package org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ *
+ *
+ * @author Cedric Richter
+ */
+
 public class APExecutor implements Runnable {
 
     private double lambda = 0.5;

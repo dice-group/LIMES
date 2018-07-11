@@ -7,6 +7,8 @@ import com.google.common.collect.Multimap;
 import java.util.Set;
 
 /**
+ * Interface IDescriptionGraphView provides the rootNode, nodes, leaves and neighbors.
+ *
  * @author Cedric Richter
  */
 public interface IDescriptionGraphView {

@@ -3,7 +3,7 @@ package org.aksw.limes.core.evaluation.evaluationDataLoader.datasets;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.IDataSetIO;
 
 /**
- * Class to Select AmazonGoogle Dataset for the evaluation.
+ * Class to Select RestaurantCSV Dataset for the evaluation.
  * Using this class you can perform a variety of functions on the selected dataset.
  * You can use the following functions like getName, getDataSetFolder, getConfigFile, getReferenceFile,
  * getSourceFile, getTargetFile, getSourceClass, getTargetClass, getEvaluationFilename etc.
@@ -12,49 +12,49 @@ import org.aksw.limes.core.evaluation.evaluationDataLoader.IDataSetIO;
  *
  */
 
-public class AmazonGoogleDataset extends BaseDataSet {
+
+public class RestaurantCSV extends BaseDataSet {
 
     /**
      * @return the NameOfDataSet
      */
+
     @Override
     public String getName() {
-        return "amazongoogleproducts";
+        return "restaurants";
     }
 
     /**
      * @return the BaseFolder
      */
+
     @Override
     public String getDataSetFolder() {
-        return this.getBaseFolder()+"Amazon-GoogleProducts/";
+        return super.getBaseFolder() + "Restaurants/";
     }
-
 
     /**
      * @return the ConfigFile
      */
     @Override
     public String getConfigFile() {
-        return "Amazon-GoogleProducts.xml";
+        return "restaurants_csv.xml";
     }
-
 
     /**
      * @return the ReferenceFile
      */
     @Override
     public String getReferenceFile() {
-        return "Amzon_GoogleProducts_perfectMapping.csv";
+        return "restaurant1_restaurant2_goldstandard.rdf.csv";
     }
-
 
     /**
      * @return the SourceFile
      */
     @Override
     public String getSourceFile() {
-        return "Amazon.csv";
+        return "restaurant1.nt";
     }
 
     /**
@@ -62,15 +62,16 @@ public class AmazonGoogleDataset extends BaseDataSet {
      */
     @Override
     public String getTargetFile() {
-        return "GoogleProducts.csv";
+        return "restaurant2.nt";
     }
+
 
     /**
      * @return the SourceClass
      */
     @Override
     public String getSourceClass() {
-        return "amazon:product";
+        return "http://www.okkam.org/ontology_restaurant1.owl#Restaurant";
     }
 
     /**
@@ -78,27 +79,31 @@ public class AmazonGoogleDataset extends BaseDataSet {
      */
     @Override
     public String getTargetClass() {
-        return "google:product";
+        return "http://www.okkam.org/ontology_restaurant2.owl#Restaurant";
     }
+
 
     /**
      * @return the EvaluationFileName
      */
     @Override
     public String getEvaluationFilename() {
-        return "Pseudo_eval_Amazon-GoogleProducts.csv";
-    }
-
-    @Override
-    public String getOAEIType() {
-        return null;
+        return "Pseudo_eval_Restaurants.csv";
     }
 
     /**
-     * @return a new Oracle
+     * @return OAEIType
+     */
+    @Override
+    public String getOAEIType() {
+        return "-Restaurant";
+    }
+    /**
+     * @return Resolved Paths of DataSet using OAEIDataSetIO
      */
     @Override
     public IDataSetIO getIO() {
-        return new OracleIO();
+        return new OAEIDataSetIO();
     }
+
 }

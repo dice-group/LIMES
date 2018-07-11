@@ -2,6 +2,12 @@ package org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster;
 
 import org.aksw.limes.core.measures.measure.MeasureType;
 
+/**
+ *
+ *
+ * @author Cedric Richter
+ */
+
 public class SimilarityFilter {
 
     private MeasureType similarityType;

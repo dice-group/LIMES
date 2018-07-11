@@ -27,6 +27,12 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * Class for configuring graph mapper and contains the base logic of WSL-Kernel Graph Similarity
+ *
+ * @author Cedric Richter
+ */
+
 public class ConfigurableGraphMapper extends AMapper {
 
     private static final String CACHE_FOLDER = "cache/";
@@ -45,6 +51,11 @@ public class ConfigurableGraphMapper extends AMapper {
         this.bagMapper = bagMapper;
     }
 
+
+    /**
+     * Maps the data and Performs WSLSubgraph Operations on it
+     * @return WSL Mapping
+     */
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression, double threshold) {
 
@@ -116,6 +127,7 @@ public class ConfigurableGraphMapper extends AMapper {
         return result;
     }
 
+
     private IDescriptionGraphView prepareGraph(IResourceDescriptor d, Consumer<ILabel> consumer){
         if(consumer == null){
             return DescriptionGraphFactory.lazy(d).build();
@@ -184,6 +196,9 @@ public class ConfigurableGraphMapper extends AMapper {
         return new Pair<>(srcViews, targetViews);
     }
 
+    /**
+     * @return returns the bag, mapped with data from source, target and threshold
+     */
     private AMapping initMapping(Map<String, WLSubgraphProcessor> srcMap, Map<String, WLSubgraphProcessor> targetMap, double threshold){
 
         Map<String, Multiset<String>> src = srcMap.entrySet().stream()
@@ -238,17 +253,27 @@ public class ConfigurableGraphMapper extends AMapper {
         return bagMapper.getMapping(src, target, threshold);
     }
 
-
+    /**
+     * This method has not yet been implemented
+     * @return runtime approximation
+     */
     @Override
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
     }
 
+    /**
+     * This method has not yet been implemented
+     * @return the approximation of mapping size
+     */
     @Override
     public double getMappingSizeApproximation(int sourceSize, int targetSize, double theta, Language language) {
         return 1000d;
     }
 
+    /**
+     * @return the graph name
+     */
     @Override
     public String getName() {
         return "configurable_graph";

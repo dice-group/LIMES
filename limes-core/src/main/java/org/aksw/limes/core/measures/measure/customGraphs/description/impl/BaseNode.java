@@ -5,6 +5,8 @@ import org.aksw.limes.core.measures.measure.customGraphs.description.INode;
 import java.util.Objects;
 
 /**
+ * Class to handle operations on base node
+ *
  * @author Cedric Richter
  */
 public class BaseNode implements INode {
@@ -17,15 +19,22 @@ public class BaseNode implements INode {
         this.type = type;
     }
 
+    /**
+     * @return label of base node
+     */
     @Override
     public String getLabel() {
         return label;
     }
 
+    /**
+     * @return type of base node
+     */
     @Override
     public NodeType getType() {
         return type;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -42,6 +51,9 @@ public class BaseNode implements INode {
         return Objects.hash(label, type);
     }
 
+    /**
+     * @return Base Node's label and type
+     */
     @Override
     public String toString() {
         return "BaseNode{" +

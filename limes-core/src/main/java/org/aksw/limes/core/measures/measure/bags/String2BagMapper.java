@@ -2,7 +2,10 @@ package org.aksw.limes.core.measures.measure.bags;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
+
 /**
+ * The Class String2BagMappers simply parses the data(strings) to bags
+ *
  * @author Cedric Richter
  */
 public class String2BagMapper {

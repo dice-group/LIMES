@@ -8,6 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Class to relabel Literal Constant
+ *
+ * @author Cedric Richter
+ */
+
 public class ConstantRelabel implements IGraphRelabel {
 
     public static final String LITERAL_CONSTANT = "_LITERAL_";

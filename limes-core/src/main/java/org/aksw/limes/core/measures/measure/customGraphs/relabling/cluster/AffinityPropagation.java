@@ -1,7 +1,6 @@
 package org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster;
 
 
-
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -9,6 +8,12 @@ import org.apache.commons.collections.bag.HashBag;
 import org.apache.jena.base.Sys;
 
 import java.util.*;
+
+/**
+ * Class
+ *
+ * @author Cedric Richter
+ */
 
 public class AffinityPropagation {
 

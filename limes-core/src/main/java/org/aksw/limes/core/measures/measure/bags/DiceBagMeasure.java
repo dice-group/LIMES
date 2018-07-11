@@ -3,6 +3,11 @@ package org.aksw.limes.core.measures.measure.bags;
 import com.google.common.collect.Multiset;
 
 /**
+ * The Dice index, is a statistic used for comparing the similarity of two samples,
+ * another name for it is 'F-Measure'. This is another similarity measure for bags.
+ *
+ *
+ *
  * @author Cedric Richter
  */
 public class DiceBagMeasure extends ABagMeasure {

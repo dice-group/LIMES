@@ -4,6 +4,7 @@ import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.describe.IResourceDescriptor;
 
 /**
+ * Abstract class to get graph measure between two objects using IResourceDescriptor
  * @author Cedric Richter
  */
 public abstract class AGraphMeasure implements IGraphMeasure {

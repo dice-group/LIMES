@@ -11,6 +11,10 @@ import org.aksw.limes.core.measures.mapper.string.fastngram.NGramTokenizer;
 import java.util.*;
 
 /**
+ * Create the indexes of JaccardBagMapper
+ *
+ * The Jaccard index, will be a good index to identify mirror sites,
+ * but not so great at catching copy pasta plagiarism
  *
  * @param <T>
  * @author  Cedric Richter
@@ -23,6 +27,9 @@ public class Index<T> {
         sizeObjectIndex = new HashMap<>();
     }
 
+    /**
+     * @return Add bags to the HashMap
+     */
     public void addBag(KeyedBag<T> bag){
         int size = bag.getBag().size();
         sizeObjectIndex.putIfAbsent(size, new HashMap<>());
@@ -34,6 +41,9 @@ public class Index<T> {
         }
     }
 
+    /**
+     * @return All Bags in the HashMap
+     */
     public Set<KeyedBag<T>> getBags(int size, T obj){
         Set<KeyedBag<T>> output = new HashSet<>();
         if(sizeObjectIndex.containsKey(size)) {
@@ -43,12 +53,16 @@ public class Index<T> {
         }
         return output;
     }
-
+    /**
+     * @return Size of HashMap
+     */
     public Map<T, Set<KeyedBag<T>>> getBags(int size){
         return sizeObjectIndex.getOrDefault(size, new HashMap<>());
     }
 
-
+    /**
+     * @return Size of ObjectIndexes
+     */
     public Set<Integer> getAllSizes(){
         return sizeObjectIndex.keySet();
     }

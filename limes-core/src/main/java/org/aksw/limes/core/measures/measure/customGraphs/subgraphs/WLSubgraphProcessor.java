@@ -12,6 +12,8 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
+ * Class for processing WLSubgraph to certain iterations
+ *
  * @author Cedric Richter
  */
 public class WLSubgraphProcessor {

@@ -12,6 +12,11 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
+ * Class to relabel JaccardIndex
+ * Jaccard needs the know how of source Literal,
+ * getting a new literal we querying for every literal in source which has similarity above threshold
+ *
+ *
  * @author Cedric Richter
  */
 public class JaccardIndexRelabel implements IGraphRelabel {

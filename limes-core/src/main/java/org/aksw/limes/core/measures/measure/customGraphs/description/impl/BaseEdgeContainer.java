@@ -6,6 +6,8 @@ import org.aksw.limes.core.measures.measure.customGraphs.description.INode;
 import java.util.Objects;
 
 /**
+ * Class to handle edges and nodes of base
+ *
  * @author Cedric Richter
  */
 public class BaseEdgeContainer implements IEdge {
@@ -21,21 +23,35 @@ public class BaseEdgeContainer implements IEdge {
         this.target = target;
     }
 
+    /**
+     * @return source node
+     */
     @Override
     public INode getSource() {
         return source;
     }
 
+    /**
+     * @return edge type
+     */
     @Override
     public String getEdgeType() {
         return type;
     }
 
+    /**
+     * @return target node
+     */
     @Override
     public INode getTarget() {
         return target;
     }
 
+    /**
+     * Compares objects from source and target
+     * @return {@code true} if the arguments are equal to each other
+     * and {@code false} otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -45,6 +61,12 @@ public class BaseEdgeContainer implements IEdge {
                 Objects.equals(type, that.type) &&
                 Objects.equals(target, that.target);
     }
+
+    /**
+     * Compares objects from source and target
+     * @return {@code true} if the arguments are equal to each other
+     * and {@code false} otherwise.
+     */
 
     @Override
     public int hashCode() {

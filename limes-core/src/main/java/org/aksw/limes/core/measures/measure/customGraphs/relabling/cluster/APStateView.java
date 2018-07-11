@@ -2,6 +2,12 @@ package org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster;
 
 import java.util.Map;
 
+/**
+ *
+ *
+ * @author Cedric Richter
+ */
+
 public class APStateView {
 
     private APState parent;

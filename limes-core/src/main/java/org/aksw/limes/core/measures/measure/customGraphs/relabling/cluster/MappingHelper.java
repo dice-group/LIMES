@@ -16,6 +16,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ *
+ *
+ * @author Cedric Richter
+ */
+
 public class MappingHelper {
 
     public static ACache initMap(Set<String> str){
