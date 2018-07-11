@@ -45,6 +45,7 @@ public class DataSetChooser2 {
         chooser.registerDataSet(new DBPLinkMDBDataset());
         chooser.registerDataSet(new DrugsDataset());
         chooser.registerDataSet(new DLDataSet());
+        chooser.registerDataSet(new DBLPScholorDataSet());
 
         return chooser;
     }

@@ -1,13 +1,16 @@
 package org.aksw.limes.core.measures.measure.graphs;
 
 import com.github.andrewoma.dexx.collection.Sets;
+import com.google.common.base.Stopwatch;
 import org.aksw.limes.core.controller.LSPipeline;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.evaluator.Evaluator;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
+import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
 import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
 import org.aksw.limes.core.execution.rewriter.RewriterFactory;
@@ -25,6 +28,7 @@ import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster.SimilarityFilter;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.impl.APRelabel;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.impl.ExactRelabel;
+import org.aksw.limes.core.ml.algorithm.*;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +38,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.fail;
 
 public class SimilarityTest {
 
     static Logger logger = LoggerFactory.getLogger(SimilarityTest.class);
-
 
     public IMapper createMapper(){
         List<SimilarityFilter> definitions = new ArrayList<>();
@@ -54,10 +60,11 @@ public class SimilarityTest {
         return mapper;
     }
 
-
     @Test
     public void testSimilarity() throws FileNotFoundException {
         String[] datasets = {"PERSON1","PERSON2" , "RESTAURANTS","OAEI2014BOOKS","DBLPACM","ABTBUY","DBLPSCHOLAR","AMAZONGOOGLEPRODUCTS","DBPLINKEDMDB","DRUGS","PERSON2_CSV","PERSON1_CSV","RESTAURANTS_CSV"};
+
+        datasets = new String[]{"PERSON1", "PERSON2", "RESTAURANTS", "DBLPACM", "ABTBUY", "DBLPSCHOLAR", "AMAZONGOOGLEPRODUCTS"};
 
         double[] thresholds = {0.243, 0.242, 0.267, 0.52, 0.267, 0.206, 0.3, 0.3, 0.3, 0.34, 0.202, 0.384, 0.146 };
         thresholds = new double[]{0.551, 0.253, 0.534, 0.3, 0.267, 0.206, 0.267, 0.299, 0.3, 0.34, 0.187, 0.384, 0.146};
@@ -67,24 +74,47 @@ public class SimilarityTest {
         File f = new File("result.txt");
         PrintWriter writer = new PrintWriter(f);
         int i = 0;
+        Stopwatch stopwatch = Stopwatch.createUnstarted();
         try {
             for (String d : datasets) {
+                stopwatch.start();
                 EvaluationData dataset = DataSetChooser.getData(d);
                 double threshold = thresholds[i++];
                 logger.info(String.format("Evaluate dataset %s.", dataset.getName()));
 
-                AMapping mapping = mapper.getMapping(dataset.getSourceCache(), dataset.getTargetCache(), null, null,
-                        "graph_wls(x,y)", threshold);
+                //AMapping mapping = mapper.getMapping(dataset.getSourceCache(), dataset.getTargetCache(), null, null,
+                        //"graph_wls(x,y)", threshold);
 
-                Configuration config = dataset.getConfigReader().getConfiguration();
 
-                AMapping mapping1 = LSPipeline.execute(dataset.getSourceCache(), dataset.getTargetCache(), config.getMetricExpression(),
-                        config.getVerificationThreshold(), config.getSourceInfo().getVar(), config.getTargetInfo().getVar(),
-                        RewriterFactory.getRewriterType(config.getExecutionRewriter()),
-                        ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlanner()),
-                        ExecutionEngineFactory.getExecutionEngineType(config.getExecutionEngine()));
 
-                mapping = MappingOperations.union(mapping, mapping1);
+                //Configuration config = dataset.getConfigReader().getConfiguration();
+
+                //AMapping mapping1 = LSPipeline.execute(dataset.getSourceCache(), dataset.getTargetCache(), config.getMetricExpression(),
+                  //      config.getVerificationThreshold(), config.getSourceInfo().getVar(), config.getTargetInfo().getVar(),
+                    //    RewriterFactory.getRewriterType(config.getExecutionRewriter()),
+                      //  ExecutionPlannerFactory.getExecutionPlannerType(config.getExecutionPlanner()),
+                        //ExecutionEngineFactory.getExecutionEngineType(config.getExecutionEngine()));
+
+                //mapping = MappingOperations.union(mapping, mapping1);
+
+                UnsupervisedMLAlgorithm wombatCompleteU = null;
+                try {
+                    wombatCompleteU = MLAlgorithmFactory.createMLAlgorithm(WombatComplete.class,
+                            MLImplementationType.UNSUPERVISED).asUnsupervised();
+                } catch (UnsupportedMLImplementationException e) {
+                    e.printStackTrace();
+                    fail();
+                }
+                wombatCompleteU.init(null, dataset.getSourceCache(), dataset.getTargetCache());
+                MLResults mlModel = null;
+                try {
+                    mlModel = wombatCompleteU.learn(new PseudoFMeasure());
+                } catch (UnsupportedMLImplementationException e) {
+                    e.printStackTrace();
+                }
+                AMapping mapping = wombatCompleteU.predict(dataset.getSourceCache(), dataset.getTargetCache(), mlModel);
+
+                stopwatch.stop();
 
                 GoldStandard standard = new GoldStandard(dataset.getReferenceMapping(),
                         dataset.getSourceCache().getAllUris(),
@@ -100,11 +130,13 @@ public class SimilarityTest {
 
                 Map<EvaluatorType, Double> quality = evaluator.evaluate(mapping, standard, evalTypes);
 
-                writer.println(d + ":");
+                System.out.println(d+"( "+stopwatch.elapsed(TimeUnit.MILLISECONDS)+" ms) :");
+                writer.write(d+"( "+stopwatch.elapsed(TimeUnit.MILLISECONDS)+" ms) :\n");
                 for (Map.Entry<EvaluatorType, Double> e : quality.entrySet()) {
-                    writer.println(String.format("\t%s: %f", e.getKey().name(), e.getValue()));
+                    writer.write(String.format("\t%s: %f\n", e.getKey().name(), e.getValue()));
                     System.out.println(String.format("\t%s: %f", e.getKey().name(), e.getValue()));
                 }
+                stopwatch.reset();
             }
         }finally{
             writer.close();

@@ -67,7 +67,13 @@ public class PathResolvingIO implements IDataSetIO {
     public PropertyMapping loadProperties(String baseFolder, String configFile) {
         String path = PathResolver.resolvePath(baseFolder+prepPropertyFile(configFile));
         postPropertyFile(path);
-        return delegate.loadProperties(dirname(path), filename(path));
+        String cfgFile;
+        if(path.endsWith(".tmp"))
+            cfgFile = filename(path);
+        else
+            cfgFile = configFile;
+
+        return delegate.loadProperties(dirname(path), cfgFile);
     }
 
     @Override
