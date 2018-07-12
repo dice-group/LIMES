@@ -1,10 +1,8 @@
 package org.aksw.limes.core.measures.measure.string;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import org.aksw.limes.core.measures.measure.AMeasure;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class SimpleEditDistanceMeasureTest {
 

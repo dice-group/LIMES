@@ -1,10 +1,10 @@
 package org.aksw.limes.core.io.serializer;
 
 
+import org.aksw.limes.core.io.mapping.AMapping;
+
 import java.io.File;
 import java.util.Map;
-
-import org.aksw.limes.core.io.mapping.AMapping;
 
 /**
  * Interface for serializers

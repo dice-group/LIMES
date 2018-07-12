@@ -1,46 +1,29 @@
 package org.aksw.limes.core.measures.measure.graphs;
 
-import com.github.andrewoma.dexx.collection.Sets;
 import com.google.common.base.Stopwatch;
-import org.aksw.limes.core.controller.LSPipeline;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
-import org.aksw.limes.core.evaluation.evaluator.Evaluator;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
-import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
-import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.execution.engine.ExecutionEngineFactory;
-import org.aksw.limes.core.execution.planning.planner.ExecutionPlannerFactory;
-import org.aksw.limes.core.execution.rewriter.RewriterFactory;
-import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.IMapper;
-import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.mapper.bags.jaccard.JaccardBagMapper;
 import org.aksw.limes.core.measures.mapper.customGraphs.ConfigurableGraphMapper;
-
 import org.aksw.limes.core.measures.mapper.customGraphs.TopologicalGraphMapper;
-import org.aksw.limes.core.measures.mapper.wrapper.ChunkedMapper;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster.SimilarityFilter;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.impl.APRelabel;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.impl.ExactRelabel;
-import org.aksw.limes.core.ml.algorithm.*;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.actors.Eval;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.fail;
 
 public class SimilarityTest {
 
@@ -54,7 +37,6 @@ public class SimilarityTest {
 
         IMapper mapper = new ConfigurableGraphMapper(2, 1, new APRelabel(definitions), new JaccardBagMapper());
 
-        mapper = new ChunkedMapper(100, mapper);
         mapper = new ConfigurableGraphMapper(2, 1, new ExactRelabel(), new JaccardBagMapper());
         mapper = new TopologicalGraphMapper(2, 1);
         return mapper;
@@ -82,8 +64,8 @@ public class SimilarityTest {
                 double threshold = thresholds[i++];
                 logger.info(String.format("Evaluate dataset %s.", dataset.getName()));
 
-                //AMapping mapping = mapper.getMapping(dataset.getSourceCache(), dataset.getTargetCache(), null, null,
-                        //"graph_wls(x,y)", threshold);
+                AMapping mapping = mapper.getMapping(dataset.getSourceCache(), dataset.getTargetCache(), null, null,
+                        "graph_wls(x,y)", threshold);
 
 
 
@@ -97,22 +79,6 @@ public class SimilarityTest {
 
                 //mapping = MappingOperations.union(mapping, mapping1);
 
-                UnsupervisedMLAlgorithm wombatCompleteU = null;
-                try {
-                    wombatCompleteU = MLAlgorithmFactory.createMLAlgorithm(WombatComplete.class,
-                            MLImplementationType.UNSUPERVISED).asUnsupervised();
-                } catch (UnsupportedMLImplementationException e) {
-                    e.printStackTrace();
-                    fail();
-                }
-                wombatCompleteU.init(null, dataset.getSourceCache(), dataset.getTargetCache());
-                MLResults mlModel = null;
-                try {
-                    mlModel = wombatCompleteU.learn(new PseudoFMeasure());
-                } catch (UnsupportedMLImplementationException e) {
-                    e.printStackTrace();
-                }
-                AMapping mapping = wombatCompleteU.predict(dataset.getSourceCache(), dataset.getTargetCache(), mlModel);
 
                 stopwatch.stop();
 

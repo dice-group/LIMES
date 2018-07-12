@@ -1,9 +1,9 @@
 package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
+import org.aksw.limes.core.ml.algorithm.euclid.BooleanEuclid;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearEuclid;
 import org.aksw.limes.core.ml.algorithm.euclid.MeshEuclid;
-import org.aksw.limes.core.ml.algorithm.euclid.BooleanEuclid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

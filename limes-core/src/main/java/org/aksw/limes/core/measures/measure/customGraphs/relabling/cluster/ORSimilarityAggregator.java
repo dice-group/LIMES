@@ -8,6 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ *
+ * A similarity aggregator which applies a OR-rule.
+ * The or-rule allows to have similarities which is only in one of the similarity matrices.
+ *
+ * @author Cedric Richter
+ */
 public class ORSimilarityAggregator extends ASimilarityAggregator {
 
     @Override

@@ -1,7 +1,6 @@
 package org.aksw.limes.core.evaluation.evaluationDataLoader.datasets;
 
 import org.aksw.limes.core.evaluation.evaluationDataLoader.IDataSet;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.IDataSetIO;
 
 /**
  * Class to Select Base Folder of Datasets for the evaluation.

@@ -1,23 +1,17 @@
 package org.aksw.limes.core.evaluation;
 
-import static org.junit.Assert.assertTrue;
+import org.aksw.limes.core.datastrutures.TaskAlgorithm;
+import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
+import org.aksw.limes.core.measures.measure.MeasureType;
+import org.aksw.limes.core.ml.algorithm.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import org.aksw.limes.core.datastrutures.TaskAlgorithm;
-import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
-import org.aksw.limes.core.measures.measure.MeasureType;
-import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.Eagle;
-import org.aksw.limes.core.ml.algorithm.LearningParameter;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
-import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.algorithm.WombatComplete;
-import org.aksw.limes.core.ml.algorithm.WombatSimple;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 public class AlgorithmsInitTest {
     final public String[] algorithmsListData = {"UNSUPERVISED:WOMBATSIMPLE","SUPERVISED_BATCH:WOMBATSIMPLE"};

@@ -2,16 +2,14 @@ package org.aksw.limes.core.measures.measure.graphs;
 
 
 import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdfxml.xmloutput.impl.Abbreviated;
-import static org.junit.Assert.fail;
-import java.io.*;
+
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.HashMap;
+
+import static org.junit.Assert.fail;
 
 public class CityDataSetWiki {
 

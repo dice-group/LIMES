@@ -1,7 +1,6 @@
 package org.aksw.limes.core.evaluation.evaluationDataLoader.datasets;
 
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser2;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.Experiment;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.AMapping;

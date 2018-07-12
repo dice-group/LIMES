@@ -1,7 +1,5 @@
 package org.aksw.limes.core.measures.measure.customGraphs.relabling.impl;
 
-import com.google.common.collect.Table;
-import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.IGraphRelabel;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.ILabel;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.ILabelCollector;

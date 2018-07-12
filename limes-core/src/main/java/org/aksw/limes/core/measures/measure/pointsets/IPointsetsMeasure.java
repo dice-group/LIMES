@@ -4,11 +4,11 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets;
 
-import java.util.Set;
-
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.IMeasure;
+
+import java.util.Set;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)

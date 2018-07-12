@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * Executor to run Affinity Propagation clustering
  *
  * @author Cedric Richter
  */

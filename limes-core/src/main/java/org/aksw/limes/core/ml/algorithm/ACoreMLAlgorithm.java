@@ -1,8 +1,5 @@
 package org.aksw.limes.core.ml.algorithm;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.NoSuchParameterException;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
@@ -11,6 +8,9 @@ import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)

@@ -4,12 +4,12 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.benchmarking;
 
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 
 /**
  * In order not to generate a self intersecting modified polygons, in this

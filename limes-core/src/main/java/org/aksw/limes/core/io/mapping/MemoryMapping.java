@@ -1,12 +1,8 @@
 package org.aksw.limes.core.io.mapping;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.util.RandomStringGenerator;
+
+import java.util.*;
 
 /**
  * This class contains the mappings computed by an organizer. Each URI from the

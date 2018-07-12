@@ -1,11 +1,10 @@
 package org.aksw.limes.core.measures.measure.topology;
 
-import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.measures.measure.AMeasure;
-
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.measures.measure.AMeasure;
 
 /**
  * Measure that checks for the topological relation within.

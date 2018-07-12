@@ -1,10 +1,5 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.execution.engine.ExecutionEngine;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.planner.DynamicPlanner;
@@ -18,6 +13,11 @@ import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsStartedByMea
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Set;
+import java.util.TreeSet;
+
+import static org.junit.Assert.assertTrue;
 
 public class IsStartedByMapperTest {
 

@@ -1,12 +1,8 @@
 package org.aksw.limes.core.ml.algorithm.eagle.genes;
 
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.aksw.limes.core.datastrutures.PairSimilar;
-import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
+import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
 import org.jgap.gp.CommandGene;
@@ -18,6 +14,10 @@ import org.jgap.util.CloneException;
 import org.jgap.util.ICloneable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**

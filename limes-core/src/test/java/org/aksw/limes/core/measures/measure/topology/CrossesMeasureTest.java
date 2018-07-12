@@ -1,9 +1,9 @@
 package org.aksw.limes.core.measures.measure.topology;
 
-import static org.junit.Assert.assertEquals;
-
 import org.aksw.limes.core.measures.measure.AMeasure;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Kevin Dreßler

@@ -1,11 +1,9 @@
 package org.aksw.limes.core.measures.measure.customGraphs.description.impl;
 
 import com.google.common.collect.Multimap;
-import org.aksw.limes.core.io.describe.IResourceDescriptor;
 import org.aksw.limes.core.measures.measure.customGraphs.description.IEdge;
 import org.aksw.limes.core.measures.measure.customGraphs.description.INode;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.ILabel;
-import org.aksw.limes.core.measures.measure.customGraphs.relabling.ILabelCollector;
 import org.apache.jena.rdf.model.RDFNode;
 
 import java.util.List;

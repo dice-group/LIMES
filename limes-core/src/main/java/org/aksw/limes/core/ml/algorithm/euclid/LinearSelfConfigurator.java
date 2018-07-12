@@ -1,12 +1,5 @@
 package org.aksw.limes.core.ml.algorithm.euclid;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.aksw.limes.core.controller.LSPipeline;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorFactory;
@@ -22,6 +15,8 @@ import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.*;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)

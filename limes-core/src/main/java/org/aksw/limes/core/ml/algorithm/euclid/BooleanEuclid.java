@@ -1,7 +1,5 @@
 package org.aksw.limes.core.ml.algorithm.euclid;
 
-import java.util.List;
-
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
@@ -12,6 +10,8 @@ import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator.QMeasureType;
 import org.apache.log4j.Logger;
+
+import java.util.List;
 
 /**
  * Class wraps around EUCLIDs boolean classifier to abide LIMES ml interface

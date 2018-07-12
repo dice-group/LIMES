@@ -2,7 +2,6 @@ package org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster;
 
 
 import com.google.common.math.IntMath;
-
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.customGraphs.MapAndLog;
@@ -13,6 +12,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * A helper class which plans the execution of mapping operation.
+ * The execution is optimized by chunking instances. This allows to decrease the memory usage as
+ * processed chunks could be removed from memory. Sometimes there is also runtime advantages
+ *
+ * @author Cedric Richter
+ */
 public class MappingPlanner {
 
     private static final int CHUNK_SIZE = 3000;

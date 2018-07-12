@@ -4,11 +4,10 @@
  */
 package org.aksw.limes.core.measures.mapper.bags.jaccard;
 
-import com.google.common.collect.Multiset;
-import org.aksw.limes.core.measures.mapper.string.fastngram.ITokenizer;
-import org.aksw.limes.core.measures.mapper.string.fastngram.NGramTokenizer;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Create the indexes of JaccardBagMapper

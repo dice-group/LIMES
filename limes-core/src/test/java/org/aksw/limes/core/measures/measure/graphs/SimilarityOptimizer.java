@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.measure.graphs;
 
-import com.google.common.collect.BoundType;
 import com.google.common.collect.SortedMultiset;
 import com.google.common.collect.TreeMultiset;
 import org.aksw.limes.core.datastrutures.GoldStandard;

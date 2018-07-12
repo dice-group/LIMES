@@ -1,7 +1,5 @@
 package org.aksw.limes.core.ml.matching;
 
-import static org.junit.Assert.assertEquals;
-
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
@@ -11,6 +9,8 @@ import org.aksw.limes.core.ml.algorithm.matching.DefaultClassMapper;
 import org.apache.jena.rdf.model.Model;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class DefaultClassMapperTest {
 

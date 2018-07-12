@@ -1,12 +1,12 @@
 package org.aksw.limes.core.ml.algorithm;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Wraps around results of a ML algorithm.

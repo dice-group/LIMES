@@ -3,13 +3,13 @@
  */
 package org.aksw.limes.core.datastrutures;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.RunRecord;
 import org.aksw.limes.core.io.ls.LinkSpecification;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class represents a single run for an algorithm with specific implementation using specific datasets with its qualitative scores and quantitative records

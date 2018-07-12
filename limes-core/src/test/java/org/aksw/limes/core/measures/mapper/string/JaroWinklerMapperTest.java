@@ -1,16 +1,16 @@
 package org.aksw.limes.core.measures.mapper.string;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.Map;
-import java.util.Set;
-
 import org.aksw.commons.util.StopWatch;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.MapperTest;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.measure.string.JaroWinklerMeasure;
 import org.junit.Test;
+
+import java.util.Map;
+import java.util.Set;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Kevin Dreßler

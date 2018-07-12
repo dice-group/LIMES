@@ -2,6 +2,11 @@ package org.aksw.limes.core.evaluation.evaluationDataLoader.datasets;
 
 import org.aksw.limes.core.evaluation.evaluationDataLoader.IDataSetIO;
 
+
+/**
+ * A dataset for cities coming from DBpedia and Wikidata
+ * @author Zohaib Shoket
+ */
 public class CitiesDataSet extends BaseDataSet {
 
     /**

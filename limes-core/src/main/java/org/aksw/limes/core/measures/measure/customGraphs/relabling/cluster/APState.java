@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.WeakHashMap;
 
 /**
- *
+ * the current state of AP clustering
  *
  * @author Cedric Richter
  */

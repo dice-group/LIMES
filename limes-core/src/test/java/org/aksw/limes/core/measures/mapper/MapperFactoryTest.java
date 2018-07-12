@@ -1,7 +1,5 @@
 package org.aksw.limes.core.measures.mapper;
 
-import static org.junit.Assert.assertTrue;
-
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
@@ -11,43 +9,22 @@ import org.aksw.limes.core.measures.mapper.IMapper.Language;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
-import org.aksw.limes.core.measures.mapper.string.EDJoinMapper;
-import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
-import org.aksw.limes.core.measures.mapper.string.JaroMapper;
-import org.aksw.limes.core.measures.mapper.string.MongeElkanMapper;
-import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
-import org.aksw.limes.core.measures.mapper.string.RatcliffObershelpMapper;
-import org.aksw.limes.core.measures.mapper.string.SoundexMapper;
+import org.aksw.limes.core.measures.mapper.string.*;
 import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGramMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.AfterMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.BeforeMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.DuringMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.DuringReverseMapper;
+import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.*;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.EqualsMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.FinishesMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsFinishedByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsMetByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsOverlappedByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.IsStartedByMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.MeetsMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.OverlapsMapper;
-import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.StartsMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.ConcurrentMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.PredecessorMapper;
 import org.aksw.limes.core.measures.mapper.temporal.simpleTemporal.SuccessorMapper;
-import org.aksw.limes.core.measures.mapper.topology.ContainsMapper;
-import org.aksw.limes.core.measures.mapper.topology.CoveredbyMapper;
-import org.aksw.limes.core.measures.mapper.topology.CoversMapper;
-import org.aksw.limes.core.measures.mapper.topology.CrossesMapper;
-import org.aksw.limes.core.measures.mapper.topology.DisjointMapper;
-import org.aksw.limes.core.measures.mapper.topology.IntersectsMapper;
-import org.aksw.limes.core.measures.mapper.topology.TouchesMapper;
-import org.aksw.limes.core.measures.mapper.topology.WithinMapper;
+import org.aksw.limes.core.measures.mapper.topology.*;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class MapperFactoryTest {
     public ACache source = new MemoryCache();

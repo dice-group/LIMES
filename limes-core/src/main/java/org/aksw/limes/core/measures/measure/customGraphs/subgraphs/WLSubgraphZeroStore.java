@@ -1,6 +1,5 @@
 package org.aksw.limes.core.measures.measure.customGraphs.subgraphs;
 
-import com.google.common.collect.Multiset;
 import org.aksw.limes.core.measures.measure.customGraphs.description.IDescriptionGraphView;
 import org.aksw.limes.core.measures.measure.customGraphs.description.INode;
 

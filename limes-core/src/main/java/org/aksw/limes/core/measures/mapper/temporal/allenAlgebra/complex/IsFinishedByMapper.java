@@ -1,17 +1,13 @@
 package org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.AllenAlgebraMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.BeginBegin;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.atomic.EndEnd;
+
+import java.util.*;
 
 /**
  * Class for Allen's temporal relation "IsFinishedBy". Given two events X and Y,

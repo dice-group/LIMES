@@ -6,7 +6,6 @@
 package org.aksw.limes.core.measures.measure.string;
 
 import org.aksw.limes.core.io.cache.Instance;
-
 import uk.ac.shef.wit.simmetrics.similaritymetrics.JaccardSimilarity;
 
 /**

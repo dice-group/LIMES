@@ -1,9 +1,9 @@
 package org.aksw.limes.core.ml.algorithm;
 
-import java.lang.reflect.Constructor;
-
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
+
+import java.lang.reflect.Constructor;
 
 /**
  * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)

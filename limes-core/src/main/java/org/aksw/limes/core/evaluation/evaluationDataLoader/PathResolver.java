@@ -3,7 +3,6 @@ package org.aksw.limes.core.evaluation.evaluationDataLoader;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.apache.commons.io.IOUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;

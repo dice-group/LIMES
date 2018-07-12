@@ -3,14 +3,19 @@ package org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.apache.commons.collections.bag.HashBag;
-import org.apache.jena.base.Sys;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * Class
+ * Class based on Affinity Propagation (AP) [1].
+ *
+ * AP as a clustering algorithm has the advantage to be define with absence of similarity.
+ * Therefore, it can be computed very fast for sparse similarity matrices.
+ *
+ * [1] Brendan J. Frey; Delbert Dueck (2007). "Clustering by passing messages between data points"
  *
  * @author Cedric Richter
  */

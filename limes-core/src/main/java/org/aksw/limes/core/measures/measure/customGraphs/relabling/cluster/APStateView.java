@@ -3,7 +3,7 @@ package org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster;
 import java.util.Map;
 
 /**
- *
+ * A view on the current state of AP clustering
  *
  * @author Cedric Richter
  */

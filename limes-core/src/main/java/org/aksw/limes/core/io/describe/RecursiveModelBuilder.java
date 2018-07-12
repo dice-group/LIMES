@@ -4,8 +4,9 @@ import org.aksw.jena_sparql_api.core.QueryExecutionFactory;
 import org.aksw.jena_sparql_api.utils.CannedQueryUtils;
 import org.apache.jena.graph.Node;
 import org.apache.jena.query.QueryExecution;
-import org.apache.jena.rdf.model.*;
-
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.RDFNode;
 
 import java.util.Stack;
 

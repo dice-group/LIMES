@@ -1,14 +1,5 @@
 package org.aksw.limes.core.evaluation;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.TaskData;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
@@ -18,6 +9,10 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.*;
+
+import static org.junit.Assert.assertTrue;
 
 
 

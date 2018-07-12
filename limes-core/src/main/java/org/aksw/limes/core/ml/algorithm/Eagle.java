@@ -1,27 +1,16 @@
 package org.aksw.limes.core.ml.algorithm;
 
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.NotYetImplementedException;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
-import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.aksw.limes.core.ml.algorithm.eagle.core.ALDecider;
-import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionFitnessFunction;
-import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem;
-import org.aksw.limes.core.ml.algorithm.eagle.core.IGPFitnessFunction;
-import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
-import org.aksw.limes.core.ml.algorithm.eagle.core.PseudoFMeasureFitnessFunction;
+import org.aksw.limes.core.ml.algorithm.eagle.core.*;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.algorithm.eagle.util.TerminationCriteria;
 import org.apache.log4j.Logger;
@@ -31,6 +20,11 @@ import org.jgap.gp.IGPProgram;
 import org.jgap.gp.impl.GPGenotype;
 import org.jgap.gp.impl.GPPopulation;
 import org.jgap.gp.impl.ProgramChromosome;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)

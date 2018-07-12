@@ -10,7 +10,6 @@ import org.aksw.limes.core.measures.measure.customGraphs.description.IEdge;
 import org.aksw.limes.core.measures.measure.customGraphs.description.INode;
 import org.apache.commons.lang3.StringUtils;
 
-
 import java.util.HashMap;
 import java.util.Map;
 

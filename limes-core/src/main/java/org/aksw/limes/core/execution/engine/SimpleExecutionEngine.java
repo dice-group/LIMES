@@ -1,9 +1,5 @@
 package org.aksw.limes.core.execution.engine;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.execution.engine.filter.LinearFilter;
@@ -25,6 +21,10 @@ import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Implements the default execution engine class. The idea is that the engine

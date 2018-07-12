@@ -3,21 +3,16 @@ package org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.MapperFactory;
-import org.aksw.limes.core.measures.mapper.string.EDJoinMapper;
 import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGramMapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.MeasureType;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * A helper class for mappings
  *
  * @author Cedric Richter
  */
@@ -58,11 +53,25 @@ public class MappingHelper {
         return FastNGramMapper.compute(A, B, 3, threshold);
     }
 
-
+    /**
+     * Similarity mapper for strings are defined over instances.
+     * This method allow to use the mapper without creating fake instances before
+     * @param set the source instances
+     * @param filter defined mapping operation
+     * @return a mapping from source instances to source instances
+     */
     public static AMapping filter(Set<String> set, SimilarityFilter filter){
        return filter(set, set, filter);
     }
 
+    /**
+     * Similarity mapper for strings are defined over instances.
+     * This method allow to use the mapper without creating fake instances before
+     * @param A the source instances
+     * @param B the target instances
+     * @param filter defined mapping operation
+     * @return a mapping from source instances to target instances
+     */
     public static AMapping filter(Set<String> A, Set<String> B,  SimilarityFilter filter){
         if(filter.getSimilarityType().equals(MeasureType.TRIGRAM)){
             return executeTrigram(A, B, filter.getThreshold());

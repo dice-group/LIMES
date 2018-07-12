@@ -1,11 +1,11 @@
 package org.aksw.limes.core.io.mapping.reader;
 
-import static org.junit.Assert.assertTrue;
-
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class MappingReaderTest {
     AMapping refMap = MappingFactory.createDefaultMapping();

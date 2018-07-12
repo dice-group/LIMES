@@ -1,8 +1,8 @@
 package org.aksw.limes.core.util;
 
-import java.util.Stack;
-
 import org.apache.log4j.Logger;
+
+import java.util.Stack;
 
 public class ParenthesisMatcher {
 	static Logger logger = Logger.getLogger("LIMES");

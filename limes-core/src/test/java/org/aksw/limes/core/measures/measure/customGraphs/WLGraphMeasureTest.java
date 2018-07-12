@@ -8,18 +8,12 @@ import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.measures.measure.bags.JaccardBagMeasure;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster.SimilarityFilter;
 import org.aksw.limes.core.measures.measure.customGraphs.relabling.impl.MaxSimRelabel;
-import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
-import org.aksw.limes.core.measures.measure.string.JaroWinklerMeasure;
-import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
-import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 public class WLGraphMeasureTest {
 

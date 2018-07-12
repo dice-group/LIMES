@@ -1,9 +1,9 @@
 package org.aksw.limes.core.io.mapping.writer;
 
-import java.io.IOException;
-
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.serializer.CSVSerializer;
+
+import java.io.IOException;
 
 
 /**

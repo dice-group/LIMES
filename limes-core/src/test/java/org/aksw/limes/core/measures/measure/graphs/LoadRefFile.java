@@ -1,13 +1,9 @@
 package org.aksw.limes.core.measures.measure.graphs;
 
 
-import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LoadRefFile {
 

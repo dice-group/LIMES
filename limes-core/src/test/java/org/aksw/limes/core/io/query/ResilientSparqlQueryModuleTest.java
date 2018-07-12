@@ -1,16 +1,16 @@
 package org.aksw.limes.core.io.query;
 
-import static org.junit.Assert.assertTrue;
+import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.cache.HybridCache;
+import org.aksw.limes.core.io.config.KBInfo;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.aksw.limes.core.io.cache.ACache;
-import org.aksw.limes.core.io.cache.HybridCache;
-import org.aksw.limes.core.io.config.KBInfo;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 public class ResilientSparqlQueryModuleTest {
 

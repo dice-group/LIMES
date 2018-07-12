@@ -5,9 +5,9 @@
 
 package org.aksw.limes.core.measures.mapper.space.blocking;
 
-import java.util.ArrayList;
-
 import org.aksw.limes.core.io.cache.Instance;
+
+import java.util.ArrayList;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)

@@ -4,10 +4,6 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.hausdorff;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -15,6 +11,10 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.mapper.pointsets.PolygonIndex;
 import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)

@@ -1,9 +1,9 @@
 package org.aksw.limes.core.io.ls;
 
-import java.util.ArrayList;
-
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.parser.Parser;
+
+import java.util.ArrayList;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)

@@ -1,10 +1,10 @@
 package org.aksw.limes.core.evaluation.qualititativeMeasures;
 
+import org.aksw.limes.core.io.mapping.AMapping;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.aksw.limes.core.io.mapping.AMapping;
 
 /**
  * Implements a quality measure for unsupervised ML algorihtms, dubbed pseudo F-Measure.

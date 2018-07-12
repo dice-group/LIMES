@@ -4,13 +4,13 @@
  */
 package org.aksw.limes.core.ml.algorithm.matching.stablematching;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**

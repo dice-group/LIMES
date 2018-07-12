@@ -4,9 +4,9 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.benchmarking;
 
-import java.util.Set;
-
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+
+import java.util.Set;
 
 /**
  * Implements the polygon modifier interface. It provides basic functions for

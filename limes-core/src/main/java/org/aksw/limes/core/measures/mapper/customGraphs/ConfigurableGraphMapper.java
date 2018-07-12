@@ -2,7 +2,6 @@ package org.aksw.limes.core.measures.mapper.customGraphs;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multiset;
-import javafx.util.Pair;
 import org.aksw.jena_sparql_api.cache.extra.CacheFrontend;
 import org.aksw.jena_sparql_api.cache.extra.CacheFrontendImpl;
 import org.aksw.jena_sparql_api.cache.file.CacheBackendFile;
@@ -12,7 +11,6 @@ import org.aksw.limes.core.io.describe.*;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.AMapper;
-import org.aksw.limes.core.measures.mapper.IMapper;
 import org.aksw.limes.core.measures.mapper.bags.IBagMapper;
 import org.aksw.limes.core.measures.measure.customGraphs.description.IDescriptionGraphView;
 import org.aksw.limes.core.measures.measure.customGraphs.description.impl.DescriptionGraphFactory;

@@ -1,21 +1,15 @@
 package org.aksw.limes.core.ml.algorithm.matching;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.apache.jena.graph.Node;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.log4j.Logger;
-
 import uk.ac.shef.wit.simmetrics.similaritymetrics.QGramsDistance;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Implements a label-based similarity for classes in two ontologies

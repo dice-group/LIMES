@@ -1,12 +1,12 @@
 package org.aksw.limes.core.measures.measure.pointsets.link;
 
 
-import java.util.Arrays;
-
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)

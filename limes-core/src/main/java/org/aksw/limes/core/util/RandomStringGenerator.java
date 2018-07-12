@@ -1,5 +1,8 @@
 package org.aksw.limes.core.util;
 
+import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.cache.MemoryCache;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,10 +10,6 @@ import java.util.List;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
-import org.aksw.limes.core.io.cache.ACache;
-import org.aksw.limes.core.io.cache.MemoryCache;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)

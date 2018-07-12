@@ -1,19 +1,15 @@
 package org.aksw.limes.core.ml.algorithm.euclid;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
-import org.aksw.limes.core.ml.algorithm.LearningParameter;
-import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
-import org.aksw.limes.core.ml.algorithm.MLImplementationType;
-import org.aksw.limes.core.ml.algorithm.MLResults;
+import org.aksw.limes.core.ml.algorithm.*;
 import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearSelfConfigurator.QMeasureType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class wraps around EUCLIDs linear classifier to abide LIMES ml interface

@@ -7,18 +7,9 @@ import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +49,6 @@ public class DataSetChooser2 {
         chooser.registerDataSet(new AmazonGoogleDataset());
         chooser.registerDataSet(new DBPLinkMDBDataset());
         chooser.registerDataSet(new DrugsDataset());
-        chooser.registerDataSet(new DLDataSet());
         chooser.registerDataSet(new DBLPScholorDataSet());
         chooser.registerDataSet(new CitiesDataSet());
 

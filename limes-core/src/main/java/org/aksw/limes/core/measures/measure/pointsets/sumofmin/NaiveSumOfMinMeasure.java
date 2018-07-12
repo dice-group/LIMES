@@ -3,10 +3,6 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.sumofmin;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -15,6 +11,10 @@ import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.min.NaiveMinMeasure;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Brute force approach to computing the MAX distance between two polygons

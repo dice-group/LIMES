@@ -6,7 +6,6 @@ import org.aksw.limes.core.measures.measure.customGraphs.description.IEdge;
 import org.aksw.limes.core.measures.measure.customGraphs.description.INode;
 import org.apache.jena.rdf.model.RDFNode;
 
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;

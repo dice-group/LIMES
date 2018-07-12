@@ -1,11 +1,11 @@
 package org.aksw.limes.core.measures.measure.temporal.allenAlgebra;
 
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.measures.measure.temporal.TemporalMeasure;
 
 /**
  * Implements the temporal is finished by measure class.

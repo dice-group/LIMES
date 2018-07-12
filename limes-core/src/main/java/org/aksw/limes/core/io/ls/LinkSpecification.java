@@ -1,14 +1,10 @@
 package org.aksw.limes.core.io.ls;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
-
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.parser.Parser;
+
+import java.text.DecimalFormat;
+import java.util.*;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)

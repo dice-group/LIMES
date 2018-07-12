@@ -1,9 +1,5 @@
 package org.aksw.limes.core.execution.engine.filter;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
@@ -14,6 +10,10 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertTrue;
 
 public class LinearFilterTest {
     public ACache source = new MemoryCache();

@@ -5,9 +5,9 @@
 
 package org.aksw.limes.core.measures.measure.string;
 
-import java.util.TreeSet;
-
 import org.aksw.limes.core.io.cache.Instance;
+
+import java.util.TreeSet;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)

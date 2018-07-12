@@ -1,13 +1,5 @@
 package org.aksw.limes.core.measures.measure.graphs;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
 import org.openrdf.model.URI;
 import org.openrdf.model.vocabulary.RDF;
 import slib.sglib.algo.graph.utils.GAction;
@@ -21,6 +13,11 @@ import slib.sglib.model.graph.G;
 import slib.sglib.model.graph.utils.Direction;
 import slib.sglib.model.impl.repo.URIFactoryMemory;
 import slib.sglib.model.repo.URIFactory;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.*;
 
 public class BenchmarkBuilder {
 

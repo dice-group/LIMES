@@ -1,10 +1,5 @@
 package org.aksw.limes.core.evaluation;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-import java.util.Set;
-
 import org.aksw.limes.core.datastrutures.EvaluationRun;
 import org.aksw.limes.core.datastrutures.TaskAlgorithm;
 import org.aksw.limes.core.datastrutures.TaskData;
@@ -14,6 +9,11 @@ import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.Assert.assertTrue;
 
 public class EvaluatorsTest {
     static Logger logger = LoggerFactory.getLogger(EvaluatorsTest.class);

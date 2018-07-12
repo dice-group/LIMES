@@ -5,16 +5,11 @@ import org.aksw.limes.core.controller.Controller;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
-import org.aksw.limes.core.io.config.writer.RDFConfigurationWriter;
-import org.aksw.limes.core.io.config.writer.XMLConfigurationWriter;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.junit.Test;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static org.junit.Assert.*;
 
 public class FullGraphSimilarityTest {
     @Test

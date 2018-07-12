@@ -1,6 +1,5 @@
 package org.aksw.limes.core;
 
-import java.io.File;
 import org.aksw.limes.core.controller.Controller;
 import org.junit.Test;
 

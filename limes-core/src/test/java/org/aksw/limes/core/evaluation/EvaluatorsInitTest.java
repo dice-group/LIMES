@@ -1,12 +1,12 @@
 package org.aksw.limes.core.evaluation;
 
-import static org.junit.Assert.assertTrue;
+import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
+import org.junit.Test;
 
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 public class EvaluatorsInitTest {
 

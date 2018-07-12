@@ -4,11 +4,11 @@
  */
 package org.aksw.limes.core.measures.measure.pointsets.benchmarking;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)

@@ -1,8 +1,5 @@
 package org.aksw.limes.core.io.config.writer;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.rdf.LIMES;
 import org.apache.jena.rdf.model.Model;
@@ -14,6 +11,9 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 /**

@@ -3,15 +3,11 @@ package org.aksw.limes.core.measures.measure.graphs;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.describe.Descriptor;
 import org.aksw.limes.core.io.describe.IResourceDescriptor;
-import org.apache.commons.io.FileUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
-import org.junit.Test;
 
-import java.io.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DescriptorTest {

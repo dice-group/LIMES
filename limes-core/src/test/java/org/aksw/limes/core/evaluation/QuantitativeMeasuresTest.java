@@ -3,11 +3,11 @@
  */
 package org.aksw.limes.core.evaluation;
 
-import static org.junit.Assert.assertTrue;
-
 import org.aksw.limes.core.evaluation.quantitativeMeasures.RunRecord;
 import org.aksw.limes.core.evaluation.quantitativeMeasures.RunsData;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author mofeed

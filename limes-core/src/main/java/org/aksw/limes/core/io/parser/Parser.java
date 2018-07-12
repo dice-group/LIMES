@@ -1,14 +1,14 @@
 package org.aksw.limes.core.io.parser;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.exceptions.UnsupportedOperator;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Parse Link Specifications

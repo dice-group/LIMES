@@ -3,17 +3,17 @@
  */
 package org.aksw.limes.core.io.serializer;
 
+import org.aksw.limes.core.datastrutures.EvaluationRun;
+import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Set;
-
-import org.aksw.limes.core.datastrutures.EvaluationRun;
-import org.aksw.limes.core.evaluation.evaluator.EvaluatorType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class serializes the results of evaluating a machine learning algorithm that uses a dataset against one or more of evaluation measures<br>

@@ -1,7 +1,5 @@
 package org.aksw.limes.core.io.describe;
 
-import org.aksw.jena_sparql_api.core.FluentQueryExecutionFactory;
-import org.aksw.jena_sparql_api.core.SparqlServiceReference;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.config.KBInfo;
@@ -9,7 +7,6 @@ import org.aksw.limes.core.io.query.CsvQueryModule;
 import org.aksw.limes.core.io.query.FileQueryModule;
 import org.aksw.limes.core.io.query.ModelRegistry;
 import org.apache.jena.rdf.model.*;
-import org.apache.jena.sparql.core.DatasetDescription;
 
 import java.util.*;
 import java.util.stream.Stream;

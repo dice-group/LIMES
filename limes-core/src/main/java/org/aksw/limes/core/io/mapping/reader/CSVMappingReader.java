@@ -1,14 +1,14 @@
 package org.aksw.limes.core.io.mapping.reader;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.util.DataCleaner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 /**
  * Read AMapping from CSV file by default the CSV file delimiter is the comma,

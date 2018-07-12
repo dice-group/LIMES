@@ -1,8 +1,8 @@
 package org.aksw.limes.core.io.config.writer;
 
-import java.io.IOException;
-
 import org.aksw.limes.core.io.config.Configuration;
+
+import java.io.IOException;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)

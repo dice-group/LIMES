@@ -2,12 +2,9 @@ package org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster;
 
 import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.util.RandomStringGenerator;
-import org.apache.jena.base.Sys;
 import org.junit.Test;
 
 import java.util.*;
-
-import static org.junit.Assert.*;
 
 public class AffinityPropagationTest {
 

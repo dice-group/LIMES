@@ -1,20 +1,9 @@
 package org.aksw.limes.core.ml.algorithm.eagle.core;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.AtomicPreprocessingCommand;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.ChainedPreprocessingCommand;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.MetricCommand;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.NestedBoolean;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.PointSetMeasure;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.PointSetPropertyPair;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.StringMeasure;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.StringPreprocessMeasure;
-import org.aksw.limes.core.ml.algorithm.eagle.genes.StringPropertyPair;
+import org.aksw.limes.core.ml.algorithm.eagle.genes.*;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.CommandGene;
 import org.jgap.gp.GPProblem;
@@ -24,6 +13,9 @@ import org.jgap.gp.impl.GPGenotype;
 import org.jgap.gp.terminal.Terminal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**

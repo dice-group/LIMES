@@ -4,14 +4,9 @@
  */
 package org.aksw.limes.core.measures.mapper.string;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.StringTokenizer;
-
+import algorithms.StoppUhr;
+import algorithms.Token;
+import algorithms.ppjoinplus.Record;
 import org.aksw.limes.core.exceptions.InvalidThresholdException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
@@ -26,9 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 
-import algorithms.StoppUhr;
-import algorithms.Token;
-import algorithms.ppjoinplus.Record;
+import java.util.*;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)

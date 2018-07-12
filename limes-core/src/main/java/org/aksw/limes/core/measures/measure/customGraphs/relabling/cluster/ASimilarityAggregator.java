@@ -3,10 +3,15 @@ package org.aksw.limes.core.measures.measure.customGraphs.relabling.cluster;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.aksw.limes.core.io.mapping.AMapping;
-import scala.runtime.StringFormat$;
 
 import java.util.*;
 
+/**
+ *
+ * A base class for similarity aggregators. It can combine multiple similarity matrices to one.
+ *
+ * @author Cedric Richter
+ */
 public abstract class ASimilarityAggregator {
 
 

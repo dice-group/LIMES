@@ -1,10 +1,10 @@
 package org.aksw.limes.core.datastrutures;
 
-import java.util.List;
-
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+
+import java.util.List;
 
 /**
  * This class combines a machine learning algorithm information to be executed  

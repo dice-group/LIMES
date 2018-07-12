@@ -1,12 +1,12 @@
 package org.aksw.limes.core.measures.mapper.topology;
 
-import static org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper.getPoints;
+import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
-import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
-import org.junit.Test;
+import static org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper.getPoints;
 
 public class RADONTest {
 

@@ -1,12 +1,12 @@
 package org.aksw.limes.core.ml.algorithm;
 
-import java.util.List;
-
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.NotYetImplementedException;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
+
+import java.util.List;
 
 public class ACIDS extends ACoreMLAlgorithm {
 

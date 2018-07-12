@@ -4,12 +4,12 @@
  */
 package org.aksw.limes.core.measures.mapper.topology;
 
-import java.util.Set;
-
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
+
+import java.util.Set;
 
 /**
  * Mapper that checks for the topological relation contains.

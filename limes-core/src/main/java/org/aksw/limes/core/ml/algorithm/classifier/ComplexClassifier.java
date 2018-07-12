@@ -1,9 +1,9 @@
 package org.aksw.limes.core.ml.algorithm.classifier;
 
+import org.aksw.limes.core.io.mapping.AMapping;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.aksw.limes.core.io.mapping.AMapping;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)

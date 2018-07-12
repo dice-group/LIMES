@@ -1,7 +1,5 @@
 package org.aksw.limes.core.execution.engine;
 
-import static org.junit.Assert.assertTrue;
-
 import org.aksw.limes.core.execution.engine.filter.LinearFilter;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
@@ -18,6 +16,8 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class SimpleExecutionEngineTest {
     public ACache source = new MemoryCache();

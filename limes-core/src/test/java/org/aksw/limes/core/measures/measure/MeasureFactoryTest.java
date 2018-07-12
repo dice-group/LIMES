@@ -1,7 +1,5 @@
 package org.aksw.limes.core.measures.measure;
 
-import static org.junit.Assert.assertTrue;
-
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.execution.planning.plan.Instruction;
 import org.aksw.limes.core.execution.planning.plan.Instruction.Command;
@@ -12,12 +10,7 @@ import org.aksw.limes.core.measures.measure.pointsets.GeoGreatEllipticMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.GeoOrthodromicMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverageMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechetMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.FastHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.IndexedHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.NaiveHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.ScanIndexedHausdorffMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.hausdorff.SymmetricHausdorffMeasure;
+import org.aksw.limes.core.measures.measure.pointsets.hausdorff.*;
 import org.aksw.limes.core.measures.measure.pointsets.link.NaiveLinkMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.max.NaiveMaxMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.mean.NaiveMeanMeasure;
@@ -27,43 +20,19 @@ import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjectionM
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
-import org.aksw.limes.core.measures.measure.string.CosineMeasure;
-import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
-import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
-import org.aksw.limes.core.measures.measure.string.JaroMeasure;
-import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
-import org.aksw.limes.core.measures.measure.string.MongeElkanMeasure;
-import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
-import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
-import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
-import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.AfterMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.BeforeMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.DuringMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.DuringReverseMeasure;
+import org.aksw.limes.core.measures.measure.string.*;
+import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.*;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.EqualsMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.FinishesMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsFinishedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsMetByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsOverlappedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.IsStartedByMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.MeetsMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.OverlapsMeasure;
-import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.StartsMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.ConcurrentMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.PredecessorMeasure;
 import org.aksw.limes.core.measures.measure.temporal.simpleTemporal.SuccessorMeasure;
-import org.aksw.limes.core.measures.measure.topology.ContainsMeasure;
-import org.aksw.limes.core.measures.measure.topology.CoveredbyMeasure;
-import org.aksw.limes.core.measures.measure.topology.CoversMeasure;
-import org.aksw.limes.core.measures.measure.topology.CrossesMeasure;
-import org.aksw.limes.core.measures.measure.topology.DisjointMeasure;
-import org.aksw.limes.core.measures.measure.topology.IntersectsMeasure;
-import org.aksw.limes.core.measures.measure.topology.TouchesMeasure;
-import org.aksw.limes.core.measures.measure.topology.WithinMeasure;
+import org.aksw.limes.core.measures.measure.topology.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class MeasureFactoryTest {
 

@@ -1,9 +1,5 @@
 package org.aksw.limes.core.measures.measure.string;
 
-import static org.apache.commons.lang3.math.NumberUtils.min;
-import static uk.ac.shef.wit.simmetrics.math.MathFuncs.min3;
-
-import org.aksw.limes.core.io.cache.Instance;
 import org.apache.commons.lang3.math.NumberUtils;
 
 public class SimpleEditDistanceMeasure extends AStringMeasure {

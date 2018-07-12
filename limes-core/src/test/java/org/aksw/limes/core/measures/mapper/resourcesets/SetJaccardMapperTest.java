@@ -1,12 +1,12 @@
 package org.aksw.limes.core.measures.mapper.resourcesets;
 
-import static org.junit.Assert.assertEquals;
-
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Kevin Dreßler
