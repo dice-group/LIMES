@@ -1,13 +1,12 @@
 package org.aksw.limes.core.evaluation.evaluationDataLoader;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+import org.aksw.limes.core.util.SafeReaderFromFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,10 +80,10 @@ public class PropMapper {
     
     public static PropertyMapping getPropertyMappingFromFile(String filePath){
         PropertyMapping pM = new PropertyMapping();
-        BufferedReader reader;
-        try {
-            reader = new BufferedReader(new FileReader(filePath));
-            String s = reader.readLine();
+		BufferedReader reader = SafeReaderFromFile.getReader(filePath);
+		String s;
+		try {
+			s = reader.readLine();
             String split[];
             while (s != null && s.length() > 0) {
                 split = s.split("\t");
@@ -98,14 +97,10 @@ public class PropMapper {
                     pM.addPointsetPropertyMatch(split[0], split[1]);
                 s = reader.readLine();
             }
-            reader.close();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return pM;
-    }
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pM;
+	}
 }

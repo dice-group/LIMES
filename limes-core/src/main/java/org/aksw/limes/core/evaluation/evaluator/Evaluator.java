@@ -38,6 +38,8 @@ import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
+import org.aksw.limes.core.ml.algorithm.fptld.FPTLD;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -212,7 +214,7 @@ public class Evaluator {
 
 			// train
 			MLResults model = trainModel(algorithm, parameter, trainingData, dataset.evalData.getConfigReader().read(),
-					trainSourceCache, trainTargetCache);
+					trainSourceCache, trainTargetCache, dataset.evalData.getPropertyMapping());
 			EvaluationRun er = new EvaluationRun(algorithm.getName(), dataset.dataName, eval
 					.evaluate(algorithm.predict(testSourceCache, testTargetCache, model), goldStandard, qlMeasures));
 			er.display();
@@ -221,9 +223,10 @@ public class Evaluator {
 		return runsList;
 	}
 
-	public Summary crossValidateWithTuningAndStatisticalTest(List<TaskAlgorithm> TaskAlgorithms,
-			Set<TaskData> datasets, Set<EvaluatorType> qlMeasures, int foldNumber) {
+	public Summary crossValidateWithTuningAndStatisticalTest(List<TaskAlgorithm> TaskAlgorithms, Set<TaskData> datasets,
+			Set<EvaluatorType> qlMeasures, int foldNumber) {
 		for (TaskData dataset : datasets) {
+			logger.info(" +++ " + dataset.dataName + " +++ ");
 			successesAndFailures = new HashMap<>();
 			// Adjust if you need negative examples
 			List<FoldData> folds = generateFolds(dataset.evalData, foldNumber, false);
@@ -252,7 +255,7 @@ public class Evaluator {
 						for (List<LearningParameter> lps : parameterGrid) {
 							MLResults tuneModel = trainModel(algorithm, lps, tuneFolds.get(0).map,
 									dataset.evalData.getConfigReader().read(), tuneFolds.get(0).sourceCache,
-									tuneFolds.get(0).targetCache);
+									tuneFolds.get(0).targetCache, dataset.evalData.getPropertyMapping());
 							double current = eval
 									.evaluate(
 											algorithm.predict(tuneFolds.get(1).sourceCache,
@@ -270,7 +273,8 @@ public class Evaluator {
 					long begin = System.currentTimeMillis();
 					// train
 					MLResults model = trainModel(algorithm, params, trainingData,
-							dataset.evalData.getConfigReader().read(), trainSourceCache, trainTargetCache);
+							dataset.evalData.getConfigReader().read(), trainSourceCache, trainTargetCache,
+							dataset.evalData.getPropertyMapping());
 					AMapping prediction = algorithm.predict(testSourceCache, testTargetCache, model);
 					double runTime = ((double) (System.currentTimeMillis() - begin)) / 1000.0;
 					algoMappings.put(tAlgo.getName(), prediction);
@@ -278,6 +282,7 @@ public class Evaluator {
 							dataset.dataName, eval.evaluate(prediction, goldStandard, qlMeasures), k,
 							model.getLinkSpecification());
 					er.setQuanititativeRecord(new RunRecord(k, runTime, 0.0, model.getLinkSpecification().size()));
+
 					er.display();
 					runsList.add(er);
 				}
@@ -292,7 +297,6 @@ public class Evaluator {
 				}
 			}
 		}
-		System.out.println(statisticalTestResults);
 		Summary summary = new Summary(runsList, foldNumber);
 		summary.setStatisticalTestResults(statisticalTestResults);
 		return summary;
@@ -359,8 +363,11 @@ public class Evaluator {
 	}
 
 	private MLResults trainModel(AMLAlgorithm algorithm, List<LearningParameter> params, AMapping trainingData,
-			Configuration config, ACache trainSourceCache, ACache trainTargetCache) {
+			Configuration config, ACache trainSourceCache, ACache trainTargetCache, PropertyMapping propMap) {
 		algorithm.init(params, trainSourceCache, trainTargetCache);
+		if (algorithm.getName().equals("FPTLD")) {
+			algorithm.setParameter(FPTLD.PARAMETER_PROPERTY_MAPPING, propMap);
+		}
 		algorithm.getMl().setConfiguration(config);
 		MLResults model = null;
 		try {

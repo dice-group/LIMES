@@ -306,7 +306,6 @@ public class Summary {
 		try {
 			d = BigDecimal.valueOf(d).round(new MathContext(PRECISION, RoundingMode.HALF_UP)).doubleValue();
 		} catch (NumberFormatException e) {
-			System.out.println(d);
 			return "NaN";
 		}
 		DecimalFormat twoDForm = new DecimalFormat("########0." + new String(new char[PRECISION]).replace("\0", "0"));
@@ -405,7 +404,6 @@ public class Summary {
 		String runDir = createDirectoriesIfNecessary(dir, "statistics");
 		for (String dataSet : statisticalTestResults.keySet()) {
 			AsciiTable at = statisticalResultsToTable(dataSet, false);
-			System.out.println(at.render());
 			String result = "";
 			for (AT_Row row : at.getRawContent()) {
 				if (row.getCells() != null) {
@@ -418,7 +416,6 @@ public class Summary {
 					result += "\n";
 				}
 			}
-			System.out.println(result);
 			try (PrintWriter out = new PrintWriter(runDir + File.separatorChar + dataSet)) {
 				out.print(result);
 			}

@@ -4,14 +4,13 @@
 package org.aksw.limes.core.evaluation.evaluationDataLoader;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.MemoryCache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.util.SafeReaderFromFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,39 +27,40 @@ public class Experiment {
     static String CSVSEPARATOR = ",";
 
     public static AMapping readOAEIMapping(String file) {
-        AMapping m = MappingFactory.createDefaultMapping();
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
-            //read properties;
-            String s = reader.readLine();
-            String e1 = "", e2;
-            while (s != null) {
-                //                String[] split = s.split(" ");
-                {
-                    if (s.contains("entity1")) {
-                        e1 = s.substring(s.indexOf("=") + 2, s.lastIndexOf(">") - 2);
-                    } else if (s.contains("entity2")) {
-                        e2 = s.substring(s.indexOf("=") + 2, s.lastIndexOf(">") - 2);
-                        m.add(e1, e2, 1.0);
-                    }
-                    s = reader.readLine();
-                }
-            }
-            reader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return m;
-    }
+		BufferedReader reader = SafeReaderFromFile.getReader(file);
+		AMapping m = MappingFactory.createDefaultMapping();
+		// read properties;
+		String s;
+		try {
+			s = reader.readLine();
+			String e1 = "", e2;
+			while (s != null) {
+				// String[] split = s.split(" ");
+				{
+					if (s.contains("entity1")) {
+						e1 = s.substring(s.indexOf("=") + 2, s.lastIndexOf(">") - 2);
+					} else if (s.contains("entity2")) {
+						e2 = s.substring(s.indexOf("=") + 2, s.lastIndexOf(">") - 2);
+						m.add(e1, e2, 1.0);
+					}
+					s = reader.readLine();
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return m;
+	}
 
 
     public static ACache readOAEIFile(String file, String token) {
         ACache c = new MemoryCache();
-        BufferedReader reader = null;
+		BufferedReader reader = SafeReaderFromFile.getReader(file);
+		// read properties;
+		String s;
         try {
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
-            //read properties;
-            String s = reader.readLine();
+			s = reader.readLine();
             while (s != null) {
                 String[] split = s.split(" ");
                 String value = split[2];
@@ -76,20 +76,13 @@ public class Experiment {
                 }
                 s = reader.readLine();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                reader.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        //        logger.info(c);
-        c.resetIterator();
-        return c;
-    }
-
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// logger.info(c);
+		c.resetIterator();
+		return c;
+	}
 
 }

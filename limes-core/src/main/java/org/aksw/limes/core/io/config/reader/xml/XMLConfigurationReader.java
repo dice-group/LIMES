@@ -199,14 +199,21 @@ public class XMLConfigurationReader extends AConfigurationReader {
      */
     @Override
     public Configuration read() {
+
         try {
             File f = new File(fileNameOrUri);
             InputStream input = new FileInputStream(f);
             return validateAndRead(input, fileNameOrUri);
         } catch (FileNotFoundException e) {
-            logger.warn(e.getMessage());
-            e.printStackTrace();
-            logger.warn("Some values were not set. Crossing my fingers and using defaults.");
+			try {
+				InputStream input = XMLConfigurationReader.class
+						.getResourceAsStream(fileNameOrUri.replace("src/main/resources", ""));
+				return validateAndRead(input, fileNameOrUri);
+			} catch (Exception e1) {
+				logger.warn(e.getMessage());
+				e.printStackTrace();
+				logger.warn("Some values were not set. Crossing my fingers and using defaults.");
+			}
         }
         return configuration;
     }

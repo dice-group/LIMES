@@ -1,11 +1,12 @@
 package org.aksw.limes.core.io.mapping.reader;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.IOException;
 
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.util.DataCleaner;
+import org.aksw.limes.core.util.SafeReaderFromFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
@@ -51,33 +52,38 @@ public class CSVMappingReader extends AMappingReader {
      */
     @Override
     public AMapping read() {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String line = reader.readLine();
-            reader.close();
-            String col[];
-            if (line != null) {
-                // split first line
-                col = line.split(delimiter);
-                if (col.length == 2) {
-                    return readTwoColumnFile();
-                } else if (col.length == 3) {
-                    try {
-                        Double.parseDouble(col[2]);
-                        return readThreeColumnFileWithSimilarity();
-                    } catch (NumberFormatException e) {
-                        return readThreeColumnFile();
-                    }
-                } else {
-                    logger.error(MarkerFactory.getMarker("FATAL"), "Format not supported");
-                    throw new RuntimeException();
+		BufferedReader reader = SafeReaderFromFile.getReader(file);
+		try {
+			return fillMapping(reader);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private AMapping fillMapping(BufferedReader reader) throws IOException {
+		String line = reader.readLine();
+		reader.close();
+		String col[];
+		if (line != null) {
+			// split first line
+			col = line.split(delimiter);
+			if (col.length == 2) {
+				return readTwoColumnFile();
+			} else if (col.length == 3) {
+				try {
+					Double.parseDouble(col[2]);
+					return readThreeColumnFileWithSimilarity();
+				} catch (NumberFormatException e) {
+					return readThreeColumnFile();
                 }
+			} else {
+				logger.error(MarkerFactory.getMarker("FATAL"), "Format not supported");
+				throw new RuntimeException();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return null;
-
     }
 
     /**
@@ -89,7 +95,7 @@ public class CSVMappingReader extends AMappingReader {
     public AMapping readTwoColumnFile() {
         AMapping m = MappingFactory.createDefaultMapping();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+			BufferedReader reader = SafeReaderFromFile.getReader(file);
             String line = reader.readLine();
             String split[];
             while (line != null) {
@@ -123,7 +129,7 @@ public class CSVMappingReader extends AMappingReader {
     public AMapping readThreeColumnFileWithSimilarity() {
         AMapping m = MappingFactory.createDefaultMapping();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+			BufferedReader reader = SafeReaderFromFile.getReader(file);
             String s = reader.readLine();
             String split[];
             while (s != null) {
@@ -149,7 +155,7 @@ public class CSVMappingReader extends AMappingReader {
     public AMapping readThreeColumnFile() {
         AMapping m = MappingFactory.createDefaultMapping();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+			BufferedReader reader = SafeReaderFromFile.getReader(file);
             String s = reader.readLine();
             String split[];
             while (s != null) {
