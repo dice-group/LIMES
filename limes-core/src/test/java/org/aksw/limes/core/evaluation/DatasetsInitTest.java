@@ -45,10 +45,10 @@ public class DatasetsInitTest {
         initializeDataSets(null);
     }
 
-    public Set<TaskData> initializeDataSets(String[] datasetsList) {
+	public List<TaskData> initializeDataSets(String[] datasetsList) {
         if(datasetsList==null)
             datasetsList=defultDatasetsList;
-        Set<TaskData> tasks =new TreeSet<TaskData>();
+		List<TaskData> tasks = new ArrayList<TaskData>();
         TaskData task = new TaskData();
         try {
             for (String ds : datasetsList) {

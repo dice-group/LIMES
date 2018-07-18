@@ -17,14 +17,12 @@
  */
 package org.aksw.limes.core.evaluation.evaluator;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.aksw.limes.core.datastrutures.EvaluationRun;
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.TaskAlgorithm;
 import org.aksw.limes.core.datastrutures.TaskData;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
 import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.McNemarsTest;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.QualitativeMeasuresEvaluator;
@@ -38,9 +36,7 @@ import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.measures.measure.MeasureType;
 import org.aksw.limes.core.ml.algorithm.*;
-import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +48,7 @@ import java.util.*;
  *
  * @author Mofeed Hassan (mounir@informatik.uni-leipzig.de)
  * @author Daniel Obraczka (obraczka@studserv.uni-leipzig.de)
+ * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
  * @version 1.0
  * @since 1.0
  */
@@ -79,35 +76,35 @@ public class Evaluator {
     // --- --------
     // ---------------------------------------------------------------------------------------------------------
 
-    /**
-     * @param TaskAlgorithms
-     *            the set of algorithms used to generate the predicted mappings
-     * @param datasets
-     *            the set of the datasets to apply the algorithms on them. The
-     *            should include source Cache, target Cache, goldstandard and
-     *            predicted mapping
-     * @param QlMeasures
-     *            the set of qualitative measures
-     * @param QnMeasures
-     *            the set of quantitative measures
-     * @return List - contains list of multiple runs evaluation results
-     *         corresponding to the algorithms, its implementation and used dataset
-     */
-    public List<EvaluationRun> evaluate(List<TaskAlgorithm> TaskAlgorithms, Set<TaskData> datasets,
-                                        Set<EvaluatorType> QlMeasures, Set<IQuantitativeMeasure> QnMeasures) {
-        AMapping predictions = null;
-        Map<EvaluatorType, Double> evaluationResults = null;
-        try {
-            for (TaskAlgorithm tAlgorithm : TaskAlgorithms) { // iterate over algorithms tasks(type,algorithm,parameter)
-                logger.info("Running algorihm: " + tAlgorithm.getMlAlgorithm().getName());
-                for (TaskData dataset : datasets) { // iterate over
-                    // datasets(name,source,target,mapping,training,pseudofm)
-                    logger.info("Used dataset: " + dataset.dataName);
-                    // initialize the algorithm with source and target data, passing its parameters
-                    // too ( if it is null in case of WOMBAT it will use its defaults)
-                    tAlgorithm.getMlAlgorithm().init(null, dataset.source, dataset.target);
+	/**
+	 * @param TaskAlgorithms
+	 *            the set of algorithms used to generate the predicted mappings
+	 * @param datasets
+	 *            the set of the datasets to apply the algorithms on them. The
+	 *            should include source Cache, target Cache, goldstandard and
+	 *            predicted mapping
+	 * @param QlMeasures
+	 *            the set of qualitative measures
+	 * @param QnMeasures
+	 *            the set of quantitative measures
+	 * @return List - contains list of multiple runs evaluation results
+	 *         corresponding to the algorithms, its implementation and used dataset
+	 */
+	public List<EvaluationRun> evaluate(List<TaskAlgorithm> TaskAlgorithms, List<TaskData> datasets,
+			Set<EvaluatorType> QlMeasures, Set<IQuantitativeMeasure> QnMeasures) {
+		AMapping predictions = null;
+		Map<EvaluatorType, Double> evaluationResults = null;
+		try {
+			for (TaskAlgorithm tAlgorithm : TaskAlgorithms) { // iterate over algorithms tasks(type,algorithm,parameter)
+				logger.info("Running algorihm: " + tAlgorithm.getMlAlgorithm().getName());
+				for (TaskData dataset : datasets) { // iterate over
+													// datasets(name,source,target,mapping,training,pseudofm)
+					logger.info("Used dataset: " + dataset.dataName);
+					// initialize the algorithm with source and target data, passing its parameters
+					// too ( if it is null in case of WOMBAT it will use its defaults)
+					tAlgorithm.getMlAlgorithm().init(null, dataset.source, dataset.target);
 
-                    MLResults mlModel = null; // model resulting from the learning process
+					MLResults mlModel = null; // model resulting from the learning process
 
                     if (tAlgorithm.getMlType().equals(MLImplementationType.SUPERVISED_BATCH)) {
                         logger.info("Implementation type: " + MLImplementationType.SUPERVISED_BATCH);
@@ -147,156 +144,148 @@ public class Evaluator {
 
     }
 
-    /**
-     * @param algorithm
-     *            the algorithm used to generate the predicted mappings
-     * @param datasets
-     *            the set of the datasets to apply the algorithms on them. The
-     *            should include source Cache, target Cache, goldstandard and
-     *            predicted mapping
-     * @param parameter
-     *            the parameters of the algorithm (will be set to default if this is
-     *            null)
-     * @param foldNumber
-     *            the number of subsamples to divide the data (k)
-     * @param qlMeasures
-     *            the set of qualitative measures
-     * @param qnMeasures
-     *            the set of quantitative measures
-     * @return List - contains list of multiple runs evaluation results
-     *         corresponding to the algorithms, its implementation and used dataset
-     *
-     * @author Tommaso Soru (tsoru@informatik.uni-leipzig.de)
-     * @version 2016-02-26
-     */
-    /* Table<String, String, Map<EvaluatorType, Double>> */
-    public List<EvaluationRun> crossValidate(AMLAlgorithm algorithm, List<LearningParameter> parameter,
-                                             Set<TaskData> datasets, int foldNumber, Set<EvaluatorType> qlMeasures,
-                                             Set<IQuantitativeMeasure> qnMeasures) {
+	/**
+	 * @param algorithms
+	 *            the algorithm used to generate the predicted mappings
+	 * @param datasets
+	 *            the set of the datasets to apply the algorithms on them. The
+	 *            should include source Cache, target Cache, goldstandard and
+	 *            predicted mapping
+	 * @param foldNumber
+	 *            the number of subsamples to divide the data (k)
+	 * @param qlMeasures
+	 *            the set of qualitative measures
+	 * @return List - contains list of multiple runs evaluation results
+	 *         corresponding to the algorithms, its implementation and used dataset
+	 */
+	public List<EvaluationRun> crossValidate(List<TaskAlgorithm> algorithms, List<TaskData> datasets, int foldNumber,
+			Set<EvaluatorType> qlMeasures) {
+		for (TaskData dataset : datasets) {
+			List<FoldData> folds = generateFolds(dataset.evalData, foldNumber, false);
+			for (int k = 0; k < foldNumber; k++) {
+				Map<String, AMapping> algoMappings = new HashMap<>();
+				FoldData testData = folds.get(k);
+				FoldData trainData = getTrainingFold(folds, k, foldNumber);
+				trainData = fixCachesIfNecessary(trainData, dataset);
+				AMapping trainingData = trainData.map;
+				ACache trainSourceCache = trainData.sourceCache;
+				ACache trainTargetCache = trainData.targetCache;
+				ACache testSourceCache = testData.sourceCache;
+				ACache testTargetCache = testData.targetCache;
+				GoldStandard goldStandard = new GoldStandard(testData.map, testSourceCache.getAllUris(),
+						testTargetCache.getAllUris());
+				for (TaskAlgorithm tAlgo : algorithms) {
+					AMLAlgorithm algorithm = tAlgo.getMlAlgorithm();
+					long begin = System.currentTimeMillis();
+					// train
+					MLResults model = trainModel(algorithm, tAlgo.getMlParameter(), trainingData,
+							dataset.evalData.getConfigReader().read(), trainSourceCache, trainTargetCache);
+					AMapping prediction = algorithm.predict(testSourceCache, testTargetCache, model);
+					double runTime = ((double) (System.currentTimeMillis() - begin)) / 1000.0;
+					algoMappings.put(tAlgo.getName(), prediction);
+					EvaluationRun er = new EvaluationRun(tAlgo.getName(), tAlgo.getMlType().toString(),
+							dataset.dataName, eval.evaluate(prediction, goldStandard, qlMeasures), k,
+							model.getLinkSpecification());
+					er.setQuanititativeRecord(new RunRecord(k, runTime, 0.0, model.getLinkSpecification().size()));
+					er.display();
+					runsList.add(er);
+				}
+			}
+		}
+		return runsList;
+	}
 
-        // select a dataset-pair to evaluate each ML algorithm on
-        for (TaskData dataset : datasets) {
-            // Adjust if you dont need negative examples
-            List<FoldData> folds = generateFolds(dataset.evalData, foldNumber, true);
-
-            FoldData trainData = new FoldData();
-            FoldData testData = folds.get(foldNumber - 1);
-            // perform union on test folds
-            for (int i = 0; i < foldNumber; i++) {
-                if (i != 9) {
-                    trainData.map = MappingOperations.union(trainData.map, folds.get(i).map);
-                    trainData.sourceCache = cacheUnion(trainData.sourceCache, folds.get(i).sourceCache);
-                    trainData.targetCache = cacheUnion(trainData.targetCache, folds.get(i).targetCache);
-                }
-            }
-            // fix caches if necessary
-            for (String s : trainData.map.getMap().keySet()) {
-                for (String t : trainData.map.getMap().get(s).keySet()) {
-                    if (!trainData.targetCache.containsUri(t)) {
-                        // logger.info("target: " + t);
-                        trainData.targetCache.addInstance(dataset.target.getInstance(t));
-                    }
-                }
-                if (!trainData.sourceCache.containsUri(s)) {
-                    // logger.info("source: " + s);
-                    trainData.sourceCache.addInstance(dataset.source.getInstance(s));
-                }
-            }
-            AMapping trainingData = trainData.map;
-            ACache trainSourceCache = trainData.sourceCache;
-            ACache trainTargetCache = trainData.targetCache;
-            ACache testSourceCache = testData.sourceCache;
-            ACache testTargetCache = testData.targetCache;
-            GoldStandard goldStandard = new GoldStandard(testData.map, testSourceCache.getAllUris(),
-                    testTargetCache.getAllUris());
-
-            // train
-            MLResults model = trainModel(algorithm, parameter, trainingData, dataset.evalData.getConfigReader().read(),
-                    trainSourceCache, trainTargetCache);
-            EvaluationRun er = new EvaluationRun(algorithm.getName(), dataset.dataName, eval
-                    .evaluate(algorithm.predict(testSourceCache, testTargetCache, model), goldStandard, qlMeasures));
-            er.display();
-            runsList.add(er);
-        }
-        return runsList;
-    }
-
-    public Summary crossValidateWithTuningAndStatisticalTest(List<TaskAlgorithm> TaskAlgorithms,
-                                                             Set<TaskData> datasets, Set<EvaluatorType> qlMeasures, int foldNumber) {
-        for (TaskData dataset : datasets) {
-            successesAndFailures = new HashMap<>();
-            // Adjust if you need negative examples
-            List<FoldData> folds = generateFolds(dataset.evalData, foldNumber, false);
-            for (int k = 0; k < foldNumber; k++) {
-                Map<String, AMapping> algoMappings = new HashMap<>();
-                FoldData testData = folds.get(k);
-                FoldData trainData = getTrainingFold(folds, k, foldNumber);
-                trainData = fixCachesIfNecessary(trainData, dataset);
-                AMapping trainingData = trainData.map;
-                ACache trainSourceCache = trainData.sourceCache;
-                ACache trainTargetCache = trainData.targetCache;
-                ACache testSourceCache = testData.sourceCache;
-                ACache testTargetCache = testData.targetCache;
-                GoldStandard goldStandard = new GoldStandard(testData.map, testSourceCache.getAllUris(),
-                        testTargetCache.getAllUris());
-                List<FoldData> tuneFolds = createTuneFolds(trainData, 5d);
-                GoldStandard tuneGold = new GoldStandard(tuneFolds.get(1).map,
-                        tuneFolds.get(1).sourceCache.getAllUris(), tuneFolds.get(1).targetCache.getAllUris());
-                for (TaskAlgorithm tAlgo : TaskAlgorithms) {
-                    AMLAlgorithm algorithm = tAlgo.getMlAlgorithm();
-                    // tune parameters
-                    List<LearningParameter> params = null;
-                    if (tAlgo.getMlParameterValues() != null) {
-                        Set<List<LearningParameter>> parameterGrid = createParameterGrid(tAlgo.getMlParameterValues());
-                        double bestFM = 0.0;
-                        for (List<LearningParameter> lps : parameterGrid) {
-                            MLResults tuneModel = trainModel(algorithm, lps, tuneFolds.get(0).map,
-                                    dataset.evalData.getConfigReader().read(), tuneFolds.get(0).sourceCache,
-                                    tuneFolds.get(0).targetCache);
-                            double current = eval
-                                    .evaluate(
-                                            algorithm.predict(tuneFolds.get(1).sourceCache,
-                                                    tuneFolds.get(1).targetCache, tuneModel),
-                                            tuneGold, ImmutableSet.of(EvaluatorType.F_MEASURE))
-                                    .get(EvaluatorType.F_MEASURE);
-                            if (current > bestFM) {
-                                bestFM = current;
-                                params = lps;
-                            }
-                        }
-                    } else {
-                        params = tAlgo.getMlParameter();
-                    }
-                    long begin = System.currentTimeMillis();
-                    // train
-                    MLResults model = trainModel(algorithm, params, trainingData,
-                            dataset.evalData.getConfigReader().read(), trainSourceCache, trainTargetCache);
-                    AMapping prediction = algorithm.predict(testSourceCache, testTargetCache, model);
-                    double runTime = ((double) (System.currentTimeMillis() - begin)) / 1000.0;
-                    algoMappings.put(tAlgo.getName(), prediction);
-                    EvaluationRun er = new EvaluationRun(tAlgo.getName(), tAlgo.getMlType().toString(),
-                            dataset.dataName, eval.evaluate(prediction, goldStandard, qlMeasures), k,
-                            model.getLinkSpecification());
-                    er.setQuanititativeRecord(new RunRecord(k, runTime, 0.0, model.getLinkSpecification().size()));
-                    er.display();
-                    runsList.add(er);
-                }
-                // Calculate successes and failures for this fold
-                updateSuccessesAndFailures(algoMappings, testData);
-            }
-            // Perform test for this dataset
-            for (String a : successesAndFailures.keySet()) {
-                for (String b : successesAndFailures.get(a).keySet()) {
-                    double pValue = McNemarsTest.calculate(successesAndFailures.get(a).get(b));
-                    addToMapMapMap(statisticalTestResults, dataset.dataName, a, b, pValue);
-                }
-            }
-        }
-        System.out.println(statisticalTestResults);
-        Summary summary = new Summary(runsList, foldNumber);
-        summary.setStatisticalTestResults(statisticalTestResults);
-        return summary;
-    }
+	/**
+	 * Performs crossvalidation, enables the tuning of hyperparameters via grid
+	 * search on part of the training fold, performs pairwise McNemars Test on
+	 * successes and failures between algorithms, i.e. the times algorithm A got a
+	 * link right and algorithm B got it wrong and vice versa <br>
+	 * <br>
+	 * This is an implementation of the recommended approach of
+	 * <a href="http://web.cs.iastate.edu/~honavar/salzberg.pdf">this paper</a>
+	 *
+	 * @param TaskAlgorithms
+	 *            to use here
+	 * @param dataset
+	 *            dataset on which the crossvalidation should be performed
+	 * @param qlMeasures
+	 *            measures that will be used
+	 * @param foldNumber
+	 *            number of folds that the crossvalidation should use
+	 * @return Summary containing results with statistical evaluation
+	 *
+	 */
+	public Summary crossValidateWithTuningAndMcNemarsTest(List<TaskAlgorithm> TaskAlgorithms, TaskData dataset,
+			Set<EvaluatorType> qlMeasures, int foldNumber) {
+		successesAndFailures = new HashMap<>();
+		// Adjust if you need negative examples
+		List<FoldData> folds = generateFolds(dataset.evalData, foldNumber, false);
+		for (int k = 0; k < foldNumber; k++) {
+			Map<String, AMapping> algoMappings = new HashMap<>();
+			FoldData testData = folds.get(k);
+			FoldData trainData = getTrainingFold(folds, k, foldNumber);
+			trainData = fixCachesIfNecessary(trainData, dataset);
+			AMapping trainingData = trainData.map;
+			ACache trainSourceCache = trainData.sourceCache;
+			ACache trainTargetCache = trainData.targetCache;
+			ACache testSourceCache = testData.sourceCache;
+			ACache testTargetCache = testData.targetCache;
+			GoldStandard goldStandard = new GoldStandard(testData.map, testSourceCache.getAllUris(),
+					testTargetCache.getAllUris());
+			List<FoldData> tuneFolds = createTuneFolds(trainData, 5d);
+			GoldStandard tuneGold = new GoldStandard(tuneFolds.get(1).map, tuneFolds.get(1).sourceCache.getAllUris(),
+					tuneFolds.get(1).targetCache.getAllUris());
+			for (TaskAlgorithm tAlgo : TaskAlgorithms) {
+				AMLAlgorithm algorithm = tAlgo.getMlAlgorithm();
+				// tune parameters
+				List<LearningParameter> params = null;
+				if (tAlgo.getMlParameterValues() != null) {
+					Set<List<LearningParameter>> parameterGrid = createParameterGrid(tAlgo.getMlParameterValues());
+					double bestFM = 0.0;
+					for (List<LearningParameter> lps : parameterGrid) {
+						MLResults tuneModel = trainModel(algorithm, lps, tuneFolds.get(0).map,
+								dataset.evalData.getConfigReader().read(), tuneFolds.get(0).sourceCache,
+								tuneFolds.get(0).targetCache);
+						double current = eval
+								.evaluate(algorithm.predict(tuneFolds.get(1).sourceCache, tuneFolds.get(1).targetCache,
+										tuneModel), tuneGold, ImmutableSet.of(EvaluatorType.F_MEASURE))
+								.get(EvaluatorType.F_MEASURE);
+						if (current > bestFM) {
+							bestFM = current;
+							params = lps;
+						}
+					}
+				} else {
+					params = tAlgo.getMlParameter();
+				}
+				long begin = System.currentTimeMillis();
+				// train
+				MLResults model = trainModel(algorithm, params, trainingData, dataset.evalData.getConfigReader().read(),
+						trainSourceCache, trainTargetCache);
+				AMapping prediction = algorithm.predict(testSourceCache, testTargetCache, model);
+				double runTime = ((double) (System.currentTimeMillis() - begin)) / 1000.0;
+				algoMappings.put(tAlgo.getName(), prediction);
+				EvaluationRun er = new EvaluationRun(tAlgo.getName(), tAlgo.getMlType().toString(), dataset.dataName,
+						eval.evaluate(prediction, goldStandard, qlMeasures), k, model.getLinkSpecification());
+				er.setQuanititativeRecord(new RunRecord(k, runTime, 0.0, model.getLinkSpecification().size()));
+				er.display();
+				runsList.add(er);
+			}
+			// Calculate successes and failures for this fold
+			updateSuccessesAndFailures(algoMappings, testData);
+		}
+		// Perform test for this dataset
+		for (String a : successesAndFailures.keySet()) {
+			for (String b : successesAndFailures.get(a).keySet()) {
+				double pValue = McNemarsTest.calculate(successesAndFailures.get(a).get(b));
+				addToMapMapMap(statisticalTestResults, dataset.dataName, a, b, pValue);
+			}
+		}
+		System.out.println(statisticalTestResults);
+		Summary summary = new Summary(runsList, foldNumber);
+		summary.setStatisticalTestResults(statisticalTestResults);
+		return summary;
+	}
 
     private void updateSuccessesAndFailures(Map<String, AMapping> algoMappings, FoldData testData) {
         for (String a : algoMappings.keySet()) {
@@ -403,117 +392,18 @@ public class Evaluator {
         return Sets.cartesianProduct(grid);
     }
 
-    public static void main(String[] args) throws UnsupportedMLImplementationException {
-        TaskAlgorithm w = new TaskAlgorithm(MLImplementationType.SUPERVISED_BATCH,
-                MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class, MLImplementationType.SUPERVISED_BATCH), null);
-        TaskAlgorithm w2 = new TaskAlgorithm(MLImplementationType.SUPERVISED_BATCH,
-                MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class, MLImplementationType.SUPERVISED_BATCH), null);
-        w.setMlParameterValues(wombatDefaultParams(0.95, 0.99, 0.9, 0.95));
-        w2.setMlParameterValues(wombatDefaultParams(0.35, 0.4, 0.85, 0.9));
-        w.setName("WOMBAT HIGH");
-        w2.setName("WOMBAT LOW");
-        EvaluationData eval = DataSetChooser.getData("restaurants");
-        TaskData td = new TaskData(new GoldStandard(eval.getReferenceMapping(), eval.getSourceCache().getAllUris(),
-                eval.getTargetCache().getAllUris()), eval.getSourceCache(), eval.getTargetCache(), eval);
-        td.dataName = eval.getName();
-        List<TaskAlgorithm> algos = new ArrayList<>();
-        Set<TaskData> data = new HashSet<>();
-        Set<EvaluatorType> measures = new HashSet<>();
-        algos.add(w);
-        algos.add(w2);
-        data.add(td);
-        measures.add(EvaluatorType.F_MEASURE);
-        System.out.println(new Evaluator().crossValidateWithTuningAndStatisticalTest(algos, data, measures, 3));
-    }
-
-    // DELETE ME
-    private static Map<LearningParameter, List<Object>> wombatDefaultParams(double... p) {
-        // default parameters
-        long maxRefineTreeSize = 2000;
-        int maxIterationNumber = 3;
-        int maxIterationTimeInMin = 20;
-        int maxExecutionTimeInMin = 600;
-        double maxFitnessThreshold = 1;
-        double childrenPenaltyWeight = 1;
-        double complexityPenaltyWeight = 1;
-        boolean saveMapping = true;
-        double minPropertyCoverage = 0.4;
-        double propertyLearningRate = 0.9;
-        double overallPenaltyWeight = 0.5d;
-        boolean verbose = false;
-        Set<String> simMeasures = new HashSet<>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams"));
-
-        LearningParameter lp1 = new LearningParameter(AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize,
-                Long.class, 10d, Long.MAX_VALUE, 10d, AWombat.PARAMETER_MAX_REFINEMENT_TREE_SIZE);
-        LearningParameter lp2 = new LearningParameter(AWombat.PARAMETER_MAX_ITERATIONS_NUMBER, maxIterationNumber,
-                Integer.class, 1d, Integer.MAX_VALUE, 10d, AWombat.PARAMETER_MAX_ITERATIONS_NUMBER);
-        LearningParameter lp3 = new LearningParameter(AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES,
-                maxIterationTimeInMin, Integer.class, 1d, Integer.MAX_VALUE, 1,
-                AWombat.PARAMETER_MAX_ITERATION_TIME_IN_MINUTES);
-        LearningParameter lp4 = new LearningParameter(AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES,
-                maxExecutionTimeInMin, Integer.class, 1d, Integer.MAX_VALUE, 1,
-                AWombat.PARAMETER_EXECUTION_TIME_IN_MINUTES);
-        LearningParameter lp5 = new LearningParameter(AWombat.PARAMETER_MAX_FITNESS_THRESHOLD, maxFitnessThreshold,
-                Double.class, 0d, 1d, 0.01d, AWombat.PARAMETER_MAX_FITNESS_THRESHOLD);
-        LearningParameter lpMinPropC = new LearningParameter(AWombat.PARAMETER_MIN_PROPERTY_COVERAGE,
-                minPropertyCoverage, Double.class, 0d, 1d, 0.01d, AWombat.PARAMETER_MIN_PROPERTY_COVERAGE);
-        LearningParameter lpMinPropLR = new LearningParameter(AWombat.PARAMETER_PROPERTY_LEARNING_RATE,
-                propertyLearningRate, Double.class, 0d, 1d, 0.01d, AWombat.PARAMETER_PROPERTY_LEARNING_RATE);
-        LearningParameter lp8 = new LearningParameter(AWombat.PARAMETER_OVERALL_PENALTY_WEIGHT, overallPenaltyWeight,
-                Double.class, 0d, 1d, 0.01d, AWombat.PARAMETER_OVERALL_PENALTY_WEIGHT);
-        LearningParameter lp9 = new LearningParameter(AWombat.PARAMETER_CHILDREN_PENALTY_WEIGHT, childrenPenaltyWeight,
-                Double.class, 0d, 1d, 0.01d, AWombat.PARAMETER_CHILDREN_PENALTY_WEIGHT);
-        LearningParameter lp10 = new LearningParameter(AWombat.PARAMETER_COMPLEXITY_PENALTY_WEIGHT,
-                complexityPenaltyWeight, Double.class, 0d, 1d, 0.01d, AWombat.PARAMETER_COMPLEXITY_PENALTY_WEIGHT);
-        LearningParameter lp11 = new LearningParameter(AWombat.PARAMETER_VERBOSE, verbose, Boolean.class, 0, 1, 0,
-                AWombat.PARAMETER_VERBOSE);
-        LearningParameter lp12 = new LearningParameter(AWombat.PARAMETER_ATOMIC_MEASURES, simMeasures,
-                MeasureType.class, 0, 0, 0, AWombat.PARAMETER_ATOMIC_MEASURES);
-        LearningParameter lp13 = new LearningParameter(AWombat.PARAMETER_SAVE_MAPPING, saveMapping, Boolean.class, 0, 1,
-                0, AWombat.PARAMETER_SAVE_MAPPING);
-
-        List<Object> lp1Values = ImmutableList.of(maxRefineTreeSize);
-        List<Object> lp2Values = ImmutableList.of(maxIterationNumber);
-        List<Object> lp3Values = ImmutableList.of(maxIterationTimeInMin);
-        List<Object> lp4Values = ImmutableList.of(maxExecutionTimeInMin);
-        List<Object> lp5Values = ImmutableList.of(maxFitnessThreshold);
-        List<Object> lpMinPropCValues = ImmutableList.of(p[0], p[1]);
-        List<Object> lpMinPropLRValues = ImmutableList.of(p[2], p[3]);
-        List<Object> lp8Values = ImmutableList.of(overallPenaltyWeight);
-        List<Object> lp9Values = ImmutableList.of(childrenPenaltyWeight);
-        List<Object> lp10Values = ImmutableList.of(complexityPenaltyWeight);
-        List<Object> lp11Values = ImmutableList.of(verbose);
-        List<Object> lp12Values = ImmutableList.of(simMeasures);
-        List<Object> lp13Values = ImmutableList.of(saveMapping);
-        Map<LearningParameter, List<Object>> params = new HashMap<>();
-        params.put(lp1, lp1Values);
-        params.put(lp2, lp2Values);
-        params.put(lp3, lp3Values);
-        params.put(lp4, lp4Values);
-        params.put(lp5, lp5Values);
-        params.put(lpMinPropC, lpMinPropCValues);
-        params.put(lpMinPropLR, lpMinPropLRValues);
-        params.put(lp8, lp8Values);
-        params.put(lp9, lp9Values);
-        params.put(lp10, lp10Values);
-        params.put(lp11, lp11Values);
-        params.put(lp12, lp12Values);
-        params.put(lp13, lp13Values);
-        return params;
-    }
-
-    private FoldData getTrainingFold(List<FoldData> folds, int k, int foldNumber) {
-        FoldData trainData = new FoldData();
-        // perform union on test folds
-        for (int i = 0; i < foldNumber; i++) {
-            if (i != k) {
-                trainData.map = MappingOperations.union(trainData.map, folds.get(i).map);
-                trainData.sourceCache = cacheUnion(trainData.sourceCache, folds.get(i).sourceCache);
-                trainData.targetCache = cacheUnion(trainData.targetCache, folds.get(i).targetCache);
-            }
-        }
-        return trainData;
-    }
+	private FoldData getTrainingFold(List<FoldData> folds, int k, int foldNumber) {
+		FoldData trainData = new FoldData();
+		// perform union on test folds
+		for (int i = 0; i < foldNumber; i++) {
+			if (i != k) {
+				trainData.map = MappingOperations.union(trainData.map, folds.get(i).map);
+				trainData.sourceCache = cacheUnion(trainData.sourceCache, folds.get(i).sourceCache);
+				trainData.targetCache = cacheUnion(trainData.targetCache, folds.get(i).targetCache);
+			}
+		}
+		return trainData;
+	}
 
     private FoldData fixCachesIfNecessary(FoldData trainData, TaskData dataset) {
         // fix caches if necessary
