@@ -45,7 +45,6 @@ public class WombatSimple extends AWombat {
 	private LogicOperator[] availableOperators = new LogicOperator[] { LogicOperator.AND, LogicOperator.OR,
 			LogicOperator.MINUS };
 
-
 	/**
 	 * WombatSimple constructor.
 	 */
@@ -314,6 +313,33 @@ public class WombatSimple extends AWombat {
 						metricExpr = InternalNode.opToExpMapping.get(op) + "_" + result.getSecond() + "("
 								+ node.getValue().getMetricExpression()
 								+ "," + c.getMetricExpression() + ")|0";
+
+						// Commented out until good way to optimize p values of yager are found
+						// } else if (op.toString().startsWith("YAGERDIFF")) {
+						// Pair<AMapping, Double> result = YagerSetOperations.INSTANCE
+						// .difference(node.getValue().getMapping(), c.getMapping(), trainingData);
+						// map = result.getFirst();
+						// metricExpr = InternalNode.opToExpMapping.get(op) + "_" + result.getSecond() +
+						// "("
+						// + node.getValue().getMetricExpression() + "," + c.getMetricExpression() +
+						// ")|0";
+						// } else if (op.toString().startsWith("YAGERTCO")) {
+						// Pair<AMapping, Double> result =
+						// YagerSetOperations.INSTANCE.union(node.getValue().getMapping(),
+						// c.getMapping(), trainingData);
+						// map = result.getFirst();
+						// metricExpr = InternalNode.opToExpMapping.get(op) + "_" + result.getSecond() +
+						// "("
+						// + node.getValue().getMetricExpression() + "," + c.getMetricExpression() +
+						// ")|0";
+						// } else if (op.toString().startsWith("YAGERT")) {
+						// Pair<AMapping, Double> result = YagerSetOperations.INSTANCE
+						// .intersection(node.getValue().getMapping(), c.getMapping(), trainingData);
+						// map = result.getFirst();
+						// metricExpr = InternalNode.opToExpMapping.get(op) + "_" + result.getSecond() +
+						// "("
+						// + node.getValue().getMetricExpression() + "," + c.getMetricExpression() +
+						// ")|0";
 					} else {
 						map = MappingOperations.performOperation(node.getValue().getMapping(), c.getMapping(), op);
 						metricExpr = InternalNode.opToExpMapping.get(op) + "(" + node.getValue().getMetricExpression()
@@ -330,8 +356,6 @@ public class WombatSimple extends AWombat {
 		}
 		return node;
 	}
-
-
 
 	/**
 	 * initiate the refinement tree as a root node  with set of

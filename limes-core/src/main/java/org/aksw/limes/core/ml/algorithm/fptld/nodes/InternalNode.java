@@ -17,8 +17,10 @@ public class InternalNode extends ANode {
 			.put(LogicOperator.EINSTEINTCO, "EINTCO").put(LogicOperator.HAMACHERDIFF, "HAMDIFF")
 			.put(LogicOperator.HAMACHERT, "HAMT").put(LogicOperator.HAMACHERTCO, "HAMTCO")
 			.put(LogicOperator.LUKASIEWICZT, "LUKT").put(LogicOperator.LUKASIEWICZTCO, "LUKTCO")
-			.put(LogicOperator.LUKASIEWICZDIFF, "LUKDIFF").put(LogicOperator.MINUS, "DIFF").put(LogicOperator.OR, "OR")
-			.put(LogicOperator.XOR, "XOR").build();
+			.put(LogicOperator.LUKASIEWICZDIFF, "LUKDIFF").put(LogicOperator.MINUS, "MINUS").put(LogicOperator.OR, "OR")
+			.put(LogicOperator.XOR, "XOR").put(LogicOperator.YAGERT, "YAGERT").put(LogicOperator.YAGERTCO, "YAGERTCO")
+			.put(LogicOperator.YAGERDIFF, "YAGERDIFF")
+			.build();
 
 	public InternalNode(LogicOperator op) {
 		super();
@@ -40,7 +42,12 @@ public class InternalNode extends ANode {
 		children.add(leftChild.toLS());
 		children.add(rightChild.toLS());
 		ls.setChildren(children);
-		ls.setFullExpression(opToExpMapping.get(op) + "(" + children.get(0).getFullExpression() + "|"
+		String parameterVal = "";
+		if (!Double.isNaN(parameter)) {
+			parameterVal = "_" + parameter;
+			ls.setOperatorParameter(parameter);
+		}
+		ls.setFullExpression(opToExpMapping.get(op) + parameterVal + "(" + children.get(0).getFullExpression() + "|"
 				+ children.get(0).getThreshold() + "," + children.get(1).getFullExpression() + "|"
 				+ children.get(1).getThreshold() + ")");
 		return ls;
@@ -71,7 +78,7 @@ public class InternalNode extends ANode {
 	}
 
 	@Override
-	public ANode replaceLeaf(LeafNode leafToReplace, LogicOperator op, LeafNode newNode) {
+	public ANode replaceLeaf(LeafNode leafToReplace, LogicOperator op, LeafNode newNode, Double p) {
 		List<LeafNode> leaves = clone().getLeaves();
 		LeafNode replace = null;
 		for (LeafNode l : leaves) {
@@ -90,6 +97,8 @@ public class InternalNode extends ANode {
 		}
 		operator.setLeftChild(replace);
 		operator.setRightChild(newNode);
+		if (!Double.isNaN(p))
+			operator.parameter = p;
 		return operator.getRoot();
 	}
 

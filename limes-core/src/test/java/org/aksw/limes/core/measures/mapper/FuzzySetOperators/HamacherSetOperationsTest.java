@@ -129,15 +129,15 @@ public class HamacherSetOperationsTest {
 		AMapping a = MappingFactory.createDefaultMapping();
 		a.add("i3", "i3", 0.9);
 		a.add("i4", "i4", 0.7);
-		a.add("i6", "i6", 0.2);
+		a.add("i6", "i6", 0.6);
 		a.add("i5", "i5", 0.6);
 
 		AMapping b = MappingFactory.createDefaultMapping();
 		b.add("i3", "i3", 0.8);
-		b.add("i6", "i6", 0.4);
+		b.add("i6", "i6", 0.7);
 		b.add("i5", "i5", 0.9);
 
-		HamacherSetOperations.INSTANCE.intersection(a, b, ref);
+		System.out.println(HamacherSetOperations.INSTANCE.intersection(a, b, ref));
 	}
 
 	@Test

@@ -44,8 +44,11 @@ public class LeafNode extends ANode {
 	}
 
 	@Override
-	public ANode replaceLeaf(LeafNode leafToReplace, LogicOperator op, LeafNode newNode) {
+	public ANode replaceLeaf(LeafNode leafToReplace, LogicOperator op, LeafNode newNode, Double p) {
 		InternalNode internal = new InternalNode(op);
+		if (!Double.isNaN(p)) {
+			internal.parameter = p;
+		}
 		internal.setLeftChild(leafToReplace.clone());
 		internal.setRightChild(newNode.clone());
 		return internal;

@@ -12,6 +12,7 @@ import org.aksw.limes.core.measures.mapper.FuzzyOperators.AlgebraicSetOperations
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.EinsteinSetOperations;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.HamacherSetOperations;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.LukasiewiczSetOperations;
+import org.aksw.limes.core.measures.mapper.FuzzyOperators.YagerSetOperations;
 
 // Classes should be enum to ensure they are singletons
 public interface MappingOperations {
@@ -141,6 +142,8 @@ public interface MappingOperations {
 			return HamacherSetOperations.INSTANCE;
 		} else if (Command.crisp.contains(c)) {
 			return CrispSetOperations.INSTANCE;
+		} else if (Command.yager.contains(c)) {
+			return YagerSetOperations.INSTANCE;
 		} else {
 			throw new UnsupportedOperator(c.toString());
 		}
@@ -200,6 +203,15 @@ public interface MappingOperations {
 			break;
 		case HAMACHERDIFF:
 			res = HamacherSetOperations.INSTANCE.difference(a, b, p);
+			break;
+		case YAGERT:
+			res = YagerSetOperations.INSTANCE.intersection(a, b, p);
+			break;
+		case YAGERTCO:
+			res = YagerSetOperations.INSTANCE.union(a, b, p);
+			break;
+		case YAGERDIFF:
+			res = YagerSetOperations.INSTANCE.difference(a, b, p);
 			break;
 		default:
 			throw new UnsupportedOperator(op + " can not be used in here");

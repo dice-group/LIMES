@@ -36,6 +36,9 @@ public class LinkSpecification implements ILinkSpecification {
 	protected static final String HAMT = "HAMT";
 	protected static final String HAMTCO = "HAMTCO";
 	protected static final String HAMDIFF = "HAMDIFF";
+	protected static final String YAGERT = "YAGERT";
+	protected static final String YAGERTCO = "YAGERTCO";
+	protected static final String YAGERDIFF = "YAGERDIFF";
 	protected double threshold;
 	protected LogicOperator operator;
 	protected List<LinkSpecification> children; // children must be a list
@@ -62,7 +65,7 @@ public class LinkSpecification implements ILinkSpecification {
 	/**
 	 * Used for parameterized t-norms/t-conorms
 	 */
-	protected double operatorParameter;
+	protected double operatorParameter = Double.NaN;
 
 	public LinkSpecification() {
 		setOperator(null);
@@ -381,6 +384,33 @@ public class LinkSpecification implements ILinkSpecification {
 				operatorParameter = getParameter(p.getOperator().toUpperCase(), HAMDIFF);
 				fullExpression = "HAMDIFF_" + operatorParameter + "(" + leftSpec.fullExpression + "|"
 						+ p.getThreshold1() + "," + rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
+			} else if (p.getOperator().toUpperCase().startsWith(YAGERDIFF)) {
+				setOperator(LogicOperator.YAGERDIFF);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				operatorParameter = getParameter(p.getOperator().toUpperCase(), YAGERDIFF);
+				fullExpression = "YAGERDIFF_" + operatorParameter + "(" + leftSpec.fullExpression + "|"
+						+ p.getThreshold1() + "," + rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
+			} else if (p.getOperator().toUpperCase().startsWith(YAGERTCO)) {
+				setOperator(LogicOperator.YAGERTCO);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				operatorParameter = getParameter(p.getOperator().toUpperCase(), YAGERTCO);
+				fullExpression = "YAGERTCO_" + operatorParameter + "(" + leftSpec.fullExpression + "|"
+						+ p.getThreshold1() + "," + rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
+			} else if (p.getOperator().toUpperCase().startsWith(YAGERT)) {
+				setOperator(LogicOperator.YAGERT);
+				leftSpec.readSpec(p.getLeftTerm(), p.getThreshold1());
+				rightSpec.readSpec(p.getRightTerm(), p.getThreshold2());
+				filterExpression = null;
+				setThreshold(theta);
+				operatorParameter = getParameter(p.getOperator().toUpperCase(), YAGERT);
+				fullExpression = "YAGERT_" + operatorParameter + "(" + leftSpec.fullExpression + "|" + p.getThreshold1()
+						+ "," + rightSpec.fullExpression + "|" + p.getThreshold2() + ")";
 			}
 		}
 	}
@@ -524,7 +554,7 @@ public class LinkSpecification implements ILinkSpecification {
 
 	public String toStringPretty() {
 		String op = "" + operator;
-		op += operatorParameter != 0.0 ? "_" + operatorParameter : "";
+		op += !Double.isNaN(operatorParameter) ? "_" + operatorParameter : "";
 		if (getChildren() != null) {
 			String str = "(" + filterExpression + ", " + getThreshold() + ", " + op + ", null,)";
 			String indent = new String(new char[getDepth()]).replace("\0", "\t");

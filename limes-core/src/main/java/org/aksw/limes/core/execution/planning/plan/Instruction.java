@@ -24,20 +24,21 @@ public class Instruction {
 	public enum Command {
 		RUN, INTERSECTION, UNION, DIFF, RETURN, FILTER, XOR, REVERSEFILTER, LUKASIEWICZT, LUKASIEWICZTCO,
 		LUKASIEWICZDIFF, ALGEBRAICT, ALGEBRAICTCO, ALGEBRAICDIFF, EINSTEINT, EINSTEINTCO, EINSTEINDIFF, HAMACHERT,
-		HAMACHERTCO, HAMACHERDIFF;
+		HAMACHERTCO, HAMACHERDIFF, YAGERT, YAGERTCO, YAGERDIFF;
 
 		public static EnumSet<Command> unions = EnumSet.of(UNION, LUKASIEWICZTCO, ALGEBRAICTCO, EINSTEINTCO,
-				HAMACHERTCO);
+				HAMACHERTCO, YAGERTCO);
 		public static EnumSet<Command> intersections = EnumSet.of(INTERSECTION, LUKASIEWICZT, ALGEBRAICT, EINSTEINT,
-				HAMACHERT);
+				HAMACHERT, YAGERT);
 		public static EnumSet<Command> diffs = EnumSet.of(DIFF, LUKASIEWICZDIFF, ALGEBRAICDIFF, EINSTEINDIFF,
-				HAMACHERDIFF);
+				HAMACHERDIFF, YAGERDIFF);
 
 		public static EnumSet<Command> crisp = EnumSet.of(UNION, INTERSECTION, DIFF);
 		public static EnumSet<Command> lukasiewicz = EnumSet.of(LUKASIEWICZT, LUKASIEWICZTCO, LUKASIEWICZDIFF);
 		public static EnumSet<Command> algebraic = EnumSet.of(ALGEBRAICT, ALGEBRAICTCO, ALGEBRAICDIFF);
 		public static EnumSet<Command> einstein = EnumSet.of(EINSTEINT, EINSTEINTCO, EINSTEINDIFF);
 		public static EnumSet<Command> hamacher = EnumSet.of(HAMACHERT, HAMACHERTCO, HAMACHERDIFF);
+		public static EnumSet<Command> yager = EnumSet.of(YAGERT, YAGERTCO, YAGERDIFF);
 	}
 
 	static Logger logger = LoggerFactory.getLogger(Instruction.class);

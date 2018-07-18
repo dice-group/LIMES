@@ -91,7 +91,7 @@ public class TestNode {
 	@Test
 	public void testReplaceLeaf() {
 		LeafNode replacee = new LeafNode(trig, 0.3);
-		ANode newNode = complexTree.clone().replaceLeaf(middle, LogicOperator.ALGEBRAICT, replacee);
+		ANode newNode = complexTree.clone().replaceLeaf(middle, LogicOperator.ALGEBRAICT, replacee, Double.NaN);
 		assertNotSame(newNode, complexTree);
 		assertFalse(newNode.equals(complexTree));
 		InternalNode middle = new InternalNode(LogicOperator.ALGEBRAICT);
@@ -114,7 +114,7 @@ public class TestNode {
 	public void testReplaceLeafSimple() {
 		LeafNode toBeReplaced = new LeafNode("qgrams(x.h,y.h)", 0.8);
 		LeafNode replacee = new LeafNode("trigrams(x.h,y.h)", 0.3);
-		ANode newNode = toBeReplaced.replaceLeaf(toBeReplaced, LogicOperator.ALGEBRAICT, replacee);
+		ANode newNode = toBeReplaced.replaceLeaf(toBeReplaced, LogicOperator.ALGEBRAICT, replacee, Double.NaN);
 
 		LeafNode left = new LeafNode("qgrams(x.h,y.h)", 0.8);
 		LeafNode right = new LeafNode("trigrams(x.h,y.h)", 0.3);

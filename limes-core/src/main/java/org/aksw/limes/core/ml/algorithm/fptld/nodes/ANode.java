@@ -19,7 +19,7 @@ public abstract class ANode {
 	protected boolean isLeftChild;
 	protected int depth;
 	protected double quality;
-	protected double parameter;
+	protected double parameter = Double.NaN;
 
 	public abstract LinkSpecification toLS();
 
@@ -116,7 +116,7 @@ public abstract class ANode {
 		StringBuilder sb = new StringBuilder("\n");
 		sb.append(new String(new char[depth]).replace("\0", "\t"));
 		if (op != null) {
-			sb.append(op);
+			sb.append(op + "_" + parameter);
 		}
 		if (fuzzyTerm != null && !fuzzyTerm.equals("")) {
 			sb.append(fuzzyTerm + "|" + threshold);
@@ -130,7 +130,7 @@ public abstract class ANode {
 		return sb.toString();
 	}
 
-	public abstract ANode replaceLeaf(LeafNode leafToReplace, LogicOperator op, LeafNode newNode);
+	public abstract ANode replaceLeaf(LeafNode leafToReplace, LogicOperator op, LeafNode newNode, Double p);
 
 	public ANode getRoot() {
 		if (parent == null) {
@@ -182,6 +182,7 @@ public abstract class ANode {
 		clone.set = set;
 		clone.depth = depth;
 		clone.quality = quality;
+		clone.parameter = parameter;
 		return clone;
 	}
 

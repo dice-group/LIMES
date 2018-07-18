@@ -96,6 +96,15 @@ public class CanonicalPlanner extends Planner {
 			} else if (spec.getOperator().equals(LogicOperator.HAMACHERDIFF)) {
 				plan.setOperator(Instruction.Command.HAMACHERDIFF);
 				plan.setCommandParameter(spec.getOperatorParameter());
+			} else if (spec.getOperator().equals(LogicOperator.YAGERT)) {
+				plan.setOperator(Instruction.Command.YAGERT);
+				plan.setCommandParameter(spec.getOperatorParameter());
+			} else if (spec.getOperator().equals(LogicOperator.YAGERTCO)) {
+				plan.setOperator(Instruction.Command.YAGERTCO);
+				plan.setCommandParameter(spec.getOperatorParameter());
+			} else if (spec.getOperator().equals(LogicOperator.YAGERDIFF)) {
+				plan.setOperator(Instruction.Command.YAGERDIFF);
+				plan.setCommandParameter(spec.getOperatorParameter());
 			} else {
 				System.out.println("Wrong operator: " + spec.getOperator() + ". at LS: " + spec);
 				return null;

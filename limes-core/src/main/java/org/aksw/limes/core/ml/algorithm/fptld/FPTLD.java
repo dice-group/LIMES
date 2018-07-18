@@ -48,14 +48,14 @@ public class FPTLD extends ACoreMLAlgorithm {
 	public static final String FITNESS_NAME_FM = "Fmeasure";
 
 	public static final String[] defaultMeasures = { "jaccard", "trigrams", "cosine", "qgrams" };
-	private static final double minPropertyCoverage = 0.4;
-	private static final int beamSize = 3;
-	private static final double eps = 0.01;
-	private static final double propertyLearningRate = 0.95;
-	private static FuzzySimilarity fitnessFunction = SimFuzzyRMSE.INSTANCE;
-	private static LogicOperator[] operators = { LogicOperator.LUKASIEWICZT, LogicOperator.LUKASIEWICZTCO,
+	private final double minPropertyCoverage = 0.4;
+	private final int beamSize = 3;
+	private final double eps = 0.01;
+	private final double propertyLearningRate = 0.95;
+	private FuzzySimilarity fitnessFunction = SimFuzzyRMSE.INSTANCE;
+	private LogicOperator[] operators = { LogicOperator.LUKASIEWICZT, LogicOperator.LUKASIEWICZTCO,
 			LogicOperator.AND, LogicOperator.OR, LogicOperator.EINSTEINT, LogicOperator.EINSTEINTCO,
-			LogicOperator.ALGEBRAICT, LogicOperator.ALGEBRAICTCO, LogicOperator.DIFF, LogicOperator.ALGEBRAICDIFF,
+			LogicOperator.ALGEBRAICT, LogicOperator.ALGEBRAICTCO, LogicOperator.MINUS, LogicOperator.ALGEBRAICDIFF,
 			LogicOperator.LUKASIEWICZDIFF, LogicOperator.EINSTEINDIFF };
 
 	@Override
@@ -104,13 +104,25 @@ public class FPTLD extends ACoreMLAlgorithm {
 							if (!ppt.equals(leaf)
 									&& !leafCombinations.contains(leaf.getFuzzyTerm() + ppt.getFuzzyTerm())
 									&& !leafCombinations.contains(ppt.getFuzzyTerm() + leaf.getFuzzyTerm())) {
+								Double opParam = Double.NaN;
+								// Commented out until good way to optimize p values of yager are found
+								// if (op.equals(LogicOperator.YAGERT)) {
+								// opParam = YagerSetOperations.INSTANCE
+								// .intersection(leaf.getSet(), ppt.getSet(), trainingData).getSecond();
+								// } else if (op.equals(LogicOperator.YAGERDIFF)) {
+								// opParam = YagerSetOperations.INSTANCE
+								// .difference(leaf.getSet(), ppt.getSet(), trainingData).getSecond();
+								// } else if (op.equals(LogicOperator.YAGERTCO)) {
+								// opParam = YagerSetOperations.INSTANCE
+								// .union(leaf.getSet(), ppt.getSet(), trainingData).getSecond();
+								// }
 								ANode clone = candidate.clone();
-								clone = clone.replaceLeaf(leaf, op, ppt);
+								clone = clone.replaceLeaf(leaf, op, ppt, opParam);
 								clone.setSet(clone.calculateSet());
 								double quality = fitnessFunction.getSimilarity(clone.getSet(), trainingData);
 								clone.setQuality(quality);
 								newCandidates.add(clone);
-								if (!(op.equals(LogicOperator.DIFF) || op.equals(LogicOperator.LUKASIEWICZDIFF)
+								if (!(op.equals(LogicOperator.MINUS) || op.equals(LogicOperator.LUKASIEWICZDIFF)
 										|| op.equals(LogicOperator.ALGEBRAICDIFF)
 										|| op.equals(LogicOperator.EINSTEINDIFF))) {
 									leafCombinations.add(leaf.getFuzzyTerm() + ppt.getFuzzyTerm());
@@ -123,11 +135,12 @@ public class FPTLD extends ACoreMLAlgorithm {
 			candidates.addAll(newCandidates);
 			Collections.sort(candidates, (o1, o2) -> Double.compare(o1.getQuality(), o2.getQuality()) * -1);
 			candidates = candidates.stream().limit(bs).collect(Collectors.toList());
-			System.out.println("Improvement: " + (candidates.get(0).getQuality() - best.getQuality()));
 			if (candidates.get(0).getQuality() < (1 + eps) * best.getQuality()) {
 				break;
 			}
 			best = candidates.get(0);
+			System.out.println(best.getParameter());
+			System.out.println(best);
 		}
 		LinkSpecification ls = best.toLS();
 		MLResults res = new MLResults(ls, best.getSet(), best.getQuality(), null);
@@ -205,6 +218,14 @@ public class FPTLD extends ACoreMLAlgorithm {
 	protected MLResults activeLearn() throws UnsupportedMLImplementationException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public LogicOperator[] getOperators() {
+		return operators;
+	}
+
+	public void setOperators(LogicOperator[] operators) {
+		this.operators = operators;
 	}
 
 }
