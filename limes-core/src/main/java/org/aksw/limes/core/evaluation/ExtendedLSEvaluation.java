@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
 import org.aksw.limes.core.datastrutures.LogicOperator;
@@ -49,11 +50,9 @@ public class ExtendedLSEvaluation {
 		// }
 		Set<TaskData> data = new HashSet<>();
 		List<TaskAlgorithm> algos = new ArrayList<>();
-		// String[] dataSetNames = new String[] {
-		// "restaurantsfixed", "person1",
-		// "person2",
-		// "DBLPACM", "ABTBUY", "DBLPSCHOLAR", "AMAZONGOOGLEPRODUCTS", "DBPLINKEDMDB"
-		// };
+		// String[] dataSetNames = new String[] { "restaurantsfixed", "person1",
+		// "person2", "DBLPACM", "ABTBUY",
+		// "DBLPSCHOLAR", "AMAZONGOOGLEPRODUCTS", "DBPLINKEDMDB" };
 		// for (String d : dataSetNames) {
 		String d = args[1];
 			EvaluationData eval = DataSetChooser.getData(d);
@@ -69,58 +68,61 @@ public class ExtendedLSEvaluation {
 		measures.add(EvaluatorType.RECALL);
 
 		LogicOperator[] crispOps = { LogicOperator.AND, LogicOperator.OR, LogicOperator.MINUS };
+		LogicOperator[] einsteinOps = { LogicOperator.EINSTEINT, LogicOperator.EINSTEINTCO,
+				LogicOperator.EINSTEINDIFF };
 		LogicOperator[] algebraic = { LogicOperator.ALGEBRAICT, LogicOperator.ALGEBRAICTCO,
 				LogicOperator.ALGEBRAICDIFF };
 		LogicOperator[] lukasiewicz = { LogicOperator.LUKASIEWICZT, LogicOperator.LUKASIEWICZTCO,
 				LogicOperator.LUKASIEWICZDIFF };
-		// LogicOperator[] lukOps = { LogicOperator.LUKASIEWICZT,
-		// LogicOperator.LUKASIEWICZTCO,
-		// LogicOperator.LUKASIEWICZDIFF };
-		// LogicOperator[] hamacherOps = { LogicOperator.HAMACHERT,
-		// LogicOperator.HAMACHERTCO,
-		// LogicOperator.HAMACHERDIFF };
-		// LogicOperator[] allOps = { LogicOperator.AND, LogicOperator.OR,
-		// LogicOperator.MINUS, LogicOperator.ALGEBRAICT,
-		// LogicOperator.ALGEBRAICTCO, LogicOperator.ALGEBRAICDIFF,
-		// LogicOperator.EINSTEINT,
-		// LogicOperator.EINSTEINTCO, LogicOperator.EINSTEINDIFF,
-		// LogicOperator.LUKASIEWICZT,
-		// LogicOperator.LUKASIEWICZTCO, LogicOperator.LUKASIEWICZDIFF,
-		// LogicOperator.HAMACHERT,
-		// LogicOperator.HAMACHERTCO, LogicOperator.HAMACHERDIFF };
+		LogicOperator[] yager = { LogicOperator.YAGERT, LogicOperator.YAGERTCO, LogicOperator.YAGERDIFF };
+		LogicOperator[] hamacherOps = { LogicOperator.HAMACHERT, LogicOperator.HAMACHERTCO,
+				LogicOperator.HAMACHERDIFF };
+		LogicOperator[] all = Stream.of(crispOps, einsteinOps, algebraic, lukasiewicz, yager, hamacherOps)
+				.flatMap(Stream::of).toArray(LogicOperator[]::new);
+
 		TaskAlgorithm crispWombat = createWombatWithOperators(crispOps);
-		crispWombat.setName("crispWombat");
+		crispWombat.setName("crispWom");
+		TaskAlgorithm einsteinWombat = createWombatWithOperators(einsteinOps);
+		einsteinWombat.setName("einstWom");
 		TaskAlgorithm algebraicWombat = createWombatWithOperators(algebraic);
 		algebraicWombat.setName("algWom");
 		TaskAlgorithm lukasiewiczWombat = createWombatWithOperators(lukasiewicz);
-		lukasiewiczWombat.setName("lukasiewiczWombat");
-		TaskAlgorithm fptldalg = createFPTLDWithOperators(algebraic);
-		fptldalg.setName("algfptld");
-		TaskAlgorithm fptldluk = createFPTLDWithOperators(lukasiewicz);
-		fptldluk.setName("lukfptld");
-		// TaskAlgorithm fptldparaluk = createFPTLDWithOperators(pluk);
-		// fptldparaluk.setName("paralukfptld");
-		// TaskAlgorithm luk = createWombatWithOperators(plukOps);
-		// luk.setName("pluk");
-		// TaskAlgorithm fuzzy = createWombatWithOperators(fuzzyOps);
-		// fuzzy.setName("fuzzy");
-		// TaskAlgorithm hamacher = createWombatWithOperators(hamacherOps);
-		// hamacher.setName("hamacher");
-		// TaskAlgorithm all = createWombatWithOperators(allOps);
-		// all.setName("all");
-		// algos.add(crisp);
-		// algos.add(fptld);
-		// algos.add(fptld2);
+		lukasiewiczWombat.setName("lukWom");
+		TaskAlgorithm yagerWombat = createWombatWithOperators(yager);
+		yagerWombat.setName("yagerWom");
+		TaskAlgorithm hamacherWombat = createWombatWithOperators(hamacherOps);
+		hamacherWombat.setName("hamacherWom");
+		TaskAlgorithm allWombat = createWombatWithOperators(all);
+		allWombat.setName("allWom");
+
+		TaskAlgorithm crispFPTLD = createFPTLDWithOperators(crispOps);
+		crispFPTLD.setName("crispfptld");
+		TaskAlgorithm einsteinFPTLD = createFPTLDWithOperators(einsteinOps);
+		einsteinFPTLD.setName("einstfptld");
+		TaskAlgorithm algebraicFPTLD = createFPTLDWithOperators(algebraic);
+		algebraicFPTLD.setName("algfptld");
+		TaskAlgorithm lukasiewiczFPTLD = createFPTLDWithOperators(lukasiewicz);
+		lukasiewiczFPTLD.setName("lukfptld");
+		TaskAlgorithm yagerFPTLD = createFPTLDWithOperators(yager);
+		yagerFPTLD.setName("yagerfptld");
+		TaskAlgorithm hamacherFPTLD = createFPTLDWithOperators(hamacherOps);
+		hamacherFPTLD.setName("hamacherfptld");
+		TaskAlgorithm allFPTLD = createFPTLDWithOperators(all);
+		allFPTLD.setName("allfptld");
 		algos.add(crispWombat);
+		algos.add(crispFPTLD);
+		algos.add(einsteinWombat);
+		algos.add(einsteinFPTLD);
 		algos.add(algebraicWombat);
+		algos.add(algebraicFPTLD);
 		algos.add(lukasiewiczWombat);
-		algos.add(fptldalg);
-		algos.add(fptldluk);
-		// algos.add(fptldparaluk);
-		// algos.add(luk);
-		// algos.add(fuzzy);
-		// algos.add(hamacher);
-		// algos.add(all);
+		algos.add(lukasiewiczFPTLD);
+		algos.add(yagerWombat);
+		algos.add(yagerFPTLD);
+		algos.add(hamacherWombat);
+		algos.add(hamacherFPTLD);
+		algos.add(allWombat);
+		algos.add(allFPTLD);
 		Summary s = new Evaluator().crossValidateWithTuningAndStatisticalTest(algos, data, measures, 10);
 		s.printToFiles(args[0]);
 	}

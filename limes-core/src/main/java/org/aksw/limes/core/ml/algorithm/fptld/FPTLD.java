@@ -23,6 +23,7 @@ import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.measures.mapper.FuzzyOperators.YagerSetOperations;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
@@ -105,17 +106,17 @@ public class FPTLD extends ACoreMLAlgorithm {
 									&& !leafCombinations.contains(leaf.getFuzzyTerm() + ppt.getFuzzyTerm())
 									&& !leafCombinations.contains(ppt.getFuzzyTerm() + leaf.getFuzzyTerm())) {
 								Double opParam = Double.NaN;
-								// Commented out until good way to optimize p values of yager are found
-								// if (op.equals(LogicOperator.YAGERT)) {
-								// opParam = YagerSetOperations.INSTANCE
-								// .intersection(leaf.getSet(), ppt.getSet(), trainingData).getSecond();
-								// } else if (op.equals(LogicOperator.YAGERDIFF)) {
-								// opParam = YagerSetOperations.INSTANCE
-								// .difference(leaf.getSet(), ppt.getSet(), trainingData).getSecond();
-								// } else if (op.equals(LogicOperator.YAGERTCO)) {
-								// opParam = YagerSetOperations.INSTANCE
-								// .union(leaf.getSet(), ppt.getSet(), trainingData).getSecond();
-								// }
+								if (op.equals(LogicOperator.YAGERT)) {
+									opParam = YagerSetOperations.INSTANCE
+											.intersection(leaf.getSet(), ppt.getSet(), trainingData).getSecond();
+								} else if (op.equals(LogicOperator.YAGERDIFF)) {
+									opParam = YagerSetOperations.INSTANCE
+											.difference(leaf.getSet(), ppt.getSet(), trainingData).getSecond();
+								} else if (op.equals(LogicOperator.YAGERTCO) || op.equals(LogicOperator.HAMACHERT)
+										|| op.equals(LogicOperator.HAMACHERTCO)
+										|| op.equals(LogicOperator.HAMACHERDIFF)) {
+									opParam = 1.0;
+								}
 								ANode clone = candidate.clone();
 								clone = clone.replaceLeaf(leaf, op, ppt, opParam);
 								clone.setSet(clone.calculateSet());
@@ -139,8 +140,6 @@ public class FPTLD extends ACoreMLAlgorithm {
 				break;
 			}
 			best = candidates.get(0);
-			System.out.println(best.getParameter());
-			System.out.println(best);
 		}
 		LinkSpecification ls = best.toLS();
 		MLResults res = new MLResults(ls, best.getSet(), best.getQuality(), null);

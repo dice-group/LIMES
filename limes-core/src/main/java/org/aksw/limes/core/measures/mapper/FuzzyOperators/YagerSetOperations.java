@@ -2,14 +2,23 @@ package org.aksw.limes.core.measures.mapper.FuzzyOperators;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Random;
 
+import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.apache.commons.math3.util.Pair;
 
 public enum YagerSetOperations implements MappingOperations {
 
 	INSTANCE;
-	public static final int maxTries = 10;
-	public static final double epsilon = 0.0001;
+	public static final int MAX_ITERATIONS = 50;
+	public static final double EPSILON = 0.0001;
+	public static final double STD_DEV = 1;
+	public static final long SEED = 7829;
+	public static final double[] INITIAL_VALUES = new double[] { 0, 1, 2, 100 };
 
 	/**
 	 * Returns yager t-norm, i.e. <br>
@@ -80,208 +89,77 @@ public enum YagerSetOperations implements MappingOperations {
 		return Math.min(1, Math.pow(added, oneDivp));
 	}
 
-	// TODO find a way to optimize p value
-	//
-	// /**
-	// * Optimizes p value using a technique similar to backprop (specificly
-	// * quickprop) and returns the mapping result using the best p-value
-	// *
-	// * @param a
-	// * first Mapping for intersection
-	// * @param b
-	// * second Mapping for intersection
-	// * @param ref
-	// * trainingData or reference Mapping
-	// * @return pair mapping,best p value
-	// */
-	// public Pair<AMapping, Double> intersection(AMapping a, AMapping b, AMapping
-	// ref) {
-	// if (a == null || a.size() == 0 || b == null || b.size() == 0) {
-	// return new Pair<AMapping, Double>(MappingFactory.createDefaultMapping(),
-	// 1.0);
-	// }
-	// double bestP = 1.0;
-	// double bestRMSE = 0;
-	// AMapping bestMapping = MappingFactory.createDefaultMapping();
-	// double p = bestP;
-	// double errorOld = 0;
-	// double error = errorOld - 1;
-	// int tries = 0;
-	// while (Math.abs(errorOld - error) > epsilon && tries < maxTries) {
-	// errorOld = error;
-	// System.out.println(p + " : " + errorOld);
-	// AMapping output = intersection(a, b, p);
-	// double simrmse = SimFuzzyRMSE.INSTANCE.getSimilarity(output, ref);
-	// if (simrmse > bestRMSE) {
-	// bestRMSE = simrmse;
-	// bestP = p;
-	// bestMapping = output;
-	// }
-	// error = errorTNorm(a, b, output, ref, p);
-	// p = Math.abs(error / (errorOld - error) * p);
-	// tries++;
-	// }
-	// return new Pair<AMapping, Double>(bestMapping, bestP);
-	// }
-	//
-	// /**
-	// * Optimizes p value using a technique similar to backprop (specificly
-	// * quickprop) and returns the mapping result using the best p-value
-	// *
-	// * @param a
-	// * first Mapping for union
-	// * @param b
-	// * second Mapping for union
-	// * @param ref
-	// * trainingData or reference Mapping
-	// * @return pair mapping,best p value
-	// */
-	// public Pair<AMapping, Double> union(AMapping a, AMapping b, AMapping ref) {
-	// if ((a == null || a.size() == 0) && (b == null || b.size() == 0)) {
-	// return new Pair<AMapping, Double>(MappingFactory.createDefaultMapping(),
-	// 1.0);
-	// } else if (a == null || a.size() == 0) {
-	// return new Pair<AMapping, Double>(b, 1.0);
-	// } else if (b == null || b.size() == 0) {
-	// return new Pair<AMapping, Double>(a, 1.0);
-	// }
-	// double bestP = 1.0;
-	// double bestRMSE = 0;
-	// AMapping bestMapping = MappingFactory.createDefaultMapping();
-	// double p = bestP;
-	// double errorOld = 0;
-	// double error = errorOld - 1;
-	// int tries = 0;
-	// while (Math.abs(errorOld - error) > epsilon && tries < maxTries) {
-	// errorOld = error;
-	// AMapping output = union(a, b, p);
-	// double simrmse = SimFuzzyRMSE.INSTANCE.getSimilarity(output, ref);
-	// if (simrmse > bestRMSE) {
-	// bestRMSE = simrmse;
-	// bestP = p;
-	// bestMapping = output;
-	// }
-	// error = errorTConorm(a, b, output, ref, p);
-	// p = Math.abs(error / (errorOld - error) * p);
-	// if (p == 0) {
-	// p += epsilon;
-	// }
-	// tries++;
-	// }
-	// return new Pair<AMapping, Double>(bestMapping, bestP);
-	// }
-	//
-	// public Pair<AMapping, Double> difference(AMapping a, AMapping b, AMapping
-	// ref) {
-	// AMapping bNeg = MappingFactory.createDefaultMapping();
-	// b.getMap().forEach((key, inner) -> {
-	// inner.forEach((key2, value) -> {
-	// bNeg.add(key, key2, 1 - value);
-	// });
-	// });
-	// return intersection(a, bNeg, ref);
-	// }
-	//
-	// /**
-	// * Calculates partial derivative of p from the euclidean distance between link
-	// * from ref Mapping and result of tNorm(a,b,p)
-	// */
-	// private double errorTNorm(AMapping aMap, AMapping bMap, AMapping
-	// intersection, AMapping ref, double p) {
-	// double error = 0.0;
-	// for (String s : intersection.getMap().keySet()) {
-	// for (String t : intersection.getMap().get(s).keySet()) {
-	// double refValue = ref.getValue(s, t);
-	// double a = aMap.getValue(s, t);
-	// double b = bMap.getValue(s, t);
-	// // 1/p
-	// double oneDivp = BigDecimal.ONE.divide(BigDecimal.valueOf(p), SCALE,
-	// RoundingMode.HALF_UP)
-	// .doubleValue();
-	// // (1-a)^p
-	// BigDecimal aSubbed = BigDecimal
-	// .valueOf(Math.pow(BigDecimal.ONE.subtract(BigDecimal.valueOf(a)).doubleValue(),
-	// p));
-	// // (1-b)^p
-	// BigDecimal bSubbed = BigDecimal
-	// .valueOf(Math.pow(BigDecimal.ONE.subtract(BigDecimal.valueOf(b)).doubleValue(),
-	// p));
-	// // (1-a)^p + (1-b)^p
-	// double addedAB = aSubbed.add(bSubbed).doubleValue();
-	// // ((1-a)^p + (1-b)^p)^(1/p)
-	// BigDecimal powed = BigDecimal.valueOf(Math.pow(addedAB, oneDivp));
-	// if (powed.doubleValue() < 1) {
-	// // -(ref-Max(0,1-((1-a)^p+(1-b)^p)^(1/p)))
-	// BigDecimal leftMultplicand = BigDecimal.valueOf(refValue)
-	// .subtract(BigDecimal.valueOf(Math.max(0,
-	// BigDecimal.ONE.subtract(powed).doubleValue())))
-	// .negate();
-	//
-	// BigDecimal rightLeft = powed.negate();
-	// //
-	// -(powed)*(-(Log(addedAb)/p^2)+((aSubbed*Log(1-a)+bSubbed*Log(1-b))/(addedAb*p)))
-	// BigDecimal rightRight = BigDecimal.valueOf(Math.log(addedAB))
-	// .divide(BigDecimal.valueOf(Math.pow(p, 2)), SCALE,
-	// RoundingMode.HALF_UP).negate()
-	// .add(aSubbed.multiply(BigDecimal.valueOf(Math.log(1 - a)))
-	// .add(bSubbed.multiply(BigDecimal.valueOf(Math.log(1 - b))))
-	// .divide(BigDecimal.valueOf(addedAB).multiply(BigDecimal.valueOf(p)), SCALE,
-	// RoundingMode.HALF_UP));
-	// BigDecimal right = rightLeft.multiply(rightRight);
-	// error += leftMultplicand.multiply(right).doubleValue();
-	// } else {
-	// error += 0;
-	// }
-	// }
-	// }
-	// return error;
-	// }
-	//
-	// /**
-	// * Calculates partial derivative of p from the euclidean distance between link
-	// * from ref Mapping and result of tConorm(a,b,p)
-	// */
-	// private double errorTConorm(AMapping aMap, AMapping bMap, AMapping
-	// intersection, AMapping ref, double p) {
-	// double error = 0.0;
-	// for (String s : intersection.getMap().keySet()) {
-	// for (String t : intersection.getMap().get(s).keySet()) {
-	// double refValue = ref.getValue(s, t) + epsilon;
-	// double a = aMap.getValue(s, t) + epsilon;
-	// double b = bMap.getValue(s, t) + epsilon;
-	// // 1/p
-	// double oneDivp = BigDecimal.ONE.divide(BigDecimal.valueOf(p), SCALE,
-	// RoundingMode.HALF_UP)
-	// .doubleValue();
-	// // a^p
-	// BigDecimal aPow = BigDecimal.valueOf(Math.pow(a, p));
-	// // b^p
-	// BigDecimal bPow = BigDecimal.valueOf(Math.pow(b, p));
-	// // (1-a)^p + (1-b)^p
-	// double addedAB = aPow.add(bPow).doubleValue();
-	// // (a^p + b^p)^(1/p)
-	// BigDecimal powed = BigDecimal.valueOf(Math.pow(addedAB, oneDivp));
-	// if (powed.doubleValue() >= 1) {
-	// error += 0;
-	// } else {
-	// // -(ref-Min(1,(a^p+b^p)^(1/p)))
-	// BigDecimal leftMultplicand = BigDecimal.valueOf(refValue)
-	// .subtract(BigDecimal.valueOf(Math.min(1, powed.doubleValue()))).negate();
-	//
-	// // powed*((aPow*Log(a)+bPow*Log(b))/((aPow+bPow)*p) - (Log(aPow+bPow)/(p^2))
-	// BigDecimal rightRight = powed
-	// .multiply(aPow.multiply(BigDecimal.valueOf(Math.log(a)))
-	// .add(bPow.multiply(BigDecimal.valueOf(Math.log(b)))))
-	// .divide(aPow.add(bPow).multiply(BigDecimal.valueOf(p)), SCALE,
-	// RoundingMode.HALF_UP)
-	// .subtract(BigDecimal.valueOf(Math.log(aPow.add(bPow).doubleValue()))
-	// .divide(BigDecimal.valueOf(Math.pow(p, 2)), SCALE, RoundingMode.HALF_UP));
-	// BigDecimal right = powed.multiply(rightRight);
-	// error += leftMultplicand.multiply(right).doubleValue();
-	// }
-	// }
-	// }
-	// return error;
-	// }
+	/**
+	 * Optimizes p value using a technique similar to backprop (specificly
+	 * quickprop) and returns the mapping result using the best p-value
+	 *
+	 * @param a
+	 *            first Mapping for intersection
+	 * @param b
+	 *            second Mapping for intersection
+	 * @param ref
+	 *            trainingData or reference Mapping
+	 * @return pair mapping,best p value
+	 */
+	public Pair<AMapping, Double> intersection(AMapping a, AMapping b, AMapping ref) {
+		if (a == null || a.size() == 0 || b == null || b.size() == 0) {
+			return new Pair<AMapping, Double>(MappingFactory.createDefaultMapping(), 1.0);
+		}
+		double bestP = 1.0;
+		AMapping bestMapping = MappingFactory.createDefaultMapping();
+		FMeasure fm = new FMeasure();
+		double bestFM = 0.0;
+		GoldStandard gs = new GoldStandard(ref);
+		Random rand = new Random(SEED);
+		int iterations = 0;
+		for (double p : INITIAL_VALUES) {
+			AMapping m = intersection(a, b, p);
+			double currentFM = fm.calculate(m, gs);
+			if (currentFM > bestFM) {
+				bestFM = currentFM;
+				bestMapping = m;
+				bestP = p;
+			}
+			iterations++;
+		}
+		while (bestFM < 1 && iterations < MAX_ITERATIONS) {
+			double next = rand.nextGaussian();
+			double p = Math.abs(next * STD_DEV + bestP);
+			AMapping m = intersection(a, b, p);
+			double currentFM = fm.calculate(m, gs);
+			if (currentFM > bestFM) {
+				bestFM = currentFM;
+				bestMapping = m;
+				bestP = p;
+			}
+			iterations++;
+		}
+//		while (p.doubleValue() <= 100) {
+//			AMapping m = intersection(a, b, p.doubleValue());
+//			double currentFM = fm.calculate(m, gs);
+//			if (currentFM > bestFM) {
+//				bestFM = currentFM;
+//				bestMapping = m;
+//				bestP = p.doubleValue();
+//			}
+//			if (p.doubleValue() <= 2) {
+//				p = p.add(BigDecimal.valueOf(0.01));
+//			} else if (p.doubleValue() <= 10) {
+//				p = p.add(BigDecimal.valueOf(0.1));
+//			} else if (p.doubleValue() < 100) {
+//				p = p.add(BigDecimal.valueOf(1.0));
+//			}
+//		}
+		return new Pair<AMapping, Double>(bestMapping, bestP);
+	}
 
+	public Pair<AMapping, Double> difference(AMapping a, AMapping b, AMapping ref) {
+		AMapping bNeg = MappingFactory.createDefaultMapping();
+		b.getMap().forEach((key, inner) -> {
+			inner.forEach((key2, value) -> {
+				bNeg.add(key, key2, 1 - value);
+			});
+		});
+		return intersection(a, bNeg, ref);
+	}
 }

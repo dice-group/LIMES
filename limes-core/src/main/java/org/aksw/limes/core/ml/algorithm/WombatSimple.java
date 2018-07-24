@@ -17,6 +17,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.CrispSetOperations;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.HamacherSetOperations;
+import org.aksw.limes.core.measures.mapper.FuzzyOperators.YagerSetOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.algorithm.fptld.nodes.InternalNode;
@@ -313,33 +314,22 @@ public class WombatSimple extends AWombat {
 						metricExpr = InternalNode.opToExpMapping.get(op) + "_" + result.getSecond() + "("
 								+ node.getValue().getMetricExpression()
 								+ "," + c.getMetricExpression() + ")|0";
-
-						// Commented out until good way to optimize p values of yager are found
-						// } else if (op.toString().startsWith("YAGERDIFF")) {
-						// Pair<AMapping, Double> result = YagerSetOperations.INSTANCE
-						// .difference(node.getValue().getMapping(), c.getMapping(), trainingData);
-						// map = result.getFirst();
-						// metricExpr = InternalNode.opToExpMapping.get(op) + "_" + result.getSecond() +
-						// "("
-						// + node.getValue().getMetricExpression() + "," + c.getMetricExpression() +
-						// ")|0";
-						// } else if (op.toString().startsWith("YAGERTCO")) {
-						// Pair<AMapping, Double> result =
-						// YagerSetOperations.INSTANCE.union(node.getValue().getMapping(),
-						// c.getMapping(), trainingData);
-						// map = result.getFirst();
-						// metricExpr = InternalNode.opToExpMapping.get(op) + "_" + result.getSecond() +
-						// "("
-						// + node.getValue().getMetricExpression() + "," + c.getMetricExpression() +
-						// ")|0";
-						// } else if (op.toString().startsWith("YAGERT")) {
-						// Pair<AMapping, Double> result = YagerSetOperations.INSTANCE
-						// .intersection(node.getValue().getMapping(), c.getMapping(), trainingData);
-						// map = result.getFirst();
-						// metricExpr = InternalNode.opToExpMapping.get(op) + "_" + result.getSecond() +
-						// "("
-						// + node.getValue().getMetricExpression() + "," + c.getMetricExpression() +
-						// ")|0";
+					} else if (op.toString().startsWith("YAGERDIFF")) {
+						Pair<AMapping, Double> result = YagerSetOperations.INSTANCE
+								.difference(node.getValue().getMapping(), c.getMapping(), trainingData);
+						map = result.getFirst();
+						metricExpr = InternalNode.opToExpMapping.get(op) + "_" + result.getSecond() + "("
+								+ node.getValue().getMetricExpression() + "," + c.getMetricExpression() + ")|0";
+					} else if (op.toString().startsWith("YAGERTCO")) {
+						map = YagerSetOperations.INSTANCE.union(node.getValue().getMapping(), c.getMapping(), 1.0);
+						metricExpr = InternalNode.opToExpMapping.get(op) + "_1.0" + "("
+								+ node.getValue().getMetricExpression() + "," + c.getMetricExpression() + ")|0";
+					} else if (op.toString().startsWith("YAGERT")) {
+						Pair<AMapping, Double> result = YagerSetOperations.INSTANCE
+								.intersection(node.getValue().getMapping(), c.getMapping(), trainingData);
+						map = result.getFirst();
+						metricExpr = InternalNode.opToExpMapping.get(op) + "_" + result.getSecond() + "("
+								+ node.getValue().getMetricExpression() + "," + c.getMetricExpression() + ")|0";
 					} else {
 						map = MappingOperations.performOperation(node.getValue().getMapping(), c.getMapping(), op);
 						metricExpr = InternalNode.opToExpMapping.get(op) + "(" + node.getValue().getMetricExpression()
