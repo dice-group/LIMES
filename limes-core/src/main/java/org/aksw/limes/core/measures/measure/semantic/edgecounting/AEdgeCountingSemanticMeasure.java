@@ -3,13 +3,13 @@ package org.aksw.limes.core.measures.measure.semantic.edgecounting;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.semantic.ASemanticMeasure;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.dictionary.SemanticDictionary;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.preprocessing.DB.DBImplementation;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.HypernymTreesFinder;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.SemanticDictionary;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.HypernymPathsFinder;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.MinMaxDepthFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +20,7 @@ import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.IWordID;
 import edu.mit.jwi.item.POS;
 import weka.core.Stopwords;
+import weka.core.tokenizers.Tokenizer;
 import weka.core.tokenizers.WordTokenizer;
 
 /**
@@ -29,21 +30,115 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
     private static final Logger logger = LoggerFactory.getLogger(AEdgeCountingSemanticMeasure.class);
 
-    protected static final int NOUN_DEPTH = 20;
+    protected static final int NOUN_DEPTH = 19;
     protected static final int VERB_DEPTH = 13;
     protected static final int ADJECTIVE_DEPTH = 1;
     protected static final int ADVERB_DEPTH = 1;
 
     protected DBImplementation db = null;
     protected SemanticDictionary dictionary = null;
-    protected boolean dictionaryFlag = true;
-    
-    public AEdgeCountingSemanticMeasure(DBImplementation d) {
+    protected double theta;
+    protected boolean preIndex;
+    protected boolean filtering = true;
+
+    public boolean simple = false;
+
+    protected RuntimeStorage runtimes = new RuntimeStorage();
+
+    public RuntimeStorage getRuntimeStorage() {
+        return runtimes;
+    }
+
+    public AEdgeCountingSemanticMeasure(double threshold, boolean pre, boolean fil) {
+        theta = threshold;
+        preIndex = pre;
+        filtering = fil;
+        System.out.println("filtering: " + filtering);
+        System.out.println("indexing: " + preIndex);
+
+        runtimes = new RuntimeStorage();
+
+        long b = System.currentTimeMillis();
         dictionary = new SemanticDictionary();
         dictionary.exportDictionaryToFile();
-        db = d;
-        if (d != null)
+        dictionary.openDictionaryFromFile();
+        long e = System.currentTimeMillis();
+        runtimes.createDictionary += e - b;
+
+        if (preIndex) {
+            db = new DBImplementation();
             db.init();
+        }
+
+    }
+
+    public class RuntimeStorage {
+        protected long createDictionary = 0l;
+        protected long sourceTokenizing = 0l;
+        protected long targetTokenizing = 0l;
+        protected long checkSimilarity = 0l;
+        protected long getIIndexWords = 0l;
+        protected long getWordIDs = 0l;
+        protected long getIWord = 0l;
+        protected long getSynset = 0l;
+        protected long getMinMaxDepth = 0l;
+        protected long filter = 0l;
+        protected long getHypernymPaths = 0l;
+        protected long getSynsetSimilarity = 0l;
+        protected long getSimilarityInstances = 0l;
+
+        public long createDictionary() {
+            return createDictionary;
+        }
+
+        public long getSourceTokenizing() {
+            return sourceTokenizing;
+        }
+
+        public long getTargetTokenizing() {
+            return targetTokenizing;
+        }
+
+        public long getCheckSimilarity() {
+            return checkSimilarity;
+        }
+
+        public long getGetIIndexWords() {
+            return getIIndexWords;
+        }
+
+        public long getGetWordIDs() {
+            return getWordIDs;
+        }
+
+        public long getGetIWord() {
+            return getIWord;
+        }
+
+        public long getGetSynset() {
+            return getSynset;
+        }
+
+        public long getGetMinMaxDepth() {
+            return getMinMaxDepth;
+        }
+
+        public long getFilter() {
+            return filter;
+        }
+
+        public long getGetHypernymPaths() {
+            return getHypernymPaths;
+        }
+
+        public long getGetSynsetSimilarity() {
+            return getSynsetSimilarity;
+        }
+
+        public long getSimilarityInstances() {
+            return getSimilarityInstances;
+        }
+
     }
 
     public SemanticDictionary getSemanticDictionary() {
@@ -52,10 +147,6 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
     public void setDictionary(SemanticDictionary dict) {
         this.dictionary = dict;
-    }
-
-    public void setDictionaryFlag(boolean f) {
-        dictionaryFlag = f;
     }
 
     public int getHierarchyDepth(int posNumber) {
@@ -75,67 +166,119 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     }
 
     public IWord getIWord(IWordID wordID) {
+        long b = System.currentTimeMillis();
         IWord iword = null;
         if (wordID != null)
             iword = dictionary.getWord(wordID);
-
+        long e = System.currentTimeMillis();
+        runtimes.getIWord += e - b;
         return iword;
     }
 
     public ISynset getSynset(IWord iword) {
+        long b = System.currentTimeMillis();
         if (iword == null)
             return null;
+        long e = System.currentTimeMillis();
+        // called multiple times
+        runtimes.getSynset += e - b;
         return iword.getSynset();
     }
 
-    public List<List<ISynsetID>> getTrees(ISynset synset) {
-
-        List<List<ISynsetID>> trees = new ArrayList<List<ISynsetID>>();
-        if (db == null) {
-            trees = HypernymTreesFinder.getHypernymTrees(dictionary, synset);
-        } else {
-            if (db.isEmpty()) {
-                trees = HypernymTreesFinder.getHypernymTrees(dictionary, synset);
-            } else {
-                trees = db.getSynsetsTrees(synset.getID());
-            }
-        }
-        return trees;
+    public List<IWordID> getWordIDs(IIndexWord w) {
+        long b = System.currentTimeMillis();
+        List<IWordID> wordIDs = w.getWordIDs();
+        long e = System.currentTimeMillis();
+        // called multiple times
+        runtimes.getWordIDs += e - b;
+        return wordIDs;
     }
 
-    protected HashMap<ISynset, List<List<ISynsetID>>> preprocessHypernymTrees(IIndexWord word) {
+    public ArrayList<ArrayList<ISynsetID>> getPaths(ISynset synset) {
+        long b = System.currentTimeMillis();
+        if (synset == null)
+            return new ArrayList<ArrayList<ISynsetID>>();
 
-        if (word == null)
-            return null;
+        ArrayList<ArrayList<ISynsetID>> paths = preIndex ? db.getSynsetPaths(synset.getID().toString())
+                : HypernymPathsFinder.getHypernymPaths(dictionary, synset);
 
-        ISynset synset;
-        HashMap<ISynset, List<List<ISynsetID>>> hypernymTrees = new HashMap<ISynset, List<List<ISynsetID>>>();
-
-        List<IWordID> wordIDs = word.getWordIDs();
-        if (wordIDs == null) {
-            return hypernymTrees;
-        }
-        for (IWordID wordID : wordIDs) {
-            IWord iword = getIWord(wordID);
-            if (iword != null) {
-                synset = getSynset(iword);
-                if (synset != null) {
-                    List<List<ISynsetID>> trees = getTrees(synset);
-                    if (trees.isEmpty() == false)
-                        hypernymTrees.put(synset, trees);
-                }
-            }
-
-        }
-        return hypernymTrees;
+        long e = System.currentTimeMillis();
+        // called multiple times
+        runtimes.getHypernymPaths += e - b;
+        return paths;
     }
 
     @Override
     public double getSimilarity(ISynset synset1, ISynset synset2) {
-        List<List<ISynsetID>> list1 = getTrees(synset1);
-        List<List<ISynsetID>> list2 = getTrees(synset2);
 
-        return getSimilarity(synset1, list1, synset2, list2);
+        double sim = 0.0;
+
+        if (filtering == true) {
+
+            int minDepth1 = 0, minDepth2 = 0;
+            int[] depths1 = new int[3], depths2 = new int[3];
+
+            long bMinMax = System.currentTimeMillis();
+            if (preIndex) {
+                minDepth1 = db.getMinDepth(synset1.getID().toString());
+                minDepth2 = db.getMinDepth(synset2.getID().toString());
+            } else {
+                depths1 = MinMaxDepthFinder.getMinMaxDepth(synset1.getID().toString(), dictionary, db);
+                minDepth1 = depths1[0];
+                depths2 = MinMaxDepthFinder.getMinMaxDepth(synset2.getID().toString(), dictionary, db);
+                minDepth2 = depths2[0];
+            }
+            long eMinMax = System.currentTimeMillis();
+            // called multiple times
+            runtimes.getMinMaxDepth += eMinMax - bMinMax;
+
+            ArrayList<Integer> parameters = new ArrayList<Integer>();
+            parameters.add(minDepth1);
+            parameters.add(minDepth2);
+
+            if (this.getName().equals("wupalmer") || this.getName().equals("li")) {
+                int maxDepth1 = 0, maxDepth2 = 0;
+                bMinMax = System.currentTimeMillis();
+                if (preIndex) {
+                    maxDepth1 = db.getMaxDepth(synset1.getID().toString());
+                    maxDepth2 = db.getMaxDepth(synset2.getID().toString());
+                } else {
+                    maxDepth1 = depths1[1];
+                    maxDepth2 = depths2[1];
+                }
+                eMinMax = System.currentTimeMillis();
+                // called multiple times
+                runtimes.getMinMaxDepth += eMinMax - bMinMax;
+
+                parameters.add(maxDepth1);
+                parameters.add(maxDepth2);
+            }
+            int D = getHierarchyDepth(synset1.getType());
+            parameters.add(D);
+
+            long bFilter = System.currentTimeMillis();
+            boolean passed = filter(parameters);
+            long eFilter = System.currentTimeMillis();
+            // called multiple times
+            runtimes.filter += eFilter - bFilter;
+
+            if (passed == false) {
+                return 0.0d;
+            } else {
+                // if (simple == false)
+                sim = getSimilarityComplex(synset1, synset2);
+                // else
+                // sim = getSimilaritySimple(synset1, synset2);
+            }
+        } else {
+            // if (simple == false)
+            sim = getSimilarityComplex(synset1, synset2);
+            // else
+            // sim = getSimilaritySimple(synset1, synset2);
+        }
+
+        return sim;
+
     }
 
     @Override
@@ -150,98 +293,152 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         if (w1.getPOS().getNumber() != w2.getPOS().getNumber())
             return maxSim;
 
-        HashMap<ISynset, List<List<ISynsetID>>> trees2 = preprocessHypernymTrees(w2);
-        if (trees2.isEmpty() == true)
-            return maxSim;
-
-        List<IWordID> wordIDs1 = w1.getWordIDs();
+        // runtime calculated individually
+        List<IWordID> wordIDs1 = getWordIDs(w1);
         if (wordIDs1 == null) {
             return maxSim;
         }
+        // runtime calculated individually
+        List<IWordID> wordIDs2 = getWordIDs(w2);
+        if (wordIDs2 == null) {
+            return maxSim;
+        }
+
         for (IWordID wordID1 : wordIDs1) {
+            // runtime calculated individually
             IWord iword1 = getIWord(wordID1);
             if (iword1 != null) {
+                // runtime calculated individually
                 ISynset synset1 = getSynset(iword1);
                 if (synset1 != null) {
 
-                    List<List<ISynsetID>> synset1Tree = getTrees(synset1);
+                    for (IWordID wordID2 : wordIDs2) {
+                        // runtime calculated individually
+                        IWord iword2 = getIWord(wordID2);
+                        if (iword2 != null) {
+                            // runtime calculated individually
+                            ISynset synset2 = getSynset(iword2);
+                            if (synset2 != null) {
 
-                    if (synset1Tree.isEmpty() == false) {
-                        for (Map.Entry<ISynset, List<List<ISynsetID>>> entry2 : trees2.entrySet()) {
-                            ISynset synset2 = entry2.getKey();
-                            List<List<ISynsetID>> synset2Tree = entry2.getValue();
-                            sim = getSimilarity(synset1, synset1Tree, synset2, synset2Tree);
-                            if (sim > maxSim) {
-                                maxSim = sim;
-                            }
-                            if (maxSim == 1.0d) {
-                                return maxSim;
+                                // runtime calculated individually
+                                sim = this.getSimilarity(synset1, synset2);
+
+                                if (sim > maxSim) {
+                                    maxSim = sim;
+                                }
+                                if (maxSim == 1.0d) {
+                                    return maxSim;
+                                }
+
                             }
                         }
                     }
 
                 }
             }
-
         }
 
         return maxSim;
     }
 
+    public String[] tokenize(String[] input) {
+        String[] tokens = null;
+        try {
+            tokens = Tokenizer.tokenize(new WordTokenizer(), input);
+        } catch (Exception e) {
+            logger.error("Could tokenize: " + input[0]);
+            e.printStackTrace();
+        }
+        return tokens;
+    }
+
+    public double checkSimilarity(HashMap<String, Double> similaritiesMap, String sourceToken, String targetToken) {
+        long bCheck = System.currentTimeMillis();
+        double similarity = 0.0d;
+        String together = sourceToken + "||" + targetToken;
+        String together2 = targetToken + "||" + sourceToken;
+
+        if (similaritiesMap.containsKey(together)) {
+            similarity = similaritiesMap.get(together);
+        } else if (similaritiesMap.containsKey(together2)) {
+            similarity = similaritiesMap.get(together2);
+        } else {
+            similarity = Double.MAX_VALUE;
+        }
+        long eCheck = System.currentTimeMillis();
+        // called multiple times
+        runtimes.checkSimilarity += eCheck - bCheck;
+
+        return similarity;
+    }
+
     @Override
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         // test in each semantic similarity
+        long b = System.currentTimeMillis();
 
-        if (dictionaryFlag == true)
-            dictionary.openDictionaryFromFile();
+        // if (dictionaryFlag == true)
+        // dictionary.openDictionaryFromFile();
         double sim = 0;
         double maxSim = 0;
+
+        // pre-tokenize all target labels
+        long bTokenizeTarget = System.currentTimeMillis();
+        ArrayList<String[]> targetInTokens = new ArrayList<String[]>();
+        for (String targetValue : instance2.getProperty(property2)) {
+            if (targetValue.equals(""))
+                continue;
+            String[] tempTokens = tokenize(new String[] { targetValue });
+            targetInTokens.add(tempTokens);
+        }
+        long eTokenizeTarget = System.currentTimeMillis();
+        // called once per instance pair
+        runtimes.targetTokenizing = eTokenizeTarget - bTokenizeTarget;
+
+        ///////////////////////////////////////////////////////////////////
         HashMap<String, Double> similaritiesMap = new HashMap<String, Double>();
+
         for (String sourceValue : instance1.getProperty(property1)) {
-            // logger.info("Source value: " + sourceValue);
-            for (String targetValue : instance2.getProperty(property2)) {
-                // create bag of words for each property value
-                // logger.info("Target value: " + targetValue);
+            // System.out.println("++++++++++++++++++++++++++++++");
+            if (sourceValue.equals(""))
+                continue;
+
+            long bTokenizeBegin = System.currentTimeMillis();
+            String[] sourceTokens = tokenize(new String[] { sourceValue });
+            long eTokenizeBegin = System.currentTimeMillis();
+            // called multiple times, once for each source value
+            runtimes.sourceTokenizing += eTokenizeBegin - bTokenizeBegin;
+
+            for (String[] targetTokens : targetInTokens) {
+
                 double sourceTokensSum = 0;
                 // compare each token of the current source value
                 // with every token of the current target value
-                WordTokenizer tokenizerSource = new WordTokenizer();
-                tokenizerSource.tokenize(sourceValue);
-                int counter = 0;
-                while (tokenizerSource.hasMoreElements() == true) {
+                int nonSWCounter = 0;
 
-                    String sourceToken = tokenizerSource.nextElement();
+                for (String sourceToken : sourceTokens) {
 
                     if (!Stopwords.isStopword(sourceToken)) {
-                        counter++;
+
+                        nonSWCounter++;
                         double maxTargetTokenSim = 0;
-                        WordTokenizer tokenizerTarget = new WordTokenizer();
-                        tokenizerTarget.tokenize(targetValue);
 
-                        while (tokenizerTarget.hasMoreElements() == true) {
-
-                            String targetToken = tokenizerTarget.nextElement();
+                        for (String targetToken : targetTokens) {
 
                             if (!Stopwords.isStopword(targetToken)) {
 
                                 double targetTokenSim = 0.0d;
-                                // logger.info("Source token: " + sourceToken +
-                                // " Target token: " + targetToken);
-                                String together = sourceToken + "||" + targetToken;
-                                String together2 = targetToken + "||" + sourceToken;
-                                if (similaritiesMap.containsKey(together)) {
-                                    targetTokenSim = similaritiesMap.get(together);
-                                    // logger.info("Similarity exists");
-                                } else if (similaritiesMap.containsKey(together2)) {
-                                    targetTokenSim = similaritiesMap.get(together2);
-                                    // logger.info("Similarity exists2");
-                                } else {
-                                    // logger.info("Similarity doesn't exist");
+
+                                double tempSim = checkSimilarity(similaritiesMap, sourceToken, targetToken);
+                                if (tempSim == Double.MAX_VALUE) {
                                     targetTokenSim = (sourceToken.equals(targetToken) == true) ? 1d
                                             : getSimilarity(sourceToken, targetToken);
-                                    similaritiesMap.put(together, targetTokenSim);
+                                    similaritiesMap.put(sourceToken + "||" + targetToken, targetTokenSim);
+                                } else {
+                                    targetTokenSim = tempSim;
                                 }
-
+                                // System.out.println("----> "+sourceToken + " "
+                                // + targetToken + " = " + targetTokenSim);
                                 if (targetTokenSim > maxTargetTokenSim) {
                                     maxTargetTokenSim = targetTokenSim;
                                 }
@@ -250,9 +447,13 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                                 }
                             }
                         }
+                        // System.out.println("--------------------------------");
                         // for the current source bag of words, add the max
                         // similarity to the sum over all current source
                         // token similarities
+                        // if(maxTargetTokenSim > sourceTokensSum)
+                        // sourceTokensSum = maxTargetTokenSim;
+
                         sourceTokensSum += maxTargetTokenSim;
                     }
 
@@ -260,11 +461,13 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                 // get the average of the max similarities of each source token
                 // this is the similarity of the current source bag of words
                 // logger.info("Non stop words " + counter);
-                if (counter > 0)
-                    sim = (double) sourceTokensSum / ((double) (counter));
+                // sim = sourceTokensSum;
+                if (nonSWCounter > 0)
+                    sim = (double) sourceTokensSum / ((double) (nonSWCounter));
                 else
                     sim = 0;
-                // logger.info("Average Sum " + sim);
+
+                // System.out.println("Score " + sim);
 
                 if (sim > maxSim) {
                     maxSim = sim;
@@ -274,10 +477,24 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                 }
             }
         }
-        if (dictionaryFlag == true)
-            dictionary.removeDictionary();
 
+        // if (dictionaryFlag == true)
+        // dictionary.removeDictionary();
+
+        long e = System.currentTimeMillis();
+        // called once
+        runtimes.getSimilarityInstances += e - b;
         return maxSim;
+    }
+
+    public void closeDB() {
+        if (preIndex) {
+            db.close();
+        }
+    }
+
+    public void closeDictionary() {
+        dictionary.removeDictionary();
     }
 
     @Override
@@ -285,8 +502,11 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         if (object1 == null || object2 == null)
             return 0.0d;
 
+        // runtime calculated individually
         IIndexWord idxWord1 = getIIndexWord(object1.toString());
+        // runtime calculated individually
         IIndexWord idxWord2 = getIIndexWord(object2.toString());
+
         if (idxWord1 == null || idxWord2 == null)
             return 0.0d;
         else {
@@ -300,6 +520,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
     @Override
     public IIndexWord getIIndexWord(String str) {
+        long b = System.currentTimeMillis();
         if (str == null)
             return null;
 
@@ -314,6 +535,9 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
             }
 
         }
+        long e = System.currentTimeMillis();
+        // called multiple times
+        runtimes.getIIndexWords += e - b;
         return idxWord1;
     }
 

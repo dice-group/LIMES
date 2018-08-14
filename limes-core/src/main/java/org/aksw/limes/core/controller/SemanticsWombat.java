@@ -48,11 +48,11 @@ import java.util.*;
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  */
 
-public class Semantics {
+public class SemanticsWombat {
     /**
      *
      */
-    private static final Logger logger = Logger.getLogger(Semantics.class);
+    private static final Logger logger = Logger.getLogger(SemanticsWombat.class);
 
     public static AMapping fullReferenceMapping;
     public static int fold = 1;
@@ -169,7 +169,7 @@ public class Semantics {
             logger.error("Not enough arguments");
             System.exit(1);
         }
-        Semantics.init(args);
+        SemanticsWombat.init(args);
         ACache fullSourceCache = data.getSourceCache();
         ACache fullTargetCache = data.getTargetCache();
         fullReferenceMapping = removeLinksWithNoInstances(data.getReferenceMapping(), fullSourceCache, fullTargetCache);

@@ -7,7 +7,8 @@ import edu.mit.jwi.item.ISynsetID;
 
 public class LeastCommonSubsumerFinder {
     LeastCommonSubsumer lcs = null;
-
+    public static long duration = 0l;
+    
     public int getDepth() {
         if (lcs == null)
             return -1;
@@ -20,8 +21,10 @@ public class LeastCommonSubsumerFinder {
         return lcs.getSynsetsDistance();
     }
 
-    public void getLeastCommonSubsumer(List<List<ISynsetID>> synset1Tree, List<List<ISynsetID>> synset2Tree) {
+    public void getLeastCommonSubsumer(ArrayList<ArrayList<ISynsetID>> synset1Tree,
+            ArrayList<ArrayList<ISynsetID>> synset2Tree) {
 
+        long begin = System.currentTimeMillis();
         if (synset1Tree == null || synset2Tree == null)
             return;
 
@@ -61,10 +64,13 @@ public class LeastCommonSubsumerFinder {
 
             }
         }
+        long end = System.currentTimeMillis();
+        duration = end - begin;
     }
 
-    public void getLeastCommonSubsumerViaShortestPath(List<List<ISynsetID>> synset1Tree,
-            List<List<ISynsetID>> synset2Tree) {
+    @Deprecated
+    public void getLeastCommonSubsumerViaShortestPath(ArrayList<ArrayList<ISynsetID>> synset1Tree,
+            ArrayList<ArrayList<ISynsetID>> synset2Tree) {
 
         if (synset1Tree == null || synset2Tree == null)
             return;

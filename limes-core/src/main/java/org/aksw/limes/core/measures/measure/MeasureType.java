@@ -21,14 +21,5 @@ public enum MeasureType {
     SET_JACCARD,
     SHORTEST_PATH,LCH,LI,WUPALMER;
     
-    private String strategy = null;
-    
-    public void setStrategy(String str){
-        strategy = str;
-    }
-    
-    public String getStrategy(){
-        return this.strategy;
-    }
     
 }

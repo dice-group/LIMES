@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.measure.semantic.edgecounting.utils;
+package org.aksw.limes.core.measures.measure.semantic.edgecounting.dictionary;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -515,13 +515,13 @@ public class MeasureFactory {
             return new SetJaccardMeasure();
         ///////////////////////
         case SHORTEST_PATH:
-            return new ShortestPathMeasure(null);
+            return new ShortestPathMeasure(0.0, false, false);
         case LCH:
-            return new LCHMeasure(null);
+            return new LCHMeasure(0.0, false, false);
         case LI:
-            return new LiMeasure(null);
+            return new LiMeasure(0.0, false, false);
         case WUPALMER:
-            return new WuPalmerMeasure(null);
+            return new WuPalmerMeasure(0.0, false, false);
 
         ////////////////////////////////
         default:
