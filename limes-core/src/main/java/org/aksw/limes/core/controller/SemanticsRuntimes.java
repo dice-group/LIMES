@@ -64,12 +64,14 @@ public class SemanticsRuntimes {
         int index = datasets.indexOf(currentDataset);
         currentPredicates = predicates.get(index);
         currentConfigFile = baseFolderName + configNames.get(index);
+        
         AConfigurationReader cR = new XMLConfigurationReader(currentConfigFile);
         cR.read();
         source = HybridCache.getData(cR.getConfiguration().getSourceInfo());
         target = HybridCache.getData(cR.getConfiguration().getTargetInfo());
         sourceV = cR.getConfiguration().getSourceInfo().getVar();
         targetV = cR.getConfiguration().getTargetInfo().getVar();
+        
         String tempName = "-" + measure + "-" + iteration + "-" + args[2].toLowerCase() + "-" + args[3].toLowerCase();
         resultsFile = System.getProperty("user.dir") + "/"
                 + cR.getConfiguration().getSourceInfo().getEndpoint().substring(0,
@@ -95,7 +97,7 @@ public class SemanticsRuntimes {
             throw new RuntimeException();
         }
         csvWriter.writeNext(new String[] { "LS", "theta", "Runtime", "IndexMinMax", "IndexPaths", "createDictionary",
-                "getSimilarityInstances", "sourceTokenizing", "targetTokenizing", "checkSimilarity", "getIIndexWords",
+                "getSimilarityInstances", "sourceTokenizing", "targetTokenizing", "checkStopWords" ,"checkSimilarity", "getIIndexWords",
                 "getWordIDs", "getIWord", "getSynset", "getMinMaxDepth", "filter", "getHypernymPaths",
                 "getSynsetSimilarity", "Mapping" }, false);
         try {
@@ -111,7 +113,7 @@ public class SemanticsRuntimes {
     public void writeResults(String measureExpression, double thrs, long runtime, long IndexMinMax, long IndexPaths,
             EdgeCountingSemanticMapper mapper, AMapping mapping) {
 
-        String[] values = new String[19];
+        String[] values = new String[20];
         values[0] = measureExpression;
         values[1] = String.valueOf(thrs);
         values[2] = String.valueOf((double) runtime / 1000);
@@ -125,20 +127,23 @@ public class SemanticsRuntimes {
 
         values[7] = String.valueOf((double) runtimes.getSourceTokenizing() / 1000);
         values[8] = String.valueOf((double) runtimes.getTargetTokenizing() / 1000);
-        values[9] = String.valueOf((double) runtimes.getCheckSimilarity() / 1000);
+        values[9] = String.valueOf((double) runtimes.checkStopWords() / 1000);
 
-        values[10] = String.valueOf((double) runtimes.getGetIIndexWords() / 1000);
-        values[11] = String.valueOf((double) runtimes.getGetWordIDs() / 1000);
-        values[12] = String.valueOf((double) runtimes.getGetIWord() / 1000);
+        ///////////////
+        values[10] = String.valueOf((double) runtimes.getCheckSimilarity() / 1000);
 
-        values[13] = String.valueOf((double) runtimes.getGetSynset() / 1000);
-        values[14] = String.valueOf((double) runtimes.getGetMinMaxDepth() / 1000);
-        values[15] = String.valueOf((double) runtimes.getFilter() / 1000);
-        values[16] = String.valueOf((double) runtimes.getGetHypernymPaths() / 1000);
+        values[11] = String.valueOf((double) runtimes.getGetIIndexWords() / 1000);
+        values[12] = String.valueOf((double) runtimes.getGetWordIDs() / 1000);
+        values[13] = String.valueOf((double) runtimes.getGetIWord() / 1000);
 
-        values[17] = String.valueOf((double) runtimes.getGetSynsetSimilarity() / 1000);
+        values[14] = String.valueOf((double) runtimes.getGetSynset() / 1000);
+        values[15] = String.valueOf((double) runtimes.getGetMinMaxDepth() / 1000);
+        values[16] = String.valueOf((double) runtimes.getFilter() / 1000);
+        values[17] = String.valueOf((double) runtimes.getGetHypernymPaths() / 1000);
 
-        values[18] = String.valueOf((double) mapping.size());
+        values[18] = String.valueOf((double) runtimes.getGetSynsetSimilarity() / 1000);
+
+        values[19] = String.valueOf((double) mapping.size());
 
         try {
             csvWriter = new CSVWriter(new FileWriter(resultsFile, true));

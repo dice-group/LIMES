@@ -12,6 +12,7 @@ import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.semantic.edgecounting.EdgeCountingSemanticMapper;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure.RuntimeStorage;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.preprocessing.PreIndexing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ public class SemanticsBaseline {
     public String currentConfigFile = null;
     public HybridCache source = null;
     public HybridCache target = null;
-    public boolean index = false;
+    public boolean index = true;
     public boolean filter = false;
     public int no = 0;
     public String measure = null;
@@ -50,20 +51,32 @@ public class SemanticsBaseline {
 
         String currentDataset = args[0];
         measure = args[1];
-        no = Integer.valueOf(args[2]);
+
+        if (args[2].equalsIgnoreCase("filter"))
+            filter = true;
+        else
+            filter = false;
+
+        if (args[3].equalsIgnoreCase("index"))
+            index = true;
+        else
+            index = false;
+
+        no = Integer.valueOf(args[4]);
 
         int index = datasets.indexOf(currentDataset);
         currentPredicates = predicates.get(index);
         currentConfigFile = baseFolderName + configNames.get(index);
-        
+
         AConfigurationReader cR = new XMLConfigurationReader(currentConfigFile);
         cR.read();
         source = HybridCache.getData(cR.getConfiguration().getSourceInfo());
         target = HybridCache.getData(cR.getConfiguration().getTargetInfo());
         sourceV = cR.getConfiguration().getSourceInfo().getVar();
         targetV = cR.getConfiguration().getTargetInfo().getVar();
-        
-        String tempName = "-" + measure + "-" + iteration + "-" + "Baseline"+no;
+
+        String tempName = "-" + measure + "-" + iteration + "-" + args[2].toLowerCase() + "-" + args[3].toLowerCase()
+                + "-" + no;
         resultsFile = System.getProperty("user.dir") + "/"
                 + cR.getConfiguration().getSourceInfo().getEndpoint().substring(0,
                         cR.getConfiguration().getSourceInfo().getEndpoint().lastIndexOf("/"))
@@ -87,10 +100,13 @@ public class SemanticsBaseline {
             e.printStackTrace();
             throw new RuntimeException();
         }
-        csvWriter.writeNext(new String[] { "LS", "theta", "Runtime", "IndexMinMax", "IndexPaths", "createDictionary",
-                "getSimilarityInstances", "sourceTokenizing", "targetTokenizing", "checkSimilarity", "getIIndexWords",
-                "getWordIDs", "getIWord", "getSynset", "getMinMaxDepth", "filter", "getHypernymPaths",
-                "getSynsetSimilarity", "Mapping" }, false);
+        csvWriter
+                .writeNext(
+                        new String[] { "LS", "theta", "Runtime", "IndexMinMax", "IndexPaths", "createDictionary",
+                                "getSimilarityInstances", "sourceTokenizing", "targetTokenizing", "checkStopWords",
+                                "checkSimilarity", "getIIndexWords", "getWordIDs", "getIWord", "getSynset",
+                                "getMinMaxDepth", "filter", "getHypernymPaths", "getSynsetSimilarity", "Mapping" },
+                        false);
         try {
             csvWriter.close();
         } catch (IOException e) {
@@ -104,7 +120,7 @@ public class SemanticsBaseline {
     public void writeResults(String measureExpression, double thrs, long runtime, long IndexMinMax, long IndexPaths,
             EdgeCountingSemanticMapper mapper, AMapping mapping) {
 
-        String[] values = new String[19];
+        String[] values = new String[20];
         values[0] = measureExpression;
         values[1] = String.valueOf(thrs);
         values[2] = String.valueOf((double) runtime / 1000);
@@ -118,20 +134,23 @@ public class SemanticsBaseline {
 
         values[7] = String.valueOf((double) runtimes.getSourceTokenizing() / 1000);
         values[8] = String.valueOf((double) runtimes.getTargetTokenizing() / 1000);
-        values[9] = String.valueOf((double) runtimes.getCheckSimilarity() / 1000);
+        values[9] = String.valueOf((double) runtimes.checkStopWords() / 1000);
 
-        values[10] = String.valueOf((double) runtimes.getGetIIndexWords() / 1000);
-        values[11] = String.valueOf((double) runtimes.getGetWordIDs() / 1000);
-        values[12] = String.valueOf((double) runtimes.getGetIWord() / 1000);
+        ///////////////
+        values[10] = String.valueOf((double) runtimes.getCheckSimilarity() / 1000);
 
-        values[13] = String.valueOf((double) runtimes.getGetSynset() / 1000);
-        values[14] = String.valueOf((double) runtimes.getGetMinMaxDepth() / 1000);
-        values[15] = String.valueOf((double) runtimes.getFilter() / 1000);
-        values[16] = String.valueOf((double) runtimes.getGetHypernymPaths() / 1000);
+        values[11] = String.valueOf((double) runtimes.getGetIIndexWords() / 1000);
+        values[12] = String.valueOf((double) runtimes.getGetWordIDs() / 1000);
+        values[13] = String.valueOf((double) runtimes.getGetIWord() / 1000);
 
-        values[17] = String.valueOf((double) runtimes.getGetSynsetSimilarity() / 1000);
+        values[14] = String.valueOf((double) runtimes.getGetSynset() / 1000);
+        values[15] = String.valueOf((double) runtimes.getGetMinMaxDepth() / 1000);
+        values[16] = String.valueOf((double) runtimes.getFilter() / 1000);
+        values[17] = String.valueOf((double) runtimes.getGetHypernymPaths() / 1000);
 
-        values[18] = String.valueOf((double) mapping.size());
+        values[18] = String.valueOf((double) runtimes.getGetSynsetSimilarity() / 1000);
+
+        values[19] = String.valueOf((double) mapping.size());
 
         try {
             csvWriter = new CSVWriter(new FileWriter(resultsFile, true));
@@ -152,7 +171,7 @@ public class SemanticsBaseline {
     }
 
     public static void main(String[] args) {
-        if (args.length != 3) {
+        if (args.length != 5) {
             logger.error("Not enough arguments");
             System.exit(1);
         }
@@ -165,17 +184,29 @@ public class SemanticsBaseline {
             // indexing
             long indexMinMax = 0l;
             long indexPaths = 0l;
+            if (controller.index) {
+                long bIndex = System.currentTimeMillis();
+                PreIndexing.flush = true;
+                PreIndexing.preIndexMinMaxDepths();
+                long eIndex = System.currentTimeMillis();
+                indexMinMax = eIndex - bIndex;
+
+                bIndex = System.currentTimeMillis();
+                PreIndexing.flush = false;
+                PreIndexing.preIndexPaths();
+                eIndex = System.currentTimeMillis();
+                indexPaths = eIndex - bIndex;
+            }
 
             double thrs = 0.1d;
-            
-            
+
             while (thrs <= 1.0d) {
                 long begin = System.currentTimeMillis();
-                
+
                 EdgeCountingSemanticMapper mapper = new EdgeCountingSemanticMapper();
                 mapper.setValues(controller.index, controller.filter);
                 mapper.setNo(controller.no);
-                
+
                 long b = System.currentTimeMillis();
                 String expression = controller.measure + "(" + controller.sourceV.charAt(1) + "."
                         + controller.currentPredicates.split("-")[0] + "," + controller.targetV.charAt(1) + "."
@@ -188,13 +219,13 @@ public class SemanticsBaseline {
 
                 long e = System.currentTimeMillis();
 
-                controller.writeResults(controller.measure, (Math.round(thrs * 100.0) / 100.0), (e - b), indexMinMax,
-                        indexPaths, mapper, mapping);
+                controller.writeResults(controller.measure, (Math.round(thrs * 100.0) / 100.0),
+                        (e - b) + indexMinMax + indexPaths, indexMinMax, indexPaths, mapper, mapping);
                 thrs += 0.1d;
-                
+
                 long end = System.currentTimeMillis();
                 long duration = end - begin;
-                if(duration >= 7200000)
+                if (duration >= 7200000)
                     break;
             }
 

@@ -76,6 +76,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         protected long createDictionary = 0l;
         protected long sourceTokenizing = 0l;
         protected long targetTokenizing = 0l;
+        protected long checkStopWords = 0l;
         protected long checkSimilarity = 0l;
         protected long getIIndexWords = 0l;
         protected long getWordIDs = 0l;
@@ -91,6 +92,10 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
             return createDictionary;
         }
 
+        public long checkStopWords() {
+            return checkStopWords;
+        }
+        
         public long getSourceTokenizing() {
             return sourceTokenizing;
         }
@@ -393,7 +398,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         }
         long eTokenizeTarget = System.currentTimeMillis();
         // called once per instance pair
-        runtimes.targetTokenizing = eTokenizeTarget - bTokenizeTarget;
+        runtimes.targetTokenizing += eTokenizeTarget - bTokenizeTarget;
 
         ///////////////////////////////////////////////////////////////////
         HashMap<String, Double> similaritiesMap = new HashMap<String, Double>();
@@ -406,6 +411,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
             long bTokenizeBegin = System.currentTimeMillis();
             String[] sourceTokens = tokenize(new String[] { sourceValue });
             long eTokenizeBegin = System.currentTimeMillis();
+
             // called multiple times, once for each source value
             runtimes.sourceTokenizing += eTokenizeBegin - bTokenizeBegin;
 
@@ -417,15 +423,24 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                 int nonSWCounter = 0;
 
                 for (String sourceToken : sourceTokens) {
+                    long bStopSource = System.currentTimeMillis();
+                    boolean flagSource = Stopwords.isStopword(sourceToken);
+                    long eStopSource = System.currentTimeMillis();
+                    runtimes.checkStopWords += eStopSource - bStopSource;
 
-                    if (!Stopwords.isStopword(sourceToken)) {
+                    if (!flagSource) {
 
                         nonSWCounter++;
                         double maxTargetTokenSim = 0;
 
                         for (String targetToken : targetTokens) {
 
-                            if (!Stopwords.isStopword(targetToken)) {
+                            long bStopTarget = System.currentTimeMillis();
+                            boolean flagTarget = Stopwords.isStopword(targetToken);
+                            long eStopTarget = System.currentTimeMillis();
+                            runtimes.checkStopWords += eStopTarget - bStopTarget;
+                            
+                            if (!flagTarget) {
 
                                 double targetTokenSim = 0.0d;
 

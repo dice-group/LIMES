@@ -67,10 +67,10 @@ public class EdgeCountingSemanticMapper extends AMapper {
         int counterSource = 0;
         for (Instance sourceInstance : source.getAllInstances()) {
             counterSource++;
-            System.out.println("Source URI "+sourceInstance.getUri());
+            //System.out.println("Source URI "+sourceInstance.getUri());
             int counterTarget = 0;
             for (Instance targetInstance : target.getAllInstances()) {
-                System.out.println("-->Target URI "+targetInstance.getUri());
+                //System.out.println("-->Target URI "+targetInstance.getUri());
                 counterTarget++;
                 //long begin = System.currentTimeMillis();
                 double similarity = measure.getSimilarity(sourceInstance, targetInstance, properties.get(0),
