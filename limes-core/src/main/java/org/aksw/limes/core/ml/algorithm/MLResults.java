@@ -15,8 +15,8 @@ import org.aksw.limes.core.ml.algorithm.classifier.SimpleClassifier;
  */
 
 public class MLResults {
-    protected LinkSpecification linkspec;
-    protected AMapping mapping;
+	protected LinkSpecification linkspec;
+	protected AMapping mapping;
     protected double quality;
     protected Map<String, Object> details = new HashMap<>();
     protected List<SimpleClassifier> classifiers = null;

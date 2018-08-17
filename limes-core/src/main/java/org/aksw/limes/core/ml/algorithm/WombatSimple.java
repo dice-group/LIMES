@@ -42,7 +42,7 @@ public class WombatSimple extends AWombat {
     /**
      * WombatSimple constructor.
      */
-    protected WombatSimple() {
+    public WombatSimple() {
         super();
     }
 
@@ -52,7 +52,7 @@ public class WombatSimple extends AWombat {
     }
 
     @Override
-    protected void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
+	protected void init(List<LearningParameter> lp, ACache sourceCache, ACache targetCache) {
         super.init(lp, sourceCache, targetCache);
         sourceUris = sourceCache.getAllUris();
         targetUris = targetCache.getAllUris();
@@ -62,7 +62,7 @@ public class WombatSimple extends AWombat {
     }
 
     @Override
-    protected MLResults learn(AMapping trainingData) {
+	public MLResults learn(AMapping trainingData) {
         this.trainingData = trainingData;
         fillSampleSourceTargetCaches(trainingData);
         this.sourceCache = sourceSample;
@@ -73,7 +73,7 @@ public class WombatSimple extends AWombat {
     /**
      * @return wrap with results, null if no result found
      */
-    private MLResults learn() {
+    public MLResults learn() {
         if (bestSolutionNode == null) { // not to do learning twice
             bestSolutionNode = findBestSolution();
         }

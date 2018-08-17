@@ -60,7 +60,7 @@ public class RADON {
 			}
 			double estAreaS = stats[0] * stats[1] * s.size;
 			double estAreaT = stats[2] * stats[3] * t.size;
-			// we want to swap towards the smallest area coverage to optimizethe
+			// we want to swap towards the smallest area coverage to optimize the
 			// number of comparisons
 			swap = estAreaS > estAreaT;
 			return new double[] { (2.0d) / (stats[0] + stats[2]), (2.0d) / (stats[1] + stats[3]) };
@@ -352,7 +352,7 @@ public class RADON {
 				try {
 					gMap.put(uri, wktReader.read(wkt));
 				} catch (ParseException e) {
-					logger.warn("Skipping malformed geometry at " + uri + "...");
+					//logger.warn("Skipping malformed geometry at " + uri + "...");
 				}
 			}
 		}
@@ -545,7 +545,7 @@ public class RADON {
 			}
 			m = disjoint;
 		}
-		System.out.println("the size of RADON "+ m.getSize());
+		//System.out.println("the size of RADON "+ m.getSize());
 		return m;
 	}
 

@@ -23,10 +23,9 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 import com.vividsolutions.jts.simplify.TopologyPreservingSimplifier;
-import com.vividsolutions.jts.simplify.VWSimplifier;
 
 
-public class PolygonSiplification {
+public class PolygonSimplification {
 
 
 	Set<Polygon> sourceWithSimpilification(String str1,String str2) throws ParseException {
@@ -75,7 +74,7 @@ public class PolygonSiplification {
 		return polygons ;
 	}
 
-	Set<Polygon> sourceWithoutSimpilification(String str2) {
+	public static Set<Polygon> sourceWithoutSimpilification(String str2) {
 
 		final String ngeo = "http://www.opengis.net/ont/geosparql#";
 		Set<Polygon> polygons1=new HashSet<Polygon>();
@@ -106,9 +105,9 @@ public class PolygonSiplification {
 		return polygons1 ;
 	}
 
-	ACache cacheWithoutSimplification(String str2) throws ParseException {
+	public static ACache cacheWithoutSimplification(String str2) throws ParseException {
 
-		String ngeo = "http://www.opengis.net/ont/geosparql#";
+		final String ngeo = "http://www.opengis.net/ont/geosparql#";
 		Property p = ResourceFactory.createProperty(ngeo,"asWKT");
 		Model model=ModelFactory.createDefaultModel();
 		java.io.InputStream in = FileManager.get().open( str2 );
@@ -138,10 +137,11 @@ public class PolygonSiplification {
 		double time1;
 		double time2 ;
 		double time3=0;
+		final String ngeo = "http://www.opengis.net/ont/geosparql#";
 		ACache s1 = new MemoryCache();
 		GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory( null );
 		WKTReader reader = new WKTReader( geometryFactory );
-		String ngeo = "http://www.opengis.net/ont/geosparql#";
+		
 		Property p = ResourceFactory.createProperty(ngeo,"asWKT");
 		Model model=ModelFactory.createDefaultModel();
 		double value = Double.parseDouble(str1);
@@ -163,7 +163,7 @@ public class PolygonSiplification {
 				strO="POLYGON "+strO+"))";}
 			time1= System.nanoTime()/1000000;
 			Geometry pLtemp=  reader.read(strO);
-			Geometry geomTemp=	VWSimplifier.simplify(pLtemp,value); //TopologyPreservingSimplifier VWSimplifier
+			Geometry geomTemp=	TopologyPreservingSimplifier.simplify(pLtemp,value); //TopologyPreservingSimplifier VWSimplifier
 			time2= System.nanoTime()/1000000;
 			time3=time3+(time2-time1);
 			String strP = pro.toString();

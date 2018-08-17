@@ -43,7 +43,7 @@ public class LinkSpecification implements ILinkSpecification {
     protected String atomicMeasure = ""; // eg. trigrams...
     protected String prop1 = "";
     protected String prop2 = "";
-    protected String treePath = "";
+    public String treePath = "";
     protected String fullExpression = "";
     // just a quick hack to have lower borders for advanced threshold searches
     private double lowThreshold = 0d;

@@ -31,14 +31,14 @@ public class SimpleNLGTemplate {
 	public static String realisation3;
 	public static String realisation4;
 
-	public String getIntroduction() {
+	public String getIntroductionNLG() {
 		return realisation;	
 	}
 	
-	public String getFullMeasure() {
+	public String getFullMeasureNLG() {
 		return realisation1+ realisation2+realisation3;}
 	
-	public String getAtomicMeasure() {
+	public String getAtomicMeasureNLG() {
 		return realisation4;
 	}
 	public static void introduction(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
@@ -508,7 +508,7 @@ public class SimpleNLGTemplate {
 		Realiser realiser = new Realiser(lexicon);
 		NLGElement realised = realiser.realise(paragraph);
 		realisation4 = realised.getRealisation();
-		//System.out.println(realisation4);
+		System.out.println(realisation4);
 
 	}
 

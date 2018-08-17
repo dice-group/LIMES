@@ -89,7 +89,7 @@ public abstract class ACoreMLAlgorithm {
      * @return wrap with results
      * @throws UnsupportedMLImplementationException if ML implementation is not supported
      */
-    protected abstract MLResults learn(AMapping trainingData)
+    public abstract MLResults learn(AMapping trainingData)
             throws UnsupportedMLImplementationException;
 
     /**

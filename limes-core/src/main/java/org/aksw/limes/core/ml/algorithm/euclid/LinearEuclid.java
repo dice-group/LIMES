@@ -86,7 +86,7 @@ public class LinearEuclid extends ACoreMLAlgorithm{
 	}
 	
 	@Override
-	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
+	public MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
 		configureEuclid(lsc);
 		lsc.setPFMType(QMeasureType.SUPERVISED);
 		lsc.setSupervisedBatch(trainingData);
