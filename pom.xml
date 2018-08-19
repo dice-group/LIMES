@@ -215,56 +215,56 @@
 			</build>
 		</profile>
 
-		<profile>
-			<id>release</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.6</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-								<configuration>
-									<keyname>AKSW</keyname>
-									<passphraseServerId>${gpg.keyname}</passphraseServerId>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
+		<!--<profile>-->
+			<!--<id>release</id>-->
+			<!--<build>-->
+				<!--<plugins>-->
+					<!--<plugin>-->
+						<!--<groupId>org.apache.maven.plugins</groupId>-->
+						<!--<artifactId>maven-gpg-plugin</artifactId>-->
+						<!--<version>1.6</version>-->
+						<!--<executions>-->
+							<!--<execution>-->
+								<!--<id>sign-artifacts</id>-->
+								<!--<phase>verify</phase>-->
+								<!--<goals>-->
+									<!--<goal>sign</goal>-->
+								<!--</goals>-->
+								<!--<configuration>-->
+									<!--<keyname>AKSW</keyname>-->
+									<!--<passphraseServerId>${gpg.keyname}</passphraseServerId>-->
+								<!--</configuration>-->
+							<!--</execution>-->
+						<!--</executions>-->
+					<!--</plugin>-->
 
-					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<serverId>ossrh</serverId>
-							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-							<autoReleaseAfterClose>true</autoReleaseAfterClose>
-						</configuration>
-					</plugin>
+					<!--<plugin>-->
+						<!--<groupId>org.sonatype.plugins</groupId>-->
+						<!--<artifactId>nexus-staging-maven-plugin</artifactId>-->
+						<!--<extensions>true</extensions>-->
+						<!--<configuration>-->
+							<!--<serverId>ossrh</serverId>-->
+							<!--<nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
+							<!--<autoReleaseAfterClose>true</autoReleaseAfterClose>-->
+						<!--</configuration>-->
+					<!--</plugin>-->
 
-				</plugins>
-			</build>
-		</profile>
+				<!--</plugins>-->
+			<!--</build>-->
+		<!--</profile>-->
 	</profiles>
 
-	<distributionManagement>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-		<snapshotRepository>
-			<id>maven.aksw.snapshots</id>
-			<name>AKSW Snapshot Repository</name>
-			<url>http://maven.aksw.org/archiva/repository/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>maven.aksw.internal</id>
+            <url>http://maven.aksw.org/archiva/repository/internal</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven.aksw.snapshots</id>
+            <name>AKSW Snapshot Repository</name>
+            <url>http://maven.aksw.org/archiva/repository/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 	<repositories>
 		<repository>
