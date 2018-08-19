@@ -15,3 +15,6 @@ idea (if you've used OpenJDK before try Oracle Java!).
 If this doesn't work, in Ubuntu versions 15.04 upwards you can install JavaFX seperately using `sudo apt-get install openjfx`.
 Unfortunately this package seems unavailable for lower Ubuntu versions (Although there is always the possibility to 
 [build it yourself](https://wiki.openjdk.java.net/display/OpenJFX/Building+OpenJFX) or use [community builds](https://wiki.openjdk.java.net/display/OpenJFX/Community+Builds)).
+
+From Oracle Java version 11 onwards, JavaFX is not part of the JDK anymore. We are currently working on getting LIMES running in Oracle Java >= 11.
+In the meantime, please use an older version to build LIMES. 

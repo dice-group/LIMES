@@ -1,17 +1,21 @@
-# Machine Learning
-In most cases, finding a good metric expression (i.s. one that achieve high F-Measure) is not a trivial task. Therefore, in LIMES we implemented a number of machine learning algorithm for auto-generation of metric (also called Link Specification). For using a machine learning algorithm in your configuration file use the `MLALGORITHM` tag instead of the `METRIC` tag. For example:
+# Defining Machine Learning Tasks
 
-	<MLALGORITHM>
-		<NAME>wombat simple</NAME>
-		<TYPE>supervised batch</TYPE>
-		<TRAINING>trainingData.nt</TRAINING>
-		<PARAMETER> 
-			<NAME>max execution time in minutes</NAME>
-			<VALUE>60</VALUE>
-		</PARAMETER>
-	</MLALGORITHM>
+In the following we will detail the contents of the `MLALGORITHM` tag
+that users can use to configure LIMES for machine learning.
+Consider the following example from the configuration file:
 
-In particular:
+```xml
+<MLALGORITHM>
+    <NAME>wombat simple</NAME>
+    <TYPE>supervised batch</TYPE>
+    <TRAINING>trainingData.nt</TRAINING>
+    <PARAMETER> 
+        <NAME>max execution time in minutes</NAME>
+        <VALUE>60</VALUE>
+    </PARAMETER>
+</MLALGORITHM>
+```
+
 * The tag `NAME` contains the name of the machine learning algorithm. Currently, we implemented the following algorithms:
     + wombat simple
     + wombat complete
@@ -181,3 +185,5 @@ The following table contains a list of implemented algorithms together with supp
   </tr>
 </table>
     	
+ 
+
