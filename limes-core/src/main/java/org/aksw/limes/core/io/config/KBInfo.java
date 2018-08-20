@@ -7,6 +7,7 @@ package org.aksw.limes.core.io.config;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,7 +33,7 @@ public class KBInfo implements Serializable {
     protected List<String> properties;
     protected List<String> optionalProperties;
     protected ArrayList<String> restrictions;
-    protected Map<String, Map<String, String>> functions;
+    protected LinkedHashMap<String, Map<String, String>> functions;
     protected Map<String, String> prefixes;
     protected int pageSize;
     protected String type;
@@ -50,7 +51,7 @@ public class KBInfo implements Serializable {
         properties = new ArrayList<>();
         optionalProperties = new ArrayList<>();
         prefixes = new HashMap<>();
-        functions = new HashMap<>();
+        functions = new LinkedHashMap<>();
         pageSize = -1;      //-1 means query all at once
         type = DEFAULT_QUERY_TYPE;    //default value
         maxoffset  = -1;
@@ -67,7 +68,7 @@ public class KBInfo implements Serializable {
 
     public KBInfo(String id, String endpoint, String graph, String var,
             List<String> properties, List<String> optionalProperties,
-            ArrayList<String> restrictions, Map<String, Map<String, String>> functions,
+            ArrayList<String> restrictions, LinkedHashMap<String, Map<String, String>> functions,
             Map<String, String> prefixes, int pageSize, String type) {
         super();
         this.id = id;
@@ -85,7 +86,7 @@ public class KBInfo implements Serializable {
 
     public KBInfo(String id, String endpoint, String graph, String var,
                   List<String> properties, List<String> optionalProperties,
-                  ArrayList<String> restrictions, Map<String, Map<String, String>> functions,
+                  ArrayList<String> restrictions, LinkedHashMap<String, Map<String, String>> functions,
                   Map<String, String> prefixes, int pageSize, String type, int minoffset, int maxoffset) {
         this(id, endpoint, graph, var, properties, optionalProperties, restrictions, functions,
                 prefixes, pageSize, type);
@@ -161,11 +162,11 @@ public class KBInfo implements Serializable {
         this.optionalProperties.add(optionalProperty);
     }
     
-    public Map<String, Map<String, String>> getFunctions() {
+    public LinkedHashMap<String, Map<String, String>> getFunctions() {
         return functions;
     }
 
-    public void setFunctions(Map<String, Map<String, String>> functions) {
+    public void setFunctions(LinkedHashMap<String, Map<String, String>> functions) {
         this.functions = functions;
     }
 

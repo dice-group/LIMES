@@ -8,7 +8,7 @@
 	</PREFIX>
 	<SOURCE>
 		<ID>linkedmdb</ID>
-		<ENDPOINT>src/main/resources/datasets/dbpedia-linkedmdb/source2.csv</ENDPOINT>
+		<ENDPOINT>datasets/dbpedia-linkedmdb/source2.csv</ENDPOINT>
 		<VAR>?x</VAR>
 		<PAGESIZE>-1</PAGESIZE>
 		<RESTRICTION></RESTRICTION>
@@ -18,7 +18,7 @@
 	</SOURCE>
 	<TARGET>
 		<ID>dbpedia</ID>
-		<ENDPOINT>src/main/resources/datasets/dbpedia-linkedmdb/target2.csv</ENDPOINT>
+		<ENDPOINT>datasets/dbpedia-linkedmdb/target2.csv</ENDPOINT>
 		<VAR>?y</VAR>
 		<PAGESIZE>-1</PAGESIZE>
 		<RESTRICTION></RESTRICTION>

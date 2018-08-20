@@ -1,8 +1,9 @@
 package org.aksw.limes.core.gui;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.util.Locale;
-import static org.junit.Assert.assertEquals;
 
 import org.aksw.limes.core.gui.controller.MainController;
 import org.aksw.limes.core.gui.util.CustomGuiTest;
@@ -29,14 +30,14 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest {
 	@Override
 	public void start(Stage stage) throws Exception {
 		Locale.setDefault(new Locale("en", "US"));
-		mainView = new MainView(stage);
-		mainController = new MainController(mainView);
-		mainView.setController(mainController);
+		this.mainView = new MainView(stage);
+		this.mainController = new MainController(this.mainView);
+		this.mainView.setController(this.mainController);
 	}
 
 	@Before
 	public void loadConfig() {
-		mainController.loadConfig(
+		this.mainController.loadConfig(
 				new File(Thread.currentThread().getContextClassLoader().getResource("gui/testConfig.xml").getFile()));
 	}
 
@@ -52,44 +53,40 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest {
 	@Test
 	public void testEditProperties() throws InterruptedException {
 		logger.info("Clicking on Configuration");
-		clickOn("Configuration");
+		this.clickOn("Configuration");
 		logger.info("Clicking on Edit");
-		clickOn("Edit");
+		this.clickOn("Edit");
 		// Necessary because otherwise the sub-menu vanishes
 		logger.info("Moving to Edit Classes");
-		moveTo("Edit Classes");
+		this.moveTo("Edit Classes");
 		logger.info("Clicking on Edit Properties");
-		clickOn("Edit Properties");
+		this.clickOn("Edit Properties");
 
 		logger.info("Waiting for properties to finish loading");
-		CustomGuiTest.waitUntilLoadingWindowIsClosed("Getting properties",500);
+		CustomGuiTest.waitUntilLoadingWindowIsClosed("Getting properties", 500);
 		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", 180);
-		clickOn("#switchModeButton");
+		this.clickOn("#switchModeButton");
 		logger.info("Waiting for dbo:abbreviation");
 		CustomGuiTest.waitUntilNodeIsVisible("dbo:abbreviation", 180);
-		clickOn("dbo:abbreviation");
-		clickOn("dbo:birthDate");
-		clickOn("Finish");
+		this.clickOn("dbo:abbreviation");
+		this.clickOn("dbo:birthDate");
+		this.clickOn("Finish");
 
-		clickOn("dbo:abbreviation");
-		clickOn("dbo:birthDate");
+		this.clickOn("dbo:abbreviation");
+		this.clickOn("dbo:birthDate");
 	}
 
 	@AfterClass
-	public static void cleanup(){
-		FxRobot rob = new FxRobot();
-		for(Window w : rob.listWindows()){
-			int currentsize = rob.listWindows().size();
-			System.out.println(((Stage)w).getTitle());
-			//Avoid not on fx application thread error
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                	((Stage)w).close();
-                }
-            });
-            CustomGuiTest.waitUntilWindowIsClosed(currentsize - 1, 200);
+	public static void cleanup() {
+		final FxRobot rob = new FxRobot();
+		for (final Window w : rob.listWindows()) {
+			final int currentsize = rob.listWindows().size();
+			System.out.println(((Stage) w).getTitle());
+			// Avoid not on fx application thread error
+			Platform.runLater(() -> ((Stage) w).close());
+			CustomGuiTest.waitUntilWindowIsClosed(currentsize - 1, 200);
 		}
-		assertEquals(0,rob.listWindows().size());
+		assertEquals(0, rob.listWindows().size());
 	}
 
 }

@@ -12,91 +12,98 @@ import javafx.concurrent.Task;
 
 /**
  * Class to show user progress if tasks are being executed in the background
+ * 
  * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
  *         studserv.uni-leipzig.de{@literal >}
  *
  */
 public class TaskProgressController {
-    
-    /**
-     * holds the tasks
-     */
-    private static final ExecutorService executorService = Executors
-            .newCachedThreadPool();
 
-    /**
-     * corresponding view
-     */
-    private TaskProgressView view;
-    
-    /**
-     * set with the tasks to be executed
-     */
-    private Set<Task<?>> tasks;
+	/**
+	 * holds the tasks
+	 */
+	private static final ExecutorService executorService = Executors.newCachedThreadPool();
 
-    /**
-     * constructor
-     * @param view corresponding view
-     * @param tasks tasks to execute
-     */
-    public TaskProgressController(TaskProgressView view,
-                                  Task<?>... tasks) {
-        view.setController(this);
-        this.view = view;
-        this.tasks = new HashSet<Task<?>>();
-    }
+	/**
+	 * corresponding view
+	 */
+	private final TaskProgressView view;
 
-    /**
-     * returns executorService
-     * @return executorService
-     */
-    public static ExecutorService getExecutorservice() {
-        return executorService;
-    }
+	/**
+	 * set with the tasks to be executed
+	 */
+	private final Set<Task<?>> tasks;
 
-    /**
-     * adds a new task with the desired callbacks on either success or error
-     * @param task task to be executed
-     * @param successCallback called on success
-     * @param errorCallback called on failure
-     * @param <T> throwable
-     */
-    public <T> void addTask(Task<T> task, Consumer<T> successCallback,
-                            Consumer<Throwable> errorCallback) {
-	tasks.add(task);
-        task.setOnSucceeded(event -> {
-            T result;
-            try {
-                result = task.get();
-            } catch (Exception e) {
-                return;
-            }
-            successCallback.accept(result);
+	/**
+	 * constructor
+	 * 
+	 * @param view
+	 *            corresponding view
+	 * @param tasks
+	 *            tasks to execute
+	 */
+	public TaskProgressController(TaskProgressView view, Task<?>... tasks) {
+		view.setController(this);
+		this.view = view;
+		this.tasks = new HashSet<>();
+	}
 
-            tasks.remove(task);
-            if (tasks.isEmpty()) {
-        	view.setFinishedSuccessfully(true);
-                view.close();
-            }
-        });
+	/**
+	 * returns executorService
+	 * 
+	 * @return executorService
+	 */
+	public static ExecutorService getExecutorservice() {
+		return executorService;
+	}
 
-        task.setOnFailed(event -> {
-            view.setFinishedSuccessfully(false);
-            cancel();
-            errorCallback.accept(task.getException());
-        });
-        executorService.submit(task);
-    }
+	/**
+	 * adds a new task with the desired callbacks on either success or error
+	 * 
+	 * @param task
+	 *            task to be executed
+	 * @param successCallback
+	 *            called on success
+	 * @param errorCallback
+	 *            called on failure
+	 * @param <T>
+	 *            throwable
+	 */
+	public <T> void addTask(Task<T> task, Consumer<T> successCallback, Consumer<Throwable> errorCallback) {
+		this.tasks.add(task);
+		task.setOnSucceeded(event -> {
+			T result;
+			try {
+				result = task.get();
+			} catch (final Exception e) {
+				return;
+			}
+			successCallback.accept(result);
 
-    /**
-     * cancels all tasks
-     */
-    public void cancel() {
-	view.setCancelled(true);
-        view.setFinishedSuccessfully(false);
-        for (Task<?> task : tasks) {
-            task.cancel();
-        }
-        view.close();
-    }
+			this.tasks.remove(task);
+			if (this.tasks.isEmpty()) {
+				this.view.setFinishedSuccessfully(true);
+				this.view.close();
+			}
+		});
+
+		task.setOnFailed(event -> {
+			this.view.setFinishedSuccessfully(false);
+			this.cancel();
+			errorCallback.accept(task.getException());
+		});
+		executorService.submit(task);
+	}
+
+	/**
+	 * cancels all tasks
+	 */
+	public void cancel() {
+		this.view.setCancelled(true);
+		this.view.setFinishedSuccessfully(false);
+		for (final Task<?> task : this.tasks) {
+			task.cancel();
+		}
+		this.view.close();
+	}
 }

@@ -8,7 +8,7 @@
 	</PREFIX>
 	<SOURCE>
 		<ID>amazon</ID>
-		<ENDPOINT>src/main/resources/datasets/Amazon-GoogleProducts/Amazon.csv</ENDPOINT>
+		<ENDPOINT>datasets/Amazon-GoogleProducts/Amazon.csv</ENDPOINT>
 		<VAR>?x</VAR>
 		<PAGESIZE>-1</PAGESIZE>
 		<RESTRICTION></RESTRICTION>
@@ -20,7 +20,7 @@
 	</SOURCE>
 	<TARGET>
 		<ID>googleprod</ID>
-		<ENDPOINT>src/main/resources/datasets/Amazon-GoogleProducts/GoogleProducts.csv</ENDPOINT>
+		<ENDPOINT>datasets/Amazon-GoogleProducts/GoogleProducts.csv</ENDPOINT>
 		<VAR>?y</VAR>
 		<PAGESIZE>-1</PAGESIZE>
 		<RESTRICTION></RESTRICTION>

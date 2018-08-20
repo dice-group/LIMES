@@ -16,6 +16,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.aksw.limes.core.ml.algorithm.wombat.LinkEntropy;
 import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;
@@ -36,6 +37,7 @@ public class WombatSimple extends AWombat {
     protected RefinementNode bestSolutionNode = null;
     protected List<ExtendedClassifier> classifiers = null;
     protected int iterationNr = 0;
+    public PropertyMapping propMap;
 
 
 
@@ -225,10 +227,6 @@ public class WombatSimple extends AWombat {
         logger.debug("Overall Best Solution: " + bestSolution);
         return bestSolution;
     }
-
-
-
-
 
 
 

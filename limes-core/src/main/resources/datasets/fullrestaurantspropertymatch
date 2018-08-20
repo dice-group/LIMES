@@ -1,0 +1,7 @@
+http://www.okkam.org/ontology_restaurant1.owl#has_address/http://www.okkam.org/ontology_restaurant1.owl#street	http://www.okkam.org/ontology_restaurant2.owl#has_address/http://www.okkam.org/ontology_restaurant2.owl#street	string
+http://www.okkam.org/ontology_restaurant1.owl#has_address	http://www.okkam.org/ontology_restaurant2.owl#has_address	string
+http://www.okkam.org/ontology_restaurant1.owl#name	http://www.okkam.org/ontology_restaurant2.owl#name	string
+http://www.okkam.org/ontology_restaurant1.owl#category	http://www.okkam.org/ontology_restaurant2.owl#category	string
+http://www.okkam.org/ontology_restaurant1.owl#has_address/http://www.okkam.org/ontology_restaurant1.owl#is_in_city	http://www.okkam.org/ontology_restaurant2.owl#has_address/http://www.okkam.org/ontology_restaurant2.owl#is_in_city	string
+http://www.okkam.org/ontology_restaurant1.owl#has_address/http://www.okkam.org/ontology_restaurant1.owl#is_in_city/http://www.okkam.org/ontology_restaurant1.owl#name	http://www.okkam.org/ontology_restaurant2.owl#has_address/http://www.okkam.org/ontology_restaurant2.owl#is_in_city/http://www.okkam.org/ontology_restaurant2.owl#name	string
+http://www.okkam.org/ontology_restaurant1.owl#phone_number	http://www.okkam.org/ontology_restaurant2.owl#phone_number	string

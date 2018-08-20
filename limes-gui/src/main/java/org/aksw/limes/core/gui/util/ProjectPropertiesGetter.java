@@ -8,16 +8,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ProjectPropertiesGetter {
-    protected Logger logger = LoggerFactory.getLogger(ProjectPropertiesGetter.class);
-	
-	public static String getProperty(String projectPropertiesPath, String propertyKey){
-		Properties props = new Properties();
-    	try {
+	protected Logger logger = LoggerFactory.getLogger(ProjectPropertiesGetter.class);
+
+	public static String getProperty(String projectPropertiesPath, String propertyKey) {
+		final Properties props = new Properties();
+		try {
 			props.load(new FileInputStream(projectPropertiesPath));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-        return props.get(propertyKey).toString();
-		
+		return props.get(propertyKey).toString();
+
 	}
 }

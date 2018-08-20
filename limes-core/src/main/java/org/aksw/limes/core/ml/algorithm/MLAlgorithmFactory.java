@@ -1,9 +1,10 @@
 package org.aksw.limes.core.ml.algorithm;
 
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
+import org.aksw.limes.core.ml.algorithm.dragon.Dragon;
+import org.aksw.limes.core.ml.algorithm.euclid.BooleanEuclid;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearEuclid;
 import org.aksw.limes.core.ml.algorithm.euclid.MeshEuclid;
-import org.aksw.limes.core.ml.algorithm.euclid.BooleanEuclid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +18,7 @@ public class MLAlgorithmFactory {
     public static final String EUCLID_LINEAR = "euclid linear";
     public static final String EUCLID_BOOLEAN = "euclid boolean";
     public static final String EUCLID_MESH = "euclid mesh";
-//    public static final String DECISION_TREE_LEARNING = "dtl";
+    public static final String DRAGON = "dragon";
 
     public static final String SUPERVISED_ACTIVE = "supervised active";
     public static final String SUPERVISED_BATCH = "supervised batch";
@@ -53,6 +54,10 @@ public class MLAlgorithmFactory {
             //@todo: fix this
             return Eagle.class;
         }
+        if (name.equalsIgnoreCase(DRAGON)) {
+        	return Dragon.class;
+        }
+
 //        if(name.equalsIgnoreCase(DECISION_TREE_LEARNING)){
 //            return DecisionTreeLearning.class;
 //        }

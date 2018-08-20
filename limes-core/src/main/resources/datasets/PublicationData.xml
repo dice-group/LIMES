@@ -8,7 +8,7 @@
 	</PREFIX>
 	<SOURCE>
 		<ID>dblp2</ID>
-		<ENDPOINT>src/main/resources/datasets/DBLP-ACM/DBLP2.csv</ENDPOINT>
+		<ENDPOINT>datasets/DBLP-ACM/DBLP2.csv</ENDPOINT>
 		<VAR>?x</VAR>
 		<PAGESIZE>-1</PAGESIZE>
 		<RESTRICTION></RESTRICTION>
@@ -20,7 +20,7 @@
 	</SOURCE>
 	<TARGET>
 		<ID>acm</ID>
-		<ENDPOINT>src/main/resources/datasets/DBLP-ACM/ACM.csv</ENDPOINT>
+		<ENDPOINT>datasets/DBLP-ACM/ACM.csv</ENDPOINT>
 		<VAR>?y</VAR>
 		<PAGESIZE>-1</PAGESIZE>
 		<RESTRICTION></RESTRICTION>

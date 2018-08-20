@@ -29,7 +29,6 @@ public class Precision extends APRF implements IQualitativeMeasure {
             return 0;
 		return trueFalsePositive(predictions, goldStandard.referenceMappings, true)
 				/ (double) ((MemoryMapping) predictions).getNumberofPositiveMappings();
-
     }
 
 }

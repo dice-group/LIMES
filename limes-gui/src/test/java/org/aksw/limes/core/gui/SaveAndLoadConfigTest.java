@@ -11,7 +11,9 @@ import org.aksw.limes.core.gui.view.MainView;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 
@@ -19,72 +21,71 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class SaveAndLoadConfigTest extends ApplicationTest{
-	
-	
+public class SaveAndLoadConfigTest extends ApplicationTest {
+
 	MainView mainView;
 	MainController mainController;
 	private static final String metricExpression = "or(jaccard(x.rdfs:label,y.rdfs:label)|0.8,cosine(x.rdfs:label,y.rdfs:label)|0.9)";
-	
-	private static final File changedTestConfig = new File("src/test/resources/gui/changedTestConfig.ttl");
-	
+
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
+
+	private File changedTestConfig = null;
+
 	@Override
 	public void start(Stage stage) throws Exception {
 		Locale.setDefault(new Locale("en", "US"));
-		mainView = new MainView(stage);
-		mainController = new MainController(mainView);
-		mainView.setController(mainController);
+		this.mainView = new MainView(stage);
+		this.mainController = new MainController(this.mainView);
+		this.mainView.setController(this.mainController);
+		this.changedTestConfig = this.folder.newFile("changedTestConfig.ttl");
 	}
 
 	@Before
-	public void loadInitialConfig(){
-		mainController.loadConfig(new File(Thread.currentThread().getContextClassLoader().getResource("gui/testConfig.xml").getFile()));
+	public void loadInitialConfig() {
+		this.mainController.loadConfig(
+				new File(Thread.currentThread().getContextClassLoader().getResource("gui/testConfig.xml").getFile()));
 	}
-	
-	@BeforeClass
-	public static void setup(){
-        System.setProperty("testfx.robot", "glass");
-        System.setProperty("testfx.headless", "true");
-        System.setProperty("prism.order", "sw");
-        System.setProperty("prism.text", "t2k");
-        System.setProperty("java.awt.headless", "true");
-	}
-	
-	@Test
-	public void changeSaveAndLoadConfig(){
-		changeAndSaveConfig();
-		loadNewConfig();
-	}
-	
-	
-	public void changeAndSaveConfig(){
-		mainController.getCurrentConfig().setMetricExpression(metricExpression);
-		mainView.getGraphBuild().graphBuildController.generateGraphFromConfig();
-		CustomGuiTest.waitUntilNodeIsVisible("Agent properties", 180);
-//		GuiTest.waitUntil("Drug properties", Matchers.notNullValue()); 
 
-		mainController.saveConfig(changedTestConfig);
+	@BeforeClass
+	public static void setup() {
+		System.setProperty("testfx.robot", "glass");
+		System.setProperty("testfx.headless", "true");
+		System.setProperty("prism.order", "sw");
+		System.setProperty("prism.text", "t2k");
+		System.setProperty("java.awt.headless", "true");
 	}
-	
-	public void loadNewConfig(){
-		mainController.loadConfig(changedTestConfig);
-		assertEquals(metricExpression, mainController.getCurrentConfig().getMetricExpression());
+
+	@Test
+	public void changeSaveAndLoadConfig() {
+		this.changeAndSaveConfig();
+		this.loadNewConfig();
+	}
+
+	public void changeAndSaveConfig() {
+		this.mainController.getCurrentConfig().setMetricExpression(metricExpression);
+		this.mainView.getGraphBuild().graphBuildController.generateGraphFromConfig();
+		CustomGuiTest.waitUntilNodeIsVisible("Agent properties", 180);
+		// GuiTest.waitUntil("Drug properties", Matchers.notNullValue());
+
+		this.mainController.saveConfig(this.changedTestConfig);
+	}
+
+	public void loadNewConfig() {
+		this.mainController.loadConfig(this.changedTestConfig);
+		assertEquals(metricExpression, this.mainController.getCurrentConfig().getMetricExpression());
 	}
 
 	@AfterClass
-	public static void cleanup(){
-		FxRobot rob = new FxRobot();
-		for(Window w : rob.listWindows()){
-			int currentsize = rob.listWindows().size();
-			System.out.println(((Stage)w).getTitle());
-			//Avoid not on fx application thread error
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                	((Stage)w).close();
-                }
-            });
-            CustomGuiTest.waitUntilWindowIsClosed(currentsize - 1, 200);
+	public static void cleanup() {
+		final FxRobot rob = new FxRobot();
+		for (final Window w : rob.listWindows()) {
+			final int currentsize = rob.listWindows().size();
+			System.out.println(((Stage) w).getTitle());
+			// Avoid not on fx application thread error
+			Platform.runLater(() -> ((Stage) w).close());
+			CustomGuiTest.waitUntilWindowIsClosed(currentsize - 1, 200);
 		}
-		assertEquals(0,rob.listWindows().size());
+		assertEquals(0, rob.listWindows().size());
 	}
 }

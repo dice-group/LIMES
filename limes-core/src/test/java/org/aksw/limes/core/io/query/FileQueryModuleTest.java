@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.aksw.limes.core.io.cache.HybridCache;
@@ -20,10 +21,7 @@ public class FileQueryModuleTest {
         prefixes.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
         prefixes.put("dbpo", "http://dbpedia.org/ontology/");
 
-        Map<String, Map<String, String>> functions = new HashMap<>();
-        HashMap<String, String> f = new HashMap<String, String>();
-        f.put("label", null);
-        functions.put("rdfs:label", f);
+        LinkedHashMap<String, Map<String, String>> functions = new LinkedHashMap<>();
 
         KBInfo kbinfo = new KBInfo(
                 "DBpedia",                                                            //String id
@@ -31,10 +29,10 @@ public class FileQueryModuleTest {
                 Thread.currentThread().getContextClassLoader().getResource("ibuprofen.nt").getPath(),
                 null,                                                                //String graph
                 "?x",                                                                //String var
-                new ArrayList<String>(Arrays.asList("rdfs:label")),                    //List<String> properties
+                new ArrayList<String>(Arrays.asList("rdfs:label","dbpo:abstract")),                    //List<String> properties
                 null,                    //List<String> optionlProperties
                 new ArrayList<String>(Arrays.asList("?x rdf:type dbpo:Drug")),        //ArrayList<String> restrictions
-                functions,                                                        //Map<String, Map<String, String>> functions
+                functions,                                                        //LinkedHashMap<String, Map<String, String>> functions
                 prefixes,                                                            //Map<String, String> prefixes
                 1000,                                                                //int pageSize
                 "N3",                                                                //String type
@@ -46,6 +44,11 @@ public class FileQueryModuleTest {
         fqm.fillCache(cache);
 
         assertTrue(cache.size() > 0);
+        for(String abs: cache.getAllInstances().get(0).getProperty("dbpo:abstract")){
+        	if(abs.contains("@en")){
+        		System.out.println(abs);
+        	}
+        }
     }
 
 }
