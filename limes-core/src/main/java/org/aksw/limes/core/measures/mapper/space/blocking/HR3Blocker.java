@@ -5,12 +5,12 @@
 package org.aksw.limes.core.measures.mapper.space.blocking;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.measures.mapper.space.Flink.PerformanceEval;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class HR3Blocker implements IBlockingModule {
+public class HR3Blocker implements IBlockingModule, Serializable {
     static Logger logger = LoggerFactory.getLogger(HR3Blocker.class);
     int dim = 2;
     ArrayList<Double> thresholds;

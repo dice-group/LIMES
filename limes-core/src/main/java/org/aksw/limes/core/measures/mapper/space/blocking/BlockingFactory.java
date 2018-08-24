@@ -4,11 +4,12 @@
  */
 package org.aksw.limes.core.measures.mapper.space.blocking;
 
+import java.io.Serializable;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
-public class BlockingFactory {
+public class BlockingFactory implements Serializable {
 
     public static IBlockingModule getBlockingModule(String props, String measureName, double threshold, int granularity) {
         if (measureName.toLowerCase().startsWith("euclidean")) {

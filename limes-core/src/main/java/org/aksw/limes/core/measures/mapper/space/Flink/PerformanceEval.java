@@ -4,13 +4,11 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
 import org.aksw.limes.core.io.cache.ACache;
-import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.writer.CSVMappingWriter;
-import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
@@ -56,8 +54,8 @@ public class PerformanceEval {
             resWriter.write("Iteration\tFlink\n");
             resWriter.close();
 
-            FlinkHR3Mapper flinkhr3m = new FlinkHR3Mapper();
-            for(int i = 0; i < 10; i++){
+		FlinkHR3MapperNEW flinkhr3m = new FlinkHR3MapperNEW();
+		for (int i = 0; i < 1; i++) {
                 resWriter = new PrintWriter(new FileOutputStream("FlinkHR3Eval.csv", true));
                 long start = System.currentTimeMillis();
 
@@ -69,9 +67,10 @@ public class PerformanceEval {
                 resWriter.close();
                 CSVMappingWriter linkWriter = new CSVMappingWriter();
                 linkWriter.write(links, "FlinkHR3links.csv");
-                int comparisons = env.getLastJobExecutionResult().getAccumulatorResult("comparisons");
-                logger.info("\n\n ====Comparisons: " + comparisons + "\n\n");
-                System.out.println("\n\n ====Comparisons: " + comparisons + "\n\n");
+			// int comparisons =
+			// env.getLastJobExecutionResult().getAccumulatorResult("comparisons");
+			// logger.info("\n\n ====Comparisons: " + comparisons + "\n\n");
+			// System.out.println("\n\n ====Comparisons: " + comparisons + "\n\n");
             }
 	}
 }
