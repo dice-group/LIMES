@@ -332,7 +332,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 		double complexityPenaltyWeight = 1;
 		boolean saveMapping = true;
 		double minPropertyCoverage = 0.4;
-		double propertyLearningRate = 0.9;
+		double propertyLearningRate = 0.95;
 		double overallPenaltyWeight = 0.5d;
 		boolean verbose = false;
 		Set<String> measures = new HashSet<>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams"));

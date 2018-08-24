@@ -50,17 +50,19 @@ public class ExtendedLSEvaluation {
 		// }
 		Set<TaskData> data = new HashSet<>();
 		List<TaskAlgorithm> algos = new ArrayList<>();
-		// String[] dataSetNames = new String[] { "restaurantsfixed", "person1",
-		// "person2", "DBLPACM", "ABTBUY",
-		// "DBLPSCHOLAR", "AMAZONGOOGLEPRODUCTS", "DBPLINKEDMDB" };
-		// for (String d : dataSetNames) {
-		String d = args[1];
+		String[] dataSetNames = new String[] {
+				// "restaurantsfixed", "person1", "person2", "DBLPACM",
+				"ABTBUY",
+				// "DBLPSCHOLAR", "AMAZONGOOGLEPRODUCTS", "DBPLINKEDMDB"
+		};
+		for (String d : dataSetNames) {
+			// String d = args[1];
 			EvaluationData eval = DataSetChooser.getData(d);
 			TaskData td = new TaskData(new GoldStandard(eval.getReferenceMapping(), eval.getSourceCache().getAllUris(),
 					eval.getTargetCache().getAllUris()), eval.getSourceCache(), eval.getTargetCache(), eval);
 			td.dataName = eval.getName();
 			data.add(td);
-		// }
+		}
 
 		Set<EvaluatorType> measures = new HashSet<>();
 		measures.add(EvaluatorType.F_MEASURE);
@@ -110,19 +112,19 @@ public class ExtendedLSEvaluation {
 		TaskAlgorithm allFPTLD = createFPTLDWithOperators(all);
 		allFPTLD.setName("allfptld");
 		algos.add(crispWombat);
-		algos.add(crispFPTLD);
-		algos.add(einsteinWombat);
-		algos.add(einsteinFPTLD);
-		algos.add(algebraicWombat);
-		algos.add(algebraicFPTLD);
-		algos.add(lukasiewiczWombat);
-		algos.add(lukasiewiczFPTLD);
-		algos.add(yagerWombat);
-		algos.add(yagerFPTLD);
-		algos.add(hamacherWombat);
-		algos.add(hamacherFPTLD);
-		algos.add(allWombat);
-		algos.add(allFPTLD);
+		 algos.add(crispFPTLD);
+		// algos.add(einsteinWombat);
+		// algos.add(einsteinFPTLD);
+		// algos.add(algebraicWombat);
+		// algos.add(algebraicFPTLD);
+		// algos.add(lukasiewiczWombat);
+		// algos.add(lukasiewiczFPTLD);
+		// algos.add(yagerWombat);
+//		algos.add(yagerFPTLD);
+		// algos.add(hamacherWombat);
+//		algos.add(hamacherFPTLD);
+		// algos.add(allWombat);
+//		algos.add(allFPTLD);
 		Summary s = new Evaluator().crossValidateWithTuningAndStatisticalTest(algos, data, measures, 10);
 		s.printToFiles(args[0]);
 	}

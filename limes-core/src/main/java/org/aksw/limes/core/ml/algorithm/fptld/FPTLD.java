@@ -23,7 +23,9 @@ import org.aksw.limes.core.execution.rewriter.RewriterFactory;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.measures.mapper.FuzzyOperators.HamacherSetOperations;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.YagerSetOperations;
+import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
@@ -87,6 +89,14 @@ public class FPTLD extends ACoreMLAlgorithm {
 				FitnessFunctionDTL.class, new String[] { FITNESS_NAME_JAC, FITNESS_NAME_RMSE, FITNESS_NAME_FM },
 				PARAMETER_FITNESS_FUNCTION));
 	}
+	
+	public static void main(String[] args) {
+		TrigramMeasure tm = new TrigramMeasure();
+        System.out.println(tm.getSimilarity("Hans Peter","Hans-Peter"));
+        System.out.println(tm.getSimilarity("Marianne","Marianne"));
+        System.out.println(tm.getSimilarity("Salah","Susanne"));
+        System.out.println(tm.getSimilarity("Larissa","Larysa")); 
+	}
 
 	@Override
 	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
@@ -112,10 +122,18 @@ public class FPTLD extends ACoreMLAlgorithm {
 								} else if (op.equals(LogicOperator.YAGERDIFF)) {
 									opParam = YagerSetOperations.INSTANCE
 											.difference(leaf.getSet(), ppt.getSet(), trainingData).getSecond();
-								} else if (op.equals(LogicOperator.YAGERTCO) || op.equals(LogicOperator.HAMACHERT)
-										|| op.equals(LogicOperator.HAMACHERTCO)
-										|| op.equals(LogicOperator.HAMACHERDIFF)) {
-									opParam = 1.0;
+								} else if (op.equals(LogicOperator.YAGERTCO)) {
+									opParam = YagerSetOperations.INSTANCE
+											.union(leaf.getSet(), ppt.getSet(), trainingData).getSecond();
+								} else if (op.equals(LogicOperator.HAMACHERT)) {
+									opParam = HamacherSetOperations.INSTANCE
+											.intersection(leaf.getSet(), ppt.getSet(), trainingData).getSecond();
+								} else if (op.equals(LogicOperator.HAMACHERDIFF)) {
+									opParam = HamacherSetOperations.INSTANCE
+											.difference(leaf.getSet(), ppt.getSet(), trainingData).getSecond();
+								} else if (op.equals(LogicOperator.HAMACHERTCO)) {
+									opParam = HamacherSetOperations.INSTANCE
+											.union(leaf.getSet(), ppt.getSet(), trainingData).getSecond();
 								}
 								ANode clone = candidate.clone();
 								clone = clone.replaceLeaf(leaf, op, ppt, opParam);

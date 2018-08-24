@@ -40,8 +40,8 @@ public enum SimFuzzyRMSE implements FuzzySimilarity {
 				}
 			}
 		}
-		return 1 - Math
+		return Math.abs(1 - Math
 				.sqrt(numerator.divide(BigDecimal.valueOf(b.getSize()), MappingOperations.SCALE, RoundingMode.HALF_UP)
-						.doubleValue());
+						.doubleValue()));
 	}
 }

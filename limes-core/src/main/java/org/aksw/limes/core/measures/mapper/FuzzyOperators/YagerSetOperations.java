@@ -9,6 +9,7 @@ import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.ml.algorithm.fptld.fitness.SimFuzzyRMSE;
 import org.apache.commons.math3.util.Pair;
 
 public enum YagerSetOperations implements MappingOperations {
@@ -90,8 +91,52 @@ public enum YagerSetOperations implements MappingOperations {
 	}
 
 	/**
-	 * Optimizes p value using a technique similar to backprop (specificly
-	 * quickprop) and returns the mapping result using the best p-value
+	 * Optimizes p-value using random search
+	 *
+	 * @param a
+	 *            first Mapping for intersection
+	 * @param b
+	 *            second Mapping for intersection
+	 * @param ref
+	 *            trainingData or reference Mapping
+	 * @return pair mapping,best p value
+	 */
+	public Pair<AMapping, Double> union(AMapping a, AMapping b, AMapping ref) {
+		if (a == null || a.size() == 0 || b == null || b.size() == 0) {
+			return new Pair<AMapping, Double>(MappingFactory.createDefaultMapping(), 1.0);
+		}
+		double bestP = 1.0;
+		AMapping bestMapping = MappingFactory.createDefaultMapping();
+		double bestSim = 0.0;
+		Random rand = new Random(SEED);
+		int iterations = 0;
+		for (double p : INITIAL_VALUES) {
+			AMapping m = union(a, b, p);
+			double simrmse = SimFuzzyRMSE.INSTANCE.getSimilarity(m, ref);
+			if (simrmse > bestSim) {
+				bestSim = simrmse;
+				bestMapping = m;
+				bestP = p;
+			}
+			iterations++;
+		}
+		while (bestSim < 1 && iterations < MAX_ITERATIONS) {
+			double next = rand.nextGaussian();
+			double p = Math.abs(next * Math.pow(STD_DEV, 2) + bestP);
+			AMapping m = union(a, b, p);
+			double simrmse = SimFuzzyRMSE.INSTANCE.getSimilarity(m, ref);
+			if (simrmse > bestSim) {
+				bestSim = simrmse;
+				bestMapping = m;
+				bestP = p;
+			}
+			iterations++;
+		}
+		return new Pair<AMapping, Double>(bestMapping, bestP);
+	}
+
+	/**
+	 * Optimizes p-value using random search
 	 *
 	 * @param a
 	 *            first Mapping for intersection
@@ -134,22 +179,6 @@ public enum YagerSetOperations implements MappingOperations {
 			}
 			iterations++;
 		}
-//		while (p.doubleValue() <= 100) {
-//			AMapping m = intersection(a, b, p.doubleValue());
-//			double currentFM = fm.calculate(m, gs);
-//			if (currentFM > bestFM) {
-//				bestFM = currentFM;
-//				bestMapping = m;
-//				bestP = p.doubleValue();
-//			}
-//			if (p.doubleValue() <= 2) {
-//				p = p.add(BigDecimal.valueOf(0.01));
-//			} else if (p.doubleValue() <= 10) {
-//				p = p.add(BigDecimal.valueOf(0.1));
-//			} else if (p.doubleValue() < 100) {
-//				p = p.add(BigDecimal.valueOf(1.0));
-//			}
-//		}
 		return new Pair<AMapping, Double>(bestMapping, bestP);
 	}
 
