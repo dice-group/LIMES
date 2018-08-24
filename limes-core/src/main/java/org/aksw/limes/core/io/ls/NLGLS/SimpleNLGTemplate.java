@@ -1,11 +1,7 @@
-package org.aksw.limes.core.ml.algorithm.NLGLS;
-import java.util.Locale;
-
+package  org.aksw.limes.core.io.ls.NLGLS;
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-
-import com.ibm.icu.text.RuleBasedNumberFormat;
 
 import simplenlg.features.Feature;
 import simplenlg.features.Tense;
@@ -24,22 +20,35 @@ import simplenlg.phrasespec.VPPhraseSpec;
 import simplenlg.realiser.english.Realiser;
 
 public class SimpleNLGTemplate {
-	
+
 	public static String realisation;
 	public static String realisation1;
 	public static String realisation2;
 	public static String realisation3;
 	public static String realisation4;
-
+	public static String realisation5;
+	
 	public String getIntroductionNLG() {
 		return realisation;	
 	}
-	
+
 	public String getFullMeasureNLG() {
-		return realisation1+ realisation2+realisation3;}
-	
+		return realisation1+realisation2+realisation3+realisation4;}
+
 	public String getAtomicMeasureNLG() {
-		return realisation4;
+		return realisation5;
+	}
+
+	public static void descriptor(LinkSpecification linkSpec, boolean verbos) throws UnsupportedMLImplementationException {
+
+
+		//verbos=false;
+		if (verbos==true)
+			introduction(linkSpec);
+		if(!linkSpec.isAtomic())
+			fullMeasureNLG(linkSpec);
+		else
+			atomicMeasureNLG(linkSpec);
 	}
 	public static void introduction(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 
@@ -291,228 +300,294 @@ public class SimpleNLGTemplate {
 
 		NLGElement realised = realiser.realise(paragraph);
 		//realiser.setCommaSepCuephrase(true);
-		realisation = realised.getRealisation();
-		//System.out.println(realisation);
+		String realisation = realised.getRealisation();
+		System.out.println(realisation);
 		fullMeasureNLG(linkSpec);
 	}
 
-	private static void fullMeasureNLG(LinkSpecification linkSpecification) throws UnsupportedMLImplementationException {
-
+	public static void fullMeasureNLG(LinkSpecification linkSpecification) throws UnsupportedMLImplementationException {
+		System.out.println("the link spec is: "+ linkSpecification.getFullExpression());
 		Lexicon lexicon = new XMLLexicon();                         
 		NLGFactory nlgFactory = new NLGFactory(lexicon);
 		// create nouns
 		NPPhraseSpec theLink = nlgFactory.createNounPhrase(WORDS.THE, WORDS.LINKSPECIFICATION);
-		NPPhraseSpec complexSpec = nlgFactory.createNounPhrase(WORDS.COMPLEXSPECIFICATION);
+		//NPPhraseSpec complexSpec = nlgFactory.createNounPhrase(WORDS.COMPLEXSPECIFICATION);
 		// create preposition
 		PPPhraseSpec onTheLink = nlgFactory.createPrepositionPhrase(WORDS.ON); 
 		//set the nouns to objects
 		onTheLink.setObject(theLink);
 
-		// create clauses
-		SPhraseSpec s0 = nlgFactory.createClause(WORDS.THE +" "+ WORDS.MAPPING,WORDS.BASE, onTheLink);
-		s0.setFeature(Feature.TENSE,Tense.PAST);
-		s0.addPreModifier(WORDS.IS);
+		SPhraseSpec clause_1 = nlgFactory.createClause();
+		SPhraseSpec clause_2 = nlgFactory.createClause();
+		SPhraseSpec clause_3 = nlgFactory.createClause();
+		SPhraseSpec clause_4 = nlgFactory.createClause();
+		SPhraseSpec clause_5 = nlgFactory.createClause();
+		SPhraseSpec clause_6 = nlgFactory.createClause();
+		SPhraseSpec clause_7 = nlgFactory.createClause();
+		SPhraseSpec clause_8 = nlgFactory.createClause();
+		SPhraseSpec clause_9 = nlgFactory.createClause();
+		DocumentElement sentence_1 = nlgFactory.createSentence();
+		DocumentElement sentence_2 = nlgFactory.createSentence();
+		DocumentElement sentence_3 = nlgFactory.createSentence();
+		DocumentElement sentence_4 = nlgFactory.createSentence();
+		DocumentElement sentence_5 = nlgFactory.createSentence();
+		CoordinatedPhraseElement coordinate_1 = nlgFactory.createCoordinatedPhrase();
+		CoordinatedPhraseElement coordinate_2 = nlgFactory.createCoordinatedPhrase();
+		CoordinatedPhraseElement coordinate_3 = nlgFactory.createCoordinatedPhrase();
+		CoordinatedPhraseElement coordinate_4 = nlgFactory.createCoordinatedPhrase();
+		CoordinatedPhraseElement coordinate_5 = nlgFactory.createCoordinatedPhrase();
+		clause_1.setObject(WORDS.THE +" tow resources");
+		//s1.addPostModifier("as follow");
 
-		SPhraseSpec s1 = nlgFactory.createClause();
-		s1.setObject(WORDS.WHERE+" "+WORDS.THE +" "+ WORDS.LINKSPECIFICATION);
-		s1.setSubject(complexSpec);
-		s1.setVerb(WORDS.PRODUCE);
-		s1.setFeature(Feature.PASSIVE,true);
-		s1.setFeature(Feature.PERFECT, true);
+		clause_1.setVerb("link");//s1.setVerb(WORDS.PRODUCE);
+		clause_1.setFeature(Feature.TENSE,Tense.FUTURE);
+		clause_1.setFeature(Feature.PASSIVE, true);
 
-		SPhraseSpec s2 = nlgFactory.createClause();
-		s2.setSubject(WORDS.IT);
-		s1.setSubject(complexSpec);
-		s2.setVerb(WORDS.CONSIST + " "+ WORDS.OF);
+		//		RuleBasedNumberFormat nf = new RuleBasedNumberFormat(Locale.UK, RuleBasedNumberFormat.SPELLOUT);
+		//c.addCoordinate(s1);
+		if(linkSpecification.getOperator().toString()=="OR")
+			clause_2.addComplement(" if any of the following conditions holds: ");
+		if(linkSpecification.getOperator().toString()=="AND")
+			clause_2.addComplement(" if both of the following conditions hold: ");
+		if(linkSpecification.getOperator().toString()=="NOT")
+			clause_2.addComplement(" if both of the following conditions not hold: ");
 
-		RuleBasedNumberFormat nf = new RuleBasedNumberFormat(Locale.UK, RuleBasedNumberFormat.SPELLOUT);
-		s2.setObject(nf.format(linkSpecification.getChildren().size(), 
-				WORDS.SPELLOUT_NUMBERING)+" "+ WORDS.CHILDREN+ " "+ WORDS.AND+
-				" "+nf.format(linkSpecification.getAllLeaves().size(),
-						WORDS.SPELLOUT_NUMBERING) +" "+WORDS.LEAVES );
-
-		CoordinatedPhraseElement c = nlgFactory.createCoordinatedPhrase();
-
-		c.addCoordinate(s0);
-		c.addCoordinate(s1);
-		c.addCoordinate(s2);
-
-		DocumentElement sentence = nlgFactory.createSentence(c);
-		//DocumentElement sentence3 = nlgFactory.createSentence();
-
-		SPhraseSpec s3 = nlgFactory.createClause();
-		s3.setFeature(Feature.CUE_PHRASE, WORDS.ALSO);
-		s3.setSubject(WORDS.THE+ " "+ WORDS.LINKSPECIFICATION);
-		s3.setVerb(WORDS.HAS);
-		s3.setObject(WORDS.OPERATOR+ " "+linkSpecification.getOperator());
-
+		coordinate_1.addComplement(clause_1);
+		coordinate_1.addComplement(clause_2);
+		sentence_1.addComponent(coordinate_1);
 		DocumentElement paragraph = nlgFactory.createParagraph();
-		DocumentElement sentence3 = nlgFactory.createSentence(s3);
-		paragraph.addComponent(sentence);
-		paragraph.addComponent(sentence3);
+
+		paragraph.addComponent(sentence_1);
+		//paragraph.addComponent(sentence3);
 		Realiser realiser = new Realiser(lexicon);
-		NLGElement realised = realiser.realise(paragraph);
-		realisation1 = realised.getRealisation();
-		//System.out.println(realisation1);
+		NLGElement realised = realiser.realise(coordinate_1);
+		String realisation1 = realised.getRealisation();
+		System.out.println(realisation1);
 
 		for (int i=0;i< linkSpecification.getChildren().size();i++) {
-			String format = nf.format(i+1, WORDS.SPELLOUT_ORDINAL);
-			String format1 = nf.format(linkSpecification.getChildren().get(i).getAllLeaves().size(),
-					WORDS.SPELLOUT_NUMBERING);
-			String temp;
-			if(linkSpecification.getChildren().get(i).getAllLeaves().size()<=1) 
-				temp=" "+ WORDS.LEAVE;
-			else temp=" "+ WORDS.LEAVES;
-
-			SPhraseSpec s5 = nlgFactory.createClause(WORDS.THE+" "+ format + " "+WORDS.CHILD,WORDS.HAS, format1+temp);
-			s5.setFeature(Feature.TENSE,Tense.PRESENT);
-
-			SPhraseSpec s6 = nlgFactory.createClause();
-			LogicOperator operator = linkSpecification.getChildren().get(i).getOperator();
-			//	System.out.println("STRING: "+string);
-			if(operator!=null) {
-				//s6.setFeature(Feature.CONJUNCTION, WORDS.AND);
-				s6.addComplement(WORDS.OPERATOR);}
-			else {
-				s6.addComplement(WORDS.NOOPERATOR);	
-				s6.addComplement(WORDS.ONLYATOMICMEASURE);	}
-			LogicOperator operator1 = linkSpecification.getChildren().get(i).getOperator();
-			//	System.out.println("STRING: "+string);
-			if(operator1!=null) {
-
-				s6.addComplement(operator1.toString());
-				s6.addComplement(WORDS.THAT);
-				s6.addComplement(WORDS.COMBINES);
-				s6.addComplement(WORDS.TWOATOMICMEASURE);
-			}
-			CoordinatedPhraseElement c1 = nlgFactory.createCoordinatedPhrase();
-			c1.addCoordinate(s5);
-			c1.addCoordinate(s6);
-
-			DocumentElement sentence1 = nlgFactory.createSentence(c1);
-			DocumentElement paragraph1 = nlgFactory.createParagraph();
-			paragraph1.addComponent(sentence1);
-
-			Realiser realiser1 = new Realiser(lexicon);
-			NLGElement realised1 = realiser1.realise(paragraph1);
-			realisation2 = realised1.getRealisation();
-		//	System.out.println(realisation2);
-
+			int size = linkSpecification.getChildren().get(i).size();
 			if(!linkSpecification.getChildren().get(i).isAtomic()) {
-				SPhraseSpec s7 = nlgFactory.createClause();
-				s7.addComplement(WORDS.FORTHEFIRSTLEAVE);
+				LogicOperator operator22 = linkSpecification.getChildren().get(i).getOperator();
+				//	System.out.println("operator 2: "+operator22);
+				clause_3.setObject("1: the tow resources");
+				clause_3.setVerb("link");
+				clause_3.setFeature(Feature.TENSE, Tense.FUTURE);
+				clause_3.setFeature(Feature.PASSIVE, true);
+				if(operator22.toString()=="OR")
+					clause_4.addComplement(" if any of the following conditions holds: ");
+				if(operator22.toString()=="AND")
+					clause_4.addComplement(" if both of the following conditions hold: ");
+				if(operator22.toString()=="NOT")
+					clause_4.addComplement(" if both of the following conditions not hold: ");
+				coordinate_2.addComplement(clause_3);
+				coordinate_2.addComplement(clause_4);
+				sentence_2.addComponent(coordinate_2);
+				DocumentElement paragraph1 = nlgFactory.createParagraph();
+				paragraph1.addComponent(sentence_2);
 
-				DocumentElement sentence2 = nlgFactory.createSentence(s7);
+				Realiser realiser1 = new Realiser(lexicon);
+				NLGElement realised1 = realiser1.realise(coordinate_2);
+				String realisation2 = realised1.getRealisation();
+				System.out.println(realisation2);
+				if(size>1) {
 
-				Realiser realiser2 = new Realiser(lexicon);
-				NLGElement realised2 = realiser2.realise(sentence2);
-				realisation3 = realised2.getRealisation();
+					LinkSpecification fullExpression = linkSpecification.getChildren().get(i).getAllLeaves().get(0);
+					//s111111.addComplement("1.1: ");
+					//String format=nf.format(i+1);
+					//System.out.println("format :"+ format);
+					NLGElement atomicMeasureNLG1 = atomicMeasureNLG1(fullExpression);
+					int number=i+1;
+					String str=number+".1: ";
+					clause_6.addComplement(str+atomicMeasureNLG1+",");
+					//System.out.println("sentence: "+ atomicMeasureNLG1);
+					LinkSpecification linkSpecification2 = linkSpecification.getChildren().
+							get(i).getAllLeaves().get(1);
+					//s1111111.addComplement("1.2:");
+					NLGElement atomicMeasureNLG2=atomicMeasureNLG1(linkSpecification2);
+					str=number+".2: ";
+					clause_7.addComplement("\n"+str+atomicMeasureNLG2);
+					coordinate_3.addComplement(clause_6);
+					coordinate_3.addComplement(clause_7);
+					sentence_3.addComponent(coordinate_3);
 
-			//	System.out.println(realisation3);
 
-				atomicMeasureNLG(linkSpecification.getChildren().get(i).getAllLeaves().get(0));
+					Realiser realiser11 = new Realiser(lexicon);
+					NLGElement realised11 = realiser11.realise(sentence_3);
+					String realisation22 = realised11.getRealisation();
+					System.out.println(realisation22);
+				}
+				else {
+					LinkSpecification linkSpecification33 = linkSpecification.getChildren().get(i).getAllLeaves().get(0);
+					NLGElement atomicMeasureNLG3=atomicMeasureNLG1(linkSpecification33);
 
-				SPhraseSpec s8 = nlgFactory.createClause();
-				s8.addComplement(WORDS.FORTHESECONDTLEAVE);
+				}
 
-				DocumentElement sentence4 = nlgFactory.createSentence(s8);
-				Realiser realiser3 = new Realiser(lexicon);
-				NLGElement realised3 = realiser3.realise(sentence4);
-				String realisation4 = realised3.getRealisation();
-				System.out.println(realisation4);
-				WORDS.GENERATE="creat";
-				WORDS.MAPPING="linking";
-				atomicMeasureNLG(linkSpecification.getChildren().get(i).getAllLeaves().get(1));
+
+				clause_5.setObject("2: the two resources");
+				clause_5.setVerb("link");
+				clause_5.setFeature(Feature.TENSE, Tense.FUTURE);
+				clause_5.setFeature(Feature.PASSIVE, true);
+
+			} else {
+				if(i==0) {
+					NLGElement atomicMeasureNLG4 = atomicMeasureNLG1(linkSpecification.getChildren().get(0).getAllLeaves().get(0));
+					clause_8.addComplement("if "+atomicMeasureNLG4+",");
+					coordinate_4.addComplement(clause_5);
+					coordinate_4.addComplement(clause_8);
+					//coordinate_4.addComplement(clause_9);
+					sentence_4.addComponent(coordinate_4);
+					Realiser realiser11 = new Realiser(lexicon);
+					NLGElement realised11 = realiser11.realise(coordinate_4);
+
+					String realisation11 = realised11.getRealisation();
+					System.out.println(realisation11);
+
+				}
+				if(i==1) {
+					NLGElement atomicMeasureNLG5 = atomicMeasureNLG1(linkSpecification.getChildren().get(1).getAllLeaves().get(0));
+					clause_9.addComplement("if "+atomicMeasureNLG5);
+					coordinate_5.addComplement(clause_5);
+					coordinate_5.addComplement(clause_9);
+					//coordinate_4.addComplement(clause_9);
+					sentence_5.addComponent(coordinate_5);
+					Realiser realiser111 = new Realiser(lexicon);
+					NLGElement realised111 = realiser111.realise(coordinate_5);
+
+					String realisation111 = realised111.getRealisation();
+					System.out.println(realisation111);
+
+
+				}
+
+				//				System.out.println("iii: "+i);//}
+				//				//clause_8.addComplement("if "+atomicMeasureNLG4);
+				//				
+				//				//atomicMeasureNLG4=new NLGElement();
+				//				coordinate_4.addComplement(clause_5);
+				//				coordinate_4.addComplement(clause_8);
+				//				coordinate_4.addComplement(clause_9);
+				//				sentence_4.addComponent(coordinate_4);
+				//				Realiser realiser11 = new Realiser(lexicon);
+				//				NLGElement realised11 = realiser11.realise(sentence_4);
+				//			
+				//				String realisation11 = realised11.getRealisation();
+				//				System.out.println(realisation11);
 			}
-			else {
-				WORDS.MAPPING="link generating";
-				WORDS.GENERATE="make";
-				WORDS.MOREVER="furthermore";
-				atomicMeasureNLG(linkSpecification.getChildren().get(i).getAllLeaves().get(0));}
+
 		}
 
 	}
-	private static void atomicMeasureNLG(LinkSpecification learn) throws UnsupportedMLImplementationException {
+	public static void atomicMeasureNLG(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 
-		String atomicMeasureString = learn.getAtomicMeasure();
-		String threshold = Double.toString(learn.getThreshold());
-		String str;
-		if(learn.isAtomic())
-			str = WORDS.ATOMICMEASURE;
-		else  
-			str="";
+		String atomicMeasureString = linkSpec.getAtomicMeasure();
+		String fullExpression = linkSpec.getFullExpression();
+		String leftProp;
+		String rightProp;
+		leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("x"),
+				fullExpression.indexOf(","));
+		if(leftProp.contains("#")) {
+			leftProp=leftProp.substring(leftProp.indexOf("#")+1);
+		}
+		rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("y"),
+				fullExpression.indexOf(")"));
+		if(rightProp.contains("#")) {
+			rightProp=rightProp.substring(rightProp.indexOf("#")+1);
+			rightProp = rightProp.substring(rightProp.indexOf("#")+1);
+		}
 
 		Lexicon lexicon = new XMLLexicon();                          
 		NLGFactory nlgFactory = new NLGFactory(lexicon);
-		// create nouns
-		NPPhraseSpec theLink = nlgFactory.createNounPhrase(WORDS.THE, WORDS.LINKSPECIFICATION);
-		NPPhraseSpec atomicMeasure = nlgFactory.createNounPhrase(str);
-		// create preposition
-		PPPhraseSpec onTheLink = nlgFactory.createPrepositionPhrase(WORDS.ON);  
-		//set the nouns to objects
-		onTheLink.setObject(theLink); 
-
-		// create clauses
-		SPhraseSpec s0 = nlgFactory.createClause(WORDS.THE +" "+ WORDS.MAPPING,WORDS.BASE, onTheLink);
-		s0.setFeature(Feature.TENSE,Tense.PAST); 
-		s0.addPreModifier(WORDS.IS);
 
 		SPhraseSpec s1 = nlgFactory.createClause();
-		s1.setObject(WORDS.IT);
-		s1.setSubject(atomicMeasure);
-		s1.setVerb(WORDS.GENERATE);
+		s1.setObject(WORDS.THE+"  link ");
+		//s1.setSubject(atomicMeasure);
+		//s1.addPostModifier("as follow");
+		s1.setVerb("link");
 		s1.setFeature(Feature.PASSIVE,true);
 		s1.setFeature(Feature.PERFECT, true);
-
+		//s1.addComplement("as follow");
 		//coordinate the clauses
 		CoordinatedPhraseElement c = nlgFactory.createCoordinatedPhrase();
-		c.addCoordinate(s0);
 		c.addCoordinate(s1);
+		DocumentElement sentence = nlgFactory.createSentence();
+		sentence.addComponent(c);
+		DocumentElement sentence1 = nlgFactory.createSentence();
+		SPhraseSpec s2 = nlgFactory.createClause();
+		SPhraseSpec s3 = nlgFactory.createClause();
+		s2.addFrontModifier("if");
+		s3.addComplement("the "+ atomicMeasureString+ " similarity");
+		s3.addComplement("between");
+		s3.addComplement("the property "+"("+leftProp+")");
+		s3.addComplement("and");
+		s3.addComplement("the property"+"("+rightProp+")");
+		s3.addComplement("of the two resources");
+		s2.setSubject(s3);
+		s2.setVerb("is");
+		if(linkSpec.getThreshold()==1.0)
+			s2.addComplement("equal "+linkSpec.getThreshold()*100 +" %");
+		else
+			s2.addComplement("greater or equal than "+linkSpec.getThreshold()*100 +" %");
+		CoordinatedPhraseElement cc = nlgFactory.createCoordinatedPhrase();
+		cc.addCoordinate(s2);
+		//cc.addCoordinate(s12);
+		sentence1.addComponent(cc);
 
-		// create a sentence
-		DocumentElement sentence = nlgFactory.createSentence(c);
-		StringElement theatomicmeasure = new StringElement(WORDS.THE+" "+str);        
-		StringElement verbIs = new StringElement(WORDS.IS);
-		WordElement measureFunction = new WordElement(atomicMeasureString);
-
-		// create a sentence
-		DocumentElement sentence2 = nlgFactory.createSentence();
-		sentence2.addComponent(theatomicmeasure);
-		sentence2.addComponent(verbIs);
-		sentence2.addComponent(measureFunction);
-
-		DocumentElement sentence3 = nlgFactory.createSentence();
-		StringElement hasSimilarty = new StringElement(WORDS.SIMILARTY);
-		WordElement similiarty = new WordElement(threshold);
-		PPPhraseSpec ofSimilarty = nlgFactory.createPrepositionPhrase(WORDS.OF);
-
-		sentence3.addComponent(hasSimilarty);
-		sentence3.addComponent(ofSimilarty);
-		sentence3.addComponent(similiarty);
-
-		SPhraseSpec s3 = nlgFactory.createClause(WORDS.THE+" "+str, WORDS.IS,measureFunction);
-		s3.setFeature(Feature.CUE_PHRASE, WORDS.MOREVER);
-
-		SPhraseSpec s4 = nlgFactory.createClause(WORDS.IT,WORDS.HAS,sentence3);
-
-		CoordinatedPhraseElement c1 = nlgFactory.createCoordinatedPhrase();
-		c1.addCoordinate(s3);
-		c1.addCoordinate(s4);
-
-		DocumentElement sentence4 = nlgFactory.createSentence();
-		sentence4.addComponent(c1);
-		//create paragraph
 		DocumentElement paragraph = nlgFactory.createParagraph();
 		paragraph.addComponent(sentence);
-		paragraph.addComponent(sentence4);
+		sentence.addComponent(sentence1);
+		//paragraph.addComponent(sentence4);
 		Realiser realiser = new Realiser(lexicon);
-		NLGElement realised = realiser.realise(paragraph);
-		realisation4 = realised.getRealisation();
-		System.out.println(realisation4);
+		NLGElement realised = realiser.realise(sentence);
+		String realisation5 = realised.getRealisation();
+		System.out.println(realisation5);
 
 	}
 
+	public static NLGElement atomicMeasureNLG1(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 
+		String atomicMeasureString = linkSpec.getAtomicMeasure();
+		String fullExpression = linkSpec.getFullExpression();
+		String leftProp;
+		String rightProp;
+		leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("x"),
+				fullExpression.indexOf(","));
+		if(leftProp.contains("#")) {
+			leftProp=leftProp.substring(leftProp.indexOf("#")+1);
+		}
+		rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("y"),
+				fullExpression.indexOf(")"));
+		if(rightProp.contains("#")) {
+			rightProp=rightProp.substring(rightProp.indexOf("#")+1);
+			rightProp = rightProp.substring(rightProp.indexOf("#")+1);
+		}
 
+		Lexicon lexicon = new XMLLexicon();                          
+		NLGFactory nlgFactory = new NLGFactory(lexicon);
 
+		DocumentElement sentence1 = nlgFactory.createSentence();
+		SPhraseSpec s2 = nlgFactory.createClause();
+		SPhraseSpec s3 = nlgFactory.createClause();
+		//s2.addFrontModifier("if");
+		s3.addComplement("the "+ atomicMeasureString+ " similarity");
+		s3.addComplement("between");
+		s3.addComplement("the property "+"("+leftProp+")");
+		s3.addComplement("and");
+		s3.addComplement("the property"+"("+rightProp+")");
+		s3.addComplement("of the two resources");
+		s2.setSubject(s3);
+		s2.setVerb("is");
+		if(linkSpec.getThreshold()==1.0)
+			s2.addComplement("equal "+linkSpec.getThreshold()*100 +"%");
+		else
+			s2.addComplement("greater or equal than "+linkSpec.getThreshold()*100 +"%");
+		CoordinatedPhraseElement cc = nlgFactory.createCoordinatedPhrase();
+		cc.addCoordinate(s2);
+		sentence1.addComponent(cc);
+		Realiser realiser = new Realiser(lexicon);
+		NLGElement realised = realiser.realise(s2);
+		//String realisation5 = realised.getRealisation();
+		//System.out.println(realisation5);
+
+		return realised;
+	}
 }

@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.NLGLS;
+package  org.aksw.limes.core.io.ls.NLGLS;
 
 public class WORDS {
 	
