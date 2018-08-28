@@ -7,13 +7,12 @@ import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.writer.CSVMappingWriter;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.core.fs.FileSystem.WriteMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,22 +54,17 @@ public class PerformanceEval {
             resWriter.close();
 
 		FlinkHR3MapperNEW flinkhr3m = new FlinkHR3MapperNEW();
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 10; i++) {
                 resWriter = new PrintWriter(new FileOutputStream("FlinkHR3Eval.csv", true));
                 long start = System.currentTimeMillis();
 
-                AMapping links = flinkhr3m.getMapping(sourceDS, targetDS, "?x", "?y", measureExpr, threshold);
-                long finish = System.currentTimeMillis();
-                long flinkhr3res = finish - start;
-                logger.info("link size: " + links.size());
-                resWriter.write(i + "\t" + flinkhr3res + "\n");
-                resWriter.close();
-                CSVMappingWriter linkWriter = new CSVMappingWriter();
-                linkWriter.write(links, "FlinkHR3links.csv");
-			// int comparisons =
-			// env.getLastJobExecutionResult().getAccumulatorResult("comparisons");
-			// logger.info("\n\n ====Comparisons: " + comparisons + "\n\n");
-			// System.out.println("\n\n ====Comparisons: " + comparisons + "\n\n");
-            }
+			flinkhr3m.getMapping(sourceDS, targetDS, "?x", "?y", measureExpr, threshold).writeAsCsv("FlinkHR3links.csv",
+					WriteMode.OVERWRITE);
+			env.execute();
+			long finish = System.currentTimeMillis();
+			long flinkhr3res = finish - start;
+			resWriter.write(i + "\t" + flinkhr3res + "\n");
+			resWriter.close();
+		}
 	}
 }

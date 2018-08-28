@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.parser.Parser;
 import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
 import org.aksw.limes.core.measures.mapper.space.blocking.IBlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
+import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -33,13 +32,13 @@ public class FlinkHR3MapperNEW {
 	public static ArrayList<Double> thresholds = new ArrayList<Double>();
 	public ArrayList<String> properties = new ArrayList<String>();
 
-	public FlinkHR3MapperNEW(){
-		
+	public FlinkHR3MapperNEW() {
+
 	}
-	
-	public AMapping getMapping(DataSet<Instance> source, DataSet<Instance> target, String sourceVar, String targetVar,
+
+	public DataSet<Tuple3<String, String, Double>> getMapping(DataSet<Instance> source, DataSet<Instance> target,
+			String sourceVar, String targetVar,
 			String expression, double threshold) throws Exception {
-		AMapping mapping = MappingFactory.createDefaultMapping();
 
 		// 0. get properties
 		String property1, property2;
@@ -84,19 +83,8 @@ public class FlinkHR3MapperNEW {
 		final String finalProperty2 = property2;
 		DataSet<Tuple2<HR3Block, Instance>> sourceBlocks = source.flatMap(new GetSourceBlocks(gen, finalProperty1));
 		DataSet<Tuple2<HR3Block, Instance>> targetBlocks = target.flatMap(new GetTargetBlocks(gen));
-		sourceBlocks.join(targetBlocks).where("f0").equalTo("f0").map(tuple -> {
-			final Instance s = tuple.f0.f1;
-			final Instance t = tuple.f1.f1;
-			final double sim = measure.getSimilarity(s, t, finalProperty1, finalProperty2);
-			return new Tuple3<String, String, Double>(s.getUri(), t.getUri(), sim);
-		}).returns(new TupleTypeInfo<>(TypeInformation.of(new TypeHint<String>() {
-		}), TypeInformation.of(new TypeHint<String>() {
-		}), TypeInformation.of(new TypeHint<Double>() {
-		}))).collect().forEach(t -> {
-			if (t.f2 >= threshold)
-				mapping.add(t.f0, t.f1, t.f2);
-		});
-		return mapping;
+		return sourceBlocks.join(targetBlocks).where("f0").equalTo("f0")
+				.with(new JoinWithSimilarity(measure, finalProperty1, finalProperty2, threshold));
 	}
 
 	public static class GetSourceBlocks implements FlatMapFunction<Instance, Tuple2<HR3Block, Instance>>,
@@ -151,9 +139,48 @@ public class FlinkHR3MapperNEW {
 		}
 	}
 
+	public static class JoinWithSimilarity implements
+			FlatJoinFunction<Tuple2<HR3Block, Instance>, Tuple2<HR3Block, Instance>, Tuple3<String, String, Double>>,
+			ResultTypeQueryable<Tuple3<String, String, Double>> {
+
+		ISpaceMeasure measure;
+		String finalProperty1;
+		String finalProperty2;
+		double threshold;
+
+		public JoinWithSimilarity(ISpaceMeasure measure, String finalProperty1, String finalProperty2,
+				double threshold) {
+			super();
+			this.measure = measure;
+			this.finalProperty1 = finalProperty1;
+			this.finalProperty2 = finalProperty2;
+			this.threshold = threshold;
+		}
+
+		@Override
+		public TypeInformation<Tuple3<String, String, Double>> getProducedType() {
+			return new TupleTypeInfo<>(TypeInformation.of(new TypeHint<String>() {
+			}), TypeInformation.of(new TypeHint<String>() {
+			}), TypeInformation.of(new TypeHint<Double>() {
+			}));
+		}
+
+		@Override
+		public void join(Tuple2<HR3Block, Instance> first, Tuple2<HR3Block, Instance> second,
+				Collector<Tuple3<String, String, Double>> out) throws Exception {
+			final Instance s = first.f1;
+			final Instance t = second.f1;
+			final double sim = measure.getSimilarity(s, t, finalProperty1, finalProperty2);
+			if (sim >= threshold) {
+				out.collect(new Tuple3<String, String, Double>(s.getUri(), t.getUri(), sim));
+			}
+		}
+
+	}
+
 	public static class HR3Block {
 
-//		public List<Integer> id;
+		// public List<Integer> id;
 		public String id;
 
 		public static Tuple2<HR3Block, Instance> createTuple(List<Integer> blockId, Instance instance) {
