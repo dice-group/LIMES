@@ -1,9 +1,7 @@
 package  org.aksw.limes.core.io.ls.NLGLS;
 import org.aksw.limes.core.datastrutures.LogicOperator;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser.DataSets;
-import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
+import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
@@ -49,29 +47,32 @@ public class SimpleNLGTemplate {
 	public String getIntroductionNLG() {
 		return realisation;	
 	}
+	//
+	//	public String getFullMeasureNLG(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+	//		fullMeasureNLG(linkSpec);
+	//		return realisation_1+realisation_2+realisation_3+realisation_4;}
+	//
+	//	public String getAtomicMeasureNLG(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+	//		atomicMeasureNLG(linkSpec);
+	//		return realisation5;
+	//	}
 
-	public String getFullMeasureNLG(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
-		fullMeasureNLG(linkSpec);
-		return realisation_1+realisation_2+realisation_3+realisation_4;}
-
-	public String getAtomicMeasureNLG(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
-		atomicMeasureNLG(linkSpec);
-		return realisation5;
-	}
 
 	/**
 	 * @param linkSpec
+	 * @param source
+	 * @param target
 	 * @param verbos
 	 * @throws UnsupportedMLImplementationException
 	 */
-	public static void descriptor(LinkSpecification linkSpec, boolean verbos) throws UnsupportedMLImplementationException {
+	public static void descriptor(LinkSpecification linkSpec,ACache source, ACache target, boolean verbos) throws UnsupportedMLImplementationException {
 
 
 		//verbos=false;
 		if (verbos==true)
 			introduction(linkSpec);
 		if(!linkSpec.isAtomic())
-			fullMeasureNLG(linkSpec);
+			fullMeasureNLG(linkSpec,source, target);
 		else
 			atomicMeasureNLG(linkSpec);
 	}
@@ -258,7 +259,7 @@ public class SimpleNLGTemplate {
 		sentence_5.addComponent(clause_13);
 		sentence_5.addComponent(clause_14);
 		// the end of the fifth sentence
-		
+
 		// the sixth sentence
 		clause_16.setSubject(WORDS.WE);
 		clause_16.setVerb(WORDS.USE);
@@ -345,14 +346,16 @@ public class SimpleNLGTemplate {
 		//realiser.setCommaSepCuephrase(true);
 		realisation = realised.getRealisation();
 		System.out.println(realisation);
-		fullMeasureNLG(linkSpec);
+		//fullMeasureNLG(linkSpec, source, target);
 	}
 
 	/**
 	 * @param linkSpec
+	 * @param source
+	 * @param target
 	 * @throws UnsupportedMLImplementationException
 	 */
-	public static void fullMeasureNLG(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+	public static void fullMeasureNLG(LinkSpecification linkSpec, ACache source, ACache target) throws UnsupportedMLImplementationException {
 		//System.out.println("the link spec is: "+ linkSpecification.getFullExpression());
 		int allLSMapSize;
 		Lexicon lexicon = new XMLLexicon();                         
@@ -388,7 +391,7 @@ public class SimpleNLGTemplate {
 		clause_1.setVerb("link");//s1.setVerb(WORDS.PRODUCE);
 		clause_1.setFeature(Feature.TENSE,Tense.FUTURE);
 		clause_1.setFeature(Feature.PASSIVE, true);
-		allLSMapSize=slection(linkSpec).getSize();
+		allLSMapSize=slection(linkSpec,source, target).getSize();
 		String numberAsString = Integer.toString(allLSMapSize);
 		//System.out.println("the mapping size is : "+allLSMapSize);
 		clause_10.setSubject(" the mapping size");
@@ -445,7 +448,7 @@ public class SimpleNLGTemplate {
 				if(size>1) {
 
 					LinkSpecification linkSpec_1 = linkSpec.getChildren().get(i).getAllLeaves().get(0);
-					int size1=slection(linkSpec_1).getSize();
+					int size1=slection(linkSpec_1,source, target).getSize();
 					double percentage1=((double) size1/(double) allLSMapSize)*100.d;
 					double roundPercentage1 = Math.round(percentage1*100.0/100.0);
 					String percentage1AsStreing=Double.toString(roundPercentage1);
@@ -459,11 +462,11 @@ public class SimpleNLGTemplate {
 					clause_11.setObject(percentage1AsStreing+"%");
 					clause_11.addPostModifier("when");
 					NLGElement atomicMeasureNLG1 = atomicMeasureNLG1(linkSpec_1);
-					
+
 					clause_6.addComplement(atomicMeasureNLG1+",");
 					LinkSpecification linkSpec_2 = linkSpec.getChildren().
 							get(i).getAllLeaves().get(1);
-					int size2=slection(linkSpec_2).getSize();
+					int size2=slection(linkSpec_2,source, target).getSize();
 					double percentage2=((double)size2/(double)allLSMapSize)*100.d;
 					double roundPercentage2 = Math.round(percentage2*100.0/100.0);
 					String percentage2AsString=Double.toString(roundPercentage2);
@@ -476,7 +479,7 @@ public class SimpleNLGTemplate {
 					clause_12.addPostModifier("when");
 					//System.out.println(" the mapping is :"+ slection(linkSpec_2).getSize());
 					NLGElement atomicMeasureNLG2=atomicMeasureNLG1(linkSpec_2);
-					
+
 					clause_7.addComplement(str+atomicMeasureNLG2);
 					coordinate_3.addComplement(clause_11);
 					coordinate_3.addComplement(clause_6);
@@ -507,7 +510,7 @@ public class SimpleNLGTemplate {
 					LinkSpecification linkSpec_3 = linkSpec.getChildren().get(0).getAllLeaves().get(0);
 					int str1= i+1;
 					String str2= str1+": ";
-					int size3=slection(linkSpec_3).getSize();
+					int size3=slection(linkSpec_3,source, target).getSize();
 					double percentage3=((double)size3/(double)allLSMapSize)*100;
 					double roundPercentage3 = Math.round(percentage3*100.0/100);
 					String percentage3AsString=Double.toString(roundPercentage3);
@@ -519,7 +522,7 @@ public class SimpleNLGTemplate {
 					clause_13.addPostModifier("when");
 					//System.out.println(" the mapping is :"+ slection(linkSpec_3).getSize());
 					NLGElement atomicMeasureNLG4 = atomicMeasureNLG1(linkSpec_3);
-					
+
 					if(i==0)
 						clause_8.addComplement(atomicMeasureNLG4);
 					else str2="";
@@ -537,12 +540,12 @@ public class SimpleNLGTemplate {
 				if(i==1) {
 					LinkSpecification linkSpec_4 = linkSpec.getChildren().get(1).getAllLeaves().get(0);
 					//slection(linkSpec_4).getSize();
-					int size4=slection(linkSpec_4).getSize();
+					int size4=slection(linkSpec_4,source, target).getSize();
 					double percentage4=((double)size4/(double)allLSMapSize)*100;
 					double roundPercentage4 = Math.round(percentage4*100.0/100);
 					String percentageAsString= Double.toString(roundPercentage4);
 					//System.out.println("the pecentage 4: "+roundPercentage4);
-					String size4AsString=Integer.toString(size4);
+					//String size4AsString=Integer.toString(size4);
 					clause_14.setSubject("2: the mapping size");
 					clause_14.setVerb("be");
 					clause_14.setObject(percentageAsString+"%");
@@ -692,23 +695,26 @@ public class SimpleNLGTemplate {
 		return realised_1;
 	}
 
+
 	/**
-	 * @param linkSpec 
+	 * @param linkSpec
+	 * @param source
+	 * @param target
 	 * @return
 	 * @throws UnsupportedMLImplementationException
 	 */
-	static AMapping slection(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+	static AMapping slection(LinkSpecification linkSpec, ACache source, ACache target) throws UnsupportedMLImplementationException {
 
-		EvaluationData eval = DataSetChooser.getData(DataSets.PERSON1);
+		//EvaluationData eval = DataSetChooser.getData(DataSets.PERSON1);
 		AMLAlgorithm wombat = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
 				MLImplementationType.SUPERVISED_BATCH);
 		//		//Especially the source and target caches
 
-		wombat.init(null, eval.getSourceCache(), eval.getTargetCache());
+		wombat.init(null,source, target);
 		//		//And the training data 
 		MLResults mlModel=new MLResults();
 		mlModel.setLinkSpecification(linkSpec);
-		AMapping mapping = wombat.predict(eval.getSourceCache(), eval.getTargetCache(), mlModel);
+		AMapping mapping = wombat.predict(source, target, mlModel);
 		return mapping;
 	}
 }
