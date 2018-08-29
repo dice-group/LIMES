@@ -1,7 +1,18 @@
 package  org.aksw.limes.core.io.ls.NLGLS;
 import org.aksw.limes.core.datastrutures.LogicOperator;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser.DataSets;
+import org.aksw.limes.core.evaluation.evaluationDataLoader.EvaluationData;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.ls.LinkSpecification;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
+import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
+import org.aksw.limes.core.ml.algorithm.MLImplementationType;
+import org.aksw.limes.core.ml.algorithm.MLResults;
+import org.aksw.limes.core.ml.algorithm.WombatSimple;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import simplenlg.features.Feature;
 import simplenlg.features.Tense;
@@ -19,26 +30,40 @@ import simplenlg.phrasespec.SPhraseSpec;
 import simplenlg.phrasespec.VPPhraseSpec;
 import simplenlg.realiser.english.Realiser;
 
+/**
+ * @author Abdullah Ahmed
+ *
+ */
 public class SimpleNLGTemplate {
+	protected static Logger logger = LoggerFactory.getLogger(SimpleNLGTemplate.class);
 
 	public static String realisation;
-	public static String realisation1;
-	public static String realisation2;
-	public static String realisation3;
-	public static String realisation4;
+	public static String realisation_1;
+	public static String realisation_2;
+	public static String realisation_3;
+	public static String realisation_4;
+	public static String realisation_5;
 	public static String realisation5;
+	public static String realisation_11;
 
 	public String getIntroductionNLG() {
 		return realisation;	
 	}
 
-	public String getFullMeasureNLG() {
-		return realisation1+realisation2+realisation3+realisation4;}
+	public String getFullMeasureNLG(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+		fullMeasureNLG(linkSpec);
+		return realisation_1+realisation_2+realisation_3+realisation_4;}
 
-	public String getAtomicMeasureNLG() {
+	public String getAtomicMeasureNLG(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+		atomicMeasureNLG(linkSpec);
 		return realisation5;
 	}
 
+	/**
+	 * @param linkSpec
+	 * @param verbos
+	 * @throws UnsupportedMLImplementationException
+	 */
 	public static void descriptor(LinkSpecification linkSpec, boolean verbos) throws UnsupportedMLImplementationException {
 
 
@@ -50,6 +75,10 @@ public class SimpleNLGTemplate {
 		else
 			atomicMeasureNLG(linkSpec);
 	}
+	/**
+	 * @param linkSpec
+	 * @throws UnsupportedMLImplementationException
+	 */
 	public static void introduction(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 
 		Lexicon lexicon = new XMLLexicon();                         
@@ -79,7 +108,7 @@ public class SimpleNLGTemplate {
 		SPhraseSpec clause_8 = nlgFactory.createClause();
 		SPhraseSpec clause_9 = nlgFactory.createClause();
 		SPhraseSpec clause_10 = nlgFactory.createClause();
-		SPhraseSpec clause_11= nlgFactory.createClause();
+		SPhraseSpec clause_11 = nlgFactory.createClause();
 		SPhraseSpec clause_12 = nlgFactory.createClause();
 		SPhraseSpec clause_13 = nlgFactory.createClause();
 		SPhraseSpec clause_14 = nlgFactory.createClause();
@@ -229,7 +258,7 @@ public class SimpleNLGTemplate {
 		sentence_5.addComponent(clause_13);
 		sentence_5.addComponent(clause_14);
 		// the end of the fifth sentence
-
+		
 		// the sixth sentence
 		clause_16.setSubject(WORDS.WE);
 		clause_16.setVerb(WORDS.USE);
@@ -314,14 +343,18 @@ public class SimpleNLGTemplate {
 
 		NLGElement realised = realiser.realise(paragraph);
 		//realiser.setCommaSepCuephrase(true);
-		String realisation = realised.getRealisation();
+		realisation = realised.getRealisation();
 		System.out.println(realisation);
 		fullMeasureNLG(linkSpec);
 	}
 
-	public static void fullMeasureNLG(LinkSpecification linkSpecification) throws UnsupportedMLImplementationException {
+	/**
+	 * @param linkSpec
+	 * @throws UnsupportedMLImplementationException
+	 */
+	public static void fullMeasureNLG(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 		//System.out.println("the link spec is: "+ linkSpecification.getFullExpression());
-
+		int allLSMapSize;
 		Lexicon lexicon = new XMLLexicon();                         
 		NLGFactory nlgFactory = new NLGFactory(lexicon);
 
@@ -334,7 +367,11 @@ public class SimpleNLGTemplate {
 		SPhraseSpec clause_7 = nlgFactory.createClause();
 		SPhraseSpec clause_8 = nlgFactory.createClause();
 		SPhraseSpec clause_9 = nlgFactory.createClause();
-
+		SPhraseSpec clause_10 = nlgFactory.createClause();
+		SPhraseSpec clause_11 = nlgFactory.createClause();
+		SPhraseSpec clause_12 = nlgFactory.createClause();
+		SPhraseSpec clause_13 = nlgFactory.createClause();
+		SPhraseSpec clause_14 = nlgFactory.createClause();
 		DocumentElement sentence_1 = nlgFactory.createSentence();
 		DocumentElement sentence_2 = nlgFactory.createSentence();
 		DocumentElement sentence_3 = nlgFactory.createSentence();
@@ -346,19 +383,26 @@ public class SimpleNLGTemplate {
 		CoordinatedPhraseElement coordinate_3 = nlgFactory.createCoordinatedPhrase();
 		CoordinatedPhraseElement coordinate_4 = nlgFactory.createCoordinatedPhrase();
 		CoordinatedPhraseElement coordinate_5 = nlgFactory.createCoordinatedPhrase();
-		clause_1.setObject(WORDS.THE +" tow resources");
 
+		clause_1.setObject(WORDS.THE +" two resources");
 		clause_1.setVerb("link");//s1.setVerb(WORDS.PRODUCE);
 		clause_1.setFeature(Feature.TENSE,Tense.FUTURE);
 		clause_1.setFeature(Feature.PASSIVE, true);
-
-		if(linkSpecification.getOperator().toString()=="OR")
+		allLSMapSize=slection(linkSpec).getSize();
+		String numberAsString = Integer.toString(allLSMapSize);
+		//System.out.println("the mapping size is : "+allLSMapSize);
+		clause_10.setSubject(" the mapping size");
+		clause_10.setVerb("be");
+		clause_10.setObject(numberAsString);
+		clause_10.addPostModifier("when");
+		//clause_10.setFeature(Feature.CUE_PHRASE, "when");
+		if(linkSpec.getOperator().toString()=="OR")
 			clause_2.addComplement(" if any of the following conditions holds: ");
-		if(linkSpecification.getOperator().toString()=="AND")
+		if(linkSpec.getOperator().toString()=="AND")
 			clause_2.addComplement(" if both of the following conditions hold: ");
-		if(linkSpecification.getOperator().toString()=="NOT")
+		if(linkSpec.getOperator().toString()=="NOT")
 			clause_2.addComplement(" if both of the following conditions not hold: ");
-
+		//coordinate_1.addComplement(clause_10);
 		coordinate_1.addComplement(clause_1);
 		coordinate_1.addComplement(clause_2);
 		sentence_1.addComponent(coordinate_1);
@@ -368,15 +412,17 @@ public class SimpleNLGTemplate {
 		//paragraph.addComponent(sentence3);
 		Realiser realiser_1 = new Realiser(lexicon);
 		NLGElement realised_1 = realiser_1.realise(coordinate_1);
-		String realisation_1 = realised_1.getRealisation();
+		realisation_1 = realised_1.getRealisation();
 		System.out.println(realisation_1);
-
-		for (int i=0;i< linkSpecification.getChildren().size();i++) {
-			int size = linkSpecification.getChildren().get(i).size();
-			if(!linkSpecification.getChildren().get(i).isAtomic()) {
-				LogicOperator operator_1 = linkSpecification.getChildren().get(i).getOperator();
+		String str = "";
+		for (int i=0;i< linkSpec.getChildren().size();i++) {
+			int size = linkSpec.getChildren().get(i).size();
+			if(!linkSpec.getChildren().get(i).isAtomic()) {
+				LogicOperator operator_1 = linkSpec.getChildren().get(i).getOperator();
 				//	System.out.println("operator 2: "+operator22);
-				clause_3.setObject("1: the tow resources");
+				int number=i+1;
+				str=number+": ";
+				clause_3.setObject( str+"the two resources");
 				clause_3.setVerb("link");
 				clause_3.setFeature(Feature.TENSE, Tense.FUTURE);
 				clause_3.setFeature(Feature.PASSIVE, true);
@@ -394,66 +440,127 @@ public class SimpleNLGTemplate {
 
 				Realiser realiser_2 = new Realiser(lexicon);
 				NLGElement realised_2 = realiser_2.realise(coordinate_2);
-				String realisation_2 = realised_2.getRealisation();
+				realisation_2 = realised_2.getRealisation();
 				System.out.println(realisation_2);
 				if(size>1) {
 
-					LinkSpecification linkSpec_1 = linkSpecification.getChildren().get(i).getAllLeaves().get(0);
+					LinkSpecification linkSpec_1 = linkSpec.getChildren().get(i).getAllLeaves().get(0);
+					int size1=slection(linkSpec_1).getSize();
+					double percentage1=((double) size1/(double) allLSMapSize)*100.d;
+					double roundPercentage1 = Math.round(percentage1*100.0/100.0);
+					String percentage1AsStreing=Double.toString(roundPercentage1);
+					//System.out.println("percentage2: "+roundPercentage1);
+					//String siz1AsString=Integer.toString(size1);
+					//System.out.println(" the mapping is :"+ slection(linkSpec_1).getSize());
+					//int number=i+1;
+					str=number+".1: ";
+					clause_11.setSubject(str+"the mapping size");
+					clause_11.setVerb("be");
+					clause_11.setObject(percentage1AsStreing+"%");
+					clause_11.addPostModifier("when");
 					NLGElement atomicMeasureNLG1 = atomicMeasureNLG1(linkSpec_1);
-					int number=i+1;
-					String str=number+".1: ";
-					clause_6.addComplement(str+atomicMeasureNLG1+",");
-					LinkSpecification linkSpec_2 = linkSpecification.getChildren().
+					
+					clause_6.addComplement(atomicMeasureNLG1+",");
+					LinkSpecification linkSpec_2 = linkSpec.getChildren().
 							get(i).getAllLeaves().get(1);
-					NLGElement atomicMeasureNLG2=atomicMeasureNLG1(linkSpec_2);
+					int size2=slection(linkSpec_2).getSize();
+					double percentage2=((double)size2/(double)allLSMapSize)*100.d;
+					double roundPercentage2 = Math.round(percentage2*100.0/100.0);
+					String percentage2AsString=Double.toString(roundPercentage2);
+					//System.out.println("percentage2: "+roundPercentage2);
+					//String size2AsString=Integer.toString(size2);
 					str=number+".2: ";
-					clause_7.addComplement("\n"+str+atomicMeasureNLG2);
+					clause_12.setSubject(str+"the mapping size");
+					clause_12.setVerb("be");
+					clause_12.setObject(percentage2AsString+"%");
+					clause_12.addPostModifier("when");
+					//System.out.println(" the mapping is :"+ slection(linkSpec_2).getSize());
+					NLGElement atomicMeasureNLG2=atomicMeasureNLG1(linkSpec_2);
+					
+					clause_7.addComplement(str+atomicMeasureNLG2);
+					coordinate_3.addComplement(clause_11);
 					coordinate_3.addComplement(clause_6);
+					coordinate_3.addComplement(clause_12);
 					coordinate_3.addComplement(clause_7);
 					sentence_3.addComponent(coordinate_3);
-
+					str=number+1+ ": ";
 
 					Realiser realiser_3 = new Realiser(lexicon);
 					NLGElement realised_3 = realiser_3.realise(sentence_3);
-					String realisation_3 = realised_3.getRealisation();
+					realisation_3 = realised_3.getRealisation();
 					System.out.println(realisation_3);
 				}
 				else {
-					LinkSpecification linkSpec_3 = linkSpecification.getChildren().get(i).getAllLeaves().get(0);
+					LinkSpecification linkSpec_3 = linkSpec.getChildren().get(i).getAllLeaves().get(0);
 					NLGElement atomicMeasureNLG3=atomicMeasureNLG1(linkSpec_3);
 
 				}
 
 
-				clause_5.setObject("2: the two resources");
+				clause_5.setObject("the two resources");
 				clause_5.setVerb("link");
 				clause_5.setFeature(Feature.TENSE, Tense.FUTURE);
 				clause_5.setFeature(Feature.PASSIVE, true);
 
 			} else {
 				if(i==0) {
-					NLGElement atomicMeasureNLG4 = atomicMeasureNLG1(linkSpecification.getChildren().get(0).getAllLeaves().get(0));
-					clause_8.addComplement("if "+atomicMeasureNLG4+",");
+					LinkSpecification linkSpec_3 = linkSpec.getChildren().get(0).getAllLeaves().get(0);
+					int str1= i+1;
+					String str2= str1+": ";
+					int size3=slection(linkSpec_3).getSize();
+					double percentage3=((double)size3/(double)allLSMapSize)*100;
+					double roundPercentage3 = Math.round(percentage3*100.0/100);
+					String percentage3AsString=Double.toString(roundPercentage3);
+					//System.out.println("the pecentage 3: "+roundPercentage3);
+					//String size3AsString=Integer.toString(size3);
+					clause_13.setSubject(str2+"the mapping size");
+					clause_13.setVerb("be");
+					clause_13.setObject(percentage3AsString+"%");
+					clause_13.addPostModifier("when");
+					//System.out.println(" the mapping is :"+ slection(linkSpec_3).getSize());
+					NLGElement atomicMeasureNLG4 = atomicMeasureNLG1(linkSpec_3);
+					
+					if(i==0)
+						clause_8.addComplement(atomicMeasureNLG4);
+					else str2="";
+					coordinate_4.addComplement(clause_13);
 					coordinate_4.addComplement(clause_5);
 					coordinate_4.addComplement(clause_8);
 					sentence_4.addComponent(coordinate_4);
 					Realiser realiser_4 = new Realiser(lexicon);
 					NLGElement realised_4 = realiser_4.realise(coordinate_4);
 
-					String realisation_4 = realised_4.getRealisation();
+					realisation_4 = realised_4.getRealisation();
 					System.out.println(realisation_4);
 
 				}
 				if(i==1) {
-					NLGElement atomicMeasureNLG5 = atomicMeasureNLG1(linkSpecification.getChildren().get(1).getAllLeaves().get(0));
-					clause_9.addComplement("if "+atomicMeasureNLG5);
+					LinkSpecification linkSpec_4 = linkSpec.getChildren().get(1).getAllLeaves().get(0);
+					//slection(linkSpec_4).getSize();
+					int size4=slection(linkSpec_4).getSize();
+					double percentage4=((double)size4/(double)allLSMapSize)*100;
+					double roundPercentage4 = Math.round(percentage4*100.0/100);
+					String percentageAsString= Double.toString(roundPercentage4);
+					//System.out.println("the pecentage 4: "+roundPercentage4);
+					String size4AsString=Integer.toString(size4);
+					clause_14.setSubject("2: the mapping size");
+					clause_14.setVerb("be");
+					clause_14.setObject(percentageAsString+"%");
+					clause_14.addPostModifier("when");
+					//System.out.println(" the mapping is :"+ slection(linkSpec_4).getSize());
+					NLGElement atomicMeasureNLG5 = atomicMeasureNLG1(linkSpec_4);
+					//					int str1= i+1;
+					//					String str2= str1+": ";
+
+					clause_9.addComplement(atomicMeasureNLG5);
+					coordinate_5.addComplement(clause_14);
 					coordinate_5.addComplement(clause_5);
 					coordinate_5.addComplement(clause_9);
 					sentence_5.addComponent(coordinate_5);
 					Realiser realiser_5 = new Realiser(lexicon);
 					NLGElement realised_5 = realiser_5.realise(coordinate_5);
 
-					String realisation_5 = realised_5.getRealisation();
+					realisation_5 = realised_5.getRealisation();
 					System.out.println(realisation_5);
 
 
@@ -464,6 +571,10 @@ public class SimpleNLGTemplate {
 		}
 
 	}
+	/**
+	 * @param linkSpec
+	 * @throws UnsupportedMLImplementationException
+	 */
 	public static void atomicMeasureNLG(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 
 		String atomicMeasureString = linkSpec.getAtomicMeasure();
@@ -494,7 +605,7 @@ public class SimpleNLGTemplate {
 		CoordinatedPhraseElement coordinate_2 = nlgFactory.createCoordinatedPhrase();
 
 		clause_1.setObject(WORDS.THE+"  link ");
-		clause_1.setVerb("link");
+		clause_1.setVerb("generate");
 		clause_1.setFeature(Feature.PASSIVE,true);
 		clause_1.setFeature(Feature.PERFECT, true);
 
@@ -523,11 +634,16 @@ public class SimpleNLGTemplate {
 		sentence_1.addComponent(sentence_2);
 		Realiser realiser_1 = new Realiser(lexicon);
 		NLGElement realised_1 = realiser_1.realise(sentence_1);
-		String realisation_1 = realised_1.getRealisation();
-		System.out.println(realisation_1);
+		realisation_11 = realised_1.getRealisation();
+		System.out.println(realisation_11);
 
 	}
 
+	/**
+	 * @param linkSpec
+	 * @return
+	 * @throws UnsupportedMLImplementationException
+	 */
 	public static NLGElement atomicMeasureNLG1(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 
 		String atomicMeasureString = linkSpec.getAtomicMeasure();
@@ -574,5 +690,25 @@ public class SimpleNLGTemplate {
 		Realiser realiser_1 = new Realiser(lexicon);
 		NLGElement realised_1 = realiser_1.realise(clause_1);
 		return realised_1;
+	}
+
+	/**
+	 * @param linkSpec 
+	 * @return
+	 * @throws UnsupportedMLImplementationException
+	 */
+	static AMapping slection(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+
+		EvaluationData eval = DataSetChooser.getData(DataSets.PERSON1);
+		AMLAlgorithm wombat = MLAlgorithmFactory.createMLAlgorithm(WombatSimple.class,
+				MLImplementationType.SUPERVISED_BATCH);
+		//		//Especially the source and target caches
+
+		wombat.init(null, eval.getSourceCache(), eval.getTargetCache());
+		//		//And the training data 
+		MLResults mlModel=new MLResults();
+		mlModel.setLinkSpecification(linkSpec);
+		AMapping mapping = wombat.predict(eval.getSourceCache(), eval.getTargetCache(), mlModel);
+		return mapping;
 	}
 }
