@@ -18,14 +18,15 @@ import java.io.PrintWriter;
  */
 public class SparkEvaluation {
 
-    private static SparkSession spark = SparkSession.builder()
-            .appName("Example")
+    private SparkSession spark = SparkSession.builder()
+            .appName("LIMES HR3")
+            .master("spark://spark-master:7077")
             .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
             .config("spark.kryo.registrator", LimesKryoRegistrator.class.getName())
             .getOrCreate();
 
-    public static void main(String[] args) throws Exception {
-        RDFConfigurationReader reader = new RDFConfigurationReader(args[0]);
+    public void run(String cfgUrl) throws Exception {
+        RDFConfigurationReader reader = new RDFConfigurationReader(cfgUrl);
         Configuration c = reader.read();
         Dataset<Instance> sourceDS = readInstancesFromCSV(c.getSourceInfo().getEndpoint());
         Dataset<Instance> targetDS = readInstancesFromCSV(c.getTargetInfo().getEndpoint());
@@ -48,7 +49,13 @@ public class SparkEvaluation {
         }
     }
 
-    private static Dataset<Instance> readInstancesFromCSV(String path){
+
+    public static void main(String[] args) throws Exception {
+        new SparkEvaluation().run(args[0]);
+
+    }
+
+    private Dataset<Instance> readInstancesFromCSV(String path){
         Dataset<Row> ds = spark.read()
                 .format("csv")
                 .option("header", "true")
