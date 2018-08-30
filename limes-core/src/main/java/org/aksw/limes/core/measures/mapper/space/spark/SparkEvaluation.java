@@ -5,6 +5,9 @@ import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.writer.CSVMappingWriter;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
@@ -32,20 +35,29 @@ public class SparkEvaluation {
         Dataset<Instance> targetDS = readInstancesFromCSV(c.getTargetInfo().getEndpoint());
         String measureExpr = c.getMetricExpression();
         double threshold = c.getAcceptanceThreshold();
-        PrintWriter resWriter = new PrintWriter(new FileOutputStream("SparkHR3Eval.csv"));
-        resWriter.write("Iteration\tSpark\n");
-        resWriter.close();
-        SparkHR3Mapper sparkHR3Mapper = new SparkHR3Mapper();
-        for(int i = 0; i < 10; i++){
-            resWriter = new PrintWriter(new FileOutputStream("SparkHR3Eval.csv", true));
-            long start = System.currentTimeMillis();
-            AMapping links = sparkHR3Mapper.getMapping(sourceDS, targetDS, "?x", "?y", measureExpr, threshold);
-            long finish = System.currentTimeMillis();
-            long time = finish - start;
-            resWriter.write(i + "\t" + time + "\n");
-            resWriter.close();
-            CSVMappingWriter linkWriter = new CSVMappingWriter();
-            linkWriter.write(links, "SparkHR3links.csv");
+        org.apache.hadoop.conf.Configuration configuration = new org.apache.hadoop.conf.Configuration();
+        FileSystem fs = FileSystem.get(configuration);
+        Path fileName = new Path("hdfs://namenode:8020/user/admin/eval.csv");
+        try {
+            if (fs.exists(fileName)) {
+                fs.delete(fileName, true);
+            }
+
+            FSDataOutputStream fin = fs.create(fileName);
+            fin.writeUTF("Iteration\tSpark\n");
+            SparkHR3Mapper sparkHR3Mapper = new SparkHR3Mapper();
+            for(int i = 0; i < 10; i++){
+                long start = System.currentTimeMillis();
+                AMapping links = sparkHR3Mapper.getMapping(sourceDS, targetDS, "?x", "?y", measureExpr, threshold);
+                long finish = System.currentTimeMillis();
+                long time = finish - start;
+                fin.writeUTF(i + "\t" + time + "\n");
+//                CSVMappingWriter linkWriter = new CSVMappingWriter();
+//                linkWriter.write(links, "SparkHR3links.csv");
+            }
+            fin.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

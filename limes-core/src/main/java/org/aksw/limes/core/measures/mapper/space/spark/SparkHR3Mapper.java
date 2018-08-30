@@ -143,8 +143,9 @@ public class SparkHR3Mapper extends AMapper {
                     final double sim = measure.get().getSimilarity(s, t, finalProperty1, finalProperty2);
                     return new Tuple3<>(s.getUri(), t.getUri(), sim);
                 }, Encoders.tuple(Encoders.STRING(), Encoders.STRING(), Encoders.DOUBLE()))
-                .collectAsList()
-                .forEach(t -> mapping.add(t._1(), t._2(), t._3()));
+                .write().csv("hdfs://namenode:8020/user/admin/links.csv");
+//                .collectAsList()
+//                .forEach(t -> mapping.add(t._1(), t._2(), t._3()));
         return mapping;
     }
 
