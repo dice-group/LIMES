@@ -140,11 +140,11 @@ public class SparkHR3Mapper extends AMapper {
         return sourceBlocks.joinWith(targetBlocks, sourceBlocks.col("blockId").equalTo(targetBlocks.col("blockId")))
                 .map(rows -> {
                     final Instance s = new Instance(rows._1().getString(3));
-                    s.addProperty("lat", rows._1().getString(1));
-                    s.addProperty("long", rows._1().getString(2));
+                    s.addProperty("lat", Double.toString(rows._1().getDouble(1)));
+                    s.addProperty("long", Double.toString(rows._1().getDouble(2)));
                     final Instance t = new Instance(rows._2().getString(3));
-                    t.addProperty("lat", rows._2().getString(1));
-                    t.addProperty("long", rows._2().getString(2));
+                    t.addProperty("lat", Double.toString(rows._2().getDouble(1)));
+                    t.addProperty("long", Double.toString(rows._2().getDouble(2)));
                     ISpaceMeasure spaceMeasure = SpaceMeasureFactory.getMeasure(finalOperator, finalDimensions);
                     final double sim = spaceMeasure.getSimilarity(s, t, finalProperty1, finalProperty2);
                     return RowFactory.create(s.getUri(), t.getUri(), sim);
