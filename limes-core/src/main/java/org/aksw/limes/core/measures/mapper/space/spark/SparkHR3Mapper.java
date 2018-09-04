@@ -10,8 +10,10 @@ import org.aksw.limes.core.measures.mapper.space.blocking.BlockingFactory;
 import org.aksw.limes.core.measures.mapper.space.blocking.IBlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
+import org.apache.spark.api.java.function.FilterFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
+import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,11 +59,7 @@ public class SparkHR3Mapper extends AMapper {
 
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
                                double threshold) {
-        SparkSession spark = SparkSession.builder().getOrCreate();
-        return getMapping(
-                spark.createDataset(source.getAllInstances(), Encoders.kryo(Instance.class)),
-                spark.createDataset(source.getAllInstances(), Encoders.kryo(Instance.class)),
-                sourceVar, targetVar, expression, threshold);
+        return null;
     }
 
 
@@ -83,9 +81,8 @@ public class SparkHR3Mapper extends AMapper {
      * @return A mapping which contains links between the source instances and
      *         the target instances
      */
-    public AMapping getMapping(Dataset<Instance> source, Dataset<Instance> target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
-        AMapping mapping = MappingFactory.createDefaultMapping();
+    public Dataset<Row> getMapping(Dataset<Instance> source, Dataset<Instance> target, String sourceVar, String targetVar, String expression,
+                                   double threshold) {
         // 0. get properties
         String property1, property2;
         // get property labels
@@ -136,17 +133,16 @@ public class SparkHR3Mapper extends AMapper {
                 }, Encoders.tuple(Encoders.bean(HR3Block.class),Encoders.kryo(Instance.class)));
         sourceBlocks.repartition(sourceBlocks.col("_1.id"));
         targetBlocks.repartition(targetBlocks.col("_1.id"));
-        sourceBlocks.joinWith(targetBlocks, sourceBlocks.col("_1.id").equalTo(targetBlocks.col("_1.id")))
+        Dataset<Row> linksDf = sourceBlocks.joinWith(targetBlocks, sourceBlocks.col("_1.id").equalTo(targetBlocks.col("_1.id")))
                 .map(tuple -> {
                     final Instance s = tuple._1()._2();
                     final Instance t = tuple._2()._2();
                     final double sim = measure.get().getSimilarity(s, t, finalProperty1, finalProperty2);
                     return new Tuple3<>(s.getUri(), t.getUri(), sim);
                 }, Encoders.tuple(Encoders.STRING(), Encoders.STRING(), Encoders.DOUBLE()))
-                .write().csv("hdfs://namenode:8020/user/admin/links.csv");
-//                .collectAsList()
-//                .forEach(t -> mapping.add(t._1(), t._2(), t._3()));
-        return mapping;
+                .filter((FilterFunction<Tuple3<String, String, Double>>) sim -> sim._3() >= threshold)
+                .toDF("source", "target", "confidence");
+        return linksDf;
     }
 
     // need to change this
