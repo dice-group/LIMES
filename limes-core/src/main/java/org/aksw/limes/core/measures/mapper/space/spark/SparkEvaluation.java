@@ -39,18 +39,13 @@ public class SparkEvaluation {
         Path evalPath = new Path(evalUrl);
         Path linksPath = new Path(outputUrl);
         try {
-            if (fs.exists(evalPath)) {
-                fs.delete(evalPath, true);
-            }
-
-            if (fs.exists(linksPath)) {
-                fs.delete(linksPath, true);
-            }
-
-            FSDataOutputStream fin = fs.create(evalPath);
+            FSDataOutputStream fin = fs.create(evalPath, true);
             fin.writeUTF("Iteration\tComputation\tOutput\n");
             SparkHR3Mapper sparkHR3Mapper = new SparkHR3Mapper();
             for (int i = 0; i < 10; i++) {
+                if (fs.exists(linksPath)) {
+                    fs.delete(linksPath, true);
+                }
                 long start = System.currentTimeMillis();
                 Dataset<Row> mapping = sparkHR3Mapper.getMapping(sourceDS, targetDS, "?x", "?y", measureExpr, threshold);
                 mapping.first();
