@@ -25,11 +25,11 @@ public class SparkEvaluation {
             .config("spark.dynamicAllocation.enabled", false)
             .getOrCreate();
 
-    public void run(String cfgUrl, String evalUrl, String outputUrl, int n) throws Exception {
+    public void run(String cfgUrl, String evalUrl, String outputUrl) throws Exception {
         RDFConfigurationReader reader = new RDFConfigurationReader(cfgUrl);
         Configuration c = reader.read();
-        Dataset<Row> sourceDS = readInstancesFromCSV(c.getSourceInfo().getEndpoint(), n);
-        Dataset<Row> targetDS = readInstancesFromCSV(c.getTargetInfo().getEndpoint(), n);
+        Dataset<Row> sourceDS = readInstancesFromCSV(c.getSourceInfo().getEndpoint());
+        Dataset<Row> targetDS = readInstancesFromCSV(c.getTargetInfo().getEndpoint());
         String measureExpr = c.getMetricExpression();
         double threshold = c.getAcceptanceThreshold();
         org.apache.hadoop.conf.Configuration configuration = new org.apache.hadoop.conf.Configuration();
@@ -63,17 +63,16 @@ public class SparkEvaluation {
 
 
     public static void main(String[] args) throws Exception {
-        new SparkEvaluation().run(args[0], args[1], args[2], Integer.valueOf(args[3]));
+        new SparkEvaluation().run(args[0], args[1], args[2]);
 
     }
 
-    private Dataset<Row> readInstancesFromCSV(String path, int n) {
+    private Dataset<Row> readInstancesFromCSV(String path) {
         Dataset<Row> ds = spark.read()
                 .format("csv")
                 .option("header", "true")
                 .option("mode", "DROPMALFORMED")
-                .load(path)
-                .limit(n);
+                .load(path);
         return ds;
 //            Instance i = new Instance(line.getString(0));
 //            i.addProperty("lat", line.getString(1));
