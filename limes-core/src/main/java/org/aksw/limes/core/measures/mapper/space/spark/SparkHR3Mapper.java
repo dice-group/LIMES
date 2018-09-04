@@ -92,16 +92,13 @@ public class SparkHR3Mapper extends AMapper {
             property2 = term2;
         }
         // get number of dimensions we are dealing with
-        int dimensions = property2.split("\\|").length;
-        IBlockingModule generator = BlockingFactory.getBlockingModule(property2, p.getOperator(), threshold,
-                granularity);
-        // initialize the measure for similarity computation
-        ISpaceMeasure spaceMeasure = SpaceMeasureFactory.getMeasure(p.getOperator(), dimensions);
-        // could get rid of these wrappers?
-        KryoSerializationWrapper<ISpaceMeasure> measure = new KryoSerializationWrapper<>(spaceMeasure, spaceMeasure.getClass());
+        final int finalDimensions = property2.split("\\|").length;
         final String finalProperty1 = property1;
         final String finalProperty2 = property2;
-        KryoSerializationWrapper<IBlockingModule> blockingWrapper = new KryoSerializationWrapper<>(generator, generator.getClass());
+        final String finalOperator = p.getOperator();
+        final double finalThreshold = threshold;
+        final int finalGranularity = granularity;
+
         // create input encoder
         StructType inputType = new StructType()
                 .add("blockId", DataTypes.createArrayType(DataTypes.IntegerType), false)
@@ -122,7 +119,7 @@ public class SparkHR3Mapper extends AMapper {
                     Instance i = new Instance(row.getString(0));
                     i.addProperty("lat", row.getString(1));
                     i.addProperty("long", row.getString(2));
-                    final IBlockingModule gen = blockingWrapper.get();
+                    final IBlockingModule gen = BlockingFactory.getBlockingModule(finalProperty1, finalOperator, finalThreshold, finalGranularity);
                     return gen.getAllSourceIds(i, finalProperty1).stream()
                             .flatMap(x -> gen.getBlocksToCompare(x).stream())
                             .map(x -> RowFactory.create(x.toArray(), Double.valueOf(row.getString(1)), Double.valueOf(row.getString(2)), row.getString(0))).iterator();
@@ -133,7 +130,7 @@ public class SparkHR3Mapper extends AMapper {
                     Instance i = new Instance(row.getString(0));
                     i.addProperty("lat", row.getString(1));
                     i.addProperty("long", row.getString(2));
-                    final IBlockingModule gen = blockingWrapper.get();
+                    final IBlockingModule gen = BlockingFactory.getBlockingModule(finalProperty2, finalOperator, finalThreshold, finalGranularity);
                     return gen.getAllBlockIds(i).stream().map(x -> RowFactory.create(x.toArray(), Double.valueOf(row.getString(1)), Double.valueOf(row.getString(2)), row.getString(0))).iterator();
                 }, inputEncoder);
         // repartition source and target for efficient join
@@ -148,7 +145,8 @@ public class SparkHR3Mapper extends AMapper {
                     final Instance t = new Instance(rows._2().getString(3));
                     t.addProperty("lat", rows._2().getString(1));
                     t.addProperty("long", rows._2().getString(2));
-                    final double sim = measure.get().getSimilarity(s, t, finalProperty1, finalProperty2);
+                    ISpaceMeasure spaceMeasure = SpaceMeasureFactory.getMeasure(finalOperator, finalDimensions);
+                    final double sim = spaceMeasure.getSimilarity(s, t, finalProperty1, finalProperty2);
                     return RowFactory.create(s.getUri(), t.getUri(), sim);
                 }, outputEncoder)
                 .filter(row -> row.getDouble(2) >= threshold)
