@@ -28,8 +28,8 @@ public class SparkEvaluation {
     public void run(String cfgUrl, String evalUrl, String outputUrl, int n) throws Exception {
         RDFConfigurationReader reader = new RDFConfigurationReader(cfgUrl);
         Configuration c = reader.read();
-        Dataset<Instance> sourceDS = readInstancesFromCSV(c.getSourceInfo().getEndpoint(), n);
-        Dataset<Instance> targetDS = readInstancesFromCSV(c.getTargetInfo().getEndpoint(), n);
+        Dataset<Row> sourceDS = readInstancesFromCSV(c.getSourceInfo().getEndpoint(), n);
+        Dataset<Row> targetDS = readInstancesFromCSV(c.getTargetInfo().getEndpoint(), n);
         String measureExpr = c.getMetricExpression();
         double threshold = c.getAcceptanceThreshold();
         org.apache.hadoop.conf.Configuration configuration = new org.apache.hadoop.conf.Configuration();
@@ -67,19 +67,19 @@ public class SparkEvaluation {
 
     }
 
-    private Dataset<Instance> readInstancesFromCSV(String path, int n) {
+    private Dataset<Row> readInstancesFromCSV(String path, int n) {
         Dataset<Row> ds = spark.read()
                 .format("csv")
                 .option("header", "true")
                 .option("mode", "DROPMALFORMED")
                 .load(path)
                 .limit(n);
-        return ds.map(line -> {
-            Instance i = new Instance(line.getString(0));
-            i.addProperty("lat", line.getString(1));
-            i.addProperty("long", line.getString(2));
-            return i;
-        }, Encoders.kryo(Instance.class));
+        return ds;
+//            Instance i = new Instance(line.getString(0));
+//            i.addProperty("lat", line.getString(1));
+//            i.addProperty("long", line.getString(2));
+//            return i;
+//        }, Encoders.kryo(Instance.class));
     }
 
 }

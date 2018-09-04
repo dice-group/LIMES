@@ -11,10 +11,11 @@ import org.aksw.limes.core.measures.mapper.space.blocking.IBlockingModule;
 import org.aksw.limes.core.measures.measure.space.ISpaceMeasure;
 import org.aksw.limes.core.measures.measure.space.SpaceMeasureFactory;
 import org.apache.spark.api.java.function.FilterFunction;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Encoders;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.*;
+import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder;
+import org.apache.spark.sql.catalyst.encoders.RowEncoder;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.Tuple2;
@@ -31,25 +32,6 @@ import java.util.*;
 public class SparkHR3Mapper extends AMapper {
 
     private static final Logger logger = LoggerFactory.getLogger(SparkHR3Mapper.class);
-
-    public static class HR3Block {
-
-        private List<Integer> id;
-
-        public static Tuple2<HR3Block, Instance> createTuple(List<Integer> blockId, Instance instance) {
-            HR3Block hr3Block = new HR3Block();
-            hr3Block.id = blockId;
-            return new Tuple2<>(hr3Block, instance);
-        }
-
-        public List<Integer> getId() {
-            return id;
-        }
-
-        public void setId(List<Integer> id) {
-            this.id = id;
-        }
-    }
 
     public int granularity = 4;
 
@@ -81,7 +63,7 @@ public class SparkHR3Mapper extends AMapper {
      * @return A mapping which contains links between the source instances and
      *         the target instances
      */
-    public Dataset<Row> getMapping(Dataset<Instance> source, Dataset<Instance> target, String sourceVar, String targetVar, String expression,
+    public Dataset<Row> getMapping(Dataset<Row> source, Dataset<Row> target, String sourceVar, String targetVar, String expression,
                                    double threshold) {
         // 0. get properties
         String property1, property2;
@@ -119,30 +101,53 @@ public class SparkHR3Mapper extends AMapper {
         final String finalProperty1 = property1;
         final String finalProperty2 = property2;
         KryoSerializationWrapper<IBlockingModule> blockingWrapper = new KryoSerializationWrapper<>(generator, generator.getClass());
-        Dataset<Tuple2<HR3Block, Instance>> sourceBlocks = source
-                .flatMap(i -> {
+
+        StructType inputType = new StructType()
+                .add("blockId", DataTypes.createArrayType(DataTypes.IntegerType), false)
+                .add("lat", DataTypes.DoubleType, false)
+                .add("long", DataTypes.DoubleType, false)
+                .add("url", DataTypes.StringType, false);
+        ExpressionEncoder<Row> inputEncoder = RowEncoder.apply(inputType);
+
+        StructType outputType = new StructType()
+                .add("source", DataTypes.createArrayType(DataTypes.IntegerType), false)
+                .add("target", DataTypes.LongType, false)
+                .add("sim", DataTypes.DoubleType, false);
+        ExpressionEncoder<Row> outputEncoder = RowEncoder.apply(outputType);
+
+        Dataset<Row> sourceBlocks = source
+                .flatMap(row -> {
+                    Instance i = new Instance(row.getString(0));
+                    i.addProperty("lat", row.getString(1));
+                    i.addProperty("long", row.getString(2));
                     final IBlockingModule gen = blockingWrapper.get();
                     return gen.getAllSourceIds(i, finalProperty1).stream()
                             .flatMap(x -> gen.getBlocksToCompare(x).stream())
-                            .map(x -> HR3Block.createTuple(x, i)).iterator();
-                }, Encoders.tuple(Encoders.bean(HR3Block.class),Encoders.kryo(Instance.class)));
-        Dataset<Tuple2<HR3Block, Instance>> targetBlocks = target
-                .flatMap(i -> {
+                            .map(x -> RowFactory.create(x.toArray(), row.getDouble(1), row.getDouble(2), row.getString(0))).iterator();
+                }, inputEncoder);
+        Dataset<Row> targetBlocks = target
+                .flatMap(row -> {
+                    Instance i = new Instance(row.getString(0));
+                    i.addProperty("lat", row.getString(1));
+                    i.addProperty("long", row.getString(2));
                     final IBlockingModule gen = blockingWrapper.get();
-                    return gen.getAllBlockIds(i).stream().map(x -> HR3Block.createTuple(x, i)).iterator();
-                }, Encoders.tuple(Encoders.bean(HR3Block.class),Encoders.kryo(Instance.class)));
-        sourceBlocks.repartition(sourceBlocks.col("_1.id"));
-        targetBlocks.repartition(targetBlocks.col("_1.id"));
-        Dataset<Row> linksDf = sourceBlocks.joinWith(targetBlocks, sourceBlocks.col("_1.id").equalTo(targetBlocks.col("_1.id")))
-                .map(tuple -> {
-                    final Instance s = tuple._1()._2();
-                    final Instance t = tuple._2()._2();
+                    return gen.getAllBlockIds(i).stream().map(x -> RowFactory.create(x.toArray(), row.getLong(1), row.getLong(2), row.getString(0))).iterator();
+                }, inputEncoder);
+        sourceBlocks.repartition(sourceBlocks.col("blockId"));
+        targetBlocks.repartition(targetBlocks.col("blockId"));
+        return sourceBlocks.joinWith(targetBlocks, sourceBlocks.col("blockId").equalTo(targetBlocks.col("blockId")))
+                .map(rows -> {
+                    final Instance s = new Instance(rows._1().getString(3));
+                    s.addProperty("lat", rows._1().getString(1));
+                    s.addProperty("long", rows._1().getString(2));
+                    final Instance t = new Instance(rows._2().getString(3));
+                    t.addProperty("lat", rows._2().getString(1));
+                    t.addProperty("long", rows._2().getString(2));
                     final double sim = measure.get().getSimilarity(s, t, finalProperty1, finalProperty2);
-                    return new Tuple3<>(s.getUri(), t.getUri(), sim);
-                }, Encoders.tuple(Encoders.STRING(), Encoders.STRING(), Encoders.DOUBLE()))
-                .filter((FilterFunction<Tuple3<String, String, Double>>) sim -> sim._3() >= threshold)
+                    return RowFactory.create(s.getUri(), t.getUri(), sim);
+                }, outputEncoder)
+                .filter(row -> row.getDouble(2) >= threshold)
                 .toDF("source", "target", "confidence");
-        return linksDf;
     }
 
     // need to change this
