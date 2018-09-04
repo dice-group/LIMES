@@ -34,6 +34,7 @@ public class SparkEvaluation {
         String measureExpr = c.getMetricExpression();
         double threshold = c.getAcceptanceThreshold();
         org.apache.hadoop.conf.Configuration configuration = new org.apache.hadoop.conf.Configuration();
+        configuration.addResource(new Path("/usr/local/hadoop/etc/hadoop/core-site.xml"));
         FileSystem fs = FileSystem.get(configuration);
         Path evalPath = new Path(evalUrl);
         Path linksPath = new Path(outputUrl);
