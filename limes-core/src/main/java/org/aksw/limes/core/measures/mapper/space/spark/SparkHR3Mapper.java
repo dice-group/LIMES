@@ -97,24 +97,26 @@ public class SparkHR3Mapper extends AMapper {
                 granularity);
         // initialize the measure for similarity computation
         ISpaceMeasure spaceMeasure = SpaceMeasureFactory.getMeasure(p.getOperator(), dimensions);
+        // could get rid of these wrappers?
         KryoSerializationWrapper<ISpaceMeasure> measure = new KryoSerializationWrapper<>(spaceMeasure, spaceMeasure.getClass());
         final String finalProperty1 = property1;
         final String finalProperty2 = property2;
         KryoSerializationWrapper<IBlockingModule> blockingWrapper = new KryoSerializationWrapper<>(generator, generator.getClass());
-
+        // create input encoder
         StructType inputType = new StructType()
                 .add("blockId", DataTypes.createArrayType(DataTypes.IntegerType), false)
                 .add("lat", DataTypes.DoubleType, false)
                 .add("long", DataTypes.DoubleType, false)
                 .add("url", DataTypes.StringType, false);
         ExpressionEncoder<Row> inputEncoder = RowEncoder.apply(inputType);
-
+        // create output encoder
         StructType outputType = new StructType()
                 .add("source", DataTypes.createArrayType(DataTypes.IntegerType), false)
                 .add("target", DataTypes.LongType, false)
                 .add("sim", DataTypes.DoubleType, false);
         ExpressionEncoder<Row> outputEncoder = RowEncoder.apply(outputType);
-
+        source.printSchema();
+        // index source
         Dataset<Row> sourceBlocks = source
                 .flatMap(row -> {
                     Instance i = new Instance(row.getString(0));
@@ -123,18 +125,21 @@ public class SparkHR3Mapper extends AMapper {
                     final IBlockingModule gen = blockingWrapper.get();
                     return gen.getAllSourceIds(i, finalProperty1).stream()
                             .flatMap(x -> gen.getBlocksToCompare(x).stream())
-                            .map(x -> RowFactory.create(x.toArray(), row.getDouble(1), row.getDouble(2), row.getString(0))).iterator();
+                            .map(x -> RowFactory.create(x.toArray(), Double.valueOf(row.getString(1)), Double.valueOf(row.getString(2)), row.getString(0))).iterator();
                 }, inputEncoder);
+        // index target
         Dataset<Row> targetBlocks = target
                 .flatMap(row -> {
                     Instance i = new Instance(row.getString(0));
                     i.addProperty("lat", row.getString(1));
                     i.addProperty("long", row.getString(2));
                     final IBlockingModule gen = blockingWrapper.get();
-                    return gen.getAllBlockIds(i).stream().map(x -> RowFactory.create(x.toArray(), row.getLong(1), row.getLong(2), row.getString(0))).iterator();
+                    return gen.getAllBlockIds(i).stream().map(x -> RowFactory.create(x.toArray(), Double.valueOf(row.getString(1)), Double.valueOf(row.getString(2)), row.getString(0))).iterator();
                 }, inputEncoder);
+        // repartition source and target for efficient join
         sourceBlocks.repartition(sourceBlocks.col("blockId"));
         targetBlocks.repartition(targetBlocks.col("blockId"));
+        // join generates link candidates and filter only keeps links with similarity >= threshold
         return sourceBlocks.joinWith(targetBlocks, sourceBlocks.col("blockId").equalTo(targetBlocks.col("blockId")))
                 .map(rows -> {
                     final Instance s = new Instance(rows._1().getString(3));
