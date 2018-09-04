@@ -108,8 +108,8 @@ public class SparkHR3Mapper extends AMapper {
         ExpressionEncoder<Row> inputEncoder = RowEncoder.apply(inputType);
         // create output encoder
         StructType outputType = new StructType()
-                .add("source", DataTypes.createArrayType(DataTypes.IntegerType), false)
-                .add("target", DataTypes.LongType, false)
+                .add("source", DataTypes.StringType, false)
+                .add("target", DataTypes.StringType, false)
                 .add("sim", DataTypes.DoubleType, false);
         ExpressionEncoder<Row> outputEncoder = RowEncoder.apply(outputType);
         source.printSchema();
