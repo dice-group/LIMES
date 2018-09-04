@@ -137,7 +137,7 @@ public class SparkHR3Mapper extends AMapper {
         sourceBlocks.repartition(sourceBlocks.col("blockId"));
         targetBlocks.repartition(targetBlocks.col("blockId"));
         // join generates link candidates and filter only keeps links with similarity >= threshold
-        return sourceBlocks.joinWith(targetBlocks, sourceBlocks.col("blockId").equalTo(targetBlocks.col("blockId")))
+        Dataset<Row> result = sourceBlocks.joinWith(targetBlocks, sourceBlocks.col("blockId").equalTo(targetBlocks.col("blockId")))
                 .map(rows -> {
                     final Instance s = new Instance(rows._1().getString(3));
                     s.addProperty("lat", Double.toString(rows._1().getDouble(1)));
@@ -149,8 +149,9 @@ public class SparkHR3Mapper extends AMapper {
                     final double sim = spaceMeasure.getSimilarity(s, t, finalProperty1, finalProperty2);
                     return RowFactory.create(s.getUri(), t.getUri(), sim);
                 }, outputEncoder)
-                .filter(row -> row.getDouble(2) >= threshold)
-                .toDF("source", "target", "confidence");
+                .filter(row -> row.getDouble(2) >= threshold);
+        result.printSchema();
+        return result;
     }
 
     // need to change this
