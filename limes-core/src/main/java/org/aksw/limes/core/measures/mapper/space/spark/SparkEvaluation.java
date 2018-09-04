@@ -47,7 +47,8 @@ public class SparkEvaluation {
                 }
                 long start = System.currentTimeMillis();
                 Dataset<Row> mapping = sparkHR3Mapper.getMapping(sourceDS, targetDS, "?x", "?y", measureExpr, threshold);
-                mapping.first();
+                long count = mapping.count();
+                System.out.println("Generated " + count + " links!");
                 long comp = System.currentTimeMillis();
                 mapping.write().csv(outputUrl);
                 long finish = System.currentTimeMillis();
