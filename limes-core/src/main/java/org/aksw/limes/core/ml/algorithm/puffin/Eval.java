@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.fptld;
+package org.aksw.limes.core.ml.algorithm.puffin;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -221,13 +221,13 @@ public class Eval {
 					// ========================================
 					logger.info("========FPTDL==========");
 
-					fptld = MLAlgorithmFactory.createMLAlgorithm(FPTLD.class, MLImplementationType.SUPERVISED_BATCH);
+					fptld = MLAlgorithmFactory.createMLAlgorithm(Puffin.class, MLImplementationType.SUPERVISED_BATCH);
 					logger.info("source size: " + testSourceCache.size());
 					logger.info("target size: " + testTargetCache.size());
 					fptld.init(null, trainSourceCache, trainTargetCache);
 					config = c.getConfigReader().read();
 					fptld.getMl().setConfiguration(config);
-					((FPTLD) fptld.getMl()).setParameter(FPTLD.PARAMETER_PROPERTY_MAPPING, c.getPropertyMapping());
+					((Puffin) fptld.getMl()).setParameter(Puffin.PARAMETER_PROPERTY_MAPPING, c.getPropertyMapping());
 					start = System.currentTimeMillis();
 					res = fptld.asSupervised().learn(trainingData);
 					end = System.currentTimeMillis();

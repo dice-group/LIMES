@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.fptld;
+package org.aksw.limes.core.ml.algorithm.puffin;
 
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;

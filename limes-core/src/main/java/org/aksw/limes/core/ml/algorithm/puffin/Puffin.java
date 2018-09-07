@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.fptld;
+package org.aksw.limes.core.ml.algorithm.puffin;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,19 +25,18 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.HamacherSetOperations;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.YagerSetOperations;
-import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.LearningParameter;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.MLResults;
 import org.aksw.limes.core.ml.algorithm.dragon.FitnessFunctions.FitnessFunctionDTL;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.aksw.limes.core.ml.algorithm.fptld.fitness.FuzzySimilarity;
-import org.aksw.limes.core.ml.algorithm.fptld.fitness.SimFuzzyRMSE;
-import org.aksw.limes.core.ml.algorithm.fptld.nodes.ANode;
-import org.aksw.limes.core.ml.algorithm.fptld.nodes.LeafNode;
+import org.aksw.limes.core.ml.algorithm.puffin.fitness.FuzzySimilarity;
+import org.aksw.limes.core.ml.algorithm.puffin.fitness.SimFuzzyRMSE;
+import org.aksw.limes.core.ml.algorithm.puffin.nodes.ANode;
+import org.aksw.limes.core.ml.algorithm.puffin.nodes.LeafNode;
 
-public class FPTLD extends ACoreMLAlgorithm {
+public class Puffin extends ACoreMLAlgorithm {
 
 	public static final String PARAMETER_PROPERTY_MAPPING = "property mapping";
 	public static final String PARAMETER_MIN_PROPERTY_COVERAGE = "minimum property coverage";
@@ -63,7 +62,7 @@ public class FPTLD extends ACoreMLAlgorithm {
 
 	@Override
 	protected String getName() {
-		return "FPTLD";
+		return "Puffin";
 	}
 
 	@Override
@@ -88,14 +87,6 @@ public class FPTLD extends ACoreMLAlgorithm {
 		learningParameters.add(new LearningParameter(PARAMETER_FITNESS_FUNCTION, fitnessFunction,
 				FitnessFunctionDTL.class, new String[] { FITNESS_NAME_JAC, FITNESS_NAME_RMSE, FITNESS_NAME_FM },
 				PARAMETER_FITNESS_FUNCTION));
-	}
-	
-	public static void main(String[] args) {
-		TrigramMeasure tm = new TrigramMeasure();
-        System.out.println(tm.getSimilarity("Hans Peter","Hans-Peter"));
-        System.out.println(tm.getSimilarity("Marianne","Marianne"));
-        System.out.println(tm.getSimilarity("Salah","Susanne"));
-        System.out.println(tm.getSimilarity("Larissa","Larysa")); 
 	}
 
 	@Override

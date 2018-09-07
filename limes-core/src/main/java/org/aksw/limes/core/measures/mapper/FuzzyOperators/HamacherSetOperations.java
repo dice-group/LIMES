@@ -6,7 +6,7 @@ import java.math.RoundingMode;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.ml.algorithm.fptld.fitness.SimFuzzyRMSE;
+import org.aksw.limes.core.ml.algorithm.puffin.fitness.SimFuzzyRMSE;
 import org.apache.commons.math3.util.Pair;
 
 public enum HamacherSetOperations implements MappingOperations {

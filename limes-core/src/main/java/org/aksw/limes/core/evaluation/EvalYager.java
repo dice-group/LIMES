@@ -25,7 +25,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.HamacherSetOperations;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.YagerSetOperations;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.aksw.limes.core.ml.algorithm.fptld.fitness.SimFuzzyRMSE;
+import org.aksw.limes.core.ml.algorithm.puffin.fitness.SimFuzzyRMSE;
 import org.apache.commons.math3.util.Pair;
 
 public class EvalYager {

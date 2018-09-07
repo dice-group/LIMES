@@ -18,7 +18,7 @@ import org.aksw.limes.core.execution.planning.planner.CanonicalPlanner;
 import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.YagerSetOperations;
-import org.aksw.limes.core.ml.algorithm.fptld.fitness.SimFuzzyRMSE;
+import org.aksw.limes.core.ml.algorithm.puffin.fitness.SimFuzzyRMSE;
 
 public class Test {
 	// public static final double[] testValues = new double[] { 0.0, 0.1, 0.2, 0.3,

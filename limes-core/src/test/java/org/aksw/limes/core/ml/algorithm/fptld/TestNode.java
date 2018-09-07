@@ -11,9 +11,9 @@ import java.util.List;
 
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.ls.LinkSpecification;
-import org.aksw.limes.core.ml.algorithm.fptld.nodes.ANode;
-import org.aksw.limes.core.ml.algorithm.fptld.nodes.InternalNode;
-import org.aksw.limes.core.ml.algorithm.fptld.nodes.LeafNode;
+import org.aksw.limes.core.ml.algorithm.puffin.nodes.ANode;
+import org.aksw.limes.core.ml.algorithm.puffin.nodes.InternalNode;
+import org.aksw.limes.core.ml.algorithm.puffin.nodes.LeafNode;
 import org.junit.Before;
 import org.junit.Test;
 

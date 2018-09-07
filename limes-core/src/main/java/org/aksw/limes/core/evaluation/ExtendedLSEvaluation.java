@@ -21,7 +21,7 @@ import org.aksw.limes.core.ml.algorithm.AMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.MLAlgorithmFactory;
 import org.aksw.limes.core.ml.algorithm.MLImplementationType;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
-import org.aksw.limes.core.ml.algorithm.fptld.FPTLD;
+import org.aksw.limes.core.ml.algorithm.puffin.Puffin;
 
 public class ExtendedLSEvaluation {
 
@@ -131,8 +131,8 @@ public class ExtendedLSEvaluation {
 
 	public static TaskAlgorithm createFPTLDWithOperators(LogicOperator[] operators)
 			throws UnsupportedMLImplementationException {
-		AMLAlgorithm algo = MLAlgorithmFactory.createMLAlgorithm(FPTLD.class, MLImplementationType.SUPERVISED_BATCH);
-		((FPTLD) algo.getMl()).setOperators(operators);
+		AMLAlgorithm algo = MLAlgorithmFactory.createMLAlgorithm(Puffin.class, MLImplementationType.SUPERVISED_BATCH);
+		((Puffin) algo.getMl()).setOperators(operators);
 		TaskAlgorithm tAlgo = new TaskAlgorithm(MLImplementationType.SUPERVISED_BATCH, algo, null, null);
 		return tAlgo;
 	}

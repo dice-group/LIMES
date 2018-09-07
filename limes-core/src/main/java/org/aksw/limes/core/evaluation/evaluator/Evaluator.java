@@ -39,7 +39,7 @@ import org.aksw.limes.core.ml.algorithm.SupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.UnsupervisedMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.WombatSimple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.aksw.limes.core.ml.algorithm.fptld.FPTLD;
+import org.aksw.limes.core.ml.algorithm.puffin.Puffin;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -366,7 +366,7 @@ public class Evaluator {
 			Configuration config, ACache trainSourceCache, ACache trainTargetCache, PropertyMapping propMap) {
 		algorithm.init(params, trainSourceCache, trainTargetCache);
 		if (algorithm.getName().equals("FPTLD")) {
-			algorithm.setParameter(FPTLD.PARAMETER_PROPERTY_MAPPING, propMap);
+			algorithm.setParameter(Puffin.PARAMETER_PROPERTY_MAPPING, propMap);
 		}
 		algorithm.getMl().setConfiguration(config);
 		MLResults model = null;

@@ -5,7 +5,7 @@ import org.aksw.limes.core.ml.algorithm.dragon.Dragon;
 import org.aksw.limes.core.ml.algorithm.euclid.BooleanEuclid;
 import org.aksw.limes.core.ml.algorithm.euclid.LinearEuclid;
 import org.aksw.limes.core.ml.algorithm.euclid.MeshEuclid;
-import org.aksw.limes.core.ml.algorithm.fptld.FPTLD;
+import org.aksw.limes.core.ml.algorithm.puffin.Puffin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +60,7 @@ public class MLAlgorithmFactory {
 			return Dragon.class;
 		}
 		if (name.equalsIgnoreCase(FPTLD)) {
-			return FPTLD.class;
+			return Puffin.class;
 		}
 
 		//        if(name.equalsIgnoreCase(DECISION_TREE_LEARNING)){

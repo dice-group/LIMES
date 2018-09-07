@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.fptld.fitness;
+package org.aksw.limes.core.ml.algorithm.puffin.fitness;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

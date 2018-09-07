@@ -20,7 +20,7 @@ import org.aksw.limes.core.measures.mapper.FuzzyOperators.HamacherSetOperations;
 import org.aksw.limes.core.measures.mapper.FuzzyOperators.YagerSetOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
-import org.aksw.limes.core.ml.algorithm.fptld.nodes.InternalNode;
+import org.aksw.limes.core.ml.algorithm.puffin.nodes.InternalNode;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.aksw.limes.core.ml.algorithm.wombat.LinkEntropy;
 import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;

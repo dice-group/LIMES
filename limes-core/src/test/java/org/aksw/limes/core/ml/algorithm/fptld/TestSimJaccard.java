@@ -8,7 +8,7 @@ import java.math.RoundingMode;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
-import org.aksw.limes.core.ml.algorithm.fptld.fitness.SimFuzzyJaccard;
+import org.aksw.limes.core.ml.algorithm.puffin.fitness.SimFuzzyJaccard;
 import org.junit.Before;
 import org.junit.Test;
 

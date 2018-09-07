@@ -1,4 +1,4 @@
-package org.aksw.limes.core.ml.algorithm.fptld.nodes;
+package org.aksw.limes.core.ml.algorithm.puffin.nodes;
 
 import java.util.ArrayList;
 import java.util.List;
