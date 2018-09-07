@@ -331,7 +331,7 @@ public class LinkSpecSummery {
 	 * @param threshold
 	 * @throws UnsupportedMLImplementationException
 	 */
-	static void summery(LinkSpecification linkspec, ACache source, ACache target, double threshold) throws UnsupportedMLImplementationException {
+	static void summary(LinkSpecification linkspec, ACache source, ACache target, double threshold) throws UnsupportedMLImplementationException {
 
 		int allMapZise;
 		allMapZise=slection(linkspec, source, target).getSize();
