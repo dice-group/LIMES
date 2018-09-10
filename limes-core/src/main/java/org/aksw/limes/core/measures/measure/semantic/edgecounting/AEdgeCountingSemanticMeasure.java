@@ -7,7 +7,7 @@ import java.util.List;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.semantic.ASemanticMeasure;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.dictionary.SemanticDictionary;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.preprocessing.DB.DBImplementation;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.HypernymPathsFinder;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.MinMaxDepthFinder;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     protected static final int ADJECTIVE_DEPTH = 1;
     protected static final int ADVERB_DEPTH = 1;
 
-    protected DBImplementation db = null;
+    protected AIndex Indexer = null;
     protected SemanticDictionary dictionary = null;
     protected double theta;
     protected boolean preIndex;
@@ -49,12 +49,12 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         return runtimes;
     }
 
-    public AEdgeCountingSemanticMeasure(double threshold, boolean pre, boolean fil) {
+    public AEdgeCountingSemanticMeasure(double threshold, boolean pre, boolean fil, AIndex indexer) {
         theta = threshold;
         preIndex = pre;
         filtering = fil;
-        System.out.println("filtering: " + filtering);
-        System.out.println("indexing: " + preIndex);
+        logger.info("filtering: " + filtering);
+        logger.info("indexing: " + preIndex);
 
         runtimes = new RuntimeStorage();
 
@@ -66,8 +66,8 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         runtimes.createDictionary += e - b;
 
         if (preIndex) {
-            db = new DBImplementation();
-            db.init();
+            // in case of db, connection is already opened
+            Indexer = indexer;
         }
 
     }
@@ -95,7 +95,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         public long checkStopWords() {
             return checkStopWords;
         }
-        
+
         public long getSourceTokenizing() {
             return sourceTokenizing;
         }
@@ -204,8 +204,10 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         if (synset == null)
             return new ArrayList<ArrayList<ISynsetID>>();
 
-        ArrayList<ArrayList<ISynsetID>> paths = preIndex ? db.getSynsetPaths(synset.getID().toString())
-                : HypernymPathsFinder.getHypernymPaths(dictionary, synset);
+        //ArrayList<ArrayList<ISynsetID>> paths = preIndex ? Indexer.getHypernymPaths(synset)
+        //        : HypernymPathsFinder.getHypernymPaths(dictionary, synset);
+
+        ArrayList<ArrayList<ISynsetID>> paths = HypernymPathsFinder.getHypernymPaths(dictionary, synset);
 
         long e = System.currentTimeMillis();
         // called multiple times
@@ -225,13 +227,20 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
             long bMinMax = System.currentTimeMillis();
             if (preIndex) {
-                minDepth1 = db.getMinDepth(synset1.getID().toString());
-                minDepth2 = db.getMinDepth(synset2.getID().toString());
+                minDepth1 = Indexer.getMinDepth(synset1);
+                minDepth2 = Indexer.getMinDepth(synset2);
+
             } else {
-                depths1 = MinMaxDepthFinder.getMinMaxDepth(synset1.getID().toString(), dictionary, db);
+
+                MinMaxDepthFinder finder = new MinMaxDepthFinder();
+                finder.calculateMinMaxDepths(synset1.getPOS(), dictionary);
+                HashMap<Integer, int[]> depths = finder.getDepths();
+
+                depths1 = depths.get(synset1.getOffset());
                 minDepth1 = depths1[0];
-                depths2 = MinMaxDepthFinder.getMinMaxDepth(synset2.getID().toString(), dictionary, db);
+                depths2 = depths.get(synset2.getOffset());
                 minDepth2 = depths2[0];
+
             }
             long eMinMax = System.currentTimeMillis();
             // called multiple times
@@ -245,8 +254,8 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                 int maxDepth1 = 0, maxDepth2 = 0;
                 bMinMax = System.currentTimeMillis();
                 if (preIndex) {
-                    maxDepth1 = db.getMaxDepth(synset1.getID().toString());
-                    maxDepth2 = db.getMaxDepth(synset2.getID().toString());
+                    maxDepth1 = Indexer.getMaxDepth(synset1);
+                    maxDepth2 = Indexer.getMaxDepth(synset2);
                 } else {
                     maxDepth1 = depths1[1];
                     maxDepth2 = depths2[1];
@@ -439,7 +448,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                             boolean flagTarget = Stopwords.isStopword(targetToken);
                             long eStopTarget = System.currentTimeMillis();
                             runtimes.checkStopWords += eStopTarget - bStopTarget;
-                            
+
                             if (!flagTarget) {
 
                                 double targetTokenSim = 0.0d;
@@ -502,13 +511,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         return maxSim;
     }
 
-    public void closeDB() {
-        if (preIndex) {
-            db.close();
-        }
-    }
-
-    public void closeDictionary() {
+    public void close() {
         dictionary.removeDictionary();
     }
 

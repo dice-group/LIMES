@@ -12,7 +12,8 @@ import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.semantic.edgecounting.EdgeCountingSemanticMapper;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure.RuntimeStorage;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.preprocessing.PreIndexing;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.memory.MemoryIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -184,18 +185,13 @@ public class SemanticsBaseline {
             // indexing
             long indexMinMax = 0l;
             long indexPaths = 0l;
-            if (controller.index) {
-                long bIndex = System.currentTimeMillis();
-                PreIndexing.flush = true;
-                PreIndexing.preIndexMinMaxDepths();
-                long eIndex = System.currentTimeMillis();
-                indexMinMax = eIndex - bIndex;
+            AIndex Indexer = new MemoryIndex();
 
-                bIndex = System.currentTimeMillis();
-                PreIndexing.flush = false;
-                PreIndexing.preIndexPaths();
-                eIndex = System.currentTimeMillis();
-                indexPaths = eIndex - bIndex;
+            if (controller.index) {
+                Indexer.preIndex();
+                indexMinMax = Indexer.getDurations()[0];
+                indexPaths = Indexer.getDurations()[1];
+
             }
 
             double thrs = 0.1d;
@@ -206,6 +202,9 @@ public class SemanticsBaseline {
                 EdgeCountingSemanticMapper mapper = new EdgeCountingSemanticMapper();
                 mapper.setValues(controller.index, controller.filter);
                 mapper.setNo(controller.no);
+                
+                if (controller.index)
+                    mapper.setIndexer(Indexer);
 
                 long b = System.currentTimeMillis();
                 String expression = controller.measure + "(" + controller.sourceV.charAt(1) + "."
@@ -226,7 +225,7 @@ public class SemanticsBaseline {
                 long end = System.currentTimeMillis();
                 long duration = end - begin;
                 if (duration >= 7200000)
-                    break;
+                    System.exit(1);
             }
 
         }

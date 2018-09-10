@@ -17,12 +17,10 @@ import edu.mit.jwi.item.Pointer;
 
 public class ShortestPathFinder {
 
-    public static long duration = 0l;
     
     public static int shortestPath(ArrayList<ArrayList<ISynsetID>> synset1Tree,
             ArrayList<ArrayList<ISynsetID>> synset2Tree) {
         
-        long begin = System.currentTimeMillis();
         
         int path = Integer.MAX_VALUE;
 
@@ -65,14 +63,11 @@ public class ShortestPathFinder {
         if (path == Integer.MAX_VALUE)
             path = -1;
         
-        long end = System.currentTimeMillis();
-        duration = end - begin;
         return path;
 
     }
 
     public static int shortestPath(ISynset synsetID1, ISynset synsetID2, SemanticDictionary dictionary) {
-        long begin = System.currentTimeMillis();
         
         int length = 0;
 
@@ -208,8 +203,6 @@ public class ShortestPathFinder {
             minLength = min1.getValue() + min2.getValue() + 2;
         }
         
-        long end = System.currentTimeMillis();
-        duration = end - begin;
         return minLength;
     }
 

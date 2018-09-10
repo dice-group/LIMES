@@ -14,6 +14,7 @@ import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingS
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure.RuntimeStorage;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticFactory;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticType;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
@@ -21,20 +22,25 @@ import org.slf4j.MarkerFactory;
 public class EdgeCountingSemanticMapper extends AMapper {
     static Logger logger = LoggerFactory.getLogger(EdgeCountingSemanticMapper.class);
     boolean preIndex = false;
-    boolean filtering = true;
+    boolean filtering = false;
     AEdgeCountingSemanticMeasure measure = null;
+    AIndex Indexer = null;
     public long duration = 0;
     int no = 0;
-    
+
     public void setValues(boolean i, boolean f) {
         preIndex = i;
         filtering = f;
     }
 
-    public void setNo(int n){
+    public void setNo(int n) {
         no = n;
     }
-    
+
+    public void setIndexer(AIndex index) {
+        Indexer = index;
+    }
+
     public RuntimeStorage getRuntimes() {
         return measure.getRuntimeStorage();
     }
@@ -61,35 +67,45 @@ public class EdgeCountingSemanticMapper extends AMapper {
 
         AMapping m = MappingFactory.createDefaultMapping();
 
+        
+        if (preIndex == true) {
+            // in case of DB, you open a connection
+            Indexer.init(false);
+
+        }
         SemanticType type = SemanticFactory.getMeasureType(expression);
-        measure = (AEdgeCountingSemanticMeasure) SemanticFactory.createMeasure(type, threshold, preIndex, filtering);
+        measure = SemanticFactory.createMeasure(type, threshold, preIndex, filtering, Indexer);
 
         int counterSource = 0;
         for (Instance sourceInstance : source.getAllInstances()) {
             counterSource++;
-            //System.out.println("Source URI "+sourceInstance.getUri());
+            // System.out.println("Source URI "+sourceInstance.getUri());
             int counterTarget = 0;
             for (Instance targetInstance : target.getAllInstances()) {
-                //System.out.println("-->Target URI "+targetInstance.getUri());
+                // System.out.println("-->Target URI "+targetInstance.getUri());
                 counterTarget++;
-                //long begin = System.currentTimeMillis();
+                // long begin = System.currentTimeMillis();
                 double similarity = measure.getSimilarity(sourceInstance, targetInstance, properties.get(0),
                         properties.get(1));
                 if (similarity >= threshold) {
                     m.add(sourceInstance.getUri(), targetInstance.getUri(), similarity);
                 }
-                if(counterTarget == no)
+                if (counterTarget == no)
                     break;
-                //long end = System.currentTimeMillis();
-                //duration += end - begin;
+                // long end = System.currentTimeMillis();
+                // duration += end - begin;
             }
-            if(counterSource == no)
+            if (counterSource == no)
                 break;
         }
-        
-        measure.closeDictionary();
-        measure.closeDB();
-        
+
+        if (preIndex == true) {
+            // in case of a db, you close the connection
+            Indexer.close();
+        }
+
+        measure.close();
+
         return m;
     }
 

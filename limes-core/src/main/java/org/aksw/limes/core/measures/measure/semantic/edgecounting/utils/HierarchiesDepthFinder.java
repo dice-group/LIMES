@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.dictionary.SemanticDictionary;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.preprocessing.DB.DBImplementation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import edu.mit.jwi.item.ISynset;
@@ -16,7 +15,7 @@ public class HierarchiesDepthFinder {
     private static final Logger logger = LoggerFactory.getLogger(HierarchiesDepthFinder.class);
 
     protected static SemanticDictionary dictionary = null;
-    public static DBImplementation db = new DBImplementation();
+    //public static DBImplementation db = new DBImplementation();
     
     public HierarchiesDepthFinder() {
         dictionary = new SemanticDictionary();

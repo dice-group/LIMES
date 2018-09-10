@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.filters.ASemanticFilter;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.filters.SemanticFilterFactory;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.utils.ShortestPathFinder;
 
 import edu.mit.jwi.item.ISynset;
@@ -13,8 +14,8 @@ public class ShortestPathMeasure extends AEdgeCountingSemanticMeasure {
 
     double maxValue = 1;
 
-    public ShortestPathMeasure(double threshold, boolean preindex, boolean filtering) {
-        super(threshold, preindex, filtering);
+    public ShortestPathMeasure(double threshold, boolean preindex, boolean filtering, AIndex Indexer) {
+        super(threshold, preindex, filtering, Indexer);
     }
 
     public double calculate(ISynset synset1, double shortestPath) {

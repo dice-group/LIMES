@@ -16,17 +16,13 @@ public class HypernymPathsFinder {
     public static boolean useInstanceHypernyms = true;
     public static boolean useHypernyms = true;
 
-    public static long duration = 0l;
 
     public static ArrayList<ArrayList<ISynsetID>> getHypernymPaths(SemanticDictionary dictionary, ISynset synset) {
-        long begin = System.currentTimeMillis();
         if (synset == null)
             return new ArrayList<ArrayList<ISynsetID>>();
 
         ArrayList<ArrayList<ISynsetID>> trees = getHypernymPaths(dictionary, synset, new HashSet<ISynsetID>());
-        long end = System.currentTimeMillis();
         
-        duration = end - begin;
         
         return trees;
     }

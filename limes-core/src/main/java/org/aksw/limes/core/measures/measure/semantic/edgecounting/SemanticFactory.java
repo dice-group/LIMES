@@ -1,5 +1,6 @@
 package org.aksw.limes.core.measures.measure.semantic.edgecounting;
 
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,15 +14,15 @@ public class SemanticFactory {
     static Logger logger = LoggerFactory.getLogger(SemanticFactory.class);
 
     public static AEdgeCountingSemanticMeasure createMeasure(SemanticType measure, double threshold,
-            boolean preindex, boolean filtering) {
+            boolean preindex, boolean filtering, AIndex Indexer) {
         if (measure == SemanticType.SHORTEST_PATH)
-            return new ShortestPathMeasure(threshold, preindex, filtering);
+            return new ShortestPathMeasure(threshold, preindex, filtering, Indexer);
         else if (measure == SemanticType.LI)
-            return new LiMeasure(threshold, preindex, filtering);
+            return new LiMeasure(threshold, preindex, filtering, Indexer);
         else if (measure == SemanticType.LCH)
-            return new LCHMeasure(threshold, preindex, filtering);
+            return new LCHMeasure(threshold, preindex, filtering, Indexer);
         else if (measure == SemanticType.WUPALMER)
-            return new WuPalmerMeasure(threshold, preindex, filtering);
+            return new WuPalmerMeasure(threshold, preindex, filtering, Indexer);
         return null;
     }
 
