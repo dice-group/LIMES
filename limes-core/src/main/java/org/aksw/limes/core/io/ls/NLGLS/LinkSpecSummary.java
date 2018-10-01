@@ -1,7 +1,4 @@
 package  org.aksw.limes.core.io.ls.NLGLS;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.ls.LinkSpecification;
@@ -37,7 +34,7 @@ import simplenlg.realiser.english.Realiser;
 public class LinkSpecSummary {
 
 	protected static Logger logger = LoggerFactory.getLogger(LinkSpecSummary.class);
-
+	
 	/**
 	 * @param linkSpec
 	 * @param verbos
@@ -45,13 +42,11 @@ public class LinkSpecSummary {
 	 */
 	public static void descriptor(LinkSpecification linkSpec, boolean verbos) throws UnsupportedMLImplementationException {
 
-
 		//verbos=false;
 		if (verbos==true)
 			introduction(linkSpec);
 
-		fullMeasureNLG(linkSpec);
-
+		fullMeasureNLG(linkSpec, 0,"");
 	}
 
 	/**
@@ -147,7 +142,7 @@ public class LinkSpecSummary {
 		clause_4.setVerb(WORDS.PROPOSE);
 		clause_4.setFeature(Feature.PASSIVE,true);
 		clause_4.setFeature(Feature.PERFECT, true);
-
+		//static Integer x=1;
 		clause_5.addComplement(WORDS.TO);
 		clause_5.addComplement(WORDS.IMPROVE);
 		clause_5.addComplement(WORDS.THE +" "+ WORDS.PERFORMANCE);
@@ -189,7 +184,7 @@ public class LinkSpecSummary {
 		clause_8.addComplement(runTime);
 		coordinate_3.addCoordinate(clause_6);
 		coordinate_3.addComplement(clause_7);
-		coordinate_3.addComplement(clause_8);
+		coordinate_3.addComplement(clause_8);//static Integer x=1;
 		sentence_3.addComponent(coordinate_3);
 		// the end of the third sentence 
 
@@ -222,7 +217,7 @@ public class LinkSpecSummary {
 		clause_13.addComplement(WORDS.OPTIMIZE);
 
 		NPPhraseSpec linkSpecifications = nlgFactory.createNounPhrase(WORDS.THE,WORDS.LINKSPECIFICATION);
-		clause_14.addComplement(linkSpecifications);
+		clause_14.addComplement(linkSpecifications);//static Integer x=1;
 
 		clause_15.setFeature(Feature.COMPLEMENTISER, WORDS.WHICH);
 		clause_15.setObject(WORDS.IT);
@@ -259,7 +254,7 @@ public class LinkSpecSummary {
 		clause_17.setVerb(WORDS.NEED);
 		clause_17.addComplement(WORDS.TO);
 		clause_17.addComplement(WORDS.SET);
-		clause_17.addComplement(WORDS.THRESHOLDVALUE);
+		clause_17.addComplement(WORDS.THRESHOLDVALUE);//static Integer x=1;
 		clause_17.addComplement(WORDS.TO);
 		clause_17.addComplement(WORDS.ELIMINATE);
 		clause_17.addComplement(WORDS.RESOURCES);
@@ -289,7 +284,7 @@ public class LinkSpecSummary {
 		clause_20.setSubject(WORDS.THE+" "+WORDS.MACHINELEARNING+" "+WORDS.ALGORITHM+" (e.g. WOMBAT Simple)");
 		clause_20.setVerb(WORDS.OPTIMIZE);
 		clause_20.setFeature(Feature.TENSE, Tense.PRESENT);
-		clause_20.setObject(WORDS.THE+" "+WORDS.LINKSPECIFICATION);
+		clause_20.setObject(WORDS.THE+" "+WORDS.LINKSPECIFICATION);//static Integer x=1;
 		clause_20.addComplement(WORDS.THAT);
 		clause_20.addComplement(WORDS.RETURN);
 		clause_20.addComplement(WORDS.BEST);
@@ -314,7 +309,7 @@ public class LinkSpecSummary {
 		paragraph.addComponent(sentence_6);
 		paragraph.addComponent(sentence_7);
 		paragraph.addComponent(sentence_8);
-		paragraph.addComponent(sentence_9);
+		paragraph.addComponent(sentence_9);//static Integer x=1;
 		paragraph.addComponent(sentence_10);
 		Realiser realiser = new Realiser(lexicon);
 		//realiser.setDebugMode(true);
@@ -323,10 +318,9 @@ public class LinkSpecSummary {
 		//realiser.setCommaSepCuephrase(true);
 		String realisation = realised.getRealisation();
 		System.out.println(realisation);
-		fullMeasureNLG(linkSpec);
+		fullMeasureNLG(linkSpec, 0,"");
 	}
-
-
+	 	
 	/**
 	 * @param linkspec
 	 * @param source
@@ -334,216 +328,127 @@ public class LinkSpecSummary {
 	 * @param threshold
 	 * @throws UnsupportedMLImplementationException
 	 */
-	static void summary(LinkSpecification linkspec, ACache source, ACache target, double threshold) throws UnsupportedMLImplementationException {
-		Lexicon lexicon = new XMLLexicon();                         
-		NLGFactory nlgFactory = new NLGFactory(lexicon);
+	static void sumerazation(LinkSpecification linkspec,ACache source, ACache target, double threshold) throws UnsupportedMLImplementationException {
+       
+		Lexicon lexicon = new XMLLexicon();                        
+        NLGFactory nlgFactory = new NLGFactory(lexicon);
 
-		SPhraseSpec clause_1 = nlgFactory.createClause();
-		SPhraseSpec clause_2 = nlgFactory.createClause();
-		SPhraseSpec clause_3 = nlgFactory.createClause();
-		SPhraseSpec clause_4 = nlgFactory.createClause();
-		SPhraseSpec clause_5 = nlgFactory.createClause();
-		SPhraseSpec clause_6 = nlgFactory.createClause();
-		SPhraseSpec clause_7 = nlgFactory.createClause();
-		SPhraseSpec clause_8 = nlgFactory.createClause();
+        SPhraseSpec clause_1 = nlgFactory.createClause();
+        SPhraseSpec clause_2 = nlgFactory.createClause();
+        SPhraseSpec clause_3 = nlgFactory.createClause();
+        SPhraseSpec clause_5 = nlgFactory.createClause();
+        SPhraseSpec clause_6 = nlgFactory.createClause();
+        SPhraseSpec clause_7 = nlgFactory.createClause();
 
+        CoordinatedPhraseElement coordinate_1 = nlgFactory.createCoordinatedPhrase();
+        CoordinatedPhraseElement coordinate_2 = nlgFactory.createCoordinatedPhrase();
 
-		CoordinatedPhraseElement coordinate_1 = nlgFactory.createCoordinatedPhrase();
-		CoordinatedPhraseElement coordinate_2 = nlgFactory.createCoordinatedPhrase();
-		//CoordinatedPhraseElement coordinate_3 = nlgFactory.createCoordinatedPhrase();
+        int allMapZise;
+        allMapZise=slection(linkspec, source, target).getSize();
+        double percentage=100.0;
+        double roundPercentage = Math.round(percentage*100.0/100.0);
 
-		int allMapZise;
-		allMapZise=slection(linkspec, source, target).getSize();
-		double percentage=100.0;
-		double roundPercentage = Math.round(percentage*100.0/100.0);
-		//System.out.println("the percntage 1 is : "+percentage);
-		//String percentage1AsStreing=Double.toString(roundPercentage);
-		if(roundPercentage==threshold) {
-			List<NLGElement> fullMeasureNLG3 = fullMeasureNLG(linkspec);
-			//clause_1.addComplement("if the mapping coverage is greater or equal to the "+threshold);
-			clause_1.addFrontModifier("when");
-			clause_1.setSubject("the mapping coverage");
-			clause_1.setVerb("is");
-			//if(threshold==100.0)
-			clause_1.addComplement("equal to "+ threshold+ "%");
-			//else
-			//clause_1.addComplement("equal or greater than "+ threshold+ "%");
-			clause_2.addComplement("then");
-			clause_3.setSubject("the description");
-			clause_3.setVerb("is");
-			clause_3.addComplement("as follows:");
-			String str=fullMeasureNLG3.toString();
-			str=str.substring(str.indexOf("[")+1, str.indexOf("]"));
-			str=str.replace(",", "");
-			clause_4.addComplement(str);
-			coordinate_1.addComplement(clause_1);
-			coordinate_1.addComplement(clause_2);
-			coordinate_1.addComplement(clause_3);
-			coordinate_1.addComplement(clause_4);
-			Realiser realiser_1 = new Realiser(lexicon);
-			NLGElement realised_1 = realiser_1.realise(coordinate_1);
-			String realisation_1 = realised_1.getRealisation();
-			System.out.println(" the output is "+realisation_1);
-			//System.out.println(" the measure: "+fullMeasureNLG3.toString());
-		}
-		if(!linkspec.isAtomic())
-		{
+        if(threshold==roundPercentage) {
+            clause_1.addFrontModifier("when");
+            clause_1.setSubject("the mapping coverage");
+            clause_1.setVerb("is");
 
+            clause_1.addComplement("equal to "+ threshold+ "%");
 
-			for( int i=0;i<linkspec.getChildren().size();i++) {
+            clause_2.addComplement("then");
+            clause_3.setSubject("the description");
+            clause_3.setVerb("is");
+            clause_3.addComplement("as follows:");
+            coordinate_1.addComplement(clause_1);
+            coordinate_1.addComplement(clause_2);
+            coordinate_1.addComplement(clause_3);
 
-				int number=i+1;
-				String str= number +": ";
+            clause_1=new SPhraseSpec(nlgFactory);
+            clause_2=new SPhraseSpec(nlgFactory);
+            clause_3=new SPhraseSpec(nlgFactory);
 
-				if(!linkspec.getChildren().get(i).isAtomic()) 
+            Realiser realiser_1 = new Realiser(lexicon);
+            NLGElement realised_1 = realiser_1.realise(coordinate_1);
+            String realisation_1 = realised_1.getRealisation();
+            System.out.println(realisation_1);
+            fullMeasureNLG(linkspec,0,"");
+        }
+       
+        for(int i=0;i<linkspec.getChildren().size();i++)
+        {
+            LinkSpecification  linkspecification=linkspec.getChildren().get(i);
+            if(!linkspecification.isAtomic()) {
 
-				{
-					int	map1=slection(linkspec.getChildren().get(i), source, target).getSize();
-					double percentage1=((double) map1/(double) allMapZise)*100.d;
-					double roundPercentage1 = Math.round(percentage1*100.0/100.0);
-					//System.out.println("the percntage 1 is : "+percentage1);
-					//String percentage1AsStreing_1=Double.toString(roundPercentage1);
-					if(roundPercentage1==threshold) {
-						List<NLGElement> fullMeasureNLG3 = fullMeasureNLG(linkspec.getChildren().get(i));
-						clause_5.addFrontModifier("when");
-						clause_5.setSubject("the mapping coverage");
-						clause_5.setVerb("is");
-						//if(threshold==100.0)
-						clause_5.addComplement("equal to "+ threshold+ "%");
-						//else
-						//	clause_5.addComplement("equal or greater than "+ threshold+ "%");
-						clause_6.addComplement("then");
-						clause_7.setSubject("the description");
-						clause_7.setVerb("is");
-						clause_7.addComplement("as follows:");
-						String str_1=fullMeasureNLG3.toString();
-						str_1=str_1.substring(str_1.indexOf("[")+1, str_1.indexOf("]"));
-						str_1=str_1.replace(",", "");
-						clause_8.addComplement(str_1);
-						coordinate_2.addComplement(clause_5);
-						coordinate_2.addComplement(clause_6);
-						coordinate_2.addComplement(clause_7);
-						coordinate_2.addComplement(clause_8);
-						Realiser realiser_2 = new Realiser(lexicon);
-						NLGElement realised_2 = realiser_2.realise(coordinate_2);
-						String realisation_2 = realised_2.getRealisation();
-						System.out.println(" the output is "+realisation_2);
-					}
-					for(int j=0;j<linkspec.getChildren().get(i).getAllLeaves().size();j++) 
-					{
-						int map2=slection(linkspec.getChildren().get(i).getAllLeaves().get(j), source, target).getSize();
-						double percentage2=((double) map2/(double) allMapZise)*100.d;
+                int    map1=slection(linkspecification, source, target).getSize();
+                double percentage1=((double) map1/(double) allMapZise)*100.d;
+                double roundPercentage1 = Math.round(percentage1*100.0/100.0);
+                if(roundPercentage1==threshold) {
+                    clause_5.addFrontModifier("when");
+                    clause_5.setSubject("the mapping coverage");
+                    clause_5.addComplement("equal to "+ threshold+ "%");
+                    clause_6.addComplement("then");
+                    clause_7.setSubject("the description");
+                    clause_7.setVerb("is");
+                    clause_7.addComplement("as follows:");
 
-						double roundPercentage2 = Math.round(percentage2*100.0/100.0);
-						//String percentage1AsStreing1=Double.toString(roundPercentage2);
-						if(roundPercentage2>=threshold) {
-							List<NLGElement> fullMeasureNLG = fullMeasureNLG(linkspec.getChildren().get(i).getAllLeaves().get(j));
-							clause_5.addFrontModifier("when");
-							clause_5.setSubject("the mapping coverage");
-							clause_5.setVerb("is");
-							//if(threshold==100.0)
-							clause_5.addComplement("equal to "+ threshold+ "%");
-							//else
-							//clause_5.addComplement("equal or greater than "+ threshold+ "%");
-							clause_6.addComplement("then");
-							clause_7.setSubject("the description");
-							clause_7.setVerb("is");
-							clause_7.addComplement("as follows:");
-							String str_1=fullMeasureNLG.toString();
-							str_1=str_1.substring(str_1.indexOf("[")+1, str_1.indexOf("]"));
-							str_1=str_1.replace(",", "");
-							clause_8.addComplement(str_1);
-							coordinate_2.addComplement(clause_5);
-							coordinate_2.addComplement(clause_6);
-							coordinate_2.addComplement(clause_7);
-							coordinate_2.addComplement(clause_8);
-							Realiser realiser_2 = new Realiser(lexicon);
-							NLGElement realised_2 = realiser_2.realise(coordinate_2);
-							String realisation_2 = realised_2.getRealisation();
-							System.out.println(" the output is "+realisation_2);
+                    coordinate_2.addComplement(clause_5);
+                    coordinate_2.addComplement(clause_6);
+                    coordinate_2.addComplement(clause_7);
 
-						}
+                    clause_5=new SPhraseSpec(nlgFactory);
+                    clause_6=new SPhraseSpec(nlgFactory);
+                    clause_7=new SPhraseSpec(nlgFactory);
+                    Realiser realiser_2 = new Realiser(lexicon);
+                    NLGElement realised_2 = realiser_2.realise(coordinate_2);
+                    String realisation_2 = realised_2.getRealisation();
+                    System.out.println(realisation_2);
+                    fullMeasureNLG(linkspecification, 0, "");
+                    sumerazation(linkspecification, source, target, threshold);
+                }
 
-					}
-
-				}
-				else 
-				{
-					linkspec.getChildren().get(i);
-					int map3=slection(linkspec.getChildren().get(i), source, target).getSize();
-					double percentage3=((double) map3/(double) allMapZise)*100.d;
-					//    allLinkSpecs.add( linkSpec_1);
-					double roundPercentage3 = Math.round(percentage3*100.0/100.0);
-					//String percentage1AsStreing3=Double.toString(roundPercentage3);
-					if(roundPercentage3==threshold) {
-						List<NLGElement> fullMeasureNLG=fullMeasureNLG(linkspec.getChildren().get(i));
-						clause_5.addFrontModifier("when");
-						clause_5.setSubject("the mapping coverage");
-						clause_5.setVerb("is");
-						//if(threshold==100.0)
-						clause_5.addComplement("equal to "+ threshold+ "%");
-						//else
-						//	clause_5.addComplement("equal or greater than "+ threshold+ "%");
-						clause_6.addComplement("then");
-						clause_7.setSubject("the description");
-						clause_7.setVerb("is");
-						clause_7.addComplement("as follows:");
-						String str_1=fullMeasureNLG.toString();
-						str_1=str_1.substring(str_1.indexOf("[")+1, str_1.indexOf("]"));
-						str_1=str_1.replace(",", "");
-						clause_8.addComplement(str_1);
-						coordinate_2.addComplement(clause_5);
-						coordinate_2.addComplement(clause_6);
-						coordinate_2.addComplement(clause_7);
-						coordinate_2.addComplement(clause_8);
-						Realiser realiser_2 = new Realiser(lexicon);
-						NLGElement realised_2 = realiser_2.realise(coordinate_2);
-						String realisation_2 = realised_2.getRealisation();
-						System.out.println(" the output is "+realisation_2);
-						//System.out.println(" the measure: "+fullMeasureNLG.toString());
-					}
-				}
-			}
-		}
-		else
-		{
-			int map4=slection(linkspec, source, target).getSize();
-			double percentage4=((double) map4/(double) allMapZise)*100.d;
-			//    allLinkSpecs.add( linkSpec_1);
-			double roundPercentage4 = Math.round(percentage4*100.0/100.0);
-			//String percentage1AsStreing4=Double.toString(roundPercentage4);
-			if(roundPercentage4==threshold) {
-				List<NLGElement> fullMeasureNLG=fullMeasureNLG(linkspec);
-				clause_5.addFrontModifier("when");
-				clause_5.setSubject("the mapping coverage");
-				clause_5.setVerb("is");
-				//if(threshold==100.0)
-				clause_5.addComplement("equal to "+ threshold+ "%");
-				//else
-				//	clause_5.addComplement("equal or greater than "+ threshold+ "%");
-				clause_6.addComplement("then");
-				clause_7.setSubject("the description");
-				clause_7.setVerb("is");
-				clause_7.addComplement("as follows:");
-				String str_1=fullMeasureNLG.toString();
-				str_1=str_1.substring(str_1.indexOf("[")+1, str_1.indexOf("]"));
-				str_1=str_1.replace(",", "");
-				clause_8.addComplement(str_1);
-				coordinate_2.addComplement(clause_5);
-				coordinate_2.addComplement(clause_6);
-				coordinate_2.addComplement(clause_7);
-				coordinate_2.addComplement(clause_8);
-				Realiser realiser_2 = new Realiser(lexicon);
-				NLGElement realised_2 = realiser_2.realise(coordinate_2);
-				String realisation_2 = realised_2.getRealisation();
-				System.out.println(" the output is "+realisation_2);
-				//System.out.println(" the measure: "+fullMeasureNLG.toString());
-
-			}
-		}
+            }
+            else {
 
 
-	}
+                int    map1=slection(linkspecification, source, target).getSize();
+                double percentage1=((double) map1/(double) allMapZise)*100.d;
+                double roundPercentage1 = Math.round(percentage1*100.0/100.0);
+               // System.out.println("the percentage 2 is: "+roundPercentage1);
+                if(roundPercentage1==threshold) {
+                    clause_5.addFrontModifier("when");
+                    clause_5.setSubject("the mapping coverage");
+                    clause_5.addComplement("equal to "+ threshold+ "%");
+                    clause_6.addComplement("then");
+                    clause_7.setSubject("the description");
+                    clause_7.setVerb("is");
+                    clause_7.addComplement("as follows:");
+
+                    coordinate_2.addComplement(clause_5);
+                    coordinate_2.addComplement(clause_6);
+                    coordinate_2.addComplement(clause_7);
+
+                    clause_5=new SPhraseSpec(nlgFactory);
+                    clause_6=new SPhraseSpec(nlgFactory);
+                    clause_7=new SPhraseSpec(nlgFactory);
+                    Realiser realiser_2 = new Realiser(lexicon);
+                    NLGElement realised_2 = realiser_2.realise(coordinate_2);
+                    String realisation_2 = realised_2.getRealisation();
+                    System.out.println(realisation_2);
+                    NLGElement atomicMeasureNLG = atomicMeasureNLG(linkspecification);
+                    Realiser realiser_4 = new Realiser(lexicon);
+                    NLGElement realised_4 = realiser_4.realise(atomicMeasureNLG);
+                    String realisation_4 = realised_4.getRealisation();
+                    System.out.println(realisation_4);
+
+                }
+
+            }
+
+        }
+
+
+    }
+	
 
 	/**
 	 * @param linkSpec
@@ -566,164 +471,100 @@ public class LinkSpecSummary {
 	}
 
 
-	static List<NLGElement> fullMeasureNLG(LinkSpecification linkspec) throws UnsupportedMLImplementationException {
-		Lexicon lexicon = new XMLLexicon();                         
+	static void fullMeasureNLG(LinkSpecification linkspec,int x, String str) throws UnsupportedMLImplementationException {
+
+
+		Lexicon lexicon = new XMLLexicon();                        
 		NLGFactory nlgFactory = new NLGFactory(lexicon);
 
 		SPhraseSpec clause_1 = nlgFactory.createClause();
 		SPhraseSpec clause_2 = nlgFactory.createClause();
 		SPhraseSpec clause_3 = nlgFactory.createClause();
-		SPhraseSpec clause_4 = nlgFactory.createClause();
-		SPhraseSpec clause_5 = nlgFactory.createClause();
-		SPhraseSpec clause_6 = nlgFactory.createClause();
-		SPhraseSpec clause_7 = nlgFactory.createClause();
-		SPhraseSpec clause_8 = nlgFactory.createClause();
-		SPhraseSpec clause_9 = nlgFactory.createClause();
-
-		//		DocumentElement sentence_1 = nlgFactory.createSentence();
-		//		DocumentElement sentence_2 = nlgFactory.createSentence();
-		//		DocumentElement sentence_3 = nlgFactory.createSentence();
-		//		DocumentElement sentence_4 = nlgFactory.createSentence();
-		//		DocumentElement sentence_5 = nlgFactory.createSentence();
-
+		//SPhraseSpec clause_4 = nlgFactory.createClause();
 		CoordinatedPhraseElement coordinate_1 = nlgFactory.createCoordinatedPhrase();
-		CoordinatedPhraseElement coordinate_2 = nlgFactory.createCoordinatedPhrase();
-		CoordinatedPhraseElement coordinate_3 = nlgFactory.createCoordinatedPhrase();
-		CoordinatedPhraseElement coordinate_4 = nlgFactory.createCoordinatedPhrase();
-		CoordinatedPhraseElement coordinate_5 = nlgFactory.createCoordinatedPhrase();
-		List<NLGElement> listOfCoordinates=new ArrayList<NLGElement>();
+		//CoordinatedPhraseElement coordinate_2 = nlgFactory.createCoordinatedPhrase();
+		if(linkspec.isAtomic()) {
 
-
-
+			NLGElement atomicMeasureNLG = atomicMeasureNLG(linkspec);
+			Realiser realiser_4 = new Realiser(lexicon);
+			NLGElement realised_4 = realiser_4.realise(atomicMeasureNLG);
+			String realisation_4 = realised_4.getRealisation();
+			System.out.println(realisation_4);
+		}else {
 		clause_1.setObject(WORDS.THE +" tow resources");
 
 		clause_1.setVerb("link");
 		clause_1.setFeature(Feature.TENSE,Tense.FUTURE);
 		clause_1.setFeature(Feature.PASSIVE, true);
 
-		if(!linkspec.isAtomic())
-		{
-			if(linkspec.getOperator().toString()=="OR")
-				clause_2.addComplement(" if any of the following conditions holds: ");
-			if(linkspec.getOperator().toString()=="AND")
-				clause_2.addComplement(" if both of the following conditions hold: ");
-			if(linkspec.getOperator().toString()=="NOT")
-				clause_2.addComplement(" if both of the following conditions not hold: ");
-			coordinate_2.addComplement(clause_1);
-			coordinate_2.addComplement(clause_2);
+		if(linkspec.getOperator().toString()=="OR")
+			clause_2.addComplement(" if any of the following conditions holds: ");
+		if(linkspec.getOperator().toString()=="AND")
+			clause_2.addComplement(" if both of the following conditions hold: ");
+		if(linkspec.getOperator().toString()=="NOT")
+			clause_2.addComplement(" if both of the following conditions not hold: ");
 
-			Realiser realiser_2 = new Realiser(lexicon);
-			NLGElement realised_2 = realiser_2.realise(coordinate_2);
-			if(realised_2!=null)
-				listOfCoordinates.add(realised_2);
-			//String realisation_2 = realised_2.getRealisation();
-			//System.out.println(realisation_2);
 
-			for( int i=0;i<linkspec.getChildren().size();i++) {
-				int number=i+1;
-				String str= number +": ";
-				clause_1.setObject(str+WORDS.THE +" tow resources");
-				clause_1.setVerb("link");
-				clause_1.setFeature(Feature.TENSE,Tense.FUTURE);
-				clause_1.setFeature(Feature.PASSIVE, true);
+		coordinate_1.addComplement(clause_1);
+		coordinate_1.addComplement(clause_2);
+		clause_1=new SPhraseSpec(nlgFactory);
+		clause_2=new SPhraseSpec(nlgFactory);
+		Realiser realiser_1 = new Realiser(lexicon);
+		NLGElement realised_1 = realiser_1.realise(coordinate_1);
+		String realisation_1 = realised_1.getRealisation();
+		System.out.println(realisation_1);
 
-				if(!linkspec.getChildren().get(i).isAtomic()) 
-				{
-					if(linkspec.getChildren().get(i).getOperator().toString()=="OR")
-						clause_3.addComplement(" if any of the following conditions holds: ");
-					if(linkspec.getChildren().get(i).getOperator().toString()=="AND")
-						clause_3.addComplement(" if both of the following conditions hold: ");
-					if(linkspec.getChildren().get(i).getOperator().toString()=="NOT")
-						clause_3.addComplement(" if both of the following conditions not hold: ");
+		coordinate_1=new CoordinatedPhraseElement();
+		for (int i=0;i<linkspec.getChildren().size();i++) {
 
-					coordinate_1.addComplement(clause_1);
-					coordinate_1.addComplement(clause_3);
-					//listOfCoordinates.add(coordinate_1);
-					clause_3=new SPhraseSpec(nlgFactory);
-					Realiser realiser_1 = new Realiser(lexicon);
-					NLGElement realised_1 = realiser_1.realise(coordinate_1);
-					if(realised_1!=null)
-						listOfCoordinates.add(realised_1);
-					//String realisation_1 = realised_1.getRealisation();
-					//System.out.println(realisation_1);
-					coordinate_1=new CoordinatedPhraseElement();
+			LinkSpecification linkSpecification = linkspec.getChildren().get(i);
+			if(i==0) {
+				clause_3.addComplement(str +(i+1));
 
-					for(int j=0;j<linkspec.getChildren().get(i).getAllLeaves().size();j++) {
-						int x=i+1;
-						int y=j+1;
-						String str1=x+"."+y+": ";
-						clause_4.setObject(str1+WORDS.THE +" tow resources");
-						clause_4.setVerb("link");
-						clause_4.setFeature(Feature.TENSE,Tense.FUTURE);
-						clause_4.setFeature(Feature.PASSIVE, true);
-						clause_4.addPostModifier("if");
-
-						NLGElement atomicMeasureNLG1 = atomicMeasureNLG(linkspec.getChildren().get(i).getAllLeaves().get(j));
-						clause_5.addComplement(atomicMeasureNLG1);
-						coordinate_3.addComplement(clause_4);
-						coordinate_3.addComplement(clause_5);
-						//listOfCoordinates.add(coordinate_3);
-						clause_4=new SPhraseSpec(nlgFactory);
-						clause_5=new SPhraseSpec(nlgFactory);
-						Realiser realiser_3 = new Realiser(lexicon);
-						NLGElement realised_3 = realiser_3.realise(coordinate_3);
-						if(realised_3!=null)
-							listOfCoordinates.add( realised_3);
-						//String realisation_3= realised_3.getRealisation();
-						//System.out.println(realisation_3);
-						coordinate_3=new CoordinatedPhraseElement();
-
-					}
-
+				Realiser realiser_2 = new Realiser(lexicon);
+				NLGElement realised_2 = realiser_2.realise(clause_3);
+				String realisation_2= realised_2.getRealisation();
+				System.out.println(realisation_2);
+				clause_3=new SPhraseSpec( nlgFactory);
+				if(linkSpecification.isAtomic()) {
+					NLGElement atomicMeasureNLG = atomicMeasureNLG(linkSpecification);
+					Realiser realiser_4 = new Realiser(lexicon);
+					NLGElement realised_4 = realiser_4.realise(atomicMeasureNLG);
+					String realisation_4 = realised_4.getRealisation();
+					System.out.println(realisation_4);
 				}
 				else {
-					clause_6.setObject(str+WORDS.THE +" tow resources");
-					clause_6.setVerb("link");;
-					clause_6.setFeature(Feature.TENSE,Tense.FUTURE);
-					clause_6.setFeature(Feature.PASSIVE, true);
-					clause_6.addPostModifier("if");
-					NLGElement atomicMeasureNLG2 = atomicMeasureNLG(linkspec.getChildren().get(i));
-					clause_7.addComplement(atomicMeasureNLG2);
-					coordinate_4.addComplement(clause_6);
-					coordinate_4.addComplement(clause_7);
-					//listOfCoordinates.add(coordinate_4);
-					clause_6=new SPhraseSpec(nlgFactory);
-					clause_7=new SPhraseSpec(nlgFactory);
-					Realiser realiser_4 = new Realiser(lexicon);
-					NLGElement realised_4 = realiser_4.realise(coordinate_4);
-					if(realised_4!=null)
-						listOfCoordinates.add(realised_4);
-					//String realisation_4= realised_4.getRealisation();
-					//System.out.println(realisation_4);
-					coordinate_4=new CoordinatedPhraseElement();
+
+					fullMeasureNLG(linkSpecification,i,(str+"1."));
+
 				}
 			}
+			else {
+				clause_3.addComplement(str +(i+1));
+
+				Realiser realiser_2 = new Realiser(lexicon);
+				NLGElement realised_2 = realiser_2.realise(clause_3);
+				String realisation_2= realised_2.getRealisation();
+				System.out.println(realisation_2);
+				clause_3=new SPhraseSpec( nlgFactory);
+				if(linkSpecification.isAtomic()) {
+					NLGElement atomicMeasureNLG = atomicMeasureNLG(linkSpecification);
+					Realiser realiser_4 = new Realiser(lexicon);
+					NLGElement realised_4 = realiser_4.realise(atomicMeasureNLG);
+					String realisation_4 = realised_4.getRealisation();
+					System.out.println(realisation_4);
+				}
+				else {
+
+					fullMeasureNLG(linkSpecification,i,(str+"2."));
+
+				}
+
+			}
+
 		}
-		else {
-			clause_8.setObject(WORDS.THE +" tow resources");
-			clause_8.setVerb("link");
-			clause_8.setFeature(Feature.TENSE,Tense.FUTURE);
-			clause_8.setFeature(Feature.PASSIVE, true);
-			clause_8.addPostModifier("if");
-			NLGElement atomicMeasureNLG3 = atomicMeasureNLG(linkspec);
-			clause_9.addComplement(atomicMeasureNLG3);
-			coordinate_5.addComplement(clause_8);
-			coordinate_5.addComplement(clause_9);
-			//listOfCoordinates.add(coordinate_5);
-			clause_8=new SPhraseSpec(nlgFactory);
-			clause_9=new SPhraseSpec(nlgFactory);
-			Realiser realiser_5 = new Realiser(lexicon);
-			NLGElement realised_5 = realiser_5.realise(coordinate_5);
-			if(realised_5!=null)
-				listOfCoordinates.add( realised_5);
-			//String realisation_5= realised_5.getRealisation();
-			//System.out.println(realisation_5);
-			coordinate_5=new CoordinatedPhraseElement();
+
 		}
-		Realiser realiser_6 = new Realiser(lexicon);
-		List<NLGElement> realised_6 = realiser_6.realise((listOfCoordinates));
-		//String realisation_6= (realised_6).getRealisation();
-		return realised_6;
 	}
 
 	/**
