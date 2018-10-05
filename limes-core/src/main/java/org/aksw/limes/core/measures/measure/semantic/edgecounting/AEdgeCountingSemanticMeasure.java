@@ -88,6 +88,8 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         protected long getSynsetSimilarity = 0l;
         protected long getSimilarityInstances = 0l;
 
+
+
         public long createDictionary() {
             return createDictionary;
         }
@@ -204,10 +206,11 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         if (synset == null)
             return new ArrayList<ArrayList<ISynsetID>>();
 
-        //ArrayList<ArrayList<ISynsetID>> paths = preIndex ? Indexer.getHypernymPaths(synset)
-        //        : HypernymPathsFinder.getHypernymPaths(dictionary, synset);
+        ArrayList<ArrayList<ISynsetID>> paths = preIndex ? Indexer.getHypernymPaths(synset)
+                : HypernymPathsFinder.getHypernymPaths(dictionary, synset);
 
-        ArrayList<ArrayList<ISynsetID>> paths = HypernymPathsFinder.getHypernymPaths(dictionary, synset);
+        // ArrayList<ArrayList<ISynsetID>> paths =
+        // HypernymPathsFinder.getHypernymPaths(dictionary, synset);
 
         long e = System.currentTimeMillis();
         // called multiple times
@@ -222,8 +225,11 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
         if (filtering == true) {
 
+            long r = System.currentTimeMillis();
             int minDepth1 = 0, minDepth2 = 0;
             int[] depths1 = new int[3], depths2 = new int[3];
+            long m = System.currentTimeMillis();
+            runtimes.filter += m - r;
 
             long bMinMax = System.currentTimeMillis();
             if (preIndex) {
@@ -246,9 +252,12 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
             // called multiple times
             runtimes.getMinMaxDepth += eMinMax - bMinMax;
 
+            r = System.currentTimeMillis();
             ArrayList<Integer> parameters = new ArrayList<Integer>();
             parameters.add(minDepth1);
             parameters.add(minDepth2);
+            m = System.currentTimeMillis();
+            runtimes.filter += m - r;
 
             if (this.getName().equals("wupalmer") || this.getName().equals("li")) {
                 int maxDepth1 = 0, maxDepth2 = 0;
@@ -264,11 +273,18 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                 // called multiple times
                 runtimes.getMinMaxDepth += eMinMax - bMinMax;
 
+                r = System.currentTimeMillis();
                 parameters.add(maxDepth1);
                 parameters.add(maxDepth2);
+                m = System.currentTimeMillis();
+                runtimes.filter += m - r;
             }
+
+            r = System.currentTimeMillis();
             int D = getHierarchyDepth(synset1.getType());
             parameters.add(D);
+            m = System.currentTimeMillis();
+            runtimes.filter += m - r;
 
             long bFilter = System.currentTimeMillis();
             boolean passed = filter(parameters);

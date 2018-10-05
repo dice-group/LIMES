@@ -191,7 +191,6 @@ public class SemanticsBaseline {
                 Indexer.preIndex();
                 indexMinMax = Indexer.getDurations()[0];
                 indexPaths = Indexer.getDurations()[1];
-
             }
 
             double thrs = 0.1d;

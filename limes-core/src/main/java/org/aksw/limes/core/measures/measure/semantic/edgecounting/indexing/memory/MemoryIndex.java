@@ -23,7 +23,7 @@ public class MemoryIndex extends AIndex {
 
     HashMap<Integer, ArrayList<ArrayList<ISynsetID>>> paths = new HashMap<Integer, ArrayList<ArrayList<ISynsetID>>>();
     protected SemanticDictionary dictionary = null;
-    
+
     @Override
     public void init(boolean f) {
     }
@@ -43,22 +43,23 @@ public class MemoryIndex extends AIndex {
         long indexMinMax = eIndex - bIndex;
         durations[0] = indexMinMax;
 
-        /*
-         * bIndex = System.currentTimeMillis(); this.preIndexPaths(); eIndex =
-         * System.currentTimeMillis(); long indexPaths = eIndex - bIndex;
-         * durations[1] = indexPaths;
-         */
+        bIndex = System.currentTimeMillis();
+        this.preIndexPaths();
+        eIndex = System.currentTimeMillis();
+        long indexPaths = eIndex - bIndex;
+        durations[1] = indexPaths;
 
     }
-    
+
     protected void preIndexMinMaxDepths() {
-        
+
         dictionary = new SemanticDictionary();
         dictionary.exportDictionaryToFile();
         dictionary.openDictionaryFromFile();
 
         logger.info("Finding min and max depths.");
         for (POS pos : POS.values()) {
+            
             MinMaxDepthFinder finder = new MinMaxDepthFinder();
             finder.calculateMinMaxDepths(pos, dictionary);
             HashMap<Integer, int[]> depths = finder.getDepths();
@@ -90,7 +91,7 @@ public class MemoryIndex extends AIndex {
         }
         logger.info("Done.");
         dictionary.removeDictionary();
-        
+
     }
 
     @Override
