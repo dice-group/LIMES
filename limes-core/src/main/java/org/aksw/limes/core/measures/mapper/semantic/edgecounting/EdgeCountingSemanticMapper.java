@@ -15,6 +15,7 @@ import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingS
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticFactory;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.SemanticType;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.memory.MemoryIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
@@ -23,10 +24,23 @@ public class EdgeCountingSemanticMapper extends AMapper {
     static Logger logger = LoggerFactory.getLogger(EdgeCountingSemanticMapper.class);
     boolean preIndex = false;
     boolean filtering = false;
+    
     AEdgeCountingSemanticMeasure measure = null;
     AIndex Indexer = null;
-    public long duration = 0;
+    
     int no = 0;
+    
+    long indexMinMax = 0l;
+    long indexPaths = 0l;
+
+    
+    public long getIndexPaths() {
+        return indexPaths;
+    }
+
+    public long getIndexMinMax() {
+        return indexMinMax;
+    }
 
     public void setValues(boolean i, boolean f) {
         preIndex = i;
@@ -35,10 +49,6 @@ public class EdgeCountingSemanticMapper extends AMapper {
 
     public void setNo(int n) {
         no = n;
-    }
-
-    public void setIndexer(AIndex index) {
-        Indexer = index;
     }
 
     public RuntimeStorage getRuntimes() {
@@ -67,12 +77,14 @@ public class EdgeCountingSemanticMapper extends AMapper {
 
         AMapping m = MappingFactory.createDefaultMapping();
 
-        
         if (preIndex == true) {
-            // in case of DB, you open a connection
-            Indexer.init(false);
-
+            Indexer = new MemoryIndex();
+            Indexer.preIndex();
+            if (filtering == true)
+                indexMinMax = Indexer.getDurations()[0];
+            indexPaths = Indexer.getDurations()[1];
         }
+
         SemanticType type = SemanticFactory.getMeasureType(expression);
         measure = SemanticFactory.createMeasure(type, threshold, preIndex, filtering, Indexer);
 

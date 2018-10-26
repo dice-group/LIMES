@@ -12,8 +12,6 @@ import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.semantic.edgecounting.EdgeCountingSemanticMapper;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure.RuntimeStorage;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.memory.MemoryIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -182,17 +180,6 @@ public class SemanticsBaseline {
             SemanticsBaseline controller = new SemanticsBaseline();
             controller.init(args, i);
 
-            // indexing
-            long indexMinMax = 0l;
-            long indexPaths = 0l;
-            AIndex Indexer = new MemoryIndex();
-
-            if (controller.index) {
-                Indexer.preIndex();
-                indexMinMax = Indexer.getDurations()[0];
-                indexPaths = Indexer.getDurations()[1];
-            }
-
             double thrs = 0.1d;
 
             while (thrs <= 1.0d) {
@@ -201,9 +188,6 @@ public class SemanticsBaseline {
                 EdgeCountingSemanticMapper mapper = new EdgeCountingSemanticMapper();
                 mapper.setValues(controller.index, controller.filter);
                 mapper.setNo(controller.no);
-                
-                if (controller.index)
-                    mapper.setIndexer(Indexer);
 
                 long b = System.currentTimeMillis();
                 String expression = controller.measure + "(" + controller.sourceV.charAt(1) + "."
@@ -218,7 +202,8 @@ public class SemanticsBaseline {
                 long e = System.currentTimeMillis();
 
                 controller.writeResults(controller.measure, (Math.round(thrs * 100.0) / 100.0),
-                        (e - b) + indexMinMax + indexPaths, indexMinMax, indexPaths, mapper, mapping);
+                        (e - b) + mapper.getIndexMinMax() + mapper.getIndexPaths(), mapper.getIndexMinMax(),
+                        mapper.getIndexPaths(), mapper, mapping);
                 thrs += 0.1d;
 
                 long end = System.currentTimeMillis();

@@ -18,10 +18,11 @@ import edu.mit.jwi.item.POS;
 public class MemoryIndex extends AIndex {
     private static final Logger logger = LoggerFactory.getLogger(MemoryIndex.class);
 
-    HashMap<Integer, Integer> minDepths = new HashMap<Integer, Integer>();
-    HashMap<Integer, Integer> maxDepths = new HashMap<Integer, Integer>();
+    HashMap<String, HashMap<Integer, Integer>> minDepths = new HashMap<String, HashMap<Integer, Integer>>();
+    HashMap<String, HashMap<Integer, Integer>> maxDepths = new HashMap<String, HashMap<Integer, Integer>>();
+    
+    HashMap<String, HashMap<Integer, ArrayList<ArrayList<ISynsetID>>>> paths = new HashMap<String, HashMap<Integer, ArrayList<ArrayList<ISynsetID>>>>();
 
-    HashMap<Integer, ArrayList<ArrayList<ISynsetID>>> paths = new HashMap<Integer, ArrayList<ArrayList<ISynsetID>>>();
     protected SemanticDictionary dictionary = null;
 
     @Override
@@ -62,12 +63,23 @@ public class MemoryIndex extends AIndex {
             
             MinMaxDepthFinder finder = new MinMaxDepthFinder();
             finder.calculateMinMaxDepths(pos, dictionary);
+            
             HashMap<Integer, int[]> depths = finder.getDepths();
 
+            minDepths.put(pos.toString(), new HashMap<Integer, Integer>());
+            maxDepths.put(pos.toString(), new HashMap<Integer, Integer>());
+            
             for (Integer sid : depths.keySet()) {
+                
                 int[] values = depths.get(sid);
-                minDepths.put(sid, values[0]);
-                maxDepths.put(sid, values[1]);
+                
+                HashMap<Integer, Integer> tempMin = minDepths.get(pos.toString());
+                tempMin.put(sid, values[0]);
+                minDepths.put(pos.toString(), tempMin);
+                ////////////////////////////////////////////////////
+                HashMap<Integer, Integer> tempMax = maxDepths.get(pos.toString());
+                tempMax.put(sid, values[1]);
+                maxDepths.put(pos.toString(), tempMax);
             }
         }
 
@@ -82,11 +94,15 @@ public class MemoryIndex extends AIndex {
 
         logger.info("Finding all paths from root");
         for (POS pos : POS.values()) {
+            paths.put(pos.toString(), new HashMap<Integer, ArrayList<ArrayList<ISynsetID>>>());
             Iterator<ISynset> iterator = dictionary.getDictionary().getSynsetIterator(pos);
             while (iterator.hasNext()) {
                 ISynset synset = iterator.next();
                 ArrayList<ArrayList<ISynsetID>> trees = HypernymPathsFinder.getHypernymPaths(dictionary, synset);
-                paths.put(synset.getOffset(), trees);
+                
+                HashMap<Integer, ArrayList<ArrayList<ISynsetID>>> temp = paths.get(pos.toString());
+                temp.put(synset.getOffset(), trees);
+                paths.put(pos.toString(), temp);
             }
         }
         logger.info("Done.");
@@ -96,17 +112,17 @@ public class MemoryIndex extends AIndex {
 
     @Override
     public int getMinDepth(ISynset synset) {
-        return minDepths.get(synset.getOffset());
+        return minDepths.get(synset.getPOS().toString()).get(synset.getOffset());
     }
 
     @Override
     public int getMaxDepth(ISynset synset) {
-        return maxDepths.get(synset.getOffset());
+        return maxDepths.get(synset.getPOS().toString()).get(synset.getOffset());
     }
 
     @Override
     public ArrayList<ArrayList<ISynsetID>> getHypernymPaths(ISynset synset) {
-        return paths.get(synset.getOffset());
+        return paths.get(synset.getPOS().toString()).get(synset.getOffset());
     }
 
 }
