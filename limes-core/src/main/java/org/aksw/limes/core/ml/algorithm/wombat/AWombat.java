@@ -324,7 +324,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 	public void setDefaultParameters() {
 		//default parameters
 		long maxRefineTreeSize = 2000;
-		int maxIterationNumber = 3;
+		int maxIterationNumber = 10;
 		int maxIterationTimeInMin = 20;
 		int maxExecutionTimeInMin = 600;
 		double maxFitnessThreshold = 1;
