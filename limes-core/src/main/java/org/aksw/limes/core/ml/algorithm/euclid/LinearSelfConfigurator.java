@@ -176,6 +176,8 @@ public class LinearSelfConfigurator implements ISelfConfigurator {
         //first count how often properties appear across instances
         for (Instance i : c.getAllInstances()) {
             for (String p : i.getAllProperties()) {
+                if(p.equalsIgnoreCase("price") || p.equalsIgnoreCase("year"))
+                    continue;
                 if (!buffer.containsKey(p)) {
                     buffer.put(p, 1.0);
                 } else {

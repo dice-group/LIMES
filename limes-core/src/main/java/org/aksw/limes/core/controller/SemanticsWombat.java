@@ -65,14 +65,14 @@ public class SemanticsWombat {
     public static int experiment = 0;
 
     public static void init(String[] args) {
-        
+
         datasetName = args[0];
         experiment = Integer.valueOf(args[1]);
 
         data = DataSetChooser.getData(datasetName);
 
-        resultsFileTest = data.getDatasetFolder() + "Test" + data.getEvaluationResultFileName();
-        resultsFileTraining = data.getDatasetFolder() + "Training" + data.getEvaluationResultFileName();
+        resultsFileTest = data.getDatasetFolder() + "Test" + experiment + data.getEvaluationResultFileName();
+        resultsFileTraining = data.getDatasetFolder() + "Training" + experiment + data.getEvaluationResultFileName();
 
         createFile(resultsFileTest, csvWriterTest);
         createFile(resultsFileTraining, csvWriterTrain);
@@ -225,7 +225,7 @@ public class SemanticsWombat {
             AMapping predictions = executeLinkSpecs(mlResults.getLinkSpecification(), testingCaches.get(0),
                     testingCaches.get(1));
             long runtime = stopWatch.getTime();
-            
+
             // evaluate
             // compare results from limes to test set
             logger.info("Evaluating results");
@@ -235,7 +235,7 @@ public class SemanticsWombat {
             evaluate(mlResults.getMapping(), trainingSet, 0, mlResults.getLinkSpecification(), resultsFileTraining,
                     csvWriterTrain, trainingCaches.get(0), trainingCaches.get(1));
         }
-        
+
     }
 
     protected static List<ACache> reduceCaches(AMapping refMap, ACache fullSourceCache, ACache fullTargetCache) {

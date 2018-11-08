@@ -43,9 +43,9 @@ import org.apache.jena.atlas.lib.CacheFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
- * This class uses Least General Generalization (LGG) to learn Link Specifications (LS)
+ * This class uses Least General Generalization (LGG) to learn Link
+ * Specifications (LS)
  *
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
  * @version Jun 7, 2016
@@ -72,8 +72,12 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     public static List<String> sourceUris;
     public static List<String> targetUris;
 
-    protected Map<String, Double> sourcePropertiesCoverageMap; //coverage map for latter computations
-    protected Map<String, Double> targetPropertiesCoverageMap; //coverage map for latter computations
+    protected Map<String, Double> sourcePropertiesCoverageMap; // coverage map
+                                                               // for latter
+                                                               // computations
+    protected Map<String, Double> targetPropertiesCoverageMap; // coverage map
+                                                               // for latter
+                                                               // computations
 
     protected PseudoFMeasure pseudoFMeasure = null;
     protected AMapping trainingData = MappingFactory.createDefaultMapping();
@@ -83,7 +87,6 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected ACache sourceSample = new HybridCache();
     protected ACache targetSample = new HybridCache();
 
-
     protected AWombat() {
         super();
         setDefaultParameters();
@@ -92,12 +95,14 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     /**
      * Create new RefinementNode using either real or pseudo-F-Measure
      *
-     * @param mapping of the node 
-     * @param metricExpr learning specifications
+     * @param mapping
+     *            of the node
+     * @param metricExpr
+     *            learning specifications
      * @return new RefinementNode
      */
     protected RefinementNode createNode(AMapping mapping, String metricExpr) {
-        if(!saveMapping()){
+        if (!saveMapping()) {
             mapping = null;
         }
         if (isUnsupervised) {
@@ -107,34 +112,37 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         return new RefinementNode(mapping, metricExpr, trainingData);
     }
 
-
-
     /**
-     * @param metricExpr learning specifications
+     * @param metricExpr
+     *            learning specifications
      * @return new RefinementNode
      */
     protected RefinementNode createNode(String metricExpr) {
         AMapping map = null;
-        if(saveMapping()){
+        if (saveMapping()) {
             map = getMapingOfMetricExpression(metricExpr);
         }
         return createNode(map, metricExpr);
     }
 
-
-
     /**
-     * @param sourceProperty URI
-     * @param targetProperty URI
-     * @param measure name
-     * @param threshold of the LS
-     * @return Mapping from source to target resources after applying
-     * the atomic mapper measure(sourceProperty, targetProperty)
+     * @param sourceProperty
+     *            URI
+     * @param targetProperty
+     *            URI
+     * @param measure
+     *            name
+     * @param threshold
+     *            of the LS
+     * @return Mapping from source to target resources after applying the atomic
+     *         mapper measure(sourceProperty, targetProperty)
      */
-    public AMapping executeAtomicMeasure(String sourceProperty, String targetProperty, String measure, double threshold) {
+    public AMapping executeAtomicMeasure(String sourceProperty, String targetProperty, String measure,
+            double threshold) {
         String measureExpression = measure + "(x." + sourceProperty + ", y." + targetProperty + ")";
         Instruction inst = new Instruction(Instruction.Command.RUN, measureExpression, threshold + "", -1, -1, -1);
-        ExecutionEngine ee = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache, "?x", "?y");
+        ExecutionEngine ee = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache,
+                "?x", "?y");
         Plan plan = new Plan();
         plan.addInstruction(inst);
         return ((SimpleExecutionEngine) ee).executeInstructions(plan);
@@ -143,7 +151,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     /**
      * calculate either a real or a pseudo-F-Measure
      *
-     * @param predictions Mapping
+     * @param predictions
+     *            Mapping
      * @return F-measure
      */
     protected double fMeasure(AMapping predictions) {
@@ -151,17 +160,17 @@ public abstract class AWombat extends ACoreMLAlgorithm {
             // compute pseudo-F-Measure
             return pseudoFMeasure.calculate(predictions, new GoldStandard(null, sourceUris, targetUris));
         }
-        // get real F-Measure based on training data 
+        // get real F-Measure based on training data
         return new FMeasure().calculate(predictions, new GoldStandard(trainingData));
     }
 
-
     /**
-     * Looks first for the input metricExpression in the already constructed tree,
-     * if found the corresponding mapping is returned.
-     * Otherwise, the SetConstraintsMapper is generate the mapping from the metricExpression.
+     * Looks first for the input metricExpression in the already constructed
+     * tree, if found the corresponding mapping is returned. Otherwise, the
+     * SetConstraintsMapper is generate the mapping from the metricExpression.
      *
-     * @param metricExpression learning specifications
+     * @param metricExpression
+     *            learning specifications
      * @return Mapping corresponding to the input metric expression
      */
     protected AMapping getMapingOfMetricExpression(String metricExpression) {
@@ -170,13 +179,16 @@ public abstract class AWombat extends ACoreMLAlgorithm {
             map = getMapingOfMetricFromTree(metricExpression, refinementTreeRoot);
         }
         if (map == null) {
-            Double threshold = Double.parseDouble(metricExpression.substring(metricExpression.lastIndexOf("|") + 1, metricExpression.length()));
+            Double threshold = Double.parseDouble(
+                    metricExpression.substring(metricExpression.lastIndexOf("|") + 1, metricExpression.length()));
             Rewriter rw = RewriterFactory.getRewriter(RewriterType.DEFAULT);
             LinkSpecification ls = new LinkSpecification(metricExpression, threshold);
             LinkSpecification rwLs = rw.rewrite(ls);
-            IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceCache, targetCache);
+            IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sourceCache,
+                    targetCache);
             assert planner != null;
-            ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache, targetCache, "?x", "?y");
+            ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sourceCache,
+                    targetCache, "?x", "?y");
             assert engine != null;
             AMapping resultMap = engine.execute(rwLs, planner);
             map = resultMap.getSubMap(threshold);
@@ -185,8 +197,10 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     }
 
     /**
-     * @param metricExpression learning specifications
-     * @param r refinement tree
+     * @param metricExpression
+     *            learning specifications
+     * @param r
+     *            refinement tree
      * @return return mapping of the input metricExpression from the search tree
      */
     protected AMapping getMapingOfMetricFromTree(String metricExpression, Tree<RefinementNode> r) {
@@ -206,13 +220,15 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         return null;
     }
 
-
     /**
      * get mapping from source cache to target cache using metricExpression
      *
-     * @param ls learning specifications
-     * @param sCache source Cache
-     * @param tCache target Cache
+     * @param ls
+     *            learning specifications
+     * @param sCache
+     *            source Cache
+     * @param tCache
+     *            target Cache
      * @return Mapping from sCache to tCache
      */
     protected AMapping getPredictions(LinkSpecification ls, ACache sCache, ACache tCache) {
@@ -221,13 +237,13 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         LinkSpecification rwLs = rw.rewrite(ls);
         IPlanner planner = ExecutionPlannerFactory.getPlanner(ExecutionPlannerType.DEFAULT, sCache, tCache);
         assert planner != null;
-        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sCache, tCache, "?x", "?y");
+        ExecutionEngine engine = ExecutionEngineFactory.getEngine(ExecutionEngineType.DEFAULT, sCache, tCache, "?x",
+                "?y");
         assert engine != null;
         AMapping resultMap = engine.execute(rwLs, planner);
         map = resultMap.getSubMap(ls.getThreshold());
         return map;
     }
-
 
     public PseudoFMeasure getPseudoFMeasure() {
         return pseudoFMeasure;
@@ -245,17 +261,15 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         RefinementNode.setSaveMapping(saveMapping());
     }
 
-
-
     public boolean isUnsupervised() {
         return isUnsupervised;
     }
 
-
     /**
      * calculate either a real or a pseudo-Precision
      *
-     * @param predictions Mapping
+     * @param predictions
+     *            Mapping
      * @return precision
      */
     protected double precision(AMapping predictions) {
@@ -263,15 +277,15 @@ public abstract class AWombat extends ACoreMLAlgorithm {
             // compute pseudo-precision
             return pseudoFMeasure.precision(predictions, new GoldStandard(null, sourceUris, targetUris));
         }
-        // get real precision based on training data 
+        // get real precision based on training data
         return new Precision().calculate(predictions, new GoldStandard(trainingData));
     }
-
 
     /**
      * calculate either a real or a pseudo-Recall
      *
-     * @param predictions Mapping
+     * @param predictions
+     *            Mapping
      * @return recall
      */
     protected double recall(AMapping predictions) {
@@ -279,28 +293,42 @@ public abstract class AWombat extends ACoreMLAlgorithm {
             // compute pseudo-recall
             return pseudoFMeasure.recall(predictions, new GoldStandard(null, sourceUris, targetUris));
         }
-        // get real recall based on training data 
+        // get real recall based on training data
         return new Recall().calculate(predictions, new GoldStandard(trainingData));
 
+    }
+
+    double getThreshold(String measure) {
+        double threshold = 0.4d;
+        if (measure.equals("li") || measure.equals("lch") || measure.equals("wupalmer")
+                || measure.equals("shortest_path"))
+            threshold = 0.7d;
+        return threshold;
     }
 
     /**
      * Computes the atomic classifiers by finding the highest possible F-measure
      * achievable on a given property pair
      *
-     * @param sourceProperty Property of source to use
-     * @param targetProperty Property of target to use
-     * @param measure Measure to be used
+     * @param sourceProperty
+     *            Property of source to use
+     * @param targetProperty
+     *            Property of target to use
+     * @param measure
+     *            Measure to be used
      * @return Best simple classifier
      */
     protected ExtendedClassifier findInitialClassifier(String sourceProperty, String targetProperty, String measure) {
         double maxOverlap = 0;
         double theta = 1.0;
         AMapping bestMapping = MappingFactory.createDefaultMapping();
-        for (double threshold = 1d; threshold > 0.4d; threshold = threshold * getPropertyLearningRate()) {
+        
+        double minThreshold = this.getThreshold(measure);
+        for (double threshold = 1d; threshold > minThreshold; threshold = threshold * getPropertyLearningRate()) {
             AMapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
             double overlap = fMeasure(mapping);
-            if (maxOverlap < overlap) { //only interested in largest threshold with recall 1
+            if (maxOverlap < overlap) { // only interested in largest threshold
+                                        // with recall 1
                 bestMapping = mapping;
                 theta = threshold;
                 maxOverlap = overlap;
@@ -315,7 +343,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 
     @Override
     public void setDefaultParameters() {
-        //default parameters
+        // default parameters
         long maxRefineTreeSize = 2000;
         int maxIterationNumber = 3;
         int maxIterationTimeInMin = 20;
@@ -331,19 +359,32 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         Set<String> measures = new HashSet<>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams"));
 
         learningParameters = new ArrayList<>();
-        learningParameters.add(new LearningParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize, Long.class, 10d, Long.MAX_VALUE, 10d, PARAMETER_MAX_REFINEMENT_TREE_SIZE));
-        learningParameters.add(new LearningParameter(PARAMETER_MAX_ITERATIONS_NUMBER, maxIterationNumber, Integer.class, 1d, Integer.MAX_VALUE, 10d, PARAMETER_MAX_ITERATIONS_NUMBER));
-        learningParameters.add(new LearningParameter(PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, maxIterationTimeInMin, Integer.class, 1d, Integer.MAX_VALUE,1, PARAMETER_MAX_ITERATION_TIME_IN_MINUTES));
-        learningParameters.add(new LearningParameter(PARAMETER_EXECUTION_TIME_IN_MINUTES, maxExecutionTimeInMin, Integer.class, 1d, Integer.MAX_VALUE,1,PARAMETER_EXECUTION_TIME_IN_MINUTES));
-        learningParameters.add(new LearningParameter(PARAMETER_MAX_FITNESS_THRESHOLD, maxFitnessThreshold, Double.class, 0d, 1d, 0.01d, PARAMETER_MAX_FITNESS_THRESHOLD));
-        learningParameters.add(new LearningParameter(PARAMETER_MIN_PROPERTY_COVERAGE, minPropertyCoverage, Double.class, 0d, 1d, 0.01d, PARAMETER_MIN_PROPERTY_COVERAGE));
-        learningParameters.add(new LearningParameter(PARAMETER_PROPERTY_LEARNING_RATE, propertyLearningRate,Double.class, 0d, 1d, 0.01d, PARAMETER_PROPERTY_LEARNING_RATE));
-        learningParameters.add(new LearningParameter(PARAMETER_OVERALL_PENALTY_WEIGHT, overallPenaltyWeight, Double.class, 0d, 1d, 0.01d, PARAMETER_OVERALL_PENALTY_WEIGHT));
-        learningParameters.add(new LearningParameter(PARAMETER_CHILDREN_PENALTY_WEIGHT, childrenPenaltyWeight, Double.class, 0d, 1d, 0.01d, PARAMETER_CHILDREN_PENALTY_WEIGHT));
-        learningParameters.add(new LearningParameter(PARAMETER_COMPLEXITY_PENALTY_WEIGHT, complexityPenaltyWeight, Double.class, 0d, 1d, 0.01d, PARAMETER_COMPLEXITY_PENALTY_WEIGHT));
-        learningParameters.add(new LearningParameter(PARAMETER_VERBOSE, verbose, Boolean.class, 0, 1, 0, PARAMETER_VERBOSE));
-        learningParameters.add(new LearningParameter(PARAMETER_ATOMIC_MEASURES, measures, MeasureType.class, 0, 0, 0, PARAMETER_ATOMIC_MEASURES));
-        learningParameters.add(new LearningParameter(PARAMETER_SAVE_MAPPING, saveMapping, Boolean.class, 0, 1, 0, PARAMETER_SAVE_MAPPING));
+        learningParameters.add(new LearningParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize, Long.class,
+                10d, Long.MAX_VALUE, 10d, PARAMETER_MAX_REFINEMENT_TREE_SIZE));
+        learningParameters.add(new LearningParameter(PARAMETER_MAX_ITERATIONS_NUMBER, maxIterationNumber, Integer.class,
+                1d, Integer.MAX_VALUE, 10d, PARAMETER_MAX_ITERATIONS_NUMBER));
+        learningParameters.add(new LearningParameter(PARAMETER_MAX_ITERATION_TIME_IN_MINUTES, maxIterationTimeInMin,
+                Integer.class, 1d, Integer.MAX_VALUE, 1, PARAMETER_MAX_ITERATION_TIME_IN_MINUTES));
+        learningParameters.add(new LearningParameter(PARAMETER_EXECUTION_TIME_IN_MINUTES, maxExecutionTimeInMin,
+                Integer.class, 1d, Integer.MAX_VALUE, 1, PARAMETER_EXECUTION_TIME_IN_MINUTES));
+        learningParameters.add(new LearningParameter(PARAMETER_MAX_FITNESS_THRESHOLD, maxFitnessThreshold, Double.class,
+                0d, 1d, 0.01d, PARAMETER_MAX_FITNESS_THRESHOLD));
+        learningParameters.add(new LearningParameter(PARAMETER_MIN_PROPERTY_COVERAGE, minPropertyCoverage, Double.class,
+                0d, 1d, 0.01d, PARAMETER_MIN_PROPERTY_COVERAGE));
+        learningParameters.add(new LearningParameter(PARAMETER_PROPERTY_LEARNING_RATE, propertyLearningRate,
+                Double.class, 0d, 1d, 0.01d, PARAMETER_PROPERTY_LEARNING_RATE));
+        learningParameters.add(new LearningParameter(PARAMETER_OVERALL_PENALTY_WEIGHT, overallPenaltyWeight,
+                Double.class, 0d, 1d, 0.01d, PARAMETER_OVERALL_PENALTY_WEIGHT));
+        learningParameters.add(new LearningParameter(PARAMETER_CHILDREN_PENALTY_WEIGHT, childrenPenaltyWeight,
+                Double.class, 0d, 1d, 0.01d, PARAMETER_CHILDREN_PENALTY_WEIGHT));
+        learningParameters.add(new LearningParameter(PARAMETER_COMPLEXITY_PENALTY_WEIGHT, complexityPenaltyWeight,
+                Double.class, 0d, 1d, 0.01d, PARAMETER_COMPLEXITY_PENALTY_WEIGHT));
+        learningParameters
+                .add(new LearningParameter(PARAMETER_VERBOSE, verbose, Boolean.class, 0, 1, 0, PARAMETER_VERBOSE));
+        learningParameters.add(new LearningParameter(PARAMETER_ATOMIC_MEASURES, measures, MeasureType.class, 0, 0, 0,
+                PARAMETER_ATOMIC_MEASURES));
+        learningParameters.add(new LearningParameter(PARAMETER_SAVE_MAPPING, saveMapping, Boolean.class, 0, 1, 0,
+                PARAMETER_SAVE_MAPPING));
     }
 
     protected boolean isVerbose() {
@@ -393,8 +434,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     protected Set<String> getAtomicMeasures() {
         Set<String> atomicMeasures = new HashSet<String>();
 
-        String measuresAsString = getParameter(PARAMETER_ATOMIC_MEASURES).toString().replace("[","").replace("]", "");
-        for(String m : measuresAsString.split(",")){
+        String measuresAsString = getParameter(PARAMETER_ATOMIC_MEASURES).toString().replace("[", "").replace("]", "");
+        for (String m : measuresAsString.split(",")) {
             atomicMeasures.add(m.trim());
         }
         return atomicMeasures;
@@ -402,7 +443,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 
     protected void fillSampleSourceTargetCaches(AMapping sample) {
         for (String s : sample.getMap().keySet()) {
-            if (this.sourceCache.containsUri(s)){
+            if (this.sourceCache.containsUri(s)) {
                 sourceSample.addInstance(this.sourceCache.getInstance(s));
                 for (String t : sample.getMap().get(s).keySet())
                     if (targetCache.containsUri(t))
@@ -418,8 +459,10 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     /**
      * Get the most promising node as the node with the best F-score
      *
-     * @param r  The whole refinement tree
-     * @param penaltyWeight penalty weight
+     * @param r
+     *            The whole refinement tree
+     * @param penaltyWeight
+     *            penalty weight
      * @return most promising node from the input tree r
      * @author sherif
      */
@@ -433,7 +476,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         for (Tree<RefinementNode> child : r.getchildren()) {
             if (child.getValue().getFMeasure() >= 0) {
                 Tree<RefinementNode> promesyChild = getMostPromisingNode(child, penaltyWeight);
-                double newFitness = promesyChild.getValue().getFMeasure() - penaltyWeight * computePenalty(promesyChild);
+                double newFitness = promesyChild.getValue().getFMeasure()
+                        - penaltyWeight * computePenalty(promesyChild);
                 if (newFitness > mostPromesyChild.getValue().getFMeasure()) {
                     mostPromesyChild = promesyChild;
                 }
@@ -469,7 +513,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
     }
 
     /**
-     * @param promesyChild promesy child
+     * @param promesyChild
+     *            promesy child
      * @return children penalty + complexity penalty
      * @author sherif
      */
