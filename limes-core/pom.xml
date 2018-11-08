@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.aksw.limes</groupId>
         <artifactId>limes-full</artifactId>
-        <version>1.5.1-SNAPSHOT</version>
+        <version>1.5.2-SNAPSHOT</version>
     </parent>
 
     <build>
@@ -92,7 +92,7 @@
                 <version>2.20.1</version>
                 <configuration>
                     <forkMode>pertest</forkMode>
-                    <argLine>@{argLine} -Xms256m -Xmx512m</argLine>
+                    <argLine>${argLine} -Xms256m -Xmx512m</argLine>
                     <testFailureIgnore>false</testFailureIgnore>
                     <skipTests>false</skipTests>
                     <useManifestOnlyJar>false</useManifestOnlyJar>
