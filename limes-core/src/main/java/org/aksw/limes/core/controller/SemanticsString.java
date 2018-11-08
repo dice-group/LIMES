@@ -10,14 +10,17 @@ import org.aksw.limes.core.io.cache.HybridCache;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.measures.mapper.IMapper;
+import org.aksw.limes.core.measures.mapper.MapperFactory;
 import org.aksw.limes.core.measures.mapper.semantic.edgecounting.EdgeCountingSemanticMapper;
-import org.aksw.limes.core.measures.measure.semantic.edgecounting.AEdgeCountingSemanticMeasure.RuntimeStorage;
+import org.aksw.limes.core.measures.measure.MeasureFactory;
+import org.aksw.limes.core.measures.measure.MeasureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opencsv.CSVWriter;
 
-public class SemanticsBaseline {
+public class SemanticsString {
 
     static Logger logger = LoggerFactory.getLogger(SemanticsBaseline.class);
 
@@ -39,8 +42,7 @@ public class SemanticsBaseline {
     public String currentConfigFile = null;
     public HybridCache source = null;
     public HybridCache target = null;
-    public boolean index = true;
-    public boolean filter = false;
+
     public int no = 0;
     public String measure = null;
     public String sourceV = null;
@@ -51,17 +53,7 @@ public class SemanticsBaseline {
         String currentDataset = args[0];
         measure = args[1];
 
-        if (args[2].equalsIgnoreCase("filter"))
-            filter = true;
-        else
-            filter = false;
-
-        if (args[3].equalsIgnoreCase("index"))
-            index = true;
-        else
-            index = false;
-
-        no = Integer.valueOf(args[4]);
+        no = Integer.valueOf(args[2]);
 
         int index = datasets.indexOf(currentDataset);
         currentPredicates = predicates.get(index);
@@ -74,8 +66,7 @@ public class SemanticsBaseline {
         sourceV = cR.getConfiguration().getSourceInfo().getVar();
         targetV = cR.getConfiguration().getTargetInfo().getVar();
 
-        String tempName = "-" + measure + "-" + iteration + "-" + args[2].toLowerCase() + "-" + args[3].toLowerCase()
-                + "-" + no;
+        String tempName = "-" + measure + "-" + iteration  + "-" + no;
         resultsFile = System.getProperty("user.dir") + "/"
                 + cR.getConfiguration().getSourceInfo().getEndpoint().substring(0,
                         cR.getConfiguration().getSourceInfo().getEndpoint().lastIndexOf("/"))
@@ -99,13 +90,7 @@ public class SemanticsBaseline {
             e.printStackTrace();
             throw new RuntimeException();
         }
-        csvWriter
-                .writeNext(
-                        new String[] { "LS", "theta", "Runtime", "IndexMinMax", "IndexPaths", "createDictionary",
-                                "getSimilarityInstances", "sourceTokenizing", "targetTokenizing", "checkStopWords",
-                                "checkSimilarity", "getIIndexWords", "getWordIDs", "getIWord", "getSynset",
-                                "getMinMaxDepth", "filter", "getHypernymPaths", "getSynsetSimilarity", "Mapping","Comparisons" },
-                        false);
+        csvWriter.writeNext(new String[] { "LS", "theta", "Runtime", "Mapping" }, false);
         try {
             csvWriter.close();
         } catch (IOException e) {
@@ -116,42 +101,14 @@ public class SemanticsBaseline {
 
     }
 
-    public void writeResults(String measureExpression, double thrs, long runtime, long IndexMinMax, long IndexPaths,
-            EdgeCountingSemanticMapper mapper, AMapping mapping) {
+    public void writeResults(String measureExpression, double thrs, long runtime, AMapping mapping) {
 
-        String[] values = new String[21];
+        String[] values = new String[4];
         values[0] = measureExpression;
         values[1] = String.valueOf(thrs);
         values[2] = String.valueOf((double) runtime / 1000);
-        values[3] = String.valueOf((double) IndexMinMax / 1000);
-        values[4] = String.valueOf((double) IndexPaths / 1000);
+        values[3] = String.valueOf((double) mapping.size());
 
-        RuntimeStorage runtimes = mapper.getRuntimes();
-        values[5] = String.valueOf((double) runtimes.createDictionary() / 1000);
-
-        values[6] = String.valueOf((double) runtimes.getSimilarityInstances() / 1000);
-
-        values[7] = String.valueOf((double) runtimes.getSourceTokenizing() / 1000);
-        values[8] = String.valueOf((double) runtimes.getTargetTokenizing() / 1000);
-        values[9] = String.valueOf((double) runtimes.checkStopWords() / 1000);
-
-        ///////////////
-        values[10] = String.valueOf((double) runtimes.getCheckSimilarity() / 1000);
-
-        values[11] = String.valueOf((double) runtimes.getGetIIndexWords() / 1000);
-        values[12] = String.valueOf((double) runtimes.getGetWordIDs() / 1000);
-        values[13] = String.valueOf((double) runtimes.getGetIWord() / 1000);
-
-        values[14] = String.valueOf((double) runtimes.getGetSynset() / 1000);
-        values[15] = String.valueOf((double) runtimes.getGetMinMaxDepth() / 1000);
-        values[16] = String.valueOf((double) runtimes.getFilter() / 1000);
-        values[17] = String.valueOf((double) runtimes.getGetHypernymPaths() / 1000);
-
-        values[18] = String.valueOf((double) runtimes.getGetSynsetSimilarity() / 1000);
-
-        values[19] = String.valueOf((double) mapping.size());
-
-        values[20] = String.valueOf((double) runtimes.getComparisonsCounter());
         try {
             csvWriter = new CSVWriter(new FileWriter(resultsFile, true));
         } catch (IOException e) {
@@ -171,23 +128,24 @@ public class SemanticsBaseline {
     }
 
     public static void main(String[] args) {
-        if (args.length != 5) {
+        if (args.length != 3) {
             logger.error("Not enough arguments");
             System.exit(1);
         }
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 3; i++) {
 
-            SemanticsBaseline controller = new SemanticsBaseline();
+            SemanticsString controller = new SemanticsString();
             controller.init(args, i);
 
             double thrs = 0.1d;
 
-            while (thrs <= 0.1d) {
+            while (thrs <= 1.0d) {
                 long begin = System.currentTimeMillis();
 
-                EdgeCountingSemanticMapper mapper = new EdgeCountingSemanticMapper();
-                mapper.setValues(controller.index, controller.filter);
+                MeasureType type = MeasureFactory.getMeasureType(controller.measure);
+                IMapper mapper = MapperFactory.createMapper(type);
+
                 mapper.setNo(controller.no);
 
                 long b = System.currentTimeMillis();
@@ -202,9 +160,7 @@ public class SemanticsBaseline {
 
                 long e = System.currentTimeMillis();
 
-                controller.writeResults(controller.measure, (Math.round(thrs * 100.0) / 100.0),
-                        (e - b), mapper.getIndexMinMax(),
-                        mapper.getIndexPaths(), mapper, mapping);
+                controller.writeResults(controller.measure, (Math.round(thrs * 100.0) / 100.0), (e - b), mapping);
                 thrs += 0.1d;
 
                 long end = System.currentTimeMillis();

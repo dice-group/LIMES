@@ -75,4 +75,5 @@ public class SuccessorMapper extends SimpleTemporalMapper {
         return 1000d;
     }
 
+
 }

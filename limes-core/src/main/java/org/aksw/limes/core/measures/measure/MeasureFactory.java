@@ -20,6 +20,8 @@ import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjectionM
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.*;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.AIndex;
+import org.aksw.limes.core.measures.measure.semantic.edgecounting.indexing.memory.MemoryIndex;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
 import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
@@ -515,19 +517,29 @@ public class MeasureFactory {
             return new SetJaccardMeasure();
         ///////////////////////
         case SHORTEST_PATH:
-            return new ShortestPathMeasure(0.0, false, false, null);
+            AIndex IndexerSP = createIndexer();
+            return new ShortestPathMeasure(0.0, true, false, IndexerSP);
         case LCH:
-            return new LCHMeasure(0.0, false, false, null);
+            AIndex IndexerLCH = createIndexer();
+            return new LCHMeasure(0.0, true, false, IndexerLCH);
         case LI:
-            return new LiMeasure(0.0, false, false, null);
+            AIndex IndexerLi = createIndexer();
+            return new LiMeasure(0.0, true, false, IndexerLi);
         case WUPALMER:
-            return new WuPalmerMeasure(0.0, false, false, null);
+            AIndex IndexerWP = createIndexer();
+            return new WuPalmerMeasure(0.0, true, false, IndexerWP);
 
         ////////////////////////////////
         default:
             throw new InvalidMeasureException(type.toString());
         }
 
+    }
+    
+    public static AIndex createIndexer(){
+        AIndex Indexer = new MemoryIndex();
+        Indexer.preIndex();
+        return Indexer;
     }
 
 }

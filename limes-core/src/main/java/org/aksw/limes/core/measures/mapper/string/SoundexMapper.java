@@ -210,6 +210,5 @@ public class SoundexMapper extends AMapper {
         }
     }
 
-    ;
 
 }

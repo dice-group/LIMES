@@ -38,15 +38,15 @@ public class MemoryIndex extends AIndex {
         for (int i = 0; i < durations.length; i++)
             durations[i] = 0l;
 
-        long bIndex = System.currentTimeMillis();
+        /*long bIndex = System.currentTimeMillis();
         this.preIndexMinMaxDepths();
         long eIndex = System.currentTimeMillis();
         long indexMinMax = eIndex - bIndex;
-        durations[0] = indexMinMax;
+        durations[0] = indexMinMax;*/
 
-        bIndex = System.currentTimeMillis();
+        long bIndex = System.currentTimeMillis();
         this.preIndexPaths();
-        eIndex = System.currentTimeMillis();
+        long eIndex = System.currentTimeMillis();
         long indexPaths = eIndex - bIndex;
         durations[1] = indexPaths;
 

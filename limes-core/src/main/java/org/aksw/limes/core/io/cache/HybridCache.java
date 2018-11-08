@@ -279,7 +279,7 @@ public class HybridCache extends MemoryCache implements Serializable {
      *         false
      */
     public boolean containsUri(String uri) {
-        return instanceMap.containsKey(uri);
+        return instanceMap.containsKey(uri.toString());
     }
 
     public void resetIterator() {

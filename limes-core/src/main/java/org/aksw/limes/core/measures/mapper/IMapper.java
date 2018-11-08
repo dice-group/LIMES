@@ -75,4 +75,6 @@ public interface IMapper {
     enum Language {
         EN, FR, DE, NULL
     }
+
+    void setNo(int no);
 }

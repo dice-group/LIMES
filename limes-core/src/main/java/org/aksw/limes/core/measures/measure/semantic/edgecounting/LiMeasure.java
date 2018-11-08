@@ -55,11 +55,10 @@ public class LiMeasure extends AEdgeCountingSemanticMeasure {
         ArrayList<ArrayList<ISynsetID>> paths1 = getPaths(synset1);
         ArrayList<ArrayList<ISynsetID>> paths2 = getPaths(synset2);
 
-        long b = System.currentTimeMillis();
+        //long b = System.currentTimeMillis();
         sim = getSimilarity(synset1, paths1, synset2, paths2);
-        long e = System.currentTimeMillis();
-        // called multiple times
-        runtimes.getSynsetSimilarity += e - b;
+        //long e = System.currentTimeMillis();
+        //runtimes.getSynsetSimilarity += e - b;
         return sim;
     }
 

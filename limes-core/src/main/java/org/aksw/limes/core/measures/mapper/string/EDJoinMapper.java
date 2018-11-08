@@ -36,7 +36,7 @@ public class EDJoinMapper extends AMapper {
     private static HashMap<Integer, String> targetMap;
     @SuppressWarnings("unused")
     private int comparisons = 0;
-
+    
     private static Record[] qTokenizer(String[] objects, int q) {
         StoppUhr s = new StoppUhr();
         s.Starten();
@@ -81,7 +81,7 @@ public class EDJoinMapper extends AMapper {
             compareQGramsResult compResult = compareQGrams(currentRec, y, threshold);
 
             /*
-             * count filtering
+             * count fnoiltering
              */
             if (compResult.e1 <= q * threshold) {
                 int e2 = minEditErrors(compResult.Q, q);
@@ -560,6 +560,7 @@ public class EDJoinMapper extends AMapper {
         return getMappingSizeApproximation(sourceSize, targetSize, threshold, language)
                 / (double) (sourceSize * targetSize);
     }
+
 }
 
 class compareQGramsResult {

@@ -22,7 +22,7 @@ import org.slf4j.MarkerFactory;
 
 public class EdgeCountingSemanticMapper extends AMapper {
     static Logger logger = LoggerFactory.getLogger(EdgeCountingSemanticMapper.class);
-    boolean preIndex = false;
+    boolean preIndex = true;
     boolean filtering = false;
     
     AEdgeCountingSemanticMeasure measure = null;
@@ -80,35 +80,35 @@ public class EdgeCountingSemanticMapper extends AMapper {
         if (preIndex == true) {
             Indexer = new MemoryIndex();
             Indexer.preIndex();
-            if (filtering == true)
+            /*if (filtering == true)
                 indexMinMax = Indexer.getDurations()[0];
-            indexPaths = Indexer.getDurations()[1];
+            indexPaths = Indexer.getDurations()[1];*/
         }
 
         SemanticType type = SemanticFactory.getMeasureType(expression);
         measure = SemanticFactory.createMeasure(type, threshold, preIndex, filtering, Indexer);
 
-        int counterSource = 0;
+        //int counterSource = 0;
         for (Instance sourceInstance : source.getAllInstances()) {
-            counterSource++;
+            //counterSource++;
             // System.out.println("Source URI "+sourceInstance.getUri());
-            int counterTarget = 0;
+            //int counterTarget = 0;
             for (Instance targetInstance : target.getAllInstances()) {
                 // System.out.println("-->Target URI "+targetInstance.getUri());
-                counterTarget++;
+                //counterTarget++;
                 // long begin = System.currentTimeMillis();
                 double similarity = measure.getSimilarity(sourceInstance, targetInstance, properties.get(0),
                         properties.get(1));
                 if (similarity >= threshold) {
                     m.add(sourceInstance.getUri(), targetInstance.getUri(), similarity);
                 }
-                if (counterTarget == no)
-                    break;
+                //if (counterTarget == no)
+                //    break;
                 // long end = System.currentTimeMillis();
                 // duration += end - begin;
             }
-            if (counterSource == no)
-                break;
+            //if (counterSource == no)
+                //break;
         }
 
         if (preIndex == true) {

@@ -183,4 +183,5 @@ public class HR3Mapper extends AMapper {
             return 0.006 * (sourceSize + targetSize) - 134.2 * threshold;
         }
     }
+
 }
