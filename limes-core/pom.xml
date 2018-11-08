@@ -92,7 +92,7 @@
                 <version>2.20.1</version>
                 <configuration>
                     <forkMode>pertest</forkMode>
-                    <argLine>@{argLine} -Xms256m -Xmx512m</argLine>
+                    <argLine>${argLine} -Xms256m -Xmx512m</argLine>
                     <testFailureIgnore>false</testFailureIgnore>
                     <skipTests>false</skipTests>
                     <useManifestOnlyJar>false</useManifestOnlyJar>
