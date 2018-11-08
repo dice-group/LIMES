@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 /**
  * used for the shape of a
  * {@link org.aksw.limes.core.gui.view.graphBuilder.NodeView}
- * 
+ *
  * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
  *         studserv.uni-leipzig.de{@literal >}
  *
@@ -20,7 +20,7 @@ public class NodeViewRectangle {
 	public static final Color targetCol = Color.rgb(23, 104, 19);
 	public static final Color targetOptionalCol = Color.rgb(23, 104, 19, 0.6);
 	public static final Color sourceCol = Color.rgb(128, 23, 26);
-	public static final Color sourceOptionalCol = Color.rgb(128, 23, 26 ,0.6);
+	public static final Color sourceOptionalCol = Color.rgb(128, 23, 26, 0.6);
 	public static final Color metricCol = Color.rgb(129, 70, 23);
 	public static final Color operatorCol = Color.rgb(14, 78, 76);
 	public static final Color outputCol = Color.rgb(1, 30, 0);
@@ -30,16 +30,16 @@ public class NodeViewRectangle {
 	public static final Color operatorHeadtextCol = Color.rgb(255, 254, 253);
 	public static final Color outputHeadTextCol = Color.rgb(243, 243, 243);
 	public static double arch = 50;
-	private NodeView node;
-	private double x;
-	private double y;
+	private final NodeView node;
+	private final double x;
+	private final double y;
 	private Color color;
 	private Color HeadTextCol;
 	private Node nodeData;
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param x
 	 *            x position
 	 * @param y
@@ -70,17 +70,17 @@ public class NodeViewRectangle {
 			break;
 		case NodeView.SOURCE:
 			this.HeadTextCol = sourceHeadTextCol;
-			if(((Property)nodeData).isOptional()){
+			if (((Property) nodeData).isOptional()) {
 				this.color = sourceOptionalCol;
-			}else{
+			} else {
 				this.color = sourceCol;
 			}
 			break;
 		case NodeView.TARGET:
 			this.HeadTextCol = targetHeadTextCol;
-			if(((Property)nodeData).isOptional()){
+			if (((Property) nodeData).isOptional()) {
 				this.color = targetOptionalCol;
-			}else{
+			} else {
 				this.color = targetCol;
 			}
 			break;
@@ -93,7 +93,7 @@ public class NodeViewRectangle {
 	/**
 	 * draws the NodeViewRectangle object according to its variables in the
 	 * {@link javafx.scene.canvas.GraphicsContext}
-	 * 
+	 *
 	 * @param gc
 	 *            GraphicsContext
 	 */
@@ -109,80 +109,87 @@ public class NodeViewRectangle {
 			gc.fillArc(this.x, this.y, NodeViewRectangle.arch, NodeViewRectangle.arch, 90.0, 90.0, ArcType.ROUND);
 			gc.fillArc(this.x + this.node.getWidth() - NodeViewRectangle.arch, this.y, NodeViewRectangle.arch,
 					NodeViewRectangle.arch, 0.0, 90.0, ArcType.ROUND);
-			gc.fillRect(x + (arch / 2), y, this.node.getWidth() - arch, arch / 2);
+			gc.fillRect(this.x + arch / 2, this.y, this.node.getWidth() - arch, arch / 2);
 		} else {
 			gc.setFill(this.color);
 			gc.fillRoundRect(this.x, this.y, this.node.getWidth(), this.node.getHeight(), NodeViewRectangle.arch,
 					NodeViewRectangle.arch);
 		}
-		if (this.color != sourceCol  && this.color != sourceOptionalCol && this.color != targetCol && this.color != targetOptionalCol) {
+		if (this.color != sourceCol && this.color != sourceOptionalCol && this.color != targetCol
+				&& this.color != targetOptionalCol) {
 			gc.setFill(this.HeadTextCol);
-			fillText(gc, nodeData.id, node.getWidth(), 0, arch / 4, false);
+			this.fillText(gc, this.nodeData.id, this.node.getWidth(), 0, arch / 4, false);
 
 			if (this.color == outputCol) {
 				gc.setFill(operatorCol);
-				fillText(gc, "Acceptance threshold: ", this.nodeData.param1, node.getWidth(), 4, arch * 0.75, true);
-				fillText(gc, "Verification threshold: ", this.nodeData.param2, node.getWidth(), 4, arch * 1.25, true);
+				this.fillText(gc, "Acceptance threshold: ", this.nodeData.param1, this.node.getWidth(), 4, arch * 0.75,
+						true);
+				this.fillText(gc, "Verification threshold: ", this.nodeData.param2, this.node.getWidth(), 4,
+						arch * 1.25, true);
 			} else if (this.color == operatorCol) {
 				gc.setFill(operatorCol);
 				if (this.nodeData.getChilds().isEmpty()) {
-					fillText(gc, "parent1 threshold: ", this.nodeData.param1, node.getWidth(), 4, arch * 0.75, true);
-					fillText(gc, "parent2 threshold: ", this.nodeData.param2, node.getWidth(), 4, arch * 1.25, true);
+					this.fillText(gc, "parent1 threshold: ", this.nodeData.param1, this.node.getWidth(), 4, arch * 0.75,
+							true);
+					this.fillText(gc, "parent2 threshold: ", this.nodeData.param2, this.node.getWidth(), 4, arch * 1.25,
+							true);
 				} else if (this.nodeData.getChilds().size() == 1) {
-					fillText(gc, this.nodeData.getChilds().get(0).id + " threshold: ", this.nodeData.param1,
-							node.getWidth(), 4.0, arch * 0.75, true);
-					fillText(gc, "parent2 threshold: ", this.nodeData.param2, node.getWidth(), 4, arch * 1.25, true);
+					this.fillText(gc, this.nodeData.getChilds().get(0).id + " threshold: ", this.nodeData.param1,
+							this.node.getWidth(), 4.0, arch * 0.75, true);
+					this.fillText(gc, "parent2 threshold: ", this.nodeData.param2, this.node.getWidth(), 4, arch * 1.25,
+							true);
 				} else {
-					fillText(gc, this.nodeData.getChilds().get(0).id + " threshold: ", this.nodeData.param1,
-							node.getWidth(), 4.0, arch * 0.75, true);
-					fillText(gc, this.nodeData.getChilds().get(1).id + " threshold: ", this.nodeData.param2,
-							node.getWidth(), 4.0, arch * 1.25, true);
+					this.fillText(gc, this.nodeData.getChilds().get(0).id + " threshold: ", this.nodeData.param1,
+							this.node.getWidth(), 4.0, arch * 0.75, true);
+					this.fillText(gc, this.nodeData.getChilds().get(1).id + " threshold: ", this.nodeData.param2,
+							this.node.getWidth(), 4.0, arch * 1.25, true);
 				}
 			}
 		} else if (this.color == sourceCol || this.color == sourceOptionalCol) {
 			gc.setFill(this.HeadTextCol);
-			fillText(gc, "source", node.getWidth(), 0.0, arch / 4, false);
+			this.fillText(gc, "source", this.node.getWidth(), 0.0, arch / 4, false);
 			gc.setFill(operatorCol);
-			fillText(gc, this.nodeData.id, node.getWidth(), 4, arch * 0.75, true);
+			this.fillText(gc, this.nodeData.id, this.node.getWidth(), 4, arch * 0.75, true);
 		} else if (this.color == targetCol || this.color == targetOptionalCol) {
 			gc.setFill(this.HeadTextCol);
-			fillText(gc, "target", node.getWidth(), 0.0, arch / 4, false);
+			this.fillText(gc, "target", this.node.getWidth(), 0.0, arch / 4, false);
 			gc.setFill(operatorCol);
-			fillText(gc, this.nodeData.id, node.getWidth(), 4, arch * 0.75, true);
+			this.fillText(gc, this.nodeData.id, this.node.getWidth(), 4, arch * 0.75, true);
 		}
 	}
-	
+
 	private void fillText(GraphicsContext gc, String text, int nodeWidth, double xoffset, double yoffset,
 			boolean leftAligned) {
-		fillText(gc, text, -1, nodeWidth, xoffset, yoffset, leftAligned);
+		this.fillText(gc, text, -1, nodeWidth, xoffset, yoffset, leftAligned);
 	}
 
 	private void fillText(GraphicsContext gc, String text, double thresholdValue, int nodeWidth, double xoffset,
 			double yoffset, boolean leftAligned) {
 		Text label = new Text(text);
-		double labelWidth = label.getLayoutBounds().getWidth();
+		final double labelWidth = label.getLayoutBounds().getWidth();
 
 		// check if the label needs to be cutoff
 		if (labelWidth > 0.85 * this.node.getWidth()) {
 			double cutoff = 0.0;
 			if (leftAligned) {
-				cutoff = ((100 / (double) (this.node.getWidth() - 20)) * labelWidth - 100) / 100;
+				cutoff = (100 / (double) (this.node.getWidth() - 20) * labelWidth - 100) / 100;
 			} else {
-				cutoff = ((100 / (double) (this.node.getWidth() - 30)) * labelWidth - 100) / 100;
+				cutoff = (100 / (double) (this.node.getWidth() - 30) * labelWidth - 100) / 100;
 			}
 			if (thresholdValue == -1) {
 				label = new Text(text.substring(0, (int) (text.length() - Math.abs(text.length() * cutoff))) + "...");
 			} else {
-				label = new Text(text.substring(0, (int) (text.length() - Math.abs(text.length() * cutoff))) + "... : ");
+				label = new Text(
+						text.substring(0, (int) (text.length() - Math.abs(text.length() * cutoff))) + "... : ");
 			}
 		}
 		if (!leftAligned) {
-			xoffset += calculateOffset(label, nodeWidth);
+			xoffset += this.calculateOffset(label, nodeWidth);
 		}
 		if (thresholdValue == -1) {
-			gc.fillText(label.getText(), x + xoffset, y + yoffset);
+			gc.fillText(label.getText(), this.x + xoffset, this.y + yoffset);
 		} else {
-			gc.fillText(label.getText() + thresholdValue, x + xoffset, y + yoffset);
+			gc.fillText(label.getText() + thresholdValue, this.x + xoffset, this.y + yoffset);
 		}
 
 	}
@@ -191,7 +198,7 @@ public class NodeViewRectangle {
 	 * Calculate the offset, to get the text centered
 	 */
 	private int calculateOffset(Text label, int width) {
-		double labelWidth = label.getLayoutBounds().getWidth();
+		final double labelWidth = label.getLayoutBounds().getWidth();
 		return (int) (width / 2.0 - labelWidth / 2.0);
 	}
 

@@ -36,15 +36,24 @@ public abstract class ACache implements ICache {
     public abstract void replaceInstance(String uri, Instance a);
 
     public abstract Set<String> getAllProperties();
+    
+    @Override
+    public abstract ACache clone();
+    
+    @Override
+    public abstract int hashCode();
 
-    /**
-     * Method to processData according to specific preprocessing steps.
-     *
-     * @param propertyProcess
-     *         Map maps propertyNames to preprocessing functions.
-     * @return cacheof processed data
-     */
-    public abstract ACache processData(Map<String, String> propertyProcess);
+    @Override
+    public abstract boolean equals(Object obj);
+
+//    /**
+//     * Method to processData according to specific preprocessing steps.
+//     *
+//     * @param propertyProcess
+//     *         Map maps propertyNames to preprocessing functions.
+//     * @return cacheof processed data
+//     */
+//    public abstract ACache processData(Map<String, String> propertyProcess);
 
     /**
      * Method to process data of a property into a new property with specific preprocessing.

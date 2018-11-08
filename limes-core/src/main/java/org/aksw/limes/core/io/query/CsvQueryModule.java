@@ -2,14 +2,15 @@ package org.aksw.limes.core.io.query;
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.aksw.limes.core.util.DataCleaner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,12 @@ public class CsvQueryModule implements IQueryModule {
     public void fillCache(ACache c) {
         try {
             // in case a CSV is use, endpoint is the file to read
-            BufferedReader reader = new BufferedReader(new FileReader(kb.getEndpoint()));
+        	BufferedReader reader;
+        	try{
+        		reader = new BufferedReader(new FileReader(new File(kb.getEndpoint())));
+        	}catch(Exception e){
+        		reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(kb.getEndpoint())));
+        	}
             String s = reader.readLine();
             String split[];
             //first read name of properties. URI = first column
@@ -55,7 +61,6 @@ public class CsvQueryModule implements IQueryModule {
                 properties.addAll(Arrays.asList(split));
 
                 s = reader.readLine();
-                String rawValue;
                 String id, value;
                 while (s != null) {
                     //split = s.split(SEP);
@@ -64,16 +69,8 @@ public class CsvQueryModule implements IQueryModule {
 
                     id = split[0];
                     for (String propertyLabel : kb.getProperties()) {
-//                    	System.out.println("Trying to access property "+propertyLabel+" at position "+properties.indexOf(propertyLabel));
-                        rawValue = split[properties.indexOf(propertyLabel)];
-                        for (String propertyDub : kb.getFunctions().get(propertyLabel).keySet()) {
-                            //functions.get(propertyLabel).get(propertyDub) gets the preprocessing chain that leads from 
-                            //the propertyLabel to the propertyDub
-                            value = Preprocessor.process(rawValue, kb.getFunctions().get(propertyLabel).get(propertyDub));
-                            if (properties.indexOf(propertyLabel) >= 0) {
-                                c.addTriple(id, propertyDub, value);
-                            }
-                        }
+                            value = split[properties.indexOf(propertyLabel)];
+                            c.addTriple(id, propertyLabel, value);
                     }
                     s = reader.readLine();
                 }
@@ -115,7 +112,6 @@ public class CsvQueryModule implements IQueryModule {
 
                 kb.setProperties(properties);
                 s = reader.readLine();
-                String rawValue;
                 String id, value;
                 while (s != null) {
                     split = s.split(SEP);
@@ -123,19 +119,8 @@ public class CsvQueryModule implements IQueryModule {
                     id = split[0].substring(1, split[0].length() - 1);
                     //logger.info(id);
                     for (String propertyLabel : kb.getProperties()) {
-                        rawValue = split[properties.indexOf(propertyLabel)];
-                        if (kb.getFunctions().containsKey(propertyLabel)) {
-                            for (String propertyDub : kb.getFunctions().get(propertyLabel).keySet()) {
-                                //functions.get(propertyLabel).get(propertyDub) gets the preprocessing chain that leads from 
-                                //the propertyLabel to the propertyDub
-                                value = Preprocessor.process(rawValue, kb.getFunctions().get(propertyLabel).get(propertyDub));
-                                if (properties.indexOf(propertyLabel) >= 0) {
-                                    c.addTriple(id, propertyDub, value);
-                                }
-                            }
-                        } else {
-                            c.addTriple(id, propertyLabel, rawValue.replaceAll(Pattern.quote("@en"), ""));
-                        }
+                        value = split[properties.indexOf(propertyLabel)];
+                        c.addTriple(id, propertyLabel, value.replaceAll(Pattern.quote("@en"), ""));
                     }
                     s = reader.readLine();
                 }

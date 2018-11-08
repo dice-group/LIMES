@@ -5,7 +5,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import org.aksw.limes.core.gui.util.TaskResultSerializer;
-import org.aksw.limes.core.gui.view.TaskProgressView;
 import org.aksw.limes.core.io.config.KBInfo;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.ml.algorithm.matching.DefaultClassMapper;
@@ -18,7 +17,7 @@ import javafx.concurrent.Task;
 
 /**
  * Task for loading classes in {@link org.aksw.limes.core.gui.view.WizardView}
- * 
+ *
  * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
  *         studserv.uni-leipzig.de{@literal >}
  *
@@ -27,21 +26,23 @@ public class GetAutomatedClassMatchingTask extends Task<ObservableList<Automated
 	/**
 	 * source info
 	 */
-	private KBInfo sinfo;
+	private final KBInfo sinfo;
 	/**
 	 * target info
 	 */
-	private KBInfo tinfo;
+	private final KBInfo tinfo;
 	/**
 	 * source model
 	 */
-	private Model smodel;
+	private final Model smodel;
 	/**
 	 * target model
 	 */
-	private Model tmodel;
+	private final Model tmodel;
+
 	/**
 	 * constructor
+	 * 
 	 * @param sinfo
 	 * @param tinfo
 	 * @param smodel
@@ -60,47 +61,47 @@ public class GetAutomatedClassMatchingTask extends Task<ObservableList<Automated
 	@Override
 	@SuppressWarnings("unchecked")
 	protected ObservableList<AutomatedClassMatchingNode> call() throws Exception {
-		Object serializedResult = TaskResultSerializer.getTaskResult(this);
+		final Object serializedResult = TaskResultSerializer.getTaskResult(this);
 		ObservableList<AutomatedClassMatchingNode> result = null;
 		if (serializedResult instanceof ArrayList && serializedResult != null) {
 			// Creating tmpRes is necessary to guarantee typesafety
-			ArrayList<AutomatedClassMatchingNode> tmpRes = (ArrayList<AutomatedClassMatchingNode>) serializedResult;
+			final ArrayList<AutomatedClassMatchingNode> tmpRes = (ArrayList<AutomatedClassMatchingNode>) serializedResult;
 			result = FXCollections.observableArrayList();
 			result.addAll(tmpRes);
 			return result;
 		}
-		result = getAutomatedClassMatchingNodes();
+		result = this.getAutomatedClassMatchingNodes();
 		// Converting to ArrayList is necessary because ObservableList is not
 		// serializable
-		TaskResultSerializer.serializeTaskResult(this, new ArrayList<AutomatedClassMatchingNode>(result));
+		TaskResultSerializer.serializeTaskResult(this, new ArrayList<>(result));
 		return result;
 	}
 
 	/**
 	 * loads the classes and displays progress in progress bar
-	 * 
+	 *
 	 * @param classes
 	 * @return
 	 */
 	private ObservableList<AutomatedClassMatchingNode> getAutomatedClassMatchingNodes() {
 		// maxSize += classes.size();
-		if (isCancelled()) {
+		if (this.isCancelled()) {
 			return null;
 		}
 		DefaultClassMapper mapper;
-		ObservableList<AutomatedClassMatchingNode> result = FXCollections.observableArrayList();
-		if (smodel != null && tmodel != null) {
-			mapper = new DefaultClassMapper(smodel, tmodel);
+		final ObservableList<AutomatedClassMatchingNode> result = FXCollections.observableArrayList();
+		if (this.smodel != null && this.tmodel != null) {
+			mapper = new DefaultClassMapper(this.smodel, this.tmodel);
 		} else {
 			mapper = new DefaultClassMapper();
 		}
-		AMapping classMapping = mapper.getEntityMapping(sinfo.getEndpoint(), tinfo.getEndpoint(), sinfo.getId(),
-				tinfo.getId());
-		for (String classTarget : classMapping.getMap().keySet()) {
-			for (String classSource : classMapping.getMap().get(classTarget).keySet()) {
+		final AMapping classMapping = mapper.getEntityMapping(this.sinfo.getEndpoint(), this.tinfo.getEndpoint(),
+				this.sinfo.getId(), this.tinfo.getId());
+		for (final String classTarget : classMapping.getMap().keySet()) {
+			for (final String classSource : classMapping.getMap().get(classTarget).keySet()) {
 				try {
 					result.add(new AutomatedClassMatchingNode(new URI(classSource), new URI(classTarget)));
-				} catch (URISyntaxException e) {
+				} catch (final URISyntaxException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -109,8 +110,10 @@ public class GetAutomatedClassMatchingTask extends Task<ObservableList<Automated
 		return result;
 	}
 
+	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17, 37).append(sinfo.getEndpoint()).append(tinfo.getEndpoint()).append(sinfo.getId())
-				.append(tinfo.getId()).append(smodel).append(tmodel).toHashCode();
+		return new HashCodeBuilder(17, 37).append(this.sinfo.getEndpoint()).append(this.tinfo.getEndpoint())
+				.append(this.sinfo.getId()).append(this.tinfo.getId()).append(this.smodel).append(this.tmodel)
+				.toHashCode();
 	}
 }

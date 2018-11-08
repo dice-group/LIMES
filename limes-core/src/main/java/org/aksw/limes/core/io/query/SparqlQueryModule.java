@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.KBInfo;
-import org.aksw.limes.core.io.preprocessing.Preprocessor;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -57,16 +56,34 @@ public class SparqlQueryModule implements IQueryModule {
         // run query
         logger.info("Querying the endpoint.");
         int offset = 0;
+        if(kb.getMinOffset() > 0) {
+            offset = kb.getMinOffset();
+        }
+        
         boolean moreResults = false;
         int counter = 0;
         String basicQuery = query;
         do {
-            logger.info("Getting statements " + offset + " to " + (offset + kb.getPageSize()));
+            int nextOffset = offset + kb.getPageSize();
+            if(kb.getMaxOffset() > 0) {
+                nextOffset = Math.min(kb.getMaxOffset(), nextOffset);
+            }
+            
+            logger.info("Getting statements " + offset + " to " + nextOffset);
+            
             if (kb.getPageSize() > 0) {
-                query = basicQuery + " LIMIT " + kb.getPageSize() + " OFFSET " + offset;
+                int limit = kb.getPageSize();
+                if(kb.getMaxOffset() > 0) {
+                    limit = nextOffset - offset;
+                }
+                query = basicQuery + " LIMIT " + limit + " OFFSET " + offset;
             } else {
                 query = basicQuery;
+                if(kb.getMaxOffset() > 0) {
+                    query = query + " LIMIT " + kb.getMaxOffset();
+                }
             }
+            
             Query sparqlQuery = QueryFactory.create(query, Syntax.syntaxARQ);
             QueryExecution qexec;
 
@@ -90,7 +107,7 @@ public class SparqlQueryModule implements IQueryModule {
             ResultSet results = qexec.execSelect();
 
             // write
-            String uri, propertyLabel, rawValue, value;
+            String uri, propertyLabel, value;
             try {
                 if (results.hasNext()) {
                     moreResults = true;
@@ -107,26 +124,16 @@ public class SparqlQueryModule implements IQueryModule {
                             for (int i = 0; i < kb.getProperties().size(); i++) {
                                 propertyLabel = kb.getProperties().get(i);
                                 if (soln.contains("v" + i)) {
-                                    rawValue = soln.get("v" + i).toString();
-                                    // remove localization information, e.g. @en
-                                    for (String propertyDub : kb.getFunctions().get(propertyLabel).keySet()) {
-                                        value = Preprocessor.process(rawValue,
-                                                kb.getFunctions().get(propertyLabel).get(propertyDub));
-                                        cache.addTriple(uri, propertyDub, value);
-                                    }
+                                    value = soln.get("v" + i).toString();
+                                    cache.addTriple(uri, propertyLabel, value);
                                 }
                             }
                             if(kb.getOptionalProperties() != null){
                                 for (int i = 0; i < kb.getOptionalProperties().size(); i++) {
                                     propertyLabel = kb.getOptionalProperties().get(i);
                                     if (soln.contains("v" + i)) {
-                                        rawValue = soln.get("v" + i).toString();
-                                        // remove localization information, e.g. @en
-                                        for (String propertyDub : kb.getFunctions().get(propertyLabel).keySet()) {
-                                            value = Preprocessor.process(rawValue,
-                                                    kb.getFunctions().get(propertyLabel).get(propertyDub));
-                                            cache.addTriple(uri, propertyDub, value);
-                                        }
+                                        value = soln.get("v" + i).toString();
+                                        cache.addTriple(uri, propertyLabel, value);
                                     }
                                 }
                             }
@@ -149,7 +156,7 @@ public class SparqlQueryModule implements IQueryModule {
             }
             offset = offset + kb.getPageSize();
 
-        } while (moreResults && kb.getPageSize() > 0);
+        } while (moreResults && kb.getPageSize() > 0 && (offset < kb.getMaxOffset() || kb.getMaxOffset() < 0));
         logger.info("Retrieved " + counter + " triples and " + cache.size() + " entities.");
         logger.info("Retrieving statements took " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds.");
     }

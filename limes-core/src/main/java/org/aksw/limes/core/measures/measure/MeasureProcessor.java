@@ -163,7 +163,6 @@ public class MeasureProcessor {
 
                         }
                     }
-
                     if (similarity >= threshold)
                         return similarity;
                     else

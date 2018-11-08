@@ -12,6 +12,8 @@ import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
+import org.aksw.limes.core.io.mapping.reader.AMappingReader;
+import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
 import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
 import org.aksw.limes.core.ml.algorithm.ACoreMLAlgorithm;
 import org.aksw.limes.core.ml.algorithm.ActiveMLAlgorithm;
@@ -51,7 +53,12 @@ public class MLPipeline {
         if (
                 mlImplementationType == MLImplementationType.SUPERVISED_BATCH){
             // TODO make it check for different readers
-            RDFMappingReader mappingReader = new RDFMappingReader(trainingDataFile);
+        	AMappingReader mappingReader;
+        	if(trainingDataFile.endsWith(".csv")){
+        		mappingReader = new CSVMappingReader(trainingDataFile);
+        	}else{
+        		mappingReader = new RDFMappingReader(trainingDataFile);
+        	}
             trainingDataMap = mappingReader.read();
         }
 
@@ -61,7 +68,7 @@ public class MLPipeline {
                 mls.init(learningParameters, source, target);
                 mls.getMl().setConfiguration(configuration);
                 mlm = mls.learn(trainingDataMap);
-                logger.info(mlm.getLinkSpecification().toStringOneLine());
+                logger.info("Learned: " + mlm.getLinkSpecification().getFullExpression() + " with threshold: " + mlm.getLinkSpecification().getThreshold());
                 return mls.predict(source, target, mlm);
             case SUPERVISED_ACTIVE:
                 // for active learning, need to reiterate and prompt the user for evaluation of examples:
@@ -109,6 +116,7 @@ public class MLPipeline {
                     }
                     mlm = mla.activeLearn(nextExamples);
                 }
+                logger.info("Learned: " + mlm.getLinkSpecification().getFullExpression() + " with threshold: " + mlm.getLinkSpecification().getThreshold());
                 return mla.predict(source, target, mlm);
             case UNSUPERVISED:
                 UnsupervisedMLAlgorithm mlu = new UnsupervisedMLAlgorithm(clazz);
@@ -119,6 +127,7 @@ public class MLPipeline {
                     pfm = (PseudoFMeasure) EvaluatorFactory.create(pfmType);
                 }
                 mlm = mlu.learn(pfm);
+                logger.info("Learned: " + mlm.getLinkSpecification().getFullExpression() + " with threshold: " + mlm.getLinkSpecification().getThreshold());
                 return mlu.predict(source, target, mlm);
             default:
                 throw new UnsupportedMLImplementationException(clazz.getName());

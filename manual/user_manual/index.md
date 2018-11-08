@@ -17,8 +17,6 @@ The LIMES framework consists of eight main modules of which each can be extended
 
 Given that the configuration file is valid w.r.t. the LIMES Specification Language (LSL), the **query** module is called. This module uses the configuration for the target and source knowledge bases to retrieve instances and properties from the SPARQL-endpoints of the source and target knowledge bases that adhere to the restrictions specified in the configuration file. The query module writes its output into a file by invoking the **cache** module. Once all instances have been stored in the cache, the controller chooses between performing Link Discovery or Machine Learning. For Link Discovery, LIMES will re-write, plan and execute the Link Specification (LS) included in the configuration file, by calling the **rewriter**, **planner** and **engine** modules resp. The main goal of LD is to identify the set of links (mapping) that satisfy the conditions opposed by the input LS. For Machine Learning, LIMES calls the **machine learning** algorithm included in the configuration file, to identify an appropriate LS to link S and T. Then it proceeds in executing the LS. For both taks, the mapping will be stored in the output file choosen by the user in the configuration file. The results are finally stored into a RDF or a XML file.
 
-
-
 The advantages of LIMES’ approach are manifold. First, it implements
 **highly time-optimized** mappers, making it a complexity class faster
 than other Link Discovery Frameworks. Thus, the larger the problem, the
@@ -28,8 +26,8 @@ that provide the user with the opportunity to perform various comparisons betwee
 In addition, **LIMES is guaranteed to lead to exactly the same matching as a brute
 force approach while at the same time reducing significantly the number
 of comparisons**. In addition, LIMES supports a **large number of input
-and output formats** and can be extended very easily to fit new
-algorithms , new datatypes, new preprocessing functions and others thank
+and output formats** and can easily be extended with custom
+algorithms, datatypes, preprocessing functions and more thank
 to its modular architecture.
 
 
@@ -37,9 +35,8 @@ In general, LIMES can be used to set links between two data sources,
 e.g., a novel data source created by a data publisher and existing data
 source such as DBpedia. This functionality can also be used to
 detect duplicates within one data source for knowledge curation. The
-only requirement to carry out these tasks is a simple XML-based or TURTLE-based
-configuration file. The purpose of this manual is to explicate the LIMES
-Configuration Language (LCL) that underlies these configuration files,
-so as allow users to generate their own configurations. An online
-version of LIMES is available online at
-http://limes.aksw.org.
+only requirement to carry out these tasks is a simple XML- or RDF-based
+configuration file. 
+The purpose of this user manual is to
+1. show the various ways in which LIMES can be invoked and
+2. explicate the LIMES Configuration Language (LCL) so as allow users to generate their own configurations.

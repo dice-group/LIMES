@@ -1,14 +1,10 @@
 package org.aksw.limes.core.io.ls;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
-
 import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.parser.Parser;
+
+import java.text.DecimalFormat;
+import java.util.*;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)
@@ -58,11 +54,11 @@ public class LinkSpecification implements ILinkSpecification {
 
     /**
      * Creates a spec with a measure read inside
-     * 
+     *
      * @param measure
-     *            String representation of the spec
+     *         String representation of the spec
      * @param threshold
-     *            of the spec
+     *         of the spec
      */
     public LinkSpecification(String measure, double threshold) {
         setOperator(null);
@@ -83,7 +79,7 @@ public class LinkSpecification implements ILinkSpecification {
      * Adds a child to the current node of the spec
      *
      * @param spec
-     *            to be added
+     *         to be added
      */
     public void addChild(LinkSpecification spec) {
         if (getChildren() == null)
@@ -95,7 +91,7 @@ public class LinkSpecification implements ILinkSpecification {
      * Adds a child to the current node of the spec
      *
      * @param spec
-     *            to be added
+     *         to be added
      */
     public void addDependency(LinkSpecification spec) {
         if (getDependencies() == null)
@@ -107,7 +103,7 @@ public class LinkSpecification implements ILinkSpecification {
      * Removes a dependency from the list of dependencies
      *
      * @param spec
-     *            Input spec
+     *         Input spec
      */
     public void removeDependency(LinkSpecification spec) {
         if (getDependencies().contains(spec)) {
@@ -119,7 +115,7 @@ public class LinkSpecification implements ILinkSpecification {
 
     /**
      * Checks whether a spec has dependencies
-     * 
+     *
      * @return true if the spec has dependencies, false otherwise
      */
     public boolean hasDependencies() {
@@ -174,12 +170,12 @@ public class LinkSpecification implements ILinkSpecification {
      * than or equal to theta, then theta = 0)
      *
      * @param spec
-     *            expression to read
+     *         expression to read
      * @param theta
-     *            Global threshold
+     *         Global threshold
      */
     public void readSpec(String spec, double theta) {
-
+        spec = spec.trim();
         Parser p = new Parser(spec, theta);
         if (p.isAtomic()) {
             filterExpression = spec;
@@ -275,6 +271,34 @@ public class LinkSpecification implements ILinkSpecification {
         return allLeaves;
     }
 
+    public LinkSpecification setLeaf(LinkSpecification leaf, int n) {
+        LinkSpecification clone = this.clone();
+        clone.setLeaf(leaf, null, n);
+        return clone;
+    }
+
+    private void setLeaf(LinkSpecification leaf, LinkSpecification parent, int n) {
+        List<LinkSpecification> children = getChildren();
+        int leftSize = children.get(0).getAllLeaves().size();
+        if (n < leftSize) {
+            if (children.get(0).isAtomic()) {
+                leaf.setParent(this);
+                children.set(0, leaf);
+                setChildren(children);
+                return;
+            }
+            children.get(0).setLeaf(leaf, this, n);
+        } else {
+            if (children.get(1).isAtomic()) {
+                leaf.setParent(this);
+                children.set(1, leaf);
+                setChildren(children);
+                return;
+            }
+            children.get(1).setLeaf(leaf, this, n - leftSize);
+        }
+    }
+
     /**
      * Returns size of the spec, i.e., 1 for atomic spec, 0 for empty spec and
      * else 1 + sum of size of all children
@@ -344,6 +368,26 @@ public class LinkSpecification implements ILinkSpecification {
             for (LinkSpecification child : getChildren()) {
 
                 str += "\n  ->" + child;
+            }
+            return str;
+        } else
+            return "(" + filterExpression + ", " + getThreshold() + ", " + getOperator() + ", null)";
+        // }
+    }
+
+    public int getDepth() {
+        if (parent == null) {
+            return 0;
+        }
+        return parent.getDepth() + 1;
+    }
+
+    public String toStringPretty() {
+        if (getChildren() != null) {
+            String str = "(" + filterExpression + ", " + getThreshold() + ", " + getOperator() + ", null,)";
+            String indent = new String(new char[getDepth()]).replace("\0", "\t");
+            for (LinkSpecification child : getChildren()) {
+                str += "\n  " + indent + " ->" + child.toStringPretty();
             }
             return str;
         } else
@@ -526,7 +570,7 @@ public class LinkSpecification implements ILinkSpecification {
 
     /**
      * @param atomicMeasure
-     *            the atomicMeasure to set
+     *         the atomicMeasure to set
      */
     public void setAtomicMeasure(String atomicMeasure) {
         this.atomicMeasure = atomicMeasure;
@@ -537,7 +581,7 @@ public class LinkSpecification implements ILinkSpecification {
      * different measures though.
      *
      * @return true if two leaves compare the same properties, possibly with
-     *         different measures
+     * different measures
      */
     public boolean containsRedundantProperties() {
         List<LinkSpecification> leaves = getAllLeaves();

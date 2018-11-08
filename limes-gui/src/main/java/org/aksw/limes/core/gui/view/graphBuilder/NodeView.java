@@ -3,12 +3,7 @@ package org.aksw.limes.core.gui.view.graphBuilder;
 import java.util.List;
 import java.util.Vector;
 
-import org.aksw.limes.core.gui.model.Config;
 import org.aksw.limes.core.gui.model.metric.Node;
-import org.aksw.limes.core.gui.model.metric.Property;
-import org.aksw.limes.core.gui.util.SourceOrTarget;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -18,14 +13,12 @@ import javafx.scene.transform.Rotate;
 
 /**
  * Graphical representation of a node
- * 
+ *
  * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
  *         studserv.uni-leipzig.de{@literal >}
  *
  */
 public class NodeView {
-    private static final Logger logger = LoggerFactory.getLogger(NodeView.class);
-
 	/**
 	 * Node-Shape Integer Metric
 	 */
@@ -89,7 +82,7 @@ public class NodeView {
 	/**
 	 * Children of Node
 	 */
-	private List<NodeView> children = new Vector<NodeView>();
+	private final List<NodeView> children = new Vector<>();
 	/**
 	 * X Position of middle of link
 	 */
@@ -101,6 +94,7 @@ public class NodeView {
 	private int midLinkY;
 
 	private NodeViewRectangle nvr;
+
 	/**
 	 * Constructor
 	 *
@@ -139,9 +133,9 @@ public class NodeView {
 	 * Draw Node to GraphBuildView
 	 */
 	public void displayNode() {
-		GraphicsContext gc = gbv.getGraphicsContext2D();
-		nvr = new NodeViewRectangle(this.x, this.y, this.nodeShape, this, this.nodeData);
-		nvr.drawNodeViewRectangle(gc);
+		final GraphicsContext gc = this.gbv.getGraphicsContext2D();
+		this.nvr = new NodeViewRectangle(this.x, this.y, this.nodeShape, this, this.nodeData);
+		this.nvr.drawNodeViewRectangle(gc);
 	}
 
 	/**
@@ -167,10 +161,10 @@ public class NodeView {
 	 * @return True it Position is in drawed sector
 	 */
 	public boolean contains(int x, int y) {
-		int minX = this.x;
-		int maxX = this.x + this.width;
-		int minY = this.y;
-		int maxY = this.y + this.height;
+		final int minX = this.x;
+		final int maxX = this.x + this.width;
+		final int minY = this.y;
+		final int maxY = this.y + this.height;
 		if (x >= minX && x <= maxX) {
 			if (y >= minY && y <= maxY) {
 				return true;
@@ -191,10 +185,10 @@ public class NodeView {
 	 * @return True it Position is in drawed sector
 	 */
 	public boolean containsLinkMid(int x, int y) {
-		int minX = this.midLinkX - 10;
-		int maxX = this.midLinkX + 10;
-		int minY = this.midLinkY - 10;
-		int maxY = this.midLinkY + 10;
+		final int minX = this.midLinkX - 10;
+		final int maxX = this.midLinkX + 10;
+		final int minY = this.midLinkY - 10;
+		final int maxY = this.midLinkY + 10;
 		if (x >= minX && x <= maxX) {
 			if (y >= minY && y <= maxY) {
 				return true;
@@ -213,7 +207,7 @@ public class NodeView {
 	 * @return True if successful
 	 */
 	public boolean addParent(NodeView parent) {
-		boolean test = parent.nodeData.addChild(nodeData);
+		final boolean test = parent.nodeData.addChild(this.nodeData);
 		if (!test) {
 			return false;
 		}
@@ -229,7 +223,7 @@ public class NodeView {
 	 *            parent node
 	 */
 	public void deleteParent(NodeView parent) {
-		parent.nodeData.removeChild(nodeData);
+		parent.nodeData.removeChild(this.nodeData);
 		parent.children.remove(this);
 		this.parent = null;
 	}
@@ -241,7 +235,7 @@ public class NodeView {
 	 *            Child to Added
 	 */
 	public void addChildWithOutDataLinking(NodeView child) {
-		children.add(child);
+		this.children.add(child);
 		child.parent = this;
 		child.nodeData.overwriteParent(this.nodeData);
 	}
@@ -250,24 +244,24 @@ public class NodeView {
 	 * Draw the Links on Canvas to the Childs
 	 */
 	public void drawLink() {
-		GraphicsContext gc = gbv.getGraphicsContext2D();
+		final GraphicsContext gc = this.gbv.getGraphicsContext2D();
 		gc.setStroke(Color.BLACK);
-		children.forEach(nodeView -> {
-			int x1 = x + this.width / 2;
-			int y1 = y + this.height / 2;
-			int x2 = nodeView.x + nodeView.width / 2;
-			int y2 = nodeView.y + nodeView.height / 2;
+		this.children.forEach(nodeView -> {
+			final int x1 = this.x + this.width / 2;
+			final int y1 = this.y + this.height / 2;
+			final int x2 = nodeView.x + nodeView.width / 2;
+			final int y2 = nodeView.y + nodeView.height / 2;
 			gc.strokeLine(x1, y1, x2, y2);
 
-			double linkMidX = (x1 + x2) / 2.0;
+			final double linkMidX = (x1 + x2) / 2.0;
 			nodeView.midLinkX = (int) linkMidX;
-			double linkMidY = (y1 + y2) / 2.0;
+			final double linkMidY = (y1 + y2) / 2.0;
 			nodeView.midLinkY = (int) linkMidY;
-			double rotate = Math.toDegrees(Math.atan2(y2 - y1, x2 - x1)) + 225;
+			final double rotate = Math.toDegrees(Math.atan2(y2 - y1, x2 - x1)) + 225;
 			gc.setTransform(new Affine(new Rotate(rotate, linkMidX, linkMidY)));
-			double arrowX = linkMidX - (arrow.getWidth() * 3 / 4);
-			double arrowY = linkMidY - (arrow.getWidth() / 4);
-			gc.drawImage(arrow, arrowX, arrowY);
+			final double arrowX = linkMidX - this.arrow.getWidth() * 3 / 4;
+			final double arrowY = linkMidY - this.arrow.getWidth() / 4;
+			gc.drawImage(this.arrow, arrowX, arrowY);
 			gc.setTransform(new Affine());
 		});
 	}
@@ -276,26 +270,26 @@ public class NodeView {
 	 * Delete the Node unlink Children and Parent in Data and View Model
 	 */
 	public void deleteNode() {
-		if (parent != null) {
-			parent.nodeData.removeChild(this.nodeData);
-			parent.children.remove(this);
+		if (this.parent != null) {
+			this.parent.nodeData.removeChild(this.nodeData);
+			this.parent.children.remove(this);
 
 		}
-		children.forEach(e -> {
+		this.children.forEach(e -> {
 			e.nodeData.removeParent();
 			e.parent = null;
 		});
 		this.parent = null;
 		this.nodeData.removeParent();
 	}
-	
 
+	@Override
 	public String toString() {
-		String str = nodeData.id + "\n";
-		switch (nodeShape) {
+		String str = this.nodeData.id + "\n";
+		switch (this.nodeShape) {
 		case OUTPUT:
-			str += "Acceptance threshold: " + nodeData.param1 + "\n";
-			str += "Verification threshold: " + nodeData.param2 + "\n";
+			str += "Acceptance threshold: " + this.nodeData.param1 + "\n";
+			str += "Verification threshold: " + this.nodeData.param2 + "\n";
 			break;
 		case OPERATOR:
 			if (this.nodeData.getChilds().isEmpty()) {
@@ -315,37 +309,37 @@ public class NodeView {
 
 	/**
 	 * returns width
-	 * 
+	 *
 	 * @return width
 	 */
 	public int getWidth() {
-		return width;
+		return this.width;
 	}
 
 	/**
 	 * returns height
-	 * 
+	 *
 	 * @return height
 	 */
 	public int getHeight() {
-		return height;
+		return this.height;
 	}
 
 	/**
 	 * returns midLinkX
-	 * 
+	 *
 	 * @return midLinkX
 	 */
 	public int getMidLinkX() {
-		return midLinkX;
+		return this.midLinkX;
 	}
 
 	/**
 	 * returns midLinkY
-	 * 
+	 *
 	 * @return midLinkY
 	 */
 	public int getMidLinkY() {
-		return midLinkY;
+		return this.midLinkY;
 	}
 }

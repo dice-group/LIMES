@@ -17,26 +17,24 @@ import org.junit.Test;
  * @author Klaus Lyko (lyko@informatik.uni-leipzig.de)
  */
 public class EuclidTest extends MLAlgorithmTest{
-	
-
-	@SuppressWarnings("unchecked")
-    @Test
-	public void testAlgorithms() {
-        @SuppressWarnings("rawtypes")
-        Class[] algorithms = {
-        		LinearEuclid.class, 
-        		BooleanEuclid.class,
-        		MeshEuclid.class,
-        };
-        // for each Euclid sub type
-        for(Class<? extends ACoreMLAlgorithm> algorithm : algorithms) {
-        	logger.info("Testing unsupervised "+algorithm.getSimpleName());
-        	testUnsupervised(algorithm);
-        	
-        	logger.info("Testing supervised "+algorithm.getSimpleName());
-//        	testSupervisedBatch(algorithm);
-        }        
-	}
+//	
+//
+//	@Test
+//	public void testAlgorithms() {
+//        Class[] algorithms = {
+//        		LinearEuclid.class, 
+//        		BooleanEuclid.class,
+//        		MeshEuclid.class,
+//        };
+//        // for each Euclid sub type
+//        for(Class<? extends ACoreMLAlgorithm> algorithm : algorithms) {
+//        	logger.info("Testing unsupervised "+algorithm.getSimpleName());
+//        	testUnsupervised(algorithm);
+//        	
+//        	logger.info("Testing supervised "+algorithm.getSimpleName());
+////        	testSupervisedBatch(algorithm);
+//        }        
+//	}
 	
 /*-------------------------- unsupervised tests ----------------------------------*/	
 	

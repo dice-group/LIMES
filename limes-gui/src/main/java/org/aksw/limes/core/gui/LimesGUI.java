@@ -15,32 +15,36 @@ import javafx.stage.Stage;
  *         studserv.uni-leipzig.de{@literal >}
  */
 public class LimesGUI extends Application {
-	
-	MainView mainView;
-    /**
-     * Main function Entry Point for the Application
-     *
-     * @param args
-     *         optional arguments on StartUp, No Options implemented yet
-     */
-    public static void startGUI(String[] args) {
-        launch(args);
-    }
 
-    public static void main(String[] args){
-	    startGUI(args);
-    }
-    
-    /**
-     * Opens a new Window for the Application
-     * @param primaryStage View to initialize Application
-     * @exception Exception Thrown if initialization didn't work properly
-     */
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Locale.setDefault(new Locale("en", "US"));
-        mainView = new MainView(primaryStage);
-        MainController mainController = new MainController(mainView);
-        mainView.setController(mainController);
-    }
+	MainView mainView;
+
+	/**
+	 * Main function Entry Point for the Application
+	 *
+	 * @param args
+	 *            optional arguments on StartUp, No Options implemented yet
+	 */
+	public static void startGUI(String[] args) {
+		launch(args);
+	}
+
+	public static void main(String[] args) {
+		startGUI(args);
+	}
+
+	/**
+	 * Opens a new Window for the Application
+	 * 
+	 * @param primaryStage
+	 *            View to initialize Application
+	 * @exception Exception
+	 *                Thrown if initialization didn't work properly
+	 */
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		Locale.setDefault(new Locale("en", "US"));
+		this.mainView = new MainView(primaryStage);
+		final MainController mainController = new MainController(this.mainView);
+		this.mainView.setController(mainController);
+	}
 }
