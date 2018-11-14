@@ -35,30 +35,39 @@ public class RunNLG {
 		clause_1.setFeature(Feature.PASSIVE, true);
 
 
-		String ls1="OR(OR(OR(OR(qgrams(x.name,y.name)|0.4135,jaccard(x.name,y.name)|0.3637)|0.1136,OR(qgrams(x.name,y.name)|0.4135,qgrams(x.name,y.name)|0.4135)|0.1136)|0.1136,qgrams(x.name,y.name)|0.4135)|0.2861,jaccard(x.name,y.name)|0.3637)";
-		String ls2="OR(OR(trigrams(x.name,y.name)|0.6355,OR(trigrams(x.description,y.description)|0.4965,OR(trigrams(x.name,y.name)|0.4965,levenshtein(x.name,y.name)|0.7808)|0.6127)|0.6127)|0.6127,qgrams(x.name,y.name)|0.6127)";
-		String ls3="XOR(XOR(XOR(XOR(XOR(levenshtein(x.title,y.name)|0.6527,levenshtein(x.title,y.name)|0.3701)|0.3668,cosine(x.title,y.name)|0.6835)|0.3668,levenshtein(x.title,y.name)|0.3701)|0.3668,levenshtein(x.title,y.name)|0.3701)|0.3668,trigrams(x.title,y.name)|0.6527)";
-		String ls4="OR(OR(OR(jaccard(x.title,y.name)|0.8520,overlap(x.title,y.name)|0.8444)|0.8444,cosine(x.description,y.description)|0.8444)|0.7744,jaccard(x.title,y.name)|0.6032)";
-		String ls5="XOR(XOR(jaccard(x.description,y.description)|0.5122,cosine(x.title,y.name)|0.4551)|0.5122,XOR(cosine(x.title,y.name)|0.4776,XOR(jaccard(x.description,y.description)|0.5122,cosine(x.title,y.name)|0.5348)|0.5122)|0.2181)";
-		String ls6="AND(AND(trigrams(x.title,y.title)|0.3882,trigrams(x.title,y.title)|0.3882)|0.6803,OR(trigrams(x.authors,y.authors)|0.4420,jaccard(x.title,y.title)|0.6803)|0.6803)";
-		String ls7="AND(AND(AND(trigrams(x.title,y.title)|0.6233,AND(AND(overlap(x.title,y.title)|0.5124,cosine(x.authors,y.authors)|0.5254)|0.5124,overlap(x.title,y.title)|0.5124)|0.5124)|0.5124,cosine(x.authors,y.authors)|0.5254)|0.5124,overlap(x.title,y.title)|0.5124)";
-		String ls8="AND(jaccard(x.title,y.title)|0.4521,AND(qgrams(x.authors,y.authors)|0.3352,AND(AND(cosine(x.venue,y.venue)|0.1580,cosine(x.venue,y.venue)|0.1580)|0.1580,cosine(x.venue,y.venue)|0.1580)|0.1580)|0.1580)";
-		String ls9="AND(AND(cosine(x.title,y.title)|0.5266,AND(AND(qgrams(x.title,y.title)|0.3679,euclidean(x.year,y.year)|0.8331)|0.5325,euclidean(x.year,y.year)|0.8331)|0.5325)|0.5325,euclidean(x.year,y.year)|0.8331)";
+		String ls1="OR(OR(OR(OR(qgrams(x.name,y.name)|0.4135,jaccard(x.name,y.name)|0.3637)|0.1136,OR(trigrams(x.name,y.name)|0.4135,cosine(x.name,y.name)|0.4135)|0.1136)|0.1136,qgrams(x.name,y.name)|0.4135)|0.2861,jaccard(x.name,y.name)|0.3637)";
+		String ls2="AND(OR(trigrams(x.name,y.name)|0.6355,OR(trigrams(x.description,y.description)|0.4965,OR(trigrams(x.name,y.name)|0.4965,levenshtein(x.name,y.name)|0.4965)|0.6127)|0.6127)|0.6127,qgrams(x.name,y.name)|0.4965)";
+		String ls3="AND(AND(trigrams(x.title,y.title)|0.3882,trigrams(x.title,y.title)|0.3882)|0.6803,OR(trigrams(x.authors,y.authors)|0.4420,jaccard(x.title,y.title)|0.6803)|0.6803)";
+		String ls4="AND(AND(AND(trigrams(x.title,y.title)|0.6233,AND(AND(overlap(x.title,y.title)|0.5124,cosine(x.authors,y.authors)|0.5254)|0.5124,overlap(x.title,y.title)|0.5124)|0.5124)|0.5124,cosine(x.authors,y.authors)|0.5254)|0.5124,overlap(x.title,y.title)|0.5124)";
+		String ls5="AND(AND(cosine(x.title,z.title)|0.5266,AND(AND(qgrams(x.title,z.title)|0.3679,euclidean(x.year,z.year)|0.8331)|0.5325,euclidean(x.year,z.year)|0.8331)|0.5325)|0.5325,euclidean(x.year,z.year)|0.8331)";
+		
+		
+		String test= "OR(OR(OR(jaccard(x.date_of_birth,y.date_of_birth)|1.0,"
+	            + "jaccard(x.date_of_birth,y.has_address)|0.0)|0.6,"
+	            + "AND(jaccard(x.date_of_birth,y.date_of_birth)|1.0,jaccard(x.date_of_birth,y.has_address)|0.9)|0.5)|0.9,"
+	            + "AND(AND(jaccard(x.date_of_birth,y.date_of_birth)|1.0,jaccard(x.date_of_birth,y.has_address)|1.0)|0.6,"
+	            + "OR(jaccard(x.date_of_birth,y.date_of_birth)|1.0,jaccard(x.date_of_birth,y.has_address)|1.0)|0.5)|0.8)";
+		
 		LinkSpecification link=new LinkSpecification();
 
-		link.readSpec(ls9, 0.6);
-		System.out.println(ls9);
-		List<NLGElement>allNLGElement=LinkSpecSummary.fullMeasureNLG(link);
-
+		link.readSpec(ls1, 0.6);
+		//System.out.println(ls5);
+		List<SPhraseSpec> allNLGElement=LinkSpecSummary.fullMeasureNLG(link);
+		for(SPhraseSpec ele:allNLGElement) {
+		
+		Realiser finalRealiser = new Realiser(lexicon);
+		NLGElement finalRealised = finalRealiser.realise(ele);
+		System.out.println(finalRealised.toString());}
 
 		String previous = "";
 		//String previous1 = "";
-		for (NLGElement el: allNLGElement) {
-			if (!previous.equals(el.toString()) ) {               
-				previous = el.toString();
+		/*for (NLGElement el: allNLGElement) {
+			//System.out.println(el);
+			//if (!previous.equals(el.toString()) ) {               
+				//previous = el.toString();
 				result.add(el);               
-			}               
-		}
+			//}               
+		}*/
 		String temp="";
 		String prefix ="";
 		for (int i=0;i<result.size();i++) {
@@ -99,11 +108,11 @@ public class RunNLG {
 
 
 
-			System.out.println(strEle);
+			//System.out.println(strEle);
 
 		}
-		System.out.println("************************************************");
-		System.out.println("************************************************");
+		//System.out.println("************************************************");
+		//System.out.println("************************************************");
 		//}
 
 
