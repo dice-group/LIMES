@@ -8,6 +8,7 @@ import org.aksw.limes.core.io.ls.LinkSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import simplenlg.features.Feature;
 import simplenlg.framework.CoordinatedPhraseElement;
 import simplenlg.framework.NLGElement;
 import simplenlg.framework.NLGFactory;
@@ -44,12 +45,14 @@ public class LinkSpecSummery {
 	protected static NLGFactory nlgFactory = new NLGFactory(lexicon);
 
 	protected static NPPhraseSpec name;
+	protected static NPPhraseSpec measureName;
 	protected static NPPhraseSpec firstSubject;
 	protected static NPPhraseSpec theta;
 	protected static CoordinatedPhraseElement obj=nlgFactory.createCoordinatedPhrase() ;
-	protected static NPPhraseSpec oprtator=new NPPhraseSpec(nlgFactory);
+	//protected static NPPhraseSpec operator=new NPPhraseSpec(nlgFactory);
 	protected static CoordinatedPhraseElement coordinateClause=nlgFactory.createCoordinatedPhrase() ;
 	protected static String previousSubject="";
+	protected static String previousStringTheta = "";
 	protected static List<NLGElement> result =new ArrayList<NLGElement>();
 	protected static CoordinatedPhraseElement objCollection= nlgFactory.createCoordinatedPhrase() ;
 	protected static LinkSpecification linkspec;
@@ -86,15 +89,15 @@ public class LinkSpecSummery {
 				if(linkSpecification.isAtomic()) {
 
 					String operatorAsString =linkspec.getOperator().toString().toLowerCase();
-
-					oprtator.addComplement(operatorAsString);
+					NPPhraseSpec operator=new NPPhraseSpec(nlgFactory);
+					operator.addComplement(operatorAsString);
 					Realiser realiser_2 = new Realiser(lexicon);
-					NLGElement realised_2 = realiser_2.realise(oprtator);
+					NLGElement realised_2 = realiser_2.realise(operator);
 					//    System.out.println("the realizer is "+realised_2.toString());
 					if (!allOperator.isEmpty()) {
 						AggregationResult = AggregationResult + "," +realised_2.toString();
-						//allcoordinate.add(oprtator);
-						//temp.add(realised_2.toString());
+						//System.out.println(realised_2.toString());
+						//result.add(realised_2);
 					}
 					allOperator.add(realised_2);
 					nlgElements.add(realised_2);
@@ -132,8 +135,19 @@ public class LinkSpecSummery {
 						stringTheta=thetaRealised.toString();
 						name.addPreModifier(stringTheta);
 					}
-
-					//the object
+					measureName = LsPreProcessor.atomicSimilarity(linkSpecification);
+					//The Object
+					Realiser measureRealiser = new Realiser(lexicon);
+					NLGElement measureRealised = measureRealiser.realise(name);
+					//System.out.println(measureRealised.toString());
+					//the element
+					clause_1.setSubject(firstSubject);
+					clause_1.setVerb("have");
+					clause_1.setObject(name);
+					Realiser elementRealiser = new Realiser(lexicon);
+					NLGElement elementRealised = elementRealiser.realise(clause_1);
+					System.out.println(elementRealised.toString());
+					//System.out.println("");
 					Realiser objectRealiser = new Realiser(lexicon);
 					NLGElement objectRealised = objectRealiser.realise(name);
 					//the subject	
@@ -143,15 +157,25 @@ public class LinkSpecSummery {
 					System.out.println("current element "+ firstSubjectRealised.toString());*/
 					if (previousSubject.equals(firstSubjectRealised.toString())) {
 						//System.out.println("found the same subject");
-						objCollection.addCoordinate(name);
-						objCollection.addCoordinate(oprtator);
+						objCollection.addCoordinate(operator);
+						objCollection.setFeature(Feature.CONJUNCTION, "");
+						if (previousStringTheta.equals(stringTheta)) {							
+							objCollection.addCoordinate(measureName);
+							objCollection.setFeature(Feature.CONJUNCTION, "");
+							objCollection.setFeature(Feature.CONJUNCTION, "");
+						}else {
+							objCollection.addCoordinate(name);
+							objCollection.setFeature(Feature.CONJUNCTION, "");
+							previousStringTheta = stringTheta;
+						}
+						
+						
 						//System.out.println("number of element inside Obj "+ size);
 					}else {
 						//System.out.println("found the first or the new different subject element");
 						//System.out.println("number of element inside Obj "+objCollection.getChildren().size());
 						//System.out.println(objCollection.getChildren().size());
-						if (!(objCollection.getChildren().isEmpty())) {
-							//System.out.println("Obj is "+objCollection.getChildren().size());
+						if (!(objCollection.getChildren().isEmpty())) {							
 							clause.setSubject(previousSubject);
 							clause.setVerb("have");							
 							clause.setObject(objCollection);
@@ -159,7 +183,10 @@ public class LinkSpecSummery {
 							//the clause
 							Realiser clauseRealiser = new Realiser(lexicon);
 							NLGElement clauseRealised = clauseRealiser.realise(clause);
+							
 							result.add(clauseRealised);
+							//put the second operator
+							result.add(realised_2);
 							/*System.out.println(" aggregation "+clauseRealised);
 							System.out.println("\n");*/
 							objCollection.clearCoordinates();
@@ -168,13 +195,13 @@ public class LinkSpecSummery {
 							previousSubject = firstSubjectRealised.toString();
 							//System.out.println("previous subject "+previousSubject);
 							objCollection.addCoordinate(name);
-							objCollection.addCoordinate(oprtator);
+							objCollection.setFeature(Feature.CONJUNCTION, "");
+							
 						}else {
 							previousSubject = firstSubjectRealised.toString();
 							//System.out.println("previous subject "+previousSubject);
 							objCollection.addCoordinate(name);
-							int size = objCollection.getChildren().size();
-							//System.out.println("number of element inside Obj "+ size);
+							objCollection.setFeature(Feature.CONJUNCTION, "");
 						}
 
 					}					
@@ -186,12 +213,7 @@ public class LinkSpecSummery {
 
 		}
 
-		//return nlgElements;
-		//System.out.println(" iteration "+x);
-
 		return result;
-		//return temp;
-
 	}
 
 
