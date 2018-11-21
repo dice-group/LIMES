@@ -15,153 +15,184 @@ import simplenlg.phrasespec.PPPhraseSpec;
 
 public class LsPreProcessor {
 
-    protected static String leftProp;
-    protected static String rightProp;
+	protected static String leftProp;
+	protected static String rightProp;
 
-    protected static Lexicon lexicon = new XMLLexicon();                     
-    protected static NLGFactory nlgFactory = new NLGFactory(lexicon);
+	protected static Lexicon lexicon = new XMLLexicon();                     
+	protected static NLGFactory nlgFactory = new NLGFactory(lexicon);
 
-//    public static CoordinatedPhraseElement sameSubject() throws UnsupportedMLImplementationException {
-//
-//        CoordinatedPhraseElement sameSubj = nlgFactory.createCoordinatedPhrase("the source","the target");
-//
-//        return sameSubj;
-//    }
-
-
-    public static NPPhraseSpec atomicMeasure(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
-        String atomicMeasureString = linkSpec.getAtomicMeasure();
-        NPPhraseSpec n1=nlgFactory.createNounPhrase(atomicMeasureString);
-
-        return n1;
-    }
-    public static NPPhraseSpec atomicSimilarity(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
-
-        String atomicMeasureString = linkSpec.getAtomicMeasure();
+	//    public static CoordinatedPhraseElement sameSubject() throws UnsupportedMLImplementationException {
+	//
+	//        CoordinatedPhraseElement sameSubj = nlgFactory.createCoordinatedPhrase("the source","the target");
+	//
+	//        return sameSubj;
+	//    }
 
 
-        NPPhraseSpec n2=nlgFactory.createNounPhrase(atomicMeasureString);
-        NPPhraseSpec similarity=nlgFactory.createNounPhrase(" similarity");
-        n2.setDeterminer("a");
-        n2.addPostModifier(similarity);
+	public NPPhraseSpec atomicMeasure(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+		String atomicMeasureString = linkSpec.getAtomicMeasure();
+		NPPhraseSpec n1=nlgFactory.createNounPhrase(atomicMeasureString);
 
-        return n2;
-    }
+		return n1;
+	}
+	public  NPPhraseSpec atomicSimilarity(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 
-    public static String leftProperty(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+		String atomicMeasureString = linkSpec.getAtomicMeasure();
+		atomicMeasureString =convert(atomicMeasureString) ;
 
-        String fullExpression = linkSpec.getFullExpression();
-        leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("x")+2,
-                fullExpression.indexOf(","));
-        if(leftProp.contains("#")) {
-            leftProp=leftProp.substring(leftProp.indexOf("#")+1);
-            System.out.println(" the p "+leftProp);        
-        }
+		NPPhraseSpec n2=nlgFactory.createNounPhrase(atomicMeasureString);
+		NPPhraseSpec similarity=nlgFactory.createNounPhrase(" similarity");
+		n2.setDeterminer("a");
+		n2.addPostModifier(similarity);
 
-        if(leftProp.contains("_")) {
-            leftProp=leftProp.replace("_", " ");
-        }
+		return n2;
+	}
 
-        return leftProp;
-    }
-    public static String rightProperty(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+	public  String leftProperty(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 
-        String fullExpression = linkSpec.getFullExpression();
+		String fullExpression = linkSpec.getFullExpression();
+		leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("x")+2,
+				fullExpression.indexOf(","));
+		if(leftProp.contains("#")) {
+			leftProp=leftProp.substring(leftProp.indexOf("#")+1);
+			System.out.println(" the p "+leftProp);        
+		}
 
-        rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("y")+2,
-                fullExpression.indexOf(")"));
-        if(rightProp.contains("#")) {
-            rightProp=rightProp.substring(rightProp.indexOf("#")+1);        
-        }
+		if(leftProp.contains("_")) {
+			leftProp=leftProp.replace("_", " ");
+		}
 
-        if(rightProp.contains("_"))
-            rightProp=rightProp.replace("_", " ");
+		return leftProp;
+	}
+	public  String rightProperty(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 
+		String fullExpression = linkSpec.getFullExpression();
 
-        return rightProp;
-    }
+		rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("y")+2,
+				fullExpression.indexOf(")"));
+		if(rightProp.contains("#")) {
+			rightProp=rightProp.substring(rightProp.indexOf("#")+1);        
+		}
 
-    public static CoordinatedPhraseElement coordinate(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
-        String fullExpression = linkSpec.getFullExpression();
-        leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("x")+2,
-                fullExpression.indexOf(","));
-        if(leftProp.contains("#")) {
-            leftProp=leftProp.substring(leftProp.indexOf("#")+1);
-            System.out.println(" the p "+leftProp);        
-        }
-
-        if(leftProp.contains("_")) {
-            leftProp=leftProp.replace("_", " ");
-        }
-        rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("y")+2,
-                fullExpression.indexOf(")"));
-        if(rightProp.contains("#")) {
-            rightProp=rightProp.substring(rightProp.indexOf("#")+1);        
-        }
-
-        if(rightProp.contains("_"))
-            rightProp=rightProp.replace("_", " ");
-
-        PhraseElement leftP=nlgFactory.createNounPhrase("the","source");
-        leftP.setFeature(Feature.POSSESSIVE, true);
-        PhraseElement leftPValue=nlgFactory.createNounPhrase(leftProp);
-        leftPValue.setFeature(InternalFeature.SPECIFIER, leftP);
-
-        PhraseElement rightP=nlgFactory.createNounPhrase("the","target");
-        rightP.setFeature(Feature.POSSESSIVE, true);
-        PhraseElement rightPValue=nlgFactory.createNounPhrase(rightProp);
-        rightPValue.setFeature(InternalFeature.SPECIFIER, rightP);
-
-        CoordinatedPhraseElement coordinate_1 = nlgFactory.createCoordinatedPhrase(leftPValue,rightPValue);
-
-        return coordinate_1;
-    }
-    public static NPPhraseSpec Theta(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+		if(rightProp.contains("_"))
+			rightProp=rightProp.replace("_", " ");
 
 
-        double d = linkSpec.getThreshold()*100.00;
-        d=Math.round(d*100.00/100.00);
+		return rightProp;
+	}
 
-        NPPhraseSpec theta=nlgFactory.createNounPhrase(d +"%");
+	public  CoordinatedPhraseElement coordinate(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+		String fullExpression = linkSpec.getFullExpression();
+		leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("x")+2,
+				fullExpression.indexOf(","));
+		if(leftProp.contains("#")) {
+			leftProp=leftProp.substring(leftProp.indexOf("#")+1);
+			System.out.println(" the p "+leftProp);        
+		}
 
-        PPPhraseSpec pp = nlgFactory.createPrepositionPhrase();
-        pp.addComplement(theta);
-        pp.setPreposition("of");
-        return theta;
-    }
+		if(leftProp.contains("_")) {
+			leftProp=leftProp.replace("_", " ");
+		}
+		rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("y")+2,
+				fullExpression.indexOf(")"));
+		if(rightProp.contains("#")) {
+			rightProp=rightProp.substring(rightProp.indexOf("#")+1);        
+		}
 
-    public static NPPhraseSpec resourceValue(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+		if(rightProp.contains("_"))
+			rightProp=rightProp.replace("_", " ");
 
-        String fullExpression = linkSpec.getFullExpression();
-        leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("x")+2,
-                fullExpression.indexOf(","));
-        if(leftProp.contains("#")) {
-            leftProp=leftProp.substring(leftProp.indexOf("#")+1);
-            System.out.println(" the p "+leftProp);        
-        }
+		PhraseElement leftP=nlgFactory.createNounPhrase("the","source");
+		leftP.setFeature(Feature.POSSESSIVE, true);
+		PhraseElement leftPValue=nlgFactory.createNounPhrase(leftProp);
+		leftPValue.setFeature(InternalFeature.SPECIFIER, leftP);
 
-        if(leftProp.contains("_")) {
-            leftProp=leftProp.replace("_", " ");
-        }
-        rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("y")+2,
-                fullExpression.indexOf(")"));
-        if(rightProp.contains("#")) {
-            rightProp=rightProp.substring(rightProp.indexOf("#")+1);        
-        }
+		PhraseElement rightP=nlgFactory.createNounPhrase("the","target");
+		rightP.setFeature(Feature.POSSESSIVE, true);
+		PhraseElement rightPValue=nlgFactory.createNounPhrase(rightProp);
+		rightPValue.setFeature(InternalFeature.SPECIFIER, rightP);
 
-        if(rightProp.contains("_"))
-            rightProp=rightProp.replace("_", " ");
+		CoordinatedPhraseElement coordinate_1 = nlgFactory.createCoordinatedPhrase(leftPValue,rightPValue);
+
+		return coordinate_1;
+	}
+	public  NPPhraseSpec Theta(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 
 
-        NPPhraseSpec resource=nlgFactory.createNounPhrase("resource");
-        //resource.addPreModifier("same");
-        resource.setFeature(Feature.POSSESSIVE, true);
-        NPPhraseSpec resourceValue=nlgFactory.createNounPhrase(leftProp);
-        resourceValue.setFeature(InternalFeature.SPECIFIER, resource);
+		double d = linkSpec.getThreshold()*100;
+		d=Math.round(d*100/100);
+		int dAsInteger= (int)d;
 
-        return resourceValue;
-    }
+		NPPhraseSpec theta=nlgFactory.createNounPhrase(dAsInteger +"%");
 
+		PPPhraseSpec pp = nlgFactory.createPrepositionPhrase();
+		pp.addComplement(theta);
+		pp.setPreposition("of");
+		return theta;
+	}
+
+	public NPPhraseSpec resourceValue(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+
+		String fullExpression = linkSpec.getFullExpression();
+		leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("x")+2,
+				fullExpression.indexOf(","));
+		if(leftProp.contains("#")) {
+			leftProp=leftProp.substring(leftProp.indexOf("#")+1);
+			System.out.println(" the p "+leftProp);        
+		}
+
+		if(leftProp.contains("_")) {
+			leftProp=leftProp.replace("_", " ");
+		}
+		rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("y")+2,
+				fullExpression.indexOf(")"));
+		if(rightProp.contains("#")) {
+			rightProp=rightProp.substring(rightProp.indexOf("#")+1);        
+		}
+
+		if(rightProp.contains("_"))
+			rightProp=rightProp.replace("_", " ");
+
+
+		NPPhraseSpec resource=nlgFactory.createNounPhrase("resource");
+		//resource.addPreModifier("same");
+		resource.setFeature(Feature.POSSESSIVE, true);
+		NPPhraseSpec resourceValue=nlgFactory.createNounPhrase(leftProp);
+		//resourceValue.setFeature(InternalFeature.SPECIFIER, resource);
+
+		return resourceValue;
+	}
+	private static String convert(String str) 
+	{ 
+
+		// Create a char array of given String 
+		char ch[] = str.toCharArray(); 
+		for (int i = 0; i < str.length(); i++) { 
+
+			// If first character of a word is found 
+			if (i == 0 && ch[i] != ' ' ||  
+					ch[i] != ' ' && ch[i - 1] == ' ') { 
+
+				// If it is in lower-case 
+				if (ch[i] >= 'a' && ch[i] <= 'z') { 
+
+					// Convert into Upper-case 
+					ch[i] = (char)(ch[i] - 'a' + 'A'); 
+				} 
+			} 
+
+			// If apart from first character 
+			// Any one is in Upper-case 
+			else if (ch[i] >= 'A' && ch[i] <= 'Z')  
+
+				// Convert into Lower-Case 
+				ch[i] = (char)(ch[i] + 'a' - 'A');             
+		} 
+
+		// Convert the char array to equivalent String 
+		String st = new String(ch); 
+		return st; 
+	} 
 
 
 }

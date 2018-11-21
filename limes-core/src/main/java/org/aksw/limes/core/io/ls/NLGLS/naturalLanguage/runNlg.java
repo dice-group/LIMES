@@ -17,9 +17,9 @@ import simplenlg.phrasespec.SPhraseSpec;
 import simplenlg.realiser.english.Realiser;
 
 public class runNlg {
-	
-	
-	 static void postProcessor(String str) throws UnsupportedMLImplementationException {
+
+
+	static void postProcessor(String str) throws UnsupportedMLImplementationException {
 
 		LinkSpecification link=new LinkSpecification();
 		Lexicon lexicon = new XMLLexicon();                      
@@ -36,9 +36,9 @@ public class runNlg {
 		clause1.setFeature(Feature.PASSIVE, true);
 		Realiser clause1Realiser = new Realiser(lexicon);
 		NLGElement clause1Realised = clause1Realiser.realise(clause1);
-		
+
 		System.out.println(clause1Realised);
-		
+
 		clause.setSubject(LinkSpecSummery.previousSubject);
 		clause.setVerb("have");
 		clause.setObject(LinkSpecSummery.objCollection);
@@ -60,23 +60,39 @@ public class runNlg {
 
 	public static void main(String[] args) throws UnsupportedMLImplementationException, IOException {
 
-
-		String ls1="OR(OR(OR(AND(qgrams(x.author,y.author)|0.4135,jaccard(x.name,y.name)|0.3637)|0.1136,OR(trigrams(x.name,y.name)|0.4135,cosine(x.name,y.name)|0.4135)|0.1136)|0.1136,qgrams(x.name,y.name)|0.4135)|0.2861,jaccard(x.name,y.name)|0.3637)";
-		String ls2="AND(OR(trigrams(x.name,y.name)|0.6355,OR(trigrams(x.description,y.description)|0.4965,OR(trigrams(x.name,y.name)|0.4965,levenshtein(x.name,y.name)|0.4965)|0.6127)|0.6127)|0.6127,qgrams(x.name,y.name)|0.4965)";
-		String ls3="AND(AND(trigrams(x.title,y.title)|0.3882,trigrams(x.title,y.title)|0.3882)|0.6803,OR(trigrams(x.authors,y.authors)|0.4420,jaccard(x.title,y.title)|0.6803)|0.6803)";
-		String ls4="AND(AND(AND(trigrams(x.title,y.title)|0.6233,AND(AND(overlap(x.title,y.title)|0.5124,cosine(x.authors,y.authors)|0.5254)|0.5124,overlap(x.title,y.title)|0.5124)|0.5124)|0.5124,cosine(x.authors,y.authors)|0.5254)|0.5124,overlap(x.title,y.title)|0.5124)";
-		String ls5="AND(AND(cosine(x.title,z.title)|0.5266,AND(AND(qgrams(x.title,z.title)|0.3679,euclidean(x.year,z.year)|0.8331)|0.5325,euclidean(x.year,z.year)|0.8331)|0.5325)|0.5325,euclidean(x.year,z.year)|0.8331)";
-
+		String ls1="OR(OR(OR(OR(qgrams(x.name,y.description)|0.41,jaccard(x.name,y.name)|0.36)|0.11,OR(euclidean(x.price,y.price)|0.41,cosine(x.name,y.name)|0.41)|0.11)|0.11,qgrams(x.description,y.description)|0.41)|0.2861,jaccard(x.name,y.name)|0.36)";
+		String ls2="OR(OR(trigrams(x.description,y.description)|0.63,OR(trigrams(x.description,y.description)|0.49,OR(trigrams(x.price,y.price)|0.49,levenshtein(x.name,y.name)|0.78)|0.61)|0.61)|0.61,qgrams(x.name,y.name)|0.61)";
+		String ls3="AND(AND(trigrams(x.title,y.title)|0.38,trigrams(x.title,y.title)|0.38)|0.68,OR(trigrams(x.authors,y.authors)|0.44,jaccard(x.title,y.title)|0.68)|0.68)";
+		String ls4="AND(AND(AND(trigrams(x.title,y.title)|0.62,AND(AND(overlap(x.title,y.title)|0.51,cosine(x.authors,y.authors)|0.52)|0.51,overlap(x.title,y.title)|0.51)|0.51)|0.51,cosine(x.authors,y.authors)|0.52)|0.51,overlap(x.venue,y.venue)|0.51)";
+		String ls5="AND(AND(cosine(x.title,z.title)|0.52,AND(AND(qgrams(x.title,z.title)|0.36,euclidean(x.authors,z.authors)|0.83)|0.53,cosine(x.year,z.year)|0.83)|0.53)|0.53,euclidean(x.year,z.year)|0.83)";
 		
+
 		String test= "OR(OR(OR(jaccard(x.date_of_birth,y.date_of_birth)|1.0,"
 				+ "jaccard(x.date_of_birth,y.has_address)|0.0)|0.6,"
 				+ "AND(jaccard(x.date_of_birth,y.date_of_birth)|1.0,jaccard(x.date_of_birth,y.has_address)|0.9)|0.5)|0.9,"
 				+ "AND(AND(jaccard(x.date_of_birth,y.date_of_birth)|1.0,jaccard(x.date_of_birth,y.has_address)|1.0)|0.6,"
 				+ "OR(jaccard(x.date_of_birth,y.date_of_birth)|1.0,jaccard(x.date_of_birth,y.has_address)|1.0)|0.5)|0.8)";
 
-		
+		System.out.println("ABT-BUY_LS1: "+ls1);
 		postProcessor( ls1);
-
+		
+		//System.out.println("*******************************************");
+		//System.out.println("*******************************************");
+		//System.out.println("ABT-BUY_LS2: "+ls2);
+		//postProcessor( ls2);
+		
+		//System.out.println("*******************************************");
+		//System.out.println("*******************************************");
+	//	System.out.println("ACM_DBLP_LS1: "+ls3);
+		//postProcessor( ls3);
+		
+	//	System.out.println("*******************************************");
+	//	System.out.println("*******************************************");
+		//System.out.println("SCHOLAR_DBLP_LS1: "+ls5);
+		//postProcessor( ls5);
+		
+		System.out.println("*******************************************");
+		System.out.println("*******************************************");
 
 	}
 

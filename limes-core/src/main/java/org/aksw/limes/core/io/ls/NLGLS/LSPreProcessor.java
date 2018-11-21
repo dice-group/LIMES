@@ -14,28 +14,33 @@ import simplenlg.phrasespec.PPPhraseSpec;
 
 public class LSPreProcessor {
 
-	protected static String leftProp;
-	protected static String rightProp;
+	private static String leftProp;
+	private static String rightProp;
+	private static Lexicon lexicon;                  
+	private static NLGFactory nlgFactory ;
+	
 
-	protected static Lexicon lexicon = new XMLLexicon();                      
-	protected static NLGFactory nlgFactory = new NLGFactory(lexicon);
-
-	public static CoordinatedPhraseElement sameSubject() throws UnsupportedMLImplementationException {
-
+	protected static CoordinatedPhraseElement sameSubject() throws UnsupportedMLImplementationException {
+		lexicon= new XMLLexicon();
+		nlgFactory = new NLGFactory(lexicon);
 		CoordinatedPhraseElement sameSubj = nlgFactory.createCoordinatedPhrase("the source","the target");
 
 		return sameSubj;
 	}
 
 
-	public static NPPhraseSpec atomicMeasure(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+	protected static NPPhraseSpec atomicMeasure(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+		lexicon= new XMLLexicon();
+		nlgFactory = new NLGFactory(lexicon);
 		String atomicMeasureString = linkSpec.getAtomicMeasure();
 		NPPhraseSpec n1=nlgFactory.createNounPhrase(atomicMeasureString);
 
 		return n1;
 	}
-	public static NPPhraseSpec atomicSimilarity(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
-
+	protected static NPPhraseSpec atomicSimilarity(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+		lexicon= new XMLLexicon();
+		nlgFactory = new NLGFactory(lexicon);
+		
 		String atomicMeasureString = linkSpec.getAtomicMeasure();
 
 
@@ -48,7 +53,9 @@ public class LSPreProcessor {
 	}
 
 	public static String leftProperty(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
-
+		lexicon= new XMLLexicon();
+		nlgFactory = new NLGFactory(lexicon);
+		
 		String fullExpression = linkSpec.getFullExpression();
 		leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("x")+2,
 				fullExpression.indexOf(","));
@@ -64,10 +71,11 @@ public class LSPreProcessor {
 		return leftProp;
 	}
 	public static String rightProperty(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
-
+		lexicon= new XMLLexicon();
+		nlgFactory = new NLGFactory(lexicon);
 		String fullExpression = linkSpec.getFullExpression();
 
-		rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("y")+2,
+		rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("z")+2,
 				fullExpression.indexOf(")"));
 		if(rightProp.contains("#")) {
 			rightProp=rightProp.substring(rightProp.indexOf("#")+1);         
@@ -81,6 +89,8 @@ public class LSPreProcessor {
 	}
 
 	public static CoordinatedPhraseElement coordinate(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
+		lexicon= new XMLLexicon();
+		nlgFactory = new NLGFactory(lexicon);
 		String fullExpression = linkSpec.getFullExpression();
 		leftProp = linkSpec.getMeasure().substring(fullExpression.indexOf("x")+2,
 				fullExpression.indexOf(","));
@@ -92,7 +102,7 @@ public class LSPreProcessor {
 		if(leftProp.contains("_")) {
 			leftProp=leftProp.replace("_", " ");
 		}
-		rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("y")+2,
+		rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("z")+2,
 				fullExpression.indexOf(")"));
 		if(rightProp.contains("#")) {
 			rightProp=rightProp.substring(rightProp.indexOf("#")+1);         
@@ -142,7 +152,7 @@ public class LSPreProcessor {
 		if(leftProp.contains("_")) {
 			leftProp=leftProp.replace("_", " ");
 		}
-		rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("y")+2,
+		rightProp = linkSpec.getMeasure().substring(fullExpression.indexOf("z")+2,
 				fullExpression.indexOf(")"));
 		if(rightProp.contains("#")) {
 			rightProp=rightProp.substring(rightProp.indexOf("#")+1);         
@@ -155,7 +165,7 @@ public class LSPreProcessor {
 		NPPhraseSpec resource=nlgFactory.createNounPhrase("resource");
 		resource.addPreModifier("same");
 		resource.setFeature(Feature.POSSESSIVE, true);
-		NPPhraseSpec resourceValue=nlgFactory.createNounPhrase(leftProp);
+		NPPhraseSpec resourceValue=nlgFactory.createNounPhrase(rightProp);
 		resourceValue.setFeature(InternalFeature.SPECIFIER, resource);
 
 		return resourceValue;
