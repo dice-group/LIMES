@@ -2,7 +2,6 @@ package org.aksw.limes.core.measures.measure.pointsets.frechet;
 
 import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.GeoOrthodromicMeasure;
 
 import fr.ign.cogit.geoxygene.api.spatial.coordgeom.IDirectPosition;
 import fr.ign.cogit.geoxygene.api.spatial.coordgeom.ILineString;

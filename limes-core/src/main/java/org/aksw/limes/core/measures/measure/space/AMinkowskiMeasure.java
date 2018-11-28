@@ -44,7 +44,7 @@ abstract class AMinkowskiMeasure extends ASpaceMeasure {
 
         double distance = 0;
         for (int i = 0; i < p1.length; i++) {
-            double min = Integer.MAX_VALUE;
+            double min = Double.MAX_VALUE;
             for (String value1 : instance1.getProperty(p1[i])) {
                 for (String value2 : instance2.getProperty(p2[i])) {
                     try {
@@ -55,7 +55,7 @@ abstract class AMinkowskiMeasure extends ASpaceMeasure {
             }
             distance = distance + min;
         }
-        return 1.0 / (1 + outerPTerm(distance));
+        return 1.0 / (1.0 + outerPTerm(distance));
     }
 
     /**

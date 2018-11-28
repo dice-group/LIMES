@@ -92,7 +92,8 @@ public class MapperFactory {
             return new HR3Mapper();
         case GEO_ORTHODROMIC:
         case GEO_GREAT_ELLIPTIC:
-            ///////////////////////
+            return new HR3Mapper();
+        ///////////////////////
         case GEO_CENTROID_INDEXED_HAUSDORFF:
         case GEO_FAST_HAUSDORFF:
         case GEO_HAUSDORFF:

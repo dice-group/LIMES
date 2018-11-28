@@ -88,7 +88,7 @@ public class SimpleServer {
                 AConfigurationReader reader = new XMLConfigurationReader(STORAGE_DIR_PATH + CONFIG_FILE_PREFIX + id + ".xml");
                 Configuration config = reader.read();
                 jobs.put(Long.parseLong(id), 1);
-                ResultMappings mappings = Controller.getMapping(config, limit);
+                LimesResult mappings = Controller.getMapping(config, limit);
                 String outputFormat = config.getOutputFormat();
                 ISerializer output = SerializerFactory.createSerializer(outputFormat);
                 output.setPrefixes(config.getPrefixes());
