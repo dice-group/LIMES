@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.aksw.limes</groupId>
 		<artifactId>limes-full</artifactId>
-		<version>1.5.3-SNAPSHOT</version>
+		<version>1.5.3</version>
 	</parent>
 
 	<artifactId>limes-debian-cli</artifactId>
@@ -153,7 +153,7 @@
 		<dependency>
 			<groupId>org.aksw.limes</groupId>
 			<artifactId>limes-core</artifactId>
-			<version>1.5.3-SNAPSHOT</version>
+			<version>1.5.3</version>
 		</dependency>
 	</dependencies>
 </project>
