@@ -15,7 +15,7 @@ public class EuclideanMeasure extends AMinkowskiMeasure {
 
     @Override
     double innerPTerm(String xi, String yi) {
-        double d = new Double(xi) - new Double(xi);
+        double d = new Double(xi) - new Double(yi);
         return d * d;
     }
 

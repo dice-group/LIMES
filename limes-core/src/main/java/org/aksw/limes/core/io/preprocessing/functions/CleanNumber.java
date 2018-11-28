@@ -21,7 +21,7 @@ public class CleanNumber extends APreprocessingFunction implements IPreprocessin
 	 * Matches a number that is followed by "^"
 	 */
 	public static final Pattern typedNumber = Pattern.compile("[0-9,.-]+(?=\\^)");
-	public static final Pattern untypedNumber = Pattern.compile("-{0,1}[0-9]+.{0,1}[0-9]");
+	public static final Pattern untypedNumber = Pattern.compile("-?[0-9]+(\\.[0-9]+)?");
 
 	@Override
 	public Instance applyFunctionAfterCheck(Instance i, String property, String... arguments) {

@@ -55,7 +55,7 @@ public class OracleFactory {
         AMapping m = reader.read();
 
         //finally return the right type of oracle
-        if (inputType.equals("simple")) //scan input types here
+        if (oracleType.equals("simple")) //scan input types here
         {
             oracle = new SimpleOracle(m);
         } else //default

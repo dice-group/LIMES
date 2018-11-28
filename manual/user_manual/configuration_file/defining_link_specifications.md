@@ -124,19 +124,7 @@ LIMES supports comparing numeric vectors by using the vector space measures pack
 With this distance, Euclidean space becomes a metric space.
 For example, `euclidean(a.wgs84:lat|wgs84:long,b.wgs84:lat|wgs84:long)` will compute the Euclidean
 distance between the point representations of each resource from the source and target datasets.
-* **Geo_Orthodromic**: The great-circle distance or orthodromic distance is the shortest distance
-between two points on the surface of a sphere, measured along the surface of the sphere
-(as opposed to a straight line through the sphere's interior). The distance between two points in
-Euclidean space is the length of a straight line between them, but on the sphere, there are no
-straight lines. In spaces with curvature, straight lines are replaced by geodesics.
-Geodesics on the sphere are circles on the sphere whose centres coincide with the canter of the
-sphere and are called great circles.
-* **Geo_Great_Elliptic**: The great ellipse distance is the length of the ellipse passing through
-two points on a spheroid and having the same centre as that of the spheroid. Equivalently, it is
-distance of the ellipse on the surface of a spheroid and cantered on the origin, or the curve
-formed by intersecting the spheroid by a plane through its centre. The great ellipse distance is
-confedered the most accurate distance between two point In the surface of the earth.
-
+* **Manhattan**: Manhattan metric defines the distance between two points as the sum of the absolute differences of their Cartesian coordinates.
 
 ### Point-Set Measures
   

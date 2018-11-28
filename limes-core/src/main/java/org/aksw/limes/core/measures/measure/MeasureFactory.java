@@ -1,8 +1,8 @@
 package org.aksw.limes.core.measures.measure;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
-import org.aksw.limes.core.measures.measure.pointsets.GeoGreatEllipticMeasure;
-import org.aksw.limes.core.measures.measure.pointsets.GeoOrthodromicMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoOrthodromicMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverageMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechetMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
