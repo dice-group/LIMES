@@ -110,7 +110,7 @@ public class LimesResult {
                 "\n\t\t}," +
                 "\n\t}" +
                 "\n}",
-                this.sourceCache.size(), this.targetCache.size(), this.runTime,
+                this.runTime, this.sourceCache.size(), this.targetCache.size(),
                 this.verificationMapping.size(), this.acceptanceMapping.size(),
                 pseudoPrecisionForAcceptance, pseudoRecallForAcceptance, pseudoFMeasureForAcceptance,
                 pseudoPrecisionForAll, pseudoRecallForAll, pseudoFMeasureForAll);

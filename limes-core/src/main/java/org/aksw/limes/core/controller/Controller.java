@@ -261,8 +261,8 @@ public class Controller {
         options.addOption("o", true, "Set path of log file. Default is 'limes.log'");
         options.addOption("f", true, "Optionally configure format of <config_file_or_uri>, either \"xml\" (default) or " +
                 "\"rdf\". If not specified, LIMES tries to infer the format from file ending.");
-        options.addOption("F", true, "Optionally configure format of gold standard file, wither \"csv\" (default) or" +
-                "\"tab\". Only effective in combination with -g option.");
+        options.addOption("F", true, "Optionally configure format of gold standard file, wither \"csv\" (default), " +
+                "\"tab\" or \"rdf\". Only effective in combination with -g option.");
         options.addOption("p", true, "Optionally configure HTTP server port. Only effective if -s is specified. Default port is 8080.");
         options.addOption("g", true, "Compute P,R,F for the resulting mapping compared to a gold standard file given as an argument to this option.");
         options.addOption("l", true, "Optionally configure a limit for source and target resources processed by LIMES Server. Only effective if -s is specified. Default value is -1 (no limit).");

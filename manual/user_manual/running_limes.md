@@ -16,7 +16,7 @@ The following optional command line flags and options are available:
 * `-d $file_path` configure the path for the statistics JSON output file
 * `-1` enforces 1-to-1 mappings, i.e. for each source resource only keep the link with the highest probability
 * `-g $file_path` configure a reference mapping file (a.k.a. gold standard) to compute precision, recall and f measure
-* `-F $format` sets the format of the gold standard. Possible values for `$format` are`"csv"` (default) or `"tab"`. Only effective when `-g $file_path` is also specified
+* `-F $format` sets the format of the gold standard. Possible values for `$format` are`"csv"` (default), `"tab"` or `"rdf""`. Only effective when `-g $file_path` is also specified
 * `-s` runs the LIMES server
 * `-p $port` used to specify port of LIMES server, defaults to port 8080
 * `-l $limit` limits the number of resources processed by LIMES server to `$limit`, defaults to -1 (no limit).
