@@ -14,8 +14,8 @@ import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.pointsets.APointsetsMeasure;
 
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.util.GeometricShapeFactory;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.util.GeometricShapeFactory;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)

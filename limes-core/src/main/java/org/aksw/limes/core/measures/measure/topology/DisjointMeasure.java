@@ -3,9 +3,9 @@ package org.aksw.limes.core.measures.measure.topology;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.AMeasure;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
 
 /**
  * Measure that checks for the topological relation disjoint.
