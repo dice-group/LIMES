@@ -19,9 +19,6 @@ import org.aksw.limes.core.measures.measure.string.KoelnPhoneticMeasure;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 
-/**
- * @author Ewald Neufeld
- */
 public class KoelnPhoneticMapper extends AMapper {
 
     /**
@@ -44,7 +41,7 @@ public class KoelnPhoneticMapper extends AMapper {
      */
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
-            double threshold) {
+                               double threshold) {
         if (threshold <= 0) {
             throw new InvalidThresholdException(threshold);
         }
@@ -138,35 +135,37 @@ public class KoelnPhoneticMapper extends AMapper {
         return new Double(Math.floor(4 * (1 - threshold))).intValue();
     }
 
-    static class TrieNode {
+    private static class TrieNode {
 
         private Map<Character, TrieNode> children;
         private List<Integer> references;
 
-        public TrieNode(List<Integer> references) {
+        TrieNode(List<Integer> references) {
             this.references = references;
             this.children = new HashMap<>();
         }
 
-        public static TrieNode recursiveAddAll(Map<String, List<Integer>> code2References) {
+        static TrieNode recursiveAddAll(Map<String, List<Integer>> code2References) {
             TrieNode root = new TrieNode(null);
             TrieNode.recursiveAddAll(root, code2References);
             return root;
         }
 
-        public static void recursiveAddAll(TrieNode root, Map<String, List<Integer>> code2References) {
-            for (Map.Entry<String, List<Integer>> entry : code2References.entrySet())
+        static void recursiveAddAll(TrieNode root, Map<String, List<Integer>> code2References) {
+            for (Map.Entry<String, List<Integer>> entry : code2References.entrySet()) {
                 TrieNode.recursiveAdd(root, entry.getKey(), entry.getValue());
+            }
         }
 
-        private static void recursiveAdd(TrieNode node, String code, List<Integer> references) {
-            if (code.length() > 1)
+        static void recursiveAdd(TrieNode node, String code, List<Integer> references) {
+            if (code.length() > 1) {
                 TrieNode.recursiveAdd(node.addChild(code.charAt(0), null), code.substring(1), references);
-            else
+            } else {
                 node.addChild(code.charAt(0), references);
+            }
         }
 
-        public TrieNode addChild(char symbol, List<Integer> references) {
+        TrieNode addChild(char symbol, List<Integer> references) {
             TrieNode child;
             if (!this.children.containsKey(symbol)) {
                 child = new TrieNode(references);
@@ -177,39 +176,37 @@ public class KoelnPhoneticMapper extends AMapper {
             return child;
         }
 
-        public List<Integer> getReferences() {
+        List<Integer> getReferences() {
             return this.references;
         }
 
-        public Set<Map.Entry<Character, TrieNode>> getChildren() {
+        Set<Map.Entry<Character, TrieNode>> getChildren() {
             return this.children.entrySet();
         }
     }
 
-    static class TrieSearchState {
+    private static class TrieSearchState {
+
         private int distance;
         private int position;
         private TrieNode node;
 
-        public TrieSearchState(int distance, int position, TrieNode node) {
+        TrieSearchState(int distance, int position, TrieNode node) {
             this.distance = distance;
             this.position = position;
             this.node = node;
         }
 
-        public int getDistance() {
+        int getDistance() {
             return distance;
         }
 
-        public int getPosition() {
+        int getPosition() {
             return position;
         }
 
-        public TrieNode getNode() {
+        TrieNode getNode() {
             return node;
         }
     }
-
-    ;
-
 }
