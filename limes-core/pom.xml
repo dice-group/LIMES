@@ -306,8 +306,14 @@
             <version>57.1</version>
         </dependency>
 
+        <!-- commons codec for koeln phonetic measure-->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.11</version>
+        </dependency>
+      
         <!-- jena-sparql-api -->
-
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>apache-jena-libs</artifactId>
