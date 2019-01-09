@@ -22,7 +22,7 @@ import org.slf4j.MarkerFactory;
  */
 public class ExactMatchMapper extends AMapper {
 
-    static Logger logger = LoggerFactory.getLogger(ExactMatchMapper.class);
+    private static Logger logger = LoggerFactory.getLogger(ExactMatchMapper.class);
 
     /**
      * Computes a mapping between a source and a target.
@@ -58,9 +58,9 @@ public class ExactMatchMapper extends AMapper {
         Map<String, Set<String>> targetIndex = getValueToUriMap(target, properties.get(1));
         AMapping m = MappingFactory.createDefaultMapping();
         boolean swapped = sourceIndex.keySet().size() > targetIndex.keySet().size();
-        (swapped ? sourceIndex : targetIndex).keySet().stream().filter(targetIndex::containsKey).forEach(value -> {
-            for (String sourceUri : (swapped ? sourceIndex : targetIndex).get(value)) {
-                for (String targetUri : (swapped ? targetIndex : sourceIndex).get(value)) {
+        (!swapped ? sourceIndex : targetIndex).keySet().stream().filter(!swapped ? targetIndex::containsKey : sourceIndex::containsKey).forEach(value -> {
+            for (String sourceUri : sourceIndex.get(value)) {
+                for (String targetUri : targetIndex.get(value)) {
                     m.add(sourceUri, targetUri, 1d);
                 }
             }
@@ -69,7 +69,7 @@ public class ExactMatchMapper extends AMapper {
     }
 
     public Map<String, Set<String>> index(ACache c, String property) {
-        Map<String, Set<String>> index = new HashMap<String, Set<String>>();
+        Map<String, Set<String>> index = new HashMap<>();
         for (String uri : c.getAllUris()) {
             TreeSet<String> values = c.getInstance(uri).getProperty(property);
             for (String v : values) {

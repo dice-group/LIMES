@@ -94,9 +94,12 @@ public class MapperFactory {
         ///////////////////////
         case EUCLIDEAN:
             return new HR3Mapper();
+        case MANHATTAN:
+            return new HR3Mapper();
         case GEO_ORTHODROMIC:
         case GEO_GREAT_ELLIPTIC:
-            ///////////////////////
+            return new HR3Mapper();
+        ///////////////////////
         case GEO_CENTROID_INDEXED_HAUSDORFF:
         case GEO_FAST_HAUSDORFF:
         case GEO_HAUSDORFF:

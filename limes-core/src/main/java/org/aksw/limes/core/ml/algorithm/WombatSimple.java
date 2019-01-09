@@ -16,6 +16,7 @@ import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.io.mapping.MappingFactory.MappingType;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
 import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
+import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
 import org.aksw.limes.core.ml.algorithm.wombat.AWombat;
 import org.aksw.limes.core.ml.algorithm.wombat.LinkEntropy;
 import org.aksw.limes.core.ml.algorithm.wombat.RefinementNode;
@@ -36,6 +37,7 @@ public class WombatSimple extends AWombat {
     protected RefinementNode bestSolutionNode = null;
     protected List<ExtendedClassifier> classifiers = null;
     protected int iterationNr = 0;
+    public PropertyMapping propMap;
 
 
 
@@ -228,10 +230,6 @@ public class WombatSimple extends AWombat {
 
 
 
-
-
-
-
     /**
      * @param r the root of the refinement tree
      * @param k number of best nodes
@@ -285,7 +283,7 @@ public class WombatSimple extends AWombat {
         AMapping map = MappingFactory.createDefaultMapping();
         for (ExtendedClassifier c : classifiers) {
             for (LogicOperator op : LogicOperator.values()) {
-                if (node.getValue().getMetricExpression() != c.getMetricExpression()) { // do not create the same metricExpression again
+                if (!node.getValue().getMetricExpression().equals(c.getMetricExpression())) { // do not create the same metricExpression again
                     if (op.equals(LogicOperator.AND)) {
                         map = MappingOperations.intersection(node.getValue().getMapping(), c.getMapping());
                     } else if (op.equals(LogicOperator.OR)) {

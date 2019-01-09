@@ -71,17 +71,19 @@ public class PropMapper {
      * @param name     Name of the LIMES config file.
      * @return PropertyMapping read from the file.
      */
-    @SuppressWarnings("finally")
     public static PropertyMapping getPropertyMappingFromFile(String folder, String name) {
         if (name.indexOf("/") > 0)
             name = name.substring(name.lastIndexOf("/"));
         String filename = name.substring(0, name.lastIndexOf("."));
         filename += "propertymatch";
-
+        return getPropertyMappingFromFile(folder + filename);
+    }
+    
+    public static PropertyMapping getPropertyMappingFromFile(String filePath){
         PropertyMapping pM = new PropertyMapping();
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader(folder + filename));
+            reader = new BufferedReader(new FileReader(filePath));
             String s = reader.readLine();
             String split[];
             while (s != null && s.length() > 0) {
@@ -103,9 +105,7 @@ public class PropMapper {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } finally {
-            //			System.out.println(pM);
-            return pM;
         }
+        return pM;
     }
 }

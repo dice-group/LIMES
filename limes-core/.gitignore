@@ -18,9 +18,15 @@ hs_err_pid*
 .classpath
 .settings/
 .DS_Store
+*.html
+*.log
+doc/*
+*.swp
+*sys:logFilename*
+*attach_pid*
 
 # folder Eagle uses default for caches
-cache/
+/cache/
 
 # generated outputs
 /*.nt

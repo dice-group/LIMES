@@ -62,9 +62,11 @@ public class MLAlgorithmTest {
         i6.addProperty("surname", "Dumb");
 
 
-        sc.addInstance(i1);
-        sc.addInstance(i3);
-        sc.addInstance(i6);
+        sc.addInstance(i1);//lyko
+        sc.addInstance(i2);//j.doe
+        sc.addInstance(i3);//stadler
+        sc.addInstance(i6);//trump
+        
 
         tc.addInstance(i1);
         tc.addInstance(i2);

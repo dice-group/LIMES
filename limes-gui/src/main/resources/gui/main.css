@@ -26,3 +26,17 @@
 .table-row-cell:empty .table-cell {
     -fx-border-width: 0px;
 }
+
+.toolBarButton{
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-base,30%), derive(-fx-base,60%));
+}
+
+.toolBarButton:hover {
+	-fx-background-color: -fx-base;
+}
+
+.toolBarButton:pressed {
+	-fx-scale-y: 0.9;
+    -fx-scale-x: 0.9;
+}
+

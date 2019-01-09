@@ -5,6 +5,7 @@ import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.measure.AMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
 
 /**
  * @author Mohamed Sherif (sherif@informatik.uni-leipzig.de)

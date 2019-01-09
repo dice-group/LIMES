@@ -16,7 +16,7 @@ import javafx.collections.ObservableList;
 
 /**
  * This class handles the user input from {@link ActiveLearningResultView}
- * 
+ *
  * @author Daniel Obraczka {@literal <} soz11ffe{@literal @}
  *         studserv.uni-leipzig.de{@literal >}
  *
@@ -26,8 +26,7 @@ public class ActiveLearningResultController {
 	/**
 	 * The corresponding view
 	 */
-	private ActiveLearningResultView view;
-
+	private final ActiveLearningResultView view;
 
 	/**
 	 * Config to get instance information
@@ -37,11 +36,11 @@ public class ActiveLearningResultController {
 	/**
 	 * The corresponding model
 	 */
-	private ActiveLearningModel model;
+	private final ActiveLearningModel model;
 
 	/**
 	 * Sets the Config
-	 * 
+	 *
 	 * @param c
 	 *            Config of LIMES-query
 	 */
@@ -53,101 +52,106 @@ public class ActiveLearningResultController {
 
 	/**
 	 * Constructor
-	 * @param v view
-	 * @param c config
-	 * @param m model
+	 * 
+	 * @param v
+	 *            view
+	 * @param c
+	 *            config
+	 * @param m
+	 *            model
 	 */
-	public ActiveLearningResultController(ActiveLearningResultView v, Config c,
-			ActiveLearningModel m) {
-		view = v;
-		currentConfig = c;
-		model = m;
+	public ActiveLearningResultController(ActiveLearningResultView v, Config c, ActiveLearningModel m) {
+		this.view = v;
+		this.currentConfig = c;
+		this.model = m;
 	}
 
 	/**
-	 * shows the properties of matched instances 
-	 * 
+	 * shows the properties of matched instances
+	 *
 	 * @param item
 	 *            the clicked matched instances of the ActiveLearningResultView
 	 */
 	public void showProperties(ActiveLearningResult item) {
-		String sourceURI = item.getSourceURI();
-		String targetURI = item.getTargetURI();
+		final String sourceURI = item.getSourceURI();
+		final String targetURI = item.getTargetURI();
 
-		ObservableList<InstanceProperty> sourcePropertyList = FXCollections
-				.observableArrayList();
-		ObservableList<InstanceProperty> targetPropertyList = FXCollections
-				.observableArrayList();
+		final ObservableList<InstanceProperty> sourcePropertyList = FXCollections.observableArrayList();
+		final ObservableList<InstanceProperty> targetPropertyList = FXCollections.observableArrayList();
 
-		Instance i1 = currentConfig.getSourceEndpoint().getCache()
-				.getInstance(sourceURI);
-		Instance i2 = currentConfig.getTargetEndpoint().getCache()
-				.getInstance(targetURI);
-		for (String prop : i1.getAllProperties()) {
+		final Instance i1 = this.currentConfig.getSourceEndpoint().getCache().getInstance(sourceURI);
+		final Instance i2 = this.currentConfig.getTargetEndpoint().getCache().getInstance(targetURI);
+		for (final String prop : i1.getAllProperties()) {
 			String value = "";
-			for (String s : i1.getProperty(prop)) {
+			for (final String s : i1.getProperty(prop)) {
 				value += s + " ";
 			}
 			sourcePropertyList.add(new InstanceProperty(prop, value));
 
 		}
 
-		view.showSourceInstance(sourcePropertyList);
+		this.view.showSourceInstance(sourcePropertyList);
 
-		for (String prop : i2.getAllProperties()) {
+		for (final String prop : i2.getAllProperties()) {
 			String value = "";
-			for (String s : i2.getProperty(prop)) {
+			for (final String s : i2.getProperty(prop)) {
 				value += s + " ";
 			}
 			targetPropertyList.add(new InstanceProperty(prop, value));
 		}
-		view.showTargetInstance(targetPropertyList);
+		this.view.showTargetInstance(targetPropertyList);
 	}
 
 	/**
 	 * Starts a new active learning process as a thread
 	 */
 	public void learnButtonPressed() {
-	    AMapping trainingMap = MappingFactory.createDefaultMapping();
-		view.learnProgress.setVisible(true);
-		for (ActiveLearningResult item : view.getMatchingTable().getItems()) {
+		final AMapping trainingMap = MappingFactory.createDefaultMapping();
+		this.view.learnProgress.setVisible(true);
+		for (final ActiveLearningResult item : this.view.getMatchingTable().getItems()) {
 			if (item.isMatchProperty().get()) {
-				trainingMap.add(item.getSourceURI(), item.getTargetURI(),
-						1.0d);
+				trainingMap.add(item.getSourceURI(), item.getTargetURI(), 1.0d);
 			}
 		}
 
-		ObservableList<ActiveLearningResult> results = FXCollections
-				.observableArrayList();
-		Thread thread = new Thread() {
+		final ObservableList<ActiveLearningResult> results = FXCollections.observableArrayList();
+		final Thread thread = new Thread() {
+			@Override
 			public void run() {
-			    MLResults mlModel = null;
-			    try {
-				mlModel = model.getMlalgorithm().asActive().activeLearn(trainingMap);
-				model.setNextExamples(model.getMlalgorithm().asActive().getNextExamples(ActiveLearningModel.nextExamplesNum));
-			    } catch (UnsupportedMLImplementationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			    }
-				model.getNextExamples().getMap().forEach((sourceURI, map2) -> {
+				MLResults mlModel = null;
+				try {
+					mlModel = ActiveLearningResultController.this.model.getMlalgorithm().asActive()
+							.activeLearn(trainingMap);
+					ActiveLearningResultController.this.model.setNextExamples(ActiveLearningResultController.this.model
+							.getMlalgorithm().asActive().getNextExamples(ActiveLearningModel.nextExamplesNum));
+				} catch (final UnsupportedMLImplementationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				ActiveLearningResultController.this.model.getNextExamples().getMap().forEach((sourceURI, map2) -> {
 					map2.forEach((targetURI, value) -> {
-						results.add(new ActiveLearningResult(sourceURI,
-								targetURI, value));
+						results.add(new ActiveLearningResult(sourceURI, targetURI, value));
 					});
 				});
-        model.setLearnedMapping(model.getMlalgorithm().asActive().predict(model.getConfig().getSourceEndpoint().getCache(), model.getConfig().getTargetEndpoint().getCache(), mlModel));
-				onFinish(results);
+				ActiveLearningResultController.this.model.setLearnedMapping(
+						ActiveLearningResultController.this.model.getMlalgorithm().asActive().predict(
+								ActiveLearningResultController.this.model.getConfig().getSourceEndpoint().getCache(),
+								ActiveLearningResultController.this.model.getConfig().getTargetEndpoint().getCache(),
+								mlModel));
+				ActiveLearningResultController.this.onFinish(results);
 			}
 		};
 		thread.start();
 	}
 
 	/**
-	 * Gets called after the active learning thread is finished and displays the results
+	 * Gets called after the active learning thread is finished and displays the
+	 * results
+	 * 
 	 * @param results
 	 */
 	private void onFinish(ObservableList<ActiveLearningResult> results) {
-		view.learnProgress.setVisible(false);
-		view.showResults(results);
+		this.view.learnProgress.setVisible(false);
+		this.view.showResults(results);
 	}
 }

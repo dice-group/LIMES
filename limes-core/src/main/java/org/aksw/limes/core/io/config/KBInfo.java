@@ -7,6 +7,7 @@ package org.aksw.limes.core.io.config;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,10 +33,12 @@ public class KBInfo implements Serializable {
     protected List<String> properties;
     protected List<String> optionalProperties;
     protected ArrayList<String> restrictions;
-    protected Map<String, Map<String, String>> functions;
+    protected LinkedHashMap<String, Map<String, String>> functions;
     protected Map<String, String> prefixes;
     protected int pageSize;
     protected String type;
+    protected int maxoffset;
+    protected int minoffset;
 
     /**
      * Constructor
@@ -48,9 +51,11 @@ public class KBInfo implements Serializable {
         properties = new ArrayList<>();
         optionalProperties = new ArrayList<>();
         prefixes = new HashMap<>();
-        functions = new HashMap<>();
+        functions = new LinkedHashMap<>();
         pageSize = -1;      //-1 means query all at once
         type = DEFAULT_QUERY_TYPE;    //default value
+        maxoffset  = -1;
+        minoffset = -1;
     }
 
     /**
@@ -63,7 +68,7 @@ public class KBInfo implements Serializable {
 
     public KBInfo(String id, String endpoint, String graph, String var,
             List<String> properties, List<String> optionalProperties,
-            ArrayList<String> restrictions, Map<String, Map<String, String>> functions,
+            ArrayList<String> restrictions, LinkedHashMap<String, Map<String, String>> functions,
             Map<String, String> prefixes, int pageSize, String type) {
         super();
         this.id = id;
@@ -77,6 +82,16 @@ public class KBInfo implements Serializable {
         this.prefixes = prefixes;
         this.pageSize = pageSize;
         this.type = type;
+    }
+
+    public KBInfo(String id, String endpoint, String graph, String var,
+                  List<String> properties, List<String> optionalProperties,
+                  ArrayList<String> restrictions, LinkedHashMap<String, Map<String, String>> functions,
+                  Map<String, String> prefixes, int pageSize, String type, int minoffset, int maxoffset) {
+        this(id, endpoint, graph, var, properties, optionalProperties, restrictions, functions,
+                prefixes, pageSize, type);
+        this.maxoffset = maxoffset;
+        this.minoffset = minoffset;
     }
 
     public String getId() {
@@ -147,11 +162,11 @@ public class KBInfo implements Serializable {
         this.optionalProperties.add(optionalProperty);
     }
     
-    public Map<String, Map<String, String>> getFunctions() {
+    public LinkedHashMap<String, Map<String, String>> getFunctions() {
         return functions;
     }
 
-    public void setFunctions(Map<String, Map<String, String>> functions) {
+    public void setFunctions(LinkedHashMap<String, Map<String, String>> functions) {
         this.functions = functions;
     }
 
@@ -178,6 +193,22 @@ public class KBInfo implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
+    
+    public void setMaxOffset(int maxoffset) {
+        this.maxoffset = maxoffset;
+    }
+    
+    public int getMaxOffset() {
+        return maxoffset;
+    }
+    
+    public void setMinOffset(int minoffset) {
+        this.minoffset = minoffset;
+    }
+    
+    public int getMinOffset() {
+        return minoffset;
+    }
 
     /**
      * @return String representation of knowledge base info
@@ -195,6 +226,8 @@ public class KBInfo implements Serializable {
         s = s + "Functions: " + functions + "\n";
         s = s + "Page size: " + pageSize + "\n";
         s = s + "Type: " + type + "\n";
+        s = s + "MinOffset: " + minoffset + "\n";
+        s = s + "MaxOffset: " + maxoffset + "\n";
         return s;
     }
 
@@ -222,6 +255,8 @@ public class KBInfo implements Serializable {
                 + ((restrictions == null) ? 0 : restrictions.hashCode());
         //result = prime * result + ((var == null) ? 0 : var.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
+        result = prime * result + maxoffset;
+        result = prime * result + minoffset;
         return result;
     }
 
@@ -259,6 +294,12 @@ public class KBInfo implements Serializable {
             return false;
         }
         if (pageSize != other.pageSize) {
+            return false;
+        }
+        if(maxoffset != other.maxoffset) {
+            return false;
+        }
+        if(minoffset != other.minoffset) {
             return false;
         }
         if (prefixes == null) {

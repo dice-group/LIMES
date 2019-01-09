@@ -3,6 +3,7 @@ package org.aksw.limes.core.evaluation.oracle;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.reader.AMappingReader;
 import org.aksw.limes.core.io.mapping.reader.CSVMappingReader;
+import org.aksw.limes.core.io.mapping.reader.RDFMappingReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,10 +40,9 @@ public class OracleFactory {
         if (inputType.equalsIgnoreCase("csv")) //scan input types here
         {
             reader = new CSVMappingReader(filePath);
-        } else if (inputType.equalsIgnoreCase("xml")) //scan input types here
+        } else if (inputType.equalsIgnoreCase("rdf")) //scan input types here
         {
-            //commented by mofeed to check if it exists or not and the possibilities of adding it
-            //reader = new XMLMappingReader();
+            reader = new RDFMappingReader(filePath);
         } else if (inputType.equalsIgnoreCase("tab")) //scan input types here
         {
             reader = new CSVMappingReader(filePath);
@@ -55,7 +55,7 @@ public class OracleFactory {
         AMapping m = reader.read();
 
         //finally return the right type of oracle
-        if (inputType.equals("simple")) //scan input types here
+        if (oracleType.equals("simple")) //scan input types here
         {
             oracle = new SimpleOracle(m);
         } else //default
