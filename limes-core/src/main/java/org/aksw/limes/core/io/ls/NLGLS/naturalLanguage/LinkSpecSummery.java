@@ -34,22 +34,22 @@ public class LinkSpecSummery {
 	private static NPPhraseSpec name;
 	private static NPPhraseSpec measureName;
 	private static NPPhraseSpec theta;
-	protected static String previousSubject="";
-	private static String previousStringTheta = "";
-	private static List<NLGElement> result =new ArrayList<NLGElement>();
-	protected static CoordinatedPhraseElement objCollection= nlgFactory.createCoordinatedPhrase() ;
+	protected  String previousSubject="";
+	private  String previousStringTheta = "";
+	private  List<NLGElement> result =new ArrayList<NLGElement>();
+	protected  CoordinatedPhraseElement objCollection= nlgFactory.createCoordinatedPhrase() ;
 
 	/**
 	 * @param linkspec
 	 * @return
 	 * @throws UnsupportedMLImplementationException
 	 */
-	protected static List<NLGElement> fullMeasureNLG(LinkSpecification linkspec) throws UnsupportedMLImplementationException {
+	protected  List<NLGElement> fullMeasureNLG(LinkSpecification linkspec) throws UnsupportedMLImplementationException {
 
 		SPhraseSpec clause = nlgFactory.createClause();
 		LsPreProcessor lsPreProcessor=new LsPreProcessor();
 		if(linkspec.isAtomic()) {
-			
+
 			NPPhraseSpec name = lsPreProcessor.atomicSimilarity(linkspec);
 			PhraseElement resourceValue = lsPreProcessor.resourceValue(linkspec);
 			NPPhraseSpec theta = lsPreProcessor.Theta(linkspec);
@@ -59,22 +59,21 @@ public class LinkSpecSummery {
 		}else {
 
 			for (int i=0;i<linkspec.getChildren().size();i++) {
+				String operatorAsString =linkspec.getOperator().toString().toLowerCase();
+				//System.out.println(" the operator is "+operatorAsString);
+				NPPhraseSpec operator=new NPPhraseSpec(nlgFactory);
+				operator.addComplement(operatorAsString);
+				Realiser realiser2 = new Realiser(lexicon);
+				NLGElement realised2 = realiser2.realise(operator);
+				//    System.out.println("the realizer is "+realised_2.toString());
+				if (!allOperator.isEmpty()) {
+					AggregationResult = AggregationResult + "," +realised2.toString();
+					//System.out.println(realised_2.toString());
+					//result.add(realised_2);
+				}
+				allOperator.add(realised2);
 				LinkSpecification linkSpecification = linkspec.getChildren().get(i);
 				if(linkSpecification.isAtomic()) {
-
-					String operatorAsString =linkspec.getOperator().toString().toLowerCase();
-					NPPhraseSpec operator=new NPPhraseSpec(nlgFactory);
-					operator.addComplement(operatorAsString);
-					Realiser realiser2 = new Realiser(lexicon);
-					NLGElement realised2 = realiser2.realise(operator);
-					//    System.out.println("the realizer is "+realised_2.toString());
-					if (!allOperator.isEmpty()) {
-						AggregationResult = AggregationResult + "," +realised2.toString();
-						//System.out.println(realised_2.toString());
-						//result.add(realised_2);
-					}
-					allOperator.add(realised2);
-					//nlgElements.add(realised2);
 
 					name = lsPreProcessor.atomicSimilarity(linkSpecification);
 					PhraseElement resourceValue = lsPreProcessor.resourceValue(linkSpecification);
@@ -94,22 +93,18 @@ public class LinkSpecSummery {
 					if(d==1) {
 						stringTheta=" exact match of";
 						name.addPreModifier(stringTheta);
-						//name.addPostModifier(stringTheta);
 					}
 					if(d==0) {
 						stringTheta=    "complete mismatch of";
 						name.addPreModifier(stringTheta);
-						//name.addPostModifier(stringTheta);
 					}
 					if(d>0&& d<1) {
-
 						Realiser clause2Realiser = new Realiser(lexicon);
 						NLGElement thetaRealised = clause2Realiser.realise(theta);
 
 						String	thetaAString=thetaRealised.toString();
 						stringTheta=thetaAString +" of ";
 						name.addPreModifier(stringTheta);
-						//name.addPostModifier(stringTheta);
 					}
 					measureName = lsPreProcessor.atomicSimilarity(linkSpecification);
 					//The Object
@@ -185,22 +180,28 @@ public class LinkSpecSummery {
 		Realiser clause22Realiser = new Realiser(lexicon);
 		NLGElement sameResource = clause22Realiser.realise(resourceValue);
 		String sameResourceAsString=sameResource.toString();
-		String p=    "the "+sameResourceAsString+" of "+"the source "+"and "+"the target";
+		String p=    "the "+sameResourceAsString+" of "+"the source "+"and "+"the target"+" resources";
 		PPPhraseSpec pp = nlgFactory.createPrepositionPhrase(p);
 		if(rightProp.equals(leftProp)) {
 			subject1.addComplement(pp);
-			//clause1.setVerb("have");
-			//    clause1.setObject(resourceValue);
 			return subject1;
 		}
 		else {
 			subject2.addComplement(coordinate);
-			//clause2.setVerb("have");
 			return subject2;
 
 		}
 
 	}
 
+
+
+	/*public void flush() {
+
+		previousSubject="";
+		previousStringTheta="";
+		objCollection= nlgFactory.createCoordinatedPhrase() ;
+		result =new ArrayList<NLGElement>();
+	}*/
 
 }

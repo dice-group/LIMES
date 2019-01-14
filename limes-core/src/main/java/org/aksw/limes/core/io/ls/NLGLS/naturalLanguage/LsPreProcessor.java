@@ -21,14 +21,6 @@ public class LsPreProcessor {
 	protected static Lexicon lexicon = new XMLLexicon();                     
 	protected static NLGFactory nlgFactory = new NLGFactory(lexicon);
 
-	//    public static CoordinatedPhraseElement sameSubject() throws UnsupportedMLImplementationException {
-	//
-	//        CoordinatedPhraseElement sameSubj = nlgFactory.createCoordinatedPhrase("the source","the target");
-	//
-	//        return sameSubj;
-	//    }
-
-
 	public NPPhraseSpec atomicMeasure(LinkSpecification linkSpec) throws UnsupportedMLImplementationException {
 		String atomicMeasureString = linkSpec.getAtomicMeasure();
 		NPPhraseSpec n1=nlgFactory.createNounPhrase(atomicMeasureString);
@@ -102,16 +94,17 @@ public class LsPreProcessor {
 		if(rightProp.contains("_"))
 			rightProp=rightProp.replace("_", " ");
 
-		PhraseElement leftP=nlgFactory.createNounPhrase("the","source");
+		PhraseElement leftP=nlgFactory.createNounPhrase("the","resource");
 		leftP.setFeature(Feature.POSSESSIVE, true);
 		PhraseElement leftPValue=nlgFactory.createNounPhrase(leftProp);
 		leftPValue.setFeature(InternalFeature.SPECIFIER, leftP);
-
-		PhraseElement rightP=nlgFactory.createNounPhrase("the","target");
+		leftPValue.addComplement("of the source");
+		//PhraseElement leftSource=nlgFactory.createNounPhrase("the","resource");
+		PhraseElement rightP=nlgFactory.createNounPhrase("the","resource");
 		rightP.setFeature(Feature.POSSESSIVE, true);
 		PhraseElement rightPValue=nlgFactory.createNounPhrase(rightProp);
 		rightPValue.setFeature(InternalFeature.SPECIFIER, rightP);
-
+		rightPValue.addComplement("of the target");
 		CoordinatedPhraseElement coordinate_1 = nlgFactory.createCoordinatedPhrase(leftPValue,rightPValue);
 
 		return coordinate_1;
@@ -155,11 +148,8 @@ public class LsPreProcessor {
 
 
 		NPPhraseSpec resource=nlgFactory.createNounPhrase("resource");
-		//resource.addPreModifier("same");
 		resource.setFeature(Feature.POSSESSIVE, true);
 		NPPhraseSpec resourceValue=nlgFactory.createNounPhrase(leftProp);
-		//resourceValue.setFeature(InternalFeature.SPECIFIER, resource);
-
 		return resourceValue;
 	}
 	private static String convert(String str) 
@@ -181,8 +171,6 @@ public class LsPreProcessor {
 				} 
 			} 
 
-			// If apart from first character 
-			// Any one is in Upper-case 
 			else if (ch[i] >= 'A' && ch[i] <= 'Z')  
 
 				// Convert into Lower-Case 
