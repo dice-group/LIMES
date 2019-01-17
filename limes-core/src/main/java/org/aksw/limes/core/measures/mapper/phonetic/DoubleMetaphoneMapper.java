@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.mapper.string;
+package org.aksw.limes.core.measures.mapper.phonetic;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -15,14 +15,11 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
-import org.aksw.limes.core.measures.measure.phoneticmeasure.SoundexMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.DoubleMetaphoneMeasure;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 
-/**
- * @author Kevin Dreßler
- */
-public class SoundexMapper extends AMapper {
+public class DoubleMetaphoneMapper extends AMapper {
 
     /**
      * Computes a mapping between a source and a target.
@@ -58,10 +55,10 @@ public class SoundexMapper extends AMapper {
         // create inverted lists (code=>index of original list)
         invListA = getInvertedList(listA);
         invListB = getInvertedList(listB);
+        
         Deque<Triple<Integer, List<Integer>, List<Integer>>> similarityBook = new ArrayDeque<>();
         // construct trie from smaller list
         TrieNode trie = TrieNode.recursiveAddAll(invListB);
-        int maxDistance = getMaxDistance(threshold);
         // iterate over other list
         for (Map.Entry<String, List<Integer>> entry : invListA.entrySet()) {
             // for each entry do trie search
@@ -75,11 +72,8 @@ public class SoundexMapper extends AMapper {
                             current.getNode().getReferences()));
                 }
                 for (Map.Entry<Character, TrieNode> nodeEntry : childs) {
-                    if (nodeEntry.getKey().equals(entry.getKey().charAt(current.getPosition()))) {
+                    if (entry.getKey().length()>current.getPosition() && nodeEntry.getKey().equals(entry.getKey().charAt(current.getPosition()))) {
                         queue.push(new TrieSearchState(current.getDistance(), current.getPosition() + 1,
-                                nodeEntry.getValue()));
-                    } else if (current.getDistance() < maxDistance) {
-                        queue.push(new TrieSearchState(current.getDistance() + 1, current.getPosition() + 1,
                                 nodeEntry.getValue()));
                     }
                 }
@@ -92,16 +86,19 @@ public class SoundexMapper extends AMapper {
                 String a = listA.get(i);
                 for (Integer j : t.getRight()) {
                     String b = listB.get(j);
+                    int length = a.length();
+                    if (a.length()>b.length()) {
+                    	length = b.length();
+                    }
                     for (String sourceUri : sourceMap.get(a)) {
                         for (String targetUri : targetMap.get(b)) {
                             result.add(sourceUri, targetUri,
-                                    (1.0d - (t.getLeft().doubleValue() / (double) SoundexMeasure.codeLength)));
+                                    (1.0d - (t.getLeft().doubleValue() / length)));
                         }
                     }
                 }
             }
         }
-
         return result;
     }
 
@@ -109,21 +106,23 @@ public class SoundexMapper extends AMapper {
         Map<String, List<Integer>> result = new HashMap<>(list.size());
         for (int i = 0, listASize = list.size(); i < listASize; i++) {
             String s = list.get(i);
-            String code = SoundexMeasure.getCode(s);
+            String code = DoubleMetaphoneMeasure.getCode(s);
             List<Integer> ref;
-            if (!result.containsKey(code)) {
-                ref = new LinkedList<>();
-                result.put(code, ref);
-            } else {
-                ref = result.get(code);
-            }
-            ref.add(i);
+           // for (String c : code) {
+            	if (!result.containsKey(code)) {
+            		ref = new LinkedList<>();
+            		result.put(code, ref);
+            	} else {
+            		ref = result.get(code);
+            	}
+            	ref.add(i);
+           // }
         }
         return result;
     }
 
     public String getName() {
-        return "soundex";
+        return "doubleMetaphone";
     }
 
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
@@ -134,39 +133,37 @@ public class SoundexMapper extends AMapper {
         return 1000d;
     }
 
-    private int getMaxDistance(double threshold) {
-        return new Double(Math.floor(SoundexMeasure.codeLength * (1 - threshold))).intValue();
-    }
-
-    static class TrieNode {
+    private static class TrieNode {
 
         private Map<Character, TrieNode> children;
         private List<Integer> references;
 
-        public TrieNode(List<Integer> references) {
+        TrieNode(List<Integer> references) {
             this.references = references;
             this.children = new HashMap<>();
         }
 
-        public static TrieNode recursiveAddAll(Map<String, List<Integer>> code2References) {
+        static TrieNode recursiveAddAll(Map<String, List<Integer>> code2References) {
             TrieNode root = new TrieNode(null);
             TrieNode.recursiveAddAll(root, code2References);
             return root;
         }
 
-        public static void recursiveAddAll(TrieNode root, Map<String, List<Integer>> code2References) {
-            for (Map.Entry<String, List<Integer>> entry : code2References.entrySet())
-                TrieNode.recursiveAdd(root, entry.getKey(), entry.getValue());
+        static void recursiveAddAll(TrieNode root, Map<String, List<Integer>> code2References) {
+            for (Map.Entry<String, List<Integer>> entry : code2References.entrySet()) {
+            	TrieNode.recursiveAdd(root, entry.getKey(), entry.getValue());
+            }
         }
 
-        private static void recursiveAdd(TrieNode node, String code, List<Integer> references) {
-            if (code.length() > 1)
+        static void recursiveAdd(TrieNode node, String code, List<Integer> references) {
+            if (code.length() > 1) {
                 TrieNode.recursiveAdd(node.addChild(code.charAt(0), null), code.substring(1), references);
-            else
+            } else {
                 node.addChild(code.charAt(0), references);
+            }
         }
 
-        public TrieNode addChild(char symbol, List<Integer> references) {
+        TrieNode addChild(char symbol, List<Integer> references) {
             TrieNode child;
             if (!this.children.containsKey(symbol)) {
                 child = new TrieNode(references);
@@ -177,39 +174,38 @@ public class SoundexMapper extends AMapper {
             return child;
         }
 
-        public List<Integer> getReferences() {
+        List<Integer> getReferences() {
             return this.references;
         }
 
-        public Set<Map.Entry<Character, TrieNode>> getChildren() {
+        Set<Map.Entry<Character, TrieNode>> getChildren() {
             return this.children.entrySet();
         }
     }
 
-    static class TrieSearchState {
+    private static class TrieSearchState {
+
         private int distance;
         private int position;
         private TrieNode node;
 
-        public TrieSearchState(int distance, int position, TrieNode node) {
+        TrieSearchState(int distance, int position, TrieNode node) {
             this.distance = distance;
             this.position = position;
             this.node = node;
         }
 
-        public int getDistance() {
+        int getDistance() {
             return distance;
         }
 
-        public int getPosition() {
+        int getPosition() {
             return position;
         }
 
-        public TrieNode getNode() {
+        TrieNode getNode() {
             return node;
         }
     }
-
-    ;
 
 }

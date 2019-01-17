@@ -2,49 +2,27 @@ package org.aksw.limes.core.measures.measure.phoneticmeasure;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.string.StringMeasure;
-import org.apache.commons.codec.language.DoubleMetaphone;
+import org.apache.commons.codec.language.Metaphone;
 
-public class DoubleMetaphoneMeasure extends StringMeasure {
+public class MetaphoneMeasure extends StringMeasure {
 
 	public static String getCode(String string) {
-		DoubleMetaphone doublemetaphone = new DoubleMetaphone();
-		return doublemetaphone.encode(string);
+		Metaphone metaphone = new Metaphone();
+		return metaphone.encode(string);
 	}
-	
+
 	public double proximity(String s1, String s2) {
 		char[] c1, c2;
 		c1 = getCode(s1).toCharArray();
 		c2 = getCode(s2).toCharArray();
-		int shorter;
-		int longer;
-		if (c1.length>c2.length) {
-			shorter = c2.length; 
-			longer = c1.length;
-		}else {
-			shorter =  c1.length;
-			longer = c2.length;
-		}
 		double distance = 0d;
-		for (int i = 0; i < shorter; i++)
-			if (c1[i] != c2[i])
+		for (int i = 0; i < c1.length; i++) {
+			if (c1[i] != c2[i]) {
 				distance += 1d;
-		return (1.0d - (distance / (double) longer));
+			}
+		}
+		return (1.0d - (distance / (double) c1.length));
 	}
-
-//	public double proximity(String s1, String s2) {
-//		char[] c1, c2;
-//		c1 = getCode(s1).toCharArray();
-//		c2 = getCode(s2).toCharArray();
-//		double proximity = 0d;
-//		double check;
-//	
-//				check = getProximity(c1,c2);
-//				if (check > proximity) {
-//					proximity = check;
-//				}
-//		
-//		return proximity;
-//	}
 
 	@Override
 	public int getPrefixLength(int tokensNumber, double threshold) {
@@ -103,12 +81,11 @@ public class DoubleMetaphoneMeasure extends StringMeasure {
 
 	@Override
 	public String getName() {
-		return "doublemeta";
+		return "meta";
 	}
 
 	@Override
 	public double getRuntimeApproximation(double mappingSize) {
 		return mappingSize / 1000d;
 	}
-
 }

@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.mapper.string;
+package org.aksw.limes.core.measures.mapper.phonetic;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

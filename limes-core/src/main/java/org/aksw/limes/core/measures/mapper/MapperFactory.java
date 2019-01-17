@@ -1,20 +1,20 @@
 package org.aksw.limes.core.measures.mapper;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
+import org.aksw.limes.core.measures.mapper.phonetic.DoubleMetaphoneMapper;
+import org.aksw.limes.core.measures.mapper.phonetic.KoelnPhoneticMapper;
+import org.aksw.limes.core.measures.mapper.phonetic.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
 import org.aksw.limes.core.measures.mapper.resourcesets.SetJaccardMapper;
 import org.aksw.limes.core.measures.mapper.space.HR3Mapper;
-import org.aksw.limes.core.measures.mapper.string.DoubleMetaphoneMapper;
 import org.aksw.limes.core.measures.mapper.string.EDJoinMapper;
 import org.aksw.limes.core.measures.mapper.string.ExactMatchMapper;
 import org.aksw.limes.core.measures.mapper.string.JaroMapper;
 import org.aksw.limes.core.measures.mapper.string.JaroWinklerMapper;
-import org.aksw.limes.core.measures.mapper.string.KoelnPhoneticMapper;
 import org.aksw.limes.core.measures.mapper.string.MongeElkanMapper;
 import org.aksw.limes.core.measures.mapper.string.PPJoinPlusPlus;
 import org.aksw.limes.core.measures.mapper.string.RatcliffObershelpMapper;
-import org.aksw.limes.core.measures.mapper.string.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.string.fastngram.FastNGramMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.AfterMapper;
 import org.aksw.limes.core.measures.mapper.temporal.allenAlgebra.complex.BeforeMapper;
