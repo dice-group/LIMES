@@ -1,12 +1,18 @@
-package org.aksw.limes.core.measures.measure.string;
+package org.aksw.limes.core.measures.measure.phoneticmeasure;
 
 import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.measures.measure.string.StringMeasure;
+import org.apache.commons.codec.language.Soundex;
 
 public class SoundexMeasure extends StringMeasure {
 
     public static final int codeLength = 6;
 
     public static String getCode(String string) {
+    	Soundex so = new Soundex();
+        return so.encode(string);
+    }
+  /*  public static String getCode(String string) {
         char[] in = string.toUpperCase().toCharArray();
         char[] out = new char[codeLength];
         int i = 0;
@@ -39,9 +45,9 @@ public class SoundexMeasure extends StringMeasure {
             j++;
         }
         return String.valueOf(out);
-    }
+    }*/
 
-    private static int getCode(char x) {
+/*    private static int getCode(char x) {
         switch (x) {
         case 'B':
         case 'F':
@@ -71,7 +77,7 @@ public class SoundexMeasure extends StringMeasure {
             return -1;
         }
     }
-
+*/
     public double proximity(String s1, String s2) {
         char[] c1, c2;
         c1 = SoundexMeasure.getCode(s1).toCharArray();

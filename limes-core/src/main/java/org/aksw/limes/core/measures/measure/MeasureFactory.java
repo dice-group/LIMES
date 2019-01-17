@@ -1,8 +1,9 @@
 package org.aksw.limes.core.measures.measure;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
-import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
-import org.aksw.limes.core.measures.measure.space.GeoOrthodromicMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.DoubleMetaphoneMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.KoelnPhoneticMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.average.NaiveAverageMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.frechet.NaiveFrechetMeasure;
 import org.aksw.limes.core.measures.measure.pointsets.hausdorff.CentroidIndexedHausdorffMeasure;
@@ -20,19 +21,18 @@ import org.aksw.limes.core.measures.measure.pointsets.surjection.FairSurjectionM
 import org.aksw.limes.core.measures.measure.pointsets.surjection.NaiveSurjectionMeasure;
 import org.aksw.limes.core.measures.measure.resourcesets.SetJaccardMeasure;
 import org.aksw.limes.core.measures.measure.space.EuclideanMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoOrthodromicMeasure;
 import org.aksw.limes.core.measures.measure.space.ManhattanMeasure;
 import org.aksw.limes.core.measures.measure.string.CosineMeasure;
-import org.aksw.limes.core.measures.measure.string.DoubleMetaphoneMeasure;
 import org.aksw.limes.core.measures.measure.string.ExactMatchMeasure;
 import org.aksw.limes.core.measures.measure.string.JaccardMeasure;
 import org.aksw.limes.core.measures.measure.string.JaroMeasure;
 import org.aksw.limes.core.measures.measure.string.JaroWinklerMeasure;
-import org.aksw.limes.core.measures.measure.string.KoelnPhoneticMeasure;
 import org.aksw.limes.core.measures.measure.string.LevenshteinMeasure;
 import org.aksw.limes.core.measures.measure.string.MongeElkanMeasure;
 import org.aksw.limes.core.measures.measure.string.QGramSimilarityMeasure;
 import org.aksw.limes.core.measures.measure.string.RatcliffObershelpMeasure;
-import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.string.TrigramMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.AfterMeasure;
 import org.aksw.limes.core.measures.measure.temporal.allenAlgebra.BeforeMeasure;

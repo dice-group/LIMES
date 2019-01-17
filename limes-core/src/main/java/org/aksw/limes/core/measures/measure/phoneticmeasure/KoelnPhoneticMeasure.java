@@ -1,6 +1,7 @@
-package org.aksw.limes.core.measures.measure.string;
+package org.aksw.limes.core.measures.measure.phoneticmeasure;
 
 import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.measures.measure.string.StringMeasure;
 import org.apache.commons.codec.language.ColognePhonetic;
 
 public class KoelnPhoneticMeasure extends StringMeasure {

@@ -1,9 +1,10 @@
-package org.aksw.limes.core.measures.measure.string;
-
-import org.aksw.limes.core.io.cache.Instance;
+package org.aksw.limes.core.measures.measure.phoneticmeasure;
 
 import java.util.Arrays;
 import java.util.List;
+
+import org.aksw.limes.core.io.cache.Instance;
+import org.aksw.limes.core.measures.measure.string.StringMeasure;
 
 public class DoubleMetaphoneMeasure extends StringMeasure {
 
