@@ -89,7 +89,13 @@ public class MeasureFactory {
     public static final String DOUBLEMETA = "doublemeta";
     public static final String KOELN = "koeln";
     public static final String TRIGRAM = "trigram";
-
+    public static final String META = "meta";
+    public static final String NYSIIS = "nysiis";
+    public static final String CAVERPHONE1 = "caverphone1";
+    public static final String CAVERPHONE2 = "caverphone2";
+    public static final String REFINEDSOUNDEX = "refinedsoundex";
+    public static final String MATCHRATING = "matchrating";
+    public static final String DAITCHMOKOTOFF = "daitchmokotoff";
     // vector space measures
     public static final String EUCLIDEAN = "euclidean";
     public static final String MANHATTAN = "manhattan";
@@ -186,7 +192,6 @@ public class MeasureFactory {
         if (measure.startsWith(OVERLAP)) {
             return MeasureType.OVERLAP;
         }
-
         if (measure.startsWith(QGRAMS)) {
             return MeasureType.QGRAMS;
         }
@@ -201,6 +206,27 @@ public class MeasureFactory {
         }
         if (measure.startsWith(KOELN)) {
             return MeasureType.KOELN;
+        }
+        if (measure.startsWith(META)) {
+            return MeasureType.META;
+        }
+        if (measure.startsWith(REFINEDSOUNDEX)) {
+            return MeasureType.REFINEDSOUNDEX;
+        }
+        if (measure.startsWith(NYSIIS)) {
+            return MeasureType.NYSIIS;
+        }
+        if (measure.startsWith(MATCHRATING)) {
+            return MeasureType.MATCHRATING;
+        }
+        if (measure.startsWith(CAVERPHONE1)) {
+            return MeasureType.CAVERPHONE1;
+        }
+        if (measure.startsWith(CAVERPHONE2)) {
+            return MeasureType.CAVERPHONE2;
+        }
+        if (measure.startsWith(DAITCHMOKOTOFF)) {
+            return MeasureType.DAITCHMOKOTOFF;
         }
         if (measure.startsWith(TRIGRAM)) {
             return MeasureType.TRIGRAM;
