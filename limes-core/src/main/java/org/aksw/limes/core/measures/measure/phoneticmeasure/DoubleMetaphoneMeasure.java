@@ -8,27 +8,18 @@ public class DoubleMetaphoneMeasure extends StringMeasure {
 
 	public static String getCode(String string) {
 		DoubleMetaphone doublemetaphone = new DoubleMetaphone();
-		return doublemetaphone.encode(string);
+		return doublemetaphone.doubleMetaphone(string,true);
 	}
 	
 	public double proximity(String s1, String s2) {
 		char[] c1, c2;
 		c1 = getCode(s1).toCharArray();
 		c2 = getCode(s2).toCharArray();
-		int shorter;
-		int longer;
-		if (c1.length>c2.length) {
-			shorter = c2.length; 
-			longer = c1.length;
-		}else {
-			shorter =  c1.length;
-			longer = c2.length;
-		}
 		double distance = 0d;
-		for (int i = 0; i < shorter; i++)
+		for (int i = 0; i < c1.length; i++)
 			if (c1[i] != c2[i])
 				distance += 1d;
-		return (1.0d - (distance / (double) longer));
+		return (1.0d - (distance / (double) c1.length));
 	}
 
 //	public double proximity(String s1, String s2) {

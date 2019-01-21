@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.aksw.limes.core.measures.measure.phoneticmeasure.SoundexMeasure;
-import org.apache.commons.codec.language.Soundex;
+import org.apache.commons.codec.language.Caverphone1;
+import org.apache.commons.codec.language.DoubleMetaphone;
 public class SoundexTest {
 
 	static Map<String, List<Integer>> getInvertedList(List<String> list) {
@@ -36,14 +37,14 @@ public class SoundexTest {
 		Map<String, List<Integer>> invListA;
 		invListA = getInvertedList(list);
 		System.out.println(invListA.values());
-		Soundex so = new Soundex();
-
+		Caverphone1 co = new Caverphone1();
+       DoubleMetaphone d =new DoubleMetaphone();
 		SoundexMeasure soundMeausre=new SoundexMeasure();
 		String code= SoundexMeasure.getCode("abcdellah");
 		double sim=soundMeausre.proximity("abcdellah", "abdullah");
 		System.out.println("1 "+code);
 		System.out.println("sim "+sim);
-		System.out.println("2 "+so.encode("abdullah"));
+		System.out.println("2 "+co.encode("Abdullah"));
 		// TODO Auto-generated method stub
 
 	}

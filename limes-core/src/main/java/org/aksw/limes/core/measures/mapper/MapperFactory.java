@@ -1,8 +1,11 @@
 package org.aksw.limes.core.measures.mapper;
 
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
-import org.aksw.limes.core.measures.mapper.phonetic.DoubleMetaphoneMapper;
+import org.aksw.limes.core.measures.mapper.phonetic.Caverphone1Mapper;
+import org.aksw.limes.core.measures.mapper.phonetic.Caverphone2Mapper;
+import org.aksw.limes.core.measures.mapper.phonetic.DoubleMetaPhoneMapper;
 import org.aksw.limes.core.measures.mapper.phonetic.KoelnPhoneticMapper;
+import org.aksw.limes.core.measures.mapper.phonetic.MetaPhoneMapper;
 import org.aksw.limes.core.measures.mapper.phonetic.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
@@ -84,7 +87,13 @@ public class MapperFactory {
             case SOUNDEX:
                 return new SoundexMapper();
             case DOUBLEMETA:
-                return new DoubleMetaphoneMapper();
+                return new DoubleMetaPhoneMapper();
+            case META:
+                return new MetaPhoneMapper();
+            case CAVERPHONE1:
+                return new Caverphone1Mapper();
+            case CAVERPHONE2:
+                return new Caverphone2Mapper();
             case KOELN:
                 return new KoelnPhoneticMapper();
             case MONGEELKAN:
