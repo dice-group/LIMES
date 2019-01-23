@@ -3,9 +3,13 @@ package org.aksw.limes.core.measures.mapper;
 import org.aksw.limes.core.exceptions.InvalidMeasureException;
 import org.aksw.limes.core.measures.mapper.phonetic.Caverphone1Mapper;
 import org.aksw.limes.core.measures.mapper.phonetic.Caverphone2Mapper;
+import org.aksw.limes.core.measures.mapper.phonetic.DaitchMokotoffMapper;
 import org.aksw.limes.core.measures.mapper.phonetic.DoubleMetaPhoneMapper;
 import org.aksw.limes.core.measures.mapper.phonetic.KoelnPhoneticMapper;
+import org.aksw.limes.core.measures.mapper.phonetic.MatchRatingMapper;
 import org.aksw.limes.core.measures.mapper.phonetic.MetaPhoneMapper;
+import org.aksw.limes.core.measures.mapper.phonetic.NysiisMapper;
+import org.aksw.limes.core.measures.mapper.phonetic.RefinedSoundexMapper;
 import org.aksw.limes.core.measures.mapper.phonetic.SoundexMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.OrchidMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.SymmetricHausdorffMapper;
@@ -86,6 +90,8 @@ public class MapperFactory {
                 return new ExactMatchMapper();
             case SOUNDEX:
                 return new SoundexMapper();
+            case REFINEDSOUNDEX:
+                return new RefinedSoundexMapper();
             case DOUBLEMETA:
                 return new DoubleMetaPhoneMapper();
             case META:
@@ -96,6 +102,12 @@ public class MapperFactory {
                 return new Caverphone2Mapper();
             case KOELN:
                 return new KoelnPhoneticMapper();
+            case DAITCHMOKOTOFF:
+            	return new DaitchMokotoffMapper();
+            case MATCHRATING:
+            	return new MatchRatingMapper();
+            case NYSIIS:
+                return new NysiisMapper();
             case MONGEELKAN:
                 return new MongeElkanMapper();
             case RATCLIFF:
