@@ -110,8 +110,7 @@ public class DTLEvaluation {
 
     public static void main(String[] args) {
         try {
-//            newEval(args[0]);
-            cleanEval();
+            cleanEval(args[0]);
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -134,13 +133,10 @@ public class DTLEvaluation {
         }
     }
 
-    public static void cleanEval() throws FileNotFoundException {
+    public static void cleanEval(String baseFolder) throws FileNotFoundException {
         // ================================================================================================================
         // Set up output
         // ================================================================================================================
-        String baseFolder = "/tmp/";
-        long start;
-        long end;
         String fMeasureBase = baseFolder + "FMeasure/";
         String precisionBase = baseFolder + "Precision/";
         String recallBase = baseFolder + "Recall/";
@@ -165,7 +161,7 @@ public class DTLEvaluation {
         headerBuilder.append("\n");
         String header = headerBuilder.toString();
 
-        for (int k = 0; k < 1; k++) {
+        for (int k = 0; k < 10; k++) {
 
             PrintWriter writerFMeasure = new PrintWriter(new FileOutputStream(fMeasureBase + k + ".csv", false));
             writerFMeasure.write(header);
