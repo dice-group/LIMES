@@ -1,7 +1,9 @@
 package org.aksw.limes.core.ml.algorithm.dragon.Pruning;
 
 import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.MappingOperations;
+import org.aksw.limes.core.ml.algorithm.classifier.ExtendedClassifier;
 import org.aksw.limes.core.ml.algorithm.dragon.DecisionTree;
 import org.aksw.limes.core.ml.algorithm.dragon.Utils.InstanceCalculator;
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -27,11 +29,7 @@ public class ErrorEstimatePruning extends PruningFunctionDTL{
 	}
 	
 	public static void main(String[] args){
-
-		System.out.println();
-		/*
 		ErrorEstimatePruning eep = new ErrorEstimatePruning();
-		double pC = 0.69;
 		AMapping parentMapping = MappingFactory.createDefaultMapping();
 		parentMapping.add("m1", "m1",1.0);
 		parentMapping.add("m2", "m2",1.0);
@@ -67,10 +65,12 @@ public class ErrorEstimatePruning extends PruningFunctionDTL{
 		nodeMapping.add("m14", "m14",0.0);
 		ExtendedClassifier ec = new ExtendedClassifier("", 0.0);
 		ec.setMapping(nodeMapping);
-		DecisionTree t = new DecisionTree(null, null, null, null, 0, 0, pC, null);
+		DecisionTree t = new DecisionTree(null, null, null, null, 0, 0, 0, null);
 		t.setClassifier(ec);
-		eep.pruneChild(t,parentMapping);
-		*/
+		for(double pc = 0.1; pc <= 1; pc += 0.1) {
+			t.setPruningConfidence(pc);
+			System.out.println(pc + " : " + eep.pruneChild(t, parentMapping));
+		}
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class ErrorEstimatePruning extends PruningFunctionDTL{
 			node.setLeftChild(null);
 		}
 		if(node.getRightChild() != null && pruneChild(node.getRightChild(), node.getClassifier().getMapping())){
-			node.setLeftChild(null);
+			node.setRightChild(null);
 		}
 		return node;
 	}
@@ -102,12 +102,17 @@ public class ErrorEstimatePruning extends PruningFunctionDTL{
 		double parentError = getErrorRate(posNegParent, node.getPruningConfidence());
 		double combinedError = (leftWeight * leftErrorRate + rightWeight * rightErrorRate)/(leftWeight + rightWeight);
 		if(parentError < combinedError){
+			System.out.println(true);
 			return true;
 		}
+		System.out.println(false);
 		return false;
 	}
 	
 	private double getErrorRate(double[] posNeg, double confidence){
+		if (posNeg[0] == 0 && posNeg[1] == 0){
+			return 0;
+		}
 		double z = 0.0;
 		if(confidence == defaultConfidence){
 			z = 0.69;

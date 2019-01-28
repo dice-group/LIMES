@@ -194,10 +194,12 @@ public class XMLConfigurationReader extends AConfigurationReader {
     @Override
     public Configuration read() {
         try {
-            File f = new File(fileNameOrUri);
-            InputStream input = new FileInputStream(f);
+//            File f = new File(this.getClass().getClassLoader().getResource(fileNameOrUri).getFile());
+//            File f = new File(fileNameOrUri);
+//            InputStream input = new FileInputStream(f);
+            InputStream input = this.getClass().getClassLoader().getResourceAsStream(fileNameOrUri);
             return validateAndRead(input, fileNameOrUri);
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             logger.warn(e.getMessage());
             e.printStackTrace();
             logger.warn("Some values were not set. Crossing my fingers and using defaults.");

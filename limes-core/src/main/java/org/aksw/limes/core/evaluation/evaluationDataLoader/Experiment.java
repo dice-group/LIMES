@@ -30,7 +30,8 @@ public class Experiment {
     public static AMapping readOAEIMapping(String file) {
         AMapping m = MappingFactory.createDefaultMapping();
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(Experiment.class.getClassLoader().getResourceAsStream(file), "UTF8"));
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
             //read properties;
             String s = reader.readLine();
             String e1 = "", e2;
@@ -58,7 +59,8 @@ public class Experiment {
         ACache c = new MemoryCache();
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
+            reader = new BufferedReader(new InputStreamReader(Experiment.class.getClassLoader().getResourceAsStream(file), "UTF8"));
+//            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
             //read properties;
             String s = reader.readLine();
             while (s != null) {

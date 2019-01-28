@@ -1,9 +1,6 @@
 package org.aksw.limes.core.evaluation.evaluationDataLoader;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
@@ -81,7 +78,10 @@ public class PropMapper {
         PropertyMapping pM = new PropertyMapping();
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader(folder + filename));
+//            reader = new BufferedReader(new FileReader(PropMapper.class.getClassLoader().getResource(folder + filename).getFile()));
+
+            reader = new BufferedReader(new InputStreamReader(PropMapper.class.getClassLoader().getResourceAsStream(folder + filename)));
+//            reader = new BufferedReader(new FileReader(folder + filename));
             String s = reader.readLine();
             String split[];
             while (s != null && s.length() > 0) {
@@ -98,9 +98,6 @@ public class PropMapper {
             }
             reader.close();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {

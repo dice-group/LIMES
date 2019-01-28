@@ -109,7 +109,8 @@ public class ActiveDTLEvaluation {
 		long end;
 //		String[] datasets = { "dbplinkedmdb", "person1full", "person2full", "drugs", "restaurantsfull", "dblpacm",
 //				"abtbuy", "dblpscholar", "amazongoogleproducts" };
-		String[] datasets = {"drugs", "restaurantsfull", "dbplinkedmdb", "abtbuy"};
+		String[] datasets = {"drugs"};
+//		, "restaurantsfull", "dbplinkedmdb", "abtbuy"};
 
 		String header = "Iterations\tGloE\tGloG\tGinG\tGinE\n";
 

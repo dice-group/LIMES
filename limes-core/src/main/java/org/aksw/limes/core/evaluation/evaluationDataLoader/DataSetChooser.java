@@ -10,6 +10,7 @@ import org.aksw.limes.core.evaluation.oracle.IOracle;
 import org.aksw.limes.core.evaluation.oracle.OracleFactory;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.cache.HybridCache;
+import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -227,8 +228,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getPersonNew() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Persons1/");
+        param.put(MapKey.BASE_FOLDER, "datasets/");
+        param.put(MapKey.DATASET_FOLDER, "datasets/Persons1/");
         param.put(MapKey.CONFIG_FILE, "personsNew.xml");
         param.put(MapKey.REFERENCE_FILE, "dataset11_dataset12_goldstandard_person.xml");
         param.put(MapKey.SOURCE_FILE, "person11.nt");
@@ -266,8 +267,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getPerson1() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Persons1/");
+        param.put(MapKey.BASE_FOLDER, "datasets/");
+        param.put(MapKey.DATASET_FOLDER, "datasets/Persons1/");
         param.put(MapKey.CONFIG_FILE, "persons1.xml");
         param.put(MapKey.REFERENCE_FILE, "dataset11_dataset12_goldstandard_person.xml");
         param.put(MapKey.SOURCE_FILE, "person11.nt");
@@ -303,8 +304,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getOAEI2014Books() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/OAEI2014/");
+        param.put(MapKey.BASE_FOLDER, "datasets/");
+        param.put(MapKey.DATASET_FOLDER, "datasets/OAEI2014/");
         param.put(MapKey.CONFIG_FILE, "oaei2014_identity.xml");
         param.put(MapKey.REFERENCE_FILE, "oaei2014_identity_mappings.rdf");
         param.put(MapKey.SOURCE_FILE, "oaei2014_identity_a.owl");
@@ -334,8 +335,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getPerson1CSV() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Persons1/");
+        param.put(MapKey.BASE_FOLDER, "datasets/");
+        param.put(MapKey.DATASET_FOLDER, "datasets/Persons1/");
         param.put(MapKey.CONFIG_FILE, "persons1_csv.xml");
         param.put(MapKey.REFERENCE_FILE, "dataset11_dataset12_goldstandard_person.xml.csv");
         param.put(MapKey.SOURCE_FILE, "person11.nt");
@@ -364,8 +365,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getPerson2() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Persons2/");
+        param.put(MapKey.BASE_FOLDER, "datasets/");
+        param.put(MapKey.DATASET_FOLDER, "datasets/Persons2/");
         param.put(MapKey.CONFIG_FILE, "persons2.xml");
         param.put(MapKey.REFERENCE_FILE, "dataset21_dataset22_goldstandard_person.xml");
         param.put(MapKey.SOURCE_FILE, "person21.nt");
@@ -408,8 +409,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getPerson2CSV() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Persons2/");
+        param.put(MapKey.BASE_FOLDER, "datasets/");
+        param.put(MapKey.DATASET_FOLDER, "datasets/Persons2/");
         param.put(MapKey.CONFIG_FILE, "persons2_csv.xml");
         param.put(MapKey.REFERENCE_FILE, "dataset21_dataset22_goldstandard_person.xml.csv");
         param.put(MapKey.SOURCE_FILE, "person21.nt");
@@ -438,8 +439,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getRestaurant() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Restaurants/");
+        param.put(MapKey.BASE_FOLDER, "datasets/");
+        param.put(MapKey.DATASET_FOLDER, "datasets/Restaurants/");
         param.put(MapKey.CONFIG_FILE, "restaurants.xml");
         param.put(MapKey.REFERENCE_FILE, "restaurant1_restaurant2_goldstandard.rdf");
         param.put(MapKey.SOURCE_FILE, "restaurant1.nt");
@@ -491,8 +492,8 @@ public class DataSetChooser {
 
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Restaurants/");
+        param.put(MapKey.BASE_FOLDER, "datasets/");
+        param.put(MapKey.DATASET_FOLDER, "datasets/Restaurants/");
         param.put(MapKey.CONFIG_FILE, "restaurants_csv.xml");
         param.put(MapKey.REFERENCE_FILE, "restaurant1_restaurant2_goldstandard.rdf.csv");
         param.put(MapKey.SOURCE_FILE, "restaurant1.nt");
@@ -525,8 +526,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getDBLPACM() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/"/* "Examples/GeneticEval/" */);
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/DBLP-ACM/" /* "Datasets/DBLP-ACM/" */);
+        param.put(MapKey.BASE_FOLDER, "datasets/"/* "Examples/GeneticEval/" */);
+        param.put(MapKey.DATASET_FOLDER, "datasets/DBLP-ACM/" /* "Datasets/DBLP-ACM/" */);
         param.put(MapKey.CONFIG_FILE, "PublicationData.xml");
         param.put(MapKey.REFERENCE_FILE, "DBLP-ACM_perfectMapping.csv");
         param.put(MapKey.SOURCE_FILE, "ACM.csv");
@@ -557,8 +558,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getAbtBuy() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/"/* "Examples/GeneticEval/" */);
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Abt-Buy/" /* "Datasets/Abt-Buy/" */);
+        param.put(MapKey.BASE_FOLDER, "datasets/"/* "Examples/GeneticEval/" */);
+        param.put(MapKey.DATASET_FOLDER, "datasets/Abt-Buy/" /* "Datasets/Abt-Buy/" */);
         param.put(MapKey.CONFIG_FILE, "Abt-Buy.xml");
         param.put(MapKey.REFERENCE_FILE, "abt_buy_perfectMapping.csv");
         param.put(MapKey.SOURCE_FILE, "Abt.csv");
@@ -590,8 +591,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getDBLPScholar() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/"/* "Examples/GeneticEval/" */);
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/DBLP-Scholar/"/* "Datasets/DBLP-Scholar/" */);
+        param.put(MapKey.BASE_FOLDER, "datasets/"/* "Examples/GeneticEval/" */);
+        param.put(MapKey.DATASET_FOLDER, "datasets/DBLP-Scholar/"/* "Datasets/DBLP-Scholar/" */);
         param.put(MapKey.CONFIG_FILE, "DBLP-Scholar.xml");
         param.put(MapKey.REFERENCE_FILE, "DBLP-Scholar_perfectMapping.csv");
         param.put(MapKey.SOURCE_FILE, "DBLP1.csv");
@@ -625,8 +626,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getAmazonGoogleProducts() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/Amazon-GoogleProducts/");
+        param.put(MapKey.BASE_FOLDER, "datasets/");
+        param.put(MapKey.DATASET_FOLDER, "datasets/Amazon-GoogleProducts/");
         param.put(MapKey.CONFIG_FILE, "Amazon-GoogleProducts.xml");
         param.put(MapKey.REFERENCE_FILE, "Amzon_GoogleProducts_perfectMapping.csv");
         param.put(MapKey.SOURCE_FILE, "Amazon.csv");
@@ -659,8 +660,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getDBPediaLinkedMDB() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/dbpedia-linkedmdb/");
+        param.put(MapKey.BASE_FOLDER, "datasets/");
+        param.put(MapKey.DATASET_FOLDER, "datasets/dbpedia-linkedmdb/");
         param.put(MapKey.CONFIG_FILE, "dbpedia-linkedmdb.xml");
         param.put(MapKey.REFERENCE_FILE, "reference.csv");
         param.put(MapKey.SOURCE_FILE, "source.csv");
@@ -680,21 +681,31 @@ public class DataSetChooser {
         param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
         param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
         param.put(MapKey.REFERENCE_MAPPING,
-                OracleFactory
+                fixMovies(OracleFactory
                         .getOracle((String) /* param.get(MapKey.BASE_FOLDER)+ */param.get(MapKey.DATASET_FOLDER)
                                 + param.get(MapKey.REFERENCE_FILE), "tab", "simple")
-                        .getMapping());
+                        .getMapping()));
 
         param.put(MapKey.SOURCE_CLASS, "dbpedia:film");
         param.put(MapKey.TARGET_CLASS, "linkedmdb:movie");
         return param;
     }
 
+    private static AMapping fixMovies(AMapping m){
+        AMapping newM = MappingFactory.createDefaultMapping();
+        for (String s : m.getMap().keySet()) {
+            for (String t : m.getMap().get(s).keySet()) {
+               newM.add("<" + s + ">", "<" + t + ">", m.getMap().get(s).get(t));
+            }
+        }
+        return newM;
+    }
+
     private static HashMap<MapKey, Object> getDrugs() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/dailymed-drugbank-ingredients/");
+        param.put(MapKey.BASE_FOLDER, "datasets/");
+        param.put(MapKey.DATASET_FOLDER, "datasets/dailymed-drugbank-ingredients/");
         param.put(MapKey.CONFIG_FILE, "dailymed-drugbank.xml");
         param.put(MapKey.REFERENCE_FILE, "reference2.csv");
         param.put(MapKey.SOURCE_FILE, "source2.csv");

@@ -439,10 +439,10 @@ public class Dragon extends ACoreMLAlgorithm {
 				} else {
 					resLS = raisedLS;
 				}
-				logger.debug("Setting threshold to: " + resLS.getThreshold());
+				logger.info("Setting threshold to: " + resLS.getThreshold());
 			}
-			if (checkIfThereWasBetterLSBefore(resLS, null, null)) {
-				logger.debug("Already had better LinkSpecification: " + bestLS);
+			if (checkIfThereWasBetterLSBefore(resLS, sourceCache, targetCache)) {
+				logger.info("Already had better LinkSpecification: " + bestLS);
 			} else {
 				logger.info("Learned LinkSpecification: " + resLS.toStringOneLine());
 			}
@@ -793,7 +793,7 @@ public class Dragon extends ACoreMLAlgorithm {
 	 * 
 	 * @param ls
 	 *            LinkSpec to be cleaned of the delta shift
-	 * @param parentIsMinus
+	 * @param measureIsMinus
 	 *            true if measure is minus
 	 * @param threshold
 	 *            if negative subtracted, if positive added to atomic measures
@@ -1030,6 +1030,7 @@ public class Dragon extends ACoreMLAlgorithm {
 			DecisionTree.fitnessFunction.setDt(root);
 			DecisionTree.maxDepth = (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
 			root.buildTree((int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
+			LinkSpecification unpruned = root.getTotalLS();
 			logger.info("FULL:\n" + root.toString());
 
 			root.prune();
@@ -1038,7 +1039,9 @@ public class Dragon extends ACoreMLAlgorithm {
 			LinkSpecification ls = root.getTotalLS();
 			if (bestLS == null)
 				bestLS = ls;
-			MLResults res = new MLResults(bestLS, null, -1.0, null);
+			HashMap<String, Object> details = new HashMap<>();
+			details.put("unpruned", unpruned);
+			MLResults res = new MLResults(bestLS, null, -1.0, details);
 			return res;
 		}
 	}
