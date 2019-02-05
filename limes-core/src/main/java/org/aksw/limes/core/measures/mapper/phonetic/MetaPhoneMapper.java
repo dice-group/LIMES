@@ -19,6 +19,7 @@ import org.aksw.limes.core.measures.measure.phoneticmeasure.MetaphoneMeasure;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 
+@SuppressWarnings("Duplicates")
 public class MetaPhoneMapper extends AMapper {
 
     /**
@@ -71,13 +72,15 @@ public class MetaPhoneMapper extends AMapper {
                     similarityBook.push(new MutableTriple<>(current.getDistance(), entry.getValue(),
                             current.getNode().getReferences()));
                 }
-                for (Map.Entry<Character, TrieNode> nodeEntry : childs) {
-                    if (nodeEntry.getKey().equals(entry.getKey().charAt(current.getPosition()))) {
-                        queue.push(new TrieSearchState(current.getDistance(), current.getPosition() + 1,
-                                nodeEntry.getValue()));
-                    } else if (current.getDistance() < maxDistance) {
-                        queue.push(new TrieSearchState(current.getDistance() + 1, current.getPosition() + 1,
-                                nodeEntry.getValue()));
+                if (entry.getKey().length() > current.getPosition()) {
+                    for (Map.Entry<Character, TrieNode> nodeEntry : childs) {
+                        if (nodeEntry.getKey().equals(entry.getKey().charAt(current.getPosition()))) {
+                            queue.push(new TrieSearchState(current.getDistance(), current.getPosition() + 1,
+                                    nodeEntry.getValue()));
+                        } else if (current.getDistance() < maxDistance) {
+                            queue.push(new TrieSearchState(current.getDistance() + 1, current.getPosition() + 1,
+                                    nodeEntry.getValue()));
+                        }
                     }
                 }
             }
@@ -106,15 +109,17 @@ public class MetaPhoneMapper extends AMapper {
         Map<String, List<Integer>> result = new HashMap<>(list.size());
         for (int i = 0, listASize = list.size(); i < listASize; i++) {
             String s = list.get(i);
-            String code = MetaphoneMeasure.getCode(s);
-            List<Integer> ref;
-            if (!result.containsKey(code)) {
-                ref = new LinkedList<>();
-                result.put(code, ref);
-            } else {
-                ref = result.get(code);
+            if (!s.equals("")) {
+                String code = MetaphoneMeasure.getCode(s);
+                List<Integer> ref;
+                if (!result.containsKey(code)) {
+                    ref = new LinkedList<>();
+                    result.put(code, ref);
+                } else {
+                    ref = result.get(code);
+                }
+                ref.add(i);
             }
-            ref.add(i);
         }
         return result;
     }
