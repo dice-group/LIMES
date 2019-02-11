@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 public class FMeasure extends APRF implements IQualitativeMeasure {
     static Logger logger = LoggerFactory.getLogger(FMeasure.class);
 
-    /** 
+    /**
      * The method calculates the F-Measure of the machine learning predictions compared to a gold standard
      * @param predictions The predictions provided by a machine learning algorithm
      * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
@@ -23,12 +23,23 @@ public class FMeasure extends APRF implements IQualitativeMeasure {
      */
     @Override
     public double calculate(AMapping predictions, GoldStandard goldStandard) {
+        return calculate(predictions, goldStandard, 1d);
+    }
+
+    /** 
+     * The method calculates the F-Measure of the machine learning predictions compared to a gold standard
+     * @param predictions The predictions provided by a machine learning algorithm
+     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs
+     * @return double - This returns the calculated F-Measure
+     */
+    public double calculate(AMapping predictions, GoldStandard goldStandard, double beta) {
 
         double p = precision(predictions, goldStandard);
         double r = recall(predictions, goldStandard);
+        double beta2 = Math.pow(beta, 2);
 
         if (p + r > 0d)
-            return 2 * p * r / (p + r);
+            return (1 + beta2) * p * r / ((beta2 * p) + r);
         else
             return 0d;
 

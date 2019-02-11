@@ -27,7 +27,7 @@ public class PseudoRefPrecision extends PseudoPrecision {
      */
     @Override
     public double calculate(AMapping predictions, GoldStandard goldStandard) {
-        AMapping res = predictions;
+        AMapping res = predictions.getOnlyPositiveExamples();
         if (useOneToOneMapping)
             res = predictions.getBestOneToOneMappings(predictions); // the first call of prediction just to call the method; ya i know
         double p = res.getMap().keySet().size();
