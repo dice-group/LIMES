@@ -48,7 +48,7 @@
 		</PARAMETER>
         <PARAMETER>
             <NAME>beta</NAME>
-            <VALUE>5</VALUE>
+            <VALUE>5.0</VALUE>
         </PARAMETER>
 	</MLALGORITHM>
 	

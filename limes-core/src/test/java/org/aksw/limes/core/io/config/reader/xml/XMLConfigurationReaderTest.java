@@ -139,10 +139,13 @@ public class XMLConfigurationReaderTest {
         lp.setName("max execution time in minutes");
         lp.setValue(60);
         mlParameters.add(lp);
+        lp = new LearningParameter();
+        lp.setName("beta");
+        lp.setValue(5.0);
+        mlParameters.add(lp);
 
         testConf.setMlAlgorithmName("wombat simple");
-        testConf.setMlImplementationType(MLImplementationType.SUPERVISED_BATCH);
-        testConf.setTrainingDataFile("trainingData.nt");
+        testConf.setMlImplementationType(MLImplementationType.UNSUPERVISED);
         testConf.setMlAlgorithmParameters(mlParameters);
 
 //        String file = System.getProperty("user.dir") +"/resources/lgd-lgd-ml.xml";
