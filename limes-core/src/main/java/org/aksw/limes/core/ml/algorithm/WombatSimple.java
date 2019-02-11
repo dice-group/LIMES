@@ -188,15 +188,11 @@ public class WombatSimple extends AWombat {
     protected void updateScores(Tree<RefinementNode> r) {
         if (r.getchildren() == null || r.getchildren().size() == 0) {
             r.getValue().setfMeasure(fMeasure(r.getValue().getMapping()));
-            r.getValue().setPrecision(precision(r.getValue().getMapping()));
-            r.getValue().setRecall(recall(r.getValue().getMapping()));
             return;
         }
         for (Tree<RefinementNode> child : r.getchildren()) {
             if (child.getValue().getFMeasure() >= 0) {
                 r.getValue().setfMeasure(fMeasure(r.getValue().getMapping()));
-                r.getValue().setPrecision(precision(r.getValue().getMapping()));
-                r.getValue().setRecall(recall(r.getValue().getMapping()));
                 updateScores(child);
             }
         }

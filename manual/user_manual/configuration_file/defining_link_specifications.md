@@ -106,8 +106,16 @@ in the unmatched region on either side of the longest common subsequence.
 * **Soundex**: Soundex is a phonetic algorithm for indexing names by sound, as pronounced in English.
 The goal is for homophones to be encoded to the same representation so that they can be matched
 despite minor differences in spelling. The algorithm mainly encodes consonants, a vowel will not be
-encoded unless it is the first letter. In LIMES, we compute the Soundex distance as the reverse of
+encoded unless it is the first letter. In LIMES, we compute the Soundex similarity score as the reverse of
 the distance between the encoding of the two input strings. 
+* **Koeln**: This phonetic similarity measure uses the Cologne phonetics algorithm which is closely
+related to the previously mentioned Soundex algorithm but is optimized to match the German language.
+In LIMES, we compute the Koeln similarity score as the reverse of the distance between the Cologne 
+phonetics encoding of the two input strings.
+* **DoubleMetaphone**: This is a phonetic algorithm for indexing words by their English pronunciation.
+It was designed based on the Soundex algorithm and aims to deal with most of its shortcomings.
+In LIMES, we compute the DoubleMetaphone similarity score as the reverse of the distance between the
+DoubleMetaphone encoding of the two input strings.
 * **Trigram**: A tri-gram is a group of three consecutive characters taken from a string.
 In LIMES, we measure the similarity of two input strings by counting the number of trigrams they share.
 Formally, we compute the trigram similarity as the normalized sum of absolute differences between

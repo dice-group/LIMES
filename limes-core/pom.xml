@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.aksw.limes</groupId>
         <artifactId>limes-full</artifactId>
-        <version>1.5.5-SNAPSHOT</version>
+        <version>1.5.6-SNAPSHOT</version>
     </parent>
 
     <build>
@@ -306,8 +306,14 @@
             <version>57.1</version>
         </dependency>
 
+        <!-- commons codec for koeln phonetic measure-->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.11</version>
+        </dependency>
+      
         <!-- jena-sparql-api -->
-
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>apache-jena-libs</artifactId>
@@ -432,9 +438,15 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.vividsolutions</groupId>
+            <groupId>org.locationtech.jts</groupId>
             <artifactId>jts</artifactId>
-            <version>1.13</version>
+            <version>1.16.0</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.locationtech.jts</groupId>
+            <artifactId>jts-core</artifactId>
+            <version>1.16.0</version>
         </dependency>
         <dependency>
             <groupId>algorithms.edjoin</groupId>

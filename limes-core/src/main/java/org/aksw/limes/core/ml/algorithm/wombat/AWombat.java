@@ -67,6 +67,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 	public static final String PARAMETER_VERBOSE = "verbose";
 	public static final String PARAMETER_ATOMIC_MEASURES = "atomic measures";
 	public static final String PARAMETER_SAVE_MAPPING = "save mapping";
+	public static final String PARAMETER_FMEASURE_BETA = "beta";
 
 	protected String sourceVariable = "x";
 	protected String targetVariable = "y";
@@ -107,10 +108,9 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 			mapping = null;
 		}
 		if (isUnsupervised) {
-			double pfm = pseudoFMeasure.calculate(mapping, new GoldStandard(null, sourceUris, targetUris));
-			return new RefinementNode(pfm, mapping, metricExpr);
+			return new RefinementNode(fMeasure(mapping), mapping, metricExpr);
 		}
-		return new RefinementNode(mapping, metricExpr, trainingData);
+        return new RefinementNode(mapping, metricExpr, trainingData, fMeasure(mapping));
 	}
 
 
@@ -155,10 +155,10 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 	protected double fMeasure(AMapping predictions) {
 		if (isUnsupervised) {
 			// compute pseudo-F-Measure
-			return pseudoFMeasure.calculate(predictions, new GoldStandard(null, sourceUris, targetUris));
+			return pseudoFMeasure.calculate(predictions, new GoldStandard(null, sourceUris, targetUris), getBeta());
 		}
 		// get real F-Measure based on training data 
-		return new FMeasure().calculate(predictions, new GoldStandard(trainingData));
+		return new FMeasure().calculate(predictions, new GoldStandard(trainingData), getBeta());
 	}
 
 
@@ -307,7 +307,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 		for (double threshold = 1d; threshold > 0.4d; threshold = threshold * getPropertyLearningRate()) {
 			AMapping mapping = executeAtomicMeasure(sourceProperty, targetProperty, measure, threshold);
 			double overlap = fMeasure(mapping);
-			if (maxOverlap < overlap) { //only interested in largest threshold with recall 1
+			if (maxOverlap < overlap) { //only interested in largest threshold with fmeasure 1
 				bestMapping = mapping;
 				theta = threshold;
 				maxOverlap = overlap;
@@ -330,6 +330,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 		double maxFitnessThreshold = 1;
 		double childrenPenaltyWeight = 1;
 		double complexityPenaltyWeight = 1;
+		double beta = 1;
 		boolean saveMapping = true;
 		double minPropertyCoverage = 0.4;
 		double propertyLearningRate = 0.9;
@@ -348,6 +349,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 		learningParameters.add(new LearningParameter(PARAMETER_OVERALL_PENALTY_WEIGHT, overallPenaltyWeight, Double.class, 0d, 1d, 0.01d, PARAMETER_OVERALL_PENALTY_WEIGHT));
 		learningParameters.add(new LearningParameter(PARAMETER_CHILDREN_PENALTY_WEIGHT, childrenPenaltyWeight, Double.class, 0d, 1d, 0.01d, PARAMETER_CHILDREN_PENALTY_WEIGHT));
 		learningParameters.add(new LearningParameter(PARAMETER_COMPLEXITY_PENALTY_WEIGHT, complexityPenaltyWeight, Double.class, 0d, 1d, 0.01d, PARAMETER_COMPLEXITY_PENALTY_WEIGHT));
+		learningParameters.add(new LearningParameter(PARAMETER_FMEASURE_BETA, beta, Double.class, 0d, Double.MAX_VALUE, 0.01d, "beta parameter for f-measure"));
 		learningParameters.add(new LearningParameter(PARAMETER_VERBOSE, verbose, Boolean.class, 0, 1, 0, PARAMETER_VERBOSE));
 		learningParameters.add(new LearningParameter(PARAMETER_ATOMIC_MEASURES, measures, MeasureType.class, 0, 0, 0, PARAMETER_ATOMIC_MEASURES));
 		learningParameters.add(new LearningParameter(PARAMETER_SAVE_MAPPING, saveMapping, Boolean.class, 0, 1, 0, PARAMETER_SAVE_MAPPING));
@@ -376,6 +378,10 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 	protected double getPropertyLearningRate() {
 		return Double.parseDouble(getParameter(PARAMETER_PROPERTY_LEARNING_RATE).toString());
 	}
+
+    protected double getBeta() {
+        return Double.parseDouble(getParameter(PARAMETER_FMEASURE_BETA).toString());
+    }
 
 	protected int getIterationTimeInMinutes() {
 		return Integer.parseInt(getParameter(PARAMETER_MAX_ITERATION_TIME_IN_MINUTES).toString());
@@ -436,7 +442,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 			return r;
 		}
 		// get mostPromesyChild of children
-		Tree<RefinementNode> mostPromesyChild = new Tree<RefinementNode>(new RefinementNode());
+		Tree<RefinementNode> mostPromesyChild = new Tree<>(new RefinementNode());
 		for (Tree<RefinementNode> child : r.getchildren()) {
 			if (child.getValue().getFMeasure() >= 0) {
 				Tree<RefinementNode> promesyChild = getMostPromisingNode(child, penaltyWeight);

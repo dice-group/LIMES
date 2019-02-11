@@ -5,6 +5,7 @@ package org.aksw.limes.core.ml.algorithm.wombat;
 
 
 import org.aksw.limes.core.datastrutures.GoldStandard;
+import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Precision;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.Recall;
 import org.aksw.limes.core.io.mapping.AMapping;
@@ -19,8 +20,6 @@ public class RefinementNode implements Comparable<RefinementNode> {
 
     protected static double rMax = -Double.MAX_VALUE;
     protected static boolean saveMapping = true;
-    protected double precision = -Double.MAX_VALUE;
-    protected double recall = -Double.MAX_VALUE;
     protected double fMeasure = -Double.MAX_VALUE;
     protected double maxFMeasure = 1d;
     protected AMapping map = MappingFactory.createDefaultMapping();
@@ -75,12 +74,11 @@ public class RefinementNode implements Comparable<RefinementNode> {
      * @param refMap
      * @author sherif
      */
-    public RefinementNode(AMapping map, String metricExpression, AMapping refMap) {
+    public RefinementNode(AMapping map, String metricExpression, AMapping refMap, double fMeasure) {
         super();
-        this.setPrecision(new Precision().calculate(map, new GoldStandard(refMap)));
-        this.setRecall(new Recall().calculate(map, new GoldStandard(refMap)));
-        this.setfMeasure((precision == 0 && recall == 0) ? 0 : 2 * precision * recall / (precision + recall));
+        this.setfMeasure(fMeasure);
         double pMax = computeMaxPrecision(map, refMap);
+        //@todo: what is this? how is it used? the getter always emits 0?!
         this.setMaxFMeasure(2 * pMax * rMax / (pMax + rMax));
         this.setMap(saveMapping ? map : null);
         this.setMetricExpression(metricExpression);
@@ -151,22 +149,6 @@ public class RefinementNode implements Comparable<RefinementNode> {
 
     public void setMetricExpression(String metricExpression) {
         this.metricExpression = metricExpression;
-    }
-
-    public double getPrecision() {
-        return precision;
-    }
-
-    public void setPrecision(double precision) {
-        this.precision = precision;
-    }
-
-    public double getRecall() {
-        return recall;
-    }
-
-    public void setRecall(double recall) {
-        this.recall = recall;
     }
 
     public void setfMeasure(double fMeasure) {

@@ -34,6 +34,7 @@ public class PseudoRefRecall extends PseudoRecall {
         AMapping res = predictions;
         if (useOneToOneMapping)
             res = predictions.getBestOneToOneMappings(predictions);// the first call of prediction just to call the method; ya i know
+        res.getSize();
         double size = 0;
         for (String s : res.getMap().keySet()) {
 
