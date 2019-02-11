@@ -65,7 +65,7 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
             AMapping m = getMapping(cc.getClassifiers());
             result.setClassifiers(cc.getClassifiers());
             result.setfMeasure(computeQuality(m));
-//            result.fMeasure = _measure.getPseudoFMeasure(source.getAllUris(), target.getAllUris(), m, beta);
+//            result.fMeasure = _measure.calculate(source.getAllUris(), target.getAllUris(), m, beta);
             return result;
         } else {
             if (cc.getClassifiers().size() > index + 1) {
@@ -78,7 +78,7 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
                 AMapping m = getMapping(cp);
                 result.setClassifiers(cp);
                 result.setfMeasure(computeQuality(m));
-//                result.fMeasure = _measure.getPseudoFMeasure(source.getAllUris(), target.getAllUris(), m, beta);
+//                result.fMeasure = _measure.calculate(source.getAllUris(), target.getAllUris(), m, beta);
                 return result;
             } else {
                 return result;
@@ -135,7 +135,7 @@ public class BooleanSelfConfigurator extends LinearSelfConfigurator {
         classifiers = normalizeClassifiers(classifiers);
         AMapping m = getMapping(classifiers);
         double f = computeQuality(m);
-//        double f = _measure.getPseudoFMeasure(source.getAllUris(), target.getAllUris(), m, beta);
+//        double f = _measure.calculate(source.getAllUris(), target.getAllUris(), m, beta);
         // no need to update if the classifiers are already perfect
         if (f == 1.0) {
             return classifiers;

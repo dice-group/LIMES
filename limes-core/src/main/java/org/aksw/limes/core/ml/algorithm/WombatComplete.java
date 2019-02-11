@@ -262,8 +262,6 @@ public class WombatComplete extends AWombat {
         pruneNodeCount++;
         //      t.remove();
         t.getValue().setMetricExpression("Pruned");
-        t.getValue().setPrecision(-Double.MAX_VALUE);
-        t.getValue().setRecall(-Double.MAX_VALUE);
         t.getValue().setfMeasure(-Double.MAX_VALUE);
         t.getValue().setMaxFMeasure(-Double.MAX_VALUE);
         t.getValue().setMap(null);
