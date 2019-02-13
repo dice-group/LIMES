@@ -31,13 +31,18 @@ import org.slf4j.LoggerFactory;
  * @version Jun 7, 2016
  */
 public class WombatSimple extends AWombat {
-    protected static Logger logger = LoggerFactory.getLogger(WombatSimple.class);
-    protected static final String ALGORITHM_NAME = "Wombat Simple";
-    protected int activeLearningRate = 3;
-    protected RefinementNode bestSolutionNode = null;
-    protected List<ExtendedClassifier> classifiers = null;
-    protected int iterationNr = 0;
-    public PropertyMapping propMap;
+
+    private static final Logger logger = LoggerFactory.getLogger(WombatSimple.class);
+
+    private static final String ALGORITHM_NAME = "Wombat Simple";
+
+    private static final int activeLearningRate = 3;
+
+    private RefinementNode bestSolutionNode = null;
+
+    private List<ExtendedClassifier> classifiers = null;
+
+    private Tree<RefinementNode> refinementTreeRoot = null;
 
 
 
@@ -60,7 +65,6 @@ public class WombatSimple extends AWombat {
         targetUris = targetCache.getAllUris();
         bestSolutionNode = null;
         classifiers = null;
-        iterationNr = 0;
     }
 
     @Override
@@ -100,12 +104,6 @@ public class WombatSimple extends AWombat {
         }
         this.isUnsupervised = true;
         return learn();
-    }
-
-    @Override
-    protected AMapping predict(ACache source, ACache target, MLResults mlModel) {
-        LinkSpecification ls = mlModel.getLinkSpecification();
-        return getPredictions(ls, source, target);
     }
 
     @Override
@@ -180,7 +178,7 @@ public class WombatSimple extends AWombat {
 
 
     /**
-     * update precision, recall and F-Measure of the refinement tree r
+     * update F-Measure of the refinement tree r
      * based on either training data or PFM
      *  
      * @param r refinement tree
@@ -205,21 +203,21 @@ public class WombatSimple extends AWombat {
     public RefinementNode findBestSolution() {
         classifiers = findInitialClassifiers();
         createRefinementTreeRoot();
-        Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot, getOverAllPenaltyWeight() );
+        Tree<RefinementNode> mostPromisingNode = getMostPromisingNode(refinementTreeRoot);
         logger.debug("Most promising node: " + mostPromisingNode.getValue());
-        iterationNr++;
+        int i = 1;
         while ((mostPromisingNode.getValue().getFMeasure()) < getMaxFitnessThreshold()
                 && refinementTreeRoot.size() <= getMaxRefinmentTreeSize()
-                && iterationNr <= getMaxIterationNumber()) {
-            iterationNr++;
-            mostPromisingNode = expandNode(mostPromisingNode);
-            mostPromisingNode = getMostPromisingNode(refinementTreeRoot, getOverAllPenaltyWeight());
+                && i <= getMaxIterationNumber()) {
+            expandNode(mostPromisingNode);
+            mostPromisingNode = getMostPromisingNode(refinementTreeRoot);
             if (mostPromisingNode.getValue().getFMeasure() == -Double.MAX_VALUE) {
                 break; // no better solution can be found
             }
             logger.debug("Most promising node: " + mostPromisingNode.getValue());
+            i++;
         }
-        RefinementNode bestSolution = getMostPromisingNode(refinementTreeRoot, 0).getValue();
+        RefinementNode bestSolution = getBestNode(refinementTreeRoot).getValue();
         logger.debug("Overall Best Solution: " + bestSolution);
         return bestSolution;
     }
@@ -272,10 +270,9 @@ public class WombatSimple extends AWombat {
      *
      * @param node
      *         Refinement node to be expanded
-     * @return The input tree node after expansion
      * @author sherif
      */
-    private Tree<RefinementNode> expandNode(Tree<RefinementNode> node) {
+    private void expandNode(Tree<RefinementNode> node) {
         AMapping map = MappingFactory.createDefaultMapping();
         for (ExtendedClassifier c : classifiers) {
             for (LogicOperator op : LogicOperator.values()) {
@@ -296,7 +293,6 @@ public class WombatSimple extends AWombat {
         if (isVerbose()) {
             refinementTreeRoot.print();
         }
-        return node;
     }
 
 
