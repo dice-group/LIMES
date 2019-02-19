@@ -80,9 +80,9 @@ Currently, LIMES supports the following set of pre-processing functions:
 * `fahrenheit` for converting Celsius to Fahrenheit
 * `removebraces` for removing the braces
 * `regularAlphabet` for removing nun-alphanumeric characters
-* `uriasstring` returns the last part of an URI as a String. Additional parsing `_` as space
+* `uriasstring` returns the last part of a URI as a String. Additional parsing `_` as space
 
-Sometimes, generating the right link specification might either require merging property values (for example, the `dc:title` and `foaf:name` of MESH concepts) or splitting property values (for example, comparing the label and `foaf:homepage` of source instances and the `foaf:homepage` of target instances as well as `foaf:homepage AS cleaniri` of the target instances with the `rdfs:label` of target instances. To enable this, LIMES provides the `RENAME` operator which simply store either the values of a property or the results of a preprocessing into a different property field. For example, `foaf:homepage AS cleaniri RENAME label` would stored the homepage of a object without all the prefixes in the name property. The user could then access this value during the specification of the similarity measure for comparing sources and target instances. Note that the same property value can be used several times. Thus, the following specification fragment is valid and leads to the the `dc:title` and `foaf:name` of individuals)  of MESH concepts being first cast down to the lowercase and then merged to a single property.
+Sometimes, generating the right link specification might either require merging property values (for example, the `dc:title` and `foaf:name` of MESH concepts) or splitting property values (for example, comparing the label and `foaf:homepage` of source instances and the `foaf:homepage` of target instances as well as `foaf:homepage AS cleaniri` of the target instances with the `rdfs:label` of target instances. To enable this, LIMES provides the `RENAME` operator which simply store either the values of a property or the results of a preprocessing into a different property field. For example, `foaf:homepage AS cleaniri RENAME label` would store the homepage of an object without all the prefixes in the name property. The user could then access this value during the specification of the similarity measure for comparing sources and target instances. Note that the same property value can be used several times. Thus, the following specification fragment is valid and leads to the the `dc:title` and `foaf:name` of individuals)  of MESH concepts being the first cast down to the lowercase and then merged to a single property.
 ```xml
 <SOURCE>
     <ID>mesh</ID>
@@ -194,7 +194,7 @@ Three LIMES execution parameters could be set here:
  	* `SIMPLE`: It executes each independent part of the plan sequentially.
  	* `DEFAULT`: same as `SIMPLE`.
  
-If not set, the `DEFAULT` value for each parameter will used be will
+If not set, the `DEFAULT` value for each parameter will be used.
 
 ## Machine Learning (optional) {#machine-learning}
 

@@ -28,11 +28,11 @@ MAX(trigrams(x.rdfs:label,y.dc:title)|0.3,euclidean(x.lat|long, y.latitude|longi
 This specification computes the maximum of:
 
 1. The trigram similarity of x's `rdfs:label` and y's `dc:title` is greater or equal to 0.3
-2. The 2-dimension euclidean distance of `x`'s `lat` and `long` with `y`'s `latitude` and `longitude`, i.e.,  $$ \sqrt{((x.lat- y.latitude)^2 + (x.long - y.longitude)^2)} $$ is greater or equal to 0.5. 
+2. The 2-dimension Euclidean distance of `x`'s `lat` and `long` with `y`'s `latitude` and `longitude`, i.e.,  $$ \sqrt{((x.lat- y.latitude)^2 + (x.long - y.longitude)^2)} $$ is greater or equal to 0.5. 
 
 Note that euclidean supports arbitrarily many dimensions. In addition, note that `ADD` allows to define weighted sums as follows:`ADD(0.3*trigrams(x.rdfs:label,y.dc:title)|0.3, 0.7*euclidean(x.lat|x.long,y.latitude|y.longitude)|0.5)`.
 
-We call `trigrams(x.rdfs:label,y.dc:title)|0.3` the left child of the specification and `euclidean(x.lat|long, y.latitude|longitude)|0.5` the right child of the specification. Both children specifications are simple specifications and combined with a metric operator, they create a complex specification. LIMES gives the user the opportunity to combine **exactly two ** complex or simple spefications to create a new complex specification. Note that each child specification must be accompanied by its own threshold.
+We call `trigrams(x.rdfs:label,y.dc:title)|0.3` the left child of the specification and `euclidean(x.lat|long, y.latitude|longitude)|0.5` the right child of the specification. Both children specifications are simple specifications and combined with a metric operator, they create a complex specification. LIMES gives the user the opportunity to combine **exactly two ** complex or simple specifications to create a new complex specification. Note that each child specification must be accompanied by its own threshold.
 
 ## Boolean operations
 
@@ -226,7 +226,7 @@ Moreover, LIMES support the following temporal relations between POI resources b
 * **Tmp_Is_Finished_By**: reverse of Tmp_Finishes
 * **Tmp_Overlaps**: Part of the first POI timestamp overlaps with the second POI time stamp.
 * **Tmp_Is_Overlapped_By**: reverse of Tmp_Overlaps
-* **Tmp_Starts**: The start first POI timestamp is tha same as the start of the second POI time stamp.
+* **Tmp_Starts**: The start first POI timestamp is the same as the start of the second POI time stamp.
 * **Tmp_Is_Started_By**: reverse of Tmp_Starts
 * **Tmp_Meets**: The end first POI timestamp meets the start of the second POI time stamp.
 * **Tmp_Is_xBy**: reverse of Tmp_Meets
