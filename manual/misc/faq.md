@@ -10,7 +10,7 @@ include JavaFX. And in [some cases](https://github.com/AKSW/LIMES-dev/issues/56)
 The first thing you should do is check if you can find `jfxrt.jar`, it *should* be in `<JRE_HOME>/lib/ext/jfxrt.jar` (but in this
 case everything should be working just fine). If you find it somewhere else, you have to put it on the classpath. A guide
 on how to do this can be found [here](http://askubuntu.com/a/609954). If this does not work, trying to reinstall java would be a good
-idea (if you've used OpenJDK before trying Oracle Java!).
+idea (if you've used OpenJDK before try Oracle Java!).
 
 If this doesn't work, in Ubuntu versions 15.04 upwards you can install JavaFX separately using `sudo apt-get install openjfx`.
 Unfortunately, this package seems unavailable for lower Ubuntu versions (Although there is always the possibility to 

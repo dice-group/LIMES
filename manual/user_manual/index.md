@@ -20,7 +20,7 @@ Given that the configuration file is valid w.r.t. the LIMES Specification Langua
 The advantages of LIMES’ approach are manifold. First, it implements
 **highly time-optimized** mappers, making it a complexity class faster
 than other Link Discovery Frameworks. Thus, the larger the problem, the
-faster the LIMES is w.r.t. other Link Discovery Frameworks. Secondly, LIMES 
+faster LIMES is w.r.t. other Link Discovery Frameworks. Secondly, LIMES 
 supports a large set of string, numeric, topological and temporal similarity metrics, 
 that provide the user with the opportunity to perform various comparisons between resources.
 In addition, **LIMES is guaranteed to lead to exactly the same matching as a brute
