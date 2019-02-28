@@ -3,6 +3,7 @@ package org.aksw.limes.core.measures.measure.topology;
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.AMeasure;
 
+import org.aksw.limes.core.util.LimesWktReader;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
@@ -20,7 +21,7 @@ public class CrossesMeasure extends AMeasure {
         Geometry sGeo, tGeo;
         sWKT = object1.toString();
         tWKT = object2.toString();
-        WKTReader reader = new WKTReader();
+        LimesWktReader reader = new LimesWktReader();
         try {
             sGeo = reader.read(sWKT);
             tGeo = reader.read(tWKT);

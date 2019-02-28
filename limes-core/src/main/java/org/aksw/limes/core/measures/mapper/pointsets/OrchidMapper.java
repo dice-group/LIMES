@@ -7,10 +7,10 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
 import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
+import org.aksw.limes.core.util.LimesWktReader;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKTReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ public class OrchidMapper extends AMapper {
     IPointsetsMeasure m = null;
 
     public static List<Point> getPoints(String wktString) {
-        WKTReader wktReader = new WKTReader();
+        LimesWktReader wktReader = new LimesWktReader();
         List<Point> points = new ArrayList<>();
         try {
             Geometry geometry = wktReader.read(wktString);

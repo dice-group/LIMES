@@ -42,7 +42,7 @@ public class SparqlQueryModuleTest {
                 1000,                                                            //int pageSize
                 "sparql",                                                         //String type
                 -1,                                                               //int minOffset
-                -1                                                                //int maxoffset
+                2000                                                                //int maxoffset
         );
     }
 
