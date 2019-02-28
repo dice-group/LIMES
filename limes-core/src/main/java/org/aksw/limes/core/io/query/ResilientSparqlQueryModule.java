@@ -79,21 +79,29 @@ public class ResilientSparqlQueryModule extends SparqlQueryModule implements IQu
         int counter = 0;
         ResultSet results = qe.execSelect();
         //write
-        String uri, propertyLabel, value;
+        String uri, value;
         while (results.hasNext()) {
             QuerySolution soln = results.nextSolution();
             // process query here
             {
                 try {
-                    //first get uri
                     uri = soln.get(kb.getVar().substring(1)).toString();
-                    //now get (p,o) pairs for this s
-                    for (int i = 0; i < kb.getProperties().size(); i++) {
-                        propertyLabel = kb.getProperties().get(i);
+                    int i = 1;
+                    for (String propertyLabel : kb.getProperties()) {
                         if (soln.contains("v" + i)) {
                             value = soln.get("v" + i).toString();
                             cache.addTriple(uri, propertyLabel, value);
                         }
+                        i++;
+                    }
+                    if(kb.getOptionalProperties() != null){
+                        for (String propertyLabel : kb.getOptionalProperties()) {
+                            if (soln.contains("v" + i)) {
+                                value = soln.get("v" + i).toString();
+                                cache.addTriple(uri, propertyLabel, value);
+                            }
+                        }
+                        i++;
                     }
                 } catch (Exception e) {
                     logger.warn("Error while processing: " + soln.toString());
