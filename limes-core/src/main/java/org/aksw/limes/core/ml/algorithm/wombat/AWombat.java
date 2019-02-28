@@ -358,12 +358,23 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         }
         // get mostPromisingChild of children
         Tree<T> mostPromisingChild = new Tree<>();
+        double bestFitness = -1;
+
         for (Tree<T> child : root.getchildren()) {
             if (child.getValue().getFMeasure() >= 0) {
                 Tree<T> promisingChild = getMostPromisingNode(child, penaltyWeight);
-                double newFitness = promisingChild.getValue().getFMeasure() - penaltyWeight * computePenalty(root, promisingChild);
-                if (mostPromisingChild.getValue() == null || newFitness > mostPromisingChild.getValue().getFMeasure()) {
+                double penalty = computePenalty(root, promisingChild);
+                double newFitness = promisingChild.getValue().getFMeasure() - penaltyWeight * penalty;
+                if (newFitness > bestFitness) {
                     mostPromisingChild = promisingChild;
+                    bestFitness = newFitness;
+                } else if (newFitness == bestFitness) {
+                    double tieBreakerFitness = bestFitness - getOverAllPenaltyWeight() * computePenalty(root, mostPromisingChild);
+                    double newTieBreakerFitness = promisingChild.getValue().getFMeasure() - getOverAllPenaltyWeight() * penalty;
+                    if (newTieBreakerFitness > tieBreakerFitness) {
+                        mostPromisingChild = promisingChild;
+                        bestFitness = mostPromisingChild.getValue().getFMeasure();
+                    }
                 }
             }
         }

@@ -56,10 +56,10 @@ public class SparqlQueryModule implements IQueryModule {
         // run query
         logger.info("Querying the endpoint.");
         int offset = 0;
-        if(kb.getMinOffset() > 0) {
+        if (kb.getMinOffset() > 0) {
             offset = kb.getMinOffset();
         }
-        
+
         boolean moreResults = false;
         int counter = 0;
         String basicQuery = query;
@@ -68,9 +68,9 @@ public class SparqlQueryModule implements IQueryModule {
             if(kb.getMaxOffset() > 0) {
                 nextOffset = Math.min(kb.getMaxOffset(), nextOffset);
             }
-            
+
             logger.info("Getting statements " + offset + " to " + nextOffset);
-            
+
             if (kb.getPageSize() > 0) {
                 int limit = kb.getPageSize();
                 if(kb.getMaxOffset() > 0) {
@@ -83,7 +83,7 @@ public class SparqlQueryModule implements IQueryModule {
                     query = query + " LIMIT " + kb.getMaxOffset();
                 }
             }
-            
+
             Query sparqlQuery = QueryFactory.create(query, Syntax.syntaxARQ);
             QueryExecution qexec;
 
@@ -107,7 +107,7 @@ public class SparqlQueryModule implements IQueryModule {
             ResultSet results = qexec.execSelect();
 
             // write
-            String uri, propertyLabel, value;
+            String uri, value;
             try {
                 if (results.hasNext()) {
                     moreResults = true;
@@ -118,32 +118,30 @@ public class SparqlQueryModule implements IQueryModule {
 
                 while (results.hasNext()) {
                     QuerySolution soln = results.nextSolution();
-                    {
-                        try {
-                            uri = soln.get(kb.getVar().substring(1)).toString();
-                            for (int i = 0; i < kb.getProperties().size(); i++) {
-                                propertyLabel = kb.getProperties().get(i);
+                    try {
+                        uri = soln.get(kb.getVar().substring(1)).toString();
+                        int i = 1;
+                        for (String propertyLabel : kb.getProperties()) {
+                            if (soln.contains("v" + i)) {
+                                value = soln.get("v" + i).toString();
+                                cache.addTriple(uri, propertyLabel, value);
+                            }
+                            i++;
+                        }
+                        if(kb.getOptionalProperties() != null){
+                            for (String propertyLabel : kb.getOptionalProperties()) {
                                 if (soln.contains("v" + i)) {
                                     value = soln.get("v" + i).toString();
                                     cache.addTriple(uri, propertyLabel, value);
                                 }
                             }
-                            if(kb.getOptionalProperties() != null){
-                                for (int i = 0; i < kb.getOptionalProperties().size(); i++) {
-                                    propertyLabel = kb.getOptionalProperties().get(i);
-                                    if (soln.contains("v" + i)) {
-                                        value = soln.get("v" + i).toString();
-                                        cache.addTriple(uri, propertyLabel, value);
-                                    }
-                                }
-                            }
-                        } catch (Exception e) {
-                            logger.warn("Error while processing: " + soln.toString());
-                            logger.warn("Following exception occured: " + e.getMessage());
-                            e.printStackTrace();
-                            throw new RuntimeException();
-
+                            i++;
                         }
+                    } catch (Exception e) {
+                        logger.warn("Error while processing: " + soln.toString());
+                        logger.warn("Following exception occurred: " + e.getMessage());
+                        e.printStackTrace();
+                        throw new RuntimeException();
                     }
                     counter++;
                 }
@@ -171,7 +169,9 @@ public class SparqlQueryModule implements IQueryModule {
         }
         // fill in variable for the different properties to be retrieved
         query = query + "SELECT DISTINCT " + kb.getVar();
-        for (int i = 0; i < kb.getProperties().size(); i++) {
+        final int numVars = kb.getProperties().size() +
+                (kb.getOptionalProperties() == null ? 0 : kb.getOptionalProperties().size());
+        for (int i = 1; i <= numVars; i++) {
             query = query + " ?v" + i;
         }
         query = query + "\n";
@@ -197,15 +197,16 @@ public class SparqlQueryModule implements IQueryModule {
             }
         }
         // properties
+        int varCount = 1;
+        int i = 1;
         String propertiesStr;
         if (kb.getProperties().size() > 0) {
             propertiesStr = "";
-            for (int i = 0; i < kb.getProperties().size(); i++) {
-                propertiesStr = propertiesStr + kb.getVar() + " " + kb.getProperties().get(i) + " ?v" + i + " .\n";
+            for (String property : kb.getProperties()) {
+                propertiesStr = propertiesStr + kb.getVar() + " " + property + " ?v" + i++ + " .\n";
             }
             // some endpoints and parsers do not support property paths. We
             // replace them here with variables
-            int varCount = 1;
             while (propertiesStr.contains("/")) {
                 propertiesStr = propertiesStr.replaceFirst("/", " ?w" + varCount + " .\n?w" + varCount + " ");
                 varCount++;
@@ -216,14 +217,13 @@ public class SparqlQueryModule implements IQueryModule {
         // optional properties
         String optionalPropertiesStr;
         if (kb.getOptionalProperties() != null && kb.getOptionalProperties().size() > 0) {
-            logger.info("Optipnal properties are " + kb.getOptionalProperties());
+            logger.info("Optional properties are " + kb.getOptionalProperties());
             optionalPropertiesStr = "OPTIONAL {\n";
-            for (int i = 0; i < kb.getOptionalProperties().size(); i++) {
-                optionalPropertiesStr += kb.getVar() + " " + kb.getOptionalProperties().get(i) + " ?v" + i + " .\n";
+            for (String optionalProperty : kb.getOptionalProperties()) {
+                optionalPropertiesStr += kb.getVar() + " " + optionalProperty + " ?v" + i++ + " .\n";
             }
             // some endpoints and parsers do not support property paths. We
             // replace them here with variables
-            int varCount = 1;
             while (optionalPropertiesStr.contains("/")) {
                 optionalPropertiesStr = optionalPropertiesStr.replaceFirst("/", " ?w" + varCount + " .\n?w" + varCount + " ");
                 varCount++;
