@@ -4,6 +4,7 @@
  */
 package org.aksw.limes.core.measures.mapper.string.fastngram;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,16 +18,9 @@ public class NGramTokenizer implements ITokenizer {
         if (s == null) {
             s = "";
         }
-        // remove double blanks
-        while (s.contains("  ")) {
-            s = s.replaceAll("  ", " ");
-        }
-        s = s.trim();
-        // for (int i = 1; i < q; i++) {
-        while (s.length() < q) {
-            s = s + "_";
-        }
-        Set<String> tokens = new HashSet<String>();
+        String pad = String.join("", Collections.nCopies(q-1, " "));
+        s = pad + s + pad;
+        Set<String> tokens = new HashSet<>();
         for (int i = 0; i < s.length() - q + 1; i++) {
             tokens.add(s.substring(i, i + q));
         }
