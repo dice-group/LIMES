@@ -238,7 +238,6 @@ public class SparqlQueryModule implements IQueryModule {
             if (q[ql].contains("regex"))
                 query = query + q[ql] + "\n";
             else if (q[ql].contains("^")) {
-                System.out.println(q[ql]);
                 String[] sp = q[ql].replaceAll("\\^", "").split(" ");
                 query = query + sp[2] + " " + sp[1] + " " + sp[0] + " " + sp[3] + "\n";
             } else {
