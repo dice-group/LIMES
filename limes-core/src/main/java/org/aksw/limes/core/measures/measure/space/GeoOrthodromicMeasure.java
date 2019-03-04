@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.aksw.limes.core.measures.measure.pointsets;
+package org.aksw.limes.core.measures.measure.space;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.space.ASpaceMeasure;
@@ -14,6 +14,7 @@ import org.aksw.limes.core.measures.measure.space.ASpaceMeasure;
  *
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
+@Deprecated
 public class GeoOrthodromicMeasure extends ASpaceMeasure {
 
 

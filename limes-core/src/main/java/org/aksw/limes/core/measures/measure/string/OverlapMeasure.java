@@ -5,6 +5,9 @@
 
 package org.aksw.limes.core.measures.measure.string;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.aksw.limes.core.io.cache.Instance;
@@ -38,22 +41,17 @@ public class OverlapMeasure extends StringMeasure {
     public double getSimilarity(Object object1, Object object2) {
         double counter = 0;
 
-        TreeSet<String> tokens1 = new TreeSet<String>();
-        TreeSet<String> tokens2 = new TreeSet<String>();
+        String[] split1 = object1.toString().split(" ");
+        Set<String> tokens1 = new HashSet<>(Arrays.asList(split1));
 
-        String split1[] = ((String) object1).split(" ");
-        for (int i = 0; i < split1.length; i++)
-            tokens1.add(split1[i]);
-
-        String split2[] = ((String) object2).split(" ");
-        for (int i = 0; i < split2.length; i++)
-            tokens2.add(split2[i]);
+        String[] split2 = object2.toString().split(" ");
+        Set<String> tokens2 = new HashSet<>(Arrays.asList(split2));
 
         for (String s : tokens2) {
             if (tokens1.contains(s))
                 counter++;
         }
-        return counter;
+        return counter/Math.min(tokens1.size(), tokens2.size());
     }
 
     public String getType() {

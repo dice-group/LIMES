@@ -115,7 +115,7 @@ public class Server {
             MDC.put("requestId", requestId);
             AConfigurationReader reader = new XMLConfigurationReader(tempFile.toAbsolutePath().toString());
             Configuration config = reader.read();
-            ResultMappings mappings = Controller.getMapping(config, limit);
+            LimesResult mappings = Controller.getMapping(config, limit);
             String outputFormat = config.getOutputFormat();
             ISerializer output = SerializerFactory.createSerializer(outputFormat);
             output.setPrefixes(config.getPrefixes());

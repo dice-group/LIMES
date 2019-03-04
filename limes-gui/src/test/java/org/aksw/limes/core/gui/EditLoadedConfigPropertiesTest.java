@@ -64,10 +64,10 @@ public class EditLoadedConfigPropertiesTest extends ApplicationTest {
 
 		logger.info("Waiting for properties to finish loading");
 		CustomGuiTest.waitUntilLoadingWindowIsClosed("Getting properties", 500);
-		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", 180);
+		CustomGuiTest.waitUntilNodeIsVisible("#switchModeButton", 280);
 		this.clickOn("#switchModeButton");
 		logger.info("Waiting for dbo:abbreviation");
-		CustomGuiTest.waitUntilNodeIsVisible("dbo:abbreviation", 180);
+		CustomGuiTest.waitUntilNodeIsVisible("dbo:abbreviation", 280);
 		this.clickOn("dbo:abbreviation");
 		this.clickOn("dbo:birthDate");
 		this.clickOn("Finish");

@@ -14,7 +14,9 @@ The following optional command line flags and options are available:
 
 * `-f $format` sets the format of configuration file. Possible values for `$format` are`"XML"` (default) or `"RDF"`
 * `-d $file_path` configure the path for the statistics JSON output file
-* `-1` enforce 1-to-1 mappings, i.e. for each source resource only keep the link with the highest probability 
+* `-1` enforces 1-to-1 mappings, i.e. for each source resource only keep the link with the highest probability
+* `-g $file_path` configure a reference mapping file (a.k.a. gold standard) to compute precision, recall and f measure
+* `-F $format` sets the format of the gold standard. Possible values for `$format` are`"csv"` (default), `"tab"` or `"rdf""`. Only effective when `-g $file_path` is also specified
 * `-s` runs the LIMES server
 * `-p $port` used to specify port of LIMES server, defaults to port 8080
 * `-l $limit` limits the number of resources processed by LIMES server to `$limit`, defaults to -1 (no limit).
@@ -27,7 +29,7 @@ allocate more memory to the Java Virtual Machine.
 
 ## Server
 
-LIMES can be run as a HTTP Server, implementing a RESTful API and serving a browser frontend by default.
+LIMES can be run as an HTTP Server, implementing a RESTful API and serving a browser frontend by default.
 Configuration files are accepted via POST multipart/form-data uploads.
 Each configuration file gets assigned a unique *job_id*.
 Given this job id, the user can query the server for the status of the job, its logs, a list of result files and the contents of these result files.
@@ -112,7 +114,7 @@ We will discuss each of the two components in the following subsections.
 The menu bar contains three drop-down menus:
 * **File**, which serves as a collection of the following main functionality:
     * **New**: Create a new configuration 
-    * **Load Config**: Load a [configuration file](../configuration_file/index.md). Since machine learning is implemented seperately 
+    * **Load Config**: Load a [configuration file](../configuration_file/index.md). Since machine learning is implemented separately 
     in the GUI, only configurations with metric expressions are accepted. If you load a configuration with machine learning 
     instructions, as much information as possible will be saved, but you have to run the machine learning through the GUI.
     * **Save Config**: Save a configuration to a file (only possible, after loading a configuration or creating a new configuration)

@@ -119,14 +119,11 @@ public class PseudoFMeasureFitnessFunction extends IGPFitnessFunction {
      * @return PseudoMeasure
      */
     public Double calculatePseudoMeasure(IGPProgram p) {
-        
     	// mapping
         AMapping mapping = calculateMapping(p);
         // gold standard is not needed by pseudoFM
         GoldStandard gold = new GoldStandard(mapping, sourceCache, targetCache);
-        
-        return pfm.getPseudoFMeasure(mapping, gold, beta);
-        
+        return pfm.calculate(mapping, gold, beta);
     }
 
     /**

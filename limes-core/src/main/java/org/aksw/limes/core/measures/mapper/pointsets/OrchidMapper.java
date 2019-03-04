@@ -1,72 +1,59 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.aksw.limes.core.measures.mapper.pointsets;
+
+import com.google.common.collect.Lists;
+import org.aksw.limes.core.datastrutures.Point;
+import org.aksw.limes.core.io.cache.ACache;
+import org.aksw.limes.core.io.mapping.AMapping;
+import org.aksw.limes.core.measures.mapper.AMapper;
+import org.aksw.limes.core.measures.measure.MeasureFactory;
+import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
+import org.aksw.limes.core.util.LimesWktReader;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
-import java.util.regex.Pattern;
-
-import org.aksw.limes.core.datastrutures.Point;
-import org.aksw.limes.core.io.cache.ACache;
-import org.aksw.limes.core.io.cache.Instance;
-import org.aksw.limes.core.io.mapping.AMapping;
-import org.aksw.limes.core.measures.mapper.AMapper;
-import org.aksw.limes.core.measures.measure.MeasureFactory;
-import org.aksw.limes.core.measures.measure.MeasureType;
-import org.aksw.limes.core.measures.measure.pointsets.IPointsetsMeasure;
 
 /**
  * @author Axel-C. Ngonga Ngomo (ngonga@informatik.uni-leipzig.de)
  */
 public class OrchidMapper extends AMapper {
 
+    private static final Logger logger = LoggerFactory.getLogger(OrchidMapper.class);
+
     IPointsetsMeasure m = null;
 
-    public static List<Point> getPoints(String rawValue) {
-        if (!(rawValue.contains("(") && rawValue.contains(")"))) {
-            return new ArrayList<Point>();
-        }
-        String s = rawValue.substring(rawValue.indexOf("(") + 1, rawValue.lastIndexOf(")"));
-        s = s.replaceAll(Pattern.quote("("), "");
-        s = s.replaceAll(Pattern.quote(")"), "");
-        s = s.replaceAll(Pattern.quote("  "), "");
-        s = s.replaceAll(Pattern.quote(" ,"), ",");
-        s = s.replaceAll(Pattern.quote(", "), ",");
-
-        String split[] = s.split(",");
-        List<Point> result = new ArrayList<Point>();
-        for (int i = 0; i < split.length; i++) {
-            String[] coords = split[i].split(" ");
-            for (int j = 0; j < coords.length; j = j + 2) {
-                List<Double> coordinates = new ArrayList<Double>();
-                try {
-                    coordinates.add(Double.parseDouble(coords[j].replaceAll(" ", "")));
-                    coordinates.add(Double.parseDouble(coords[j + 1].replaceAll(" ", "")));
-                    Point p = new Point("", coordinates);
-                    result.add(p);
-                } catch (Exception e) {
-                    System.err.println(e);
-                }
+    public static List<Point> getPoints(String wktString) {
+        LimesWktReader wktReader = new LimesWktReader();
+        List<Point> points = new ArrayList<>();
+        try {
+            Geometry geometry = wktReader.read(wktString);
+            for (Coordinate coordinate : geometry.getCoordinates()) {
+                points.add(new Point("", Double.isNaN(coordinate.getZ()) ?
+                        Lists.newArrayList(coordinate.getX(), coordinate.getY()) :
+                        Lists.newArrayList(coordinate.getX(), coordinate.getY(), coordinate.getZ())));
             }
+        } catch (ParseException e) {
+            logger.warn("Skipping malformed geometry \"" + wktString + "\"...");
         }
-        return result;
+        return points;
     }
 
     /**
      * Computes a polygon out of a WKT string
      *
-     * @param rawValue
+     * @param wktString
      *            An WKT string
      * @return A polygon
      */
-    public static Polygon getPolygon(String rawValue) {
+    public static Polygon getPolygon(String wktString) {
         Polygon p = new Polygon("");
-        List<Point> points = getPoints(rawValue);
+        List<Point> points = getPoints(wktString);
         for (Point point : points) {
             p.add(point);
         }
@@ -102,9 +89,7 @@ public class OrchidMapper extends AMapper {
         Set<Polygon> sourcePolygons = getPolygons(source, properties.get(0));
         Set<Polygon> targetPolygons = getPolygons(target, properties.get(1));
         float theta = (1 / (float) threshold) - 1;
-        MeasureType type = null;
-        type = MeasureFactory.getMeasureType(expression);
-        GeoHR3 orchid = new GeoHR3(theta, GeoHR3.DEFAULT_GRANULARITY, type);
+        GeoHR3 orchid = new GeoHR3(theta, GeoHR3.DEFAULT_GRANULARITY, MeasureFactory.getMeasureType(expression));
         return orchid.run(sourcePolygons, targetPolygons);
     }
 
@@ -120,25 +105,13 @@ public class OrchidMapper extends AMapper {
      *         matches
      */
     public Set<Polygon> getPolygons(ACache c, String property) {
-        Polygon p;
-        Set<Polygon> polygons = new HashSet<Polygon>();
-        for (Instance instance : c.getAllInstances()) {
-            p = new Polygon(instance.getUri());
-            TreeSet<String> values = instance.getProperty(property);
-            if (instance.getUri().contains("dbpedia")) {
-                String value = values.first();
-                value = value.replace(",", "");
-                values = new TreeSet<String>();
-                values.add(value);
+        Set<Polygon> polygons = new HashSet<>();
+        for (String uri : c.getAllUris()) {
+            Set<String> values = c.getInstance(uri).getProperty(property);
+            if (values.size() > 0) {
+                String wkt = values.iterator().next();
+                polygons.add(new Polygon(uri, getPoints(wkt)));
             }
-
-            for (String v : values) {
-                List<Point> points = getPoints(v);
-                for (Point point : points) {
-                    p.add(point);
-                }
-            }
-            polygons.add(p);
         }
         return polygons;
     }

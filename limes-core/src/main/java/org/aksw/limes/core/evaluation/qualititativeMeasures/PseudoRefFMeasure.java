@@ -19,21 +19,6 @@ import org.slf4j.LoggerFactory;
  */
 public class PseudoRefFMeasure extends PseudoFMeasure {
     static Logger logger = LoggerFactory.getLogger(PseudoRefFMeasure.class);
-    /** 
-     * The method calculates the pseudo reference F-Measure of the machine learning predictions compared to a gold standard for beta = 1 .
-     * @param predictions The predictions provided by a machine learning algorithm.
-     * @param goldStandard It contains the gold standard (reference mapping) combined with the source and target URIs.
-     * @param beta this values specifies how F-Measure is biased between precision and recall
-     * @return double - This returns the calculated pseudo reference F-Measure.
-     */
-    public double calculate(AMapping predictions, GoldStandard goldStandard, double beta) {
-
-        double p = precision(predictions, goldStandard);
-        double r = recall(predictions, goldStandard);
-        if (p == 0 && r == 0) return 0.0;
-        double f = (1 + beta * beta) * p * r / (beta * beta * p + r);
-        return f;
-    }
 
     /** 
      * The method calculates the pseudo reference recall of the machine learning predictions compared to a gold standard

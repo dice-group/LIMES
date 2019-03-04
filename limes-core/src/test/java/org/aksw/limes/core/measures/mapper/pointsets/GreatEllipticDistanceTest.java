@@ -1,7 +1,7 @@
 package org.aksw.limes.core.measures.mapper.pointsets;
 
 
-import org.aksw.limes.core.measures.measure.pointsets.GeoGreatEllipticMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
 import org.junit.Test;
 
 public class GreatEllipticDistanceTest {

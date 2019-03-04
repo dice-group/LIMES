@@ -28,11 +28,11 @@ MAX(trigrams(x.rdfs:label,y.dc:title)|0.3,euclidean(x.lat|long, y.latitude|longi
 This specification computes the maximum of:
 
 1. The trigram similarity of x's `rdfs:label` and y's `dc:title` is greater or equal to 0.3
-2. The 2-dimension euclidean distance of `x`'s `lat` and `long` with `y`'s `latitude` and `longitude`, i.e.,  $$ \sqrt{((x.lat- y.latitude)^2 + (x.long - y.longitude)^2)} $$ is greater or equal to 0.5. 
+2. The 2-dimension Euclidean distance of `x`'s `lat` and `long` with `y`'s `latitude` and `longitude`, i.e.,  $$ \sqrt{((x.lat- y.latitude)^2 + (x.long - y.longitude)^2)} $$ is greater or equal to 0.5. 
 
 Note that euclidean supports arbitrarily many dimensions. In addition, note that `ADD` allows to define weighted sums as follows:`ADD(0.3*trigrams(x.rdfs:label,y.dc:title)|0.3, 0.7*euclidean(x.lat|x.long,y.latitude|y.longitude)|0.5)`.
 
-We call `trigrams(x.rdfs:label,y.dc:title)|0.3` the left child of the specification and `euclidean(x.lat|long, y.latitude|longitude)|0.5` the right child of the specification. Both children specifications are simple specifications and combined with a metric operator, they create a complex specification. LIMES gives the user the opportunity to combine **exactly two ** complex or simple spefications to create a new complex specification. Note that each child specification must be accompanied by its own threshold.
+We call `trigrams(x.rdfs:label,y.dc:title)|0.3` the left child of the specification and `euclidean(x.lat|long, y.latitude|longitude)|0.5` the right child of the specification. Both children specifications are simple specifications and combined with a metric operator, they create a complex specification. LIMES gives the user the opportunity to combine **exactly two** complex or simple specifications to create a new complex specification. Note that each child specification must be accompanied by its own threshold.
 
 ## Boolean operations
 
@@ -106,8 +106,16 @@ in the unmatched region on either side of the longest common subsequence.
 * **Soundex**: Soundex is a phonetic algorithm for indexing names by sound, as pronounced in English.
 The goal is for homophones to be encoded to the same representation so that they can be matched
 despite minor differences in spelling. The algorithm mainly encodes consonants, a vowel will not be
-encoded unless it is the first letter. In LIMES, we compute the Soundex distance as the reverse of
+encoded unless it is the first letter. In LIMES, we compute the Soundex similarity score as the reverse of
 the distance between the encoding of the two input strings. 
+* **Koeln**: This phonetic similarity measure uses the Cologne phonetics algorithm which is closely
+related to the previously mentioned Soundex algorithm but is optimized to match the German language.
+In LIMES, we compute the Koeln similarity score as the reverse of the distance between the Cologne 
+phonetics encoding of the two input strings.
+* **DoubleMetaphone**: This is a phonetic algorithm for indexing words by their English pronunciation.
+It was designed based on the Soundex algorithm and aims to deal with most of its shortcomings.
+In LIMES, we compute the DoubleMetaphone similarity score as the reverse of the distance between the
+DoubleMetaphone encoding of the two input strings.
 * **Trigram**: A tri-gram is a group of three consecutive characters taken from a string.
 In LIMES, we measure the similarity of two input strings by counting the number of trigrams they share.
 Formally, we compute the trigram similarity as the normalized sum of absolute differences between
@@ -124,19 +132,7 @@ LIMES supports comparing numeric vectors by using the vector space measures pack
 With this distance, Euclidean space becomes a metric space.
 For example, `euclidean(a.wgs84:lat|wgs84:long,b.wgs84:lat|wgs84:long)` will compute the Euclidean
 distance between the point representations of each resource from the source and target datasets.
-* **Geo_Orthodromic**: The great-circle distance or orthodromic distance is the shortest distance
-between two points on the surface of a sphere, measured along the surface of the sphere
-(as opposed to a straight line through the sphere's interior). The distance between two points in
-Euclidean space is the length of a straight line between them, but on the sphere, there are no
-straight lines. In spaces with curvature, straight lines are replaced by geodesics.
-Geodesics on the sphere are circles on the sphere whose centres coincide with the canter of the
-sphere and are called great circles.
-* **Geo_Great_Elliptic**: The great ellipse distance is the length of the ellipse passing through
-two points on a spheroid and having the same centre as that of the spheroid. Equivalently, it is
-distance of the ellipse on the surface of a spheroid and cantered on the origin, or the curve
-formed by intersecting the spheroid by a plane through its centre. The great ellipse distance is
-confedered the most accurate distance between two point In the surface of the earth.
-
+* **Manhattan**: Manhattan metric defines the distance between two points as the sum of the absolute differences of their Cartesian coordinates.
 
 ### Point-Set Measures
   
@@ -230,7 +226,7 @@ Moreover, LIMES support the following temporal relations between POI resources b
 * **Tmp_Is_Finished_By**: reverse of Tmp_Finishes
 * **Tmp_Overlaps**: Part of the first POI timestamp overlaps with the second POI time stamp.
 * **Tmp_Is_Overlapped_By**: reverse of Tmp_Overlaps
-* **Tmp_Starts**: The start first POI timestamp is tha same as the start of the second POI time stamp.
+* **Tmp_Starts**: The start first POI timestamp is the same as the start of the second POI time stamp.
 * **Tmp_Is_Started_By**: reverse of Tmp_Starts
 * **Tmp_Meets**: The end first POI timestamp meets the start of the second POI time stamp.
 * **Tmp_Is_xBy**: reverse of Tmp_Meets

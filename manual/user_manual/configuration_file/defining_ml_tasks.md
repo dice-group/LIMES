@@ -96,6 +96,11 @@ The following table contains a list of implemented algorithms together with supp
     <td class="tg-yw4l">1</td>
     <td class="tg-yw4l">Range 0 to 1</td>
   </tr>
+    <tr>
+      <td class="tg-yw4l">beta</td>
+      <td class="tg-yw4l">1</td>
+      <td class="tg-yw4l">Range 0 to 1.7*10^308 (Double.MAX_VALUE)</td>
+    </tr>
   <tr>
     <td class="tg-yw4l">verbose</td>
     <td class="tg-yw4l">false</td>

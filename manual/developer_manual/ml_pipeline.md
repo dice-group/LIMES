@@ -1,7 +1,7 @@
 # MLPipeline
 
 The `MLPipeline` acts as a simple facade for the three `MLImplementationType`s of `MLAlgorithms` LIMES 1.0 offers: `UNSUPERVISED`, `SUPERVISED_BATCH`, `SUPERVISED_ACTIVE`.
-In the following the patten for invoking a `MLAlgorithm` is presented.
+In the following the pattern for invoking a `MLAlgorithm` is presented.
 Because many algorithms can support more than one `MLImplementationType`, to minimize redundant code, `MLAlgorithm`'s should be implemented by extending the abstract class `ACoreMLAlgorithm`. `ACoreMLAlgorithm`'s interface covers all three types, but not all three need to be implemented.
 For each `MLImplementationType` there is a decorator class extending `AMLAlgorithm`. To use any `MLAlgorithm` in a safe way, pass its class type to the constructor of the decorator class corresponding to the `MLImplementationType`, e.g.:
 

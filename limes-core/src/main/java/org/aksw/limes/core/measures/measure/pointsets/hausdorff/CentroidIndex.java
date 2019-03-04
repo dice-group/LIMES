@@ -13,7 +13,7 @@ import org.aksw.limes.core.datastrutures.Point;
 import org.aksw.limes.core.measures.mapper.pointsets.OrthodromicDistance;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.mapper.pointsets.PolygonIndex;
-import org.aksw.limes.core.measures.measure.pointsets.GeoGreatEllipticMeasure;
+import org.aksw.limes.core.measures.measure.space.GeoGreatEllipticMeasure;
 
 /**
  * Adds the distance from the centroids, which are in the middle of the longest

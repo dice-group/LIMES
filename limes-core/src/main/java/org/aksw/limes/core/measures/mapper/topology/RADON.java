@@ -20,13 +20,13 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.pointsets.Polygon;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
+import org.aksw.limes.core.util.LimesWktReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
 
 /**
  *
@@ -343,7 +343,7 @@ public class RADON {
     private static final Logger logger = LoggerFactory.getLogger(RADON.class);
 
     public static Map<String, Geometry> getGeometryMapFromCache(ACache c, String property) {
-        WKTReader wktReader = new WKTReader();
+        LimesWktReader wktReader = new LimesWktReader();
         Map<String, Geometry> gMap = new HashMap<>();
         for (String uri : c.getAllUris()) {
             Set<String> values = c.getInstance(uri).getProperty(property);
