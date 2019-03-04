@@ -502,6 +502,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
         for (String p : sourcePropertiesCoverageMap.keySet()) {
             for (String q : targetPropertiesCoverageMap.keySet()) {
                 for (String m : getAtomicMeasures()) {
+                    //logger.info(p+" "+q+" "+m);
                     ExtendedClassifier cp = findInitialClassifier(p, q, m);
                     // only add if classifier covers all entries
                     initialClassifiers.add(cp);

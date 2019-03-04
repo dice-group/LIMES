@@ -237,7 +237,7 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
         RandomGenerator randomGen = getGPConfiguration().getRandomGenerator();
         String newOp = aO[randomGen.nextInt(aO.length)];
         StringMeasure result = new StringMeasure(newOp, getGPConfiguration(), getReturnType(), getSubReturnType(),
-                m_mutateable);
+                m_mutateable, allowedOperations);
         return result;
     }
 

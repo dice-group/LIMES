@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.aksw.limes.core.measures.measure.semantic.edgecounting.dictionary.SemanticDictionary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.mit.jwi.item.ISynset;
 import edu.mit.jwi.item.ISynsetID;
@@ -15,15 +17,14 @@ import edu.mit.jwi.item.Pointer;
 public class HypernymPathsFinder {
     public static boolean useInstanceHypernyms = true;
     public static boolean useHypernyms = true;
-
+    private static final Logger logger = LoggerFactory.getLogger(HypernymPathsFinder.class);
 
     public static ArrayList<ArrayList<ISynsetID>> getHypernymPaths(SemanticDictionary dictionary, ISynset synset) {
         if (synset == null)
             return new ArrayList<ArrayList<ISynsetID>>();
 
         ArrayList<ArrayList<ISynsetID>> trees = getHypernymPaths(dictionary, synset, new HashSet<ISynsetID>());
-        
-        
+
         return trees;
     }
 
@@ -44,6 +45,7 @@ public class HypernymPathsFinder {
 
         ArrayList<ArrayList<ISynsetID>> result = new ArrayList<ArrayList<ISynsetID>>();
 
+        logger.info("Current: "+synset.getID().toString());
         // If this is the highest node and has no other hypernyms
         if ((hypernymIds.size() == 0) && (instanceHypernymIds.size() == 0)) {
             // return the tree containing only the current node
@@ -53,8 +55,10 @@ public class HypernymPathsFinder {
         } else {
             // for all (direct) hypernyms of this synset
             for (ISynsetID hypernymId : hypernymIds) {
+                logger.info("--->Calling for "+hypernymId.toString());
                 ArrayList<ArrayList<ISynsetID>> hypernymTrees = getHypernymPaths(dictionary,
                         dictionary.getSynset(hypernymId), history);
+                logger.info("--->Came back from "+hypernymId.toString());
                 // add the current Tree and
                 for (ArrayList<ISynsetID> hypernymTree : hypernymTrees) {
                     hypernymTree.add(synset.getID());
@@ -69,6 +73,7 @@ public class HypernymPathsFinder {
                     hypernymTree.add(synset.getID());
                     result.add(hypernymTree);
                 }
+
             }
         }
 

@@ -40,10 +40,6 @@ public class WuPalmerMeasure extends AEdgeCountingSemanticMeasure {
         return sim;
     }
 
-    @Override
-    public double getSimilaritySimple(ISynset synset1, ISynset synset2) {
-        return getSimilarityComplex(synset1, synset2);
-    }
 
     @Override
     public double getSimilarityComplex(ISynset synset1, ISynset synset2) {
@@ -51,10 +47,10 @@ public class WuPalmerMeasure extends AEdgeCountingSemanticMeasure {
         ArrayList<ArrayList<ISynsetID>> paths1 = getPaths(synset1);
         ArrayList<ArrayList<ISynsetID>> paths2 = getPaths(synset2);
 
-        //long b = System.currentTimeMillis();
+        long b = System.currentTimeMillis();
         sim = getSimilarity(synset1, paths1, synset2, paths2);
-        //long e = System.currentTimeMillis();
-        //runtimes.getSynsetSimilarity += e - b;
+        long e = System.currentTimeMillis();
+        runtimes.getSynsetSimilarity += e - b;
         return sim;
     }
 

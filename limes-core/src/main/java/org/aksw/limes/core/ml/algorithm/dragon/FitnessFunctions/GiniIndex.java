@@ -43,7 +43,7 @@ public class GiniIndex extends FitnessFunctionDTL {
 				final TrainingInstance currentInstance = new TrainingInstance(s, t,
 						this.dt.getRefMapping().getMap().get(s).get(t));
 				for (final PairSimilar<String> propPair : this.propertyMapping.stringPropPairs) {
-					for (final String measure : Dragon.defaultMeasures) {
+					for ( String measure : Dragon.defaultMeasures) {
 						final String metricExpression = measure + "(x." + propPair.a + ",y." + propPair.b + ")";
 						metricExpressions.add(new Metric(propPair.a, propPair.b, metricExpression, measure));
 						if (this.dt.getTargetCache().getInstance(t) != null

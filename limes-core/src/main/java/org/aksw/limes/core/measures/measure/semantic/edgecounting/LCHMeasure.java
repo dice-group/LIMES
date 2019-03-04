@@ -34,33 +34,13 @@ public class LCHMeasure extends AEdgeCountingSemanticMeasure {
         ArrayList<ArrayList<ISynsetID>> paths1 = getPaths(synset1);
         ArrayList<ArrayList<ISynsetID>> paths2 = getPaths(synset2);
 
-        //long b = System.currentTimeMillis();
+        long b = System.currentTimeMillis();
         sim = getSimilarity(synset1, paths1, synset2, paths2);
-        //long e = System.currentTimeMillis();
-        //runtimes.getSynsetSimilarity += e - b;
+        long e = System.currentTimeMillis();
+        runtimes.getSynsetSimilarity += e - b;
         return sim;
     }
 
-    @Override
-    public double getSimilaritySimple(ISynset synset1, ISynset synset2) {
-        double sim = 0.0d;
-        //long b = System.currentTimeMillis();
-
-        if (synset1.getType() != synset2.getType())
-            return 0;
-
-        if (synset1.getOffset() == synset2.getOffset())
-            return maxValue;
-
-        int shortestPath = ShortestPathFinder.shortestPath(synset1, synset2, dictionary);
-        sim = calculate(synset1, shortestPath);
-
-        //long e = System.currentTimeMillis();
-        //runtimes.getSynsetSimilarity += e - b;
-
-        return sim;
-
-    }
 
     public double getSimilarity(ISynset synset1, ArrayList<ArrayList<ISynsetID>> synset1Tree, ISynset synset2,
             ArrayList<ArrayList<ISynsetID>> synset2Tree) {

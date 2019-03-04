@@ -545,7 +545,7 @@ public class MeasureFactory {
     
     public static AIndex createIndexer(){
         AIndex Indexer = new MemoryIndex();
-        Indexer.preIndex();
+        Indexer.preIndex(false);
         return Indexer;
     }
 

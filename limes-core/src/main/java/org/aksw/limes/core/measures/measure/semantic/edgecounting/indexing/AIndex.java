@@ -13,7 +13,7 @@ public abstract class AIndex {
         return durations;
     }
 
-    public abstract void preIndex();
+    public abstract void preIndex(boolean filter);
     
     public abstract void init(boolean f);
 

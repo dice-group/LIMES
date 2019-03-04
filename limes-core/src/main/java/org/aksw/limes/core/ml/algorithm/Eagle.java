@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.aksw.limes.core.evaluation.qualititativeMeasures.FMeasure;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.IQualitativeMeasure;
@@ -74,7 +75,8 @@ public class Eagle extends ACoreMLAlgorithm {
     public static final String MEASURE = "measure";
     public static final String PROPERTY_MAPPING = "property_mapping";
     
-    
+    public static final String PARAMETER_ATOMIC_MEASURES = "atomic_measures";
+
     // ========================================================================
     
     
@@ -99,6 +101,8 @@ public class Eagle extends ACoreMLAlgorithm {
         this.turn = 0;
         this.bestSolutions = new LinkedList<IGPProgram>();
     }
+    
+    
     
 	@Override
     protected MLResults learn(AMapping trainingData) {
@@ -258,12 +262,23 @@ public class Eagle extends ACoreMLAlgorithm {
         
 
         GPProblem gpP;
-
-        gpP = new ExpressionProblem(jgapConfig);
+        //TODO: create new constructor to include the list of measures
+        Set<String> atomicMeasures = getAtomicMeasures();
+        gpP = new ExpressionProblem(jgapConfig, atomicMeasures);
         gp = gpP.create();
     }
 
 
+    protected Set<String> getAtomicMeasures() {
+        Set<String> atomicMeasures = new HashSet<String>();
+
+        String measuresAsString = getParameter(PARAMETER_ATOMIC_MEASURES).toString().replace("[", "").replace("]", "");
+        for (String m : measuresAsString.split(",")) {
+            atomicMeasures.add(m.trim());
+        }
+        return atomicMeasures;
+    }
+    
     /**
      * Returns only positive matches, that are those with a confidence higher then 0.
      *

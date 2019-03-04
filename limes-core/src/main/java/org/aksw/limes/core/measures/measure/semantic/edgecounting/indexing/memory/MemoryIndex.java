@@ -20,7 +20,7 @@ public class MemoryIndex extends AIndex {
 
     HashMap<String, HashMap<Integer, Integer>> minDepths = new HashMap<String, HashMap<Integer, Integer>>();
     HashMap<String, HashMap<Integer, Integer>> maxDepths = new HashMap<String, HashMap<Integer, Integer>>();
-    
+
     HashMap<String, HashMap<Integer, ArrayList<ArrayList<ISynsetID>>>> paths = new HashMap<String, HashMap<Integer, ArrayList<ArrayList<ISynsetID>>>>();
 
     protected SemanticDictionary dictionary = null;
@@ -34,19 +34,24 @@ public class MemoryIndex extends AIndex {
     }
 
     @Override
-    public void preIndex() {
+    public void preIndex(boolean filter) {
         for (int i = 0; i < durations.length; i++)
             durations[i] = 0l;
 
-        /*long bIndex = System.currentTimeMillis();
-        this.preIndexMinMaxDepths();
-        long eIndex = System.currentTimeMillis();
-        long indexMinMax = eIndex - bIndex;
-        durations[0] = indexMinMax;*/
+        long bIndex = 0l;
+        long eIndex = 0l;
 
-        long bIndex = System.currentTimeMillis();
+        if (filter == true) {
+            bIndex = System.currentTimeMillis();
+            this.preIndexMinMaxDepths();
+            eIndex = System.currentTimeMillis();
+            long indexMinMax = eIndex - bIndex;
+            durations[0] = indexMinMax;
+        }
+
+        bIndex = System.currentTimeMillis();
         this.preIndexPaths();
-        long eIndex = System.currentTimeMillis();
+        eIndex = System.currentTimeMillis();
         long indexPaths = eIndex - bIndex;
         durations[1] = indexPaths;
 
@@ -60,19 +65,19 @@ public class MemoryIndex extends AIndex {
 
         logger.info("Finding min and max depths.");
         for (POS pos : POS.values()) {
-            
+
             MinMaxDepthFinder finder = new MinMaxDepthFinder();
             finder.calculateMinMaxDepths(pos, dictionary);
-            
+
             HashMap<Integer, int[]> depths = finder.getDepths();
 
             minDepths.put(pos.toString(), new HashMap<Integer, Integer>());
             maxDepths.put(pos.toString(), new HashMap<Integer, Integer>());
-            
+
             for (Integer sid : depths.keySet()) {
-                
+
                 int[] values = depths.get(sid);
-                
+
                 HashMap<Integer, Integer> tempMin = minDepths.get(pos.toString());
                 tempMin.put(sid, values[0]);
                 minDepths.put(pos.toString(), tempMin);
@@ -99,7 +104,7 @@ public class MemoryIndex extends AIndex {
             while (iterator.hasNext()) {
                 ISynset synset = iterator.next();
                 ArrayList<ArrayList<ISynsetID>> trees = HypernymPathsFinder.getHypernymPaths(dictionary, synset);
-                
+
                 HashMap<Integer, ArrayList<ArrayList<ISynsetID>>> temp = paths.get(pos.toString());
                 temp.put(synset.getOffset(), trees);
                 paths.put(pos.toString(), temp);

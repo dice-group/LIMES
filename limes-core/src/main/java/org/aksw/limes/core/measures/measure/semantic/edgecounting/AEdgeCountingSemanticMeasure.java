@@ -56,14 +56,14 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         logger.info("filtering: " + filtering);
         logger.info("indexing: " + preIndex);
 
-        //runtimes = new RuntimeStorage();
+        runtimes = new RuntimeStorage();
 
-        //long b = System.currentTimeMillis();
+        long b = System.currentTimeMillis();
         dictionary = new SemanticDictionary();
         dictionary.exportDictionaryToFile();
         dictionary.openDictionaryFromFile();
-        //long e = System.currentTimeMillis();
-        //runtimes.createDictionary += e - b;
+        long e = System.currentTimeMillis();
+        runtimes.createDictionary += e - b;
 
         if (preIndex) {
             // in case of db, connection is already opened
@@ -178,42 +178,42 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     }
 
     public IWord getIWord(IWordID wordID) {
-        //long b = System.currentTimeMillis();
+        long b = System.currentTimeMillis();
         IWord iword = null;
         if (wordID != null)
             iword = dictionary.getWord(wordID);
-        //long e = System.currentTimeMillis();
-        //runtimes.getIWord += e - b;
+        long e = System.currentTimeMillis();
+        runtimes.getIWord += e - b;
         return iword;
     }
 
     public ISynset getSynset(IWord iword) {
-        //long b = System.currentTimeMillis();
+        long b = System.currentTimeMillis();
         if (iword == null)
             return null;
-        //long e = System.currentTimeMillis();
-        //runtimes.getSynset += e - b;
+        long e = System.currentTimeMillis();
+        runtimes.getSynset += e - b;
         return iword.getSynset();
     }
 
     public List<IWordID> getWordIDs(IIndexWord w) {
-        //long b = System.currentTimeMillis();
+        long b = System.currentTimeMillis();
         List<IWordID> wordIDs = w.getWordIDs();
-        //long e = System.currentTimeMillis();
-        //runtimes.getWordIDs += e - b;
+        long e = System.currentTimeMillis();
+        runtimes.getWordIDs += e - b;
         return wordIDs;
     }
 
     public ArrayList<ArrayList<ISynsetID>> getPaths(ISynset synset) {
-        //long b = System.currentTimeMillis();
+        long b = System.currentTimeMillis();
         if (synset == null)
             return new ArrayList<ArrayList<ISynsetID>>();
 
         ArrayList<ArrayList<ISynsetID>> paths = preIndex ? Indexer.getHypernymPaths(synset)
                 : HypernymPathsFinder.getHypernymPaths(dictionary, synset);
 
-        //long e = System.currentTimeMillis();
-        //runtimes.getHypernymPaths += e - b;
+        long e = System.currentTimeMillis();
+        runtimes.getHypernymPaths += e - b;
         return paths;
     }
 
@@ -224,13 +224,13 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
         if (filtering == true) {
 
-            //long r = System.currentTimeMillis();
+            long r = System.currentTimeMillis();
             int minDepth1 = 0, minDepth2 = 0;
             int[] depths1 = new int[3], depths2 = new int[3];
-            //long m = System.currentTimeMillis();
-            //runtimes.filter += m - r;
+            long m = System.currentTimeMillis();
+            runtimes.filter += m - r;
 
-            //long bMinMax = System.currentTimeMillis();
+            long bMinMax = System.currentTimeMillis();
             if (preIndex) {
                 minDepth1 = Indexer.getMinDepth(synset1);
                 minDepth2 = Indexer.getMinDepth(synset2);
@@ -247,19 +247,19 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                 minDepth2 = depths2[0];
 
             }
-            //long eMinMax = System.currentTimeMillis();
-            //runtimes.getMinMaxDepth += eMinMax - bMinMax;
+            long eMinMax = System.currentTimeMillis();
+            runtimes.getMinMaxDepth += eMinMax - bMinMax;
 
-            //r = System.currentTimeMillis();
+            r = System.currentTimeMillis();
             ArrayList<Integer> parameters = new ArrayList<Integer>();
             parameters.add(minDepth1);
             parameters.add(minDepth2);
-            //m = System.currentTimeMillis();
-            //runtimes.filter += m - r;
+            m = System.currentTimeMillis();
+            runtimes.filter += m - r;
 
             if (this.getName().equals("wupalmer") || this.getName().equals("li")) {
                 int maxDepth1 = 0, maxDepth2 = 0;
-                //bMinMax = System.currentTimeMillis();
+                bMinMax = System.currentTimeMillis();
                 if (preIndex) {
                     maxDepth1 = Indexer.getMaxDepth(synset1);
                     maxDepth2 = Indexer.getMaxDepth(synset2);
@@ -267,35 +267,35 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                     maxDepth1 = depths1[1];
                     maxDepth2 = depths2[1];
                 }
-                //eMinMax = System.currentTimeMillis();
-                //runtimes.getMinMaxDepth += eMinMax - bMinMax;
+                eMinMax = System.currentTimeMillis();
+                runtimes.getMinMaxDepth += eMinMax - bMinMax;
 
-                //r = System.currentTimeMillis();
+                r = System.currentTimeMillis();
                 parameters.add(maxDepth1);
                 parameters.add(maxDepth2);
-                //m = System.currentTimeMillis();
-                //runtimes.filter += m - r;
+                m = System.currentTimeMillis();
+                runtimes.filter += m - r;
             }
 
-            //r = System.currentTimeMillis();
+            r = System.currentTimeMillis();
             int D = getHierarchyDepth(synset1.getType());
             parameters.add(D);
-            //m = System.currentTimeMillis();
-            //runtimes.filter += m - r;
+            m = System.currentTimeMillis();
+            runtimes.filter += m - r;
 
-            //long bFilter = System.currentTimeMillis();
+            long bFilter = System.currentTimeMillis();
             boolean passed = filter(parameters);
-            //long eFilter = System.currentTimeMillis();
-            //runtimes.filter += eFilter - bFilter;
+            long eFilter = System.currentTimeMillis();
+            runtimes.filter += eFilter - bFilter;
 
             if (passed == false) {
                 return 0.0d;
             } else {
-                //runtimes.counts++;
+                runtimes.counts++;
                 sim = getSimilarityComplex(synset1, synset2);
             }
         } else {
-            //runtimes.counts++;
+            runtimes.counts++;
             sim = getSimilarityComplex(synset1, synset2);
         }
 
@@ -375,7 +375,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     }
 
     public double checkSimilarity(HashMap<String, Double> similaritiesMap, String sourceToken, String targetToken) {
-        //long bCheck = System.currentTimeMillis();
+        long bCheck = System.currentTimeMillis();
         double similarity = 0.0d;
         String together = sourceToken + "||" + targetToken;
         String together2 = targetToken + "||" + sourceToken;
@@ -387,8 +387,8 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
         } else {
             similarity = Double.MAX_VALUE;
         }
-        //long eCheck = System.currentTimeMillis();
-        //runtimes.checkSimilarity += eCheck - bCheck;
+        long eCheck = System.currentTimeMillis();
+        runtimes.checkSimilarity += eCheck - bCheck;
 
         return similarity;
     }
@@ -396,13 +396,13 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
     @Override
     public double getSimilarity(Instance instance1, Instance instance2, String property1, String property2) {
         // test in each semantic similarity
-        //long b = System.currentTimeMillis();
+        long b = System.currentTimeMillis();
 
         double sim = 0;
         double maxSim = 0;
 
         // pre-tokenize all target labels
-        //long bTokenizeTarget = System.currentTimeMillis();
+        long bTokenizeTarget = System.currentTimeMillis();
         ArrayList<String[]> targetInTokens = new ArrayList<String[]>();
         for (String targetValue : instance2.getProperty(property2)) {
             if (targetValue.equals(""))
@@ -410,8 +410,8 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
             String[] tempTokens = tokenize(new String[] { targetValue });
             targetInTokens.add(tempTokens);
         }
-        //long eTokenizeTarget = System.currentTimeMillis();
-        //runtimes.targetTokenizing += eTokenizeTarget - bTokenizeTarget;
+        long eTokenizeTarget = System.currentTimeMillis();
+        runtimes.targetTokenizing += eTokenizeTarget - bTokenizeTarget;
 
         ///////////////////////////////////////////////////////////////////
         HashMap<String, Double> similaritiesMap = new HashMap<String, Double>();
@@ -420,10 +420,10 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
             if (sourceValue.equals(""))
                 continue;
 
-            //long bTokenizeBegin = System.currentTimeMillis();
+            long bTokenizeBegin = System.currentTimeMillis();
             String[] sourceTokens = tokenize(new String[] { sourceValue });
-            //long eTokenizeBegin = System.currentTimeMillis();
-            //runtimes.sourceTokenizing += eTokenizeBegin - bTokenizeBegin;
+            long eTokenizeBegin = System.currentTimeMillis();
+            runtimes.sourceTokenizing += eTokenizeBegin - bTokenizeBegin;
 
             for (String[] targetTokens : targetInTokens) {
 
@@ -433,10 +433,10 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                 int nonSWCounter = 0;
 
                 for (String sourceToken : sourceTokens) {
-                    //long bStopSource = System.currentTimeMillis();
+                    long bStopSource = System.currentTimeMillis();
                     boolean flagSource = Stopwords.isStopword(sourceToken);
-                    //long eStopSource = System.currentTimeMillis();
-                    //runtimes.checkStopWords += eStopSource - bStopSource;
+                    long eStopSource = System.currentTimeMillis();
+                    runtimes.checkStopWords += eStopSource - bStopSource;
 
                     if (!flagSource) {
 
@@ -445,10 +445,10 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
                         for (String targetToken : targetTokens) {
 
-                            //long bStopTarget = System.currentTimeMillis();
+                            long bStopTarget = System.currentTimeMillis();
                             boolean flagTarget = Stopwords.isStopword(targetToken);
-                            //long eStopTarget = System.currentTimeMillis();
-                            //runtimes.checkStopWords += eStopTarget - bStopTarget;
+                            long eStopTarget = System.currentTimeMillis();
+                            runtimes.checkStopWords += eStopTarget - bStopTarget;
 
                             if (!flagTarget) {
 
@@ -496,8 +496,8 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
                 }
             }
         }
-        //long e = System.currentTimeMillis();
-        //runtimes.getSimilarityInstances += e - b;
+        long e = System.currentTimeMillis();
+        runtimes.getSimilarityInstances += e - b;
         return maxSim;
     }
 
@@ -528,7 +528,7 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
 
     @Override
     public IIndexWord getIIndexWord(String str) {
-        //long b = System.currentTimeMillis();
+        long b = System.currentTimeMillis();
         if (str == null)
             return null;
 
@@ -543,8 +543,8 @@ public abstract class AEdgeCountingSemanticMeasure extends ASemanticMeasure impl
             }
 
         }
-        //long e = System.currentTimeMillis();
-        //runtimes.getIIndexWords += e - b;
+        long e = System.currentTimeMillis();
+        runtimes.getIIndexWords += e - b;
         return idxWord1;
     }
 

@@ -318,7 +318,12 @@
             <artifactId>jena-sparql-api-cache-h2</artifactId>
             <version>3.6.0-1</version>
         </dependency>
-
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-web</artifactId>
+    <version>2.6.2</version>
+    <scope>test</scope>
+</dependency>
         <dependency>
             <groupId>org.aksw.jena-sparql-api</groupId>
             <artifactId>jena-sparql-api-core</artifactId>
