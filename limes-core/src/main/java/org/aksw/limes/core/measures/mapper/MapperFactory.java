@@ -71,10 +71,11 @@ public class MapperFactory {
             case JARO:
                 return new JaroMapper();
             case QGRAMS:
+            //@todo this is a hotfix, remove it in the future
+            case TRIGRAM:
                 return new FastNGramMapper();
             case COSINE:
             case OVERLAP:
-            case TRIGRAM:
             case JACCARD:
                 return new PPJoinPlusPlus();
             case LEVENSHTEIN:
