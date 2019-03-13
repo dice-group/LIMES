@@ -42,7 +42,6 @@ public class Preprocessor {
 		}
 		functions.forEach((property, innerMap) -> {
 			innerMap.forEach((propertyDub, functionChain) -> {
-				System.out.println(property);
 				for(Instance inst : cacheClone.getAllInstances()){
                     logger.debug("Function chain = " + functionChain);
                     applyRenameIfNecessary(inst, property, propertyDub);
