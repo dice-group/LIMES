@@ -67,7 +67,7 @@ public class Server {
         }
         port(port);
         staticFiles.location("/web-ui");
-        staticFiles.expireTime(10);
+        staticFiles.expireTime(0);
         enableCORS("*","GET, POST, OPTIONS","");
         post("/submit", this::handleSubmit);
         get("/status/:id", this::handleStatus);
