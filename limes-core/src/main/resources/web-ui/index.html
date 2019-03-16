@@ -84,7 +84,13 @@
           <datasource-component v-bind:source="source" title="Data source"></datasource-component>
           <datasource-component v-bind:source="target" title="Data target"></datasource-component>
           <!-- metrics UI -->
-          <metrics-component v-bind:metrics="metrics"></metrics-component>
+          <metrics-component
+            v-bind:metrics="metrics"
+            v-bind:measureOptions="measureOptions"
+            v-bind:selectedMeasureOption="selectedMeasureOption"
+            v-bind:selectedOperatorOption="selectedOperatorOption"
+            v-bind:operatorOptions="operatorOptions"
+          ></metrics-component>
           <!-- acceptance UI -->
           <accreview-component v-bind:data="acceptance" title="Acceptance Condition"></accreview-component>
           <accreview-component v-bind:data="review" title="Review Condition"></accreview-component>
@@ -203,6 +209,19 @@
     <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
       <div class="md-title">Metrics</div>
       <md-chips v-model="metrics" md-input-placeholder="Add a metric"></md-chips>
+
+      <select v-model="selectedMeasureOption" multiple="true">
+        <option v-for="measureOption in measureOptions" v-bind:value="measureOption.value">
+          {{ measureOption.text }}
+        </option>
+      </select>
+
+      <select v-model="selectedOperatorOption" multiple="true">
+        <option v-for="operatorOption in operatorOptions" v-bind:value="operatorOption.value">
+          {{ operatorOption.text }}
+        </option>
+      </select>
+
     </md-whiteframe>
   </script>
 

@@ -20,6 +20,16 @@ const makeAccReview = (data, tag) => `<${tag.toUpperCase()}>
 </${tag.toUpperCase()}>
 `;
 
+const measures = ['Cosine', 'ExactMatch', 'Jaccard', 'Overlap', 'Jaro', 'JaroWinkler', 
+'Levenshtein', 'MongeElkan', 'RatcliffObershelp', 'Soundex', 'Koeln', 'DoubleMetaphone',
+'Trigram', 'Qgrams'];
+let measureOptionsArray = [];
+measures.forEach(i => measureOptionsArray.push({text: i.toLowerCase(), value: i.toLowerCase()}));
+
+const operators = ['MAX', 'AND'];
+let operatorOptionsArray = [];
+operators.forEach(i => operatorOptionsArray.push({text: i.toLowerCase(), value: i.toLowerCase()}));
+
 // init the app
 let app = new Vue({
   el: '#app',
@@ -58,6 +68,10 @@ let app = new Vue({
       optionalProperties: ['rdf:type'],
     },
     metrics: ['trigrams(y.dc:title, x.linkedct:condition_name)'],
+    selectedMeasureOption: '',
+    measureOptions: measureOptionsArray,
+    selectedOperatorOption: '',
+    operatorOptions: operatorOptionsArray,
     acceptance: {
       threshold: 0.98,
       file: 'accepted.nt',
@@ -276,6 +290,7 @@ let app = new Vue({
           label: 'rdfs',
         },
       ];
+      console.log(this.prefixes);
       this.source = {
         id: 'linkedgeodata',
         endpoint: 'http://linkedgeodata.org/sparql',

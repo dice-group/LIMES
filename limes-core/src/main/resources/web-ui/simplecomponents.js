@@ -7,8 +7,9 @@ Vue.component('datasource-component', {
 // Define a new component for metric
 Vue.component('metrics-component', {
   template: '#metricsComponent',
-  props: ['metrics'],
+  props: ['metrics', 'selectedMeasureOption', 'measureOptions', 'selectedOperatorOption', 'operatorOptions'],
 });
+
 
 // Define a new component for metric
 Vue.component('accreview-component', {
