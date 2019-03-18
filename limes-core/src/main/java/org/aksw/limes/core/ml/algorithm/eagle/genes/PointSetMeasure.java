@@ -201,7 +201,7 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
     	ops.add(MeasureFactory.GEO_MEAN);
     	ops.add(MeasureFactory.GEO_MIN);
     	ops.add(MeasureFactory.GEO_NAIVE_HAUSDORFF);
-    	ops.add(MeasureFactory.GEO_NAIVE_SURJECTION);
+    	ops.add(MeasureFactory.GEO_SURJECTION);
     	ops.add(MeasureFactory.GEO_ORTHODROMIC);
     	ops.add(MeasureFactory.GEO_SCAN_INDEXED_HAUSDORFF);
     	ops.add(MeasureFactory.GEO_SUM_OF_MIN);

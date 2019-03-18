@@ -4,11 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import eu.medsea.mimeutil.MimeType;
 import eu.medsea.mimeutil.MimeUtil;
+import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
 import org.aksw.limes.core.io.serializer.ISerializer;
 import org.aksw.limes.core.io.serializer.SerializerFactory;
+import org.aksw.limes.core.measures.measure.MeasureType;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +76,8 @@ public class Server {
         get("/logs/:id", this::handleLogs);
         get("/results/:id", this::handleResults);
         get("/result/:id/:file", this::handleResult);
+        get("/list/operators", this::handleOperators);
+        get("/list/measures", this::handleMeasures);
         exception(Exception.class, (e, req, res) -> {
             logger.error("Error in processing request" + req.uri(), e);
             res.status(500);
@@ -90,6 +94,27 @@ public class Server {
     }
 
     private Server(){
+    }
+
+    private Object handleOperators(Request req, Response res) {
+        OperatorsMessage result = new OperatorsMessage(
+            Arrays.stream(LogicOperator.values())
+                    .map(Enum::name)
+                    .collect(Collectors.toList())
+        );
+        res.status(200);
+        return GSON.toJson(result);
+    }
+
+    private Object handleMeasures(Request req, Response res) {
+        MeasuresMessage result = new MeasuresMessage(
+                Arrays.stream(MeasureType.values())
+                        .map(Enum::name)
+                        .map(String::toLowerCase)
+                        .collect(Collectors.toList())
+        );
+        res.status(200);
+        return GSON.toJson(result);
     }
 
     private Object handleSubmit(Request req, Response res) throws Exception {
@@ -301,6 +326,24 @@ public class Server {
 
         private ResultsMessage(List<String> availableFiles) {
             this.availableFiles = availableFiles;
+        }
+    }
+
+    private static class MeasuresMessage extends ServerMessage {
+
+        private List<String> availableMeasures;
+
+        private MeasuresMessage(List<String> availableMeasures) {
+            this.availableMeasures = availableMeasures;
+        }
+    }
+
+    private static class OperatorsMessage extends ServerMessage {
+
+        private List<String> availableOperators;
+
+        private OperatorsMessage(List<String> availableOperators) {
+            this.availableOperators = availableOperators;
         }
     }
 
