@@ -13,6 +13,51 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://unpkg.com/vue-material@0.8.1/dist/vue-material.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+  <style lang="scss" scoped>
+  .dropdown {
+    position: relative;
+    display: block;
+    .dropdown-input {
+      background: #fff;
+      cursor: pointer;
+      border: 1px solid #e7ecf5;
+      border-radius: 3px;
+      color: #333;
+      display: block;
+      font-size: .8em;
+      padding: 6px;
+      min-width: 250px;
+      max-width: 250px;
+      &:hover {
+        background: #f8f8fa;
+      }
+    }
+    .dropdown-content {
+      position: absolute;
+      background-color: #fff;
+      min-width: 248px;
+      max-width: 248px;
+      border: 1px solid #e7ecf5;
+      box-shadow: 0px -8px 34px 0px rgba(0,0,0,0.05);
+      z-index: 1;
+      .dropdown-item {
+        color: black;
+        font-size: .7em;
+        line-height: 1em;
+        padding: 8px;
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+        &:hover {
+          background-color: #e7ecf5;
+        }
+      }
+    }
+    .dropdown:hover .dropdowncontent {
+      display: block;
+    }
+  }
+</style>
 
   <!-- LIMES server ref -->
   <script>
@@ -79,7 +124,8 @@
       <md-layout md-gutter>
         <md-layout md-flex-offset="25" md-column>
           <!-- prefixes UI -->
-          <prefixes-list v-bind:deleteChip="deletePrefix" v-bind:addPrefix="addPrefix" v-bind:prefixes="prefixes"></prefixes-list>
+          <prefixes-list v-bind:deleteChip="deletePrefix" v-bind:addPrefix="addPrefix" v-bind:prefixes="prefixes" v-bind:filteredOptions="filteredOptions"
+          v-bind:context="context"></prefixes-list>
           <!-- datasources UI -->
           <datasource-component v-bind:source="source" title="Data source"></datasource-component>
           <datasource-component v-bind:source="target" title="Data target"></datasource-component>
@@ -131,9 +177,22 @@
 
       <md-layout md-gutter="8">
         <md-layout md-flex="33">
-          <md-input-container>
+          <md-input-container class="dropdown">
             <label>Label</label>
-            <md-input v-model="label" placeholder="Label"></md-input>
+            <md-input class="dropdown-input" v-model="label" @focus="onFocus" @blur="onBlur" placeholder="Label"></md-input>
+
+             <div class="dropdown-content"
+                  v-show="optionsShown">
+                  <div
+                    class="dropdown-item"
+                    @mousedown="selectOption(option)"
+                    v-for="option in afterFilteredOptions">
+                      {{ option }}
+                  </div>
+                  
+            </div>
+
+
           </md-input-container>
         </md-layout>
         <md-layout md-flex>

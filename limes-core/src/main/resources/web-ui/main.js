@@ -1,5 +1,6 @@
 // apply vue-material stuff
 Vue.use(VueMaterial);
+Vue.config.devtools = true;
 
 const makeDatasource = (data, tag) => `<${tag.toUpperCase()}>
 <ID>${data.id}</ID>
@@ -47,6 +48,8 @@ let app = new Vue({
     results: [],
     // config
     prefixes: [],
+    filteredOptions: [],
+    context: [],
     source: {
       id: 'sourceId',
       endpoint: 'http://source.endpoint.com/sparql',
@@ -112,6 +115,26 @@ let app = new Vue({
       setTimeout(() => this.$refs.jobDialog.open(), 10);
       setTimeout(() => this.getStatus(), 1000);
     }
+
+  },
+  beforeMount() {
+    let context;
+    let filteredOptions;
+    fetch('http://prefix.cc/context')
+            .then(function(response) {
+              return response.json();
+             })
+            .then((content) => {
+              console.log(Object.keys(content["@context"]));
+              context = content["@context"];
+              filteredOptions = Object.keys(context);
+              
+              this.context = context;
+              this.filteredOptions.push(...filteredOptions);
+              console.log(this.filteredOptions);
+              console.log(this.context);
+            })
+            //.catch( alert );
   },
   methods: {
     deletePrefix(prefix) {
