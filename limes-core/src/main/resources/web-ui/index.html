@@ -57,6 +57,10 @@
       display: block;
     }
   }
+  .dropdown-content {
+      height: 100px;
+      overflow: auto;
+  }
 </style>
 
   <!-- LIMES server ref -->
@@ -181,7 +185,7 @@
             <label>Label</label>
             <md-input class="dropdown-input" v-model="label" @focus="onFocus" @blur="onBlur" placeholder="Label"></md-input>
 
-             <div class="dropdown-content"
+            <div class="dropdown-content"
                   v-show="optionsShown">
                   <div
                     class="dropdown-item"
@@ -190,8 +194,8 @@
                       {{ option }}
                   </div>
                   
-            </div>
-
+            </div> 
+            
 
           </md-input-container>
         </md-layout>
@@ -222,9 +226,21 @@
           </md-input-container>
         </md-layout>
         <md-layout>
-          <md-input-container>
+          <md-input-container class="dropdown">
             <label>Endpoint</label>
-            <md-input v-model="source.endpoint" placeholder="Endpoint"></md-input>
+            <md-input v-model="source.endpoint" @focus="onFocus" @blur="onBlur" placeholder="Endpoint"></md-input>
+         
+            <div class="dropdown-content"
+                  v-show="optionsShown">
+                  <div
+                    class="dropdown-item"
+                    @mousedown="selectOption(option)"
+                    v-for="option in afterFilteredOptions">
+                      {{ option }}
+                  </div>
+                  
+            </div> 
+
           </md-input-container>
         </md-layout>
         <md-layout>

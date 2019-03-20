@@ -52,7 +52,8 @@ let app = new Vue({
     context: [],
     source: {
       id: 'sourceId',
-      endpoint: 'http://source.endpoint.com/sparql',
+      endpoint: '',
+      endpoints: [],
       var: '?src',
       pagesize: 1000,
       restriction: '?src rdf:type some:Type',
@@ -125,14 +126,31 @@ let app = new Vue({
               return response.json();
              })
             .then((content) => {
-              console.log(Object.keys(content["@context"]));
               context = content["@context"];
               filteredOptions = Object.keys(context);
               
               this.context = context;
               this.filteredOptions.push(...filteredOptions);
-              console.log(this.filteredOptions);
-              console.log(this.context);
+            })
+            //.catch( alert );
+
+    fetch('./lod-data.json')
+            .then(function(response) {
+              return response.json();
+             })
+            .then((content) => {
+              let obj = {};
+              for (let prop in content) {
+                if(content[prop].sparql.length){
+                  for(let i=0; i< content[prop].sparql.length; i++){
+                    if(content[prop].sparql[i].status == "OK"){
+                      //this.source.endpoints.push(content[prop].sparql[i].access_url);
+                      obj[content[prop].sparql[i].access_url] = true;
+                    }
+                  }
+                }
+              }
+              this.source.endpoints.push(...Object.keys(obj));
             })
             //.catch( alert );
   },

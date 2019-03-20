@@ -27,7 +27,6 @@ Vue.component('prefixes-list', {
     },
     onFocus() {
       this.focused = true;
-      console.log("focused");
       this.optionsShown = true;
         
 
@@ -38,17 +37,14 @@ Vue.component('prefixes-list', {
     },
     selectOption(option){
       this.label = option;
-      console.log(this.context[option]);
       this.namespace=this.context[option];
     }
   },
   watch: {
       label: function() {
-        console.log("in watch "+ this.label);
          this.afterFilteredOptions = this.filteredOptions.filter(i => {
           return i.toLowerCase().includes(this.label.toLowerCase())
         })
-        console.log(this.afterFilteredOptions);
       }
   }
 });
