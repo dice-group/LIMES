@@ -53,6 +53,8 @@ returns the java logs for the given job. Useful for troubleshooting.
 * `list/measures` **(GET)** ---
 returns the list of available measures.
 * `list/operators` **(GET)** ---
+returns the list of available measures.
+* `list/preprocessings` **(GET)** ---
 returns the list of available operators.
 * `results/:id` **(GET)** ---
 returns a list of result files in a JSON object.

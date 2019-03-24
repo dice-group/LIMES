@@ -91,4 +91,8 @@ public abstract class APreprocessingFunction implements IPreprocessingFunction {
 		return "";
 	}
 
+	public boolean isComplex() {
+	    return false;
+    }
+
 }

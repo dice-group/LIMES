@@ -78,4 +78,8 @@ public class Concat extends APreprocessingFunction implements IPreprocessingFunc
 		return -1;
 	}
 
+    public boolean isComplex() {
+        return true;
+    }
+
 }
