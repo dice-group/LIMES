@@ -53,9 +53,11 @@ returns the java logs for the given job. Useful for troubleshooting.
 * `list/measures` **(GET)** ---
 returns the list of available measures.
 * `list/operators` **(GET)** ---
-returns the list of available measures.
-* `list/preprocessings` **(GET)** ---
 returns the list of available operators.
+* `list/preprocessings` **(GET)** ---
+returns the list of available preprocessings.
+* `sparql/:urlEncodedEndpointUrl` **(GET, POST, OPTIONS)** ---
+proxy for SPARQL queries. Useful in browser when SPARQL endpoints do not implement CORS headers.
 * `results/:id` **(GET)** ---
 returns a list of result files in a JSON object.
 * `result/:id/:filename`  **(GET)** ---
