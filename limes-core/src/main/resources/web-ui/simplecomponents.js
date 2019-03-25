@@ -6,7 +6,10 @@ Vue.component('datasource-component', {
     return {
       focused: false,
       optionsShown: false,
+      focusedClass: false,
+      classesShown: false,
       afterFilteredOptions: this.source.endpoints,
+      afterFilteredClasses: this.source.classes,
     };
   },
   methods: {
@@ -14,17 +17,31 @@ Vue.component('datasource-component', {
       this.focused = true;
       console.log("focused");
       this.optionsShown = true;
-        
-
     },
     onBlur() {
       this.focused = false;
       this.optionsShown = false;
     },
+    onClassFocus() {
+      this.focusedClass = true;
+      this.classesShown = true;
+      console.log(this.source.classes);
+    },
+    onClassBlur() {
+      this.focusedClass = false;
+      this.classesShown = false;
+    },
     selectOption(option){
       this.source.endpoint = option;
-      // /sparql?default-graph-uri=&query=select+distinct+%3Fclass+where+{[]+a+%3Fclass}+LIMIT+100&format=text%2Fhtml&timeout=0&debug=on
-      // fetchClasses();
+      this.source.classes.splice(0);
+      this.source.propertiesForChoice.splice(0);
+      this.source.class = '';
+      fetchClasses(this.source, option);
+    },
+    selectClass(option){
+      this.source.class = option;
+      this.source.propertiesForChoice.splice(0);
+      fetchProperties(this.source, this.source.endpoint, option);
     }
   },
   watch: {
@@ -32,20 +49,59 @@ Vue.component('datasource-component', {
          this.afterFilteredOptions = this.source.endpoints.filter(i => {
           return i.toLowerCase().includes(this.source.endpoint.toLowerCase())
         })
+      },
+      'source.class': function() {
+         this.afterFilteredClasses = this.source.classes.filter(i => {
+          return i.toLowerCase().includes(this.source.class.toLowerCase())
+        })
       }
   }
 });
 
-// function fetchClasses(endpoint) {
-//     fetch(endpoint + '/sparql?default-graph-uri=http://dbpedia.org&query=select+distinct+?class+where+{?x+a+?class}+LIMIT+100&format=application/sparql-results+json&CXML_redir_for_subjs=121&CXML_redir_for_hrefs=&timeout=30000&debug=on&run=+Run+Query+')
-//           .then(function(response) {
-//             return response.json();
-//            })
-//           .then((content) => {
-//             console.log(content);
-//           })
-//             //.catch( alert );
-// }
+function fetchClasses(source, endpoint) {
+    fetch(`/sparql/${encodeURIComponent(endpoint)}?query=${encodeURIComponent('select distinct ?class where {?x a ?class} LIMIT 100')}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(function(response) {
+      return response.json();
+     })
+    .then((content) => {
+      console.log(content.results.bindings);
+      let classes = [];
+      content.results.bindings.forEach((i, index) => Vue.set(source.classes, index, i.class.value));
+      //i => classes.push(i.class.value));
+      //source.classes.push(...classes);
+    })
+    //.catch( alert );
+}
+
+function fetchProperties(source, endpoint, curClass) {
+    let query = encodeURIComponent('select distinct ?p where {<'+curClass+'> ?p ?o}');
+    fetch(`/sparql/${encodeURIComponent(endpoint)}?query=${query}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(function(response) {
+      return response.json();
+     })
+    .then((content) => {
+      console.log(content.results.bindings);
+      
+      let classes = [];
+      content.results.bindings.forEach(i => {
+        i.p.value.split('#').length != 1 ? 
+        classes.push(i.p.value.split('#')[1]): 
+        classes.push(i.p.value.split('/')[i.p.value.split('/').length-1])
+      });
+      source.propertiesForChoice.push(...classes);
+    })
+    //.catch( alert );
+}
 
 // Define a new component for metric
 Vue.component('metrics-component', {

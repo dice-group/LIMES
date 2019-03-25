@@ -61,6 +61,28 @@
       height: 100px;
       overflow: auto;
   }
+  .draggableBox {
+    background:
+      repeating-linear-gradient(
+          transparent,transparent 20px, grey 22px
+          ),
+      repeating-linear-gradient(
+          90deg,
+          transparent,transparent 20px, grey 22px
+          );
+    border: 1px solid gray;  
+    width: 500px;
+    height: 500px;
+    position: relative;
+  }
+  .draggableElement, .draggedEl {
+    background-color: rgba(218, 223, 225, 1);
+    display: inline-flex;
+    border: 1px solid transparent;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 25px;
+  }
 </style>
 
   <!-- LIMES server ref -->
@@ -269,7 +291,33 @@
         </md-layout>
         <md-layout>
           Properties
+          
+          <md-input-container class="dropdown">
+            <label>Class</label>
+            <md-input v-model="source.class" @focus="onClassFocus" @blur="onClassBlur" placeholder="Class"></md-input>
+         
+            <div class="dropdown-content"
+                  v-show="classesShown">
+                  <div
+                    class="dropdown-item"
+                    @mousedown="selectClass(option)"
+                    v-for="option in afterFilteredClasses">
+                      {{ option }}
+                  </div>
+                  
+            </div> 
+
+          </md-input-container>
+
           <md-chips v-model="source.properties" md-input-placeholder="Add a property"></md-chips>
+          
+          <div class="draggablePart">
+            <div class="draggableElement" v-for="option in source.propertiesForChoice" draggable="true" ondragstart="event.dataTransfer.setData('text/plain',null)">
+                      {{ option }}
+            </div>
+            <div class="draggableBox" ondragover="return false"></div>
+          </div>
+
         </md-layout>
         <md-layout>
           Optional Properties
@@ -421,6 +469,9 @@
   <script src="https://unpkg.com/vue-material@0.8.1/dist/vue-material.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/2.0.4/go-debug.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
   <!-- our scripts -->
   <script src="prefixes.js"></script>
   <script src="mlalgorithm.js"></script>

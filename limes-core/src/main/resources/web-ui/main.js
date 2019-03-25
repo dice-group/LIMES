@@ -31,6 +31,67 @@ const operators = ['MAX', 'AND'];
 let operatorOptionsArray = [];
 operators.forEach(i => operatorOptionsArray.push({text: i.toLowerCase(), value: i.toLowerCase()}));
 
+let dragged;
+let shiftLeft, shiftTop;
+document.addEventListener("drag", function(event) {
+
+}, false);
+
+document.addEventListener("dragstart", function(event) {
+  dragged = event.target;
+  var coords = getCoords(dragged);
+  shiftLeft = event.pageX - coords.left;
+  shiftTop = event.pageY - coords.top; 
+}, false);
+
+document.addEventListener("dragend", function(event) {
+  event.target.style.opacity = "";
+}, false);
+
+document.addEventListener("dragover", function(event) {
+  event.preventDefault();
+}, false);
+
+document.addEventListener("dragenter", function(event) {
+}, false);
+
+document.addEventListener("dragleave", function(event) {
+  if (event.target.className == "draggableBox") {
+    event.target.style.background = "";
+  }
+
+}, false);
+
+document.addEventListener("drop", function(event) {
+  event.preventDefault();
+  if (dragged.classList.contains("draggableElement")) {
+    var coords = getCoords(event.target);
+    var clonedNode = dragged.cloneNode(true);
+    clonedNode.classList.add("draggedEl");
+    clonedNode.style.left = (event.pageX - coords.left) - shiftLeft + 'px';
+    clonedNode.style.top = (event.pageY - coords.top) - shiftTop + 'px';
+    clonedNode.style.position = "absolute";
+    event.target.style.background = "";
+    event.target.appendChild( clonedNode );
+    clonedNode.classList.remove("draggableElement");
+  }
+  if(dragged.classList.contains("draggedEl")){
+    var coords = getCoords(event.target);
+    dragged.style.left = (event.pageX - coords.left) - shiftLeft + 'px';
+    dragged.style.top = (event.pageY - coords.top) - shiftTop + 'px';
+    dragged.style.position = "absolute";
+    event.target.style.background = "";
+  }
+}, false);
+
+function getCoords(elem) {
+  var box = elem.getBoundingClientRect();
+  return {
+    top: box.top + pageYOffset,
+    left: box.left + pageXOffset
+  };
+}
+
 // init the app
 let app = new Vue({
   el: '#app',
@@ -54,11 +115,14 @@ let app = new Vue({
       id: 'sourceId',
       endpoint: '',
       endpoints: [],
+      class: '',
+      classes: ["http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat"],
       var: '?src',
       pagesize: 1000,
       restriction: '?src rdf:type some:Type',
       type: 'sparql',
       properties: ['dc:title AS lowercase RENAME name'],
+      propertiesForChoice: ["a","b","c"],
       optionalProperties: ['rdfs:label'],
     },
     target: {
@@ -116,7 +180,7 @@ let app = new Vue({
       setTimeout(() => this.$refs.jobDialog.open(), 10);
       setTimeout(() => this.getStatus(), 1000);
     }
-
+    
   },
   beforeMount() {
     let context;
@@ -153,6 +217,7 @@ let app = new Vue({
               this.source.endpoints.push(...Object.keys(obj));
             })
             //.catch( alert );
+
   },
   methods: {
     deletePrefix(prefix) {
