@@ -3,14 +3,40 @@ Vue.component('datasource-component', {
   template: '#datasourceComponent',
   props: ['title', 'source'],
   data() {
+    console.log("data!!!")
     return {
       focused: false,
       optionsShown: false,
       focusedClass: false,
       classesShown: false,
-      afterFilteredOptions: this.source.endpoints,
-      afterFilteredClasses: this.source.classes,
+      classes: [],
+      endpoints: [],
+      classVar: '',
+      propertiesForChoice: ["a","b","c"],
+      afterFilteredOptions: [],
+      afterFilteredClasses: [],
     };
+  },
+  beforeMount() {
+        fetch('./lod-data.json')
+            .then(function(response) {
+              return response.json();
+             })
+            .then((content) => {
+              let obj = {};
+              for (let prop in content) {
+                if(content[prop].sparql.length){
+                  for(let i=0; i< content[prop].sparql.length; i++){
+                    if(content[prop].sparql[i].status == "OK"){
+                      obj[content[prop].sparql[i].access_url] = true;
+                    }
+                  }
+                }
+              }
+              this.endpoints.push(...Object.keys(obj));
+              this.afterFilteredOptions = this.endpoints;
+            })
+            //.catch( alert );
   },
   methods: {
     onFocus() {
@@ -25,7 +51,7 @@ Vue.component('datasource-component', {
     onClassFocus() {
       this.focusedClass = true;
       this.classesShown = true;
-      console.log(this.source.classes);
+      console.log(this.classes);
     },
     onClassBlur() {
       this.focusedClass = false;
@@ -33,33 +59,33 @@ Vue.component('datasource-component', {
     },
     selectOption(option){
       this.source.endpoint = option;
-      this.source.classes.splice(0);
-      this.source.propertiesForChoice.splice(0);
-      this.source.class = '';
-      fetchClasses(this.source, option);
+      this.classes.splice(0);
+      this.propertiesForChoice.splice(0);
+      this.classVar = '';
+      fetchClasses(this, option);
     },
     selectClass(option){
-      this.source.class = option;
-      this.source.propertiesForChoice.splice(0);
-      fetchProperties(this.source, this.source.endpoint, option);
+      this.classVar = option;
+      this.propertiesForChoice.splice(0);
+      fetchProperties(this, this.source.endpoint, option);
     }
   },
   watch: {
       'source.endpoint': function() {
-         this.afterFilteredOptions = this.source.endpoints.filter(i => {
+         this.afterFilteredOptions = this.endpoints.filter(i => {
           return i.toLowerCase().includes(this.source.endpoint.toLowerCase())
         })
       },
-      'source.class': function() {
-         this.afterFilteredClasses = this.source.classes.filter(i => {
-          return i.toLowerCase().includes(this.source.class.toLowerCase())
+      'classVar': function() {
+         this.afterFilteredClasses = this.classes.filter(i => {
+          return i.toLowerCase().includes(this.classVar.toLowerCase())
         })
       }
   }
 });
 
 function fetchClasses(source, endpoint) {
-    fetch(`/sparql/${encodeURIComponent(endpoint)}?query=${encodeURIComponent('select distinct ?class where {?x a ?class} LIMIT 100')}`, {
+    fetch(`${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${encodeURIComponent('select distinct ?class where {?x a ?class} LIMIT 100')}`, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -71,16 +97,17 @@ function fetchClasses(source, endpoint) {
     .then((content) => {
       console.log(content.results.bindings);
       let classes = [];
-      content.results.bindings.forEach((i, index) => Vue.set(source.classes, index, i.class.value));
-      //i => classes.push(i.class.value));
-      //source.classes.push(...classes);
+      content.results.bindings.forEach(
+        i => classes.push(i.class.value));
+      source.classes.push(...classes);
+      source.afterFilteredClasses = source.classes;
     })
     //.catch( alert );
 }
 
 function fetchProperties(source, endpoint, curClass) {
     let query = encodeURIComponent('select distinct ?p where {<'+curClass+'> ?p ?o}');
-    fetch(`/sparql/${encodeURIComponent(endpoint)}?query=${query}`, {
+    fetch(`${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${query}`, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

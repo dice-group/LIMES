@@ -294,7 +294,7 @@
           
           <md-input-container class="dropdown">
             <label>Class</label>
-            <md-input v-model="source.class" @focus="onClassFocus" @blur="onClassBlur" placeholder="Class"></md-input>
+            <md-input v-model="classVar" @focus="onClassFocus" @blur="onClassBlur" placeholder="Class"></md-input>
          
             <div class="dropdown-content"
                   v-show="classesShown">
@@ -312,7 +312,7 @@
           <md-chips v-model="source.properties" md-input-placeholder="Add a property"></md-chips>
           
           <div class="draggablePart">
-            <div class="draggableElement" v-for="option in source.propertiesForChoice" draggable="true" ondragstart="event.dataTransfer.setData('text/plain',null)">
+            <div class="draggableElement" v-for="option in propertiesForChoice" draggable="true" ondragstart="event.dataTransfer.setData('text/plain',null)">
                       {{ option }}
             </div>
             <div class="draggableBox" ondragover="return false"></div>

@@ -1,3 +1,5 @@
+window.SPARQL_ENDPOINT = "/sparql/";
+
 // apply vue-material stuff
 Vue.use(VueMaterial);
 Vue.config.devtools = true;
@@ -114,15 +116,11 @@ let app = new Vue({
     source: {
       id: 'sourceId',
       endpoint: '',
-      endpoints: [],
-      class: '',
-      classes: ["http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat"],
       var: '?src',
       pagesize: 1000,
       restriction: '?src rdf:type some:Type',
       type: 'sparql',
       properties: ['dc:title AS lowercase RENAME name'],
-      propertiesForChoice: ["a","b","c"],
       optionalProperties: ['rdfs:label'],
     },
     target: {
@@ -195,26 +193,6 @@ let app = new Vue({
               
               this.context = context;
               this.filteredOptions.push(...filteredOptions);
-            })
-            //.catch( alert );
-
-    fetch('./lod-data.json')
-            .then(function(response) {
-              return response.json();
-             })
-            .then((content) => {
-              let obj = {};
-              for (let prop in content) {
-                if(content[prop].sparql.length){
-                  for(let i=0; i< content[prop].sparql.length; i++){
-                    if(content[prop].sparql[i].status == "OK"){
-                      //this.source.endpoints.push(content[prop].sparql[i].access_url);
-                      obj[content[prop].sparql[i].access_url] = true;
-                    }
-                  }
-                }
-              }
-              this.source.endpoints.push(...Object.keys(obj));
             })
             //.catch( alert );
 
