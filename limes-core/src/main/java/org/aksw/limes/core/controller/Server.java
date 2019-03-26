@@ -126,11 +126,10 @@ public class Server {
         }
         HttpResponse response = request.execute().returnResponse();
         for (Header header : response.getAllHeaders()) {
-            res.header(header.getName(), header.getValue());
+            if (!header.getName().startsWith("Access-Control")) {
+                res.header(header.getName(), header.getValue());
+            }
         }
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-        res.header("Access-Control-Allow-Headers", "*");
         res.status(response.getStatusLine().getStatusCode());
         if (!req.requestMethod().equals("OPTIONS")) {
             HttpEntity entity = response.getEntity();
