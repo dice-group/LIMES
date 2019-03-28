@@ -61,28 +61,6 @@
       height: 100px;
       overflow: auto;
   }
-  .draggableBox {
-    background:
-      repeating-linear-gradient(
-          transparent,transparent 20px, grey 22px
-          ),
-      repeating-linear-gradient(
-          90deg,
-          transparent,transparent 20px, grey 22px
-          );
-    border: 1px solid gray;  
-    width: 500px;
-    height: 500px;
-    position: relative;
-  }
-  .draggableElement, .draggedEl {
-    background-color: rgba(218, 223, 225, 1);
-    display: inline-flex;
-    border: 1px solid transparent;
-    margin: 10px;
-    padding: 5px;
-    border-radius: 25px;
-  }
 </style>
 
   <!-- LIMES server ref -->
@@ -153,8 +131,10 @@
           <prefixes-list v-bind:deleteChip="deletePrefix" v-bind:addPrefix="addPrefix" v-bind:prefixes="prefixes" v-bind:filteredOptions="filteredOptions"
           v-bind:context="context"></prefixes-list>
           <!-- datasources UI -->
-          <datasource-component v-bind:source="source" title="Data source"></datasource-component>
-          <datasource-component v-bind:source="target" title="Data target"></datasource-component>
+          <datasource-component v-bind:source="source" title="Data source" v-bind:advancedOptionsShow="advancedOptionsShow"></datasource-component>
+          <datasource-component v-bind:source="target" v-bind:advancedOptionsShow="advancedOptionsShow" title="Data target"  ></datasource-component>
+
+          <datacanvas-component v-bind:source="source" v-bind:target="target" title="Data target"></datacanvas-component>
           <!-- metrics UI -->
           <metrics-component
             v-bind:metrics="metrics"
@@ -172,6 +152,8 @@
           <execution-component v-bind:execution="execution"></execution-component>
           <!-- output UI -->
           <output-component v-bind:output="output"></output-component>
+          <!-- enable advanced options UI -->
+          <advancedoptions-component v-bind:advancedOptionsShow="advancedOptionsShow" v-on:toggle-advanced-options="advancedOptionsShow = $event"></advancedoptions-component>
 
           <!-- done button -->
           <md-layout md-gutter="16">
@@ -242,7 +224,7 @@
       <!-- source -->
       <md-layout md-column>
         <md-layout>
-          <md-input-container>
+          <md-input-container v-show="advancedOptionsShow">
             <label>ID</label>
             <md-input v-model="source.id" placeholder="ID"></md-input>
           </md-input-container>
@@ -266,13 +248,13 @@
           </md-input-container>
         </md-layout>
         <md-layout>
-          <md-input-container>
+          <md-input-container v-show="advancedOptionsShow">
             <label>Var</label>
             <md-input v-model="source.var" placeholder="Var"></md-input>
           </md-input-container>
         </md-layout>
         <md-layout>
-          <md-input-container>
+          <md-input-container v-show="advancedOptionsShow">
             <label>Pagesize</label>
             <md-input v-model="source.pagesize" placeholder="Pagesize"></md-input>
           </md-input-container>
@@ -282,16 +264,7 @@
             <label>Restriction</label>
             <md-input v-model="source.restriction" placeholder="Restriction"></md-input>
           </md-input-container>
-        </md-layout>
-        <md-layout>
-          <md-input-container>
-            <label>Type (optional)</label>
-            <md-input v-model="source.type" placeholder="Type (optional)"></md-input>
-          </md-input-container>
-        </md-layout>
-        <md-layout>
-          Properties
-          
+
           <md-input-container class="dropdown">
             <label>Class</label>
             <md-input v-model="classVar" @focus="onClassFocus" @blur="onClassBlur" placeholder="Class"></md-input>
@@ -309,20 +282,48 @@
 
           </md-input-container>
 
+        </md-layout>
+        <md-layout>
+          <md-input-container v-show="advancedOptionsShow">
+            <label>Type (optional)</label>
+            <md-input v-model="source.type" placeholder="Type (optional)"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout v-show="advancedOptionsShow">
+          Properties
+
           <md-chips v-model="source.properties" md-input-placeholder="Add a property"></md-chips>
           
-          <div class="draggablePart">
+<!--           <div class="draggablePart">
             <div class="draggableElement" v-for="option in propertiesForChoice" draggable="true" ondragstart="event.dataTransfer.setData('text/plain',null)">
                       {{ option }}
             </div>
             <div class="draggableBox" ondragover="return false"></div>
-          </div>
+          </div> -->
 
         </md-layout>
-        <md-layout>
+        <md-layout v-show="advancedOptionsShow">
           Optional Properties
           <md-chips v-model="source.optionalProperties" md-input-placeholder="Add an optional property"></md-chips>
         </md-layout>
+      </md-layout>
+    </md-whiteframe>
+  </script>
+
+  <script type="text/x-template" id="datacanvasComponent">
+    <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
+      <md-layout>
+          <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+          <xml id="toolbox" style="display: none">
+            <category name="Control">  
+              <block type="sourceproperty"></block>
+              <block type="targetproperty"></block>
+              <block type="renamepreprocessingfunction"></block>
+              <block type="lowercasepreprocessingfunction"></block>
+              <block type="measure"></block>
+              <block type="operator"></block>
+            </category>
+          </xml>
       </md-layout>
     </md-whiteframe>
   </script>
@@ -464,6 +465,13 @@
     </md-whiteframe>
   </script>
 
+  <!-- advancedOptions component -->
+  <script type="text/x-template" id="advancedOptions">
+    <md-whiteframe md-tag="section" style="flex: 1; padding: 15px;">
+      <md-switch v-model="advancedOptionsShow" @change="switchCheck" ref="advancedOpts" id="my-advancedChecked" name="my-advancedChecked" class="md-primary">Enable advanced options</md-switch>
+    </md-whiteframe>
+  </script>
+
   <!-- libs -->
   <script src="https://unpkg.com/vue@2.5.3/dist/vue.min.js"></script>
   <script src="https://unpkg.com/vue-material@0.8.1/dist/vue-material.js"></script>
@@ -471,8 +479,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/xml.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/2.0.4/go-debug.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+  <script src="./blockly-1.20190215.0/blockly_compressed.js"></script>
+  <script src="./blockly-1.20190215.0/blocks_compressed.js"></script>
+  <script src="./blockly-1.20190215.0/msg/js/en.js"></script>
   <!-- our scripts -->
+  <script src="blocks.js"></script>
   <script src="prefixes.js"></script>
   <script src="mlalgorithm.js"></script>
   <script src="simplecomponents.js"></script>

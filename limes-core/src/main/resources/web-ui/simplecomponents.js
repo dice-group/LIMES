@@ -1,9 +1,8 @@
 // Define a new component for data sources
 Vue.component('datasource-component', {
   template: '#datasourceComponent',
-  props: ['title', 'source'],
+  props: ['title', 'source', 'advancedOptionsShow'],
   data() {
-    console.log("data!!!")
     return {
       focused: false,
       optionsShown: false,
@@ -12,9 +11,10 @@ Vue.component('datasource-component', {
       classes: [],
       endpoints: [],
       classVar: '',
-      propertiesForChoice: ["a","b","c"],
+      //propertiesForChoice: ["a","b","c"],
       afterFilteredOptions: [],
       afterFilteredClasses: [],
+      
     };
   },
   beforeMount() {
@@ -51,7 +51,7 @@ Vue.component('datasource-component', {
     onClassFocus() {
       this.focusedClass = true;
       this.classesShown = true;
-      console.log(this.classes);
+      //console.log(this.classes);
     },
     onClassBlur() {
       this.focusedClass = false;
@@ -60,14 +60,14 @@ Vue.component('datasource-component', {
     selectOption(option){
       this.source.endpoint = option;
       this.classes.splice(0);
-      this.propertiesForChoice.splice(0);
+      this.source.propertiesForChoice.splice(0);
       this.classVar = '';
       fetchClasses(this, option);
     },
     selectClass(option){
       this.classVar = option;
-      this.propertiesForChoice.splice(0);
-      fetchProperties(this, this.source.endpoint, option);
+      this.source.propertiesForChoice.splice(0);
+      fetchProperties(this.source, this.source.endpoint, option);
     }
   },
   watch: {
@@ -85,7 +85,7 @@ Vue.component('datasource-component', {
 });
 
 function fetchClasses(source, endpoint) {
-    fetch(`${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${encodeURIComponent('select distinct ?class where {?x a ?class} LIMIT 100')}`, {
+    fetch(`${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${encodeURIComponent('select distinct ?class where {?x a ?class}')}`, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -95,7 +95,7 @@ function fetchClasses(source, endpoint) {
       return response.json();
      })
     .then((content) => {
-      console.log(content.results.bindings);
+      //console.log(content.results.bindings);
       let classes = [];
       content.results.bindings.forEach(
         i => classes.push(i.class.value));
@@ -106,7 +106,7 @@ function fetchClasses(source, endpoint) {
 }
 
 function fetchProperties(source, endpoint, curClass) {
-    let query = encodeURIComponent('select distinct ?p where {<'+curClass+'> ?p ?o}');
+    let query = encodeURIComponent('select distinct ?p where { ?s a <'+curClass+'>. ?s ?p ?o}');
     fetch(`${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${query}`, {
       headers: {
         'Accept': 'application/json',
@@ -117,7 +117,8 @@ function fetchProperties(source, endpoint, curClass) {
       return response.json();
      })
     .then((content) => {
-      console.log(content.results.bindings);
+      console.log("hello");
+      //console.log(content.results.bindings);
       
       let classes = [];
       content.results.bindings.forEach(i => {
@@ -126,9 +127,84 @@ function fetchProperties(source, endpoint, curClass) {
         classes.push(i.p.value.split('/')[i.p.value.split('/').length-1])
       });
       source.propertiesForChoice.push(...classes);
+
+      let arr = classes.map(i => [i, i[0]]);
+
+      if(source.id === "sourceId"){
+        sourceProperty.args0[0].options.length = 0;
+        arr.forEach(i => sourceProperty.args0[0].options.push(i));
+      }
+
+      if(source.id === "targetId"){
+        targetProperty.args0[0].options.length = 0;
+        arr.forEach(i => targetProperty.args0[0].options.push(i));
+      }
+
     })
     //.catch( alert );
 }
+
+
+
+// Define a new component for canvas
+Vue.component('datacanvas-component', {
+  template: '#datacanvasComponent',
+  props: ['title', 'source'],
+  data() {
+    return {
+      focused: false,
+      optionsShown: false,
+      focusedClass: false,
+      classesShown: false,
+      classes: [],
+      endpoints: [],
+      classVar: '',
+      propertiesForChoice: this.source.propertiesForChoice,
+      afterFilteredOptions: [],
+      afterFilteredClasses: [],
+    };
+  },
+  beforeMount() {
+    window.onload = function() {
+          var demoWorkspace = Blockly.inject('blocklyDiv',
+            {media: './blockly-1.20190215.0/media/',
+             toolbox: document.getElementById('toolbox')});
+          Blockly.Blocks['sourceproperty'] = {
+            init: function() {
+              this.jsonInit(sourceProperty);              
+            }
+          };
+          Blockly.Blocks['targetproperty'] = {
+            init: function() {
+              this.jsonInit(targetProperty);
+            }
+          };
+          Blockly.Blocks['renamepreprocessingfunction'] = {
+            init: function() {
+              this.jsonInit(RenamePreprocessingFunction);
+            }
+          };
+          Blockly.Blocks['lowercasepreprocessingfunction'] = {
+            init: function() {
+              this.jsonInit(LowercasePreprocessingFunction);
+            }
+          };
+          Blockly.Blocks['measure'] = {
+            init: function() {
+              this.jsonInit(Measure);
+            }
+          };
+          Blockly.Blocks['operator'] = {
+            init: function() {
+              this.jsonInit(Operator);
+            }
+          };
+    };
+  },
+  methods: {
+
+  },
+});
 
 // Define a new component for metric
 Vue.component('metrics-component', {
@@ -153,4 +229,19 @@ Vue.component('execution-component', {
 Vue.component('output-component', {
   template: '#outputComponent',
   props: ['output'],
+});
+
+
+
+// Define a new component for advancedOptions
+Vue.component('advancedoptions-component', {
+  template: '#advancedOptions',
+  props: ['advancedOptionsShow'],
+  methods: {
+    switchCheck(){
+      console.log(this.$parent);
+      //this.$parent.advancedOptionsShow = !this.advancedOptionsShow;
+      this.$emit('toggle-advanced-options', !this.advancedOptionsShow)
+    }
+  },
 });
