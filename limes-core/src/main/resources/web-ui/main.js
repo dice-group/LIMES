@@ -121,7 +121,115 @@ let app = new Vue({
       setTimeout(() => this.$refs.jobDialog.open(), 10);
       setTimeout(() => this.getStatus(), 1000);
     }
-    
+
+    let source = this.source;
+    let target = this.target;
+    window.onload = function() {
+          var Workspace = Blockly.inject('blocklyDiv',
+            {media: './blockly-1.20190215.0/media/',
+             toolbox: document.getElementById('toolbox')});
+          Blockly.Blocks['sourceproperty'] = {
+            init: function() {
+              this.jsonInit(sourceProperty);              
+            }
+          };
+          Blockly.Blocks['targetproperty'] = {
+            init: function() {
+              this.jsonInit(targetProperty);
+            }
+          };
+          Blockly.Blocks['renamepreprocessingfunction'] = {
+            init: function() {
+              this.jsonInit(RenamePreprocessingFunction);
+            }
+          };
+          Blockly.Blocks['lowercasepreprocessingfunction'] = {
+            init: function() {
+              this.jsonInit(LowercasePreprocessingFunction);
+            }
+          };
+          Blockly.Blocks['measure'] = {
+            init: function() {
+              this.jsonInit(Measure);
+            }
+          };
+          Blockly.Blocks['operator'] = {
+            init: function() {
+              this.jsonInit(Operator);
+            }
+          };
+
+          function onFirstComment(event) {
+            //console.log(Workspace.getAllBlocks()[0].getField("propTitle").getDisplayText_());
+            console.log(Workspace.getTopBlocks());
+            source.properties.splice(0);
+            target.properties.splice(0);
+
+            let allBlocks = Workspace.getTopBlocks();
+            allBlocks.forEach( i => {
+              switch(i.type) {
+                case "lowercasepreprocessingfunction": {
+                  i.getChildren().forEach(
+                    pr => pr.type === "sourceproperty" ? 
+                    source.properties.push(pr.getField("propTitle").getDisplayText_() + " AS lowercase") 
+                    : target.properties.push(pr.getField("propTitle").getDisplayText_() + " AS lowercase"));
+                
+                  break;
+                }
+
+                case "renamepreprocessingfunction": {
+                  i.getChildren().forEach(
+                    pr => {
+                        if(pr.type === "sourceproperty"){
+                         source.properties.push(pr.getField("propTitle").getDisplayText_() + " RENAME " + i.getField("RENAME").getDisplayText_()); 
+                        } else {
+                          //target
+                          if(!pr.getChildren().length) {
+                            console.log("tar");
+                            target.properties.push(pr.getField("propTitle").getDisplayText_() + " RENAME " + i.getField("RENAME").getDisplayText_()); 
+                          } else {
+                            pr.getChildren().forEach( 
+                              childPr => {
+                                if(childPr.type === "sourceproperty") {
+                                source.properties.push(childPr.getField("propTitle").getDisplayText_() + " AS lowercase RENAME " + i.getField("RENAME").getDisplayText_());
+                                } else {
+                                  target.properties.push(childPr.getField("propTitle").getDisplayText_() + " AS lowercase RENAME " + i.getField("RENAME").getDisplayText_());
+                                  }
+                              });
+                          }
+                        }
+                    });
+
+                  
+                  break;                  
+                }
+
+                case "measure": {
+
+                  break;
+                }
+
+                default: {
+                  if(!i.getParent() && i.type === "sourceproperty"){
+                    source.properties.push(i.getField("propTitle").getDisplayText_());
+                  } else {
+                    if(!i.getParent()){
+                      // target
+                      target.properties.push(i.getField("propTitle").getDisplayText_());
+                    }
+                  }
+                  break;
+                }
+              }
+
+            });
+
+            
+          }
+          Workspace.addChangeListener(onFirstComment);
+
+          
+    };
   },
   beforeMount() {
     let context;
@@ -138,6 +246,7 @@ let app = new Vue({
               this.filteredOptions.push(...filteredOptions);
             })
             //.catch( alert );
+
 
   },
   methods: {

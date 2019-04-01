@@ -14,7 +14,7 @@ Vue.component('datasource-component', {
       //propertiesForChoice: ["a","b","c"],
       afterFilteredOptions: [],
       afterFilteredClasses: [],
-      
+      prefixes: [],
     };
   },
   beforeMount() {
@@ -37,6 +37,15 @@ Vue.component('datasource-component', {
               this.afterFilteredOptions = this.endpoints;
             })
             //.catch( alert );
+
+        fetch('http://prefix.cc/context')
+              .then(function(response) {
+                return response.json();
+               })
+              .then((content) => {
+                this.prefixes = content["@context"];
+              })
+              //.catch( alert );
   },
   methods: {
     onFocus() {
@@ -67,7 +76,7 @@ Vue.component('datasource-component', {
     selectClass(option){
       this.classVar = option;
       this.source.propertiesForChoice.splice(0);
-      fetchProperties(this.source, this.source.endpoint, option);
+      fetchProperties(this, this.source.endpoint, option);
     }
   },
   watch: {
@@ -105,7 +114,7 @@ function fetchClasses(source, endpoint) {
     //.catch( alert );
 }
 
-function fetchProperties(source, endpoint, curClass) {
+function fetchProperties(context, endpoint, curClass) {
     let query = encodeURIComponent('select distinct ?p where { ?s a <'+curClass+'>. ?s ?p ?o}');
     fetch(`${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${query}`, {
       headers: {
@@ -121,21 +130,46 @@ function fetchProperties(source, endpoint, curClass) {
       //console.log(content.results.bindings);
       
       let classes = [];
-      content.results.bindings.forEach(i => {
-        i.p.value.split('#').length != 1 ? 
-        classes.push(i.p.value.split('#')[1]): 
-        classes.push(i.p.value.split('/')[i.p.value.split('/').length-1])
+
+      content.results.bindings.forEach((i, index) => {
+        let property;
+        let prefixNamespace;
+        if(i.p.value.split('#').length != 1) {
+          let url = i.p.value.split('#');
+          property = url[1];
+          prefixNamespace = url[0]+"#";
+        } else {
+          let url = i.p.value.split('/');
+          property = url[i.p.value.split('/').length-1];
+          url.pop();
+          prefixNamespace = url.join('/')+"/";         
+        }
+
+        let prefix = '';
+        for(let key in context.prefixes){
+          if (context.prefixes[key] === prefixNamespace){
+            prefix = key;
+          }
+        }
+        if(prefix.length === 0){
+          prefix = "pref"+ index;
+        }
+
+        classes.push(prefix+":"+property);
+
+
       });
-      source.propertiesForChoice.push(...classes);
+      
+      context.source.propertiesForChoice.push(...classes);
 
-      let arr = classes.map(i => [i, i[0]]);
+      let arr = classes.map(i => [i, i]);
 
-      if(source.id === "sourceId"){
+      if(context.source.id === "sourceId"){
         sourceProperty.args0[0].options.length = 0;
         arr.forEach(i => sourceProperty.args0[0].options.push(i));
       }
 
-      if(source.id === "targetId"){
+      if(context.source.id === "targetId"){
         targetProperty.args0[0].options.length = 0;
         arr.forEach(i => targetProperty.args0[0].options.push(i));
       }
@@ -165,41 +199,7 @@ Vue.component('datacanvas-component', {
     };
   },
   beforeMount() {
-    window.onload = function() {
-          var demoWorkspace = Blockly.inject('blocklyDiv',
-            {media: './blockly-1.20190215.0/media/',
-             toolbox: document.getElementById('toolbox')});
-          Blockly.Blocks['sourceproperty'] = {
-            init: function() {
-              this.jsonInit(sourceProperty);              
-            }
-          };
-          Blockly.Blocks['targetproperty'] = {
-            init: function() {
-              this.jsonInit(targetProperty);
-            }
-          };
-          Blockly.Blocks['renamepreprocessingfunction'] = {
-            init: function() {
-              this.jsonInit(RenamePreprocessingFunction);
-            }
-          };
-          Blockly.Blocks['lowercasepreprocessingfunction'] = {
-            init: function() {
-              this.jsonInit(LowercasePreprocessingFunction);
-            }
-          };
-          Blockly.Blocks['measure'] = {
-            init: function() {
-              this.jsonInit(Measure);
-            }
-          };
-          Blockly.Blocks['operator'] = {
-            init: function() {
-              this.jsonInit(Operator);
-            }
-          };
-    };
+
   },
   methods: {
 

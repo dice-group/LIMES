@@ -49,15 +49,15 @@ var targetProperty = {
       "options": [
         [
           ":name",
-          "OPTIONNAME"
+          "n"
         ],
         [
           ":title",
-          "OPTIONNAME"
+          "t"
         ],
         [
           ":bio",
-          "OPTIONNAME"
+          "b"
         ]
       ]
     }
@@ -74,7 +74,7 @@ var RenamePreprocessingFunction = {
   "args0": [
     {
       "type": "input_value",
-      "name": "NAME",
+      "name": "RENAME",
       "check": [
         "SourceProperty",
         "TargetProperty",
@@ -83,7 +83,7 @@ var RenamePreprocessingFunction = {
     },
     {
       "type": "field_input",
-      "name": "NAME",
+      "name": "RENAME",
       "text": "X"
     }
   ],
