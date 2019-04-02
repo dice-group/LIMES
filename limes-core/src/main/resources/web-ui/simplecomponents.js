@@ -15,6 +15,9 @@ Vue.component('datasource-component', {
       afterFilteredOptions: [],
       afterFilteredClasses: [],
       prefixes: [],
+      customPrefixes: {},
+      messageAboutClasses: "",
+      messageAboutProps: "",
     };
   },
   beforeMount() {
@@ -50,7 +53,6 @@ Vue.component('datasource-component', {
   methods: {
     onFocus() {
       this.focused = true;
-      console.log("focused");
       this.optionsShown = true;
     },
     onBlur() {
@@ -67,6 +69,7 @@ Vue.component('datasource-component', {
       this.classesShown = false;
     },
     selectOption(option){
+
       this.source.endpoint = option;
       this.classes.splice(0);
       this.source.propertiesForChoice.splice(0);
@@ -77,6 +80,19 @@ Vue.component('datasource-component', {
       this.classVar = option;
       this.source.propertiesForChoice.splice(0);
       fetchProperties(this, this.source.endpoint, option);
+      changeRestrictions(this, option);
+    },
+    enterEndpointClicked(){
+      this.onBlur();
+      this.classes.splice(0);
+      this.source.propertiesForChoice.splice(0);
+      this.classVar = '';
+      fetchClasses(this, this.source.endpoint);
+    },
+    enterClassClicked(){
+      this.source.propertiesForChoice.splice(0);
+      fetchProperties(this, this.source.endpoint, this.classVar);
+      changeRestrictions(this, this.classVar);
     }
   },
   watch: {
@@ -94,6 +110,7 @@ Vue.component('datasource-component', {
 });
 
 function fetchClasses(source, endpoint) {
+    source.messageAboutClasses = "Loading ...";
     fetch(`${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${encodeURIComponent('select distinct ?class where {?x a ?class}')}`, {
       headers: {
         'Accept': 'application/json',
@@ -101,10 +118,12 @@ function fetchClasses(source, endpoint) {
       },
     })
     .then(function(response) {
+      console.log(response);
+      source.messageAboutClasses = "Status of the request: "+response.statusText;
       return response.json();
      })
     .then((content) => {
-      //console.log(content.results.bindings);
+      source.messageAboutClasses = "";
       let classes = [];
       content.results.bindings.forEach(
         i => classes.push(i.class.value));
@@ -115,6 +134,7 @@ function fetchClasses(source, endpoint) {
 }
 
 function fetchProperties(context, endpoint, curClass) {
+    context.messageAboutProps = "Properties haven't received yet. Loading ...";
     let query = encodeURIComponent('select distinct ?p where { ?s a <'+curClass+'>. ?s ?p ?o}');
     fetch(`${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${query}`, {
       headers: {
@@ -126,38 +146,13 @@ function fetchProperties(context, endpoint, curClass) {
       return response.json();
      })
     .then((content) => {
-      console.log("hello");
-      //console.log(content.results.bindings);
+      context.messageAboutProps = "Properties were received.";
       
       let classes = [];
 
-      content.results.bindings.forEach((i, index) => {
-        let property;
-        let prefixNamespace;
-        if(i.p.value.split('#').length != 1) {
-          let url = i.p.value.split('#');
-          property = url[1];
-          prefixNamespace = url[0]+"#";
-        } else {
-          let url = i.p.value.split('/');
-          property = url[i.p.value.split('/').length-1];
-          url.pop();
-          prefixNamespace = url.join('/')+"/";         
-        }
-
-        let prefix = '';
-        for(let key in context.prefixes){
-          if (context.prefixes[key] === prefixNamespace){
-            prefix = key;
-          }
-        }
-        if(prefix.length === 0){
-          prefix = "pref"+ index;
-        }
-
-        classes.push(prefix+":"+property);
-
-
+      content.results.bindings.forEach(i => {
+        let pair = getPrefix(context, i.p.value);
+        classes.push(pair);
       });
       
       context.source.propertiesForChoice.push(...classes);
@@ -176,6 +171,63 @@ function fetchProperties(context, endpoint, curClass) {
 
     })
     //.catch( alert );
+}
+
+function changeRestrictions(context, option){
+
+  let pair = getPrefix(context, option);
+  let curRest = context.source.restriction;
+  let rest;
+  let restArr = curRest.split(" ");
+  restArr[2] = pair;
+  rest = restArr.join(" ");
+  if(context.source.id === "sourceId"){
+    context.$emit('toggle-restr-src', rest);
+  }
+
+  if(context.source.id === "targetId"){
+    context.$emit('toggle-restr-target', rest);
+  }  
+
+}
+
+function getPrefix(context, urlValue){
+
+    let property;
+    let prefixNamespace;
+    if(urlValue.split('#').length != 1) {
+      let url = urlValue.split('#');
+      property = url[1];
+      prefixNamespace = url[0]+"#";
+    } else {
+      let url = urlValue.split('/');
+      property = url[urlValue.split('/').length-1];
+      url.pop();
+      prefixNamespace = url.join('/')+"/";         
+    }
+
+    let prefix = '';
+    for(let key in context.prefixes){
+      if (context.prefixes[key] === prefixNamespace){
+        prefix = key;
+      }
+    }
+
+    if(prefix.length === 0){
+      if(!context.prefixes["pref0"]){
+        prefix = "pref"+ 0;
+      } else {
+        let lastKey = Object.keys(context.prefixes).pop();
+        prefix = "pref" +  (parseInt(lastKey.split("pref")[1]) + 1);
+      }
+      
+
+      context.prefixes[prefix] = prefixNamespace;
+    }
+    
+
+    return prefix+":"+property;
+
 }
 
 
@@ -239,8 +291,6 @@ Vue.component('advancedoptions-component', {
   props: ['advancedOptionsShow'],
   methods: {
     switchCheck(){
-      console.log(this.$parent);
-      //this.$parent.advancedOptionsShow = !this.advancedOptionsShow;
       this.$emit('toggle-advanced-options', !this.advancedOptionsShow)
     }
   },

@@ -61,6 +61,17 @@
       height: 100px;
       overflow: auto;
   }
+  .dropdown-item {
+    padding-top: 4px;
+  }
+  .contColumns {
+    width: 46%;
+    display: block;
+    margin-right: 16px;
+  }
+  .message {
+    color : red;
+  }
 </style>
 
   <!-- LIMES server ref -->
@@ -131,8 +142,19 @@
           <prefixes-list v-bind:deleteChip="deletePrefix" v-bind:addPrefix="addPrefix" v-bind:prefixes="prefixes" v-bind:filteredOptions="filteredOptions"
           v-bind:context="context"></prefixes-list>
           <!-- datasources UI -->
-          <datasource-component v-bind:source="source" title="Data source" v-bind:advancedOptionsShow="advancedOptionsShow"></datasource-component>
-          <datasource-component v-bind:source="target" v-bind:advancedOptionsShow="advancedOptionsShow" title="Data target"  ></datasource-component>
+          <datasource-component 
+          v-bind:source="source" 
+          title="Data source" 
+          v-bind:advancedOptionsShow="advancedOptionsShow"
+          v-on:toggle-restr-src="source.restriction = $event"
+          ></datasource-component>
+
+          <datasource-component 
+          v-bind:source="target" 
+          v-bind:advancedOptionsShow="advancedOptionsShow" 
+          v-on:toggle-restr-target="target.restriction = $event"
+          title="Data target"  
+          ></datasource-component>
 
           <datacanvas-component v-bind:source="source" v-bind:target="target" title="Data target"></datacanvas-component>
           <!-- metrics UI -->
@@ -232,7 +254,9 @@
         <md-layout>
           <md-input-container class="dropdown">
             <label>Endpoint</label>
-            <md-input v-model="source.endpoint" @focus="onFocus" @blur="onBlur" placeholder="Endpoint"></md-input>
+            <md-input v-model="source.endpoint" @keyup.enter.native="enterEndpointClicked"
+            @focus="onFocus" @blur="onBlur" placeholder="Endpoint"
+            ></md-input>
          
             <div class="dropdown-content"
                   v-show="optionsShown">
@@ -245,7 +269,10 @@
                   
             </div> 
 
+
+
           </md-input-container>
+
         </md-layout>
         <md-layout>
           <md-input-container v-show="advancedOptionsShow">
@@ -260,15 +287,17 @@
           </md-input-container>
         </md-layout>
         <md-layout>
-          <md-input-container>
+          <md-input-container class="contColumns">
             <label>Restriction</label>
             <md-input v-model="source.restriction" placeholder="Restriction"></md-input>
           </md-input-container>
 
-          <md-input-container class="dropdown">
-            <label>Class</label>
-            <md-input v-model="classVar" @focus="onClassFocus" @blur="onClassBlur" placeholder="Class"></md-input>
+          <md-input-container class="contColumns">
+            <label>Restriction class</label>
+            <md-input class="dropdown" v-model="classVar" @keyup.enter.native="enterClassClicked"
+            @focus="onClassFocus" @blur="onClassBlur" placeholder="Class"></md-input>
          
+          <p class="message">{{messageAboutClasses}}</p>
             <div class="dropdown-content"
                   v-show="classesShown">
                   <div
@@ -280,7 +309,9 @@
                   
             </div> 
 
+
           </md-input-container>
+          <p class="message">{{messageAboutProps}}</p>
 
         </md-layout>
         <md-layout>

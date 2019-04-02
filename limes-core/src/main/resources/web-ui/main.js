@@ -61,18 +61,18 @@ let app = new Vue({
       restriction: '?src rdf:type some:Type',
       type: 'sparql',
       properties: ['dc:title AS lowercase RENAME name'],
-      optionalProperties: ['rdfs:label'],
+      optionalProperties: [],//['rdfs:label'],
       propertiesForChoice: ["a","b","c"],
     },
     target: {
       id: 'targetId',
-      endpoint: 'http://target.endpoint.com/sparql',
+      endpoint: '',
       var: '?target',
       pagesize: 1000,
-      restriction: '?target rdf:type other:Type',
+      restriction: '?target rdf:type some:Type',
       type: 'sparql',
       properties: ['foaf:name AS lowercase RENAME name'],
-      optionalProperties: ['rdf:type'],
+      optionalProperties: [],//['rdf:type'],
       propertiesForChoice: ["a","b","c"],
     },
     metrics: ['trigrams(y.dc:title, x.linkedct:condition_name)'],
@@ -124,6 +124,7 @@ let app = new Vue({
 
     let source = this.source;
     let target = this.target;
+    let metrics = this. metrics;
     window.onload = function() {
           var Workspace = Blockly.inject('blocklyDiv',
             {media: './blockly-1.20190215.0/media/',
@@ -161,7 +162,7 @@ let app = new Vue({
 
           function onFirstComment(event) {
             //console.log(Workspace.getAllBlocks()[0].getField("propTitle").getDisplayText_());
-            console.log(Workspace.getTopBlocks());
+            //console.log(Workspace.getTopBlocks());
             source.properties.splice(0);
             target.properties.splice(0);
 
@@ -185,7 +186,7 @@ let app = new Vue({
                         } else {
                           //target
                           if(!pr.getChildren().length) {
-                            console.log("tar");
+                            //console.log("tar");
                             target.properties.push(pr.getField("propTitle").getDisplayText_() + " RENAME " + i.getField("RENAME").getDisplayText_()); 
                           } else {
                             pr.getChildren().forEach( 
@@ -205,7 +206,24 @@ let app = new Vue({
                 }
 
                 case "measure": {
+                  let src;
+                  let tgt;
+                  i.getChildren().forEach(
+                  pr => {
+                    if(pr.type === "sourceproperty"){
+                      src = pr.getField("propTitle").getDisplayText_();
+                      source.properties.push(src);
+                    } else {
+                      tgt = pr.getField("propTitle").getDisplayText_();
+                      target.properties.push(tgt);
+                    }
 
+                   
+                  });
+                  let measureFunc = i.getField("measureList").getDisplayText_();
+                  metrics.splice(0);
+                  metrics.push(measureFunc+"("+src+","+tgt+")");
+             
                   break;
                 }
 
@@ -429,7 +447,6 @@ let app = new Vue({
           label: 'rdfs',
         },
       ];
-      console.log(this.prefixes);
       this.source = {
         id: 'linkedgeodata',
         endpoint: 'http://linkedgeodata.org/sparql',

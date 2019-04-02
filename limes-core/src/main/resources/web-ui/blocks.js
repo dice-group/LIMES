@@ -19,16 +19,8 @@ var sourceProperty = {
       "name": "propTitle",
       "options": [
         [
-          ":name",
-          "n"
-        ],
-        [
-          ":title",
-          "t"
-        ],
-        [
-          ":bio",
-          "b"
+          "",
+          ""
         ]
       ]
     }
@@ -48,16 +40,8 @@ var targetProperty = {
       "name": "propTitle",
       "options": [
         [
-          ":name",
-          "n"
-        ],
-        [
-          ":title",
-          "t"
-        ],
-        [
-          ":bio",
-          "b"
+          "",
+          ""
         ]
       ]
     }
