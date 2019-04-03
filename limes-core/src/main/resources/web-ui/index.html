@@ -139,7 +139,8 @@
       <md-layout md-gutter>
         <md-layout md-flex-offset="25" md-column>
           <!-- prefixes UI -->
-          <prefixes-list v-bind:deleteChip="deletePrefix" v-bind:addPrefix="addPrefix" v-bind:prefixes="prefixes" v-bind:filteredOptions="filteredOptions"
+          <prefixes-list v-bind:deleteChip="deletePrefix" v-bind:addPrefix="addPrefix"
+          v-bind:prefixes="prefixes" v-bind:filteredOptions="filteredOptions"
           v-bind:context="context"></prefixes-list>
           <!-- datasources UI -->
           <datasource-component 
@@ -147,12 +148,14 @@
           title="Data source" 
           v-bind:advancedOptionsShow="advancedOptionsShow"
           v-on:toggle-restr-src="source.restriction = $event"
+          v-on:toggle-prefix-from-rest="addPrefix($event)"
           ></datasource-component>
 
           <datasource-component 
           v-bind:source="target" 
           v-bind:advancedOptionsShow="advancedOptionsShow" 
           v-on:toggle-restr-target="target.restriction = $event"
+          v-on:toggle-prefix-from-rest="addPrefix($event)"
           title="Data target"  
           ></datasource-component>
 
@@ -160,10 +163,6 @@
           <!-- metrics UI -->
           <metrics-component
             v-bind:metrics="metrics"
-            v-bind:measureOptions="measureOptions"
-            v-bind:selectedMeasureOption="selectedMeasureOption"
-            v-bind:selectedOperatorOption="selectedOperatorOption"
-            v-bind:operatorOptions="operatorOptions"
           ></metrics-component>
           <!-- acceptance UI -->
           <accreview-component v-bind:data="acceptance" title="Acceptance Condition"></accreview-component>
@@ -295,7 +294,7 @@
           <md-input-container class="contColumns">
             <label>Restriction class</label>
             <md-input class="dropdown" v-model="classVar" @keyup.enter.native="enterClassClicked"
-            @focus="onClassFocus" @blur="onClassBlur" placeholder="Class"></md-input>
+            @focus="onClassFocus" @blur="onClassBlur" placeholder="Select restriction class"></md-input>
          
           <p class="message">{{messageAboutClasses}}</p>
             <div class="dropdown-content"
@@ -365,7 +364,7 @@
       <div class="md-title">Metrics</div>
       <md-chips v-model="metrics" md-input-placeholder="Add a metric"></md-chips>
 
-      <select v-model="selectedMeasureOption" multiple="true">
+<!--       <select v-model="selectedMeasureOption" multiple="true">
         <option v-for="measureOption in measureOptions" v-bind:value="measureOption.value">
           {{ measureOption.text }}
         </option>
@@ -375,7 +374,7 @@
         <option v-for="operatorOption in operatorOptions" v-bind:value="operatorOption.value">
           {{ operatorOption.text }}
         </option>
-      </select>
+      </select> -->
 
     </md-whiteframe>
   </script>

@@ -16,6 +16,7 @@ Vue.component('datasource-component', {
       afterFilteredClasses: [],
       prefixes: [],
       customPrefixes: {},
+      usingPrefix: [],
       messageAboutClasses: "",
       messageAboutProps: "",
     };
@@ -105,6 +106,10 @@ Vue.component('datasource-component', {
          this.afterFilteredClasses = this.classes.filter(i => {
           return i.toLowerCase().includes(this.classVar.toLowerCase())
         })
+      },
+      'usingPrefix': function() {
+        console.log(this.usingPrefix);
+        this.$emit('toggle-prefix-from-rest', this.usingPrefix);
       }
   }
 });
@@ -151,7 +156,7 @@ function fetchProperties(context, endpoint, curClass) {
       let classes = [];
 
       content.results.bindings.forEach(i => {
-        let pair = getPrefix(context, i.p.value);
+        let pair = getPrefix(context, i.p.value).pair;
         classes.push(pair);
       });
       
@@ -175,11 +180,12 @@ function fetchProperties(context, endpoint, curClass) {
 
 function changeRestrictions(context, option){
 
-  let pair = getPrefix(context, option);
+  let prefixInfo = getPrefix(context, option);
+  context.usingPrefix = {label: prefixInfo.pair.split(":")[0], namespace: prefixInfo.namespace};
   let curRest = context.source.restriction;
   let rest;
   let restArr = curRest.split(" ");
-  restArr[2] = pair;
+  restArr[2] = prefixInfo.pair;
   rest = restArr.join(" ");
   if(context.source.id === "sourceId"){
     context.$emit('toggle-restr-src', rest);
@@ -224,9 +230,8 @@ function getPrefix(context, urlValue){
 
       context.prefixes[prefix] = prefixNamespace;
     }
-    
 
-    return prefix+":"+property;
+    return {pair: prefix+":"+property, namespace: prefixNamespace};
 
 }
 
