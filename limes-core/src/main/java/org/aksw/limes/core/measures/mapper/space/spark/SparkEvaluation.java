@@ -6,6 +6,7 @@ import org.aksw.limes.core.io.config.reader.rdf.RDFConfigurationReader;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
@@ -18,23 +19,18 @@ public class SparkEvaluation {
 
     private SparkSession spark = SparkSession.builder()
             .appName("LIMES HR3")
-            .master("spark://172.18.160.16:3090")
             .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
             .config("spark.kryo.registrator", LimesKryoRegistrator.class.getName())
-            .config("spark.cores.max", 90)
             .config("spark.dynamicAllocation.enabled", false)
             .getOrCreate();
 
-    public void run(String cfgUrl, String evalUrl, String outputUrl) throws Exception {
+    public void run(String cfgUrl, String evalUrl, String outputUrl, FileSystem fs) throws Exception {
         RDFConfigurationReader reader = new RDFConfigurationReader(cfgUrl);
         Configuration c = reader.read();
         Dataset<Row> sourceDS = readInstancesFromCSV(c.getSourceInfo().getEndpoint());
         Dataset<Row> targetDS = readInstancesFromCSV(c.getTargetInfo().getEndpoint());
         String measureExpr = c.getMetricExpression();
         double threshold = c.getAcceptanceThreshold();
-        org.apache.hadoop.conf.Configuration configuration = new org.apache.hadoop.conf.Configuration();
-        configuration.addResource(new Path("/usr/local/hadoop/etc/hadoop/core-site.xml"));
-        FileSystem fs = FileSystem.get(configuration);
         Path evalPath = new Path(evalUrl);
         Path linksPath = new Path(outputUrl);
         try {
@@ -63,7 +59,11 @@ public class SparkEvaluation {
 
 
     public static void main(String[] args) throws Exception {
-        new SparkEvaluation().run(args[0], args[1], args[2]);
+        final GenericOptionsParser optionsParser = new GenericOptionsParser(args);
+        final String[] posArgs = optionsParser.getRemainingArgs();
+        final org.apache.hadoop.conf.Configuration conf = optionsParser.getConfiguration();
+        FileSystem fs = FileSystem.get(conf);
+        new SparkEvaluation().run(posArgs[0], posArgs[1], posArgs[2], fs);
 
     }
 
