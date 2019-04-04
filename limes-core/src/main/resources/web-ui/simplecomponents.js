@@ -112,6 +112,13 @@ Vue.component('datasource-component', {
         //console.log(this.usingPrefix);
         this.$emit('toggle-del-exprefix', this.exPrefix);
         this.$emit('toggle-prefix-from-rest', this.usingPrefix);
+
+        let label = this.source.restriction.split(" ")[1].split(":")[0];
+        let prefixFromRestriction = { 
+          label: label , 
+          namespace: this.prefixes[label]
+        };
+        this.$emit('toggle-prefix-from-rest', prefixFromRestriction);
       }
   }
 });
@@ -276,7 +283,18 @@ Vue.component('metrics-component', {
 // Define a new component for metric
 Vue.component('accreview-component', {
   template: '#accreviewComponent',
-  props: ['data', 'title'],
+  props: ['data', 'title', 'acceptance'],
+  methods: {
+    getMaxV(){
+      let maxV;
+      if (this.data.id === 'review'){
+        maxV = this.acceptance.threshold;
+      } else {
+        maxV = 1;
+      }
+      return maxV;
+    }
+  }
 });
 
 // Define a new component for execution

@@ -82,12 +82,14 @@ let app = new Vue({
     //selectedOperatorOption: '',
     //operatorOptions: operatorOptionsArray,
     acceptance: {
+      id: 'acceptance',
       threshold: 0.98,
       file: 'accepted.nt',
       relation: 'owl:sameAs',
     },
     review: {
-      threshold: 0.95,
+      id: 'review',
+      threshold: 0.01,
       file: 'reviewme.nt',
       relation: 'owl:sameAs',
     },

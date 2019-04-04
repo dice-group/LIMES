@@ -180,8 +180,8 @@
             v-bind:metrics="metrics"
           ></metrics-component>
           <!-- acceptance UI -->
-          <accreview-component v-bind:data="acceptance" title="Acceptance Condition"></accreview-component>
-          <accreview-component v-bind:data="review" title="Review Condition"></accreview-component>
+          <accreview-component v-bind:data="acceptance" v-bind:acceptance="acceptance" title="Acceptance Condition"></accreview-component>
+          <accreview-component v-bind:data="review" v-bind:acceptance="acceptance" title="Review Condition"></accreview-component>
 
           <!-- execution UI -->
           <execution-component v-bind:execution="execution" v-bind:advancedOptionsShow="advancedOptionsShow"
@@ -398,9 +398,9 @@
   <script type="text/x-template" id="accreviewComponent">
     <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
       <div class="md-title">{{ title }}</div>
-
       <md-input-container>
         <label>Threshold</label>
+        <input type="range" min="0" :max="getMaxV()" step="0.01" v-model.number="data.threshold">
         <md-input v-model="data.threshold" placeholder="Threshold"></md-input>
       </md-input-container>
       <md-input-container>
