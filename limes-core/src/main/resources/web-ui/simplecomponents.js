@@ -17,6 +17,7 @@ Vue.component('datasource-component', {
       prefixes: [],
       customPrefixes: {},
       usingPrefix: [],
+      exPrefix: [],
       messageAboutClasses: "",
       messageAboutProps: "",
     };
@@ -108,7 +109,8 @@ Vue.component('datasource-component', {
         })
       },
       'usingPrefix': function() {
-        console.log(this.usingPrefix);
+        //console.log(this.usingPrefix);
+        this.$emit('toggle-del-exprefix', this.exPrefix);
         this.$emit('toggle-prefix-from-rest', this.usingPrefix);
       }
   }
@@ -181,6 +183,7 @@ function fetchProperties(context, endpoint, curClass) {
 function changeRestrictions(context, option){
 
   let prefixInfo = getPrefix(context, option);
+  context.exPrefix = context.usingPrefix;
   context.usingPrefix = {label: prefixInfo.pair.split(":")[0], namespace: prefixInfo.namespace};
   let curRest = context.source.restriction;
   let rest;
@@ -279,7 +282,7 @@ Vue.component('accreview-component', {
 // Define a new component for execution
 Vue.component('execution-component', {
   template: '#executionComponent',
-  props: ['execution'],
+  props: ['execution', 'advancedOptionsShow'],
 });
 
 // Define a new component for output

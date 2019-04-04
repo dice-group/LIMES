@@ -11,9 +11,9 @@ const makeDatasource = (data, tag) => `<${tag.toUpperCase()}>
 <VAR>${data.var}</VAR>
 <PAGESIZE>${data.pagesize}</PAGESIZE>
 <RESTRICTION>${data.restriction}</RESTRICTION>
-${data.type && data.type.length ? `<TYPE>${data.type}</TYPE>` : ''}
 ${data.properties.map(p => `<PROPERTY>${p}</PROPERTY>`).join('\n')}
 ${data.optionalProperties.map(p => `<OPTIONAL_PROPERTY>${p}</OPTIONAL_PROPERTY>`).join('\n')}
+${data.type && data.type.length ? `<TYPE>${data.type}</TYPE>` : ''}
 </${tag.toUpperCase()}>
 `;
 
@@ -51,6 +51,7 @@ let app = new Vue({
     results: [],
     // config
     prefixes: [],
+    exPrefixes: [],
     filteredOptions: [],
     context: [],
     source: {
@@ -122,10 +123,7 @@ let app = new Vue({
       setTimeout(() => this.getStatus(), 1000);
     }
 
-    let source = this.source;
-    let target = this.target;
-    let metrics = this. metrics;
-    window.onload = function() {
+    window.onload = () => {
           var Workspace = Blockly.inject('blocklyDiv',
             {media: './blockly-1.20190215.0/media/',
              toolbox: document.getElementById('toolbox')});
@@ -160,11 +158,12 @@ let app = new Vue({
             }
           };
 
-          function onFirstComment(event) {
+          let onFirstComment = (event) => {
+            // console.log("change");
             //console.log(Workspace.getAllBlocks()[0].getField("propTitle").getDisplayText_());
             //console.log(Workspace.getTopBlocks());
-            source.properties.splice(0);
-            target.properties.splice(0);
+            this.source.properties.splice(0);
+            this.target.properties.splice(0);
 
             let allBlocks = Workspace.getTopBlocks();
             allBlocks.forEach( i => {
@@ -172,8 +171,8 @@ let app = new Vue({
                 case "lowercasepreprocessingfunction": {
                   i.getChildren().forEach(
                     pr => pr.type === "sourceproperty" ? 
-                    source.properties.push(pr.getField("propTitle").getDisplayText_() + " AS lowercase") 
-                    : target.properties.push(pr.getField("propTitle").getDisplayText_() + " AS lowercase"));
+                    this.source.properties.push(pr.getField("propTitle").getDisplayText_() + " AS lowercase") 
+                    : this.target.properties.push(pr.getField("propTitle").getDisplayText_() + " AS lowercase"));
                 
                   break;
                 }
@@ -182,19 +181,19 @@ let app = new Vue({
                   i.getChildren().forEach(
                     pr => {
                         if(pr.type === "sourceproperty"){
-                         source.properties.push(pr.getField("propTitle").getDisplayText_() + " RENAME " + i.getField("RENAME").getDisplayText_()); 
+                         this.source.properties.push(pr.getField("propTitle").getDisplayText_() + " RENAME " + i.getField("RENAME").getDisplayText_()); 
                         } else {
                           //target
                           if(!pr.getChildren().length) {
                             //console.log("tar");
-                            target.properties.push(pr.getField("propTitle").getDisplayText_() + " RENAME " + i.getField("RENAME").getDisplayText_()); 
+                            this.target.properties.push(pr.getField("propTitle").getDisplayText_() + " RENAME " + i.getField("RENAME").getDisplayText_()); 
                           } else {
                             pr.getChildren().forEach( 
                               childPr => {
                                 if(childPr.type === "sourceproperty") {
-                                source.properties.push(childPr.getField("propTitle").getDisplayText_() + " AS lowercase RENAME " + i.getField("RENAME").getDisplayText_());
+                                this.source.properties.push(childPr.getField("propTitle").getDisplayText_() + " AS lowercase RENAME " + i.getField("RENAME").getDisplayText_());
                                 } else {
-                                  target.properties.push(childPr.getField("propTitle").getDisplayText_() + " AS lowercase RENAME " + i.getField("RENAME").getDisplayText_());
+                                  this.target.properties.push(childPr.getField("propTitle").getDisplayText_() + " AS lowercase RENAME " + i.getField("RENAME").getDisplayText_());
                                   }
                               });
                           }
@@ -212,38 +211,61 @@ let app = new Vue({
                   pr => {
                     if(pr.type === "sourceproperty"){
                       src = pr.getField("propTitle").getDisplayText_();
-                      source.properties.push(src);
+                      this.source.properties.push(src);
                     } else {
                       tgt = pr.getField("propTitle").getDisplayText_();
-                      target.properties.push(tgt);
+                      this.target.properties.push(tgt);
                     }
 
                    
                   });
                   let threshold = i.getField("threshold").text_;
                   let measureFunc = i.getField("measureList").getDisplayText_();
-                  metrics.splice(0);
-                  metrics.push(measureFunc.toLowerCase()+"("+src+","+tgt+")|"+threshold);
+                  this.metrics.splice(0);
+                  this.metrics.push(measureFunc.toLowerCase()+"("+src+","+tgt+")|"+threshold);
              
                   break;
                 }
 
                 default: {
                   if(!i.getParent() && i.type === "sourceproperty"){
-                    source.properties.push(i.getField("propTitle").getDisplayText_());
+                    this.source.properties.push(i.getField("propTitle").getDisplayText_());
                   } else {
                     if(!i.getParent() && i.type === "targetproperty"){
                       // target
-                      target.properties.push(i.getField("propTitle").getDisplayText_());
+                      this.target.properties.push(i.getField("propTitle").getDisplayText_());
                     }
                   }
                   break;
                 }
               }
 
+              this.exPrefixes.forEach(pref => {
+                this.prefixes.forEach(pr => {
+                  if(pref.label === pr.label){
+                    this.deletePrefix(pr);
+                  }
+                })
+              }) 
+
+              this.source.properties.forEach(pr => 
+                {
+                  let label = pr.split(":")[0];
+                  this.exPrefixes.push({label: label, namespace: this.context[label]});
+                  this.addPrefix({label: label, namespace: this.context[label]});
+              });
+
+              this.target.properties.forEach(pr => 
+                {
+                  let label = pr.split(":")[0];
+                  this.exPrefixes.push({label: label, namespace: this.context[label]});
+                  this.addPrefix({label: label, namespace: this.context[label]});
+              });
+            
             });
 
-            
+
+
           }
           Workspace.addChangeListener(onFirstComment);
 
@@ -273,7 +295,7 @@ let app = new Vue({
       this.prefixes = this.prefixes.filter(p => p.label !== prefix.label && p.namespace !== prefix.namespace);
     },
     addPrefix(prefix) {
-      console.log(prefix);
+      //console.log(prefix);
       // push new prefix
       if(!this.prefixes.some(i => i.label === prefix.label)){
         this.prefixes.push(prefix);
@@ -287,7 +309,6 @@ let app = new Vue({
 <LIMES>
 `;
       const configFooter = `</LIMES>`;
-
       const prefixes = this.prefixes
         .map(
           p => `<PREFIX>

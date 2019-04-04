@@ -72,6 +72,9 @@
   .message {
     color : red;
   }
+  .advancedOptions {
+    color: #3f51b5;
+  }
 </style>
 
   <!-- LIMES server ref -->
@@ -149,6 +152,7 @@
           v-bind:advancedOptionsShow="advancedOptionsShow"
           v-on:toggle-restr-src="source.restriction = $event"
           v-on:toggle-prefix-from-rest="addPrefix($event)"
+          v-on:toggle-del-exprefix="deletePrefix($event)"
           ></datasource-component>
 
           <datasource-component 
@@ -156,10 +160,21 @@
           v-bind:advancedOptionsShow="advancedOptionsShow" 
           v-on:toggle-restr-target="target.restriction = $event"
           v-on:toggle-prefix-from-rest="addPrefix($event)"
+          v-on:toggle-del-exprefix="deletePrefix($event)"
           title="Data target"  
           ></datasource-component>
 
-          <datacanvas-component v-bind:source="source" v-bind:target="target" title="Data target"></datacanvas-component>
+          <md-tabs>
+            <md-tab id="manualMetric" md-label="Manual metric">
+              <datacanvas-component v-bind:source="source" v-bind:target="target" title="Data target"></datacanvas-component>
+            </md-tab>
+            <md-tab id="machineLearning" md-label="Machine learning">
+              <!-- machine learning UI -->
+              <mlalgorithm-component v-bind:data="mlalgorithm"></mlalgorithm-component>
+            </md-tab>
+          </md-tabs>
+
+
           <!-- metrics UI -->
           <metrics-component
             v-bind:metrics="metrics"
@@ -167,10 +182,10 @@
           <!-- acceptance UI -->
           <accreview-component v-bind:data="acceptance" title="Acceptance Condition"></accreview-component>
           <accreview-component v-bind:data="review" title="Review Condition"></accreview-component>
-          <!-- machine learning UI -->
-          <mlalgorithm-component v-bind:data="mlalgorithm"></mlalgorithm-component>
+
           <!-- execution UI -->
-          <execution-component v-bind:execution="execution"></execution-component>
+          <execution-component v-bind:execution="execution" v-bind:advancedOptionsShow="advancedOptionsShow"
+          ></execution-component>
           <!-- output UI -->
           <output-component v-bind:output="output"></output-component>
           <!-- enable advanced options UI -->
@@ -245,7 +260,7 @@
       <!-- source -->
       <md-layout md-column>
         <md-layout>
-          <md-input-container v-show="advancedOptionsShow">
+          <md-input-container class="advancedOptions" v-show="advancedOptionsShow">
             <label>ID</label>
             <md-input v-model="source.id" placeholder="ID"></md-input>
           </md-input-container>
@@ -274,13 +289,13 @@
 
         </md-layout>
         <md-layout>
-          <md-input-container v-show="advancedOptionsShow">
+          <md-input-container class="advancedOptions" v-show="advancedOptionsShow">
             <label>Var</label>
             <md-input v-model="source.var" placeholder="Var"></md-input>
           </md-input-container>
         </md-layout>
         <md-layout>
-          <md-input-container v-show="advancedOptionsShow">
+          <md-input-container class="advancedOptions" v-show="advancedOptionsShow">
             <label>Pagesize</label>
             <md-input v-model="source.pagesize" placeholder="Pagesize"></md-input>
           </md-input-container>
@@ -314,12 +329,12 @@
 
         </md-layout>
         <md-layout>
-          <md-input-container v-show="advancedOptionsShow">
+          <md-input-container class="advancedOptions" v-show="advancedOptionsShow">
             <label>Type (optional)</label>
             <md-input v-model="source.type" placeholder="Type (optional)"></md-input>
           </md-input-container>
         </md-layout>
-        <md-layout v-show="advancedOptionsShow">
+        <md-layout  class="advancedOptions" v-show="advancedOptionsShow">
           Properties
 
           <md-chips v-model="source.properties" md-input-placeholder="Add a property"></md-chips>
@@ -332,7 +347,7 @@
           </div> -->
 
         </md-layout>
-        <md-layout v-show="advancedOptionsShow">
+        <md-layout class="advancedOptions" v-show="advancedOptionsShow">
           Optional Properties
           <md-chips v-model="source.optionalProperties" md-input-placeholder="Add an optional property"></md-chips>
         </md-layout>
@@ -456,7 +471,7 @@
 
   <!-- execution component -->
   <script type="text/x-template" id="executionComponent">
-    <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
+    <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;" class="advancedOptions" v-show="advancedOptionsShow">
       <div class="md-title">Execution</div>
 
       <md-layout md-gutter="8" style="padding-top: 10px; padding-bottom: 15px;">
