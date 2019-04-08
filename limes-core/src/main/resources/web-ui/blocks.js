@@ -98,7 +98,7 @@ var LowercasePreprocessingFunction = {
 
 var Measure = {
   "type": "measure",
-  "message0": "%1 Threshold %2 %3 Source property  %4 Target property  %5",
+  "message0": "%1 Threshold %2 %3 %4 Source property  %5 Target property  %6",
   "args0": [
     {
       "type": "field_dropdown",
@@ -121,6 +121,11 @@ var Measure = {
           "ext"
         ]
       ]
+    },
+    {
+      "type": "field_checkbox",
+      "name": "enable_threshold",
+      "checked": false
     },
     {
       "type": "field_number",
@@ -162,7 +167,7 @@ var Operator = {
   "args0": [
     {
       "type": "field_dropdown",
-      "name": "NAME",
+      "name": "operators",
       "options": [
         [
           "AND",
@@ -173,8 +178,12 @@ var Operator = {
           "or"
         ],
         [
-          "XOR",
+          "NOR",
           "xor"
+        ],
+        [
+          "NAND",
+          "nand"
         ]
       ]
     },

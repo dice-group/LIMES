@@ -152,6 +152,7 @@ let app = new Vue({
           Blockly.Blocks['measure'] = {
             init: function() {
               this.jsonInit(Measure);
+              this.getField("threshold").visible_ = false;
             }
           };
           Blockly.Blocks['operator'] = {
@@ -207,25 +208,84 @@ let app = new Vue({
                 }
 
                 case "measure": {
-                  let src;
-                  let tgt;
-                  i.getChildren().forEach(
-                  pr => {
-                    if(pr.type === "sourceproperty"){
-                      src = pr.getField("propTitle").getDisplayText_();
-                      this.source.properties.push(src);
-                    } else {
-                      tgt = pr.getField("propTitle").getDisplayText_();
-                      this.target.properties.push(tgt);
-                    }
+                  let shownM = showThreshold(i);
+                  let properties = getFromMeasure(this, i);
 
-                   
-                  });
                   let threshold = i.getField("threshold").text_;
                   let measureFunc = i.getField("measureList").getDisplayText_();
                   this.metrics.splice(0);
-                  this.metrics.push(measureFunc.toLowerCase()+"("+src+","+tgt+")|"+threshold);
-             
+                  if(shownM){
+                    this.metrics.push(measureFunc.toLowerCase()+"("+properties.src+","+properties.tgt+")|"+threshold);
+                  } else {
+                    this.metrics.push(measureFunc.toLowerCase()+"("+properties.src+","+properties.tgt+")"); 
+                  }
+        
+                  break;
+                }
+
+                case "operator": {
+                  if(i.getChildren().length === 2){
+                    let firstM = i.getChildren()[0];
+                    let secondM = i.getChildren()[1];
+                    let shownFirstM = showThreshold(firstM);
+                    let shownSecondM = showThreshold(secondM);
+                    let props1, props2;
+                    if(firstM.type === "measure"){
+                      props1 = getFromMeasure(this, firstM);
+                    }
+                    if(secondM.type === "measure"){
+                      props2 = getFromMeasure(this, secondM);
+                    }
+                    let operator = i.getField("operators").text_;
+                    let measureFunc1 = firstM.getField("measureList").getDisplayText_();
+                    let measureFunc2 = secondM.getField("measureList").getDisplayText_();
+                    let threshold1 = firstM.getField("threshold").text_;
+                    let threshold2 = secondM.getField("threshold").text_;
+                    this.metrics.splice(0);
+                    if(operator[0] !== 'N'){       
+                      let str1 = operator + '(' + measureFunc1.toLowerCase()+"("+props1.src+","+props1.tgt+")"; 
+                      let str2 = ',' + measureFunc2.toLowerCase()+"("+props2.src+","+props2.tgt+")";
+                      if(shownFirstM && shownSecondM){
+                        this.metrics.push(str1 + "|" + threshold1 + str2 + "|"+threshold2 + ')');
+                      } else {
+
+                        if(!shownFirstM && !shownSecondM){
+                          this.metrics.push(str1 + str2 + ')');
+                        }
+
+                        if(shownFirstM && !shownSecondM){
+                          this.metrics.push(str1 + "|" + threshold1 + str2 + ')');
+                        } else if(!shownFirstM && shownSecondM) {
+                          this.metrics.push(str1 + str2 + "|"+threshold2 + ')');
+                        }
+                      }
+
+
+
+                    } else {
+                   
+                      let str1 = 'NOT(' + operator.substr(1) + '(' + measureFunc1.toLowerCase()+"("+props1.src+","+props1.tgt+")"; 
+                      let str2 = ',' + measureFunc2.toLowerCase()+"("+props2.src+","+props2.tgt+")";  
+                      if(shownFirstM && shownSecondM){
+                        this.metrics.push(str1 + "|" + threshold1 + str2 + "|"+threshold2 + ')))');
+                      } else {
+
+                        if(!shownFirstM && !shownSecondM){
+                          this.metrics.push(str1 + str2 + ')))');
+                        }
+
+                        if(shownFirstM && !shownSecondM){
+                          this.metrics.push(str1 + "|" + threshold1 + str2 + ')))');
+                        } else if(!shownFirstM && shownSecondM) {
+                          this.metrics.push(str1 + str2 + "|"+threshold2 + ')))');
+                        }
+                      }
+
+                    }
+                  }
+
+
+
                   break;
                 }
 
@@ -512,3 +572,34 @@ let app = new Vue({
     },
   },
 });
+
+
+function getFromMeasure(context, i){
+  let src;
+  let tgt;
+  i.getChildren().forEach(
+    pr => {
+      if(pr.type === "sourceproperty"){
+        src = pr.getField("propTitle").getDisplayText_();
+        context.source.properties.push(src);
+      } else {
+        tgt = pr.getField("propTitle").getDisplayText_();
+        context.target.properties.push(tgt);
+      }                  
+  }); 
+  return {src: src, tgt: tgt};
+}
+
+function showThreshold(i){
+  let isShown;
+  if(i.getField("enable_threshold").getValue().toLowerCase() === 'true'){
+    i.getField("threshold").setVisible(true);
+    i.getField("threshold").forceRerender();
+    isShown = true;
+  } else {
+    i.getField("threshold").setVisible(false);
+    i.getField("threshold").forceRerender();
+    isShown = false;
+  }
+  return isShown;
+}
