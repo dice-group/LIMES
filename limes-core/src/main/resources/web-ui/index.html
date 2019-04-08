@@ -180,8 +180,8 @@
             v-bind:metrics="metrics"
           ></metrics-component>
           <!-- acceptance UI -->
-          <accreview-component v-bind:data="acceptance" v-bind:acceptance="acceptance" title="Acceptance Condition"></accreview-component>
-          <accreview-component v-bind:data="review" v-bind:acceptance="acceptance" title="Review Condition"></accreview-component>
+          <accreview-component v-bind:data="acceptance" v-bind:acceptance="acceptance" v-bind:prefixes="context" v-on:send-prefix="addPrefix($event)" v-on:del-exprefix="deletePrefix($event)" title="Acceptance Condition"></accreview-component>
+          <accreview-component v-bind:data="review" v-bind:acceptance="acceptance" v-bind:prefixes="context" v-on:send-prefix="addPrefix($event)" v-on:del-exprefix="deletePrefix($event)" title="Review Condition"></accreview-component>
 
           <!-- execution UI -->
           <execution-component v-bind:execution="execution" v-bind:advancedOptionsShow="advancedOptionsShow"
@@ -410,6 +410,7 @@
       <md-input-container>
         <label>Relation</label>
         <md-input v-model="data.relation" placeholder="Relation"></md-input>
+        <p class="message">{{messageAboutPrefixInRelation}}</p>
       </md-input-container>
     </md-whiteframe>
   </script>

@@ -50,7 +50,7 @@ let app = new Vue({
     jobError: false,
     results: [],
     // config
-    prefixes: [],
+    prefixes: [{label: 'owl', namespace: 'http://www.w3.org/2002/07/owl#'}],
     exPrefixes: [],
     filteredOptions: [],
     context: [],
@@ -302,25 +302,39 @@ let app = new Vue({
                 }
               }
 
-              this.exPrefixes.forEach(pref => {
-                this.prefixes.forEach(pr => {
-                  if(pref.label === pr.label){
-                    this.deletePrefix(pr);
-                  }
-                })
-              }) 
+              console.log(this.exPrefixes);
+
+              if(this.exPrefixes.length){
+                this.exPrefixes.forEach(pref => {
+                  this.prefixes.forEach(pr => {
+                    if(pref.label === pr.label){
+                      this.deletePrefix(pr);
+                    }
+                  })
+                }) 
+              }
+
+
+              this.exPrefixes.splice(0);
 
               this.source.properties.forEach(pr => 
                 {
                   let label = pr.split(":")[0];
-                  this.exPrefixes.push({label: label, namespace: this.context[label]});
+                  let pref = {label: label, namespace: this.context[label]};
+                  if(!this.prefixes.some(i => i.label === label)){
+                    this.exPrefixes.push(pref);
+                  }
+
                   this.addPrefix({label: label, namespace: this.context[label]});
               });
 
               this.target.properties.forEach(pr => 
                 {
                   let label = pr.split(":")[0];
-                  this.exPrefixes.push({label: label, namespace: this.context[label]});
+                  let pref = {label: label, namespace: this.context[label]};
+                  if(!this.prefixes.some(i => i.label === label)){
+                    this.exPrefixes.push(pref);
+                  }
                   this.addPrefix({label: label, namespace: this.context[label]});
               });
             

@@ -283,7 +283,13 @@ Vue.component('metrics-component', {
 // Define a new component for metric
 Vue.component('accreview-component', {
   template: '#accreviewComponent',
-  props: ['data', 'title', 'acceptance'],
+  props: ['data', 'title', 'acceptance', 'prefixes'],
+  data(){
+    return {
+      messageAboutPrefixInRelation: '',
+      exPrefix: {label: 'owl', namespace: 'http://www.w3.org/2002/07/owl#'},
+    };
+  },
   methods: {
     getMaxV(){
       let maxV;
@@ -293,6 +299,35 @@ Vue.component('accreview-component', {
         maxV = 1;
       }
       return maxV;
+    }
+  },
+  watch: {
+    'data.relation': function(){
+      this.$emit('del-exprefix', this.exPrefix);
+      let property = this.data.relation.split(":")> 2 ? this.data.relation.split(":")[1] : this.data.relation.split(":")[2];
+      let label = this.data.relation.split(":").length > 2 ? this.data.relation.split(":")[1] : this.data.relation.split(":")[0];
+
+      if(label[0] === '/'){ // if label is url
+        let prefixNamespace = label;
+        for(let key in this.prefixes){
+          if (this.prefixes[key] === 'http:'+prefixNamespace){
+            label = key;
+          }
+        }
+        this.data.relation = label+':'+property;
+      } 
+
+      if(!this.prefixes[label]){
+        this.messageAboutPrefixInRelation = "Prefix is not found";
+      } else {
+        this.messageAboutPrefixInRelation = '';
+        let prefixFromRelation = { 
+          label: label , 
+          namespace: this.prefixes[label]
+        };
+        this.exPrefix = prefixFromRelation;
+        this.$emit('send-prefix', prefixFromRelation);
+      }
     }
   }
 });
