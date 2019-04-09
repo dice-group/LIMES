@@ -52,6 +52,48 @@ var targetProperty = {
   "helpUrl": ""
 }
 
+var optionalSourceProperty = {
+  "type": "optionalsourceproperty",
+  "message0": "Optional source property %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "propTitle",
+      "options": [
+        [
+          "",
+          ""
+        ]
+      ]
+    }
+  ],
+  "output": "OptionalSourceProperty",
+  "colour": 80,
+  "tooltip": "Optional source property block",
+  "helpUrl": ""
+}
+
+var optionalTargetProperty = {
+  "type": "optionaltargetproperty",
+  "message0": "Optional target property %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "propTitle",
+      "options": [
+        [
+          "",
+          ""
+        ]
+      ]
+    }
+  ],
+  "output": "OptionalTargetProperty",
+  "colour": 215,
+  "tooltip": "Optional target property block",
+  "helpUrl": ""
+}
+
 var RenamePreprocessingFunction = {
   "type": "renamepreprocessingfunction",
   "message0": "Rename %1 As %2",

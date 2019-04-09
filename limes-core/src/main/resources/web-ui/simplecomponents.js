@@ -175,12 +175,20 @@ function fetchProperties(context, endpoint, curClass) {
 
       if(context.source.id === "sourceId"){
         sourceProperty.args0[0].options.length = 0;
-        arr.forEach(i => sourceProperty.args0[0].options.push(i));
+        optionalSourceProperty.args0[0].options.length = 0;
+        arr.forEach(i => {
+          sourceProperty.args0[0].options.push(i);
+          optionalSourceProperty.args0[0].options.push(i);
+        });
       }
 
       if(context.source.id === "targetId"){
         targetProperty.args0[0].options.length = 0;
-        arr.forEach(i => targetProperty.args0[0].options.push(i));
+        optionalTargetProperty.args0[0].options.length = 0;
+        arr.forEach(i => {
+          targetProperty.args0[0].options.push(i);
+          optionalTargetProperty.args0[0].options.push(i);
+        });
       }
 
     })

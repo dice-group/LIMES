@@ -139,6 +139,16 @@ let app = new Vue({
               this.jsonInit(targetProperty);
             }
           };
+          Blockly.Blocks['optionalsourceproperty'] = {
+            init: function() {
+              this.jsonInit(optionalSourceProperty);              
+            }
+          };
+          Blockly.Blocks['optionaltargetproperty'] = {
+            init: function() {
+              this.jsonInit(optionalTargetProperty);
+            }
+          };
           Blockly.Blocks['renamepreprocessingfunction'] = {
             init: function() {
               this.jsonInit(RenamePreprocessingFunction);
@@ -167,6 +177,8 @@ let app = new Vue({
             //console.log(Workspace.getTopBlocks());
             this.source.properties.splice(0);
             this.target.properties.splice(0);
+            this.source.optionalProperties.splice(0);
+            this.target.optionalProperties.splice(0);
 
             let allBlocks = Workspace.getTopBlocks();
             allBlocks.forEach( i => {
@@ -298,11 +310,18 @@ let app = new Vue({
                       this.target.properties.push(i.getField("propTitle").getDisplayText_());
                     }
                   }
+
+                  if(!i.getParent() && i.type === "optionalsourceproperty"){
+                    this.source.optionalProperties.push(i.getField("propTitle").getDisplayText_());
+                  } else {
+                    if(!i.getParent() && i.type === "optionaltargetproperty"){
+                      // target
+                      this.target.optionalProperties.push(i.getField("propTitle").getDisplayText_());
+                    }
+                  }
                   break;
                 }
               }
-
-              console.log(this.exPrefixes);
 
               if(this.exPrefixes.length){
                 this.exPrefixes.forEach(pref => {
@@ -317,26 +336,11 @@ let app = new Vue({
 
               this.exPrefixes.splice(0);
 
-              this.source.properties.forEach(pr => 
-                {
-                  let label = pr.split(":")[0];
-                  let pref = {label: label, namespace: this.context[label]};
-                  if(!this.prefixes.some(i => i.label === label)){
-                    this.exPrefixes.push(pref);
-                  }
+              this.addOldAndNewPrefix(this.source.properties);
+              this.addOldAndNewPrefix(this.target.properties);
 
-                  this.addPrefix({label: label, namespace: this.context[label]});
-              });
-
-              this.target.properties.forEach(pr => 
-                {
-                  let label = pr.split(":")[0];
-                  let pref = {label: label, namespace: this.context[label]};
-                  if(!this.prefixes.some(i => i.label === label)){
-                    this.exPrefixes.push(pref);
-                  }
-                  this.addPrefix({label: label, namespace: this.context[label]});
-              });
+              this.addOldAndNewPrefix(this.source.optionalProperties);
+              this.addOldAndNewPrefix(this.target.optionalProperties);
             
             });
 
@@ -378,6 +382,18 @@ let app = new Vue({
       }
 
     },
+    addOldAndNewPrefix(props){
+      props.forEach(pr => 
+      {
+          let label = pr.split(":")[0];
+          let pref = {label: label, namespace: this.context[label]};
+          if(!this.prefixes.some(i => i.label === label)){
+            this.exPrefixes.push(pref);
+          }
+
+          this.addPrefix({label: label, namespace: this.context[label]});
+      });
+    },
 
     generateConfig() {
       const configHeader = `<?xml version="1.0" encoding="UTF-8"?>
@@ -398,14 +414,14 @@ let app = new Vue({
       const src = makeDatasource(this.source, 'SOURCE');
       const target = makeDatasource(this.target, 'TARGET');
 
-      const metrics = this.metrics
+      const metrics = !this.mlalgorithm.enabled ? this.metrics
         .map(
           m => `<METRIC>
   ${m}
 </METRIC>
 `
         )
-        .join('');
+        .join('') : '';
 
       const acceptance = makeAccReview(this.acceptance, 'ACCEPTANCE');
       const review = makeAccReview(this.review, 'REVIEW');
@@ -438,7 +454,7 @@ let app = new Vue({
 `;
 
       const config =
-        configHeader + prefixes + src + target + metrics + acceptance + review + ml + execution + output + configFooter;
+        configHeader + prefixes + src + target + metrics + ml + acceptance + review  + execution + output + configFooter;
       return config;
     },
     showConfig() {
