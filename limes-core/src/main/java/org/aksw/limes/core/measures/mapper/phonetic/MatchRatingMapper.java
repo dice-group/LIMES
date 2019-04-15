@@ -72,13 +72,15 @@ public class MatchRatingMapper extends AMapper {
                     similarityBook.push(new MutableTriple<>(current.getDistance(), entry.getValue(),
                             current.getNode().getReferences()));
                 }
-                for (Map.Entry<Character, TrieNode> nodeEntry : childs) {
-                    if (nodeEntry.getKey().equals(entry.getKey().charAt(current.getPosition()))) {
-                        queue.push(new TrieSearchState(current.getDistance(), current.getPosition() + 1,
-                                nodeEntry.getValue()));
-                    } else if (current.getDistance() < maxDistance) {
-                        queue.push(new TrieSearchState(current.getDistance() + 1, current.getPosition() + 1,
-                                nodeEntry.getValue()));
+                if (entry.getKey().length() > current.getPosition()) {
+                    for (Map.Entry<Character, TrieNode> nodeEntry : childs) {
+                        if (nodeEntry.getKey().equals(entry.getKey().charAt(current.getPosition()))) {
+                            queue.push(new TrieSearchState(current.getDistance(), current.getPosition() + 1,
+                                    nodeEntry.getValue()));
+                        } else if (current.getDistance() < maxDistance) {
+                            queue.push(new TrieSearchState(current.getDistance() + 1, current.getPosition() + 1,
+                                    nodeEntry.getValue()));
+                        }
                     }
                 }
             }
@@ -93,7 +95,7 @@ public class MatchRatingMapper extends AMapper {
                     for (String sourceUri : sourceMap.get(a)) {
                         for (String targetUri : targetMap.get(b)) {
                             result.add(sourceUri, targetUri,
-                                    (1.0d - (t.getLeft().doubleValue() / (double)6)));
+                                    (1.0d - (t.getLeft().doubleValue() / (double)4)));
                         }
                     }
                 }
@@ -102,12 +104,13 @@ public class MatchRatingMapper extends AMapper {
 
         return result;
     }
-
     private Map<String, List<Integer>> getInvertedList(List<String> list) {
         Map<String, List<Integer>> result = new HashMap<>(list.size());
         for (int i = 0, listASize = list.size(); i < listASize; i++) {
             String s = list.get(i);
+        
             String code = MatchRatingApproachEncoderMeasure.getCode(s);
+            if(code.length()!=0) {
             List<Integer> ref;
             if (!result.containsKey(code)) {
                 ref = new LinkedList<>();
@@ -116,6 +119,7 @@ public class MatchRatingMapper extends AMapper {
                 ref = result.get(code);
             }
             ref.add(i);
+        	}
         }
         return result;
     }
@@ -158,10 +162,10 @@ public class MatchRatingMapper extends AMapper {
         }
 
         private static void recursiveAdd(TrieNode node, String code, List<Integer> references) {
-            if (code.length() > 1)
-                TrieNode.recursiveAdd(node.addChild(code.charAt(0), null), code.substring(1), references);
-            else
-                node.addChild(code.charAt(0), references);
+            if (code.length() > 1) {
+                TrieNode.recursiveAdd(node.addChild(code.charAt(0), null), code.substring(1), references);}
+            else if(code.length()==1) {
+                node.addChild(code.charAt(0), references);}
         }
 
         public TrieNode addChild(char symbol, List<Integer> references) {

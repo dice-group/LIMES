@@ -8,7 +8,7 @@ public class DoubleMetaphoneMeasure extends StringMeasure {
 
 	public static String getCode(String string) {
 		DoubleMetaphone doublemetaphone = new DoubleMetaphone();
-		return doublemetaphone.doubleMetaphone(string,true);
+		return doublemetaphone.doubleMetaphone(string,false);
 	}
 	
 	public double proximity(String s1, String s2) {

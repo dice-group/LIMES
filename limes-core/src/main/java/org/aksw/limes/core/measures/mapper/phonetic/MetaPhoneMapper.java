@@ -109,13 +109,22 @@ public class MetaPhoneMapper extends AMapper {
         Map<String, List<Integer>> result = new HashMap<>(list.size());
         for (int i = 0, listASize = list.size(); i < listASize; i++) {
             String s = list.get(i);
-            if (!s.equals("")) {
+           // System.out.println("STRING: "+s);
+         //   if (s.length()>=1) {
                 String code = MetaphoneMeasure.getCode(s);
+            	if(code.length()!=0) {
+               // System.out.println("CODE: "+code);
                 List<Integer> ref;
+                
+                
                 if (!result.containsKey(code)) {
+                	
+                	
                     ref = new LinkedList<>();
+                  //  if(code.length()!=0&&!code.equals(""))
                     result.put(code, ref);
                 } else {
+                //	if(code.length()!=0&&!code.equals(""))
                     ref = result.get(code);
                 }
                 ref.add(i);
@@ -162,10 +171,10 @@ public class MetaPhoneMapper extends AMapper {
         }
 
         private static void recursiveAdd(TrieNode node, String code, List<Integer> references) {
-            if (code.length() > 1)
-                TrieNode.recursiveAdd(node.addChild(code.charAt(0), null), code.substring(1), references);
-            else
-                node.addChild(code.charAt(0), references);
+            if (code.length() > 1) {
+                TrieNode.recursiveAdd(node.addChild(code.charAt(0), null), code.substring(1), references);}
+            else if(code.length()==1) {
+                node.addChild(code.charAt(0), references);}
         }
 
         public TrieNode addChild(char symbol, List<Integer> references) {

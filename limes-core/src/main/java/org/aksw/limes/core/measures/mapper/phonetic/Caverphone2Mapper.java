@@ -106,6 +106,7 @@ public class Caverphone2Mapper extends AMapper {
 		Map<String, List<Integer>> result = new HashMap<>(list.size());
 		for (int i = 0, listASize = list.size(); i < listASize; i++) {
 			String s = list.get(i);
+			 if (!s.equals("")) {
 			String code = Caverphone2Measure.getCode(s);
 			List<Integer> ref;
 			if (!result.containsKey(code)) {
@@ -115,6 +116,7 @@ public class Caverphone2Mapper extends AMapper {
 				ref = result.get(code);
 			}
 			ref.add(i);
+			 }
 		}
 		return result;
 	}
@@ -157,10 +159,10 @@ public class Caverphone2Mapper extends AMapper {
 		}
 
 		private static void recursiveAdd(TrieNode node, String code, List<Integer> references) {
-			if (code.length() > 1)
-				TrieNode.recursiveAdd(node.addChild(code.charAt(0), null), code.substring(1), references);
-			else
-				node.addChild(code.charAt(0), references);
+			if (code.length() > 1) {
+				TrieNode.recursiveAdd(node.addChild(code.charAt(0), null), code.substring(1), references);}
+			else if(code.length()==1) {
+				node.addChild(code.charAt(0), references);}
 		}
 
 		public TrieNode addChild(char symbol, List<Integer> references) {

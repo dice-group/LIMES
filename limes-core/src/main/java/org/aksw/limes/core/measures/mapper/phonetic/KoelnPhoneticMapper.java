@@ -41,7 +41,7 @@ public class KoelnPhoneticMapper extends AMapper {
      */
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
         if (threshold <= 0) {
             throw new InvalidThresholdException(threshold);
         }
@@ -71,13 +71,15 @@ public class KoelnPhoneticMapper extends AMapper {
                     similarityBook.push(new MutableTriple<>(current.getDistance(), entry.getValue(),
                             current.getNode().getReferences()));
                 }
-                for (Map.Entry<Character, TrieNode> nodeEntry : childs) {
-                    if (entry.getKey().length()>current.getPosition() && nodeEntry.getKey().equals(entry.getKey().charAt(current.getPosition()))) {
-                        queue.push(new TrieSearchState(current.getDistance(), current.getPosition() + 1,
-                                nodeEntry.getValue()));
-                    } else if (current.getDistance() < maxDistance) {
-                        queue.push(new TrieSearchState(current.getDistance() + 1, current.getPosition() + 1,
-                                nodeEntry.getValue()));
+                if (entry.getKey().length() > current.getPosition()) {
+                    for (Map.Entry<Character, TrieNode> nodeEntry : childs) {
+                        if (nodeEntry.getKey().equals(entry.getKey().charAt(current.getPosition()))) {
+                            queue.push(new TrieSearchState(current.getDistance(), current.getPosition() + 1,
+                                    nodeEntry.getValue()));
+                        } else if (current.getDistance() < maxDistance) {
+                            queue.push(new TrieSearchState(current.getDistance() + 1, current.getPosition() + 1,
+                                    nodeEntry.getValue()));
+                        }
                     }
                 }
             }
@@ -92,7 +94,7 @@ public class KoelnPhoneticMapper extends AMapper {
                     for (String sourceUri : sourceMap.get(a)) {
                         for (String targetUri : targetMap.get(b)) {
                             result.add(sourceUri, targetUri,
-                                    (1.0d - (t.getLeft().doubleValue() / (double) a.length())));
+                                    (1.0d - (t.getLeft().doubleValue() / (double)4)));
                         }
                     }
                 }
@@ -106,6 +108,7 @@ public class KoelnPhoneticMapper extends AMapper {
         Map<String, List<Integer>> result = new HashMap<>(list.size());
         for (int i = 0, listASize = list.size(); i < listASize; i++) {
             String s = list.get(i);
+        	if (!s.equals("")) {
             String code = KoelnPhoneticMeasure.getCode(s);
             List<Integer> ref;
             if (!result.containsKey(code)) {
@@ -115,10 +118,13 @@ public class KoelnPhoneticMapper extends AMapper {
                 ref = result.get(code);
             }
             ref.add(i);
+        	}
         }
         return result;
     }
 
+    
+  
     public String getName() {
         return "koelnPhonetic";
     }
@@ -160,7 +166,7 @@ public class KoelnPhoneticMapper extends AMapper {
         static void recursiveAdd(TrieNode node, String code, List<Integer> references) {
             if (code.length() > 1) {
                 TrieNode.recursiveAdd(node.addChild(code.charAt(0), null), code.substring(1), references);
-            } else {
+            } else if (code.length()==1){
                 node.addChild(code.charAt(0), references);
             }
         }

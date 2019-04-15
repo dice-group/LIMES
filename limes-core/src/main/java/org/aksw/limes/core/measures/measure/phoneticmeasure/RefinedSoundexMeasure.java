@@ -10,6 +10,7 @@ public class RefinedSoundexMeasure extends StringMeasure {
 
 	public static String getCode(String string) {
 		RefinedSoundex rso = new RefinedSoundex();
+		string=string.replaceAll("[^\\p{ASCII}]", "");
 		return rso.encode(string);
 	}
 	public double proximity(String s1, String s2) {

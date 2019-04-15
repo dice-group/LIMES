@@ -93,6 +93,9 @@ public class DataSetChooser {
         case "OAEI2014BOOKS":
             param = getOAEI2014Books();
             break;
+        case "OAEI2018":
+            param = getOAEI2018();
+            break;
         /*
          * case "TOWNS": param = getTowns(); break; case "VILLAGES": param =
          * getVillages(); break; case "MOVIES": param = getMovies(); break;
@@ -209,6 +212,10 @@ public class DataSetChooser {
             break;
         case OAEI2014BOOKS:
             param = getOAEI2014Books();
+            break;
+            
+        case OAEI2018:
+            param = getOAEI2018();
             break;
 
         }
@@ -330,6 +337,41 @@ public class DataSetChooser {
         param.put(MapKey.TARGET_CLASS, "oaei2014:Book");
         return param;
     }
+    
+    
+    private static HashMap<MapKey, Object> getOAEI2018() {
+        HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
+        // folders & files
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/OAEI2018/");
+       // param.put(MapKey.CONFIG_FILE, "oaei2014_identity.xml");
+        param.put(MapKey.REFERENCE_FILE, "refalign.rdf");
+        param.put(MapKey.SOURCE_FILE, "Abox1.nt");
+        param.put(MapKey.TARGET_FILE, "Abox2.nt");
+        param.put(MapKey.EVALUATION_RESULTS_FOLDER, getEvalFolder());
+        param.put(MapKey.EVALUATION_FILENAME, "Pseudo_eval_OAEI2018.csv");
+        param.put(MapKey.NAME, "OAEI2018");
+        // data
+        AConfigurationReader cR = new XMLConfigurationReader(
+                "" + param.get(MapKey.BASE_FOLDER) + param.get(MapKey.CONFIG_FILE));
+        cR.read();
+        param.put(MapKey.CONFIG_READER, cR);
+
+        param.put(MapKey.PROPERTY_MAPPING, PropMapper.getPropertyMappingFromFile((String) param.get(MapKey.BASE_FOLDER),
+                (String) param.get(MapKey.CONFIG_FILE)));
+        param.put(MapKey.SOURCE_CACHE, HybridCache.getData(cR.getConfiguration().getSourceInfo()));
+        param.put(MapKey.TARGET_CACHE, HybridCache.getData(cR.getConfiguration().getTargetInfo()));
+        OAEIMappingParser mappingParser = new OAEIMappingParser(
+                (String) param.get(MapKey.BASE_FOLDER) + (String) param.get(MapKey.REFERENCE_FILE));
+        param.put(MapKey.REFERENCE_MAPPING, mappingParser.parseDocument());
+
+        param.put(MapKey.SOURCE_CLASS, "oaei2018:Book");
+        param.put(MapKey.TARGET_CLASS, "oaei2018:Book");
+        return param;
+    }
+    
+    
+    
 
     private static HashMap<MapKey, Object> getPerson1CSV() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
@@ -902,7 +944,7 @@ public class DataSetChooser {
     }
 
     public enum DataSets {
-        PERSON1, PERSON1_CSV, PERSON2, PERSON2_CSV, RESTAURANTS, OAEI2014BOOKS, RESTAURANTS_FIXED, DBLPACM, ABTBUY, DBLPSCHOLAR, AMAZONGOOGLEPRODUCTS, DBPLINKEDMDB, DRUGS, RESTAURANTS_CSV// ,TOWNS,
+        PERSON1, PERSON1_CSV, PERSON2, PERSON2_CSV, RESTAURANTS, OAEI2014BOOKS, RESTAURANTS_FIXED, DBLPACM, ABTBUY, DBLPSCHOLAR, AMAZONGOOGLEPRODUCTS, DBPLINKEDMDB, DRUGS, RESTAURANTS_CSV, OAEI2018// ,TOWNS,
         // VILLAGES,
         // MOVIES
     }

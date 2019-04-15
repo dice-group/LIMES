@@ -10,6 +10,7 @@ public class SoundexMeasure extends StringMeasure {
 
 	public static String getCode(String string) {
 		Soundex so = new Soundex();
+		string=string.replaceAll("[^\\p{ASCII}]", "");
 		return so.encode(string);
 	}
 

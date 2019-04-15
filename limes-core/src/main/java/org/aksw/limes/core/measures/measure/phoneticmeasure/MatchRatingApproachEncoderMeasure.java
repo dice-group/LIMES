@@ -2,15 +2,17 @@ package org.aksw.limes.core.measures.measure.phoneticmeasure;
 
 import org.aksw.limes.core.io.cache.Instance;
 import org.aksw.limes.core.measures.measure.string.StringMeasure;
-import org.apache.commons.codec.language.MatchRatingApproachEncoder;;
 
 public class MatchRatingApproachEncoderMeasure  extends StringMeasure {
 
 	//public static final int codeLength = 6;
 
 	public static String getCode(String string) {
+		
+	string=string.toUpperCase();
 		MatchRatingApproachEncoder matchratingapproachencoder = new MatchRatingApproachEncoder();
 		return matchratingapproachencoder.encode(string);
+		
 	}
 
 	public double proximity(String s1, String s2) {
