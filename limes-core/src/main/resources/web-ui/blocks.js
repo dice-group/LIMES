@@ -104,7 +104,9 @@ var RenamePreprocessingFunction = {
       "check": [
         "SourceProperty",
         "TargetProperty",
-        "PreprocessingFunction"
+        "PreprocessingFunction",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty"
       ]
     },
     {
@@ -128,7 +130,208 @@ var LowercasePreprocessingFunction = {
       "name": "NAME",
       "check": [
         "SourceProperty",
-        "TargetProperty"
+        "TargetProperty",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty",
+        "PreprocessingFunction"
+      ]
+    }
+  ],
+  "output": "PreprocessingFunction",
+  "colour": 240,
+  "tooltip": "Measure block",
+  "helpUrl": ""
+}
+
+var UppercasePreprocessingFunction = {
+  "type": "uppercasepreprocessingfunction",
+  "message0": "Uppercase %1",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "NAME",
+      "check": [
+        "SourceProperty",
+        "TargetProperty",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty",
+        "PreprocessingFunction"
+      ]
+    }
+  ],
+  "output": "PreprocessingFunction",
+  "colour": 240,
+  "tooltip": "Measure block",
+  "helpUrl": ""
+}
+
+var NumberPreprocessingFunction = {
+  "type": "numberpreprocessingfunction",
+  "message0": "Number %1",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "NAME",
+      "check": [
+        "SourceProperty",
+        "TargetProperty",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty",
+        "PreprocessingFunction"
+      ]
+    }
+  ],
+  "output": "PreprocessingFunction",
+  "colour": 240,
+  "tooltip": "Measure block",
+  "helpUrl": ""
+}
+
+var NolangPreprocessingFunction = {
+  "type": "nolangpreprocessingfunction",
+  "message0": "Nolang %1",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "NAME",
+      "check": [
+        "SourceProperty",
+        "TargetProperty",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty",
+        "PreprocessingFunction"        
+      ]
+    }
+  ],
+  "output": "PreprocessingFunction",
+  "colour": 240,
+  "tooltip": "Measure block",
+  "helpUrl": ""
+}
+
+var CleaniriPreprocessingFunction = {
+  "type": "cleaniripreprocessingfunction",
+  "message0": "Cleaniri %1",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "NAME",
+      "check": [
+        "SourceProperty",
+        "TargetProperty",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty",
+        "PreprocessingFunction"        
+      ]
+    }
+  ],
+  "output": "PreprocessingFunction",
+  "colour": 240,
+  "tooltip": "Measure block",
+  "helpUrl": ""
+}
+
+var CelsiusPreprocessingFunction = {
+  "type": "celsiuspreprocessingfunction",
+  "message0": "Celsius %1",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "NAME",
+      "check": [
+        "SourceProperty",
+        "TargetProperty",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty",
+        "PreprocessingFunction"        
+      ]
+    }
+  ],
+  "output": "PreprocessingFunction",
+  "colour": 240,
+  "tooltip": "Measure block",
+  "helpUrl": ""
+}
+
+var FahrenheitPreprocessingFunction = {
+  "type": "fahrenheitpreprocessingfunction",
+  "message0": "Fahrenheit %1",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "NAME",
+      "check": [
+        "SourceProperty",
+        "TargetProperty",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty",
+        "PreprocessingFunction"        
+      ]
+    }
+  ],
+  "output": "PreprocessingFunction",
+  "colour": 240,
+  "tooltip": "Measure block",
+  "helpUrl": ""
+}
+
+var RemovebracesPreprocessingFunction = {
+  "type": "removebracespreprocessingfunction",
+  "message0": "Removebraces %1",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "NAME",
+      "check": [
+        "SourceProperty",
+        "TargetProperty",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty",
+        "PreprocessingFunction"        
+      ]
+    }
+  ],
+  "output": "PreprocessingFunction",
+  "colour": 240,
+  "tooltip": "Measure block",
+  "helpUrl": ""
+}
+
+var RegularAlphabetPreprocessingFunction = {
+  "type": "regularalphabetpreprocessingfunction",
+  "message0": "RegularAlphabet %1",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "NAME",
+      "check": [
+        "SourceProperty",
+        "TargetProperty",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty",
+        "PreprocessingFunction"        
+      ]
+    }
+  ],
+  "output": "PreprocessingFunction",
+  "colour": 240,
+  "tooltip": "Measure block",
+  "helpUrl": ""
+}
+
+var UriasstringPreprocessingFunction = {
+  "type": "uriasstringpreprocessingfunction",
+  "message0": "Uriasstring %1",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "NAME",
+      "check": [
+        "SourceProperty",
+        "TargetProperty",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty",
+        "PreprocessingFunction"        
       ]
     }
   ],
@@ -185,7 +388,8 @@ var Measure = {
       "name": "sourceProperty",
       "check": [
         "SourceProperty",
-        "PreprocessingFunction"
+        "PreprocessingFunction",
+        "OptionalSourceProperty"        
       ]
     },
     {
@@ -193,7 +397,8 @@ var Measure = {
       "name": "targetProperty",
       "check": [
         "TargetProperty",
-        "PreprocessingFunction"
+        "PreprocessingFunction",
+        "OptionalTargetProperty",
       ]
     }
   ],

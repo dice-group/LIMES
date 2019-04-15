@@ -132,7 +132,7 @@ function fetchClasses(source, endpoint) {
       },
     })
     .then(function(response) {
-      console.log(response);
+      // console.log(response);
       source.messageAboutClasses = "Status of the request: "+response.statusText;
       return response.json();
      })
@@ -284,7 +284,7 @@ Vue.component('datacanvas-component', {
 // Define a new component for metric
 Vue.component('metrics-component', {
   template: '#metricsComponent',
-  props: ['metrics', 'selectedMeasureOption', 'measureOptions', 'selectedOperatorOption', 'operatorOptions'],
+  props: ['metrics'],
 });
 
 
@@ -336,6 +336,24 @@ Vue.component('accreview-component', {
         this.exPrefix = prefixFromRelation;
         this.$emit('send-prefix', prefixFromRelation);
       }
+    },
+    'data.threshold': function(){
+      if(this.data.id !== 'review'){
+        if(this.data.threshold > 1){
+          this.$emit('change-threshold', 1);
+        }
+        if(this.data.threshold < 0){
+          this.$emit('change-threshold', 0);
+        }
+      }else {
+        if(this.data.threshold > this.acceptance.threshold){
+          this.$emit('change-revthreshold', this.acceptance.threshold);
+        }
+        if(this.data.threshold < 0){
+          this.$emit('change-revthreshold', 0);
+        }
+      }
+
     }
   }
 });

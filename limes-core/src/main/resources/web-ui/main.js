@@ -57,7 +57,7 @@ let app = new Vue({
     source: {
       id: 'sourceId',
       endpoint: '',
-      var: '?src',
+      var: '?s',
       pagesize: 1000,
       restriction: '?src rdf:type some:Type',
       type: 'sparql',
@@ -68,7 +68,7 @@ let app = new Vue({
     target: {
       id: 'targetId',
       endpoint: '',
-      var: '?target',
+      var: '?t',
       pagesize: 1000,
       restriction: '?target rdf:type some:Type',
       type: 'sparql',
@@ -114,6 +114,24 @@ let app = new Vue({
       type: 'TAB',
     },
     advancedOptionsShow: false,
+    typesOfBlocks: {'sourceproperty': sourceProperty,
+      'targetproperty': targetProperty,
+      'optionalsourceproperty': optionalSourceProperty,
+      'optionaltargetproperty': optionalTargetProperty,
+      'measure': Measure,
+      'operator': Operator,
+      'nolangpreprocessingfunction': NolangPreprocessingFunction,
+      'renamepreprocessingfunction': RenamePreprocessingFunction,
+      'lowercasepreprocessingfunction': LowercasePreprocessingFunction,
+      'numberpreprocessingfunction': NumberPreprocessingFunction,
+      'cleaniripreprocessingfunction': CleaniriPreprocessingFunction,
+      'celsiuspreprocessingfunction': CelsiusPreprocessingFunction,
+      'fahrenheitpreprocessingfunction': FahrenheitPreprocessingFunction,
+      'removebracespreprocessingfunction': RemovebracesPreprocessingFunction,
+      'regularalphabetpreprocessingfunction': RegularAlphabetPreprocessingFunction,
+      'uriasstringpreprocessingfunction': UriasstringPreprocessingFunction,
+      'uppercasepreprocessingfunction': UppercasePreprocessingFunction,
+    },
   },
   mounted() {
     const jobIdmatches = /\?jobId=(.+)/.exec(window.location.search);
@@ -126,50 +144,43 @@ let app = new Vue({
     }
 
     window.onload = () => {
-          var Workspace = Blockly.inject('blocklyDiv',
-            {media: './blockly-1.20190215.0/media/',
-             toolbox: document.getElementById('toolbox')});
-          Blockly.Blocks['sourceproperty'] = {
-            init: function() {
-              this.jsonInit(sourceProperty);              
-            }
+          // var Workspace = Blockly.inject('blocklyDiv',
+          //   {toolbox: document.getElementById('toolbox')});
+
+          var blocklyArea = document.getElementById('blocklyArea');
+          var blocklyDiv = document.getElementById('blocklyDiv');
+          var Workspace = Blockly.inject(blocklyDiv,
+              {toolbox: document.getElementById('toolbox')});
+          var onresize = function(e) {
+            // Compute the absolute coordinates and dimensions of blocklyArea.
+            var element = blocklyArea;
+            var x = 0;
+            var y = 0;
+            do {
+              x += element.offsetLeft;
+              y += element.offsetTop;
+              element = element.offsetParent;
+            } while (element);
+            // Position blocklyDiv over blocklyArea.
+            //blocklyDiv.style.left = x + 'px';
+            //blocklyDiv.style.top = y + 'px';
+            blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+            blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+            Blockly.svgResize(Workspace);
           };
-          Blockly.Blocks['targetproperty'] = {
-            init: function() {
-              this.jsonInit(targetProperty);
-            }
-          };
-          Blockly.Blocks['optionalsourceproperty'] = {
-            init: function() {
-              this.jsonInit(optionalSourceProperty);              
-            }
-          };
-          Blockly.Blocks['optionaltargetproperty'] = {
-            init: function() {
-              this.jsonInit(optionalTargetProperty);
-            }
-          };
-          Blockly.Blocks['renamepreprocessingfunction'] = {
-            init: function() {
-              this.jsonInit(RenamePreprocessingFunction);
-            }
-          };
-          Blockly.Blocks['lowercasepreprocessingfunction'] = {
-            init: function() {
-              this.jsonInit(LowercasePreprocessingFunction);
-            }
-          };
-          Blockly.Blocks['measure'] = {
-            init: function() {
-              this.jsonInit(Measure);
-              this.getField("threshold").visible_ = false;
-            }
-          };
-          Blockly.Blocks['operator'] = {
-            init: function() {
-              this.jsonInit(Operator);
-            }
-          };
+          window.addEventListener('resize', onresize, false);
+          onresize();
+          Blockly.svgResize(Workspace);
+
+
+          let typesOfBlocks = this.typesOfBlocks;
+          for(let key in typesOfBlocks){
+            Blockly.Blocks[key] = {
+              init: function() {
+                this.jsonInit(typesOfBlocks[key]);              
+              }
+            };
+          }
 
           let onFirstComment = (event) => {
             // console.log("change");
@@ -182,42 +193,35 @@ let app = new Vue({
 
             let allBlocks = Workspace.getTopBlocks();
             allBlocks.forEach( i => {
+              if(i.getChildren().length){
+
+                i.getChildren().forEach(child => {
+                  if(i.type.indexOf('preprocessing')!== -1){
+                    if(i.type.indexOf('renamepreprocessing')!== -1){
+                      if(child.getChildren().length){
+                        this.addChainOfPreprocessings(i, i.getField("RENAME").getDisplayText_());
+                      } else {
+                        let strForXml = child.getFieldValue("propTitle")+ " RENAME " + i.getField("RENAME").getDisplayText_();
+                        this.addProperies(child,strForXml);
+                      }
+                    } else {
+                      if(child.getChildren().length){
+                        this.addChainOfPreprocessings(i, null);
+                      } else {
+                        let strForXml = child.getFieldValue("propTitle");
+                        let strOfPreprocessings = " AS "+ i.type.split('preprocessing')[0];;
+                        strForXml += strOfPreprocessings;
+                        this.addProperies(child,strForXml);
+                      }
+                    }
+                  }
+                });
+              } else { // not children blocks
+                let strForXml = i.getFieldValue("propTitle");
+                this.addProperies(i,strForXml);
+              }
+
               switch(i.type) {
-                case "lowercasepreprocessingfunction": {
-                  i.getChildren().forEach(
-                    pr => pr.type === "sourceproperty" ? 
-                    this.source.properties.push(pr.getField("propTitle").getDisplayText_() + " AS lowercase") 
-                    : this.target.properties.push(pr.getField("propTitle").getDisplayText_() + " AS lowercase"));
-                
-                  break;
-                }
-
-                case "renamepreprocessingfunction": {
-                  i.getChildren().forEach(
-                    pr => {
-                        if(pr.type === "sourceproperty"){
-                         this.source.properties.push(pr.getField("propTitle").getDisplayText_() + " RENAME " + i.getField("RENAME").getDisplayText_()); 
-                        } else {
-                          //target
-                          if(!pr.getChildren().length) {
-                            //console.log("tar");
-                            this.target.properties.push(pr.getField("propTitle").getDisplayText_() + " RENAME " + i.getField("RENAME").getDisplayText_()); 
-                          } else {
-                            pr.getChildren().forEach( 
-                              childPr => {
-                                if(childPr.type === "sourceproperty") {
-                                this.source.properties.push(childPr.getField("propTitle").getDisplayText_() + " AS lowercase RENAME " + i.getField("RENAME").getDisplayText_());
-                                } else {
-                                  this.target.properties.push(childPr.getField("propTitle").getDisplayText_() + " AS lowercase RENAME " + i.getField("RENAME").getDisplayText_());
-                                  }
-                              });
-                          }
-                        }
-                    });
-
-                  
-                  break;                  
-                }
 
                 case "measure": {
                   let shownM = showThreshold(i);
@@ -227,9 +231,9 @@ let app = new Vue({
                   let measureFunc = i.getField("measureList").getDisplayText_();
                   this.metrics.splice(0);
                   if(shownM){
-                    this.metrics.push(measureFunc.toLowerCase()+"("+properties.src+","+properties.tgt+")|"+threshold);
+                    this.metrics.push(measureFunc.toLowerCase()+"("+ this.source.var.substr(1)+"."+properties.src+","+ this.target.var.substr(1)+"." +properties.tgt+")|"+threshold);
                   } else {
-                    this.metrics.push(measureFunc.toLowerCase()+"("+properties.src+","+properties.tgt+")"); 
+                    this.metrics.push(measureFunc.toLowerCase()+"("+this.source.var.substr(1)+"."+properties.src+","+this.target.var.substr(1)+"."+properties.tgt+")"); 
                   }
         
                   break;
@@ -302,24 +306,6 @@ let app = new Vue({
                 }
 
                 default: {
-                  if(!i.getParent() && i.type === "sourceproperty"){
-                    this.source.properties.push(i.getField("propTitle").getDisplayText_());
-                  } else {
-                    if(!i.getParent() && i.type === "targetproperty"){
-                      // target
-                      this.target.properties.push(i.getField("propTitle").getDisplayText_());
-                    }
-                  }
-
-                  if(!i.getParent() && i.type === "optionalsourceproperty"){
-                    this.source.optionalProperties.push(i.getField("propTitle").getDisplayText_());
-                  } else {
-                    if(!i.getParent() && i.type === "optionaltargetproperty"){
-                      // target
-                      this.target.optionalProperties.push(i.getField("propTitle").getDisplayText_());
-                    }
-                  }
-                  break;
                 }
               }
 
@@ -393,6 +379,45 @@ let app = new Vue({
 
           this.addPrefix({label: label, namespace: this.context[label]});
       });
+    },
+    addProperies(i,strForXml){
+      if(i.type.indexOf("source") !== -1){
+        if(i.type.indexOf("optional") !== -1){
+          this.source.optionalProperties.push(strForXml);
+        } else {
+          this.source.properties.push(strForXml);
+        }
+      } else {
+        if(i.type.indexOf("optional") !== -1){
+          this.target.optionalProperties.push(strForXml);
+        } else {
+          this.target.properties.push(strForXml);
+        }
+      }
+    },
+    addChainOfPreprocessings(i,renameText){
+      let arrForXml = i.toString().split(" ").map(pf => pf.toLowerCase()).filter(prepFunc => prepFunc !== "optional" && prepFunc !== "source" && prepFunc !== "target" && prepFunc !== "property" && prepFunc !== "rename" && prepFunc !== "as");
+      if(renameText !== null && arrForXml[arrForXml.length-1].toLowerCase() === renameText.toLowerCase()){
+        arrForXml.pop();
+      }
+      let strForXml = arrForXml[arrForXml.length-1]+" AS ";
+      arrForXml.pop();
+      let strOfPreprocessings = "";
+      arrForXml.forEach(prepFunc => {
+        strOfPreprocessings += prepFunc + "->";
+      });
+      strOfPreprocessings = strOfPreprocessings.slice(0,-2);
+      if(renameText !== null){
+        strForXml += strOfPreprocessings + " RENAME " + renameText;//i.getField("RENAME").getDisplayText_();//rename;
+      } else {
+        strForXml += strOfPreprocessings;
+      }
+      let arr = i.toString().split(" ").map(pf => pf.toLowerCase());
+      let mainType = arr.filter(type => type === "source" || type === "target");
+      let optional = arr.filter(type => type === "optional");
+      let type = optional.length ? mainType[0] + " " + optional[0] : mainType[0];
+      let child = {type: type};
+      this.addProperies(child,strForXml);
     },
 
     generateConfig() {

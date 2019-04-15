@@ -75,6 +75,12 @@
   .advancedOptions {
     color: #3f51b5;
   }
+  .row{
+    display: flex;
+  }
+  .twoColumns{
+    flex: 50%;
+  }
 </style>
 
   <!-- LIMES server ref -->
@@ -180,9 +186,10 @@
             v-bind:metrics="metrics"
           ></metrics-component>
           <!-- acceptance UI -->
-          <accreview-component v-bind:data="acceptance" v-bind:acceptance="acceptance" v-bind:prefixes="context" v-on:send-prefix="addPrefix($event)" v-on:del-exprefix="deletePrefix($event)" title="Acceptance Condition"></accreview-component>
-          <accreview-component v-bind:data="review" v-bind:acceptance="acceptance" v-bind:prefixes="context" v-on:send-prefix="addPrefix($event)" v-on:del-exprefix="deletePrefix($event)" title="Review Condition"></accreview-component>
-
+          <div class="row">
+            <accreview-component class="twoColumns" v-bind:data="acceptance" v-bind:acceptance="acceptance" v-bind:prefixes="context" v-on:send-prefix="addPrefix($event)" v-on:del-exprefix="deletePrefix($event)" v-on:change-threshold="acceptance.threshold = $event" title="Acceptance Condition"></accreview-component>
+            <accreview-component class="twoColumns" v-bind:data="review" v-bind:acceptance="acceptance" v-bind:prefixes="context" v-on:send-prefix="addPrefix($event)" v-on:del-exprefix="deletePrefix($event)" v-on:change-revthreshold="review.threshold = $event" title="Review Condition"></accreview-component>
+          </div>
           <!-- execution UI -->
           <execution-component v-bind:execution="execution" v-bind:advancedOptionsShow="advancedOptionsShow"
           ></execution-component>
@@ -358,18 +365,30 @@
   <script type="text/x-template" id="datacanvasComponent">
     <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
       <md-layout>
-          <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+          <div id="blocklyArea" style="height: 500px; width: 100%;"></div>
+          <div id="blocklyDiv" style="position: absolute"></div>
           <xml id="toolbox" style="display: none">
-            <category name="Control">  
+            <category name="Source&Target">  
               <block type="sourceproperty"></block>
               <block type="targetproperty"></block>
               <block type="optionalsourceproperty"></block>
               <block type="optionaltargetproperty"></block>
-              <block type="renamepreprocessingfunction"></block>
-              <block type="lowercasepreprocessingfunction"></block>
               <block type="measure"></block>
               <block type="operator"></block>
             </category>
+            <category name="Preprocessing functions"> 
+              <block type="nolangpreprocessingfunction"></block> 
+              <block type="renamepreprocessingfunction"></block>
+              <block type="lowercasepreprocessingfunction"></block>
+              <block type="uppercasepreprocessingfunction"></block>
+              <block type="numberpreprocessingfunction"></block>
+              <block type="cleaniripreprocessingfunction"></block>
+              <block type="celsiuspreprocessingfunction"></block>        
+              <block type="fahrenheitpreprocessingfunction"></block>
+              <block type="removebracespreprocessingfunction"></block>
+              <block type="regularalphabetpreprocessingfunction"></block>
+              <block type="uriasstringpreprocessingfunction"></block>    
+            </category> 
           </xml>
       </md-layout>
     </md-whiteframe>
@@ -379,19 +398,7 @@
   <script type="text/x-template" id="metricsComponent">
     <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
       <div class="md-title">Metrics</div>
-      <md-chips v-model="metrics" md-input-placeholder="Add a metric"></md-chips>
-
-<!--       <select v-model="selectedMeasureOption" multiple="true">
-        <option v-for="measureOption in measureOptions" v-bind:value="measureOption.value">
-          {{ measureOption.text }}
-        </option>
-      </select>
-
-      <select v-model="selectedOperatorOption" multiple="true">
-        <option v-for="operatorOption in operatorOptions" v-bind:value="operatorOption.value">
-          {{ operatorOption.text }}
-        </option>
-      </select> -->
+      <md-chips v-model="metrics" md-static></md-chips>
 
     </md-whiteframe>
   </script>
@@ -508,6 +515,8 @@
 
       <md-select v-model="output.type" name="output" id="output">
         <md-option value="TAB">TAB</md-option>
+        <md-option value="CSV">CSV</md-option>
+        <md-option value="TTL">TTL</md-option>
         <md-option value="N3">N3</md-option>
       </md-select>
     </md-whiteframe>
