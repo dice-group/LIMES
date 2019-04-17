@@ -193,39 +193,13 @@ let app = new Vue({
 
             let allBlocks = Workspace.getTopBlocks();
             allBlocks.forEach( i => {
-              if(i.getChildren().length){
-
-                i.getChildren().forEach(child => {
-                  if(i.type.indexOf('preprocessing')!== -1){
-                    if(i.type.indexOf('renamepreprocessing')!== -1){
-                      if(child.getChildren().length){
-                        this.addChainOfPreprocessings(i, i.getField("RENAME").getDisplayText_());
-                      } else {
-                        let strForXml = child.getFieldValue("propTitle")+ " RENAME " + i.getField("RENAME").getDisplayText_();
-                        this.addProperies(child,strForXml);
-                      }
-                    } else {
-                      if(child.getChildren().length){
-                        this.addChainOfPreprocessings(i, null);
-                      } else {
-                        let strForXml = child.getFieldValue("propTitle");
-                        let strOfPreprocessings = " AS "+ i.type.split('preprocessing')[0];;
-                        strForXml += strOfPreprocessings;
-                        this.addProperies(child,strForXml);
-                      }
-                    }
-                  }
-                });
-              } else { // not children blocks
-                let strForXml = i.getFieldValue("propTitle");
-                this.addProperies(i,strForXml);
-              }
+              this.processingPropertyWithPrepFunc(i);
 
               switch(i.type) {
 
                 case "measure": {
                   let shownM = showThreshold(i);
-                  let properties = getFromMeasure(this, i);
+                  let properties = this.getFromMeasure(i);
 
                   let threshold = i.getField("threshold").text_;
                   let measureFunc = i.getField("measureList").getDisplayText_();
@@ -247,20 +221,22 @@ let app = new Vue({
                     let shownSecondM = showThreshold(secondM);
                     let props1, props2;
                     if(firstM.type === "measure"){
-                      props1 = getFromMeasure(this, firstM);
+                      props1 = this.getFromMeasure(firstM);
                     }
                     if(secondM.type === "measure"){
-                      props2 = getFromMeasure(this, secondM);
+                      props2 = this.getFromMeasure(secondM);
                     }
                     let operator = i.getField("operators").text_;
                     let measureFunc1 = firstM.getField("measureList").getDisplayText_();
                     let measureFunc2 = secondM.getField("measureList").getDisplayText_();
                     let threshold1 = firstM.getField("threshold").text_;
                     let threshold2 = secondM.getField("threshold").text_;
+                    let varSrc = this.source.var.substr(1)+".";
+                    let varTgt = this.target.var.substr(1)+".";
                     this.metrics.splice(0);
                     if(operator[0] !== 'N'){       
-                      let str1 = operator + '(' + measureFunc1.toLowerCase()+"("+props1.src+","+props1.tgt+")"; 
-                      let str2 = ',' + measureFunc2.toLowerCase()+"("+props2.src+","+props2.tgt+")";
+                      let str1 = operator + '(' + measureFunc1.toLowerCase()+"("+varSrc+props1.src+","+varTgt+props1.tgt+")"; 
+                      let str2 = ',' + measureFunc2.toLowerCase()+"("+varSrc+props2.src+","+varTgt+props2.tgt+")";
                       if(shownFirstM && shownSecondM){
                         this.metrics.push(str1 + "|" + threshold1 + str2 + "|"+threshold2 + ')');
                       } else {
@@ -280,8 +256,8 @@ let app = new Vue({
 
                     } else {
                    
-                      let str1 = 'NOT(' + operator.substr(1) + '(' + measureFunc1.toLowerCase()+"("+props1.src+","+props1.tgt+")"; 
-                      let str2 = ',' + measureFunc2.toLowerCase()+"("+props2.src+","+props2.tgt+")";  
+                      let str1 = 'NOT(' + operator.substr(1) + '(' + measureFunc1.toLowerCase()+"("+varSrc+props1.src+","+varTgt+props1.tgt+")"; 
+                      let str2 = ',' + measureFunc2.toLowerCase()+"("+varSrc+props2.src+","+varTgt+props2.tgt+")";  
                       if(shownFirstM && shownSecondM){
                         this.metrics.push(str1 + "|" + threshold1 + str2 + "|"+threshold2 + ')))');
                       } else {
@@ -371,13 +347,15 @@ let app = new Vue({
     addOldAndNewPrefix(props){
       props.forEach(pr => 
       {
-          let label = pr.split(":")[0];
-          let pref = {label: label, namespace: this.context[label]};
-          if(!this.prefixes.some(i => i.label === label)){
-            this.exPrefixes.push(pref);
+          if(pr){
+            let label = pr.split(":")[0];
+            let pref = {label: label, namespace: this.context[label]};
+            if(!this.prefixes.some(i => i.label === label)){
+              this.exPrefixes.push(pref);
+            }
+          
+            this.addPrefix({label: label, namespace: this.context[label]});
           }
-
-          this.addPrefix({label: label, namespace: this.context[label]});
       });
     },
     addProperies(i,strForXml){
@@ -386,7 +364,7 @@ let app = new Vue({
           this.source.optionalProperties.push(strForXml);
         } else {
           this.source.properties.push(strForXml);
-        }
+        }   
       } else {
         if(i.type.indexOf("optional") !== -1){
           this.target.optionalProperties.push(strForXml);
@@ -418,6 +396,50 @@ let app = new Vue({
       let type = optional.length ? mainType[0] + " " + optional[0] : mainType[0];
       let child = {type: type};
       this.addProperies(child,strForXml);
+    },
+    processingPropertyWithPrepFunc(i){
+      if(i.getChildren().length){
+
+        i.getChildren().forEach(child => {
+          if(i.type.indexOf('preprocessing')!== -1){
+            if(i.type.indexOf('renamepreprocessing')!== -1){
+              if(child.getChildren().length){
+                this.addChainOfPreprocessings(i, i.getField("RENAME").getDisplayText_());
+              } else {
+                let strForXml = child.getFieldValue("propTitle")+ " RENAME " + i.getField("RENAME").getDisplayText_();
+                this.addProperies(child,strForXml);
+              }
+            } else {
+              if(child.getChildren().length){
+                this.addChainOfPreprocessings(i, null);
+              } else {
+                let strForXml = child.getFieldValue("propTitle");
+                let strOfPreprocessings = " AS "+ i.type.split('preprocessing')[0];;
+                strForXml += strOfPreprocessings;
+                this.addProperies(child,strForXml);
+              }
+            }
+          }
+        });
+      } else { // not children blocks
+        let strForXml = i.getFieldValue("propTitle");
+        this.addProperies(i,strForXml);
+      }
+    },
+    getFromMeasure(i){
+      let src;
+      let tgt;
+      i.getChildren().forEach(
+        pr => {
+          this.processingPropertyWithPrepFunc(pr);              
+      }); 
+
+      let valuesOfBlock = i.toString().split(' ');
+      let a = valuesOfBlock.filter(val => val.indexOf(":") !== -1);
+      src = a[0];
+      tgt = a[1];
+
+      return {src:src, tgt:tgt};
     },
 
     generateConfig() {
@@ -627,23 +649,6 @@ let app = new Vue({
     },
   },
 });
-
-
-function getFromMeasure(context, i){
-  let src;
-  let tgt;
-  i.getChildren().forEach(
-    pr => {
-      if(pr.type === "sourceproperty"){
-        src = pr.getField("propTitle").getDisplayText_();
-        context.source.properties.push(src);
-      } else {
-        tgt = pr.getField("propTitle").getDisplayText_();
-        context.target.properties.push(tgt);
-      }                  
-  }); 
-  return {src: src, tgt: tgt};
-}
 
 function showThreshold(i){
   let isShown;
