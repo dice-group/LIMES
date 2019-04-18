@@ -335,8 +335,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 		double propertyLearningRate = 0.9;
 		double overallPenaltyWeight = 0.5d;
 		boolean verbose = false;
-		Set<String> measures = new HashSet<>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams"));
-
+		Set<String> measures = new HashSet<>(Arrays.asList("soundex","doublemeta", "koeln", "meta", "nysiis", "caverphone1", "caverphone2", "refinedsoundex", "matchrating", "daitchmokotoff"));
+    
 		learningParameters = new ArrayList<>();
 		learningParameters.add(new LearningParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize, Long.class, 10d, Long.MAX_VALUE, 10d, PARAMETER_MAX_REFINEMENT_TREE_SIZE));
 		learningParameters.add(new LearningParameter(PARAMETER_MAX_ITERATIONS_NUMBER, maxIterationNumber, Integer.class, 1d, Integer.MAX_VALUE, 10d, PARAMETER_MAX_ITERATIONS_NUMBER));
@@ -351,6 +351,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 		learningParameters.add(new LearningParameter(PARAMETER_VERBOSE, verbose, Boolean.class, 0, 1, 0, PARAMETER_VERBOSE));
 		learningParameters.add(new LearningParameter(PARAMETER_ATOMIC_MEASURES, measures, MeasureType.class, 0, 0, 0, PARAMETER_ATOMIC_MEASURES));
 		learningParameters.add(new LearningParameter(PARAMETER_SAVE_MAPPING, saveMapping, Boolean.class, 0, 1, 0, PARAMETER_SAVE_MAPPING));
+		
 	}
 
 	protected boolean isVerbose() {

@@ -632,8 +632,8 @@ public class DataSetChooser {
     private static HashMap<MapKey, Object> getDBLPScholar() {
         HashMap<MapKey, Object> param = new HashMap<MapKey, Object>();
         // folders & files
-        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/"/* "Examples/GeneticEval/" */);
-        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/DBLP-Scholar/"/* "Datasets/DBLP-Scholar/" */);
+        param.put(MapKey.BASE_FOLDER, "src/main/resources/datasets/");
+        param.put(MapKey.DATASET_FOLDER, "src/main/resources/datasets/DBLP-Scholar/"/* "Datasets/DBLP-Scar*/);
         param.put(MapKey.CONFIG_FILE, "DBLP-Scholar.xml");
         param.put(MapKey.REFERENCE_FILE, "DBLP-Scholar_perfectMapping.csv");
         param.put(MapKey.SOURCE_FILE, "DBLP1.csv");
