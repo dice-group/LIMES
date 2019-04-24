@@ -101,6 +101,7 @@ let app = new Vue({
       name: 'simple ml',
       type: 'supervised batch',
       training: 'trainingData.nt',
+      items: ['max refinement tree size','max iterations number'],
       parameters: [
         {
           name: 'max execution time in minutes',
@@ -117,7 +118,9 @@ let app = new Vue({
       type: 'TAB',
     },
     advancedOptionsShow: false,
-    typesOfBlocks: {'sourceproperty': sourceProperty,
+    typesOfBlocks: {
+      'start': Start,
+      'sourceproperty': sourceProperty,
       'targetproperty': targetProperty,
       'optionalsourceproperty': optionalSourceProperty,
       'optionaltargetproperty': optionalTargetProperty,
@@ -177,14 +180,13 @@ let app = new Vue({
           Blockly.svgResize(Workspace);
 
 
-          let typesOfBlocks = this.typesOfBlocks;
-          for(let key in typesOfBlocks){
-            Blockly.Blocks[key] = {
-              init: function() {
-                this.jsonInit(typesOfBlocks[key]);              
-              }
-            };
-          }
+
+
+          var newBlock = Workspace.newBlock('start');
+          newBlock.setDeletable(false);
+          newBlock.initSvg();
+          newBlock.render();
+          //addRootBlock(Blockly.Blocks['start']);
 
           let onFirstComment = (event) => {
             // console.log("change");
@@ -196,118 +198,122 @@ let app = new Vue({
             this.target.optionalProperties.splice(0);
 
             let allBlocks = Workspace.getTopBlocks();
-            allBlocks.forEach( i => {
-              this.processingPropertyWithPrepFunc(i);
+            allBlocks.forEach( block => {
+              if(block.type === 'start'){
+                block.getChildren().forEach(i => { 
+                  this.processingPropertyWithPrepFunc(i);
 
-              switch(i.type) {
+                  switch(i.type) {
 
-                case "measure": {
-                  let shownM = showThreshold(i);
-                  let properties = this.getFromMeasure(i);
+                    case "measure": {
+                      let shownM = showThreshold(i);
+                      let properties = this.getFromMeasure(i);
 
-                  let threshold = i.getField("threshold").text_;
-                  let measureFunc = i.getField("measureList").getDisplayText_();
-                  this.metrics.splice(0);
-                  if(shownM){
-                    this.metrics.push(measureFunc.toLowerCase()+"("+ this.source.var.substr(1)+"."+properties.src+","+ this.target.var.substr(1)+"." +properties.tgt+")|"+threshold);
-                  } else {
-                    this.metrics.push(measureFunc.toLowerCase()+"("+this.source.var.substr(1)+"."+properties.src+","+this.target.var.substr(1)+"."+properties.tgt+")"); 
-                  }
-        
-                  break;
-                }
-
-                case "operator": {
-                  if(i.getChildren().length === 2){
-                    let firstM = i.getChildren()[0];
-                    let secondM = i.getChildren()[1];
-                    let shownFirstM = showThreshold(firstM);
-                    let shownSecondM = showThreshold(secondM);
-                    let props1, props2;
-                    if(firstM.type === "measure"){
-                      props1 = this.getFromMeasure(firstM);
-                    }
-                    if(secondM.type === "measure"){
-                      props2 = this.getFromMeasure(secondM);
-                    }
-                    let operator = i.getField("operators").text_;
-                    let measureFunc1 = firstM.getField("measureList").getDisplayText_();
-                    let measureFunc2 = secondM.getField("measureList").getDisplayText_();
-                    let threshold1 = firstM.getField("threshold").text_;
-                    let threshold2 = secondM.getField("threshold").text_;
-                    let varSrc = this.source.var.substr(1)+".";
-                    let varTgt = this.target.var.substr(1)+".";
-                    this.metrics.splice(0);
-                    if(operator[0] !== 'N'){       
-                      let str1 = operator + '(' + measureFunc1.toLowerCase()+"("+varSrc+props1.src+","+varTgt+props1.tgt+")"; 
-                      let str2 = ',' + measureFunc2.toLowerCase()+"("+varSrc+props2.src+","+varTgt+props2.tgt+")";
-                      if(shownFirstM && shownSecondM){
-                        this.metrics.push(str1 + "|" + threshold1 + str2 + "|"+threshold2 + ')');
+                      let threshold = i.getField("threshold").text_;
+                      let measureFunc = i.getField("measureList").getDisplayText_();
+                      this.metrics.splice(0);
+                      if(shownM){
+                        this.metrics.push(measureFunc.toLowerCase()+"("+ this.source.var.substr(1)+"."+properties.src+","+ this.target.var.substr(1)+"." +properties.tgt+")|"+threshold);
                       } else {
-
-                        if(!shownFirstM && !shownSecondM){
-                          this.metrics.push(str1 + str2 + ')');
-                        }
-
-                        if(shownFirstM && !shownSecondM){
-                          this.metrics.push(str1 + "|" + threshold1 + str2 + ')');
-                        } else if(!shownFirstM && shownSecondM) {
-                          this.metrics.push(str1 + str2 + "|"+threshold2 + ')');
-                        }
+                        this.metrics.push(measureFunc.toLowerCase()+"("+this.source.var.substr(1)+"."+properties.src+","+this.target.var.substr(1)+"."+properties.tgt+")"); 
                       }
-
-
-
-                    } else {
-                   
-                      let str1 = 'NOT(' + operator.substr(1) + '(' + measureFunc1.toLowerCase()+"("+varSrc+props1.src+","+varTgt+props1.tgt+")"; 
-                      let str2 = ',' + measureFunc2.toLowerCase()+"("+varSrc+props2.src+","+varTgt+props2.tgt+")";  
-                      if(shownFirstM && shownSecondM){
-                        this.metrics.push(str1 + "|" + threshold1 + str2 + "|"+threshold2 + ')))');
-                      } else {
-
-                        if(!shownFirstM && !shownSecondM){
-                          this.metrics.push(str1 + str2 + ')))');
-                        }
-
-                        if(shownFirstM && !shownSecondM){
-                          this.metrics.push(str1 + "|" + threshold1 + str2 + ')))');
-                        } else if(!shownFirstM && shownSecondM) {
-                          this.metrics.push(str1 + str2 + "|"+threshold2 + ')))');
-                        }
-                      }
-
-                    }
-                  }
-
-
-
-                  break;
-                }
-
-                default: {
-                }
-              }
-
-              if(this.exPrefixes.length){
-                this.exPrefixes.forEach(pref => {
-                  this.prefixes.forEach(pr => {
-                    if(pref.label === pr.label){
-                      this.deletePrefix(pr);
-                    }
-                  })
-                }) 
-              }
-
-
-              this.exPrefixes.splice(0);
-
-              this.addOldAndNewPrefix(this.source.properties);
-              this.addOldAndNewPrefix(this.target.properties);
-
-              this.addOldAndNewPrefix(this.source.optionalProperties);
-              this.addOldAndNewPrefix(this.target.optionalProperties);
             
+                      break;
+                    }
+
+                    case "operator": {
+                      if(i.getChildren().length === 2){
+                        let firstM = i.getChildren()[0];
+                        let secondM = i.getChildren()[1];
+                        let shownFirstM = showThreshold(firstM);
+                        let shownSecondM = showThreshold(secondM);
+                        let props1, props2;
+                        if(firstM.type === "measure"){
+                          props1 = this.getFromMeasure(firstM);
+                        }
+                        if(secondM.type === "measure"){
+                          props2 = this.getFromMeasure(secondM);
+                        }
+                        let operator = i.getField("operators").text_;
+                        let measureFunc1 = firstM.getField("measureList").getDisplayText_();
+                        let measureFunc2 = secondM.getField("measureList").getDisplayText_();
+                        let threshold1 = firstM.getField("threshold").text_;
+                        let threshold2 = secondM.getField("threshold").text_;
+                        let varSrc = this.source.var.substr(1)+".";
+                        let varTgt = this.target.var.substr(1)+".";
+                        this.metrics.splice(0);
+                        if(operator[0] !== 'N'){       
+                          let str1 = operator + '(' + measureFunc1.toLowerCase()+"("+varSrc+props1.src+","+varTgt+props1.tgt+")"; 
+                          let str2 = ',' + measureFunc2.toLowerCase()+"("+varSrc+props2.src+","+varTgt+props2.tgt+")";
+                          if(shownFirstM && shownSecondM){
+                            this.metrics.push(str1 + "|" + threshold1 + str2 + "|"+threshold2 + ')');
+                          } else {
+
+                            if(!shownFirstM && !shownSecondM){
+                              this.metrics.push(str1 + str2 + ')');
+                            }
+
+                            if(shownFirstM && !shownSecondM){
+                              this.metrics.push(str1 + "|" + threshold1 + str2 + ')');
+                            } else if(!shownFirstM && shownSecondM) {
+                              this.metrics.push(str1 + str2 + "|"+threshold2 + ')');
+                            }
+                          }
+
+
+
+                        } else {
+                       
+                          let str1 = 'NOT(' + operator.substr(1) + '(' + measureFunc1.toLowerCase()+"("+varSrc+props1.src+","+varTgt+props1.tgt+")"; 
+                          let str2 = ',' + measureFunc2.toLowerCase()+"("+varSrc+props2.src+","+varTgt+props2.tgt+")";  
+                          if(shownFirstM && shownSecondM){
+                            this.metrics.push(str1 + "|" + threshold1 + str2 + "|"+threshold2 + ')))');
+                          } else {
+
+                            if(!shownFirstM && !shownSecondM){
+                              this.metrics.push(str1 + str2 + ')))');
+                            }
+
+                            if(shownFirstM && !shownSecondM){
+                              this.metrics.push(str1 + "|" + threshold1 + str2 + ')))');
+                            } else if(!shownFirstM && shownSecondM) {
+                              this.metrics.push(str1 + str2 + "|"+threshold2 + ')))');
+                            }
+                          }
+
+                        }
+                      }
+
+
+
+                      break;
+                    }
+
+                    default: {
+                    }
+                  }
+
+                  if(this.exPrefixes.length){
+                    this.exPrefixes.forEach(pref => {
+                      this.prefixes.forEach(pr => {
+                        if(pref.label === pr.label){
+                          this.deletePrefix(pr);
+                        }
+                      })
+                    }) 
+                  }
+
+
+                  this.exPrefixes.splice(0);
+
+                  this.addOldAndNewPrefix(this.source.properties);
+                  this.addOldAndNewPrefix(this.target.properties);
+
+                  this.addOldAndNewPrefix(this.source.optionalProperties);
+                  this.addOldAndNewPrefix(this.target.optionalProperties);
+                
+                })
+              }
             });
 
 
@@ -346,7 +352,14 @@ let app = new Vue({
               });
             })
             //.catch( alert );        
-
+          let typesOfBlocks = this.typesOfBlocks;
+          for(let key in typesOfBlocks){
+            Blockly.Blocks[key] = {
+              init: function() {
+                this.jsonInit(typesOfBlocks[key]);              
+              }
+            };
+          }
 
   },
   methods: {
@@ -472,6 +485,11 @@ let app = new Vue({
       tgt = values[1];
 
       return {src:src, tgt:tgt};
+    },
+    manualMetricClicked(index){
+      if(index === 0){
+        this.mlalgorithm.enabled = false;
+      }
     },
 
     generateConfig() {

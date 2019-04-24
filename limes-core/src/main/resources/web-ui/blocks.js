@@ -9,6 +9,24 @@ var mathChangeJson = {
   "colour": 230
 };
 
+var Start = {
+  "type": "start",
+  "message0": "Start %1",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "NAME",
+      "check": [
+        "Measure",
+        "Operator"
+      ]
+    }
+  ],
+  "colour": 0,
+  "tooltip": "",
+  "helpUrl": ""
+}
+
 
 var sourceProperty = {
   "type": "sourceproperty",

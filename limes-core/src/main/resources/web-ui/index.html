@@ -152,31 +152,37 @@
           v-bind:prefixes="prefixes" v-bind:filteredOptions="filteredOptions"
           v-bind:context="context"></prefixes-list>
           <!-- datasources UI -->
-          <datasource-component 
-          v-bind:source="source"
-          v-bind:endpointandclasses="target" 
-          title="Data source" 
-          v-bind:advancedOptionsShow="advancedOptionsShow"
-          v-on:toggle-source-classes="source.classes = $event"
-          v-on:toggle-restr-src="source.restriction = $event"
-          v-on:toggle-prefix-from-rest="addPrefix($event)"
-          v-on:toggle-del-exprefix="deletePrefix($event)"
-          ></datasource-component>
+          <div class="row">
+            <datasource-component class="twoColumns"
+            v-bind:source="source"
+            v-bind:endpointandclasses="target" 
+            title="Data source" 
+            v-bind:advancedOptionsShow="advancedOptionsShow"
+            v-on:toggle-source-classes="source.classes = $event"
+            v-on:toggle-restr-src="source.restriction = $event"
+            v-on:toggle-prefix-from-rest="addPrefix($event)"
+            v-on:toggle-del-exprefix="deletePrefix($event)"
+            ></datasource-component>
 
-          <datasource-component 
-          v-bind:source="target"
-          v-bind:endpointandclasses="source" 
-          v-bind:advancedOptionsShow="advancedOptionsShow"
-          v-on:toggle-source-classes="target.classes = $event" 
-          v-on:toggle-restr-target="target.restriction = $event"
-          v-on:toggle-prefix-from-rest="addPrefix($event)"
-          v-on:toggle-del-exprefix="deletePrefix($event)"
-          title="Data target"  
-          ></datasource-component>
+            <datasource-component class="twoColumns"
+            v-bind:source="target"
+            v-bind:endpointandclasses="source" 
+            v-bind:advancedOptionsShow="advancedOptionsShow"
+            v-on:toggle-source-classes="target.classes = $event" 
+            v-on:toggle-restr-target="target.restriction = $event"
+            v-on:toggle-prefix-from-rest="addPrefix($event)"
+            v-on:toggle-del-exprefix="deletePrefix($event)"
+            title="Data target"  
+            ></datasource-component>
+        </div>    
 
-          <md-tabs>
+          <md-tabs @change="manualMetricClicked">
             <md-tab id="manualMetric" md-label="Manual metric">
               <datacanvas-component v-bind:source="source" v-bind:target="target" title="Data target"></datacanvas-component>
+              <!-- metrics UI -->
+              <metrics-component
+                v-bind:metrics="metrics"
+              ></metrics-component>
             </md-tab>
             <md-tab id="machineLearning" md-label="Machine learning">
               <!-- machine learning UI -->
@@ -185,10 +191,7 @@
           </md-tabs>
 
 
-          <!-- metrics UI -->
-          <metrics-component
-            v-bind:metrics="metrics"
-          ></metrics-component>
+
           <!-- acceptance UI -->
           <div class="row">
             <accreview-component class="twoColumns" v-bind:data="acceptance" v-bind:review="review" v-bind:acceptance="acceptance" v-bind:prefixes="context" v-on:send-prefix="addPrefix($event)" v-on:del-exprefix="deletePrefix($event)" v-on:change-threshold="acceptance.threshold = $event" title="Acceptance Condition"></accreview-component>
@@ -372,7 +375,7 @@
           <div id="blocklyArea" style="height: 500px; width: 100%;"></div>
           <div id="blocklyDiv" style="position: absolute"></div>
           <xml id="toolbox" style="display: none">
-            <category name="Source&Target&Measure&Operator">  
+            
               <block type="sourceproperty"></block>
               <block type="targetproperty"></block>
               <block type="optionalsourceproperty"></block>
@@ -381,19 +384,7 @@
               <block type="operator"></block>
               <block type="preprocessingfunction"></block>
               <block type="renamepreprocessingfunction"></block>
-            </category>
-            <category name="Preprocessing functions"> 
-              <block type="nolangpreprocessingfunction"></block> 
-              <block type="lowercasepreprocessingfunction"></block>
-              <block type="uppercasepreprocessingfunction"></block>
-              <block type="numberpreprocessingfunction"></block>
-              <block type="cleaniripreprocessingfunction"></block>
-              <block type="celsiuspreprocessingfunction"></block>        
-              <block type="fahrenheitpreprocessingfunction"></block>
-              <block type="removebracespreprocessingfunction"></block>
-              <block type="regularalphabetpreprocessingfunction"></block>
-              <block type="uriasstringpreprocessingfunction"></block>    
-            </category> 
+
           </xml>
       </md-layout>
     </md-whiteframe>
@@ -446,15 +437,28 @@
 
       <md-input-container v-if="data.enabled">
         <label>Name</label>
-        <md-input v-model="data.name" placeholder="Name"></md-input>
+        <!-- <md-input v-model="data.name" placeholder="Name"></md-input> -->
+          <md-select v-model="data.name" >
+            <md-option value="WOMBAT Simple">WOMBAT Simple</md-option>
+            <md-option value="WOMBAT Complete">WOMBAT Complete</md-option>
+            <md-option value="EAGLE">EAGLE</md-option>
+          </md-select> 
+
       </md-input-container>
       <md-input-container v-if="data.enabled">
         <label>Type</label>
-        <md-input v-model="data.type" placeholder="Type"></md-input>
+        <!-- <md-input v-model="data.type" placeholder="Type"></md-input> -->
+          <md-select v-model="data.type" >
+            <md-option value="supervised batch">supervised batch</md-option>
+            <md-option value="supervised active">supervised active</md-option>
+            <md-option value="unsupervised">unsupervised</md-option>
+          </md-select> 
+
       </md-input-container>
-      <md-input-container v-if="data.enabled">
+      <md-input-container v-if="data.enabled && (data.type==='supervised batch' || data.type==='supervised active')">
         <label>Training</label>
-        <md-input v-model="data.training" placeholder="Training"></md-input>
+        <!-- <md-input v-model="data.training" placeholder="Training"></md-input> -->
+        <md-file v-model="data.training"></md-file>
       </md-input-container>
 
       <md-layout v-if="data.enabled">
@@ -466,8 +470,15 @@
       <md-layout md-gutter="8" v-if="data.enabled">
         <md-layout md-flex="33">
           <md-input-container>
-            <label>Name</label>
-            <md-input v-model="name" placeholder="Name"></md-input>
+            <label>Parameter name</label>
+            <!-- <md-input v-model="name" placeholder="Name"></md-input> -->
+            <md-select v-model="name" >
+              <md-option
+                v-for="option in data.items">
+                  {{ option }}
+              </md-option>
+            </md-select>  
+
           </md-input-container>
         </md-layout>
         <md-layout md-flex>
