@@ -1,5 +1,6 @@
 window.SPARQL_ENDPOINT = "/sparql/";
 window.SPARQL_ENDPOINT = "http://localhost:8080/sparql/";
+window.PREPROCESSING_LIST = "http://localhost:8080/list/preprocessings";
 
 // apply vue-material stuff
 Vue.use(VueMaterial);
@@ -57,6 +58,7 @@ let app = new Vue({
     source: {
       id: 'sourceId',
       endpoint: '',
+      classes: [],
       var: '?s',
       pagesize: 1000,
       restriction: '?src rdf:type some:Type',
@@ -68,6 +70,7 @@ let app = new Vue({
     target: {
       id: 'targetId',
       endpoint: '',
+      classes: [],
       var: '?t',
       pagesize: 1000,
       restriction: '?target rdf:type some:Type',
@@ -120,6 +123,7 @@ let app = new Vue({
       'optionaltargetproperty': optionalTargetProperty,
       'measure': Measure,
       'operator': Operator,
+      'preprocessingfunction':PreprocessingFunction,
       'nolangpreprocessingfunction': NolangPreprocessingFunction,
       'renamepreprocessingfunction': RenamePreprocessingFunction,
       'lowercasepreprocessingfunction': LowercasePreprocessingFunction,
@@ -329,6 +333,19 @@ let app = new Vue({
               this.filteredOptions.push(...filteredOptions);
             })
             //.catch( alert );
+    fetch(window.PREPROCESSING_LIST)
+            .then(function(response) {
+              return response.json();
+             })
+            .then((content) => {
+              PreprocessingFunction.args0[0].options.length = 0;
+              content.availablePreprocessings.forEach(prepr => {
+                if(prepr.name !== "rename"){
+                  PreprocessingFunction.args0[0].options.push([prepr.name, prepr.name]);
+                }
+              });
+            })
+            //.catch( alert );        
 
 
   },
@@ -399,13 +416,19 @@ let app = new Vue({
     },
     processingPropertyWithPrepFunc(i){
       if(i.getChildren().length){
-
         i.getChildren().forEach(child => {
           if(i.type.indexOf('preprocessing')!== -1){
             if(i.type.indexOf('renamepreprocessing')!== -1){
               if(child.getChildren().length){
                 this.addChainOfPreprocessings(i, i.getField("RENAME").getDisplayText_());
               } else {
+                let defaultRenameText = child.getFieldValue("propTitle").split(":")[1].toUpperCase();
+                i.getField("RENAME").setText(defaultRenameText); 
+
+                let renameText = i.getField("RENAME").getDisplayText_();                 
+                if(renameText !== defaultRenameText){
+                  i.getField("RENAME").setText(renameText); 
+                }
                 let strForXml = child.getFieldValue("propTitle")+ " RENAME " + i.getField("RENAME").getDisplayText_();
                 this.addProperies(child,strForXml);
               }
@@ -414,7 +437,7 @@ let app = new Vue({
                 this.addChainOfPreprocessings(i, null);
               } else {
                 let strForXml = child.getFieldValue("propTitle");
-                let strOfPreprocessings = " AS "+ i.type.split('preprocessing')[0];;
+                let strOfPreprocessings = " AS "+ i.getFieldValue('function');
                 strForXml += strOfPreprocessings;
                 this.addProperies(child,strForXml);
               }
@@ -435,9 +458,18 @@ let app = new Vue({
       }); 
 
       let valuesOfBlock = i.toString().split(' ');
-      let a = valuesOfBlock.filter(val => val.indexOf(":") !== -1);
-      src = a[0];
-      tgt = a[1];
+      let values = [];
+      for(let val=0; val<valuesOfBlock.length; val++){
+        if(valuesOfBlock[val] === "As"){
+          values.push(valuesOfBlock[val+1]);
+        }
+      }
+
+      if(values.length === 0){
+        values = valuesOfBlock.filter(val => val.indexOf(":") !== -1);
+      }
+      src = values[0];
+      tgt = values[1];
 
       return {src:src, tgt:tgt};
     },

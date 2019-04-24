@@ -1,7 +1,7 @@
 // Define a new component for data sources
 Vue.component('datasource-component', {
   template: '#datasourceComponent',
-  props: ['title', 'source', 'advancedOptionsShow'],
+  props: ['title', 'source', 'advancedOptionsShow', 'endpointandclasses'],
   data() {
     return {
       focused: false,
@@ -76,7 +76,11 @@ Vue.component('datasource-component', {
       this.classes.splice(0);
       this.source.propertiesForChoice.splice(0);
       this.classVar = '';
-      fetchClasses(this, option);
+      if(this.endpointandclasses.endpoint !== option){
+        fetchClasses(this, option);
+      } else {
+        this.afterFilteredClasses = this.endpointandclasses.classes;
+      }
     },
     selectClass(option){
       this.classVar = option;
@@ -89,7 +93,11 @@ Vue.component('datasource-component', {
       this.classes.splice(0);
       this.source.propertiesForChoice.splice(0);
       this.classVar = '';
-      fetchClasses(this, this.source.endpoint);
+      if(this.endpointandclasses.endpoint !== this.source.endpoint){
+        fetchClasses(this, this.source.endpoint);
+      } else {
+        this.afterFilteredClasses = this.endpointandclasses.classes;
+      }
     },
     enterClassClicked(){
       this.source.propertiesForChoice.splice(0);
@@ -143,6 +151,7 @@ function fetchClasses(source, endpoint) {
         i => classes.push(i.class.value));
       source.classes.push(...classes);
       source.afterFilteredClasses = source.classes;
+      source.$emit('toggle-source-classes', source.classes);
     })
     //.catch( alert );
 }
@@ -291,11 +300,11 @@ Vue.component('metrics-component', {
 // Define a new component for metric
 Vue.component('accreview-component', {
   template: '#accreviewComponent',
-  props: ['data', 'title', 'acceptance', 'prefixes'],
+  props: ['data', 'title', 'acceptance', 'review', 'prefixes'],
   data(){
     return {
       messageAboutPrefixInRelation: '',
-      exPrefix: {label: 'owl', namespace: 'http://www.w3.org/2002/07/owl#'},
+      exPrefixes: [{label: 'owl', namespace: 'http://www.w3.org/2002/07/owl#'}],
     };
   },
   methods: {
@@ -311,7 +320,12 @@ Vue.component('accreview-component', {
   },
   watch: {
     'data.relation': function(){
-      this.$emit('del-exprefix', this.exPrefix);
+      console.log(this.exPrefixes);
+      this.exPrefixes.forEach(expr => {
+        if(expr.label !== this.acceptance.relation.split(":")[0] && expr.label !== this.review.relation.split(":")[0]){
+          this.$emit('del-exprefix', expr);
+        }
+      });
       let property = this.data.relation.split(":")> 2 ? this.data.relation.split(":")[1] : this.data.relation.split(":")[2];
       let label = this.data.relation.split(":").length > 2 ? this.data.relation.split(":")[1] : this.data.relation.split(":")[0];
 
@@ -333,7 +347,7 @@ Vue.component('accreview-component', {
           label: label , 
           namespace: this.prefixes[label]
         };
-        this.exPrefix = prefixFromRelation;
+        this.exPrefixes.push(prefixFromRelation);
         this.$emit('send-prefix', prefixFromRelation);
       }
     },

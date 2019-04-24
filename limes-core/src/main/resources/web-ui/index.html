@@ -153,17 +153,21 @@
           v-bind:context="context"></prefixes-list>
           <!-- datasources UI -->
           <datasource-component 
-          v-bind:source="source" 
+          v-bind:source="source"
+          v-bind:endpointandclasses="target" 
           title="Data source" 
           v-bind:advancedOptionsShow="advancedOptionsShow"
+          v-on:toggle-source-classes="source.classes = $event"
           v-on:toggle-restr-src="source.restriction = $event"
           v-on:toggle-prefix-from-rest="addPrefix($event)"
           v-on:toggle-del-exprefix="deletePrefix($event)"
           ></datasource-component>
 
           <datasource-component 
-          v-bind:source="target" 
-          v-bind:advancedOptionsShow="advancedOptionsShow" 
+          v-bind:source="target"
+          v-bind:endpointandclasses="source" 
+          v-bind:advancedOptionsShow="advancedOptionsShow"
+          v-on:toggle-source-classes="target.classes = $event" 
           v-on:toggle-restr-target="target.restriction = $event"
           v-on:toggle-prefix-from-rest="addPrefix($event)"
           v-on:toggle-del-exprefix="deletePrefix($event)"
@@ -187,8 +191,8 @@
           ></metrics-component>
           <!-- acceptance UI -->
           <div class="row">
-            <accreview-component class="twoColumns" v-bind:data="acceptance" v-bind:acceptance="acceptance" v-bind:prefixes="context" v-on:send-prefix="addPrefix($event)" v-on:del-exprefix="deletePrefix($event)" v-on:change-threshold="acceptance.threshold = $event" title="Acceptance Condition"></accreview-component>
-            <accreview-component class="twoColumns" v-bind:data="review" v-bind:acceptance="acceptance" v-bind:prefixes="context" v-on:send-prefix="addPrefix($event)" v-on:del-exprefix="deletePrefix($event)" v-on:change-revthreshold="review.threshold = $event" title="Review Condition"></accreview-component>
+            <accreview-component class="twoColumns" v-bind:data="acceptance" v-bind:review="review" v-bind:acceptance="acceptance" v-bind:prefixes="context" v-on:send-prefix="addPrefix($event)" v-on:del-exprefix="deletePrefix($event)" v-on:change-threshold="acceptance.threshold = $event" title="Acceptance Condition"></accreview-component>
+            <accreview-component class="twoColumns" v-bind:data="review" v-bind:review="review" v-bind:acceptance="acceptance" v-bind:prefixes="context" v-on:send-prefix="addPrefix($event)" v-on:del-exprefix="deletePrefix($event)" v-on:change-revthreshold="review.threshold = $event" title="Review Condition"></accreview-component>
           </div>
           <!-- execution UI -->
           <execution-component v-bind:execution="execution" v-bind:advancedOptionsShow="advancedOptionsShow"
@@ -368,17 +372,18 @@
           <div id="blocklyArea" style="height: 500px; width: 100%;"></div>
           <div id="blocklyDiv" style="position: absolute"></div>
           <xml id="toolbox" style="display: none">
-            <category name="Source&Target">  
+            <category name="Source&Target&Measure&Operator">  
               <block type="sourceproperty"></block>
               <block type="targetproperty"></block>
               <block type="optionalsourceproperty"></block>
               <block type="optionaltargetproperty"></block>
               <block type="measure"></block>
               <block type="operator"></block>
+              <block type="preprocessingfunction"></block>
+              <block type="renamepreprocessingfunction"></block>
             </category>
             <category name="Preprocessing functions"> 
               <block type="nolangpreprocessingfunction"></block> 
-              <block type="renamepreprocessingfunction"></block>
               <block type="lowercasepreprocessingfunction"></block>
               <block type="uppercasepreprocessingfunction"></block>
               <block type="numberpreprocessingfunction"></block>

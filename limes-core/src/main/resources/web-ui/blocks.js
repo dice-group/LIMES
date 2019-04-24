@@ -112,12 +112,52 @@ var RenamePreprocessingFunction = {
     {
       "type": "field_input",
       "name": "RENAME",
-      "text": "X"
+      "text": "TYPE"
     }
   ],
   "output": "PreprocessingFunction",
   "colour": 300,
   "tooltip": "Pre-processing function",
+  "helpUrl": ""
+}
+
+var PreprocessingFunction = {
+  "type": "preprocessingfunction",
+  "message0": "%1 %2",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "function",
+      "options": [
+        [
+          "option",
+          "OPTIONNAME"
+        ],
+        [
+          "option",
+          "OPTIONNAME"
+        ],
+        [
+          "option",
+          "OPTIONNAME"
+        ]
+      ]
+    },
+    {
+      "type": "input_value",
+      "name": "NAME",
+      "check": [
+        "SourceProperty",
+        "TargetProperty",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty",
+        "PreprocessingFunction"
+      ]
+    },
+  ],
+  "output": "PreprocessingFunction",
+  "colour": 240,
+  "tooltip": "Measure block",
   "helpUrl": ""
 }
 
