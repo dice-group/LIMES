@@ -98,10 +98,9 @@ let app = new Vue({
     },
     mlalgorithm: {
       enabled: false,
-      name: 'simple ml',
-      type: 'supervised batch',
+      name: 'WOMBAT Simple',
+      type: 'unsupervised',
       training: 'trainingData.nt',
-      items: ['max refinement tree size','max iterations number'],
       parameters: [
         {
           name: 'max execution time in minutes',
@@ -181,7 +180,6 @@ let app = new Vue({
 
 
 
-
           var newBlock = Workspace.newBlock('start');
           newBlock.setDeletable(false);
           newBlock.initSvg();
@@ -198,11 +196,17 @@ let app = new Vue({
             this.target.optionalProperties.splice(0);
 
             let allBlocks = Workspace.getTopBlocks();
+
+            let countMeasureBlocks = allBlocks.filter(bl => bl.type === 'measure');
+            if(countMeasureBlocks.length > 1){
+              //document.querySelectorAll('[type="measure"]')[0].setAttribute("disabled","true");
+            }
+
             allBlocks.forEach( block => {
               if(block.type === 'start'){
                 block.getChildren().forEach(i => { 
                   this.processingPropertyWithPrepFunc(i);
-
+                  i.setDisabled(false);
                   switch(i.type) {
 
                     case "measure": {
@@ -225,6 +229,8 @@ let app = new Vue({
                       if(i.getChildren().length === 2){
                         let firstM = i.getChildren()[0];
                         let secondM = i.getChildren()[1];
+                        firstM.setDisabled(false);
+                        secondM.setDisabled(false);
                         let shownFirstM = showThreshold(firstM);
                         let shownSecondM = showThreshold(secondM);
                         let props1, props2;
@@ -313,6 +319,8 @@ let app = new Vue({
                   this.addOldAndNewPrefix(this.target.optionalProperties);
                 
                 })
+              } else {
+                block.setDisabled(true);
               }
             });
 
@@ -429,8 +437,17 @@ let app = new Vue({
     },
     processingPropertyWithPrepFunc(i){
       if(i.getChildren().length){
+        i.setDisabled(false);
         i.getChildren().forEach(child => {
+          child.setDisabled(false);
           if(i.type.indexOf('preprocessing')!== -1){
+
+            //changeOutputOfPreprocessingFunction
+            let preprWithParam = i.toString().split(" ");
+            let srcOrTgt = preprWithParam.find(val => val.toLowerCase() === "source" || val.toLowerCase() === "target");
+            let stringForCheck = srcOrTgt[0].toUpperCase() + srcOrTgt.slice(1);
+            i.setOutput(true, stringForCheck + "Property");
+
             if(i.type.indexOf('renamepreprocessing')!== -1){
               if(child.getChildren().length){
                 this.addChainOfPreprocessings(i, i.getField("RENAME").getDisplayText_());
@@ -446,6 +463,9 @@ let app = new Vue({
                 this.addProperies(child,strForXml);
               }
             } else {
+
+
+
               if(child.getChildren().length){
                 this.addChainOfPreprocessings(i, null);
               } else {
@@ -467,19 +487,30 @@ let app = new Vue({
       let tgt;
       i.getChildren().forEach(
         pr => {
+          pr.setDisabled(false);
           this.processingPropertyWithPrepFunc(pr);              
       }); 
 
       let valuesOfBlock = i.toString().split(' ');
       let values = [];
+      let srcOrTgt;
       for(let val=0; val<valuesOfBlock.length; val++){
         if(valuesOfBlock[val] === "As"){
+          srcOrTgt = valuesOfBlock[val-3].toLowerCase();
           values.push(valuesOfBlock[val+1]);
         }
       }
 
       if(values.length === 0){
         values = valuesOfBlock.filter(val => val.indexOf(":") !== -1);
+      } 
+      if(values.length === 1){
+        if(srcOrTgt === 'source'){
+          values.push(valuesOfBlock.filter(val => val.indexOf(":") !== -1)[1]);
+        }
+        if(srcOrTgt === 'target'){
+          values.unshift(valuesOfBlock.filter(val => val.indexOf(":") !== -1)[0]);
+        }
       }
       src = values[0];
       tgt = values[1];
@@ -489,6 +520,8 @@ let app = new Vue({
     manualMetricClicked(index){
       if(index === 0){
         this.mlalgorithm.enabled = false;
+      } else {
+        this.mlalgorithm.enabled = true;
       }
     },
 
@@ -522,7 +555,7 @@ let app = new Vue({
 
       const acceptance = makeAccReview(this.acceptance, 'ACCEPTANCE');
       const review = makeAccReview(this.review, 'REVIEW');
-
+      console.log(this.data.parameters);
       const ml = this.mlalgorithm.enabled
         ? `<MLALGORITHM>
   <NAME>${this.mlalgorithm.name}</NAME>

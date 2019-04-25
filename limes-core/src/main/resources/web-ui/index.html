@@ -429,16 +429,16 @@
             Machine Learning
           </div>
         </md-layout>
-        <md-layout>
+<!--         <md-layout>
           <md-button v-on:click="enable()" v-if="!data.enabled">Enable</md-button>
           <md-button v-on:click="disable()" v-if="data.enabled">Disable</md-button>
-        </md-layout>
+        </md-layout> -->
       </md-layout>
 
       <md-input-container v-if="data.enabled">
         <label>Name</label>
         <!-- <md-input v-model="data.name" placeholder="Name"></md-input> -->
-          <md-select v-model="data.name" >
+          <md-select v-model="data.name" @selected="selectName(data.name)">
             <md-option value="WOMBAT Simple">WOMBAT Simple</md-option>
             <md-option value="WOMBAT Complete">WOMBAT Complete</md-option>
             <md-option value="EAGLE">EAGLE</md-option>
@@ -472,9 +472,9 @@
           <md-input-container>
             <label>Parameter name</label>
             <!-- <md-input v-model="name" placeholder="Name"></md-input> -->
-            <md-select v-model="name" >
+            <md-select v-model="name" @selected="selectParameter(name)">
               <md-option
-                v-for="option in data.items">
+                v-for="option in items" :value="option">
                   {{ option }}
               </md-option>
             </md-select>  
@@ -482,9 +482,10 @@
           </md-input-container>
         </md-layout>
         <md-layout md-flex>
-          <md-input-container>
+          <md-input-container v-if="isNumber">
             <label>Value</label>
-            <md-input v-model="value" placeholder="Value"></md-input>
+            <!-- <md-input v-model="value" placeholder="Value"></md-input> -->
+            <md-input v-model="value" type="number" min="min" max="max" step="0.1"></md-input>
           </md-input-container>
         </md-layout>
         <md-layout md-flex="25">

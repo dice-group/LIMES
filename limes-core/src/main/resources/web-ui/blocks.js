@@ -148,17 +148,9 @@ var PreprocessingFunction = {
       "name": "function",
       "options": [
         [
-          "option",
-          "OPTIONNAME"
+          "select Preprocessing Function",
+          "selectPreprocessingFunction"
         ],
-        [
-          "option",
-          "OPTIONNAME"
-        ],
-        [
-          "option",
-          "OPTIONNAME"
-        ]
       ]
     },
     {
@@ -513,4 +505,24 @@ var Operator = {
   "colour": 20,
   "tooltip": "Operator",
   "helpUrl": ""
+}
+
+let MLParameters = {
+	"WOMBAT": {
+		"max refinement tree size": { "default": 2000 },
+		"max iterations number": { "default": 3 },
+		"max iteration time in minutes": { "default": 20 },
+		"max execution time in minutes": { "default": 600 },
+		"max fitness threshold": { "default": 1, "min": 0, "max": 1 },
+		"minimum property coverage": { "default": 0.4, "min": 0, "max": 1 },
+		"property learning rate": { "default": 0.9, "min": 0, "max": 1 },
+		"overall penalty weight": { "default": 0.5, "min": 0, "max": 1 },
+		"children penalty weight": { "default": 1, "min": 0, "max": 1 },
+		"complexity penalty weight": { "default": 1, "min": 0, "max": 1 },
+		"beta": { "default": 1, "min": 0, "max": Number.MAX_VALUE },
+		"verbose": false,
+		"atomic measures": { "default": "jaccard, trigrams, cosine, qgrams"},
+		"save mapping": true,
+	},
+	"EAGLE": {},
 }
