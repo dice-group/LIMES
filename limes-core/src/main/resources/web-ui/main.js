@@ -7,14 +7,14 @@ Vue.use(VueMaterial);
 Vue.config.devtools = true;
 
 const makeDatasource = (data, tag) => `<${tag.toUpperCase()}>
-<ID>${data.id}</ID>
-<ENDPOINT>${data.endpoint}</ENDPOINT>
-<VAR>${data.var}</VAR>
-<PAGESIZE>${data.pagesize}</PAGESIZE>
-<RESTRICTION>${data.restriction}</RESTRICTION>
-${data.properties.map(p => `<PROPERTY>${p}</PROPERTY>`).join('\n')}
-${data.optionalProperties.map(p => `<OPTIONAL_PROPERTY>${p}</OPTIONAL_PROPERTY>`).join('\n')}
-${data.type && data.type.length ? `<TYPE>${data.type}</TYPE>` : ''}
+  <ID>${data.id}</ID>
+  <ENDPOINT>${data.endpoint}</ENDPOINT>
+  <VAR>${data.var}</VAR>
+  <PAGESIZE>${data.pagesize}</PAGESIZE>
+  <RESTRICTION>${data.restriction}</RESTRICTION>
+${data.properties.map(p => `  <PROPERTY>${p}</PROPERTY>`).join('\n')}
+${data.optionalProperties.map(p => `  <OPTIONAL_PROPERTY>${p}</OPTIONAL_PROPERTY>`).join('\n')}
+${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 </${tag.toUpperCase()}>
 `;
 
@@ -226,69 +226,72 @@ let app = new Vue({
                     }
 
                     case "operator": {
-                      if(i.getChildren().length === 2){
-                        let firstM = i.getChildren()[0];
-                        let secondM = i.getChildren()[1];
+                      let firstM = i.getChildren()[0];
+                      let secondM = i.getChildren()[1];
+                      if(firstM){
                         firstM.setDisabled(false);
-                        secondM.setDisabled(false);
-                        let shownFirstM = showThreshold(firstM);
-                        let shownSecondM = showThreshold(secondM);
-                        let props1, props2;
-                        if(firstM.type === "measure"){
-                          props1 = this.getFromMeasure(firstM);
-                        }
-                        if(secondM.type === "measure"){
-                          props2 = this.getFromMeasure(secondM);
-                        }
-                        let operator = i.getField("operators").text_;
-                        let measureFunc1 = firstM.getField("measureList").getDisplayText_();
-                        let measureFunc2 = secondM.getField("measureList").getDisplayText_();
-                        let threshold1 = firstM.getField("threshold").text_;
-                        let threshold2 = secondM.getField("threshold").text_;
-                        let varSrc = this.source.var.substr(1)+".";
-                        let varTgt = this.target.var.substr(1)+".";
-                        this.metrics.splice(0);
-                        if(operator[0] !== 'N'){       
-                          let str1 = operator + '(' + measureFunc1.toLowerCase()+"("+varSrc+props1.src+","+varTgt+props1.tgt+")"; 
-                          let str2 = ',' + measureFunc2.toLowerCase()+"("+varSrc+props2.src+","+varTgt+props2.tgt+")";
-                          if(shownFirstM && shownSecondM){
-                            this.metrics.push(str1 + "|" + threshold1 + str2 + "|"+threshold2 + ')');
-                          } else {
-
-                            if(!shownFirstM && !shownSecondM){
-                              this.metrics.push(str1 + str2 + ')');
-                            }
-
-                            if(shownFirstM && !shownSecondM){
-                              this.metrics.push(str1 + "|" + threshold1 + str2 + ')');
-                            } else if(!shownFirstM && shownSecondM) {
-                              this.metrics.push(str1 + str2 + "|"+threshold2 + ')');
-                            }
-                          }
-
-
-
-                        } else {
-                       
-                          let str1 = 'NOT(' + operator.substr(1) + '(' + measureFunc1.toLowerCase()+"("+varSrc+props1.src+","+varTgt+props1.tgt+")"; 
-                          let str2 = ',' + measureFunc2.toLowerCase()+"("+varSrc+props2.src+","+varTgt+props2.tgt+")";  
-                          if(shownFirstM && shownSecondM){
-                            this.metrics.push(str1 + "|" + threshold1 + str2 + "|"+threshold2 + ')))');
-                          } else {
-
-                            if(!shownFirstM && !shownSecondM){
-                              this.metrics.push(str1 + str2 + ')))');
-                            }
-
-                            if(shownFirstM && !shownSecondM){
-                              this.metrics.push(str1 + "|" + threshold1 + str2 + ')))');
-                            } else if(!shownFirstM && shownSecondM) {
-                              this.metrics.push(str1 + str2 + "|"+threshold2 + ')))');
-                            }
-                          }
-
-                        }
                       }
+                      if(secondM){
+                        secondM.setDisabled(false);
+                      }
+                      let shownFirstM = showThreshold(firstM);
+                      let shownSecondM = showThreshold(secondM);
+                      let props1 = "", props2 = "";
+                      if(firstM && firstM.type === "measure"){
+                        props1 = this.getFromMeasure(firstM);
+                      }
+                      if(secondM && secondM.type === "measure"){
+                        props2 = this.getFromMeasure(secondM);
+                      }
+                      let operator = i.getField("operators").text_;
+                      let measureFunc1 = firstM ? firstM.getField("measureList").getDisplayText_() : "undefined";
+                      let measureFunc2 = secondM ? secondM.getField("measureList").getDisplayText_() : "undefined";
+                      let threshold1 = firstM ? firstM.getField("threshold").text_ : "undefined";
+                      let threshold2 = secondM ? secondM.getField("threshold").text_ : "undefined";
+                      let varSrc = this.source.var.substr(1)+".";
+                      let varTgt = this.target.var.substr(1)+".";
+                      this.metrics.splice(0);
+                      if(operator[0] !== 'N'){       
+                        let str1 = operator + '(' + measureFunc1.toLowerCase()+"("+varSrc+props1.src+","+varTgt+props1.tgt+")"; 
+                        let str2 = ',' + measureFunc2.toLowerCase()+"("+varSrc+props2.src+","+varTgt+props2.tgt+")";
+                        if(shownFirstM && shownSecondM){
+                          this.metrics.push(str1 + "|" + threshold1 + str2 + "|"+threshold2 + ')');
+                        } else {
+
+                          if(!shownFirstM && !shownSecondM){
+                            this.metrics.push(str1 + str2 + ')');
+                          }
+
+                          if(shownFirstM && !shownSecondM){
+                            this.metrics.push(str1 + "|" + threshold1 + str2 + ')');
+                          } else if(!shownFirstM && shownSecondM) {
+                            this.metrics.push(str1 + str2 + "|"+threshold2 + ')');
+                          }
+                        }
+
+
+
+                      } else {
+                     
+                        let str1 = 'NOT(' + operator.substr(1) + '(' + measureFunc1.toLowerCase()+"("+varSrc+props1.src+","+varTgt+props1.tgt+")"; 
+                        let str2 = ',' + measureFunc2.toLowerCase()+"("+varSrc+props2.src+","+varTgt+props2.tgt+")";  
+                        if(shownFirstM && shownSecondM){
+                          this.metrics.push(str1 + "|" + threshold1 + str2 + "|"+threshold2 + ')))');
+                        } else {
+
+                          if(!shownFirstM && !shownSecondM){
+                            this.metrics.push(str1 + str2 + ')))');
+                          }
+
+                          if(shownFirstM && !shownSecondM){
+                            this.metrics.push(str1 + "|" + threshold1 + str2 + ')))');
+                          } else if(!shownFirstM && shownSecondM) {
+                            this.metrics.push(str1 + str2 + "|"+threshold2 + ')))');
+                          }
+                        }
+
+                      }
+
 
 
 
@@ -555,12 +558,11 @@ let app = new Vue({
 
       const acceptance = makeAccReview(this.acceptance, 'ACCEPTANCE');
       const review = makeAccReview(this.review, 'REVIEW');
-      console.log(this.data.parameters);
       const ml = this.mlalgorithm.enabled
         ? `<MLALGORITHM>
   <NAME>${this.mlalgorithm.name}</NAME>
   <TYPE>${this.mlalgorithm.type}</TYPE>
-  <TRAINING>${this.mlalgorithm.training}</TRAINING>
+  ${(this.mlalgorithm.type==='supervised batch' || this.mlalgorithm.type==='supervised active') ? `<TRAINING>${this.mlalgorithm.training}</TRAINING>` : ''}
   ${this.mlalgorithm.parameters
     .map(
       p => `<PARAMETER>
@@ -734,15 +736,17 @@ let app = new Vue({
 });
 
 function showThreshold(i){
-  let isShown;
-  if(i.getField("enable_threshold").getValue().toLowerCase() === 'true'){
-    i.getField("threshold").setVisible(true);
-    i.getField("threshold").forceRerender();
-    isShown = true;
-  } else {
-    i.getField("threshold").setVisible(false);
-    i.getField("threshold").forceRerender();
-    isShown = false;
+  let isShown = false;
+  if(i){
+    if(i.getField("enable_threshold").getValue().toLowerCase() === 'true'){
+      i.getField("threshold").setVisible(true);
+      i.getField("threshold").forceRerender();
+      isShown = true;
+    } else {
+      i.getField("threshold").setVisible(false);
+      i.getField("threshold").forceRerender();
+      isShown = false;
+    }
   }
   return isShown;
 }

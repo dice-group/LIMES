@@ -485,8 +485,23 @@
           <md-input-container v-if="isNumber">
             <label>Value</label>
             <!-- <md-input v-model="value" placeholder="Value"></md-input> -->
-            <md-input v-model="value" type="number" min="min" max="max" step="0.1"></md-input>
+            <md-input v-model="value" type="number" v-bind:min="min" v-bind:max="max" v-bind:step="step" @blur="isBlur"></md-input>
           </md-input-container>
+
+          <md-input-container v-if="isCheck">
+            <md-checkbox v-model="value"></md-checkbox>
+          </md-input-container>
+
+          <md-input-container v-if="isMultCheck">
+          <label>Simple multiselect</label>
+          <md-select multiple v-model="value">
+            <md-option
+              v-for="val in measures" :value="val">
+                {{ val }}
+            </md-option>
+          </md-select>
+        </md-input-container>
+
         </md-layout>
         <md-layout md-flex="25">
           <md-button v-on:click="add()">Add</md-button>

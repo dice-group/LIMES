@@ -148,7 +148,7 @@ var PreprocessingFunction = {
       "name": "function",
       "options": [
         [
-          "select Preprocessing Function",
+          "Select Preprocessing Function",
           "selectPreprocessingFunction"
         ],
       ]
