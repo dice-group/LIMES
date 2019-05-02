@@ -111,6 +111,7 @@
         <md-dialog-content><pre><code class="xml hljs" v-html="configText"></code></pre></md-dialog-content>
 
         <md-dialog-actions>
+          <md-button class="md-primary" @click="saveXML()">Save XML</md-button>
           <md-button class="md-primary" @click="closeConfig()">Close</md-button>
         </md-dialog-actions>
       </md-dialog>
@@ -146,7 +147,7 @@
       </md-dialog>
 
       <md-layout md-gutter>
-        <md-layout md-flex-offset="25" md-column>
+        <md-layout md-flex-offset="10" md-column>
           <!-- prefixes UI -->
           <prefixes-list v-bind:deleteChip="deletePrefix" v-bind:addPrefix="addPrefix"
           v-bind:prefixes="prefixes" v-bind:filteredOptions="filteredOptions"
@@ -215,7 +216,7 @@
             </md-layout>
           </md-layout>
         </md-layout>
-        <md-layout md-flex="25"></md-layout>
+        <md-layout md-flex="10"></md-layout>
       </md-layout>
     </div>
   </script>

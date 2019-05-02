@@ -130,7 +130,7 @@ var RenamePreprocessingFunction = {
     {
       "type": "field_input",
       "name": "RENAME",
-      "text": "TYPE"
+      "text": "X"
     }
   ],
   "output": "PreprocessingFunction",
@@ -438,8 +438,7 @@ var Measure = {
       "name": "sourceProperty",
       "check": [
         "SourceProperty",
-        "PreprocessingFunction",
-        "OptionalSourceProperty"        
+        "PreprocessingFunction",      
       ]
     },
     {
@@ -448,7 +447,6 @@ var Measure = {
       "check": [
         "TargetProperty",
         "PreprocessingFunction",
-        "OptionalTargetProperty",
       ]
     }
   ],

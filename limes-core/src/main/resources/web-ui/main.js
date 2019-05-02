@@ -61,7 +61,7 @@ let app = new Vue({
       classes: [],
       var: '?s',
       pagesize: 1000,
-      restriction: '?src rdf:type some:Type',
+      restriction: '?s rdf:type some:Type',
       type: 'sparql',
       properties: ['dc:title AS lowercase RENAME name'],
       optionalProperties: [],//['rdfs:label'],
@@ -73,13 +73,13 @@ let app = new Vue({
       classes: [],
       var: '?t',
       pagesize: 1000,
-      restriction: '?target rdf:type some:Type',
+      restriction: '?t rdf:type some:Type',
       type: 'sparql',
       properties: ['foaf:name AS lowercase RENAME name'],
       optionalProperties: [],//['rdf:type'],
       propertiesForChoice: ["a","b","c"],
     },
-    metrics: ['trigrams(y.dc:title, x.linkedct:condition_name)'],
+    metrics: [''],
     //selectedMeasureOption: '',
     //measureOptions: measureOptionsArray,
     //selectedOperatorOption: '',
@@ -138,6 +138,9 @@ let app = new Vue({
       'uriasstringpreprocessingfunction': UriasstringPreprocessingFunction,
       'uppercasepreprocessingfunction': UppercasePreprocessingFunction,
     },
+    mainSource: false,
+    mainTarget: false,
+    notConnectedToStart: false,
   },
   mounted() {
     const jobIdmatches = /\?jobId=(.+)/.exec(window.location.search);
@@ -156,7 +159,9 @@ let app = new Vue({
           var blocklyArea = document.getElementById('blocklyArea');
           var blocklyDiv = document.getElementById('blocklyDiv');
           var Workspace = Blockly.inject(blocklyDiv,
-              {toolbox: document.getElementById('toolbox')});
+              {toolbox: document.getElementById('toolbox'),
+                trashcan: true,
+              });
           var onresize = function(e) {
             // Compute the absolute coordinates and dimensions of blocklyArea.
             var element = blocklyArea;
@@ -197,12 +202,8 @@ let app = new Vue({
 
             let allBlocks = Workspace.getTopBlocks();
 
-            let countMeasureBlocks = allBlocks.filter(bl => bl.type === 'measure');
-            if(countMeasureBlocks.length > 1){
-              //document.querySelectorAll('[type="measure"]')[0].setAttribute("disabled","true");
-            }
-
             allBlocks.forEach( block => {
+              this.notConnectedToStart = false;
               if(block.type === 'start'){
                 block.getChildren().forEach(i => { 
                   this.processingPropertyWithPrepFunc(i);
@@ -210,6 +211,7 @@ let app = new Vue({
                   switch(i.type) {
 
                     case "measure": {
+
                       let shownM = showThreshold(i);
                       let properties = this.getFromMeasure(i);
 
@@ -228,14 +230,10 @@ let app = new Vue({
                     case "operator": {
                       let firstM = i.getChildren()[0];
                       let secondM = i.getChildren()[1];
-                      if(firstM){
-                        firstM.setDisabled(false);
-                      }
-                      if(secondM){
-                        secondM.setDisabled(false);
-                      }
-                      let shownFirstM = showThreshold(firstM);
-                      let shownSecondM = showThreshold(secondM);
+
+                      this.mainSource = false;
+                      this.mainTarget = false;
+
                       let props1 = "", props2 = "";
                       if(firstM && firstM.type === "measure"){
                         props1 = this.getFromMeasure(firstM);
@@ -243,6 +241,106 @@ let app = new Vue({
                       if(secondM && secondM.type === "measure"){
                         props2 = this.getFromMeasure(secondM);
                       }
+
+                      if(firstM){
+                        firstM.setDisabled(false);
+
+
+
+                        if(secondM && secondM.getChildren().length && (secondM.getChildren()[0].type ==='sourceproperty' || secondM.getChildren()[0].type ==='targetproperty')){
+                          let secondMChildren = secondM.getChildren();
+                          if(secondMChildren.length){
+                            secondMChildren.forEach(m => {
+                              if(m.type === 'sourceproperty'){
+                                this.mainSource = true;
+                              }
+                              if(m.type === 'targetproperty'){
+                                this.mainTarget = true;
+                              }
+                            });
+                          }
+
+                        } else {
+
+                          if(firstM.getChildren().length){
+                            firstM.getChildren().forEach(m => {
+                              if(m.type === 'sourceproperty'){
+                                this.mainSource = true;
+                              }
+                              if(m.type === 'targetproperty'){
+                                this.mainTarget = true;
+                              }
+                            });
+
+                          }
+                        }
+                      }
+
+                      if(secondM){
+                        secondM.setDisabled(false);
+
+                        //console.log(this.mainSource,this.mainTarget);
+
+
+                          if(this.mainSource){
+                            secondM.inputList[1].setCheck([
+                              "SourceProperty",
+                              "PreprocessingFunction",
+                              "OptionalSourceProperty"        
+                            ]);
+                          } else {
+                            secondM.inputList[1].setCheck([
+                              "SourceProperty",
+                              "PreprocessingFunction"   
+                            ]);
+                          }
+            
+                          if(this.mainTarget){
+                            secondM.inputList[2].setCheck([
+                              "TargetProperty",
+                              "PreprocessingFunction",
+                              "OptionalTargetProperty"        
+                            ]);
+                          } else {
+                            secondM.inputList[2].setCheck([
+                              "TargetProperty",
+                              "PreprocessingFunction"   
+                            ]);
+                          }
+
+                          /////
+
+                          if(this.mainSource){
+                            firstM.inputList[1].setCheck([
+                              "SourceProperty",
+                              "PreprocessingFunction",
+                              "OptionalSourceProperty"        
+                            ]);
+                          } else {
+                            firstM.inputList[1].setCheck([
+                              "SourceProperty",
+                              "PreprocessingFunction"   
+                            ]);
+                          }
+            
+                          if(this.mainTarget){
+                            firstM.inputList[2].setCheck([
+                              "TargetProperty",
+                              "PreprocessingFunction",
+                              "OptionalTargetProperty"        
+                            ]);
+                          } else {
+                            firstM.inputList[2].setCheck([
+                              "TargetProperty",
+                              "PreprocessingFunction"   
+                            ]);
+                          }
+ 
+
+                      }
+                      let shownFirstM = showThreshold(firstM);
+                      let shownSecondM = showThreshold(secondM);
+
                       let operator = i.getField("operators").text_;
                       let measureFunc1 = firstM ? firstM.getField("measureList").getDisplayText_() : "undefined";
                       let measureFunc2 = secondM ? secondM.getField("measureList").getDisplayText_() : "undefined";
@@ -323,6 +421,11 @@ let app = new Vue({
                 
                 })
               } else {
+                
+                if(block.type.indexOf('preprocessing')!== -1){
+                  this.notConnectedToStart = true;
+                  this.processingPropertyWithPrepFunc(block);
+                }
                 block.setDisabled(true);
               }
             });
@@ -440,16 +543,33 @@ let app = new Vue({
     },
     processingPropertyWithPrepFunc(i){
       if(i.getChildren().length){
-        i.setDisabled(false);
+        if(!this.notConnectedToStart){
+          i.setDisabled(false);
+        }
         i.getChildren().forEach(child => {
-          child.setDisabled(false);
+          if(!this.notConnectedToStart){
+            child.setDisabled(false);
+          }
           if(i.type.indexOf('preprocessing')!== -1){
 
             //changeOutputOfPreprocessingFunction
             let preprWithParam = i.toString().split(" ");
+            let isOptional = preprWithParam.find(val => val.toLowerCase() === "optional");
             let srcOrTgt = preprWithParam.find(val => val.toLowerCase() === "source" || val.toLowerCase() === "target");
             let stringForCheck = srcOrTgt[0].toUpperCase() + srcOrTgt.slice(1);
-            i.setOutput(true, stringForCheck + "Property");
+            if(isOptional){
+              i.setOutput(true, isOptional+stringForCheck + "Property");
+            } else {
+              i.setOutput(true, stringForCheck + "Property");
+            }
+
+            // check preprocessing for availability to use optional property
+            if(srcOrTgt.toLowerCase() === 'source'){
+              this.mainSource = true;
+            }
+            if(srcOrTgt.toLowerCase() === 'target'){
+              this.mainTarget = true;
+            }
 
             if(i.type.indexOf('renamepreprocessing')!== -1){
               if(child.getChildren().length){
@@ -601,6 +721,17 @@ let app = new Vue({
     },
     closeConfig() {
       this.$refs.configDialog.close();
+    },
+    forceFileDownload(str){
+      const url = window.URL.createObjectURL(new Blob([str]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', 'file.xml') //or any other extension
+      document.body.appendChild(link)
+      link.click()
+    },
+    saveXML(){
+      this.forceFileDownload(this.generateConfig());
     },
     closeStatus() {
       history.pushState({}, '', '?');
