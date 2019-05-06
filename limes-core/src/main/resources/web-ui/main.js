@@ -1,6 +1,9 @@
 window.SPARQL_ENDPOINT = "/sparql/";
 window.SPARQL_ENDPOINT = "http://localhost:8080/sparql/";
 window.PREPROCESSING_LIST = "http://localhost:8080/list/preprocessings";
+window.RESULT_FILES = "http://localhost:8080/results/";
+window.RESULT_FILE = "http://localhost:8080/result/";
+window.JOB_LOGS = "http://localhost:8080/logs/";
 
 // apply vue-material stuff
 Vue.use(VueMaterial);
@@ -141,6 +144,10 @@ let app = new Vue({
     mainSource: false,
     mainTarget: false,
     notConnectedToStart: false,
+    executedKey: '',
+    isDisabledLog: true,
+    isDisabled: true,
+    availableFiles: [],
   },
   mounted() {
     const jobIdmatches = /\?jobId=(.+)/.exec(window.location.search);
@@ -722,16 +729,66 @@ let app = new Vue({
     closeConfig() {
       this.$refs.configDialog.close();
     },
-    forceFileDownload(str){
+    showDialogForPreviousRun(){
+      this.isDisabledLog = true;
+      this.isDisabled = true;
+      this.$refs.previousRunDialog.open();
+    },
+    closePreviousRun(){
+      this.$refs.previousRunDialog.close();
+    },
+    checkExecutedKey(){
+      this.isDisabledLog = true;
+      this.isDisabled = true;
+      let key = this.executedKey;
+      fetch(window.RESULT_FILES+this.executedKey)
+        .then(function(response) {
+          return response.json();
+         })
+        .then((content) => {
+          this.isDisabledLog = false;
+          if(content.success){
+            this.availableFiles.splice(0);
+            this.availableFiles = content.availableFiles;
+            this.isDisabled = false;
+          } else {
+            console.log("Key is not found");
+          }
+        })
+
+    },
+    saveAccepted(){
+      if(this.availableFiles.length){
+        fetch(window.RESULT_FILE+this.executedKey+"/"+this.availableFiles[0])
+        .then(function(response) {
+          return response.text();
+         })
+        .then((content) => {
+          this.forceFileDownload(content,this.availableFiles[0]);
+        })
+      }
+    },
+    saveReviewed(){
+      if(this.availableFiles.length){
+        fetch(window.RESULT_FILE+this.executedKey+"/"+this.availableFiles[1])
+        .then(function(response) {
+          return response.text();
+         })
+        .then((content) => {
+          this.forceFileDownload(content,this.availableFiles[1]);
+        })
+      }
+    },
+    forceFileDownload(str, filename){
       const url = window.URL.createObjectURL(new Blob([str]))
       const link = document.createElement('a')
       link.href = url
-      link.setAttribute('download', 'file.xml') //or any other extension
+      link.setAttribute('download', filename) //or any other extension
       document.body.appendChild(link)
       link.click()
     },
     saveXML(){
-      this.forceFileDownload(this.generateConfig());
+      this.forceFileDownload(this.generateConfig(),'file.xml');
     },
     closeStatus() {
       history.pushState({}, '', '?');

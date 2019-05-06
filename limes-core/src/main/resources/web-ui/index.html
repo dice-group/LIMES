@@ -81,6 +81,17 @@
   .twoColumns{
     flex: 50%;
   }
+  .keyInputLabel{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+  }
+  .executionKey{
+    font-weight: bold;
+    font-size: 16px;
+    margin-left: 10px;
+  }
 </style>
 
   <!-- LIMES server ref -->
@@ -116,6 +127,36 @@
         </md-dialog-actions>
       </md-dialog>
 
+      <!-- previous run dialog -->
+      <md-dialog ref="previousRunDialog">
+        <md-dialog-title>Check the state of the previous run</md-dialog-title>
+
+        <md-dialog-content>
+          <md-layout>
+            <md-layout>
+              <span class="keyInputLabel">Enter execution key:</span> 
+            </md-layout>
+            <md-layout md-flex="50">
+              <md-input-container>
+                <md-input v-model="executedKey" @keyup.enter.native="checkExecutedKey()" placeholder="Enter execution key"></md-input>
+              </md-input-container>
+            </md-layout>
+            <md-layout md-flex="20">
+              <md-button class="md-primary" @click="checkExecutedKey()">Check</md-button>
+            </md-layout>
+          </md-layout>  
+        </md-dialog-content>
+
+        <md-dialog-actions>
+          <md-button v-bind:disabled="isDisabledLog" class="md-primary" 
+            v-bind:href=" window.LIMES_SERVER_URL + 'logs/' + executedKey" target="_blank"
+          >Show log</md-button>
+          <md-button v-bind:disabled="isDisabled" class="md-primary" @click="saveAccepted()">Save accepted links</md-button>
+          <md-button v-bind:disabled="isDisabled" class="md-primary" @click="saveReviewed()">Save reviewed links</md-button>
+          <md-button class="md-primary" @click="closePreviousRun()">Close</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+
       <!-- job status dialog -->
       <md-dialog ref="jobDialog">
         <md-dialog-title>Job status</md-dialog-title>
@@ -139,6 +180,7 @@
                 <li v-for="r in results"><a v-bind:href=" window.LIMES_SERVER_URL + '/result/' + jobId + '/' + r " target="_blank">{{r}}</a></li>
               </ul>
           </div>
+          <div>Save the execution key for checking the state later: <span class="executionKey">{{jobId}}</span></div>
         </md-dialog-content>
 
         <md-dialog-actions>
@@ -213,6 +255,9 @@
             </md-layout>
             <md-layout>
               <md-button class="md-raised md-primary md-flex" v-on:click="execute()">Execute</md-button>
+            </md-layout>
+            <md-layout>
+              <md-button class="md-raised md-flex" v-on:click="showDialogForPreviousRun()">Check the state of the previous run</md-button>
             </md-layout>
           </md-layout>
         </md-layout>
