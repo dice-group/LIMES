@@ -76,11 +76,7 @@ Vue.component('datasource-component', {
       this.classes.splice(0);
       this.source.propertiesForChoice.splice(0);
       this.classVar = '';
-      if(this.endpointandclasses.endpoint !== option){
-        fetchClasses(this, option);
-      } else {
-        this.afterFilteredClasses = this.endpointandclasses.classes;
-      }
+      this.checkForSameEndpoints(option);
     },
     selectClass(option){
       this.classVar = option;
@@ -93,10 +89,15 @@ Vue.component('datasource-component', {
       this.classes.splice(0);
       this.source.propertiesForChoice.splice(0);
       this.classVar = '';
-      if(this.endpointandclasses.endpoint !== this.source.endpoint){
-        fetchClasses(this, this.source.endpoint);
+      this.checkForSameEndpoints(this.source.endpoint);
+    },
+    checkForSameEndpoints(currentOption){
+      if(this.endpointandclasses.endpoint !== currentOption){
+        fetchClasses(this, currentOption);
       } else {
         this.afterFilteredClasses = this.endpointandclasses.classes;
+        this.classes = this.endpointandclasses.classes;
+        this.$emit('toggle-source-classes', this.endpointandclasses.classes);
       }
     },
     enterClassClicked(){
@@ -151,7 +152,7 @@ function fetchClasses(source, endpoint) {
         i => classes.push(i.class.value));
       source.classes.push(...classes);
       source.afterFilteredClasses = source.classes;
-      source.$emit('toggle-source-classes', source.classes);
+      source.$emit('toggle-source-classes', classes);
     })
     //.catch( alert );
 }
@@ -320,7 +321,7 @@ Vue.component('accreview-component', {
   },
   watch: {
     'data.relation': function(){
-      console.log(this.exPrefixes);
+      // console.log(this.exPrefixes);
       this.exPrefixes.forEach(expr => {
         if(expr.label !== this.acceptance.relation.split(":")[0] && expr.label !== this.review.relation.split(":")[0]){
           this.$emit('del-exprefix', expr);

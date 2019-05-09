@@ -140,6 +140,8 @@
               <md-input-container>
                 <md-input v-model="executedKey" @keyup.enter.native="checkExecutedKey()" placeholder="Enter execution key"></md-input>
               </md-input-container>
+              <p class="message">{{notFoundKeyMessage}}</p>
+              <p class="message">{{findStatusMessage}}</p>
             </md-layout>
             <md-layout md-flex="20">
               <md-button class="md-primary" @click="checkExecutedKey()">Check</md-button>
@@ -229,7 +231,7 @@
             </md-tab>
             <md-tab id="machineLearning" md-label="Machine learning">
               <!-- machine learning UI -->
-              <mlalgorithm-component v-bind:data="mlalgorithm"></mlalgorithm-component>
+              <mlalgorithm-component v-bind:measures="measures" v-bind:data="mlalgorithm"></mlalgorithm-component>
             </md-tab>
           </md-tabs>
 
@@ -542,7 +544,7 @@
           <label>Simple multiselect</label>
           <md-select multiple v-model="value">
             <md-option
-              v-for="val in measures" :value="val">
+              v-for="val in measuresList" :value="val">
                 {{ val }}
             </md-option>
           </md-select>

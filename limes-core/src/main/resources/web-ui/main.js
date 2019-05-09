@@ -4,6 +4,7 @@ window.PREPROCESSING_LIST = "http://localhost:8080/list/preprocessings";
 window.RESULT_FILES = "http://localhost:8080/results/";
 window.RESULT_FILE = "http://localhost:8080/result/";
 window.JOB_LOGS = "http://localhost:8080/logs/";
+window.JOB_STATUS = "http://localhost:8080/status/";
 
 // apply vue-material stuff
 Vue.use(VueMaterial);
@@ -28,11 +29,16 @@ const makeAccReview = (data, tag) => `<${tag.toUpperCase()}>
 </${tag.toUpperCase()}>
 `;
 
-// const measures = ['Cosine', 'ExactMatch', 'Jaccard', 'Overlap', 'Jaro', 'JaroWinkler', 
-// 'Levenshtein', 'MongeElkan', 'RatcliffObershelp', 'Soundex', 'Koeln', 'DoubleMetaphone',
-// 'Trigram', 'Qgrams'];
-// let measureOptionsArray = [];
-// measures.forEach(i => measureOptionsArray.push({text: i.toLowerCase(), value: i.toLowerCase()}));
+const measures = ['Cosine', 'ExactMatch', 'Jaccard', 'Overlap', 'Jaro', 'JaroWinkler', 
+'Levenshtein', 'MongeElkan', 'RatcliffObershelp', 'Soundex', 'Koeln', 'DoubleMetaphone',
+'Trigram', 'Qgrams','Euclidean','Manhattan','Geo_Hausdorff','Geo_Max','Geo_Min','Geo_Mean','Geo_Avg',
+'Geo_Frechet','Geo_Sum_Of_Min','Geo_Naive_Surjection','Geo_Fair_Surjection','Geo_Link',
+'Top_Contains','Top_Covers','Top_Covered_By','Top_Crosses','Top_Disjoint','Top_Equals','Top_Intersects',
+'Top_Overlaps','Top_Touches','Top_Within','Tmp_Concurrent','Tmp_Predecessor','Tmp_Successor','Tmp_After',
+'Tmp_Before','Tmp_During','Tmp_During_Reverse','Tmp_Equals','Tmp_Finishes','Tmp_Is_Finished_By',
+'Tmp_Overlaps','Tmp_Is_Overlapped_By','Tmp_Starts','Tmp_Is_Started_By','Tmp_Meets','Tmp_Is_xBy',
+'Set_Jaccard'];
+let measureOptionsArray = measures.map(i => [i, i]);
 
 // const operators = ['MAX', 'AND'];
 // let operatorOptionsArray = [];
@@ -84,7 +90,7 @@ let app = new Vue({
     },
     metrics: [''],
     //selectedMeasureOption: '',
-    //measureOptions: measureOptionsArray,
+    measureOptions: measureOptionsArray,
     //selectedOperatorOption: '',
     //operatorOptions: operatorOptionsArray,
     acceptance: {
@@ -148,6 +154,8 @@ let app = new Vue({
     isDisabledLog: true,
     isDisabled: true,
     availableFiles: [],
+    notFoundKeyMessage: '',
+    findStatusMessage: '',
   },
   mounted() {
     const jobIdmatches = /\?jobId=(.+)/.exec(window.location.search);
@@ -482,6 +490,11 @@ let app = new Vue({
             };
           }
 
+    Measure.args0[0].options.length = 0;
+    this.measureOptions.forEach(i => {
+      Measure.args0[0].options.push(i);
+    });  
+
   },
   methods: {
     deletePrefix(prefix) {
@@ -732,6 +745,9 @@ let app = new Vue({
     showDialogForPreviousRun(){
       this.isDisabledLog = true;
       this.isDisabled = true;
+      this.notFoundKeyMessage = '';
+      this.executedKey = '';
+      this.findStatusMessage = '';
       this.$refs.previousRunDialog.open();
     },
     closePreviousRun(){
@@ -740,22 +756,43 @@ let app = new Vue({
     checkExecutedKey(){
       this.isDisabledLog = true;
       this.isDisabled = true;
-      let key = this.executedKey;
+      this.notFoundKeyMessage = '';
+      this.getStatusOfCertainJob();
+    },
+    getStatusOfCertainJob(){
+      fetch(window.JOB_STATUS+this.executedKey)
+      .then(r => r.json().then(x => x.status))
+      .then(status => {
+        if (status.code === -1) {
+          this.findStatusMessage = status.description;
+        }
+        if (status.code === 0) {
+          this.findStatusMessage = status.description;
+          setTimeout(() => this.getStatusOfCertainJob(), 5000);
+        }
+        if (status.code === 1) {
+          this.findStatusMessage = status.description;
+          setTimeout(() => this.getStatusOfCertainJob(), 5000);
+        }
+        if (status.code === 2) {
+          this.findStatusMessage = status.description;
+          this.getResultsOfCertainJob();
+        }
+      })
+    },
+    getResultsOfCertainJob(){
       fetch(window.RESULT_FILES+this.executedKey)
-        .then(function(response) {
-          return response.json();
-         })
-        .then((content) => {
-          this.isDisabledLog = false;
-          if(content.success){
-            this.availableFiles.splice(0);
-            this.availableFiles = content.availableFiles;
-            this.isDisabled = false;
-          } else {
-            console.log("Key is not found");
-          }
-        })
-
+              .then(function(response) {
+                return response.json();
+               })
+              .then((content) => {
+                this.isDisabledLog = false;
+                if(content.success && content.availableFiles.length){
+                  this.availableFiles.splice(0);
+                  this.availableFiles = content.availableFiles;
+                  this.isDisabled = false;
+                } 
+              })
     },
     saveAccepted(){
       if(this.availableFiles.length){
@@ -809,7 +846,7 @@ let app = new Vue({
           this.jobId = r;
           this.jobRunning = true;
           this.jobError = false;
-          this.jobStatusText = 'Status Loading - waiting for status from server..';
+          this.c = 'Status Loading - waiting for status from server..';
           this.$refs.jobDialog.open();
           history.pushState({jobId: r}, '', `?jobId=${r}`);
           setTimeout(() => this.getStatus(), 1000);

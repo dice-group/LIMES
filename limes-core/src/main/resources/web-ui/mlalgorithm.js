@@ -1,13 +1,13 @@
 // Define a new component for prefixes
 Vue.component('mlalgorithm-component', {
   template: '#mlalgorithmComponent',
-  props: ['data'],
+  props: ['data','measures'],
   data() {
     return {
       name: '',
       value: '',
       items: [],
-      measures: [],
+      measuresList: [],
       isNumber: false,
       isCheck: false,
       isMultCheck: false,
@@ -74,7 +74,7 @@ Vue.component('mlalgorithm-component', {
           this.isCheck = true;
         } else {
           this.isMultCheck = true;
-          this.measures = MLParams[param].default.split(",");
+          this.measuresList = this.measures;//MLParams[param].default.split(",");
         }
       }
     },
