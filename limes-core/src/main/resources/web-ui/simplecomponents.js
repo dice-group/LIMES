@@ -50,7 +50,7 @@ Vue.component('datasource-component', {
               .then((content) => {
                 this.prefixes = content["@context"];
               })
-              //.catch( alert );
+              //.catch( alert );                    
   },
   methods: {
     onFocus() {
@@ -110,7 +110,11 @@ Vue.component('datasource-component', {
       'source.endpoint': function() {
          this.afterFilteredOptions = this.endpoints.filter(i => {
           return i.toLowerCase().includes(this.source.endpoint.toLowerCase())
-        })
+        });
+        if(this.classVar === ''){
+          this.classVar = this.endpointandclasses.classes;
+          fetchProperties(this, this.source.endpoint, this.classVar);
+        }  
       },
       'classVar': function() {
          this.afterFilteredClasses = this.classes.filter(i => {
@@ -182,6 +186,7 @@ function fetchProperties(context, endpoint, curClass) {
       context.source.propertiesForChoice.push(...classes);
 
       let arr = classes.map(i => [i, i]);
+
 
       if(context.source.id === "sourceId"){
         sourceProperty.args0[0].options.length = 0;

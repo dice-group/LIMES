@@ -40,10 +40,6 @@ const measures = ['Cosine', 'ExactMatch', 'Jaccard', 'Overlap', 'Jaro', 'JaroWin
 'Set_Jaccard'];
 let measureOptionsArray = measures.map(i => [i, i]);
 
-// const operators = ['MAX', 'AND'];
-// let operatorOptionsArray = [];
-// operators.forEach(i => operatorOptionsArray.push({text: i.toLowerCase(), value: i.toLowerCase()}));
-
 // init the app
 let app = new Vue({
   el: '#app',
@@ -88,6 +84,9 @@ let app = new Vue({
       optionalProperties: [],//['rdf:type'],
       propertiesForChoice: ["a","b","c"],
     },
+    Workspace: null,
+    fileWorkspaceForInput: '',
+    importWorkspaceString: '',
     metrics: [''],
     //selectedMeasureOption: '',
     measureOptions: measureOptionsArray,
@@ -168,16 +167,17 @@ let app = new Vue({
     }
 
     window.onload = () => {
-          // var Workspace = Blockly.inject('blocklyDiv',
+          // var this.Workspace = Blockly.inject('blocklyDiv',
           //   {toolbox: document.getElementById('toolbox')});
 
           var blocklyArea = document.getElementById('blocklyArea');
           var blocklyDiv = document.getElementById('blocklyDiv');
-          var Workspace = Blockly.inject(blocklyDiv,
+          // var this.Workspace = this.this.Workspace;
+          this.Workspace = Blockly.inject(blocklyDiv,
               {toolbox: document.getElementById('toolbox'),
                 trashcan: true,
               });
-          var onresize = function(e) {
+          var onresize = (e) => {
             // Compute the absolute coordinates and dimensions of blocklyArea.
             var element = blocklyArea;
             var x = 0;
@@ -192,15 +192,15 @@ let app = new Vue({
             //blocklyDiv.style.top = y + 'px';
             blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
             blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-            Blockly.svgResize(Workspace);
+            Blockly.svgResize(this.Workspace);
           };
           window.addEventListener('resize', onresize, false);
           onresize();
-          Blockly.svgResize(Workspace);
+          Blockly.svgResize(this.Workspace);
 
 
 
-          var newBlock = Workspace.newBlock('start');
+          var newBlock = this.Workspace.newBlock('start');
           newBlock.setDeletable(false);
           newBlock.initSvg();
           newBlock.render();
@@ -208,14 +208,14 @@ let app = new Vue({
 
           let onFirstComment = (event) => {
             // console.log("change");
-            //console.log(Workspace.getAllBlocks()[0].getField("propTitle").getDisplayText_());
-            //console.log(Workspace.getTopBlocks());
+            //console.log(this.Workspace.getAllBlocks()[0].getField("propTitle").getDisplayText_());
+            //console.log(this.Workspace.getTopBlocks());
             this.source.properties.splice(0);
             this.target.properties.splice(0);
             this.source.optionalProperties.splice(0);
             this.target.optionalProperties.splice(0);
 
-            let allBlocks = Workspace.getTopBlocks();
+            let allBlocks = this.Workspace.getTopBlocks();
 
             allBlocks.forEach( block => {
               this.notConnectedToStart = false;
@@ -448,7 +448,7 @@ let app = new Vue({
 
 
           }
-          Workspace.addChangeListener(onFirstComment);
+          this.Workspace.addChangeListener(onFirstComment);
 
           
     };
@@ -523,17 +523,19 @@ let app = new Vue({
       });
     },
     addProperies(i,strForXml){
-      if(i.type.indexOf("source") !== -1){
-        if(i.type.indexOf("optional") !== -1){
-          this.source.optionalProperties.push(strForXml);
+      if(!this.notConnectedToStart){
+        if(i.type.indexOf("source") !== -1){
+          if(i.type.indexOf("optional") !== -1){
+            this.source.optionalProperties.push(strForXml);
+          } else {
+            this.source.properties.push(strForXml);
+          }   
         } else {
-          this.source.properties.push(strForXml);
-        }   
-      } else {
-        if(i.type.indexOf("optional") !== -1){
-          this.target.optionalProperties.push(strForXml);
-        } else {
-          this.target.properties.push(strForXml);
+          if(i.type.indexOf("optional") !== -1){
+            this.target.optionalProperties.push(strForXml);
+          } else {
+            this.target.properties.push(strForXml);
+          }
         }
       }
     },
@@ -596,7 +598,9 @@ let app = new Vue({
                 this.addChainOfPreprocessings(i, i.getField("RENAME").getDisplayText_());
               } else {
                 let defaultRenameText = child.getFieldValue("propTitle").split(":")[1].toUpperCase();
-                i.getField("RENAME").setText(defaultRenameText); 
+                if(i.getField("RENAME").getDisplayText_() === "X" || i.getField("RENAME").getDisplayText_().trim() === ''){
+                  i.getField("RENAME").setText(defaultRenameText); 
+                }
 
                 let renameText = i.getField("RENAME").getDisplayText_();                 
                 if(renameText !== defaultRenameText){
@@ -666,6 +670,25 @@ let app = new Vue({
       } else {
         this.mlalgorithm.enabled = true;
       }
+    },
+    exportWorkspace(){
+      var xml = Blockly.Xml.workspaceToDom(this.Workspace);
+      var xml_text = Blockly.Xml.domToPrettyText(xml);//domToText(xml);
+      this.forceFileDownload(xml_text, "workspace.xml");
+    },
+    importWorkspace(){
+
+      var fileToLoad = document.getElementById("fileToLoad").files[0];
+
+      var fileReader = new FileReader();
+      fileReader.onload = (fileLoadedEvent) => {
+          var textFromFileLoaded = fileLoadedEvent.target.result;
+          //this.importWorkspaceString = textFromFileLoaded;
+          this.xmlToWorkspace(textFromFileLoaded);
+      };
+
+      fileReader.readAsText(fileToLoad, "UTF-8");
+
     },
 
     generateConfig() {
@@ -900,6 +923,13 @@ let app = new Vue({
           this.jobError = `Error getting job results: ${e.toString()}`;
         });
     },
+    xmlToWorkspace(str){
+      var xml = Blockly.Xml.textToDom(str);
+      if(str.indexOf('type="start"')!== -1){
+        this.Workspace.getBlocksByType("start")[0].dispose(true);
+      }
+      Blockly.Xml.domToWorkspace(xml, this.Workspace);
+    },
     exampleConfig() {
       this.prefixes = [
         {
@@ -920,26 +950,64 @@ let app = new Vue({
         },
       ];
       this.source = {
-        id: 'linkedgeodata',
+        id: 'sourceId',
         endpoint: 'http://linkedgeodata.org/sparql',
-        var: '?x',
+        var: '?s',
         pagesize: 2000,
-        restriction: '?x a lgdo:RelayBox',
+        restriction: '?s a lgdo:RelayBox',
         type: '',
         properties: ['geom:geometry/geos:asWKT RENAME polygon'],
         optionalProperties: ['rdfs:label'],
+        classes: ['http://linkedgeodata.org/ontology/RelayBox'],
+        propertiesForChoice: [],
       };
       this.target = {
-        id: 'linkedgeodata',
+        id: 'targetId',
         endpoint: 'http://linkedgeodata.org/sparql',
-        var: '?y',
+        var: '?t',
         pagesize: 2000,
-        restriction: '?y a lgdo:RelayBox',
+        restriction: '?t a lgdo:RelayBox',
         type: '',
         properties: ['geom:geometry/geos:asWKT RENAME polygon'],
         optionalProperties: ['rdfs:label'],
+        classes: ['http://linkedgeodata.org/ontology/RelayBox'],
+        propertiesForChoice: [],
       };
-      this.metrics = ['geo_hausdorff(x.polygon, y.polygon)'];
+      this.importWorkspaceString = `
+      <xml xmlns="http://www.w3.org/1999/xhtml">
+        <block type="start" id="]~iOOuxgG1il)Qn#!5@R" deletable="false" x="0" y="0">
+          <value name="NAME">
+            <block type="measure" id="KV+e%A!n/j5k2T@D@*GH">
+              <field name="measureList">Geo_Hausdorff</field>
+              <field name="enable_threshold">FALSE</field>
+              <field name="threshold">0.5</field>
+              <value name="sourceProperty">
+                <block type="renamepreprocessingfunction" id="$J8bghZmrI;ETkue6mwG">
+                  <field name="RENAME">polygon</field>
+                  <value name="RENAME">
+                    <block type="sourceproperty" id="sp">
+                      <field name="propTitle">geom:geometry/geos:asWKT</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <value name="targetProperty">
+                <block type="renamepreprocessingfunction" id="rpf">
+                  <field name="RENAME">polygon</field>
+                  <value name="RENAME">
+                    <block type="targetproperty" id="tg">
+                      <field name="propTitle">geom:geometry/geos:asWKT</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </xml>
+      `;
+      this.xmlToWorkspace(this.importWorkspaceString);
+      this.metrics = ['geo_hausdorff(s.polygon, t.polygon)'];
       this.acceptance = {
         threshold: 0.9,
         file: 'lgd_relaybox_verynear.nt',

@@ -223,19 +223,33 @@
 
           <md-tabs @change="manualMetricClicked">
             <md-tab id="manualMetric" md-label="Manual metric">
+
+              <md-layout>
+                <md-layout>
+                  <md-button class="md-raised md-flex" v-on:click="exportWorkspace()">Export workspace to xml</md-button>
+                </md-layout>
+
+                <md-layout>
+                  <md-input-container>
+                    <label>Select the file for importing to the workspace</label>
+                    <md-file v-model="fileWorkspaceForInput" id="fileToLoad" v-on:selected="importWorkspace()"></md-file>
+                  </md-input-container>
+                </md-layout>
+              </md-layout>
+
               <datacanvas-component v-bind:source="source" v-bind:target="target" title="Data target"></datacanvas-component>
               <!-- metrics UI -->
               <metrics-component
                 v-bind:metrics="metrics"
               ></metrics-component>
+
+
             </md-tab>
             <md-tab id="machineLearning" md-label="Machine learning">
               <!-- machine learning UI -->
               <mlalgorithm-component v-bind:measures="measures" v-bind:data="mlalgorithm"></mlalgorithm-component>
             </md-tab>
-          </md-tabs>
-
-
+          </md-tabs>          
 
           <!-- acceptance UI -->
           <div class="row">
