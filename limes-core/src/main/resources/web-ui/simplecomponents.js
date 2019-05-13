@@ -1,7 +1,7 @@
 // Define a new component for data sources
 Vue.component('datasource-component', {
   template: '#datasourceComponent',
-  props: ['title', 'source', 'advancedOptionsShow', 'endpointandclasses'],
+  props: ['title', 'source', 'advancedOptionsShow', 'endpointandclasses','exampleConfigEnable'],
   data() {
     return {
       focused: false,
@@ -71,7 +71,7 @@ Vue.component('datasource-component', {
       this.classesShown = false;
     },
     selectOption(option){
-
+      this.exampleConfigEnable = false;
       this.source.endpoint = option;
       this.classes.splice(0);
       this.source.propertiesForChoice.splice(0);
@@ -85,6 +85,7 @@ Vue.component('datasource-component', {
       changeRestrictions(this, option);
     },
     enterEndpointClicked(){
+      this.exampleConfigEnable = false;
       this.onBlur();
       this.classes.splice(0);
       this.source.propertiesForChoice.splice(0);
@@ -111,13 +112,13 @@ Vue.component('datasource-component', {
          this.afterFilteredOptions = this.endpoints.filter(i => {
           return i.toLowerCase().includes(this.source.endpoint.toLowerCase())
         });
-        if(this.classVar === ''){
+        if(this.classVar === '' && this.exampleConfigEnable){
           this.classVar = this.endpointandclasses.classes;
           fetchProperties(this, this.source.endpoint, this.classVar);
         }  
       },
       'classVar': function() {
-         this.afterFilteredClasses = this.classes.filter(i => {
+        this.afterFilteredClasses = this.classes.filter(i => {
           return i.toLowerCase().includes(this.classVar.toLowerCase())
         })
       },

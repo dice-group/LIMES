@@ -4,7 +4,7 @@ window.RESULT_FILES = window.LIMES_SERVER_URL+"/results/";
 window.RESULT_FILE = window.LIMES_SERVER_URL+"/result/";
 window.JOB_LOGS = window.LIMES_SERVER_URL+"/logs/";
 window.JOB_STATUS = window.LIMES_SERVER_URL+"/status/";
-//window.SPARQL_ENDPOINT = "/sparql/";
+// window.SPARQL_ENDPOINT = "/sparql/";
 // window.SPARQL_ENDPOINT = "http://localhost:8080/sparql/";
 // window.PREPROCESSING_LIST = "http://localhost:8080/list/preprocessings";
 // window.RESULT_FILES = "http://localhost:8080/results/";
@@ -161,6 +161,7 @@ let app = new Vue({
     availableFiles: [],
     notFoundKeyMessage: '',
     findStatusMessage: '',
+    exampleConfigEnable: false,
   },
   mounted() {
     const jobIdmatches = /\?jobId=(.+)/.exec(window.location.search);
@@ -937,6 +938,7 @@ let app = new Vue({
       Blockly.Xml.domToWorkspace(xml, this.Workspace);
     },
     exampleConfig() {
+      this.exampleConfigEnable = true;
       this.prefixes = [
         {
           namespace: 'http://geovocab.org/geometry#',

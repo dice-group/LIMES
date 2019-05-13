@@ -200,7 +200,8 @@
           <div class="row">
             <datasource-component class="twoColumns"
             v-bind:source="source"
-            v-bind:endpointandclasses="target" 
+            v-bind:endpointandclasses="target"  
+            v-bind:exampleConfigEnable="exampleConfigEnable"
             title="Data source" 
             v-bind:advancedOptionsShow="advancedOptionsShow"
             v-on:toggle-source-classes="source.classes = $event"
@@ -211,7 +212,8 @@
 
             <datasource-component class="twoColumns"
             v-bind:source="target"
-            v-bind:endpointandclasses="source" 
+            v-bind:endpointandclasses="source"
+            v-bind:exampleConfigEnable="exampleConfigEnable" 
             v-bind:advancedOptionsShow="advancedOptionsShow"
             v-on:toggle-source-classes="target.classes = $event" 
             v-on:toggle-restr-target="target.restriction = $event"
