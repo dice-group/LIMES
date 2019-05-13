@@ -1,10 +1,16 @@
-window.SPARQL_ENDPOINT = "/sparql/";
-window.SPARQL_ENDPOINT = "http://localhost:8080/sparql/";
-window.PREPROCESSING_LIST = "http://localhost:8080/list/preprocessings";
-window.RESULT_FILES = "http://localhost:8080/results/";
-window.RESULT_FILE = "http://localhost:8080/result/";
-window.JOB_LOGS = "http://localhost:8080/logs/";
-window.JOB_STATUS = "http://localhost:8080/status/";
+window.SPARQL_ENDPOINT = window.LIMES_SERVER_URL+"/sparql/";
+window.PREPROCESSING_LIST = window.LIMES_SERVER_URL+"/list/preprocessings";
+window.RESULT_FILES = window.LIMES_SERVER_URL+"/results/";
+window.RESULT_FILE = window.LIMES_SERVER_URL+"/result/";
+window.JOB_LOGS = window.LIMES_SERVER_URL+"/logs/";
+window.JOB_STATUS = window.LIMES_SERVER_URL+"/status/";
+//window.SPARQL_ENDPOINT = "/sparql/";
+// window.SPARQL_ENDPOINT = "http://localhost:8080/sparql/";
+// window.PREPROCESSING_LIST = "http://localhost:8080/list/preprocessings";
+// window.RESULT_FILES = "http://localhost:8080/results/";
+// window.RESULT_FILE = "http://localhost:8080/result/";
+// window.JOB_LOGS = "http://localhost:8080/logs/";
+// window.JOB_STATUS = "http://localhost:8080/status/";
 
 // apply vue-material stuff
 Vue.use(VueMaterial);
