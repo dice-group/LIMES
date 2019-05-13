@@ -1,4 +1,4 @@
-window.SPARQL_ENDPOINT = window.LIMES_SERVER_URL+"/sparql/";
+window.SPARQL_ENDPOINT = "/sparql/";
 window.PREPROCESSING_LIST = window.LIMES_SERVER_URL+"/list/preprocessings";
 window.RESULT_FILES = window.LIMES_SERVER_URL+"/results/";
 window.RESULT_FILE = window.LIMES_SERVER_URL+"/result/";
