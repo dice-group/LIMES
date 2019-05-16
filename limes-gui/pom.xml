@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.aksw.limes</groupId>
         <artifactId>limes-full</artifactId>
-        <version>1.5.8-SNAPSHOT</version>
+        <version>1.6.1-SNAPSHOT</version>
     </parent>
 
     <build>
@@ -39,8 +39,13 @@
         <dependency>
             <groupId>org.aksw.limes</groupId>
             <artifactId>limes-core</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
+            <version>1.6.1-SNAPSHOT</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <artifactId>ehcache</artifactId>
+            <groupId>net.sf.ehcache</groupId>
+            <version>2.10.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

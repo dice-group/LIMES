@@ -50,6 +50,14 @@ returns the status (a numerical code) for a given job in a JSON object.
   * **2 (Finished)** - the job is finished and its output files are ready for delivery
 * `logs/:id` **(GET)** ---
 returns the java logs for the given job. Useful for troubleshooting.
+* `list/measures` **(GET)** ---
+returns the list of available measures.
+* `list/operators` **(GET)** ---
+returns the list of available operators.
+* `list/preprocessings` **(GET)** ---
+returns the list of available preprocessings.
+* `sparql/:urlEncodedEndpointUrl` **(GET, POST, OPTIONS)** ---
+proxy for SPARQL queries. Useful in browser when SPARQL endpoints do not implement CORS headers.
 * `results/:id` **(GET)** ---
 returns a list of result files in a JSON object.
 * `result/:id/:filename`  **(GET)** ---
@@ -85,7 +93,7 @@ curl http://localhost:8080/status/7538819321022935531
 # Get result file list
 curl http://localhost:8080/results/7538819321022935531
 # returns:
-# {"availableFiles":["lgd_relaybox_near.nt","lgd_relaybox_verynear.nt"],"success":true}
+# {"availableOperators":["lgd_relaybox_near.nt","lgd_relaybox_verynear.nt"],"success":true}
 # Get result
 curl http://localhost:8080/result/7538819321022935531/lgd_relaybox_verynear.nt
 # returns:

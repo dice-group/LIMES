@@ -4,12 +4,19 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import eu.medsea.mimeutil.MimeType;
 import eu.medsea.mimeutil.MimeUtil;
+import org.aksw.limes.core.datastrutures.LogicOperator;
 import org.aksw.limes.core.io.config.Configuration;
 import org.aksw.limes.core.io.config.reader.AConfigurationReader;
 import org.aksw.limes.core.io.config.reader.xml.XMLConfigurationReader;
+import org.aksw.limes.core.io.preprocessing.APreprocessingFunction;
+import org.aksw.limes.core.io.preprocessing.PreprocessingFunctionFactory;
 import org.aksw.limes.core.io.serializer.ISerializer;
 import org.aksw.limes.core.io.serializer.SerializerFactory;
+import org.aksw.limes.core.measures.measure.MeasureType;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -18,10 +25,8 @@ import spark.Response;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -67,13 +72,19 @@ public class Server {
         }
         port(port);
         staticFiles.location("/web-ui");
-        staticFiles.expireTime(10);
+        staticFiles.expireTime(7200);
         enableCORS("*","GET, POST, OPTIONS","");
         post("/submit", this::handleSubmit);
         get("/status/:id", this::handleStatus);
         get("/logs/:id", this::handleLogs);
         get("/results/:id", this::handleResults);
         get("/result/:id/:file", this::handleResult);
+        get("/list/operators", this::handleOperators);
+        get("/list/measures", this::handleMeasures);
+        get("/list/preprocessings", this::handlePreprocessings);
+        get("/sparql/:endpoint", this::handleSparql);
+        post("/sparql/:endpoint", this::handleSparql);
+        options("/sparql/:endpoint", this::handleSparql);
         exception(Exception.class, (e, req, res) -> {
             logger.error("Error in processing request" + req.uri(), e);
             res.status(500);
@@ -89,7 +100,94 @@ public class Server {
         awaitInitialization();
     }
 
+    private Object handleSparql(Request req, Response res) throws IOException {
+        String endpointUrl = URLDecoder.decode(req.params("endpoint"), "UTF-8");
+        if (req.queryString() != null && !req.queryString().equals("null")) {
+            endpointUrl += "?" + req.queryString();
+        }
+        logger.info("endpointUrl: {}", endpointUrl);
+        org.apache.http.client.fluent.Request request;
+        switch (req.requestMethod()) {
+            case "POST":
+                request = org.apache.http.client.fluent.Request.Post(endpointUrl);
+                request.bodyByteArray(req.bodyAsBytes());
+                break;
+            case "OPTIONS":
+                request = org.apache.http.client.fluent.Request.Options(endpointUrl);
+                break;
+            case "GET":
+            default:
+                request = org.apache.http.client.fluent.Request.Get(endpointUrl);
+                break;
+        }
+        for (String header : req.headers()) {
+            if (!header.equals("Content-Length") && !header.equals("Host"))
+                request.setHeader(header, req.headers(header));
+        }
+        HttpResponse response = request.execute().returnResponse();
+        for (Header header : response.getAllHeaders()) {
+            if (!header.getName().startsWith("Access-Control")) {
+                res.header(header.getName(), header.getValue());
+            }
+        }
+        res.status(response.getStatusLine().getStatusCode());
+        if (!req.requestMethod().equals("OPTIONS")) {
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                entity.writeTo(baos);
+                byte[] bytes = baos.toByteArray();
+                res.raw().getOutputStream().write(bytes);
+                res.raw().getOutputStream().flush();
+                res.raw().getOutputStream().close();
+            }
+        }
+        return res.raw();
+    }
+
     private Server(){
+    }
+
+    private Object handleOperators(Request req, Response res) {
+        OperatorsMessage result = new OperatorsMessage(
+                Arrays.stream(LogicOperator.values())
+                        .map(Enum::name)
+                        .collect(Collectors.toList())
+        );
+        res.status(200);
+        return GSON.toJson(result);
+    }
+
+    private Object handleMeasures(Request req, Response res) {
+        MeasuresMessage result = new MeasuresMessage(
+                Arrays.stream(MeasureType.values())
+                        .map(Enum::name)
+                        .map(String::toLowerCase)
+                        .collect(Collectors.toList())
+        );
+        res.status(200);
+        return GSON.toJson(result);
+    }
+
+    private Object handlePreprocessings(Request req, Response res) {
+        PreprocessingsMessage result = new PreprocessingsMessage(
+                PreprocessingFunctionFactory.listTypes().stream()
+                        .map(pp -> {
+                            APreprocessingFunction ppf =
+                                    PreprocessingFunctionFactory.getPreprocessingFunction(
+                                            PreprocessingFunctionFactory.getPreprocessingType(pp)
+                                    );
+                            return new PreprocessingsMessage.PPInfo(
+                                    pp,
+                                    ppf.minNumberOfArguments(),
+                                    ppf.maxNumberOfArguments(),
+                                    ppf.isComplex());
+                        })
+                        .filter(ppi -> !ppi.isComplex)
+                        .collect(Collectors.toList())
+        );
+        res.status(200);
+        return GSON.toJson(result);
     }
 
     private Object handleSubmit(Request req, Response res) throws Exception {
@@ -98,7 +196,7 @@ public class Server {
         String fileName = getFileName(configFile);
         String suffix = FilenameUtils.getExtension(fileName);
         final Path tempFile = Files.createTempFile(uploadDir.toPath(), CONFIG_FILE_PREFIX, "." + (
-                        suffix.equals("") ? CONFIG_FILE_SUFFIX : suffix));
+                suffix.equals("") ? CONFIG_FILE_SUFFIX : suffix));
         try (InputStream is = configFile.getInputStream()) {
             Files.copy(is, tempFile, StandardCopyOption.REPLACE_EXISTING);
         }
@@ -301,6 +399,48 @@ public class Server {
 
         private ResultsMessage(List<String> availableFiles) {
             this.availableFiles = availableFiles;
+        }
+    }
+
+    private static class MeasuresMessage extends ServerMessage {
+
+        private List<String> availableMeasures;
+
+        private MeasuresMessage(List<String> availableMeasures) {
+            this.availableMeasures = availableMeasures;
+        }
+    }
+
+    private static class OperatorsMessage extends ServerMessage {
+
+        private List<String> availableOperators;
+
+        private OperatorsMessage(List<String> availableOperators) {
+            this.availableOperators = availableOperators;
+        }
+    }
+
+    static class PreprocessingsMessage extends ServerMessage {
+
+        static class PPInfo {
+
+            private String name;
+            private int minArgs;
+            private int maxArgs;
+            private boolean isComplex;
+
+            PPInfo(String name, int minArgs, int maxArgs, boolean isComplex) {
+                this.name = name;
+                this.minArgs = minArgs;
+                this.maxArgs = maxArgs;
+                this.isComplex = isComplex;
+            }
+        }
+
+        private List<PPInfo> availablePreprocessings;
+
+        private PreprocessingsMessage(List<PPInfo> availablePreprocessings) {
+            this.availablePreprocessings = availablePreprocessings;
         }
     }
 

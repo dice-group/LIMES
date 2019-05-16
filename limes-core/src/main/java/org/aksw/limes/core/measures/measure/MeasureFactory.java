@@ -112,7 +112,7 @@ public class MeasureFactory {
     public static final String GEO_FRECHET = "geo_frechet";
     public static final String GEO_LINK = "geo_link";
     public static final String GEO_SUM_OF_MIN = "geo_sum_of_min";
-    public static final String GEO_NAIVE_SURJECTION = "geo_surjection";
+    public static final String GEO_SURJECTION = "geo_surjection";
     public static final String GEO_FAIR_SURJECTION = "geo_fairsurjection";
 
     // Temporal measures
@@ -265,7 +265,7 @@ public class MeasureFactory {
         if (measure.startsWith(GEO_SUM_OF_MIN)) {
             return MeasureType.GEO_SUM_OF_MIN;
         }
-        if (measure.startsWith(GEO_NAIVE_SURJECTION)) {
+        if (measure.startsWith(GEO_SURJECTION)) {
             return MeasureType.GEO_NAIVE_SURJECTION;
         }
         if (measure.startsWith(GEO_FAIR_SURJECTION)) {
