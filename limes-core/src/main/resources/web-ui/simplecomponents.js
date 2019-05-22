@@ -114,7 +114,11 @@ Vue.component('datasource-component', {
         });
         if(this.classVar === '' && this.exampleConfigEnable){
           this.classVar = this.endpointandclasses.classes;
-          fetchProperties(this, this.source.endpoint, this.classVar);
+          if(this.endpointandclasses.classes.length){
+            fetchProperties(this, this.source.endpoint, this.classVar);
+          } else {
+            fetchClasses(this,this.source.endpoint);
+          }
         }  
       },
       'classVar': function() {
@@ -139,6 +143,7 @@ Vue.component('datasource-component', {
 
 function fetchClasses(source, endpoint) {
     source.messageAboutClasses = "Loading ...";
+    source.messageAboutProps  = "";
     fetch(`${window.SPARQL_ENDPOINT}${encodeURIComponent(endpoint)}?query=${encodeURIComponent('select distinct ?class where {?x a ?class}')}`, {
       headers: {
         'Accept': 'application/json',
@@ -219,6 +224,9 @@ function changeRestrictions(context, option){
   let curRest = context.source.restriction;
   let rest;
   let restArr = curRest.split(" ");
+  if(restArr[1] !== 'rdf:type'){
+    restArr[1] = 'rdf:type';
+  }
   restArr[2] = prefixInfo.pair;
   rest = restArr.join(" ");
   if(context.source.id === "sourceId"){

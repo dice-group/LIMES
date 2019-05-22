@@ -4,6 +4,7 @@ window.RESULT_FILES = window.LIMES_SERVER_URL+"/results/";
 window.RESULT_FILE = window.LIMES_SERVER_URL+"/result/";
 window.JOB_LOGS = window.LIMES_SERVER_URL+"/logs/";
 window.JOB_STATUS = window.LIMES_SERVER_URL+"/status/";
+
 // window.SPARQL_ENDPOINT = "/sparql/";
 // window.SPARQL_ENDPOINT = "http://localhost:8080/sparql/";
 // window.PREPROCESSING_LIST = "http://localhost:8080/list/preprocessings";
@@ -22,8 +23,8 @@ const makeDatasource = (data, tag) => `<${tag.toUpperCase()}>
   <VAR>${data.var}</VAR>
   <PAGESIZE>${data.pagesize}</PAGESIZE>
   <RESTRICTION>${data.restriction}</RESTRICTION>
-${data.properties.map(p => `  <PROPERTY>${p}</PROPERTY>`).join('\n')}
-${data.optionalProperties.map(p => `  <OPTIONAL_PROPERTY>${p}</OPTIONAL_PROPERTY>`).join('\n')}
+${data.properties.length ? data.properties.map(p => `  <PROPERTY>${p}</PROPERTY>`).join('\n') : ''}
+${data.optionalProperties.length ? data.optionalProperties.map(p => `  <OPTIONAL_PROPERTY>${p}</OPTIONAL_PROPERTY>`).join('\n') : ''}
 ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 </${tag.toUpperCase()}>
 `;
@@ -93,6 +94,7 @@ let app = new Vue({
     Workspace: null,
     fileWorkspaceForInput: '',
     importWorkspaceString: '',
+    configurationFile: '',
     metrics: [''],
     //selectedMeasureOption: '',
     measureOptions: measureOptionsArray,
@@ -171,9 +173,11 @@ let app = new Vue({
       this.jobRunning = true;
       setTimeout(() => this.$refs.jobDialog.open(), 10);
       setTimeout(() => this.getStatus(), 1000);
+
     }
 
     window.onload = () => {
+      //this.convertMetricToBlocklyXML();
           // var this.Workspace = Blockly.inject('blocklyDiv',
           //   {toolbox: document.getElementById('toolbox')});
 
@@ -697,6 +701,206 @@ let app = new Vue({
       fileReader.readAsText(fileToLoad, "UTF-8");
 
     },
+    importConfigurationFile(){
+      var fileToLoad = document.getElementById("fileToLoad0").files[0];
+
+      var fileReader = new FileReader();
+      fileReader.onload = (fileLoadedEvent) => {
+          var textFromFileLoaded = fileLoadedEvent.target.result;
+          this.xmlToHml(textFromFileLoaded);
+      };
+
+      fileReader.readAsText(fileToLoad, "UTF-8");
+    },
+    xmlToHml(xmlStr){
+      let parser=new DOMParser();
+      let xmlDoc=parser.parseFromString(xmlStr,"text/xml");
+      this.exampleConfigEnable = true;
+      for (let i of xmlDoc.children[0].children) {
+        switch(i.tagName){
+          case "PREFIX":{
+            this.addPrefix({namespace:i.firstElementChild.innerHTML,label:i.lastElementChild.innerHTML});
+            break;
+          }
+          case "SOURCE":{
+            this.source = {
+              id: i.children[0].innerHTML,
+              endpoint: i.children[1].innerHTML,
+              var: i.children[2].innerHTML,
+              pagesize: i.children[3].innerHTML,
+              restriction: i.children[4].innerHTML,
+              type: i.children[6].innerHTML,
+              properties: [i.children[5].innerHTML],
+              optionalProperties: [],
+              classes: [],
+              propertiesForChoice: [],
+            };
+            break;
+          }
+          case "TARGET":{
+            this.target = {
+              id: i.children[0].innerHTML,
+              endpoint: i.children[1].innerHTML,
+              var: i.children[2].innerHTML,
+              pagesize: i.children[3].innerHTML,
+              restriction: i.children[4].innerHTML,
+              type: i.children[6].innerHTML,
+              properties: [i.children[5].innerHTML],
+              optionalProperties: [],
+              classes: [],
+              propertiesForChoice: [],
+            };
+            break;
+          }
+          case "METRIC":{
+            //this.metrics.splice(0);
+            //this.metrics.push(i.innerHTML.trim());
+            this.convertMetricToBlocklyXML(i.innerHTML.trim());
+            break;
+          }
+          case "ACCEPTANCE":{
+            this.acceptance = {
+              id: 'acceptance',
+              threshold: i.children[0].innerHTML,
+              file: i.children[1].innerHTML,
+              relation: i.children[2].innerHTML,
+            };
+            break;
+          }
+          case "REVIEW":{
+            this.review = {
+              id: 'review',
+              threshold: i.children[0].innerHTML,
+              file: i.children[1].innerHTML,
+              relation: i.children[2].innerHTML,
+            };
+            break;
+          }
+          case "EXECUTION":{
+            this.execution = {
+              rewriter: i.children[0].innerHTML,
+              planner: i.children[1].innerHTML,
+              engine: i.children[2].innerHTML,
+            };
+            break;
+          }
+          case "OUTPUT":{
+            this.output = {type: i.innerHTML};
+            break;
+          }
+          defailt: {
+            break;
+          }
+        }
+      }   
+      
+    },
+    generate_random_string(){
+      let string_length = 10;
+      let random_string = '';
+      let random_ascii;
+      for(let i = 0; i < string_length; i++) {
+          random_ascii = Math.floor((Math.random() * 25) + 97);
+          random_string += String.fromCharCode(random_ascii)
+      }
+      return random_string;
+    },
+    convertMetricToBlocklyXML(metric){
+      //cosine(s.rdfs:subClassOf,t.rdfs:range)
+      //let metric = "cosine(s.rdfs:subClassOf,t.rdfs:range)";
+      let operators = ['and','or','xor','nand'];
+      let hasOperator = operators.filter( i => metric.indexOf(i) !== -1);
+      let hasMeasure = measures.filter( i => metric.indexOf(i.toLowerCase()) !== -1);
+
+      let sourceBegin = metric.indexOf("s.");
+      let sourceEnd = metric.indexOf(",t");
+      let source = metric.substring(sourceBegin+2,sourceEnd);
+
+      let targetBegin = metric.indexOf("t.");
+      let targetEnd = metric.indexOf(")");
+      let target = metric.substring(targetBegin+2,targetEnd);
+
+      // console.log(hasOperator);
+      // console.log(hasMeasure);
+      // console.log(metric);
+
+      var doc = document.implementation.createDocument("http://www.w3.org/1999/xhtml", "", null);
+      var xmlElem = doc.createElement("xml");
+      xmlElem.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+
+      var startBlock = doc.createElement("block");
+      startBlock.setAttribute("type", "start");
+      startBlock.setAttribute("id", this.generate_random_string());
+      startBlock.setAttribute("deletable", "false");
+      startBlock.setAttribute("x", "0");
+      startBlock.setAttribute("y", "0");
+
+      var valueStart = doc.createElement("value");
+      valueStart.setAttribute("name", "NAME");
+
+      var measureBlock = doc.createElement("block");
+      measureBlock.setAttribute("type", "measure");
+      measureBlock.setAttribute("id", this.generate_random_string());
+
+      var fieldMeasureList = doc.createElement("field");
+      fieldMeasureList.setAttribute("name", "measureList");
+      fieldMeasureList.innerHTML= hasMeasure[0];
+
+      var fieldEnabledTh = doc.createElement("field");
+      fieldEnabledTh.setAttribute("name", "enable_threshold");
+      fieldEnabledTh.innerHTML = "FALSE";
+
+      var fieldThreshold = doc.createElement("field");
+      fieldThreshold.setAttribute("name", "threshold");
+      fieldThreshold.innerHTML = "0.5";
+
+      //src
+
+      var valueSrcProp = doc.createElement("value");
+      valueSrcProp.setAttribute("name", "sourceProperty");
+
+      var srcProp = doc.createElement("block");
+      srcProp.setAttribute("type", "sourceproperty");
+      srcProp.setAttribute("id", this.generate_random_string());
+
+      var fieldSrcProp = doc.createElement("field");
+      fieldSrcProp.setAttribute("name", "propTitle");
+      fieldSrcProp.innerHTML=source;
+
+      //tgt
+
+      var valueTgtProp = doc.createElement("value");
+      valueTgtProp.setAttribute("name", "targetProperty");
+
+      var tgtProp = doc.createElement("block");
+      tgtProp.setAttribute("type", "targetproperty");
+      tgtProp.setAttribute("id", this.generate_random_string());
+
+      var fieldTgtProp = doc.createElement("field");
+      fieldTgtProp.setAttribute("name", "propTitle");
+      fieldTgtProp.innerHTML=target;
+     
+      xmlElem.appendChild(startBlock);
+      startBlock.appendChild(valueStart);
+      valueStart.appendChild(measureBlock);
+
+      measureBlock.appendChild(fieldMeasureList);
+      measureBlock.appendChild(fieldEnabledTh);
+      measureBlock.appendChild(fieldThreshold);
+      measureBlock.appendChild(valueSrcProp);
+      measureBlock.appendChild(valueTgtProp);
+
+      valueSrcProp.appendChild(srcProp);
+      srcProp.appendChild(fieldSrcProp);
+
+      valueTgtProp.appendChild(tgtProp);
+      tgtProp.appendChild(fieldTgtProp);
+
+      doc.appendChild(xmlElem);
+      //console.log((new XMLSerializer()).serializeToString(doc));
+      this.xmlToWorkspace((new XMLSerializer()).serializeToString(doc));
+
+    },
 
     generateConfig() {
       const configHeader = `<?xml version="1.0" encoding="UTF-8"?>
@@ -1017,11 +1221,13 @@ let app = new Vue({
       this.xmlToWorkspace(this.importWorkspaceString);
       this.metrics = ['geo_hausdorff(s.polygon, t.polygon)'];
       this.acceptance = {
+        id: 'acceptance',
         threshold: 0.9,
         file: 'lgd_relaybox_verynear.nt',
         relation: 'lgdo:near',
       };
       this.review = {
+        id: 'review',
         threshold: 0.5,
         file: 'lgd_relaybox_near.nt',
         relation: 'lgdo:near',
