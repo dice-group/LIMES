@@ -111,15 +111,17 @@
   <script type="text/x-template" id="mainApp">
     <div>
       <md-toolbar>
-        <h2 class="md-title" style="flex: 1">LIMES Web UI</h2>
-        <md-layout md-flex="20">
+        <h2 class="md-title" style="flex: 1" md-flex="60">LIMES Web UI</h2>
+        <md-layout md-flex="40">
+        <md-layout md-flex="40">
           <md-button v-on:click="exampleConfig()">Try example LGD config</md-button>
         </md-layout>  
-        <md-layout md-flex="20">
+        <md-layout>
           <md-input-container>
             <label>Select the configuration file</label>
             <md-file v-model="configurationFile" id="fileToLoad0" v-on:selected="importConfigurationFile()"></md-file>
           </md-input-container>
+        </md-layout>
         </md-layout>
       </md-toolbar>
 

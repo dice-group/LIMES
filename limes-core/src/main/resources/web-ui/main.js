@@ -176,7 +176,7 @@ let app = new Vue({
 
     }
 
-    window.onload = () => {
+    let blocklyInit = () => {
       //this.convertMetricToBlocklyXML();
           // var this.Workspace = Blockly.inject('blocklyDiv',
           //   {toolbox: document.getElementById('toolbox')});
@@ -463,6 +463,7 @@ let app = new Vue({
 
           
     };
+    setTimeout(blocklyInit, 500);
   },
   beforeMount() {
     let context;
@@ -805,23 +806,40 @@ let app = new Vue({
       }
       return random_string;
     },
+    getSrcAndTgtFromMetric(metric, lastBeginAndEnd){
+      console.log(lastBeginAndEnd);
+      let sourceBegin = metric.indexOf("s.",lastBeginAndEnd ? lastBeginAndEnd.sourceBegin+1 : 0);
+      let sourceEnd = metric.indexOf(",t",lastBeginAndEnd ? lastBeginAndEnd.sourceEnd+1 : 0);
+      let source = metric.substring(sourceBegin+2,sourceEnd);
+
+      let targetBegin = metric.indexOf("t.",lastBeginAndEnd ? lastBeginAndEnd.targetBegin+1 : 0);
+      let targetEnd = metric.indexOf(")",lastBeginAndEnd ? lastBeginAndEnd.targetEnd+1 : 0);
+      let target = metric.substring(targetBegin+2,targetEnd);
+      return {
+        src: source, 
+        tgt: target, 
+        lastBeginAndEnd: {
+          sourceBegin: sourceBegin,
+          sourceEnd: sourceEnd,
+          targetBegin: targetBegin,
+          targetEnd: targetEnd,
+        }
+      }
+    },
     convertMetricToBlocklyXML(metric){
       //cosine(s.rdfs:subClassOf,t.rdfs:range)
       //let metric = "cosine(s.rdfs:subClassOf,t.rdfs:range)";
       let operators = ['and','or','xor','nand'];
-      let hasOperator = operators.filter( i => metric.indexOf(i) !== -1);
+      let hasOperator = operators.filter( i => metric.toLowerCase().indexOf(i) !== -1);
       let hasMeasure = measures.filter( i => metric.indexOf(i.toLowerCase()) !== -1);
-
-      let sourceBegin = metric.indexOf("s.");
-      let sourceEnd = metric.indexOf(",t");
-      let source = metric.substring(sourceBegin+2,sourceEnd);
-
-      let targetBegin = metric.indexOf("t.");
-      let targetEnd = metric.indexOf(")");
-      let target = metric.substring(targetBegin+2,targetEnd);
-
-      // console.log(hasOperator);
-      // console.log(hasMeasure);
+      
+      let srcAndTgtFromMetric = this.getSrcAndTgtFromMetric(metric,null);
+      let source = srcAndTgtFromMetric.src;
+      let target = srcAndTgtFromMetric.tgt;
+      let source2 = this.getSrcAndTgtFromMetric(metric,srcAndTgtFromMetric.lastBeginAndEnd).src;
+      let target2 = this.getSrcAndTgtFromMetric(metric,srcAndTgtFromMetric.lastBeginAndEnd).tgt;
+       // console.log(hasOperator);
+       //console.log(hasMeasure);
       // console.log(metric);
 
       var doc = document.implementation.createDocument("http://www.w3.org/1999/xhtml", "", null);
@@ -838,6 +856,22 @@ let app = new Vue({
       var valueStart = doc.createElement("value");
       valueStart.setAttribute("name", "NAME");
 
+      //operator
+      var operatorBlock = doc.createElement("block");
+      operatorBlock.setAttribute("type", "operator");
+      operatorBlock.setAttribute("id", this.generate_random_string());
+
+      var fieldOperator = doc.createElement("field");
+      fieldOperator.setAttribute("name", "operators");
+      fieldOperator.innerHTML= hasOperator[0];
+
+      var valueOpM1 = doc.createElement("value");
+      valueOpM1.setAttribute("name", "rename");//?
+
+      var valueOpM2 = doc.createElement("value");
+      valueOpM2.setAttribute("name", "NAME");//?
+
+      //measure
       var measureBlock = doc.createElement("block");
       measureBlock.setAttribute("type", "measure");
       measureBlock.setAttribute("id", this.generate_random_string());
@@ -854,6 +888,23 @@ let app = new Vue({
       fieldThreshold.setAttribute("name", "threshold");
       fieldThreshold.innerHTML = "0.5";
 
+      //measure2
+      var measureBlock2 = doc.createElement("block");
+      measureBlock2.setAttribute("type", "measure");
+      measureBlock2.setAttribute("id", this.generate_random_string());
+
+      var fieldMeasureList2 = doc.createElement("field");
+      fieldMeasureList2.setAttribute("name", "measureList");
+      fieldMeasureList2.innerHTML= hasMeasure[1] || hasMeasure[0];
+
+      var fieldEnabledTh2 = doc.createElement("field");
+      fieldEnabledTh2.setAttribute("name", "enable_threshold");
+      fieldEnabledTh2.innerHTML = "FALSE";
+
+      var fieldThreshold2 = doc.createElement("field");
+      fieldThreshold2.setAttribute("name", "threshold");
+      fieldThreshold2.innerHTML = "0.5";
+
       //src
 
       var valueSrcProp = doc.createElement("value");
@@ -867,6 +918,23 @@ let app = new Vue({
       fieldSrcProp.setAttribute("name", "propTitle");
       fieldSrcProp.innerHTML=source;
 
+      //rename
+      // var renameSrc;
+      // var fieldRenameSrc;
+      // var valueRenameSrc;
+      // if(source === source.toUpperCase()){
+      //   renameSrc = doc.createElement("block");
+      //   renameSrc.setAttribute("type", "renamepreprocessingfunction");
+      //   renameSrc.setAttribute("id", this.generate_random_string());
+
+      //   fieldRenameSrc = doc.createElement("field");
+      //   fieldRenameSrc.setAttribute("name", "RENAME");
+      //   fieldRenameSrc.innerHTML=source;
+
+      //   valueRenameSrc = doc.createElement("value");
+      //   valueRenameSrc.setAttribute("name", "RENAME");
+      // }
+
       //tgt
 
       var valueTgtProp = doc.createElement("value");
@@ -879,24 +947,98 @@ let app = new Vue({
       var fieldTgtProp = doc.createElement("field");
       fieldTgtProp.setAttribute("name", "propTitle");
       fieldTgtProp.innerHTML=target;
+
+      //src2
+
+      var valueSrcProp2 = doc.createElement("value");
+      valueSrcProp2.setAttribute("name", "sourceProperty");
+
+      var srcProp2 = doc.createElement("block");
+      srcProp2.setAttribute("type", "sourceproperty");
+      srcProp2.setAttribute("id", this.generate_random_string());
+
+      var fieldSrcProp2 = doc.createElement("field");
+      fieldSrcProp2.setAttribute("name", "propTitle");
+      fieldSrcProp2.innerHTML=source2;
+
+      //tgt2
+
+      var valueTgtProp2 = doc.createElement("value");
+      valueTgtProp2.setAttribute("name", "targetProperty");
+
+      var tgtProp2 = doc.createElement("block");
+      tgtProp2.setAttribute("type", "targetproperty");
+      tgtProp2.setAttribute("id", this.generate_random_string());
+
+      var fieldTgtProp2 = doc.createElement("field");
+      fieldTgtProp2.setAttribute("name", "propTitle");
+      fieldTgtProp2.innerHTML=target2;
+
+      if(hasOperator.length === 0){
      
-      xmlElem.appendChild(startBlock);
-      startBlock.appendChild(valueStart);
-      valueStart.appendChild(measureBlock);
+        xmlElem.appendChild(startBlock);
+        startBlock.appendChild(valueStart);
+        valueStart.appendChild(measureBlock);
 
-      measureBlock.appendChild(fieldMeasureList);
-      measureBlock.appendChild(fieldEnabledTh);
-      measureBlock.appendChild(fieldThreshold);
-      measureBlock.appendChild(valueSrcProp);
-      measureBlock.appendChild(valueTgtProp);
+        measureBlock.appendChild(fieldMeasureList);
+        measureBlock.appendChild(fieldEnabledTh);
+        measureBlock.appendChild(fieldThreshold);
+        measureBlock.appendChild(valueSrcProp);
+        measureBlock.appendChild(valueTgtProp);
 
-      valueSrcProp.appendChild(srcProp);
-      srcProp.appendChild(fieldSrcProp);
+        // if(source === source.toUpperCase()){//rename
+        //   valueSrcProp.appendChild(renameSrc);
+        //   renameSrc.appendChild(fieldRenameSrc);
+        //   renameSrc.appendChild(valueRenameSrc);
+        //   valueRenameSrc.appendChild(srcProp);
+        //   srcProp.appendChild(fieldSrcProp);
+        // } else {
+          valueSrcProp.appendChild(srcProp);
+          srcProp.appendChild(fieldSrcProp);
+        // }
 
-      valueTgtProp.appendChild(tgtProp);
-      tgtProp.appendChild(fieldTgtProp);
+        valueTgtProp.appendChild(tgtProp);
+        tgtProp.appendChild(fieldTgtProp); 
+        doc.appendChild(xmlElem);
+      } else {
+        xmlElem.appendChild(startBlock);
+        startBlock.appendChild(valueStart);
 
-      doc.appendChild(xmlElem);
+        valueStart.appendChild(operatorBlock);
+        operatorBlock.appendChild(fieldOperator);
+        operatorBlock.appendChild(valueOpM1);
+        operatorBlock.appendChild(valueOpM2);
+
+        valueOpM1.appendChild(measureBlock);
+        measureBlock.appendChild(fieldMeasureList);
+        measureBlock.appendChild(fieldEnabledTh);
+        measureBlock.appendChild(fieldThreshold);
+        measureBlock.appendChild(valueSrcProp);
+        measureBlock.appendChild(valueTgtProp);
+
+        valueSrcProp.appendChild(srcProp);
+        srcProp.appendChild(fieldSrcProp);
+
+        valueTgtProp.appendChild(tgtProp);
+        tgtProp.appendChild(fieldTgtProp);
+
+        valueOpM2.appendChild(measureBlock2);
+        measureBlock2.appendChild(fieldMeasureList2);
+        measureBlock2.appendChild(fieldEnabledTh2);
+        measureBlock2.appendChild(fieldThreshold2);
+        measureBlock2.appendChild(valueSrcProp2);
+        measureBlock2.appendChild(valueTgtProp2);
+
+        valueSrcProp2.appendChild(srcProp2);
+        srcProp2.appendChild(fieldSrcProp2);
+
+        valueTgtProp2.appendChild(tgtProp2);
+        tgtProp2.appendChild(fieldTgtProp2);
+
+        doc.appendChild(xmlElem);
+      }
+
+      
       //console.log((new XMLSerializer()).serializeToString(doc));
       this.xmlToWorkspace((new XMLSerializer()).serializeToString(doc));
 
