@@ -1172,23 +1172,23 @@ let app = new Vue({
     },
     saveAccepted(){
       if(this.availableFiles.length){
-        fetch(window.RESULT_FILE+this.executedKey+"/"+this.availableFiles[0])
-        .then(function(response) {
-          return response.text();
-         })
-        .then((content) => {
-          this.forceFileDownload(content,this.availableFiles[0]);
-        })
-      }
-    },
-    saveReviewed(){
-      if(this.availableFiles.length){
         fetch(window.RESULT_FILE+this.executedKey+"/"+this.availableFiles[1])
         .then(function(response) {
           return response.text();
          })
         .then((content) => {
           this.forceFileDownload(content,this.availableFiles[1]);
+        })
+      }
+    },
+    saveReviewed(){
+      if(this.availableFiles.length){
+        fetch(window.RESULT_FILE+this.executedKey+"/"+this.availableFiles[0])
+        .then(function(response) {
+          return response.text();
+         })
+        .then((content) => {
+          this.forceFileDownload(content,this.availableFiles[0]);
         })
       }
     },
