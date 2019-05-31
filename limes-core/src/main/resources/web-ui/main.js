@@ -78,6 +78,7 @@ let app = new Vue({
       properties: ['dc:title AS lowercase RENAME name'],
       optionalProperties: [],//['rdfs:label'],
       propertiesForChoice: ["a","b","c"],
+      allProperties: [],
     },
     target: {
       id: 'targetId',
@@ -90,6 +91,7 @@ let app = new Vue({
       properties: ['foaf:name AS lowercase RENAME name'],
       optionalProperties: [],//['rdf:type'],
       propertiesForChoice: ["a","b","c"],
+      allProperties: [],
     },
     Workspace: null,
     fileWorkspaceForInput: '',
@@ -164,6 +166,20 @@ let app = new Vue({
     notFoundKeyMessage: '',
     findStatusMessage: '',
     exampleConfigEnable: false,
+  },
+  watch: {
+      'source.properties': function() {
+        this.addOldAndNewPrefix(this.source.properties);
+      },
+      'target.properties': function() {
+        this.addOldAndNewPrefix(this.target.properties);
+      },
+      'source.optionalProperties': function() {
+        this.addOldAndNewPrefix(this.source.optionalProperties);
+      },
+      'target.optionalProperties': function() {
+        this.addOldAndNewPrefix(this.target.optionalProperties);
+      },
   },
   mounted() {
     const jobIdmatches = /\?jobId=(.+)/.exec(window.location.search);
@@ -426,24 +442,24 @@ let app = new Vue({
                     }
                   }
 
-                  if(this.exPrefixes.length){
-                    this.exPrefixes.forEach(pref => {
-                      this.prefixes.forEach(pr => {
-                        if(pref.label === pr.label){
-                          this.deletePrefix(pr);
-                        }
-                      })
-                    }) 
-                  }
+                  // if(this.exPrefixes.length){
+                  //   this.exPrefixes.forEach(pref => {
+                  //     this.prefixes.forEach(pr => {
+                  //       if(pref.label === pr.label){
+                  //         this.deletePrefix(pr);
+                  //       }
+                  //     })
+                  //   }) 
+                  // }
 
+                  // this.exPrefixes.splice(0);
+                  this.deleteOldPrefixes();
 
-                  this.exPrefixes.splice(0);
+                  // this.addOldAndNewPrefix(this.source.properties);
+                  // this.addOldAndNewPrefix(this.target.properties);
 
-                  this.addOldAndNewPrefix(this.source.properties);
-                  this.addOldAndNewPrefix(this.target.properties);
-
-                  this.addOldAndNewPrefix(this.source.optionalProperties);
-                  this.addOldAndNewPrefix(this.target.optionalProperties);
+                  // this.addOldAndNewPrefix(this.source.optionalProperties);
+                  // this.addOldAndNewPrefix(this.target.optionalProperties);
                 
                 })
               } else {
@@ -519,6 +535,19 @@ let app = new Vue({
         this.prefixes.push(prefix);
       }
 
+    },
+    deleteOldPrefixes(){
+      if(this.exPrefixes.length){
+        this.exPrefixes.forEach(pref => {
+          this.prefixes.forEach(pr => {
+            if(pref.label === pr.label){
+              this.deletePrefix(pr);
+            }
+          })
+        }) 
+      }
+
+      this.exPrefixes.splice(0);
     },
     addOldAndNewPrefix(props){
       props.forEach(pr => 
@@ -682,6 +711,11 @@ let app = new Vue({
       } else {
         this.mlalgorithm.enabled = true;
       }
+      this.source.properties.splice(0);
+      this.target.properties.splice(0);
+      this.source.optionalProperties.splice(0);
+      this.target.optionalProperties.splice(0);
+      this.deleteOldPrefixes();
     },
     exportWorkspace(){
       var xml = Blockly.Xml.workspaceToDom(this.Workspace);

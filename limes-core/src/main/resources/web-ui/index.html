@@ -218,6 +218,7 @@
             v-on:toggle-restr-src="source.restriction = $event"
             v-on:toggle-prefix-from-rest="addPrefix($event)"
             v-on:toggle-del-exprefix="deletePrefix($event)"
+            v-on:toggle-allProps="source.allProperties = $event"
             ></datasource-component>
 
             <datasource-component class="twoColumns"
@@ -229,6 +230,7 @@
             v-on:toggle-restr-target="target.restriction = $event"
             v-on:toggle-prefix-from-rest="addPrefix($event)"
             v-on:toggle-del-exprefix="deletePrefix($event)"
+            v-on:toggle-allProps="target.allProperties = $event"
             title="Data target"  
             ></datasource-component>
         </div>    
@@ -259,7 +261,12 @@
             </md-tab>
             <md-tab id="machineLearning" md-label="Machine learning">
               <!-- machine learning UI -->
-              <mlalgorithm-component v-bind:measures="measures" v-bind:data="mlalgorithm"></mlalgorithm-component>
+              <mlalgorithm-component 
+              v-bind:measures="measures" 
+              v-bind:data="mlalgorithm" 
+              v-bind:source="source" 
+              v-bind:target="target"
+              ></mlalgorithm-component>
             </md-tab>
           </md-tabs>          
 
@@ -534,6 +541,49 @@
         <!-- <md-input v-model="data.training" placeholder="Training"></md-input> -->
         <md-file v-model="data.training"></md-file>
       </md-input-container>
+
+
+        <md-layout>
+          <div style="padding-top: 20px;" v-if="!source.properties.length">No properties defined..</div>
+          <md-chip v-for="pr in source.properties" md-deletable v-on:delete="deleteChip(pr)" style="margin-left: 3px">
+            {{ pr }}
+          </md-chip>
+        </md-layout>
+
+
+          <md-layout md-flex="33">
+           <md-input-container>
+            <label>Source property</label>
+            <md-select v-model="sourcePropName" @selected="selectSProperty(sourcePropName)">
+              <md-option
+                v-for="option in source.allProperties" :value="option">
+                  {{ option }}
+              </md-option>
+            </md-select>  
+          </md-input-container>
+          </md-layout>
+
+        <md-layout>
+          <div style="padding-top: 20px;" v-if="!target.properties.length">No properties defined..</div>
+          <md-chip v-for="pr in target.properties" md-deletable v-on:delete="deleteChip(pr)" style="margin-left: 3px">
+            {{ pr }}
+          </md-chip>
+        </md-layout>
+
+          <md-layout md-flex="33">
+           <md-input-container>
+            <label>Target property</label>
+            <md-select v-model="targetPropName" @selected="selectTProperty(targetPropName)">
+              <md-option
+                v-for="option in target.allProperties" :value="option">
+                  {{ option }}
+              </md-option>
+            </md-select>  
+          </md-input-container>
+          </md-layout>
+   
+
+
 
       <md-layout v-if="data.enabled">
         <div style="padding-top: 20px;" v-if="!data.parameters.length">No parameters defined..</div>

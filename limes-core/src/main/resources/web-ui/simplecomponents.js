@@ -211,6 +211,7 @@ function fetchProperties(context, endpoint, curClass) {
           optionalTargetProperty.args0[0].options.push(i);
         });
       }
+      context.$emit('toggle-allProps', classes);
 
     })
     //.catch( alert );
