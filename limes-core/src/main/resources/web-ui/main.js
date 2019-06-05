@@ -64,6 +64,7 @@ let app = new Vue({
     results: [],
     // config
     prefixes: [{label: 'owl', namespace: 'http://www.w3.org/2002/07/owl#'}],
+    allPrefixes: [{label: 'owl', namespace: 'http://www.w3.org/2002/07/owl#'}],
     exPrefixes: [],
     filteredOptions: [],
     context: [],
@@ -179,6 +180,14 @@ let app = new Vue({
       },
       'target.optionalProperties': function() {
         this.addOldAndNewPrefix(this.target.optionalProperties);
+      },
+      'source.allProperties': function() {
+        this.deleteOldPrefixes();
+        this.source.properties.splice(0);
+      },
+      'target.allProperties': function() {
+        this.deleteOldPrefixes();
+        this.target.properties.splice(0);
       },
   },
   mounted() {
@@ -526,7 +535,13 @@ let app = new Vue({
   },
   methods: {
     deletePrefix(prefix) {
-      this.prefixes = this.prefixes.filter(p => p.label !== prefix.label && p.namespace !== prefix.namespace);
+      let amountAppearPrefixes = this.allPrefixes.filter(p => p.label === prefix.label).length;
+      if(amountAppearPrefixes > 1){
+        this.allPrefixes = this.allPrefixes.filter(p => p.label !== prefix.label && p.namespace !== prefix.namespace);
+      } else {
+        this.prefixes = this.prefixes.filter(p => p.label !== prefix.label && p.namespace !== prefix.namespace);
+        this.allPrefixes = this.allPrefixes.filter(p => p.label !== prefix.label && p.namespace !== prefix.namespace);
+      }
     },
     addPrefix(prefix) {
       //console.log(prefix);
@@ -534,7 +549,7 @@ let app = new Vue({
       if(!this.prefixes.some(i => i.label === prefix.label)){
         this.prefixes.push(prefix);
       }
-
+      this.allPrefixes.push(prefix);
     },
     deleteOldPrefixes(){
       if(this.exPrefixes.length){
@@ -555,9 +570,9 @@ let app = new Vue({
           if(pr){
             let label = pr.split(":")[0];
             let pref = {label: label, namespace: this.context[label]};
-            if(!this.prefixes.some(i => i.label === label)){
+            //if(!this.prefixes.some(i => i.label === label)){
               this.exPrefixes.push(pref);
-            }
+            //}
           
             this.addPrefix({label: label, namespace: this.context[label]});
           }
@@ -841,7 +856,6 @@ let app = new Vue({
       return random_string;
     },
     getSrcAndTgtFromMetric(metric, lastBeginAndEnd){
-      console.log(lastBeginAndEnd);
       let sourceBegin = metric.indexOf("s.",lastBeginAndEnd ? lastBeginAndEnd.sourceBegin+1 : 0);
       let sourceEnd = metric.indexOf(",t",lastBeginAndEnd ? lastBeginAndEnd.sourceEnd+1 : 0);
       let source = metric.substring(sourceBegin+2,sourceEnd);
