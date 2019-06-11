@@ -757,12 +757,12 @@ let app = new Vue({
       var fileReader = new FileReader();
       fileReader.onload = (fileLoadedEvent) => {
           var textFromFileLoaded = fileLoadedEvent.target.result;
-          this.xmlToHml(textFromFileLoaded);
+          this.xmlToHtml(textFromFileLoaded);
       };
 
       fileReader.readAsText(fileToLoad, "UTF-8");
     },
-    xmlToHml(xmlStr){
+    xmlToHtml(xmlStr){
       let parser=new DOMParser();
       let xmlDoc=parser.parseFromString(xmlStr,"text/xml");
       this.exampleConfigEnable = true;
@@ -779,12 +779,22 @@ let app = new Vue({
               var: i.children[2].innerHTML,
               pagesize: i.children[3].innerHTML,
               restriction: i.children[4].innerHTML,
-              type: i.children[6].innerHTML,
-              properties: [i.children[5].innerHTML],
+              type: '',
+              properties: [],
               optionalProperties: [],
               classes: [],
               propertiesForChoice: [],
             };
+            if(i.children[6].tagName === "PROPERTY"){
+              this.source.properties.splice(0);
+              this.source.properties.push(i.children[5].innerHTML);
+              this.source.properties.push(i.children[6].innerHTML);
+              this.source.type = i.children[7].innerHTML;
+            } else {
+              this.source.properties.splice(0);
+              this.source.properties.push(i.children[5].innerHTML);
+              this.source.type = i.children[6].innerHTML;
+            }
             break;
           }
           case "TARGET":{
@@ -794,12 +804,22 @@ let app = new Vue({
               var: i.children[2].innerHTML,
               pagesize: i.children[3].innerHTML,
               restriction: i.children[4].innerHTML,
-              type: i.children[6].innerHTML,
-              properties: [i.children[5].innerHTML],
+              type: '',
+              properties: [],
               optionalProperties: [],
               classes: [],
               propertiesForChoice: [],
             };
+            if(i.children[6].tagName === "PROPERTY"){
+              this.target.properties.splice(0);
+              this.target.properties.push(i.children[5].innerHTML);
+              this.target.properties.push(i.children[6].innerHTML);
+              this.target.type = i.children[7].innerHTML;
+            } else {
+              this.target.properties.splice(0);
+              this.target.properties.push(i.children[5].innerHTML);
+              this.target.type = i.children[6].innerHTML;
+            }
             break;
           }
           case "METRIC":{
@@ -872,6 +892,65 @@ let app = new Vue({
           targetBegin: targetBegin,
           targetEnd: targetEnd,
         }
+      }
+    },
+    creatingNewPreprocessingBlocklyXML(doc, functionName){
+      // preprocessings
+      var preprocessingsBlock = doc.createElement("block");
+      preprocessingsBlock.setAttribute("type", "preprocessingfunction");
+      preprocessingsBlock.setAttribute("id", this.generate_random_string());
+
+      var preprocessingsField = doc.createElement("field");
+      preprocessingsField.setAttribute("name", "function");
+      preprocessingsField.innerHTML=functionName;
+
+      var preprocessingsValue = doc.createElement("value");
+      preprocessingsValue.setAttribute("name", "NAME");
+
+      return {preprocessingsBlock: preprocessingsBlock,
+        preprocessingsField: preprocessingsField,
+        preprocessingsValue: preprocessingsValue};
+
+    },
+    addPreprocessingsWithProperty(doc, valueSrcProp, srcProp, fieldSrcProp, props){
+      if(props){
+        let prepArr = props.split('-&gt;');
+        if(prepArr.length > 1){
+          let lastPrepItems;
+          prepArr.forEach((prepf, index) => {
+            let prepItems = this.creatingNewPreprocessingBlocklyXML(doc,prepf);
+            if(index === 0){
+              valueSrcProp.appendChild(prepItems.preprocessingsBlock);
+              prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsField);
+              prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsValue);
+              lastPrepItems = prepItems;
+            } else {
+              if(index === prepArr.length-1){
+                lastPrepItems.preprocessingsValue.appendChild(prepItems.preprocessingsBlock);
+                prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsField);
+                prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsValue);
+                prepItems.preprocessingsValue.appendChild(srcProp);
+                srcProp.appendChild(fieldSrcProp);
+              } else {
+                lastPrepItems.preprocessingsValue.appendChild(prepItems.preprocessingsBlock);
+                prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsField);
+                prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsValue);
+                lastPrepItems = prepItems;
+              }
+            }
+          });
+        } else {
+          let prepItems = this.creatingNewPreprocessingBlocklyXML(doc,prepArr[0]);
+          valueSrcProp.appendChild(prepItems.preprocessingsBlock);
+          prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsField);
+          prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsValue);
+          prepItems.preprocessingsValue.appendChild(srcProp);
+          srcProp.appendChild(fieldSrcProp);
+        }
+
+      } else {
+        valueSrcProp.appendChild(srcProp);
+        srcProp.appendChild(fieldSrcProp);
       }
     },
     convertMetricToBlocklyXML(metric){
@@ -1041,12 +1120,15 @@ let app = new Vue({
         //   valueRenameSrc.appendChild(srcProp);
         //   srcProp.appendChild(fieldSrcProp);
         // } else {
-          valueSrcProp.appendChild(srcProp);
-          srcProp.appendChild(fieldSrcProp);
+
+          this.addPreprocessingsWithProperty(doc, valueSrcProp, srcProp, fieldSrcProp, this.source.properties[0].split('AS')[1]);
+
         // }
 
-        valueTgtProp.appendChild(tgtProp);
-        tgtProp.appendChild(fieldTgtProp); 
+        // valueTgtProp.appendChild(tgtProp);
+        // tgtProp.appendChild(fieldTgtProp); 
+          this.addPreprocessingsWithProperty(doc, valueTgtProp, tgtProp, fieldTgtProp, this.target.properties[0].split('AS')[1]);
+
         doc.appendChild(xmlElem);
       } else {
         xmlElem.appendChild(startBlock);
@@ -1064,11 +1146,15 @@ let app = new Vue({
         measureBlock.appendChild(valueSrcProp);
         measureBlock.appendChild(valueTgtProp);
 
-        valueSrcProp.appendChild(srcProp);
-        srcProp.appendChild(fieldSrcProp);
+        // valueSrcProp.appendChild(srcProp);
+        // srcProp.appendChild(fieldSrcProp);
 
-        valueTgtProp.appendChild(tgtProp);
-        tgtProp.appendChild(fieldTgtProp);
+        // valueTgtProp.appendChild(tgtProp);
+        // tgtProp.appendChild(fieldTgtProp);
+
+        this.addPreprocessingsWithProperty(doc, valueSrcProp, srcProp, fieldSrcProp, this.source.properties[0].split('AS')[1]);
+        this.addPreprocessingsWithProperty(doc, valueTgtProp, tgtProp, fieldTgtProp, this.target.properties[0].split('AS')[1]);
+
 
         valueOpM2.appendChild(measureBlock2);
         measureBlock2.appendChild(fieldMeasureList2);
@@ -1077,11 +1163,14 @@ let app = new Vue({
         measureBlock2.appendChild(valueSrcProp2);
         measureBlock2.appendChild(valueTgtProp2);
 
-        valueSrcProp2.appendChild(srcProp2);
-        srcProp2.appendChild(fieldSrcProp2);
+        // valueSrcProp2.appendChild(srcProp2);
+        // srcProp2.appendChild(fieldSrcProp2);
 
-        valueTgtProp2.appendChild(tgtProp2);
-        tgtProp2.appendChild(fieldTgtProp2);
+        // valueTgtProp2.appendChild(tgtProp2);
+        // tgtProp2.appendChild(fieldTgtProp2);
+        this.addPreprocessingsWithProperty(doc, valueSrcProp2, srcProp2, fieldSrcProp2, this.source.properties[1].split('AS')[1]);
+        this.addPreprocessingsWithProperty(doc, valueTgtProp2, tgtProp2, fieldTgtProp2, this.target.properties[1].split('AS')[1]);
+
 
         doc.appendChild(xmlElem);
       }
