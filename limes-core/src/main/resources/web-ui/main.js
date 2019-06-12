@@ -912,18 +912,53 @@ let app = new Vue({
         preprocessingsValue: preprocessingsValue};
 
     },
+    creatingNewRenameBlocklyXML(doc, renameText){
+        var renameBlock = doc.createElement("block");
+        renameBlock.setAttribute("type", "renamepreprocessingfunction");
+        renameBlock.setAttribute("id", this.generate_random_string());
+
+        var renameField = doc.createElement("field");
+        renameField.setAttribute("name", "RENAME");
+        renameField.innerHTML=renameText;
+
+        var renameValue = doc.createElement("value");
+        renameValue.setAttribute("name", "RENAME");
+        return {
+          renameBlock: renameBlock,
+          renameField: renameField,
+          renameValue: renameValue,
+        };
+    },
     addPreprocessingsWithProperty(doc, valueSrcProp, srcProp, fieldSrcProp, props){
-      if(props){
-        let prepArr = props.split('-&gt;');
+      let pr = props.split('AS')[1];
+      let renameExists = props.split('RENAME')[1];
+      if(pr){
+      let prepArr = [];
+      if(renameExists){
+        prepArr = pr.split('RENAME')[0].split('-&gt;');
+      }  else {
+        prepArr = pr.split('-&gt;');
+      }           
         if(prepArr.length > 1){
           let lastPrepItems;
           prepArr.forEach((prepf, index) => {
-            let prepItems = this.creatingNewPreprocessingBlocklyXML(doc,prepf);
+            let prepItems = this.creatingNewPreprocessingBlocklyXML(doc,prepf.trim());
             if(index === 0){
-              valueSrcProp.appendChild(prepItems.preprocessingsBlock);
-              prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsField);
-              prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsValue);
-              lastPrepItems = prepItems;
+              if(renameExists){
+                let renameItems = this.creatingNewRenameBlocklyXML(doc, renameExists.trim());
+                valueSrcProp.appendChild(renameItems.renameBlock);
+                renameItems.renameBlock.appendChild(renameItems.renameField);
+                renameItems.renameBlock.appendChild(renameItems.renameValue);
+                renameItems.renameValue.appendChild(prepItems.preprocessingsBlock);
+                prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsField);
+                prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsValue);
+                lastPrepItems = prepItems;
+              } else {
+                valueSrcProp.appendChild(prepItems.preprocessingsBlock);
+                prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsField);
+                prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsValue);
+                lastPrepItems = prepItems;
+              }
             } else {
               if(index === prepArr.length-1){
                 lastPrepItems.preprocessingsValue.appendChild(prepItems.preprocessingsBlock);
@@ -940,18 +975,45 @@ let app = new Vue({
             }
           });
         } else {
-          let prepItems = this.creatingNewPreprocessingBlocklyXML(doc,prepArr[0]);
-          valueSrcProp.appendChild(prepItems.preprocessingsBlock);
-          prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsField);
-          prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsValue);
-          prepItems.preprocessingsValue.appendChild(srcProp);
-          srcProp.appendChild(fieldSrcProp);
+          if(renameExists){
+            let prepItems = this.creatingNewRenameBlocklyXML(doc, renameExists.trim());
+            valueSrcProp.appendChild(prepItems.renameBlock);
+            prepItems.renameBlock.appendChild(prepItems.renameField);
+            prepItems.renameBlock.appendChild(prepItems.renameValue);
+            let preprocessingItems = this.creatingNewPreprocessingBlocklyXML(doc,prepArr[0].split("RENAME")[0]);
+            prepItems.renameValue.appendChild(preprocessingItems.preprocessingsBlock);
+            preprocessingItems.preprocessingsBlock.appendChild(preprocessingItems.preprocessingsField);
+            preprocessingItems.preprocessingsBlock.appendChild(preprocessingItems.preprocessingsValue);
+            preprocessingItems.preprocessingsValue.appendChild(srcProp);
+            srcProp.appendChild(fieldSrcProp);
+          } else {
+            let prepItems = this.creatingNewPreprocessingBlocklyXML(doc,prepArr[0]);
+            valueSrcProp.appendChild(prepItems.preprocessingsBlock);
+            prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsField);
+            prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsValue);
+            prepItems.preprocessingsValue.appendChild(srcProp);
+            srcProp.appendChild(fieldSrcProp);
+          }
         }
 
       } else {
-        valueSrcProp.appendChild(srcProp);
-        srcProp.appendChild(fieldSrcProp);
+        if(renameExists){
+          let prepItems = this.creatingNewRenameBlocklyXML(doc, renameExists.trim());
+          valueSrcProp.appendChild(prepItems.renameBlock);
+          prepItems.renameBlock.appendChild(prepItems.renameField);
+          prepItems.renameBlock.appendChild(prepItems.renameValue);
+          prepItems.renameValue.appendChild(srcProp);
+          srcProp.appendChild(fieldSrcProp);
+        } else {
+          valueSrcProp.appendChild(srcProp);
+          srcProp.appendChild(fieldSrcProp);
+        }
       }
+    },
+    changeSrcOrTgtWithRename(props){ 
+      let pr = props.split(" ");
+      let pair = pr.filter(i => i.indexOf(":") !== -1);
+      return pair;
     },
     convertMetricToBlocklyXML(metric){
       //cosine(s.rdfs:subClassOf,t.rdfs:range)
@@ -965,9 +1027,19 @@ let app = new Vue({
       let target = srcAndTgtFromMetric.tgt;
       let source2 = this.getSrcAndTgtFromMetric(metric,srcAndTgtFromMetric.lastBeginAndEnd).src;
       let target2 = this.getSrcAndTgtFromMetric(metric,srcAndTgtFromMetric.lastBeginAndEnd).tgt;
-       // console.log(hasOperator);
-       //console.log(hasMeasure);
-      // console.log(metric);
+      
+      if(this.source.properties[0].indexOf("RENAME") !== -1){
+        source = this.changeSrcOrTgtWithRename(this.source.properties[0]);
+      }
+      if(this.source.properties[0].indexOf("RENAME") !== -1){
+        target = this.changeSrcOrTgtWithRename(this.target.properties[0]);
+      }
+      if(this.source.properties[1] && this.source.properties[1].indexOf("RENAME") !== -1){
+        source2 = this.changeSrcOrTgtWithRename(this.source.properties[1]);
+      }
+      if(this.source.properties[1] && this.source.properties[1].indexOf("RENAME") !== -1){
+        target2 = this.changeSrcOrTgtWithRename(this.target.properties[1]); 
+      }
 
       var doc = document.implementation.createDocument("http://www.w3.org/1999/xhtml", "", null);
       var xmlElem = doc.createElement("xml");
@@ -1045,23 +1117,6 @@ let app = new Vue({
       fieldSrcProp.setAttribute("name", "propTitle");
       fieldSrcProp.innerHTML=source;
 
-      //rename
-      // var renameSrc;
-      // var fieldRenameSrc;
-      // var valueRenameSrc;
-      // if(source === source.toUpperCase()){
-      //   renameSrc = doc.createElement("block");
-      //   renameSrc.setAttribute("type", "renamepreprocessingfunction");
-      //   renameSrc.setAttribute("id", this.generate_random_string());
-
-      //   fieldRenameSrc = doc.createElement("field");
-      //   fieldRenameSrc.setAttribute("name", "RENAME");
-      //   fieldRenameSrc.innerHTML=source;
-
-      //   valueRenameSrc = doc.createElement("value");
-      //   valueRenameSrc.setAttribute("name", "RENAME");
-      // }
-
       //tgt
 
       var valueTgtProp = doc.createElement("value");
@@ -1113,21 +1168,8 @@ let app = new Vue({
         measureBlock.appendChild(valueSrcProp);
         measureBlock.appendChild(valueTgtProp);
 
-        // if(source === source.toUpperCase()){//rename
-        //   valueSrcProp.appendChild(renameSrc);
-        //   renameSrc.appendChild(fieldRenameSrc);
-        //   renameSrc.appendChild(valueRenameSrc);
-        //   valueRenameSrc.appendChild(srcProp);
-        //   srcProp.appendChild(fieldSrcProp);
-        // } else {
-
-          this.addPreprocessingsWithProperty(doc, valueSrcProp, srcProp, fieldSrcProp, this.source.properties[0].split('AS')[1]);
-
-        // }
-
-        // valueTgtProp.appendChild(tgtProp);
-        // tgtProp.appendChild(fieldTgtProp); 
-          this.addPreprocessingsWithProperty(doc, valueTgtProp, tgtProp, fieldTgtProp, this.target.properties[0].split('AS')[1]);
+        this.addPreprocessingsWithProperty(doc, valueSrcProp, srcProp, fieldSrcProp, this.source.properties[0]);
+        this.addPreprocessingsWithProperty(doc, valueTgtProp, tgtProp, fieldTgtProp, this.target.properties[0]);
 
         doc.appendChild(xmlElem);
       } else {
@@ -1146,15 +1188,8 @@ let app = new Vue({
         measureBlock.appendChild(valueSrcProp);
         measureBlock.appendChild(valueTgtProp);
 
-        // valueSrcProp.appendChild(srcProp);
-        // srcProp.appendChild(fieldSrcProp);
-
-        // valueTgtProp.appendChild(tgtProp);
-        // tgtProp.appendChild(fieldTgtProp);
-
-        this.addPreprocessingsWithProperty(doc, valueSrcProp, srcProp, fieldSrcProp, this.source.properties[0].split('AS')[1]);
-        this.addPreprocessingsWithProperty(doc, valueTgtProp, tgtProp, fieldTgtProp, this.target.properties[0].split('AS')[1]);
-
+        this.addPreprocessingsWithProperty(doc, valueSrcProp, srcProp, fieldSrcProp, this.source.properties[0]);
+        this.addPreprocessingsWithProperty(doc, valueTgtProp, tgtProp, fieldTgtProp, this.target.properties[0]);
 
         valueOpM2.appendChild(measureBlock2);
         measureBlock2.appendChild(fieldMeasureList2);
@@ -1163,14 +1198,8 @@ let app = new Vue({
         measureBlock2.appendChild(valueSrcProp2);
         measureBlock2.appendChild(valueTgtProp2);
 
-        // valueSrcProp2.appendChild(srcProp2);
-        // srcProp2.appendChild(fieldSrcProp2);
-
-        // valueTgtProp2.appendChild(tgtProp2);
-        // tgtProp2.appendChild(fieldTgtProp2);
-        this.addPreprocessingsWithProperty(doc, valueSrcProp2, srcProp2, fieldSrcProp2, this.source.properties[1].split('AS')[1]);
-        this.addPreprocessingsWithProperty(doc, valueTgtProp2, tgtProp2, fieldTgtProp2, this.target.properties[1].split('AS')[1]);
-
+        this.addPreprocessingsWithProperty(doc, valueSrcProp2, srcProp2, fieldSrcProp2, this.source.properties[1]);
+        this.addPreprocessingsWithProperty(doc, valueTgtProp2, tgtProp2, fieldTgtProp2, this.target.properties[1]);
 
         doc.appendChild(xmlElem);
       }
