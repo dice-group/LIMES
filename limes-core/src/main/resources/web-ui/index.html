@@ -92,6 +92,18 @@
     font-size: 16px;
     margin-left: 10px;
   }
+  .styleDetailsButton{
+    white-space: normal;
+    line-height: 22px;
+    text-transform: none;
+  }
+  .details-card-info{
+    margin: 15px;
+    font-size: 16px;
+  }
+  .details-card-name{
+    font-weight: bold;
+  }
 </style>
 
   <!-- LIMES server ref -->
@@ -112,17 +124,41 @@
     <div>
       <md-toolbar>
         <h2 class="md-title" style="flex: 1" md-flex="60">LIMES Web UI</h2>
-        <md-layout md-flex="40">
-        <md-layout md-flex="50">
-          <md-button v-on:click="exampleConfig()">Try example LGD config</md-button>
-        </md-layout>  
         <md-layout>
-          <md-input-container>
-            <label>Select the configuration file</label>
-            <md-file v-model="configurationFile" id="fileToLoad0" v-on:selected="importConfigurationFile()"></md-file>
-          </md-input-container>
+          <md-layout md-flex="35">
+            <md-button v-on:click="exampleConfig()">Try example LGD config</md-button>
+          </md-layout>
+
+          <md-layout md-flex="40">
+            <md-input-container style="margin-bottom: 13px;">
+              <label>Select the configuration file</label>
+              <md-file v-model="configurationFile" id="fileToLoad0" v-on:selected="importConfigurationFile()"></md-file>
+            </md-input-container>
+          </md-layout>
+
+          <md-layout md-flex="25">
+            <md-menu md-size="4" md-direction="top right" ref="menu">
+              <md-button class="md-raised md-primary styleDetailsButton" md-menu-trigger>More details about the project</md-button>
+
+              <md-menu-content>
+                <div class="details-card">
+
+                  <div class="details-card-info">
+                    <p class="details-card-name">More details about the project:<p>
+                    <ul> 
+                      <li><a href="https://dice.cs.uni-paderborn.de/projects/active-projects/limes/" target="_blank">Project web site</a></li>
+                      <li><a href="https://dice-group.github.io/LIMES/user_manual/" target="_blank">User manual</a></li>
+                      <li><a href="https://github.com/dice-group/LIMES" target="_blank">GitHub</a></li>
+                    </ul>
+
+                  </div>
+                </div>
+              </md-menu-content>
+            </md-menu>
+          </md-layout> 
+
         </md-layout>
-        </md-layout>
+
       </md-toolbar>
 
       <!-- config text dialog -->
