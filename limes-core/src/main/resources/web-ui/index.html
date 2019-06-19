@@ -104,6 +104,9 @@
   .details-card-name{
     font-weight: bold;
   }
+  .md-toolbar .md-input-container input{
+    height: 60px;
+  }
 </style>
 
   <!-- LIMES server ref -->
@@ -123,7 +126,7 @@
   <script type="text/x-template" id="mainApp">
     <div>
       <md-toolbar>
-        <h2 class="md-title" style="flex: 1" md-flex="60">LIMES Web UI</h2>
+        <md-layout><h2 class="md-title" style="flex: 1" md-flex="60">LIMES Web UI</h2></md-layout>
         <md-layout>
           <md-layout md-flex="35">
             <md-button v-on:click="exampleConfig()">Try example LGD config</md-button>
@@ -737,6 +740,9 @@
   <script src="prefixes.js"></script>
   <script src="mlalgorithm.js"></script>
   <script src="simplecomponents.js"></script>
+  <script src="properties.js"></script>
+  <script src="preprocessings.js"></script>
+  <script src="configurationFileParser.js"></script>
   <script src="main.js"></script>
 </body>
 

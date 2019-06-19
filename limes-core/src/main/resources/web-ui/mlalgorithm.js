@@ -87,13 +87,17 @@ Vue.component('mlalgorithm-component', {
       if(!this.source.properties.some(i => i === pr)){
         this.source.properties.push(pr);
       }
-      this.sourcePropName = null;
+      setTimeout(() => this.sourcePropName = null, 1);
     },
     selectTProperty(pr){
       if(!this.target.properties.some(i => i === pr)){
         this.target.properties.push(pr);
       }
-      this.targetPropName = null;
+      //setTimeout(() => this.targetPropName = null, 1);
+      
+      this.$nextTick(function () {
+        this.targetPropName = null;
+      })
     },
     isBlur(){
         let curValue = this.value;
