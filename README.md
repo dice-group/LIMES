@@ -36,6 +36,6 @@ Then, update the project on Eclipse.
 
 ## More details
 
-* [Project web site](http://cs.uni-paderborn.de/ds/research/research-projects/active-projects/limes/)
+* [Project web site](https://dice.cs.uni-paderborn.de/projects/active-projects/limes/)
 * [User manual](http://dice-group.github.io/LIMES/user_manual/)
 * [Developer manual](http://dice-group.github.io/LIMES/developer_manual/)
