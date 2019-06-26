@@ -1,7 +1,7 @@
 // Define a new component for prefixes
 Vue.component('mlalgorithm-component', {
   template: '#mlalgorithmComponent',
-  props: ['data','measures'],
+  props: ['data','measures','source','target'],
   data() {
     return {
       name: '',
@@ -15,6 +15,8 @@ Vue.component('mlalgorithm-component', {
       max: Number.MAX_VALUE,
       step: 1,
       correctValue: true,
+      sourcePropName: null,
+      targetPropName: null,
     };
   },
   methods: {
@@ -26,6 +28,9 @@ Vue.component('mlalgorithm-component', {
     },
     deleteParam(param) {
       this.data.parameters = this.data.parameters.filter(p => p.name !== param.name && p.value !== param.value);
+    },
+    deleteChip(pr) {
+      this.source.properties = this.source.properties.filter(p => p !== pr);
     },
     add() {
       // push new prefix
@@ -77,6 +82,22 @@ Vue.component('mlalgorithm-component', {
           this.measuresList = this.measures;//MLParams[param].default.split(",");
         }
       }
+    },
+    selectSProperty(pr){
+      if(!this.source.properties.some(i => i === pr)){
+        this.source.properties.push(pr);
+      }
+      setTimeout(() => this.sourcePropName = null, 1);
+    },
+    selectTProperty(pr){
+      if(!this.target.properties.some(i => i === pr)){
+        this.target.properties.push(pr);
+      }
+      //setTimeout(() => this.targetPropName = null, 1);
+      
+      this.$nextTick(function () {
+        this.targetPropName = null;
+      })
     },
     isBlur(){
         let curValue = this.value;

@@ -17,6 +17,7 @@
 	    * [Creating a New Configuration](user_manual/running_limes.md#how-to-create-a-new-configuration)
 	    * [Creating a New Metric](user_manual/running_limes.md#how-to-create-a-new-link-specification)
 	    * [Machine Learning with the GUI](user_manual/running_limes.md#machine-learning-in-the-gui)
+    * [Using the Web UI](user_manual/running_limes.md#web-ui)
 * [Writing Configuration Files](user_manual/configuration_file/index.md)
     * [Components of a Configuration File](user_manual/configuration_file/index.md#components-of-a-limes-xml-configuration-file)
         * [Metadata](user_manual/configuration_file/index.md#metadata)

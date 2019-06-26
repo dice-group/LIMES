@@ -61,7 +61,7 @@ proxy for SPARQL queries. Useful in browser when SPARQL endpoints do not impleme
 * `results/:id` **(GET)** ---
 returns a list of result files in a JSON object.
 * `result/:id/:filename`  **(GET)** ---
-returns the contents of a given result file for a given job id.
+returns the contents of a given result file for a given job id. 
   
   
 ### Example
@@ -270,3 +270,99 @@ Of course the more training data you provide the better the algorithm can learn.
 #### Unsupervised Learning
 This is the type that needs the least effort from the user. You just click on *Learn* and after the algorithm is finished, 
 the results will be presented.
+
+## Web UI
+
+LIMES Web UI is an additional tool to write configuration file in the XML using web interface and execute it using the LIMES server.
+LIMES Web UI consists of six main components: *prefixes*, *data source / target* , *manual metric*, *machine learning*, *acceptance/review conditions* and *output*.
+
+<img src="../images/full_limes_with_marks.png" width="800" alt ="Overview">
+
+### 1 - Prefixes
+
+The Prefixes component consists of two parts:
+* Currently added prefixes. They look like chips, containing the label of the prefix and a hover tooltip with the namespace.
+* Add new prefix (optional). In most cases, our interface is able to automatically find the common prefixes from [prefix.cc](https://prefix.cc/context). In case the user want to add a prefix manually, (s)he can type the prefix, choose the its respective URI  from the dropdown list (if any) or manually type it.  Then, the user click on *Add* and the prefix will be added as a new chip. Again, this process is necessary for common prefixes. 
+
+<img src="../images/prefixes_web_ui.png" width="800" alt ="Prefixes_web_ui">
+
+### 2 - Data source / target
+
+The Data source and data target consists of the two similar components, which include three input fields:
+* *Endpoint*: A dropdown list of available endpoints. Moreover, the user can try to search for the endpoint, typing it in the input field or write your own endpoint. After clicking on the endpoint from the list or writing it by hand and press the Enter, the user will get the list of restriction classes according to this endpoint.
+* *Restriction*: Contains of three parameters splitted by space (?s rdf:type some:Type). The third parameter will be changed automatically after changing the restriction class. 
+* *Restriction class*: A dropdown list of restriction classes according to the endpoint. You can start typing the name of the class and the list will be filtered automatically. After choosing the restriction class, you will get all the properties related to this class.
+
+<img src="../images/data_source_and_target_web_ui.png" width="800" alt ="Data_source_and_target_web_ui">
+
+### 3 - Manual metric and machine learning
+
+After the *data source and target* have chosen and you have got a message that properties have already received, you are now ready to build a metric. You can build a manual metric or use machine learning.   These options are interchangeable. Consider first the manual metric tab.
+
+#### Manual metric
+To build a metric you can drag and drop elements from the toolbox. 
+
+There are 8 blocks: 
+* *Source property*, 
+* *Target property*, 
+* *Optional source property*, 
+* *Optional target property*, 
+* *Measure*, 
+* *Operator*, 
+* *Preprocessing function*, 
+* *Preprocessing rename function*. 
+
+In the Workspace you can see the *Start* block, which cannot be removed. Building the metric exactly starts from connecting the *Measure* or *Operator* block to the *Start* block. Once you connect the *Measure* block, next step can be connecting the *Source property* and the *Target property*. 
+The *Measure* block consists of list of measures and checkbox for enable changing the *Threshold* value.
+  
+Optionally, you could preprocess your *Source* and *Target* properties using the *Preprocessing function*. For instance, to use *Preprocessing rename function* you should put the *Source property* or *Target property* into this block and then you can connect it to the *Measure*. 
+  
+An *Operator* block accepts two *Measure* blocks as inputs. i.e., two *Measure* blocks must be attached to its input ports.   
+The *Operator* block includes the list of operators.  
+  
+*Optional source property* and *Optional target property* can be connected just after connecting the *Source property* and the *Target property*.  
+
+In general, once you add *Source property*/*Target property*/*Optional source property*/*Optional target property* to the workspace, you can choose the property from the dropdown list. Prefixes of the properties will automatically added to the *Prefixes*.  
+  
+You can remove the block using the trash can or using right click on the block.  
+On the bottom after the Workspace you can see the formed *Metric*.  
+  
+At the top before the Workspace there are two options related to Workspace: 
+* *Export workspace to xml*: You can download an xml file of the current Workspace with connected blocks. 
+* *Select file for the importing to the workspace*: You can upload the xml file of the saved Workspace to change the current Workspace.
+  
+<img src="../images/manual_metric_web_ui.png" width="800" alt ="Manual_metric_web_ui">
+
+#### Machine learning
+
+The tab *Machine learning* consists of three parts:
+* *Name*:The machine learning (ML) algorithm name. The currently available ML algorithms include WOMBAT Simple, WOMBAT Complete and EAGLE
+* *Type*: The ML algorithm types, which include supervised batch, supervised active and unsupervised
+* *Parameters*: A list of parameters which can be added to the currently selected ML algorithm.
+
+If *Type* is supervised batch or supervised active, you will see the additional input, where you can upload the file with training data.
+
+<img src="../images/ml_web_ui.png" width="800" alt ="ML_web_ui">
+
+### 4 - Acceptance and review conditions
+
+In this component you can define the *Acceptance Threshold* and the *Review Threshold*. In addition, you can rename the names of files, which can be created after execution. Besides, you can change the *Relation*. Instead of prefix you can write the namespace and its respective URI will be automatically found by the interface, converted to a prefix (if it exists in prefix.cc, otherwise you have to manually add it).
+<img src="../images/acc_rev_web_ui.png" width="800" alt ="acc_rev_web_ui">
+
+### 5 - Output
+
+Here you can choose an output format, including turtle (TTL), n-triples (N3), tab separated values (TAB), comma separated values (CSV).
+
+### Display config and run
+There are three buttons at the bottom of the page: *Display config*, *Execute*, *Check the state of the previous run*.  
+* If you click on the *Display config*, you can look at formed xml config. Also, if you want you can save it.
+<img src="../images/config_xml_web_ui.png" width="500" alt ="config_xml_web_ui">  
+
+* The *Execute* button will immediately start the process of executing this xml config. You can have a look at the log messages by clicking on the link *Show log*.
+
+<img src="../images/job_status_web_ui.png" width="400" alt ="job_status_web_ui">  
+  
+* *Check the state of the previous run* button. The execution can take time. To look at the result later, you must copy the *execution key*.
+In order to get the result of the previous run, you should click on *Check the state of the previous run* button. Here you can paste the *execution key*, which you copied when you ran the execution. Then click on *Check* and you will get the result. If the run is finished without errors and result is not empty, then you can download *accepted links* and *reviewed links* files.  
+  
+<img src="../images/check_run_web_ui.png" width="400" alt ="check_run_web_ui"> 

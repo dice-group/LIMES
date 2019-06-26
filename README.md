@@ -1,7 +1,6 @@
 # LIMES - Link Discovery Framework for Metric Spaces.
 
 [![Build Status](https://travis-ci.org/dice-group/LIMES.svg?branch=master)](https://travis-ci.org/dice-group/LIMES)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f565ba159e0340ad9dd3e5de41b12ed9)](https://www.codacy.com/app/MSherif/LIMES?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dice-group/LIMES&amp;utm_campaign=Badge_Grade)
 
 ## Generating Jar File (Headless)
 installing use:
@@ -36,6 +35,6 @@ Then, update the project on Eclipse.
 
 ## More details
 
-* [Project web site](http://cs.uni-paderborn.de/ds/research/research-projects/active-projects/limes/)
+* [Project web site](https://dice.cs.uni-paderborn.de/projects/active-projects/limes/)
 * [User manual](http://dice-group.github.io/LIMES/user_manual/)
 * [Developer manual](http://dice-group.github.io/LIMES/developer_manual/)

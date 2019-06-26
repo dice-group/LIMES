@@ -92,6 +92,32 @@
     font-size: 16px;
     margin-left: 10px;
   }
+  .styleDetailsButton{
+    white-space: normal;
+    line-height: 22px;
+    text-transform: none;
+  }
+  .details-card-info{
+    margin: 15px;
+    font-size: 16px;
+  }
+  .details-card-name{
+    font-weight: bold;
+  }
+  .md-toolbar .md-input-container input{
+    height: 60px;
+  }
+  .md-theme-default.md-tabs > .md-tabs-navigation .md-tab-header.md-active, .md-theme-default.md-tabs > .md-tabs-navigation .md-tab-header > button:focus {
+    background-color: #fff;
+  }
+  .md-tab-header-container{
+    color: #000;
+  }
+  .md-tab-indicator{
+    background-color: #3f51b5 !important;
+    top: 0;
+  }
+
 </style>
 
   <!-- LIMES server ref -->
@@ -111,8 +137,52 @@
   <script type="text/x-template" id="mainApp">
     <div>
       <md-toolbar>
-        <h2 class="md-title" style="flex: 1">LIMES Web UI</h2>
-        <md-button v-on:click="exampleConfig()">Try example LGD config</md-button>
+        <md-layout><h2 class="md-title" style="flex: 1" md-flex="60">LIMES Web UI</h2></md-layout>
+        <md-layout>
+
+        <md-menu md-size="5" md-align-trigger>
+          <md-button md-menu-trigger style="margin-top: 18px;">Try examples</md-button>
+
+          <md-menu-content>
+            <md-menu-item v-on:click="exampleConfig()">Try example LGD config</md-menu-item>
+            <md-menu-item v-on:click="exampleFilmAndMovieConfig()">Try example Movie and Film config</md-menu-item>
+          </md-menu-content>
+        </md-menu>
+
+<!--           <md-layout md-flex="35">
+            <md-button v-on:click="exampleConfig()">Try example LGD config</md-button>
+          </md-layout> -->
+
+          <md-layout md-flex="40">
+            <md-input-container style="margin-bottom: 13px;">
+              <label>Select the configuration file</label>
+              <md-file v-model="configurationFile" id="fileToLoad0" v-on:selected="importConfigurationFile()"></md-file>
+            </md-input-container>
+          </md-layout>
+
+          <md-layout md-flex="25">
+            <md-menu md-size="4" md-direction="top right" ref="menu">
+              <md-button class="md-raised md-primary styleDetailsButton" md-menu-trigger>More details about the project</md-button>
+
+              <md-menu-content>
+                <div class="details-card">
+
+                  <div class="details-card-info">
+                    <p class="details-card-name">More details about the project:<p>
+                    <ul> 
+                      <li><a href="https://dice.cs.uni-paderborn.de/projects/active-projects/limes/" target="_blank">Project web site</a></li>
+                      <li><a href="https://dice-group.github.io/LIMES/user_manual/" target="_blank">User manual</a></li>
+                      <li><a href="https://github.com/dice-group/LIMES" target="_blank">GitHub</a></li>
+                    </ul>
+
+                  </div>
+                </div>
+              </md-menu-content>
+            </md-menu>
+          </md-layout> 
+
+        </md-layout>
+
       </md-toolbar>
 
       <!-- config text dialog -->
@@ -208,6 +278,7 @@
             v-on:toggle-restr-src="source.restriction = $event"
             v-on:toggle-prefix-from-rest="addPrefix($event)"
             v-on:toggle-del-exprefix="deletePrefix($event)"
+            v-on:toggle-allProps="source.allProperties = $event"
             ></datasource-component>
 
             <datasource-component class="twoColumns"
@@ -219,39 +290,47 @@
             v-on:toggle-restr-target="target.restriction = $event"
             v-on:toggle-prefix-from-rest="addPrefix($event)"
             v-on:toggle-del-exprefix="deletePrefix($event)"
+            v-on:toggle-allProps="target.allProperties = $event"
             title="Data target"  
             ></datasource-component>
         </div>    
 
+      <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px;">
           <md-tabs @change="manualMetricClicked">
             <md-tab id="manualMetric" md-label="Manual metric">
+                
+                <datacanvas-component v-bind:source="source" v-bind:target="target" title="Data target"></datacanvas-component>
+                <!-- metrics UI -->
+                <metrics-component
+                  v-bind:metrics="metrics"
+                ></metrics-component>
 
-              <md-layout>
                 <md-layout>
-                  <md-button class="md-raised md-flex" v-on:click="exportWorkspace()">Export workspace to xml</md-button>
-                </md-layout>
+                  <md-layout>
+                    <md-button class="md-raised md-flex" v-on:click="exportWorkspace()">Export workspace to xml</md-button>
+                  </md-layout>
 
-                <md-layout>
-                  <md-input-container>
-                    <label>Select the file for importing to the workspace</label>
-                    <md-file v-model="fileWorkspaceForInput" id="fileToLoad" v-on:selected="importWorkspace()"></md-file>
-                  </md-input-container>
+                  <md-layout>
+                    <md-input-container>
+                      <label>Select the file for importing to the workspace</label>
+                      <md-file v-model="fileWorkspaceForInput" id="fileToLoad" v-on:selected="importWorkspace()"></md-file>
+                    </md-input-container>
+                  </md-layout>
                 </md-layout>
-              </md-layout>
-
-              <datacanvas-component v-bind:source="source" v-bind:target="target" title="Data target"></datacanvas-component>
-              <!-- metrics UI -->
-              <metrics-component
-                v-bind:metrics="metrics"
-              ></metrics-component>
 
 
             </md-tab>
             <md-tab id="machineLearning" md-label="Machine learning">
               <!-- machine learning UI -->
-              <mlalgorithm-component v-bind:measures="measures" v-bind:data="mlalgorithm"></mlalgorithm-component>
+                <mlalgorithm-component 
+                v-bind:measures="measures" 
+                v-bind:data="mlalgorithm" 
+                v-bind:source="source" 
+                v-bind:target="target"
+                ></mlalgorithm-component>
             </md-tab>
-          </md-tabs>          
+          </md-tabs> 
+        </md-whiteframe>      
 
           <!-- acceptance UI -->
           <div class="row">
@@ -434,7 +513,7 @@
   </script>
 
   <script type="text/x-template" id="datacanvasComponent">
-    <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
+<!--     <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;"> -->
       <md-layout>
           <div id="blocklyArea" style="height: 500px; width: 100%;"></div>
           <div id="blocklyDiv" style="position: absolute"></div>
@@ -451,7 +530,7 @@
 
           </xml>
       </md-layout>
-    </md-whiteframe>
+    <!-- </md-whiteframe> -->
   </script>
 
   <!-- metrics component -->
@@ -524,6 +603,49 @@
         <!-- <md-input v-model="data.training" placeholder="Training"></md-input> -->
         <md-file v-model="data.training"></md-file>
       </md-input-container>
+
+
+        <md-layout>
+          <div style="padding-top: 20px;" v-if="!source.properties.length">No properties defined..</div>
+          <md-chip v-for="pr in source.properties" md-deletable v-on:delete="deleteChip(pr)" style="margin-left: 3px">
+            {{ pr }}
+          </md-chip>
+        </md-layout>
+
+
+          <md-layout md-flex="33">
+           <md-input-container>
+            <label>Source property</label>
+            <md-select v-model="sourcePropName" @selected="selectSProperty(sourcePropName)">
+              <md-option
+                v-for="option in source.allProperties" :value="option">
+                  {{ option }}
+              </md-option>
+            </md-select>  
+          </md-input-container>
+          </md-layout>
+
+        <md-layout>
+          <div style="padding-top: 20px;" v-if="!target.properties.length">No properties defined..</div>
+          <md-chip v-for="pr in target.properties" md-deletable v-on:delete="deleteChip(pr)" style="margin-left: 3px">
+            {{ pr }}
+          </md-chip>
+        </md-layout>
+
+          <md-layout md-flex="33">
+           <md-input-container>
+            <label>Target property</label>
+            <md-select v-model="targetPropName" @selected="selectTProperty(targetPropName)">
+              <md-option
+                v-for="option in target.allProperties" :value="option">
+                  {{ option }}
+              </md-option>
+            </md-select>  
+          </md-input-container>
+          </md-layout>
+   
+
+
 
       <md-layout v-if="data.enabled">
         <div style="padding-top: 20px;" v-if="!data.parameters.length">No parameters defined..</div>
@@ -641,6 +763,9 @@
   <script src="prefixes.js"></script>
   <script src="mlalgorithm.js"></script>
   <script src="simplecomponents.js"></script>
+  <script src="properties.js"></script>
+  <script src="preprocessings.js"></script>
+  <script src="configurationFileParser.js"></script>
   <script src="main.js"></script>
 </body>
 

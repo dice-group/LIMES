@@ -4,6 +4,7 @@ window.RESULT_FILES = window.LIMES_SERVER_URL+"/results/";
 window.RESULT_FILE = window.LIMES_SERVER_URL+"/result/";
 window.JOB_LOGS = window.LIMES_SERVER_URL+"/logs/";
 window.JOB_STATUS = window.LIMES_SERVER_URL+"/status/";
+
 // window.SPARQL_ENDPOINT = "/sparql/";
 // window.SPARQL_ENDPOINT = "http://localhost:8080/sparql/";
 // window.PREPROCESSING_LIST = "http://localhost:8080/list/preprocessings";
@@ -22,8 +23,8 @@ const makeDatasource = (data, tag) => `<${tag.toUpperCase()}>
   <VAR>${data.var}</VAR>
   <PAGESIZE>${data.pagesize}</PAGESIZE>
   <RESTRICTION>${data.restriction}</RESTRICTION>
-${data.properties.map(p => `  <PROPERTY>${p}</PROPERTY>`).join('\n')}
-${data.optionalProperties.map(p => `  <OPTIONAL_PROPERTY>${p}</OPTIONAL_PROPERTY>`).join('\n')}
+${data.properties.length ? data.properties.map(p => `  <PROPERTY>${p}</PROPERTY>`).join('\n') : ''}
+${data.optionalProperties.length ? data.optionalProperties.map(p => `  <OPTIONAL_PROPERTY>${p}</OPTIONAL_PROPERTY>`).join('\n') : ''}
 ${data.type && data.type.length ? `  <TYPE>${data.type}</TYPE>` : ''}
 </${tag.toUpperCase()}>
 `;
@@ -63,6 +64,7 @@ let app = new Vue({
     results: [],
     // config
     prefixes: [{label: 'owl', namespace: 'http://www.w3.org/2002/07/owl#'}],
+    allPrefixes: [{label: 'owl', namespace: 'http://www.w3.org/2002/07/owl#'}],
     exPrefixes: [],
     filteredOptions: [],
     context: [],
@@ -77,6 +79,7 @@ let app = new Vue({
       properties: ['dc:title AS lowercase RENAME name'],
       optionalProperties: [],//['rdfs:label'],
       propertiesForChoice: ["a","b","c"],
+      allProperties: [],
     },
     target: {
       id: 'targetId',
@@ -89,10 +92,12 @@ let app = new Vue({
       properties: ['foaf:name AS lowercase RENAME name'],
       optionalProperties: [],//['rdf:type'],
       propertiesForChoice: ["a","b","c"],
+      allProperties: [],
     },
     Workspace: null,
     fileWorkspaceForInput: '',
     importWorkspaceString: '',
+    configurationFile: '',
     metrics: [''],
     //selectedMeasureOption: '',
     measureOptions: measureOptionsArray,
@@ -106,7 +111,7 @@ let app = new Vue({
     },
     review: {
       id: 'review',
-      threshold: 0.01,
+      threshold: 0.9,
       file: 'reviewme.nt',
       relation: 'owl:sameAs',
     },
@@ -117,8 +122,8 @@ let app = new Vue({
       training: 'trainingData.nt',
       parameters: [
         {
-          name: 'max execution time in minutes',
-          value: 60,
+          name: 'max refinement tree size',
+          value: 2000,
         },
       ],
     },
@@ -163,6 +168,28 @@ let app = new Vue({
     findStatusMessage: '',
     exampleConfigEnable: false,
   },
+  watch: {
+      'source.properties': function() {
+        this.addOldAndNewPrefix(this.source.properties);
+      },
+      'target.properties': function() {
+        this.addOldAndNewPrefix(this.target.properties);
+      },
+      'source.optionalProperties': function() {
+        this.addOldAndNewPrefix(this.source.optionalProperties);
+      },
+      'target.optionalProperties': function() {
+        this.addOldAndNewPrefix(this.target.optionalProperties);
+      },
+      'source.allProperties': function() {
+        this.deleteOldPrefixes();
+        this.source.properties.splice(0);
+      },
+      'target.allProperties': function() {
+        this.deleteOldPrefixes();
+        this.target.properties.splice(0);
+      },
+  },
   mounted() {
     const jobIdmatches = /\?jobId=(.+)/.exec(window.location.search);
     if (jobIdmatches) {
@@ -171,9 +198,11 @@ let app = new Vue({
       this.jobRunning = true;
       setTimeout(() => this.$refs.jobDialog.open(), 10);
       setTimeout(() => this.getStatus(), 1000);
+
     }
 
-    window.onload = () => {
+    let blocklyInit = () => {
+      //this.convertMetricToBlocklyXML();
           // var this.Workspace = Blockly.inject('blocklyDiv',
           //   {toolbox: document.getElementById('toolbox')});
 
@@ -182,8 +211,18 @@ let app = new Vue({
           // var this.Workspace = this.this.Workspace;
           this.Workspace = Blockly.inject(blocklyDiv,
               {toolbox: document.getElementById('toolbox'),
+              //scrollbars: true,
+               zoom:
+                 {controls: true,
+                  wheel: true,
+                  startScale: 1.0,
+                  maxScale: 3,
+                  minScale: 0.3,
+                  scaleSpeed: 1.2},
                 trashcan: true,
               });
+          //console.log(this.Workspace);
+          //new Blockly.ScrollbarPair(this.Workspace);
           var onresize = (e) => {
             // Compute the absolute coordinates and dimensions of blocklyArea.
             var element = blocklyArea;
@@ -215,12 +254,11 @@ let app = new Vue({
 
           let onFirstComment = (event) => {
             // console.log("change");
-            //console.log(this.Workspace.getAllBlocks()[0].getField("propTitle").getDisplayText_());
-            //console.log(this.Workspace.getTopBlocks());
-            this.source.properties.splice(0);
-            this.target.properties.splice(0);
-            this.source.optionalProperties.splice(0);
-            this.target.optionalProperties.splice(0);
+
+            // this.source.properties.splice(0);
+            // this.target.properties.splice(0);
+            // this.source.optionalProperties.splice(0);
+            // this.target.optionalProperties.splice(0);
 
             let allBlocks = this.Workspace.getTopBlocks();
 
@@ -422,24 +460,24 @@ let app = new Vue({
                     }
                   }
 
-                  if(this.exPrefixes.length){
-                    this.exPrefixes.forEach(pref => {
-                      this.prefixes.forEach(pr => {
-                        if(pref.label === pr.label){
-                          this.deletePrefix(pr);
-                        }
-                      })
-                    }) 
-                  }
+                  // if(this.exPrefixes.length){
+                  //   this.exPrefixes.forEach(pref => {
+                  //     this.prefixes.forEach(pr => {
+                  //       if(pref.label === pr.label){
+                  //         this.deletePrefix(pr);
+                  //       }
+                  //     })
+                  //   }) 
+                  // }
 
+                  // this.exPrefixes.splice(0);
+                  this.deleteOldPrefixes();
 
-                  this.exPrefixes.splice(0);
+                  // this.addOldAndNewPrefix(this.source.properties);
+                  // this.addOldAndNewPrefix(this.target.properties);
 
-                  this.addOldAndNewPrefix(this.source.properties);
-                  this.addOldAndNewPrefix(this.target.properties);
-
-                  this.addOldAndNewPrefix(this.source.optionalProperties);
-                  this.addOldAndNewPrefix(this.target.optionalProperties);
+                  // this.addOldAndNewPrefix(this.source.optionalProperties);
+                  // this.addOldAndNewPrefix(this.target.optionalProperties);
                 
                 })
               } else {
@@ -459,6 +497,7 @@ let app = new Vue({
 
           
     };
+    setTimeout(blocklyInit, 500);
   },
   beforeMount() {
     let context;
@@ -502,10 +541,25 @@ let app = new Vue({
       Measure.args0[0].options.push(i);
     });  
 
+    let params = Object.keys(MLParameters.WOMBAT).map(function(i) {
+      return {
+        name: i,
+        value: MLParameters.WOMBAT[i].default || MLParameters.WOMBAT[i],
+      } 
+    });
+    this.mlalgorithm.parameters.splice(0);
+    this.mlalgorithm.parameters = params;
+
   },
   methods: {
     deletePrefix(prefix) {
-      this.prefixes = this.prefixes.filter(p => p.label !== prefix.label && p.namespace !== prefix.namespace);
+      let amountAppearPrefixes = this.allPrefixes.filter(p => p.label === prefix.label).length;
+      if(amountAppearPrefixes > 1){
+        this.allPrefixes = this.allPrefixes.filter(p => p.label !== prefix.label && p.namespace !== prefix.namespace);
+      } else {
+        this.prefixes = this.prefixes.filter(p => p.label !== prefix.label && p.namespace !== prefix.namespace);
+        this.allPrefixes = this.allPrefixes.filter(p => p.label !== prefix.label && p.namespace !== prefix.namespace);
+      }
     },
     addPrefix(prefix) {
       //console.log(prefix);
@@ -513,7 +567,20 @@ let app = new Vue({
       if(!this.prefixes.some(i => i.label === prefix.label)){
         this.prefixes.push(prefix);
       }
+      this.allPrefixes.push(prefix);
+    },
+    deleteOldPrefixes(){
+      if(this.exPrefixes.length){
+        this.exPrefixes.forEach(pref => {
+          this.prefixes.forEach(pr => {
+            if(pref.label === pr.label){
+              this.deletePrefix(pr);
+            }
+          })
+        }) 
+      }
 
+      this.exPrefixes.splice(0);
     },
     addOldAndNewPrefix(props){
       props.forEach(pr => 
@@ -521,120 +588,23 @@ let app = new Vue({
           if(pr){
             let label = pr.split(":")[0];
             let pref = {label: label, namespace: this.context[label]};
-            if(!this.prefixes.some(i => i.label === label)){
+            //if(!this.prefixes.some(i => i.label === label)){
               this.exPrefixes.push(pref);
-            }
-          
+            //}
+
             this.addPrefix({label: label, namespace: this.context[label]});
           }
       });
     },
     addProperies(i,strForXml){
-      if(!this.notConnectedToStart){
-        if(i.type.indexOf("source") !== -1){
-          if(i.type.indexOf("optional") !== -1){
-            this.source.optionalProperties.push(strForXml);
-          } else {
-            this.source.properties.push(strForXml);
-          }   
-        } else {
-          if(i.type.indexOf("optional") !== -1){
-            this.target.optionalProperties.push(strForXml);
-          } else {
-            this.target.properties.push(strForXml);
-          }
-        }
-      }
-    },
-    addChainOfPreprocessings(i,renameText){
-      let arrForXml = i.toString().split(" ").map(pf => pf.toLowerCase()).filter(prepFunc => prepFunc !== "optional" && prepFunc !== "source" && prepFunc !== "target" && prepFunc !== "property" && prepFunc !== "rename" && prepFunc !== "as");
-      if(renameText !== null && arrForXml[arrForXml.length-1].toLowerCase() === renameText.toLowerCase()){
-        arrForXml.pop();
-      }
-      let strForXml = arrForXml[arrForXml.length-1]+" AS ";
-      arrForXml.pop();
-      let strOfPreprocessings = "";
-      arrForXml.forEach(prepFunc => {
-        strOfPreprocessings += prepFunc + "->";
-      });
-      strOfPreprocessings = strOfPreprocessings.slice(0,-2);
-      if(renameText !== null){
-        strForXml += strOfPreprocessings + " RENAME " + renameText;//i.getField("RENAME").getDisplayText_();//rename;
-      } else {
-        strForXml += strOfPreprocessings;
-      }
-      let arr = i.toString().split(" ").map(pf => pf.toLowerCase());
-      let mainType = arr.filter(type => type === "source" || type === "target");
-      let optional = arr.filter(type => type === "optional");
-      let type = optional.length ? mainType[0] + " " + optional[0] : mainType[0];
-      let child = {type: type};
-      this.addProperies(child,strForXml);
+      console.log(i);
+      let propertiesClass = new Properties(this, i);
+      propertiesClass.addProperies(i, strForXml); 
+      console.log(i);
     },
     processingPropertyWithPrepFunc(i){
-      if(i.getChildren().length){
-        if(!this.notConnectedToStart){
-          i.setDisabled(false);
-        }
-        i.getChildren().forEach(child => {
-          if(!this.notConnectedToStart){
-            child.setDisabled(false);
-          }
-          if(i.type.indexOf('preprocessing')!== -1){
-
-            //changeOutputOfPreprocessingFunction
-            let preprWithParam = i.toString().split(" ");
-            let isOptional = preprWithParam.find(val => val.toLowerCase() === "optional");
-            let srcOrTgt = preprWithParam.find(val => val.toLowerCase() === "source" || val.toLowerCase() === "target");
-            let stringForCheck = srcOrTgt[0].toUpperCase() + srcOrTgt.slice(1);
-            if(isOptional){
-              i.setOutput(true, isOptional+stringForCheck + "Property");
-            } else {
-              i.setOutput(true, stringForCheck + "Property");
-            }
-
-            // check preprocessing for availability to use optional property
-            if(srcOrTgt.toLowerCase() === 'source'){
-              this.mainSource = true;
-            }
-            if(srcOrTgt.toLowerCase() === 'target'){
-              this.mainTarget = true;
-            }
-
-            if(i.type.indexOf('renamepreprocessing')!== -1){
-              if(child.getChildren().length){
-                this.addChainOfPreprocessings(i, i.getField("RENAME").getDisplayText_());
-              } else {
-                let defaultRenameText = child.getFieldValue("propTitle").split(":")[1].toUpperCase();
-                if(i.getField("RENAME").getDisplayText_() === "X" || i.getField("RENAME").getDisplayText_().trim() === ''){
-                  i.getField("RENAME").setText(defaultRenameText); 
-                }
-
-                let renameText = i.getField("RENAME").getDisplayText_();                 
-                if(renameText !== defaultRenameText){
-                  i.getField("RENAME").setText(renameText); 
-                }
-                let strForXml = child.getFieldValue("propTitle")+ " RENAME " + i.getField("RENAME").getDisplayText_();
-                this.addProperies(child,strForXml);
-              }
-            } else {
-
-
-
-              if(child.getChildren().length){
-                this.addChainOfPreprocessings(i, null);
-              } else {
-                let strForXml = child.getFieldValue("propTitle");
-                let strOfPreprocessings = " AS "+ i.getFieldValue('function');
-                strForXml += strOfPreprocessings;
-                this.addProperies(child,strForXml);
-              }
-            }
-          }
-        });
-      } else { // not children blocks
-        let strForXml = i.getFieldValue("propTitle");
-        this.addProperies(i,strForXml);
-      }
+      let preprocessings = new Preprocessings(this,i);
+      preprocessings.processingPropertyWithPrepFunc(i);
     },
     getFromMeasure(i){
       let src;
@@ -677,6 +647,11 @@ let app = new Vue({
       } else {
         this.mlalgorithm.enabled = true;
       }
+      this.source.properties.splice(0);
+      this.target.properties.splice(0);
+      this.source.optionalProperties.splice(0);
+      this.target.optionalProperties.splice(0);
+      this.deleteOldPrefixes();
     },
     exportWorkspace(){
       var xml = Blockly.Xml.workspaceToDom(this.Workspace);
@@ -696,6 +671,10 @@ let app = new Vue({
 
       fileReader.readAsText(fileToLoad, "UTF-8");
 
+    },
+    importConfigurationFile(){
+      let confugurationFileParser = new configurationFileParser(this);
+      confugurationFileParser.importConfigurationFile(); 
     },
 
     generateConfig() {
@@ -717,7 +696,35 @@ let app = new Vue({
       const src = makeDatasource(this.source, 'SOURCE');
       const target = makeDatasource(this.target, 'TARGET');
 
-      const metrics = !this.mlalgorithm.enabled ? this.metrics
+      // add threshold from review threshold if user didn't choose threshold for measures using operators
+      let changedMetrics = [];
+      let operators = ['and','or','xor','nand'];
+      let hasOperator = operators.filter( i => this.metrics[0].toLowerCase().indexOf(i) !== -1);
+      if(hasOperator){ 
+        let isLeftThreshold = this.metrics[0].indexOf("),");
+        let isRightThreshold = this.metrics[0].indexOf("))"); 
+        let placeForThreshold = this.metrics[0].split(")");  
+        if (isLeftThreshold !== -1 && isRightThreshold !== -1){
+          // user didn't choose threshold
+          let strWithThreshold = placeForThreshold[0] + ")|" + this.review.threshold + placeForThreshold[1] + ")|" + this.review.threshold+")";
+          changedMetrics.push(strWithThreshold);
+        } else if(isLeftThreshold !== -1 && isRightThreshold === -1){
+          // user changed right threshold  
+          let strWithThreshold = placeForThreshold[0] + ")|" + this.review.threshold + placeForThreshold[1] + ")" + placeForThreshold[2] +")";
+          changedMetrics.push(strWithThreshold);
+        } else if(isLeftThreshold === -1 && isRightThreshold !== -1){
+          // user changed left threshold  
+          let strWithThreshold = placeForThreshold[0] + ")" + placeForThreshold[1] + ")|" + this.review.threshold+")";
+          changedMetrics.push(strWithThreshold);
+        } else {
+          changedMetrics = this.metrics;
+        }
+      } else {
+        // don't change
+        changedMetrics = this.metrics;
+      }
+      
+      const metrics = !this.mlalgorithm.enabled ? changedMetrics//this.metrics
         .map(
           m => `<METRIC>
   ${m}
@@ -826,23 +833,23 @@ let app = new Vue({
     },
     saveAccepted(){
       if(this.availableFiles.length){
-        fetch(window.RESULT_FILE+this.executedKey+"/"+this.availableFiles[0])
-        .then(function(response) {
-          return response.text();
-         })
-        .then((content) => {
-          this.forceFileDownload(content,this.availableFiles[0]);
-        })
-      }
-    },
-    saveReviewed(){
-      if(this.availableFiles.length){
         fetch(window.RESULT_FILE+this.executedKey+"/"+this.availableFiles[1])
         .then(function(response) {
           return response.text();
          })
         .then((content) => {
           this.forceFileDownload(content,this.availableFiles[1]);
+        })
+      }
+    },
+    saveReviewed(){
+      if(this.availableFiles.length){
+        fetch(window.RESULT_FILE+this.executedKey+"/"+this.availableFiles[0])
+        .then(function(response) {
+          return response.text();
+         })
+        .then((content) => {
+          this.forceFileDownload(content,this.availableFiles[0]);
         })
       }
     },
@@ -952,10 +959,6 @@ let app = new Vue({
           namespace: 'http://linkedgeodata.org/ontology/',
           label: 'lgdo',
         },
-        {
-          namespace: 'http://www.w3.org/2000/01/rdf-schema#',
-          label: 'rdfs',
-        },
       ];
       this.source = {
         id: 'sourceId',
@@ -965,7 +968,7 @@ let app = new Vue({
         restriction: '?s a lgdo:RelayBox',
         type: '',
         properties: ['geom:geometry/geos:asWKT RENAME polygon'],
-        optionalProperties: ['rdfs:label'],
+        optionalProperties: [],
         classes: ['http://linkedgeodata.org/ontology/RelayBox'],
         propertiesForChoice: [],
       };
@@ -977,7 +980,7 @@ let app = new Vue({
         restriction: '?t a lgdo:RelayBox',
         type: '',
         properties: ['geom:geometry/geos:asWKT RENAME polygon'],
-        optionalProperties: ['rdfs:label'],
+        optionalProperties: [],
         classes: ['http://linkedgeodata.org/ontology/RelayBox'],
         propertiesForChoice: [],
       };
@@ -1017,11 +1020,13 @@ let app = new Vue({
       this.xmlToWorkspace(this.importWorkspaceString);
       this.metrics = ['geo_hausdorff(s.polygon, t.polygon)'];
       this.acceptance = {
+        id: 'acceptance',
         threshold: 0.9,
         file: 'lgd_relaybox_verynear.nt',
         relation: 'lgdo:near',
       };
       this.review = {
+        id: 'review',
         threshold: 0.5,
         file: 'lgd_relaybox_near.nt',
         relation: 'lgdo:near',
@@ -1032,6 +1037,73 @@ let app = new Vue({
         engine: 'DEFAULT',
       };
       this.output = {type: 'TAB'};
+    },
+    exampleFilmAndMovieConfig(){
+      let textFromXMLFile = `<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE LIMES SYSTEM "limes.dtd">
+        <LIMES>
+        <PREFIX>
+          <NAMESPACE>http://www.w3.org/2002/07/owl#</NAMESPACE>
+          <LABEL>owl</LABEL>
+        </PREFIX>
+        <PREFIX>
+          <NAMESPACE>http://schema.org/</NAMESPACE>
+          <LABEL>url</LABEL>
+        </PREFIX>
+        <PREFIX>
+          <NAMESPACE>http://www.w3.org/1999/02/22-rdf-syntax-ns#</NAMESPACE>
+          <LABEL>rdf</LABEL>
+        </PREFIX>
+        <PREFIX>
+          <NAMESPACE>http://dbpedia.org/ontology/</NAMESPACE>
+          <LABEL>dbpo</LABEL>
+        </PREFIX>
+        <PREFIX>
+          <NAMESPACE>http://www.w3.org/2000/01/rdf-schema#</NAMESPACE>
+          <LABEL>rdfs</LABEL>
+        </PREFIX>
+        <SOURCE>
+          <ID>sourceId</ID>
+          <ENDPOINT>http://dbpedia.org/sparql</ENDPOINT>
+          <VAR>?s</VAR>
+          <PAGESIZE>1000</PAGESIZE>
+          <RESTRICTION>?s rdf:type url:Movie</RESTRICTION>
+          <PROPERTY>rdfs:label</PROPERTY>
+
+          <TYPE>sparql</TYPE>
+        </SOURCE>
+        <TARGET>
+          <ID>targetId</ID>
+          <ENDPOINT>http://dbpedia.org/sparql</ENDPOINT>
+          <VAR>?t</VAR>
+          <PAGESIZE>1000</PAGESIZE>
+          <RESTRICTION>?t rdf:type dbpo:Film</RESTRICTION>
+          <PROPERTY>rdfs:label</PROPERTY>
+
+          <TYPE>sparql</TYPE>
+        </TARGET>
+        <METRIC>
+          AND(cosine(s.rdfs:label,t.rdfs:label)|0.9,exactmatch(s.rdfs:label,t.rdfs:label)|0.9)
+        </METRIC>
+        <ACCEPTANCE>
+        <THRESHOLD>0.98</THRESHOLD>
+        <FILE>accepted.nt</FILE>
+        <RELATION>owl:sameAs</RELATION>
+        </ACCEPTANCE>
+        <REVIEW>
+        <THRESHOLD>0.9</THRESHOLD>
+        <FILE>reviewme.nt</FILE>
+        <RELATION>owl:sameAs</RELATION>
+        </REVIEW>
+        <EXECUTION>
+          <REWRITER>DEFAULT</REWRITER>
+          <PLANNER>DEFAULT</PLANNER>
+          <ENGINE>DEFAULT</ENGINE>
+        </EXECUTION>
+        <OUTPUT>TAB</OUTPUT>
+      </LIMES>`;
+      let confugurationFileParser = new configurationFileParser(this);
+      confugurationFileParser.xmlToHtml(textFromXMLFile);
     },
   },
 });
