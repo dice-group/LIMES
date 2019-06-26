@@ -426,7 +426,6 @@ class configurationFileParser {
         measureBlock.appendChild(fieldThreshold);
         measureBlock.appendChild(valueSrcProp);
         measureBlock.appendChild(valueTgtProp);
-
         this.addPreprocessingsWithProperty(doc, valueSrcProp, srcProp, fieldSrcProp, this.context.source.properties[0]);
         this.addPreprocessingsWithProperty(doc, valueTgtProp, tgtProp, fieldTgtProp, this.context.target.properties[0]);
 
@@ -457,8 +456,8 @@ class configurationFileParser {
         measureBlock2.appendChild(valueSrcProp2);
         measureBlock2.appendChild(valueTgtProp2);
 
-        this.addPreprocessingsWithProperty(doc, valueSrcProp2, srcProp2, fieldSrcProp2, this.context.source.properties[1]);
-        this.addPreprocessingsWithProperty(doc, valueTgtProp2, tgtProp2, fieldTgtProp2, this.context.target.properties[1]);
+        this.addPreprocessingsWithProperty(doc, valueSrcProp2, srcProp2, fieldSrcProp2, this.context.source.properties[0]);
+        this.addPreprocessingsWithProperty(doc, valueTgtProp2, tgtProp2, fieldTgtProp2, this.context.target.properties[0]);
 
         doc.appendChild(xmlElem);
       }

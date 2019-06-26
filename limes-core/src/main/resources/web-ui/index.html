@@ -107,6 +107,17 @@
   .md-toolbar .md-input-container input{
     height: 60px;
   }
+  .md-theme-default.md-tabs > .md-tabs-navigation .md-tab-header.md-active, .md-theme-default.md-tabs > .md-tabs-navigation .md-tab-header > button:focus {
+    background-color: #fff;
+  }
+  .md-tab-header-container{
+    color: #000;
+  }
+  .md-tab-indicator{
+    background-color: #3f51b5 !important;
+    top: 0;
+  }
+
 </style>
 
   <!-- LIMES server ref -->
@@ -128,9 +139,19 @@
       <md-toolbar>
         <md-layout><h2 class="md-title" style="flex: 1" md-flex="60">LIMES Web UI</h2></md-layout>
         <md-layout>
-          <md-layout md-flex="35">
+
+        <md-menu md-size="5" md-align-trigger>
+          <md-button md-menu-trigger style="margin-top: 18px;">Try examples</md-button>
+
+          <md-menu-content>
+            <md-menu-item v-on:click="exampleConfig()">Try example LGD config</md-menu-item>
+            <md-menu-item v-on:click="exampleFilmAndMovieConfig()">Try example Movie and Film config</md-menu-item>
+          </md-menu-content>
+        </md-menu>
+
+<!--           <md-layout md-flex="35">
             <md-button v-on:click="exampleConfig()">Try example LGD config</md-button>
-          </md-layout>
+          </md-layout> -->
 
           <md-layout md-flex="40">
             <md-input-container style="margin-bottom: 13px;">
@@ -274,40 +295,42 @@
             ></datasource-component>
         </div>    
 
+      <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px;">
           <md-tabs @change="manualMetricClicked">
             <md-tab id="manualMetric" md-label="Manual metric">
+                
+                <datacanvas-component v-bind:source="source" v-bind:target="target" title="Data target"></datacanvas-component>
+                <!-- metrics UI -->
+                <metrics-component
+                  v-bind:metrics="metrics"
+                ></metrics-component>
 
-              <md-layout>
                 <md-layout>
-                  <md-button class="md-raised md-flex" v-on:click="exportWorkspace()">Export workspace to xml</md-button>
-                </md-layout>
+                  <md-layout>
+                    <md-button class="md-raised md-flex" v-on:click="exportWorkspace()">Export workspace to xml</md-button>
+                  </md-layout>
 
-                <md-layout>
-                  <md-input-container>
-                    <label>Select the file for importing to the workspace</label>
-                    <md-file v-model="fileWorkspaceForInput" id="fileToLoad" v-on:selected="importWorkspace()"></md-file>
-                  </md-input-container>
+                  <md-layout>
+                    <md-input-container>
+                      <label>Select the file for importing to the workspace</label>
+                      <md-file v-model="fileWorkspaceForInput" id="fileToLoad" v-on:selected="importWorkspace()"></md-file>
+                    </md-input-container>
+                  </md-layout>
                 </md-layout>
-              </md-layout>
-
-              <datacanvas-component v-bind:source="source" v-bind:target="target" title="Data target"></datacanvas-component>
-              <!-- metrics UI -->
-              <metrics-component
-                v-bind:metrics="metrics"
-              ></metrics-component>
 
 
             </md-tab>
             <md-tab id="machineLearning" md-label="Machine learning">
               <!-- machine learning UI -->
-              <mlalgorithm-component 
-              v-bind:measures="measures" 
-              v-bind:data="mlalgorithm" 
-              v-bind:source="source" 
-              v-bind:target="target"
-              ></mlalgorithm-component>
+                <mlalgorithm-component 
+                v-bind:measures="measures" 
+                v-bind:data="mlalgorithm" 
+                v-bind:source="source" 
+                v-bind:target="target"
+                ></mlalgorithm-component>
             </md-tab>
-          </md-tabs>          
+          </md-tabs> 
+        </md-whiteframe>      
 
           <!-- acceptance UI -->
           <div class="row">
@@ -490,7 +513,7 @@
   </script>
 
   <script type="text/x-template" id="datacanvasComponent">
-    <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
+<!--     <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;"> -->
       <md-layout>
           <div id="blocklyArea" style="height: 500px; width: 100%;"></div>
           <div id="blocklyDiv" style="position: absolute"></div>
@@ -507,7 +530,7 @@
 
           </xml>
       </md-layout>
-    </md-whiteframe>
+    <!-- </md-whiteframe> -->
   </script>
 
   <!-- metrics component -->

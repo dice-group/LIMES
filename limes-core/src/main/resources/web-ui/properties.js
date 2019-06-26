@@ -56,7 +56,7 @@ class Properties {
         if(content.boolean){
           this.getForNextLevelProperties(p,endpoint);
         }
-        console.log(content.boolean);
+        //console.log(content.boolean);
 
       })
     }

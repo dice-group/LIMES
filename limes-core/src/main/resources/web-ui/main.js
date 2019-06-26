@@ -111,7 +111,7 @@ let app = new Vue({
     },
     review: {
       id: 'review',
-      threshold: 0.01,
+      threshold: 0.9,
       file: 'reviewme.nt',
       relation: 'owl:sameAs',
     },
@@ -122,8 +122,8 @@ let app = new Vue({
       training: 'trainingData.nt',
       parameters: [
         {
-          name: 'max execution time in minutes',
-          value: 60,
+          name: 'max refinement tree size',
+          value: 2000,
         },
       ],
     },
@@ -221,7 +221,7 @@ let app = new Vue({
                   scaleSpeed: 1.2},
                 trashcan: true,
               });
-          console.log(this.Workspace);
+          //console.log(this.Workspace);
           //new Blockly.ScrollbarPair(this.Workspace);
           var onresize = (e) => {
             // Compute the absolute coordinates and dimensions of blocklyArea.
@@ -541,6 +541,15 @@ let app = new Vue({
       Measure.args0[0].options.push(i);
     });  
 
+    let params = Object.keys(MLParameters.WOMBAT).map(function(i) {
+      return {
+        name: i,
+        value: MLParameters.WOMBAT[i].default || MLParameters.WOMBAT[i],
+      } 
+    });
+    this.mlalgorithm.parameters.splice(0);
+    this.mlalgorithm.parameters = params;
+
   },
   methods: {
     deletePrefix(prefix) {
@@ -687,7 +696,35 @@ let app = new Vue({
       const src = makeDatasource(this.source, 'SOURCE');
       const target = makeDatasource(this.target, 'TARGET');
 
-      const metrics = !this.mlalgorithm.enabled ? this.metrics
+      // add threshold from review threshold if user didn't choose threshold for measures using operators
+      let changedMetrics = [];
+      let operators = ['and','or','xor','nand'];
+      let hasOperator = operators.filter( i => this.metrics[0].toLowerCase().indexOf(i) !== -1);
+      if(hasOperator){ 
+        let isLeftThreshold = this.metrics[0].indexOf("),");
+        let isRightThreshold = this.metrics[0].indexOf("))"); 
+        let placeForThreshold = this.metrics[0].split(")");  
+        if (isLeftThreshold !== -1 && isRightThreshold !== -1){
+          // user didn't choose threshold
+          let strWithThreshold = placeForThreshold[0] + ")|" + this.review.threshold + placeForThreshold[1] + ")|" + this.review.threshold+")";
+          changedMetrics.push(strWithThreshold);
+        } else if(isLeftThreshold !== -1 && isRightThreshold === -1){
+          // user changed right threshold  
+          let strWithThreshold = placeForThreshold[0] + ")|" + this.review.threshold + placeForThreshold[1] + ")" + placeForThreshold[2] +")";
+          changedMetrics.push(strWithThreshold);
+        } else if(isLeftThreshold === -1 && isRightThreshold !== -1){
+          // user changed left threshold  
+          let strWithThreshold = placeForThreshold[0] + ")" + placeForThreshold[1] + ")|" + this.review.threshold+")";
+          changedMetrics.push(strWithThreshold);
+        } else {
+          changedMetrics = this.metrics;
+        }
+      } else {
+        // don't change
+        changedMetrics = this.metrics;
+      }
+      
+      const metrics = !this.mlalgorithm.enabled ? changedMetrics//this.metrics
         .map(
           m => `<METRIC>
   ${m}
@@ -922,10 +959,6 @@ let app = new Vue({
           namespace: 'http://linkedgeodata.org/ontology/',
           label: 'lgdo',
         },
-        {
-          namespace: 'http://www.w3.org/2000/01/rdf-schema#',
-          label: 'rdfs',
-        },
       ];
       this.source = {
         id: 'sourceId',
@@ -935,7 +968,7 @@ let app = new Vue({
         restriction: '?s a lgdo:RelayBox',
         type: '',
         properties: ['geom:geometry/geos:asWKT RENAME polygon'],
-        optionalProperties: ['rdfs:label'],
+        optionalProperties: [],
         classes: ['http://linkedgeodata.org/ontology/RelayBox'],
         propertiesForChoice: [],
       };
@@ -947,7 +980,7 @@ let app = new Vue({
         restriction: '?t a lgdo:RelayBox',
         type: '',
         properties: ['geom:geometry/geos:asWKT RENAME polygon'],
-        optionalProperties: ['rdfs:label'],
+        optionalProperties: [],
         classes: ['http://linkedgeodata.org/ontology/RelayBox'],
         propertiesForChoice: [],
       };
@@ -1004,6 +1037,73 @@ let app = new Vue({
         engine: 'DEFAULT',
       };
       this.output = {type: 'TAB'};
+    },
+    exampleFilmAndMovieConfig(){
+      let textFromXMLFile = `<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE LIMES SYSTEM "limes.dtd">
+        <LIMES>
+        <PREFIX>
+          <NAMESPACE>http://www.w3.org/2002/07/owl#</NAMESPACE>
+          <LABEL>owl</LABEL>
+        </PREFIX>
+        <PREFIX>
+          <NAMESPACE>http://schema.org/</NAMESPACE>
+          <LABEL>url</LABEL>
+        </PREFIX>
+        <PREFIX>
+          <NAMESPACE>http://www.w3.org/1999/02/22-rdf-syntax-ns#</NAMESPACE>
+          <LABEL>rdf</LABEL>
+        </PREFIX>
+        <PREFIX>
+          <NAMESPACE>http://dbpedia.org/ontology/</NAMESPACE>
+          <LABEL>dbpo</LABEL>
+        </PREFIX>
+        <PREFIX>
+          <NAMESPACE>http://www.w3.org/2000/01/rdf-schema#</NAMESPACE>
+          <LABEL>rdfs</LABEL>
+        </PREFIX>
+        <SOURCE>
+          <ID>sourceId</ID>
+          <ENDPOINT>http://dbpedia.org/sparql</ENDPOINT>
+          <VAR>?s</VAR>
+          <PAGESIZE>1000</PAGESIZE>
+          <RESTRICTION>?s rdf:type url:Movie</RESTRICTION>
+          <PROPERTY>rdfs:label</PROPERTY>
+
+          <TYPE>sparql</TYPE>
+        </SOURCE>
+        <TARGET>
+          <ID>targetId</ID>
+          <ENDPOINT>http://dbpedia.org/sparql</ENDPOINT>
+          <VAR>?t</VAR>
+          <PAGESIZE>1000</PAGESIZE>
+          <RESTRICTION>?t rdf:type dbpo:Film</RESTRICTION>
+          <PROPERTY>rdfs:label</PROPERTY>
+
+          <TYPE>sparql</TYPE>
+        </TARGET>
+        <METRIC>
+          AND(cosine(s.rdfs:label,t.rdfs:label)|0.9,exactmatch(s.rdfs:label,t.rdfs:label)|0.9)
+        </METRIC>
+        <ACCEPTANCE>
+        <THRESHOLD>0.98</THRESHOLD>
+        <FILE>accepted.nt</FILE>
+        <RELATION>owl:sameAs</RELATION>
+        </ACCEPTANCE>
+        <REVIEW>
+        <THRESHOLD>0.9</THRESHOLD>
+        <FILE>reviewme.nt</FILE>
+        <RELATION>owl:sameAs</RELATION>
+        </REVIEW>
+        <EXECUTION>
+          <REWRITER>DEFAULT</REWRITER>
+          <PLANNER>DEFAULT</PLANNER>
+          <ENGINE>DEFAULT</ENGINE>
+        </EXECUTION>
+        <OUTPUT>TAB</OUTPUT>
+      </LIMES>`;
+      let confugurationFileParser = new configurationFileParser(this);
+      confugurationFileParser.xmlToHtml(textFromXMLFile);
     },
   },
 });
