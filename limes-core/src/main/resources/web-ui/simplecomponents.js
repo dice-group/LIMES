@@ -328,6 +328,9 @@ Vue.component('accreview-component', {
       let maxV;
       if (this.data.id === 'review'){
         maxV = this.acceptance.threshold;
+        if(this.review.threshold > maxV){
+          this.review.threshold = maxV;
+        }
       } else {
         maxV = 1;
       }
