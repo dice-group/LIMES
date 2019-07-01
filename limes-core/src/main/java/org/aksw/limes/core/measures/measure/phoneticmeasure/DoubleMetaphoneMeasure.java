@@ -8,6 +8,8 @@ public class DoubleMetaphoneMeasure extends StringMeasure {
 
 	public static String getCode(String string) {
 		DoubleMetaphone doublemetaphone = new DoubleMetaphone();
+		string=string.replaceAll("[^\\p{ASCII}]", "");
+		string=string.replaceAll("[^a-zA-Z0-9]", "");
 		return doublemetaphone.doubleMetaphone(string,false);
 	}
 	

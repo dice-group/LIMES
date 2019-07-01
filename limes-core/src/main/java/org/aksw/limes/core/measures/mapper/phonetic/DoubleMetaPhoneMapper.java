@@ -48,8 +48,17 @@ public class DoubleMetaPhoneMapper extends AMapper {
 		List<String> listA, listB;
 		Map<String, List<Integer>> invListA, invListB;
 		List<String> properties = PropertyFetcher.getProperties(expression, threshold);
-		Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
-		Map<String, Set<String>> targetMap = getValueToUriMap(target, properties.get(1));
+
+		String property1 = properties.get(0);
+		String property2 = properties.get(1);
+		//if(property1.contains("#"))
+		//property1=property1.substring(property1.indexOf("#")+1);
+		//if(property2.contains("#"))
+		//property2=property2.substring(property2.indexOf("#")+1);
+		//System.out.println(" p1: "+property1);
+		//System.out.println(" p2: "+property2);
+		Map<String, Set<String>> sourceMap = getValueToUriMap(source, property1);
+		Map<String, Set<String>> targetMap = getValueToUriMap(target, property2);
 		listA = new ArrayList<>(sourceMap.keySet());
 		listB = new ArrayList<>(targetMap.keySet());
 		// create inverted lists (code=>index of original list)
@@ -67,7 +76,7 @@ public class DoubleMetaPhoneMapper extends AMapper {
 			while (!queue.isEmpty()) {
 				TrieSearchState current = queue.pop();
 				Set<Map.Entry<Character, TrieNode>> childs = current.getNode().getChildren();
-				if (childs.isEmpty() && !current.getNode().getReferences().isEmpty()) {
+				if (childs.isEmpty() && !current.getNode().getReferences().isEmpty()&& current.getNode().getReferences()!=null) {
 					similarityBook.push(new MutableTriple<>(current.getDistance(), entry.getValue(),
 							current.getNode().getReferences()));
 				}
@@ -109,19 +118,19 @@ public class DoubleMetaPhoneMapper extends AMapper {
 		for (int i = 0, listASize = list.size(); i < listASize; i++) {
 			String s = list.get(i);
 			String code = DoubleMetaphoneMeasure.getCode(s);
-				if(code!=null) {
+			if(code!=null) {
 				List<Integer> ref;
 				if (!result.containsKey(code)) {
 
 					ref = new LinkedList<>();
-					
+
 					result.put(code, ref);
 				} else {
 					ref = result.get(code);
 				}
 				ref.add(i);
 			}}
-		
+
 		return result;
 	}
 

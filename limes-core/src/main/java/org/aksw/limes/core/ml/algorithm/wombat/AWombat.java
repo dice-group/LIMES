@@ -323,8 +323,8 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 	@Override
 	public void setDefaultParameters() {
 		//default parameters
-		long maxRefineTreeSize = 2000;
-		int maxIterationNumber = 3;
+		long maxRefineTreeSize = 2000; //2000
+		int maxIterationNumber = 3; //3
 		int maxIterationTimeInMin = 20;
 		int maxExecutionTimeInMin = 600;
 		double maxFitnessThreshold = 1;
@@ -335,7 +335,7 @@ public abstract class AWombat extends ACoreMLAlgorithm {
 		double propertyLearningRate = 0.9;
 		double overallPenaltyWeight = 0.5d;
 		boolean verbose = false;
-		Set<String> measures = new HashSet<>(Arrays.asList("soundex","doublemeta", "koeln", "meta", "nysiis", "caverphone1", "caverphone2", "refinedsoundex", "matchrating", "daitchmokotoff"));
+		Set<String> measures = new HashSet<>(Arrays.asList("jaccard", "trigrams", "cosine", "qgrams"));
     
 		learningParameters = new ArrayList<>();
 		learningParameters.add(new LearningParameter(PARAMETER_MAX_REFINEMENT_TREE_SIZE, maxRefineTreeSize, Long.class, 10d, Long.MAX_VALUE, 10d, PARAMETER_MAX_REFINEMENT_TREE_SIZE));

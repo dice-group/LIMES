@@ -48,8 +48,16 @@ public class Caverphone2Mapper extends AMapper {
 		List<String> listA, listB;
 		Map<String, List<Integer>> invListA, invListB;
 		List<String> properties = PropertyFetcher.getProperties(expression, threshold);
-		Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
-		Map<String, Set<String>> targetMap = getValueToUriMap(target, properties.get(1));
+		String property1 = properties.get(0);
+		String property2 = properties.get(1);
+		//if(property1.contains("#"))
+		//property1=property1.substring(property1.indexOf("#")+1);
+		//if(property2.contains("#"))
+		//property2=property2.substring(property2.indexOf("#")+1);
+		//System.out.println(" p1: "+property1);
+		//System.out.println(" p2: "+property2);
+		Map<String, Set<String>> sourceMap = getValueToUriMap(source, property1);
+		Map<String, Set<String>> targetMap = getValueToUriMap(target, property2);
 		listA = new ArrayList<>(sourceMap.keySet());
 		listB = new ArrayList<>(targetMap.keySet());
 		// create inverted lists (code=>index of original list)
@@ -92,7 +100,7 @@ public class Caverphone2Mapper extends AMapper {
 					for (String sourceUri : sourceMap.get(a)) {
 						for (String targetUri : targetMap.get(b)) {
 							result.add(sourceUri, targetUri,
-									(1.0d - (t.getLeft().doubleValue() / (double)6)));
+									(1.0d - (t.getLeft().doubleValue() / (double)10)));
 						}
 					}
 				}
@@ -106,17 +114,17 @@ public class Caverphone2Mapper extends AMapper {
 		Map<String, List<Integer>> result = new HashMap<>(list.size());
 		for (int i = 0, listASize = list.size(); i < listASize; i++) {
 			String s = list.get(i);
-			 if (!s.equals("")) {
-			String code = Caverphone2Measure.getCode(s);
-			List<Integer> ref;
-			if (!result.containsKey(code)) {
-				ref = new LinkedList<>();
-				result.put(code, ref);
-			} else {
-				ref = result.get(code);
+			if (!s.equals("")) {
+				String code = Caverphone2Measure.getCode(s);
+				List<Integer> ref;
+				if (!result.containsKey(code)) {
+					ref = new LinkedList<>();
+					result.put(code, ref);
+				} else {
+					ref = result.get(code);
+				}
+				ref.add(i);
 			}
-			ref.add(i);
-			 }
 		}
 		return result;
 	}

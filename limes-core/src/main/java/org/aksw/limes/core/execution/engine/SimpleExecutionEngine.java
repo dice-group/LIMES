@@ -170,6 +170,9 @@ public class SimpleExecutionEngine extends ExecutionEngine {
 
                     return mapper.getMapping(source, target, sourceVariable, targetVariable,
                             inst.getMeasureExpression(), threshold);
+                    
+                    
+                    
                /* } catch (InvalidMeasureException e) {
                     e.printStackTrace();
                     logger.info("Returning an empty mapping");

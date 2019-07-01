@@ -8,6 +8,8 @@ public class NysiisMeasure extends StringMeasure {
 
 		public static String getCode(String string) {
 			Nysiis nysiis = new Nysiis();
+			string=string.replaceAll("[^\\p{ASCII}]", "");
+			string=string.replaceAll("[^a-zA-Z0-9]", "");
 			return nysiis.encode(string);
 		}
 

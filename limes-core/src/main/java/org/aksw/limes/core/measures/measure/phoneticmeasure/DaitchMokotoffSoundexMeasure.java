@@ -10,6 +10,8 @@ public class DaitchMokotoffSoundexMeasure extends StringMeasure {
 
 	public static String getCode(String string) {
 		DaitchMokotoffSoundex daitchmokotoffsoundex = new DaitchMokotoffSoundex();
+		string=string.replaceAll("[^\\p{ASCII}]", "");
+		string=string.replaceAll("[^a-zA-Z0-9]", "");
 		return daitchmokotoffsoundex.encode(string);
 	}
 

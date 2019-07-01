@@ -10,6 +10,8 @@ public class Caverphone2Measure extends StringMeasure {
 
 	public static String getCode(String string) {
 		Caverphone2 caverphone2 = new Caverphone2();
+		string=string.replaceAll("[^\\p{ASCII}]", "");
+		string=string.replaceAll("[^a-zA-Z0-9]", "");
 		return caverphone2.encode(string);
 	}
 

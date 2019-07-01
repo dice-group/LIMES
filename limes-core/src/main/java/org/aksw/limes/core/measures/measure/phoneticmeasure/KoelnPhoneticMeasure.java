@@ -8,6 +8,8 @@ public class KoelnPhoneticMeasure extends StringMeasure {
 
     public static String getCode(String string) {
         ColognePhonetic co = new ColognePhonetic();
+        string=string.replaceAll("[^\\p{ASCII}]", "");
+		string=string.replaceAll("[^a-zA-Z0-9]", "");
         return co.encode(string);
     }
 

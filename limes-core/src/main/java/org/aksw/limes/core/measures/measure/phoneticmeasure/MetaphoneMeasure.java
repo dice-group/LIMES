@@ -8,6 +8,8 @@ public class MetaphoneMeasure extends StringMeasure {
 
 	public static String getCode(String string) {
 		Metaphone metaphone = new Metaphone();
+		string=string.replaceAll("[^\\p{ASCII}]", "");
+		string=string.replaceAll("[^a-zA-Z0-9]", "");
 		return metaphone.encode(string);
 	}
 

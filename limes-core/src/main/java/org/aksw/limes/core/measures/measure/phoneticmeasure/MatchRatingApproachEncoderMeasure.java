@@ -11,6 +11,8 @@ public class MatchRatingApproachEncoderMeasure  extends StringMeasure {
 		
 	string=string.toUpperCase();
 		MatchRatingApproachEncoder matchratingapproachencoder = new MatchRatingApproachEncoder();
+		string=string.replaceAll("[^\\p{ASCII}]", "");
+		string=string.replaceAll("[^a-zA-Z0-9]", "");
 		return matchratingapproachencoder.encode(string);
 		
 	}
