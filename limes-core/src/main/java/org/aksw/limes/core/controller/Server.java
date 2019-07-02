@@ -1,6 +1,5 @@
 package org.aksw.limes.core.controller;
 
-
 import static spark.Spark.awaitInitialization;
 import static spark.Spark.before;
 import static spark.Spark.exception;

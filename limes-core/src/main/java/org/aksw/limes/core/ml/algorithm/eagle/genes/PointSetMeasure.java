@@ -7,13 +7,8 @@ import java.util.Set;
 
 import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.measures.measure.MeasureFactory;
-<<<<<<< HEAD
-import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
-import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
-=======
 import org.aksw.limes.core.ml.algorithm.eagle.core.ExpressionProblem.ResourceTerminalType;
 import org.aksw.limes.core.ml.algorithm.eagle.core.LinkSpecGeneticLearnerConfig;
->>>>>>> feature/PhoneticSimilarity
 import org.jgap.InvalidConfigurationException;
 import org.jgap.RandomGenerator;
 import org.jgap.gp.CommandGene;
@@ -208,7 +203,7 @@ public class PointSetMeasure extends CommandGene implements IMutateable, IClonea
     	ops.add(MeasureFactory.GEO_NAIVE_HAUSDORFF);
 
     	ops.add(MeasureFactory.GEO_SURJECTION);
-    	ops.add(MeasureFactory.GEO_NAIVE_SURJECTION);
+    	ops.add(MeasureFactory.GEO_SURJECTION);
     	ops.add(MeasureFactory.GEO_ORTHODROMIC);
     	ops.add(MeasureFactory.GEO_SCAN_INDEXED_HAUSDORFF);
     	ops.add(MeasureFactory.GEO_SUM_OF_MIN);
