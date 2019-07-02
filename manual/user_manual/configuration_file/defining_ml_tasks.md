@@ -199,12 +199,9 @@ The following table contains a list of implemented algorithms together with supp
     <td class="tg-yw4l">property mapping</td>
     <td class="tg-yw4l">/path/to/propertymapping/file</td>
     <td class="tg-yw4l">tab seperated file matching properties of source and target and property type e.g.:
-
-
-    name    name    string
-
-
-    age age number</td>
+    name    name    string<BR>
+    age age number<BR>
+    </td>
   </tr>
   <tr>
     <td class="tg-yw4l">maximum height of the link specification</td>
