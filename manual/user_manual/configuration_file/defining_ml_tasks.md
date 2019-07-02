@@ -188,6 +188,45 @@ The following table contains a list of implemented algorithms together with supp
     <td class="tg-yw4l">0.3</td>
     <td class="tg-yw4l">[0.0,1.0]</td>
   </tr>
+  <tr>
+    <td class="tg-yw4l" rowspan="13">DRAGON</td>
+    <td class="tg-yw4l" rowspan="13">supervised batch</td>
+    <td class="tg-yw4l">confidence threshold for pruning</td>
+    <td class="tg-yw4l">0.01</td>
+    <td class="tg-yw4l">[0.0,1.0]</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">property mapping</td>
+    <td class="tg-yw4l">/path/to/propertymapping/file</td>
+    <td class="tg-yw4l">tab seperated file matching properties of source and target and property type e.g.:
+    name    name    string
+    age age number</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">maximum height of the link specification</td>
+    <td class="tg-yw4l">1</td>
+    <td class="tg-yw4l">[1,100000]</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">minimum property coverage</td>
+    <td class="tg-yw4l">0.01</td>
+    <td class="tg-yw4l">[0.0,1.0]</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">property learning rate</td>
+    <td class="tg-yw4l">0.01</td>
+    <td class="tg-yw4l">[0.0,1.0]</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">fitness function</td>
+    <td class="tg-yw4l">GiniIndex</td>
+    <td class="tg-yw4l">"GiniIndex" or "GlobalFMeasure"</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">pruning function</td>
+    <td class="tg-yw4l">ErrorEstimate</td>
+    <td class="tg-yw4l">"ErrorEstimate" or "GlobalFmeasure"</td>
+  </tr>
 </table>
     	
  
