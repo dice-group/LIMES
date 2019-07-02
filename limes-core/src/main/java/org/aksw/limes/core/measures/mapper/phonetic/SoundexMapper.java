@@ -1,4 +1,4 @@
-package org.aksw.limes.core.measures.mapper.string;
+package org.aksw.limes.core.measures.mapper.phonetic;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -15,11 +15,14 @@ import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.io.mapping.MappingFactory;
 import org.aksw.limes.core.measures.mapper.AMapper;
 import org.aksw.limes.core.measures.mapper.pointsets.PropertyFetcher;
-import org.aksw.limes.core.measures.measure.string.KoelnPhoneticMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.SoundexMeasure;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 
-public class KoelnPhoneticMapper extends AMapper {
+/**
+ * @author Kevin Dreßler
+ */
+public class SoundexMapper extends AMapper {
 
     /**
      * Computes a mapping between a source and a target.
@@ -41,15 +44,23 @@ public class KoelnPhoneticMapper extends AMapper {
      */
     @Override
     public AMapping getMapping(ACache source, ACache target, String sourceVar, String targetVar, String expression,
-                               double threshold) {
+            double threshold) {
         if (threshold <= 0) {
             throw new InvalidThresholdException(threshold);
         }
         List<String> listA, listB;
         Map<String, List<Integer>> invListA, invListB;
         List<String> properties = PropertyFetcher.getProperties(expression, threshold);
-        Map<String, Set<String>> sourceMap = getValueToUriMap(source, properties.get(0));
-        Map<String, Set<String>> targetMap = getValueToUriMap(target, properties.get(1));
+        String property1 = properties.get(0);
+		String property2 = properties.get(1);
+		//if(property1.contains("#"))
+		//property1=property1.substring(property1.indexOf("#")+1);
+		//if(property2.contains("#"))
+		//property2=property2.substring(property2.indexOf("#")+1);
+	//	System.out.println(" p1: "+property1);
+	//	System.out.println(" p2: "+property2);
+		Map<String, Set<String>> sourceMap = getValueToUriMap(source, property1);
+		Map<String, Set<String>> targetMap = getValueToUriMap(target, property2);
         listA = new ArrayList<>(sourceMap.keySet());
         listB = new ArrayList<>(targetMap.keySet());
         // create inverted lists (code=>index of original list)
@@ -71,13 +82,15 @@ public class KoelnPhoneticMapper extends AMapper {
                     similarityBook.push(new MutableTriple<>(current.getDistance(), entry.getValue(),
                             current.getNode().getReferences()));
                 }
-                for (Map.Entry<Character, TrieNode> nodeEntry : childs) {
-                    if (entry.getKey().length()>current.getPosition() && nodeEntry.getKey().equals(entry.getKey().charAt(current.getPosition()))) {
-                        queue.push(new TrieSearchState(current.getDistance(), current.getPosition() + 1,
-                                nodeEntry.getValue()));
-                    } else if (current.getDistance() < maxDistance) {
-                        queue.push(new TrieSearchState(current.getDistance() + 1, current.getPosition() + 1,
-                                nodeEntry.getValue()));
+                if (entry.getKey().length() > current.getPosition()) {
+                    for (Map.Entry<Character, TrieNode> nodeEntry : childs) {
+                        if (nodeEntry.getKey().equals(entry.getKey().charAt(current.getPosition()))) {
+                            queue.push(new TrieSearchState(current.getDistance(), current.getPosition() + 1,
+                                    nodeEntry.getValue()));
+                        } else if (current.getDistance() < maxDistance) {
+                            queue.push(new TrieSearchState(current.getDistance() + 1, current.getPosition() + 1,
+                                    nodeEntry.getValue()));
+                        }
                     }
                 }
             }
@@ -92,7 +105,7 @@ public class KoelnPhoneticMapper extends AMapper {
                     for (String sourceUri : sourceMap.get(a)) {
                         for (String targetUri : targetMap.get(b)) {
                             result.add(sourceUri, targetUri,
-                                    (1.0d - (t.getLeft().doubleValue() / (double) a.length())));
+                                    (1.0d - (t.getLeft().doubleValue() / (double)4)));
                         }
                     }
                 }
@@ -106,7 +119,8 @@ public class KoelnPhoneticMapper extends AMapper {
         Map<String, List<Integer>> result = new HashMap<>(list.size());
         for (int i = 0, listASize = list.size(); i < listASize; i++) {
             String s = list.get(i);
-            String code = KoelnPhoneticMeasure.getCode(s);
+            if (!s.equals("")) {
+            String code = SoundexMeasure.getCode(s);
             List<Integer> ref;
             if (!result.containsKey(code)) {
                 ref = new LinkedList<>();
@@ -114,13 +128,13 @@ public class KoelnPhoneticMapper extends AMapper {
             } else {
                 ref = result.get(code);
             }
-            ref.add(i);
+            ref.add(i);}
         }
         return result;
     }
 
     public String getName() {
-        return "koelnPhonetic";
+        return "soundex";
     }
 
     public double getRuntimeApproximation(int sourceSize, int targetSize, double theta, Language language) {
@@ -135,37 +149,35 @@ public class KoelnPhoneticMapper extends AMapper {
         return new Double(Math.floor(4 * (1 - threshold))).intValue();
     }
 
-    private static class TrieNode {
+    static class TrieNode {
 
         private Map<Character, TrieNode> children;
         private List<Integer> references;
 
-        TrieNode(List<Integer> references) {
+        public TrieNode(List<Integer> references) {
             this.references = references;
             this.children = new HashMap<>();
         }
 
-        static TrieNode recursiveAddAll(Map<String, List<Integer>> code2References) {
+        public static TrieNode recursiveAddAll(Map<String, List<Integer>> code2References) {
             TrieNode root = new TrieNode(null);
             TrieNode.recursiveAddAll(root, code2References);
             return root;
         }
 
-        static void recursiveAddAll(TrieNode root, Map<String, List<Integer>> code2References) {
-            for (Map.Entry<String, List<Integer>> entry : code2References.entrySet()) {
+        public static void recursiveAddAll(TrieNode root, Map<String, List<Integer>> code2References) {
+            for (Map.Entry<String, List<Integer>> entry : code2References.entrySet())
                 TrieNode.recursiveAdd(root, entry.getKey(), entry.getValue());
-            }
         }
 
-        static void recursiveAdd(TrieNode node, String code, List<Integer> references) {
-            if (code.length() > 1) {
-                TrieNode.recursiveAdd(node.addChild(code.charAt(0), null), code.substring(1), references);
-            } else {
-                node.addChild(code.charAt(0), references);
-            }
+        private static void recursiveAdd(TrieNode node, String code, List<Integer> references) {
+            if (code.length() >1) {
+                TrieNode.recursiveAdd(node.addChild(code.charAt(0), null), code.substring(1), references);}
+            else if (code.length()==1) {
+                node.addChild(code.charAt(0), references);}
         }
 
-        TrieNode addChild(char symbol, List<Integer> references) {
+        public TrieNode addChild(char symbol, List<Integer> references) {
             TrieNode child;
             if (!this.children.containsKey(symbol)) {
                 child = new TrieNode(references);
@@ -176,37 +188,39 @@ public class KoelnPhoneticMapper extends AMapper {
             return child;
         }
 
-        List<Integer> getReferences() {
+        public List<Integer> getReferences() {
             return this.references;
         }
 
-        Set<Map.Entry<Character, TrieNode>> getChildren() {
+        public Set<Map.Entry<Character, TrieNode>> getChildren() {
             return this.children.entrySet();
         }
     }
 
-    private static class TrieSearchState {
-
+    static class TrieSearchState {
         private int distance;
         private int position;
         private TrieNode node;
 
-        TrieSearchState(int distance, int position, TrieNode node) {
+        public TrieSearchState(int distance, int position, TrieNode node) {
             this.distance = distance;
             this.position = position;
             this.node = node;
         }
 
-        int getDistance() {
+        public int getDistance() {
             return distance;
         }
 
-        int getPosition() {
+        public int getPosition() {
             return position;
         }
 
-        TrieNode getNode() {
+        public TrieNode getNode() {
             return node;
         }
     }
+
+    ;
+
 }

@@ -9,7 +9,7 @@ import org.aksw.limes.core.datastrutures.PairSimilar;
 import org.aksw.limes.core.io.cache.ACache;
 import org.aksw.limes.core.io.mapping.AMapping;
 import org.aksw.limes.core.measures.measure.AMeasure;
-import org.aksw.limes.core.measures.measure.string.SoundexMeasure;
+import org.aksw.limes.core.measures.measure.phoneticmeasure.SoundexMeasure;
 import org.aksw.limes.core.measures.measure.string.StringMeasure;
 import org.aksw.limes.core.ml.algorithm.eagle.core.ALDecider.Triple;
 import org.aksw.limes.core.ml.algorithm.eagle.util.PropertyMapping;
