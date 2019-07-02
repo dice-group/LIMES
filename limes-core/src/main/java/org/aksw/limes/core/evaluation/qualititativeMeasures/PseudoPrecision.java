@@ -46,8 +46,8 @@ public class PseudoPrecision extends APseudoPRF {
 		AMapping res = predictions;
         AMapping rev = res.reverseSourceTarget();
         if (useOneToOneMapping) {
-            res = predictions.getBestOneToNMapping();
-            rev = res.reverseSourceTarget().getBestOneToNMapping();
+            res = predictions.getBestOneToOneMappings(predictions);
+            rev = res.reverseSourceTarget();
         }
         double p = res.getMap().keySet().size();
         if (isSymmetricPrecision())

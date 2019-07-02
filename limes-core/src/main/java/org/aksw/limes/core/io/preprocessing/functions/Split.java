@@ -43,4 +43,8 @@ public class Split extends APreprocessingFunction {
 		}
 		return inst;
 	}
+
+    public boolean isComplex() {
+        return true;
+    }
 }

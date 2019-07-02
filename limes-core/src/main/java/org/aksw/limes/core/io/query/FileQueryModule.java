@@ -49,7 +49,6 @@ public class FileQueryModule implements IQueryModule {
             }
             InputStreamReader reader = new InputStreamReader(in, "UTF8");
             r.read(model, reader, null);
-            logger.info("here");
             logger.info("RDF model read from " + kb.getEndpoint() + " is of size " + model.size());
             ModelRegistry.register(kb.getEndpoint(), model);
             reader.close();

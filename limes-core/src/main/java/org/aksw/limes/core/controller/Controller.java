@@ -195,11 +195,8 @@ public class Controller {
             sourceCache = getSubCache.apply(sourceCache);
             targetCache = getSubCache.apply(targetCache);
         }
-
-        System.out.println(sourceCache.getAllInstances().get(0));
         // 4. Apply preprocessing 
         sourceCache = Preprocessor.applyFunctionsToCache(sourceCache, config.getSourceInfo().getFunctions());
-        System.out.println(sourceCache.getAllInstances().get(0));
         targetCache = Preprocessor.applyFunctionsToCache(targetCache, config.getTargetInfo().getFunctions());
 
         // 5. Machine Learning or Planning

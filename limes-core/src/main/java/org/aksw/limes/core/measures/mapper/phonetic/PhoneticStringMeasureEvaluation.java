@@ -1,4 +1,4 @@
-
+/*
 package org.aksw.limes.core.measures.mapper.phonetic;
 
 import static org.junit.Assert.fail;
@@ -139,6 +139,7 @@ public class PhoneticStringMeasureEvaluation {
 
 		} }
 */
+		/*
 
 		// phonetic similarity algorithms 
 		EvaluationData eval = DataSetChooser.getData("DBLPSCHOLAR");
@@ -271,6 +272,7 @@ public class PhoneticStringMeasureEvaluation {
 
 	}
 	//	 */
+		/*
 
 		public static ACache cleanNumericProperties(ACache inputCache, List<String> numericProperties) {
 			ACache noNumericPropertiesCache = new MemoryCache();
@@ -444,3 +446,4 @@ public class PhoneticStringMeasureEvaluation {
 
 
 	}
+*/

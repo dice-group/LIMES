@@ -1,7 +1,7 @@
 package org.aksw.limes.core.evaluation.evaluationDataLoader;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.aksw.limes.core.evaluation.evaluationDataLoader.DataSetChooser.MapKey;
 import org.aksw.limes.core.io.cache.ACache;
@@ -52,28 +52,28 @@ public class EvaluationData {
      * For the time beeing and convenience a method to construct EvaluationData using
      * the outdated HashMap-based approach.
      *
-     * @param param
+     * @param map
      *         HashMap meeting the standards of the {@link DataSetChooser}.
      * @return EvaluationData-Contains all information regarding the evaluation such as dataset folder, dataset files and property mapping
      */
-    public static EvaluationData buildFromHashMap(HashMap<MapKey, Object> param) {
+    public static EvaluationData buildFromHashMap(Map<MapKey, Object> map) {
         EvaluationData data = new EvaluationData();
-        data.baseFolder = (String) param.get(MapKey.BASE_FOLDER);
-        data.configFileName = (String) param.get(MapKey.CONFIG_FILE);
-        data.configReader = (AConfigurationReader) param.get(MapKey.CONFIG_READER);
-        data.datasetFolder = (String) param.get(MapKey.DATASET_FOLDER);
-        data.evaluationResultFileName = (String) param.get(MapKey.EVALUATION_FILENAME);
-        data.evauationResultFolder = (String) param.get(MapKey.EVALUATION_RESULTS_FOLDER);
-        data.goldStandardFile = (String) param.get(MapKey.REFERENCE_FILE);
-        data.name = (String) param.get(MapKey.NAME);
-        data.propertyMapping = (PropertyMapping) param.get(MapKey.PROPERTY_MAPPING);
-        data.referenceMapping = (AMapping) param.get(MapKey.REFERENCE_MAPPING);
-        data.sourceCache = (ACache) param.get(MapKey.SOURCE_CACHE);
-        data.sourceFileName = (String) param.get(MapKey.SOURCE_FILE);
-        data.targetCache = (ACache) param.get(MapKey.TARGET_CACHE);
-        data.targetFileName = (String) param.get(MapKey.TARGET_FILE);
-        data.sourceClass = (String) param.get(MapKey.SOURCE_CLASS);
-        data.targetClass = (String) param.get(MapKey.TARGET_CLASS);
+        data.baseFolder = (String) map.get(MapKey.BASE_FOLDER);
+        data.configFileName = (String) map.get(MapKey.CONFIG_FILE);
+        data.configReader = (AConfigurationReader) map.get(MapKey.CONFIG_READER);
+        data.datasetFolder = (String) map.get(MapKey.DATASET_FOLDER);
+        data.evaluationResultFileName = (String) map.get(MapKey.EVALUATION_FILENAME);
+        data.evauationResultFolder = (String) map.get(MapKey.EVALUATION_RESULTS_FOLDER);
+        data.goldStandardFile = (String) map.get(MapKey.REFERENCE_FILE);
+        data.name = (String) map.get(MapKey.NAME);
+        data.propertyMapping = (PropertyMapping) map.get(MapKey.PROPERTY_MAPPING);
+        data.referenceMapping = (AMapping) map.get(MapKey.REFERENCE_MAPPING);
+        data.sourceCache = (ACache) map.get(MapKey.SOURCE_CACHE);
+        data.sourceFileName = (String) map.get(MapKey.SOURCE_FILE);
+        data.targetCache = (ACache) map.get(MapKey.TARGET_CACHE);
+        data.targetFileName = (String) map.get(MapKey.TARGET_FILE);
+        data.sourceClass = (String) map.get(MapKey.SOURCE_CLASS);
+        data.targetClass = (String) map.get(MapKey.TARGET_CLASS);
         return data;
     }
 
