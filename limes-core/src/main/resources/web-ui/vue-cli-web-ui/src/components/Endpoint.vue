@@ -1,0 +1,148 @@
+<template>
+  <div>
+    <md-layout>
+      <md-input-container class="advancedOptions" v-show="advancedOptionsShow">
+        <label>ID</label>
+        <md-input v-model="source.id" placeholder="ID"></md-input>
+      </md-input-container>
+    </md-layout>
+    <md-layout>
+      <md-input-container class="dropdown">
+        <label>Endpoint</label>
+        <md-input v-model="source.endpoint" @keyup.enter.native="enterEndpointClicked"
+        @focus="onFocus" @blur="onBlur" placeholder="Endpoint"
+        ></md-input>
+     
+        <div class="dropdown-content"
+              v-show="optionsShown">
+              <div
+                :key="option"
+                class="dropdown-item"
+                @mousedown="selectOption(option)"
+                v-for="option in afterFilteredOptions">
+                  {{ option }}
+              </div>
+              
+        </div> 
+      </md-input-container>
+
+    </md-layout>
+    <md-layout>
+      <md-input-container class="advancedOptions" v-show="advancedOptionsShow">
+        <label>Var</label>
+        <md-input v-model="source.var" placeholder="Var"></md-input>
+      </md-input-container>
+    </md-layout>
+    <md-layout>
+      <md-input-container class="advancedOptions" v-show="advancedOptionsShow">
+        <label>Pagesize</label>
+        <md-input v-model="source.pagesize" placeholder="Pagesize"></md-input>
+      </md-input-container>
+    </md-layout>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    source: {
+      type: Object,
+    },
+    advancedOptionsShow: {
+      type: Boolean,
+    },
+    fetchClasses: {
+      type: Function,
+    },
+    classVar: {
+      type: String,
+    },
+    endpointandclasses: {
+      type: Object,
+    },
+    exampleConfigEnable: {
+      type: Boolean,
+    },
+    fetchProperties: {
+      type: Function,
+    },
+  },
+  data () {
+    return {
+      focused: false,
+      optionsShown: false,
+      classes: [],
+      endpoints: [],
+      afterFilteredOptions: [],
+    }
+  },
+  beforeMount() {
+        fetch('./lod-data.json')
+            .then(function(response) {
+              return response.json();
+             })
+            .then((content) => {
+              let obj = {};
+              for (let prop in content) {
+                if(content[prop].sparql.length){
+                  for(let i=0; i< content[prop].sparql.length; i++){
+                    if(content[prop].sparql[i].status == "OK"){
+                      obj[content[prop].sparql[i].access_url] = true;
+                    }
+                  }
+                }
+              }
+              this.endpoints.push(...Object.keys(obj));
+              this.afterFilteredOptions = this.endpoints;
+            })                  
+  },
+  methods: {
+    onFocus() {
+      this.focused = true;
+      this.optionsShown = true;
+    },
+    onBlur() {
+      this.focused = false;
+      this.optionsShown = false;
+    },
+    selectOption(option){
+      this.exampleConfigEnable = false;
+      this.source.endpoint = option;
+      this.source.propertiesForChoice.splice(0);
+      this.classVar = '';
+      this.checkForSameEndpoints(option);
+    },
+    enterEndpointClicked(){
+      this.exampleConfigEnable = false;
+      this.onBlur();
+      this.source.propertiesForChoice.splice(0);
+      this.classVar = '';
+      this.checkForSameEndpoints(this.source.endpoint);
+    },
+    checkForSameEndpoints(currentOption){
+      if(this.endpointandclasses.endpoint !== currentOption){
+        this.fetchClasses(currentOption);
+      } else {
+        this.$emit('repeat-source-classes', this.endpointandclasses.classes);
+        this.$emit('repeat-classes', this.endpointandclasses.classes);
+      }
+    },
+  },
+  watch: {
+      'source.endpoint': function() {
+         this.afterFilteredOptions = this.endpoints.filter(i => {
+          return i.toLowerCase().includes(this.source.endpoint.toLowerCase())
+        });
+        if(this.classVar === '' && this.exampleConfigEnable){
+          //this.classVar = this.endpointandclasses.classes;
+          this.$emit('toggle-classVar', this.endpointandclasses.classes[0]);
+          if(this.endpointandclasses.classes.length){
+            this.fetchProperties(this.source.endpoint, this.endpointandclasses.classes[0]);
+          } else {
+            this.fetchClasses(this.source.endpoint);
+          }
+        }  
+      },
+  }
+}
+</script>
