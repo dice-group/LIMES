@@ -25,8 +25,8 @@ public class ContentMeasure {
 
 		this.a=A;
 		this.b=B;
-		mixedContentMeasure();
-
+		mixedContentMeasureS(A,B);
+		mixedContentMeasureT(B,A);
 	}
 	/**
 	 * class constructor
@@ -41,7 +41,7 @@ public class ContentMeasure {
 	 * @param b
 	 * @return  boolean value defines whether or not the projections of these mbra and mbrb over x-axis overlap
 	 */
-	public boolean projectionX() {
+	public boolean projectionX(Geometry a,Geometry b) {
 		//mbra is the minimum bounding box of geometry a
 		//mbrb is the minimum bounding box of geometry a
 		 boolean projX=false;
@@ -61,7 +61,7 @@ public class ContentMeasure {
 	 * @param b
 	 * @return boolean value defines whether or not the projections of these mbra and mbrb over y-axis overlap
 	 */
-	public boolean projectionY() {
+	public boolean projectionY(Geometry a,Geometry b) {
   boolean projY=false;
 		Envelope mbra= a.getEnvelopeInternal();
 		Envelope mbrb= b.getEnvelopeInternal();
@@ -79,7 +79,7 @@ public class ContentMeasure {
 	 * @param b
 	 * @return the distance based on many conditions
 	 */
-	public double distance() {
+	public double distance(Geometry a,Geometry b) {
 
 		double d = 0;
 		double min1=0;
@@ -91,7 +91,7 @@ public class ContentMeasure {
 		double areaAintersectB=mbraIntersectsmbrb.getArea();
 		double areaA=mbra.getArea();
 		double areaB=mbrb.getArea();
-		if(!projectionX()&& !projectionY()) {
+		if(!projectionX(a,b)&& !projectionY(a,b)) {
 			double x1=Math.abs((mbra.getMinX()-mbrb.getMaxX()));
 			double x2=Math.abs((mbra.getMaxX()-mbrb.getMinX()));
 			double y1=Math.abs((mbra.getMinY()-mbrb.getMaxY()));
@@ -117,7 +117,7 @@ public class ContentMeasure {
 			//System.out.println("DDD1: "+d);
 			return d;
 		}
-		else if(projectionX( )&& !projectionY()) {
+		else if(projectionX(a,b )&& !projectionY(a,b)) {
 			double y1=Math.abs(mbra.getMinY()-mbrb.getMaxY());
 			double y2=Math.abs(mbra.getMaxY()-mbrb.getMinY());
 			
@@ -129,7 +129,7 @@ public class ContentMeasure {
 			return d;
 		}
 
-		else if(!projectionX( )&& projectionY( )) {
+		else if(!projectionX(a,b )&& projectionY( a,b)) {
 			double x1=Math.abs(mbra.getMinX()-mbrb.getMaxX());
 			double x2=Math.abs(mbra.getMaxX()-mbrb.getMinX());
 			if(x1<x2) d=x1;	
@@ -146,35 +146,83 @@ public class ContentMeasure {
 	 * @param b
 	 * @return measure of similarity based on the area computing 
 	 */
-	public double areaBasedMeasure() {
+	public double areaBasedMeasureS(Geometry a,Geometry b) {
 
 		Envelope mbra= a.getEnvelopeInternal();
 		Geometry mbraUnionmbra=a.union(b);
-		Envelope envelopeInternal = mbraUnionmbra.getEnvelopeInternal();
-		double f_a=0;
-		f_a=mbra.getArea()/envelopeInternal.getArea();
-		return f_a;
+		Envelope envelopeUnion = mbraUnionmbra.getEnvelopeInternal();
+		double f_a_s=0;
+		f_a_s=mbra.getArea()/envelopeUnion.getArea();
+		return f_a_s;
 	}
 
+	
+	public double areaBasedMeasureT(Geometry b,Geometry a) {
+
+		Envelope mbrb= b.getEnvelopeInternal();
+		Geometry mbraUnionmbra=a.union(b);
+		Envelope envelopeUnion = mbraUnionmbra.getEnvelopeInternal();
+		double f_a_t=0;
+		f_a_t=mbrb.getArea()/envelopeUnion.getArea();
+		return f_a_t;
+	}
 	/**
 	 * @param a
 	 * @param b
 	 * @return measure of similarity based on the diagonal computing
 	 */
-	public double diagonalBasedMeasure() {
+	public double diagonalBasedMeasureS(Geometry a,Geometry b) {
 
 		Envelope mbra= a.getEnvelopeInternal();
-		Geometry mbraUnionmbra=a.union(b);
-		Envelope envelopeInternal = mbraUnionmbra.getEnvelopeInternal();
-		double f_d=0;
+		Geometry mbraUnionmbrb=a.union(b);
+		Envelope envelopeUnion = mbraUnionmbrb.getEnvelopeInternal();
+		double f_d_s=0;
 		double diagonal=Math.sqrt(Math.pow((mbra.getMaxX()-mbra.getMinX()), 2)
 				+Math.pow((mbra.getMinY()-mbra.getMaxY()), 2));
 
-		double diagonalOfUnion=Math.sqrt(Math.pow((envelopeInternal.getMaxX()-envelopeInternal.getMinX()), 2)
-				+Math.pow((envelopeInternal.getMinY()-envelopeInternal.getMaxY()), 2));
+		double diagonalOfUnion=Math.sqrt(Math.pow((envelopeUnion.getMaxX()-envelopeUnion.getMinX()), 2)
+				+Math.pow((envelopeUnion.getMinY()-envelopeUnion.getMaxY()), 2));
 
-		f_d=diagonal/diagonalOfUnion;
-		return f_d;
+		f_d_s=diagonal/diagonalOfUnion;
+		return f_d_s;
+	}
+	
+	public double diagonalBasedMeasureT(Geometry b,Geometry a) {
+
+		Envelope mbrb= b.getEnvelopeInternal();
+		Geometry mbraUnionmbra=a.union(b);
+		Envelope envelopeUnion = mbraUnionmbra.getEnvelopeInternal();
+		double f_d_t=0;
+		double diagonal=Math.sqrt(Math.pow((mbrb.getMaxX()-mbrb.getMinX()), 2)
+				+Math.pow((mbrb.getMinY()-mbrb.getMaxY()), 2));
+
+		double diagonalOfUnion=Math.sqrt(Math.pow((envelopeUnion.getMaxX()-envelopeUnion.getMinX()), 2)
+				+Math.pow((envelopeUnion.getMinY()-envelopeUnion.getMaxY()), 2));
+
+		f_d_t=diagonal/diagonalOfUnion;
+		return f_d_t;
+	}
+	
+	public double diagonalS(Geometry a) {
+
+		Envelope mbra= a.getEnvelopeInternal();
+		double diagonalS=0;
+		 diagonalS=Math.sqrt(Math.pow((mbra.getMaxX()-mbra.getMinX()), 2)
+				+Math.pow((mbra.getMinY()-mbra.getMaxY()), 2));
+
+		
+		return diagonalS;
+	}
+	
+	public double diagonalT(Geometry b) {
+
+		Envelope mbrb= b.getEnvelopeInternal();
+		double diagonalT=0;
+		 diagonalT=Math.sqrt(Math.pow((mbrb.getMaxX()-mbrb.getMinX()), 2)
+				+Math.pow((mbrb.getMinY()-mbrb.getMaxY()), 2));
+
+		
+		return diagonalT;
 	}
 
 
@@ -184,52 +232,35 @@ public class ContentMeasure {
 	 * @return measure of similarity based on the combination of area and diagonal measure, it can distinguish 
 	 * the 8 topological relations taking in account
 	 */
-	public int mixedContentMeasure() {
+	public int mixedContentMeasureS(Geometry a,Geometry b) {
 
 		Envelope mbra= a.getEnvelopeInternal();
 		Envelope mbrb=  b.getEnvelopeInternal();
 		Envelope mbraIntersectsmbrb=  mbra.intersection(mbrb);
 
-		int f_m=0;
-		f_m=(int) ((mbra.getArea()-2*(mbraIntersectsmbrb.getArea()))/mbra.getArea()+
-				(distance()/diagonalBasedMeasure()));
+		int f_m_s=0;
+		f_m_s=(int) ((mbra.getArea()-2*(mbraIntersectsmbrb.getArea()))/mbra.getArea()+
+				(distance(a,b)/diagonalS(a)));
 
 
-		return f_m;
-
-	}
-	/**
-	 * @return the distance
-	 */
-	public double getDistance() {
-
-		return distance( );
+		return f_m_s;
 
 	}
-	/**
-	 * @return area based measure
-	 */
-	public double getAreaBasedMeasure() {
+	public int mixedContentMeasureT(Geometry b,Geometry a) {
 
-		return areaBasedMeasure( );
+		Envelope mbra= a.getEnvelopeInternal();
+		Envelope mbrb=  b.getEnvelopeInternal();
+		Envelope mbraIntersectsmbrb=  mbra.intersection(mbrb);
 
-	}
-	/**
-	 * @return diagonal based measure
-	 */
-	public double getDiagonalBasedMeasure() {
+		int f_m_s=0;
+		f_m_s=(int) ((mbrb.getArea()-2*(mbraIntersectsmbrb.getArea()))/mbrb.getArea()+
+				(distance(a,b)/diagonalT(b)));
 
-		return diagonalBasedMeasure( );
+
+		return f_m_s;
 
 	}
-	/**
-	 * @return mixed content measure
-	 */
-	public double getMixedContentMeasure() {
-
-		return mixedContentMeasure( );
-
-	}
+	
 
 
 }
