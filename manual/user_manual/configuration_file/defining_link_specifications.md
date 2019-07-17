@@ -36,7 +36,7 @@ We call `trigrams(x.rdfs:label,y.dc:title)|0.3` the left child of the specificat
 
 ## Boolean operations
 
-Boolean operations allow to combine and filter the results of metric operations and include `AND`, `OR`, `DIFF`, e.g. as `AND(trigrams(x.rdfs:label,y.dc:title)|0.9, euclidean(x.lat|x.long, y.latitude|y.longitude)|0.7)`.
+Boolean operations allow to combine and filter the results of metric operations and include `AND`, `OR`, `MINUS`, e.g. as `AND(trigrams(x.rdfs:label,y.dc:title)|0.9, euclidean(x.lat|x.long, y.latitude|y.longitude)|0.7)`.
     
 This specification returns all links such that:
     
