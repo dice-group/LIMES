@@ -45,8 +45,8 @@ The following table contains a list of implemented algorithms together with supp
     <th class="tg-yw4l">Note</th>
   </tr>
   <tr>
-    <td class="tg-baqh" rowspan="13">WOMBAT Simple<br></td>
-    <td class="tg-yw4l" rowspan="13">supervised batch, supervised active and unsupervised</td>
+    <td class="tg-baqh" rowspan="14">WOMBAT Simple<br></td>
+    <td class="tg-yw4l" rowspan="14">supervised batch, supervised active and unsupervised</td>
     <td class="tg-yw4l">max refinement tree size</td>
     <td class="tg-yw4l">2000</td>
     <td class="tg-yw4l"></td>
