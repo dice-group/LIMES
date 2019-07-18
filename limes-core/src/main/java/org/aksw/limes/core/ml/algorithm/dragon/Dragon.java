@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.aksw.limes.core.evaluation.evaluationDataLoader.PropMapper;
 import org.aksw.limes.core.evaluation.qualititativeMeasures.PseudoFMeasure;
 import org.aksw.limes.core.exceptions.UnsupportedMLImplementationException;
 import org.aksw.limes.core.execution.engine.SimpleExecutionEngine;
@@ -163,9 +164,7 @@ public class Dragon extends ACoreMLAlgorithm {
 	}
 
 	/**
-	 * Creates a training set out of the oracleMapping and uses {@link J48} to
-	 * build a decision tree The decision tree gets parsed to a
-	 * {@link LinkSpecification} by {@link TreeParser}
+	 * Not implemented yet
 	 * 
 	 * @param oracleMapping
 	 * @return res wrapper containing learned link specification
@@ -247,26 +246,36 @@ public class Dragon extends ACoreMLAlgorithm {
 		return mlType == MLImplementationType.SUPERVISED_BATCH;
 	}
 
+	private PropertyMapping getPropertyMappingFromParameter(){
+		PropertyMapping propertyMapping = null;
+		if(getParameter(PARAMETER_PROPERTY_MAPPING) instanceof PropertyMapping){
+			propertyMapping = (PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING);
+		}else {
+			propertyMapping = PropMapper.getPropertyMappingFromFile(getParameter(PARAMETER_PROPERTY_MAPPING).toString());
+			setParameter(PARAMETER_PROPERTY_MAPPING,propertyMapping);
+		}
+		return propertyMapping;
+	}
 
 	@Override
 	protected MLResults learn(AMapping trainingData) throws UnsupportedMLImplementationException {
 		if(isActive){
             root = new DecisionTree(this, testSourceCache, testTargetCache, null,
-                    (double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
-                    (double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
-                    (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData, (PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
+                    Double.parseDouble(getParameter(PARAMETER_MIN_PROPERTY_COVERAGE).toString()),
+                    Double.parseDouble(getParameter(PARAMETER_PROPERTY_LEARNING_RATE).toString()),
+                    Double.parseDouble(getParameter(PARAMETER_PRUNING_CONFIDENCE).toString()), trainingData, getPropertyMappingFromParameter());
         }else{
             root = new DecisionTree(this, sourceCache, targetCache, null,
                     (double) getParameter(PARAMETER_MIN_PROPERTY_COVERAGE),
                     (double) getParameter(PARAMETER_PROPERTY_LEARNING_RATE),
-                    (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData, (PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
+                    (double) getParameter(PARAMETER_PRUNING_CONFIDENCE), trainingData, getPropertyMappingFromParameter());
         }
         DecisionTree.fitnessFunction = (FitnessFunctionDTL) getParameter(PARAMETER_FITNESS_FUNCTION);
         DecisionTree.fitnessFunction.setPropertyMapping((PropertyMapping) getParameter(PARAMETER_PROPERTY_MAPPING));
         DecisionTree.pruningFunction = (PruningFunctionDTL) getParameter(PARAMETER_PRUNING_FUNCTION);
         DecisionTree.fitnessFunction.setDt(root);
-        DecisionTree.maxDepth = (int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT);
-        root.buildTree((int) getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT));
+        DecisionTree.maxDepth = Integer.parseInt(getParameter(PARAMETER_MAX_LINK_SPEC_HEIGHT).toString());
+        root.buildTree(DecisionTree.maxDepth);
         logger.info("FULL:\n" + root.toString());
 
         root.prune();
