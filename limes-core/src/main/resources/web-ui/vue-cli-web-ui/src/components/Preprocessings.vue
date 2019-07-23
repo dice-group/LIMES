@@ -16,7 +16,8 @@ export default {
 	methods: {
 	    processingPropertyWithPrepFunc(i){
 
-	      if(i.getChildren().length){
+	      if(i.getChildren().length && i.getChildren().filter(b => b.type === "emptyBlock" || b.type === "propertyPath").length === 0){
+	      	
 	        if(!this.$store.state.notConnectedToStart){
 	          i.setDisabled(false);
 	        }
@@ -77,8 +78,18 @@ export default {
 	          }
 	        });
 	      } else { // not children blocks
-	        let strForXml = i.getFieldValue("propTitle");
-	        this.addProperies(i,strForXml);
+	      	if(i.getChildren().length === 0 ||  (i.getChildren().length && i.getChildren().filter(b => b.type === "propertyPath").length === 0)){
+		      	console.log(i.type,"kuku3");
+		        let strForXml = i.getFieldValue("propTitle");
+		        this.addProperies(i,strForXml);
+		    }else
+		    if(i.getField("enable_propertypath").getValue().toLowerCase() === 'false'){
+	      		console.log("REMOVE");
+	      		if(i.getChildren() && i.getChildren().length && i.getChildren()[0].type === "propertyPath"){
+	      			i.getChildren()[0].dispose();
+	      		}
+		    }
+		    
 	      }
 	    },
 	    addChainOfPreprocessings(i,renameText){

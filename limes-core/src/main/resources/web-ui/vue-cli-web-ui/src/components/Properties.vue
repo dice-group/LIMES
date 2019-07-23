@@ -8,13 +8,36 @@ export default {
 	},
   data () {
     return {
-
+    	currentBlock: null,
+    	emptyRemoved: false,
     }
   },
   methods: {
-		addProperies(i,strForXml){
+
+  		changePropertyBlockWithEmptyTail(block){
+        	if(block.getChildren().length === 0 && this.emptyRemoved === false){
+        	  let parentColour = block.getColour();
+	          var newBlock = this.$store.state.Workspace.newBlock('emptyBlock');
+	          newBlock.setColour(parentColour);
+	          newBlock.setMovable(false);
+			  newBlock.initSvg();
+          	  newBlock.render();
+
+          	  var parentConnection = block.getInput('propName').connection;
+			  var childConnection = newBlock.outputConnection;
+			  parentConnection.connect(childConnection);
+			}
+  		},
+		addProperies(i,strForXml){			
+			//for some time if added redundant emptyBlock
+			// if(i.type === 'emptyBlock'){
+			// 	i.dispose();
+			// }
+			this.currentBlock = i;		
+
 	      if(!this.$store.state.notConnectedToStart){
 	        if(i.type.indexOf("source") !== -1){
+	          this.changePropertyBlockWithEmptyTail(i);
 	          if(i.type.indexOf("optional") !== -1){
 	            this.processProperties("os", this.$store.state.source, this.$store.state.source.optionalProperties, strForXml);
 	          } else {
@@ -22,6 +45,7 @@ export default {
 	          }   
 	        } else {
 		        if(i.type.indexOf("target") !== -1){
+		          this.changePropertyBlockWithEmptyTail(i);
 		          if(i.type.indexOf("optional") !== -1){
 		            this.processProperties("ot", this.$store.state.target, this.$store.state.target.optionalProperties, strForXml);
 		          } else {
@@ -33,8 +57,13 @@ export default {
 	    },
 
 	    processProperties(kindOfProperty, srcOrTgt, allProps, strForXml){
-	      //this.checkNextLevelProperties(srcOrTgt, strForXml); // don't do it so far
-
+	      if(strForXml && strForXml.length !== 0){
+	      	console.log(this.currentBlock.type);
+	      	if(this.currentBlock.getField("enable_propertypath").getValue().toLowerCase() === 'true'){
+	      		console.log("TRUE");
+	      		this.checkNextLevelProperties(srcOrTgt, strForXml); // don't do it so far
+	      	}
+	      }	
 	      //allProps.splice(0);
 	      //allProps.push(strForXml);
 	      
@@ -104,7 +133,7 @@ export default {
 		        let classes = [];
 
 		        content.results.bindings.forEach(i => {
-		          let pair = this.getPrefix(this.$store.state, i.p.value).pair;
+		          let pair = this.getPrefix(i.p.value).pair;
 		          classes.push(pair);
 		        });
 		        let arr = classes.map(i => [i, i]);
@@ -117,50 +146,66 @@ export default {
 				    //   "type": "input_value",
 				    //   "name": "propName"
 				    // }
+			    // var dropdown = new Blockly.FieldDropdown(arr);
+			    // this.currentBlock.getInput('propName').appendField(dropdown, 'propTitle');
 
-		  //       var dropdown = new Blockly.FieldDropdown(arr);
-				// this.block.getInput("propName").appendField(dropdown, 'propTitle');
-		      
+
+		  // another variant
+		  console.log(this.currentBlock.type);
+
+		        var dropdown = new Blockly.FieldDropdown(arr);
+		        var checkbox = new Blockly.FieldCheckbox(false);
+		      	let parentColour = this.currentBlock.getColour();
+		        var newBlock = this.$store.state.Workspace.newBlock('propertyPath');
+		        newBlock.getInput("propertyPath").appendField(dropdown, 'propTitle');
+		        newBlock.getInput("propertyPath").appendField(checkbox, 'enable_propertypath');
+		        newBlock.setMovable(false);
+		        newBlock.setColour(parentColour);
+				newBlock.initSvg();
+		      	newBlock.render();
+
+		      	var parentConnection = this.currentBlock.getInput('propName').connection;
+				var childConnection = newBlock.outputConnection;
+				parentConnection.connect(childConnection);
 
 		      })
 		},
-		getPrefix(context, urlValue){
+	    getPrefix(urlValue){
+	        let property;
+	        let prefixNamespace;
+	        if(urlValue.split('#').length != 1) {
+	          let url = urlValue.split('#');
+	          property = url[1];
+	          prefixNamespace = url[0]+"#";
+	        } else {
+	          let url = urlValue.split('/');
+	          property = url[urlValue.split('/').length-1];
+	          url.pop();
+	          prefixNamespace = url.join('/')+"/";         
+	        }
 
-		    let property;
-		    let prefixNamespace;
-		    if(urlValue.split('#').length != 1) {
-		      let url = urlValue.split('#');
-		      property = url[1];
-		      prefixNamespace = url[0]+"#";
-		    } else {
-		      let url = urlValue.split('/');
-		      property = url[urlValue.split('/').length-1];
-		      url.pop();
-		      prefixNamespace = url.join('/')+"/";         
-		    }
+	        let prefix = '';
+	        for(let key in this.$store.state.context){
+	          if (this.$store.state.context[key] === prefixNamespace){
+	            prefix = key;
+	          }
+	        }
 
-		    let prefix = '';
-		    for(let key in context.prefixes){
-		      if (context.prefixes[key] === prefixNamespace){
-		        prefix = key;
-		      }
-		    }
+	        if(prefix.length === 0){
+	          if(!this.$store.state.context["pref0"]){
+	            prefix = "pref"+ 0;
+	          } else {
+	            let lastKey = Object.keys(this.$store.state.context).pop();
+	            prefix = "pref" +  (parseInt(lastKey.split("pref")[1]) + 1);
+	          }
+	          
 
-		    if(prefix.length === 0){
-		      if(!context.prefixes["pref0"]){
-		        prefix = "pref"+ 0;
-		      } else {
-		        let lastKey = Object.keys(context.prefixes).pop();
-		        prefix = "pref" +  (parseInt(lastKey.split("pref")[1]) + 1);
-		      }
-		      
+	          this.$store.state.context[prefix] = prefixNamespace;
+	        }
 
-		      context.prefixes[prefix] = prefixNamespace;
-		    }
+	        return {pair: prefix+":"+property, namespace: prefixNamespace};
 
-		    return {pair: prefix+":"+property, namespace: prefixNamespace};
-
-		},
+	    },
 	}
 }
 </script>

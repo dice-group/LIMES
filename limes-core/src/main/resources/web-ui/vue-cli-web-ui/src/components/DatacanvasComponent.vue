@@ -37,6 +37,8 @@ export default {
     	measureOptions: [],
     	typesOfBlocks: {
 	      'start': Start,
+        'emptyBlock': emptyBlock,
+        'propertyPath': propertyPath,
 	      'sourceproperty': sourceProperty,
 	      'targetproperty': targetProperty,
 	      'optionalsourceproperty': optionalSourceProperty,
@@ -149,12 +151,14 @@ export default {
           let onFirstComment = (event) => {
             console.log("change");
 
+
             // this.$store.state.source.properties.splice(0);
             // this.$store.state.target.properties.splice(0);
             // this.$store.state.source.optionalProperties.splice(0);
             // this.$store.state.target.optionalProperties.splice(0);
 
             let allBlocks = this.Workspace.getTopBlocks();
+            //console.log(this.Workspace.getAllBlocks());
 
             allBlocks.forEach( block => {
               this.notConnectedToStart = false;

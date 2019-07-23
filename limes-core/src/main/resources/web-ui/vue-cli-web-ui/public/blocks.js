@@ -27,10 +27,63 @@ var Start = {
   "helpUrl": ""
 }
 
+var emptyBlock = {
+  "type": "emptyBlock",
+  "message0": "%1",
+  "args0": [
+    {
+      "type": "input_dummy"
+    }
+  ],
+  "output": [
+    "emptyBlock",
+  ],
+  "colour": 105,
+  "tooltip": "",
+  "helpUrl": ""
+}
+
+var propertyPath = {
+  "type": "propertyPath",
+  "message0": "%1 %2",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "NAME",
+      "options": [
+        [
+          "/",
+          "OPTIONNAME"
+        ],
+        [
+          "\\",
+          "OPTIONNAME"
+        ]
+      ]
+    },
+    {
+      "type": "input_value",
+      "name": "propertyPath",
+      "check": [
+        "SourceProperty",
+        "TargetProperty",
+        "PreprocessingFunction",
+        "OptionalTargetProperty",
+        "OptionalSourceProperty",
+        "emptyBlock",
+      ]
+    }
+  ],
+  "output": "propertyPath",
+  "colour": 150,
+  "tooltip": "propertyPath",
+  "helpUrl": ""
+}
+
 
 var sourceProperty = {
   "type": "sourceproperty",
-  "message0": "Source property %1",
+  "message0": "Source property %1 PP %2 %3",
   "args0": [
     {
       "type": "field_dropdown",
@@ -40,6 +93,19 @@ var sourceProperty = {
           "",
           ""
         ]
+      ]
+    },
+    {
+      "type": "field_checkbox",
+      "name": "enable_propertypath",
+      "checked": false
+    },
+    {
+      "type": "input_value",
+      "name": "propName",
+      "check": [
+        "emptyBlock",  
+        "propertyPath",    
       ]
     }
   ],
@@ -51,7 +117,7 @@ var sourceProperty = {
 
 var targetProperty = {
   "type": "targetproperty",
-  "message0": "Target property %1",
+  "message0": "Target property %1 PP %2 %3",
   "args0": [
     {
       "type": "field_dropdown",
@@ -61,6 +127,19 @@ var targetProperty = {
           "",
           ""
         ]
+      ]
+    },
+    {
+      "type": "field_checkbox",
+      "name": "enable_propertypath",
+      "checked": false
+    },
+    {
+      "type": "input_value",
+      "name": "propName",
+      "check": [
+        "emptyBlock",  
+        "propertyPath",    
       ]
     }
   ],
@@ -72,7 +151,7 @@ var targetProperty = {
 
 var optionalSourceProperty = {
   "type": "optionalsourceproperty",
-  "message0": "Optional source property %1",
+  "message0": "Optional source property %1 PP %2 %3",
   "args0": [
     {
       "type": "field_dropdown",
@@ -82,6 +161,19 @@ var optionalSourceProperty = {
           "",
           ""
         ]
+      ]
+    },    
+    {
+      "type": "field_checkbox",
+      "name": "enable_propertypath",
+      "checked": false
+    },
+    {
+      "type": "input_value",
+      "name": "propName",
+      "check": [
+        "emptyBlock",  
+        "propertyPath",    
       ]
     }
   ],
@@ -93,7 +185,7 @@ var optionalSourceProperty = {
 
 var optionalTargetProperty = {
   "type": "optionaltargetproperty",
-  "message0": "Optional target property %1",
+  "message0": "Optional target property %1 PP %2 %3",
   "args0": [
     {
       "type": "field_dropdown",
@@ -103,6 +195,19 @@ var optionalTargetProperty = {
           "",
           ""
         ]
+      ]
+    },
+    {
+      "type": "field_checkbox",
+      "name": "enable_propertypath",
+      "checked": false
+    },
+    {
+      "type": "input_value",
+      "name": "propName",
+      "check": [
+        "emptyBlock",  
+        "propertyPath",    
       ]
     }
   ],

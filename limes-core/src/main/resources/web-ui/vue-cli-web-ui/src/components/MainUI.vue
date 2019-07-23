@@ -168,13 +168,16 @@ export default {
               filteredOptions = Object.keys(context);
               
               this.context = context;
+              this.$store.commit('changeContext', context);
               this.filteredOptions.push(...filteredOptions);
             })
 
               
     // this.$store.commit('changeSource', this.source);
     // this.$store.commit('changeTarget', this.target);
-    this.$store.commit('changeContext', this.context);
+
+    // this.$store.commit('changeContext', this.context);
+
     // console.log(this.$store.state.source);
 
   },
