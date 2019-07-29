@@ -29,16 +29,18 @@ export default {
 		  }
 		  return isShown;
 		},
-		getFromMeasure(i){
+		getFromMeasure(i,num){
 	      let src;
 	      let tgt;
 	      i.getChildren().forEach(
 	        pr => {
 	          pr.setDisabled(false);
-	          this.processingPropertyWithPrepFunc(pr);              
+	          if(pr.type !== "measure"){
+				this.processingPropertyWithPrepFunc(pr); 
+			  }             
 	      }); 
 
-	      let valuesOfBlock = i.toString().split(' ');
+	      /*let valuesOfBlock = i.toString().split(' ');
 	      let values = [];
 	      let srcOrTgt;
 	      for(let val=0; val<valuesOfBlock.length; val++){
@@ -58,9 +60,20 @@ export default {
 	        if(srcOrTgt === 'target'){
 	          values.unshift(valuesOfBlock.filter(val => val.indexOf(":") !== -1)[0]);
 	        }
-	      }
-	      src = values[0];
-	      tgt = values[1];
+	      }*/
+	      let sourceProperty = this.$store.state.source.properties[num];
+	      let targetProperty = this.$store.state.target.properties[num];
+	      if(sourceProperty){
+			  sourceProperty = sourceProperty.split("AS")[0].trim();
+			  sourceProperty = sourceProperty.split("RENAME")[0].trim();
+		  }
+		  if(targetProperty){
+			  targetProperty = targetProperty.split("AS")[0].trim();
+			  targetProperty = sourceProperty.split("RENAME")[0].trim();
+		  }
+	      
+	      src = sourceProperty;//values[0];
+	      tgt = targetProperty;//values[1];
 
 	      return {src:src, tgt:tgt};
 	    },

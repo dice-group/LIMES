@@ -49,7 +49,7 @@ var propertyPath = {
   "args0": [
     {
       "type": "field_dropdown",
-      "name": "NAME",
+      "name": "path",
       "options": [
         [
           "/",

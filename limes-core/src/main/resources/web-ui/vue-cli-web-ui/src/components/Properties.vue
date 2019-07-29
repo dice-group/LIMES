@@ -33,7 +33,7 @@ export default {
 			// if(i.type === 'emptyBlock'){
 			// 	i.dispose();
 			// }
-			this.currentBlock = i;		
+			this.currentBlock = i;	
 
 	      if(!this.$store.state.notConnectedToStart){
 	        if(i.type.indexOf("source") !== -1){
@@ -58,8 +58,9 @@ export default {
 
 	    processProperties(kindOfProperty, srcOrTgt, allProps, strForXml){
 	      if(strForXml && strForXml.length !== 0){
-	      	console.log(this.currentBlock.type);
-	      	if(this.currentBlock.getField("enable_propertypath").getValue().toLowerCase() === 'true'){
+
+	      	if(this.currentBlock.getField("enable_propertypath").getValue().toLowerCase() === 'true' 
+				&& this.currentBlock.getChildren()[0].type !== "propertyPath"){
 	      		console.log("TRUE");
 	      		this.checkNextLevelProperties(srcOrTgt, strForXml); // don't do it so far
 	      	}
@@ -69,6 +70,7 @@ export default {
 	      
 	      if(strForXml && strForXml.length !== 0 && !allProps.some(i => i === strForXml)){
 		      if(kindOfProperty === "s"){
+				  console.log("ADD", strForXml);
 		      	this.$store.commit('addSrcProps', strForXml);
 		      }
 		      if(kindOfProperty === "t"){
@@ -84,15 +86,17 @@ export default {
 	    },
 
 	    checkNextLevelProperties(srcOrTgt, property){
+			console.log("CALL");
 	      if(property && property !== null && property.length !== 0){
 	        let label = property.split(":")[0];
 	        let endpoint = srcOrTgt.endpoint;
 	        //if the property is same as before, we don't need to do that
-	        let notSamePropertyIsChosen = srcOrTgt.properties.filter(p => p === property).length === 0;
-	        if(notSamePropertyIsChosen){
+	        //let samePropertyIsChosen = srcOrTgt.properties.length && srcOrTgt.properties[0] === property;
+	        //console.log(property,samePropertyIsChosen,srcOrTgt.properties);
+	        //if(!samePropertyIsChosen){
 	          let propertyName = property.split(":")[1].split(" ")[0];
 	          this.fetchForNextLevelProperties(this.$store.state.context[label]+propertyName,endpoint);
-	        }
+	        //}
 	      }
 	    },
 

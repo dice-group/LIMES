@@ -164,7 +164,7 @@ export default {
               this.notConnectedToStart = false;
               if(block.type === 'start'){
                 block.getChildren().forEach(i => { 
-                  this.processingPropertyWithPrepFunc(i);
+                  //this.processingPropertyWithPrepFunc(i);
                   i.setDisabled(false);
                   switch(i.type) {
 
@@ -172,7 +172,7 @@ export default {
 
                       let shownM = this.showThreshold(i);
                       this.$store.commit('removeProps');
-                      let properties = this.getFromMeasure(i);
+                      let properties = this.getFromMeasure(i,0);
 
                       let threshold = i.getField("threshold").text_;
                       let measureFunc = i.getField("measureList").getDisplayText_();
@@ -196,10 +196,10 @@ export default {
                       let props1 = "", props2 = "";
                       this.$store.commit('removeProps');
                       if(firstM && firstM.type === "measure"){
-                        props1 = this.getFromMeasure(firstM);
+                        props1 = this.getFromMeasure(firstM,0);
                       }
                       if(secondM && secondM.type === "measure"){
-                        props2 = this.getFromMeasure(secondM);
+                        props2 = this.getFromMeasure(secondM,1);
                       }
 
                       if(firstM){
