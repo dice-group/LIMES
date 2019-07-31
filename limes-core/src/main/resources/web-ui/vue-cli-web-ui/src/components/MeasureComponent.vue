@@ -65,11 +65,15 @@ export default {
 	      let targetProperty = this.$store.state.target.properties[num];
 	      if(sourceProperty){
 			  sourceProperty = sourceProperty.split("AS")[0].trim();
-			  sourceProperty = sourceProperty.split("RENAME")[0].trim();
+			  if(sourceProperty.indexOf("RENAME") !== -1){
+				 sourceProperty = sourceProperty.split("RENAME")[1].trim(); 
+			  }
 		  }
 		  if(targetProperty){
 			  targetProperty = targetProperty.split("AS")[0].trim();
-			  targetProperty = sourceProperty.split("RENAME")[0].trim();
+			  if(targetProperty.indexOf("RENAME") !== -1){
+				targetProperty = targetProperty.split("RENAME")[1].trim();
+			  }
 		  }
 	      
 	      src = sourceProperty;//values[0];

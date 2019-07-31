@@ -63,9 +63,22 @@ export default {
                 <block type="renamepreprocessingfunction" id="$J8bghZmrI;ETkue6mwG">
                   <field name="RENAME">polygon</field>
                   <value name="RENAME">
+                    
                     <block type="sourceproperty" id="sp">
-                      <field name="propTitle">geom:geometry/geos:asWKT</field>
-                    </block>
+					<field name="propTitle">geom:geometry</field>
+					<field name="enable_propertypath">TRUE</field>
+					<value name="propName">
+					  <block type="propertyPath" id="KJ" movable="false">
+						<field name="path">sslash</field>
+						<field name="propTitle">geos:asWKT</field>
+						<field name="enable_propertypath">FALSE</field>
+						<value name="propertyPath">
+						  <block type="emptyBlock" id="sC" movable="false"></block>
+						</value>
+					  </block>
+					</value>
+				  </block>
+                    
                   </value>
                 </block>
               </value>
@@ -73,9 +86,22 @@ export default {
                 <block type="renamepreprocessingfunction" id="rpf">
                   <field name="RENAME">polygon</field>
                   <value name="RENAME">
-                    <block type="targetproperty" id="tg">
-                      <field name="propTitle">geom:geometry/geos:asWKT</field>
-                    </block>
+                    
+                    <block type="targetproperty" id="sp">
+					<field name="propTitle">geom:geometry</field>
+					<field name="enable_propertypath">TRUE</field>
+					<value name="propName">
+					  <block type="propertyPath" id="KJ" movable="false">
+						<field name="path">sslash</field>
+						<field name="propTitle">geos:asWKT</field>
+						<field name="enable_propertypath">FALSE</field>
+						<value name="propertyPath">
+						  <block type="emptyBlock" id="sC" movable="false"></block>
+						</value>
+					  </block>
+					</value>
+				  </block>
+                    
                   </value>
                 </block>
               </value>

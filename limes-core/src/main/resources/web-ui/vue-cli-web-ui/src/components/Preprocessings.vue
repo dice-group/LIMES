@@ -93,7 +93,6 @@ export default {
 					}
 	                //with PP
 					else if(child.getChildren().length && child.getChildren().filter(b => b.type === "propertyPath").length){
-						console.log("WITH PP");
 						let strForXml = child.getFieldValue("propTitle");
 						let propPath = child.getChildren()[0].getField("path").getDisplayText_() + child.getChildren()[0].getFieldValue("propTitle");
 						let strOfPreprocessings = " AS "+ i.getFieldValue('function');
@@ -144,7 +143,6 @@ export default {
 			let indexSlash = arrForXml.indexOf("/");
 			arrForXml.splice(indexSlash);
 		  }	
-		  console.log(arrForXml);
 			
 	      let strForXml = arrForXml[arrForXml.length-1]+" AS ";
 	      arrForXml.pop();
@@ -172,11 +170,9 @@ export default {
 		  }
 
 		  //with property path
-		  console.log(child);
 		  if(child && child.getChildren().length && child.getChildren().filter(b => b.type === "propertyPath").length){
 		  let propPath = child.getChildren()[0].getField("path").getDisplayText_() + child.getChildren()[0].getFieldValue("propTitle");
 			strForXml = strForXml.split(" ")[0]+propPath+" "+strForXml.split(" ").splice(1).join(" ");
-			console.log("strForXml",strForXml);
 			this.addProperies(child,strForXml);
 		  } else {
 			this.addProperies(child,strForXml);

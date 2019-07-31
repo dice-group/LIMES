@@ -45,7 +45,7 @@ var emptyBlock = {
 
 var propertyPath = {
   "type": "propertyPath",
-  "message0": "%1 %2",
+  "message0": "%1 %2 %3 %4",
   "args0": [
     {
       "type": "field_dropdown",
@@ -53,13 +53,28 @@ var propertyPath = {
       "options": [
         [
           "/",
-          "OPTIONNAME"
+          "sslash"
         ],
         [
           "\\",
-          "OPTIONNAME"
+          "bslash"
         ]
       ]
+    },
+    {
+      "type": "field_dropdown",
+      "name": "propTitle",
+      "options": [
+        [
+          "",
+          ""
+        ],
+      ]
+    },
+    {
+      "type": "field_checkbox",
+      "name": "enable_propertypath",
+      "checked": false
     },
     {
       "type": "input_value",

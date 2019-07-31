@@ -10,6 +10,7 @@ export default {
     return {
     	currentBlock: null,
     	emptyRemoved: false,
+    	blockForCheckNextLevel: null,
     }
   },
   methods: {
@@ -58,19 +59,26 @@ export default {
 
 	    processProperties(kindOfProperty, srcOrTgt, allProps, strForXml){
 	      if(strForXml && strForXml.length !== 0){
-
-	      	if(this.currentBlock.getField("enable_propertypath").getValue().toLowerCase() === 'true' 
-				&& this.currentBlock.getChildren()[0].type !== "propertyPath"){
-	      		console.log("TRUE");
-	      		this.checkNextLevelProperties(srcOrTgt, strForXml); // don't do it so far
-	      	}
+	      	
+	      	let curBlock = this.currentBlock;
+	      	
+	      	do{		
+				//check next level
+				if(curBlock.getField("enable_propertypath").getValue().toLowerCase() === 'true' 
+					&& curBlock.getChildren()[0].type !== "propertyPath"){
+						this.blockForCheckNextLevel = curBlock;
+						this.checkNextLevelProperties(srcOrTgt, strForXml);
+				}	
+	
+				curBlock = curBlock.getChildren()[0];
+				
+			} while (curBlock.getField("enable_propertypath") !== null);
+	      	
 	      }	
-	      //allProps.splice(0);
-	      //allProps.push(strForXml);
+
 	      
-	      if(strForXml && strForXml.length !== 0 && !allProps.some(i => i === strForXml)){
+	      if(strForXml && strForXml.length !== 0){//&& !allProps.some(i => i === strForXml)){
 		      if(kindOfProperty === "s"){
-				  console.log("ADD", strForXml);
 		      	this.$store.commit('addSrcProps', strForXml);
 		      }
 		      if(kindOfProperty === "t"){
@@ -86,17 +94,13 @@ export default {
 	    },
 
 	    checkNextLevelProperties(srcOrTgt, property){
-			console.log("CALL");
 	      if(property && property !== null && property.length !== 0){
 	        let label = property.split(":")[0];
 	        let endpoint = srcOrTgt.endpoint;
-	        //if the property is same as before, we don't need to do that
-	        //let samePropertyIsChosen = srcOrTgt.properties.length && srcOrTgt.properties[0] === property;
-	        //console.log(property,samePropertyIsChosen,srcOrTgt.properties);
-	        //if(!samePropertyIsChosen){
-	          let propertyName = property.split(":")[1].split(" ")[0];
-	          this.fetchForNextLevelProperties(this.$store.state.context[label]+propertyName,endpoint);
-	        //}
+
+	        let propertyName = property.split(":")[1].split(" ")[0];
+	        this.fetchForNextLevelProperties(this.$store.state.context[label]+propertyName,endpoint);
+	        
 	      }
 	    },
 
@@ -114,8 +118,12 @@ export default {
 	      .then((content) => {
 	        if(content.boolean){
 	          this.getForNextLevelProperties(p,endpoint);
-	        }
-	        //console.log(content.boolean);
+	        } 
+	        else {
+				this.blockForCheckNextLevel.getField("enable_propertypath").setValue(false);
+				alert("There are no more internal properties!")
+			}
+	        console.log(content.boolean);
 
 	      })
 	    },
@@ -155,12 +163,14 @@ export default {
 
 
 		  // another variant
-		  console.log(this.currentBlock.type);
+		  //console.log(this.currentBlock.type);
 
 		        var dropdown = new Blockly.FieldDropdown(arr);
 		        var checkbox = new Blockly.FieldCheckbox(false);
 		      	let parentColour = this.currentBlock.getColour();
 		        var newBlock = this.$store.state.Workspace.newBlock('propertyPath');
+		        newBlock.getInput("propertyPath").removeField('propTitle');
+		        newBlock.getInput("propertyPath").removeField('enable_propertypath');
 		        newBlock.getInput("propertyPath").appendField(dropdown, 'propTitle');
 		        newBlock.getInput("propertyPath").appendField(checkbox, 'enable_propertypath');
 		        newBlock.setMovable(false);
