@@ -46,7 +46,7 @@ export default {
               };
               
       
-              if(i.children[6].tagName === "PROPERTY"){
+              if(i.children[6] && i.children[6].tagName === "PROPERTY"){
                 source.properties.splice(0);
                 source.properties.push(i.children[5].innerHTML);
                 source.properties.push(i.children[6].innerHTML);
@@ -54,7 +54,7 @@ export default {
               } else {
                 source.properties.splice(0);
                 source.properties.push(i.children[5].innerHTML);
-                source.type = i.children[6].innerHTML;
+                source.type = i.children[6] ? i.children[6].innerHTML : '';
               }
 
               this.$store.commit('changeSource', source);
@@ -74,7 +74,7 @@ export default {
                 propertiesForChoice: [],
               };
 
-              if(i.children[6].tagName === "PROPERTY"){
+              if( i.children[6] && i.children[6].tagName === "PROPERTY"){
                 target.properties.splice(0);
                 target.properties.push(i.children[5].innerHTML);
                 target.properties.push(i.children[6].innerHTML);
@@ -82,7 +82,7 @@ export default {
               } else {
                 target.properties.splice(0);
                 target.properties.push(i.children[5].innerHTML);
-                target.type = i.children[6].innerHTML;
+                target.type = i.children[6] ? i.children[6].innerHTML : '';
               }
               this.$store.commit('changeTarget', target);
               break;
@@ -197,9 +197,9 @@ export default {
         }
       },
 
-      addPreprocessingsWithProperty(doc, valueSrcProp, srcProp, fieldSrcProp, props){
-        let pr = props.split('AS')[1];
-        let renameExists = props.split('RENAME')[1];
+      addPreprocessingsWithProperty(tagObj){
+        let pr = tagObj.props.split('AS')[1];
+        let renameExists = tagObj.props.split('RENAME')[1];
         if(pr){
         let prepArr = [];
         if(renameExists){
@@ -210,11 +210,11 @@ export default {
           if(prepArr.length > 1){
             let lastPrepItems;
             prepArr.forEach((prepf, index) => {
-              let prepItems = this.creatingNewPreprocessingBlocklyXML(doc,prepf.trim());
+              let prepItems = this.creatingNewPreprocessingBlocklyXML(tagObj.doc,prepf.trim());
               if(index === 0){
                 if(renameExists){
-                  let renameItems = this.creatingNewRenameBlocklyXML(doc, renameExists.trim());
-                  valueSrcProp.appendChild(renameItems.renameBlock);
+                  let renameItems = this.creatingNewRenameBlocklyXML(tagObj.doc, renameExists.trim());
+                  tagObj.valueSrcProp.appendChild(renameItems.renameBlock);
                   renameItems.renameBlock.appendChild(renameItems.renameField);
                   renameItems.renameBlock.appendChild(renameItems.renameValue);
                   renameItems.renameValue.appendChild(prepItems.preprocessingsBlock);
@@ -222,7 +222,7 @@ export default {
                   prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsValue);
                   lastPrepItems = prepItems;
                 } else {
-                  valueSrcProp.appendChild(prepItems.preprocessingsBlock);
+                  tagObj.valueSrcProp.appendChild(prepItems.preprocessingsBlock);
                   prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsField);
                   prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsValue);
                   lastPrepItems = prepItems;
@@ -232,8 +232,8 @@ export default {
                   lastPrepItems.preprocessingsValue.appendChild(prepItems.preprocessingsBlock);
                   prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsField);
                   prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsValue);
-                  prepItems.preprocessingsValue.appendChild(srcProp);
-                  srcProp.appendChild(fieldSrcProp);
+                  prepItems.preprocessingsValue.appendChild(tagObj.srcProp);
+                  tagObj.srcProp.appendChild(tagObj.fieldSrcProp);
                 } else {
                   lastPrepItems.preprocessingsValue.appendChild(prepItems.preprocessingsBlock);
                   prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsField);
@@ -244,37 +244,47 @@ export default {
             });
           } else {
             if(renameExists){
-              let prepItems = this.creatingNewRenameBlocklyXML(doc, renameExists.trim());
-              valueSrcProp.appendChild(prepItems.renameBlock);
+              let prepItems = this.creatingNewRenameBlocklyXML(tagObj.doc, renameExists.trim());
+              tagObj.valueSrcProp.appendChild(prepItems.renameBlock);
               prepItems.renameBlock.appendChild(prepItems.renameField);
               prepItems.renameBlock.appendChild(prepItems.renameValue);
-              let preprocessingItems = this.creatingNewPreprocessingBlocklyXML(doc,prepArr[0].split("RENAME")[0]);
+              let preprocessingItems = this.creatingNewPreprocessingBlocklyXML(tagObj.doc,prepArr[0].split("RENAME")[0]);
               prepItems.renameValue.appendChild(preprocessingItems.preprocessingsBlock);
               preprocessingItems.preprocessingsBlock.appendChild(preprocessingItems.preprocessingsField);
               preprocessingItems.preprocessingsBlock.appendChild(preprocessingItems.preprocessingsValue);
-              preprocessingItems.preprocessingsValue.appendChild(srcProp);
-              srcProp.appendChild(fieldSrcProp);
+              preprocessingItems.preprocessingsValue.appendChild(tagObj.srcProp);
+              tagObj.srcProp.appendChild(tagObj.fieldSrcProp);
             } else {
-              let prepItems = this.creatingNewPreprocessingBlocklyXML(doc,prepArr[0]);
-              valueSrcProp.appendChild(prepItems.preprocessingsBlock);
+              let prepItems = this.creatingNewPreprocessingBlocklyXML(tagObj.doc,prepArr[0]);
+              tagObj.valueSrcProp.appendChild(prepItems.preprocessingsBlock);
               prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsField);
               prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsValue);
-              prepItems.preprocessingsValue.appendChild(srcProp);
-              srcProp.appendChild(fieldSrcProp);
+              prepItems.preprocessingsValue.appendChild(tagObj.srcProp);
+              tagObj.srcProp.appendChild(tagObj.fieldSrcProp);
             }
           }
 
         } else {
           if(renameExists){
-            let prepItems = this.creatingNewRenameBlocklyXML(doc, renameExists.trim());
-            valueSrcProp.appendChild(prepItems.renameBlock);
+            let prepItems = this.creatingNewRenameBlocklyXML(tagObj.doc, renameExists.trim());
+            tagObj.valueSrcProp.appendChild(prepItems.renameBlock);
             prepItems.renameBlock.appendChild(prepItems.renameField);
             prepItems.renameBlock.appendChild(prepItems.renameValue);
-            prepItems.renameValue.appendChild(srcProp);
-            srcProp.appendChild(fieldSrcProp);
+            prepItems.renameValue.appendChild(tagObj.srcProp);
+            tagObj.srcProp.appendChild(tagObj.fieldSrcProp);
+
+            // property path
+            tagObj.srcProp.appendChild(tagObj.fieldSrcPropPath);
+            tagObj.srcProp.appendChild(tagObj.valueSrcPropPath);
+            tagObj.valueSrcPropPath.appendChild(tagObj.blockSrcPropPath);
+            tagObj.blockSrcPropPath.appendChild(tagObj.fieldSrcPath);
+            tagObj.blockSrcPropPath.appendChild(tagObj.fieldSrcPathPropTitle);
+            tagObj.blockSrcPropPath.appendChild(tagObj.fieldSrcPropPathEnable); 
+            tagObj.blockSrcPropPath.appendChild(tagObj.valueEmpty);
+            tagObj.valueEmpty.appendChild(tagObj.blockEmpty);
           } else {
-            valueSrcProp.appendChild(srcProp);
-            srcProp.appendChild(fieldSrcProp);
+            tagObj.valueSrcProp.appendChild(tagObj.srcProp);
+            tagObj.srcProp.appendChild(tagObj.fieldSrcProp);
           }
         }
       },
@@ -289,20 +299,38 @@ export default {
         //cosine(s.rdfs:subClassOf,t.rdfs:range)
         //let metric = "cosine(s.rdfs:subClassOf,t.rdfs:range)";
         //let operators = ['and','or','minus','xor'];//['and','or','xor','nand'];
-        let hasOperator = this.$store.state.operators.filter( i => metric.toLowerCase().indexOf(i) !== -1);
-        let hasMeasure = this.$store.state.measures.filter( i => metric.indexOf(i[0].toLowerCase()) !== -1);
-        
+        let hasOperator = this.$store.state.operators.filter( i => metric.toLowerCase().indexOf(i) !== -1 && metric[metric.toLowerCase().indexOf(i)+1] === '(');
+        let hasMeasure = this.$store.state.measures.filter( i => metric.toLowerCase().indexOf(i.toLowerCase()) !== -1);
+
         let srcAndTgtFromMetric = this.getSrcAndTgtFromMetric(metric,null);
         let source = srcAndTgtFromMetric.src;
         let target = srcAndTgtFromMetric.tgt;
         let source2 = this.getSrcAndTgtFromMetric(metric,srcAndTgtFromMetric.lastBeginAndEnd).src;
         let target2 = this.getSrcAndTgtFromMetric(metric,srcAndTgtFromMetric.lastBeginAndEnd).tgt;
+
+        let hasPropertyPathS = metric.indexOf('/') !== -1;
+        let hasPropertyPathT = metric.indexOf('/') !== -1;
+        let sourcePropertyPath = [];
+        let targetPropertyPath = [];
+
         
         if(this.$store.state.source.properties[0].indexOf("RENAME") !== -1){
           source = this.changeSrcOrTgtWithRename(this.$store.state.source.properties[0]);
+          if(this.$store.state.source.properties[0].indexOf('/') !== -1){
+            hasPropertyPathS = true;
+            let arr = source[0].split("/");
+            sourcePropertyPath = arr;
+            source = sourcePropertyPath.shift();
+          }
         }
-        if(this.$store.state.source.properties[0].indexOf("RENAME") !== -1){
+        if(this.$store.state.target.properties[0].indexOf("RENAME") !== -1){
           target = this.changeSrcOrTgtWithRename(this.$store.state.target.properties[0]);
+          if(this.$store.state.target.properties[0].indexOf('/') !== -1){
+            hasPropertyPathT = true;
+            let arr = target[0].split("/");
+            targetPropertyPath = arr;
+            target = targetPropertyPath.shift();
+          }
         }
         if(this.$store.state.source.properties[1] && this.$store.state.source.properties[1].indexOf("RENAME") !== -1){
           source2 = this.changeSrcOrTgtWithRename(this.$store.state.source.properties[1]);
@@ -310,6 +338,7 @@ export default {
         if(this.$store.state.source.properties[1] && this.$store.state.source.properties[1].indexOf("RENAME") !== -1){
           target2 = this.changeSrcOrTgtWithRename(this.$store.state.target.properties[1]); 
         }
+
 
         var doc = document.implementation.createDocument("http://www.w3.org/1999/xhtml", "", null);
         var xmlElem = doc.createElement("xml");
@@ -387,6 +416,40 @@ export default {
         fieldSrcProp.setAttribute("name", "propTitle");
         fieldSrcProp.innerHTML=source;
 
+        // source property path
+
+        var fieldSrcPropPath = doc.createElement("field");
+        fieldSrcPropPath.setAttribute("name", "enable_propertypath");
+        fieldSrcPropPath.innerHTML=hasPropertyPathS;
+
+        var valueSrcPropPath = doc.createElement("value");
+        valueSrcPropPath.setAttribute("name", "propName");
+
+        var blockSrcPropPath = doc.createElement("block");
+        blockSrcPropPath.setAttribute("type", "propertyPath");
+        blockSrcPropPath.setAttribute("id", this.generate_random_string());
+        blockSrcPropPath.setAttribute("movable", "true");
+
+        var fieldSrcPath = doc.createElement("field");
+        fieldSrcPath.setAttribute("name", "path");
+        fieldSrcPath.innerHTML="sslash";
+
+        var fieldSrcPathPropTitle = doc.createElement("field");
+        fieldSrcPathPropTitle.setAttribute("name", "propTitle");
+        fieldSrcPathPropTitle.innerHTML=sourcePropertyPath[0]; // so far for one level
+
+        var fieldSrcPropPathEnable = doc.createElement("field");
+        fieldSrcPropPathEnable.setAttribute("name", "enable_propertypath");
+        fieldSrcPropPathEnable.innerHTML="false"; // so far for one level
+
+        var valueEmpty = doc.createElement("value");
+        valueEmpty.setAttribute("name", "propertyPath");
+
+        var blockEmpty = doc.createElement("block");
+        blockEmpty.setAttribute("type", "emptyBlock");
+        blockEmpty.setAttribute("id", this.generate_random_string());
+        blockEmpty.setAttribute("movable", "false");
+
         //tgt
 
         var valueTgtProp = doc.createElement("value");
@@ -399,6 +462,40 @@ export default {
         var fieldTgtProp = doc.createElement("field");
         fieldTgtProp.setAttribute("name", "propTitle");
         fieldTgtProp.innerHTML=target;
+
+        // target property path
+
+        var fieldTgtPropPath = doc.createElement("field");
+        fieldTgtPropPath.setAttribute("name", "enable_propertypath");
+        fieldTgtPropPath.innerHTML=hasPropertyPathT;
+
+        var valueTgtPropPath = doc.createElement("value");
+        valueTgtPropPath.setAttribute("name", "propName");
+
+        var blockTgtPropPath = doc.createElement("block");
+        blockTgtPropPath.setAttribute("type", "propertyPath");
+        blockTgtPropPath.setAttribute("id", this.generate_random_string());
+        blockTgtPropPath.setAttribute("movable", "true");
+
+        var fieldTgtPath = doc.createElement("field");
+        fieldTgtPath.setAttribute("name", "path");
+        fieldTgtPath.innerHTML="sslash";
+
+        var fieldTgtPathPropTitle = doc.createElement("field");
+        fieldTgtPathPropTitle.setAttribute("name", "propTitle");
+        fieldTgtPathPropTitle.innerHTML=targetPropertyPath[0]; // so far for one level
+
+        var fieldTgtPropPathEnable = doc.createElement("field");
+        fieldTgtPropPathEnable.setAttribute("name", "enable_propertypath");
+        fieldTgtPropPathEnable.innerHTML="false"; // so far for one level
+
+        var valueEmptyTgt = doc.createElement("value");
+        valueEmptyTgt.setAttribute("name", "propertyPath");
+
+        var blockEmptyTgt = doc.createElement("block");
+        blockEmptyTgt.setAttribute("type", "emptyBlock");
+        blockEmptyTgt.setAttribute("id", this.generate_random_string());
+        blockEmptyTgt.setAttribute("movable", "false");
 
         //src2
 
@@ -437,8 +534,41 @@ export default {
           measureBlock.appendChild(fieldThreshold);
           measureBlock.appendChild(valueSrcProp);
           measureBlock.appendChild(valueTgtProp);
-          this.addPreprocessingsWithProperty(doc, valueSrcProp, srcProp, fieldSrcProp, this.$store.state.source.properties[0]);
-          this.addPreprocessingsWithProperty(doc, valueTgtProp, tgtProp, fieldTgtProp, this.$store.state.target.properties[0]);
+          let sourceTagsObj = {
+            "doc": doc, 
+            "valueSrcProp": valueSrcProp, 
+            "srcProp": srcProp, 
+            "fieldSrcProp": fieldSrcProp, 
+            "props": this.$store.state.source.properties[0],
+
+            "fieldSrcPropPath": fieldSrcPropPath,
+            "valueSrcPropPath": valueSrcPropPath,
+            "blockSrcPropPath": blockSrcPropPath,
+            "fieldSrcPath": fieldSrcPath,
+            "fieldSrcPathPropTitle": fieldSrcPathPropTitle,
+            "fieldSrcPropPathEnable": fieldSrcPropPathEnable,
+            "valueEmpty": valueEmpty,
+            "blockEmpty": blockEmpty,
+          };
+
+          let targetTagsObj = {
+            "doc": doc, 
+            "valueSrcProp": valueTgtProp, 
+            "srcProp": tgtProp, 
+            "fieldSrcProp": fieldTgtProp, 
+            "props": this.$store.state.target.properties[0],
+
+            "fieldSrcPropPath": fieldTgtPropPath,
+            "valueSrcPropPath": valueTgtPropPath,
+            "blockSrcPropPath": blockTgtPropPath,
+            "fieldSrcPath": fieldTgtPath,
+            "fieldSrcPathPropTitle": fieldTgtPathPropTitle,
+            "fieldSrcPropPathEnable": fieldTgtPropPathEnable,
+            "valueEmpty": valueEmptyTgt,
+            "blockEmpty": blockEmptyTgt,
+          };
+          this.addPreprocessingsWithProperty(sourceTagsObj);
+          this.addPreprocessingsWithProperty(targetTagsObj);
 
           doc.appendChild(xmlElem);
         } else {
