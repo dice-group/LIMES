@@ -197,6 +197,18 @@ export default {
         }
       },
 
+      formPropertyPath(tagObj){
+        // property path
+        tagObj.srcProp.appendChild(tagObj.fieldSrcPropPath);
+        tagObj.srcProp.appendChild(tagObj.valueSrcPropPath);
+        tagObj.valueSrcPropPath.appendChild(tagObj.blockSrcPropPath);
+        tagObj.blockSrcPropPath.appendChild(tagObj.fieldSrcPath);
+        tagObj.blockSrcPropPath.appendChild(tagObj.fieldSrcPathPropTitle);
+        tagObj.blockSrcPropPath.appendChild(tagObj.fieldSrcPropPathEnable); 
+        tagObj.blockSrcPropPath.appendChild(tagObj.valueEmpty);
+        tagObj.valueEmpty.appendChild(tagObj.blockEmpty);
+      },
+
       addPreprocessingsWithProperty(tagObj){
         let pr = tagObj.props.split('AS')[1];
         let renameExists = tagObj.props.split('RENAME')[1];
@@ -254,6 +266,8 @@ export default {
               preprocessingItems.preprocessingsBlock.appendChild(preprocessingItems.preprocessingsValue);
               preprocessingItems.preprocessingsValue.appendChild(tagObj.srcProp);
               tagObj.srcProp.appendChild(tagObj.fieldSrcProp);
+
+              this.formPropertyPath(tagObj);
             } else {
               let prepItems = this.creatingNewPreprocessingBlocklyXML(tagObj.doc,prepArr[0]);
               tagObj.valueSrcProp.appendChild(prepItems.preprocessingsBlock);
@@ -261,6 +275,7 @@ export default {
               prepItems.preprocessingsBlock.appendChild(prepItems.preprocessingsValue);
               prepItems.preprocessingsValue.appendChild(tagObj.srcProp);
               tagObj.srcProp.appendChild(tagObj.fieldSrcProp);
+              this.formPropertyPath(tagObj);
             }
           }
 
@@ -273,18 +288,12 @@ export default {
             prepItems.renameValue.appendChild(tagObj.srcProp);
             tagObj.srcProp.appendChild(tagObj.fieldSrcProp);
 
-            // property path
-            tagObj.srcProp.appendChild(tagObj.fieldSrcPropPath);
-            tagObj.srcProp.appendChild(tagObj.valueSrcPropPath);
-            tagObj.valueSrcPropPath.appendChild(tagObj.blockSrcPropPath);
-            tagObj.blockSrcPropPath.appendChild(tagObj.fieldSrcPath);
-            tagObj.blockSrcPropPath.appendChild(tagObj.fieldSrcPathPropTitle);
-            tagObj.blockSrcPropPath.appendChild(tagObj.fieldSrcPropPathEnable); 
-            tagObj.blockSrcPropPath.appendChild(tagObj.valueEmpty);
-            tagObj.valueEmpty.appendChild(tagObj.blockEmpty);
+            this.formPropertyPath(tagObj);
           } else {
             tagObj.valueSrcProp.appendChild(tagObj.srcProp);
             tagObj.srcProp.appendChild(tagObj.fieldSrcProp);
+
+            this.formPropertyPath(tagObj);
           }
         }
       },
@@ -295,11 +304,81 @@ export default {
         return pair;
       },
 
+      creatingNewDataWithPropertyPath(doc, source, hasPropertyPathS, sourcePropertyPath, propertyName){
+        var valueSrcProp = doc.createElement("value");
+        valueSrcProp.setAttribute("name", propertyName);
+
+        var srcProp = doc.createElement("block");
+        srcProp.setAttribute("type", propertyName.toLowerCase());
+        srcProp.setAttribute("id", this.generate_random_string());
+
+        var fieldSrcProp = doc.createElement("field");
+        fieldSrcProp.setAttribute("name", "propTitle");
+        fieldSrcProp.innerHTML=source;
+
+        // source property path
+
+        var fieldSrcPropPath = doc.createElement("field");
+        fieldSrcPropPath.setAttribute("name", "enable_propertypath");
+        fieldSrcPropPath.innerHTML=hasPropertyPathS;
+
+        var valueSrcPropPath = doc.createElement("value");
+        valueSrcPropPath.setAttribute("name", "propName");
+
+        var blockSrcPropPath = doc.createElement("block");
+        blockSrcPropPath.setAttribute("type", "propertyPath");
+        blockSrcPropPath.setAttribute("id", this.generate_random_string());
+        blockSrcPropPath.setAttribute("movable", "true");
+
+        var fieldSrcPath = doc.createElement("field");
+        fieldSrcPath.setAttribute("name", "path");
+        fieldSrcPath.innerHTML="sslash";
+
+        var fieldSrcPathPropTitle = doc.createElement("field");
+        fieldSrcPathPropTitle.setAttribute("name", "propTitle");
+        fieldSrcPathPropTitle.innerHTML=sourcePropertyPath[0]; // so far for one level
+
+        var fieldSrcPropPathEnable = doc.createElement("field");
+        fieldSrcPropPathEnable.setAttribute("name", "enable_propertypath");
+        fieldSrcPropPathEnable.innerHTML="false"; // so far for one level
+
+        var valueEmpty = doc.createElement("value");
+        valueEmpty.setAttribute("name", "propertyPath");
+
+        var blockEmpty = doc.createElement("block");
+        blockEmpty.setAttribute("type", "emptyBlock");
+        blockEmpty.setAttribute("id", this.generate_random_string());
+        blockEmpty.setAttribute("movable", "false");
+
+        return {
+          "valueSrcProp": valueSrcProp, 
+          "srcProp": srcProp, 
+          "fieldSrcProp": fieldSrcProp, 
+
+          "fieldSrcPropPath": fieldSrcPropPath,
+          "valueSrcPropPath": valueSrcPropPath,
+          "blockSrcPropPath": blockSrcPropPath,
+          "fieldSrcPath": fieldSrcPath,
+          "fieldSrcPathPropTitle": fieldSrcPathPropTitle,
+          "fieldSrcPropPathEnable": fieldSrcPropPathEnable,
+          "valueEmpty": valueEmpty,
+          "blockEmpty": blockEmpty,
+        };
+      },
+
       convertMetricToBlocklyXML(metric){
         //cosine(s.rdfs:subClassOf,t.rdfs:range)
         //let metric = "cosine(s.rdfs:subClassOf,t.rdfs:range)";
         //let operators = ['and','or','minus','xor'];//['and','or','xor','nand'];
-        let hasOperator = this.$store.state.operators.filter( i => metric.toLowerCase().indexOf(i) !== -1 && metric[metric.toLowerCase().indexOf(i)+1] === '(');
+        let hasOperator = this.$store.state.operators.filter( i => 
+          {
+            if(metric.toLowerCase().indexOf(i.toLowerCase()) !== -1){
+              let ind = metric.toLowerCase().indexOf(i)+i.length;
+              if(metric[ind] === '('){
+                return i;
+              }
+            }
+          });
         let hasMeasure = this.$store.state.measures.filter( i => metric.toLowerCase().indexOf(i.toLowerCase()) !== -1);
 
         let srcAndTgtFromMetric = this.getSrcAndTgtFromMetric(metric,null);
@@ -312,9 +391,13 @@ export default {
         let hasPropertyPathT = metric.indexOf('/') !== -1;
         let sourcePropertyPath = [];
         let targetPropertyPath = [];
+        let hasPropertyPathS2 = metric.indexOf('/') !== -1;
+        let hasPropertyPathT2 = metric.indexOf('/') !== -1;
+        let sourcePropertyPath2 = [];
+        let targetPropertyPath2 = [];
 
         
-        if(this.$store.state.source.properties[0].indexOf("RENAME") !== -1){
+        if(this.$store.state.source.properties[0].indexOf("RENAME") !== -1 || this.$store.state.source.properties[0].indexOf("AS") !== -1){
           source = this.changeSrcOrTgtWithRename(this.$store.state.source.properties[0]);
           if(this.$store.state.source.properties[0].indexOf('/') !== -1){
             hasPropertyPathS = true;
@@ -323,7 +406,7 @@ export default {
             source = sourcePropertyPath.shift();
           }
         }
-        if(this.$store.state.target.properties[0].indexOf("RENAME") !== -1){
+        if(this.$store.state.target.properties[0].indexOf("RENAME") !== -1 || this.$store.state.target.properties[0].indexOf("AS") !== -1){
           target = this.changeSrcOrTgtWithRename(this.$store.state.target.properties[0]);
           if(this.$store.state.target.properties[0].indexOf('/') !== -1){
             hasPropertyPathT = true;
@@ -332,11 +415,27 @@ export default {
             target = targetPropertyPath.shift();
           }
         }
-        if(this.$store.state.source.properties[1] && this.$store.state.source.properties[1].indexOf("RENAME") !== -1){
+        if(this.$store.state.source.properties[1] 
+          && (this.$store.state.source.properties[1].indexOf("RENAME") !== -1 
+            || this.$store.state.source.properties[1].indexOf("AS") !== -1)){
           source2 = this.changeSrcOrTgtWithRename(this.$store.state.source.properties[1]);
+          if(this.$store.state.source.properties[1].indexOf('/') !== -1){
+            hasPropertyPathS2 = true;
+            let arr = source2[1].split("/");
+            sourcePropertyPath2 = arr;
+            source2 = sourcePropertyPath2.shift();
+          }
         }
-        if(this.$store.state.source.properties[1] && this.$store.state.source.properties[1].indexOf("RENAME") !== -1){
+        if(this.$store.state.source.properties[1] 
+          && (this.$store.state.source.properties[1].indexOf("RENAME") !== -1
+            || this.$store.state.source.properties[1].indexOf("AS") !== -1)){
           target2 = this.changeSrcOrTgtWithRename(this.$store.state.target.properties[1]); 
+          if(this.$store.state.target.properties[1].indexOf('/') !== -1){
+            hasPropertyPathT2 = true;
+            let arr = target[1].split("/");
+            targetPropertyPath2 = arr;
+            target2 = targetPropertyPath2.shift();
+          }
         }
 
 
@@ -404,124 +503,83 @@ export default {
         fieldThreshold2.innerHTML = "0.5";
 
         //src
+        let src = this.creatingNewDataWithPropertyPath(doc, source, hasPropertyPathS, sourcePropertyPath, "sourceProperty");
+        let sourceTagsObj = {
+          "doc": doc, 
+          "valueSrcProp": src.valueSrcProp, 
+          "srcProp": src.srcProp, 
+          "fieldSrcProp": src.fieldSrcProp, 
+          "props": this.$store.state.source.properties[0],
 
-        var valueSrcProp = doc.createElement("value");
-        valueSrcProp.setAttribute("name", "sourceProperty");
-
-        var srcProp = doc.createElement("block");
-        srcProp.setAttribute("type", "sourceproperty");
-        srcProp.setAttribute("id", this.generate_random_string());
-
-        var fieldSrcProp = doc.createElement("field");
-        fieldSrcProp.setAttribute("name", "propTitle");
-        fieldSrcProp.innerHTML=source;
-
-        // source property path
-
-        var fieldSrcPropPath = doc.createElement("field");
-        fieldSrcPropPath.setAttribute("name", "enable_propertypath");
-        fieldSrcPropPath.innerHTML=hasPropertyPathS;
-
-        var valueSrcPropPath = doc.createElement("value");
-        valueSrcPropPath.setAttribute("name", "propName");
-
-        var blockSrcPropPath = doc.createElement("block");
-        blockSrcPropPath.setAttribute("type", "propertyPath");
-        blockSrcPropPath.setAttribute("id", this.generate_random_string());
-        blockSrcPropPath.setAttribute("movable", "true");
-
-        var fieldSrcPath = doc.createElement("field");
-        fieldSrcPath.setAttribute("name", "path");
-        fieldSrcPath.innerHTML="sslash";
-
-        var fieldSrcPathPropTitle = doc.createElement("field");
-        fieldSrcPathPropTitle.setAttribute("name", "propTitle");
-        fieldSrcPathPropTitle.innerHTML=sourcePropertyPath[0]; // so far for one level
-
-        var fieldSrcPropPathEnable = doc.createElement("field");
-        fieldSrcPropPathEnable.setAttribute("name", "enable_propertypath");
-        fieldSrcPropPathEnable.innerHTML="false"; // so far for one level
-
-        var valueEmpty = doc.createElement("value");
-        valueEmpty.setAttribute("name", "propertyPath");
-
-        var blockEmpty = doc.createElement("block");
-        blockEmpty.setAttribute("type", "emptyBlock");
-        blockEmpty.setAttribute("id", this.generate_random_string());
-        blockEmpty.setAttribute("movable", "false");
+          "fieldSrcPropPath": src.fieldSrcPropPath,
+          "valueSrcPropPath": src.valueSrcPropPath,
+          "blockSrcPropPath": src.blockSrcPropPath,
+          "fieldSrcPath": src.fieldSrcPath,
+          "fieldSrcPathPropTitle": src.fieldSrcPathPropTitle,
+          "fieldSrcPropPathEnable": src.fieldSrcPropPathEnable,
+          "valueEmpty": src.valueEmpty,
+          "blockEmpty": src.blockEmpty,
+        };
 
         //tgt
+        let tgt = this.creatingNewDataWithPropertyPath(doc, target, hasPropertyPathT, targetPropertyPath, "targetProperty");
+        let targetTagsObj = {
+          "doc": doc, 
+          "valueSrcProp": tgt.valueSrcProp, 
+          "srcProp": tgt.srcProp, 
+          "fieldSrcProp": tgt.fieldSrcProp, 
+          "props": this.$store.state.target.properties[0],
 
-        var valueTgtProp = doc.createElement("value");
-        valueTgtProp.setAttribute("name", "targetProperty");
-
-        var tgtProp = doc.createElement("block");
-        tgtProp.setAttribute("type", "targetproperty");
-        tgtProp.setAttribute("id", this.generate_random_string());
-
-        var fieldTgtProp = doc.createElement("field");
-        fieldTgtProp.setAttribute("name", "propTitle");
-        fieldTgtProp.innerHTML=target;
-
-        // target property path
-
-        var fieldTgtPropPath = doc.createElement("field");
-        fieldTgtPropPath.setAttribute("name", "enable_propertypath");
-        fieldTgtPropPath.innerHTML=hasPropertyPathT;
-
-        var valueTgtPropPath = doc.createElement("value");
-        valueTgtPropPath.setAttribute("name", "propName");
-
-        var blockTgtPropPath = doc.createElement("block");
-        blockTgtPropPath.setAttribute("type", "propertyPath");
-        blockTgtPropPath.setAttribute("id", this.generate_random_string());
-        blockTgtPropPath.setAttribute("movable", "true");
-
-        var fieldTgtPath = doc.createElement("field");
-        fieldTgtPath.setAttribute("name", "path");
-        fieldTgtPath.innerHTML="sslash";
-
-        var fieldTgtPathPropTitle = doc.createElement("field");
-        fieldTgtPathPropTitle.setAttribute("name", "propTitle");
-        fieldTgtPathPropTitle.innerHTML=targetPropertyPath[0]; // so far for one level
-
-        var fieldTgtPropPathEnable = doc.createElement("field");
-        fieldTgtPropPathEnable.setAttribute("name", "enable_propertypath");
-        fieldTgtPropPathEnable.innerHTML="false"; // so far for one level
-
-        var valueEmptyTgt = doc.createElement("value");
-        valueEmptyTgt.setAttribute("name", "propertyPath");
-
-        var blockEmptyTgt = doc.createElement("block");
-        blockEmptyTgt.setAttribute("type", "emptyBlock");
-        blockEmptyTgt.setAttribute("id", this.generate_random_string());
-        blockEmptyTgt.setAttribute("movable", "false");
+          "fieldSrcPropPath": tgt.fieldSrcPropPath,
+          "valueSrcPropPath": tgt.valueSrcPropPath,
+          "blockSrcPropPath": tgt.blockSrcPropPath,
+          "fieldSrcPath": tgt.fieldSrcPath,
+          "fieldSrcPathPropTitle": tgt.fieldSrcPathPropTitle,
+          "fieldSrcPropPathEnable": tgt.fieldSrcPropPathEnable,
+          "valueEmpty": tgt.valueEmpty,
+          "blockEmpty": tgt.blockEmpty,
+        };
 
         //src2
 
-        var valueSrcProp2 = doc.createElement("value");
-        valueSrcProp2.setAttribute("name", "sourceProperty");
+        let src2 = this.creatingNewDataWithPropertyPath(doc, source2, hasPropertyPathS2, sourcePropertyPath2, "sourceProperty");
+        let sourceTagsObj2 = {
+          "doc": doc, 
+          "valueSrcProp": src2.valueSrcProp, 
+          "srcProp": src2.srcProp, 
+          "fieldSrcProp": src2.fieldSrcProp, 
+          "props": this.$store.state.source.properties[0],
 
-        var srcProp2 = doc.createElement("block");
-        srcProp2.setAttribute("type", "sourceproperty");
-        srcProp2.setAttribute("id", this.generate_random_string());
-
-        var fieldSrcProp2 = doc.createElement("field");
-        fieldSrcProp2.setAttribute("name", "propTitle");
-        fieldSrcProp2.innerHTML=source2;
+          "fieldSrcPropPath": src2.fieldSrcPropPath,
+          "valueSrcPropPath": src2.valueSrcPropPath,
+          "blockSrcPropPath": src2.blockSrcPropPath,
+          "fieldSrcPath": src2.fieldSrcPath,
+          "fieldSrcPathPropTitle": src2.fieldSrcPathPropTitle,
+          "fieldSrcPropPathEnable": src2.fieldSrcPropPathEnable,
+          "valueEmpty": src2.valueEmpty,
+          "blockEmpty": src2.blockEmpty,
+        };
 
         //tgt2
 
-        var valueTgtProp2 = doc.createElement("value");
-        valueTgtProp2.setAttribute("name", "targetProperty");
+        let tgt2 = this.creatingNewDataWithPropertyPath(doc, target2, hasPropertyPathT2, targetPropertyPath2, "targetProperty");
+        let targetTagsObj2 = {
+          "doc": doc, 
+          "valueSrcProp": tgt2.valueSrcProp, 
+          "srcProp": tgt2.srcProp, 
+          "fieldSrcProp": tgt2.fieldSrcProp, 
+          "props": this.$store.state.target.properties[0],
 
-        var tgtProp2 = doc.createElement("block");
-        tgtProp2.setAttribute("type", "targetproperty");
-        tgtProp2.setAttribute("id", this.generate_random_string());
+          "fieldSrcPropPath": tgt2.fieldSrcPropPath,
+          "valueSrcPropPath": tgt2.valueSrcPropPath,
+          "blockSrcPropPath": tgt2.blockSrcPropPath,
+          "fieldSrcPath": tgt2.fieldSrcPath,
+          "fieldSrcPathPropTitle": tgt2.fieldSrcPathPropTitle,
+          "fieldSrcPropPathEnable": tgt2.fieldSrcPropPathEnable,
+          "valueEmpty": tgt2.valueEmpty,
+          "blockEmpty": tgt2.blockEmpty,
+        };
 
-        var fieldTgtProp2 = doc.createElement("field");
-        fieldTgtProp2.setAttribute("name", "propTitle");
-        fieldTgtProp2.innerHTML=target2;
 
         if(hasOperator.length === 0){
        
@@ -532,41 +590,9 @@ export default {
           measureBlock.appendChild(fieldMeasureList);
           measureBlock.appendChild(fieldEnabledTh);
           measureBlock.appendChild(fieldThreshold);
-          measureBlock.appendChild(valueSrcProp);
-          measureBlock.appendChild(valueTgtProp);
-          let sourceTagsObj = {
-            "doc": doc, 
-            "valueSrcProp": valueSrcProp, 
-            "srcProp": srcProp, 
-            "fieldSrcProp": fieldSrcProp, 
-            "props": this.$store.state.source.properties[0],
+          measureBlock.appendChild(src.valueSrcProp);
+          measureBlock.appendChild(tgt.valueSrcProp);
 
-            "fieldSrcPropPath": fieldSrcPropPath,
-            "valueSrcPropPath": valueSrcPropPath,
-            "blockSrcPropPath": blockSrcPropPath,
-            "fieldSrcPath": fieldSrcPath,
-            "fieldSrcPathPropTitle": fieldSrcPathPropTitle,
-            "fieldSrcPropPathEnable": fieldSrcPropPathEnable,
-            "valueEmpty": valueEmpty,
-            "blockEmpty": blockEmpty,
-          };
-
-          let targetTagsObj = {
-            "doc": doc, 
-            "valueSrcProp": valueTgtProp, 
-            "srcProp": tgtProp, 
-            "fieldSrcProp": fieldTgtProp, 
-            "props": this.$store.state.target.properties[0],
-
-            "fieldSrcPropPath": fieldTgtPropPath,
-            "valueSrcPropPath": valueTgtPropPath,
-            "blockSrcPropPath": blockTgtPropPath,
-            "fieldSrcPath": fieldTgtPath,
-            "fieldSrcPathPropTitle": fieldTgtPathPropTitle,
-            "fieldSrcPropPathEnable": fieldTgtPropPathEnable,
-            "valueEmpty": valueEmptyTgt,
-            "blockEmpty": blockEmptyTgt,
-          };
           this.addPreprocessingsWithProperty(sourceTagsObj);
           this.addPreprocessingsWithProperty(targetTagsObj);
 
@@ -584,21 +610,21 @@ export default {
           measureBlock.appendChild(fieldMeasureList);
           measureBlock.appendChild(fieldEnabledTh);
           measureBlock.appendChild(fieldThreshold);
-          measureBlock.appendChild(valueSrcProp);
-          measureBlock.appendChild(valueTgtProp);
+          measureBlock.appendChild(src.valueSrcProp);
+          measureBlock.appendChild(tgt.valueSrcProp);
 
-          this.addPreprocessingsWithProperty(doc, valueSrcProp, srcProp, fieldSrcProp, this.$store.state.source.properties[0]);
-          this.addPreprocessingsWithProperty(doc, valueTgtProp, tgtProp, fieldTgtProp, this.$store.state.target.properties[0]);
+          this.addPreprocessingsWithProperty(sourceTagsObj);
+          this.addPreprocessingsWithProperty(targetTagsObj);
 
           valueOpM2.appendChild(measureBlock2);
           measureBlock2.appendChild(fieldMeasureList2);
           measureBlock2.appendChild(fieldEnabledTh2);
           measureBlock2.appendChild(fieldThreshold2);
-          measureBlock2.appendChild(valueSrcProp2);
-          measureBlock2.appendChild(valueTgtProp2);
+          measureBlock2.appendChild(src2.valueSrcProp);
+          measureBlock2.appendChild(tgt2.valueSrcProp);
 
-          this.addPreprocessingsWithProperty(doc, valueSrcProp2, srcProp2, fieldSrcProp2, this.$store.state.source.properties[0]);
-          this.addPreprocessingsWithProperty(doc, valueTgtProp2, tgtProp2, fieldTgtProp2, this.$store.state.target.properties[0]);
+          this.addPreprocessingsWithProperty(sourceTagsObj2);
+          this.addPreprocessingsWithProperty(targetTagsObj2);
 
           doc.appendChild(xmlElem);
         }

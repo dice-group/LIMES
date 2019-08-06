@@ -68,24 +68,30 @@ export default {
 	                if(renameText !== defaultRenameText){
 	                  i.getField("RENAME").setText(renameText); 
 	                }
+	                let isCleared = this.clearPropertyPath(child);
 	                //without PP
-	                if(child.getChildren().length && child.getChildren().filter(b => b.type === "propertyPath").length === 0){
+	                if(isCleared){
 						let strForXml = child.getFieldValue("propTitle")+ " RENAME " + i.getField("RENAME").getDisplayText_();
 						this.addProperies(child,strForXml);
 					}
 					//with PP
 					else if(child.getChildren().length && child.getChildren().filter(b => b.type === "propertyPath").length){
-						let strForXml = child.getFieldValue("propTitle");
-						let propPath = child.getChildren()[0].getField("path").getDisplayText_() + child.getChildren()[0].getFieldValue("propTitle");
-						this.addProperies(child,strForXml + propPath + " RENAME " + i.getField("RENAME").getDisplayText_());
+
+						if(!isCleared){
+
+							let strForXml = child.getFieldValue("propTitle");
+							let propPath = child.getChildren()[0].getField("path").getDisplayText_() + child.getChildren()[0].getFieldValue("propTitle");
+							this.addProperies(child,strForXml + propPath + " RENAME " + i.getField("RENAME").getDisplayText_());
+						}
 					}
 	              }
 	            } else {
 	              if(child.type === "preprocessingfunction"){
 	                this.addChainOfPreprocessings(i, null);
 	              } else {
-					  //without PP
-					if(child.getChildren().length && child.getChildren().filter(b => b.type === "propertyPath").length === 0){
+	              	let isCleared = this.clearPropertyPath(child);
+					//without PP
+					if(isCleared){	
 						let strForXml = child.getFieldValue("propTitle");
 						let strOfPreprocessings = " AS "+ i.getFieldValue('function');
 						strForXml += strOfPreprocessings;
@@ -93,10 +99,14 @@ export default {
 					}
 	                //with PP
 					else if(child.getChildren().length && child.getChildren().filter(b => b.type === "propertyPath").length){
-						let strForXml = child.getFieldValue("propTitle");
-						let propPath = child.getChildren()[0].getField("path").getDisplayText_() + child.getChildren()[0].getFieldValue("propTitle");
-						let strOfPreprocessings = " AS "+ i.getFieldValue('function');
-						this.addProperies(child,strForXml + propPath + strOfPreprocessings);
+
+						if(!isCleared){
+
+							let strForXml = child.getFieldValue("propTitle");
+							let propPath = child.getChildren()[0].getField("path").getDisplayText_() + child.getChildren()[0].getFieldValue("propTitle");
+							let strOfPreprocessings = " AS "+ i.getFieldValue('function');
+							this.addProperies(child,strForXml + propPath + strOfPreprocessings);
+						}
 					}
 	              }
 	            }
@@ -108,21 +118,37 @@ export default {
 		        let strForXml = i.getFieldValue("propTitle");
 		        this.addProperies(i,strForXml);
 		    }else{
-				if(i.getField("enable_propertypath").getValue().toLowerCase() === 'false'){
-					console.log("REMOVE");
-					if(i.getChildren() && i.getChildren().length && i.getChildren()[0].type === "propertyPath"){
-						i.getChildren()[0].dispose();
-					}
-				}
+				// if(i.getField("enable_propertypath").getValue().toLowerCase() === 'false'){
+				// 	console.log("REMOVE");
+				// 	if(i.getChildren() && i.getChildren().length && i.getChildren()[0].type === "propertyPath"){
+				// 		i.getChildren()[0].dispose();
+				// 	}
+				// }
+				
+
 				//with property path
 				if(i.getChildren().length && i.getChildren().filter(b => b.type === "propertyPath").length){
-					let strForXml = i.getFieldValue("propTitle");
-					let propPath = i.getChildren()[0].getField("path").getDisplayText_() + i.getChildren()[0].getFieldValue("propTitle");
-					this.addProperies(i,strForXml + propPath);
+					if(!this.clearPropertyPath(i)){
+						let strForXml = i.getFieldValue("propTitle");
+						let propPath = i.getChildren()[0].getField("path").getDisplayText_() + i.getChildren()[0].getFieldValue("propTitle");
+						this.addProperies(i,strForXml + propPath);
+					}
 				}
 			}
 		    
 	      }
+	    },
+	    clearPropertyPath(i){
+	    	// i - block
+	    	let isCleared = false;
+			if(i.getField("enable_propertypath").getValue().toLowerCase() === 'false'){
+				console.log("REMOVE");
+				if(i.getChildren() && i.getChildren().length && i.getChildren()[0].type === "propertyPath"){
+					i.getChildren()[0].dispose();
+					isCleared = true;
+				}
+			}
+			return isCleared;
 	    },
 	    addChainOfPreprocessings(i,renameText){
 	      let arrForXml = i.toString().split(" ").map(pf => pf.toLowerCase()).filter(prepFunc => prepFunc !== "optional" && prepFunc !== "source" && prepFunc !== "target" && prepFunc !== "property" && prepFunc !== "rename" && prepFunc !== "as" && prepFunc !== "pp" && prepFunc !== "???" && prepFunc !== "");
