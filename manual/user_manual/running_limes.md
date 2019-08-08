@@ -58,10 +58,15 @@ returns the list of available operators.
 returns the list of available preprocessings.
 * `sparql/:urlEncodedEndpointUrl` **(GET, POST, OPTIONS)** ---
 proxy for SPARQL queries. Useful in browser when SPARQL endpoints do not implement CORS headers.
+* `upload` **(POST)** ---
+  used to upload source and/or target files as multipart/form-data POST messages and returns the
+            assigned *upload_id* in a JSON object.
+* `uploads/:uploadId/sparql`  **(GET)** ---
+query uploaded files. Useful in browser.
 * `results/:id` **(GET)** ---
 returns a list of result files in a JSON object.
 * `result/:id/:filename`  **(GET)** ---
-returns the contents of a given result file for a given job id. 
+returns the contents of a given result file for a given job id.
   
   
 ### Example

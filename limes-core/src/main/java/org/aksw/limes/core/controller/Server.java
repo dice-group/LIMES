@@ -17,6 +17,12 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFormatter;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -24,11 +30,13 @@ import spark.Request;
 import spark.Response;
 
 import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletException;
 import javax.servlet.http.Part;
 import java.io.*;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -46,9 +54,13 @@ public class Server {
     public static final String CONFIG_FILE_SUFFIX = "xml";
 
     private static final Gson GSON = new GsonBuilder().create();
+    private static final int FILE_SIZE_THRESHOLD = 1024;
+    private static final long MAX_REQUEST_SIZE = 1024 * 1024 * 15;
+    private static final long MAX_FILE_SIZE = 1024 * 1024 * 5;
     private static Server instance = null;
 
     private final Map<String, CompletableFuture<Void>> requests = new HashMap<>();
+    private Map<String, String> uploadFiles = new HashMap<>();
     private final File uploadDir = new File(STORAGE_DIR_PATH);
     private int port = -1;
     private int limit = -1;
@@ -61,6 +73,17 @@ public class Server {
     }
 
     public void run(int port, int limit) {
+        try {
+            Path files = Paths.get(STORAGE_DIR_PATH, "files").toAbsolutePath();
+            if (Files.exists(files)) {
+                Files.walk(files)
+                        .sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            }
+        } catch (IOException e) {
+           throw new RuntimeException(e);
+        }
         this.limit = limit;
         if (this.port > 0) {
             throw new IllegalStateException("Server already running on port " + port + "!");
@@ -83,6 +106,8 @@ public class Server {
         get("/list/measures", this::handleMeasures);
         get("/list/preprocessings", this::handlePreprocessings);
         get("/sparql/:endpoint", this::handleSparql);
+        get("/uploads/:uploadId/sparql", this::handleLocalSparql);
+        post("/upload", this::handleUpload);
         post("/sparql/:endpoint", this::handleSparql);
         options("/sparql/:endpoint", this::handleSparql);
         exception(Exception.class, (e, req, res) -> {
@@ -143,6 +168,43 @@ public class Server {
             }
         }
         return res.raw();
+    }
+
+    private Object handleLocalSparql(Request req, Response res) throws IOException {
+        String uploadId = req.params("uploadId");
+        String s = uploadFiles.get(uploadId);
+        Model queryModel = ModelFactory.createDefaultModel().read(s);
+        QueryExecution queryExecution = QueryExecutionFactory.create(req.queryParams("query"), queryModel);
+        ResultSet resultSet = queryExecution.execSelect();
+        ResultSetFormatter.outputAsJSON(res.raw().getOutputStream(), resultSet);
+        return "";
+    }
+
+    private Object handleUpload(Request req, Response res) throws IOException, ServletException {
+        File workingDir = new File(uploadDir.getAbsoluteFile(), "files");
+        if (!workingDir.exists() && !workingDir.mkdirs() ||  !workingDir.isDirectory()) {
+            throw new IOException("Not able to create directory " + workingDir.getAbsolutePath());
+        }
+        Map<String, String> partUploads = new HashMap<>();
+        req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(workingDir.getAbsolutePath(), MAX_FILE_SIZE, MAX_REQUEST_SIZE, FILE_SIZE_THRESHOLD));
+        if (req.contentType().contains("multipart/form-data")) {
+            for (Part part : req.raw().getParts()) {
+                try (InputStream is = part.getInputStream()) {
+                    String uploadId = UUID.randomUUID().toString();
+                    Path partFileName = Paths.get(part.getSubmittedFileName()).getFileName();
+                    String extension = FilenameUtils.getExtension(partFileName.toString());
+                    Path destinationPath = workingDir.toPath().resolve(uploadId + "." + extension);
+                    Files.copy(is, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+                    partUploads.put(part.getSubmittedFileName(), uploadId);
+                    uploadFiles.put(uploadId, destinationPath.toString());
+                    logger.info("Uploaded file '{}' with uploadId '{}'", part.getName(), uploadId);
+                }
+            }
+        } else {
+            return GSON.toJson(new ErrorMessage(1, "Only Requests of type \"multipart/form-data\" are allowed"));
+        }
+        res.status(200);
+        return GSON.toJson(new UploadMessage(partUploads));
     }
 
     private Server(){
@@ -213,6 +275,14 @@ public class Server {
             MDC.put("requestId", requestId);
             AConfigurationReader reader = new XMLConfigurationReader(tempFile.toAbsolutePath().toString());
             Configuration config = reader.read();
+            String sourceEndpoint = config.getSourceInfo().getEndpoint();
+            if (uploadFiles.containsKey(sourceEndpoint)) {
+                config.getSourceInfo().setEndpoint(uploadFiles.get(sourceEndpoint));
+            }
+            String targetEndpoint = config.getTargetInfo().getEndpoint();
+            if (uploadFiles.containsKey(targetEndpoint)) {
+                config.getTargetInfo().setEndpoint(uploadFiles.get(targetEndpoint));
+            }
             LimesResult mappings = Controller.getMapping(config, limit);
             String outputFormat = config.getOutputFormat();
             ISerializer output = SerializerFactory.createSerializer(outputFormat);
@@ -450,6 +520,28 @@ public class Server {
 
         private SubmitMessage(String requestId) {
             this.requestId = requestId;
+        }
+    }
+
+    private static class UploadMessage extends ServerMessage {
+
+        private List<UploadInfo> uploads = new ArrayList<>();
+
+        static class UploadInfo {
+
+            private String partName;
+            private String uploadId;
+
+            UploadInfo(String partName, String uploadId) {
+                this.partName = partName;
+                this.uploadId = uploadId;
+            }
+        }
+
+        private UploadMessage(Map<String, String> partUploads) {
+            for (Map.Entry<String, String> upload : partUploads.entrySet()) {
+                this.uploads.add(new UploadInfo(upload.getKey(), upload.getValue()));
+            }
         }
     }
 
